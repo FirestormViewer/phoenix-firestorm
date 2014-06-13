@@ -841,11 +841,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Shadow_Res"
-				 can_edit_text="true"
 				 control_name="RenderShadowResolutionScale"
 				 follows="left|right"
 				 height="16"
-				 decimal_digits="2"
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
@@ -855,7 +853,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Shadow_Res"
-				 can_edit_text="true"
 				 control_name="RenderShadowResolutionScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -865,8 +862,7 @@
 				 max_val="7"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Shadow_Res"
@@ -895,11 +891,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Shd_Clarity"
-				 can_edit_text="true"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
-				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -908,7 +902,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Shd_Clarity"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -917,8 +910,7 @@
 				 max_val="1000"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Clarity_Reset"
@@ -942,8 +934,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Blur_Size"
-				 decimal_digits="2"
-				 can_edit_text="true"
 				 control_name="RenderShadowBlurSize"
 				 follows="left|right"
 				 height="16"
@@ -956,7 +946,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Blur_Size"
-				 can_edit_text="true"
 				 control_name="RenderShadowBlurSize"
 				 top_delta="-3"
 				 label_width="0"
@@ -966,8 +955,7 @@
 				 max_val="1000"
 				 min_val="0"
 				 width="53"
-				 increment="0.1"
-				 border_visible="false"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Blur_Reset"
@@ -996,11 +984,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Shd_Soften"
-				 can_edit_text="true"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
-				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.001"
@@ -1009,7 +995,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Shd_Soften"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -1018,8 +1003,7 @@
 				 max_val="10000"
 				 min_val="-10000"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Soften_Reset"
@@ -1043,12 +1027,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Blur_Dist"
-				 can_edit_text="true"
 				 control_name="RenderShadowBlurDistFactor"
 				 follows="left|right"
 				 height="16"
 				 increment="0.01"
-				 decimal_digits="2"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.00"
@@ -1057,7 +1039,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Blur_Dist"
-				 can_edit_text="true"
 				 control_name="RenderShadowBlurDistFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -1067,8 +1048,7 @@
 				 max_val="2"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Blur_Dist_Reset"
@@ -1096,12 +1076,10 @@
 				</text>
 				<slider_bar
 				 name="SB_FOV_Cutoff"
-				 can_edit_text="true"
 				 control_name="RenderShadowFOVCutoff"
 				 follows="left|right"
 				 height="16"
 				 increment="0.1"
-				 decimal_digits="2"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -1110,7 +1088,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_FOV_Cutoff"
-				 can_edit_text="true"
 				 control_name="RenderShadowFOVCutoff"
 				 top_delta="-3"
 				 label_width="0"
@@ -1120,8 +1097,7 @@
 				 max_val="100"
 				 min_val="0"
 				 width="53"
-				 increment="0.1"
-				 border_visible="false"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="FOV_Cutoff_Reset"
@@ -1149,12 +1125,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Shd_Bias"
-				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 follows="left|right"
 				 height="16"
 				 increment="0.0001"
-				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="-.008"
@@ -1163,7 +1137,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Shd_Bias"
-				 can_edit_text="true"
 				 control_name="RenderShadowBias"
 				 top_delta="-3"
 				 label_width="0"
@@ -1173,8 +1146,7 @@
 				 max_val="5"
 				 min_val="-5"
 				 width="53"
-				 increment="0.0001"
-				 border_visible="false"/>
+				 increment="0.0001"/>
 				<button
 				 follows="left|top"
 				 name="Shd_Bias_Reset"
@@ -1281,12 +1253,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Scale"
-				 can_edit_text="true"
 				 control_name="RenderSSAOScale"
 				 follows="left|right"
 				 height="16"
 				 increment="1"
-				 decimal_digits="0"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -1295,7 +1265,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Scale"
-				 can_edit_text="true"
 				 control_name="RenderSSAOScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1305,8 +1274,7 @@
 				 max_val="10000000"
 				 min_val="-1000000"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Scale"
@@ -1334,12 +1302,10 @@
 				</text>
 				<slider_bar
 				 name="SB_Max_Scale"
-				 can_edit_text="true"
 				 control_name="RenderSSAOMaxScale"
 				 follows="left|right"
 				 height="16"
 				 increment="1"
-				 decimal_digits="0"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -1348,7 +1314,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Max_Scale"
-				 can_edit_text="true"
 				 control_name="RenderSSAOMaxScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1358,8 +1323,7 @@
 				 max_val="100000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Max_Scale"
@@ -1387,8 +1351,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Scaling_Factor"
-				 decimal_digits="2"
-				 can_edit_text="true"
 				 control_name="RenderSSAOFactor"
 				 follows="left|right"
 				 height="16"
@@ -1401,7 +1363,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Scaling_Factor"
-				 can_edit_text="true"
 				 control_name="RenderSSAOFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -1411,8 +1372,7 @@
 				 max_val="100000"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Scaling_Factor"
@@ -1441,11 +1401,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Effect"
-				 can_edit_text="true"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
-				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -1454,7 +1412,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Effect"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -1463,8 +1420,7 @@
 				 max_val="100000"
 				 min_val="-10000"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Effect"
@@ -1489,11 +1445,9 @@
 				</text>
 				<slider_bar
 				 name="SB_AO_Soften"
-				 can_edit_text="true"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
-				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.001"
@@ -1502,7 +1456,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_AO_Soften"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -1511,8 +1464,7 @@
 				 max_val="100000"
 				 min_val="-10000"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_AO_Soften"
@@ -1623,7 +1575,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Zoom"
-				 can_edit_text="true"
 				 control_name="CameraAngle"
 				 follows="left|top"
 				 height="16"
@@ -1636,7 +1587,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Zoom"
-				 can_edit_text="true"
 				 control_name="CameraAngle"
 				 top_delta="-3"
 				 label_width="0"
@@ -1646,8 +1596,7 @@
 				 max_val="3.06"
 				 min_val="0.08"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Zoom"
@@ -1675,7 +1624,6 @@
 				</text>
 				<slider_bar
 				 name="SB_FOV"
-				 can_edit_text="true"
 				 control_name="CameraFieldOfView"
 				 follows="left|top"
 				 height="16"
@@ -1688,7 +1636,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_FOV"
-				 can_edit_text="true"
 				 control_name="CameraFieldOfView"
 				 top_delta="-3"
 				 label_width="0"
@@ -1698,8 +1645,7 @@
 				 max_val="360"
 				 min_val="-360"
 				 width="53"
-				 increment="0.1"
-				 border_visible="false"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_FOV"
@@ -1727,7 +1673,6 @@
 				</text>
 				<slider_bar
 				 name="SB_F_Number"
-				 can_edit_text="true"
 				 control_name="CameraFNumber"
 				 follows="top|left"
 				 height="16"
@@ -1740,7 +1685,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_F_Number"
-				 can_edit_text="true"
 				 control_name="CameraFNumber"
 				 top_delta="-3"
 				 label_width="0"
@@ -1750,8 +1694,7 @@
 				 max_val="128"
 				 min_val="-128"
 				 width="53"
-				 increment=".01"
-				 border_visible="false"/>
+				 increment=".01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_F_Number"
@@ -1779,7 +1722,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Focal_Length"
-				 can_edit_text="true"
 				 control_name="CameraFocalLength"
 				 follows="top|left"
 				 height="16"
@@ -1792,7 +1734,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Focal_Length"
-				 can_edit_text="true"
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
 				 label_width="0"
@@ -1802,8 +1743,7 @@
 				 max_val="10000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Focal_Length"
@@ -1831,7 +1771,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Foc_Time"
-				 can_edit_text="true"
 				 control_name="CameraFocusTransitionTime"
 				 follows="top|left"
 				 height="16"
@@ -1844,7 +1783,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Foc_Time"
-				 can_edit_text="true"
 				 control_name="CameraFocusTransitionTime"
 				 top_delta="-3"
 				 label_width="0"
@@ -1854,8 +1792,7 @@
 				 max_val="100"
 				 min_val=".001"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Foc_Time"
@@ -1883,7 +1820,6 @@
 				</text>
 				<slider_bar
 				 name="SB_CoC"
-				 can_edit_text="true"
 				 control_name="CameraMaxCoF"
 				 follows="top|left"
 				 height="16"
@@ -1896,7 +1832,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_CoC"
-				 can_edit_text="true"
 				 control_name="CameraMaxCoF"
 				 top_delta="-3"
 				 label_width="0"
@@ -1906,8 +1841,7 @@
 				 max_val="300"
 				 min_val="300"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_CoC"
@@ -1935,7 +1869,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Resolution"
-				 can_edit_text="true"
 				 control_name="CameraDoFResScale"
 				 follows="left|right"
 				 height="16"
@@ -1948,7 +1881,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Resolution"
-				 can_edit_text="true"
 				 control_name="CameraDoFResScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -1958,8 +1890,7 @@
 				 max_val="100"
 				 min_val="-100"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Resolution"
@@ -1987,7 +1918,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Aspect_Ratio"
-				 can_edit_text="true"
 				 control_name="CameraAspectRatio"
 				 follows="left|right"
 				 height="16"
@@ -2000,7 +1930,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Aspect_Ratio"
-				 can_edit_text="true"
 				 control_name="CameraAspectRatio"
 				 top_delta="-3"
 				 label_width="0"
@@ -2010,8 +1939,7 @@
 				 max_val="5"
 				 min_val="0"
 				 width="53"
-				 increment="0.01"
-				 border_visible="false"/>
+				 increment="0.01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Aspect_Ratio"
@@ -2089,11 +2017,9 @@
 				</text>
 				<!--slider_bar
 				 name="SB_Glow_Quality"
-				 can_edit_text="true"
 				 control_name="RenderGlowResolutionPow"
 				 follows="top|left"
 				 height="16"
-				 decimal_digits="0"
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
@@ -2103,7 +2029,6 @@
 				 width="127" /-->
 				<spinner
 				 name="S_Glow_Quality"
-				 can_edit_text="true"
 				 control_name="RenderGlowResolutionPow"
 				 top_delta="-3"
 				 label_width="0"
@@ -2113,8 +2038,7 @@
 				 max_val="10"
 				 min_val="8"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Glow_Quality"
@@ -2155,11 +2079,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Glow_Iterations"
-				 can_edit_text="true"
 				 control_name="RenderGlowIterations"
 				 follows="top|left"
 				 height="16"
-				 decimal_digits="0"
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
@@ -2169,7 +2091,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Glow_Iterations"
-				 can_edit_text="true"
 				 control_name="RenderGlowIterations"
 				 top_delta="-3"
 				 label_width="0"
@@ -2179,8 +2100,7 @@
 				 max_val="500"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Glow_Iterations"
@@ -2207,11 +2127,9 @@
 				</text>
 				<slider_bar
 				 name="SB_Glow_Strength"
-				 can_edit_text="true"
 				 control_name="RenderGlowStrength"
 				 follows="top|left"
 				 height="16"
-				 decimal_digits="3"
 				 increment=".001"
 				 layout="topleft"
 				 left_pad="-20"
@@ -2221,7 +2139,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Glow_Strength"
-				 can_edit_text="true"
 				 control_name="RenderGlowStrength"
 				 top_delta="-3"
 				 label_width="0"
@@ -2231,8 +2148,7 @@
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment=".00001"
-				 border_visible="false"/>
+				 increment=".00001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Glow_Strength"
@@ -2260,7 +2176,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Luminance"
-				 can_edit_text="true"
 				 control_name="RenderGlowMinLuminance"
 				 follows="left|top"
 				 height="16"
@@ -2273,7 +2188,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Luminance"
-				 can_edit_text="true"
 				 control_name="RenderGlowMinLuminance"
 				 top_delta="-3"
 				 label_width="0"
@@ -2283,8 +2197,7 @@
 				 max_val="1"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Luminance"
@@ -2312,7 +2225,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Warmth"
-				 can_edit_text="true"
 				 control_name="RenderGlowWarmthAmount"
 				 follows="left|right"
 				 height="16"
@@ -2325,7 +2237,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Warmth"
-				 can_edit_text="true"
 				 control_name="RenderGlowWarmthAmount"
 				 top_delta="-3"
 				 label_width="0"
@@ -2335,8 +2246,7 @@
 				 max_val="30"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Warmth"
@@ -2364,7 +2274,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Glow_Width"
-				 can_edit_text="true"
 				 control_name="RenderGlowWidth"
 				 follows="left|right"
 				 height="16"
@@ -2377,7 +2286,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Glow_Width"
-				 can_edit_text="true"
 				 control_name="RenderGlowWidth"
 				 top_delta="-3"
 				 label_width="0"
@@ -2387,8 +2295,7 @@
 				 max_val="5000"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Glow_Width"
@@ -2416,7 +2323,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Alpha"
-				 can_edit_text="true"
 				 control_name="RenderGlowMaxExtractAlpha"
 				 follows="left|right"
 				 height="16"
@@ -2429,7 +2335,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Alpha"
-				 can_edit_text="true"
 				 control_name="RenderGlowMaxExtractAlpha"
 				 top_delta="-3"
 				 label_width="0"
@@ -2439,8 +2344,7 @@
 				 max_val="1000"
 				 min_val="0"
 				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
+				 increment="0.001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Alpha"
@@ -2513,7 +2417,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Draw_Distance"
-				 can_edit_text="true"
 				 control_name="RenderFarClip"
 				 follows="left|top"
 				 height="16"
@@ -2526,7 +2429,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Draw_Distance"
-				 can_edit_text="true"
 				 control_name="RenderFarClip"
 				 top_delta="-3"
 				 label_width="0"
@@ -2536,8 +2438,7 @@
 				 max_val="10240"
 				 min_val="-10240"
 				 width="53"
-				 increment=".01"
-				 border_visible="false"/>
+				 increment=".01"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Draw_Distance"
@@ -2565,7 +2466,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Avi_Count"
-				 can_edit_text="true"
 				 control_name="RenderAvatarMaxVisible"
 				 follows="left|top"
 				 height="16"
@@ -2578,7 +2478,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Avi_Count"
-				 can_edit_text="true"
 				 control_name="RenderAvatarMaxVisible"
 				 top_delta="-3"
 				 label_width="0"
@@ -2588,8 +2487,7 @@
 				 max_val="100"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Avi_Count"
@@ -2617,7 +2515,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Avi_Detail"
-				 can_edit_text="true"
 				 control_name="RenderAvatarLODFactor"
 				 follows="left|top"
 				 height="16"
@@ -2630,7 +2527,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Avi_Detail"
-				 can_edit_text="true"
 				 control_name="RenderAvatarLODFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -2640,8 +2536,7 @@
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Avi_Detail"
@@ -2669,7 +2564,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Avi_Physics"
-				 can_edit_text="true"
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 follows="left|top"
 				 height="16"
@@ -2682,7 +2576,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Avi_Physics"
-				 can_edit_text="true"
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -2692,8 +2585,7 @@
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Avi_Physics"
@@ -2721,7 +2613,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Particle_Cnt"
-				 can_edit_text="true"
 				 control_name="RenderMaxPartCount"
 				 follows="left|top"
 				 height="16"
@@ -2734,7 +2625,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Particle_Cnt"
-				 can_edit_text="true"
 				 control_name="RenderMaxPartCount"
 				 top_delta="-3"
 				 label_width="0"
@@ -2744,8 +2634,7 @@
 				 max_val="10000"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Particle_Cnt"
@@ -2773,7 +2662,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Terrain_Scale"
-				 can_edit_text="true"
 				 control_name="RenderTerrainScale"
 				 follows="left|top"
 				 height="16"
@@ -2786,7 +2674,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Terrain_Scale"
-				 can_edit_text="true"
 				 control_name="RenderTerrainScale"
 				 top_delta="-3"
 				 label_width="0"
@@ -2796,8 +2683,7 @@
 				 max_val="24"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Terrain_Scale"
@@ -2825,7 +2711,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Terrain_Quality"
-				 can_edit_text="true"
 				 control_name="RenderTerrainLODFactor"
 				 follows="left|top"
 				 height="16"
@@ -2838,7 +2723,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Terrain_Quality"
-				 can_edit_text="true"
 				 control_name="RenderTerrainLODFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -2848,8 +2732,7 @@
 				 max_val="15"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Terrain_Quality"
@@ -2877,7 +2760,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Object_Detail"
-				 can_edit_text="true"
 				 control_name="RenderVolumeLODFactor"
 				 follows="left|top"
 				 height="16"
@@ -2890,7 +2772,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Object_Detail"
-				 can_edit_text="true"
 				 control_name="RenderVolumeLODFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -2900,8 +2781,7 @@
 				 max_val="15"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Object_Detail"
@@ -2929,7 +2809,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Flexi_Detail"
-				 can_edit_text="true"
 				 control_name="RenderFlexTimeFactor"
 				 follows="left|top"
 				 height="16"
@@ -2942,7 +2821,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Flexi_Detail"
-				 can_edit_text="true"
 				 control_name="RenderFlexTimeFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -2952,8 +2830,7 @@
 				 max_val="10"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Flexi_Detail"
@@ -2981,7 +2858,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Tree_Detail"
-				 can_edit_text="true"
 				 control_name="RenderTreeLODFactor"
 				 follows="left|top"
 				 height="16"
@@ -2994,7 +2870,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Tree_Detail"
-				 can_edit_text="true"
 				 control_name="RenderTreeLODFactor"
 				 top_delta="-3"
 				 label_width="0"
@@ -3004,8 +2879,7 @@
 				 max_val="15"
 				 min_val="0"
 				 width="53"
-				 increment="1"
-				 border_visible="false"/>
+				 increment="1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Tree_Detail"
@@ -3033,7 +2907,6 @@
 				</text>
 				<slider_bar
 				 name="SB_Sky_Detail"
-				 can_edit_text="true"
 				 control_name="WLSkyDetail"
 				 follows="left|top"
 				 height="16"
@@ -3046,7 +2919,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Sky_Detail"
-				 can_edit_text="true"
 				 control_name="WLSkyDetail"
 				 top_delta="-3"
 				 label_width="0"
@@ -3056,8 +2928,7 @@
 				 max_val="512"
 				 min_val="4"
 				 width="53"
-				 increment="4"
-				 border_visible="false"/>
+				 increment="4"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Sky_Detail"
@@ -3098,7 +2969,6 @@
 				</text>
 				<slider_bar
 				 name="VignetteSliderX"
-				 can_edit_text="true"
 				 follows="left|top"
 				 height="16"
 				 increment="0.05"
@@ -3111,7 +2981,6 @@
 				 width="117"/>
 				<spinner
 				 name="VignetteSpinnerX"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -3120,8 +2989,7 @@
 				 max_val="1.0"
 				 min_val="0.0"
 				 width="53"
-				 increment="0.05"
-				 border_visible="false"/>
+				 increment="0.05"/>
 				<button
 				 follows="left|top"
 				 name="Reset_VignetteX"
@@ -3144,7 +3012,6 @@
 				</text>
 				<slider_bar
 				 name="VignetteSliderY"
-				 can_edit_text="true"
 				 follows="left|top"
 				 height="16"
 				 increment="0.1"
@@ -3157,7 +3024,6 @@
 				 width="117"/>
 				<spinner
 				 name="VignetteSpinnerY"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -3166,8 +3032,7 @@
 				 max_val="32.0"
 				 min_val="0.0"
 				 width="53"
-				 increment="0.1"
-				 border_visible="false"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_VignetteY"
@@ -3190,7 +3055,6 @@
 				</text>
 				<slider_bar
 				 name="VignetteSliderZ"
-				 can_edit_text="true"
 				 follows="left|top"
 				 height="16"
 				 increment="0.1"
@@ -3203,7 +3067,6 @@
 				 width="117"/>
 				<spinner
 				 name="VignetteSpinnerZ"
-				 can_edit_text="true"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -3212,8 +3075,7 @@
 				 max_val="8.0"
 				 min_val="0.0"
 				 width="53"
-				 increment="0.1"
-				 border_visible="false"/>
+				 increment="0.1"/>
 				<button
 				 follows="left|top"
 				 name="Reset_VignetteZ"
@@ -3674,7 +3536,6 @@
 			 name="statistics_scroll"
 			 reserve_scroll_corner="false"
 			 top_pad="1"
-			 bevel_style="out"
 			 opaque="false"
 			 color="DkGray_66"
 			 border_visible="false"
@@ -3702,8 +3563,7 @@
 						 bar_min="0"
 						 bar_max="60"
 						 tick_spacing="6"
-						 label_spacing="12"
-						 precision="1"
+						 decimal_digits="1"
 						 show_bar="true"
 						 show_history="true"
 						 tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 25 (PAL)/30 (NTSC) frames per second (FPS) is the rate for broadcast television."
@@ -3717,8 +3577,7 @@
 						 bar_min="0"
 						 bar_max="5000"
 						 tick_spacing="500"
-						 label_spacing="1000"
-						 precision="1"
+						 decimal_digits="1"
 						 show_bar="true"
 						 show_history="false"
 						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
@@ -3732,9 +3591,7 @@
 						 bar_min="0"
 						 bar_max="10000"
 						 tick_spacing="1000"
-						 label_spacing="2000"
-						 precision="0"
-						 show_per_sec="false"
+						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="KTris Drawn: (per frame) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles, or 'tris', in each frame of the current scene."
 						 setting="DebugStatModeKTrisDrawnFr">
@@ -3747,8 +3604,7 @@
 						 bar_min="0"
 						 bar_max="200000"
 						 tick_spacing="25000"
-						 label_spacing="50000"
-						 precision="0"
+						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="KTris Drawn: (per second) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles ('tris') drawn every second."
 						 setting="DebugStatModeKTrisDrawnSec">
@@ -3760,9 +3616,7 @@
 						 bar_min="0"
 						 bar_max="50000"
 						 tick_spacing="5000"
-						 label_spacing="10000"
-						 precision="0"
-						 show_per_sec="false"
+						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="Total Objs: The number of objects currently in view, which includes: Prims, Avatars, Terrain patches, Trees, Particle groups, and Water patches."
 						 setting="DebugStatModeTotalObjs">
@@ -3775,8 +3629,6 @@
 						 bar_min="0"
 						 bar_max="2000"
 						 tick_spacing="200"
-						 label_spacing="400"
-						 show_per_sec="true"
 						 show_bar="false"
 						 tool_tip="New Objs: The number of objects being downloaded per second."
 						 setting="DebugStatModeNewObjs">
@@ -3788,8 +3640,6 @@
 						 bar_min="0.f"
 						 bar_max="8000.f" 
 						 tick_spacing="2000.f"
-						 label_spacing="4000.f" 
-						 show_per_sec="false"
 						 show_bar="false"
 						 tool_tip="Count: The number of unique textures loaded by the viewer."
 						 setting="DebugStatModeTextureCount">
@@ -3854,10 +3704,8 @@
 				</text>
 				<slider_bar
 				 name="SB_LR_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale1"
 				 follows="left|right"
-				 decimal_digits="3"
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
@@ -3868,7 +3716,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_LR_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale1"
 				 top_delta="-3"
 				 label_width="0"
@@ -3878,8 +3725,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_LR_Axis"
@@ -3907,10 +3753,8 @@
 				</text>
 				<slider_bar
 				 name="SB_UD_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale2"
 				 follows="left|right"
-				 decimal_digits="3"
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
@@ -3921,7 +3765,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_UD_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale2"
 				 top_delta="-3"
 				 label_width="0"
@@ -3931,8 +3774,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_UD_Axis"
@@ -3960,10 +3802,8 @@
 				</text>
 				<slider_bar
 				 name="SB_IO_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale0"
 				 follows="left|right"
-				 decimal_digits="3"
 				 height="16"
 				 increment="0.1"
 				 layout="topleft"
@@ -3974,7 +3814,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_IO_Axis"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale0"
 				 top_delta="-3"
 				 label_width="0"
@@ -3984,8 +3823,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
-				 border_visible="false"/>
+				 increment=".0001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_IO_Axis"
@@ -4013,10 +3851,8 @@
 				</text>
 				<slider_bar
 				 name="SB_Tilt"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale4"
 				 follows="left|right"
-				 decimal_digits="5"
 				 height="16"
 				 increment="0.00001"
 				 layout="topleft"
@@ -4027,7 +3863,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Tilt"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale4"
 				 top_delta="-3"
 				 label_width="0"
@@ -4037,8 +3872,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
-				 border_visible="false"/>
+				 increment=".0001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Tilt"
@@ -4066,10 +3900,8 @@
 				</text>
 				<slider_bar
 				 name="SB_Spin"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale5"
 				 follows="left|right"
-				 decimal_digits="5"
 				 height="16"
 				 increment="0.00001"
 				 layout="topleft"
@@ -4080,7 +3912,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Spin"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale5"
 				 top_delta="-3"
 				 label_width="0"
@@ -4090,8 +3921,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
-				 border_visible="false"/>
+				 increment=".0001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Spin"
@@ -4119,10 +3949,8 @@
 				</text>
 				<slider_bar
 				 name="SB_Roll"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale3"
 				 follows="left|right"
-				 decimal_digits="4"
 				 height="16"
 				 increment="0.0001"
 				 layout="topleft"
@@ -4133,7 +3961,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Roll"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale3"
 				 top_delta="-3"
 				 label_width="0"
@@ -4143,8 +3970,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
-				 border_visible="false"/>
+				 increment=".0001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Roll"
@@ -4172,10 +3998,8 @@
 				</text>
 				<slider_bar
 				 name="SB_Zoom_Speed"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale6"
 				 follows="left|right"
-				 decimal_digits="4"
 				 height="16"
 				 increment="0.0001"
 				 layout="topleft"
@@ -4186,7 +4010,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Zoom_Speed"
-				 can_edit_text="true"
 				 control_name="FlycamAxisScale6"
 				 top_delta="-3"
 				 label_width="0"
@@ -4196,8 +4019,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
-				 border_visible="false"/>
+				 increment=".0001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Zoom_Speed"
@@ -4225,10 +4047,8 @@
 				</text>
 				<slider_bar
 				 name="SB_Feathering"
-				 can_edit_text="true"
 				 control_name="FlycamFeathering"
 				 follows="left|right"
-				 decimal_digits="4"
 				 height="16"
 				 increment="0.0001"
 				 layout="topleft"
@@ -4239,7 +4059,6 @@
 				 width="127"/>
 				<spinner
 				 name="S_Feathering"
-				 can_edit_text="true"
 				 control_name="FlycamFeathering"
 				 top_delta="-3"
 				 label_width="0"
@@ -4249,8 +4068,7 @@
 				 max_val="100"
 				 min_val="0"
 				 width="53"
-				 increment=".001"
-				 border_visible="false"/>
+				 increment=".001"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Feathering"
@@ -4307,7 +4125,6 @@
 				<check_box
 				 name="CB_ZoomDirect"
 				 control_name="ZoomDirect"
-				 label_width="15"
 				 label="Enable Zoom Control (See Tool Tip!)"
 				 layout="topleft"
 				 left="6"
@@ -4317,7 +4134,6 @@
 				<check_box
 				 name="CB_AutoLeveling"
 				 control_name="AutoLeveling"
-				 label_width="15"
 				 label="Enable Auto Leveling (Prevents Camera Roll)"
 				 layout="topleft"
 				 left="6"
@@ -4327,7 +4143,6 @@
 				<check_box
 				 name="CB_Move_Avatar"
 				 control_name="JoystickAvatarEnabled"
-				 label_width="15"
 				 label="Use the 3D Mouse to move the avatar"
 				 layout="topleft"
 				 left="6"
@@ -4337,7 +4152,6 @@
 				<check_box
 				 name="CB_Move_Objects"
 				 control_name="JoystickBuildEnabled"
-				 label_width="15"
 				 label="Use the 3D Mouse to move objects (building)"
 				 tool_tip="Uses the 3D mouse to move objects when building and editing."
 				 layout="topleft"
@@ -4455,7 +4269,6 @@
 							</text>
 							<slider
 							 name="SB_Zoom2"
-							 can_edit_text="true"
 							 control_name="CameraAngle"
 							 follows="left|right"
 							 height="16"
@@ -4468,7 +4281,6 @@
 							 width="135"/>
 							<!--spinner
 							 name="S_Zoom2"
-							 can_edit_text="true"
 							 control_name="CameraAngle"
 							 top_delta="-3"
 							 label_width="0"
@@ -4478,8 +4290,7 @@
 							 max_val="3.06"
 							 min_val="0.08"
 							 width="53"
-							 increment="0.001"
-							 border_visible="false"/-->
+							 increment="0.001"/-->
 							<button
 							 follows="right"
 							 name="Reset_Zoom2"
