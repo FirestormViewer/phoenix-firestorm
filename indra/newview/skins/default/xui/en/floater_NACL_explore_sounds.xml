@@ -2,7 +2,7 @@
 <floater
  can_close="true"
  can_minimize="true"
- open_centered="true"
+ positioning="centered"
  can_resize="true"
  height="300"
  width="550"
