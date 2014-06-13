@@ -301,7 +301,7 @@
 		follows="left|top|right"
 		mouse_opaque="false"
 		name="loading"
-		rotations_per_sec="1.0"
+		images_per_sec="1.0"
 		tab_stop="false"
 		height="100"
 		width="100"

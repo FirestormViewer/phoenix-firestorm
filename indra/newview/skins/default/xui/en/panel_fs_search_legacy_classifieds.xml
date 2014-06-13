@@ -30,10 +30,6 @@
 		Enter search terms:
 		</text>
 		<search_combo_box
-		 bevel_style="none"
-		 border_style="line"
-		 border.border_thickness="0"
-		 commit_on_focus_lost="false"
 		 layout="topleft"
 		 follows="left|top|right"
 		 height="23"
