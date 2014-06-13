@@ -30,8 +30,7 @@
      allow_no_texture="true"
      default_image_name="None"
      enabled="false"
-     fallback_image="Generic_Person_Large"
-     scale_image="false" />
+     fallback_image="Generic_Person_Large"/>
 
     <view_border
      top="225"

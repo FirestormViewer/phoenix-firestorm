@@ -17,7 +17,6 @@
      layout="topleft"
      follows="left|top"
      name="url_edit"
-     is_unicode="false"
      max_length_bytes="254" />
 
     <flyout_button
@@ -29,7 +28,6 @@
      follows="left|top"
      name="load"
      label="Load"
-     label_selected="Load"
      enabled="false"
      tool_tip="Load this profile page with embedded web browser." >
         <flyout_button.item
@@ -60,7 +58,6 @@
      follows="right|top"
      name="web_profile"
      label="Profile"
-     label_selected="Profile"
      enabled="false" >
         <flyout_button.item
          label="Popout"
@@ -80,7 +77,6 @@
      layout="topleft"
      follows="all"
      name="profile_html"
-     ignore_ui_scale="false"
      start_url="" />
 
     <text

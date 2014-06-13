@@ -113,7 +113,6 @@
          layout="topleft"
          follows="left|top|right"
          name="want_to_edit"
-         is_unicode="false"
          max_length_bytes="254" />
 
     <text
@@ -193,7 +192,6 @@
          layout="topleft"
          follows="left|top|right"
          name="skills_edit"
-         is_unicode="false"
          max_length_bytes="254" />
 
     <text
@@ -215,7 +213,6 @@
          layout="topleft"
          follows="left|top|right"
          name="languages_edit"
-         is_unicode="false"
-         max_length="254" />
+         max_length_bytes="254" />
 </panel>
 
