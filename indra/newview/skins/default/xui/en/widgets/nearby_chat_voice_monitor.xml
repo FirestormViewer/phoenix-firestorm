@@ -4,7 +4,6 @@
 	<nearby_voice_monitor
 	 name="nearby_voice_output_monitor"
 	 draw_border="false"
-	 label=""
 	 height="20"
 	 top_pad="2"
 	 right="0"
