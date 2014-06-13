@@ -134,11 +134,9 @@
      width="290" />
   </tab_container>
   <panel
-   animate="false"
    follows="left|right|bottom"
    height="25"
    layout="topleft"
-   orientation="horizontal"
    top_pad="0"
    left="10"
    name="bottom_panel"

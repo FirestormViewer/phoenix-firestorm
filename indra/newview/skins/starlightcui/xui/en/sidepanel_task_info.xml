@@ -108,7 +108,6 @@
      top="45">
 	<panel
          follows="left|top|right"
-         auto_resize="true"
          height="490"
          label=""
          layout="topleft"
