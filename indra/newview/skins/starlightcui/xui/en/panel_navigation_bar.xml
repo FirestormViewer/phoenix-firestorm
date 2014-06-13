@@ -34,7 +34,6 @@
  background_visible="true"
  height="24"
  layout="topleft"
- border_size="0"
  name="navigation_bar_visibility_panel"
  visibility_control="ShowNavbarNavigationPanel"
  width="1024"
@@ -70,7 +69,6 @@
 	 layout="topleft"
 	 right="193"
 	 height="24"
-	 border_size="0"
 	 auto_resize="false">
 
 	     <pull_button
@@ -154,7 +152,6 @@
 	 layout="topleft"
 	 width="587"
 	 height="22"
-	 border_size="0"
 	 auto_resize="true">
 
 	    <location_input

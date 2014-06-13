@@ -137,7 +137,6 @@
   </tab_container>
   <panel
    animate="false"
-   border_size="0"
    follows="left|right|bottom"
    height="25"
    layout="topleft"
