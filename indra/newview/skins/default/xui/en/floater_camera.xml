@@ -108,7 +108,6 @@ free_mode_title
     
             <layout_panel
              name="camera_zoom_layout_panel"
-             can_resize="false"
              auto_resize="false"
              user_resize="false"
              height="70"
