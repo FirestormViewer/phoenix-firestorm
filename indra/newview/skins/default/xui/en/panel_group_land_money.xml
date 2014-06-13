@@ -179,6 +179,7 @@
      height="19"
      layout="topleft"
      left_pad="5"
+     max_length_bytes="10"
      name="your_contribution_line_editor"
      top_delta="0"
      width="80" />
@@ -188,7 +189,6 @@
      height="16"
      layout="topleft"
      left_pad="3"
-     max_length_bytes="10"
      name="your_contribution_units"
      top_delta="2"
      width="40"
