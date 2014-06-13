@@ -27,7 +27,6 @@
 
     <tab_container
        name="wearable_accordion"
-       fit_parent="true"
        layout="topleft"
        follows="all"
        tab_position="left"
@@ -41,7 +40,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -84,7 +82,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -127,7 +124,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -170,7 +166,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -213,7 +208,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -256,7 +250,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -299,7 +292,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -342,7 +334,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
@@ -385,7 +376,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="384"
        width="263">
