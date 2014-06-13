@@ -108,7 +108,6 @@
              left_pad="20"
              name="BHText3"
              top_delta="0"
-             wrap="0"
              tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best. Try snake skin, tiles, or any other normal map for some wacky effects! "
              width="100">
                  Normal Map
