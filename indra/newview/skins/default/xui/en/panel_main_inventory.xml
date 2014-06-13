@@ -182,7 +182,6 @@
        layout="topleft"
        left_pad="0"
        name="add_btn_panel"
-       user_resize="false"
        width="32">
           <button
            follows="top|left"

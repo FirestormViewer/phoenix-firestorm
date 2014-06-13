@@ -170,7 +170,6 @@
        height="25"
        layout="topleft"
        name="add_btn_panel"
-       user_resize="false"
        width="32">
           <button
            follows="bottom|left"
@@ -216,7 +215,6 @@
        left_pad="0"
        height="25"
        layout="topleft"
-	   user_resize="false"
        name="collapse_panel"
        width="90">
 	      <button
@@ -240,7 +238,6 @@
        height="25"
        layout="topleft"
        name="expand_panel"
-       user_resize="false"
        width="90">
 		  <button
 		   auto_resize="true"
@@ -272,7 +269,6 @@
        height="25"
        layout="topleft"
        name="trash_btn_panel"
-       user_resize="false"
        width="31">
           <dnd_button
            follows="top|right"
