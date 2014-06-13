@@ -44,7 +44,7 @@
      height="19"
      layout="topleft"
      left_pad="0"
-     max_length="127"
+     max_length_bytes="127"
      name="desc"
      width="440" />
 
@@ -71,7 +71,7 @@
      height="19"
      layout="topleft"
      left_pad="0"
-     max_length="127"
+     max_length_bytes="127"
      name="uploader"
      visible="false"
      width="377" />
@@ -108,7 +108,7 @@
      height="19"
      layout="topleft"
      left_pad="0"
-     max_length="127"
+     max_length_bytes="127"
      name="upload_time"
      visible="false"
      width="440" />
@@ -135,7 +135,7 @@
      height="19"
      layout="topleft"
      left_pad="0"
-     max_length="127"
+     max_length_bytes="127"
      name="uuid"
      visible="false"
      width="377" />

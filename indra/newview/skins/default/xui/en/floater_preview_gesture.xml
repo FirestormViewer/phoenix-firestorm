@@ -269,7 +269,6 @@
      top="330"
      width="100" />
     <radio_group
-     draw_border="false"
      follows="top|left"
      height="40"
      layout="topleft"
