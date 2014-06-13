@@ -40,7 +40,7 @@
 	<check_box follows="top|left" bottom_delta="0" left_delta="64" width="160" name="collision_chk" label="Default Collision Sounds" control_name="FloaterSoundsLogCollisions" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="160" width="110" name="repeated_asset_chk" label="Repeated Asset" control_name="FloaterSoundsLogRepeats" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="110" width="80" name="pause_chk" label="Pause Log" initial_value="false"/>
-	<scroll_list can_resize="true" column_padding="0" draw_heading="true" follows="all" left="10" multi_select="true" name="sound_list" search_column="0" top="40" right="-10" bottom="-60">
+	<scroll_list column_padding="0" draw_heading="true" follows="all" left="10" multi_select="true" name="sound_list" search_column="0" top="40" right="-10" bottom="-60">
 		<columns dynamicwidth="false" width="80" label="Playing" name="playing" />
 		<columns dynamicwidth="false" width="100" label="Type" name="type" />
 		<columns dynamicwidth="true" label="Owner" name="owner" />

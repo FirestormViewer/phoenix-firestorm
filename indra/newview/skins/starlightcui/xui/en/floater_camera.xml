@@ -255,7 +255,6 @@
             <!-- Camera zoom layout panel -->
             <layout_panel
              name="panel_zoom"
-             can_resize="false"
              auto_resize="false"
              user_resize="false"
              height="78"
