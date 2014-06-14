@@ -747,13 +747,6 @@ static void handleFlightAssistOptionChanged(const LLSD& newvalue)
 }
 // </FS:TT>
 
-// <FS:AO> bridge-based radar tags
-static void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
-}
-// </FS:AO>
-
 // <FS:PP> Movelock for Bridge
 static void handleMovelockOptionChanged(const LLSD& newvalue)
 {
@@ -962,7 +955,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
 
 	gSavedPerAccountSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
-	gSavedPerAccountSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("RelockMoveLockAfterMovement")->getCommitSignal()->connect(boost::bind(&handleMovelockAfterMoveOptionChanged, _2));
 	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));

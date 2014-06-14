@@ -106,10 +106,6 @@
 		label="Afficher 'Resident'"
 		tool_tip="Ajouter 'Resident' au nom hérité.">
 	</check_box>
-	<!--FIRE-5505 (work in progress)-->
-	<check_box name="FSPublishRadarTag"
-		label="Publier le label du viewer"
-		tool_tip="Cette fonction permet aux HUDs de recevoir un label appelé 'Firestorm' lors de l'affichage d'informations sur votre avatar. Cette option améliore la fonctionnalité de certains HUDs radar, et utilise le pont (bridge) LSL Firestorm."/>
 <!--time/log out-->
 	<text name="title_afk_text">
 		Absent après :
