@@ -27,6 +27,11 @@
 #import <Cocoa/Cocoa.h>
 #import "llopenglview-objc.h"
 
+// [Cinder] Override NSApplication to give us access to sendEvent
+@interface LLNSApplication : NSApplication
+@end
+// [/Cinder]
+
 @interface LLAppDelegate : NSObject <NSApplicationDelegate> {
 	LLNSWindow *window;
 	NSWindow *inputWindow;

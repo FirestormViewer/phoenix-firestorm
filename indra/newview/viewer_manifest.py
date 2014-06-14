@@ -1204,7 +1204,7 @@ class Darwin_universal_Manifest(DarwinManifest):
                 self.path("libllqtwebkit.dylib")
             self.end_prefix("llplugin")
 
-        self.end_prefix("../packages/bin_x86/slplugin");
+        self.end_prefix("../packages/bin_x86");
 
 
 class Darwin_x86_64_Manifest(DarwinManifest):
