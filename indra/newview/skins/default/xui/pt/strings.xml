@@ -439,9 +439,11 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="ReleaseNotes">
 		Notas de versão
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Carregando...
 	</string>

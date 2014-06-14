@@ -428,9 +428,11 @@ Prøv venligst om lidt igen.
 	<string name="ReleaseNotes">
 		Noter om version
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Henter...
 	</string>

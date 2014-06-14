@@ -481,9 +481,11 @@ support@secondlife.com にお問い合わせください。
 	<string name="ReleaseNotes">
 		リリースノート
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		ローディング...
 	</string>
