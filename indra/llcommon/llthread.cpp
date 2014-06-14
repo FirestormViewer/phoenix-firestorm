@@ -111,8 +111,8 @@ LL_COMMON_API void assert_main_thread()
 	static uintptr_t s_thread_id = LLThread::currentID();
 	if (LLThread::currentID() != s_thread_id)
 	{
-		LL_WARNS() << "Illegal execution from thread id " << (intrptr_t) LLThread::currentID()
-			<< " outside main thread " << (intrptr_t) s_thread_id << LL_ENDL;
+		LL_WARNS() << "Illegal execution from thread id " << (intptr_t) LLThread::currentID()
+			<< " outside main thread " << (intptr_t) s_thread_id << LL_ENDL;
 	}
 }
 
