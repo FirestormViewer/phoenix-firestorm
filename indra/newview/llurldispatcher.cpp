@@ -152,7 +152,7 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 									  LLMediaCtrl* web,
 									  bool trusted_browser)
 {
-	llinfos << "cmd: " << slurl.getAppCmd() << " path: " << slurl.getAppPath() << " query: " << slurl.getAppQuery() << llendl;
+	LL_INFOS() << "cmd: " << slurl.getAppCmd() << " path: " << slurl.getAppPath() << " query: " << slurl.getAppQuery() << LL_ENDL;
 
 	// <FS:Ansariel> FIRE-6238: Don't try to parse an already unescaped query string - use the already created query map!
 	//const LLSD& query_map = LLURI::queryMap(slurl.getAppQuery());
@@ -321,6 +321,7 @@ public:
 	// cause a constant teleport loop.  JC
 	LLTeleportHandler() : LLCommandHandler("teleport", UNTRUSTED_THROTTLE) { }
 
+
 	bool handle(const LLSD& tokens, const LLSD& query_map,
 				LLMediaCtrl* web)
 	{
@@ -371,7 +372,7 @@ public:
 							   tokens[2].asReal(), 
 							   tokens[3].asReal());
 		}
-		
+
 		// Region names may be %20 escaped.
 		
 		std::string region_name = LLURI::unescape(tokens[0]);
@@ -416,9 +417,12 @@ public:
 
 		return false;
 	}
+
 };
 LLTeleportHandler gTeleportHandler;
 static LLNotificationFunctorRegistration open_landmark_callback_reg("TeleportViaSLAPP", LLTeleportHandler::teleport_via_slapp_callback);
+
+
 
 //---------------------------------------------------------------------------
 

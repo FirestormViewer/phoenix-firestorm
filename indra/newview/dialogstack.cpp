@@ -53,7 +53,7 @@ void DialogStack::pop(const LLUUID& uuid)
 {
 	if(notificationIDs.empty())
 	{
-		llwarns << "Dialog Stack count was 0 when pop() was called." << llendl;
+		LL_WARNS() << "Dialog Stack count was 0 when pop() was called." << LL_ENDL;
 	}
 	else
 	{

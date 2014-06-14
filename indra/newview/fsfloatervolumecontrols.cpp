@@ -59,10 +59,10 @@ BOOL FSFloaterVolumeControls::postBuild()
 }
 
 // virtual
-void FSFloaterVolumeControls::handleVisibilityChange(BOOL new_visibility)
+void FSFloaterVolumeControls::onVisibilityChange(BOOL new_visibility)
 {
 	UtilityBar::instance().setVolumeControlsButtonExpanded(new_visibility);
-	LLFloater::handleVisibilityChange(new_visibility);
+	LLFloater::onVisibilityChange(new_visibility);
 }
 
 //<FS:KC> Handled centrally now

@@ -174,7 +174,7 @@ void LLPanelGroups::reset()
 		group_list->operateOnAll(LLCtrlListInterface::OP_DELETE);
 	}
 	// [CR] FIRE-12229
-	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.size()));
 	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
 	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
 	// [/CR]
@@ -188,7 +188,7 @@ BOOL LLPanelGroups::postBuild()
 	childSetCommitCallback("group list", onGroupList, this);
 
 	// [CR] FIRE-12229
-	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.size()));
 	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
 	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
 	// [/CR]
@@ -349,7 +349,7 @@ void LLPanelGroups::onGroupList(LLUICtrl* ctrl, void* userdata)
 
 void init_group_list(LLScrollListCtrl* group_list, const LLUUID& highlight_id, U64 powers_mask)
 {
-	S32 count = gAgent.mGroups.count();
+	S32 count = gAgent.mGroups.size();
 	LLUUID id;
 	if (!group_list) return;
 
@@ -357,8 +357,8 @@ void init_group_list(LLScrollListCtrl* group_list, const LLUUID& highlight_id, U
 
 	for(S32 i = 0; i < count; ++i)
 	{
-		id = gAgent.mGroups.get(i).mID;
-		LLGroupData* group_datap = &gAgent.mGroups.get(i);
+		id = gAgent.mGroups.at(i).mID;
+		LLGroupData* group_datap = &gAgent.mGroups.at(i);
 		if ((powers_mask == GP_ALL_POWERS) || ((group_datap->mPowers & powers_mask) != 0))
 		{
 			std::string style = "NORMAL";

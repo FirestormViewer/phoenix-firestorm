@@ -72,7 +72,7 @@ public:
 	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, EAcceptance *accept, std::string& tooltip_msg);
 	
 	// <FS:Ansariel> Fix broken return and delete key in task inventory
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
+	//virtual BOOL handleKeyHere(KEY key, MASK mask);
 
 	/*virtual*/ void onFocusLost();
 	/*virtual*/ void onFocusReceived();
@@ -96,6 +96,9 @@ protected:
 	void addItemID( const LLUUID& id, LLFolderViewItem*   itemp );
 	void removeItemID(const LLUUID& id);
 	void clearItemIDs();
+
+	BOOL			handleKeyHere( KEY key, MASK mask );
+	BOOL			isSelectionRemovable();
 
 private:
 	std::map<LLUUID, LLFolderViewItem*> mItemMap;

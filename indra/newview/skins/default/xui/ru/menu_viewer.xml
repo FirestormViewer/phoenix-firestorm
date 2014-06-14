@@ -29,7 +29,6 @@
 			<menu_item_call label="Сброс на мужского аватара. (Нуб)" name="ResetDefaultAvM"/>
             <menu_item_call label="Сброс на женского аватара. (Нуб)" name="ResetDefaultAvF"/>
 			<menu_item_check label="Показать вес аватаров(АРК)" name="Avatar Rendering Cost"/>
-			<menu_item_call label="Лаг-метр" name="Lag Meter"/>
 			<menu_item_call label="Пересоздать лсл мост" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu label="Статус" name="Status">
@@ -244,7 +243,6 @@
 		<menu_item_check label="Снимок высокого разрешения" name="HighResSnapshot"/>
 		<menu_item_check label="Тихое создание снимка" name="QuietSnapshotsToDisk"/>
 		<menu label="Производительность" name="Performance Tools">
-			<menu_item_call label="Запаздывание" name="Lag Meter"/>
 			<menu_item_check label="Статистика" name="Statistics Bar"/>
 			<menu_item_check label="Показать вес отрисовки для аватаров" name="Avatar Rendering Cost"/>
 		</menu>

@@ -34,13 +34,15 @@
 #include "llcontrol.h"
 #include "lldir.h"
 #include "llwindow.h"
+#include "llxmlnode.h"
 
 extern LLControlGroup gSavedSettings;
 
 using std::string;
 using std::map;
 
-bool fontDescInitFromXML(LLXMLNodePtr node, LLFontDescriptor& desc);
+bool font_desc_init_from_xml(LLXMLNodePtr node, LLFontDescriptor& desc);
+bool init_from_xml(LLFontRegistry* registry, LLXMLNodePtr node);
 
 LLFontDescriptor::LLFontDescriptor():
 	mStyle(0)
@@ -191,7 +193,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 
 	if ( root.isNull() || ! root->hasName( "fonts" ) )
 	{
-		llwarns << "Bad font info file: " << xml_filename << llendl;
+		LL_WARNS() << "Bad font info file: " << xml_filename << LL_ENDL;
 		return false;
 	}
 
@@ -200,7 +202,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 	if (root->hasName("fonts"))
 	{
 		// Expect a collection of children consisting of "font" or "font_size" entries
-		bool init_succ = initFromXML(root);
+		bool init_succ = init_from_xml(this, root);
 		success = success || init_succ;
 	}
     
@@ -226,7 +228,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 
 		if ( root.isNull() || ! root->hasName( "fonts" ) )
 		{
-			llwarns << "Bad font info file: " << *path_it << llendl;
+			LL_WARNS() << "Bad font info file: " << *path_it << LL_ENDL;
 			continue;
 		}
 
@@ -235,7 +237,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 		if (root->hasName("fonts"))
 		{
 			// Expect a collection of children consisting of "font" or "font_size" entries
-			bool init_succ = initFromXML(root);
+			bool init_succ = init_from_xml(this, root);
 			success = success || init_succ;
 		}
 	}
@@ -260,7 +262,7 @@ std::string currentOsName()
 #endif
 }
 
-bool fontDescInitFromXML(LLXMLNodePtr node, LLFontDescriptor& desc)
+bool font_desc_init_from_xml(LLXMLNodePtr node, LLFontDescriptor& desc)
 {
 	if (node->hasName("font"))
 	{
@@ -293,14 +295,14 @@ bool fontDescInitFromXML(LLXMLNodePtr node, LLFontDescriptor& desc)
 		{
 			if (child_name == currentOsName())
 			{
-				fontDescInitFromXML(child, desc);
+				font_desc_init_from_xml(child, desc);
 			}
 		}
 	}
 	return true;
 }
 
-bool LLFontRegistry::initFromXML(LLXMLNodePtr node)
+bool init_from_xml(LLFontRegistry* registry, LLXMLNodePtr node)
 {
 	LLXMLNodePtr child;
 	
@@ -311,17 +313,17 @@ bool LLFontRegistry::initFromXML(LLXMLNodePtr node)
 		if (child->hasName("font"))
 		{
 			LLFontDescriptor desc;
-			bool font_succ = fontDescInitFromXML(child, desc);
+			bool font_succ = font_desc_init_from_xml(child, desc);
 			LLFontDescriptor norm_desc = desc.normalize();
 			if (font_succ)
 			{
 				// if this is the first time we've seen this font name,
 				// create a new template map entry for it.
-				const LLFontDescriptor *match_desc = getMatchingFontDesc(desc);
+				const LLFontDescriptor *match_desc = registry->getMatchingFontDesc(desc);
 				if (match_desc == NULL)
 				{
 					// Create a new entry (with no corresponding font).
-					mFontMap[norm_desc] = NULL;
+					registry->mFontMap[norm_desc] = NULL;
 				}
 				// otherwise, find the existing entry and combine data. 
 				else
@@ -336,8 +338,8 @@ bool LLFontRegistry::initFromXML(LLXMLNodePtr node)
 											desc.getFileNames().end());
 					LLFontDescriptor new_desc = *match_desc;
 					new_desc.getFileNames() = match_file_names;
-					mFontMap.erase(*match_desc);
-					mFontMap[new_desc] = NULL;
+					registry->mFontMap.erase(*match_desc);
+					registry->mFontMap[new_desc] = NULL;
 				}
 			}
 		}
@@ -348,9 +350,9 @@ bool LLFontRegistry::initFromXML(LLXMLNodePtr node)
 			if (child->getAttributeString("name",size_name) &&
 				child->getAttributeF32("size",size_value))
 			{
-				// mFontSizes[size_name] = size_value;
+				//registry->mFontSizes[size_name] = size_value;
 				// +/- defualt font sizes -KC
-				mFontSizes[size_name] = size_value + mFontSizeMod;
+				registry->mFontSizes[size_name] = size_value; //+ mFontSizeMod; FS:ND this broke after merge. Someone familiar with this code has to look after this.
 			}
 
 		}
@@ -383,10 +385,10 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	bool found_size = nameToSize(norm_desc.getSize(),point_size);
 	if (!found_size)
 	{
-		llwarns << "createFont unrecognized size " << norm_desc.getSize() << llendl;
+		LL_WARNS() << "createFont unrecognized size " << norm_desc.getSize() << LL_ENDL;
 		return NULL;
 	}
-	llinfos << "createFont " << norm_desc.getName() << " size " << norm_desc.getSize() << " style " << ((S32) norm_desc.getStyle()) << llendl;
+	LL_INFOS() << "createFont " << norm_desc.getName() << " size " << norm_desc.getSize() << " style " << ((S32) norm_desc.getStyle()) << LL_ENDL;
 	F32 fallback_scale = 1.0;
 
 	// Find corresponding font template (based on same descriptor with no size specified)
@@ -395,8 +397,8 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	const LLFontDescriptor *match_desc = getClosestFontTemplate(template_desc);
 	if (!match_desc)
 	{
-		llwarns << "createFont failed, no template found for "
-				<< norm_desc.getName() << " style [" << ((S32)norm_desc.getStyle()) << "]" << llendl;
+		LL_WARNS() << "createFont failed, no template found for "
+				<< norm_desc.getName() << " style [" << ((S32)norm_desc.getStyle()) << "]" << LL_ENDL;
 		return NULL;
 	}
 
@@ -409,7 +411,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	// This may not be the best solution, but it at least prevents a crash.
 	if (it != mFontMap.end() && it->second != NULL)
 	{
-		llinfos << "-- matching font exists: " << nearest_exact_desc.getName() << " size " << nearest_exact_desc.getSize() << " style " << ((S32) nearest_exact_desc.getStyle()) << llendl;
+		LL_INFOS() << "-- matching font exists: " << nearest_exact_desc.getName() << " size " << nearest_exact_desc.getSize() << " style " << ((S32) nearest_exact_desc.getStyle()) << LL_ENDL;
 		
 		// copying underlying Freetype font, and storing in LLFontGL with requested font descriptor
 		LLFontGL *font = new LLFontGL;
@@ -442,7 +444,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	// Load fonts based on names.
 	if (file_names.empty())
 	{
-		llwarns << "createFont failed, no file names specified" << llendl;
+		LL_WARNS() << "createFont failed, no file names specified" << LL_ENDL;
 		return NULL;
 	}
 
@@ -525,7 +527,7 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	}
 	else
 	{
-		llwarns << "createFont failed in some way" << llendl;
+		LL_WARNS() << "createFont failed in some way" << LL_ENDL;
 	}
 
 	mFontMap[desc] = result;
@@ -578,9 +580,9 @@ LLFontGL *LLFontRegistry::getFont(const LLFontDescriptor& desc)
 		LLFontGL *fontp = createFont(desc);
 		if (!fontp)
 		{
-			llwarns << "getFont failed, name " << desc.getName()
+			LL_WARNS() << "getFont failed, name " << desc.getName()
 					<<" style=[" << ((S32) desc.getStyle()) << "]"
-					<< " size=[" << desc.getSize() << "]" << llendl;
+					<< " size=[" << desc.getSize() << "]" << LL_ENDL;
 		}
 		return fontp;
 	}
@@ -683,28 +685,28 @@ const LLFontDescriptor *LLFontRegistry::getClosestFontTemplate(const LLFontDescr
 
 void LLFontRegistry::dump()
 {
-	llinfos << "LLFontRegistry dump: " << llendl;
+	LL_INFOS() << "LLFontRegistry dump: " << LL_ENDL;
 	for (font_size_map_t::iterator size_it = mFontSizes.begin();
 		 size_it != mFontSizes.end();
 		 ++size_it)
 	{
-		llinfos << "Size: " << size_it->first << " => " << size_it->second << llendl;
+		LL_INFOS() << "Size: " << size_it->first << " => " << size_it->second << LL_ENDL;
 	}
 	for (font_reg_map_t::iterator font_it = mFontMap.begin();
 		 font_it != mFontMap.end();
 		 ++font_it)
 	{
 		const LLFontDescriptor& desc = font_it->first;
-		llinfos << "Font: name=" << desc.getName()
+		LL_INFOS() << "Font: name=" << desc.getName()
 				<< " style=[" << ((S32)desc.getStyle()) << "]"
 				<< " size=[" << desc.getSize() << "]"
 				<< " fileNames="
-				<< llendl;
+				<< LL_ENDL;
 		for (string_vec_t::const_iterator file_it=desc.getFileNames().begin();
 			 file_it != desc.getFileNames().end();
 			 ++file_it)
 		{
-			llinfos << "  file: " << *file_it <<llendl;
+			LL_INFOS() << "  file: " << *file_it <<LL_ENDL;
 		}
 	}
 }

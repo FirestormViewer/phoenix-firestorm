@@ -33,7 +33,6 @@
 #include "llsurface.h"
 #include "pipeline.h"
 #include "llagent.h"
-#include "timing.h"
 #include "llsky.h"
 #include "llviewercamera.h"
 #include "llregionhandle.h" // <FS:CR> Aurora Sim
@@ -45,11 +44,11 @@
 #include "noise.h"
 
 extern bool gShiftFrame;
-extern U64 gFrameTime;
+extern U64MicrosecondsImplicit gFrameTime;
 extern LLPipeline gPipeline;
 
-LLSurfacePatch::LLSurfacePatch() :
-	mHasReceivedData(FALSE),
+LLSurfacePatch::LLSurfacePatch() 
+:	mHasReceivedData(FALSE),
 	mSTexUpdate(FALSE),
 	mDirty(FALSE),
 	mDirtyZStats(TRUE),
@@ -101,7 +100,7 @@ void LLSurfacePatch::dirty()
 	}
 	else
 	{
-		llwarns << "No viewer object for this surface patch!" << llendl;
+		LL_WARNS() << "No viewer object for this surface patch!" << LL_ENDL;
 	}
 
 	mDirtyZStats = TRUE;

@@ -534,7 +534,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="all"
          name="drop_target"
-         border_thickness="0"
          mouse_opaque="false" />
 </panel>
 

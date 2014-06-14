@@ -241,7 +241,7 @@ BOOL LLPanelMainInventory::postBuild()
 	// Now load the stored settings from disk, if available.
 	std::ostringstream filterSaveName;
 	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
-	llinfos << "LLPanelMainInventory::init: reading from " << filterSaveName.str() << llendl;
+	LL_INFOS() << "LLPanelMainInventory::init: reading from " << filterSaveName.str() << LL_ENDL;
 	llifstream file(filterSaveName.str());
 	LLSD savedFilterState;
 	if (file.is_open())
@@ -251,34 +251,24 @@ BOOL LLPanelMainInventory::postBuild()
 
 		// Load the persistent "Recent Items" settings.
 		// Note that the "All Items" settings do not persist.
-		// <FS:ND> bring back worn items panel.
-		//if(recent_items_panel)
-		//{
-		//	if(savedFilterState.has(recent_items_panel->getFilter().getName()))
-		//	{
-		//		LLSD recent_items = savedFilterState.get(
-		//			recent_items_panel->getFilter().getName());
-		//		LLInventoryFilter::Params p;
-		//		LLParamSDParser parser;
-		//		parser.readSD(recent_items, p);
-		//		recent_items_panel->getFilter().fromParams(p);
-		//	}
-		//}
-
 		if(recent_items_panel)
 		{
-			if(savedFilterState.has(recent_items_panel->getName()))
+			if(savedFilterState.has(recent_items_panel->getFilter().getName()))
 			{
 				LLSD recent_items = savedFilterState.get(
-					recent_items_panel->getName());
+					recent_items_panel->getFilter().getName());
+				// <FS:Ansariel> Fix wrong param type
+				//LLInventoryFilter::Params p;
 				LLInventoryPanel::InventoryState p;
+				// </FS:Ansariel>
 				LLParamSDParser parser;
 				parser.readSD(recent_items, p);
+				// <FS:Ansariel> Fix wrong param type
+				//recent_items_panel->getFilter().fromParams(p);
 				recent_items_panel->getFilter().fromParams(p.filter);
+				// </FS:Ansariel>
 			}
 		}
-		// </FS:ND>
-
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
@@ -369,8 +359,8 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
 	{
 		// <FS:TM> VS2013 compile fix
-		//llwarns << "Could not write to filters save file " << filterSaveName << llendl;
-		llwarns << "Could not write to filters save file " << filterSaveName.str() << llendl;
+		//LL_WARNS() << "Could not write to filters save file " << filterSaveName << LL_ENDL;
+		LL_WARNS() << "Could not write to filters save file " << filterSaveName.str() << LL_ENDL;
 	}
 	else
 		filtersFile.close();
@@ -675,7 +665,7 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 	// invalid selection (broken XML?)
 	else
 	{
-		llwarns << "Invalid filter selection: " << filter_type_name << llendl;
+		LL_WARNS() << "Invalid filter selection: " << filter_type_name << LL_ENDL;
 		return;
 	}
 
@@ -918,7 +908,7 @@ void LLPanelMainInventory::onFocusReceived()
 	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 	if (!sidepanel_inventory)
 	{
-		llwarns << "Could not find Inventory Panel in My Inventory floater" << llendl;
+		LL_WARNS() << "Could not find Inventory Panel in My Inventory floater" << LL_ENDL;
 		return;
 	}
 

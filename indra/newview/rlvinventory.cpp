@@ -108,8 +108,8 @@ void RlvInventory::fetchSharedInventory()
 	// Add them to the "to fetch" list
 	uuid_vec_t idFolders;
 	idFolders.push_back(pRlvRoot->getUUID());
-	for (S32 idxFolder = 0, cntFolder = folders.count(); idxFolder < cntFolder; idxFolder++)
-		idFolders.push_back(folders.get(idxFolder)->getUUID());
+	for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
+		idFolders.push_back(folders.at(idxFolder)->getUUID());
 
 	// Now fetch them all in one go
 	RlvSharedInventoryFetcher* pFetcher = new RlvSharedInventoryFetcher(idFolders);
@@ -138,9 +138,9 @@ void RlvInventory::fetchSharedLinks()
 
 	// Add them to the "to fetch" list based on link type
 	uuid_vec_t idFolders, idItems;
-	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
+	for (S32 idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
 	{
-		const LLViewerInventoryItem* pItem = items.get(idxItem);
+		const LLViewerInventoryItem* pItem = items.at(idxItem);
 		switch (pItem->getActualType())
 		{
 			case LLAssetType::AT_LINK:
@@ -215,7 +215,7 @@ bool RlvInventory::findSharedFolders(const std::string& strCriteria, LLInventory
 	RlvCriteriaCategoryCollector f(strCriteria);
 	gInventory.collectDescendentsIf(pRlvRoot->getUUID(), folders, items, FALSE, f);
 
-	return (folders.count() != 0);
+	return (folders.size() != 0);
 }
 
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -240,7 +240,7 @@ bool RlvInventory::getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_arra
 		}
 	}
 
-	return (folders.count() != 0);
+	return (folders.size() != 0);
 }
 
 // Checked: 2011-10-06 (RLVa-1.4.2a) | Modified: RLVa-1.4.2a
@@ -254,9 +254,9 @@ const LLUUID& RlvInventory::getSharedRootID() const
 		{
 			// NOTE: we might have multiple #RLV folders (pick the first one with sub-folders; otherwise the last one with no sub-folders)
 			const LLViewerInventoryCategory* pFolder;
-			for (S32 idxFolder = 0, cntFolder = pFolders->count(); idxFolder < cntFolder; idxFolder++)
+			for (S32 idxFolder = 0, cntFolder = pFolders->size(); idxFolder < cntFolder; idxFolder++)
 			{
-				if ( ((pFolder = pFolders->get(idxFolder)) != NULL) && (cstrSharedRoot == pFolder->getName()) )
+				if ( ((pFolder = pFolders->at(idxFolder)) != NULL) && (cstrSharedRoot == pFolder->getName()) )
 				{
 					m_idRlvRoot = pFolder->getUUID();
 					if (getDirectDescendentsFolderCount(pFolder) > 0)
@@ -364,8 +364,8 @@ S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFold
 
 		if (pItems)
 		{
-			for (S32 idxItem = 0, cntItem = pItems->count(); idxItem < cntItem; idxItem++)
-				if (pItems->get(idxItem)->getType() == filterType)
+			for (S32 idxItem = 0, cntItem = pItems->size(); idxItem < cntItem; idxItem++)
+				if (pItems->at(idxItem)->getType() == filterType)
 					cntType++;
 		}
 	}
@@ -440,9 +440,9 @@ void RlvRenameOnWearObserver::doneIdle()
 			continue;
 		}
 
-		for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
+		for (S32 idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
 		{
-			LLViewerInventoryItem* pItem = items.get(idxItem);
+			LLViewerInventoryItem* pItem = items.at(idxItem);
 			if (!pItem)
 				continue;
 

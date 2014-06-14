@@ -118,6 +118,7 @@ Var COMMANDLINE         ; command line passed to this installer, set in .onInit
 Var SHORTCUT_LANG_PARAM ; "--set InstallLanguage de", passes language to viewer
 Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall 
                         ; GUI and the defaults.
+Var SKIP_AUTORUN		; skip automatic launch of viewer after install
 Var DO_UNINSTALL_V2     ; If non-null, path to a previous Viewer 2 installation that will be uninstalled.
 Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 
@@ -138,24 +139,9 @@ Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 Function .onInstSuccess
 Call CheckWindowsServPack				; Warn if not on the latest SP before asking to launch.
     Push $R0	# Option value, unused
-
-    StrCmp $SKIP_DIALOGS "true" label_launch 
-
-    ${GetOptions} $COMMANDLINE "/AUTOSTART" $R0
-    # If parameter was there (no error) just launch
-    # Otherwise ask
-    IfErrors label_ask_launch label_launch
-    
-label_ask_launch:
-    # Don't launch by default when silent
-    IfSilent label_no_launch
-	MessageBox MB_YESNO $(InstSuccesssQuestion) \
-        IDYES label_launch IDNO label_no_launch
-        
-label_launch:
+	StrCmp $SKIP_AUTORUN "true" +2;
 	# Assumes SetOutPath $INSTDIR
 	Exec '"$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM'
-label_no_launch:
 	Pop $R0
 FunctionEnd
 
@@ -876,7 +862,12 @@ Call CheckWindowsVersion		;Check the version of windows we are installing on
         SetAutoClose true
     ; </FS:Ansariel>
 
+	${GetOptions} $COMMANDLINE "/SKIP_AUTORUN" $0
+    IfErrors +2 0 ; If error jump past setting SKIP_AUTORUN
+		StrCpy $SKIP_AUTORUN "true"
+
     ${GetOptions} $COMMANDLINE "/LANGID=" $0   ; /LANGID=1033 implies US English
+
     ; If no language (error), then proceed
     IfErrors lbl_configure_default_lang
     ; No error means we got a language, so use it

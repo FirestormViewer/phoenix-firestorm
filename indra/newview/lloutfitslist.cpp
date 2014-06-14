@@ -92,7 +92,7 @@ const outfit_accordion_tab_params& get_accordion_tab_params()
 		}
 		else
 		{
-			llwarns << "Failed to read xml of Outfit's Accordion Tab from outfit_accordion_tab.xml" << llendl;
+			LL_WARNS() << "Failed to read xml of Outfit's Accordion Tab from outfit_accordion_tab.xml" << LL_ENDL;
 		}
 	}
 
@@ -219,7 +219,7 @@ private:
 		LLWearableType::EType type = LLWearableType::typeNameToType(data.asString());
 		if (type == LLWearableType::WT_NONE)
 		{
-			llwarns << "Invalid wearable type" << llendl;
+			LL_WARNS() << "Invalid wearable type" << LL_ENDL;
 			return;
 		}
 
@@ -498,13 +498,13 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 	// <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
 	if( vadded.size() > 128 )
-		llwarns << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnects" << llendl;
+		LL_WARNS() << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnects" << LL_ENDL;
 
 	U32 nCap = gSavedSettings.getU32( "FSDisplaySavedOutfitsCap" );
 	if( nCap && nCap < vadded.size() )
 	{
 		vadded.resize( nCap );
-		llwarns << "Capped outfits to " << nCap << " due to debug setting FSDisplaySavedOutfitsCap" << llendl;
+		LL_WARNS() << "Capped outfits to " << nCap << " due to debug setting FSDisplaySavedOutfitsCap" << LL_ENDL;
 	}
 	// </FS:ND>
 
@@ -687,7 +687,7 @@ void LLOutfitsList::performAction(std::string action)
 	}
 	if ("replaceitems" == action)
 	{
-		llinfos << "replaceitems" << llendl;
+		LL_INFOS() << "replaceitems" << LL_ENDL;
 		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
 	}
 	else if ("addtooutfit" == action)

@@ -75,7 +75,7 @@ LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
 LLScrollListItem* LLNameListCtrl::addNameItem(const LLUUID& agent_id, EAddPosition pos,
 								 BOOL enabled, const std::string& suffix)
 {
-	//llinfos << "LLNameListCtrl::addNameItem " << agent_id << llendl;
+	//LL_INFOS() << "LLNameListCtrl::addNameItem " << agent_id << LL_ENDL;
 
 	NameItem item;
 	item.value = agent_id;
@@ -128,7 +128,7 @@ BOOL LLNameListCtrl::handleDragAndDrop(
 	}
 
 	handled = TRUE;
-	lldebugst(LLERR_USER_INPUT) << "dragAndDrop handled by LLNameListCtrl " << getName() << llendl;
+	LL_DEBUGS("UserInput") << "dragAndDrop handled by LLNameListCtrl " << getName() << LL_ENDL;
 
 	return handled;
 }
@@ -181,7 +181,7 @@ void	LLNameListCtrl::mouseOverHighlightNthItem( S32 target_index )
 			}
 			else
 			{
-				llwarns << "highlighted name list item is NULL" << llendl;
+				LL_WARNS() << "highlighted name list item is NULL" << LL_ENDL;
 			}
 		}
 		if(target_index != -1)
@@ -195,7 +195,7 @@ void	LLNameListCtrl::mouseOverHighlightNthItem( S32 target_index )
 			}
 			else
 			{
-				llwarns << "target name item is NULL" << llendl;
+				LL_WARNS() << "target name item is NULL" << LL_ENDL;
 			}
 		}
 	}
@@ -243,6 +243,12 @@ BOOL LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 				params.padding(0);
 				params.pos(pos);
 				params.sticky_rect(sticky_rect);
+
+				// <FS:Ansariel> FIRE-14013: Add styled_message param so the return condition in LLToolTipMgr::show will fail
+				LLToolTip::StyledText st;
+				st.text("");
+				params.styled_message.add(st);
+				// </FS:Ansariel>
 
 				LLToolTipMgr::getInstance()->show(params);
 				handled = TRUE;

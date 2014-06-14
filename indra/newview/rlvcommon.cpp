@@ -37,6 +37,7 @@
 #include "fsscriptlibrary.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>	// <FS:CR>
+#include "lltrace.h"
 
 // ============================================================================
 // RlvNotifications
@@ -521,7 +522,7 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	gMessageSystem->addU8Fast(_PREHASH_Type, CHAT_TYPE_SHOUT);
 	gMessageSystem->addS32("Channel", nChannel);
 	gAgent.sendReliableMessage();
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
+	add(LLStatViewer::CHAT_COUNT,1);
 
 	return true;
 }

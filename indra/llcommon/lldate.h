@@ -33,6 +33,7 @@
 #include <string>
 
 #include "stdtypes.h"
+#include "llunits.h"
 
 // <FS:Ansariel> Fix dependency on llviewerprecompiledheaders.h in dependent projects
 #include "llpreprocessor.h"
@@ -59,9 +60,9 @@ public:
 	/** 
 	 * @brief Construct a date from a seconds since epoch value.
 	 *
-	 * @pararm seconds_since_epoch The number of seconds since UTC epoch.
+	 * @param seconds_since_epoch The number of seconds since UTC epoch.
 	 */
-	LLDate(F64 seconds_since_epoch);
+	LLDate(F64SecondsImplicit seconds_since_epoch);
 
 	/** 
 	 * @brief Construct a date from a string representation

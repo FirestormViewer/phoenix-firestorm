@@ -37,6 +37,9 @@
 class LLDrawable;
 class LLViewerObject;
 
+// <FS:Ansariel> Moved here to make it publically available
+const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters?
+
 //-----------------------------------------------------------------------------
 // class LLViewerJointAttachment
 //-----------------------------------------------------------------------------

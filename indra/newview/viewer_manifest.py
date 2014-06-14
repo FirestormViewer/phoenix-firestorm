@@ -1435,6 +1435,7 @@ class Linux_i686_Manifest(LinuxManifest):
           except:
               print "Leap Motion library not found"
           self.end_prefix("lib")
+          open( os.path.join(self.get_dst_prefix(), "FS_No_LD_Hacks.txt" ), "w" ).write( "1" )
 
 
 class Linux_x86_64_Manifest(LinuxManifest):

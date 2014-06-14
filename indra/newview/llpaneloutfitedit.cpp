@@ -172,14 +172,14 @@ public:
 
 		return menu;
 	}
-	
+
 private:
 	static void onCreate(const LLSD& param)
 	{
 		LLWearableType::EType type = LLWearableType::typeNameToType(param.asString());
 		if (type == LLWearableType::WT_NONE)
 		{
-			llwarns << "Invalid wearable type" << llendl;
+			LL_WARNS() << "Invalid wearable type" << LL_ENDL;
 			return;
 		}
 
@@ -266,7 +266,7 @@ private:
 		}
 		else
 		{
-			llwarns << "Unrecognized sort order action" << llendl;
+			LL_WARNS() << "Unrecognized sort order action" << LL_ENDL;
 			return;
 		}
 
@@ -309,7 +309,7 @@ private:
 				// If inventory panel is not sorted by date then it is sorted by name.
 				return LLWearableItemsList::E_SORT_BY_MOST_RECENT & ~sort_order;
 			}
-			llwarns << "Unrecognized inventory panel sort order" << llendl;
+			LL_WARNS() << "Unrecognized inventory panel sort order" << LL_ENDL;
 		}
 		else
 		{
@@ -327,7 +327,7 @@ private:
 			{
 				return LLWearableItemsList::E_SORT_BY_TYPE_NAME == sort_order;
 			}
-			llwarns << "Unrecognized wearable list sort order" << llendl;
+			LL_WARNS() << "Unrecognized wearable list sort order" << LL_ENDL;
 		}
 		return false;
 	}
@@ -484,7 +484,7 @@ BOOL LLPanelOutfitEdit::postBuild()
 	childSetCommitCallback("shop_btn_1", boost::bind(&LLPanelOutfitEdit::onShopButtonClicked, this), NULL);
 	childSetCommitCallback("shop_btn_2", boost::bind(&LLPanelOutfitEdit::onShopButtonClicked, this), NULL);
 
-	setVisibleCallback(boost::bind(&LLPanelOutfitEdit::onVisibilityChange, this, _2));
+	setVisibleCallback(boost::bind(&LLPanelOutfitEdit::onVisibilityChanged, this, _2));
 
 	mWearablesGearMenuBtn = getChild<LLMenuButton>("wearables_gear_menu_btn");
 	mGearMenuBtn = getChild<LLMenuButton>("gear_menu_btn");
@@ -774,7 +774,7 @@ void LLPanelOutfitEdit::onPlusBtnClicked(void)
 	}
 }
 
-void LLPanelOutfitEdit::onVisibilityChange(const LLSD &in_visible_chain)
+void LLPanelOutfitEdit::onVisibilityChanged(const LLSD &in_visible_chain)
 {
 	showAddWearablesPanel(false);
 	mWearableItemsList->resetSelection();
@@ -849,7 +849,7 @@ void LLPanelOutfitEdit::onShopButtonClicked()
 	}
 	else
 	{
-		llwarns << "Agent avatar is invalid" << llendl;
+		LL_WARNS() << "Agent avatar is invalid" << LL_ENDL;
 
 		// the second argument is not important in this case: generic market place will be opened
 		url = url_resolver.resolveURL(LLWearableType::WT_NONE, SEX_FEMALE);
@@ -1161,7 +1161,7 @@ BOOL LLPanelOutfitEdit::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 {
 	if (cargo_data == NULL)
 	{
-		llwarns << "cargo_data is NULL" << llendl;
+		LL_WARNS() << "cargo_data is NULL" << LL_ENDL;
 		return TRUE;
 	}
 
@@ -1267,7 +1267,7 @@ void LLPanelOutfitEdit::resetAccordionState()
 	}
 	else
 	{
-		llwarns << "mCOFWearables is NULL" << llendl;
+		LL_WARNS() << "mCOFWearables is NULL" << LL_ENDL;
 	}
 }
 

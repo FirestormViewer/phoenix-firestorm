@@ -117,7 +117,7 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 														LLInventoryModel::INCLUDE_TRASH,
 														asset_id_matches);
 						
-						for (S32 i = 0; i < items.count(); ++i)
+						for (S32 i = 0; i < items.size(); ++i)
 						{
 							const LLPermissions perms = items[i]->getPermissions();
 							exportable = perms.getCreator() == gAgentID;
@@ -140,7 +140,7 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 													LLInventoryModel::INCLUDE_TRASH,
 													asset_id_matches);
 					
-					for (S32 i = 0; i < items.count(); ++i)
+					for (S32 i = 0; i < items.size(); ++i)
 					{
 						const LLPermissions perms = items[i]->getPermissions();
 						switch (LFSimFeatureHandler::instance().exportPolicy())
@@ -192,13 +192,13 @@ bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std:
 									LLInventoryModel::INCLUDE_TRASH,
 									asset_id_matches);
 	
-	if (items.count())
+	if (items.size())
 	{
 		// use the name of the first match
 		(*name) = items[0]->getName();
 		(*description) = items[0]->getDescription();
 		
-		for (S32 i = 0; i < items.count(); ++i)
+		for (S32 i = 0; i < items.size(); ++i)
 		{
 			if (!exportable)
 			{

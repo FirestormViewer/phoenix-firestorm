@@ -38,7 +38,6 @@
 #include "llfloaterautoreplacesettings.h"
 #include "llviewertexturelist.h"
 #include "llagent.h"
-#include "llavatarconstants.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
@@ -116,6 +115,7 @@
 #include "llsdserialize.h"
 
 // Firestorm Includes
+#include "exogroupmutelist.h"
 #include "fsfloatercontacts.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
@@ -134,11 +134,16 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "NACLantispam.h"
+#include "../llcrashlogger/llcrashlogger.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
+char const* const VISIBILITY_DEFAULT = "default";
+char const* const VISIBILITY_HIDDEN = "hidden";
+char const* const VISIBILITY_VISIBLE = "visible";
+char const* const VISIBILITY_INVISIBLE = "invisible";
 
 //control value for middle mouse as talk2push button
 const static std::string MIDDLE_MOUSE_CV = "MiddleMouse";
@@ -1007,13 +1012,19 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	
 // <FS:CR> Show/hide Client Tag panel
-	bool show_client_tags = false;
+	bool in_opensim = false;
 #ifdef OPENSIM
-	show_client_tags = LLGridManager::getInstance()->isInOpenSim();
+	in_opensim = LLGridManager::getInstance()->isInOpenSim();
 #endif // OPENSIM
-	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
+	getChild<LLPanel>("client_tags_panel")->setVisible(in_opensim);
 // </FS:CR>
-	
+
+	// <FS:Ansariel> Group mutes backup
+	LLScrollListItem* groupmute_item = getChild<LLScrollListCtrl>("restore_per_account_files_list")->getItem(LLSD("groupmutes"));
+	groupmute_item->setEnabled(in_opensim);
+	groupmute_item->getColumn(0)->setEnabled(in_opensim);
+	// </FS:Ansariel>
+
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
 	// job
@@ -1134,7 +1145,7 @@ void LLFloaterPreference::onBtnOK()
 	else
 	{
 		// Show beep, pop up dialog, etc.
-		llinfos << "Can't close preferences!" << llendl;
+		LL_INFOS() << "Can't close preferences!" << LL_ENDL;
 	}
 
 	LLPanelLogin::updateLocationSelectorsVisibility();	
@@ -1393,7 +1404,7 @@ bool callback_clear_settings(const LLSD& notification, const LLSD& response)
 		// Create a filesystem marker instructing a full settings wipe
 		std::string clear_file_name;
 		clear_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
-		llinfos << "Creating clear settings marker file " << clear_file_name << llendl;
+		LL_INFOS() << "Creating clear settings marker file " << clear_file_name << LL_ENDL;
 		
 		LLAPRFile clear_file ;
 		clear_file.open(clear_file_name, LL_APR_W);
@@ -1556,10 +1567,10 @@ void LLFloaterPreference::refreshEnabledState()
 {
 	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
 	
-	S32 min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
-	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
+	S32Megabytes min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
+	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
 
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)
@@ -3361,7 +3372,7 @@ void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLS
 	}
 	if (0 == option) // Restart
 	{
-		llinfos << "User requested quit" << llendl;
+		LL_INFOS() << "User requested quit" << LL_ENDL;
 		LLAppViewer::instance()->requestQuit();
 	}
 }
@@ -3418,7 +3429,7 @@ void LLPanelPreferenceSkins::onSkinChanged()
 
 	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
 	{
-		llinfos << "Clearing toolbar settings." << llendl;
+		LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
 		gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
 	}
     //</FS:AO>
@@ -3499,12 +3510,12 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 // added a safeguard so the destination file is only created when the source file exists -Zi
 S32 copy_prefs_file(const std::string& from, const std::string& to)
 {
-	llwarns << "copying " << from << " to " << to << llendl;
+	LL_WARNS() << "copying " << from << " to " << to << LL_ENDL;
 	S32 rv = 0;
 	LLFILE* in = LLFile::fopen(from, "rb");	/*Flawfinder: ignore*/
 	if(!in)
 	{
-		llwarns << "couldn't open source file " << from << " - copy aborted." << llendl;
+		LL_WARNS() << "couldn't open source file " << from << " - copy aborted." << LL_ENDL;
 		return -1;
 	}
 
@@ -3512,7 +3523,7 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	if(!out)
 	{
 		fclose(in);
-		llwarns << "couldn't open destination file " << to << " - copy aborted." << llendl;
+		LL_WARNS() << "couldn't open destination file " << to << " - copy aborted." << LL_ENDL;
 		return -1;
 	}
 
@@ -3621,7 +3632,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 			// only backup settings that are not default, are persistent an are marked as "safe" to back up
 			if (!control->isDefault() && control->isPersisted() && control->isBackupable())
 			{
-				llwarns << control->getName() << llendl;
+				LL_WARNS() << control->getName() << LL_ENDL;
 				// copy the control to our backup group
 				(*group).declareControl(
 					control->getName(),
@@ -3908,6 +3919,13 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		gToolBarView->clearToolbars();
 		LL_INFOS("SettingsBackup") << "reloading toolbars" << LL_ENDL;
 		gToolBarView->loadToolbars(FALSE);
+#ifdef OPENSIM
+		if (LLGridManager::instance().isInOpenSim())
+		{
+			LL_INFOS("SettingsBackup") << "reloading group mute list" << LL_ENDL;
+			exoGroupMuteList::instance().loadMuteList();
+		}
+#endif
 
 		LLPanelMainInventory::sSaveFilters = false;
 	}
@@ -4225,7 +4243,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 
 	if (!mGridListControl)
 	{
-		llwarns << "No GridListControl - bug or out of memory" << llendl;
+		LL_WARNS() << "No GridListControl - bug or out of memory" << LL_ENDL;
 		return;
 	}
 

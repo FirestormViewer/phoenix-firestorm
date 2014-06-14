@@ -14,7 +14,7 @@
 		 follows="all"
 		 layout="topleft"
 		 left="0"
-		 name="sidepanel__inventory_panel"
+		 name="sidepanel_inventory_panel"
 		 top="0"
 		 label=""
 		 height="570"
@@ -59,7 +59,6 @@
                  name="inbox_layout_panel"
                  visible="false"
                  min_dim="35"
-                 max_dim="235"
                  expanded_min_dim="90"
                  height="235">
                  <panel

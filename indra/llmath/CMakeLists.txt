@@ -93,6 +93,10 @@ set(llmath_HEADER_FILES
     xform.h
     )
 
+set( llmath_SOURCE_FILES ${llmath_SOURCE_FILES} nd/ndoctreelog.cpp )
+set( llmath_HEADER_FILES ${llmath_HEADER_FILES} nd/ndoctreelog.h )
+
+
 set_source_files_properties(${llmath_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 

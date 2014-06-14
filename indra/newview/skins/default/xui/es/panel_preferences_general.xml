@@ -60,7 +60,6 @@
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Realzar las etiquetas de los nombres de tus amigos"/>
 	<check_box label="Ocultar 'Resident' en los nombres clásicos" name="legacy_trim_check" tool_tip="Suprime 'Resident' de los nombres clásicos"/>
 	<check_box label="Posicionamiento clásico de la etiqueta de nombre" name="FSLegacyNametagPosition" tool_tip="Si lo activas, la etiqueta de nombre permanecerá fija en la posición del avatar y no lo seguirá si se mueve a causa de sus animaciones."/>
-	<check_box label="Publicar y mostrar etiquetas de radar (experimental)" name="FSPublishRadarTag" tool_tip="Activar esta casilla te permite ver los tags de radar publicados por otros. También publicará uno llamado 'Firestorm' para ti mismo. Esta característica usa el LSL Bridgde y actualmente es una característica incompleta"/>
 	<text name="title_afk_text">
 		Ausente tras:
 	</text>

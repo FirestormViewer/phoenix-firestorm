@@ -41,12 +41,12 @@ int main(int argc, char **argv)
     
     if (!(options.has("pid") && options.has("dumpdir")))
     {
-        llwarns << "Insufficient parameters to crash report." << llendl;
+        LL_WARNS() << "Insufficient parameters to crash report." << LL_ENDL;
     }
     
 	if (! app.init())
 	{
-		llwarns << "Unable to initialize application." << llendl;
+		LL_WARNS() << "Unable to initialize application." << LL_ENDL;
 		return 1;
 	}
     if (app.getCrashBehavior() != CRASH_BEHAVIOR_ALWAYS_SEND)
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	app.mainLoop();
 	app.cleanup();
 
-	llinfos << "Crash reporter finished normally." << llendl;
+	LL_INFOS() << "Crash reporter finished normally." << LL_ENDL;
     
 	return 0;
 }

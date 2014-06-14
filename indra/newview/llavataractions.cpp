@@ -33,7 +33,6 @@
 
 #include "llavatarnamecache.h"	// IDEVO
 #include "llsd.h"
-#include "lldarray.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "roles_constants.h"    // for GP_MEMBER_INVITE
@@ -95,6 +94,12 @@
 #include "rlvactions.h"
 #include "rlvcommon.h"
 #include "rlvhandler.h"
+
+// Flags for kick message
+const U32 KICK_FLAGS_DEFAULT	= 0x0;
+const U32 KICK_FLAGS_FREEZE		= 1 << 0;
+const U32 KICK_FLAGS_UNFREEZE	= 1 << 1;
+
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -186,7 +191,7 @@ void LLAvatarActions::offerTeleport(const LLUUID& invitee)
 	if (invitee.isNull())
 		return;
 
-	LLDynamicArray<LLUUID> ids;
+	std::vector<LLUUID> ids;
 	ids.push_back(invitee);
 	offerTeleport(ids);
 }
@@ -302,8 +307,9 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floate
 		return;
 	}
 
-	// convert vector into LLDynamicArray for addSession
-	LLDynamicArray<LLUUID> id_array;
+	// convert vector into std::vector for addSession
+	std::vector<LLUUID> id_array;
+	id_array.reserve(ids.size());
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
@@ -358,7 +364,9 @@ bool LLAvatarActions::canCall()
 void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& floater_id)
 {
 	// *HACK: Copy into dynamic array
-	LLDynamicArray<LLUUID> id_array;
+	std::vector<LLUUID> id_array;
+
+	id_array.reserve(ids.size());
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
@@ -1316,7 +1324,7 @@ bool LLAvatarActions::handleRemove(const LLSD& notification, const LLSD& respons
 
 			case 1: // NO
 			default:
-				llinfos << "No removal performed." << llendl;
+				LL_INFOS() << "No removal performed." << LL_ENDL;
 				break;
 			}
 		}
@@ -1527,7 +1535,7 @@ void LLAvatarActions::zoomIn(const LLUUID& idAgent)
 
 void LLAvatarActions::getScriptInfo(const LLUUID& idAgent)
 {
-	llinfos << "Reporting Script Info for avatar: " << idAgent.asString() << llendl;
+	LL_INFOS() << "Reporting Script Info for avatar: " << idAgent.asString() << LL_ENDL;
 	FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + idAgent.asString());
 }
 
@@ -1560,14 +1568,14 @@ bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegio
 	for (; itRegion != endRegion; ++itRegion)
 	{
 		const LLViewerRegion* pRegion = *itRegion;
-		for (S32 idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.count(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
+		for (S32 idxRegionAgent = 0, cntRegionAgent = pRegion->mMapAvatars.size(); idxRegionAgent < cntRegionAgent; idxRegionAgent++)
 		{
-			if (pRegion->mMapAvatarIDs.get(idxRegionAgent) == idAgent)
+			if (pRegion->mMapAvatarIDs.at(idxRegionAgent) == idAgent)
 			{
 				if (ppRegion)
 					*ppRegion = pRegion;
 				if (pPosGlobal)
-					*pPosGlobal = unpackLocalToGlobalPosition(pRegion->mMapAvatars.get(idxRegionAgent), pRegion->getOriginGlobal());
+					*pPosGlobal = unpackLocalToGlobalPosition(pRegion->mMapAvatars.at(idxRegionAgent), pRegion->getOriginGlobal());
 				return (NULL != pRegion);
 			}
 		}
@@ -1631,7 +1639,7 @@ bool LLAvatarActions::canLandFreezeOrEjectMultiple(uuid_vec_t& idAgents, bool fF
 // static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 void LLAvatarActions::landEject(const LLUUID& idAgent)
 {
-	llinfos << "landeject " << idAgent << llendl;
+	LL_INFOS() << "landeject " << idAgent << LL_ENDL;
 	uuid_vec_t idAgents;
 	idAgents.push_back(idAgent);
 	landEjectMultiple(idAgents);
@@ -1643,7 +1651,7 @@ void LLAvatarActions::landEjectMultiple(const uuid_vec_t& idAgents)
 	uuid_vec_t idEjectAgents(idAgents);
 	if (!canLandFreezeOrEjectMultiple(idEjectAgents, true))
 	{
-		llwarns << "Not allowed to eject" << llendl;
+		LL_WARNS() << "Not allowed to eject" << LL_ENDL;
 		return;
 	}
 
@@ -1715,7 +1723,7 @@ bool LLAvatarActions::callbackLandEject(const LLSD& notification, const LLSD& re
 // static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 void LLAvatarActions::landFreeze(const LLUUID& idAgent)
 {
-	llinfos << "landfreezing " << idAgent << llendl;
+	LL_INFOS() << "landfreezing " << idAgent << LL_ENDL;
 	uuid_vec_t idAgents;
 	idAgents.push_back(idAgent);
 	landFreezeMultiple(idAgents);
@@ -1791,7 +1799,7 @@ void sendEstateOwnerMessage(const LLViewerRegion* pRegion, const std::string& re
 {
 	if (pRegion)
 	{
-		llinfos << "Sending estate request '" << request << "'" << llendl;
+		LL_INFOS() << "Sending estate request '" << request << "'" << LL_ENDL;
 		gMessageSystem->newMessage("EstateOwnerMessage");
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
@@ -1855,7 +1863,7 @@ bool LLAvatarActions::canEstateKickOrTeleportHomeMultiple(uuid_vec_t& idAgents, 
 // static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 void LLAvatarActions::estateKick(const LLUUID& idAgent)
 {
-	llinfos << "estatekick " << idAgent << llendl;
+	LL_INFOS() << "estatekick " << idAgent << LL_ENDL;
 	uuid_vec_t idAgents;
 	idAgents.push_back(idAgent);
 	estateKickMultiple(idAgents);
@@ -1917,7 +1925,7 @@ bool LLAvatarActions::callbackEstateKick(const LLSD& notification, const LLSD& r
 // static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 void LLAvatarActions::estateTeleportHome(const LLUUID& idAgent)
 {
-	llinfos << "estateTpHome " << idAgent << llendl;
+	LL_INFOS() << "estateTpHome " << idAgent << LL_ENDL;
 	uuid_vec_t idAgents;
 	idAgents.push_back(idAgent);
 	estateTeleportHomeMultiple(idAgents);

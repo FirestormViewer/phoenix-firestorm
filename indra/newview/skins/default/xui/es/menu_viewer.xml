@@ -30,8 +30,7 @@
 			<menu_item_call label="Recargar texturas" name="Rebake Texture"/>
 			<menu_item_call label="Volver al avatar masculino por defecto (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Volver al avatar femenino por defecto (Character Test)" name="ResetDefaultAvF"/>
-	        	<menu_item_check label="Mostrar coste de dibujo del avatar (ARC)" name="Avatar Rendering Cost"/>
-			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
+			<menu_item_check label="Mostrar coste de dibujo del avatar (ARC)" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Regenerar el LSL Bridge" name="Recreate LSL Bridge"/>			
 		</menu>
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
@@ -267,7 +266,6 @@
 		<menu_item_check label="Foto en alta resolución" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos silenciosas" name="QuietSnapshotsToDisk"/>
 		<menu label="Herramientas de rendimiento" name="Performance Tools">
-			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
 			<menu_item_check label="Estadísticas" name="Statistics Bar"/>
 			<menu_item_check label="Mostrar coste de dibujo del avatar (ARC)" name="Avatar Rendering Cost"/>
 		</menu>

@@ -31,7 +31,6 @@
 
 // library includes
 #include "message.h"
-#include "metapropertyt.h"
 #include "llsd.h"
 
 ///----------------------------------------------------------------------------
@@ -117,7 +116,7 @@ LLUUID LLPermissions::getSafeOwner() const
 	}
 	else
 	{
-		llwarns << "LLPermissions::getSafeOwner() called with no valid owner!" << llendl;
+		LL_WARNS() << "LLPermissions::getSafeOwner() called with no valid owner!" << LL_ENDL;
 		LLUUID unused_uuid;
 		unused_uuid.generate();
 
@@ -671,7 +670,7 @@ BOOL LLPermissions::importFile(LLFILE* fp)
 		}
 		else
 		{
-			llinfos << "unknown keyword " << keyword << " in permissions import" << llendl;
+			LL_INFOS() << "unknown keyword " << keyword << " in permissions import" << LL_ENDL;
 		}
 	}
 	fix();
@@ -805,7 +804,7 @@ BOOL LLPermissions::importLegacyStream(std::istream& input_stream)
 		}
 		else
 		{
-			llinfos << "unknown keyword " << keyword << " in permissions import" << llendl;
+			LL_INFOS() << "unknown keyword " << keyword << " in permissions import" << LL_ENDL;
 		}
 	}
 	fix();
@@ -900,21 +899,6 @@ std::ostream& operator<<(std::ostream &s, const LLPermissions &perm)
 	return s;
 }
 
-template <>
-void LLMetaClassT<LLPermissions>::reflectProperties(LLMetaClass& meta_class)
-{
-	reflectProperty(meta_class, "mCreator", &LLPermissions::mCreator);
-	reflectProperty(meta_class, "mOwner", &LLPermissions::mOwner);
-	reflectProperty(meta_class, "mGroup", &LLPermissions::mGroup);
-	reflectProperty(meta_class, "mIsGroupOwned", &LLPermissions::mIsGroupOwned);
-}
-
-// virtual
-const LLMetaClass& LLPermissions::getMetaClass() const
-{
-	return LLMetaClassT<LLPermissions>::instance();
-}
-
 ///----------------------------------------------------------------------------
 /// Class LLAggregatePermissions
 ///----------------------------------------------------------------------------
@@ -1002,8 +986,8 @@ void LLAggregatePermissions::aggregateBit(EPermIndex idx, BOOL allowed)
 		mBits[idx] = allowed ? AP_ALL : AP_SOME;
 		break;
 	default:
-		llwarns << "Bad aggregateBit " << (S32)idx << " "
-				<< (allowed ? "true" : "false") << llendl;
+		LL_WARNS() << "Bad aggregateBit " << (S32)idx << " "
+				<< (allowed ? "true" : "false") << LL_ENDL;
 		break;
 	}
 }
@@ -1047,8 +1031,8 @@ void LLAggregatePermissions::aggregateIndex(EPermIndex idx, U8 bits)
 		}
 		break;
 	default:
-		llwarns << "Bad aggregate index " << (S32)idx << " "
-				<<  (S32)bits << llendl;
+		LL_WARNS() << "Bad aggregate index " << (S32)idx << " "
+				<<  (S32)bits << LL_ENDL;
 		break;
 	}
 }

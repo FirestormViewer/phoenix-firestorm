@@ -215,7 +215,7 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="222"
+             left="225"
              name="lod_mode_high"
              top_delta="0"
              visible="false"
@@ -350,7 +350,7 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="222"
+             left="225"
              name="lod_mode_medium"
              top_delta="0"
              width="130">
@@ -483,7 +483,7 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="222"
+             left="225"
              name="lod_mode_low"
              top_delta="0"
              width="130">
@@ -616,7 +616,7 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="222"
+             left="225"
              name="lod_mode_lowest"
              top_delta="0"
              width="130">

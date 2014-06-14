@@ -177,7 +177,7 @@ void LLViewerParcelMedia::update(LLParcel* parcel)
 				{
 					if (gSavedSettings.getBOOL("MediaEnableFilter"))
 					{
-						llinfos << "Filtering media URL." << llendl;
+						LL_INFOS() << "Filtering media URL." << LL_ENDL;
 						filterMediaUrl(parcel);
 					}
 					else
@@ -221,7 +221,7 @@ void LLViewerParcelMedia::update(LLParcel* parcel)
 // static
 void LLViewerParcelMedia::play(LLParcel* parcel)
 {
-	llinfos << "LLViewerParcelMedia::play" << llendl;
+	LL_INFOS() << "LLViewerParcelMedia::play" << LL_ENDL;
 
 	if (!parcel) return;
 
@@ -426,7 +426,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 			}
 			else
 			{
-				llinfos << "Queueing PARCEL_MEDIA_STOP command." << llendl;
+				LL_INFOS() << "Queueing PARCEL_MEDIA_STOP command." << LL_ENDL;
 				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_STOP;
 			}
 		}
@@ -440,7 +440,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 			}
 			else
 			{
-				llinfos << "Queueing PARCEL_MEDIA_PAUSE command." << llendl;
+				LL_INFOS() << "Queueing PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_PAUSE;
 			}
 		}
@@ -458,14 +458,14 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 				//AO: Disallow scripted media option
 				if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
 				{
-					llinfos << "Disallowing scripted media." <<llendl;
+					LL_INFOS() << "Disallowing scripted media." <<LL_ENDL;
 				}
 				else 
 				{
 					LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 					if (gSavedSettings.getBOOL("MediaEnableFilter"))
 					{
-						llinfos << "PARCEL_MEDIA_COMMAND_PLAY: Filtering media URL." << llendl;
+						LL_INFOS() << "PARCEL_MEDIA_COMMAND_PLAY: Filtering media URL." << LL_ENDL;
 						filterMediaUrl(parcel);
 					}
 					else
@@ -485,7 +485,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 			}
 			else
 			{
-				llinfos << "Queueing PARCEL_MEDIA_UNLOAD command." << llendl;
+				LL_INFOS() << "Queueing PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 				sMediaCommandQueue = PARCEL_MEDIA_COMMAND_UNLOAD;
 			}
 		}
@@ -498,14 +498,14 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 			//AO: Disallow scripted media option
 			if (( !gSavedSettings.getBOOL("PermAllowScriptedMedia")) && (!gSavedSettings.getBOOL("TempAllowScriptedMedia")))
 			{
-				llinfos << "Disallowing scripted media." << llendl;
+				LL_INFOS() << "Disallowing scripted media." << LL_ENDL;
 			}
 			else 
 			{
 				LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 				if (gSavedSettings.getBOOL("MediaEnableFilter"))
 				{
-					llinfos << "PARCEL_MEDIA_COMMAND_TIME: Filtering media URL." << llendl;
+					LL_INFOS() << "PARCEL_MEDIA_COMMAND_TIME: Filtering media URL." << LL_ENDL;
 					filterMediaUrl(parcel);
 				}
 				else
@@ -520,7 +520,7 @@ void LLViewerParcelMedia::processParcelMediaCommandMessage( LLMessageSystem *msg
 		}
 		else
 		{
-			llinfos << "Queueing PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Queueing PARCEL_MEDIA_TIME command." << LL_ENDL;
 			sMediaCommandQueue = PARCEL_MEDIA_COMMAND_TIME;
 			sMediaCommandTime = time;
 		}
@@ -582,7 +582,7 @@ void LLViewerParcelMedia::processParcelMediaUpdate( LLMessageSystem *msg, void *
 			{
 				if (gSavedSettings.getBOOL("MediaEnableFilter"))
 				{
-					llinfos << "Parcel media changed. Filtering media URL." << llendl;
+					LL_INFOS() << "Parcel media changed. Filtering media URL." << LL_ENDL;
 					filterMediaUrl(parcel);
 				}
 				else
@@ -609,7 +609,7 @@ void LLViewerParcelMedia::sendMediaNavigateMessage(const std::string& url)
 	}
 	else
 	{
-		llwarns << "can't get ParcelNavigateMedia capability" << llendl;
+		LL_WARNS() << "can't get ParcelNavigateMedia capability" << LL_ENDL;
 	}
 
 }
@@ -803,8 +803,8 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 
 	LLParcel *currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
-	llinfos << "Current media: "+sCurrentMedia.getMediaURL() << llendl;
-	llinfos << "New media: "+parcel->getMediaURL() << llendl;
+	LL_INFOS() << "Current media: "+sCurrentMedia.getMediaURL() << LL_ENDL;
+	LL_INFOS() << "New media: "+parcel->getMediaURL() << LL_ENDL;
 	// If there is no alert active, filter the media and flag media
 	//  queue empty.
 	if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
@@ -812,7 +812,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		if ((parcel->getMediaURL() == sCurrentMedia.getMediaURL()) &&
 			(!sMediaReFilter))
 		{
-			llinfos << "Media URL filter: no active alert, same URL as previous: " +parcel->getMediaURL() << llendl;
+			LL_INFOS() << "Media URL filter: no active alert, same URL as previous: " +parcel->getMediaURL() << LL_ENDL;
 			sCurrentMedia = *parcel;
 			if ((parcel->getName() == currentparcel->getName()) &&
 				sMediaLastActionPlay)
@@ -823,7 +823,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 			sMediaQueueEmpty = true;
 			return;
 		}
-		llinfos << "Media URL filter: no active alert, filtering new URL: "+parcel->getMediaURL() << llendl;
+		LL_INFOS() << "Media URL filter: no active alert, filtering new URL: "+parcel->getMediaURL() << LL_ENDL;
 		sMediaQueueEmpty = true;
 	}
 	// If an alert is active, place the media in the media queue if not the same as previous request
@@ -833,7 +833,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		{
 			if (parcel->getMediaURL() != sQueuedMedia.getMediaURL())
 			{	
-				llinfos << "Media URL filter: active alert, replacing current queued media URL with: "+sQueuedMedia.getMediaURL() << llendl;
+				LL_INFOS() << "Media URL filter: active alert, replacing current queued media URL with: "+sQueuedMedia.getMediaURL() << LL_ENDL;
 				sQueuedMedia = *parcel;
 				sMediaQueueEmpty = false;
 			}
@@ -844,7 +844,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		{
 			if (parcel->getMediaURL() != sCurrentMedia.getMediaURL())
 			{
-				llinfos << "Media URL filter: active alert, nothing queued, adding new queued media URL: "+sQueuedMedia.getMediaURL() << llendl;
+				LL_INFOS() << "Media URL filter: active alert, nothing queued, adding new queued media URL: "+sQueuedMedia.getMediaURL() << LL_ENDL;
 				sQueuedMedia = *parcel;
 				sMediaQueueEmpty = false;
 			}
@@ -1081,22 +1081,22 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		// There's a queued media command. Process it.
 		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_STOP command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 			LLViewerParcelMedia::pause();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_TIME command." << LL_ENDL;
 			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
@@ -1178,22 +1178,22 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
 		// There's a queued media command. Process it.
 		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_STOP command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 			LLViewerParcelMedia::pause();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_TIME command." << LL_ENDL;
 			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
@@ -1238,7 +1238,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		if ((media_url == sCurrentMusic) && 
 			(!sMediaReFilter))
 		{
-			llinfos << "Audio URL filter: no active alert, same URL as previous: " + media_url << llendl;
+			LL_INFOS() << "Audio URL filter: no active alert, same URL as previous: " + media_url << LL_ENDL;
 			// The music hasn't changed, so keep playing if we were.
 			if ((gAudiop != NULL) && sAudioLastActionPlay)
 			{
@@ -1248,7 +1248,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 			return;
 		}
 		// New music, so flag the queue empty and filter it.
-		llinfos << "Audio URL filter: no active alert, filtering new URL: " + media_url << llendl;
+		LL_INFOS() << "Audio URL filter: no active alert, filtering new URL: " + media_url << LL_ENDL;
 		sMusicQueueEmpty = true;
 	}
 	// If an alert is active, place the media url in the music queue
@@ -1259,7 +1259,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		{
 			if (media_url != sQueuedMusic)
 			{
-				llinfos << "Audio URL filter: active alert, replacing existing queue with: " + media_url << llendl;
+				LL_INFOS() << "Audio URL filter: active alert, replacing existing queue with: " + media_url << LL_ENDL;
 				sQueuedMusic = media_url;
 				sMusicQueueEmpty = false;
 			}
@@ -1270,7 +1270,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		{
 			if (media_url != sCurrentMusic)
 			{
-				llinfos << "Audio URL filter: active alert, nothing queued, adding queue with: " + media_url << llendl;
+				LL_INFOS() << "Audio URL filter: active alert, nothing queued, adding queue with: " + media_url << LL_ENDL;
 				sQueuedMusic = media_url;
 				sMusicQueueEmpty = false;
 			}
@@ -1512,22 +1512,22 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		// There's a queued media command. Process it.
 		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_STOP command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 			LLViewerParcelMedia::pause();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_TIME command." << LL_ENDL;
 			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
@@ -1615,22 +1615,22 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		// There's a queued media command. Process it.
 		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_STOP command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 			LLViewerParcelMedia::pause();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_TIME command." << LL_ENDL;
 			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;
@@ -1917,22 +1917,22 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		// There's a queued media command. Process it.
 		if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_STOP)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_STOP command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_STOP command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_PAUSE)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_PAUSE command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_PAUSE command." << LL_ENDL;
 			LLViewerParcelMedia::pause();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_UNLOAD)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_UNLOAD command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_UNLOAD command." << LL_ENDL;
 			LLViewerParcelMedia::stop();
 		}
 		else if (LLViewerParcelMedia::sMediaCommandQueue == PARCEL_MEDIA_COMMAND_TIME)
 		{
-			llinfos << "Executing Queued PARCEL_MEDIA_TIME command." << llendl;
+			LL_INFOS() << "Executing Queued PARCEL_MEDIA_TIME command." << LL_ENDL;
 			LLViewerParcelMedia::seek(LLViewerParcelMedia::sMediaCommandTime);
 		}
 		LLViewerParcelMedia::sMediaCommandQueue = 0;

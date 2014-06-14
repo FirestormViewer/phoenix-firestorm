@@ -41,7 +41,6 @@
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
 			<menu_item_check label="レンダリングコスト" name="Avatar Rendering Cost"/>
-			<menu_item_call label="ラグ計測器" name="Lag Meter"/>
 			<menu_item_call label="ブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu label="ログイン" name="Status">
@@ -368,7 +367,6 @@
 		<menu_item_check label="高解像度スナップショット" name="HighResSnapshot"/>
 		<menu_item_check label="シャッター音とアニメーションなしでスナップショットをディスクに保存する" name="QuietSnapshotsToDisk"/>
 		<menu label="パフォーマンスツール" name="Performance Tools">
-			<menu_item_call label="ラグ計測器" name="Lag Meter"/>
 			<menu_item_check label="統計バー" name="Statistics Bar"/>
 			<menu_item_check label="アバターのレンダリングコストを表示する" name="Avatar Rendering Cost"/>
 		</menu>

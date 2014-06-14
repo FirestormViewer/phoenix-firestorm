@@ -332,7 +332,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 LLSD FSCommon::populateGroupCount()
 {
 	LLStringUtil::format_map_t args;
-	S32 groupcount = gAgent.mGroups.count();
+	S32 groupcount = gAgent.mGroups.size();
 	args["[COUNT]"] = llformat("%d", groupcount);
 	args["[REMAINING]"] = llformat("%d", gMaxAgentGroups - groupcount);
 	LLUIString groupcountstring = LLTrans::getString((gMaxAgentGroups ? "groupcountstring" : "groupcountunlimitedstring"), args);

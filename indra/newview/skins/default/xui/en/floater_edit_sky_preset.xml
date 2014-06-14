@@ -185,7 +185,7 @@
 			 bevel_style="in"
 			 background_visible="true">
 				<slider
-				 edit_text="true"
+				 can_edit_text="false"
 				 control_name="WLHazeHorizon"
 				 decimal_digits="2"
 				 follows="left|top"

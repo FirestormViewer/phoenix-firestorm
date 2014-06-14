@@ -225,6 +225,11 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Teleport History</column>
             <column name="value">teleport_history.txt</column>
         </row>
+        <row name="restore_per_account_row_groupmutes" value="groupmutes">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Disabled Group Chats</column>
+            <column name="value">muted_groups.xml</column>
+        </row>
     </scroll_list>
     <!-- since enabled_control does not work properly on scroll list items and
          enabling/disabling in code did not show any visual difference, we just use

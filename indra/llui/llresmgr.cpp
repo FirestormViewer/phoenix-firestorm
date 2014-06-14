@@ -45,33 +45,6 @@ LLResMgr::LLResMgr()
 void LLResMgr::setLocale( LLLOCALE_ID locale_id )
 {
 	mLocale = locale_id;
-
-	//RN: for now, use normal 'C' locale for everything but specific UI input/output routines
-//	switch( locale_id )
-//	{
-//	case LLLOCALE_USA: 
-//#if LL_WINDOWS
-//		// Windows doesn't use ISO country codes.
-//		llinfos << "Setting locale to " << setlocale( LC_ALL, "english-usa" ) << llendl;
-//#else	
-//		// posix version should work everywhere else.
-//		llinfos << "Setting locale to " << setlocale( LC_ALL, "en_US" ) << llendl;
-//#endif
-//		break;
-//	case LLLOCALE_UK:
-//#if LL_WINDOWS
-//		// Windows doesn't use ISO country codes.
-//		llinfos << "Setting locale to " << setlocale( LC_ALL, "english-uk" ) << llendl;
-//#else
-//		// posix version should work everywhere else.
-//		llinfos << "Setting locale to " << setlocale( LC_ALL, "en_GB" ) << llendl;
-//#endif
-//		break;
-//	default:
-//		llassert(0);
-//		setLocale(LLLOCALE_USA);
-//		break;
-//	}
 }
 
 char LLResMgr::getDecimalPoint() const					
@@ -338,14 +311,14 @@ LLLocale::LLLocale(const std::string& locale_string)
 	if ( new_locale_string == NULL)
 	{
 		// .c_str() : Workaround for a segfault in g++ < 4.5.3 -Zi
-		llwarns << "Failed to set locale " << locale_string.c_str() << llendl;
+		LL_WARNS() << "Failed to set locale " << locale_string.c_str() << LL_ENDL;
 		//LL_WARNS_ONCE("LLLocale") << "Failed to set locale " << locale_string << LL_ENDL;
 
 		setlocale(LC_ALL, SYSTEM_LOCALE.c_str());
 	}
 	//else
 	//{
-	//	llinfos << "Set locale to " << new_locale_string << llendl;
+	//	LL_INFOS() << "Set locale to " << new_locale_string << LL_ENDL;
 	//}
 }
 

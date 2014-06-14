@@ -65,6 +65,8 @@
 #include "llvfile.h"
 #include "llvfs.h"
 #include "llvolumemessage.h"
+#include "llviewerstats.h"
+#include "lltrace.h"
 #include "fsexportperms.h"
 #include "material_codes.h"
 #include <boost/algorithm/string_regex.hpp>
@@ -707,7 +709,7 @@ void FSFloaterImport::createPrim()
 	gMessageSystem->addU8Fast(_PREHASH_State, (U8)0);
 	gMessageSystem->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
 	gMessageSystem->sendReliable(gAgent.getRegion()->getHost());
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CREATE_COUNT);
+	LLTrace::add(LLStatViewer::OBJECT_CREATE,1);
 }
 
 bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
@@ -1057,9 +1059,9 @@ void FSFloaterImport::searchInventory(LLUUID asset_id, LLViewerObject* object, s
 					LLInventoryModel::INCLUDE_TRASH,
 					asset_id_matches);
 
-	if (items.count())
+	if (items.size())
 	{
-		LLViewerInventoryItem* item = items.get(0);
+		LLViewerInventoryItem* item = items.at(0);
 		
 		FSInventoryQueue item_queue;
 		item_queue.item = item;
@@ -1207,7 +1209,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
 		}
-		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_TEXTURE_COUNT);
+		LLTrace::add(LLStatViewer::UPLOAD_TEXTURE,1);
 	}
 		break;
 	case LLAssetType::AT_SOUND:
@@ -1223,7 +1225,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_SOUND_COUNT);
+			LLTrace::add(LLStatViewer::UPLOAD_SOUND,1);
 		}
 		
 	}
@@ -1339,7 +1341,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_ANIM_COUNT);
+			LLTrace::add(LLStatViewer::ANIMATION_UPLOADS,1);
 		}
 	}
 		break;
@@ -1933,7 +1935,7 @@ void FSAssetResponder::uploadComplete(const LLSD& content)
 					inventory_item_flags = (U32) content["inventory_flags"].asInteger();
 					if (inventory_item_flags != 0)
 					{
-						llinfos << "inventory_item_flags " << inventory_item_flags << llendl;
+						LL_INFOS() << "inventory_item_flags " << inventory_item_flags << LL_ENDL;
 					}
 				}
 				S32 creation_date_now = time_corrected();

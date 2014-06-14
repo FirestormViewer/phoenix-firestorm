@@ -62,7 +62,7 @@ private:
 
 		if (!floater)
 		{
-			llwarns << "Cannot find translation settings floater" << llendl;
+			LL_WARNS() << "Cannot find translation settings floater" << LL_ENDL;
 			return;
 		}
 

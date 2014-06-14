@@ -58,7 +58,6 @@
 	<check_box label="Показать титул группы" name="RenderHideGroupTitle" tool_tip="EПоказать титул своей активной группы" />
 	<check_box label="Показать Viewer" name="show_viewerID" tool_tip="Показывает рядом с именем пользователя используемый Viewer" />
 	<check_box label="Старый формат" name="FSshow_legacyun" tool_tip="Имя Фамилия в замен имя.фамилия" />
-	<check_box label="Показать тэги радара (в работе)" name="FSPublishRadarTag" tool_tip="показать вивер другим на радаре"/>
 
 	<text name="inworld_typing_rg_label">
 		Нажатие клавиш с буквами:

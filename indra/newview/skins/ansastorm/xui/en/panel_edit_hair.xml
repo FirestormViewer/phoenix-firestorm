@@ -37,7 +37,6 @@
 
      <tab_container
        name="wearable_accordion"
-       fit_parent="true"
        layout="topleft"
        follows="all"
        tab_position="left"
@@ -51,7 +50,6 @@
        name="hair_color_tab_holder"
        title="Color"
        layout="topleft"
-       fit_parent="false"
        follows="left"
        height="400"
        width="263">
@@ -92,7 +90,6 @@
        name="hair_style_tab_holder"
        title="Style"
        layout="topleft"
-       fit_parent="false"
        follows="left"
        height="400"
        width="263">
@@ -133,7 +130,6 @@
        name="hair_eyebrows_tab_holder"
        title="Eyebrows"
        layout="topleft"
-       fit_parent="false"
        follows="left"
        height="400"
        width="263">
@@ -174,7 +170,6 @@
        name="hair_facial_tab_holder"
        title="Facial"
        layout="topleft"
-       fit_parent="false"
        follows="left"
        height="400"
        width="263">

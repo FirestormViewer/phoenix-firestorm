@@ -126,7 +126,7 @@ LLDir_Win32::LLDir_Win32()
 		mAppRODataDir = mExecutableDir;
 	}
 
-//	llinfos << "mAppRODataDir = " << mAppRODataDir << llendl;
+//	LL_INFOS() << "mAppRODataDir = " << mAppRODataDir << LL_ENDL;
 
 	mSkinBaseDir = mAppRODataDir + mDirDelimiter + "skins";
 
@@ -139,7 +139,7 @@ LLDir_Win32::LLDir_Win32()
 	{
 		if (errno != EEXIST)
 		{
-			llwarns << "Couldn't create LL_PATH_CACHE dir " << mDefaultCacheDir << llendl;
+			LL_WARNS() << "Couldn't create LL_PATH_CACHE dir " << mDefaultCacheDir << LL_ENDL;
 		}
 	}
 
@@ -171,8 +171,8 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 	{
 		if (errno != EEXIST)
 		{
-			llwarns << "Couldn't create app user dir " << mOSUserAppDir << llendl;
-			llwarns << "Default to base dir" << mOSUserDir << llendl;
+			LL_WARNS() << "Couldn't create app user dir " << mOSUserAppDir << LL_ENDL;
+			LL_WARNS() << "Default to base dir" << mOSUserDir << LL_ENDL;
 			mOSUserAppDir = mOSUserDir;
 		}
 	}
@@ -183,7 +183,7 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 	{
 		if (errno != EEXIST)
 		{
-			llwarns << "Couldn't create LL_PATH_LOGS dir " << getExpandedFilename(LL_PATH_LOGS,"") << llendl;
+			LL_WARNS() << "Couldn't create LL_PATH_LOGS dir " << getExpandedFilename(LL_PATH_LOGS,"") << LL_ENDL;
 		}
 	}
 	
@@ -192,7 +192,7 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 	{
 		if (errno != EEXIST)
 		{
-			llwarns << "Couldn't create LL_PATH_USER_SETTINGS dir " << getExpandedFilename(LL_PATH_USER_SETTINGS,"") << llendl;
+			LL_WARNS() << "Couldn't create LL_PATH_USER_SETTINGS dir " << getExpandedFilename(LL_PATH_USER_SETTINGS,"") << LL_ENDL;
 		}
 	}
 	
@@ -201,7 +201,7 @@ void LLDir_Win32::initAppDirs(const std::string &app_name,
 	{
 		if (errno != EEXIST)
 		{
-			llwarns << "Couldn't create LL_PATH_CACHE dir " << getExpandedFilename(LL_PATH_CACHE,"") << llendl;
+			LL_WARNS() << "Couldn't create LL_PATH_CACHE dir " << getExpandedFilename(LL_PATH_CACHE,"") << LL_ENDL;
 		}
 	}
 	

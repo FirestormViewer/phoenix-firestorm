@@ -275,7 +275,6 @@ Maximum 200 per group daily
          bottom="-4"
          width="360"
          height="94"
-         border="true"
          follows="bottom|left|right"
          layout="topleft" />
 

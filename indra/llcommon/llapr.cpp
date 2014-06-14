@@ -29,6 +29,7 @@
 #include "linden_common.h"
 #include "llapr.h"
 #include "apr_dso.h"
+#include "llthreadlocalstorage.h"
 
 apr_pool_t *gAPRPoolp = NULL; // Global APR memory pool
 
@@ -44,12 +45,15 @@ const S32 FULL_VOLATILE_APR_POOL = 1024 ; //number of references to LLVolatileAP
 
 std::string ndConvertFilename( std::string const &aFilename ); // <FS:ND/> Porper UTF-8 filename handling under windows.
 
+bool gAPRInitialized = false;
+
 void ll_init_apr()
 {
+	// Initialize APR and create the global pool
+	apr_initialize();
+	
 	if (!gAPRPoolp)
 	{
-		// Initialize APR and create the global pool
-		apr_initialize();
 		apr_pool_create(&gAPRPoolp, NULL);
 		
 		// Initialize the logging mutex
@@ -65,11 +69,21 @@ void ll_init_apr()
 	{
 		ll::apr::LLAPRFile::sAPRFilePoolp = new LLVolatileAPRPool(FALSE) ;
 	}
+
+	LLThreadLocalPointerBase::initAllThreadLocalStorage();
+	gAPRInitialized = true;
 }
 
 
+bool ll_apr_is_initialized()
+{
+	return gAPRInitialized;
+}
+
 void ll_cleanup_apr()
 {
+	gAPRInitialized = false;
+
 	LL_INFOS("APR") << "Cleaning up APR" << LL_ENDL;
 
 	if (gLogMutexp)
@@ -88,6 +102,9 @@ void ll_cleanup_apr()
 		apr_thread_mutex_destroy(gCallStacksLogMutexp);
 		gCallStacksLogMutexp = NULL;
 	}
+
+	LLThreadLocalPointerBase::destroyAllThreadLocalStorage();
+
 	if (gAPRPoolp)
 	{
 		apr_pool_destroy(gAPRPoolp);
@@ -462,7 +479,7 @@ S32 LLAPRFile::read(void *buf, S32 nbytes)
 {
 	if(!mFile) 
 	{
-		llwarns << "apr mFile is removed by somebody else. Can not read." << llendl ;
+		LL_WARNS() << "apr mFile is removed by somebody else. Can not read." << LL_ENDL ;
 		return 0;
 	}
 	
@@ -484,7 +501,7 @@ S32 LLAPRFile::write(const void *buf, S32 nbytes)
 {
 	if(!mFile) 
 	{
-		llwarns << "apr mFile is removed by somebody else. Can not write." << llendl ;
+		LL_WARNS() << "apr mFile is removed by somebody else. Can not write." << LL_ENDL ;
 		return 0;
 	}
 	

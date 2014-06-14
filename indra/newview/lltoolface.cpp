@@ -324,7 +324,7 @@ void LLToolFace::render()
 		return;
 	}
 
-	llwarns << x << " " << y << " " << pick.mSTCoords.mV[VX] << " " <<  pick.mSTCoords.mV[VY] << llendl;
+	LL_WARNS() << x << " " << y << " " << pick.mSTCoords.mV[VX] << " " <<  pick.mSTCoords.mV[VY] << LL_ENDL;
 */
 
 	// this is another way I would rather do it than tracking mouse deltas, because it

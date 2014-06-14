@@ -96,7 +96,7 @@ void KCWindlightInterface::ParcelChange()
 
 	if ( (this_parcel_id != mLastParcelID) || (mLastParcelDesc != desc) ) //parcel changed
 	{
-		//llinfos << "agent in new parcel: "<< this_parcel_id << " : "  << parcel->getName() << llendl;
+		//LL_INFOS() << "agent in new parcel: "<< this_parcel_id << " : "  << parcel->getName() << LL_ENDL;
 
 		mLastParcelID = this_parcel_id;
 		mLastParcelDesc = desc;
@@ -211,12 +211,12 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 		// set notes on KCWindlightInterface::haveParcelOverride
 		if (settings.has("sky_default") && (!mHaveRegionSettings || mRegionOverride))
 		{
-			//llinfos << "WL set : " << settings["sky_default"] << llendl;
+			//LL_INFOS() << "WL set : " << settings["sky_default"] << LL_ENDL;
 			ApplyWindLightPreset(settings["sky_default"].asString());
 		}
 		else //reset to default
 		{
-			//llinfos << "WL set : Default" << llendl;
+			//LL_INFOS() << "WL set : Default" << LL_ENDL;
 			ApplyWindLightPreset("Default");
 		}
 	}
@@ -271,7 +271,7 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 		const boost::regex setWWpreset_exp("^setWWpreset\\|(.*)");
 		if(boost::regex_match(data.c_str(), match, setWLpreset_exp))
 		{
-			llinfos << "got setWLpreset : " << match[1] << llendl;
+			LL_INFOS() << "got setWLpreset : " << match[1] << LL_ENDL;
 			LLWLParamManager::instance()->mAnimator.mIsRunning = false;
 			LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
 			LLWLParamManager::instance()->loadPreset(match[1]);
@@ -279,7 +279,7 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 		}
 		else if(boost::regex_match(data.c_str(), match, setWWpreset_exp))
 		{
-			llinfos << "got setWWpreset : " << match[1] << llendl;
+			LL_INFOS() << "got setWWpreset : " << match[1] << LL_ENDL;
 			LLWaterParamManager::instance()->loadPreset(match[1], true);
 			return true;
 		}
@@ -302,7 +302,7 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 
 				if (match2[1]=="Parcel")
 				{
-					llinfos << "Got Parcel WL : " << match[2] << llendl;
+					LL_INFOS() << "Got Parcel WL : " << match[2] << LL_ENDL;
 					
 					LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 					LLSD payload;
@@ -370,7 +370,7 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 		if(boost::regex_search(desc, mat_block, Parcel_exp))
 		{
 			std::string data1(mat_block[1].first, mat_block[1].second);
-			//llinfos << "found parcel flags block: " << mat_block[1] << llendl;
+			//LL_INFOS() << "found parcel flags block: " << mat_block[1] << LL_ENDL;
 			
 			S32 sky_index = 0;
 			LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
@@ -384,7 +384,7 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 			{
 				if (match[1].matched)
 				{
-					//llinfos << "sky flag: " << match[1] << " : " << match[2] << " : " << match[3] << " : " << match[5] << llendl;
+					//LL_INFOS() << "sky flag: " << match[1] << " : " << match[2] << " : " << match[3] << " : " << match[5] << LL_ENDL;
 
 					std::string preset(match[5]);
 					LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
@@ -416,7 +416,7 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 				else if (match[4].matched)
 				{
 					std::string preset(match[5]);
-					//llinfos << "got water: " << preset << llendl;
+					//LL_INFOS() << "got water: " << preset << LL_ENDL;
 					if(wwprammgr->hasParamSet(preset))
 					{
 						settings["water"] = preset;
@@ -426,7 +426,7 @@ bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD
 				else if (match[6].matched)
 				{
 					std::string preset(match[5]);
-					llinfos << "got region override flag" << llendl;
+					LL_INFOS() << "got region override flag" << LL_ENDL;
 					settings["region_override"] = true;
 				}
 				

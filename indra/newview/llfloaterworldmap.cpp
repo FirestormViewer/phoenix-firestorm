@@ -724,7 +724,7 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	}
 	else
 	{
-		llwarns << "Cannot request parcel details: Cap not found" << llendl;
+		LL_WARNS() << "Cannot request parcel details: Cap not found" << LL_ENDL;
 	}
 }
 // </FS:Ansariel> Parcel details on map
@@ -771,9 +771,9 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 	buildLandmarkIDLists();
 	BOOL found = FALSE;
 	S32 idx;
-	for (idx = 0; idx < mLandmarkItemIDList.count(); idx++)
+	for (idx = 0; idx < mLandmarkItemIDList.size(); idx++)
 	{
-		if ( mLandmarkItemIDList.get(idx) == landmark_item_id)
+		if ( mLandmarkItemIDList.at(idx) == landmark_item_id)
 		{
 			found = TRUE;
 			break;
@@ -782,13 +782,13 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 	
 	if (found && iface->setCurrentByID( landmark_item_id ) ) 
 	{
-		LLUUID asset_id = mLandmarkAssetIDList.get( idx );
+		LLUUID asset_id = mLandmarkAssetIDList.at( idx );
 		std::string name;
 		LLComboBox* combo = getChild<LLComboBox>( "landmark combo");
 		if (combo) name = combo->getSimple();
 		mTrackedStatus = LLTracker::TRACKING_LANDMARK;
-		LLTracker::trackLandmark(mLandmarkAssetIDList.get( idx ),	// assetID
-								 mLandmarkItemIDList.get( idx ), // itemID
+		LLTracker::trackLandmark(mLandmarkAssetIDList.at( idx ),	// assetID
+								 mLandmarkItemIDList.at( idx ), // itemID
 								 name);			// name
 		
 		if( asset_id != sHomeID )
@@ -1199,15 +1199,15 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
 		list->operateOnSelection(LLCtrlListInterface::OP_DELETE);
 	}
 	
-	mLandmarkItemIDList.reset();
-	mLandmarkAssetIDList.reset();
+	mLandmarkItemIDList.clear();
+	mLandmarkAssetIDList.clear();
 	
 	// Get all of the current landmarks
-	mLandmarkAssetIDList.put( LLUUID::null );
-	mLandmarkItemIDList.put( LLUUID::null );
+	mLandmarkAssetIDList.push_back( LLUUID::null );
+	mLandmarkItemIDList.push_back( LLUUID::null );
 	
-	mLandmarkAssetIDList.put( sHomeID );
-	mLandmarkItemIDList.put( sHomeID );
+	mLandmarkAssetIDList.push_back( sHomeID );
+	mLandmarkItemIDList.push_back( sHomeID );
 	
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
@@ -1219,33 +1219,19 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
 									is_landmark);
 	
 	std::sort(items.begin(), items.end(), LLViewerInventoryItem::comparePointers());
-	std::list<LLInventoryItem*> usedLMs;
+	
+	mLandmarkAssetIDList.reserve(mLandmarkAssetIDList.size() + items.size());
+	mLandmarkItemIDList.reserve(mLandmarkItemIDList.size() + items.size());
 
-	BOOL filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
-	S32 count = items.count();
+	S32 count = items.size();
 	for(S32 i = 0; i < count; ++i)
 	{
-		LLInventoryItem* item = items.get(i);
-
-		if (filterLandmarks)
-		{
-			bool skip = false;
-			for (std::list<LLInventoryItem*>::iterator it = usedLMs.begin(); it != usedLMs.end(); ++it)
-			{
-				if ((*it)->getAssetUUID() == item->getAssetUUID())
-				{
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-			usedLMs.push_front(item);
-		}
+		LLInventoryItem* item = items.at(i);
 		
 		list->addSimpleElement(item->getName(), ADD_BOTTOM, item->getUUID());
 		
-		mLandmarkAssetIDList.put( item->getAssetUUID() );
-		mLandmarkItemIDList.put( item->getUUID() );
+		mLandmarkAssetIDList.push_back( item->getAssetUUID() );
+		mLandmarkItemIDList.push_back( item->getUUID() );
 	}
 	
 	list->selectFirstItem();

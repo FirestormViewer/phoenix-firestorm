@@ -1,4 +1,4 @@
-//http bridge script v.2.10
+//http bridge script v.2.11
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.10";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.11";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -28,23 +28,6 @@
     integer tryHandshakeOnce = TRUE;
     key owner;
     integer timerType = TIMER_TYPE_NONE;
-
-    // Radar Tags
-    integer useTags = FALSE;
-    list tagStore = [];     // Strided list of (key,integer) est. 21 + (126)*100 = 12,621kb
-    list tagInterestQ = []; // Keys pending for lookup
-    integer tagChan;        // Holds our response channel
-    integer tagChanH;       // tagChan listener handle
-    integer tagSpamCount;   // Tag lookup messages received last 60s sample
-    integer tagLastReqT;    // Timestamp of last lookup request
-    string protoTag = "RTAG";
-    string myTagIdx = "1";
-    // The following vars could be defined for clarity, but are left out for mem savings.
-    //integer MAX_STORE = 100;
-    // Indexes may correspond to the following:
-    // ["", "Firestorm", "Kokua", "Dolphin", "MiniRadar", "Catznip", "RLV", "Radegast", "TPV", "Phoenix", "Singularity", "Zen"];
-    // If you add tags to the above list, also be sure to increment the range enforcement in the LISTEN section.
-    // Note: the radar tag system is optional, opt-in, off by default. It can be enabled in viewer preferences.
 
     // Teleport
     float   TP_TARGET_DISTANCE = 1.0;// Distance to target when move to target should stop
@@ -306,19 +289,6 @@
             key target = (key)llList2String(commandList, 1);
             getScriptInfo(target);
         }
-        else if (cmd == "getTag")
-        {
-            if (useTags)
-            {
-                key target = llList2String(commandList, 1);
-                lookupTag(target);
-            }
-        }
-        else if (cmd == "FSPublishRadarTag")
-        {
-            integer bool = (integer)llList2Integer(commandList, 1);  // 0 = false, else true
-            enableTags(bool);
-        }
         else if (cmd == "UseMoveLock")
         {
             //debugOutput("Parsing params: " + llList2String(commandList, 1));
@@ -365,87 +335,6 @@ getScriptInfo(key target)
 {
     list details = llGetObjectDetails(target, ([OBJECT_NAME, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
     llOwnerSay("'" + llList2String(details, 0) + "' [" + llList2String(details, 2) + "/" + llList2String(details, 1) + "] running scripts. " + (string)(llList2Integer(details, 3) / 1024) + " KB allowed memory size limit, " + (string)(llList2Float(details, 4) * 1000.0) + " ms of CPU time consumed.");
-}
-
-//
-// Radar Tag Functions
-//
-
-enableTags(integer en)
-{
-    useTags = en;
-    tagStore = [];
-    tagInterestQ = [];
-    tagSpamCount = 0;
-    tagLastReqT = 0;
-    llListenRemove(tagChanH);
-    if (en)
-    {
-        tagChan = hashChannel(owner);
-        // On activation, test for multiple receivers.
-        llRegionSayTo(owner, hashChannel(owner), llList2CSV([protoTag, myTagIdx, 0]));
-        tagChanH = llListen(tagChan, "", NULL_KEY, "");
-    }
-}
-
-integer hashChannel(key agent)
-// Algorithm from unknown author
-{
-    string str = (string)agent;
-    integer channel = 5381;
-    integer i;
-    for( i = 20 ; i >= 0 ; i-- )
-    {
-        channel = ( ( channel << 5 ) + channel ) + llSubStringIndex( " -0123456789abcdef", llGetSubString(str, i, i) );
-    }
-    if ( channel == DEBUG_CHANNEL || ( channel >= -100000 && channel <= 100000 ) )
-    channel = channel + 123456; // Add value to it if it reaches this point.
-    return channel;
-}
-
-integer lookupTag(key agent)
-// We want to get a tag for a particular agent
-{
-    integer i = llListFindList(tagStore, [agent]);
-
-    // If found...
-    if (i != -1)
-    {
-        return llList2Integer(tagStore, i+1);
-    }
-
-    // Check and see if target is in this sim
-    if (llGetAgentSize(agent) == ZERO_VECTOR)
-        return 0;
-
-    if (llListFindList(tagInterestQ, [agent]) != -1)
-        return 0; // Don't requery if we already have one pending.
-
-    // If we get here, queue up a request, add to interestList
-
-    // Garbage collect tagAgentList if needed (should never be needed)
-    integer n = llGetListLength(tagInterestQ);
-    if (n > 40)
-    {
-        while (n > 0)
-        {
-            key a = llList2Key(tagInterestQ, n-1);
-            if (llGetAgentSize(a) == ZERO_VECTOR)
-            {
-                tagInterestQ = llDeleteSubList(tagInterestQ, n-1, n-1);
-            }
-            n -= 1;
-        }
-    }
-
-    tagInterestQ += [agent];
-    llRegionSayTo(agent, hashChannel(agent), llList2CSV([protoTag, myTagIdx, tagChan])); // protoString, Firestorm IDX
-    return 0;
-}
-
-reportTag(key av, integer tagIdx)
-{
-    llOwnerSay("<bridgeTag av="+(string)av+" idx="+(string)tagIdx+" />");
 }
 
 //
@@ -710,7 +599,6 @@ default
         //<DEBUG>
         //debug = TRUE;
         //debugOutput("Free memory="+(string)llGetFreeMemory());
-        //enableTags(TRUE);
         //llSetTimerEvent(10);
         //</DEBUG>
     }
@@ -731,8 +619,6 @@ default
         {
             tryHandshakeOnce = TRUE;
             initBridge();
-            if (useTags)
-                enableTags(TRUE);
             aoListenOC(NULL_KEY);
             aoPingCollarOC();
             aoListenLM();
@@ -791,13 +677,6 @@ default
         if (change & CHANGED_REGION)
         {
             llRequestURL();
-        }
-        if (change & CHANGED_TELEPORT)
-        {
-            tagStore = [];
-            tagInterestQ = [];
-            tagSpamCount = 0;
-            tagLastReqT = 0;
         }
         if (change & CHANGED_INVENTORY)
         {
@@ -890,92 +769,7 @@ default
     {
         //debugOutput("DEBUG from "+senderName+" msg: "+msg);
 
-        if (fromChan == tagChan) // ie, tag channel logic
-        {
-            // Our av of interest is the owner of the senderID
-            // Sanity: insure the av is in our sim
-            key av = llGetOwnerKey(senderID);
-            if (llGetAgentSize(av) == ZERO_VECTOR)
-            {
-                return;
-            }
-
-            // Some input tracking to deal with spam
-            integer curResponseT = llGetUnixTime();
-            if (curResponseT - tagLastReqT > 60) // 60s sample serial
-            {
-                tagLastReqT = curResponseT;
-                tagSpamCount = 0;
-            }
-            ++tagSpamCount;
-
-            // Sanity: insure our msg is CSV arguemnts in the correct format protoTag,tagIdx,responseChannel
-            list args = llCSV2List(msg);
-            if (llGetListLength(args) != 3)
-                return;
-
-            // Sanity: arg 0 is protoTag
-            if (llList2String(args, 0) != protoTag)
-                return;
-
-            integer chan = llList2Integer(args, 2);
-
-            // Sanity: insure that the tagIdx we received is in our range
-            integer tagIdx = llList2Integer(args, 1);
-            //if (tagIdx < 1 || tagIdx >= llGetListLength(tagStrings))
-            if (tagIdx < 1 || tagIdx >= 10) // Hardcoded for memsavings
-            {
-                return;
-            }
-
-            // Sanity: antispam, if we're being flooded with requests, only respond to new avs
-            if (tagSpamCount > 60)
-            {
-                // If we already know this av, send a response
-                integer i = llListFindList(tagStore, [av]);
-                if (i != -1)
-                    return;
-            }
-
-            // Sanity: Insure the av is not ourselves (from other, radar tag handling attachments)
-            if (llGetOwnerKey(senderID) == owner)
-            {
-                // Disabled, pending a timer and flush mechanism to deal with typical "two bridge" scenarios during bridge creation.
-                //llOwnerSay("Duplicate radar tag processing attachments detected ("+llKey2Name(senderID)+"). You may wish to wish to remove one of your attachments that processes radar tags.");
-            }
-
-            // Message/Args are valid if we get here, return response
-            if (chan != 0)
-                llRegionSayTo(av, chan, llList2CSV([protoTag, myTagIdx, 0])); // Zero channel = no response please.
-
-            // See if we're getting a response we have pending
-            integer i = llListFindList(tagInterestQ, [av]);
-            if (i != -1)
-            {
-                // Render Data to the viewer and/or minilist
-                tagInterestQ = llDeleteSubList(tagInterestQ, i, i);
-                reportTag(av, tagIdx);
-
-                // Garbage collect the tagStore list if get over 100 entries.
-                integer n = llGetListLength(tagStore) / 2;
-                if (n > 99)
-                {
-                    while (n > 0)
-                    {
-                        key a = llList2Key(tagStore, (n-1)*2);
-                        if (llGetAgentSize(a) == ZERO_VECTOR)
-                        {
-                            tagStore = llDeleteSubList(tagStore, (n-1)*2, (n-1)*2+1);
-                        }
-                        n -= 1;
-                    }
-                }
-
-                tagStore += [av, tagIdx];
-            }
-        } // End tagChan listen handler
-
-        else if (fromChan == aoChannelOC)     // OpenCollar AO interface
+        if (fromChan == aoChannelOC)     // OpenCollar AO interface
         {
             integer zhaoPos;
             if ((aoCollarKey == NULL_KEY) &&    // No collar paired yet

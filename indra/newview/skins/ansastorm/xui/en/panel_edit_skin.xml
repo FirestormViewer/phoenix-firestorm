@@ -70,7 +70,6 @@
 
      <tab_container
        name="wearable_accordion"
-       fit_parent="true"
        layout="topleft"
        follows="all"
        tab_position="left"
@@ -84,7 +83,6 @@
        name="skin_color_tab_holder"
        title="Skin Color"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="400"
        width="263">
@@ -125,7 +123,6 @@
        name="skin_face_tab_holder"
        title="Face Detail"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="400"
        width="263">
@@ -166,7 +163,6 @@
        name="skin_makeup_holder"
        title="Makeup"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="400"
        width="263">
@@ -207,7 +203,6 @@
        name="skin_body_holder"
        title="Body Detail"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="400"
        width="263">

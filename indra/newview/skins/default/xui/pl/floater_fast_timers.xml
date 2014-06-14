@@ -2,5 +2,16 @@
 <floater name="fast_timers">
   <string name="pause">Pauza</string>
   <string name="run">Start</string>
+  <combo_box name="time_scale_combo">
+    <item name="2x Average" label="2x średnia"/>
+    <item name="Max" label="Maksimum"/>
+    <item name="Recent Max" label="Ostatnie maksimum"/>
+    <item name="100ms" label="100ms"/>
+  </combo_box>
+  <combo_box name="metric_combo">
+    <item name="Time" label="Czas"/>
+    <item name="Number of Calls" label="Ilość odwołań"/>
+    <item name="Hz" label="Hz"/>
+  </combo_box>
   <button name="pause_btn" label="Pauza" />
 </floater>

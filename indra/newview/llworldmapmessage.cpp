@@ -165,7 +165,7 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
 	// There's only one flag that we ever use here
 	if (agent_flags != LAYER_FLAG)
 	{
-		llwarns << "Invalid map image type returned! layer = " << agent_flags << llendl;
+		LL_WARNS() << "Invalid map image type returned! layer = " << agent_flags << LL_ENDL;
 		return;
 	}
 
@@ -218,7 +218,7 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
 		// which made debug builds impossible to use on OpenSim
 		if(name.empty())
 		{
-			llwarns << "MapBlockReply returned empty region name, not inserting in  the world map" << llendl;
+			LL_WARNS() << "MapBlockReply returned empty region name, not inserting in  the world map" << LL_ENDL;
 		}
 // </AW: opensim>
 		// Insert that region in the world map, if failure, flag it as a "null_sim"

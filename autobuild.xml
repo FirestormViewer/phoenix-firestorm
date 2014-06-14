@@ -290,9 +290,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>562bf2c9b6b835b1f36caf96dca9f907</string>
+              <string>9617df1d21e7552888f9a411d202777c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20130708.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1024,7 +1024,7 @@
               <key>hash</key>
               <string>52257e5eb166a0b69c9c0c38f6e1920e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-breakpad/rev/273079/arch/Linux/installer/google_breakpad-0.0.0-rev1099-linux-20130329.tar.bz2</string>
+	         <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-breakpad/rev/273079/arch/Linux/installer/google_breakpad-0.0.0-rev1099-linux-20130329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1430,9 +1430,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ab2ee5cce7db268d28f245ff1a34532b</string>
+              <string>f5a09d25b38c251bc880121f6ca1c857</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.3.2-darwin-20131204.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.4.0-darwin-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1442,9 +1442,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>03350c4f0aa32e56bba4979b598a6fc2</string>
+              <string>ae5e86bbe3376d107960e1364cada76a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.3.2-linux-20131204.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.4.0-linux-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1466,9 +1466,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>20ea3d68affefca2b31b60f2ea3e2a96</string>
+              <string>3c2d8f82e75cab399dbe9eff7c3038f6</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm//kdu-7.3.2-windows-20131204.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.4.0-windows-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1730,9 +1730,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5bc44db15eb3cca021382e40e04a9a38</string>
+              <string>b6d29de20de5c8f31925697b30e8f727</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/llappearanceutility-source/rev/271972/arch/Linux/installer/llappearanceutility_source-0.1-linux-20130315.tar.bz2</string>
+              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/llappearanceutility-source/rev/283723/arch/Linux/installer/llappearanceutility_source-0.1-linux-20131109.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2160,9 +2160,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3d40be8566fa4b9df9a38e2a0f9ea467</string>
+              <string>72a1eaeff0df2fd132447b6b6f5e60c5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-openssl/rev/226882/arch/Linux/installer/openssl-1.0.0d-linux-20110418.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-linux-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2184,9 +2184,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>85082f3d5fac07ce947622bf6dd3119e</string>
+              <string>6395ebbd46dd6112e7aa0aa54089d9ed</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.1g-windows-20140410.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-windows-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2612,9 +2612,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b4cf3aa2c04937d0a20761516587896</string>
+              <string>ca53589d8dd4969cd8c42d0b8f8594dd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-zlib/rev/223739/arch/Linux/installer/zlib-1.2.5-linux-20110314.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8-linux-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

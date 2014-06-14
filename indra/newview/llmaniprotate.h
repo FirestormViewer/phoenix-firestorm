@@ -105,9 +105,7 @@ private:
 
 	BOOL				mSendUpdateOnMouseUp;
 
-// <FS:CR> FIRE-8882
-	//BOOL				mSmoothRotate;
-// </FS:CR>
+	BOOL				mSmoothRotate;
 	BOOL				mCamEdgeOn;
 
 	LLVector4			mManipulatorVertices[6];

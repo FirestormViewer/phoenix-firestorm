@@ -41,4 +41,5 @@
 	</text>
 	<spinner name="restart_delay" left_delta="65"/>
 	<button label="Neustart abbrechen" name="cancel_restart_btn" tool_tip="Bricht den Regionsneustart ab"/>
+	<button label="Regions-Debug-Konsole" name="region_debug_console_btn" tool_tip="Regions-Debug-Konsole öffnen"/>
 </panel>

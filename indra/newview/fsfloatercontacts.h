@@ -142,6 +142,8 @@ private:
 	LLCachedControl<bool>	mSortByUserName;
 
 	std::string				mFriendListFontName;
+
+	void childShowTab(const std::string& id, const std::string& tabname);
 };
 
 

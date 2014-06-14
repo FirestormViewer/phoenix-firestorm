@@ -73,8 +73,8 @@ public:
 	
 	virtual void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
    	{
-		llwarns << "LLAssetUploadChainResponder Error [status:" 
-				<< statusNum << "]: " << content << llendl;
+		LL_WARNS() << "LLAssetUploadChainResponder Error [status:" 
+				<< statusNum << "]: " << content << LL_ENDL;
 		LLUpdateTaskInventoryResponder::errorWithContent(statusNum, reason, content);
    		LLAssetUploadQueue *queue = mSupplier->get();
    		if (queue)
@@ -109,7 +109,7 @@ public:
 		args["[NAME]"] = mScriptName;
 		mSupplier->log(LLTrans::getString("Compiling", args).c_str());
 		// </FS:Ansariel> Localized log messages
-		llinfos << "Compiling " << llendl;
+		LL_INFOS() << "Compiling " << LL_ENDL;
 
 		// postRaw takes ownership of mData and will delete it.
 		LLHTTPClient::postRaw(uploader, mData, mDataSize, this);
@@ -126,7 +126,7 @@ public:
 			//mSupplier->log("Compilation succeeded");
 			mSupplier->log(LLTrans::getString("CompileSuccessful").c_str());
 			// </FS:Ansariel> Localized log messages
-			llinfos << "Compiled!" << llendl;
+			LL_INFOS() << "Compiled!" << LL_ENDL;
 		}
 		else
 		{
@@ -137,7 +137,7 @@ public:
 				std::string str = line->asString();
 				str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
 				mSupplier->log(str);
-				llinfos << content["errors"] << llendl;
+				LL_INFOS() << content["errors"] << LL_ENDL;
 			}
 		}
 		LLUpdateTaskInventoryResponder::uploadComplete(content);

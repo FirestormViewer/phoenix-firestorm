@@ -47,7 +47,7 @@ public:
 	virtual ~LLSidepanelAppearance();
 
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onOpen(const LLSD& key);	
 
 	void refreshCurrentOutfitName(const std::string& name = "");
 
@@ -76,7 +76,7 @@ public:
 
 private:
 	void onFilterEdit(const std::string& search_string);
-	void onVisibilityChange ( const LLSD& new_visibility );
+	void onVisibilityChanged ( const LLSD& new_visibility );
 
 	void onOpenOutfitButtonClicked();
 	void onEditAppearanceButtonClicked();

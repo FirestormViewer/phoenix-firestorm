@@ -488,9 +488,9 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	bool fSeenWType[LLWearableType::WT_COUNT] = { false };
 
 	EWearAction eCurAction = eAction;
-	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
+	for (S32 idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
 	{
-		LLViewerInventoryItem* pRlvItem = items.get(idxItem);
+		LLViewerInventoryItem* pRlvItem = items.at(idxItem);
 		LLViewerInventoryItem* pItem = (LLAssetType::AT_LINK == pRlvItem->getActualType()) ? pRlvItem->getLinkedItem() : pRlvItem;
 
 		// If it's wearable it should be worn on detach
@@ -925,8 +925,8 @@ void RlvForceWear::done()
 	if (m_remGestures.size())
 	{
 		// NOTE: LLGestureMgr::deactivateGesture() will call LLAppearanceMgr::removeCOFItemLinks() for us
-		for (S32 idxItem = 0, cntItem = m_remGestures.count(); idxItem < cntItem; idxItem++)
-			LLGestureMgr::instance().deactivateGesture(m_remGestures.get(idxItem)->getUUID());
+		for (S32 idxItem = 0, cntItem = m_remGestures.size(); idxItem < cntItem; idxItem++)
+			LLGestureMgr::instance().deactivateGesture(m_remGestures.at(idxItem)->getUUID());
 		m_remGestures.clear();
 	}
 
@@ -954,9 +954,9 @@ void RlvForceWear::done()
 	for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.begin(); itAddWearables != m_addWearables.end(); ++itAddWearables)
 	{
 		const LLInventoryModel::item_array_t& wearItems = itAddWearables->second;
-		for (S32 idxItem = 0, cntItem = wearItems.count(); idxItem < cntItem; idxItem++)
+		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
 		{
-			LLViewerInventoryItem* pItem = wearItems.get(idxItem);
+			LLViewerInventoryItem* pItem = wearItems.at(idxItem);
 			if (!pAppearanceMgr->isLinkInCOF(pItem->getUUID()))		// It's important to examine COF here and *not* gAgentWearables
 			{
 				if (LLAssetType::AT_BODYPART == pItem->getType())
@@ -973,9 +973,9 @@ void RlvForceWear::done()
 			itAddAttachments != m_addAttachments.end(); ++itAddAttachments)
 	{
 		const LLInventoryModel::item_array_t& wearItems = itAddAttachments->second;
-		for (S32 idxItem = 0, cntItem = wearItems.count(); idxItem < cntItem; idxItem++)
+		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
 		{
-			const LLUUID& idItem = wearItems.get(idxItem)->getLinkedUUID();
+			const LLUUID& idItem = wearItems.at(idxItem)->getLinkedUUID();
 			if (gAgentAvatarp->attachmentWasRequested(idItem))
 				continue;
 			gAgentAvatarp->addAttachmentRequest(idItem);

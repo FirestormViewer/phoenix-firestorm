@@ -30,7 +30,7 @@ Pruebe a guardar la imagen como Targa (.tga)
 de 24 bits.
 	</text>
 	<check_box label="Usar compresión sin pérdida" name="lossless_check" left_delta="-2"/>
-	<check_box name="temp_check" label="Temporal (Gratis)" tooltip="Configura el activo como temporal, haciendo gratuita la subida, pero a cambio sólo útil por un corto tiempo, tras el cuál deja de existir." left_delta="184"/>
+	<check_box name="temp_check" label="Temporal (Gratis)" tool_tip="Configura el activo como temporal, haciendo gratuita la subida, pero a cambio sólo útil por un corto tiempo, tras el cuál deja de existir." left_delta="184"/>
 	<button label="Cancelar" name="cancel_btn" left="175"/>
 	<button label="Subir ([AMOUNT]L$)" name="ok_btn" left_delta="-155"/>
 </floater>

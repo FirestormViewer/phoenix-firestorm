@@ -140,7 +140,6 @@
 		<menu_item_check label="Højopløsningsfoto" name="HighResSnapshot"/>
 		<menu_item_check label="Lydløse fotos til disk" name="QuietSnapshotsToDisk"/>
 		<menu label="Værktøjer til ydelse" name="Performance Tools">
-			<menu_item_call label="Lag meter" name="Lag Meter"/>
 			<menu_item_check label="Statistik bjælke" name="Statistics Bar"/>
 			<menu_item_check label="Vis avatarers gengivelsesbelastning" name="Avatar Rendering Cost"/>
 		</menu>

@@ -96,8 +96,8 @@ echo "Running from ${RUN_PATH}"
 cd "${RUN_PATH}"
 
 # Re-register hop:// and secondlife:// protocol handler every launch, for now.
-./etc/register_hopprotocol.sh
-./etc/register_secondlifeprotocol.sh
+test -x ./etc/register_hopprotocol.sh && ./etc/register_hopprotocol.sh
+test -x ./etc/register_secondlifeprotocol.sh && ./etc/register_secondlifeprotocol.sh
 
 # Re-register the application with the desktop system every launch, for now.
 # AO: Disabled don't install by default
@@ -125,6 +125,8 @@ export SAVED_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 #    fi
 #fi
 
+if ! test -f FS_No_LD_Hacks.txt; then
+
 export LD_LIBRARY_PATH="$PWD/lib:${LD_LIBRARY_PATH}"
 # AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
 #export SL_OPT="`cat etc/gridargs.dat` $@"
@@ -142,6 +144,7 @@ then
 fi
 # <FS:ND> End of hack; God will kill a kitten for this :(
 
+fi
 
 # Copy "$@" to ARGS array specifically to delete the --skip-gridargs switch.
 # The gridargs.dat file is no more, but we still want to avoid breaking

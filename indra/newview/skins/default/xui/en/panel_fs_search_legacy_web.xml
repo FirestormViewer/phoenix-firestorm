@@ -16,7 +16,6 @@ name="panel_ls_web">
 	 layout="topleft"
 	 follows="all"
 	 name="search_browser"
-	 ignore_ui_scale="false"
 	 trusted_content="true"
 	 start_url="about:blank" />
 </panel>

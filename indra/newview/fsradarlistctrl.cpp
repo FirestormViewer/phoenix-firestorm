@@ -47,7 +47,7 @@ mContextMenu(NULL)
 
 BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	//llinfos << "handleRightMouseDown" << llendl;
+	//LL_INFOS() << "handleRightMouseDown" << LL_ENDL;
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 //	if ( mContextMenu )
 // [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
@@ -58,11 +58,11 @@ BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		std::vector<LLScrollListItem*> selected_items = getAllSelected();
 		if (selected_items.size() > 1)
 		{
-			//llinfos << "Right-click select by value: (multi-select)" << llendl;
+			//LL_INFOS() << "Right-click select by value: (multi-select)" << LL_ENDL;
 			uuid_vec_t selected_uuids;
 			for (size_t i = 0; i < selected_items.size(); i++)
 			{
-				//llinfos << "Right-click select by value: " << selected_items.at(i)->getColumn(uuid_column_index)->getValue().asUUID() << llendl;
+				//LL_INFOS() << "Right-click select by value: " << selected_items.at(i)->getColumn(uuid_column_index)->getValue().asUUID() << LL_ENDL;
 				selected_uuids.push_back(selected_items.at(i)->getColumn(uuid_column_index)->getValue().asUUID());
 			}
 			mContextMenu->show(this, selected_uuids, x, y);
@@ -72,7 +72,7 @@ BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			LLScrollListItem* hit_item = hitItem(x, y);
 			if (hit_item)
 			{
-				//llinfos << "Right-click select by value: " << hit_item->getValue() << llendl;
+				//LL_INFOS() << "Right-click select by value: " << hit_item->getValue() << LL_ENDL;
 				selectByID(hit_item->getValue());
 				LLUUID av = hit_item->getValue();
 				uuid_vec_t selected_uuids;

@@ -635,6 +635,7 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("lsl");
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
+            allowedv->push_back("gif");
             allowedv->push_back("xml");
             // <FS:CR> Import filter
             allowedv->push_back("oxp");
@@ -687,7 +688,7 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
 	    break;
 	// </FS:CR>
         default:
-            llwarns << "Unsupported format." << llendl;
+            LL_WARNS() << "Unsupported format." << LL_ENDL;
     }
 
 	return allowedv;
@@ -741,7 +742,7 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 		case FFSAVE_TGAPNG:
 			type = "PNG";
 			creator = "prvw";
-			extension = "png";
+			extension = "png,tga";
 			break;
 		case FFSAVE_BMP:
 			type = "BMPf";
@@ -882,12 +883,7 @@ BOOL LLFilePicker::getOpenFile(ELoadFilter filter, bool blocking)
 
 	if(filter == FFLOAD_ALL)	// allow application bundles etc. to be traversed; important for DEV-16869, but generally useful
 	{
-        // <FS:ND> FIRE-11793/BUG-4053/MAINT-3262 Cannot select image to upload to Web profile. This is because anding F_NAV_SUPPORT clears F_FILE. Whereas in fact we want both (OR)
-
-        // mPickOptions &= F_NAV_SUPPORT;
         mPickOptions |= F_NAV_SUPPORT;
-
-       // </FS:ND>
 	}
 	
 	if (blocking)
@@ -1044,13 +1040,13 @@ void LLFilePicker::add_to_selectedfiles(gpointer data, gpointer user_data)
 		{
 			display_name += (char)((*str >= 0x20 && *str <= 0x7E) ? *str : '?');
 		}
-		llwarns << "g_filename_to_utf8 failed on \"" << display_name << "\": " << error->message << llendl;
+		LL_WARNS() << "g_filename_to_utf8 failed on \"" << display_name << "\": " << error->message << LL_ENDL;
 	}
 
 	if (filename_utf8)
 	{
 		picker->mFiles.push_back(std::string(filename_utf8));
-		lldebugs << "ADDED FILE " << filename_utf8 << llendl;
+		LL_DEBUGS() << "ADDED FILE " << filename_utf8 << LL_ENDL;
 		g_free(filename_utf8);
 	}
 
@@ -1062,7 +1058,7 @@ void LLFilePicker::chooser_responder(GtkWidget *widget, gint response, gpointer 
 {
 	LLFilePicker* picker = (LLFilePicker*)user_data;
 
-	lldebugs << "GTK DIALOG RESPONSE " << response << llendl;
+	LL_DEBUGS() << "GTK DIALOG RESPONSE " << response << LL_ENDL;
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -1153,7 +1149,7 @@ GtkWindow* LLFilePicker::buildFilePicker(bool is_save, bool is_folder, std::stri
 		}
 		else
 		{
-			llwarns << "Hmm, couldn't get xwid to use for transient." << llendl;
+			LL_WARNS() << "Hmm, couldn't get xwid to use for transient." << LL_ENDL;
 		}
 #  endif //LL_X11
 
@@ -1536,8 +1532,8 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename 
 
 	reset();
 	
-	llinfos << "getSaveFile suggested filename is [" << filename
-		<< "]" << llendl;
+	LL_INFOS() << "getSaveFile suggested filename is [" << filename
+		<< "]" << LL_ENDL;
 	if (!filename.empty())
 	{
 		mFiles.push_back(gDirUtilp->getLindenUserDir() + gDirUtilp->getDirDelimiter() + filename);
@@ -1567,7 +1563,7 @@ BOOL LLFilePicker::getOpenFile( ELoadFilter filter, bool blocking )
 	default: break;
 	}
 	mFiles.push_back(filename);
-	llinfos << "getOpenFile: Will try to open file: " << filename << llendl;
+	LL_INFOS() << "getOpenFile: Will try to open file: " << filename << LL_ENDL;
 	return TRUE;
 }
 

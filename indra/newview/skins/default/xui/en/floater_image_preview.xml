@@ -140,7 +140,7 @@ Try saving image as 24 bit Targa (.tga).
       name="temp_check"
       width="280"
       label="Temporary (Free)"
-       tooltip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
+       tool_tip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
     <button
      follows="bottom|right"
      height="20"

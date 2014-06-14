@@ -53,7 +53,26 @@
 #include "nd/ndlogthrottle.h"
 
 namespace {
-#if !LL_WINDOWS
+#if LL_WINDOWS
+	void debugger_print(const std::string& s)
+	{
+		// Be careful when calling OutputDebugString as it throws DBG_PRINTEXCEPTION_C 
+		// which works just fine under the windows debugger, but can cause users who
+		// have enabled SEHOP exception chain validation to crash due to interactions
+		// between the Win 32-bit exception handling and boost coroutine fiber stacks. BUG-2707
+		//
+		if (IsDebuggerPresent())
+		{
+			// Need UTF16 for Unicode OutputDebugString
+			//
+			if (s.size())
+			{
+				OutputDebugString(utf8str_to_utf16str(s).c_str());
+				OutputDebugString(TEXT("\n"));
+			}
+		}
+	}
+#else
 	class RecordToSyslog : public LLError::Recorder
 	{
 	public:
@@ -98,8 +117,9 @@ namespace {
 			mFile.open(filename, llofstream::out | llofstream::app);
 			if (!mFile)
 			{
-				llinfos << "Error setting log file to " << filename << llendl;
+				LL_INFOS() << "Error setting log file to " << filename << LL_ENDL;
 			}
+			mWantsTime = true;
 		}
 		
 		~RecordToFile()
@@ -111,14 +131,10 @@ namespace {
 		//bool okay() { return mFile; }
 		bool okay() { return !!mFile; }
 		
-		virtual bool wantsTime() { return true; }
-		
 		virtual void recordMessage(LLError::ELevel level,
 									const std::string& message)
 		{
 			mFile << message << std::endl;
-			// mFile.flush();
-				// *FIX: should we do this? 
 		}
 	
 	private:
@@ -129,9 +145,10 @@ namespace {
 	class RecordToStderr : public LLError::Recorder
 	{
 	public:
-		RecordToStderr(bool timestamp) : mTimestamp(timestamp), mUseANSI(ANSI_PROBE) { }
-
-		virtual bool wantsTime() { return mTimestamp; }
+		RecordToStderr(bool timestamp) : mUseANSI(ANSI_PROBE) 
+		{
+			mWantsTime = timestamp;
+		}
 		
 		virtual void recordMessage(LLError::ELevel level,
 					   const std::string& message)
@@ -165,14 +182,19 @@ namespace {
 		}
 	
 	private:
-		bool mTimestamp;
-		enum ANSIState {ANSI_PROBE, ANSI_YES, ANSI_NO};
-		ANSIState mUseANSI;
+		enum ANSIState 
+		{
+			ANSI_PROBE, 
+			ANSI_YES, 
+			ANSI_NO
+		}					mUseANSI;
+
 		void colorANSI(const std::string color)
 		{
 			// ANSI color code escape sequence
 			fprintf(stderr, "\033[%sm", color.c_str() );
 		};
+
 		bool checkANSI(void)
 		{
 #if LL_LINUX || LL_DARWIN
@@ -205,10 +227,13 @@ namespace {
 	class RecordToWinDebug: public LLError::Recorder
 	{
 	public:
+		RecordToWinDebug()
+		{}
+
 		virtual void recordMessage(LLError::ELevel level,
 								   const std::string& message)
 		{
-			LL_WINDOWS_OUTPUT_DEBUG(message);
+			debugger_print(message);
 		}
 	};
 #endif
@@ -220,7 +245,7 @@ namespace
 	std::string className(const std::type_info& type)
 	{
 #ifdef __GNUC__
-		// GCC: type_info::name() returns a mangled class name, must demangle
+		// GCC: type_info::name() returns a mangled class name,st demangle
 
 		static size_t abi_name_len = 100;
 		static char* abi_name_buf = (char*)malloc(abi_name_len);
@@ -324,15 +349,15 @@ namespace
 
 			if (configuration.isUndefined())
 			{
-				llwarns << filename() << " missing, ill-formed,"
+				LL_WARNS() << filename() << " missing, ill-formed,"
 							" or simply undefined; not changing configuration"
-						<< llendl;
+						<< LL_ENDL;
 				return false;
 			}
 		}
 		
 		LLError::configure(configuration);
-		llinfos << "logging reconfigured from " << filename() << llendl;
+		LL_INFOS() << "logging reconfigured from " << filename() << LL_ENDL;
 		return true;
 	}
 
@@ -397,25 +422,25 @@ namespace LLError
 	class Settings
 	{
 	public:
-		bool printLocation;
+		bool                                mPrintLocation;
 
-		LLError::ELevel defaultLevel;
+		LLError::ELevel                     mDefaultLevel;
 		
-		LevelMap functionLevelMap;
-		LevelMap classLevelMap;
-		LevelMap fileLevelMap;
-		LevelMap tagLevelMap;
-		std::map<std::string, unsigned int> uniqueLogMessages;
+		LevelMap                            mFunctionLevelMap;
+		LevelMap                            mClassLevelMap;
+		LevelMap                            mFileLevelMap;
+		LevelMap                            mTagLevelMap;
+		std::map<std::string, unsigned int> mUniqueLogMessages;
 		
-		LLError::FatalFunction crashFunction;
-		LLError::TimeFunction timeFunction;
+		LLError::FatalFunction              mCrashFunction;
+		LLError::TimeFunction               mTimeFunction;
 		
-		Recorders recorders;
-		Recorder* fileRecorder;
-		Recorder* fixedBufferRecorder;
-		std::string fileRecorderFileName;
+		Recorders                           mRecorders;
+		Recorder*                           mFileRecorder;
+		Recorder*                           mFixedBufferRecorder;
+		std::string                         mFileRecorderFileName;
 		
-		int shouldLogCallCounter;
+		int									mShouldLogCallCounter;
 		
 		static Settings& get();
 	
@@ -425,19 +450,19 @@ namespace LLError
 		
 	private:
 		Settings()
-			:	printLocation(false),
-				defaultLevel(LLError::LEVEL_DEBUG),
-				crashFunction(),
-				timeFunction(NULL),
-				fileRecorder(NULL),
-				fixedBufferRecorder(NULL),
-				shouldLogCallCounter(0)
+		:	mPrintLocation(false),
+			mDefaultLevel(LLError::LEVEL_DEBUG),
+			mCrashFunction(),
+			mTimeFunction(NULL),
+			mFileRecorder(NULL),
+			mFixedBufferRecorder(NULL),
+			mShouldLogCallCounter(0)
 			{ }
 		
 		~Settings()
 		{
-			for_each(recorders.begin(), recorders.end(), DeletePointer());
-			recorders.clear();
+			for_each(mRecorders.begin(), mRecorders.end(), DeletePointer());
+			mRecorders.clear();
 		}
 		
 		static Settings*& getPtr();
@@ -496,18 +521,74 @@ namespace LLError
 					int line,
 					const std::type_info& class_info, 
 					const char* function, 
-					const char* broadTag, 
-					const char* narrowTag,
-					bool printOnce)
-		: mLevel(level), mFile(file), mLine(line),
-		  mClassInfo(class_info), mFunction(function),
-		  mCached(false), mShouldLog(false), 
-		  mBroadTag(broadTag), mNarrowTag(narrowTag), mPrintOnce(printOnce)
-		{ }
+					bool printOnce,
+					const char** tags, 
+					size_t tag_count)
+	:	mLevel(level), 
+		mFile(file), 
+		mLine(line),
+		mClassInfo(class_info), 
+		mFunction(function),
+		mCached(false), 
+		mShouldLog(false), 
+		mPrintOnce(printOnce),
+		mTags(new const char* [tag_count]),
+		mTagCount(tag_count)
+	{
+		for (int i = 0; i < tag_count; i++)
+		{
+			mTags[i] = tags[i];
+		}
 
+		switch (mLevel)
+		{
+		case LEVEL_DEBUG:		mLevelString = "DEBUG:";	break;
+		case LEVEL_INFO:		mLevelString = "INFO:";		break;
+		case LEVEL_WARN:		mLevelString = "WARNING:";	break;
+		case LEVEL_ERROR:		mLevelString = "ERROR:";	break;
+		default:				mLevelString = "XXX:";		break;
+		};
+
+		mLocationString = llformat("%s(%d) :", abbreviateFile(mFile).c_str(), mLine);
+#if LL_WINDOWS
+		// DevStudio: __FUNCTION__ already includes the full class name
+#else
+#if LL_LINUX
+		// gross, but typeid comparison seems to always fail here with gcc4.1
+		if (0 != strcmp(mClassInfo.name(), typeid(NoClassInfo).name()))
+#else
+		if (mClassInfo != typeid(NoClassInfo))
+#endif // LL_LINUX
+		{
+			mFunctionString = className(mClassInfo) + "::";
+		}
+#endif
+		mFunctionString += std::string(mFunction) + ":";
+		for (size_t i = 0; i < mTagCount; i++)
+		{
+			// <FS:ND> Tags can be 0, so work around that.
+
+			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : " ");
+
+			char const *pTag = mTags[i];
+			if( !pTag )
+				pTag = "<NULL>";
+
+			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : " ");
+
+			// </FS:ND>
+		}
+	}
+
+	CallSite::~CallSite()
+	{
+		delete []mTags;
+	}
 
 	void CallSite::invalidate()
-		{ mCached = false; }
+	{
+		mCached = false; 
+	}
 }
 
 namespace
@@ -593,25 +674,25 @@ namespace LLError
 	void setPrintLocation(bool print)
 	{
 		Settings& s = Settings::get();
-		s.printLocation = print;
+		s.mPrintLocation = print;
 	}
 
 	void setFatalFunction(const FatalFunction& f)
 	{
 		Settings& s = Settings::get();
-		s.crashFunction = f;
+		s.mCrashFunction = f;
 	}
 
     FatalFunction getFatalFunction()
     {
         Settings& s = Settings::get();
-        return s.crashFunction;
+        return s.mCrashFunction;
     }
 
 	void setTimeFunction(TimeFunction f)
 	{
 		Settings& s = Settings::get();
-		s.timeFunction = f;
+		s.mTimeFunction = f;
 	}
 
 	void setDefaultLevel(ELevel level)
@@ -619,13 +700,13 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		g.invalidateCallSites();
-		s.defaultLevel = level;
+		s.mDefaultLevel = level;
 	}
 
 	ELevel getDefaultLevel()
 	{
 		Settings& s = Settings::get();
-		return s.defaultLevel;
+		return s.mDefaultLevel;
 	}
 
 	void setFunctionLevel(const std::string& function_name, ELevel level)
@@ -633,7 +714,7 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		g.invalidateCallSites();
-		s.functionLevelMap[function_name] = level;
+		s.mFunctionLevelMap[function_name] = level;
 	}
 
 	void setClassLevel(const std::string& class_name, ELevel level)
@@ -641,7 +722,7 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		g.invalidateCallSites();
-		s.classLevelMap[class_name] = level;
+		s.mClassLevelMap[class_name] = level;
 	}
 
 	void setFileLevel(const std::string& file_name, ELevel level)
@@ -649,7 +730,7 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		g.invalidateCallSites();
-		s.fileLevelMap[file_name] = level;
+		s.mFileLevelMap[file_name] = level;
 	}
 
 	void setTagLevel(const std::string& tag_name, ELevel level)
@@ -657,7 +738,7 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		g.invalidateCallSites();
-		s.tagLevelMap[tag_name] = level;
+		s.mTagLevelMap[tag_name] = level;
 	}
 
 	LLError::ELevel decodeLevel(std::string name)
@@ -678,7 +759,7 @@ namespace LLError
 		LevelMap::const_iterator i = level_names.find(name);
 		if (i == level_names.end())
 		{
-			llwarns << "unrecognized logging level: '" << name << "'" << llendl;
+			LL_WARNS() << "unrecognized logging level: '" << name << "'" << LL_ENDL;
 			return LLError::LEVEL_INFO;
 		}
 		
@@ -705,11 +786,11 @@ namespace LLError
 		Settings& s = Settings::get();
 		
 		g.invalidateCallSites();
-		s.functionLevelMap.clear();
-		s.classLevelMap.clear();
-		s.fileLevelMap.clear();
-		s.tagLevelMap.clear();
-		s.uniqueLogMessages.clear();
+		s.mFunctionLevelMap.clear();
+		s.mClassLevelMap.clear();
+		s.mFileLevelMap.clear();
+		s.mTagLevelMap.clear();
+		s.mUniqueLogMessages.clear();
 		
 		setPrintLocation(config["print-location"]);
 		setDefaultLevel(decodeLevel(config["default-level"]));
@@ -722,10 +803,10 @@ namespace LLError
 			
 			ELevel level = decodeLevel(entry["level"]);
 			
-			setLevels(s.functionLevelMap,	entry["functions"],	level);
-			setLevels(s.classLevelMap,		entry["classes"],	level);
-			setLevels(s.fileLevelMap,		entry["files"],		level);
-			setLevels(s.tagLevelMap,		entry["tags"],		level);
+			setLevels(s.mFunctionLevelMap,	entry["functions"],	level);
+			setLevels(s.mClassLevelMap,		entry["classes"],	level);
+			setLevels(s.mFileLevelMap,		entry["files"],		level);
+			setLevels(s.mTagLevelMap,		entry["tags"],		level);
 		}
 	}
 }
@@ -733,14 +814,45 @@ namespace LLError
 
 namespace LLError
 {
+	Recorder::Recorder()
+	:	mWantsTime(false),
+		mWantsTags(false),
+		mWantsLevel(true),
+		mWantsLocation(false),
+		mWantsFunctionName(true)
+	{}
+
 	Recorder::~Recorder()
 		{ }
 
-	// virtual
 	bool Recorder::wantsTime()
-		{ return false; }
+	{ 
+		return mWantsTime; 
+	}
 
+	// virtual
+	bool Recorder::wantsTags()
+	{
+		return mWantsTags;
+	}
 
+	// virtual 
+	bool Recorder::wantsLevel() 
+	{ 
+		return mWantsLevel;
+	}
+
+	// virtual 
+	bool Recorder::wantsLocation() 
+	{ 
+		return mWantsLocation;
+	}
+
+	// virtual 
+	bool Recorder::wantsFunctionName() 
+	{ 
+		return mWantsFunctionName;
+	}
 
 	void addRecorder(Recorder* recorder)
 	{
@@ -749,7 +861,7 @@ namespace LLError
 			return;
 		}
 		Settings& s = Settings::get();
-		s.recorders.push_back(recorder);
+		s.mRecorders.push_back(recorder);
 	}
 
 	void removeRecorder(Recorder* recorder)
@@ -759,9 +871,8 @@ namespace LLError
 			return;
 		}
 		Settings& s = Settings::get();
-		s.recorders.erase(
-			std::remove(s.recorders.begin(), s.recorders.end(), recorder),
-			s.recorders.end());
+		s.mRecorders.erase(std::remove(s.mRecorders.begin(), s.mRecorders.end(), recorder),
+							s.mRecorders.end());
 	}
 }
 
@@ -771,10 +882,10 @@ namespace LLError
 	{
 		LLError::Settings& s = LLError::Settings::get();
 
-		removeRecorder(s.fileRecorder);
-		delete s.fileRecorder;
-		s.fileRecorder = NULL;
-		s.fileRecorderFileName.clear();
+		removeRecorder(s.mFileRecorder);
+		delete s.mFileRecorder;
+		s.mFileRecorder = NULL;
+		s.mFileRecorderFileName.clear();
 		
 		if (file_name.empty())
 		{
@@ -788,8 +899,8 @@ namespace LLError
 			return;
 		}
 
-		s.fileRecorderFileName = file_name;
-		s.fileRecorder = f;
+		s.mFileRecorderFileName = file_name;
+		s.mFileRecorder = f;
 		addRecorder(f);
 	}
 	
@@ -797,98 +908,117 @@ namespace LLError
 	{
 		LLError::Settings& s = LLError::Settings::get();
 
-		removeRecorder(s.fixedBufferRecorder);
-		delete s.fixedBufferRecorder;
-		s.fixedBufferRecorder = NULL;
+		removeRecorder(s.mFixedBufferRecorder);
+		delete s.mFixedBufferRecorder;
+		s.mFixedBufferRecorder = NULL;
 		
 		if (!fixedBuffer)
 		{
 			return;
 		}
 		
-		s.fixedBufferRecorder = new RecordToFixedBuffer(fixedBuffer);
-		addRecorder(s.fixedBufferRecorder);
+		s.mFixedBufferRecorder = new RecordToFixedBuffer(fixedBuffer);
+		addRecorder(s.mFixedBufferRecorder);
 	}
 
 	std::string logFileName()
 	{
 		LLError::Settings& s = LLError::Settings::get();
-		return s.fileRecorderFileName;
+		return s.mFileRecorderFileName;
 	}
 }
 
 namespace
 {
-	void writeToRecorders(LLError::ELevel level, const std::string& message)
+	void writeToRecorders(const LLError::CallSite& site, const std::string& message, bool show_location = true, bool show_time = true, bool show_tags = true, bool show_level = true, bool show_function = true)
 	{
+		LLError::ELevel level = site.mLevel;
 		LLError::Settings& s = LLError::Settings::get();
 	
-		std::string messageWithTime;
-		
-		for (Recorders::const_iterator i = s.recorders.begin();
-			i != s.recorders.end();
+		for (Recorders::const_iterator i = s.mRecorders.begin();
+			i != s.mRecorders.end();
 			++i)
 		{
 			LLError::Recorder* r = *i;
 			
-			if (r->wantsTime()  &&  s.timeFunction != NULL)
+			std::ostringstream message_stream;
+
+			if (show_location && (r->wantsLocation() || level == LLError::LEVEL_ERROR || s.mPrintLocation))
 			{
-				if (messageWithTime.empty())
+				message_stream << site.mLocationString << " ";
+			}
+
+			if (show_time && r->wantsTime() && s.mTimeFunction != NULL)
+			{
+				message_stream << s.mTimeFunction() << " ";
+			}
+
+			if (show_level && r->wantsLevel())
 				{
-					messageWithTime = s.timeFunction() + " " + message;
+				message_stream << site.mLevelString << " ";
 				}
 				
-				r->recordMessage(level, messageWithTime);
-			}
-			else
+			if (show_tags && r->wantsTags())
 			{
-				r->recordMessage(level, message);
+				message_stream << site.mTagString << " ";
 			}
+
+			if (show_function && r->wantsFunctionName())
+			{
+				message_stream << site.mFunctionString << " ";
+			}
+
+			message_stream << message;
+
+			r->recordMessage(level, message_stream.str());
 		}
 	}
 }
-
-
-/*
-Recorder formats:
-
-$type = "ERROR" | "WARNING" | "ALERT" | "INFO" | "DEBUG"
-$loc = "$file($line)"
-$msg = "$loc : " if FATAL or printing loc
-		"" otherwise
-$msg += "$type: "
-$msg += contents of stringstream
-
-$time = "%Y-%m-%dT%H:%M:%SZ" if UTC
-	 or "%Y-%m-%dT%H:%M:%S %Z" if local
-
-syslog:	"$msg"
-file: "$time $msg\n"
-stderr: "$time $msg\n" except on windows, "$msg\n"
-fixedbuf: "$msg"
-winddebug: "$msg\n"
-
-Note: if FATAL, an additional line gets logged first, with $msg set to
-	"$loc : error"
-	
-You get:
-	llfoo.cpp(42) : error
-	llfoo.cpp(42) : ERROR: something
-	
-*/
 
 namespace {
 	bool checkLevelMap(const LevelMap& map, const std::string& key,
 						LLError::ELevel& level)
 	{
+		bool stop_checking;
 		LevelMap::const_iterator i = map.find(key);
 		if (i == map.end())
 		{
-			return false;
+			return stop_checking = false;
 		}
 		
 			level = i->second;
-		return true;
+		return stop_checking = true;
+	}
+	
+	bool checkLevelMap(	const LevelMap& map, 
+						const char *const * keys, 
+						size_t count,
+						LLError::ELevel& level)
+	{
+		bool found_level = false;
+
+		LLError::ELevel tag_level = LLError::LEVEL_NONE;
+
+		for (size_t i = 0; i < count; i++)
+		{
+			// <FS:ND> Can be 0
+			if( !keys[i] )
+				continue;
+			// </FS:ND>
+
+			LevelMap::const_iterator it = map.find(keys[i]);
+			if (it != map.end())
+			{
+				found_level = true;
+				tag_level = llmin(tag_level, it->second);
+			}
+		}
+
+		if (found_level)
+		{
+			level = tag_level;
+		}
+		return found_level;
 	}
 	
 	class LogLock
@@ -955,9 +1085,9 @@ namespace LLError
 		Globals& g = Globals::get();
 		Settings& s = Settings::get();
 		
-		s.shouldLogCallCounter += 1;
+		s.mShouldLogCallCounter++;
 		
-		std::string class_name = className(site.mClassInfo);
+		const std::string& class_name = className(site.mClassInfo);
 		std::string function_name = functionName(site.mFunction);
 #if LL_LINUX
 		// gross, but typeid comparison seems to always fail here with gcc4.1
@@ -969,17 +1099,18 @@ namespace LLError
 			function_name = class_name + "::" + function_name;
 		}
 
-		ELevel compareLevel = s.defaultLevel;
+		ELevel compareLevel = s.mDefaultLevel;
 
 		// The most specific match found will be used as the log level,
 		// since the computation short circuits.
 		// So, in increasing order of importance:
-		// Default < Broad Tag < File < Class < Function < Narrow Tag
-		((site.mNarrowTag != NULL) ? checkLevelMap(s.tagLevelMap, site.mNarrowTag, compareLevel) : false)
-		|| checkLevelMap(s.functionLevelMap, function_name, compareLevel)
-		|| checkLevelMap(s.classLevelMap, class_name, compareLevel)
-		|| checkLevelMap(s.fileLevelMap, abbreviateFile(site.mFile), compareLevel)
-		|| ((site.mBroadTag != NULL) ? checkLevelMap(s.tagLevelMap, site.mBroadTag, compareLevel) : false);
+		// Default < Tags < File < Class < Function
+		checkLevelMap(s.mFunctionLevelMap, function_name, compareLevel)
+		|| checkLevelMap(s.mClassLevelMap, class_name, compareLevel)
+		|| checkLevelMap(s.mFileLevelMap, abbreviateFile(site.mFile), compareLevel)
+		|| (site.mTagCount > 0
+			? checkLevelMap(s.mTagLevelMap, site.mTags, site.mTagCount, compareLevel) 
+			: false);
 
 		site.mCached = true;
 		g.addCallSite(site);
@@ -1023,6 +1154,7 @@ namespace LLError
 	   }
 	   
 	   Globals& g = Globals::get();
+
        if (out == &g.messageStream)
        {
            g.messageStream.clear();
@@ -1061,59 +1193,25 @@ namespace LLError
 
 		if (site.mLevel == LEVEL_ERROR)
 		{
-			std::ostringstream fatalMessage;
-			fatalMessage << abbreviateFile(site.mFile)
-						<< "(" << site.mLine << ") : error";
-			
-			writeToRecorders(site.mLevel, fatalMessage.str());
+			writeToRecorders(site, "error", true, true, true, false, false);
 		}
-		
-		
-		std::ostringstream prefix;
 
+		std::ostringstream prefix;
 		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
 			return;
-
-		switch (site.mLevel)
-		{
-			case LEVEL_DEBUG:		prefix << "DEBUG: ";	break;
-			case LEVEL_INFO:		prefix << "INFO: ";		break;
-			case LEVEL_WARN:		prefix << "WARNING: ";	break;
-			case LEVEL_ERROR:		prefix << "ERROR: ";	break;
-			default:				prefix << "XXX: ";		break;
-		};
 		
-		if (s.printLocation)
-		{
-			prefix << abbreviateFile(site.mFile)
-					<< "(" << site.mLine << ") : ";
-		}
-		
-	#if LL_WINDOWS
-		// DevStudio: __FUNCTION__ already includes the full class name
-	#else
-                #if LL_LINUX
-		// gross, but typeid comparison seems to always fail here with gcc4.1
-		if (0 != strcmp(site.mClassInfo.name(), typeid(NoClassInfo).name()))
-                #else
-		if (site.mClassInfo != typeid(NoClassInfo))
-                #endif // LL_LINUX
-		{
-			prefix << className(site.mClassInfo) << "::";
-		}
-	#endif
-		prefix << site.mFunction << ": ";
+		std::ostringstream message_stream;
 
 		if (site.mPrintOnce)
 		{
-			std::map<std::string, unsigned int>::iterator messageIter = s.uniqueLogMessages.find(message);
-			if (messageIter != s.uniqueLogMessages.end())
+			std::map<std::string, unsigned int>::iterator messageIter = s.mUniqueLogMessages.find(message);
+			if (messageIter != s.mUniqueLogMessages.end())
 			{
 				messageIter->second++;
 				unsigned int num_messages = messageIter->second;
 				if (num_messages == 10 || num_messages == 50 || (num_messages % 100) == 0)
 				{
-					prefix << "ONCE (" << num_messages << "th time seen): ";
+					message_stream << "ONCE (" << num_messages << "th time seen): ";
 				} 
 				else
 				{
@@ -1122,25 +1220,21 @@ namespace LLError
 			}
 			else 
 			{
-				prefix << "ONCE: ";
-				s.uniqueLogMessages[message] = 1;
+				message_stream << "ONCE: ";
+				s.mUniqueLogMessages[message] = 1;
 			}
 		}
 		
-		prefix << message;
-		message = prefix.str();
+		message_stream << message;
 		
-		writeToRecorders(site.mLevel, message);
+		writeToRecorders(site, message_stream.str());
 		
-		if (site.mLevel == LEVEL_ERROR  &&  s.crashFunction)
+		if (site.mLevel == LEVEL_ERROR  &&  s.mCrashFunction)
 		{
-			s.crashFunction(message);
+			s.mCrashFunction(message_stream.str());
 		}
 	}
 }
-
-
-
 
 namespace LLError
 {
@@ -1198,7 +1292,7 @@ namespace LLError
 	int shouldLogCallCount()
 	{
 		Settings& s = Settings::get();
-		return s.shouldLogCallCounter;
+		return s.mShouldLogCallCounter;
 	}
 
 #if LL_WINDOWS
@@ -1386,13 +1480,13 @@ namespace LLError
 
        if(sIndex > 0)
        {
-           llinfos << " ************* PRINT OUT LL CALL STACKS ************* " << llendl ;
+           LL_INFOS() << " ************* PRINT OUT LL CALL STACKS ************* " << LL_ENDL;
            while(sIndex > 0)
            {                  
 			   sIndex-- ;
-               llinfos << sBuffer[sIndex] << llendl ;
+               LL_INFOS() << sBuffer[sIndex] << LL_ENDL;
            }
-           llinfos << " *************** END OF LL CALL STACKS *************** " << llendl ;
+           LL_INFOS() << " *************** END OF LL CALL STACKS *************** " << LL_ENDL;
        }
 
 	   if(sBuffer)
@@ -1408,27 +1502,6 @@ namespace LLError
    {
        sIndex = 0 ;
    }
-
-#if LL_WINDOWS
-	void LLOutputDebugUTF8(const std::string& s)
-	{
-		// Be careful when calling OutputDebugString as it throws DBG_PRINTEXCEPTION_C 
-		// which works just fine under the windows debugger, but can cause users who
-		// have enabled SEHOP exception chain validation to crash due to interactions
-		// between the Win 32-bit exception handling and boost coroutine fiber stacks. BUG-2707
-		//
-		if (IsDebuggerPresent())
-		{
-			// Need UTF16 for Unicode OutputDebugString
-			//
-			if (s.size())
-			{
-				OutputDebugString(utf8str_to_utf16str(s).c_str());
-				OutputDebugString(TEXT("\n"));
-			}
-		}
-	}
-#endif
 
 }
 

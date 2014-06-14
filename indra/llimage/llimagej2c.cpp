@@ -24,11 +24,13 @@
  */
 #include "linden_common.h"
 
+#include "llapr.h"
 #include "lldir.h"
 #include "llimagej2c.h"
 #include "lltimer.h"
 #include "llmath.h"
 #include "llmemory.h"
+#include "llsd.h"
 
 typedef LLImageJ2CImpl* (*CreateLLImageJ2CFunction)();
 typedef void (*DestroyLLImageJ2CFunction)(LLImageJ2CImpl*);
@@ -60,6 +62,7 @@ LLImageJ2C::LLImageJ2C() : 	LLImageFormatted(IMG_CODEC_J2C),
 							mAreaUsedForDataSizeCalcs(0)
 {
 	mImpl = fallbackCreateLLImageJ2CImpl();
+	claimMem(mImpl);
 
 	// Clear data size table
 	for( S32 i = 0; i <= MAX_DISCARD_LEVEL; i++)
@@ -381,7 +384,7 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 		U8 *data = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), file_size);
 		if(!data)
 		{
-			llwarns << "couldn't allocate memory for loading file: " << filename << " size: " << file_size << llendl;
+			LL_WARNS() << "couldn't allocate memory for loading file: " << filename << " size: " << file_size << LL_ENDL;
 			return FALSE;
 		}
 		apr_size_t bytes_read = file_size;

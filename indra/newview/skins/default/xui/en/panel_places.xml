@@ -25,6 +25,7 @@
      label="Filter Places"
      max_length_chars="300"
      name="Filter"
+     tab_group="1"
      top="3"
      width="303" />
     <tab_container
@@ -34,7 +35,7 @@
      layout="topleft"
      left="2"
      name="Places Tabs"
-     tab_group="1"
+     tab_group="2"
      tab_position="top"
      top_pad="10"
      width="325" />

@@ -97,7 +97,7 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 
 
 LLFloaterIMNearbyChat::LLFloaterIMNearbyChat(const LLSD& llsd)
-:	LLFloaterIMSessionTab(llsd),
+:	LLFloaterIMSessionTab(LLSD(LLUUID::null)),
 	//mOutputMonitor(NULL),
 	mSpeakerMgr(NULL),
 	mExpandedHeight(COLLAPSED_HEIGHT + EXPANDED_HEIGHT)
@@ -105,7 +105,6 @@ LLFloaterIMNearbyChat::LLFloaterIMNearbyChat(const LLSD& llsd)
     mIsP2PChat = false;
 	mIsNearbyChat = true;
 	mSpeakerMgr = LLLocalSpeakerMgr::getInstance();
-	mSessionID = LLUUID();
 }
 
 //static
@@ -339,7 +338,7 @@ void LLFloaterIMNearbyChat::onChatFontChange(LLFontGL* fontp)
 void LLFloaterIMNearbyChat::show()
 {
 		openFloater(getKey());
-	}
+}
 
 bool LLFloaterIMNearbyChat::isChatVisible() const
 {
@@ -515,10 +514,10 @@ void LLFloaterIMNearbyChat::onChatBoxKeystroke()
 			mInputEditor->endOfDoc();
 		}
 
-		//llinfos << "GESTUREDEBUG " << trigger 
+		//LL_INFOS() << "GESTUREDEBUG " << trigger 
 		//	<< " len " << length
 		//	<< " outlen " << out_str.getLength()
-		//	<< llendl;
+		//	<< LL_ENDL;
 	}
 }
 
@@ -705,22 +704,22 @@ void LLFloaterIMNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType
 	{
 		if (type == CHAT_TYPE_WHISPER)
 		{
-			lldebugs << "You whisper " << utf8_text << llendl;
+			LL_DEBUGS() << "You whisper " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_WHISPER, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_NORMAL)
 		{
-			lldebugs << "You say " << utf8_text << llendl;
+			LL_DEBUGS() << "You say " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_TALK, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_SHOUT)
 		{
-			lldebugs << "You shout " << utf8_text << llendl;
+			LL_DEBUGS() << "You shout " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_SHOUT, ANIM_REQUEST_START);
 		}
 		else
 		{
-			llinfos << "send_chat_from_viewer() - invalid volume" << llendl;
+			LL_INFOS() << "send_chat_from_viewer() - invalid volume" << LL_ENDL;
 			return;
 		}
 	}
@@ -728,7 +727,7 @@ void LLFloaterIMNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType
 	{
 		if (type != CHAT_TYPE_START && type != CHAT_TYPE_STOP)
 		{
-			lldebugs << "Channel chat: " << utf8_text << llendl;
+			LL_DEBUGS() << "Channel chat: " << utf8_text << LL_ENDL;
 		}
 	}
 
@@ -907,7 +906,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 
 	gAgent.sendReliableMessage();
 
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
+	add(LLStatViewer::CHAT_COUNT, 1);
 }
 
 class LLChatCommandHandler : public LLCommandHandler

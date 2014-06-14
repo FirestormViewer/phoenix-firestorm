@@ -81,7 +81,7 @@
              follows="left|bottom"
              allow_text_entry="true"
              combo_editor.prevalidate_callback="ascii"
-             commit_on_focus_lost="false"
+             combo_editor.commit_on_focus_lost="false"
              max_chars="128"
             >
             </combo_box>

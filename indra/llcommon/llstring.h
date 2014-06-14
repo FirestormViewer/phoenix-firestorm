@@ -29,10 +29,13 @@
 
 #include <string>
 #include <cstdio>
-#include <locale>
+//#include <locale>
 #include <iomanip>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include "llformat.h"
 #include "llsd.h"
-#include "llfasttimer.h"
 
 #if LL_LINUX || LL_SOLARIS
 #include <wctype.h>
@@ -49,6 +52,7 @@
 #endif
 
 const char LL_UNKNOWN_CHAR = '?';
+class LLSD;
 
 #if LL_DARWIN || LL_LINUX || LL_SOLARIS
 // Template specialization of char_traits for U16s. Only necessary on Mac and Linux (exists on Windows already)

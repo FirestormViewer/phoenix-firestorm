@@ -592,7 +592,7 @@ void LLParticipantList::sort()
 			mAvatarList->sort();
 			break;
 		default :
-			llwarns << "Unrecognized sort order for " << mAvatarList->getName() << llendl;
+			LL_WARNS() << "Unrecognized sort order for " << mAvatarList->getName() << LL_ENDL;
 			return;
 	}
 }
@@ -774,7 +774,7 @@ void LLParticipantList::LLParticipantListMenu::toggleMute(const LLSD& userdata, 
 	LLPointer<LLSpeaker> speakerp = mParent.mSpeakerMgr->findSpeaker(speaker_id);
 	if (speakerp.isNull())
 	{
-		LL_WARNS("Speakers") << "Speaker " << speaker_id << " not found" << llendl;
+		LL_WARNS("Speakers") << "Speaker " << speaker_id << " not found" << LL_ENDL;
 		return;
 	}
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(mParent.mAvatarList->getItemByValue(speaker_id));
@@ -822,7 +822,7 @@ bool LLParticipantList::LLParticipantListMenu::isGroupModerator()
 {
 	if (!mParent.mSpeakerMgr)
 	{
-		llwarns << "Speaker manager is missing" << llendl;
+		LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
 		return false;
 	}
 

@@ -327,7 +327,7 @@ void LLLogChat::saveHistory(const std::string& filename,
 	if (tmp_filename.empty())
 	{
 		std::string warn = "Chat history filename [" + filename + "] is empty!";
-		llwarning(warn, 666);
+		LL_WARNS() << warn << LL_ENDL;
 		llassert(tmp_filename.size());
 		return;
 	}
@@ -335,7 +335,7 @@ void LLLogChat::saveHistory(const std::string& filename,
 	llofstream file (LLLogChat::makeLogFileName(filename), std::ios_base::app);
 	if (!file.is_open())
 	{
-		llwarns << "Couldn't open chat history log! - " + filename << llendl;
+		LL_WARNS() << "Couldn't open chat history log! - " + filename << LL_ENDL;
 		return;
 	}
 
@@ -605,7 +605,7 @@ void LLLogChat::findTranscriptFiles(std::string pattern, std::vector<std::string
 				//Add Nearby chat history to the list of transcriptions
 				list_of_transcriptions.push_back(gDirUtilp->add(dirname, filename));
 				LLFile::close(filep);
-				return;
+				continue;
 			}
 			char buffer[LOG_RECALL_SIZE];
 
@@ -857,7 +857,7 @@ void LLChatLogFormatter::format(const LLSD& im, std::ostream& ostr) const
 {
 	if (!im.isMap())
 	{
-		llwarning("invalid LLSD type of an instant message", 0);
+		LL_WARNS() << "invalid LLSD type of an instant message" << LL_ENDL;
 		return;
 	}
 
@@ -1020,11 +1020,9 @@ LLDeleteHistoryThread::LLDeleteHistoryThread(std::list<LLSD>* messages, LLLoadHi
 	mLoadThread(loadThread)
 {
 }
-
 LLDeleteHistoryThread::~LLDeleteHistoryThread()
 {
 }
-
 void LLDeleteHistoryThread::run()
 {
 	if (mLoadThread != NULL)
@@ -1093,7 +1091,7 @@ void LLLoadHistoryThread::run()
 	{
 		loadHistory(mFileName, mMessages, mLoadParams);
 		int count = mMessages->size();
-		llinfos << "mMessages->size(): " << count << llendl;
+		LL_INFOS() << "mMessages->size(): " << count << LL_ENDL;
 		setFinished();
 	}
 }
@@ -1119,6 +1117,7 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			return;						//No previous conversation with this name.
 		}
 	}
+
 	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
 
 	char *bptr;

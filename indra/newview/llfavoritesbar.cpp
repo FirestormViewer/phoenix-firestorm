@@ -501,7 +501,7 @@ BOOL LLFavoritesBarCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 				const LLUUID favorites_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
 				if (item->getParentUUID() == favorites_id)
 				{
-					llwarns << "Attemt to copy a favorite item into the same folder." << llendl;
+					LL_WARNS() << "Attemt to copy a favorite item into the same folder." << LL_ENDL;
 					break;
 				}
 
@@ -653,7 +653,7 @@ void LLFavoritesBarCtrl::handleNewFavoriteDragAndDrop(LLInventoryItem *item, con
 	//		landmarks to an empty favorites bar.
 	updateButtons();
 	
-	llinfos << "Copied inventory item #" << item->getUUID() << " to favorites." << llendl;
+	LL_INFOS() << "Copied inventory item #" << item->getUUID() << " to favorites." << LL_ENDL;
 }
 
 //virtual
@@ -762,7 +762,7 @@ void LLFavoritesBarCtrl::updateButtons()
 	int rightest_point = getRect().mRight - mMoreCtrl->getRect().getWidth();
 	// </FS:Ansariel>
 	//lets find first changed button
-	while (child_it != childs->end() && first_changed_item_index < mItems.count())
+	while (child_it != childs->end() && first_changed_item_index < mItems.size())
 	{
 		LLFavoriteLandmarkButton* button = dynamic_cast<LLFavoriteLandmarkButton*> (*child_it);
 		if (button)
@@ -784,7 +784,7 @@ void LLFavoritesBarCtrl::updateButtons()
 	}
 	// now first_changed_item_index should contains a number of button that need to change
 
-	if (first_changed_item_index <= mItems.count())
+	if (first_changed_item_index <= mItems.size())
 	{
 		// Rebuild the buttons only
 		// child_list_t is a linked list, so safe to erase from the middle if we pre-increment the iterator
@@ -828,7 +828,7 @@ void LLFavoritesBarCtrl::updateButtons()
 		//last_right_edge is saving coordinates
 		LLButton* last_new_button = NULL;
 		int j = first_changed_item_index;
-		for (; j < mItems.count(); j++)
+		for (; j < mItems.size(); j++)
 		{
 			last_new_button = createButton(mItems[j], button_params, last_right_edge);
 			if (!last_new_button)
@@ -842,7 +842,7 @@ void LLFavoritesBarCtrl::updateButtons()
 		}
 		mFirstDropDownItem = j;
 		// Chevron button
-		if (mFirstDropDownItem < mItems.count())
+		if (mFirstDropDownItem < mItems.size())
 		{
 			// if updateButton had been called it means:
 			//or there are some new favorites, or width had been changed
@@ -913,7 +913,7 @@ LLButton* LLFavoritesBarCtrl::createButton(const LLPointer<LLViewerInventoryItem
 	fav_btn = LLUICtrlFactory::create<LLFavoriteLandmarkButton>(fav_btn_params);
 	if (NULL == fav_btn)
 	{
-		llwarns << "Unable to create LLFavoriteLandmarkButton widget: " << item->getName() << llendl;
+		LL_WARNS() << "Unable to create LLFavoriteLandmarkButton widget: " << item->getName() << LL_ENDL;
 		return NULL;
 	}
 	
@@ -1022,9 +1022,9 @@ void LLFavoritesBarCtrl::updateMenuItems(LLToggleableMenu* menu)
 
 	U32 widest_item = 0;
 
-	for (S32 i = mFirstDropDownItem; i < mItems.count(); i++)
+	for (S32 i = mFirstDropDownItem; i < mItems.size(); i++)
 	{
-		LLViewerInventoryItem* item = mItems.get(i);
+		LLViewerInventoryItem* item = mItems.at(i);
 		const std::string& item_name = item->getName();
 
 		LLFavoriteLandmarkMenuItem::Params item_params;
@@ -1205,7 +1205,7 @@ bool LLFavoritesBarCtrl::enableSelected(const LLSD& userdata)
 void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 {
 	std::string action = userdata.asString();
-	llinfos << "Action = " << action << " Item = " << mSelectedItemID.asString() << llendl;
+	LL_INFOS() << "Action = " << action << " Item = " << mSelectedItemID.asString() << LL_ENDL;
 	
 	LLViewerInventoryItem* item = gInventory.getItem(mSelectedItemID);
 	if (!item)
@@ -1290,12 +1290,12 @@ BOOL LLFavoritesBarCtrl::isClipboardPasteable() const
 		return FALSE;
 	}
 
-	LLDynamicArray<LLUUID> objects;
+	std::vector<LLUUID> objects;
 	LLClipboard::instance().pasteFromClipboard(objects);
-	S32 count = objects.count();
+	S32 count = objects.size();
 	for(S32 i = 0; i < count; i++)
 	{
-		const LLUUID &item_id = objects.get(i);
+		const LLUUID &item_id = objects.at(i);
 
 		// Can't paste folders
 		const LLInventoryCategory *cat = gInventory.getCategory(item_id);
@@ -1319,13 +1319,13 @@ void LLFavoritesBarCtrl::pasteFromClipboard() const
 	if(model && isClipboardPasteable())
 	{
 		LLInventoryItem* item = NULL;
-		LLDynamicArray<LLUUID> objects;
+		std::vector<LLUUID> objects;
 		LLClipboard::instance().pasteFromClipboard(objects);
-		S32 count = objects.count();
+		S32 count = objects.size();
 		LLUUID parent_id(mFavoriteFolderId);
 		for(S32 i = 0; i < count; i++)
 		{
-			item = model->getItem(objects.get(i));
+			item = model->getItem(objects.at(i));
 			if (item)
 			{
 				copy_inventory_item(
@@ -1542,14 +1542,14 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	// Do not change the file if we are not logged in yet.
 	if (!LLLoginInstance::getInstance()->authSuccess())
 	{
-		LL_WARNS("Favorites") << "Cannot save favorites: not logged in" << LL_ENDL;
+		LL_WARNS() << "Cannot save favorites: not logged in" << LL_ENDL;
 		return;
 	}
 
 	std::string user_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "");
 	if (user_dir.empty())
 	{
-		LL_WARNS("Favorites") << "Cannot save favorites: empty user dir name" << LL_ENDL;
+		LL_WARNS() << "Cannot save favorites: empty user dir name" << LL_ENDL;
 		return;
 	}
 
@@ -1577,13 +1577,13 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 		slurls_map_t::iterator slurl_iter = mSLURLs.find(value["asset_id"]);
 		if (slurl_iter != mSLURLs.end())
 		{
-			LL_DEBUGS("Favorites") << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << LL_ENDL;
+			LL_DEBUGS() << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << LL_ENDL;
 			value["slurl"] = slurl_iter->second;
 			user_llsd[LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID())] = value;
 		}
 		else
 		{
-			LL_WARNS("Favorites") << "Not saving favorite " << value["name"] << ": no matching SLURL" << LL_ENDL;
+			LL_WARNS() << "Not saving favorite " << value["name"] << ": no matching SLURL" << LL_ENDL;
 		}
 	}
 
@@ -1592,7 +1592,7 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	// Note : use the "John Doe" and not the "john.doe" version of the name 
 	// as we'll compare it with the stored credentials in the login panel.
 	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
+	//LL_DEBUGS() << "Saved favorites for " << av_name.getUserName() << LL_ENDL;
 	//fav_llsd[av_name.getUserName()] = user_llsd;
 	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
 	LL_DEBUGS("Favorites") << "Saved favorites for " << name << LL_ENDL;
@@ -1620,7 +1620,7 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	// Note : use the "John Doe" and not the "john.doe" version of the name.
 	// See saveFavoritesSLURLs() here above for the reason why.
 	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//lldebugs << "Removed favorites for " << av_name.getUserName() << llendl;
+	//LL_DEBUGS() << "Removed favorites for " << av_name.getUserName() << LL_ENDL;
 	//if (fav_llsd.has(av_name.getUserName()))
 	//{
 	//	fav_llsd.erase(av_name.getUserName());
@@ -1661,7 +1661,7 @@ void LLFavoritesOrderStorage::onLandmarkLoaded(const LLUUID& asset_id, LLLandmar
 
 void LLFavoritesOrderStorage::storeFavoriteSLURL(const LLUUID& asset_id, std::string& slurl)
 {
-	lldebugs << "Saving landmark SLURL: " << slurl << llendl;
+	LL_DEBUGS() << "Saving landmark SLURL: " << slurl << LL_ENDL;
 	mSLURLs[asset_id] = slurl;
 }
 

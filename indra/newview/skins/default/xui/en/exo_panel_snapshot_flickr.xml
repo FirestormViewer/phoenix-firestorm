@@ -77,7 +77,6 @@
      layout="topleft"
      left="1"
      name="flickr_panel_container"
-     default_panel_name="panel_flickr_metadata"
      top="5"
      width="490">
       <panel

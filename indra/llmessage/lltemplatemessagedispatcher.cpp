@@ -63,7 +63,7 @@ void LLTemplateMessageDispatcher::dispatch(const std::string& msg_name,
 		//		mTemplateMessageReader.readMessage(&(data[0]),host);
 		
 		try{ mTemplateMessageReader.readMessage(&(data[0]),host); }
-		catch( nd::exceptions::xran &ex ) { llwarns << ex.what() << llendl; }
+		catch( nd::exceptions::xran &ex ) { LL_WARNS() << ex.what() << LL_ENDL; }
 		// </FS:ND>
 	} 
 	else 

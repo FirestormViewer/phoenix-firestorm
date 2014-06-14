@@ -228,7 +228,7 @@ void LLIMWellChiclet::createMenu()
 {
 	if(mContextMenu)
 	{
-		llwarns << "Menu already exists" << llendl;
+		LL_WARNS() << "Menu already exists" << LL_ENDL;
 		return;
 	}
 
@@ -316,7 +316,7 @@ void LLNotificationChiclet::createMenu()
 {
 	if(mContextMenu)
 	{
-		llwarns << "Menu already exists" << llendl;
+		LL_WARNS() << "Menu already exists" << LL_ENDL;
 		return;
 	}
 
@@ -654,7 +654,7 @@ bool LLIMChiclet::canCreateMenu()
 {
 	if(mPopupMenu)
 	{
-		llwarns << "Menu already exists" << llendl;
+		LL_WARNS() << "Menu already exists" << LL_ENDL;
 		return false;
 	}
 	if(getSessionId().isNull())
@@ -1118,7 +1118,7 @@ void LLChicletPanel::onMessageCountChanged(const LLSD& data)
 		}
 		else
 		{
-			llwarns << "Unable to set counter for chiclet " << session_id << llendl;
+			LL_WARNS() << "Unable to set counter for chiclet " << session_id << LL_ENDL;
 		}
 	}
 	// </FS:Ansariel> [FS communication UI]
@@ -1431,7 +1431,7 @@ void LLChicletPanel::setChicletToggleState(const LLUUID& session_id, bool toggle
 {
 	if(session_id.isNull())
 	{
-		llwarns << "Null Session ID" << llendl;
+		LL_WARNS() << "Null Session ID" << LL_ENDL;
 	}
 
 	// toggle off all chiclets, except specified

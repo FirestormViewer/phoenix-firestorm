@@ -106,7 +106,7 @@ public:
 	// called when docked floater's position has been set by chiclet
 	// void setPositioned(bool b) { mPositioned = b; };		// dead code -Zi
 
-	void onVisibilityChange(const LLSD& new_visibility);
+	void onVisibilityChange(BOOL new_visibility);
 	void processIMTyping(const LLIMInfo* im_info, BOOL typing);
 	void processAgentListUpdates(const LLSD& body);
 	void processSessionUpdate(const LLSD& session_update);

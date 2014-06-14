@@ -280,7 +280,7 @@ BOOL LLMenuItemGL::addToAcceleratorList(std::list <LLKeyBinding*> *listp)
 			//	warning.append("\n    ");
 			//	warning.append(mLabel);
 
-			//	llwarns << warning << llendl;
+			//	LL_WARNS() << warning << LL_ENDL;
 			//	LLAlertDialog::modalAlert(warning);
 				return FALSE;
 			}
@@ -549,13 +549,13 @@ BOOL LLMenuItemGL::setLabelArg( const std::string& key, const LLStringExplicit& 
 	return TRUE;
 }
 
-void LLMenuItemGL::handleVisibilityChange(BOOL new_visibility)
+void LLMenuItemGL::onVisibilityChange(BOOL new_visibility)
 {
 	if (getMenu())
 	{
 		getMenu()->needsArrange();
 	}
-	LLView::handleVisibilityChange(new_visibility);
+	LLView::onVisibilityChange(new_visibility);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1154,13 +1154,13 @@ void LLMenuItemBranchGL::updateBranchParent(LLView* parentp)
 	}
 }
 
-void LLMenuItemBranchGL::handleVisibilityChange( BOOL new_visibility )
+void LLMenuItemBranchGL::onVisibilityChange( BOOL new_visibility )
 {
 	if (new_visibility == FALSE && getBranch() && !getBranch()->getTornOff())
 	{
 		getBranch()->setVisible(FALSE);
 	}
-	LLMenuItemGL::handleVisibilityChange(new_visibility);
+	LLMenuItemGL::onVisibilityChange(new_visibility);
 }
 
 BOOL LLMenuItemBranchGL::handleKeyHere( KEY key, MASK mask )
@@ -1822,7 +1822,7 @@ bool LLMenuGL::addContextChild(LLView* view, S32 tab_group)
 	{
 		return appendMenu(menup);
 	}
-	
+
 	return false;
 }
 
@@ -2003,7 +2003,7 @@ bool LLMenuGL::scrollItems(EScrollingDirection direction)
 		break;
 	}
 	default:
-		llwarns << "Unknown scrolling direction: " << direction << llendl;
+		LL_WARNS() << "Unknown scrolling direction: " << direction << LL_ENDL;
 	}
 
 	mNeedsArrange = TRUE;
@@ -2606,8 +2606,8 @@ BOOL LLMenuGL::appendMenu( LLMenuGL* menu )
 {
 	if( menu == this )
 	{
-		llerrs << "** Attempt to attach menu to itself. This is certainly "
-			   << "a logic error." << llendl;
+		LL_ERRS() << "** Attempt to attach menu to itself. This is certainly "
+			   << "a logic error." << LL_ENDL;
 	}
 	BOOL success = TRUE;
 
@@ -2635,7 +2635,7 @@ BOOL LLMenuGL::appendContextSubMenu(LLMenuGL *menu)
 {
 	if (menu == this)
 	{
-		llerrs << "Can't attach a context menu to itself" << llendl;
+		LL_ERRS() << "Can't attach a context menu to itself" << LL_ENDL;
 	}
 
 	LLContextMenuBranch *item;
@@ -3166,7 +3166,7 @@ LLMenuGL* LLMenuGL::findChildMenuByName(const std::string& name, BOOL recurse) c
 			return menup;
 		}
 	}
-	llwarns << "Child Menu " << name << " not found in menu " << getName() << llendl;
+	LL_WARNS() << "Child Menu " << name << " not found in menu " << getName() << LL_ENDL;
 	return NULL;
 }
 
@@ -3477,8 +3477,8 @@ BOOL LLMenuBarGL::appendMenu( LLMenuGL* menu )
 {
 	if( menu == this )
 	{
-		llerrs << "** Attempt to attach menu to itself. This is certainly "
-			   << "a logic error." << llendl;
+		LL_ERRS() << "** Attempt to attach menu to itself. This is certainly "
+			   << "a logic error." << LL_ENDL;
 	}
 
 	BOOL success = TRUE;
@@ -3807,7 +3807,7 @@ void LLTearOffMenu::draw()
 	if (getRect().getHeight() != mTargetHeight)
 	{
 		// animate towards target height
-		reshape(getRect().getWidth(), llceil(lerp((F32)getRect().getHeight(), mTargetHeight, LLCriticalDamp::getInterpolant(0.05f))));
+		reshape(getRect().getWidth(), llceil(lerp((F32)getRect().getHeight(), mTargetHeight, LLSmoothInterpolation::getInterpolant(0.05f))));
 	}
 	LLFloater::draw();
 }
@@ -4078,7 +4078,7 @@ void LLContextMenu::hide()
 		if( !mHoverItemHandle.isDead() )
 			mHoverItem->setHighlight( FALSE );
 		else
-			llwarns << "Hoveritem is already dead" << llendl;
+			LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 		// </FS:ND>
 
 	}
@@ -4114,7 +4114,7 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 				if( !mHoverItemHandle.isDead() )
 					mHoverItem->setHighlight( FALSE );
 				else
-					llwarns << "Hoveritem is already dead" << llendl;
+					LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 
 				// </FS:ND>
 			}
@@ -4141,7 +4141,7 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 			if( !mHoverItemHandle.isDead() )
 				mHoverItem->setHighlight(FALSE);
 			else
-				llwarns << "Hoveritem is already dead" << llendl;
+				LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 
 			mHoverItemHandle = LLHandle< LLView >();
 

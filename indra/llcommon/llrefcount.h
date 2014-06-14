@@ -28,6 +28,8 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include "llmutex.h"
+#include "llapr.h"
 
 #include "nd/ndintrin.h" // <FS:ND/> For FAA/FAD
 
@@ -71,7 +73,7 @@ public:
 
 		// <FS:ND> Use intrinsic functions for threadsafe decrement
 
-		//		if (0 == --mRef) 
+		//		if (0 == --mRef)
 		if (0 == nd::intrin::FAD( &mRef) )
 
 		// </FS:ND>
@@ -105,9 +107,67 @@ private:
 #endif
 };
 
+
+//============================================================================
+
+// see llmemory.h for LLPointer<> definition
+
+class LL_COMMON_API LLThreadSafeRefCount
+{
+public:
+	static void initThreadSafeRefCount(); // creates sMutex
+	static void cleanupThreadSafeRefCount(); // destroys sMutex
+
+private:
+	static LLMutex* sMutex;
+
+protected:
+	virtual ~LLThreadSafeRefCount(); // use unref()
+
+public:
+	LLThreadSafeRefCount();
+	LLThreadSafeRefCount(const LLThreadSafeRefCount&);
+	LLThreadSafeRefCount& operator=(const LLThreadSafeRefCount& ref) 
+	{
+		mRef = 0;
+		return *this;
+	}
+
+	void ref()
+	{
+		mRef++; 
+	} 
+
+	void unref()
+	{
+		llassert(mRef >= 1);
+		if ((--mRef) == 0)		// See note in llapr.h on atomic decrement operator return value.  
+		{	
+			// If we hit zero, the caller should be the only smart pointer owning the object and we can delete it.
+			// It is technically possible for a vanilla pointer to mess this up, or another thread to
+			// jump in, find this object, create another smart pointer and end up dangling, but if
+			// the code is that bad and not thread-safe, it's trouble already.
+			delete this;
+		}
+	}
+
+	S32 getNumRefs() const
+	{
+		const S32 currentVal = mRef.CurrentValue();
+		return currentVal;
+	}
+
+private: 
+	LLAtomic32< S32	> mRef; 
+};
+
 /**
  * intrusive pointer support
  * this allows you to use boost::intrusive_ptr with any LLRefCount-derived type
+ */
+/**
+ * intrusive pointer support for LLThreadSafeRefCount
+ * this allows you to use boost::intrusive_ptr with any LLThreadSafeRefCount-derived type
  */
 
 // <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.
@@ -115,14 +175,24 @@ private:
 // {
 // </FS:ND>
 
-	inline void intrusive_ptr_add_ref(LLRefCount* p)
+	inline void intrusive_ptr_add_ref(LLThreadSafeRefCount* p) 
 	{
 		p->ref();
 	}
 
-	inline void intrusive_ptr_release(LLRefCount* p)
+	inline void intrusive_ptr_release(LLThreadSafeRefCount* p) 
 	{
-		p->unref();
+		p->unref(); 
+	}
+
+	inline void intrusive_ptr_add_ref(LLRefCount* p) 
+	{
+		p->ref();
+	}
+
+	inline void intrusive_ptr_release(LLRefCount* p) 
+	{
+		p->unref(); 
 	}
 
 // <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.

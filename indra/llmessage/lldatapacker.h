@@ -172,6 +172,7 @@ public:
 				S32			getBufferSize() const	{ return mBufferSize; }
 				const U8*   getBuffer() const   { return mBufferp; }    
 				void		reset()				{ mCurBufferp = mBufferp; mWriteEnabled = (mCurBufferp != NULL); }
+				void        shift(S32 offset)   { reset(); mCurBufferp += offset;}
 				void		freeBuffer()		{ delete [] mBufferp; mBufferp = mCurBufferp = NULL; mBufferSize = 0; mWriteEnabled = FALSE; }
 				void		assignBuffer(U8 *bufferp, S32 size)
 				{
@@ -203,8 +204,8 @@ inline BOOL LLDataPackerBinaryBuffer::verifyLength(const S32 data_size, const ch
 	{
 		// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
 
-		// llwarns << "Buffer overflow in AsciiBuffer length verify, field name " << name << "!" << llendl;
-		// llwarns << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << llendl;
+		//LL_WARNS() << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << LL_ENDL;
+		//LL_WARNS() << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << LL_ENDL;
 		// return FALSE;
 
 		std::stringstream strm;
@@ -331,8 +332,8 @@ inline BOOL LLDataPackerAsciiBuffer::verifyLength(const S32 data_size, const cha
 {
 	if (mWriteEnabled && (mCurBufferp - mBufferp) > mBufferSize - data_size)
 	{
-		llwarns << "Buffer overflow in AsciiBuffer length verify, field name " << name << "!" << llendl;
-		llwarns << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << llendl;
+		LL_WARNS() << "Buffer overflow in AsciiBuffer length verify, field name " << name << "!" << LL_ENDL;
+		LL_WARNS() << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << LL_ENDL;
 		return FALSE;
 	}
 

@@ -42,9 +42,9 @@ LLIconCtrl::Params::Params()
 :	image("image_name"),
 	color("color"),
 	use_draw_context_alpha("use_draw_context_alpha", true),
-	// <FS:KC> Scaled imaged
-	//scale_image("scale_image")
-	scale_image("scale_image", true)
+	scale_image("scale_image"),
+	min_width("min_width", 0),
+	min_height("min_height", 0)
 {}
 
 LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
@@ -53,9 +53,8 @@ LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
 	mImagep(p.image),
 	mUseDrawContextAlpha(p.use_draw_context_alpha),
 	mPriority(0),
-	mDrawWidth(0),
-	mDrawHeight(0),
-	mScaleImage(p.scale_image) // <FS:KC> Scaled imaged
+	mMinWidth(p.min_width),
+	mMinHeight(p.min_height)
 {
 	if (mImagep.notNull())
 	{
@@ -74,17 +73,7 @@ void LLIconCtrl::draw()
 	if( mImagep.notNull() )
 	{
 		const F32 alpha = mUseDrawContextAlpha ? getDrawContext().mAlpha : getCurrentTransparency();
-		// <FS:KC> Scaled imaged
-		//mImagep->draw(getLocalRect(), mColor.get() % alpha );
-		if ( mScaleImage )
-		{
-			mImagep->draw(getLocalRect(), mColor.get() % alpha );
-		}
-		else
-		{
-			mImagep->draw(0, 0, mColor.get() % alpha );
-		}
-		// </FS:KC> Scaled imaged
+		mImagep->draw(getLocalRect(), mColor.get() % alpha );
 	}
 
 	LLUICtrl::draw();
@@ -110,7 +99,13 @@ void LLIconCtrl::setValue(const LLSD& value )
 		mImagep = LLUI::getUIImage(tvalue.asString(), mPriority);
 	}
 
-	setIconImageDrawSize();
+	if(mImagep.notNull() 
+		&& mImagep->getImage().notNull() 
+		&& mMinWidth 
+		&& mMinHeight)
+	{
+		mImagep->getImage()->setKnownDrawSize(llmax(mMinWidth, mImagep->getWidth()), llmax(mMinHeight, mImagep->getHeight()));
+	}
 }
 
 std::string LLIconCtrl::getImageName() const
@@ -121,14 +116,4 @@ std::string LLIconCtrl::getImageName() const
 		return std::string();
 }
 
-void LLIconCtrl::setIconImageDrawSize()
-{
-	if(mImagep.notNull() && mDrawWidth && mDrawHeight)
-	{
-		if(mImagep->getImage().notNull())
-		{
-			mImagep->getImage()->setKnownDrawSize(mDrawWidth, mDrawHeight) ;
-		}
-	}
-}
 

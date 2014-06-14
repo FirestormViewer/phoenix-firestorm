@@ -359,7 +359,7 @@ BOOL LLManipTranslate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	if (!selectNode)
 	{
 		// didn't find the object in our selection...oh well
-		llwarns << "Trying to translate an unselected object" << llendl;
+		LL_WARNS() << "Trying to translate an unselected object" << LL_ENDL;
 		return TRUE;
 	}
 
@@ -367,7 +367,7 @@ BOOL LLManipTranslate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	if (!selected_object)
 	{
 		// somehow we lost the object!
-		llwarns << "Translate manip lost the object, no selected object" << llendl;
+		LL_WARNS() << "Translate manip lost the object, no selected object" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 		return TRUE;
 	}
@@ -388,7 +388,7 @@ BOOL LLManipTranslate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 		if (!LLViewerCamera::getInstance()->projectPosAgentToScreen(select_center_agent, mouse_pos))
 		{
 			// mouse_pos may be nonsense
-			llwarns << "Failed to project object center to screen" << llendl;
+			LL_WARNS() << "Failed to project object center to screen" << LL_ENDL;
 		}
 		else if (gSavedSettings.getBOOL("SnapToMouseCursor"))
 		{
@@ -416,7 +416,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	// Bail out if mouse not down.
 	if( !hasMouseCapture() )
 	{
-		lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (inactive)" << llendl;		
+		LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (inactive)" << LL_ENDL;		
 		// Always show cursor
 		// gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
@@ -464,7 +464,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	// rotation above.
 	if( x == mLastHoverMouseX && y == mLastHoverMouseY && !rotated)
 	{
-		lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (mouse unmoved)" << llendl;
+		LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (mouse unmoved)" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 		return TRUE;
 	}
@@ -477,7 +477,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	{
 		if (abs(mMouseDownX - x) < MOUSE_DRAG_SLOP && abs(mMouseDownY - y) < MOUSE_DRAG_SLOP )
 		{
-			lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (mouse inside slop)" << llendl;
+			LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (mouse inside slop)" << LL_ENDL;
 			gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 			return TRUE;
 		}
@@ -494,7 +494,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 				// When we make the copy, we don't want to do any other processing.
 				// If so, the object will also be moved, and the copy will be offset.
-				lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (made copy)" << llendl;
+				LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (made copy)" << LL_ENDL;
 				gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 			}
 		}
@@ -511,7 +511,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	if (!selectNode)
 	{
 		// somehow we lost the object!
-		llwarns << "Translate manip lost the object, no selectNode" << llendl;
+		LL_WARNS() << "Translate manip lost the object, no selectNode" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 		return TRUE;
 	}
@@ -520,7 +520,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	if (!object)
 	{
 		// somehow we lost the object!
-		llwarns << "Translate manip lost the object, no object in selectNode" << llendl;
+		LL_WARNS() << "Translate manip lost the object, no object in selectNode" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 		return TRUE;
 	}
@@ -552,7 +552,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 		if (relative_move.magVecSquared() > max_drag_distance * max_drag_distance)
 		{
-			lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (too far)" << llendl;
+			LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (too far)" << LL_ENDL;
 			gViewerWindow->setCursor(UI_CURSOR_NOLOCKED);
 			return TRUE;
 		}
@@ -561,27 +561,15 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	F64 axis_magnitude = relative_move * axis_d;					// dot product
 	LLVector3d cursor_point_snap_line;
 	
-// <FS:Cron> FIRE-8882 - off_axis_magnitude was scoped too far away from its only use.
-	//F64 off_axis_magnitude;
+	F64 off_axis_magnitude;
 
 	getMousePointOnPlaneGlobal(cursor_point_snap_line, x, y, current_pos_global, mSnapOffsetAxis % axis_f);
-	//off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
-// </FS:Cron>
+	off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-// <FS:Cron> FIRE-8882
-		F64 off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
-		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
-		
-		//if (off_axis_magnitude > mSnapOffsetMeters)
-		if
-		(
-			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && off_axis_magnitude > mSnapOffsetMeters)
-			||
-			(snap_domain == LL_SNAP_DOMAIN_INSIDE && axis_exists && off_axis_magnitude <= mSnapOffsetMeters)
-		)
-// </FS:Cron>
+
+		if (off_axis_magnitude > mSnapOffsetMeters)
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 mouse_down_offset(mDragCursorStartGlobal - mDragSelectionStartGlobal);
@@ -815,7 +803,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	gAgentCamera.clearFocusObject();
 	dialog_refresh_all();		// ??? is this necessary?
 
-	lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (active)" << llendl;
+	LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (active)" << LL_ENDL;
 	gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 	return TRUE;
 }
@@ -1290,10 +1278,6 @@ void LLManipTranslate::renderSnapGuides()
 		S32 sub_div_offset = llround(fmod(dist_grid_axis - offset_nearest_grid_unit, getMinGridScale() / sGridMinSubdivisionLevel) / smallest_grid_unit_scale);
 		S32 num_ticks_per_side = llmax(1, llfloor(0.5f * guide_size_meters / smallest_grid_unit_scale));
 
-// <FS:Cron> FIRE-8882
-		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
-// </FS:Cron>
-
 		LLGLDepthTest gls_depth(GL_FALSE);
 
 		for (S32 pass = 0; pass < 3; pass++)
@@ -1340,19 +1324,7 @@ void LLManipTranslate::renderSnapGuides()
 					// add in off-axis offset
 					tick_start += (mSnapOffsetAxis * mSnapOffsetMeters);
 
-// <FS:Cron> FIRE-8882
-					//F32 tick_scale = 1.f;
-					F32 tick_scale = 0.f;
-					switch (snap_domain)
-					{
-						case LL_SNAP_DOMAIN_OUTSIDE:
-							tick_scale = 1.f;
-						break;
-						case LL_SNAP_DOMAIN_INSIDE:
-							tick_scale = -0.8f;
-						break;
-					}
-// </FS:Cron>
+					F32 tick_scale = 1.f;
 					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 					{
 						if (fmodf((F32)(i + sub_div_offset), division_level) == 0.f)
@@ -1442,25 +1414,16 @@ void LLManipTranslate::renderSnapGuides()
 
 			if (fmodf((F32)(i + sub_div_offset), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, translate_axis, getMinGridScale(), tick_label_spacing)))) == 0.f)
 			{
-// <FS:Cron> FIRE-8882
-				//F32 snap_offset_meters;
-				F32 snap_offset_meters = 0.f;
+				F32 snap_offset_meters;
 
-				if (snap_domain == LL_SNAP_DOMAIN_OUTSIDE) {
-// </FS:Cron>
-					if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
-					{
-						snap_offset_meters = mSnapOffsetMeters;
-					}
-					else
-					{
-						snap_offset_meters = -mSnapOffsetMeters;
-					}
-// <FS:Cron> FIRE-8882
+				if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
+				{
+					snap_offset_meters = mSnapOffsetMeters;			
 				}
-				//else case assuming snap_domain == LL_SNAP_DOMAIN_INSIDE for now.  This results in snap_offset_meters == 0.f and the third term of the text_origin assignment becoming zero as an expected consequence. ~Cron Stardust
-// </FS:Cron>
-				
+				else
+				{
+					snap_offset_meters = -mSnapOffsetMeters;
+				}
 				LLVector3 text_origin = selection_center + 
 						(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit)) + 
 							(mSnapOffsetAxis * snap_offset_meters * (1.f + tick_scale));
@@ -1972,18 +1935,18 @@ void LLManipTranslate::renderTranslationHandles()
 			{
 				if (index == mManipPart - LL_X_ARROW || index == mHighlightedPart - LL_X_ARROW)
 				{
-					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], SELECTED_ARROW_SCALE, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
-					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], 1.f, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], SELECTED_ARROW_SCALE, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], 1.f, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
 				}
 				else if (index == mManipPart - LL_YZ_PLANE || index == mHighlightedPart - LL_YZ_PLANE)
 				{
-					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], 1.f, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
-					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], SELECTED_ARROW_SCALE, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], 1.f, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], SELECTED_ARROW_SCALE, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
 				}
 				else
 				{
-					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], 1.f, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
-					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], 1.f, LLCriticalDamp::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mArrowScales.mV[index] = lerp(mArrowScales.mV[index], 1.f, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
+					mPlaneScales.mV[index] = lerp(mPlaneScales.mV[index], 1.f, LLSmoothInterpolation::getInterpolant(MANIPULATOR_SCALE_HALF_LIFE ));
 				}
 			}
 
@@ -2318,7 +2281,7 @@ void LLManipTranslate::renderArrow(S32 which_arrow, S32 selected_arrow, F32 box_
 			axis.mV[0] = 1.0f;
 			break;
 		default:
-			llerrs << "renderArrow called with bad arrow " << which_arrow << llendl;
+			LL_ERRS() << "renderArrow called with bad arrow " << which_arrow << LL_ENDL;
 			break;
 		}
 

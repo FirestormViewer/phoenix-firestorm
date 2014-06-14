@@ -42,6 +42,7 @@
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
+#include "llhttpclient.h"
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
 #include "llchatentry.h"
@@ -76,6 +77,7 @@
 #include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
+#include "llviewerregion.h"
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
@@ -226,13 +228,11 @@ void FSFloaterIM::newIMCallback(const LLSD& data){
 	}
 }
 
-void FSFloaterIM::onVisibilityChange(const LLSD& new_visibility)
+void FSFloaterIM::onVisibilityChange(BOOL new_visibility)
 {
-	bool visible = new_visibility.asBoolean();
-
 	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
 
-	if (visible && voice_channel &&
+	if (new_visibility && voice_channel &&
 		voice_channel->getState() == LLVoiceChannel::STATE_CONNECTED)
 	{
 		LLFloaterReg::showInstance("voice_call", mSessionID);
@@ -1015,7 +1015,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 							session_id);
 			if (chiclet == NULL)
 			{
-				llerror("Dock chiclet for FSFloaterIM doesn't exists", 0);
+				LL_ERRS() << "Dock chiclet for FSFloaterIM doesn't exists" << LL_ENDL;
 			}
 			else
 			{
@@ -1584,7 +1584,7 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 										items,
 										LLInventoryModel::EXCLUDE_TRASH,
 										buddies);
-		S32 count = items.count();
+		S32 count = items.size();
 		if(count == 0)
 		{
 			rv = FALSE;
@@ -1595,7 +1595,7 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 			ids.reserve(count);
 			for(S32 i = 0; i < count; ++i)
 			{
-				ids.push_back(items.get(i)->getCreatorUUID());
+				ids.push_back(items.at(i)->getCreatorUUID());
 			}
 			inviteToSession(ids);
 		}

@@ -50,7 +50,7 @@ LLChannelManager::LLChannelManager()
 	
 	if(!gViewerWindow)
 	{
-		llerrs << "LLChannelManager::LLChannelManager() - viwer window is not initialized yet" << llendl;
+		LL_ERRS() << "LLChannelManager::LLChannelManager() - viwer window is not initialized yet" << LL_ENDL;
 	}
 }
 
@@ -131,11 +131,6 @@ void LLChannelManager::onLoginCompleted()
 	}
 	else
 	{
-		// TODO: Seems this code leads to MAINT-3536 new crash in XML_ParserFree.
-		// Need to investigate this and fix possible problems with notifications in startup time
-		// Viewer can normally receive and show of postponed notifications about purchasing in marketplace on startup time.
-		// Other types of postponed notifications did not tested.
-		// <FS:Ansariel> Uncomment this code again; crash was caused by c-style cast in LLFloaterView
 		// create a channel for the StartUp Toast
 		LLScreenChannelBase::Params p;
 		p.id = LLUUID(gSavedSettings.getString("StartUpChannelUUID"));
@@ -160,7 +155,6 @@ void LLChannelManager::onLoginCompleted()
 			mStartUpChannel->createStartUpToast(away_notifications, gSavedSettings.getS32("StartUpToastLifeTime"));
 		}
 	}
-	// </FS:Ansariel>
 
 	LLPersistentNotificationStorage::getInstance()->loadNotifications();
 	LLDoNotDisturbNotificationStorage::getInstance()->loadNotifications();
@@ -271,7 +265,7 @@ LLNotificationsUI::LLScreenChannel* LLChannelManager::getNotificationScreenChann
 
 	if (channel == NULL)
 	{
-		llwarns << "Can't find screen channel by NotificationChannelUUID" << llendl;
+		LL_WARNS() << "Can't find screen channel by NotificationChannelUUID" << LL_ENDL;
 		llassert(!"Can't find screen channel by NotificationChannelUUID");
 	}
 

@@ -49,6 +49,14 @@ else (STANDALONE)
         pangox-1.0
         pangoxft-1.0
         )
+
+    if (ND_BUILD64BIT_ARCH)
+      set(UI_LIB_NAMES ${UI_LIB_NAMES}
+          gio-2.0
+          pangocairo-1.0
+          )
+    endif(ND_BUILD64BIT_ARCH)
+
     foreach(libname ${UI_LIB_NAMES})
       find_library(UI_LIB_${libname}
                    NAMES ${libname}
@@ -59,17 +67,6 @@ else (STANDALONE)
                    )
       set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
     endforeach(libname)
-
-    if (ND_BUILD64BIT_ARCH)
-      find_library(UI_LIB_gio-2.0
-                   NAMES gio-2.0
-                   PATHS
-                     debug ${LIBS_PREBUILT_DIR}/lib/debug
-                     optimized ${LIBS_PREBUILT_DIR}/lib/release
-                   NO_DEFAULT_PATH
-                   )
-      set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_gio-2.0})
-    endif(ND_BUILD64BIT_ARCH)
 
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)

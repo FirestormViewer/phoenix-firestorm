@@ -402,7 +402,7 @@ void LLSpinCtrl::setPrecision(S32 precision)
 {
 	if (precision < 0 || precision > 10)
 	{
-		llerrs << "LLSpinCtrl::setPrecision - precision out of range" << llendl;
+		LL_ERRS() << "LLSpinCtrl::setPrecision - precision out of range" << LL_ENDL;
 		return;
 	}
 
@@ -418,7 +418,7 @@ void LLSpinCtrl::setLabel(const LLStringExplicit& label)
 	}
 	else
 	{
-		llwarns << "Attempting to set label on LLSpinCtrl constructed without one " << getName() << llendl;
+		LL_WARNS() << "Attempting to set label on LLSpinCtrl constructed without one " << getName() << LL_ENDL;
 	}
 	updateLabelColor();
 }
@@ -432,7 +432,7 @@ BOOL LLSpinCtrl::setLabelArg(const std::string& key, const LLStringExplicit& tex
 	}
 	else
 	{
-		llwarns << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << llendl;
+		LL_WARNS() << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << LL_ENDL;
 	}
 	updateLabelColor();
 

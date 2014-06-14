@@ -266,7 +266,7 @@ BOOL LLImageTGA::updateData()
 			mColorMap = new U8[ color_map_bytes ];  
 			if (!mColorMap)
 			{
-				llwarns << "Out of Memory in BOOL LLImageTGA::updateData(), size: " << color_map_bytes << llendl;
+				LL_WARNS() << "Out of Memory in BOOL LLImageTGA::updateData(), size: " << color_map_bytes << LL_ENDL;
 				return FALSE;
 			}
 			memcpy( mColorMap, getData() + mDataOffset, color_map_bytes );	/* Flawfinder: ignore */
@@ -1058,8 +1058,8 @@ BOOL LLImageTGA::decodeAndProcess( LLImageRaw* raw_image, F32 domain, F32 weight
 	// Only works for unflipped monochrome RLE images
 	if( (getComponents() != 1) || (mImageType != 11) || mOriginTopBit || mOriginRightBit ) 
 	{
-		llwarns << "LLImageTGA trying to alpha-gradient process an image that's not a standard RLE, one component image" << llendl;
-		llwarns << "getComponents(): " << getComponents() << " mImageType: " << mImageType << " mOriginTopBit:" << mOriginTopBit << " mOriginRightBit: " << mOriginRightBit << llendl;
+		LL_WARNS() << "LLImageTGA trying to alpha-gradient process an image that's not a standard RLE, one component image" << LL_ENDL;
+		LL_WARNS() << "getComponents(): " << getComponents() << " mImageType: " << mImageType << " mOriginTopBit:" << mOriginTopBit << " mOriginRightBit: " << mOriginRightBit << LL_ENDL;
 		return FALSE;
 	}
 
@@ -1167,7 +1167,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	LLFILE* file = LLFile::fopen(path, "rb");	/* Flawfinder: ignore */
 	if( !file )
 	{
-		llwarns << "Couldn't open file " << path << llendl;
+		LL_WARNS() << "Couldn't open file " << path << LL_ENDL;
 		return false;
 	}
 
@@ -1181,7 +1181,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	U8* buffer = allocateData(file_size);
 	if(!buffer)
 	{
-		llwarns << "could not allocate memory for image loading, size: " << file_size << llendl;
+		LL_WARNS() << "could not allocate memory for image loading, size: " << file_size << LL_ENDL;
 		return false;
 	}
 
@@ -1189,7 +1189,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	if( bytes_read != file_size )
 	{
 		deleteData();
-		llwarns << "Couldn't read file " << path << llendl;
+		LL_WARNS() << "Couldn't read file " << path << LL_ENDL;
 		return false;
 	}
 
@@ -1197,7 +1197,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 
 	if( !updateData() )
 	{
-		llwarns << "Couldn't decode file " << path << llendl;
+		LL_WARNS() << "Couldn't decode file " << path << LL_ENDL;
 		deleteData();
 		return false;
 	}

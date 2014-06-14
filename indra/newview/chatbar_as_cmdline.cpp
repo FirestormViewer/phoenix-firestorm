@@ -60,6 +60,7 @@
 #include "llworld.h"
 #include "llworldmap.h"
 
+
 // [RLVa:KB] - Checked by TM: 2013-11-10 (RLVa-1.4.9)
 #include "rlvhandler.h"
 #include "rlvactions.h"
@@ -245,8 +246,8 @@ public:
 						{
 							reportToNearbyChat("Phase 1 of the packager finished.");
 							std::stack<LLViewerInventoryItem*> lolstack;
-							LLDynamicArray<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(mFolderName);
-							for(LLDynamicArray<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+							std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(mFolderName);
+							for(std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
 							{
 								LLViewerInventoryItem* item = *it;
 								lolstack.push(item);
@@ -716,15 +717,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			else if (command == std::string(sFSCmdLineOfferTp))
             {
                 std::string avatarKey;
-//				llinfos << "CMD DEBUG 0 " << command << " " << avatarName << llendl;
+//				LL_INFOS() << "CMD DEBUG 0 " << command << " " << avatarName << LL_ENDL;
                 if (i >> avatarKey)
                 {
-//				llinfos << "CMD DEBUG 0 afterif " << command << " " << avatarName << llendl;
+//				LL_INFOS() << "CMD DEBUG 0 afterif " << command << " " << avatarName << LL_ENDL;
                     LLUUID tempUUID;
                     if (LLUUID::parseUUID(avatarKey, &tempUUID))
                     {
                         char buffer[DB_IM_MSG_BUF_SIZE * 2];
-                        LLDynamicArray<LLUUID> ids;
+                        std::vector<LLUUID> ids;
                         ids.push_back(tempUUID);
                         std::string tpMsg="Join me!";
                         LLMessageSystem* msg = gMessageSystem;
@@ -736,7 +737,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
                         msg->addU8Fast(_PREHASH_LureType, (U8)0); 
 
                         msg->addStringFast(_PREHASH_Message, tpMsg);
-                        for (LLDynamicArray<LLUUID>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+                        for (std::vector<LLUUID>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
                         {
                             msg->nextBlockFast(_PREHASH_TargetData);
                             msg->addUUIDFast(_PREHASH_TargetID, *itr);
@@ -903,8 +904,8 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 										{
 											reportToNearbyChat("Verifying folder location...");
 											std::stack<LLViewerInventoryItem*> lolstack;
-											LLDynamicArray<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(lolfolder);
-											for (LLDynamicArray<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+											std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(lolfolder);
+											for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
 											{
 												LLViewerInventoryItem* item = *it;
 												lolstack.push(item);

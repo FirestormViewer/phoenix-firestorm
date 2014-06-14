@@ -38,9 +38,7 @@
 		 height="330"
 		 width="327"
 		 mouse_opaque="false"
-		 name="radar_ls"
-		 auto_resize="false"
-		 user_resize="true">
+		 name="radar_ls">
 			<layout_panel
 			 layout="topleft"
 			 top="0"

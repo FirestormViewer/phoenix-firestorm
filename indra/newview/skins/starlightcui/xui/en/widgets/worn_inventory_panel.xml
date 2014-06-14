@@ -5,7 +5,6 @@
   border="false"
   background_visible="true"
   background_opaque="true"
-  show_load_status="true"
   accepts_drag_and_drop="true"
   >
     <scroll

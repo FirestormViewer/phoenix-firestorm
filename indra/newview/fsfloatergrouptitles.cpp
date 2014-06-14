@@ -223,9 +223,9 @@ void FSFloaterGroupTitles::refreshGroupTitles()
 	// Add "no group"
 	addListItem(LLUUID::null, LLUUID::null, getString("NoGroupTitle"), LLTrans::getString("GroupsNone"), gAgent.getGroupID().isNull(), ADD_TOP);
 
-	for (S32 i = 0; i < gAgent.mGroups.count(); i++)
+	for (S32 i = 0; i < gAgent.mGroups.size(); i++)
 	{
-		LLGroupData group_data = gAgent.mGroups.get(i);
+		LLGroupData group_data = gAgent.mGroups.at(i);
 		FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, this);
 		mGroupTitleObserverMap[group_data.mID] = roleObserver;
 		LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);

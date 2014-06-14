@@ -773,7 +773,7 @@
      top_pad="28"
      left="10"
      name="link_num_obj_count"
-	 tooltip="Link number may not be accurate."
+	 tool_tip="Link number may not be accurate."
      width="143">
         [DESC] [NUM]
     </text>

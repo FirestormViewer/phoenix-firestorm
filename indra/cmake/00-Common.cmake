@@ -97,6 +97,7 @@ if (WINDOWS)
   else (USE_AVX_OPTIMIZATION)
     add_definitions(
         /DLL_WINDOWS=1
+      /DNOMINMAX
         /DDOM_DYNAMIC
         /DUNICODE
         /D_UNICODE 

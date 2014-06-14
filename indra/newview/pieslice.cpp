@@ -39,7 +39,7 @@ PieSlice::PieSlice(const PieSlice::Params& p) :
 	mDoUpdateEnabled(TRUE)
 {
 
-	lldebugs << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << llendl;
+	LL_DEBUGS() << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << LL_ENDL;
 }
 
 // pick up parameters from the XUI definition

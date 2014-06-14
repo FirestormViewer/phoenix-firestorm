@@ -100,8 +100,8 @@ LLDir_Mac::LLDir_Mac()
 			// ...we're in a dev checkout
 			mSkinBaseDir = mExecutableDir.substr(0, build_dir_pos)
 				+ "/indra/newview/skins";
-			llinfos << "Running in dev checkout with mSkinBaseDir "
-				<< mSkinBaseDir << llendl;
+			LL_INFOS() << "Running in dev checkout with mSkinBaseDir "
+				<< mSkinBaseDir << LL_ENDL;
 		}
 		else
 		{
@@ -232,7 +232,7 @@ BOOL LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &
 
                         if(mCurrentDirIndex < g.gl_pathc)
                         {
-//                              llinfos << "getNextFileInDir: returning number " << mCurrentDirIndex << ", path is " << g.gl_pathv[mCurrentDirIndex] << llendl;
+//                              LL_INFOS() << "getNextFileInDir: returning number " << mCurrentDirIndex << ", path is " << g.gl_pathv[mCurrentDirIndex] << LL_ENDL;
 
                                 // The API wants just the filename, not the full path.
                                 //fname = g.gl_pathv[mCurrentDirIndex];

@@ -49,7 +49,7 @@ void FSLightshare::processLightshareMessage(LLMessageSystem* msg)
 	/// Lightshare on or off
 	if (!gSavedSettings.getBOOL("FSOpenSimLightshare"))
 	{
-		llinfos << "Received Lightshare message from the region, but Lightshare is disabled." << llendl;
+		LL_INFOS() << "Received Lightshare message from the region, but Lightshare is disabled." << LL_ENDL;
 		return;
 	}
 	// Be paranoid!
@@ -80,7 +80,7 @@ void FSLightshare::processLightshareMessage(LLMessageSystem* msg)
 			msg->getBinaryDataFast(_PREHASH_ParamList, _PREHASH_Parameter, buffer, size, i, 249);
 			LightsharePacket* ls_packet = (LightsharePacket*)buffer; // <-- warning! ugly stupid, not byte-order safe!
 
-			llinfos << "Received Lightshare message from the region, processing it." << llendl;
+			LL_INFOS() << "Received Lightshare message from the region, processing it." << LL_ENDL;
 			processWater(ls_packet);
 			processSky(ls_packet);
 		}

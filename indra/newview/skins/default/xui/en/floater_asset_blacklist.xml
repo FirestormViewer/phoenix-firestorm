@@ -43,7 +43,6 @@ Unknown region
 	 top="10"
 	 bottom="-32"
 	 follows="left|top|bottom|right"
-	 can_resize="true"
 	 column_padding="10"
 	 draw_heading="true"
 	 multi_select="true"

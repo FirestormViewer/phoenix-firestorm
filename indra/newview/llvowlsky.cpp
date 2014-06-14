@@ -301,11 +301,11 @@ void LLVOWLSky::restoreGL()
 	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_ALL, TRUE);
 }
 
-static LLFastTimer::DeclareTimer FTM_GEO_SKY("Windlight Sky Geometry");
+static LLTrace::BlockTimerStatHandle FTM_GEO_SKY("Windlight Sky Geometry");
 
 BOOL LLVOWLSky::updateGeometry(LLDrawable * drawable)
 {
-	LLFastTimer ftm(FTM_GEO_SKY);
+	LL_RECORD_BLOCK_TIME(FTM_GEO_SKY);
 	LLStrider<LLVector3>	vertices;
 	LLStrider<LLVector2>	texCoords;
 	LLStrider<U16>			indices;
@@ -321,7 +321,7 @@ BOOL LLVOWLSky::updateGeometry(LLDrawable * drawable)
 
 		if(!success) 
 		{
-			llerrs << "Failed updating WindLight sky geometry." << llendl;
+			LL_ERRS() << "Failed updating WindLight sky geometry." << LL_ENDL;
 		}
 
 		buildFanBuffer(vertices, texCoords, indices);
@@ -352,7 +352,7 @@ BOOL LLVOWLSky::updateGeometry(LLDrawable * drawable)
 		// round up to a whole number of segments
 		const U32 strips_segments = (total_stacks+stacks_per_seg-1) / stacks_per_seg;
 
-		llinfos << "WL Skydome strips in " << strips_segments << " batches." << llendl;
+		LL_INFOS() << "WL Skydome strips in " << strips_segments << " batches." << LL_ENDL;
 
 		mStripsVerts.resize(strips_segments, NULL);
 
@@ -391,7 +391,7 @@ BOOL LLVOWLSky::updateGeometry(LLDrawable * drawable)
 
 			if(!success) 
 			{
-				llerrs << "Failed updating WindLight sky geometry." << llendl;
+				LL_ERRS() << "Failed updating WindLight sky geometry." << LL_ENDL;
 			}
 
 			// fill it
@@ -401,7 +401,7 @@ BOOL LLVOWLSky::updateGeometry(LLDrawable * drawable)
 			segment->flush();
 		}
 	
-		llinfos << "completed in " << llformat("%.2f", timer.getElapsedTimeF32()) << "seconds" << llendl;
+		LL_INFOS() << "completed in " << llformat("%.2f", timer.getElapsedTimeF32().value()) << "seconds" << LL_ENDL;
 	}
 #else
 	mStripsVerts = new LLVertexBuffer(LLDrawPoolWLSky::SKY_VERTEX_DATA_MASK, GL_STATIC_DRAW_ARB);
@@ -793,7 +793,7 @@ BOOL LLVOWLSky::updateStarGeometry(LLDrawable *drawable)
 
 	if(!success)
 	{
-		llerrs << "Failed updating star geometry." << llendl;
+		LL_ERRS() << "Failed updating star geometry." << LL_ENDL;
 	}
 
 	// *TODO: fix LLStrider with a real prefix increment operator so it can be
@@ -802,7 +802,7 @@ BOOL LLVOWLSky::updateStarGeometry(LLDrawable *drawable)
 
 	if (mStarVertices.size() < getStarsNumVerts())
 	{
-		llerrs << "Star reference geometry insufficient." << llendl;
+		LL_ERRS() << "Star reference geometry insufficient." << LL_ENDL;
 	}
 
 	for (U32 vtx = 0; vtx < getStarsNumVerts(); ++vtx)

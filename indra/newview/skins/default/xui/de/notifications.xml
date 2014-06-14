@@ -114,13 +114,13 @@ Weitere Informationen finden Sie im [[MARKETPLACE_IMPORTS_URL] Fehlerprotokoll].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportFailed">
-		Übertragung fehlgeschlagen mit Fehler &apos;[ERROR_CODE]&apos;
+		Übertragung fehlgeschlagen mit Fehler „[ERROR_CODE]“
 
 Aufgrund eines System- oder Netzwerkfehlers wurden keine Ordner an den Marktplatz übertragen. Versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxInitFailed">
-		Marktplatzinitialisierung fehlgeschlagen mit Fehler &apos;[ERROR_CODE]&apos;
+		Marktplatzinitialisierung fehlgeschlagen mit Fehler „[ERROR_CODE]“
 
 Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschlagen. Versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -1789,7 +1789,7 @@ womit Sie die Höchstgrenze von [LIMIT] überschreiten.
 		<usetemplate ignoretext="Bestätigen, dass ich zu einer Landmarke teleportieren möchte" name="okcancelignore" notext="Abbrechen" yestext="Teleportieren"/>
 	</notification>
 	<notification name="TeleportViaSLAPP">
-		Sind Sie sicher, dass Sie zu &lt;nolink&gt;[LOCATION]&lt;/nolink&gt; teleportieren möchten?
+		Möchten Sie wirklich zu &lt;nolink&gt;[LOCATION]&lt;/nolink&gt; teleportieren?
 		<usetemplate ignoretext="Bestätigen, dass ich via SLAPP teleportieren möchte" name="okcancelignore" notext="Abbrechen" yestext="Teleportieren"/>
 	</notification>
 	<notification name="TeleportToPick">
@@ -2030,7 +2030,7 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters.  Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
 	</notification>
 	<notification name="ProblemAddingEstateBanManager">
-		Grundbesitzeigentümer oder Grundbesitzverwalter kann nicht zur Bannliste hinzugefügt werden.
+		Grundbesitzer oder Grundstücksverwalter kann nicht auf die Bannliste gesetzt werden.
 	</notification>
 	<notification name="ProblemAddingEstateGeneric">
 		Problem beim Hinzufügen zu dieser Grundbesitzliste.  Bei mindestens einem Grundbesitz ist die Liste voll.
@@ -3163,13 +3163,13 @@ Details finden Sie in der Protokolldatei.
 		Regionsfähigkeit „[CAPABILITY]“ konnte nicht abgerufen werden.
 	</notification>
 	<notification name="ShareItemsConfirmation">
-		Möchten Sie wirklich die folgenden Objekte:
+		Möchten Sie wirklich die folgenden Artikel:
 
 &lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
 
-für folgende Einwohner freigeben:
+mit den folgenden Einwohnern teilen:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
 		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
@@ -3181,7 +3181,7 @@ Möchten Sie wirklich die folgenden Artikel:
 
 mit den folgenden Einwohnern teilen:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
@@ -3582,10 +3582,6 @@ Versuch abgebrochen.
 		Kommen Sie näher heran.  Sitzen auf Objekt nicht möglich, da
 es sich nicht in der gleichen Region befindet wie Sie.
 	</notification>
-	<notification name="ChatHistoryIsBusyAlert">
-		Der Chatverlauf ist noch mit einer vorhergehenden Aktion beschäftigt. Bitte versuchen Sie es in ein paar Sekunden erneut oder wählen Sie den Chatverlauf einer anderen Person.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="NoNewObjectRegionFull">
 		Neues Objekt kann nicht erstellt werden. Die Region ist voll.
 	</notification>
@@ -3837,7 +3833,7 @@ Sie ist voll oder startet in Kürze neu.
 		Objekt verwendet zu viele Physikressourcen – seine Dynamik wurde deaktiviert.
 	</notification>
 	<notification name="EstateManagerFailedllTeleportHome">
-		Das Objekt „[OBJECT_NAME]“ an [SLURL] kann Grundbesitzverwalter nicht nach Hause teleportieren.
+		Das Objekt „[OBJECT_NAME]“ auf [SLURL] kann Grundstücksverwalter nicht nach Hause teleportieren.
 	</notification>
 	<notification name="TeleportedHomeByObjectOnParcel">
 		Sie wurden vom Objekt „[OBJECT_NAME]“ auf der Parzelle „[PARCEL_NAME]“ nach Hause teleportiert
@@ -4039,11 +4035,10 @@ Wählen Sie ein kleineres Stück Land aus.
 	<notification name="CantDivideLandCantFindParcel">
 		Land kann nicht geteilt werden.
 Parzelle nicht auffindbar.
-Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“...
+Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Land kann nicht geteilt werden.
-Die gesamte Parzelle ist ausgewählt.
+		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt.
 Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 	<notification name="LandHasBeenDivided">
@@ -4186,6 +4181,10 @@ Wählen Sie ein kleineres Stück Land aus.
 	<notification name="PreferenceChatPathChanged">
 		Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="ChatHistoryIsBusyAlert">
+		Chatverlaufsdatei ist noch mit vorheriger Operation beschäftigt. Versuchen Sie es in ein paar Minuten noch einmal oder chatten Sie mit einer anderen Person.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
   <notification name="FSWL">

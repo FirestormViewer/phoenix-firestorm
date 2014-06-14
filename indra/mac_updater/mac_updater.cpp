@@ -384,15 +384,15 @@ int main(int argc, char **argv)
 	parse_args(argc, argv);
 	if ((gUpdateURL == NULL) && (gDmgFile == NULL))
 	{
-		llinfos << "Usage: mac_updater -url <url> | -dmg <dmg file> [-name <product_name>] [-program <program_name>]" << llendl;
+		LL_INFOS() << "Usage: mac_updater -url <url> | -dmg <dmg file> [-name <product_name>] [-program <program_name>]" << LL_ENDL;
 		exit(1);
 	}
 	else
 	{
-		llinfos << "Update url is: " << gUpdateURL << llendl;
+		LL_INFOS() << "Update url is: " << gUpdateURL << LL_ENDL;
 		if (gProductName)
 		{
-			llinfos << "Product name is: " << gProductName << llendl;
+			LL_INFOS() << "Product name is: " << gProductName << LL_ENDL;
 		}
 		else
 		{
@@ -400,7 +400,7 @@ int main(int argc, char **argv)
 		}
 		if (gBundleID)
 		{
-			llinfos << "Bundle ID is: " << gBundleID << llendl;
+			LL_INFOS() << "Bundle ID is: " << gBundleID << LL_ENDL;
 		}
 		else
 		{
@@ -408,7 +408,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	llinfos << "Starting " << gProductName << " Updater" << llendl;
+	LL_INFOS() << "Starting " << gProductName << " Updater" << LL_ENDL;
 
 	// Real UI...
 	OSStatus err;
@@ -569,7 +569,7 @@ bool isDirWritable(FSRef &dir)
 		if(perm & kioACUserNoMakeChangesMask)
 		{
 			// Parent directory isn't writable.
-			llinfos << "Target parent directory not writable." << llendl;
+			LL_INFOS() << "Target parent directory not writable." << LL_ENDL;
 			err = -1;
 			replacingTarget = false;
 		}
@@ -600,7 +600,7 @@ int restoreObject(const char* aside, const char* target, const char* path, const
 	err = FSPathMakeRef((UInt8 *)dest, &destRef, NULL);
 	if(err != noErr) return false;
 
-	llinfos << "Copying " << source << " to " << dest << llendl;
+	LL_INFOS() << "Copying " << source << " to " << dest << LL_ENDL;
 
 	err = FSCopyObjectSync(
 			&sourceRef,
@@ -639,7 +639,7 @@ static bool isFSRefViewerBundle(FSRef *targetRef)
 
 	if(targetURL == NULL)
 	{
-		llinfos << "Error creating target URL." << llendl;
+		LL_INFOS() << "Error creating target URL." << LL_ENDL;
 	}
 	else
 	{
@@ -648,7 +648,7 @@ static bool isFSRefViewerBundle(FSRef *targetRef)
 	
 	if(targetBundle == NULL)
 	{
-		llinfos << "Failed to create target bundle." << llendl;
+		LL_INFOS() << "Failed to create target bundle." << LL_ENDL;
 	}
 	else
 	{
@@ -657,7 +657,7 @@ static bool isFSRefViewerBundle(FSRef *targetRef)
 	
 	if(targetBundleID == NULL)
 	{
-		llinfos << "Couldn't retrieve target bundle ID." << llendl;
+		LL_INFOS() << "Couldn't retrieve target bundle ID." << LL_ENDL;
 	}
 	else
 	{
@@ -669,7 +669,7 @@ static bool isFSRefViewerBundle(FSRef *targetRef)
 		}
 		else
 		{
-			llinfos << "Target bundle ID mismatch." << llendl;
+			LL_INFOS() << "Target bundle ID mismatch." << LL_ENDL;
 		}
 	}
 	
@@ -717,7 +717,7 @@ static OSErr findAppBundleOnDiskImage(FSRef *parent, FSRef *app)
 				// Call succeeded and not done with the iteration.
 				std::string name = HFSUniStr255_to_utf8str(&unicodeName);
 
-				llinfos << "Considering \"" << name << "\"" << llendl;
+				LL_INFOS() << "Considering \"" << name << "\"" << LL_ENDL;
 
 				if(info.nodeFlags & kFSNodeIsDirectoryMask)
 				{
@@ -727,13 +727,13 @@ static OSErr findAppBundleOnDiskImage(FSRef *parent, FSRef *app)
 						// Looks promising.  Check to see if it has the right bundle identifier.
 						if(isFSRefViewerBundle(&ref))
 						{
-							llinfos << name << " is the one" << llendl;
+							LL_INFOS() << name << " is the one" << LL_ENDL;
 							// This is the one.  Return it.
 							*app = ref;
 							found = true;
 							break;
 						} else {
-							llinfos << name << " is not the bundle we are looking for; move along" << llendl;
+							LL_INFOS() << name << " is not the bundle we are looking for; move along" << LL_ENDL;
 						}
 
 					}
@@ -742,11 +742,11 @@ static OSErr findAppBundleOnDiskImage(FSRef *parent, FSRef *app)
 		}
 		while(!err);
 		
-		llinfos << "closing the iterator" << llendl;
+		LL_INFOS() << "closing the iterator" << LL_ENDL;
 		
 		FSCloseIterator(iterator);
 		
-		llinfos << "closed" << llendl;
+		LL_INFOS() << "closed" << LL_ENDL;
 	}
 	
 	if(!err && !found)
@@ -794,7 +794,7 @@ void *updatethreadproc(void*)
 				// Sanity check:  Make sure the name of the item referenced by targetRef is "Second Life.app".
 				FSRefMakePath(&myBundle, (UInt8*)target, sizeof(target));
 				
-				llinfos << "Updater bundle location: " << target << llendl;
+				LL_INFOS() << "Updater bundle location: " << target << LL_ENDL;
 			}
 			
 			// Our bundle should be in Second Life.app/Contents/Resources/AutoUpdater.app
@@ -821,7 +821,7 @@ void *updatethreadproc(void*)
 			if(err == noErr)
 			{
 				FSRefMakePath(&targetRef, (UInt8*)target, sizeof(target));
-				llinfos << "Path to target: " << target << llendl;
+				LL_INFOS() << "Path to target: " << target << LL_ENDL;
 			}
 			
 			// Sanity check: make sure the target is a bundle with the right identifier
@@ -844,7 +844,7 @@ void *updatethreadproc(void*)
 				if(!isDirWritable(targetParentRef))
 				{
 					// Parent directory isn't writable.
-					llinfos << "Target parent directory not writable." << llendl;
+					LL_INFOS() << "Target parent directory not writable." << LL_ENDL;
 					err = -1;
 					replacingTarget = false;
 				}
@@ -853,14 +853,14 @@ void *updatethreadproc(void*)
 			if(err != noErr)
 			{
 				Boolean isDirectory;
-				llinfos << "Target search failed, defaulting to /Applications/" << gProductName << ".app." << llendl;
+				LL_INFOS() << "Target search failed, defaulting to /Applications/" << gProductName << ".app." << LL_ENDL;
 				
 				// Set up the parent directory
 				err = FSPathMakeRef((UInt8*)"/Applications", &targetParentRef, &isDirectory);
 				if((err != noErr) || (!isDirectory))
 				{
 					// We're so hosed.
-					llinfos << "Applications directory not found, giving up." << llendl;
+					LL_INFOS() << "Applications directory not found, giving up." << LL_ENDL;
 					throw 0;
 				}
 				
@@ -885,7 +885,7 @@ void *updatethreadproc(void*)
 					if(!isDirWritable(targetParentRef))
 					{
 						// Parent directory isn't writable.
-						llinfos << "Target parent directory not writable." << llendl;
+						LL_INFOS() << "Target parent directory not writable." << LL_ENDL;
 						err = -1;
 						replacingTarget = false;
 					}
@@ -896,7 +896,7 @@ void *updatethreadproc(void*)
 			// If we haven't fixed all problems by this point, just bail.
 			if(err != noErr)
 			{
-				llinfos << "Unable to pick a target, giving up." << llendl;
+				LL_INFOS() << "Unable to pick a target, giving up." << LL_ENDL;
 				throw 0;
 			}
 		}
@@ -982,7 +982,7 @@ void *updatethreadproc(void*)
 		strncpy(tempDir, temp, sizeof(tempDir));
 		temp[sizeof(tempDir) - 1] = '\0';
 		
-		llinfos << "tempDir is " << tempDir << llendl;
+		LL_INFOS() << "tempDir is " << tempDir << LL_ENDL;
 
 		err = FSPathMakeRef((UInt8*)tempDir, &tempDirRef, NULL);
 
@@ -1018,13 +1018,13 @@ void *updatethreadproc(void*)
 			
 			if(gCancelled)
 			{
-				llinfos << "User cancel, bailing out."<< llendl;
+				LL_INFOS() << "User cancel, bailing out."<< LL_ENDL;
 				throw 0;
 			}
 			
 			if(result != CURLE_OK)
 			{
-				llinfos << "Error " << result << " while downloading disk image."<< llendl;
+				LL_INFOS() << "Error " << result << " while downloading disk image."<< LL_ENDL;
 				throw 0;
 			}
 			
@@ -1045,7 +1045,7 @@ void *updatethreadproc(void*)
 		
 		if(mounter == NULL)
 		{
-			llinfos << "Failed to mount disk image, exiting."<< llendl;
+			LL_INFOS() << "Failed to mount disk image, exiting."<< LL_ENDL;
 			throw 0;
 		}
 		
@@ -1064,7 +1064,7 @@ void *updatethreadproc(void*)
 				{
 					// NOTE: We used to abort here, but pclose() started returning 
 					// -1, possibly when the size of the DMG passed a certain point 
-					llinfos << "Unexpected result closing pipe: " << result << llendl; 
+					LL_INFOS() << "Unexpected result closing pipe: " << result << LL_ENDL; 
 				}
 				mounter = NULL;
 			}
@@ -1085,11 +1085,11 @@ void *updatethreadproc(void*)
 		
 		if(deviceNode[0] != 0)
 		{
-			llinfos << "Disk image attached on /dev/" << deviceNode << llendl;
+			LL_INFOS() << "Disk image attached on /dev/" << deviceNode << LL_ENDL;
 		}
 		else
 		{
-			llinfos << "Disk image device node not found!" << llendl;
+			LL_INFOS() << "Disk image device node not found!" << LL_ENDL;
 			throw 0; 
 		}
 		
@@ -1098,12 +1098,12 @@ void *updatethreadproc(void*)
 		FSRef mountRef;
 		snprintf(temp, sizeof(temp), "%s/mnt", tempDir);		
 
-		llinfos << "Disk image mount point is: " << temp << llendl;
+		LL_INFOS() << "Disk image mount point is: " << temp << LL_ENDL;
 
 		err = FSPathMakeRef((UInt8 *)temp, &mountRef, NULL);
 		if(err != noErr)
 		{
-			llinfos << "Couldn't make FSRef to disk image mount point." << llendl;
+			LL_INFOS() << "Couldn't make FSRef to disk image mount point." << LL_ENDL;
 			throw 0;
 		}
 
@@ -1111,12 +1111,12 @@ void *updatethreadproc(void*)
 		err = findAppBundleOnDiskImage(&mountRef, &sourceRef);
 		if(err != noErr)
 		{
-			llinfos << "Couldn't find application bundle on mounted disk image." << llendl;
+			LL_INFOS() << "Couldn't find application bundle on mounted disk image." << LL_ENDL;
 			throw 0;
 		}
 		else
 		{
-			llinfos << "found the bundle." << llendl;
+			LL_INFOS() << "found the bundle." << LL_ENDL;
 		}
 
 		sendProgress(0, 0, CFSTR("Preparing to copy files..."));
@@ -1140,8 +1140,8 @@ void *updatethreadproc(void*)
 			err = FSMoveObject(&targetRef, &tempDirRef, &asideRef);
 			if(err != noErr)
 			{
-				llwarns << "failed to move aside old version (error code " << 
-					err << ")" << llendl;
+				LL_WARNS() << "failed to move aside old version (error code " << 
+					err << ")" << LL_ENDL;
 				throw 0;
 			}
 
@@ -1158,7 +1158,7 @@ void *updatethreadproc(void*)
 		
 		sendProgress(0, 0, CFSTR("Copying files..."));
 		
-		llinfos << "Starting copy..." << llendl;
+		LL_INFOS() << "Starting copy..." << LL_ENDL;
 
 		// Copy the new version from the disk image to the target location.
 		err = FSCopyObjectSync(
@@ -1173,7 +1173,7 @@ void *updatethreadproc(void*)
 		if(err != noErr)
 			throw 0;
 
-		llinfos << "Copy complete. Target = " << target << llendl;
+		LL_INFOS() << "Copy complete. Target = " << target << LL_ENDL;
 
 		if(err != noErr)
 		{
@@ -1191,11 +1191,11 @@ void *updatethreadproc(void*)
 
 			sendProgress(0, 0, CFSTR("Clearing cache..."));
 	
-			llinfos << "Clearing cache..." << llendl;
+			LL_INFOS() << "Clearing cache..." << LL_ENDL;
 			
 			gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""), "*.*");
 			
-			llinfos << "Clear complete." << llendl;
+			LL_INFOS() << "Clear complete." << LL_ENDL;
 
 		}
 	}
@@ -1212,7 +1212,7 @@ void *updatethreadproc(void*)
 	// Close disk image file if necessary
 	if(downloadFile != NULL)
 	{
-		llinfos << "Closing download file." << llendl;
+		LL_INFOS() << "Closing download file." << LL_ENDL;
 
 		fclose(downloadFile);
 		downloadFile = NULL;
@@ -1222,7 +1222,7 @@ void *updatethreadproc(void*)
 	// Unmount image
 	if(deviceNode[0] != 0)
 	{
-		llinfos << "Detaching disk image." << llendl;
+		LL_INFOS() << "Detaching disk image." << LL_ENDL;
 
 		snprintf(temp, sizeof(temp), "hdiutil detach '%s'", deviceNode);		
 		system(temp);		/* Flawfinder: ignore */
@@ -1233,24 +1233,24 @@ void *updatethreadproc(void*)
 	// Move work directory to the trash
 	if(tempDir[0] != 0)
 	{
-		llinfos << "Moving work directory to the trash." << llendl;
+		LL_INFOS() << "Moving work directory to the trash." << LL_ENDL;
 
 		FSRef trashRef;
 		OSStatus err = FSMoveObjectToTrashSync(&tempDirRef, &trashRef, 0); 
 		if(err != noErr) {
-			llwarns << "failed to move files to trash, (error code " <<
-				err << ")" << llendl;
+			LL_WARNS() << "failed to move files to trash, (error code " <<
+				err << ")" << LL_ENDL;
 		}
 	}
 	
 	if(!gCancelled  && !gFailure && (target[0] != 0))
 	{
-		llinfos << "Touching application bundle." << llendl;
+		LL_INFOS() << "Touching application bundle." << LL_ENDL;
 
 		snprintf(temp, sizeof(temp), "touch '%s'", target);		
 		system(temp);		/* Flawfinder: ignore */
 
-		llinfos << "Launching updated application." << llendl;
+		LL_INFOS() << "Launching updated application." << LL_ENDL;
 
 		snprintf(temp, sizeof(temp), "open '%s'", target);		
 		system(temp);		/* Flawfinder: ignore */

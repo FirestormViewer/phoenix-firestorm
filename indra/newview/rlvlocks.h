@@ -17,7 +17,7 @@
 #ifndef RLV_LOCKS_H
 #define RLV_LOCKS_H
 
-#include "llagentconstants.h"
+//#include "llagentconstants.h"
 #include "llagentwearables.h"
 #include "lleventtimer.h"
 #include "llvoavatarself.h"

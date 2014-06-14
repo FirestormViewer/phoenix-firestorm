@@ -190,8 +190,8 @@
 	<!--Windlight-->
 	<panel label="Windlight" name="WindlightTab">
 		<check_box label="Umgebung automatisch auf Regions-/Parzelleneinstellungen setzen" name="UseEnvironmentFromRegionAlways"/>
-		<check_box label="Umgebung bei Änderungen am Himmel in den Schnelleinstellungen überblenden" name="FSInterpolateSky" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Himmel. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
-		<check_box label="Umgebung bei Änderungen am Wasser in den Schnelleinstellungen überblenden" name="FSInterpolateWater" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Wasser. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
+		<check_box label="Umgebung beim Wechsel des Himmels in den Schnelleinstellungen interpolieren" name="FSInterpolateSky" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Himmel. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
+		<check_box label="Umgebung beim Wechsel des Wassers in den Schnelleinstellungen interpolieren" name="FSInterpolateWater" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Wasser. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
 		<text name="FSWLshare_txt">
 			Firestorm Windlight-Sharing:
 		</text>
@@ -199,9 +199,9 @@
 		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
 		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
 		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>
-		<check_box label="Änderungen an den Umgebungseinstellungen überblenden" name="FSInterpolateParcelWL" tool_tip="Aktiviert einen Überblendeffekt bei Änderungen an den Umgebungseinstellungen beim Windlight-Sharing für Parzellen."/>
+		<check_box label="Wechsel der Umgebungseinstellungen interpolieren" name="FSInterpolateParcelWL" tool_tip="Aktiviert einen Überblendeffekt bei Änderungen an den Umgebungseinstellungen beim Windlight-Sharing für Parzellen."/>
 		<text name="wl_crossfade_label">
-			Überblenddauer (Sekunden):
+			Interpolationsdauer (Sekunden):
 		</text>
 		<spinner name="FSWindlightInterpolateTime" tool_tip="Die Zeit, die für die Überblendung von einer Voreinstellung zu einer anderen benötigt wird. [Standard: 3]"/>
 		<text name="could_texture_text">
@@ -302,7 +302,7 @@
 		</text>
 		<spinner name="RotationStep" tool_tip="Alle Rotationen mittels des Rotationstools werden auf ein Vielfaches dieses Wertes beschränkt [Standard: 1.0]"/>
 		<text name="RotationStepText2" width="290">
-			Grad beschränken, fals „An Raster ausrichten“ deakt.
+			Grad beschränken, falls „An Raster ausrichten“ deakt.
 		</text>
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>

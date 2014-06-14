@@ -45,6 +45,7 @@ class LLFilterEditor;
 class LLGroupList;
 class LLMenuButton;
 class LLTabContainer;
+class LLNetMap;
 
 // Firestorm declarations
 class LLMenuGL;

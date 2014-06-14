@@ -181,7 +181,7 @@ void FSFloaterContacts::updateGroupButtons()
 	getChildView("info_btn")->setEnabled(isGroup);
 	getChildView("activate_btn")->setEnabled(groupId != gAgent.getGroupID());
 	getChildView("leave_btn")->setEnabled(isGroup);
-	getChildView("create_btn")->setEnabled((!gMaxAgentGroups) || (gAgent.mGroups.count() < gMaxAgentGroups));
+	getChildView("create_btn")->setEnabled((!gMaxAgentGroups) || (gAgent.mGroups.size() < gMaxAgentGroups));
 	getChildView("invite_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_MEMBER_INVITE));
 }
 
@@ -775,7 +775,7 @@ void FSFloaterContacts::refreshUI()
 	// Set friend count
 	LLStringUtil::format_map_t args;
 	args["[COUNT]"] = llformat("%d", mFriendsList->getItemCount());
-	mFriendsTab->childSetText("friend_count", mFriendsTab->getString("FriendCount", args));
+	mFriendsTab->childSetValue("friend_count", LLSD( mFriendsTab->getString("FriendCount", args) ) );
 
 	refreshRightsChangeList();
 }
@@ -985,6 +985,13 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
 
 	mNumRightsChanged = ids.size();
 	gAgent.sendReliableMessage();
+}
+
+void FSFloaterContacts::childShowTab(const std::string& id, const std::string& tabname )
+{
+	LLTabContainer* child = findChild<LLTabContainer>(id);
+	if (child)
+		child->selectTabByName(tabname);
 }
 
 // EOF

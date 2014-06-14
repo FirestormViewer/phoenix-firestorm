@@ -77,6 +77,7 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
+#include "llscenemonitor.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -88,11 +89,6 @@ extern bool gShiftFrame;
 LLPointer<LLViewerTexture> gDisconnectedImagep = NULL;
 
 // used to toggle renderer back on after teleport
-const F32 TELEPORT_RENDER_DELAY = 20.f; // Max time a teleport is allowed to take before we raise the curtain
-const F32 TELEPORT_ARRIVAL_DELAY = 2.f; // Time to preload the world before raising the curtain after we've actually already arrived.
-// <FS:CR> FIRE-8721 - Remove local teleport delay
-//const F32 TELEPORT_LOCAL_DELAY = 1.0f;  // Delay to prevent teleports after starting an in-sim teleport.
-// </FS:CR>
 BOOL		 gTeleportDisplay = FALSE;
 LLFrameTimer gTeleportDisplayTimer;
 LLFrameTimer gTeleportArrivalTimer;
@@ -109,6 +105,11 @@ BOOL gWindowResized = FALSE;
 BOOL gSnapshot = FALSE;
 BOOL gShaderProfileFrame = FALSE;
 
+// This is how long the sim will try to teleport you before giving up.
+const F32 TELEPORT_EXPIRY = 15.0f;
+// Additional time (in seconds) to wait per attachment
+const F32 TELEPORT_EXPIRY_PER_ATTACHMENT = 3.f;
+
 U32 gRecentFrameCount = 0; // number of 'recent' frames
 LLFrameTimer gRecentFPSTime;
 LLFrameTimer gRecentMemoryTime;
@@ -117,6 +118,7 @@ LLFrameTimer gRecentMemoryTime;
 void pre_show_depth_buffer();
 void post_show_depth_buffer();
 void render_ui(F32 zoom_factor = 1.f, int subfield = 0);
+void swap();
 void render_hud_attachments();
 void render_ui_3d();
 void render_ui_2d();
@@ -142,7 +144,7 @@ void display_startup()
 	//
 	if (!LLViewerFetchedTexture::sWhiteImagep.isNull())
 	{
-		LLTexUnit::sWhiteTexture = LLViewerFetchedTexture::sWhiteImagep->getTexName();
+	LLTexUnit::sWhiteTexture = LLViewerFetchedTexture::sWhiteImagep->getTexName();
 	}
 
 	LLGLSDefault gls_default;
@@ -185,11 +187,11 @@ void display_startup()
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
-static LLFastTimer::DeclareTimer FTM_UPDATE_CAMERA("Update Camera");
+static LLTrace::BlockTimerStatHandle FTM_UPDATE_CAMERA("Update Camera");
 
 void display_update_camera()
 {
-	LLFastTimer t(FTM_UPDATE_CAMERA);
+	LL_RECORD_BLOCK_TIME(FTM_UPDATE_CAMERA);
 	// TODO: cut draw distance down if customizing avatar?
 	// TODO: cut draw distance on per-parcel basis?
 
@@ -218,7 +220,7 @@ void display_update_camera()
 	LLWorld::getInstance()->setLandFarClip(final_far);
 }
 
-// Write some stats to llinfos
+// Write some stats to LL_INFOS()
 void display_stats()
 {
 	// <FS:Ansariel> gSavedSettings replacement
@@ -229,7 +231,7 @@ void display_stats()
 	if (fps_log_freq > 0.f && gRecentFPSTime.getElapsedTimeF32() >= fps_log_freq)
 	{
 		F32 fps = gRecentFrameCount / fps_log_freq;
-		llinfos << llformat("FPS: %.02f", fps) << llendl;
+		LL_INFOS() << llformat("FPS: %.02f", fps) << LL_ENDL;
 		gRecentFrameCount = 0;
 		gRecentFPSTime.reset();
 	}
@@ -240,37 +242,37 @@ void display_stats()
 	// </FS:Ansariel>
 	if (mem_log_freq > 0.f && gRecentMemoryTime.getElapsedTimeF32() >= mem_log_freq)
 	{
-		gMemoryAllocated = LLMemory::getCurrentRSS();
-		U32 memory = (U32)(gMemoryAllocated / (1024*1024));
-		llinfos << llformat("MEMORY: %d MB", memory) << llendl;
+		gMemoryAllocated = (U64Bytes)LLMemory::getCurrentRSS();
+		U32Megabytes memory = gMemoryAllocated;
+		LL_INFOS() << llformat("MEMORY: %d MB", memory.value()) << LL_ENDL;
 		LLMemory::logMemoryInfo(TRUE) ;
 		gRecentMemoryTime.reset();
 	}
 }
 
-static LLFastTimer::DeclareTimer FTM_PICK("Picking");
-static LLFastTimer::DeclareTimer FTM_RENDER("Render", true);
-static LLFastTimer::DeclareTimer FTM_UPDATE_SKY("Update Sky");
-static LLFastTimer::DeclareTimer FTM_UPDATE_TEXTURES("Update Textures");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE("Update Images");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_CLASS("Class");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_BUMP("Image Update Bump");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_LIST("List");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_DELETE("Delete");
-static LLFastTimer::DeclareTimer FTM_RESIZE_WINDOW("Resize Window");
-static LLFastTimer::DeclareTimer FTM_HUD_UPDATE("HUD Update");
-static LLFastTimer::DeclareTimer FTM_DISPLAY_UPDATE_GEOM("Update Geom");
-static LLFastTimer::DeclareTimer FTM_TEXTURE_UNBIND("Texture Unbind");
-static LLFastTimer::DeclareTimer FTM_TELEPORT_DISPLAY("Teleport Display");
+static LLTrace::BlockTimerStatHandle FTM_PICK("Picking");
+static LLTrace::BlockTimerStatHandle FTM_RENDER("Render");
+static LLTrace::BlockTimerStatHandle FTM_UPDATE_SKY("Update Sky");
+static LLTrace::BlockTimerStatHandle FTM_UPDATE_DYNAMIC_TEXTURES("Update Dynamic Textures");
+static LLTrace::BlockTimerStatHandle FTM_IMAGE_UPDATE("Update Images");
+static LLTrace::BlockTimerStatHandle FTM_IMAGE_UPDATE_CLASS("Class");
+static LLTrace::BlockTimerStatHandle FTM_IMAGE_UPDATE_BUMP("Image Update Bump");
+static LLTrace::BlockTimerStatHandle FTM_IMAGE_UPDATE_LIST("List");
+static LLTrace::BlockTimerStatHandle FTM_IMAGE_UPDATE_DELETE("Delete");
+static LLTrace::BlockTimerStatHandle FTM_RESIZE_WINDOW("Resize Window");
+static LLTrace::BlockTimerStatHandle FTM_HUD_UPDATE("HUD Update");
+static LLTrace::BlockTimerStatHandle FTM_DISPLAY_UPDATE_GEOM("Update Geom");
+static LLTrace::BlockTimerStatHandle FTM_TEXTURE_UNBIND("Texture Unbind");
+static LLTrace::BlockTimerStatHandle FTM_TELEPORT_DISPLAY("Teleport Display");
 
 // Paint the display!
 void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 {
-	LLFastTimer t(FTM_RENDER);
+	LL_RECORD_BLOCK_TIME(FTM_RENDER);
 
 	if (gWindowResized)
 	{ //skip render on frames where window has been resized
-		LLFastTimer t(FTM_RESIZE_WINDOW);
+		LL_RECORD_BLOCK_TIME(FTM_RESIZE_WINDOW);
 		gGL.flush();
 		glClear(GL_COLOR_BUFFER_BIT);
 		gViewerWindow->getWindow()->swapBuffers();
@@ -334,7 +336,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	gViewerWindow->checkSettings();
 	
 	{
-		LLFastTimer ftm(FTM_PICK);
+		LL_RECORD_BLOCK_TIME(FTM_PICK);
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Pick");
 		gViewerWindow->performPick();
 	}
@@ -370,7 +372,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	// Bail out if we're in the startup state and don't want to try to
 	// render the world.
 	//
-	if (LLStartUp::getStartupState() < STATE_STARTED)
+	if (LLStartUp::getStartupState() < STATE_PRECACHE)
 	{
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Startup");
 		display_startup();
@@ -426,9 +428,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	if (gTeleportDisplay)
 	{
-		LLFastTimer t(FTM_TELEPORT_DISPLAY);
+		LL_RECORD_BLOCK_TIME(FTM_TELEPORT_DISPLAY);
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Teleport");
-		const F32 TELEPORT_ARRIVAL_DELAY = 2.f; // Time to preload the world before raising the curtain after we've actually already arrived.
+		static LLCachedControl<F32> teleport_arrival_delay(gSavedSettings, "TeleportArrivalDelay");
+		static LLCachedControl<F32> teleport_local_delay(gSavedSettings, "TeleportLocalDelay");
 
 		S32 attach_count = 0;
 		if (isAgentAvatarValid())
@@ -516,7 +519,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		case LLAgent::TELEPORT_ARRIVING:
 			// Make the user wait while content "pre-caches"
 			{
-				F32 arrival_fraction = (gTeleportArrivalTimer.getElapsedTimeF32() / TELEPORT_ARRIVAL_DELAY);
+				F32 arrival_fraction = (gTeleportArrivalTimer.getElapsedTimeF32() / teleport_arrival_delay());
 				if( arrival_fraction > 1.f || gSavedSettings.getBOOL("FSDisableTeleportScreens") )
 				{
 					arrival_fraction = 1.f;
@@ -534,7 +537,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// fall-through from TELEPORT_START)
 			{
 				// <FS:CR> FIRE-8721 - Remove local teleport delay
-				//if( gTeleportDisplayTimer.getElapsedTimeF32() > TELEPORT_LOCAL_DELAY )
+				//if( gTeleportDisplayTimer.getElapsedTimeF32() > teleport_local_delay() )
 				// </FS:CR>
 				{
 					//LLFirstUse::useTeleport();
@@ -650,6 +653,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	{
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Disconnected");
 		render_ui();
+		swap();
 	}
 	
 	//////////////////////////
@@ -680,7 +684,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_DYNAMIC_TEXTURES))
 	{
 		LLAppViewer::instance()->pingMainloopTimeout("Display:DynamicTextures");
-		LLFastTimer t(FTM_UPDATE_TEXTURES);
+		LL_RECORD_BLOCK_TIME(FTM_UPDATE_DYNAMIC_TEXTURES);
 		if (LLViewerDynamicTexture::updateAllInstances())
 		{
 			gGL.setColorMask(true, true);
@@ -714,15 +718,15 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				
 		// *TODO: merge these two methods
 		{
-			LLFastTimer t(FTM_HUD_UPDATE);
+			LL_RECORD_BLOCK_TIME(FTM_HUD_UPDATE);
 			LLHUDManager::getInstance()->updateEffects();
 			LLHUDObject::updateAll();
 			stop_glerror();
 		}
 
 		{
-			LLFastTimer t(FTM_DISPLAY_UPDATE_GEOM);
-			const F32 max_geom_update_time = 0.005f*10.f*gFrameIntervalSeconds; // 50 ms/second update time
+			LL_RECORD_BLOCK_TIME(FTM_DISPLAY_UPDATE_GEOM);
+			const F32 max_geom_update_time = 0.005f*10.f*gFrameIntervalSeconds.value(); // 50 ms/second update time
 			gPipeline.createObjects(max_geom_update_time);
 			gPipeline.processPartitionQ();
 			gPipeline.updateGeom(max_geom_update_time);
@@ -860,29 +864,31 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:UpdateImages");
 		
 		{
-			LLFastTimer t(FTM_IMAGE_UPDATE);
+			LL_RECORD_BLOCK_TIME(FTM_IMAGE_UPDATE);
 			
 			{
-				LLFastTimer t(FTM_IMAGE_UPDATE_CLASS);
-				LLViewerTexture::updateClass(LLViewerCamera::getInstance()->getVelocityStat()->getMean(),
-											LLViewerCamera::getInstance()->getAngularVelocityStat()->getMean());
+				LL_RECORD_BLOCK_TIME(FTM_IMAGE_UPDATE_CLASS);
+				LLTrace::CountStatHandle<>* velocity_stat = LLViewerCamera::getVelocityStat();
+				LLTrace::CountStatHandle<>* angular_velocity_stat = LLViewerCamera::getAngularVelocityStat();
+				LLViewerTexture::updateClass(LLTrace::get_frame_recording().getPeriodMeanPerSec(*velocity_stat),
+											LLTrace::get_frame_recording().getPeriodMeanPerSec(*angular_velocity_stat));
 			}
 
 			
 			{
-				LLFastTimer t(FTM_IMAGE_UPDATE_BUMP);
+				LL_RECORD_BLOCK_TIME(FTM_IMAGE_UPDATE_BUMP);
 				gBumpImageList.updateImages();  // must be called before gTextureList version so that it's textures are thrown out first.
 			}
 
 			{
-				LLFastTimer t(FTM_IMAGE_UPDATE_LIST);
-				F32 max_image_decode_time = 0.050f*gFrameIntervalSeconds; // 50 ms/second decode time
+				LL_RECORD_BLOCK_TIME(FTM_IMAGE_UPDATE_LIST);
+				F32 max_image_decode_time = 0.050f*gFrameIntervalSeconds.value(); // 50 ms/second decode time
 				max_image_decode_time = llclamp(max_image_decode_time, 0.002f, 0.005f ); // min 2ms/frame, max 5ms/frame)
 				gTextureList.updateImages(max_image_decode_time);
 			}
 
 			/*{
-				LLFastTimer t(FTM_IMAGE_UPDATE_DELETE);
+				LL_RECORD_BLOCK_TIME(FTM_IMAGE_UPDATE_DELETE);
 				//remove dead textures from GL
 				LLImageGL::deleteDeadTextures();
 				stop_glerror();
@@ -918,6 +924,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 		}
 
+		LLSceneMonitor::getInstance()->fetchQueryResult();
+		
 		LLGLState::checkStates();
 		LLGLState::checkClientArrays();
 
@@ -925,7 +933,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		{
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Sky");
-			LLFastTimer t(FTM_UPDATE_SKY);	
+			LL_RECORD_BLOCK_TIME(FTM_UPDATE_SKY);	
 			gSky.updateSky();
 		}
 
@@ -1067,7 +1075,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		}
 
 		{
-			LLFastTimer t(FTM_TEXTURE_UNBIND);
+			LL_RECORD_BLOCK_TIME(FTM_TEXTURE_UNBIND);
 			for (U32 i = 0; i < gGLManager.mNumTextureImageUnits; i++)
 			{ //dummy cleanup of any currently bound textures
 				if (gGL.getTexUnit(i)->getCurrType() != LLTexUnit::TT_NONE)
@@ -1115,11 +1123,17 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		LLPipeline::sUnderWaterRender = FALSE;
 
+		{
+			//capture the frame buffer.
+			LLSceneMonitor::getInstance()->capture();
+		}
+
 		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderUI");
 		if (!for_snapshot)
 		{
-			LLFastTimer t(FTM_RENDER_UI);
+			LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 			render_ui();
+			swap();
 		}
 
 		
@@ -1178,7 +1192,7 @@ void render_hud_attachments()
 // [/RLVa:KB]
 
 	// smoothly interpolate current zoom level
-	gAgentCamera.mHUDCurZoom = lerp(gAgentCamera.mHUDCurZoom, gAgentCamera.mHUDTargetZoom, LLCriticalDamp::getInterpolant(0.03f));
+	gAgentCamera.mHUDCurZoom = lerp(gAgentCamera.mHUDCurZoom, gAgentCamera.mHUDTargetZoom, LLSmoothInterpolation::getInterpolant(0.03f));
 
 	if (LLPipeline::sShowHUDAttachments && !gDisconnected && setup_hud_matrices())
 	{
@@ -1360,8 +1374,6 @@ BOOL setup_hud_matrices(const LLRect& screen_region)
 	return TRUE;
 }
 
-static LLFastTimer::DeclareTimer FTM_SWAP("Swap");
-
 void render_ui(F32 zoom_factor, int subfield)
 {
 	LLGLState::checkStates();
@@ -1375,6 +1387,15 @@ void render_ui(F32 zoom_factor, int subfield)
 		glh_set_current_modelview(glh_copy_matrix(gGLLastModelView));
 	}
 	
+	if(LLSceneMonitor::getInstance()->needsUpdate())
+	{
+		gGL.pushMatrix();
+		gViewerWindow->setup2DRender();
+		LLSceneMonitor::getInstance()->compare();
+		gViewerWindow->setup3DRender();
+		gGL.popMatrix();
+	}
+
 	{
 		BOOL to_texture = gPipeline.canUseVertexShaders() &&
 							LLPipeline::sRenderGlow;
@@ -1398,7 +1419,7 @@ void render_ui(F32 zoom_factor, int subfield)
 		gGL.color4f(1,1,1,1);
 		if (gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 		{
-			LLFastTimer t(FTM_RENDER_UI);
+			LL_RECORD_BLOCK_TIME(FTM_RENDER_UI);
 
 			if (!gDisconnected)
 			{
@@ -1429,10 +1450,16 @@ void render_ui(F32 zoom_factor, int subfield)
 		glh_set_current_modelview(saved_view);
 		gGL.popMatrix();
 	}
+}
+
+static LLTrace::BlockTimerStatHandle FTM_SWAP("Swap");
+
+void swap()
+{
+	LL_RECORD_BLOCK_TIME(FTM_SWAP);
 
 	if (gDisplaySwapBuffers)
 	{
-		LLFastTimer t(FTM_SWAP);
 		gViewerWindow->getWindow()->swapBuffers();
 	}
 	gDisplaySwapBuffers = TRUE;
@@ -1676,7 +1703,7 @@ void render_disconnected_background()
 	gGL.color4f(1,1,1,1);
 	if (!gDisconnectedImagep && gDisconnected)
 	{
-		llinfos << "Loading last bitmap..." << llendl;
+		LL_INFOS() << "Loading last bitmap..." << LL_ENDL;
 
 		std::string temp_str;
 		temp_str = gDirUtilp->getLindenUserDir() + gDirUtilp->getDirDelimiter() + SCREEN_LAST_FILENAME;
@@ -1684,14 +1711,14 @@ void render_disconnected_background()
 		LLPointer<LLImageBMP> image_bmp = new LLImageBMP;
 		if( !image_bmp->load(temp_str) )
 		{
-			//llinfos << "Bitmap load failed" << llendl;
+			//LL_INFOS() << "Bitmap load failed" << LL_ENDL;
 			return;
 		}
 		
 		LLPointer<LLImageRaw> raw = new LLImageRaw;
 		if (!image_bmp->decode(raw, 0.0f))
 		{
-			llinfos << "Bitmap decode failed" << llendl;
+			LL_INFOS() << "Bitmap decode failed" << LL_ENDL;
 			gDisconnectedImagep = NULL;
 			return;
 		}

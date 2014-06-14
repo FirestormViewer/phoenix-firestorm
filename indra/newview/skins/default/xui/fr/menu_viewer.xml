@@ -193,7 +193,6 @@
 		<menu_item_check label="Photo haute résolution" name="HighResSnapshot"/>
 		<menu_item_check label="Photos discrètes sur disque" name="QuietSnapshotsToDisk"/>
 		<menu label="Outils de performance" name="Performance Tools">
-			<menu_item_call label="Mesure du lag" name="Lag Meter"/>
 			<menu_item_check label="Barre de statistiques" name="Statistics Bar"/>
 			<menu_item_check label="Afficher le poids de dessin pour les avatars" name="Avatar Rendering Cost"/>
 		</menu>

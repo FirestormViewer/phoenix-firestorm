@@ -8187,7 +8187,7 @@ Are you sure you want to share the following items:
 
 With the following residents:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
   <tag>confirm</tag>
 	<usetemplate
      ignoretext="Confirm before I share an item"
@@ -8208,7 +8208,7 @@ Are you sure you want to share the following items:
 
 With the following Residents:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
   <tag>confirm</tag>
 	<usetemplate
      name="okcancelbuttons"
@@ -11366,7 +11366,7 @@ Changes won't take effect until after you restart [APP_NAME].
      name="okignore"
      yestext="OK"/>
   </notification>
-  
+
 <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"

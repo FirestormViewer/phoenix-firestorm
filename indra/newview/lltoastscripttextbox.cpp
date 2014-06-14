@@ -116,7 +116,7 @@ void LLToastScriptTextbox::onClickSubmit()
 		}
 		mNotification->respond(response);
 		close();
-		llwarns << response << llendl;
+		LL_WARNS() << response << LL_ENDL;
 	}
 }
 

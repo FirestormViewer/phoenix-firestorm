@@ -35,7 +35,6 @@
  bg_opaque_color="DkGray2"
  height="24"
  layout="topleft"
- border_size="0"
  name="navigation_bar_visibility_panel"
  visibility_control="ShowNavbarNavigationPanel"
  width="1024"
@@ -71,7 +70,6 @@
 	 layout="topleft"
 	 right="193"
 	 height="24"
-	 border_size="0"
 	 auto_resize="false">
 
 	     <pull_button
@@ -155,7 +153,6 @@
 	 layout="topleft"
 	 width="587"
 	 height="22"
-	 border_size="0"
 	 auto_resize="true">
 
 	    <location_input
@@ -229,7 +226,6 @@
  bg_opaque_color="DkGray2"
  height="15"
  layout="topleft"
- border_size="0"
  name="favorites_bar_visibility_panel"
  visibility_control="ShowNavbarFavoritesPanel"
  auto_resize="false">

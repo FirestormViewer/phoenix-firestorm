@@ -927,7 +927,7 @@ static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
-	LLFastTimer _(FTM_APPEND_MESSAGE);
+	LL_RECORD_BLOCK_TIME(FTM_APPEND_MESSAGE);
 	// Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
 	//       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
 	mScrollToBottom = (mScroller->isAtBottom() || mScroller->getScrollbar(LLScrollContainer::VERTICAL)->getDocPosMax() <= 1);

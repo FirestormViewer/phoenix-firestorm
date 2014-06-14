@@ -128,7 +128,7 @@
 		Fuerza:
 	</text>
 	<button label="Aplicar" label_selected="Aplicar" name="button apply to selection" tool_tip="Modificar el terreno seleccionado."/>
-	<text name="link_num_obj_count" tooltip="El número de objetos enlazados puede ser impreciso.">
+	<text name="link_num_obj_count" tool_tip="El número de objetos enlazados puede ser impreciso.">
 		[DESC] [NUM]
 	</text>
 	<text name="selection_empty" width="115">

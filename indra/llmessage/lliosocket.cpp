@@ -32,6 +32,7 @@
 #include "llapr.h"
 
 #include "llbuffer.h"
+#include "llfasttimer.h"
 #include "llhost.h"
 #include "llpumpio.h"
 
@@ -73,7 +74,7 @@ void ll_debug_socket(const char* msg, apr_socket_t* apr_sock)
 #if LL_DEBUG_SOCKET_FILE_DESCRIPTORS
 	if(!apr_sock)
 	{
-		lldebugs << "Socket -- " << (msg?msg:"") << ": no socket." << llendl;
+		LL_DEBUGS() << "Socket -- " << (msg?msg:"") << ": no socket." << LL_ENDL;
 		return;
 	}
 	// *TODO: Why doesn't this work?
@@ -81,13 +82,13 @@ void ll_debug_socket(const char* msg, apr_socket_t* apr_sock)
 	int os_sock;
 	if(APR_SUCCESS == apr_os_sock_get(&os_sock, apr_sock))
 	{
-		lldebugs << "Socket -- " << (msg?msg:"") << " on fd " << os_sock
-			<< " at " << apr_sock << llendl;
+		LL_DEBUGS() << "Socket -- " << (msg?msg:"") << " on fd " << os_sock
+			<< " at " << apr_sock << LL_ENDL;
 	}
 	else
 	{
-		lldebugs << "Socket -- " << (msg?msg:"") << " no fd "
-			<< " at " << apr_sock << llendl;
+		LL_DEBUGS() << "Socket -- " << (msg?msg:"") << " no fd "
+			<< " at " << apr_sock << LL_ENDL;
 	}
 #endif
 }
@@ -165,13 +166,13 @@ LLSocket::ptr_t LLSocket::create(apr_pool_t* pool, EType type, U16 port)
 			rv.reset();
 			return rv;
 		}
-		lldebugs << "Bound " << ((DATAGRAM_UDP == type) ? "udp" : "tcp")
-				 << " socket to port: " << sa->port << llendl;
+		LL_DEBUGS() << "Bound " << ((DATAGRAM_UDP == type) ? "udp" : "tcp")
+				 << " socket to port: " << sa->port << LL_ENDL;
 		if(STREAM_TCP == type)
 		{
 			// If it's a stream based socket, we need to tell the OS
 			// to keep a queue of incoming connections for ACCEPT.
-			lldebugs << "Setting listen state for socket." << llendl;
+			LL_DEBUGS() << "Setting listen state for socket." << LL_ENDL;
 			status = apr_socket_listen(
 				socket,
 				LL_DEFAULT_LISTEN_BACKLOG);
@@ -296,10 +297,10 @@ LLIOSocketReader::LLIOSocketReader(LLSocket::ptr_t socket) :
 
 LLIOSocketReader::~LLIOSocketReader()
 {
-	//lldebugs << "Destroying LLIOSocketReader" << llendl;
+	//LL_DEBUGS() << "Destroying LLIOSocketReader" << LL_ENDL;
 }
 
-static LLFastTimer::DeclareTimer FTM_PROCESS_SOCKET_READER("Socket Reader");
+static LLTrace::BlockTimerStatHandle FTM_PROCESS_SOCKET_READER("Socket Reader");
 
 // virtual
 LLIOPipe::EStatus LLIOSocketReader::process_impl(
@@ -309,7 +310,7 @@ LLIOPipe::EStatus LLIOSocketReader::process_impl(
 	LLSD& context,
 	LLPumpIO* pump)
 {
-	LLFastTimer t(FTM_PROCESS_SOCKET_READER);
+	LL_RECORD_BLOCK_TIME(FTM_PROCESS_SOCKET_READER);
 	PUMP_DEBUG;
 	if(!mSource) return STATUS_PRECONDITION_NOT_MET;
 	if(!mInitialized)
@@ -321,8 +322,8 @@ LLIOPipe::EStatus LLIOSocketReader::process_impl(
 		if(pump)
 		{
 			PUMP_DEBUG;
-			lldebugs << "Initializing poll descriptor for LLIOSocketReader."
-					 << llendl;
+			LL_DEBUGS() << "Initializing poll descriptor for LLIOSocketReader."
+					 << LL_ENDL;
 			apr_pollfd_t poll_fd;
 			poll_fd.p = NULL;
 			poll_fd.desc_type = APR_POLL_SOCKET;
@@ -349,7 +350,7 @@ LLIOPipe::EStatus LLIOSocketReader::process_impl(
 		status = apr_socket_recv(mSource->getSocket(), read_buf, &len);
 		buffer->append(channels.out(), (U8*)read_buf, len);
 	} while((APR_SUCCESS == status) && (READ_BUFFER_SIZE == len));
-	lldebugs << "socket read status: " << status << llendl;
+	LL_DEBUGS() << "socket read status: " << status << LL_ENDL;
 	LLIOPipe::EStatus rv = STATUS_OK;
 
 	PUMP_DEBUG;
@@ -396,10 +397,10 @@ LLIOSocketWriter::LLIOSocketWriter(LLSocket::ptr_t socket) :
 
 LLIOSocketWriter::~LLIOSocketWriter()
 {
-	//lldebugs << "Destroying LLIOSocketWriter" << llendl;
+	//LL_DEBUGS() << "Destroying LLIOSocketWriter" << LL_ENDL;
 }
 
-static LLFastTimer::DeclareTimer FTM_PROCESS_SOCKET_WRITER("Socket Writer");
+static LLTrace::BlockTimerStatHandle FTM_PROCESS_SOCKET_WRITER("Socket Writer");
 // virtual
 LLIOPipe::EStatus LLIOSocketWriter::process_impl(
 	const LLChannelDescriptors& channels,
@@ -408,7 +409,7 @@ LLIOPipe::EStatus LLIOSocketWriter::process_impl(
 	LLSD& context,
 	LLPumpIO* pump)
 {
-	LLFastTimer t(FTM_PROCESS_SOCKET_WRITER);
+	LL_RECORD_BLOCK_TIME(FTM_PROCESS_SOCKET_WRITER);
 	PUMP_DEBUG;
 	if(!mDestination) return STATUS_PRECONDITION_NOT_MET;
 	if(!mInitialized)
@@ -420,8 +421,8 @@ LLIOPipe::EStatus LLIOSocketWriter::process_impl(
 		if(pump)
 		{
 			PUMP_DEBUG;
-			lldebugs << "Initializing poll descriptor for LLIOSocketWriter."
-					 << llendl;
+			LL_DEBUGS() << "Initializing poll descriptor for LLIOSocketWriter."
+					 << LL_ENDL;
 			apr_pollfd_t poll_fd;
 			poll_fd.p = NULL;
 			poll_fd.desc_type = APR_POLL_SOCKET;
@@ -547,7 +548,7 @@ LLIOServerSocket::LLIOServerSocket(
 
 LLIOServerSocket::~LLIOServerSocket()
 {
-	//lldebugs << "Destroying LLIOServerSocket" << llendl;
+	//LL_DEBUGS() << "Destroying LLIOServerSocket" << LL_ENDL;
 }
 
 void LLIOServerSocket::setResponseTimeout(F32 timeout_secs)
@@ -555,7 +556,7 @@ void LLIOServerSocket::setResponseTimeout(F32 timeout_secs)
 	mResponseTimeout = timeout_secs;
 }
 
-static LLFastTimer::DeclareTimer FTM_PROCESS_SERVER_SOCKET("Server Socket");
+static LLTrace::BlockTimerStatHandle FTM_PROCESS_SERVER_SOCKET("Server Socket");
 // virtual
 LLIOPipe::EStatus LLIOServerSocket::process_impl(
 	const LLChannelDescriptors& channels,
@@ -564,11 +565,11 @@ LLIOPipe::EStatus LLIOServerSocket::process_impl(
 	LLSD& context,
 	LLPumpIO* pump)
 {
-	LLFastTimer t(FTM_PROCESS_SERVER_SOCKET);
+	LL_RECORD_BLOCK_TIME(FTM_PROCESS_SERVER_SOCKET);
 	PUMP_DEBUG;
 	if(!pump)
 	{
-		llwarns << "Need a pump for server socket." << llendl;
+		LL_WARNS() << "Need a pump for server socket." << LL_ENDL;
 		return STATUS_ERROR;
 	}
 	if(!mInitialized)
@@ -577,8 +578,8 @@ LLIOPipe::EStatus LLIOServerSocket::process_impl(
 		// This segment sets up the pump so that we do not call
 		// process again until we have an incoming read, aka connect()
 		// from a remote host.
-		lldebugs << "Initializing poll descriptor for LLIOServerSocket."
-				 << llendl;
+		LL_DEBUGS() << "Initializing poll descriptor for LLIOServerSocket."
+				 << LL_ENDL;
 		apr_pollfd_t poll_fd;
 		poll_fd.p = NULL;
 		poll_fd.desc_type = APR_POLL_SOCKET;
@@ -593,7 +594,7 @@ LLIOPipe::EStatus LLIOServerSocket::process_impl(
 
 	// we are initialized, and told to process, so we must have a
 	// socket waiting for a connection.
-	lldebugs << "accepting socket" << llendl;
+	LL_DEBUGS() << "accepting socket" << LL_ENDL;
 
 	PUMP_DEBUG;
 	apr_pool_t* new_pool = NULL;
@@ -638,12 +639,12 @@ LLIOPipe::EStatus LLIOServerSocket::process_impl(
 		}
 		else
 		{
-			llwarns << "Unable to build reactor to socket." << llendl;
+			LL_WARNS() << "Unable to build reactor to socket." << LL_ENDL;
 		}
 	}
 	else
 	{
-		llwarns << "Unable to create linden socket." << llendl;
+		LL_WARNS() << "Unable to create linden socket." << LL_ENDL;
 	}
 
 	PUMP_DEBUG;
@@ -683,7 +684,7 @@ LLIODataSocket::LLIODataSocket(
 	if(ll_apr_warn_status(status)) return;
 	if(sa->port)
 	{
-		lldebugs << "Bound datagram socket to port: " << sa->port << llendl;
+		LL_DEBUGS() << "Bound datagram socket to port: " << sa->port << LL_ENDL;
 		mPort = sa->port;
 	}
 	else

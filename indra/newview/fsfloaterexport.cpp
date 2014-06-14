@@ -32,7 +32,7 @@
 
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
-#include "llagentconstants.h"
+//#include "llagentconstants.h"
 #include "llagentdata.h"
 #include "llavatarnamecache.h"
 #include "llbufferstream.h"
@@ -63,6 +63,8 @@
 #include "fsexportperms.h"
 
 #include "llfloaterreg.h"
+#include "llappviewer.h"
+
 #include <boost/algorithm/string_regex.hpp>
 
 const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
@@ -1103,7 +1105,7 @@ void FSFloaterObjectExport::onClickExport()
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp")))
 	{
-		llinfos << "User closed the filepicker, aborting export!" << llendl;
+		LL_INFOS() << "User closed the filepicker, aborting export!" << LL_ENDL;
 		return;
 	}
 	mFilename = file_picker.getFirstFile();

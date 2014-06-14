@@ -40,10 +40,10 @@ bool LLScriptLibrary::loadLibrary(const std::string& filename)
 	LLXMLNodePtr xml_root;
 	if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
 	{
-		llwarns << "Could not read the script library (" << filename << ")" << llendl;
+		LL_WARNS() << "Could not read the script library (" << filename << ")" << LL_ENDL;
 		return false;
 	}
-	llinfos << "Loading script library at: " << filename << llendl;
+	LL_INFOS() << "Loading script library at: " << filename << LL_ENDL;
 	for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
 	{
 		if (pNode->hasName("functions"))

@@ -260,7 +260,7 @@
      height="23"
      layout="topleft"
      left_pad="5"
-     max_length="4096"
+     max_length_bytes="4096"
      name="log_path_string"
      top_delta="-5"
      width="285">

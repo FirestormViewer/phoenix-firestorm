@@ -48,7 +48,7 @@
 #include  <time.h>
 #include "llavatarpropertiesprocessor.h"
 #include "lldateutil.h"
-#include "llavatarconstants.h"
+//#include "llavatarconstants.h"
 #include "indra_constants.h"
 #include "llnotificationsutil.h"
 #include "llvoiceclient.h"
@@ -219,7 +219,10 @@ void LLAvatarListItem::onVolumeChange(const LLSD& data)
 	LLVoiceClient::getInstance()->setUserVolume(mAvatarId, volume);
 }
 
-void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
+// <FS:Ansariel> LL refactoring error
+//void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
+void LLAvatarListItem::onVisibilityChange ( BOOL new_visibility )
+// </FS:Ansariel>
 {
     //Adjust positions of icons (info button etc) when 
     //speaking indicator visibility was changed/toggled while panel was closed (not visible)

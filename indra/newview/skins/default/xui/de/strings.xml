@@ -74,6 +74,7 @@ Bandbreite: [BANDWIDTH]
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutTraffic">
 		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
@@ -592,9 +593,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ReleaseNotes">
 		Versionshinweise
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
@@ -1414,7 +1417,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InventoryNoTexture">
 		Sie haben keine Kopie dieser Textur in Ihrem Inventar.
 	</string>
-	<string name="InventoryInboxNoItems">
+  <string name="InventoryInboxNoItems">
 		Einkäufe aus dem Marktplatz erscheinen hier. Sie können diese dann zur Verwendung in Ihr Inventar ziehen.
 	</string>
 	<string name="MarketplaceURL">
@@ -1488,6 +1491,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="Open landmarks">
 		Landmarken öffnen
+	</string>
+	<string name="Unconstrained">
+		Variabel
 	</string>
 	<string name="no_transfer" value=" (kein Transferieren)"/>
 	<string name="no_modify" value=" (kein Bearbeiten)"/>
@@ -1894,6 +1900,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="CompileQueueDownloadedCompiling">
 		Heruntergeladen, wird kompiliert
+	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Kein Skriptkompilierungsdienst verfügbar
 	</string>
 	<string name="CompileQueueScriptNotFound">
 		Skript wurde auf Server nicht gefunden.

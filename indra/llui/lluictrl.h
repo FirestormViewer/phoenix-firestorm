@@ -231,7 +231,6 @@ public:
 
 	// ## Zi: Made this virtual to be able to override it, so we can fix the IM focus issue
 	virtual BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
-	BOOL	focusLastItem(BOOL prefer_text_fields = FALSE);
 
 	// Non Virtuals
 	LLHandle<LLUICtrl> getHandle() const { return getDerivedHandle<LLUICtrl>(); }
@@ -326,8 +325,6 @@ private:
 	BOOL			mTentative;
 
 	ETypeTransparency mTransparencyType;
-
-	class DefaultTabGroupFirstSorter;
 
 	// <FS:Zi> Decides if this UI control should be visible according to ControlVisibility
 	void decideVisibility();

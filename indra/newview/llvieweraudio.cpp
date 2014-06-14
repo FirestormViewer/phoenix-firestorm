@@ -37,6 +37,7 @@
 #include "llviewerwindow.h"
 #include "llvoiceclient.h"
 #include "llviewermedia.h"
+#include "llviewerregion.h"
 #include "llprogressview.h"
 #include "llcallbacklist.h"
 #include "llstartup.h"
@@ -90,7 +91,7 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 		/// <FS:CR> FIRE-8419 - Don't return here. It can keep the user from toggling audio streams off/on.
 		/// We handle identical stream URIs with FIRE-7093 anyways.
 		//return;
-		lldebugs << "Identical URI's: " << mNextStreamURI << " and " << streamURI << llendl;
+		LL_DEBUGS() << "Identical URI's: " << mNextStreamURI << " and " << streamURI << LL_ENDL;
 		// </FS:CR>
 	}
 
@@ -107,7 +108,12 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 
 	switch (mFadeState)
 	{
-		case FADE_IDLE:
+	case FADE_IDLE:
+		if (!gAudiop)
+		{
+			LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+			break;
+		}
 		// If a stream is playing fade it out first
 		if (!gAudiop->getInternetStreamURL().empty())
 		{
@@ -129,18 +135,18 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 			break;
 		}
 
-		case FADE_OUT:
-			startFading();
-			registerIdleListener();
-			break;
+	case FADE_OUT:
+		startFading();
+		registerIdleListener();
+		break;
 
-		case FADE_IN:
-			registerIdleListener();
-			break;
+	case FADE_IN:
+		registerIdleListener();
+		break;
 
-		default:
-			llwarns << "Unknown fading state: " << mFadeState << llendl;
-			break;
+	default:
+		LL_WARNS() << "Unknown fading state: " << mFadeState << LL_ENDL;
+		break;
 	}
 }
 
@@ -171,19 +177,26 @@ bool LLViewerAudio::onIdleUpdate()
 		// we have finished the current fade operation
 		if (mFadeState == FADE_OUT)
 		{
-			// Clear URI
-			gAudiop->startInternetStream(LLStringUtil::null);
-			gAudiop->stopInternetStream();
+			if (gAudiop)
+			{
+				// Clear URI
+				gAudiop->startInternetStream(LLStringUtil::null);
+				gAudiop->stopInternetStream();
+			}
 				
 			if (!mNextStreamURI.empty())
 			{
 				mFadeState = FADE_IN;
 
-				LLStreamingAudioInterface *stream = gAudiop->getStreamingAudioImpl();
-				if(stream && stream->supportsAdjustableBufferSizes())
-					stream->setBufferSizes(gSavedSettings.getU32("FMODExStreamBufferSize"),gSavedSettings.getU32("FMODExDecodeBufferSize"));
+				if (gAudiop)
+				{
+					LLStreamingAudioInterface *stream = gAudiop->getStreamingAudioImpl();
+					if(stream && stream->supportsAdjustableBufferSizes())
+						stream->setBufferSizes(gSavedSettings.getU32("FMODExStreamBufferSize"),gSavedSettings.getU32("FMODExDecodeBufferSize"));
 
-				gAudiop->startInternetStream(mNextStreamURI);
+					gAudiop->startInternetStream(mNextStreamURI);
+				}
+
 				startFading();
 			}
 			else
@@ -195,7 +208,7 @@ bool LLViewerAudio::onIdleUpdate()
 		}
 		else if (mFadeState == FADE_IN)
 		{
-			if (mNextStreamURI != gAudiop->getInternetStreamURL())
+			if (gAudiop && mNextStreamURI != gAudiop->getInternetStreamURL())
 			{
 				mFadeState = FADE_OUT;
 				startFading();
@@ -226,9 +239,12 @@ void LLViewerAudio::stopInternetStreamWithAutoFade()
 	mFadeState = FADE_IDLE;
 	mNextStreamURI = LLStringUtil::null;
 	mDone = true;
-
-	gAudiop->startInternetStream(LLStringUtil::null);
-	gAudiop->stopInternetStream();
+	
+	if (gAudiop)
+	{
+		gAudiop->startInternetStream(LLStringUtil::null);
+		gAudiop->stopInternetStream();
+	}
 }
 
 void LLViewerAudio::startFading()
@@ -294,7 +310,7 @@ F32 LLViewerAudio::getFadeVolume()
 
 void LLViewerAudio::onTeleportStarted()
 {
-	if (!LLViewerAudio::getInstance()->getForcedTeleportFade())
+	if (gAudiop && !LLViewerAudio::getInstance()->getForcedTeleportFade())
 	{
 		// Even though the music was turned off it was starting up (with autoplay disabled) occasionally
 		// after a failed teleport or after an intra-parcel teleport.  Also, the music sometimes was not
@@ -333,7 +349,7 @@ void LLViewerAudio::onTeleportFailed()
 		if (parcel)
 		{
 			mNextStreamURI = parcel->getMusicURL();
-			llinfos << "Teleport failed -- setting music stream to " << mNextStreamURI << llendl;
+			LL_INFOS() << "Teleport failed -- setting music stream to " << mNextStreamURI << LL_ENDL;
 		}
 	}
 	mWasPlaying = false;
@@ -351,7 +367,7 @@ void LLViewerAudio::onTeleportFinished(const LLVector3d& pos, const bool& local)
 		if (parcel)
 		{
 			mNextStreamURI = parcel->getMusicURL();
-			llinfos << "Intraparcel teleport -- setting music stream to " << mNextStreamURI << llendl;
+			LL_INFOS() << "Intraparcel teleport -- setting music stream to " << mNextStreamURI << LL_ENDL;
 		}
 	}
 	mWasPlaying = false;
@@ -361,7 +377,7 @@ void init_audio()
 {
 	if (!gAudiop) 
 	{
-		llwarns << "Failed to create an appropriate Audio Engine" << llendl;
+		LL_WARNS() << "Failed to create an appropriate Audio Engine" << LL_ENDL;
 		return;
 	}
 	LLVector3d lpos_global = gAgentCamera.getCameraPositionGlobal();
@@ -454,9 +470,10 @@ void audio_update_volume(bool force_update)
 	}
 	F32 mute_volume = mute_audio ? 0.0f : 1.0f;
 
-	// Sound Effects
 	if (gAudiop) 
 	{
+		// Sound Effects
+
 		gAudiop->setMasterGain ( master_volume );
 
 		// <FS:Ansariel> Replace frequently called gSavedSettings
@@ -516,11 +533,9 @@ void audio_update_volume(bool force_update)
 								  muteAmbient ? 0.f : (F32)audioLevelAmbient);
 
 		// <FS:Ansariel>
-	}
 
-	// Streaming Music
-	if (gAudiop) 
-	{
+		// Streaming Music
+
 		if (!progress_view_visible && LLViewerAudio::getInstance()->getForcedTeleportFade())
 		{
 			LLViewerAudio::getInstance()->setWasPlaying(!gAudiop->getInternetStreamURL().empty());
@@ -656,6 +671,12 @@ void audio_update_wind(bool force_update)
 			// initialize wind volume (force_update) by using large volume_delta
 			// which is sufficient to completely turn off or turn on wind noise
 			volume_delta = 1.f;
+		}
+
+		if (!gAudiop)
+		{
+			LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+			return;
 		}
 
 		// mute wind when not flying

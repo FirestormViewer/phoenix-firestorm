@@ -63,13 +63,13 @@ BOOL FSFloaterAddToContactSet::postBuild()
 	{
 		LLStringUtil::format_map_t args;
 		args["COUNT"] = llformat("%d", mAgentIDs.size());
-		childSetText("textfield", getString("text_add_multiple", args));
+		childSetValue("textfield", LLSD( getString("text_add_multiple", args) ) );
 	}
 	else
 	{
 		LLStringUtil::format_map_t args;
 		args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
-		childSetText("textfield", getString("text_add_single", args));
+		childSetValue("textfield", LLSD( getString("text_add_single", args)) );
 	}
 	
 	mContactSetsCombo = getChild<LLComboBox>("contact_sets");

@@ -439,9 +439,11 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="ReleaseNotes">
 		Notas de versão
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Carregando...
 	</string>
@@ -1219,7 +1221,8 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="InventoryInboxNoItems">
 		Suas compras do Marketplace aparecerão aqui. Depois, você poderá arrastá-las para seu inventário para usá-las.
 	</string>
-	<string name="MarketplaceURL">
+  <string name="Unconstrained">Sem limites</string>
+  <string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
