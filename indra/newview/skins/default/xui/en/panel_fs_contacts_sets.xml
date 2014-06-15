@@ -127,7 +127,7 @@
 	 tool_tip="Offer a teleport to your current location"
 	 width="80" />
 	<button
-	 top_pad="25"
+	 top_pad="10"
 	 follows="top|right"
 	 layout="topleft"
 	 height="22"
