@@ -23,5 +23,6 @@
 	<menu_item_check label="Powiadom o wyjściu osoby z zasięgu regionu" name="RadarReportSimRangeLeave"/>
 	<menu_item_check label="Wysyłaj alerty wejść do skryptów" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Wysyłaj alerty wyjść do skryptów" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="Wspomaganie radaru za pomocą Mostu LSL" name="FSRadarEnhanceByBridge"/>
 	<menu_item_call label="Pokaż zablokowanych Rezydentów i obiekty" name="show_blocked_list"/>
 </toggleable_menu>

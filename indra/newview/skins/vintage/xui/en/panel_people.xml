@@ -249,6 +249,19 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						follows="left|top"/>
 
 					<check_box
+						enabled_control="UseLSLBridge"
+						label="Enhance radar with LSL-Client Bridge"
+						tool_tip="If this is enabled, radar functions responsible for determining avatar locations at high altitudes are assisted by the LSL-Client Bridge, particularly when they're beyond draw distance."
+						left="0"
+						top_pad="2"
+						name="FSRadarEnhanceByBridge"
+						control_name="FSRadarEnhanceByBridge"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
+
+					<check_box
 						label="Color names based on distance"
 						left="0"
 						top_pad="2"

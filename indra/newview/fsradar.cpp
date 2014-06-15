@@ -177,6 +177,7 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> sFSLegacyRadarFriendColoring(gSavedSettings, "FSLegacyRadarFriendColoring");
 	static LLCachedControl<bool> sRadarColorNamesByDistance(gSavedSettings, "FSRadarColorNamesByDistance", false);
 	static LLCachedControl<bool> RadarShowMutedAndDerendered(gSavedSettings, "FSRadarShowMutedAndDerendered");
+	static LLCachedControl<bool> sFSRadarEnhanceByBridge(gSavedSettings, "FSRadarEnhanceByBridge");
 	bool sUseLSLBridge = FSLSLBridge::instance().canUseBridge();
 
 	F32 drawRadius(RenderFarClip);
@@ -329,7 +330,7 @@ void FSRadar::updateRadarList()
 			}
 			
 			//schedule offset requests, if needed
-			if (sUseLSLBridge && (now > (mRadarLastBulkOffsetRequestTime + FSRADAR_COARSE_OFFSET_INTERVAL)) && (now > lastZOffsetTime + FSRADAR_COARSE_OFFSET_INTERVAL))
+			if (sUseLSLBridge && sFSRadarEnhanceByBridge && (now > (mRadarLastBulkOffsetRequestTime + FSRADAR_COARSE_OFFSET_INTERVAL)) && (now > lastZOffsetTime + FSRADAR_COARSE_OFFSET_INTERVAL))
 			{
 				mRadarOffsetRequests.push_back(avId);
 				ent->mLastZOffsetTime = now;
