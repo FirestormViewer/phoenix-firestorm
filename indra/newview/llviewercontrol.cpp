@@ -743,7 +743,7 @@ static void handleSetPoseStandLock(const LLSD& newvalue)
 // <FS:TT> Client LSL Bridge
 static void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
-	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
+	FSLSLBridge::instance().viewerToLSL("UseLSLFlightAssist|" + newvalue.asString());
 }
 // </FS:TT>
 

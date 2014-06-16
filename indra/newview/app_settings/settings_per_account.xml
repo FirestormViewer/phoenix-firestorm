@@ -656,13 +656,13 @@
     <key>UseLSLFlightAssist</key>
         <map>
         <key>Comment</key>
-            <string>Use the client LSL bridge for flight boost</string>
+            <string>Use the client LSL bridge for flight boost - boost power: 0.0 (disabled), 1.0 (low), 3.0 (standard), 5.0 (high).</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
-            <string>Boolean</string>
+            <string>F32</string>
         <key>Value</key>
-            <integer>0</integer>
+            <integer>3.0</integer>
         </map>
     <key>UseMoveLock</key>
         <map>

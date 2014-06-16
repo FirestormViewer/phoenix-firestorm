@@ -33,9 +33,8 @@
     integer relockIsUserMoving = FALSE;
 
     // Flight assist
-    integer useFlightAssist = FALSE;
     integer isFlyingNow = -1;
-    float flightAssistPushForce = 3.0;
+    float flightAssistPushForce = 0.0;
     float flightAirCheckNormal = 0.5;
     float flightAirCheckSlow = 5.0;
 
@@ -109,7 +108,7 @@
         keyViewerHandshake = UNKNOWN_VIEWER;
 
         // If we were last flying reinitialize ourself
-        if (useFlightAssist)
+        if (flightAssistPushForce > 0)
         {
             flight_init();
         }
@@ -174,11 +173,11 @@
 
         if (cmd == "UseLSLFlightAssist")
         {
-            integer newstatus = llList2Integer(commandList, 1);
-            if (newstatus != useFlightAssist)
+            float speed = llList2Float(commandList, 1);
+            if (speed != flightAssistPushForce)
             {
-               useFlightAssist = newstatus;
-               if (useFlightAssist)
+               flightAssistPushForce = speed;
+               if (flightAssistPushForce > 0)
                {
                    flight_init();
                }
@@ -412,12 +411,16 @@ getScriptInfo(key target)
 
     flight_init()
     {
-        useFlightAssist = TRUE;
-        llSetTimerEvent(flightAirCheckNormal);
+        if (flightAssistPushForce > 5.0)
+        {
+            // No lightspeed please!
+            flightAssistPushForce = 5.0;
+        }
         if (llGetAttached())
         {
             request_control_perms();
         }
+        llSetTimerEvent(flightAirCheckNormal);
     }
 
     flight_hover(integer yes)
@@ -471,7 +474,7 @@ default
         // Force Movelock and Flight assist variables to false here and allow attach() to decide via initBridge(), if we're on Firestorm and login relock / flight assist can be turned off if needed.
         // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
         useMoveLock = FALSE;
-        useFlightAssist = FALSE;
+        flightAssistPushForce = 0.0;
         isFlyingNow = -1;
     }
 
@@ -492,7 +495,7 @@ default
     {
         if (i)
         {
-            if (useFlightAssist || useMoveLock)
+            if (flightAssistPushForce > 0 || useMoveLock)
             {
                 request_control_perms();
             }
@@ -524,7 +527,7 @@ default
             }
         }
 
-        if (useFlightAssist && isFlyingNow)
+        if (flightAssistPushForce > 0 && isFlyingNow)
         {
             if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {

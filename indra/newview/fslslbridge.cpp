@@ -214,12 +214,11 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		}
 
 		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
-		//updateBoolSettingValue("UseLSLFlightAssist");
 		if (!mIsFirstCallDone)
 		{
 			//on first call from bridge, confirm that we are here
 			//then check options use
-			updateBoolSettingValue("UseLSLFlightAssist");
+			viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
 			updateBoolSettingValue("UseMoveLock");
 			updateBoolSettingValue("RelockMoveLockAfterMovement");
 			mIsFirstCallDone = true;
