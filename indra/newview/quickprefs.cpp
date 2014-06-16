@@ -925,6 +925,9 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("DCPresetsCombo", enable);
 	childSetEnabled("DCPrevPreset", enable);
 	childSetEnabled("DCNextPreset", enable);
+	//<FS:TS> FIRE-13448: Quickprefs daycycle slider allows evading @setenv=n
+	childSetEnabled("WLSunPos", enable);
+	//</FS:TS> FIRE-13448
 
 	if (getIsPhototools())
 	{
