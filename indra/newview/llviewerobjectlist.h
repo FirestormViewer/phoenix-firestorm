@@ -242,6 +242,9 @@ protected:
 // <FS:ND> Remember objects we did derender. We might get object updates for them that create new instances. In those cases we kill them again.
 private:
 	std::map< LLUUID, U64 > mDerendered;
+public:
+	void resetDerenderList();
+	void addBlacklistedItem( LLUUID const & );
 // </FS:ND>
 };
 

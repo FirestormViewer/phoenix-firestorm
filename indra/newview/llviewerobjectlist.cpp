@@ -2450,3 +2450,18 @@ LLDebugBeacon::~LLDebugBeacon()
 		mHUDObject->markDead();
 	}
 }
+
+// <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
+
+void LLViewerObjectList::resetDerenderList()
+{
+	mDerendered.clear();
+}
+
+// <FS:ND> Helper function to add items from global blacklist after teleport.
+void LLViewerObjectList::addBlacklistedItem( LLUUID const &aId )
+{
+	mDerendered[ aId ] = LLTimer::getTotalSeconds().value();
+}
+
+// </FS:ND>
