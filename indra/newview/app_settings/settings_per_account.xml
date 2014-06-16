@@ -686,6 +686,28 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
+    <key>BridgeIntegrationOC</key>
+        <map>
+        <key>Comment</key>
+            <string>Allow OpenCollar protocol to enable or disable built in AO. Client LSL Bridge needs to be enabled.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
+    <key>BridgeIntegrationLM</key>
+        <map>
+        <key>Comment</key>
+            <string>Allow LockMeister protocol to enable or disable built in AO. Client LSL Bridge needs to be enabled.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>1</integer>
+        </map>
     <!-- End of Firestorm settings -->
 
     <!-- Settings imported from Exodus -->

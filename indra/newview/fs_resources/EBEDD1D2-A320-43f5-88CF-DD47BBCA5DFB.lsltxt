@@ -1,4 +1,4 @@
-//http bridge script v.2.12
+//http bridge script v.2.13
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -11,7 +11,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.12";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.13";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -35,10 +35,12 @@
     // Flight assist
     integer isFlyingNow = -1;
     float flightAssistPushForce = 0.0;
-    float flightAirCheckNormal = 0.5;
+    float flightAirCheckNormal = 1.0;
     float flightAirCheckSlow = 5.0;
 
     // OpenCollar/LockMeister AO interface
+    integer aoEnabledOC = FALSE;
+    integer aoEnabledLM = FALSE;
     integer aoChannelOC;
     integer aoChannelLM = -8888;
     integer aoListenerOC = -1;
@@ -132,19 +134,16 @@
         }
 
         // Set the channel for the AO OC interface
-        aoSetChannelOC();
-        // Remove previous AO listeners if present
-        if (aoListenerOC >= 0)
+        aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
+        if (aoChannelOC > 0)
         {
-            llListenRemove(aoListenerOC);
-            aoListenerOC = -1;
-            aoCollarKey = NULL_KEY;
+            aoChannelOC = -aoChannelOC;
         }
-        if (aoListenerLM >= 0)
-        {
-            llListenRemove(aoListenerLM);
-            aoListenerLM = -1;
-        }
+
+        // Remove previous AO listeners if present, enable if needed
+        integrationCheckOC();
+        integrationCheckLM();
+
     }
 
     saveNewURL(string url)
@@ -256,6 +255,7 @@
             key target = (key)llList2String(commandList, 1);
             getScriptInfo(target);
         }
+
         else if (cmd == "UseMoveLock")
         {
             //debugOutput("Parsing params: " + llList2String(commandList, 1));
@@ -271,6 +271,7 @@
                 llStopMoveToTarget();
             }
         }
+
         else if (cmd == "RelockMoveLockAfterMovement")
         {
             //debugOutput("Parsing params: " + llList2String(commandList, 1));
@@ -281,6 +282,22 @@
                 {
                     request_control_perms();
                 }
+            }
+        }
+
+        else if (cmd == "ExternalIntegration")
+        {
+            integer integrationOpenCollar = llList2Integer(commandList, 1);
+            integer integrationLockMeister = llList2Integer(commandList, 2);
+            if (integrationOpenCollar != aoEnabledOC)
+            {
+                aoEnabledOC = integrationOpenCollar;
+                integrationCheckOC();
+            }
+            if (integrationLockMeister != aoEnabledLM)
+            {
+                aoEnabledLM = integrationLockMeister;
+                integrationCheckLM();
             }
         }
 
@@ -308,42 +325,48 @@ getScriptInfo(key target)
 // OpenCollar/LockMeister AO interface functions
 //
 
-    aoSetChannelOC()
+    aoListenOC(key collarid, integer enabled)
     {
-        aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
-        if (aoChannelOC > 0)
+        llListenRemove(aoListenerOC);
+        if (enabled)
         {
-             aoChannelOC = -aoChannelOC;
+            aoListenerOC = llListen(aoChannelOC, "", collarid, "");
+            aoCollarKey = collarid;
         }
-    }
-
-    aoPingCollarOC()
-    {
-        llWhisper(aoChannelOC, "OpenCollar?");
-    }
-
-    aoListenOC(key collarid)
-    {
-        if (aoListenerOC >= 0)
+        else
         {
-            llListenRemove(aoListenerOC);
+            aoCollarKey = NULL_KEY;
         }
-        aoListenerOC = llListen(aoChannelOC, "", collarid, "");
-        aoCollarKey = collarid;
-    }
-
-    aoListenLM()
-    {
-        if (aoListenerLM >= 0)
-        {
-            llListenRemove(aoListenerLM);
-        }
-        aoListenerLM = llListen(aoChannelLM, "", NULL_KEY, "");
     }
 
     aoState(string newstate)
     {
         llOwnerSay("<clientAO state="+newstate+">");
+    }
+
+    integrationCheckOC()
+    {
+        if (aoEnabledOC)
+        {
+            aoListenOC(NULL_KEY, TRUE);
+            llWhisper(aoChannelOC, "OpenCollar?");
+        }
+        else
+        {
+            aoListenOC(NULL_KEY, FALSE);
+        }
+    }
+
+    integrationCheckLM()
+    {
+        if (aoEnabledLM)
+        {
+            aoListenerLM = llListen(aoChannelLM, "", NULL_KEY, "");
+        }
+        else
+        {
+            llListenRemove(aoListenerLM);
+        }
     }
 
 //
@@ -456,9 +479,6 @@ default
     {
         makeSane();
         initBridge();
-        aoListenOC(NULL_KEY);
-        aoListenLM();
-        aoPingCollarOC();
 
         //<DEBUG>
         //debug = TRUE;
@@ -471,11 +491,13 @@ default
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
         llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_TEMP_ON_REZ, TRUE]);
-        // Force Movelock and Flight assist variables to false here and allow attach() to decide via initBridge(), if we're on Firestorm and login relock / flight assist can be turned off if needed.
+        // Force Movelock, Flight Assist and external integration variables to false here and allow attach() to decide via initBridge(), if we're on Firestorm and they need to be updated / enabled.
         // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
         useMoveLock = FALSE;
         flightAssistPushForce = 0.0;
         isFlyingNow = -1;
+        aoEnabledOC = FALSE;
+        aoEnabledLM = FALSE;
     }
 
     attach(key k)
@@ -485,9 +507,6 @@ default
         {
             tryHandshakeOnce = TRUE;
             initBridge();
-            aoListenOC(NULL_KEY);
-            aoPingCollarOC();
-            aoListenLM();
         }
     }
 
@@ -660,11 +679,11 @@ default
             if ((aoCollarKey == NULL_KEY) &&    // No collar paired yet
                 (msg == "OpenCollar=Yes"))      // A collar is saying hello
             {
-                aoListenOC(senderID);     // Pair with it
+                aoListenOC(senderID, TRUE);     // Pair with it
             }
             else if (msg == "OpenCollar=No")    // Collar signing off
             {
-                aoListenOC(NULL_KEY);     // Unpair with it
+                aoListenOC(NULL_KEY, TRUE);     // Unpair with it
             }
             else if ((zhaoPos = llSubStringIndex(msg, "ZHAO_")) >= 0)
             {

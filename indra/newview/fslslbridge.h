@@ -63,6 +63,7 @@ public:
 
 	bool updateBoolSettingValue(const std::string& msgVal);
 	bool updateBoolSettingValue(const std::string& msgVal, bool contentVal);
+	void updateIntegrations();
 	
 	void initBridge();
 	void recreateBridge();

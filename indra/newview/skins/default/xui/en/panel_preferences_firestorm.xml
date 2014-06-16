@@ -859,6 +859,39 @@
          width="150"
          tool_tip="Change the scale of the shape used for the Phoenix Shaped Beam" />
 
+        <text
+         type="string"
+         left="5"
+         top_pad="90"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="BridgeProtocols"
+         width="500">
+            LSL-Client Bridge external protocols integration:
+        </text>
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Allow OpenCollar protocol to enable or disable built in AO"
+         left="15"
+         top_pad="10"
+         name="BridgeIntegrationOC"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationOC" />
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Allow LockMeister protocol to enable or disable built in AO"
+         left="15"
+         top_pad="2"
+         name="BridgeIntegrationLM"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationLM" />
+
     </panel>
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   <!--CmdLine1-->

@@ -758,6 +758,13 @@ static void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue)
 }
 // </FS:PP>
 
+// <FS:PP> External integrations (OC, LM etc.) for Bridge
+static void handleExternalIntegrationsOptionChanged()
+{
+	FSLSLBridge::instance().updateIntegrations();
+}
+// </FS:PP>
+
 static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 {
 	LLFloaterTools* build_tools = LLFloaterReg::findTypedInstance<LLFloaterTools>("build");
@@ -958,6 +965,11 @@ void settings_setup_listeners()
 	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("RelockMoveLockAfterMovement")->getCommitSignal()->connect(boost::bind(&handleMovelockAfterMoveOptionChanged, _2));
 	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
+
+	// <FS:PP> External integrations (OC, LM etc.) for Bridge
+	gSavedPerAccountSettings.getControl("BridgeIntegrationOC")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
+	gSavedPerAccountSettings.getControl("BridgeIntegrationLM")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
+
 }
 
 #if TEST_CACHED_CONTROL

@@ -67,10 +67,10 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 12;
+const U32 FS_BRIDGE_MINOR_VERSION = 13;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.12
+//current script version is 2.13
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -221,6 +221,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
 			updateBoolSettingValue("UseMoveLock");
 			updateBoolSettingValue("RelockMoveLockAfterMovement");
+			updateIntegrations();
 			mIsFirstCallDone = true;
 
 			// <FS:PP> Inform user, if movelock was enabled at login
@@ -321,6 +322,15 @@ bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool content
 	}
 
 	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
+}
+
+void FSLSLBridge::updateIntegrations()
+{
+	viewerToLSL(llformat(
+		"ExternalIntegration|%d|%d",
+		gSavedPerAccountSettings.getBOOL("BridgeIntegrationOC"),
+		gSavedPerAccountSettings.getBOOL("BridgeIntegrationLM")
+	), new FSLSLBridgeRequestResponder());
 }
 
 //

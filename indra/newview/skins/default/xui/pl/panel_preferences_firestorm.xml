@@ -101,6 +101,11 @@
         <button name="custom_beam_btn" label="Utwórz nowy" tool_tip="Dopasuj kształt wiązki" />
         <button name="refresh_beams" label="Odśwież listę" tool_tip="Odśwież listę wiązek" />
         <slider name="FSBeamShapeScale" label="Rozm.:" tool_tip="Zmień rozmiar użytego kształtu wiązki" />
+        <text name="BridgeProtocols">
+            Integracja Mostu LSL z zewnętrznymi protokołami:
+        </text>
+        <check_box label="Zezwól protokołowi OpenCollar na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationOC" />
+        <check_box label="Zezwól protokołowi LockMeister na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationLM" />
     </panel>
     <panel label="Polecenia 1" name="tab-CmdLine1">
         <check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />
