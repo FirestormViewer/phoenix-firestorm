@@ -284,16 +284,36 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
 	LLViewerCamera* camera = LLViewerCamera::getInstance();
 	LLViewerRegion *regionp = getRegion();
 	S32 end = (S32) mParticles.size();
-	for (S32 i = 0 ; i < (S32)mParticles.size();)
+
+	// <FS:ND> Instead of walking the current particles back to front, we first make a copy, then sort by adress and refill mParticles as needed.
+	mParticlesTemp.swap( mParticles );
+	mParticles.erase( mParticles.begin(), mParticles.end() );
+	std::sort( mParticlesTemp.begin(), mParticlesTemp.end() );
+
+	// for (S32 i = 0 ; i < (S32)mParticles.size(); )
+	for (S32 i = 0 ; i < (S32)mParticlesTemp.size(); ++i )
+	// </FS:ND>
 	{
-		LLVector3 a(0.f, 0.f, 0.f);
-		LLViewerPart* part = mParticles[i] ;
+		// LLVector3 a(0.f, 0.f, 0.f); // <FS:ND/> Unused
+		LLViewerPart* part = mParticlesTemp[i] ;
 
 		dt = lastdt + mSkippedTime - part->mSkipOffset;
 		part->mSkipOffset = 0.f;
 
 		// Update current time
 		const F32 cur_time = part->mLastUpdateTime + dt;
+
+		// <FS:ND> Bail out as soon as possible to avoid all the complicated work down.
+		if( cur_time > part->mMaxAge || LLViewerPart::LL_PART_DEAD_MASK == part->mFlags )
+		{
+			if (part->mVPCallback)
+				(*part->mVPCallback)(*part, dt);
+
+			delete part ;
+			continue;
+		}
+		// </FS:ND>
+
 		const F32 frac = cur_time / part->mMaxAge;
 
 		// "Drift" the object based on the source object
@@ -397,26 +417,34 @@ void LLViewerPartGroup::updateParticles(const F32 lastdt)
 		part->mLastUpdateTime = cur_time;
 
 
+		// <FS:ND> We did that above
 		// Kill dead particles (either flagged dead, or too old)
-		if ((part->mLastUpdateTime > part->mMaxAge) || (LLViewerPart::LL_PART_DEAD_MASK == part->mFlags))
-		{
-			mParticles[i] = mParticles.back() ;
-			mParticles.pop_back() ;
-			delete part ;
-		}
-		else 
+		// if ((part->mLastUpdateTime > part->mMaxAge) || (LLViewerPart::LL_PART_DEAD_MASK == part->mFlags))
+		// {
+		//	mParticles[i] = mParticles.back() ;
+		//	mParticles.pop_back() ;
+		//	delete part ;
+		// }
+		// else 
+		// </FS:ND>
 		{
 			F32 desired_size = calc_desired_size(camera, part->mPosAgent, part->mScale);
 			if (!posInGroup(part->mPosAgent, desired_size))
 			{
 				// Transfer particles between groups
 				LLViewerPartSim::getInstance()->put(part) ;
-				mParticles[i] = mParticles.back() ;
-				mParticles.pop_back() ;
+
+				// <FS:ND> No need for any transfer, just to not add to mParticles.
+				// mParticles[i] = mParticles.back() ;
+				// mParticles.pop_back() ;
+				// </FS:ND>
 			}
 			else
 			{
-				i++ ;
+				// <FS:ND> Keep current particle in this group.
+				// i++ ;
+				mParticles.push_back( part );
+				// </FS:ND>
 			}
 		}
 	}
@@ -892,3 +920,76 @@ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
 	}
 }
 
+// <FS:ND> Object pool for LLViewerPart
+U8 *sParts;
+U8 *sPartsEnd;
+U32 sFree[ LL_MAX_PARTICLE_COUNT/32 ];
+U32 sPartSize;
+
+S32 findFreeIndex()
+{
+	for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
+	{
+		if( sFree[i]  )
+		{
+			U32 val = sFree[i];
+			U32 mask = 1;
+			int j(0);
+			for( j = 0; j < 32; ++j )
+			{
+				if( mask & val )
+				{
+					mask = ~mask;
+					break;
+				}
+
+				mask <<= 1;
+			}
+
+			sFree[ i ] = val & mask;
+			return i*32+j;
+		}
+	}
+	return -1;
+}
+
+void* LLViewerPart::operator new(size_t size)
+{
+	if( !sParts )
+	{
+		sPartSize = sizeof( LLViewerPart );
+		sPartSize += 0xF;
+		sPartSize &= ~0xF;
+		sParts = reinterpret_cast<U8*>( ll_aligned_malloc<16>( sPartSize * LL_MAX_PARTICLE_COUNT ) );
+		for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
+			sFree[ i ] = 0xFFFFFFFF;
+
+		sPartsEnd = sParts + sPartSize * LL_MAX_PARTICLE_COUNT;
+	}
+
+	S32 i = findFreeIndex();
+	if( i < 0 )
+		return new char[ size ];
+
+	return reinterpret_cast< void* >( sParts + sPartSize*i );
+}
+
+void LLViewerPart::operator delete(void* ptr)
+{
+	if( ptr < sParts || ptr >= sPartsEnd )
+	{
+		delete []  (char*)ptr;
+		return;
+	}
+
+	U32 diff = static_cast<U32>( reinterpret_cast<U8*>(ptr) - sParts );
+	diff /= sPartSize;
+
+	U32 i = (diff & ~0x0000001F) / 32;
+	U32 j =  diff &  0x0000001F;
+
+	U32 mask = 1 << j;
+
+	sFree[ i ] |= mask;
+}
+// </FS:ND>
