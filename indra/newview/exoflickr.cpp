@@ -72,8 +72,8 @@ void exoFlickr::request(const std::string& method, const LLSD& args, response_ca
 	params["format"] = "json";
 	params["method"] = method;
 	params["nojsoncallback"] = 1;
-	signRequest(params, "GET", "http://api.flickr.com/services/rest/");
-	LLHTTPClient::get("http://api.flickr.com/services/rest/", params, new exoFlickrResponse(callback));
+	signRequest(params, "GET", "https://api.flickr.com/services/rest/");
+	LLHTTPClient::get("https://api.flickr.com/services/rest/", params, new exoFlickrResponse(callback));
 }
 
 void exoFlickr::signRequest(LLSD& params, std::string method, std::string url)
@@ -96,7 +96,7 @@ void exoFlickr::signRequest(LLSD& params, std::string method, std::string url)
 void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_callback_t callback)
 {
 	LLSD params(args);
-	signRequest(params, "POST", "http://api.flickr.com/services/upload/");
+	signRequest(params, "POST", "https://up.flickr.com/services/upload/");
 
 	// It would be nice if there was an easy way to do multipart form data. Oh well.
 	const std::string boundary = "------------abcdefgh012345";
@@ -147,7 +147,7 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	// <FS:TS> Patch from Exodus:
 	// The default timeout (one minute) isn't enough for a large picture.
 	// 10 minutes is arbitrary, but should be long enough.
-	LLHTTPClient::postRaw("http://api.flickr.com/services/upload/", (U8*)post_data, total_data_size, new exoFlickrUploadResponse(callback), headers, 600);
+	LLHTTPClient::postRaw("https://up.flickr.com/services/upload/", (U8*)post_data, total_data_size, new exoFlickrUploadResponse(callback), headers, 600);
 	// </FS:TS>
 	// The HTTP client takes ownership of our post_data array,
 	// and will delete it when it's done.
