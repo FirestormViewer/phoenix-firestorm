@@ -49,6 +49,7 @@ public:
 		LLStrider<Object> ret;
 		ret.mBytep = mBytep + mSkip*index;
 		ret.mSkip = mSkip;
+
 		return ret;
 	}
 

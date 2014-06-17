@@ -824,7 +824,6 @@ void LLViewerTexture::addFace(U32 ch, LLFace* facep)
 	mFaceList[ch][mNumFaces[ch]] = facep;
 	facep->setIndexInTex(ch, mNumFaces[ch]);
 	mNumFaces[ch]++;
-
 	mLastFaceListUpdateTimer.reset();
 }
 
