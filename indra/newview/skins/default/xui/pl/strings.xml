@@ -5153,6 +5153,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="MovelockDisabled">
 		Blokada pozycji została wyłączona
 	</string>
+	<string name="MovelockEnabling">
+		Włączanie blokady pozycji...
+	</string>
+	<string name="MovelockDisabling">
+		Wyłączanie blokady pozycji...
+	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
 	</string>

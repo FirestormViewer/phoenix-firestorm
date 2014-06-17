@@ -270,6 +270,7 @@
                 //debugOutput("Movelock false, using llStopMoveToTarget()");
                 llStopMoveToTarget();
             }
+            llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
         }
 
         else if (cmd == "RelockMoveLockAfterMovement")

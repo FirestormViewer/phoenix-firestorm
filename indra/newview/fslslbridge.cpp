@@ -227,7 +227,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			// <FS:PP> Inform user, if movelock was enabled at login
 			if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 			}
 			// </FS:PP>
 
@@ -240,7 +240,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
 				gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
-				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
 			}
 			else
 			{
@@ -275,6 +275,26 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		}
 	}
 	//</FS:TS> FIRE-962
+
+	// <FS:PP> Movelock state response
+	else if (tag == "<bridgeMovelock ")
+	{
+		status = true;
+		S32 valuepos = message.find("state=") + 6;
+		if (valuepos != std::string::npos)
+		{
+			if (message.substr(valuepos, 1) == "1")
+			{
+				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+			}
+			else if (message.substr(valuepos, 1) == "0")
+			{
+				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+			}
+		}
+	}
+	// </FS:PP>
+
 	return status;
 }
 
