@@ -352,7 +352,7 @@ bool init_from_xml(LLFontRegistry* registry, LLXMLNodePtr node)
 			{
 				//registry->mFontSizes[size_name] = size_value;
 				// +/- defualt font sizes -KC
-				registry->mFontSizes[size_name] = size_value; //+ mFontSizeMod; FS:ND this broke after merge. Someone familiar with this code has to look after this.
+				registry->mFontSizes[size_name] = size_value + registry->mFontSizeMod;
 			}
 
 		}
