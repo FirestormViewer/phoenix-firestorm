@@ -5670,6 +5670,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="MovelockDisabled">
 		Movelock deaktiviert.
 	</string>
+	<string name="MovelockEnabling">
+		Aktiviere Movelock...
+	</string>
+	<string name="MovelockDisabling">
+		Deaktiviere Movelock...
+	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
