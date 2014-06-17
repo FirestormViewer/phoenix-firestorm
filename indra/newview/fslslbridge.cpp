@@ -67,10 +67,10 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 13;
+const U32 FS_BRIDGE_MINOR_VERSION = 14;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.13
+//current script version is 2.14
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -276,6 +276,49 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	}
 	//</FS:TS> FIRE-962
 
+	// <FS:PP> Get script info response
+	else if (tag == "<bridgeGetScriptInfo>")
+	{
+		status = true;
+		S32 getScriptInfoEnd = message.find("</bridgeGetScriptInfo>");
+		if (getScriptInfoEnd != std::string::npos)
+		{
+
+			std::string getScriptInfoString = message.substr(21, getScriptInfoEnd - 21);
+			std::istringstream strStreamGetScriptInfo(getScriptInfoString);
+			std::string scriptInfoToken;
+			LLSD scriptInfoArray = LLSD::emptyArray();
+			int scriptInfoArrayCount = 0;
+			while (std::getline(strStreamGetScriptInfo, scriptInfoToken, ','))
+			{
+				LLStringUtil::trim(scriptInfoToken);
+				scriptInfoArray.append(scriptInfoToken);
+				++scriptInfoArrayCount;
+			}
+
+			if (scriptInfoArrayCount == 5)
+			{
+				LLStringUtil::format_map_t args;
+				args["OBJECT_NAME"] = scriptInfoArray[0].asString();
+				args["OBJECT_RUNNING_SCRIPT_COUNT"] = scriptInfoArray[1].asString();
+				args["OBJECT_TOTAL_SCRIPT_COUNT"] = scriptInfoArray[2].asString();
+				args["OBJECT_SCRIPT_MEMORY"] = scriptInfoArray[3].asString();
+				args["OBJECT_SCRIPT_TIME"] = scriptInfoArray[4].asString();
+				reportToNearbyChat(formatString(LLTrans::getString("fsbridge_script_info"), args));
+			}
+			else
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+			}
+
+		}
+		else
+		{
+			reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfomalformed"));
+		}
+	}
+	// </FS:PP>
+
 	// <FS:PP> Movelock state response
 	else if (tag == "<bridgeMovelock ")
 	{
@@ -290,6 +333,25 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			else if (message.substr(valuepos+6, 1) == "0")
 			{
 				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+			}
+		}
+	}
+	// </FS:PP>
+
+	// <FS:PP> Error responses handling
+	else if (tag == "<bridgeError ")
+	{
+		status = true;
+		S32 valuepos = message.find("error=");
+		if (valuepos != std::string::npos)
+		{
+			if (message.substr(valuepos+6, 9) == "injection")
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_injection"));
+			}
+			else if (message.substr(valuepos+6, 18) == "scriptinfonotfound")
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
 			}
 		}
 	}

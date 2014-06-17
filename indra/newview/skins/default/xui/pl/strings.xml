@@ -5300,6 +5300,18 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="fsbridge_created">
 		Most LSL został utworzony pomyślnie.
 	</string>
+	<string name="fsbridge_script_info">
+		Info o skryptach: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] działających skryptów, [OBJECT_SCRIPT_MEMORY] KB dozwolonego limitu pamięci, [OBJECT_SCRIPT_TIME] ms zużytego czasu CPU.
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">
+		Info o skryptach: Obiekt do sprawdzenia jest nieprawidłowy lub poza zasięgiem.
+	</string>
+	<string name="fsbridge_error_scriptinfomalformed">
+		Info o skryptach: Otrzymano uszkodzoną odpowiedź od Mostu LSL. Spróbuj ponownie.
+	</string>
+	<string name="fsbridge_error_injection">
+		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL Firestorma! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
 	<string name="QP Draw Distance">
 		Pole widzenia
 	</string>

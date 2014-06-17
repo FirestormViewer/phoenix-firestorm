@@ -1,6 +1,6 @@
-//http bridge script v.2.13
-//Firestorm
-//Tozh Taurog, Arrehn Oberlander, Tonya Souther
+// HTTP Bridge script v.2.14
+// Firestorm
+// Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
 //
 // Global Variables and CONSTANTS
@@ -11,10 +11,9 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.13";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.14";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
-    integer debug = FALSE;
     integer httpStatus = 200;
     integer keyViewerHandshake;
     integer tryHandshakeOnce = TRUE;
@@ -59,7 +58,7 @@
         integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
         if (n > 1)
         {
-            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.");
+            llOwnerSay("<bridgeError error=injection>");
             llSleep(1.0);
             while(n)
             {
@@ -94,7 +93,6 @@
     initBridge()
     {
         llRequestURL();
-        //debugOutput("rezzed");
         owner = llGetOwner();
 
         // Disable all secondary stateful services
@@ -129,7 +127,6 @@
                     request_control_perms();
                 }
             }
-            //debugOutput("Movelock true, going to movelock_init");
             movelock_init();
         }
 
@@ -153,16 +150,12 @@
 
     parseCommand(key httpReqID, string msg)
     {
-        //debugOutput("Parsing original input: " + msg);
         // Remove the <llsd><string> ... </string></llsd> wrapper
         integer end = llStringLength(msg) - 18;
         integer start = 14;
-        //debugOutput("Parsing inner string: " + llGetSubString(msg, start, end));
         list commandList = llParseString2List(llGetSubString(msg, start, end), ["|"], []);
-        //debugOutput("Parsing command list: " + (string)commandList);
         string cmd = llList2String(commandList, 0);
 
-        //debugOutput("Parsing command: " + cmd);
         // Large If statement for command processing. Shame on you, LSL!
         if (cmd == "URL Confirmed")
         {
@@ -206,7 +199,6 @@
             // Get parameters
             string params = "<" + llList2String(commandList, 1) + ">";
             mttVector = (vector)params;
-            //debugOutput("Parsing vector: " + (string)mttVector);
             vector relpos = mttVector - llGetPos();
             float groundLevel = llGround(relpos);
             if (mttVector.z < groundLevel) // Trying to go underground? I think not!
@@ -252,22 +244,26 @@
 
         else if (cmd == "getScriptInfo")
         {
-            key target = (key)llList2String(commandList, 1);
-            getScriptInfo(target);
+            list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
+            if (llGetListLength(details) == 5)
+            {
+                llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llList2String(details, 0), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0]) + "</bridgeGetScriptInfo>");
+            }
+            else
+            {
+                llOwnerSay("<bridgeError error=scriptinfonotfound>");
+            }
         }
 
         else if (cmd == "UseMoveLock")
         {
-            //debugOutput("Parsing params: " + llList2String(commandList, 1));
             useMoveLock = llList2Integer(commandList, 1);
             if (useMoveLock)
             {
-                //debugOutput("Movelock true, going to movelock_init");
                 movelock_init();
             }
             else
             {
-                //debugOutput("Movelock false, using llStopMoveToTarget()");
                 llStopMoveToTarget();
             }
             llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
@@ -275,7 +271,6 @@
 
         else if (cmd == "RelockMoveLockAfterMovement")
         {
-            //debugOutput("Parsing params: " + llList2String(commandList, 1));
             relockMoveLockAfterMovement = llList2Integer(commandList, 1);
             if (relockMoveLockAfterMovement)
             {
@@ -303,24 +298,6 @@
         }
 
     }
-
-    debugOutput(string msg)
-    {
-        if (debug)
-        {
-            llOwnerSay("BridgeDebug: " + msg);
-        }
-    }
-
-//
-//  Get Script Count
-//
-
-getScriptInfo(key target)
-{
-    list details = llGetObjectDetails(target, ([OBJECT_NAME, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
-    llOwnerSay("'" + llList2String(details, 0) + "' [" + llList2String(details, 2) + "/" + llList2String(details, 1) + "] running scripts. " + (string)(llList2Integer(details, 3) / 1024) + " KB allowed memory size limit, " + (string)(llList2Float(details, 4) * 1000.0) + " ms of CPU time consumed.");
-}
 
 //
 // OpenCollar/LockMeister AO interface functions
@@ -392,7 +369,7 @@ getScriptInfo(key target)
         vector targ = mttVector - loc;
         float dist = llVecMag(targ);
 
-        //debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
+        // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
 
         // If we are out of time or distance - stop
         if ((dist < TP_TARGET_DISTANCE) || (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
@@ -408,12 +385,12 @@ getScriptInfo(key target)
         {
             if (dist < 65)
             {
-                //debugOutput("One jump to :" + (string)mttVector);
+                // llOwnerSay("One jump to :" + (string)mttVector);
                 llMoveToTarget(mttVector, TP_TIMER_TICK);
             }
             else
             {
-                //debugOutput("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+                // llOwnerSay("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
                 llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
             }
         }
@@ -465,7 +442,6 @@ getScriptInfo(key target)
 
     movelock_init()
     {
-        //debugOutput("movelock_init");
         useMoveLock = TRUE;
         llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
     }
@@ -480,12 +456,6 @@ default
     {
         makeSane();
         initBridge();
-
-        //<DEBUG>
-        //debug = TRUE;
-        //debugOutput("Free memory="+(string)llGetFreeMemory());
-        //llSetTimerEvent(10);
-        //</DEBUG>
     }
 
     on_rez(integer i)
@@ -625,18 +595,16 @@ default
 
     http_request(key ID, string Method, string Body)
     {
-        //httpReqID = ID;
-        //debugOutput("Received HTTP " + Method + " message. Command body: " + Body);
+        // llOwnerSay("Received HTTP " + Method + " message. Command body: " + Body);
 
         if (Method == URL_REQUEST_GRANTED)
         {
             saveNewURL(Body);
 
-            //debugOutput ("keyViewerHandshake " + (string)keyViewerHandshake + " tryHandshakeOnce " + (string)tryHandshakeOnce);
             // Saying URL to owner
             if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
             {
-                //debugOutput ("Firestorm viewer and handshake");
+                // Firestorm viewer and handshake
                 llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL><bridgeAuth>"+bridgeAuth+"</bridgeAuth><bridgeVer>"+bridgeVersion+"</bridgeVer>");
                 tryHandshakeOnce = 0;
             }
@@ -650,8 +618,7 @@ default
         {
             saveNewURL("");
 
-            //debugOutput("No URLs free !");
-            // Keep trying?
+            // No URLs free! Keep trying?
             llRequestURL();
         }
         else if (Method == "GET")
@@ -672,7 +639,7 @@ default
 
     listen(integer fromChan, string senderName, key senderID, string msg)
     {
-        //debugOutput("DEBUG from "+senderName+" msg: "+msg);
+        // llOwnerSay("listen() from "+senderName+" msg: "+msg);
 
         if (fromChan == aoChannelOC)     // OpenCollar AO interface
         {
