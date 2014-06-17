@@ -261,14 +261,14 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	if (tag == "<clientAO ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=") + 6;
+		S32 valuepos = message.find("state=");
 		if (valuepos != std::string::npos)
 		{
-			if (message.substr(valuepos, 2) == "on")
+			if (message.substr(valuepos+6, 2) == "on")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
 			}
-			else if (message.substr(valuepos, 3) == "off")
+			else if (message.substr(valuepos+6, 3) == "off")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
 			}
@@ -280,14 +280,14 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	else if (tag == "<bridgeMovelock ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=") + 6;
+		S32 valuepos = message.find("state=");
 		if (valuepos != std::string::npos)
 		{
-			if (message.substr(valuepos, 1) == "1")
+			if (message.substr(valuepos+6, 1) == "1")
 			{
 				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
 			}
-			else if (message.substr(valuepos, 1) == "0")
+			else if (message.substr(valuepos+6, 1) == "0")
 			{
 				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
 			}
