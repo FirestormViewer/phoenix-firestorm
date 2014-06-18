@@ -30,6 +30,7 @@
 #include "fslslbridgerequest.h"
 //#include "imageids.h"
 #include "llxmlnode.h"
+#include "apr_base64.h" // For getScriptInfo()
 #include "llbufferstream.h"
 #include "llsdserialize.h"
 #include "llviewerinventory.h"
@@ -67,10 +68,10 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 14;
+const U32 FS_BRIDGE_MINOR_VERSION = 15;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.14
+//current script version is 2.15
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -277,6 +278,10 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
 			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "AO control - Received unknown state" << LL_ENDL;
+			}
 		}
 	}
 	//</FS:TS> FIRE-962
@@ -297,6 +302,25 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			while (std::getline(strStreamGetScriptInfo, scriptInfoToken, ','))
 			{
 				LLStringUtil::trim(scriptInfoToken);
+				if (scriptInfoArrayCount == 0)
+				{
+					// First value, OBJECT_NAME, should be passed from Bridge as encoded in base64
+					// Encoding eliminates problems with special characters and commas for CSV
+					S32 base64Length = apr_base64_decode_len(scriptInfoToken.c_str());
+					if (base64Length)
+					{
+						std::vector<U8> base64VectorData;
+						base64VectorData.resize(base64Length);
+						base64Length = apr_base64_decode_binary(&base64VectorData[0], scriptInfoToken.c_str());
+						base64VectorData.resize(base64Length);
+						std::string base64FinalData(base64VectorData.begin(), base64VectorData.end());
+						scriptInfoToken = base64FinalData;
+					}
+					else
+					{
+						LL_WARNS("FSLSLBridge") << "ScriptInfo - OBJECT_NAME cannot be decoded" << LL_ENDL;
+					}
+				}
 				scriptInfoArray.append(scriptInfoToken);
 				++scriptInfoArrayCount;
 			}
@@ -314,12 +338,14 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			else
 			{
 				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+				LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by viewer, data somehow passed bridge script check)" << LL_ENDL;
 			}
 
 		}
 		else
 		{
 			reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfomalformed"));
+			LL_WARNS("FSLSLBridge") << "ScriptInfo - Received malformed response from bridge (missing ending tag)" << LL_ENDL;
 		}
 	}
 	// </FS:PP>
@@ -339,6 +365,10 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
 			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "Movelock - Received unknown state" << LL_ENDL;
+			}
 		}
 	}
 	// </FS:PP>
@@ -353,10 +383,16 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			if (message.substr(valuepos+6, 9) == "injection")
 			{
 				reportToNearbyChat(LLTrans::getString("fsbridge_error_injection"));
+				LL_WARNS("FSLSLBridge") << "Script injection detected" << LL_ENDL;
 			}
 			else if (message.substr(valuepos+6, 18) == "scriptinfonotfound")
 			{
 				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+				LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by bridge)" << LL_ENDL;
+			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "ErrorReporting - Received unknown error type" << LL_ENDL;
 			}
 		}
 	}
