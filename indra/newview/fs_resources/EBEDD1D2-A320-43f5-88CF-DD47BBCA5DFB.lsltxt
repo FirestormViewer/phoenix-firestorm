@@ -560,7 +560,6 @@ default
     http_request(key ID, string Method, string Body)
     {
         // llOwnerSay("Received HTTP " + Method + " message. Command body: " + Body);
-
         if (Method == URL_REQUEST_GRANTED)
         {
             latestURL = Body;
@@ -583,19 +582,9 @@ default
             latestURL = "";
             llRequestURL();
         }
-        else if (Method == "GET")
+        else if (Method == "GET" || Method == "POST")
         {
             parseCommand(ID, Body);
-            llHTTPResponse(ID, httpStatus, "<llsd><string> command=\"GET\" text=\"get - Hello Bridge!</string></llsd>");
-        }
-        else if (Method == "PUT")
-        {
-            llHTTPResponse(ID, httpStatus, "<llsd><string>PUT - Hello Bridge!</string></llsd>");
-        }
-        else if (Method == "POST")
-        {
-            parseCommand(ID, Body);
-            llHTTPResponse(ID, httpStatus, "<llsd><string>POST - Hello Bridge!</string></llsd>");
         }
     }
 
