@@ -72,6 +72,7 @@
         llAllowInventoryDrop(FALSE);
         llSetTorque(ZERO_VECTOR, 0);
         flight_hover(FALSE);
+        isFlyingNow = -1;
         llStopMoveToTarget();
         if (useMoveLock)
         {
