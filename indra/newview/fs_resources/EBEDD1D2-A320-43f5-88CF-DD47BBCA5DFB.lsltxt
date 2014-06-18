@@ -70,9 +70,10 @@
         llParticleSystem([]);
         llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
         llAllowInventoryDrop(FALSE);
-        llStopMoveToTarget();
         llSetTorque(ZERO_VECTOR, 0);
+        llSetTimerEvent(0);
         flight_hover(FALSE);
+        llStopMoveToTarget();
         // Make bridge inconspicuous
         llSetLinkPrimitiveParamsFast(LINK_THIS, [
             PRIM_TEXT, "", ZERO_VECTOR, 0.0,
@@ -92,43 +93,14 @@
 
     initBridge()
     {
-        llRequestURL();
+
         owner = llGetOwner();
+        request_control_perms();
 
         // Disable all secondary stateful services
         llSetTimerEvent(0);
+        flight_hover(FALSE);
         llStopMoveToTarget();
-
-        if (llGetAttached() != 0)
-        {
-            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
-        }
-
-        // Assume the worst and let the viewer convince us otherwise
-        keyViewerHandshake = UNKNOWN_VIEWER;
-
-        // If we were last flying reinitialize ourself
-        if (flightAssistPushForce > 0)
-        {
-            flight_init();
-        }
-        else
-        {
-            flight_hover(FALSE);
-        }
-
-        // Check the state of movelock, relock if needed
-        if (useMoveLock)
-        {
-            if (relockMoveLockAfterMovement)
-            {
-                if (llGetAttached())
-                {
-                    request_control_perms();
-                }
-            }
-            movelock_init();
-        }
 
         // Set the channel for the AO OC interface
         aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
@@ -137,23 +109,20 @@
             aoChannelOC = -aoChannelOC;
         }
 
-        // Remove previous AO listeners if present, enable if needed
+        // Remove previous AO listeners if present
         integrationCheckOC();
         integrationCheckLM();
 
-    }
+        // Assume the worst and let the viewer convince us otherwise
+        keyViewerHandshake = UNKNOWN_VIEWER;
+        llRequestURL();
 
-    saveNewURL(string url)
-    {
-        latestURL = url;
     }
 
     parseCommand(key httpReqID, string msg)
     {
         // Remove the <llsd><string> ... </string></llsd> wrapper
-        integer end = llStringLength(msg) - 18;
-        integer start = 14;
-        list commandList = llParseString2List(llGetSubString(msg, start, end), ["|"], []);
+        list commandList = llParseString2List(llGetSubString(msg, 14, llStringLength(msg) - 18), ["|"], []);
         string cmd = llList2String(commandList, 0);
 
         // Large If statement for command processing. Shame on you, LSL!
@@ -161,23 +130,29 @@
         {
             // We're in the right viewer, go on.
             keyViewerHandshake = FIRESTORM_VIEWER;
-        } // URL Confirmed
+        }
 
-        if (cmd == "UseLSLFlightAssist")
+        else if (cmd == "UseLSLFlightAssist")
         {
             float speed = llList2Float(commandList, 1);
             if (speed != flightAssistPushForce)
             {
-               flightAssistPushForce = speed;
-               if (flightAssistPushForce > 0)
-               {
-                   flight_init();
-               }
-               else
-               {
-                   flight_hover(FALSE);
-                   llSetTimerEvent(0);
-               }
+                flightAssistPushForce = speed;
+                if (flightAssistPushForce > 0)
+                {
+                    if (flightAssistPushForce > 5.0)
+                    {
+                        // No lightspeed please!
+                        flightAssistPushForce = 5.0;
+                    }
+                    request_control_perms();
+                    llSetTimerEvent(flightAirCheckNormal);
+                }
+                else
+                {
+                    flight_hover(FALSE);
+                    llSetTimerEvent(0);
+                }
             }
         }
 
@@ -210,8 +185,7 @@
             // TP commands immediately configure a TP timer consumer
             setTimerEvent2(TP_TIMER_TICK);
 
-            //llHTTPResponse(httpReqID, httpStatus, "<llsd><string>test response from llMoveToTarget</string></llsd>");
-        } // "llMoveToTarget"
+        }
 
         else if (cmd == "getZOffsets")
         // Radar-specific command to get high-rez altitude data.
@@ -240,7 +214,7 @@
             responses = []; // Free memory
             llHTTPResponse(httpReqID, httpStatus, body);
  
-        } // "getZOffsets"
+        }
 
         else if (cmd == "getScriptInfo")
         {
@@ -274,10 +248,7 @@
             relockMoveLockAfterMovement = llList2Integer(commandList, 1);
             if (relockMoveLockAfterMovement)
             {
-                if (llGetAttached())
-                {
-                    request_control_perms();
-                }
+                request_control_perms();
             }
         }
 
@@ -403,26 +374,15 @@
 
     request_control_perms()
     {
-        llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
+        if (llGetAttached() != 0)
+        {
+            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
+        }
     }
 
 //
 // Flight Assist
 //
-
-    flight_init()
-    {
-        if (flightAssistPushForce > 5.0)
-        {
-            // No lightspeed please!
-            flightAssistPushForce = 5.0;
-        }
-        if (llGetAttached())
-        {
-            request_control_perms();
-        }
-        llSetTimerEvent(flightAirCheckNormal);
-    }
 
     flight_hover(integer yes)
     {
@@ -442,7 +402,6 @@
 
     movelock_init()
     {
-        useMoveLock = TRUE;
         llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
     }
 
@@ -485,9 +444,9 @@ default
     {
         if (i)
         {
-            if (flightAssistPushForce > 0 || useMoveLock)
+            if (flightAssistPushForce > 0 || relockMoveLockAfterMovement)
             {
-                request_control_perms();
+                llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
             }
             else
             {
@@ -599,8 +558,7 @@ default
 
         if (Method == URL_REQUEST_GRANTED)
         {
-            saveNewURL(Body);
-
+            latestURL = Body;
             // Saying URL to owner
             if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
             {
@@ -616,9 +574,8 @@ default
         }
         else if (Method == URL_REQUEST_DENIED)
         {
-            saveNewURL("");
-
             // No URLs free! Keep trying?
+            latestURL = "";
             llRequestURL();
         }
         else if (Method == "GET")
