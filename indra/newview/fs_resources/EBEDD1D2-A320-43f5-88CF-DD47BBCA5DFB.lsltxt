@@ -71,7 +71,6 @@
         llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
         llAllowInventoryDrop(FALSE);
         llSetTorque(ZERO_VECTOR, 0);
-        llSetTimerEvent(0);
         flight_hover(FALSE);
         llStopMoveToTarget();
         // Make bridge inconspicuous
@@ -98,6 +97,7 @@
         request_control_perms();
 
         // Disable all secondary stateful services
+        setTimerEvent2(0);
         llSetTimerEvent(0);
         flight_hover(FALSE);
         llStopMoveToTarget();
