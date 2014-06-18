@@ -96,11 +96,6 @@
 		<text name="note_lookat">
 			(Einstellungen für Avatar-Kamerafokus befinden sich auf dem Reiter &quot;Privatsphäre&quot;.)
 		</text>
-		<text name="BridgeProtocols">
-			Integration externer Protokolle in LSL-Client-Brücke:
-		</text>
-		<check_box label="OpenCollar-Protokoll erlauben den integrierten AO zu aktiviere/deaktivieren" name="BridgeIntegrationOC"/>
-		<check_box label="LockMeister-Protokoll erlauben den integrierten AO zu aktiviere/deaktivieren" name="BridgeIntegrationLM"/>
 
 		<!-- LGG Color Beams -->
 		<text name="BeamPrefs">
@@ -119,6 +114,11 @@
 		<button name="custom_beam_btn" label="Erstellen" tool_tip="Eine neue Form erstellen."/>
 		<button name="refresh_beams" label="Aktualisieren" tool_tip="Aktualisiert die Liste mit Formen für den Auswahlstrahl."/>
 		<slider name="FSBeamShapeScale" label="Skalierung:" tool_tip="Ändert die Skalierung der Form für den Auswahlstrahl." label_width="60" width="175"/>
+		<text name="BridgeProtocols">
+			Integration externer Protokolle in LSL-Client-Brücke:
+		</text>
+		<check_box label="OpenCollar-Protokoll erlauben den integrierten AO zu aktiviere/deaktivieren" name="BridgeIntegrationOC"/>
+		<check_box label="LockMeister-Protokoll erlauben den integrierten AO zu aktiviere/deaktivieren" name="BridgeIntegrationLM"/>
 	</panel>
 
 	<!--CmdLine-->
