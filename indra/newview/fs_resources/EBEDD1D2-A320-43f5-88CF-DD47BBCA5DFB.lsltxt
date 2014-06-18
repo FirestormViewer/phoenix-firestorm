@@ -73,6 +73,10 @@
         llSetTorque(ZERO_VECTOR, 0);
         flight_hover(FALSE);
         llStopMoveToTarget();
+        if (useMoveLock)
+        {
+            movelock_init();
+        }
         // Make bridge inconspicuous
         llSetLinkPrimitiveParamsFast(LINK_THIS, [
             PRIM_TEXT, "", ZERO_VECTOR, 0.0,
