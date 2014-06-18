@@ -218,18 +218,23 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		{
 			//on first call from bridge, confirm that we are here
 			//then check options use
-			viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
-			updateBoolSettingValue("UseMoveLock");
-			updateBoolSettingValue("RelockMoveLockAfterMovement");
-			updateIntegrations();
-			mIsFirstCallDone = true;
+
+			if (gSavedPerAccountSettings.getF32("UseLSLFlightAssist") > 0.f)
+			{
+				viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
+			}
 
 			// <FS:PP> Inform user, if movelock was enabled at login
 			if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 			{
+				updateBoolSettingValue("UseMoveLock");
 				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 			}
 			// </FS:PP>
+
+			updateBoolSettingValue("RelockMoveLockAfterMovement");
+			updateIntegrations();
+			mIsFirstCallDone = true;
 
 		}
 		// <FS:PP> FIRE-11924: Refresh movelock position after region change (crossing/teleporting), if lock was enabled
