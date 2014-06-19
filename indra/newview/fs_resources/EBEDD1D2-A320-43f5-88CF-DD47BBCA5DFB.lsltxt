@@ -68,11 +68,7 @@
         llSetTorque(ZERO_VECTOR, 0);
         flight_hover(FALSE);
         isFlyingNow = -1;
-        llStopMoveToTarget();
-        if (useMoveLock)
-        {
-            movelock_init();
-        }
+        movelock_init(useMoveLock);
         // Make bridge inconspicuous
         llSetLinkPrimitiveParamsFast(LINK_THIS, [
             PRIM_TEXT, "", ZERO_VECTOR, 0.0,
@@ -100,7 +96,7 @@
         setTimerEvent2(0);
         llSetTimerEvent(0);
         flight_hover(FALSE);
-        llStopMoveToTarget();
+        movelock_init(FALSE);
 
         // Set the channel for the AO OC interface
         aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
@@ -182,7 +178,7 @@
             // Pause movelock for now, if present
             if (useMoveLock)
             {
-                llStopMoveToTarget();
+                movelock_init(FALSE);
             }
 
             // Get parameters
@@ -246,14 +242,7 @@
         else if (cmd == "UseMoveLock")
         {
             useMoveLock = llList2Integer(commandList, 1);
-            if (useMoveLock)
-            {
-                movelock_init();
-            }
-            else
-            {
-                llStopMoveToTarget();
-            }
+            movelock_init(useMoveLock);
             llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
         }
 
@@ -366,12 +355,8 @@
         // If we are out of time or distance - stop
         if ((dist < TP_TARGET_DISTANCE) || (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
         {
-            llStopMoveToTarget();
             setTimerEvent2(0);
-            if (useMoveLock)
-            {
-                movelock_init();
-            }
+            movelock_init(useMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
         }
         else
         {
@@ -421,9 +406,20 @@
 // Movelock
 //
 
-    movelock_init()
+    movelock_init(integer lock)
     {
-        llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
+        if (lock)
+        {
+            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
+            llSetVehicleType(VEHICLE_TYPE_SLED);
+            llSetVehicleFloatParam(VEHICLE_LINEAR_FRICTION_TIMESCALE, 0.05);
+            llSetVehicleFloatParam(VEHICLE_ANGULAR_FRICTION_TIMESCALE, 0.05);
+        }
+        else
+        {
+            llStopMoveToTarget();
+            llSetVehicleType(VEHICLE_TYPE_NONE);
+        }
     }
 
 //
@@ -491,13 +487,13 @@ default
                 if (!relockIsUserMoving)
                 {
                     relockIsUserMoving = TRUE;
-                    llStopMoveToTarget();
+                    movelock_init(FALSE);
                 }
             }
             else if (relockIsUserMoving)
             {
                 relockIsUserMoving = FALSE;
-                movelock_init();
+                movelock_init(TRUE);
             }
         }
 
