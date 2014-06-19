@@ -145,7 +145,7 @@ public:
 	void triggerSound(const LLUUID &sound_id, const LLUUID& owner_id, const F32 gain,
 					  const S32 type = LLAudioEngine::AUDIO_TYPE_NONE,
 					  const LLVector3d &pos_global = LLVector3d::zero,
-							  const LLUUID source_object = LLUUID::null);
+							  const LLUUID& source_object = LLUUID::null);
 	// NaCl End
 	void triggerSound(SoundData& soundData);
 
