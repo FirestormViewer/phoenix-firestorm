@@ -119,6 +119,12 @@
 
     }
 
+    detachBridge()
+    {
+        llReleaseURL(latestURL);
+        llRequestPermissions(owner, PERMISSION_ATTACH);
+    }
+
     parseCommand(key httpReqID, string msg)
     {
         // Remove the <llsd><string> ... </string></llsd> wrapper
@@ -130,6 +136,14 @@
         {
             // We're in the right viewer, go on.
             viewerIsFirestorm = TRUE;
+        }
+
+        else if (cmd == "DetachBridge")
+        {
+            // HTTP request from the viewer to immediately detach LSL-Client Bridge
+            // This could be passed during session or at login, as a response to "<bridgeURL> ... </bridgeVer>" handshake right after granting URL by a region
+            // Note: If Bridge doesn't receive "URL Confirmed" message as a reply to handshake it'll automatically detach after next region change anyway
+            detachBridge();
         }
 
         else if (cmd == "UseLSLFlightAssist")
@@ -580,8 +594,7 @@ default
             {
                 // We're in a wrong viewer, just sit quietly and call llDetachFromAvatar();
                 // This place is reached via CHANGED_REGION - when viewerIsFirestorm is still not Firestorm and handshake was already done (tryHandshakeOnce is FALSE)
-                llReleaseURL(latestURL);
-                llRequestPermissions(owner, PERMISSION_ATTACH);
+                detachBridge();
             }
         }
         else if (Method == URL_REQUEST_DENIED)
