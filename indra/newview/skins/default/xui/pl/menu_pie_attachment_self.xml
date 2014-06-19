@@ -4,7 +4,7 @@
     <pie_slice label="Upuść" name="Drop"/>
     <pie_menu name="Attachment Pie More" label="Więcej &gt;">
         <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
-        <pie_slice label="O skryptach" name="ScriptInfo"/>
+        <pie_slice label="Info o skryptach" name="ScriptInfo"/>
         <pie_slice label="Dotknij" name="Attachment Object Touch"/>
         <pie_menu name="DerenderMenu" label="Derenderuj &gt;">
             <pie_slice label="Tymczasowo" name="Derender"/>
