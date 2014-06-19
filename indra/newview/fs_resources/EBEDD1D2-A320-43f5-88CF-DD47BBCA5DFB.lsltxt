@@ -7,15 +7,10 @@
 //
 
     // Bridge platform
-    integer FIRESTORM_VIEWER = 0;
-    integer UNKNOWN_VIEWER = 1;
-    integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
-    string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
+    string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
     string  bridgeVersion = "2.15";    // This should match fslslbridge.cpp
-    string  bridgeURL;
     string  latestURL;
-    integer httpStatus = 200;
-    integer keyViewerHandshake;
+    integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
     key owner;
 
@@ -119,8 +114,8 @@
         integrationCheckLM();
 
         // Assume the worst and let the viewer convince us otherwise
-        keyViewerHandshake = UNKNOWN_VIEWER;
-        llRequestURL();
+        viewerIsFirestorm = FALSE;
+        requestBridgeURL();
 
     }
 
@@ -134,7 +129,7 @@
         if (cmd == "URL Confirmed")
         {
             // We're in the right viewer, go on.
-            keyViewerHandshake = FIRESTORM_VIEWER;
+            viewerIsFirestorm = TRUE;
         }
 
         else if (cmd == "UseLSLFlightAssist")
@@ -217,7 +212,7 @@
             tUUIDs = []; // Free memory
             string body = "<llsd><string>" +llList2CSV(responses) + "</string></llsd>";
             responses = []; // Free memory
-            llHTTPResponse(httpReqID, httpStatus, body);
+            llHTTPResponse(httpReqID, 200, body);
  
         }
 
@@ -273,6 +268,13 @@
             }
         }
 
+    }
+
+    requestBridgeURL()
+    {
+        llReleaseURL(latestURL);
+        latestURL = "";
+        llRequestURL();
     }
 
 //
@@ -456,7 +458,7 @@ default
             else
             {
                 // Take control for value that does nothing, in order to work in no-script sims
-                llTakeControls(META_CONTROL, TRUE, TRUE);
+                llTakeControls(1024, TRUE, TRUE);
             }
         }
         else if (i & PERMISSION_ATTACH)
@@ -472,13 +474,13 @@ default
         {
             if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {
-                if (relockIsUserMoving == FALSE)
+                if (!relockIsUserMoving)
                 {
                     relockIsUserMoving = TRUE;
                     llStopMoveToTarget();
                 }
             }
-            else if (relockIsUserMoving == TRUE)
+            else if (relockIsUserMoving)
             {
                 relockIsUserMoving = FALSE;
                 movelock_init();
@@ -527,7 +529,7 @@ default
     {
         if (change & CHANGED_REGION)
         {
-            llRequestURL();
+            requestBridgeURL();
         }
         if (change & CHANGED_INVENTORY)
         {
@@ -568,23 +570,25 @@ default
         {
             latestURL = Body;
             // Saying URL to owner
-            if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == TRUE)
+            if (viewerIsFirestorm || tryHandshakeOnce)
             {
                 // Firestorm viewer and handshake
-                llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL><bridgeAuth>"+bridgeAuth+"</bridgeAuth><bridgeVer>"+bridgeVersion+"</bridgeVer>");
+                llOwnerSay("<bridgeURL>" + latestURL + "</bridgeURL><bridgeAuth>" + bridgeAuth + "</bridgeAuth><bridgeVer>" + bridgeVersion + "</bridgeVer>");
                 tryHandshakeOnce = FALSE;
             }
             else
             {
                 // We're in a wrong viewer, just sit quietly and call llDetachFromAvatar();
+                // This place is reached via CHANGED_REGION - when viewerIsFirestorm is still not Firestorm and handshake was already done (tryHandshakeOnce is FALSE)
+                llReleaseURL(latestURL);
                 llRequestPermissions(owner, PERMISSION_ATTACH);
             }
         }
         else if (Method == URL_REQUEST_DENIED)
         {
             // No URLs free! Keep trying?
-            latestURL = "";
-            llRequestURL();
+            llSleep(5);
+            requestBridgeURL();
         }
         else if (Method == "GET" || Method == "POST")
         {
