@@ -48,9 +48,7 @@ public:
 	static void restoreGL();
 	static void destroyGL();
 	static S32 findAvailableVBSlot();
-
-	// static void freeVBSlot(S32 idx);
-	static void freeVBSlot(S32 idx, U32 generation);
+	static void freeVBSlot(S32 idx);
 
 	enum
 	{

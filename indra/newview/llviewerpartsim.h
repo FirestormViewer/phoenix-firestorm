@@ -81,10 +81,6 @@ public:
 
 
 	static U32		sNextPartID;
-	// <FS:ND> Object pool for LLViewerPart
-	void* operator new(size_t size);
-	void operator delete(void* ptr);
-	// </FS:ND>
 };
 
 
@@ -112,7 +108,6 @@ public:
 
 	typedef std::vector<LLViewerPart*>  part_list_t;
 	part_list_t mParticles;
-	part_list_t mParticlesTemp; // <FS:ND/> Temporary list for iteration in updateParticles
 
 	const LLVector3 &getCenterAgent() const		{ return mCenterAgent; }
 	S32 getCount() const					{ return (S32) mParticles.size(); }
