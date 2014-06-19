@@ -447,7 +447,7 @@ default
 
     run_time_permissions(integer i)
     {
-        if (i)
+        if (i & PERMISSION_TAKE_CONTROLS)
         {
             if (flightAssistPushForce > 0 || relockMoveLockAfterMovement)
             {
@@ -458,6 +458,10 @@ default
                 // Take control for value that does nothing, in order to work in no-script sims
                 llTakeControls(META_CONTROL, TRUE, TRUE);
             }
+        }
+        else if (i & PERMISSION_ATTACH)
+        {
+            llDetachFromAvatar();
         }
     }
 
@@ -564,16 +568,16 @@ default
         {
             latestURL = Body;
             // Saying URL to owner
-            if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == 1)
+            if (keyViewerHandshake == FIRESTORM_VIEWER || tryHandshakeOnce == TRUE)
             {
                 // Firestorm viewer and handshake
                 llOwnerSay("<bridgeURL>" + latestURL+ "</bridgeURL><bridgeAuth>"+bridgeAuth+"</bridgeAuth><bridgeVer>"+bridgeVersion+"</bridgeVer>");
-                tryHandshakeOnce = 0;
+                tryHandshakeOnce = FALSE;
             }
             else
             {
-                // We're in a wrong viewer, just sit quietly
-                llDetachFromAvatar();
+                // We're in a wrong viewer, just sit quietly and call llDetachFromAvatar();
+                llRequestPermissions(owner, PERMISSION_ATTACH);
             }
         }
         else if (Method == URL_REQUEST_DENIED)
