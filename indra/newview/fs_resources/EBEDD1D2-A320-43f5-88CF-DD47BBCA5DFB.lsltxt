@@ -222,12 +222,9 @@
                 }
             }
             tUUIDs = []; // Free memory
-            if (llGetListLength(responses) > 0)
-            {
-                string body = "<llsd><string>" + llList2CSV(responses) + "</string></llsd>";
-                responses = []; // Free memory
-                llHTTPResponse(httpReqID, 200, body);
-            }
+            string body = "<llsd><string>" + llList2CSV(responses) + "</string></llsd>";
+            responses = []; // Free memory
+            llHTTPResponse(httpReqID, 200, body);
 
         }
 
