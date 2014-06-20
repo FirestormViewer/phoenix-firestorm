@@ -217,13 +217,18 @@
                 tUUID = (key)llList2String(tUUIDs, i);
                 tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])), 0);
                 if (tPos.z > 1023) // We only care about results at higher altitudes.
+                {
                     responses = responses + tUUID + tPos.z; // Optimized for Mono-LSL
+                }
             }
             tUUIDs = []; // Free memory
-            string body = "<llsd><string>" +llList2CSV(responses) + "</string></llsd>";
-            responses = []; // Free memory
-            llHTTPResponse(httpReqID, 200, body);
- 
+            if (llGetListLength(responses) > 0)
+            {
+                string body = "<llsd><string>" + llList2CSV(responses) + "</string></llsd>";
+                responses = []; // Free memory
+                llHTTPResponse(httpReqID, 200, body);
+            }
+
         }
 
         else if (cmd == "getScriptInfo")
