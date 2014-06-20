@@ -144,160 +144,6 @@
         llRequestPermissions(owner, PERMISSION_ATTACH);
     }
 
-    parseCommand(key httpReqID, string msg)
-    {
-        // Remove the <llsd><string> ... </string></llsd> wrapper
-        list commandList = llParseString2List(llGetSubString(msg, 14, llStringLength(msg) - 18), ["|"], []);
-        string cmd = llList2String(commandList, 0);
-
-        // Large If statement for command processing. Shame on you, LSL!
-        if (cmd == "URL Confirmed")
-        {
-            // We're in the right viewer, go on.
-            viewerIsFirestorm = TRUE;
-        }
-
-        else if (cmd == "UseLSLFlightAssist")
-        {
-            float speed = llList2Float(commandList, 1);
-            if (speed != flightAssistPushForce)
-            {
-                flightAssistPushForce = speed;
-                if (flightAssistPushForce > 0)
-                {
-                    if (flightAssistPushForce > 5.0)
-                    {
-                        // No lightspeed please!
-                        flightAssistPushForce = 5.0;
-                    }
-                    request_control_perms();
-                    llSetTimerEvent(flightAirCheckNormal);
-                }
-                else
-                {
-                    llSetTimerEvent(0);
-                    flight_hover(FALSE);
-                }
-            }
-        }
-
-        else if (cmd == "llMoveToTarget")
-        {
-
-            if (llList2String(commandList, 2) == "1")
-            {
-                // llMoveToTarget teleports are disabled for Second Life grids
-                return;
-            }
-
-            // Pause movelock for now, if present
-            if (useMoveLock)
-            {
-                movelock_init(FALSE);
-            }
-
-            // Get parameters
-            string params = "<" + llList2String(commandList, 1) + ">";
-            mttVector = (vector)params;
-            vector relpos = mttVector - llGetPos();
-            float groundLevel = llGround(relpos);
-            if (mttVector.z < groundLevel) // Trying to go underground? I think not!
-            {
-                mttVector.z = groundLevel + 1;
-            }
-            startTPTimer = llGetUnixTime();
-
-            // TP commands immediately configure a TP timer consumer
-            setTimerEvent2(TP_TIMER_TICK);
-
-        }
-
-        else if (cmd == "getZOffsets")
-        // Radar-specific command to get high-rez altitude data.
-        // Input is list of UUIDs to query
-        // Output is list of UUID:Altitude pairs
-        {
-
-            // Get parameters
-            list    tUUIDs = llCSV2List(llList2String(commandList, 1));
-            commandList = []; // Free memory
-            integer tLength = llGetListLength(tUUIDs);
-            key     tUUID; // Key for llGetobjectDetails()
-            vector  tPos;
-            integer i = 0;
-            list    responses;
-
-            for (i = 0; i < tLength; ++i)
-            {
-                tUUID = (key)llList2String(tUUIDs, i);
-                tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])), 0);
-                if (tPos.z > 1023) // We only care about results at higher altitudes.
-                {
-                    responses = responses + tUUID + tPos.z; // Optimized for Mono-LSL
-                }
-            }
-            tUUIDs = []; // Free memory
-            string body = "<llsd><string>" + llList2CSV(responses) + "</string></llsd>";
-            responses = []; // Free memory
-            llHTTPResponse(httpReqID, 200, body);
-
-        }
-
-        else if (cmd == "getScriptInfo")
-        {
-            list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
-            if (llGetListLength(details) == 5)
-            {
-                llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0]) + "</bridgeGetScriptInfo>");
-            }
-            else
-            {
-                llOwnerSay("<bridgeError error=scriptinfonotfound>");
-            }
-        }
-
-        else if (cmd == "UseMoveLock")
-        {
-            useMoveLock = llList2Integer(commandList, 1);
-            movelock_init(useMoveLock);
-            llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
-        }
-
-        else if (cmd == "RelockMoveLockAfterMovement")
-        {
-            relockMoveLockAfterMovement = llList2Integer(commandList, 1);
-            if (relockMoveLockAfterMovement)
-            {
-                request_control_perms();
-            }
-        }
-
-        else if (cmd == "ExternalIntegration")
-        {
-            integer integrationOpenCollar = llList2Integer(commandList, 1);
-            integer integrationLockMeister = llList2Integer(commandList, 2);
-            if (integrationOpenCollar != aoEnabledOC)
-            {
-                aoEnabledOC = integrationOpenCollar;
-                integrationCheckOC();
-            }
-            if (integrationLockMeister != aoEnabledLM)
-            {
-                aoEnabledLM = integrationLockMeister;
-                integrationCheckLM();
-            }
-        }
-
-        else if (cmd == "DetachBridge")
-        {
-            // HTTP request from the viewer to immediately detach LSL-Client Bridge
-            // This can be passed as a response to llOwnerSay("<bridgeURL> ... </bridgeVer>") handshake right after granting URL by a region
-            // If bridge doesn't receive "URL Confirmed" message as a reply to handshake it'll automatically detach after next region change anyway
-            detachBridge();
-        }
-
-    }
-
 //
 // OpenCollar/LockMeister AO interface functions
 //
@@ -552,9 +398,13 @@ default
         {
             requestBridgeURL();
         }
-        if (change & CHANGED_INVENTORY)
+        else if (change & (CHANGED_INVENTORY | CHANGED_ALLOWED_DROP))
         {
             makeSane();
+        }
+        else if (change & CHANGED_OWNER)
+        {
+            llResetScript();
         }
     }
 
@@ -584,13 +434,12 @@ default
         tpMoveStep();
     }
 
-    http_request(key ID, string Method, string Body)
+    http_request(key httpReqID, string Method, string Body)
     {
         // llOwnerSay("Received HTTP " + Method + " message. Command body: " + Body);
         if (Method == URL_REQUEST_GRANTED)
         {
             latestURL = Body;
-            // Saying URL to owner
             if (viewerIsFirestorm || tryHandshakeOnce)
             {
                 // Firestorm viewer and handshake
@@ -612,7 +461,157 @@ default
         }
         else if (Method == "GET" || Method == "POST")
         {
-            parseCommand(ID, Body);
+
+            // Remove the <llsd><string> ... </string></llsd> wrapper
+            list commandList = llParseString2List(llGetSubString(Body, 14, llStringLength(Body) - 18), ["|"], []);
+            string cmd = llList2String(commandList, 0);
+
+            // Large If statement for command processing. Shame on you, LSL!
+            if (cmd == "getZOffsets")
+            {
+
+                // Radar-specific command to get high-rez altitude data.
+                // Input is list of UUIDs to query, output is list of UUID:Altitude pairs.
+
+                // Get parameters
+                list    tUUIDs = llCSV2List(llList2String(commandList, 1));
+                commandList = []; // Free memory
+                integer tLength = llGetListLength(tUUIDs);
+                key     tUUID; // Key for llGetobjectDetails()
+                vector  tPos;
+                integer i = 0;
+                list    responses;
+
+                for (i = 0; i < tLength; ++i)
+                {
+                    tUUID = (key)llList2String(tUUIDs, i);
+                    tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])), 0);
+                    if (tPos.z > 1023) // We only care about results at higher altitudes.
+                    {
+                        responses = responses + tUUID + tPos.z; // Optimized for Mono-LSL
+                    }
+                }
+                tUUIDs = []; // Free memory
+                string body = "<llsd><string>" + llList2CSV(responses) + "</string></llsd>";
+                responses = []; // Free memory
+                llHTTPResponse(httpReqID, 200, body);
+
+            }
+
+            else if (cmd == "UseMoveLock")
+            {
+                useMoveLock = llList2Integer(commandList, 1);
+                movelock_init(useMoveLock);
+                llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
+            }
+
+            else if (cmd == "llMoveToTarget")
+            {
+
+                if (llList2String(commandList, 2) == "1")
+                {
+                    // llMoveToTarget teleports are disabled for Second Life grids
+                    return;
+                }
+
+                // Pause movelock for now, if present
+                if (useMoveLock)
+                {
+                    movelock_init(FALSE);
+                }
+
+                // Get parameters
+                string params = "<" + llList2String(commandList, 1) + ">";
+                mttVector = (vector)params;
+                vector relpos = mttVector - llGetPos();
+                float groundLevel = llGround(relpos);
+                if (mttVector.z < groundLevel) // Trying to go underground? I think not!
+                {
+                    mttVector.z = groundLevel + 1;
+                }
+                startTPTimer = llGetUnixTime();
+
+                // TP commands immediately configure a TP timer consumer
+                setTimerEvent2(TP_TIMER_TICK);
+
+            }
+
+            else if (cmd == "getScriptInfo")
+            {
+                list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
+                if (llGetListLength(details) == 5)
+                {
+                    llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0]) + "</bridgeGetScriptInfo>");
+                }
+                else
+                {
+                    llOwnerSay("<bridgeError error=scriptinfonotfound>");
+                }
+            }
+
+            else if (cmd == "UseLSLFlightAssist")
+            {
+                float speed = llList2Float(commandList, 1);
+                if (speed != flightAssistPushForce)
+                {
+                    flightAssistPushForce = speed;
+                    if (flightAssistPushForce > 0)
+                    {
+                        if (flightAssistPushForce > 5.0)
+                        {
+                            // No lightspeed please!
+                            flightAssistPushForce = 5.0;
+                        }
+                        request_control_perms();
+                        llSetTimerEvent(flightAirCheckNormal);
+                    }
+                    else
+                    {
+                        llSetTimerEvent(0);
+                        flight_hover(FALSE);
+                    }
+                }
+            }
+
+            else if (cmd == "RelockMoveLockAfterMovement")
+            {
+                relockMoveLockAfterMovement = llList2Integer(commandList, 1);
+                if (relockMoveLockAfterMovement)
+                {
+                    request_control_perms();
+                }
+            }
+
+            else if (cmd == "ExternalIntegration")
+            {
+                integer integrationOpenCollar = llList2Integer(commandList, 1);
+                integer integrationLockMeister = llList2Integer(commandList, 2);
+                if (integrationOpenCollar != aoEnabledOC)
+                {
+                    aoEnabledOC = integrationOpenCollar;
+                    integrationCheckOC();
+                }
+                if (integrationLockMeister != aoEnabledLM)
+                {
+                    aoEnabledLM = integrationLockMeister;
+                    integrationCheckLM();
+                }
+            }
+
+            else if (cmd == "URL Confirmed")
+            {
+                // We're in the right viewer, go on.
+                viewerIsFirestorm = TRUE;
+            }
+
+            else if (cmd == "DetachBridge")
+            {
+                // HTTP request from the viewer to immediately detach LSL-Client Bridge
+                // This can be passed as a response to llOwnerSay("<bridgeURL> ... </bridgeVer>") handshake right after granting URL by a region
+                // If bridge doesn't receive "URL Confirmed" message as a reply to handshake it'll automatically detach after next region change anyway
+                detachBridge();
+            }
+
         }
     }
 
