@@ -12,6 +12,7 @@
     string  latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
+    integer useHTTPS = FALSE;
     key owner;
 
     // Teleport
@@ -89,6 +90,14 @@
     initBridge()
     {
 
+        // Assume everything is disabled for now and synchronize later with the viewer via HTTP
+        useMoveLock = FALSE;
+        flightAssistPushForce = 0.0;
+        isFlyingNow = -1;
+        aoEnabledOC = FALSE;
+        aoEnabledLM = FALSE;
+
+        // Set owner and request control perms
         owner = llGetOwner();
         request_control_perms();
 
@@ -115,6 +124,20 @@
 
     }
 
+    requestBridgeURL()
+    {
+        llReleaseURL(latestURL);
+        latestURL = "";
+        if (useHTTPS)
+        {
+            llRequestSecureURL();
+        }
+        else
+        {
+            llRequestURL();
+        }
+    }
+
     detachBridge()
     {
         llReleaseURL(latestURL);
@@ -132,14 +155,6 @@
         {
             // We're in the right viewer, go on.
             viewerIsFirestorm = TRUE;
-        }
-
-        else if (cmd == "DetachBridge")
-        {
-            // HTTP request from the viewer to immediately detach LSL-Client Bridge
-            // This could be passed during session or at login, as a response to "<bridgeURL> ... </bridgeVer>" handshake right after granting URL by a region
-            // Note: If Bridge doesn't receive "URL Confirmed" message as a reply to handshake it'll automatically detach after next region change anyway
-            detachBridge();
         }
 
         else if (cmd == "UseLSLFlightAssist")
@@ -273,13 +288,14 @@
             }
         }
 
-    }
+        else if (cmd == "DetachBridge")
+        {
+            // HTTP request from the viewer to immediately detach LSL-Client Bridge
+            // This can be passed as a response to llOwnerSay("<bridgeURL> ... </bridgeVer>") handshake right after granting URL by a region
+            // If bridge doesn't receive "URL Confirmed" message as a reply to handshake it'll automatically detach after next region change anyway
+            detachBridge();
+        }
 
-    requestBridgeURL()
-    {
-        llReleaseURL(latestURL);
-        latestURL = "";
-        llRequestURL();
     }
 
 //
@@ -440,13 +456,6 @@ default
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
         llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_TEMP_ON_REZ, TRUE]);
-        // Force Movelock, Flight Assist and external integration variables to false here and allow attach() to decide via initBridge(), if we're on Firestorm and they need to be updated / enabled.
-        // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
-        useMoveLock = FALSE;
-        flightAssistPushForce = 0.0;
-        isFlyingNow = -1;
-        aoEnabledOC = FALSE;
-        aoEnabledLM = FALSE;
     }
 
     attach(key k)
