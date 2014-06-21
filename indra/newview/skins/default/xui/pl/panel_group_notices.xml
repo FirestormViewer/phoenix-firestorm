@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ogłoszenia" name="notices_tab">
 	<panel.string name="help_text">
-		Ogłoszenia to szybka droga do komunikowania się ze wszystkimi członkami grupy poprzez wysyłanie ich na grupowym kanale.
-Dodatkowo, do ogłoszenia można dołączać załączniki. Ogłoszenia docierają jedynie do członków grupy, którzy mają zdolność ich otrzymywania.
+		Ogłoszenia to szybka droga do komunikowania się ze wszystkimi osobami w grupie poprzez wysyłanie ich na grupowym kanale.
+Dodatkowo, do ogłoszenia można dołączać załączniki. Ogłoszenia docierają jedynie do tych osób, które mają zdolność ich otrzymywania.
 By nie otrzymywać ogłoszeń, w zakładce Ogólne pozostaw niezaznaczone &quot;Otrzymuj grupowe ogłoszenia&quot;.
 	</panel.string>
 	<panel.string name="no_notices_text">

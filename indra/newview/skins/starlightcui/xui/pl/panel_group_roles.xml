@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Członkowie i funkcje" name="roles_tab">
+<panel label="Osoby i funkcje" name="roles_tab">
 	<panel.string name="default_needs_apply_text">
 		Panel zawiera niezapisane zmiany.
 	</panel.string>
@@ -7,14 +7,14 @@
 		Czy chcesz zapisać zmiany?
 	</panel.string>
 	<tab_container name="roles_tab_container">
-		<panel label="CZŁONKOWIE" name="members_sub_tab" tool_tip="Członkowie">
+		<panel label="OSOBY" name="members_sub_tab" tool_tip="Osoby">
 			<panel.string name="help_text">
-				Możesz dodawać i usuwać funkcje przypisane do członków.
-Możesz wybrać wielu członków naciskając Ctrl i klikając na ich imionach.
+				Możesz dodawać i usuwać funkcje przypisane do osób.
+Możesz wybrać wiele osób naciskając Ctrl i klikając na ich imionach.
 			</panel.string>
-			<filter_editor label="Filtruj członków" name="filter_input"/>
+			<filter_editor label="Filtruj osoby" name="filter_input"/>
 			<name_list name="member_list">
-				<name_list.columns label="Członek" name="name"/>
+				<name_list.columns label="Imię" name="name"/>
 				<name_list.columns label="Dotacje" name="donated"/>
 				<name_list.columns label="Tytuł" name="title"/>
 			</name_list>
@@ -25,7 +25,7 @@ Możesz wybrać wielu członków naciskając Ctrl i klikając na ich imionach.
 		<panel label="FUNKCJE" name="roles_sub_tab">
 			<panel.string name="help_text">
 				Wszystkie funkcje mają tytuł oraz przypisane przywileje
-które umożliwiają wykonywanie danej funkcji. Każdy członek może pełnić
+które umożliwiają wykonywanie danej funkcji. Każda osoba może pełnić
 jedną lub wiele funkcji. Każda grupa może posiadać maksymalnie 10 funkcji,
 łącznie z funkcją Każdy i Właściciel.
 			</panel.string>
@@ -40,9 +40,9 @@ jedną lub wiele funkcji. Każda grupa może posiadać maksymalnie 10 funkcji,
 			<button label="Nowa funkcja" name="role_create"/>
 			<button label="Usuń funkcję" name="role_delete"/>
 		</panel>
-		<panel label="PRZYWILEJE" name="actions_sub_tab" tool_tip="Możesz sprawdzić szczegóły dotyczące danego przywileju oraz jakie funkcje oraz jacy członkowie posiadają prawo korzystania z niego.">
+		<panel label="PRZYWILEJE" name="actions_sub_tab" tool_tip="Możesz sprawdzić szczegóły dotyczące danego przywileju oraz jakie funkcje oraz jakie osoby posiadają prawo korzystania z niego.">
 			<panel.string name="help_text">
-				Przywileje pozwalają członkom przypisanym do funkcji
+				Przywileje pozwalają osobom przypisanym do funkcji
 na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 			</panel.string>
 			<filter_editor label="Filtruj przywileje" name="filter_input"/>
@@ -69,9 +69,9 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 			Opis
 		</text>
 		<text name="static4">
-			Przypisani członkowie
+			Przypisane osoby
 		</text>
-		<check_box label="Publikuj osoby z funkcją" name="role_visible_in_list" tool_tip="Opcja ta pozwala określić widoczność członków pełniących tę funkcję dla ludzi spoza grupy."/>
+		<check_box label="Publikuj osoby z funkcją" name="role_visible_in_list" tool_tip="Opcja ta pozwala określić widoczność osób pełniących tę funkcję dla ludzi spoza grupy."/>
 		<text name="static5">
 			Dozwolone przywileje
 		</text>
@@ -79,13 +79,13 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 	</panel>
 	<panel name="actions_footer">
 		<text_editor name="action_description">
-			Przywilej &apos;Usuń członka z grupy&apos;. Tylko właściciel może usunąć innego właściciela.
+			Przywilej &apos;Usuń osobę z grupy&apos;. Tylko właściciel może usunąć innego właściciela.
 		</text_editor>
 		<text name="static2">
 			Funkcje z tym przywilejem
 		</text>
 		<text name="static3">
-			Członkowie z tym przywilejem
+			Osoby z tym przywilejem
 		</text>
 	</panel>
 </panel>

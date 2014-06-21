@@ -5,11 +5,11 @@
 	<string name="FSQualityAssurance" value=" Łowca błędów"/>
 	<string name="AcctTypeResident" value="Rezydent"/>
 	<string name="AcctTypeTrial" value="Próbne"/>
-	<string name="AcctTypeCharterMember" value="Członek-zalożyciel"/>
+	<string name="AcctTypeCharterMember" value="Założyciel"/>
 	<string name="AcctTypeEmployee" value="Pracownik Linden Lab"/>
-	<string name="PaymentInfoUsed" value="Dane konta używane"/>
-	<string name="PaymentInfoOnFile" value="Dane konta dostępne"/>
-	<string name="NoPaymentInfoOnFile" value="Brak danych konta"/>
+	<string name="PaymentInfoUsed" value="Płatności: Dane użyte"/>
+	<string name="PaymentInfoOnFile" value="Płatności: Dane wprowadzone"/>
+	<string name="NoPaymentInfoOnFile" value="Płatności: Dane niewprowadzone"/>
 	<string name="AgeVerified" value="Wiek zweryfikowany"/>
 	<string name="NotAgeVerified" value="Wiek niezweryfikowany"/>
 	<string name="no_partner_text" value="Brak"/>

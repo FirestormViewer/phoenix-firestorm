@@ -1779,13 +1779,13 @@ Spróbuj zalogować się ponownie za minutę.
 		[COUNT] dni
 	</string>
 	<string name="GroupMembersA">
-		[COUNT] członek
+		[COUNT] osoba
 	</string>
 	<string name="GroupMembersB">
-		[COUNT] członków
+		[COUNT] osób
 	</string>
 	<string name="GroupMembersC">
-		[COUNT] członków
+		[COUNT] osób
 	</string>
 	<string name="AcctTypeResident">
 		Rezydent
@@ -1794,19 +1794,19 @@ Spróbuj zalogować się ponownie za minutę.
 		Próbne
 	</string>
 	<string name="AcctTypeCharterMember">
-		Członek założyciel
+		Założyciel
 	</string>
 	<string name="AcctTypeEmployee">
 		Pracownik Linden Lab
 	</string>
 	<string name="PaymentInfoUsed">
-		Dane konta używane
+		Płatności: Dane użyte
 	</string>
 	<string name="PaymentInfoOnFile">
-		Dane płatnicze na koncie
+		Płatności: Dane wprowadzone
 	</string>
 	<string name="NoPaymentInfoOnFile">
-		Brak danych na koncie
+		Płatności: Dane niewprowadzone
 	</string>
 	<string name="AgeVerified">
 		Zweryfikowany wiekowo

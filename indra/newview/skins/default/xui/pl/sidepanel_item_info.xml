@@ -54,7 +54,7 @@
 				<text name="GroupLabel">
 					Grupa:
 				</text>
-				<check_box label="Udostępnij" name="CheckShareWithGroup" tool_tip="Pozwól wszystkim członkom ustawionej grupy na dzielenie prawa do modyfikacji dla tego obiektu. Musisz przypisać obiekt grupie aby aktywować ograniczenia wynikające z funkcji."/>
+				<check_box label="Udostępnij" name="CheckShareWithGroup" tool_tip="Pozwól wszystkim osobom z ustawionej grupy na dzielenie prawa do modyfikacji dla tego obiektu. Musisz przypisać obiekt grupie aby aktywować ograniczenia wynikające z funkcji."/>
 				<text name="NextOwnerLabel">
 					Nast. właściciel:
 				</text>

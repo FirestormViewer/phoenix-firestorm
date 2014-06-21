@@ -87,7 +87,7 @@
 			<text name="GroupLabel">
 				Grupa:
 			</text>
-			<check_box label="Udostępnij" name="checkbox share with group" tool_tip="Udostępnij prawa do modyfikacji tego obiektu wszystkim członkom, którzy posiadają przywilej modyfikacji obiektów grupy. By ograniczyć, przypisz obiekt do grupy."/>
+			<check_box label="Udostępnij" name="checkbox share with group" tool_tip="Udostępnij prawa do modyfikacji tego obiektu wszystkim osobom, które posiadają przywilej modyfikacji obiektów grupy. By ograniczyć, przypisz obiekt do grupy."/>
 			<text name="NextOwnerLabel">
 				Nast. Właściciel:
 			</text>
