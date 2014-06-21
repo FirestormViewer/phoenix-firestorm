@@ -570,7 +570,6 @@
 		  left="5"
 		  name="buttons_ls"
 		  orientation="horizontal"
-		  botom="0"
 		  width="313">
       <layout_panel
 	  follows="bottom|left"

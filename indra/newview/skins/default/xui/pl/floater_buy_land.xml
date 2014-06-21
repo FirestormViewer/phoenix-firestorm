@@ -181,7 +181,7 @@ sprzedaż z obiektami
 		Zmianę Twojego konta na Premium.
 	</text>
 	<text name="account_reason">
-		Tylko członkowie z kontem Premium mogą mieć działki.
+		Tylko osoby z kontem Premium mogą mieć działki.
 	</text>
 	<combo_box name="account_level">
 		<combo_box.item label="US$9.95/miesięcznie, naliczane miesięcznie" name="US$9.95/month,billedmonthly"/>

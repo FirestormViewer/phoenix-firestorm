@@ -22,7 +22,12 @@
         <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />
         <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
         <check_box name="UseLSLBridge" label="Włącz Most w LScript Language" tool_tip="Pozwala Firestormowi na używanie oskryptowanego dodatku (Mostu), aby rozszerzyć znacznie swoje możliwości" />
-        <check_box name="UseLSLFlightAssist" label="Włącz pomocnika lotu w Moście" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach" />
+        <combo_box width="275" name="UseLSLFlightAssist" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach">
+            <combo_box.item label="Pomocnik lotu: Wyłączony" name="flight_disabled" />
+            <combo_box.item label="Pomocnik lotu: Lekkie przyspieszanie" name="flight_mild" />
+            <combo_box.item label="Pomocnik lotu: Umiarkowane przyspieszanie" name="flight_moderate" />
+            <combo_box.item label="Pomocnik lotu: Silne przyspieszanie" name="flight_strong" />
+        </combo_box>
         <check_box label="Stopniowe powiększanie pola widzenia" name="FSRenderFarClipStepping" tool_tip="Jeśli włączysz tą opcję, to Firestorm będzie stopniowo zwiększać pole widzenia po teleportacji." />
         <slider name="progressive_draw_distance_interval" tool_tip="Odstęp w sekundach pomiędzy każdym kolejnym powiększeniem pola widzenia." />
     </panel>
@@ -96,6 +101,11 @@
         <button name="custom_beam_btn" label="Utwórz nowy" tool_tip="Dopasuj kształt wiązki" />
         <button name="refresh_beams" label="Odśwież listę" tool_tip="Odśwież listę wiązek" />
         <slider name="FSBeamShapeScale" label="Rozm.:" tool_tip="Zmień rozmiar użytego kształtu wiązki" />
+        <text name="BridgeProtocols">
+            Integracja Mostu LSL z zewnętrznymi protokołami:
+        </text>
+        <check_box label="Zezwól protokołowi OpenCollar na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationOC" />
+        <check_box label="Zezwól protokołowi LockMeister na włączanie lub wyłączanie wbudowanego Animatora" name="BridgeIntegrationLM" />
     </panel>
     <panel label="Polecenia 1" name="tab-CmdLine1">
         <check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />

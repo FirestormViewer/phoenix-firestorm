@@ -237,17 +237,34 @@
          left="15"
          width="270"
          tool_tip="Allows the Viewer to use a scripted attachment (Bridge) to extend its features"/>
-        <check_box
+        <combo_box
          control_name="UseLSLFlightAssist"
          enabled_control="UseLSLBridge"
          layout="topleft"
          left_delta="200"
-         height="16"
-         initial_value="false"
+         top_delta="0"
+         follows="left|top"
+         height="20"
          name="UseLSLFlightAssist"
-         label="Enable Bridge Flight Assist"
-         width="270"
-         tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
+         tool_tip="Enables the script that assists flying and hovering at extended altitudes"
+         width="200">
+            <combo_box.item
+             label="Flight Assist: Disabled"
+             name="flight_disabled"
+             value="0.0" />
+            <combo_box.item
+             label="Flight Assist: Mild boost"
+             name="flight_mild"
+             value="1.0" />
+            <combo_box.item
+             label="Flight Assist: Moderate boost"
+             name="flight_moderate"
+             value="3.0" />
+            <combo_box.item
+             label="Flight Assist: Strong boost"
+             name="flight_strong"
+             value="5.0" />
+        </combo_box>
 
     </panel>
 
@@ -841,6 +858,39 @@
          show_text="true"
          width="150"
          tool_tip="Change the scale of the shape used for the Phoenix Shaped Beam" />
+
+        <text
+         type="string"
+         left="5"
+         top_pad="90"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="BridgeProtocols"
+         width="500">
+            LSL-Client Bridge external protocols integration:
+        </text>
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Allow OpenCollar protocol to enable or disable built in AO"
+         left="15"
+         top_pad="10"
+         name="BridgeIntegrationOC"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationOC" />
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Allow LockMeister protocol to enable or disable built in AO"
+         left="15"
+         top_pad="2"
+         name="BridgeIntegrationLM"
+         width="450"
+         enabled_control="UseLSLBridge"
+         control_name="BridgeIntegrationLM" />
 
     </panel>
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->

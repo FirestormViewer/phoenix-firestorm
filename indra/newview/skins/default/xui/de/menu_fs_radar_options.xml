@@ -23,5 +23,6 @@
 	<menu_item_check label="Verlassen der Region melden" name="RadarReportSimRangeLeave"/>
 	<menu_item_check label="Eintrittsmeldungen an Skripte senden" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Austrittsmeldungen an Skripte senden" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="LSL-Brücke zur Verbesserung der Genauigkeit verwenden" name="FSRadarEnhanceByBridge"/>
 	<menu_item_call label="Liste ignorierter Einwohner &amp; Objekte öffnen" name="show_blocked_list"/>
 </toggleable_menu>

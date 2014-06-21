@@ -330,8 +330,9 @@ public:
 		MM_TEXTURE1,
 		MM_TEXTURE2,
 		MM_TEXTURE3,
-		NUM_MATRIX_MODES,
-		MM_TEXTURE
+		// NUM_MATRIX_MODES // <FS:ND/> Needs to be the last entry.
+		MM_TEXTURE,
+		NUM_MATRIX_MODES
 	} eMatrixMode;
 
 	LLRender();

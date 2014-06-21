@@ -1428,7 +1428,8 @@ void LLViewerObjectList::removeDrawable(LLDrawable* drawablep)
 	}
 }
 
-BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
+// BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
+BOOL LLViewerObjectList::killObject(LLViewerObject *objectp, bool aForDerender )
 {
 	// Don't ever kill gAgentAvatarp, just force it to the agent's region
 	// unless region is NULL which is assumed to mean you are logging out.
@@ -1443,6 +1444,11 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
 
 	if (objectp)
 	{
+		// <FS:ND> Remember this object it case it comes back.	
+		if( aForDerender )
+			mDerendered[ objectp->getID()] = LLTimer::getTotalSeconds().value();
+		// </FS:ND>
+
 		objectp->markDead(); // does the right thing if object already dead
 		return TRUE;
 	}
@@ -2168,6 +2174,11 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 	
 	updateActive(objectp);
 
+	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
+	if( mDerendered.end() != mDerendered.find( uuid ) )
+		killObject( objectp );
+	// </FS:ND>
+
 	return objectp;
 }
 
@@ -2205,6 +2216,11 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 	mObjects.push_back(objectp);
 
 	updateActive(objectp);
+
+	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
+	if( mDerendered.end() != mDerendered.find( uuid ) )
+		killObject( objectp );
+	// </FS:ND>
 
 	return objectp;
 }
@@ -2434,3 +2450,18 @@ LLDebugBeacon::~LLDebugBeacon()
 		mHUDObject->markDead();
 	}
 }
+
+// <FS:ND> Helper function to purge the internal list of derendered objects on teleport.
+
+void LLViewerObjectList::resetDerenderList()
+{
+	mDerendered.clear();
+}
+
+// <FS:ND> Helper function to add items from global blacklist after teleport.
+void LLViewerObjectList::addBlacklistedItem( LLUUID const &aId )
+{
+	mDerendered[ aId ] = LLTimer::getTotalSeconds().value();
+}
+
+// </FS:ND>

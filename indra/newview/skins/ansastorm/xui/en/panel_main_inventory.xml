@@ -543,7 +543,6 @@
   </tab_container>
   <panel
    follows="left|right|bottom"
-   auto_resize="true"
    height="25"
    layout="topleft"
    top_pad="-3"
@@ -552,7 +551,6 @@
    width="322">
       <panel
        visible="false"
-       auto_resize="false"
        follows="top|left"
        height="25"
        left="0"
@@ -576,12 +574,10 @@
       <panel
        visible="false"
        follows="top|left"
-       auto_resize="false"
        height="25"
        layout="topleft"
        left_pad="0"
        name="add_btn_panel"
-       user_resize="false"
        width="0">
           <button
            follows="top|left"
@@ -599,7 +595,6 @@
       </panel>
       <panel
        follows="top|left"
-       auto_resize="false"
        height="25"
        layout="topleft"
        left_pad="0"
@@ -625,7 +620,6 @@
       </panel>
       <panel
        follows="top|left|right"
-       auto_resize="true"
        height="25"
        left_pad="0"
        right="-33"
@@ -655,7 +649,6 @@
            name="dummy_icon" />
       </panel>
       <panel
-       auto_resize="false"
        follows="top|right"
        height="25"
        left_pad="0"

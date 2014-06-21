@@ -2803,7 +2803,11 @@ void derenderObject(bool permanent)
 			}
 
 			select_mgr->deselectObjectOnly(objp);
-			gObjectList.killObject(objp);
+
+			// <FS:ND> Pass true to make sure this object stays dead.
+			// gObjectList.killObject(objp);
+			gObjectList.killObject(objp, true);
+			// </FS:ND>
 		}
 		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
 		{
@@ -4303,11 +4307,11 @@ class FSSelfToggleMoveLock : public view_listener_t
 				gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 				if (new_value)
 				{
-					reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+					reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 				}
 				else
 				{
-					reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+					reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
 				}
 			}
 #ifdef OPENSIM

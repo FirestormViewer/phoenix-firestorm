@@ -20,9 +20,4 @@
   font="SansSerif"
   bg_visible="true"
   bg_readonly_color="FSChatHistoryBackground">
-  <more_chat_text
-    mouse_opaque="true" 
-    parse_urls="false"
-    word_wrap="true"
-    />
 </fs_chat_history>

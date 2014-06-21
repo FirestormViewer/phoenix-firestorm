@@ -45,7 +45,6 @@
      parse_urls="true"/>
     <text_editor
 	 border_visible="true"
-	 bevel_style="in"
      parse_urls="true"
      enabled="true"
      follows="all"
@@ -61,8 +60,7 @@
      use_ellipses="true"
      value="message"
      width="285"
-     word_wrap="true"
-     parse_url="false" >
+     word_wrap="true">
     </text_editor>
   </panel>
   <panel

@@ -45,7 +45,7 @@
 			<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
-		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
+		<menu_item_call label="Zażądaj statusu administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
 		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
@@ -420,7 +420,7 @@
 			<menu_item_check label="Promienie" name="Raycast"/>
 			<menu_item_check label="Wektory wiatru" name="Wind Vectors"/>
 			<menu_item_check label="Złożoność renderowania" name="rendercomplexity"/>
-			<menu_item_check label="Bajty załączników" name="attachment bytes"/>
+			<menu_item_check label="Bajty dodatków" name="attachment bytes"/>
 			<menu_item_check label="Skulpty" name="Sculpt"/>
 			<menu_item_check label="Rozmiar tekstury" name="Texture Size"/>
 			<menu label="Gęstość tekstur" name="Texture Density">
@@ -558,7 +558,7 @@
 			<menu_item_check label="Błędy" name="Error"/>
 			<menu_item_check label="Brak" name="None"/>
 		</menu>
-		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
+		<menu_item_call label="Zażądaj statusu administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
 		<menu_item_check label="Pokaż menu administratora" name="View Admin Options"/>
 	</menu>

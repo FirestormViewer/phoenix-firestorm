@@ -60,7 +60,6 @@
 	<check_box label="Podświetl znajomych" name="show_friends" tool_tip="Podświetlaj imiona Twoich znajomych."/>
 	<check_box label="Usuwaj 'Resident' z imion starego typu" name="legacy_trim_check" tool_tip="Usuwaj 'Resident' z imion starego typu."/>
 	<check_box label="Pozycje tagów imion w stary sposób" name="FSLegacyNametagPosition" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie zawieszony na stałej wysokości ponad awatarem i nie będzie podążać za jego głową, jeśli poruszy się ona np. w wyniku animacji."/>
-	<check_box label="Udostępniaj tag Radaru skryptom LSL" name="FSPublishRadarTag" tool_tip="Zaznaczenie tej opcji spowoduje włączenie udostępniania specjalnym oskryptowanym HUDom tagu 'Firestorm' podczas wyświetlania informacji o Twoim awatarze. Ta funkcjonalność zwiększa możliwości niektórych HUDów radarowych używając Mostu LSL Firestorma."/>
 	<text name="title_afk_text">
 		Zasypiaj po czasie:
 	</text>

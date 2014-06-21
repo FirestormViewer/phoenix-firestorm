@@ -40,10 +40,6 @@
          width="356"
          follows="left|top|right"
          layout="topleft"
-         bevel_style="none"
-         border.border_thickness="0"
-         border_style="line"
-         commit_on_focus_lost="false"
         >
         </search_combo_box>
     </panel>

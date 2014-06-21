@@ -4476,6 +4476,8 @@ bool LLAgent::teleportCore(bool is_local)
 	// This was breaking the case of teleporting within a single sim.  Backing it out for now.
 //	LLVoiceClient::getInstance()->leaveChannel();
 	
+	gObjectList.resetDerenderList();
+
 	return true;
 }
 

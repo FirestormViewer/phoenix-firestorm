@@ -213,7 +213,18 @@
       function="RLV.EnableIfNot"
       parameter="showminimap" />
   </menu_item_check>
-     
+  
+  <menu_item_check
+     label="Enhance radar with LSL-Client Bridge"
+     name="FSRadarEnhanceByBridge"
+     enabled_control="UseLSLBridge">
+	 <menu_item_check.on_check
+     	control="FSRadarEnhanceByBridge" />
+     <menu_item_check.on_click
+        function="ToggleControl"
+        parameter="FSRadarEnhanceByBridge" />
+  </menu_item_check>
+  
   <menu_item_separator layout="topleft" />
   <menu_item_call name="show_blocked_list" label="Open Blocked Residents &amp; Objects">
     <menu_item_call.on_click function="Radar.Option.Action" userdata="panel_block_list_sidetray" />

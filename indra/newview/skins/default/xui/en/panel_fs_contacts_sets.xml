@@ -70,7 +70,7 @@
      bottom="-3"
 	 follows="all"
 	 layout="topleft"
-     show_profile_button="true"
+     show_profile_btn="true"
      show_speaking_indicator="false"
      show_voice_volume="false"
      show_permissions_granted="true"
@@ -127,7 +127,7 @@
 	 tool_tip="Offer a teleport to your current location"
 	 width="80" />
 	<button
-	 top_pad="25"
+	 top_pad="10"
 	 follows="top|right"
 	 layout="topleft"
 	 height="22"

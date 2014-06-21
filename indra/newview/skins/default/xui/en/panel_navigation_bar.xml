@@ -67,7 +67,6 @@
 	 layout="topleft"
 	 right="193"
 	 height="22"
-	 border_size="0"
 	 auto_resize="false">
 
 		<pull_button
@@ -147,7 +146,6 @@
 	 layout="topleft"
 	 width="587"
 	 height="22"
-	 border_size="0"
 	 auto_resize="true">
 
 	    <location_input
@@ -222,9 +220,6 @@
  auto_resize="false">
 
   <favorites_bar
- 	 background_visible="false"
- 	 bg_alpha_color="Transparent"
- 	 color="Transparent"
      follows="left|top|right"
      top_pad="2"
      font="SansSerifSmall"

@@ -743,16 +743,9 @@ static void handleSetPoseStandLock(const LLSD& newvalue)
 // <FS:TT> Client LSL Bridge
 static void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
-	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
+	FSLSLBridge::instance().viewerToLSL("UseLSLFlightAssist|" + newvalue.asString());
 }
 // </FS:TT>
-
-// <FS:AO> bridge-based radar tags
-static void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
-}
-// </FS:AO>
 
 // <FS:PP> Movelock for Bridge
 static void handleMovelockOptionChanged(const LLSD& newvalue)
@@ -762,6 +755,13 @@ static void handleMovelockOptionChanged(const LLSD& newvalue)
 static void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue)
 {
 	FSLSLBridge::instance().updateBoolSettingValue("RelockMoveLockAfterMovement", newvalue.asBoolean());
+}
+// </FS:PP>
+
+// <FS:PP> External integrations (OC, LM etc.) for Bridge
+static void handleExternalIntegrationsOptionChanged()
+{
+	FSLSLBridge::instance().updateIntegrations();
 }
 // </FS:PP>
 
@@ -962,10 +962,14 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
 
 	gSavedPerAccountSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
-	gSavedPerAccountSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("RelockMoveLockAfterMovement")->getCommitSignal()->connect(boost::bind(&handleMovelockAfterMoveOptionChanged, _2));
 	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
+
+	// <FS:PP> External integrations (OC, LM etc.) for Bridge
+	gSavedPerAccountSettings.getControl("BridgeIntegrationOC")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
+	gSavedPerAccountSettings.getControl("BridgeIntegrationLM")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
+
 }
 
 #if TEST_CACHED_CONTROL

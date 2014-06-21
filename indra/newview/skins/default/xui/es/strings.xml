@@ -516,9 +516,11 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ReleaseNotes">
 		Notas de la versión
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Cargando...
 	</string>

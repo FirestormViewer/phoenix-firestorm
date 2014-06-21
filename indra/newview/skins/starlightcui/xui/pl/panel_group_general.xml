@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ogólne" name="general_tab">
 	<panel.string name="help_text">
-		Zakładka Główne zawiera ogólne informacje na temat tej grupy, listę członków, ustawień dla całej grupy oraz danych członków.
+		Zakładka Główne zawiera ogólne informacje na temat tej grupy, listę osób wraz z danymi oraz panel ustawień.
 
 By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 	</panel.string>
@@ -9,7 +9,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		Ogólne informacje na temat grupy uległy zmianie.
 	</panel.string>
 	<panel.string name="incomplete_member_data_str">
-		Wyszukiwanie informacji o członku
+		Wyszukiwanie informacji o osobie
 	</panel.string>
 	<panel name="group_info_top">
 		<texture_picker name="insignia" tool_tip="Kliknij by powiększyć obraz" />
@@ -25,7 +25,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		Status grupy
 	</text_editor>
 	<name_list name="visible_members">
-		<name_list.columns label="Członek" name="name"/>
+		<name_list.columns label="Imię" name="name"/>
 		<name_list.columns label="Tytuł" name="title"/>
 		<name_list.columns label="Status" name="status"/>
 	</name_list>
@@ -45,7 +45,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		</text>
 		<check_box label="Wolny wstęp" name="open_enrollement" tool_tip="Grupa oferuje wolny wstęp dla każdego i nie wymaga zaproszenia."/>
 		<check_box label="Opłata wstępu" name="check_enrollment_fee" tool_tip="Ustaw opłatę za przyłączenie się do grupy."/>
-		<spinner name="spin_enrollment_fee" tool_tip="Nowi członkowie muszą zapłacić tą sumę by dołączyć do grupy, jeśli 'Opłata wstępu' jest zaznaczona."/>
+		<spinner name="spin_enrollment_fee" tool_tip="Nowe osoby muszą zapłacić tą sumę by dołączyć do grupy, jeśli 'Opłata wstępu' jest zaznaczona."/>
 		<combo_box name="group_mature_check" tool_tip="Wybierz jeżeli uważasz, że Twoja grupa klasyfikowana jest jako Moderate.">
 			<combo_item name="select_mature">
 				- Wybierz klasyfikację wieku -

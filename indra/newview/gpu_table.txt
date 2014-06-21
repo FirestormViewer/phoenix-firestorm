@@ -143,6 +143,9 @@ ATI Radeon HD 8900D/G/M					.*ATI.*AMD Radeon.* (HD|HD )89..[DGM].*				4	1	0	4.2
 ATI Radeon R5 Mobile Series				.*ATI.*AMD Radeon.* R5 M2\d\d.*						3	1	0	4.2
 ATI Radeon R7 Mobile Series				.*ATI.*AMD Radeon.* R7 M2\d\d.*						4	1	0	4.2
 ATI Radeon R9 Mobile Series				.*ATI.*AMD Radeon.* R9 M2\d\d.*						4	1	0	4.2
+AMD Radeon R5(TM) OEM Mobile Series		.*ATI.*AMD Radeon\(TM\).* R5 .*						3	1	0	4.2
+AMD Radeon R7(TM) OEM Mobile Series		.*ATI.*AMD Radeon\(TM\).* R7 .*						4	1	0	4.2
+AMD Radeon R9(TM) OEM Mobile Series		.*ATI.*AMD Radeon\(TM\).* R9 .*						4	1	0	4.2
 AMD Radeon 6600M and 6700M Series		.*ATI.*AMD Radeon.* 6600M and .*					4	1	0	4.2
 ATI Radeon HD 2300						.*ATI.*Radeon.* (HD|HD )23..						0	1	1	3.3
 ATI Radeon HD 2400						.*ATI.*(Radeon|ASUS).* (AH|AX|HD|HD |EAH)24..		1	1	1	4
@@ -329,12 +332,12 @@ Intel HD Graphics 4000					.*Intel.*HD Graphics 40.*							3	1	1	4.2
 Intel HD Graphics 4200					.*Intel.*HD Graphics 42.*							3	1	0	4.2
 Intel HD Graphics 4400					.*Intel.*HD Graphics 44.*							3	1	0	4.2
 Intel HD Graphics 4600					.*Intel.*HD Graphics 46.*							3	1	0	4.2
-Intel HD Graphics 5000					.*Intel.*HD Graphics 5.*							4	1	0	4
-Intel Intel Iris Pro Graphics 5200		.*Intel.*Iris Pro Graphics 52.*						4	1	0	4
-Intel Intel Iris Graphics 5100			.*Intel.*Iris Graphics 51.*							4	1	0	4
+Intel HD Graphics 5000					.*Intel.*HD Graphics 50.*							4	1	0	4.2
+Intel Intel Iris Pro Graphics 5200		.*Intel.*Iris Pro Graphics 52.*						4	1	0	4.2
+Intel Intel Iris Graphics 5100			.*Intel.*Iris Graphics 51.*							4	1	0	4.2
 Intel Intel Iris OpenGL Engine			.*Intel.*Iris OpenGL.*								4	1	0	4
 Intel Intel Iris Pro OpenGL Engine		.*Intel.*Iris Pro OpenGL.*							5	1	0	4
-Intel HD Graphics						.*Intel.*HD Graphics.*								1	1	1	4
+Intel HD Graphics						.*Intel.*HD Graphics.*								0	1	1	3.1
 Intel Mobile 4 Series					.*Intel.*Mobile.* 4 Series.*						0	1	1	2.1
 Intel Mobile 45 Express					.*Intel.*Mobile.* 45 Express Chipset.*				0	1	0	2.1
 Intel 4 Series Internal					.*Intel.* 4 Series Internal.*						1	1	1	2.1

@@ -822,7 +822,7 @@ F64 LLAudioEngine::mapWindVecToPan(LLVector3 wind_vec)
 
 
 void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_id, const F32 gain,
-								 const S32 type, const LLVector3d &pos_global, const LLUUID source_object)
+								 const S32 type, const LLVector3d &pos_global, const LLUUID& source_object)
 {
 	// Create a new source (since this can't be associated with an existing source.
 	//LL_INFOS() << "Localized: " << audio_uuid << LL_ENDL;

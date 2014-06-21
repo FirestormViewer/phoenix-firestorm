@@ -79,7 +79,7 @@
       bottom="-3"
       follows="all"
       layout="topleft"
-      show_profile_button="true"
+      show_profile_btn="true"
       show_speaking_indicator="false"
       show_voice_volume="false"
       show_permissions_granted="true"

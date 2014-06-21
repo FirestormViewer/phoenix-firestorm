@@ -149,7 +149,7 @@
                 height="60"
                 follows="all"
                 save_sizes="true"
-                border_width="0"
+                border_size="0"
                 resize_bar_overlap="8"
                 mouse_opaque="false">
 
@@ -170,7 +170,7 @@
                 right="-1"
                 height="60"
                 follows="all"
-                border_width="0"
+                border_size="0"
                 mouse_opaque="false">
 
   <!-- Panel to house the stand fly buttons, will expand down if chatbar is hidden -->

@@ -242,6 +242,7 @@
 			<button label="S" name="Def_UISndRadarSimLeave" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="RadarEnterChannelAlert" label="Betreten-Meldungen an Skripte weiterleiten"/>
 			<check_box name="RadarLeaveChannelAlert" label="Verlassen-Meldungen an Skripte weiterleiten"/>
+			<check_box name="FSRadarEnhanceByBridge" label="LSL-Brücke zur Verbesserung der Radar-Genauigkeit verwenden" tool_tip="Falls aktiviert, wird die LSL-Brücke verwendet, um die Entfernung zu Avataren zu bestimmen, die sich in einer Höhe von mehr als 1020m und außerhalb der Draw Distance befinden."/>
 		</panel>
 
 		<!-- Chat: Keyword Alerts -->

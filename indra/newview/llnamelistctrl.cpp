@@ -244,6 +244,12 @@ BOOL LLNameListCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 				params.pos(pos);
 				params.sticky_rect(sticky_rect);
 
+				// <FS:Ansariel> FIRE-14013: Add styled_message param so the return condition in LLToolTipMgr::show will fail
+				LLToolTip::StyledText st;
+				st.text("");
+				params.styled_message.add(st);
+				// </FS:Ansariel>
+
 				LLToolTipMgr::getInstance()->show(params);
 				handled = TRUE;
 			}

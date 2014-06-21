@@ -141,9 +141,9 @@ Czy chcesz dać prawa modyfikacji wybranym osobom?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AddGroupOwnerWarning">
-		Dodajesz członków do funkcji [ROLE_NAME].
+		Dodajesz osoby do funkcji [ROLE_NAME].
 Ta funkcja nie może być odebrana.
-Członkowie muszą sami zrezygnować z pełnienia tej funkcji.
+Osoby muszą same zrezygnować z pełnienia tej funkcji.
 Chcesz kontynuować?
 		<usetemplate ignoretext="Przed dodaniem nowego właściciela do grupy, proszę potwierdzić swoją decyzję." name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
@@ -151,7 +151,7 @@ Chcesz kontynuować?
 		Dodajesz przywilej &apos;[ACTION_NAME]&apos; do funkcji &apos;[ROLE_NAME]&apos;.
 
 *UWAGA*
-Członek w funkcji z tym przywilejem może przypisać siebie i innych członków nie będących właścicielami do funkcji dających więcej przywilejów niż posiadane obecnie, potencjalnie dające możliwości zbliżone do możliwości właściciela.
+Osoba w funkcji z tym przywilejem może przypisać siebie i inne osoby, które nie są właścicielami do funkcji dających więcej przywilejów niż posiadane obecnie, potencjalnie dające możliwości zbliżone do możliwości właściciela.
 Udzielaj tego przywileju z rozwagą.
 
 Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
@@ -161,7 +161,7 @@ Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 		Dodajesz przywilej &apos;[ACTION_NAME]&apos; do funkcji &apos;[ROLE_NAME]&apos;
 
 *UWAGA*
-Członek w funkcji z tym przywilejem może przypisać sobie i innym członkom nie będącymi właścicielami wszystkie przywileje potencjalnie dające możliwości zbliżone do możliwości właściciela.
+Osoba w funkcji z tym przywilejem może przypisać sobie i innym osobom, które nie są właścicielami wszystkie przywileje potencjalnie dające możliwości zbliżone do możliwości właściciela.
 Udzielaj tego przywileju z rozwagą.
 
 Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
@@ -169,11 +169,11 @@ Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+		<usetemplate ignoretext="Potwierdź wyrzucenie osoby z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectGroupMembersWarning">
-		Zamierzasz wyrzucić [COUNT] członków z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+		Zamierzasz wyrzucić [COUNT] osób z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie kilku osób z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="AttachmentDrop">
 		Wybrałeś opcję upuszczenia swojego dodatku.
@@ -192,12 +192,12 @@ Czy chcesz kontynuować?
 	</notification>
 	<notification name="JoinGroupCannotAfford">
 		Członkostwo w tej grupie kosztuje [COST]L$
-Masz za mało L$ żeby zostać członkiem.
+Masz za mało L$ żeby do niej dołączyć.
 	</notification>
 	<notification name="CreateGroupCost">
 		Stworzenie tej grupy kosztuje [COST]L$.
-W grupie powinien być więcej niż jeden członek, albo zostanie na zawsze skasowana.
-Zaproś proszę członków w ciągu 48 godzin.
+W grupie powinna być więcej niż jedna osoba, w przeciwnym razie zostanie ona na zawsze skasowana.
+Zaproś kogoś w ciągu 48 godzin.
 		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
 	<notification name="LandBuyPass">
@@ -1560,7 +1560,7 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
 		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Chcesz opuścić grupę?
+Chcesz ją opuścić?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
@@ -3758,7 +3758,7 @@ Obecne ustawienie: [CURRENT_VALUE]
 	<notification name="FirstJoinSupportGroup">
 		Witaj w grupie wsparcia Phoenix/Firestorm!
 
-Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie prezentowała swoją wersję - będzie ona wyświetlana przed każdą Twoją wypowiedzią na tym czacie grupowym. Nasi członkowie będą mogli dać Ci bardziej sensowne porady, jeśli będą znać wersję Twojej Przeglądarki od razu.
+Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie prezentowała swoją wersję - będzie ona wyświetlana przed każdą Twoją wypowiedzią na tym czacie grupowym. Osoby z naszej załogi wsparcia będą mogły dać Ci bardziej sensowne porady, jeśli będą znać wersję Twojej Przeglądarki od razu.
 
 Możesz włączyć lub wyłączyć tą funkcję w każdej chwili w górnej części okna czatu.
 

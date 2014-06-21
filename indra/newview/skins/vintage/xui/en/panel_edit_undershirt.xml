@@ -56,7 +56,6 @@
        top_pad="0"
        left="0"
        layout="topleft"
-       fit_parent="false"
        follows="all"
        height="320"
        width="333">

@@ -13,7 +13,6 @@
      name="wearable_accordion"
      background_visible="true"
      bg_alpha_color="DkGray2"
-     fit_parent="true"
      layout="topleft"
      follows="all"
      halign="center"

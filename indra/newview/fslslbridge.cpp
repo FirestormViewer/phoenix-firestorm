@@ -30,6 +30,7 @@
 #include "fslslbridgerequest.h"
 //#include "imageids.h"
 #include "llxmlnode.h"
+#include "apr_base64.h" // For getScriptInfo()
 #include "llbufferstream.h"
 #include "llsdserialize.h"
 #include "llviewerinventory.h"
@@ -67,10 +68,10 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 10;
+const U32 FS_BRIDGE_MINOR_VERSION = 15;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.10
+//current script version is 2.15
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -214,23 +215,27 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		}
 
 		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
-		//updateBoolSettingValue("UseLSLFlightAssist");
 		if (!mIsFirstCallDone)
 		{
 			//on first call from bridge, confirm that we are here
 			//then check options use
-			updateBoolSettingValue("UseLSLFlightAssist");
-			updateBoolSettingValue("UseMoveLock");
-			updateBoolSettingValue("RelockMoveLockAfterMovement");
-			updateBoolSettingValue("FSPublishRadarTag");
-			mIsFirstCallDone = true;
+
+			if (gSavedPerAccountSettings.getF32("UseLSLFlightAssist") > 0.f)
+			{
+				viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
+			}
 
 			// <FS:PP> Inform user, if movelock was enabled at login
 			if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+				updateBoolSettingValue("UseMoveLock");
+				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 			}
 			// </FS:PP>
+
+			updateBoolSettingValue("RelockMoveLockAfterMovement");
+			updateIntegrations();
+			mIsFirstCallDone = true;
 
 		}
 		// <FS:PP> FIRE-11924: Refresh movelock position after region change (crossing/teleporting), if lock was enabled
@@ -241,7 +246,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
 				gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
-				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
 			}
 			else
 			{
@@ -262,20 +267,137 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	if (tag == "<clientAO ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=") + 6;
+		S32 valuepos = message.find("state=");
 		if (valuepos != std::string::npos)
 		{
-			if (message.substr(valuepos, 2) == "on")
+			if (message.substr(valuepos+6, 2) == "on")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
 			}
-			else if (message.substr(valuepos, 3) == "off")
+			else if (message.substr(valuepos+6, 3) == "off")
 			{
 				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "AO control - Received unknown state" << LL_ENDL;
 			}
 		}
 	}
 	//</FS:TS> FIRE-962
+
+	// <FS:PP> Get script info response
+	else if (tag == "<bridgeGetScriptInfo>")
+	{
+		status = true;
+		S32 getScriptInfoEnd = message.find("</bridgeGetScriptInfo>");
+		if (getScriptInfoEnd != std::string::npos)
+		{
+
+			std::string getScriptInfoString = message.substr(21, getScriptInfoEnd - 21);
+			std::istringstream strStreamGetScriptInfo(getScriptInfoString);
+			std::string scriptInfoToken;
+			LLSD scriptInfoArray = LLSD::emptyArray();
+			int scriptInfoArrayCount = 0;
+			while (std::getline(strStreamGetScriptInfo, scriptInfoToken, ','))
+			{
+				LLStringUtil::trim(scriptInfoToken);
+				if (scriptInfoArrayCount == 0)
+				{
+					// First value, OBJECT_NAME, should be passed from Bridge as encoded in base64
+					// Encoding eliminates problems with special characters and commas for CSV
+					S32 base64Length = apr_base64_decode_len(scriptInfoToken.c_str());
+					if (base64Length)
+					{
+						std::vector<U8> base64VectorData;
+						base64VectorData.resize(base64Length);
+						base64Length = apr_base64_decode_binary(&base64VectorData[0], scriptInfoToken.c_str());
+						base64VectorData.resize(base64Length);
+						std::string base64FinalData(base64VectorData.begin(), base64VectorData.end());
+						scriptInfoToken = base64FinalData;
+					}
+					else
+					{
+						LL_WARNS("FSLSLBridge") << "ScriptInfo - OBJECT_NAME cannot be decoded" << LL_ENDL;
+					}
+				}
+				scriptInfoArray.append(scriptInfoToken);
+				++scriptInfoArrayCount;
+			}
+
+			if (scriptInfoArrayCount == 5)
+			{
+				LLStringUtil::format_map_t args;
+				args["OBJECT_NAME"] = scriptInfoArray[0].asString();
+				args["OBJECT_RUNNING_SCRIPT_COUNT"] = scriptInfoArray[1].asString();
+				args["OBJECT_TOTAL_SCRIPT_COUNT"] = scriptInfoArray[2].asString();
+				args["OBJECT_SCRIPT_MEMORY"] = scriptInfoArray[3].asString();
+				args["OBJECT_SCRIPT_TIME"] = scriptInfoArray[4].asString();
+				reportToNearbyChat(formatString(LLTrans::getString("fsbridge_script_info"), args));
+			}
+			else
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+				LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by viewer, data somehow passed bridge script check)" << LL_ENDL;
+			}
+
+		}
+		else
+		{
+			reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfomalformed"));
+			LL_WARNS("FSLSLBridge") << "ScriptInfo - Received malformed response from bridge (missing ending tag)" << LL_ENDL;
+		}
+	}
+	// </FS:PP>
+
+	// <FS:PP> Movelock state response
+	else if (tag == "<bridgeMovelock ")
+	{
+		status = true;
+		S32 valuepos = message.find("state=");
+		if (valuepos != std::string::npos)
+		{
+			if (message.substr(valuepos+6, 1) == "1")
+			{
+				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+			}
+			else if (message.substr(valuepos+6, 1) == "0")
+			{
+				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "Movelock - Received unknown state" << LL_ENDL;
+			}
+		}
+	}
+	// </FS:PP>
+
+	// <FS:PP> Error responses handling
+	else if (tag == "<bridgeError ")
+	{
+		status = true;
+		S32 valuepos = message.find("error=");
+		if (valuepos != std::string::npos)
+		{
+			if (message.substr(valuepos+6, 9) == "injection")
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_injection"));
+				LL_WARNS("FSLSLBridge") << "Script injection detected" << LL_ENDL;
+			}
+			else if (message.substr(valuepos+6, 18) == "scriptinfonotfound")
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
+				LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by bridge)" << LL_ENDL;
+			}
+			else
+			{
+				LL_WARNS("FSLSLBridge") << "ErrorReporting - Received unknown error type" << LL_ENDL;
+			}
+		}
+	}
+	// </FS:PP>
+
 	return status;
 }
 
@@ -323,6 +445,15 @@ bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool content
 	}
 
 	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
+}
+
+void FSLSLBridge::updateIntegrations()
+{
+	viewerToLSL(llformat(
+		"ExternalIntegration|%d|%d",
+		gSavedPerAccountSettings.getBOOL("BridgeIntegrationOC"),
+		gSavedPerAccountSettings.getBOOL("BridgeIntegrationLM")
+	), new FSLSLBridgeRequestResponder());
 }
 
 //

@@ -37,8 +37,6 @@
 			<panel
 				label="Marketplace"
 				layout="topleft"
-				auto_resize="true"
-				user_resize="false"
 				follows="bottom|left|right"
 				name="inbox_outbox_layout_panel"
 				visible="true">

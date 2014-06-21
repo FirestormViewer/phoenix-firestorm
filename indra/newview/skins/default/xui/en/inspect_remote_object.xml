@@ -19,7 +19,6 @@
   <text
    follows="all"
    font="SansSerifLarge"
-   font_style="BOLD"
    height="30"
    left="8"
    name="object_name"

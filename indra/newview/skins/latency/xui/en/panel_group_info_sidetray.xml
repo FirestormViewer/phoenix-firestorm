@@ -132,7 +132,6 @@ background_visible="false"
    <tab_container
      left="0"
      top="0"
-     fit_parent="true"
      follows="all"
      layout="topleft"
      name="groups_accordion"

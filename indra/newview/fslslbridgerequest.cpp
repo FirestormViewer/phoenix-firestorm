@@ -67,6 +67,10 @@ FSLSLBridgeRequestResponder::FSLSLBridgeRequestResponder()
 	//FSLSLBridgeRequestManager::instance().initSingleton(); 
 }
 
+FSLSLBridgeRequestResponder::~FSLSLBridgeRequestResponder()
+{
+}
+
 //If we get back a normal response, handle it here
 void FSLSLBridgeRequestResponder::result(const LLSD& content)
 {
@@ -89,6 +93,11 @@ void FSLSLBridgeRequestResponder::error(U32 status, const std::string& reason)
 FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
 {
 }
+
+FSLSLBridgeRequestRadarPosResponder::~FSLSLBridgeRequestRadarPosResponder()
+{
+}
+
 void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 {
 	FSRadar* radar = FSRadar::getInstance();

@@ -10,7 +10,7 @@
 		Obszar: [AREA]
 	</floater.string>
 	<floater.string name="string.members">
-		Członków: [MEMBER_COUNT]
+		Osób: [MEMBER_COUNT]
 	</floater.string>
 	<floater.string name="string.founder">
 		Założył: [FOUNDER]

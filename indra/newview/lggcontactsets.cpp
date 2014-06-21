@@ -649,6 +649,9 @@ bool LGGContactSets::isFriendInSet(const LLUUID& friend_id, const std::string& s
 		return isNonFriend(friend_id);
 	}
 
+	if( set_name.empty() )
+		return false;
+
 	ContactSet* set = getContactSet(set_name);
 	if (set)
 	{

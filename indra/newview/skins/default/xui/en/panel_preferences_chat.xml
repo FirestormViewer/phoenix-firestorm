@@ -1588,6 +1588,17 @@
            height="20"
            width="400" />
 
+          <check_box
+           enabled_control="UseLSLBridge"
+           control_name="FSRadarEnhanceByBridge"
+           name="FSRadarEnhanceByBridge"
+           label="Enhance radar with LSL-Client Bridge"
+           tool_tip="If this is enabled, radar functions responsible for determining avatar locations at high altitudes are assisted by the LSL-Client Bridge, particularly when they're beyond draw distance."
+           layout="topleft"
+           top_pad="0"
+           height="20"
+           width="400" />
+
         </panel>
 
         <!-- Chat: Keyword Alerts -->

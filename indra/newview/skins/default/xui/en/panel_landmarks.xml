@@ -115,7 +115,6 @@
      name="bottom_panel"
      width="313">
      	  <panel
-   		  border_size="0"
 		   follows="top|left|right"
 		   height="25"
 		   layout="topleft"

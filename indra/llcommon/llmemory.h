@@ -245,6 +245,7 @@ LL_FORCE_INLINE void ll_aligned_free(void* ptr)
 		return ll_aligned_free_fallback(ptr);
 	}
 }
+
 // Copy words 16-byte blocks from src to dst. Source and destination MUST NOT OVERLAP. 
 // Source and dest must be 16-byte aligned and size must be multiple of 16.
 //

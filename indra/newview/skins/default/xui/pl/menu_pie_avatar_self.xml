@@ -26,7 +26,7 @@
     </pie_menu>
     <pie_slice label="Usiądź" name="Sit Down Here"/>
     <pie_slice label="Wstań" name="Stand Up"/>
-    <pie_slice label="O skryptach" name="ScriptInfo"/>
+    <pie_slice label="Info o skryptach" name="ScriptInfo"/>
     <pie_slice label="Gesty..." name="Gestures"/>
     <pie_menu label="Wygląd &gt;" name="Appearance &gt;">
         <pie_slice label="Edytuj kształt" name="Edit My Shape"/>

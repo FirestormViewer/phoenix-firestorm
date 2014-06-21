@@ -593,9 +593,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ReleaseNotes">
 		Versionshinweise
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Wird geladen...
 	</string>
@@ -5668,6 +5670,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="MovelockDisabled">
 		Movelock deaktiviert.
 	</string>
+	<string name="MovelockEnabling">
+		Aktiviere Movelock...
+	</string>
+	<string name="MovelockDisabling">
+		Deaktiviere Movelock...
+	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
@@ -5800,6 +5808,18 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="fsbridge_created">
 		LSL-Brücke erstellt.
+	</string>
+	<string name="fsbridge_script_info">
+		Skript-Info: „[OBJECT_NAME]“: [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] aktive Skripte, [OBJECT_SCRIPT_MEMORY] KB Limit erlaubter Speicher, [OBJECT_SCRIPT_TIME] ms CPU-Zeit beansprucht.
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">
+		Skript-Info: Zu prüfendes Objekt ungültig oder außer Reichweite.
+	</string>
+	<string name="fsbridge_error_scriptinfomalformed">
+		Skript-Info: Fehlerhafte Antwort von LSL-Brücke erhalten. Bitte erneut versuchen.
+	</string>
+	<string name="fsbridge_error_injection">
+		HINWEIS: Ein oder mehrere Skripte wurden zur Firestorm-LSL-Brücke hinzugefügt! Falls dieser Hinweis unerwartet aufgetreten ist, bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen.
 	</string>
 
 	<string name="QP Draw Distance">

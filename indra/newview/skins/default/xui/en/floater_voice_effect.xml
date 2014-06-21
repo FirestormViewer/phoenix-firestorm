@@ -80,7 +80,7 @@
    follows="left|top|right"
    layout="topleft"
    font="SansSerifBold"
-   color="White"
+   text_color="White"
    left="10"
    name="preview_text"
    right="-10"

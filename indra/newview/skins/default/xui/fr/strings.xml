@@ -481,9 +481,11 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="ReleaseNotes">
 		Notes de version
 	</string>
+	<!--
 	<string name="RELEASE_NOTES_BASE_URL">
 		http://wiki.secondlife.com/wiki/Release_Notes/
 	</string>
+	-->
 	<string name="LoadingData">
 		Chargement...
 	</string>

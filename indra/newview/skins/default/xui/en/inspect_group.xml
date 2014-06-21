@@ -73,8 +73,7 @@ L$123 to join
      mouse_opaque="true"
      name="group_icon"
      top="10"
-     width="38"
-     bevel_style="in" />
+     width="38"/>
   <button
    follows="bottom|left"
    height="23"

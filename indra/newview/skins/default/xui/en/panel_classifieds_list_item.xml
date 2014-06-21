@@ -32,7 +32,6 @@
      width="308"/>
     <texture_picker
      allow_no_texture="true"
-     border_enabled="true"
      fallback_image="default_land_picture.j2c"
      enabled="false"
      follows="left|top"
@@ -67,8 +66,7 @@
      textbox.max_length="1024"
      textbox.show_context_menu="false" 
      top_pad="0"
-     width="178"
-     word_wrap="true" />
+     width="178"/>
     <button
      follows="right"
      height="20"

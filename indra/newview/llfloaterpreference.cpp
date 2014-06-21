@@ -2428,6 +2428,7 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLButton>("Def_UISndRestartOpenSim")->setVisible(TRUE);
 	getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(TRUE);
 #endif
+	getChild<LLComboBox>("UseLSLFlightAssist")->setValue((int)gSavedPerAccountSettings.getF32("UseLSLFlightAssist")); // Flight Assist combo box; Not sound-related, but better to place it here instead of creating whole new void
 }
 // </FS:PP>
 

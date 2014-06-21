@@ -303,7 +303,7 @@ Please try logging in again in a minute.</string>
 
 	<string name="ReleaseNotes">Release Notes</string>
 	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">http://wiki.secondlife.com/wiki/Release_Notes/</string>
+	<string name="RELEASE_NOTES_BASE_URL" translate="false">http://wiki.phoenixviewer.com/firestorm_change_log_</string>
 
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>
@@ -2558,6 +2558,8 @@ Try enclosing path to the editor with double quotes.
 
   <string name="MovelockEnabled">Movelock enabled</string>
   <string name="MovelockDisabled">Movelock disabled</string>
+  <string name="MovelockEnabling">Enabling movelock...</string>
+  <string name="MovelockDisabling">Disabling movelock...</string>
 
   <string name="BusyResponse">busy response</string>
   
@@ -2631,6 +2633,10 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
   <string name="fsbridge_detached">Bridge detached.</string>
   <string name="fsbridge_created">Bridge created.</string>
+  <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.</string>
+  <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
+  <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
+  <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
 
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">Draw Distance</string>

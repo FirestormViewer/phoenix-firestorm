@@ -4,7 +4,7 @@
 		<container_view name="statistics_view">
 			<stat_view label="Podstawowe" name="basic">
 				<stat_bar label="Klatki/sek (FPS)" name="fps"/>
-				<stat_bar label="Przepustowość" name="bandwidth"/>
+				<stat_bar label="Otrzymane dane UDP" name="bandwidth"/>
 				<stat_bar label="Utracone pakiety" name="packet_loss"/>
 				<stat_bar label="Ping symulatora" name="ping"/>
 			</stat_view>

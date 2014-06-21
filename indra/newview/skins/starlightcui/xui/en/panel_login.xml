@@ -80,7 +80,7 @@
           height="22"
           left_delta="0"
           max_chars="128"
-          commit_on_focus_lost="false"
+          combo_editor.commit_on_focus_lost="false"
           combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith420 or Steller Sunshine"
           top_pad="0"

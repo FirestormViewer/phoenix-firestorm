@@ -24,8 +24,7 @@
 	 background_opaque="true"
 	 follows="left|top"
 	 bg_opaque_color="1,1,1,0"
-	 bg_alpha_color="white"
-	 can_resize="false">
+	 bg_alpha_color="white">
     </panel>
 	<text
 	 font="SansSerifSmall"
@@ -78,7 +77,6 @@ Right click changes end position.
 	 mouse_opaque="true"
 	 show_text="true"
 	 width="280"
-	 auto_resize="false"
 	 tool_tip="Controls the speed of the color cycle"/>
 	<button
 	 bottom_delta="30"
