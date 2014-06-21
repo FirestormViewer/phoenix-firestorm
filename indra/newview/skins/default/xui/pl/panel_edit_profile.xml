@@ -8,8 +8,8 @@
 	<string name="AcctTypeCharterMember" value="Założyciel"/>
 	<string name="AcctTypeEmployee" value="Pracownik Linden Lab"/>
 	<string name="PaymentInfoUsed" value="Płatności: Dane użyte"/>
-	<string name="PaymentInfoOnFile" value="Płatności: Dane wprowadzone"/>
-	<string name="NoPaymentInfoOnFile" value="Płatności: Dane niewprowadzone"/>
+	<string name="PaymentInfoOnFile" value="Płatności: Dane znane"/>
+	<string name="NoPaymentInfoOnFile" value="Płatności: Dane nieznane"/>
 	<string name="AgeVerified" value="Wiek zweryfikowany"/>
 	<string name="NotAgeVerified" value="Wiek niezweryfikowany"/>
 	<string name="no_partner_text" value="Brak"/>

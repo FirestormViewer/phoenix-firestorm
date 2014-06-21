@@ -1803,10 +1803,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Płatności: Dane użyte
 	</string>
 	<string name="PaymentInfoOnFile">
-		Płatności: Dane wprowadzone
+		Płatności: Dane znane
 	</string>
 	<string name="NoPaymentInfoOnFile">
-		Płatności: Dane niewprowadzone
+		Płatności: Dane nieznane
 	</string>
 	<string name="AgeVerified">
 		Zweryfikowany wiekowo
