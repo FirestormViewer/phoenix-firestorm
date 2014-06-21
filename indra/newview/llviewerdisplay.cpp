@@ -134,6 +134,11 @@ void display_startup()
 		return; 
 	}
 
+	// <FS:ND> Once at and past STATE_PRECACHE display() kicks in and starts to draw, we can safely eit here.
+	if (LLStartUp::getStartupState() >= STATE_PRECACHE)
+		return;
+	// </FS:ND>
+	
 	gPipeline.updateGL();
 
 	// Update images?
