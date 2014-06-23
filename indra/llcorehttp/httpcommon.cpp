@@ -40,9 +40,7 @@ HttpStatus::type_enum_t LLCORE;
 
 HttpStatus::operator unsigned long() const
 {
-	static const int shift(sizeof(unsigned long) * 4);
-
-	unsigned long result(((unsigned long) mType) << shift | (unsigned long) (int) mStatus);
+	unsigned long result(((unsigned long) mType) << 16 | (unsigned long) (int) mStatus);
 	return result;
 }
 
@@ -52,7 +50,7 @@ std::string HttpStatus::toHex() const
 	std::ostringstream result;
 	result.width(8);
 	result.fill('0');
-	result << std::hex << operator unsigned long();
+	result << std::hex << operator unsigned long() << std::dec;
 	return result.str();
 }
 

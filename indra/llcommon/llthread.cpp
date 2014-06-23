@@ -98,12 +98,12 @@ void set_thread_name( DWORD dwThreadID, const char* threadName)
 #if LL_DARWIN
 // statically allocated thread local storage not supported in Darwin executable formats
 #elif LL_WINDOWS
-U32 __declspec(thread) sThreadID = 0;
+uintptr_t __declspec(thread) sThreadID = 0;
 #elif LL_LINUX
-U32 __thread sThreadID = 0;
+uintptr_t __thread sThreadID = 0;
 #endif 
 
-U32 LLThread::sIDIter = 0;
+uintptr_t LLThread::sIDIter = 0;
 
 
 LL_COMMON_API void assert_main_thread()
@@ -111,8 +111,8 @@ LL_COMMON_API void assert_main_thread()
 	static uintptr_t s_thread_id = LLThread::currentID();
 	if (LLThread::currentID() != s_thread_id)
 	{
-		LL_WARNS() << "Illegal execution from thread id " << (intptr_t) LLThread::currentID()
-			<< " outside main thread " << (intptr_t) s_thread_id << LL_ENDL;
+		LL_WARNS() << "Illegal execution from thread id " << LLThread::currentID()
+			<< " outside main thread " << s_thread_id << LL_ENDL;
 	}
 }
 
@@ -352,7 +352,7 @@ uintptr_t LLThread::currentID()
 {
 #if LL_DARWIN
 	// statically allocated thread local storage not supported in Darwin executable formats
-	return (uintptr_t)apr_os_thread_current();
+	return reinterpret_cast<uintptr_t>(apr_os_thread_current());
 #else
 	return sThreadID;
 #endif

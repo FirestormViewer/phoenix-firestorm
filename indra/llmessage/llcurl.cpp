@@ -1727,7 +1727,7 @@ void LLCurl::ssl_locking_callback(int mode, int type, const char *file, int line
 //static
 unsigned long LLCurl::ssl_thread_id(void)
 {
-	return LLThread::currentID();
+	return static_cast<unsigned long>(LLThread::currentID());
 }
 #endif
 

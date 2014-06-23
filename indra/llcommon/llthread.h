@@ -45,7 +45,7 @@ class LL_COMMON_API LLThread
 {
 private:
 	friend class LLMutex;
-	static U32 sIDIter;
+	static uintptr_t sIDIter;
 
 public:
 	typedef enum e_thread_status
@@ -87,7 +87,7 @@ public:
 	apr_pool_t *getAPRPool() { return mAPRPoolp; }
 	LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
 
-	U32 getID() const { return mID; }
+	uintptr_t getID() const { return mID; }
 
 	// Called by threads *not* created via LLThread to register some
 	// internal state used by LLMutex.  You must call this once early
@@ -109,7 +109,7 @@ protected:
 	apr_pool_t			*mAPRPoolp;
 	BOOL				mIsLocalPool;
 	EThreadStatus		mStatus;
-	U32					mID;
+	uintptr_t			mID;
 	LLTrace::ThreadRecorder* mRecorder;
 
 	//a local apr_pool for APRFile operations in this thread. If it exists, LLAPRFile::sAPRFilePoolp should not be used.
