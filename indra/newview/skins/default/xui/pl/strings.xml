@@ -5301,7 +5301,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Most LSL został utworzony pomyślnie.
 	</string>
 	<string name="fsbridge_script_info">
-		Info o skryptach: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] działających skryptów, [OBJECT_SCRIPT_MEMORY] KB dozwolonego limitu pamięci, [OBJECT_SCRIPT_TIME] ms zużytego czasu CPU.
+		Info o skryptach: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] działających skryptów, [OBJECT_SCRIPT_MEMORY] KB dozwolonego limitu pamięci, [OBJECT_SCRIPT_TIME] ms zużytego czasu CPU.[PATHFINDING_TEXT]
+	</string>
+	<string name="fsbridge_script_info_pf">
+		Średni czas CPU zużyty do obsługi nawigacji odnajdywania ścieżek: [OBJECT_CHARACTER_TIME] ms.
 	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
 		Info o skryptach: Obiekt do sprawdzenia jest nieprawidłowy lub poza zasięgiem.

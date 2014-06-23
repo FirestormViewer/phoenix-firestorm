@@ -68,10 +68,10 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 15;
+const U32 FS_BRIDGE_MINOR_VERSION = 16;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.15
+//current script version is 2.16
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -325,7 +325,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 				++scriptInfoArrayCount;
 			}
 
-			if (scriptInfoArrayCount == 5)
+			if (scriptInfoArrayCount == 6)
 			{
 				LLStringUtil::format_map_t args;
 				args["OBJECT_NAME"] = scriptInfoArray[0].asString();
@@ -333,6 +333,16 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 				args["OBJECT_TOTAL_SCRIPT_COUNT"] = scriptInfoArray[2].asString();
 				args["OBJECT_SCRIPT_MEMORY"] = scriptInfoArray[3].asString();
 				args["OBJECT_SCRIPT_TIME"] = scriptInfoArray[4].asString();
+				if (scriptInfoArray[5].asString() != "0.000000")
+				{
+					LLStringUtil::format_map_t args2;
+					args2["OBJECT_CHARACTER_TIME"] = scriptInfoArray[5].asString();
+					args["PATHFINDING_TEXT"] = " " + formatString(LLTrans::getString("fsbridge_script_info_pf"), args2);
+				}
+				else
+				{
+					args["PATHFINDING_TEXT"] = "";
+				}
 				reportToNearbyChat(formatString(LLTrans::getString("fsbridge_script_info"), args));
 			}
 			else

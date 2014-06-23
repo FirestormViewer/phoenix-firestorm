@@ -2633,7 +2633,8 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
   <string name="fsbridge_detached">Bridge detached.</string>
   <string name="fsbridge_created">Bridge created.</string>
-  <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.</string>
+  <string name="fsbridge_script_info">Script info: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] running scripts, [OBJECT_SCRIPT_MEMORY] KB allowed memory size limit, [OBJECT_SCRIPT_TIME] ms of CPU time consumed.[PATHFINDING_TEXT]</string>
+  <string name="fsbridge_script_info_pf">Average CPU time used for pathfinding navigation: [OBJECT_CHARACTER_TIME] ms.</string>
   <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
   <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
   <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>

@@ -1,4 +1,4 @@
-// HTTP Bridge script v.2.15
+// HTTP Bridge script v.2.16
 // Firestorm
 // Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -8,7 +8,7 @@
 
     // Bridge platform
     string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
-    string  bridgeVersion = "2.15";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.16";    // This should match fslslbridge.cpp
     string  latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
@@ -538,10 +538,10 @@ default
 
             else if (cmd == "getScriptInfo")
             {
-                list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
-                if (llGetListLength(details) == 5)
+                list details = llGetObjectDetails(llList2Key(commandList, 1), ([OBJECT_NAME, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME, OBJECT_CHARACTER_TIME]));
+                if (llGetListLength(details) == 6)
                 {
-                    llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0]) + "</bridgeGetScriptInfo>");
+                    llOwnerSay("<bridgeGetScriptInfo>" + llList2CSV([llStringToBase64(llStringTrim(llList2String(details, 0), STRING_TRIM)), llList2String(details, 1), llList2String(details, 2), llList2Integer(details, 3) / 1024, llList2Float(details, 4) * 1000.0, llList2Float(details, 5) * 1000.0]) + "</bridgeGetScriptInfo>");
                 }
                 else
                 {
