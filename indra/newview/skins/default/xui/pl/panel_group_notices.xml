@@ -6,7 +6,7 @@ Dodatkowo, do ogłoszenia można dołączać załączniki. Ogłoszenia docieraj�
 By nie otrzymywać ogłoszeń, w zakładce Ogólne pozostaw niezaznaczone &quot;Otrzymuj grupowe ogłoszenia&quot;.
 	</panel.string>
 	<panel.string name="no_notices_text">
-		Brak przeszłych ogłoszeń
+		Brak ogłoszeń
 	</panel.string>
 	<text name="lbl2">
 		Ogłoszenia przechowywane są przez 14 dni.
@@ -43,7 +43,7 @@ Limit dzienny ogłoszeń dla grupy wynosi 200.
 		<button label="Wyślij" label_selected="Wyślij" name="send_notice"/>
 		<group_drop_target name="drop_target" tool_tip="Przeciągnij załącznik ze swojej Szafy na to pole docelowe aby wysłać go z Ogłoszeniem. Musisz posiadać prawo do kopiowania i transferu załącznika aby go dodać do ogłoszenia."/>
 	</panel>
-	<panel label="Zobacz przeszłe Ogłoszenia" name="panel_view_past_notice">
+	<panel label="Zobacz ogłoszenia archiwalne" name="panel_view_past_notice">
 		<text name="lbl6">
 			Ogłoszenia archiwalne
 		</text>

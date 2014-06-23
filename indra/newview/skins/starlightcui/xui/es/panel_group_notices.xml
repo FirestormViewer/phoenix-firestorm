@@ -43,7 +43,7 @@ El máximo es de 200 por día y grupo.
 		<button label="Enviar" label_selected="Enviar" name="send_notice"/>
 		<group_drop_target name="drop_target" tool_tip="Para enviar un ítem con el aviso, arrástralo desde tu inventario hasta este cajetín. Para poder adjuntarlo, debes tener permiso para copiarlo y transferirlo."/>
 	</panel>
-	<panel label="Zobacz przeszłe Ogłoszenia" name="panel_view_past_notice">
+	<panel name="panel_view_past_notice">
 		<text name="lbl">
 			Avisos archivados
 		</text>

@@ -4433,7 +4433,7 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
-		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę przeszłych rozmów. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
+		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę rozmów odbytych w przeszłości. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
 		<usetemplate ignoretext="Potwierdź, zanim usunę logi rozmów." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PreferenceChatPathChanged">

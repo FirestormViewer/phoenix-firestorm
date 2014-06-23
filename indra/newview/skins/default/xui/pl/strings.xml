@@ -4947,7 +4947,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera radar z najbliższymi awatarami
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
-		Otwiera dziennik rozmów, aby zobaczyć przeszłe logi
+		Otwiera dziennik rozmów, aby zobaczyć listę konwersacji odbytych w przeszłości
 	</string>
 	<string name="Command_Move_Lock_Tooltip">
 		Blokuje Twojego awatara na obecnej pozycji (CTRL+ALT+P)
