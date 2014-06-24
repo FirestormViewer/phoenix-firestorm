@@ -427,6 +427,9 @@
 		<integer_constant name="PRIM_NAME" desc="Sets the prim's name." />
 		<integer_constant name="PRIM_DESC" desc="Sets the prim's description." />
 		<integer_constant name="PRIM_OMEGA" desc="Makes the object spin at the specified axis and rate." />
+		<integer_constant name="PRIM_NORMAL" desc="Sets the prim's normal map attributes. Followed by integer face, string texture, vector repeats, vector offsets and float rotation_in_radians." />
+		<integer_constant name="PRIM_SPECULAR" desc="Sets the prim's specular map attributes. Followed by integer face, string texture, vector repeats, vector offsets, float rotation_in_radians, vector color, integer glossiness and integer environment." />
+		<integer_constant name="PRIM_ALPHA_MODE" desc="Sets the prim's diffuse texture alpha rendering mode attributes. Followed by integer face, integer alpha_mode (PRIM_ALPHA_MODE_* flag) and integer mask_cutoff." />
 		<integer_constant name="PRIM_LINK_TARGET" desc="Used to get or set multiple links with a single PrimParameters call." />
 		<integer_constant name="PRIM_SLICE" desc="Get and set the &quot;slice&quot; parameter of all shapes. Takes a vector parameter of the form &lt;start_slice, end_slice, 0&gt;" />
 			
@@ -457,6 +460,11 @@
 		<integer_constant name="PRIM_SHINY_LOW" desc="Low shininess" />
 		<integer_constant name="PRIM_SHINY_MEDIUM" desc="Medium shininess" />
 		<integer_constant name="PRIM_SHINY_HIGH" desc="High shininess" />
+			
+		<integer_constant name="PRIM_ALPHA_MODE_NONE" desc="Used with PRIM_ALPHA_MODE. Prims faces set to this type ignore the alpha channel of the diffuse texture, and render as completely opaque." />
+		<integer_constant name="PRIM_ALPHA_MODE_BLEND" desc="Used with PRIM_ALPHA_MODE. Prims faces set to this type use alpha blending for diffuse texture rendering (assuming the alpha channel exists)." />
+		<integer_constant name="PRIM_ALPHA_MODE_MASK" desc="Used with PRIM_ALPHA_MODE. Prims faces set to this type render as either completely opaque or completely transparent on a per-pixel basis. Pixels which are less opaque than the specified mask_cutoff are rendered as completely transparent, and the rest are rendered as fully opaque." />
+		<integer_constant name="PRIM_ALPHA_MODE_EMISSIVE" desc="Used with PRIM_ALPHA_MODE. Prims faces set to this type render with an emissivity corresponding to the opacity of each pixel of the diffuse texture. The more opaque a pixel is, the brighter it renders under all lighting conditions. A fully-opaque pixel will effectively render as 'full bright'." />
 			
 		<integer_constant name="PRIM_BUMP_NONE" desc="No bump map" />
 		<integer_constant name="PRIM_BUMP_BRIGHT" desc="Generate bump map from highlights" />
