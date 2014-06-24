@@ -76,7 +76,7 @@ void FSLSLBridgeRequestResponder::result(const LLSD& content)
 {
 	//FSLSLBridgeRequestManager::instance().processBridgeCall(content);
 	std::string strContent = content.asString();
-	LL_INFOS() << "Got info: " << strContent << LL_ENDL;
+	LL_DEBUGS() << "Got info: " << strContent << LL_ENDL;
 
 	//do not use - infinite loop, only here for testing.
 	//FSLSLBridge::instance().viewerToLSL("Response_to_response|" + strContent);
