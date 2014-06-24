@@ -5810,7 +5810,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		LSL-Brücke erstellt.
 	</string>
 	<string name="fsbridge_script_info">
-		Skript-Info: „[OBJECT_NAME]“: [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] aktive Skripte, [OBJECT_SCRIPT_MEMORY] KB Limit erlaubter Speicher, [OBJECT_SCRIPT_TIME] ms CPU-Zeit beansprucht.
+		Skript-Info: „[OBJECT_NAME]“: [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] aktive Skripte, [OBJECT_SCRIPT_MEMORY] KB Limit erlaubter Speicher, [OBJECT_SCRIPT_TIME] ms CPU-Zeit beansprucht.[PATHFINDING_TEXT]
+	</string>
+	<string name="fsbridge_script_info_pf">
+		Durchschnittlich beanspruchte CPU-Zeit für Pathfinding-Navigation: [OBJECT_CHARACTER_TIME] ms.
 	</string>
 	<string name="fsbridge_error_scriptinfonotfound">
 		Skript-Info: Zu prüfendes Objekt ungültig oder außer Reichweite.
