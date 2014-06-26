@@ -220,6 +220,7 @@
 		<menu_item_check label="SL-Marktplatz" name="SL Marketplace"/>
 		<menu_item_check label="L$-Markt-Kurse" name="LindenXchange"/>
 		<menu_item_check label="Skript-Datenbank" name="Script Library"/>
+		<menu_item_call label="Nachricht des Tages" name="Firestorm MoTD"/>
 	</menu>
 	<menu label="Hilfe" name="Help">
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
