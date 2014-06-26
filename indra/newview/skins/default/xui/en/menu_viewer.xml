@@ -1921,7 +1921,15 @@
              function="PromptShowURL"
              name="firestorm_plurk_url"
              parameter="WebLaunchExternalTarget,http://www.plurk.com/ThePhoenixViewerProject" />
-       </menu_item_call>	   
+       </menu_item_call>
+       <menu_item_separator/>
+       <menu_item_call
+             label="Message of the day"
+             name="Firestorm MoTD">
+             <menu_item_call.on_click
+             function="Advanced.ToggleHUDInfo"
+             parameter="motd" />
+       </menu_item_call>
       </menu>   
     
     <!-- Help Menu -->

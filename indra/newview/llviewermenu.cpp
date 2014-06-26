@@ -748,6 +748,10 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		{
 			reportToNearbyChat("Cookies!");
 		}
+		else if ("motd" == info_type)
+		{
+			reportToNearbyChat(gAgent.mMOTD);
+		}
 		return true;
 	}
 };
