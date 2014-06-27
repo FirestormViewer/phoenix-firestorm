@@ -165,6 +165,9 @@ LLStatBar::Params::Params()
 	num_frames_short("num_frames_short", 20),
 	max_height("max_height", 67),
 	stat("stat"),
+	// <FS:Ansariel> Save display state
+	setting("setting"),
+	// </FS:Ansariel> Save display state
 	orientation("orientation", VERTICAL)
 {
 	changeDefault(follows.flags, FOLLOWS_TOP | FOLLOWS_LEFT);
@@ -191,6 +194,9 @@ LLStatBar::LLStatBar(const Params& p)
 	mAutoScaleMin(!p.bar_min.isProvided()),
 	mTickSpacing(p.tick_spacing),
 	mLastDisplayValue(0.f),
+	// <FS:Ansariel> Save display state
+	mSetting(p.setting),
+	// </FS:Ansariel> Save display state
 	mStatType(STAT_NONE)
 {
 	mFloatingTargetMinBar = mTargetMinBar;
@@ -203,8 +209,59 @@ LLStatBar::LLStatBar(const Params& p)
 		mTickSpacing = calc_tick_value(mTargetMinBar, mTargetMaxBar);
 	}
 
+	// <FS:Ansariel> Save display state
+	if (!mSetting.empty())
+	{
+		S32 setting = LLUI::sSettingGroups["config"]->getS32(mSetting);
+		switch (setting)
+		{
+			default:
+			case -1:
+				mDisplayBar = p.show_bar;
+				mDisplayHistory = p.show_history;
+				break;
+			case 0:
+				mDisplayBar = false;
+				mDisplayHistory = false;
+				break;
+			case 1:
+				mDisplayBar = true;
+				mDisplayHistory = true;
+				break;
+			case 2:
+				mDisplayBar = true;
+				mDisplayHistory = false;
+				break;
+		}
+	}
+	// </FS:Ansariel> Save display state
+
 	setStat(p.stat);
 }
+
+// <FS:Ansariel> Save display state
+LLStatBar::~LLStatBar()
+{
+	if (!mSetting.empty())
+	{
+		if (mDisplayHistory)
+		{
+			LLUI::sSettingGroups["config"]->setS32(mSetting, 1);
+		}
+		else
+		{
+			if (mDisplayBar)
+			{
+				LLUI::sSettingGroups["config"]->setS32(mSetting, 2);
+			}
+			else
+			{
+				LLUI::sSettingGroups["config"]->setS32(mSetting, 0);
+			}
+		}
+	}
+}
+// </FS:Ansariel> Save display state
 
 BOOL LLStatBar::handleHover(S32 x, S32 y, MASK mask)
 {

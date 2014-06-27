@@ -3507,7 +3507,7 @@
 						 show_bar="true"
 						 show_history="true"
 						 tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 25 (PAL)/30 (NTSC) frames per second (FPS) is the rate for broadcast television."
-						 setting="DebugStatModeFPS">
+						 setting="DebugStatModePTFPS">
 						</stat_bar>
 						<stat_bar
 						 name="bandwidth"
@@ -3521,7 +3521,7 @@
 						 show_bar="true"
 						 show_history="false"
 						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
-						 setting="DebugStatModeBandwidth">
+						 setting="DebugStatModePTBandwidth">
 						</stat_bar>
 						<stat_bar
 						 name="ktrisframe"
@@ -3534,7 +3534,7 @@
 						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="KTris Drawn: (per frame) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles, or 'tris', in each frame of the current scene."
-						 setting="DebugStatModeKTrisDrawnFr">
+						 setting="DebugStatModePTKTrisDrawnFr">
 						</stat_bar>
 						<stat_bar
 						 name="ktrissec"
@@ -3547,7 +3547,7 @@
 						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="KTris Drawn: (per second) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles ('tris') drawn every second."
-						 setting="DebugStatModeKTrisDrawnSec">
+						 setting="DebugStatModePTKTrisDrawnSec">
 						</stat_bar>
 						<stat_bar
 						 name="objs"
@@ -3559,7 +3559,7 @@
 						 decimal_digits="0"
 						 show_bar="false"
 						 tool_tip="Total Objs: The number of objects currently in view, which includes: Prims, Avatars, Terrain patches, Trees, Particle groups, and Water patches."
-						 setting="DebugStatModeTotalObjs">
+						 setting="DebugStatModePTTotalObjs">
 						</stat_bar>
 						<stat_bar
 						 name="newobjs"
@@ -3571,7 +3571,7 @@
 						 tick_spacing="200"
 						 show_bar="false"
 						 tool_tip="New Objs: The number of objects being downloaded per second."
-						 setting="DebugStatModeNewObjs">
+						 setting="DebugStatModePTNewObjs">
 						</stat_bar>
 						<stat_bar
 						 name="numimagesstat"
@@ -3582,7 +3582,7 @@
 						 tick_spacing="2000.f"
 						 show_bar="false"
 						 tool_tip="Count: The number of unique textures loaded by the viewer."
-						 setting="DebugStatModeTextureCount">
+						 setting="DebugStatModePTTextureCount">
 						</stat_bar>
 					</stat_view>
 				</container_view>

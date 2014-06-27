@@ -54,10 +54,15 @@ public:
 								max_height;
 		Optional<std::string>	stat;
 		Optional<EOrientation>	orientation;
+		
+		// <FS:Ansariel> Save display state
+		Optional<std::string>	setting;
 
 		Params();
 	};
 	LLStatBar(const Params&);
+	// <FS:Ansariel> Save display state
+	~LLStatBar();
 
 	virtual void draw();
 	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
@@ -115,6 +120,9 @@ private:
 				 mDisplayHistory,
 				 mAutoScaleMax,
 				 mAutoScaleMin;
+
+	// <FS:Ansariel> Save display state
+	std::string mSetting;
 };
 
 #endif
