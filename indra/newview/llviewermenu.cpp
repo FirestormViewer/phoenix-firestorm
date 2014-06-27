@@ -150,7 +150,7 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
-
+#include "llscenemonitor.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -658,6 +658,12 @@ class LLAdvancedToggleConsole : public view_listener_t
 		{
 			toggle_visibility( (void*)gSceneView);
 		}
+		// <FS:Ansariel> Scene monitor view not working
+		else if ("scene monitor" == console_type)
+		{
+			toggle_visibility( (void*)gSceneMonitorView);
+		}
+		// </FS:Ansariel>
 
 		return true;
 	}
@@ -684,6 +690,12 @@ class LLAdvancedCheckConsole : public view_listener_t
 		{
 			new_value = get_visibility( (void*) gSceneView);
 		}
+		// <FS:Ansariel> Scene monitor view not working
+		else if ("scene monitor" == console_type)
+		{
+			new_value = get_visibility( (void*) gSceneMonitorView);
+		}
+		// </FS:Ansariel>
 		
 		return new_value;
 	}
