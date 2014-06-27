@@ -507,6 +507,18 @@
     <integer>1</integer>
   </map>
 
+  <key>FSStatbarLegacyMeanPerSec</key>
+  <map>
+    <key>Comment</key>
+    <string>Use legacy period mean per second display for stat bars.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
   <!-- <FS_Zi> Animated dialogs -->
   <key>FSAnimatedScriptDialogs</key>
   <map>

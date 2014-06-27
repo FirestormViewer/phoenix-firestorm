@@ -246,6 +246,7 @@
        width="110"
        tool_tip="Show lag meter in the Status Overlay"/>
       <check_box
+       enabled_control="ShowNetStats"
        control_name="FSStatbarLegacyMeanPerSec"
        height="16"
        label="Use legacy period mean per second display for lag meter"
