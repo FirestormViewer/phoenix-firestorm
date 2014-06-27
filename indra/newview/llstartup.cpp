@@ -2555,6 +2555,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 				LLTrans::getString("LoginDownloadingClothing").c_str(),
 				gAgent.mMOTD.c_str());
 			display_startup();
+
+			// <FS:Ansariel> Can't fall through here, so return
+			return TRUE;
 		}
 		//fall through this frame to STATE_CLEANUP
 	}
