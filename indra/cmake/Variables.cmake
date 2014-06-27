@@ -10,8 +10,11 @@
 #   WINDOWS - Windows
 
 if( ${NDTARGET_ARCH} STREQUAL "x64" )
- set( ND_BUILD64BIT_ARCH ON )
-endif( ${NDTARGET_ARCH} STREQUAL "x64" )
+  set( ND_BUILD64BIT_ARCH ON )
+elseif( ${NDTARGET_ARCH} STREQUAL "universal" )
+  set( ND_BUILD64BIT_ARCH ON )
+  set( OSX_UNIVERSAL_ARCH ON )
+endif()
 
 # Relative and absolute paths to subtrees.
 
@@ -165,34 +168,43 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
   endif (XCODE_VERSION GREATER 4.9)
 
-  set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
+  if (LL_RELEASE_FOR_DOWNLOAD)
+    set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
+  else (LL_RELEASE_FOR_DOWNLOAD)
+    set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf)
+  endif (LL_RELEASE_FOR_DOWNLOAD)
 
   # Build only for i386 by default, system default on MacOSX 10.6 is x86_64
   if (NOT CMAKE_OSX_ARCHITECTURES)
-    set(CMAKE_OSX_ARCHITECTURES i386)
+    set(CMAKE_OSX_ARCHITECTURES "i386")
+    if(ND_BUILD64BIT_ARCH)
+      set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    endif(ND_BUILD64BIT_ARCH)
+    if(OSX_UNIVERSAL_ARCH)
+      set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+    endif(OSX_UNIVERSAL_ARCH)
   endif (NOT CMAKE_OSX_ARCHITECTURES)
-
-# [FS:CR] Can't build ppc since forever.
-#  if (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
-#   set(ARCH universal)
-#  else (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
-#   if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-#     set(ARCH ppc)
-#   else (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-#     set(ARCH i386)
-#   endif (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-#  endif (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
 
   if (CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
     error("Can't build on PowerPC. You need an upgrade.")
   endif (CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
 
-# *TODO: Universal Build
   set(ARCH i386)
+  if(ND_BUILD64BIT_ARCH)
+    set(ARCH x86_64)
+  endif(ND_BUILD64BIT_ARCH)
+  if(OSX_UNIVERSAL_ARCH)
+    set(ARCH universal)
+  endif(OSX_UNIVERSAL_ARCH)
 # [/FS:CR]
+
   set(LL_ARCH ${ARCH}_darwin)
   set(LL_ARCH_DIR universal-darwin)
-  set(WORD_SIZE 32)
+  if(ND_BUILD64BIT_ARCH)
+    set(WORD_SIZE 64)
+  else (ND_BUILD64BIT_ARCH)
+    set(WORD_SIZE 32)
+  endif(ND_BUILD64BIT_ARCH)
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 # Default deploy grid

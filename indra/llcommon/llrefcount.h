@@ -102,7 +102,7 @@ private:
 
 #if LL_REF_COUNT_DEBUG
 	LLMutex*  mMutexp ;
-	mutable U32  mLockedThreadID ;
+	mutable uintptr_t  mLockedThreadID ;
 	mutable BOOL mCrashAtUnlock ; 
 #endif
 };

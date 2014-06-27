@@ -80,7 +80,7 @@ void LLMutex::lock()
 	
 #if MUTEX_DEBUG
 	// Have to have the lock before we can access the debug info
-	U32 id = LLThread::currentID();
+	uintptr_t id = LLThread::currentID();
 	if (mIsLocked[id] != FALSE)
 		LL_ERRS() << "Already locked in Thread: " << id << LL_ENDL;
 	mIsLocked[id] = TRUE;
@@ -99,7 +99,7 @@ void LLMutex::unlock()
 	
 #if MUTEX_DEBUG
 	// Access the debug info while we have the lock
-	U32 id = LLThread::currentID();
+	uintptr_t id = LLThread::currentID();
 	if (mIsLocked[id] != TRUE)
 		LL_ERRS() << "Not locked in Thread: " << id << LL_ENDL;	
 	mIsLocked[id] = FALSE;
@@ -128,7 +128,7 @@ bool LLMutex::isSelfLocked()
 	return mLockingThread == LLThread::currentID();
 }
 
-U32 LLMutex::lockingThread() const
+uintptr_t LLMutex::lockingThread() const
 {
 	return mLockingThread;
 }
@@ -149,7 +149,7 @@ bool LLMutex::trylock()
 	
 #if MUTEX_DEBUG
 	// Have to have the lock before we can access the debug info
-	U32 id = LLThread::currentID();
+	uintptr_t id = LLThread::currentID();
 	if (mIsLocked[id] != FALSE)
 		LL_ERRS() << "Already locked in Thread: " << id << LL_ENDL;
 	mIsLocked[id] = TRUE;
@@ -184,7 +184,7 @@ void LLCondition::wait()
 		apr_thread_mutex_lock(mAPRMutexp);
 #if MUTEX_DEBUG
 		// avoid asserts on destruction in non-release builds
-		U32 id = LLThread::currentID();
+		uintptr_t id = LLThread::currentID();
 		mIsLocked[id] = TRUE;
 #endif
 	}

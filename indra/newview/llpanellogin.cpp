@@ -634,7 +634,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 	LLStringUtil::trim(username);
 // <FS:CR>
-	U32 arobase = username.find("@");
+	size_t arobase = username.find("@");
 	if(arobase != std::string::npos)
 		username = username.substr(0, arobase);
 // </FS:CR>
@@ -1221,7 +1221,7 @@ void LLPanelLogin::addUsersToCombo(BOOL show_server)
 		
 		std::string credname = name;
 		std::string gridname = name;
-		U32 arobase = gridname.find("@");
+		size_t arobase = gridname.find("@");
 		if (arobase != std::string::npos && arobase + 1 < gridname.length() && arobase > 1)
 		{
 			gridname = gridname.substr(arobase + 1, gridname.length() - arobase - 1);
@@ -1381,7 +1381,7 @@ std::string LLPanelLogin::credentialName()
 	std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 	LLStringUtil::trim(username);
 	
-	U32 arobase = username.find("@");
+	size_t arobase = username.find("@");
 	if (arobase != std::string::npos && arobase + 1 < username.length())
 		username = username.substr(0,arobase);
 	LLStringUtil::trim(username);
