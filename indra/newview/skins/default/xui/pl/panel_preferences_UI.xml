@@ -30,6 +30,7 @@
         </text>
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" width="135" tool_tip="Pokaż miernik lagów w pasku statusu" />
+        <check_box label="Stary sposób odświeżania wartości w mierniku lagów" name="FSStatbarLegacyMeanPerSec" tool_tip="Gdy ta opcja jest włączona, to Firestorm będzie używał starego sposobu odświeżania wartości w mierniku lagów, uśredniając je dynamicznie co sekundę, zamiast podmieniać bez przerwy na te bieżące" />
         <check_box label="Pokaż kontrolki mediów w menu na górze" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
         <text name="standalone_textbox">
             Używaj osobnych okien dla:
