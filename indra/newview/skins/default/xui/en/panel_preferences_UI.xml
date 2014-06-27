@@ -245,12 +245,23 @@
        label="Show lag meter"
        width="110"
        tool_tip="Show lag meter in the Status Overlay"/>
+      <check_box
+       control_name="FSStatbarLegacyMeanPerSec"
+       height="16"
+       label="Use legacy period mean per second display for lag meter"
+       layout="topleft"
+       left_pad="10"
+       name="FSStatbarLegacyMeanPerSec"
+       tool_tip="If enabled, Firestorm will use the legacy method of showing the period mean per second value in the lag meter instead of the current observed value"
+       top_delta="0"
+       width="250" />
 
       <check_box
        control_name="FSEnableVolumeControls"
        height="16"
        name="FSEnableVolumeControls"
        label="Show media controls in top menu"
+       left="5"
        width="256"
        tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
 
