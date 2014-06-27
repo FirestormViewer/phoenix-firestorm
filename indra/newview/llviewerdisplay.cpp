@@ -133,11 +133,6 @@ void display_startup()
 	{
 		return; 
 	}
-
-	// <FS:ND> Once at and past STATE_PRECACHE display() kicks in and starts to draw, we can safely eit here.
-	if (LLStartUp::getStartupState() >= STATE_PRECACHE)
-		return;
-	// </FS:ND>
 	
 	gPipeline.updateGL();
 
@@ -377,7 +372,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	// Bail out if we're in the startup state and don't want to try to
 	// render the world.
 	//
-	if (LLStartUp::getStartupState() < STATE_PRECACHE)
+	// <FS:Ansariel> Revert to original state to prevent flickering if login progress screen is disabled
+	//if (LLStartUp::getStartupState() < STATE_PRECACHE)
+	if (LLStartUp::getStartupState() < STATE_STARTED)
+	// </FS:Ansariel>
 	{
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Startup");
 		display_startup();
