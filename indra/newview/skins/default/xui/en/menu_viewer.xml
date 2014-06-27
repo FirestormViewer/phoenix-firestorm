@@ -957,13 +957,13 @@
              label="Sunrise"
              name="Sunrise"
 			 shortcut="control|shift|U">
-                <menu_item_call.on_click
+                <menu_item_check.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="sunrise" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
@@ -977,7 +977,7 @@
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="noon" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
@@ -991,7 +991,7 @@
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="sunset" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
@@ -999,13 +999,13 @@
              label="Midnight"
              name="Midnight"
 			 shortcut="control|shift|X">
-                <menu_item_call.on_click
+                <menu_item_check.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="midnight" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
@@ -1015,11 +1015,11 @@
              name="Revert to Region Default">
                 <menu_item_check.on_click
                  function="World.EnvSettings"
-                 parameter="default" />
+                 parameter="region" />
                 <menu_item_check.on_check
                  function="World.EnableEnvSettings" 
                  parameter="region" />
-                <menu_item_call.on_enable
+                <menu_item_check.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
             </menu_item_check>
