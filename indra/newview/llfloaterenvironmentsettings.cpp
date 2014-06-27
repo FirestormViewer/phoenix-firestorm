@@ -122,7 +122,10 @@ void LLFloaterEnvironmentSettings::onBtnOK()
 {
 	// Save and apply new user preferences.
 	bool use_region_settings	= mRegionSettingsRadioGroup->getSelectedIndex() == 0;
-	bool use_fixed_sky			= mDayCycleSettingsRadioGroup->getSelectedIndex() == 0;
+	// <FS:Ansariel> BUG-5699: Disable fixed sky if using region settings
+	//bool use_fixed_sky			= mDayCycleSettingsRadioGroup->getSelectedIndex() == 0;
+	bool use_fixed_sky			= mDayCycleSettingsRadioGroup->getSelectedIndex() == 0 && !use_region_settings;
+	// </FS:Ansariel>
 	std::string water_preset	= mWaterPresetCombo->getValue().asString();
 	std::string sky_preset		= mSkyPresetCombo->getValue().asString();
 	std::string day_cycle		= mDayCyclePresetCombo->getValue().asString();
