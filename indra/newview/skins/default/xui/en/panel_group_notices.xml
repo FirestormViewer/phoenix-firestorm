@@ -2,6 +2,7 @@
 <panel
  name="notices_tab"
  label="Notices"
+ default_tab_group="1"
  left="0"
  top="0"
  width="470"
@@ -107,6 +108,7 @@ Maximum 200 per group daily
     <panel
      name="panel_create_new_notice"
      label="Create New Notice"
+     tab_group="1"
      left="0"
      bottom="-1"
      width="470"

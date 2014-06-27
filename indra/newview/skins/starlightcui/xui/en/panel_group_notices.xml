@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
+ default_tab_group="1"
  height="530"
  label="Notices"
  layout="topleft"
@@ -99,6 +100,7 @@ Maximum 200 per group daily
      layout="topleft"
      left="0"
      right="-1"
+     tab_group="1"
      top_pad="0"
      visible="true"
      name="panel_create_new_notice"
