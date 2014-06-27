@@ -185,7 +185,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			{
 				suffix = wstring_to_utf8str(raw_text.substr(cur_pos)); // Text after search string
 			}
-			U32 last_space = prefix.rfind(" ");
+			size_t last_space = prefix.rfind(" ");
 			std::string pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1); // Search pattern
 			
 			prefix = prefix.substr(0, last_space + 1);

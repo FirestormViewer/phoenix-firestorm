@@ -2362,7 +2362,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
   set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2014 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
-  set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
+  set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
 
   set_target_properties(
     ${VIEWER_BINARY_NAME}
@@ -2403,7 +2403,7 @@ if (DARWIN)
       generate_viewer_version
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_webkit mac-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
   
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")

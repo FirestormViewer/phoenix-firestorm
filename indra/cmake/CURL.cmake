@@ -14,6 +14,12 @@ else (STANDALONE)
     optimized libcurl.lib)
   else (WINDOWS)
     set(CURL_LIBRARIES libcurl.a)
+      if (DARWIN)
+          list(APPEND CURL_LIBRARIES
+               idn
+               iconv
+              )
+      endif (DARWIN)
   endif (WINDOWS)
   set(CURL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
 endif (STANDALONE)
