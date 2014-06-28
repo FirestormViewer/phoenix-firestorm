@@ -8,6 +8,7 @@
       <file>gulim.ttc</file>
       <file>simhei.ttf</file>
       <file>ArialUni.ttf</file>
+      <file>seguisym.ttf</file>
     </os>
     <os name="Mac">
       <file>ヒラギノ角ゴ Pro W3.otf</file>
@@ -60,7 +61,7 @@
 
   <font name="Monospace"
 	comment="Name of monospace font">
-    <file>MobiSansMono.ttf</file>
+    <file>SourceCodePro-Regular.ttf</file>
   </font>
 
   <font name="Scripting"
@@ -171,7 +172,7 @@
 	     />
   <font_size name="Small"
 	     comment="Size of small font (points, or 1/72 of an inch)"
-	     size="9.0"
+	     size="8.0"
 	     />
   <font_size name="Pie"
 	     comment="Size of pie menu font (points, or 1/72 of an inch)"
