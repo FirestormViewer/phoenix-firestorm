@@ -82,6 +82,7 @@
          top_pad="5"
          width="256" />
         <check_box
+         enabled_control="ShowHoverTips"
          control_name="ShowAllObjectHoverTip"
          height="16"
          initial_value="true"
@@ -93,6 +94,7 @@
          top_pad="2"
          width="256" />
         <check_box
+         enabled_control="ShowHoverTips"
          control_name="ShowLandHoverTip"
          height="16"
          initial_value="true"
@@ -103,6 +105,7 @@
          top_pad="2"
          width="256" />
 		<check_box
+		enabled_control="ShowHoverTips"
 		control_name="FSAdvancedTooltips"
 		name="FSAdvancedTooltips"
 		label="Show extended information in hovertips (Phoenix style)"
@@ -112,6 +115,7 @@
 		height="16"
 		width="350" />
         <check_box
+		enabled_control="ShowHoverTips"
 		control_name="FSShowGroupTitleInTooltip"
 		name="FSShowGroupTitleInTooltip"
 		label="Show avatar group titles in hovertips"
@@ -134,6 +138,7 @@
         </text>
 		
         <slider
+         enabled_control="ShowHoverTips"
          control_name="ToolTipDelay"
          decimal_digits="3"
          follows="left|top"
@@ -164,6 +169,7 @@
         </text>
 		
         <slider
+         enabled_control="ShowHoverTips"
          control_name="AvatarInspectorTooltipDelay"
          decimal_digits="3"
          follows="left|top"
@@ -194,6 +200,7 @@
         </text>
 		
         <slider
+         enabled_control="ShowHoverTips"
          control_name="ObjectInspectorTooltipDelay"
          decimal_digits="3"
          follows="left|top"

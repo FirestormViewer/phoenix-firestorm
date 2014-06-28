@@ -822,6 +822,7 @@
          tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
          width="315" />
         <check_box
+         enabled_control="RenderVBOEnable"
          control_name="RenderUseStreamVBO"
          height="16"
          initial_value="false"
@@ -1120,6 +1121,7 @@
          top_pad="2"
          width="256"/>
 		<slider
+		enabled_control="RenderGlow"
 		control_name="RenderGlowIterations"
 		decimal_digits="0"
 		follows="left|top"
@@ -1275,6 +1277,7 @@
          top_pad="4"
          width="256"/>
         <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraFNumber"
          decimal_digits="1"
          follows="left|top"
@@ -1292,6 +1295,7 @@
          top_pad="10"
          width="471"/>
         <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraFocalLength"
          decimal_digits="0"
          follows="left|top"
@@ -1309,6 +1313,7 @@
          top_pad="5"
          width="475"/>
         <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraFieldOfView"
          decimal_digits="0"
          follows="left|top"
@@ -1326,6 +1331,7 @@
          top_pad="5"
          width="468"/>
         <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraAspectRatio"
          decimal_digits="2"
          follows="left|top"
@@ -1343,6 +1349,7 @@
          top_pad="5"
          width="471"/>
         <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraFocusTransitionTime"
          decimal_digits="2"
          follows="left|top"
@@ -1360,6 +1367,7 @@
          top_pad="5"
          width="478"/>
        <slider
+         enabled_control="RenderDepthOfField"
          control_name="CameraDoFResScale"
          decimal_digits="3"
          follows="left|top"

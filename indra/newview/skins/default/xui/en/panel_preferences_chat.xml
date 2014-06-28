@@ -961,6 +961,7 @@
               Name Style:
             </text>
             <combo_box
+             enabled_control="FSHighlightGroupMods"
              control_name="FSModNameStyle"
              layout="topleft"
              follows="left|top"
@@ -1013,6 +1014,7 @@
               Text Style:
             </text>
             <combo_box
+             enabled_control="FSHighlightGroupMods"
              control_name="FSModTextStyle"
              layout="topleft"
              follows="left|top"

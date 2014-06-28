@@ -346,6 +346,7 @@
             Show names for look at targets:
         </text>
         <combo_box
+         enabled_control="DebugLookAt"
          control_name="DebugLookAtShowNames"
          follows="left|top"
          height="23"
@@ -568,6 +569,7 @@
          control_name="FSSendMutedAvatarResponse"
          tool_tip="Send the text below when someone you've muted sends you an IM."/>
         <text_editor
+         enabled_control="FSSendMutedAvatarResponse"
          control_name="FSMutedAvatarResponse"
          use_ellipses="false"
          commit_on_focus_lost = "true"
@@ -593,6 +595,7 @@
         control_name="FSSendAwayAvatarResponse"
         tool_tip="Send the text below when someone sends you an IM while you're in away mode."/>
       <text_editor
+        enabled_control="FSSendAwayAvatarResponse"
         control_name="FSAwayAvatarResponse"
         use_ellipses="false"
         commit_on_focus_lost = "true"

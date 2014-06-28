@@ -367,6 +367,7 @@
          width="380"
          tool_tip="This protects you from objects with very large textures over large surface areas often designed to crash the viewer. Default is 5000 square meters, but if you find that some objects are not rendering and this option is enabled you may need to increase it."/>
         <spinner
+         enabled_control="RenderVolumeSAProtection"
          top_delta="-5"
          control_name="RenderVolumeSAFrameMax"
          decimal_digits="0"
@@ -403,6 +404,7 @@
            Max lines in a single message:
         </text>
         <spinner
+         enabled_control="UseAntiSpam"
          top_delta="-5"
          control_name="_NACL_AntiSpamNewlines"
          decimal_digits="0"
@@ -430,6 +432,7 @@
            Max events from same source:
         </text>
         <spinner
+         enabled_control="UseAntiSpam"
          top_delta="-5"
          control_name="_NACL_AntiSpamAmount"
          decimal_digits="0"
@@ -457,6 +460,7 @@
            Sound play requests multiplier:
         </text>
         <spinner
+         enabled_control="UseAntiSpam"
          top_delta="-5"
          control_name="_NACL_AntiSpamSoundMulti"
          decimal_digits="0"
@@ -484,6 +488,7 @@
            Sound preload requests multiplier:
         </text>
         <spinner
+         enabled_control="UseAntiSpam"
          top_delta="-5"
          control_name="_NACL_AntiSpamSoundPreloadMulti"
          decimal_digits="0"
@@ -499,6 +504,7 @@
          width="50"
          tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button
+         enabled_control="UseAntiSpam"
          layout="topleft"
          follows="left|top"
          top_pad="10"
@@ -675,6 +681,7 @@
          width="490" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="BeamColor_delete"
          label="Delete"
          tool_tip="Remove this preset"
@@ -685,6 +692,7 @@
          follows="left|top" />
 
         <combo_box
+         enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          top_delta="0"
          left_delta="60"
@@ -697,6 +705,7 @@
          tool_tip="Select the color preset for the selection beam"/>
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="BeamColor_new"
          label="Create New"
          tool_tip="Create a new color preset"
@@ -707,6 +716,7 @@
          follows="left|top" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="BeamColor_refresh"
          label="Refresh List"
          tool_tip="Refresh the preset list"
@@ -717,6 +727,7 @@
          follows="left|top" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          left="100"
          top_delta="-25"
          follows="left|top"
@@ -731,6 +742,7 @@
          image_hover_unselected="beam_rainbow.png" />
 
         <slider
+         enabled_control="ShowSelectionBeam"
          bottom_delta="25"
          left="15"
          name="FSMaxBeamsPerSecond"
@@ -785,6 +797,7 @@
          width="0" />
 
         <combo_box
+         enabled_control="ShowSelectionBeam"
          allow_text_entry="false"
          bottom_delta="-150"
          left="275"
@@ -797,6 +810,7 @@
          tool_tip="Select the shape for the particle beam" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="delete_beam"
          label="Delete"
          tool_tip="Remove this beam"
@@ -807,6 +821,7 @@
          follows="left|top" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="custom_beam_btn"
          label="Create New"
          tool_tip="Customize the beam shape"
@@ -817,6 +832,7 @@
          follows="left|top"/>
 
         <button
+         enabled_control="ShowSelectionBeam"
          name="refresh_beams"
          label="Refresh List"
          tool_tip="Refresh the beam list"
@@ -827,6 +843,7 @@
          follows="left|top" />
 
         <button
+         enabled_control="ShowSelectionBeam"
          left="290"
          top_delta="-25"
          follows="left|top"
@@ -841,6 +858,7 @@
          image_hover_unselected="beam_phoenix.png" />
 
         <slider
+         enabled_control="ShowSelectionBeam"
          bottom_delta="25"
          left_delta="-15"
          name="FSBeamShapeScale"
@@ -924,6 +942,7 @@
       Calc. expressions (usage: cmd SIN(2+2))
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -942,6 +961,7 @@
       Change Draw Dist (usage: cmd meters)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -960,6 +980,7 @@
       Max. Bandwidth (usage: cmd kbps)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -978,6 +999,7 @@
       Copy camera position to clipboard
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -996,6 +1018,7 @@
       Rez a platform (usage: cmd 0 - 64)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1005,6 +1028,7 @@
       control_name="FSCmdLineRezPlatform"
       width="200"/>
     <slider
+      enabled_control="FSCmdLine"
       top_pad="4"
       name="FSCmdLinePlatformSize"
       control_name="FSCmdLinePlatformSize"
@@ -1041,6 +1065,7 @@
       Get avatar name from key (usage: cmd key)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1059,6 +1084,7 @@
       Turn AO on/off (usage: cmd on/off)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1077,6 +1103,7 @@
       Clear the chat transcript (usage: cmd)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1095,6 +1122,7 @@
       Set the media url (usage: cmd url type)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1113,6 +1141,7 @@
       Set the music stream url (usage: cmd url)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1131,6 +1160,7 @@
       Roll dice (usage: cmd dice faces)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1172,6 +1202,7 @@
       Teleport within sim (usage: cmd x y z)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1190,6 +1221,7 @@
       Teleport to ground (usage: cmd)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1208,6 +1240,7 @@
       Teleport to altitude (usage: cmd z)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1226,6 +1259,7 @@
       Teleport to sim x (usage: cmd simname)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1235,6 +1269,7 @@
       control_name="FSCmdLineMapTo"
       width="200"/>
     <check_box
+      enabled_control="FSCmdLine"
       top_pad="4"
       follows="left|top"
       height="16"
@@ -1263,6 +1298,7 @@
       Teleport to cam position (usage: cmd)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1281,6 +1317,7 @@
       Offer teleport to avatar (usage: cmd key)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1299,6 +1336,7 @@
       Teleport to avatar (usage: cmd name)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1317,6 +1355,7 @@
       Teleport home (usage: cmd)
     </text>
     <line_editor
+      enabled_control="FSCmdLine"
       top_pad="0"
       follows="left|top"
       height="20"
@@ -1381,7 +1420,6 @@
          top_pad="8"
          label="Use Firestorm Parcel Windlight Sharing"
          control_name="FSWLParcelEnabled"
-         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLParcelEnabled"
@@ -1391,7 +1429,7 @@
          left="15"
          label="Auto apply WL settings from friend's land"
          control_name="FSWLWhitelistFriends"
-         enabled_control="UseEnvironmentFromRegionAlways"
+         enabled_control="FSWLParcelEnabled"
          follows="left|top"
          height="16"
          name="FSWLWhitelistFriends"
@@ -1400,7 +1438,7 @@
          top_pad="5"
          label="Auto apply WL settings from my groups' land"
          control_name="FSWLWhitelistGroups"
-         enabled_control="UseEnvironmentFromRegionAlways"
+         enabled_control="FSWLParcelEnabled"
          follows="left|top"
          height="16"
          name="FSWLWhitelistGroups"
@@ -1409,7 +1447,7 @@
          top_pad="5"
          label="Auto apply WL settings from any parcel"
          control_name="FSWLWhitelistAll"
-         enabled_control="UseEnvironmentFromRegionAlways"
+         enabled_control="FSWLParcelEnabled"
          follows="left|top"
          height="16"
          name="FSWLWhitelistAll"
@@ -1418,7 +1456,7 @@
          top_pad="5"
          label="Crossfade region environment changes for Parcel WL"
          control_name="FSInterpolateParcelWL"
-         enabled_control="UseEnvironmentFromRegionAlways"
+         enabled_control="FSWLParcelEnabled"
          follows="left|top"
          height="16"
          name="FSInterpolateParcelWL"
