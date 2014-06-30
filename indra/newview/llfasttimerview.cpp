@@ -94,6 +94,10 @@ LLFastTimerView::LLFastTimerView(const LLSD& key)
 	mRecording(NUM_FRAMES_HISTORY)
 {
 	mTimerBarRows.resize(NUM_FRAMES_HISTORY);
+	// <FS:LO> Making the ledgend part of fast timers scrollable
+	mOverLegend = false;
+	mScrollOffset = 0;
+	// </FS:LO>
 }
 
 LLFastTimerView::~LLFastTimerView()
@@ -225,6 +229,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 	}
 	mHoverTimer = NULL;
 	mHoverID = NULL;
+	mOverLegend = false; // <FS:LO> Making the ledgend part of fast timers scrollable
 
 	if(mPauseHistory && mBarRect.pointInRect(x, y))
 	{
@@ -291,6 +296,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 		{
 			mHoverID = timer_id;
 		}
+		mOverLegend = true; // <FS:LO> Making the ledgend part of fast timers scrollable
 	}
 	
 	return LLFloater::handleHover(x, y, mask);
@@ -352,10 +358,36 @@ BOOL LLFastTimerView::handleToolTip(S32 x, S32 y, MASK mask)
 
 BOOL LLFastTimerView::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-	setPauseState(true);
-	mScrollIndex = llclamp(	mScrollIndex + clicks,
-							0,
-							llmin((S32)mRecording.getNumRecordedPeriods(), (S32)mRecording.getNumRecordedPeriods() - MAX_VISIBLE_HISTORY));
+	//setPauseState(true);
+	//mScrollIndex = llclamp(	mScrollIndex + clicks,
+							//0,
+							//llmin((S32)mRecording.getNumRecordedPeriods(), (S32)mRecording.getNumRecordedPeriods() - MAX_VISIBLE_HISTORY));
+	// <FS:LO> Making the ledgend part of fast timers scrollable
+	if(mOverLegend)
+	{
+		mScrollOffset += clicks;
+		S32 count = 0;
+		for (block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+			it != block_timer_tree_df_iterator_t();
+			++it)
+		{
+			count++;
+			BlockTimerStatHandle* idp = (*it);
+			if (idp->getTreeNode().mCollapsed) 
+			{
+				it.skipDescendants();
+			}
+		}
+		mScrollOffset = llclamp(mScrollOffset,0,count-5);
+	}
+	else
+	{
+		setPauseState(true);
+		mScrollIndex = llclamp(	mScrollIndex + clicks,
+								0,
+								llmin((S32)mRecording.getNumRecordedPeriods(), (S32)mRecording.getNumRecordedPeriods() - MAX_VISIBLE_HISTORY));
+	}
+	// </FS:LO>
 	return TRUE;
 }
 
@@ -1196,11 +1228,23 @@ void LLFastTimerView::drawLegend()
 		S32 cur_line = 0;
 		ft_display_idx.clear();
 		std::map<BlockTimerStatHandle*, S32> display_line;
+		S32 mScrollOffset_tmp = mScrollOffset; // <FS:LO> Making the ledgend part of fast timers scrollable
 		for (block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 			it != block_timer_tree_df_iterator_t();
 			++it)
 		{
 			BlockTimerStatHandle* idp = (*it);
+			// <FS:LO> Making the ledgend part of fast timers scrollable
+			if(mScrollOffset_tmp)
+			{
+				--mScrollOffset_tmp;
+				if (idp->getTreeNode().mCollapsed)
+				{
+					it.skipDescendants();
+				}
+				continue;
+			}
+			// </FS:LO>
 			display_line[idp] = cur_line;
 			ft_display_idx.push_back(idp);
 			cur_line++;
