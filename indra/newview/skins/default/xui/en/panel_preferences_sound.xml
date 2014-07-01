@@ -392,6 +392,7 @@
          top_pad="3"
          left="25"/>
         <button
+         enabled_control="MediaEnableFilter"
          layout="topleft"
          follows="left|top"
          height="23"
@@ -763,6 +764,7 @@
         </radio_group>
 
         <check_box
+         enabled_control="EnableVoiceChat"
          control_name="LipSyncEnabled"
          follows="left|top"
          height="15"
@@ -773,6 +775,7 @@
          top_pad="5"
          width="237"/>
         <check_box
+         enabled_control="EnableVoiceChat"
          control_name="FSShowVoiceVisualizer"
          follows="left|top"
          height="15"
@@ -784,6 +787,7 @@
          top_pad="3"
          width="237"/>
         <check_box
+         enabled_control="EnableVoiceChat"
          control_name="ShowVoiceVisualizersInCalls"
          follows="left|top"
          height="15"
@@ -795,6 +799,7 @@
          top_pad="3"
          width="237"/>
         <check_box
+         enabled_control="EnableVoiceChat"
          control_name="FSShowConversationVoiceStateIndicator"
          follows="left|top"
          height="15"
@@ -807,6 +812,7 @@
          width="237"/>
 
         <check_box
+         enabled_control="EnableVoiceChat"
          follows="left|top"
          control_name="VoiceCallsRejectGroup"
          height="15"
@@ -817,6 +823,7 @@
          width="237"
          top_pad="10"/>
         <check_box
+         enabled_control="EnableVoiceChat"
          follows="left|top"
          control_name="VoiceCallsRejectAdHoc"
          height="15"
@@ -827,6 +834,7 @@
          width="237"
          top_pad="3"/>
         <check_box
+         enabled_control="EnableVoiceChat"
          follows="left|top"
          control_name="VoiceCallsRejectP2P"
          height="15"
@@ -1107,7 +1115,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Default alert:
         </text>
         <line_editor
-         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1163,7 +1170,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Invalid keystroke:
         </text>
         <line_editor
-         tool_tip="2ca849ba-2885-4bc3-90ef-d4987a5b983a"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1219,7 +1225,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Mouse button click:
         </text>
         <line_editor
-         tool_tip="4c8c3c77-de8d-bde2-b9b8-32635e0fd4a6"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1275,7 +1280,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Mouse button release:
         </text>
         <line_editor
-         tool_tip="4c8c3c77-de8d-bde2-b9b8-32635e0fd4a6"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1331,7 +1335,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Female avatar hurt:
         </text>
         <line_editor
-         tool_tip="219c5d93-6c09-31c5-fb3f-c5fe7495c115"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1387,7 +1390,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Male avatar hurt:
         </text>
         <line_editor
-         tool_tip="e057c244-5768-1056-c37e-1537454eeb62"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1443,7 +1445,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Money balance decrease:
         </text>
         <line_editor
-         tool_tip="104974e3-dfda-428b-99ee-b0d4e748d3a3"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1499,7 +1500,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Money balance increase:
         </text>
         <line_editor
-         tool_tip="77a018af-098e-c037-51a6-178f05877c6f"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1555,7 +1555,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Incoming Instant Message:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1627,7 +1626,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Group Instant Message:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1699,7 +1697,6 @@ Hover your mouse cursor over UUID field to show its default value.
             AdHoc Instant Message:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1771,7 +1768,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Starting IM session:
         </text>
         <line_editor
-         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1827,7 +1823,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Object creation:
         </text>
         <line_editor
-         tool_tip="f4a0660f-5446-dea2-80b7-6482a082803c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1883,7 +1878,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Object deletion:
         </text>
         <line_editor
-         tool_tip="0cb7b00a-4c10-6948-84de-a93c09af2ba9"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1939,7 +1933,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Object rezzing:
         </text>
         <line_editor
-         tool_tip="3c8fc726-1fd6-862d-fa01-16c5b2568db6"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -1995,7 +1988,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Object derezzing:
         </text>
         <line_editor
-         tool_tip="00000000-0000-0000-0000-000000000000"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2051,7 +2043,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Taking snapshot:
         </text>
         <line_editor
-         tool_tip="3d09f582-3851-c0e0-f5ba-277ac5c73fb4"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2107,7 +2098,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Teleportation:
         </text>
         <line_editor
-         tool_tip="d7a9a565-a013-2a69-797d-5332baa1a947"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2187,7 +2177,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu appear:
         </text>
         <line_editor
-         tool_tip="8eaed61f-92ff-6485-de83-4dcc938a478e"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2243,7 +2232,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu disappear:
         </text>
         <line_editor
-         tool_tip="00000000-0000-0000-0000-000000000000"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2299,7 +2287,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 1:
         </text>
         <line_editor
-         tool_tip="d9f73cf8-17b4-6f7a-1565-7951226c305d"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2355,7 +2342,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 2:
         </text>
         <line_editor
-         tool_tip="f6ba9816-dcaf-f755-7b67-51b31b6233e5"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2411,7 +2397,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 3:
         </text>
         <line_editor
-         tool_tip="7aff2265-d05b-8b72-63c7-dbf96dc2f21f"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2467,7 +2452,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 4:
         </text>
         <line_editor
-         tool_tip="09b2184e-8601-44e2-afbb-ce37434b8ba1"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2523,7 +2507,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 5:
         </text>
         <line_editor
-         tool_tip="bbe4c7fc-7044-b05e-7b89-36924a67593c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2579,7 +2562,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 6:
         </text>
         <line_editor
-         tool_tip="d166039b-b4f5-c2ec-4911-c85c727b016c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2635,7 +2617,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 7:
         </text>
         <line_editor
-         tool_tip="242af82b-43c2-9a3b-e108-3b0c7e384981"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2691,7 +2672,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Pie Menu option 8:
         </text>
         <line_editor
-         tool_tip="c1f334fb-a5be-8fe7-22b3-29631c21cf0b"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2747,7 +2727,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Typing a message:
         </text>
         <line_editor
-         tool_tip="5e191c7b-8996-9ced-a177-b2ac32bfea06"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2803,7 +2782,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Closing a window:
         </text>
         <line_editor
-         tool_tip="2c346eda-b60c-ab33-1119-b8941916a499"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2859,7 +2837,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Opening a window:
         </text>
         <line_editor
-         tool_tip="c80260ba-41fd-8a46-768a-6bf236360e3a"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2915,7 +2892,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Default footsteps:
         </text>
         <line_editor
-         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -2971,7 +2947,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Friend comes online:
         </text>
         <line_editor
-         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3027,7 +3002,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Friend goes offline:
         </text>
         <line_editor
-         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3083,7 +3057,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Friendship offer:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3139,7 +3112,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Teleport offer:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3219,7 +3191,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Inventory offer:
         </text>
         <line_editor
-         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3275,7 +3246,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Voice call:
         </text>
         <line_editor
-         tool_tip="c80260ba-41fd-8a46-768a-6bf236360e3a"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3331,7 +3301,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Group invitation:
         </text>
         <line_editor
-         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3387,7 +3356,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Group notice:
         </text>
         <line_editor
-         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3443,7 +3411,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Invalid operation:
         </text>
         <line_editor
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3499,7 +3466,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Toggling movelock:
         </text>
         <line_editor
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3555,7 +3521,6 @@ Hover your mouse cursor over UUID field to show its default value.
             Region restart:
         </text>
         <line_editor
-         tool_tip="b92a0f64-7709-8811-40c5-16afd624a45f"
          follows="left|top"
          left_pad="5"
          height="20"
@@ -3613,7 +3578,6 @@ Hover your mouse cursor over UUID field to show its default value.
         </text>
         <line_editor
          visible="false"
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
          follows="left|top"
          left_pad="5"
          height="20"

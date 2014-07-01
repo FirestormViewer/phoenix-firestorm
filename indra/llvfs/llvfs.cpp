@@ -279,7 +279,11 @@ LLVFS::LLVFS(const std::string& index_filename, const std::string& data_filename
 				tm *pTm = gmtime( &tmin );
 				strm << std::setw(2) << std::setfill('0') << pTm->tm_year+1900 << "-" << pTm->tm_mon+1 << "-" << pTm->tm_mday << "T" << pTm->tm_hour << ":" << pTm->tm_min << ":" << pTm->tm_sec  << " " << std::endl;
 
-				(void)fwrite( strm.str().c_str(), strm.str().size(), 1, fp );
+				size_t bytesWritten = fwrite( strm.str().c_str(), strm.str().size(), 1, fp );
+				if( !bytesWritten )
+				{
+					LL_WARNS() << "Eror during write to " << mIndexFilename + ".date" << LL_ENDL;
+				}
 				LLFile::close( fp );
 			}
 			// </FS:ND>
