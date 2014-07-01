@@ -18,9 +18,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>afd8e4cb38ba4b704edb857188491fa5</string>
+              <string>e272f7b43c72d3a54cfab14d0294d59d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glod-1.0pre4-darwin-20131029u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre4-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -80,9 +80,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>affcd44a78003bbafca8d458f1030d47</string>
+              <string>0cae15bc577943760b97be370e100ea1</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-20131227u.tar.bz2</uri>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-20140629.tar.bz2</uri>
             </map>
           </map>
           <key>linux</key>
@@ -158,9 +158,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>508c560cb2ac234e62efe2d4d5049789</string>
+              <string>6e95badbb6695f89b7b02f71d1cce98e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5-darwin-20140519u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -218,9 +218,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e3e2d26c6d15667c5ceddcec68ae7c32</string>
+              <string>51cd17efb21a14821b2b4c29e79abe2f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ares-1.10.0-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ares-1.10.0-darwin-20140625.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -278,9 +278,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1eb36db04aa34dd2a9fcd7af1ff14d45</string>
+              <string>714f613af8d3593b71d32ec6cde20a86</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20140518u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20140630.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -338,9 +338,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dc28ae49a8917ad39d9432b86ff91c82</string>
+              <string>c2abcaf4438b72f80f09058eaa4d45d3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.2-darwin-20140519u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.2-darwin-20140630.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b1954c2c6fefb38a312a610f0adcbb11</string>
+              <string>221e2b4c7e75ee61a46ce1f63c143288</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140605u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.24.0-darwin-20140630.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -626,9 +626,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>600080e0ee370be7c4f563215c4f0033</string>
+              <string>1643fc9f3fc667d7e8d2ed315f669a74</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/expat-2.0.1-darwin-20140522u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.0.1-darwin-20140624.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -806,9 +806,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05e66a9a07e7c0e19373a5fde7153378</string>
+              <string>62ad03fb881279c6b44daef76330d5b3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-darwin-20131114u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-darwin-20140701.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -974,9 +974,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa443c9aa66d13ee833e07287a047527</string>
+              <string>cae16b436e02f6978ac870e47f9f467b</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/glui-2.36-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glui-2.36-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1010,9 +1010,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>544b56abc54a18d4f6cc8ed715d55396</string>
+              <string>d7c4c5be653a3c3cfdb38c0699f0d988</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-0.0.0-rev1099-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-0.0.0-rev1099-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1065,18 +1065,6 @@
         <string>googlemock</string>
         <key>platforms</key>
         <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>a50fc6c83159ca5a726f6052a8612c50</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/gmock-1.6.0-darwin-20131028u.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -1310,9 +1298,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>980608f33010ac20886dfecd74a5df48</string>
+              <string>cc8a0985ccc28f1f00b0c4e76cd392ea</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jpeglib-8c-darwin-20131112u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1370,9 +1358,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d24884f62c3a67cedace4b54edfec939</string>
+              <string>c1bc00263479f8154043a8cae7833f11</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1538,9 +1526,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>18c4964fea16bdc3f656d217a726ad9c</string>
+              <string>c3c276ba37ed823f1f6fcae750844d57</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1583,6 +1571,30 @@
           </map>
         </map>
       </map>
+      <key>libidn</key>
+      <map>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/libidn.txt</string>
+        <key>name</key>
+        <string>libidn</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>36df6c24e77acaf7424721af25675c0a</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/libidn-1.28-darwin-20140630.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+        </map>
+      </map>
       <key>libpng</key>
       <map>
         <key>license</key>
@@ -1598,9 +1610,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7070be15ab964fc5b3c1e3be25adb40</string>
+              <string>7ff4105def20c5137f63604f2153529f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.5.1-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.5.1-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1944,9 +1956,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eca7d927bef09da2686d60feaf155930</string>
+              <string>fd4fa7d8b15db7c90ee1860bf070ac6f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-0.1.1-darwin-20131109u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2004,9 +2016,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c59b494033ed0e052935dca3120bb15</string>
+              <string>ac4d3ded92e87b5e941c4224a9cab8a5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libndofdev-0.1-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libndofdev-0.1-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2088,9 +2100,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1772c222adf5376451bc320d49946d05</string>
+              <string>c318d26c47f9284f498489057aa4feea</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.1-1.3.4-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.1-1.3.4-darwin-20140626.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2148,9 +2160,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>86f2c270b64be8140e2c622b06d34034</string>
+              <string>0d5a4bd17079653ca70b32ea26a8156d</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1h-darwin-20140605u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2260,9 +2272,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bd42f49f2977ce4aa9bbd04b39999f08</string>
+              <string>4c004c0246577720f09c62f465c4a38e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openjpeg-1.4-darwin-20140524u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4-darwin-20140626.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2320,9 +2332,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c38f1cc4eafca2959ff56b7d1dbf79e</string>
+              <string>44d1cd6519d39d6063a5b9a40ce4d580</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.32-darwin-20131110u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.32-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2392,9 +2404,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c86e0a8e3977e6e27a61f78d625295d3</string>
+              <string>6849432c00ee2db495016c45f0f30122</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-1.0-darwin-20140410.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slplugin_x86-1.0-darwin-20140630.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2540,9 +2552,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3f268f06de51082e18aa6f7b16026c24</string>
+              <string>aa2a84aa73ace1412325463aa41701a0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2600,9 +2612,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>40f752c0c22c02a5b29217245d6bc230</string>
+              <string>c4b6d8780b6f816f8bfe36dc41bc4279</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/zlib-1.2.8-darwin-20140527u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8-darwin-20140629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
