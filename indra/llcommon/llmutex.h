@@ -28,6 +28,9 @@
 #define LL_LLMUTEX_H
 
 #include "stdtypes.h"
+#if !LL_WINDOWS
+#include <stdint.h>
+#endif
 
 //============================================================================
 
