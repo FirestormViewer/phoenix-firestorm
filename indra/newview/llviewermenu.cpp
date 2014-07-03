@@ -2894,7 +2894,7 @@ class LLEditParticleSource : public view_listener_t
 };
 
 // ## Zi: Texture Refresh
-void destroy_texture(LLUUID id)		// will be used by the texture refresh functions below
+void destroy_texture(const LLUUID& id)		// will be used by the texture refresh functions below
 {
 	LLViewerFetchedTexture* tx=LLViewerTextureManager::getFetchedTexture(id);
 	if (tx)
@@ -2906,8 +2906,8 @@ void destroy_texture(LLUUID id)		// will be used by the texture refresh function
 
 class LLObjectTexRefresh : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
+	bool handleEvent(const LLSD& userdata)
+	{
 		// partly copied from the texture info code in handle_selected_texture_info()
 		for (LLObjectSelection::valid_iterator iter = LLSelectMgr::getInstance()->getSelection()->valid_begin();
 			iter != LLSelectMgr::getInstance()->getSelection()->valid_end(); iter++)
@@ -2918,24 +2918,31 @@ class LLObjectTexRefresh : public view_listener_t
 			// map from texture ID to list of faces using it
 			typedef std::map< LLUUID, std::vector<U8> > map_t;
 			map_t faces_per_texture;
-			for (U8 i = 0; i < te_count; i++)
+			for (U8 i = 0; i < te_count; ++i)
 			{
 				if (!node->isTESelected(i)) continue;
 
 				LLViewerTexture* img = node->getObject()->getTEImage(i);
-				LLUUID image_id = img->getID();
-				faces_per_texture[image_id].push_back(i);
+				faces_per_texture[img->getID()].push_back(i);
+
+				LLViewerTexture* norm_img = node->getObject()->getTENormalMap(i);
+				faces_per_texture[norm_img->getID()].push_back(i);
+
+				LLViewerTexture* spec_img = node->getObject()->getTESpecularMap(i);
+				faces_per_texture[spec_img->getID()].push_back(i);
 			}
 
 			map_t::iterator it;
 			for (it = faces_per_texture.begin(); it != faces_per_texture.end(); ++it)
+			{
 				destroy_texture(it->first);
+			}
 
 			// Refresh sculpt texture
-			if(node->getObject()->isSculpted())
+			if (node->getObject()->isSculpted())
 			{
 				LLSculptParams *sculpt_params = (LLSculptParams *)node->getObject()->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-				if(sculpt_params)
+				if (sculpt_params)
 				{
 					LLUUID sculpt_uuid = sculpt_params->getSculptTexture();
 
@@ -2951,15 +2958,17 @@ class LLObjectTexRefresh : public view_listener_t
 						{
 							LLVOVolume* pVolume = pVolumeList->at(idxVolume);
 							if (pVolume)
+							{
 								pVolume->notifyMeshLoaded();
+							}
 						}
 					}
 				}
 			}
 		}
 
-        return true;
-    }
+		return true;
+	}
 };
 
 void avatar_tex_refresh()
@@ -2980,12 +2989,12 @@ void avatar_tex_refresh()
 
 class LLAvatarTexRefresh : public view_listener_t
 {
-    bool handleEvent(const LLSD& userdata)
-    {
+	bool handleEvent(const LLSD& userdata)
+	{
 		avatar_tex_refresh();
 
-        return true;
-    }
+		return true;
+	}
 };
 // ## Zi: Texture Refresh
 
