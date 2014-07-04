@@ -2999,6 +2999,16 @@ void LLIMMgr::addMessage(
 		}
 		// </FS:Ansariel>
 
+		// <FS:Ansariel> FIRE-13613: First group IM received that was initiated by a muted
+		//                           resident leads to leaving the group chat session
+		if (IM_NOTHING_SPECIAL != dialog && IM_SESSION_P2P_INVITE != dialog &&
+			gAgent.isInGroup(new_session_id) && LLMuteList::getInstance()->isMuted(other_participant_id) && !from_linden)
+		{
+			LL_INFOS() << "Ignoring group chat initiated by muted resident." << LL_ENDL;
+			return;
+		}
+		// </FS:Ansariel>
+
 		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, false, is_offline_msg);
 
 		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(new_session_id);
