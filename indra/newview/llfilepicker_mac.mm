@@ -130,8 +130,6 @@ std::string* doSaveDialog(const std::string* file,
         outfile = new std::string( [p UTF8String] );
         // write the file 
     }
-	[fileType release];	// <FS:CR> Fix memleak
-	
     return outfile;
 }
 
