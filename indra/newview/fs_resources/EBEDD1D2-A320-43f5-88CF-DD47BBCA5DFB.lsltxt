@@ -99,7 +99,10 @@
 
         // Set owner and request control perms
         owner = llGetOwner();
-        request_control_perms();
+        if (llGetAttached() != 0)
+        {
+            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
+        }
 
         // Disable all secondary stateful services
         setTimerEvent2(0);
@@ -239,18 +242,6 @@
     }
 
 //
-// Movement control permission, shared function
-//
-
-    request_control_perms()
-    {
-        if (llGetAttached() != 0)
-        {
-            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
-        }
-    }
-
-//
 // Flight Assist
 //
 
@@ -292,6 +283,7 @@
 
 default
 {
+
     state_entry()
     {
         makeSane();
@@ -318,15 +310,8 @@ default
     {
         if (i & PERMISSION_TAKE_CONTROLS)
         {
-            if (flightAssistPushForce > 0 || relockMoveLockAfterMovement)
-            {
-                llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
-            }
-            else
-            {
-                // Take control for value that does nothing, in order to work in no-script sims
-                llTakeControls(1024, TRUE, TRUE);
-            }
+            // This also cause the script to work in no-script sims
+            llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
         }
         else if (i & PERMISSION_ATTACH)
         {
@@ -563,7 +548,6 @@ default
                             // No lightspeed please!
                             flightAssistPushForce = 5.0;
                         }
-                        request_control_perms();
                         llSetTimerEvent(flightAirCheckNormal);
                     }
                     else
@@ -577,10 +561,6 @@ default
             else if (cmd == "RelockMoveLockAfterMovement")
             {
                 relockMoveLockAfterMovement = llList2Integer(commandList, 1);
-                if (relockMoveLockAfterMovement)
-                {
-                    request_control_perms();
-                }
             }
 
             else if (cmd == "ExternalIntegration")
