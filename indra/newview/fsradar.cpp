@@ -480,7 +480,7 @@ void FSRadar::updateRadarList()
 		entry["name"] = avName;
 		entry["in_region"] = (regionSelf == avRegion);
 		entry["flags"] = avFlag;
-		entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
+		entry["age"] = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) ? "---" : ( (avAge > -1 ? llformat("%d", avAge) : "") );
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
 		entry["typing"] = (avVo && avVo->isTyping());
