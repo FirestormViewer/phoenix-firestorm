@@ -760,10 +760,16 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		{
 			reportToNearbyChat("Cookies!");
 		}
+		// <FS:PP>
 		else if ("motd" == info_type)
 		{
 			reportToNearbyChat(gAgent.mMOTD);
 		}
+		else if ("gridstatus" == info_type)
+		{
+			FSLSLBridge::instance().viewerToLSL("QueryGridStatus");
+		}
+		// </FS:PP>
 		return true;
 	}
 };

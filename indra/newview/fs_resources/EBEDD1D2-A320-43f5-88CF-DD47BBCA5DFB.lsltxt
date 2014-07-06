@@ -1,4 +1,4 @@
-// HTTP Bridge script v.2.16
+// HTTP Bridge script v.2.17
 // Firestorm
 // Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -8,7 +8,7 @@
 
     // Bridge platform
     string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
-    string  bridgeVersion = "2.16";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.17";    // This should match fslslbridge.cpp
     string  latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
@@ -491,6 +491,11 @@ default
                 llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
             }
 
+            else if (cmd == "QueryGridStatus")
+            {
+                llHTTPRequest("http://status.secondlifegrid.net/feed/rss/", [], "");
+            }
+
             else if (cmd == "llMoveToTarget")
             {
 
@@ -596,6 +601,31 @@ default
             // Acknowledgment of receipt for all commands, which are not sending back HTTP response for FSLSLBridgeRequestResponder
             llHTTPResponse(httpReqID, 200, "<llsd><string>ok</string></llsd>");
 
+        }
+    }
+
+    http_response(key request_id, integer status, list metadata, string body)
+    {
+        if (status == 200)
+        {
+            integer itemEnd = llSubStringIndex(body, "</item>");
+            if (itemEnd != -1)
+            {
+                string theNews = llGetSubString(body, llSubStringIndex(body, "<item>") + 6, itemEnd - 1);
+                llOwnerSay("[" + llGetSubString(theNews, llSubStringIndex(theNews, "<title>") + 7, llSubStringIndex(theNews, "</title>") - 1) + "] " + llStringTrim(llGetSubString(theNews, llSubStringIndex(theNews, "<description>") + 13, llSubStringIndex(theNews, "</description>") - 1), STRING_TRIM) + " [ " + llGetSubString(theNews, llSubStringIndex(theNews, "<link>") + 6, llSubStringIndex(theNews, "</link>") - 1) + " ]");
+            }
+            else
+            {
+                llOwnerSay("SL Grid Status error: Invalid message format. Try again later.");
+            }
+        }
+        else if (status == 499)
+        {
+            llOwnerSay("SL Grid Status error: Request timed out.");
+        }
+        else
+        {
+            llOwnerSay("SL Grid Status error: " + (string)status + " (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).");
         }
     }
 
