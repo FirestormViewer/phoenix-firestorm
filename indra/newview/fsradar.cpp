@@ -302,6 +302,7 @@ void FSRadar::updateRadarList()
 		{
 			avRegion = reg->getRegionID();
 		}
+		bool isInSameRegion = (avRegion == regionSelf);
 		S32 seentime = (S32)difftime(now, ent->mFirstSeen);
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
@@ -364,7 +365,7 @@ void FSRadar::updateRadarList()
 				make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 			}
-			if (RadarReportSimRangeEnter && (avRegion == regionSelf))
+			if (RadarReportSimRangeEnter && isInSameRegion)
 			{
 				make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
@@ -385,7 +386,7 @@ void FSRadar::updateRadarList()
 				// If Leave channel alerts are not set, restrict reports to same-sim only.
 				if (!RadarLeaveChannelAlert)
 				{
-					if (avRegion == regionSelf)
+					if (isInSameRegion)
 					{
 						mRadarEnterAlerts.push_back(avId);
 					}
@@ -437,7 +438,7 @@ void FSRadar::updateRadarList()
 			}
 			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 			{
-				if (RadarReportSimRangeEnter && avRegion == regionSelf && avRegion != rf.lastRegion && rf.lastRegion.notNull())
+				if (RadarReportSimRangeEnter && isInSameRegion && avRegion != rf.lastRegion && rf.lastRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
@@ -452,7 +453,7 @@ void FSRadar::updateRadarList()
 						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
 					}
 				}
-				else if (RadarReportSimRangeLeave && rf.lastRegion == regionSelf && avRegion != regionSelf && avRegion.notNull())
+				else if (RadarReportSimRangeLeave && rf.lastRegion == regionSelf && !isInSameRegion && avRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
@@ -468,7 +469,7 @@ void FSRadar::updateRadarList()
 		//
 		//2d. Prepare data for presentation view for this avatar
 		//
-		if (regionSelf == avRegion)
+		if (isInSameRegion)
 		{
 			inSameRegion++;
 		}
@@ -478,7 +479,7 @@ void FSRadar::updateRadarList()
 
 		entry["id"] = avId;
 		entry["name"] = avName;
-		entry["in_region"] = (regionSelf == avRegion);
+		entry["in_region"] = isInSameRegion;
 		entry["flags"] = avFlag;
 		entry["age"] = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) ? "---" : ( (avAge > -1 ? llformat("%d", avAge) : "") );
 		entry["seen"] = avSeenStr;
