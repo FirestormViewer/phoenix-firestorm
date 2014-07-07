@@ -290,9 +290,8 @@
      width="160"/>
     <check_box
      control_name="AutoQueryGridStatus"
-     enabled_control="UseLSLBridge"
      height="16"
-     label="Use the LSL-Client Bridge to query status.secondlifegrid.net for latest news at login"
+     label="Query status.secondlifegrid.net for latest news at login"
      layout="topleft"
      left="10"
      name="AutoQueryGridStatus"

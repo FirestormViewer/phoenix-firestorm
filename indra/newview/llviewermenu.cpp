@@ -765,10 +765,6 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		{
 			reportToNearbyChat(gAgent.mMOTD);
 		}
-		else if ("gridstatus" == info_type)
-		{
-			FSLSLBridge::instance().viewerToLSL("QueryGridStatus");
-		}
 		// </FS:PP>
 		return true;
 	}

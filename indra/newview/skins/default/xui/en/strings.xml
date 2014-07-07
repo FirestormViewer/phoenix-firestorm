@@ -2701,4 +2701,8 @@ Try enclosing path to the editor with double quotes.
   <string name="groupcountstring">You belong to [COUNT] groups ([REMAINING] remaining).</string>
   <string name="groupcountunlimitedstring">You belong to [COUNT] groups.</string>
 
+  <string name="SLGridStatusInvalidMsg">SL Grid Status error: Invalid message format. Try again later.</string>
+  <string name="SLGridStatusTimedOut">SL Grid Status error: Request timed out.</string>
+  <string name="SLGridStatusOtherError">SL Grid Status error: [STATUS] (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).</string>
+
 </strings>

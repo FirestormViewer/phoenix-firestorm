@@ -115,6 +115,7 @@
 #include "llgroupmgr.h"
 #include "llhudeffecttrail.h"
 #include "llhudmanager.h"
+#include "llbufferstream.h" // <FS:PP> For SL Grid Status
 #include "llhttpclient.h"
 #include "llimagebmp.h"
 #include "llinventorybridge.h"
@@ -367,6 +368,71 @@ public:
 	}
 };
 // </AW: opensim>
+
+// <FS:PP>
+class SLGridStatusResponder : public LLHTTPClient::Responder
+{
+public:
+	virtual void completedRaw(U32 status, const std::string& reason, const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
+	{
+
+		if (!isGoodStatus(status) && status != 304)
+		{
+			if (status == 499)
+			{
+				reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
+			}
+			else
+			{
+				LLStringUtil::format_map_t args;
+				args["STATUS"] = llformat("%d", status);
+				reportToNearbyChat(LLTrans::getString("SLGridStatusOtherError", args));
+			}
+			LL_WARNS("SLGridStatusResponder") << "Error - status " << status << LL_ENDL;
+			return;
+		}
+
+		S32 outputSize = buffer->countAfter(channels.in(), NULL);
+		if (outputSize <= 0)
+		{
+			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+			LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
+			return;
+		}
+
+		LLBufferStream istr(channels, buffer.get());
+		std::stringstream strstrm;
+		strstrm << istr.rdbuf();
+		std::string fetchedNews = strstrm.str();
+
+		S32 itemEnd = fetchedNews.find("</item>");
+		if (itemEnd != std::string::npos)
+		{
+
+			S32 itemStart = fetchedNews.find("<item>") + 6;
+			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
+	
+			S32 titleStart = theNews.find("<title>") + 7;
+			S32 descStart = theNews.find("<description>") + 13;
+			S32 linkStart = theNews.find("<link>") + 6;
+			std::string newsTitle = theNews.substr(titleStart, theNews.find("</title>") - titleStart);
+			std::string newsDesc = theNews.substr(descStart, theNews.find("</description>") - descStart);
+			std::string newsLink = theNews.substr(linkStart, theNews.find("</link>") - linkStart);
+			LLStringUtil::trim(newsTitle);
+			LLStringUtil::trim(newsDesc);
+			LLStringUtil::trim(newsLink);
+			reportToNearbyChat("[" + newsTitle + "] " + newsDesc + " [ " + newsLink + " ]");
+
+		}
+		else
+		{
+			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+			LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+		}
+
+	}
+};
+// </FS:PP>
 
 void update_texture_fetch()
 {
@@ -1537,6 +1603,13 @@ bool idle_startup()
 			reportToNearbyChat(gAgent.mMOTD);
 		}
 		// </FS:Techwolf Lupindo>
+		// <FS:PP>
+		if (gSavedPerAccountSettings.getBOOL("AutoQueryGridStatus"))
+		{
+			std::string url = "http://status.secondlifegrid.net/feed/rss/";
+			LLHTTPClient::get(url, new SLGridStatusResponder());
+		}
+		// </FS:PP>
 		display_startup();
 		// We should have an agent id by this point.
 		llassert(!(gAgentID == LLUUID::null));
