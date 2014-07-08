@@ -1604,7 +1604,7 @@ bool idle_startup()
 		}
 		// </FS:Techwolf Lupindo>
 		// <FS:PP>
-		if (gSavedPerAccountSettings.getBOOL("AutoQueryGridStatus"))
+		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
 		{
 			std::string url = "http://status.secondlifegrid.net/feed/rss/";
 			LLHTTPClient::get(url, new SLGridStatusResponder());
