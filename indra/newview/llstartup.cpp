@@ -405,31 +405,73 @@ public:
 		strstrm << istr.rdbuf();
 		std::string fetchedNews = strstrm.str();
 
-		S32 itemStart = fetchedNews.find("<item>") + 6;
+		S32 itemStart = fetchedNews.find("<item>");
 		S32 itemEnd = fetchedNews.find("</item>");
 		if (itemEnd != std::string::npos && itemStart != std::string::npos)
 		{
 
+			// Isolate latest news data
+			itemStart += 6;
 			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
 
 			// Check for and remove CDATA characters if they're present
-			theNews.replace(theNews.find("<title><![CDATA["), 16, "<title>");
-			theNews.replace(theNews.find("]]></title>"), 11, "</title>");
-			theNews.replace(theNews.find("<description><![CDATA["), 22, "<description>");
-			theNews.replace(theNews.find("]]></description>"), 17, "</description>");
-			theNews.replace(theNews.find("<link><![CDATA["), 15, "<link>");
-			theNews.replace(theNews.find("]]></link>"), 10, "</link>");
+			S32 titleStart = theNews.find("<title><![CDATA[");
+			if (titleStart != std::string::npos)
+			{
+				theNews.replace(titleStart, 16, "<title>");
+			}
+			S32 titleEnd = theNews.find("]]></title>");
+			if (titleEnd != std::string::npos)
+			{
+				theNews.replace(titleEnd, 11, "</title>");
+			}
+			S32 descStart = theNews.find("<description><![CDATA[");
+			if (descStart != std::string::npos)
+			{
+				theNews.replace(descStart, 22, "<description>");
+			}
+			S32 descEnd = theNews.find("]]></description>");
+			if (descEnd != std::string::npos)
+			{
+				theNews.replace(descEnd, 17, "</description>");
+			}
+			S32 linkStart = theNews.find("<link><![CDATA[");
+			if (linkStart != std::string::npos)
+			{
+				theNews.replace(linkStart, 15, "<link>");
+			}
+			S32 linkEnd = theNews.find("]]></link>");
+			if (linkEnd != std::string::npos)
+			{
+				theNews.replace(linkEnd, 10, "</link>");
+			}
 
-			S32 titleStart = theNews.find("<title>") + 7;
-			S32 descStart = theNews.find("<description>") + 13;
-			S32 linkStart = theNews.find("<link>") + 6;
-			std::string newsTitle = theNews.substr(titleStart, theNews.find("</title>") - titleStart);
-			std::string newsDesc = theNews.substr(descStart, theNews.find("</description>") - descStart);
-			std::string newsLink = theNews.substr(linkStart, theNews.find("</link>") - linkStart);
-			LLStringUtil::trim(newsTitle);
-			LLStringUtil::trim(newsDesc);
-			LLStringUtil::trim(newsLink);
-			reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+			// Get indexes
+			titleStart = theNews.find("<title>");
+			descStart = theNews.find("<description>");
+			linkStart = theNews.find("<link>");
+			titleEnd = theNews.find("</title>");
+			descEnd = theNews.find("</description>");
+			linkEnd = theNews.find("</link>");
+
+			if (titleStart != std::string::npos && descStart != std::string::npos && linkStart != std::string::npos && titleEnd != std::string::npos && descEnd != std::string::npos && linkEnd != std::string::npos)
+			{
+				titleStart += 7;
+				descStart += 13;
+				linkStart += 6;
+				std::string newsTitle = theNews.substr(titleStart, titleEnd - titleStart);
+				std::string newsDesc = theNews.substr(descStart, descEnd - descStart);
+				std::string newsLink = theNews.substr(linkStart, linkEnd - linkStart);
+				LLStringUtil::trim(newsTitle);
+				LLStringUtil::trim(newsDesc);
+				LLStringUtil::trim(newsLink);
+				reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+			}
+			else
+			{
+				reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+				LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
+			}
 
 		}
 		else
