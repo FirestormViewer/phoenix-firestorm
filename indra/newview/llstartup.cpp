@@ -405,13 +405,21 @@ public:
 		strstrm << istr.rdbuf();
 		std::string fetchedNews = strstrm.str();
 
+		S32 itemStart = fetchedNews.find("<item>") + 6;
 		S32 itemEnd = fetchedNews.find("</item>");
-		if (itemEnd != std::string::npos)
+		if (itemEnd != std::string::npos && itemStart != std::string::npos)
 		{
 
-			S32 itemStart = fetchedNews.find("<item>") + 6;
 			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
-	
+
+			// Check for and remove CDATA characters if they're present
+			theNews.replace(theNews.find("<title><![CDATA["), 16, "<title>");
+			theNews.replace(theNews.find("]]></title>"), 11, "</title>");
+			theNews.replace(theNews.find("<description><![CDATA["), 22, "<description>");
+			theNews.replace(theNews.find("]]></description>"), 17, "</description>");
+			theNews.replace(theNews.find("<link><![CDATA["), 15, "<link>");
+			theNews.replace(theNews.find("]]></link>"), 10, "</link>");
+
 			S32 titleStart = theNews.find("<title>") + 7;
 			S32 descStart = theNews.find("<description>") + 13;
 			S32 linkStart = theNews.find("<link>") + 6;
@@ -421,7 +429,7 @@ public:
 			LLStringUtil::trim(newsTitle);
 			LLStringUtil::trim(newsDesc);
 			LLStringUtil::trim(newsLink);
-			reportToNearbyChat("[" + newsTitle + "] " + newsDesc + " [ " + newsLink + " ]");
+			reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
 
 		}
 		else
@@ -1606,8 +1614,7 @@ bool idle_startup()
 		// <FS:PP>
 		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
 		{
-			std::string url = "http://status.secondlifegrid.net/feed/rss/";
-			LLHTTPClient::get(url, new SLGridStatusResponder());
+			LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
 		}
 		// </FS:PP>
 		display_startup();
