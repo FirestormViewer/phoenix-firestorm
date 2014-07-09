@@ -1647,18 +1647,6 @@ bool idle_startup()
 	if (STATE_WORLD_INIT == LLStartUp::getStartupState())
 	{
 		set_startup_status(0.30f, LLTrans::getString("LoginInitializingWorld"), gAgent.mMOTD);
-		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
-		if(gSavedSettings.getBOOL("FSDisableLoginScreens"))
-		{
-			reportToNearbyChat(gAgent.mMOTD);
-		}
-		// </FS:Techwolf Lupindo>
-		// <FS:PP>
-		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
-		{
-			LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
-		}
-		// </FS:PP>
 		display_startup();
 		// We should have an agent id by this point.
 		llassert(!(gAgentID == LLUUID::null));
@@ -2782,6 +2770,19 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 
 		llassert(LLPathfindingManager::getInstance() != NULL);
 		LLPathfindingManager::getInstance()->initSystem();
+
+		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
+		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
+		{
+			reportToNearbyChat(gAgent.mMOTD);
+		}
+		// </FS:Techwolf Lupindo>
+		// <FS:PP>
+		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
+		{
+			LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
+		}
+		// </FS:PP>
 
 		return TRUE;
 	}
