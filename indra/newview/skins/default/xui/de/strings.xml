@@ -5973,4 +5973,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="groupcountunlimitedstring">
 		Sie gehören [COUNT] Gruppe(n) an.
 	</string>
+	<string name="SLGridStatusInvalidMsg">
+		SL-Grid-Status-Fehler: Ungültiges Nachrichtenformat. Bitte später erneut versuchen.
+	</string>
+	<string name="SLGridStatusTimedOut">
+		SL-Grid-Status-Fehler: Zeitüberschreitung der Anfrage.
+	</string>
+	<string name="SLGridStatusOtherError">
+		SL-Grid-Status-Fehler: [STATUS] (https://de.wikipedia.org/wiki/HTTP-Statuscode).
+	</string>
 </strings>
