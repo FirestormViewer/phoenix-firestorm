@@ -1391,10 +1391,9 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
 		// </FS:TT>
 		// <FS:TT> Client LSL Bridge
-		if (gSavedSettings.getBOOL("UseLSLBridge"))
+		if (attachment->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && gSavedSettings.getBOOL("UseLSLBridge"))
 		{
-			if (attachment->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
-				FSLSLBridge::instance().processAttach(viewer_object, attachment);
+			FSLSLBridge::instance().processAttach(viewer_object, attachment);
 		}
 		// </FS:TT>
 		updateLODRiggedAttachments();		
