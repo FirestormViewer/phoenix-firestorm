@@ -30,12 +30,12 @@
 #include "llsingleton.h"
 
 #include "llfloater.h"
-#include "llscrolllistctrl.h"
 
 #include "llagent.h"
 #include "llgroupmgr.h"
 
 class FSFloaterGroupTitles;
+class LLScrollListCtrl;
 
 class FSGroupTitlesObserver : LLGroupMgrObserver
 {

@@ -28,10 +28,7 @@
 #ifndef FS_DATA_H
 #define FS_DATA_H
 
-#include <map>
-
 #include "llinstantmessage.h"
-#include "llsd.h"
 #include "llsingleton.h"
 
 class FSData : public LLSingleton<FSData>

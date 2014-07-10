@@ -28,8 +28,7 @@
 
 #include "fsfloatergrouptitles.h"
 #include "llgroupactions.h"
-#include "llscrolllistitem.h"
-#include "llviewermessage.h"
+#include "llscrolllistctrl.h"
 #include "lltrans.h"
 
 /////////////////////////////////////////////////////

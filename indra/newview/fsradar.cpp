@@ -38,6 +38,7 @@
 // newview
 #include "fscommon.h"
 #include "fslslbridge.h"
+#include "fslslbridgerequest.h"
 #include "fswsassetblacklist.h"
 #include "lggcontactsets.h"
 #include "lfsimfeaturehandler.h"

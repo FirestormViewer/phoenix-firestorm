@@ -30,8 +30,6 @@
 
 #include "llfloater.h"
 #include "llsingleton.h"
-#include "lluuid.h"
-#include "llstring.h"
 #include "llframetimer.h"
 #include "llsaleinfo.h"
 #include "llcategory.h"

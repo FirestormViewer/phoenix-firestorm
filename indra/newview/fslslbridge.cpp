@@ -26,40 +26,23 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
+#include "fscommon.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
-//#include "imageids.h"
-#include "llxmlnode.h"
-#include "apr_base64.h" // For getScriptInfo()
-#include "llbufferstream.h"
-#include "llsdserialize.h"
-#include "llviewerinventory.h"
-#include "llagent.h"
-#include "llvoavatar.h"
-#include "llattachmentsmgr.h"
-#include "llinventorymodel.h"
-#include "llinventoryfunctions.h"
-#include "llviewerassettype.h"
-#include "llfloaterreg.h"
-#include "llinventorybridge.h"
-#include "llpreviewscript.h"
-#include "llselectmgr.h"
-#include "llinventorydefines.h"
-#include "llviewerregion.h"
-#include "llfoldertype.h"
-#include "llhttpclient.h"
-#include "llassetuploadresponders.h"
-#include "llnotificationmanager.h"
-#include "llviewerobject.h"
-#include "llappearancemgr.h"
-#include "lltrans.h"
-#include "aoengine.h"
-#include "fscommon.h"
 
-#include <boost/regex.hpp>
-#include <string>
-#include <fstream>
-#include <streambuf>
+#include "aoengine.h"
+#include "apr_base64.h" // For getScriptInfo()
+#include "llagent.h"
+#include "llattachmentsmgr.h"
+#include "llappearancemgr.h"
+#include "llinventoryfunctions.h"
+#include "llpreviewscript.h"
+#include "lltrans.h"
+#include "llviewercontrol.h"
+#include "llviewerregion.h"
+
+//#include <boost/regex.hpp>
 
 #if OPENSIM
 #include "llviewernetwork.h"

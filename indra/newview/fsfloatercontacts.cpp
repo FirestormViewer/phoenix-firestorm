@@ -32,7 +32,6 @@
 
 // libs
 #include "llagent.h"
-#include "llavatarname.h"
 #include "llfloaterreg.h"
 #include "lltabcontainer.h"
 #include "llscrolllistctrl.h"
@@ -47,7 +46,6 @@
 #include "llgrouplist.h"
 #include "fsfloaterimcontainer.h"
 #include "llnotificationsutil.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llstartup.h"
 #include "llviewercontrol.h"
 #include "llvoiceclient.h"

@@ -28,7 +28,6 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloaterblocklist.h"
-#include "llviewercontrol.h"
 
 FSFloaterBlocklist::FSFloaterBlocklist(const LLSD& seed)
 	: LLFloater(seed),

@@ -27,8 +27,6 @@
 
 #include "llsingleton.h"
 
-#include <list>
-
 class DialogStack
 :	public LLSingleton<DialogStack>
 {

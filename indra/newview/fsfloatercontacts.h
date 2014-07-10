@@ -30,8 +30,6 @@
 #define FS_FLOATERCONTACTS_H
 
 #include "llfloater.h"
-#include "lleventtimer.h"
-#include "llcallingcard.h"
 
 class LLAvatarList;
 class LLAvatarName;

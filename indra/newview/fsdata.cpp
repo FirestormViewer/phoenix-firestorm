@@ -47,7 +47,6 @@
 #include "llimview.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
-#include "llprimitive.h"
 #include "llsdserialize.h"
 #include "llversioninfo.h"
 #include "llviewercontrol.h"

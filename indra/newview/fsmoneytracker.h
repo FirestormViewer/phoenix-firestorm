@@ -25,15 +25,9 @@
 #define FS_MONEYTRACKER_H
 
 #include "llfloater.h"
-#include "llsingleton.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llchathistory.h"
-#include "fschathistory.h"
-// </FS:Ansariel> [FS communication UI]
-#include "lllineeditor.h"
-#include "llchat.h"
-#include <string.h>
 
+class FSChatHistory;
+class LLChat;
 class LLTextBox;
 class LLViewerRegion;
 	
@@ -49,10 +43,7 @@ public:
 private:
 	void clear();
 	std::string appendTime();
-	// <FS:Ansariel> [FS communication UI]
-	//LLChatHistory* mTransactionHistory;
 	FSChatHistory* mTransactionHistory;
-	// </FS:Ansariel> [FS communication UI]
 };
 
 #endif // FS_MONEYTRACKER_H

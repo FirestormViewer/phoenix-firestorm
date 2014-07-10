@@ -34,13 +34,13 @@ class LLScrollListCtrl;
 
 class FSFloaterWSAssetBlacklist : public LLFloater
 {
-    LOG_CLASS(FSFloaterWSAssetBlacklist);
+	LOG_CLASS(FSFloaterWSAssetBlacklist);
 public:
-    FSFloaterWSAssetBlacklist(const LLSD& key);
-    virtual ~FSFloaterWSAssetBlacklist();
+	FSFloaterWSAssetBlacklist(const LLSD& key);
+	virtual ~FSFloaterWSAssetBlacklist();
 
-    /*virtual*/ void onOpen(const LLSD& key);
-    /*virtual*/ BOOL postBuild();
+	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ BOOL postBuild();
 
 	std::string getTypeString(S32 type);
 	void buildBlacklist();
@@ -48,8 +48,8 @@ public:
 	void removeElementFromList(const LLUUID& id);
 
 protected:
-    void onRemoveBtn();
-    void onCancelBtn();
+	void onRemoveBtn();
+	void onCancelBtn();
 
 private:
 	LLScrollListCtrl* mResultList;

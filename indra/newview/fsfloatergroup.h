@@ -29,7 +29,6 @@
 #define FS_FLOATERGROUP_H
 
 #include "llfloater.h"
-#include "llpanelgroup.h"
 
 class LLPanelGroup;
 

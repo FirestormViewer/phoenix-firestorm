@@ -28,8 +28,8 @@
 #ifndef FS_CONSOLEUTILS_H
 #define FS_CONSOLEUTILS_H
 
-#include "llavatarnamecache.h"
-#include "llviewerchat.h"
+class LLAvatarName;
+class LLChat;
 
 class FSConsoleUtils
 {

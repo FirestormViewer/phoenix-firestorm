@@ -28,15 +28,13 @@
 #ifndef FS_LSLBRIDGE_H
 #define FS_LSLBRIDGE_H
 
-#include "llviewerprecompiledheaders.h"
-#include "llchat.h"
 #include "llhttpclient.h"
 #include "llinventorymodel.h"
-#include "fslslbridgerequest.h"
 #include "llviewerinventory.h"
 #include "llinventoryobserver.h"
 #include "lleventtimer.h"
-#include "llvoinventorylistener.h"
+
+class FSLSLBridgeRequestResponder;
 
 //
 //-TT Client LSL Bridge File

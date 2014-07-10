@@ -104,7 +104,7 @@ void FSFloaterWSAssetBlacklist::removeElementFromList(const LLUUID& id)
 
 
 void FSFloaterWSAssetBlacklist::onOpen(const LLSD& key)
-{	
+{
 	mResultList->clearRows();
 	buildBlacklist();
 }
@@ -112,7 +112,7 @@ void FSFloaterWSAssetBlacklist::onOpen(const LLSD& key)
 BOOL FSFloaterWSAssetBlacklist::postBuild()
 {
 	mResultList = getChild<LLScrollListCtrl>("result_list");
-    childSetAction("remove_btn", boost::bind(&FSFloaterWSAssetBlacklist::onRemoveBtn, this));
+	childSetAction("remove_btn", boost::bind(&FSFloaterWSAssetBlacklist::onRemoveBtn, this));
 	std::string order_by = gSavedSettings.getString("FSFloaterBlacklistSortColumn");
 	BOOL ascending = gSavedSettings.getBOOL("FSFloaterBlacklistSortAscending");
 
@@ -121,7 +121,7 @@ BOOL FSFloaterWSAssetBlacklist::postBuild()
 		mResultList->sortByColumn(order_by, ascending);
 	}
 
-    return TRUE;
+	return TRUE;
 }
 
 void FSFloaterWSAssetBlacklist::onRemoveBtn()
@@ -138,5 +138,5 @@ void FSFloaterWSAssetBlacklist::onRemoveBtn()
 
 void FSFloaterWSAssetBlacklist::onCancelBtn()
 {
-    closeFloater();
+	closeFloater();
 }

@@ -30,6 +30,7 @@
 #include "fsfloatergroup.h"
 
 #include "llfloaterreg.h"
+#include "llpanelgroup.h"
 
 FSFloaterGroup::FSFloaterGroup(const LLSD& seed)
 	: LLFloater(seed),

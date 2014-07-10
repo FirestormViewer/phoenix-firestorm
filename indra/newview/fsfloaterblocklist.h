@@ -30,8 +30,6 @@
 
 #include "llfloater.h"
 
-#include "llpanelblockedlist.h"
-
 class FSFloaterBlocklist : public LLFloater
 {
 public:

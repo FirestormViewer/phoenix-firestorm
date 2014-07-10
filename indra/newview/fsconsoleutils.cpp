@@ -33,13 +33,12 @@
 #include "fsfloaternearbychat.h"
 #include "lggcontactsets.h"
 #include "llagent.h"
+#include "llavatarnamecache.h"
 #include "llconsole.h"
 #include "llfloaterreg.h"
 #include "llimview.h"
-#include "llnotificationhandler.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
-#include "rlvhandler.h"
 
 // static
 BOOL FSConsoleUtils::isNearbyChatVisible()
