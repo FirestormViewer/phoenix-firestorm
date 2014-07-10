@@ -28,28 +28,11 @@
 #ifndef FS_LSLBRIDGEREQUEST_H
 #define FS_LSLBRIDGEREQUEST_H
 
-#include "llviewerprecompiledheaders.h"
 #include "llhttpclient.h"
 
 //
 //-TT Client LSL Bridge File
 //
-
-class FSLSLBridgeRequestManager //: public LLSingleton<FSLSLBridgeRequestManager>
-{
-public:
-	FSLSLBridgeRequestManager();
-	~FSLSLBridgeRequestManager();
-
-	void processBridgeCall(const LLSD& content);
-	/* virtual */ void initSingleton();
-private:
-	LLSD mBridgeCalls;
-
-	//friend class LLSingleton<FSLSLBridgeRequestManager>;	
-
-};
-
 
 class FSLSLBridgeRequestResponder : public LLHTTPClient::Responder
 {
@@ -75,7 +58,5 @@ public:
 	//If we get back a normal response, handle it here
 	void result(const LLSD& content);
 };
-
-
 
 #endif // FS_LSLBRIDGEREQUEST_H
