@@ -32,6 +32,8 @@
 #include "rlvui.h"
 #include "rlvextensions.h"
 
+#include "fslslbridge.h"
+
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
@@ -2031,7 +2033,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == "Bridge")
+		if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
 		{
 			continue;
 		}
@@ -2062,7 +2064,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == "Bridge")
+		if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
 		{
 			continue;
 		}

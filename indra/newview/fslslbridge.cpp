@@ -575,7 +575,7 @@ void FSLSLBridge::startCreation()
 			if (!LLAppearanceMgr::instance().getIsInCOF(mpBridge->getUUID()))
 			{
 				//Is this a valid bridge - wear it. 
-				LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), BRIDGE_POINT, FALSE, TRUE);	
+				LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), FS_BRIDGE_POINT, FALSE, TRUE);	
 				LL_INFOS("FSLSLBridge") << "Bridge not attached but found in inventory, reattaching..." << LL_ENDL;
 				//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
 			}
@@ -630,7 +630,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 {
 	LL_INFOS("FSLSLBridge") << "Entering processAttach, checking the bridge container - gInventory.isInventoryUsable=" << gInventory.isInventoryUsable()<< LL_ENDL;
 
-	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
+	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != FS_BRIDGE_ATTACHMENT_POINT_NAME))
 	{
 		LL_WARNS("FSLSLBridge") << "Bridge not created. Our bridge container attachment isn't named correctly." << LL_ENDL;
 		if (mBridgeCreating)
@@ -820,7 +820,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 {
 	LL_INFOS("FSLSLBridge") << "Entering processDetach" << LL_ENDL;
 
-	if (gAgentAvatarp.isNull() || (!gAgentAvatarp->isSelf()) || (attachment == NULL) || (attachment->getName() != "Bridge"))
+	if (gAgentAvatarp.isNull() || (!gAgentAvatarp->isSelf()) || (attachment == NULL) || (attachment->getName() != FS_BRIDGE_ATTACHMENT_POINT_NAME))
 	{
 		LL_WARNS("FSLSLBridge") << "Couldn't detach bridge, object has wrong name or avatar wasn't self." << LL_ENDL;
 		return;
@@ -960,7 +960,7 @@ void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
 	FSLSLBridge::instance().setBridge(item);
 	
 	LL_INFOS("FSLSLBridge") << "Attaching bridge to the 'bridge' attachmnent point..." << LL_ENDL;
-	LLAttachmentsMgr::instance().addAttachment(inv_item, FSLSLBridge::BRIDGE_POINT, TRUE, TRUE);
+	LLAttachmentsMgr::instance().addAttachment(inv_item, FS_BRIDGE_POINT, TRUE, TRUE);
 }
 
 

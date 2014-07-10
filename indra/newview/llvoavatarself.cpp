@@ -1387,16 +1387,16 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		// Clear any pending requests once the attachment arrives.
 		removeAttachmentRequest(attachment_id);
 
-//-TT Patch: ReplaceWornItemsOnly
+		// <FS:TT> ReplaceWornItemsOnly
 		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
-//-TT
-//-TT Client LSL Bridge
+		// </FS:TT>
+		// <FS:TT> Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
 		{
-			if (attachment->getName() == "Bridge")
+			if (attachment->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
 				FSLSLBridge::instance().processAttach(viewer_object, attachment);
 		}
-//-TT
+		// </FS:TT>
 		updateLODRiggedAttachments();		
 
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
@@ -1433,7 +1433,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 	//		const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
 	//		if (pAttachPt->isObjectAttached(viewer_object))
 	//		{
-//-TT Client LSL Bridge - moving the rlv check to get the pAttachPt for the bridge
+	// <FS:TT> Client LSL Bridge - moving the rlv check to get the pAttachPt for the bridge
 	const LLViewerJointAttachment* pAttachPt = NULL;
 	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
 	{
@@ -1442,7 +1442,7 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 		{
 			if (rlv_handler_t::isEnabled())
 			{
-//-TT
+	// </FS:TT>
 				RlvAttachmentLockWatchdog::instance().onDetach(viewer_object, pAttachPt);
 				gRlvHandler.onDetach(viewer_object, pAttachPt);
 			}
@@ -1451,12 +1451,12 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 				(*mAttachmentSignal)(viewer_object, pAttachPt, ACTION_DETACH);
 			}
 
-//-TT Client LSL Bridge
-			if (pAttachPt->getName() == "Bridge" && gSavedSettings.getBOOL("UseLSLBridge"))
+			// <FS:TT> Client LSL Bridge
+			if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && gSavedSettings.getBOOL("UseLSLBridge"))
 			{
 				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
 			}
-//-TT
+			// </FS:TT>
 			break;
 		}
 	}

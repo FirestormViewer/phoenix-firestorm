@@ -44,11 +44,11 @@
 
 const std::string LIB_ROCK_NAME = "Rock - medium, round";
 const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
+const U8 FS_BRIDGE_POINT = 127;
+const std::string FS_BRIDGE_ATTACHMENT_POINT_NAME = "Bridge";
 
 class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
 {
-	static const U8 BRIDGE_POINT = 127;
-
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
