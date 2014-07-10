@@ -3526,7 +3526,7 @@ void LLInventoryModel::wearWearablesOnAvatar(const LLUUID& category_id)
 	S32 i;
 	S32 wearable_count = mItemArray.size();
 
-	if (wearable_count > 0)	//Loop through wearables. 
+	if (wearable_count > 0) //Loop through wearables.
 	{
 		//LL_INFOS() << "ReplaceWornItemsOnly wearable_count" << wearable_count << LL_ENDL;
 		S32 aTypes[LLWearableType::WT_COUNT] = {0};
@@ -3556,7 +3556,9 @@ void LLInventoryModel::wearWearablesOnAvatar(const LLUUID& category_id)
 						//if the item is from our folder - don't remove it
 						//for (LLViewerInventoryItem *item = item_array.get(i); 
 						if ( mItemArray.end() == std::find( mItemArray.begin(), mItemArray.end(), (LLViewerInventoryItem*)wearable ) )
+						{
 							LLAppearanceMgr::instance().removeItemFromAvatar(wearable->getItemID());
+						}
 						//LL_INFOS() << "Removing wearable name: " << wearable->getName() << LL_ENDL;
 					}
 					//now add the first item (replace just in case)
@@ -3565,9 +3567,13 @@ void LLInventoryModel::wearWearablesOnAvatar(const LLUUID& category_id)
 				}
 				else // just add - unless it's body
 				{
-					if (!(iType == LLWearableType::WT_SHAPE) && !(iType == LLWearableType::WT_SKIN) && 
-						!(iType == LLWearableType::WT_HAIR) && !(iType == LLWearableType::WT_EYES))
-							LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, false);
+					if (iType != LLWearableType::WT_SHAPE &&
+						iType != LLWearableType::WT_SKIN &&
+						iType != LLWearableType::WT_HAIR &&
+						iType != LLWearableType::WT_EYES)
+					{
+						LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, false);
+					}
 				}
 			}
 		}
@@ -3624,7 +3630,7 @@ void LLInventoryModel::wearGesturesOnAvatar(const LLUUID& category_id)
 
 	if (gest_count > 0)
 	{
-		for (i = 0; i  < gest_count; ++i)
+		for (i = 0; i < gest_count; ++i)
 		{
 			LLViewerInventoryItem *gest_item = gest_item_array.at(i);
 			if (!get_is_item_worn(gest_item->getUUID()))
