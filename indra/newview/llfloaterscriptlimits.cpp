@@ -1212,7 +1212,7 @@ void LLPanelScriptLimitsAttachment::setAttachmentDetails(LLSD content)
 			// <FS:Ansariel> Firestorm Bridge hack
 			if (!isValid && (name.find(FS_BRIDGE_NAME) != std::string::npos || name == LIB_ROCK_NAME))
 			{
-				humanReadableLocation = LLTrans::getString("Bridge");
+				humanReadableLocation = LLTrans::getString(FS_BRIDGE_ATTACHMENT_POINT_NAME);
 				name = "Firestorm LSL Bridge";
 			}
 			// </FS:Ansariel>
