@@ -3509,10 +3509,10 @@ void LLInventoryModel::saveItemsOrder(const LLInventoryModel::item_array_t& item
 */
 // See also LLInventorySort where landmarks in the Favorites folder are sorted.
 
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 // Collect all wearables, objects and gestures in the subtree, then wear them, 
 // replacing only relevant layers and attachment points
-void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
+void LLInventoryModel::wearWearablesOnAvatar(const LLUUID& category_id)
 {
 	LLInventoryModel::cat_array_t cat_array;
 
@@ -3529,13 +3529,13 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 	if (wearable_count > 0)	//Loop through wearables. 
 	{
 		//LL_INFOS() << "ReplaceWornItemsOnly wearable_count" << wearable_count << LL_ENDL;
-		int aTypes[LLWearableType::WT_COUNT] = {0};
+		S32 aTypes[LLWearableType::WT_COUNT] = {0};
 		
-		for(i = 0; i  < wearable_count; ++i)
+		for (i = 0; i < wearable_count; ++i)
 		{
 			//LL_INFOS() << "ReplaceWornItemsOnly wearable_count loop, i=" << i << LL_ENDL;
 			LLViewerInventoryItem *item = mItemArray.at(i);
-			int iType = (int)item->getWearableType();
+			S32 iType = (S32)item->getWearableType();
 			//LL_INFOS() << "ReplaceWornItemsOnly wearable_count loop, iType=" << iType << LL_ENDL;
 			if (item->isWearableType() 
 				&& iType != LLWearableType::WT_INVALID 
@@ -3549,7 +3549,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 					U32 count = gAgentWearables.getWearableCount((LLWearableType::EType)iType);
 					//LL_INFOS() << "Type: " << iType << " count " << count << LL_ENDL;
 
-					for (U32 j=0; j<count; j++) //remove all
+					for (U32 j = 0; j < count; ++j) //remove all
 					{
 						//take the first one from the list, since the list is diminishing.
 						LLViewerWearable* wearable = gAgentWearables.getViewerWearable((LLWearableType::EType)iType,0);
@@ -3574,7 +3574,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 	}
 }
 
-void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
+void LLInventoryModel::wearAttachmentsOnAvatar(const LLUUID& category_id)
 {
 	// Find all the wearables that are in the category's subtree.
 	LL_INFOS() << "ReplaceWornItemsOnly find all attachments" << LL_ENDL;
@@ -3594,7 +3594,7 @@ void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
 
 	if (obj_count > 0)
 	{
-		for(i = 0; i  < obj_count; ++i)
+		for (i = 0; i < obj_count; ++i)
 		{
 			LLViewerInventoryItem *obj_item = mObjArray.at(i);
 
@@ -3607,7 +3607,8 @@ void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
 		}
 	}
 }
-void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
+
+void LLInventoryModel::wearGesturesOnAvatar(const LLUUID& category_id)
 {
 	// Find all gestures in this folder
 	LLInventoryModel::cat_array_t	gest_cat_array;
@@ -3623,7 +3624,7 @@ void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
 
 	if (gest_count > 0)
 	{
-		for(i = 0; i  < gest_count; ++i)
+		for (i = 0; i  < gest_count; ++i)
 		{
 			LLViewerInventoryItem *gest_item = gest_item_array.at(i);
 			if (!get_is_item_worn(gest_item->getUUID()))
@@ -3636,16 +3637,14 @@ void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
 	}
 }
 
-
 void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment)
 {
 	//check if the object is in the current list.
 	LLUUID objID = object->getAttachmentItemID();
 	bool isObjectInList = false;
 
-	for(int i = 0; i  < mObjArray.size(); ++i)
+	for (S32 i = 0; i < mObjArray.size(); ++i)
 	{
-
 		if (objID == (mObjArray.at(i))->getUUID())
 		{
 			isObjectInList = true;
@@ -3659,11 +3658,10 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 	if (isObjectInList && attachment != NULL)
 	{
 		std::string attName = attachment->getName();
-		std::vector<std::string>::iterator itrFound  = std::find( mAttPoints.begin(), mAttPoints.end(), attName );
-
+		std::vector<std::string>::iterator itrFound = std::find( mAttPoints.begin(), mAttPoints.end(), attName );
 
 		// we have not encountered this attach point yet
-		if ( mAttPoints.end() == itrFound )
+		if (mAttPoints.end() == itrFound)
 		{
 			mAttPoints.insert(mAttPoints.end(),attName);
 			S32 numCnt = attachment->getNumObjects();
@@ -3679,17 +3677,19 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 
 					//if any of those things aren't in our list - remove them
 					bool isFound = false;
-					for(int j = 0; j  < obj_count; ++j)
+					for (S32 j = 0; j < obj_count; ++j)
 					{
 						LLViewerInventoryItem *fold_item = mObjArray.at(j);
 						if (att_id == fold_item->getUUID())
 						{
 							isFound = true;
 							continue;
-						}		
+						}
 					}
 					if (!isFound)
+					{
 						LLVOAvatarSelf::detachAttachmentIntoInventory(att_id);
+					}
 				}
 			}
 		}
@@ -3698,19 +3698,21 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 
 void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category)
 {
-	if(!category) return;
+	if (!category)
+	{
+		return;
+	}
+
 	LL_INFOS() << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " 
 			 << category->getName() << " )" << LL_ENDL;
 
 	LLUUID category_id = category->getUUID();
 
 	wearAttachmentsOnAvatar(category_id);
-
 	wearWearablesOnAvatar(category_id);
-
 	wearGesturesOnAvatar(category_id);
 }
-//-TT
+// </FS:TT>
 
 class LLViewerInventoryItemSort
 {

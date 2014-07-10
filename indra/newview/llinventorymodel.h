@@ -290,9 +290,9 @@ public:
 	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
 
 private:
-	void wearWearablesOnAvatar(LLUUID category_id);
-	void wearAttachmentsOnAvatar(LLUUID category_id);
-	void wearGesturesOnAvatar(LLUUID category_id);
+	void wearWearablesOnAvatar(const LLUUID& category_id);
+	void wearAttachmentsOnAvatar(const LLUUID& category_id);
+	void wearGesturesOnAvatar(const LLUUID& category_id);
 // </FS:TT>
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
