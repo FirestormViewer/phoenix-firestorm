@@ -3683,7 +3683,7 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 						if (att_id == fold_item->getUUID())
 						{
 							isFound = true;
-							continue;
+							break;
 						}
 					}
 					if (!isFound)
