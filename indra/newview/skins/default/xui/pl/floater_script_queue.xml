@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="queue" title="Postęp resetowania">
 	<floater.string name="Starting">
-		[START] z [COUNT] obiektów.
+		[START] w [COUNT] obiektach.
 	</floater.string>
 	<floater.string name="Done">
 		Gotowe.
 	</floater.string>
 	<floater.string name="Resetting">
-		Trwa resetowanie
+		Resetowanie
 	</floater.string>
 	<floater.string name="Running">
-		Skrypt działa
+		Włączanie
 	</floater.string>
 	<floater.string name="NotRunning">
-		Skrypt nie działa
+		Wyłączanie
 	</floater.string>
 	<floater.string name="Deleting">
 		Usuwanie

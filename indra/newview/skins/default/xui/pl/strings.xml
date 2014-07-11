@@ -1860,34 +1860,34 @@ Spróbuj zalogować się ponownie za minutę.
 		Nieznany błąd podczas pobierania
 	</string>
 	<string name="CompileQueueTitle">
-		POSTĘP REKOMPILACJI
+		Postęp rekompilacji
 	</string>
 	<string name="CompileQueueStart">
-		rekompiluj
+		Rekompiluj
 	</string>
 	<string name="ResetQueueTitle">
-		POSTĘP RESETOWANIA
+		Postęp resetowania
 	</string>
 	<string name="ResetQueueStart">
-		zresetuj
+		Resetuj
 	</string>
 	<string name="RunQueueTitle">
-		POSTĘP WŁĄCZANIA
+		Postęp włączania
 	</string>
 	<string name="RunQueueStart">
-		włącz
+		Włącz
 	</string>
 	<string name="NotRunQueueTitle">
-		POSTĘP WYŁĄCZANIA
+		Postęp wyłączania
 	</string>
 	<string name="NotRunQueueStart">
-		wyłącz
+		Wyłącz
 	</string>
 	<string name="DeleteQueueTitle">
-		POSTĘP USUWANIA
+		Postęp usuwania
 	</string>
 	<string name="DeleteQueueStart">
-		Usuwanie
+		Usuń
 	</string>
 	<string name="Compiling">
 		Kompilowanie [NAME]
