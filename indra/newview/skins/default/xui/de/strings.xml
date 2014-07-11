@@ -1920,31 +1920,31 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Unbekannter Fehler beim Herunterladen
 	</string>
 	<string name="CompileQueueTitle">
-		SKRIPTE REKOMPILIEREN
+		Skripte rekompilieren
 	</string>
 	<string name="CompileQueueStart">
 		Rekompilieren
 	</string>
 	<string name="ResetQueueTitle">
-		SKRIPTE ZURÜCKSETZEN
+		Skripte zurücksetzen
 	</string>
 	<string name="ResetQueueStart">
 		Zurücksetzen
 	</string>
 	<string name="RunQueueTitle">
-		SKRIPTE AUSFÜHREN
+		Skripte ausführen
 	</string>
 	<string name="RunQueueStart">
 		Skript ausführen
 	</string>
 	<string name="NotRunQueueTitle">
-		SKRIPTE ANHALTEN
+		Skripte anhalten
 	</string>
 	<string name="NotRunQueueStart">
 		Skript anhalten
 	</string>
 	<string name="DeleteQueueTitle">
-		SKRIPTE LÖSCHEN
+		Skripte löschen
 	</string>
 	<string name="DeleteQueueStart">
 		Löschen

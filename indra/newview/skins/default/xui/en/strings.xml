@@ -891,15 +891,15 @@ The [[MARKETPLACE_CREATE_STORE_URL] Marketplace store] is returning errors.
 	<string name="CompileQueueInsufficientPermDownload">Insufficient permissions to download a script.</string>
 	<string name="CompileQueueInsufficientPermFor">Insufficient permissions for</string>
 	<string name="CompileQueueUnknownFailure">Unknown failure to download</string>
-	<string name="CompileQueueTitle">RECOMPILATION PROGRESS</string>
+	<string name="CompileQueueTitle">Recompilation Progress</string>
 	<string name="CompileQueueStart">recompile</string>
-	<string name="ResetQueueTitle">RESET PROGRESS</string>
+	<string name="ResetQueueTitle">Reset Progress</string>
 	<string name="ResetQueueStart">reset</string>
-	<string name="RunQueueTitle">SET RUNNING PROGRESS</string>
+	<string name="RunQueueTitle">Set Running Progress</string>
 	<string name="RunQueueStart">set running</string>
-	<string name="NotRunQueueTitle">SET NOT RUNNING PROGRESS</string>
+	<string name="NotRunQueueTitle">Set Not Running Progress</string>
 	<string name="NotRunQueueStart">set not running</string>
-	<string name="DeleteQueueTitle">DELETE PROGRESS</string>
+	<string name="DeleteQueueTitle">Delete Progress</string>
 	<string name="DeleteQueueStart">Deleting</string>
 
 	<!-- compile comment text-->
