@@ -27,7 +27,6 @@
 
 #include "lleventtimer.h"
 #include "llsingleton.h"
-#include "lluuid.h"
 
 class LLButton;
 

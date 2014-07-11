@@ -32,7 +32,6 @@
 #include "llassettype.h"
 #include "lleventtimer.h"
 #include "llsingleton.h"
-#include "lluuid.h"
 
 // NaCl - feex
 #include "llextendedstatus.h"

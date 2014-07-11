@@ -25,7 +25,6 @@
 #ifndef AOSET_H
 #define AOSET_H
 
-#include "llcommon.h"
 #include "lleventtimer.h"
 
 class AOSet

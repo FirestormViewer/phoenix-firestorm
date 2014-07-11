@@ -32,16 +32,20 @@
 
 #include "lltransientdockablefloater.h"
 #include "llwlparamset.h"
-#include "llmultisliderctrl.h"
-#include "llcombobox.h"
 #include "rlvdefines.h"
 
 const std::string PHOTOTOOLS_FLOATER = "phototools";
 
 // <FS:Zi> Dynamic quick prefs
-class LLLayoutStack;
+class LLCheckBoxCtrl;
+class LLComboBox;
 class LLLayoutPanel;
+class LLLayoutStack;
+class LLLineEditor;
+class LLMultiSliderCtrl;
+class LLSlider;
 class LLSpinCtrl;
+class LLTextBox;
 // </FS:Zi>
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"

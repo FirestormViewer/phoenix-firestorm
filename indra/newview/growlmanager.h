@@ -36,7 +36,6 @@
 #include "llnotifications.h"
 #include "growlnotifier.h"
 #include "lleventtimer.h"
-#include <map>
 
 struct GrowlNotification
 {

@@ -28,11 +28,8 @@
 #ifndef ANIMATIONEXPLORER_H
 #define ANIMATIONEXPLORER_H
 
-#include <deque>
-
 #include "llfloater.h"
 #include "llfloaterbvhpreview.h"	// for LLPreviewAnimation
-#include "llscrolllistitem.h"
 #include "llsingleton.h"
 
 // --------------------------------------------------------------------------
