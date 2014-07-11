@@ -215,6 +215,14 @@ bool FSRadarMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		return LLAvatarActions::canOfferTeleport(mUUIDs);
 	}
+	else if(item == std::string("can_request_teleport"))
+	{
+		if (mUUIDs.size() == 1)
+		{
+			return LLAvatarActions::canRequestTeleport(mUUIDs.front());
+		}
+		return false;
+	}
 	else if (item == std::string("can_open_inventory"))
 	{
 		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));

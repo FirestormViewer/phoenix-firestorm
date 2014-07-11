@@ -75,7 +75,7 @@
        parameter="request_teleport"/>
       <on_enable
       function="Calllog.Enable"
-      parameter="can_offer_teleport"/>
+      parameter="can_request_teleport"/>
     </menu_item_call>
     <menu_item_separator />
     <menu_item_call

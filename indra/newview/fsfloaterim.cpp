@@ -141,6 +141,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	}
 	
 	mCommitCallbackRegistrar.add("IMSession.Menu.Action", boost::bind(&FSFloaterIM::doToSelected, this, _2));
+	mEnableCallbackRegistrar.add("IMSession.Menu.Enable", boost::bind(&FSFloaterIM::checkEnabled, this, _2));
 	
 	setOverlapsScreenChannel(true);
 
@@ -476,6 +477,16 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
 	}
 	else
 		LL_WARNS("FSFloaterIM") << "Unhandled command '" << command << "'. Ignoring." << LL_ENDL;
+}
+
+bool FSFloaterIM::checkEnabled(const LLSD& userdata)
+{
+	const std::string command = userdata.asString();
+	if (command == "enable_offer_tp")
+	{
+		return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
+	}
+	return false;
 }
 
 // support sysinfo button -Zi

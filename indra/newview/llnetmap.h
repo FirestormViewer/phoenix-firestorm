@@ -216,6 +216,8 @@ private:
 	bool canFreezeEject();
 	bool canKickTeleportHome();
 	bool isBlocked();
+	// <FS:Ansariel> Extra request teleport
+	bool canRequestTeleport();
 
 	void handleAddFriend();
 	void handleAddToContactSet();

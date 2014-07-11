@@ -182,6 +182,7 @@ private:
 	static void		onInputEditorKeystroke(LLTextEditor* caller, void* userdata);
 
 	void doToSelected(const LLSD& userdata);
+	bool checkEnabled(const LLSD& userdata);
 
 	// support sysinfo button -Zi
 	void onSysinfoButtonClicked();

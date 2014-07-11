@@ -51,6 +51,7 @@
 #include "llvoiceclient.h"
 #include "fscommon.h"
 #include "llviewermenu.h"
+#include "rlvhandler.h"
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
@@ -704,15 +705,24 @@ void FSFloaterContacts::refreshRightsChangeList()
 	bool selected_friends_online = true;
 
 	const LLRelationship* friend_status = NULL;
-	for(std::vector<LLUUID>::iterator itr = friends.begin(); itr != friends.end(); ++itr)
+	for (uuid_vec_t::iterator itr = friends.begin(); itr != friends.end(); ++itr)
 	{
 		friend_status = LLAvatarTracker::instance().getBuddyInfo(*itr);
 		if (friend_status)
 		{
-			if(!friend_status->isOnline())
+			if (!friend_status->isOnline())
 			{
 				can_offer_teleport = false;
 				selected_friends_online = false;
+			}
+			else
+			{
+				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) &&
+					!gRlvHandler.isException(RLV_BHVR_TPLURE, *itr, RLV_CHECK_PERMISSIVE) &&
+					!friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION))
+				{
+					can_offer_teleport = false;
+				}
 			}
 		}
 		else // missing buddy info, don't allow any operations

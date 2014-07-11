@@ -159,7 +159,7 @@
 			<menu_item_call.on_click
 				function="Minimap.RequestTeleport"/>
 			<menu_item_call.on_enable
-				function="Minimap.CanOfferTeleport"/>
+				function="Minimap.CanRequestTeleport"/>
 		</menu_item_call>
 		<menu_item_call
 			label="Teleport To"

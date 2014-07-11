@@ -35,7 +35,7 @@
        function="Avatar.TeleportRequest"/>
       <menu_item_call.on_enable
       function="Avatar.EnableItem"
-      parameter="can_offer_teleport"/>
+      parameter="can_request_teleport"/>
     </menu_item_call>
     <menu_item_call
      label="Voice call"

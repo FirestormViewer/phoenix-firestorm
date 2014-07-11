@@ -247,6 +247,16 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		return LLAvatarActions::canOfferTeleport(mUUIDs);
 	}
+	// <FS:Ansariel> Extra request teleport
+	else if(item == std::string("can_request_teleport"))
+	{
+		if (mUUIDs.size() == 1)
+		{
+			return LLAvatarActions::canRequestTeleport(mUUIDs.front());
+		}
+		return false;
+	}
+	// </FS:Ansariel>
 	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
 	else if (item == std::string("can_open_inventory"))
 	{

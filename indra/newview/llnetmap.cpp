@@ -214,6 +214,7 @@ BOOL LLNetMap::postBuild()
 	enable_registrar.add("Minimap.CanMap", boost::bind(&LLNetMap::canMap, this));
 	enable_registrar.add("Minimap.CanShare", boost::bind(&LLNetMap::canShare, this));
 	enable_registrar.add("Minimap.CanOfferTeleport", boost::bind(&LLNetMap::canOfferTeleport, this));
+	enable_registrar.add("Minimap.CanRequestTeleport", boost::bind(&LLNetMap::canRequestTeleport, this));
 	enable_registrar.add("Minimap.IsBlocked", boost::bind(&LLNetMap::isBlocked, this));
 	enable_registrar.add("Minimap.CanBlock", boost::bind(&LLNetMap::canBlock, this));
 	enable_registrar.add("Minimap.VisibleFreezeEject", boost::bind(&LLNetMap::canFreezeEject, this));
@@ -1927,6 +1928,13 @@ bool LLNetMap::canOfferTeleport()
 {
 	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_OFFER_TELEPORT);
 }
+
+// <FS:Ansariel> Extra request teleport
+bool LLNetMap::canRequestTeleport()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_REQUEST_TELEPORT);
+}
+// </FS:Ansariel>
 
 bool LLNetMap::canBlock()
 {

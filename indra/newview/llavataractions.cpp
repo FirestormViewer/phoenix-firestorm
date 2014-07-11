@@ -1147,6 +1147,21 @@ void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
 // static
 bool LLAvatarActions::canOfferTeleport(const LLUUID& id)
 {
+	// <FS:Ansariel> RLV support
+	// Only allow offering teleports if everyone is a @tplure exception or able to map this avie under @showloc=n
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		const LLRelationship* pBuddyInfo = LLAvatarTracker::instance().getBuddyInfo(id);
+		if (gRlvHandler.isException(RLV_BHVR_TPLURE, id, RLV_CHECK_PERMISSIVE) ||
+			(pBuddyInfo && pBuddyInfo->isOnline() && pBuddyInfo->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	// </FS:Ansariel>
+
 	// First use LLAvatarTracker::isBuddy()
 	// If LLAvatarTracker::instance().isBuddyOnline function only is used
 	// then for avatars that are online and not a friend it will return false.
@@ -1193,6 +1208,18 @@ bool LLAvatarActions::canOfferTeleport(const uuid_vec_t& ids)
 	}
 	return (valid_count > 0 && valid_count <= 250);
 	// </FS:Ansariel>
+}
+
+// <FS:Ansariel> Extra request teleport
+// static
+bool LLAvatarActions::canRequestTeleport(const LLUUID& id)
+{
+	if(LLAvatarTracker::instance().isBuddy(id))
+	{
+		return LLAvatarTracker::instance().isBuddyOnline(id);
+	}
+
+	return true;
 }
 
 void LLAvatarActions::inviteToGroup(const LLUUID& id)

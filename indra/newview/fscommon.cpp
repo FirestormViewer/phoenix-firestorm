@@ -309,9 +309,13 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	{
 		return (!isSelf && LLAvatarActions::canZoomIn(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_OFFER_TELEPORT || action == FS_RGSTR_ACT_REQUEST_TELEPORT)
+	else if (action == FS_RGSTR_ACT_OFFER_TELEPORT)
 	{
 		return (!isSelf && LLAvatarActions::canOfferTeleport(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_REQUEST_TELEPORT)
+	{
+		return (!isSelf && LLAvatarActions::canRequestTeleport(av_id));
 	}
 	else if (action == FS_RGSTR_ACT_SHOW_PROFILE)
 	{

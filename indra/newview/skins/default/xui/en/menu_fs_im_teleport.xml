@@ -9,6 +9,9 @@
       <menu_item_call.on_click
          function="IMSession.Menu.Action"
          parameter="offer_tp"/>
+      <menu_item_call.on_enable
+         function="IMSession.Menu.Enable"
+         parameter="enable_offer_tp"/>
     </menu_item_call>
     <menu_item_call
        label="Request teleport"

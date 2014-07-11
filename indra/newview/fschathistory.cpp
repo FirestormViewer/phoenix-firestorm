@@ -663,7 +663,7 @@ protected:
 				}
 				menu->setItemEnabled("Teleport to", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TELEPORT_TO));
 				menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
-				menu->setItemEnabled("Request Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
+				menu->setItemEnabled("Request Teleport", LLAvatarActions::canRequestTeleport(mAvatarID));
 				menu->setItemEnabled("Voice Call", LLAvatarActions::canCall());
 				menu->setItemEnabled("Zoom In", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_ZOOM_IN));
 				menu->setItemEnabled("track", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TRACK_AVATAR));
