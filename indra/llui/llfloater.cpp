@@ -737,8 +737,13 @@ void LLFloater::openFloater(const LLSD& key)
 
 void LLFloater::closeFloater(bool app_quitting)
 {
-	LL_INFOS() << "Closing floater " << getName() << LL_ENDL;
-	LLViewerEventRecorder::instance().logVisibilityChange( getPathname(), getName(), false,"floater"); // Last param is event subtype or empty string
+	// <FS:PP> FIRE-10373 / BUG-6437: UISndWindowClose played if an online or offline notification toast is still open for the same person
+	// LL_INFOS() << "Closing floater " << getName() << LL_ENDL;
+	// LLViewerEventRecorder::instance().logVisibilityChange( getPathname(), getName(), false,"floater"); // Last param is event subtype or empty string
+	std::string floaterName = getName();
+	LL_INFOS() << "Closing floater " << floaterName << LL_ENDL;
+	LLViewerEventRecorder::instance().logVisibilityChange( getPathname(), floaterName, false,"floater"); // Last param is event subtype or empty string
+	// </FS:PP>
 	if (app_quitting)
 	{
 		LLFloater::sQuitting = true;
@@ -759,7 +764,8 @@ void LLFloater::closeFloater(bool app_quitting)
 		if (getSoundFlags() != SILENT
 			&& getVisible()
 			&& !getHost()
-			&& !app_quitting)
+			&& !app_quitting
+			&& floaterName != "toast") // <FS:PP> FIRE-10373 / BUG-6437
 		{
 			make_ui_sound("UISndWindowClose");
 		}
