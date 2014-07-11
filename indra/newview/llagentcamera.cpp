@@ -941,6 +941,11 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	static LLCachedControl<bool> disable_constraints(gSavedSettings,"DisableCameraConstraints");
 	F32 max_distance = disable_constraints ? INT_MAX : llmin(mDrawDistance - DIST_FUDGE, 
 							 LLWorld::getInstance()->getRegionWidthInMeters() - DIST_FUDGE );
+
+	// <FS:TS> FIRE-12241: Camera becomes uncontrollable when zooming out
+	//	Not sure why this works, but it's LL's fix.
+	max_distance = llmin(max_distance, current_distance * 4.f); //Scaled max relative to current distance.  MAINT-3154
+	// </FS:TS> FIRE-12241
 	
 	if (new_distance > max_distance)
 	{
