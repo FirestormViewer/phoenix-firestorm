@@ -58,6 +58,18 @@
      top_pad="5"
      width="237"/>
 
+    <check_box
+     control_name="UseAnimationTimeSteps"
+     tool_tip="This setting may reduce render load for distant avatars, but also cause their animations to play at wrong speeds"
+     follows="top|left"
+     height="15"
+     label="Enable the use of animation timesteps (experimental)"
+     layout="topleft"
+     left="30"
+     name="UseAnimationTimeSteps"
+     top_pad="10"
+     width="237"/>
+
     <text
      name="BackgroundYieldTimeText"
      follows="top|left"
@@ -65,7 +77,7 @@
      left="30"
      right="-1"
      word_wrap="true"
-     top_pad="30"
+     top_pad="25"
      height="100">
         Amount of time, in milliseconds, to yield every frame to other applications when [APP_NAME] is not the foreground window (default: 40; 1 second = 1000 milliseconds):
     </text>
