@@ -60,7 +60,7 @@
 
     <check_box
      control_name="UseAnimationTimeSteps"
-     tool_tip="This setting may reduce render load for distant avatars, but also cause their animations to play at wrong speeds"
+     tool_tip="This setting may reduce render load for distant avatars but, may also cause their animations to play at incorrect speeds"
      follows="top|left"
      height="15"
      label="Enable the use of animation timesteps (experimental)"
