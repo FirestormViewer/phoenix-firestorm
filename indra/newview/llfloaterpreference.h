@@ -335,12 +335,14 @@ protected:
 	void onSkinThemeChanged();
 	void refreshSkinList();
 	void refreshSkinThemeList();
+	void refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
 	
 protected:
 	std::string m_Skin;
 	LLComboBox* m_pSkinCombo;
 	std::string m_SkinTheme;
 	LLComboBox* m_pSkinThemeCombo;
+	LLButton*	m_pSkinPreview; // <FS:PP> FIRE-1689: Skins preview image
 	LLSD        m_SkinsInfo;
 	std::string	m_SkinName;
 	std::string	m_SkinThemeName;

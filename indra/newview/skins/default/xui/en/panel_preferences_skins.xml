@@ -9,6 +9,21 @@
  width="540"
  label="Skins"
  name="skin_panel">
+
+    <button
+     scale_image="true"
+     display_pressed_state="false"
+     hover_glow_amount="0.0"
+     left="30"
+     top="20"
+     follows="left|top"
+     layout="topleft"
+     width="414"
+     height="225"
+     name="skin_preview"
+     image_selected="Blank"
+     image_unselected="Blank" />
+
     <text
      type="string"
      length="1"
@@ -17,7 +32,7 @@
      layout="topleft"
      left="30"
      name="skin_textbox"
-     top="10"
+     top_pad="15"
      width="400">
         Skin:
     </text>
@@ -101,7 +116,7 @@
      label="Use Viewer 1 style cursors"
      layout="topleft"
      left="30"
-     top_pad="20"
+     top_pad="5"
      name="use_legacy_cursors"
      width="200" />
     <text

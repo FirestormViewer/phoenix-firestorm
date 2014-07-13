@@ -3317,6 +3317,7 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins()
 	: LLPanelPreference()
 	, m_pSkinCombo(NULL)
 	, m_pSkinThemeCombo(NULL)
+	, m_pSkinPreview(NULL) // <FS:PP> FIRE-1689: Skins preview image
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
@@ -3342,6 +3343,11 @@ BOOL LLPanelPreferenceSkins::postBuild()
 		m_pSkinThemeCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinThemeChanged, this));
 
 	refreshSkinList();
+
+	// <FS:PP> FIRE-1689: Skins preview image
+	m_pSkinPreview = getChild<LLButton>("skin_preview");
+	refreshPreviewImage();
+	// </FS:PP>
 
 	return LLPanelPreference::postBuild();
 }
@@ -3385,6 +3391,7 @@ void LLPanelPreferenceSkins::cancel()
 	m_SkinName = gSavedSettings.getString("FSSkinCurrentReadableName");
 	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
 	refreshSkinList();
+	refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
 }
 
 void LLPanelPreferenceSkins::onSkinChanged()
@@ -3395,6 +3402,7 @@ void LLPanelPreferenceSkins::onSkinChanged()
 
 	m_SkinName = m_pSkinCombo->getSelectedItemLabel();
 	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
+	refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
 
     // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
     // current skin would be carried over, leading to confusion and a first experience with
@@ -3440,6 +3448,7 @@ void LLPanelPreferenceSkins::onSkinThemeChanged()
 {
 	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
 	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
+	refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
 }
 
 void LLPanelPreferenceSkins::refreshSkinList()
@@ -3505,6 +3514,15 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 	}
 }
 // [/SL:KB]
+
+// <FS:PP> FIRE-1689: Skins preview image
+void LLPanelPreferenceSkins::refreshPreviewImage()
+{
+	std::string previewImageName = "skin " + m_SkinName + " " + m_SkinThemeName;
+	LLStringUtil::toLower(previewImageName);
+	m_pSkinPreview->setImages(previewImageName, previewImageName);
+}
+// </FS:PP>
 
 // <FS:Zi> Backup Settings
 // copied from llxfer_file.cpp - Hopefully this will be part of LLFile some day -Zi
