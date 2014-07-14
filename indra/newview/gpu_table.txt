@@ -204,8 +204,8 @@ ATI Radeon HD 8600 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)86.*				3	1	0	4.2
 ATI Radeon HD 8700 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)87.*				4	1	1	4.2
 ATI Radeon HD 8800 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)88.*				5	1	1	4.2
 ATI Radeon HD 8900 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)89.*				5	1	1	4.2
-AMD Radeon R7 200 Series				.*ATI.*(Radeon|ASUS).* R7 2[0-9]0.*					4	1	0	4.2
-AMD Radeon R9 200 Series				.*ATI.*(Radeon|ASUS).* R9 2[0-9]0.*					5	1	0	4.2
+AMD Radeon R7 200 Series				.*ATI.*(Radeon|ASUS).* R7 2[0-9].*					4	1	0	4.2
+AMD Radeon R9 200 Series				.*ATI.*(Radeon|ASUS).* R9 2[0-9].*					5	1	0	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*								0	0	0	0
 ATI Radeon 2100							.*ATI.*Radeon 21..									0	0	1	2.1
 ATI Radeon 3000							.*ATI.*Radeon 30..									0	0	1	4
