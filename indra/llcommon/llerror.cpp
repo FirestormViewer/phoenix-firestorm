@@ -580,6 +580,31 @@ namespace LLError
 		}
 	}
 
+#ifdef LL_LINUX
+  // <FS:ND> Temp hack to get the old linux havok stub to link
+  CallSite::CallSite(LLError::ELevel level,
+		     char const* file,
+		     int line,
+		     std::type_info const& class_info,
+		     char const* function,
+		     char const*,
+		     char const*,
+		     bool)
+    : mLevel(level),
+      mFile(file),
+      mLine(line),
+      mClassInfo(class_info), 
+      mFunction(function),
+      mCached(false), 
+      mShouldLog(false), 
+      mPrintOnce(false),
+      mTags(0),
+      mTagCount(0)
+  {
+  }
+  // </FS:ND>
+#endif
+
 	CallSite::~CallSite()
 	{
 		delete []mTags;
