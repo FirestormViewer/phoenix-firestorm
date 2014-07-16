@@ -3957,13 +3957,17 @@ LLSD LLAppViewer::getViewerInfo() const
 
 	if (gPacketsIn > 0)
 	{
-		LLTrace::Recording& last_frame = LLTrace::get_frame_recording().getLastRecording();
-		info["PACKETS_LOST"] = last_frame.getSum(LLStatViewer::PACKETS_LOST);
-		// <FS:Ansariel> FIRE-3925: Formatting fails when reaching 1,000,000;
-		//               Use S32 since it will be used in LLStringUtil::formatNumber anyway.
-		//info["PACKETS_IN"] = last_frame.getSum(LLStatViewer::PACKETS_IN);
-		info["PACKETS_IN"] = S32(last_frame.getSum(LLStatViewer::PACKETS_IN));
-		// </FS:Ansariel>
+		// <FS:ND> Stats are only per frame, but we want the total amount over the whole application life here.
+
+		// LLTrace::Recording& last_frame = LLTrace::get_frame_recording().getLastRecording();
+		// info["PACKETS_LOST"] = last_frame.getSum(LLStatViewer::PACKETS_LOST);
+		// info["PACKETS_IN"] = last_frame.getSum(LLStatViewer::PACKETS_IN);
+
+		info["PACKETS_LOST"] = (F64)LLWorld::getInstance()->getPacketsLost();
+		info["PACKETS_IN"] = (S32)LLWorld::getInstance()->getPacketsIn();
+		
+		// </FS:ND>
+	
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
 

@@ -313,6 +313,16 @@ private:
 	LLPointer<LLVOWater> mEdgeWaterObjects[8];
 
 	LLPointer<LLViewerTexture> mDefaultWaterTexturep;
+
+// <FS:ND> Stats keep only data for one frame.
+	U64 mPacketsIn;
+	U64 mPacketsOut;
+	U64 mPacketsLost;
+public:
+	U64 getPacketsIn( ) const { return mPacketsIn; }
+	U64 getPacketsOut( ) const { return mPacketsOut; }
+	U64 getPacketsLost( ) const { return mPacketsLost; }
+// </FS:ND>
 };
 
 
