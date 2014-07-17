@@ -704,7 +704,10 @@ LLSceneMonitorView::LLSceneMonitorView(const LLRect& rect)
 	setCanClose(true);
 }
 
-void LLSceneMonitorView::onClose(bool app_quitting)
+// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X
+//void LLSceneMonitorView::onClose(bool app_quitting)
+void LLSceneMonitorView::closeFloater(bool app_quitting)
+// </FS:Ansariel>
 {
 	setVisible(false);	
 }
@@ -713,6 +716,9 @@ void LLSceneMonitorView::onVisibilityChange(BOOL visible)
 {
 	visible = visible && LLGLSLShader::sNoFixedFunction;
 	LLSceneMonitor::getInstance()->setDebugViewerVisible(visible);
+
+	// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X
+	LLFloater::setVisible(visible);
 }
 
 void LLSceneMonitorView::draw()
