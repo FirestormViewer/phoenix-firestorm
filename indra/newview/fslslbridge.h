@@ -42,8 +42,8 @@ class FSLSLBridgeRequestResponder;
 
 const std::string LIB_ROCK_NAME = "Rock - medium, round";
 const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
-const U8 FS_BRIDGE_POINT = 127;
-const std::string FS_BRIDGE_ATTACHMENT_POINT_NAME = "Bridge";
+const U8 FS_BRIDGE_POINT = 31;
+const std::string FS_BRIDGE_ATTACHMENT_POINT_NAME = "Center 2";
 
 class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
 {

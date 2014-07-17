@@ -1,4 +1,4 @@
-// HTTP Bridge script v.2.16
+// HTTP Bridge script v.2.17
 // Firestorm
 // Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -8,7 +8,7 @@
 
     // Bridge platform
     string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
-    string  bridgeVersion = "2.16";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.17";    // This should match fslslbridge.cpp
     string  latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
@@ -70,21 +70,6 @@
         flight_hover(FALSE);
         isFlyingNow = -1;
         movelock_init(useMoveLock);
-        // Make bridge inconspicuous
-        llSetLinkPrimitiveParamsFast(LINK_THIS, [
-            PRIM_TEXT, "", ZERO_VECTOR, 0.0,
-            PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, ZERO_VECTOR, ZERO_VECTOR, 0.0,
-            PRIM_TEXGEN, ALL_SIDES, PRIM_TEXGEN_DEFAULT,
-            PRIM_SIZE, <0.01, 0.01, 0.01>,
-            PRIM_POSITION, <0.0, 0.0, -0.15>,
-            PRIM_DESC, llGetObjectName(),
-            PRIM_POINT_LIGHT, FALSE, ZERO_VECTOR, 0.0, 0.1, 0.01,
-            PRIM_GLOW, ALL_SIDES, 0,
-            PRIM_OMEGA, ZERO_VECTOR, 0.0, 0.0,
-            PRIM_FULLBRIGHT, ALL_SIDES, FALSE,
-            PRIM_FLEXIBLE, FALSE, 0, 0.0, 0.0, 0.0, 0.0, ZERO_VECTOR,
-            PRIM_BUMP_SHINY, ALL_SIDES, PRIM_SHINY_NONE, PRIM_BUMP_NONE
-        ]);
     }
 
     initBridge()

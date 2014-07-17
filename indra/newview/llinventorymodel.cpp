@@ -3692,7 +3692,7 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 							break;
 						}
 					}
-					if (!isFound)
+					if (!isFound && att_id != FSLSLBridge::instance().getAttachedID())
 					{
 						LLVOAvatarSelf::detachAttachmentIntoInventory(att_id);
 					}

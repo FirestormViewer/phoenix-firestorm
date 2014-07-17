@@ -412,17 +412,6 @@
        position="0 0 0"
        rotation="0 0 0"
        visible_in_first_person="true" />
-  	
-    <attachment_point
-       id="127"
-       group="6"
-       name="Bridge"
-       joint="mPelvis"
-       position="0 0 0"
-       rotation="0 0 0"
-       hud="false"
-       max_attachment_offset="2.0"
-       visible_in_first_person="true" />
 
     <param
        id="32"

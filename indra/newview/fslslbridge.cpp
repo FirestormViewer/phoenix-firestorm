@@ -37,7 +37,9 @@
 #include "llattachmentsmgr.h"
 #include "llappearancemgr.h"
 #include "llinventoryfunctions.h"
+#include "llmaniptranslate.h"
 #include "llpreviewscript.h"
+#include "llselectmgr.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
@@ -51,7 +53,7 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 16;
+const U32 FS_BRIDGE_MINOR_VERSION = 17;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
 //current script version is 2.16
@@ -803,6 +805,18 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 {
 	LL_INFOS("FSLSLBridge") << "Entering processDetach" << LL_ENDL;
 
+	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	{
+		LL_INFOS() << "Re-attaching bridge" << LL_ENDL;
+		LLViewerInventoryItem* inv_object = gInventory.getItem(object->getAttachmentItemID());
+		if (inv_object && mpBridge && mpBridge->getUUID() == inv_object->getUUID())
+		{
+			LLAttachmentsMgr::instance().addAttachment(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+		}
+
+		return;
+	}
+
 	if (gAgentAvatarp.isNull() || (!gAgentAvatarp->isSelf()) || (attachment == NULL) || (attachment->getName() != FS_BRIDGE_ATTACHMENT_POINT_NAME))
 	{
 		LL_WARNS("FSLSLBridge") << "Couldn't detach bridge, object has wrong name or avatar wasn't self." << LL_ENDL;
@@ -852,22 +866,41 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 		F32(0.05), F32(0.05));	//revolutions, skew
 	pathParams.setRevolutions(F32(1.0));
 	object->setVolume(LLVolumeParams(profParams, pathParams), 0);
+	object->sendShapeUpdate();
 
-	object->setScale(LLVector3(10.0f, 10.0f, 10.0f), TRUE);
-	for (S32 i = 0; i < object->getNumTEs(); i++)
+	// Set scale and position
+	object->setScale(LLVector3(0.01f, 0.01f, 0.01f));
+	object->setPosition(LLVector3(2.f, 2.f, 2.f));
+	LLManip::rebuild(object);
+	gAgentAvatarp->clampAttachmentPositions();
+
+	U8 data[24];
+	htonmemcpy(&data[0], &(object->getPosition().mV), MVT_LLVector3, 12);
+	htonmemcpy(&data[12], &(object->getScale().mV), MVT_LLVector3, 12);
+
+	gMessageSystem->newMessage("MultipleObjectUpdate");
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
+	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object->getLocalID());
+	gMessageSystem->addU8Fast(_PREHASH_Type, UPD_POSITION | UPD_SCALE | UPD_LINKED_SETS);
+	gMessageSystem->addBinaryDataFast(_PREHASH_Data, data, 24);
+	gMessageSystem->sendReliable(object->getRegion()->getHost());
+
+	// Set textures
+	for (S32 i = 0; i < object->getNumTEs(); ++i)
 	{
 		LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture( IMG_INVISIBLE );
 		object->setTEImage(i, image); //transparent texture
 	}
-	object->setChanged(LLXform::MOVED | LLXform::SILHOUETTE | LLXform::TEXTURE);
+	object->sendTEUpdate();
 
-	//object->setTETexture(0, LLUUID("29de489d-0491-fb00-7dab-f9e686d31e83")); //another test texture
-	object->sendShapeUpdate();
-	object->markForUpdate(TRUE);
-
-	//object->setFlags(FLAGS_TEMPORARY_ON_REZ, true);
 	object->addFlags(FLAGS_TEMPORARY_ON_REZ);
 	object->updateFlags();
+
+	object->setChanged(LLXform::MOVED | LLXform::SILHOUETTE | LLXform::TEXTURE);
+	object->markForUpdate(TRUE);
 
 	LL_DEBUGS("FSLSLBridge") << "End bridge container setup." << LL_ENDL;
 }

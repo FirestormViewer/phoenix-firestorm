@@ -1393,7 +1393,11 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		// <FS:TT> Client LSL Bridge
 		if (attachment->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && gSavedSettings.getBOOL("UseLSLBridge"))
 		{
-			FSLSLBridge::instance().processAttach(viewer_object, attachment);
+			LLViewerInventoryItem* inv_object = gInventory.getItem(viewer_object->getAttachmentItemID());
+			if (inv_object && inv_object->getName() == FSLSLBridge::instance().currentFullName())
+			{
+				FSLSLBridge::instance().processAttach(viewer_object, attachment);
+			}
 		}
 		// </FS:TT>
 		updateLODRiggedAttachments();		
@@ -1451,9 +1455,13 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 			}
 
 			// <FS:TT> Client LSL Bridge
-			if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && gSavedSettings.getBOOL("UseLSLBridge"))
+			if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
 			{
-				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
+				LLViewerInventoryItem* inv_object = gInventory.getItem(viewer_object->getAttachmentItemID());
+				if (inv_object && inv_object->getName() == FSLSLBridge::instance().currentFullName())
+				{
+					FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
+				}
 			}
 			// </FS:TT>
 			break;
