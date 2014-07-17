@@ -51,6 +51,7 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Respon
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
 	friend class FSLSLBridgeCleanupTimer;
+	friend class FSLSLReAttachTimer;
 
 public:
 	FSLSLBridge();
@@ -90,6 +91,7 @@ public:
 private:
 	std::string				mCurrentURL;
 	bool					mBridgeCreating;
+	bool					mAllowDetach;
 
 	LLViewerInventoryItem*	mpBridge;
 	std::string				mCurrentFullName;
@@ -163,7 +165,19 @@ public:
 	BOOL tick();
 	void startTimer() { mEventTimer.start(); }
 	void stopTimer() { mEventTimer.stop(); }
+};
 
+class FSLSLReAttachTimer : public LLEventTimer
+{
+public:
+	FSLSLReAttachTimer(const LLUUID& bridge_uuid) :
+		LLEventTimer(5.f),
+		mBridgeUUID(bridge_uuid)
+		{}
+	BOOL tick();
+
+protected:
+	LLUUID mBridgeUUID;
 };
 
 #endif // FS_LSLBRIDGE_H
