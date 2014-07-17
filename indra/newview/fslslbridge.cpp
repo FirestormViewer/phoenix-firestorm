@@ -1191,9 +1191,10 @@ void FSLSLBridge::finishBridge()
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
 }
+
 //
 // Helper functions
-///
+//
 bool FSLSLBridge::isItemAttached(const LLUUID& iID)
 {
 	return (isAgentAvatarValid() && gAgentAvatarp->isWearingAttachment(iID));
@@ -1217,12 +1218,12 @@ LLUUID FSLSLBridge::findFSCategory()
 		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
 		if (cats)
 		{
-			S32 count = cats->size();
-			for (S32 i = 0; i < count; ++i)
+			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
 			{
-				if (cats->at(i)->getName() == FS_BRIDGE_FOLDER)
+				if ((*it)->getName() == FS_BRIDGE_FOLDER)
 				{
-					bridgeCatID = cats->at(i)->getUUID();
+					bridgeCatID = (*it)->getUUID();
+					break;
 				}
 			}
 		}
@@ -1259,12 +1260,11 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 		gInventory.getDirectDescendentsOf(LibRootID, cats, items);
 		if (cats)
 		{
-			S32 count = cats->size();
-			for (S32 i = 0; i < count; ++i)
+			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
 			{
-				if (cats->at(i)->getName() == "Objects")
+				if ((*it)->getName() == "Objects")
 				{
-					LLUUID LibObjectsCatID = cats->at(i)->getUUID();
+					LLUUID LibObjectsCatID = (*it)->getUUID();
 					if (LibObjectsCatID.notNull())
 					{
 						LLInventoryModel::item_array_t* objects_items;
@@ -1272,12 +1272,11 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 						gInventory.getDirectDescendentsOf(LibObjectsCatID, objects_cats, objects_items);
 						if (objects_cats)
 						{
-							S32 objects_count = objects_cats->size();
-							for (S32 j = 0; j < objects_count; ++j)
+							for (LLInventoryModel::cat_array_t::iterator object_it = objects_cats->begin(); object_it != objects_cats->end(); ++object_it)
 							{
-								if (objects_cats->at(j)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
+								if ((*object_it)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
 								{
-									mBridgeContainerFolderID = objects_cats->at(j)->getUUID();
+									mBridgeContainerFolderID = (*object_it)->getUUID();
 									LL_INFOS("FSLSLBridge") << "FSBridge container category found in library. UUID: " << mBridgeContainerFolderID << LL_ENDL;
 									gInventory.fetchDescendentsOf(mBridgeContainerFolderID);
 									return mBridgeContainerFolderID;
@@ -1299,15 +1298,14 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, c
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
-	//gInventory.findCategoryByName
 	LLUUID itemID;
 	NameCollectFunctor namefunctor(obj_name);
 
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
+	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
-		const LLViewerInventoryItem* itemp = items.at(iIndex);
+		const LLViewerInventoryItem* itemp = *it;
 		if (!itemp->getIsLinkType() && (itemp->getType() == LLAssetType::AT_OBJECT))
 		{
 			itemID = itemp->getUUID();
@@ -1342,14 +1340,15 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 	NameCollectFunctor namefunctor(nameToCleanUp);
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
+	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
-		const LLViewerInventoryItem* itemp = items.at(iIndex);
+		const LLViewerInventoryItem* itemp = *it;
 		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			gInventory.purgeObject(itemp->getUUID());
 		}
 	}
+
 	gInventory.notifyObservers();
 }
 
@@ -1418,9 +1417,9 @@ void FSLSLBridge::detachOtherBridges()
 	//detach everything except current valid bridge - if any
 	gInventory.collectDescendents(catID,cats,items,FALSE);
 
-	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
+	for (LLViewerInventoryItem::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
-		const LLViewerInventoryItem* itemp = items.at(iIndex);
+		const LLViewerInventoryItem* itemp = *it;
 		if (get_is_item_worn(itemp->getUUID()) &&
 			((fsBridge == NULL) || (itemp->getUUID() != fsBridge->getUUID())))
 		{
