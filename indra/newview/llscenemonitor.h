@@ -115,7 +115,10 @@ public:
 	virtual void onVisibilityChange(BOOL visible);
 
 protected:
-	virtual void onClose(bool app_quitting=false);
+	// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X
+	//virtual void onClose(bool app_quitting=false);
+	virtual void closeFloater(bool app_qutting = false);
+	// </FS:Ansariel>
 };
 
 extern LLSceneMonitorView* gSceneMonitorView;
