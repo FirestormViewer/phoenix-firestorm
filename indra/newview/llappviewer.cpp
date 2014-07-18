@@ -407,7 +407,7 @@ std::string SafeFileName(std::string filename)
 //															  LL_VERSION_MINOR,
 //															  LL_VERSION_PATCH,
 //															  LL_VERSION_BUILD )));
-const std::string SAFE_FILE_NAME_PREFIX(SafeFileName("Firestorm"));
+const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(APP_NAME));
 static std::string gArgs;
 const int MAX_MARKER_LENGTH = 1024;
 const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker"); //FS orig modified LL
@@ -781,9 +781,9 @@ LLAppViewer::LLAppViewer()
 
 	// gDirUtilp->initAppDirs("SecondLife");
 #ifdef ND_BUILD64BIT_ARCH
-	gDirUtilp->initAppDirs("Firestorm_x64");
+	gDirUtilp->initAppDirs(APP_NAME + "_x64");
 #else
-	gDirUtilp->initAppDirs("Firestorm");
+	gDirUtilp->initAppDirs(APP_NAME);
 #endif
 
 	// </FS:ND>
@@ -2614,12 +2614,12 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "Firestorm.old");
+							     APP_NAME + ".old");
 	LLFile::remove(old_log_file);
 
 	// Get name of the log file
 	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "Firestorm.log");
+							     APP_NAME + ".log");
  	/*
 	 * Before touching any log files, compute the duration of the last run
 	 * by comparing the ctime of the previous start marker file with the ctime
@@ -4175,10 +4175,10 @@ void LLAppViewer::writeSystemInfo()
 // #endif
 
 #if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Firestorm.log");
+	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP, APP_NAME + ".log");
 #else
     //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Firestorm.old");  //LLError::logFileName();
+    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, APP_NAME + ".old");  //LLError::logFileName();
 #endif
 	// </FS:ND>
 
