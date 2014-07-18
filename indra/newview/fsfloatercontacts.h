@@ -30,6 +30,7 @@
 #define FS_FLOATERCONTACTS_H
 
 #include "llfloater.h"
+#include "rlvhandler.h"
 
 class LLAvatarList;
 class LLAvatarName;
@@ -73,6 +74,7 @@ private:
 	std::string				getActiveTabName() const;
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
+	void					getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) const;
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 
 	enum FRIENDS_COLUMN_ORDER
@@ -142,6 +144,8 @@ private:
 	std::string				mFriendListFontName;
 
 	void childShowTab(const std::string& id, const std::string& tabname);
+
+	void updateRlvRestrictions(ERlvBehaviour behavior);
 };
 
 

@@ -51,7 +51,6 @@
 #include "llvoiceclient.h"
 #include "fscommon.h"
 #include "llviewermenu.h"
-#include "rlvhandler.h"
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
@@ -166,6 +165,8 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,		this));
 	mGroupsTab->setDefaultBtn("chat_btn");
 	
+	gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
+
 	return TRUE;
 }
 
@@ -462,15 +463,20 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 
 	if (cur_tab == FRIENDS_TAB_NAME)
 	{
-		std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
-		for(std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
-		{
-			selected_uuids.push_back((*itr)->getUUID());
-		}
+		getCurrentFriendItemIDs(selected_uuids);
 	}
 	else if (cur_tab == GROUP_TAB_NAME)
 	{
 		mGroupList->getSelectedUUIDs(selected_uuids);
+	}
+}
+
+void FSFloaterContacts::getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) const
+{
+	std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
+	for(std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
+	{
+		selected_uuids.push_back((*itr)->getUUID());
 	}
 }
 
@@ -697,7 +703,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 void FSFloaterContacts::refreshRightsChangeList()
 {
 	uuid_vec_t friends;
-	getCurrentItemIDs(friends);
+	getCurrentFriendItemIDs(friends);
 
 	size_t num_selected = friends.size();
 
@@ -999,4 +1005,12 @@ void FSFloaterContacts::childShowTab(const std::string& id, const std::string& t
 		child->selectTabByName(tabname);
 }
 
+void FSFloaterContacts::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+	if (behavior == RLV_BHVR_SHOWLOC ||
+		behavior == RLV_BHVR_SHOWWORLDMAP)
+	{
+		refreshUI();
+	}
+}
 // EOF
