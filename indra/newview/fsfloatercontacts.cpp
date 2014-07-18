@@ -699,7 +699,7 @@ void FSFloaterContacts::refreshRightsChangeList()
 	uuid_vec_t friends;
 	getCurrentItemIDs(friends);
 
-	S32 num_selected = friends.size();
+	size_t num_selected = friends.size();
 
 	bool can_offer_teleport = num_selected >= 1;
 	bool selected_friends_online = true;
@@ -733,8 +733,8 @@ void FSFloaterContacts::refreshRightsChangeList()
 	
 	if (num_selected == 0)  // nothing selected
 	{
-		childSetEnabled("im_btn", FALSE);
-		childSetEnabled("offer_teleport_btn", FALSE);
+		childSetEnabled("im_btn", false);
+		childSetEnabled("offer_teleport_btn", false);
 	}
 	else // we have at least one friend selected...
 	{
@@ -750,16 +750,13 @@ void FSFloaterContacts::refreshUI()
 {
 	sortFriendList();
 
-	BOOL single_selected = FALSE;
-	BOOL multiple_selected = FALSE;
-	int num_selected = mFriendsList->getAllSelected().size();
-	if(num_selected > 0)
+	bool single_selected = false;
+	bool multiple_selected = false;
+	size_t num_selected = mFriendsList->getAllSelected().size();
+	if (num_selected > 0)
 	{
-		single_selected = TRUE;
-		if(num_selected > 1)
-		{
-			multiple_selected = TRUE;
-		}
+		single_selected = true;
+		multiple_selected = (num_selected > 1);
 	}
 
 	//Options that can only be performed with one friend selected
