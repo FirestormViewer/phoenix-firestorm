@@ -385,7 +385,6 @@ std::string LLDir::buildSLOSCacheDir() const
   #ifdef ND_BUILD64BIT_ARCH
 		res = add(getOSCacheDir(), APP_NAME + "OS_x64");
   #else
-		
 		res = add(getOSCacheDir(), APP_NAME + "OS");
   #endif
 #else
