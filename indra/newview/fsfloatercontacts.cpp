@@ -778,7 +778,7 @@ void FSFloaterContacts::refreshUI()
 		LLUUID av_id = selected_item->getUUID();
 		mappable = (single_selected && !multiple_selected && av_id.notNull() && is_agent_mappable(av_id));
 	}
-	childSetEnabled("map_btn", mappable);
+	childSetEnabled("map_btn", mappable && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
 
 	// Set friend count
 	LLStringUtil::format_map_t args;
