@@ -822,7 +822,6 @@
          tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
          width="315" />
         <check_box
-         enabled_control="RenderVBOEnable"
          control_name="RenderUseStreamVBO"
          height="16"
          initial_value="false"
