@@ -7988,7 +7988,10 @@ static bool onEnableAttachmentLabel(LLUICtrl* ctrl, const LLSD& data)
 				if (attached_object)
 				{
 					LLViewerInventoryItem* itemp = gInventory.getItem(attached_object->getAttachmentItemID());
-					if (itemp)
+					// <FS:Ansariel> Hide bridge from attach to HUD menus
+					//if (itemp)
+					if (itemp && !(FSLSLBridge::instance().getBridge() && FSLSLBridge::instance().getBridge()->getUUID() == itemp->getUUID() && data["index"].asInteger() == FS_BRIDGE_POINT))
+					// </FS:Ansariel>
 					{
 						label += std::string(" (") + itemp->getName() + std::string(")");
 						break;
