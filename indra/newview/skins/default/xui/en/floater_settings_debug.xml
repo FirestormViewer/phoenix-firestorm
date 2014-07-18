@@ -29,7 +29,7 @@
 			label="Search Here"
 			layout="topleft"
 			left="0"
-			max_chars="255"
+			max_length_bytes="255"
 			name="search_settings_input"
 			right="-1"
 			text_pad_left="6"
@@ -74,7 +74,6 @@
 		right="-3">
 
 		<text_editor
-			bevel_style="in"
 			border_visible="true"
 			enabled="false"
 			follows="all"
