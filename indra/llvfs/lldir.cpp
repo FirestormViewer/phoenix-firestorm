@@ -51,6 +51,8 @@
 #include <boost/ref.hpp>
 #include <algorithm>
 
+#include "indra_constants.h"
+
 using boost::assign::list_of;
 using boost::assign::map_list_of;
 
@@ -381,15 +383,16 @@ std::string LLDir::buildSLOSCacheDir() const
 // <FS:CR> FIRE-8226 - Different flavoured cache directories.
 #ifdef OPENSIM
   #ifdef ND_BUILD64BIT_ARCH
-		res = add(getOSCacheDir(), "FirestormOS_x64");
+		res = add(getOSCacheDir(), APP_NAME + "OS_x64");
   #else
-		res = add(getOSCacheDir(), "FirestormOS");
+		
+		res = add(getOSCacheDir(), APP_NAME + "OS");
   #endif
 #else
   #ifdef ND_BUILD64BIT_ARCH
-		res = add(getOSCacheDir(), "Firestorm_x64");
+		res = add(getOSCacheDir(), APP_NAME + "_x64");
   #else
-		res = add(getOSCacheDir(), "Firestorm");
+		res = add(getOSCacheDir(), APP_NAME);
   #endif
 #endif // OPENSIM
 // </FS:CR>
