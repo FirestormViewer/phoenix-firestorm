@@ -10045,7 +10045,7 @@ class LLWorldEnvSettings : public view_listener_t
 			envmgr.setUserPrefs(envmgr.getWaterPresetName(),
 					    envmgr.getSkyPresetName(),
 					    envmgr.getDayCycleName(),
-					    use_fixed_sky, use_region_settings);
+					    use_fixed_sky, use_region_settings, false);
 		}
 
 		return true;

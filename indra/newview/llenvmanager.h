@@ -213,7 +213,11 @@ public:
 		const std::string& sky_preset,
 		const std::string& day_cycle_preset,
 		bool use_fixed_sky,
-		bool use_region_settings);
+		// <FS:Ansariel> Allow interpolation
+		//bool use_region_settings);
+		bool use_region_settings,
+		bool interpolate = false);
+		// </FS:Ansariel>
 
 	// debugging methods
 	void dumpUserPrefs();

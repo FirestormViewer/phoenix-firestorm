@@ -553,7 +553,15 @@ void FloaterQuickPrefs::selectDayCyclePreset(const std::string& preset_name)
 
 void FloaterQuickPrefs::onChangeUseRegionWindlight()
 {
-	LLEnvManagerNew::instance().setUseRegionSettings(mUseRegionWindlight->get(), (gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
+	LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
+	// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
+	bool use_fixed_sky = !mUseRegionWindlight->get();
+	bool use_region_settings = !use_fixed_sky;
+	envmgr.setUserPrefs(envmgr.getWaterPresetName(),
+				envmgr.getSkyPresetName(),
+				envmgr.getDayCycleName(),
+				use_fixed_sky, use_region_settings,
+				(gSavedSettings.getBOOL("FSInterpolateSky") || gSavedSettings.getBOOL("FSInterpolateWater")));
 }
 
 void FloaterQuickPrefs::onChangeWaterPreset()

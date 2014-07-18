@@ -347,7 +347,11 @@ void LLEnvManagerNew::setUserPrefs(
 	const std::string& sky_preset,
 	const std::string& day_cycle_preset,
 	bool use_fixed_sky,
-	bool use_region_settings)
+	// <FS:Ansariel> Allow interpolation
+	//bool use_region_settings)
+	bool use_region_settings,
+	bool interpolate)
+	// </FS:Ansariel>
 {
 	// operate on members directly to avoid side effects
 	mUserPrefs.mWaterPresetName	= water_preset;
@@ -358,7 +362,10 @@ void LLEnvManagerNew::setUserPrefs(
 	mUserPrefs.mUseDayCycle			= !use_fixed_sky;
 
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	// <FS:Ansariel> Allow interpolation
+	//updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
+	// </FS:Ansariel>
 }
 
 void LLEnvManagerNew::dumpUserPrefs()
@@ -509,9 +516,10 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 		//bit of a hacky override since I've repurposed many of the settings and methods here -KC
 		//NOTE* It might not be a good idea to do this if under RLV_BHVR_SETENV -KC
 		else if (gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways") 
-		 && !(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
+			&& !(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 		{
-			setUseRegionSettings(true, mInterpNextChangeMessage);
+			// reset all environmental settings to track the region defaults, make this reset 'sticky' like the other sun settings.
+			setUserPrefs(getWaterPresetName(), getSkyPresetName(), getDayCycleName(), false, true, mInterpNextChangeMessage);
 		}
 	}
 
