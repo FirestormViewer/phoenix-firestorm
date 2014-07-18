@@ -91,7 +91,8 @@ FSLSLBridge::FSLSLBridge():
 					mBridgeCreating(false),
 					mpBridge(NULL),
 					mIsFirstCallDone(false),
-					mAllowDetach(false)
+					mAllowDetach(false),
+					mFinishCreation(false)
 {
 	LL_INFOS("FSLSLBridge") << "Initializing FSLSLBridge" << LL_ENDL;
 	mCurrentFullName = llformat("%s%d.%d", FS_BRIDGE_NAME.c_str(), FS_BRIDGE_MAJOR_VERSION, FS_BRIDGE_MINOR_VERSION);
@@ -601,6 +602,7 @@ void FSLSLBridge::initCreationStep()
 	if (LLGridManager::getInstance()->isInOpenSim()) return;
 #endif
 	setBridgeCreating(true);
+	mFinishCreation = false;
 	//announce yourself
 	reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
 
@@ -761,7 +763,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 			if (item->getType() == LLAssetType::AT_LSL_TEXT)
 			{
-				if (item->getCreatorUUID() == gAgent.getID())
+				if (item->getCreatorUUID() == gAgentID)
 				{
 					isOurScript = true;
 				}
@@ -773,19 +775,15 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 		}
 		if (count == 1 && isOurScript) //We attached a valid bridge. Run along.
 		{
-			return;
+			LL_INFOS("FSLSLBridge") << "Bridge inventory is okay." << LL_ENDL;
 		}
-		else 
+		else
 		{
 			reportToNearbyChat(LLTrans::getString("fsbridge_warning_unexpected_items"));
 			LL_WARNS("FSLSLBridge") << "The bridge inventory contains items other than bridge script." << LL_ENDL;
 			if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
 			{
 				setBridgeCreating(true);
-			}
-			else //Let the script disable competitors 
-			{
-				return;
 			}
 		}
 	}
@@ -797,7 +795,14 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 	//modify the rock size and texture
 	if (getBridgeCreating())
 	{
+		mFinishCreation = false;
 		configureBridgePrim(object);
+	}
+	else if (mFinishCreation)
+	{
+		LL_INFOS("FSLSLBridge") << "Bridge created." << LL_ENDL;
+		mFinishCreation = false;
+		reportToNearbyChat(LLTrans::getString("fsbridge_created"));
 	}
 }
 
@@ -810,7 +815,7 @@ void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 	}
 
 	//modify the rock size and texture
-	LL_INFOS("FSLSLBridge") << "Bridge container found after second attachment, resizing..." << LL_ENDL;
+	LL_INFOS("FSLSLBridge") << "Bridge container found after attachment, configuring prim..." << LL_ENDL;
 	setupBridgePrim(object);
 
 	//add bridge script to object
@@ -824,11 +829,12 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 
 	if (gSavedSettings.getBOOL("UseLSLBridge") && !mAllowDetach)
 	{
-		// Use a timer here to give the asset servers time to store object properties and content,
-		// or on first re-attach they will be gone and the bridge needs to be re-created.
-		// (It magically works after it has happened once...)
-		LL_INFOS() << "Starting re-attach timer for bridge" << LL_ENDL;
-		new FSLSLReAttachTimer(object->getAttachmentItemID());
+		LL_INFOS() << "Re-attaching bridge" << LL_ENDL;
+		LLViewerInventoryItem* inv_object = gInventory.getItem(object->getAttachmentItemID());
+		if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
+		{
+			LLAttachmentsMgr::instance().addAttachment(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+		}
 
 		return;
 	}
@@ -846,6 +852,14 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 		LL_WARNS("FSLSLBridge") << "Couldn't detach bridge. inventory object was NULL." << LL_ENDL;
 		return;
 	}
+
+	if (mFinishCreation)
+	{
+		LL_INFOS("FSLSLBridge") << "Bridge detached to save settings. Starting re-attach timer..." << LL_ENDL;
+		new FSLSLReAttachTimer(object->getAttachmentItemID());
+		return;
+	}
+
 	//is it in the right place?
 	LLUUID catID = findFSCategory();
 	if (catID != fsObject->getParentUUID())
@@ -1204,15 +1218,17 @@ void FSLSLBridge::cleanUpBridge()
 
 void FSLSLBridge::finishBridge()
 {
-	//announce yourself
-	LL_INFOS("FSLSLBridge") << "Bridge created." << LL_ENDL;
-	reportToNearbyChat(LLTrans::getString("fsbridge_created"));
+	LL_INFOS("FSLSLBridge") << "Finishing bridge" << LL_ENDL;
 
 	setBridgeCreating(false);
 	mIsFirstCallDone = false;
 	//removeVOInventoryListener();
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
+
+	mAllowDetach = true;
+	mFinishCreation = true;
+	LLVOAvatarSelf::detachAttachmentIntoInventory(getBridge()->getUUID());
 }
 
 //
@@ -1453,7 +1469,7 @@ void FSLSLBridge::detachOtherBridges()
 
 BOOL FSLSLReAttachTimer::tick()
 {
-	LL_INFOS() << "Re-attaching..." << LL_ENDL;
+	LL_INFOS() << "Re-attaching bridge after creation..." << LL_ENDL;
 	LLViewerInventoryItem* inv_object = gInventory.getItem(mBridgeUUID);
 	if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 	{

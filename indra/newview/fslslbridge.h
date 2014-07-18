@@ -92,6 +92,7 @@ private:
 	std::string				mCurrentURL;
 	bool					mBridgeCreating;
 	bool					mAllowDetach;
+	bool					mFinishCreation;
 
 	LLViewerInventoryItem*	mpBridge;
 	std::string				mCurrentFullName;
