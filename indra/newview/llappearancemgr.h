@@ -151,6 +151,7 @@ public:
 
 	// Find COF entries referencing the given item.
 	LLInventoryModel::item_array_t findCOFItemLinks(const LLUUID& item_id);
+	bool isLinkedInCOF(const LLUUID& item_id); // <FS:Ansariel> FIRE-13990 / BUG-6578 / MAINT-4216 FIX
 
 	// Remove COF entries
 	void removeCOFItemLinks(const LLUUID& item_id);

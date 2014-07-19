@@ -6808,8 +6808,17 @@ public:
 		LLViewerInventoryItem* item = getItem();
 		if(item)
 		{
-			if ( get_is_item_worn(mUUID) ) LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
-			else LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
+			if ( get_is_item_worn(mUUID) )
+			{
+				if (item->getType() != LLAssetType::AT_BODYPART)
+				{
+					LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
+				}
+			}
+			else
+			{
+				LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
+			}
 		}
 		// </FS>
 	}
