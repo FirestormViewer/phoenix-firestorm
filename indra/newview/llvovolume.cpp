@@ -1334,7 +1334,7 @@ BOOL LLVOVolume::calcLOD()
 	{
 		//setDebugText(llformat("%.2f:%.2f, %d", debug_distance, radius, cur_detail));
 
-		//setDebugText(llformat("%d", mDrawable->getFace(0)->getTextureIndex()));
+		setDebugText(llformat("%d", mDrawable->getFace(0)->getTextureIndex()));
 	}
 
 	if (cur_detail != mLOD)
