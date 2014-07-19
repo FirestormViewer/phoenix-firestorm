@@ -26,19 +26,15 @@
 #ifndef KC_WLINTERFACE_H
 #define KC_WLINTERFACE_H
 
-#include "llviewerprecompiledheaders.h"
 #include "llsingleton.h"
 #include "lleventtimer.h"
 #include "llnotifications.h"
-#include "lluuid.h"
-#include <set>
-#include <string>
 
 class LLParcel;
 class LLViewerRegion;
 class LLEnvironmentSettings;
 
-class KCWindlightInterface : public LLSingleton<KCWindlightInterface>,LLEventTimer
+class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTimer
 {
 public:
 	KCWindlightInterface();
@@ -49,8 +45,8 @@ public:
 	void ApplyWindLightPreset(const std::string& preset);
 	void ResetToRegion(bool force = false);
 	//bool ChatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id);
-	bool LoadFromPacel(LLParcel *parcel);
-	bool ParsePacelForWLSettings(const std::string& desc, LLSD& settings);
+	bool LoadFromParcel(LLParcel *parcel);
+	bool ParseParcelForWLSettings(const std::string& desc, LLSD& settings);
 	void onClickWLStatusButton();
 	void setTPing(bool value) { mTPing = value; }
 	bool haveParcelOverride(const LLEnvironmentSettings& new_settings);

@@ -29,23 +29,20 @@
 
 #include "llagent.h"
 #include "llcallingcard.h" // isBuddy
+#include "lldaycyclemanager.h"
+#include "llparcel.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "llstatusbar.h"
-#include "llparcel.h"
 #include "llviewercontrol.h" // gSavedSettings, gSavedPerAccountSettings
-#include "llviewermenu.h" // is_agent_friend
 #include "llviewerparcelmgr.h"
-#include "llwlparammanager.h"
 #include "llwaterparammanager.h"
-#include "lldaycyclemanager.h"
+#include "llwlparammanager.h"
+#include "rlvhandler.h"
 
 #include <boost/regex.hpp>
 
-#include "llslurl.h"
-#include "rlvhandler.h"
-#include "rlvactions.h"
-
-const F32 PARCEL_WL_CHECK_TIME  = 5;
+const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 
 KCWindlightInterface::KCWindlightInterface() :
@@ -151,7 +148,7 @@ BOOL KCWindlightInterface::tick()
 	if (parcel)
 	{
 		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-		if (!LoadFromPacel(parcel) || !mCurrentSettings.has("sky"))
+		if (!LoadFromParcel(parcel) || !mCurrentSettings.has("sky"))
 			mEventTimer.stop();
 	}
 
@@ -224,7 +221,7 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 
 void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 {
-	if (rlv_handler_t::isEnabled() && RlvActions::hasBehaviour(RLV_BHVR_SETENV))
+	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
 		return;
 
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
@@ -246,7 +243,7 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 
 void KCWindlightInterface::ResetToRegion(bool force)
 {
-	if (rlv_handler_t::isEnabled() && RlvActions::hasBehaviour(RLV_BHVR_SETENV))
+	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
 		return;
 
 	//TODO: clear per parcel
@@ -325,13 +322,13 @@ bool KCWindlightInterface::ChatCommand(std::string message, std::string from_nam
 }
 #endif
 
-bool KCWindlightInterface::LoadFromPacel(LLParcel *parcel)
+bool KCWindlightInterface::LoadFromParcel(LLParcel *parcel)
 {
 	if (!parcel)
 		return false;
 
 	LLSD payload;
-	if (ParsePacelForWLSettings(parcel->getDesc(), payload))
+	if (ParseParcelForWLSettings(parcel->getDesc(), payload))
 	{
 		const LLUUID owner_id = getOwnerID(parcel);
 		//basic auth for now
@@ -359,7 +356,7 @@ bool KCWindlightInterface::LoadFromPacel(LLParcel *parcel)
 	return false;
 }
 
-bool KCWindlightInterface::ParsePacelForWLSettings(const std::string& desc, LLSD& settings)
+bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLSD& settings)
 {
 	bool found_settings = false;
 	try
@@ -589,7 +586,7 @@ bool KCWindlightInterface::checkSettings()
 	static LLCachedControl<bool> sFSWLParcelEnabled(gSavedSettings, "FSWLParcelEnabled");
 	static LLCachedControl<bool> sUseEnvironmentFromRegionAlways(gSavedSettings, "UseEnvironmentFromRegionAlways");
 	if (!sFSWLParcelEnabled || !sUseEnvironmentFromRegionAlways ||
-	(rlv_handler_t::isEnabled() && RlvActions::hasBehaviour(RLV_BHVR_SETENV)))
+		(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
 	{
 		// The setting changed, clear everything
 		if (!mDisabled)
