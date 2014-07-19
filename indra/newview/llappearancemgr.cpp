@@ -1364,7 +1364,10 @@ bool LLAppearanceMgr::wearItemOnAvatar(const LLUUID& item_id_to_wear, bool do_up
 		LLNotificationsUtil::add("CannotWearTrash");
 		return false;
 	}
-	else if (gInventory.isObjectDescendentOf(item_to_wear->getUUID(), LLAppearanceMgr::instance().getCOF())) // EXT-84911
+	// <FS:Ansariel> FIRE-13990 / BUG-6578 / MAINT-4216 FIX
+	//else if (gInventory.isObjectDescendentOf(item_to_wear->getUUID(), LLAppearanceMgr::instance().getCOF())) // EXT-84911
+	else if (isLinkedInCOF(item_to_wear->getUUID())) // EXT-84911
+	// </FS:Ansariel>
 	{
 		return false;
 	}
@@ -2973,6 +2976,14 @@ LLInventoryModel::item_array_t LLAppearanceMgr::findCOFItemLinks(const LLUUID& i
 	}
 	return result;
 }
+
+// <FS:Ansariel> FIRE-13990 / BUG-6578 / MAINT-4216 FIX
+bool LLAppearanceMgr::isLinkedInCOF(const LLUUID& item_id)
+{
+	LLInventoryModel::item_array_t links = LLAppearanceMgr::instance().findCOFItemLinks(item_id);
+	return links.size() > 0;
+}
+// </FS:Ansariel>
 
 void LLAppearanceMgr::removeAllClothesFromAvatar()
 {
