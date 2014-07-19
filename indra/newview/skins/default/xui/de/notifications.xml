@@ -4187,7 +4187,7 @@ Wählen Sie ein kleineres Stück Land aus.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
-  <notification name="FSWL">
+  <notification name="FSWL" label="Windlight-Umgebungseinstellungen anpassen">
 &apos;[PARCEL_NAME]&apos;, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
     <form name="form">
       <button name="Allow" text="Zulassen"/>
@@ -4195,8 +4195,8 @@ Wählen Sie ein kleineres Stück Land aus.
     </form>
   </notification>
   
-  <notification name="FSWLClear">
-Windlight-Einstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
+  <notification name="FSWLClear" label="Windlight-Umgebungseinstellungen zurücksetzen">
+Windlight-Umgebungseinstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
     <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
   </notification>
 	

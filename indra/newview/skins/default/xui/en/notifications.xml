@@ -9103,6 +9103,7 @@ You can not remove [REMOVE_GRID] while being connected to it.
 
   <notification
    icon="notify.tga"
+   label="Apply Windlight settings"
    name="FSWL"
    type="notify">
 &apos;[PARCEL_NAME]&apos;, owned by [OWNER_NAME], would like to change your Windlight visual environment settings.
@@ -9120,6 +9121,7 @@ You can not remove [REMOVE_GRID] while being connected to it.
   
   <notification
    icon="notify.tga"
+   label="Reset Windlight settings"
    name="FSWLClear"
    type="notify">
 Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
