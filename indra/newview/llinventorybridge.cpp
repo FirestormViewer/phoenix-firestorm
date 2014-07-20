@@ -2239,7 +2239,7 @@ BOOL LLFolderBridge::isItemCopyable() const
 bool LLFolderBridge::isItemLinkable() const
 {
 	LLFolderType::EType ftType = getPreferredType();
-	return (LLFolderType::FT_NONE == ftType || LLFolderType::FT_PHOENIX == ftType);
+	return (LLFolderType::FT_NONE == ftType || LLFolderType::FT_OUTFIT == ftType);
 }
 // [/SL:KB]
 
