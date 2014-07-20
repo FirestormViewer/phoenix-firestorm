@@ -782,15 +782,59 @@ void LLLogChat::deleteTranscripts()
 // static
 bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 {
-	std::vector<std::string> list_of_transcriptions;
-	LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
+	// <FS:Ansariel> FIRE-13725 / CHUIBUG-222: Viewer freezes when opening preferences or right-clicking on friends' names
+	//std::vector<std::string> list_of_transcriptions;
+	//LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
 
-	if (list_of_transcriptions.size() > 0)
+	//if (list_of_transcriptions.size() > 0)
+	//{
+	//	LLAvatarName avatar_name;
+	//	LLAvatarNameCache::get(avatar_id, &avatar_name);
+	//	// <FS:Ansariel> [Legacy IM logfile names]
+	//	//std::string avatar_user_name = avatar_name.getAccountName();
+	//	std::string avatar_user_name;
+	//	if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+	//	{
+	//		avatar_user_name = avatar_name.getUserName();
+	//		avatar_user_name = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
+	//	}
+	//	else
+	//	{
+	//		avatar_user_name = avatar_name.getAccountName();
+	//		std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+	//	}
+	//	// <//FS:Ansariel> [Legacy IM logfile names]
+	//	if(!is_group)
+	//	{
+	//		//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+	//		BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
+	//		{
+	//			if (std::string::npos != transcript_file_name.find(avatar_user_name))
+	//			{
+	//				return true;
+	//			}
+	//		}
+	//	}
+	//	else
+	//	{
+	//		std::string file_name;
+	//		gCacheName->getGroupName(avatar_id, file_name);
+	//		file_name = makeLogFileName(file_name);
+	//		BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
+	//		{
+	//			if (transcript_file_name == file_name)
+	//			{
+	//				return true;
+	//			}
+	//		}
+	//	}
+
+	//}
+	std::string file_name;
+	if (!is_group)
 	{
 		LLAvatarName avatar_name;
 		LLAvatarNameCache::get(avatar_id, &avatar_name);
-		// <FS:Ansariel> [Legacy IM logfile names]
-		//std::string avatar_user_name = avatar_name.getAccountName();
 		std::string avatar_user_name;
 		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
 		{
@@ -802,51 +846,43 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 			avatar_user_name = avatar_name.getAccountName();
 			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
 		}
-		// <//FS:Ansariel> [Legacy IM logfile names]
-		if(!is_group)
-		{
-			//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
-			BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
-			{
-				if (std::string::npos != transcript_file_name.find(avatar_user_name))
-				{
-					return true;
-				}
-			}
-		}
-		else
-		{
-			std::string file_name;
-			gCacheName->getGroupName(avatar_id, file_name);
-			file_name = makeLogFileName(file_name);
-			BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
-			{
-				if (transcript_file_name == file_name)
-				{
-					return true;
-				}
-			}
-		}
-
+		file_name = makeLogFileName(avatar_user_name);
 	}
+	else
+	{
+		gCacheName->getGroupName(avatar_id, file_name);
+		file_name = makeLogFileName(file_name);
+	}
+	if ( (!file_name.empty()) && (LLFile::isfile(file_name)) )
+	{
+		return true;
+	}
+	// </FS:Ansariel>
 
 	return false;
 }
 
 bool LLLogChat::isNearbyTranscriptExist()
 {
-	std::vector<std::string> list_of_transcriptions;
-	LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
+	// <FS:Ansariel> FIRE-13725 / CHUIBUG-222: Viewer freezes when opening preferences or right-clicking on friends' names
+	//std::vector<std::string> list_of_transcriptions;
+	//LLLogChat::getListOfTranscriptFiles(list_of_transcriptions);
 
-	std::string file_name;
-	file_name = makeLogFileName("chat");
-	BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
+	//std::string file_name;
+	//file_name = makeLogFileName("chat");
+	//BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
+	//{
+	//   	if (transcript_file_name == file_name)
+	//   	{
+	//		return true;
+	//	 }
+	//}
+	std::string strFilePath = makeLogFileName("chat");
+	if ( (!strFilePath.empty()) && (LLFile::isfile(strFilePath)) )
 	{
-	   	if (transcript_file_name == file_name)
-	   	{
-			return true;
-		 }
+		return true;
 	}
+	// </FS:Ansariel>
 	return false;
 }
 
