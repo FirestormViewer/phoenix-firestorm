@@ -305,7 +305,10 @@ BOOL LLInvFVBridge::cutToClipboard() const
 BOOL LLInvFVBridge::copyToClipboard() const
 {
 	const LLInventoryObject* obj = gInventory.getObject(mUUID);
-	if (obj && isItemCopyable())
+//	if (obj && isItemCopyable())
+// [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
+	if (obj && (isItemCopyable() || isItemLinkable()))
+// [/SL:KB]
 	{
 		return LLClipboard::instance().addToClipboard(mUUID);
 	}
@@ -669,22 +672,6 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 			{
 				disabled_items.push_back(std::string("Find Original"));
 			}
-
-			// <FS:Ansariel> FIRE-8283: Copy/cut for inventory links
-			items.push_back(std::string("Copy Separator"));
-			
-			items.push_back(std::string("Copy"));
-			if (!isItemCopyable())
-			{
-				disabled_items.push_back(std::string("Copy"));
-			}
-
-			items.push_back(std::string("Cut"));
-			if (!isItemMovable() || !isItemRemovable())
-			{
-				disabled_items.push_back(std::string("Cut"));
-			}
-			// </FS:Ansariel>
 		}
 		else
 		{
@@ -723,19 +710,21 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 					disabled_items.push_back(std::string("Copy Asset UUID"));
 				}
 			}
-			items.push_back(std::string("Copy Separator"));
-			
-			items.push_back(std::string("Copy"));
-			if (!isItemCopyable())
-			{
-				disabled_items.push_back(std::string("Copy"));
-			}
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
+			//items.push_back(std::string("Copy Separator"));
+			//
+			//items.push_back(std::string("Copy"));
+			//if (!isItemCopyable())
+			//{
+			//	disabled_items.push_back(std::string("Copy"));
+			//}
 
-			items.push_back(std::string("Cut"));
-			if (!isItemMovable() || !isItemRemovable())
-			{
-				disabled_items.push_back(std::string("Cut"));
-			}
+			//items.push_back(std::string("Cut"));
+			//if (!isItemMovable() || !isItemRemovable())
+			//{
+			//	disabled_items.push_back(std::string("Cut"));
+			//}
+// [/SL:KB]
 
 			if (canListOnMarketplace())
 			{
@@ -748,6 +737,22 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 				}
 			}
 		}
+
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
+		items.push_back(std::string("Copy Separator"));
+
+		items.push_back(std::string("Cut"));
+		if (!isItemMovable() || !isItemRemovable() || isLibraryItem())
+		{
+			disabled_items.push_back(std::string("Cut"));
+		}
+
+		items.push_back(std::string("Copy"));
+		if (!isItemCopyable() && !isItemLinkable())
+		{
+			disabled_items.push_back(std::string("Copy"));
+		}
+// [/SL:KB]
 	}
 
 	// Don't allow items to be pasted directly into the COF or the inbox/outbox
@@ -2009,10 +2014,10 @@ BOOL LLItemBridge::isItemCopyable() const
 		// We'll allow copying a link if:
 		//   - its target is available
 		//   - it doesn't point to another link [see LLViewerInventoryItem::getLinkedItem() which returns NULL in that case]
-		if ( (item->getIsLinkType()) && (!item->getLinkedItem()) )
+		if (item->getIsLinkType())
 // [/SL:KB]
 		{
-			return FALSE;
+			return (NULL != item->getLinkedItem());
 		}
 
 // [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.2.0a) | Added: Catznip-2.0.0a
@@ -2020,12 +2025,20 @@ BOOL LLItemBridge::isItemCopyable() const
 		//   - the item (or its target in the case of a link) is "copy"
 		//   - and/or if the item (or its target in the case of a link) has a linkable asset type
 		// NOTE: we do *not* want to return TRUE on everything like LL seems to do in SL-2.1.0 because not all types are "linkable"
-		return (item->getPermissions().allowCopyBy(gAgent.getID())) || (LLAssetType::lookupCanLink(item->getType()));
+		return (item->getPermissions().allowCopyBy(gAgent.getID()));
 // [/SL:KB]
 //		return item->getPermissions().allowCopyBy(gAgent.getID()) || gSavedSettings.getBOOL("InventoryLinking");
 	}
 	return FALSE;
 }
+
+// [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
+bool LLItemBridge::isItemLinkable() const
+{
+	LLViewerInventoryItem* item = getItem();
+	return (item && LLAssetType::lookupCanLink(item->getType()));
+}
+// [/SL:KB]
 
 LLViewerInventoryItem* LLItemBridge::getItem() const
 {
@@ -2221,6 +2234,14 @@ BOOL LLFolderBridge::isItemCopyable() const
 	
 		return TRUE;
 	}
+
+// [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
+bool LLFolderBridge::isItemLinkable() const
+{
+	LLFolderType::EType ftType = getPreferredType();
+	return (LLFolderType::FT_NONE == ftType || LLFolderType::FT_PHOENIX == ftType);
+}
+// [/SL:KB]
 
 BOOL LLFolderBridge::isClipboardPasteable() const
 {
