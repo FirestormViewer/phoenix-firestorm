@@ -125,12 +125,6 @@ LLWorld::LLWorld() :
 	gGL.getTexUnit(0)->bind(mDefaultWaterTexturep);
 	mDefaultWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
 	LLViewerRegion::sVOCacheCullingEnabled = gSavedSettings.getBOOL("RequestFullRegionCache") && gSavedSettings.getBOOL("ObjectCacheEnabled");
-
-	// <FS:ND> Net-stats we want to keep during the whole application life
-	mPacketsIn = 0;
-	mPacketsOut = 0;
-	mPacketsLost = 0;
-	// </FS:ND>
 }
 
 
@@ -1241,12 +1235,6 @@ void LLWorld::updateNetStats()
 	mLastPacketsIn = gMessageSystem->mPacketsIn;
 	mLastPacketsOut = gMessageSystem->mPacketsOut;
 	mLastPacketsLost = gMessageSystem->mDroppedPackets;
-
-	// <FS:ND> Net-stats we want to keep during the whole application life
-	mPacketsIn += packets_in;
-	mPacketsOut += packets_out;
-	mPacketsLost += packets_lost;
-	// </FS:ND>
 }
 
 

@@ -179,9 +179,26 @@ public:
 
 	CountStatHandle(const char* name, const char* description = NULL) 
 	:	stat_t(name, description)
+	, mTotalSamplesCount(0)
+	, mTotalSamples(0.0)
 	{}
 
 	/*virtual*/ const char* getUnitLabel() const { return LLGetUnitLabel<T>::getUnitLabel(); }
+
+	// <FS:ND> Add a stats global count. Which will accumulate all samples over the applicaton lifetime.
+	void add( T const &samples )
+	{
+		++mTotalSamplesCount;
+		mTotalSamples += samples;
+	}
+
+	T getTotalSamples() const { return mTotalSamples; }
+	U64 getTotalSampleCount() const { return mTotalSamplesCount; }
+
+private:
+	U64 mTotalSamplesCount;
+	T mTotalSamples;
+	// </FS:ND>
 };
 
 template<typename T, typename VALUE_T>
@@ -190,6 +207,7 @@ void add(CountStatHandle<T>& count, VALUE_T value)
 #if LL_TRACE_ENABLED
 	T converted_value(value);
 	count.getCurrentAccumulator().add(storage_value(converted_value));
+	count.add( value ); // <FS:ND/> Add a stats global count. Which will accumulate all samples over the applicaton lifetime.
 #endif
 }
 
