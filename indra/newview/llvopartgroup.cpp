@@ -51,6 +51,8 @@ extern U64MicrosecondsImplicit gFrameTime;
 LLPointer<LLVertexBuffer> LLVOPartGroup::sVB = NULL;
 S32 LLVOPartGroup::sVBSlotCursor = 0;
 
+#include "fsvopartgroup.cpp"
+
 void LLVOPartGroup::initClass()
 {
 	
@@ -59,6 +61,11 @@ void LLVOPartGroup::initClass()
 //static
 void LLVOPartGroup::restoreGL()
 {
+	sIndexGeneration += 2;
+
+	for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
+		sFreeIndex[i] = 0xFFFFFFFF;
+
 
 	//TODO: optimize out binormal mask here.  Specular and normal coords as well.
 	sVB = new LLVertexBuffer(VERTEX_DATA_MASK | LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_TEXCOORD1 | LLVertexBuffer::MAP_TEXCOORD2, GL_STREAM_DRAW_ARB);
@@ -118,12 +125,39 @@ void LLVOPartGroup::destroyGL()
 //static
 S32 LLVOPartGroup::findAvailableVBSlot()
 {
-	if (sVBSlotCursor >= LL_MAX_PARTICLE_COUNT)
-	{ //no more available slots
-		return -1;
+	for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
+	{
+		if( sFreeIndex[i] != 0 )
+		{
+			U32 val = sFreeIndex[i];
+			U32 mask = 1;
+			int j(0);
+			for( j = 0; j < 32; ++j )
+			{
+				if( mask & val )
+				{
+					mask = ~mask;
+					break;
+				}
+
+				mask <<= 1;
+			}
+
+			sFreeIndex[ i ] = val & mask;
+			++sTotalParticles;
+
+			return i*32+j;
+		}
 	}
 
-	return sVBSlotCursor++;
+	return -1;
+
+//	if (sVBSlotCursor >= LL_MAX_PARTICLE_COUNT)
+//	{ //no more available slots
+//		return -1;
+//	}
+//
+//	return sVBSlotCursor++;
 }
 
 bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
@@ -142,7 +176,8 @@ bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
 }
 
 //static
-void LLVOPartGroup::freeVBSlot(S32 idx)
+// void LLVOPartGroup::freeVBSlot(S32 idx)
+void LLVOPartGroup::freeVBSlot(S32 idx, U32 generation )
 {
 	/*llassert(idx < LL_MAX_PARTICLE_COUNT && idx >= 0);
 	//llassert(sVBSlotCursor > sVBSlotFree);
@@ -153,6 +188,21 @@ void LLVOPartGroup::freeVBSlot(S32 idx)
 		sVBSlotCursor--;
 		*sVBSlotCursor = idx;
 	}*/
+
+	if( idx < 0 || idx >= LL_MAX_PARTICLE_COUNT )
+		return;
+
+	--sTotalParticles;
+
+	if( sIndexGeneration != generation )
+		return;
+
+	U32 i = (idx & ~0x0000001F) / 32;
+	U32 j =  idx &  0x0000001F;
+
+	U32 mask = 1 << j;
+
+	sFreeIndex[ i ] |= mask;
 }
 
 LLVOPartGroup::LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
@@ -859,6 +909,14 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 	
 	LLSpatialGroup::drawmap_elem_t& draw_vec = group->mDrawMap[mRenderPass];	
 
+	// <FS:ND> Free all vb slots. Then try to allocate an adjacent block of slots for all faces
+	for( std::vector<LLFace*>::iterator itr = mFaceList.begin(); itr != mFaceList.end(); ++itr )
+		(*itr)->setGeomIndex( 0 );
+	
+	S32 idxStart, idxEnd;
+	bool bValidRange = findAvailableVBSlots( idxStart, idxEnd, mFaceList.size() );
+	// </FS:ND>
+	
 	for (std::vector<LLFace*>::iterator i = mFaceList.begin(); i != mFaceList.end(); ++i)
 	{
 		LLFace* facep = *i;
@@ -866,10 +924,26 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 
 		//if (!facep->isState(LLFace::PARTICLE))
 		{ //set the indices of this face
-			S32 idx = LLVOPartGroup::findAvailableVBSlot();
+
+			// <FS:ND> Can we use a index from our preallocated list?
+			// S32 idx = LLVOPartGroup::findAvailableVBSlot();
+			S32 idx(-1);
+			if( bValidRange )
+			{
+				if( idxStart < idxEnd )
+					idx = idxStart++;
+			}
+			else
+				idx = LLVOPartGroup::findAvailableVBSlot();
+			// <FS:ND>
+			
 			if (idx >= 0)
 			{
-				facep->setGeomIndex(idx*4);
+				// <FS:ND> Face needs to release the index when it gets destroyed.
+				// facep->setGeomIndex(idx*4);
+				facep->setGeomIndex(idx*4, sIndexGeneration);
+				// <FS:ND>
+
 				facep->setIndicesIndex(idx*6);
 				facep->setVertexBuffer(LLVOPartGroup::sVB);
 				facep->setPoolType(LLDrawPool::POOL_ALPHA);

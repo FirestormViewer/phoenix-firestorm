@@ -166,6 +166,8 @@ void LLFace::init(LLDrawable* drawablep, LLViewerObject* objp)
 	mBoundingSphereRadius = 0.0f ;
 
 	mHasMedia = FALSE ;
+
+	mParticleGeneration = 0; // <FS:ND/> Default = no particle
 }
 
 void LLFace::destroy()
@@ -183,9 +185,14 @@ void LLFace::destroy()
 		}
 	}
 	
-	if (isState(LLFace::PARTICLE))
+	// <FS:ND> Make sure we released any allocated VB index if this was a particle
+	// if (isState(LLFace::PARTICLE))
+	if (isState(LLFace::PARTICLE) || mParticleGeneration )
+	// </FS:ND>
 	{
-		LLVOPartGroup::freeVBSlot(getGeomIndex()/4);
+		LLVOPartGroup::freeVBSlot(getGeomIndex()/4,mParticleGeneration);
+		mParticleGeneration = 0;
+
 		clearState(LLFace::PARTICLE);
 	}
 
@@ -414,8 +421,16 @@ void LLFace::setSize(S32 num_vertices, S32 num_indices, bool align)
 	llassert(verify());
 }
 
-void LLFace::setGeomIndex(U16 idx) 
+// <FS:ND> Pass another flag to mark this index as from LLVOPartGroup, in that case it needs to be freed with LLVOPartGroup::LLVOPartGroup
+// void LLFace::setGeomIndex(U16 idx) 
+void LLFace::setGeomIndex(U16 idx, U32 aParticleGeneration ) 
+// </FS:ND>
 { 
+	if( mParticleGeneration && mGeomIndex != idx )
+		LLVOPartGroup::freeVBSlot(getGeomIndex()/4,mParticleGeneration);
+	
+	mParticleGeneration = aParticleGeneration;
+
 	if (mGeomIndex != idx)
 	{
 		mGeomIndex = idx; 
