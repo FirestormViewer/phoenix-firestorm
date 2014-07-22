@@ -839,7 +839,7 @@
              name="AutoCloseOOC"
              label="Auto-close ((OOC)) parentheses"
              layout="topleft"
-             top_pad="0"
+             top_pad="-2"
              left="30"
              height="18"
              width="400" />
@@ -856,7 +856,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-2"
              left="30"
              width="250"
              height="18"
@@ -866,7 +866,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-2"
              left="30"
              width="250"
              height="18"
@@ -894,7 +894,7 @@
              left="30"
              name="AutohideChatBar"
              tool_tip="Hide the chat bar from the bottom button bar and only show it as an overlay when needed."
-             top_pad="0"
+             top_pad="-2"
              width="256" />
             <check_box
              control_name="CloseChatOnReturn"
@@ -904,7 +904,7 @@
              layout="topleft"
              left="30"
              name="CloseChatOnReturn"
-             top_pad="0"
+             top_pad="-2"
              width="256" />
             <check_box
              control_name="FSUnfocusChatHistoryOnReturn"
@@ -920,7 +920,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-2"
              left="30"
              width="400"
              height="18"
@@ -1070,14 +1070,34 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-2"
              left_delta="10"
              width="30"
              height="18"
              control_name="FSMuteGroupWhenNoticesDisabled"
              name="FSMuteGroupWhenNoticesDisabled"
              label="When 'Receive group notices' is disabled, disable group chat as well"/>
-
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="-2"
+             left="30"
+             width="30"
+             height="18"
+             name="FSIgnoreAdHocSessions"
+             control_name="FSIgnoreAdHocSessions"
+             label="Automatically ignore and leave all conference (ad-hoc) chats"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             left_delta="10"
+             enabled_control="FSIgnoreAdHocSessions"
+             top_pad="-2"
+             width="30"
+             height="18"
+             name="FSReportIgnoredAdHocSession"
+             control_name="FSReportIgnoredAdHocSession"
+             label="Report ignored conference chats in nearby chat"/>
             <!-- Logging -->
             <text
              name="logging_enhancements"
@@ -1160,7 +1180,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-2"
              left="30"
              width="200"
              height="18"

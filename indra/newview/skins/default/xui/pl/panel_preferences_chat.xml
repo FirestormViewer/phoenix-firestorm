@@ -175,6 +175,8 @@
 			</combo_box>
 			<check_box name="FSMuteAllGroups" label="Wyłącz WSZYSTKIE czaty grupowe"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Automatycznie ignoruj i opuszczaj wszystkie czaty konferencji (ad-hoc)"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie lokalnym"/>
 			<text name="logging_enhancements">
 				Znaczniki czasu:
 			</text>

@@ -3059,6 +3059,22 @@ void LLIMMgr::addMessage(
 			is_group_chat = gAgent.isInGroup(new_session_id);
 		}
 
+		// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
+		if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && gSavedSettings.getBOOL("FSIgnoreAdHocSessions") && !from_linden)
+		{
+			LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
+			if (!gIMMgr->leaveSession(new_session_id))
+			{
+				LL_WARNS() << "Ad-hoc session " << new_session_id.asString() << " does not exist." << LL_ENDL;
+			}
+			if (gSavedSettings.getBOOL("FSReportIgnoredAdHocSession"))
+			{
+				reportToNearbyChat(LLTrans::getString("IgnoredAdHocSession"));
+			}
+			return;
+		}
+		// </FS:PP>
+
 		if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
