@@ -184,6 +184,7 @@ set(viewer_SOURCE_FILES
     fsradarmenu.cpp
     fsscriptlibrary.cpp
     fsslurlcommand.cpp
+    fsvopartgroup.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
     #growlmanager.cpp
@@ -885,6 +886,7 @@ set(viewer_HEADER_FILES
     fsscriptlibrary.h
     fsslurl.h
     fsslurlcommand.h
+    fsvopartgroup.h
     fswsassetblacklist.h
     groupchatlistener.h
     llaccountingcost.h

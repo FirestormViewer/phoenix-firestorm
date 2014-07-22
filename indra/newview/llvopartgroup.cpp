@@ -51,7 +51,8 @@ extern U64MicrosecondsImplicit gFrameTime;
 LLPointer<LLVertexBuffer> LLVOPartGroup::sVB = NULL;
 S32 LLVOPartGroup::sVBSlotCursor = 0;
 
-#include "fsvopartgroup.cpp"
+#include "fsvopartgroup.h" //<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+FSVOPartGroup *LLVOPartGroup::fsvopartgroup = NULL;
 
 void LLVOPartGroup::initClass()
 {
@@ -61,11 +62,12 @@ void LLVOPartGroup::initClass()
 //static
 void LLVOPartGroup::restoreGL()
 {
-	sIndexGeneration += 2;
+	//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+	fsvopartgroup->setIndexGeneration( fsvopartgroup->getIndexGeneration() + 2);
 
 	for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
-		sFreeIndex[i] = 0xFFFFFFFF;
-
+		fsvopartgroup->setFreeIndex(i, 0xFFFFFFFF);
+	//</FS:LO>
 
 	//TODO: optimize out binormal mask here.  Specular and normal coords as well.
 	sVB = new LLVertexBuffer(VERTEX_DATA_MASK | LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_TEXCOORD1 | LLVertexBuffer::MAP_TEXCOORD2, GL_STREAM_DRAW_ARB);
@@ -125,11 +127,19 @@ void LLVOPartGroup::destroyGL()
 //static
 S32 LLVOPartGroup::findAvailableVBSlot()
 {
+	//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+	/*if (sVBSlotCursor >= LL_MAX_PARTICLE_COUNT)
+	{ //no more available slots
+		return -1;
+	}
+
+	return sVBSlotCursor++;*/
+
 	for( int i = 0; i < LL_MAX_PARTICLE_COUNT/32; ++i )
 	{
-		if( sFreeIndex[i] != 0 )
+		if( fsvopartgroup->getFreeIndex(i) != 0 )
 		{
-			U32 val = sFreeIndex[i];
+			U32 val = fsvopartgroup->getFreeIndex(i);
 			U32 mask = 1;
 			int j(0);
 			for( j = 0; j < 32; ++j )
@@ -143,21 +153,15 @@ S32 LLVOPartGroup::findAvailableVBSlot()
 				mask <<= 1;
 			}
 
-			sFreeIndex[ i ] = val & mask;
-			++sTotalParticles;
+			fsvopartgroup->setFreeIndex(i, val & mask);
+			fsvopartgroup->setTotalParticles(fsvopartgroup->getTotalParticles()+1);
 
 			return i*32+j;
 		}
 	}
 
 	return -1;
-
-//	if (sVBSlotCursor >= LL_MAX_PARTICLE_COUNT)
-//	{ //no more available slots
-//		return -1;
-//	}
-//
-//	return sVBSlotCursor++;
+	//</FS:LO>
 }
 
 bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
@@ -176,6 +180,7 @@ bool ll_is_part_idx_allocated(S32 idx, S32* start, S32* end)
 }
 
 //static
+//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
 // void LLVOPartGroup::freeVBSlot(S32 idx)
 void LLVOPartGroup::freeVBSlot(S32 idx, U32 generation )
 {
@@ -192,9 +197,10 @@ void LLVOPartGroup::freeVBSlot(S32 idx, U32 generation )
 	if( idx < 0 || idx >= LL_MAX_PARTICLE_COUNT )
 		return;
 
-	--sTotalParticles;
+	//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+	fsvopartgroup->setTotalParticles(fsvopartgroup->getTotalParticles()-1);
 
-	if( sIndexGeneration != generation )
+	if( fsvopartgroup->getIndexGeneration() != generation )
 		return;
 
 	U32 i = (idx & ~0x0000001F) / 32;
@@ -202,7 +208,8 @@ void LLVOPartGroup::freeVBSlot(S32 idx, U32 generation )
 
 	U32 mask = 1 << j;
 
-	sFreeIndex[ i ] |= mask;
+	fsvopartgroup->setFreeIndex(i, fsvopartgroup->getFreeIndex(i) | mask);
+	//</FS:LO>
 }
 
 LLVOPartGroup::LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
@@ -212,6 +219,7 @@ LLVOPartGroup::LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegi
 	setNumTEs(1);
 	setTETexture(0, LLUUID::null);
 	mbCanSelect = FALSE;			// users can't select particle systems
+	fsvopartgroup = new FSVOPartGroup();
 }
 
 
@@ -914,7 +922,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 		(*itr)->setGeomIndex( 0 );
 	
 	S32 idxStart, idxEnd;
-	bool bValidRange = findAvailableVBSlots( idxStart, idxEnd, mFaceList.size() );
+	bool bValidRange = LLVOPartGroup::getFsvopartgroup()->findAvailableVBSlots( idxStart, idxEnd, mFaceList.size() );
 	// </FS:ND>
 	
 	for (std::vector<LLFace*>::iterator i = mFaceList.begin(); i != mFaceList.end(); ++i)
@@ -935,14 +943,14 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 			}
 			else
 				idx = LLVOPartGroup::findAvailableVBSlot();
-			// <FS:ND>
+			// </FS:ND>
 			
 			if (idx >= 0)
 			{
 				// <FS:ND> Face needs to release the index when it gets destroyed.
 				// facep->setGeomIndex(idx*4);
-				facep->setGeomIndex(idx*4, sIndexGeneration);
-				// <FS:ND>
+				facep->setGeomIndex(idx*4, LLVOPartGroup::getFsvopartgroup()->getIndexGeneration());
+				// </FS:ND>
 
 				facep->setIndicesIndex(idx*6);
 				facep->setVertexBuffer(LLVOPartGroup::sVB);

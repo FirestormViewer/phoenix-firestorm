@@ -36,6 +36,8 @@
 
 class LLViewerPartGroup;
 
+class FSVOPartGroup; //<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+
 class LLVOPartGroup : public LLAlphaObject
 {
 public:
@@ -106,12 +108,19 @@ public:
 	void setViewerPartGroup(LLViewerPartGroup *part_groupp)		{ mViewerPartGroupp = part_groupp; }
 	LLViewerPartGroup* getViewerPartGroup()	{ return mViewerPartGroupp; }
 
+	static FSVOPartGroup* getFsvopartgroup() {return fsvopartgroup;}//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+
 protected:
 	~LLVOPartGroup();
 
 	LLViewerPartGroup *mViewerPartGroupp;
 
 	virtual LLVector3 getCameraPosition() const;
+
+//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
+private:
+	static FSVOPartGroup* fsvopartgroup;
+//</FS:LO>
 
 };
 
