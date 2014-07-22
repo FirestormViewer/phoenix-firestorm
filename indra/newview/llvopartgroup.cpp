@@ -62,6 +62,10 @@ void LLVOPartGroup::initClass()
 //static
 void LLVOPartGroup::restoreGL()
 {
+	if (fsvopartgroup == NULL)
+	{
+		fsvopartgroup = new FSVOPartGroup();
+	}
 	//<FS:LO> Fixing up/classifying Nicky D's fsvopartgroup code
 	fsvopartgroup->setIndexGeneration( fsvopartgroup->getIndexGeneration() + 2);
 
@@ -219,7 +223,10 @@ LLVOPartGroup::LLVOPartGroup(const LLUUID &id, const LLPCode pcode, LLViewerRegi
 	setNumTEs(1);
 	setTETexture(0, LLUUID::null);
 	mbCanSelect = FALSE;			// users can't select particle systems
-	fsvopartgroup = new FSVOPartGroup();
+	if (fsvopartgroup == NULL)
+	{
+		fsvopartgroup = new FSVOPartGroup();
+	}
 }
 
 
