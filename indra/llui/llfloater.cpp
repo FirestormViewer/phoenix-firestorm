@@ -686,9 +686,13 @@ void LLFloater::openFloater(const LLSD& key)
         // {
         //    make_ui_sound("UISndWindowOpen");
         // }
-        if(getName() == "incoming call")
+        if (getName() == "incoming call")
         {
             make_ui_sound("UISndIncomingVoiceCall");
+        }
+        else if (getName() == "script_floater")
+        {
+            make_ui_sound("UISndScriptFloaterOpen");
         }
         else
         {
