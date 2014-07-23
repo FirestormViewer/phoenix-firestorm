@@ -101,7 +101,7 @@
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Blinkender Chat-Toolbar-Button, wenn neuer Chat in der Nähe eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn ein neuer Chat in der Nähe eintrifft. Das Fenster vom Chat in der Nähe muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt."/>
 			<check_box name="FSNotifyIMFlash" label="Blinkender Chat-Toolbar-Button, wenn eine neue (Gruppen-)IM eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn eine neue Instand Message oder ein neuer Gruppenchat eintrifft. Das entsprechende Fenster muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt. Diese Option ist nur verfügbar, wenn (Gruppen-)IM-Fenster als Registerkarten und nicht als separate Fenster angezeigt werden (siehe Reiter „Allgemein“)."/>
-			<check_box name="FSReportMutedGroupChat" label="Stummgeschalteten Gruppenchat im lokalen Chat melden"/>
+			<check_box name="FSReportMutedGroupChat" label="Stummgeschalteten Gruppenchat im Chat in der Nähe melden"/>
 			<text name="WhenPlayIMLabel" width="205">
 				Beim Eintreffen von Instant Messages:
 			</text>
@@ -185,6 +185,8 @@
 			</combo_box>
 			<check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppenmitteilungen erhalten' deaktiviert auch Gruppenchat"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Automatisch alle Konferenzen ignorieren und verlassen"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Ignorierte Konferenzen im Chat in der Nähe melden"/>
 
 			<!-- Logging -->
 			<text name="logging_enhancements">

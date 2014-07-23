@@ -5901,7 +5901,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="GroupChatMuteNotice">
 		Ignoriere Gruppenchat von [NAME].
 	</string>
-	
+	<string name="IgnoredAdHocSession">
+		Eine Einladung zu einer Konferenz wurde aufgrund der aktuellen Einstellungen automatisch ignoriert.
+	</string>
+
 	<!-- <FS:Ansariel> Radar notifications -->
 	<string name="camera_no_focus">
 		Die Kamera kann nicht auf [AVATARNAME] fokussiert werden, da er/sie sich außerhalb der Draw Distance befindet.
