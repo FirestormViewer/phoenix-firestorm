@@ -246,6 +246,7 @@ bool enable_god()
 FSPanelProfileSecondLife::FSPanelProfileSecondLife()
  : FSPanelProfileTab()
  , mStatusText(NULL)
+ , mRlvBehaviorCallbackConnection()
 {
 }
 
@@ -259,6 +260,11 @@ FSPanelProfileSecondLife::~FSPanelProfileSecondLife()
 	if(LLVoiceClient::instanceExists())
 	{
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
+	}
+
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
 	}
 }
 
@@ -330,6 +336,8 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	// allow skins to have copy buttons for name and avatar URI -Zi
 
 	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
+
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelProfileSecondLife::updateRlvRestrictions, this, _1));
 
 	return TRUE;
 }
@@ -786,27 +794,35 @@ void FSPanelProfileSecondLife::enableControls()
 
 void FSPanelProfileSecondLife::updateButtons()
 {
+	LLUUID av_id = getAvatarId();
 	bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
 
-	if(LLAvatarActions::isFriend(getAvatarId()))
+	if (LLAvatarActions::isFriend(av_id))
 	{
-		mTeleportButton->setEnabled(is_buddy_online);
+		const LLRelationship* friend_status = LLAvatarTracker::instance().getBuddyInfo(av_id);
+		bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+								(gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE) ||
+								friend_status->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION)));
+
+		mTeleportButton->setEnabled(is_buddy_online && can_offer_tp);
 		//Disable "Add Friend" button for friends.
 		mAddFriendButton->setEnabled(false);
 	}
 	else
 	{
-		mTeleportButton->setEnabled(true);
+		bool can_offer_tp = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC) ||
+								gRlvHandler.isException(RLV_BHVR_TPLURE, av_id, RLV_CHECK_PERMISSIVE));
+		mTeleportButton->setEnabled(can_offer_tp);
 		mAddFriendButton->setEnabled(true);
 	}
 
-	bool enable_map_btn = (is_buddy_online && is_agent_mappable(getAvatarId())) || gAgent.isGodlike();
+	bool enable_map_btn = ((is_buddy_online && is_agent_mappable(av_id)) || gAgent.isGodlike()) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP);
 	mShowOnMapButton->setEnabled(enable_map_btn);
 
-	bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
+	bool enable_block_btn = LLAvatarActions::canBlock(av_id) && !LLAvatarActions::isBlocked(av_id);
 	mBlockButton->setVisible(enable_block_btn);
 
-	bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
+	bool enable_unblock_btn = LLAvatarActions::isBlocked(av_id);
 	mUnblockButton->setVisible(enable_unblock_btn);
 }
 
@@ -845,6 +861,15 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 	}
 	
 	LLFloaterReg::showInstance("display_name");
+}
+
+void FSPanelProfileSecondLife::updateRlvRestrictions(ERlvBehaviour behavior)
+{
+	if (behavior == RLV_BHVR_SHOWLOC ||
+		behavior == RLV_BHVR_SHOWWORLDMAP)
+	{
+		updateButtons();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

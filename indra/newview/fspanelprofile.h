@@ -34,6 +34,7 @@
 #include "llvoiceclient.h"
 #include "llmediactrl.h"
 #include "llremoteparcelrequest.h"
+#include "rlvhandler.h"
 
 class LLAvatarName;
 class LLCheckBoxCtrl;
@@ -263,6 +264,9 @@ private:
 	LLMenuButton*		mOverflowButton;
 
 	bool                mVoiceStatus;
+
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior);
 };
 
 
