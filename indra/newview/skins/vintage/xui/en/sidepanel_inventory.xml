@@ -105,7 +105,7 @@
 								right="-3"
 								top_delta="1"
 								tool_tip="Drag and drop items to your inventory to manage and use them">
-								<panel
+								<text
 									name="inbox_inventory_placeholder"
 									type="string"
 									follows="all"
@@ -117,7 +117,7 @@
 									wrap="true"
 									halign="center">
 									Purchases from the marketplace will be delivered here.
-								</panel>
+								</text>
 							</panel>
 						</panel>
 					</layout_panel>

@@ -459,7 +459,6 @@
   <nearby_voice_monitor name="nearby_voice_output_monitor"
           draw_border="false"
           tool_tip="Current voice channel activity"
-          label=""
           height="20"
           top="2"
           left_pad="38"

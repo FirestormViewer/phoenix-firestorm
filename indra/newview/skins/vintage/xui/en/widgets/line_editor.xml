@@ -11,7 +11,6 @@
 	text_pad_left="2"
 	text_readonly_color="TextFgReadOnlyColor"
 	text_tentative_color="TextFgTentativeColor"
-	bg_readonly_color="TextFgReadOnlyColor"
 	highlight_color="LineEditorBgSelectedColor"
 	preedit_bg_color="TextBgFocusColor"
 	mouse_opaque="true"
