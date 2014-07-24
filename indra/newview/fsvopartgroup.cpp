@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
- * http://www.phoenixviewer.com
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -34,9 +34,9 @@
 
 FSVOPartGroup::FSVOPartGroup()
 {
-	for(int i = 0; i < sFreeIndexSize; i++)
+	for (S32 i = 0; i < sFreeIndexSize; ++i)
 	{
-		setFreeIndex(i,0);
+		setFreeIndex(i, 0);
 	}
 	setIndexGeneration(1);
 	setTotalParticles(0);
@@ -50,7 +50,7 @@ FSVOPartGroup::FSVOPartGroup()
 					   0xFFFFFF00, 0xFFFFFF80, 0xFFFFFFC0, 0xFFFFFFE0,
 					   0xFFFFFFF0, 0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE };
 
-	for(int i = 0;i<32;i++)
+	for (S32 i = 0; i < 32; ++i)
 	{
 		bitMasks[i] = bitMasksTmp[i];
 	}
