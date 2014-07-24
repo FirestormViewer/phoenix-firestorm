@@ -3,6 +3,7 @@
   positioning="centered"
   legacy_header_height="18"
   background_visible="true"
+  default_tab_group="1"
   show_title="true"
   follows="all"
   height="350"
@@ -368,6 +369,8 @@
   <!-- END: FS Prefix -->
 
   <layout_stack
+    tab_group="1"
+    default_tab_group="2"
     animate="false"
     follows="all"
     height="308"
@@ -392,6 +395,7 @@
       follows="all"/>
     </layout_panel>
     <layout_panel
+      tab_group="2"
       name="panel_im_control_lp"
       left="0"
       top="0"
@@ -399,6 +403,7 @@
       right="0"
       user_resize="true">
       <layout_stack
+        default_tab_group="3"
         animate="false"
         follows="all"
         height="304"
@@ -423,6 +428,7 @@
           bottom="-1" />
         </layout_panel>
         <layout_panel
+          tab_group="3"
           top_delta="0"
           top="0"
           height="26"
@@ -431,7 +437,6 @@
           name="chat_layout_panel">
           <layout_stack
             animate="false"
-            default_tab_group="2"
             follows="all"
             orientation="horizontal"
             name="input_panels"
@@ -456,7 +461,6 @@
               name="chat_editor"
               max_length="3070"
               spellcheck="true"
-              tab_group="3"
               top="1"
               bottom="-1"
               left="4"
