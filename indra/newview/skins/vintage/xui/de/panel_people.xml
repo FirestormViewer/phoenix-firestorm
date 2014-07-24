@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Leute" name="people_panel">
+	<string name="high_server_load" value="Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit effektiv wird."/>
+	<string name="no_recent_people" value="Hier sind keine Leute. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
+	<string name="no_filtered_recent_people" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
+	<string name="no_one_near" value="Es ist niemand in der Nähe. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
+	<string name="no_one_filtered_near" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
+	<string name="no_friends_online" value="Keine Freunde online"/>
+	<string name="no_friends" value="Keine Freunde"/>
+	<string name="no_friends_msg">
+		Verwenden Sie die [secondlife:///app/search/people Suche], um Freunde zu finden. Oder klicken Sie mit rechts auf einen Einwohner und fügen Sie diesen als Freund hinzu.
+Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche].
+	</string>
+	<string name="people_filter_label" value="Filter Leute" />
+	<string name="groups_filter_label" value="Filter Gruppen" />
+	<string name="no_filtered_groups_msg" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/groups/[SEARCH_TERM] Suche]."/>
+	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="empty_list">
+		Dieses Kontakt-Set ist leer.
+	</string>
+	<string name="no_sets">
+		Keine Kontakt-Sets
+	</string>
+	<string name="all_sets">
+		Alle Kontakt-Sets
+	</string>
+	<string name="pseudonyms">
+		Aliase
+	</string>
+	<tab_container name="tabs">
+		<panel label="In der Nähe" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Liste"/>
+				<panel name="radarmap_options_panel" label="Optionen">
+					<check_box label="Karte oberhalb Radar anzeigen" name="ShowRadarMinimap"/>
+					<check_box label="Ignorierte und geblacklistete Einwohner anzeigen" name="FSRadarShowMutedAndDerendered"/>
+					<check_box label="Betreten der Draw Distance melden" name="RadarReportDrawRangeEnter"/>
+					<check_box label="Verlassen der Draw Distance melden" name="RadarReportDrawRangeLeaving"/>
+					<check_box label="Betreten der Chat-Reichweite melden" name="RadarReportChatRangeEnter"/>
+					<check_box label="Verlassen der Chat-Reichweite melden" name="RadarReportChatRangeLeave"/>
+					<check_box label="Betreten der Region melden" name="RadarReportSimRangeEnter"/>
+					<check_box label="Verlassen der Region melden" name="RadarReportSimRangeLeave"/>
+					<check_box label="Eintrittsmeldungen an Skripte senden" name="RadarEnterChannelAlert"/>
+					<check_box label="Austrittsmeldungen an Skripte senden" name="RadarLeaveChannelAlert"/>
+					<check_box label="LSL-Brücke verwenden" tool_tip="Falls aktiviert, wird die Funktion zur Ermittlung der Position eines Avatars in großer Höhe durch die LSL-Brücke unterstützt, insbesondere wenn dieser sich außerhalb der Draw Distance befindet" name="FSRadarEnhanceByBridge"/>
+					<check_box label="Namen nach Entfernung einfärben" name="FSRadarColorNamesByDistance"/>
+					<check_box label="Reichweite:" tool_tip="Begrenzt Reichweite auf definierten Radius" name="LimitRadarByRange" />
+					<text name="radarmap_range_label" value="Radar-Namensformat:"/>
+					<combo_box name="RadarNameFormat">
+						<combo_box.item name="RadarNameFormat_display" label="Anzeigename" />
+						<combo_box.item name="RadarNameFormat_user" label="Benutzername" />
+						<combo_box.item name="RadarNameFormat_displayuser" label="Anzeigename (Benutzername)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" label="Benutzername (Anzeigename)" />
+					</combo_box>
+				</panel>
+			</tab_container>
+			<panel label="bottom_panel" name="nearby_buttons_panel">
+				<filter_editor label="Nach Personen filtern" name="nearby_filter_input"/>
+				<button name="gear_btn" tool_tip="Aktionen für ausgewählte Person"/>
+				<menu_button name="nearby_view_btn" tool_tip="Anzeige-/Sortieroptionen"/>
+				<button name="add_friend_btn" tool_tip="Einem Einwohner die Freundschaft anbieten"/>
+				<dnd_button name="nearby_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
+			</panel>
+		</panel>
+		<panel label="Freunde" name="friends_panel"/>
+		<panel label="Gruppen" name="groups_panel"/>
+		<panel label="Aktuell" name="recent_panel"/>
+		<panel label="Ignoriert" name="blocked_panel"/>
+		<panel label="Kontakt-Sets" name="contact_sets_panel"/>
+	</tab_container>
+</panel>

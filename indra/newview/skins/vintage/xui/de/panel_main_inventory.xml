@@ -6,7 +6,7 @@
 	Inventar ([ITEM_COUNT] Artikel werden abgerufen... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-	[[ITEM_COUNT] Objekte [FILTER]
+	[ITEM_COUNT] Objekte [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
 	Objekte:
@@ -137,8 +137,8 @@
 		<filter_editor.clear_button rect.height="14" rect.width="14" rect.bottom="3" />
 	</filter_editor>
 	
-	<button name="collapse_btn" label="Einklappen" width="60" />
-	<button name="expand_btn" label="Ausklappen" width="60" />
+	<button name="collapse_btn" label="Einklappen" width="70" />
+	<button name="expand_btn" label="Ausklappen" width="70" />
 	
 	<text name="filter_label" value="Filter:" width="30" />
 

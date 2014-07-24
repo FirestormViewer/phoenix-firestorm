@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+	<layout_stack name="bottom_toolbar_stack">
+		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
+		<layout_panel name="bottom_chat_bar_panel">
+			<!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
+			<layout_stack name="chat_bar_utility_bar_stack">
+				<!-- Chat panel -->
+				<layout_panel name="chat_panel">
+					<!-- Layout stack to make showing and hiding easy -->
+					<layout_stack name="bottom_chat_stack">
+						<!-- Panel to house the chat bar in, will be set visible/invisible in code as parent of the chat control -->
+						<layout_panel name="bottom_chat_bar_panel">
+							<button name="local_chat_button" tool_tip="Zeigt/versteckt das Chat-in-der-Nähe-Fenster (Strg+H)" label="Chat in der Nähe" width="100"/>
+							<fs_nearby_chat_control name="default_chat_bar" label="An Chat in der Nähe"/>
+						</layout_panel>
+						<!-- Panel to house the chat bar in, will be set visible/invisible in code as parent of the chat control -->
+					</layout_stack>
+					<!-- Layout stack to make showing and hiding easy -->
+				</layout_panel>
+				<!-- Chat panel -->
+				<!-- Utility Bar layout panel -->
+				<layout_panel name="utility_bar_layout_panel">
+					<!-- Utility Bar panel -->
+					<panel name="utility_bar_panel">
+						<!-- Parcel Stream controls -->
+						<button name="utility_parcel_audio_stream_button" tool_tip="Audiostream der Parzelle starten/stoppen"/>
+						<!-- Parcel Stream controls -->
+						<!-- Parcel Media controls -->
+						<button name="utility_parcel_media_button" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>
+						<!-- Parcel Media controls -->
+						<!-- Volume controls -->
+						<slider name="System Volume" tool_tip="Steuerung der Gesamtlautstärke"/>
+						<button name="mute_audio" tool_tip="Stummschalten"/>
+						<button name="show_volume_controls_button" tool_tip="Lautstärke-Einstellungen anzeigen"/>
+						<!-- Volume controls -->
+					</panel>
+					<!-- Utility Bar panel -->
+				</layout_panel>
+				<!-- Utility Bar layout panel -->
+				<!-- Voice Chat layout panel -->
+				<layout_panel name="voice_chat_controls_layout_panel" width="166">
+					<!-- Voice Chat panel -->
+					<panel name="voice_chat_controls_panel" width="163">
+						<button name="show_voice_controls_button" tool_tip="Voice-Einstellungen und Sprecher in der Nähe anzeigen"/>
+						<button name="utility_talk_button" tool_tip="Zum Sprechen diesen Button drücken. Push-to-Talk-Funktion über das Schloss-Symbol aktivieren bzw. deaktivieren." label="Sprechen" width="85"/>
+						<button name="utility_push_to_talk_lock_button" tool_tip="Push-to-Talk-Funktion umschalten"/>
+						<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Aktivität auf dem aktuellen Voice-Kanal" left_pad="68"/>
+					</panel>
+					<!-- Voice Chat panel -->
+				</layout_panel>
+				<!-- Voice Chat layout panel -->
+				<!-- Quick Preferences Button layout panel -->
+				<layout_panel name="quick_preferences_button_layout_panel">
+					<!-- Quick Preferences Button panel -->
+					<panel name="quick_preferences_button_panel">
+						<button name="enable_disable_ao_button" tool_tip="Animation Overrider aktivieren/deaktivieren"/>
+						<button name="show_ao_interface_button" tool_tip="Einstellungen für Animation Overrider anzeigen/verstecken"/>
+						<button name="show_quick_prefs_button" tool_tip="Schnelleinstellungen für oftmals benötigte Einstellungen"/>
+					</panel>
+					<!-- Quick Preferences Button panel -->
+				</layout_panel>
+				<!-- Quick Preferences Button layout panel -->
+			</layout_stack>
+			<!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
+		</layout_panel>
+		<!-- Nearby chat panel, resting on top of the bottom toolbar -->
+		<layout_panel name="bottom_toolbar_panel">
+			<button name="open_chat_bar_button" tool_tip="Chat-Eingabezeile öffnen (Enter)"/>
+		</layout_panel>
+	</layout_stack>
+</toolbar_view>

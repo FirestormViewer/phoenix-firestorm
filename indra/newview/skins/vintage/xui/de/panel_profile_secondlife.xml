@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profil">
+	<string name="status_online">
+		Online
+	</string>
+	<string name="status_offline">
+		Offline
+	</string>
+	<string name="payment_update_link_url">
+		http://www.secondlife.com/account/billing.php?lang=de
+	</string>
+	<string name="partner_edit_link_url">
+		http://www.secondlife.com/account/partners.php?lang=de
+	</string>
+	<string name="no_partner_text" value="Kein Partner"/>
+	<string name="no_group_text" value="Keine"/>
+	<string name="FSDev" value="-Entwickler"/>
+	<string name="FSSupp" value="-Support"/>
+	<string name="FSQualityAssurance" value="-Bug-Hunter"/>
+	<text name="Key:" value="UUID:"/>
+	<view_border right="-105" name="info_border2"/>
+	<text_editor name="user_key" value="(laden)" right="-105"/>
+	<button name="copy_uri_button" label="UUID kopieren"/>
+	<text name="Name:" value="Name:"/>
+	<button name="set_name" label="Name" tool_tip="Anzeigename ändern"/>
+	<view_border right="-105" name="info_border"/>
+	<text_editor name="complete_name" value="(laden)" right="-105"/>
+	<button name="copy_name_button" label="Name kopieren"/>
+	<text name="Photo:" value="Foto:" />
+	<text name="status" value="Unbekannt"/>
+	<text name="label" value="Geboren am:"/>
+	<text_editor name="register_date" value="(laden)" />
+	<text name="label2" value="Konto:"/>
+	<text name="partner_label" value="Partner:"/>
+	<text name="Groups:" value="Gruppen:"/>
+	<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
+	<text name="About:" value="Info:"/>
+	<text name="Give item:" value="Teilen:"/>
+	<text name="Give inventory" tool_tip="Hier Inventarobjekte ablegen, um sie dieser Person zu geben.">
+		Inventarobjekt hier ablegen.
+	</text>
+
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button label="Zeige auf Karte" label_selected="Zeige auf Karte" name="show_on_map_btn" tool_tip="Zeige Position des Einwohners auf der Karte."/>
+			<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Zahle Geld an diesen Einwohner."/>
+		</layout_panel>
+
+		<layout_panel name="middle_buttonstack">
+			<button label="Teleport anbieten" label_selected="Teleport anbieten" name="teleport" tool_tip="Diesem Einwohner einen Teleport anbieten."/>
+			<button label="Instant Message" label_selected="Instant Message" name="im" tool_tip="Instant-Message-Session mit diesem Einwohner beginnen."/>
+		</layout_panel>
+		
+		<layout_panel name="right_buttonstack">
+			<button label="Freund hinzufügen" label_selected="Freund hinzufügen" name="add_friend" tool_tip="Diesem Einwohner deine Freundschaft anbieten."/>
+			<button label="Blockieren" name="block" tool_tip="Diesen Einwohner blockieren."/>
+			<button label="Freigeben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren."/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search_checkbox" label="In Suche anzeigen"/>
+</panel>
+

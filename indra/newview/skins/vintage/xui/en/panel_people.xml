@@ -300,6 +300,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						left_pad="4"
 						width="140" />
 					<text
+						visibility_control="LimitRadarByRange"
 						value="m"
 						layout="topleft"
 						follows="top|left"

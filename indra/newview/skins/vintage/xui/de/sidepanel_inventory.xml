@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Dinge" name="objects panel">
+	<panel name="sidepanel_inventory_panel">
+		<tab_container name="inventory_tab_container">
+			<panel label="Inventar" name="panel_main_inventory"/>
+			<panel label="Marktplatz" name="inbox_outbox_layout_panel">
+				<layout_stack name="inbox_outbox_layout_stack_off">
+					<layout_panel name="inbox_layout_panel_off">
+						<panel name="marketplace_inbox">
+							<string name="InboxLabelWithArg">
+								Erhaltene Artikel ([NUM])
+							</string>
+							<string name="InboxLabelNoArg">
+								Erhaltene Artikel
+							</string>
+							<text value="Erhaltene Artikel" name="inbox_label"/>
+							<text name="inbox_fresh_new_count">
+								[NUM] Neu
+							</text>
+							<panel name="inbox_inventory_placeholder_panel" tool_tip="Artikel zur Verwendung in Ihr Inventar ziehen">
+								<text name="inbox_inventory_placeholder">
+									Einkäufe auf dem Marktplatz werden hierher geliefert.
+								</text>
+							</panel>
+						</panel>
+					</layout_panel>
+					<layout_panel name="outbox_layout_panel">
+						<panel name="marketplace_outbox">
+							<string name="OutboxLabelWithArg">
+								Händler-Outbox ([NUM])
+							</string>
+							<string name="OutboxLabelNoArg">
+								Händler-Outbox
+							</string>
+							<text value="Händler-Outbox" name="outbox_label"/>
+							<button tool_tip="In Marktplatz verschieben" name="outbox_sync_btn"/>
+							<panel name="outbox_inventory_placeholder_upperpanel">
+								<panel name="outbox_inventory_placeholder_panel">
+									<text name="outbox_inventory_placeholder_title">
+										Wird geladen...
+									</text>
+								</panel>
+							</panel>
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</panel>
+		</tab_container>
+	</panel>
+</panel>

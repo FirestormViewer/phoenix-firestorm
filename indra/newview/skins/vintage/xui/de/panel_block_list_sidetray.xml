@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+	<block_list name="blocked" tool_tip="Liste der zur Zeit ignorierten Einwohner"/>
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
+			<button tool_tip="Zurück zu Leute" name="back"/>
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
+			<layout_stack name="block_list_blocklaystack">
+				<layout_panel name="block_panels_btnsort">
+					<menu_button label="Sortieren..." name="view_btn" tool_tip="Sortieroptionen"/>
+				</layout_panel>
+				<layout_panel name="block_panels_btnpersonobject">
+					<menu_button label="Blockieren..." name="plus_btn" tool_tip="Einwohner oder Objekt zum ignorieren auswählen"/>
+				</layout_panel>
+				<layout_panel name="block_panels_btnunblock">
+					<button label="Freigeben" name="unblock_btn" tool_tip="Einwohner oder Objekt aus der Liste der ignorierten Einwohner oder Objekte entfernen"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
