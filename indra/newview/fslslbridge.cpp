@@ -829,7 +829,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 
 	if (gSavedSettings.getBOOL("UseLSLBridge") && !mAllowDetach)
 	{
-		LL_INFOS() << "Re-attaching bridge" << LL_ENDL;
+		LL_INFOS("FSLSLBridge") << "Re-attaching bridge" << LL_ENDL;
 		LLViewerInventoryItem* inv_object = gInventory.getItem(object->getAttachmentItemID());
 		if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 		{
@@ -856,7 +856,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 	if (mFinishCreation)
 	{
 		LL_INFOS("FSLSLBridge") << "Bridge detached to save settings. Starting re-attach timer..." << LL_ENDL;
-		new FSLSLReAttachTimer(object->getAttachmentItemID());
+		new FSLSLBridgeReAttachTimer(object->getAttachmentItemID());
 		return;
 	}
 
@@ -1467,9 +1467,9 @@ void FSLSLBridge::detachOtherBridges()
 	}
 }
 
-BOOL FSLSLReAttachTimer::tick()
+BOOL FSLSLBridgeReAttachTimer::tick()
 {
-	LL_INFOS() << "Re-attaching bridge after creation..." << LL_ENDL;
+	LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
 	LLViewerInventoryItem* inv_object = gInventory.getItem(mBridgeUUID);
 	if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 	{

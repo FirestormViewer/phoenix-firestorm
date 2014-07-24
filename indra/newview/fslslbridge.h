@@ -51,7 +51,7 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Respon
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
 	friend class FSLSLBridgeCleanupTimer;
-	friend class FSLSLReAttachTimer;
+	friend class FSLSLBridgeReAttachTimer;
 
 public:
 	FSLSLBridge();
@@ -168,10 +168,10 @@ public:
 	void stopTimer() { mEventTimer.stop(); }
 };
 
-class FSLSLReAttachTimer : public LLEventTimer
+class FSLSLBridgeReAttachTimer : public LLEventTimer
 {
 public:
-	FSLSLReAttachTimer(const LLUUID& bridge_uuid) :
+	FSLSLBridgeReAttachTimer(const LLUUID& bridge_uuid) :
 		LLEventTimer(5.f),
 		mBridgeUUID(bridge_uuid)
 		{}
