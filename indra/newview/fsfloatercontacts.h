@@ -146,6 +146,7 @@ private:
 	void childShowTab(const std::string& id, const std::string& tabname);
 
 	void updateRlvRestrictions(ERlvBehaviour behavior);
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
 };
 
 

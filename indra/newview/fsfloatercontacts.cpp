@@ -91,7 +91,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mGroupList(NULL),
 	mAllowRightsChange(TRUE),
 	mNumRightsChanged(0),
-	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE))
+	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE)),
+	mRlvBehaviorCallbackConnection()
 {
 	mObserver = new LLLocalFriendsObserver(this);
 	LLAvatarTracker::instance().addObserver(mObserver);
@@ -105,6 +106,11 @@ FSFloaterContacts::~FSFloaterContacts()
 	LLVoiceClient::getInstance()->removeObserver(mObserver);
 	LLAvatarTracker::instance().removeObserver(mObserver);
 	delete mObserver;
+
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
+	}
 }
 
 BOOL FSFloaterContacts::postBuild()
@@ -165,7 +171,7 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,		this));
 	mGroupsTab->setDefaultBtn("chat_btn");
 	
-	gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
 	return TRUE;
 }
