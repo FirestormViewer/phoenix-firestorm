@@ -7,6 +7,8 @@
 		<text name="set_label">
 			Kontakt-Set-Einstellungen:
 		</text>
+		<line_editor name="set_name_editor" right="-100"/>
+		<button name="rename_btn" width="85" label="Umbenennen"/>
 		<color_swatch label="Farbwahl" name="set_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
 		<check_box label="Zeige Benachrichtigungen" name="show_set_notifications"/>
 	</panel>

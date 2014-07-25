@@ -80,6 +80,7 @@ public:
 	bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type);
 
 	void addSet(const std::string& set_name);
+	bool renameSet(const std::string& set_name, const std::string& new_set_name);
 	void removeSet(const std::string& set_name);
 	bool isValidSet(const std::string& set_name);
 

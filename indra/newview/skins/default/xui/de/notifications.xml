@@ -4785,6 +4785,9 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="RenameContactSetFailure">
+		Kontakt-Set „[SET]“ konnte nicht in „[NEW_NAME]“ umbenannt werden, da entweder bereits ein Kontakt-Set mit demselben Namen existiert oder der neue Name ungültig ist.
+	</notification>
 
 	<notification name="ShapeImportGenericFail">
 		Es gab ein Problem beim importieren von [FILENAME]. Siehe Log-Datei für weitergehende Details.

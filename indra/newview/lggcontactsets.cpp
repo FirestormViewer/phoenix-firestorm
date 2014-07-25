@@ -916,6 +916,22 @@ void LGGContactSets::addSet(const std::string& set_name)
 	}
 }
 
+bool LGGContactSets::renameSet(const std::string& set_name, const std::string& new_set_name)
+{
+	if (!isInternalSetName(set_name) && isValidSet(set_name) &&
+		!isInternalSetName(new_set_name) && !isValidSet(new_set_name))
+	{
+		ContactSet* set = getContactSet(set_name);
+		set->mName = new_set_name;
+		mContactSets.erase(set_name);
+		mContactSets[new_set_name] = set;
+		saveToDisk();
+		mChangedSignal(UPDATED_LISTS);
+		return true;
+	}
+	return false;
+}
+
 void LGGContactSets::removeSet(const std::string& set_name)
 {
 	contact_set_map_t::iterator found = mContactSets.find(set_name);

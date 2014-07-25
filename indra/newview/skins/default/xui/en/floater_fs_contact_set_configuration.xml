@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="360"
+ height="400"
  width="380"
  layout="topleft"
  can_resize="false"
@@ -15,7 +15,7 @@
      name="top_panel"
      top="18"
      left="0"
-     height="80"
+     height="120"
      width="380"
      border_visible="true"
      bevel_style="none">
@@ -28,13 +28,30 @@
      name="set_label">
 Contact Set Settings:
     </text>
+    <line_editor
+     name="set_name_editor"
+     height="23"
+     top_pad="10"
+     follows="left|top"
+     layout="topleft"
+     left="14"
+     right="-90"/>
+    <button
+     name="rename_btn"
+     height="23"
+     top_delta="0"
+     follows="left|top|right"
+     layout="topleft"
+     right="-10"
+     width="75"
+     label="Rename"/>
     <color_swatch
      can_apply_immediately="true"
      follows="left|top"
      height="55"
      label="Set Color"
      top_pad="8"
-     left_delta="4"
+     left="14"
      name="set_swatch"
      tool_tip="Click to open Color Picker"
      width="65" />

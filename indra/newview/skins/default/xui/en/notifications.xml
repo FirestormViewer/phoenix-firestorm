@@ -11803,6 +11803,14 @@ Enter an alias for [AVATAR]:
   </notification>
 
   <notification
+   icon="alertmodal.tga"
+   name="RenameContactSetFailure"
+   type="alertmodal">
+    <tag>contact set</tag>
+Could not rename set &apos;[SET]&apos; to &apos;[NEW_NAME]&apos; because a set with the same name already exists or the new name is invalid.
+  </notification>
+
+  <notification
    icon="notifytip.tga"
    name="ShapeImportGenericFail"
    type="notifytip">

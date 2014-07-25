@@ -31,8 +31,11 @@
 #define FS_FLOATERCONTACTSETCONFIGURATION_H
 
 #include "llfloater.h"
-#include "llcheckboxctrl.h"
-#include "llcolorswatch.h"
+
+class LLColorSwatchCtrl;
+class LLCheckBoxCtrl;
+class LLLineEditor;
+class LLButton;
 
 class FSFloaterContactSetConfiguration : public LLFloater
 {
@@ -46,13 +49,18 @@ private:
 	void onCommitSetColor();
 	void onCommitSetNotifications();
 	void onCommitDefaultColor();
+	void onRenameSet();
 	
+	void updateTitle();
+
 	// Wish there was something better to use for this...
 	std::string mContactSet;
 	
-	LLCheckBoxCtrl* mNotificationCheckBox;
-	LLColorSwatchCtrl* mSetSwatch;
-	LLColorSwatchCtrl* mGlobalSwatch;
+	LLCheckBoxCtrl*		mNotificationCheckBox;
+	LLColorSwatchCtrl*	mSetSwatch;
+	LLColorSwatchCtrl*	mGlobalSwatch;
+	LLLineEditor*		mSetName;
+	LLButton*			mRenameButton;
 };
 
 #endif //FS_FLOATERCONTACTSETCONFIGURATION_H

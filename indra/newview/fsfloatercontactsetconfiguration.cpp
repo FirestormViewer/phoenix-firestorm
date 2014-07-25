@@ -30,6 +30,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloatercontactsetconfiguration.h"
 #include "lggcontactsets.h"
+#include "llcheckboxctrl.h"
+#include "llcolorswatch.h"
+#include "lllineeditor.h"
+#include "llbutton.h"
+#include "llnotificationsutil.h"
 
 FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& target_set)
 :	LLFloater(target_set)
@@ -39,9 +44,13 @@ FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& t
 
 BOOL FSFloaterContactSetConfiguration::postBuild()
 {
-	LLStringUtil::format_map_t map;
-	map["NAME"] = mContactSet;
-	setTitle(getString("title", map));
+	updateTitle();
+
+	mSetName = getChild<LLLineEditor>("set_name_editor");
+	mSetName->setText(mContactSet);
+
+	mRenameButton = getChild<LLButton>("rename_btn");
+	mRenameButton->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onRenameSet, this));
 
 	mSetSwatch = getChild<LLColorSwatchCtrl>("set_swatch");
 	if (mSetSwatch)
@@ -83,4 +92,30 @@ void FSFloaterContactSetConfiguration::onCommitSetNotifications()
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()
 {
 	LGGContactSets::getInstance()->setDefaultColor(mGlobalSwatch->get());
+}
+
+void FSFloaterContactSetConfiguration::onRenameSet()
+{
+	std::string new_name = mSetName->getText();
+
+	if (!new_name.empty() && LGGContactSets::getInstance()->renameSet(mContactSet, new_name))
+	{
+		mKey = LLSD(new_name);
+		mContactSet = new_name;
+		updateTitle();
+	}
+	else
+	{
+		LLSD substitutions;
+		substitutions["SET"] = mContactSet;
+		substitutions["NEW_NAME"] = new_name;
+		LLNotificationsUtil::add("RenameContactSetFailure", substitutions);
+	}
+}
+
+void FSFloaterContactSetConfiguration::updateTitle()
+{
+	LLStringUtil::format_map_t map;
+	map["NAME"] = mContactSet;
+	setTitle(getString("title", map));
 }
