@@ -48,9 +48,7 @@ If you want to set custom configuration, do this in the configure step separatel
 build -c ReleaseFS --no-configure" as a secondary step.
 
 Logs:
-
 	Look for logs in build-vc100/logs
 
 Output:
-
 	Look for output in build-vc100/newview/Release
