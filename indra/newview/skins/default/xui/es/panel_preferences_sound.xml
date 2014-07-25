@@ -14,7 +14,7 @@
 			<slider label="Medios" name="Media Volume"/>
 			<check_box label="Activado" name="enable_media"/>
 			<slider label="Chat de voz" name="Voice Volume"/>
-			<check_box label="Activado" name="enable_voice_check"/>
+			<check_box label="Activado" name="enable_voice_check_volume"/>
 			<check_box name="media_auto_play_btn" tool_tip="Activa/desactiva la reproducción automática de medios cuando te conectas o cambias de región." label="Permitir reproducción automática de medios al entrar en una región"/>
 			<check_box name="media_allowscript_btn" tool_tip="Permite/impide que los scripts de los prims controlen tus conexiones de medios" label="Permitir que los scripts prims reproduzcan medios"/>
 			<check_box name="media_show_on_others_btn" tool_tip="Desactiva para ocultar los medios anexados a avatares de tu entorno" label="Reproducir medios anexados a otros avatares"/>

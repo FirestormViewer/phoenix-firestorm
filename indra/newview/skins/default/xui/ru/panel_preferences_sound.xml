@@ -17,7 +17,7 @@
 		<slider label="Медия" name="Media Volume"/>
 		<check_box label="Вкл." name="enable_media"/>
 		<slider label="Голосовой чат" name="Voice Volume"/>
-		<check_box label="Вкл." name="enable_voice_check"/>
+		<check_box label="Вкл." name="enable_voice_check_volume"/>
 		<check_box label="Разрешить автоматическое воспроизведение" name="media_auto_play_btn" tool_tip="" value="true"/>
 		<check_box name="media_allowscript_btn" tool_tip="Эта установка разрешает / запрещает объектам со скриптами использовать медиа" label="Разрешить медиа для скриптов" />
 		<check_box label="Воспроизводить медиа других аватаров" name="media_show_on_others_btn" tool_tip="Отключите данную опцию, чтоб не слышать медиа, которые прикреплены к ближайшим пользователям" value="true"/>
@@ -40,7 +40,7 @@
 
     <!-- Voice -->
     <panel label="Настройки голоса" name="Media Voice tab">
-        <check_box label="Вкл. голосовой чат" name="enable_voice_check"/>
+        <check_box label="Вкл. голосовой чат" name="enable_voice_check" width="130"/>
 		<text name="Listen from">
 			Слушать с:
 		</text>

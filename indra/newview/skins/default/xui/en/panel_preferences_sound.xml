@@ -344,7 +344,7 @@
          layout="topleft"
          top_delta="2"
          left_pad="5"
-         name="enable_voice_check"
+         name="enable_voice_check_volume"
          width="110"/>
 
         <check_box
@@ -680,8 +680,23 @@
          top_pad="10"
          left="25"
          name="enable_voice_check"
-         width="110"/>
-        <check_box
+         width="90"/>
+         <button
+         enabled_control="EnableVoiceChat"
+         disabled_control="CmdLineDisableVoice"
+         follows="top|left"
+         halign="center"
+         height="23"
+         image_overlay="Refresh_Off"
+         layout="topleft"
+         tool_tip="Reset Voice"
+         name="reset_voice_button"
+         left_pad="5"
+         width="25">
+           <button.commit_callback
+            function="Pref.ResetVoice" />
+        </button>
+         <check_box
          follows="left|top"
          height="16"
          control_name="VoiceMultiInstance"

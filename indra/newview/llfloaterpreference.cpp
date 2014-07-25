@@ -120,6 +120,7 @@
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
+#include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
 #include "llpanelmaininventory.h"
@@ -544,6 +545,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.SetSoundCache",					boost::bind(&LLFloaterPreference::onClickSetSoundCache, this));
 	mCommitCallbackRegistrar.add("Pref.ResetSoundCache",				boost::bind(&LLFloaterPreference::onClickResetSoundCache, this));
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-2912: Reset voice button
+	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
 	// </Firestorm callbacks>
 }
 
@@ -1393,6 +1397,37 @@ void LLFloaterPreference::onClickResetSoundCache()
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-2912: Reset voice button
+class FSResetVoiceTimer : public LLEventTimer
+{
+public:
+	FSResetVoiceTimer() : LLEventTimer(5.f) { }
+	~FSResetVoiceTimer() { }
+
+	BOOL tick()
+	{
+		gSavedSettings.setBOOL("EnableVoiceChat", TRUE);
+		LLFloaterPreference* floater = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+		if (floater)
+		{
+			floater->childSetEnabled("enable_voice_check", true);
+			floater->childSetEnabled("enable_voice_check_volume", true);
+		}
+		return TRUE;
+	}
+};
+
+void LLFloaterPreference::onClickResetVoice()
+{
+	if (gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice"))
+	{
+		gSavedSettings.setBOOL("EnableVoiceChat", FALSE);
+		childSetEnabled("enable_voice_check", false);
+		childSetEnabled("enable_voice_check_volume", false);
+		new FSResetVoiceTimer();
+	}
+}
+// </FS:Ansariel>
 
 // Performs a wipe of the local settings dir on next restart 
 bool callback_clear_settings(const LLSD& notification, const LLSD& response)
@@ -2626,12 +2661,14 @@ BOOL LLPanelPreference::postBuild()
 	// </FS:Ansariel>
 
 	////////////////////// PanelVoice ///////////////////
-	if (hasChild("voice_unavailable", TRUE))
-	{
-		BOOL voice_disabled = gSavedSettings.getBOOL("CmdLineDisableVoice");
-		getChildView("voice_unavailable")->setVisible( voice_disabled);
-		getChildView("enable_voice_check")->setVisible( !voice_disabled);
-	}
+	// <FS:Ansariel> Doesn't exist as of 25-07-2014
+	//if (hasChild("voice_unavailable", TRUE))
+	//{
+	//	BOOL voice_disabled = gSavedSettings.getBOOL("CmdLineDisableVoice");
+	//	getChildView("voice_unavailable")->setVisible( voice_disabled);
+	//	getChildView("enable_voice_check")->setVisible( !voice_disabled);
+	//}
+	// </FS:Ansariel>
 	
 	//////////////////////PanelSkins ///////////////////
 	

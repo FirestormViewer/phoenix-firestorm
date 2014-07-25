@@ -16,7 +16,7 @@
 			<slider label="Media" name="Media Volume"/>
 			<check_box label="Abilita" name="enable_media"/>
 			<slider label="Volume Voice" name="Voice Volume"/>
-			<check_box label="Abilita" name="enable_voice_check"/>
+			<check_box label="Abilita" name="enable_voice_check_volume"/>
 			<check_box label="Riproduci automaticamente lo streaming quando entri in Regione" name="media_auto_play_btn" tool_tip="Spunta per startare automaticamente i Media quando entri in una Sim."/>
 			<check_box name="media_allowscript_btn" tool_tip="Questa impostazione consente/impedisce di controllare le connessioni multimediali da parte di script di altri utenti" label="Consenti agli script di un residente di riprodurre Media"/>
 			<check_box label="Riproduci media indossati da altri Avatar" name="media_show_on_others_btn" tool_tip="Non selezionare se non si vogliono ascoltare i media indossati su altri avatar."/>

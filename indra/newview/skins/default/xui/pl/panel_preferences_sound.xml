@@ -17,7 +17,7 @@
 			<slider label="Media" name="Media Volume"/>
 			<check_box label="Włączone" name="enable_media"/>
 			<slider label="Rozmowy głosowe" name="Voice Volume"/>
-			<check_box label="Włączone" name="enable_voice_check"/>
+			<check_box label="Włączone" name="enable_voice_check_volume"/>
 			<check_box label="Automatycznie odtwarzaj media" name="media_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać media podczas logowania się lub zmiany regionu"/>
 			<check_box name="media_allowscript_btn" tool_tip="To ustawienie pozwala lub zabrania oskryptowanym primom kontrolować Twoje media" label="Pozwalaj skryptom w świecie odtwarzać media"/>
 			<check_box label="Uruchamiaj media dołączone do innych awatarów" name="media_show_on_others_btn" tool_tip="Odznacz tę funkcję by ukryć media załączone do awatarów w pobliżu"/>
@@ -57,7 +57,7 @@
 			</text>
 		</panel>
 		<panel label="Rozmowy głosowe" name="Media Voice tab">
-			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check"/>
+			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check" width="155"/>
 			<check_box label="Gdy działa kilka kopii przeglądarki na raz, to zezwól na rozmowy głosowe w każdej z nich" name="VoiceMultiInstance" />
 			<radio_group name="ear_location">
 				<radio_item label="Odtwarzaj głos z pozycji kamery" name="0"/>

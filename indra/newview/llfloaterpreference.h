@@ -162,6 +162,9 @@ public:
 	void onClickResetSoundCache();
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> FIRE-2912: Reset voice button
+	void onClickResetVoice();
+
 	void onClickSetCache();
 	void onClickBrowseCache();
 	void onClickBrowseCrashLogs();
