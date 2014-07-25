@@ -214,6 +214,8 @@ class AOEngine
 		std::vector<AOSet*> mOldImportSets;
 		LLUUID mImportCategory;
 		S32 mImportRetryCount;
+
+		boost::signals2::connection mRegionChangeConnection;
 };
 
 #endif // AOENGINE_H

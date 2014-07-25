@@ -66,12 +66,17 @@ AOEngine::AOEngine() :
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
 
-	gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
+	mRegionChangeConnection = gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
 
 AOEngine::~AOEngine()
 {
 	clear(false);
+
+	if (mRegionChangeConnection.connected())
+	{
+		mRegionChangeConnection.disconnect();
+	}
 }
 
 void AOEngine::init()
