@@ -25,7 +25,7 @@
 	 top="-10"
 	 width="240" />
 -->
-	<scroll_list
+	<friend_list
      left="4"
      right="-100"
      top="10"
@@ -37,50 +37,50 @@
 	 heading_height="24"
 	 multi_select="true"
      name="friend_list">
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_online_status"
 		 image="legacy/icon_avatar_online_h.tga"
 		 tool_tip="Online status"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 label="Имя пользователя"
 		 name="user_name"
 		 tool_tip="This contact's username."
 		 width="-1" />
-		<scroll_list.column
+		<friend_list.column
 		 dynamicwidth="true"
 		 label="Отображаемое имя"
 		 name="full_name"
 		 tool_tip="Выбраный контактом отображаемый ник. Пример: Шашлык Кифировна." />
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_visible_online"
 		 image="Permission_Visible_Online_h"
 		 tool_tip="Friend can see when you&apos;re online"
 		 width="16" />
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_visible_map"
 		 image="Permission_Visible_Map_h"
 		 tool_tip="Friend can locate you on the map"
 		 width="16" />
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_edit_mine"
 		 image="Permission_Edit_Objects_Mine_h"
 		 tool_tip="Friend can edit, delete or take objects"
 		 width="16" />
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_visible_map_theirs"
 		 image="Permission_Visible_Map_h"
 		 tool_tip="You can locate them on the map"
 		 width="16" />
-		<scroll_list.column
+		<friend_list.column
 		 name="icon_edit_theirs"
 		 image="Permission_Edit_Objects_Theirs_h"
 		 tool_tip="You can edit this friend&apos;s objects"
 		 width="16" />
-		<scroll_list.column
+		<friend_list.column
 		 name="friend_last_update_generation"
 		 width="-1" />
-	</scroll_list>
+	</friend_list>
 	<button
 	 top="10"
 	 follows="top|right"

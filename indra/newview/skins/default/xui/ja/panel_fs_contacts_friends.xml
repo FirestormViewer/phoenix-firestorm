@@ -4,17 +4,17 @@
 <panel name="friends">
 	<panel.string name="FriendCount" value="フレンド数: [COUNT]"/>
 
-	<scroll_list name="friend_list">
-		<scroll_list.column name="icon_online_status" tool_tip="オンライン・ステータス" />
-		<scroll_list.column label="ユーザー名" name="user_name" tool_tip="この連絡先のユーザー名です。" />
-		<scroll_list.column label="名前" name="full_name" tool_tip="この連絡先が選択した名前の表示です。" />
-		<scroll_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。" />
-		<scroll_list.column name="icon_visible_map" tool_tip="フレンドは、地図であなたの居場所を見つけることができます。" />
-		<scroll_list.column name="icon_edit_mine" tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。" />
-		<scroll_list.column name="icon_visible_map_theirs" tool_tip="あなたは、地図でフレンドの居場所を見つけることができます。" />
-		<scroll_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。" />
-		<scroll_list.column name="friend_last_update_generation" />
-	</scroll_list>
+	<friend_list name="friend_list">
+		<friend_list.column name="icon_online_status" tool_tip="オンライン・ステータス" />
+		<friend_list.column label="ユーザー名" name="user_name" tool_tip="この連絡先のユーザー名です。" />
+		<friend_list.column label="名前" name="full_name" tool_tip="この連絡先が選択した名前の表示です。" />
+		<friend_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインかどうか確認することができます。" />
+		<friend_list.column name="icon_visible_map" tool_tip="フレンドは、地図であなたの居場所を見つけることができます。" />
+		<friend_list.column name="icon_edit_mine" tool_tip="フレンドは、オブジェクトを編集、削除、または取得することができます。" />
+		<friend_list.column name="icon_visible_map_theirs" tool_tip="あなたは、地図でフレンドの居場所を見つけることができます。" />
+		<friend_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集することができます。" />
+		<friend_list.column name="friend_last_update_generation" />
+	</friend_list>
 	<button label="IM/コール" name="im_btn" tool_tip="インスタントメッセージ・セッションを開く" />
 	<button label="プロフィール" name="profile_btn" tool_tip="写真、グループ、およびその他の情報を表示します。" />
 	<button label="テレポート..." name="offer_teleport_btn" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。" />

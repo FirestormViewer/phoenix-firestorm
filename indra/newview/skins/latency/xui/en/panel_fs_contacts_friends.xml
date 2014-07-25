@@ -27,7 +27,7 @@
 	 top="-10"
 	 width="240" />
 -->
-	<scroll_list
+	<friend_list
      left="4"
      right="-85"
      top="0"
@@ -39,50 +39,50 @@
 	 heading_height="20"
 	 multi_select="true"
      name="friend_list">
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_online_status_button.tga"
 		 name="icon_online_status"
 		 tool_tip="Online status"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 label="Username"
 		 name="user_name"
 		 tool_tip="This contact's username."
 		 width="-1" />
-		<scroll_list.column
+		<friend_list.column
 		 dynamicwidth="true"
 		 label="Name"
 		 name="full_name"
 		 tool_tip="This contact's chosen name." />
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_visible_online_button.tga"
 		 name="icon_visible_online"
 		 tool_tip="Friend can see when you&apos;re online"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_visible_map_button.tga"
 		 name="icon_visible_map"
 		 tool_tip="Friend can locate you on the map"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_edit_mine_button.tga"
 		 name="icon_edit_mine"
 		 tool_tip="Friend can edit, delete or take objects"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_visible_map_button_theirs.tga"
 		 name="icon_visible_map_theirs"
 		 tool_tip="You can locate them on the map"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 image="legacy/ff_edit_theirs_button.tga"
 		 name="icon_edit_theirs"
 		 tool_tip="You can edit this friend&apos;s objects"
 		 width="20" />
-		<scroll_list.column
+		<friend_list.column
 		 name="friend_last_update_generation"
 		 width="-1" />
-	</scroll_list>
+	</friend_list>
 	<button
 	 top="1"
 	 follows="top|right"

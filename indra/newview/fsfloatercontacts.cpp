@@ -51,6 +51,8 @@
 #include "llvoiceclient.h"
 #include "fscommon.h"
 #include "llviewermenu.h"
+#include "fscontactsfriendsctrl.h"
+#include "fscontactsfriendsmenu.h"
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
@@ -119,15 +121,14 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
 	mFriendListFontName = mFriendsTab->getString("FontName");
 
-	mFriendsList = mFriendsTab->getChild<LLScrollListCtrl>("friend_list");
+	mFriendsList = mFriendsTab->getChild<FSContactsFriendsCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);
 	//mFriendsList->setMaximumSelectCallback(boost::bind(&FSFloaterContacts::onMaximumSelect, this)); //TODO
 	mFriendsList->setCommitOnSelectionChange(TRUE);
-	//mFriendsList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
 	mFriendsList->setCommitCallback(boost::bind(&FSFloaterContacts::onSelectName, this));
 	mFriendsList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	//mFriendsList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
-	mFriendsList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	mFriendsList->setContextMenu(&gFSContactsFriendsMenu);
 
 	// primary sort = online status, secondary sort = name
 	if (mSortByUserName)

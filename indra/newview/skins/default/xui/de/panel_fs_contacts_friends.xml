@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
 	<panel.string name="FriendCount" value="Freunde: [COUNT]"/>
-	<scroll_list name="friend_list" right="-90">
-		<scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
-		<scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
-		<scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
-		<scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
-		<scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
-		<scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
-		<scroll_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
-		<scroll_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
-	</scroll_list>
+	<friend_list name="friend_list" right="-90">
+		<friend_list.column name="icon_online_status" tool_tip="Online-Status"/>
+		<friend_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
+		<friend_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
+		<friend_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
+		<friend_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
+		<friend_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
+		<friend_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
+		<friend_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
+	</friend_list>
 	<button
 	 label="IM/Anruf"
 	 name="im_btn"

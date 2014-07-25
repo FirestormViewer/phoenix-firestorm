@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
 	<panel.string name="FriendCount" value="Amigos: [COUNT]"/>
-	<scroll_list name="friend_list">
-		<scroll_list.column name="icon_online_status" tool_tip="Estado de conexión"/>
-		<scroll_list.column label="Usuario" name="user_name" tool_tip="Nombre de usuario de este contacto"/>
-		<scroll_list.column label="Nombre" name="full_name" tool_tip="Nombre por el que desea ser conocido este contacto"/>
-		<scroll_list.column name="icon_visible_online" tool_tip="Este contacto puede ver si estás conectado"/>
-		<scroll_list.column name="icon_visible_map" tool_tip="Este  contacto puede localizarte en el mapa"/>
-		<scroll_list.column name="icon_edit_mine" tool_tip="Este contacto puede editar, eliminar o tomar tus objetos"/>
-		<scroll_list.column name="icon_visible_map_theirs" tool_tip="Puedes localizar a este contacto en el mapa"/>
-		<scroll_list.column name="icon_edit_theirs" tool_tip="Puedes editar los objetos de este contacto"/>
-	</scroll_list>
+	<friend_list name="friend_list">
+		<friend_list.column name="icon_online_status" tool_tip="Estado de conexión"/>
+		<friend_list.column label="Usuario" name="user_name" tool_tip="Nombre de usuario de este contacto"/>
+		<friend_list.column label="Nombre" name="full_name" tool_tip="Nombre por el que desea ser conocido este contacto"/>
+		<friend_list.column name="icon_visible_online" tool_tip="Este contacto puede ver si estás conectado"/>
+		<friend_list.column name="icon_visible_map" tool_tip="Este  contacto puede localizarte en el mapa"/>
+		<friend_list.column name="icon_edit_mine" tool_tip="Este contacto puede editar, eliminar o tomar tus objetos"/>
+		<friend_list.column name="icon_visible_map_theirs" tool_tip="Puedes localizar a este contacto en el mapa"/>
+		<friend_list.column name="icon_edit_theirs" tool_tip="Puedes editar los objetos de este contacto"/>
+	</friend_list>
 	<button label="MI/Llamar" name="im_btn" tool_tip="Abre una sesión de mensajería instantánea con un contacto o conferencia si hay seleccionado más de uno"/>
 	<button label="Perfil" tool_tip="Mostrar imagen, grupos y otra información del contacto seleccionado" name="profile_btn"/>
 	<button label="Teleporte..." name="offer_teleport_btn" tool_tip="Ofrecer al contacto seleccionado teleporte a tu posición actual"/>

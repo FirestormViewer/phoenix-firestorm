@@ -136,6 +136,8 @@ set(viewer_SOURCE_FILES
     fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
+    fscontactsfriendsctrl.cpp
+    fscontactsfriendsmenu.cpp
     fsdata.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
@@ -836,6 +838,8 @@ set(viewer_HEADER_FILES
     fschathistory.h
     fscommon.h
     fsconsoleutils.h
+    fscontactsfriendsctrl.h
+    fscontactsfriendsmenu.h
     fsdata.h
     fsexportperms.h
     fsfloateraddtocontactset.h

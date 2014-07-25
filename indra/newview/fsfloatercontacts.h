@@ -32,6 +32,7 @@
 #include "llfloater.h"
 #include "rlvhandler.h"
 
+class FSContactsFriendsCtrl;
 class LLAvatarList;
 class LLAvatarName;
 class LLAvatarTracker;
@@ -66,7 +67,7 @@ public:
 	void					sortFriendList();
 
 	LLPanel*				mFriendsTab;
-	LLScrollListCtrl*		mFriendsList;
+	FSContactsFriendsCtrl*	mFriendsList;
 	LLPanel*				mGroupsTab;
 	LLGroupList*			mGroupList;
 
