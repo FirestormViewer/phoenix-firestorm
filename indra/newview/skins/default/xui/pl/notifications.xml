@@ -4603,6 +4603,9 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="RenameContactSetFailure">
+		Nie można zmienić nazwy zestawu &apos;[SET]&apos; na &apos;[NEW_NAME]&apos;, ponieważ zestaw z taką nazwą już istnieje lub nowa nazwa nie jest poprawna.
+	</notification>
 	<notification name="ShapeImportGenericFail">
 		Wystąpił problem podczas importowania [FILENAME]. Zobacz log, aby uzyskać więcej szczegółów.
 	</notification>
