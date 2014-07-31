@@ -2638,6 +2638,7 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_error_scriptinfonotfound">Script info: Object to check is invalid or out of range.</string>
   <string name="fsbridge_error_scriptinfomalformed">Script info: Received malformed response from bridge. Try again.</string>
   <string name="fsbridge_error_injection">NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.</string>
+  <string name="fsbridge_error_wrongvm">NOTICE: Bridge script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge. If you'll see this message again - please try again in a different region.</string>
 
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">Draw Distance</string>

@@ -5315,6 +5315,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="fsbridge_error_injection">
 		UWAGA: Jeden lub więcej skryptów zostało dodanych do Twojego Mostu LSL Firestorma! Jeśli ta wiadomość jest niespodziewana, to stwórz teraz Most LSL na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
 	</string>
+	<string name="fsbridge_error_wrongvm">
+		UWAGA: Skrypt Mostu LSL używa starej maszyny wirtualnej LSO (16 KB limitu pamięci) zamiast nowej Mono, co stwarza wysokie prawdopodobieństwo kolizji sterty i stosu oraz awarii Mostu poprzez wyczerpanie się pamięci. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze). Jeśli ten komunikat pojawi się ponownie spróbuj jeszcze raz w innym regionie.
+	</string>
 	<string name="QP Draw Distance">
 		Pole widzenia
 	</string>
