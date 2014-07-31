@@ -25,7 +25,7 @@
 		<check_box label="Powiadamiaj online dla danych zestawów w tostach" name="FSContactSetsNotificationToast" />
 		<check_box label="Powiadamiaj online dla danych zestawów w czacie lokalnym" name="FSContactSetsNotificationNearbyChat" />
 		<text name="label_colors">
-			Custom Colors:
+			Własne kolory:
 		</text>
 		<check_box label="Koloruj ikonę na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
 		<check_box label="Koloruj tag imienia bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
