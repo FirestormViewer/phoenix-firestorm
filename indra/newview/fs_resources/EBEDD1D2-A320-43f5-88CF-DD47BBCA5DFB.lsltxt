@@ -95,6 +95,12 @@
         flight_hover(FALSE);
         movelock_init(FALSE);
 
+        // Check VM version
+        if (llGetMemoryLimit() <= 16384)
+        {
+            llOwnerSay("<bridgeError error=wrongvm>");
+        }
+
         // Set the channel for the AO OC interface
         aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
         if (aoChannelOC > 0)

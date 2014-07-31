@@ -56,7 +56,7 @@ const U32 FS_BRIDGE_MAJOR_VERSION = 2;
 const U32 FS_BRIDGE_MINOR_VERSION = 17;
 const U32 FS_MAX_MINOR_VERSION = 99;
 
-//current script version is 2.16
+//current script version is 2.17
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -386,6 +386,11 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			{
 				reportToNearbyChat(LLTrans::getString("fsbridge_error_scriptinfonotfound"));
 				LL_WARNS("FSLSLBridge") << "ScriptInfo - Object to check is invalid or out of range (warning returned by bridge)" << LL_ENDL;
+			}
+			else if (message.substr(valuepos+6, 7) == "wrongvm")
+			{
+				reportToNearbyChat(LLTrans::getString("fsbridge_error_wrongvm"));
+				LL_WARNS("FSLSLBridge") << "Script is using old LSO (16 KB memory limit) instead of new Mono (64 KB memory limit) virtual machine, which creates high probability of stack-heap collision and bridge failure by running out of memory" << LL_ENDL;
 			}
 			else
 			{
