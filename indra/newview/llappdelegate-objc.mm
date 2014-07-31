@@ -118,7 +118,7 @@
 	if (appExiting)
 	{
 		[frameTimer release];
-		[[NSApplication sharedApplication] terminate:self];
+		[[LLNSApplication sharedApplication] terminate:self];
 	}
 }
 
