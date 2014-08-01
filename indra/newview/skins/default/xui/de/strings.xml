@@ -5824,6 +5824,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="fsbridge_error_injection">
 		HINWEIS: Ein oder mehrere Skripte wurden zur Firestorm-LSL-Brücke hinzugefügt! Falls dieser Hinweis unerwartet aufgetreten ist, bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen.
 	</string>
+	<string name="fsbridge_error_wrongvm">
+		HINWEIS: Das Skript der Firestorm-LSL-Brücke verwendet die alte LSO Virtuelle Maschine (16 KB Speicherlimit) anstelle von Mono (64 KB Speicherlimit), wodurch eine hohe Wahrscheinlichkeit von Stack-Heap-Collisions und Fehlern aufgrund von nicht mehr verfügbarem Speicher besteht! Bitte die LSL-Brücke über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellen. Falls dieser Hinweis erneut angezeigt wurde, bitte die Brücke in einer anderen Region neu erstellen.
+	</string>
 
 	<string name="QP Draw Distance">
 		Draw Distance
