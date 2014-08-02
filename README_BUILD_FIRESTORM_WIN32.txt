@@ -37,7 +37,6 @@ Other build targets you may use are:
 	RelWithDebInfoFS_open	(no KDU, no FMOD)
 
 Other examples:
-
         autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure
         autobuild configure -c ReleaseFS -- --clean         # clean the output area first, then configure
         autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
