@@ -207,11 +207,7 @@ public:
 	BOOL		verify(const U32* indices_array = NULL) const;
 	void		printDebugInfo() const;
 
-	// <FS:ND> Pass another flag to mark this index as from LLVOPartGroup, in that case it needs to be freed with LLVOPartGroup::LLVOPartGroup
-	// void		setGeomIndex(U16 idx); 
-	void		setGeomIndex(U16 idx, U32 aParticleGeneration = 0); 
-	// </FS:ND>
-
+	void		setGeomIndex(U16 idx); 
 	void		setIndicesIndex(S32 idx);
 	void		setDrawInfo(LLDrawInfo* draw_info);
 
@@ -363,9 +359,6 @@ public:
 				lhs->getTexture() < rhs->getTexture();
 		}
 	};
-
-private:
-	U32 mParticleGeneration;
 };
 
 #endif // LL_LLFACE_H
