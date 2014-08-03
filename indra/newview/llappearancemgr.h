@@ -268,6 +268,14 @@ private:
 
 	void addDoomedTempAttachment(const LLUUID& id_to_remove);
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
+public:
+	void linkPendingAttachments();
+	void onRegisterAttachmentComplete(const LLUUID& idItem);
+private:
+	uuid_vec_t mPendingAttachLinks;
+// [/SL:KB]
+
 	//////////////////////////////////////////////////////////////////////////////////
 	// Item-specific convenience functions 
 public:
@@ -298,11 +306,21 @@ private:
 	nullary_func_t mPostUpdateFunc;
 };
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1)
+class LLRegisterAttachmentCallback : public LLInventoryCallback
+{
+public:
+	/*virtual*/ void fire(const LLUUID& idItem)
+	{
+		LLAppearanceMgr::instance().onRegisterAttachmentComplete(idItem);
+	}
+};
+// [/SL:KB]
+
 class LLUpdateAppearanceAndEditWearableOnDestroy: public LLInventoryCallback
 {
 public:
 	LLUpdateAppearanceAndEditWearableOnDestroy(const LLUUID& item_id);
-
 	/* virtual */ void fire(const LLUUID& item_id) {}
 
 	~LLUpdateAppearanceAndEditWearableOnDestroy();
