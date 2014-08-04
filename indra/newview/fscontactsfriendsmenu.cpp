@@ -149,7 +149,7 @@ void FSContactsFriendsMenu::addToContactSet()
 void FSContactsFriendsMenu::copyNameToClipboard(const LLUUID& id)
 {
 	LLAvatarName av_name;
-	LLAvatarNameCache::get(LLUUID(id), &av_name);
+	LLAvatarNameCache::get(id, &av_name);
 	LLUrlAction::copyURLToClipboard(av_name.getAccountName());
 }
 

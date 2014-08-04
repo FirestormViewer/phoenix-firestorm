@@ -167,12 +167,10 @@ void FSPanelRadar::updateButtons()
 
 LLUUID FSPanelRadar::getCurrentItemID() const
 {
-	static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
-
 	LLScrollListItem* item = mRadarList->getFirstSelected();
 	if (item)
 	{
-		return item->getColumn(uuid_column_index)->getValue().asUUID();
+		return item->getUUID();
 	}
 
 	return LLUUID::null;
@@ -180,11 +178,10 @@ LLUUID FSPanelRadar::getCurrentItemID() const
 
 void FSPanelRadar::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 {
-	static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
-
-	for (size_t i = 0; i < mRadarList->getAllSelected().size(); ++i)
+	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
+	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
 	{
-		selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(uuid_column_index)->getValue().asUUID());
+		selected_uuids.push_back((*it)->getUUID());
 	}
 }
 
@@ -215,7 +212,7 @@ void FSPanelRadar::onRadarListDoubleClicked()
 		return;
 	}
 
-	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+	LLUUID clicked_id = item->getUUID();
 	std::string name = item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asString();
 
 	FSRadar* radar = FSRadar::getInstance();
@@ -299,12 +296,11 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	static const std::string sittingStatusKey = getString("SittingStatusKey");
 
 	// Store current selection and scroll position
-	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
 	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
 	uuid_vec_t selected_ids;
-	for (size_t i = 0; i < selected_items.size(); i++)
+	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
 	{
-		selected_ids.push_back(selected_items.at(i)->getColumn(uuidColumnIndex)->getValue().asUUID());
+		selected_ids.push_back((*it)->getUUID());
 	}
 	S32 lastScroll = mRadarList->getScrollPos();
 
@@ -351,9 +347,6 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 		row_data["columns"][8]["column"] = "range";
 		row_data["columns"][8]["value"] = entry["range"];
-
-		row_data["columns"][9]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row_data["columns"][9]["value"] = entry["id"];
 
 		LLScrollListItem* row = mRadarList->addElement(row_data);
 

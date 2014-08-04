@@ -213,10 +213,6 @@
 							 label="Range"
 							 name="range"
 							 relative_width="0.16"/>
-							<radar_list.columns
-							 label="av_id"
-							 name="uuid"
-							 relative_width="0"/>
 						</radar_list>
 					</layout_panel>
 				</layout_stack>
