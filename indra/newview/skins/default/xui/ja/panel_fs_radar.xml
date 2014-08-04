@@ -36,7 +36,6 @@
 							<radar_list.columns label="年齢" name="age" />
 							<radar_list.columns label="表示時間" name="seen" />
 							<radar_list.columns label="距離" name="range" />
-							<radar_list.columns label="UUID" name="uuid" />
 						</radar_list>
 					</layout_panel>
 				</layout_stack>
