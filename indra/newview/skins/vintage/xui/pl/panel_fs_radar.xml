@@ -15,7 +15,7 @@
 					<radar_list.columns name="sitting_status" tool_tip="Obecnie siedzi"/>
 					<radar_list.columns name="flags" tool_tip="Stan danych płatniczych"/>
 					<radar_list.columns label="Wiek" name="age"/>
-					<radar_list.columns label="Widz." name="seen"/>
+					<radar_list.columns label="Czas" name="seen"/>
 					<radar_list.columns label="Odl." name="range"/>
 				</radar_list>
 			</layout_panel>
