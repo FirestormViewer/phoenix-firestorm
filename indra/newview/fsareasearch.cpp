@@ -100,7 +100,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mFilterForSale(false),
 	mFilterForSaleMin(0),
 	mFilterForSaleMax(999999),
-	mFilterPhysicial(false),
+	mFilterPhysical(false),
 	mFilterTemporary(false),
 	mRegexSearch(false),
 	mFilterClickAction(false),
@@ -281,7 +281,7 @@ void FSAreaSearch::checkRegion()
 			mRequested = 0;
 			mObjectDetails.clear();
 			mRegionRequests.clear();
-			mLastProptiesRecievedTimer.start();
+			mLastPropertiesReceivedTimer.start();
 			mPanelList->getResultList()->deleteAllItems();
 			mPanelList->setCounterText();
 			mPanelList->setAgentLastPosition(gAgent.getPositionGlobal());
@@ -299,7 +299,7 @@ void FSAreaSearch::refreshList(bool cache_clear)
 		mRequested = 0;
 		mObjectDetails.clear();
 		mRegionRequests.clear();
-		mLastProptiesRecievedTimer.start();
+		mLastPropertiesReceivedTimer.start();
 	}
 	else
 	{
@@ -490,7 +490,7 @@ void FSAreaSearch::processRequestQueue()
 	      return;
 	}
 
-	if (mLastProptiesRecievedTimer.getElapsedTimeF32() > REQUEST_TIMEOUT)
+	if (mLastPropertiesReceivedTimer.getElapsedTimeF32() > REQUEST_TIMEOUT)
 	{
 		LL_DEBUGS("FSAreaSearch") << "Timeout reached, resending requests."<< LL_ENDL;
 		S32 request_count = 0;
@@ -513,7 +513,7 @@ void FSAreaSearch::processRequestQueue()
 		}
 
 		mRegionRequests.clear();
-		mLastProptiesRecievedTimer.start();
+		mLastPropertiesReceivedTimer.start();
 
 		if (!mRequestNeedsSent)
 		{
@@ -662,7 +662,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 			// and requested objects.
 
 			details.request = FSObjectProperties::FINISHED;
-			mLastProptiesRecievedTimer.start();
+			mLastPropertiesReceivedTimer.start();
 
 			if (details.id.isNull())
 			{
@@ -796,7 +796,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 // 			}
 // 		}
 
-	if (mFilterPhysicial && !objectp->flagUsePhysics())
+	if (mFilterPhysical && !objectp->flagUsePhysics())
 	{
 		return;
 	}
@@ -2050,7 +2050,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 
 	if (mCheckboxExcludePhysics->get())
 	{
-		mFSAreaSearch->setFilterPhysicial(false);
+		mFSAreaSearch->setFilterPhysical(false);
 		mCheckboxPhysical->set(FALSE);
 		mCheckboxPhysical->setEnabled(FALSE);
 		mFSAreaSearch->setExcludePhysics(true);
@@ -2060,7 +2060,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 		mCheckboxPhysical->setEnabled(TRUE);
 		mFSAreaSearch->setExcludePhysics(false);
 	}
-	mFSAreaSearch->setFilterPhysicial(mCheckboxPhysical->get());
+	mFSAreaSearch->setFilterPhysical(mCheckboxPhysical->get());
 
 	if (mCheckboxExcludetemporary->get())
 	{

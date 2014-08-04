@@ -131,7 +131,7 @@ public:
 
 	void setFilterForSale(bool b) { mFilterForSale = b; }
 	void setFilterLocked(bool b) { mFilterLocked = b; }
-	void setFilterPhysicial(bool b) { mFilterPhysicial = b; }
+	void setFilterPhysical(bool b) { mFilterPhysical = b; }
 	void setFilterTemporary(bool b) { mFilterTemporary = b; }
 	void setFilterPhantom(bool b) { mFilterPhantom = b; }
 	void setFilterAttachment(bool b) { mFilterAttachment = b; }
@@ -203,9 +203,9 @@ private:
 	boost::regex mRegexSearchLastOwner;
 
 	LLFrameTimer mLastUpdateTimer;
-	LLFrameTimer mLastProptiesRecievedTimer;
+	LLFrameTimer mLastPropertiesReceivedTimer;
 
-	std::vector<LLUUID> mNamesRequested;
+	uuid_vec_t mNamesRequested;
 
 	LLViewerRegion* mLastRegion;
 	
@@ -235,7 +235,7 @@ private:
 	bool mExcludeNeighborRegions;
 
 	bool mFilterLocked;
-	bool mFilterPhysicial;
+	bool mFilterPhysical;
 	bool mFilterTemporary;
 	bool mFilterPhantom;
 	bool mFilterAttachment;
