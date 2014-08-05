@@ -408,6 +408,12 @@ LLVisualParam*	LLCharacter::getVisualParam(const char *param_name)
 	std::string tname(param_name);
 	LLStringUtil::toLower(tname);
 	char *tableptr = sVisualParamNames.checkString(tname);
+
+	// <FS:ND> Protect against crashes later on
+	if( !tableptr )
+		return 0;
+	// </FS:ND>
+
 	visual_param_name_map_t::iterator name_iter = mVisualParamNameMap.find(tableptr);
 	if (name_iter != mVisualParamNameMap.end())
 	{
