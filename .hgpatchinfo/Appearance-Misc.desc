@@ -5,6 +5,8 @@
 - fixed   : attachments sometimes detach only to instantly get reattached after logon
 - fixed   : Add to/Replace Outfit removes newly worn attachments on completion
     -> fix for http://jira.secondlife.com/browse/VWR-18512
+- fixed   : "Replace Outfit" isn't available for non-outfit folders that don't contain a full set of body parts (eyes, hair base, skin and shape)
+    -> fix for http://jira.secondlife.com/browse/VWR-23972
 - fixed   : attachments that attach and then instantly detach don't have their COF link removed
 - fixed   : multiple LLWearableHoldingPattern instances lead to "COF corruption"
 - fixed   : get_is_item_worn() shouldn't make the assumption that items in COFs are always worn

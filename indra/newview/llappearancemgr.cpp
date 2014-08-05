@@ -1794,7 +1794,7 @@ void LLAppearanceMgr::filterWearableItems(
 			continue;
 //		S32 start_index = llmax(0,size-max_per_type);
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2010-05-11 (Catznip-2.0)
-		S32 start_index = llmax(0, size - ((LLAssetType::AT_BODYPART == LLWearableType::getAssetType((LLWearableType::EType)i)) ? 1 : max_per_type));
+		S32 start_index = llmax(0, size - ((LLWearableType::getAllowMultiwear((LLWearableType::EType)i)) ? max_per_type : 1));
 // [/SL:KB[
 		for (S32 j = start_index; j<size; j++)
 		{
@@ -3969,9 +3969,8 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2)
 void LLAppearanceMgr::linkPendingAttachments()
 {
-   LLPointer<LLInventoryCallback> cb = NULL;
-   for (uuid_vec_t::const_iterator itPendingAttachLink = mPendingAttachLinks.begin(); 
-			itPendingAttachLink != mPendingAttachLinks.end(); ++itPendingAttachLink)
+	LLPointer<LLInventoryCallback> cb = NULL;
+	for (uuid_vec_t::const_iterator itPendingAttachLink = mPendingAttachLinks.begin(); itPendingAttachLink != mPendingAttachLinks.end(); ++itPendingAttachLink)
 	{
 		const LLUUID& idAttachItem = *itPendingAttachLink;
 		if ( (gAgentAvatarp->isWearingAttachment(idAttachItem)) && (!isLinkInCOF(idAttachItem)) )

@@ -321,6 +321,7 @@ class LLUpdateAppearanceAndEditWearableOnDestroy: public LLInventoryCallback
 {
 public:
 	LLUpdateAppearanceAndEditWearableOnDestroy(const LLUUID& item_id);
+
 	/* virtual */ void fire(const LLUUID& item_id) {}
 
 	~LLUpdateAppearanceAndEditWearableOnDestroy();

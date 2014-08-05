@@ -201,7 +201,7 @@ public:
 	typedef boost::signals2::signal<void()>	loaded_signal_t;
 	boost::signals2::connection				addLoadedCallback(loaded_callback_t cb);
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
-	boost::signals2::connection				addInitialWearablesLoadedCallback(loaded_callback_t cb);
+	boost::signals2::connection				addInitialWearablesLoadedCallback(const loaded_callback_t& cb);
 // [/SL:KB]
 
 	bool									changeInProgress() const;

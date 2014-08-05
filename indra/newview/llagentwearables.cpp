@@ -1302,13 +1302,13 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 	// LL_INFOS() << "remove " << remove_count << " add " << add_count << LL_ENDL;
 
 	// Remove everything in objects_to_remove
-//	userRemoveMultipleAttachments(objects_to_remove);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
 	if (!attach_only)
 	{
 		userRemoveMultipleAttachments(objects_to_remove);
 	}
 // [/SL:KB]
+//	userRemoveMultipleAttachments(objects_to_remove);
 
 	// Add everything in items_to_add
 	userAttachMultipleAttachments(items_to_add);
@@ -1565,7 +1565,7 @@ bool LLAgentWearables::changeInProgress() const
 }
 
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
-boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
+boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(const loaded_callback_t& cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);
 }
