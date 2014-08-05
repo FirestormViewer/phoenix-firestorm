@@ -4750,7 +4750,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						pAvatarVO->postPelvisSetRecalc();
 					}
 
-					if (pool)
+					// <FS:ND> need an texture entry, or we crash
+					// if (pool)
+					if (pool && facep->getTextureEntry() )
+					// </FS:ND>
 					{
 						const LLTextureEntry* te = facep->getTextureEntry();
 
