@@ -759,6 +759,7 @@ with the same filename but different name
   <texture name="block_list" file_name="toolbar_icons/blocklist.png" preload="true" />
   <texture name="resync_animations" file_name="toolbar_icons/resync_animations.png" preload="true" />
   
+  <texture name="skin ansastorm blood" file_name="skinspreview/ansa_blood.jpg" preload="true" />
   <texture name="skin ansastorm bright blue" file_name="skinspreview/ansa_blue.jpg" preload="true" />
   <texture name="skin ansastorm classic brown" file_name="skinspreview/ansa_brown.jpg" preload="true" />
   <texture name="skin ansastorm ectoplasma" file_name="skinspreview/ansa_ecto.jpg" preload="true" />

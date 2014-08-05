@@ -25,6 +25,12 @@
           <key>folder</key>
           <string>ectoplasma</string>
         </map>
+        <map>
+          <key>name</key>
+          <string>Blood</string>
+          <key>folder</key>
+          <string>Blood</string>
+        </map>
       </array>
     </map>
 
