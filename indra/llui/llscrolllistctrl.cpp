@@ -2994,6 +2994,9 @@ void LLScrollListCtrl::clearColumns()
 	mSortColumns.clear();
 	mTotalStaticColumnWidth = 0;
 	mTotalColumnPadding = 0;
+
+	// <FS:Ansariel> Reset number of dynamic columns, too
+	mNumDynamicWidthColumns = 0;
 }
 
 void LLScrollListCtrl::setColumnLabel(const std::string& column, const std::string& label)
