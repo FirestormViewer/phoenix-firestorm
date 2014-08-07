@@ -494,20 +494,23 @@ void FSFloaterContacts::sortFriendList()
 {
 	mFriendsList->updateLineHeight();
 	mFriendsList->updateLayout();
+	mFriendsList->clearSortOrder();
 
 	if (mSortByUserName)
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
 	}
 	else
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
 	}
-	mFriendsList->setNeedsSort(true);
+	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 }
 
 
