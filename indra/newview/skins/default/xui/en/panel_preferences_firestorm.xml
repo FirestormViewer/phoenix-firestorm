@@ -9,6 +9,10 @@
  width="540"
  label="Firestorm"
  name="firestorm">
+ 
+<panel.string name="BeamsOffLabel">
+	=== OFF ===
+</panel.string>
 
 <tab_container
  label="Firestorm Prefs"

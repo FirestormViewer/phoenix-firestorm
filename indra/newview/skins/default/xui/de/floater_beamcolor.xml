@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="BeamColor" title="Auswahlstrahl-Farbrotation">
+	<floater.string name="start_hue">
+		Startfarbe
+	</floater.string>
+	<floater.string name="end_hue">
+		Endfarbe
+	</floater.string>
 	<text name="beamcolor_text">
 Bitte mit der Maus die Farben auszuwählen,
 bei denen die Rotation starten bzw. stoppen soll.

@@ -14,26 +14,9 @@
 #ifndef LGG_BEAMMAPFLOATER_H
 #define LGG_BEAMMAPFLOATER_H
 
-#include "llviewerprecompiledheaders.h"
-
-#include "llagentdata.h"
-#include "llcommandhandler.h"
 #include "llfloater.h"
-#include "llsdutil.h"
-#include "lluictrlfactory.h"
-#include "llviewercontrol.h"
-#include "llagent.h"
-#include "llfilepicker.h"
-#include "llpanel.h"
-#include "lliconctrl.h"
-#include "llbutton.h"
-#include "llcolorswatch.h"
 
-
-#include "llsdserialize.h"
-#include "fspanelprefs.h"
-#include "llfocusmgr.h"
-
+class FSPanelPrefs;
 
 class lggPoint
 {
@@ -50,33 +33,29 @@ class lggBeamMapFloater : public LLFloater
 public:
 	lggBeamMapFloater(const LLSD& seed);
 	virtual ~lggBeamMapFloater();
-	
 
 	BOOL postBuild(void);
 	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
-	void update();
 	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
-	
-	void setData(void* data);
-	FSPanelPrefs* fspanel;
 
 	void draw();
-	void clearPoints();
 
-	LLSD getMyDataSerialized();
-	
-	std::vector<lggPoint> dots;
+	void setData(void* data);
 
+private:
 	// UI Handlers
 	void onClickSave();
 	void onClickClear();
 	void onClickLoad();
+	void onBackgroundChange();
 
-	
-private:
-	static void onBackgroundChange(LLUICtrl* ctrl, void* userdata);
+	void clearPoints();
 
-	F32 mContextConeOpacity;
+	LLSD getMyDataSerialized();
+
+	std::vector<lggPoint>	mDots;
+	F32						mContextConeOpacity;
+	FSPanelPrefs*			mFSPanel;
 };
 
 #endif // LGG_BEAMMAPFLOATER_H

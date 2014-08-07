@@ -11,6 +11,12 @@
  title="Beam Color rotate"
  width="410"
  save_rect="true">
+	<floater.string name="start_hue">
+		Start Hue
+	</floater.string>
+	<floater.string name="end_hue">
+		End Hue
+	</floater.string>
     <panel
 	 name="BeamColor_Picker"
 	 left="5"

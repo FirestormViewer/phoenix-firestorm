@@ -11,31 +11,17 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
-
 #include "llviewerprecompiledheaders.h"
 
 #include "lggbeamcolormapfloater.h"
 
-#include "llagentdata.h"
-#include "llcommandhandler.h"
-#include "llfloater.h"
-#include "llsdutil.h"
-#include "lluictrlfactory.h"
-#include "llviewercontrol.h"
-#include "llagent.h"
-#include "llfilepicker.h"
-#include "llpanel.h"
-#include "lliconctrl.h"
-#include "llbutton.h"
-#include "llcolorswatch.h"
-#include "lggbeammaps.h"
-
-
-#include "llsdserialize.h"
 #include "fspanelprefs.h"
-#include "lggbeamscolors.h"
+#include "lggbeammaps.h"
+#include "llcolorswatch.h"
+#include "llfilepicker.h"
+#include "llsdserialize.h"
 #include "llsliderctrl.h"
-#include "llfocusmgr.h"
+#include "llviewercontrol.h"
 
 F32 convertXToHue(S32 place)
 {
@@ -92,14 +78,16 @@ const F32 CONTEXT_FADE_TIME = 0.08f;
 const S32 CORRECTION_X = 0;
 const S32 CORRECTION_Y = -40;
 
-void lggBeamColorMapFloater::onClickSlider(LLUICtrl* crtl, void* userdata)
+void lggBeamColorMapFloater::onClickSlider()
 {
-	lggBeamColorMapFloater* self = (lggBeamColorMapFloater*)userdata;
-	self->fixOrder();
+	fixOrder();
 }
 
 void lggBeamColorMapFloater::draw()
 {
+	static const std::string start_hue_label = getString("start_hue");
+	static const std::string end_hue_label = getString("end_hue");
+
 	//set the color of the preview thing
 	LLColorSwatchCtrl* colorctrl = getChild<LLColorSwatchCtrl>("BeamColor_Preview");
 	LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(myData));
@@ -107,11 +95,11 @@ void lggBeamColorMapFloater::draw()
 	
 	//Try draw rectangle attach beam
 	LLRect swatch_rect;
-	LLButton* createButton = fspanel->getChild<LLButton>("BeamColor_new");
+	LLButton* createButton = mFSPanel->getChild<LLButton>("BeamColor_new");
 	
 	createButton->localRectToOtherView(createButton->getLocalRect(), &swatch_rect, this);
 	LLRect local_rect = getLocalRect();
-	if (gFocusMgr.childHasKeyboardFocus(this) && fspanel->isInVisibleChain() && mContextConeOpacity > 0.001f)
+	if (gFocusMgr.childHasKeyboardFocus(this) && mFSPanel->isInVisibleChain() && mContextConeOpacity > 0.001f)
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 		LLGLEnable(GL_CULL_FACE);
@@ -162,10 +150,10 @@ void lggBeamColorMapFloater::draw()
 	gGL.pushMatrix();
 	F32 r, g, b;
 	LLColor4 output;
-	for (int i  = 0;i <= 720;i++)
+	for (S32 i = 0; i <= 720; ++i)
 	{
-		int hi =i%360;
-		hslToRgb1((hi/360.0f), 1.0f, 0.5f, r, g, b);
+		S32 hi = i % 360;
+		hslToRgb1((hi / 360.0f), 1.0f, 0.5f, r, g, b);
 		output.set(r, g, b);
 
 		gl_line_2d(
@@ -180,24 +168,24 @@ void lggBeamColorMapFloater::draw()
 	LLFontGL* font = LLFontGL::getFontSansSerifSmall();
 
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y,9.0f, (S32)30, false);
+	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y, 9.0f, 30, false);
 
 	gGL.color4fv(LLColor4::black.mV);
-	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y,8.0f, (S32)30, false);
+	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y, 8.0f, 30, false);
 
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y,7.0f, (S32)30, false);
+	gl_circle_2d(X1 + CORRECTION_X, 238 + CORRECTION_Y, 7.0f, 30, false);
 
-	gl_line_2d(X1+1 + CORRECTION_X, 210 + CORRECTION_Y, X1+1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X1-1 + CORRECTION_X, 210 + CORRECTION_Y, X1-1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X1 + 1 + CORRECTION_X, 210 + CORRECTION_Y, X1 + 1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X1 - 1 + CORRECTION_X, 210 + CORRECTION_Y, X1-1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
 	gl_line_2d(X1 + CORRECTION_X, 210 + CORRECTION_Y, X1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::black);
 
-	gl_line_2d(X1-25 + CORRECTION_X, 238+1 + CORRECTION_Y, X1+25 + CORRECTION_X, 238+1 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X1-25 + CORRECTION_X, 238-1 + CORRECTION_Y, X1+25 + CORRECTION_X, 238-1 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X1-25 + CORRECTION_X, 238 + CORRECTION_Y, X1+25 + CORRECTION_X, 238 + CORRECTION_Y, LLColor4::black);
+	gl_line_2d(X1 - 25 + CORRECTION_X, 238 + 1 + CORRECTION_Y, X1 + 25 + CORRECTION_X, 238 + 1 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X1 - 25 + CORRECTION_X, 238 - 1 + CORRECTION_Y, X1 + 25 + CORRECTION_X, 238 - 1 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X1 - 25 + CORRECTION_X, 238 + CORRECTION_Y, X1 + 25 + CORRECTION_X, 238 + CORRECTION_Y, LLColor4::black);
 
 	font->renderUTF8(
-		"Start Hue", 0,
+		start_hue_label, 0,
 		X1 + CORRECTION_X, 
 		212 + CORRECTION_Y,
 		LLColor4::white, LLFontGL::HCENTER,
@@ -205,31 +193,30 @@ void lggBeamColorMapFloater::draw()
 
 
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 9.0f, (S32)30, false);
+	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 9.0f, 30, false);
 
 	gGL.color4fv(LLColor4::black.mV);
-	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 8.0f, (S32)30, false);
+	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 8.0f, 30, false);
 
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 7.0f, (S32)30, false);
+	gl_circle_2d(X2 + CORRECTION_X, 238 + CORRECTION_Y, 7.0f, 30, false);
 
-	gl_line_2d(X2+1 + CORRECTION_X, 210 + CORRECTION_Y, X2+1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X2-1 + CORRECTION_X, 210 + CORRECTION_Y, X2-1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X2 + 1 + CORRECTION_X, 210 + CORRECTION_Y, X2 + 1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X2 - 1 + CORRECTION_X, 210 + CORRECTION_Y, X2 - 1 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::white);
 	gl_line_2d(X2 + CORRECTION_X ,210 + CORRECTION_Y, X2 + CORRECTION_X, 266 + CORRECTION_Y, LLColor4::black);
 
-	gl_line_2d(X2-25 + CORRECTION_X, 238+1 + CORRECTION_Y, X2+25 + CORRECTION_X, 238+1 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X2-25 + CORRECTION_X, 238-1 + CORRECTION_Y, X2+25 + CORRECTION_X, 238-1 + CORRECTION_Y, LLColor4::white);
-	gl_line_2d(X2-25 + CORRECTION_X, 238 + CORRECTION_Y, X2+25 + CORRECTION_X, 238 + CORRECTION_Y, LLColor4::black);
+	gl_line_2d(X2 - 25 + CORRECTION_X, 238 + 1 + CORRECTION_Y, X2 + 25 + CORRECTION_X, 238 + 1 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X2 - 25 + CORRECTION_X, 238 - 1 + CORRECTION_Y, X2 + 25 + CORRECTION_X, 238 - 1 + CORRECTION_Y, LLColor4::white);
+	gl_line_2d(X2 - 25 + CORRECTION_X, 238 + CORRECTION_Y, X2 + 25 + CORRECTION_X, 238 + CORRECTION_Y, LLColor4::black);
 
 	font->renderUTF8(
-		"End Hue", 0,
+		end_hue_label, 0,
 		X2 + CORRECTION_X, 
 		212 + CORRECTION_Y,
 		LLColor4::white, LLFontGL::HCENTER,
 		LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
-	
+
 	gGL.popMatrix();
-	
 }
 
 lggBeamColorMapFloater::~lggBeamColorMapFloater()
@@ -249,22 +236,21 @@ BOOL lggBeamColorMapFloater::postBuild(void)
 	getChild<LLUICtrl>("BeamColor_Load")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickLoad, this));
 	getChild<LLUICtrl>("BeamColor_Cancel")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickCancel, this));
 
-
 	mColorSlider = getChild<LLSliderCtrl>("BeamColor_Speed");
-	childSetCommitCallback("BeamColor_Speed", onClickSlider, this);
+	mColorSlider->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSlider, this));
 	
 	// Is this still needed???
 	//mColorSlider->setCallbackUserData(this);
 
 	fixOrder();
-	
+
 	return true;
 }
 BOOL lggBeamColorMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 {
 	//6, 277
 		//402 201
-	
+
 	if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
 	{
 		if (x < (6 + CORRECTION_X))
@@ -273,32 +259,32 @@ BOOL lggBeamColorMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 		}
 		else if (x > (402 + CORRECTION_X))
 		{
-			myData.mEndHue=720.0f;
+			myData.mEndHue = 720.0f;
 		}
 		else
 		{
 			myData.mStartHue  = convertXToHue(x + CORRECTION_X);
 		}
-	
+
 		fixOrder();
 	}
-	
+
 	LL_INFOS() << "we got clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
-	
-	return LLFloater::handleMouseDown(x,y,mask);
+
+	return LLFloater::handleMouseDown(x, y, mask);
 }
 
-BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x,S32 y,MASK mask)
+BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (y > (201 + CORRECTION_Y) &&  y < (277 + CORRECTION_Y))
 	{
 		if (x < (6 + CORRECTION_X))
 		{
-			myData.mStartHue=0.0f;
+			myData.mStartHue = 0.0f;
 		}
 		else if (x > (402 + CORRECTION_X))
 		{
-			myData.mEndHue=720.0f;
+			myData.mEndHue = 720.0f;
 		}
 		else
 		{
@@ -309,14 +295,14 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x,S32 y,MASK mask)
 	}
 	LL_INFOS() << "we got right clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
 
-	return LLFloater::handleRightMouseDown(x,y,mask);
+	return LLFloater::handleRightMouseDown(x, y, mask);
 }
 
 void lggBeamColorMapFloater::fixOrder()
 {
 	myData.mRotateSpeed = mColorSlider->getValueF32();
 	myData.mRotateSpeed /= 100.0f;
-	
+
 	if(myData.mEndHue < myData.mStartHue)
 	{
 		F32 temp = myData.mStartHue;
@@ -325,53 +311,46 @@ void lggBeamColorMapFloater::fixOrder()
 	}
 }
 
-
 void lggBeamColorMapFloater::setData(void* data)
 {
-	fspanel = (FSPanelPrefs*)data;
-	if (fspanel)
+	mFSPanel = (FSPanelPrefs*)data;
+	if (mFSPanel)
 	{
-		gFloaterView->getParentFloater(fspanel)->addDependentFloater(this);
+		gFloaterView->getParentFloater(mFSPanel)->addDependentFloater(this);
 	}
-}
-
-void lggBeamColorMapFloater::update()
-{
-	
 }
 
 LLSD lggBeamColorMapFloater::getMyDataSerialized()
 {
- 	
- 	return myData.toLLSD();
+	return myData.toLLSD();
 }
 
 void lggBeamColorMapFloater::onClickSave()
 {
 	LLFilePicker& picker = LLFilePicker::instance();
-	
+
 	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", ""));
-				
+
 	std::string filename=path_name2 + "myNewBeamColor.xml";
 	if(!picker.getSaveFile( LLFilePicker::FFSAVE_BEAM, filename ) )
 	{
 		return;
-	}	
-	
+	}
+
 	filename = path_name2 + gDirUtilp->getBaseFileName(picker.getFirstFile());
-	
+
 	LLSD main = getMyDataSerialized();
-  
+
 	llofstream export_file;
 	export_file.open(filename);
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
 
-	gSavedSettings.setString("FSBeamColorFile", gDirUtilp->getBaseFileName(filename,true));
+	gSavedSettings.setString("FSBeamColorFile", gDirUtilp->getBaseFileName(filename, true));
 
-	if (fspanel != NULL)
+	if (mFSPanel)
 	{
-		fspanel->refreshBeamLists();
+		mFSPanel->refreshBeamLists();
 	}
 	closeFloater();
 }
@@ -391,7 +370,7 @@ void lggBeamColorMapFloater::onClickLoad()
 	LLSD minedata;
 	llifstream importer(picker.getFirstFile());
 	LLSDSerialize::fromXMLDocument(minedata, importer);
-	
+
 	myData = lggBeamsColors::fromLLSD(minedata);
 	childSetValue("BeamColor_Speed", myData.mRotateSpeed * 100);
 }

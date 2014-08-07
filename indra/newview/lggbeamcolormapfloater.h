@@ -14,27 +14,12 @@
 #ifndef LGG_BEAMCOLORMAPFLOATER_H
 #define LGG_BEAMCOLORMAPFLOATER_H
 
-#include "llviewerprecompiledheaders.h"
-
-#include "llagentdata.h"
-#include "llcommandhandler.h"
 #include "llfloater.h"
-#include "llsdutil.h"
-#include "lluictrlfactory.h"
-#include "llviewercontrol.h"
-#include "llagent.h"
-#include "llfilepicker.h"
-#include "llpanel.h"
-#include "lliconctrl.h"
-#include "llbutton.h"
-#include "llcolorswatch.h"
 
-#include "llsdserialize.h"
-#include "fspanelprefs.h"
 #include "lggbeamscolors.h"
-#include "llsliderctrl.h"
-#include "llfocusmgr.h"
 
+class FSPanelPrefs;
+class LLSliderCtrl;
 
 ////////////////////////////////////////////////////////////////////////////
 // lggBeamMapFloater
@@ -43,34 +28,29 @@ class lggBeamColorMapFloater : public LLFloater
 public:
 	lggBeamColorMapFloater(const LLSD& seed);
 	virtual ~lggBeamColorMapFloater();
-	
-	void fixOrder();
 
 	BOOL postBuild(void);
 	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
 	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
-	void update();
-	
+
 	void setData(void* data);
 
 	void draw();
-	
-	LLSD getMyDataSerialized();
-	
-	// UI Handlers
-	static void onClickSlider(LLUICtrl* crtl, void* userdata);
 
+protected:
+	// UI Handlers
+	void onClickSlider();
 	void onClickSave();
 	void onClickLoad();
 	void onClickCancel();
-	
-	
-protected:
-	F32 mContextConeOpacity;
-	FSPanelPrefs * fspanel;
-	lggBeamsColors myData; 
-	LLSliderCtrl* mColorSlider;
 
+	void fixOrder();
+	LLSD getMyDataSerialized();
+
+	F32				mContextConeOpacity;
+	FSPanelPrefs*	mFSPanel;
+	lggBeamsColors	myData;
+	LLSliderCtrl*	mColorSlider;
 };
 
 #endif // LGG_BEAMCOLORMAPFLOATER_H

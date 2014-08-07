@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Firestorm" name="firestorm">
 
+<panel.string name="BeamsOffLabel">
+	=== AUS ===
+</panel.string>
+
 <tab_container label="Firestorm Prefs" name="tabs">
 
 	<!--General-->

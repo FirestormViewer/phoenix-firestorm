@@ -15,23 +15,12 @@
 
 #include "lggbeammapfloater.h"
 
-#include "llagentdata.h"
-#include "llcommandhandler.h"
-#include "llfloater.h"
-#include "llsdutil.h"
-#include "lluictrlfactory.h"
-#include "llviewercontrol.h"
-#include "llagent.h"
-#include "llfilepicker.h"
-#include "llpanel.h"
-#include "lliconctrl.h"
-#include "llbutton.h"
-#include "llcolorswatch.h"
-#include "lggbeammaps.h"
-
-#include "llsdserialize.h"
 #include "fspanelprefs.h"
-#include "llfocusmgr.h"
+#include "lggbeammaps.h"
+#include "llcolorswatch.h"
+#include "llfilepicker.h"
+#include "llsdserialize.h"
+#include "llviewercontrol.h"
 
 const F32 CONTEXT_CONE_IN_ALPHA = 0.0f;
 const F32 CONTEXT_CONE_OUT_ALPHA = 1.f;
@@ -40,13 +29,13 @@ const F32 CONTEXT_FADE_TIME = 0.08f;
 
 void lggBeamMapFloater::clearPoints()
 {
-	dots.clear();
+	mDots.clear();
 }
 
 void lggBeamMapFloater::draw()
 {
 	LLRect swatch_rect;
-	LLButton* createButton = fspanel->getChild<LLButton>("custom_beam_btn");
+	LLButton* createButton = mFSPanel->getChild<LLButton>("custom_beam_btn");
 
 	createButton->localRectToOtherView(createButton->getLocalRect(), &swatch_rect, this);
 	LLRect local_rect = getLocalRect();
@@ -96,28 +85,30 @@ void lggBeamMapFloater::draw()
 	
 	gGL.pushMatrix();
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(rec.getCenterX(), rec.getCenterY() ,2.0f, (S32)30, false);
+	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 2.0f, 30, false);
 	gGL.color4fv(LLColor4::black.mV);
-	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 30.0f, (S32)30, false);	
+	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 30.0f, 30, false);
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 60.0f, (S32)30, false);	
+	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 60.0f, 30, false);
 	gGL.color4fv(LLColor4::black.mV);
-	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 90.0f, (S32)30, false);
+	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 90.0f, 30, false);
 	gGL.color4fv(LLColor4::white.mV);
-	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 120.0f, (S32)30, false);
+	gl_circle_2d(rec.getCenterX(), rec.getCenterY(), 120.0f, 30, false);
 
-	for(int i = 0; i < (int)dots.size(); i++)
-	{	
+	for (std::vector<lggPoint>::iterator it = mDots.begin(); it != mDots.end(); ++it)
+	{
+		lggPoint dot = *it;
+
 		gGL.color4fv(LLColor4::white.mV);
-		gl_circle_2d(dots[i].x, dots[i].y, 9.0f, (S32)30, true);
+		gl_circle_2d(dot.x, dot.y, 9.0f, 30, true);
 
 		gGL.color4fv(LLColor4::black.mV);
-		gl_circle_2d(dots[i].x, dots[i].y, 8.0f, (S32)30, true);
-		
-		gGL.color4fv(dots[i].c.mV);
-		gl_circle_2d(dots[i]. x,dots[i].y, 7.0f, (S32)30, true);
+		gl_circle_2d(dot.x, dot.y, 8.0f, 30, true);
+
+		gGL.color4fv(dot.c.mV);
+		gl_circle_2d(dot.x, dot.y, 7.0f, 30, true);
 	}
-	gGL.popMatrix();	
+	gGL.popMatrix();
 }
 
 lggBeamMapFloater::~lggBeamMapFloater()
@@ -137,23 +128,22 @@ BOOL lggBeamMapFloater::postBuild(void)
 	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
 	getChild<LLUICtrl>("beamshape_load")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickLoad, this));
 
-	//getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(onBackgroundChange);
-	childSetCommitCallback("back_color_swatch", onBackgroundChange, this);
+	getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(boost::bind(&lggBeamMapFloater::onBackgroundChange, this));
 	getChild<LLColorSwatchCtrl>("beam_color_swatch")->setColor(LLColor4::red);
-	
+
 	return true;
 }
 
 BOOL lggBeamMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 {
-	if(y>39 && x>16 && x<394 && y<317)
+	if (y > 39 && x > 16 && x < 394 && y < 317)
 	{
 		lggPoint a;
-		a.x=x;
-		a.y=y;
-		a.c= 	getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
-		dots.push_back(a);
-	
+		a.x = x;
+		a.y = y;
+		a.c= getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
+		mDots.push_back(a);
+
 		LL_INFOS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
 	}
 	
@@ -162,62 +152,50 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 
 void lggBeamMapFloater::setData(void* data)
 {
-	fspanel = (FSPanelPrefs*)data;
-	if (fspanel)
+	mFSPanel = (FSPanelPrefs*)data;
+	if (mFSPanel)
 	{
-		gFloaterView->getParentFloater(fspanel)->addDependentFloater(this);
+		gFloaterView->getParentFloater(mFSPanel)->addDependentFloater(this);
 	}
 }
 
 BOOL lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	std::vector<lggPoint> newDots;
-	for(int i = 0; i < (int)dots.size(); i++)
+	for (std::vector<lggPoint>::iterator it = mDots.begin(); it != mDots.end(); ++it)
 	{
-		if(dist_vec(LLVector2(x,y), LLVector2(dots[i].x,dots[i].y)) < 7)
+		lggPoint dot = *it;
+		if (dist_vec(LLVector2(x, y), LLVector2(dot.x, dot.y)) >= 7)
 		{
+			newDots.push_back(dot);
 		}
-		else
-		{
-			newDots.push_back(dots[i]);
-		}
-	
+
 	}
-	dots = newDots;
-		
-	return LLFloater::handleMouseDown(x,y,mask);
+	mDots = newDots;
+
+	return LLFloater::handleMouseDown(x, y, mask);
 }
 
-void lggBeamMapFloater::onBackgroundChange(LLUICtrl* ctrl, void* userdata)
+void lggBeamMapFloater::onBackgroundChange()
 {
-	lggBeamMapFloater* self = (lggBeamMapFloater*)userdata;
-	LLColorSwatchCtrl* cctrl = (LLColorSwatchCtrl*)ctrl;
-	
-	if(cctrl)
-	{
-		self->getChild<LLPanel>("beamshape_draw")->setBackgroundColor(cctrl->get());
-	}
-}
-
-void lggBeamMapFloater::update()
-{
+	getChild<LLPanel>("beamshape_draw")->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 }
 
 LLSD lggBeamMapFloater::getMyDataSerialized()
 {
 	LLSD out;
 	LLRect r  = getChild<LLPanel>("beamshape_draw")->getRect();
-	for(int i =0; i<(int)dots.size(); i++)
+	for (S32 i = 0; i < mDots.size(); ++i)
 	{
 		LLSD point;
-		lggPoint t = dots[i];
-		LLVector3 vec = LLVector3((F32)0.0, (F32)t.x, (F32)t.y);
-		vec -= LLVector3((F32)0.0, (F32)r.getCenterX(), r.getCenterY());
+		lggPoint t = mDots[i];
+		LLVector3 vec = LLVector3(0.f, (F32)t.x, (F32)t.y);
+		vec -= LLVector3(0.f, (F32)r.getCenterX(), (F32)r.getCenterY());
 		
-		point["offset"]= vec.getValue();
+		point["offset"] = vec.getValue();
 		point["color"] = t.c.getValue();
 
-		out[i]=point;
+		out[i] = point;
 	}
 	return out;
 }
@@ -227,28 +205,28 @@ void lggBeamMapFloater::onClickSave()
 	LLRect r = getChild<LLPanel>("beamshape_draw")->getRect();
 	LLFilePicker& picker = LLFilePicker::instance();
 	
-	std::string path_name2(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "beams", ""));
+	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
 	std::string filename=path_name2 + "myNewBeam.xml";
-	if(!picker.getSaveFile( LLFilePicker::FFSAVE_BEAM, filename ) )
+	if (!picker.getSaveFile(LLFilePicker::FFSAVE_BEAM, filename))
 	{
 		return;
-	}	
+	}
 	
 	filename = path_name2 +gDirUtilp->getBaseFileName(picker.getFirstFile());
-	
+
 	LLSD main;
 	main["scale"] = 8.0f / (r.getWidth());
 	main["data"] = getMyDataSerialized();
-  
+
 	llofstream export_file;
 	export_file.open(filename);
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
-	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename,true));
+	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename, true));
 
-	if(fspanel)
+	if (mFSPanel)
 	{
-		fspanel->refreshBeamLists();
+		mFSPanel->refreshBeamLists();
 	}
 }
 
@@ -260,32 +238,31 @@ void lggBeamMapFloater::onClickClear()
 void lggBeamMapFloater::onClickLoad()
 {
 	LLFilePicker& picker = LLFilePicker::instance();
-	if(!picker.getOpenFile( LLFilePicker::FFLOAD_XML ) )
+	if (!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
 	{
 		return;
 	}
 
-	dots.clear();
+	mDots.clear();
 	LLSD mydata;
 	llifstream importer(picker.getFirstFile());
 	LLSDSerialize::fromXMLDocument(mydata, importer);
-	LLSD myPicture = mydata["data"];	
+	LLSD myPicture = mydata["data"];
 	F32 scale = (F32)mydata["scale"].asReal();
 
-			
-	for(int i = 0; i < myPicture.size(); i++)
+	for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
 	{
 		LLRect rec  = getChild<LLPanel>("beamshape_draw")->getRect();
-		
-		LLSD beamData = myPicture[i];
+
+		LLSD beamData = *it;
 		lggPoint p;
 		LLVector3 vec = LLVector3(beamData["offset"]);
-		vec *= (scale)/(8.0f/(rec.getWidth()));
+		vec *= scale / (8.0f / rec.getWidth());
 		LLColor4 color = LLColor4(beamData["color"]);
 		p.c = color;
-		p.x = (S32)(vec.mV[VY]+rec.getCenterX());
-		p.y = (S32)(vec.mV[VZ]+rec.getCenterY());
-						
-		dots.push_back(p);
+		p.x = (S32)(vec.mV[VY] + rec.getCenterX());
+		p.y = (S32)(vec.mV[VZ] + rec.getCenterY());
+
+		mDots.push_back(p);
 	}
 }

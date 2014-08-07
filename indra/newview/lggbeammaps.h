@@ -15,9 +15,7 @@
 #define LGG_BEAMMAPS_H
 
 #include "llhudeffecttrail.h"
-#include "llviewerprecompiledheaders.h"
 #include "lggbeamscolors.h"
-#include "llframetimer.h"
 
 class lggBeamData
 {
@@ -49,7 +47,7 @@ public:
 	std::vector<std::string>	getColorsFileNames();
 
 private:
-	LLSD			getPic(const std::string& filename); 
+	LLSD			getPic(const std::string& filename);
 
 	std::string		mLastFileName;
 	std::string		mLastColorFileName;

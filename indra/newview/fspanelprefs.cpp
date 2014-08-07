@@ -31,6 +31,7 @@
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "lggbeammaps.h"
+#include "llagent.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
@@ -92,16 +93,19 @@ void FSPanelPrefs::cancel()
 
 void FSPanelPrefs::refreshBeamLists()
 {
+	static const std::string off_label = getString("BeamsOffLabel");
+
 	LLComboBox* comboBox = findChild<LLComboBox>("FSBeamShape_combo");
 
 	if (comboBox)
 	{
 		comboBox->removeall();
-		comboBox->add("===OFF===");
+		comboBox->add(off_label, LLSD(""));
+
 		string_vec_t names = gLggBeamMaps.getFileNames();
 		for (string_vec_t::iterator it = names.begin(); it != names.end(); ++it)
 		{
-			comboBox->add(*it);
+			comboBox->add(*it, LLSD(*it));
 		}
 		comboBox->setSimple(gSavedSettings.getString("FSBeamShape"));
 	}
@@ -110,11 +114,11 @@ void FSPanelPrefs::refreshBeamLists()
 	if (comboBox)
 	{
 		comboBox->removeall();
-		comboBox->add("===OFF===");
+		comboBox->add(off_label, LLSD(""));
 		string_vec_t names = gLggBeamMaps.getColorsFileNames();
 		for (string_vec_t::iterator it = names.begin(); it != names.end(); ++it)
 		{
-			comboBox->add(*it);
+			comboBox->add(*it, LLSD(*it));
 		}
 		comboBox->setSimple(gSavedSettings.getString("FSBeamColorFile"));
 	}
@@ -138,19 +142,19 @@ void FSPanelPrefs::onBeamColorDelete()
 
 	if (comboBox)
 	{
-		std::string filename = comboBox->getValue().asString()+".xml";
+		std::string filename = comboBox->getValue().asString() + ".xml";
 		std::string path_name1(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", filename));
 		std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", filename));
 
 		if (gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("FSBeamColorFile", "===OFF===");
+			gSavedSettings.setString("FSBeamColorFile", "");
 		}
 		if (gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("FSBeamColorFile", "===OFF===");
+			gSavedSettings.setString("FSBeamColorFile", "");
 		}
 	}
 	refreshBeamLists();
@@ -169,12 +173,12 @@ void FSPanelPrefs::onBeamDelete()
 		if (gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("FSBeamShape", "===OFF===");
+			gSavedSettings.setString("FSBeamShape", "");
 		}
 		if (gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("FSBeamShape", "===OFF===");
+			gSavedSettings.setString("FSBeamShape", "");
 		}
 	}
 	refreshBeamLists();

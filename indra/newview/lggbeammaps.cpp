@@ -15,18 +15,15 @@
 #include "llviewerprecompiledheaders.h"
 #include "lggbeammaps.h"
 #include "lggbeamscolors.h"
+#include "llagent.h"
 #include "llappviewer.h"
 #include "llfile.h"
-#include "llagent.h"
-#include "llsdserialize.h"
-#include "llviewercontrol.h"
+#include "llframetimer.h"
 #include "llhudeffecttrail.h"
 #include "llhudmanager.h"
-
+#include "llsdserialize.h"
+#include "llviewercontrol.h"
 #include "message.h"
-#include <curl/curl.h>
-
-static const std::string BEAMS_OFF = "===OFF===";
 
 lggBeamMaps gLggBeamMaps;
 F32 hueToRgb ( F32 val1In, F32 val2In, F32 valHUeIn )
@@ -94,7 +91,7 @@ LLColor4U lggBeamMaps::getCurrentColor(const LLColor4U& agentColor)
 	static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamColorFile");
 	std::string setName(settingName);
 
-	if (setName == BEAMS_OFF)
+	if (setName.empty())
 	{
 		return agentColor;
 	}
@@ -155,16 +152,19 @@ void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, const LLC
 	}
 
 	static LLCachedControl<std::string> colorf(gSavedSettings, "FSBeamColorFile");
-	bool colorsDisabled = (colorf() == BEAMS_OFF);
+	bool colorsDisabled = (colorf().empty());
 	
-	for (S32 i = 0; i < mDots.size(); ++i)
+	for (std::vector<lggBeamData>::iterator it = mDots.begin(); it != mDots.end(); ++it)
 	{
 		LLColor4U myColor = rgb;
-		if (colorsDisabled) myColor = mDots[i].c;
+		if (colorsDisabled)
+		{
+			myColor = (*it).c;
+		}
 
 		F32 distanceAdjust = dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
 		F32 pulse = (F32)(.75f + sinf(gFrameTimeSeconds * 1.0f) * 0.25f);
-		LLVector3d offset = mDots[i].p;
+		LLVector3d offset = (*it).p;
 		offset.mdV[VY] *= -1.f;
 		offset *= pulse * mScale * distanceAdjust * 0.1f;
 		
@@ -208,7 +208,7 @@ F32 lggBeamMaps::setUpAndGetDuration()
 	if (settingName != mLastFileName)
 	{
 		mLastFileName = settingName;
-		if (settingName != BEAMS_OFF && settingName != "")
+		if (!settingName.empty())
 		{
 			std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
 			std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
@@ -222,9 +222,9 @@ F32 lggBeamMaps::setUpAndGetDuration()
 			mScale = (F32)mydata["scale"].asReal() / 10.0f;
 			LLSD myPicture = mydata["data"];
 			mDots.clear();
-			for (S32 i = 0; i < myPicture.size(); ++i)
+			for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
 			{
-				LLSD beamData = myPicture[i];
+				LLSD beamData = *it;
 				lggBeamData dot;
 				
 				dot.p = LLVector3d(beamData["offset"]);
@@ -251,13 +251,13 @@ F32 lggBeamMaps::setUpAndGetDuration()
 	return mDuration;
 }
 
-std::vector<std::string> lggBeamMaps::getFileNames()
+string_vec_t lggBeamMaps::getFileNames()
 {
-	std::vector<std::string> names;	
+	string_vec_t names;
 	std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
 	bool found = true;
 
-	while (found) 
+	while (found)
 	{
 		std::string name;
 		found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
@@ -270,7 +270,7 @@ std::vector<std::string> lggBeamMaps::getFileNames()
 
 	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams", ""));
 	found = true;
-	while (found) 
+	while (found)
 	{
 		std::string name;
 		found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);
@@ -283,13 +283,13 @@ std::vector<std::string> lggBeamMaps::getFileNames()
 	return names;
 }
 
-std::vector<std::string> lggBeamMaps::getColorsFileNames()
+string_vec_t lggBeamMaps::getColorsFileNames()
 {
-	std::vector<std::string> names;
+	string_vec_t names;
 	std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
 	bool found = true;
 
-	while (found) 
+	while (found)
 	{
 		std::string name;
 		found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
@@ -303,7 +303,7 @@ std::vector<std::string> lggBeamMaps::getColorsFileNames()
 	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", ""));
 	found = true;
 
-	while (found) 
+	while (found)
 	{
 		std::string name;
 		found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);

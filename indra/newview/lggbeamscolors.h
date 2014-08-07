@@ -14,10 +14,7 @@
 #ifndef LGG_BEAMSCOLORS_H
 #define LGG_BEAMSCOLORS_H
 
-#include "llviewerprecompiledheaders.h"
-
-#include "llfile.h"
-#include "llsdserialize.h"
+#include "llsd.h"
 
 class lggBeamsColors
 {
