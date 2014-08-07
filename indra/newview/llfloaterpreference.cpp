@@ -116,7 +116,6 @@
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
-#include "fsfloatercontacts.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
