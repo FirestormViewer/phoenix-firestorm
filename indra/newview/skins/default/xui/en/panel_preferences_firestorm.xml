@@ -168,21 +168,42 @@
             <check_box.commit_callback
              function="FS.CheckContactListColumnMode" />
         </check_box>
-        <check_box
-         top_pad="2"
-         left="15"
+        <text
+         top_pad="5"
+         left="18"
          follows="left|top"
+         name="textFriendListSortOrder"
+         width="100">
+         Sort contact list by:
+        </text>
+        <radio_group
+         top_delta="0"
+         left_pad="15"
          height="16"
-         label="Sort contact lists by username even when display names are shown"
-         name="sortcontactsbyun"
-         width="270"
-         control_name="FSSortContactsByUserName"
-         tool_tip="If this is checked, all contact lists are always sorted by username">
-            <check_box.commit_callback
-             function="FS.ToggleSortContacts" />
-        </check_box>
+         layout="topleft"
+         control_name="FSFriendListSortOrder"
+         name="FSFriendListSortOrder"
+         tool_tip=""
+         width="331">
+            <radio_item
+             label="Username"
+             layout="topleft"
+             name="username"
+             value="0"
+             top_pad="7"
+             width="75" />
+            <radio_item
+             left_pad="15"
+             label="Display name"
+             layout="topleft"
+             top_delta="0"
+             name="displayname"
+             value="1"
+             width="75" />
+        </radio_group>
         <check_box
          top_pad="2"
+         left="18"
          follows="left|top"
          height="16"
          label="Render blocked avatars as particle cloud"

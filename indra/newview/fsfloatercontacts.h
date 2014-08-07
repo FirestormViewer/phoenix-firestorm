@@ -144,7 +144,6 @@ private:
 	LLFriendObserver*		mObserver;
 	BOOL					mAllowRightsChange;
 	S32						mNumRightsChanged;
-	LLCachedControl<bool>	mSortByUserName;
 
 	std::string				mFriendListFontName;
 

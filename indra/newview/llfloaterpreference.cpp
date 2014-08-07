@@ -515,7 +515,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.DeleteTranscripts",      boost::bind(&LLFloaterPreference::onDeleteTranscripts, this));
 
 	// <Firestorm Callbacks>
-	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
 	//[ADD - Clear Settings : SJ]
@@ -2368,11 +2367,6 @@ void LLFloaterPreference::onClickBlockList()
 			LLSD().with("people_panel_tab_name", "blocked_panel"));
 	}
 	// </FS:Ansariel>
-}
-
-void LLFloaterPreference::onClickSortContacts()
-{
-	FSFloaterContacts::getInstance()->sortFriendList();
 }
 
 void LLFloaterPreference::onClickProxySettings()

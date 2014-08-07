@@ -219,7 +219,6 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onClickBlockList();
-	void onClickSortContacts();
 	void onClickProxySettings();
 	void onClickTranslationSettings();
 	void onClickAutoReplace();

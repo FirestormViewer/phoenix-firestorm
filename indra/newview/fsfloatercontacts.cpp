@@ -93,7 +93,6 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mGroupList(NULL),
 	mAllowRightsChange(TRUE),
 	mNumRightsChanged(0),
-	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE)),
 	mRlvBehaviorCallbackConnection(),
 	mResetLastColumnDisplayModeChanged(false)
 {
@@ -161,6 +160,7 @@ BOOL FSFloaterContacts::postBuild()
 	
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
+	gSavedSettings.getControl("FSFriendListSortOrder")->getSignal()->connect(boost::bind(&FSFloaterContacts::sortFriendList, this));
 	gSavedSettings.getControl("FSFriendListColumnShowUserName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowUserName"));
 	gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
 	gSavedSettings.getControl("FSFriendListColumnShowFullName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowFullName"));
@@ -496,19 +496,19 @@ void FSFloaterContacts::sortFriendList()
 	mFriendsList->updateLayout();
 	mFriendsList->clearSortOrder();
 
-	if (mSortByUserName)
-	{
-		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
-	}
-	else
+	if (gSavedSettings.getS32("FSFriendListSortOrder"))
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
+	}
+	else
+	{
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
 	}
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 }
@@ -1136,19 +1136,19 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 	mFriendsList->dirtyColumns();
 
 	// primary sort = online status, secondary sort = name
-	if (mSortByUserName)
-	{
-		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
-	}
-	else
+	if (gSavedSettings.getS32("FSFriendListSortOrder"))
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
+	}
+	else
+	{
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
 	}
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);

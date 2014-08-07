@@ -1105,14 +1105,14 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>FSSortContactsByUserName</key>
+  <key>FSFriendListSortOrder</key>
     <map>
       <key>Comment</key>
-      <string>Sort contact lists by username even if display name is shown</string>
+      <string>Defines the sort order of the contacts list (0 = username, 1 = display name)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string>
+      <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
