@@ -2144,111 +2144,120 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 
 	LLScrollListCtrl* result_list = mFSAreaSearch->getPanelList()->getResultList();
 	result_list->deleteAllItems();
-	LLCheckBoxCtrl* checkboxctrl = getChild<LLCheckBoxCtrl>("show_" + column_name);
 
-	if (checkboxctrl)
+	std::vector<LLScrollListColumn::Params> params = result_list->getColumnInitParams();
+	result_list->clearColumns();
+	const child_list_t* children = getChildList();
+	for (child_list_t::const_reverse_iterator it = children->rbegin(); it != children->rend(); ++it)
 	{
-		if (checkboxctrl->get())
+		LLCheckBoxCtrl* ctrl = dynamic_cast<LLCheckBoxCtrl*>(*it);
+		if (ctrl && ctrl->getName().find("show_") != std::string::npos && ctrl->get())
 		{
-			result_list->addColumn(mColumnParms[column_name]);
-		}
-		else
-		{
-			mColumnParms[column_name] = result_list->delColumn(column_name);
-		}
+			std::string col_name = ctrl->getName().substr(5);
 
-		/// until C++ supports variable within a variable name, have to do this instead.
-		/// used switch instead of a huge if then else if then else...
-		// Please keep in alphabetical order.  Provides both optimizations and ease of updating as the list grows.
-		char c = column_name.at(0);
-		switch(c)
-		{
-			case 'c':
+			for (std::vector<LLScrollListColumn::Params>::iterator pit = params.begin(); pit != params.end(); ++pit)
 			{
-				mFSAreaSearch->setColumnCreator(checkboxctrl->get());
-				break;
-			}
-			case 'd':
-			{
-				char d = column_name.at(1);
-				switch (d)
+				if ((*pit).name.getValue() == col_name)
 				{
-					case 'i':
-					{
-						mFSAreaSearch->setColumnDistance(checkboxctrl->get());
-						break;
-					}
-					case 'e':
-					{
-						mFSAreaSearch->setColumnDescription(checkboxctrl->get());
-						break;
-					}
-					default:
-						break;
+					result_list->addColumn(*pit);
+					break;
 				}
-				break;
 			}
-			case 'g':
-			{
-				mFSAreaSearch->setColumnGroup(checkboxctrl->get());
-				break;
-			}
-			case 'l':
-			{
-				char d = column_name.at(2);
-				switch (d)
-				{
-					case 'n':
-					{
-						mFSAreaSearch->setColumnLandImpact(checkboxctrl->get());
-						break;
-					}
-					case 's':
-					{
-						mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
-						break;
-					}
-					default:
-						break;
-				}
-				break;
-			}
-			case 'n':
-			{
-				mFSAreaSearch->setColumnName(checkboxctrl->get());
-				break;
-			}
-			case 'o':
-			{
-				mFSAreaSearch->setColumnOwner(checkboxctrl->get());
-				break;
-			}
-			case 'p':
-			{
-				char d = column_name.at(3);
-				switch (d)
-				{
-					case 'c':
-					{
-						mFSAreaSearch->setColumnPrice(checkboxctrl->get());
-						break;
-					}
-					case 'm':
-					{
-						mFSAreaSearch->setColumnPrimCount(checkboxctrl->get());
-						break;
-					}
-					default:
-						break;
-				}
-				break;
-			}
-			default:
-				break;
 		}
 	}
 
-	result_list->updateLayout();
+	/// until C++ supports variable within a variable name, have to do this instead.
+	/// used switch instead of a huge if then else if then else...
+	// Please keep in alphabetical order.  Provides both optimizations and ease of updating as the list grows.
+	LLCheckBoxCtrl* checkboxctrl = getChild<LLCheckBoxCtrl>("show_" + column_name);
+	char c = column_name.at(0);
+	switch(c)
+	{
+		case 'c':
+		{
+			mFSAreaSearch->setColumnCreator(checkboxctrl->get());
+			break;
+		}
+		case 'd':
+		{
+			char d = column_name.at(1);
+			switch (d)
+			{
+				case 'i':
+				{
+					mFSAreaSearch->setColumnDistance(checkboxctrl->get());
+					break;
+				}
+				case 'e':
+				{
+					mFSAreaSearch->setColumnDescription(checkboxctrl->get());
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		case 'g':
+		{
+			mFSAreaSearch->setColumnGroup(checkboxctrl->get());
+			break;
+		}
+		case 'l':
+		{
+			char d = column_name.at(2);
+			switch (d)
+			{
+				case 'n':
+				{
+					mFSAreaSearch->setColumnLandImpact(checkboxctrl->get());
+					break;
+				}
+				case 's':
+				{
+					mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		case 'n':
+		{
+			mFSAreaSearch->setColumnName(checkboxctrl->get());
+			break;
+		}
+		case 'o':
+		{
+			mFSAreaSearch->setColumnOwner(checkboxctrl->get());
+			break;
+		}
+		case 'p':
+		{
+			char d = column_name.at(3);
+			switch (d)
+			{
+				case 'c':
+				{
+					mFSAreaSearch->setColumnPrice(checkboxctrl->get());
+					break;
+				}
+				case 'm':
+				{
+					mFSAreaSearch->setColumnPrimCount(checkboxctrl->get());
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	result_list->dirtyColumns();
 }
 
 
