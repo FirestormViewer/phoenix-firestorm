@@ -2,8 +2,12 @@
 <floater name="area_search" title="Umgebungssuche">
 	<tab_container name="area_searchtab">
 		<panel name="area_search_list_panel" label="Liste">
-			<panel.string name="ListedPendingTotalBlank" value="Gelistet | Offen | Total"/>
-			<panel.string name="ListedPendingTotalFilled" value="[LISTED] Gelistet | [PENDING] Offen | [TOTAL] Total"/>
+			<panel.string name="ListedPendingTotalBlank">
+				Gelistet | Offen | Total"
+			</panel.string>
+			<panel.string name="ListedPendingTotalFilled">
+				[LISTED] Gelistet | [PENDING] Offen | [TOTAL] Total
+			</panel.string>
 			<scroll_list name="result_list">
 				<scroll_list.columns name="distance" label="Entf." tool_tip="Entfernung vom Avatar zum Objekt."/>
 				<scroll_list.columns name="name" label="Name"/>

@@ -2,8 +2,12 @@
 <floater name="area_search" title="Przeszukiwanie obszaru pod kątem obiektów">
 	<tab_container name="area_searchtab">
 		<panel name="area_search_list_panel" label="Lista">
-			<panel.string name="ListedPendingTotalBlank" value="Wylistowane | Oczekujące | Wszystkie"/>
-			<panel.string name="ListedPendingTotalFilled" value="[LISTED] Wylistowane | [PENDING] Oczekujące | [TOTAL] Wszystkie"/>
+			<panel.string name="ListedPendingTotalBlank">
+				Wylistowane | Oczekujące | Wszystkie
+			</panel.string>
+			<panel.string name="ListedPendingTotalFilled">
+				[LISTED] Wylistowane | [PENDING] Oczekujące | [TOTAL] Wszystkie
+			</panel.string>
 			<scroll_list name="result_list">
 				<scroll_list.columns name="distance" label="Odl." tool_tip="Odległość obiektu od Twojego awatara."/>
 				<scroll_list.columns name="name" label="Nazwa"/>
