@@ -49,6 +49,8 @@ public:
 	void onCommitTexture(const LLSD& data);
 	void onCommitCopy();
 	void onCommitTrans();
+
+	void onCheckContactListColumnMode();
 };
 
 #endif // FS_PANELPREFS_H

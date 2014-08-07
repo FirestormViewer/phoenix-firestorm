@@ -268,6 +268,9 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 		++row_it)
 	{
 		addColumn(*row_it);
+
+		// <FS:Ansariel> Get list of the column init params so we can re-add them
+		mColumnInitParams.push_back(*row_it);
 	}
 
 	for (LLInitParam::ParamIterator<LLScrollListItem::Params>::const_iterator row_it = p.contents.rows.begin();

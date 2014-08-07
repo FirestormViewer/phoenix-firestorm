@@ -56,7 +56,7 @@
         </text>
         
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Enable double click teleports on the world map"
@@ -66,7 +66,7 @@
          control_name="FSWorldMapDoubleclickTeleport"
          tool_tip="Enables teleporting via double click to a destination on the world map."/>
 		<check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Disable Teleport Beacons"
@@ -75,7 +75,7 @@
          control_name="FSDisableBeaconAfterTeleport"
          tool_tip="Disables the teleport destination beacons after teleports."/>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Disable Teleport Screens"
@@ -84,7 +84,7 @@
          control_name="FSDisableTeleportScreens"
          tool_tip="Disables the black teleport screen during all teleports."/>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Disable Login Progress Screen"
@@ -93,7 +93,7 @@
          control_name="FSDisableLoginScreens"
          tool_tip="Disables the black login progress Screen"/>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Disable Logout Progress Screen"
@@ -102,7 +102,7 @@
          control_name="FSDisableLogoutScreens"
          tool_tip="Disables the black Logout progress screen."/>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Disable automatic opening of block list"
@@ -111,7 +111,7 @@
          control_name="FSDisableBlockListAutoOpen"
          tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Always rez objects under the land group if possible"
@@ -119,8 +119,58 @@
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
+        <text
+         top_pad="2"
+         left="18"
+         layout="topleft"
+         follows="left|top"
+         height="16"
+         width="300"
+         name="textFriendlistColumns">
+            Visible name columns in contact list:
+        </text>
         <check_box
-         top_pad="5"
+         top_pad="2"
+         left="25"
+         follows="left|top"
+         height="16"
+         label="Username"
+         name="FSFriendListColumnShowUserName"
+         width="70"
+         control_name="FSFriendListColumnShowUserName"
+         tool_tip="The contact list will show a column with the friend's username.">
+            <check_box.commit_callback
+             function="FS.CheckContactListColumnMode" />
+        </check_box>
+        <check_box
+         top_delta="0"
+         left_pad="15"
+         follows="left|top"
+         height="16"
+         label="Display name"
+         name="FSFriendListColumnShowDisplayName"
+         width="90"
+         control_name="FSFriendListColumnShowDisplayName"
+         tool_tip="The contact list will show a column with the friend's display name.">
+            <check_box.commit_callback
+             function="FS.CheckContactListColumnMode" />
+        </check_box>
+        <check_box
+         top_delta="0"
+         left_pad="15"
+         follows="left|top"
+         height="16"
+         label="Full name"
+         name="FSFriendListColumnShowFullName"
+         width="70"
+         control_name="FSFriendListColumnShowFullName"
+         tool_tip="The contact list will show a column with the friend's full name.">
+            <check_box.commit_callback
+             function="FS.CheckContactListColumnMode" />
+        </check_box>
+        <check_box
+         top_pad="2"
+         left="15"
          follows="left|top"
          height="16"
          label="Sort contact lists by username even when display names are shown"
@@ -132,7 +182,7 @@
              function="FS.ToggleSortContacts" />
         </check_box>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Render blocked avatars as particle cloud"
@@ -142,7 +192,7 @@
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
         </check_box>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Hide empty system folders from inventory"
@@ -152,7 +202,7 @@
          tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
         </check_box>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Show the Received Items folder in normal inventory"
@@ -162,7 +212,7 @@
          tool_tip="If enabled, the inventory windows will also show the Received Items folder">
         </check_box>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Allow separate search terms on each tab in inventory"
@@ -172,7 +222,7 @@
          tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
         </check_box>
         <check_box
-         top_pad="5"
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
@@ -188,7 +238,7 @@
 		 name="EffectScriptChatParticles"
 		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
 		 initial_value="true"
-		 top_pad="5"
+		 top_pad="2"
 		 width="350" />
 		<check_box
 		 control_name="FSInspectAvatarSlurlOpensProfile"
@@ -198,7 +248,7 @@
 		 name="FSInspectAvatarSlurlOpensProfile"
 		 tool_tip="If enabled, Firestorm will open the profile of an avatar directly when clicking on a link with its name"
 		 initial_value="true"
-		 top_pad="5"
+		 top_pad="2"
 		 width="250" />
 		<check_box
 		 control_name="FSRenderFarClipStepping"
@@ -208,7 +258,7 @@
 		 name="FSRenderFarClipStepping"
 		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
-		 top_pad="5"
+		 top_pad="2"
 		 width="250" />
 		<slider
 		 name="progressive_draw_distance_interval"
@@ -227,7 +277,7 @@
 		 tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
-         top_pad="5"
+         top_pad="2"
          control_name="UseLSLBridge"
          follows="left|top"
          height="16"

@@ -30,6 +30,7 @@
 #define FS_FLOATERCONTACTS_H
 
 #include "llfloater.h"
+#include "llscrolllistcolumn.h"
 #include "rlvhandler.h"
 
 class FSContactsFriendsCtrl;
@@ -57,6 +58,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void draw();
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
@@ -82,6 +84,7 @@ private:
 	{
 		LIST_ONLINE_STATUS,
 		LIST_FRIEND_USER_NAME,
+		LIST_FRIEND_DISPLAY_NAME,
 		LIST_FRIEND_NAME,
 		LIST_VISIBLE_ONLINE,
 		LIST_VISIBLE_MAP,
@@ -113,6 +116,7 @@ private:
 	
 	// misc callbacks
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
+	void					onColumnDisplayModeChanged(const std::string& settings_name = "");
 	
 	// friend buttons
 	void					onViewProfileButtonClicked();
@@ -143,6 +147,9 @@ private:
 	LLCachedControl<bool>	mSortByUserName;
 
 	std::string				mFriendListFontName;
+
+	std::string				mLastColumnDisplayModeChanged;
+	bool					mResetLastColumnDisplayModeChanged;
 
 	void childShowTab(const std::string& id, const std::string& tabname);
 

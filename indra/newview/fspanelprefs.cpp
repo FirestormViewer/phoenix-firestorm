@@ -47,6 +47,7 @@ PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
 {
 	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&PanelPreferenceFirestorm::onCommitCopy, this));
 	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&PanelPreferenceFirestorm::onCommitTrans, this));
+	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&PanelPreferenceFirestorm::onCheckContactListColumnMode, this));
 }
 
 BOOL PanelPreferenceFirestorm::postBuild()
@@ -69,6 +70,8 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
 	tex_ctrl->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
 	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+
+	onCheckContactListColumnMode();
 
 	return LLPanelPreference::postBuild();
 }
@@ -244,4 +247,11 @@ void PanelPreferenceFirestorm::onCommitTrans()
 	{
 		gSavedSettings.setBOOL("NextOwnerCopy", TRUE);
 	}
+}
+
+void PanelPreferenceFirestorm::onCheckContactListColumnMode()
+{
+	childSetEnabled("FSFriendListColumnShowUserName", gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowFullName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
 }

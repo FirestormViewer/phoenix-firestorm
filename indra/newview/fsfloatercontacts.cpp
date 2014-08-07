@@ -94,7 +94,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mAllowRightsChange(TRUE),
 	mNumRightsChanged(0),
 	mSortByUserName(LLCachedControl<bool>(gSavedSettings,"FSSortContactsByUserName", FALSE)),
-	mRlvBehaviorCallbackConnection()
+	mRlvBehaviorCallbackConnection(),
+	mResetLastColumnDisplayModeChanged(false)
 {
 	mObserver = new LLLocalFriendsObserver(this);
 	LLAvatarTracker::instance().addObserver(mObserver);
@@ -129,20 +130,6 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	//mFriendsList->setReturnCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	mFriendsList->setContextMenu(&gFSContactsFriendsMenu);
-
-	// primary sort = online status, secondary sort = name
-	if (mSortByUserName)
-	{
-		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
-	}
-	else
-	{
-		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("full_name"), TRUE);
-	}
-	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
-	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
 	
 	mFriendsTab->childSetAction("im_btn",				boost::bind(&FSFloaterContacts::onImButtonClicked,				this));
 	mFriendsTab->childSetAction("profile_btn",			boost::bind(&FSFloaterContacts::onViewProfileButtonClicked,		this));
@@ -174,7 +161,23 @@ BOOL FSFloaterContacts::postBuild()
 	
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
+	gSavedSettings.getControl("FSFriendListColumnShowUserName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowUserName"));
+	gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
+	gSavedSettings.getControl("FSFriendListColumnShowFullName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowFullName"));
+	onColumnDisplayModeChanged();
+
 	return TRUE;
+}
+
+void FSFloaterContacts::draw()
+{
+	if (mResetLastColumnDisplayModeChanged)
+	{
+		gSavedSettings.setBOOL(mLastColumnDisplayModeChanged, TRUE);
+		mResetLastColumnDisplayModeChanged = false;
+	}
+
+	LLFloater::draw();
 }
 
 void FSFloaterContacts::updateGroupButtons()
@@ -494,11 +497,15 @@ void FSFloaterContacts::sortFriendList()
 
 	if (mSortByUserName)
 	{
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 	}
 	else
 	{
-		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 	}
 	mFriendsList->setNeedsSort(true);
 }
@@ -594,6 +601,12 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	username_column["column"]			= "user_name";
 	username_column["value"]			= av_name.getUserNameForDisplay();
 	
+	LLSD& display_name_column			= element["columns"][LIST_FRIEND_DISPLAY_NAME];
+	display_name_column["column"]		= "display_name";
+	display_name_column["value"]		= av_name.getDisplayName();
+	display_name_column["font"]["name"]	= mFriendListFontName;
+	display_name_column["font"]["style"]= "NORMAL";
+	
 	LLSD& friend_column					= element["columns"][LIST_FRIEND_NAME];
 	friend_column["column"]				= "full_name";
 	friend_column["value"]				= av_name.getCompleteName();
@@ -607,12 +620,16 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	
 	if (isOnline)
 	{	
-		friend_column["font"]["style"]		= "BOLD";	
+		username_column["font"]["style"]	= "BOLD";
+		display_name_column["font"]["style"]= "BOLD";
+		friend_column["font"]["style"]		= "BOLD";
 		online_status_column["value"]		= "icon_avatar_online";
 	}
-	else if(isOnlineSIP)
+	else if (isOnlineSIP)
 	{	
-		friend_column["font"]["style"]		= "BOLD";	
+		username_column["font"]["style"]	= "BOLD";
+		display_name_column["font"]["style"]= "BOLD";
+		friend_column["font"]["style"]		= "BOLD";
 		online_status_column["value"]		= "slim_icon_16_viewer";
 	}
 
@@ -690,10 +707,14 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 	itemp->getColumn(LIST_ONLINE_STATUS)->setValue(statusIcon);
 
 	itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue( av_name.getUserNameForDisplay() );
+	itemp->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue( av_name.getDisplayName() );
 	itemp->getColumn(LIST_FRIEND_NAME)->setValue( av_name.getCompleteName() );
 
 	// render name of online friends in bold text
-	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_NAME))->setFontStyle((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);
+	LLFontGL::StyleFlags font_style = ((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);
+	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_USER_NAME))->setFontStyle(font_style);
+	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_DISPLAY_NAME))->setFontStyle(font_style);
+	((LLScrollListText*)itemp->getColumn(LIST_FRIEND_NAME))->setFontStyle(font_style);
 
 	itemp->getColumn(LIST_VISIBLE_ONLINE)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS));
 	itemp->getColumn(LIST_VISIBLE_MAP)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION));
@@ -1020,4 +1041,114 @@ void FSFloaterContacts::updateRlvRestrictions(ERlvBehaviour behavior)
 		refreshUI();
 	}
 }
+
+void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_name)
+{
+	mLastColumnDisplayModeChanged = settings_name;
+
+	// Make sure at least one column is shown!
+	if (!settings_name.empty() &&
+		!gSavedSettings.getBOOL("FSFriendListColumnShowUserName") &&
+		!gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") &&
+		!gSavedSettings.getBOOL("FSFriendListColumnShowFullName"))
+	{
+		mResetLastColumnDisplayModeChanged = true;
+		return;
+	}
+
+	std::vector<LLScrollListColumn::Params> column_params = mFriendsList->getColumnInitParams();
+
+	mFriendsList->clearColumns();
+	for (std::vector<LLScrollListColumn::Params>::iterator it = column_params.begin(); it != column_params.end(); ++it)
+	{
+		LLScrollListColumn::Params p = *it;
+
+		if (p.name.getValue() == "user_name")
+		{
+			LLScrollListColumn::Params params;
+			params.header = p.header;
+			params.name = p.name;
+			params.halign = p.halign;
+			params.sort_direction = p.sort_direction;
+			params.sort_column = p.sort_column;
+			params.tool_tip = p.tool_tip;
+
+			if (gSavedSettings.getBOOL("FSFriendListColumnShowUserName"))
+			{
+				params.width.dynamic_width.set(true, true);
+			}
+			else
+			{
+				params.width.pixel_width.set(-1, true);
+			}
+			mFriendsList->addColumn(params);
+		}
+		else if (p.name.getValue() == "display_name")
+		{
+			LLScrollListColumn::Params params;
+			params.header = p.header;
+			params.name = p.name;
+			params.halign = p.halign;
+			params.sort_direction = p.sort_direction;
+			params.sort_column = p.sort_column;
+			params.tool_tip = p.tool_tip;
+
+			if (gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"))
+			{
+				params.width.dynamic_width.set(true, true);
+			}
+			else
+			{
+				params.width.pixel_width.set(-1, true);
+			}
+			mFriendsList->addColumn(params);
+		}
+		else if (p.name.getValue() == "full_name")
+		{
+			LLScrollListColumn::Params params;
+			params.header = p.header;
+			params.name = p.name;
+			params.halign = p.halign;
+			params.sort_direction = p.sort_direction;
+			params.sort_column = p.sort_column;
+			params.tool_tip = p.tool_tip;
+
+			if (gSavedSettings.getBOOL("FSFriendListColumnShowFullName"))
+			{
+				params.width.dynamic_width.set(true, true);
+			}
+			else
+			{
+				params.width.pixel_width.set(-1, true);
+			}
+			mFriendsList->addColumn(params);
+		}
+		else
+		{
+			mFriendsList->addColumn(p);
+		}
+		
+	}
+
+	mFriendsList->dirtyColumns();
+
+	// primary sort = online status, secondary sort = name
+	if (mSortByUserName)
+	{
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
+	}
+	else
+	{
+		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
+		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
+	}
+	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
+	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
+}
+
 // EOF

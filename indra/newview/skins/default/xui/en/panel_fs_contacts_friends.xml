@@ -45,10 +45,15 @@
 		 tool_tip="Online status"
 		 width="20" />
 		<friend_list.column
+		 dynamicwidth="true"
 		 label="Username"
 		 name="user_name"
-		 tool_tip="This contact's username."
-		 width="-1" />
+		 tool_tip="This contact's username."/>
+		<friend_list.column
+		 dynamicwidth="true"
+		 label="Display name"
+		 name="display_name"
+		 tool_tip="This contact's display name."/>
 		<friend_list.column
 		 dynamicwidth="true"
 		 label="Name"
