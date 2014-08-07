@@ -33,12 +33,15 @@ class FSPanelPrefs : public LLPanelPreference
 {
 public:
 	FSPanelPrefs();
-	
+	virtual ~FSPanelPrefs() {}
+
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel();
 
 	void refreshBeamLists();
+
+private:
 	void onBeamColor_new();
 	void onBeam_new();
 	void onBeamColorDelete();
