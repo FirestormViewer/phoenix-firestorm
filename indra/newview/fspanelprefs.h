@@ -29,10 +29,10 @@
 
 #include "llfloaterpreference.h"
 
-class PanelPreferenceFirestorm : public LLPanelPreference
+class FSPanelPrefs : public LLPanelPreference
 {
 public:
-	PanelPreferenceFirestorm();
+	FSPanelPrefs();
 	
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();

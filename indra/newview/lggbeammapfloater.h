@@ -58,7 +58,7 @@ public:
 	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
 	
 	void setData(void* data);
-	PanelPreferenceFirestorm* fspanel;
+	FSPanelPrefs* fspanel;
 
 	void draw();
 	void clearPoints();

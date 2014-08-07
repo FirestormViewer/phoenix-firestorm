@@ -162,7 +162,7 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 
 void lggBeamMapFloater::setData(void* data)
 {
-	fspanel = (PanelPreferenceFirestorm*)data;
+	fspanel = (FSPanelPrefs*)data;
 	if (fspanel)
 	{
 		gFloaterView->getParentFloater(fspanel)->addDependentFloater(this);

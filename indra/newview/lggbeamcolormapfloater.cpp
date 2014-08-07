@@ -328,7 +328,7 @@ void lggBeamColorMapFloater::fixOrder()
 
 void lggBeamColorMapFloater::setData(void* data)
 {
-	fspanel = (PanelPreferenceFirestorm*)data;
+	fspanel = (FSPanelPrefs*)data;
 	if (fspanel)
 	{
 		gFloaterView->getParentFloater(fspanel)->addDependentFloater(this);

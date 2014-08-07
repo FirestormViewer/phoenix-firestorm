@@ -25,50 +25,52 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fspanelprefs.h"
-#include "llcombobox.h"
-#include "llcolorswatch.h"
-#include "llcheckboxctrl.h"
-#include "llviewercontrol.h"
-#include "llfloaterreg.h"
-#include "lggbeammaps.h"
-#include "lggbeammapfloater.h"
+
 #include "lggbeamcolormapfloater.h"
+#include "lggbeammapfloater.h"
+#include "lggbeammaps.h"
+#include "llcheckboxctrl.h"
+#include "llcolorswatch.h"
+#include "llcombobox.h"
+#include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
+#include "llfloaterreg.h"
+#include "llinventorymodel.h"
+#include "llspinctrl.h"
+#include "lltexturectrl.h"
+#include "llviewercontrol.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llspinctrl.h"
-#include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
-#include "lltexturectrl.h"
-#include "llinventorymodel.h"
 
-static LLPanelInjector<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
+static LLPanelInjector<FSPanelPrefs> t_pref_fs("panel_preference_firestorm");
 
-PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
+FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 {
-	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&PanelPreferenceFirestorm::onCommitCopy, this));
-	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&PanelPreferenceFirestorm::onCommitTrans, this));
-	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&PanelPreferenceFirestorm::onCheckContactListColumnMode, this));
+	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&FSPanelPrefs::onCommitCopy, this));
+	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&FSPanelPrefs::onCommitTrans, this));
+	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&FSPanelPrefs::onCheckContactListColumnMode, this));
 }
 
-BOOL PanelPreferenceFirestorm::postBuild()
+BOOL FSPanelPrefs::postBuild()
 {
 	// LGG's Color Beams
 	refreshBeamLists();
 
 	// Beam Colors
-	getChild<LLUICtrl>("BeamColor_new")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamColor_new, this));
-	getChild<LLUICtrl>("BeamColor_refresh")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::refreshBeamLists, this));
-	getChild<LLUICtrl>("BeamColor_delete")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamColorDelete, this));
+	getChild<LLUICtrl>("BeamColor_new")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamColor_new, this));
+	getChild<LLUICtrl>("BeamColor_refresh")->setCommitCallback(boost::bind(&FSPanelPrefs::refreshBeamLists, this));
+	getChild<LLUICtrl>("BeamColor_delete")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamColorDelete, this));
 
 	// Beam Shapes
-	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeam_new, this));
-	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::refreshBeamLists, this));
-	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onBeamDelete, this));
+	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeam_new, this));
+	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&FSPanelPrefs::refreshBeamLists, this));
+	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamDelete, this));
 
 	populateCloudCombo();
 	
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
-	tex_ctrl->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
+	tex_ctrl->setCommitCallback(boost::bind(&FSPanelPrefs::onCommitTexture, this, _2));
 	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
 
 	onCheckContactListColumnMode();
@@ -76,141 +78,139 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	return LLPanelPreference::postBuild();
 }
 
-void PanelPreferenceFirestorm::apply()
+void FSPanelPrefs::apply()
 {
 	LLPanelPreference::apply();
 }
 
 
-void PanelPreferenceFirestorm::cancel()
+void FSPanelPrefs::cancel()
 {
 	LLPanelPreference::cancel();
 }
 
 
-void PanelPreferenceFirestorm::refreshBeamLists()
+void FSPanelPrefs::refreshBeamLists()
 {
-	LLComboBox* comboBox = getChild<LLComboBox>("FSBeamShape_combo");
+	LLComboBox* comboBox = findChild<LLComboBox>("FSBeamShape_combo");
 
-	if(comboBox != NULL) 
+	if (comboBox)
 	{
 		comboBox->removeall();
 		comboBox->add("===OFF===");
-		std::vector<std::string> names = gLggBeamMaps.getFileNames();
-		for(int i=0; i<(int)names.size(); i++) 
+		string_vec_t names = gLggBeamMaps.getFileNames();
+		for (string_vec_t::iterator it = names.begin(); it != names.end(); ++it)
 		{
-			comboBox->add(names[i]);
+			comboBox->add(*it);
 		}
 		comboBox->setSimple(gSavedSettings.getString("FSBeamShape"));
 	}
 
-	comboBox = getChild<LLComboBox>("BeamColor_combo");
-	if(comboBox != NULL) 
+	comboBox = findChild<LLComboBox>("BeamColor_combo");
+	if (comboBox)
 	{
 		comboBox->removeall();
 		comboBox->add("===OFF===");
-		std::vector<std::string> names = gLggBeamMaps.getColorsFileNames();
-		for(int i=0; i<(int)names.size(); i++) 
+		string_vec_t names = gLggBeamMaps.getColorsFileNames();
+		for (string_vec_t::iterator it = names.begin(); it != names.end(); ++it)
 		{
-			comboBox->add(names[i]);
+			comboBox->add(*it);
 		}
 		comboBox->setSimple(gSavedSettings.getString("FSBeamColorFile"));
 	}
 }
 
-void PanelPreferenceFirestorm::onBeamColor_new()
+void FSPanelPrefs::onBeamColor_new()
 {
 	lggBeamColorMapFloater* colorMapFloater = (lggBeamColorMapFloater*)LLFloaterReg::showInstance("lgg_beamcolormap");
 	colorMapFloater->setData(this);
 }
 
-void PanelPreferenceFirestorm::onBeam_new()
+void FSPanelPrefs::onBeam_new()
 {
 	lggBeamMapFloater* beamMapFloater = (lggBeamMapFloater*)LLFloaterReg::showInstance("lgg_beamshape");
 	beamMapFloater->setData(this);
 }
 
-void PanelPreferenceFirestorm::onBeamColorDelete()
+void FSPanelPrefs::onBeamColorDelete()
 {
-	LLComboBox* comboBox = getChild<LLComboBox>("BeamColor_combo");
+	LLComboBox* comboBox = findChild<LLComboBox>("BeamColor_combo");
 
-	if(comboBox != NULL) 
+	if (comboBox)
 	{
 		std::string filename = comboBox->getValue().asString()+".xml";
-		std::string path_name1(gDirUtilp->getExpandedFilename( LL_PATH_APP_SETTINGS , "beamsColors", filename));
-		std::string path_name2(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "beamsColors", filename));
+		std::string path_name1(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", filename));
+		std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", filename));
 
-		if(gDirUtilp->fileExists(path_name1))
+		if (gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("FSBeamColorFile","===OFF===");
+			gSavedSettings.setString("FSBeamColorFile", "===OFF===");
 		}
-		if(gDirUtilp->fileExists(path_name2))
+		if (gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("FSBeamColorFile","===OFF===");
+			gSavedSettings.setString("FSBeamColorFile", "===OFF===");
 		}
 	}
 	refreshBeamLists();
 }
 
-void PanelPreferenceFirestorm::onBeamDelete()
+void FSPanelPrefs::onBeamDelete()
 {
-	LLComboBox* comboBox = getChild<LLComboBox>("FSBeamShape_combo");
+	LLComboBox* comboBox = findChild<LLComboBox>("FSBeamShape_combo");
 
-	if(comboBox != NULL) 
+	if (comboBox)
 	{
-		std::string filename = comboBox->getValue().asString()+".xml";
-		std::string path_name1(gDirUtilp->getExpandedFilename( LL_PATH_APP_SETTINGS , "beams", filename));
-		std::string path_name2(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "beams", filename));
+		std::string filename = comboBox->getValue().asString() + ".xml";
+		std::string path_name1(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", filename));
+		std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams", filename));
 		
-		if(gDirUtilp->fileExists(path_name1))
+		if (gDirUtilp->fileExists(path_name1))
 		{
 			LLFile::remove(path_name1);
-			gSavedSettings.setString("FSBeamShape","===OFF===");
+			gSavedSettings.setString("FSBeamShape", "===OFF===");
 		}
-		if(gDirUtilp->fileExists(path_name2))
+		if (gDirUtilp->fileExists(path_name2))
 		{
 			LLFile::remove(path_name2);
-			gSavedSettings.setString("FSBeamShape","===OFF===");
+			gSavedSettings.setString("FSBeamShape", "===OFF===");
 		}
 	}
 	refreshBeamLists();
 }
 
-
-void PanelPreferenceFirestorm::populateCloudCombo()
+void FSPanelPrefs::populateCloudCombo()
 {
-	LLComboBox* cloud_combo = getChild<LLComboBox>("cloud_combo");
-	if(cloud_combo)
+	LLComboBox* cloud_combo = findChild<LLComboBox>("cloud_combo");
+	if (cloud_combo)
 	{
 		const std::string cloudDir(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight" + gDirUtilp->getDirDelimiter() + "clouds"));
 
 		LLDirIterator dir_iter(cloudDir, "*.tga");
-		while (1)
+		std::string file;
+		while (dir_iter.next(file))
 		{
-			std::string file;
-			if (!dir_iter.next(file))
-			{
-				break; // no more files
-			}
-			
 			cloud_combo->add(file);
 		}
 		cloud_combo->setSimple(gSavedSettings.getString("FSCloudTexture"));
 	}
 }
 
-void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
+void FSPanelPrefs::onCommitTexture(const LLSD& data)
 {
 	LLTextureCtrl* texture_ctrl = getChild<LLTextureCtrl>("texture control");
-	if(!texture_ctrl) return;
-	if( !texture_ctrl->getTentative() )
+	if (!texture_ctrl)
+	{
+		return;
+	}
+
+	if (!texture_ctrl->getTentative())
 	{
 		// we grab the item id first, because we want to do a
 		// permissions check
 		LLUUID id = texture_ctrl->getImageItemID();
-		if(id.isNull())
+		if (id.isNull())
 		{
 			id = texture_ctrl->getImageAssetID();
 		}
@@ -218,7 +218,7 @@ void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
 		// Texture picker defaults aren't inventory items
 		// * Don't need to worry about permissions for them
 		LLViewerInventoryItem* item = gInventory.getItem(id);
-		if(item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
+		if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
 		{
 			// Do not have permission to copy the texture.
 			return;
@@ -228,11 +228,11 @@ void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
 	}
 }
 
-void PanelPreferenceFirestorm::onCommitCopy()
+void FSPanelPrefs::onCommitCopy()
 {
 	// Implements fair use
 	BOOL copyable = gSavedSettings.getBOOL("NextOwnerCopy");
-	if(!copyable)
+	if (!copyable)
 	{
 		gSavedSettings.setBOOL("NextOwnerTransfer", TRUE);
 	}
@@ -240,7 +240,7 @@ void PanelPreferenceFirestorm::onCommitCopy()
 	xfer->setEnabled(copyable);
 }
 
-void PanelPreferenceFirestorm::onCommitTrans()
+void FSPanelPrefs::onCommitTrans()
 {
 	BOOL transferable = gSavedSettings.getBOOL("NextOwnerTransfer");
 	if (!transferable)
@@ -249,7 +249,7 @@ void PanelPreferenceFirestorm::onCommitTrans()
 	}
 }
 
-void PanelPreferenceFirestorm::onCheckContactListColumnMode()
+void FSPanelPrefs::onCheckContactListColumnMode()
 {
 	childSetEnabled("FSFriendListColumnShowUserName", gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
 	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));

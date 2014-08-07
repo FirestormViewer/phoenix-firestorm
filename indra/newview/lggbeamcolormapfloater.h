@@ -67,7 +67,7 @@ public:
 	
 protected:
 	F32 mContextConeOpacity;
-	PanelPreferenceFirestorm * fspanel;
+	FSPanelPrefs * fspanel;
 	lggBeamsColors myData; 
 	LLSliderCtrl* mColorSlider;
 
