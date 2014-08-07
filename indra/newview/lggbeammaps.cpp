@@ -26,15 +26,6 @@
 #include "message.h"
 
 lggBeamMaps gLggBeamMaps;
-F32 hueToRgb ( F32 val1In, F32 val2In, F32 valHUeIn )
-{
-	while ( valHUeIn < 0.0f ) valHUeIn += 1.0f;
-	while ( valHUeIn > 1.0f ) valHUeIn -= 1.0f;
-	if ( ( 6.0f * valHUeIn ) < 1.0f ) return ( val1In + ( val2In - val1In ) * 6.0f * valHUeIn );
-	if ( ( 2.0f * valHUeIn ) < 1.0f ) return ( val2In );
-	if ( ( 3.0f * valHUeIn ) < 2.0f ) return ( val1In + ( val2In - val1In ) * ( ( 2.0f / 3.0f ) - valHUeIn ) * 6.0f );
-	return ( val1In );
-}
 
 std::string unescape_name(const std::string& name)
 {
@@ -47,9 +38,19 @@ std::string unescape_name(const std::string& name)
 	return unescaped_name;
 }
 
-void hslToRgb ( F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut )
+F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 {
-	if ( sValIn < 0.00001f )
+	while (valHUeIn < 0.0f) valHUeIn += 1.0f;
+	while (valHUeIn > 1.0f) valHUeIn -= 1.0f;
+	if ((6.0f * valHUeIn) < 1.0f) return (val1In + (val2In - val1In) * 6.0f * valHUeIn);
+	if ((2.0f * valHUeIn) < 1.0f) return (val2In);
+	if ((3.0f * valHUeIn) < 2.0f) return (val1In + (val2In - val1In) * ((2.0f / 3.0f) - valHUeIn) * 6.0f);
+	return val1In;
+}
+
+void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut)
+{
+	if (sValIn < 0.00001f)
 	{
 		rValOut = lValIn;
 		gValOut = lValIn;
@@ -60,20 +61,20 @@ void hslToRgb ( F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, 
 		F32 interVal1;
 		F32 interVal2;
 
-		if ( lValIn < 0.5f )
+		if (lValIn < 0.5f)
 		{
-			interVal2 = lValIn * ( 1.0f + sValIn );
+			interVal2 = lValIn * (1.0f + sValIn);
 		}
 		else
 		{
-			interVal2 = ( lValIn + sValIn ) - ( sValIn * lValIn );
+			interVal2 = (lValIn + sValIn) - (sValIn * lValIn);
 		}
 
 		interVal1 = 2.0f * lValIn - interVal2;
 
-		rValOut = hueToRgb ( interVal1, interVal2, hValIn + ( 1.f / 3.f ) );
-		gValOut = hueToRgb ( interVal1, interVal2, hValIn );
-		bValOut = hueToRgb ( interVal1, interVal2, hValIn - ( 1.f / 3.f ) );
+		rValOut = hueToRgb(interVal1, interVal2, hValIn + (1.f / 3.f));
+		gValOut = hueToRgb(interVal1, interVal2, hValIn);
+		bValOut = hueToRgb(interVal1, interVal2, hValIn - (1.f / 3.f));
 	}
 }
 

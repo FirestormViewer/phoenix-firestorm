@@ -14,8 +14,12 @@
 #ifndef LGG_BEAMMAPS_H
 #define LGG_BEAMMAPS_H
 
+#include "llfontregistry.h"
 #include "llhudeffecttrail.h"
 #include "lggbeamscolors.h"
+
+F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn);
+void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut);
 
 class lggBeamData
 {
@@ -43,8 +47,8 @@ public:
 	void						updateBeamChat(const LLVector3d& currentPos);
 	static LLColor4U			beamColorFromData(const lggBeamsColors& data);
 	LLColor4U					getCurrentColor(const LLColor4U& agentColor);
-	std::vector<std::string>	getFileNames();
-	std::vector<std::string>	getColorsFileNames();
+	string_vec_t				getFileNames();
+	string_vec_t				getColorsFileNames();
 
 private:
 	LLSD			getPic(const std::string& filename);

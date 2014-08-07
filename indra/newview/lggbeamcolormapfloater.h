@@ -19,6 +19,7 @@
 #include "lggbeamscolors.h"
 
 class FSPanelPrefs;
+class LLColorSwatchCtrl;
 class LLSliderCtrl;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -29,7 +30,7 @@ public:
 	lggBeamColorMapFloater(const LLSD& seed);
 	virtual ~lggBeamColorMapFloater();
 
-	BOOL postBuild(void);
+	BOOL postBuild();
 	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
 	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
 
@@ -47,10 +48,11 @@ protected:
 	void fixOrder();
 	LLSD getMyDataSerialized();
 
-	F32				mContextConeOpacity;
-	FSPanelPrefs*	mFSPanel;
-	lggBeamsColors	myData;
-	LLSliderCtrl*	mColorSlider;
+	F32					mContextConeOpacity;
+	FSPanelPrefs*		mFSPanel;
+	lggBeamsColors		myData;
+	LLSliderCtrl*		mColorSlider;
+	LLColorSwatchCtrl*	mBeamColorPreview;
 };
 
 #endif // LGG_BEAMCOLORMAPFLOATER_H

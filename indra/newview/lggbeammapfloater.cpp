@@ -76,12 +76,11 @@ void lggBeamMapFloater::draw()
 		gGL.end();
 	}
 
-	F32 opacity = gSavedSettings.getF32("PickerContextOpacity");
-	mContextConeOpacity = lerp(mContextConeOpacity, opacity, LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
+	static LLCachedControl<F32> opacity(gSavedSettings, "PickerContextOpacity");
+	mContextConeOpacity = lerp(mContextConeOpacity, opacity(), LLCriticalDamp::getInterpolant(CONTEXT_FADE_TIME));
 
-	//getChild<LLPanel>("beamshape_draw")->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 	LLFloater::draw();
-	LLRect rec  = getChild<LLPanel>("beamshape_draw")->getRect();
+	LLRect rec  = mBeamshapePanel->getRect();
 	
 	gGL.pushMatrix();
 	gGL.color4fv(LLColor4::white.mV);
@@ -115,14 +114,14 @@ lggBeamMapFloater::~lggBeamMapFloater()
 {
 }
 
-lggBeamMapFloater::lggBeamMapFloater(const LLSD& seed): LLFloater(seed),
+lggBeamMapFloater::lggBeamMapFloater(const LLSD& seed) : LLFloater(seed),
 	mContextConeOpacity(0.0f)
 {
 }
 
-BOOL lggBeamMapFloater::postBuild(void)
+BOOL lggBeamMapFloater::postBuild()
 {
-	setCanMinimize(false);
+	setCanMinimize(FALSE);
 
 	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
@@ -131,23 +130,25 @@ BOOL lggBeamMapFloater::postBuild(void)
 	getChild<LLColorSwatchCtrl>("back_color_swatch")->setCommitCallback(boost::bind(&lggBeamMapFloater::onBackgroundChange, this));
 	getChild<LLColorSwatchCtrl>("beam_color_swatch")->setColor(LLColor4::red);
 
-	return true;
+	mBeamshapePanel = getChild<LLPanel>("beamshape_draw");
+
+	return TRUE;
 }
 
-BOOL lggBeamMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
+BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (y > 39 && x > 16 && x < 394 && y < 317)
 	{
 		lggPoint a;
 		a.x = x;
 		a.y = y;
-		a.c= getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
+		a.c = getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
 		mDots.push_back(a);
 
-		LL_INFOS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
+		LL_DEBUGS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
 	}
 	
-	return LLFloater::handleMouseDown(x,y,mask);
+	return LLFloater::handleMouseDown(x, y, mask);
 }
 
 void lggBeamMapFloater::setData(void* data)
@@ -178,13 +179,13 @@ BOOL lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 void lggBeamMapFloater::onBackgroundChange()
 {
-	getChild<LLPanel>("beamshape_draw")->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
+	mBeamshapePanel->setBackgroundColor(getChild<LLColorSwatchCtrl>("back_color_swatch")->get());
 }
 
 LLSD lggBeamMapFloater::getMyDataSerialized()
 {
 	LLSD out;
-	LLRect r  = getChild<LLPanel>("beamshape_draw")->getRect();
+	LLRect r  = mBeamshapePanel->getRect();
 	for (S32 i = 0; i < mDots.size(); ++i)
 	{
 		LLSD point;
@@ -202,7 +203,7 @@ LLSD lggBeamMapFloater::getMyDataSerialized()
 
 void lggBeamMapFloater::onClickSave()
 {
-	LLRect r = getChild<LLPanel>("beamshape_draw")->getRect();
+	LLRect r = mBeamshapePanel->getRect();
 	LLFilePicker& picker = LLFilePicker::instance();
 	
 	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
@@ -252,7 +253,7 @@ void lggBeamMapFloater::onClickLoad()
 
 	for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
 	{
-		LLRect rec  = getChild<LLPanel>("beamshape_draw")->getRect();
+		LLRect rec = mBeamshapePanel->getRect();
 
 		LLSD beamData = *it;
 		lggPoint p;

@@ -17,6 +17,7 @@
 #include "llfloater.h"
 
 class FSPanelPrefs;
+class LLPanel;
 
 class lggPoint
 {
@@ -56,6 +57,7 @@ private:
 	std::vector<lggPoint>	mDots;
 	F32						mContextConeOpacity;
 	FSPanelPrefs*			mFSPanel;
+	LLPanel*				mBeamshapePanel;
 };
 
 #endif // LGG_BEAMMAPFLOATER_H
