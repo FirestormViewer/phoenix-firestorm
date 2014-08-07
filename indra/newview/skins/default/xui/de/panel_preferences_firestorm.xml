@@ -16,19 +16,30 @@
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logouts" name="logout_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logouts."/>
 		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
 		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
-		<text name="textFriendlistColumns">
-			Sichtbare Namensspalten in Kontaktliste:
+		<text name="textFriendlistOptions">
+			Einstellungen für Kontaktliste:
+		</text>
+		<text name="textFriendlistColumns" width="145">
+			Sichtbare Namensspalten:
 		</text>
 		<check_box label="Benutzername" name="FSFriendListColumnShowUserName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem Benutzernamen des Freundes an." width="95"/>
 		<check_box label="Anzeigename" name="FSFriendListColumnShowDisplayName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem Anzeigenamen des Freundes an."/>
 		<check_box label="Vollständiger Name" name="FSFriendListColumnShowFullName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem vollständigen Namen des Freundes an."/>
-		<text name="textFriendListSortOrder" width="150">
-			Kontaktliste sortieren nach:
+		<text name="textFriendListSortOrder" width="85">
+			Sortieren nach:
 		</text>
 		<radio_group name="FSFriendListSortOrder">
 			<radio_item label="Benutzername" name="username" width="95"/>
 			<radio_item label="Anzeigename" name="displayname" width="95"/>
 		</radio_group>
+		<text name="textFriendListFullNameFormat" width="155">
+			Format vollständiger Name:
+		</text>
+		<radio_group name="FSFriendListFullNameFormat">
+			<radio_item label="Benutzern. (Anzeigen.)" name="username_displayname" width="140"/>
+			<radio_item label="Anzeigen. (Benutzern.)" name="displayname_username" width="140"/>
+		</radio_group>
+		<check_box label="Kontaktliste immer nach Benutzername sortieren" name="sortcontactsbyun" tool_tip="Sortiert Kontaktlisten immer anhand des Benutzernamens, auch wenn Anzeigenamen aktiviert sind."/>
 		<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
 		<check_box label="Ordner &quot;Erhaltene Artikel&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Erhaltene Artikel&quot; als normaler Ordner im Inventar angezeigt."/>

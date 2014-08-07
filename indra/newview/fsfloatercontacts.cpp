@@ -160,6 +160,7 @@ BOOL FSFloaterContacts::postBuild()
 	
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
+	gSavedSettings.getControl("FSFriendListFullNameFormat")->getSignal()->connect(boost::bind(&FSFloaterContacts::onFullNameFormatChanged, this));
 	gSavedSettings.getControl("FSFriendListSortOrder")->getSignal()->connect(boost::bind(&FSFloaterContacts::sortFriendList, this));
 	gSavedSettings.getControl("FSFriendListColumnShowUserName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowUserName"));
 	gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
@@ -609,10 +610,10 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	display_name_column["value"]		= av_name.getDisplayName();
 	display_name_column["font"]["name"]	= mFriendListFontName;
 	display_name_column["font"]["style"]= "NORMAL";
-	
+
 	LLSD& friend_column					= element["columns"][LIST_FRIEND_NAME];
 	friend_column["column"]				= "full_name";
-	friend_column["value"]				= av_name.getCompleteName();
+	friend_column["value"]				= getFullName(av_name);
 	friend_column["font"]["name"]		= mFriendListFontName;
 	friend_column["font"]["style"]		= "NORMAL";
 
@@ -711,7 +712,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 
 	itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue( av_name.getUserNameForDisplay() );
 	itemp->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue( av_name.getDisplayName() );
-	itemp->getColumn(LIST_FRIEND_NAME)->setValue( av_name.getCompleteName() );
+	itemp->getColumn(LIST_FRIEND_NAME)->setValue( getFullName(av_name) );
 
 	// render name of online friends in bold text
 	LLFontGL::StyleFlags font_style = ((isOnline || isOnlineSIP) ? LLFontGL::BOLD : LLFontGL::NORMAL);
@@ -1154,4 +1155,35 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
 }
 
+void FSFloaterContacts::onFullNameFormatChanged()
+{
+	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
+	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); ++it)
+	{
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
+		{
+			(*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+		}
+	}
+}
+
+std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
+{
+	if (av_name.isDisplayNameDefault())
+	{
+		return av_name.getDisplayName();
+	}
+
+	if (gSavedSettings.getS32("FSFriendListFullNameFormat"))
+	{
+		// Display name (Username)
+		return llformat("%s (%s)", av_name.getDisplayName().c_str(), av_name.getUserNameForDisplay().c_str());
+	}
+	else
+	{
+		// Username (Display name)
+		return llformat("%s (%s)", av_name.getUserNameForDisplay().c_str(), av_name.getDisplayName().c_str());
+	}
+}
 // EOF

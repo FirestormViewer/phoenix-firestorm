@@ -126,12 +126,22 @@
          follows="left|top"
          height="16"
          width="300"
+         name="textFriendlistOptions">
+            Contact list options:
+        </text>
+        <text
+         top_pad="2"
+         left="30"
+         layout="topleft"
+         follows="left|top"
+         height="16"
+         width="125"
          name="textFriendlistColumns">
-            Visible name columns in contact list:
+            Visible name columns:
         </text>
         <check_box
-         top_pad="2"
-         left="25"
+         top_delta="0"
+         left_pad="15"
          follows="left|top"
          height="16"
          label="Username"
@@ -169,12 +179,12 @@
              function="FS.CheckContactListColumnMode" />
         </check_box>
         <text
-         top_pad="5"
-         left="18"
+         top_pad="2"
+         left="30"
          follows="left|top"
          name="textFriendListSortOrder"
-         width="100">
-         Sort contact list by:
+         width="60">
+         Sort list by:
         </text>
         <radio_group
          top_delta="0"
@@ -198,6 +208,40 @@
              layout="topleft"
              top_delta="0"
              name="displayname"
+             value="1"
+             width="75" />
+        </radio_group>
+        <text
+         top_pad="2"
+         left="30"
+         follows="left|top"
+         name="textFriendListFullNameFormat"
+         width="105">
+         Show full name as:
+        </text>
+        <radio_group
+         top_delta="0"
+         left_pad="15"
+         height="16"
+         layout="topleft"
+         enabled_control="FSFriendListColumnShowFullName"
+         control_name="FSFriendListFullNameFormat"
+         name="FSFriendListFullNameFormat"
+         tool_tip=""
+         width="331">
+            <radio_item
+             label="Username (Display name)"
+             layout="topleft"
+             name="username_displayname"
+             value="0"
+             top_pad="7"
+             width="160" />
+            <radio_item
+             left_pad="15"
+             label="Display name (Username)"
+             layout="topleft"
+             top_delta="0"
+             name="displayname_username"
              value="1"
              width="75" />
         </radio_group>

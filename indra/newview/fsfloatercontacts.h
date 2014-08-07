@@ -117,7 +117,8 @@ private:
 	// misc callbacks
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void					onColumnDisplayModeChanged(const std::string& settings_name = "");
-	
+	void					onFullNameFormatChanged();
+
 	// friend buttons
 	void					onViewProfileButtonClicked();
 	void					onImButtonClicked();
@@ -154,6 +155,8 @@ private:
 
 	void updateRlvRestrictions(ERlvBehaviour behavior);
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
+
+	std::string getFullName(const LLAvatarName& av_name);
 };
 
 
