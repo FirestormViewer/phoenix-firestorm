@@ -68,6 +68,8 @@ static const char dialog_title[] =
 
 // </FS:ND>
 
+#if 0
+
 #if LL_GTK
 static void response_callback (GtkDialog *dialog,
 			       gint       arg1,
@@ -115,6 +117,7 @@ static BOOL do_ask_dialog(void)
 	return FALSE;
 #endif // LL_GTK
 }
+#endif
 
 LLCrashLoggerLinux::LLCrashLoggerLinux(void)
 {
@@ -130,15 +133,23 @@ void LLCrashLoggerLinux::gatherPlatformSpecificFiles()
 
 bool LLCrashLoggerLinux::mainLoop()
 {
-	bool send_logs = true;
-	if(CRASH_BEHAVIOR_ASK == getCrashBehavior())
-	{
-		send_logs = do_ask_dialog();
-	}
-	else if(CRASH_BEHAVIOR_NEVER_SEND == getCrashBehavior())
-	{
-		send_logs = false;
-	}
+	// <FS:ND> Get around the crash logger popping up all the time.
+	// Right now there seems to be no easy way to test if there's logs from a real crash to send. Which
+	// would be preferred, as then asking for sending in data makes sense. Right now the dialog will just open always.
+
+	// bool send_logs = true;
+	// if(CRASH_BEHAVIOR_ASK == getCrashBehavior())
+	// {
+	// 	send_logs = do_ask_dialog();
+	// }
+	// else if(CRASH_BEHAVIOR_NEVER_SEND == getCrashBehavior())
+	// {
+	// 	send_logs = false;
+	// }
+
+	bool send_logs = (CRASH_BEHAVIOR_NEVER_SEND == getCrashBehavior());
+
+	// </FS:ND>
 
 	if(send_logs)
 	{
