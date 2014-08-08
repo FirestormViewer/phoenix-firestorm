@@ -21,12 +21,10 @@
 	<tab_container name="ResidentChooserTabs">
 		<panel label="Suchen" name="SearchPanel">
 			<text name="InstructSearchResidentName">
-				Geben Sie einen Teil des Namens einer
-Person ein:
+				Geben Sie einen Teil des Namens einer Person ein:
 			</text>
-			<line_editor bottom_delta="-76" name="Edit" top_pad="16"/>
-			<button label="Los" label_selected="Los" name="Find" top="70"/>
-			<scroll_list height="54" name="SearchResults" top="80">
+			<button label="Los" label_selected="Los" name="Find"/>
+			<scroll_list name="SearchResults">
 				<columns label="Name" name="name"/>
 				<columns label="Benutzername" name="username"/>
 			</scroll_list>
@@ -48,6 +46,16 @@ Person ein:
 			<scroll_list border="false" follows="all" height="100" layout="topleft" left="0" name="NearMe" sort_column="0" top="50" width="132">
 				<columns label="Name" name="name"/>
 				<columns label="Benutzername" name="username"/>
+			</scroll_list>
+		</panel>
+		<panel label="Suchen per UUID" name="SearchPanelUUID">
+			<text name="SearchByUUIDLabel">
+				Geben Sie die UUID einer Person ein:
+			</text>
+			<button label="Los" label_selected="Los" name="FindUUID"/>
+			<scroll_list name="SearchResultsUUID">
+				<columns label="Name" name="nameUUID"/>
+				<columns label="Benutzername" name="usernameUUID"/>
 			</scroll_list>
 		</panel>
 	</tab_container>

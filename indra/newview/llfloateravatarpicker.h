@@ -70,6 +70,12 @@ public:
 
 private:
 	void editKeystroke(class LLLineEditor* caller, void* user_data);
+	// <FS:Ansariel> Search by UUID
+	void editKeystrokeUUID(class LLLineEditor* caller, void* user_data);
+	void onBtnFindUUID();
+	void onFindUUIDAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
+	boost::signals2::connection mFindUUIDAvatarNameCacheConnection;
+	// </FS:Ansariel>
 
 	void onBtnFind();
 	void onBtnSelect();
