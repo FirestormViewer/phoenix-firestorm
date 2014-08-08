@@ -48,7 +48,7 @@
          value="da" />
         <combo_box.item
          enabled="true"
-         label="Deutsch (German) - Beta"
+         label="Deutsch (German)"
          name="Deutsch(German)"
          value="de" />
         <combo_box.item
