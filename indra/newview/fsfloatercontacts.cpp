@@ -604,6 +604,8 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	LLSD& username_column				= element["columns"][LIST_FRIEND_USER_NAME];
 	username_column["column"]			= "user_name";
 	username_column["value"]			= av_name.getUserNameForDisplay();
+	username_column["font"]["name"]		= mFriendListFontName;
+	username_column["font"]["style"]	= "NORMAL";
 	
 	LLSD& display_name_column			= element["columns"][LIST_FRIEND_DISPLAY_NAME];
 	display_name_column["column"]		= "display_name";
