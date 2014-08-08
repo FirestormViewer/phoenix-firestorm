@@ -19,5 +19,9 @@ Falls Sie in dieser Region bleiben, werden Sie ausgeloggt.
 			Sekunden bis Neustart
 32767
 		</text>
+		<combo_box label="Meine Landmarken" name="landmark combo">
+			<combo_box.item label="Meine Landmarken" name="item1"/>
+		</combo_box>
+		<button tool_tip="Zur Landmarke teleportieren" name="teleport_btn"/>
 	</panel>
  </floater>

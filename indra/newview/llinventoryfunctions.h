@@ -417,6 +417,22 @@ public:
 	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
 };
 
+// [SL:KB] - Patch: UI-Misc | Checked: 2014-03-02 (Catznip-3.6)
+class LLFindLandmarks : public  LLInventoryCollectFunctor
+{
+public:
+	LLFindLandmarks(bool fFilterDuplicates, bool fFilterSelf);
+	virtual ~LLFindLandmarks() { }
+
+	/*virtual*/ bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+
+protected:
+	bool              m_fFilterDuplicates;
+	std::list<LLUUID> m_AssetIds;
+	bool              m_fFilterSelf;
+};
+// [/SL:KB]
+
 /**                    Inventory Collector Functions
  **                                                                            **
  *******************************************************************************/

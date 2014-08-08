@@ -1013,6 +1013,35 @@ bool LLFindNonRemovableObjects::operator()(LLInventoryCategory* cat, LLInventory
 	return false;
 }
 
+// [SL:KB] - Patch: UI-Misc | Checked: 2014-03-02 (Catznip-3.6)
+LLFindLandmarks::LLFindLandmarks(bool fFilterDuplicates, bool fFilterSelf)
+	: m_fFilterDuplicates(fFilterDuplicates)
+	, m_fFilterSelf(fFilterSelf)
+{
+}
+
+bool LLFindLandmarks::operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+{
+	if ( (item) && (LLAssetType::AT_LANDMARK == item->getType()) )
+	{
+		if ( (m_fFilterSelf) && (gAgentID != item->getCreatorUUID()) )
+		{
+			return false;
+		}
+
+		if (m_fFilterDuplicates)
+		{
+			if (m_AssetIds.end() != std::find(m_AssetIds.begin(), m_AssetIds.end(), item->getAssetUUID()))
+				return false;
+			m_AssetIds.push_back(item->getAssetUUID());
+		}
+
+		return true;
+	}
+	return false;
+}
+// [/SL:KB]
+
 ///----------------------------------------------------------------------------
 /// LLAssetIDMatches 
 ///----------------------------------------------------------------------------

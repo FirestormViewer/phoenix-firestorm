@@ -35,6 +35,15 @@
 #include "llviewercontrol.h" // <FS:PP> FIRE-12900, FIRE-12901: gSavedSettings, make screen shaking optional
 #include "llviewerwindow.h"
 
+// [SL:KB] - Patch: UI-RegionRestart | Checked: 2014-03-15 (Catznip-3.6)
+#include "llcombobox.h"
+#include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
+#include "llinventorymodelbackgroundfetch.h"
+#include "llviewercontrol.h"
+#include "llviewerinventory.h"
+// [/SL:KB]
+
 static S32 sSeconds;
 static U32 sShakeState;
 
@@ -54,6 +63,14 @@ LLFloaterRegionRestarting::~LLFloaterRegionRestarting()
 BOOL LLFloaterRegionRestarting::postBuild()
 {
 	mRegionChangedConnection = gAgent.addRegionChangedCallback(boost::bind(&LLFloaterRegionRestarting::regionChange, this));
+
+// [SL:KB] - Patch: UI-RegionRestart | Checked: 2014-03-15 (Catznip-3.6)
+	const LLUUID idLandmarks = gInventory.findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
+	LLInventoryModelBackgroundFetch::instance().start(idLandmarks);
+
+	getChild<LLComboBox>("landmark combo")->setPrearrangeCallback(boost::bind(&LLFloaterRegionRestarting::refreshLandmarkList, this));
+	getChild<LLUICtrl>("teleport_btn")->setCommitCallback(boost::bind(&LLFloaterRegionRestarting::onTeleportClicked, this));
+// [/SL:KB]
 
 	LLStringUtil::format_map_t args;
 	std::string text;
@@ -96,6 +113,57 @@ void LLFloaterRegionRestarting::refresh()
 		sSeconds = 0;
 	}
 }
+
+// [SL:KB] - Patch: UI-RegionRestart | Checked: 2014-03-15 (Catznip-3.6)
+void LLFloaterRegionRestarting::onOpen(const LLSD& key)
+{
+	LLFloater::onOpen(key);
+
+	refreshLandmarkList();
+}
+
+void LLFloaterRegionRestarting::onTeleportClicked()
+{
+	LLComboBox* pCombo = findChild<LLComboBox>("landmark combo");
+	if (pCombo)
+	{
+		const LLUUID idAsset = pCombo->getSelectedValue().asUUID();
+		if (idAsset.notNull())
+			gAgent.teleportViaLandmark(idAsset);
+	}
+}
+
+void LLFloaterRegionRestarting::refreshLandmarkList()
+{
+	LLComboBox* pCombo = findChild<LLComboBox>("landmark combo");
+	if (!pCombo)
+		return;
+
+	// Delete all but the placehold entry
+	S32 cntItem = pCombo->getItemCount();
+	if (cntItem > 1)
+	{
+		pCombo->selectItemRange(1, -1);
+		pCombo->operateOnSelection(LLCtrlListInterface::OP_DELETE);
+	}
+	
+	// Add landmarks from inventory (match the logic from the world map floater)
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	LLFindLandmarks is_landmark(true, false /*gSavedSettings.getBOOL("WorldMapFilterSelfLandmarks")*/);
+	gInventory.collectDescendentsIf(gInventory.getRootFolderID(), cats, items, LLInventoryModel::EXCLUDE_TRASH, is_landmark);
+	
+	std::sort(items.begin(), items.end(), LLViewerInventoryItem::comparePointers());
+
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		const LLViewerInventoryItem* pItem = *itItem;
+		pCombo->addSimpleElement(pItem->getName(), ADD_BOTTOM, pItem->getAssetUUID());
+	}
+
+	pCombo->selectFirstItem();
+}
+// [/SL:KB]
 
 void LLFloaterRegionRestarting::draw()
 {

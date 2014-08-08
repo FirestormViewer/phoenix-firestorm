@@ -48,6 +48,13 @@ private:
 	virtual void draw();
 	virtual void regionChange();
 
+// [SL:KB] - Patch: UI-RegionRestart | Checked: 2014-03-15 (Catznip-3.6)
+	/*virtual*/ void onOpen(const LLSD& key);
+
+	void onTeleportClicked();
+	void refreshLandmarkList();
+// [/SL:KB]
+
 	std::string mName;
 	U32 mShakeIterations;
 	F32 mShakeMagnitude;
