@@ -59,12 +59,12 @@ BOOL FSPanelPrefs::postBuild()
 	refreshBeamLists();
 
 	// Beam Colors
-	getChild<LLUICtrl>("BeamColor_new")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamColor_new, this));
+	getChild<LLUICtrl>("BeamColor_new")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamColorNew, this));
 	getChild<LLUICtrl>("BeamColor_refresh")->setCommitCallback(boost::bind(&FSPanelPrefs::refreshBeamLists, this));
 	getChild<LLUICtrl>("BeamColor_delete")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamColorDelete, this));
 
 	// Beam Shapes
-	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeam_new, this));
+	getChild<LLUICtrl>("custom_beam_btn")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamNew, this));
 	getChild<LLUICtrl>("refresh_beams")->setCommitCallback(boost::bind(&FSPanelPrefs::refreshBeamLists, this));
 	getChild<LLUICtrl>("delete_beam")->setCommitCallback(boost::bind(&FSPanelPrefs::onBeamDelete, this));
 
@@ -124,15 +124,15 @@ void FSPanelPrefs::refreshBeamLists()
 	}
 }
 
-void FSPanelPrefs::onBeamColor_new()
+void FSPanelPrefs::onBeamColorNew()
 {
-	lggBeamColorMapFloater* colorMapFloater = (lggBeamColorMapFloater*)LLFloaterReg::showInstance("lgg_beamcolormap");
+	lggBeamColorMapFloater* colorMapFloater = LLFloaterReg::showTypedInstance<lggBeamColorMapFloater>("lgg_beamcolormap");
 	colorMapFloater->setData(this);
 }
 
-void FSPanelPrefs::onBeam_new()
+void FSPanelPrefs::onBeamNew()
 {
-	lggBeamMapFloater* beamMapFloater = (lggBeamMapFloater*)LLFloaterReg::showInstance("lgg_beamshape");
+	lggBeamMapFloater* beamMapFloater = LLFloaterReg::showTypedInstance<lggBeamMapFloater>("lgg_beamshape");
 	beamMapFloater->setData(this);
 }
 

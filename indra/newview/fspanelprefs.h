@@ -42,8 +42,8 @@ public:
 	void refreshBeamLists();
 
 private:
-	void onBeamColor_new();
-	void onBeam_new();
+	void onBeamColorNew();
+	void onBeamNew();
 	void onBeamColorDelete();
 	void onBeamDelete();
 
