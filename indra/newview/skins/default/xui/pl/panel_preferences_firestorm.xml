@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="firestorm">
+<panel.string name="BeamsOffLabel">
+	=== WYŁĄCZONE ===
+</panel.string>
 <tab_container label="Ust. Firestorma" name="tabs">
     <panel label="Ogólne" name="tab-general">
         <check_box name="checkMiscRLVa" label="Sterowanie Firestormem przez skrypty (RLVa)" />
@@ -13,7 +16,29 @@
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
         <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
         <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
-        <check_box label="Porządkuj listę kontaktów ZAWSZE według nazw kont" name="sortcontactsbyun" tool_tip="Nie zwracaj uwagi na Imiona Wyświetlane" />
+        <text name="textFriendlistOptions">
+            Opcje listy kontaktów:
+        </text>
+        <text name="textFriendlistColumns" width="113">
+            Widoczne kolumny:
+        </text>
+        <check_box width="80" label="Nazwa konta" name="FSFriendListColumnShowUserName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z nazwami kont znajomych." />
+        <check_box width="105" label="Wyświetlane Imię" name="FSFriendListColumnShowDisplayName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z Imionami Wyświetlanymi znajomych." />
+        <check_box label="Pełne imię" name="FSFriendListColumnShowFullName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z imionami znajomych w pełnym formacie." />
+        <text name="textFriendListSortOrder" width="83">
+            Sortuj listę po:
+        </text>
+        <radio_group name="FSFriendListSortOrder">
+            <radio_item label="Nazwa konta" name="username" width="80" />
+            <radio_item label="Wyświetlane Imię" name="displayname" />
+        </radio_group>
+        <text name="textFriendListFullNameFormat" width="93">
+            Pełne imię jako:
+        </text>
+        <radio_group name="FSFriendListFullNameFormat">
+            <radio_item label="Nazwa konta (Wyświetlane)" name="username_displayname" />
+            <radio_item label="Wyświetlane (Nazwa konta)" name="displayname_username" />
+        </radio_group>
         <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
         <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />

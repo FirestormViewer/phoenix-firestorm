@@ -4,6 +4,7 @@
 	<friend_list name="friend_list">
 		<friend_list.column name="icon_online_status" tool_tip="Status online"/>
 		<friend_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
+		<friend_list.column label="Wyświetlane" name="display_name" tool_tip="Imię Wyświetlane tego kontaktu."/>
 		<friend_list.column label="Imię" name="full_name" tool_tip="Wybrane imię tego kontaktu."/>
 		<friend_list.column name="icon_visible_online" tool_tip="Znajomy może widzieć, że jesteś dostępny/a online w świecie"/>
 		<friend_list.column name="icon_visible_map" tool_tip="Znajomy może znaleźć Cię na mapie"/>

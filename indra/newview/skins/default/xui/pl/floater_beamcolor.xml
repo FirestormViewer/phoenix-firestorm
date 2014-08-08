@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="BeamColor" title="Kolor promienia">
+	<floater.string name="start_hue">
+		Barwa startowa
+	</floater.string>
+	<floater.string name="end_hue">
+		Barwa końcowa
+	</floater.string>
 	<text name="beamcolor_text">
 Użyj myszki, aby określić który kolor ma być
 startowym, a który końcowym dla promienia.
