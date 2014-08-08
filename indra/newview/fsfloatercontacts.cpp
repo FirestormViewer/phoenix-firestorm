@@ -167,6 +167,8 @@ BOOL FSFloaterContacts::postBuild()
 	gSavedSettings.getControl("FSFriendListColumnShowFullName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowFullName"));
 	onColumnDisplayModeChanged();
 
+	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
+
 	return TRUE;
 }
 
@@ -1165,6 +1167,20 @@ void FSFloaterContacts::onFullNameFormatChanged()
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
 		{
+			(*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+		}
+	}
+}
+
+void FSFloaterContacts::onDisplayNameChanged()
+{
+	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
+	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); ++it)
+	{
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
+		{
+			(*it)->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
 			(*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
 		}
 	}

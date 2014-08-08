@@ -118,6 +118,7 @@ private:
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void					onColumnDisplayModeChanged(const std::string& settings_name = "");
 	void					onFullNameFormatChanged();
+	void					onDisplayNameChanged();
 
 	// friend buttons
 	void					onViewProfileButtonClicked();
