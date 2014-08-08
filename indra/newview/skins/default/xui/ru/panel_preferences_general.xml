@@ -7,12 +7,12 @@
 		<combo_box.item label="Системный" name="System Default Language"/>
 		<combo_box.item label="English (английский)" name="English"/>
 		<combo_box.item label="Dansk (Датский) - Beta" name="Danish"/>
-		<combo_box.item label="Deutsch (Немецкий) - Beta" name="Deutsch(German)"/>
+		<combo_box.item label="Deutsch (Немецкий)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Испанский) - Beta" name="Spanish"/>
 		<combo_box.item label="Français (Французский) - Beta" name="French"/>
 		<combo_box.item label="Italiano (Итальянский) - Beta" name="Italian"/>
 		<combo_box.item label="Nederlands (Голландский) - Beta" name="Dutch"/>
-		<combo_box.item label="Polski (Польский) - Beta" name="Polish"/>
+		<combo_box.item label="Polski (Польский)" name="Polish"/>
 		<combo_box.item label="Português (Португальский) - Beta" name="Portugese"/>
 		<combo_box.item label="日本語 (Японский) - Beta" name="Japanese"/>
 		<combo_box.item label="Русский (Русский) - Beta v2.0" name="Russian"/>

@@ -7,11 +7,11 @@
 		<combo_box.item label="Padrão" name="System Default Language"/>
 		<combo_box.item label="English (Inglês)" name="English"/>
 		<combo_box.item label="Dansk (Dinamarquês) - Beta" name="Danish"/>
-		<combo_box.item label="Deutsch (Alemão) - Beta" name="Deutsch(German)"/>
+		<combo_box.item label="Deutsch (Alemão)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espanhol) - Beta" name="Spanish"/>
 		<combo_box.item label="Français (Francês) - Beta" name="French"/>
 		<combo_box.item label="Italiano - Beta" name="Italian"/>
-		<combo_box.item label="Polski (Polonês) - Beta" name="Polish"/>
+		<combo_box.item label="Polski (Polonês)" name="Polish"/>
 		<combo_box.item label="Português (Português) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский (Russo) - Beta" name="Russian"/>
 		<combo_box.item label="Türkçe (Turco) - Beta" name="Turkish"/>

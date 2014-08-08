@@ -14,7 +14,7 @@
 		<combo_box.item name="Danish"
 			label="Dansk (Danois) - Bêta" />
 		<combo_box.item name="Deutsch(German)"
-			label="Deutsch (Allemand) - Bêta" />
+			label="Deutsch (Allemand)" />
 		<combo_box.item name="Spanish"
 			label="Español (Espagnol) - Bêta" />
 		<combo_box.item name="French"
@@ -22,7 +22,7 @@
 		<combo_box.item name="Italian"
 			label="Italiano (Italien) - Bêta" />
 		<combo_box.item name="Polish"
-			label="Polski (Polonais) - Bêta" />
+			label="Polski (Polonais)" />
 		<combo_box.item name="Portugese"
 			label="Português (Portugais) - Bêta" />
 		<combo_box.item name="Russian"
