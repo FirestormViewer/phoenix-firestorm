@@ -68,7 +68,7 @@
          value="it" />
         <combo_box.item
          enabled="true"
-         label="Polski (Polish) - Beta"
+         label="Polski (Polish)"
          name="Polish"
          value="pl" />
         <combo_box.item

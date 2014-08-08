@@ -480,6 +480,7 @@
 		</menu>
 		<menu label="Interfejs" name="UI">
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
+			<menu_item_check label="Test restartu regionu" name="Region Restart Test"/>
 			<menu_item_call label="Przeglądarka treści internetowych" name="Web Content Browser"/>
 			<menu_item_call label="Test połączenia z Facebookiem" name="FB Connect Test"/>
 			<menu_item_call label="Zrzut SelectMgr" name="Dump SelectMgr"/>

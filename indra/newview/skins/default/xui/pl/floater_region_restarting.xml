@@ -19,5 +19,9 @@ Jeśli w nim zostaniesz, to symulator Cię wyloguje.
 			Sekund do restartu
 32767
 		</text>
+		<combo_box label="Moje landmarki" name="landmark combo">
+			<combo_box.item label="Moje landmarki" name="item1" />
+		</combo_box>
+		<button tool_tip="Teleportuj do landmarka" name="teleport_btn" />
 	</panel>
 </floater>

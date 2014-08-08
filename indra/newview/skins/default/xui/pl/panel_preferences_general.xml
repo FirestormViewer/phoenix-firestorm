@@ -11,7 +11,7 @@
 		<combo_box.item label="Español (Hiszpański) - Beta" name="Spanish"/>
 		<combo_box.item label="Français (Francuski) - Beta" name="French"/>
 		<combo_box.item label="Italiano (Włoski) - Beta" name="Italian"/>
-		<combo_box.item label="Polski - Beta" name="Polish"/>
+		<combo_box.item label="Polski" name="Polish"/>
 		<combo_box.item label="Português (Portugalski) - Beta" name="Portugese"/>
 		<combo_box.item label="Русский (Rosyjski) - Beta" name="Russian"/>
 		<combo_box.item label="Türkçe (Turecki) - Beta" name="Turkish"/>

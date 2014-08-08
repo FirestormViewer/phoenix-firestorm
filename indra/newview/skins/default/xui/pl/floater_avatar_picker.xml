@@ -34,7 +34,7 @@
 				Wybierz osobę:
 			</text>
 		</panel>
-		<panel label="Obok mnie:" name="NearMePanel">
+		<panel label="Obok mnie" name="NearMePanel">
 			<text name="InstructSelectResident">
 				Wybierz osobę w pobliżu:
 			</text>
@@ -45,6 +45,16 @@
 			<scroll_list name="NearMe">
 				<columns label="Imię" name="name"/>
 				<columns label="Nazwa użytkownika" name="username"/>
+			</scroll_list>
+		</panel>
+		<panel label="Szukaj po UUID" name="SearchPanelUUID">
+			<text name="SearchByUUIDLabel">
+				Wpisz UUID osoby:
+			</text>
+			<button label="Szukaj" label_selected="Szukaj" name="FindUUID" />
+			<scroll_list name="SearchResultsUUID">
+				<columns label="Imię" name="nameUUID" />
+				<columns label="Nazwa użytkownika" name="usernameUUID" />
 			</scroll_list>
 		</panel>
 	</tab_container>
