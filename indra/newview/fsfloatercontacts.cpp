@@ -160,7 +160,7 @@ BOOL FSFloaterContacts::postBuild()
 	
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSFloaterContacts::updateRlvRestrictions, this, _1));
 
-	gSavedSettings.getControl("FSFriendListFullNameFormat")->getSignal()->connect(boost::bind(&FSFloaterContacts::onFullNameFormatChanged, this));
+	gSavedSettings.getControl("FSFriendListFullNameFormat")->getSignal()->connect(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
 	gSavedSettings.getControl("FSFriendListSortOrder")->getSignal()->connect(boost::bind(&FSFloaterContacts::sortFriendList, this));
 	gSavedSettings.getControl("FSFriendListColumnShowUserName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowUserName"));
 	gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
@@ -1157,19 +1157,6 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 	}
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
-}
-
-void FSFloaterContacts::onFullNameFormatChanged()
-{
-	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
-	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); ++it)
-	{
-		LLAvatarName av_name;
-		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
-		{
-			(*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
-		}
-	}
 }
 
 void FSFloaterContacts::onDisplayNameChanged()
