@@ -84,6 +84,7 @@
 #include "fsconsoleutils.h"
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
+#include "llslurl.h"
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
@@ -2989,7 +2990,7 @@ void LLIMMgr::addMessage(
 			if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
 			{
 				LLStringUtil::format_map_t args;
-				args["NAME"] = fixed_session_name;
+				args["NAME"] = LLSLURL("group", new_session_id, "about").getSLURLString();
 				reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
 			}
 			clearPendingInvitation(new_session_id);
@@ -4166,7 +4167,7 @@ public:
 					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
 					{
 						LLStringUtil::format_map_t args;
-						args["NAME"] = group_data.mName;
+						args["NAME"] = LLSLURL("group", session_id, "about").getSLURLString();
 						reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
 					}
 					
