@@ -413,25 +413,9 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 
 	removeExtraLines();
 
-	// Parse SLURLs
-	LLWString newLine = wline;
-	if (mParseUrls)
-	{
-		LLUrlMatch urlMatch;
-		LLWString workLine = wline;
-		while (LLUrlRegistry::instance().findUrl(workLine, urlMatch) && !urlMatch.getUrl().empty())
-		{
-			LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
-
-			// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
-			// findUrl will always return the very first URL in a string
-			workLine = workLine.erase(0, urlMatch.getEnd() + 1);
-		}
-	}
-
 	mMutex.lock();
-	mLines.push_back(newLine);
-	mLineLengths.push_back((S32)newLine.length());
+	mLines.push_back(wline);
+	mLineLengths.push_back((S32)wline.length());
 	mAddTimes.push_back(mTimer.getElapsedTimeF32());
 	mLineColors.push_back(color);
 	mLineStyle.push_back(styleflags);
@@ -593,16 +577,64 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 //Pass in the string and the default color for this block of text.
 // <FS:Ansariel> Added styleflags parameter for style customization
 //LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width) 
-LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags) 
+LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, bool parse_urls, LLConsole* console) 
 // </FS:Ansariel>
 :	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
 {
+	// <FS:Ansariel> Parse SLURLs
+	mSourceText = str;
+	mID.generate();
+
+	if (parse_urls)
+	{
+		LLUrlMatch urlMatch;
+		LLWString workLine = str;
+
+		while (LLUrlRegistry::instance().findUrl(workLine, urlMatch, boost::bind(&LLConsole::onUrlLabelCallback, console, mID, _1, _2)) && !urlMatch.getUrl().empty())
+		{
+			LLWStringUtil::replaceString(mParagraphText, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
+			mUrlLabels[urlMatch.getUrl()] = urlMatch.getLabel();
+
+			// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
+			// findUrl will always return the very first URL in a string
+			workLine = workLine.erase(0, urlMatch.getEnd() + 1);
+		}
+	}
+	// </FS:Ansariel>
+
 	makeParagraphColorSegments(color);
 	// <FS:Ansariel> Added styleflags parameter for style customization
 	//updateLines( screen_width, font );
 	updateLines( screen_width, font, styleflags );
 	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Parse SLURLs
+void LLConsole::onUrlLabelCallback(const LLUUID& paragraph_id, const std::string& url, const std::string& label)
+{
+	for (paragraph_t::reverse_iterator it = mParagraphs.rbegin(); it != mParagraphs.rend(); ++it)
+	{
+		LLConsole::Paragraph& paragraph = *it;
+
+		if (paragraph.mID == paragraph_id)
+		{
+			paragraph.mUrlLabels[url] = label;
+
+			LLWString newText = paragraph.mSourceText;
+			for (std::map<std::string, std::string>::iterator url_it = paragraph.mUrlLabels.begin(); url_it != paragraph.mUrlLabels.end(); ++url_it)
+			{
+				LLWStringUtil::replaceString(newText, utf8string_to_wstring(url_it->first), utf8string_to_wstring(url_it->second));
+			}
+			paragraph.mParagraphText = newText;
+
+			paragraph.makeParagraphColorSegments(paragraph.mLines.front().mLineColorSegments.front().mColor);
+			paragraph.updateLines((F32)getRect().getWidth(), mFont, paragraph.mLines.front().mStyleFlags, true);
+
+			break;
+		}
+	}
+}
+// </FS:Ansariel>
 	
 // called once per frame regardless of console visibility
 // static
@@ -636,7 +668,9 @@ void LLConsole::update()
 							mTimer.getElapsedTimeF32(), 
 							mFont, 
 							(F32)getRect().getWidth(),
-							(!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL)));
+							(!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL),
+							mParseUrls,
+							this));
 			mLines.pop_front();
 			if (!mLineColors.empty())
 				mLineColors.pop_front();

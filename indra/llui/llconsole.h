@@ -120,7 +120,7 @@ public:
 		public:
 			// <FS:Ansariel> Added styleflags parameter for style customization
 			//Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width);
-			Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags);
+			Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, bool parse_urls, LLConsole* console);
 			// </FS:Ansariel>
 			void makeParagraphColorSegments ( const LLColor4 &color);
 			// <FS:Ansariel> Added styleflags parameter for style customization
@@ -133,7 +133,12 @@ public:
 			F32 mAddTime;				//Time this paragraph was added to the display.
 			F32 mMaxWidth;				//Width of the widest line of text in this paragraph.
 			lines_t	mLines;
-			
+
+			// <FS:Ansariel> Parse SLURLs
+			LLUUID								mID;
+			LLWString							mSourceText;
+			std::map<std::string, std::string>	mUrlLabels;
+			// </FS:Ansariel>
 	};
 		
 	//The console contains a deque of paragraphs which represent the individual messages.
@@ -164,6 +169,8 @@ public:
 
 protected:
 	void removeExtraLines();
+
+	void onUrlLabelCallback(const LLUUID& paragraph_id, const std::string& url, const std::string& label);
 // </FS:Ansariel>
 
 private:
