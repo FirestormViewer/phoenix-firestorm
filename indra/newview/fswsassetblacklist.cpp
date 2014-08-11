@@ -35,7 +35,7 @@
 #include "llsdserialize.h"
 #include "llvfs.h"
 #include "llxorcipher.h"
-
+#include "llviewerobjectlist.h"
 
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
@@ -130,6 +130,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 
 	addEntryToBlacklistMap(id, type);
 	mBlacklistData[id] = data;
+	gObjectList.addBlacklistedItem( id );
 
 	if (type == LLAssetType::AT_SOUND)
 	{
