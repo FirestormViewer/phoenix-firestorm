@@ -81,7 +81,6 @@ private:
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
 	void					getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) const;
-	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 
 	enum FRIENDS_COLUMN_ORDER
 	{
@@ -102,7 +101,7 @@ private:
 	void					refreshUI();
 	void					onSelectName();
 	void					applyRightsToFriends();
-	void					addFriend(const LLUUID& agent_id);	
+	void					addFriend(const LLUUID& agent_id);
 	void					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
 
 	typedef enum 
