@@ -89,7 +89,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mAllowRightsChange(TRUE),
 	mNumRightsChanged(0),
 	mRlvBehaviorCallbackConnection(),
-	mResetLastColumnDisplayModeChanged(false)
+	mResetLastColumnDisplayModeChanged(false),
+	mDirtyNames(false)
 {
 	mObserver = new LLLocalFriendsObserver(this);
 	LLAvatarTracker::instance().addObserver(mObserver);
@@ -171,6 +172,12 @@ void FSFloaterContacts::draw()
 	{
 		gSavedSettings.setBOOL(mLastColumnDisplayModeChanged, TRUE);
 		mResetLastColumnDisplayModeChanged = false;
+	}
+
+	if (mDirtyNames)
+	{
+		onDisplayNameChanged();
+		mDirtyNames = false;
 	}
 
 	LLFloater::draw();
@@ -1173,7 +1180,7 @@ void FSFloaterContacts::onDisplayNameChanged()
 		}
 		else
 		{
-			LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
+			LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this));
 		}
 	}
 }

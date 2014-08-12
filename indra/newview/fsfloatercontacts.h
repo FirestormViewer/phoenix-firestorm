@@ -151,6 +151,7 @@ private:
 
 	std::string				mLastColumnDisplayModeChanged;
 	bool					mResetLastColumnDisplayModeChanged;
+	bool					mDirtyNames;
 
 	void childShowTab(const std::string& id, const std::string& tabname);
 
@@ -158,6 +159,8 @@ private:
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
 
 	std::string getFullName(const LLAvatarName& av_name);
+
+	void setDirtyNames() { mDirtyNames = true; }
 };
 
 
