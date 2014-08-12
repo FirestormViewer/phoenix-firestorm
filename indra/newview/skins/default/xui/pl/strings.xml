@@ -2158,6 +2158,21 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="DoNotDisturbModeResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość prywatną znajduje się w trybie zajętości i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
 	</string>
+	<string name="AutoResponseModeDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w Firestormie tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość prywatną aktywował w Firestormie tryb autoodpowiedzi i nie chce, aby mu przeszkadzano. Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania próśb oraz propozycji teleportacji i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość zablokował Cię.
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość obecnie śpi (jest z dala od klawiatury). Oznacza to, iż Twoja wiadomość zostanie zapisana do przejrzenia na później.
+	</string>
 	<string name="MuteByName">
 		(Nazwa)
 	</string>
