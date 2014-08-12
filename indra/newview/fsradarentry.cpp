@@ -141,7 +141,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 		{
 			if (av_name.isDisplayNameDefault())
 			{
-				return av_name.getDisplayName();
+				return av_name.getUserNameForDisplay();
 			}
 			else
 			{
@@ -152,7 +152,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 		{
 			if (av_name.isDisplayNameDefault())
 			{
-				return av_name.getDisplayName();
+				return av_name.getUserNameForDisplay();
 			}
 			else
 			{
@@ -162,5 +162,5 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 	}
 	
 	// else use legacy name lookups
-	return av_name.getDisplayName(); // will be mapped to legacyname automatically by the name cache
+	return av_name.getUserNameForDisplay(); // will be mapped to legacyname automatically by the name cache
 }

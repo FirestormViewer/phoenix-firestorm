@@ -90,6 +90,7 @@
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
 #include "fsfloatercontacts.h"
+#include "fsradar.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -783,6 +784,7 @@ void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 	LLAvatarNameCache::cleanupClass();
 	LLVOAvatar::invalidateNameTags();
 	FSFloaterContacts::getInstance()->onDisplayNameChanged();
+	FSRadar::getInstance()->updateNames();
 }
 
 void handleUsernameFormatOptionChanged(const LLSD& newvalue)
@@ -792,6 +794,7 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 	LLAvatarNameCache::cleanupClass();
 	LLVOAvatar::invalidateNameTags();
 	FSFloaterContacts::getInstance()->onDisplayNameChanged();
+	FSRadar::getInstance()->updateNames();
 }
 // </FS:CR>
 
