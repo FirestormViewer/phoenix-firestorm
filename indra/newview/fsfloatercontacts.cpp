@@ -177,6 +177,7 @@ void FSFloaterContacts::draw()
 	if (mDirtyNames)
 	{
 		onDisplayNameChanged();
+		mFriendsList->setNeedsSort();
 		mDirtyNames = false;
 	}
 
@@ -1183,6 +1184,7 @@ void FSFloaterContacts::onDisplayNameChanged()
 			LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this));
 		}
 	}
+	mFriendsList->setNeedsSort();
 }
 
 std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
