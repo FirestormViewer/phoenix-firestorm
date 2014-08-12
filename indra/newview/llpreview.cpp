@@ -269,7 +269,15 @@ void LLPreview::onRadio(LLUICtrl*, void* userdata)
 // static
 void LLPreview::hide(const LLUUID& item_uuid, BOOL no_saving /* = FALSE */ )
 {
-	LLFloater* floater = LLFloaterReg::findInstance("preview", LLSD(item_uuid));
+	// <FS:Ansariel> FIRE-14195: Deleting item from inventory doesn't close preview
+	//LLFloater* floater = LLFloaterReg::findInstance("preview", LLSD(item_uuid));
+	LLFloater* floater = LLFloaterReg::findInstance("preview_anim", LLSD(item_uuid));
+	if (!floater) floater = LLFloaterReg::findInstance("preview_gesture", LLSD(item_uuid));
+	if (!floater) floater = LLFloaterReg::findInstance("preview_notecard", LLSD(item_uuid));
+	if (!floater) floater = LLFloaterReg::findInstance("preview_script", LLSD(item_uuid));
+	if (!floater) floater = LLFloaterReg::findInstance("preview_sound", LLSD(item_uuid));
+	if (!floater) floater = LLFloaterReg::findInstance("preview_texture", LLSD(item_uuid));
+	// </FS:Ansariel>
 	if (!floater) floater = LLFloaterReg::findInstance("preview_avatar", LLSD(item_uuid));
 	
 	LLPreview* preview = dynamic_cast<LLPreview*>(floater);
