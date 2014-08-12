@@ -89,6 +89,7 @@
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
+#include "fsfloatercontacts.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -774,6 +775,26 @@ static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 	}
 }
 
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+void handleLegacyTrimOptionChanged(const LLSD& newvalue)
+{
+	gSavedSettings.setBOOL("FSTrimLegacyNames", newvalue.asBoolean());
+	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
+	LLAvatarNameCache::cleanupClass();
+	LLVOAvatar::invalidateNameTags();
+	FSFloaterContacts::getInstance()->onDisplayNameChanged();
+}
+
+void handleUsernameFormatOptionChanged(const LLSD& newvalue)
+{
+	gSavedSettings.setBOOL("FSNameTagShowLegacyUsernames", newvalue.asBoolean());
+	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
+	LLAvatarNameCache::cleanupClass();
+	LLVOAvatar::invalidateNameTags();
+	FSFloaterContacts::getInstance()->onDisplayNameChanged();
+}
+// </FS:CR>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -970,6 +991,8 @@ void settings_setup_listeners()
 	gSavedPerAccountSettings.getControl("BridgeIntegrationOC")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
 	gSavedPerAccountSettings.getControl("BridgeIntegrationLM")->getCommitSignal()->connect(boost::bind(&handleExternalIntegrationsOptionChanged));
 
+	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
+	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

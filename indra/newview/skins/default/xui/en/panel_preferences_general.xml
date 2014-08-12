@@ -365,10 +365,7 @@
      name="display_names_check"
      width="140"
      tool_tip="Check to use display names in chat, IM, name tags, etc."
-     top_pad="3">
-        <check_box.commit_callback
-         function="FS.ToggleSortContacts" />
-    </check_box>
+     top_pad="3"/>
    <check_box
      control_name="FSNameTagShowLegacyUsernames"
      enabled_control="NameTagShowUserNames"
@@ -403,10 +400,7 @@
    name="legacy_trim_check"
    width="100"
    tool_tip="Trim 'Resident' from legacy names"
-   top_delta="0">
-    <check_box.commit_callback
-     function="FS.ToggleSortContacts" />
-  </check_box>
+   top_delta="0"/>
     
    <check_box
      control_name="FSLegacyNametagPosition"

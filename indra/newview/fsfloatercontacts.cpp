@@ -1167,8 +1167,13 @@ void FSFloaterContacts::onDisplayNameChanged()
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
 		{
+			(*it)->getColumn(LIST_FRIEND_USER_NAME)->setValue(av_name.getUserNameForDisplay());
 			(*it)->getColumn(LIST_FRIEND_DISPLAY_NAME)->setValue(av_name.getDisplayName());
 			(*it)->getColumn(LIST_FRIEND_NAME)->setValue(getFullName(av_name));
+		}
+		else
+		{
+			LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
 		}
 	}
 }

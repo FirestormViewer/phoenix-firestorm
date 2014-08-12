@@ -67,6 +67,7 @@ public:
 	LLPanel* getPanelByName(const std::string& panel_name);
 
 	void					sortFriendList();
+	void					onDisplayNameChanged();
 
 	LLPanel*				mFriendsTab;
 	FSContactsFriendsCtrl*	mFriendsList;
@@ -117,7 +118,6 @@ private:
 	// misc callbacks
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void					onColumnDisplayModeChanged(const std::string& settings_name = "");
-	void					onDisplayNameChanged();
 
 	// friend buttons
 	void					onViewProfileButtonClicked();

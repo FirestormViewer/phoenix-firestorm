@@ -237,10 +237,6 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response);
 bool callback_growl_not_installed(const LLSD& notification, const LLSD& response);
 #endif
 // </FS:LO>
-// <FS:CR>
-void handleLegacyTrimOptionChanged(const LLSD& newvalue);
-void handleUsernameFormatOptionChanged(const LLSD& newvalue);
-// </FS:CR>
 // </Firestorm>
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
@@ -373,24 +369,6 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 	return false;
 }
 // </FS:AW  opensim search support>
-
-// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-void handleLegacyTrimOptionChanged(const LLSD& newvalue)
-{
-	gSavedSettings.setBOOL("FSTrimLegacyNames", newvalue.asBoolean());
-	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
-	LLAvatarNameCache::cleanupClass();
-	LLVOAvatar::invalidateNameTags();
-}
-
-void handleUsernameFormatOptionChanged(const LLSD& newvalue)
-{
-	gSavedSettings.setBOOL("FSNameTagShowLegacyUsernames", newvalue.asBoolean());
-	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
-	LLAvatarNameCache::cleanupClass();
-	LLVOAvatar::invalidateNameTags();
-}
-// </FS:CR>
 
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
 {
@@ -531,8 +509,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ResetLogPath",			boost::bind(&LLFloaterPreference::onClickResetLogPath, this));
 	// <FS:CR>
 	gSavedSettings.getControl("FSColorUsername")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
-	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
-	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
 	gSavedSettings.getControl("FSUseLegacyClienttags")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
 	gSavedSettings.getControl("FSClientTagsVisibility")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
 	gSavedSettings.getControl("FSColorClienttags")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
