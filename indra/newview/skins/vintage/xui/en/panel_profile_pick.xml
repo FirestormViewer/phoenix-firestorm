@@ -80,10 +80,8 @@
      layout="topleft"
      follows="left|bottom"
      name="pick_location"
-     border_visible="true"
      type="string"
-     length="1"
-     word_wrap="false">
+     length="1">
         loading...
     </line_editor>
 

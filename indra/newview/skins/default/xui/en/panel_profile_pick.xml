@@ -56,10 +56,8 @@
      layout="topleft"
      follows="left|right|bottom"
      name="pick_location"
-     border_visible="true"
      type="string"
-     length="1"
-     word_wrap="false">
+     length="1">
         Loading...
     </line_editor>
 
