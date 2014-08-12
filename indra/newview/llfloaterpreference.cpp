@@ -3465,12 +3465,56 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("FSSkinCurrentReadableName", m_SkinName);
 		gSavedSettings.setString("FSSkinCurrentThemeReadableName", m_SkinThemeName);
 
-		LLSD args, payload;
-		LLNotificationsUtil::add("ChangeSkin",
-								 args,
-								 payload,
-								 boost::bind(&LLPanelPreferenceSkins::callbackRestart, this, _1, _2));
+		// <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
+		// current skin would be carried over, leading to confusion and a first experience with
+		// the skin that the designer didn't intend.
+		if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
+		{
+			LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
+			gSavedSettings.setBOOL("ResetToolbarSettings", TRUE);
+		}
+
+		if (m_Skin == "starlight" || m_Skin == "starlightcui")
+		{
+			std::string noteMessage;
+
+			if (gSavedSettings.getBOOL("ShowMenuBarLocation"))
+			{
+				noteMessage = LLTrans::getString("skin_defaults_starlight_location");
+				gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+			}
+
+			if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+			{
+				if (!noteMessage.empty())
+				{
+					noteMessage += "\n";
+				}
+				noteMessage += LLTrans::getString("skin_defaults_starlight_navbar");
+				gSavedSettings.setBOOL("ShowNavbarNavigationPanel", TRUE);
+			}
+
+			if (!noteMessage.empty())
+			{
+				LLSD args;
+				args["MESSAGE"] = noteMessage;
+				LLNotificationsUtil::add("SkinDefaultsChangeSettings", args, LLSD(), boost::bind(&LLPanelPreferenceSkins::showSkinChangeNotification, this));
+				return;
+			}
+		}
+		// </FS:AO>
+
+		showSkinChangeNotification();
 	}
+}
+
+void LLPanelPreferenceSkins::showSkinChangeNotification()
+{
+	LLSD args, payload;
+	LLNotificationsUtil::add("ChangeSkin",
+								args,
+								payload,
+								boost::bind(&LLPanelPreferenceSkins::callbackRestart, this, _1, _2));
 }
 
 void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLSD& response)
@@ -3506,45 +3550,6 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_SkinName = m_pSkinCombo->getSelectedItemLabel();
 	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
 	refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
-
-    // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
-    // current skin would be carried over, leading to confusion and a first experience with
-    // the skin that the designer didn't intend.
-	if  (m_Skin.compare("starlight") == 0 ||
-	     m_Skin.compare("starlightcui") == 0)
-	{
-		std::string noteMessage;
-
-		if(gSavedSettings.getBOOL("ShowMenuBarLocation"))
-		{
-			noteMessage=LLTrans::getString("skin_defaults_starlight_location");
-			gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
-		}
-
-		if(!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-		{
-			if(!noteMessage.empty())
-			{
-				noteMessage+="\n";
-			}
-			noteMessage+=LLTrans::getString("skin_defaults_starlight_navbar");
-			gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
-		}
-
-		if(!noteMessage.empty())
-		{
-			LLSD args;
-			args["MESSAGE"]=noteMessage;
-			LLNotificationsUtil::add("SkinDefaultsChangeSettings",args);
-		}
-	}
-
-	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
-	{
-		LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
-		gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
-	}
-    //</FS:AO>
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()

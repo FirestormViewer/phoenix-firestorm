@@ -338,6 +338,7 @@ protected:
 	void refreshSkinList();
 	void refreshSkinThemeList();
 	void refreshPreviewImage(); // <FS:PP> FIRE-1689: Skins preview image
+	void showSkinChangeNotification();
 	
 protected:
 	std::string m_Skin;
