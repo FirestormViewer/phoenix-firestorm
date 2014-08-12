@@ -75,6 +75,8 @@ public:
 	LLGroupList*			mGroupList;
 
 private:
+	typedef std::vector<LLScrollListItem*> listitem_vec_t;
+
 	std::string				getActiveTabName() const;
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;

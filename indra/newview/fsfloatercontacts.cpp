@@ -486,8 +486,8 @@ void FSFloaterContacts::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 
 void FSFloaterContacts::getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) const
 {
-	std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
-	for(std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
+	listitem_vec_t selected = mFriendsList->getAllSelected();
+	for (listitem_vec_t::iterator itr = selected.begin(); itr != selected.end(); ++itr)
 	{
 		selected_uuids.push_back((*itr)->getUUID());
 	}
@@ -921,8 +921,8 @@ void FSFloaterContacts::applyRightsToFriends()
 	EGrantRevoke confirmation_type = GRANT;
 
 	// this assumes that changes only happened to selected items
-	std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
-	for (std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
+	listitem_vec_t selected = mFriendsList->getAllSelected();
+	for (listitem_vec_t::iterator itr = selected.begin(); itr != selected.end(); ++itr)
 	{
 		LLUUID id = (*itr)->getValue();
 		const LLRelationship* buddy_relationship = LLAvatarTracker::instance().getBuddyInfo(id);
@@ -1161,8 +1161,8 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 
 void FSFloaterContacts::onDisplayNameChanged()
 {
-	std::vector<LLScrollListItem*> items = mFriendsList->getAllData();
-	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); ++it)
+	listitem_vec_t items = mFriendsList->getAllData();
+	for (listitem_vec_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get((*it)->getUUID(), &av_name))
