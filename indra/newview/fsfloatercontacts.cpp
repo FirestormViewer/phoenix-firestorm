@@ -1187,7 +1187,7 @@ void FSFloaterContacts::onDisplayNameChanged()
 
 std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
 {
-	if (av_name.isDisplayNameDefault())
+	if (av_name.isDisplayNameDefault() || !gSavedSettings.getBOOL("UseDisplayNames"))
 	{
 		return av_name.getDisplayName();
 	}
