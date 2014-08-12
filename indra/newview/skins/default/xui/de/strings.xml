@@ -2223,6 +2223,21 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="DoNotDisturbModeResponseDefault">
 		Dieser Einwohner hat den Nicht-stören-Modus aktiviert und wird Ihre Nachricht später sehen.
 	</string>
+	<string name="AutoResponseModeDefault">
+		Dieser Einwohner hat den Firestorm-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		Dieser Einwohner hat den Firestorm-Viewer-Modus „Automatische Antwort“ aktiviert. Dies bedeutet, dass er nicht gestört werden möchte. Er wird Ihre Nachricht später sehen.
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		Dieser Einwohner hat den Firestorm-Viewer-Modus „Teleport-Angebote und -Anforderungen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Teleport-Angeboten oder -Anforderungen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		Dieser Einwohner hat den Empfang Ihrer Nachrichten blockiert.
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		Dieser Einwohner ist gerade nicht am Platz und wird Ihre Nachricht später sehen.
+	</string>
 	<string name="MuteByName">
 		(Nach Namen)
 	</string>
@@ -2266,7 +2281,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		(wird nach Veröffentlichung aktualisiert)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Sie haben keine Auswahl oder Anzeigen erstelllt. Klicken Sie auf die „Plus&quot;-Schaltfläche, um eine Auswahl oder Anzeige zu erstellen.
+		Sie haben keine Auswahl oder Anzeigen erstelllt. Klicken Sie auf die „Plus“-Schaltfläche, um eine Auswahl oder Anzeige zu erstellen.
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		Der Einwohner hat keine Auswahl oder Anzeigen
@@ -2281,7 +2296,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Der Einwohner hat keine Auswahl.
 	</string>
 	<string name="NoClassifiedsText">
-		Sie haben keine Anzeige erstelllt. Klicken Sie auf die „Plus&quot;-Schaltfläche, um eine Anzeige zu erstellen.
+		Sie haben keine Anzeige erstelllt. Klicken Sie auf die „Plus“-Schaltfläche, um eine Anzeige zu erstellen.
 	</string>
 	<string name="NoAvatarClassifiedsText">
 		Der Einwohner hat keine Anzeigen.

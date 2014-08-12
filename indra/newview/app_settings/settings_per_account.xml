@@ -121,6 +121,17 @@
         <key>Value</key>
             <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
+    <key>FSAutoResponseChanged</key>
+        <map>
+        <key>Comment</key>
+            <string>Does user's auto response mode message differ from default?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     <key>FSAutorespondNonFriendsMode</key>
         <map>
         <key>Comment</key>
@@ -142,6 +153,17 @@
             <string>String</string>
         <key>Value</key>
             <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+        </map>
+    <key>FSAutoResponseNonFriendsChanged</key>
+        <map>
+        <key>Comment</key>
+            <string>Does user's auto response to non-friends mode message differ from default?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
         </map>
     <key>FSRejectTeleportOffersMode</key>
         <map>
@@ -165,6 +187,17 @@
         <key>Value</key>
             <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all teleport offers and requests mode&apos; which means they have requested not to be disturbed with teleport offers and requests. You may still send an IM message manually.</string>
         </map>
+    <key>FSRejectTeleportOffersResponseChanged</key>
+        <map>
+        <key>Comment</key>
+            <string>Does user's reject teleport offers response message differ from default?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     <key>FSSendAwayAvatarResponse</key>
         <map>
         <key>Comment</key>
@@ -187,6 +220,17 @@
         <key>Value</key>
             <string>The Resident you messaged is currently away from keyboard. Your message will still be shown in their IM panel for later viewing.</string>
         </map>
+    <key>FSAwayAvatarResponseChanged</key>
+        <map>
+        <key>Comment</key>
+            <string>Does user's away response message differ from default?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     <key>FSMutedAvatarResponse</key>
         <map>
         <key>Comment</key>
@@ -208,7 +252,18 @@
             <string>Boolean</string>
         <key>Value</key>
             <integer>0</integer>
-		</map>
+        </map>
+    <key>FSMutedAvatarResponseChanged</key>
+        <map>
+        <key>Comment</key>
+            <string>Does user's muted avatar response message differ from default?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     <key>GlobalOnlineStatusToggle</key>
         <map>
         <key>Comment</key>

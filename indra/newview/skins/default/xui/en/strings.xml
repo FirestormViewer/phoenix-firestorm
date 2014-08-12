@@ -1026,6 +1026,11 @@ The [[MARKETPLACE_CREATE_STORE_URL] Marketplace store] is returning errors.
 
   <!-- panel preferences general -->
   <string name="DoNotDisturbModeResponseDefault">This resident has turned on Unavailable mode and will see your message later.</string>
+  <string name="AutoResponseModeDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="AutoResponseModeNonFriendsDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="RejectTeleportOffersResponseDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all teleport offers and requests mode&apos; which means they have requested not to be disturbed with teleport offers and requests. You may still send an IM message manually.</string>
+  <string name="MutedAvatarsResponseDefault">The Resident you messaged has blocked you from sending them any messages.</string>
+  <string name="AwayAvatarResponseDefault">The Resident you messaged is currently away from keyboard. Your message will still be shown in their IM panel for later viewing.</string>
 
 	<!-- Mute -->
 	<string name="MuteByName">(By name)</string>

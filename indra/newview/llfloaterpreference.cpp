@@ -665,6 +665,13 @@ BOOL LLFloaterPreference::postBuild()
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		gSavedPerAccountSettings.setString("DoNotDisturbModeResponse", LLTrans::getString("DoNotDisturbModeResponseDefault"));
+		// <FS:Ansariel> FIRE-5436: Unlocalizable auto-response messages
+		gSavedPerAccountSettings.setString("FSAutorespondModeResponse", LLTrans::getString("AutoResponseModeDefault"));
+		gSavedPerAccountSettings.setString("FSAutorespondNonFriendsResponse", LLTrans::getString("AutoResponseModeNonFriendsDefault"));
+		gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		gSavedPerAccountSettings.setString("FSMutedAvatarResponse", LLTrans::getString("MutedAvatarsResponseDefault"));
+		gSavedPerAccountSettings.setString("FSAwayAvatarResponse", LLTrans::getString("AwayAvatarResponseDefault"));
+		// </FS:Ansariel>
 	}
 
 	// set 'enable' property for 'Clear log...' button
@@ -742,6 +749,38 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 					!= getChild<LLUICtrl>("do_not_disturb_response")->getValue().asString();
 
 	gSavedPerAccountSettings.setBOOL("DoNotDisturbResponseChanged", response_changed_flag );
+
+	// <FS:Ansariel> FIRE-5436: Unlocalizable auto-response messages
+	bool auto_response_changed_flag =
+			LLTrans::getString("AutoResponseModeDefault")
+					!= getChild<LLUICtrl>("autorespond_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSAutoResponseChanged", auto_response_changed_flag );
+
+	bool auto_response_non_friends_changed_flag =
+			LLTrans::getString("AutoResponseModeNonFriendsDefault")
+					!= getChild<LLUICtrl>("autorespond_nf_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSAutoResponseNonFriendsChanged", auto_response_non_friends_changed_flag );
+
+	bool reject_teleport_offers_response_changed_flag =
+			LLTrans::getString("RejectTeleportOffersResponseDefault")
+					!= getChild<LLUICtrl>("autorespond_rto_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersResponseChanged", reject_teleport_offers_response_changed_flag );
+
+	bool muted_avatar_response_changed_flag =
+			LLTrans::getString("MutedAvatarsResponseDefault")
+					!= getChild<LLUICtrl>("muted_avatar_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSMutedAvatarResponseChanged", muted_avatar_response_changed_flag );
+
+	bool away_avatar_response_changed_flag =
+			LLTrans::getString("AwayAvatarResponseDefault")
+					!= getChild<LLUICtrl>("away_avatar_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSAwayAvatarResponseChanged", away_avatar_response_changed_flag );
+	// </FS:Ansariel>
 }
 
 // <FS:Zi> Optional Edit Appearance Lighting
@@ -945,6 +984,13 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		// this connection is needed to properly set "DoNotDisturbResponseChanged" setting when user makes changes in
 		// do not disturb response message.
 		gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		// <FS:Ansariel> FIRE-5436: Unlocalizable auto-response messages
+		gSavedPerAccountSettings.getControl("FSAutorespondModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSAutorespondNonFriendsResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSRejectTeleportOffersResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSMutedAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSAwayAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		// </FS:Ansariel>
 	}
 	gAgent.sendAgentUserInfoRequest();
 
@@ -1058,6 +1104,33 @@ void LLFloaterPreference::initDoNotDisturbResponse()
 			//LLTrans::getString("DoNotDisturbModeResponseDefault") is used here for localization (EXT-5885)
 			gSavedPerAccountSettings.setString("DoNotDisturbModeResponse", LLTrans::getString("DoNotDisturbModeResponseDefault"));
 		}
+
+		// <FS:Ansariel> FIRE-5436: Unlocalizable auto-response messages
+		if (!gSavedPerAccountSettings.getBOOL("FSAutoResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSAutorespondModeResponse", LLTrans::getString("AutoResponseModeDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSAutoResponseNonFriendsChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSAutorespondNonFriendsResponse", LLTrans::getString("AutoResponseModeNonFriendsDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSMutedAvatarResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSMutedAvatarResponse", LLTrans::getString("MutedAvatarsResponseDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSAwayAvatarResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSAwayAvatarResponse", LLTrans::getString("AwayAvatarResponseDefault"));
+		}
+		// </FS:Ansariel>
 	}
 
 void LLFloaterPreference::setHardwareDefaults()
