@@ -8,7 +8,7 @@
 
     // Bridge platform
     string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
-    string  bridgeVersion = "2.17";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.18";    // This should match fslslbridge.cpp
     string  latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
@@ -45,78 +45,6 @@
 //
 // Bridge platform helper functions
 //
-
-    makeSane()
-    // Try and resist "accidental" damage from other scripts
-    // Reset persistent prim attributes frequently set via scripts, try and stop other scripts
-    {
-        string myName = llGetScriptName();
-        integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
-        if (n > 1)
-        {
-            llOwnerSay("<bridgeError error=injection>");
-            llSleep(1.0);
-            while(n)
-            {
-                string s = llGetInventoryName(INVENTORY_SCRIPT, --n);
-                if (s != myName)
-                    llSetScriptState(s, FALSE);
-            }
-        }
-        llParticleSystem([]);
-        llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
-        llAllowInventoryDrop(FALSE);
-        llSetTorque(ZERO_VECTOR, 0);
-        flight_hover(FALSE);
-        isFlyingNow = -1;
-        movelock_init(useMoveLock);
-    }
-
-    initBridge()
-    {
-
-        // Assume everything is disabled for now and synchronize later with the viewer via HTTP
-        useMoveLock = FALSE;
-        flightAssistPushForce = 0.0;
-        isFlyingNow = -1;
-        aoEnabledOC = FALSE;
-        aoEnabledLM = FALSE;
-
-        // Set owner and request control perms
-        owner = llGetOwner();
-        if (llGetAttached() != 0)
-        {
-            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
-        }
-
-        // Disable all secondary stateful services
-        setTimerEvent2(0);
-        llSetTimerEvent(0);
-        flight_hover(FALSE);
-        movelock_init(FALSE);
-
-        // Check VM version
-        if (llGetMemoryLimit() <= 16384)
-        {
-            llOwnerSay("<bridgeError error=wrongvm>");
-        }
-
-        // Set the channel for the AO OC interface
-        aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
-        if (aoChannelOC > 0)
-        {
-            aoChannelOC = -aoChannelOC;
-        }
-
-        // Remove previous AO listeners if present
-        integrationCheckOC();
-        integrationCheckLM();
-
-        // Assume the worst and let the viewer convince us otherwise
-        viewerIsFirestorm = FALSE;
-        requestBridgeURL();
-
-    }
 
     requestBridgeURL()
     {
@@ -275,12 +203,6 @@
 default
 {
 
-    state_entry()
-    {
-        makeSane();
-        initBridge();
-    }
-
     on_rez(integer i)
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
@@ -292,8 +214,46 @@ default
     {
         if (k != NULL_KEY)
         {
+
+            // Set owner and request control perms
+            owner = llGetOwner();
+            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
+
+            // Assume everything is disabled for now and synchronize later with the viewer via HTTP
+            useMoveLock = FALSE;
+            flightAssistPushForce = 0.0;
+            isFlyingNow = -1;
+            aoEnabledOC = FALSE;
+            aoEnabledLM = FALSE;
+
+            // Disable all secondary stateful services
+            setTimerEvent2(0);
+            llSetTimerEvent(0);
+            flight_hover(FALSE);
+            movelock_init(FALSE);
+
+            // Check VM version
+            if (llGetMemoryLimit() <= 16384)
+            {
+                llOwnerSay("<bridgeError error=wrongvm>");
+            }
+
+            // Set the channel for the AO OC interface
+            aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
+            if (aoChannelOC > 0)
+            {
+                aoChannelOC = -aoChannelOC;
+            }
+
+            // Remove previous AO listeners if present
+            integrationCheckOC();
+            integrationCheckLM();
+
+            // Assume the worst and let the viewer convince us otherwise
             tryHandshakeOnce = TRUE;
-            initBridge();
+            viewerIsFirestorm = FALSE;
+            requestBridgeURL();
+
         }
     }
 
@@ -376,7 +336,28 @@ default
         }
         else if (change & (CHANGED_INVENTORY | CHANGED_ALLOWED_DROP))
         {
-            makeSane();
+            // Try and resist "accidental" damage from other scripts
+            // Reset persistent prim attributes frequently set via scripts, try and stop other scripts
+            string myName = llGetScriptName();
+            integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
+            if (n > 1)
+            {
+                llOwnerSay("<bridgeError error=injection>");
+                llSleep(1.0);
+                while(n)
+                {
+                    string s = llGetInventoryName(INVENTORY_SCRIPT, --n);
+                    if (s != myName)
+                        llSetScriptState(s, FALSE);
+                }
+            }
+            llParticleSystem([]);
+            llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
+            llAllowInventoryDrop(FALSE);
+            llSetTorque(ZERO_VECTOR, 0);
+            flight_hover(FALSE);
+            isFlyingNow = -1;
+            movelock_init(useMoveLock);
         }
         else if (change & CHANGED_OWNER)
         {
