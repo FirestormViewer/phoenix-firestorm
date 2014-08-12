@@ -165,18 +165,9 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 	std::string message = irc_me ? chat_msg.mText.substr(3) : chat_msg.mText;
 
 	// Get the display name of the sender if required
-	static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
-	static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
 	if (!chat_msg.mRlvNamesFiltered)
 	{
-		if (nameTagShowUsernames && useDisplayNames)
-		{
-			senderName = av_name.getCompleteName();
-		}
-		else if (useDisplayNames)
-		{
-			senderName = av_name.getDisplayName();
-		}
+		senderName = FSCommon::getAvatarNameByDisplaySettings(av_name);
 	}
 
 	consoleChat = senderName + delimiter + message;
