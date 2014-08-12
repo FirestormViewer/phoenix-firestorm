@@ -1189,6 +1189,10 @@ std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
 {
 	if (av_name.isDisplayNameDefault() || !gSavedSettings.getBOOL("UseDisplayNames"))
 	{
+		if (!gSavedSettings.getBOOL("FSTrimLegacyNames"))
+		{
+			return av_name.getUserNameForDisplay();
+		}
 		return av_name.getDisplayName();
 	}
 
