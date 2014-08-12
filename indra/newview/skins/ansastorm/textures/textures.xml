@@ -123,4 +123,8 @@
 	<texture name="Checkbox_Transparent_On_Disabled"		file_name="widgets/Checkbox_Transparent_On_Disabled.png" preload="true" />
 	<texture name="Checkbox_Transparent_Off"				file_name="widgets/Checkbox_Transparent_Off.png" preload="true" />
 	<texture name="Checkbox_Transparent_Off_Disabled"		file_name="widgets/Checkbox_Transparent_Disabled.png" preload="true" />
+
+	<texture name="icon_avatar_online"		file_name="icons/green_square.png" preload="true" />
+	<texture name="slim_icon_16_viewer"		file_name="icons/yellow_square.png" preload="true" />
+	<texture name="avatar_in_region"		file_name="icons/green_square.png" preload="true" />
 </textures>
