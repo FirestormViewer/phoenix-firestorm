@@ -76,21 +76,19 @@
 #include "llstartup.h"
 #include "llupdaterservice.h"
 
-// NaCl - Antispam Registry
-#include "NACLantispam.h"
-// NaCl End
-//#include "llcombobox.h"
-#include "llnetmap.h"
-#include "llnotificationsutil.h"
-#include "llstatusbar.h"
-#include "llfloaterreg.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llpanelplaces.h"
+// Firestorm inclues
+#include "fsfloatercontacts.h"
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
-#include "fsfloatercontacts.h"
 #include "fsradar.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llnetmap.h"
+#include "llnotificationsutil.h"
+#include "llpanelplaces.h"
+#include "llstatusbar.h"
+#include "NACLantispam.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
