@@ -78,20 +78,20 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 		loadConfig();
 		if (!mNotifier->isUsable())
 		{
-			LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
+			LL_INFOS("GrowlManagerInit") << "Growl not available" << LL_ENDL;
 			return;
 		}
 	}
 	else
 	{
-		LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
+		LL_INFOS("GrowlManagerInit") << "Growl not available" << LL_ENDL;
 		return;
 	}
 #else
 	// Don't do anything more if Growl isn't usable.
 	if( !mNotifier || !mNotifier->isUsable())
 	{
-		LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
+		LL_INFOS("GrowlManagerInit") << "Growl not available" << LL_ENDL;
 		return;
 	}
 
