@@ -3058,11 +3058,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 					if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 					{
-						addNameTagLine(av_name.getDisplayName()+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), (!av_name.getDisplayName().empty()) );
+						addNameTagLine((av_name.isDisplayNameDefault() ? av_name.getUserNameForDisplay() : av_name.getDisplayName()) +" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), (!av_name.getDisplayName().empty()) );
 					}
 					else
 					{
-						addNameTagLine(av_name.getDisplayName(), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
+						addNameTagLine((av_name.isDisplayNameDefault() ? av_name.getUserNameForDisplay() : av_name.getDisplayName()), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
 					}
 				}
 				// Suppress SLID display if display name matches exactly (ugh)
