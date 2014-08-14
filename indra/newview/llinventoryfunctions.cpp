@@ -1247,7 +1247,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 			}
 
 			LLUUID target_cat_id = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()));
-			if (target_cat_id.notNull()
+			if (target_cat_id.notNull())
 			{
 				move_inventory_item(gAgentID, gAgentSessionID, obj->getUUID(), target_cat_id, obj->getName(), LLPointer<LLInventoryCallback>(NULL));
 			}
