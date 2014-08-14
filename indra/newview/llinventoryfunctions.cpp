@@ -1207,6 +1207,53 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		return;
 	}
 	// </FS:Ansariel>
+	// <FS:Ansariel> Move to default folder
+	if ("move_to_default_folder" == action)
+	{
+		std::set<LLFolderViewItem*> selected_items = root->getSelectionList();
+		std::set<LLFolderViewItem*>::iterator set_iter;
+		LLUUID outbox_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX);
+		LLUUID cof_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+
+		for (set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
+		{
+			LLFolderViewItem* folder_item = *set_iter;
+			if (!folder_item)
+			{
+				continue;
+			}
+
+			LLInvFVBridge* bridge = (LLInvFVBridge*)folder_item->getViewModelItem();
+			if (!bridge)
+			{
+				continue;
+			}
+
+			LLInventoryObject* obj = bridge->getInventoryObject();
+			if (!obj)
+			{
+				continue;
+			}
+			
+			if (obj->getActualType() == LLAssetType::AT_CATEGORY)
+			{
+				continue;
+			}
+
+			if (gInventory.isObjectDescendentOf(obj->getUUID(), outbox_folder_id) ||
+				gInventory.isObjectDescendentOf(obj->getUUID(), cof_folder_id))
+			{
+				continue;
+			}
+
+			LLUUID target_cat_id = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()));
+			if (target_cat_id.notNull()
+			{
+				move_inventory_item(gAgentID, gAgentSessionID, obj->getUUID(), target_cat_id, obj->getName(), LLPointer<LLInventoryCallback>(NULL));
+			}
+		}
+	}
+	// </FS:Ansariel>
 
 	static const std::string change_folder_string = "change_folder_type_";
 	if (action.length() > change_folder_string.length() && 

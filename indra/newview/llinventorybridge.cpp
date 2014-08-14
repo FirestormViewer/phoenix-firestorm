@@ -673,6 +673,22 @@ void LLInvFVBridge::checkInventoryLinkReplace(menuentry_vec_t& items, menuentry_
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Move to default folder
+void LLInvFVBridge::checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_vec_t& disables_items)
+{
+	const LLInventoryObject* obj = getInventoryObject();
+
+	if (isAgentInventory() && !isOutboxFolder() && obj &&
+		obj->getActualType() != LLAssetType::AT_CATEGORY &&
+		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
+		obj->getActualType() != LLAssetType::AT_LINK
+		)
+	{
+		items.push_back(std::string("Move to Default Folder"));
+	}
+}
+// </FS:Ansariel>
+
 // Helper for commonly-used entries
 void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 										menuentry_vec_t &items,
@@ -859,6 +875,9 @@ void LLInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
+
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -4892,6 +4911,9 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);	
 }
 
@@ -4965,6 +4987,9 @@ void LLSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -5036,6 +5061,9 @@ void LLLandmarkBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
+
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -5364,6 +5392,9 @@ void LLCallingCardBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -5616,6 +5647,9 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -5673,6 +5707,9 @@ void LLAnimationBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
+
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -6142,6 +6179,9 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -6396,6 +6436,9 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
 
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
+
 	hide_context_entries(menu, items, disabled_items);
 }
 
@@ -6622,6 +6665,9 @@ void LLMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 
 	// <FS:Ansariel> Inventory Links Replace
 	checkInventoryLinkReplace(items, disabled_items);
+
+	// <FS:Ansariel> Move to default folder
+	checkMoveToDefaultFolder(items, disabled_items);
 
 	hide_context_entries(menu, items, disabled_items);
 }

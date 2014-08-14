@@ -175,6 +175,9 @@ protected:
 	// <FS:Ansariel> Inventory Links Replace
 	void checkInventoryLinkReplace(menuentry_vec_t& items, menuentry_vec_t& disables_items);
 
+	// <FS:Ansariel> Move to default folder
+	void checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_vec_t& disables_items);
+
 	virtual BOOL isItemPermissive() const;
 	static void changeItemParent(LLInventoryModel* model,
 								 LLViewerInventoryItem* item,
