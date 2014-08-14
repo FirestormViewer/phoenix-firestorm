@@ -1428,6 +1428,28 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		filter.setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
 		filter.setFilterLinks(LLInventoryFilter::FILTERLINK_ONLY_LINKS);
 	}
+
+	// <FS:Ansariel> Inventory Links Replace
+	if (command_name == "replace_links")
+	{
+		LLSD params;
+		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+		if (current_item)
+		{
+			LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
+
+			if (bridge)
+			{
+				LLInventoryObject* obj = bridge->getInventoryObject();
+				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
+				{
+					params = LLSD(obj->getUUID());
+				}
+			}
+		}
+		LLFloaterReg::showInstance("fs_linkreplace", params);
+	}
+	// </FS:Ansariel>
 }
 
 bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="fs_linkreplace" title="Inventar-Links ersetzen">
+	<string name="Ready">
+		Bereit...
+	</string>
+	<string name="TargetNotFound">
+		Ziel-Objekt nicht gefunden.
+	</string>
+	<string name="ItemsIdentical">
+		Quell- und Ziel-Objekt sind identisch.
+	</string>
+	<string name="ItemsFound">
+		[NUM] Inventar-Links gefunden.
+	</string>
+	<string name="ItemsRemaining">
+		Objekte verbleibend: [NUM]
+	</string>
+	<string name="ReplaceFinished">
+		Ersetzen von Inventar-Links beendet.
+	</string>
+	<text name="source_label">
+		Quelle:
+	</text>
+	<fs_inventory_drop_target name="source_uuid_editor" tool_tip="Quell-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
+	<text name="target_label">
+		Ziel:
+	</text>
+	<fs_inventory_drop_target name="target_uuid_editor" tool_tip="Ziel-Objekt aus dem Inventar hier per Drag&amp;Drop hineinziehen."/>
+	<text name="status_text">
+		Bereit...
+	</text>
+	<button name="btn_refresh" label="Aktualisieren"/>
+	<button name="btn_start" label="Starten"/>
+</floater>

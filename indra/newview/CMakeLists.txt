@@ -150,6 +150,7 @@ set(viewer_SOURCE_FILES
     fsfloaterimport.cpp
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
+    fsfloaterlinkreplace.cpp
     fsfloaternearbychat.cpp
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
@@ -848,6 +849,7 @@ set(viewer_HEADER_FILES
     fsfloaterexport.h
     fsfloatergroup.h
     fsfloatergrouptitles.h
+    fsfloaterlinkreplace.h
     fsfloaterimport.h
     fsfloaterim.h
     fsfloaterimcontainer.h
