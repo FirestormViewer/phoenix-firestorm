@@ -16907,7 +16907,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>VivoxDebugLevel</key>
     <map>
       <key>Comment</key>
-      <string>Logging level to use when launching the vivox daemon</string>
+      <string>Logging level to use when launching the vivox daemon SPATTERS FIX VALUE BEFORE CHECKIN</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -16916,6 +16916,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>0</string>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>VivoxShutdownTimeout</key>
+    <map>
+      <key>Comment</key>
+      <string>shutdown timeout in miliseconds.  The amount of time to wait for the service to shutdown gracefully after the last disconnect</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>500</string>
     </map>
     <key>VivoxDebugSIPURIHostName</key>
     <map>
