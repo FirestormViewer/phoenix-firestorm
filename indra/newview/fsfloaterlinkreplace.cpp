@@ -62,7 +62,7 @@ public:
 		LLInventoryItem* item = (LLInventoryItem*)cargo_data;
 
 		if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_LINK &&
-			item && item->getType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
+			item && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
 			(
 				LLAssetType::lookupCanLink(item->getType()) ||
 				(item->getType() == LLAssetType::AT_LINK && !gInventory.getObject(item->getLinkedUUID())) // Broken Link!

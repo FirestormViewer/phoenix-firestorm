@@ -1197,7 +1197,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 			if (bridge)
 			{
 				LLInventoryObject* obj = bridge->getInventoryObject();
-				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getType() != LLAssetType::AT_LINK_FOLDER)
+				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
 				{
 					params = LLSD(obj->getUUID());
 				}
