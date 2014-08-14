@@ -4876,6 +4876,17 @@ void LLTextureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			disabled_items.push_back(std::string("Save As"));
 		}
+
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
+		if (rlv_handler_t::isEnabled())
+		{
+			const LLInventoryObject* pItem = getInventoryObject();
+			if (pItem && gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE))
+			{
+				disabled_items.push_back(std::string("Open"));
+			}
+		}
+// [/RLVa:KB]
 	}
 
 	// <FS:Ansariel> Inventory Links Replace
