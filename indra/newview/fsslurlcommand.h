@@ -27,6 +27,4 @@
 #ifndef FS_SLURLCOMMAND_H
 #define FS_SLURLCOMMAND_H
 
-#include "llviewerprecompiledheaders.h"
-
 #endif // FS_SLURLCOMMAND_H

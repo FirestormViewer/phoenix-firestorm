@@ -41,9 +41,7 @@ public:
 	// not allowed from outside the app
 	FSSlurlCommandHandler() : LLCommandHandler("firestorm", UNTRUSTED_BLOCK) { }
 
-    // Your code here
-	bool handle(const LLSD& params, const LLSD& query_map,
-				LLMediaCtrl* web)
+	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
 	{
 		if (params.size() < 2)
 		{
