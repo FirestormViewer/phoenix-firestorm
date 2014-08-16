@@ -29,10 +29,9 @@
 #define FS_COMMON_H
 
 #include "fsregistrarutils.h"
-#include "llchat.h"
-#include "llviewerobject.h"
 
 class LLAvatarName;
+class LLViewerObject;
 
 const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;

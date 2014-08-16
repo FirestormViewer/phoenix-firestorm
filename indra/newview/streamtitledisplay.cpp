@@ -31,13 +31,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "streamtitledisplay.h"
+
+#include "fscommon.h"
 #include "llagent.h"
 #include "llaudioengine.h"
+#include "llchat.h"
 #include "llnotificationsutil.h"
 #include "llstreamingaudio.h"
-#include "llviewercontrol.h"
 #include "lltrans.h"
-#include "fscommon.h"
+#include "llviewercontrol.h"
 #include "message.h"
 
 StreamTitleDisplay::StreamTitleDisplay() : LLEventTimer(2.f) { }
@@ -54,9 +56,12 @@ void StreamTitleDisplay::checkMetadata()
 	static LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat", false);
 
 	if (!gAudiop)
+	{
 		return;
+	}
+
 	if ((ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat)
-	    && gAudiop->getStreamingAudioImpl()->getNewMetadata(mMetadata))
+		&& gAudiop->getStreamingAudioImpl()->getNewMetadata(mMetadata))
 	{
 		std::string chat = "";
 		
@@ -88,7 +93,9 @@ void StreamTitleDisplay::checkMetadata()
 					 && (mMetadata.has("TITLE") || mMetadata.has("ARTIST")))
 			{
 				if (!mMetadata.has("TITLE"))
+				{
 					mMetadata["TITLE"] = "";
+				}
 				LLNotificationsUtil::add((mMetadata.has("ARTIST") ? "StreamMetadata" : "StreamMetadataNoArtist"), mMetadata);
 			}
 		}

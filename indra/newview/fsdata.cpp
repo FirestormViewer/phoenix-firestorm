@@ -54,6 +54,7 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 #include "llvfs.h"
+#include "message.h"
 
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");

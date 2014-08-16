@@ -32,13 +32,13 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
 #include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
+#include "llviewerobject.h"
 #include "llviewerregion.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -64,9 +64,7 @@ void reportToNearbyChat(const std::string& message)
 	LLChat chat;
 	chat.mText = message;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-	LLSD args;
-	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-
+	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, LLSD());
 }
 
 std::string applyAutoCloseOoc(const std::string& message)
