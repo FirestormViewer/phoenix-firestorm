@@ -40,7 +40,7 @@ class LLImageRaw;
 class LLViewerTexture;
 class LLFloaterMap;
 class LLMenuGL;
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 class LLViewerRegion;
 class LLAvatarName;
 // [/SL:KB]
@@ -83,7 +83,7 @@ public:
 	/*virtual*/ BOOL	handleClick(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
 
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	void			refreshParcelOverlay() { mUpdateParcelImage = true; }
 // [/SL:KB]
 	void			setScale( F32 scale );
@@ -124,7 +124,7 @@ private:
 	BOOL			handleToolTipAgent(const LLUUID& avatar_id);
 	static void		showAvatarInspector(const LLUUID& avatar_id);
 
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	bool			createImage(LLPointer<LLImageRaw>& rawimagep) const;
 	void			createObjectImage();
 	void			createParcelImage();
@@ -136,7 +136,7 @@ private:
 	static bool		outsideSlop(S32 x, S32 y, S32 start_x, S32 start_y, S32 slop);
 
 //	bool			mUpdateNow;
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	bool			mUpdateObjectImage;
 	bool			mUpdateParcelImage;
 // [/SL:KB]
@@ -160,14 +160,17 @@ private:
 	LLVector3d		mObjectImageCenterGlobal;
 	LLPointer<LLImageRaw> mObjectRawImagep;
 	LLPointer<LLViewerTexture>	mObjectImagep;
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	LLVector3d		mParcelImageCenterGlobal;
 	LLPointer<LLImageRaw> mParcelRawImagep;
 	LLPointer<LLViewerTexture>	mParcelImagep;
+
+	boost::signals2::connection mParcelMgrConn;
+	boost::signals2::connection mParcelOverlayConn;
 // [/SL:KB]
 
 	LLUUID			mClosestAgentToCursor;
-// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 	LLVector3d		mClosestAgentPosition;
 // [/SL:KB]
 	// <FS:Ansariel> Synchronize tooltips throughout instances
@@ -197,7 +200,7 @@ private:
 	void handleClearMark();
 	void handleClearMarks();
 	void handleCam();
-// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 	void handleOverlayToggle(const LLSD& sdParam);
 	bool checkTextureType(const LLSD& sdParam) const;
 	void handleTextureType(const LLSD& sdParam) const;

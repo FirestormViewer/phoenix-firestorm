@@ -1,0 +1,21 @@
+[World/Minimap]
+- added   : "MiniMapObjects" setting to control the rendering of objects on the minimap
+    -> enabled by default
+- added   : property line overlay on the minimap
+- added   : "Property Lines" context menu option on the mini-map to toggle showing property lines
+    -> controls 'MiniMapPropertyLines' setting, defaults to on
+- added   : (optionally) use world map tile texture for the mini-map region texture
+- added   : "Terrain Textures" as an option to the mini-map "Show" context menu
+    -> with "Terrain Textures" and "World Map Textures" as separated options it will hopefully become clearer what the texture option entails
+- added   : (optionally) show for-sale parcels with a yellow highlight on the mini-map
+    -> controlled by 'MiniMapForSaleParcels', defaults to off
+- added   : colour collision parcels a transparent red
+    -> controlled by 'MiniMapCollisionParcels', defaults to on
+- added   : user-configurable "MiniMapParcelOverylay" color for the property lines on the mini-map
+- added   : "Place Profile" menu item to the mini-map context menu
+- added   : "View Profile" context menu item for singular and context sub-menu for multiple dots on the mini-map
+- changed : removed title bar from the mini-map + fixed vertical centering of directions
+- changed : moved mini-map zoom options into a "Zoom" sub-menu
+- changed : mini-map zoom levels for "Close", "Medium" and "Far" options
+    -> removed dead code in LLFloaterMap::handleZoom()
+- changed : only show the "Stop Tracking" mini-map context menu item if we're actually tracking something

@@ -165,7 +165,7 @@ public:
 	LLParcel*	getHoverParcel() const;
 
 	LLParcel*	getCollisionParcel() const;
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	const U8*	getCollisionBitmap() const { return mCollisionBitmap; }
 	size_t		getCollisionBitmapSize() const { return mParcelsPerEdge * mParcelsPerEdge / 8; }
 	U64			getCollisionRegionHandle() const { return mCollisionRegionHandle; }
@@ -365,7 +365,7 @@ private:
 	// Watch for pending collisions with a parcel you can't access.
 	// If it's coming, draw the parcel's boundaries.
 	LLParcel*					mCollisionParcel;
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	U8*							mCollisionBitmap;
 	U64							mCollisionRegionHandle;
 	collision_update_signal_t*	mCollisionUpdateSignal;

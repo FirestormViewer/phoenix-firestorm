@@ -139,7 +139,7 @@ public:
 	inline BOOL getReleaseNotesRequested()		const;
 
 //	bool isAlive(); // can become false if circuit disconnects
-// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	bool isAlive() const; // can become false if circuit disconnects
 
 	LLViewerTexture* getWorldMapTile() const;
