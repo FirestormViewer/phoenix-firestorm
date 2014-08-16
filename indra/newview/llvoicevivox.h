@@ -750,7 +750,7 @@ private:
 	std::string getAudioSessionURI();
 	std::string getAudioSessionHandle();
 			
-    void setHidden(bool hidden);
+    void setHidden(bool hidden); //virtual
 	void sendPositionalUpdate(void);
 	
 	void buildSetCaptureDevice(std::ostringstream &stream);

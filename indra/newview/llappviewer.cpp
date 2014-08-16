@@ -5687,8 +5687,8 @@ void LLAppViewer::idle()
 	// hover callbacks
 	//
     
-#ifdef LL_DARWIN   
-	if (mQuitRequested)  //MAINT-4243
+#ifdef LL_DARWIN
+	if (!mQuitRequested)  //MAINT-4243
 #endif
 	{
 // 		LL_RECORD_BLOCK_TIME(FTM_IDLE_CB);
