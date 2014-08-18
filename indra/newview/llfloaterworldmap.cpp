@@ -1223,10 +1223,31 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
 	mLandmarkAssetIDList.reserve(mLandmarkAssetIDList.size() + items.size());
 	mLandmarkItemIDList.reserve(mLandmarkItemIDList.size() + items.size());
 
+	// <FS:Ansariel> Filter duplicate landmarks on world map
+	std::list<LLInventoryItem*> usedLMs;
+	BOOL filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
+	// </FS:Ansariel>
 	S32 count = items.size();
 	for(S32 i = 0; i < count; ++i)
 	{
 		LLInventoryItem* item = items.at(i);
+
+		// <FS:Ansariel> Filter duplicate landmarks on world map
+		if (filterLandmarks)
+		{
+			bool skip = false;
+			for (std::list<LLInventoryItem*>::iterator it = usedLMs.begin(); it != usedLMs.end(); ++it)
+			{
+				if ((*it)->getAssetUUID() == item->getAssetUUID())
+				{
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+			usedLMs.push_front(item);
+		}
+		// </FS:Ansariel>
 		
 		list->addSimpleElement(item->getName(), ADD_BOTTOM, item->getUUID());
 		
