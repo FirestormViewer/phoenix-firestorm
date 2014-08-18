@@ -801,13 +801,13 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		return;
 	}
 
-	LLParcel *currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	LL_INFOS() << "Current media: "+sCurrentMedia.getMediaURL() << LL_ENDL;
 	LL_INFOS() << "New media: "+parcel->getMediaURL() << LL_ENDL;
 	// If there is no alert active, filter the media and flag media
 	//  queue empty.
-	if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+	if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 	{
 		if ((parcel->getMediaURL() == sCurrentMedia.getMediaURL()) &&
 			(!sMediaReFilter))
@@ -829,10 +829,10 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 	// If an alert is active, place the media in the media queue if not the same as previous request
 	else
 	{
-		if (sMediaQueueEmpty == false)
+		if (!sMediaQueueEmpty)
 		{
 			if (parcel->getMediaURL() != sQueuedMedia.getMediaURL())
-			{	
+			{
 				LL_INFOS() << "Media URL filter: active alert, replacing current queued media URL with: "+sQueuedMedia.getMediaURL() << LL_ENDL;
 				sQueuedMedia = *parcel;
 				sMediaQueueEmpty = false;
@@ -888,11 +888,11 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 
 	std::string media_action;
 	std::string domain = extractDomain(media_url);
-    
-	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
+
+	for (LLSD::array_iterator it = sMediaFilterList.beginArray(); it != sMediaFilterList.endArray(); ++it)
 	{
 		bool found = false;
-		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		std::string listed_domain = (*it)["domain"].asString();
 		if (media_url == listed_domain)
 		{
 			found = true;
@@ -908,7 +908,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		}
 		if (found)
 		{
-			media_action = sMediaFilterList[i]["action"].asString();
+			media_action = (*it)["action"].asString();
 			break;
 		}
 	}
@@ -982,7 +982,7 @@ void callback_media_alert(const LLSD &notification, const LLSD &response, LLParc
 
 void callback_media_alert2(const LLSD &notification, const LLSD &response, LLParcel* parcel, bool allow)
 {
-	LLParcel *currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	std::string media_url = parcel->getMediaURL();
@@ -1059,18 +1059,18 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 	LLViewerParcelMedia::sMediaFilterAlertActive = false;
 
 	// Check for any queued alerts.
-	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	if (!LLViewerParcelMedia::sMusicQueueEmpty)
 	{
 		// There's a queued audio stream. Ask about it.
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMediaQueueEmpty)
 	{
 		// There's a queued media stream. Ask about it.
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
-	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMOAPQueueEmpty)
 	{
 		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
 		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
@@ -1107,7 +1107,7 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 
 void callback_media_alert_single(const LLSD &notification, const LLSD &response, LLParcel* parcel)
 {
-	LLParcel *currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* currentparcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	std::string media_url = parcel->getMediaURL();
@@ -1156,18 +1156,18 @@ void callback_media_alert_single(const LLSD &notification, const LLSD &response,
 	LLViewerParcelMedia::sMediaFilterAlertActive = false;
 
 	// Check for any queued alerts.
-	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	if (!LLViewerParcelMedia::sMusicQueueEmpty)
 	{
 		// There's a queued audio stream. Ask about it.
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMediaQueueEmpty)
 	{
 		// There's a queued media stream. Ask about it.
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
-	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMOAPQueueEmpty)
 	{
 		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
 		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
@@ -1233,7 +1233,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 
 	// If there is no alert active, filter the media and flag the music
 	//  queue empty.
-	if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+	if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 	{
 		if ((media_url == sCurrentMusic) && 
 			(!sMediaReFilter))
@@ -1255,7 +1255,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	//  if not the same as previous request.
 	else
 	{
-		if (sMusicQueueEmpty == false)
+		if (!sMusicQueueEmpty)
 		{
 			if (media_url != sQueuedMusic)
 			{
@@ -1310,11 +1310,11 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 
 	std::string media_action;
 	std::string domain = extractDomain(media_url);
-    
-	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
+
+	for (LLSD::array_iterator it = sMediaFilterList.beginArray(); it != sMediaFilterList.endArray(); ++it)
 	{
 		bool found = false;
-		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		std::string listed_domain = (*it)["domain"].asString();
 		if (media_url == listed_domain)
 		{
 			found = true;
@@ -1323,14 +1323,14 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		{
 			size_t pos = domain.rfind(listed_domain);
 			if ((pos != std::string::npos) && 
-				(pos == domain.length()-listed_domain.length()))
+				(pos == domain.length() - listed_domain.length()))
 			{
 				found = true;
 			}
 		}
 		if (found)
 		{
-			media_action = sMediaFilterList[i]["action"].asString();
+			media_action = (*it)["action"].asString();
 			break;
 		}
 	}
@@ -1492,16 +1492,16 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 	LLViewerParcelMedia::sMediaFilterAlertActive = false;
 	
 	// Check for queues 
-	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	if (!LLViewerParcelMedia::sMusicQueueEmpty)
 	{
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMediaQueueEmpty)
 	{
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
-	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMOAPQueueEmpty)
 	{
 		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
 		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
@@ -1595,16 +1595,16 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 	LLViewerParcelMedia::sMediaFilterAlertActive = false;
 	
 	// Check for queues 
-	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	if (!LLViewerParcelMedia::sMusicQueueEmpty)
 	{
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMediaQueueEmpty)
 	{
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
-	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMOAPQueueEmpty)
 	{
 		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
 		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
@@ -1665,7 +1665,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 
 	// If there is no alert active, filter the media and flag the MOAP
 	//  queue empty.
-	if (LLViewerParcelMedia::sMediaFilterAlertActive == false)
+	if (!LLViewerParcelMedia::sMediaFilterAlertActive)
 	{
 		if ((media_url == sCurrentMOAP) && (!sMediaReFilter))
 		{
@@ -1686,7 +1686,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 	//  if not the same as previous request.
 	else
 	{
-		if (sMOAPQueueEmpty == false)
+		if (!sMOAPQueueEmpty)
 		{
 			if (media_url != sQueuedMOAPUrl)
 			{
@@ -1741,11 +1741,11 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 
 	std::string media_action;
 	std::string domain = extractDomain(media_url);
-    
-	for(S32 i = 0;i<(S32)sMediaFilterList.size();i++)
+
+	for (LLSD::array_iterator it = sMediaFilterList.beginArray(); it != sMediaFilterList.endArray(); ++it)
 	{
 		bool found = false;
-		std::string listed_domain = sMediaFilterList[i]["domain"].asString();
+		std::string listed_domain = (*it)["domain"].asString();
 		if (media_url == listed_domain)
 		{
 			found = true;
@@ -1761,7 +1761,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 		}
 		if (found)
 		{
-			media_action = sMediaFilterList[i]["action"].asString();
+			media_action = (*it)["action"].asString();
 			break;
 		}
 	}
@@ -1897,16 +1897,16 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 	LLViewerParcelMedia::sMediaFilterAlertActive = false;
 	
 	// Check for queues 
-	if (LLViewerParcelMedia::sMusicQueueEmpty == false)
+	if (!LLViewerParcelMedia::sMusicQueueEmpty)
 	{
 		LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMedia::sQueuedMusic);
 	}
-	else if (LLViewerParcelMedia::sMediaQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMediaQueueEmpty)
 	{
 		LLParcel* pParcel = &LLViewerParcelMedia::sQueuedMedia;
 		LLViewerParcelMedia::filterMediaUrl(pParcel);
 	}
-	else if (LLViewerParcelMedia::sMOAPQueueEmpty == false)
+	else if (!LLViewerParcelMedia::sMOAPQueueEmpty)
 	{
 		LLMediaDataClientObject* pObject = LLViewerParcelMedia::sQueuedMOAPObject;
 		LLObjectMediaNavigateClient* pNavObject = LLViewerParcelMedia::sQueuedMOAPNavObject;
@@ -1976,8 +1976,8 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 
 	if (pos != std::string::npos)
 	{
-		S32 count = url.size()-pos+2;
-		url = url.substr(pos+2, count);
+		size_t count = url.size() - pos + 2;
+		url = url.substr(pos + 2, count);
 	}
 
 	// Now, look for a / marking a local part; if there is one,
@@ -1994,14 +1994,14 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 
 	if (pos != std::string::npos)
 	{
-		S32 count = url.size()-pos+1;
-		url = url.substr(pos+1, count);
+		size_t count = url.size() - pos + 1;
+		url = url.substr(pos + 1, count);
 	}
 
 	// Finally, find and strip away any port number. This has to be done
 	//  after the previous step, or else the extra : for the password,
 	//  if supplied, will confuse things.
-	pos = url.find(":");  
+	pos = url.find(":");
 
 	if (pos != std::string::npos)
 	{
@@ -2009,8 +2009,8 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
 	}
 	
 	// Now map the whole thing to lowercase, since domain names aren't
-	//  case sensitive.
-	std::transform(url.begin(), url.end(),url.begin(), ::tolower);
+	// case sensitive.
+	std::transform(url.begin(), url.end(), url.begin(), ::tolower);
 
 	return url;
 }
