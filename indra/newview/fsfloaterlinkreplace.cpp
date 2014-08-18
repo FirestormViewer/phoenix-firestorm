@@ -201,7 +201,7 @@ void FSFloaterLinkReplace::onStartClicked()
 {
 	LL_INFOS() << "Starting inventory link replace" << LL_ENDL;
 
-	if (mSourceUUID.isNull() || mTargetUUID.isNull() || mSourceUUID == mTargetUUID)
+	if (mSourceUUID.isNull() || mTargetUUID.isNull())
 	{
 		LL_WARNS() << "Cannot replace. Either source or target UUID is null." << LL_ENDL;
 		return;
