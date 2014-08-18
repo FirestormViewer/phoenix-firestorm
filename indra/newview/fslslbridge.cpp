@@ -116,9 +116,9 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	{
 		return false; 		// quick exit if no leading <
 	}
-	S32 closebracket = message.find('>');
-	S32 firstblank = message.find(' ');
-	S32 tagend;
+	size_t closebracket = message.find('>');
+	size_t firstblank = message.find(' ');
+	size_t tagend;
 	if (closebracket == std::string::npos)
 	{
 		tagend = firstblank;
@@ -144,12 +144,12 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	{
 
 		// brutish parsing
-		S32 urlStart  = message.find("<bridgeURL>") + 11;
-		S32 urlEnd    = message.find("</bridgeURL>");
-		S32 authStart = message.find("<bridgeAuth>") + 12;
-		S32 authEnd   = message.find("</bridgeAuth>");
-		S32 verStart  = message.find("<bridgeVer>") + 11;
-		S32 verEnd    = message.find("</bridgeVer>");
+		size_t urlStart  = message.find("<bridgeURL>") + 11;
+		size_t urlEnd    = message.find("</bridgeURL>");
+		size_t authStart = message.find("<bridgeAuth>") + 12;
+		size_t authEnd   = message.find("</bridgeAuth>");
+		size_t verStart  = message.find("<bridgeVer>") + 11;
+		size_t verEnd    = message.find("</bridgeVer>");
 		std::string bURL = message.substr(urlStart,urlEnd - urlStart);
 		std::string bAuth = message.substr(authStart,authEnd - authStart);
 		std::string bVer = message.substr(verStart,verEnd - verStart);
@@ -254,7 +254,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	if (tag == "<clientAO ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=");
+		size_t valuepos = message.find("state=");
 		if (valuepos != std::string::npos)
 		{
 			if (message.substr(valuepos+6, 2) == "on")
@@ -277,7 +277,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	else if (tag == "<bridgeGetScriptInfo>")
 	{
 		status = true;
-		S32 getScriptInfoEnd = message.find("</bridgeGetScriptInfo>");
+		size_t getScriptInfoEnd = message.find("</bridgeGetScriptInfo>");
 		if (getScriptInfoEnd != std::string::npos)
 		{
 
@@ -351,7 +351,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	else if (tag == "<bridgeMovelock ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=");
+		size_t valuepos = message.find("state=");
 		if (valuepos != std::string::npos)
 		{
 			if (message.substr(valuepos+6, 1) == "1")
@@ -374,7 +374,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	else if (tag == "<bridgeError ")
 	{
 		status = true;
-		S32 valuepos = message.find("error=");
+		size_t valuepos = message.find("error=");
 		if (valuepos != std::string::npos)
 		{
 			if (message.substr(valuepos+6, 9) == "injection")
