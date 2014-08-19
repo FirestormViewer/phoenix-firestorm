@@ -2160,9 +2160,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0d5a4bd17079653ca70b32ea26a8156d</string>
+              <string>d813889f566cf287b6107b6c5c29f8ae</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-darwin-20140629.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1i-darwin-20140816.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2172,9 +2172,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>72a1eaeff0df2fd132447b6b6f5e60c5</string>
+              <string>201d28015436b94686b21d21d3cdfa77</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-linux-20140606.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1i-linux-20140816.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2196,9 +2196,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6395ebbd46dd6112e7aa0aa54089d9ed</string>
+              <string>2f9dd6fa95782433a99f644e75889cba</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-windows-20140606.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1i-windows-20140816.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
