@@ -46,7 +46,7 @@ void main()
 	vec2 dither_coord;
 	dither_coord[0] = vary_texcoord0[0] * dither_scale_s;
 	dither_coord[1] = vary_texcoord0[1] * dither_scale_t;
-	vec4 dither_vec = texture(dither_tex, dither_coord.xy);
+	vec4 dither_vec = texture2D(dither_tex, dither_coord.xy);
 
 	for(int i = 0; i < 3; i++)
 	{
