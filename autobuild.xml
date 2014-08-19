@@ -686,9 +686,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3f6461c8c3e9b4dcc999b7aa8ed6c4ee</string>
+              <string>35d52d6bd75b9d40330acc781645721d</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.32-darwin-20140407.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.41-darwin-20140819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -698,9 +698,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5178792b004a3617598b0593cacb23b5</string>
+              <string>93d450e246e7aeb7ba25d93adc3ebc9d</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.32-linux-20140407.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.41-linux-20140819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -710,9 +710,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5178792b004a3617598b0593cacb23b5</string>
+              <string>93d450e246e7aeb7ba25d93adc3ebc9d</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.32-linux-20140407.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.41-linux-20140819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -722,9 +722,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b257e73e2fe402b0c886222a5e71eb30</string>
+              <string>19bc62e8d4b11f1c3422ec5cfc89c7c2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.32-windows-20140407.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.41-windows-20140819.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
