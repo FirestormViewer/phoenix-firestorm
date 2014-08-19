@@ -111,6 +111,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	virtual void draw();
+	virtual void onOpen(const LLSD& key);
 
 	void callbackLoadFullName(const LLUUID& id, const std::string& full_name);
 	void processObjectProperties(LLMessageSystem* msg);

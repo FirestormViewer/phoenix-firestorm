@@ -185,6 +185,11 @@ BOOL FSAreaSearch::postBuild()
 	return LLFloater::postBuild();
 }
 
+void FSAreaSearch::onOpen(const LLSD& key)
+{
+	mTab->selectTab(1);
+}
+
 void FSAreaSearch::draw()
 {
 	LLFloater::draw();
