@@ -749,12 +749,12 @@ BOOL FSFloaterIM::postBuild()
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 	
-	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));	
-	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
-	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
-	mInputEditor->setKeystrokeCallback( boost::bind(onInputEditorKeystroke, _1, this) );
+	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
+	mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterIM::onInputEditorFocusReceived, this));
+	mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterIM::onInputEditorFocusLost, this));
+	mInputEditor->setKeystrokeCallback(boost::bind(&FSFloaterIM::onInputEditorKeystroke, this));
 	mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterIM::reshapeChatLayoutPanel, this));
-	mInputEditor->setCommitOnFocusLost( FALSE );
+	mInputEditor->setCommitOnFocusLost(FALSE);
 	mInputEditor->setPassDelete(TRUE);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -1338,42 +1338,35 @@ void FSFloaterIM::reloadMessages(bool clean_messages/* = false*/)
 	updateMessages();
 }
 
-// static
-void FSFloaterIM::onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata )
+void FSFloaterIM::onInputEditorFocusReceived()
 {
-	FSFloaterIM* self= (FSFloaterIM*) userdata;
-
 	// Allow enabling the FSFloaterIM input editor only if session can accept text
 	LLIMModel::LLIMSession* im_session =
-		LLIMModel::instance().findIMSession(self->mSessionID);
+		LLIMModel::instance().findIMSession(mSessionID);
 	//TODO: While disabled lllineeditor can receive focus we need to check if it is enabled (EK)
-	if( im_session && im_session->mTextIMPossible && self->mInputEditor->getEnabled())
+	if (im_session && im_session->mTextIMPossible && mInputEditor->getEnabled())
 	{
 		//in disconnected state IM input editor should be disabled
-		self->mInputEditor->setEnabled(!gDisconnected);
+		mInputEditor->setEnabled(!gDisconnected);
 	}
 }
 
-// static
-void FSFloaterIM::onInputEditorFocusLost(LLFocusableElement* caller, void* userdata)
+void FSFloaterIM::onInputEditorFocusLost()
 {
-	FSFloaterIM* self = (FSFloaterIM*) userdata;
-	self->setTyping(false);
+	setTyping(false);
 }
 
-// static
-void FSFloaterIM::onInputEditorKeystroke(LLTextEditor* caller, void* userdata)
+void FSFloaterIM::onInputEditorKeystroke()
 {
-	FSFloaterIM* self = (FSFloaterIM*)userdata;
-	std::string text = self->mInputEditor->getText();
+	std::string text = mInputEditor->getText();
 	if (!text.empty())
 	{
-		self->setTyping(true);
+		setTyping(true);
 	}
 	else
 	{
 		// Deleting all text counts as stopping typing.
-		self->setTyping(false);
+		setTyping(false);
 	}
 }
 

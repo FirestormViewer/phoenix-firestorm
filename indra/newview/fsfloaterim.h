@@ -177,9 +177,9 @@ private:
 	BOOL isInviteAllowed() const;
 	BOOL inviteToSession(const uuid_vec_t& agent_ids);
 	
-	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
-	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
-	static void		onInputEditorKeystroke(LLTextEditor* caller, void* userdata);
+	void onInputEditorFocusReceived();
+	void onInputEditorFocusLost();
+	void onInputEditorKeystroke();
 
 	void doToSelected(const LLSD& userdata);
 	bool checkEnabled(const LLSD& userdata);
