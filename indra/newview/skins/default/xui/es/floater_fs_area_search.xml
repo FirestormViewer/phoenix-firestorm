@@ -8,14 +8,14 @@
 			<panel.string name="ListedPendingTotalFilled">
 				[LISTED] Listados | [PENDING] Pendientes | [TOTAL] Totales
 			</panel.string>
-			<scroll_list name="result_list">
-				<scroll_list.columns name="name" label="Nombre"/>
-				<scroll_list.columns name="description" label="Descripción"/>
-				<scroll_list.columns name="owner" label="Propietario"/>
-				<scroll_list.columns name="group" label="Grupo" tool_tip="Con qué grupo está configurado el objeto."/>
-				<scroll_list.columns name="creator" label="Creador"/>
-				<scroll_list.columns name="last_owner" label="Último propietario" tool_tip="Quién lo poseyó anteriormente."/>
-			</scroll_list>
+			<area_search_list name="result_list">
+				<area_search_list.columns name="name" label="Nombre"/>
+				<area_search_list.columns name="description" label="Descripción"/>
+				<area_search_list.columns name="owner" label="Propietario"/>
+				<area_search_list.columns name="group" label="Grupo" tool_tip="Con qué grupo está configurado el objeto."/>
+				<area_search_list.columns name="creator" label="Creador"/>
+				<area_search_list.columns name="last_owner" label="Último propietario" tool_tip="Quién lo poseyó anteriormente."/>
+			</area_search_list>
 			<button name="Refresh" label="Actualizar"/>
 			<text name="counter">
 				Listados | Pendientes | Totales

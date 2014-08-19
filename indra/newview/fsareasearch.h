@@ -47,6 +47,7 @@ class LLContextMenu;
 class LLSpinCtrl;
 class LLComboBox;
 
+class FSAreaSearchListCtrl;
 class FSPanelAreaSearchList;
 class FSPanelAreaSearchFind;
 class FSPanelAreaSearchFilter;
@@ -280,12 +281,13 @@ class FSPanelAreaSearchList
 :	public LLPanel
 {
 	LOG_CLASS(FSPanelAreaSearchList);
+	friend class FSAreaSearchMenu;
+
 public:
 	FSPanelAreaSearchList(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchList();
 
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 	
 	void setCounterText();
 	void setCounterText(LLStringUtil::format_map_t args);
@@ -293,7 +295,7 @@ public:
 	void updateName(LLUUID id, std::string name);
 	void touchObject(LLViewerObject* objectp);
 
-	LLScrollListCtrl* getResultList() { return mResultList; }
+	FSAreaSearchListCtrl* getResultList() { return mResultList; }
 
 	void setAgentLastPosition(LLVector3d d) { mAgentLastPosition = d; }
 	LLVector3d getAgentLastPosition() { return mAgentLastPosition; }
@@ -304,7 +306,6 @@ private:
 	void buyObject(FSObjectProperties& details, LLViewerObject* objectp);
 	void onCommitCheckboxBeacons();
 
-	LLContextMenu* mPopupMenu;
 	bool onContextMenuItemClick(const LLSD& userdata);
 	bool onContextMenuItemEnable(const LLSD& userdata);
 
@@ -314,7 +315,7 @@ private:
 
 	FSAreaSearch* mFSAreaSearch;
 	LLButton* mRefreshButton;
-	LLScrollListCtrl* mResultList;
+	FSAreaSearchListCtrl* mResultList;
 	LLCheckBoxCtrl* mCheckboxBeacons;
 	LLTextBox* mCounterText;
 };

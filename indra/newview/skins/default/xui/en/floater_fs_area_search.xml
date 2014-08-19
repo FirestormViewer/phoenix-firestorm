@@ -39,7 +39,7 @@
 			<panel.string name="ListedPendingTotalFilled">
 				[LISTED] Listed | [PENDING] Pending | [TOTAL] Total
 			</panel.string>
-			<scroll_list
+			<area_search_list
 			 name="result_list"
 			 left="5"
 			 right="-5"
@@ -50,53 +50,53 @@
 			 draw_heading="true"
 			 multi_select="true"
 			 search_column="1">
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="distance"
 				 label="Dist"
 				 width="40"
 				 tool_tip="Distance from your avatar to the object."/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="name"
 				 label="Name"
 				 width="180"/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="description"
 				 label="Description"
 				 width="180"/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="price"
 				 label="Price"
 				 width="40"
 				 tool_tip="If the object is for sale, what you'd pay to purchase it."/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="land_impact"
 				 label="LI"
 				 width="40"
 				 tool_tip="The number that is counted against your parcel's maximum."/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="prim_count"
 				 label="Prims"
 				 width="40"
 				 tool_tip="Count of prims that make up each object."/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="owner"
 				 label="Owner"
 				 width="140"/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="group"
 				 label="Group"
 				 width="140"
 				 tool_tip="What group the object is set to."/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="creator"
 				 label="Creator"
 				 width="170"/>
-				<scroll_list.columns
+				<area_search_list.columns
 				 name="last_owner"
 				 label="Last Owner"
 				 width="150"
 				 tool_tip="Who owned it last."/>
-			</scroll_list>
+			</area_search_list>
 			<button
 			 name="Refresh"
 			 label="Refresh"

@@ -133,6 +133,8 @@ set(viewer_SOURCE_FILES
     exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
+    fsareasearchlistctrl.cpp
+    fsareasearchmenu.cpp
     fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
@@ -835,6 +837,8 @@ set(viewer_HEADER_FILES
     exopostprocess.h
     floatermedialists.h
     fsareasearch.h
+    fsareasearchlistctrl.h
+    fsareasearchmenu.h
     fschathistory.h
     fscommon.h
     fsconsoleutils.h

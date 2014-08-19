@@ -8,15 +8,15 @@
 			<panel.string name="ListedPendingTotalFilled">
 				表示済 [LISTED] | 取得中 [PENDING] | 合計 [TOTAL]
 			</panel.string>
-			<scroll_list name="result_list">
-				<scroll_list.columns name="distance" label="距離" />
-				<scroll_list.columns name="name" label="名前" />
-				<scroll_list.columns name="description" label="説明" />
-				<scroll_list.columns name="owner" label="オーナー" />
-				<scroll_list.columns name="group" label="グループ" tool_tip="オブジェクトに設定されたグループ名です。" />
-				<scroll_list.columns name="creator" label="クリエイター" />
-				<scroll_list.columns name="last_owner" label="最終オーナー" tool_tip="オブジェクトを最後に所有していた人です。" />
-			</scroll_list>
+			<area_search_list name="result_list">
+				<area_search_list.columns name="distance" label="距離" />
+				<area_search_list.columns name="name" label="名前" />
+				<area_search_list.columns name="description" label="説明" />
+				<area_search_list.columns name="owner" label="オーナー" />
+				<area_search_list.columns name="group" label="グループ" tool_tip="オブジェクトに設定されたグループ名です。" />
+				<area_search_list.columns name="creator" label="クリエイター" />
+				<area_search_list.columns name="last_owner" label="最終オーナー" tool_tip="オブジェクトを最後に所有していた人です。" />
+			</area_search_list>
 			<button name="Refresh" label="更新" />
 			<text name="counter">
 				表示済 | 取得中 | 合計

@@ -8,18 +8,18 @@
 			<panel.string name="ListedPendingTotalFilled">
 				[LISTED] Gelistet | [PENDING] Offen | [TOTAL] Total
 			</panel.string>
-			<scroll_list name="result_list">
-				<scroll_list.columns name="distance" label="Entf." tool_tip="Entfernung vom Avatar zum Objekt."/>
-				<scroll_list.columns name="name" label="Name"/>
-				<scroll_list.columns name="description" label="Beschreibung" width="170"/>
-				<scroll_list.columns name="price" label="Preis" tool_tip="Preis des Objects, falls es zum Verkauf steht."/>
-				<scroll_list.columns name="land_impact" label="LI" tool_tip="Der Wert, der mit dem Prim-Maximum der Parzelle verrechnet wird."/>
-				<scroll_list.columns name="prim_count" label="Prims" tool_tip="Anzahl an Primitiven, aus dem das Objekt besteht."/>
-				<scroll_list.columns name="owner" label="Eigentümer"/>
-				<scroll_list.columns name="group" label="Gruppe" tool_tip="Welcher Gruppe das Objekt zugeordnet ist."/>
-				<scroll_list.columns name="creator" label="Ersteller" width="150"/>
-				<scroll_list.columns name="last_owner" label="Vorheriger Eigentümer" width="140" tool_tip="Der Vorbesitzer des Objekts."/>
-			</scroll_list>
+			<area_search_list name="result_list">
+				<area_search_list.columns name="distance" label="Entf." tool_tip="Entfernung vom Avatar zum Objekt."/>
+				<area_search_list.columns name="name" label="Name"/>
+				<area_search_list.columns name="description" label="Beschreibung" width="170"/>
+				<area_search_list.columns name="price" label="Preis" tool_tip="Preis des Objects, falls es zum Verkauf steht."/>
+				<area_search_list.columns name="land_impact" label="LI" tool_tip="Der Wert, der mit dem Prim-Maximum der Parzelle verrechnet wird."/>
+				<area_search_list.columns name="prim_count" label="Prims" tool_tip="Anzahl an Primitiven, aus dem das Objekt besteht."/>
+				<area_search_list.columns name="owner" label="Eigentümer"/>
+				<area_search_list.columns name="group" label="Gruppe" tool_tip="Welcher Gruppe das Objekt zugeordnet ist."/>
+				<area_search_list.columns name="creator" label="Ersteller" width="150"/>
+				<area_search_list.columns name="last_owner" label="Vorheriger Eigentümer" width="140" tool_tip="Der Vorbesitzer des Objekts."/>
+			</area_search_list>
 			<button name="Refresh" label="Aktualisieren" width="100"/>
 			<text name="counter" left_delta="110">
 				Gelistet | Offen | Total

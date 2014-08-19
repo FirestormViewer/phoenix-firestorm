@@ -60,6 +60,8 @@
 #include "llviewerjoystick.h" // For disabling/re-enabling when requested to look at an object.
 #include "llmoveview.h" // For LLPanelStandStopFlying::clearStandStopFlyingMode
 #include "rlvhandler.h"
+#include "fsareasearchlistctrl.h"
+#include "fsareasearchmenu.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 const S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1062,7 +1064,7 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 		return;
 	}
 	
-	LLScrollListCtrl* result_list = mPanelList->getResultList();
+	FSAreaSearchListCtrl* result_list = mPanelList->getResultList();
 	if (result_list)
 	{
 		LLScrollListItem* list_row = result_list->getItem(LLSD(object_id));
@@ -1293,23 +1295,15 @@ FSPanelAreaSearchList::FSPanelAreaSearchList(FSAreaSearch* pointer)
 	mCounterText(0),
 	mResultList(0),
 	mFSAreaSearch(pointer)
-{	
-	// Set up context menu.
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-
-	registrar.add("AreaSearch.Action", boost::bind(&FSPanelAreaSearchList::onContextMenuItemClick, this, _2));
-	enable_registrar.add("AreaSearch.Enable", boost::bind(&FSPanelAreaSearchList::onContextMenuItemEnable, this, _2));
-	
-	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
-				"menu_fs_area_search.xml", LLContextMenu::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
+{
 }
 
 BOOL FSPanelAreaSearchList::postBuild()
 {
-	mResultList = getChild<LLScrollListCtrl>("result_list");
+	mResultList = getChild<FSAreaSearchListCtrl>("result_list");
 	mResultList->setDoubleClickCallback(boost::bind(&FSPanelAreaSearchList::onDoubleClick, this));
 	mResultList->sortByColumn("name", TRUE);
+	mResultList->setContextMenu(&gFSAreaSearchMenu);
 
 	mCounterText = getChild<LLTextBox>("counter");
 
@@ -1467,33 +1461,6 @@ void FSPanelAreaSearchList::updateName(LLUUID id, std::string name)
 			mResultList->setNeedsSort();
 		}
 	}
-}
-
-// virtual
-BOOL FSPanelAreaSearchList::handleRightMouseDown(S32 x, S32 y, MASK mask)
-{
-	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
-	
-	// BUG: hitItem is off by three rows up.
-	// when fixed, selectByID(item->getValue()) if nothing was selected.
-// 	LLScrollListItem *item = mResultList->hitItem(x, y);
-// 	if (item)
-// 	{
-// 		mResultList->selectByID(item->getValue());
-// 		
-// 	}
-	
-	if (mPopupMenu)
-	{
-		if (mResultList->getNumSelected() !=0)
-		{
-			mPopupMenu->show(x, y);
-			LLMenuGL::showPopup(this, mPopupMenu, x, y);
-			return TRUE;
-		}
-	}
-
-	return handled;
 }
 
 bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
@@ -2142,7 +2109,7 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 		return;
 	}
 
-	LLScrollListCtrl* result_list = mFSAreaSearch->getPanelList()->getResultList();
+	FSAreaSearchListCtrl* result_list = mFSAreaSearch->getPanelList()->getResultList();
 	result_list->deleteAllItems();
 
 	std::vector<LLScrollListColumn::Params> params = result_list->getColumnInitParams();
