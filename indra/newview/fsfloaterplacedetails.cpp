@@ -55,7 +55,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerwindow.h"
 
-static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0;
+static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
 
 static bool fs_is_agent_in_selected_parcel(LLParcel* parcel)
 {
