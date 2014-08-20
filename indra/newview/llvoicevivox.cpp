@@ -316,6 +316,7 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mCaptureBufferRecording(false),
 	mCaptureBufferRecorded(false),
 	mCaptureBufferPlaying(false),
+	mShutdownComplete(true),
 	mPlayRequestCount(0),
 
 	mAvatarNameCacheConnection()
@@ -370,7 +371,14 @@ void LLVivoxVoiceClient::terminate()
 	if(mConnected)
 	{
 		logout();
-		connectorShutdown();
+		connectorShutdown(); 
+		int count=0;
+		while (!mShutdownComplete && 10 > count++)
+		{
+			stateMachine();
+			_sleep(1000);
+		}
+
 		closeSocket();		// Need to do this now -- bad things happen if the destructor does it later.
 		cleanUp();
 	}
@@ -519,6 +527,7 @@ void LLVivoxVoiceClient::connectorShutdown()
 		<< "</Request>"
 		<< "\n\n\n";
 		
+		mShutdownComplete = false;
 		mConnectorHandle.clear();
 		
 		writeString(stream.str());
@@ -1589,6 +1598,7 @@ void LLVivoxVoiceClient::stateMachine()
 		//MARK: stateConnectorStopping
 		case stateConnectorStopping:	// waiting for connector stop
 			// The handler for the Connector.InitiateShutdown response will transition from here to stateConnectorStopped.
+			mShutdownComplete = true;
 		break;
 
 		//MARK: stateConnectorStopped
@@ -1668,9 +1678,6 @@ void LLVivoxVoiceClient::stateMachine()
 
 void LLVivoxVoiceClient::closeSocket(void)
 {
-#ifdef LL_WINDOWS
-	_sleep(3000);	//Wait a moment for socket to close.
-#endif  
 	mSocket.reset();
 	mConnected = false;
 	mConnectorHandle.clear();
