@@ -569,6 +569,11 @@ LLPanelPeople::LLPanelPeople()
 	mEnableCallbackRegistrar.add("ContactSet.Enable", boost::bind(&LLPanelPeople::onContactSetsEnable, this, _2));
 	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&LLPanelPeople::updateContactSets, this, _1));
 	// [/FS:CR]
+
+	// <FS:Ansariel> FIRE-10839: Customizable radar columns (needed for Vintage skin)
+	mCommitCallbackRegistrar.add("People.ToggleColumn", boost::bind(&LLPanelPeople::onColumnVisibilityChecked, this, _2));
+	mEnableCallbackRegistrar.add("People.EnableColumn", boost::bind(&LLPanelPeople::onEnableColumnVisibilityChecked, this, _2));
+	// </FS:Ansariel>
 }
 
 LLPanelPeople::~LLPanelPeople()
@@ -2006,5 +2011,24 @@ void LLPanelPeople::handlePickerCallback(const uuid_vec_t& ids, const std::strin
 	}
 }
 // [/FS:CR]
+
+// <FS:Ansariel> FIRE-10839: Customizable radar columns (needed for Vintage skin)
+void LLPanelPeople::onColumnVisibilityChecked(const LLSD& userdata)
+{
+	if (mRadarPanel)
+	{
+		mRadarPanel->onColumnVisibilityChecked(userdata);
+	}
+}
+
+bool LLPanelPeople::onEnableColumnVisibilityChecked(const LLSD& userdata)
+{
+	if (mRadarPanel)
+	{
+		return mRadarPanel->onEnableColumnVisibilityChecked(userdata);
+	}
+	return false;
+}
+// </FS:Ansariel>
 
 // EOF

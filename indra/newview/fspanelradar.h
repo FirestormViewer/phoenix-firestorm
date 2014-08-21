@@ -38,10 +38,12 @@ class LLFilterEditor;
 class LLMenuButton;
 class LLNetMap;
 
-class FSPanelRadar 
+class FSPanelRadar
 	: public LLPanel
 {
 	LOG_CLASS(FSPanelRadar);
+	friend class LLPanelPeople;
+
 public:
 	FSPanelRadar();
 	virtual ~FSPanelRadar();

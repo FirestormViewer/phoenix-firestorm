@@ -57,6 +57,14 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 						<combo_box.item name="RadarNameFormat_displayuser" label="Anzeigename (Benutzername)" />
 						<combo_box.item name="RadarNameFormat_userdisplay" label="Benutzername (Anzeigename)" />
 					</combo_box>
+					<text name="columns_label" value="Angezeigte Spalten:"/>
+					<check_box label="Voice" name="column_voice"/>
+					<check_box label="Zeit" name="column_seen"/>
+					<check_box label="Alter" name="column_age"/>
+					<check_box label="Selbe Region" name="column_region"/>
+					<check_box label="Status Schreiben" name="column_typing_status"/>
+					<check_box label="Status Sitzen" name="column_sitting_status"/>
+					<check_box label="Status Zahlungsinformationen" name="column_flags"/>
 				</panel>
 			</tab_container>
 			<panel label="bottom_panel" name="nearby_buttons_panel">

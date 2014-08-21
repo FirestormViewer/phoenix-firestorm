@@ -187,6 +187,11 @@ private:
 	boost::signals2::connection mContactSetChangedConnection;
 	LLComboBox* mContactSetCombo;
 	// [/FS:CR]
+
+	// <FS:Ansariel> FIRE-10839: Customizable radar columns (needed for Vintage skin)
+	void					onColumnVisibilityChecked(const LLSD& userdata);
+	bool					onEnableColumnVisibilityChecked(const LLSD& userdata);
+	// </FS:Ansariel>
 };
 
 #endif //LL_LLPANELPEOPLE_H
