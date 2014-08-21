@@ -1275,8 +1275,8 @@
       follows="left|top"
       height="16"
       name="FSCmdLineRollDice_txt"
-      width="250">
-      Roll dice (usage: cmd dice faces)
+      width="280">
+      Roll dice (usage: cmd dice faces mt mv)
     </text>
     <line_editor
       enabled_control="FSCmdLine"
@@ -1284,7 +1284,7 @@
       follows="left|top"
       height="20"
       max_length_chars="256"
-      tool_tip="Rolls dice - cmd [number of dice] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard die)."
+      tool_tip="Rolls dice - cmd [number of dice] [number of faces] [modifier type (optional)] [modifier value (optional)]. Example: cmd 1 20, cmd 2 40 + 5. Lack of parameters is equal to cmd 1 6 (standard die)."
       name="FSCmdLineRollDice"
       control_name="FSCmdLineRollDice"
       width="200"/>

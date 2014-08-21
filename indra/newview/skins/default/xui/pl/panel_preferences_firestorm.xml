@@ -169,9 +169,9 @@
         </text>
         <line_editor tool_tip="Ustawia i odtwarza strumień muzyki dla podanego URL" name="FSCmdLineMusic" />
         <text name="FSCmdLineRollDice_txt">
-            Rzuć kostką (użycie: cmd kostki ścianki)
+            Rzuć kostką (użycie: cmd kostki ścianki tm wm)
         </text>
-        <line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek]. Przykład: cmd 1 20. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
+        <line_editor tool_tip="Rzut kostką - cmd [ilość kostek] [ilość ścianek] [typ modyfikatora (opcjonalne)] [wartość modyfikatora (opcjonalne)]. Przykład: cmd 1 20, cmd 2 40 + 5. Brak parametrów jest równy cmd 1 6 (zwykła kostka)." name="FSCmdLineRollDice" />
     </panel>
     <panel label="Polecenia 2" name="tab-CmdLine2">
         <check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle2" />

@@ -5208,10 +5208,22 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Pozycja kamery [POS] została skopiowana do schowka.
 	</string>
 	<string name="FSCmdLineRollDiceTotal">
-		Wynik całkowity dla [DICE]d[FACES]: [RESULT].
+		Wynik całkowity dla [DICE]d[FACES][MODIFIER]: [RESULT].
 	</string>
 	<string name="FSCmdLineRollDiceLimits">
 		Musisz podać wartości dodatnie dla ilości kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).
+	</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">
+		Jeśli chcesz użyć modyfikatora, to musisz podać właściwą jego liczbę oraz typ. Wartość modyfikatora musi być w zakresie od -1000 do 1000. Prawidłowe typy modyfikatorów to "+" (premie), "-" (kary), "&gt;", "&lt;" (sukcesy), "!&gt;", "!&lt;" oraz "!" (eksplozje). Możesz jednocześnie użyć tylko jednego typu modyfikatora. Przykłady: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 !", "[COMMAND] 15 25 !&lt; 10".
+	</string>
+	<string name="FSCmdLineRollDiceExploded">
+		Eksplozja
+	</string>
+	<string name="FSCmdLineRollDiceSuccess">
+		Sukces
+	</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">
+		Ta operacja nie może zostać zakończona, ponieważ przeglądarka mogłaby się zawiesić. Proszę zmienić kryteria losowania.
 	</string>
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' nie jest poprawnym wyrażeniem dla RAND(min,max). MAX musi być większe niż MIN, oba w zakresie od -10000 do 10000.
