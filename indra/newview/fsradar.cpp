@@ -101,6 +101,8 @@ FSRadar::FSRadar() :
 	// Use the callback from LLAvatarNameCache here or we might update the names too early!
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
 	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
+
+	gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 }
 
 FSRadar::~FSRadar()
@@ -831,12 +833,6 @@ void FSRadar::onRadarNameFmtClicked(const LLSD& userdata)
 	else if (chosen_item == "UNDN")
 	{
 		gSavedSettings.setU32("RadarNameFormat", FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME);
-	}
-
-	FSRadar* instance = FSRadar::getInstance();
-	if (instance)
-	{
-		instance->updateNames();
 	}
 }
 
