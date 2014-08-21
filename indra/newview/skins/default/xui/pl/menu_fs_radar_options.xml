@@ -9,6 +9,15 @@
 		<menu_item_check label="Wyświetlane (Nazwa konta)" name="radarFmtDNUN"/>
 		<menu_item_check label="Wyświetlane (Wyświetlane)" name="radarFmtUNDN"/>
 	</context_menu>
+	<context_menu label="Widoczne kolumny" name="visible_columns">
+		<menu_item_check label="Rozmawia głosowo" name="voice_level"/>
+		<menu_item_check label="Jest w tym samym regionie" name="in_region"/>
+		<menu_item_check label="Obecnie pisze" name="typing_status"/>
+		<menu_item_check label="Obecnie siedzi" name="sitting_status"/>
+		<menu_item_check label="Stan danych płatniczych" name="flags"/>
+		<menu_item_check label="Wiek" name="age"/>
+		<menu_item_check label="Czas" name="seen"/>
+	</context_menu>
 	<menu_item_check label="Koloruj imiona bazując na odległości" name="radarColorNamesBasedOnDistance"/>
 	<context_menu label="Zgłaszaj do" name="report_to_menu">
 		<menu_item_check label="Czatu lokalnego" name="radar_nearby_chat"/>
