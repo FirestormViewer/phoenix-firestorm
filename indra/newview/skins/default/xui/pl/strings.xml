@@ -5213,6 +5213,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSCmdLineRollDiceLimits">
 		Musisz podać wartości dodatnie dla ilości kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).
 	</string>
+	<string name="FSCmdLineCalcRandError">
+		'[RAND]' nie jest poprawnym wyrażeniem dla RAND(min,max). MAX musi być większe niż MIN, oba w zakresie -200000 - 200000.
+	</string>
 	<string name="FSWithHavok">
 		ze wsparciem dla Havoka
 	</string>

@@ -59,6 +59,7 @@
 #include "llvolumemessage.h"
 #include "llworld.h"
 #include "llworldmap.h"
+#include <boost/regex.hpp> // rand(min,max) in calc
 
 
 // [RLVa:KB] - Checked by TM: 2013-11-10 (RLVa-1.4.9)
@@ -821,6 +822,42 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 
 					std::string expr = revised_text.substr(command.length()+1);
 					LLStringUtil::toUpper(expr);
+					std::string original_expr = expr;
+
+					// < rand(min,max) >
+					S32 loop_attempts = 0;
+					boost::cmatch random_nums;
+					const boost::regex expression("RAND\\(([0-9-]+),([0-9-]+)\\)");
+					while (boost::regex_search(expr.c_str(), random_nums, expression) && loop_attempts < 5) // No more than five rand() in one expression please (performance)
+					{
+						++loop_attempts;
+						S32 random_min = atoi(random_nums[1].first);
+						S32 random_max = atoi(random_nums[2].first);
+						std::string look_for = "RAND(" + llformat("%d", random_min) + "," + llformat("%d", random_max) + ")";
+						S32 random_string_pos = expr.find(look_for);
+						if (random_string_pos != std::string::npos)
+						{
+							S32 random_number = 0;
+							if (random_max > random_min && random_min >= -200000 && random_min <= 200000 && random_max >= -200000 && random_max <= 200000) // Generate a random number only when max > min, and when they're in rational range
+							{
+								S32 random_calculated = (random_max - random_min) + 1;
+								if (random_calculated != 0) // Don't divide by zero
+								{
+									random_number = random_min + (rand() % random_calculated);
+								}
+							}
+							else
+							{
+								LLStringUtil::format_map_t args;
+								args["RAND"] = llformat("%s", look_for.c_str());
+								reportToNearbyChat(LLTrans::getString("FSCmdLineCalcRandError", args));
+							}
+							std::string random_number_text = llformat("%d", random_number);
+							expr.replace(random_string_pos, look_for.length(), random_number_text);
+						}
+					}
+					// </ rand(min,max) >
+
 					success = LLCalc::getInstance()->evalString(expr, result);
 
 					std::string out;
@@ -833,7 +870,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					{
 						// Replace the expression with the result
 						std::ostringstream result_str;
-						result_str << expr;
+						result_str << original_expr;
 						result_str << " = ";
 						result_str << result;
 						out = result_str.str();
