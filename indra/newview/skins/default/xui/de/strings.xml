@@ -5718,7 +5718,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Es müssen positive Werte für Würfel (max. 100) und Seiten (max. 1000) angegeben werden.
 	</string>
 	<string name="FSCmdLineCalcRandError">
-		'[RAND]' ist kein gültiger Ausdruck für RAND(min,max). MAX muss größer als MIN sein und beide Werte müssen sich im Intervall von -200000 bis 200000 befinden.
+		'[RAND]' ist kein gültiger Ausdruck für RAND(min,max). MAX muss größer als MIN sein und beide Werte müssen sich im Intervall von -10000 bis 10000 befinden.
 	</string>
 	<string name="FSWithHavok">
 		mit Havok-Unterstützung

@@ -2597,7 +2597,7 @@ Try enclosing path to the editor with double quotes.
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES]: [RESULT].</string>
   <string name="FSCmdLineRollDiceLimits">You must provide positive values for dice (max 100) and faces (max 1000).</string>
 
-  <string name="FSCmdLineCalcRandError">'[RAND]' is not a valid expression for RAND(min,max). MAX must be higher than MIN, both in -200000 - 200000 range.</string>
+  <string name="FSCmdLineCalcRandError">'[RAND]' is not a valid expression for RAND(min,max). MAX must be higher than MIN, both in range from -10000 to 10000.</string>
 
   <!-- Build types for about floater -->
   <string name="FSWithHavok">with Havok support</string>

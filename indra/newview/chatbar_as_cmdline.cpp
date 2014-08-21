@@ -838,7 +838,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						if (random_string_pos != std::string::npos)
 						{
 							S32 random_number = 0;
-							if (random_max > random_min && random_min >= -200000 && random_min <= 200000 && random_max >= -200000 && random_max <= 200000) // Generate a random number only when max > min, and when they're in rational range
+							if (random_max > random_min && random_min >= -10000 && random_min <= 10000 && random_max >= -10000 && random_max <= 10000) // Generate a random number only when max > min, and when they're in rational range
 							{
 								S32 random_calculated = (random_max - random_min) + 1;
 								if (random_calculated != 0) // Don't divide by zero
