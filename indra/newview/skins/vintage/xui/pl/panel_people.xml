@@ -58,6 +58,14 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwa konta)" />
 						<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwa konta (Wyświetlane)" />
 					</combo_box>
+					<text name="columns_label" value="Widoczne kolumny:" />
+					<check_box label="Rozmawia głosowo" name="column_voice" />
+					<check_box label="Czas" name="column_seen" />
+					<check_box label="Wiek" name="column_age" />
+					<check_box label="Jest w tym samym regionie" name="column_region" />
+					<check_box label="Obecnie pisze" name="column_typing_status" />
+					<check_box label="Obecnie siedzi" name="column_sitting_status" />
+					<check_box label="Stan danych płatniczych" name="column_flags" />
 				</panel>
 			</tab_container>
 		</panel>
