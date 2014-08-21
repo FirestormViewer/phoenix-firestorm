@@ -85,16 +85,38 @@ FSPanelRadar::FSPanelRadar()
 		mFilterSubString(LLStringUtil::null),
 		mFilterSubStringOrig(LLStringUtil::null),
 		mRadarList(NULL),
-		mVisibleCheckFunction(NULL)
+		mVisibleCheckFunction(NULL),
+		mUpdateSignalConnection(),
+		mFSRadarColumnConfigConnection(),
+		mLastResizeDelta(0)
 {
 	mButtonsUpdater = new FSButtonsUpdater(boost::bind(&FSPanelRadar::updateButtons, this));
 	mCommitCallbackRegistrar.add("Radar.AddFriend",	boost::bind(&FSPanelRadar::onAddFriendButtonClicked,	this));
 	mCommitCallbackRegistrar.add("Radar.Gear",		boost::bind(&FSPanelRadar::onGearButtonClicked,			this, _1));
+
+	mColumnBits["name"] = 1;
+	mColumnBits["voice_level"] = 2;
+	mColumnBits["in_region"] = 4;
+	mColumnBits["typing_status"] = 8;
+	mColumnBits["sitting_status"] = 16;
+	mColumnBits["flags"] = 32;
+	mColumnBits["age"] = 64;
+	mColumnBits["seen"] = 128;
+	mColumnBits["range"] = 256;
 }
 
 FSPanelRadar::~FSPanelRadar()
 {
-	mUpdateSignalConnection.disconnect();
+	if (mUpdateSignalConnection.connected())
+	{
+		mUpdateSignalConnection.disconnect();
+	}
+
+	if (mFSRadarColumnConfigConnection.connected())
+	{
+		mFSRadarColumnConfigConnection.disconnect();
+	}
+
 	delete mButtonsUpdater;
 
 	if (mOptionsMenuHandle.get()) mOptionsMenuHandle.get()->die();
@@ -122,10 +144,12 @@ BOOL FSPanelRadar::postBuild()
 	registrar.add("Radar.Option.Action",	boost::bind(&FSPanelRadar::onOptionsMenuItemClicked, this, _2));
 	registrar.add("Radar.NameFmt",			boost::bind(&FSRadar::onRadarNameFmtClicked, _2));
 	registrar.add("Radar.ReportTo",			boost::bind(&FSRadar::onRadarReportToClicked, _2));
+	registrar.add("Radar.ToggleColumn",		boost::bind(&FSPanelRadar::onColumnVisibilityChecked, this, _2));
 
 	enable_registrar.add("Radar.NameFmtCheck",	boost::bind(&FSRadar::radarNameFmtCheck, _2));
 	enable_registrar.add("Radar.ReportToCheck",	boost::bind(&FSRadar::radarReportToCheck, _2));
-	
+	enable_registrar.add("Radar.EnableColumn",	boost::bind(&FSPanelRadar::onEnableColumnVisibilityChecked, this, _2));
+
 	mRadarGearButton = getChild<LLButton>("gear_btn");
 	mOptionsButton = getChild<LLMenuButton>("options_btn");
 
@@ -135,6 +159,9 @@ BOOL FSPanelRadar::postBuild()
 		mOptionsMenuHandle = options_menu->getHandle();
 		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
 	}
+
+	mFSRadarColumnConfigConnection = gSavedSettings.getControl("FSRadarColumnConfig")->getSignal()->connect(boost::bind(&FSPanelRadar::onColumnDisplayModeChanged, this));
+	onColumnDisplayModeChanged();
 
 	// Register for radar updates
 	mUpdateSignalConnection = FSRadar::getInstance()->setUpdateCallback(boost::bind(&FSPanelRadar::updateList, this, _1, _2));
@@ -398,4 +425,112 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 	updateButtons();
 	mChangeSignal();
+}
+
+void FSPanelRadar::onColumnDisplayModeChanged()
+{
+	U32 column_config = gSavedSettings.getU32("FSRadarColumnConfig");
+	std::vector<LLScrollListColumn::Params> column_params = mRadarList->getColumnInitParams();
+	S32 column_padding = mRadarList->getColumnPadding();
+
+	LLFloater* parent_floater = NULL;
+	LLView* parent = getParent();
+	while (parent)
+	{
+		parent_floater = dynamic_cast<LLFloater*>(parent);
+		if (parent_floater)
+		{
+			break;
+		}
+		parent = parent->getParent();
+	}
+	if (!parent_floater)
+	{
+		return;
+	}
+
+	S32 default_width = 0;
+	S32 new_width = 0;
+	S32 min_width, min_height;
+	parent_floater->getResizeLimits(&min_width, &min_height);
+
+	std::string current_sort_col = mRadarList->getSortColumnName();
+	BOOL current_sort_asc = mRadarList->getSortAscending();
+	
+	mRadarList->clearRows();
+	mRadarList->clearColumns();
+	mRadarList->updateLayout();
+
+	std::vector<LLScrollListColumn::Params>::iterator param_it;
+	for (param_it = column_params.begin(); param_it != column_params.end(); ++param_it)
+	{
+		LLScrollListColumn::Params p = *param_it;
+		default_width += (p.width.pixel_width.getValue() + column_padding);
+		
+		LLScrollListColumn::Params params;
+		params.header = p.header;
+		params.name = p.name;
+		params.halign = p.halign;
+		params.sort_direction = p.sort_direction;
+		params.sort_column = p.sort_column;
+		params.tool_tip = p.tool_tip;
+
+		if (column_config & mColumnBits[p.name.getValue()])
+		{
+			params.width = p.width;
+			new_width += (params.width.pixel_width.getValue() + column_padding);
+		}
+		else
+		{
+			params.width.pixel_width.set(-1, true);
+		}
+
+		mRadarList->addColumn(params);
+	}
+
+	min_width -= (default_width - new_width - mLastResizeDelta);
+	mLastResizeDelta = default_width - new_width;
+	parent_floater->setResizeLimits(min_width, min_height);
+
+	if (parent_floater->getRect().getWidth() < min_width)
+	{
+		parent_floater->reshape(min_width, parent_floater->getRect().getHeight());
+	}
+
+	if (mRadarList->getColumn(current_sort_col)->getWidth() == -1)
+	{
+		current_sort_col = "range";
+		current_sort_asc = TRUE;
+	}
+	mRadarList->sortByColumn(current_sort_col, current_sort_asc);
+	mRadarList->setFilterColumn(0);
+
+	mRadarList->dirtyColumns();
+}
+
+void FSPanelRadar::onColumnVisibilityChecked(const LLSD& userdata)
+{
+	std::string column = userdata.asString();
+	U32 column_config = gSavedSettings.getU32("FSRadarColumnConfig");
+
+	U32 new_value;
+	U32 enabled = (mColumnBits[column] & column_config);
+	if (enabled)
+	{
+		new_value = (column_config & ~mColumnBits[column]);
+	}
+	else
+	{
+		new_value = (column_config | mColumnBits[column]);
+	}
+
+	gSavedSettings.setU32("FSRadarColumnConfig", new_value);
+}
+
+bool FSPanelRadar::onEnableColumnVisibilityChecked(const LLSD& userdata)
+{
+	std::string column = userdata.asString();
+	U32 column_config = gSavedSettings.getU32("FSRadarColumnConfig");
+
+	return (mColumnBits[column] & column_config);
 }

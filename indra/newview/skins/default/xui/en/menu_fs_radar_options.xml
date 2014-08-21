@@ -84,6 +84,80 @@
         	parameter="UNDN"/>
     </menu_item_check>
    </context_menu>
+	<context_menu
+	 label="Displayed Columns"
+	 name="visible_columns">
+		<menu_item_check
+		 label="Voice"
+		 name="voice_level">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="voice_level"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="voice_level"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Same Region"
+		 name="in_region">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="in_region"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="in_region"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Typing Status"
+		 name="typing_status">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="typing_status"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="typing_status"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Sitting Status"
+		 name="sitting_status">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="sitting_status"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="sitting_status"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Flags"
+		 name="flags">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="flags"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="flags"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Age"
+		 name="age">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="age"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="age"/>
+		</menu_item_check>
+		<menu_item_check
+		 label="Seen"
+		 name="seen">
+			<menu_item_check.on_check
+			 function="Radar.EnableColumn"
+			 parameter="seen"/>
+			<menu_item_check.on_click
+			 function="Radar.ToggleColumn"
+			 parameter="seen"/>
+		</menu_item_check>
+	</context_menu>
    <menu_item_check
      label="Color names based on distance"
      name="radarColorNamesBasedOnDistance">
@@ -93,7 +167,7 @@
        function="ToggleControl"
        parameter="FSRadarColorNamesByDistance" />
    </menu_item_check>
-  
+
   <menu_item_separator layout="topleft" />
 
   <context_menu

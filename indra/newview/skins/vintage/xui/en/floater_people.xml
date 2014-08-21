@@ -7,7 +7,7 @@
   height="570"
   help_topic="sidebar_people"
   min_height="250"
-  min_width="268"
+  min_width="350"
   layout="topleft"
   name="floater_people"
   save_rect="true"
@@ -15,13 +15,13 @@
   single_instance="true"
   reuse_instance="true"
   title="PEOPLE"
-  width="333">
+  width="350">
     <panel_container
       default_panel_name="panel_people"
       follows="all"
       height="570"
       name="main_panel"
-      width="333">
+      width="350">
       <panel
         class="panel_people"
         name="panel_people"

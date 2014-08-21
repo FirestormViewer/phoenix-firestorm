@@ -75,6 +75,9 @@ private:
 	void					onOptionsMenuItemClicked(const LLSD& userdata);
 	void					onFilterEdit(const std::string& search_string);
 	void					onGearButtonClicked(LLUICtrl* btn);
+	void					onColumnDisplayModeChanged();
+	void					onColumnVisibilityChecked(const LLSD& userdata);
+	bool					onEnableColumnVisibilityChecked(const LLSD& userdata);
 
 	FSRadarListCtrl*		mRadarList;
 	LLNetMap*				mMiniMap;
@@ -89,8 +92,13 @@ private:
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
 
+	std::map<std::string, U32> mColumnBits;
+	S32						mLastResizeDelta;
+
 	// Slot connection for FSRadar updates
 	boost::signals2::connection mUpdateSignalConnection;
+
+	boost::signals2::connection mFSRadarColumnConfigConnection;
 
 	// Signal for subscribers interested in updates (selection/list update)
 	change_callback_t		mChangeSignal;

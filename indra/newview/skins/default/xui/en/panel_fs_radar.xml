@@ -175,44 +175,44 @@
 							 label="Name"
 							 name="name"
 							 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
-							 relative_width="0.30"/>
+							 dynamic_width="true"/>
 							<radar_list.columns
 							 label=""
 							 name="voice_level"
 							 tool_tip="Is talking on voice"
-							 relative_width="0.07"/>
+							 width="20"/>
 							<radar_list.columns
 							 label=""
 							 name="in_region"
 							 tool_tip="Is in the same region"
-							 relative_width="0.03"/>
+							 width="15"/>
 							<radar_list.columns
 							 label=""
 							 name="typing_status"
 							 tool_tip="Is typing"
-							 relative_width="0.02"/>
+							 width="10"/>
 							<radar_list.columns
 							 label=""
 							 name="sitting_status"
 							 tool_tip="Is sitting"
-							 relative_width="0.02"/>
+							 width="10"/>
 							<radar_list.columns
 							 label=""
 							 name="flags"
 							 tool_tip="Payment info status"
-							 relative_width="0.05"/>
+							 width="15"/>
 							<radar_list.columns
 							 label="Age"
 							 name="age"
-							 relative_width="0.1"/>
+							 width="50"/>
 							<radar_list.columns
 							 label="Seen"
 							 name="seen"
-							 relative_width="0.15"/>
+							 width="50"/>
 							<radar_list.columns
 							 label="Range"
 							 name="range"
-							 relative_width="0.16"/>
+							 width="60"/>
 						</radar_list>
 					</layout_panel>
 				</layout_stack>

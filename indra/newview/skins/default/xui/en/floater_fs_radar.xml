@@ -3,9 +3,9 @@
  name="radar"
  help_topic="fs_radar"
  title="Radar"
- width="333"
+ width="400"
  height="440"
- min_width="250"
+ min_width="350"
  min_height="150"
  reuse_instance="true"
  single_instance="true"
@@ -23,5 +23,5 @@
 	 layout="topleft"
 	 left="3"
 	 top_pad="3"
-	 width="324"/>
+	 width="391"/>
 </floater>

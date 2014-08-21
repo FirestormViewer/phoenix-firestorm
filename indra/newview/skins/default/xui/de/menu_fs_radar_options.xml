@@ -9,6 +9,15 @@
 		<menu_item_check label="Anzeigename (Benutzername)" name="radarFmtDNUN"/>
 		<menu_item_check label="Benutzername (Anzeigename)" name="radarFmtUNDN"/>
 	</context_menu>
+	<context_menu label="Angezeigte Spalten" name="visible_columns">
+		<menu_item_check label="Voice" name="voice_level"/>
+		<menu_item_check label="Selbe Region" name="in_region"/>
+		<menu_item_check label="Status Schreiben" name="typing_status"/>
+		<menu_item_check label="Status Sitzen" name="sitting_status"/>
+		<menu_item_check label="Status Zahlungsinformationen" name="flags"/>
+		<menu_item_check label="Alter" name="age"/>
+		<menu_item_check label="Zeit" name="seen"/>
+	</context_menu>
 	<menu_item_check label="Namen nach Entfernung einfärben" name="radarColorNamesBasedOnDistance"/>
 	<context_menu label="Melden via" name="report_to_menu">
 		<menu_item_check label="Chat in der Nähe" name="radar_nearby_chat"/>

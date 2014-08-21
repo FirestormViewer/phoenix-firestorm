@@ -22655,6 +22655,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSRadarColumnConfig</key>
+    <map>
+      <key>Comment</key>
+      <string>Stores the column visibility of the radar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>511</integer>
+    </map>
 </map>
 </llsd>
 
