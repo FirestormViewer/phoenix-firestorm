@@ -1225,28 +1225,17 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						// For viewer performance - max 100 dice and 1000 faces per die at once
 						S32 modifier = 0;
 						S32 successes = 0;
-						S32 modifier_error = 0;
 
 						if (i >> modifier_type && i >> modifier)
 						{
-							// Important: There is no "!" here, as it has no 'S32 modifier' at the end, so it won't reach this if()
-							if (modifier < -1000 || modifier > 1000 || (modifier_type != "+" && modifier_type != "-" && modifier_type != "<" && modifier_type != ">" && modifier_type != "!>" && modifier_type != "!<"))
+							// 2d20+5, 2d20-5 / 2d20>5, 2d20<5 / 2d20!>5, 2d20!<5, 2d20!5 / 2d20r>5, 2d20r<5, 2d20r5
+							if (modifier < -1000 || modifier > 1000 || (modifier_type != "+" && modifier_type != "-" && modifier_type != "<" && modifier_type != ">" && modifier_type != "!>" && modifier_type != "!<" && modifier_type != "!" && modifier_type != "r" && modifier_type != "r>" && modifier_type != "r<"))
 							{
-								modifier_error = 1;
+								LLStringUtil::format_map_t args;
+								args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str());
+								reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
+								return false;
 							}
-						}
-						else if (modifier_type != "" && modifier_type != "!")
-						{
-							// Modifier type invalid
-							modifier_error = 1;
-						}
-
-						if (modifier_error)
-						{
-							LLStringUtil::format_map_t args;
-							args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str() );
-							reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
-							return false;
 						}
 
 						S32 result_per_die = 0;
@@ -1268,7 +1257,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							if (modifier_type == "<")
 							{
 								// Modifier: Successes lower than a value
-								if (result_per_die < modifier)
+								if (result_per_die <= modifier)
 								{
 									reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
 									++successes;
@@ -1281,7 +1270,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							else if (modifier_type == ">")
 							{
 								// Modifier: Successes greater than a value
-								if (result_per_die > modifier)
+								if (result_per_die >= modifier)
 								{
 									reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceSuccess"));
 									++successes;
@@ -1291,11 +1280,17 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 									result -= result_per_die;
 								}
 							}
-							else if ( (modifier_type == "!" && result_per_die == faces) || (modifier_type == "!>" && result_per_die >= modifier) || (modifier_type == "!<" && result_per_die <= modifier) )
+							else if ((modifier_type == "!" && result_per_die == modifier) || (modifier_type == "!>" && result_per_die >= modifier) || (modifier_type == "!<" && result_per_die <= modifier))
 							{
 								// Modifier: Exploding dice
-								// Note: "!" can be activated without compare point (no "S32 modifier" value at the end of command)
 								reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceExploded"));
+								--die_iter;
+							}
+							else if ((modifier_type == "r" && result_per_die == modifier) || (modifier_type == "r>" && result_per_die >= modifier) || (modifier_type == "r<" && result_per_die <= modifier))
+							{
+								// Modifier: Reroll
+								result -= result_per_die;
+								reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceReroll"));
 								--die_iter;
 							}
 
@@ -1313,7 +1308,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 
 						if (modifier_type != "")
 						{
-
 							if (modifier_type == "+")
 							{
 								// Modifier: Bonus
@@ -1329,12 +1323,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								// Modifier: Successes
 								reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceSuccess") + ": " + llformat("%d", successes));
 							}
-
-							if (modifier_type != "!") // Do not add zero to "!" like in "rolld 1 20 !" -> "1d20!0: 19"
-							{
-								modifier_type = modifier_type + llformat("%d", modifier);
-							}
-
+							modifier_type = modifier_type + llformat("%d", modifier);
 						}
 
 					}
@@ -1355,7 +1344,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				args["DICE"] = llformat("%d", dice);
 				args["FACES"] = llformat("%d", faces);
 				args["RESULT"] = llformat("%d", result);
-				args["MODIFIER"] = llformat("%s", modifier_type.c_str() );
+				args["MODIFIER"] = llformat("%s", modifier_type.c_str());
 				reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
 				return false;
 			}
