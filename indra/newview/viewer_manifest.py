@@ -1283,6 +1283,7 @@ class LinuxManifest(ViewerManifest):
             self.path("libalut.so*")
             self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
+            self.path("libpng15.so.15.1.0") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libopenal.so", "libopenal.so.1") # Install as versioned file in case it's missing from the 3p- and won't get copied below
             self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
