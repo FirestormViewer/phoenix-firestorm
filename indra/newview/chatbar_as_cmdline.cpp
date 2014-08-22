@@ -1244,7 +1244,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						if (modifier_error)
 						{
 							LLStringUtil::format_map_t args;
-							args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice));
+							args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str() );
 							reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
 							return false;
 						}
@@ -1355,7 +1355,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				args["DICE"] = llformat("%d", dice);
 				args["FACES"] = llformat("%d", faces);
 				args["RESULT"] = llformat("%d", result);
-				args["MODIFIER"] = llformat("%s", modifier_type);
+				args["MODIFIER"] = llformat("%s", modifier_type.c_str() );
 				reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
 				return false;
 			}
