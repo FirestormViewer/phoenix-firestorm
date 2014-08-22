@@ -665,6 +665,7 @@ BOOL LLPanelPeople::postBuild()
 	
 	// <FS:AO> Radarlist takes over for nearbylist for presentation.
 	mRadarPanel = nearby_tab->findChild<FSPanelRadar>("panel_radar");
+	mRadarPanel->onColumnDisplayModeChanged();
 	// </FS:AO>
 
 	// <FS:Ansariel> Firestorm radar
