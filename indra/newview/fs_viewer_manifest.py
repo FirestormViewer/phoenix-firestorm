@@ -1,5 +1,6 @@
 import os
 import subprocess
+import tarfile
 
 class FSViewerManifest:
     def fs_is_64bit_build( self ):
@@ -95,3 +96,41 @@ class FSViewerManifest:
 
     def fs_linux_tar_excludes(self):
         return "--exclude core --exclude .debug/* --exclude .debug"
+
+    def fs_save_windows_symbols(self, substitution_strings):
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
+                                                                     self.fs_channel_legacy_oneword(),
+                                                                     substitution_strings['version_dashes'],
+                                                                     self.args['viewer_flavor'])
+
+            if os.path.exists( sName ):
+                os.unlink( sName )
+
+            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
+        
+        pdbName = "firestorm-bin.pdb"
+        try:
+            subprocess.check_call( [ "pdbcopy.exe" ,
+                                     self.args['configuration'] + "\\firestorm-bin.pdb", 
+                                     self.args['configuration'] + "\\firestorm-bin-public.pdb",
+                                     "-p"
+                                 ], stderr=subprocess.PIPE,stdout=subprocess.PIPE )
+            pdbName = "firestorm-bin-public.pdb"
+        except:
+            print( "Cannot run pdbcopy, packaging private symbols" )
+
+        # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
+        # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
+        # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for now.
+        symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
+                                                                                    self.fs_channel_legacy_oneword(),
+                                                                                    substitution_strings['version_dashes'],
+                                                                                    self.args['viewer_flavor']),
+                                                                                    'w')
+        symbolTar.add( "%s/Firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
+        symbolTar.add( "%s/%s" % (self.args['configuration'].lower(),pdbName), pdbName )
+        symbolTar.close()
