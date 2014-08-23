@@ -5726,6 +5726,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineRollDiceSuccess">
 		Erfolg
 	</string>
+	<string name="FSCmdLineRollDiceReroll">
+		Erneut würfeln
+	</string>
 	<string name="FSCmdLineRollDiceFreezeGuard">
 		Diese Operation kann nicht beendet werden, da der Viewer in einer Endlosschleife landen würde. Bitte die Kriterien ändern.
 	</string>
