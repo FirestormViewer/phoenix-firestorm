@@ -1225,17 +1225,28 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						// For viewer performance - max 100 dice and 1000 faces per die at once
 						S32 modifier = 0;
 						S32 successes = 0;
+						S32 modifier_error = 0;
 
 						if (i >> modifier_type && i >> modifier)
 						{
 							// 2d20+5, 2d20-5 / 2d20>5, 2d20<5 / 2d20!>5, 2d20!<5, 2d20!5 / 2d20r>5, 2d20r<5, 2d20r5
 							if (modifier < -1000 || modifier > 1000 || (modifier_type != "+" && modifier_type != "-" && modifier_type != "<" && modifier_type != ">" && modifier_type != "!>" && modifier_type != "!<" && modifier_type != "!" && modifier_type != "r" && modifier_type != "r>" && modifier_type != "r<"))
 							{
-								LLStringUtil::format_map_t args;
-								args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str());
-								reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
-								return false;
+								modifier_error = 1;
 							}
+						}
+						else if (modifier_type != "")
+						{
+							// Modifier type invalid
+							modifier_error = 1;
+						}
+
+						if (modifier_error == 1)
+						{
+							LLStringUtil::format_map_t args;
+							args["COMMAND"] = llformat("%s", std::string(sFSCmdLineRollDice).c_str());
+							reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceModifiersInvalid", args));
+							return false;
 						}
 
 						S32 result_per_die = 0;
