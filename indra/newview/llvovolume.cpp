@@ -4035,7 +4035,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	}
 
 	//build matrix palette
-	static const size_t kMaxJoints = 64;
+	// <FS:Ansariel> Proper matrix array length for fitted mesh
+	//static const size_t kMaxJoints = 64;
+	static const size_t kMaxJoints = 52;
+	// </FS:Ansariel>
 
 	LLMatrix4a mp[kMaxJoints];
 	LLMatrix4* mat = (LLMatrix4*) mp;

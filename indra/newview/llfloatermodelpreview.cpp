@@ -5608,8 +5608,13 @@ BOOL LLModelPreview::render()
 
 							//build matrix palette
 							
-							LLMatrix4 mat[64];
-							for (U32 j = 0; j < model->mSkinInfo.mJointNames.size(); ++j)
+							// <FS:Ansariel> Proper matrix array length for fitted mesh
+							//LLMatrix4 mat[64];
+							//for (U32 j = 0; j < model->mSkinInfo.mJointNames.size(); ++j)
+							LLMatrix4 mat[52];
+							U32 count = llmin((U32) model->mSkinInfo.mJointNames.size(), (U32) 52);
+							for (U32 j = 0; j < count; ++j)
+							// </FS:Ansariel>
 							{
 								LLJoint* joint = getPreviewAvatar()->getJoint(model->mSkinInfo.mJointNames[j]);
 								if (joint)
