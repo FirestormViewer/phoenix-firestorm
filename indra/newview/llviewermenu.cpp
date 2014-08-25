@@ -2925,13 +2925,25 @@ class LLObjectTexRefresh : public view_listener_t
 				if (!node->isTESelected(i)) continue;
 
 				LLViewerTexture* img = node->getObject()->getTEImage(i);
-				faces_per_texture[img->getID()].push_back(i);
+				if (img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
+				{
+					faces_per_texture[img->getID()].push_back(i);
+				}
 
-				LLViewerTexture* norm_img = node->getObject()->getTENormalMap(i);
-				faces_per_texture[norm_img->getID()].push_back(i);
+				if (node->getObject()->getTE(i)->getMaterialParams().notNull())
+				{
+					LLViewerTexture* norm_img = node->getObject()->getTENormalMap(i);
+					if (norm_img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
+					{
+						faces_per_texture[norm_img->getID()].push_back(i);
+					}
 
-				LLViewerTexture* spec_img = node->getObject()->getTESpecularMap(i);
-				faces_per_texture[spec_img->getID()].push_back(i);
+					LLViewerTexture* spec_img = node->getObject()->getTESpecularMap(i);
+					if (spec_img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
+					{
+						faces_per_texture[spec_img->getID()].push_back(i);
+					}
+				}
 			}
 
 			map_t::iterator it;
