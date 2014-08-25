@@ -282,7 +282,14 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 		}
 		else
 		{
-			pEnvMgr->useRegionSettings();
+			// <FS:Ansariel> FIRE-14466: Menu item checkmark in menu doesn't get properly updated
+			//pEnvMgr->useRegionSettings();
+			LLEnvManagerNew &envmgr = LLEnvManagerNew::instance();
+			envmgr.setUserPrefs(envmgr.getWaterPresetName(),
+					    envmgr.getSkyPresetName(),
+					    envmgr.getDayCycleName(),
+					    false, true, false);
+			// </FS:Ansariel>
 		}
 		return true;
 	}
