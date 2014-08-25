@@ -136,6 +136,8 @@ protected:
 	LLExpandableTextBox*	mDescEditor;
 	LLIconCtrl*				mMaturityRatingIcon;
 	LLTextBox*				mMaturityRatingText;
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	LLTextBox*				mInfoText;
 };
 
 #endif // LL_LLPANELPLACEINFO_H

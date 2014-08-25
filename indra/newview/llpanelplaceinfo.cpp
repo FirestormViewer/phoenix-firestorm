@@ -56,7 +56,9 @@ LLPanelPlaceInfo::LLPanelPlaceInfo()
 	mInfoType(UNKNOWN),
 	mScrollingPanel(NULL),
 	mScrollContainer(NULL),
-	mDescEditor(NULL)
+	mDescEditor(NULL),
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	mInfoText(NULL)
 {}
 
 //virtual
@@ -78,6 +80,8 @@ BOOL LLPanelPlaceInfo::postBuild()
 	mRegionName = getChild<LLTextBox>("region_title");
 	mParcelName = getChild<LLTextBox>("parcel_title");
 	mDescEditor = getChild<LLExpandableTextBox>("description");
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	mInfoText = findChild<LLTextBox>("information");
 
 	mMaturityRatingIcon = getChild<LLIconCtrl>("maturity_icon");
 	mMaturityRatingText = getChild<LLTextBox>("maturity_value");
@@ -103,6 +107,12 @@ void LLPanelPlaceInfo::resetLocation()
 	mRegionName->setText(loading);
 	mParcelName->setText(loading);
 	mDescEditor->setText(loading);
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	if (mInfoText)
+	{
+		mInfoText->setText(loading);
+	}
+	// </FS:Ansariel>
 	// <FS:Ansariel> Fix loading icon
 	//mMaturityRatingIcon->setValue(LLUUID::null);
 	mMaturityRatingIcon->setValue(LLSD("Unknown_Icon"));
@@ -195,6 +205,12 @@ void LLPanelPlaceInfo::setErrorStatus(U32 status, const std::string& reason)
 	mMaturityRatingText->setValue(not_available);
 	mRegionName->setText(not_available);
 	mParcelName->setText(not_available);
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	if (mInfoText)
+	{
+		mInfoText->setText(not_available);
+	}
+	// </FS:Ansariel>
 	// <FS:Ansariel> Fix loading icon
 	//mMaturityRatingIcon->setValue(LLUUID::null);
 	mMaturityRatingIcon->setValue(LLSD("Unknown_Icon"));
@@ -259,6 +275,17 @@ void LLPanelPlaceInfo::processParcelInfo(const LLParcelData& parcel_data)
 	{
 		mParcelName->setText(getString("not_available"));
 	}
+
+	// <FS:Ansariel> FIRE-2717: Display traffic and area in landmark
+	if (mInfoText)
+	{
+		LLStringUtil::format_map_t args;
+		args["TRAFFIC"] = llformat("%d", (S32)parcel_data.dwell);
+		args["AREA"] = llformat("%d", parcel_data.actual_area);
+		std::string info_text = getString("information_text", args);
+		mInfoText->setText(info_text);
+	}
+	// </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-817: Separate place details floater
 	if (!mParcelDetailLoadedSignal.empty())
