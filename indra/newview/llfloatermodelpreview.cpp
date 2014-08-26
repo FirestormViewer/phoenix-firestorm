@@ -118,6 +118,9 @@
 // </AW: opensim-limits>
 #include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
 
+// <FS:Ansariel> Proper matrix array length for fitted mesh
+#define JOINT_COUNT 52
+
 const S32 SLM_SUPPORTED_VERSION = 3;
 
 //static
@@ -5611,8 +5614,8 @@ BOOL LLModelPreview::render()
 							// <FS:Ansariel> Proper matrix array length for fitted mesh
 							//LLMatrix4 mat[64];
 							//for (U32 j = 0; j < model->mSkinInfo.mJointNames.size(); ++j)
-							LLMatrix4 mat[52];
-							U32 count = llmin((U32) model->mSkinInfo.mJointNames.size(), (U32) 52);
+							LLMatrix4 mat[JOINT_COUNT];
+							U32 count = llmin((U32) model->mSkinInfo.mJointNames.size(), (U32) JOINT_COUNT);
 							for (U32 j = 0; j < count; ++j)
 							// </FS:Ansariel>
 							{
@@ -5637,10 +5640,7 @@ BOOL LLModelPreview::render()
 								{
 									F32 w = weight[j].mV[k];
 
-									// <FS:Ansariel> Proper matrix array length for fitted mesh
-									//idx[k] = (S32) floorf(w);
-									idx[k] = llclamp((S32) floorf(w), 0, 51);
-									// </FS:Ansariel>
+									idx[k] = (S32) floorf(w);
 									wght.mV[k] = w - floorf(w);
 									scale += wght.mV[k];
 								}
@@ -5649,7 +5649,10 @@ BOOL LLModelPreview::render()
 
 								for (U32 k = 0; k < 4; k++)
 								{
-									F32* src = (F32*) mat[idx[k]].mMatrix;
+									// <FS:Ansariel> Proper matrix array length for fitted mesh
+									//F32* src = (F32*) mat[idx[k]].mMatrix;
+									F32* src = (F32*) mat[idx[(k < JOINT_COUNT) ? k : 0]].mMatrix;
+									// </FS:Ansariel>
 									F32* dst = (F32*) final_mat.mMatrix;
 
 									F32 w = wght.mV[k];
