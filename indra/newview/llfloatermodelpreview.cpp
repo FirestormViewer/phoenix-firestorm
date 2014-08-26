@@ -5637,7 +5637,10 @@ BOOL LLModelPreview::render()
 								{
 									F32 w = weight[j].mV[k];
 
-									idx[k] = (S32) floorf(w);
+									// <FS:Ansariel> Proper matrix array length for fitted mesh
+									//idx[k] = (S32) floorf(w);
+									idx[k] = llclamp((S32) floorf(w), 0, 51);
+									// </FS:Ansariel>
 									wght.mV[k] = w - floorf(w);
 									scale += wght.mV[k];
 								}
