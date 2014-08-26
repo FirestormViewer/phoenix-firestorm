@@ -32,6 +32,7 @@
 std::vector<std::string>* doLoadDialog(const std::vector<std::string>* allowed_types, 
                  unsigned int flags)
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; // <FS> Fix mem leak by Cinder Roxley
     int i, result;
     
     //Aura TODO:  We could init a small window and release it at the end of this routine
@@ -94,8 +95,8 @@ std::vector<std::string>* doLoadDialog(const std::vector<std::string>* allowed_t
             outfiles->push_back(*afilestr);
         }
     }
-	[fileTypes release];	// <FS:CR> Fix memleak	
-	
+    [pool release]; // <FS> Fix mem leak by Cinder Roxley
+    
     return outfiles;
 }
 
@@ -106,6 +107,7 @@ std::string* doSaveDialog(const std::string* file,
                   const std::string* extension,
                   unsigned int flags)
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; // <FS> Fix mem leak by Cinder Roxley
     NSSavePanel *panel = [NSSavePanel savePanel]; 
     
     NSString *extensionns = [NSString stringWithCString:extension->c_str() encoding:[NSString defaultCStringEncoding]];
@@ -130,6 +132,8 @@ std::string* doSaveDialog(const std::string* file,
         outfile = new std::string( [p UTF8String] );
         // write the file 
     }
+    [pool release]; // <FS> Fix mem leak by Cinder Roxley
+    
     return outfile;
 }
 
