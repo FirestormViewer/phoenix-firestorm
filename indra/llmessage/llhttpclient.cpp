@@ -124,7 +124,10 @@ namespace
 	{
 	public:
 		RawInjector(const U8* data, S32 size) : mData(data), mSize(size) {}
-		virtual ~RawInjector() {delete mData;}
+		// <FS> Memleak fix by Cinder Roxley
+		//virtual ~RawInjector() {delete mData;}
+		virtual ~RawInjector() {delete [] mData;}
+		// </FS>
 
 		const char* contentType() { return "application/octet-stream"; }
 
