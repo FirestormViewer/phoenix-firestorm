@@ -195,7 +195,10 @@ static std::string getStringAfterToken(const std::string str, const std::string 
 //
 LLUrlEntryHTTP::LLUrlEntryHTTP()
 {
-	mPattern = boost::regex("https?://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
+	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
+	//mPattern = boost::regex("https?://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
+	mPattern = boost::regex("(https?|ftp)://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
+	// </FS:Ansariel>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
@@ -212,7 +215,10 @@ std::string LLUrlEntryHTTP::getLabel(const std::string &url, const LLUrlLabelCal
 //
 LLUrlEntryHTTPLabel::LLUrlEntryHTTPLabel()
 {
-	mPattern = boost::regex("\\[https?://\\S+[ \t]+[^\\]]+\\]",
+	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
+	//mPattern = boost::regex("\\[https?://\\S+[ \t]+[^\\]]+\\]",
+	mPattern = boost::regex("\\[(https?|ftp)://\\S+[ \t]+[^\\]]+\\]",
+	// </FS:Ansariel>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
@@ -240,7 +246,10 @@ std::string LLUrlEntryHTTPLabel::getUrl(const std::string &string) const
 LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
 {
 	mPattern = boost::regex("("
-				"\\bwww\\.\\S+\\.\\S+" // i.e. www.FOO.BAR
+				// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
+				//"\\bwww\\.\\S+\\.\\S+" // i.e. www.FOO.BAR
+				"\\b(www|ftp)\\.\\S+\\.\\S+" // i.e. www.FOO.BAR
+				// </FS:Ansariel>
 				"|" // or
 				"(?<!@)\\b[^[:space:]:@/>]+\\.(?:com|net|edu|org)([/:][^[:space:]<]*)?\\b" // i.e. FOO.net
 				")",
