@@ -4087,7 +4087,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					{
 						F32 w = weight[j][k];
 
-						idx[k] = (S32) floorf(w);
+						// <FS:Ansariel> Proper matrix array length for fitted mesh
+						//idx[k] = (S32) floorf(w);
+						idx[k] = llclamp((S32) floorf(w), 0, (S32)kMaxJoints - 1);
+						// </FS:Ansariel>
 						wght[k] = w - floorf(w);
 						scale += wght[k];
 					}
