@@ -164,8 +164,12 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (id) initWithFrame:(NSRect)frame withSamples:(NSUInteger)samples andVsync:(BOOL)vsync
 {
+	// <FS> Fix some bad refcount code and squash some potential leakiness; by Cinder Roxley
+	self = [super initWithFrame:frame];
+	if (!self) { return self; }	// Despite what this may look like, returning nil self is a-ok.
+	// <F/S>
 	[self registerForDraggedTypes:[NSArray arrayWithObject:NSURLPboardType]];
-	[self initWithFrame:frame];
+	//[self initWithFrame:frame]; <FS> Fix some bad refcount code and squash some potential leakiness; by Cinder Roxley
 	
 	// Initialize with a default "safe" pixel format that will work with versions dating back to OS X 10.6.
 	// Any specialized pixel formats, i.e. a core profile pixel format, should be initialized through rebuildContextWithFormat.
@@ -192,7 +196,10 @@ attributedStringInfo getSegments(NSAttributedString *str)
 		return nil;
 	}
 	
-	NSOpenGLContext *glContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+	// <FS> Fix some bad refcount code and squash some potential leakiness; by Cinder Roxley
+	//NSOpenGLContext *glContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+	NSOpenGLContext *glContext = [[[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil] autorelease];
+	// </FS>
 	
 	if (glContext == nil)
 	{
@@ -243,7 +250,10 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	NSOpenGLContext *ctx = [self openGLContext];
 	
 	[ctx clearDrawable];
-	[ctx initWithFormat:format shareContext:nil];
+	// <FS> Fix some bad refcount code and squash some potential leakiness; by Cinder Roxley
+	//[ctx initWithFormat:format shareContext:nil];
+	ctx = [[[NSOpenGLContext alloc] initWithFormat:format shareContext:nil] autorelease];
+	// </FS>
 	
 	if (ctx == nil)
 	{
