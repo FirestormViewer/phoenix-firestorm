@@ -132,6 +132,7 @@
 #include "fsmoneytracker.h"
 #include "fswsassetblacklist.h"
 #include "llfloaterreg.h"
+#include "llgiveinventory.h"
 #include "llnotificationmanager.h"
 #include "lltexturefetch.h"
 #include "rlvactions.h"
@@ -2881,6 +2882,31 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					TRUE
 					);
 				// </FS:LO>
+
+				// <FS:Ansariel> Send inventory item on autoresponse
+				LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
+				if (item_id.notNull())
+				{
+					LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
+					if (item)
+					{
+						gIMMgr->addMessage(
+								session_id,
+								gAgentID,
+								LLStringUtil::null, // Pass null value so no name gets prepended
+								LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
+								false,
+								name,
+								IM_NOTHING_SPECIAL,
+								parent_estate_id,
+								region_id,
+								position,
+								false,
+								TRUE);
+						LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
+					}
+				}
+				// </FS:Ansariel>
 			}
 		}
 		else if (from_id.isNull())

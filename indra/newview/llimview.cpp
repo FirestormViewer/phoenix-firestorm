@@ -88,6 +88,8 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
+#include "llgiveinventory.h"
+#include "llinventoryfunctions.h"
 
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
@@ -3933,6 +3935,31 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				false, // <-- Wow! This parameter is never handled!!!
 				TRUE
 				);
+
+				// <FS:Ansariel> Send inventory item on autoresponse
+				LLUUID item_id(gSavedPerAccountSettings.getString("FSAutoresponseItemUUID"));
+				if (item_id.notNull())
+				{
+					LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getItem(item_id));
+					if (item)
+					{
+						gIMMgr->addMessage(
+								session_id,
+								gAgentID,
+								LLStringUtil::null, // Pass null value so no name gets prepended
+								LLTrans::getString("IM_autoresponse_item_sent", LLSD().with("[ITEM_NAME]", item->getName())),
+								false,
+								im_info->mName,
+								IM_NOTHING_SPECIAL,
+								im_info->mParentEstateID,
+								im_info->mRegionID,
+								im_info->mPosition,
+								false,
+								TRUE);
+						LLGiveInventory::doGiveInventoryItem(im_info->mFromID, item, session_id);
+					}
+				}
+				// </FS:Ansariel>
 		}
 	}
 	// </FS:Ansariel>

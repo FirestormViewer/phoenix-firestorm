@@ -10,6 +10,16 @@
  label="Communication"
  name="im">
  
+	<string name="AutoresponseItemNotSet">
+		No item set
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		No item not available
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Not logged in
+	</string>
+ 
 <tab_container
  label="Privacy"
  layout="topleft"
@@ -455,7 +465,7 @@
          left="15"
          mouse_opaque="false"
          name="text_box3"
-         top="10"
+         top="3"
          width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
@@ -464,10 +474,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="42"
+         height="40"
          layout="topleft"
          left="35"
-         top_pad="5"
+         top_pad="3"
          name="do_not_disturb_response"
          width="475"
          word_wrap="true">
@@ -492,10 +502,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="42"
+         height="40"
          layout="topleft"
          left="35"
-         top_pad="5"
+         top_pad="3"
          name="autorespond_response"
          width="475"
          word_wrap="true">
@@ -520,10 +530,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="42"
+         height="40"
          layout="topleft"
          left="35"
-         top_pad="5"
+         top_pad="3"
          name="autorespond_nf_response"
          width="475"
          word_wrap="true">
@@ -548,10 +558,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="42"
+         height="40"
          layout="topleft"
          left="35"
-         top_pad="5"
+         top_pad="3"
          name="autorespond_rto_response"
          width="475"
          word_wrap="true">
@@ -574,10 +584,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="42"
+         height="40"
          layout="topleft"
          left="35"
-         top_pad="5"
+         top_pad="3"
          name="muted_avatar_response"
          width="475"
          word_wrap="true">
@@ -600,16 +610,48 @@
         use_ellipses="false"
         commit_on_focus_lost = "true"
         follows="left|top"
-        height="42"
+        height="40"
         layout="topleft"
         left="35"
-        top_pad="5"
+        top_pad="3"
         name="away_avatar_response"
         width="475"
         word_wrap="true">
         log_in_to_change
       </text_editor>
 
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="10"
+         mouse_opaque="false"
+         name="autoresponse_item_label"
+         top_pad="12"
+         width="110">
+          Autoresponse item:
+        </text>
+        <fs_copytrans_inventory_drop_target
+         name="autoresponse_item"
+         follows="left|top|right"
+         height="23"
+         layout="topleft"
+         left_pad="5"
+         max_length_bytes="255"
+         top_delta="-5"
+         right="-50"
+         tool_tip="Drag and drop source inventory item here."/>
+        <button
+         follows="left|top"
+         height="23"
+         label="Clear"
+         layout="topleft"
+         left_pad="4"
+         name="clear_autoresponse_item"
+         top_delta="0"
+         width="40"/>
     </panel>
 </tab_container>
 </panel>

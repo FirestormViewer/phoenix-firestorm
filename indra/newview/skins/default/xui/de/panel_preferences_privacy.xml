@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Kommunikation" name="im">
+	<string name="AutoresponseItemNotSet">
+		Kein Objekt ausgewählt
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Objekt nicht verfügbar
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Nicht eingeloggt
+	</string>
 	<tab_container label="Privacy" name="tabs">
 		<!--General-->
 		<panel label="Allgemein" name="tab-general">
@@ -83,6 +92,11 @@
 			</text>
 			<check_box label="Automatische Antwort an geblockte Avatare senden:" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
 			<check_box label="Automatische Antwort während des „Abwesend“-Modus senden:" name="send_away_av_response" tool_tip="Sendet den unten stehenden Text an jemanden, wenn sie eine Instant Message während des „Abwesend“-Modus schickt."/>
+			<text name="autoresponse_item_label" width="150">
+				Objekt für autom. Antwort:
+			</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="-70" tool_tip="Hier Inventarobjekt via Drag&amp;Drop ablegen"/>
+			<button label="Löschen" name="clear_autoresponse_item" width="60"/>
 		</panel>
 	</tab_container>
 </panel>

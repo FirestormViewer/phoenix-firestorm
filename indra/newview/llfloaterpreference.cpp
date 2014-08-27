@@ -116,6 +116,7 @@
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
+#include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
@@ -1049,11 +1050,23 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	groupmute_item->getColumn(0)->setEnabled(in_opensim);
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Call onOpen on all panels for additional initialization on open
+	// Call onOpen() on all panels that derive from LLPanelPreference
+	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+	for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
+		iter != tabcontainer->getChildList()->end(); ++iter)
+	{
+		LLView* view = *iter;
+		LLPanelPreference* panel = dynamic_cast<LLPanelPreference*>(view);
+		if (panel)
+			panel->onOpen(key);
+	}
+	// </FS:Ansariel>
+
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
 	// job
 	saveSettings();
-	
 }
 
 void LLFloaterPreference::onVertexShaderEnable()
@@ -3020,6 +3033,17 @@ public:
 		}
 	}
 
+	// <FS:Ansariel> Send inventory item on autoresponse
+	/*virtual*/ void apply()
+	{
+		LLPanelPreference::apply();
+		if (LLStartUp::getStartupState() == STATE_STARTED)
+		{
+			gSavedPerAccountSettings.setString("FSAutoresponseItemUUID", mAutoresponseItem);
+		}
+	}
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
 	/*virtual*/ BOOL postBuild()
 	{
@@ -3027,12 +3051,54 @@ public:
 		gSavedPerAccountSettings.getControl("DebugLookAt")->getSignal()->connect(boost::bind(&LLPanelPreferencePrivacy::onChangeDebugLookAt, this));
 		onChangeDebugLookAt();
 
+		mInvDropTarget = getChild<FSCopyTransInventoryDropTarget>("autoresponse_item");
+		mInvDropTarget->setDADCallback(boost::bind(&LLPanelPreferencePrivacy::onDADAutoresponseItem, this, _1));
+		getChild<LLButton>("clear_autoresponse_item")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClearAutoresponseItem, this));
+
 		return TRUE;
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Send inventory item on autoresponse
+	/* virtual */ void onOpen(const LLSD& key)
+	{
+		LLButton* clear_item_btn = getChild<LLButton>("clear_autoresponse_item");
+		clear_item_btn->setEnabled(FALSE);
+		if (LLStartUp::getStartupState() == STATE_STARTED)
+		{
+			mAutoresponseItem = gSavedPerAccountSettings.getString("FSAutoresponseItemUUID");
+			LLUUID item_id(mAutoresponseItem);
+			if (item_id.isNull())
+			{
+				mInvDropTarget->setText(getString("AutoresponseItemNotSet"));
+			}
+			else
+			{
+				clear_item_btn->setEnabled(TRUE);
+				LLInventoryObject* item = gInventory.getObject(item_id);
+				if (item)
+				{
+					mInvDropTarget->setText(item->getName());
+				}
+				else
+				{
+					mInvDropTarget->setText(getString("AutoresponseItemNotAvailable"));
+				}
+			}
+		}
+		else
+		{
+			mInvDropTarget->setText(getString("AutoresponseItemNotLoggedIn"));
+		}
 	}
 	// </FS:Ansariel>
 
 private:
 	std::list<std::string> mAccountIndependentSettings;
+
+	// <FS:Ansariel> Send inventory item on autoresponse
+	FSCopyTransInventoryDropTarget*	mInvDropTarget;
+	std::string						mAutoresponseItem;
 
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
 	void onChangeDebugLookAt()
@@ -3043,6 +3109,26 @@ private:
 	void onClickDebugLookAt(const LLSD& value)
 	{
 		gSavedPerAccountSettings.setS32("DebugLookAt", value.asBoolean());
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Send inventory item on autoresponse
+	void onDADAutoresponseItem(const LLUUID& item_id)
+	{
+		LLInventoryObject* item = gInventory.getObject(item_id);
+		if (item)
+		{
+			mInvDropTarget->setText(item->getName());
+			mAutoresponseItem = item_id.asString();
+			childSetEnabled("clear_autoresponse_item", true);
+		}
+	}
+
+	void onClearAutoresponseItem()
+	{
+		mAutoresponseItem = "";
+		mInvDropTarget->setText(getString("AutoresponseItemNotSet"));
+		childSetEnabled("clear_autoresponse_item", false);
 	}
 	// </FS:Ansariel>
 };

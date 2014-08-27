@@ -141,6 +141,7 @@ set(viewer_SOURCE_FILES
     fscontactsfriendsctrl.cpp
     fscontactsfriendsmenu.cpp
     fsdata.cpp
+    fsdroptarget.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
     fsfloaterblocklist.cpp
@@ -845,6 +846,7 @@ set(viewer_HEADER_FILES
     fscontactsfriendsctrl.h
     fscontactsfriendsmenu.h
     fsdata.h
+    fsdroptarget.h
     fsexportperms.h
     fsfloateraddtocontactset.h
     fsfloaterblocklist.h

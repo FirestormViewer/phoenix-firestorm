@@ -4232,6 +4232,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="IM_autoresponse_sent">
 		Automatische Antwort gesendet.
 	</string>
+	<string name="IM_autoresponse_item_sent">
+		Objekt für automatische Antwort gesendet: [ITEM_NAME]
+	</string>
 	<string name="OnlineStatus">
 		online
 	</string>

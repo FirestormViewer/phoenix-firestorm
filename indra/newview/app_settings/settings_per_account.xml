@@ -863,6 +863,17 @@
         <key>Value</key>
             <string></string>
         </map>
+    <key>FSAutoresponseItemUUID</key>
+        <map>
+            <key>Comment</key>
+                <string>UUID of the inventory item that is sent as part of an auto-response message</string>
+            <key>Persist</key>
+                <integer>1</integer>
+            <key>Type</key>
+                <string>String</string>
+            <key>Value</key>
+               <string/>
+        </map>
 
     </map>
 </llsd>
