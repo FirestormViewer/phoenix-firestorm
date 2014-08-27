@@ -8745,16 +8745,17 @@ class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		
-		BOOL checked = gSavedSettings.getBOOL( "DoubleClickTeleport" );
+		BOOL checked = gSavedSettings.getBOOL("DoubleClickTeleport");
 		if (checked)
 		{
-		   gSavedSettings.setBOOL( "DoubleClickTeleport", false );
+			gSavedSettings.setBOOL("DoubleClickTeleport", FALSE);
+			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportDisabled"));
 		}
 		else
 		{
-           gSavedSettings.setBOOL( "DoubleClickTeleport", true );
-		   gSavedSettings.setBOOL( "DoubleClickAutoPilot", false );
+			gSavedSettings.setBOOL("DoubleClickTeleport", TRUE);
+			gSavedSettings.setBOOL("DoubleClickAutoPilot", FALSE);
+			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportEnabled"));
 		}
 		return true;
 	}

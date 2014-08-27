@@ -2720,4 +2720,6 @@ Try enclosing path to the editor with double quotes.
   <string name="SLGridStatusTimedOut">SL Grid Status error: Request timed out.</string>
   <string name="SLGridStatusOtherError">SL Grid Status error: [STATUS] (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).</string>
 
+  <string name="DoubleClickTeleportEnabled">DoubleClick Teleport enabled.</string>
+  <string name="DoubleClickTeleportDisabled">DoubleClick Teleport disabled.</string>
 </strings>

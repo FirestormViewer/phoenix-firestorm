@@ -6024,4 +6024,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SLGridStatusOtherError">
 		SL-Grid-Status-Fehler: [STATUS] (https://de.wikipedia.org/wiki/HTTP-Statuscode).
 	</string>
+
+	<string name="DoubleClickTeleportEnabled">
+		Doppelklick-Teleport aktiviert.
+	</string>
+	<string name="DoubleClickTeleportDisabled">
+		Doppelklick-Teleport deaktiviert.
+	</string>
 </strings>
