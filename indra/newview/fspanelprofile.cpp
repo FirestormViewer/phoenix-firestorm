@@ -50,6 +50,7 @@
 
 // Newview
 #include "fsdata.h"
+#include "fsdroptarget.h"
 #include "fspanelprofileclassifieds.h"
 #include "llagent.h" //gAgent
 #include "llagentpicksinfo.h"
@@ -63,7 +64,6 @@
 #include "lltrans.h"
 #include "llvoiceclient.h"
 #include "llgroupactions.h"
-#include "lltooldraganddrop.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h" //LLGridManager
 #include "llfloaterworldmap.h"
@@ -88,76 +88,6 @@ static const std::string PANEL_CLASSIFIEDS	= "panel_profile_classified";
 static const std::string PANEL_FIRSTLIFE	= "panel_profile_firstlife";
 static const std::string PANEL_NOTES		= "panel_profile_notes";
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Class FSDropTarget
-//
-// This handy class is a simple way to drop something on another
-// view. It handles drop events, always setting itself to the size of
-// its parent.
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-class FSDropTarget : public LLView
-{
-public:
-	struct Params : public LLInitParam::Block<Params, LLView::Params>
-	{
-		Optional<LLUUID> agent_id;
-		Params()
-			: agent_id("agent_id")
-		{
-			changeDefault(mouse_opaque, false);
-			changeDefault(follows.flags, FOLLOWS_ALL);
-		}
-	};
-
-	FSDropTarget(const Params&);
-	~FSDropTarget();
-
-	void doDrop(EDragAndDropType cargo_type, void* cargo_data);
-
-	//
-	// LLView functionality
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg);
-	void setAgentID(const LLUUID &agent_id) { mAgentID = agent_id; }
-protected:
-	LLUUID mAgentID;
-};
-
-FSDropTarget::FSDropTarget(const FSDropTarget::Params& p)
-	: LLView(p),
-	mAgentID(p.agent_id)
-{}
-
-FSDropTarget::~FSDropTarget()
-{}
-
-void FSDropTarget::doDrop(EDragAndDropType cargo_type, void* cargo_data)
-{
-	LL_INFOS("LegacyProfile") << "FSDropTarget::doDrop()" << LL_ENDL;
-}
-
-BOOL FSDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-									 EDragAndDropType cargo_type,
-									 void* cargo_data,
-									 EAcceptance* accept,
-									 std::string& tooltip_msg)
-{
-	if(getParent())
-	{
-		LLToolDragAndDrop::handleGiveDragAndDrop(mAgentID, LLUUID::null, drop,
-												 cargo_type, cargo_data, accept);
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-static LLDefaultChildRegistry::Register<FSDropTarget> r("profile_drop_target");
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

@@ -39,7 +39,7 @@
 	 top="10">
 		Source:
 	</text>
-	<fs_inventory_drop_target
+	<fs_inventory_link_replace_drop_target
 	 name="source_uuid_editor"
 	 follows="left|top|right"
 	 height="23"
@@ -61,7 +61,7 @@
 	 top_pad="10">
 		Target:
 	</text>
-	<fs_inventory_drop_target
+	<fs_inventory_link_replace_drop_target
 	 name="target_uuid_editor"
 	 follows="left|top|right"
 	 height="23"

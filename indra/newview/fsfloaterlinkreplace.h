@@ -29,7 +29,7 @@
 
 #include "llfloater.h"
 
-class FSInventoryDropTarget;
+class FSInventoryLinkReplaceDropTarget;
 class LLButton;
 class LLTextBox;
 
@@ -52,10 +52,10 @@ private:
 	void onSourceItemDrop(const LLUUID& source_item_id);
 	void onTargetItemDrop(const LLUUID& target_item_id);
 
-	FSInventoryDropTarget*	mSourceEditor;
-	FSInventoryDropTarget*	mTargetEditor;
-	LLButton*				mStartBtn;
-	LLTextBox*				mStatusText;
+	FSInventoryLinkReplaceDropTarget*	mSourceEditor;
+	FSInventoryLinkReplaceDropTarget*	mTargetEditor;
+	LLButton*							mStartBtn;
+	LLTextBox*							mStatusText;
 
 	LLUUID	mSourceUUID;
 	LLUUID	mTargetUUID;

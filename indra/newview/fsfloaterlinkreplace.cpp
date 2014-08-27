@@ -28,90 +28,12 @@
 
 #include "fsfloaterlinkreplace.h"
 
+#include "fsdroptarget.h"
 #include "llagent.h"
 #include "llinventoryfunctions.h"
 #include "lllineeditor.h"
 #include "lltextbox.h"
 #include "llviewerinventory.h"
-
-class FSInventoryDropTarget : public LLLineEditor
-{
-public:
-	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
-	{
-		Params()
-		{}
-	};
-
-	FSInventoryDropTarget(const Params& p)
-		: LLLineEditor(p) {}
-	~FSInventoryDropTarget() {}
-
-	typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
-	boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
-	{
-		return mDADSignal.connect(cb);
-	}
-
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg)
-	{
-		LLInventoryItem* item = (LLInventoryItem*)cargo_data;
-
-		if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_LINK &&
-			item && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
-			(
-				LLAssetType::lookupCanLink(item->getType()) ||
-				(item->getType() == LLAssetType::AT_LINK && !gInventory.getObject(item->getLinkedUUID())) // Broken Link!
-			))
-		{
-			if (drop)
-			{
-				setItem(item);
-				if (!mDADSignal.empty())
-				{
-					mDADSignal(mItemID);
-				}
-			}
-			else
-			{
-				*accept = ACCEPT_YES_SINGLE;
-			}
-		}
-		else
-		{
-			*accept = ACCEPT_NO;
-		}
-
-		return TRUE;
-	}
-
-	LLUUID getItemID() const { return mItemID; }
-	void setItem(LLInventoryItem* item)
-	{
-		if (item)
-		{
-			mItemID = item->getLinkedUUID();
-			setText(item->getName());
-		}
-		else
-		{
-			mItemID.setNull();
-			setText(LLStringExplicit(""));
-		}
-	}
-
-private:
-	LLUUID mItemID;
-
-	item_dad_callback_t mDADSignal;
-};
-
-static LLDefaultChildRegistry::Register<FSInventoryDropTarget> r("fs_inventory_drop_target");
-
 
 FSFloaterLinkReplace::FSFloaterLinkReplace(const LLSD& key)
 	: LLFloater(key),
@@ -132,11 +54,8 @@ BOOL FSFloaterLinkReplace::postBuild()
 
 	getChild<LLButton>("btn_refresh")->setCommitCallback(boost::bind(&FSFloaterLinkReplace::checkEnableStart, this));
 
-	mSourceEditor = getChild<FSInventoryDropTarget>("source_uuid_editor");
-	mTargetEditor = getChild<FSInventoryDropTarget>("target_uuid_editor");
-
-	mSourceEditor->setEnabled(FALSE);
-	mTargetEditor->setEnabled(FALSE);
+	mSourceEditor = getChild<FSInventoryLinkReplaceDropTarget>("source_uuid_editor");
+	mTargetEditor = getChild<FSInventoryLinkReplaceDropTarget>("target_uuid_editor");
 
 	mSourceEditor->setDADCallback(boost::bind(&FSFloaterLinkReplace::onSourceItemDrop, this, _1));
 	mTargetEditor->setDADCallback(boost::bind(&FSFloaterLinkReplace::onTargetItemDrop, this, _1));
