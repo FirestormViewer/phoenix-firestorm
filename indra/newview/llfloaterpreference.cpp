@@ -3006,6 +3006,8 @@ public:
 	{
 		mAccountIndependentSettings.push_back("VoiceCallsFriendsOnly");
 		mAccountIndependentSettings.push_back("AutoDisengageMic");
+
+		mAutoresponseItem = gSavedPerAccountSettings.getString("FSAutoresponseItemUUID");
 	}
 
 	/*virtual*/ void saveSettings()
@@ -3055,7 +3057,7 @@ public:
 		mInvDropTarget->setDADCallback(boost::bind(&LLPanelPreferencePrivacy::onDADAutoresponseItem, this, _1));
 		getChild<LLButton>("clear_autoresponse_item")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClearAutoresponseItem, this));
 
-		return TRUE;
+		return LLPanelPreference::postBuild();
 	}
 	// </FS:Ansariel>
 
