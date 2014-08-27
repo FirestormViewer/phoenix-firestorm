@@ -259,9 +259,9 @@
           <combo_item name="High" label="Wysoki"/>
         </combo_box>
         <check_box name="FSBuildPrefs_EmbedItem" label="Umieszczaj obiekt w nowych primach"/>
-        <text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu.">
+        <fs_embedded_item_drop_target name="embed_item" tool_tip="Upuść przedmiot w tym miejscu.">
          Upuść przedmiot w tym miejscu.
-        </text>
+        </fs_embedded_item_drop_target>
         <text name="build_item_add_disp_rect_txt">
          Obecnie ustawiono na: [ITEM]
         </text>

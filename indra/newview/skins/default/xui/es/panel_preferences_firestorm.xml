@@ -227,9 +227,9 @@
 				<combo_item name="High" label="Alto"/>
 				</combo_box>
 			<check_box name="FSBuildPrefs_EmbedItem" label="Incrustar un objeto en los nuevos prims"/>
-			<text name="Give inventory" tool_tip="Arrastra aquí un ítem del inventario.">
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="Arrastra aquí un ítem del inventario.">
 				Arrastra aquí un ítem del inventario.
-			</text>
+			</fs_embedded_item_drop_target>
 			<text name="build_item_add_disp_rect_txt">
 				Actualmente establecido a: [ITEM]
 			</text>

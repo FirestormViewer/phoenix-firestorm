@@ -193,23 +193,26 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	}
 	object->sendTEUpdate();
 	
-	if(gSavedSettings.getBOOL("FSBuildPrefs_EmbedItem"))
+	if (gSavedPerAccountSettings.getBOOL("FSBuildPrefs_EmbedItem"))
 	{
-		LLViewerInventoryItem* item = (LLViewerInventoryItem*)gInventory.getItem((LLUUID)gSavedSettings.getString("FSBuildPrefs_Item"));
-		if(item)
+		LLUUID item_id(gSavedPerAccountSettings.getString("FSBuildPrefs_Item"));
+		if (item_id.notNull())
 		{
-			if (item->getType() == LLAssetType::AT_LSL_TEXT)
+			LLInventoryItem* item = dynamic_cast<LLInventoryItem*>(gInventory.getObject(item_id));
+			if (item)
 			{
-				
-				LLToolDragAndDrop::dropScript(object, item, TRUE,
-							      LLToolDragAndDrop::SOURCE_AGENT,
-							      gAgentID);
-			}
-			else
-			{
-				LLToolDragAndDrop::dropInventory(object, item,
-								LLToolDragAndDrop::SOURCE_AGENT,
-								gAgentID);
+				if (item->getType() == LLAssetType::AT_LSL_TEXT)
+				{
+					LLToolDragAndDrop::dropScript(object, item, TRUE,
+									  LLToolDragAndDrop::SOURCE_AGENT,
+									  gAgentID);
+				}
+				else
+				{
+					LLToolDragAndDrop::dropInventory(object, item,
+									LLToolDragAndDrop::SOURCE_AGENT,
+									gAgentID);
+				}
 			}
 		}
 	}

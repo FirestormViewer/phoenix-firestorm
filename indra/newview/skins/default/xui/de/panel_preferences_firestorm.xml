@@ -4,6 +4,15 @@
 <panel.string name="BeamsOffLabel">
 	=== AUS ===
 </panel.string>
+	<string name="EmbeddedItemNotSet">
+		Nicht gesetzt
+	</string>
+	<string name="EmbeddedItemNotAvailable">
+		Nicht verfügbar
+	</string>
+	<string name="EmbeddedItemNotLoggedIn">
+		Nicht eingeloggt
+	</string>
 
 <tab_container label="Firestorm Prefs" name="tabs">
 
@@ -286,9 +295,9 @@
 			<combo_item name="High" label="Hoch"/>
         </combo_box>
 		<check_box name="FSBuildPrefs_EmbedItem" label="Objekt zu neuem Prim hinzufügen"/>
-		<text name="Give inventory" tool_tip="Gegenstand aus Inventar hier ablegen">
+		<fs_embedded_item_drop_target name="embed_item" tool_tip="Gegenstand aus Inventar hier ablegen">
 			Gegenstand aus Inventar hier ablegen
-		</text>
+		</fs_embedded_item_drop_target>
 		<text name="build_item_add_disp_rect_txt">
 			Aktuell gesetzt: [ITEM]
         </text>

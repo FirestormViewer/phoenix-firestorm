@@ -36,6 +36,7 @@
 static LLDefaultChildRegistry::Register<FSCopyTransInventoryDropTarget> r1("fs_copytrans_inventory_drop_target");
 static LLDefaultChildRegistry::Register<FSInventoryLinkReplaceDropTarget> r2("fs_inventory_link_replace_drop_target");
 static LLDefaultChildRegistry::Register<FSDropTarget> r3("profile_drop_target");
+static LLDefaultChildRegistry::Register<FSEmbeddedItemDropTarget> r4("fs_embedded_item_drop_target");
 
 
 BOOL FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
@@ -144,3 +145,34 @@ BOOL FSDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 	return FALSE;
 }
 
+BOOL FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+												EDragAndDropType cargo_type,
+												void* cargo_data,
+												EAcceptance* accept,
+												std::string& tooltip_msg)
+{
+	LLInventoryItem* item = (LLInventoryItem*)cargo_data;
+
+	if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_GESTURE &&
+		item && item->getActualType() != LLAssetType::AT_LINK && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
+		item->getPermissions().getMaskOwner() & PERM_COPY && item->getPermissions().getMaskOwner() & PERM_TRANSFER)
+	{
+		if (drop)
+		{
+			if (!mDADSignal.empty())
+			{
+				mDADSignal(item->getUUID());
+			}
+		}
+		else
+		{
+			*accept = ACCEPT_YES_SINGLE;
+		}
+	}
+	else
+	{
+		*accept = ACCEPT_NO;
+	}
+
+	return TRUE;
+}

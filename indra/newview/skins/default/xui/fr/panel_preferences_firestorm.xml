@@ -416,10 +416,10 @@
 	<!--for future drop zone-->
 		<check_box name="FSBuildPrefs_EmbedItem"
 			label="Intégrer un item aux prim."/>
-		<text name="Give inventory"
+		<fs_embedded_item_drop_target name="embed_item"
 			tool_tip="Depuis l'inventaire, glisser / déposer un item dans cette zone.">
 			Déposer un item ici
-        </text>
+        </fs_embedded_item_drop_target>
 		<text name="build_item_add_disp_rect_txt"
 			tool_tip="Item actuellement intégré.">
 			Item actuel : [ITEM]

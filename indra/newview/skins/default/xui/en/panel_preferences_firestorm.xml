@@ -13,6 +13,15 @@
 <panel.string name="BeamsOffLabel">
 	=== OFF ===
 </panel.string>
+	<string name="EmbeddedItemNotSet">
+		Not set
+	</string>
+	<string name="EmbeddedItemNotAvailable">
+		Not available
+	</string>
+	<string name="EmbeddedItemNotLoggedIn">
+		Not logged in
+	</string>
 
 <tab_container
  label="Firestorm Prefs"
@@ -1888,12 +1897,7 @@
           <combo_item name="Medium" value="Medium" label="Medium"/>
           <combo_item name="High" value="High" label="High"/>
         </combo_box>
-<!--
-TODO: add the code to enable drag and drop support for items
-For now, just make the UI elements invisiable but still have the debug settings to play with.
--->
         <check_box
-	visible="false"
          name="FSBuildPrefs_EmbedItem"
          top="120"
          enabled="false"
@@ -1908,19 +1912,15 @@ For now, just make the UI elements invisiable but still have the debug settings 
          radio_style="false"
          width="270"/>
         <view_border
-	visible="false"
-	enabled="false"
          bevel_style="in"
          top_delta="20"
          follows="left|top"
          height="16"
          left_delta="0"
          mouse_opaque="false"
-         name="im_give_drop_target_rect"
+         name="embed_item_drop_target_rect"
          width="220"/>
-        <text
-	visible="false"
-	enabled="false"
+        <fs_embedded_item_drop_target
          bg_visible="false"
          border_visible="false"
          top_delta="0"
@@ -1931,15 +1931,13 @@ For now, just make the UI elements invisiable but still have the debug settings 
          height="16"
          left_delta="0"
          mouse_opaque="true"
-         name="Give inventory"
+         name="embed_item"
          tool_tip="Drop an inventory item here."
          v_pad="2"
          width="220">
          Drop an inventory item here.
-        </text>
+        </fs_embedded_item_drop_target>
         <view_border
-	visible="false"
-	enabled="false"
          bevel_style="in"
          top_delta="18"
          follows="left|top"
@@ -1949,8 +1947,6 @@ For now, just make the UI elements invisiable but still have the debug settings 
          name="build_item_add_disp_rect"
          width="220"/>
         <text
-	visible="false"
-	enabled="false"
          bg_visible="false"
          border_visible="false"
          top_delta="0"
@@ -1967,7 +1963,6 @@ For now, just make the UI elements invisiable but still have the debug settings 
          width="220">
          Currently set to: [ITEM]
         </text>
-<!-- end drag and drop UI -->
         <text
          top_pad="-60"
          left_pad="20"

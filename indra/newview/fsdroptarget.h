@@ -29,6 +29,7 @@
 #define FS_DROPTARGET_H
 
 #include "lllineeditor.h"
+#include "lltextbox.h"
 
 class LLInventoryItem;
 
@@ -138,6 +139,35 @@ public:
 
 protected:
 	LLUUID mAgentID;
+};
+
+
+class FSEmbeddedItemDropTarget : public LLTextBox
+{
+public:
+	struct Params : public LLInitParam::Block<Params, LLTextBox::Params>
+	{
+		Params()
+		{}
+	};
+
+	FSEmbeddedItemDropTarget(const Params& p) : LLTextBox(p) {}
+	~FSEmbeddedItemDropTarget() {}
+
+	typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
+	boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
+	{
+		return mDADSignal.connect(cb);
+	}
+
+	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+								   EDragAndDropType cargo_type,
+								   void* cargo_data,
+								   EAcceptance* accept,
+								   std::string& tooltip_msg);
+
+protected:
+	item_dad_callback_t mDADSignal;
 };
 
 #endif // FS_DROPTARGET_H

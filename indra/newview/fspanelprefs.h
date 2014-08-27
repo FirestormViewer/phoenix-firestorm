@@ -29,6 +29,8 @@
 
 #include "llfloaterpreference.h"
 
+class FSEmbeddedItemDropTarget;
+
 class FSPanelPrefs : public LLPanelPreference
 {
 public:
@@ -36,6 +38,7 @@ public:
 	virtual ~FSPanelPrefs() {}
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel();
 
@@ -54,6 +57,11 @@ private:
 	void onCommitTrans();
 
 	void onCheckContactListColumnMode();
+
+	void onDADEmbeddedItem(const LLUUID& item_id);
+
+	FSEmbeddedItemDropTarget*	mInvDropTarget;
+	std::string					mEmbeddedItem;
 };
 
 #endif // FS_PANELPREFS_H

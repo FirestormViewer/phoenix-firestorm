@@ -28,6 +28,7 @@
 
 #include "fspanelprefs.h"
 
+#include "fsdroptarget.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "lggbeammaps.h"
@@ -39,6 +40,7 @@
 #include "llfloaterreg.h"
 #include "llinventorymodel.h"
 #include "llspinctrl.h"
+#include "llstartup.h"
 #include "lltexturectrl.h"
 #include "llviewercontrol.h"
 #include "llvoavatar.h"
@@ -51,6 +53,8 @@ FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&FSPanelPrefs::onCommitCopy, this));
 	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&FSPanelPrefs::onCommitTrans, this));
 	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&FSPanelPrefs::onCheckContactListColumnMode, this));
+
+	mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
 }
 
 BOOL FSPanelPrefs::postBuild()
@@ -74,14 +78,53 @@ BOOL FSPanelPrefs::postBuild()
 	tex_ctrl->setCommitCallback(boost::bind(&FSPanelPrefs::onCommitTexture, this, _2));
 	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
 
+	mInvDropTarget = getChild<FSEmbeddedItemDropTarget>("embed_item");
+	mInvDropTarget->setDADCallback(boost::bind(&FSPanelPrefs::onDADEmbeddedItem, this, _1));
+
 	onCheckContactListColumnMode();
 
 	return LLPanelPreference::postBuild();
 }
 
+void FSPanelPrefs::onOpen(const LLSD& key)
+{
+	if (LLStartUp::getStartupState() == STATE_STARTED)
+	{
+		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(TRUE);
+		mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
+		LLUUID item_id(mEmbeddedItem);
+		if (item_id.isNull())
+		{
+			getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotSet"));
+		}
+		else
+		{
+			LLInventoryObject* item = gInventory.getObject(item_id);
+			if (item)
+			{
+				getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", item->getName());
+			}
+			else
+			{
+				getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotAvailable"));
+			}
+		}
+	}
+	else
+	{
+		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(FALSE);
+		getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotLoggedIn"));
+	}
+}
+
 void FSPanelPrefs::apply()
 {
 	LLPanelPreference::apply();
+
+	if (LLStartUp::getStartupState() == STATE_STARTED)
+	{
+		gSavedPerAccountSettings.setString("FSBuildPrefs_Item", mEmbeddedItem);
+	}
 }
 
 
@@ -259,3 +302,14 @@ void FSPanelPrefs::onCheckContactListColumnMode()
 	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
 	childSetEnabled("FSFriendListColumnShowFullName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
 }
+
+void FSPanelPrefs::onDADEmbeddedItem(const LLUUID& item_id)
+{
+	LLInventoryObject* item = gInventory.getObject(item_id);
+	if (item)
+	{
+		getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", item->getName());
+		mEmbeddedItem = item_id.asString();
+	}
+}
+
