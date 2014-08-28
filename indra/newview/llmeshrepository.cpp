@@ -3009,10 +3009,7 @@ void LLMeshRepository::init()
 {
 	mMeshMutex = new LLMutex(NULL);
 	
-	// <FS> No need trying to gain an instance for calling a static method; found by Cinder Roxley
-	//LLConvexDecomposition::getInstance()->initSystem();
-	LLConvexDecomposition::initSystem();
-	// </FS>
+	LLConvexDecomposition::getInstance()->initSystem();
 
 	mDecompThread = new LLPhysicsDecomp();
 	mDecompThread->start();
