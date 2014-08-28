@@ -236,7 +236,10 @@ void LLPanelContents::onClickNewScript(void *userdata)
 		// viewer so the viewer can auto-open the script and start
 		// editing ASAP.
 #if 0
-		LLFloaterReg::showInstance("preview_scriptedit", LLSD(inv_item->getUUID()), TAKE_FOCUS_YES);
+		// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+		//LLFloaterReg::showInstance("preview_scriptedit", LLSD(inv_item->getUUID()), TAKE_FOCUS_YES);
+		LLFloaterReg::showInstance("preview_scriptedit", LLSD().with("xoredid", inv_item->getUUID() ^ object->mID).with("assetid", inv_item->getUUID()), TAKE_FOCUS_YES);
+		// </FS:Ansariel>
 #endif
 	}
 }

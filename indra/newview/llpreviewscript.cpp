@@ -1991,7 +1991,10 @@ void* LLLiveLSLEditor::createScriptEdPanel(void* userdata)
 
 
 LLLiveLSLEditor::LLLiveLSLEditor(const LLSD& key) :
-	LLScriptEdContainer(key),
+	// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+	//LLScriptEdContainer(key),
+	LLScriptEdContainer(key.has("assetid") ? key.get("assetid") : key),
+	// </FS:Ansariel>
 	mAskedForRunningInfo(FALSE),
 	mHaveRunningInfo(FALSE),
 	mCloseAfterSave(FALSE),
@@ -2102,7 +2105,11 @@ void LLLiveLSLEditor::loadAsset()
 			else if(item && mItem.notNull())
 			{
 				// request the text from the object
-				LLUUID* user_data = new LLUUID(mItemUUID); //  ^ mObjectUUID
+				// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+				//LLUUID* user_data = new LLUUID(mItemUUID); //  ^ mObjectUUID
+				LLSD* user_data = new LLSD();
+				user_data->with("xoredid", mItemUUID ^ mObjectUUID).with("assetid", mItemUUID);
+				// </FS:Ansariel>
 				gAssetStorage->getInvItemAsset(object->getRegion()->getHost(),
 											   gAgent.getID(),
 											   gAgent.getSessionID(),
@@ -2179,7 +2186,10 @@ void LLLiveLSLEditor::onLoadComplete(LLVFS *vfs, const LLUUID& asset_id,
 {
 	LL_DEBUGS() << "LLLiveLSLEditor::onLoadComplete: got uuid " << asset_id
 		 << LL_ENDL;
-	LLUUID* xored_id = (LLUUID*)user_data;
+	// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+	//LLUUID* xored_id = (LLUUID*)user_data;
+	LLSD* xored_id = (LLSD*)user_data;
+	// </FS:Ansariel>
 	
 	LLLiveLSLEditor* instance = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", *xored_id);
 	
@@ -2623,7 +2633,10 @@ void LLLiveLSLEditor::onSaveTextComplete(const LLUUID& asset_uuid, void* user_da
 	}
 	else
 	{
-		LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", data->mItem->getUUID()); //  ^ data->mSaveObjectID
+		// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+		//LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", data->mItem->getUUID()); //  ^ data->mSaveObjectID
+		LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD().with("xoredid", data->mItem->getUUID() ^ data->mSaveObjectID).with("assetid", data->mItem->getUUID()));
+		// </FS:Ansariel>
 		if (self)
 		{
 			self->getWindow()->decBusyCount();
@@ -2648,7 +2661,10 @@ void LLLiveLSLEditor::onSaveBytecodeComplete(const LLUUID& asset_uuid, void* use
 	if(0 ==status)
 	{
 		LL_INFOS() << "LSL Bytecode saved" << LL_ENDL;
-		LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", data->mItem->getUUID()); //  ^ data->mSaveObjectID
+		// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+		//LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", data->mItem->getUUID()); //  ^ data->mSaveObjectID
+		LLLiveLSLEditor* self = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD().with("xoredid", data->mItem->getUUID() ^ data->mSaveObjectID).with("assetid", data->mItem->getUUID()));
+		// </FS:Ansariel>
 		if (self)
 		{
 			// Tell the user that the compile worked.
@@ -2727,7 +2743,10 @@ void LLLiveLSLEditor::processScriptRunningReply(LLMessageSystem* msg, void**)
 	msg->getUUIDFast(_PREHASH_Script, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_Script, _PREHASH_ItemID, item_id);
 
-	LLLiveLSLEditor* instance = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", item_id); //  ^ object_id
+	// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
+	//LLLiveLSLEditor* instance = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", item_id); //  ^ object_id
+	LLLiveLSLEditor* instance = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD().with("xoredid", item_id ^ object_id).with("assetid", item_id));
+	// </FS:Ansariel>
 	if(instance)
 	{
 		instance->mHaveRunningInfo = TRUE;
