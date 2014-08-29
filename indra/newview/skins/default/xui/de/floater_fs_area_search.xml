@@ -3,7 +3,7 @@
 	<tab_container name="area_searchtab">
 		<panel name="area_search_list_panel" label="Liste">
 			<panel.string name="ListedPendingTotalBlank">
-				Gelistet | Offen | Total"
+				Gelistet | Offen | Total
 			</panel.string>
 			<panel.string name="ListedPendingTotalFilled">
 				[LISTED] Gelistet | [PENDING] Offen | [TOTAL] Total
