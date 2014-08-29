@@ -3,13 +3,13 @@
 <panel.string name="BeamsOffLabel">
 	=== WYŁĄCZONE ===
 </panel.string>
-<string name="AutoresponseItemNotSet">
+<string name="EmbeddedItemNotSet">
 	Brak ustawionego
 </string>
-<string name="AutoresponseItemNotAvailable">
+<string name="EmbeddedItemNotAvailable">
 	Niedostępny
 </string>
-<string name="AutoresponseItemNotLoggedIn">
+<string name="EmbeddedItemNotLoggedIn">
 	Zaloguj się
 </string>
 <tab_container label="Ust. Firestorma" name="tabs">
@@ -272,7 +272,7 @@
          Upuść przedmiot w tym miejscu.
         </fs_embedded_item_drop_target>
         <text name="build_item_add_disp_rect_txt">
-         Obecnie ustawiono na: [ITEM]
+         Obecnie: [ITEM]
         </text>
         <text name="text_box_permissions">
           Zezwolenia
