@@ -50,7 +50,7 @@ const LLTransactionID LLTransactionID::tnull;
 // static 
 LLMutex * LLUUID::mMutex = NULL;
 
-// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 static const U8 nullUUID[UUID_BYTES] = {};
 
 /*
@@ -951,7 +951,7 @@ LLUUID::LLUUID()
 // Faster than copying from memory
  void LLUUID::setNull()
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *word = (U32 *)mData;
 	//word[0] = 0;
 	//word[1] = 0;
@@ -965,7 +965,7 @@ LLUUID::LLUUID()
 // Compare
  bool LLUUID::operator==(const LLUUID& rhs) const
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *tmp = (U32 *)mData;
 	//U32 *rhstmp = (U32 *)rhs.mData;
 	//// Note: binary & to avoid branching
@@ -981,7 +981,7 @@ LLUUID::LLUUID()
 
  bool LLUUID::operator!=(const LLUUID& rhs) const
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *tmp = (U32 *)mData;
 	//U32 *rhstmp = (U32 *)rhs.mData;
 	//// Note: binary | to avoid branching
@@ -1006,7 +1006,7 @@ LLUUID::LLUUID()
 
  BOOL LLUUID::notNull() const
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *word = (U32 *)mData;
 	//return (word[0] | word[1] | word[2] | word[3]) > 0;
 	return 0 != memcmp(mData, nullUUID, sizeof(mData));
@@ -1017,7 +1017,7 @@ LLUUID::LLUUID()
 // as much memory access.
  BOOL LLUUID::isNull() const
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *word = (U32 *)mData;
 	//// If all bits are zero, return !0 == TRUE
 	//return !(word[0] | word[1] | word[2] | word[3]);
@@ -1028,7 +1028,7 @@ LLUUID::LLUUID()
 // Copy constructor
  LLUUID::LLUUID(const LLUUID& rhs)
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *tmp = (U32 *)mData;
 	//U32 *rhstmp = (U32 *)rhs.mData;
 	//tmp[0] = rhstmp[0];
@@ -1046,7 +1046,7 @@ LLUUID::LLUUID()
 // Assignment
  LLUUID& LLUUID::operator=(const LLUUID& rhs)
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//// No need to check the case where this==&rhs.  The branch is slower than the write.
 	//U32 *tmp = (U32 *)mData;
 	//U32 *rhstmp = (U32 *)rhs.mData;
@@ -1129,7 +1129,7 @@ LLUUID::LLUUID()
 
  U32 LLUUID::getCRC32() const
 {
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Cinder Roxley
+	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
 	//U32 *tmp = (U32*)mData;
 	//return tmp[0] + tmp[1] + tmp[2] + tmp[3];
 	U32 ret = 0;
