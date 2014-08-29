@@ -3,6 +3,15 @@
 <panel.string name="BeamsOffLabel">
 	=== WYŁĄCZONE ===
 </panel.string>
+<string name="AutoresponseItemNotSet">
+	Brak ustawionego
+</string>
+<string name="AutoresponseItemNotAvailable">
+	Niedostępny
+</string>
+<string name="AutoresponseItemNotLoggedIn">
+	Zaloguj się
+</string>
 <tab_container label="Ust. Firestorma" name="tabs">
     <panel label="Ogólne" name="tab-general">
         <check_box name="checkMiscRLVa" label="Sterowanie Firestormem przez skrypty (RLVa)" />

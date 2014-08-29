@@ -14,6 +14,9 @@
 	<string name="server_forbidden_text">
 		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.
 	</string>
+	<string name="information_text">
+		Ruch: [TRAFFIC] Obszar: [AREA] m²
+	</string>
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
 			<button name="back_btn" tool_tip="Cofnij"/>
@@ -28,6 +31,7 @@
 				<text name="owner_label" value="Właściciel:"/>
 				<text name="creator_label" value="Twórca:"/>
 				<text name="created_label" value="Data:"/>
+				<text name="information_label" value="Info:"/>
 			</panel>
 			<panel name="landmark_edit_panel">
 				<text name="title_label" value="Tytuł:"/>

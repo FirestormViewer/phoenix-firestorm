@@ -4151,6 +4151,9 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="IM_autoresponse_sent">
 		Autoodpowiedź wysłana
 	</string>
+	<string name="IM_autoresponse_item_sent">
+		Wysłano przedmiot: [ITEM_NAME]
+	</string>
 	<string name="answered_call">
 		Twoja rozmowa głosowa została odebrana
 	</string>
@@ -5497,5 +5500,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="SLGridStatusOtherError">
 		Błąd strony SL Grid Status: [STATUS] (https://pl.wikipedia.org/wiki/Kod_odpowiedzi_HTTP).
+	</string>
+	<string name="DoubleClickTeleportEnabled">
+		Włączono teleport po dwukliku.
+	</string>
+	<string name="DoubleClickTeleportDisabled">
+		Wyłączono teleport po dwukliku.
 	</string>
 </strings>
