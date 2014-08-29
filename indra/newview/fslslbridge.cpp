@@ -94,7 +94,7 @@ FSLSLBridge::FSLSLBridge():
 					mAllowDetach(false),
 					mFinishCreation(false)
 {
-	LL_INFOS("FSLSLBridge") << "Initializing FSLSLBridge" << LL_ENDL;
+	LL_INFOS("FSLSLBridge") << "Constructing FSLSLBridge" << LL_ENDL;
 	mCurrentFullName = llformat("%s%d.%d", FS_BRIDGE_NAME.c_str(), FS_BRIDGE_MAJOR_VERSION, FS_BRIDGE_MINOR_VERSION);
 }
 
@@ -104,13 +104,13 @@ FSLSLBridge::~FSLSLBridge()
 
 bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
 {
+	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
+
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		return false;
 	}
 
-	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
-	
 	//<FS:TS> FIRE-962: Script controls for built-in AO
 	if ((message[0]) != '<')
 	{
@@ -411,6 +411,8 @@ bool FSLSLBridge::canUseBridge()
 
 bool FSLSLBridge::viewerToLSL(const std::string& message, FSLSLBridgeRequestResponder* responder)
 {
+	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
+
 	if (!canUseBridge())
 	{
 		return false;
@@ -465,6 +467,12 @@ void FSLSLBridge::recreateBridge()
 {
 	LL_INFOS("FSLSLBridge") << "Recreating bridge start" << LL_ENDL;
 
+	// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
+	// There is no way to ensure a rock object will ever be in a grid's Library.
+#if OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim()) return;
+#endif
+
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		//<FS:TS> FIRE-11746: Recreate should throw error if disabled
@@ -490,26 +498,85 @@ void FSLSLBridge::recreateBridge()
 		return;
 	}
 
+	//announce yourself
+	reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
+
 	LLUUID catID = findFSCategory();
 
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
-	if (fsBridge != NULL)
+	FSLSLBridgeInventoryPreCreationCleanupObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryPreCreationCleanupObserver(catID);
+	bridgeInventoryObserver->startFetch();
+	if (bridgeInventoryObserver->isFinished())
 	{
-		if (get_is_item_worn(fsBridge->getUUID()))
+		bridgeInventoryObserver->done();
+	}
+	else
+	{
+		gInventory.addObserver(bridgeInventoryObserver);
+	}
+}
+
+void FSLSLBridge::cleanUpPreCreation()
+{
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	NameCollectFunctor namefunctor(mCurrentFullName);
+	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
+
+	mAllowedDetachables.clear();
+	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	{
+		LLUUID item_id= (*it)->getUUID();
+		if (get_is_item_worn(item_id))
 		{
-			LL_INFOS("FSLSLBridge") << "Found attached bridge - detaching..." << LL_ENDL;
-			mAllowDetach = true;
-			LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
+			mAllowedDetachables.push_back(item_id);
+			LLVOAvatarSelf::detachAttachmentIntoInventory(item_id);
 		}
 	}
+
+	// Immediately start with finishCleanUpPreCreation if we don't have
+	// any attachments we need to wait for until they got detached
+	if (mAllowedDetachables.size() == 0)
+	{
+		finishCleanUpPreCreation();
+	}
+}
+
+// Called either by cleanUpPreCreation directly or via FSLSLBridgeStartCreationTimer
+// after all pending detachments have been processed
+void FSLSLBridge::finishCleanUpPreCreation()
+{
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	NameCollectFunctor namefunctor(mCurrentFullName);
+	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
+
+	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+	{
+		gInventory.purgeObject((*it)->getUUID());
+	}
+	gInventory.notifyObservers();
+
 	// clear the stored bridge ID - we are starting over.
 	mpBridge = NULL; //the object itself will get cleaned up when new one is created.
 
-	initCreationStep();
+	setBridgeCreating(true);
+	mFinishCreation = false;
+
+	createNewBridge();
+}
+
+// Called by RlvAttachmentLockWatchdog::onDetach to check if attachment
+// is allowed to get detached - required if attachment spot is locked!
+bool FSLSLBridge::canDetach(const LLUUID& item_id)
+{
+	LL_DEBUGS("FSLSLBridge") << "canDetach" << LL_ENDL;
+	return ((mpBridge && item_id == mpBridge->getUUID()) || (std::find(mAllowedDetachables.begin(), mAllowedDetachables.end(), item_id) != mAllowedDetachables.end()));
 }
 
 void FSLSLBridge::initBridge()
 {
+	LL_INFOS("FSLSLBridge") << "Initializing FSLSLBridge" << LL_ENDL;
+
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		return;
@@ -549,6 +616,8 @@ void FSLSLBridge::initBridge()
 // Gets called by the Init, when inventory loaded (FSLSLBridgeInventoryObserver::done()).
 void FSLSLBridge::startCreation()
 {
+	LL_INFOS("FSLSLBridge") << "Entering startCreation" << LL_ENDL;
+
 	if (getBridgeCreating())
 	{
 		LL_INFOS("FSLSLBridge") << "startCreation called while recreating bridge - aborting" << LL_ENDL;
@@ -575,7 +644,17 @@ void FSLSLBridge::startCreation()
 	if (fsBridge == NULL)
 	{
 		LL_INFOS("FSLSLBridge") << "Bridge not found in inventory, creating new one..." << LL_ENDL;
-		initCreationStep();
+		// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
+		// There is no way to ensure a rock object will ever be in a grid's Library.
+#if OPENSIM
+		if (LLGridManager::getInstance()->isInOpenSim()) return;
+#endif
+		setBridgeCreating(true);
+		mFinishCreation = false;
+		//announce yourself
+		reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
+
+		createNewBridge();
 	}
 	else
 	{
@@ -597,21 +676,6 @@ void FSLSLBridge::startCreation()
 			}
 		}
 	}
-}
-
-void FSLSLBridge::initCreationStep()
-{
-// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
-// There is no way to ensure a rock object will ever be in a grid's Library.
-#if OPENSIM
-	if (LLGridManager::getInstance()->isInOpenSim()) return;
-#endif
-	setBridgeCreating(true);
-	mFinishCreation = false;
-	//announce yourself
-	reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
-
-	createNewBridge();
 }
 
 void FSLSLBridge::createNewBridge()
@@ -666,6 +730,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 		}
 		return;
 	}
+
 	if (mpBridge == NULL) //user is attaching an existing bridge?
 	{
 		//is it the right version?
@@ -681,6 +746,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 			}
 			return;
 		}
+
 		//is it in the right place?
 		LLUUID catID = findFSCategory();
 		if (catID != fsObject->getParentUUID())
@@ -807,6 +873,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 	{
 		LL_INFOS("FSLSLBridge") << "Bridge created." << LL_ENDL;
 		mFinishCreation = false;
+		mAllowedDetachables.clear();
 		reportToNearbyChat(LLTrans::getString("fsbridge_created"));
 	}
 }
@@ -831,6 +898,22 @@ void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment)
 {
 	LL_INFOS("FSLSLBridge") << "Entering processDetach" << LL_ENDL;
+
+	// Begin cleanup part
+	uuid_vec_t::iterator found = std::find(mAllowedDetachables.begin(), mAllowedDetachables.end(), object->getAttachmentItemID());
+	if (found != mAllowedDetachables.end())
+	{
+		mAllowedDetachables.erase(found);
+		if (mAllowedDetachables.size() == 0)
+		{
+			LL_INFOS("FSLSLBridge") << "No attached objects left. Starting creation timer..." << LL_ENDL;
+			// Wait a few seconds before calling finishCleanUpPreCreation
+			// which will clean up the LSLBridge folder
+			new FSLSLBridgeStartCreationTimer();
+		}
+		return;
+	}
+	// End cleanup part
 
 	if (gSavedSettings.getBOOL("UseLSLBridge") && !mAllowDetach)
 	{
@@ -882,6 +965,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 		{
 			reportToNearbyChat(LLTrans::getString("fsbridge_warning_not_finished"));
 			setBridgeCreating(false); //in case we interrupted the creation
+			mAllowedDetachables.clear();
 		}
 	}
 
@@ -961,7 +1045,7 @@ void FSLSLBridge::create_script_inner(LLViewerObject* object)
 							LLAssetType::AT_LSL_TEXT, 
 							LLInventoryType::IT_LSL,
 							NOT_WEARABLE, 
-							mpBridge->getPermissions().getMaskNextOwner(), 
+							PERM_ALL,
 							cb);
 
 }
@@ -1218,6 +1302,7 @@ void FSLSLBridge::cleanUpBridge()
 
 	gInventory.notifyObservers();
 	mpBridge = NULL;
+	mAllowedDetachables.clear();
 	setBridgeCreating(false);
 }
 

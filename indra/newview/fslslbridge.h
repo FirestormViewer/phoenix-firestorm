@@ -50,8 +50,10 @@ class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Respon
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
 	friend class FSLSLBridgeInventoryObserver;
+	friend class FSLSLBridgeInventoryPreCreationCleanupObserver;
 	friend class FSLSLBridgeCleanupTimer;
 	friend class FSLSLBridgeReAttachTimer;
+	friend class FSLSLBridgeStartCreationTimer;
 
 public:
 	FSLSLBridge();
@@ -82,6 +84,8 @@ public:
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
 	LLUUID getAttachedID() { return mBridgeUUID; }
 
+	bool canDetach(const LLUUID& item_id);
+
 	// from LLVOInventoryListener
 	virtual void inventoryChanged(LLViewerObject* object,
 								LLInventoryObject::object_list_t* inventory,
@@ -104,6 +108,8 @@ private:
 	bool					mIsFirstCallDone; //initialization conversation
 	bool isBridgeValid() const { return NULL != mpBridge; }
 
+	uuid_vec_t				mAllowedDetachables;
+
 protected:
 	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
@@ -116,13 +122,14 @@ protected:
 	void cleanUpBridgeFolder();
 	void cleanUpBridgeFolder(const std::string& nameToCleanUp);
 	void setupBridgePrim(LLViewerObject* object);
-	void initCreationStep();
 	void cleanUpBridge();
 	void startCreation();
 	void finishBridge();
 	void cleanUpOldVersions();
 	void detachOtherBridges();
 	void configureBridgePrim(LLViewerObject* object);
+	void cleanUpPreCreation();
+	void finishCleanUpPreCreation();
 };
 
 
@@ -159,6 +166,18 @@ protected:
 
 };
 
+class FSLSLBridgeInventoryPreCreationCleanupObserver : public LLInventoryFetchDescendentsObserver
+{
+public:
+	FSLSLBridgeInventoryPreCreationCleanupObserver(const LLUUID& cat_id = LLUUID::null):LLInventoryFetchDescendentsObserver(cat_id) {}
+	/*virtual*/ void done() { gInventory.removeObserver(this); FSLSLBridge::instance().cleanUpPreCreation(); delete this; }
+
+protected:
+	~FSLSLBridgeInventoryPreCreationCleanupObserver() {}
+
+};
+
+
 class FSLSLBridgeCleanupTimer : public LLEventTimer
 {
 public:
@@ -181,4 +200,14 @@ protected:
 	LLUUID mBridgeUUID;
 };
 
+class FSLSLBridgeStartCreationTimer : public LLEventTimer
+{
+public:
+	FSLSLBridgeStartCreationTimer() : LLEventTimer(5.f) {}
+	BOOL tick()
+	{
+		FSLSLBridge::instance().finishCleanUpPreCreation();
+		return TRUE;
+	}
+};
 #endif // FS_LSLBRIDGE_H

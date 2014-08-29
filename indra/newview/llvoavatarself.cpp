@@ -1519,7 +1519,8 @@ BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 	LLInventoryItem* item = gInventory.getItem(item_id);
 //	if (item)
 // [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-	if ( (item) && ((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(item))) )
+	if ( (item) && (((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(item))) ||
+		FSLSLBridge::instance().canDetach(item->getUUID())) )
 // [/RLVa:KB]
 	{
 		gMessageSystem->newMessageFast(_PREHASH_DetachAttachmentIntoInv);
