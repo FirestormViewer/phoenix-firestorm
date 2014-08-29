@@ -11,6 +11,8 @@
  name="skin_panel">
 
     <button
+     image_color="White"
+     image_color_disabled="White"
      scale_image="true"
      display_pressed_state="false"
      hover_glow_amount="0.0"
