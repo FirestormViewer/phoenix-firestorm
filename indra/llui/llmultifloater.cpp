@@ -344,7 +344,7 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 
 	updateResizeLimits();
 
-	// <FS> Use dynamic cast instead of c-style cast; found by Cinder Roxley
+	// <FS> Use dynamic cast instead of c-style cast; found by Sovereign Engineer
 	//tabOpen((LLFloater*)mTabContainer->getCurrentPanel(), false);
 	LLFloater* tab_floaterp = dynamic_cast<LLFloater*>(mTabContainer->getCurrentPanel());
 	if (tab_floaterp)
