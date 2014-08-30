@@ -5217,10 +5217,13 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Musisz podać wartości dodatnie dla ilości kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).
 	</string>
 	<string name="FSCmdLineRollDiceModifiersInvalid">
-		Jeśli chcesz użyć modyfikatora, to musisz podać właściwą jego liczbę oraz typ. Wartość modyfikatora musi być w zakresie od -1000 do 1000. Prawidłowe typy modyfikatorów to "+" (premie), "-" (kary), "&gt;", "&lt;" (sukcesy), "r&gt;", "r&lt;", "r" (ponowne rzuty), "!&gt;", "!&lt;" oraz "!" (eksplozje). Możesz jednocześnie użyć tylko jednego typu modyfikatora. Przykłady: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
+		Jeśli chcesz użyć modyfikatora, to musisz podać właściwą jego liczbę oraz typ. Wartość modyfikatora musi być w zakresie od -1000 do 1000. Prawidłowe typy modyfikatorów to "+" (premie), "-" (kary), "&gt;", "&lt;" (sukcesy), "r&gt;", "r&lt;", "r" (ponowne rzuty), "!p&gt;", "!p&lt;", "!p" (penetracje), "!&gt;", "!&lt;" oraz "!" (eksplozje). Możesz jednocześnie użyć tylko jednego typu modyfikatora. Przykłady: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
 	</string>
 	<string name="FSCmdLineRollDiceExploded">
 		Eksplozja
+	</string>
+	<string name="FSCmdLineRollDicePenetrated">
+		Penetracja
 	</string>
 	<string name="FSCmdLineRollDiceSuccess">
 		Sukces

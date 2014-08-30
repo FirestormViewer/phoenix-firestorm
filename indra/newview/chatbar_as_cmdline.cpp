@@ -1229,8 +1229,9 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 
 						if (i >> modifier_type && i >> modifier)
 						{
-							// 2d20+5, 2d20-5 / 2d20>5, 2d20<5 / 2d20!>5, 2d20!<5, 2d20!5 / 2d20r>5, 2d20r<5, 2d20r5
-							if (modifier < -1000 || modifier > 1000 || (modifier_type != "+" && modifier_type != "-" && modifier_type != "<" && modifier_type != ">" && modifier_type != "!>" && modifier_type != "!<" && modifier_type != "!" && modifier_type != "r" && modifier_type != "r>" && modifier_type != "r<"))
+							// 2d20+5, 2d20-5 / 2d20>5, 2d20<5 / 2d20!>5, 2d20!<5, 2d20!5 / 2d20!p>5, 2d20!p<5, 2d20!p5 / 2d20r>5, 2d20r<5, 2d20r5
+							LLStringUtil::toLower(modifier_type);
+							if (modifier < -1000 || modifier > 1000 || (modifier_type != "+" && modifier_type != "-" && modifier_type != "<" && modifier_type != ">" && modifier_type != "!>" && modifier_type != "!<" && modifier_type != "!" && modifier_type != "!p" && modifier_type != "!p>" && modifier_type != "!p<" && modifier_type != "r" && modifier_type != "r>" && modifier_type != "r<"))
 							{
 								modifier_error = 1;
 							}
@@ -1252,17 +1253,23 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						S32 result_per_die = 0;
 						S32 die_iter = 1;
 						S32 freeze_guard = 0;
+						S32 die_penetrated = 0;
 						while (die_iter <= dice)
 						{
 
 							// Each die may have a different value rolled
 							result_per_die = 1 + (rand() % faces);
-							result += result_per_die;
-							if (dice > 1)
+							if (die_penetrated == 1)
 							{
-								// For more than one die show the ordinal number in front of the result
+								result_per_die -= 1;
+								die_penetrated = 0;
+								reportToNearbyChat(llformat("#%d 1d%d-1: %d.", die_iter, faces, result_per_die));
+							}
+							else
+							{
 								reportToNearbyChat(llformat("#%d 1d%d: %d.", die_iter, faces, result_per_die));
 							}
+							result += result_per_die;
 							++die_iter;
 
 							if (modifier_type == "<")
@@ -1295,6 +1302,13 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							{
 								// Modifier: Exploding dice
 								reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDiceExploded"));
+								--die_iter;
+							}
+							else if ((modifier_type == "!p" && result_per_die == modifier) || (modifier_type == "!p>" && result_per_die >= modifier) || (modifier_type == "!p<" && result_per_die <= modifier))
+							{
+								// Modifier: Penetrating dice (special style of exploding dice)
+								reportToNearbyChat("  ^-- " + LLTrans::getString("FSCmdLineRollDicePenetrated"));
+								die_penetrated = 1;
 								--die_iter;
 							}
 							else if ((modifier_type == "r" && result_per_die == modifier) || (modifier_type == "r>" && result_per_die >= modifier) || (modifier_type == "r<" && result_per_die <= modifier))

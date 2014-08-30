@@ -2597,8 +2597,9 @@ Try enclosing path to the editor with double quotes.
 
   <string name="FSCmdLineRollDiceTotal">Total result for [DICE]d[FACES][MODIFIER]: [RESULT].</string>
   <string name="FSCmdLineRollDiceLimits">You must provide positive values for dice (max 100) and faces (max 1000).</string>
-  <string name="FSCmdLineRollDiceModifiersInvalid">If you want to use a modifier, then you must provide valid modifier number and the type of modifier. Modifier must be in range from -1000 to 1000. Valid modifier types are "+" (bonuses), "-" (penalties), "&gt;", "&lt;" (successes), "r&gt;", "r&lt;", "r" (rerolls), "!&gt;", "!&lt;" and "!" (explosions). You can use only one modifier type per roll. Examples: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".</string>
+  <string name="FSCmdLineRollDiceModifiersInvalid">If you want to use a modifier, then you must provide valid modifier number and the type of modifier. Modifier must be in range from -1000 to 1000. Valid modifier types are "+" (bonuses), "-" (penalties), "&gt;", "&lt;" (successes), "r&gt;", "r&lt;", "r" (rerolls), "!p&gt;", "!p&lt;", "!p" (penetrations), "!&gt;", "!&lt;" and "!" (explosions). You can use only one modifier type per roll. Examples: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".</string>
   <string name="FSCmdLineRollDiceExploded">Exploded</string>
+  <string name="FSCmdLineRollDicePenetrated">Penetrated</string>
   <string name="FSCmdLineRollDiceSuccess">Success</string>
   <string name="FSCmdLineRollDiceReroll">Reroll</string>
   <string name="FSCmdLineRollDiceFreezeGuard">This operation cannot be completed because the viewer would freeze in an infinite rolling loop. Please change the criteria.</string>
