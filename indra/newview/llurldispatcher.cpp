@@ -366,7 +366,10 @@ public:
 		std::string callback_url = LLSLURL(dest).getSLURLString();
 #else // OPENSIM
 		LLVector3 coords(128, 128, 0);
-		if (tokens.size() <= 4)
+		// <FS:Ansariel> FIRE-10730: SLURL parser error on teleport app links
+		//if (tokens.size() <= 4)
+		if (tokens.size() >= 4)
+		// </FS:Ansariel>
 		{
 			coords = LLVector3(tokens[1].asReal(), 
 							   tokens[2].asReal(), 
