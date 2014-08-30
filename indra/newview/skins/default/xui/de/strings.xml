@@ -5721,10 +5721,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Es müssen positive Werte für Würfel (max. 100) und Seiten (max. 1000) angegeben werden.
 	</string>
 	<string name="FSCmdLineRollDiceModifiersInvalid">
-		Falls ein Modifizierer verwendet werden soll, muss ein gültiger Typ und Wert für den Modifizierer angegeben werden. Der Wert muss im Bereich von -1000 bis 1000 liegen. Gültige Typen sind: „+“ (Boni), „-“ (Strafen), „&gt;“, „&lt;“ (Erfolge), „!&gt;“, „!&lt;“ und „!“ (Explosionen). Es kann nur ein Modifizierer-Typ pro Wurf verwendet werden. Beispiele: „[COMMAND] 1 20 + 5“, „[COMMAND] 5 40 &gt; 15“, „[COMMAND] 10 25 ! 25“, „[COMMAND] 15 25 !&lt; 10“.
+		Falls ein Modifizierer verwendet werden soll, muss ein gültiger Typ und Wert für den Modifizierer angegeben werden. Der Wert muss im Bereich von -1000 bis 1000 liegen. Gültige Typen sind: „+“ (Boni), „-“ (Strafen), „&gt;“, „&lt;“ (Erfolge), "r&lt;", "r" (Erneut würfeln), "!p&gt;", „!&gt;“, "!p&lt;", "!p" (Penetrationen), „!&lt;“ und „!“ (Explosionen). Es kann nur ein Modifizierer-Typ pro Wurf verwendet werden. Beispiele: „[COMMAND] 1 20 + 5“, „[COMMAND] 5 40 &gt; 15“, „[COMMAND] 10 25 ! 25“, „[COMMAND] 15 25 !&lt; 10“.
 	</string>
 	<string name="FSCmdLineRollDiceExploded">
 		Explodiert
+	</string>
+	<string name="FSCmdLineRollDiceExploded">
+		Penetriert
 	</string>
 	<string name="FSCmdLineRollDiceSuccess">
 		Erfolg
