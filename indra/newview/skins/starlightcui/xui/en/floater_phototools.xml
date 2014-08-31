@@ -1838,8 +1838,8 @@
 				 left_pad="3"
 				 decimal_digits="2"
 				 follows="top|left"
-				 max_val="300"
-				 min_val="300"
+				 max_val="0"
+				 min_val="150"
 				 width="53"
 				 increment="0.01"/>
 				<button
