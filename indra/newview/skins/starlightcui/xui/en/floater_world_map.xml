@@ -339,7 +339,7 @@
      layout="topleft"
      name="Home_label"
      width="70">
-        Home
+        Go Home
     </text>
     <text
      type="string"
