@@ -423,13 +423,28 @@ void LLGroupActions::show(const LLUUID& group_id)
 
 	// <FS:Ansariel> Standalone group floaters
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	LLFloater* floater = NULL;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		FSFloaterGroup::openGroupFloater(group_id);
+		floater = FSFloaterGroup::openGroupFloater(group_id);
 	}
 	else
 	{
 		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer* floater_people = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("people");
+		if (floater_people)
+		{
+			LLPanel* group_info_panel = floater_people->getPanel("people", "panel_group_info_sidetray");
+			if (group_info_panel && group_info_panel->getVisible())
+			{
+				floater = floater_people;
+			}
+		}
+	}
+
+	if (floater && floater->isMinimized())
+	{
+		floater->setMinimized(FALSE);
 	}
 	// </FS:Ansariel>
 }
@@ -446,13 +461,28 @@ void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
 
 	// <FS:Ansariel> Standalone group floaters
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	LLFloater* floater = NULL;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		FSFloaterGroup::openGroupFloater(params);
+		floater = FSFloaterGroup::openGroupFloater(group_id);
 	}
 	else
 	{
 		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer* floater_people = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("people");
+		if (floater_people)
+		{
+			LLPanel* group_info_panel = floater_people->getPanel("people", "panel_group_info_sidetray");
+			if (group_info_panel && group_info_panel->getVisible())
+			{
+				floater = floater_people;
+			}
+		}
+	}
+
+	if (floater && floater->isMinimized())
+	{
+		floater->setMinimized(FALSE);
 	}
 	// </FS:Ansariel>
 }
