@@ -50,7 +50,7 @@
          name="System Volume"
          show_text="false"
          slider_label.halign="right"
-         top="10"
+         top="5"
          volume="true"
          width="300">
             <slider.commit_callback
@@ -172,7 +172,7 @@
          left="0"
          name="SFX Volume"
          show_text="false"
-         top_pad="4"
+         top_pad="2"
          volume="true"
          width="300">
             <slider.commit_callback
@@ -220,7 +220,7 @@
          name="Music Volume"
          slider_label.halign="right"
          show_text="false"
-         top_pad="4"
+         top_pad="2"
          volume="true"
          width="300">
             <slider.commit_callback
@@ -266,7 +266,7 @@
          name="Media Volume"
          show_text="false"
          slider_label.halign="right"
-         top_pad="4"
+         top_pad="2"
          volume="true"
          width="300">
             <slider.commit_callback
@@ -311,7 +311,7 @@
          label_width="120"
          layout="topleft"
          left="0"
-         top_pad="4"
+         top_pad="2"
          name="Voice Volume"
          show_text="false"
          slider_label.halign="right"
@@ -348,15 +348,26 @@
          width="110"/>
 
         <check_box
+         name="audio_auto_play_btn"
+         control_name="FSParcelMusicAutoPlay"
+         enabled_control="AudioStreamingMedia"
+         layout="topleft"
+         height="16"
+         width="230"
+         tool_tip="Check this to automatically start audio streams."
+         label="Allow Audio to auto-play"
+         top_pad="5"
+         left="25"/>
+        <check_box
          name="media_auto_play_btn"
          control_name="ParcelMediaAutoPlayEnable"
          enabled_control="AudioStreamingMedia"
          layout="topleft"
          height="16"
          width="230"
-         tool_tip="Check this to automatically start media when you log in or change regions."
-         label="Allow Media to auto-play when entering a region"
-         top_pad="5"
+         tool_tip="Check this to automatically start media."
+         label="Allow Media to auto-play"
+         top_pad="1"
          left="25"/>
         <check_box
          name="media_allowscript_btn"

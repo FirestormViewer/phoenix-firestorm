@@ -19,7 +19,8 @@
 		<check_box label="Aktiviert" name="enable_media"/>
 		<slider label="Voice-Chat" name="Voice Volume"/>
 		<check_box label="Aktiviert" name="enable_voice_check_volume"/>
-		<check_box label="Automatische Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben."/>
+		<check_box label="Automatische Audio-Wiedergabe zulassen" name="audio_auto_play_btn" tool_tip="Hier aktivieren, um Audio-Streams automatisch wiederzugeben."/>
+		<check_box label="Automatische Medien-Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben."/>
 		<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
