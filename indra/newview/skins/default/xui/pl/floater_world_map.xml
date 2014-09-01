@@ -37,7 +37,7 @@
 				</text>
 				<button name="Go Home" tool_tip="Teleportuj do mojego Miejsca Startowego"/>
 				<text name="Home_label">
-					Mój Start
+					Do Startu
 				</text>
 				<text name="events_label">
 					Wydarzenia:

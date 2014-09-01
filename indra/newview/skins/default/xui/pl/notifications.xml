@@ -4623,4 +4623,11 @@ Nie można tego cofnąć.
 	<notification name="CantRestoreToWorldNoCopy">
 		Funkcjonalność przywracania na ostatnią pozycję nie jest dostępna dla obiektów bez praw kopiowania, aby zapobiec ewentualnej ich utracie.
 	</notification>
+	<notification name="ConfirmRemoveCredential">
+		Na pewno chcesz usunąć dane logowania dla &lt;nolink&gt;[NAME]&lt;/nolink&gt;?
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 </notifications>
