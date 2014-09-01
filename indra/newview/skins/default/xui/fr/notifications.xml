@@ -2314,7 +2314,8 @@ Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apo
 		Habits et parties du corps manquants remplacés par les éléments par défaut.
 	</notification>
 	<notification name="GroupNotice">
-		Sujet : [SUBJECT], Message : [MESSAGE]
+		[SENDER], [GROUP]
+Sujet : [SUBJECT], Message : [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] est [STATUS]

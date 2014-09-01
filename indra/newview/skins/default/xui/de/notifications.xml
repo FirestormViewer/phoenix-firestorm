@@ -2415,7 +2415,8 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		Fehlende(s) Kleidung/Körperteil mit Standard ersetzt.
 	</notification>
 	<notification name="GroupNotice">
-		Betreff: [SUBJECT], Nachricht: [MESSAGE]
+		[SENDER], [GROUP]
+Betreff: [SUBJECT], Nachricht: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] ist [STATUS].

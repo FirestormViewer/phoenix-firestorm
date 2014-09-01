@@ -2321,7 +2321,8 @@ Inseriscilo in una pagina web per dare ad altri un accesso facile a questa ubica
 		Gli abiti/parti del corpo mancanti sono stati sostituiti con quelli di default .
 	</notification>
 	<notification name="GroupNotice">
-		Oggetto: [SUBJECT], Messaggio: [MESSAGE]
+		[SENDER], [GROUP]
+Oggetto: [SUBJECT], Messaggio: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] è [STATUS]

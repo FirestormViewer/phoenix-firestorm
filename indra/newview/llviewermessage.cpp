@@ -2612,6 +2612,26 @@ static void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::s
 	}
 }
 
+// <FS:Ansariel> FIRE-505: Group name not shown in notification well
+static void notification_group_name_cb(const std::string& group_name,
+										const std::string& sender,
+										const std::string& subject,
+										const std::string& message,
+										const LLSD& payload,
+										U32 timestamp)
+{
+	LLAvatarName av_name;
+	av_name.fromString(sender);
+	LLSD args;
+	args["SENDER"] = av_name.getUserNameForDisplay();
+	args["GROUP"] = group_name;
+	args["SUBJECT"] = subject;
+	args["MESSAGE"] = message;
+	LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
+	make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
+}
+// </FS:Ansariel>
+
 void process_improved_im(LLMessageSystem *msg, void **user_data)
 {
 	LLUUID from_id;
@@ -3147,11 +3167,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					payload["inventory_offer"] = info->asLLSD();
 				}
 
-				LLSD args;
-				args["SUBJECT"] = subj;
-				args["MESSAGE"] = mes;
-				LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
-				make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
+				// <FS:Ansariel> FIRE-505: Group name not shown in notification well
+				//LLSD args;
+				//args["SUBJECT"] = subj;
+				//args["MESSAGE"] = mes;
+				//LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
+				//make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
+				gCacheName->get(group_id, true, boost::bind(&notification_group_name_cb, _2, name, subj, mes, payload, timestamp));
+				// </FS:Ansariel>
 			}
 
 			// Also send down the old path for now.

@@ -2308,7 +2308,8 @@ Inclua um link para facilitar o acesso para visitantes. Teste o link na barra de
 		Substituindo partes de roupa/corpo perdidas com o padrão
 	</notification>
 	<notification name="GroupNotice">
-		Assunto: [SUBJECT], Mensagem: [MESSAGE]
+		[SENDER], [GROUP]
+Assunto: [SUBJECT], Mensagem: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] está [STATUS]

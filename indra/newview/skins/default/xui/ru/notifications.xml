@@ -2314,7 +2314,8 @@ http://secondlife.com/download.
 		Отсутствующая одежда/часть тела заменена вещью по умолчанию.
 	</notification>
 	<notification name="GroupNotice">
-		Раздел: [SUBJECT], сообщение: [MESSAGE]
+		[SENDER], [GROUP]
+Раздел: [SUBJECT], сообщение: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] [STATUS]

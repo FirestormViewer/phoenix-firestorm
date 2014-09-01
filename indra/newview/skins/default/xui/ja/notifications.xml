@@ -2380,7 +2380,8 @@ URL: [AUDIOURL]
 		欠落している衣類や身体部位をデフォルトに置き換えます。
 	</notification>
 	<notification name="GroupNotice">
-		件名： [SUBJECT]、メッセージ： [MESSAGE]
+		[SENDER]、[GROUP]
+件名： [SUBJECT]、メッセージ： [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		<tag>friendship</tag>

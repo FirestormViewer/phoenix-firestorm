@@ -2544,7 +2544,8 @@ URL: [AUDIOURL]
 		Reemplazadas las ropas o partes del cuerpo perdidas con sus equivalentes por defecto.
 	</notification>
 	<notification name="GroupNotice">
-		Asunto: [SUBJECT], Mensaje: [MESSAGE]
+		[SENDER], [GROUP]
+Asunto: [SUBJECT], Mensaje: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] está [STATUS]

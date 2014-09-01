@@ -6196,6 +6196,7 @@ Replaced missing clothing/body part with default.
    name="GroupNotice"
    persist="true"
    type="groupnotify">
+[SENDER], [GROUP]
 Topic: [SUBJECT], Message: [MESSAGE]
     <tag>group</tag>
   </notification>

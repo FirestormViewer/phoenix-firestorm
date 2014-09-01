@@ -2450,7 +2450,8 @@ URL: [MOAPURL]
 		Brakujące ubranie/części ciała zastąpiono domyślnymi obiektami.
 	</notification>
 	<notification name="GroupNotice">
-		Temat: [SUBJECT], Treść: [MESSAGE]
+		[SENDER], [GROUP]
+Temat: [SUBJECT], Treść: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] jest [STATUS].

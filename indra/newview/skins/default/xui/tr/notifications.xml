@@ -2314,7 +2314,8 @@ Diğer kişilerin bu konuma kolayca erişmesini sağlamak için bu adrese bir we
 		Eksik giysi/vücut bölümü varsayılan ile değiştirildi.
 	</notification>
 	<notification name="GroupNotice">
-		Konu: [SUBJECT], İleti: [MESSAGE]
+		[SENDER], [GROUP]
+Konu: [SUBJECT], İleti: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] durumu: [STATUS]

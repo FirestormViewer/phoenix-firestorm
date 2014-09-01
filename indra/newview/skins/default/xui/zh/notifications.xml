@@ -2305,7 +2305,8 @@ SHA1 指紋：[MD5_DIGEST]
 		已用預設值補足空缺的衣服/身體部位。
 	</notification>
 	<notification name="GroupNotice">
-		主旨：[SUBJECT]，訊息：[MESSAGE]
+		[SENDER]，[GROUP]
+主旨：[SUBJECT]，訊息：[MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
 		[NAME] 目前狀態為 [STATUS]
