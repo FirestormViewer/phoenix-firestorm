@@ -112,6 +112,7 @@ private:
 	static void updateServerCombo();
 // <FS:CR>
 	static void onClickRemove(void*);
+	static void onRemoveCallback(const LLSD& notification, const LLSD& response);
 	static void onClickGridMgrHelp(void*);
 	static void gridListChanged(bool success);
 	static std::string credentialName();

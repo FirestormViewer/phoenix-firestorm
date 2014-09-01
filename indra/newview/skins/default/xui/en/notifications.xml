@@ -11855,4 +11855,22 @@ Restore to Last Position is not allowed for no copy items to prevent possible co
   </notification>
   <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
 
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmRemoveCredential"
+   type="alertmodal">
+Delete saved login for &lt;nolink&gt;[NAME]&lt;/nolink&gt;?
+    <tag>confirm</tag>
+    <form name="form">
+      <button
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       default="true"
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
 </notifications>

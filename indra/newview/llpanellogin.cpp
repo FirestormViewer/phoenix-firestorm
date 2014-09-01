@@ -1270,14 +1270,32 @@ void LLPanelLogin::onClickRemove(void*)
 	{
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		std::string credName = combo->getValue().asString();
-		if (credName == gSavedSettings.getString("UserLoginInfo"))
-			gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
-		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
-		gSecAPIHandler->deleteCredential(credential);
-		sInstance->addUsersToCombo(gSavedSettings.getBOOL("ForceShowGrid"));
-		if(!combo->selectFirstItem()){
-			sInstance->getChild<LLUICtrl>("username_combo")->clear();
-			sInstance->getChild<LLUICtrl>("password_edit")->clear();
+		LLNotificationsUtil::add("ConfirmRemoveCredential", LLSD().with("NAME", credName), LLSD().with("CredName", credName), boost::bind(&LLPanelLogin::onRemoveCallback, _1, _2));
+	}
+}
+
+// static
+void LLPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& response)
+{
+	if (sInstance)
+	{
+		S32 option = response.asInteger();
+		if (option == 0)
+		{
+			std::string credName = notification["payload"]["CredName"].asString();
+			if (credName == gSavedSettings.getString("UserLoginInfo"))
+			{
+				gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
+			}
+			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
+			gSecAPIHandler->deleteCredential(credential);
+			sInstance->addUsersToCombo(gSavedSettings.getBOOL("ForceShowGrid"));
+
+			if (!sInstance->getChild<LLComboBox>("username_combo")->selectFirstItem())
+			{
+				sInstance->getChild<LLUICtrl>("username_combo")->clear();
+				sInstance->getChild<LLUICtrl>("password_edit")->clear();
+			}
 		}
 	}
 }
