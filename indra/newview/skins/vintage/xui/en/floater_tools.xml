@@ -289,6 +289,7 @@
      top_pad="0"
      layout="topleft"
      name="prev_part_btn"
+     tool_tip="Select previous linked part"
      width="12">
 	  <button.commit_callback
 	     function="Tools.SelectNextPart"
@@ -302,6 +303,7 @@
      left_pad="0"
      layout="topleft"
      name="next_part_btn"
+     tool_tip="Select next linked part"
      width="12">
 	  <button.commit_callback
 	     function="Tools.SelectNextPart"
