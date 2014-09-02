@@ -360,6 +360,10 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 
 			previewEditor->makePristine();
 
+			// <FS:Ansariel> Force spell checker to check again after saving a NC,
+			//               or misspelled words wouldn't be shown
+			previewEditor->onSpellCheckSettingsChange();
+
 			const LLInventoryItem* item = preview->getItem();
 			BOOL modifiable = item && gAgent.allowOperation(PERM_MODIFY,
 								item->getPermissions(), GP_OBJECT_MANIPULATE);
