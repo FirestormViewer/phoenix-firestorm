@@ -590,6 +590,8 @@ void LLUpdateAgentInventoryResponder::uploadComplete(const LLSD& content)
 				  gVFS->removeFile(content["new_asset"].asUUID(), LLAssetType::AT_NOTECARD);
 			  }
 			  nc->refreshFromInventory(new_item->getUUID());
+			  // <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+			  nc->checkCloseAfterSave();
 		  }
 		  break;
 	  }
@@ -717,6 +719,8 @@ void LLUpdateTaskInventoryResponder::uploadComplete(const LLSD& content)
 			  }
 			  nc->setAssetId(content["new_asset"].asUUID());
 			  nc->refreshFromInventory();
+			  // <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+			  nc->checkCloseAfterSave();
 		  }
 		  break;
 	  }

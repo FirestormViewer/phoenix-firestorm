@@ -80,6 +80,9 @@ public:
 	// asset system. :(
 	void refreshFromInventory(const LLUUID& item_id = LLUUID::null);
 
+	// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+	void checkCloseAfterSave();
+
 protected:
 
 	void updateTitleButtons();

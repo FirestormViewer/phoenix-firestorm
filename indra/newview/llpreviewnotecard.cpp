@@ -658,4 +658,14 @@ void LLPreviewNotecard::onSearchButtonClicked()
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+void LLPreviewNotecard::checkCloseAfterSave()
+{
+	if (mCloseAfterSave)
+	{
+		closeFloater();
+	}
+}
+// </FS:Ansariel>
+
 // EOF
