@@ -15,6 +15,7 @@
 	<text_editor name="Notecard Editor">
 		Ładowanie...
 	</text_editor>
+	<button tool_tip="Szukaj / Zamień" name="Search"/>
 	<button label="Zapisz" label_selected="Zapisz" name="Save"/>
 	<button label="Usuń" label_selected="Usuń" name="Delete"/>
 </floater>
