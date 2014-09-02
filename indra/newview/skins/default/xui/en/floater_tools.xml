@@ -282,10 +282,36 @@
 	</check_box>
 
    <button
+     enabled_control="EditLinkedParts"
+     follows="left|top"
+     height="20"
+     image_overlay="BackArrow_Off"
+     top_pad="0"
+     layout="topleft"
+     name="prev_part_btn"
+     width="12">
+	  <button.commit_callback
+	     function="Tools.SelectNextPart"
+	     parameter="previous" />
+    </button>
+   <button
+     enabled_control="EditLinkedParts"
+     follows="left|top"
+     height="20"
+     image_overlay="ForwardArrow_Off"
+     left_pad="0"
+     layout="topleft"
+     name="next_part_btn"
+     width="12">
+	  <button.commit_callback
+	     function="Tools.SelectNextPart"
+	     parameter="next" />
+    </button>
+   <button
      follows="left|top"
      height="20"
      label="Link"
-     top_pad="0"
+     left_pad="2"
      layout="topleft"
      name="link_btn"
      width="50">
@@ -306,7 +332,7 @@
         <combo_box
      height="20"
      layout="topleft"
-     left_pad="20"
+     left_pad="4"
      follows="left|top"
      name="combobox grid mode"
      tool_tip="Choose the type of grid ruler for positioning the object"
