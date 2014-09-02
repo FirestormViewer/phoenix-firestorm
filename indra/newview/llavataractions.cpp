@@ -966,7 +966,10 @@ void LLAvatarActions::buildResidentsString(std::vector<LLAvatarName> avatar_name
 	const std::string& separator = LLTrans::getString("words_separator");
 	for (std::vector<LLAvatarName>::const_iterator it = avatar_names.begin(); ; )
 	{
-		residents_string.append((*it).getDisplayName());
+		// <FS:Ansariel> FIRE-7923: Always show complete name when adding people to something!
+		//residents_string.append((*it).getDisplayName());
+		residents_string.append((*it).getCompleteName());
+		// </FS:Ansariel>
 		if	(++it == avatar_names.end())
 		{
 			break;
