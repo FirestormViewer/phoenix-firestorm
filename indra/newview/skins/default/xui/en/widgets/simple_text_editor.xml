@@ -21,6 +21,7 @@
   bg_visible="true"
   bg_readonly_color="TextBgReadOnlyColor"
   bg_writeable_color="TextBgWriteableColor"
+  bg_highlighted_color="TextBgHighlightColor"
   bg_selected_color="EmphasisColor"
   bg_focus_color="TextBgFocusColor">
 </simple_text_editor>

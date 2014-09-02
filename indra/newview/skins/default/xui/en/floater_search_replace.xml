@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  default_tab_group="1"
- height="120"
+ height="115"
  layout="topleft"
  name="search replace"
  help_topic="search_replace"

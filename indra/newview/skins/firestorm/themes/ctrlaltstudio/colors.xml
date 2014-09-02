@@ -31,6 +31,9 @@
 	 name="EmphasisColor"
 	 value="0.612 0.537 0.784 1.0" />
   <color
+	 name="EmphasisColorLight"
+	 value="0.712 0.637 0.884 0.66" />
+  <color
 	 name="SchemeLightest"
 	 value="0.612 0.537 0.784 1.0" />
 	<color
@@ -818,6 +821,9 @@
     <color
      name="TextBgWriteableColor"
      reference="LtGray" />
+    <color
+     name="TextBgHighlightColor"
+     reference="EmphasisColorLight" />
     <color
      name="TextCursorColor"
      reference="Black" />

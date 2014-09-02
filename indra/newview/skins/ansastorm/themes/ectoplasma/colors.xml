@@ -1055,6 +1055,9 @@
      name="TextBgWriteableColor"
      reference="Black" />
     <color
+     name="TextBgHighlightColor"
+     reference="EmphasisColorLight" />
+    <color
      name="TextCursorColor"
      reference="White" />
     <color

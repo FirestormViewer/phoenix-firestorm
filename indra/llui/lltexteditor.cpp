@@ -342,6 +342,15 @@ void LLTextEditor::setText(const LLStringExplicit &utf8str, const LLStyle::Param
 	resetDirty();
 }
 
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2013-12-30 (Catznip-3.6)
+std::string LLTextEditor::getSelectionString() const
+{
+	S32 idxSel = 0, lenSel = 0;
+	getSelectionRange(&idxSel, &lenSel);
+	return (lenSel > 0) ? wstring_to_utf8str(getWText().substr(idxSel, lenSel)) : LLStringUtil::null;
+}
+// [/SL:KB]
+
 //void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap)
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap, BOOL search_up)

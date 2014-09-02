@@ -211,6 +211,9 @@
 		name="TextBgWriteableColor"
 		value="0.729 0.765 0.745 1.0" />
 	<color
+		name="TextBgHighlightColor"
+		value="0.45 0.46 0.745 0.66" />
+	<color
 		name="TextBgReadOnlyColor"
 		reference="DkGray" />
 	<!-- Username matches the computed display name -->

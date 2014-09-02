@@ -1,36 +1,35 @@
 /** 
- * @file llfloatersearchreplace.h
- * @brief LLFloaterSearchReplace class implementation
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
- * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (c) 2010-2013, Kitty Barnett
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2.1 of the License only.
+ * The source code in this file is provided to you under the terms of the 
+ * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * By copying, modifying or distributing this software, you acknowledge that
+ * you have read and understood your obligations described above, and agree to 
+ * abide by those obligations.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
- * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
- * $/LicenseInfo$
  */
 
 #ifndef LL_FLOATERSEARCHREPLACE_H
 #define LL_FLOATERSEARCHREPLACE_H
 
 #include "llfloater.h"
-#include "llfloaterreg.h"
 
+// ============================================================================
+// Forward declarations
+//
+
+class LLCheckBoxCtrl;
+class LLLineEditor;
 class LLTextEditor;
+
+// ============================================================================
+// LLFloaterSearchReplace class
+//
 
 class LLFloaterSearchReplace : public LLFloater
 {
@@ -38,23 +37,40 @@ public:
 	LLFloaterSearchReplace(const LLSD& sdKey);
 	~LLFloaterSearchReplace();
 
-	/*virtual*/ bool hasAccelerators() const;
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/	BOOL postBuild();
-
+	/*
+	 * LLView overrides
+	 */
 public:
-	LLTextEditor* getEditor() { return mEditor; }
+	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool hasAccelerators() const;
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void onOpen(const LLSD& sdKey);
+	/*virtual*/ void onClose(bool fQuiting);
 
-	static void show(LLTextEditor* pEditor);
-
+	/*
+	 * Member functions
+	 */
+public:
+	static void   show(LLTextEditor* pEditor);
 protected:
-	void onBtnSearch();
-	void onBtnReplace();
-	void onBtnReplaceAll();
+	LLTextEditor* getEditor() const;
+	void          refreshHighlight();
+	void          onSearchClick();
+	void          onSearchKeystroke();
+	void          onReplaceClick();
+	void          onReplaceAllClick();
 
+	/*
+	 * Member variables
+	 */
 private:
-	LLTextEditor* mEditor;
+	LLLineEditor*      m_pSearchEditor;
+	LLLineEditor*      m_pReplaceEditor;
+	LLCheckBoxCtrl*    m_pCaseInsensitiveCheck;
+	LLCheckBoxCtrl*    m_pSearchUpCheck;
+	LLHandle<LLUICtrl> m_EditorHandle;
 };
 
-#endif // LL_FLOATERSEARCHREPLACE_H
+// ============================================================================
 
+#endif // LL_FLOATERSEARCHREPLACE_H

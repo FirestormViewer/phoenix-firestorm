@@ -1,39 +1,39 @@
 /** 
- * @file llfloatersearchreplace.cpp
- * @brief LLFloaterSearchReplace class implementation
  *
- * $LicenseInfo:firstyear=2002&license=viewerlgpl$
- * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (c) 2010-2013, Kitty Barnett
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2.1 of the License only.
+ * The source code in this file is provided to you under the terms of the 
+ * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * By copying, modifying or distributing this software, you acknowledge that
+ * you have read and understood your obligations described above, and agree to 
+ * abide by those obligations.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
- * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
- * $/LicenseInfo$
  */
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llfloatersearchreplace.h"
-
 #include "llcheckboxctrl.h"
+#include "llfloaterreg.h"
+#include "llfloatersearchreplace.h"
+#include "lllineeditor.h"
 #include "llmultifloater.h"
 #include "lltexteditor.h"
+#include "llviewermenu.h"
+
+// ============================================================================
+// LLFloaterSearchReplace class
+//
 
 LLFloaterSearchReplace::LLFloaterSearchReplace(const LLSD& sdKey)
-	: LLFloater(sdKey), mEditor(NULL)
+	: LLFloater(sdKey)
+	, m_pSearchEditor(NULL)
+	, m_pReplaceEditor(NULL)
+	, m_pCaseInsensitiveCheck(NULL)
+	, m_pSearchUpCheck(NULL)
 {
 }
 
@@ -41,84 +41,63 @@ LLFloaterSearchReplace::~LLFloaterSearchReplace()
 {
 }
 
-//static 
-void LLFloaterSearchReplace::show(LLTextEditor* pEditor)
-{
-	LLFloaterSearchReplace* pSelf = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
-	if (!pSelf)
-		return;
-
-	pSelf->mEditor = pEditor;
-	if (pEditor)
-	{
-		LLFloater *pDependeeNew = NULL, *pDependeeOld = pSelf->getDependee();
-		LLView* pView = pEditor->getParent();
-		while (pView)
-		{
-			pDependeeNew = dynamic_cast<LLFloater*>(pView);
-			if (pDependeeNew)
-			{
-				if (pDependeeNew != pDependeeOld)
-				{
-					if (pDependeeOld)
-						pDependeeOld->removeDependentFloater(pSelf);
-
-					if (!pDependeeNew->getHost())
-						pDependeeNew->addDependentFloater(pSelf);
-					else
-						pDependeeNew->getHost()->addDependentFloater(pSelf);
-				}
-				break;
-			}
-			pView = pView->getParent();
-		}
-
-		pSelf->getChildView("replace_text")->setEnabled(!pEditor->getReadOnly());
-		pSelf->getChildView("replace_btn")->setEnabled(!pEditor->getReadOnly());
-		pSelf->getChildView("replace_all_btn")->setEnabled(!pEditor->getReadOnly());
-		pSelf->getChildView("search_text")->setFocus(TRUE);
-
-		pSelf->openFloater();
-	}
-}
-
 BOOL LLFloaterSearchReplace::postBuild()
 {
-	childSetAction("search_btn", boost::bind(&LLFloaterSearchReplace::onBtnSearch, this));
-	childSetAction("replace_btn", boost::bind(&LLFloaterSearchReplace::onBtnReplace, this));
-	childSetAction("replace_all_btn", boost::bind(&LLFloaterSearchReplace::onBtnReplaceAll, this));
+	m_pSearchEditor = getChild<LLLineEditor>("search_text");
+	m_pSearchEditor->setCommitCallback(boost::bind(&LLFloaterSearchReplace::onSearchClick, this));
+	m_pSearchEditor->setCommitOnFocusLost(false);
+	m_pSearchEditor->setKeystrokeCallback(boost::bind(&LLFloaterSearchReplace::refreshHighlight, this), NULL);
+	m_pReplaceEditor = getChild<LLLineEditor>("replace_text");
 
-	setDefaultBtn("search_btn");
+	m_pCaseInsensitiveCheck = getChild<LLCheckBoxCtrl>("case_text");
+	m_pCaseInsensitiveCheck->setCommitCallback(boost::bind(&LLFloaterSearchReplace::refreshHighlight, this));
+	m_pSearchUpCheck = getChild<LLCheckBoxCtrl>("find_previous");
+
+	LLButton* pSearchBtn = getChild<LLButton>("search_btn");
+	pSearchBtn->setCommitCallback(boost::bind(&LLFloaterSearchReplace::onSearchClick, this));
+	setDefaultBtn(pSearchBtn);
+
+	LLButton* pReplaceBtn = getChild<LLButton>("replace_btn");
+	pReplaceBtn->setCommitCallback(boost::bind(&LLFloaterSearchReplace::onReplaceClick, this));
+
+	LLButton* pReplaceAllBtn = getChild<LLButton>("replace_all_btn");
+	pReplaceAllBtn->setCommitCallback(boost::bind(&LLFloaterSearchReplace::onReplaceAllClick, this));
 
 	return TRUE;
 }
 
-void LLFloaterSearchReplace::onBtnSearch()
+void LLFloaterSearchReplace::onOpen(const LLSD& sdKey)
 {
-	LLCheckBoxCtrl* caseChk = getChild<LLCheckBoxCtrl>("case_text");
-	LLCheckBoxCtrl* prevChk = getChild<LLCheckBoxCtrl>("find_previous");
-	mEditor->selectNext(getChild<LLUICtrl>("search_text")->getValue().asString(), caseChk->get(), TRUE, prevChk->get());
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		// HACK-Catznip: hasSelection() is inaccessible but canCopy() is (currently) a synonym *sighs*
+		if (pEditor->canCopy())
+		{
+			m_pSearchEditor->setText(pEditor->getSelectionString());
+			m_pSearchEditor->setCursorToEnd();
+		}
+		pEditor->setHighlightWord(m_pSearchEditor->getText(), m_pCaseInsensitiveCheck->get());
+
+		m_pReplaceEditor->setEnabled( (pEditor) && (!pEditor->getReadOnly()) );
+		getChild<LLButton>("replace_btn")->setEnabled( (pEditor) && (!pEditor->getReadOnly()) );
+		getChild<LLButton>("replace_all_btn")->setEnabled( (pEditor) && (!pEditor->getReadOnly()) );
+	}
+	m_pSearchEditor->setFocus(TRUE);
 }
 
-void LLFloaterSearchReplace::onBtnReplace()
+void LLFloaterSearchReplace::onClose(bool fQuiting)
 {
-	LLCheckBoxCtrl* caseChk = getChild<LLCheckBoxCtrl>("case_text");
-	LLCheckBoxCtrl* prevChk = getChild<LLCheckBoxCtrl>("find_previous");
-	mEditor->replaceText(
-		getChild<LLUICtrl>("search_text")->getValue().asString(), getChild<LLUICtrl>("replace_text")->getValue().asString(), caseChk->get(), TRUE, prevChk->get());
-}
-
-void LLFloaterSearchReplace::onBtnReplaceAll()
-{
-	LLCheckBoxCtrl* caseChk = getChild<LLCheckBoxCtrl>("case_text");
-	mEditor->replaceTextAll(getChild<LLUICtrl>("search_text")->getValue().asString(), getChild<LLUICtrl>("replace_text")->getValue().asString(), caseChk->get());
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		pEditor->clearHighlights();
+	}
 }
 
 bool LLFloaterSearchReplace::hasAccelerators() const
 {
-	// Pass this on to the editor we're operating on (or any view up along its hierarchy 
-	// (allows Ctrl-F to work when the floater itself has focus - see changeset 0c8947e5f433)
-	const LLView* pView = (LLView*)mEditor;
+	const LLView* pView = dynamic_cast<LLTextEditor*>(m_EditorHandle.get());
 	while (pView)
 	{
 		if (pView->hasAccelerators())
@@ -130,21 +109,108 @@ bool LLFloaterSearchReplace::hasAccelerators() const
 
 BOOL LLFloaterSearchReplace::handleKeyHere(KEY key, MASK mask)
 {
-      // return mEditorCore->handleKeyHere(key, mask);
-      // VWR-23608 Satomi Ahn
-	if ( KEY_RETURN == key )
-	{
-		if (getChild<LLUICtrl>("search_text")->hasFocus()) { onBtnSearch(); return TRUE; }
-		else if (getChild<LLUICtrl>("replace_text")->hasFocus()) { onBtnReplace(); return TRUE; }
-	}
-	// Pass this on to the editor we're operating on (or any view up along its hierarchy 
+	// Pass this on to the editor we're operating on (or any view up along its hierarchy) if we don't handle the key ourselves 
 	// (allows Ctrl-F to work when the floater itself has focus - see changeset 0c8947e5f433)
-	LLView* pView = (LLView*)mEditor;
+	BOOL handled = LLFloater::handleKeyHere(key, mask);
+	if (!handled)
+	{
+		// Check if one of our children currently has keyboard focus and if so route edit accellerators to it
+		if (gFocusMgr.childHasKeyboardFocus(this))
+		{
+			LLView* pEditView = dynamic_cast<LLView*>(LLEditMenuHandler::gEditMenuHandler);
+			if ( (pEditView) && (pEditView->hasAncestor(this)) && (gEditMenu) && (gEditMenu->handleAcceleratorKey(key, mask)) )
+			{
+				return TRUE;
+			}
+		}
+
+		LLView* pView = m_EditorHandle.get();
+		while (pView)
+		{
+			if ( (pView->hasAccelerators()) && (pView->handleKeyHere(key, mask)) )
+				return TRUE;
+			pView = pView->getParent();
+		}
+	}
+	return handled;
+}
+
+//static 
+void LLFloaterSearchReplace::show(LLTextEditor* pEditor)
+{
+	LLFloaterSearchReplace* pSelf = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
+	if ( (!pSelf) || (!pEditor) )
+		return;
+
+	LLFloater *pDependeeNew = NULL, *pDependeeOld = pSelf->getDependee();
+	LLView* pView = pEditor->getParent();
 	while (pView)
 	{
-		if (pView->hasAccelerators())
-			return pView->handleKeyHere(key, mask);
+		pDependeeNew = dynamic_cast<LLFloater*>(pView);
+		if (pDependeeNew)
+		{
+			if (pDependeeNew != pDependeeOld)
+			{
+				if (pDependeeOld)
+				{
+					if (pSelf->getEditor())
+						pSelf->getEditor()->clearHighlights();
+					pDependeeOld->removeDependentFloater(pSelf);
+				}
+
+				if (!pDependeeNew->getHost())
+					pDependeeNew->addDependentFloater(pSelf);
+				else
+					pDependeeNew->getHost()->addDependentFloater(pSelf);
+			}
+			break;
+		}
 		pView = pView->getParent();
 	}
-	return FALSE;
+
+	pSelf->m_EditorHandle = pEditor->getHandle();
+	pSelf->openFloater();
 }
+
+LLTextEditor* LLFloaterSearchReplace::getEditor() const
+{
+	return dynamic_cast<LLTextEditor*>(m_EditorHandle.get());
+}
+
+void LLFloaterSearchReplace::refreshHighlight()
+{
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		pEditor->setHighlightWord(m_pSearchEditor->getText(), m_pCaseInsensitiveCheck->get());
+	}
+}
+
+void LLFloaterSearchReplace::onSearchClick()
+{
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		pEditor->selectNext(m_pSearchEditor->getText(), m_pCaseInsensitiveCheck->get(), TRUE, m_pSearchUpCheck->get());
+	}
+}
+
+void LLFloaterSearchReplace::onReplaceClick()
+{
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		pEditor->replaceText(m_pSearchEditor->getText(), m_pReplaceEditor->getText(), m_pCaseInsensitiveCheck->get(), TRUE, m_pSearchUpCheck->get());
+	}
+}
+
+void LLFloaterSearchReplace::onReplaceAllClick()
+{
+	LLTextEditor* pEditor = getEditor();
+	if (pEditor)
+	{
+		pEditor->replaceTextAll(m_pSearchEditor->getText(), m_pReplaceEditor->getText(), m_pCaseInsensitiveCheck->get());
+	}
+}
+
+// ============================================================================
