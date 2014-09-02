@@ -1279,7 +1279,7 @@ void LLPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& respon
 {
 	if (sInstance)
 	{
-		S32 option = response.asInteger();
+		S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 		if (option == 0)
 		{
 			std::string credName = notification["payload"]["CredName"].asString();
