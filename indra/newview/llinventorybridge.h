@@ -165,7 +165,7 @@ protected:
 // [/SL:KB]
 	BOOL isCOFFolder() const; // true if COF or descendent of
 // <FS:TT> Client LSL Bridge
-	BOOL isProtectedFolder() const;
+	BOOL isProtectedFolder(bool ignore_setting = false) const;
 // </FS:TT>
 	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
 	BOOL isOutboxFolder() const; // true if COF or descendent of marketplace outbox

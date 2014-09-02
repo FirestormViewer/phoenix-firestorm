@@ -678,7 +678,7 @@ void LLInvFVBridge::checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_v
 {
 	const LLInventoryObject* obj = getInventoryObject();
 
-	if (isAgentInventory() && !isOutboxFolder() && obj &&
+	if (isAgentInventory() && !isOutboxFolder() && !isProtectedFolder(true) && obj &&
 		obj->getActualType() != LLAssetType::AT_CATEGORY &&
 		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
 		obj->getActualType() != LLAssetType::AT_LINK
@@ -1085,19 +1085,27 @@ BOOL LLInvFVBridge::isCOFFolder() const
 }
 
 // <FS:TT> Client LSL Bridge (also for #AO)
-BOOL LLInvFVBridge::isProtectedFolder() const
+BOOL LLInvFVBridge::isProtectedFolder(bool ignore_setting /*= false*/) const
 {
 	const LLInventoryModel* model = getInventoryModel();
-	if(!model) return FALSE;
+	if (!model)
+	{
+		return FALSE;
+	}
+
 	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()
 		|| model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		&& (gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder") || ignore_setting))
+	{
 		return TRUE;
+	}
 
 	if ((mUUID == AOEngine::instance().getAOFolder() 
 		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		&& (gSavedPerAccountSettings.getBOOL("ProtectAOFolders") || ignore_setting))
+	{
 		return TRUE;
+	}
 
 	return FALSE;
 }
