@@ -7,7 +7,7 @@
  height="361"
  layout="topleft"
  min_height="243"
- min_width="234"
+ min_width="258"
  name="preview notecard"
  help_topic="preview_notecard"
  save_rect="true"
@@ -80,12 +80,22 @@
         Loading...
     </text_editor>
     <button
+     follows="left|bottom"
+     height="22"
+     image_overlay="Search_Icon"
+     layout="topleft"
+     left="3"
+     name="Search"
+     tool_tip="Search &amp; Replace"
+     top="332"
+     width="30" />
+    <button
      follows="right|bottom"
      height="22"
      label="Save"
      label_selected="Save"
      layout="topleft"
-     left="178"
+     left="183"
      name="Save"
      top="332"
      width="100" />
@@ -95,7 +105,7 @@
      label="Delete"
      label_selected="Delete"
      layout="topleft"
-     left="288"
+     left="292"
      name="Delete"
      top="332"
      width="100" />

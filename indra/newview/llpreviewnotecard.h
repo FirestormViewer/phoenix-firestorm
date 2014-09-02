@@ -108,6 +108,9 @@ protected:
 	static void onConfirmDelete(void* user_data);
 	// [FS:CR]
 
+	// <FS:Ansariel> FIRE-13969: Search button
+	void onSearchButtonClicked();
+
 protected:
 	LLViewerTextEditor* mEditor;
 	LLButton* mSaveBtn;

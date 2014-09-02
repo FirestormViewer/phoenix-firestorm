@@ -92,6 +92,9 @@ BOOL LLPreviewNotecard::postBuild()
 	childSetAction("Delete", onClickDelete, this);
 	getChildView("Delete")->setEnabled(false);
 
+	// <FS:Ansariel> FIRE-13969: Search button
+	getChild<LLButton>("Search")->setClickedCallback(boost::bind(&LLPreviewNotecard::onSearchButtonClicked, this));
+
 	const LLInventoryItem* item = getItem();
 
 	childSetCommitCallback("desc", LLPreview::onText, this);
@@ -647,5 +650,12 @@ bool LLPreviewNotecard::handleDeleteChangesDialog(const LLSD& notification, cons
 	return false;
 }
 // [/FS:CR]
+
+// <FS:Ansariel> FIRE-13969: Search button
+void LLPreviewNotecard::onSearchButtonClicked()
+{
+	LLFloaterSearchReplace::show(getEditor());
+}
+// </FS:Ansariel>
 
 // EOF
