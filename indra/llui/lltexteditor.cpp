@@ -2521,6 +2521,15 @@ void LLTextEditor::removeTextFromEnd(S32 num_chars)
 }
 
 //----------------------------------------------------------------------------
+// <FS:Ansariel> FIRE-11045: Spell checking changes not identified as such
+void LLTextEditor::onSpellCheckPerformed()
+{
+	if (isPristine())
+	{
+		mBaseDocIsPristine = FALSE;
+	}
+}
+// </FS:Ansariel>
 
 void LLTextEditor::makePristine()
 {
