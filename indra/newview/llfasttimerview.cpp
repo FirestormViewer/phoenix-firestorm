@@ -404,6 +404,15 @@ void LLFastTimerView::draw()
 	if (!mPauseHistory)
 	{
 		mRecording.appendRecording(LLTrace::get_frame_recording().getLastRecording());
+		
+		// <FS:ND> Clean up memory. Would be clever if ~TimerBarRow existed and did that, but nope. So do it by hand.
+		if( mTimerBarRows.size() )
+		{
+			delete[] mTimerBarRows[ mTimerBarRows.size()-1 ].mBars;
+			mTimerBarRows[ mTimerBarRows.size()-1 ].mBars = 0; // Might look nonsensical, but in case someone adds a dtor later, make sure we're not double freeing.
+		}
+		// </FS:ND>
+
 		mTimerBarRows.pop_back();
 		mTimerBarRows.push_front(TimerBarRow());
 	}
