@@ -28,17 +28,18 @@
 	 width="240" />
 -->
 	<friend_list
-     left="4"
-     right="-85"
-     top="0"
-     bottom="-3"
+	 desired_line_height="14"
+	 left="4"
+	 right="-85"
+	 top="0"
+	 bottom="-3"
 	 follows="all"
 	 layout="topleft"
-     column_padding="0"
-     draw_heading="true"
+	 column_padding="0"
+	 draw_heading="true"
 	 heading_height="20"
 	 multi_select="true"
-     name="friend_list">
+	 name="friend_list">
 		<friend_list.column
 		 name="icon_online_status"
 		 tool_tip="Online status"

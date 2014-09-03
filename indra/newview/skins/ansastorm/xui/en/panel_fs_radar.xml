@@ -159,6 +159,7 @@
 					 follows="all"
 					 name="radarlayout">
 						<radar_list
+						 desired_line_height="14"
 						 draw_heading="true"
 						 follows="all"
 						 height="166"
