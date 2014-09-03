@@ -181,12 +181,12 @@
 							 label=""
 							 name="voice_level"
 							 tool_tip="Is talking on voice"
-							 width="20"/>
+							 width="10"/>
 							<radar_list.columns
 							 label=""
 							 name="in_region"
 							 tool_tip="Is in the same region"
-							 width="15"/>
+							 width="10"/>
 							<radar_list.columns
 							 label=""
 							 name="typing_status"
@@ -201,7 +201,7 @@
 							 label=""
 							 name="flags"
 							 tool_tip="Payment info status"
-							 width="15"/>
+							 width="10"/>
 							<radar_list.columns
 							 label="Age"
 							 name="age"
