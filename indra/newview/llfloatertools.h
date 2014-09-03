@@ -152,6 +152,11 @@ public:
 	LLButton*		mBtnLink;
 	LLButton*		mBtnUnlink;
 
+	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
+	LLButton*		mBtnPrevPart;
+	LLButton*		mBtnNextPart;
+	// </FS:PP>
+
 	LLCheckBoxCtrl*	mCheckSnapToGrid;
 	LLButton*		mBtnGridOptions;
 	LLComboBox*		mComboGridMode;

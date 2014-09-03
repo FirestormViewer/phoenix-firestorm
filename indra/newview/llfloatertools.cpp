@@ -247,6 +247,11 @@ BOOL	LLFloaterTools::postBuild()
 	mTitleMedia			= getChild<LLMediaCtrl>("title_media");
 	mBtnLink			= getChild<LLButton>("link_btn");
 	mBtnUnlink			= getChild<LLButton>("unlink_btn");
+
+	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
+	mBtnPrevPart		= getChild<LLButton>("prev_part_btn");
+	mBtnNextPart		= getChild<LLButton>("next_part_btn");
+	// </FS:PP>
 	
 	mCheckSelectIndividual	= getChild<LLCheckBoxCtrl>("checkbox edit linked parts");	
 	getChild<LLUICtrl>("checkbox edit linked parts")->setValue((BOOL)gSavedSettings.getBOOL("EditLinkedParts"));
@@ -395,6 +400,11 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 
 	mBtnLink(NULL),
 	mBtnUnlink(NULL),
+
+	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
+	mBtnPrevPart(NULL),
+	mBtnNextPart(NULL),
+	// </FS:PP>
 
 	mBtnDelete(NULL),
 	mBtnDuplicate(NULL),
@@ -824,6 +834,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 	mBtnLink->setEnabled(LLSelectMgr::instance().enableLinkObjects());
 	mBtnUnlink->setEnabled(LLSelectMgr::instance().enableUnlinkObjects());
+
+	// <FS:PP> FIRE-14493: Buttons to cycle through linkset
+	mBtnPrevPart->setVisible(edit_visible);
+	mBtnNextPart->setVisible(edit_visible);
+	// </FS:PP>
 
 	if (mCheckSelectIndividual)
 	{
