@@ -558,19 +558,19 @@ void FSRadar::updateRadarList()
 				switch (power_level)
 				{
 					case VPL_PTT_Off:
-						entry["voice_level_icon"] = "VoicePTT_Off";
+						entry["voice_level_icon"] = "Radar_VoicePTT_Off";
 						break;
 					case VPL_PTT_On:
-						entry["voice_level_icon"] = "VoicePTT_On";
+						entry["voice_level_icon"] = "Radar_VoicePTT_On";
 						break;
 					case VPL_Level1:
-						entry["voice_level_icon"] = "VoicePTT_Lvl1";
+						entry["voice_level_icon"] = "Radar_VoicePTT_Lvl1";
 						break;
 					case VPL_Level2:
-						entry["voice_level_icon"] = "VoicePTT_Lvl2";
+						entry["voice_level_icon"] = "Radar_VoicePTT_Lvl2";
 						break;
 					case VPL_Level3:
-						entry["voice_level_icon"] = "VoicePTT_Lvl3";
+						entry["voice_level_icon"] = "Radar_VoicePTT_Lvl3";
 						break;
 					default:
 						break;
