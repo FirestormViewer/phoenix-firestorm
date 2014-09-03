@@ -469,6 +469,7 @@ default
                 if (llList2String(commandList, 2) == "1")
                 {
                     // llMoveToTarget teleports are disabled for Second Life grids
+                    llHTTPResponse(httpReqID, 200, "<llsd><string>ok</string></llsd>");
                     return;
                 }
 
