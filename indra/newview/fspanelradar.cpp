@@ -414,6 +414,8 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
 	column->mHeader->setToolTipArgs(name_count_args);
 
+	mRadarList->refreshLineHeight();
+
 	// Restore scroll position
 	mRadarList->setScrollPos(lastScroll);
 

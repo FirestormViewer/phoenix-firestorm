@@ -1058,6 +1058,8 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 			list_cell->setFontStyle(font_style);
 		}
 	}
+
+	mPanelList->getResultList()->refreshLineHeight();
 }
 
 // <FS:Cron> Allows the object costs to be updated on-the-fly so as to bypass the problem with the data being stale when first accessed.

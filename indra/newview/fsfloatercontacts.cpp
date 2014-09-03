@@ -484,8 +484,7 @@ void FSFloaterContacts::getCurrentFriendItemIDs(uuid_vec_t& selected_uuids) cons
 
 void FSFloaterContacts::sortFriendList()
 {
-	mFriendsList->updateLineHeight();
-	mFriendsList->updateLayout();
+	mFriendsList->refreshLineHeight();
 	mFriendsList->clearSortOrder();
 
 	if (gSavedSettings.getS32("FSFriendListSortOrder"))
