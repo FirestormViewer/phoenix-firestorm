@@ -28,19 +28,12 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscontactsfriendsctrl.h"
-#include "lllistcontextmenu.h"
 #include "llscrolllistitem.h"
 
 static LLDefaultChildRegistry::Register<FSContactsFriendsCtrl> r("friend_list");
 
-FSContactsFriendsCtrl::Params::Params()
-{
-	name = "friend_list";
-}
-
 FSContactsFriendsCtrl::FSContactsFriendsCtrl(const Params& p)
-:	LLScrollListCtrl(p),
-mContextMenu(NULL)
+:	FSScrollListCtrl(p)
 {
 }
 

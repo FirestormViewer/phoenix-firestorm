@@ -1,6 +1,6 @@
 /** 
- * @file fscontactsfriendsctrl.h
- * @brief A friend list specific implementation of scrolllist
+ * @file fsscrolllistctrl.h
+ * @brief A Firestorm specific implementation of scrolllist
  *
  * $LicenseInfo:firstyear=2014&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -25,29 +25,40 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_CONTACTSFRIENDSTCTRL_H
-#define FS_CONTACTSFRIENDSTCTRL_H
+#ifndef FS_SCROLLLISTCTRL_H
+#define FS_SCROLLLISTCTRL_H
 
-#include "fsscrolllistctrl.h"
+#include "lllistcontextmenu.h"
+#include "llscrolllistctrl.h"
 
-class FSContactsFriendsCtrl
-: public FSScrollListCtrl, public LLInstanceTracker<FSContactsFriendsCtrl>
+class LLListContextMenu;
+
+class FSScrollListCtrl
+: public LLScrollListCtrl
 {
 public:
 
-	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
+	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
 	{
+		Optional<S32>		desired_line_height;
+
 		Params()
+		:	desired_line_height("desired_line_height", -1)
 		{
-			name = "friend_list";
 		}
 	};
 	
-	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
+	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
+
+	void	refreshLineHeight();
 
 protected:
-	FSContactsFriendsCtrl(const Params&);
+	FSScrollListCtrl(const Params&);
 	friend class LLUICtrlFactory;
+
+	LLListContextMenu*	mContextMenu;
+
+	S32					mDesiredLineHeight;
 };
 
-#endif // FS_CONTACTSFRIENDSTCTRL_H
+#endif // FS_SCROLLLISTCTRL_H

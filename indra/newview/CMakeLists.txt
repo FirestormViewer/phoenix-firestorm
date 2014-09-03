@@ -189,6 +189,7 @@ set(viewer_SOURCE_FILES
     fsradarlistctrl.cpp
     fsradarmenu.cpp
     fsscriptlibrary.cpp
+    fsscrolllistctrl.cpp
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
@@ -895,6 +896,7 @@ set(viewer_HEADER_FILES
     fsradarlistctrl.h
     fsradarmenu.h
     fsscriptlibrary.h
+    fsscrolllistctrl.h
     fsslurl.h
     fsslurlcommand.h
     fswsassetblacklist.h

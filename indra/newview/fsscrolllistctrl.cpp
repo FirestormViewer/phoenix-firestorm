@@ -1,6 +1,6 @@
 /** 
- * @file fscontactsfriendsctrl.h
- * @brief A friend list specific implementation of scrolllist
+ * @file fsscrolllistctrl.cpp
+ * @brief A Firestorm specific implementation of scrolllist
  *
  * $LicenseInfo:firstyear=2014&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -25,29 +25,26 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_CONTACTSFRIENDSTCTRL_H
-#define FS_CONTACTSFRIENDSTCTRL_H
+#include "llviewerprecompiledheaders.h"
 
 #include "fsscrolllistctrl.h"
 
-class FSContactsFriendsCtrl
-: public FSScrollListCtrl, public LLInstanceTracker<FSContactsFriendsCtrl>
+FSScrollListCtrl::FSScrollListCtrl(const Params& p)
+:	LLScrollListCtrl(p),
+	mContextMenu(NULL),
+	mDesiredLineHeight(p.desired_line_height)
 {
-public:
+}
 
-	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
+void FSScrollListCtrl::refreshLineHeight()
+{
+	if (mDesiredLineHeight > -1)
 	{
-		Params()
-		{
-			name = "friend_list";
-		}
-	};
-	
-	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
-
-protected:
-	FSContactsFriendsCtrl(const Params&);
-	friend class LLUICtrlFactory;
-};
-
-#endif // FS_CONTACTSFRIENDSTCTRL_H
+		setLineHeight(mDesiredLineHeight);
+	}
+	else
+	{
+		updateLineHeight();
+	}
+	updateLayout();
+}

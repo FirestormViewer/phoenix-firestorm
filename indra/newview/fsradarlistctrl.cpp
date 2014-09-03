@@ -28,20 +28,13 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsradarlistctrl.h"
-#include "lllistcontextmenu.h"
 #include "llscrolllistitem.h"
 #include "rlvhandler.h"
 
 static LLDefaultChildRegistry::Register<FSRadarListCtrl> r("radar_list");
 
-FSRadarListCtrl::Params::Params()
-{
-	name = "radar_list";
-}
-
-FSRadarListCtrl::FSRadarListCtrl(const FSRadarListCtrl::Params& p)
-:	LLScrollListCtrl(p),
-mContextMenu(NULL)
+FSRadarListCtrl::FSRadarListCtrl(const Params& p)
+:	FSScrollListCtrl(p)
 {
 }
 

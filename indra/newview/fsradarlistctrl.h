@@ -28,16 +28,14 @@
 #ifndef FS_RADARLISTCTRL_H
 #define FS_RADARLISTCTRL_H
 
-#include "llscrolllistctrl.h"
-
-class LLListContextMenu;
+#include "fsscrolllistctrl.h"
 
 class FSRadarListCtrl
-: public LLScrollListCtrl, public LLInstanceTracker<FSRadarListCtrl>
+: public FSScrollListCtrl, public LLInstanceTracker<FSRadarListCtrl>
 {
 public:
 	
-	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
+	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
 	{
 		// behavioral flags
 		Optional<bool>	multi_select,
@@ -77,20 +75,18 @@ public:
 		
 		Optional<LLViewBorder::Params> border;
 		
-		Params();
+		Params()
+		{
+			name = "radar_list";
+		}
 	};	
 	
-	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 	
 	
 protected:
 	FSRadarListCtrl(const Params&);
 	friend class LLUICtrlFactory;
-
-private:
-	LLListContextMenu*	mContextMenu;
-	
 };
 
 #endif // FS_RADARLISTCTRL_H

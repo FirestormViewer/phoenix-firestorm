@@ -28,29 +28,26 @@
 #ifndef FS_AREASEARCHLISTCTRL_H
 #define FS_AREASEARCHLISTCTRL_H
 
-#include "llscrolllistctrl.h"
-
-class LLListContextMenu;
+#include "fsscrolllistctrl.h"
 
 class FSAreaSearchListCtrl
-	: public LLScrollListCtrl, public LLInstanceTracker<FSAreaSearchListCtrl>
+	: public FSScrollListCtrl, public LLInstanceTracker<FSAreaSearchListCtrl>
 {
 public:
 
-	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
+	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
 	{
-		Params();
+		Params()
+		{
+			name = "area_search_list";
+		}
 	};
 	
-	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 protected:
 	FSAreaSearchListCtrl(const Params&);
 	friend class LLUICtrlFactory;
-
-private:
-	LLListContextMenu*	mContextMenu;
 };
 
 #endif // FS_AREASEARCHLISTCTRL_H

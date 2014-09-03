@@ -28,19 +28,12 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsareasearchlistctrl.h"
-#include "lllistcontextmenu.h"
 #include "llscrolllistitem.h"
 
 static LLDefaultChildRegistry::Register<FSAreaSearchListCtrl> r("area_search_list");
 
-FSAreaSearchListCtrl::Params::Params()
-{
-	name = "area_search_list";
-}
-
-FSAreaSearchListCtrl::FSAreaSearchListCtrl(const FSAreaSearchListCtrl::Params& p)
-:	LLScrollListCtrl(p),
-mContextMenu(NULL)
+FSAreaSearchListCtrl::FSAreaSearchListCtrl(const Params& p)
+:	FSScrollListCtrl(p)
 {
 }
 
