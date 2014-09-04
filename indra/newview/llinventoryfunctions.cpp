@@ -1252,6 +1252,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				move_inventory_item(gAgentID, gAgentSessionID, obj->getUUID(), target_cat_id, obj->getName(), LLPointer<LLInventoryCallback>(NULL));
 			}
 		}
+		return;
 	}
 	// </FS:Ansariel>
 	// <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
