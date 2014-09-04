@@ -528,6 +528,14 @@
          parameter="delete" />
     </menu_item_call>
     <menu_item_call
+     label="Cleanup broken Links"
+     layout="topleft"
+     name="Cleanup broken Links">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="cleanup_broken_links"/>
+    </menu_item_call>
+    <menu_item_call
      label="Move to Default Folder"
      layout="topleft"
      name="Move to Default Folder">

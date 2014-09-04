@@ -3709,6 +3709,12 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 	const LLUUID lost_and_found_id = model->findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 	const LLUUID favorites = model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE);
 
+	// <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
+	if (mUUID == AOEngine::instance().getAOFolder())
+	{
+		items.push_back(std::string("Cleanup broken Links"));
+	}
+	// </FS:Ansariel>
 	if (lost_and_found_id == mUUID)
 	{
 		// This is the lost+found folder.

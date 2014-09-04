@@ -1254,6 +1254,38 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		}
 	}
 	// </FS:Ansariel>
+	// <FS:Ansariel> FIRE-11628: Option to delete broken links from AO folder
+	if ("cleanup_broken_links" == action)
+	{
+		if (root->getSelectedCount() == 1)
+		{
+			LLFolderViewItem* folder_item = root->getSelectedItems().front();
+			LLInvFVBridge* bridge = (LLInvFVBridge*)folder_item->getViewModelItem();
+
+			if (bridge)
+			{
+				LLInventoryObject* obj = bridge->getInventoryObject();
+
+				LLInventoryModel::cat_array_t cats;
+				LLInventoryModel::item_array_t items;
+				model->collectDescendents(obj->getUUID(), cats, items, FALSE);
+				LLUUID trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
+
+				BOOL old_setting = gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
+				gSavedPerAccountSettings.setBOOL("ProtectAOFolders", FALSE);
+				for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
+				{
+					if ((*it)->getIsLinkType() && LLAssetType::lookupIsLinkType((*it)->getType()))
+					{
+						model->removeItem((*it)->getUUID());
+					}
+				}
+				gSavedPerAccountSettings.setBOOL("ProtectAOFolders", old_setting);
+			}
+		}
+		return;
+	}
+	// </FS:Ansariel>
 
 	static const std::string change_folder_string = "change_folder_type_";
 	if (action.length() > change_folder_string.length() && 

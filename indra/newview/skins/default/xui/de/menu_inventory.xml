@@ -68,6 +68,7 @@
 	<menu_item_call label="Links ersetzen" name="Replace Links"/>
 	<menu_item_call label="Löschen" name="Remove Link"/>
 	<menu_item_call label="Löschen" name="Delete"/>
+	<menu_item_call label="Defekte Links aufräumen" name="Cleanup broken Links"/>
 	<menu_item_call label="In Standardordner verschieben" name="Move to Default Folder"/>
 	<menu_item_call label="In Fundbüro verschieben" name="Move to Lost And Found"/>
 	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>
