@@ -35,7 +35,6 @@
 #include "fsfloaterimcontainer.h"
 #include "llagent.h"
 #include "llavataractions.h"
-#include "llavatarnamecache.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
 #include "llfloatergroupinvite.h"
@@ -109,6 +108,15 @@ FSFloaterContacts::~FSFloaterContacts()
 	{
 		mRlvBehaviorCallbackConnection.disconnect();
 	}
+
+	for (avatar_name_cb_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
 }
 
 BOOL FSFloaterContacts::postBuild()
@@ -593,7 +601,9 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	if (!LLAvatarNameCache::get(agent_id, &av_name))
 	{
 		const LLRelationship* info = LLAvatarTracker::instance().getBuddyInfo(agent_id);
-		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
+		LLUUID request_id = LLUUID::generateNewID();
+		LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
+		mAvatarNameCacheConnections[request_id] = conn;
 	}
 
 	LLSD element;
@@ -700,7 +710,9 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 	LLAvatarName av_name;
 	if (!LLAvatarNameCache::get(agent_id, &av_name))
 	{
-		LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info));
+		LLUUID request_id = LLUUID::generateNewID();
+		LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
+		mAvatarNameCacheConnections[request_id] = conn;
 	}
 
 	// Name of the status icon to use
@@ -736,6 +748,12 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 
 	// enable this item, in case it was disabled after user input
 	itemp->setEnabled(TRUE);
+}
+
+void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id)
+{
+	disconnectAvatarNameCacheConnection(request_id);
+	updateFriendItem(agent_id, relationship);
 }
 
 void FSFloaterContacts::refreshRightsChangeList()
@@ -1178,7 +1196,9 @@ void FSFloaterContacts::onDisplayNameChanged()
 		}
 		else
 		{
-			LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this));
+			LLUUID request_id = LLUUID::generateNewID();
+			LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get((*it)->getUUID(), boost::bind(&FSFloaterContacts::setDirtyNames, this, request_id));
+			mAvatarNameCacheConnections[request_id] = conn;
 		}
 	}
 	mFriendsList->setNeedsSort();
@@ -1202,4 +1222,25 @@ std::string FSFloaterContacts::getFullName(const LLAvatarName& av_name)
 		return llformat("%s (%s)", av_name.getUserNameForDisplay().c_str(), av_name.getDisplayName().c_str());
 	}
 }
+
+void FSFloaterContacts::setDirtyNames(const LLUUID& request_id)
+{
+	disconnectAvatarNameCacheConnection(request_id);
+	mDirtyNames = true;
+}
+
+void FSFloaterContacts::disconnectAvatarNameCacheConnection(const LLUUID& request_id)
+{
+	avatar_name_cb_t::iterator found = mAvatarNameCacheConnections.find(request_id);
+	if (found != mAvatarNameCacheConnections.end())
+	{
+		LLAvatarNameCache::callback_connection_t& conn = found->second;
+		if (conn.connected())
+		{
+			conn.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(found);
+	}
+}
+
 // EOF

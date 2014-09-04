@@ -29,13 +29,13 @@
 #ifndef FS_FLOATERCONTACTS_H
 #define FS_FLOATERCONTACTS_H
 
+#include "llavatarnamecache.h"
 #include "llfloater.h"
 #include "llscrolllistcolumn.h"
 #include "rlvhandler.h"
 
 class FSContactsFriendsCtrl;
 class LLAvatarList;
-class LLAvatarName;
 class LLAvatarTracker;
 class LLFriendObserver;
 class LLScrollListCtrl;
@@ -103,6 +103,7 @@ private:
 	void					applyRightsToFriends();
 	void					addFriend(const LLUUID& agent_id);
 	void					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship);
+	void					updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id);
 
 	typedef enum 
 	{
@@ -160,8 +161,11 @@ private:
 
 	std::string getFullName(const LLAvatarName& av_name);
 
-	void setDirtyNames() { mDirtyNames = true; }
-};
+	void setDirtyNames(const LLUUID& request_id);
 
+	typedef std::map<LLUUID, LLAvatarNameCache::callback_connection_t> avatar_name_cb_t;
+	avatar_name_cb_t	mAvatarNameCacheConnections;
+	void				disconnectAvatarNameCacheConnection(const LLUUID& request_id);
+};
 
 #endif // FS_FLOATERCONTACTS_H
