@@ -41,6 +41,7 @@
 #include <fcntl.h>		//_O_APPEND
 #include <io.h>			//_open_osfhandle()
 #include <errorrep.h>	// for AddERExcludedApplicationA()
+#include <WERAPI.H>
 #include <process.h>	// _spawnl()
 #include <tchar.h>		// For TCHAR support
 
@@ -412,10 +413,13 @@ void LLAppViewerWin32::disableWinErrorReporting()
 	//const char win_xp_string[] = "Microsoft Windows XP";
 	//BOOL is_win_xp = ( getOSInfo().getOSString().substr(0, strlen(win_xp_string) ) == win_xp_string );		/* Flawfinder: ignore*/
 	//if( is_win_xp )
+	//{
 	LLOSInfo info = getOSInfo();
-	if ((info.mMajorVer == 5 && info.mMinorVer >= 1) || info.mMajorVer >= 6)
-	// </FS:Ansariel>
+	if (info.mMajorVer == 5 && info.mMinorVer >= 1)
 	{
+		LL_INFOS() << "Windows version >= 5.1 - using FaultRep API" << LL_ENDL;
+	// </FS:Ansariel>
+
 		// Note: we need to use run-time dynamic linking, because load-time dynamic linking will fail
 		// on systems that don't have the library installed (all non-Windows XP systems)
 		HINSTANCE fault_rep_dll_handle = LoadLibrary(L"faultrep.dll");		/* Flawfinder: ignore */
@@ -447,6 +451,40 @@ void LLAppViewerWin32::disableWinErrorReporting()
 		}
 		// </FS:Ansariel>
 	}
+	// <FS:Ansariel> Disable windows error reporting on Windows XP and later
+	else if (info.mMajorVer >= 6)
+	{
+		LL_INFOS() << "Windows version >= 6 - using WER API" << LL_ENDL;
+
+		HINSTANCE fault_rep_dll_handle = LoadLibrary(L"wer.dll");		/* Flawfinder: ignore */
+		if( fault_rep_dll_handle )
+		{
+			typedef HRESULT (APIENTRY *pfn_WERADDEXCLUDEAPPLICATION)(__in PCWSTR pwzExeName, __in BOOL bAllUsers);
+
+			pfn_WERADDEXCLUDEAPPLICATION pAddERExcludedApplicationW  = (pfn_WERADDEXCLUDEAPPLICATION) GetProcAddress(fault_rep_dll_handle, "WerAddExcludedApplication");
+			if( pAddERExcludedApplicationW )
+			{
+				// Strip the path off the name
+				const char* executable_name = gDirUtilp->getExecutableFilename().c_str();
+				std::wstring wstr(executable_name, executable_name+strlen(executable_name));
+
+				if( S_OK == pAddERExcludedApplicationW( wstr.c_str(), FALSE ) )
+				{
+					LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
+				}
+				else
+				{
+					LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
+				}
+			}
+			FreeLibrary( fault_rep_dll_handle );
+		}
+		else
+		{
+			LL_WARNS() << "Could not load wer.dll" << LL_ENDL;
+		}
+	}
+	// </FS:Ansariel>
 }
 
 const S32 MAX_CONSOLE_LINES = 500;
