@@ -408,9 +408,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 void LLAppViewerWin32::disableWinErrorReporting()
 {
-	const char win_xp_string[] = "Microsoft Windows XP";
-	BOOL is_win_xp = ( getOSInfo().getOSString().substr(0, strlen(win_xp_string) ) == win_xp_string );		/* Flawfinder: ignore*/
-	if( is_win_xp )
+	// <FS:Ansariel> Disable windows error reporting on Windows XP and later
+	//const char win_xp_string[] = "Microsoft Windows XP";
+	//BOOL is_win_xp = ( getOSInfo().getOSString().substr(0, strlen(win_xp_string) ) == win_xp_string );		/* Flawfinder: ignore*/
+	//if( is_win_xp )
+	LLOSInfo info = getOSInfo();
+	if ((info.mMajorVer == 5 && info.mMinorVer >= 1) || info.mMajorVer >= 6)
+	// </FS:Ansariel>
 	{
 		// Note: we need to use run-time dynamic linking, because load-time dynamic linking will fail
 		// on systems that don't have the library installed (all non-Windows XP systems)
@@ -436,6 +440,12 @@ void LLAppViewerWin32::disableWinErrorReporting()
 			}
 			FreeLibrary( fault_rep_dll_handle );
 		}
+		// <FS:Ansariel> Disable error reporting on Windows XP and later
+		else
+		{
+			LL_WARNS() << "Could not load faultrep.dll" << LL_ENDL;
+		}
+		// </FS:Ansariel>
 	}
 }
 
