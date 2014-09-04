@@ -527,7 +527,7 @@ bool LLAppViewerWin32::init()
 	// (Don't send our data to Microsoft--at least until we are Logo approved and have a way
 	// of getting the data back from them.)
 	//
-	// LL_INFOS() << "Turning off Windows error reporting." << LL_ENDL;
+	LL_INFOS() << "Turning off Windows error reporting." << LL_ENDL;
 	disableWinErrorReporting();
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
