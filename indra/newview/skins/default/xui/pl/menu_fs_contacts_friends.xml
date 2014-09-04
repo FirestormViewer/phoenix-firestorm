@@ -7,6 +7,7 @@
 	<menu_item_call label="Teleportuj do znajomego" name="teleportto_agent" />
 	<menu_item_call label="Proponuj teleport" name="offer_teleport" />
 	<menu_item_call label="Poproś o teleport" name="request_teleport" />
+	<menu_item_call label="Zapłać" name="pay" />
 	<menu_item_call label="Śledź znajomego" name="track_agent" />
 	<menu_item_call label="Usuń ze znajomych" name="remove_friend" />
 	<menu_item_call label="Kopiuj nazwę do schowka" name="url_copy_label" />
