@@ -1212,8 +1212,8 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		std::set<LLFolderViewItem*> selected_items = root->getSelectionList();
 		std::set<LLFolderViewItem*>::iterator set_iter;
-		LLUUID outbox_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX);
-		LLUUID cof_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+		LLUUID outbox_folder_id = model->findCategoryUUIDForType(LLFolderType::FT_OUTBOX);
+		LLUUID cof_folder_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
 
 		for (set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
 		{
@@ -1240,13 +1240,13 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				continue;
 			}
 
-			if (gInventory.isObjectDescendentOf(obj->getUUID(), outbox_folder_id) ||
-				gInventory.isObjectDescendentOf(obj->getUUID(), cof_folder_id))
+			if (model->isObjectDescendentOf(obj->getUUID(), outbox_folder_id) ||
+				model->isObjectDescendentOf(obj->getUUID(), cof_folder_id))
 			{
 				continue;
 			}
 
-			LLUUID target_cat_id = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()));
+			LLUUID target_cat_id = model->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()));
 			if (target_cat_id.notNull())
 			{
 				move_inventory_item(gAgentID, gAgentSessionID, obj->getUUID(), target_cat_id, obj->getName(), LLPointer<LLInventoryCallback>(NULL));
