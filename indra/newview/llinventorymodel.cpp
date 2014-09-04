@@ -1208,18 +1208,16 @@ void LLInventoryModel::changeItemParent(LLViewerInventoryItem* item,
 							  << ") from " << item->getParentUUID() << " to folder "
 							  << new_parent_id << LL_ENDL;
 
-		// <FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
-		// ## Zi: Animation Overrider
-		if(isObjectDescendentOf(item->getUUID(),AOEngine::instance().getAOFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		// <FS> Protected folder
+		if ((isObjectDescendentOf(item->getUUID(), AOEngine::instance().getAOFolder())
+				&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
+			(isObjectDescendentOf(item->getUUID(), FSLSLBridge::instance().getBridgeFolder())
+				&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+		{
+			LL_INFOS("Inventory") << "Cannot move item because it is descendent of a protected folder" << LL_ENDL;
 			return;
-		// ## Zi: Animation Overrider
-//-TT Client LSL Bridge
-		if(isObjectDescendentOf(item->getUUID(),FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
-			return;
-//-TT
-		// </FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
+		}
+		// </FS>
 
 		LLInventoryModel::update_list_t update;
 		LLInventoryModel::LLCategoryUpdate old_folder(item->getParentUUID(),-1);
@@ -1252,18 +1250,16 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 		return;
 	}
 
-	// <FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
-	// ## Zi: Animation Overrider
-	if((isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
-		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
-//-TT Client LSL Bridge
-		|| (isObjectDescendentOf(cat->getUUID(),FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
-//-TT
-		)
+	// <FS> Protected folder
+	if ((isObjectDescendentOf(cat->getUUID(), AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders")) ||
+		(isObjectDescendentOf(cat->getUUID(), FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+	{
+		LL_INFOS("Inventory") << "Cannot move category because it is descendent of a protected folder" << LL_ENDL;
 		return;
-	// ## Zi: Animation Overrider
-	// </FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
+	}
+	// </FS>
 
 	LLInventoryModel::update_list_t update;
 	LLInventoryModel::LLCategoryUpdate old_folder(cat->getParentUUID(), -1);
