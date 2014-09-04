@@ -6,7 +6,6 @@
  name="friends"
  width="355">
 	<panel.string name="FontName" value="SANSSERIF"/>
-	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
 	<view_border
 	 top="1"
 	 bottom="-25"
@@ -150,6 +149,6 @@
 	 height="14"
 	 name="friend_count"
 	 right="-10">
-	 Friends: ...
+	 Friends: [COUNT]
 	</text>
 </panel>

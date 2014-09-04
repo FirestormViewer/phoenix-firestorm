@@ -2,8 +2,6 @@
 
 <!-- created Jun.30, 2013 based on English 4.4.2 version -->
 <panel name="friends">
-	<panel.string name="FriendCount" value="フレンド数: [COUNT]"/>
-
 	<friend_list name="friend_list">
 		<friend_list.column name="icon_online_status" tool_tip="オンライン・ステータス" />
 		<friend_list.column label="ユーザー名" name="user_name" tool_tip="この連絡先のユーザー名です。" />
@@ -22,6 +20,6 @@
 	<button label="削除..." name="remove_btn" tool_tip="この人物をフレンドリストから除外します。" />
 	<button label="追加..." name="add_btn" tool_tip="住人にフレンドシップを申請します。" />
 	<text name="friend_count">
-		フレンドの数: ...
+		フレンドの数: [COUNT]
 	</text>
 </panel>

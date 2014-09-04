@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<panel.string name="FriendCount" value="Amici: [COUNT]"/>
 	<friend_list name="friend_list">
 		<friend_list.column name="icon_online_status" tool_tip="Stato online"/>
 		<friend_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
@@ -18,6 +17,6 @@
 	<button label="Rimuovi..." name="remove_btn" tool_tip="Rimuovi l'amico selezionato dalla tua lista amici"/>
 	<button label="Aggiungi..." name="add_btn" tool_tip="Chiedere ad un residente, se vuole essere tuo amico"/>
 	<text name="friend_count">
-	 Amici: ...
+	 Amici: [COUNT]
 	</text>
 </panel>

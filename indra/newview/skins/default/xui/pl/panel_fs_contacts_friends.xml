@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<panel.string name="FriendCount" value="Znajomi: [COUNT]"/>
 	<friend_list name="friend_list">
 		<friend_list.column name="icon_online_status" tool_tip="Status online"/>
 		<friend_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
@@ -20,6 +19,6 @@
 	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tą osobę z listy Twoich znajomych"/>
 	<button label="Dodaj..." name="add_btn" tool_tip="Zapytaj tego Rezydenta, czy nie chce zostać Twoim znajomym"/>
 	<text name="friend_count">
-	 Znajomi: ...
+	 Znajomi: [COUNT]
 	</text>
 </panel>

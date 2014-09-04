@@ -822,9 +822,7 @@ void FSFloaterContacts::refreshUI()
 	childSetEnabled("map_btn", mappable && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
 
 	// Set friend count
-	LLStringUtil::format_map_t args;
-	args["[COUNT]"] = llformat("%d", mFriendsList->getItemCount());
-	mFriendsTab->childSetValue("friend_count", LLSD( mFriendsTab->getString("FriendCount", args) ) );
+	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
 
 	refreshRightsChangeList();
 }

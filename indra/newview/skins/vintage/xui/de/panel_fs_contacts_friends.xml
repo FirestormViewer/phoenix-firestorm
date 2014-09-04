@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<panel.string name="FriendCount" value="Freunde: [COUNT]"/>
 	<friend_list name="friend_list" right="-90">
 		<friend_list.column name="icon_online_status" tool_tip="Online-Status"/>
 		<friend_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
@@ -54,6 +53,6 @@
 	 tool_tip="Fasse deine Freunde in Gruppen zusammen"
 	 width="85" />
 	<text name="friend_count" width="85">
-	 Freunde: ...
+	 Freunde: [COUNT]
 	</text>
 </panel>
