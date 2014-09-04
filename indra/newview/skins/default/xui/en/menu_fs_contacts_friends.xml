@@ -63,6 +63,13 @@
          parameter="request_teleport"/>
     </menu_item_call>
     <menu_item_call
+     label="Pay"
+     layout="topleft"
+     name="pay">
+        <menu_item_call.on_click
+         function="Contacts.Friends.Pay"/>
+    </menu_item_call>
+    <menu_item_call
      label="Track Friend"
      layout="topleft"
      name="track_agent">

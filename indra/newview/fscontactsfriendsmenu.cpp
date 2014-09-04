@@ -52,6 +52,7 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
 		registrar.add("Contacts.Friends.OfferTeleport",			boost::bind(&FSContactsFriendsMenu::offerTeleport,				this));
 		registrar.add("Contacts.Friends.RequestTeleport",		boost::bind(&LLAvatarActions::teleportRequest,					id));
 		registrar.add("Contacts.Friends.ZoomIn",				boost::bind(&LLAvatarActions::zoomIn,							id));
+		registrar.add("Contacts.Friends.Pay",					boost::bind(&LLAvatarActions::pay,								id));
 		registrar.add("Contacts.Friends.AddToContactSet",		boost::bind(&FSContactsFriendsMenu::addToContactSet,			this));
 		registrar.add("Contacts.Friends.TeleportToTarget",		boost::bind(&FSContactsFriendsMenu::teleportToAvatar,			this));
 		registrar.add("Contacts.Friends.TrackAvatar",			boost::bind(&FSContactsFriendsMenu::onTrackAvatarMenuItemClick,	this));
