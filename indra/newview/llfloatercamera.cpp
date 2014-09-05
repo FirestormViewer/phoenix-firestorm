@@ -556,6 +556,7 @@ void LLFloaterCamera::updateState()
 	if (mUseFlatUI)
 	{
 		setModeTitle(mCurrMode);
+		updateItemsSelection();
 		return;
 	}
 // </AW: Flat cam floater>
