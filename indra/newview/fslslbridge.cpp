@@ -156,9 +156,6 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		std::string bAuth = message.substr(authStart,authEnd - authStart);
 		std::string bVer = message.substr(verStart,verEnd - verStart);
 
-		// Verify Version
-		// todo
-
 		// Verify Authorization
 		if (ourBridge != bAuth)
 		{
@@ -186,6 +183,15 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			
 			// If something that didn't look like our current bridge failed auth, don't recreate, it might interfere with a bridge creation in progress
 			// or normal bridge startup.  Bridge creation isn't threadsafe yet.
+			return true;
+		}
+
+		// Verify Version
+		std::string receivedBridgeVersion = llformat("%s%s", FS_BRIDGE_NAME.c_str(), bVer.c_str());
+		if (receivedBridgeVersion != mCurrentFullName)
+		{
+			LL_WARNS("FSLSLBridge") << "BridgeVer message received from ("<< bAuth <<") was ("<< receivedBridgeVersion <<"), but it should be different ("<< mCurrentFullName <<"). Recreating." << LL_ENDL;
+			recreateBridge();
 			return true;
 		}
 
