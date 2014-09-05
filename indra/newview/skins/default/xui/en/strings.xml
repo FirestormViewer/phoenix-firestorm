@@ -2723,4 +2723,7 @@ Try enclosing path to the editor with double quotes.
 
   <string name="DoubleClickTeleportEnabled">DoubleClick Teleport enabled.</string>
   <string name="DoubleClickTeleportDisabled">DoubleClick Teleport disabled.</string>
+
+  <string name="FSRegionRestartInLocalChat">The region you are in now is about to restart. If you stay in this region you will be logged out.</string>
+
 </strings>

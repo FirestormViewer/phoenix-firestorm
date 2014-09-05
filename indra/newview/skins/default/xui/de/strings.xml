@@ -6034,4 +6034,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="DoubleClickTeleportDisabled">
 		Doppelklick-Teleport deaktiviert.
 	</string>
+
+	<string name="FSRegionRestartInLocalChat">
+		Die Region, in der Sie sich gerade befinden, ist dabei neu zu starten. Falls Sie in dieser Region bleiben, werden Sie ausgeloggt.
+	</string>
 </strings>

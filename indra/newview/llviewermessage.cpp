@@ -7285,6 +7285,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			//send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
 			make_ui_sound("UISndRestart");
 			// </FS:Ansariel>
+			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7491,6 +7492,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			}
 
 			make_ui_sound("UISndRestartOpenSim");
+			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 			return;
 		}
 		// </FS:Ansariel>

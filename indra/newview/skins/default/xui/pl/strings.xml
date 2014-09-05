@@ -5510,4 +5510,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="DoubleClickTeleportDisabled">
 		Wyłączono teleport po dwukliku.
 	</string>
+	<string name="FSRegionRestartInLocalChat">
+		Region, w którym teraz jesteś zostanie za chwilę zrestartowany. Jeśli w nim zostaniesz, to symulator Cię wyloguje.
+	</string>
 </strings>
