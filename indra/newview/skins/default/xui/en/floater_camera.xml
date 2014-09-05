@@ -10,7 +10,7 @@
  can_close="false"
  chrome="true"
  follows="bottom"
- height="72"
+ height="77"
  min_height="20"
  layout="topleft"
  name="camera_floater"
@@ -67,7 +67,7 @@ free_mode_title
        mouse_opaque="false"
        name="zoom"
        follows="all"
-       top="20"
+       top="25"
        width="150">
 
        <layout_stack
@@ -191,13 +191,13 @@ free_mode_title
     
         <panel
      border="false"
-     height="18"
+     height="22"
      layout="topleft"
      left="5"
-     top="5"
+     top="0"
      follows="top|left"
      name="buttons_view"
-     width="55">
+     width="56">
         <panel_camera_item
           name="front_view"
           tool_tip="Front view"
@@ -209,16 +209,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="front_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Front_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Front_On" />
@@ -240,16 +244,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="group_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Side_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Side_On" />
@@ -271,16 +279,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="rear_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Back_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="Cam_Preset_Back_On" />
@@ -294,13 +306,13 @@ free_mode_title
     
     <panel
      border="false"
-     height="18"
+     height="22"
      layout="topleft"
      follows="top|left"
      left_pad="4"
-     top="5"
+     top="0"
      name="buttons"
-     width="55">
+     width="58">
         <panel_camera_item
           name="object_view"
           tool_tip="Object view"
@@ -313,16 +325,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="object_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="Object_View_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="Object_View_On" />
@@ -344,16 +360,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="mouselook_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="Mouselook_View_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="Mouselook_View_On" />
@@ -375,16 +395,20 @@ free_mode_title
             function="CameraPresets.ChangeView"
             parameter="reset_view" />
             <panel_camera_item.icon_over
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.icon_selected
+            top="18"
             height="18"
             width="18" />
             <panel_camera_item.picture
+            top="18"
             height="18"
             width="18"
             image_name="StopReload_Off" />
             <panel_camera_item.selected_picture
+            top="18"
             height="18"
             width="18"
             image_name="StopReload_Over" />
