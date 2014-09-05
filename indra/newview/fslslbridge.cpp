@@ -106,11 +106,6 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 {
 	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
 
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
-	{
-		return false;
-	}
-
 	//<FS:TS> FIRE-962: Script controls for built-in AO
 	if ((message[0]) != '<')
 	{
@@ -139,9 +134,16 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	std::string ourBridge = findFSCategory().asString();
 	//</FS:TS> FIRE-962
 	
+	bool bridgeIsEnabled = gSavedSettings.getBOOL("UseLSLBridge");
 	bool status = false;
 	if (tag == "<bridgeURL>")
 	{
+
+		if (!bridgeIsEnabled)
+		{
+			// Hide handshake message if bridge is disabled in viewer settings but the bridge itself sent it, then quit - don't reply to the handshake
+			return true;
+		}
 
 		// brutish parsing
 		size_t urlStart  = message.find("<bridgeURL>") + 11;
@@ -247,9 +249,9 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 	}
 	
 	//<FS:TS> FIRE-962: Script controls for built-in AO
-	if (fromID != mBridgeUUID)
+	if (fromID != mBridgeUUID || !bridgeIsEnabled)
 	{
-		return false;		// ignore if not from the bridge
+		return false;		// ignore if not from the bridge, or bridge is disabled
 	}
 	if (tag == "<clientAO ")
 	{
