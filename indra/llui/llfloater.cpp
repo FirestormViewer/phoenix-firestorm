@@ -1399,6 +1399,9 @@ void LLFloater::setMinimized(BOOL minimize)
 
 		// Reshape *after* setting mMinimized
 		reshape( mExpandedRect.getWidth(), mExpandedRect.getHeight(), TRUE );
+
+		// <FS:Ansariel> FIRE-7530: Make sure, an un-minimized floater goes to the front
+		setFrontmost();
 	}
 
 	make_ui_sound("UISndWindowClose");
