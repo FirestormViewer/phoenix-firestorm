@@ -258,6 +258,12 @@ void LLFloaterCamera::resetCameraMode()
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
 	if (!floater_camera) return;
 	floater_camera->switchMode(CAMERA_CTRL_MODE_PAN);
+
+	// <FS:Ansariel> Phototools camera
+	floater_camera = LLFloaterCamera::findPhototoolsInstance();
+	if (!floater_camera) return;
+	floater_camera->switchMode(CAMERA_CTRL_MODE_PAN);
+	// <FS:Ansariel>
 }
 
 void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
@@ -266,6 +272,12 @@ void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
 	if (!floater_camera) return;
 	floater_camera->handleAvatarEditingAppearance(editing);
+
+	// <FS:Ansariel> Phototools camera
+	floater_camera = LLFloaterCamera::findPhototoolsInstance();
+	if (!floater_camera) return;
+	floater_camera->handleAvatarEditingAppearance(editing);
+	// <FS:Ansariel>
 }
 
 void LLFloaterCamera::handleAvatarEditingAppearance(bool editing)
@@ -302,12 +314,31 @@ void LLFloaterCamera::toPrevMode()
 			activate_camera_tool();
 		}
 	}
+
+	// <FS:Ansariel> Phototools camera
+	floater_camera = LLFloaterCamera::findPhototoolsInstance();
+	if (floater_camera)
+	{
+		floater_camera->updateItemsSelection();
+		if(floater_camera->inFreeCameraMode())
+		{
+			activate_camera_tool();
+		}
+	}
+	// </FS:Ansariel>
 }
 
 LLFloaterCamera* LLFloaterCamera::findInstance()
 {
 	return LLFloaterReg::findTypedInstance<LLFloaterCamera>("camera");
 }
+
+// <FS:Ansariel> Phototools camera
+LLFloaterCamera* LLFloaterCamera::findPhototoolsInstance()
+{
+	return LLFloaterReg::findTypedInstance<LLFloaterCamera>("phototools_camera");
+}
+// </FS:Ansariel>
 
 void LLFloaterCamera::onOpen(const LLSD& key)
 {
@@ -653,6 +684,43 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 		camera_floater->updateItemsSelection();
 		camera_floater->fromFreeToPresets();
 	}
+
+	// <FS:Ansariel> Phototools camera
+	camera_floater = LLFloaterCamera::findPhototoolsInstance();
+ 
+	if ("reset_view" == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+		gAgentCamera.changeCameraToDefault();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+	}
+	else if ("mouselook_view" == name)
+	{
+		gAgentCamera.changeCameraToMouselook();
+	}
+	else if ("object_view" == name && camera_floater)
+	{
+		if (camera_floater->mUseFlatUI)
+		{
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
+		else
+		{
+			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
+	}
+	else
+	{
+		switchToPreset(name);
+	}
+
+	if (camera_floater)
+	{
+		camera_floater->updateItemsSelection();
+		camera_floater->fromFreeToPresets();
+	}
+	// </FS:Ansariel>
 }
 
 /*static*/

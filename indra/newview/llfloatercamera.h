@@ -90,6 +90,8 @@ private:
 
 	/* return instance if it exists - created by LLFloaterReg */
 	static LLFloaterCamera* findInstance();
+	// <FS:Ansariel> Phototools camera
+	static LLFloaterCamera* findPhototoolsInstance();
 
 	/*virtual*/ BOOL postBuild();
 
