@@ -11,7 +11,7 @@
  chrome="true"
  follows="bottom"
  height="77"
- min_height="20"
+ min_height="77"
  layout="topleft"
  name="camera_floater"
  help_topic="camera_floater"
