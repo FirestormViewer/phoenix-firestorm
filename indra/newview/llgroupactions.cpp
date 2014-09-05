@@ -464,7 +464,7 @@ void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
 	LLFloater* floater = NULL;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		floater = FSFloaterGroup::openGroupFloater(group_id);
+		floater = FSFloaterGroup::openGroupFloater(params);
 	}
 	else
 	{
