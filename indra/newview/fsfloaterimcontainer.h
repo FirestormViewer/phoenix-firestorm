@@ -72,7 +72,7 @@ public:
 	virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {};
 	virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
 	virtual void sessionRemoved(const LLUUID& session_id);
-	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) {};
+	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id);
 
 	static void reloadEmptyFloaters();
 	void initTabs();

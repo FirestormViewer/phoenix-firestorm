@@ -471,4 +471,16 @@ void FSFloaterIMContainer::checkFlashing()
 		gToolBarView->flashCommand(LLCommandId("chat"), false);
 	}
 }
+
+void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id)
+{
+	avatarID_panel_map_t::iterator found = mSessions.find(old_session_id);
+	if (found != mSessions.end())
+	{
+		LLFloater* floaterp = found->second;
+		mSessions.erase(found);
+		mSessions[new_session_id] = floaterp;
+	}
+}
+
 // EOF
