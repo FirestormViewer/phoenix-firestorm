@@ -126,7 +126,7 @@ BOOL UtilityBar::tick()
 		// Note the "sense" of the toggle is opposite whether media is playing or not
 		bool any_media_playing = (LLViewerMedia::isAnyMediaShowing() || 
 								LLViewerMedia::isParcelMediaPlaying());
-		mParcelMediaPlayButton->setValue(any_media_playing);
+		mParcelMediaPlayButton->setImageOverlay(any_media_playing ? "icn_pause.tga" : "icn_play.tga");
 	}
 
 	if(mParcelStreamPlayButton)
@@ -135,7 +135,7 @@ BOOL UtilityBar::tick()
 		bool button_enabled = (audio_streaming_music && LLViewerMedia::hasParcelAudio());
 
 		mParcelStreamPlayButton->setEnabled(button_enabled);
-		mParcelStreamPlayButton->setValue(LLViewerMedia::isParcelAudioPlaying());
+		mParcelStreamPlayButton->setImageOverlay(LLViewerMedia::isParcelAudioPlaying() ? "icn_pause.tga" : "icn_play.tga");
 	}
 
 	if(mTalkButton)
