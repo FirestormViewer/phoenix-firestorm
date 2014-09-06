@@ -143,6 +143,7 @@
 			<check_box label="Odznaczaj pasek czatu po wysłaniu wiadomości" name="CloseChatOnReturn"/>
 			<check_box label="Odznaczaj także historię czatu" name="FSUnfocusChatHistoryOnReturn" left_delta="285"/>
 			<check_box name="FSMarkObjects" label="Oznaczaj obiekty frazą (bez nazwy) gdy wysyłają coś na czat, by zapobiec oszustwom"/>
+			<check_box name="FSTypingChevronPrefix" label="Dodawaj znak (&gt;) w tytułach okien wiadomości IM przed imionami osób, które piszą"/>
 			<text name="group_enhancements">
 				Czat grupowy:
 			</text>
