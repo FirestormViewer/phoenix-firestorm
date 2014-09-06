@@ -46,38 +46,13 @@
 			<button tool_tip="このIMの会話履歴を開きます。" name="im_history_btn" />
         </layout_panel>
       
+       <layout_panel name="send_sysinfo_btn_panel">             
+			<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />
+        </layout_panel>
+      
+       <layout_panel name="support_panel" width="125">             
+			<check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" width="120" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
+        </layout_panel>
+      
 	</layout_stack>
-
-    <!-- Checkbox for FS prefix on support groups -->
-    <check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
-    <!-- END: FS Prefix -->
-	
-	<!--button for sending sys info-->
-	<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />
-	<!--End sys info button-->
-
-	<layout_stack orientation="horizontal" name="im_panels">
-		<layout_panel name="im_control_panel_holder">
-			<panel name="panel_im_control_panel" />
-		</layout_panel>	
-		<layout_panel name="panel_im_control_lp">
-			<layout_stack name="im_panels">
-				<layout_panel name="chat_holder">
-					<fs_chat_history name="chat_history" />
-				</layout_panel>
-				<layout_panel name="chat_layout_panel">
-					<layout_stack name="input_panels">
-						<layout_panel name="input_editor_layout_panel">
-							<chat_editor name="chat_editor" />
-						</layout_panel>
-						<!-- Not added yet, if ever [FS:CR]
-						<layout_panel name="input_button_layout_panel">
-							<button name="minz_btn" tool_tip="メッセージパネルを表示または非表示にします。" />
-						</layout_panel>-->
-					</layout_stack>
-				</layout_panel>
-			</layout_stack>
-		</layout_panel>
-	</layout_stack>
-
 </floater>

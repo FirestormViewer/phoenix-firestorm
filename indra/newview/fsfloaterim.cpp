@@ -526,7 +526,7 @@ BOOL FSFloaterIM::onSendSysinfo(const LLSD& notification, const LLSD& response)
 
 void FSFloaterIM::onSysinfoButtonVisibilityChanged(const LLSD& yes)
 {
-	mSysinfoButton->setVisible(yes.asBoolean() /* && mIsSupportIM */);
+	getChild<LLUICtrl>("send_sysinfo_btn_panel")->setVisible(yes.asBoolean() /* && mIsSupportIM */);
 }
 // support sysinfo button -Zi
 
@@ -568,36 +568,10 @@ void FSFloaterIM::updateCallButton()
 void FSFloaterIM::updateButtons(bool is_call_started)
 {
 	LL_DEBUGS("FSFloaterIM") << "FSFloaterIM::updateButtons" << LL_ENDL;
-	getChild<LLLayoutStack>("ls_control_panel")->reshape(240,20,true);
 	getChildView("end_call_btn_panel")->setVisible( is_call_started);
 	getChildView("voice_ctrls_btn_panel")->setVisible( is_call_started);
 	getChildView("call_btn_panel")->setVisible( ! is_call_started);
 	updateCallButton();
-	
-	// AO: force resize the widget because llpanels don't resize properly on vis change.
-	LL_DEBUGS("FSFloaterIM") << "force resize the widget" << LL_ENDL;
-	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
-	switch (pIMSession->mSessionType)
-	{
-		case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
-		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(230,20,true);
-			break;
-		}
-		case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
-		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(170,20,true);
-			break;
-		}
-		case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
-		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(150,20,true);
-			break;
-		}
-		default:
-			break;
-	}
-	
 }
 
 void FSFloaterIM::changed(U32 mask)
@@ -647,7 +621,7 @@ BOOL FSFloaterIM::postBuild()
 	button->setClickedCallback(boost::bind(&FSFloaterIM::onSlide, this));
 
 	// support sysinfo button -Zi
-	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
+	mSysinfoButton = getChild<LLButton>("send_sysinfo_btn");
 	onSysinfoButtonVisibilityChanged(FALSE);
 	
 	// type-specfic controls
@@ -663,7 +637,6 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
 				
 				LL_DEBUGS("FSFloaterIM") << "adding FSFloaterIM removing/adding particularfriendobserver" << LL_ENDL;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -700,7 +673,6 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(140,20,true);
 				
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION end" << LL_ENDL;
 				break;
@@ -716,7 +688,6 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION end" << LL_ENDL;
 				break;
 			}
@@ -761,17 +732,15 @@ BOOL FSFloaterIM::postBuild()
 
 	childSetCommitCallback("chat_editor", onSendMsg, this);
 
-	LLCheckBoxCtrl* FSPrefixBox = getChild<LLCheckBoxCtrl>("FSSupportGroupChatPrefix_toggle");
-
 	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
-	FSPrefixBox->setVisible(isFSSupportGroup);
+	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);
 
 	// <FS:Zi> Viewer version popup
-	if(isFSSupportGroup)
+	if (isFSSupportGroup)
 	{
 		// check if the dialog was set to ignore
 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
-		if(!templatep.get()->mForm->getIgnored())
+		if (!templatep.get()->mForm->getIgnored())
 		{
 			// if not, give the user a choice, whether to enable the version prefix or not
 			LLSD args;

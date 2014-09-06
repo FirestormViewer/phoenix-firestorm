@@ -26,13 +26,13 @@
     animate="false"
     follows="top|left"
     clip="false"
-    height="27"
+    height="20"
     right="-3"
     left_pad="0"
     layout="topleft"
     orientation="horizontal"
     name="ls_control_panel"
-    top="13"
+    top="20"
     left="3">
     <layout_panel
       auto_resize="false"
@@ -40,7 +40,7 @@
       name="slide_panel"
       top="0"
       layout="topleft"
-      height="24"
+      height="20"
       width="40"
       follows="left|top">
        <button
@@ -68,8 +68,8 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
        <button
         name="group_info_btn"
@@ -77,7 +77,7 @@
         top="0"
         height="20"
         width="24"
-        left_delta="5"
+        left_delta="2"
         image_overlay="profile_icon_24x24"
         image_pressed="PushButton_Press"
         image_pressed_selected="PushButton_Selected_Press"
@@ -95,8 +95,8 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        name="view_profile_btn"
@@ -104,7 +104,7 @@
        top="0"
        height="20"
        width="24"
-       left_delta="5"
+       left_delta="2"
        image_overlay="profile_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -122,14 +122,14 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        height="20"
        top="0"
-       left_delta="5"
+       left_delta="2"
        image_overlay="friends_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -149,7 +149,7 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
+      height="20"
       width="33"
       follows="left|top">
       <menu_button
@@ -161,7 +161,7 @@
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
        layout="topleft"
-       left_delta="5"
+       left_delta="2"
        name="teleport_btn"
        tool_tip="Offer or request a teleport"
        top="0"
@@ -174,14 +174,14 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        top="0"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_overlay="gift_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -201,14 +201,14 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        top="0"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_overlay="sale_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -228,13 +228,13 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_overlay="call_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -255,13 +255,13 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_overlay="call_end_icon_24x24"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
@@ -282,13 +282,13 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
@@ -309,13 +309,13 @@
       user_resize="false"
       top="0"
       layout="topleft"
-      height="24"
-      width="27"
+      height="20"
+      width="26"
       follows="left|top">
       <button
        follows="left|top"
        height="20"
-       left_delta="5"
+       left_delta="2"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
@@ -323,7 +323,7 @@
        image_overlay="Chat_History"
        name="im_history_btn"
        top="0"
-       width="25">
+       width="24">
         <button.commit_callback
          function="IMSession.Menu.Action"
          parameter="history"/>
@@ -336,13 +336,13 @@
      user_resize="false"
      top="0"
      layout="topleft"
-     height="24"
-     width="27"
+     height="20"
+     width="26"
      follows="left|top">
      <button
      follows="left|top"
      height="20"
-     left_delta="5"
+     left_delta="2"
      image_pressed="Info_Press"
      image_pressed_selected="PushButton_Selected_Press"
      image_selected="PushButton_Selected_Press"
@@ -350,23 +350,33 @@
      image_overlay="Info_Off"
      name="send_sysinfo_btn"
      top="0"
-     width="25" />
+     width="24" />
   </layout_panel>
-  </layout_stack>
 
   <!-- Checkbox for FS prefix on support groups -->
-  <check_box
-   control_name="FSSupportGroupChatPrefix2"
-   follows="right|top"
-   height="18"
-   label="Specify version"
-   layout="topleft"
-   top_delta="9"
-   left_delta="246"
-   name="FSSupportGroupChatPrefix_toggle"
-   tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
-   width="135" />
+    <layout_panel
+      name="support_panel"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="20"
+      width="115"
+      follows="left|top">
+      <check_box
+       control_name="FSSupportGroupChatPrefix2"
+       follows="left|top"
+       height="19"
+       label="Specify version"
+       layout="topleft"
+       top="0"
+       left_delta="5"
+       name="FSSupportGroupChatPrefix_toggle"
+       tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
+       width="110" />
   <!-- END: FS Prefix -->
+  </layout_panel>
+  </layout_stack>
 
   <layout_stack
     tab_group="1"

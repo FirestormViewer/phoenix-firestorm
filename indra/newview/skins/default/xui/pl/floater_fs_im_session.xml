@@ -34,19 +34,8 @@
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button tool_tip="Wyślij info systemowe" name="send_sysinfo_btn"/>
 		</layout_panel>
-	</layout_stack>
-	<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki oraz informację o skórce przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
-	<layout_stack name="im_panels">
-		<layout_panel name="panel_im_control_lp">
-			<layout_stack name="im_panels">
-				<layout_panel name="chat_layout_panel">
-					<layout_stack name="input_panels">
-						<!-- <layout_panel name="input_button_layout_panel">
-							<button name="minz_btn" tool_tip="Pokaż/ukryj panel wiadomości"/>
-						</layout_panel> -->
-					</layout_stack>
-				</layout_panel>
-			</layout_stack>
+		<layout_panel name="support_panel">
+			<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki oraz informację o skórce przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
 		</layout_panel>
 	</layout_stack>
 </floater>
