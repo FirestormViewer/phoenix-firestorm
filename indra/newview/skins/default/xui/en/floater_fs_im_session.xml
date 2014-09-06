@@ -41,13 +41,13 @@
       top="0"
       layout="topleft"
       height="20"
-      width="40"
+      width="37"
       follows="left|top">
        <button
         height="20"
         follows="left|top"
         top="0"
-        left="5"
+        left_delta="1"
         image_overlay="TabIcon_Open_Off"
         layout="topleft"
         width="24"
@@ -56,7 +56,7 @@
        height="20"
        follows="left|top"
        top="0"
-       left="5"
+       left_delta="1"
        image_overlay="TabIcon_Close_Off"
        width="24"
        name="slide_right_btn" />
