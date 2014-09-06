@@ -40,8 +40,9 @@
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button tool_tip="Enviar información de tu sistema" name="send_sysinfo_btn"/>
 		</layout_panel>
-		<layout_panel name="support_panel" width="135">
-			<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" width="130" tool_tip="Añade tu versión actual de visor y la información de skin al principio de tus mensajes para ayudar al equipo de soporte a diagnosticar tus problemas correctamente y a mejorar la precisión en las respuestas a tus preguntas"/>
+		<layout_panel name="support_panel" width="120">
+			<icon name="dummy_icon_support_group" width="118"/>
+			<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" width="115" tool_tip="Añade tu versión actual de visor y la información de skin al principio de tus mensajes para ayudar al equipo de soporte a diagnosticar tus problemas correctamente y a mejorar la precisión en las respuestas a tus preguntas"/>
 		</layout_panel>
 	</layout_stack>
 </floater>

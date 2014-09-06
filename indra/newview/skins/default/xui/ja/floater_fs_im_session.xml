@@ -50,8 +50,9 @@
 			<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />
         </layout_panel>
       
-       <layout_panel name="support_panel" width="125">             
-			<check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" width="120" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
+       <layout_panel name="support_panel" width="130">             
+			<icon name="dummy_icon_support_group" width="128"/>
+			<check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" width="125" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
         </layout_panel>
       
 	</layout_stack>

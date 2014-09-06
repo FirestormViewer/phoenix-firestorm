@@ -27,10 +27,10 @@
   <layout_stack
     border_size="0"
     animate="false"
-    follows="top|left"
+    follows="top|left|right"
     clip="false"
     height="20"
-    width="200"
+    right="-3"
     left_pad="0"
     layout="topleft"
     orientation="horizontal"
@@ -55,9 +55,9 @@
       image_overlay="TabIcon_Translate_Off"
       control_name="TranslateChat"
       is_toggle="true"
-      image_pressed="PushButton_Press"
-      image_pressed_selected="PushButton_Selected_Press"
-      image_selected="PushButton_Selected_Press"
+      image_hover_unselected="Toolbar_Middle_Over"
+      image_selected="Toolbar_Middle_Selected"
+      image_unselected="Toolbar_Middle_Off"
       tool_tip="Use selected translation service"
       name="translate_btn"/>
     </layout_panel>
@@ -76,9 +76,9 @@
        height="20"
        left_delta="2"
        image_overlay="Chat_History"
-       image_pressed="PushButton_Press"
-       image_pressed_selected="PushButton_Selected_Press"
-       image_selected="PushButton_Selected_Press"
+       image_hover_unselected="Toolbar_Middle_Over"
+       image_selected="Toolbar_Middle_Selected"
+       image_unselected="Toolbar_Middle_Off"
        tool_tip="Open the nearby chat transcript."
        name="chat_history_btn"/>
      </layout_panel>
@@ -100,15 +100,30 @@
        image_overlay="Muted_Chat"
        control_name="FSShowMutedChatHistory"
        is_toggle="true"
-       image_pressed="PushButton_Press"
-       image_pressed_selected="PushButton_Selected_Press"
-       image_selected="PushButton_Selected_Press"
+       image_hover_unselected="Toolbar_Middle_Over"
+       image_selected="Toolbar_Middle_Selected"
+       image_unselected="Toolbar_Middle_Off"
        tool_tip="Shows the muted chat in nearby chat transcript."
-       name="chat_history_muted_btn">
-		  </button>
-
+       name="chat_history_muted_btn"/>
     </layout_panel>
-    
+    <layout_panel
+      name="lp_bar"
+      auto_resize="true"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="20"
+      follows="left|top|right">
+      <icon
+        follows="left|right"
+        image_name="Toolbar_Middle_Off"
+        left="2"
+        name="dummy_icon"
+        top="0"
+        height="20"
+        right="-1"/>
+    </layout_panel>
+
   </layout_stack>
   <layout_stack
     tab_group="1"
