@@ -19,7 +19,7 @@
     top="2"
     left="10"
     width="267"
-    height="28"
+    height="33"
     layout="topleft"
     follows="right|left"
     text_color="White"
