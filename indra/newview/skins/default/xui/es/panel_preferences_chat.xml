@@ -20,7 +20,6 @@
 				<radio_item label="Grande" name="consradio3"/>
 				<radio_item label="Enorme" name="consradio4"/>
 			</radio_group>
-			<check_box label="Mostrar chats de grupo, local y sesiones de MI siempre en mayúsculas" name="chat_always_in_uppercase"/>
 			<check_box label="Ejecutar la animación de escribir al hacerlo en el chat" name="play_typing_animation"/>
 			<check_box label="Ejecutar animaciones del avatar (como gritar)" name="play_avatar_animations"/>
 			<check_box label="Reproducir sonido de tecleo cuando alguien escribe en el chat local" name="play_typing_sound"/>

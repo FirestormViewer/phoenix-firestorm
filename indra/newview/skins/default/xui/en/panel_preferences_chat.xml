@@ -144,20 +144,12 @@
             </radio_group>
 
             <check_box
-             control_name="FSChatsUppercase"
-             height="16"
-             label="Always display group chats, IM sessions and nearby chat in uppercase"
-             layout="topleft"
-             left="20"
-             name="chat_always_in_uppercase"
-             top_pad="1"
-             width="400" />
-            <check_box
              control_name="PlayTypingAnim"
              height="16"
              initial_value="true"
              label="Play typing animation when chatting"
              layout="topleft"
+             left="20"
              name="play_typing_animation"
              top_pad="1"
              width="400" />

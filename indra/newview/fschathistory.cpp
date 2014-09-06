@@ -971,8 +971,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
 	//IRC styled /me messages.
-	bool irc_me = (prefix == "/me " || prefix == "/me'"
-	 || prefix == "/ME " || prefix == "/ME'");	// <FS>
+	bool irc_me = (prefix == "/me " || prefix == "/me'");
 
 	// Delimiter after a name in header copy/past and in plain text mode
 	std::string delimiter = ": ";
@@ -1290,14 +1289,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
-		// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
-		static LLCachedControl<bool> sFSChatsUppercase(gSavedSettings, "FSChatsUppercase");
-		if (sFSChatsUppercase)
-		{
-			LLStringUtil::toUpper(message);
-			LLStringUtil::toUpper(mLastFromName);
-		}
-		// </FS:PP>
 		if (square_brackets)
 		{
 			message += "]";

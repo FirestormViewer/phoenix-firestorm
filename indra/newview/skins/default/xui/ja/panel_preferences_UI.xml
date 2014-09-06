@@ -152,14 +152,6 @@
         <text name="tooltip_textbox1">
            フォント種類：
         </text>
-        <combo_box name="Fontsettingsfile">
-            <combo_box.item label="Deja Vu" name="tt_item1" value="fonts.xml" />
-            <combo_box.item label="Ubuntuフォントファミリー" name="tt_item2" value="fonts_ubuntu.xml" />
-            <combo_box.item label="Liberation" name="tt_item3" value="fonts_liberation.xml" />
-            <combo_box.item label="Droid Sans" name="tt_item4" value="fonts_droid.xml" />
-            <combo_box.item label="Mobi Sans" name="tt_item5" value="fonts_mobi.xml" />
-            <combo_box.item label="Roboto" name="tt_item6" value="fonts_roboto.xml" />
-        </combo_box>
         <text name="tooltip_textbox2">
            （再起動が必要）
         </text>

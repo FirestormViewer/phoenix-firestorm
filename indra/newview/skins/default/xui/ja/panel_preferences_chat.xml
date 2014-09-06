@@ -21,7 +21,6 @@
 			<radio_item label="大" name="consradio3" value="2"/>
 		</radio_group>
 
-		<check_box label="グループチャット、IM、周辺チャットを常に大文字で表示する" name="chat_always_in_uppercase" />		
 		<check_box initial_value="true" label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
 		<check_box label="アバターのアニメを再生（叫ぶ時など）" name="play_avatar_animations"/>
 		<check_box label="人が会話している時にタイピング音が聞こえるようにする" name="play_typing_sound"/>

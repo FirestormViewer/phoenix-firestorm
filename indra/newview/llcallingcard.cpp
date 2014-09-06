@@ -837,14 +837,6 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();
 
-	// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
-	static LLCachedControl<bool> oFSChatsUppercase(gSavedSettings, "FSChatsUppercase");
-	if (oFSChatsUppercase)
-	{
-		LLStringUtil::toUpper(notify_msg);
-	}
-	// </FS:PP>
-
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
 	// If desired, also send it to nearby chat, this allows friends'
 	// online/offline times to be referenced in chat & logged.

@@ -3858,6 +3858,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
 	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
 	else if (fsInternalFontSettingsFile == "fonts_dyslexia.xml") info["FONT"] = "OpenDyslexic";
+	else if (fsInternalFontSettingsFile == "fonts_deja_vu_all_caps.xml") info["FONT"] = "Deja Vu All Caps";
 	
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
