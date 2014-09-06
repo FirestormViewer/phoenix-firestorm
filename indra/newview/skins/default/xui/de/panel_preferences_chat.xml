@@ -138,7 +138,7 @@
 			<text name="chat_and_im_enhancements">
 				Chat- und IM-Erweiterungen:
 			</text>
-			<check_box name="AllowMUpose" label="&quot;:&quot; als Synonym für &quot;/me&quot; verwenden"/>
+			<check_box name="AllowMUpose" label="„:“ als Synonym für &quot;/me&quot; verwenden"/>
 			<check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden" left_delta="260"/>
 			<check_box name="AutoCloseOOC" label="((OOC))-Klammern automatisch schließen"/>
 			<check_box name="FSEmphasizeShoutWhisper" label="Rufen fett, Flüstern kursiv hervorheben" left_delta="260"/>
@@ -151,6 +151,7 @@
 			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
 			<check_box label="Chatverlauf ebenfalls deaktivieren" name="FSUnfocusChatHistoryOnReturn" left_delta="260"/>
 			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>
+			<check_box name="FSTypingChevronPrefix" label="Zusätzlichen Pfeil (&gt;) als Schreib-Indikator in IM-Fenstern anzeigen"/>
 
 			<!-- Groups -->
 			<text name="group_enhancements">

@@ -1680,7 +1680,7 @@ void FSFloaterIM::addTypingIndicator(const LLIMInfo* im_info)
 
 		// Save and set new title
 		mSavedTitle = getTitle();
-		setTitle (mTypingStart);
+		setTitle((gSavedSettings.getBOOL("FSTypingChevronPrefix") ? "> " : "") + mTypingStart.getString());
 
 		// Update speaker
 		LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);

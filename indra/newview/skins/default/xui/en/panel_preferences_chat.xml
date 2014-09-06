@@ -811,7 +811,7 @@
              name="chat_and_im_enhancements"
              follows="left|top"
              layout="topleft"
-             top_pad="4"
+             top_pad="2"
              left="19"
              height="16"
              width="400">
@@ -822,7 +822,7 @@
              name="AllowMUpose"
              label="&quot;:&quot; as a synonym for &quot;/me&quot;"
              layout="topleft"
-             top_pad="0"
+             top_pad="-3"
              left="30"
              height="18"
              width="200" />
@@ -927,6 +927,16 @@
              name="FSMarkObjects"
              control_name="FSMarkObjects"
              label="Mark objects with (no name) when they speak to avoid spoofing"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="-2"
+             left="30"
+             width="400"
+             height="18"
+             name="FSTypingChevronPrefix"
+             control_name="FSTypingChevronPrefix"
+             label="Add additional chevron (&gt;) as typing indicator to IM sessions"/>
 
             <!-- Groups -->
             <text
@@ -943,7 +953,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-5"
              left="30"
              width="50"
              height="20"
@@ -1169,7 +1179,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="-3"
              left="30"
              width="200"
              height="18"
