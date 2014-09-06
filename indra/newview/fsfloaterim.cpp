@@ -552,14 +552,11 @@ void FSFloaterIM::updateCallButton()
 		return;
 	}
 	
-	//bool session_initialized = session->mSessionInitialized;
+	bool session_initialized = session->mSessionInitialized;
 	bool callback_enabled = session->mCallBackEnabled;
 
-	//[Possible FIX-FIRE-2012] GROUP and Ad-Hoc don't have session initialized --> removing that from the condition to enable_connect
-	//BOOL enable_connect = session_initialized
-	//&& voice_enabled
-	//&& callback_enabled;
-	BOOL enable_connect = voice_enabled
+	BOOL enable_connect = session_initialized
+	&& voice_enabled
 	&& callback_enabled;
 
 	getChild<LLButton>("call_btn")->setEnabled(enable_connect);
@@ -1166,10 +1163,14 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
 		mControlPanel->setSessionId(im_session_id);
 	}
 
-	// updating "Call" button from group control panel here to enable it without placing into draw() (EXT-4796)
-	if(gAgent.isInGroup(im_session_id))
+	// updating "Call" button from group/ad-hoc control panel here to enable it without placing into draw() (EXT-4796)
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im_session_id);
+	if (session)
 	{
-		updateCallButton();
+		if ((session->isGroupSessionType() && gAgent.isInGroup(im_session_id)) || session->isAdHocSessionType())
+		{
+			updateCallButton();
+		}
 	}
 	
 	//*TODO here we should remove "starting session..." warning message if we added it in postBuild() (IB)
