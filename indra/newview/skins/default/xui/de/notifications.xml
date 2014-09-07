@@ -147,7 +147,7 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 	</notification>
 	<notification name="FriendsAndGroupsOnly">
 		Personen, die nicht auf Ihrer Freundesliste stehen, werden nicht informiert, dass Sie ihre Anrufe und Instant Messages ignorieren.
-		<usetemplate name="okbutton" yestext="Ja"/>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FavoritesOnLogin">
 		Hinweis: Bei Aktivierung dieser Option sehen alle Personen, die diesen Computer benutzen, Ihre Lieblingsorte.
