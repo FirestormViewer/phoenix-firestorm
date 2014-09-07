@@ -258,6 +258,7 @@ void FSFloaterContacts::openTab(const std::string& name)
 	else
 	{
 		setVisible(TRUE);
+		setFrontmost();
 	}
 }
 
