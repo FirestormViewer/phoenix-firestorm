@@ -73,6 +73,7 @@ Draw Distance: [DRAW_DISTANCE]
 Bandbreite: [BANDWIDTH]
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
+Erw. Beleuchtungsmodell: [ALMSTATUS]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>

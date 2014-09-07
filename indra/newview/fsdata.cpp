@@ -981,6 +981,7 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
 	sysinfo2 += llformat("LOD Factor: %.3f\n", info["LOD"].asReal());
 	sysinfo2 += llformat("Render quality: %s\n", info["RENDERQUALITY_FSDATA_ENGLISH"].asString().c_str()); // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	sysinfo2 += llformat("ALM enabled: %s\n", info["ALMSTATUS_FSDATA_ENGLISH"].asString().c_str());
 	sysinfo2 += llformat("Texture memory: %d MB (%.2f)\n", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
 	sysinfo2 += "VFS (cache) creation time (UTC) " + info["VFS_DATE"].asString();
 

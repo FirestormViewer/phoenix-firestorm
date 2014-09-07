@@ -4026,6 +4026,19 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 	// </FS:PP>
 
+	// <FS:PP> ALM enabled or disabled
+	if (gSavedSettings.getBOOL("RenderDeferred"))
+	{
+		info["ALMSTATUS"] = LLTrans::getString("PermYes");
+		info["ALMSTATUS_FSDATA_ENGLISH"] = "Yes";
+	}
+	else
+	{
+		info["ALMSTATUS"] = LLTrans::getString("PermNo");
+		info["ALMSTATUS_FSDATA_ENGLISH"] = "No";
+	}
+	// </FS:PP>
+
 	// <FS:Ansariel> FIRE-11768: Include texture memory settings
 	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
 	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");

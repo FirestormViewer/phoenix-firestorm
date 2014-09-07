@@ -35,6 +35,7 @@ Distancia de dibujo (Draw distance): [DRAW_DISTANCE]
 Ancho de banda (Bandwidth): [BANDWIDTH]
 Factor de nivel de detalle (LOD factor): [LOD]
 Calidad de dibujo (Render quality): [RENDERQUALITY]
+Advanced Lightning Model: [ALMSTATUS]
 Memoria de texturas (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	</floater.string>
 	<floater.string name="none">

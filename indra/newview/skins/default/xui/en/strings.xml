@@ -65,6 +65,7 @@ Draw distance: [DRAW_DISTANCE]
 Bandwidth: [BANDWIDTH]
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
+Advanced Lightning Model: [ALMSTATUS]
 Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
   </string>

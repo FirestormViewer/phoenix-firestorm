@@ -62,6 +62,7 @@ Pole widzenia (Draw Distance): [DRAW_DISTANCE]
 Przepustowość (Bandwidth): [BANDWIDTH]
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
+Zaawansowane oświetlenie (Advanced Lightning Model): [ALMSTATUS]
 Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
