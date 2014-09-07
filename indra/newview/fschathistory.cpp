@@ -936,13 +936,14 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	bool square_brackets = false; // square brackets necessary for a system messages
 	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
 	bool is_conversation_log = args.has("conversation_log") && args["conversation_log"].asBoolean();	// <FS:CR> Don't dim chat in conversation log
+	bool is_local = args.has("is_local") && args["is_local"].asBoolean();
 
 	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-	LLViewerChat::getChatColor(chat, txt_color, false);
+	LLViewerChat::getChatColor(chat, txt_color, is_local);
 	LLFontGL* fontp = LLViewerChat::getChatFont();
 	std::string font_name = LLFontGL::nameFromFont(fontp);
 	std::string font_size = LLFontGL::sizeFromFont(fontp);

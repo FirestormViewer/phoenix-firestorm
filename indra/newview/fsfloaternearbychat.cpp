@@ -219,6 +219,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
 	chat_args["show_time"] = show_timestamps_nearby_chat;
+	chat_args["is_local"] = true;
 	mChatHistoryMuted->appendMessage(chat, chat_args);
 	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)
