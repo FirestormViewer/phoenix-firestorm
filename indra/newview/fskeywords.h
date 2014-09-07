@@ -28,11 +28,8 @@
 #define FS_KEYWORDS_H
 
 #include "llsingleton.h"
-#include "llstring.h"
-#include "llchat.h"
 
-class LLViewerRegion;
-
+class LLChat;
 
 class FSKeywords : public LLSingleton<FSKeywords>
 {
@@ -46,8 +43,6 @@ public:
 
 private:
 	std::vector<std::string> mWordList;
-	
-	
 };
 
 #endif // FS_KEYWORDS_H
