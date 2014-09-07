@@ -2788,6 +2788,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//               muted OR the sender is muted and we explicitely want
 		//               to inform him about that fact.
 		else if (offline == IM_ONLINE
+					&& (!accept_im_from_only_friend || is_friend)                                    // is friend or accept IMs from friend only disabled
 					&& ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) || // do not disturb
 						(is_autorespond && !is_muted) ||                                             // autorespond everyone
 						(is_autorespond_nonfriends && !is_friend && !is_muted) ||                    // autorespond friends only
@@ -3023,7 +3024,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLNotificationsUtil::add("SystemMessageTip", args);
 				*/
 				static LLCachedControl<bool> fsSendMutedAvatarResponse(gSavedPerAccountSettings, "FSSendMutedAvatarResponse");
-				if (fsSendMutedAvatarResponse)
+				if (fsSendMutedAvatarResponse && (!accept_im_from_only_friend || is_friend))
 				{
 					std::string my_name;
 					LLAgentUI::buildFullname(my_name);

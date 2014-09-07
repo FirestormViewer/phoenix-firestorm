@@ -3886,6 +3886,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		BOOL is_afk = gAgent.getAFK();
 
 		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
+			(!VoiceCallsFriendsOnly || is_friend) &&
 			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
 			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
 		{
