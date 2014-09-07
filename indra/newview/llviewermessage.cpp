@@ -2803,7 +2803,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// return a standard "do not disturb" message, but only do it to online IM
 			// (i.e. not other auto responses and not store-and-forward IM)
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
-			if (!gIMMgr->hasSession(session_id))
+			// Session id will be null if avatar answers from offline IM via email
+			if (!gIMMgr->hasSession(session_id) && session_id.notNull())
 			{
 			// </FS:Ansariel>
 				// <FS:Ansariel> Log autoresponse notification after initial message
