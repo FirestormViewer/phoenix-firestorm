@@ -57,6 +57,7 @@ class GrowlManager : public LLEventTimer
 public:
 	
 	GrowlManager();
+	~GrowlManager();
 	void notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type);
 	BOOL tick();
 
@@ -64,10 +65,10 @@ public:
 	static bool isUsable();
 
 private:
-	GrowlNotifier *mNotifier;
-	std::map<std::string, GrowlNotification> mNotifications;
-	std::map<std::string, U64> mTitleTimers;
-	LLNotificationChannelPtr mGrowlNotificationsChannel;
+	GrowlNotifier*								mNotifier;
+	std::map<std::string, GrowlNotification>	mNotifications;
+	std::map<std::string, U64>					mTitleTimers;
+	LLNotificationChannelPtr					mGrowlNotificationsChannel;
 	
 	void loadConfig();
 	static bool onLLNotification(const LLSD& notice);
@@ -75,6 +76,10 @@ private:
 	static void onInstantMessage(const LLSD& im);
 	static void onScriptDialog(const LLSD& data);
 	static inline bool shouldNotify();
+
+	LLBoundListener				mNotificationConnection;
+	boost::signals2::connection	mInstantMessageConnection;
+	boost::signals2::connection	mScriptDialogConnection;
 };
 
 extern GrowlManager *gGrowlManager;

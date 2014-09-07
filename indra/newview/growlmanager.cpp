@@ -56,17 +56,22 @@
 
 GrowlManager *gGrowlManager = NULL;
 
-GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
+GrowlManager::GrowlManager()
+	: LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD),
+	mNotifier(NULL),
+	mNotificationConnection(),
+	mInstantMessageConnection(),
+	mScriptDialogConnection()
 {
 	// Create a notifier appropriate to the platform.
 #ifndef LL_LINUX
-	this->mNotifier = new GrowlNotifierWin();
+	mNotifier = new GrowlNotifierWin();
 	LL_INFOS("GrowlManagerInit") << "Created GrowlNotifierWin." << LL_ENDL;
 #elif LL_LINUX
-	this->mNotifier = new DesktopNotifierLinux();
+	mNotifier = new DesktopNotifierLinux();
 	LL_INFOS("GrowlManagerInit") << "Created DesktopNotifierLinux." << LL_ENDL;
 #else
-	this->mNotifier = new GrowlNotifier();
+	mNotifier = new GrowlNotifier();
 	LL_INFOS("GrowlManagerInit") << "Created generic GrowlNotifier." << LL_ENDL;
 #endif
 	
@@ -102,13 +107,34 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 	// We hook into all of them, even though (at the time of writing) nothing uses "alert", so more notifications can be added easily.
 	// Ansa: Hope this works...
 	mGrowlNotificationsChannel = new LLNotificationChannel("GrowlNotifications", "Visible", &filterOldNotifications);
-	LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
+	mNotificationConnection = LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
 
 	// Also hook into IM notifications.
-	LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
+	mInstantMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
 	
 	// Hook into script dialogs
-	LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
+	mScriptDialogConnection = LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
+}
+
+GrowlManager::~GrowlManager()
+{
+	if (mNotificationConnection.connected())
+	{
+		mNotificationConnection.disconnect();
+	}
+	if (mInstantMessageConnection.connected())
+	{
+		mInstantMessageConnection.disconnect();
+	}
+	if (mScriptDialogConnection.connected())
+	{
+		mScriptDialogConnection.disconnect();
+	}
+
+	if (mNotifier)
+	{
+		delete mNotifier;
+	}
 }
 
 void GrowlManager::loadConfig()
@@ -214,7 +240,7 @@ void GrowlManager::notify(const std::string& notification_title, const std::stri
 BOOL GrowlManager::tick()
 {
 	mTitleTimers.clear();
-	return false;
+	return FALSE;
 }
 
 bool GrowlManager::onLLNotification(const LLSD& notice)
@@ -223,6 +249,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 	{
 		return false;
 	}
+
 	LLNotificationPtr notification = LLNotifications::instance().find(notice["id"].asUUID());
 	std::string name = notification->getName();
 	LLSD substitutions = notification->getSubstitutions();
@@ -273,28 +300,29 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 
 bool GrowlManager::filterOldNotifications(LLNotificationPtr pNotification)
 {
-// *HACK: I don't see any better way to avoid getting old, persisted messages...
-return (pNotification->getDate().secondsSinceEpoch() >= LLDate::now().secondsSinceEpoch() - 10);
+	// *HACK: I don't see any better way to avoid getting old, persisted messages...
+	return (pNotification->getDate().secondsSinceEpoch() >= LLDate::now().secondsSinceEpoch() - 10);
 }
 
 void GrowlManager::onInstantMessage(const LLSD& im)
 {
-	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"]);
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"].asUUID());
 	if (session->isP2PSessionType())
 	{
 		// Don't show messages from ourselves or the system.
-		LLUUID from_id = im["from_id"];
-		if (from_id == LLUUID::null || from_id == gAgentID)
+		LLUUID from_id = im["from_id"].asUUID();
+		if (from_id.isNull() || from_id == gAgentID)
 		{
 			return;
 		}
-		std::string message = im["message"];
+
+		std::string message = im["message"].asString();
 		std::string prefix = message.substr(0, 4);
 		if (prefix == "/me " || prefix == "/me'")
 		{
 			message = message.substr(3);
 		}
-		gGrowlManager->notify(im["from"], message, GROWL_IM_MESSAGE_TYPE);
+		gGrowlManager->notify(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
 	}
 }
 
