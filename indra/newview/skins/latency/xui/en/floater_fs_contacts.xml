@@ -38,7 +38,7 @@
      tab_icon_ctrl_pad="2"
      halign="left"
      use_ellipses="true"
-     top="1"
+     top="0"
      width="393">
       <first_tab
        tab_bottom_image_flash="Toolbar_Left_Flash"/>
@@ -72,12 +72,4 @@
 	   right="-1"
 	   name="contact_sets_panel" />
     </tab_container>
-      <icon
-        follows="left|top|right"
-        image_name="Toolbar_Middle_Off"
-        left="244"
-        name="dummy_icon"
-        top="2"
-        height="20"
-        right="-4"/>
 </floater>
