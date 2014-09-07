@@ -80,6 +80,14 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	}
 
 	std::string source(chat.mText);
+
+	// We want to check the source name in case of radar type messages as well
+	// (used for enter/leave and online/offline notifications)
+	if (chat.mChatType == CHAT_TYPE_RADAR)
+	{
+		source = chat.mFromName + " " + source;
+	}
+
 	if (!sFSKeywordCaseSensitive)
 	{
 		LLStringUtil::toLower(source);
