@@ -695,6 +695,7 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	registrar.add("Avatar.Pay",	boost::bind(&LLAvatarActions::pay, mUUIDs.front()));
 	registrar.add("Avatar.Call", boost::bind(&LLAvatarActions::startCall, mUUIDs.front()));
 	registrar.add("Avatar.AddToContactSet", boost::bind(&LLParticipantList::LLParticipantListMenu::handleAddToContactSet, this));
+	registrar.add("Avatar.ZoomIn", boost::bind(&LLAvatarActions::zoomIn, mUUIDs.front()));
 	
 	registrar.add("ParticipantList.ModerateVoice", boost::bind(&LLParticipantList::LLParticipantListMenu::moderateVoice, this, _2));
 
@@ -963,6 +964,10 @@ bool LLParticipantList::LLParticipantListMenu::enableContextMenuItem(const LLSD&
 		return LLGroupActions::canEjectFromGroup(mParent.mSpeakerMgr->getSessionID(), mUUIDs.front());
 	}
 // [/SL:KB]
+	else if (item == "can_zoom_in")
+	{
+		return LLAvatarActions::canZoomIn(mUUIDs.front());
+	}
 
 	return true;
 }
