@@ -101,7 +101,7 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Nie zapisuj" yestext="Zapisz"/>
 	</notification>
 	<notification name="FriendsAndGroupsOnly">
-		Osoby spoza listy znajomych, których rozmowy głosowe i IM są ignorowane, nie wiedzą o tym.
+		Osoby spoza listy znajomych nie będą wiedzieć, że zdecydowałeś/aś się ignorować ich rozmowy głosowe i wiadomości IM.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FavoritesOnLogin">
