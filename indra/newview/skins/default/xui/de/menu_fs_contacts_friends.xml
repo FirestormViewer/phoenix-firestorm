@@ -2,6 +2,7 @@
 <context_menu name="Friends Popup">
 	<menu_item_call label="Profil anzeigen" name="show_agent"/>
 	<menu_item_call label="IM senden" name="send_im"/>
+	<menu_item_call label="Chatverlauf anzeigen..." name="chat_history"/>
 	<menu_item_call label="Zu Kontakt-Set hinzufügen..." name="Add to Set"/>
 	<menu_item_call label="Zoome auf Freund" name="zoom_agent"/>
 	<menu_item_call label="Zu Freund teleportieren" name="teleportto_agent"/>

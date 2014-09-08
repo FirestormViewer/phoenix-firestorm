@@ -17,6 +17,16 @@
          function="Contacts.Friends.SendIM"/>
     </menu_item_call>
     <menu_item_call
+     label="View chat transcripts..."
+     layout="topleft"
+     name="chat_history">
+        <menu_item_call.on_click
+         function="Contacts.Friends.Calllog"/>
+        <menu_item_call.on_enable
+         function="Contacts.Friends.EnableItem"
+         parameter="can_callog"/>
+    </menu_item_call>
+    <menu_item_call
      label="Add to Set..."
      layout="topleft"
      name="Add to Set">

@@ -31,6 +31,7 @@
 
 #include "fsradar.h"
 #include "llavataractions.h"
+#include "lllogchat.h"
 #include "llmenugl.h"
 #include "llslurl.h"
 #include "lluictrlfactory.h"
@@ -49,6 +50,7 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
 		registrar.add("Contacts.Friends.ShowProfile",			boost::bind(&LLAvatarActions::showProfile,						id));
 		registrar.add("Contacts.Friends.RemoveFriend",			boost::bind(&LLAvatarActions::removeFriendDialog, 				id));
 		registrar.add("Contacts.Friends.SendIM",				boost::bind(&LLAvatarActions::startIM,							id));
+		registrar.add("Contacts.Friends.Calllog",				boost::bind(&LLAvatarActions::viewChatHistory,					id));
 		registrar.add("Contacts.Friends.OfferTeleport",			boost::bind(&FSContactsFriendsMenu::offerTeleport,				this));
 		registrar.add("Contacts.Friends.RequestTeleport",		boost::bind(&LLAvatarActions::teleportRequest,					id));
 		registrar.add("Contacts.Friends.ZoomIn",				boost::bind(&LLAvatarActions::zoomIn,							id));
@@ -121,6 +123,14 @@ bool FSContactsFriendsMenu::enableContextMenuItem(const LLSD& userdata)
 		if (mUUIDs.size() == 1)
 		{
 			return (FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+		}
+		return false;
+	}
+	else if (item == std::string("can_callog"))
+	{
+		if (mUUIDs.size() == 1)
+		{
+			return LLLogChat::isTranscriptExist(mUUIDs.front());
 		}
 		return false;
 	}
