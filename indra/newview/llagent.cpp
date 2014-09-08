@@ -4569,6 +4569,11 @@ void LLAgent::handleTeleportFinished()
 
 void LLAgent::handleTeleportFailed()
 {
+    if(LLVoiceClient::instanceExists())
+    {
+        LLVoiceClient::getInstance()->setHidden(FALSE);
+    }
+
 	if (mTeleportRequest != NULL)
 	{
 		mTeleportRequest->setStatus(LLTeleportRequest::kFailed);
