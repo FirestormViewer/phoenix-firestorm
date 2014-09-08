@@ -1550,12 +1550,18 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 			std::string dirname = mTexturesDirName + delem + subdirs[i];
 			LL_INFOS() << "Deleting files in directory: " << dirname << LL_ENDL;
 			gDirUtilp->deleteFilesInDir(dirname, mask);
-			if (purge_directories)
+			// <FS:Ansariel> Only delete folder if it actually exist
+			//if (purge_directories)
+			if (purge_directories && LLFile::isdir(dirname))
+			// </FS:Ansariel>
 			{
 				LLFile::rmdir(dirname);
 			}
 		}
-		if (purge_directories)
+		// <FS:Ansariel> Only delete folder if it actually exist
+		//if (purge_directories)
+		if (purge_directories && LLFile::isdir(mTexturesDirName))
+		// </FS:Ansariel>
 		{
 			gDirUtilp->deleteFilesInDir(mTexturesDirName, mask);
 			LLFile::rmdir(mTexturesDirName);
