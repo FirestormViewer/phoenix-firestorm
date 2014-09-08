@@ -35,7 +35,7 @@
     layout="topleft"
     orientation="horizontal"
     name="ls_control_panel"
-    top="14"
+    top="18"
     left="3">
     <layout_panel
       name="lp_translate_btn"
@@ -111,7 +111,7 @@
     tab_group="1"
     animate="false"
     follows="all"
-    height="308"
+    height="311"
     width="394"
     layout="topleft"
     orientation="horizontal"
@@ -148,7 +148,7 @@
            parse_highlights="true"
            parse_urls="true"
            right="-4"
-           left="4"
+           left="0"
            top="0"
            bottom="-1" />
           <fs_chat_history
@@ -159,7 +159,7 @@
            parse_highlights="true"
            parse_urls="true"
            right="-4"
-           left="4"
+           left="0"
            top="0"
            bottom="-1" />
         </layout_panel>

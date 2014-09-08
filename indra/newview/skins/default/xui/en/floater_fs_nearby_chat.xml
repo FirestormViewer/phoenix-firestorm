@@ -165,7 +165,7 @@
            parse_highlights="true"
            parse_urls="true"
            right="-4"
-           left="4"
+           left="0"
            top="0"
            bottom="-1" />
           <fs_chat_history
@@ -176,7 +176,7 @@
            parse_highlights="true"
            parse_urls="true"
            right="-4"
-           left="4"
+           left="0"
            top="0"
            bottom="-1" />
         </layout_panel>
