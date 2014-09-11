@@ -488,11 +488,17 @@ void LLVoiceClient::setMicGain(F32 volume)
 //------------------------------------------
 // enable/disable voice features
 
-bool LLVoiceClient::voiceEnabled()
+// <FS:Ansariel> Bypass LLCachedControls for voice status update
+//bool LLVoiceClient::voiceEnabled()
+bool LLVoiceClient::voiceEnabled(bool no_cache)
+// </FS:Ansariel>
 {
 	if (mVoiceModule) 
 	{
-		return mVoiceModule->voiceEnabled();
+		// <FS:Ansariel> Bypass LLCachedControls for voice status update
+		//return mVoiceModule->voiceEnabled();
+		return mVoiceModule->voiceEnabled(no_cache);
+		// </FS:Ansariel>
 	}
 	else
 	{

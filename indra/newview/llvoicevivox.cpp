@@ -4720,15 +4720,22 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 	}
 }
 
-bool LLVivoxVoiceClient::voiceEnabled()
+// <FS:Ansariel> Bypass LLCachedControls for voice status update
+//bool LLVivoxVoiceClient::voiceEnabled()
+bool LLVivoxVoiceClient::voiceEnabled(bool no_cache)
 {
 	// <FS:Ansariel> Replace frequently called gSavedSettings
 	//return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	if (no_cache)
+	{
+		return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	}
 	static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "EnableVoiceChat");
 	static LLCachedControl<bool> sCmdLineDisableVoice(gSavedSettings, "CmdLineDisableVoice");
 	return sEnableVoiceChat && !sCmdLineDisableVoice;
 	// </FS:Ansariel>
 }
+// </FS:Ansariel>
 
 void LLVivoxVoiceClient::setLipSyncEnabled(BOOL enabled)
 {
@@ -5474,7 +5481,10 @@ void LLVivoxVoiceClient::notifyStatusObservers(LLVoiceClientStatusObserver::ESta
 	if (   status != LLVoiceClientStatusObserver::STATUS_JOINING
 		&& status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL)
 	{
-		bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+		// <FS:Ansariel> Bypass LLCachedControls for voice status update
+		//bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+		bool voice_status = LLVoiceClient::getInstance()->voiceEnabled(true) && LLVoiceClient::getInstance()->isVoiceWorking();
+		// </FS:Ansariel>
 
 		gAgent.setVoiceConnected(voice_status);
 
