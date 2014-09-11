@@ -1415,7 +1415,7 @@ void LLToolBarButton::setEnabled(BOOL enabled)
 		mImageOverlaySelectedColor = mImageOverlayDisabledColor;
 	}
 // [RLVa:KB] - Checked: 2011-12-17 (RLVa-1.4.5a) | Added: RLVa-1.4.5a
-	LLButton::setEnabled(enabled);
+	//LLButton::setEnabled(enabled); // Ansa: Disabled because of FIRE-5552
 // [/RLVa:KB]
 }
 

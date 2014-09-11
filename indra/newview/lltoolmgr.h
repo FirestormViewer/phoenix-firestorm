@@ -54,8 +54,8 @@ public:
 
 	bool			inEdit();
 	bool			canEdit();
-// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6
-	void			toggleBuildMode();
+// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6 | Ansa: Changed because of FIRE-5552
+	void			toggleBuildMode(const LLSD& sdname = LLSD());
 // [/RLVa:KB]
 //	void			toggleBuildMode(const LLSD& sdname);
 	
