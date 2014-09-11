@@ -251,6 +251,7 @@
 
   <!-- The toolbar itself -->
   <layout_panel name="toolbar_panel"
+                force_resize_bar="true"
                 auto_resize="true"
                 user_resize="true"
                 height="30"
