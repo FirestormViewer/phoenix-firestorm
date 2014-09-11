@@ -444,8 +444,14 @@ void LLConsole::removeExtraLines()
 		mLines.pop_front();
 		mAddTimes.pop_front();
 		mLineLengths.pop_front();
-		mLineColors.pop_front();
-		mLineStyle.pop_front();
+		if (!mLineColors.empty())
+		{
+			mLineColors.pop_front();
+		}
+		if (!mLineStyle.empty())
+		{
+			mLineStyle.pop_front();
+		}
 	}
 	mMutex.unlock();
 }

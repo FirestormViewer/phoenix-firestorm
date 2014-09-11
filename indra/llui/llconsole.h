@@ -168,7 +168,7 @@ public:
 	std::deque<LLFontGL::StyleFlags> mLineStyle;
 
 protected:
-	void removeExtraLines();
+	/*virtual*/ void removeExtraLines();
 
 	void onUrlLabelCallback(const LLUUID& paragraph_id, const std::string& url, const std::string& label);
 // </FS:Ansariel>

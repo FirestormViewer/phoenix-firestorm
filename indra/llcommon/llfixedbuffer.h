@@ -54,7 +54,10 @@ public:
 	void setMaxLines(S32 max_lines);
 	
 protected:
-	void removeExtraLines();
+	// <FS:Ansariel> Added virtual modifier because LLConsole overrides it
+	//void removeExtraLines();
+	virtual void removeExtraLines();
+	// </FS:Ansariel>
 	void addWLine(const LLWString& line);
 
 protected:
