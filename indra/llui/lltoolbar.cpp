@@ -248,7 +248,7 @@ void LLToolBar::initFromParams(const LLToolBar::Params& p)
 	
 	// <FS:Zi> Add alignment options to toolbars
 	// mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
-	mStartCenteringPanel=LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
+	mStartCenteringPanel = LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
 	mCenteringStack->addChild(mStartCenteringPanel);
 	// </FS:Zi>
 
@@ -270,7 +270,7 @@ void LLToolBar::initFromParams(const LLToolBar::Params& p)
 	
 	// <FS:Zi> Add alignment options to toolbars
 	// mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
-	mEndCenteringPanel=LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
+	mEndCenteringPanel = LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
 	mCenteringStack->addChild(mEndCenteringPanel);
 	// </FS:Zi>
 
@@ -761,22 +761,22 @@ void LLToolBar::updateLayoutAsNeeded()
 	std::vector<LLToolBarButton*> buttons_in_row;
 
 	// <FS:Zi> Add equalized and fill layout options
-	S32 full_screen_width=max_length;
-	S32 equalized_width=0;
+	S32 full_screen_width = max_length;
+	S32 equalized_width = 0;
 
-	if(mLayoutStyle==LAYOUT_STYLE_FILL)
+	if (mLayoutStyle == LAYOUT_STYLE_FILL)
 	{
-		if(mButtons.size())
+		if (mButtons.size())
 		{
-			equalized_width=(full_screen_width-mPadBetween*(mButtons.size()+1))/mButtons.size();
+			equalized_width = (full_screen_width - mPadBetween * (mButtons.size() + 1)) / mButtons.size();
 		}
 	}
-	else if(mLayoutStyle==LAYOUT_STYLE_EQUALIZE)
+	else if (mLayoutStyle == LAYOUT_STYLE_EQUALIZE)
 	{
 		BOOST_FOREACH(LLToolBarButton* button, mButtons)
 		{
-			S32 width=button->getInitialWidth();
-			if(width>equalized_width)
+			S32 width = button->getInitialWidth();
+			if (width > equalized_width)
 			{
 				equalized_width=width;
 			}
@@ -788,10 +788,10 @@ void LLToolBar::updateLayoutAsNeeded()
 	{
 		// <FS:Zi> Add equalized and fill layout options
 		// button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
-		if(equalized_width)
+		if (equalized_width)
 		{
-			button->mWidthRange.setRange(button->mWidthRange.getMin(),equalized_width);
-			button->reshape(equalized_width,button->mDesiredHeight);
+			button->mWidthRange.setRange(button->mWidthRange.getMin(), equalized_width);
+			button->reshape(equalized_width, button->mDesiredHeight);
 		}
 		else
 		{
@@ -803,9 +803,9 @@ void LLToolBar::updateLayoutAsNeeded()
 		// <FS:Zi> Add equalized and fill layout options
 		// button_clamped_width = button->mWidthRange.clamp(button->getRect().getWidth());
 		S32 button_clamped_width;
-		if(equalized_width)
+		if (equalized_width)
 		{
-			button_clamped_width=equalized_width;
+			button_clamped_width = equalized_width;
 		}
 		else
 		{
@@ -822,7 +822,7 @@ void LLToolBar::updateLayoutAsNeeded()
 		
 		// wrap if needed
 		if (mWrap
-			&& mLayoutStyle!=LAYOUT_STYLE_FILL		// <FS:Zi> Don't wrap in fill layout mode
+			&& mLayoutStyle != LAYOUT_STYLE_FILL		// <FS:Zi> Don't wrap in fill layout mode
 			&& row_running_length + button_length > max_length	// out of room...
 			&& cur_start != row_pad_start)						// ...and not first button in row
 		{
@@ -870,7 +870,7 @@ void LLToolBar::updateLayoutAsNeeded()
 
 	// <FS:Zi> Add equalized and fill layout options
 	// resizeButtonsInRow(buttons_in_row, max_row_girth);
-	if(!equalized_width)
+	if (!equalized_width)
 	{
 		resizeButtonsInRow(buttons_in_row, max_row_girth);
 	}
@@ -905,17 +905,17 @@ void LLToolBar::updateLayoutAsNeeded()
 	mCenteringStack->updateLayout();
 
 	// <FS:Zi> Apply alignment settings
-	if(mAlignment==ALIGN_CENTER)
+	if (mAlignment == ALIGN_CENTER)
 	{
 		mStartCenteringPanel->setVisible(TRUE);
 		mEndCenteringPanel->setVisible(TRUE);
 	}
-	else if(mAlignment==ALIGN_START)
+	else if (mAlignment == ALIGN_START)
 	{
 		mStartCenteringPanel->setVisible(FALSE);
 		mEndCenteringPanel->setVisible(TRUE);
 	}
-	else if(mAlignment==ALIGN_END)
+	else if (mAlignment == ALIGN_END)
 	{
 		mStartCenteringPanel->setVisible(TRUE);
 		mEndCenteringPanel->setVisible(FALSE);
@@ -1090,17 +1090,17 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	button_p.label = LLTrans::getString(commandp->labelRef());
 	button_p.tool_tip = LLTrans::getString(commandp->tooltipRef());
 
-	// <FS;Zi> Add control_variable and checkbox_control to commands in toolbar if it's not read-only
-	if(!mReadOnly)
+	// <FS:Zi> Add control_variable and checkbox_control to commands in toolbar if it's not read-only
+	if (!mReadOnly)
 	{
-		if(!commandp->controlVariableName().empty())
+		if (!commandp->controlVariableName().empty())
 		{
 			// set up button's control name and make it a toggle, so it works properly
 			button_p.control_name = commandp->controlVariableName();
 			button_p.is_toggle = TRUE;
 		}
 
-		if(!commandp->checkboxControlVariableName().empty())
+		if (!commandp->checkboxControlVariableName().empty())
 		{
 			button_p.checkbox_control = commandp->checkboxControlVariableName();
 		}
@@ -1109,7 +1109,7 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 
 	// <FS:Zi> Do not add an icon if we are using text only buttons
 	// button_p.image_overlay = LLUI::getUIImage(commandp->icon());
-	if(mButtonType!=BTNTYPE_TEXT_ONLY)
+	if (mButtonType != BTNTYPE_TEXT_ONLY)
 	{
 		button_p.image_overlay = LLUI::getUIImage(commandp->icon());
 	}
@@ -1383,9 +1383,9 @@ void LLToolBarButton::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLButton::reshape(mWidthRange.clamp(width), height, called_from_parent);
 	// <FS:Zi> Remember first width this button was set to, so we can calculate the equalized layout
-	if(!mInitialWidth)
+	if (!mInitialWidth)
 	{
-		mInitialWidth=width;
+		mInitialWidth = width;
 	}
 	// </FS:Zi>
 }
@@ -1462,28 +1462,28 @@ LLToolBarEnums::Alignment LLToolBar::getAlignment() const
 // <FS:Zi> Sets the alignment for this panel when loading the XML settings
 void LLToolBar::setAlignment(LLToolBarEnums::Alignment alignment)
 {
-	mAlignment=alignment;
-	mNeedsLayout=true;
+	mAlignment = alignment;
+	mNeedsLayout = true;
 }
 
 // <FS:Zi> Context menu callback function to display checkmarks on alignment options
 BOOL LLToolBar::isAlignment(const LLSD& userdata)
 {
-	BOOL retval=FALSE;
+	BOOL retval = FALSE;
 
-	const std::string alignment=userdata.asString();
+	const std::string alignment = userdata.asString();
 
-	if(alignment=="center")
+	if (alignment == "center")
 	{
-		retval=(mAlignment==ALIGN_CENTER);
+		retval = (mAlignment == ALIGN_CENTER);
 	}
-	else if(alignment=="left" || alignment=="top")
+	else if (alignment == "left" || alignment == "top")
 	{
-		retval=(mAlignment==ALIGN_START);
+		retval = (mAlignment == ALIGN_START);
 	}
-	else if(alignment=="right" || alignment=="bottom")
+	else if (alignment == "right" || alignment == "bottom")
 	{
-		retval=(mAlignment==ALIGN_END);
+		retval = (mAlignment == ALIGN_END);
 	}
 
 	return retval;
@@ -1492,17 +1492,17 @@ BOOL LLToolBar::isAlignment(const LLSD& userdata)
 // <FS:Zi> Context menu callback function to set the alignment on click
 void LLToolBar::onAlignmentChanged(const LLSD& userdata)
 {
-	const std::string alignment=userdata.asString();
+	const std::string alignment = userdata.asString();
 
-	if(alignment=="center")
+	if (alignment == "center")
 	{
 		setAlignment(ALIGN_CENTER);
 	}
-	else if(alignment=="left" || alignment=="top")
+	else if(alignment == "left" || alignment == "top")
 	{
 		setAlignment(ALIGN_START);
 	}
-	else if(alignment=="right" || alignment=="bottom")
+	else if(alignment == "right" || alignment == "bottom")
 	{
 		setAlignment(ALIGN_END);
 	}
@@ -1517,28 +1517,28 @@ LLToolBarEnums::LayoutStyle LLToolBar::getLayoutStyle() const
 // <FS:Zi> Sets the layout style for this panel when loading the XML settings
 void LLToolBar::setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style)
 {
-	mLayoutStyle=layout_style;
-	mNeedsLayout=true;
+	mLayoutStyle = layout_style;
+	mNeedsLayout = true;
 }
 
 // <FS:Zi> Context menu callback function to display checkmarks on layout style options
 BOOL LLToolBar::isLayoutStyle(const LLSD& userdata)
 {
-	BOOL retval=FALSE;
+	BOOL retval = FALSE;
 
-	const std::string layout_style=userdata.asString();
+	const std::string layout_style = userdata.asString();
 
-	if(layout_style=="none")
+	if (layout_style == "none")
 	{
-		retval=(mLayoutStyle==LAYOUT_STYLE_NONE);
+		retval = (mLayoutStyle == LAYOUT_STYLE_NONE);
 	}
-	else if(layout_style=="equalize")
+	else if (layout_style == "equalize")
 	{
-		retval=(mLayoutStyle==LAYOUT_STYLE_EQUALIZE);
+		retval = (mLayoutStyle == LAYOUT_STYLE_EQUALIZE);
 	}
-	else if(layout_style=="fill")
+	else if (layout_style == "fill")
 	{
-		retval=(mLayoutStyle==LAYOUT_STYLE_FILL);
+		retval = (mLayoutStyle == LAYOUT_STYLE_FILL);
 	}
 
 	return retval;
@@ -1547,17 +1547,17 @@ BOOL LLToolBar::isLayoutStyle(const LLSD& userdata)
 // <FS:Zi> Context menu callback function to set the layout style on click
 void LLToolBar::onLayoutStyleChanged(const LLSD& userdata)
 {
-	const std::string layout_style=userdata.asString();
+	const std::string layout_style = userdata.asString();
 
-	if(layout_style=="none")
+	if (layout_style == "none")
 	{
 		setLayoutStyle(LAYOUT_STYLE_NONE);
 	}
-	else if(layout_style=="equalize")
+	else if (layout_style == "equalize")
 	{
 		setLayoutStyle(LAYOUT_STYLE_EQUALIZE);
 	}
-	else if(layout_style=="fill")
+	else if (layout_style == "fill")
 	{
 		setLayoutStyle(LAYOUT_STYLE_FILL);
 	}

@@ -248,24 +248,24 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 	mDragHandleShift(p.drag_handle_shift)
 {
 	// <FS:Zi> Set up settings control to save sizes if not already present
-	if(mSaveSizes)
+	if (mSaveSizes)
 	{
-		std::string res=std::string("layout_size_")+getName();
-		LLStringUtil::replaceChar(res,' ','_');
-		mSizeControlName=res;
-		LLControlGroup* controlGroup=LLUI::sSettingGroups["config"];
-		if(!controlGroup->controlExists(mSizeControlName))
+		std::string res = std::string("layout_size_") + getName();
+		LLStringUtil::replaceChar(res, ' ', '_');
+		mSizeControlName = res;
+		LLControlGroup* controlGroup = LLUI::sSettingGroups["config"];
+		if (!controlGroup->controlExists(mSizeControlName))
 		{
 			LL_WARNS() << "declaring control " << mSizeControlName << LL_ENDL;
 			controlGroup->declareLLSD(
 				mSizeControlName,
 				LLSD(),
 				llformat("Fractional size for layout panel %s", getName().c_str())
-				); //<FS:TM> 3.6.4 check this, persist thing
+				);
 		}
 		else
 		{
-			mSavedSizes=LLControlGroup::getInstance("Global")->getLLSD(mSizeControlName);
+			mSavedSizes = LLControlGroup::getInstance("Global")->getLLSD(mSizeControlName);
 		}
 	}
 	// </FS:Zi>
@@ -345,22 +345,22 @@ bool LLLayoutStack::addChild(LLView* child, S32 tab_group)
 	if (panelp)
 	{
 		// <FS:Zi> Restore previously saved sizes
-		if(mSaveSizes && mSavedSizes.size()!=0)
+		if (mSaveSizes && mSavedSizes.size() != 0)
 		{
-			S32 width=panelp->getRect().getWidth();
-			S32 height=panelp->getRect().getHeight();
+			S32 width = panelp->getRect().getWidth();
+			S32 height = panelp->getRect().getHeight();
 
-			S32 dim=mSavedSizes[getChildCount()];
+			S32 dim = mSavedSizes[getChildCount()];
 
-			if(mOrientation==LLLayoutStack::HORIZONTAL)
+			if (mOrientation == LLLayoutStack::HORIZONTAL)
 			{
-				width=dim;
+				width = dim;
 			}
 			else
 			{
-				height=dim;
+				height = dim;
 			}
-			panelp->reshape(width,height,TRUE);
+			panelp->reshape(width, height, TRUE);
 		}
 		// </FS:Zi>
 
@@ -565,18 +565,18 @@ void LLLayoutStack::updateLayout()
 		panelp->mResizeBar->setShape(resize_bar_rect);
 
 		// <FS:Zi> Record new size for this panel
-		if(mSaveSizes)
+		if (mSaveSizes)
 		{
-			mSavedSizes[index]=panelp->mTargetDim;
+			mSavedSizes[index] = panelp->mTargetDim;
 			index++;
 		}
 		// </FS:Zi>
 	}
 
 	// <FS:Zi> Save new sizes for this layout stack's panels
-	if(mSaveSizes)
+	if (mSaveSizes)
 	{
-		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName,mSavedSizes);
+		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName, mSavedSizes);
 	}
 	// </FS:Zi>
 

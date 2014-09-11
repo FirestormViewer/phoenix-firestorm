@@ -513,7 +513,7 @@ void LLIMModel::setActiveSessionID(const LLUUID& session_id)
 	}
 
 	mActiveSessionID = session_id;
-		}
+}
 // </FS:Ansariel> [FS communication UI]
 
 void on_new_message(const LLSD& msg)
