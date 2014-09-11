@@ -99,9 +99,9 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 void FSKeywords::notify(const LLChat& chat)
 {
-	if (chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM)
+	if (chat.mFromID != gAgentID || chat.mFromName == SYSTEM_FROM)
 	{
-		if (!LLMuteList::getInstance()->isMuted(chat.mFromID))
+		if (!LLMuteList::getInstance()->isMuted(chat.mFromID) && !chat.mMuted)
 		{
 			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedSettings, "PlayModeUISndFSKeywordSound");
 			if (PlayModeUISndFSKeywordSound)
