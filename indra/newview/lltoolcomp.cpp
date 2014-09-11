@@ -840,7 +840,7 @@ BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 		gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
 		gSavedSettings.setF32("CameraAngle", vTemp.mV[VY]);
 	}
-	else if (clicks > 0)
+	else if (clicks > 0 && gSavedSettings.getBOOL("FSScrollWheelExitsMouselook"))
 	// NaCl End
 	{
 		gAgentCamera.changeCameraToDefault();

@@ -227,6 +227,18 @@
          top_pad="2"
          width="256" />
         <check_box
+         control_name="FSScrollWheelExitsMouselook"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         initial_value="true"
+         label="Leave Mouselook using the scroll wheel"
+         layout="topleft"
+         name="FSScrollWheelExitsMouselook"
+         tool_tip="If enabled, turning the scroll wheel on the mouse will exit Mouselook"
+         top_pad="2"
+         width="256" />
+        <check_box
          control_name="FSShowMouselookInstructions"
          follows="left|top"
          enabled_control="EnableMouselook"
