@@ -641,7 +641,10 @@ bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 // Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 bool RlvUIEnabler::isBuildEnabled()
 {
-	return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	// <FS:Ansariel> FIRE-1432: Build button not properly updated
+	//return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	return (LLViewerParcelMgr::getInstance()->allowAgentBuild()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	// </FS:Ansariel>
 }
 
 // ============================================================================
