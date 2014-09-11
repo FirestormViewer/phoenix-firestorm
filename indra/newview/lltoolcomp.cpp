@@ -830,15 +830,15 @@ void	LLToolCompGun::handleDeselect()
 BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// NaCl - Rightclick-mousewheel zoom
-	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
-	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
-	LLVector3 vTemp=_NACL_MLFovValues;
-	vTemp.mV[1]=CameraAngle;
-	if(vTemp.mV[2] > 0.0f)
+	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings, "_NACL_MLFovValues");
+	static LLCachedControl<F32> CameraAngle(gSavedSettings, "CameraAngle");
+	LLVector3 vTemp = _NACL_MLFovValues;
+	vTemp.mV[VY] = CameraAngle;
+	if (vTemp.mV[VZ] > 0.0f)
 	{
-		vTemp.mV[1]=llclamp((vTemp.mV[1])+(F32)(clicks*0.1),LLViewerCamera::getInstance()->getMinView(),LLViewerCamera::getInstance()->getMaxView());
-		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-		gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+		vTemp.mV[VY] = llclamp(vTemp.mV[VY] + (F32)(clicks * 0.1f), LLViewerCamera::getInstance()->getMinView(), LLViewerCamera::getInstance()->getMaxView());
+		gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
+		gSavedSettings.setF32("CameraAngle", vTemp.mV[VY]);
 	}
 	else if (clicks > 0)
 	// NaCl End
