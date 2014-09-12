@@ -70,7 +70,7 @@ public:
 
 	void apply();
 	void cancel();
-	///*virtual*/ void draw();
+	/*virtual*/ void draw();
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);

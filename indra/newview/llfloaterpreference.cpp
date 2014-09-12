@@ -783,16 +783,25 @@ LLFloaterPreference::~LLFloaterPreference()
 	LLConversationLog::instance().removeObserver(this);
 }
 
-//void LLFloaterPreference::draw()
-//{
-//	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
-//	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
-//	
-//	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
-//	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
-//	
-//	LLFloater::draw();
-//}
+void LLFloaterPreference::draw()
+{
+	// <FS:Ansariel> Performance improvement
+	//BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
+	//gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
+	//
+	//has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
+	//gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
+
+	static LLScrollListCtrl* disabled_popups = getChild<LLScrollListCtrl>("disabled_popups");
+	static LLScrollListCtrl* enabled_popups = getChild<LLScrollListCtrl>("enabled_popups");
+	BOOL has_first_selected = disabled_popups->getFirstSelected() != NULL;
+	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
+	has_first_selected = enabled_popups->getFirstSelected() != NULL;
+	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
+	// </FS:Ansariel>
+
+	LLFloater::draw();
+}
 
 void LLFloaterPreference::saveSettings()
 {
