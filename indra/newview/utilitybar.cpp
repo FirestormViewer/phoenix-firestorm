@@ -43,7 +43,8 @@ UtilityBar::UtilityBar() :
 	mVolumeControlsInterfaceButton(NULL),
 	mParcelMediaPlayButton(NULL),
 	mParcelStreamPlayButton(NULL),
-	mTalkButton(NULL)
+	mTalkButton(NULL),
+	mPTTButton(NULL)
 {
 	// Tried to do this cleanly with callbacks and controls, but ran into dead ends on every approach.
 	// This helper class works, but I am not at all satisfied with it. -Zi
@@ -69,6 +70,7 @@ void UtilityBar::init()
 	mTalkButton = rootView->findChild<LLButton>("utility_talk_button");
 	mAOInterfaceButton = rootView->findChild<LLButton>("show_ao_interface_button");
 	mVolumeControlsInterfaceButton = rootView->findChild<LLButton>("show_volume_controls_button");
+	mPTTButton = rootView->findChild<LLButton>("utility_push_to_talk_lock_button");
 
 	if (mParcelStreamPlayButton)
 	{
@@ -140,7 +142,11 @@ BOOL UtilityBar::tick()
 
 	if (mTalkButton)
 	{
-		mTalkButton->setValue(gAgent.isMicrophoneOn(LLSD()));
+		mTalkButton->setEnabled(LLAgent::isActionAllowed(LLSD("speak")));
+	}
+	if (mPTTButton)
+	{
+		mPTTButton->setEnabled(LLAgent::isActionAllowed(LLSD("speak")));
 	}
 
 	return FALSE;

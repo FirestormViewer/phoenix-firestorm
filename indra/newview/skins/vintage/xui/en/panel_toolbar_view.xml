@@ -425,7 +425,6 @@
           left_pad="2"
           layout="topleft"
           follows="bottom|left"
-          enabled_control="ParcelAllowsVoice"
           width="56">
 <!-- Done in code for now -Zi
   <mouse_down_callback
@@ -446,7 +445,6 @@
           image_selected="ptt_lock_on.tga"
           image_unselected="ptt_lock_off.tga"
           control_name="PushToTalkToggle"
-          enabled_control="ParcelAllowsVoice"
           is_toggle="true"
           height="16"
           left_delta="4"

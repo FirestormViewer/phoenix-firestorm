@@ -1189,7 +1189,6 @@ void LLStatusBar::updateParcelIcons()
 	}
 
 	layoutParcelIcons();
-	gSavedSettings.setBOOL("ParcelAllowsVoice",allow_voice);	// <FS:Zi> set internal control for button state changing
 }
 
 void LLStatusBar::updateHealth()

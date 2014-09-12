@@ -485,7 +485,6 @@
 						 width="56"
 						 follows="bottom|left"
 						 layout="topleft"
-						 enabled_control="ParcelAllowsVoice"
 						 pad_left="10"
 						>
 							<!-- Done in code for now -Zi
@@ -511,7 +510,6 @@
 						 follows="bottom|left"
 						 layout="topleft"
 						 control_name="PushToTalkToggle"
-						 enabled_control="ParcelAllowsVoice"
 						 image_selected="ptt_lock_on.tga"
 						 image_unselected="ptt_lock_off.tga"
 						 is_toggle="true"

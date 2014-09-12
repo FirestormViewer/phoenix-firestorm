@@ -55,6 +55,7 @@ class UtilityBar
 		LLButton* mTalkButton;
 		LLButton* mAOInterfaceButton;
 		LLButton* mVolumeControlsInterfaceButton;
+		LLButton* mPTTButton;
 };
 
 #endif // UTILITYBAR_H
