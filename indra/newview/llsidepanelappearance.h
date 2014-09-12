@@ -92,7 +92,7 @@ private:
 
 	LLButton*					mOpenOutfitBtn;
 	LLButton*					mEditAppearanceBtn;
-	LLButton*					mNewOutfitBtn;
+	//LLButton*					mNewOutfitBtn; // <FS:Ansariel> Disabled as of 12-09-2014
 	LLPanel*					mCurrOutfitPanel;
 
 	LLTextBox*					mCurrentLookName;
