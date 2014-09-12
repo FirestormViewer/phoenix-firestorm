@@ -4,4 +4,14 @@
 	<menu_item_call label="Zu Kontakt-Set hinzufügen..." name="Add to Set"/>
 	<menu_item_call label="Teleport anbieten" name="offer_teleport"/>
 	<menu_item_call label="Freunde entfernen..." name="remove_friend"/>
+	<menu name="options" label="Optionen...">
+		<menu_item_check label="Benutzername anzeigen" name="show_username"/>
+		<menu_item_check label="Anzeigename anzeigen" name="show_displayname"/>
+		<menu_item_check label="Vollständiger Name anzeigen" name="show_fullname"/>
+		<menu_item_check label="Berechtigungen anzeigen" name="show_permissions"/>
+		<menu_item_check label="Sortieren nach Benutzername" name="sort_by_username"/>
+		<menu_item_check label="Sortieren nach Anzeigename" name="sort_by_displayname"/>
+		<menu_item_check label="Format vollstänger Name: Benutzername (Anzeigename)" name="format_username_displayname"/>
+		<menu_item_check label="Format vollstänger Name: Anzeigename (Benutzername)" name="format_displayname_username"/>
+	</menu>
 </context_menu>

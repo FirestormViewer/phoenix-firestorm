@@ -36,4 +36,100 @@
          function="Contacts.Friends.EnableItem"
          parameter="remove_friend"/>
     </menu_item_call>
+    <menu_item_separator/>
+    <menu name="options" label="Options...">
+        <menu_item_check
+         label="Show username column"
+         name="show_username">
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSFriendListColumnShowUserName"/>
+            <menu_item_check.on_check
+             control="FSFriendListColumnShowUserName"/>
+            <menu_item_check.on_enable
+             function="Contacts.Friends.EnableItem"
+             parameter="FSFriendListColumnShowUserName"/>
+        </menu_item_check>
+        <menu_item_check
+         label="Show display name column"
+         name="show_displayname">
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSFriendListColumnShowDisplayName"/>
+            <menu_item_check.on_check
+             control="FSFriendListColumnShowDisplayName"/>
+            <menu_item_check.on_enable
+             function="Contacts.Friends.EnableItem"
+             parameter="FSFriendListColumnShowDisplayName"/>
+        </menu_item_check>
+        <menu_item_check
+         label="Show full name column"
+         name="show_fullname">
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSFriendListColumnShowFullName"/>
+            <menu_item_check.on_check
+             control="FSFriendListColumnShowFullName"/>
+            <menu_item_check.on_enable
+             function="Contacts.Friends.EnableItem"
+             parameter="FSFriendListColumnShowFullName"/>
+        </menu_item_check>
+        <menu_item_check
+         label="Show permission columns"
+         name="show_permissions">
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSFriendListColumnShowPermissions"/>
+            <menu_item_check.on_check
+             control="FSFriendListColumnShowPermissions"/>
+        </menu_item_check>
+        <menu_item_separator/>
+        <menu_item_check
+         label="Sort by username"
+         name="sort_by_username">
+            <menu_item_check.on_click
+             function="Contacts.Friends.SelectOption"
+             parameter="sort_by_username"/>
+            <menu_item_check.on_check
+             function="Contacts.Friends.CheckOption"
+             parameter="sort_by_username"/>
+        </menu_item_check>
+        <menu_item_check
+         label="Sort by display name"
+         name="sort_by_displayname">
+            <menu_item_check.on_click
+             function="Contacts.Friends.SelectOption"
+             parameter="sort_by_displayname"/>
+            <menu_item_check.on_check
+             function="Contacts.Friends.CheckOption"
+             parameter="sort_by_displayname"/>
+        </menu_item_check>
+        <menu_item_separator/>
+        <menu_item_check
+         label="Full name format Username (Display name)"
+         name="format_username_displayname">
+            <menu_item_check.on_click
+             function="Contacts.Friends.SelectOption"
+             parameter="format_username_displayname"/>
+            <menu_item_check.on_check
+             function="Contacts.Friends.CheckOption"
+             parameter="format_username_displayname"/>
+            <menu_item_check.on_enable
+             function="Contacts.Friends.EnableItem"
+             parameter="FSFriendListFullNameFormat"/>
+        </menu_item_check>
+        <menu_item_check
+         label="Full name format Display name (Username)"
+         name="format_displayname_username">
+            <menu_item_check.on_click
+             function="Contacts.Friends.SelectOption"
+             parameter="format_displayname_username"/>
+            <menu_item_check.on_check
+             function="Contacts.Friends.CheckOption"
+             parameter="format_displayname_username"/>
+            <menu_item_check.on_enable
+             function="Contacts.Friends.EnableItem"
+             parameter="FSFriendListFullNameFormat"/>
+        </menu_item_check>
+    </menu>
 </context_menu>

@@ -36,6 +36,7 @@
 #include "llslurl.h"
 #include "lluictrlfactory.h"
 #include "llurlaction.h"
+#include "llviewercontrol.h"
 
 FSContactsFriendsMenu gFSContactsFriendsMenu;
 
@@ -60,9 +61,11 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
 		registrar.add("Contacts.Friends.TrackAvatar",			boost::bind(&FSContactsFriendsMenu::onTrackAvatarMenuItemClick,	this));
 		registrar.add("Contacts.Friends.CopyLabel",				boost::bind(&FSContactsFriendsMenu::copyNameToClipboard,		this, id));
 		registrar.add("Contacts.Friends.CopyUrl",				boost::bind(&FSContactsFriendsMenu::copySLURLToClipboard,		this, id));
+		registrar.add("Contacts.Friends.SelectOption",			boost::bind(&FSContactsFriendsMenu::selectOption,				this, _2));
 
 		enable_registrar.add("Contacts.Friends.EnableItem",		boost::bind(&FSContactsFriendsMenu::enableContextMenuItem,		this, _2));
 		enable_registrar.add("Contacts.Friends.EnableZoomIn",	boost::bind(&LLAvatarActions::canZoomIn,						id));
+		enable_registrar.add("Contacts.Friends.CheckOption",	boost::bind(&FSContactsFriendsMenu::checkOption,				this, _2));
 
 		return createFromFile("menu_fs_contacts_friends.xml");
 	}
@@ -72,8 +75,10 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
 		registrar.add("Contacts.Friends.OfferTeleport",			boost::bind(&FSContactsFriendsMenu::offerTeleport,				this));
 		registrar.add("Contacts.Friends.RemoveFriend",			boost::bind(&LLAvatarActions::removeFriendsDialog,				mUUIDs));
 		registrar.add("Contacts.Friends.AddToContactSet",		boost::bind(&FSContactsFriendsMenu::addToContactSet,			this));
+		registrar.add("Contacts.Friends.SelectOption",			boost::bind(&FSContactsFriendsMenu::selectOption,				this, _2));
 
 		enable_registrar.add("Contacts.Friends.EnableItem",		boost::bind(&FSContactsFriendsMenu::enableContextMenuItem,		this, _2));
+		enable_registrar.add("Contacts.Friends.CheckOption",	boost::bind(&FSContactsFriendsMenu::checkOption,				this, _2));
 		
 		return createFromFile("menu_fs_contacts_friends_multiselect.xml");
 	}
@@ -126,13 +131,32 @@ bool FSContactsFriendsMenu::enableContextMenuItem(const LLSD& userdata)
 		}
 		return false;
 	}
-	else if (item == std::string("can_callog"))
+	else if (item == "can_callog")
 	{
 		if (mUUIDs.size() == 1)
 		{
 			return LLLogChat::isTranscriptExist(mUUIDs.front());
 		}
 		return false;
+	}
+	else if (item == "FSFriendListColumnShowUserName")
+	{
+		return (gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") ||
+			gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	}
+	else if (item == "FSFriendListColumnShowDisplayName")
+	{
+		return (gSavedSettings.getBOOL("FSFriendListColumnShowUserName") ||
+			gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	}
+	else if (item == "FSFriendListColumnShowFullName")
+	{
+		return (gSavedSettings.getBOOL("FSFriendListColumnShowUserName") ||
+			gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
+	}
+	else if (item == "FSFriendListFullNameFormat")
+	{
+		return gSavedSettings.getBOOL("FSFriendListColumnShowFullName");
 	}
 	return false;
 }
@@ -169,3 +193,48 @@ void FSContactsFriendsMenu::copySLURLToClipboard(const LLUUID& id)
 	LLUrlAction::copyURLToClipboard(LLSLURL("agent", id, "about").getSLURLString());
 }
 
+void FSContactsFriendsMenu::selectOption(const LLSD& userdata)
+{
+	std::string option = userdata.asString();
+
+	if (option == "sort_by_username")
+	{
+		gSavedSettings.setS32("FSFriendListSortOrder", 0);
+	}
+	else if (option == "sort_by_displayname")
+	{
+		gSavedSettings.setS32("FSFriendListSortOrder", 1);
+	}
+	else if (option == "format_username_displayname")
+	{
+		gSavedSettings.setS32("FSFriendListFullNameFormat", 0);
+	}
+	else if (option == "format_displayname_username")
+	{
+		gSavedSettings.setS32("FSFriendListFullNameFormat", 1);
+	}
+}
+
+bool FSContactsFriendsMenu::checkOption(const LLSD& userdata)
+{
+	std::string option = userdata.asString();
+
+	if (option == "sort_by_username")
+	{
+		return (gSavedSettings.getS32("FSFriendListSortOrder") == 0);
+	}
+	else if (option == "sort_by_displayname")
+	{
+		return (gSavedSettings.getS32("FSFriendListSortOrder") == 1);
+	}
+	else if (option == "format_username_displayname")
+	{
+		return (gSavedSettings.getS32("FSFriendListFullNameFormat") == 0);
+	}
+	else if (option == "format_displayname_username")
+	{
+		return (gSavedSettings.getS32("FSFriendListFullNameFormat") == 1);
+	}
+
+	return false;
+}

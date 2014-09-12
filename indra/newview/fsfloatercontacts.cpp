@@ -167,6 +167,7 @@ BOOL FSFloaterContacts::postBuild()
 	gSavedSettings.getControl("FSFriendListColumnShowUserName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowUserName"));
 	gSavedSettings.getControl("FSFriendListColumnShowDisplayName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowDisplayName"));
 	gSavedSettings.getControl("FSFriendListColumnShowFullName")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, "FSFriendListColumnShowFullName"));
+	gSavedSettings.getControl("FSFriendListColumnShowPermissions")->getSignal()->connect(boost::bind(&FSFloaterContacts::onColumnDisplayModeChanged, this, std::string()));
 	onColumnDisplayModeChanged();
 
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
@@ -1091,6 +1092,8 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 	std::vector<LLScrollListColumn::Params> column_params = mFriendsList->getColumnInitParams();
 
 	mFriendsList->clearColumns();
+	mFriendsList->updateLayout();
+
 	for (std::vector<LLScrollListColumn::Params>::iterator it = column_params.begin(); it != column_params.end(); ++it)
 	{
 		LLScrollListColumn::Params p = *it;
@@ -1155,6 +1158,30 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 			}
 			mFriendsList->addColumn(params);
 		}
+		else if (p.name.getValue() == "icon_visible_online" ||
+			p.name.getValue() == "icon_visible_map" ||
+			p.name.getValue() == "icon_edit_mine" ||
+			p.name.getValue() == "icon_visible_map_theirs" ||
+			p.name.getValue() == "icon_edit_theirs")
+		{
+			LLScrollListColumn::Params params;
+			params.header = p.header;
+			params.name = p.name;
+			params.halign = p.halign;
+			params.sort_direction = p.sort_direction;
+			params.sort_column = p.sort_column;
+			params.tool_tip = p.tool_tip;
+
+			if (gSavedSettings.getBOOL("FSFriendListColumnShowPermissions"))
+			{
+				params.width = p.width;
+			}
+			else
+			{
+				params.width.pixel_width.set(-1, true);
+			}
+			mFriendsList->addColumn(params);
+		}
 		else
 		{
 			mFriendsList->addColumn(p);
@@ -1163,6 +1190,7 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 	}
 
 	mFriendsList->dirtyColumns();
+	mFriendsList->updateColumns(true); // Force update or icons don't properly hide if permission columns are hidden
 
 	// primary sort = online status, secondary sort = name
 	if (gSavedSettings.getS32("FSFriendListSortOrder"))

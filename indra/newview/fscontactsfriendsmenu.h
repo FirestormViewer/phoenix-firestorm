@@ -42,6 +42,8 @@ private:
 	void addToContactSet();
 	void copyNameToClipboard(const LLUUID& id);
 	void copySLURLToClipboard(const LLUUID& id);
+	void selectOption(const LLSD& userdata);
+	bool checkOption(const LLSD& userdata);
 };
 
 extern FSContactsFriendsMenu gFSContactsFriendsMenu;

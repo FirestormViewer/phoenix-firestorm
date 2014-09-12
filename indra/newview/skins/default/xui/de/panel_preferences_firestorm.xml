@@ -52,7 +52,7 @@
 			<radio_item label="Benutzern. (Anzeigen.)" name="username_displayname" width="140"/>
 			<radio_item label="Anzeigen. (Benutzern.)" name="displayname_username" width="140"/>
 		</radio_group>
-		<check_box label="Kontaktliste immer nach Benutzername sortieren" name="sortcontactsbyun" tool_tip="Sortiert Kontaktlisten immer anhand des Benutzernamens, auch wenn Anzeigenamen aktiviert sind."/>
+		<check_box label="Berechtigungsspalte anzeigen" name="FSFriendListColumnShowPermissions" tool_tip="Die Kontaktliste zeigt eine Spalte mit Berechtigungen an, die diesem Avatar gegeben wurden - und umgekehrt."/>
 		<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
 		<check_box label="Ordner &quot;Erhaltene Artikel&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Erhaltene Artikel&quot; als normaler Ordner im Inventar angezeigt."/>
