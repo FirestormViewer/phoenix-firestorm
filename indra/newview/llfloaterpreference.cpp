@@ -2337,16 +2337,16 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("send_im_to_email")->setEnabled(TRUE);
 	getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
 	getChildView("favorites_on_login_check")->setEnabled(TRUE);
-	getChildView("log_path_button")->setEnabled(TRUE);
+	//getChildView("log_path_button")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
 	getChildView("chat_font_size")->setEnabled(TRUE);
-	getChildView("open_log_path_button")->setEnabled(TRUE);
+	//getChildView("open_log_path_button")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
 	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
 	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
 	std::string Chatlogsdir = gDirUtilp->getOSUserAppDir();
 	
 	getChildView("conversation_log_combo")->setEnabled(TRUE);	// <FS:CR>
 	getChildView("LogNearbyChat")->setEnabled(TRUE);	// <FS:CR>
-	getChildView("log_nearby_chat")->setEnabled(TRUE);	// <FS:CR> Readd after CHUI merge
+	//getChildView("log_nearby_chat")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
 	//[FIX FIRE-2765 : SJ] Set Chatlog Reset Button on enabled when Chatlogpath isn't the default folder
 	if (gSavedPerAccountSettings.getString("InstantMessageLogPath") != gDirUtilp->getOSUserAppDir())
 	{
