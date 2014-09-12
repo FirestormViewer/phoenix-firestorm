@@ -3058,7 +3058,7 @@ public:
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
 	/*virtual*/ BOOL postBuild()
 	{
-		getChild<LLUICtrl>("DebugLookAt")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClickDebugLookAt, this, _2));
+		getChild<LLUICtrl>("showlookat")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClickDebugLookAt, this, _2));
 		gSavedPerAccountSettings.getControl("DebugLookAt")->getSignal()->connect(boost::bind(&LLPanelPreferencePrivacy::onChangeDebugLookAt, this));
 		onChangeDebugLookAt();
 
@@ -3114,7 +3114,7 @@ private:
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
 	void onChangeDebugLookAt()
 	{
-		getChild<LLCheckBoxCtrl>("DebugLookAt")->set(gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? FALSE : TRUE);
+		getChild<LLCheckBoxCtrl>("showlookat")->set(gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? FALSE : TRUE);
 	}
 
 	void onClickDebugLookAt(const LLSD& value)
