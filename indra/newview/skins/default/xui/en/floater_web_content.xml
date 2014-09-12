@@ -11,7 +11,6 @@
   help_topic="floater_web_browser"
   save_rect="true"
   title=""
-  initial_mime_type="text/html"
   width="780">
   <!--Size in this section needs to stay for How To floater to work correctly-->
   <layout_stack
@@ -187,6 +186,7 @@ for possible steps to resolve this issue.
         follows="all"
         layout="topleft"
         left="0"
+        initial_mime_type="text/html"
         name="webbrowser"
         width="770"
         top="0"/>
