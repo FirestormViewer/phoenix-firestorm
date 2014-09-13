@@ -2962,10 +2962,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				if (!gIMMgr->isNonFriendSessionNotified(session_id))
 				{
-					std::string message = LLTrans::getString("IM_unblock_only_groups_friends");
-					// <FS:Ansariel> Use our UUID so the message actually shows up
+					// <FS:Ansariel> Disable this - doesn't make sense it will be skipped by LLIMMgr::addMessage() anyway
+					//std::string message = LLTrans::getString("IM_unblock_only_groups_friends");
 					//gIMMgr->addMessage(session_id, from_id, name, message, IM_OFFLINE == offline);
-					gIMMgr->addMessage(session_id, gAgentID, name, message, IM_OFFLINE == offline);
 					// </FS:Ansariel>
 					gIMMgr->addNotifiedNonFriendSessionID(session_id);
 				}
