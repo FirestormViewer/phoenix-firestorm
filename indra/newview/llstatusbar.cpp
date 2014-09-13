@@ -477,20 +477,20 @@ void LLStatusBar::refresh()
 	}
 
 	// <FS:Zi> Pathfinding rebake functions
-	static LLMenuOptionPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode=LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
+	static LLMenuOptionPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode = LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
 	// <FS:LO> FIRE-7639 - Stop the blinking after a while
 	LLViewerRegion* current_region = gAgent.getRegion();
-	if(current_region != agent_region)
+	if (current_region != agent_region)
 	{
 		agent_region=current_region;
 		bakingStarted = false;
 		mRebakeStuck = false;
 	}
 	// </FS:LO>
-	if(	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+	if (LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
 	{
 		// <FS:LO> FIRE-7639 - Stop the blinking after a while
-		if(!bakingStarted)
+		if (!bakingStarted)
 		{
 			bakingStarted = true;
 			mRebakeStuck = false;
@@ -498,18 +498,18 @@ void LLStatusBar::refresh()
 		}
 		// </FS:LO>
 		
-		if(	agent_region &&
+		if (agent_region &&
 			agent_region->dynamicPathfindingEnabled() && 
-			mRebakingTimer.getElapsedTimeF32()>0.5f)
+			mRebakingTimer.getElapsedTimeF32() > 0.5f)
 		{
 			mRebakingTimer.reset();
 			mPathfindingFlashOn=!mPathfindingFlashOn;
 			updateParcelIcons();
 		}
 	}
-	else if(pathfinding_mode!=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode())
+	else if (pathfinding_mode != LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode())
 	{
-		pathfinding_mode=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode();
+		pathfinding_mode = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode();
 		updateParcelIcons();
 	}
 	// </FS:Zi>
@@ -1080,7 +1080,6 @@ void LLStatusBar::updateParcelIcons()
 	if (!agent_region || !agent_parcel)
 		return;
 
-	bool allow_voice=FALSE;		// <FS:Zi> Declare here to use it in both if() branches
 	if (mShowParcelIcons)
 	{
 		LLParcel* current_parcel;
@@ -1108,10 +1107,7 @@ void LLStatusBar::updateParcelIcons()
 		is_opensim = LLGridManager::getInstance()->isInOpenSim();
 #endif // OPENSIM
 		// </FS:CR>
-		// <FS:Zi> allow_voice is now declared outside the if() block
-		//	bool allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
-		allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
-		// </FS:Zi>
+		bool allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
 		bool allow_fly		= vpm->allowAgentFly(agent_region, current_parcel);
 		bool allow_push		= vpm->allowAgentPush(agent_region, current_parcel);
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
@@ -1127,21 +1123,21 @@ void LLStatusBar::updateParcelIcons()
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		// <FS:Zi> Pathfinding rebake functions
-		bool pathfinding_navmesh_dirty=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
-		F32 pathfinding_dirty_icon_alpha=1.0;
-		if(LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+		bool pathfinding_navmesh_dirty = LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+		F32 pathfinding_dirty_icon_alpha = 1.0f;
+		if (LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
 		{
 			// <FS:LO> FIRE-7639 - Stop the blinking after a while
-			if(mRebakeStuck)
+			if (mRebakeStuck)
 			{
 				pathfinding_dirty_icon_alpha = 0.5;
 			}
 			else
 			{
-				pathfinding_dirty_icon_alpha=mPathfindingFlashOn ? 1.0 : 0.25;
+				pathfinding_dirty_icon_alpha = mPathfindingFlashOn ? 1.0f : 0.25f;
 			}
 			// </FS:LO>
-			pathfinding_navmesh_dirty=true;
+			pathfinding_navmesh_dirty = true;
 		}
 		// </FS:Zi>
 
@@ -1185,7 +1181,6 @@ void LLStatusBar::updateParcelIcons()
 		// <FS:Ansariel> Script debug
 		mScriptOut->setVisible(FALSE);
 		// </FS:Ansariel> Script debug
-		allow_voice	= vpm->allowAgentVoice();	// <FS:Zi> update allow_voice even if icons are hidden
 	}
 
 	layoutParcelIcons();
@@ -1210,7 +1205,7 @@ void LLStatusBar::updateHealth()
 void LLStatusBar::layoutParcelIcons()
 {
 	// TODO: remove hard-coded values and read them as xml parameters
-	static const int FIRST_ICON_HPAD = 2; // 2 padding; See also ICON_HEAD
+	static const S32 FIRST_ICON_HPAD = 2; // 2 padding; See also ICON_HEAD
 	// Kadah - not needed static const int LAST_ICON_HPAD = 11;
 
 	// Ansariel: Changed order to be more Viewer 1 like and keep important
@@ -1221,7 +1216,7 @@ void LLStatusBar::layoutParcelIcons()
 	left = layoutWidget(mScriptOut, left);
 	left = layoutWidget(mDamageText, left);
 
-	for (int i = ICON_COUNT - 1; i >= 0; --i)
+	for (S32 i = ICON_COUNT - 1; i >= 0; --i)
 	{
 		left = layoutWidget(mParcelIcon[i], left);
 	}
@@ -1239,7 +1234,7 @@ void LLStatusBar::layoutParcelIcons()
 S32 LLStatusBar::layoutWidget(LLUICtrl* ctrl, S32 left)
 {
 	// TODO: remove hard-coded values and read them as xml parameters
-	static const int ICON_HPAD = 2;
+	static const S32 ICON_HPAD = 2;
 
 	if (ctrl->getVisible())
 	{
@@ -1426,13 +1421,15 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 // <FS:Zi> Pathfinding rebake functions
 BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& response)
 {
-	std::string newSetName=response["message"].asString();
-	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+	std::string newSetName = response["message"].asString();
+	S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
 
-	if(option==0)
+	if (option == 0)
 	{
-		if(LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
+		if (LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
+		{
 			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+		}
 		return TRUE;
 	}
 	return FALSE;
