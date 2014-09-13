@@ -146,8 +146,8 @@
     name="Show_In_Inventory"
     top_pad="3"
     width="350" />
-	 
-	 <check_box
+
+   <check_box
     control_name="ShowNewInventory"
     height="16"
     label="Automatically view notecards, textures, landmarks after accepting"
@@ -156,8 +156,18 @@
     name="Show_New_Inventory"
     top_pad="3"
     width="350" />
-	 
-	 <check_box
+
+   <check_box
+    control_name="FSOpenInventoryAfterSnapshot"
+    height="16"
+    label="Automatically show snapshots in inventory after upload"
+    layout="topleft"
+    left="30"
+    name="FSOpenInventoryAfterSnapshot"
+    top_pad="3"
+    width="350" />
+
+   <check_box
     control_name="FSCreateGiveInventoryParticleEffect"
     height="16"
     label="Create particle effects upon giving inventory objects to other avatars"

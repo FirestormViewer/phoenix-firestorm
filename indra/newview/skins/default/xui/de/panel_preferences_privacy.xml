@@ -30,6 +30,7 @@
 			<check_box label="Klassische Annahme/Ablehnungs-Nachrichten für Inventar-Angebote verwenden" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Falls aktiviert, werden Annahme- bzw. Ablehnungs-Nachrichten erst verschickt, wenn der entsprechende Button angeklickt wurde. Falls deaktiviert, wird automatisch eine Annahme-Nachricht verschickt, sobald das angebotene Objekt im Inventar eingetroffen ist. Diese Option hat keinen Effekt, wenn Inventar-Angebote automatisch akzeptiert werden."/>
 			<check_box label="Automatisch empfangene Objekte im Inventar anzeigen" name="Show_In_Inventory"/>
 			<check_box label="Automatisch akzeptierte Notizkarten, Landmarken und Texturen anzeigen" name="Show_New_Inventory"/>
+			<check_box label="Automatisch Fotos nach dem Hochladen im Inventar anzeigen" name="FSOpenInventoryAfterSnapshot"/>
 			<check_box label="Partikeleffekte erzeugen, wenn Objekte an andere Avatare gegeben werden" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Meine Lieblingslandmarken bei Anmeldung anzeigen (im Dropdown-Menü &#10;„Hier anfangen“)" name="favorites_on_login_check" top_pad="15"/>
 
@@ -50,7 +51,7 @@
 			<check_box name="UseLegacyIMLogNames" label="Klassisches Dateinamensformat für Verläufe verwenden" tool_tip="Falls aktiviert, wird das alte Namensformat für Verläufe (Benutzer Name) anstatt des aktuellen (benutzer_name) verwendet."/>
 			<check_box name="LogFileNamewithDate" label="Datum zum Verlaufsdateinamen hinzufügen" tool_tip="Fügt das aktuelle Datum zum Dateinamen des Verlaufs im Format „chat-JJJJ-MM-TT“ bzw. „Verlaufname-JJJJ-MM-TT“ hinzu."/>
 			<check_box name="FSUseBuiltInHistory" label="Integrierte Verlaufsansicht verwenden" tool_tip="Verwendet den integrierten Betrachter für Verläufe. Falls deaktiviert, wird der standardmäßige Texteditor des Betriebssystems verwendet."/>
-			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180"/>
+			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180" top="385"/>
 		</panel>
 
 		<!--LookAt-->

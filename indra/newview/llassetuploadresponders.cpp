@@ -166,8 +166,13 @@ void on_new_single_inventory_upload_complete(
 
 		// Show the preview panel for textures and sounds to let
 		// user know that the image (or snapshot) arrived intact.
-		LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel();
-		if ( panel )
+		// <FS:Ansariel> FIRE-14598: Option to prevent inventory popping up after taking a snapshot
+		//LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel();
+		//if ( panel )
+		LLInventoryPanel* panel = NULL;
+		if ((inventory_type != LLInventoryType::IT_SNAPSHOT || gSavedSettings.getBOOL("FSOpenInventoryAfterSnapshot"))
+			&& (panel = LLInventoryPanel::getActiveInventoryPanel()))
+		// </FS:Ansariel>
 		{
 			LLFocusableElement* focus = gFocusMgr.getKeyboardFocus();
 
