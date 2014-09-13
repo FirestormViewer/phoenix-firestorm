@@ -13,4 +13,14 @@
 	<menu_item_call label="Usuń ze znajomych" name="remove_friend" />
 	<menu_item_call label="Kopiuj nazwę do schowka" name="url_copy_label" />
 	<menu_item_call label="Kopiuj Url do schowka" name="url_copy" />
+	<menu name="options" label="Opcje...">
+		<menu_item_check label="Pokaż kolumnę: Nazwa konta" name="show_username" />
+		<menu_item_check label="Pokaż kolumnę: Wyświetlane Imię" name="show_displayname" />
+		<menu_item_check label="Pokaż kolumnę: Pełne imię" name="show_fullname" />
+		<menu_item_check label="Pokaż kolumny zezwoleń" name="show_permissions" />
+		<menu_item_check label="Sortuj po: Nazwa konta" name="sort_by_username" />
+		<menu_item_check label="Sortuj po: Wyświetlane Imię" name="sort_by_displayname" />
+		<menu_item_check label="Pełne imię jako: Nazwa konta (Wyświetlane)" name="format_username_displayname" />
+		<menu_item_check label="Pełne imię jako: Wyświetlane (Nazwa konta)" name="format_displayname_username" />
+	</menu>
 </context_menu>
