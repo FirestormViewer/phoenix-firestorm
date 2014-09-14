@@ -4168,11 +4168,13 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 
 	// Set the location of the snapshot sharing config endpoint
-	std::string snapshot_config_url = response["snapshot_config_url"];
-	if(!snapshot_config_url.empty())
-	{
-		gSavedSettings.setString("SnapshotConfigURL", snapshot_config_url);
-	}
+	// <FS:Ansariel> Debug setting doesn't exist anymore as of 14-09-2014
+	//std::string snapshot_config_url = response["snapshot_config_url"];
+	//if(!snapshot_config_url.empty())
+	//{
+	//	gSavedSettings.setString("SnapshotConfigURL", snapshot_config_url);
+	//}
+	// </FS:Ansariel>
 
 	// Start the process of fetching the OpenID session cookie for this user login
 	std::string openid_url = response["openid_url"];
