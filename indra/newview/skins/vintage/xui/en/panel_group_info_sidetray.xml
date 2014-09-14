@@ -29,6 +29,7 @@ background_visible="true"
 
 	<layout_stack
 		name="group_info_sidetray_main"
+		animate="false"
 		layout="topleft"
 		follows="all"
 		top="0"
