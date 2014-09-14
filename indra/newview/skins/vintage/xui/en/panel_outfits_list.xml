@@ -56,6 +56,19 @@
        left_pad="1"
        name="dummy_icon"
        width="243"/>
+     <text
+       type="string"
+       length="1"
+       height="25"
+       layout="topleft"
+       left_delta="5"
+       name="OutfitcountText"
+       font="SansSerifMedium"
+       follows="bottom|left|right"
+       v_pad="6"
+       width="238">
+          [COUNT] Outfits
+      </text>
       <button
        follows="bottom|right"
        height="25"

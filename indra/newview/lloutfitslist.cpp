@@ -508,6 +508,9 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	}
 	// </FS:ND>
 
+	// <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
+	getChild<LLTextBox>("OutfitcountText")->setTextArg("COUNT", llformat("%d", cat_array.size()));
+
 	// Handle added tabs.
 	for (uuid_vec_t::const_iterator iter = vadded.begin();
 		 iter != vadded.end();

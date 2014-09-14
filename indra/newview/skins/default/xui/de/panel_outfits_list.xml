@@ -6,6 +6,9 @@
 	</accordion>
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
+		<text name="OutfitcountText">
+			[COUNT] Outfits
+		</text>
 		<button name="trash_btn" tool_tip="Ausgewähltes Outfit löschen"/>
 	</panel>
 </panel>
