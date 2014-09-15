@@ -31,6 +31,7 @@
 #include <boost/algorithm/string.hpp>
 #include "fscommon.h"
 #include "fsradar.h"
+#include "llagent.h"
 #include "rlvhandler.h"
 
 using namespace boost;
@@ -114,13 +115,16 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 		if (type == APT_PROPERTIES)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-			mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
-			mStatus = avatar_data->flags;
+			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)
+			{
+				mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+				mStatus = avatar_data->flags;
+			}
 		}
 		else if (type == APT_NOTES)
 		{
 			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
-			if (avatar_notes)
+			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID)
 			{
 				mHasNotes = !avatar_notes->notes.empty();
 			}
