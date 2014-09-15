@@ -320,8 +320,9 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 	static const std::string flagsColumnType = getString("FlagsColumnType");
 	static const std::string flagsColumnValues [3] = { getString("FlagsColumnValue_0"), getString("FlagsColumnValue_1"), getString("FlagsColumnValue_2") };
-	static const std::string typingStatusKey = getString("TypingStatusKey");
-	static const std::string sittingStatusKey = getString("SittingStatusKey");
+	static const std::string notesColumnIcon = getString("NotesColumnIcon");
+	static const std::string sittingColumnIcon = getString("SittingColumnIcon");
+	static const std::string typingColumnIcon = getString("TypingColumnIcon");
 
 	// Store current selection and scroll position
 	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
@@ -355,11 +356,13 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][2]["halign"] = "center";
 
 		row_data["columns"][3]["column"] = "typing_status";
-		row_data["columns"][3]["value"] = (entry["typing"].asBoolean() ? typingStatusKey : "");
+		row_data["columns"][3]["type"] = "icon";
+		row_data["columns"][3]["value"] = (entry["typing"].asBoolean() ? typingColumnIcon : "");
 		row_data["columns"][3]["halign"] = "center";
 
 		row_data["columns"][4]["column"] = "sitting_status";
-		row_data["columns"][4]["value"] = (entry["sitting"].asBoolean() ? sittingStatusKey : "");
+		row_data["columns"][4]["type"] = "icon";
+		row_data["columns"][4]["value"] = (entry["sitting"].asBoolean() ? sittingColumnIcon : "");
 		row_data["columns"][4]["halign"] = "center";
 
 		row_data["columns"][5]["column"] = "flags";
@@ -367,7 +370,7 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 		row_data["columns"][6]["column"] = "has_notes";
 		row_data["columns"][6]["type"] = "icon";
-		row_data["columns"][6]["value"] = (entry["has_notes"].asBoolean() ? "radar_notes" : "");
+		row_data["columns"][6]["value"] = (entry["has_notes"].asBoolean() ? notesColumnIcon : "");
 		row_data["columns"][6]["halign"] = "center";
 
 		row_data["columns"][7]["column"] = "age";

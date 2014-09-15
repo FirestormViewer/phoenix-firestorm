@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_radar">
-	<string name="TypingStatusKey" value="P"/>
+	<string name="NotesColumnIcon" value="radarbox_n"/>
+	<string name="SittingColumnIcon" value="radarbox_s"/>
+	<string name="TypingColumnIcon" value="radarbox_p"/>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie aktywuje teleport, przeciąganie z Shiftem przesuwa)"/>
 	<string name="avatar_name_count" value="Imię [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>

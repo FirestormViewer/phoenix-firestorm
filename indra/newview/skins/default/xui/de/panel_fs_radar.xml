@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_radar">
+	<string name="NotesColumnIcon" value="radarbox_n"/>
+	<string name="SittingColumnIcon" value="radarbox_s"/>
+	<string name="TypingColumnIcon" value="radarbox_t"/>
 	<string
 		name="MiniMapToolTipMsg"
 		value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
