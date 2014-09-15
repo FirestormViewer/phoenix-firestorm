@@ -948,7 +948,7 @@ with the same filename but different name
 <texture name="teleport_menu" file_name="icons/teleport_menu.png" preload="false" />
 <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
 <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
-<texture name="avatar_in_region" file_name="green_dot.tga" preload="false" />
+<texture name="avatar_in_region" file_name="icons/green_square.png" preload="false" />
 
 <texture name="ff_online_status_button"			file_name="legacy/ff_online_status_button.tga"		preload="false" />
 <texture name="ff_visible_online_button"		file_name="legacy/ff_visible_online_button.tga"		preload="false" />
