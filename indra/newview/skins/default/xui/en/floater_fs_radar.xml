@@ -5,7 +5,7 @@
  title="Radar"
  width="400"
  height="440"
- min_width="350"
+ min_width="365"
  min_height="150"
  reuse_instance="true"
  single_instance="true"

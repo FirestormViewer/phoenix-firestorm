@@ -203,6 +203,11 @@
 							 tool_tip="Payment info status"
 							 width="10"/>
 							<radar_list.columns
+							 label=""
+							 name="has_notes"
+							 tool_tip="Avatar has notes"
+							 width="10"/>
+							<radar_list.columns
 							 label="Age"
 							 name="age"
 							 width="50"/>

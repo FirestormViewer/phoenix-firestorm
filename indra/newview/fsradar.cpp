@@ -489,6 +489,7 @@ void FSRadar::updateRadarList()
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
 		entry["typing"] = (avVo && avVo->isTyping());
 		entry["sitting"] = (avVo && (avVo->getParent() || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND) || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND_CONSTRAINED)));
+		entry["has_notes"] = ent->hasNotes();
 
 		//AO: Set any range colors / styles
 		LLUIColor range_color;

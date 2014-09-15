@@ -103,6 +103,7 @@ FSPanelRadar::FSPanelRadar()
 	mColumnBits["age"] = 64;
 	mColumnBits["seen"] = 128;
 	mColumnBits["range"] = 256;
+	mColumnBits["has_notes"] = 512;
 }
 
 FSPanelRadar::~FSPanelRadar()
@@ -364,16 +365,21 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][5]["column"] = "flags";
 		row_data["columns"][5]["type"] = flagsColumnType;
 
-		row_data["columns"][6]["column"] = "age";
-		row_data["columns"][6]["value"] = entry["age"];
-		row_data["columns"][6]["halign"] = "right";
+		row_data["columns"][6]["column"] = "has_notes";
+		row_data["columns"][6]["type"] = "icon";
+		row_data["columns"][6]["value"] = (entry["has_notes"].asBoolean() ? "radar_notes" : "");
+		row_data["columns"][6]["halign"] = "center";
 
-		row_data["columns"][7]["column"] = "seen";
-		row_data["columns"][7]["value"] = entry["seen"];
+		row_data["columns"][7]["column"] = "age";
+		row_data["columns"][7]["value"] = entry["age"];
 		row_data["columns"][7]["halign"] = "right";
 
-		row_data["columns"][8]["column"] = "range";
-		row_data["columns"][8]["value"] = entry["range"];
+		row_data["columns"][8]["column"] = "seen";
+		row_data["columns"][8]["value"] = entry["seen"];
+		row_data["columns"][8]["halign"] = "right";
+
+		row_data["columns"][9]["column"] = "range";
+		row_data["columns"][9]["value"] = entry["range"];
 
 		LLScrollListItem* row = mRadarList->addElement(row_data);
 

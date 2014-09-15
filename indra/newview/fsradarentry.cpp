@@ -50,6 +50,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mAge(-1),
 	mIsLinden(false),
 	mIgnore(false),
+	mHasNotes(false),
 	mAvatarNameCallbackConnection()
 {
 	if (mID.notNull())
@@ -60,6 +61,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 
 		processor->addObserver(mID, this);
 		processor->sendAvatarPropertiesRequest(mID);
+		processor->sendAvatarNotesRequest(mID);
 	}
 
 	updateName();
@@ -107,11 +109,22 @@ void FSRadarEntry::onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av
 
 void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 {
-	if (data && type == APT_PROPERTIES)
+	if (data)
 	{
-		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-		mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
-		mStatus = avatar_data->flags;		
+		if (type == APT_PROPERTIES)
+		{
+			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+			mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+			mStatus = avatar_data->flags;
+		}
+		else if (type == APT_NOTES)
+		{
+			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
+			if (avatar_notes)
+			{
+				mHasNotes = !avatar_notes->notes.empty();
+			}
+		}
 	}
 }
 

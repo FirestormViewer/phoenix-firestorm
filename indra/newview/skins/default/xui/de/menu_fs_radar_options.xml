@@ -15,6 +15,7 @@
 		<menu_item_check label="Status Schreiben" name="typing_status"/>
 		<menu_item_check label="Status Sitzen" name="sitting_status"/>
 		<menu_item_check label="Status Zahlungsinformationen" name="flags"/>
+		<menu_item_check label="Status Notizen" name="has_notes"/>
 		<menu_item_check label="Alter" name="age"/>
 		<menu_item_check label="Zeit" name="seen"/>
 	</context_menu>
