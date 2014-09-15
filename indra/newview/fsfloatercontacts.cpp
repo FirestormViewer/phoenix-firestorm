@@ -812,7 +812,8 @@ void FSFloaterContacts::refreshRightsChangeList()
 
 void FSFloaterContacts::refreshUI()
 {
-	sortFriendList();
+	mFriendsList->refreshLineHeight();
+	mFriendsList->setNeedsSort(true);
 
 	bool single_selected = false;
 	bool multiple_selected = false;
