@@ -353,17 +353,14 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][2]["column"] = "in_region";
 		row_data["columns"][2]["type"] = "icon";
 		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
-		row_data["columns"][2]["halign"] = "center";
 
 		row_data["columns"][3]["column"] = "typing_status";
 		row_data["columns"][3]["type"] = "icon";
 		row_data["columns"][3]["value"] = (entry["typing"].asBoolean() ? typingColumnIcon : "");
-		row_data["columns"][3]["halign"] = "center";
 
 		row_data["columns"][4]["column"] = "sitting_status";
 		row_data["columns"][4]["type"] = "icon";
 		row_data["columns"][4]["value"] = (entry["sitting"].asBoolean() ? sittingColumnIcon : "");
-		row_data["columns"][4]["halign"] = "center";
 
 		row_data["columns"][5]["column"] = "flags";
 		row_data["columns"][5]["type"] = flagsColumnType;
@@ -371,7 +368,6 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][6]["column"] = "has_notes";
 		row_data["columns"][6]["type"] = "icon";
 		row_data["columns"][6]["value"] = (entry["has_notes"].asBoolean() ? notesColumnIcon : "");
-		row_data["columns"][6]["halign"] = "center";
 
 		row_data["columns"][7]["column"] = "age";
 		row_data["columns"][7]["value"] = entry["age"];
