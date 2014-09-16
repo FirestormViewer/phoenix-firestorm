@@ -15,6 +15,7 @@
 		<menu_item_check label="Obecnie pisze" name="typing_status"/>
 		<menu_item_check label="Obecnie siedzi" name="sitting_status"/>
 		<menu_item_check label="Stan danych płatniczych" name="flags"/>
+		<menu_item_check label="Notatki" name="has_notes"/>
 		<menu_item_check label="Wiek" name="age"/>
 		<menu_item_check label="Czas" name="seen"/>
 	</context_menu>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_radar">
-	<string name="NotesColumnIcon" value="radarbox_n"/>
-	<string name="SittingColumnIcon" value="radarbox_s"/>
 	<string name="TypingColumnIcon" value="radarbox_p"/>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie aktywuje teleport, przeciąganie z Shiftem przesuwa)"/>
@@ -24,6 +22,7 @@
 							<radar_list.columns name="typing_status" tool_tip="Obecnie pisze"/>
 							<radar_list.columns name="sitting_status" tool_tip="Obecnie siedzi"/>
 							<radar_list.columns name="flags" tool_tip="Stan danych płatniczych"/>
+							<radar_list.columns name="has_notes" tool_tip="Awatar ma notatki"/>
 							<radar_list.columns label="Wiek" name="age"/>
 							<radar_list.columns label="Czas" name="seen"/>
 							<radar_list.columns label="Odl." name="range"/>

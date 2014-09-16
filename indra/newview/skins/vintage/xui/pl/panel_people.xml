@@ -66,6 +66,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 					<check_box label="Obecnie pisze" name="column_typing_status" />
 					<check_box label="Obecnie siedzi" name="column_sitting_status" />
 					<check_box label="Stan danych płatniczych" name="column_flags" />
+					<check_box label="Notatki" name="notes_flags" />
 				</panel>
 			</tab_container>
 		</panel>
