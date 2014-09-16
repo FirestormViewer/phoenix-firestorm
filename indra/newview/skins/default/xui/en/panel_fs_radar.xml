@@ -219,7 +219,7 @@
 							<radar_list.columns
 							 label="Range"
 							 name="range"
-							 width="60"/>
+							 width="61"/>
 						</radar_list>
 					</layout_panel>
 				</layout_stack>
