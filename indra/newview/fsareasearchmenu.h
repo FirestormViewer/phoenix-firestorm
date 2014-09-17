@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_AREASEARCHMENUMENU_H
-#define FS_AREASEARCHMENUMENU_H
+#ifndef FS_AREASEARCHMENU_H
+#define FS_AREASEARCHMENU_H
 
 #include "lllistcontextmenu.h"
 
@@ -41,4 +41,4 @@ private:
 
 extern FSAreaSearchMenu gFSAreaSearchMenu;
 
-#endif // FS_AREASEARCHMENUMENU_H
+#endif // FS_AREASEARCHMENU_H
