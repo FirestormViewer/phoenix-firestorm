@@ -2,7 +2,7 @@
  * @file fsblocklistmenu.cpp
  * @brief Menu used by the block list
  *
- * $LicenseInfo:firstyear=2012&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2014&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (c) 2014 Ansariel Hiller
  * 

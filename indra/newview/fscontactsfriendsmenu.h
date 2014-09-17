@@ -2,7 +2,7 @@
  * @file fscontactsfriendsmenu.h
  * @brief Menu used by Firestorm contacts floater
  *
- * $LicenseInfo:firstyear=2013&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2014&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code
  * Copyright (c) 2014 Ansariel Hiller @ Second Life
  * 
