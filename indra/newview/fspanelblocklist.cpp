@@ -157,6 +157,7 @@ void FSPanelBlockList::refreshBlockedList()
 
 		mBlockedList->addRow(item_p, ADD_BOTTOM);
 	}
+	mBlockedList->refreshLineHeight();
 }
 
 void FSPanelBlockList::updateButtons()
