@@ -522,9 +522,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		</panel>
 
 		<panel
-			class="panel_block_list_sidetray"
+			class="fs_panel_block_list_sidetray"
 			name="blocked_panel"
-			filename="panel_block_list_sidetray.xml"
+			filename="panel_fs_block_list_sidetray.xml"
 			label="Blocked" />
 
 	</tab_container>

@@ -16,13 +16,13 @@
   title="Blocked Residents &amp; Objects"
   width="310">
       <panel
-        class="panel_block_list_sidetray"
+        class="fs_panel_block_list_sidetray"
         name="panel_block_list_sidetray"
-        filename="panel_block_list_sidetray.xml"
+        filename="panel_fs_block_list_sidetray.xml"
         label="Blocked Residents &amp; Objects"
         font="SansSerifBold"
         top="0"
         left="0"
         height="332"
-        width="310"/>
+        width="308"/>
 </floater>

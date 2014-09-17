@@ -681,10 +681,10 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          right="-1"
          top="0">
           <panel
-           class="panel_block_list_sidetray"
+           class="fs_panel_block_list_sidetray"
            height="383"
            name="panel_block_list_sidetray"
-           filename="panel_block_list_sidetray.xml"
+           filename="panel_fs_block_list_sidetray.xml"
            follows="all"
            label="Blocked Residents &amp; Objects"
            layout="topleft"

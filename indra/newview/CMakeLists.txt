@@ -135,6 +135,8 @@ set(viewer_SOURCE_FILES
     fsareasearch.cpp
     fsareasearchlistctrl.cpp
     fsareasearchmenu.cpp
+    fsblocklistctrl.cpp
+    fsblocklistmenu.cpp
     fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
@@ -175,6 +177,7 @@ set(viewer_SOURCE_FILES
     fsnearbychatcontrol.cpp
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
+    fspanelblocklist.cpp
     fspanelclassified.cpp
     fspanelcontactsets.cpp
     fspanelimcontrolpanel.cpp
@@ -841,6 +844,8 @@ set(viewer_HEADER_FILES
     fsareasearch.h
     fsareasearchlistctrl.h
     fsareasearchmenu.h
+    fsblocklistctrl.h
+    fsblocklistmenu.h
     fschathistory.h
     fscommon.h
     fsconsoleutils.h
@@ -882,6 +887,7 @@ set(viewer_HEADER_FILES
     fsnearbychatcontrol.h
     fsnearbychathub.h
     fsnearbychatvoicemonitor.h
+    fspanelblocklist.h
     fspanelcontactsets.h
     fspanelclassified.h
     fspanelimcontrolpanel.h

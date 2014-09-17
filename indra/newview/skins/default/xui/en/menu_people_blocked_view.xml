@@ -14,6 +14,16 @@
        parameter="sort_by_name"/>
   </menu_item_check>
   <menu_item_check
+   label="Sort by name (descending)"
+   name="sort_by_name_desc">
+      <on_click
+       function="Block.Action"
+       parameter="sort_by_name_desc"/>
+      <on_check
+       function="Block.Check"
+       parameter="sort_by_name_desc"/>
+  </menu_item_check>
+  <menu_item_check
    label="Sort by type"
    name="sort_by_type">
       <on_click
@@ -22,5 +32,15 @@
       <on_check
        function="Block.Check"
        parameter="sort_by_type" />
+  </menu_item_check>
+  <menu_item_check
+   label="Sort by type (descending)"
+   name="sort_by_type_desc">
+      <on_click
+       function="Block.Action"
+       parameter="sort_by_type_desc" />
+      <on_check
+       function="Block.Check"
+       parameter="sort_by_type_desc" />
   </menu_item_check>
 </toggleable_menu>
