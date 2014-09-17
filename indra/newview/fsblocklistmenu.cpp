@@ -52,8 +52,6 @@ void FSBlockListMenu::show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x
 
 void FSBlockListMenu::onContextMenuItemClick(const LLSD& userdata)
 {
-	const std::string item = userdata.asString();
-
 	if (mSpawningCtrl)
 	{
 		FSPanelBlockList* blocklist = mSpawningCtrl->getParentByType<FSPanelBlockList>();
@@ -66,8 +64,6 @@ void FSBlockListMenu::onContextMenuItemClick(const LLSD& userdata)
 
 bool FSBlockListMenu::onContextMenuItemEnable(const LLSD& userdata)
 {
-	const std::string item = userdata.asString();
-
 	if (mSpawningCtrl)
 	{
 		FSPanelBlockList* blocklist = mSpawningCtrl->getParentByType<FSPanelBlockList>();
