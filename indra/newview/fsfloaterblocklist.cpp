@@ -47,9 +47,6 @@ BOOL FSFloaterBlocklist::postBuild()
 		return FALSE;
 	}
 
-	LLView* back_button = mBlockedListPanel->getChildView("back_button_container");
-	back_button->setVisible(FALSE);
-
 	return TRUE;
 }
 
