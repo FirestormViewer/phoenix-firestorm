@@ -349,7 +349,7 @@ void FSRadar::updateRadarList()
 		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
 		{
 			// set correction if we have it
-			if (avZOffset > 0.1)
+			if (avZOffset > 0.1f)
 			{
 				avPos[VZ] = avZOffset;
 			}
