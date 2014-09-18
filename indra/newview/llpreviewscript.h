@@ -292,14 +292,14 @@ public:
 	/*virtual*/ BOOL postBuild();
 	
 	void setIsNew() { mIsNew = TRUE; }
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	static void uploadAssetViaCapsStatic(const std::string& url,
 							const std::string& filename, 
 							const LLUUID& task_id,
 							const LLUUID& item_id,
 							const std::string& is_mono,
 							BOOL is_running);
-//-TT
+// </FS:TT>
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
