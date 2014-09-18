@@ -2325,22 +2325,24 @@ void LLLiveLSLEditor::draw()
 			runningCheckbox->setLabel(getString("script_running"));
 			runningCheckbox->setEnabled(TRUE);
 
-			if(object->permAnyOwner())
-			{
-				runningCheckbox->setLabel(getString("script_running"));
-				runningCheckbox->setEnabled(TRUE);
-			}
-			else
-			{
-				runningCheckbox->setLabel(getString("public_objects_can_not_run"));
-				runningCheckbox->setEnabled(FALSE);
-				// *FIX: Set it to false so that the ui is correct for
-				// a box that is released to public. It could be
-				// incorrect after a release/claim cycle, but will be
-				// correct after clicking on it.
-				runningCheckbox->set(FALSE);
-				mMonoCheckbox->set(FALSE);
-			}
+			// <FS:Ansariel> Rev 496 LL merge error
+			//if(object->permAnyOwner())
+			//{
+			//	runningCheckbox->setLabel(getString("script_running"));
+			//	runningCheckbox->setEnabled(TRUE);
+			//}
+			//else
+			//{
+			//	runningCheckbox->setLabel(getString("public_objects_can_not_run"));
+			//	runningCheckbox->setEnabled(FALSE);
+			//	// *FIX: Set it to false so that the ui is correct for
+			//	// a box that is released to public. It could be
+			//	// incorrect after a release/claim cycle, but will be
+			//	// correct after clicking on it.
+			//	runningCheckbox->set(FALSE);
+			//	mMonoCheckbox->set(FALSE);
+			//}
+			// </FS:Ansariel>
 		}
 		else
 		{
@@ -2354,7 +2356,8 @@ void LLLiveLSLEditor::draw()
 			runningCheckbox->set(FALSE);
 			mMonoCheckbox->setEnabled(FALSE);
 			// object may have fallen out of range.
-			mHaveRunningInfo = FALSE;
+			// <FS:Ansariel> Rev 496 LL merge error
+			//mHaveRunningInfo = FALSE;
 		}
 	}
 	else if(!object)
@@ -2363,6 +2366,8 @@ void LLLiveLSLEditor::draw()
 		// Really ought to put in main window.
 		setTitle(LLTrans::getString("ObjectOutOfRange"));
 		runningCheckbox->setEnabled(FALSE);
+		// <FS:Ansariel> Rev 496 LL merge error
+		mMonoCheckbox->setEnabled(FALSE);
 		// object may have fallen out of range.
 		mHaveRunningInfo = FALSE;
 	}
