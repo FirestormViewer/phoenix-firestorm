@@ -180,7 +180,7 @@ protected:
 LLLiveLSLFile::LLLiveLSLFile(std::string file_path, change_callback_t change_cb)
 :	mOnChangeCallback(change_cb)
 ,	mIgnoreNextUpdate(false)
-,	LLLiveFile(file_path, 1.0)
+,	LLLiveFile(file_path, 1.0f)
 {
 	llassert(mOnChangeCallback);
 }
