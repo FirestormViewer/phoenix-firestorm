@@ -38,15 +38,14 @@ public:
 	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
 	{
 		Params()
-		{
-			name = "area_search_list";
-		}
+		{}
 	};
 	
 	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 protected:
 	FSAreaSearchListCtrl(const Params&);
+	virtual ~FSAreaSearchListCtrl() {}
 	friend class LLUICtrlFactory;
 };
 

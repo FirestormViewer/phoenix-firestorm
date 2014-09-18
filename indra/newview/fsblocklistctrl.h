@@ -38,15 +38,14 @@ public:
 	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
 	{
 		Params()
-		{
-			name = "block_list";
-		}
+		{}
 	};
-	
+
 	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 protected:
 	FSBlockListCtrl(const Params&);
+	virtual ~FSBlockListCtrl() {}
 	friend class LLUICtrlFactory;
 };
 

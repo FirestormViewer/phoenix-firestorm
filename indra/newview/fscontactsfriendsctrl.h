@@ -38,15 +38,14 @@ public:
 	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
 	{
 		Params()
-		{
-			name = "friend_list";
-		}
+		{}
 	};
-	
+
 	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 protected:
 	FSContactsFriendsCtrl(const Params&);
+	virtual ~FSContactsFriendsCtrl() {}
 	friend class LLUICtrlFactory;
 };
 
