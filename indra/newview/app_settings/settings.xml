@@ -731,6 +731,30 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    
+   <key>RadarAvatarAgeAlert</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles whether radar sends out chat alerts when it detects an avatar younger than a pre-defined age</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    
+   <key>RadarAvatarAgeAlertValue</key>
+    <map>
+      <key>Comment</key>
+      <string>Defines how old an avatar may be at maximum for the age alert to get triggered</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>7</integer>
+    </map>
 
   <key>ShowRadarMinimap</key>
     <map>
@@ -20999,6 +21023,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Sound file played when avatars leave the region (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarAgeAlert</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when the age alert for an avatar is triggered.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarAgeAlert</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when the age alert for an avatar is triggered (uuid for sound asset)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

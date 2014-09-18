@@ -386,6 +386,7 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
 		static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
 		static S32 flagsColumnIndex = mRadarList->getColumn("flags")->mIndex;
+		static S32 ageColumnIndex = mRadarList->getColumn("age")->mIndex;
 
 		LLScrollListText* radarRangeCell = (LLScrollListText*)row->getColumn(rangeColumnIndex);
 		radarRangeCell->setColor(LLColor4(options["range_color"]));
@@ -408,6 +409,12 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		if (entry.has("flags"))
 		{
 			flagsCell->setValue(flagsColumnValues[entry["flags"].asInteger()]);
+		}
+
+		LLScrollListText* ageCell = (LLScrollListText*)row->getColumn(ageColumnIndex);
+		if (options.has("age_color"))
+		{
+			ageCell->setColor(LLColor4(options["age_color"]));
 		}
 	}
 

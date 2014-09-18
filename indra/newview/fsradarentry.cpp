@@ -52,6 +52,8 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mIsLinden(false),
 	mIgnore(false),
 	mHasNotes(false),
+	mAlertAge(false),
+	mAgeAlertPerformed(false),
 	mAvatarNameCallbackConnection()
 {
 	if (mID.notNull())
@@ -119,6 +121,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 			{
 				mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 				mStatus = avatar_data->flags;
+				checkAge();
 			}
 		}
 		else if (type == APT_NOTES)
@@ -180,4 +183,13 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 	
 	// else use legacy name lookups
 	return av_name.getUserNameForDisplay(); // will be mapped to legacyname automatically by the name cache
+}
+
+void FSRadarEntry::checkAge()
+{
+	mAlertAge = (mAge > -1 && mAge <= gSavedSettings.getS32("RadarAvatarAgeAlertValue"));
+	if (!mAlertAge || gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		mAgeAlertPerformed = true;
+	}
 }

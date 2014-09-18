@@ -94,7 +94,8 @@ FSRadar::FSRadar() :
 		mRadarAlertRequest(false),
 		mRadarFrameCount(0),
 		mRadarLastBulkOffsetRequestTime(0),
-		mRadarLastRequestTime(0.f)
+		mRadarLastRequestTime(0.f),
+		mAgeAlertCallbackConnection()
 {
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
 
@@ -103,6 +104,7 @@ FSRadar::FSRadar() :
 	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 
 	gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
+	mAgeAlertCallbackConnection = gSavedSettings.getControl("RadarAvatarAgeAlertValue")->getSignal()->connect(boost::bind(&FSRadar::updateAgeAlertCheck, this));
 }
 
 FSRadar::~FSRadar()
@@ -113,6 +115,11 @@ FSRadar::~FSRadar()
 	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
 	{
 		delete em_it->second;
+	}
+
+	if (mAgeAlertCallbackConnection.connected())
+	{
+		mAgeAlertCallbackConnection.disconnect();
 	}
 }
 
@@ -165,6 +172,7 @@ void FSRadar::updateRadarList()
 	static const std::string str_region_entering =			LLTrans::getString("entering_region");
 	static const std::string str_region_entering_distance =	LLTrans::getString("entering_region_distance");
 	static const std::string str_region_leaving =			LLTrans::getString("leaving_region");
+	static const std::string str_avatar_age_alert =			LLTrans::getString("avatar_age_alert");
 
 	static LLCachedControl<bool> RadarReportChatRangeEnter(gSavedSettings, "RadarReportChatRangeEnter");
 	static LLCachedControl<bool> RadarReportChatRangeLeave(gSavedSettings, "RadarReportChatRangeLeave");
@@ -174,6 +182,7 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> RadarReportSimRangeLeave(gSavedSettings, "RadarReportSimRangeLeave");
 	static LLCachedControl<bool> RadarEnterChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
 	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
+	static LLCachedControl<bool> RadarAvatarAgeAlert(gSavedSettings, "RadarAvatarAgeAlert");
 	static LLCachedControl<F32> nearMeRange(gSavedSettings, "NearMeRange");
 	static LLCachedControl<bool> limitRange(gSavedSettings, "LimitRadarByRange");
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
@@ -484,12 +493,34 @@ void FSRadar::updateRadarList()
 		entry["name"] = avName;
 		entry["in_region"] = isInSameRegion;
 		entry["flags"] = avFlag;
-		entry["age"] = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) ? "---" : ( (avAge > -1 ? llformat("%d", avAge) : "") );
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
 		entry["typing"] = (avVo && avVo->isTyping());
 		entry["sitting"] = (avVo && (avVo->getParent() || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND) || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND_CONSTRAINED)));
 		entry["has_notes"] = ent->hasNotes();
+
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		{
+			entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
+			if (ent->hasAlertAge())
+			{
+				entry_options["age_color"] = LLUIColorTable::instance().getColor("AvatarListItemAgeAlert", LLColor4::red).get().getValue();
+
+				if (RadarAvatarAgeAlert && !ent->hasAgeAlertPerformed())
+				{
+					make_ui_sound("UISndRadarAgeAlert");
+					LLStringUtil::format_map_t args;
+					args["AGE"] = llformat("%d", avAge);
+					std::string message = formatString(str_avatar_age_alert, args);
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
+				}
+				ent->mAgeAlertPerformed = true;
+			}
+		}
+		else
+		{
+			entry["age"] = "---";
+		}
 
 		//AO: Set any range colors / styles
 		LLUIColor range_color;
@@ -956,5 +987,14 @@ void FSRadar::updateName(const LLUUID& avatar_id)
 	if (entry)
 	{
 		entry->updateName();
+	}
+}
+
+void FSRadar::updateAgeAlertCheck()
+{
+	const entry_map_t::iterator it_end = mEntryList.end();
+	for (entry_map_t::iterator it = mEntryList.begin(); it != it_end; ++it)
+	{
+		it->second->checkAge();
 	}
 }

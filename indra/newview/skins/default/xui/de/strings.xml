@@ -5970,8 +5970,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="entering_region_distance">
 		hat die Region betreten ([DISTANCE] m).
 	</string>
-	<string	name="leaving_region">
+	<string name="leaving_region">
 		hat die Region verlassen.
+	</string>
+	<string name="avatar_age_alert">
+		hat den Alters-Alarm ausgelöst. Alter: [AGE] Tag(e)
 	</string>
 
 	<string name="TotalScriptCountChangeIncrease">

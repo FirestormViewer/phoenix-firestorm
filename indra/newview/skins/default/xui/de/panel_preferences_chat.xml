@@ -245,6 +245,20 @@
 			<check_box name="RadarEnterChannelAlert" label="Betreten-Meldungen an Skripte weiterleiten"/>
 			<check_box name="RadarLeaveChannelAlert" label="Verlassen-Meldungen an Skripte weiterleiten"/>
 			<check_box name="FSRadarEnhanceByBridge" label="LSL-Brücke zur Verbesserung der Radar-Genauigkeit verwenden" tool_tip="Falls aktiviert, wird die LSL-Brücke verwendet, um die Entfernung zu Avataren zu bestimmen, die sich in einer Höhe von mehr als 1020m und außerhalb der Draw Distance befinden."/>
+			<text name="AgeAlertLabel">
+				Alters-Alarm:
+			</text>
+			<text name="RadarAvatarAgeAlertValueLabel">
+				Schwellwert:
+			</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Färbt ebenfalls die Alters-Spalte im Radar ein. Zum Deaktivieren auf -1 setzen."/>
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">
+				Tage
+			</text>
+			<check_box name="RadarAvatarAgeAlert" label="Radar meldet, wenn Avatare jünger als das angegebene Alter sind"/>
+			<check_box width="140" name="PlayModeUISndRadarAgeAlert" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarAgeAlert" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarAgeAlert" tool_tip="Auf Standardwert zurücksetzen."/>
 		</panel>
 
 		<!-- Chat: Keyword Alerts -->

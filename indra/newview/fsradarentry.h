@@ -55,8 +55,11 @@ public:
 	bool		getIsLinden() const { return mIsLinden; }
 	bool		getIgnore() const { return mIgnore; }
 	bool		hasNotes() const { return mHasNotes; }
+	bool		hasAlertAge() const { return mAlertAge; }
+	bool		hasAgeAlertPerformed() const { return mAgeAlertPerformed; }
 
 	void		setZOffset(F32 offset) { mZOffset = offset; }
+	void		checkAge();
 
 	static std::string getRadarName(const LLAvatarName& av_name);
 
@@ -80,6 +83,8 @@ private:
 	bool		mIsLinden;
 	bool		mIgnore;
 	bool		mHasNotes;
+	bool		mAlertAge;
+	bool		mAgeAlertPerformed;
 
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 };

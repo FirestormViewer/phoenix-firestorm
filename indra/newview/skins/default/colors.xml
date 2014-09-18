@@ -418,6 +418,9 @@
      name="AvatarListItemBeyondShoutRange"
      reference="SL-Silver" />
     <color
+     name="AvatarListItemAgeAlert"
+     reference="Red" />
+    <color
      name="BackgroundChatColor"
      reference="DkGray" />
     <color

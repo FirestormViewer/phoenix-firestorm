@@ -260,6 +260,15 @@
 		 parameter="RadarReportSimRangeLeave"/>
 	</menu_item_check>
 	<menu_item_check
+	 label="Report Avatar Age Alert"
+	 name="RadarReportAgeAlert">
+		<menu_item_check.on_check
+		 control="RadarAvatarAgeAlert"/>
+		<menu_item_check.on_click
+		 function="ToggleControl"
+		 parameter="RadarAvatarAgeAlert"/>
+	</menu_item_check>
+	<menu_item_check
 	 label="Report Enter Alerts to Scripts"
 	 name="RadarEnterChannelAlert">
 		<menu_item_check.on_check

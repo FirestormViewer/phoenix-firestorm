@@ -31,6 +31,7 @@
 	<menu_item_check label="Verlassen der Chat-Reichweite melden" name="RadarReportChatRangeLeave"/>
 	<menu_item_check label="Betreten der Region melden" name="RadarReportSimRangeEnter"/>
 	<menu_item_check label="Verlassen der Region melden" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Auslösen des Alters-Alarms melden" name="RadarReportAgeAlert"/>
 	<menu_item_check label="Eintrittsmeldungen an Skripte senden" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Austrittsmeldungen an Skripte senden" name="RadarLeaveChannelAlert"/>
 	<menu_item_check label="LSL-Brücke zur Verbesserung der Genauigkeit verwenden" name="FSRadarEnhanceByBridge"/>
