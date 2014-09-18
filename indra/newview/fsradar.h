@@ -145,6 +145,8 @@ private:
 
 	radar_update_callback_t mUpdateSignal;
 
+	boost::signals2::connection mShowUsernamesCallbackConnection;
+	boost::signals2::connection mNameFormatCallbackConnection;
 	boost::signals2::connection mAgeAlertCallbackConnection;
 };
 

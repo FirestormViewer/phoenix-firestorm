@@ -95,15 +95,17 @@ FSRadar::FSRadar() :
 		mRadarFrameCount(0),
 		mRadarLastBulkOffsetRequestTime(0),
 		mRadarLastRequestTime(0.f),
+		mShowUsernamesCallbackConnection(),
+		mNameFormatCallbackConnection(),
 		mAgeAlertCallbackConnection()
 {
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
 
 	// Use the callback from LLAvatarNameCache here or we might update the names too early!
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
-	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
+	mShowUsernamesCallbackConnection = gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 
-	gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
+	mNameFormatCallbackConnection = gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 	mAgeAlertCallbackConnection = gSavedSettings.getControl("RadarAvatarAgeAlertValue")->getSignal()->connect(boost::bind(&FSRadar::updateAgeAlertCheck, this));
 }
 
@@ -115,6 +117,16 @@ FSRadar::~FSRadar()
 	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
 	{
 		delete em_it->second;
+	}
+
+	if (mShowUsernamesCallbackConnection.connected())
+	{
+		mShowUsernamesCallbackConnection.disconnect();
+	}
+
+	if (mNameFormatCallbackConnection.connected())
+	{
+		mNameFormatCallbackConnection.disconnect();
 	}
 
 	if (mAgeAlertCallbackConnection.connected())
