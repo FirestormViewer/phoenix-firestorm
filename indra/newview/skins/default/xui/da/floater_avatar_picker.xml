@@ -24,10 +24,10 @@
 				Indtast en del af beboerens navn:
 			</text>
 			<button label="Find" label_selected="Find" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Navn" name="name"/>
 				<columns label="Brugernavn" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Venner" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -43,10 +43,10 @@
 				meter
 			</text>
 			<button label="Gentegn liste" label_selected="Gentegn liste" name="Refresh"/>
-			<scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="Navn" name="name"/>
 				<columns label="Brugernavn" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>

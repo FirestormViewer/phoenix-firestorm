@@ -28,6 +28,8 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloatersearch.h"
+#include "fsavatarsearchlistctrl.h"
+#include "fsavatarsearchmenu.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llavatarname.h"
@@ -734,7 +736,7 @@ FSPanelSearchPeople::~FSPanelSearchPeople()
 BOOL FSPanelSearchPeople::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("people_edit");
-	mSearchResults =	findChild<LLScrollListCtrl>("search_results_people");
+	mSearchResults =	findChild<FSAvatarSearchListCtrl>("search_results_people");
 	if (mSearchComboBox)
 	{
 		mSearchComboBox->setCommitCallback(boost::bind(&FSPanelSearchPeople::onBtnFind, this));
@@ -745,6 +747,7 @@ BOOL FSPanelSearchPeople::postBuild()
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchPeople::onSelectItem, this));
 		mSearchResults->setEnabled(FALSE);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
+		mSearchResults->setContextMenu(&gFSAvatarSearchMenu);
 	}
 	
 	childSetAction("people_next", boost::bind(&FSPanelSearchPeople::onBtnNext, this));

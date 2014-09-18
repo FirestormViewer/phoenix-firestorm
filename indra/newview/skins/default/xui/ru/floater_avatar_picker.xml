@@ -24,10 +24,10 @@
 				Наберите часть имени жителя:
 			</text>
 			<button label="Перейти" label_selected="Перейти" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Название" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Друзья" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,10 +42,10 @@
 			<text name="meters">
 				Метров
 			</text>
-			<scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="Название" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="ОК" label_selected="ОК" name="ok_btn"/>

@@ -10,10 +10,10 @@
 	
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">
-		<scroll_list name="search_results_people">
+		<panel_fs_search_legacy_people name="search_results_people">
 			<columns label="" name="icon" />
 			<columns label="名前" name="username" />
-		</scroll_list>
+		</panel_fs_search_legacy_people>
 		<button label="戻る" name="people_back" />
 		<button label="次へ" name="people_next" />
 	</panel>

@@ -54,7 +54,7 @@
      layout="topleft"
      border="true"
     >
-        <scroll_list
+        <panel_fs_search_legacy_people
          name="search_results_people"
          top="0"
          left="0"
@@ -74,7 +74,7 @@
              label="Name"
              relwidth="1"
             />
-        </scroll_list>
+        </panel_fs_search_legacy_people>
         <button
          name="people_back"
          label="Back"

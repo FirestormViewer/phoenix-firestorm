@@ -135,6 +135,8 @@ set(viewer_SOURCE_FILES
     fsareasearch.cpp
     fsareasearchlistctrl.cpp
     fsareasearchmenu.cpp
+    fsavatarsearchlistctrl.cpp
+    fsavatarsearchmenu.cpp
     fsblocklistctrl.cpp
     fsblocklistmenu.cpp
     fschathistory.cpp
@@ -844,6 +846,8 @@ set(viewer_HEADER_FILES
     fsareasearch.h
     fsareasearchlistctrl.h
     fsareasearchmenu.h
+    fsavatarsearchlistctrl.h
+    fsavatarsearchmenu.h
     fsblocklistctrl.h
     fsblocklistmenu.h
     fschathistory.h

@@ -24,10 +24,10 @@
 				鍵入人名的一部分：
 			</text>
 			<button label="前往" label_selected="前往" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="名稱" name="name"/>
 				<columns label="使用者名稱" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="朋友" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,10 +42,10 @@
 			<text name="meters">
 				公尺
 			</text>
-			<scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="名稱" name="name"/>
 				<columns label="使用者名稱" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="確定" label_selected="確定" name="ok_btn"/>

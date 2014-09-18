@@ -84,7 +84,7 @@
              left_pad="5"
              name="Find"
              width="45" />
-          <scroll_list
+          <fs_avatar_search_list
             draw_heading="true" 
            follows="all"
            height="98"
@@ -101,7 +101,7 @@
               label="Username"
               name="username"
               width="150" />
-          </scroll_list>
+          </fs_avatar_search_list>
         </panel>
         <panel
          height="150"
@@ -136,7 +136,7 @@
              <button.commit_callback 
               function="Refresh.FriendList"/>
             </button>
-            <scroll_list
+            <fs_avatar_search_list
              follows="all"
              height="120"
              layout="topleft"
@@ -202,7 +202,7 @@
              width="28"
              name="Refresh"
              image_overlay="Refresh_Off" />
-          <scroll_list
+          <fs_avatar_search_list
              draw_heading="true"
              follows="all"
              height="100"
@@ -220,7 +220,7 @@
               label="Username"
               name="username"
               width="150" />
-          </scroll_list>
+          </fs_avatar_search_list>
         </panel>
 
         <panel
@@ -263,7 +263,7 @@
              left_pad="5"
              name="FindUUID"
              width="45" />
-            <scroll_list
+            <fs_avatar_search_list
              draw_heading="true" 
              follows="all"
              height="98"
@@ -280,7 +280,7 @@
               label="Username"
               name="usernameUUID"
               width="150" />
-          </scroll_list>
+          </fs_avatar_search_list>
         </panel>
     </tab_container>
     <button

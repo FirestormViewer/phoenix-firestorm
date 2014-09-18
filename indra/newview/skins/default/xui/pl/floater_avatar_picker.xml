@@ -24,10 +24,10 @@
 				Wpisz fragment imienia:
 			</text>
 			<button label="Szukaj" label_selected="Szukaj" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Imię" name="name"/>
 				<columns label="Nazwa użytkownika" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Znajomi" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,20 +42,20 @@
 			<text name="meters">
 				Metry
 			</text>
-			<scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="Imię" name="name"/>
 				<columns label="Nazwa użytkownika" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Szukaj po UUID" name="SearchPanelUUID">
 			<text name="SearchByUUIDLabel">
 				Wpisz UUID osoby:
 			</text>
 			<button label="Szukaj" label_selected="Szukaj" name="FindUUID" />
-			<scroll_list name="SearchResultsUUID">
+			<fs_avatar_search_list name="SearchResultsUUID">
 				<columns label="Imię" name="nameUUID" />
 				<columns label="Nazwa użytkownika" name="usernameUUID" />
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>

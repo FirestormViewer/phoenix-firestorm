@@ -24,10 +24,10 @@
 				Geben Sie einen Teil des Namens einer Person ein:
 			</text>
 			<button label="Los" label_selected="Los" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Name" name="name"/>
 				<columns label="Benutzername" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Freunde" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -43,20 +43,20 @@
 				Meter
 			</text>
 			<button follows="top|left" height="28" image_overlay="Refresh_Off" layout="topleft" left_pad="0" name="Refresh" width="28"/>
-			<scroll_list border="false" follows="all" height="100" layout="topleft" left="0" name="NearMe" sort_column="0" top="50" width="132">
+			<fs_avatar_search_list border="false" follows="all" height="100" layout="topleft" left="0" name="NearMe" sort_column="0" top="50" width="132">
 				<columns label="Name" name="name"/>
 				<columns label="Benutzername" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Suchen per UUID" name="SearchPanelUUID">
 			<text name="SearchByUUIDLabel">
 				Geben Sie die UUID einer Person ein:
 			</text>
 			<button label="Los" label_selected="Los" name="FindUUID"/>
-			<scroll_list name="SearchResultsUUID">
+			<fs_avatar_search_list name="SearchResultsUUID">
 				<columns label="Name" name="nameUUID"/>
 				<columns label="Benutzername" name="usernameUUID"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>

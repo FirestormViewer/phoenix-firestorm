@@ -24,10 +24,10 @@
 				Bir kişinin adının bir kısmını yazın:
 			</text>
 			<button label="Git" label_selected="Git" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Ad" name="name"/>
 				<columns label="Kullanıcı Adı" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Arkadaşlar" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,10 +42,10 @@
 			<text name="meters">
 				Metre
 			</text>
-			<scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="Ad" name="name"/>
 				<columns label="Kullanıcı Adı" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="Tamam" label_selected="Tamam" name="ok_btn"/>

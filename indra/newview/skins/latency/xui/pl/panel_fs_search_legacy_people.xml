@@ -6,9 +6,9 @@
 		</text>
 	</panel>
 	<panel name="panel_ls_scrolllist">
-		<scroll_list name="search_results_people">
+		<panel_fs_search_legacy_people name="search_results_people">
 			<columns label="Imię" name="username" />
-		</scroll_list>
+		</panel_fs_search_legacy_people>
 		<button label="Wstecz" name="people_back" />
 		<button label="Dalej" name="people_next" />
 	</panel>

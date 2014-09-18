@@ -48,7 +48,7 @@ class LLGroupMgrObserver;
 class LLSearchEditor;
 class LLSearchComboBox;
 class FSFloaterSearch;
-
+class FSAvatarSearchListCtrl;
 class FSPanelProfile;
 
 struct SearchQuery : public LLInitParam::Block<SearchQuery>
@@ -106,9 +106,9 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 	
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
+	FSFloaterSearch*		mParent;
+	LLSearchComboBox*		mSearchComboBox;
+	FSAvatarSearchListCtrl*	mSearchResults;
 };
 
 class FSPanelSearchGroups : public FSSearchPanelBase

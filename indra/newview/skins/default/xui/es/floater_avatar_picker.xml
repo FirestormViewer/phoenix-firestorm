@@ -24,10 +24,10 @@
 				Escribe parte del nombre del residente:
 			</text>
 			<button label="Busca" label_selected="Busca" name="Find"/>
-			<scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Nombre" name="name"/>
 				<columns label="Nombre de usuario" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Amigos" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -43,10 +43,10 @@
 				Metros
 			</text>
 			<button font="SansSerifSmall" label="Actualizar la lista" label_selected="Actualizar la lista" left_delta="1" name="Refresh" width="115"/>
-			<scroll_list bottom_delta="-169" height="159" name="NearMe">
+			<fs_avatar_search_list bottom_delta="-169" height="159" name="NearMe">
 				<columns label="Nombre" name="name"/>
 				<columns label="Nombre de usuario" name="username"/>
-			</scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="Aceptar" label_selected="Aceptar" name="ok_btn"/>
