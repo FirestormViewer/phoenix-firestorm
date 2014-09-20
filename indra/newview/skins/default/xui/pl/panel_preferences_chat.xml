@@ -228,6 +228,20 @@
 			<check_box name="RadarEnterChannelAlert" label="Zgłaszaj alerty wejść skryptom"/>
 			<check_box name="RadarLeaveChannelAlert" label="Zgłaszaj alerty wyjść skryptom"/>
 			<check_box name="FSRadarEnhanceByBridge" label="Wspomaganie radaru za pomocą Mostu LSL" tool_tip="Gdy ta opcja jest włączona, to funkcje radaru odpowiedzialne za ustalanie wysokości na jakiej znajdują się awatary są wspomagane przez Most LSL - zwłaszcza gdy jest ona duża i osoby są poza polem widzenia."/>
+			<text name="AgeAlertLabel">
+				Powiadom o wieku:
+			</text>
+			<text name="RadarAvatarAgeAlertValueLabel">
+				Próg:
+			</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Koloruje również kolumnę wieku w radarze. Ustaw na -1, aby wyłączyć." />
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">
+				Dni
+			</text>
+			<check_box name="RadarAvatarAgeAlert" label="Radar będzie zgłaszać osoby młodsze, niż ustawiono w tym miejscu" />
+			<check_box name="PlayModeUISndRadarAgeAlert" label="Odtwórz UUID dźwięku:" />
+			<button name="Prev_UISndRadarAgeAlert" tool_tip="Podgląd dźwięku." />
+			<button name="Def_UISndRadarAgeAlert" tool_tip="Resetuj do domyślnego UUID." />
 		</panel>
 		<panel label="Detektor słów" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Włącz detektor słów"/>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="block_list_panel">
+	<panel name="blocked_buttons_panel">
+		<filter_editor label="Filtruj" name="blocked_filter_input" />
+		<menu_button name="blocked_gear_btn" tool_tip="Akcje możliwe do wykonania dla wybranego Rezydenta lub obiektu" />
+		<menu_button name="view_btn" tool_tip="Opcje sortowania" />
+		<menu_button name="plus_btn" tool_tip="Wybierz Rezydenta lub obiekt do zablokowania" />
+		<button name="unblock_btn" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych" />
+	</panel>
+	<fs_block_list name="block_list">
+		<fs_block_list.columns name="item_name" label="Nazwa" />
+		<fs_block_list.columns name="item_type" label="Typ" />
+	</fs_block_list>
+</panel>
