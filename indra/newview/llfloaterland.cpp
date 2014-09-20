@@ -838,6 +838,7 @@ void LLPanelLandGeneral::refresh()
 			}
 			else
 			{
+				LL_WARNS() << "RemoteParcelRequest not available. Cannot request parcel ID" << LL_ENDL;
 				mEditUUID->setText(getString("error_resolving_uuid"));
 			}
 		}
