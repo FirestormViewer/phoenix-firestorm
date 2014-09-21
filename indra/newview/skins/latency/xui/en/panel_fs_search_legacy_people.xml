@@ -54,7 +54,7 @@
      layout="topleft"
      border="true"
     >
-        <panel_fs_search_legacy_people
+        <fs_avatar_search_list
          name="search_results_people"
          top="0"
          left="0"
@@ -74,7 +74,7 @@
              label="Name"
              relwidth="1"
             />
-        </panel_fs_search_legacy_people>
+        </fs_avatar_search_list>
         <button
          name="people_back"
          label="Back"
