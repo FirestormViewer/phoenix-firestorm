@@ -333,6 +333,13 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	callRightMouseUp(mMousePos, mModifiers);
 }
 
+// <FS:LO> Fix FIRE-14282/BUG-6875 with the solution provided in LL's jira.
+- (void) rightMouseDragged:(NSEvent *)theEvent
+{
+	[self mouseDragged:theEvent];
+}
+// </FS:LO>
+
 - (void)mouseMoved:(NSEvent *)theEvent
 {
 	float mouseDeltas[2] = {
@@ -385,7 +392,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) otherMouseDragged:(NSEvent *)theEvent
 {
-	
+	[self mouseDragged:theEvent];  // <FS:LO> Fix FIRE-14282/BUG-6875 with the solution provided in LL's jira.
 }
 
 - (void) scrollWheel:(NSEvent *)theEvent
