@@ -204,6 +204,8 @@ ATI Radeon HD 8600 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)86.*				3	1	0	4.2
 ATI Radeon HD 8700 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)87.*				4	1	1	4.2
 ATI Radeon HD 8800 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)88.*				5	1	1	4.2
 ATI Radeon HD 8900 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)89.*				5	1	1	4.2
+AMD Radeon R3 Series					.*ATI.*(Radeon|ASUS).* R3.*							3	1	0	4.2
+AMD Radeon R5 200 Series				.*ATI.*(Radeon|ASUS).* R5 2[0-9].*					3	1	0	4.2
 AMD Radeon R7 200 Series				.*ATI.*(Radeon|ASUS).* R7 2[0-9].*					4	1	0	4.2
 AMD Radeon R9 200 Series				.*ATI.*(Radeon|ASUS).* R9 2[0-9].*					5	1	0	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*								0	0	0	0
@@ -333,6 +335,7 @@ Intel HD Graphics 4200					.*Intel.*HD Graphics 42.*							3	1	0	4.2
 Intel HD Graphics 4400					.*Intel.*HD Graphics 44.*							3	1	0	4.2
 Intel HD Graphics 4600					.*Intel.*HD Graphics 46.*							3	1	0	4.2
 Intel HD Graphics 5000					.*Intel.*HD Graphics 50.*							4	1	0	4.2
+Intel HD Graphics 5300					.*Intel.*HD Graphics 53.*							3	1	0	4.2
 Intel Intel Iris Pro Graphics 5200		.*Intel.*Iris Pro Graphics 52.*						4	1	0	4.2
 Intel Intel Iris Graphics 5100			.*Intel.*Iris Graphics 51.*							4	1	0	4.2
 Intel Intel Iris OpenGL Engine			.*Intel.*Iris OpenGL.*								4	1	0	4
@@ -351,6 +354,7 @@ Intel B45/B43							.*Intel.*B4.*										1	1	1	2.1
 Intel 3D-Analyze						.*Intel.*3D-Analyze.*								2	1	0	0
 Matrox									.*Matrox.*											0	0	0	0
 Intel Mesa (Ivybridge)					.*Mesa DRI.*Ivybridge.*								1	1	1	3
+Intel Mesa (Haswell)					.*Mesa DRI.*Haswell.*								1	1	1	3
 Mesa									.*Mesa.*											1	0	1	3
 Gallium									.*Gallium.*											1	1	1	2.1
 NVIDIA GeForce Pre-Release				.*NVIDIA .*GeForce[ ]Pre-Release.*					2	1	1	3.3
@@ -527,6 +531,7 @@ NVIDIA GTX 66x							.*NVIDIA .*GTX 66.*									5	1	0	4.4
 NVIDIA GTX 67x							.*NVIDIA .*GTX 67.*									5	1	1	4.4
 NVIDIA GTX 68x							.*NVIDIA .*GTX 68.*									5	1	1	4.4
 NVIDIA GTX 69x							.*NVIDIA .*GTX 69.*									5	1	1	4.4
+NVIDIA GT 70x							.*NVIDIA .*GT *70.*									2	1	0	4.4
 NVIDIA GT 71x							.*NVIDIA .*GT *71.*									3	1	0	4.4
 NVIDIA GT 72x							.*NVIDIA .*GT *72.*									3	1	0	4.4
 NVIDIA GT 73x							.*NVIDIA .*GT *73.*									3	1	0	4.4
@@ -536,6 +541,8 @@ NVIDIA GTX 75x							.*NVIDIA .*GTX *75.*								3	1	0	4.4
 NVIDIA GTX 76x							.*NVIDIA .*GTX *76.*								5	1	0	4.4
 NVIDIA GTX 77x							.*NVIDIA .*GTX *77.*								5	1	0	4.4
 NVIDIA GTX 78x							.*NVIDIA .*GTX *78.*								5	1	0	4.4
+NVIDIA GTX 97x							.*NVIDIA .*GTX *97.*								5	1	0	4.4
+NVIDIA GTX 98x							.*NVIDIA .*GTX *98.*								5	1	0	4.4
 NVIDIA GTX TITAN						.*NVIDIA .*GTX *TITAN.*								5	1	0	4.4
 NVIDIA C51								.*NVIDIA .*C51.*									0	1	1	2
 NVIDIA G72								.*NVIDIA .*G72.*									1	1	0	0
