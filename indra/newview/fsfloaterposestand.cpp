@@ -46,7 +46,9 @@ BOOL FSFloaterPoseStand::postBuild()
 void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
 	if (!isAgentAvatarValid())
+	{
 		return;
+	}
 	
 	if (gSavedPerAccountSettings.getBOOL("UseAO"))
 	{
@@ -66,7 +68,9 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 	gFocusMgr.setMouseCapture(NULL);
 	std::string last_pose = gSavedSettings.getString("FSPoseStandLastSelectedPose");
 	if (!last_pose.empty())
+	{
 		mComboPose->setSelectedByValue(last_pose, TRUE);
+	}
 	onCommitCombo();
 }
 
@@ -74,9 +78,11 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
 	if (!isAgentAvatarValid())
+	{
 		return;
+	}
 	
-	if (mPoseStandLock == true && gAgentAvatarp->isSitting())
+	if (mPoseStandLock && gAgentAvatarp->isSitting())
 	{
 		setLock(false);
 		gAgent.standUp();
@@ -98,11 +104,15 @@ void FSFloaterPoseStand::loadPoses()
 	LLSD poses;
 	if (pose_file.is_open())
 	{
-		if(LLSDSerialize::fromXML(poses, pose_file) >= 1)
+		if (LLSDSerialize::fromXML(poses, pose_file) >= 1)
 		{
-			for(LLSD::map_iterator p_itr = poses.beginMap(); p_itr != poses.endMap(); ++p_itr)
+			for (LLSD::map_iterator p_itr = poses.beginMap(); p_itr != poses.endMap(); ++p_itr)
 			{
-				mComboPose->add(LLTrans::getString(p_itr->second["name"]), LLUUID(p_itr->first));
+				LLUUID anim_id(p_itr->first);
+				if (anim_id.notNull())
+				{
+					mComboPose->add(LLTrans::getString(p_itr->second["name"]), anim_id);
+				}
 			}
 		}
 		pose_file.close();
