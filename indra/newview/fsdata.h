@@ -43,7 +43,7 @@ public:
 	void processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified);
 	void addAgents();
 
-	LLSD resolveClientTag(LLUUID id, bool new_system, LLColor4 new_system_color);
+	LLSD resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& new_system_color);
 	
 	enum flags_t
 	{
@@ -58,17 +58,17 @@ public:
 
 	std::set<LLUUID> mSupportGroup;
 
-	bool isDeveloper(LLUUID avatar_id);
-	bool isSupport(LLUUID avatar_id);
-	BOOL isSupportGroup(LLUUID id); // BOOL is used due to used in a LL function.
+	bool isDeveloper(const LLUUID& avatar_id);
+	bool isSupport(const LLUUID& avatar_id);
+	BOOL isSupportGroup(const LLUUID& id); // BOOL is used due to used in a LL function.
 	// returns -1 if agent is not found.
-	S32 getAgentFlags(LLUUID avatar_id);
+	S32 getAgentFlags(const LLUUID& avatar_id);
 
 	LLSD allowedLogin();
 	
 	bool enableLegacySearch() {return mLegacySearch;}
 
-	std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
+	std::string processRequestForInfo(const LLUUID& requester, const std::string& message, const std::string& name, const LLUUID& sessionid);
 	static LLSD getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	
@@ -80,7 +80,7 @@ public:
 	
 
 private:
-	static void sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog);
+	static void sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& myName, EInstantMessage dialog);
 	void processAssets(const LLSD& assets);
 	void processAgents(const LLSD& data);
 	void saveLLSD(const LLSD& data, const std::string& filename, const LLDate& last_modified);
