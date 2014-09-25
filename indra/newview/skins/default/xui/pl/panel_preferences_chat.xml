@@ -238,8 +238,8 @@
 			<text name="RadarAvatarAgeAlertValueLabelSuffix">
 				Dni
 			</text>
-			<check_box name="RadarAvatarAgeAlert" label="Radar będzie zgłaszać osoby młodsze, niż ustawiono w tym miejscu" />
-			<check_box name="PlayModeUISndRadarAgeAlert" label="Odtwórz UUID dźwięku:" />
+			<check_box name="RadarAvatarAgeAlert" label="Radar ma informować, gdy awatar jest młodszy, niż ustawiono powyżej" />
+			<check_box name="PlayModeUISndRadarAgeAlert" width="150" label="Odtwórz UUID dźwięku:" />
 			<button name="Prev_UISndRadarAgeAlert" tool_tip="Podgląd dźwięku." />
 			<button name="Def_UISndRadarAgeAlert" tool_tip="Resetuj do domyślnego UUID." />
 		</panel>

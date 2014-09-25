@@ -5458,7 +5458,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		opuścił/a region.
 	</string>
 	<string name="avatar_age_alert">
-		wywołał/a alert powiadamiania wieku. Wiek: [AGE] dni.
+		wywołał/a alert powiadamiania o wieku. Wiek: [AGE] dni.
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
 		Całkowita il. skryptów w regionie wzrosła z [OLD_VALUE] do [NEW_VALUE] ([DIFFERENCE]).
