@@ -304,7 +304,7 @@ private:
 	LLTextBox* mCounterText;
 
 	std::map<std::string, U32> mColumnBits;
-	boost::signals2::connection mFSRadarColumnConfigConnection;
+	boost::signals2::connection mFSAreaSearchColumnConfigConnection;
 };
 
 

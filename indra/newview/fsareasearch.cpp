@@ -1262,7 +1262,7 @@ FSPanelAreaSearchList::FSPanelAreaSearchList(FSAreaSearch* pointer)
 	mCounterText(0),
 	mResultList(0),
 	mFSAreaSearch(pointer),
-	mFSRadarColumnConfigConnection()
+	mFSAreaSearchColumnConfigConnection()
 {
 	mColumnBits["distance"] = 1;
 	mColumnBits["name"] = 2;
@@ -1294,7 +1294,7 @@ BOOL FSPanelAreaSearchList::postBuild()
 	mAgentLastPosition = gAgent.getPositionGlobal();
 
 	updateResultListColumns();
-	mFSRadarColumnConfigConnection = gSavedSettings.getControl("FSAreaSearchColumnConfig")->getSignal()->connect(boost::bind(&FSPanelAreaSearchList::updateResultListColumns, this));
+	mFSAreaSearchColumnConfigConnection = gSavedSettings.getControl("FSAreaSearchColumnConfig")->getSignal()->connect(boost::bind(&FSPanelAreaSearchList::updateResultListColumns, this));
 
 	return LLPanel::postBuild();
 }
@@ -1302,9 +1302,9 @@ BOOL FSPanelAreaSearchList::postBuild()
 // virtual
 FSPanelAreaSearchList::~FSPanelAreaSearchList()
 {
-	if (mFSRadarColumnConfigConnection.connected())
+	if (mFSAreaSearchColumnConfigConnection.connected())
 	{
-		mFSRadarColumnConfigConnection.disconnect();
+		mFSAreaSearchColumnConfigConnection.disconnect();
 	}
 }
 
