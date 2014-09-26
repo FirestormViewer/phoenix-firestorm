@@ -996,16 +996,21 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		// italics for emotes -Zi
 		if(gSavedSettings.getBOOL("EmotesUseItalic"))
+		{
 			body_message_params.font.style = "ITALIC";
+			name_params.font.style = "ITALIC";
+		}
 	}
 
 	if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
-			body_message_params.font.style = "ITALIC";
+		body_message_params.font.style = "ITALIC";
+		name_params.font.style = "ITALIC";
 	}
 	else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
-			body_message_params.font.style = "BOLD";
+		body_message_params.font.style = "BOLD";
+		name_params.font.style = "BOLD";
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
@@ -1151,26 +1156,31 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
 				{
-					std::string localized_name;
-					bool is_localized = LLTrans::findString(localized_name, "AgentNameSubst");
-					appendText((is_localized? localized_name:"(You)") + delimiter,
-							prependNewLineState, name_params);
-					prependNewLineState = false;
+					appendText(LLTrans::getString("AgentNameSubst"), prependNewLineState, name_params);
 				}
 				else
 				{
-				// Add link to avatar's inspector and delimiter to message.
-					// <FS:Ansariel> Append delimiter with different style params or
-					//               it will be replaced with the avatar name once it's
-					//               returned from the server!
-					//appendText(std::string(link_params.link_href) + delimiter,
-					//		prependNewLineState, link_params);
+					// Add link to avatar's inspector and delimiter to message.
 					appendText(std::string(name_params.link_href), prependNewLineState, name_params);
-					prependNewLineState = false;
-					appendText(delimiter, prependNewLineState, body_message_params);
-					// </FS:Ansariel>
-					prependNewLineState = false;
 				}
+
+				prependNewLineState = false;
+
+				if (delimiter.length() > 0 && delimiter[0] == ':')
+				{
+					LLStyle::Params delimiter_params(body_message_params);
+					delimiter_params.font.style = name_params.font.style;
+
+					appendText(":", prependNewLineState, delimiter_params);
+					prependNewLineState = false;
+
+					appendText(delimiter.substr(1, std::string::npos), prependNewLineState, body_message_params);
+				}
+				else
+				{
+					appendText(delimiter, prependNewLineState, body_message_params);
+				}
+				prependNewLineState = false;
 			}
 			else
 			{
