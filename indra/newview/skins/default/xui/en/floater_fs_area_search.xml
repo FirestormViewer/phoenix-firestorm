@@ -590,6 +590,9 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="distance"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
+				 parameter="distance"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
@@ -602,6 +605,9 @@
 			 initial_value="true">
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
+				 parameter="name"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
 				 parameter="name"/>
 			</check_box>
 			<check_box
@@ -616,6 +622,9 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="description"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
+				 parameter="description"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
@@ -628,6 +637,9 @@
 			 initial_value="true">
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
+				 parameter="price"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
 				 parameter="price"/>
 			</check_box>
 			<check_box
@@ -642,6 +654,9 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="land_impact"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
+				 parameter="land_impact"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
@@ -654,6 +669,9 @@
 			 initial_value="true">
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
+				 parameter="prim_count"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
 				 parameter="prim_count"/>
 			</check_box>
 			<check_box
@@ -668,6 +686,9 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="owner"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
+				 parameter="owner"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
@@ -680,6 +701,9 @@
 			 initial_value="true">
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
+				 parameter="group"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
 				 parameter="group"/>
 			</check_box>
 			<check_box
@@ -694,6 +718,9 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="creator"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
+				 parameter="creator"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
@@ -706,6 +733,9 @@
 			 initial_value="true">
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
+				 parameter="last_owner"/>
+				<check_box.on_check
+				 function="AreaSearch.EnableColumn"
 				 parameter="last_owner"/>
 			</check_box>
 		</panel>

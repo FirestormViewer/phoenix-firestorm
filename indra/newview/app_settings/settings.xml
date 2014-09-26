@@ -22743,6 +22743,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSAreaSearchColumnConfig</key>
+    <map>
+      <key>Comment</key>
+      <string>Stores the column visibility for the area search</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>1023</integer>
+    </map>
 </map>
 </llsd>
 

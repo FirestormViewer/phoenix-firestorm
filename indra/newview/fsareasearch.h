@@ -158,17 +158,6 @@ public:
 	void setFilterDistanceMin(S32 s) { mFilterDistanceMin = s; }
 	void setFilterDistanceMax(S32 s) { mFilterDistanceMax = s; }
 	
-	void setColumnDistance(bool b) { mColumnDistance = b; }
-	void setColumnName(bool b) { mColumnName = b; }
-	void setColumnDescription(bool b) { mColumnDescription = b; }
-	void setColumnPrice(bool b) { mColumnPrice = b; }
-	void setColumnLandImpact(bool b) { mColumnLandImpact = b; }
-	void setColumnPrimCount(bool b) { mColumnPrimCount = b; }
-	void setColumnOwner(bool b) { mColumnOwner = b; }
-	void setColumnGroup(bool b) { mColumnGroup = b; }
-	void setColumnCreator(bool b) { mColumnCreator = b; }
-	void setColumnLastOwner(bool b) { mColumnLastOwner = b; }
-	
 	bool isActive() { return mActive; }
 
 private:
@@ -253,17 +242,6 @@ private:
 
 	bool mFilterClickAction;
 	U8 mFilterClickActionType;
-	
-	bool mColumnDistance;
-	bool mColumnName;
-	bool mColumnDescription;
-	bool mColumnPrice;
-	bool mColumnLandImpact;
-	bool mColumnPrimCount;
-	bool mColumnOwner;
-	bool mColumnGroup;
-	bool mColumnCreator;
-	bool mColumnLastOwner;
 
 protected:
 	static void* createPanelList(void* data);
@@ -283,6 +261,7 @@ class FSPanelAreaSearchList
 {
 	LOG_CLASS(FSPanelAreaSearchList);
 	friend class FSAreaSearchMenu;
+	friend class FSPanelAreaSearchOptions;
 
 public:
 	FSPanelAreaSearchList(FSAreaSearch* pointer);
@@ -297,6 +276,7 @@ public:
 	void touchObject(LLViewerObject* objectp);
 
 	FSAreaSearchListCtrl* getResultList() { return mResultList; }
+	void updateResultListColumns();
 
 	void setAgentLastPosition(LLVector3d d) { mAgentLastPosition = d; }
 	LLVector3d getAgentLastPosition() { return mAgentLastPosition; }
@@ -310,6 +290,9 @@ private:
 	bool onContextMenuItemClick(const LLSD& userdata);
 	bool onContextMenuItemEnable(const LLSD& userdata);
 
+	void onColumnVisibilityChecked(const LLSD& userdata);
+	bool onEnableColumnVisibilityChecked(const LLSD& userdata);
+
 	F32 getBBoxAspectRatio(const LLBBox& bbox, const LLVector3& normal, F32* height, F32* width, F32* depth);
 
 	LLVector3d mAgentLastPosition;
@@ -319,6 +302,9 @@ private:
 	FSAreaSearchListCtrl* mResultList;
 	LLCheckBoxCtrl* mCheckboxBeacons;
 	LLTextBox* mCounterText;
+
+	std::map<std::string, U32> mColumnBits;
+	boost::signals2::connection mFSRadarColumnConfigConnection;
 };
 
 
@@ -413,6 +399,7 @@ public:
 
 private:
 	void onCommitCheckboxDisplayColumn(const LLSD& userdata);
+	bool onEnableColumnVisibilityChecked(const LLSD& userdata);
 
 	FSAreaSearch* mFSAreaSearch;
 	
