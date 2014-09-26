@@ -225,6 +225,13 @@ void LLPanelLandAudio::onCommitAny(LLUICtrl*, void *userdata)
 	// Remove leading/trailing whitespace (common when copying/pasting)
 	LLStringUtil::trim(music_url);
 
+	// <FS> Add leading http:// if not already present
+	if (!music_url.empty() && music_url.find("://") == std::string::npos)
+	{
+		music_url.insert(0, "http://");
+	}
+	// </FS>
+
 	// Push data into current parcel
 	parcel->setParcelFlag(PF_ALLOW_VOICE_CHAT, voice_enabled);
 	parcel->setParcelFlag(PF_USE_ESTATE_VOICE_CHAN, voice_estate_chan);
