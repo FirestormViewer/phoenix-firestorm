@@ -1030,7 +1030,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	{
 		moderator_style_active = true;
 
-		name_params.font.style(moderator_name_style);		
+		name_params.font.style(moderator_name_style);
 		body_message_params.font.style(moderator_body_style);
 
 		if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
@@ -1038,7 +1038,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
 			{
 				moderator_name_style += "ITALIC";
-				body_message_params.font.style(moderator_name_style);
+				name_params.font.style(moderator_name_style);
 			}
 			if ( (ITALIC & moderator_body_style_value) != ITALIC )
 			{
@@ -1130,7 +1130,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && !chat.mRlvNamesFiltered)
 // [/RLVa:KB]
 			{
-				LLStyle::Params name_params(body_message_params);
 				name_params.color = name_color;
 				name_params.readonly_color = name_color;
 				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
