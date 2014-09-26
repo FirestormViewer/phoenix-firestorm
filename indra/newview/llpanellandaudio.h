@@ -49,9 +49,9 @@ public:
 private:
 	static void onCommitAny(LLUICtrl* ctrl, void *userdata);
 // <FS:CR> FIRE-593 - Add/remove streams from the list
-	static void onBtnStreamAdd(LLUICtrl* ctrl, void *userdata);
-	static void onBtnStreamDelete(LLUICtrl* ctrl, void *userdata);
-	static void onBtnCopyToClipboard(LLUICtrl* ctrl, void *userdata);
+	void onBtnStreamAdd();
+	void onBtnStreamDelete();
+	void onBtnCopyToClipboard();
 // </FS:CR>
 
 private:

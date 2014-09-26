@@ -98,13 +98,13 @@ BOOL LLPanelLandAudio::postBuild()
 	childSetCommitCallback("music_url", onCommitAny, this);
 	
 	mBtnStreamAdd = getChild<LLButton>("stream_add_btn");
-	childSetCommitCallback("stream_add_btn", onBtnStreamAdd, this);
+	mBtnStreamAdd->setCommitCallback(boost::bind(&LLPanelLandAudio::onBtnStreamAdd, this));
 	
 	mBtnStreamDelete = getChild<LLButton>("stream_delete_btn");
-	childSetCommitCallback("stream_delete_btn", onBtnStreamDelete, this);
+	mBtnStreamDelete->setCommitCallback(boost::bind(&LLPanelLandAudio::onBtnStreamDelete, this));
 	
 	mBtnStreamCopyToClipboard = getChild<LLButton>("stream_copy_btn");
-	childSetCommitCallback("stream_copy_btn", onBtnCopyToClipboard, this);
+	mBtnStreamCopyToClipboard->setCommitCallback(boost::bind(&LLPanelLandAudio::onBtnCopyToClipboard, this));
 // </FS:CR>
 
 	mCheckAVSoundAny = getChild<LLCheckBoxCtrl>("all av sound check");
@@ -248,12 +248,9 @@ void LLPanelLandAudio::onCommitAny(LLUICtrl*, void *userdata)
 }
 
 // <FS:CR> FIRE-593 - Add/remove streams from the list with these. They're fantastic!
-// static
-void LLPanelLandAudio::onBtnStreamAdd(LLUICtrl*, void *userdata)
+void LLPanelLandAudio::onBtnStreamAdd()
 {
-	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
-	
-	std::string music_url = self->mMusicURLEdit->getSimple();
+	std::string music_url = mMusicURLEdit->getSimple();
 	LLStringUtil::trim(music_url);
 	
 	if (!music_url.empty())
@@ -262,16 +259,13 @@ void LLPanelLandAudio::onBtnStreamAdd(LLUICtrl*, void *userdata)
 		streamlist["version"] = 1;
 		streamlist["audio"].append(music_url);
 		gSavedSettings.setLLSD("FSStreamList", streamlist);
-		self->refresh();
+		refresh();
 	}
 }
 
-// static
-void LLPanelLandAudio::onBtnStreamDelete(LLUICtrl*, void *userdata)
+void LLPanelLandAudio::onBtnStreamDelete()
 {
-	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
-	
-	std::string music_url = self->mMusicURLEdit->getSimple();
+	std::string music_url = mMusicURLEdit->getSimple();
 	LLStringUtil::trim(music_url);
 	
 	LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
@@ -288,14 +282,12 @@ void LLPanelLandAudio::onBtnStreamDelete(LLUICtrl*, void *userdata)
 	}
 
 	gSavedSettings.setLLSD("FSStreamList", streamlist_new);
-	self->refresh();
+	refresh();
 }
 
-//static
-void LLPanelLandAudio::onBtnCopyToClipboard(LLUICtrl*, void *userdata)
+void LLPanelLandAudio::onBtnCopyToClipboard()
 {
-	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
-	std::string music_url = self->mMusicURLEdit->getSimple();
+	std::string music_url = mMusicURLEdit->getSimple();
 	LLStringUtil::trim(music_url);
 	
 	if (!music_url.empty())
