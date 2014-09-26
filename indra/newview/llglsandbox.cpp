@@ -973,7 +973,7 @@ void gpu_benchmark()
 	std::vector<F32> results;
 
 	//build a random texture
-	U8 pixels[res*res*4];
+	U8* pixels = new U8[res*res*4];
 
 	for (U32 i = 0; i < res*res*4; ++i)
 	{
@@ -994,6 +994,7 @@ void gpu_benchmark()
 		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, source[i]);
 		LLImageGL::setManualImage(GL_TEXTURE_2D, 0, GL_RGBA, res,res,GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	}
+	delete [] pixels;
 
 	//make a dummy triangle to draw with
 	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, GL_STATIC_DRAW_ARB);
