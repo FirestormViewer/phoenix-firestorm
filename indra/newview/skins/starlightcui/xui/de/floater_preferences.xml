@@ -3,6 +3,7 @@
 	<button label="Anwenden" label_selected="Anwenden" name="Apply"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
+	<search_editor label="Einstellungen suchen" name="search_prefs_edit" tool_tip="Den Suchbegriff hier eingeben. Ergebnisse werden für Treffer im Namen oder Kommentar einer Einstellung angezeigt."/>
 	<tab_container name="pref core">
 		<panel label="Allgemein" name="general"/>
 		<panel label="Chat" name="chat"/>
