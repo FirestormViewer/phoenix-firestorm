@@ -549,7 +549,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mOriginalIMViaEmail(false),
 	mLanguageChanged(false),
 	mAvatarDataInitialized(false),
-	mClickActionDirty(false)
+	mClickActionDirty(false),
+	mSearchData(NULL) // <FS:ND> Hook up and init for filtering
 {
 	LLConversationLog::instance().addObserver(this);
 
@@ -647,7 +648,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
 	// </Firestorm callbacks>
 
-	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this)); // <FS:ND/> Hook up for filtering
+	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false)); // <FS:ND/> Hook up for filtering
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -819,16 +820,10 @@ BOOL LLFloaterPreference::postBuild()
 	// <FS:Kadah> Load the list of font settings
 	populateFontSelectionCombo();
 	// </FS:Kadah>
-    
-	 // <FS:ND> Hook up and init for filtering
-	LLSearchEditor *pSearch = getChild<LLSearchEditor>("search_prefs_edit");
-	mFilterEdit = 0;
-	mSearchData = 0;
-	if( pSearch )
-	{
-		mFilterEdit = pSearch;
-		pSearch->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this));
-	}
+
+	// <FS:ND> Hook up and init for filtering
+	mFilterEdit = getChild<LLSearchEditor>("search_prefs_edit");
+	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
 	// </FS:ND>
 	return TRUE;
 }
@@ -1212,10 +1207,11 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// when the floater is opened.  That will make cancel do its
 	// job
 	saveSettings();
-	 // <FS:ND> Hook up and init for filtering
+
+	// <FS:ND> Hook up and init for filtering
+	mFilterEdit->setText(LLStringExplicit(""));
 	collectSearchableItems();
-	if( mFilterEdit )
-		mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this));
+	onUpdateFilterTerm(true);
 	// </FS:ND>
 }
 
@@ -4639,12 +4635,12 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 // <FS:AW optional opensim support>
 
 // <FS:ND> Code to filter/search in the prefs panel
-void LLFloaterPreference::onUpdateFilterTerm()
+void LLFloaterPreference::onUpdateFilterTerm(bool force)
 {
 	LLWString seachValue = utf8str_to_wstring( mFilterEdit->getValue() );
 	LLWStringUtil::toLower( seachValue );
 
-	if( !mSearchData || mSearchData->mLastFilter == seachValue )
+	if( !mSearchData || (mSearchData->mLastFilter == seachValue && !force))
 		return;
 
 	mSearchData->mLastFilter = seachValue;

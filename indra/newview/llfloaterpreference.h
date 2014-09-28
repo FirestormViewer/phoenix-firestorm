@@ -260,7 +260,7 @@ private:
 	LLAvatarData mAvatarProperties;
 
 	LLSearchEditor *mFilterEdit;
-	void onUpdateFilterTerm();
+	void onUpdateFilterTerm(bool force = false);
 
 	nd::prefs::SearchData *mSearchData;
 	void collectSearchableItems();
