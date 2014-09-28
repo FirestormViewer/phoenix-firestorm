@@ -1766,7 +1766,10 @@ void LLFloaterPreference::buildPopupLists()
 		{
 			if (ignore == LLNotificationForm::IGNORE_WITH_LAST_RESPONSE)
 			{
-				LLSD last_response = LLUI::sSettingGroups["config"]->getLLSD("Default" + templatep->mName);
+				// <FS:Ansariel> Default responses are declared in "ignores" settings group, see llnotifications.cpp
+				//LLSD last_response = LLUI::sSettingGroups["config"]->getLLSD("Default" + templatep->mName);
+				LLSD last_response = LLUI::sSettingGroups["ignores"]->getLLSD("Default" + templatep->mName);
+				// </FS:Ansariel>
 				if (!last_response.isUndefined())
 				{
 					for (LLSD::map_const_iterator it = last_response.beginMap();
