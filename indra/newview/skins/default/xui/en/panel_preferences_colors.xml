@@ -1658,7 +1658,36 @@
      tool_tip="Choose console background opacity"
      left_pad="10"
      width="378" />
-     
+
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="30"
+       height="12"
+       name="preferences_search_label"
+       top_pad="15"
+       width="220">
+       Preferences Search Highlight Color:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     top_pad="5"
+     name="preferences_search_color"
+     tool_tip="Choose preferences search highlight Color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="SearchableControlHighlightColor" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="SearchableControlHighlightColor" />
+     </color_swatch>
+
      <check_box
      control_name="FSScriptDialogNoTransparency"
      follows="left|top"
@@ -1666,7 +1695,7 @@
      left="30"
      height="12"
      name="FSScriptDialogNoTransparency"
-     top_pad="10"
+     top_pad="15"
      width="450"
      label="Always show script dialogs on an opaque background" />
      <check_box

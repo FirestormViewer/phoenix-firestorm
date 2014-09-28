@@ -48,20 +48,19 @@ namespace nd
 	{
 		class SearchableControl
 		{
-			mutable LLColor3 mHighlightColor;
 			mutable bool mIsHighlighed;
 		public:
 			SearchableControl()
-				: mHighlightColor( 1.0f, 0.0f, 0.0f )
-				, mIsHighlighed( false )
+				: mIsHighlighed( false )
 			{ }
 			virtual ~SearchableControl()
 			{ }
 
-			void setHighlightColor( LLColor3 const &aColor ) const
-			{ mHighlightColor = aColor; }
-			LLColor3 getHighlightColor(  ) const
-			{ return mHighlightColor; }
+			LLColor4 getHighlightColor( ) const
+			{
+				static LLUIColor highlight_color = LLUIColorTable::instance().getColor("SearchableControlHighlightColor", LLColor4::red);
+				return highlight_color.get();
+			}
 
 			void setHighlighted( bool aVal ) const
 			{

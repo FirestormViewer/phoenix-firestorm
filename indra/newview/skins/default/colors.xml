@@ -1273,4 +1273,7 @@
   <color
       name="MapPickRadiusColor"
       reference="MapFrustumColor" />
+  <color
+      name="SearchableControlHighlightColor"
+      reference="Red" />
 </colors>
