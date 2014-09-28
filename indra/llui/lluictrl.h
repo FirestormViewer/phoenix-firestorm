@@ -41,6 +41,47 @@
 const BOOL TAKE_FOCUS_YES = TRUE;
 const BOOL TAKE_FOCUS_NO  = FALSE;
 
+// <FS:ND> To search in prefs. A control which can advertise a searchable text and can be highlighted for matching.
+namespace nd
+{
+	namespace ui
+	{
+		class SearchableControl
+		{
+			mutable LLColor3 mHighlightColor;
+			mutable bool mIsHighlighed;
+		public:
+			SearchableControl()
+				: mHighlightColor( 1.0f, 0.0f, 0.0f )
+				, mIsHighlighed( false )
+			{ }
+			virtual ~SearchableControl()
+			{ }
+
+			void setHighlightColor( LLColor3 const &aColor ) const
+			{ mHighlightColor = aColor; }
+			LLColor3 getHighlightColor(  ) const
+			{ return mHighlightColor; }
+
+			void setHighlighted( bool aVal ) const
+			{
+				mIsHighlighed = aVal;
+				onSetHighlight( );
+			}
+			bool getHighlighted( ) const
+			{ return mIsHighlighed; }
+
+			std::string getSearchText() const
+			{ return _getSearchText(); } 
+		protected:
+			virtual std::string _getSearchText() const = 0;
+			virtual void onSetHighlight( ) const
+			{ }
+		};
+	}
+}
+// </FS:ND>
+
 class LLUICtrl
 	: public LLView, public boost::signals2::trackable
 {

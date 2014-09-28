@@ -3,7 +3,7 @@
  legacy_header_height="18"
  positioning="centered"
  default_tab_group="1"
- height="500"
+ height="521"
  layout="topleft"
  name="Preferences"
  help_topic="preferences"
@@ -24,7 +24,7 @@
      layout="topleft"
      right="-200"
      name="Apply"
-     top="467"
+     top="488"
      width="90">
         <button.commit_callback
          function="Pref.Apply" />
@@ -55,6 +55,32 @@
         <button.commit_callback
          function="Pref.Cancel" />
     </button>
+	
+	<search_editor
+		clear_button_visible="true"
+		follows="left|top"
+		height="18"
+		label="Search Settings"
+		layout="topleft"
+		left="0"
+		max_length_bytes="255"
+		name="search_prefs_edit"
+		right="-1"
+		text_pad_left="6"
+		tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment."
+		top="21">
+	  <search_editor.commit_callback
+		  function="UpdateFilter" />
+	  <search_editor.clear_button
+		  rect.height="18"
+		  rect.width="18"
+		  rect.bottom="-1" />
+	  <search_editor.search_button
+		  rect.height="12"
+		  rect.width="12"
+		  rect.bottom="-1" />
+	</search_editor>
+
     <tab_container
      follows="all"
      halign="left"
@@ -66,7 +92,7 @@
      tab_position="left"
      tab_width="115"
      tab_padding_right="0"
-     top="21"
+     top="42"
      width="658">
         <panel
           class="panel_preference"

@@ -37,6 +37,15 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
 #include "lllineeditor.h" // <FS:CR>
+#include "llsearcheditor.h"
+
+namespace nd
+{
+	namespace prefs
+	{
+		struct SearchData;
+	}
+}
 
 class LLConversationLogObserver;
 class LLPanelPreference;
@@ -249,6 +258,12 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
+
+	LLSearchEditor *mFilterEdit;
+	void onUpdateFilterTerm();
+
+	nd::prefs::SearchData *mSearchData;
+	void collectSearchableItems();
 };
 
 class LLPanelPreference : public LLPanel

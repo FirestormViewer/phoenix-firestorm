@@ -327,6 +327,9 @@ private:
 	bool							mOpenTabsOnDragAndDrop;
 	S32								mTabIconCtrlPad;
 	bool							mUseTabEllipses;
+
+public:
+	void setTabVisibility( LLPanel const *aPanel, bool );
 };
 
 #endif  // LL_TABCONTAINER_H

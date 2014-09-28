@@ -73,6 +73,13 @@ protected:
 
 	LLUIString			mText;
 	callback_t			mClickedCallback;
+// <FS:ND> Searchable text for UI filter
+protected:
+	virtual std::string _getSearchText() const
+	{
+		return LLTextBase::_getSearchText() + mText.getString();
+	}
+// </FS:ND>
 };
 
 // Build time optimization, generate once in .cpp file

@@ -78,6 +78,7 @@ public:
 		mOldState(FALSE),
 		mPlaceholderText(placeholder),
 		mPadding(0)
+		, mVisible( true )
 	{}
 
 	LLTabContainer*  mTabContainer;
@@ -86,6 +87,8 @@ public:
 	BOOL			 mOldState;
 	LLTextBox*		 mPlaceholderText;
 	S32				 mPadding;
+
+	mutable bool mVisible;
 };
 
 //----------------------------------------------------------------------------
@@ -502,6 +505,14 @@ void LLTabContainer::draw()
 		for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
 		{
 			LLTabTuple* tuple = *iter;
+
+			// <FS:ND> If the tab is hidden, do not take it into account.
+			if( !tuple->mVisible )
+			{
+				tuple->mButton->setVisible(false);
+				continue;
+			}
+			// </FS:ND>
 
 			tuple->mButton->translate( left ? left - tuple->mButton->getRect().mLeft : 0,
 									   top ? top - tuple->mButton->getRect().mTop : 0 );
@@ -1587,7 +1598,10 @@ BOOL LLTabContainer::setTab(S32 which)
 	}
 
 	BOOL is_visible = FALSE;
-	if (selected_tuple->mButton->getEnabled())
+	// <FS:ND> Cannot switch to a hidden tab
+	// if (selected_tuple->mButton->getEnabled())
+	if (selected_tuple->mButton->getEnabled() && selected_tuple->mVisible )
+	// </FS:ND>
 	{
 		setCurrentPanelIndex(which);
 
@@ -2233,3 +2247,35 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 		}
 	}
 }
+
+// <FS:ND> Hide one tab. Will switch to the first visible tab if one exists. Otherwise the Tabcontainer is hidden
+void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
+{
+	for( tuple_list_t::const_iterator itr = mTabList.begin(); itr != mTabList.end(); ++itr )
+	{
+		LLTabTuple const *pTT = *itr;
+		if( pTT->mTabPanel == aPanel )
+		{
+			pTT->mVisible = aVisible;
+			break;
+		}
+	}
+
+	bool foundTab( false );
+	for( tuple_list_t::const_iterator itr = mTabList.begin(); itr != mTabList.end(); ++itr )
+	{
+		LLTabTuple const *pTT = *itr;
+		if( pTT->mVisible )
+		{
+			this->selectTab( itr-mTabList.begin() );
+			foundTab = true;
+			break;
+		}
+	}
+
+	if( foundTab )
+		this->setVisible( TRUE );
+	else
+		this->setVisible( FALSE );
+}
+// </FS:ND>

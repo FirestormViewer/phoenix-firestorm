@@ -137,6 +137,128 @@
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
 
+// <FS:ND> To search in prefs: Data that is collected from all floater
+namespace nd
+{
+	namespace prefs
+	{
+		struct SearchableItem;
+		struct PanelData;
+		struct TabContainerData;
+
+		typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
+		typedef boost::shared_ptr< PanelData > PanelDataPtr;
+		typedef boost::shared_ptr< TabContainerData > TabContainerDataPtr;
+
+		typedef std::vector< TabContainerData > tTabContainerDataList;
+		typedef std::vector< SearchableItemPtr > tSearchableItemList;
+		typedef std::vector< PanelDataPtr > tPanelDataList;
+
+		struct SearchableItem
+		{
+			LLWString mLabel;
+			LLView const *mView;
+			nd::ui::SearchableControl const *mCtrl;
+
+			std::vector< boost::shared_ptr< SearchableItem >  > mChildren;
+
+			virtual ~SearchableItem()
+			{}
+
+			void setNotHighlighted()
+			{
+				mCtrl->setHighlighted( false );
+			}
+
+			virtual bool hightlightAndHide( LLWString const &aFilter )
+			{
+				if( mCtrl->getHighlighted() )
+					return true;
+
+				LLView const *pView = dynamic_cast< LLView const* >( mCtrl );
+				if( pView && !pView->getVisible() )
+					return false;
+
+				if( aFilter.empty() )
+				{
+					mCtrl->setHighlighted( false );
+					return true;
+				}
+
+				if( mLabel.find( aFilter ) != LLWString::npos )
+				{
+					mCtrl->setHighlighted( true );
+					return true;
+				}
+
+				return false;
+			}
+		};
+
+		struct PanelData
+		{
+			LLPanel const *mPanel;
+			std::string mLabel;
+
+			std::vector< boost::shared_ptr< SearchableItem > > mChildren;
+			std::vector< boost::shared_ptr< PanelData > > mChildPanel;
+
+			virtual ~PanelData()
+			{}
+
+			virtual bool hightlightAndHide( LLWString const &aFilter )
+			{
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					(*itr)->setNotHighlighted( );
+
+				bool bVisible(false);
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					bVisible |= (*itr)->hightlightAndHide( aFilter );
+
+				for( tPanelDataList::iterator itr = mChildPanel.begin(); itr  != mChildPanel.end(); ++itr )
+					bVisible |= (*itr)->hightlightAndHide( aFilter );
+
+				return bVisible;
+			}
+		};
+
+		struct TabContainerData: public PanelData
+		{
+			LLTabContainer *mTabContainer;
+			virtual bool hightlightAndHide( LLWString const &aFilter )
+			{
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					(*itr)->setNotHighlighted( );
+
+				bool bVisible(false);
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					bVisible |= (*itr)->hightlightAndHide( aFilter );
+
+				for( tPanelDataList::iterator itr = mChildPanel.begin(); itr  != mChildPanel.end(); ++itr )
+				{
+					bool bPanelVisible = (*itr)->hightlightAndHide( aFilter );
+					if( (*itr)->mPanel )
+						mTabContainer->setTabVisibility( (*itr)->mPanel, bPanelVisible );
+					bVisible |= bPanelVisible;
+				}
+
+				return bVisible;
+			}
+		};
+
+		struct SearchData
+		{
+			~SearchData()
+			{
+			}
+
+			TabContainerDataPtr mRootTab;
+			LLWString mLastFilter;
+		};
+	}
+}
+// </FS:ND>
+
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
@@ -524,6 +646,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
 	// </Firestorm callbacks>
+
+	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this)); // <FS:ND/> Hook up for filtering
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -696,6 +820,16 @@ BOOL LLFloaterPreference::postBuild()
 	populateFontSelectionCombo();
 	// </FS:Kadah>
     
+	 // <FS:ND> Hook up and init for filtering
+	LLSearchEditor *pSearch = getChild<LLSearchEditor>("search_prefs_edit");
+	mFilterEdit = 0;
+	mSearchData = 0;
+	if( pSearch )
+	{
+		mFilterEdit = pSearch;
+		pSearch->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this));
+	}
+	// </FS:ND>
 	return TRUE;
 }
 
@@ -781,6 +915,8 @@ LLFloaterPreference::~LLFloaterPreference()
 	}*/
 
 	LLConversationLog::instance().removeObserver(this);
+
+	delete mSearchData;
 }
 
 void LLFloaterPreference::draw()
@@ -1076,6 +1212,11 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// when the floater is opened.  That will make cancel do its
 	// job
 	saveSettings();
+	 // <FS:ND> Hook up and init for filtering
+	collectSearchableItems();
+	if( mFilterEdit )
+		mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this));
+	// </FS:ND>
 }
 
 void LLFloaterPreference::onVertexShaderEnable()
@@ -4497,3 +4638,112 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 #endif // OPENSIM
 // <FS:AW optional opensim support>
 
+// <FS:ND> Code to filter/search in the prefs panel
+void LLFloaterPreference::onUpdateFilterTerm()
+{
+	LLWString seachValue = utf8str_to_wstring( mFilterEdit->getValue() );
+	LLWStringUtil::toLower( seachValue );
+
+	if( !mSearchData || mSearchData->mLastFilter == seachValue )
+		return;
+
+	mSearchData->mLastFilter = seachValue;
+
+	if( !mSearchData->mRootTab )
+		return;
+
+	mSearchData->mRootTab->hightlightAndHide( seachValue );
+	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
+	if( pRoot )
+		pRoot->selectFirstTab();
+}
+
+void collectChildren( LLView const *aView, nd::prefs::PanelDataPtr aParentPanel, nd::prefs::TabContainerDataPtr aParentTabContainer )
+{
+	if( !aView )
+		return;
+
+	llassert_always( aParentPanel || aParentTabContainer );
+
+	LLView::child_list_const_iter_t itr = aView->beginChild();
+	LLView::child_list_const_iter_t itrEnd = aView->endChild();
+
+	while( itr != itrEnd )
+	{
+		LLView *pView = *itr;
+		nd::prefs::PanelDataPtr pCurPanelData = aParentPanel;
+		nd::prefs::TabContainerDataPtr pCurTabContainer = aParentTabContainer;
+		if( !pView )
+			continue;
+		LLPanel const *pPanel = dynamic_cast< LLPanel const *>( pView );
+		LLTabContainer const *pTabContainer = dynamic_cast< LLTabContainer const *>( pView );
+		nd::ui::SearchableControl const *pSCtrl = dynamic_cast< nd::ui::SearchableControl const *>( pView );
+
+		if( pTabContainer )
+		{
+			pCurPanelData.reset();
+
+			pCurTabContainer = nd::prefs::TabContainerDataPtr( new nd::prefs::TabContainerData );
+			pCurTabContainer->mTabContainer = const_cast< LLTabContainer *>( pTabContainer );
+			pCurTabContainer->mLabel = pTabContainer->getLabel();
+			pCurTabContainer->mPanel = 0;
+
+			if( aParentPanel )
+				aParentPanel->mChildPanel.push_back( pCurTabContainer );
+			if( aParentTabContainer )
+				aParentTabContainer->mChildPanel.push_back( pCurTabContainer );
+		}
+		else if( pPanel )
+		{
+			pCurTabContainer.reset();
+
+			pCurPanelData = nd::prefs::PanelDataPtr( new nd::prefs::PanelData );
+			pCurPanelData->mPanel = pPanel;
+			pCurPanelData->mLabel = pPanel->getLabel();
+
+			llassert_always( aParentPanel || aParentTabContainer );
+
+			if( aParentTabContainer )
+				aParentTabContainer->mChildPanel.push_back( pCurPanelData );
+			else if( aParentPanel )
+				aParentPanel->mChildPanel.push_back( pCurPanelData );
+		}
+		else if( pSCtrl && pSCtrl->getSearchText().size() )
+		{
+			nd::prefs::SearchableItemPtr item = nd::prefs::SearchableItemPtr( new nd::prefs::SearchableItem() );
+			item->mView = pView;
+			item->mCtrl = pSCtrl;
+
+			item->mLabel = utf8str_to_wstring( pSCtrl->getSearchText() );
+			LLWStringUtil::toLower( item->mLabel );
+
+			llassert_always( aParentPanel || aParentTabContainer );
+
+			if( aParentPanel )
+				aParentPanel->mChildren.push_back( item );
+			if( aParentTabContainer )
+				aParentTabContainer->mChildren.push_back( item );
+		}
+		collectChildren( pView, pCurPanelData, pCurTabContainer );
+		++itr;
+	}
+}
+
+void LLFloaterPreference::collectSearchableItems()
+{
+	delete mSearchData;
+	mSearchData = 0;
+	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
+	if( mFilterEdit && pRoot )
+	{
+		mSearchData = new nd::prefs::SearchData();
+
+		nd::prefs::TabContainerDataPtr pRootTabcontainer = nd::prefs::TabContainerDataPtr( new nd::prefs::TabContainerData );
+		pRootTabcontainer->mTabContainer = pRoot;
+		pRootTabcontainer->mLabel = pRoot->getLabel();
+		mSearchData->mRootTab = pRootTabcontainer;
+
+		collectChildren( this, nd::prefs::PanelDataPtr(), pRootTabcontainer );
+	}
+}
+// </FS:ND>

@@ -278,6 +278,7 @@ class LLTextBase
 :	public LLUICtrl,
 	protected LLEditMenuHandler,
 	public LLSpellCheckMenuHandler
+	, public nd::ui::SearchableControl
 {
 public:
 	friend class LLTextSegment;
@@ -730,6 +731,14 @@ protected:
 	LLUIString					mLabel;	// text label that is visible when no user text provided
 	// <FS:Ansariel> Optional icon position
 	LLTextBaseEnums::EIconPositioning	mIconPositioning;
+
+// <FS:ND> Searchable text for UI filter
+protected:
+	virtual std::string _getSearchText() const
+	{
+		return mLabel.getString() + getToolTip();
+	}
+// </FS:ND>
 };
 
 #endif

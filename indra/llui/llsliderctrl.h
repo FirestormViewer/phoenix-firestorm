@@ -36,6 +36,7 @@
 
 
 class LLSliderCtrl : public LLF32UICtrl
+	, public nd::ui::SearchableControl
 {
 public:
 	struct Params : public LLInitParam::Block<Params, LLF32UICtrl::Params>
@@ -150,6 +151,22 @@ private:
 
 	LLUIColor	mTextEnabledColor;
 	LLUIColor	mTextDisabledColor;
+
+	// <FS:ND> Searchable text for UI filter
+protected:
+	virtual std::string _getSearchText() const
+	{
+		std::string strLabel;
+		if( mLabelBox )
+			strLabel = mLabelBox->getLabel();
+		return strLabel + getToolTip();
+	}
+	virtual void onSetHighlight( ) const  // When highlight, really do highlight the label
+	{
+		if( mLabelBox )
+			mLabelBox-> nd::ui::SearchableControl::setHighlighted( nd::ui::SearchableControl::getHighlighted() );
+	}
+// </FS:ND>
 };
 
 #endif  // LL_LLSLIDERCTRL_H
