@@ -141,6 +141,7 @@ set(llui_HEADER_FILES
     CMakeLists.txt
 
     fsregistrarutils.h
+	fssearchablecontrol.h
 
     llaccordionctrl.h
     llaccordionctrltab.h

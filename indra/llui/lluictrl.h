@@ -38,48 +38,10 @@
 #include "llview.h"
 #include "llviewmodel.h"		// *TODO move dependency to .cpp file
 
+#include "fssearchablecontrol.h"
+
 const BOOL TAKE_FOCUS_YES = TRUE;
 const BOOL TAKE_FOCUS_NO  = FALSE;
-
-// <FS:ND> To search in prefs. A control which can advertise a searchable text and can be highlighted for matching.
-namespace nd
-{
-	namespace ui
-	{
-		class SearchableControl
-		{
-			mutable bool mIsHighlighed;
-		public:
-			SearchableControl()
-				: mIsHighlighed( false )
-			{ }
-			virtual ~SearchableControl()
-			{ }
-
-			LLColor4 getHighlightColor( ) const
-			{
-				static LLUIColor highlight_color = LLUIColorTable::instance().getColor("SearchableControlHighlightColor", LLColor4::red);
-				return highlight_color.get();
-			}
-
-			void setHighlighted( bool aVal ) const
-			{
-				mIsHighlighed = aVal;
-				onSetHighlight( );
-			}
-			bool getHighlighted( ) const
-			{ return mIsHighlighed; }
-
-			std::string getSearchText() const
-			{ return _getSearchText(); } 
-		protected:
-			virtual std::string _getSearchText() const = 0;
-			virtual void onSetHighlight( ) const
-			{ }
-		};
-	}
-}
-// </FS:ND>
 
 class LLUICtrl
 	: public LLView, public boost::signals2::trackable

@@ -107,89 +107,12 @@
 #include "llviewernetwork.h"
 #endif // OPENSIM
 // </FS:CR>
+
+#include "fssearchableui.h"
+
 //
 // Globals
 //
-
-namespace nd
-{
-	namespace statusbar
-	{
-		struct SearchableItem;
-
-		typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
-
-		typedef std::vector< SearchableItemPtr > tSearchableItemList;
-
-		struct SearchableItem
-		{
-			LLWString mLabel;
-			LLMenuItemGL *mMenu;
-			tSearchableItemList mChildren;
-			nd::ui::SearchableControl const *mCtrl;
-			bool mWasHiddenBySearch;
-
-			SearchableItem()
-				: mMenu(0)
-				, mCtrl(0)
-				, mWasHiddenBySearch( false )
-			{ }
-
-			void setNotHighlighted( )
-			{
-				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
-					(*itr)->setNotHighlighted( );
-
-				if( mCtrl )
-				{
-					mCtrl->setHighlighted( false );
-
-					if( mWasHiddenBySearch )
-						mMenu->setVisible( TRUE );
-				}
-			}
-
-			bool hightlightAndHide( LLWString const &aFilter )
-			{
-				if( mMenu && !mMenu->getVisible() && !mWasHiddenBySearch )
-					return false;
-
-				setNotHighlighted( );
-
-				bool bVisible(false);
-				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
-					bVisible |= (*itr)->hightlightAndHide( aFilter );
-
-				if( aFilter.empty() )
-				{
-					if( mCtrl )
-						mCtrl->setHighlighted( false );
-					return true;
-				}
-
-				if( mLabel.find( aFilter ) != LLWString::npos )
-				{
-					if( mCtrl )
-						mCtrl->setHighlighted( true );
-					return true;
-				}
-
-				if( mCtrl && !bVisible )
-				{
-					mWasHiddenBySearch = true;
-					mMenu->setVisible(FALSE);
-				}
-				return bVisible;
-			}
-		};
-
-		struct SearchData
-		{
-			SearchableItemPtr mRootMenu;
-			LLWString mLastFilter;
-		};
-	}
-}
 
 LLStatusBar *gStatusBar = NULL;
 S32 STATUS_BAR_HEIGHT = 26;
