@@ -1342,6 +1342,7 @@ class LinuxManifest(ViewerManifest):
         installer_name = "_".join(installer_name_components)
         #installer_name = self.installer_base_name()
 
+        self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
         self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
 

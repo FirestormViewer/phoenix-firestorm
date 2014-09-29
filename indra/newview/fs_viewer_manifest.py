@@ -64,6 +64,13 @@ class FSViewerManifest:
             print "Working directory: %s" % os.getcwd()
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
 
+    def fs_delete_linux_symbols( self ):
+        debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
+
+        if os.path.exists( debugDir ):
+            from shutil import rmtree
+            rmtree( debugDir )
+            
     def fs_save_linux_symbols( self ):
         #AO: Try to package up symbols
         # New Method, for reading cross platform stack traces on a linux/mac host
@@ -80,12 +87,18 @@ class FSViewerManifest:
         fileSource = os.path.join( self.get_dst_prefix(), "..", "firestorm-bin" )
 
         debugName = "firestorm-bin.debug"
+        debugIndexName = "firestorm-bin.debug.gdb-index"
         debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
         debugFile = os.path.join( self.get_dst_prefix(), "bin", ".debug", debugName )
+        debugIndexFile = os.path.join( self.get_dst_prefix(), "bin", ".debug", debugIndexName )
         if not os.path.exists( debugDir ):
             os.makedirs( debugDir )
 
         self.run_command( "objcopy %s %s" % (fileSource, debugFile) )
+
+        self.run_command( "gdb -batch -ex \"save gdb-index %s\" %s" % (debugDir, debugFile ) )
+        self.run_command( "objcopy --add-section .gdb_index=%s --set-section-flags .gdb_index=readonly %s %s" % (debugIndexFile, debugFile, debugFile) )
+
         self.run_command( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
         
         if( os.path.exists( "%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower()) ):
