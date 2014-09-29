@@ -49,6 +49,7 @@ extern S32 MENU_BAR_WIDTH;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class LLMenuItemGL : public LLUICtrl
+	, public nd::ui::SearchableControl
 {
 public:
 	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
@@ -205,6 +206,9 @@ private:
 	BOOL mDrawTextDisabled;
 
 	KEY mJumpKey;
+protected:
+	virtual std::string _getSearchText() const
+	{ return mLabel.getString(); }
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

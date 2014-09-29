@@ -230,6 +230,25 @@
      name="buycurrencylabel">
         L$ [AMT]
     </panel.string>
+
+  <panel height="18" left_pad="12" top="0" width="120" follows="right|top" name="menu_search_panel"
+		 background_opaque="true" background_visible="true" bg_opaque_color="MouseGray">
+	<search_editor
+		clear_button_visible="true"
+		follows="left|top"
+		height="18"
+		label="Search Menu"
+		layout="topleft"
+		left="0"
+		max_length_bytes="255"
+		name="search_menu_edit"
+		right="-1"
+		text_pad_left="6"
+		tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the menu."
+		top="0">
+	</search_editor>
+  </panel>
+
   <panel
     height="18"
     left="-240"

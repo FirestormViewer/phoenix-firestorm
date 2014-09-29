@@ -110,6 +110,87 @@
 //
 // Globals
 //
+
+namespace nd
+{
+	namespace statusbar
+	{
+		struct SearchableItem;
+
+		typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
+
+		typedef std::vector< SearchableItemPtr > tSearchableItemList;
+
+		struct SearchableItem
+		{
+			LLWString mLabel;
+			LLMenuItemGL *mMenu;
+			tSearchableItemList mChildren;
+			nd::ui::SearchableControl const *mCtrl;
+			bool mWasHiddenBySearch;
+
+			SearchableItem()
+				: mMenu(0)
+				, mCtrl(0)
+				, mWasHiddenBySearch( false )
+			{ }
+
+			void setNotHighlighted( )
+			{
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					(*itr)->setNotHighlighted( );
+
+				if( mCtrl )
+				{
+					mCtrl->setHighlighted( false );
+
+					if( mWasHiddenBySearch )
+						mMenu->setVisible( TRUE );
+				}
+			}
+
+			bool hightlightAndHide( LLWString const &aFilter )
+			{
+				if( mMenu && !mMenu->getVisible() && !mWasHiddenBySearch )
+					return false;
+
+				setNotHighlighted( );
+
+				bool bVisible(false);
+				for( tSearchableItemList::iterator itr = mChildren.begin(); itr  != mChildren.end(); ++itr )
+					bVisible |= (*itr)->hightlightAndHide( aFilter );
+
+				if( aFilter.empty() )
+				{
+					if( mCtrl )
+						mCtrl->setHighlighted( false );
+					return true;
+				}
+
+				if( mLabel.find( aFilter ) != LLWString::npos )
+				{
+					if( mCtrl )
+						mCtrl->setHighlighted( true );
+					return true;
+				}
+
+				if( mCtrl && !bVisible )
+				{
+					mWasHiddenBySearch = true;
+					mMenu->setVisible(FALSE);
+				}
+				return bVisible;
+			}
+		};
+
+		struct SearchData
+		{
+			SearchableItemPtr mRootMenu;
+			LLWString mLastFilter;
+		};
+	}
+}
+
 LLStatusBar *gStatusBar = NULL;
 S32 STATUS_BAR_HEIGHT = 26;
 extern S32 MENU_BAR_HEIGHT;
@@ -433,6 +514,18 @@ BOOL LLStatusBar::postBuild()
 		updateVolumeControlsVisibility(LLSD(FALSE));
 	}
 	// </FS:PP>
+
+	 // <FS:ND> Hook up and init for filtering
+	LLSearchEditor *pSearch = getChild<LLSearchEditor>("search_menu_edit");
+	mFilterEdit = 0;
+	mSearchData = 0;
+	if( pSearch )
+	{
+		mFilterEdit = pSearch;
+		pSearch->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	}
+	collectSearchableItems();
+	// </FS:ND>
 
 	return TRUE;
 }
@@ -1447,3 +1540,45 @@ void LLStatusBar::onMouseLeaveParcelInfo()
 	mParcelInfoText->setColor(LLUIColorTable::instance().getColor("ParcelNormalColor"));
 }
 // </FS:Zi>
+
+void LLStatusBar::onUpdateFilterTerm()
+{
+	LLWString searchValue = utf8str_to_wstring( mFilterEdit->getValue() );
+	LLWStringUtil::toLower( searchValue );
+
+	if( !mSearchData || mSearchData->mLastFilter == searchValue )
+		return;
+
+	mSearchData->mLastFilter = searchValue;
+
+	mSearchData->mRootMenu->hightlightAndHide( searchValue );
+	gMenuBarView->needsArrange();
+}
+
+void collectChildren( LLMenuGL *aMenu, nd::statusbar::SearchableItemPtr aParentMenu )
+{
+	for( U32 i = 0; i < aMenu->getItemCount(); ++i )
+	{
+		LLMenuItemGL *pMenu = aMenu->getItem( i );
+		LL_INFOS( ) << pMenu->nd::ui::SearchableControl::getSearchText() << LL_ENDL;
+		nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
+		pItem->mCtrl = pMenu;
+		pItem->mMenu = pMenu;
+		pItem->mLabel = utf8str_to_wstring( pMenu->nd::ui::SearchableControl::getSearchText() );
+		LLWStringUtil::toLower( pItem->mLabel );
+		aParentMenu->mChildren.push_back( pItem );
+
+		LLMenuItemBranchGL *pBranch = dynamic_cast< LLMenuItemBranchGL* >( pMenu );
+		if( pBranch )
+			collectChildren( pBranch->getBranch(), pItem );
+	}
+
+}
+
+void LLStatusBar::collectSearchableItems()
+{
+	mSearchData = new nd::statusbar::SearchData;
+	nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
+	mSearchData->mRootMenu = pItem;
+	collectChildren( gMenuBarView, pItem );
+}

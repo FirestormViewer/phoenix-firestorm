@@ -498,6 +498,11 @@ void LLMenuItemGL::draw( void )
 		color = mDisabledColor.get();
 	}
 
+	// <FS:ND> Highlight if needed
+	if( nd::ui::SearchableControl::getHighlighted() )
+		color = nd::ui::SearchableControl::getHighlightColor();
+	// </FS:ND>
+
 	// Draw the text on top.
 	if (mBriefItem)
 	{

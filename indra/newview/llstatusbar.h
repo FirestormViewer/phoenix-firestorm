@@ -31,6 +31,15 @@
 
 // <FS:Ansariel> Pathfinding support
 #include "llpathfindingnavmesh.h"
+#include "llsearcheditor.h"
+
+namespace nd
+{
+	namespace statusbar
+	{
+		struct SearchData;
+	}
+}
 
 // "Constants" loaded from settings.xml at start time
 extern S32 STATUS_BAR_HEIGHT;
@@ -366,6 +375,14 @@ private:
 	void	onMouseEnterParcelInfo();
 	void	onMouseLeaveParcelInfo();
 // </FS:Zi>
+
+	// <FS:ND> Seach in menu
+	LLSearchEditor *mFilterEdit;
+	void onUpdateFilterTerm();
+
+	nd::statusbar::SearchData *mSearchData;
+	void collectSearchableItems();
+	// </FS:ND>
 };
 
 // *HACK: Status bar owns your cached money balance. JC
