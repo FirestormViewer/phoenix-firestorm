@@ -196,7 +196,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
 	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
 	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
-	mNearbyIcons(FALSE)			// <FS:Ansariel> Script debug
+	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
+	mSearchData(NULL)			// <FS:ND> Hook up and init for filtering
 {
 	setRect(rect);
 	
@@ -438,17 +439,11 @@ BOOL LLStatusBar::postBuild()
 	}
 	// </FS:PP>
 
-	 // <FS:ND> Hook up and init for filtering
-	LLSearchEditor *pSearch = getChild<LLSearchEditor>("search_menu_edit");
-	mFilterEdit = 0;
-	mSearchData = 0;
-	if( pSearch )
-	{
-		mFilterEdit = pSearch;
-		pSearch->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-	}
+	// <FS:ND> Hook up and init for filtering
+	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
+	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	collectSearchableItems();
-	getChild<LLUICtrl>("search_menu_edit")->setCommitCallback( boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	// </FS:ND>
 
 	return TRUE;
