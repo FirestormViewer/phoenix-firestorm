@@ -18,6 +18,9 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="Szukaj w menu" name="search_menu_edit" tool_tip="Wprowadź w tym miejscu interesującą Cię frazę. Wyniki będą wyświetlane dla pasujących fragmentów nazw przypisanych do opcji menu." />
+	</panel>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo L$"/>
 		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
