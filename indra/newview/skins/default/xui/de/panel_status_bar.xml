@@ -15,6 +15,9 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="Menü durchs." name="search_menu_edit" tool_tip="Den Suchbegriff hier eingeben. Ergebnisse werden für Treffer im Namen eines Menüeintrags angezeigt."/>
+	</panel>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Diese Parzelle steht zum Verkauf."/>
 		<button name="status_wl_btn" tool_tip="Windlight-Einstellungen der Parzelle"/>
