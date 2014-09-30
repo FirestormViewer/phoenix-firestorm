@@ -448,6 +448,7 @@ BOOL LLStatusBar::postBuild()
 		pSearch->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	}
 	collectSearchableItems();
+	getChild<LLUICtrl>("search_menu_edit")->setCommitCallback( boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	// </FS:ND>
 
 	return TRUE;

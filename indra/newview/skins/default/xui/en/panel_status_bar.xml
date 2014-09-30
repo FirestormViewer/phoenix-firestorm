@@ -246,6 +246,7 @@
 		text_pad_left="6"
 		tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the menu."
 		top="0">
+      <search_editor.commit_callback function="UpdateFilter" />
 	</search_editor>
   </panel>
 
