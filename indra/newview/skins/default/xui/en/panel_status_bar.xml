@@ -240,7 +240,8 @@
 	 name="menu_search_panel"
 	 background_opaque="true"
 	 background_visible="true"
-	 bg_opaque_color="MouseGray">
+	 bg_opaque_color="MouseGray"
+	 visibility_control="FSMenuSearch">
 		<search_editor
 		 clear_button_visible="true"
 		 follows="left|top"

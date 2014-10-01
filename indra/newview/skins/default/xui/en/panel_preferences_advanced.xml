@@ -62,7 +62,7 @@
      control_name="FSMenuSearch"
      follows="top|left"
      height="15"
-     label="Show Menu Search (needs restart)."
+     label="Show Menu Search"
      layout="topleft"
      left="30"
      name="show_search_menu_check"

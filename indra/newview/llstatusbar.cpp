@@ -443,16 +443,11 @@ BOOL LLStatusBar::postBuild()
 
 	// <FS:ND> Hook up and init for filtering
 	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
-	if( gSavedSettings.getBOOL( "FSMenuSearch" ) )
-	{
-		mSearchPanel = getChild<LLPanel>( "menu_search_panel" ); // Keep 0 if no search is used. This is checked in other methods.
-
-		mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-		mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-		collectSearchableItems();
-	}
-	else
-		mFilterEdit->setVisible( FALSE );
+	mSearchPanel = getChild<LLPanel>("menu_search_panel");
+	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+	collectSearchableItems();
+	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::update, this));
 	// </FS:ND>
 
 	return TRUE;
@@ -658,7 +653,7 @@ void LLStatusBar::setBalance(S32 balance)
 	}
 
 	// FS:ND> If the search panel is shown, move this according to the new balance width. Parcel text will reshape itself in setParcelInfoText
-	if( mSearchPanel )
+	if (mSearchPanel && mSearchPanel->getVisible())
 	{
 		S32 HPAD = 12;
 		LLRect balanceRect = getChildView("balance_bg")->getRect();
@@ -1050,7 +1045,7 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	LLRect panelBalanceRect = mBalancePanel->getRect();
 
 	// <FS:ND> The menu search editor is left from the balance rect. If it is shown, use that rect
-	if( mSearchPanel )
+	if (mSearchPanel && mSearchPanel->getVisible())
 		panelBalanceRect = mSearchPanel->getRect();
 	// </FS:ND>
 
