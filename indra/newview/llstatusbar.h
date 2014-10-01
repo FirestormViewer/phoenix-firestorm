@@ -378,6 +378,7 @@ private:
 
 	// <FS:ND> Seach in menu
 	LLSearchEditor *mFilterEdit;
+	LLPanel *mSearchPanel;
 	void onUpdateFilterTerm();
 
 	nd::statusbar::SearchData *mSearchData;

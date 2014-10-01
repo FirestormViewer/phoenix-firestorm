@@ -197,7 +197,9 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
 	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
 	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
-	mSearchData(NULL)			// <FS:ND> Hook up and init for filtering
+	mSearchData(NULL),			// <FS:ND/> Hook up and init for filtering
+	mFilterEdit(NULL),			// <FS:ND/> Edit for filtering
+	mSearchPanel(NULL)			// <FS:ND/> Panel for filtering
 {
 	setRect(rect);
 	
@@ -443,6 +445,8 @@ BOOL LLStatusBar::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
 	if( gSavedSettings.getBOOL( "FSMenuSearch" ) )
 	{
+		mSearchPanel = getChild<LLPanel>( "menu_search_panel" ); // Keep 0 if no search is used. This is checked in other methods.
+
 		mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 		mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 		collectSearchableItems();
@@ -532,6 +536,7 @@ void LLStatusBar::refresh()
 	// </FS:Zi>
 
 	LLRect r;
+
 	const S32 MENU_RIGHT = gMenuBarView->getRightmostMenuEdge();
 
 	// reshape menu bar to its content's width
@@ -651,6 +656,19 @@ void LLStatusBar::setBalance(S32 balance)
 		// </FS:Ansariel>
 		balance_bg_view->setShape(balance_bg_rect);
 	}
+
+	// FS:ND> If the search panel is shown, move this according to the new balance width. Parcel text will reshape itself in setParcelInfoText
+	if( mSearchPanel )
+	{
+		S32 HPAD = 12;
+		LLRect balanceRect = getChildView("balance_bg")->getRect();
+		LLRect searchRect = mSearchPanel->getRect();
+		S32 w = searchRect.getWidth();
+		searchRect.mLeft = balanceRect.mLeft - w - HPAD;
+		searchRect.mRight = searchRect.mLeft + w;
+		mSearchPanel->setShape( searchRect );
+	}
+	// </FS:ND>
 
 	if (mBalance && (fabs((F32)(mBalance - balance)) > gSavedSettings.getF32("UISndMoneyChangeThreshold")))
 	{
@@ -1030,6 +1048,12 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	// Ansariel: Recalculate panel size so we are able to click the whole text
 	LLRect panelParcelInfoRect = mParcelInfoPanel->getRect();
 	LLRect panelBalanceRect = mBalancePanel->getRect();
+
+	// <FS:ND> The menu search editor is left from the balance rect. If it is shown, use that rect
+	if( mSearchPanel )
+		panelBalanceRect = mSearchPanel->getRect();
+	// </FS:ND>
+
 	panelParcelInfoRect.mRight = panelParcelInfoRect.mLeft + rect.mRight;
 	S32 borderRight = panelBalanceRect.mLeft - ParcelInfoSpacing;
 
