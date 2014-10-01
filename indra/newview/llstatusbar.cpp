@@ -441,9 +441,14 @@ BOOL LLStatusBar::postBuild()
 
 	// <FS:ND> Hook up and init for filtering
 	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
-	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
-	collectSearchableItems();
+	if( gSavedSettings.getBOOL( "FSMenuSearch" ) )
+	{
+		mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+		mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
+		collectSearchableItems();
+	}
+	else
+		mFilterEdit->setVisible( FALSE );
 	// </FS:ND>
 
 	return TRUE;

@@ -7,6 +7,7 @@
 	<check_box label="Bei Anmeldung Gridauswahl anzeigen" name="show_grid_selection_check"/>
 	<check_box label="Menü „Erweitert“ anzeigen" name="show_advanced_menu_check"/>
 	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
+	<check_box label="Menüsuche anzeigen (Neustart erforderlich)" name="show_search_menu_check"/>
 	<check_box label="Aktiviere Zeitschritte für Animationen (experimentell)" name="UseAnimationTimeSteps" tool_tip="Diese Einstellung kann die Render-Komplexität für entfernte Avatare verringen, aber dadurch können deren Animationen in falscher Geschwindigkeit abgespielt werden."/>
 	<text name="BackgroundYieldTimeText">
 		Zeit in Millisekunden, die pro Frame an andere Anwendungen abgegeben werden, wenn [APP_NAME] nicht im Vordergrund ist [Standard: 40; 1 Sekunde = 1000 Millisekunden]
