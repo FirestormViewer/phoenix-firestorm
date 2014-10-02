@@ -116,6 +116,7 @@ static const F32 MEM_INFO_WINDOW = 10*60;
 #if LL_WINDOWS
 // We cannot trust GetVersionEx function on Win8.1 , we should check this value when creating OS string
 static const U32 WINNT_WINBLUE = 0x0603;
+static const U32 WINNT_WINTH = 0x0604;
 
 #ifndef DLLVERSIONINFO
 typedef struct _DllVersionInfo
@@ -218,7 +219,7 @@ static bool regex_search_no_exc(const S& string, M& match, const R& regex)
 }
 
 #if LL_WINDOWS
-// GetVersionEx should not works correct with Windows 8.1 and the later version. We need to check this case 
+// GetVersionEx does not work correctly with Windows 8.1 and the later.
 static bool	check_for_version(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
 {
     OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
@@ -308,7 +309,12 @@ LLOSInfo::LLOSInfo() :
 				}
 				else if(osvi.dwMinorVersion == 2)
 				{
-					if (check_for_version(HIBYTE(WINNT_WINBLUE), LOBYTE(WINNT_WINBLUE), 0))
+					if (check_for_version(HIBYTE(WINNT_WINTH), LOBYTE(WINNT_WINTH), 0))
+					{
+						mOSStringSimple = "Microsoft Windows 10 ";
+						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
+					}
+					else if (check_for_version(HIBYTE(WINNT_WINBLUE), LOBYTE(WINNT_WINBLUE), 0))
 					{
 						mOSStringSimple = "Microsoft Windows 8.1 ";
 						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
@@ -321,11 +327,7 @@ LLOSInfo::LLOSInfo() :
 							mOSStringSimple = "Windows Server 2012 ";
 					}
 				}
-				else if(osvi.dwMinorVersion == 3)
-				{
-					if(osvi.wProductType == VER_NT_WORKSTATION)
-						mOSStringSimple = "Microsoft Windows 8.1 ";
-				}
+
 
 				///get native system info if available..
 				typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO); ///function pointer for loading GetNativeSystemInfo
