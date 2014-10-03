@@ -22757,7 +22757,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSMenuSearch</key>
     <map>
       <key>Comment</key>
-      <string>If enabled, the viewer will show a search box for top menu itens (needs a restart).</string>
+      <string>If enabled, the viewer will show a search box for top menu items.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
