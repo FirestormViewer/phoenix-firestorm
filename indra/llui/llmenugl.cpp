@@ -2368,7 +2368,12 @@ void LLMenuGL::createSpilloverBranch()
 		branch_params.label = label;
 		branch_params.branch = mSpilloverMenu;
 		branch_params.font.style = "italic";
-
+		// <FS:Ansariel> FIRE-13101: Spillover menu label and highlight using wrong colors
+		branch_params.enabled_color = LLUIColorTable::instance().getColor("MenuItemEnabledColor");
+		branch_params.disabled_color = LLUIColorTable::instance().getColor("MenuItemDisabledColor");
+		branch_params.highlight_bg_color = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor");
+		branch_params.highlight_fg_color = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor");
+		// </FS:Ansariel>
 
 		mSpilloverBranch = LLUICtrlFactory::create<LLMenuItemBranchGL>(branch_params);
 	}
