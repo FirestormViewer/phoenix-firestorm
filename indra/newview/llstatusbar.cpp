@@ -1503,7 +1503,7 @@ void collectChildren( LLMenuGL *aMenu, nd::statusbar::SearchableItemPtr aParentM
 	for( U32 i = 0; i < aMenu->getItemCount(); ++i )
 	{
 		LLMenuItemGL *pMenu = aMenu->getItem( i );
-		LL_INFOS( ) << pMenu->nd::ui::SearchableControl::getSearchText() << LL_ENDL;
+
 		nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
 		pItem->mCtrl = pMenu;
 		pItem->mMenu = pMenu;
