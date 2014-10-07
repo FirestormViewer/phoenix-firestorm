@@ -33,6 +33,13 @@
 // KDU core header files
 //
 #define KDU_NO_THREADS
+
+// <FS:ND> Some magic to make KDU and the viewer agree with internal alignments
+#if KDU_MAJOR_VERSION >= 7 && KDU_MINOR_VERSION >= 5
+ #define KDU_X86_INTRINSICS
+#endif
+// </FS:ND>
+
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"
 #include "kdu_params.h"

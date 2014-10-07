@@ -38,7 +38,14 @@
 // </FS:ND>
 
 // Support classes for reading and writing from memory buffers in KDU
-#define KDU_NO_THREADS
+#define KDU_NO_THREAD
+
+// <FS:ND> Some magic to make KDU and the viewer agree with internal alignments
+#if KDU_MAJOR_VERSION >= 7 && KDU_MINOR_VERSION >= 5
+ #define KDU_X86_INTRINSICS
+#endif
+// </FS:ND>
+
 #include "kdu_image.h"
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"
