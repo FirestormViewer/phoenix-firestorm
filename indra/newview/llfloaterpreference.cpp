@@ -611,9 +611,11 @@ BOOL LLFloaterPreference::postBuild()
 
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
-	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
-	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
-		tabcontainer->selectFirstTab();
+	// <FS:Ansariel> Preferences search
+	//LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+	//if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
+	//	tabcontainer->selectFirstTab();
+	// </FS:Ansariel>
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
 	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
@@ -1092,6 +1094,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	mFilterEdit->setText(LLStringExplicit(""));
 	collectSearchableItems();
 	onUpdateFilterTerm(true);
+
+	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
+		tabcontainer->selectFirstTab();
 	// </FS:ND>
 }
 
@@ -1167,7 +1172,13 @@ void LLFloaterPreference::setHardwareDefaults()
 //virtual
 void LLFloaterPreference::onClose(bool app_quitting)
 {
-	gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
+	// <FS:Ansariel> Preferences search
+	//gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
+	if (mFilterEdit->getText().empty())
+	{
+		gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
+	}
+	// </FS:Ansariel>
 	LLPanelLogin::setAlwaysRefresh(false);
 	if (!app_quitting)
 	{
