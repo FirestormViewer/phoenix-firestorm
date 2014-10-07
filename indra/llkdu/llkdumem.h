@@ -48,6 +48,13 @@
 #include "image_local.h"
 #include "stdtypes.h"
 
+// <FS:ND> KDU >= 7.5.0 uses namespaces for nicer encapsulation. To avoid cluttering this all over LLs source we're going with this.
+#if KDU_MAJOR_VERSION >= 7 && KDU_MINOR_VERSION >= 5
+ using namespace kdu_core;
+ using namespace kd_supp_image_local;
+#endif
+// </FS:ND>
+
 // <FS:ND> Disable warning 4263/4264
 #ifdef LL_WINDOWS
 #pragma warning(pop)
