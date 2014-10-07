@@ -1430,9 +1430,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1310525b07b37fb6c869ba1af24425ce</string>
+              <string>ae5e86bbe3376d107960e1364cada76a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.5.0-linux-20141007.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.4.0-linux-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
