@@ -55,7 +55,7 @@ public:
 	void showDefaultChatBar(BOOL visible,const char* text=0) const;
 
 	void sendChat(LLWString text,EChatType type);
-	LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
+	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel, bool* is_set);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);

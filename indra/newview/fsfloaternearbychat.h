@@ -106,7 +106,6 @@ protected:
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
-	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
