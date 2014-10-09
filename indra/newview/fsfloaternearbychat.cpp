@@ -995,7 +995,7 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 			// Check if this is destined for another channel
 			S32 channel = 0;
 			bool is_set = false;
-			FSNearbyChat::stripChannelNumber(text, &channel, &is_set);
+			FSNearbyChat::stripChannelNumber(text, &channel, &sLastSpecialChatChannel, &is_set);
 			// If "/<number>" is not specified, see if a channel has been set in
 			//  the spinner.
 			if (!is_set &&
@@ -1089,7 +1089,7 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 {
 	S32 channel = 0;
 	bool is_set = false;
-	LLWString out_text = FSNearbyChat::stripChannelNumber(wtext, &channel, &is_set);
+	LLWString out_text = FSNearbyChat::stripChannelNumber(wtext, &channel, &sLastSpecialChatChannel, &is_set);
 	// If "/<number>" is not specified, see if a channel has been set in
 	//  the spinner.
 	if (!is_set &&
