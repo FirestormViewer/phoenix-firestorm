@@ -72,10 +72,7 @@ public:
 
 	LLViewerObject *replaceObject(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp); // TomY: hack to switch VO instances on the fly
 	
-	// <FS:ND> For blacklist/derender
-	// BOOL killObject(LLViewerObject *objectp);
-	BOOL killObject(LLViewerObject *objectp, bool aForDerender = false );
-	// </FS:ND>
+	BOOL killObject(LLViewerObject *objectp);
 
 	void killObjects(LLViewerRegion *regionp); // Kill all objects owned by a particular region.
 	void killAllObjects();
@@ -241,10 +238,11 @@ protected:
 
 // <FS:ND> Remember objects we did derender. We might get object updates for them that create new instances. In those cases we kill them again.
 private:
-	std::map< LLUUID, U64 > mDerendered;
+	std::map< LLUUID, bool > mDerendered;
 public:
 	void resetDerenderList();
-	void addBlacklistedItem( LLUUID const & );
+	void addDerenderedItem( LLUUID const &, bool );
+	void removeDerenderedItem( LLUUID const & );
 // </FS:ND>
 };
 

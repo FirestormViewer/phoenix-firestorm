@@ -1428,8 +1428,7 @@ void LLViewerObjectList::removeDrawable(LLDrawable* drawablep)
 	}
 }
 
-// BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
-BOOL LLViewerObjectList::killObject(LLViewerObject *objectp, bool aForDerender )
+BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
 {
 	// Don't ever kill gAgentAvatarp, just force it to the agent's region
 	// unless region is NULL which is assumed to mean you are logging out.
@@ -1444,11 +1443,6 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp, bool aForDerender )
 
 	if (objectp)
 	{
-		// <FS:ND> Remember this object it case it comes back.	
-		if( aForDerender )
-			mDerendered[ objectp->getID()] = LLTimer::getTotalSeconds().value();
-		// </FS:ND>
-
 		objectp->markDead(); // does the right thing if object already dead
 		return TRUE;
 	}
@@ -2455,13 +2449,23 @@ LLDebugBeacon::~LLDebugBeacon()
 
 void LLViewerObjectList::resetDerenderList()
 {
-	mDerendered.clear();
+	std::map< LLUUID, bool > oDerendered;
+
+	for( std::map< LLUUID, bool >::iterator itr = mDerendered.begin(); itr != mDerendered.end(); ++itr )
+		if( itr->second )
+			oDerendered[ itr->first ] = itr->second;
+
+	mDerendered.swap( oDerendered );
 }
 
 // <FS:ND> Helper function to add items from global blacklist after teleport.
-void LLViewerObjectList::addBlacklistedItem( LLUUID const &aId )
+void LLViewerObjectList::addDerenderedItem( LLUUID const &aId, bool aPermanent )
 {
-	mDerendered[ aId ] = LLTimer::getTotalSeconds().value();
+	mDerendered[ aId ] = aPermanent;
+}
+void LLViewerObjectList::removeDerenderedItem( LLUUID const &aId )
+{
+	mDerendered.erase( aId );
 }
 
 // </FS:ND>

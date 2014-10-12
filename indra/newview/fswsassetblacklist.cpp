@@ -107,6 +107,8 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::stri
 
 void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
+	gObjectList.removeDerenderedItem( id );
+
 	blacklist_data_t::iterator it;
 	it = mBlacklistData.find(id);
 
@@ -130,7 +132,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 
 	addEntryToBlacklistMap(id, type);
 	mBlacklistData[id] = data;
-	gObjectList.addBlacklistedItem( id );
+	gObjectList.addDerenderedItem( id, true );
 
 	if (type == LLAssetType::AT_SOUND)
 	{
