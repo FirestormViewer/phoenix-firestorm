@@ -2269,7 +2269,7 @@ void LLPanelLandOptions::refresh()
 	}
 
 	// <FS:Ansariel> Disable label text for show avi checkbox as well
-	getChild<LLTextBox>("allow_label5")->setColor(LLUIColorTable::instance().getColor(mSeeAvatarsCtrl->get() ? "LabelTextColor" : "LabelDisabledColor"));
+	getChild<LLTextBox>("allow_label5")->setColor(LLUIColorTable::instance().getColor(mSeeAvatarsCtrl->getEnabled() ? "LabelTextColor" : "LabelDisabledColor"));
 }
 
 S32 LLPanelLandOptions::getDirectoryFee()
