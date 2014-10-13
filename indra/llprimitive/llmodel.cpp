@@ -943,7 +943,43 @@ void LLModel::addVolumeFacesFromDomMesh(domMesh* mesh)
 			return ; //abort
 		}
 	}
- 
+
+	// <FS:ND> FIRE-12216
+	// If we're missing normals, do a quick and dirty calculation of them.
+	// Use the normals of each vertex' connected faces and sum them up.
+	// This is maybe not as good as LLModel::generateNormals, but generateNormals will optimize and change
+	// the model, which can be okay if the user triggers it knowingly.
+	for( face_list_t::iterator itr = mVolumeFaces.begin(); itr != mVolumeFaces.end(); ++itr )
+	{
+		LLVolumeFace &face = *itr;
+		if( face.mNormals || !face.mIndices || face.mNumIndices%3 )
+			continue;
+
+		face.mNormals = face.mPositions + face.mNumVertices;
+		for( S32 i = 0; i < face.mNumVertices; ++i )
+			face.mNormals[i].clear();
+
+		for( S32 i = 0; i < face.mNumIndices; i+=3 )
+		{
+			LLVector4a v0( face.mPositions[ face.mIndices[ i   ] ] );
+			LLVector4a v1( face.mPositions[ face.mIndices[ i+1 ] ] );
+			LLVector4a v2( face.mPositions[ face.mIndices[ i+2 ] ] );
+
+			LLVector4a vNormal;
+			v2.sub( v1 );
+			v1.sub( v0 );
+			vNormal.setCross3( v1, v2 );
+			vNormal.normalize3();
+
+			face.mNormals[ face.mIndices[ i   ] ].add( vNormal );
+			face.mNormals[ face.mIndices[ i+1 ] ].add( vNormal );
+			face.mNormals[ face.mIndices[ i+2 ] ].add( vNormal );
+		}
+
+		for( S32 i = 0; i < face.mNumVertices; ++i )
+			face.mNormals[i].normalize3();
+	}
+	// </FS:ND>
 }
 
 BOOL LLModel::createVolumeFacesFromDomMesh(domMesh* mesh)
