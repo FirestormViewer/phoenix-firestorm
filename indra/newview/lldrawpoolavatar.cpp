@@ -2052,6 +2052,18 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 			stop_glerror();
 
 			const LLVolumeFace& vol_face = volume->getVolumeFace(te);
+
+			// <FS:ND> FIRE-14261 try to skip broken or out of bounds faces
+			if( vol_face.mNumVertices > 0x10000 || vol_face.mNumVertices < 0 || vol_face.mNumVertices < 0 )
+			{
+				LL_WARNS() << "Skipping face " << i << " for pass " << type << " te " << te
+						   << " mesh id " << mesh_id << " vobj->getID() " << vobj->getID()
+						   << " face is possibly corrupted"
+						   << LL_ENDL;
+				continue;
+			}
+			// </FS:ND>
+
 			updateRiggedFaceVertexBuffer(avatar, face, skin, volume, vol_face);
 		}
 	}
