@@ -457,13 +457,14 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 		return color;
 	}
 
-	U32 lowest = 9999;
+	U32 lowest = U32_MAX;
 	string_vec_t contact_sets = getFriendSets(friend_id);
-	for (U32 i = 0; i < static_cast<U32>(contact_sets.size()); ++i)
+	for (string_vec_t::iterator it = contact_sets.begin(); it != contact_sets.end(); ++it)
 	{
-		if (contact_sets[i] != ignored_set_name)
+		std::string set_name = *it;
+		if (set_name != ignored_set_name)
 		{
-			U32 set_size = getFriendsInSet(contact_sets[i]).size();
+			U32 set_size = (U32)getFriendsInSet(set_name).size();
 			if (!set_size)
 			{
 				continue;
@@ -472,7 +473,7 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 			{
 				lowest = set_size;
 
-				color = mContactSets[contact_sets[i]]->mColor;
+				color = mContactSets[set_name]->mColor;
 				if (isNonFriend(friend_id))
 				{
 					toneDownColor(color);
@@ -481,7 +482,7 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 		}
 	}
 
-	if (lowest == 9999)
+	if (lowest == U32_MAX)
 	{
 		if (isFriendInSet(friend_id, ignored_set_name) && !isInternalSetName(ignored_set_name))
 		{
