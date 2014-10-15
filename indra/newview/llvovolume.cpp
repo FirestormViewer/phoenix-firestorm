@@ -4922,7 +4922,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					const LLTextureEntry* te = facep->getTextureEntry();
 					LLViewerTexture* tex = facep->getTexture();
 
-					if (te->getGlow() >= 1.f/255.f)
+					// <FS:ND> More crash avoding ...
+					// if (te->getGlow() >= 1.f/255.f)
+					if (te && te->getGlow() >= 1.f/255.f)
+					// </FS:ND>
 					{
 						emissive = true;
 					}
@@ -4983,7 +4986,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						}
 						else
 						{
-							if (te->getColor().mV[3] > 0.f)
+							// <FS:NS> Even more crash avoidance ...
+							// if (te->getColor().mV[3] > 0.f)
+							if (te && te->getColor().mV[3] > 0.f)
+							// </FS:ND>
 							{ //only treat as alpha in the pipeline if < 100% transparent
 								drawablep->setState(LLDrawable::HAS_ALPHA);
 							}
@@ -5003,7 +5009,10 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						if (gPipeline.canUseWindLightShadersOnObjects()
 							&& LLPipeline::sRenderBump)
 						{
-							if (LLPipeline::sRenderDeferred && te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())
+							// <FS:ND> We just skip all of this is there is no te entry. This might get some funny results (which would be a face without te anyway).
+							// if (LLPipeline::sRenderDeferred && te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())
+							if (LLPipeline::sRenderDeferred && te && te->getMaterialParams().notNull()  && !te->getMaterialID().isNull())
+							// </FS:ND>
 							{
 								LLMaterial* mat = te->getMaterialParams().get();
 								if (mat->getNormalID().notNull())
