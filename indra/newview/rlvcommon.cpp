@@ -35,7 +35,8 @@
 
 //#include "lscript_byteformat.h"
 #include "fsscriptlibrary.h"
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp> // icontains
+#include <boost/algorithm/string/regex.hpp> // regex_replace_all
 #include <boost/foreach.hpp>	// <FS:CR>
 #include "lltrace.h"
 
@@ -363,12 +364,12 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
 	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
+		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + (*itRegion)->getName() + "\\b", boost::regex::icase), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + pParcelMgr->getAgentParcelName() + "\\b", boost::regex::icase), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
@@ -391,16 +392,16 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 			if (boost::icontains(strLegacyName, strDisplayName))
 			{
 				if (fFilterLegacy)
-					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
 				if (fFilterDisplay)
-					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
 			}
 			else
 			{
 				if (fFilterDisplay)
-					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
 				if (fFilterLegacy)
-					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
 			}
 		}
 	}
