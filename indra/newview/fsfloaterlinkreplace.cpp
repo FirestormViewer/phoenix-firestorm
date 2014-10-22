@@ -94,7 +94,7 @@ void FSFloaterLinkReplace::onTargetItemDrop(const LLUUID& target_item_id)
 
 void FSFloaterLinkReplace::updateFoundLinks()
 {
-	LLInventoryModel::item_array_t items = gInventory.collectLinksTo(mSourceUUID);
+	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID);
 	mRemainingItems = (U32)items.size();
 
 	LLStringUtil::format_map_t args;
@@ -132,7 +132,7 @@ void FSFloaterLinkReplace::onStartClicked()
 		return;
 	}
 
-	LLInventoryModel::item_array_t items = gInventory.collectLinksTo(mSourceUUID);
+	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID);
 	LL_INFOS() << "Found " << items.size() << " inventory links that need to be replaced." << LL_ENDL;
 
 	if (items.size() > 0)
