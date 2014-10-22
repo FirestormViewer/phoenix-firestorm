@@ -206,5 +206,5 @@ void exoFlickrAuthResponse::completedRaw(const LLChannelDescriptors& channels, c
 	oss << istr.rdbuf();
 	std::string str = oss.str();
 	LLSD result = LLURI::queryMap(str);
-	mCallback((getStatus() == 200), result);
+	mCallback((getStatus() == HTTP_OK), result);
 }
