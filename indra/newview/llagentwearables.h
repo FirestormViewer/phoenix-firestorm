@@ -188,11 +188,7 @@ public:
 	
 	typedef std::vector<LLViewerObject*> llvo_vec_t;
 
-//	static void 	userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
-	// Not the best way to go about this but other attempts changed far too much LL code to be a viable solution
-	static void 	userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool attach_only = false);
-// [/SL:KB]
+	static void 	userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array);
 	static void		userRemoveMultipleAttachments(llvo_vec_t& llvo_array);
 	static void		userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array);
 

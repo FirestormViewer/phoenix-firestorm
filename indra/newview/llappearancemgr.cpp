@@ -616,15 +616,11 @@ public:
 	void onWearableAssetFetch(LLViewerWearable *wearable);
 	void onAllComplete();
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0)
-	bool pollStopped();
-// [/SL:KB]
-
 	typedef std::list<LLFoundData> found_list_t;
 	found_list_t& getFoundList();
 	void eraseTypeToLink(LLWearableType::EType type);
 	void eraseTypeToRecover(LLWearableType::EType type);
-//	void setObjItems(const LLInventoryModel::item_array_t& items);
+	void setObjItems(const LLInventoryModel::item_array_t& items);
 	void setGestItems(const LLInventoryModel::item_array_t& items);
 	bool isMostRecent();
 	void handleLateArrivals();
@@ -634,7 +630,7 @@ public:
 	
 private:
 	found_list_t mFoundList;
-//	LLInventoryModel::item_array_t mObjItems;
+	LLInventoryModel::item_array_t mObjItems;
 	LLInventoryModel::item_array_t mGestItems;
 	typedef std::set<S32> type_set_t;
 	type_set_t mTypesToRecover;
@@ -711,11 +707,10 @@ void LLWearableHoldingPattern::eraseTypeToRecover(LLWearableType::EType type)
 	mTypesToRecover.erase(type);
 }
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-06-19 (Catznip-2.1)
-//void LLWearableHoldingPattern::setObjItems(const LLInventoryModel::item_array_t& items)
-//{
-//	mObjItems = items;
-//}
+void LLWearableHoldingPattern::setObjItems(const LLInventoryModel::item_array_t& items)
+{
+	mObjItems = items;
+}
 
 void LLWearableHoldingPattern::setGestItems(const LLInventoryModel::item_array_t& items)
 {
@@ -824,14 +819,12 @@ void LLWearableHoldingPattern::onAllComplete()
 	LL_INFOS("Avatar") << self_av_string() << "HP " << index() << " updating agent wearables with " << mResolved << " wearable items " << LL_ENDL;
 	LLAppearanceMgr::instance().updateAgentWearables(this);
 	
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-2.1)
-//	// Update attachments to match those requested.
-//	if (isAgentAvatarValid())
-//	{
-//		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << mObjItems.count() << " attachments" << LL_ENDL;
-//		LL_INFOS() << "Updating " << mObjItems.size() << " attachments" << LL_ENDL;
-//		LLAgentWearables::userUpdateAttachments(mObjItems);
-//	}
+	// Update attachments to match those requested.
+	if (isAgentAvatarValid())
+	{
+		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << mObjItems.size() << " attachments" << LL_ENDL;
+		LLAgentWearables::userUpdateAttachments(mObjItems);
+	}
 
 	if (isFetchCompleted() && isMissingCompleted())
 	{
@@ -868,12 +861,6 @@ bool LLWearableHoldingPattern::pollFetchCompletion()
 	{
 		// runway skip here?
 		LL_WARNS() << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << LL_ENDL;
-
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0)
-		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
-		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
-		return true;
-// [/SL:KB]
 	}
 
 	bool completed = isFetchCompleted();
@@ -944,11 +931,6 @@ void recovered_item_cb(const LLUUID& item_id, LLWearableType::EType type, LLView
 	{
 		// runway skip here?
 		LL_WARNS() << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << LL_ENDL;
-
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0)
-		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
-		return;
-// [/SL:KB]
 	}
 
 	LL_DEBUGS("Avatar") << self_av_string() << "Recovered item for type " << type << LL_ENDL;
@@ -1014,31 +996,12 @@ void LLWearableHoldingPattern::clearCOFLinksForMissingWearables()
 	}
 }
 
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0)
-bool LLWearableHoldingPattern::pollStopped()
-{
-	// We have to keep on polling until we're sure that all callbacks have completed or they'll cause a crash
-	if ( (isFetchCompleted()) && (isMissingCompleted()) )
-	{
-		delete this;
-		return true;
-	}
-	return false;
-}
-// [/SL:KB]
-
 bool LLWearableHoldingPattern::pollMissingWearables()
 {
 	if (!isMostRecent())
 	{
 		// runway skip here?
 		LL_WARNS() << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << LL_ENDL;
-
-// [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-2.0)
-		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
-		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollStopped, this));
-		return true;
-// [/SL:KB]
 	}
 	
 	bool timed_out = isTimedOut();
@@ -2006,9 +1969,8 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	
 	// Collect and filter descendents to determine new COF contents.
 
-	//
-	// - Body parts: always include COF contents as a fallback in case any required parts are missing.
-	//
+	// - Body parts: always include COF contents as a fallback in case any
+	// required parts are missing.
 	// Preserve body parts from COF if appending.
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART);
@@ -2026,9 +1988,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1);
 
-	//
 	// - Wearables: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
@@ -2089,9 +2049,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 //-TT
 	removeDuplicateItems(obj_items);
 
-	//
 	// - Gestures: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t gest_items;
 	if (append)
 		getDescendentsOfAssetType(cof, gest_items, LLAssetType::AT_GESTURE);
@@ -2108,63 +2066,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	std::copy(obj_items.begin(), obj_items.end(), std::back_inserter(all_items));
 	std::copy(gest_items.begin(), gest_items.end(), std::back_inserter(all_items));
 
-//	// Find any wearables that need description set to enforce ordering.
-//	desc_map_t desc_map;
-//	getWearableOrderingDescUpdates(wear_items, desc_map);
-//
-//	// Will link all the above items.
-//	// link_waiter enforce flags are false because we've already fixed everything up in updateCOF().
-//	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy(false,false);
-//	LLSD contents = LLSD::emptyArray();
-//
-//	for (LLInventoryModel::item_array_t::const_iterator it = all_items.begin();
-//		 it != all_items.end(); ++it)
-//	{
-//		LLSD item_contents;
-//		LLInventoryItem *item = *it;
-//
-//		std::string desc;
-//		desc_map_t::const_iterator desc_iter = desc_map.find(item->getUUID());
-//		if (desc_iter != desc_map.end())
-//		{
-//			desc = desc_iter->second;
-//			LL_DEBUGS("Avatar") << item->getName() << " overriding desc to: " << desc
-//								<< " (was: " << item->getActualDescription() << ")" << LL_ENDL;
-//		}
-//		else
-//		{
-//			desc = item->getActualDescription();
-//		}
-//
-//		item_contents["name"] = item->getName();
-//		item_contents["desc"] = desc;
-//		item_contents["linked_id"] = item->getLinkedUUID();
-//		item_contents["type"] = LLAssetType::AT_LINK; 
-//		contents.append(item_contents);
-//	}
-//	const LLUUID& base_id = append ? getBaseOutfitUUID() : category;
-//	LLViewerInventoryCategory *base_cat = gInventory.getCategory(base_id);
-//	if (base_cat)
-//	{
-//		LLSD base_contents;
-//		base_contents["name"] = base_cat->getName();
-//		base_contents["desc"] = "";
-//		base_contents["linked_id"] = base_cat->getLinkedUUID();
-//		base_contents["type"] = LLAssetType::AT_LINK_FOLDER; 
-//		contents.append(base_contents);
-//	}
-//	if (gSavedSettings.getBOOL("DebugAvatarAppearanceMessage"))
-//	{
-//		dump_sequential_xml(gAgentAvatarp->getFullname() + "_slam_request", contents);
-//	}
-//	slam_inventory_folder(getCOF(), contents, link_waiter);
-
-	// Synchronize COF
-	//  -> it's possible that we don't link to any new items in which case 'link_waiter' fires when it goes out of scope below
-	LLInventoryModel::item_array_t items_add, items_remove;
-	syncCOF(all_items, items_add, items_remove);
-
-	// Will link all the above items.
+	// Find any wearables that need description set to enforce ordering.
 	desc_map_t desc_map;
 	getWearableOrderingDescUpdates(wear_items, desc_map);
 
@@ -2198,45 +2100,22 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		item_contents["type"] = LLAssetType::AT_LINK; 
 		contents.append(item_contents);
 	}
-	// <FS:Ansariel> [AIS Merge]
-	//const LLUUID& base_id = append ? getBaseOutfitUUID() : category;
-	//LLViewerInventoryCategory *base_cat = gInventory.getCategory(base_id);
-	//if (base_cat)
-	//{
-	//	LLSD base_contents;
-	//	base_contents["name"] = base_cat->getName();
-	//	base_contents["desc"] = "";
-	//	base_contents["linked_id"] = base_cat->getLinkedUUID();
-	//	base_contents["type"] = LLAssetType::AT_LINK_FOLDER; 
-	//	contents.append(base_contents);
-	//}
-	// </FS:Ansariel>
+	const LLUUID& base_id = append ? getBaseOutfitUUID() : idOutfit;
+	LLViewerInventoryCategory *base_cat = gInventory.getCategory(base_id);
+	if (base_cat)
+	{
+		LLSD base_contents;
+		base_contents["name"] = base_cat->getName();
+		base_contents["desc"] = "";
+		base_contents["linked_id"] = base_cat->getLinkedUUID();
+		base_contents["type"] = LLAssetType::AT_LINK_FOLDER; 
+		contents.append(base_contents);
+	}
 	if (gSavedSettings.getBOOL("DebugAvatarAppearanceMessage"))
 	{
 		dump_sequential_xml(gAgentAvatarp->getFullname() + "_slam_request", contents);
 	}
 	slam_inventory_folder(getCOF(), contents, link_waiter);
-
-	// Add link to outfit if category is an outfit. 
-	if ( (!append) && (idOutfit.notNull()) )
-	{
-		createBaseOutfitLink(idOutfit, link_waiter);
-	}
-
-	// Remove current COF contents.  Have to do this after creating
-	// the link_waiter so links can be followed for any items that get
-	// carried over (e.g. keeping old shape if the new outfit does not
-	// contain one)
-	purgeItems(items_remove);
-
-	bool keep_outfit_links = append;
-	if (!keep_outfit_links)
-	{
-		purgeItemsOfType(LLAssetType::AT_LINK_FOLDER);
-	}
-
-	gInventory.notifyObservers();
-// [/SL:KB]
 
 	LL_DEBUGS("Avatar") << self_av_string() << "waiting for LLUpdateAppearanceOnDestroy" << LL_ENDL;
 }
@@ -2548,36 +2427,6 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 				<< " descendent_count " << cof->getDescendentCount()
 				<< " viewer desc count " << cof->getViewerDescendentCount() << LL_ENDL;
 	}
-	
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
-	// Update attachments to match those requested.
-	if (isAgentAvatarValid())
-	{
-		// Include attachments which should be in COF but don't have their link created yet
-		uuid_vec_t::iterator itPendingAttachLink = mPendingAttachLinks.begin();
-		while (itPendingAttachLink != mPendingAttachLinks.end())
-		{
-			const LLUUID& idItem = *itPendingAttachLink;
-			if ( (!gAgentAvatarp->isWearingAttachment(idItem)) || (isLinkInCOF(idItem)) )
-			{
-				itPendingAttachLink = mPendingAttachLinks.erase(itPendingAttachLink);
-				continue;
-			}
-
-			LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
-			if (pItem)
-			{
-				obj_items.push_back(pItem);
-			}
-
-			++itPendingAttachLink;
-		}
-
-		// Don't remove attachments until avatar is fully loaded (should reduce random attaching/detaching/reattaching at log-on)
-		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << obj_items.size() << " attachments" << LL_ENDL;
-		LLAgentWearables::userUpdateAttachments(obj_items, !gAgentAvatarp->isFullyLoaded());
-	}
-// [/SL:KB]
 
 	if(!wear_items.size())
 	{
@@ -2593,7 +2442,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	LLTimer hp_block_timer;
 	LLWearableHoldingPattern* holder = new LLWearableHoldingPattern;
 
-//	holder->setObjItems(obj_items);
+	holder->setObjItems(obj_items);
 	holder->setGestItems(gest_items);
 		
 	// Note: can't do normal iteration, because if all the
@@ -4277,7 +4126,7 @@ bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_b
 
 	//to cause appearance of the agent to be updated
 	bool result = false;
-	if ((result = gAgentWearables.moveWearable(item, closer_to_body)))
+	if (result = gAgentWearables.moveWearable(item, closer_to_body))
 	{
 		gAgentAvatarp->wearableUpdated(item->getWearableType());
 	}
@@ -4364,12 +4213,6 @@ void LLAppearanceMgr::setAttachmentInvLinkEnable(bool val)
 {
 	LL_DEBUGS("Avatar") << "setAttachmentInvLinkEnable => " << (int) val << LL_ENDL;
 	mAttachmentInvLinkEnabled = val;
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-	if (mAttachmentInvLinkEnabled)
-	{
-		linkPendingAttachments();
-	}
-// [/SL:KB]
 }
 
 void dumpAttachmentSet(const std::set<LLUUID>& atts, const std::string& msg)
@@ -4392,28 +4235,14 @@ void dumpAttachmentSet(const std::set<LLUUID>& atts, const std::string& msg)
 void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 {
 	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-	   if (isLinkInCOF(item_id))
-	   {
-		   return;
-	   }
-	   mPendingAttachLinks.push_back(item_id);
-// [/SL:KB]
 
 	   if (mAttachmentInvLinkEnabled)
 	   {
-		   // we have to pass do_update = true to call LLAppearanceMgr::updateAppearanceFromCOF.
-		   // it will trigger gAgentWariables.notifyLoadingFinished()
-		   // But it is not acceptable solution. See EXT-7777
-//		   if (!isLinkedInCOF(item_id))
-//		   {
-//			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
-//			   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
-//		   }
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-		   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback();
-		   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
-// [/SL:KB]
+		   if (!isLinkedInCOF(item_id))
+		   {
+			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
+			   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
+		   }
 	   }
 	   else
 	   {
@@ -4424,13 +4253,6 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 {
 	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-		uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), item_id);
-		if (itPendingAttachLink != mPendingAttachLinks.end())
-		{
-			mPendingAttachLinks.erase(itPendingAttachLink);
-		}
-// [/SL:KB]
 
 	   if (mAttachmentInvLinkEnabled)
 	   {
@@ -4441,44 +4263,6 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 		   //LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
 	   }
 }
-
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.2)
-void LLAppearanceMgr::linkPendingAttachments()
-{
-   LLPointer<LLInventoryCallback> cb = NULL;
-   for (uuid_vec_t::const_iterator itPendingAttachLink = mPendingAttachLinks.begin(); 
-			itPendingAttachLink != mPendingAttachLinks.end(); ++itPendingAttachLink)
-	{
-		const LLUUID& idAttachItem = *itPendingAttachLink;
-		if ( (gAgentAvatarp->isWearingAttachment(idAttachItem)) && (!isLinkInCOF(idAttachItem)) )
-		{
-			if (!cb)
-			{
-				cb = new LLRegisterAttachmentCallback();
-			}
-			LLAppearanceMgr::addCOFItemLink(idAttachItem, cb);
-		}
-	}
-}
-
-void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idItem)
-{
-	const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
-
-	// Remove the attachment from the pending list
-	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idItemBase);
-	if (itPendingAttachLink != mPendingAttachLinks.end())
-	{
-		mPendingAttachLinks.erase(itPendingAttachLink);
-	}
-
-	// It may have been detached already in which case we should remove the COF link
-	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idItemBase)) )
-	{
-		removeCOFItemLinks(idItemBase);
-	}
-}
-// [/SL:KB]
 
 BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const
 {
