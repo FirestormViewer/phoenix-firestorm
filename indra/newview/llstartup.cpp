@@ -343,28 +343,28 @@ class GridListRequestResponder : public LLHTTPClient::Responder
 {
 public:
 	//If we get back a normal response, handle it here
-	virtual void result(const LLSD& content)
+	virtual void httpSuccess()
 	{
 		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
 
 		llofstream out_file;
 		out_file.open(filename);
-		LLSDSerialize::toPrettyXML(content, out_file);
+		LLSDSerialize::toPrettyXML(getContent(), out_file);
 		out_file.close();
 		LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
 		sGridListRequestReady = true;
 	}
 
 	//If we get back an error (not found, etc...), handle it here
-	virtual void error(U32 status, const std::string& reason)
+	virtual void httpFailure()
 	{
 		sGridListRequestReady = true;
-		if (304 == status)
+		if (HTTP_NOT_MODIFIED == getStatus())
 		{
 			LL_DEBUGS("GridManager") << "<- no error :P ... GridListRequest: List not modified since last session" << LL_ENDL;
 		}
 		else
-			LL_WARNS() << "GridListRequest::error("<< status << ": " << reason << ")" << LL_ENDL;
+			LL_WARNS() << "GridListRequest::error("<< getStatus() << ": " << getReason() << ")" << LL_ENDL;
 	}
 };
 // </AW: opensim>
@@ -376,9 +376,9 @@ public:
 	virtual void completedRaw(const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
 	{
 		S32 status = getStatus();
-		if (!isGoodStatus() && status != 304)
+		if (!isGoodStatus() && status != HTTP_NOT_MODIFIED)
 		{
-			if (status == 499)
+			if (status == HTTP_INTERNAL_ERROR)
 			{
 				reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
 			}

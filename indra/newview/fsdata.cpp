@@ -76,27 +76,32 @@ public:
 		mURL(url)
 	{}
 
-	void result(const LLSD& content)
+	void httpSuccess()
 	{
 		// check for parse failure that can happen with [200] OK result.
 		if (mDeserializeError)
 		{
-			FSData::getInstance()->processResponder(content, mURL, false, mLastModified);
+			FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
 		}
 		else
 		{
-			FSData::getInstance()->processResponder(content, mURL, true, mLastModified);
+			FSData::getInstance()->processResponder(getContent(), mURL, true, mLastModified);
 		}
+
+		completedHeader();
 	}
 	
-	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+	void httpFailure()
 	{
-		FSData::getInstance()->processResponder(content, mURL, false, mLastModified);
+		FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
+
+		completedHeader();
 	}
 	
-	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	void completedHeader()
 	{
-		LL_DEBUGS("fsdata") << "Status: [" << status << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
+		LLSD content = getResponseHeaders();
+		LL_DEBUGS("fsdata") << "Status: [" << getStatus() << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
 		if (content.has("last-modified"))
 		{
 			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
@@ -122,9 +127,11 @@ public:
 		const LLChannelDescriptors& channels,
 		const LLIOPipe::buffer_ptr_t& buffer)
 	{
+		completedHeader();
+
 		if (!isGoodStatus())
 		{
-			if (getStatus() == 304)
+			if (getStatus() == HTTP_NOT_MODIFIED)
 			{
 				LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
 			}
@@ -138,7 +145,7 @@ public:
 		S32 data_size = buffer->countAfter(channels.in(), NULL);
 		if (data_size <= 0)
 		{
-			LL_WARNS("fsdata") << "Recieved zero data for " << mURL << LL_ENDL;
+			LL_WARNS("fsdata") << "Received zero data for " << mURL << LL_ENDL;
 			return;
 		}
 
@@ -172,9 +179,10 @@ public:
 		data = NULL;
 	}
 
-	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	void completedHeader()
 	{
-		LL_DEBUGS("fsdata") << "Status: [" << status << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
+		LLSD content = getResponseHeaders();
+		LL_DEBUGS("fsdata") << "Status: [" << getStatus() << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
 		if (content.has("last-modified"))
 		{
 			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
