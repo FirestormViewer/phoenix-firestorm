@@ -4491,7 +4491,7 @@
      group="1"
      sex="female"
      name="Breast_Physics_UpDown_Driven"
-     wearable="shape"
+     wearable="physics"
      edit_group="driven"
      value_default="0"
      value_min="-3"
@@ -4513,7 +4513,7 @@
      group="1"
      sex="female"
      name="Breast_Physics_InOut_Driven"
-     wearable="shape"
+     wearable="physics"
      edit_group="driven"
      value_default="0"
      value_min="-1.25"
@@ -4535,7 +4535,6 @@
      group="1"
      name="Belly_Physics_Torso_UpDown_Driven"
      wearable="physics"
-     cross_wearable="true"
      edit_group="driven"
      value_default="0"
      value_min="-1"
@@ -4553,7 +4552,6 @@
      group="1"
      name="Breast_Physics_LeftRight_Driven"
      wearable="physics"
-     cross_wearable="true"
      edit_group="driven"
      value_default="0"
      value_min="-2"
@@ -7727,7 +7725,7 @@ render_pass="bump">
 
       <param
        id="868"
-       group="0"
+       group="3"
        wearable="shirt"
        edit_group="shirt"
        edit_group_order="8"
@@ -8850,7 +8848,7 @@ render_pass="bump">
 
       <param
        id="869"
-       group="0"
+       group="3"
        wearable="pants"
        edit_group="pants"
        edit_group_order="6"
@@ -9771,7 +9769,7 @@ render_pass="bump">
 
     <param
      id="163"
-     group="0"
+     group="3"
      wearable="skin"
      edit_group="skin_facedetail"
      edit_group_order="3"
@@ -11830,7 +11828,7 @@ render_pass="bump">
 
     <param
      id="877"
-     group="0"
+     group="3"
      name="Jacket Wrinkles"
      label="Jacket Wrinkles"
      wearable="jacket"

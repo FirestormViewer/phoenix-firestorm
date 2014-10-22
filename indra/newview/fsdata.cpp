@@ -119,20 +119,18 @@ public:
 	{}
 
 	void completedRaw(
-		U32 status,
-		const std::string& reason,
 		const LLChannelDescriptors& channels,
 		const LLIOPipe::buffer_ptr_t& buffer)
 	{
-		if (!isGoodStatus(status))
+		if (!isGoodStatus())
 		{
-			if (status == 304)
+			if (getStatus() == 304)
 			{
 				LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
 			}
 			else
 			{
-				LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << status << "]" << LL_ENDL;
+				LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << getStatus() << "]" << LL_ENDL;
 			}
 			return;
 		}

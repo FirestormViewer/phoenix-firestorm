@@ -44,8 +44,6 @@ class exoFlickrResponse : public LLHTTPClient::Responder
 public:
 	exoFlickrResponse(exoFlickr::response_callback_t &callback);
 	/* virtual */ void completedRaw(
-									U32 status,
-									const std::string& reason,
 									const LLChannelDescriptors& channels,
 									const LLIOPipe::buffer_ptr_t& buffer);
 private:
@@ -57,8 +55,6 @@ class exoFlickrUploadResponse : public LLHTTPClient::Responder
 public:
 	exoFlickrUploadResponse(exoFlickr::response_callback_t &callback);
 	/* virtual */ void completedRaw(
-									U32 status,
-									const std::string& reason,
 									const LLChannelDescriptors& channels,
 									const LLIOPipe::buffer_ptr_t& buffer);
 private:
@@ -191,8 +187,6 @@ exoFlickrUploadResponse::exoFlickrUploadResponse(exoFlickr::response_callback_t 
 }
 
 void exoFlickrUploadResponse::completedRaw(
-										  U32 status,
-										  const std::string& reason,
 										  const LLChannelDescriptors& channels,
 										  const LLIOPipe::buffer_ptr_t& buffer)
 {
@@ -207,7 +201,7 @@ void exoFlickrUploadResponse::completedRaw(
 	LLXmlTree tree;
 	if(!tree.parseString(result))
 	{
-		LL_WARNS("FlickrAPI") << "Couldn't parse flickr response(" << status << "): " << result << LL_ENDL;
+		LL_WARNS("FlickrAPI") << "Couldn't parse flickr response(" << getStatus() << "): " << result << LL_ENDL;
 		mCallback(false, LLSD());
 		return;
 	}
@@ -301,8 +295,6 @@ mCallback(callback)
 }
 
 void exoFlickrResponse::completedRaw(
-									U32 status,
-									const std::string& reason,
 									const LLChannelDescriptors& channels,
 									const LLIOPipe::buffer_ptr_t& buffer)
 {
@@ -324,6 +316,6 @@ void exoFlickrResponse::completedRaw(
 		LL_INFOS("FlickrAPI") << "Got response string: " << result << LL_ENDL;
 		LLSD response;
 		JsonToLLSD(root, response);
-		mCallback(isGoodStatus(status), response);
+		mCallback(isGoodStatus(), response);
 	}
 }

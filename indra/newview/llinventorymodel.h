@@ -33,6 +33,7 @@
 #include "llcurl.h"
 #include "lluuid.h"
 #include "llpermissionsflags.h"
+#include "llviewerinventory.h"
 #include "llstring.h"
 #include "llmd5.h"
 #include <map>
@@ -48,13 +49,8 @@ class LLInventoryObserver;
 class LLInventoryObject;
 class LLInventoryItem;
 class LLInventoryCategory;
-class LLViewerInventoryItem;
-class LLViewerInventoryCategory;
-class LLViewerInventoryItem;
-class LLViewerInventoryCategory;
 class LLMessageSystem;
 class LLInventoryCollectFunctor;
-
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LLInventoryModel
@@ -84,11 +80,12 @@ public:
 
 	class fetchInventoryResponder : public LLCurl::Responder
 	{
+		LOG_CLASS(fetchInventoryResponder);
 	public:
 		fetchInventoryResponder(const LLSD& request_sd) : mRequestSD(request_sd) {};
-		void result(const LLSD& content);			
-		void errorWithContent(U32 status, const std::string& reason, const LLSD& content);
 	protected:
+		virtual void httpSuccess();
+		virtual void httpFailure();
 		LLSD mRequestSD;
 	};
 
@@ -147,6 +144,8 @@ public:
 	// during authentication. Returns true if everything parsed.
 	bool loadSkeleton(const LLSD& options, const LLUUID& owner_id);
 	void buildParentChildMap(); // brute force method to rebuild the entire parent-child relations
+	void createCommonSystemCategories();
+	
 	// Call on logout to save a terse representation.
 	void cache(const LLUUID& parent_folder_id, const LLUUID& agent_id);
 private:
@@ -159,19 +158,21 @@ private:
 	typedef std::map<LLUUID, LLPointer<LLViewerInventoryItem> > item_map_t;
 	cat_map_t mCategoryMap;
 	item_map_t mItemMap;
-	
-	// <FS:ND> Link Processsing Efficiency
-	typedef std::set< LLUUID > item_links_set_t;
-	typedef std::map< LLUUID, item_links_set_t > item_links_map_t;
-	item_links_map_t mItemLinks;
-	// </FS:ND>
-	
 	// This last set of indices is used to map parents to children.
 	typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;
 	typedef std::map<LLUUID, item_array_t*> parent_item_map_t;
 	parent_cat_map_t mParentChildCategoryTree;
 	parent_item_map_t mParentChildItemTree;
 
+	// Track links to items and categories. We do not store item or
+	// category pointers here, because broken links are also supported.
+	typedef std::multimap<LLUUID, LLUUID> backlink_mmap_t;
+	backlink_mmap_t mBacklinkMMap; // key = target_id: ID of item, values = link_ids: IDs of item or folder links referencing it.
+	// For internal use only
+	bool hasBacklinkInfo(const LLUUID& link_id, const LLUUID& target_id) const;
+	void addBacklinkInfo(const LLUUID& link_id, const LLUUID& target_id);
+	void removeBacklinkInfo(const LLUUID& link_id, const LLUUID& target_id);
+	
 	//--------------------------------------------------------------------
 	// Login
 	//--------------------------------------------------------------------
@@ -220,6 +221,9 @@ public:
 		EXCLUDE_TRASH = FALSE, 
 		INCLUDE_TRASH = TRUE 
 	};
+	// Simpler existence test if matches don't actually need to be collected.
+	bool hasMatchingDirectDescendent(const LLUUID& cat_id,
+									 LLInventoryCollectFunctor& filter);
 	void collectDescendents(const LLUUID& id,
 							cat_array_t& categories,
 							item_array_t& items,
@@ -229,21 +233,35 @@ public:
 							  item_array_t& items,
 							  BOOL include_trash,
 							  LLInventoryCollectFunctor& add,
-							  BOOL follow_folder_links = FALSE);
+							  // <FS:Ansariel> Follow folder links
+							  bool follow_folder_links = false);
 
 	// Collect all items in inventory that are linked to item_id.
 	// Assumes item_id is itself not a linked item.
-	item_array_t collectLinkedItems(const LLUUID& item_id,
-									const LLUUID& start_folder_id = LLUUID::null);
-	
+	item_array_t collectLinksTo(const LLUUID& item_id);
 
 	// Check if one object has a parent chain up to the category specified by UUID.
 	BOOL isObjectDescendentOf(const LLUUID& obj_id, const LLUUID& cat_id) const;
 
+	// Follow parent chain to the top.
+	bool getObjectTopmostAncestor(const LLUUID& object_id, LLUUID& result) const;
+
+	// <FS:Ansariel> Re-added because of start folder id
+	// Collect all items in inventory that are linked to item_id.
+	// Assumes item_id is itself not a linked item.
+	item_array_t collectLinkedItems(const LLUUID& item_id,
+									const LLUUID& start_folder_id = LLUUID::null);
+	// </FS:Ansariel>
+	
 	//--------------------------------------------------------------------
 	// Find
 	//--------------------------------------------------------------------
 public:
+	const LLUUID findCategoryUUIDForTypeInRoot(
+		LLFolderType::EType preferred_type,
+		bool create_folder,
+		const LLUUID& root_id);
+
 	// Returns the uuid of the category that specifies 'type' as what it 
 	// defaults to containing. The category is not necessarily only for that type. 
 	//    NOTE: If create_folder is true, this will create a new inventory category 
@@ -323,7 +341,7 @@ public:
 	//    NOTE: In usage, you will want to perform cache accounting
 	//    operations in LLInventoryModel::accountForUpdate() or
 	//    LLViewerInventoryItem::updateServer() before calling this method.
-	U32 updateItem(const LLViewerInventoryItem* item);
+	U32 updateItem(const LLViewerInventoryItem* item, U32 mask = 0);
 
 	// Change an existing item with the matching id or add
 	// the category. No notifcation will be sent to observers. This
@@ -332,7 +350,7 @@ public:
 	//    NOTE: In usage, you will want to perform cache accounting
 	//    operations in accountForUpdate() or LLViewerInventoryCategory::
 	//    updateServer() before calling this method.
-	void updateCategory(const LLViewerInventoryCategory* cat);
+	void updateCategory(const LLViewerInventoryCategory* cat, U32 mask = 0);
 
 	// Move the specified object id to the specified category and
 	// update the internal structures. No cache accounting,
@@ -353,11 +371,31 @@ public:
 	// Delete
 	//--------------------------------------------------------------------
 public:
+
+	// Update model after an AISv3 update received for any operation.
+	void onAISUpdateReceived(const std::string& context, const LLSD& update);
+		
+	// Update model after an item is confirmed as removed from
+	// server. Works for categories or items.
+	void onObjectDeletedFromServer(const LLUUID& item_id,
+								   bool fix_broken_links = true,
+								   bool update_parent_version = true,
+								   bool do_notify_observers = true);
+
+	// Update model after all descendents removed from server.
+	void onDescendentsPurgedFromServer(const LLUUID& object_id, bool fix_broken_links = true);
+
+	// Update model after an existing item gets updated on server.
+	void onItemUpdated(const LLUUID& item_id, const LLSD& updates, bool update_parent_version);
+
+	// Update model after an existing category gets updated on server.
+	void onCategoryUpdated(const LLUUID& cat_id, const LLSD& updates);
+
 	// Delete a particular inventory object by ID. Will purge one
 	// object from the internal data structures, maintaining a
 	// consistent internal state. No cache accounting, observer
 	// notification, or server update is performed.
-	void deleteObject(const LLUUID& id);
+	void deleteObject(const LLUUID& id, bool fix_broken_links = true, bool do_notify_observers = true);
 	/// move Item item_id to Trash
 	void removeItem(const LLUUID& item_id);
 	/// move Category category_id to Trash
@@ -365,17 +403,6 @@ public:
 	/// removeItem() or removeCategory(), whichever is appropriate
 	void removeObject(const LLUUID& object_id);
 
-	// Delete a particular inventory object by ID, and delete it from
-	// the server. Also updates linked items.
-	void purgeObject(const LLUUID& id);
-
-	// Collects and purges the descendants of the id
-	// provided. If the category is not found, no action is
-	// taken. This method goes through the long winded process of
-	// removing server representation of folders and items while doing
-	// cache accounting in a fairly efficient manner. This method does
-	// not notify observers (though maybe it should...)
-	void purgeDescendentsOf(const LLUUID& id);
 protected:
 	void updateLinkedObjectsFromPurge(const LLUUID& baseobj_id);
 	
@@ -411,8 +438,7 @@ public:
 	LLUUID createNewCategory(const LLUUID& parent_id,
 							 LLFolderType::EType preferred_type,
 							 const std::string& name,
-							 void (*callback)(const LLSD&, void*) = NULL,
-							 void* user_data = NULL );
+							 boost::optional<inventory_func_type> callback = boost::optional<inventory_func_type>());
 protected:
 	// Internal methods that add inventory and make sure that all of
 	// the internal data structures are consistent. These methods
@@ -481,6 +507,7 @@ public:
 	// notifyObservers() manually to update regardless of whether state change 
 	// has been indicated.
 	void idleNotifyObservers();
+
 	// Call to explicitly update everyone on a new state.
 	void notifyObservers();
 
@@ -488,7 +515,9 @@ public:
 	// been changed 'under the hood', but outside the control of the
 	// inventory. The next notify will include that notification.
 	void addChangedMask(U32 mask, const LLUUID& referent);
+	
 	const changed_items_t& getChangedIDs() const { return mChangedItemIDs; }
+	const changed_items_t& getAddedIDs() const { return mAddedItemIDs; }
 protected:
 	// Updates all linked items pointing to this id.
 	void addChangedMaskForLinks(const LLUUID& object_id, U32 mask);
@@ -499,6 +528,8 @@ private:
 	// Variables used to track what has changed since the last notify.
 	U32 mModifyMask;
 	changed_items_t mChangedItemIDs;
+	changed_items_t mAddedItemIDs;
+	
 	
 	//--------------------------------------------------------------------
 	// Observers
@@ -560,7 +591,7 @@ public:
 	static void processMoveInventoryItem(LLMessageSystem* msg, void**);
 	static void processFetchInventoryReply(LLMessageSystem* msg, void**);
 protected:
-	bool messageUpdateCore(LLMessageSystem* msg, bool do_accounting);
+	bool messageUpdateCore(LLMessageSystem* msg, bool do_accounting, U32 mask = 0x0);
 
 	//--------------------------------------------------------------------
 	// Locks
@@ -584,6 +615,9 @@ private:
 	//--------------------------------------------------------------------
 public:
 	void dumpInventory() const;
+#ifdef LL_DEBUG
+	bool validate() const;
+#endif
 
 /**                    Miscellaneous
  **                                                                            **

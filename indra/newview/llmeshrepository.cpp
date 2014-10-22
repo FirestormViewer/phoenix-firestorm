@@ -27,8 +27,10 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "apr_pools.h"
+#include "apr_dso.h"
+#include "llhttpconstants.h"
 #include "llapr.h"
-#include "llhttpstatuscodes.h"
 #include "llmeshrepository.h"
 
 #include "llagent.h"
@@ -520,6 +522,7 @@ S32 LLMeshRepoThread::sRequestWaterLevel = 0;
 class LLMeshHandlerBase : public LLCore::HttpHandler
 {
 public:
+	LOG_CLASS(LLMeshHandlerBase);
 	LLMeshHandlerBase()
 		: LLCore::HttpHandler(),
 		  mMeshParams(),
@@ -552,6 +555,7 @@ public:
 class LLMeshHeaderHandler : public LLMeshHandlerBase
 {
 public:
+	LOG_CLASS(LLMeshHeaderHandler);
 	LLMeshHeaderHandler(const LLVolumeParams & mesh_params)
 		: LLMeshHandlerBase()
 	{
@@ -608,6 +612,7 @@ public:
 class LLMeshSkinInfoHandler : public LLMeshHandlerBase
 	{
 public:
+	LOG_CLASS(LLMeshSkinInfoHandler);
 	LLMeshSkinInfoHandler(const LLUUID& id, U32 offset, U32 size)
 		: LLMeshHandlerBase(),
 		  mMeshID(id),
@@ -637,6 +642,7 @@ public:
 class LLMeshDecompositionHandler : public LLMeshHandlerBase
 	{
 public:
+	LOG_CLASS(LLMeshDecompositionHandler);
 	LLMeshDecompositionHandler(const LLUUID& id, U32 offset, U32 size)
 		: LLMeshHandlerBase(),
 		  mMeshID(id),
@@ -666,6 +672,7 @@ public:
 class LLMeshPhysicsShapeHandler : public LLMeshHandlerBase
 	{
 public:
+	LOG_CLASS(LLMeshPhysicsShapeHandler);
 	LLMeshPhysicsShapeHandler(const LLUUID& id, U32 offset, U32 size)
 		: LLMeshHandlerBase(),
 		  mMeshID(id),
@@ -740,7 +747,6 @@ void log_upload_error(LLCore::HttpStatus status, const LLSD& content,
 		LL_WARNS(LOG_MESH) << "Bad response to mesh request, no additional error information available." << LL_ENDL;
 	}
 }
-
 
 LLMeshRepoThread::LLMeshRepoThread()
 : LLThread("mesh repo"),

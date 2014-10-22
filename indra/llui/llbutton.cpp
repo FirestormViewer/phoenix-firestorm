@@ -420,7 +420,7 @@ BOOL LLButton::postBuild()
 	}
 	// <FS:Zi>
 
-	addBadgeToParentPanel();
+	addBadgeToParentHolder();
 
 	return LLUICtrl::postBuild();
 }

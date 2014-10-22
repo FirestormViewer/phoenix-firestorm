@@ -35,8 +35,6 @@ class exoFlickrAuthResponse : public LLHTTPClient::Responder
 public:
 	exoFlickrAuthResponse(exoFlickrAuth::authorized_callback_t callback);
 	/* virtual */ void completedRaw(
-									U32 status,
-									const std::string& reason,
 									const LLChannelDescriptors& channels,
 									const LLIOPipe::buffer_ptr_t& buffer);
 private:
@@ -201,12 +199,12 @@ exoFlickrAuthResponse::exoFlickrAuthResponse(exoFlickrAuth::authorized_callback_
 {
 }
 
-void exoFlickrAuthResponse::completedRaw(U32 status, const std::string& reason, const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
+void exoFlickrAuthResponse::completedRaw(const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
 {
 	LLBufferStream istr(channels, buffer.get());
 	std::ostringstream oss;
 	oss << istr.rdbuf();
 	std::string str = oss.str();
 	LLSD result = LLURI::queryMap(str);
-	mCallback((status == 200), result);
+	mCallback((getStatus() == 200), result);
 }

@@ -281,7 +281,7 @@ std::string	LLViewerWindow::sMovieBaseName;
 LLTrace::SampleStatHandle<> LLViewerWindow::sMouseVelocityStat("Mouse Velocity");
 
 
-class RecordToChatConsole : public LLError::Recorder, public LLSingleton<RecordToChatConsole>
+class RecordToChatConsoleRecorder : public LLError::Recorder
 {
 public:
 	virtual void recordMessage(LLError::ELevel level,
@@ -303,6 +303,22 @@ public:
 			//}
 		//}
 	}
+};
+
+class RecordToChatConsole : public LLSingleton<RecordToChatConsole>
+{
+public:
+	RecordToChatConsole()
+		: LLSingleton<RecordToChatConsole>(),
+		mRecorder(new RecordToChatConsoleRecorder())
+	{
+	}
+
+	void startRecorder() { LLError::addRecorder(mRecorder); }
+	void stopRecorder() { LLError::removeRecorder(mRecorder); }
+
+private:
+	LLError::RecorderPtr mRecorder;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -2011,11 +2027,11 @@ void LLViewerWindow::initBase()
 	// optionally forward warnings to chat console/chat floater
 	// for qa runs and dev builds
 #if  !LL_RELEASE_FOR_DOWNLOAD
-	LLError::addRecorder(RecordToChatConsole::getInstance());
+	RecordToChatConsole::getInstance()->startRecorder();
 #else
 	if(gSavedSettings.getBOOL("QAMode"))
 	{
-		LLError::addRecorder(RecordToChatConsole::getInstance());
+		RecordToChatConsole::getInstance()->startRecorder();
 	}
 #endif
 
@@ -2035,11 +2051,9 @@ void LLViewerWindow::initBase()
 
 	if(mProgressViewMini)
 		mProgressViewMini->setVisible(FALSE);
-
 	// <FS:Zi> Moved this to the top right after creation of main_view.xml, so all context menus
 	//         created right after that get the correct parent assigned.
 	// gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
-
 	// LLMenuGL::sMenuContainer = gMenuHolder;
 	// </FS:Zi>
 }
@@ -2225,7 +2239,7 @@ void LLViewerWindow::initWorldUI()
 			destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
 			destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
 			LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
-			destinations->navigateTo(destination_guide_url, "text/html");
+			destinations->navigateTo(destination_guide_url, HTTP_CONTENT_TEXT_HTML);
 		}
 	}
 
@@ -2252,7 +2266,7 @@ void LLViewerWindow::initWorldUI()
 			avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
 			avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
 			LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
-			avatar_picker->navigateTo(avatar_picker_url, "text/html");
+			avatar_picker->navigateTo(avatar_picker_url, HTTP_CONTENT_TEXT_HTML);
 		}
  	}
 // </FS:AW  opensim destinations and avatar picker>
@@ -2269,8 +2283,7 @@ void LLViewerWindow::initWorldUI()
 void LLViewerWindow::shutdownViews()
 {
 	// clean up warning logger
-	LLError::removeRecorder(RecordToChatConsole::getInstance());
-
+	RecordToChatConsole::getInstance()->stopRecorder();
 	LL_INFOS() << "Warning logger is cleaned." << LL_ENDL ;
 
 	delete mDebugText;
@@ -2305,6 +2318,9 @@ void LLViewerWindow::shutdownViews()
 	// access to gMenuHolder
 	cleanup_menus();
 	LL_INFOS() << "menus destroyed." << LL_ENDL ;
+
+	view_listener_t::cleanup();
+	LL_INFOS() << "view listeners destroyed." << LL_ENDL ;
 	
 	// Delete all child views.
 	delete mRootView;
@@ -2385,6 +2401,12 @@ LLViewerWindow::~LLViewerWindow()
 
 	delete mDebugText;
 	mDebugText = NULL;
+
+	if (LLViewerShaderMgr::sInitialized)
+	{
+		LLViewerShaderMgr::releaseInstance();
+		LLViewerShaderMgr::sInitialized = FALSE;
+	}
 }
 
 

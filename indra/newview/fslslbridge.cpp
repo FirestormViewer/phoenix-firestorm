@@ -560,7 +560,7 @@ void FSLSLBridge::finishCleanUpPreCreation()
 
 	for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); ++it)
 	{
-		gInventory.purgeObject((*it)->getUUID());
+		remove_inventory_object((*it)->getUUID(), NULL);
 	}
 	gInventory.notifyObservers();
 
@@ -1201,7 +1201,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	
 		FSLSLBridge::instance().cleanUpBridge();
 		//also clean up script remains
-		gInventory.purgeObject(item->getUUID());
+		remove_inventory_object(item->getUUID(), NULL);
 		gInventory.notifyObservers();
 		LL_WARNS("FSLSLBridge") << "Can't update bridge script. Purging bridge." << LL_ENDL;
 		return;
@@ -1305,7 +1305,7 @@ void FSLSLBridge::cleanUpBridge()
 
 	if (isBridgeValid())
 	{
-		gInventory.purgeObject(mpBridge->getUUID());
+		remove_inventory_object(mpBridge->getUUID(), NULL);
 	}
 
 	gInventory.notifyObservers();
@@ -1482,7 +1482,7 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 		const LLViewerInventoryItem* itemp = *it;
 		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
 		{
-			gInventory.purgeObject(itemp->getUUID());
+			remove_inventory_object(itemp->getUUID(), NULL);
 		}
 	}
 

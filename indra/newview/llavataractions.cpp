@@ -687,8 +687,6 @@ void LLAvatarActions::teleportTo(const LLUUID& id)
 
 namespace action_give_inventory
 {
-	typedef std::set<LLUUID> uuid_set_t;
-
 	/**
 	 * Returns a pointer to 'Add More' inventory panel of Edit Outfit SP.
 	 */

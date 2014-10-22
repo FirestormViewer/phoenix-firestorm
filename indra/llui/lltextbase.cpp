@@ -2160,6 +2160,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 
 	// create and return the context menu from the XUI file
 	delete mPopupMenu;
+	llassert(LLMenuGL::sMenuContainer != NULL);
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(xui_file, LLMenuGL::sMenuContainer,
 																		 LLMenuHolderGL::child_registry_t::instance());	
 	if (mIsFriendSignal)
@@ -2242,7 +2243,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 		LLUrlMatch match;
 		std::string text = new_text;
 		while ( LLUrlRegistry::instance().findUrl(text, match,
-				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
+				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3),isContentTrusted()))
 		{
 			start = match.getStart();
 			end = match.getEnd()+1;
@@ -2271,7 +2272,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// <FS:Ansariel> Optional icon position
 			if (mIconPositioning == LLTextBaseEnums::LEFT)
 			{
-				LLTextUtil::processUrlMatch(&match,this);
+				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 
@@ -2294,10 +2295,10 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			}
 
 			// <FS:Ansariel> Optional icon position
-			//LLTextUtil::processUrlMatch(&match,this);
+			//LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			if (mIconPositioning == LLTextBaseEnums::RIGHT)
 			{
-				LLTextUtil::processUrlMatch(&match,this);
+				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 

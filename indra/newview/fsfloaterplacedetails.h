@@ -57,7 +57,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
-	void showAddedLandmarkInfo(const uuid_vec_t& items);
+	void showAddedLandmarkInfo(const uuid_set_t& items);
 	void changedGlobalPos(const LLVector3d& global_pos);
 	void changedParcelSelection();
 	void processParcelDetails(const LLParcelData& parcel_details);

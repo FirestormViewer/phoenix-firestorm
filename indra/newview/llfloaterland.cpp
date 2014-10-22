@@ -1136,7 +1136,7 @@ void LLPanelLandGeneral::setParcelID(const LLUUID& parcel_id)
 }
 
 // virtual
-void LLPanelLandGeneral::setErrorStatus(U32 status, const std::string& reason)
+void LLPanelLandGeneral::setErrorStatus(S32 status, const std::string& reason)
 {
 	mEditUUID->setText(getString("error_resolving_uuid"));
 	mLastParcelLocalID = 0;

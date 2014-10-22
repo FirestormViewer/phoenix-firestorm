@@ -266,7 +266,7 @@ void FSWorldMapParcelInfoObserver::setParcelID(const LLUUID& parcel_id)
 }
 
 // virtual
-void FSWorldMapParcelInfoObserver::setErrorStatus(U32 status, const std::string& reason)
+void FSWorldMapParcelInfoObserver::setErrorStatus(S32 status, const std::string& reason)
 {
 	LL_WARNS("FSWorldMapParcelInfoObserver") << "Can't handle remote parcel request." << " Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 }
