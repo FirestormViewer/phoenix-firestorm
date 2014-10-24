@@ -74,7 +74,7 @@ elseif (LINUX)
           QtGui
           QtCore
           jpeg
-          jscore
+#          jscore
           fontconfig
           X11
           Xrender
