@@ -10,7 +10,6 @@
 	Status: [STATUS]
   </text>
    <button name="cancel" label="Anuluj"/>
-   <button name="ok" label="OK" />
   <string name="status_idle">Bezczynny</string>
   <string name="status_uploading">Ładowanie [NAME]</string>
   <string name="status_creating">Tworzenie obiektu [NAME]</string>

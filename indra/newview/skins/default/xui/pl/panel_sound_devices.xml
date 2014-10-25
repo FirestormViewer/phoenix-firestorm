@@ -1,10 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Ustawienia urządzenia" name="device_settings_panel">
     <panel.string name="default_text">
         Domyślne
     </panel.string>
-    <string name="name_no_device">
-        Brak
-    </string>
     <string name="name_no_device">
         Brak
     </string>

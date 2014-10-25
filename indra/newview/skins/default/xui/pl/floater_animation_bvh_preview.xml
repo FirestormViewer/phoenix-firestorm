@@ -136,34 +136,33 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		Ekspresja
 	</text>
 	<combo_box name="emote_combo" tool_tip="Kontroluj mimikę twarzy w czasie animacji">
-		<item label="(Brak)" name="[None]"/>
-		<item label="Aaaaah" name="Aaaaah" value="Aaaaah"/>
-		<item label="Obawa" name="Afraid" value="Obawa"/>
-		<item label="Złość" name="Angry" value="Złość"/>
-		<item label="Duży uśmiech" name="BigSmile" value="Duży uśmiech"/>
-		<item label="Znudzenie" name="Bored" value="Znudzenie"/>
-		<item label="Płacz" name="Cry" value="Płacz"/>
-		<item label="Wzgarda" name="Disdain" value="Wzgarda"/>
-		<item label="Zakłopotanie" name="Embarrassed" value="Zakłopotanie"/>
-		<item label="Marszczenie brwi" name="Frown" value="Marszczenie brwi"/>
-		<item label="Pocałunek" name="Kiss" value="Pocałunek"/>
-		<item label="Śmiech" name="Laugh" value="Śmiech"/>
-		<item label="Odrzucenie" name="Repulsed" value="Odrzucenie"/>
-		<item label="Smutek" name="Sad" value="Smutek"/>
-		<item label="Wzruszenie ramionami" name="Shrug" value="Wzruszenie ramionami"/>
-		<item label="Uśmiech" name="Smile" value="Uśmiech"/>
-		<item label="Niespodzianka" name="Surprise" value="Niespodzianka"/>
-		<item label="Mrugnięcie" name="Wink" value="Mrugnięcie"/>
-		<item label="Zmartwienie" name="Worry" value="Zmartwienie"/>
+		<item label="(Brak)" name="[None]" />
+		<item label="Obawa" name="Afraid" />
+		<item label="Złość" name="Angry" />
+		<item label="Duży uśmiech" name="BigSmile" />
+		<item label="Znudzenie" name="Bored" />
+		<item label="Płacz" name="Cry" />
+		<item label="Wzgarda" name="Disdain" />
+		<item label="Zakłopotanie" name="Embarrassed" />
+		<item label="Marszczenie brwi" name="Frown" />
+		<item label="Pocałunek" name="Kiss" />
+		<item label="Śmiech" name="Laugh" />
+		<item label="Odrzucenie" name="Repulsed" />
+		<item label="Smutek" name="Sad" />
+		<item label="Wzruszenie ramionami" name="Shrug" />
+		<item label="Uśmiech" name="Smile" />
+		<item label="Niespodzianka" name="Surprise" />
+		<item label="Mrugnięcie" name="Wink" />
+		<item label="Zmartwienie" name="Worry" />
 	</combo_box>
 	<text name="preview_label">
 		Podgląd gdy:
 	</text>
 	<combo_box name="preview_base_anim" tool_tip="Przetestuj zachowanie animacji kiedy awatar wykonuje normalne czynności">
-		<item label="Stoisz" name="Standing" value="Stoisz"/>
-		<item label="Chodzisz" name="Walking" value="Chodzisz"/>
-		<item label="Siedzisz" name="Sitting" value="Siedzisz"/>
-		<item label="Latasz" name="Flying" value="Latasz"/>
+		<item label="Stoisz" name="Standing" />
+		<item label="Chodzisz" name="Walking" />
+		<item label="Siedzisz" name="Sitting" />
+		<item label="Latasz" name="Flying" />
 	</combo_box>
 	<spinner label="Łagodź wej. (sek)" name="ease_in_time" tool_tip="Ilość czasu (w sekundach), po których animacje mieszają się"/>
 	<spinner label="Łagodź wyj. (sek)" name="ease_out_time" tool_tip="Ilość czasu (w sekundach), po których animacje oddzielają się"/>
