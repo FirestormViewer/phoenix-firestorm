@@ -219,7 +219,7 @@
 	 height="18"
 	 left_pad="12"
 	 top="1"
-	 width="100"
+	 width="110"
 	 follows="right|top"
 	 name="menu_search_panel"
 	 background_opaque="false"
