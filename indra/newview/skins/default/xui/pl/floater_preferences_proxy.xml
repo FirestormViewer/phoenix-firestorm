@@ -35,6 +35,5 @@
 		<radio_item label="Użyj proxy HTTP" name="OtherHTTPProxy" tool_tip="Ruch HTTP niepowiązany ze stronami internetowymi będzie przesyłany przez proxy dla stron internetowych skonfigurowane powyżej."/>
 		<radio_item label="Użyj proxy SOCKS 5" name="OtherSocksProxy" tool_tip="Ruch HTTP niepowiązany ze stronami internetowymi będzie przesyłany przez proxy Socks 5."/>
 	</radio_group>
-	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 </floater>

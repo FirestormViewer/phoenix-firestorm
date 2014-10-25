@@ -54,6 +54,7 @@
     <text name="WLCurKeyPresetText">
         Niebo:
     </text>
+    <combo_box label="Ustawienie" name="WLSkyPresets" />
     <text name="WLCurKeyTimeText">
         Czas:
     </text>

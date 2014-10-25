@@ -10,6 +10,5 @@
 		<check_box label="Kopiowanie" name="next_owner_copy"/>
 		<check_box label="Oddawanie/Sprzedaż" name="next_owner_transfer"/>
 	</panel>
-	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel"/>
 </floater>
