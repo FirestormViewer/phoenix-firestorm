@@ -2499,10 +2499,6 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
                 pos.mdV[i] = VX_NULL_POSITION;
             }
         }
-        else
-        {
-            pos = earPosition;
-        }
         
 		stream
 			<< "<Position>"
