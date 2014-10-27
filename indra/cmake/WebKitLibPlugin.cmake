@@ -53,8 +53,8 @@ if (WINDOWS)
     )
 elseif (DARWIN)
     set(WEBKIT_PLUGIN_LIBRARIES
-        optimized ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.dylib
-        debug ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.dylib
+        optimized ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.a
+        debug ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.a
         )
 elseif (LINUX)
     # FIRE-6108, add missing if clause for standalone builds - TL
