@@ -262,6 +262,7 @@ protected:
 	S32				overwriteChar(S32 pos, llwchar wc);
 	void			removeChar();
 	S32 			removeChar(S32 pos);
+	// <FS> Ctrl-Backspace remove word
 	void			removeWord(bool prev);
 	S32				insert(S32 pos, const LLWString &wstr, bool group_with_next_op, LLTextSegmentPtr segment);
 	S32				remove(S32 pos, S32 length, bool group_with_next_op);
