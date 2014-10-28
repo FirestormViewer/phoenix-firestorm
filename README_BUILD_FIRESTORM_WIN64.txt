@@ -21,3 +21,4 @@ autobuild -m64 configure -c ReleaseFS -- --chan <channel> --package -DFS_UPGRADE
 autobuild -m64 build -c ReleaseFS --no_configure
 
 The resulting installer/exe gets created in build-vc100_x64/newview/Release
+
