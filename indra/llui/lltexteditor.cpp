@@ -1122,6 +1122,7 @@ void LLTextEditor::removeChar()
 	}
 }
 
+// <FS> Ctrl-Backspace remove word
 // Remove a word (set of characters up to next space/punctuation) from the text
 void LLTextEditor::removeWord(bool prev)
 {
@@ -1148,6 +1149,7 @@ void LLTextEditor::removeWord(bool prev)
 		LLUI::reportBadKeystroke();
 	}
 }
+// </FS>
 
 // Add a single character to the text
 S32 LLTextEditor::addChar(S32 pos, llwchar wc)
@@ -1744,10 +1746,13 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 		else
 		if( 0 < mCursorPos )
 		{
+			// <FS> Ctrl-Backspace remove word
+			//removeCharOrTab();
 			if (mask == MASK_CONTROL)
 				removeWord(true);
 			else
 				removeCharOrTab();
+			// </FS>
 		}
 		else
 		{
@@ -1755,6 +1760,7 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 		}
 		break;
 
+	// <FS> Ctrl-Backspace remove word
 	case KEY_DELETE:
 		if (getEnabled() && mask == MASK_CONTROL)
 		{
@@ -1765,6 +1771,7 @@ BOOL LLTextEditor::handleSpecialKey(const KEY key, const MASK mask)
 			handled = false;
 		}
 		break;
+	// </FS>
 
 	case KEY_RETURN:
 		if (mask == MASK_NONE)
