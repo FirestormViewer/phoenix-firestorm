@@ -74,6 +74,10 @@
 #include "llsidepanelinventory.h"
 #include "llavatarname.h"
 #include "llagentui.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 // Flags for kick message
 const U32 KICK_FLAGS_DEFAULT	= 0x0;
@@ -203,6 +207,15 @@ void LLAvatarActions::startIM(const LLUUID& id)
 	if (id.isNull() || gAgent.getID() == id)
 		return;
 
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		return;
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_cache_start_im, _1, _2));
 }
 
@@ -238,6 +251,16 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	{
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		return;
+	}
+// [/RLVa:KB]
+
 	LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_cache_start_call, _1, _2));
 }
 
@@ -254,7 +277,17 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floate
 	id_array.reserve(ids.size());
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+		const LLUUID& idAgent = *it;
+		if (!RlvActions::canStartIM(idAgent))
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 
 	// create the new ad hoc voice session
@@ -301,7 +334,17 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 	id_array.reserve(ids.size());
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		id_array.push_back(*it);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+		const LLUUID& idAgent = *it;
+		if (!RlvActions::canStartIM(idAgent))
+		{
+			make_ui_sound("UISndInvalidOp");
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+			return;
+		}
+		id_array.push_back(idAgent);
+// [/RLVa:KB]
+//		id_array.push_back(*it);
 	}
 	const std::string title = LLTrans::getString("conference-title");
 	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array, false, floater_id);
@@ -453,14 +496,17 @@ void LLAvatarActions::teleportRequest(const LLUUID& id)
 {
 	LLSD notification;
 	notification["uuid"] = id;
-	LLAvatarName av_name;
-	if (!LLAvatarNameCache::get(id, &av_name))
-	{
-		// unlikely ... they just picked this name from somewhere...
-		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
-		return; // reinvoke this when the name resolves
-	}
-	notification["NAME"] = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	notification["NAME"] = LLSLURL("agent", id, (RlvActions::canShowName(RlvActions::SNC_TELEPORTREQUEST)) ? "completename" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+//	LLAvatarName av_name;
+//	if (!LLAvatarNameCache::get(id, &av_name))
+//	{
+//		// unlikely ... they just picked this name from somewhere...
+//		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
+//		return; // reinvoke this when the name resolves
+//	}
+//	notification["NAME"] = av_name.getCompleteName();
 
 	LLSD payload;
 

@@ -89,6 +89,10 @@ public:
 	// Accessors
 	//--------------------------------------------------------------------
 public:
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0)
+	void				getWearableItemIDs(uuid_vec_t& idItems) const;
+	void				getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const;
+// [/RLVa:KB]
 	const LLUUID		getWearableItemID(LLWearableType::EType type, U32 index /*= 0*/) const;
 	const LLUUID		getWearableAssetID(LLWearableType::EType type, U32 index /*= 0*/) const;
 	const LLViewerWearable*	getWearableFromItemID(const LLUUID& item_id) const;
@@ -105,7 +109,7 @@ public:
 private:
 	/*virtual*/void	wearableUpdated(LLWearable *wearable, BOOL removed);
 public:
-	void			setWearableItem(LLInventoryItem* new_item, LLViewerWearable* wearable, bool do_append = false);
+//	void			setWearableItem(LLInventoryItem* new_item, LLViewerWearable* wearable, bool do_append = false);
 	void			setWearableOutfit(const LLInventoryItem::item_array_t& items, const std::vector< LLViewerWearable* >& wearables);
 	void			setWearableName(const LLUUID& item_id, const std::string& new_name);
 	// *TODO: Move this into llappearance/LLWearableData ?
@@ -145,8 +149,11 @@ private:
 	// Removing wearables
 	//--------------------------------------------------------------------
 public:
-	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
+//	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
 private:
+// [RLVa:KB] - Checked: 2010-05-11 (RLVa-1.2.0)
+	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
+// [/RLVa:KB]
 	void			removeWearableFinal(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
 protected:
 	static bool		onRemoveWearableDialog(const LLSD& notification, const LLSD& response);
@@ -176,8 +183,8 @@ public:
 	// Static UI hooks
 	//--------------------------------------------------------------------
 public:
-	static void		userRemoveWearable(const LLWearableType::EType &type, const U32 &index);
-	static void		userRemoveWearablesOfType(const LLWearableType::EType &type);
+//	static void		userRemoveWearable(const LLWearableType::EType &type, const U32 &index);
+//	static void		userRemoveWearablesOfType(const LLWearableType::EType &type);
 	
 	typedef std::vector<LLViewerObject*> llvo_vec_t;
 
