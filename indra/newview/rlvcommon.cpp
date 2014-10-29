@@ -664,10 +664,30 @@ bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWea
 	return !rlvPredCanWearItem(pItem, eWearMask);
 }
 
-// Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+// Checked: 2014-11-02 (RLVa-1.4.11)
+bool rlvPredCanRemoveItem(const LLUUID& idItem)
+{
+	// Check the inventory item if it's available
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
+	if (pItem)
+	{
+		return rlvPredCanRemoveItem(pItem);
+	}
+
+	// Temporary attachments don't have inventory items associated with them so check the attachment itself
+	if (isAgentAvatarValid())
+	{
+		const LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(idItem);
+		return (pAttachObj) && (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj));
+	}
+
+	return false;
+}
+
+// Checked: 2010-03-22 (RLVa-1.2.0)
 bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 {
-	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
+	if (pItem)
 	{
 		switch (pItem->getType())
 		{
@@ -679,12 +699,10 @@ bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 			case LLAssetType::AT_GESTURE:
 				return true;
 			default:
-				RLV_ASSERT(false);
+				RLV_ASSERT(!RlvForceWear::isWearableItem(pItem));
 		}
 	}
-	// HACK-RLVa: Until LL supports temporary attachment detection assume that no inventory item means a temporary 
-	//            attachment which are always removeable
-	return true;
+	return false;
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a

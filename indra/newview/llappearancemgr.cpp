@@ -3995,29 +3995,32 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		LL_WARNS() << "called with empty list, nothing to do" << LL_ENDL;
 		return;
 	}
-	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
-
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+	LLPointer<LLInventoryCallback> cb = NULL;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
+		const LLUUID& id_to_remove = *it;
+		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 
-		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item_id)) )
 		{
 			continue;
 		}
 
+		if (!cb)
+			cb = new LLUpdateAppearanceOnDestroy();
 		removeCOFItemLinks(linked_item_id, cb);
 		addDoomedTempAttachment(linked_item_id);
 	}
 // [/RLVa:KB]
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 //	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 //	{
 //		const LLUUID& id_to_remove = *it;
 //		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-//		removeCOFItemLinks(linked_item_id);
+//		removeCOFItemLinks(linked_item_id, cb);
+//		addDoomedTempAttachment(linked_item_id);
 //	}
-//	updateAppearanceFromCOF();
 }
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
@@ -4025,7 +4028,7 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item_id)) )
 	{
 		return;
 	}

@@ -451,7 +451,7 @@ inline ERlvWearMask RlvAttachmentLocks::canAttach(const LLViewerJointAttachment*
 			: RLV_WEAR_LOCKED);
 }
 
-// Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a
+// Checked: 2010-02-28 (RLVa-1.2.0)
 inline bool RlvAttachmentLocks::canDetach(const LLInventoryItem* pItem) const
 {
 	const LLViewerObject* pAttachObj = 
@@ -475,11 +475,12 @@ inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pAttach
 	RLV_ASSERT( (!pAttachObj) || (pAttachObj == pAttachObj->getRootEdit()) );
 
 	// Object is locked if:
+	//   - it's not a temporary attachment
 	//   - it's specifically marked as non-detachable (ie @detach=n)
 	//   - it's attached to an attachment point that is RLV_LOCK_REMOVE locked (ie @remattach:<attachpt>=n)
 	//   - it's part of a locked folder
 	return 
-		(pAttachObj) && (pAttachObj->isAttachment()) &&
+		(pAttachObj) && (pAttachObj->isAttachment()) && (!pAttachObj->isTempAttachment()) &&
 		( (m_AttachObjRem.find(pAttachObj->getID()) != m_AttachObjRem.end()) || 
 		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pAttachObj), RLV_LOCK_REMOVE)) ||
 		  (RlvFolderLocks::instance().isLockedAttachment(pAttachObj->getAttachmentItemID())) );
