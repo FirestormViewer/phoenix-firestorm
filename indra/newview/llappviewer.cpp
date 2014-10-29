@@ -98,6 +98,7 @@
 #include "llappearancemgr.h"
 // [/SL:KB]
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -3338,16 +3339,28 @@ LLSD LLAppViewer::getViewerInfo() const
 	LLViewerRegion* region = gAgent.getRegion();
 	if (region)
 	{
-		LLVector3d pos = gAgent.getPositionGlobal();
-		info["POSITION"] = ll_sd_from_vector3d(pos);
-		info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
-		info["REGION"] = gAgent.getRegion()->getName();
-		info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
-		info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		if (RlvActions::canShowLocation())
+		{
+// [/RLVa:KB]
+			LLVector3d pos = gAgent.getPositionGlobal();
+			info["POSITION"] = ll_sd_from_vector3d(pos);
+			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
+			info["REGION"] = gAgent.getRegion()->getName();
+			info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
+			info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
+//			info["SERVER_VERSION"] = gLastVersionChannel;
+			LLSLURL slurl;
+			LLAgentUI::buildSLURL(slurl);
+			info["SLURL"] = slurl.getSLURLString();
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		}
+		else
+		{
+			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
-		LLSLURL slurl;
-		LLAgentUI::buildSLURL(slurl);
-		info["SLURL"] = slurl.getSLURLString();
+// [/RLVa:KB]
 	}
 
 	// CPU
@@ -3366,6 +3379,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 #endif
 
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+// [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCurl::getVersionString();
 	info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
@@ -3455,7 +3471,10 @@ std::string LLAppViewer::getViewerInfoString() const
 	support << LLTrans::getString("AboutHeader", args);
 	if (info.has("REGION"))
 	{
-		support << "\n\n" << LLTrans::getString("AboutPosition", args);
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		support << "\n\n" << LLTrans::getString( (RlvActions::canShowLocation()) ? "AboutPosition" : "AboutPositionRLVShowLoc", args);
+// [/RLVa:KB]
+//		support << "\n\n" << LLTrans::getString("AboutPosition", args);
 	}
 	support << "\n\n" << LLTrans::getString("AboutSystem", args);
 	support << "\n";
