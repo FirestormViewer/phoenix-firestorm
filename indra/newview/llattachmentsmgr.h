@@ -55,7 +55,7 @@ public:
 	void addAttachment(const LLUUID& item_id,
 					   const U8 attachment_pt,
 //					   const BOOL add);
-// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+// [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1)
 					   const BOOL add, const BOOL fRlvForce = FALSE);
 // [/RLVa:KB]
 	static void onIdle(void *);

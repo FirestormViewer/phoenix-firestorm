@@ -116,8 +116,8 @@ public:
 	void			addLocalTextureObject(const LLWearableType::EType wearable_type, const LLAvatarAppearanceDefines::ETextureIndex texture_type, U32 wearable_index);
 
 protected:
-	void			setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append = false);
-	static bool		onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable);
+//	void			setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append = false);
+//	static bool		onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable);
 
 	void			addWearableToAgentInventory(LLPointer<LLInventoryCallback> cb,
 												LLViewerWearable* wearable, 
