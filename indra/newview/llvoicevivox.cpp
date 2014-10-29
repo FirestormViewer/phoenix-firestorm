@@ -479,7 +479,14 @@ bool LLVivoxVoiceClient::writeString(const std::string &str)
 void LLVivoxVoiceClient::connectorCreate()
 {
 	std::ostringstream stream;
-	std::string logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	// <FS:Ansariel> Set custom Vivox log path everywhere necessary
+	//std::string logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	std::string logpath = gSavedSettings.getString("VivoxLogDirectory");
+	if (logpath.empty())
+	{
+		logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	}
+	// </FS:Ansariel>
 	std::string loglevel = "0";
 	
 	// Transition to stateConnectorStarted when the connector handle comes back.
