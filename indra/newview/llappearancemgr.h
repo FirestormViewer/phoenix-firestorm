@@ -254,12 +254,6 @@ private:
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
 
-// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	void purgeItems(const LLInventoryModel::item_array_t& items);
-	void purgeItemsOfType(LLAssetType::EType asset_type);
-	void syncCOF(const LLInventoryModel::item_array_t& items, 
-	             LLInventoryModel::item_array_t& items_to_add, LLInventoryModel::item_array_t& items_to_remove);
-// [/SL:KB]
 	bool mAttachmentInvLinkEnabled;
 	bool mOutfitIsDirty;
 	bool mIsInUpdateAppearanceFromCOF; // to detect recursive calls.
