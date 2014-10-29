@@ -486,6 +486,10 @@ void LLVivoxVoiceClient::connectorCreate()
 	{
 		logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
 	}
+	else if (LLStringUtil::endsWith(logpath, gDirUtilp->getDirDelimiter()))
+	{
+		logpath = logpath.substr(0, logpath.size() - gDirUtilp->getDirDelimiter().size());
+	}
 	// </FS:Ansariel>
 	std::string loglevel = "0";
 	
@@ -830,6 +834,12 @@ void LLVivoxVoiceClient::stateMachine()
                         {
                             log_folder = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
                         }
+						// <FS:Ansariel> Strip trailing directory delimiter
+						else if (LLStringUtil::endsWith(log_folder, gDirUtilp->getDirDelimiter()))
+						{
+							log_folder = log_folder.substr(0, log_folder.size() - gDirUtilp->getDirDelimiter().size());
+						}
+						// </FS:Ansariel>
                         
 						params.args.add("-lf");
 						params.args.add(log_folder);
