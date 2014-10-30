@@ -8,4 +8,5 @@
 	<menu_item_check label="Symbole und Beschriftungen" name="icons_with_text"/>
 	<menu_item_check label="Nur Symbole" name="icons_only"/>
 	<menu_item_check label="Nur Beschriftungen" name="text_only"/>
+	<menu_item_check label="Gesperrt" name="toolbars_locked"/>
 </context_menu>
