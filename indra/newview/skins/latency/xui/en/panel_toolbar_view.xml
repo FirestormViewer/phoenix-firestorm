@@ -472,7 +472,7 @@
 						 image_overlay="active_speakers.tga"
 						>
 							<button.commit_callback
-							 function="Floater.ToggleOrBringToFront"
+							 function="Floater.Toggle"
 							 parameter="fs_voice_controls"
 							/>
 						</button>
@@ -605,7 +605,7 @@
 						 image_unselected="SplitButtonRight_Off"
 						>
 							<button.commit_callback
-							 function="Floater.ToggleOrBringToFront"
+							 function="Floater.Toggle"
 							 parameter="animation_overrider"
 							/>
 						</button>
@@ -623,7 +623,7 @@
 						 image_overlay="phoenix_18"
 						>
 							<button.commit_callback
-							 function="Floater.ToggleOrBringToFront"
+							 function="Floater.Toggle"
 							 parameter="quickprefs"
 							/>
 						</button>
