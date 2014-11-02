@@ -47,6 +47,7 @@
 #include "llpanellogin.h"
 #include "llviewerkeyboard.h"
 #include "llviewermenu.h"
+#include "fsfloaternearbychat.h" // <FS:KC logging saved snaps filenames to chat history>
 
 #include "llviewquery.h"
 #include "llxmltree.h"
@@ -4710,6 +4711,19 @@ BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	while( -1 != err );  // search until the file is not found (i.e., stat() gives an error).
 
 	LL_INFOS() << "Saving snapshot to " << filepath << LL_ENDL;
+	//<FS:Kadah> Log snapshot filename to local chat history
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	if(nearby_chat && gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
+	{
+		LLUIString notice(LLTrans::getString("SnapshotSavedToDisk"));
+		notice.setArg("[FILENAME]", filepath);
+		LLChat chat_msg(notice.getString());
+		chat_msg.mFromName = SYSTEM_FROM;
+		chat_msg.mFromID = LLUUID::null;
+		chat_msg.mSourceType = CHAT_SOURCE_SYSTEM;
+		nearby_chat->addMessage(chat_msg);
+	}
+	//</FS:Kadah>
 	return image->save(filepath);
 }
 
