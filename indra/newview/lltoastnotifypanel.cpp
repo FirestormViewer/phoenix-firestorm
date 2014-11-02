@@ -323,7 +323,7 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 	mTextBox->setIsFriendCallback(LLAvatarActions::isFriend);
 
 	// <FS:Ansariel> Script dialog colors
-	if (mIsScriptDialog)
+	if (mIsScriptDialog && (gSavedSettings.getString("SkinCurrent") != "latency")) //<FS:Kadah> HAX: don't override skin's text color
 	{
 		LLColor4 script_dialog_fg_color = LLUIColorTable::instance().getColor("ScriptDialogFg", LLColor4::white).get();
 		mTextBox->setColor(script_dialog_fg_color);
