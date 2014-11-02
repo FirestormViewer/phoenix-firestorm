@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
   background_opaque="false"
-      border_visible="true"
   background_visible="true"
   bg_alpha_color="Cerise_0"
   bg_opaque_color="Cerise_0"
