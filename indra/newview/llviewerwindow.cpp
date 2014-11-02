@@ -4714,7 +4714,7 @@ BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	//<FS:Kadah> Log snapshot filename to local chat history
 	if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
 	{
-		reportToNearbyChat(LLTrans::getString("SnapshotSavedToDisk") + filepath);
+		reportToNearbyChat(LLTrans::getString("SnapshotSavedToDisk") + " " + filepath);
 	}
 	//</FS:Kadah>
 	return image->save(filepath);
