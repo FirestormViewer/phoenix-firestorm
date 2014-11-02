@@ -84,13 +84,13 @@
 		reference="drkgrey123" />
 	<color
 		name="GroupNotifyDialogBG"
-		reference="ScriptDialog" />
+		reference="drkgrey123" />
 	<color
 		name="GroupNotifyTextBG"
-		value="0.855 0.933 1.0 1.0" />
+		value="drkgrey123" />
 	<color
 		name="GroupNotifyTextColor"
-		reference="TextFgColor" />
+		reference="LtGray" />
 	<color
 		name="HighlightChildColor"
 		reference="Yellow" />

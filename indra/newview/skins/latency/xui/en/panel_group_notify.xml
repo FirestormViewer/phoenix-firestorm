@@ -57,7 +57,7 @@
 		top_pad="2"
 		width="64" />
 	<text_editor
-		bg_readonly_color="GroupNotifyTextBG"
+		bg_readonly_color="Transparent"
 		border_visible="true"
 		parse_urls="true"
 		enabled="true"
@@ -90,27 +90,26 @@
 	<panel
 		name="attachment_container"
 		left_pad="4"
-		border_visible="true"
-		background_visible="true"
+		border_visible="false"
+		background_visible="false"
 		background_opaque="true"
-		bg_opaque_color="GroupNotifyTextBG"
 		follows="left|bottom|right"
-		height="15"
+		height="16"
 		layout="topleft"
 		right="-8">
 		<icon
 			top="0"
 			follows="left|top"
-			height="15"
+			height="16"
 			layout="topleft"
 			mouse_opaque="true"
 			name="attachment_icon"
-			width="15" />
+			width="16" />
 		<text
 			left_pad="5"
 			follows="left|right|top"
 			font="SansSerif"
-			height="15"
+			height="16"
 			layout="topleft"
 			name="attachment"
 			parse_urls="false"
