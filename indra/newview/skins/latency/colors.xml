@@ -83,14 +83,14 @@
 		name="ChatHistoryBgColor"
 		reference="drkgrey123" />
 	<color
-		name="GroupNotifyDialogBG"
+		name="NotifyDialogBG"
 		reference="drkgrey123" />
 	<color
-		name="GroupNotifyTextBG"
-		value="drkgrey123" />
+		name="NotifyTextBG"
+		reference="drkgrey123" />
 	<color
-		name="GroupNotifyTextColor"
-		reference="LtGray" />
+		name="NotifyTextColor"
+		reference="White" />
 	<color
 		name="HighlightChildColor"
 		reference="Yellow" />
