@@ -4,7 +4,7 @@
 	border_thickness="1"
 	background_visible="true"
 	background_opaque="true"
-	bg_opaque_color="NotifyDialogBG"
+	bg_opaque_color="GroupNotifyDialogBG"
 	height="260"
 	label="instant_message"
 	layout="topleft"
@@ -28,7 +28,7 @@
 		layout="topleft"
 		left="10"
 		name="group_notice"
-		text_color="NotifyTextColor"
+		text_color="GroupNotifyTextColor"
 		top_pad="5"
 		use_ellipses="true"
 		value="Group Notice"
@@ -41,7 +41,7 @@
 		layout="topleft"
 		left="10"
 		name="title"
-		text_color="NotifyTextColor"
+		text_color="GroupNotifyTextColor"
 		top_pad="4"
 		use_ellipses="true"
 		value="Sent by Sender Name, Group Name" 
@@ -71,7 +71,7 @@
 		parse_highlights="true"
 		read_only="true"
 		right="-8"
-		text_readonly_color="NotifyTextColor"
+		text_readonly_color="GroupNotifyTextColor"
 		type="string"
 		use_ellipses="true"
 		value="message"
@@ -85,7 +85,7 @@
 		name="attachment_label"
 		parse_urls="false"
 		width="60"
-		text_color="NotifyTextColor"
+		text_color="GroupNotifyTextColor"
 		value="Attached:" />
 	<panel
 		name="attachment_container"
@@ -114,7 +114,7 @@
 			name="attachment"
 			parse_urls="false"
 			right="-1"
-			text_color="NotifyTextColor"
+			text_color="GroupNotifyTextColor"
 			value="Attachment"
 			use_ellipses="true" />
 	</panel>
