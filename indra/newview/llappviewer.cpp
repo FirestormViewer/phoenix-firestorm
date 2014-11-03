@@ -3387,8 +3387,8 @@ bool LLAppViewer::initConfiguration()
         // Replace previously saved script dialog colors with new defaults, which happen to be the same as the group notice colors
         LLUIColorTable::instance().setColor("ScriptDialog", LLUIColorTable::instance().getColor("GroupNotifyDialogBG", LLColor4::grey4));
         LLUIColorTable::instance().setColor("ScriptDialogFg", LLUIColorTable::instance().getColor("GroupNotifyTextColor", LLColor4::white));
-        gSavedSettings.setBOOL("FSLatencyOneTimeFixRun", TRUE);
     }
+    gSavedSettings.setBOOL("FSLatencyOneTimeFixRun", TRUE);
     //</FS:KC>
 
 	// Let anyone else who cares know that we've populated our settings
