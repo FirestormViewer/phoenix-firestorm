@@ -223,7 +223,7 @@ bool LLDayCycleManager::addPreset(const std::string& name, const LLSD& data)
 {
 	if (name.empty())
 	{
-		llassert(name.empty());
+		//llassert(name.empty());
 		return false;
 	}
 
