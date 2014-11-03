@@ -339,6 +339,9 @@
       name="ScriptSelectedColor"
       reference="TextBgSelectedColor" />
 
+    <color
+     name="AvatarListItemIconDefaultColor"
+     reference="TextFgColor" />
 
 
 </colors>
