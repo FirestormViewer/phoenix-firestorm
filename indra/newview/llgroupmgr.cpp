@@ -1954,7 +1954,7 @@ void LLGroupMgr::sendGroupBanRequest(	EBanRequestType request_type,
 
 	LLSD body = LLSD::emptyMap();
 	body["ban_action"]  = (LLSD::Integer)(ban_action & ~BAN_UPDATE);
-	// Add our list of potential banned agents to the list
+	// Add our list of potential banned residents to the list
 	body["ban_ids"]	= LLSD::emptyArray();
 	LLSD ban_entry;
 
