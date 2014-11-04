@@ -8,4 +8,5 @@
   </text>
   <button label="Wyczyść paski" label_selected="Wyczyść paski" name="btn_clear_all" />
   <button label="Przywróć domyślne" label_selected="Przywróć domyślne" name="btn_restore_defaults" />
+  <check_box label="Zablokowane" name="check_toolbars_locked" tool_tip="Zaznacz, aby zablokować paski uniemożliwiając przypadkowe przesunięcie lub usunięcie przycisków." />
 </floater>

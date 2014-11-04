@@ -84,6 +84,7 @@
 #include "raytrace.h"
 
 // newview includes
+#include "fscommon.h"
 #include "llagent.h"
 #include "llbox.h"
 #include "llchicletbar.h"
@@ -4710,6 +4711,14 @@ BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	while( -1 != err );  // search until the file is not found (i.e., stat() gives an error).
 
 	LL_INFOS() << "Saving snapshot to " << filepath << LL_ENDL;
+	//<FS:Kadah> Log snapshot filename to local chat history
+	if (gSavedSettings.getBOOL("FSLogSnapshotsToLocal"))
+	{
+		LLStringUtil::format_map_t args;
+		args["FILENAME"] = filepath;
+		reportToNearbyChat(LLTrans::getString("SnapshotSavedToDisk", args));
+	}
+	//</FS:Kadah>
 	return image->save(filepath);
 }
 

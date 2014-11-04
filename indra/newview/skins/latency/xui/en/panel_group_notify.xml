@@ -29,7 +29,7 @@
 		left="10"
 		name="group_notice"
 		text_color="GroupNotifyTextColor"
-		top_pad="15"
+		top_pad="5"
 		use_ellipses="true"
 		value="Group Notice"
 		width="380" />
@@ -42,7 +42,7 @@
 		left="10"
 		name="title"
 		text_color="GroupNotifyTextColor"
-		top_pad="2"
+		top_pad="4"
 		use_ellipses="true"
 		value="Sent by Sender Name, Group Name" 
 		width="380" />
@@ -54,10 +54,10 @@
 		left="5"
 		mouse_opaque="true"
 		name="group_icon"
-		top_pad="2"
+		top_pad="4"
 		width="64" />
 	<text_editor
-		bg_readonly_color="GroupNotifyTextBG"
+		bg_readonly_color="Transparent"
 		border_visible="true"
 		parse_urls="true"
 		enabled="true"
@@ -77,7 +77,7 @@
 		value="message"
 		word_wrap="true" />
 	<text
-		top_pad="2"
+		top_pad="4"
 		follows="left|bottom"
 		font="SansSerif"
 		height="15"
@@ -89,28 +89,27 @@
 		value="Attached:" />
 	<panel
 		name="attachment_container"
-		left_pad="4"
-		border_visible="true"
-		background_visible="true"
+		left_pad="5"
+		border_visible="false"
+		background_visible="false"
 		background_opaque="true"
-		bg_opaque_color="GroupNotifyTextBG"
 		follows="left|bottom|right"
-		height="15"
+		height="16"
 		layout="topleft"
 		right="-8">
 		<icon
-			top="0"
+			top="1"
 			follows="left|top"
-			height="15"
+			height="16"
 			layout="topleft"
 			mouse_opaque="true"
 			name="attachment_icon"
-			width="15" />
+			width="16" />
 		<text
 			left_pad="5"
 			follows="left|right|top"
 			font="SansSerif"
-			height="15"
+			height="16"
 			layout="topleft"
 			name="attachment"
 			parse_urls="false"

@@ -1822,7 +1822,7 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
 		{
 			// Or check if they're listed in an active group session
 			LLIMSpeakerMgr* mgr = LLIMModel::instance().getSpeakerManager(LLIMMgr::computeSessionID(IM_SESSION_GROUP_START, group_id));
-			if ( (!mgr) && (mgr->findSpeaker(ejected_member_id).isNull()) )
+			if ( (!mgr) || (mgr->findSpeaker(ejected_member_id).isNull()) )
 			{
 				continue;
 			}

@@ -70,6 +70,7 @@
 #include "apr_base64.h"
 
 #define USE_SESSION_GROUPS 0
+#define VX_NULL_POSITION -2147483648.0 /*The Silence*/
 
 extern LLMenuBarGL* gMenuBarView;
 extern void handle_voice_morphing_subscribe();
@@ -315,6 +316,7 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mCaptureBufferRecording(false),
 	mCaptureBufferRecorded(false),
 	mCaptureBufferPlaying(false),
+	mShutdownComplete(true),
 	mPlayRequestCount(0),
 
 	mAvatarNameCacheConnection()
@@ -369,7 +371,16 @@ void LLVivoxVoiceClient::terminate()
 	if(mConnected)
 	{
 		logout();
-		connectorShutdown();
+		connectorShutdown(); 
+#ifdef LL_WINDOWS
+		int count=0;
+		while (!mShutdownComplete && 10 > count++)
+		{
+			stateMachine();
+			_sleep(1000);
+		}
+
+#endif
 		closeSocket();		// Need to do this now -- bad things happen if the destructor does it later.
 		cleanUp();
 	}
@@ -468,7 +479,18 @@ bool LLVivoxVoiceClient::writeString(const std::string &str)
 void LLVivoxVoiceClient::connectorCreate()
 {
 	std::ostringstream stream;
-	std::string logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	// <FS:Ansariel> Set custom Vivox log path everywhere necessary
+	//std::string logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	std::string logpath = gSavedSettings.getString("VivoxLogDirectory");
+	if (logpath.empty())
+	{
+		logpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+	}
+	if (LLStringUtil::endsWith(logpath, gDirUtilp->getDirDelimiter()))
+	{
+		logpath = logpath.substr(0, logpath.size() - gDirUtilp->getDirDelimiter().size());
+	}
+	// </FS:Ansariel>
 	std::string loglevel = "0";
 	
 	// Transition to stateConnectorStarted when the connector handle comes back.
@@ -476,14 +498,10 @@ void LLVivoxVoiceClient::connectorCreate()
 
 	std::string savedLogLevel = gSavedSettings.getString("VivoxDebugLevel");
 	
-	// <FS:Ansariel> Fixing Vivox debug level
-	//if(savedLogLevel != "-0")
 	if(savedLogLevel != "0")
-	// </FS:Ansariel>
 	{
 		LL_DEBUGS("Voice") << "creating connector with logging enabled" << LL_ENDL;
 		// <FS:Ansariel> Fixing Vivox debug level
-		//loglevel = "0";
 		loglevel = savedLogLevel;
 		// </FS:Ansariel>
 	}
@@ -522,6 +540,7 @@ void LLVivoxVoiceClient::connectorShutdown()
 		<< "</Request>"
 		<< "\n\n\n";
 		
+		mShutdownComplete = false;
 		mConnectorHandle.clear();
 		
 		writeString(stream.str());
@@ -798,15 +817,39 @@ void LLVivoxVoiceClient::stateMachine()
 						// vivox executable exists.  Build the command line and launch the daemon.
 						LLProcess::Params params;
 						params.executable = exe_path;
-						// SLIM SDK: these arguments are no longer necessary.
-//						std::string args = " -p tcp -h -c";
+
 						std::string loglevel = gSavedSettings.getString("VivoxDebugLevel");
+						std::string shutdown_timeout = gSavedSettings.getString("VivoxShutdownTimeout");
 						if(loglevel.empty())
 						{
 							loglevel = "0";	// turn logging off completely
 						}
+
 						params.args.add("-ll");
 						params.args.add(loglevel);
+
+						std::string log_folder = gSavedSettings.getString("VivoxLogDirectory");
+                        
+                        if (log_folder.empty())
+                        {
+                            log_folder = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+                        }
+                        
+						// <FS:Ansariel> Strip trailing directory delimiter
+						if (LLStringUtil::endsWith(log_folder, gDirUtilp->getDirDelimiter()))
+						{
+							log_folder = log_folder.substr(0, log_folder.size() - gDirUtilp->getDirDelimiter().size());
+						}
+						// </FS:Ansariel>
+						params.args.add("-lf");
+						params.args.add(log_folder);
+
+						if(!shutdown_timeout.empty())
+						{
+							params.args.add("-st");
+							params.args.add(shutdown_timeout);
+						}
+
 						// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
 						if (gSavedSettings.getBOOL("VoiceMultiInstance"))
 						{
@@ -820,6 +863,7 @@ void LLVivoxVoiceClient::stateMachine()
 							}
 						}
 						// </FS:Ansariel>
+
 						params.cwd = gDirUtilp->getAppRODataDir();
 						sGatewayPtr = LLProcess::create(params);
 
@@ -1360,7 +1404,7 @@ void LLVivoxVoiceClient::stateMachine()
 				{
 					// Connect to a session by URI
 					sessionCreateSendMessage(mAudioSession, true, false);
-				}
+				}  
 
 				notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_JOINING);
 				setState(stateJoiningSession);
@@ -1536,7 +1580,7 @@ void LLVivoxVoiceClient::stateMachine()
 			// Always reset the terminate request flag when we get here.
 			mSessionTerminateRequested = false;
 
-			if((mVoiceEnabled || !mIsInitialized) && !mRelogRequested)
+			if((mVoiceEnabled || !mIsInitialized) && !mRelogRequested  && !LLApp::isExiting())
 			{				
 				// Just leaving a channel, go back to stateNoChannel (the "logged in but have no channel" state).
 				setState(stateNoChannel);
@@ -1579,6 +1623,7 @@ void LLVivoxVoiceClient::stateMachine()
 		//MARK: stateConnectorStopping
 		case stateConnectorStopping:	// waiting for connector stop
 			// The handler for the Connector.InitiateShutdown response will transition from here to stateConnectorStopped.
+			mShutdownComplete = true;
 		break;
 
 		//MARK: stateConnectorStopped
@@ -2344,6 +2389,14 @@ static void oldSDKTransform (LLVector3 &left, LLVector3 &up, LLVector3 &at, LLVe
 #endif
 }
 
+void LLVivoxVoiceClient::setHidden(bool hidden)
+{
+    mHidden = hidden;
+    
+    sendPositionalUpdate();
+    return;
+}
+
 void LLVivoxVoiceClient::sendPositionalUpdate(void)
 {	
 	std::ostringstream stream;
@@ -2365,14 +2418,23 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 		l = mAvatarRot.getLeftRow();
 		u = mAvatarRot.getUpRow();
 		a = mAvatarRot.getFwdRow();
-		pos = mAvatarPosition;
+
+        pos = mAvatarPosition;
 		vel = mAvatarVelocity;
 
 		// SLIM SDK: the old SDK was doing a transform on the passed coordinates that the new one doesn't do anymore.
 		// The old transform is replicated by this function.
 		oldSDKTransform(l, u, a, pos, vel);
+        
+        if (mHidden)
+        {
+            for (int i=0;i<3;++i)
+            {
+                pos.mdV[i] = VX_NULL_POSITION;
+            }
+        }
 		
-		stream 
+		stream
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
 				<< "<Y>" << pos.mdV[VY] << "</Y>"
@@ -2436,7 +2498,8 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 		l = earRot.getLeftRow();
 		u = earRot.getUpRow();
 		a = earRot.getFwdRow();
-		pos = earPosition;
+
+        pos = earPosition;
 		vel = earVelocity;
 
 //		LL_DEBUGS("Voice") << "Sending listener position " << earPosition << LL_ENDL;
@@ -2445,8 +2508,16 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
 		}
 		// </FS:Ansariel>
-
-		stream 
+		
+        if (mHidden)
+        {
+            for (int i=0;i<3;++i)
+            {
+                pos.mdV[i] = VX_NULL_POSITION;
+            }
+        }
+        
+		stream
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
 				<< "<Y>" << pos.mdV[VY] << "</Y>"

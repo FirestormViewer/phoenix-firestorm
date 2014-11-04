@@ -8,4 +8,5 @@
 	</text>
 	<button label="Alle Symbolleisten leeren" label_selected="Alle Symbolleisten leeren" name="btn_clear_all" left="165" width="150"/>
 	<button label="Standards wiederherstellen" label_selected="Standards wiederherstellen" name="btn_restore_defaults" width="160"/>
+	<check_box label="Gesperrt" name="check_toolbars_locked" tool_tip="Falls aktiviert werden die Toolbars gesperrt, so dass Buttons nicht mehr verschoben oder entfernt werden können."/>
 </floater>

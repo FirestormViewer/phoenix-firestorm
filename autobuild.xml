@@ -1418,9 +1418,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5a09d25b38c251bc880121f6ca1c857</string>
+              <string>08488ce3107c4d30fd61a5bd332496d6</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.4.0-darwin-20140605.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.5.0-darwin-20141007.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1430,9 +1430,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ae5e86bbe3376d107960e1364cada76a</string>
+              <string>1310525b07b37fb6c869ba1af24425ce</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.4.0-linux-20140605.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.5.0-linux-20141007.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1454,9 +1454,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3c2d8f82e75cab399dbe9eff7c3038f6</string>
+              <string>c751616071f2b608b7071258279d2178</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.4.0-windows-20140605.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.5.0-windows-20141014.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1872,9 +1872,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4a98d727561cd1f4ac5ee02907411df1</string>
+              <string>3c2b6be4c78b2479c3fae612e1053d37</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/250147/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20120228.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/canonical_3p-llqtwebkit2/rev/295522/arch/Darwin/installer/llqtwebkit-4.7.1-darwin-20141015.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1884,9 +1884,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f50e5f0cc880c55b3f0f7e67dc8f7221</string>
+              <string>d31358176b9ba8c676458cc061767c0b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/250147/arch/Linux/installer/llqtwebkit-4.7.1-linux-20120228.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/canonical_3p-llqtwebkit2/rev/295522/arch/Linux/installer/llqtwebkit-4.7.1-linux-20141015.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1908,9 +1908,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5e3cd6af397e853a963a6de40d440ff4</string>
+              <string>bb4e8c8006c8a7aef6d3e3c36a8cebbf</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llqtwebkit/rev/250147/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20120228.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/canonical_3p-llqtwebkit2/rev/295522/arch/CYGWIN/installer/llqtwebkit-4.7.1-windows-20141015.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

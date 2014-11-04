@@ -629,6 +629,13 @@ void LLToolBarView::draw()
 
 void LLToolBarView::startDragTool(S32 x, S32 y, LLToolBarButton* toolbarButton)
 {
+	// <FS:Zi> Do not drag and drop when toolbars are locked
+	if(gSavedSettings.getBOOL("LockToolbars"))
+	{
+		return;
+	}
+	// </FS:Zi>
+
 	resetDragTool(toolbarButton);
 
 	// Flag the tool dragging but don't start it yet
@@ -637,6 +644,13 @@ void LLToolBarView::startDragTool(S32 x, S32 y, LLToolBarButton* toolbarButton)
 
 BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetType::EType type)
 {
+	// <FS:Zi> Do not drag and drop when toolbars are locked
+	if(gSavedSettings.getBOOL("LockToolbars"))
+	{
+		return FALSE;
+	}
+	// </FS:Zi>
+
 	if (LLToolDragAndDrop::getInstance()->isOverThreshold( x, y ))
 	{
 		if (!gToolBarView->mDragStarted)
@@ -670,6 +684,13 @@ BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetTyp
 
 BOOL LLToolBarView::handleDropTool( void* cargo_data, S32 x, S32 y, LLToolBar* toolbar)
 {
+	// <FS:Zi> Do not drag and drop when toolbars are locked
+	if(gSavedSettings.getBOOL("LockToolbars"))
+	{
+		return FALSE;
+	}
+	// </FS:Zi>
+
 	BOOL handled = FALSE;
 	LLInventoryObject* inv_item = static_cast<LLInventoryObject*>(cargo_data);
 	

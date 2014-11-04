@@ -43,10 +43,10 @@
     </panel>
     <tab_container name="import_tab">
         <panel label="Poziom detali" name="lod_panel" title="Poziom detali">
-            <text name="source" value="Źródło" />
-            <text name="triangles" value="Trójkąty" />
-            <text name="vertices" value="Wierzchołki" />
-            <text name="high_label" initial_value="Wysoki" value="Wysoki" />
+            <text initial_value="Źródło" name="source" value="Źródło" />
+            <text initial_value="Trójkąty" name="triangles" value="Trójkąty" />
+            <text initial_value="Wierzchołki" name="vertices" value="Wierzchołki" />
+            <text initial_value="Wysoki" name="high_label" value="Wysoki" />
             <combo_box name="lod_source_high">
                 <item name="Load from file" label="Ładuj z pliku" />
                 <item name="Generate" label="Generuj" />
@@ -183,7 +183,7 @@
      </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">
-       <button label="Przelicz wagi i opłatę" name="calculate_btn" tool_tip="Calculate weights &amp;fee"/>
+       <button label="Przelicz wagi i opłatę" name="calculate_btn" tool_tip="Przelicz wagi i opłatę"/>
        <button label="Anuluj" name="cancel_btn"/>
        <button label="Załaduj" name="ok_btn" tool_tip="Załaduj na serwer"/>
        <button label="Wyczyść i zresetuj" name="reset_btn"/>
@@ -210,10 +210,9 @@
        </text>
     </panel>
 </panel>
-
 <text name="lod_label">
- Podgląd:
- </text>
+    Podgląd:
+</text>
 <panel name="right_panel">
     <combo_box name="preview_lod_combo" tool_tip="Poziom detali (LOD) do wyświetlania w podglądzie">
         <combo_item name="high">Wysoki</combo_item>

@@ -425,14 +425,25 @@ void LLAppViewerWin32::disableWinErrorReporting()
 		HINSTANCE fault_rep_dll_handle = LoadLibrary(L"faultrep.dll");		/* Flawfinder: ignore */
 		if( fault_rep_dll_handle )
 		{
-			pfn_ADDEREXCLUDEDAPPLICATIONA pAddERExcludedApplicationA  = (pfn_ADDEREXCLUDEDAPPLICATIONA) GetProcAddress(fault_rep_dll_handle, "AddERExcludedApplicationA");
-			if( pAddERExcludedApplicationA )
+			// <FS:Ansariel> Use unicode version
+			//pfn_ADDEREXCLUDEDAPPLICATIONA pAddERExcludedApplicationA  = (pfn_ADDEREXCLUDEDAPPLICATIONA) GetProcAddress(fault_rep_dll_handle, "AddERExcludedApplicationA");
+			//if( pAddERExcludedApplicationA )
+			//{
+
+			//	// Strip the path off the name
+			//	const char* executable_name = gDirUtilp->getExecutableFilename().c_str();
+
+			//	if( 0 == pAddERExcludedApplicationA( executable_name ) )
+			pfn_ADDEREXCLUDEDAPPLICATIONW pAddERExcludedApplicationW  = (pfn_ADDEREXCLUDEDAPPLICATIONW) GetProcAddress(fault_rep_dll_handle, "AddERExcludedApplicationW");
+			if( pAddERExcludedApplicationW )
 			{
 
 				// Strip the path off the name
-				const char* executable_name = gDirUtilp->getExecutableFilename().c_str();
+				std::string executable_name = gDirUtilp->getExecutableFilename();
+				llutf16string wstr = utf8str_to_utf16str(executable_name);
 
-				if( 0 == pAddERExcludedApplicationA( executable_name ) )
+				if( 0 == pAddERExcludedApplicationW( wstr.c_str() ) )
+			// </FS:Ansariel>
 				{
 					U32 error_code = GetLastError();
 					LL_INFOS() << "AddERExcludedApplication() failed with error code " << error_code << LL_ENDL;
@@ -465,8 +476,8 @@ void LLAppViewerWin32::disableWinErrorReporting()
 			if( pAddERExcludedApplicationW )
 			{
 				// Strip the path off the name
-				const char* executable_name = gDirUtilp->getExecutableFilename().c_str();
-				std::wstring wstr(executable_name, executable_name+strlen(executable_name));
+				std::string executable_name = gDirUtilp->getExecutableFilename();
+				llutf16string wstr = utf8str_to_utf16str(executable_name);
 
 				if( S_OK == pAddERExcludedApplicationW( wstr.c_str(), FALSE ) )
 				{

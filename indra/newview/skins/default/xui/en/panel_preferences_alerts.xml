@@ -297,6 +297,15 @@
      name="AutoQueryGridStatus"
      top_pad="2"
      width="160"/>
+    <check_box
+     control_name="FSLogSnapshotsToLocal"
+     height="16"
+     label="Log filename of saved snapshots in to chat history"
+     layout="topleft"
+     left="10"
+     name="FSLogSnapshotsToLocal"
+     top_pad="2"
+     width="160"/>
       
     <check_box
       control_name="FSEnableGrowl"

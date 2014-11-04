@@ -1041,6 +1041,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ChangeYourDefaultAnimations">
 		Zmieniać Twoje domyślne animacje
 	</string>
+	<string name="SnapshotSavedToDisk">
+		Zdjęcie zapisane: [FILENAME]
+	</string>
 	<string name="JoinAnExperience">
 		Rozpocznij przygodę
 	</string>

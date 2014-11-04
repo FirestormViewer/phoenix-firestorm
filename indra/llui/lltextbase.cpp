@@ -302,6 +302,9 @@ LLTextBase::~LLTextBase()
 {
 	mSegments.clear();
 	delete mURLClickSignal;
+	// <FS:Ansariel> Properly free the signals
+	delete mIsFriendSignal;
+	// </FS:Ansariel>
 }
 
 void LLTextBase::initFromParams(const LLTextBase::Params& p)

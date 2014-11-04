@@ -3379,6 +3379,17 @@ bool LLAppViewer::initConfiguration()
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
 	loadColorSettings();
+    
+    //<FS:KC> One time fix for Latency
+    if ((gLastRunVersion != LLVersionInfo::getChannelAndVersion()) && (gSavedSettings.getString("SkinCurrent") == "latency") && !gSavedSettings.getBOOL("FSLatencyOneTimeFixRun"))
+    {
+        LL_INFOS() << "FSLatencyOneTimeFix: Fixing script dialog colors." << LL_ENDL;
+        // Replace previously saved script dialog colors with new defaults, which happen to be the same as the group notice colors
+        LLUIColorTable::instance().setColor("ScriptDialog", LLUIColorTable::instance().getColor("GroupNotifyDialogBG", LLColor4::grey4));
+        LLUIColorTable::instance().setColor("ScriptDialogFg", LLUIColorTable::instance().getColor("GroupNotifyTextColor", LLColor4::white));
+    }
+    gSavedSettings.setBOOL("FSLatencyOneTimeFixRun", TRUE);
+    //</FS:KC>
 
 	// Let anyone else who cares know that we've populated our settings
 	// variables.
@@ -5686,7 +5697,10 @@ void LLAppViewer::idle()
 	// Handle the regular UI idle callbacks as well as
 	// hover callbacks
 	//
-
+    
+#ifdef LL_DARWIN
+	if (!mQuitRequested)  //MAINT-4243
+#endif
 	{
 // 		LL_RECORD_BLOCK_TIME(FTM_IDLE_CB);
 

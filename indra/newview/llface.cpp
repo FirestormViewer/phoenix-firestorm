@@ -1290,7 +1290,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		clearState(GLOBAL);
 	}
 
-	LLColor4U color = tep->getColor();
+	// <FS:ND> Protection against faces w/o te set.
+	// LLColor4U color = tep->getColor();
+	LLColor4U color = (tep ? tep->getColor() : LLColor4());
+	// </FS:ND>
 
 	if (rebuild_color)
 	{ //decide if shiny goes in alpha channel of color
@@ -1665,7 +1668,10 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			LLVector4a scalea;
 			scalea.load3(scale.mV);
 
-			LLMaterial* mat = tep->getMaterialParams().get();
+			// <FS:ND> Protection against faces w/o te set.
+			// LLMaterial* mat = tep->getMaterialParams().get();
+			LLMaterial* mat = tep ? tep->getMaterialParams().get() : 0;
+			// </FS:ND>
 
 			bool do_bump = bump_code && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_TEXCOORD1);
 

@@ -11,4 +11,5 @@
 	<menu_item_check label="Buttons mit automatische Breite" name="layout_style_none"/>
 	<menu_item_check label="Buttons mit fester Breite" name="layout_style_equalize"/>
 	<menu_item_check label="Buttons füllen Buttonleiste" name="layout_style_fill"/>
+	<menu_item_check label="Gesperrt" name="toolbars_locked"/>
 </context_menu>

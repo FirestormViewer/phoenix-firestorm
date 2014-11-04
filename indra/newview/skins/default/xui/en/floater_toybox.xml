@@ -91,6 +91,7 @@
     height="23"
     label="Clear all toolbars"
     label_selected="Clear all toolbars"
+    disabled_control="LockToolbars"
     layout="topleft"
     left="185"
     name="btn_clear_all"
@@ -103,6 +104,7 @@
     height="23"
     label="Restore defaults"
     label_selected="Restore defaults"
+    disabled_control="LockToolbars"
     layout="topleft"
     left="335"
     name="btn_restore_defaults"
@@ -110,4 +112,15 @@
     width="130">
     <button.commit_callback function="Toybox.RestoreDefaults" />
   </button>
+  <check_box
+    follows="left|bottom|right"
+    height="23"
+    label="Locked"
+    layout="topleft"
+    left_pad="16"
+    name="check_toolbars_locked"
+    control_name="LockToolbars"
+    tool_tip="Check this box to lock the toolbars, so the buttons can't be dragged or removed by accident."
+    width="130">
+  </check_box>
 </floater>
