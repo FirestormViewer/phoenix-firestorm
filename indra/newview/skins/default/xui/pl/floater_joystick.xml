@@ -74,6 +74,5 @@
 		Tolerancja powiększania
 	</text>
 	<button label="Ustawienia domyślne" name="SpaceNavigatorDefaults"/>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 </floater>

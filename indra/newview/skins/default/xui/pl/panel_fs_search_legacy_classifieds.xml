@@ -8,7 +8,7 @@
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_classifieds">
 			<columns label="Nazwa" name="classified_name" />
-			<columns label="Cena wyświetlenia" name="price" />
+			<columns label="Koszt listowania" name="price" />
 		</scroll_list>
 		<button label="Wstecz" name="classifieds_back" />
 		<button label="Dalej" name="classifieds_next" />

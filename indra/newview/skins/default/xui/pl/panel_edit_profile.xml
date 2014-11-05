@@ -28,7 +28,7 @@
 			</panel>
 			<check_box label="Pokaż w wyszukiwarce" name="show_in_search_checkbox"/>
 			<text name="title_acc_status_text" value="Konto:"/>
-			<text_editor name="acc_status_text" value="Rezydent. Brak danych konta."/>
+			<text_editor name="acc_status_text" value="Rezydent. Płatności: Dane nieznane."/>
 			<text name="my_account_link" value="[[URL] Idź do Tablicy]"/>
 			<text name="title_partner_text" value="Partner:"/>
 			<panel name="partner_data_panel">
@@ -42,7 +42,7 @@
 				<icon name="real_world_edit_icon" tool_tip="Kliknij, aby wybrać obrazek"/>
 			</panel>
 			<text name="title_homepage_text">
-				WWW:
+				Strona www:
 			</text>
 		</panel>
 	</tab_container>

@@ -32,7 +32,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 	</panel.string>
 	<tab_container name="tabs">
 		<panel label="W pobliżu" name="nearby_panel">
-			<panel label="bottom_panel" name="nearby_buttons_panel">
+			<panel name="nearby_buttons_panel">
 				<filter_editor label="Filtruj ludzi" name="nearby_filter_input" />
 				<button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
 				<menu_button name="nearby_view_btn" tool_tip="Opcje widoku/sortowania" />
@@ -41,7 +41,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 			</panel>
 		</panel>
 		<panel label="Znajomi" name="friends_panel">
-			<panel label="bottom_panel" name="friends_buttons_panel">
+			<panel name="friends_buttons_panel">
 				<filter_editor label="Filtruj ludzi" name="friends_filter_input" />
 				<button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
 				<menu_button name="friends_view_btn" tool_tip="Opcje widoku/sortowania" />
@@ -56,11 +56,11 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 			</tab_container>
 		</panel>
 		<panel label="Grupy" name="groups_panel">
-			<panel label="bottom_panel" name="groups_buttons_panel">
+			<panel name="groups_buttons_panel">
 				<filter_editor label="Filtruj grupy" name="groups_filter_input" />
 				<menu_button name="groups_gear_btn" tool_tip="Akcje dotyczące wybranej grupy" />
 				<menu_button name="groups_view_btn" tool_tip="Opcje widoku/sortowania" />
-				<menu_button name="plus_btn" tool_tip="Dołącz do grupy/Stwórz nową grupę" />
+				<menu_button name="plus_btn" tool_tip="Dołącz do grupy / Stwórz nową grupę" />
 				<dnd_button name="minus_btn" tool_tip="Opuść wybraną grupę" />
 			</panel>
 			<text name="groupcount">
@@ -68,7 +68,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 			</text>
 		</panel>
 		<panel label="Ostatnie" name="recent_panel">
-			<panel label="bottom_panel" name="recent_buttons_panel">
+			<panel name="recent_buttons_panel">
 				<filter_editor label="Filtruj ludzi" name="recent_filter_input" />
 				<button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
 				<menu_button name="recent_view_btn" tool_tip="Opcje widoku/sortowania" />

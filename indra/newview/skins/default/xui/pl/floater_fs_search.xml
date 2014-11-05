@@ -19,7 +19,7 @@
 		Wiek: [AGE]
 	</floater.string>
 	<floater.string name="string.listing_price">
-		Cena wyświetlenia: [LISTING_PRICE]
+		Koszt listowania: [LISTING_PRICE]
 	</floater.string>
 	<floater.string name="string.duration">
 		Czas trwania: [DURATION]
