@@ -1697,7 +1697,7 @@ void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemb
 	// trying to avoid unnecessary hash lookups
 	// <FS:CR> FIRE-11350
 	//if (matchesSearchFilter(av_name.getAccountName()))
-	if (matchesSearchFilter(av_name.getUserName()))
+	if (matchesSearchFilter(av_name.getCompleteName()))
 	// </FS:CR>
 	{
 		addMemberToList(member);
@@ -1754,7 +1754,7 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		{
 			// <FS:CR> FIRE-11350
 			//if (matchesSearchFilter(av_name.getAccountName()))
-			if (matchesSearchFilter(av_name.getUserName()))
+			if (matchesSearchFilter(av_name.getCompleteName()))
 			// </FS:CR>
 			{
 				addMemberToList(mMemberProgress->second);
