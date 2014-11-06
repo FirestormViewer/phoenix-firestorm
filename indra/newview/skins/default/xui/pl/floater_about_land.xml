@@ -7,10 +7,10 @@
 		minuta
 	</floater.string>
 	<floater.string name="Seconds">
-		[SECONDS] sekundy
+		[SECONDS] sekund
 	</floater.string>
 	<floater.string name="Remaining">
-		pozostały
+		pozostało
 	</floater.string>
 	<tab_container name="landtab">
 		<panel label="Ogólne" name="land_general_panel">
@@ -24,7 +24,7 @@
 				Obszar
 			</panel.string>
 			<panel.string name="auction_id_text">
-				Numer aukcji: [ID]
+				ID aukcji: [ID]
 			</panel.string>
 			<panel.string name="need_tier_to_modify">
 				Musisz zaakceptować zakup by móc modyfikować tą działkę.
@@ -50,9 +50,6 @@
 			<panel.string name="no_selection_text">
 				Nie wybrano działki.
 			</panel.string>
-			<panel.string name="time_stamp_template">
-				[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
-			</panel.string>
 			<panel.string name="error_resolving_uuid">
 				Numer identyfikacyjny UUID działki nie został rozpoznany.
 			</panel.string>
@@ -68,14 +65,8 @@
 			<text name="LandType">
 				Typ:
 			</text>
-			<text name="LandTypeText">
-				Mainland / Homestead
-			</text>
 			<text name="ContentRating">
 				Rodzaj:
-			</text>
-			<text name="ContentRatingText">
-				Adult
 			</text>
 			<text name="Owner:">
 				Właściciel:
@@ -97,7 +88,7 @@
 				Na sprzedaż:
 			</text>
 			<text name="Not for sale.">
-				Nie
+				Nie na sprzedaż
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
 				Cena: [PRICE]L$ ([PRICE_PER_SQM]L$/m²).
@@ -129,7 +120,7 @@
 			<button label="Sprzedaż przez Lindenów" name="Linden Sale..." tool_tip="Działka musi mieć Właściciela, zawartość oraz nie może być wystawiona na Aukcję."/>
 			<button label="Skrypty" name="Scripts..."/>
 			<button label="Kup dla Grupy" name="Buy For Group..."/>
-			<button label="Kup Przepustkę" label_selected="Kup Przepustkę" name="Buy Pass..." tool_tip="Przepustka udostępnia tymczasowy wstęp na działkę."/>
+			<button label="Kup Przepustkę" name="Buy Pass..." tool_tip="Przepustka udostępnia tymczasowy wstęp na działkę."/>
 			<button label="Porzuć działkę" name="Abandon Land..."/>
 			<button label="Odzyskaj działkę" name="Reclaim Land..."/>
 		</panel>
@@ -165,23 +156,14 @@
 			<text name="covenant_timestamp_text">
 				Ostatnia modyfikacja Wed Dec 31 16:00:00 1969
 			</text>
-			<text name="region_section_lbl">
-				Region:
-			</text>
 			<text name="region_name_text">
 				Wczytywanie...
 			</text>
 			<text name="region_landtype_lbl">
 				Typ:
 			</text>
-			<text name="region_landtype_text">
-				Mainland / Homestead
-			</text>
 			<text name="region_maturity_lbl">
 				Rodzaj:
-			</text>
-			<text name="region_maturity_text">
-				Adult
 			</text>
 			<text name="resellable_lbl">
 				Odsprzedaj:
@@ -208,7 +190,7 @@
 				Ilość ekstra obiektów: [BONUS]
 			</text>
 			<text name="Simulator primitive usage:">
-				Ilość używanych primów:
+				Pojemność regionu:
 			</text>
 			<text name="objects_available">
 				[COUNT] z [MAX] ([AVAILABLE] jest dostępnych)
@@ -248,7 +230,7 @@
 			<name_list name="owner list">
 				<name_list.columns label="Typ" name="type"/>
 				<name_list.columns label="Nazwa" name="name"/>
-				<name_list.columns label="Liczba" name="count"/>
+				<name_list.columns label="Ilość" name="count"/>
 				<name_list.columns label="Najnowsze" name="mostrecent"/>
 			</name_list>
 		</panel>
@@ -273,7 +255,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 				Twoja działka bądź treść jaką zawiera klasyfikowana jest jako Moderate.
 			</panel.string>
 			<panel.string name="mature_check_adult_tooltip">
-				Informacje o Twojej działce i treści jaką zawiera klasyfikowane są jako Adult.
+				Twoja działka bądź treść jaką zawiera klasyfikowana jest jako Adult.
 			</panel.string>
 			<panel.string name="landing_point_none">
 				(brak)
@@ -361,7 +343,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 				<combo_box.item label="Gdziekolwiek" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="Media" name="land_media_panel">
+		<panel name="land_media_panel">
 			<text name="with media:">
 				Typ mediów:
 			</text>
@@ -394,7 +376,7 @@ teksturę:
 			<text name="Options:">
 				Opcje:
 			</text>
-			<check_box label="Powtarzaj odtwarzanie" name="media_loop" tool_tip="Powtarzaj odtwarzanie mediów w pętli. Po wyświetleniu materiału odtwarzanie rozpocznie się od początku."/>
+			<check_box label="Odtwarzaj w pętli" name="media_loop" tool_tip="Powtarzaj odtwarzanie mediów w pętli. Po wyświetleniu materiału odtwarzanie rozpocznie się od początku."/>
 		</panel>
 		<panel label="Dźwięk" name="land_audio_panel">
 			<text name="MusicURL:">
@@ -430,8 +412,8 @@ teksturę:
 			<text name="Only Allow">
 				Umożliwiaj dostęp tylko dla:
 			</text>
-			<check_box label="Rezydentów zarejestrowanych w systemie płatniczym Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab."/>
-			<check_box label="Rezydentów, którzy mają 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE] po więcej informacji."/>
+			<check_box label="Rezydentów zarejestrowanych w systemie płatniczym Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+			<check_box label="Rezydentów, którzy mają 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
 			<check_box label="Udostępnij wejście grupie [GROUP]" name="GroupCheck" tool_tip="Ustaw Grupę w głównej zakładce."/>
 			<check_box label="Sprzedaj przepustki:" name="PassCheck" tool_tip="Otwórz tymczasowy dostęp do tej działki"/>
 			<combo_box name="pass_combo">

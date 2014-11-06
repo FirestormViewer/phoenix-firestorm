@@ -14,7 +14,7 @@
 		<scroll_list.columns label="Czat" name="trigger"/>
 		<scroll_list.columns label="Skrót" name="shortcut"/>
 	</scroll_list>
-	<panel label="bottom_panel" name="bottom_panel">
+	<panel name="bottom_panel">
 		<menu_button name="gear_btn" tool_tip="Więcej opcji"/>
 		<button name="new_gesture_btn" tool_tip="Stwórz nowy gest"/>
 		<button name="activate_btn" tool_tip="Aktywuj/Dezaktywuj wybrany gest"/>

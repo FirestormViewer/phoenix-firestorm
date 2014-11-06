@@ -40,7 +40,6 @@
 	</text>
 	<check_box label="Stosuj teraz" name="apply_immediate"/>
 	<button label="Kopia LSL" tool_tip="Kopiuje wartości koloru do formatu wektora kolorów LSL w postaci &lt;r, g, b&gt;." name="copy_lsl_btn"/>
-	<button label="OK" label_selected="OK" name="select_btn"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 	<text name="Current color:">
 		^ Obecny kolor ^
