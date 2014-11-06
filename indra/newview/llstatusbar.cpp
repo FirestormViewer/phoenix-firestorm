@@ -444,10 +444,11 @@ BOOL LLStatusBar::postBuild()
 	// <FS:ND> Hook up and init for filtering
 	mFilterEdit = getChild<LLSearchEditor>("search_menu_edit");
 	mSearchPanel = getChild<LLPanel>("menu_search_panel");
+	mSearchPanel->setVisible(gSavedSettings.getBOOL("FSMenuSearch"));
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	collectSearchableItems();
-	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::update, this));
+	gSavedSettings.getControl("FSMenuSearch")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateMenuSearchVisibility, this, _2));
 	// </FS:ND>
 
 	return TRUE;
@@ -608,6 +609,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mSGBandwidth->setVisible(visible && showNetStats);
 	mSGPacketLoss->setVisible(visible && showNetStats);
 	mBandwidthButton->setVisible(visible && showNetStats); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
 }
@@ -1524,4 +1526,10 @@ void LLStatusBar::collectSearchableItems()
 	nd::statusbar::SearchableItemPtr pItem( new nd::statusbar::SearchableItem );
 	mSearchData->mRootMenu = pItem;
 	collectChildren( gMenuBarView, pItem );
+}
+
+void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
+{
+	mSearchPanel->setVisible(data.asBoolean());
+	update();
 }

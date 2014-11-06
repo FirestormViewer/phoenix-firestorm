@@ -383,6 +383,7 @@ private:
 
 	nd::statusbar::SearchData *mSearchData;
 	void collectSearchableItems();
+	void updateMenuSearchVisibility(const LLSD& data);
 	// </FS:ND>
 };
 
