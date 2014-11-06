@@ -55,7 +55,7 @@
     layout="topleft"
     left="30"
     name="clear_cache"
-    top_pad="10"
+    top_pad="8"
     width="145">
     <button.commit_callback
      function="Pref.WebClearCache" />
@@ -82,7 +82,7 @@
     layout="topleft"
     left="30"
     name="online_searchresults"
-    top_pad="10"
+    top_pad="8"
     width="350" />
 
    <check_box
