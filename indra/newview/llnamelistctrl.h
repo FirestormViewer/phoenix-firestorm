@@ -173,14 +173,16 @@ private:
 	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 
-	S32 mPendingLookupsRemaining;
-	namelist_complete_signal_t mNameListCompleteSignal;
-	
-public:
-	boost::signals2::connection setOnNameListCompleteCallback(boost::function<void(bool)> onNameListCompleteCallback) 
-	{ 
-		return mNameListCompleteSignal.connect(onNameListCompleteCallback); 
-	}
+// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
+//	S32 mPendingLookupsRemaining;
+//	namelist_complete_signal_t mNameListCompleteSignal;
+//	
+//public:
+//	boost::signals2::connection setOnNameListCompleteCallback(boost::function<void(bool)> onNameListCompleteCallback) 
+//	{ 
+//		return mNameListCompleteSignal.connect(onNameListCompleteCallback); 
+//	}
+// </FS:Ansariel>
 
 };
 

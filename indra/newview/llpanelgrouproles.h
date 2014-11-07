@@ -349,7 +349,8 @@ public:
 	static void onRefreshBanList(void* user_data);
 	void handleRefreshBanList();
 
-	void onBanListCompleted(bool isComplete);
+	// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
+	//void onBanListCompleted(bool isComplete);
 
 protected:
 	void setBanCount(U32 ban_count);
