@@ -24,7 +24,6 @@
 		<combo_box name="combo_aspect_ratio" tool_tip="Wyświetl w stałych proporcjach"/>
 	</panel>
 	<panel name="button_panel">
-		<button label="OK" name="Keep"/>
 		<button label="Wyrzuć" name="Discard"/>
 		<flyout_button label="Zapisz..." name="save_tex_btn">
 			<flyout_button.item label="Zapisz jako TGA" name="save_item_tga"/>

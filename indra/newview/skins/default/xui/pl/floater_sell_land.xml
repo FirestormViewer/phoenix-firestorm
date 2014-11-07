@@ -5,9 +5,6 @@
 			<text name="info_parcel_label">
 				Działka:
 			</text>
-			<text name="info_parcel">
-				NAZWA DZIAŁKI
-			</text>
 			<text name="info_size_label">
 				Rozmiar:
 			</text>
@@ -35,7 +32,7 @@
 				<combo_box.item label="Wybrany Kupiec:" name="Specificuser:"/>
 			</combo_box>
 			<button label="Wybierz" name="sell_to_select_agent"/>
-			<text name="sell_objects_label" font="SansSerifSmall">
+			<text name="sell_objects_label">
 				3. Sprzedać obiekty razem z działką?
 			</text>
 			<text name="sell_objects_text">

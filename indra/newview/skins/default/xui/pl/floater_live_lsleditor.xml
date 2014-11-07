@@ -11,5 +11,4 @@
 	</floater.string>
 	<button label="Zresetuj" label_selected="Zresetuj" name="Reset"/>
 	<check_box label="Włączony" name="running"/>
-	<check_box label="Mono" name="mono"/>
 </floater>
