@@ -501,9 +501,7 @@ void LLPanelGroupInvite::addUsers(uuid_vec_t& agent_ids)
 			//looks like user try to invite offline friend
 			//for offline avatar_id gObjectList.findObject() will return null
 			//so we need to do this additional search in avatar tracker, see EXT-4732
-			// <FS:Ansariel> FIRE-4140: Group invite button on profile sometimes doesn't work
-			//if (LLAvatarTracker::instance().isBuddy(agent_id))
-			// </FS:Ansariel>
+			if (LLAvatarTracker::instance().isBuddy(agent_id))
 			{
 				LLAvatarName av_name;
 				if (!LLAvatarNameCache::get(agent_id, &av_name))
@@ -657,7 +655,7 @@ BOOL LLPanelGroupInvite::postBuild()
 	}
 
 	mImplementation->mOKButton = 
-		getChild<LLButton>("ok_button", recurse);
+		getChild<LLButton>("invite_button", recurse);
 	if ( mImplementation->mOKButton )
  	{
 		mImplementation->mOKButton->setClickedCallback(impl::callbackClickOK, mImplementation);
