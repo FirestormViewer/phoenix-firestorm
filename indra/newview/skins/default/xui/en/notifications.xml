@@ -9218,10 +9218,10 @@ The name may only contain ASCII characters, excluding ":" and "|".
 
   <notification
    icon="alertmodal.tga"
-   name="RenameAOCantContainColon"
+   name="RenameAOMustBeASCII"
    type="alertmodal">
-Could not rename new AO set to "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+Could not rename AO set "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
