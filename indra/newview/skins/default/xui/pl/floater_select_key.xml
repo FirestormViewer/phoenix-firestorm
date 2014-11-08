@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="modal container">
-	<button label="Anuluj" name="Cancel"/>
+	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
 	<text name="Save item as:">
 		Naciśnij przycisk, aby ustawić przełącznik Głosu.
 	</text>

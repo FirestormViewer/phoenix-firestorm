@@ -7,8 +7,7 @@
 		Nazwa obiektu
 	</line_editor>
 	<text name="note">
-		* blokuje jedynie tekst obiektu, nie dźwięk
+		* Blokuje jedynie tekst obiektu, nie dźwięk
 	</text>
-	<button label="OK" name="OK"/>
 	<button label="Anuluj" name="Cancel"/>
 </floater>

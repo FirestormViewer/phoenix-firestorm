@@ -1067,6 +1067,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
+	<string name="ManageEstateSilently">
+		Grundbesitz leise verwalten
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Ihre Standardanimationen ändern
+	</string>
+	<string name="SnapshotSavedToDisk">
+		Schnappschuss gespeichert: [FILENAME]
+	</string>
 	<string name="JoinAnExperience">
 		Bei einem Erlebnis mitmachen
 	</string>
@@ -4747,6 +4756,9 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		 kostenlos
 	</string>
 <!--  /FS:AW opensim currency support -->
+	<string name="Group Ban">
+		Gruppen-Bann
+	</string>
 	<string name="Membership">
 		Mitgliedschaft
 	</string>

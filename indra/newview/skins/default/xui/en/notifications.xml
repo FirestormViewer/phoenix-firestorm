@@ -507,7 +507,35 @@ Add this ability to &apos;[ROLE_NAME]&apos;?
      notext="No"
      yestext="Yes"/>
   </notification>
-  
+
+  <notification
+    icon="alertmodal.tga"
+    name="AssignBanAbilityWarning"
+    type="alertmodal">
+You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
+
+ *WARNING*
+Any Member in a Role with this Ability will also be granted the Abilities &apos;[ACTION_NAME_2]&apos; and &apos;[ACTION_NAME_3]&apos;
+    <usetemplate
+      name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+  icon="alertmodal.tga"
+  name="RemoveBanAbilityWarning"
+  type="alertmodal">
+You are removing the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
+
+ *WARNING*
+Removing this ability will NOT remove the Abilities &apos;[ACTION_NAME_2]&apos; and &apos;[ACTION_NAME_3]&apos;.
+ 
+If you no longer wish to have these abilities granted to this role, disable them immediately!
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
   <notification
     icon="alertmodal.tga"
     name="EjectGroupMemberWarning"
@@ -3861,6 +3889,28 @@ Leave Group?
     <usetemplate
      name="okbutton"
      yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="aler.tga"
+   name="GroupDepartError"
+   type="alert">
+Unable to leave group: [reason].
+      <tag>reason</tag>
+      <usetemplate
+       name="okbutton"
+       yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="GroupDepart"
+   type="alert">
+You have left the group [group_name].
+      <tag>group_name</tag>
+      <usetemplate
+       name="okbutton"
+       yestext="OK"/>
   </notification>
 
   <notification
@@ -9138,7 +9188,7 @@ Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
    name="NewAOSet"
    type="alertmodal">
 Specify a name for the new AO set:
-(The name may not contain a ":" or "|" character)
+(The name may contain any ASCII character, except for ":" or "|")
     <form name="form">
       <input name="message" type="text" default="true">
 New AO Set
@@ -9157,10 +9207,10 @@ New AO Set
 
   <notification
    icon="alertmodal.tga"
-   name="NewAOCantContainColon"
+   name="NewAOCantContainNonASCII"
    type="alertmodal">
 Could not create new AO set "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -9168,10 +9218,10 @@ The name may not contain ":" or "|" characters.
 
   <notification
    icon="alertmodal.tga"
-   name="RenameAOCantContainColon"
+   name="RenameAOMustBeASCII"
    type="alertmodal">
-Could not rename new AO set to "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+Could not rename AO set "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>

@@ -89,6 +89,14 @@ struct LLCalcParser : grammar<LLCalcParser>
 				 (str_p("ASIN") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_asin)(self,arg1)]) |
 				 (str_p("ACOS") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_acos)(self,arg1)]) |
 				 (str_p("ATAN") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_atan)(self,arg1)]) |
+				 // <FS:Ansariel> FIRE-14618: Provide radian-based functions
+				 (str_p("SINR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_sinr)(self,arg1)]) |
+				 (str_p("COSR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_cosr)(self,arg1)]) |
+				 (str_p("TANR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_tanr)(self,arg1)]) |
+				 (str_p("ASINR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_asinr)(self,arg1)]) |
+				 (str_p("ACOSR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_acosr)(self,arg1)]) |
+				 (str_p("ATANR") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_atanr)(self,arg1)]) |
+				 // </FS:Ansariel>
 				 (str_p("SQRT") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_sqrt)(self,arg1)]) |
 				 (str_p("LOG") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_log)(self,arg1)]) |
 				 (str_p("EXP") >> '(' >> expression[unary_func.value = bind(&LLCalcParser::_exp)(self,arg1)]) |
@@ -169,9 +177,17 @@ private:
 	F32 _sin(const F32& a) const { return sin(DEG_TO_RAD * a); }
 	F32 _cos(const F32& a) const { return cos(DEG_TO_RAD * a); }
 	F32 _tan(const F32& a) const { return tan(DEG_TO_RAD * a); }
-	F32 _asin(const F32& a) const { return asin(a * RAD_TO_DEG); }
-	F32 _acos(const F32& a) const { return acos(a * RAD_TO_DEG); }
-	F32 _atan(const F32& a) const { return atan(a * RAD_TO_DEG); }
+	F32 _asin(const F32& a) const { return asin(a) * RAD_TO_DEG; }
+	F32 _acos(const F32& a) const { return acos(a) * RAD_TO_DEG; }
+	F32 _atan(const F32& a) const { return atan(a) * RAD_TO_DEG; }
+	// <FS:Ansariel> FIRE-14618: Provide radian-based functions
+	F32 _sinr(const F32& a) const { return sin(a); }
+	F32 _cosr(const F32& a) const { return cos(a); }
+	F32 _tanr(const F32& a) const { return tan(a); }
+	F32 _asinr(const F32& a) const { return asin(a); }
+	F32 _acosr(const F32& a) const { return acos(a); }
+	F32 _atanr(const F32& a) const { return atan(a); }
+	// </FS:Ansariel>
 	F32 _sqrt(const F32& a) const { return sqrt(a); }
 	F32 _log(const F32& a) const { return log(a); }
 	F32 _exp(const F32& a) const { return exp(a); }

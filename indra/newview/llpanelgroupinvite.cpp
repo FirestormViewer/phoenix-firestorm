@@ -657,7 +657,7 @@ BOOL LLPanelGroupInvite::postBuild()
 	}
 
 	mImplementation->mOKButton = 
-		getChild<LLButton>("ok_button", recurse);
+		getChild<LLButton>("invite_button", recurse);
 	if ( mImplementation->mOKButton )
  	{
 		mImplementation->mOKButton->setClickedCallback(impl::callbackClickOK, mImplementation);

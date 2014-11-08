@@ -5,8 +5,6 @@
 	<text name="total_leaked_label">
 		Wyciekło: [SIZE] KB
 	</text>
-	<button label="Start" name="start_btn"/>
-	<button label="Stop" name="stop_btn"/>
 	<button label="Uwolnij" name="release_btn"/>
 	<button label="Zamknij" name="close_btn"/>
 </floater>

@@ -46,7 +46,7 @@ Spróbuj wybrać ponownie mniejszą powierzchnię działki.
 	</floater.string>
 	<floater.string name="processing">
 		Przetwarzanie Twojego zakupu...
- 
+
 (Może zająć kilka minut)
 	</floater.string>
 	<floater.string name="fetching_error">

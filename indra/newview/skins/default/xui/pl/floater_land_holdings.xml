@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="land holdings floater" title="Moja działka">
+<floater name="land holdings floater" title="Moje działki">
 	<scroll_list name="parcel list">
 		<column label="Działka" name="name"/>
-		<column label="Region" name="location"/>
 		<column label="Typ" name="type"/>
 		<column label="Obszar" name="area"/>
 	</scroll_list>
 	<button label="Teleportuj" label_selected="Teleportuj" name="Teleport" tool_tip="Teleportuj się do centrum tej działki."/>
 	<button label="Mapa" label_selected="Mapa" name="Show on Map" tool_tip="Pokaż to miejsce na mapie świata."/>
 	<text name="contrib_label">
-		Kontrybucje do Twoich Grup:
+		Kontrybucje do Twoich grup:
 	</text>
 	<scroll_list name="grant list">
 		<column label="Grupa" name="group"/>

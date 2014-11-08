@@ -342,9 +342,13 @@ void FloaterAO::onRenameSet()
 	std::string name=mSetSelector->getSimple();
 	LLStringUtil::trim(name);
 
+	LLUIString new_set_name=name;
+
 	if(!name.empty())
 	{
-		if(name.find_first_of(":|")==std::string::npos)
+		if(
+			LLTextValidate::validateASCIIPrintableNoPipe(new_set_name.getWString()) &&	// only allow ASCII
+			name.find_first_of(":|")==std::string::npos)								// don't allow : or |
 		{
 			if(AOEngine::instance().renameSet(mSelectedSet,name))
 			{
@@ -356,7 +360,7 @@ void FloaterAO::onRenameSet()
 		{
 			LLSD args;
 			args["AO_SET_NAME"]=name;
-			LLNotificationsUtil::add("RenameAOCantContainColon",args);
+			LLNotificationsUtil::add("RenameAOMustBeASCII",args);
 		}
 	}
 	mSetSelector->setSimple(mSelectedSet->getName());
@@ -445,13 +449,19 @@ BOOL FloaterAO::newSetCallback(const LLSD& notification,const LLSD& response)
 
 	LLStringUtil::trim(newSetName);
 
+	LLUIString new_set_name=newSetName;
+
 	if(newSetName.empty())
+	{
 		return FALSE;
-	else if(newSetName.find_first_of(":|")!=std::string::npos)
+	}
+	else if(
+		!LLTextValidate::validateASCIIPrintableNoPipe(new_set_name.getWString()) ||		// only allow ASCII
+		newSetName.find_first_of(":|")!=std::string::npos)								// don't allow : or |
 	{
 		LLSD args;
 		args["AO_SET_NAME"]=newSetName;
-		LLNotificationsUtil::add("NewAOCantContainColon",args);
+		LLNotificationsUtil::add("NewAOCantContainNonASCII",args);
 		return FALSE;
 	}
 

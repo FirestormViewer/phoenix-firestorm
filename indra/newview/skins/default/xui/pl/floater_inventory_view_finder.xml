@@ -15,7 +15,7 @@
 	<button label="Wszystko" label_selected="Wszystko" name="All" />
 	<button label="Żadne" label_selected="Żadne" name="None" />
 	<check_box label="Zawsze pokaż foldery" name="check_show_empty" />
-	<check_box label="Od czasu wylogowania" name="check_since_logoff" />
+	<check_box label="Od wylogowania" name="check_since_logoff" />
 	<text name="- OR -">
 		- LUB -
 	</text>
