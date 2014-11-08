@@ -32,9 +32,9 @@ build, using openjpeg instead of KDU.
 
 Available premade firestorm-specific build targets:
 
-	ReleaseFS		(includes KDU, FMOD)
-	ReleaseFS_open		(no KDU, no FMOD)
-	RelWithDebInfo_open	(no KDU, no FMOD)
+	ReleaseFS (includes KDU, FMOD)
+	ReleaseFS_open (no KDU, no FMOD)
+	RelWithDebInfo_open (no KDU, no FMOD)
 
 To build firestorm:
 
