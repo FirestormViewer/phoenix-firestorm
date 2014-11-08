@@ -3578,7 +3578,7 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 	</notification>
 	<notification name="NewAOSet">
 		Wpisz nazwę nowego zestawu AO:
-(Nazwa nie może zawierać ":" lub "|")
+(Nazwa może zawierać każdy znak ASCII, za wyjątkiem ":" oraz "|")
 		<form name="form">
 			<input name="message">
 				Nowy zestaw AO
@@ -3587,14 +3587,14 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
-	<notification name="NewAOCantContainColon">
+	<notification name="NewAOCantContainNonASCII">
 		Nie można utworzyć zestawu AO o nazwie "[AO_SET_NAME]".
-Nazwa nie może zawierać ":" lub "|".
+Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="RenameAOCantContainColon">
-		Nie można zmienić nazwy zestawu AO na "[AO_SET_NAME]".
-Nazwa nie może zawierać ":" lub "|".
+	<notification name="RenameAOMustBeASCII">
+		Nie można zmienić nazwy zestawu AO "[AO_SET_NAME]".
+Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RemoveAOSet">
