@@ -445,13 +445,17 @@ BOOL FloaterAO::newSetCallback(const LLSD& notification,const LLSD& response)
 
 	LLStringUtil::trim(newSetName);
 
+	LLUIString new_set_name=newSetName;
+
 	if(newSetName.empty())
+	{
 		return FALSE;
-	else if(newSetName.find_first_of(":|")!=std::string::npos)
+	}
+	else if(!LLTextValidate::validateASCIIPrintableNoPipe(new_set_name.getWString()))
 	{
 		LLSD args;
 		args["AO_SET_NAME"]=newSetName;
-		LLNotificationsUtil::add("NewAOCantContainColon",args);
+		LLNotificationsUtil::add("NewAOCantContainNonASCII",args);
 		return FALSE;
 	}
 
