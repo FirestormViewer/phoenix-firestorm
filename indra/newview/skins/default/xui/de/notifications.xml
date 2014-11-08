@@ -4213,7 +4213,7 @@ Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 
   <notification name="FSWL" label="Windlight-Umgebungseinstellungen anpassen">
-&apos;[PARCEL_NAME]&apos;, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
+„[PARCEL_NAME]“, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
     <form name="form">
       <button name="Allow" text="Zulassen"/>
       <button name="Ignore" text="Ignorieren"/>
@@ -4221,14 +4221,14 @@ Wählen Sie ein kleineres Stück Land aus.
   </notification>
   
   <notification name="FSWLClear" label="Windlight-Umgebungseinstellungen zurücksetzen">
-Windlight-Umgebungseinstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
+Windlight-Umgebungseinstellungen für „[PARCEL_NAME]“ auf Regionsstandard zurücksetzen?
     <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
   </notification>
 	
 <!-- ## Zi: Animation Overrider -->
   <notification name="NewAOSet">
 Bitte einen Namen für das neue Animationsset eingeben:
-(Der Name darf kein ":" oder "|" enthalten)
+(Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.)
     <form name="form">
       <input name="message">
 Neues Animationsset
@@ -4242,17 +4242,17 @@ Neues Animationsset
     </form>
   </notification>
 
-  <notification name="NewAOCantContainColon">
+  <notification name="NewAOCantContainNonASCII">
 Ein neues Animationsset mit Namen "[AO_SET_NAME]" konnte nicht angelegt werden.
-Der Name darf kein ":" oder "|" enhalten.
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
   </notification>
 
-  <notification name="RenameAOCantContainColon">
+  <notification name="RenameAOMustBeASCII">
 Das Animationsset konnte nicht zu "[AO_SET_NAME]" umbenannt werden.
-Der Name darf kein ":" oder "|" enhalten.
+Der Name darf ausschließlich ASCII-Zeichen ausgenommen „:“ und „|“ enhalten.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
