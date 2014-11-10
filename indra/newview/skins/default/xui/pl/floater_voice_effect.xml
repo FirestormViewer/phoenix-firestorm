@@ -42,7 +42,6 @@
 		Nagraj próbkę, a następnie kliknij na głos aby usłyszeć jego brzmienie.
 	</text>
 	<button label="Nagraj" name="record_btn" tool_tip="Nagraj próbkę swojego głosu."/>
-	<button label="Zatrzymaj" name="record_stop_btn"/>
 	<text name="voice_morphing_link">
 		[[URL] Subskrybuj teraz]
 	</text>

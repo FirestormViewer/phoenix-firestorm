@@ -37,7 +37,7 @@
 	<text name="id_text">
 		ID obiektu:
 	</text>
-	<button label="Pokaż emitery" name="show_beacon_btn"/>
+	<button label="Pokaż emiter" name="show_beacon_btn"/>
 	<text name="obj_name_text">
 		Nazwa obiektu:
 	</text>
