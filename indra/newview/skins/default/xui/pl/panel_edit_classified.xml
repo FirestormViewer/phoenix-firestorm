@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Edytuj Reklamę" name="panel_edit_classified">
+<panel label="Edytuj reklamę" name="panel_edit_classified">
 	<panel.string name="location_notice">
 		(zostanie zaktualizowane po zapisaniu)
 	</panel.string>
@@ -37,11 +37,11 @@
 				<icons_combo_box.item label="Treść General" name="pg_ci"/>
 			</icons_combo_box>
 			<check_box label="Ponawiaj automatycznie co tydzień" name="auto_renew"/>
-			<text name="price_for_listing_label" value="Cena za wyświetlenie:"/>
-			<spinner name="price_for_listing" tool_tip="Cena za umieszczenie reklamy."/>
+			<text name="price_for_listing_label" value="Koszt listowania:"/>
+			<spinner name="price_for_listing" tool_tip="Koszt listowania reklamy."/>
 		</panel>
 	</scroll_container>
-	<panel label="bottom_panel" name="bottom_panel">
+	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">
 			<layout_panel name="show_on_map_btn_lp">
 				<button label="Anuluj" name="cancel_btn"/>

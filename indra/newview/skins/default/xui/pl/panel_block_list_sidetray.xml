@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-	<panel label="bottom_panel" name="blocked_buttons_panel">
+	<panel name="blocked_buttons_panel">
 		<filter_editor label="Filtruj" name="blocked_filter_input" />
 		<menu_button name="blocked_gear_btn" tool_tip="Akcje możliwe do wykonania dla wybranego Rezydenta lub obiektu" />
 		<menu_button name="view_btn" tool_tip="Opcje sortowania" />

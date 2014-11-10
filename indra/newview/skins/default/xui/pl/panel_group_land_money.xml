@@ -20,7 +20,6 @@
 	</panel.string>
 	<scroll_list name="group_parcel_list">
 		<scroll_list.columns label="Działka" name="name"/>
-		<scroll_list.columns label="Region" name="location"/>
 		<scroll_list.columns label="Typ" name="type"/>
 		<scroll_list.columns label="Obszar" name="area"/>
 		<scroll_list.columns label="Ukryte" name="hidden"/>

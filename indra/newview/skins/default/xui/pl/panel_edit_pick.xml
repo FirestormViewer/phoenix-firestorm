@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Edytuj Ulubione" name="panel_edit_pick">
+<panel label="Edytuj Miejsce" name="panel_edit_pick">
 	<panel.string name="location_notice">
 		(aktualizacja nastąpi po zapisaniu)
 	</panel.string>
 	<text name="title">
-		Edytuj Ulubione
+		Edytuj Miejsce
 	</text>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">

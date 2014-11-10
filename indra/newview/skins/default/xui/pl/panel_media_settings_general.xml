@@ -4,7 +4,7 @@
 		Strona domowa:
 	</text>
 	<text name="home_fails_whitelist_label">
-		(ta strona nie przeszła przez filtr Białej Listy)
+		(Ta strona nie przeszła przez filtr białej listy)
 	</text>
 	<line_editor name="home_url" tool_tip="Strona domowa dla źródła mediów"/>
 	<text name="preview_label">
