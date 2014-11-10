@@ -190,7 +190,7 @@ void FSPanelRadar::updateButtons()
 		is_friend = LLAvatarTracker::instance().getBuddyInfo(selected_id) != NULL;
 	}
 	mAddFriendButton->setEnabled(!is_friend && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	mRadarGearButton->setEnabled(selected_uuids.size() > 0);
+	mRadarGearButton->setEnabled(selected_uuids.size() > 0 && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 }
 
 LLUUID FSPanelRadar::getCurrentItemID() const
