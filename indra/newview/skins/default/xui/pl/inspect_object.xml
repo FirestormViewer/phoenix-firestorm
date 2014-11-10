@@ -19,7 +19,7 @@ Właściciel [OWNER]
 	<string name="Sit">
 		Usiądź tutaj
 	</string>
-	<icon name="secure_browsing" tool_tip="Zabezpiecz przeglądanie"/>
+	<icon name="secure_browsing" tool_tip="Bezpieczne przeglądanie (Secured Browsing)"/>
 	<button label="Kup" name="buy_btn"/>
 	<button label="Zapłać" name="pay_btn"/>
 	<button label="Weź kopię" name="take_free_copy_btn"/>

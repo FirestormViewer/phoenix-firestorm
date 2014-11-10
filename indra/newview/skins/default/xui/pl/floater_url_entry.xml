@@ -3,7 +3,6 @@
 	<text name="media_label">
 		URL Mediów:
 	</text>
-	<button label="OK" name="ok_btn" />
 	<button label="Anuluj" name="cancel_btn" />
 	<button label="Wyczyść" name="clear_btn" />
 	<text name="loading_label">

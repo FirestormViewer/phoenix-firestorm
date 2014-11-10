@@ -49,7 +49,7 @@
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			Strumieniowe w czasie rzeczywistym
+			Strumień w czasie rzeczywistym
 		</label>
 	</scheme>
 	<mimetype name="blank">
@@ -80,11 +80,6 @@
 	<mimetype name="video/vnd.secondlife.qt.legacy">
 		<label name="vnd.secondlife.qt.legacy_label">
 			Film (QuickTime)
-		</label>
-	</mimetype>
-	<mimetype name="application/javascript">
-		<label name="application/javascript_label">
-			Javascript
 		</label>
 	</mimetype>
 	<mimetype name="application/ogg">
@@ -149,12 +144,12 @@
 	</mimetype>
 	<mimetype name="image/jpeg">
 		<label name="image/jpeg_label">
-			Image (JPEG)
+			Obraz (JPEG)
 		</label>
 	</mimetype>
 	<mimetype name="image/png">
 		<label name="image/png_label">
-			Image (PNG)
+			Obraz (PNG)
 		</label>
 	</mimetype>
 	<mimetype name="image/svg+xml">
