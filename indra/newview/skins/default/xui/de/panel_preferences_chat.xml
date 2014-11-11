@@ -27,6 +27,7 @@
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
+			<check_box label="STRG, UMSCHALT und ALT zum Rufen, Flüstern oder OOC verwenden" name="FSUseCtrlAltShiftForChatTypes"/>
 			<check_box label="Systemmeldungen in Klammern einschließen" name="FSIMSystemMessageBrackets"/>
 			<check_box label="Im Chatverlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
 			<check_box label="Namen in direkten IMs anzeigen" name="IMShowNamesForP2PConv"/>
