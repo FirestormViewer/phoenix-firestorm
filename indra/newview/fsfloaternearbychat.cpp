@@ -681,7 +681,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	
-	if (KEY_RETURN == key)
+	if (KEY_RETURN == key && gSavedSettings.getBOOL("FSUseCtrlAltShiftForChatTypes"))
 	{
 		if (mask == MASK_CONTROL)
 		{

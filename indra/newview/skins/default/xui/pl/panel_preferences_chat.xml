@@ -26,6 +26,7 @@
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
 			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
+			<check_box name="FSUseCtrlAltShiftForChatTypes" label="Używaj klawiszy CTRL, SHIFT i ALT, aby zmieniać typ wiadomości na krzyk, szept lub OOC"/>
 			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach"/>
 			<check_box name="FSChatHistoryShowYou" label="Pokazuj &quot;Ty&quot; w logu czatu zamiast swojego imienia" />
 			<check_box name="IMShowNamesForP2PConv" label="Pokazuj imiona w bezpośrednich wiadomościach IM" />
