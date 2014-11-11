@@ -3717,19 +3717,22 @@ bool LLAppViewer::initWindow()
 	LL_INFOS("AppInit") << "gViewerwindow created." << LL_ENDL;
 
 	// Need to load feature table before cheking to start watchdog.
-	bool use_watchdog = false;
-	int watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
-	if (watchdog_enabled_setting == -1)
-	{
-		use_watchdog = !LLFeatureManager::getInstance()->isFeatureAvailable("WatchdogDisabled");
-	}
-	else
-	{
-		// The user has explicitly set this setting; always use that value.
-		use_watchdog = bool(watchdog_enabled_setting);
-	}
+	// <FS:Ansariel> Fix Watchdog settings/feature table mess
+	//bool use_watchdog = false;
+	//int watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
+	//if (watchdog_enabled_setting == -1)
+	//{
+	//	use_watchdog = !LLFeatureManager::getInstance()->isFeatureAvailable("WatchdogDisabled");
+	//}
+	//else
+	//{
+	//	// The user has explicitly set this setting; always use that value.
+	//	use_watchdog = bool(watchdog_enabled_setting);
+	//}
 
-	if (use_watchdog)
+	//if (use_watchdog)
+	if (gSavedSettings.getBOOL("WatchdogEnabled"))
+	// </FS:Ansariel>
 	{
 		LLWatchdog::getInstance()->init(watchdog_killer_callback);
 	}
