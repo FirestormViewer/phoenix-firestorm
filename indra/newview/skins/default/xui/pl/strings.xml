@@ -1065,15 +1065,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="UnknownScriptPermission">
 		(nieznane)!
 	</string>
-	<string name="SIM_ACCESS_PG">
-		General
-	</string>
-	<string name="SIM_ACCESS_MATURE">
-		Moderate
-	</string>
-	<string name="SIM_ACCESS_ADULT">
-		Adult
-	</string>
 	<string name="SIM_ACCESS_DOWN">
 		Niedostępny
 	</string>

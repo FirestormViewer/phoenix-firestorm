@@ -14,7 +14,6 @@
 			<check_box name="gesture_audio_play_btn" tool_tip="Zaznacz, aby słyszeć dźwięki gestów" label="Odtwarzaj dźwięki gestów"/>
 			<slider label="Muz. strumieniowa" name="Music Volume"/>
 			<check_box label="Włączona" name="enable_music"/>
-			<slider label="Media" name="Media Volume"/>
 			<check_box label="Włączone" name="enable_media"/>
 			<slider label="Rozmowy głosowe" name="Voice Volume"/>
 			<check_box label="Włączone" name="enable_voice_check_volume"/>

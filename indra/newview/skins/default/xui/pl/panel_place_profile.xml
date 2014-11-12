@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="place_profile">
-	<string name="on" value="Włącz"/>
-	<string name="off" value="Wyłącz"/>
+	<string name="on" value="Włączone"/>
+	<string name="off" value="Wyłączone"/>
 	<string name="anyone" value="Każdy"/>
 	<string name="available" value="dostępny"/>
 	<string name="allocated" value="przydzielony"/>
@@ -48,21 +48,13 @@
 				<accordion_tab name="parcel_characteristics_tab" title="Działka">
 					<panel name="parcel_characteristics_panel">
 						<text name="rating_label" value="Rodzaj:"/>
-						<text name="rating_value" value="nieznany"/>
 						<text name="voice_label" value="Kom. głosowa:"/>
-						<text name="voice_value" value="Włączona"/>
 						<text name="fly_label" value="Latanie:"/>
-						<text name="fly_value" value="Włączone"/>
 						<text name="push_label" value="Popchnięcia:"/>
-						<text name="push_value" value="Wyłączone"/>
 						<text name="build_label" value="Budowanie:"/>
-						<text name="build_value" value="Włączone"/>
 						<text name="scripts_label" value="Skrypty:"/>
-						<text name="scripts_value" value="Włączone"/>
 						<text name="damage_label" value="Uszkodzenia:"/>
-						<text name="damage_value" value="Wyłączone"/>
 						<text name="see_avatars_label" value="Inne awatary:"/>
-						<text name="see_avatars_value" value="Wyłączone"/>
 						<button label="O działce" name="about_land_btn"/>
 					</panel>
 				</accordion_tab>
@@ -70,7 +62,6 @@
 					<panel name="region_information_panel">
 						<text name="region_type_label" value="Typ:"/>
 						<text name="region_rating_label" value="Rodzaj:"/>
-						<text name="region_rating" value="Adult"/>
 						<text name="region_owner_label" value="Właściciel:"/>
 						<text name="region_group_label" value="Grupa:"/>
 						<button label="Region/Majątek" name="region_info_btn"/>

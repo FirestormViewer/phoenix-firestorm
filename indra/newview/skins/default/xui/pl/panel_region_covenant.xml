@@ -49,14 +49,8 @@ wszystkich działkach majątku.
 	<text name="region_landtype_lbl">
 		Typ:
 	</text>
-	<text name="region_landtype_text">
-		Region Główny / Ziemia
-	</text>
 	<text name="region_maturity_lbl">
 		Rodzaj:
-	</text>
-	<text name="region_maturity_text">
-		Adult
 	</text>
 	<text name="resellable_lbl">
 		Odsprzedaż:
