@@ -70,43 +70,43 @@ void RecentAnimationList::addAnimation(const LLUUID& id, const LLUUID& playedBy)
 {
 	AnimationEntry entry;
 
-	entry.animationID=id;
-	entry.playedBy=playedBy;
-	entry.time=LLTimer::getElapsedSeconds();
+	entry.animationID = id;
+	entry.playedBy = playedBy;
+	entry.time = LLTimer::getElapsedSeconds();
 
-	AnimationExplorer* explorer=LLFloaterReg::findTypedInstance<AnimationExplorer>("animation_explorer");
+	AnimationExplorer* explorer = LLFloaterReg::findTypedInstance<AnimationExplorer>("animation_explorer");
 
 	// only remember animation when it wasn't played by ourselves or the explorer window is open,
 	// so the list doesn't get polluted
-	if(playedBy!=gAgentAvatarp->getID() || explorer!=NULL)
+	if (playedBy != gAgentAvatarp->getID() || explorer != NULL)
 	{
 		mAnimationList.push_back(entry);
 
 		// only keep a certain number of entries
-		if(mAnimationList.size()>MAX_ANIMATIONS)
+		if (mAnimationList.size() > MAX_ANIMATIONS)
 		{
 			mAnimationList.pop_front();
 		}
 	}
 
 	// if the animation explorer floater is open, send this animation over immediately
-	if(explorer)
+	if (explorer)
 	{
-		explorer->addAnimation(id,playedBy,LLTimer::getElapsedSeconds());
+		explorer->addAnimation(id, playedBy, LLTimer::getElapsedSeconds());
 	}
 }
 
 void RecentAnimationList::requestList(AnimationExplorer* explorer)
 {
-	if(explorer)
+	if (explorer)
 	{
 		// send the list of recent animations to the given animation explorer floater
-		for(std::deque<AnimationEntry>::iterator iter=mAnimationList.begin();
-			iter!=mAnimationList.end();
+		for (std::deque<AnimationEntry>::iterator iter = mAnimationList.begin();
+			iter != mAnimationList.end();
 			++iter)
 		{
-			AnimationEntry entry=*iter;
-			explorer->addAnimation(entry.animationID,entry.playedBy,entry.time);
+			AnimationEntry entry = *iter;
+			explorer->addAnimation(entry.animationID, entry.playedBy, entry.time);
 		}
 	}
 }
@@ -123,45 +123,45 @@ AnimationExplorer::AnimationExplorer(const LLSD& key)
 
 AnimationExplorer::~AnimationExplorer()
 {
-	mAnimationPreview=NULL;
+	mAnimationPreview = NULL;
 }
 
 void AnimationExplorer::startMotion(const LLUUID& motionID)
 {
-	if(!mAnimationPreview)
+	if (!mAnimationPreview)
 	{
 		return;
 	}
 
-	LLVOAvatar* avatarp=mAnimationPreview->getDummyAvatar();
+	LLVOAvatar* avatarp = mAnimationPreview->getDummyAvatar();
 
 	avatarp->deactivateAllMotions();
-	avatarp->startMotion(ANIM_AGENT_STAND,0.0f);
+	avatarp->startMotion(ANIM_AGENT_STAND, 0.0f);
 
-	if(motionID.notNull())
+	if (motionID.notNull())
 	{
-		avatarp->startMotion(motionID,0.0f);
+		avatarp->startMotion(motionID, 0.0f);
 	}
 }
 
 BOOL AnimationExplorer::postBuild()
 {
-	mAnimationScrollList=getChild<LLScrollListCtrl>("animation_list");
-	mStopButton=getChild<LLButton>("stop_btn");
-	mRevokeButton=getChild<LLButton>("revoke_btn");
-	mStopAndRevokeButton=getChild<LLButton>("stop_and_revoke_btn");
-	mNoOwnedAnimationsCheckBox=getChild<LLCheckBoxCtrl>("no_owned_animations_check");
+	mAnimationScrollList = getChild<LLScrollListCtrl>("animation_list");
+	mStopButton = getChild<LLButton>("stop_btn");
+	mRevokeButton = getChild<LLButton>("revoke_btn");
+	mStopAndRevokeButton = getChild<LLButton>("stop_and_revoke_btn");
+	mNoOwnedAnimationsCheckBox = getChild<LLCheckBoxCtrl>("no_owned_animations_check");
 
-	mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation,this));
-	mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed,this));
-	mRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onRevokePressed,this));
-	mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed,this));
-	mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled,this));
+	mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation, this));
+	mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed, this));
+	mRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onRevokePressed, this));
+	mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed, this));
+	mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
 
-	mPreviewCtrl=findChild<LLView>("animation_preview");
-	if(mPreviewCtrl)
+	mPreviewCtrl = findChild<LLView>("animation_preview");
+	if (mPreviewCtrl)
 	{
-		mAnimationPreview=new LLPreviewAnimation(
+		mAnimationPreview = new LLPreviewAnimation(
 			mPreviewCtrl->getRect().getWidth(),mPreviewCtrl->getRect().getHeight()
 		);
 		mAnimationPreview->setZoom(2.0f);
@@ -180,37 +180,37 @@ BOOL AnimationExplorer::postBuild()
 
 void AnimationExplorer::onSelectAnimation()
 {
-	LLScrollListItem* item=mAnimationScrollList->getFirstSelected();
-	if(!item)
+	LLScrollListItem* item = mAnimationScrollList->getFirstSelected();
+	if (!item)
 	{
 		return;
 	}
 
-	S32 column=mAnimationScrollList->getColumn("animation_id")->mIndex;
-	mCurrentAnimationID=item->getColumn(column)->getValue().asUUID();
+	S32 column = mAnimationScrollList->getColumn("animation_id")->mIndex;
+	mCurrentAnimationID = item->getColumn(column)->getValue().asUUID();
 
-	column=mAnimationScrollList->getColumn("played_by")->mIndex;
-	mCurrentObject=item->getColumn(column)->getValue().asUUID();
+	column = mAnimationScrollList->getColumn("played_by")->mIndex;
+	mCurrentObject = item->getColumn(column)->getValue().asUUID();
 
 	startMotion(mCurrentAnimationID);
 }
 
 void AnimationExplorer::onStopPressed()
 {
-	if(mCurrentAnimationID.notNull())
+	if (mCurrentAnimationID.notNull())
 	{
 		gAgentAvatarp->stopMotion(mCurrentAnimationID);
-		gAgent.sendAnimationRequest(mCurrentAnimationID,ANIM_REQUEST_STOP);
+		gAgent.sendAnimationRequest(mCurrentAnimationID, ANIM_REQUEST_STOP);
 	}
 }
 
 void AnimationExplorer::onRevokePressed()
 {
-	if(mCurrentObject.notNull())
+	if (mCurrentObject.notNull())
 	{
-		LLViewerObject* vo=gObjectList.findObject(mCurrentObject);
+		LLViewerObject* vo = gObjectList.findObject(mCurrentObject);
 
-		if(vo)
+		if (vo)
 		{
 			gAgentAvatarp->revokePermissionsOnObject(vo);
 		}
@@ -232,35 +232,35 @@ void AnimationExplorer::onOwnedCheckToggled()
 void AnimationExplorer::draw()
 {
 	LLFloater::draw();
-	LLRect r=mPreviewCtrl->getRect();
+	LLRect r = mPreviewCtrl->getRect();
 
-	if(mAnimationPreview)
+	if (mAnimationPreview)
 	{
 		mAnimationPreview->requestUpdate();
 
-		gGL.color3f(1.0f,1.0f,1.0f);
+		gGL.color3f(1.0f, 1.0f, 1.0f);
 		gGL.getTexUnit(0)->bind(mAnimationPreview);
 		gGL.begin(LLRender::QUADS);
 		{
-			gGL.texCoord2f(0.0f,1.0f);
-			gGL.vertex2i(r.mLeft,r.mTop);
-			gGL.texCoord2f(0.0f,0.0f);
-			gGL.vertex2i(r.mLeft,r.mBottom);
-			gGL.texCoord2f(1.0f,0.0f);
-			gGL.vertex2i(r.mRight,r.mBottom);
-			gGL.texCoord2f(1.0f,1.0f);
-			gGL.vertex2i(r.mRight,r.mTop);
+			gGL.texCoord2f(0.0f, 1.0f);
+			gGL.vertex2i(r.mLeft, r.mTop);
+			gGL.texCoord2f(0.0f, 0.0f);
+			gGL.vertex2i(r.mLeft, r.mBottom);
+			gGL.texCoord2f(1.0f, 0.0f);
+			gGL.vertex2i(r.mRight, r.mBottom);
+			gGL.texCoord2f(1.0f, 1.0f);
+			gGL.vertex2i(r.mRight, r.mTop);
 		}
 		gGL.end();
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	}
 
 	// update tiems and "Still playing" status in the list once every few seconds
-	static F64 last_update=0.0f;
-	F64 time=LLTimer::getElapsedSeconds();
-	if(time-last_update>5.0f)
+	static F64 last_update = 0.0f;
+	F64 time = LLTimer::getElapsedSeconds();
+	if (time-last_update > 5.0f)
 	{
-		last_update=time;
+		last_update = time;
 		updateList(time);
 	}
 }
@@ -276,58 +276,58 @@ void AnimationExplorer::update()
 
 void AnimationExplorer::updateList(F64 current_timestamp)
 {
-	S32 played_column=mAnimationScrollList->getColumn("played")->mIndex;
-	S32 timestamp_column=mAnimationScrollList->getColumn("timestamp")->mIndex;
-	S32 object_id_column=mAnimationScrollList->getColumn("object_id")->mIndex;
-	S32 anim_id_column=mAnimationScrollList->getColumn("animation_id")->mIndex;
+	S32 played_column = mAnimationScrollList->getColumn("played")->mIndex;
+	S32 timestamp_column = mAnimationScrollList->getColumn("timestamp")->mIndex;
+	S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
+	S32 anim_id_column = mAnimationScrollList->getColumn("animation_id")->mIndex;
 
 	// go through the full animation scroll list
-	std::vector<LLScrollListItem*> items=mAnimationScrollList->getAllData();
-	for (std::vector<LLScrollListItem*>::iterator list_iter=items.begin();list_iter!=items.end();++list_iter)
+	std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
+	for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
 	{
-		LLScrollListItem* item=*list_iter;
+		LLScrollListItem* item = *list_iter;
 
 		// get a pointer to the "Played" column text
-		LLScrollListText* played_text=(LLScrollListText*) item->getColumn(played_column);
+		LLScrollListText* played_text = (LLScrollListText*)item->getColumn(played_column);
 
 		// get the object ID from the list
-		LLUUID object_id=item->getColumn(object_id_column)->getValue().asUUID();
+		LLUUID object_id = item->getColumn(object_id_column)->getValue().asUUID();
 
 		// assume this animation is not running first
-		bool is_running=false;
+		bool is_running = false;
 
 		// go through the list of playing animations to find out if this animation played by
 		// this object is still running
-		for(LLVOAvatar::AnimSourceIterator anim_iter=gAgentAvatarp->mAnimationSources.begin();
-			anim_iter!=gAgentAvatarp->mAnimationSources.end();anim_iter++)
+		for (LLVOAvatar::AnimSourceIterator anim_iter = gAgentAvatarp->mAnimationSources.begin();
+			anim_iter != gAgentAvatarp->mAnimationSources.end(); ++anim_iter)
 		{
 			// object found
-			if(anim_iter->first==object_id)
+			if (anim_iter->first == object_id)
 			{
-				LLUUID anim_id=item->getColumn(anim_id_column)->getValue().asUUID();
+				LLUUID anim_id = item->getColumn(anim_id_column)->getValue().asUUID();
 
 				// animation found
-				if(anim_iter->second==anim_id)
+				if (anim_iter->second == anim_id)
 				{
 					// set text to "Still playing" and break out of this loop
 					played_text->setText(LLTrans::getString("animation_explorer_still_playing"));
-					is_running=true;
+					is_running = true;
 					break;
 				}
 			}
 		}
 
 		// animation was not found to be running
-		if(!is_running)
+		if (!is_running)
 		{
 			// get timestamp when this animation was started
-			F64 timestamp=item->getColumn(timestamp_column)->getValue().asReal();
+			F64 timestamp = item->getColumn(timestamp_column)->getValue().asReal();
 
 			// update text to show the number of seconds ago when this animation was started
 			LLStringUtil::format_map_t args;
-			args["SECONDS"]=llformat("%d",(S32) (current_timestamp-timestamp));
+			args["SECONDS"] = llformat("%d", (S32) (current_timestamp - timestamp));
 
-			played_text->setText(LLTrans::getString("animation_explorer_seconds_ago",args));
+			played_text->setText(LLTrans::getString("animation_explorer_seconds_ago", args));
 		}
 	}
 }
@@ -335,37 +335,37 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, F64 time)
 {
 	// don't add animations that are played by ourselves when the filter box is checked
-	if(played_by==gAgentAvatarp->getID())
+	if (played_by == gAgentAvatarp->getID())
 	{
-		if(mNoOwnedAnimationsCheckBox->getValue().asBoolean())
+		if (mNoOwnedAnimationsCheckBox->getValue().asBoolean())
 		{
 			return;
 		}
 	}
 
 	// set object name to UUID at first
-	std::string playedByName=played_by.asString();
+	std::string playedByName = played_by.asString();
 
 	// find out if the object is still in reach
-	LLViewerObject* vo=gObjectList.findObject(played_by);
-	if(vo)
+	LLViewerObject* vo = gObjectList.findObject(played_by);
+	if (vo)
 	{
 		// if it was an avatar, get the name here
-		if(vo->isAvatar())
+		if (vo->isAvatar())
 		{
-			playedByName=std::string(vo->getNVPair("FirstName")->getString())+" "+
+			playedByName = std::string(vo->getNVPair("FirstName")->getString()) + " " +
 				std::string(vo->getNVPair("LastName")->getString());
 		}
 		// not an avatar, do a lookup by UUID
 		else
 		{
 			// find out if we know the name to this UUID already
-			std::map<LLUUID,std::string>::iterator iter=mKnownIDs.find(played_by);
+			std::map<LLUUID, std::string>::iterator iter = mKnownIDs.find(played_by);
 			// if we don't know it yet, start a lookup
-			if(iter==mKnownIDs.end())
+			if (iter == mKnownIDs.end())
 			{
 				// if we are not already looking up this object's name, send a request out
-				if(std::find(mRequestedIDs.begin(),mRequestedIDs.end(),played_by)==mRequestedIDs.end())
+				if (std::find(mRequestedIDs.begin(), mRequestedIDs.end(), played_by) == mRequestedIDs.end())
 				{
 					// remember which object names we already requested
 					mRequestedIDs.push_back(played_by);
@@ -374,86 +374,86 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 					
 					msg->newMessageFast(_PREHASH_ObjectSelect);
 					msg->nextBlockFast(_PREHASH_AgentData);
-					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+					msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+					msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 					msg->nextBlockFast(_PREHASH_ObjectData);
-					msg->addU32Fast(_PREHASH_ObjectLocalID,vo->getLocalID());
+					msg->addU32Fast(_PREHASH_ObjectLocalID, vo->getLocalID());
 					msg->sendReliable(gAgentAvatarp->getRegion()->getHost());
 
 					msg->newMessageFast(_PREHASH_ObjectDeselect);
 					msg->nextBlockFast(_PREHASH_AgentData);
-					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+					msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+					msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 					msg->nextBlockFast(_PREHASH_ObjectData);
-					msg->addU32Fast(_PREHASH_ObjectLocalID,vo->getLocalID());
+					msg->addU32Fast(_PREHASH_ObjectLocalID, vo->getLocalID());
 					msg->sendReliable(gAgentAvatarp->getRegion()->getHost());
 				}
 			}
 			else
 			{
 				// we know the name already
-				playedByName=mKnownIDs[played_by];
+				playedByName = mKnownIDs[played_by];
 			}
 		}
 	}
 
 	// insert the item into the scroll list
 	LLSD item;
-	item["columns"][0]["column"]="played_by";
-	item["columns"][0]["value"]=playedByName;
-	item["columns"][1]["column"]="played";
-	item["columns"][1]["value"]=LLTrans::getString("animation_explorer_still_playing");
-	item["columns"][2]["column"]="timestamp";
-	item["columns"][2]["value"]=time;
-	item["columns"][3]["column"]="animation_id";
-	item["columns"][3]["value"]=id;
-	item["columns"][4]["column"]="object_id";
-	item["columns"][4]["value"]=played_by;
+	item["columns"][0]["column"] = "played_by";
+	item["columns"][0]["value"] = playedByName;
+	item["columns"][1]["column"] = "played";
+	item["columns"][1]["value"] = LLTrans::getString("animation_explorer_still_playing");
+	item["columns"][2]["column"] = "timestamp";
+	item["columns"][2]["value"] = time;
+	item["columns"][3]["column"] = "animation_id";
+	item["columns"][3]["value"] = id;
+	item["columns"][4]["column"] = "object_id";
+	item["columns"][4]["value"] = played_by;
 
-	mAnimationScrollList->addElement(item,ADD_TOP);
+	mAnimationScrollList->addElement(item, ADD_TOP);
 }
 
 void AnimationExplorer::requestNameCallback(LLMessageSystem* msg)
 {
 	// if we weren't looking for any IDs, ignore this callback
-	if(mRequestedIDs.empty())
+	if (mRequestedIDs.empty())
 	{
 		return;
 	}
 
 	// we might have received more than one answer in one block
-	S32 num=msg->getNumberOfBlocksFast(_PREHASH_ObjectData);
-	for (S32 index=0;index<num;index++)
+	S32 num = msg->getNumberOfBlocksFast(_PREHASH_ObjectData);
+	for (S32 index = 0; index < num; ++index)
 	{
 		LLUUID object_id;
-		msg->getUUIDFast(_PREHASH_ObjectData,_PREHASH_ObjectID,object_id,index);
+		msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id, index);
 
-		std::vector<LLUUID>::iterator iter;
-		iter=std::find(mRequestedIDs.begin(),mRequestedIDs.end(),object_id);
+		uuid_vec_t::iterator iter;
+		iter = std::find(mRequestedIDs.begin(), mRequestedIDs.end(), object_id);
 		// if this is one of the objects we were looking for, process the data
-		if(iter!=mRequestedIDs.end())
+		if (iter != mRequestedIDs.end())
 		{
 			// get the name of the object
 			std::string object_name;
-			msg->getStringFast(_PREHASH_ObjectData,_PREHASH_Name,object_name,index);
+			msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Name, object_name, index);
 
 			// remove the object from the lookup list and add it to the known names list
 			mRequestedIDs.erase(iter);
-			mKnownIDs[object_id]=object_name;
+			mKnownIDs[object_id] = object_name;
 
-			S32 object_id_column=mAnimationScrollList->getColumn("object_id")->mIndex;
-			S32 played_by_column=mAnimationScrollList->getColumn("played_by")->mIndex;
+			S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
+			S32 played_by_column = mAnimationScrollList->getColumn("played_by")->mIndex;
 
 			// find all scroll list entries with this object UUID and update the names there
-			std::vector<LLScrollListItem*> items=mAnimationScrollList->getAllData();
-			for (std::vector<LLScrollListItem*>::iterator list_iter=items.begin();list_iter!=items.end();++list_iter)
+			std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
+			for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
 			{
-				LLScrollListItem* item=*list_iter;
-				LLUUID list_object_id=item->getColumn(object_id_column)->getValue().asUUID();
+				LLScrollListItem* item = *list_iter;
+				LLUUID list_object_id = item->getColumn(object_id_column)->getValue().asUUID();
 
-				if(object_id==list_object_id)
+				if (object_id == list_object_id)
 				{
-					LLScrollListText* played_by_text=(LLScrollListText*) item->getColumn(played_by_column);
+					LLScrollListText* played_by_text = (LLScrollListText*)item->getColumn(played_by_column);
 					played_by_text->setText(object_name);
 				}
 			}
