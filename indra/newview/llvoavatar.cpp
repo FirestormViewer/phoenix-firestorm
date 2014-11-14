@@ -3446,6 +3446,13 @@ bool LLVOAvatar::isVisuallyMuted()
 {
 	bool muted = false;
 
+	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
+	if (!isSelf() && LLMuteList::instance().isMuted(getID()))
+	{
+		return true;
+	}
+	// </FS:Ansariel>
+
 	if (!isSelf())
 	{
 		static LLCachedControl<U32> render_auto_mute_functions(gSavedSettings, "RenderAutoMuteFunctions", 0);
@@ -3485,7 +3492,7 @@ bool LLVOAvatar::isVisuallyMuted()
 
 					U32 max_cost = (U32) (max_render_cost*(LLVOAvatar::sLODFactor+0.5));
 
-					muted = LLMuteList::getInstance()->isMuted(getID()) ||
+					muted = /*LLMuteList::getInstance()->isMuted(getID()) ||*/ // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
 						(mAttachmentGeometryBytes > max_attachment_bytes && max_attachment_bytes > 0) ||
 						(mAttachmentSurfaceArea > max_attachment_area && max_attachment_area > 0.f) ||
 						(mVisualComplexity > max_cost && max_render_cost > 0);
