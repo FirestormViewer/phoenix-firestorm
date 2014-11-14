@@ -256,6 +256,14 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 			bar_index < end_index; 
 			++bar_index)
 		{
+			// <FS:Ansariel> FIRE-14600: mBars might be null here
+			if (!row.mBars)
+			{
+				LL_WARNS() << "Skipping null row bars" << LL_ENDL;
+				continue;
+			}
+			// </FS:Ansariel>
+
 			TimerBar& bar = row.mBars[bar_index];
 			if (bar.mSelfStart > mouse_time_offset)
 			{
