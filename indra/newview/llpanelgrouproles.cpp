@@ -1871,7 +1871,7 @@ void LLPanelGroupMembersSubTab::onExportMembersToXML()
 	LLAPRFile::tFiletype* file = outfile.getFileHandle();
 	if (!file) return;
 	
-	apr_file_printf(file, "Group membership record for %s", gdatap->mName.c_str());
+	apr_file_printf(file, "Group membership record for %s (avatar key, avatar name, last online, land contribution)", gdatap->mName.c_str());
 	
 	LLSD memberlist;
 	for (LLGroupMgrGroupData::member_list_t::const_iterator member_itr = gdatap->mMembers.begin();
@@ -1883,10 +1883,11 @@ void LLPanelGroupMembersSubTab::onExportMembersToXML()
 		/// When the group membership is fully loaded, this works fine as is.
 		LLAvatarName av_name;
 		LLAvatarNameCache::get(member_itr->first, &av_name);
-		apr_file_printf(file, "\n%s,%s,%s",
+		apr_file_printf(file, "\n%s,%s,%s,%s",
 						member_itr->first.asString().c_str(),
 						av_name.getCompleteName().c_str(),
-						member_itr->second->getOnlineStatus().c_str());
+						member_itr->second->getOnlineStatus().c_str(),
+						llformat("%d", member_itr->second->getContribution()).c_str());
 	}
 	apr_file_printf(file, "\n");
 }
