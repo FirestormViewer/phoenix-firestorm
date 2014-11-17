@@ -197,14 +197,6 @@
              height="16"
              width="400" />
             <check_box
-             control_name="FSUseCtrlAltShiftForChatTypes"
-             name="FSUseCtrlAltShiftForChatTypes"
-             label="Use CTRL, SHIFT and ALT keys to change message type into shout, whisper or OOC"
-             layout="topleft"
-             top_pad="1"
-             height="16"
-             width="400" />
-            <check_box
              control_name="FSIMSystemMessageBrackets"
              name="FSIMSystemMessageBrackets"
              label="Wrap system chat messages in brackets"
@@ -1937,6 +1929,44 @@
      commit_callback.function="Pref.TranslationSettings"
      label="Translation...">
     </button>
+    <text
+     top="45"
+     left="20"
+     height="14"
+     width="400"
+     name="textUseKeyboardShortcuts"
+     follows="left|top"
+     layout="topleft">
+          Use Keyboard Shortcuts:
+    </text>
+    <check_box
+     control_name="FSUseCtrlShout"
+     name="FSUseCtrlShout"
+     label="Ctrl+Enter (Shout)"
+     layout="topleft"
+     top_pad="5"
+     left_delta="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Ctrl+Enter to Shout in Nearby Chat."
+     width="155" />
+    <check_box
+     control_name="FSUseShiftWhisper"
+     name="FSUseShiftWhisper"
+     label="Shift+Enter (Whisper)"
+     layout="topleft"
+     left_pad="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Shift+Enter to Whisper in Nearby Chat"
+     width="170" />
+    <check_box
+     control_name="FSUseAltOOC"
+     name="FSUseAltOOC"
+     label="Alt+Enter ((OOC))"
+     layout="topleft"
+     left_pad="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Alt+Enter to send ((OOC)) messages to Nearby Chat."
+     width="110" />
   </panel>
 </tab_container>
 </panel>

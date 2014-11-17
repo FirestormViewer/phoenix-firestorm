@@ -681,23 +681,23 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	
-	if (KEY_RETURN == key && gSavedSettings.getBOOL("FSUseCtrlAltShiftForChatTypes"))
+	if (KEY_RETURN == key)
 	{
-		if (mask == MASK_CONTROL)
+		if (mask == MASK_CONTROL && gSavedSettings.getBOOL("FSUseCtrlShout"))
 		{
 			// shout
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
 			handled = TRUE;
 		}
-		else if (mask == MASK_SHIFT)
+		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
 			handled = TRUE;
 		}
-		else if (mask == MASK_ALT)
+		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			mInputEditor->updateHistory();
