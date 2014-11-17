@@ -498,9 +498,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>862b9244ed8a27bec16b62883fe3580a</string>
+              <string>a3ff4b324c8f15ac38fae60489febac2</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-fmodex-private/rev/288122/arch/Darwin/installer/fmodex-4.44.31-darwin-20140314.tar.bz2</string>
+              <string>file:///opt/catznip/fmodex-4.44.35-darwin-20140529.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -510,9 +510,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>180f4d703deec104469e6a9044243110</string>
+              <string>437b748372b6869428f0e3aa43081d92</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-fmodex-private/rev/288122/arch/Linux/installer/fmodex-4.44.31-linux-20140315.tar.bz2</string>
+              <string>file:///opt/catznip/fmodex-4.44.35-linux-20140529.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -522,9 +522,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6c859cd17fb8c9cdd96b188c2a2c2838</string>
+              <string>d9a1e3cd52c80466b636c92fe312852c</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/3p-fmodex-private/rev/288122/arch/CYGWIN/installer/fmodex-4.44.31-windows-20140314.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.35-windows-20140529.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1700,9 +1700,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ca5765af55f798724d601720afdf6953</string>
+              <string>2fbd3c2523c45923245b55551fae5e53</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/openjpeg-1.4-windows-20110302.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.4-windows-20110622.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2565,7 +2565,7 @@
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DUSE_KDU=FALSE</string>
                 </array>
               </map>
@@ -2652,7 +2652,7 @@
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                 </array>
@@ -2738,7 +2738,7 @@
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 10"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                 </array>
