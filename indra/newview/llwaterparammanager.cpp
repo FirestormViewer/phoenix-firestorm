@@ -144,7 +144,10 @@ void LLWaterParamManager::savePreset(const std::string & name)
 
 	// make an empty llsd
 	LLSD paramsData(LLSD::emptyMap());
-	std::string pathName(getUserDir() + LLURI::escape(name) + ".xml");
+	// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+	//std::string pathName(getUserDir() + LLURI::escape(name) + ".xml");
+	std::string pathName(getUserDir() + escapeString(name) + ".xml");
+	// </FS:Ansariel>
 
 	// fill it with LLSD windlight params
 	paramsData = mParamList[name].getAll();
@@ -348,7 +351,10 @@ bool LLWaterParamManager::removeParamSet(const std::string& name, bool delete_fr
 	// remove from file system if requested
 	if (delete_from_disk)
 	{
-		if (gDirUtilp->deleteFilesInDir(getUserDir(), LLURI::escape(name) + ".xml") < 1)
+		// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+		//if (gDirUtilp->deleteFilesInDir(getUserDir(), LLURI::escape(name) + ".xml") < 1)
+		if (gDirUtilp->deleteFilesInDir(getUserDir(), escapeString(name) + ".xml") < 1)
+		// </FS:Ansariel>
 		{
 			LL_WARNS("WindLight") << "Error removing water preset " << name << " from disk" << LL_ENDL;
 		}
@@ -362,7 +368,10 @@ bool LLWaterParamManager::removeParamSet(const std::string& name, bool delete_fr
 bool LLWaterParamManager::isSystemPreset(const std::string& preset_name) const
 {
 	// *TODO: file system access is excessive here.
-	return gDirUtilp->fileExists(getSysDir() + LLURI::escape(preset_name) + ".xml");
+	// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+	//return gDirUtilp->fileExists(getSysDir() + LLURI::escape(preset_name) + ".xml");
+	return gDirUtilp->fileExists(getSysDir() + escapeString(preset_name) + ".xml");
+	// </FS:Ansariel>
 }
 
 void LLWaterParamManager::getPresetNames(preset_name_list_t& presets) const
@@ -441,3 +450,20 @@ std::string LLWaterParamManager::getUserDir()
 {
 	return gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "windlight/water", "");
 }
+
+// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+// static
+std::string LLWaterParamManager::escapeString(const std::string& str)
+{
+	// Don't use LLURI::escape() because it doesn't encode '-' characters
+	// which may break handling of some system presets like "A-12AM".
+	char* curl_str = curl_escape(str.c_str(), str.size());
+	std::string escaped_str(curl_str);
+	curl_free(curl_str);
+
+	LLStringUtil::replaceString(escaped_str, "-", "%2D");
+	LLStringUtil::replaceString(escaped_str, ".", "%2E");
+
+	return escaped_str;
+}
+// </FS:Ansariel>
