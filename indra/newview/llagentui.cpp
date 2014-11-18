@@ -137,7 +137,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 		region_name = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 		if (LOCATION_FORMAT_NO_MATURITY == fmt)
 			fmt = LOCATION_FORMAT_LANDMARK;
-		else if (LOCATION_FORMAT_FULL == fmt)
+		else if (LOCATION_FORMAT_FULL == fmt || LOCATION_FORMAT_V1_STATUSBAR == fmt)
 			fmt = LOCATION_FORMAT_NO_COORDS;
 	}
 // [/RLVa:KB]
