@@ -7035,14 +7035,13 @@ bool LLObjectSelection::checkNode(LLSelectNode* nodep)
 		{
 			LL_WARNS("LLObjectSelection") << "skipping NULL node object pointer" << LL_ENDL;
 		}
+		mFailedNodesList.push_back(nodep);
 	}
 	else
 	{
 		LL_WARNS("LLObjectSelection") << "skipping NULL node" << LL_ENDL;
 	}
 
-	mFailedNodesList.push_back(nodep);
-	LL_WARNS("AddPointer") << "+++***+++ adding pointer " << (U32) nodep << LL_ENDL;
 	return false;
 }
 	// </FS:Zi>
