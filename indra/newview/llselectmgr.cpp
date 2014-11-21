@@ -7015,23 +7015,44 @@ S32 LLObjectSelection::getNumNodes()
 	return mList.size();
 }
 
+// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+bool LLObjectSelection::checkNode(LLSelectNode* nodep)
+{
+	if(nodep)
+	{
+		if(nodep->getObject())
+		{
+			if(!nodep->getObject()->isDead())
+			{
+				return true;
+			}
+			else
+			{
+				LL_WARNS("LLObjectSelection") << "skipping dead node object" << LL_ENDL;
+			}
+		}
+		else
+		{
+			LL_WARNS("LLObjectSelection") << "skipping NULL node object pointer" << LL_ENDL;
+		}
+	}
+	else
+	{
+		LL_WARNS("LLObjectSelection") << "skipping NULL node" << LL_ENDL;
+	}
+
+	mFailedNodesList.push_back(nodep);
+	LL_WARNS("AddPointer") << "+++***+++ adding pointer " << (U32) nodep << LL_ENDL;
+	return false;
+}
+	// </FS:Zi>
+
 void LLObjectSelection::addNode(LLSelectNode *nodep)
 {
 	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
 	// llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
-	if(!nodep)
+	if(!checkNode(nodep))
 	{
-		LL_WARNS("LLObjectSelection") << "skipping NULL node" << LL_ENDL;
-		return;
-	}
-	else if(!nodep->getObject())
-	{
-		LL_WARNS("LLObjectSelection") << "skipping NULL node object pointer" << LL_ENDL;
-		return;
-	}
-	else if(nodep->getObject()->isDead())
-	{
-		LL_WARNS("LLObjectSelection") << "skipping dead node object" << LL_ENDL;
 		return;
 	}
 	// </FS:Zi>
@@ -7044,19 +7065,8 @@ void LLObjectSelection::addNodeAtEnd(LLSelectNode *nodep)
 {
 	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
 	// llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
-	if(!nodep)
+	if(!checkNode(nodep))
 	{
-		LL_WARNS("LLObjectSelection") << "skipping NULL node" << LL_ENDL;
-		return;
-	}
-	else if(!nodep->getObject())
-	{
-		LL_WARNS("LLObjectSelection") << "skipping NULL node object pointer" << LL_ENDL;
-		return;
-	}
-	else if(nodep->getObject()->isDead())
-	{
-		LL_WARNS("LLObjectSelection") << "skipping dead node object" << LL_ENDL;
 		return;
 	}
 	// </FS:Zi>
@@ -7088,6 +7098,11 @@ void LLObjectSelection::deleteAllNodes()
 	mList.clear();
 	mSelectNodeMap.clear();
 	mPrimaryObject = NULL;
+
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	std::for_each(mFailedNodesList.begin(),mFailedNodesList.end(),DeletePointer());
+	mFailedNodesList.clear();
+	// </FS:Zi>
 }
 
 LLSelectNode* LLObjectSelection::findNode(LLViewerObject* objectp)

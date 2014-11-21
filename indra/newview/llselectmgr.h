@@ -380,6 +380,11 @@ private:
 	LLPointer<LLViewerObject> mPrimaryObject;
 	std::map<LLPointer<LLViewerObject>, LLSelectNode*> mSelectNodeMap;
 	ESelectType mSelectType;
+
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	list_t mFailedNodesList;
+	bool checkNode(LLSelectNode* nodep);
+	// </FS:Zi>
 };
 
 typedef LLSafeHandle<LLObjectSelection> LLObjectSelectionHandle;
