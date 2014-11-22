@@ -1,5 +1,41 @@
 <llsd>
     <map>
+    <key>login.aviworlds.com:8002</key>
+      <map>
+        <key>LastModified</key>
+        <date>2014-11-22T20:36:26.43Z</date>
+        <key>about</key>
+        <string>http://aviworlds.com</string>
+        <key>gatekeeper</key>
+        <string>login.aviworlds.com:8002</string>
+        <key>gridname</key>
+        <string>AviWorlds</string>
+        <key>gridnick</key>
+        <string>AviWorlds</string>
+        <key>helperuri</key>
+        <string>http://login.aviworlds.com/backend/components/com_opensim/</string>
+        <key>login_identifier_types</key>
+        <array>
+          <string>agent</string>
+          <string>account</string>
+        </array>
+        <key>loginpage</key>
+        <string>http://login.aviworlds.com/splash/</string>
+        <key>loginuri</key>
+        <array>
+          <string>http://login.aviworlds.com:8002/</string>
+        </array>
+        <key>name</key>
+        <string>login.aviworlds.com:8002</string>
+        <key>password</key>
+        <string>http://login.aviworlds.com:8002/wifi/forgotpassword</string>
+        <key>platform</key>
+        <string>OpenSim</string>
+        <key>register</key>
+        <string>http://login.aviworlds.com:8002/wifi/user/account</string>
+        <key>slurl_base</key>
+        <string>hop://login.aviworlds.com:8002/</string>
+      </map>
     <key>craft-world.org:8002</key>
         <map>
         <key>LastModified</key>
