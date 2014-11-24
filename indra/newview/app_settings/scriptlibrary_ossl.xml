@@ -12,6 +12,7 @@
 		<integer_constant name="OS_ATTACH_MSG_OBJECT_CREATOR" desc="Send only to those have the same CreatorID with host object CreatorID" />
 		<integer_constant name="OS_ATTACH_MSG_SCRIPT_CREATOR" desc="Send only to those have the same CreatorID with sender script CreatorID" />
 		
+		<integer_constant name="CHANGED_REGION_RESTART" desc="Parameter of changed event handler used to indicate the region has been restarted." />
 		<integer_constant name="CHANGED_ANIMATION" desc="The set of animations playing on the avatar to whom this object is attached has been changed." />
 		<integer_constant name="LIST_STAT_HARMONIC_MEAN" desc="Returns the harmonic mean of a list of numbers, Value 100." />
 		<integer_constant name="CAMERA_FOCUS_OFFSET_X" desc="Adjusts the camera focus x position relative to the target. (float)" />
