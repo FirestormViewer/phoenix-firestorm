@@ -41,9 +41,7 @@ Typical LL autobuild configure options should also work, as long as they don't d
 already doing.
 
 Logs:
-
         Look for logs in build-linux-i686/logs
 
 Output:
-
         Look for output in build-linux-i686/newview/Release
