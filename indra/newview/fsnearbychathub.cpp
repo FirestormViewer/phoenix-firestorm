@@ -480,7 +480,10 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 			utf8text = applyMuPose(utf8text);
 
 			// discard returned "found" boolean
-			LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text);
+			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
+			{
+				utf8_revised_text = utf8text;
+			}
 		}
 		else
 		{
