@@ -1010,6 +1010,7 @@ void LLTaskTextureBridge::openItem()
 	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(mUUID), TAKE_FOCUS_YES);
 	if(preview)
 	{
+		preview->setAuxItem(findItem());
 		preview->setObjectID(mPanel->getTaskUUID());
 	}
 }
