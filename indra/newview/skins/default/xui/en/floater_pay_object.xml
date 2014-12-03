@@ -18,6 +18,7 @@
         Pay Resident
     </string>
     <text
+     icon_positioning="left"
      follows="left|top"
      height="16"
      layout="topleft"
