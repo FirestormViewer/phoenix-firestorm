@@ -2793,12 +2793,14 @@ void derenderObject(bool permanent)
 			{
 				std::string entry_name = "";
 				std::string region_name;
+				LLAssetType::EType asset_type;
 
 				if (objp->isAvatar())
 				{
 					LLNameValue* firstname = objp->getNVPair("FirstName");
 					LLNameValue* lastname = objp->getNVPair("LastName");
-					entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
+					entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
+					asset_type = LLAssetType::AT_PERSON;
 				}
 				else
 				{
@@ -2815,9 +2817,10 @@ void derenderObject(bool permanent)
 					{
 						region_name = region->getName();
 					}
+					asset_type = LLAssetType::AT_OBJECT;
 				}
 			
-				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
+				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type);
 			}
 
 			select_mgr->deselectObjectOnly(objp);
