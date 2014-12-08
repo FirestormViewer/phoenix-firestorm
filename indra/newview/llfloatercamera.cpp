@@ -661,15 +661,18 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 // 		if (camera_floater)
 // 			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
 // 	}
-	else if ("object_view" == name && camera_floater)
+	else if ("object_view" == name)
 	{
-		if (camera_floater->mUseFlatUI)
+		if (camera_floater)
 		{
-			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
-		}
-		else
-		{
-			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			if (camera_floater->mUseFlatUI)
+			{
+				camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			}
+			else
+			{
+				camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			}
 		}
 	}
 // </AW: Flat cam floater>
@@ -699,15 +702,18 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 	{
 		gAgentCamera.changeCameraToMouselook();
 	}
-	else if ("object_view" == name && camera_floater)
+	else if ("object_view" == name)
 	{
-		if (camera_floater->mUseFlatUI)
+		if (camera_floater)
 		{
-			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
-		}
-		else
-		{
-			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			if (camera_floater->mUseFlatUI)
+			{
+				camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			}
+			else
+			{
+				camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+			}
 		}
 	}
 	else
