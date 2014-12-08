@@ -470,7 +470,7 @@ bool NACLAntiSpamRegistry::checkNewlineFlood(EAntispamQueue queue, const LLUUID&
 		}
 		return false;
 	}
-	return false;
+	return true;
 }
 
 bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source)
