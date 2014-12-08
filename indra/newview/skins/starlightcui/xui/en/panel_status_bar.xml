@@ -228,7 +228,7 @@
 		 clear_button_visible="true"
 		 follows="left|top"
 		 height="18"
-		 label="Search Menu"
+		 label="Search Menus"
 		 layout="topleft"
 		 left="0"
 		 max_length_bytes="255"
