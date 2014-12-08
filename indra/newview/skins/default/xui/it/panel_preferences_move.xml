@@ -13,7 +13,18 @@
 			</text>
 			<check_box label="Costruire/Modificare" name="edit_camera_movement" tool_tip="Utilizza il posizionamento automatico della fotocamera entrando o uscendo dalla modalità modifica"/>
 			<check_box label="Aspetto fisico" name="appearance_camera_movement" tool_tip="Utilizza il posizionamento automatico della camera in modalità modifica"/>
-			<check_box label="Aggiungi luminosità" name="EditAppearanceLighting" tool_tip="Quando si entra in Apparence verrà aggiunta una luce sull'avatar (Viewer 1.x style)"/>
+			<check_box label="Aggiungi luminosità" name="EditAppearanceLighting" tool_tip="Quando si entra in Apparence verrà aggiunta una luce sull'avatar (Viewer 1.x style)"/>			
+			<check_box label="Cliccando il tuo avatar mantiene la posizione della telecamera" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
+			<check_box label="Ripristina posizione della telecamera dopo teleport (Dentro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>
+			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell'avvicinarsi ad un'oggetto"/>
+			<check_box label="Gira l'avatar dove puntava la cam quando la resetti" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della fotocamera e ruota l'avatar, se la visuale viene resettata (quando premi ESC)."/>
+			<check_box label="Consente alla cam di spostarsi senza bloccarsi sui prim" name="ignorecameraconstraints" tool_tip="Ignora la 'spinta', che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(Richiesto riavvio)
+			</text>
+		</panel>
+		<!--Mouselook-->
+		<panel name="tab-mouselook" label="Mouselook">
 			<check_box label="Mostra in modalità Mouselook" name="first_person_avatar_visible"/>
 			<check_box label="Mostra istruzioni Mouselook" name="mouselook_instructions_visible" tool_tip="Quando si entra in Mouselook verranno visualizzate le istruzioni come nel viewer 1.x"/>
 			<text name="Mouse Sensitivity" width="170">
@@ -32,6 +43,7 @@
 			<check_box label="Volare/Atterrare tenendo premuto Pag su/Pag giù" name="automatic_fly"/>
 			<check_box label="Riprodurre effetto sonoro quando si effettua il Teleport" name="PlayTeleportSound"/>
 			<check_box label="Vola sempre dopo il teleport" name="FSFlyAfterTeleport"/>
+			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
 			<text name="single_click_action_lbl">
 				Click singolo a terra:
 			</text>
@@ -49,19 +61,8 @@
 			</combo_box>
 			<button label="Altri dispositivi" name="joystick_setup_button"/>
 		</panel>
-		<!--Firestorm-->
-		<panel name="tab-firestorm">
-			<text name="camera_options_label">
-				Opzioni camera:
-			</text>
-			<check_box label="Cliccando il tuo avatar mantiene la posizione della telecamera" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
-			<check_box label="Ripristina posizione della telecamera dopo teleport (Dentro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>
-			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell'avvicinarsi ad un'oggetto"/>
-			<check_box label="Gira l'avatar dove puntava la cam quando la resetti" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della fotocamera e ruota l'avatar, se la visuale viene resettata (quando premi ESC)."/>
-			<check_box label="Consente alla cam di spostarsi senza bloccarsi sui prim" name="ignorecameraconstraints" tool_tip="Ignora la 'spinta', che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
-			<text name="ignorecameraconstraints_requires_restart">
-				(Richiesto riavvio)
-			</text>
+		<!--Maps-->
+		<panel label="World Map &amp; Minimappa" name="tab-maps">
 			<check_box label="Abilita rotazione Minimappa" name="minimaprotate" tool_tip="Rotazione della minimappa quando fate girare il vostro avatar"/>
 			<check_box name="MiniMapChatRing" label="Visualizza il raggio della local chat sulla minimappa"/>
 			<text name="netmap_double_click_action_lbl" width="170">
@@ -72,7 +73,6 @@
 				<combo_box.item label="Apri la mappa" name="1"/>
 				<combo_box.item label="Teleport al punto cliccato" name="2"/>
 			</combo_box>
-			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
 			<check_box label="Filtra i Landmarks sulla World Map" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra i Lanmarks doppi quando si effettua la visualizzazione del posto dalla World Map"/>
 			<check_box label="Mostra ulteriori informazioni sulla regione nella Mappa del mondo" name="FSAdvancedWorldmapRegionInfo" tool_tip="Mostra informazioni aggiuntive sulla Mappa del mondo(Numero degli avatar in sim e livello di accesso)."/>
 		</panel>

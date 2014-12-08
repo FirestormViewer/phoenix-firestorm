@@ -14,10 +14,24 @@
 			<check_box label="Construir/Editar" name="edit_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de objetos"/>
 			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario" width="115"/>
 			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
+			<check_box label="Hacer clic en mi avatar mantiene la posición de la cámara" name="clickonavatarkeepscamera" tool_tip="Normalmente, hacer clic en tu avatar restablece la posición de la cámara. Esta configuración evita ese comportamiento."/>
+			<check_box label="Restablecer posición de la cámara al mover el avatar" name="FSResetCameraOnMovement"/>
+			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
+			<check_box label="Desactivar la distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva el límite de cercanía de la cámara a un objeto o avatar."/>
+			<check_box label="Orientar avatar hacia la dirección de la cámara al restablecer la vista" name="resetviewturnsavatar" tool_tip="Esta opción mantiene la dirección de la cámara y orienta al avatar cuando se restablece la vista (al pulsar la tecla ESC)."/>
+			<check_box label="Permitir a la cámara moverse a través de objetos" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos." width="285"/>
+			<text name="ignorecameraconstraints_requires_restart" top_pad="-2" top_delta="-1">
+				(requiere reiniciar)
+			</text>
+			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Notificar los cambios de versión de simulador al cambiar de región" name="FSShowServerVersionChangeNotice" tool_tip="Muestra un aviso si la versión de simulador cambia durante un teleporte o al cruzar a otra región."/>
+			<check_box label="Mostrar canal del simulador en la barra de estado" name="FSStatusbarShowSimulatorVersion" tool_tip="Muestra el canal del simulador actual en la barra de estado estilo V1."/>
+		</panel>
+		<panel label="Vista subjetiva" name="tab-mouselook">
 			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar interfaz de usuario en vista subjetiva" name="first_person_ui_visible"/>
-			<check_box label="Activa menús contextuales en vista sujetiva" name="FSEnableRightclickMenuInMouselook" tool_tip="En modo de vista subjetiva, ALT + botón derecho del ratón abritá el menú contextual/tarta"/>
+			<check_box label="Activa menús contextuales en vista subjetiva" name="FSEnableRightclickMenuInMouselook" tool_tip="En modo de vista subjetiva, ALT + botón derecho del ratón abritá el menú contextual/tarta"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
 			<check_box label="Mostrar puntos de mira en vista subjetiva" name="ShowCrosshairs" tool_tip="Muestra los puntos de mira cuando te encuentras en vista subjetiva"/>
 			<text name="Mouse Sensitivity" width="220">
@@ -31,11 +45,12 @@
 			<text name="FSUseAzertyKeyboardLayout_requires_restart">
 				(requiere reiniciar)
 			</text>
-			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
+			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run" left_delta="-220"/>
 			<check_box label="Volar/aterrizar al mantener arriba/abajo" name="automatic_fly"/>
 			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>
 			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
 			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
+			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box label="Si movelock está activado, volver a bloquear tras cambiar de región" name="RelockMoveLockAfterRegionChange"/>
 			<text name="single_click_action_lbl">
 				Un solo clic en el terreno:
@@ -54,20 +69,7 @@
 			</combo_box>
 			<button label="Configuración del Joystick" name="joystick_setup_button" width="160"/>
 		</panel>
-		<panel label="Firestorm" name="tab-firestorm">
-			<text name="camera_options_label">
-				Opciones de cámara:
-			</text>
-			<check_box label="Hacer clic en mi avatar mantiene la posición de la cámara" name="clickonavatarkeepscamera" tool_tip="Normalmente, hacer clic en tu avatar restablece la posición de la cámara. Esta configuración evita ese comportamiento."/>
-			<check_box label="Restablecer posición de la cámara al mover el avatar" name="FSResetCameraOnMovement"/>
-			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
-			<check_box label="Desactivar la distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva el límite de cercanía de la cámara a un objeto o avatar."/>
-			<check_box label="Orientar avatar hacia la dirección de la cámara al restablecer la vista" name="resetviewturnsavatar" tool_tip="Esta opción mantiene la dirección de la cámara y orienta al avatar cuando se restablece la vista (al pulsar la tecla ESC)."/>
-			<check_box label="Permitir a la cámara moverse a través de objetos" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos." width="285"/>
-			<text name="ignorecameraconstraints_requires_restart" top_pad="-2" top_delta="-1">
-				(requiere reiniciar)
-			</text>
-			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
+		<panel label="Mapa mundial &amp; minimapa" name="tab-maps">
 			<text name="minimap_options_label">
 				Opciones del minimapa:
 			</text>
@@ -86,9 +88,6 @@
 			<check_box top_pad="5" label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
 			<check_box label="Mostrar informacion adicional de la región en el Mapa Mundial" name="FSAdvancedWorldmapRegionInfo" tool_tip="Muestra informaciones adicionales en el mapa del mundo (número de avatares y calificación de contenidos)."/>
 			<check_box top_pad="5" label="Mostrar coordenadas de la red en el mapa mundial." name="FSShowRegionGridCoordinates" tool_tip="Muestra las coordinadas de la red (en unidades de región) en el mapa mundial."/>
-			<check_box label="Notificar los cambios de versión de simulador al cambiar de región" name="FSShowServerVersionChangeNotice" tool_tip="Muestra un aviso si la versión de simulador cambia durante un teleporte o al cruzar a otra región."/>
-			<check_box label="Mostrar canal del simulador en la barra de estado" name="FSStatusbarShowSimulatorVersion" tool_tip="Muestra el canal del simulador actual en la barra de estado estilo V1."/>
-			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 		</panel>
 	</tab_container>
 </panel>

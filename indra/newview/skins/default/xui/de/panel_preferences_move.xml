@@ -15,6 +15,22 @@
 			<check_box label="Bauen/Bearbeiten" name="edit_camera_movement" tool_tip="Automatische Kamerapositionierung bei Wechsel in und aus dem Bearbeitungsmodus verwenden"/>
 			<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
 			<check_box label="Zusätzliche Beleuchtung aktivieren" name="EditAppearanceLighting" tool_tip="Aktiviert die zusätzliche Beleuchtung, wenn die Form des Avatars bearbeitet wird."/>
+			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Kameraposition nach Teleport zurücksetzen (innerhalb einer Region)" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Kameraposition bei Avatarbewegung zurücksetzen" name="FSResetCameraOnMovement"/>
+			<check_box label="Minimale Zoomdistanz der Kamera aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
+			<check_box label="Beim Zurücksetzen der Ansicht Avatar in Blickrichtung der Kamera drehen" name="resetviewturnsavatar" tool_tip="Behält die Blickrichtung der Kamera bei und dreht den Avatar, wenn die Ansicht zurückgesetzt wird (Beim Drücken von ESC)."/>
+			<check_box label="Kamerabewegung durch primitive Objekte erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann."/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(Erfordert Neustart)
+			</text>
+			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
+			<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an, auf dem die aktuelle Region läuft."/>
+		</panel>
+
+		<!--Mouselook-->
+		<panel label="Mouselook" name="tab-mouselook">
 			<check_box label="Mouselook-Funktionalität aktivieren" name="EnableMouselook" tool_tip="Aktiviert die Ego-Perspektive und -Steuerung mit der Maus."/>
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
 			<check_box label="Benutzerinterface im Mouselook anzeigen" name="first_person_ui_visible"/>
@@ -30,7 +46,7 @@
 			</text>
 			<check_box label="Umkehren" name="invert_mouse"/>
 		</panel>
-		
+
 		<!--Movement-->
 		<panel label="Bewegung" name="tab-movement">
 			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
@@ -44,6 +60,8 @@
 			<check_box label="Warten auf Vor-Sprung- und Lande-Animationen deaktivieren" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
 			<check_box label="Nach einem Teleport immer fliegen" name="FSFlyAfterTeleport"/>
+			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
+			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
 			<text name="movelock_lbl">
 				Falls Movelock in der LSL-Brücke aktiviert ist...
 			</text>
@@ -67,21 +85,8 @@
 			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
 		</panel>
 
-		<!-- Firestorm -->
-		<panel label="Firestorm" name="tab-firestorm">
-			<text name="camera_options_label">
-			   Kamera-Optionen:
-			</text>
-			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-			<check_box label="Kameraposition nach Teleport zurücksetzen (innerhalb einer Region)" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-			<check_box label="Kameraposition bei Avatarbewegung zurücksetzen" name="FSResetCameraOnMovement"/>
-			<check_box label="Minimale Zoomdistanz der Kamera aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
-			<check_box label="Beim Zurücksetzen der Ansicht Avatar in Blickrichtung der Kamera drehen" name="resetviewturnsavatar" tool_tip="Behält die Blickrichtung der Kamera bei und dreht den Avatar, wenn die Ansicht zurückgesetzt wird (Beim Drücken von ESC)."/>
-			<check_box label="Kamerabewegung durch primitive Objekte erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann."/>
-			<text name="ignorecameraconstraints_requires_restart">
-				(Erfordert Neustart)
-			</text>
-			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
+		<!-- Map & Minimap -->
+		<panel label="Weltkarte &amp; Minikarte" name="tab-maps">
 			<text name="minimap_options_label">
 			   Minikarte-Optionen:
 			</text>
@@ -101,10 +106,6 @@
 			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
 			<check_box label="Erweiterte Regionsinformationen auf der Weltkarte anzeigen" name="FSAdvancedWorldmapRegionInfo" tool_tip="Zeigt erweiterte Regionsinformationen (Anzahl Avatare und Alterseinstufung) auf der Weltkarte an."/>
 			<check_box label="Grid-Koordinaten auf der Weltkarte anzeigen" name="FSShowRegionGridCoordinates" tool_tip="Zeigt die Gridkoordinaten (mit Region als Einheit) auf der Weltkarte an."/>
-			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
-			<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an, auf dem die aktuelle Region läuft."/>
-			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
-			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
 		</panel>
 	</tab_container>
 </panel>
