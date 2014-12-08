@@ -4752,11 +4752,11 @@ AntiSpam: [SOURCE] wurde wegen Spam vom Typ [QUEUE] ([COUNT] mal in [PERIOD] Sek
 	</notification>
 
 	<notification name="AntiSpamImNewLineFloodBlocked">
-AntiSpam: [SOURCE] wurde wegen senden einer Instant Message mit mehr als [COUNT] Zeilen blockiert.
+AntiSpam: [SOURCE] wurde wegen Senden einer Instant Message mit mehr als [COUNT] Zeilen blockiert.
 	</notification>
 
 	<notification name="AntiSpamChatNewLineFloodBlocked">
-AntiSpam: [SOURCE] wurde wegen senden einer Chatnachricht mit mehr als [COUNT] Zeilen blockiert.
+AntiSpam: [SOURCE] wurde wegen Senden einer Chatnachricht mit mehr als [COUNT] Zeilen blockiert.
 	</notification>
 
 	<notification name="MeshMaxConcurrentReqTooHigh">
