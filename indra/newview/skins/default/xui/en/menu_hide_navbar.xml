@@ -65,4 +65,26 @@
              function="CheckControl"
              parameter="ShowMenuBarLocation" />
     </menu_item_check>
+    <menu_item_check
+         label="Show Simulator Version in Top Menu"
+         layout="topleft"
+         name="FSStatusbarShowSimulatorVersion">
+           <on_click
+             function="ToggleControl"
+             parameter="FSStatusbarShowSimulatorVersion" /> 
+             <on_check
+             function="CheckControl"
+             parameter="FSStatusbarShowSimulatorVersion" />
+    </menu_item_check>
+    <menu_item_check
+         label="Show Menu Search"
+         layout="topleft"
+         name="FSMenuSearch">
+           <on_click
+             function="ToggleControl"
+             parameter="FSMenuSearch" /> 
+             <on_check
+             function="CheckControl"
+             parameter="FSMenuSearch" />
+    </menu_item_check>
 </menu>

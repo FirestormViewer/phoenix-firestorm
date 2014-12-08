@@ -5,4 +5,6 @@
 	<menu_item_check label="Mini-Standortleiste anzeigen" name="ShowMiniLocationPanel"/>
 	<menu_item_check label="Suchleiste anzeigen" name="ShowSearchTopBar"/>
 	<menu_item_check label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Simulator-Version in Menüleiste anzeigen" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
 </menu>
