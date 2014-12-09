@@ -937,7 +937,10 @@ void LLComboBox::updateSelection()
 		mTextEntry->setTentative(FALSE);
 		mLastSelectedIndex = mList->getFirstSelectedIndex();
 	}
-	else if (mList->selectItemByPrefix(left_wstring, FALSE))
+	// <FS:Ansariel> Allow fulltext search in comboboxes
+	//else if (mList->selectItemByPrefix(left_wstring, FALSE))
+	else if (!LLControlGroup::getInstance("Global")->getBOOL("FSComboboxSubstringSearch") && mList->selectItemByPrefix(left_wstring, FALSE))
+	// </FS:Ansariel>
 	{
 		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
 		LLWString wtext = left_wstring + selected_item.substr(left_wstring.size(), selected_item.size());
@@ -948,6 +951,18 @@ void LLComboBox::updateSelection()
 		mHasAutocompletedText = TRUE;
 		mLastSelectedIndex = mList->getFirstSelectedIndex();
 	}
+	// <FS:Ansariel> Allow fulltext search in comboboxes
+	else if (LLControlGroup::getInstance("Global")->getBOOL("FSComboboxSubstringSearch") && mList->selectItemBySubstring(left_wstring, FALSE))
+	{
+		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
+		mTextEntry->setText(wstring_to_utf8str(left_wstring) + " (" + getSelectedItemLabel() + ")");
+		mTextEntry->setSelection(left_wstring.size(), mTextEntry->getWText().size());
+		mTextEntry->endSelection();
+		mTextEntry->setTentative(FALSE);
+		mHasAutocompletedText = TRUE;
+		mLastSelectedIndex = mList->getFirstSelectedIndex();
+	}
+	// </FS:Ansariel>
 	else // no matching items found
 	{
 		mList->deselectAllItems();
