@@ -55,7 +55,8 @@ const S32 PIE_X[] = {64, 45,  0, -45, -63, -45,   0,  45};
 const S32 PIE_Y[] = { 0, 44, 73,  44,   0, -44, -73, -44};
 
 PieMenu::PieMenu(const LLContextMenu::Params& p) :
-	LLContextMenu(p)
+	LLContextMenu(p),
+	mCurrentSegment(-1)
 {
 	LL_DEBUGS() << "PieMenu::PieMenu()" << LL_ENDL;
 	// radius, so we need this *2
@@ -110,7 +111,37 @@ void PieMenu::removeChild(LLView* child)
 
 BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 {
-	// do nothing
+	// initialize pie scale factor for popup effect
+	F32 factor = getScaleFactor();
+
+	// initially, the current segment is marked as invalid
+	mCurrentSegment = -1;
+
+	// remember to take the UI scaling into account
+	LLVector2 scale = gViewerWindow->getDisplayScale();
+	// move mouse coordinates to be relative to the pie center
+	LLVector2 mouseVector(x - PIE_OUTER_SIZE / scale.mV[VX], y - PIE_OUTER_SIZE / scale.mV[VY]);
+
+	// get the distance from the center point
+	F32 distance = mouseVector.length();
+
+	// check if our mouse pointer is within the pie slice area
+	if (distance > PIE_INNER_SIZE && (distance < (PIE_OUTER_SIZE * factor) || mFirstClick))
+	{
+		// get the angle of the mouse pointer from the center in radians
+		F32 angle = acos(mouseVector.mV[VX] / distance);
+		// if the mouse is below the middle of the pie, reverse the angle
+		if (mouseVector.mV[VY] < 0)
+		{
+			angle = F_PI * 2 - angle;
+		}
+		// rotate the angle slightly so the slices' centers are aligned correctly
+		angle += F_PI / 8;
+
+		// calculate slice number from the angle
+		mCurrentSegment = (S32) (8.f * angle / (F_PI * 2.f)) % 8;
+	}
+
 	return TRUE;
 }
 
@@ -121,6 +152,8 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	{
 		return;
 	}
+
+	mCurrentSegment = -1;
 
 	// play a sound
 	make_ui_sound("UISndPieMenuAppear");
@@ -201,6 +234,7 @@ void PieMenu::hide()
 
 	LL_DEBUGS() << "Clearing selections" << LL_ENDL;
 
+	mCurrentSegment = -1;
 	mSlices = &mMySlices;
 #if PIE_POPUP_EFFECT
 	// safety in case the timer was still running
@@ -229,32 +263,7 @@ void PieMenu::draw()
 	LLRect r = getRect();
 
 	// initialize pie scale factor for popup effect
-	F32 factor = 1.f;
-
-#if PIE_POPUP_EFFECT
-	// set the popup size if this was the first click on the menu
-	if (mFirstClick)
-	{
-		factor = PIE_POPUP_FACTOR;
-	}
-	// otherwise check if the popup timer is still running
-	else if (mPopupTimer.getStarted())
-	{
-		// if the timer ran past the popup time, stop the timer and set the size to 1.0
-		F32 elapsedTime = mPopupTimer.getElapsedTimeF32();
-		if (elapsedTime > PIE_POPUP_TIME)
-		{
-			factor = 1.f;
-			mPopupTimer.stop();
-		}
-		// otherwise calculate the size factor to make the menu shrink over time
-		else
-		{
-			factor = PIE_POPUP_FACTOR - (PIE_POPUP_FACTOR - 1.f) * elapsedTime / PIE_POPUP_TIME;
-		}
-//		setRect(r);  // obsolete?
-	}
-#endif
+	F32 factor = getScaleFactor();
 
 #if PIE_DRAW_BOUNDING_BOX
 	// draw a bounding box around the menu for debugging purposes
@@ -283,36 +292,6 @@ void PieMenu::draw()
 	if (mFirstClick)
 	{
 		borderColor %= 0.f;
-	}
-
-	// initially, the current segment is marked as invalid
-	S32 currentSegment = -1;
-
-	// get the current mouse pointer position local to the pie
-	S32 x, y;
-	LLUI::getMousePositionLocal(this, &x, &y);
-	// remember to take the UI scaling into account
-	LLVector2 scale = gViewerWindow->getDisplayScale();
-	// move mouse coordinates to be relative to the pie center
-	LLVector2 mouseVector(x - PIE_OUTER_SIZE / scale.mV[VX], y - PIE_OUTER_SIZE / scale.mV[VY]);
-
-	// get the distance from the center point
-	F32 distance = mouseVector.length();
-	// check if our mouse pointer is within the pie slice area
-	if (distance > PIE_INNER_SIZE && (distance < (PIE_OUTER_SIZE * factor) || mFirstClick))
-	{
-		// get the angle of the mouse pointer from the center in radians
-		F32 angle = acos(mouseVector.mV[VX] / distance);
-		// if the mouse is below the middle of the pie, reverse the angle
-		if (mouseVector.mV[VY] < 0)
-		{
-			angle = F_PI * 2 - angle;
-		}
-		// rotate the angle slightly so the slices' centers are aligned correctly
-		angle += F_PI / 8;
-
-		// calculate slice number from the angle
-		currentSegment = (S32) (8.f * angle / (F_PI * 2.f)) % 8;
 	}
 
 	// move origin point to the center of our rectangle
@@ -427,7 +406,7 @@ void PieMenu::draw()
 			}
 
 			// if it's a slice or submenu, the mouse pointer is over the same segment as our counter and the item is enabled
-			if ((currentSlice || currentSubmenu) && (currentSegment==num) && item->getEnabled())
+			if ((currentSlice || currentSubmenu) && (mCurrentSegment == num) && item->getEnabled())
 			{
 				// memorize the currently highlighted slice for later
 				mSlice = item;
@@ -575,4 +554,37 @@ BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 
 	// give control back to the system
 	return LLView::handleMouseUp(x, y, mask);
+}
+
+F32 PieMenu::getScaleFactor()
+{
+	// initialize pie scale factor for popup effect
+	F32 factor = 1.f;
+
+#if PIE_POPUP_EFFECT
+	// set the popup size if this was the first click on the menu
+	if (mFirstClick)
+	{
+		factor = PIE_POPUP_FACTOR;
+	}
+	// otherwise check if the popup timer is still running
+	else if (mPopupTimer.getStarted())
+	{
+		// if the timer ran past the popup time, stop the timer and set the size to 1.0
+		F32 elapsedTime = mPopupTimer.getElapsedTimeF32();
+		if (elapsedTime > PIE_POPUP_TIME)
+		{
+			factor = 1.f;
+			mPopupTimer.stop();
+		}
+		// otherwise calculate the size factor to make the menu shrink over time
+		else
+		{
+			factor = PIE_POPUP_FACTOR - (PIE_POPUP_FACTOR - 1.f) * elapsedTime / PIE_POPUP_TIME;
+		}
+//		setRect(r);  // obsolete?
+	}
+
+	return factor;
+#endif
 }

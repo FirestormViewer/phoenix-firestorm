@@ -105,6 +105,10 @@ class PieMenu : public LLContextMenu
 		S32 mCenterY;
 		// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
 		bool mFirstClick;
+
+		F32 getScaleFactor();
+
+		S32 mCurrentSegment;
 };
 
 #endif // PIEMENU_H
