@@ -28,9 +28,6 @@
 #ifndef PIESLICE_H
 #define PIESLICE_H
 
-#include <boost/signals2.hpp>
-
-#include "llinitparam.h"
 #include "lluictrl.h"
 
 // A slice in the pie. Does nothing by itself, just stores the function and

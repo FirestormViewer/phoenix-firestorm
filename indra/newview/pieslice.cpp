@@ -47,9 +47,9 @@ PieSlice::Params::Params() :
 	on_click("on_click"),
 	on_visible("on_visible"),
 	on_enable("on_enable"),
-	start_autohide("start_autohide",FALSE),
-	autohide("autohide",FALSE),
-	check_enable_once("check_enable_once",FALSE)
+	start_autohide("start_autohide", FALSE),
+	autohide("autohide", FALSE),
+	check_enable_once("check_enable_once", FALSE)
 {
 }
 
@@ -57,7 +57,7 @@ PieSlice::Params::Params() :
 void PieSlice::initFromParams(const Params& p)
 {
 	// add a callback if on_click is provided
-	if(p.on_click.isProvided())
+	if (p.on_click.isProvided())
 	{
 		setCommitCallback(initCommitCallback(p.on_click));
 	}
@@ -87,12 +87,12 @@ void PieSlice::initFromParams(const Params& p)
 // call this to make the menu update its "enabled" status
 void PieSlice::updateEnabled()
 {
-	if(mDoUpdateEnabled && mEnableSignal.num_slots()>0)
+	if (mDoUpdateEnabled && mEnableSignal.num_slots() > 0)
 	{
-		bool enabled=mEnableSignal(this,LLSD());
-		if(mEnabledControlVariable)
+		bool enabled = mEnableSignal(this, LLSD());
+		if (mEnabledControlVariable)
 		{
-			if(!enabled)
+			if (!enabled)
 			{
 				// callback overrides control variable; this will call setEnabled()
 				mEnabledControlVariable->set(false);
@@ -110,9 +110,9 @@ void PieSlice::updateEnabled()
 // call this to make the menu update its "visible" status
 void PieSlice::updateVisible()
 {
-	if(mVisibleSignal.num_slots()>0)
+	if (mVisibleSignal.num_slots() > 0)
 	{
-		bool visible=mVisibleSignal(this,LLSD());
+		bool visible = mVisibleSignal(this, LLSD());
 		setVisible(visible);
 	}
 }
@@ -138,7 +138,7 @@ std::string PieSlice::getLabel() const
 // accessor
 void PieSlice::setLabel(const std::string newLabel)
 {
-	mLabel=newLabel;
+	mLabel = newLabel;
 }
 
 // accessor
