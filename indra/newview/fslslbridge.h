@@ -77,6 +77,7 @@ public:
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
 	bool canUseBridge();
+	bool isBridgeValid() const { return NULL != mpBridge; }
 
 	void checkBridgeScriptName(const std::string& fileName);
 	std::string currentFullName() { return mCurrentFullName; }
@@ -106,7 +107,6 @@ private:
 	LLUUID					mBridgeUUID;
 
 	bool					mIsFirstCallDone; //initialization conversation
-	bool isBridgeValid() const { return NULL != mpBridge; }
 
 	uuid_vec_t				mAllowedDetachables;
 
