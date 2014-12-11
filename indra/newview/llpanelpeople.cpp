@@ -1036,7 +1036,10 @@ void LLPanelPeople::updateButtons()
 				cur_panel->getChildView("friends_del_btn")->setEnabled(multiple_selected);
 			}
 
-			if (!group_tab_active)
+			// <FS:Ansariel> Fix warning about missing gear button on blocklist panel
+			//if (!group_tab_active)
+			if (!group_tab_active && cur_tab != BLOCKED_TAB_NAME)
+			// </FS:Ansariel>
 			{
 				cur_panel->getChildView("gear_btn")->setEnabled(multiple_selected);
 			}
