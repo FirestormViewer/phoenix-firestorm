@@ -1580,6 +1580,17 @@ void LLPanelPeople::onOpen(const LLSD& key)
 	std::string tab_name = key["people_panel_tab_name"];
 	if (!tab_name.empty())
 		mTabContainer->selectTabByName(tab_name);
+
+	// <FS:Ansariel> Call onOpen for the blocklist panel to select mute if necessary
+	if (tab_name == "blocked_panel")
+	{
+		LLPanel* blocklist_impl_panel = mTabContainer->getCurrentPanel()->findChild<LLPanel>("panel_block_list_sidetray");
+		if (blocklist_impl_panel)
+		{
+			blocklist_impl_panel->onOpen(key);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 bool LLPanelPeople::notifyChildren(const LLSD& info)
