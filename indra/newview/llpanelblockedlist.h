@@ -52,7 +52,9 @@ public:
 	 *	@param idToSelect - LLUUID of blocked Resident or Object to be selected. 
 	 *			If it is LLUUID::null, nothing will be selected.
 	 */
-	static void showPanelAndSelect(const LLUUID& idToSelect);
+	// </FS:Ansariel> Optional standalone blocklist floater
+	//static void showPanelAndSelect(const LLUUID& idToSelect);
+	static void showPanelAndSelect(const LLUUID& idToSelect = LLUUID::null);
 	
 private:
 

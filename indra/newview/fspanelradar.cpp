@@ -43,6 +43,7 @@
 #include "llavataractions.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnetmap.h"
+#include "llpanelblockedlist.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
 #include "rlvhandler.h"
@@ -279,15 +280,7 @@ void FSPanelRadar::onOptionsMenuItemClicked(const LLSD& userdata)
 
 	if (chosen_item == "panel_block_list_sidetray")
 	{
-		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-		{
-			LLFloaterReg::showInstance("fs_blocklist", LLSD());
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-				LLSD().with("people_panel_tab_name", "blocked_panel"));
-		}
+		LLPanelBlockedList::showPanelAndSelect();
 	}
 }
 

@@ -125,6 +125,11 @@ void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 
 void FSPanelBlockList::showPanelAndSelect(const LLUUID& idToSelect)
 {
+	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
+	{
+		return;
+	}
+
 	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
 	{
 		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));

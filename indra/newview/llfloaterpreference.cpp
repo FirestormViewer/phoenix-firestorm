@@ -123,6 +123,7 @@
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
 #include "llspellcheck.h"
@@ -2458,15 +2459,7 @@ void LLFloaterPreference::onClickBlockList()
 	// </FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
-	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-	{
-		LLFloaterReg::showInstance("fs_blocklist", LLSD());
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-			LLSD().with("people_panel_tab_name", "blocked_panel"));
-	}
+	LLPanelBlockedList::showPanelAndSelect();
 	// </FS:Ansariel>
 }
 

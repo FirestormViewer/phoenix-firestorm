@@ -48,6 +48,8 @@
 #include "llsidetraypanelcontainer.h"
 #include "llviewercontrol.h"
 
+#include "fspanelblocklist.h"
+
 static LLPanelInjector<LLPanelBlockedList> t_panel_blocked_list("panel_block_list_sidetray");
 
 //
@@ -138,24 +140,10 @@ void LLPanelBlockedList::selectBlocked(const LLUUID& mute_id)
 
 void LLPanelBlockedList::showPanelAndSelect(const LLUUID& idToSelect)
 {
-	// <FS:Ansariel> FIRE-572: Disable auto-open of blocklist
-	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
-	{
-		return;
-	}
-
-	// <FS:Ansariel> Optional standalone blocklist floater
+	// <FS:Ansariel> Defer handling to our blocklist panel for convenience since it is replacing LL's version
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
-	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-	{
-		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-			LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
-	}
+	FSPanelBlockList::showPanelAndSelect(idToSelect);
 	// </FS:Ansariel>
 }
 
