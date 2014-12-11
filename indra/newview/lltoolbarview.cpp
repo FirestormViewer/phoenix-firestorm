@@ -603,7 +603,10 @@ void LLToolBarView::draw()
 	for (S32 i = LLToolBarEnums::TOOLBAR_FIRST; i <= LLToolBarEnums::TOOLBAR_LAST; i++)
 	{
 		mToolbars[i]->getParent()->setVisible(mShowToolbars 
-											&& (mToolbars[i]->hasButtons() 
+											// <FS:Ansariel> FIRE-5141: Nearby chat floater can no longer be resized when all buttons are removed from bottom FUI panel
+											//&& (mToolbars[i]->hasButtons() 
+											&& ((i == LLToolBarEnums::TOOLBAR_BOTTOM ? true : mToolbars[i]->hasButtons())
+											// </FS:Ansariel>
 											|| isToolDragged()));
 	}
 
