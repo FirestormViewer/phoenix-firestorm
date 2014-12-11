@@ -167,7 +167,9 @@ void FSPanelBlockList::refreshBlockedList()
 
 void FSPanelBlockList::updateButtons()
 {
-	getChildView("unblock_btn")->setEnabled(mBlockedList->getNumSelected() > 0);
+	bool has_selection = mBlockedList->getNumSelected() > 0;
+	getChildView("blocked_gear_btn")->setEnabled(has_selection);
+	getChildView("unblock_btn")->setEnabled(has_selection);
 }
 
 void FSPanelBlockList::removeMutes()
