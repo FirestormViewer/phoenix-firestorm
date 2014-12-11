@@ -3498,25 +3498,27 @@ bool LLVOAvatar::isVisuallyMuted()
 						(mVisualComplexity > max_cost && max_render_cost > 0);
 
 					// Could be part of the grand || collection above, but yanked out to make the logic visible
-					if (!muted)
-					{
-						if (sMaxVisible > 0)
-						{	// They are above the visibilty rank - mute them
-							muted = (mVisibilityRank > sMaxVisible);
-						}
+					// <FS:Ansariel> FIRE-15074: Render normal imposters properly (Don't tie visual mute to RenderAvatarMaxVisible)
+					//if (!muted)
+					//{
+					//	if (sMaxVisible > 0)
+					//	{	// They are above the visibilty rank - mute them
+					//		muted = (mVisibilityRank > sMaxVisible);
+					//	}
 			
-						// Always draw friends or those in IMs.  Needs UI?
-						if ((render_auto_mute_functions & 0x02) &&
-							(muted || sMaxVisible == 0))		// Don't mute friends or IMs							
-						{
-							muted = !(LLAvatarTracker::instance().isBuddy(getID()));
-							if (muted)
-							{	// Not a friend, so they are muted ... are they in an IM?
-								LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,getID());
-								muted = !gIMMgr->hasSession(session_id);
-							}
-						}
-					}
+					//	// Always draw friends or those in IMs.  Needs UI?
+					//	if ((render_auto_mute_functions & 0x02) &&
+					//		(muted || sMaxVisible == 0))		// Don't mute friends or IMs							
+					//	{
+					//		muted = !(LLAvatarTracker::instance().isBuddy(getID()));
+					//		if (muted)
+					//		{	// Not a friend, so they are muted ... are they in an IM?
+					//			LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,getID());
+					//			muted = !gIMMgr->hasSession(session_id);
+					//		}
+					//	}
+					//}
+					// </FS:Ansariel>
 
 					// Save visual mute state and set interval for updating
 					const F64 SECONDS_BETWEEN_RENDER_AUTO_MUTE_UPDATES = 1.5;
