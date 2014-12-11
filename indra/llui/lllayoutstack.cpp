@@ -49,8 +49,7 @@ LLLayoutPanel::Params::Params()
 :	expanded_min_dim("expanded_min_dim", 0),
 	min_dim("min_dim", -1),
 	user_resize("user_resize", false),
-	auto_resize("auto_resize", true),
-	force_resize_bar("force_resize_bar", false) // <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
+	auto_resize("auto_resize", true)
 {
 	addSynonym(min_dim, "min_width");
 	addSynonym(min_dim, "min_height");
@@ -69,8 +68,7 @@ LLLayoutPanel::LLLayoutPanel(const Params& p)
 	mFractionalSize(0.f),
 	mTargetDim(0),
 	mIgnoreReshape(false),
-	mOrientation(LLLayoutStack::HORIZONTAL),
-	mForceResizeBar(p.force_resize_bar) // <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
+	mOrientation(LLLayoutStack::HORIZONTAL)
 {
 	// panels initialized as hidden should not start out partially visible
 	if (!getVisible())
@@ -476,10 +474,7 @@ void LLLayoutStack::updateLayout()
 
 		if (panelp->mAutoResize 
 			&& !panelp->mCollapsed 
-			// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-			//&& panelp->getVisible())
-			&& (panelp->getVisible() || panelp->mForceResizeBar))
-			// </FS:Ansariel>
+			&& panelp->getVisible())
 		{
 			S32 space_for_panel = remaining_space > 0 ? 1 : -1;
 			panelp->mTargetDim += space_for_panel;
@@ -792,10 +787,7 @@ bool LLLayoutStack::animatePanels()
 	//
 	BOOST_FOREACH(LLLayoutPanel* panelp, mPanels)
 	{
-		// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-		//if (panelp->getVisible())
-		if (panelp->getVisible() || panelp->mForceResizeBar)
-		// </FS:Ansariel>
+		if (panelp->getVisible())
 		{
 			if (mAnimate && panelp->mVisibleAmt < 1.f)
 			{
@@ -896,10 +888,7 @@ void LLLayoutStack::updatePanelRect( LLLayoutPanel* resized_panel, const LLRect&
 		if (panelp->mAutoResize)
 		{
 			old_auto_resize_headroom += (F32)(panelp->mTargetDim - panelp->getRelevantMinDim());
-			// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-			//if (panelp->getVisible() && !panelp->mCollapsed)
-			if ((panelp->getVisible() || panelp->mForceResizeBar) && !panelp->mCollapsed)
-			// </FS:Ansariel>
+			if (panelp->getVisible() && !panelp->mCollapsed)
 			{
 				total_visible_fraction += panelp->mFractionalSize;
 			}
@@ -910,10 +899,7 @@ void LLLayoutStack::updatePanelRect( LLLayoutPanel* resized_panel, const LLRect&
 			other_resize_panel = following_panel;
 		}
 
-		// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-		//if (panelp->getVisible() && !panelp->mCollapsed)
-		if ((panelp->getVisible() || panelp->mForceResizeBar) && !panelp->mCollapsed)
-		// </FS:Ansariel>
+		if (panelp->getVisible() && !panelp->mCollapsed)
 		{
 			following_panel = panelp;
 		}
@@ -948,10 +934,7 @@ void LLLayoutStack::updatePanelRect( LLLayoutPanel* resized_panel, const LLRect&
 
 	BOOST_FOREACH(LLLayoutPanel* panelp, mPanels)
 	{
-		// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-		//if (!panelp->getVisible() || panelp->mCollapsed) 
-		if ((!panelp->getVisible() && !panelp->mForceResizeBar) || panelp->mCollapsed) 
-		// </FS:Ansariel>
+		if (!panelp->getVisible() || panelp->mCollapsed) 
 		{
 			if (panelp->mAutoResize) 
 			{
@@ -1059,10 +1042,7 @@ void LLLayoutStack::updateResizeBarLimits()
 	LLLayoutPanel* previous_visible_panelp = NULL;
 	BOOST_REVERSE_FOREACH(LLLayoutPanel* visible_panelp, mPanels)
 	{
-		// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-		//if (!visible_panelp->getVisible() || visible_panelp->mCollapsed)
-		if ((!visible_panelp->getVisible() && !visible_panelp->mForceResizeBar) || visible_panelp->mCollapsed)
-		// </FS:Ansariel>
+		if (!visible_panelp->getVisible() || visible_panelp->mCollapsed)
 		{
 			visible_panelp->mResizeBar->setVisible(FALSE);
 			continue;
