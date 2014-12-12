@@ -1780,6 +1780,17 @@
              control_name="FSKeywordCaseSensitive"
              name="FSKeywordCaseSensitive"
              label="All Keywords are case-sensitive"/>
+            <check_box
+             enabled_control="FSKeywordOn"
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="150"
+             height="20"
+             control_name="FSKeywordMatchWholeWords"
+             name="FSKeywordMatchWholeWords"
+             label="Only match whole words"/>
             <text
              layout="topleft"
              follows="left|top"
