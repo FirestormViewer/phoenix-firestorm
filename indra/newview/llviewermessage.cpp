@@ -3177,6 +3177,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				//args["MESSAGE"] = mes;
 				//LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
 				//make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
+				if (group_id.isNull())
+				{
+					LL_WARNS() << "Received group notice with null id!" << LL_ENDL;
+				}
 				gCacheName->get(group_id, true, boost::bind(&notification_group_name_cb, _2, name, subj, mes, payload, timestamp));
 				// </FS:Ansariel>
 			}
