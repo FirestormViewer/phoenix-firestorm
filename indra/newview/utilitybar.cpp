@@ -142,6 +142,7 @@ BOOL UtilityBar::tick()
 
 	if (mTalkButton)
 	{
+		mTalkButton->setValue(gAgent.isMicrophoneOn(LLSD()));
 		mTalkButton->setEnabled(LLAgent::isActionAllowed(LLSD("speak")));
 	}
 	if (mPTTButton)
