@@ -7581,7 +7581,7 @@ The item you are trying to wear uses a feature that your viewer cannot read. Ple
 &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, an object owned by &apos;[NAME]&apos;, would like to:
 
 [QUESTIONS]
-Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&apos;.
+Is this OK?
   <tag>confirm</tag>
     <form name="form">
       <button
@@ -7595,7 +7595,7 @@ Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&a
       <button
        index="2"
        name="Mute"
-       text="Mute Owner"/>
+       text="Block"/>
     </form>
   </notification>
 
