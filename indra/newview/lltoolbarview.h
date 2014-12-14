@@ -132,6 +132,9 @@ private:
 	// <FS:Ansariel> Member variables needed for console chat bottom offset
 	LLView*				mBottomChatStack;
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Added to determine if toolbar gets hidden when empty
+	bool				mHideBottomOnEmpty;
 };
 
 extern LLToolBarView* gToolBarView;
