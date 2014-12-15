@@ -663,7 +663,21 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	{
 		// Be lenient in terms of what separators we allow for two-word names
 		// and allow legacy users to login with firstname.lastname
+		// <FS:Ansariel> FIRE-15116: Usernames with underscores don't work on OpenSim
+		//separator_index = username.find_first_of(" ._");
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			separator_index = username.find_first_of(" ._");
+		}
+		else
+		{
+			separator_index = username.find_first_of(" .");
+		}
+#else
 		separator_index = username.find_first_of(" ._");
+#endif
+		// </FS:Ansariel>
 		std::string first = username.substr(0, separator_index);
 		std::string last;
 		if (separator_index != username.npos)
