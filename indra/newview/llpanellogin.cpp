@@ -1109,6 +1109,12 @@ void LLPanelLogin::updateServer()
 		// grid changed so show new splash screen (possibly)
 		updateServerCombo();
 		loadLoginPage();
+
+		// <FS:Ansariel> FIRE-12905: Allow longer passwords in OpenSim
+#ifdef OPENSIM
+		sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? 16 : 255);
+#endif
+		// </FS:Ansariel>
 	}
 	catch (LLInvalidGridName ex)
 	{
