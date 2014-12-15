@@ -9050,20 +9050,6 @@ BOOL check_show_xui_names(void *)
 	return gSavedSettings.getBOOL("DebugShowXUINames");
 }
 
-// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
-class FSToolSelectIncludeGroupOwned : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		BOOL cur_val = gSavedSettings.getBOOL("FSSelectIncludeGroupOwned");
-
-		gSavedSettings.setBOOL("FSSelectIncludeGroupOwned", ! cur_val );
-
-		return true;
-	}
-};
-// </FS:Ansariel>
-
 // <FS:CR> Resync Animations
 class FSToolsResyncAnimations : public view_listener_t
 {
