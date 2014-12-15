@@ -463,7 +463,7 @@ private:
 	{
 		// <FS:ND> FIRE-14935; Do not switch URI if there is still a saved URI to load
 		// if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE)
-		if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE && mInitialNavigateURL.empty() )
+		if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE && !mInitialNavigateURL.empty() )
 		// </FS:ND>
 		{
 			LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "navigate_begin");
