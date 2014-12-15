@@ -519,6 +519,18 @@
     <integer>1</integer>
   </map>
 
+  <key>PlayModeUISndScriptFloaterOpen</key>
+  <map>
+    <key>Comment</key>
+    <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndScriptFloaterOpen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <!-- <FS_Zi> Animated dialogs -->
   <key>FSAnimatedScriptDialogs</key>
   <map>

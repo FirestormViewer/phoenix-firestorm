@@ -735,13 +735,17 @@
 			<integer>1</integer>
 		</map>
 
-
-
-
-
-
-
-
+    <key>PlayModeUISndScriptFloaterOpen</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndScriptFloaterOpen.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+		</map>
 
 </map>
 </llsd>
