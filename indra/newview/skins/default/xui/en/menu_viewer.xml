@@ -1612,6 +1612,15 @@
                      parameter="movable" />
                 </menu_item_check>
                 <menu_item_check
+                 label="Select Only Copyable Objects"
+                 name="Select Only Copyable Objects">
+                    <menu_item_check.on_check
+                     control="FSSelectCopyableOnly" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSSelectCopyableOnly" />
+                </menu_item_check>
+                <menu_item_check
                  label="Select By Surrounding"
                  name="Select By Surrounding">
                     <menu_item_check.on_check

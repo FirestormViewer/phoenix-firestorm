@@ -1031,6 +1031,13 @@ void LLSelectMgr::highlightObjectOnly(LLViewerObject *objectp, LLColor4 const &a
 		return;
 	}
 
+	// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+	if (!objectp->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	if (objectp->permGroupOwner() && !gSavedSettings.getBOOL("FSSelectIncludeGroupOwned"))
 	{
@@ -6920,6 +6927,12 @@ BOOL LLSelectMgr::canSelectObject(LLViewerObject* object)
 		// only select my own objects
 		return FALSE;
 	}
+	// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+	if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+	{
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	// Can't select orphans
 	if (object->isOrphaned()) return FALSE;
