@@ -86,7 +86,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mObserver(NULL),
 	mFriendsList(NULL),
 	mGroupList(NULL),
-	mAllowRightsChange(TRUE),
+	mAllowRightsChange(true),
+	mRightsChangeNotificationTriggered(false),
 	mNumRightsChanged(0),
 	mRlvBehaviorCallbackConnection(),
 	mResetLastColumnDisplayModeChanged(false),
@@ -190,6 +191,8 @@ void FSFloaterContacts::draw()
 		mFriendsList->setNeedsSort();
 		mDirtyNames = false;
 	}
+
+	mRightsChangeNotificationTriggered = false;
 
 	LLFloater::draw();
 }
@@ -553,11 +556,11 @@ void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
 				--mNumRightsChanged;
 				if (mNumRightsChanged > 0)
 				{
-					mAllowRightsChange = FALSE;
+					mAllowRightsChange = false;
 				}
 				else
 				{
-					mAllowRightsChange = TRUE;
+					mAllowRightsChange = true;
 				}
 			
 				const std::set<LLUUID>& changed_items = at.getChangedIDs();
@@ -905,6 +908,7 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 			}
 		}
 	}
+	
 }
 
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
@@ -932,6 +936,11 @@ bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const
 
 void FSFloaterContacts::applyRightsToFriends()
 {
+	if (mRightsChangeNotificationTriggered)
+	{
+		return;
+	}
+
 	bool rights_changed = false;
 
 	// store modify rights separately for confirmation
@@ -1019,6 +1028,7 @@ void FSFloaterContacts::applyRightsToFriends()
 	if (need_confirmation)
 	{
 		confirmModifyRights(rights_updates, confirmation_type);
+		mRightsChangeNotificationTriggered = true;
 	}
 	else
 	{

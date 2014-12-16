@@ -145,8 +145,9 @@ private:
 	LLTabContainer*			mTabContainer;
 
 	LLFriendObserver*		mObserver;
-	BOOL					mAllowRightsChange;
+	bool					mAllowRightsChange;
 	S32						mNumRightsChanged;
+	bool					mRightsChangeNotificationTriggered;
 
 	std::string				mFriendListFontName;
 
