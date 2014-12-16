@@ -192,8 +192,6 @@ void FSFloaterContacts::draw()
 		mDirtyNames = false;
 	}
 
-	mRightsChangeNotificationTriggered = false;
-
 	LLFloater::draw();
 }
 
@@ -913,6 +911,8 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
 {
+	mRightsChangeNotificationTriggered = false;
+
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (0 == option)
 	{
