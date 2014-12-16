@@ -8518,10 +8518,13 @@ void send_lures(const LLSD& notification, const LLSD& response)
 
 		// Record the offer.
 		{
-			std::string target_name;
-			gCacheName->getFullName(target_id, target_name);  // for im log filenames
+			// <FS:Ansariel> Show complete name for TP lures
+			//std::string target_name;
+			//gCacheName->getFullName(target_id, target_name);  // for im log filenames
 			LLSD args;
-			args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+			//args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+			args["TO_NAME"] = LLSLURL("agent", target_id, "completename").getSLURLString();
+			// </FS:Ansariel>
 	
 			LLSD payload;
 				

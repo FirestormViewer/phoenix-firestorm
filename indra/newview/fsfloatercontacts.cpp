@@ -43,6 +43,7 @@
 #include "llgrouplist.h"
 #include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "lltabcontainer.h"
 #include "llviewermenu.h"
@@ -870,12 +871,7 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 		// for single friend, show their name
 		if (ids.size() == 1)
 		{
-			LLUUID agent_id = ids.begin()->first;
-			std::string name;
-			if (gCacheName->getFullName(agent_id, name))
-			{
-				args["NAME"] = name;
-			}
+			args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
 			if (command == GRANT)
 			{
 				LLNotificationsUtil::add("GrantModifyRights", 

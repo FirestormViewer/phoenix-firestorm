@@ -1929,10 +1929,9 @@ void FSPanelAvatarNotes::rightsConfirmationCallback(const LLSD& notification,
 }
 
 void FSPanelAvatarNotes::confirmModifyRights(bool grant, S32 rights)
-// AO: If this is modified, also modify LLPanelAvatar::ConfirmModifyRights
 {
 	LLSD args;
-	args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+	args["NAME"] = LLSLURL("agent", getAvatarId(), "completename").getSLURLString();
 
 	if (grant)
 	{

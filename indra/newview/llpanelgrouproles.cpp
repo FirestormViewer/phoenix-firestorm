@@ -1227,7 +1227,9 @@ void LLPanelGroupMembersSubTab::sendEjectNotifications(const LLUUID& group_id, c
 		for (uuid_vec_t::const_iterator i = selected_members.begin(); i != selected_members.end(); ++i)
 		{
 			LLSD args;
-			args["AVATAR_NAME"] = LLSLURL("agent", *i, "displayname").getSLURLString();
+			// <FS:Ansariel> Always show complete name in rights confirmation dialogs
+			//args["AVATAR_NAME"] = LLSLURL("agent", *i, "displayname").getSLURLString();
+			args["AVATAR_NAME"] = LLSLURL("agent", *i, "completename").getSLURLString();
 			args["GROUP_NAME"] = group_data->mName;
 			
 			LLNotifications::instance().add(LLNotification::Params("EjectAvatarFromGroup").substitutions(args));
