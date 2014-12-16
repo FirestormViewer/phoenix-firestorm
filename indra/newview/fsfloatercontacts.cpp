@@ -143,6 +143,8 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
 	mFriendsTab->setDefaultBtn("im_btn");
 
+	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
+
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
 	mGroupList->setNoItemsMsg(getString("no_groups_msg"));
