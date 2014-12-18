@@ -68,6 +68,11 @@ public:
 	void openFriendsTab();
 	BOOL isExcludeAgentFromSearchResults() {return mExcludeAgentFromSearchResults;}
 
+	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+	typedef std::map<LLUUID, std::string> query_id_name_map_t;
+	static query_id_name_map_t sQueryNameMap;
+	// </FS:Ansariel>
+
 private:
 	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	// <FS:Ansariel> Search by UUID
