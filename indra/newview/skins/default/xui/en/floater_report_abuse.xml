@@ -21,13 +21,24 @@
      name="screenshot"
      top="15"
      width="220" />
+     <button
+     follows="top|left"
+     halign="center"
+     height="23"
+     image_overlay="Refresh_Off"
+     layout="topleft"
+     tool_tip="Refresh Screenshot"
+     name="refresh_screenshot"
+     left_pad="5"
+     top="121"
+     width="25"/>
     <check_box
      height="15"
      label="Use this screenshot"
      layout="topleft"
      left="8"
      name="screen_check"
-     top_pad="-12"
+     top_pad="5"
      width="116" />
     <text
      type="string"

@@ -178,6 +178,9 @@ BOOL LLFloaterReporter::postBuild()
 	std::string reporter = LLSLURL("agent", gAgent.getID(), "inspect").getSLURLString();
 	getChild<LLUICtrl>("reporter_field")->setValue(reporter);
 	
+	// <FS:Ansariel> FIRE-15218: Refresh screenshot button
+	getChild<LLButton>("refresh_screenshot")->setCommitCallback(boost::bind(&LLFloaterReporter::takeScreenshot, this));
+
 	center();
 
 	return TRUE;
