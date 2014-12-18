@@ -795,7 +795,7 @@ void LLFloaterAvatarPicker::processAvatarPickerReply(LLMessageSystem* msg, void*
 	{
 		return;
 	}
-	std::string floater_key = LLSD(found->second);
+	const LLSD floater_key(found->second);
 	sQueryNameMap.erase(found);
 	LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker", floater_key);
 	// </FS:Ansariel>
