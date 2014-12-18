@@ -659,6 +659,13 @@ void LLFloaterModelPreview::disableViewOption(const std::string& option)
 
 void LLFloaterModelPreview::loadModel(S32 lod)
 {
+	// <FS:Ansariel> FIRE-15204: Viewer crashes when clicking "upload model" quickly twice then closing both filepickers
+	if (mModelPreview->mLoading)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	mModelPreview->mLoading = true;
 
 	(new LLMeshFilePicker(mModelPreview, lod))->getFile();
@@ -666,6 +673,13 @@ void LLFloaterModelPreview::loadModel(S32 lod)
 
 void LLFloaterModelPreview::loadModel(S32 lod, const std::string& file_name, bool force_disable_slm)
 {
+	// <FS:Ansariel> FIRE-15204: Viewer crashes when clicking "upload model" quickly twice then closing both filepickers
+	if (mModelPreview->mLoading)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	mModelPreview->mLoading = true;
 
 	mModelPreview->loadModel(file_name, lod, force_disable_slm);
