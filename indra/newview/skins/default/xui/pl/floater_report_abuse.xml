@@ -3,6 +3,7 @@
 	<floater.string name="Screenshot">
 		Zdjęcie ekranu
 	</floater.string>
+	<button tool_tip="Odśwież zdjęcie" name="refresh_screenshot"/>
 	<check_box label="Załącz zdjęcie" name="screen_check"/>
 	<text name="reporter_title">
 		Zgłasza:
