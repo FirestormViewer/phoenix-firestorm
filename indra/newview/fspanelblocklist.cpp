@@ -307,7 +307,7 @@ void FSPanelBlockList::blockResidentByName()
 
 void FSPanelBlockList::blockObjectByName()
 {
-	LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(&FSPanelBlockList::callbackBlockByName);
+	LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(boost::bind(&FSPanelBlockList::callbackBlockByName, this, _1));
 	LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
 	if (parent)
 	{
@@ -338,7 +338,6 @@ void FSPanelBlockList::callbackBlockPicked(const uuid_vec_t& ids, const std::vec
 	showPanelAndSelect(mute.mID);
 }
 
-//static
 void FSPanelBlockList::callbackBlockByName(const std::string& text)
 {
 	if (text.empty()) return;
@@ -348,6 +347,11 @@ void FSPanelBlockList::callbackBlockByName(const std::string& text)
 	if (!success)
 	{
 		LLNotificationsUtil::add("MuteByNameFailed");
+	}
+	else
+	{
+		mBlockedList->selectItemByLabel(text);
+		mBlockedList->scrollToShowSelected();
 	}
 }
 

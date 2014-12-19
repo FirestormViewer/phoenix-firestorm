@@ -90,7 +90,7 @@ private:
 	bool isActionEnabled(const LLSD& userdata);
 
 	void callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
-	static void callbackBlockByName(const std::string& text);
+	void callbackBlockByName(const std::string& text);
 
 private:
 	FSBlockListCtrl* mBlockedList;
