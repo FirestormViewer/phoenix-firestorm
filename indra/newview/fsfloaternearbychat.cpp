@@ -495,6 +495,12 @@ void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 	if (nearby_chat)
 	{
 		nearby_chat->updateChatHistoryStyle();
+		nearby_chat->mInputEditor->setFont(LLViewerChat::getChatFont());
+
+		// Re-set the current text to make style update instant
+		std::string text = nearby_chat->mInputEditor->getText();
+		nearby_chat->mInputEditor->clear();
+		nearby_chat->mInputEditor->setText(text);
 	}
 }
 

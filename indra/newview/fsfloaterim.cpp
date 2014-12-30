@@ -1468,6 +1468,11 @@ void FSFloaterIM::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		{
 			floater->updateChatHistoryStyle();
 			floater->mInputEditor->setFont(font);
+
+			// Re-set the current text to make style update instant
+			std::string text = floater->mInputEditor->getText();
+			floater->mInputEditor->clear();
+			floater->mInputEditor->setText(text);
 		}
 	}
 }
