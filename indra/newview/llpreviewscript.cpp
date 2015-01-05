@@ -1610,6 +1610,10 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 
 	// Disable sync to avoid recursive load->save->load calls.
 	// <FS> LSL preprocessor
+	// Ansariel: Don't call saveIfNeeded directly, as we might have to run the
+	// preprocessor first. saveIfNeeded will be invoked via callback. Make sure
+	// to pass sync = false - we don't need to update the external editor in this
+	// case or the next save will be ignored!
 	//saveIfNeeded(false);
 	mScriptEd->doSave(FALSE, false);
 	// </FS>
