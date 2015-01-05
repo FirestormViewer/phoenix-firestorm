@@ -72,7 +72,7 @@ class ParticleEditor : public LLFloater
 		void callbackReturned(const LLUUID& inv_item);
 		void scriptInjectReturned(const LLSD& content);
 
-		std::string lslVector(F32 x,F32 y,F32 z);
+		std::string lslVector(F32 x, F32 y, F32 z);
 		std::string lslColor(const LLColor4& color);
 
 		LLViewerObject* mObject;
@@ -83,11 +83,11 @@ class ParticleEditor : public LLFloater
 
 		LLPartSysData mParticles;
 
-		std::map<std::string,U8> mPatternMap;
-		std::map<std::string,std::string> mScriptPatternMap;
+		std::map<std::string, U8> mPatternMap;
+		std::map<std::string, std::string> mScriptPatternMap;
 
-		std::map<std::string,U8> mBlendMap;
-		std::map<std::string,std::string> mScriptBlendMap;
+		std::map<std::string, U8> mBlendMap;
+		std::map<std::string, std::string> mScriptBlendMap;
 
 		LLPanel* mMainPanel;
 

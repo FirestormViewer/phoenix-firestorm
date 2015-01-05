@@ -88,7 +88,7 @@ BOOL NACLFloaterExploreSounds::postBuild()
 
 void NACLFloaterExploreSounds::handleSelection()
 {
-	S32 num_selected = mHistoryScroller->getAllSelected().size();
+	size_t num_selected = mHistoryScroller->getAllSelected().size();
 	bool multiple = (num_selected > 1);
 	childSetEnabled("look_at_btn", (num_selected && !multiple));
 	childSetEnabled("play_locally_btn", num_selected);
