@@ -77,7 +77,10 @@ protected:
 		const std::string& sample,
 		const LLHandle<LLFloater>& floater_handle,
 		void (*load_callback)(void* userdata),
-		void (*save_callback)(void* userdata, BOOL close_after_save),
+		// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+		//void (*save_callback)(void* userdata, BOOL close_after_save),
+		void (*save_callback)(void* userdata, BOOL close_after_save, bool sync),
+		// </FS:Ansariel>
 		void (*search_replace_callback)(void* userdata),
 		void* userdata,
 		S32 bottom_pad = 0);	// pad below bottom row of buttons
@@ -95,13 +98,16 @@ public:
 	void            setScriptText(const std::string& text, BOOL is_valid);
 	// NaCL - LSL Preprocessor
 	std::string		getScriptText();
-	void			doSaveComplete(void* userdata, BOOL close_after_save );
+	void			doSaveComplete(void* userdata, BOOL close_after_save, bool sync);
 	// NaCl End
 	bool			loadScriptText(const std::string& filename);
 	bool			writeToFile(const std::string& filename, bool unprocessed);
 	void			sync();
 	
-	void			doSave( BOOL close_after_save );
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void			doSave( BOOL close_after_save );
+	void			doSave(BOOL close_after_save, bool sync = true);
+	// </FS:Ansariel>
 
 	bool			handleSaveChangesDialog(const LLSD& notification, const LLSD& response);
 	bool			handleReloadFromServerDialog(const LLSD& notification, const LLSD& response);
@@ -155,7 +161,10 @@ private:
 	std::string		mSampleText;
 	LLTextEditor*	mEditor;
 	void			(*mLoadCallback)(void* userdata);
-	void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
+	void			(*mSaveCallback)(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 	void			(*mSearchReplaceCallback) (void* userdata);
 	void*			mUserdata;
 	LLComboBox		*mFunctions;
@@ -254,7 +263,10 @@ protected:
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
-	static void onSave(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//static void onSave(void* userdata, BOOL close_after_save);
+	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 	
 	static void onLoadComplete(LLVFS *vfs, const LLUUID& uuid,
 							   LLAssetType::EType type,
@@ -327,7 +339,10 @@ private:
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
-	static void onSave(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//static void onSave(void* userdata, BOOL close_after_save);
+	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 
 	static void onLoadComplete(LLVFS *vfs, const LLUUID& asset_uuid,
 							   LLAssetType::EType type,

@@ -672,9 +672,10 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 	}
 }
 
-void FSLSLPreprocessor::preprocess_script(BOOL close, BOOL defcache)
+void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, BOOL defcache)
 {
 	mClose = close;
+	mSync = sync;
 	mDefinitionCaching = defcache;
 	caching_files.clear();
 	mCore->mErrorList->setCommentText(std::string("PreProc Starting..."));
@@ -1156,7 +1157,7 @@ void FSLSLPreprocessor::start_process()
 			outfield->setText(LLStringExplicit(output));
 		}
 		mCore->mPostScript = output;
-		mCore->doSaveComplete((void*)mCore,mClose);
+		mCore->doSaveComplete((void*)mCore,mClose,mSync);
 	}
 	mWaving = FALSE;
 }
