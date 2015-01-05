@@ -6288,8 +6288,6 @@
         <real>0.0</real>
         <real>1.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>FocusOffsetFrontView</key>
     <map>
@@ -6305,8 +6303,6 @@
         <real>0.0</real>
         <real>0.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>FocusOffsetGroupView</key>
     <map>
@@ -6322,8 +6318,6 @@
         <real>0.7</real>
         <real>1.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>FocusPosOnLogout</key>
     <map>
