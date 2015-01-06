@@ -190,8 +190,11 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
     if (key == KEY_RETURN)
     {
         endOfDoc();
-        startSelection();
-        endSelection();
+		// <FS:Ansariel> FIRE-15334: Properly deselect
+        //startSelection();
+        //endSelection();
+		deselect();
+		// </FS:Ansariel>
     }
 
 	LLTextEditor::handleSpecialKey(key, mask);
