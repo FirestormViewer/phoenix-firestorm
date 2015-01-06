@@ -1213,7 +1213,7 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 		static LLCachedControl<U32> fsOfferThrottleMaxCount(gSavedSettings, "FSOfferThrottleMaxCount");
 		if (LLStartUp::getStartupState() >= STATE_STARTED
 			//&& throttle_count >= OFFER_THROTTLE_MAX_COUNT)
-			&& throttle_count >= U32(fsOfferThrottleMaxCount))
+			&& throttle_count >= fsOfferThrottleMaxCount)
 		{
 			if (!throttle_logged)
 			{
@@ -1232,7 +1232,6 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				if (!from_name.empty())
 				{
 					// <FS:PP> gSavedSettings to LLCachedControl
-					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
 					static LLCachedControl<bool> fsNotifyIncomingObjectSpamFrom(gSavedSettings, "FSNotifyIncomingObjectSpamFrom");
 					if (fsNotifyIncomingObjectSpamFrom)
 					// </FS:PP>
@@ -1244,7 +1243,6 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				else
 				{
 					// <FS:PP> gSavedSettings to LLCachedControl
-					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
 					static LLCachedControl<bool> fsNotifyIncomingObjectSpam(gSavedSettings, "FSNotifyIncomingObjectSpam");
 					if (fsNotifyIncomingObjectSpam)
 					// </FS:PP>
