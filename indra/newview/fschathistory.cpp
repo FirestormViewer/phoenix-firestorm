@@ -506,7 +506,14 @@ public:
 		switch (mSourceType)
 		{
 			case CHAT_SOURCE_AGENT:
-				icon->setValue(chat.mFromID);
+				if (!chat.mRlvNamesFiltered)
+				{
+					icon->setValue(chat.mFromID);
+				}
+				else
+				{
+					icon->setValue(LLSD("Unknown_Icon"));
+				}
 				break;
 			case CHAT_SOURCE_OBJECT:
 				icon->setValue(LLSD("OBJECT_Icon"));
@@ -516,7 +523,14 @@ public:
 				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 				if(chat.mChatType == CHAT_TYPE_RADAR)
 				{
-					icon->setValue(chat.mFromID);
+					if (!chat.mRlvNamesFiltered)
+					{
+						icon->setValue(chat.mFromID);
+					}
+					else
+					{
+						icon->setValue(LLSD("Unknown_Icon"));
+					}
 				}
 				else
 				{
