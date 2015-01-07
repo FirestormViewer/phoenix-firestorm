@@ -3287,6 +3287,13 @@
                  function="ToggleControl"
                  parameter="DebugShowTextureInfo" />
             </menu_item_check>
+            <menu_item_call
+              label="VRAM usage per object"
+              name="VRAM usage per object">
+              <menu_item_call.on_click
+                function="Floater.Show"
+                parameter="vram_usage" />
+            </menu_item_call>
             <menu_item_check
              label="Show Avatar Render Info"
              name="Show Avatar Render Info">

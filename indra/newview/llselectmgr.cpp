@@ -490,6 +490,9 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(const std::vector<LLV
 		object->addThisAndNonJointChildren(objects);
 		addAsFamily(objects);
 
+		if( isBatchMode() )
+			continue;
+
 		// Stop the object from moving (this anticipates changes on the
 		// simulator in LLTask::userSelect)
 		object->setVelocity(LLVector3::zero);
@@ -497,6 +500,14 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(const std::vector<LLV
 		//object->setAngularVelocity(LLVector3::zero);
 		object->resetRot();
 	}
+
+	if( isBatchMode() )
+	{
+		mShowSelection = FALSE;
+		sendSelect();
+		return mSelectedObjects;
+	}
+
 
 	updateSelectionCenter();
 	saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
@@ -5343,6 +5354,10 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 			node->mInventorySerial = inv_serial;
 			node->mSitName.assign(sit_name);
 			node->mTouchName.assign(touch_name);
+
+			// <FS:ND> Fire for any observer interested in object properties
+			LLSelectMgr::instance().firePropertyReceived( node );
+			// </FS:ND>
 		}
 	}
 
