@@ -7686,25 +7686,44 @@ class LLLandEdit : public view_listener_t
 
 class LLMuteParticle : public view_listener_t
 {
+	// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
+	void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
+	{
+		LLMute mute(av_id, av_name.getLegacyName(), LLMute::AGENT);
+		if (LLMuteList::getInstance()->isMuted(mute.mID))
+		{
+			LLMuteList::getInstance()->remove(mute);
+		}
+		else
+		{
+			LLMuteList::getInstance()->add(mute);
+			LLPanelBlockedList::showPanelAndSelect(mute.mID);
+		}
+	}
+	// </FS:Ansariel>
+
 	bool handleEvent(const LLSD& userdata)
 	{
 		LLUUID id = LLToolPie::getInstance()->getPick().mParticleOwnerID;
 		
 		if (id.notNull())
 		{
-			std::string name;
-			gCacheName->getFullName(id, name);
+			// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
+			//std::string name;
+			//gCacheName->getFullName(id, name);
 
-			LLMute mute(id, name, LLMute::AGENT);
-			if (LLMuteList::getInstance()->isMuted(mute.mID))
-			{
-				LLMuteList::getInstance()->remove(mute);
-			}
-			else
-			{
-				LLMuteList::getInstance()->add(mute);
-				LLPanelBlockedList::showPanelAndSelect(mute.mID);
-			}
+			//LLMute mute(id, name, LLMute::AGENT);
+			//if (LLMuteList::getInstance()->isMuted(mute.mID))
+			//{
+			//	LLMuteList::getInstance()->remove(mute);
+			//}
+			//else
+			//{
+			//	LLMuteList::getInstance()->add(mute);
+			//	LLPanelBlockedList::showPanelAndSelect(mute.mID);
+			//}
+			LLAvatarNameCache::get(id, boost::bind(&LLMuteParticle::onAvatarNameCache, this, _1, _2));
+			// </FS:Ansariel>
 		}
 
 		return true;
