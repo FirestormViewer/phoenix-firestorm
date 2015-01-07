@@ -2664,7 +2664,21 @@ Lütfen biraz sonra tekrar deneyin.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Göster"/>
+			<button name="Keep" text="Sakla"/>
 			<button name="Discard" text="At"/>
+			<button name="Mute" text="Engelle"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] size [OBJECTTYPE] türündeki nesneyi verdi:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Göster"/>
+			<button name="Accept" text="Sakla"/>
+			<button name="Discard" text="At"/>
+			<button name="ShowSilent" text="(Göster)"/>
+			<button name="AcceptSilent" text="(Sakla)"/>
+			<button name="DiscardSilent" text="(At)"/>
 			<button name="Mute" text="Engelle"/>
 		</form>
 	</notification>

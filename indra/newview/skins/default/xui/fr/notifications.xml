@@ -2664,7 +2664,21 @@ Veuillez réessayer dans quelques minutes.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Afficher"/>
+			<button name="Keep" text="Garder"/>
 			<button name="Discard" text="Jeter"/>
+			<button name="Mute" text="Ignorer"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] vous a donné un [OBJECTTYPE] :
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Afficher"/>
+			<button name="Accept" text="Garder"/>
+			<button name="Discard" text="Jeter"/>
+			<button name="ShowSilent" text="(Afficher)"/>
+			<button name="AcceptSilent" text="(Garder)"/>
+			<button name="DiscardSilent" text="(Jeter)"/>
 			<button name="Mute" text="Ignorer"/>
 		</form>
 	</notification>

@@ -2664,7 +2664,21 @@ http://secondlife.com/download.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Показать"/>
+			<button name="Keep" text="Оставить"/>
 			<button name="Discard" text="Удалить"/>
+			<button name="Mute" text="Заблокировать"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] дал(а) вам этот [OBJECTTYPE]:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Показать"/>
+			<button name="Accept" text="Оставить"/>
+			<button name="Discard" text="Удалить"/>
+			<button name="ShowSilent" text="(Показать)"/>
+			<button name="AcceptSilent" text="(Оставить)"/>
+			<button name="DiscardSilent" text="(Удалить)"/>
 			<button name="Mute" text="Заблокировать"/>
 		</form>
 	</notification>

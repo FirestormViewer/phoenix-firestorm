@@ -2724,7 +2724,22 @@ Spróbuj ponownie za kilka minut.
 Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już otrzymywać żadnych ofert lub wiadomości od [NAME_SLURL].
 		<form name="form">
 			<button name="Show" text="Pokaż"/>
+			<button name="Keep" text="Zachowaj"/>
 			<button name="Discard" text="Wyrzuć"/>
+			<button name="Mute" text="Zablokuj"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy" label="Propozycja przedmiotu od [NAME_LABEL]">
+		[NAME_SLURL] dał Ci [OBJECTTYPE]:
+[ITEM_SLURL]
+Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już otrzymywać żadnych ofert lub wiadomości od [NAME_SLURL].
+		<form name="form">
+			<button name="Show" text="Pokaż"/>
+			<button name="Accept" text="Zachowaj"/>
+			<button name="Discard" text="Verwerfen"/>
+			<button name="ShowSilent" text="(Wyrzuć)"/>
+			<button name="AcceptSilent" text="(Zachowaj)"/>
+			<button name="DiscardSilent" text="(Wyrzuć)"/>
 			<button name="Mute" text="Zablokuj"/>
 		</form>
 	</notification>

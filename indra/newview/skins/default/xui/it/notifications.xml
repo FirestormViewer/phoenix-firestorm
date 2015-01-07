@@ -2670,7 +2670,21 @@ Riprova tra qualche istante.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Mostra"/>
+			<button name="Keep" text="Mantieni"/>
 			<button name="Discard" text="Rifiuta"/>
+			<button name="Mute" text="Blocca"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] ti ha dato questo [OBJECTTYPE]:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Mostra"/>
+			<button name="Accept" text="Mantieni"/>
+			<button name="Discard" text="Rifiuta"/>
+			<button name="ShowSilent" text="(Mostra)"/>
+			<button name="AcceptSilent" text="(Mantieni)"/>
+			<button name="DiscardSilent" text="(Rifiuta)"/>
 			<button name="Mute" text="Blocca"/>
 		</form>
 	</notification>

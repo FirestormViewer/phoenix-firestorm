@@ -7194,11 +7194,57 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
       <button
        index="3"
        name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Keep"
        text="Accept"/>
       <button
        index="1"
        name="Discard"
        text="Discard"/>
+      <button
+       index="2"
+       name="Mute"
+       text="Mute Sender"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="UserGiveItemLegacy"
+   label="Inventory offer from [NAME_LABEL]"
+   log_to_im ="true"
+   type="offer"
+   sound="UISndInventoryOffer">
+[NAME_SLURL] has given you this [OBJECTTYPE]:
+[ITEM_SLURL]
+Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
+    <form name="form">
+      <button
+       index="3"
+       name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Accept"
+       text="Accept"/>
+      <button
+       index="1"
+       name="Discard"
+       text="Discard"/>
+      <button
+       index="6"
+       name="ShowSilent"
+       text="(Show)"/>
+      <button
+       index="4"
+       name="AcceptSilent"
+       text="(Accept)"/>
+      <button
+       index="5"
+       name="DiscardSilent"
+       text="(Discard)"/>
       <button
        index="2"
        name="Mute"

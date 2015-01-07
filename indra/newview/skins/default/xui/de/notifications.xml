@@ -2800,8 +2800,22 @@ Versuchen Sie es in einigen Minuten erneut.
 		[NAME_SLURL] hat Ihnen folgendes [OBJECTTYPE] übergeben:
 [ITEM_SLURL]
 		<form name="form">
-			<button name="Show" text="Annehmen"/>
+			<button name="Show" text="Anzeigen"/>
+			<button name="Keep" text="Annehmen"/>
 			<button name="Discard" text="Verwerfen"/>
+			<button name="Mute" text="Blockieren"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] hat Ihnen folgendes [OBJECTTYPE] übergeben:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Anzeigen"/>
+			<button name="Accept" text="Annehmen"/>
+			<button name="Discard" text="Verwerfen"/>
+			<button name="ShowSilent" text="(Anzeigen)"/>
+			<button name="AcceptSilent" text="(Annehmen)"/>
+			<button name="DiscardSilent" text="(Verwerfen)"/>
 			<button name="Mute" text="Blockieren"/>
 		</form>
 	</notification>
