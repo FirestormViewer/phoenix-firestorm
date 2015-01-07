@@ -51,11 +51,11 @@
           dynamicwidth="true"/>
       <column
           name="vram_usage"
-          label="VRAM (Textures) in kb"
+          label="VRAM (Textures) in KB"
           dynamicwidth="true"/>
       <column
           name="vram_usage_vbo"
-          label="VRAM (VBO) in kb"
+          label="VRAM (VBO) in KB"
           dynamicwidth="true"/>
     </scroll_list>
     <button
