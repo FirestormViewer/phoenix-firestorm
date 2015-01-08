@@ -9315,8 +9315,35 @@ void invalid_message_callback(LLMessageSystem* msg,
 
 void LLOfferInfo::forceResponse(InventoryOfferResponse response)
 {
-	LLNotification::Params params("UserGiveItem");
+	// <FS:Ansariel> Now this is a hell of piece of... forceResponse() will look for the
+	//               ELEMENT index, and NOT the button index. So if we want to force a
+	//               response of IOR_ACCEPT, we need to pass the correct element
+	//               index of the button. Since we have modified the button order and also
+	//               added legacy accept/decline messages support, we want to reponse with
+	//               the silent version. So we don't use UserGiveItem but UserGiveItemLegacy
+	//               and map the button index to the correct element index.
+	//LLNotification::Params params("UserGiveItem");
+	//params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
+	//LLNotifications::instance().forceResponse(params, response);
+	S32 element_index;
+	switch (response)
+	{
+		case IOR_ACCEPT:
+			element_index = 4;
+			break;
+		case IOR_DECLINE:
+			element_index = 5;
+			break;
+		case IOR_MUTE:
+			element_index = 6;
+			break;
+		default:
+			element_index = -1;
+			break;
+	}
+	LLNotification::Params params("UserGiveItemLegacy");
 	params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
-	LLNotifications::instance().forceResponse(params, response);
+	LLNotifications::instance().forceResponse(params, element_index);
+	// </FS:Ansariel>
 }
 

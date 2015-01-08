@@ -7210,6 +7210,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
     </form>
   </notification>
 
+  <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification
    icon="notify.tga"
    name="UserGiveItemLegacy"
