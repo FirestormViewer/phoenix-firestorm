@@ -1785,13 +1785,21 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		}
 
 		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
-		if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_ACCEPT)
+		if (mIM == IM_GROUP_NOTICE)
 		{
+			opener = new LLOpenTaskGroupOffer;
 			send_auto_receive_response();
 		}
-		if (gSavedSettings.getBOOL("ShowInInventory"))
+		else
 		{
-			LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mObjectID);
+			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_ACCEPT)
+			{
+				send_auto_receive_response();
+			}
+			if (gSavedSettings.getBOOL("ShowInInventory"))
+			{
+				LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mObjectID);
+			}
 		}
 		// </FS:Ansariel>
 
@@ -1834,7 +1842,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 			}
 
 			// <FS:Ansariel> Optional V1-like inventory accept messages
-			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_DECLINE)
+			if ((gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_DECLINE) && mIM == IM_INVENTORY_OFFERED)
 			{
 				send_decline_response();
 			}
@@ -9318,10 +9326,7 @@ void LLOfferInfo::forceResponse(InventoryOfferResponse response)
 	// <FS:Ansariel> Now this is a hell of piece of... forceResponse() will look for the
 	//               ELEMENT index, and NOT the button index. So if we want to force a
 	//               response of IOR_ACCEPT, we need to pass the correct element
-	//               index of the button. Since we have modified the button order and also
-	//               added legacy accept/decline messages support, we want to reponse with
-	//               the silent version. So we don't use UserGiveItem but UserGiveItemLegacy
-	//               and map the button index to the correct element index.
+	//               index of the button.
 	//LLNotification::Params params("UserGiveItem");
 	//params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
 	//LLNotifications::instance().forceResponse(params, response);
@@ -9329,19 +9334,19 @@ void LLOfferInfo::forceResponse(InventoryOfferResponse response)
 	switch (response)
 	{
 		case IOR_ACCEPT:
-			element_index = 4;
+			element_index = 1;
 			break;
 		case IOR_DECLINE:
-			element_index = 5;
+			element_index = 2;
 			break;
 		case IOR_MUTE:
-			element_index = 6;
+			element_index = 3;
 			break;
 		default:
 			element_index = -1;
 			break;
 	}
-	LLNotification::Params params("UserGiveItemLegacy");
+	LLNotification::Params params("UserGiveItem");
 	params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
 	LLNotifications::instance().forceResponse(params, element_index);
 	// </FS:Ansariel>
