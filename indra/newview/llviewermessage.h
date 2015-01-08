@@ -60,7 +60,12 @@ enum InventoryOfferResponse
 	IOR_ACCEPT,
 	IOR_DECLINE,
 	IOR_MUTE,
-	IOR_SHOW
+	IOR_SHOW,
+	// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
+	IOR_ACCEPT_SILENT,
+	IOR_DECLINE_SILENT,
+	IOR_SHOW_SILENT
+	// </FS:Ansariel>
 };
 
 BOOL can_afford_transaction(S32 cost);

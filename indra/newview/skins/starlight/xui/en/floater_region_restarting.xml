@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- height="150"
+ height="200"
  width="290"
  layout="topleft"
  name="region_restarting"
@@ -19,9 +19,9 @@ If you stay in this region you will be logged out.
     </string>
     <panel
      name="layout_panel_1"
-     height="150"
-     width="290"
-     follows="right|top"
+     right="-1"
+     bottom="-1"
+     follows="all"
      top="0"
      left="0"
      background_visible="true"
@@ -71,5 +71,33 @@ If you stay in this region you will be logged out.
      Seconds until restart
      32767
     </text>
+    <combo_box
+     allow_text_entry="true"
+     follows="top|right"
+     height="23"
+     label="My Landmarks"
+     layout="topleft"
+     top_pad="10"
+     left="30"
+     max_chars="64"
+     name="landmark combo"
+     right="-50"
+     width="182">
+        <combo_box.item
+         label="My Landmarks"
+         name="item1"
+         value="None" />
+    </combo_box>
+    <button
+     follows="top|left"
+     height="23"
+     image_overlay="Arrow_Right"
+     image_overlay_alignment="center"
+     tool_tip="Teleport to Landmark"
+     layout="topleft"
+     left_pad="1"
+     name="teleport_btn"
+     top_delta="0"
+     width="28" />
   </panel>
  </floater>

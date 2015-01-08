@@ -151,9 +151,6 @@ public:
 		Optional<bool>			user_resize,
 								auto_resize;
 
-		// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-		Optional<bool>			force_resize_bar;
-
 		Params();
 	};
 
@@ -222,9 +219,6 @@ protected:
 	bool	mIgnoreReshape;
 	LLView::EOrientation mOrientation;
 	class LLResizeBar* mResizeBar;
-
-	// <FS:Ansariel> FIRE-5141: Add option to force display of a resize handle
-	bool	mForceResizeBar;
 
 	// <FS:Ansariel> Add callback for reshaping
 	reshape_panel_callback_t mReshapePanelCallback;

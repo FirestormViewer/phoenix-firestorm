@@ -192,7 +192,10 @@ protected:
 protected:
 	LLGLTextureState  mTextureState ;
 
-
+// <FS>ND> Expose mipmap generation so we can check it for texture memory tax
+public:
+	bool getUseMipMaps() const { return mUseMipMaps; }
+// </FS:ND>
 };
 
 #endif // LL_GL_TEXTURE_H

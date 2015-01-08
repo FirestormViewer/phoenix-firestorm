@@ -200,7 +200,10 @@ public:
 		{
 			if (params.size() > 2)
 			{
-				const std::string object_name = params[2].asString();
+				// <FS:Ansariel> FIRE-14987: Cannot mute objects with slashes in their name via V1 chat history
+				//const std::string object_name = params[2].asString();
+				const std::string object_name = LLURI::unescape(params[2].asString());
+				// </FS:Ansariel>
 				LLMute mute(avatar_id, object_name, LLMute::OBJECT);
 				LLMuteList::getInstance()->add(mute);
 				LLPanelBlockedList::showPanelAndSelect(mute.mID);

@@ -65,6 +65,9 @@
 //put it back as a member once the legacy path is out?
 static std::map<LLUUID, LLAvatarName> sAvatarNameMap;
 
+// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+LLFloaterAvatarPicker::query_id_name_map_t LLFloaterAvatarPicker::sQueryNameMap;
+
 LLFloaterAvatarPicker* LLFloaterAvatarPicker::show(select_callback_t callback,
 												   BOOL allow_multiple,
 												   BOOL closeOnSelect,
@@ -216,6 +219,14 @@ LLFloaterAvatarPicker::~LLFloaterAvatarPicker()
 	if (mFindUUIDAvatarNameCacheConnection.connected())
 	{
 		mFindUUIDAvatarNameCacheConnection.disconnect();
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+	query_id_name_map_t::iterator found = sQueryNameMap.find(mQueryID);
+	if (found != sQueryNameMap.end())
+	{
+		sQueryNameMap.erase(found);
 	}
 	// </FS:Ansariel>
 
@@ -649,6 +660,9 @@ void LLFloaterAvatarPicker::find()
 	}
 	else
 	{
+		// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+		sQueryNameMap[mQueryID] = getKey().asString();
+
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessage("AvatarPickerRequest");
 		msg->nextBlock("AgentData");
@@ -775,7 +789,17 @@ void LLFloaterAvatarPicker::processAvatarPickerReply(LLMessageSystem* msg, void*
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
 	
-	LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker");
+	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+	//LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker");
+	query_id_name_map_t::iterator found = sQueryNameMap.find(query_id);
+	if (found == sQueryNameMap.end())
+	{
+		return;
+	}
+	const LLSD floater_key(found->second);
+	sQueryNameMap.erase(found);
+	LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker", floater_key);
+	// </FS:Ansariel>
 
 	// floater is closed or these are not results from our last request
 	if (NULL == floater || query_id != floater->mQueryID)

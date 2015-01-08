@@ -4,4 +4,5 @@
   <menu_item_call label="Przyciski na pasku..." name="Choose Buttons" />
   <menu_item_check label="Ikony i etykiety" name="icons_with_text" />
   <menu_item_check label="Tylko ikony" name="icons_only" />
+  <menu_item_check label="Zablokowane" name="toolbars_locked" />
 </context_menu>

@@ -3,12 +3,10 @@
 	<floater.string name="Screenshot">
 		Zdjęcie ekranu
 	</floater.string>
+	<button tool_tip="Odśwież zdjęcie" name="refresh_screenshot"/>
 	<check_box label="Załącz zdjęcie" name="screen_check"/>
 	<text name="reporter_title">
 		Zgłasza:
-	</text>
-	<text name="sim_field">
-		Nazwa Regionu
 	</text>
 	<text name="pos_title">
 		Pozycja:
@@ -32,7 +30,7 @@
 		<combo_box.item label="Napaść &gt; Bezpieczny obszar" name="Assault__Safe_area"/>
 		<combo_box.item label="Napaść &gt; Piaskownica do testowania broni" name="Assault__Weapons_testing_sandbox"/>
 		<combo_box.item label="Handel &gt; Niedostarczenie produktu lub usługi" name="Commerce__Failure_to_deliver_product_or_service"/>
-		<combo_box.item label="Prywatność &gt; Dane osobiste" name="Disclosure__Real_world_information"/>
+		<combo_box.item label="Prywatność &gt; Dane osobiste ze świata realnego" name="Disclosure__Real_world_information"/>
 		<combo_box.item label="Prywatność &gt; Zdalne monitorowanie czatu" name="Disclosure__Remotely_monitoring chat"/>
 		<combo_box.item label="Prywatność &gt; Dane z Second Life / Czatu / IM" name="Disclosure__Second_Life_information_chat_IMs"/>
 		<combo_box.item label="Zakłócanie spokoju &gt; Nieuczciwe używanie zasobów Regionu" name="Disturbing_the_peace__Unfair_use_of_region_resources"/>

@@ -234,6 +234,9 @@ public:
 private: //aligned members
 	LL_ALIGN_16(LLVector4a	mImpostorExtents[2]);
 
+	// <FS:Ansariel> Show muted avatars as cloud
+	bool			mMutedAsCloud;
+
 	//--------------------------------------------------------------------
 	// Updates
 	//--------------------------------------------------------------------

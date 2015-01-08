@@ -11,4 +11,5 @@
   <menu_item_check label="Automatycznie dopasuj przyciski" name="layout_style_none" />
   <menu_item_check label="Stały rozmiar przycisków" name="layout_style_equalize" />
   <menu_item_check label="Przyciski wypełniają pasek" name="layout_style_fill" />
+  <menu_item_check label="Zablokowane" name="toolbars_locked" />
 </context_menu>

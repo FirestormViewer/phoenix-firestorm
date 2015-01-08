@@ -21,14 +21,14 @@
 			<text name="classified_location_label" value="Miejsce:"/>
 			<text name="content_type_label" value="Zawartość:"/>
 			<text name="category_label" value="Kategoria:"/>
-			<text name="creation_date_label" value="Data stworzenia:"/>
-			<text_editor name="creation_date" tool_tip="Data stworzenia"/>
-			<text name="price_for_listing_label" value="Cena wyświetlenia:"/>
+			<text name="creation_date_label" value="Data utworzenia:"/>
+			<text_editor name="creation_date" tool_tip="Data utworzenia"/>
+			<text name="price_for_listing_label" value="Koszt listowania:"/>
 			<text_editor name="price_for_listing" tool_tip="Cena za umieszczenie reklamy."/>
 			<layout_stack name="descr_stack">
 				<layout_panel name="clickthrough_layout_panel">
 					<text name="click_through_label" value="Kliknięcia:"/>
-					<text_editor name="click_through_text" tool_tip="Kliknij według daty"/>
+					<text_editor name="click_through_text" tool_tip="Współczynnik klikalności"/>
 				</layout_panel>
 				<layout_panel name="price_layout_panel">
 					<text name="auto_renew_label" value="Autoprzedłużanie:"/>

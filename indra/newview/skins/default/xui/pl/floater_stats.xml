@@ -31,7 +31,6 @@
 					<stat_bar label="Pamięć przypisana" name="glboundmemstat"/>
 				</stat_view>
 				<stat_view name="memory" label="Użycie pamięci">
-					<stat_bar name="LLTrace" label="LLTrace"/>
 					<stat_bar name="LLView" label="Interfejs"/>
 					<stat_bar name="LLFontFreetype" label="Czcionki"/>
 					<stat_bar name="LLInventoryObject" label="Szafa"/>

@@ -53,8 +53,12 @@ if (WINDOWS)
     )
 elseif (DARWIN)
     set(WEBKIT_PLUGIN_LIBRARIES
-        optimized ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.dylib
-        debug ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.dylib
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.a
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libQtWebKit.4.dylib
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libQtOpenGL.4.dylib
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libQtNetwork.4.dylib
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libQtGui.4.dylib
+        ${ARCH_PREBUILT_DIRS_RELEASE}/libQtCore.4.dylib
         )
 elseif (LINUX)
     # FIRE-6108, add missing if clause for standalone builds - TL
@@ -74,7 +78,7 @@ elseif (LINUX)
           QtGui
           QtCore
           jpeg
-          jscore
+#          jscore
           fontconfig
           X11
           Xrender

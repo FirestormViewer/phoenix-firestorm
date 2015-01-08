@@ -1346,7 +1346,21 @@ Prøv igen om lidt.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Vis"/>
+			<button name="Keep" text="Behold"/>
 			<button name="Discard" text="Smid væk"/>
+			<button name="Mute" text="Blokér"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] har givet dig denne/dette [OBJECTTYPE]:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Vis"/>
+			<button name="Accept" text="Behold"/>
+			<button name="Discard" text="Smid væk"/>
+			<button name="ShowSilent" text="(Vis)"/>
+			<button name="AcceptSilent" text="(Behold)"/>
+			<button name="DiscardSilent" text="(Smid væk)"/>
 			<button name="Mute" text="Blokér"/>
 		</form>
 	</notification>

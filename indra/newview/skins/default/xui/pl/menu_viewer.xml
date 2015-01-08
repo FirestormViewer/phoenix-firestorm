@@ -80,7 +80,7 @@
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
 		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
-		<menu_item_check label="Miejsca" name="Places"/>
+		<menu_item_check label="Landmarki" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa Świata" name="World Map"/>
 		<menu_item_call label="Zapamiętaj to miejsce (LM)" name="Create Landmark Here"/>
@@ -109,21 +109,21 @@
 		</menu>
 		<menu label="Edytor środowiska" name="Environment Editor">
 			<menu_item_call label="Ustawienia środowiska" name="Environment Settings"/>
-				<menu name="Water Presets" label="Ustawienia wody">
-					<menu_item_call label="Nowe Ustawienie..." name="new_water_preset"/>
-					<menu_item_call label="Edytuj Ustawienie..." name="edit_water_preset"/>
-					<menu_item_call label="Usuń Ustawienie..." name="delete_water_preset"/>
-				</menu>
-				<menu name="Sky Presets" label="Ustawienia nieba">
-					<menu_item_call label="Nowe Ustawienie..." name="new_sky_preset"/>
-					<menu_item_call label="Edytuj Ustawienie..." name="edit_sky_preset"/>
-					<menu_item_call label="Usuń Ustawienie..." name="delete_sky_preset"/>
-				</menu>
-				<menu name="Day Presets" label="Ustawienia pory dnia">
-					<menu_item_call label="Nowe Ustawienie..." name="new_day_preset"/>
-					<menu_item_call label="Edytuj Ustawienie..." name="edit_day_preset"/>
-					<menu_item_call label="Usuń Ustawienie..." name="delete_day_preset"/>
-				</menu>
+			<menu name="Water Presets" label="Ustawienia wody">
+				<menu_item_call label="Nowe Ustawienie..." name="new_water_preset"/>
+				<menu_item_call label="Edytuj Ustawienie..." name="edit_water_preset"/>
+				<menu_item_call label="Usuń Ustawienie..." name="delete_water_preset"/>
+			</menu>
+			<menu name="Sky Presets" label="Ustawienia nieba">
+				<menu_item_call label="Nowe Ustawienie..." name="new_sky_preset"/>
+				<menu_item_call label="Edytuj Ustawienie..." name="edit_sky_preset"/>
+				<menu_item_call label="Usuń Ustawienie..." name="delete_sky_preset"/>
+			</menu>
+			<menu name="Day Presets" label="Ustawienia pory dnia">
+				<menu_item_call label="Nowe Ustawienie..." name="new_day_preset"/>
+				<menu_item_call label="Edytuj Ustawienie..." name="edit_day_preset"/>
+				<menu_item_call label="Usuń Ustawienie..." name="delete_day_preset"/>
+			</menu>
 		</menu>
 		<menu name="photo_and_video" label="Foto i Wideo">
 			<menu_item_call label="Narzędzia fotograficzne" name="phototools_item_call"/>
@@ -189,6 +189,7 @@
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>
 			<menu_item_check label="Wybierz tylko moje obiekty" name="Select Only My Objects"/>
 			<menu_item_check label="Wybierz tylko obiekty przesuwalne" name="Select Only Movable Objects"/>
+			<menu_item_check label="Wybierz tylko obiekty kopiowalne" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Dołącz obiekty, których właścicielem jest grupa" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Wybierz przez otoczenie" name="Select By Surrounding"/>
 			<menu_item_check label="Pokaż kontury selekcji" name="Show Selection Outlines"/>
@@ -306,7 +307,7 @@
 			<menu_item_check label="Trawa" name="Rendering Type Grass"/>
 			<menu_item_check label="Chmury" name="Rendering Type Clouds"/>
 			<menu_item_check label="Cząsteczki" name="Rendering Type Particles"/>
-			<menu_item_check label="Zderzenia" name="Rendering Type Bump"/>
+			<menu_item_check label="Mapping wypukłości i połysk" name="Rendering Type Bump"/>
 		</menu>
 		<menu label="Opcje renderowania" name="Rendering Features">
 			<menu_item_check label="Interfejs użytkownika" name="ToggleUI"/>
@@ -455,8 +456,8 @@
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>
-			<menu_item_call label="Włącz logowanie" name="Enable Message Log"/>
-			<menu_item_call label="Wyłącz logowanie" name="Disable Message Log"/>
+			<menu_item_call label="Włącz logowanie wiadomości" name="Enable Message Log"/>
+			<menu_item_call label="Wyłącz logowanie wiadomości" name="Disable Message Log"/>
 			<menu_item_check label="Prędkość interpolacji obiektów" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Pinguj pozycje interpolowanych obiektów" name="Ping Interpolate Object Positions"/>
 			<menu_item_call label="Zagub pakiet" name="Drop a Packet" shortcut=""/>
@@ -495,9 +496,7 @@
 			<menu_item_check label="Debuguj kliknięcia" name="Debug Clicks"/>
 			<menu_item_check label="Debuguj widoki" name="Debug Views"/>
 			<menu_item_check label="Debuguj chmurki dla podpowiedzi nazw" name="Debug Name Tooltips"/>
-			<menu_item_check label="Debuguj kliknięcia" name="Debug Clicks"/>
-			<menu_item_check label="Debuguj kliknięcia" name="Debug Clicks"/>
-			<menu_item_check label="Debuguj zdarzeń myszy" name="Debug Mouse Events"/>
+			<menu_item_check label="Debuguj zdarzenia myszy" name="Debug Mouse Events"/>
 			<menu_item_check label="Debuguj klawisze" name="Debug Keys"/>
 			<menu_item_check label="Debuguj procesy okien" name="Debug WindowProc"/>
 		</menu>
@@ -578,13 +577,13 @@
 			<menu_item_call label="Ustaw na własność Lindenów" name="Set to Linden Content"/>
 			<menu_item_call label="Zażądaj działki publicznej" name="Claim Public Land"/>
 		</menu>
-		<menu label="Region" name="Region">
+		<menu name="Region">
 			<menu_item_call label="Zrzuć tymczasowe informacje zasobów danych (assetów)" name="Dump Temp Asset Data"/>
 			<menu_item_call label="Zachowaj ustawienie Regionu" name="Save Region State"/>
 		</menu>
 		<menu_item_call label="Boskie narzędzia" name="God Tools"/>
 	</menu>
-	<menu label="Admin" name="Deprecated">
+	<menu name="Deprecated">
 		<menu label="Przyłącz obiekt" name="Attach Object"/>
 		<menu label="Odłącz obiekt" name="Detach Object"/>
 		<menu label="Zdejmij ubrania" name="Take Off Clothing">
@@ -597,7 +596,6 @@
 			<menu_item_call label="Podkoszulek" name="Menu Undershirt"/>
 			<menu_item_call label="Bielizna" name="Menu Underpants"/>
 			<menu_item_call label="Spódnica" name="Skirt"/>
-			<menu_item_call label="Alpha" name="Alpha"/>
 			<menu_item_call label="Tatuaż" name="Tattoo"/>
 			<menu_item_call label="Fizyka" name="Physics"/>
 			<menu_item_call label="Wszystkie ubrania" name="All Clothes"/>

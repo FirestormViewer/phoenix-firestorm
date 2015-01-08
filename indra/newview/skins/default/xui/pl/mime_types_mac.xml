@@ -19,10 +19,10 @@
 			Film
 		</label>
 		<tooltip name="movie_tooltip">
-			To miejsce posiada zawartość filmową
+			To miejsce wyświetla filmy
 		</tooltip>
 		<playtip name="movie_playtip">
-			Oglądaj film
+			Zacznij odtwarzanie filmu
 		</playtip>
 	</widgetset>
 	<widgetset name="image">
@@ -30,10 +30,10 @@
 			Obraz
 		</label>
 		<tooltip name="image_tooltip">
-			To miejsce posiada zwartość graficzną
+			W tym miejscu można zobaczyć obrazy
 		</tooltip>
 		<playtip name="image_playtip">
-			Zobacz zdjęcie miejsca
+			Zobacz obrazy wyświetlane w tym miejscu
 		</playtip>
 	</widgetset>
 	<widgetset name="audio">
@@ -41,15 +41,15 @@
 			Dźwięk
 		</label>
 		<tooltip name="audio_tooltip">
-			To miejsce posiada zawartość dźwiękową
+			W tym miejscu odtwarzane są dźwięki
 		</tooltip>
 		<playtip name="audio_playtip">
-			Rozpocznij odtwarzanie dźwięków
+			Zacznij odtwarzanie dźwięków
 		</playtip>
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
-			Synchroniczne strumienie mediów
+			Strumień w czasie rzeczywistym
 		</label>
 	</scheme>
 	<mimetype name="blank">

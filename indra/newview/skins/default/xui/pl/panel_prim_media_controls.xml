@@ -7,13 +7,13 @@
 	</layout_stack>
 	<layout_stack name="media_controls">
 		<layout_panel name="back">
-			<button name="back_btn" tool_tip="Przejdź do poprzedniego"/>
+			<button name="back_btn" tool_tip="Przejdź do poprzedniej strony"/>
 		</layout_panel>
 		<layout_panel name="fwd">
-			<button name="fwd_btn" tool_tip="Przejdź do następnego"/>
+			<button name="fwd_btn" tool_tip="Przejdź do następnej strony"/>
 		</layout_panel>
 		<layout_panel name="home">
-			<button name="home_btn" tool_tip="Strona domowa"/>
+			<button name="home_btn" tool_tip="Strona startowa"/>
 		</layout_panel>
 		<layout_panel name="media_stop">
 			<button name="media_stop_btn" tool_tip="Zatrzymaj media"/>
@@ -35,7 +35,7 @@
 			<icon name="media_secure_lock_flag" tool_tip="Bezpieczne przeglądanie"/>
 			<layout_stack name="media_address_url_icons">
 				<layout_panel name="media_address_url_icons_wl">
-					<icon name="media_whitelist_flag" tool_tip="Biała Lista aktywna"/>
+					<icon name="media_whitelist_flag" tool_tip="Biała lista aktywna"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

@@ -26,7 +26,6 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "linden_common.h"
 
 #include "pieseparator.h"
 
@@ -40,5 +39,5 @@ PieSeparator::PieSeparator(const PieSeparator::Params& p) :
 // pick up parameters from the XUI definition
 PieSeparator::Params::Params()
 {
-	name="pie_separator";
+	name = "pie_separator";
 }

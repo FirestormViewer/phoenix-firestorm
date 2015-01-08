@@ -191,6 +191,7 @@
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
 			<menu_item_check label="Nur meine Objekte auswählen" name="Select Only My Objects"/>
 			<menu_item_check label="Nur bewegliche Objekte auswählen" name="Select Only Movable Objects"/>
+			<menu_item_check label="Nur kopierbare Objekte auswählen" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Gruppen-Objekte einschließen" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Nach Umgebung auswählen" name="Select By Surrounding"/>
 			<menu_item_check label="Auswahlumrandung anzeigen" name="Show Selection Outlines"/>
@@ -386,6 +387,7 @@
 			<menu_item_check label="Transaktion beim Hochladen anzeigen" name="Show Upload Transaction"/>
 			<menu_item_check label="Render-Info anzeigen" name="Show Render Info"/>
 			<menu_item_check label="Texturinfos anzeigen" name="Show Texture Info"/>
+			<menu_item_call label="VRAM-Belegung pro Objekt" name="VRAM usage per object"/>
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
 			<menu_item_check label="Farbe unter Cursor anzeigen" name="Show Color Under Cursor"/>
 			<menu_item_check label="Speicher anzeigen" name="Show Memory"/>

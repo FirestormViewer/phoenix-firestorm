@@ -3,7 +3,6 @@
 	<text name="media_label">
 		Wprowadź URL / wzorzec dla dodania do listy dozwolonych domen
 	</text>
-	<line_editor name="whitelist_entry" tool_tip="Wprowadź URL lub wzorzec URL do Białej Listy"/>
-	<button label="OK" name="ok_btn"/>
+	<line_editor name="whitelist_entry" tool_tip="Wprowadź URL lub wzorzec URL na Białą Listę"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>

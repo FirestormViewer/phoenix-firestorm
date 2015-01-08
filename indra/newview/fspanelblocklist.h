@@ -57,7 +57,7 @@ public:
 	 *	@param idToSelect - LLUUID of blocked Resident or Object to be selected. 
 	 *			If it is LLUUID::null, nothing will be selected.
 	 */
-	static void showPanelAndSelect(const LLUUID& idToSelect);
+	static void showPanelAndSelect(const LLUUID& idToSelect = LLUUID::null);
 
 	// LLMuteListObserver callback interface implementation.
 	/* virtual */ void onChange() {	refreshBlockedList();}
@@ -90,7 +90,7 @@ private:
 	bool isActionEnabled(const LLSD& userdata);
 
 	void callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
-	static void callbackBlockByName(const std::string& text);
+	void callbackBlockByName(const std::string& text);
 
 private:
 	FSBlockListCtrl* mBlockedList;

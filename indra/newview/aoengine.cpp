@@ -1036,6 +1036,13 @@ void AOEngine::update()
 	{
 		LLViewerInventoryCategory* currentCategory=categories->at(index);
 		const std::string& setFolderName=currentCategory->getName();
+
+		if( setFolderName.empty())
+		{
+			LL_WARNS("AOEngine") << "Folder with emtpy name in AO folder" << LL_ENDL;
+			continue;
+		}
+
 		std::vector<std::string> params;
 		LLStringUtil::getTokens(setFolderName,params,":");
 

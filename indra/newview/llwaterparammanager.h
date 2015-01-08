@@ -293,6 +293,10 @@ public:
 	F32 getFogDensity(void);
 	LLColor4 getFogColor(void);
 
+	// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+	/// escape string in a way different from LLURI::escape()
+	static std::string escapeString(const std::string& str);
+
 public:
 
 	LLWaterParamSet mCurParams;

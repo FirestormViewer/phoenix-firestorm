@@ -774,5 +774,11 @@ std::string LLWLParamManager::escapeString(const std::string& str)
 	std::string escaped_str(curl_str);
 	curl_free(curl_str);
 
+	// <FS:Ansariel> FIRE-10861: Fix Windlight settings order
+	// And neither does cURL...
+	LLStringUtil::replaceString(escaped_str, "-", "%2D");
+	LLStringUtil::replaceString(escaped_str, ".", "%2E");
+	// </FS:Ansariel>
+
 	return escaped_str;
 }

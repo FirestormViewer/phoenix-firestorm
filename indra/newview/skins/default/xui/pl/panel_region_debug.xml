@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Debugowanie" name="Debug">
-	<text name="region_text_lbl">
-		Region:
-	</text>
 	<text name="region_text">
 		brak danych
 	</text>
-	<check_box label="Wyłącz skrypty" name="disable_scripts_check" tool_tip="Wyłącz wszystkie skrypty w tym Regionie"/>
-	<check_box label="Wyłącz kolizje" name="disable_collisions_check" tool_tip="Wyłącz kolizje obiektów (nie awatarów) w tym Regionie"/>
-	<check_box label="Wyłącz fizykę" name="disable_physics_check" tool_tip="Wyłącz wpływ fizyki w tym Regionie"/>
+	<check_box label="Wyłącz skrypty" name="disable_scripts_check" tool_tip="Wyłącz wszystkie skrypty w tym regionie"/>
+	<check_box label="Wyłącz kolizje" name="disable_collisions_check" tool_tip="Wyłącz kolizje obiektów (nie awatarów) w tym regionie"/>
+	<check_box label="Wyłącz fizykę" name="disable_physics_check" tool_tip="Wyłącz wpływ fizyki w tym regionie"/>
 	<button label="Zastosuj" name="apply_btn"/>
 	<text name="objret_text_lbl">
-		Zwrot obiektu
+		Zwrot obiektów
 	</text>
 	<text name="resident_text_lbl">
 		Rezydent:
@@ -26,13 +23,13 @@
 	<check_box label="Ze skryptami" name="return_scripts" tool_tip="Odeślij wyłącznie obiekty ze skryptami"/>
 	<check_box label="Wyłącznie obiekty, które są na działkach innych osób" name="return_other_land" tool_tip="Odeślij wyłącznie obiekty, które są na działkach innych osób"/>
 	<check_box label="W każdym regionie tego majątku" name="return_estate_wide" tool_tip="Odeślij obiekty z wszystkich regionów w tym majątku"/>
-	<button label="Odeślij" name="return_btn"/>
+	<button label="Zwróć" name="return_btn"/>
 	<button label="Szczytowe kolizje" name="top_colliders_btn" tool_tip="Lista obiektów doświadczających najwięcej potencjalnych kolizji"/>
 	<button label="Szczytowe skrypty" name="top_scripts_btn" tool_tip="Lista obiektów najdłużej wykonujących skrypty"/>
-	<button label="Restart Regionu" name="restart_btn" tool_tip="Odliczanie i restart Regionu za dwie minuty"/>
+	<button label="Restart regionu" name="restart_btn" tool_tip="Odliczanie i restart regionu za dwie minuty"/>
 	<text name="label_restart_delay">
 		Sekundy:
 	</text>
-	<button label="Anuluj restart" name="cancel_restart_btn" tool_tip="Anuluj restart Regionu"/>
+	<button label="Anuluj restart" name="cancel_restart_btn" tool_tip="Anuluj restart regionu"/>
 	<button label="Debugowanie regionu" name="region_debug_console_btn" tool_tip="Otwórz konsolę debugowania regionu"/>
 </panel>

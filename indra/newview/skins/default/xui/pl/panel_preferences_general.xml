@@ -27,7 +27,6 @@
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="General, Moderate oraz Adult" name="Desired_Adult"/>
 		<combo_box.item label="General oraz Moderate" name="Desired_Mature"/>
-		<combo_box.item label="General" name="Desired_PG"/>
 	</combo_box>
 	<text name="start_location_textbox">
 		Miejsce Startu:

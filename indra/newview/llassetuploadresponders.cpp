@@ -570,9 +570,10 @@ void LLUpdateAgentInventoryResponder::uploadComplete(const LLSD& content)
 			  }
 		  }
 		// <FS:TT> Client LSL Bridge
-		if (FSLSLBridge::instance().canUseBridge())
+		FSLSLBridge& fs_bridge = FSLSLBridge::instance();
+		if (fs_bridge.canUseBridge() && fs_bridge.getBridgeCreating())
 		{
-			FSLSLBridge::instance().checkBridgeScriptName(mFileName);
+			fs_bridge.checkBridgeScriptName(mFileName);
 		}
 		// </FS:TT>
 		  break;

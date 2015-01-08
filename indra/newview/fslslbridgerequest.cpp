@@ -89,7 +89,7 @@ void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 			FSRadarEntry* entry = radar->getEntry(targetAv);
 			if (entry)
 			{
-				entry->setZOffset((F32)(targetZ));
+				entry->setZOffset(targetZ);
 				//LL_INFOS() << targetAv << " ::: " << targetZ << LL_ENDL;
 			}
 		}

@@ -119,6 +119,13 @@ clicking on their names.
              name="member_eject"
              width="100" />
             <button
+             height="23"
+             label="Ban Member(s)"
+             follows="top|left"
+             left_pad="4"
+             name="member_ban"
+             width="100" />
+            <button
              name="export_list"
              label="Export List"
              left_pad="4"
@@ -288,6 +295,88 @@ things in this group. There&apos;s a broad variety of Abilities.
              width="270" />
         </scroll_list>
         </panel>
+        <panel
+        border="false"
+        height="303"
+        label="Banned Residents"
+        layout="topleft"
+        left="0"
+        right="-1"
+        help_topic="roles_banlist_tab"
+        name="banlist_sub_tab"
+        class="panel_group_banlist_subtab"
+        tool_tip="View the banned residents from this group."
+        width="310">
+        <panel.string
+         name="help_text">
+          Any resident on the ban list will be unable to join the group.
+        </panel.string>
+        <panel.string
+         name="ban_count_template">
+          Ban count: [COUNT]/[LIMIT]
+        </panel.string>
+        <name_list
+             column_padding="0"
+             draw_heading="true"
+             height="136"
+             follows="left|top|right"
+             layout="topleft"
+             left="0"
+             right="-1"
+             multi_select="true"
+             name="ban_list"
+             short_names="false"
+             name_column="name"
+             top_pad="5">
+          <name_list.columns
+           label="Resident"
+           name="name"
+           font.name="SANSSERIF_SMALL"
+           font.style="NORMAL"
+           relative_width="0.7" />
+          <name_list.columns
+           label="Date Banned"
+           name="ban_date"
+           relative_width="0.3" />
+        </name_list>
+        <button
+          follows="top|left"
+          height="23"
+          label="Ban Resident(s)"
+          layout="topleft"
+          left="3"
+          name="ban_create"
+          tool_tip="Ban residents from your group"
+          width="120" />
+        <button
+          follows="top|left"
+          height="23"
+          label="Remove Ban(s)"
+          layout="topleft"
+          left_pad="5"
+          name="ban_delete"
+          tool_tip="Unban selected residents from your group"
+          width="120" />
+        <button
+          follows="top|left"
+          height="23"
+          width="23"
+          image_overlay="Refresh_Off"
+          layout="topleft"
+          left_pad="5"
+          name="ban_refresh"
+          tool_tip="Refresh the ban list"
+        />
+        <text
+          type="string"
+          height="18"
+          left_pad="5"
+          follows="top|left"
+          layout="topleft"
+          name="ban_count"
+          width="100">
+        </text>
+      </panel>
     </tab_container>
     <panel
      height="350"

@@ -3384,6 +3384,17 @@ bool LLAppViewer::initConfiguration()
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
 	loadColorSettings();
+    
+    //<FS:KC> One time fix for Latency
+    if ((gLastRunVersion != LLVersionInfo::getChannelAndVersion()) && (gSavedSettings.getString("SkinCurrent") == "latency") && !gSavedSettings.getBOOL("FSLatencyOneTimeFixRun"))
+    {
+        LL_INFOS() << "FSLatencyOneTimeFix: Fixing script dialog colors." << LL_ENDL;
+        // Replace previously saved script dialog colors with new defaults, which happen to be the same as the group notice colors
+        LLUIColorTable::instance().setColor("ScriptDialog", LLUIColorTable::instance().getColor("GroupNotifyDialogBG", LLColor4::grey4));
+        LLUIColorTable::instance().setColor("ScriptDialogFg", LLUIColorTable::instance().getColor("GroupNotifyTextColor", LLColor4::white));
+    }
+    gSavedSettings.setBOOL("FSLatencyOneTimeFixRun", TRUE);
+    //</FS:KC>
 
 	// Let anyone else who cares know that we've populated our settings
 	// variables.
@@ -3711,19 +3722,22 @@ bool LLAppViewer::initWindow()
 	LL_INFOS("AppInit") << "gViewerwindow created." << LL_ENDL;
 
 	// Need to load feature table before cheking to start watchdog.
-	bool use_watchdog = false;
-	int watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
-	if (watchdog_enabled_setting == -1)
-	{
-		use_watchdog = !LLFeatureManager::getInstance()->isFeatureAvailable("WatchdogDisabled");
-	}
-	else
-	{
-		// The user has explicitly set this setting; always use that value.
-		use_watchdog = bool(watchdog_enabled_setting);
-	}
+	// <FS:Ansariel> Fix Watchdog settings/feature table mess
+	//bool use_watchdog = false;
+	//int watchdog_enabled_setting = gSavedSettings.getS32("WatchdogEnabled");
+	//if (watchdog_enabled_setting == -1)
+	//{
+	//	use_watchdog = !LLFeatureManager::getInstance()->isFeatureAvailable("WatchdogDisabled");
+	//}
+	//else
+	//{
+	//	// The user has explicitly set this setting; always use that value.
+	//	use_watchdog = bool(watchdog_enabled_setting);
+	//}
 
-	if (use_watchdog)
+	//if (use_watchdog)
+	if (gSavedSettings.getBOOL("WatchdogEnabled"))
+	// </FS:Ansariel>
 	{
 		LLWatchdog::getInstance()->init(watchdog_killer_callback);
 	}
@@ -5691,7 +5705,10 @@ void LLAppViewer::idle()
 	// Handle the regular UI idle callbacks as well as
 	// hover callbacks
 	//
-
+    
+#ifdef LL_DARWIN
+	if (!mQuitRequested)  //MAINT-4243
+#endif
 	{
 // 		LL_RECORD_BLOCK_TIME(FTM_IDLE_CB);
 

@@ -125,6 +125,11 @@ void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 
 void FSPanelBlockList::showPanelAndSelect(const LLUUID& idToSelect)
 {
+	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
+	{
+		return;
+	}
+
 	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
 	{
 		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
@@ -162,7 +167,9 @@ void FSPanelBlockList::refreshBlockedList()
 
 void FSPanelBlockList::updateButtons()
 {
-	getChildView("unblock_btn")->setEnabled(mBlockedList->getNumSelected() > 0);
+	bool has_selection = mBlockedList->getNumSelected() > 0;
+	getChildView("blocked_gear_btn")->setEnabled(has_selection);
+	getChildView("unblock_btn")->setEnabled(has_selection);
 }
 
 void FSPanelBlockList::removeMutes()
@@ -300,7 +307,7 @@ void FSPanelBlockList::blockResidentByName()
 
 void FSPanelBlockList::blockObjectByName()
 {
-	LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(&FSPanelBlockList::callbackBlockByName);
+	LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(boost::bind(&FSPanelBlockList::callbackBlockByName, this, _1));
 	LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
 	if (parent)
 	{
@@ -331,7 +338,6 @@ void FSPanelBlockList::callbackBlockPicked(const uuid_vec_t& ids, const std::vec
 	showPanelAndSelect(mute.mID);
 }
 
-//static
 void FSPanelBlockList::callbackBlockByName(const std::string& text)
 {
 	if (text.empty()) return;
@@ -341,6 +347,11 @@ void FSPanelBlockList::callbackBlockByName(const std::string& text)
 	if (!success)
 	{
 		LLNotificationsUtil::add("MuteByNameFailed");
+	}
+	else
+	{
+		mBlockedList->selectItemByLabel(text);
+		mBlockedList->scrollToShowSelected();
 	}
 }
 

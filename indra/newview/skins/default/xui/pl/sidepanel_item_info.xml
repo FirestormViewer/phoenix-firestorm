@@ -60,7 +60,7 @@
 				</text>
 				<check_box label="Modyfikacja" name="CheckNextOwnerModify"/>
 				<check_box label="Kopiowanie" name="CheckNextOwnerCopy"/>
-				<check_box label="Transferowanie" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddawać lub sprzedawać ten obiekt"/>
+				<check_box label="Transferowanie" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddać lub sprzedać ten obiekt"/>
 			</panel>
 			<check_box label="Na sprzedaż" name="CheckPurchase"/>
 			<combo_box name="combobox sale copy">

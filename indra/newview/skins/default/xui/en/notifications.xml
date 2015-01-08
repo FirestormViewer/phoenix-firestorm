@@ -507,7 +507,35 @@ Add this ability to &apos;[ROLE_NAME]&apos;?
      notext="No"
      yestext="Yes"/>
   </notification>
-  
+
+  <notification
+    icon="alertmodal.tga"
+    name="AssignBanAbilityWarning"
+    type="alertmodal">
+You are about to add the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
+
+ *WARNING*
+Any Member in a Role with this Ability will also be granted the Abilities &apos;[ACTION_NAME_2]&apos; and &apos;[ACTION_NAME_3]&apos;
+    <usetemplate
+      name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+  icon="alertmodal.tga"
+  name="RemoveBanAbilityWarning"
+  type="alertmodal">
+You are removing the Ability &apos;[ACTION_NAME]&apos; to the Role &apos;[ROLE_NAME]&apos;.
+
+ *WARNING*
+Removing this ability will NOT remove the Abilities &apos;[ACTION_NAME_2]&apos; and &apos;[ACTION_NAME_3]&apos;.
+ 
+If you no longer wish to have these abilities granted to this role, disable them immediately!
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
   <notification
     icon="alertmodal.tga"
     name="EjectGroupMemberWarning"
@@ -3864,6 +3892,28 @@ Leave Group?
   </notification>
 
   <notification
+   icon="aler.tga"
+   name="GroupDepartError"
+   type="alert">
+Unable to leave group: [reason].
+      <tag>reason</tag>
+      <usetemplate
+       name="okbutton"
+       yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="GroupDepart"
+   type="alert">
+You have left the group [group_name].
+      <tag>group_name</tag>
+      <usetemplate
+       name="okbutton"
+       yestext="OK"/>
+  </notification>
+
+  <notification
    icon="alert.tga"
    name="ConfirmKick"
    type="alert">
@@ -7130,6 +7180,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
     </form>
   </notification>
 
+  <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification
    icon="notify.tga"
    name="UserGiveItem"
@@ -7144,11 +7195,57 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
       <button
        index="3"
        name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Keep"
        text="Accept"/>
       <button
        index="1"
        name="Discard"
        text="Discard"/>
+      <button
+       index="2"
+       name="Mute"
+       text="Mute Sender"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="UserGiveItemLegacy"
+   label="Inventory offer from [NAME_LABEL]"
+   log_to_im ="true"
+   type="offer"
+   sound="UISndInventoryOffer">
+[NAME_SLURL] has given you this [OBJECTTYPE]:
+[ITEM_SLURL]
+Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
+    <form name="form">
+      <button
+       index="3"
+       name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Accept"
+       text="Accept"/>
+      <button
+       index="1"
+       name="Discard"
+       text="Discard"/>
+      <button
+       index="6"
+       name="ShowSilent"
+       text="(Show)"/>
+      <button
+       index="4"
+       name="AcceptSilent"
+       text="(Accept)"/>
+      <button
+       index="5"
+       name="DiscardSilent"
+       text="(Discard)"/>
       <button
        index="2"
        name="Mute"
@@ -7531,7 +7628,7 @@ The item you are trying to wear uses a feature that your viewer cannot read. Ple
 &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, an object owned by &apos;[NAME]&apos;, would like to:
 
 [QUESTIONS]
-Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&apos;.
+Is this OK?
   <tag>confirm</tag>
     <form name="form">
       <button
@@ -7545,7 +7642,7 @@ Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&a
       <button
        index="2"
        name="Mute"
-       text="Mute Owner"/>
+       text="Block"/>
     </form>
   </notification>
 
@@ -9138,7 +9235,7 @@ Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
    name="NewAOSet"
    type="alertmodal">
 Specify a name for the new AO set:
-(The name may not contain a ":" or "|" character)
+(The name may contain any ASCII character, except for ":" or "|")
     <form name="form">
       <input name="message" type="text" default="true">
 New AO Set
@@ -9157,10 +9254,10 @@ New AO Set
 
   <notification
    icon="alertmodal.tga"
-   name="NewAOCantContainColon"
+   name="NewAOCantContainNonASCII"
    type="alertmodal">
 Could not create new AO set "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -9168,10 +9265,10 @@ The name may not contain ":" or "|" characters.
 
   <notification
    icon="alertmodal.tga"
-   name="RenameAOCantContainColon"
+   name="RenameAOMustBeASCII"
    type="alertmodal">
-Could not rename new AO set to "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+Could not rename AO set "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -11467,15 +11564,6 @@ Caution: Use the Fly Override responsibly! Using the Fly Override without the la
 The region you have entered is running a different simulator version.
 Current simulator: [NEWVERSION]
 Previous simulator: [OLDVERSION]
-  </notification>
-  
-  <notification
-   name="VintageLoginInfo"
-   type="alertmodal">
-Did you know you can get the classic Phoenix Viewer look with Firestorm? Go to the "select mode" menu on the right and select "Phoenix".
-    <usetemplate
-      name="okbutton"
-      yestext="OK"/>
   </notification>
   
   <notification

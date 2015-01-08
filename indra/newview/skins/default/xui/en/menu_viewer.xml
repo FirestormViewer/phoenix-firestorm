@@ -1612,6 +1612,15 @@
                      parameter="movable" />
                 </menu_item_check>
                 <menu_item_check
+                 label="Select Only Copyable Objects"
+                 name="Select Only Copyable Objects">
+                    <menu_item_check.on_check
+                     control="FSSelectCopyableOnly" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSSelectCopyableOnly" />
+                </menu_item_check>
+                <menu_item_check
                  label="Select By Surrounding"
                  name="Select By Surrounding">
                     <menu_item_check.on_check
@@ -1625,7 +1634,8 @@
                     <menu_item_check.on_check
                      control="FSSelectIncludeGroupOwned" />
                     <menu_item_check.on_click
-                     function="Tools.SelectIncludeGroupOwned" />
+                     function="ToggleControl"
+                     parameter="FSSelectIncludeGroupOwned" />
                 </menu_item_check>
 
           <menu_item_separator/>
@@ -3277,6 +3287,13 @@
                  function="ToggleControl"
                  parameter="DebugShowTextureInfo" />
             </menu_item_check>
+            <menu_item_call
+              label="VRAM usage per object"
+              name="VRAM usage per object">
+              <menu_item_call.on_click
+                function="Floater.Show"
+                parameter="vram_usage" />
+            </menu_item_call>
             <menu_item_check
              label="Show Avatar Render Info"
              name="Show Avatar Render Info">
@@ -4614,7 +4631,6 @@
                  function="ToggleControl"
                  parameter="DebugAvatarRotation" />
             </menu_item_check> -->
--->
             <menu_item_call
              label="Dump Attachments"
              name="Dump Attachments">

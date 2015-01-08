@@ -2654,7 +2654,21 @@ Por favor, tente novamente em alguns instantes.
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="Mostrar"/>
+			<button name="Keep" text="Manter"/>
 			<button name="Discard" text="Descarte"/>
+			<button name="Mute" text="Bloquear"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] lhe deu [OBJECTTYPE]:
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="Mostrar"/>
+			<button name="Accept" text="Manter"/>
+			<button name="Discard" text="Verwerfen"/>
+			<button name="ShowSilent" text="(Descarte)"/>
+			<button name="AcceptSilent" text="(Manter)"/>
+			<button name="DiscardSilent" text="(Descarte)"/>
 			<button name="Mute" text="Bloquear"/>
 		</form>
 	</notification>

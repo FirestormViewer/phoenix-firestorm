@@ -4,7 +4,7 @@
 		nieznany
 	</floater.string>
 	<string name="postcard_progress_str">
-		Wysyłanie Email
+		Wysyłanie maila
 	</string>
 	<string name="facebook_progress_str">
 		Wysyłanie na Facebooka
@@ -31,7 +31,7 @@
 		Obraz załadowany na Flickr
 	</string>
 	<string name="postcard_succeeded_str">
-		Email wysłany
+		Mail wysłany
 	</string>
 	<string name="inventory_succeeded_str">
 		Zapisano do Szafy
@@ -46,7 +46,7 @@
 		Publikacja obrazu na kanale nie powiodła się.
 	</string>
 	<string name="postcard_failed_str">
-		Wysyłanie emaila nie powiodło się.
+		Wysyłanie maila nie powiodło się.
 	</string>
 	<string name="inventory_failed_str">
 		Zapis do Szafy nie powiódł się.
@@ -91,7 +91,7 @@
 		<check_box label="Interfejs" name="ui_check"/>
 		<check_box label="Stan L$" name="currency_check"/>
 		<check_box label="Obiekty HUD" name="hud_check"/>
-		<check_box label="Pełne okno" name="freeze_frame_check"/>
+		<check_box label="Wstrzymaj (pełny ekran)" name="freeze_frame_check"/>
 		<check_box label="Autoodświeżanie" name="auto_snapshot_check"/>
 	</panel>
 	<button name="advanced_options_btn" tool_tip="Opcje zaawansowane" />

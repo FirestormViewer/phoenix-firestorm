@@ -2845,14 +2845,6 @@ void login_show()
 	}
 	
 	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
-
-	// <FS:PP> "Did you know about Phoenix mode?" notification, showed once per installation
-	if (!gSavedSettings.getBOOL("FSVintageLoginInfo"))
-	{
-		gSavedSettings.setBOOL("FSVintageLoginInfo", TRUE);
-		LLNotificationsUtil::add("VintageLoginInfo");
-	}
-
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.

@@ -160,7 +160,10 @@ private:
 
 		checkEditState();
 		
-		if(mInitState == INIT_STATE_NAVIGATE_COMPLETE)
+		// <FS:ND> FIRE-14935; Make sure to load URI even if state changes are happing rapidly
+		// if(mInitState == INIT_STATE_NAVIGATE_COMPLETE)
+		if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE)
+		// </FS:ND>
 		{
 			if(!mInitialNavigateURL.empty())
 			{
@@ -458,7 +461,10 @@ private:
 	// virtual
 	void onNavigateBegin(const EventType& event)
 	{
-		if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE)
+		// <FS:ND> FIRE-14935; Do not switch URI if there is still a saved URI to load
+		// if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE)
+		if(mInitState >= INIT_STATE_NAVIGATE_COMPLETE && !mInitialNavigateURL.empty() )
+		// </FS:ND>
 		{
 			LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "navigate_begin");
 			message.setValue("uri", event.getEventUri());

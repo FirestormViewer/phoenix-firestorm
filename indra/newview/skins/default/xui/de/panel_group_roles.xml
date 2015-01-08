@@ -25,6 +25,7 @@ um mehrere Mitglieder auszuwählen.
 			</name_list>
 			<button label="Einladen" name="member_invite"/>
 			<button label="Hinauswerfen" name="member_eject"/>
+			<button label="Verbannen" name="member_ban"/>
 			<button label="Liste exportieren" name="export_list"/>
 		</panel>
 		<panel label="Rollen" name="roles_sub_tab" tool_tip="Rollen">
@@ -64,6 +65,22 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 			<scroll_list name="action_list" tool_tip="Eine Fähigkeit auswählen, um mehr Details anzuzeigen.">
 				<scroll_list.columns label="" name="action"/>
 			</scroll_list>
+		</panel>
+		<panel label="Verbannte Einwohner" name="banlist_sub_tab" tool_tip="Verbannte Einwohner dieser Gruppe anzeigen.">
+			<panel.string name="help_text">
+				Für jeden Einwohner auf der Liste ist es unmöglich, der Gruppe beizutreten.
+			</panel.string>
+			<panel.string name="ban_count_template">
+				Bann-Anzahl: [COUNT]/[LIMIT]
+			</panel.string>
+			<name_list name="ban_list">
+				<name_list.columns label="Einwohner" name="name"/>
+				<name_list.columns label="Bann-Datum" name="ban_date"/>
+			</name_list>
+			<button label="Verbannen" name="ban_create" tool_tip="Einwohner aus der Gruppe verbannen"/>
+			<button label="Bann entfernen" name="ban_delete" tool_tip="Verbannung der ausgewählten Einwohner aufheben"/>
+			<button name="ban_refresh" tool_tip="Bannliste aktualisieren"/>
+			<text name="ban_count" width="150"></text>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">

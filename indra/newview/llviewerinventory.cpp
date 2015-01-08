@@ -251,7 +251,17 @@ public:
 			uuid_vec_t items_to_open;
 			items_to_open.push_back(inventory_id);
 			//inventory_handler is just a stub, because we don't know from who this offer
-			open_inventory_offer(items_to_open, "inventory_handler");
+			// <FS:Ansariel> Moved check out of check_offer_throttle
+			//open_inventory_offer(items_to_open, "inventory_handler");
+			if (gSavedSettings.getBOOL("ShowNewInventory"))
+			{
+				open_inventory_offer(items_to_open, "inventory_handler");
+			}
+			else if (!items_to_open.empty() && gSavedSettings.getBOOL("ShowInInventory"))
+			{
+				LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, items_to_open.back());
+			}
+			// </FS:Ansariel>
 			return true;
 		}
 		

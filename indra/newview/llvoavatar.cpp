@@ -690,6 +690,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mTyping(FALSE),
 	mMeshValid(FALSE),
 	mVisible(FALSE),
+	mMutedAsCloud(false), // <FS:Ansariel> Show muted avatars as cloud
 	mWindFreq(0.f),
 	mRipplePhase( 0.f ),
 	mBelowWater(FALSE),
@@ -2199,6 +2200,11 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 
 	// attach objects that were waiting for a drawable
 	lazyAttach();
+
+	// <FS:Ansariel> Show muted avatars as cloud
+	static LLUICachedControl<bool> showMutedAvatarsAsCloud("ShowMutedAvatarsAsCloud", false);
+	mMutedAsCloud = !isSelf() && showMutedAvatarsAsCloud && LLMuteList::instance().isMuted(getID());
+	// </FS:Ansariel>
 	
 	// animate the character
 	// store off last frame's root position to be consistent with camera position
@@ -2593,7 +2599,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 		}
 		else
 		{
-// [ LL Default Av Clouds ]
+// <FS> Custom avatar particle cloud
 //			LLPartSysData particle_parameters;
 //
 //			// fancy particle cloud designed by Brent
@@ -2628,15 +2634,18 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 
 			// Firestorm Clouds
 			if (!isTooComplex()) // do not generate particles for overly-complex avatars
-            {
-                if (!isSelf() && LLMuteList::getInstance()->isMuted(getID()))
-                    setParticleSource(sCloudMuted, getID());
-                else
-                    setParticleSource(sCloud, getID());
-            }
-
-
+			{
+				if (mMutedAsCloud)
+				{
+					setParticleSource(sCloudMuted, getID());
+				}
+				else
+				{
+					setParticleSource(sCloud, getID());
+				}
+			}
 		}
+// </FS>
 	}
 }	
 
@@ -3437,6 +3446,13 @@ bool LLVOAvatar::isVisuallyMuted()
 {
 	bool muted = false;
 
+	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
+	if (!isSelf() && LLMuteList::instance().isMuted(getID()))
+	{
+		return true;
+	}
+	// </FS:Ansariel>
+
 	if (!isSelf())
 	{
 		static LLCachedControl<U32> render_auto_mute_functions(gSavedSettings, "RenderAutoMuteFunctions", 0);
@@ -3476,31 +3492,33 @@ bool LLVOAvatar::isVisuallyMuted()
 
 					U32 max_cost = (U32) (max_render_cost*(LLVOAvatar::sLODFactor+0.5));
 
-					muted = LLMuteList::getInstance()->isMuted(getID()) ||
+					muted = /*LLMuteList::getInstance()->isMuted(getID()) ||*/ // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
 						(mAttachmentGeometryBytes > max_attachment_bytes && max_attachment_bytes > 0) ||
 						(mAttachmentSurfaceArea > max_attachment_area && max_attachment_area > 0.f) ||
 						(mVisualComplexity > max_cost && max_render_cost > 0);
 
 					// Could be part of the grand || collection above, but yanked out to make the logic visible
-					if (!muted)
-					{
-						if (sMaxVisible > 0)
-						{	// They are above the visibilty rank - mute them
-							muted = (mVisibilityRank > sMaxVisible);
-						}
+					// <FS:Ansariel> FIRE-15074: Render normal imposters properly (Don't tie visual mute to RenderAvatarMaxVisible)
+					//if (!muted)
+					//{
+					//	if (sMaxVisible > 0)
+					//	{	// They are above the visibilty rank - mute them
+					//		muted = (mVisibilityRank > sMaxVisible);
+					//	}
 			
-						// Always draw friends or those in IMs.  Needs UI?
-						if ((render_auto_mute_functions & 0x02) &&
-							(muted || sMaxVisible == 0))		// Don't mute friends or IMs							
-						{
-							muted = !(LLAvatarTracker::instance().isBuddy(getID()));
-							if (muted)
-							{	// Not a friend, so they are muted ... are they in an IM?
-								LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,getID());
-								muted = !gIMMgr->hasSession(session_id);
-							}
-						}
-					}
+					//	// Always draw friends or those in IMs.  Needs UI?
+					//	if ((render_auto_mute_functions & 0x02) &&
+					//		(muted || sMaxVisible == 0))		// Don't mute friends or IMs							
+					//	{
+					//		muted = !(LLAvatarTracker::instance().isBuddy(getID()));
+					//		if (muted)
+					//		{	// Not a friend, so they are muted ... are they in an IM?
+					//			LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,getID());
+					//			muted = !gIMMgr->hasSession(session_id);
+					//		}
+					//	}
+					//}
+					// </FS:Ansariel>
 
 					// Save visual mute state and set interval for updating
 					const F64 SECONDS_BETWEEN_RENDER_AUTO_MUTE_UPDATES = 1.5;
@@ -6553,8 +6571,6 @@ BOOL LLVOAvatar::isVisible() const
 // Determine if we have enough avatar data to render
 BOOL LLVOAvatar::getIsCloud() const
 {
-	static LLUICachedControl<bool> muted_as_cloud("ShowMutedAvatarsAsCloud");
-	
 	// Do we have a shape?
 	if ((const_cast<LLVOAvatar*>(this))->visualParamWeightsAreDefault())
 	{
@@ -6568,10 +6584,12 @@ BOOL LLVOAvatar::getIsCloud() const
 		return TRUE;
 	}
 
-	if (muted_as_cloud && !isSelf() &&  LLMuteList::getInstance()->isMuted(getID()))
+	// <FS> Show muted avatars as cloud
+	if (mMutedAsCloud)
 	{
 		return TRUE;
 	}
+	// </FS>
 	
 	if (isTooComplex())
 	{
@@ -6602,7 +6620,10 @@ void LLVOAvatar::updateRezzedStatusTimers()
 				startPhase("first_load_" + LLVOAvatar::rezStatusToString(i));
 			}
 		}
-		if (rez_status < mLastRezzedStatus)
+		// <FS:Ansariel> Show muted avatars as cloud
+		//if (rez_status < mLastRezzedStatus)
+		if (rez_status < mLastRezzedStatus && !mMutedAsCloud)
+		// </FS:Ansariel>
 		{
 			// load level has decreased. start phase timers for higher load levels.
 			for (S32 i = rez_status+1; i <= mLastRezzedStatus; i++)
@@ -6765,7 +6786,10 @@ BOOL LLVOAvatar::updateIsFullyLoaded()
 
 void LLVOAvatar::updateRuthTimer(bool loading)
 {
-	if (isSelf() || !loading) 
+	// <FS:Ansariel> Show muted avatars as cloud
+	//if (isSelf() || !loading) 
+	if (isSelf() || !loading || !mMutedAsCloud) 
+	// </FS:Ansariel>
 	{
 		return;
 	}
@@ -6827,7 +6851,8 @@ BOOL LLVOAvatar::isFullyLoaded() const
 //	return (mRenderUnloadedAvatar || mFullyLoaded);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
-	return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
+	//return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
+	return (mRenderUnloadedAvatar && !isSelf() && !mMutedAsCloud) ||(mFullyLoaded); // Particle clouds!
 // [/SL:KB]
 }
 

@@ -853,6 +853,9 @@ public:
 	}
 	/*virtual*/ void done()
 	{
+		// <FS:Ansariel> FIRE-3234: Don't need a check for ShowNewInventory here;
+		// This only gets called if the user explicity clicks "Show" or
+		// AutoAcceptNewInventory and ShowNewInventory are TRUE.
 		open_inventory_offer(mComplete, mFromName);
 		gInventory.removeObserver(this);
 		delete this;
@@ -1094,7 +1097,17 @@ protected:
 			else ++it;
 		}
 
-		open_inventory_offer(added, "");
+		// <FS:Ansariel> Moved check out of check_offer_throttle
+		//open_inventory_offer(added, "");
+		if (gSavedSettings.getBOOL("ShowNewInventory"))
+		{
+			open_inventory_offer(added, "");
+		}
+		else if (!added.empty() && gSavedSettings.getBOOL("ShowInInventory"))
+		{
+			LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, added.back());
+		}
+		// </FS:Ansariel>
 	}
  };
 
@@ -1108,7 +1121,18 @@ protected:
 		{
 			added.push_back(*it);
 		}
-		open_inventory_offer(added, "group_offer");
+
+		// <FS:Ansariel> Moved check out of check_offer_throttle
+		//open_inventory_offer(added, "group_offer");
+		if (gSavedSettings.getBOOL("ShowNewInventory"))
+		{
+			open_inventory_offer(added, "group_offer");
+		}
+		else if (!added.empty() && gSavedSettings.getBOOL("ShowInInventory"))
+		{
+			LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, added.back());
+		}
+		// </FS:Ansariel>
 		gInventory.removeObserver(this);
 		delete this;
 	}
@@ -1192,12 +1216,10 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 	LLChat chat;
 	std::string log_message;
 
-	// <FS:PP> gSavedSettings to LLCachedControl
-	// if (!gSavedSettings.getBOOL("ShowNewInventory"))
-	static LLCachedControl<bool> showNewInventory(gSavedSettings, "ShowNewInventory");
-	if (!showNewInventory)
-	// </FS:PP>
-		return false;
+	// <FS:Ansariel> This controls if items should be opened in open_inventory_offer()??? No way!
+	//if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	//	return false;
+	// </FS:Ansariel>
 
 	if (check_only)
 	{
@@ -1221,7 +1243,7 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 		static LLCachedControl<U32> fsOfferThrottleMaxCount(gSavedSettings, "FSOfferThrottleMaxCount");
 		if (LLStartUp::getStartupState() >= STATE_STARTED
 			//&& throttle_count >= OFFER_THROTTLE_MAX_COUNT)
-			&& throttle_count >= U32(fsOfferThrottleMaxCount))
+			&& throttle_count >= fsOfferThrottleMaxCount)
 		{
 			if (!throttle_logged)
 			{
@@ -1240,7 +1262,6 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				if (!from_name.empty())
 				{
 					// <FS:PP> gSavedSettings to LLCachedControl
-					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
 					static LLCachedControl<bool> fsNotifyIncomingObjectSpamFrom(gSavedSettings, "FSNotifyIncomingObjectSpamFrom");
 					if (fsNotifyIncomingObjectSpamFrom)
 					// </FS:PP>
@@ -1252,7 +1273,6 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				else
 				{
 					// <FS:PP> gSavedSettings to LLCachedControl
-					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
 					static LLCachedControl<bool> fsNotifyIncomingObjectSpam(gSavedSettings, "FSNotifyIncomingObjectSpam");
 					if (fsNotifyIncomingObjectSpam)
 					// </FS:PP>
@@ -1422,6 +1442,8 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory"); // AO: don't open if showininventory is false, otherwise ignore from_name.
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
+		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
+		if (auto_open)
 		LLInventoryPanel::openInventoryPanelAndSetSelection(auto_open, obj_id);
 	}
 }
@@ -1476,6 +1498,7 @@ void inventory_offer_mute_callback(const LLUUID& blocked_id,
 		{
 			if(notification->getName() == "ObjectGiveItem" 
 				|| notification->getName() == "OwnObjectGiveItem"
+				|| notification->getName() == "UserGiveItemLegacy" // <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
 				|| notification->getName() == "UserGiveItem")
 			{
 				return (notification->getPayload()["from_id"].asUUID() == blocked_id);
@@ -1688,6 +1711,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 	switch(button)
 	{
 	case IOR_SHOW:
+	case IOR_SHOW_SILENT: // <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
 		// we will want to open this item when it comes back.
 		LL_DEBUGS("Messaging") << "Initializing an opener for tid: " << mTransactionID
 				 << LL_ENDL;
@@ -1710,7 +1734,10 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				}
 // [/RLVa:KB]
 
-				if (gSavedSettings.getBOOL("ShowOfferedInventory"))
+				// <FS:Ansariel> FIRE-3234: Ask if items should be previewed;
+				// ShowOfferedInventory is always true anyway - instead there is
+				// ShowNewInventory that is actually changable by the user!
+				//if (gSavedSettings.getBOOL("ShowOfferedInventory"))
 				{
 					LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(mObjectID, from_string);
 					open_agent_offer->startFetch();
@@ -1725,7 +1752,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				}
 
 				// <FS:Ansariel> Optional V1-like inventory accept messages
-				if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages"))
+				if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_SHOW)
 				{
 					send_auto_receive_response();
 				}
@@ -1756,6 +1783,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		// end switch (mIM)
 			
 	case IOR_ACCEPT:
+	case IOR_ACCEPT_SILENT: // <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
 		//don't spam them if they are getting flooded
 		if (check_offer_throttle(mFromName, true))
 		{
@@ -1764,6 +1792,25 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 			args["MESSAGE"] = log_message;
 			LLNotificationsUtil::add("SystemMessageTip", args);
 		}
+
+		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
+		if (mIM == IM_GROUP_NOTICE)
+		{
+			opener = new LLOpenTaskGroupOffer;
+			send_auto_receive_response();
+		}
+		else
+		{
+			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_ACCEPT)
+			{
+				send_auto_receive_response();
+			}
+			if (gSavedSettings.getBOOL("ShowInInventory"))
+			{
+				LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mObjectID);
+			}
+		}
+		// </FS:Ansariel>
 
 		break;
 
@@ -1774,6 +1821,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 		}
 		// MUTE falls through to decline
 	case IOR_DECLINE:
+	case IOR_DECLINE_SILENT: // <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
 		{
 			{
 				LLStringUtil::format_map_t log_message_args;
@@ -1803,7 +1851,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 			}
 
 			// <FS:Ansariel> Optional V1-like inventory accept messages
-			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages"))
+			if ((gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_DECLINE) && mIM == IM_INVENTORY_OFFERED)
 			{
 				send_decline_response();
 			}
@@ -2096,6 +2144,8 @@ void LLOfferInfo::initRespondFunctionMap()
 		mRespondFunctions["ObjectGiveItem"] = boost::bind(&LLOfferInfo::inventory_task_offer_callback, this, _1, _2);
 		mRespondFunctions["OwnObjectGiveItem"] = boost::bind(&LLOfferInfo::inventory_task_offer_callback, this, _1, _2);
 		mRespondFunctions["UserGiveItem"] = boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2);
+		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
+		mRespondFunctions["UserGiveItemLegacy"] = boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2);
 	}
 }
 
@@ -2243,7 +2293,10 @@ void inventory_offer_handler(LLOfferInfo* info)
 		// closes viewer(without responding the notification)
 		p.substitutions(args).payload(payload).functor.responder(LLNotificationResponderPtr(info));
 		info->mPersist = true;
-		p.name = "UserGiveItem";
+		// <FS:Ansariel> FIRE-3832: Silent accept/decline of inventory offers
+		//p.name = "UserGiveItem";
+		p.name = (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") ? "UserGiveItemLegacy" : "UserGiveItem");
+		// </FS:Ansariel>
 		p.offer_from_agent = true;
 		
 		// Prefetch the item into your local inventory.
@@ -2282,7 +2335,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 		}
 
 		// <FS:Ansariel> Show offered inventory also if auto-accept is enabled (FIRE-5101)
-		if (bAutoAccept && gSavedSettings.getBOOL("ShowOfferedInventory"))
+		if (bAutoAccept && gSavedSettings.getBOOL("ShowNewInventory"))
 		{
 			LLViewerInventoryCategory* catp = NULL;
 			catp = (LLViewerInventoryCategory*)gInventory.getCategory(info->mObjectID);
@@ -3185,6 +3238,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				//args["MESSAGE"] = mes;
 				//LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
 				//make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
+				if (group_id.isNull())
+				{
+					LL_WARNS() << "Received group notice with null id!" << LL_ENDL;
+				}
 				gCacheName->get(group_id, true, boost::bind(&notification_group_name_cb, _2, name, subj, mes, payload, timestamp));
 				// </FS:Ansariel>
 			}
@@ -6103,7 +6160,10 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		}
 		else
 		{
-			LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
+			// <FS:Ansariel> Cut down logspam
+			//LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
+			LL_WARNS_ONCE() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
+			// </FS:Ansariel>
 		}
 	}
 
@@ -8522,10 +8582,13 @@ void send_lures(const LLSD& notification, const LLSD& response)
 
 		// Record the offer.
 		{
-			std::string target_name;
-			gCacheName->getFullName(target_id, target_name);  // for im log filenames
+			// <FS:Ansariel> Show complete name for TP lures
+			//std::string target_name;
+			//gCacheName->getFullName(target_id, target_name);  // for im log filenames
 			LLSD args;
-			args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+			//args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+			args["TO_NAME"] = LLSLURL("agent", target_id, "completename").getSLURLString();
+			// </FS:Ansariel>
 	
 			LLSD payload;
 				
@@ -9269,8 +9332,32 @@ void invalid_message_callback(LLMessageSystem* msg,
 
 void LLOfferInfo::forceResponse(InventoryOfferResponse response)
 {
+	// <FS:Ansariel> Now this is a hell of piece of... forceResponse() will look for the
+	//               ELEMENT index, and NOT the button index. So if we want to force a
+	//               response of IOR_ACCEPT, we need to pass the correct element
+	//               index of the button.
+	//LLNotification::Params params("UserGiveItem");
+	//params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
+	//LLNotifications::instance().forceResponse(params, response);
+	S32 element_index;
+	switch (response)
+	{
+		case IOR_ACCEPT:
+			element_index = 1;
+			break;
+		case IOR_DECLINE:
+			element_index = 2;
+			break;
+		case IOR_MUTE:
+			element_index = 3;
+			break;
+		default:
+			element_index = -1;
+			break;
+	}
 	LLNotification::Params params("UserGiveItem");
 	params.functor.function(boost::bind(&LLOfferInfo::inventory_offer_callback, this, _1, _2));
-	LLNotifications::instance().forceResponse(params, response);
+	LLNotifications::instance().forceResponse(params, element_index);
+	// </FS:Ansariel>
 }
 

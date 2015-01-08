@@ -18,7 +18,7 @@
 	<panel name="minimized_controls">
 		<button label="Zatrzymaj" name="all_nearby_media_disable_btn" tool_tip="Wyłącz wszystkie media w pobliżu"/>
 		<button label="Włącz" name="all_nearby_media_enable_btn" tool_tip="Włącz wszystkie media w pobliżu"/>
-		<button name="open_prefs_btn" tool_tip="Uruchom preferencje mediów"/>
+		<button name="open_prefs_btn" tool_tip="Pokaż preferencje mediów"/>
 		<button label="Więcej &gt;&gt;" label_selected="&lt;&lt; Mniej" name="more_btn" tool_tip="Zaawansowane"/>
 	</panel>
 	<panel name="nearby_media_panel">

@@ -84,13 +84,19 @@
 		reference="drkgrey123" />
 	<color
 		name="GroupNotifyDialogBG"
-		reference="ScriptDialog" />
+		reference="drkgrey123" />
 	<color
 		name="GroupNotifyTextBG"
-		value="0.855 0.933 1.0 1.0" />
+		reference="drkgrey123" />
 	<color
 		name="GroupNotifyTextColor"
-		reference="TextFgColor" />
+		reference="White" />
+	<color
+		name="ScriptDialog"
+		reference="drkgrey123" />
+	<color
+		name="ScriptDialogFg"
+		reference="White" />
 	<color
 		name="HighlightChildColor"
 		reference="Yellow" />
@@ -333,6 +339,9 @@
       name="ScriptSelectedColor"
       reference="TextBgSelectedColor" />
 
+    <color
+     name="AvatarListItemIconDefaultColor"
+     reference="TextFgColor" />
 
 
 </colors>

@@ -2,7 +2,7 @@ Before you start configuring your Windows build system, be aware of our tested c
 	Memory: You will need at least 2GB RAM, 4GB strongly recommended.
 	CPU: Multiple CPUs are strongly recommended. 
 	  A build can take over an hour.
-	Visual Studio 2010. 
+	Visual Studio 2010 SP1. 
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
@@ -32,9 +32,9 @@ After launching the VS2010 cmd shell and navigating to your firestorm code repo:
 
 Other build targets you may use are:
 
-	ReleaseFS		(includes KDU, FMOD)
-	ReleaseFS_open		(no KDU, no FMOD)
-	RelWithDebInfoFS_open	(no KDU, no FMOD)
+	ReleaseFS (includes KDU, FMOD)
+	ReleaseFS_open (no KDU, no FMOD)
+	RelWithDebInfoFS_open (no KDU, no FMOD)
 
 Other examples:
         autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure

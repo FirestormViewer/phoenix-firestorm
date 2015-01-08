@@ -21,6 +21,23 @@
 			<!-- Deleted Aug.21, 2012
 			<check_box initial_value="true" label="サイドバー" name="appearance_sidebar_positioning" tool_tip="サイドバーに自動カメラポジションを使います"/>
 			-->
+			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
+			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
+			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement" />
+			<check_box label="至近距離の制限を解除" name="disableminzoomdist" tool_tip="オブジェクトにカメラが近づける距離には制限がありますが、この制限を解除して近づけます。"/>
+			<check_box label="カメラリセット時にアバターを振り返らせる" name="resetviewturnsavatar" tool_tip="Escキーでカメラをリセットすると、アバターがカメラの方を向きます。"/>
+			<check_box label="プリムの向こう側が見えるようにカメラ移動の制限を解除" name="ignorecameraconstraints" tool_tip="通常はプリムにぶつかるとそれより先にカメラを進めることはできないが、この制限を解除してプリムの向こう側にカメラを回ることができます。"/>
+			<text name="ignorecameraconstraints_requires_restart">
+				（再起動が必要）
+			</text>
+			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
+			<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
+			<check_box label="シミュレーターのチャネルをステータスバーに表示" name="FSStatusbarShowSimulatorVersion" tool_tip="１系仕様のステータスバーにシミューレーターのチャネルを表示します。"/>
+		</panel>
+
+		<!--Mouselook-->
+
+		<panel label="マウスルック" name="tab-mouselook">
 			<check_box label="マウスルック機能を有効にする" name="EnableMouselook" tool_tip="一人称視点を可能にし、マウスでカメラをコントロールできるようにします。" />
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
 			<check_box label="マウスルックにユーザーインターフェイスを表示" name="first_person_ui_visible" />
@@ -32,21 +49,21 @@
 			</text>
 			<check_box label="切り替え" name="invert_mouse"/>
 		</panel>
-		
-		
+
 		<!--Movement-->
 		
 		<panel label="移動" name="tab-movement">
 			<check_box label="常にキー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
-			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" />
-			<text name="FSUseAzertyKeyboardLayout_requires_restart" left_pad ="60" width="80">
+			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" width="230" />
+			<text name="FSUseAzertyKeyboardLayout_requires_restart">
 				（再起動が必要）
 			</text>
-			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run"/>
+			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run" left_delta="-240"/>
 			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
 			<check_box label="身をかがめる動作を有効にする" name="crouch_toggle_mode" />
 			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
 			<check_box label="テレポート後は飛行状態のままにする" name="FSFlyAfterTeleport" />
+			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
 			<text name="single_click_action_lbl">
 				地面をシングルクリック：
 			</text>
@@ -70,23 +87,9 @@
 		</panel>
 		
 		
-		<!-- Firestorm -->
+		<!-- Maps -->
 		
-		<panel label="Firestorm" name="tab-firestorm" >
-			<text name="camera_options_label">
-				カメラ・オプション
-			</text>
-
-			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
-			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
-			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement" />
-			<check_box label="至近距離の制限を解除" name="disableminzoomdist" tool_tip="オブジェクトにカメラが近づける距離には制限がありますが、この制限を解除して近づけます。"/>
-			<check_box label="カメラリセット時にアバターを振り返らせる" name="resetviewturnsavatar" tool_tip="Escキーでカメラをリセットすると、アバターがカメラの方を向きます。"/>
-			<check_box label="プリムの向こう側が見えるようにカメラ移動の制限を解除" name="ignorecameraconstraints" tool_tip="通常はプリムにぶつかるとそれより先にカメラを進めることはできないが、この制限を解除してプリムの向こう側にカメラを回ることができます。"/>
-			<text name="ignorecameraconstraints_requires_restart">
-				（再起動が必要）
-			</text>
-			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
+		<panel label="世界地図のオプション / ミニマップのオプション" name="tab-maps" >
 			<text name="minimap_options_label">
 				ミニマップのオプション:
 			</text>
@@ -109,9 +112,6 @@
 			<check_box label="世界地図上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="世界地図のランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
 			<check_box label="世界地図にその地域の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="世界地図上にその地域の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>
 			<check_box label="世界地図にグリッド座標を表示" name="FSShowRegionGridCoordinates" tool_tip="世界地図上にグリッド座標を地域単位で表示します。" />
-			<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
-			<check_box label="シミュレーターのチャネルをステータスバーに表示" name="FSStatusbarShowSimulatorVersion" tool_tip="１系仕様のステータスバーにシミューレーターのチャネルを表示します。"/>
-			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
 		</panel>
 	 
 	</tab_container>

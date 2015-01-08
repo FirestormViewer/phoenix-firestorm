@@ -45,6 +45,7 @@
 //#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
+#include "llavataractions.h"
 
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
@@ -507,6 +508,7 @@ void LLIMToastNotifyPanel::compactButtons()
 
 	const child_list_t* children = getControlPanel()->getChildList();
 	S32 offset = 0;
+	S32 last_bottom = 0; // <FS:Ansariel> Fix stacked buttons offset
 	// Children were added by addChild() which uses push_front to insert them into list,
 	// so to get buttons in correct order reverse iterator is used (EXT-5906) 
 	for (child_list_t::const_reverse_iterator it = children->rbegin(); it != children->rend(); it++)
@@ -514,6 +516,12 @@ void LLIMToastNotifyPanel::compactButtons()
 		LLButton * button = dynamic_cast<LLButton*> (*it);
 		if (button != NULL)
 		{
+			// <FS:Ansariel> Fix stacked buttons offset
+			if (last_bottom != button->getRect().mBottom)
+			{
+				offset = 0;
+			}
+			// </FS:Ansariel>
 			button->setOrigin( offset,button->getRect().mBottom);
 			button->setLeftHPad(2 * HPAD);
 			button->setRightHPad(2 * HPAD);
@@ -526,6 +534,8 @@ void LLIMToastNotifyPanel::compactButtons()
 			button->autoResize();
 			offset += HPAD + button->getRect().getWidth();
 			button->setFollowsNone();
+			// <FS:Ansariel> Fix stacked buttons offset
+			last_bottom = button->getRect().mBottom;
 		}
 	}
 

@@ -956,7 +956,7 @@ void LLPanelEditWearable::onCommitSexChange()
         gAgentAvatarp->updateSexDependentLayerSets();
 
         gAgentAvatarp->updateVisualParams();
-
+        showWearable(mWearablePtr, TRUE, TRUE);
         updateScrollingPanelUI();
 }
 

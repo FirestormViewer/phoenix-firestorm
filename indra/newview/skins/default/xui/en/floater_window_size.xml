@@ -37,41 +37,49 @@
        name="item2"
        value="1024 x 768" />
       <combo_box.item
-       label="1280 x 720 (16:9 HDTV)"
+       label="1280 x 720 (16:9 HD)"
        name="item3"
        value="1280 x 720" />
       <combo_box.item
-       label="1280 x 800 (5:8 WXGA)"
+       label="1280 x 800 (16:10 WXGA)"
        name="item4"
        value="1280 x 800" />
       <combo_box.item
-       label="1280 x 1024 (5:4 SXGA)"
+       label="1360 x 768 (16:9 WXGA)"
        name="item5"
-       value="1280 x 1024" />
+       value="1360 x 768" />
       <combo_box.item
-       label="1440 x 900 (8:5 WSXGA)"
+       label="1366 x 768 (16:9 WXGA)"
        name="item7"
+       value="1366 x 768" />
+      <combo_box.item
+       label="1440 x 900 (16:10 WXGA+)"
+       name="item8"
        value="1440 x 900" />
       <combo_box.item
+       label="1536 x 864 (16:9)"
+       name="item9"
+       value="1536 x 864" />
+      <combo_box.item
        label="1600 x 900 (16:9 HD+)"
-       name="item8"
+       name="item10"
        value="1600 x 900" />
       <combo_box.item
-       label="1600 x 1200 (4:3 UXGA)"
-       name="item9"
-       value="1600 x 1200" />
-      <combo_box.item
-       label="1680 x 1050 (8:5 WSXGA+)"
-       name="item10"
+       label="1680 x 1050 (16:10 WSXGA+)"
+       name="item11"
        value="1680 x 1050" />
       <combo_box.item
-       label="1920 x 1080 (16:9 HDTV)"
-       name="item11"
+       label="1920 x 1080 (16:9 FHD)"
+       name="item12"
        value="1920 x 1080" />
       <combo_box.item
-       label="1920 x 1200 (8:5 WUXGA)"
-       name="item12"
+       label="1920 x 1200 (16:10 WUXGA)"
+       name="item13"
        value="1920 x 1200" />
+      <combo_box.item
+       label="2560 x 1440 (16:9 QHD)"
+       name="item14"
+       value="2560 x 1440" />
     </combo_box>
     <button
      follows="right|bottom"

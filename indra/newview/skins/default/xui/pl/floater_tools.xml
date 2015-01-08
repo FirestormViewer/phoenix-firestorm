@@ -102,7 +102,6 @@
 	<button name="ToolHemiCone" tool_tip="Półstożek"/>
 	<button name="ToolSphere" tool_tip="Kula"/>
 	<button name="ToolHemiSphere" tool_tip="Półkula"/>
-	<button name="ToolTorus" tool_tip="Torus"/>
 	<button name="ToolTube" tool_tip="Rura"/>
 	<button name="ToolRing" tool_tip="Pierścień"/>
 	<button name="ToolTree" tool_tip="Drzewo"/>
@@ -296,7 +295,6 @@
 				<combo_box.item label="Walec" name="Cylinder"/>
 				<combo_box.item label="Graniastosłup" name="Prism"/>
 				<combo_box.item label="Kula" name="Sphere"/>
-				<combo_box.item label="Torus" name="Torus"/>
 				<combo_box.item label="Rura" name="Tube"/>
 				<combo_box.item label="Pierścień" name="Ring"/>
 				<combo_box.item label="Skulpt" name="Sculpted"/>
@@ -377,15 +375,20 @@
 			</text>
 			<combo_box name="sculpt type control" tool_tip="Opcja &quot;żadne&quot; została usunięta, ponieważ działa identycznie jak &quot;Płaszczyzna&quot;.">
 				<combo_box.item label="Kula" name="Sphere"/>
-				<combo_box.item label="Torus" name="Torus"/>
 				<combo_box.item label="Płaszczyzna / Żadne" name="Plane"/>
 				<combo_box.item label="Walec" name="Cylinder"/>
 			</combo_box>
 		</panel>
 		<panel label="Cechy" name="Features">
-			<panel.string name="None">Żadny</panel.string>
-			<panel.string name="Prim">Prima</panel.string>
-			<panel.string name="Convex Hull">Powłoka wypukła</panel.string>
+			<panel.string name="None">
+				Żadny
+			</panel.string>
+			<panel.string name="Prim">
+				Prima
+			</panel.string>
+			<panel.string name="Convex Hull">
+				Powłoka wypukła
+			</panel.string>
 			<text name="select_single">
 				Wybierz pojedynczy obiekt, aby edytować cechy.
 			</text>
@@ -411,12 +414,11 @@
 			<spinner label="Obniż. siły" name="Light Falloff"/>
 			<spinner label="Nastrój" name="Light Ambiance"/>
 			<text name="label physicsshapetype">
-				Typ kształtu Fizycznego:
+				Typ kształtu fizycznego:
 			</text>
 			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Wybierz typ kształtu fizycznego"/>
 			<combo_box name="material">
 				<combo_box.item label="Kamień" name="Stone"/>
-				<combo_box.item label="Metal" name="Metal"/>
 				<combo_box.item label="Szkło" name="Glass"/>
 				<combo_box.item label="Drewno" name="Wood"/>
 				<combo_box.item label="Ciało" name="Flesh"/>

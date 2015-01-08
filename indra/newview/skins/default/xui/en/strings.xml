@@ -65,7 +65,7 @@ Draw distance: [DRAW_DISTANCE]
 Bandwidth: [BANDWIDTH]
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
-Advanced Lightning Model: [ALMSTATUS]
+Advanced Lighting Model: [ALMSTATUS]
 Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 VFS (cache) creation time (UTC): [VFS_DATE]
   </string>
@@ -496,6 +496,7 @@ Please try logging in again in a minute.</string>
 	<string name="TeleportYourAgent">Teleport you</string>
 	<string name="ManageEstateSilently">Manage your estates silently</string>
 	<string name="ChangeYourDefaultAnimations">Change your default animations</string>
+	<string name="SnapshotSavedToDisk">Snapshot saved: [FILENAME]</string>
 	
 	<string name="JoinAnExperience">Join an experience</string> <!-- not used -->
 	<string name="SilentlyManageEstateAccess">Suppress alerts when managing estate access lists</string>
@@ -2204,6 +2205,7 @@ If you continue to experience problems, please check your network and firewall s
   <string name="free">free</string>
 
   <!-- Group Profile roles and powers -->
+  <string name="Group Ban">Group Ban</string>
   <string name="Membership">Membership</string>
   <string name="Roles">Roles</string>
   <string name="Group Identity">Group Identity</string>

@@ -384,7 +384,10 @@ BOOL LLToolPie::handleLeftClickPick()
 			}
 			object = (LLViewerObject*)object->getParent();
 		}
-		if (object && object == gAgentAvatarp && !gSavedSettings.getBOOL("ClickToWalk"))
+		// <FS:Ansariel> FIRE-15189: Fix ClickToWalk not allowing mouse-walk (behavior change)
+		//if (object && object == gAgentAvatarp && !gSavedSettings.getBOOL("ClickToWalk"))
+		if (object && object == gAgentAvatarp)
+		// </FS:Ansariel>
 		{
 			// we left clicked on avatar, switch to focus mode
 			mMouseButtonDown = false;
@@ -1296,9 +1299,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				if (region)
 				{
 					LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
-					args.clear();
-					args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
-					tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
+
+					if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+					{
+						args.clear();
+						args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
+						tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
+					}
 
 					// Get distance
 					F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();

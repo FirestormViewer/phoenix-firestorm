@@ -545,6 +545,10 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 	sMaxTotalTextureMem = gTextureList.getMaxTotalTextureMem();
 	sMaxDesiredTextureMem = sMaxTotalTextureMem; //in Bytes, by default and when total used texture memory is small.
 
+	// <FS:Ansariel> Link threshold factor for lowering bias based on total texture memory to the same value
+	//               textures will be destroyed
+	static LLCachedControl<F32> fsDestroyGLTexturesThreshold(gSavedSettings, "FSDestroyGLTexturesThreshold");
+
 	if (sBoundTextureMemory >= sMaxBoundTextureMem ||
 		sTotalTextureMemory >= sMaxTotalTextureMem)
 	{
@@ -575,7 +579,11 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 	}
 	else if (sDesiredDiscardBias > 0.0f &&
 			 sBoundTextureMemory < sMaxBoundTextureMem * texmem_lower_bound_scale &&
-			 sTotalTextureMemory < sMaxTotalTextureMem * texmem_lower_bound_scale)
+			 // <FS:Ansariel> Link threshold factor for lowering bias based on total texture memory to the same value
+			 //               textures will be destroyed
+			 //sTotalTextureMemory < sMaxTotalTextureMem * texmem_lower_bound_scale)
+			 sTotalTextureMemory < sMaxTotalTextureMem * fsDestroyGLTexturesThreshold())
+			 // </FS:Ansariel>
 	{			 
 		// If we are using less texture memory than we should,
 		// scale down the desired discard level

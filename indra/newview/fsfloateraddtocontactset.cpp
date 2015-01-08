@@ -43,9 +43,9 @@ FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 	if (target.isArray())
 	{
 		mHasMultipleAgents = true;
-		for (S32 i = 0; i < target.size(); ++i)
+		for (LLSD::array_const_iterator it = target.beginArray(); it != target.endArray(); ++it)
 		{
-			mAgentIDs.push_back(target[i].asUUID());
+			mAgentIDs.push_back((*it).asUUID());
 		}
 	}
 	else

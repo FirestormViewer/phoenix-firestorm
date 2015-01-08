@@ -3,6 +3,7 @@
 	<action_set description="Przywileje pozwalające na dodawanie i usuwanie osób z grupy oraz umożliwiające nowym osobom na przyłączanie bez zaproszenia." name="Membership">
 		<action description="Zapraszanie do grupy" longdescription="Zapraszanie nowych ludzi do grupy używając przycisku &apos;Zaproś&apos; w sekcji Funkcje &gt; Osoby" name="member invite"/>
 		<action description="Usuwanie z grupy" longdescription="Usuwanie osób z grupy za pomocą przycisku &apos;Usuń z Grupy&apos; w sekcji Funkcje &gt; Osoby. Właściciel może usunąć każdego za wyjątkiem innego Właściciela. Jeżeli nie jesteś Właścicielem możesz usuwać osoby wtedy (i tylko wtedy), gdy są w funkcji Każdy i nie mają aktywnej ŻADNEJ innej. Aby odebrać osobie funkcję musisz mieć przywilej &apos;Odbieranie Funkcji&apos;." name="member eject"/>
+		<action description="Zarządzanie listą banów" longdescription="Umożliwia banowanie / odbanowywanie w tej grupie." name="allow ban"/>
 		<action description="Dostęp do opcji &apos;Wolny Wstęp&apos; i zmiany &apos;Opłaty Wstępnej&apos;" longdescription="Dostęp do opcji &apos;Wolny Wstęp&apos; (pozwala nowym osobom na przyłączanie bez zaproszenia) i zmiany &apos;Opłaty Wstępnej&apos; w Ustawieniach Grupy w sekcji Ogólne." name="member options"/>
 	</action_set>
 	<action_set description="Przywileje pozwalające na dodawanie, usuwanie i edycję funkcji w grupie, na nadawanie i odbieranie funkcji osobom w grupie oraz na przypisywanie Przywilejów do Funkcji." name="Roles">

@@ -706,7 +706,9 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 				if((mBuddyInfo[agent_id]->getRightsGrantedFrom() ^  new_rights) & LLRelationship::GRANT_MODIFY_OBJECTS)
 				{
 					LLSD args;
-					args["NAME"] = LLSLURL("agent", agent_id, "displayname").getSLURLString();
+					// <FS:Ansariel> Always show complete name in rights dialogs
+					//args["NAME"] = LLSLURL("agent", agent_id, "displayname").getSLURLString();
+					args["NAME"] = LLSLURL("agent", agent_id, "completename").getSLURLString();
 					
 					LLSD payload;
 					payload["from_id"] = agent_id;

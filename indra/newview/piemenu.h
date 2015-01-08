@@ -45,7 +45,7 @@ class PieMenu : public LLContextMenu
 
 			Params()
 			{
-				visible=false;
+				visible = false;
 			}
 		};
 
@@ -57,7 +57,7 @@ class PieMenu : public LLContextMenu
 		/*virtual*/ void setVisible(BOOL visible);
 
 		// adding and removing "child" slices to the pie
-		/*virtual*/ bool addChild(LLView* child,S32 tab_group=0);
+		/*virtual*/ bool addChild(LLView* child, S32 tab_group = 0);
 		/*virtual*/ void removeChild(LLView* child);
 
 		/*virtual*/ BOOL handleHover(S32 x,S32 y,MASK mask);
@@ -90,7 +90,7 @@ class PieMenu : public LLContextMenu
 
 	protected:
 		// general mouse button handling
-		BOOL handleMouseButtonUp(S32 x,S32 y,MASK mask);
+		BOOL handleMouseButtonUp(S32 x, S32 y, MASK mask);
 		// font used for the menu
 		const LLFontGL* mFont;
 		// currently highlighted item, must be tested if it's a slice or submenu
@@ -104,7 +104,11 @@ class PieMenu : public LLContextMenu
 		S32 mCenterX;
 		S32 mCenterY;
 		// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
-		BOOL mFirstClick;
+		bool mFirstClick;
+
+		F32 getScaleFactor();
+
+		S32 mCurrentSegment;
 };
 
 #endif // PIEMENU_H

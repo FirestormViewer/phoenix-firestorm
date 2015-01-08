@@ -23,9 +23,6 @@
 			<text name="muted_label">
 				Wyciszeni
 			</text>
-			<text name="system_label">
-				System
-			</text>
 			<text name="script_error_label">
 				Błędy skryptów
 			</text>
@@ -177,7 +174,7 @@
 				Tło/klr skryptów
 			</text>
 			<text name="floater_opacity">
-				Przezroczystość pływającego okna:
+				Przezroczystość okna:
 			</text>
 			<slider label="Aktywne:" name="active"/>
 			<slider label="Nieaktywne:" name="inactive"/>
@@ -186,6 +183,10 @@
 			</text>
 			<color_swatch name="console_background" tool_tip="Wybierz kolor konsoli"/>
 			<slider label="Przezroczystość:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
+			<text name="preferences_search_label">
+				Podśw. wyników wyszukiwania w opcjach:
+			</text>
+			<color_swatch name="preferences_search_color" tool_tip="Wybierz kolor dla podświetlenia wyników wyszukiwania w opcjach"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>

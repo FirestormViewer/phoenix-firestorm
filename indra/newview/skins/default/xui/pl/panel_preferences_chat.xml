@@ -248,6 +248,7 @@
 			<check_box name="FSKeywordInChat" label="Szukaj słów w Czacie Lokalnym"/>
 			<check_box name="FSKeywordInIM" label="Szukaj słów w IM i czatach grupowych"/>
 			<check_box name="FSKeywordCaseSensitive" label="Bierz pod uwagę wielkość liter w szukanych słowach"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Dopasowywuj tylko całe słowa"/>
 			<text name="textFSKeywords">
 				Szukane słowa (oddzielone przecinkami):
 			</text>
@@ -264,6 +265,12 @@
 			<button name="autoreplace_showgui" label="Autokorekta"/>
 			<button name="spellcheck_showgui" label="Sprawdzanie pisowni"/>
 			<button label="Tłumaczenie..." name="translation_settings_btn"/>
+			<text name="textUseKeyboardShortcuts">
+				Używaj skrótów klawiszowych:
+			</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (krzyk)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Ctrl+Enter, aby krzyczeć poprzez czat lokalny." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (szept)" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Shift+Enter, aby szeptać poprzez czat lokalny" />
+			<check_box name="FSUseAltOOC" tool_tip="Zaznacz tą opcję, jeśli chcesz używać skrótu klawiszowego Alt+Enter, aby wysyłać wiadomości ((OOC)) poprzez czat lokalny." />
 		</panel>
 	</tab_container>
 </panel>

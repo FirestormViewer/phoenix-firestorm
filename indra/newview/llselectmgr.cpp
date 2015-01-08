@@ -490,6 +490,9 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(const std::vector<LLV
 		object->addThisAndNonJointChildren(objects);
 		addAsFamily(objects);
 
+		if( isBatchMode() )
+			continue;
+
 		// Stop the object from moving (this anticipates changes on the
 		// simulator in LLTask::userSelect)
 		object->setVelocity(LLVector3::zero);
@@ -497,6 +500,14 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(const std::vector<LLV
 		//object->setAngularVelocity(LLVector3::zero);
 		object->resetRot();
 	}
+
+	if( isBatchMode() )
+	{
+		mShowSelection = FALSE;
+		sendSelect();
+		return mSelectedObjects;
+	}
+
 
 	updateSelectionCenter();
 	saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
@@ -1030,6 +1041,13 @@ void LLSelectMgr::highlightObjectOnly(LLViewerObject *objectp, LLColor4 const &a
 		// only select my own objects
 		return;
 	}
+
+	// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+	if (!objectp->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	if (objectp->permGroupOwner() && !gSavedSettings.getBOOL("FSSelectIncludeGroupOwned"))
@@ -5336,6 +5354,10 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 			node->mInventorySerial = inv_serial;
 			node->mSitName.assign(sit_name);
 			node->mTouchName.assign(touch_name);
+
+			// <FS:ND> Fire for any observer interested in object properties
+			LLSelectMgr::instance().firePropertyReceived( node );
+			// </FS:ND>
 		}
 	}
 
@@ -6920,6 +6942,12 @@ BOOL LLSelectMgr::canSelectObject(LLViewerObject* object)
 		// only select my own objects
 		return FALSE;
 	}
+	// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
+	if (!object->permCopy() && gSavedSettings.getBOOL("FSSelectCopyableOnly"))
+	{
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	// Can't select orphans
 	if (object->isOrphaned()) return FALSE;
@@ -7015,16 +7043,61 @@ S32 LLObjectSelection::getNumNodes()
 	return mList.size();
 }
 
+// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+bool LLObjectSelection::checkNode(LLSelectNode* nodep)
+{
+	if(nodep)
+	{
+		if(nodep->getObject())
+		{
+			if(!nodep->getObject()->isDead())
+			{
+				return true;
+			}
+			else
+			{
+				LL_WARNS("LLObjectSelection") << "skipping dead node object" << LL_ENDL;
+			}
+		}
+		else
+		{
+			LL_WARNS("LLObjectSelection") << "skipping NULL node object pointer" << LL_ENDL;
+		}
+		mFailedNodesList.push_back(nodep);
+	}
+	else
+	{
+		LL_WARNS("LLObjectSelection") << "skipping NULL node" << LL_ENDL;
+	}
+
+	return false;
+}
+	// </FS:Zi>
+
 void LLObjectSelection::addNode(LLSelectNode *nodep)
 {
-	llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	// llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
+	if(!checkNode(nodep))
+	{
+		return;
+	}
+	// </FS:Zi>
+
 	mList.push_front(nodep);
 	mSelectNodeMap[nodep->getObject()] = nodep;
 }
 
 void LLObjectSelection::addNodeAtEnd(LLSelectNode *nodep)
 {
-	llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	// llassert_always(nodep->getObject() && !nodep->getObject()->isDead());
+	if(!checkNode(nodep))
+	{
+		return;
+	}
+	// </FS:Zi>
+
 	mList.push_back(nodep);
 	mSelectNodeMap[nodep->getObject()] = nodep;
 }
@@ -7052,6 +7125,11 @@ void LLObjectSelection::deleteAllNodes()
 	mList.clear();
 	mSelectNodeMap.clear();
 	mPrimaryObject = NULL;
+
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	std::for_each(mFailedNodesList.begin(),mFailedNodesList.end(),DeletePointer());
+	mFailedNodesList.clear();
+	// </FS:Zi>
 }
 
 LLSelectNode* LLObjectSelection::findNode(LLViewerObject* objectp)

@@ -659,6 +659,13 @@ void LLFloaterModelPreview::disableViewOption(const std::string& option)
 
 void LLFloaterModelPreview::loadModel(S32 lod)
 {
+	// <FS:Ansariel> FIRE-15204: Viewer crashes when clicking "upload model" quickly twice then closing both filepickers
+	if (mModelPreview->mLoading)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	mModelPreview->mLoading = true;
 
 	(new LLMeshFilePicker(mModelPreview, lod))->getFile();
@@ -666,6 +673,13 @@ void LLFloaterModelPreview::loadModel(S32 lod)
 
 void LLFloaterModelPreview::loadModel(S32 lod, const std::string& file_name, bool force_disable_slm)
 {
+	// <FS:Ansariel> FIRE-15204: Viewer crashes when clicking "upload model" quickly twice then closing both filepickers
+	if (mModelPreview->mLoading)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	mModelPreview->mLoading = true;
 
 	mModelPreview->loadModel(file_name, lod, force_disable_slm);
@@ -1433,32 +1447,6 @@ LLModelLoader::LLModelLoader( std::string filename, S32 lod, LLModelPreview* pre
 	mJointMap["lThigh"] = "mHipLeft";
 	mJointMap["lShin"] = "mKneeLeft";
 	mJointMap["lFoot"] = "mFootLeft";
-
-// <FS:WF> FIRE-7937 : Patch from Magus Freston - allows ALL bones including all attachment points to be weighted to mesh and animated	
-	mJointMap["Right_Ear"] = "Right Ear";
-    mJointMap["Left_Ear"] = "Left Ear";
-    mJointMap["Right_Eyeball"] = "Right Eyeball";
-    mJointMap["Left_Eyeball"] = "Left Eyeball";
-    mJointMap["Right_Shoulder"] = "Right Shoulder";
-    mJointMap["Left_Shoulder"] = "Left Shoulder";
-    mJointMap["R_Upper_Arm"] = "R Upper Arm";
-    mJointMap["L_Upper_Arm"] = "L Upper Arm";
-    mJointMap["R_Forearm"] = "R Forearm";
-    mJointMap["L_Forearm"] = "L Forearm";
-    mJointMap["Right_Hand"] = "Right Hand";
-    mJointMap["Left_Hand"] = "Left Hand";
-    mJointMap["Right_Pec"] = "Right Pec";
-    mJointMap["Left_Pec"] = "Left Pec";
-    mJointMap["Avatar_Center"] = "Avatar Center";
-    mJointMap["Right_Hip"] = "Right Hip";
-    mJointMap["Left_Hip"] = "Left Hip";
-    mJointMap["R_Upper_Leg"] = "R Upper Leg";
-    mJointMap["L_Upper_Leg"] = "L Upper Leg";
-    mJointMap["R_Lower_Leg"] = "R Lower Leg";
-    mJointMap["R_Lower_Leg"] = "R Lower Leg";
-    mJointMap["Right_Foot"] = "Right Foot";
-    mJointMap["Left_Foot"] = "Left Foot";
-// <FS:WF> FIRE-7937 end
 
 	if (mPreview)
 	{

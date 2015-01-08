@@ -8,4 +8,5 @@
   <menu_item_check label="Ikony i etykiety" name="icons_with_text" />
   <menu_item_check label="Tylko ikony" name="icons_only" />
   <menu_item_check label="Tylko etykiety" name="text_only" />
+  <menu_item_check label="Zablokowane" name="toolbars_locked" />
 </context_menu>

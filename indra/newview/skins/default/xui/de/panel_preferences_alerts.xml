@@ -37,6 +37,7 @@
 	<check_box label="Anwendungsicon blinkt bei neuen Skriptdialogen, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnScriptDialog"/>
 	<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
 	<check_box label="Aktuelle Neuigkeiten von status.secondlifegrid.net beim Login abrufen" name="AutoQueryGridStatus"/>
+	<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
 	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
 	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
     </panel>

@@ -35,6 +35,7 @@
 		<check_box label="Mrugaj ikoną aplikacji, gdy otwiera się okno dialogowe skryptu, a [APP_NAME] jest w tle" name="FSFlashOnScriptDialog"/>
 		<check_box label="Wyłącz powiadomienia mówiące o zwróceniu przedmiotów do szafy" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Pobieraj najnowszego newsa z status.secondlifegrid.net przy logowaniu" name="AutoQueryGridStatus"/>
+		<check_box label="Pokazuj nazwy zapisanych zdjęć w historii czatu" name="FSLogSnapshotsToLocal"/>
 		<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
 		<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
 	</panel>

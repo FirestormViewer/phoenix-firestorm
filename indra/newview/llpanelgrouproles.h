@@ -39,10 +39,8 @@ class LLScrollListCtrl;
 class LLScrollListItem;
 class LLTextEditor;
 
-// Forward declare for friend usage.
-//virtual BOOL LLPanelGroupSubTab::postBuildSubTab(LLView*);
-
 typedef std::map<std::string,std::string> icon_map_t;
+
 
 class LLPanelGroupRoles : public LLPanelGroupTab
 {
@@ -91,6 +89,7 @@ protected:
 	std::string				mDefaultNeedsApplyMesg;
 	std::string				mWantApplyMesg;
 };
+
 
 class LLPanelGroupSubTab : public LLPanelGroupTab
 {
@@ -143,9 +142,13 @@ protected:
 	icon_map_t	mActionIcons;
 
 	bool mActivated;
-
+	
+	bool mHasGroupBanPower; // Used to communicate between action sets due to the dependency between
+							// GP_GROUP_BAN_ACCESS and GP_EJECT_MEMBER and GP_ROLE_REMOVE_MEMBER
+	
 	void setOthersVisible(BOOL b);
 };
+
 
 class LLPanelGroupMembersSubTab : public LLPanelGroupSubTab
 {
@@ -172,6 +175,10 @@ public:
 	static void onRoleCheck(LLUICtrl* check, void* user_data);
 	void handleRoleCheck(const LLUUID& role_id,
 						 LLRoleMemberChangeType type);
+
+	static void onBanMember(void* user_data);
+	void handleBanMember();
+
 
 	void applyMemberChanges();
 	bool addOwnerCB(const LLSD& notification, const LLSD& response);
@@ -209,6 +216,7 @@ protected:
 	LLScrollListCtrl*	mAssignedRolesList;
 	LLScrollListCtrl*	mAllowedActionsList;
 	LLButton*           mEjectBtn;
+	LLButton*			mBanBtn;
 
 	BOOL mChanged;
 	BOOL mPendingMemberUpdate;
@@ -228,6 +236,7 @@ protected:
 private:
 	void onExportMembersToXML();
 };
+
 
 class LLPanelGroupRolesSubTab : public LLPanelGroupSubTab
 {
@@ -251,7 +260,7 @@ public:
 
 	static void onActionCheck(LLUICtrl*, void*);
 	bool addActionCB(const LLSD& notification, const LLSD& response, LLCheckBoxCtrl* check);
-
+	
 	static void onPropertiesKey(LLLineEditor*, void*);
 
 	void onDescriptionKeyStroke(LLTextEditor* caller);
@@ -270,6 +279,9 @@ public:
 	void saveRoleChanges(bool select_saved_role);
 
 	virtual void setGroupID(const LLUUID& id);
+
+	BOOL	mFirstOpen;
+
 protected:
 	void handleActionCheck(LLUICtrl* ctrl, bool force);
 	LLSD createRoleItem(const LLUUID& role_id, std::string name, std::string title, S32 members);
@@ -290,6 +302,7 @@ protected:
 	BOOL	mHasRoleChange;
 	std::string mRemoveEveryoneTxt;
 };
+
 
 class LLPanelGroupActionsSubTab : public LLPanelGroupSubTab
 {
@@ -317,5 +330,48 @@ protected:
 	LLTextEditor*	mActionDescription;
 };
 
+
+class LLPanelGroupBanListSubTab : public LLPanelGroupSubTab
+{
+public:
+	LLPanelGroupBanListSubTab();
+	virtual ~LLPanelGroupBanListSubTab() {}
+
+	virtual BOOL postBuildSubTab(LLView* root);
+
+	virtual void activate();
+	virtual void update(LLGroupChange gc);
+	virtual void draw();
+
+	static void onBanEntrySelect(LLUICtrl* ctrl, void* user_data);
+	void handleBanEntrySelect();
+	
+	static void onCreateBanEntry(void* user_data);
+	void handleCreateBanEntry();
+	
+	static void onDeleteBanEntry(void* user_data);
+	void handleDeleteBanEntry();
+
+	static void onRefreshBanList(void* user_data);
+	void handleRefreshBanList();
+
+	// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
+	//void onBanListCompleted(bool isComplete);
+
+protected:
+	void setBanCount(U32 ban_count);
+	void populateBanList();
+
+public:
+	virtual void setGroupID(const LLUUID& id);
+
+protected:
+	LLNameListCtrl* mBanList;
+	LLButton* mCreateBanButton;
+	LLButton* mDeleteBanButton;
+	LLButton* mRefreshBanListButton;
+	LLTextBase* mBanCountText;
+
+};
 
 #endif // LL_LLPANELGROUPROLES_H

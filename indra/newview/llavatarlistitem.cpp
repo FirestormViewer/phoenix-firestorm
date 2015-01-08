@@ -1122,7 +1122,9 @@ void LLAvatarListItem::confirmModifyRights(bool grant, S32 rights)
 // Same as llpanelavatar::confirmModifyRights
 {
 	LLSD args;
-	args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+	// <FS:Ansariel> Always show complete name in rights confirmation dialogs
+	//args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+	args["NAME"] = LLSLURL("agent", getAvatarId(), "completename").getSLURLString();
 	
 	if (grant)
 	{

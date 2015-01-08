@@ -400,7 +400,10 @@ LLScriptEdCore::LLScriptEdCore(
 	const std::string& sample,
 	const LLHandle<LLFloater>& floater_handle,
 	void (*load_callback)(void*),
-	void (*save_callback)(void*, BOOL),
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void (*save_callback)(void*, BOOL),
+	void (*save_callback)(void*, BOOL, bool),
+	// </FS:Ansariel>
 	void (*search_replace_callback) (void* userdata),
 	void* userdata,
 	S32 bottom_pad)
@@ -620,7 +623,10 @@ void LLScriptEdCore::initMenu()
 	LLMenuItemCallGL* menuItem;
 	
 	menuItem = getChild<LLMenuItemCallGL>("Save");
-	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));
+	// </FS:Ansariel>
 	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::hasChanged, this));
 	
 	menuItem = getChild<LLMenuItemCallGL>("Revert All Changes");
@@ -685,8 +691,8 @@ void LLScriptEdCore::initMenu()
 
 void LLScriptEdCore::initButtonBar()
 {
-	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
-	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));	// <FS:Zi> support extra save button
+	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));
+	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));	// <FS:Zi> support extra save button
 	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
 	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
 	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
@@ -1197,26 +1203,29 @@ void LLScriptEdCore::onBtnInsertFunction(LLUICtrl *ui, void* userdata)
 	self->setHelpPage(self->mFunctions->getSimple());
 }
 
-void LLScriptEdCore::doSave( BOOL close_after_save )
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLScriptEdCore::doSave( BOOL close_after_save )
+void LLScriptEdCore::doSave(BOOL close_after_save, bool sync /*= true*/)
+// </FS:Ansariel>
 {
 	// NaCl - LSL Preprocessor
 	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		LL_INFOS() << "passing to preproc" << LL_ENDL;
-		mLSLProc->preprocess_script(close_after_save);
+		mLSLProc->preprocess_script(close_after_save, sync);
 	}
 	else
 	{
 		if( mSaveCallback )
 		{
-			mSaveCallback( mUserdata, close_after_save );
+			mSaveCallback( mUserdata, close_after_save, sync );
 		}
 	}
 	// NaCl End
 }
 
 // NaCl - LSL Preprocessor
-void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
+void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save, bool sync)
 {
 	add( LLStatViewer::LSL_SAVES,1 );
 
@@ -1224,7 +1233,7 @@ void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
 
 	if( mSaveCallback )
 	{
-		mSaveCallback( mUserdata, close_after_save );
+		mSaveCallback( mUserdata, close_after_save, sync );
 	}
 }
 // NaCl End
@@ -1474,7 +1483,10 @@ void LLScriptEdCore::onBtnSaveToFile( void* userdata )
 			std::ofstream fout(filename.c_str());
 			fout<<(scriptText);
 			fout.close();
-			self->mSaveCallback( self->mUserdata, FALSE );
+			// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+			//self->mSaveCallback( self->mUserdata, FALSE );
+			self->mSaveCallback( self->mUserdata, FALSE, true );
+			// </FS:Ansariel>
 		}
 	}
 }
@@ -1597,8 +1609,14 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 	}
 
 	// Disable sync to avoid recursive load->save->load calls.
-	mScriptEd->doSave(FALSE);
-	saveIfNeeded(false);
+	// <FS> LSL preprocessor
+	// Ansariel: Don't call saveIfNeeded directly, as we might have to run the
+	// preprocessor first. saveIfNeeded will be invoked via callback. Make sure
+	// to pass sync = false - we don't need to update the external editor in this
+	// case or the next save will be ignored!
+	//saveIfNeeded(false);
+	mScriptEd->doSave(FALSE, false);
+	// </FS>
 	return true;
 }
 
@@ -1801,11 +1819,17 @@ void LLPreviewLSL::onLoad(void* userdata)
 }
 
 // static
-void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save)
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save)
+void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save, bool sync)
+// </FS:Ansariel>
 {
 	LLPreviewLSL* self = (LLPreviewLSL*)userdata;
 	self->mCloseAfterSave = close_after_save;
-	self->saveIfNeeded();
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//self->saveIfNeeded();
+	self->saveIfNeeded(sync);
+	// </FS:Ansariel>
 }
 
 // Save needs to compile the text in the buffer. If the compile
@@ -2907,12 +2931,18 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 }
 
 // static
-void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
+void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save, bool sync)
+// </FS:Ansariel>
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
 
 	self->mCloseAfterSave = close_after_save;
-	self->saveIfNeeded();
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//self->saveIfNeeded();
+	self->saveIfNeeded(sync);
+	// </FS:Ansariel>
 }
 
 

@@ -6,10 +6,11 @@
       visible="false">
   <menu_item_call label="Remove this button"
                   layout="topleft"
+                  invisibility_control="LockToolbars"
                   name="Remove button">
     <menu_item_call.on_click function="Toolbars.RemoveSelectedCommand" />
   </menu_item_call>
-  <menu_item_separator layout="topleft" />
+  <menu_item_separator layout="topleft" invisibility_control="LockToolbars" />
   <menu_item_call label="Toolbar buttons..."
                   layout="topleft"
                   name="Choose Buttons">
@@ -90,5 +91,13 @@
               parameter="fill" />
     <on_check function="Toolbars.CheckLayoutStyle"
               parameter="fill" />
+  </menu_item_check>
+  <menu_item_separator layout="topleft" />
+  <menu_item_check label="Locked"
+                   layout="topleft"
+                   name="toolbars_locked">
+    <on_check control="LockToolbars" />
+    <on_click function="ToggleControl"
+              parameter="LockToolbars" />
   </menu_item_check>
 </context_menu>
