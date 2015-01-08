@@ -370,6 +370,8 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
 
 static LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA_GROUP_LOOP("Alpha Group");
 static LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA_PUSH("Alpha Push Verts");
+// <FS:Ansariel> LL materials support merge error
+static LLTrace::BlockTimerStatHandle FTM_RENDER_ALPHA_GLOW("Alpha Glow");
 
 void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 {
@@ -613,13 +615,19 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					(!params.mParticle || params.mHasGlow))
 					// </FS:Ansariel>
 				{
+					// <FS:Ansariel> LL materials support merge error
+					LL_RECORD_BLOCK_TIME(FTM_RENDER_ALPHA_GLOW);
+
 					// install glow-accumulating blend mode
 					gGL.blendFunc(LLRender::BF_ZERO, LLRender::BF_ONE, // don't touch color
 						      LLRender::BF_ONE, LLRender::BF_ONE); // add to alpha (glow)
 
-					emissive_shader->bind();
-					
-					params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
+					// <FS:Ansariel> LL materials support merge error
+					//emissive_shader->bind();
+					//
+					//params.mVertexBuffer->setBuffer((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
+					params.mVertexBuffer->setBuffer(mask | LLVertexBuffer::MAP_EMISSIVE);
+					// </FS:Ansariel>
 					
 					// do the actual drawing, again
 					params.mVertexBuffer->drawRange(params.mDrawMode, params.mStart, params.mEnd, params.mCount, params.mOffset);
@@ -628,7 +636,8 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					// restore our alpha blend mode
 					gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
 
-					current_shader->bind();
+					// <FS:Ansariel> LL materials support merge error
+					//current_shader->bind();
 				}
 			
 				if (tex_setup)
