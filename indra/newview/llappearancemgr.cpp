@@ -4005,6 +4005,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
 	bool fUpdateAppearance = false;
+	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLViewerInventoryItem* linked_item = gInventory.getLinkedItem(*it);
@@ -4022,18 +4023,20 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		fUpdateAppearance = true;
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
 		addDoomedTempAttachment(linked_item_id);
+		removeCOFItemLinks(linked_item_id, cb);
 	}
 
 	if (fUpdateAppearance)
 	{
 		updateAppearanceFromCOF();
-}
+	}
 // [/RLVa:KB]
 //	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 //	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 //	{
 //		const LLUUID& id_to_remove = *it;
 //		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+//		addDoomedTempAttachment(linked_item_id);
 //		removeCOFItemLinks(linked_item_id, cb);
 //	}
 //	updateAppearanceFromCOF();
