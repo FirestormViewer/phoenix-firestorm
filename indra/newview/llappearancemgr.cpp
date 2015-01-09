@@ -1510,20 +1510,15 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 // <FS:TT> Client LSL Bridge
 	if (FSLSLBridge::instance().canUseBridge())
 	{
-		//if replacing - make sure bridge stays.
-		if (FSLSLBridge::instance().getBridge())
+		LL_INFOS() << "reinserting bridge at outfit remove" << LL_ENDL;
+		for (LLInventoryModel::item_array_t::iterator i = items.begin(); i != items.end(); ++i)
 		{
-			LL_INFOS() << "reinserting bridge at outfit remove" << LL_ENDL;
-			//items.find(FSLSLBridge::instance().getBridge());
-			for (LLInventoryModel::item_array_t::iterator i = items.begin(); i != items.end(); ++i)
-			{
-				LLViewerInventoryItem *item = *i;
+			const LLViewerInventoryItem* item = *i;
 				
-				if (item->getName() == FSLSLBridge::instance().currentFullName())
-				{
-					items.erase( i );
-					break;
-				}
+			if (item->getName() == FSLSLBridge::instance().currentFullName())
+			{
+				items.erase(i);
+				break;
 			}
 		}
 	}
