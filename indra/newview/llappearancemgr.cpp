@@ -1850,49 +1850,6 @@ void LLAppearanceMgr::purgeItemsOfType(LLAssetType::EType asset_type)
 		}
 	}
 }
-
-void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items,
-                              LLInventoryModel::item_array_t& items_to_add, LLInventoryModel::item_array_t& items_to_remove)
-{
-	const LLUUID idCOF = getCOF();
-	LLInventoryModel::item_array_t cur_cof_items, new_cof_items = items;
-
-	// Grab the current COF contents
-	LLInventoryModel::cat_array_t cats; 
-	gInventory.collectDescendents(getCOF(), cats, cur_cof_items, LLInventoryModel::EXCLUDE_TRASH);
-
-	// Purge everything in cur_cof_items that isn't part of new_cof_items
-	for (S32 idxCurItem = 0, cntCurItem = cur_cof_items.size(); idxCurItem < cntCurItem; idxCurItem++)
-	{
-		LLViewerInventoryItem* pItem = cur_cof_items.at(idxCurItem);
-		if (std::find_if(new_cof_items.begin(), new_cof_items.end(), RlvPredIsEqualOrLinkedItem(pItem)) == new_cof_items.end())
-		{
-			// Item doesn't exist in new_cof_items => purge (if it's a link)
-			if ( (pItem->getIsLinkType()) && 
-				 (LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
-			     (items_to_remove.end() == std::find(items_to_remove.begin(), items_to_remove.end(), pItem)) )
-			{
-				items_to_remove.push_back(pItem);
-			}
-		}
-		else
-		{
-			// Item exists in new_cof_items => remove *all* occurances in new_cof_items (removes duplicate COF links to this item as well)
-			new_cof_items.erase(
-				std::remove_if(new_cof_items.begin(), new_cof_items.end(), RlvPredIsEqualOrLinkedItem(pItem)), new_cof_items.end());
-		}
-	}
-
-	// Whatever remains in new_cof_items will need to have a link created
-	for (S32 idxNewItem = 0, cntNewItem = new_cof_items.size(); idxNewItem < cntNewItem; idxNewItem++)
-	{
-		LLViewerInventoryItem* pItem = new_cof_items.at(idxNewItem);
-		if (items_to_add.end() == std::find(items_to_add.begin(), items_to_add.end(), pItem))
-		{
-			items_to_add.push_back(pItem);
-		}
-	}
-}
 // [/SL:KB]
 
 // Keep the last N wearables of each type.  For viewer 2.0, N is 1 for
@@ -4244,6 +4201,9 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 
 	   if (mAttachmentInvLinkEnabled)
 	   {
+		   // we have to pass do_update = true to call LLAppearanceMgr::updateAppearanceFromCOF.
+		   // it will trigger gAgentWariables.notifyLoadingFinished()
+		   // But it is not acceptable solution. See EXT-7777
 		   if (!isLinkedInCOF(item_id))
 		   {
 			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
