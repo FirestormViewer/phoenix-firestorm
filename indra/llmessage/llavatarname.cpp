@@ -123,6 +123,8 @@ void LLAvatarName::fromLLSD(const LLSD& sd)
 	if (mDisplayName.empty())
 	{
 		mDisplayName = mUsername;
+		// <FS:Ansariel> OpenSim GetDisplayNames cap support
+		mIsDisplayNameDefault = true;
 	}
 }
 
