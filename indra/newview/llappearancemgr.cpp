@@ -1591,6 +1591,14 @@ void LLAppearanceMgr::slamCategoryLinks(const LLUUID& src_id, const LLUUID& dst_
 		 ++iter)
 	{
 		const LLViewerInventoryItem* item = (*iter);
+
+		// <FS:Ansariel> Don't add LSL bridge to outfit
+		if (item->getName() == FSLSLBridge::instance().currentFullName())
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		switch (item->getActualType())
 		{
 			case LLAssetType::AT_LINK:
