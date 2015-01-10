@@ -1103,7 +1103,7 @@ protected:
 		{
 			open_inventory_offer(added, "");
 		}
-		else if (!added.empty() && gSavedSettings.getBOOL("ShowInInventory"))
+		else if (!added.empty() && gSavedSettings.getBOOL("ShowInInventory") && highlight_offered_object(added.back()))
 		{
 			LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, added.back());
 		}
