@@ -2923,7 +2923,7 @@ bool LLDispatchSetEstateAccess::operator()(
 	if (num_banned_agents > 0
 		&& !(access_flags & ESTATE_ACCESS_BANNED_AGENTS))
 	{
-		LL_WARNS() << "non-zero count for banned residents, but no corresponding flag" << LL_ENDL;
+		LL_WARNS() << "non-zero count for banned agents, but no corresponding flag" << LL_ENDL;
 	}
 	if (num_estate_managers > 0
 		&& !(access_flags & ESTATE_ACCESS_MANAGERS))
