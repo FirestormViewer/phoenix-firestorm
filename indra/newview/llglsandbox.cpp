@@ -1015,8 +1015,6 @@ F32 gpu_benchmark()
 	}
 	delete [] pixels;
 
-    delete [] pixels;
-
 	//make a dummy triangle to draw with
 	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0, GL_STATIC_DRAW_ARB);
 	buff->allocateBuffer(3, 0, true);
@@ -1098,16 +1096,7 @@ F32 gpu_benchmark()
 	F32 gbps = results[results.size()/2];
 
 	LL_INFOS() << "Memory bandwidth is " << llformat("%.3f", gbps) << "GB/sec according to CPU timers" << LL_ENDL;
-  
-#if LL_DARWIN
-    if (gbps > 512.f)
-    { 
-        LL_INFOS() << "Memory bandwidth is improbably high and likely incorrect." << LL_ENDL;
-        //OSX is probably lying, discard result
-        gbps = -1.f;
-    }
-#endif
-
+	
 	if (gGLManager.mHasTimerQuery)
 	{
 		F32 ms = gBenchmarkProgram.mTimeElapsed/1000000.f;
