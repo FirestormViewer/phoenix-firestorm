@@ -4756,9 +4756,6 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 		 kostenlos
 	</string>
 <!--  /FS:AW opensim currency support -->
-	<string name="Group Ban">
-		Gruppen-Bann
-	</string>
 	<string name="Membership">
 		Mitgliedschaft
 	</string>

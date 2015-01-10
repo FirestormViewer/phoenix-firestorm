@@ -216,22 +216,6 @@ Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
-	<notification name="AssignBanAbilityWarning">
-		Sie sind im Begriff, der Rolle „[ROLE_NAME]“ die Fähigkeit „[ACTION_NAME]“ zuzuweisen.
-
-*ACHTUNG*
-Jedes Mitglied in einer Rolle mit dieser Fähigkeit bekommt ebenfalls die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“ zugewiesen.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="RemoveBanAbilityWarning">
-		Sie sind im Begriff, der Rolle „[ROLE_NAME]“ die Fähigkeit „[ACTION_NAME]“ zu entziehen.
-
-*ACHTUNG*
-Der Entzug dieser Fähigkeit entzieht NICHT die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“.
-
-Falls diese Fähigkeiten dieser Rolle nicht länger zugewiesen sein sollen, deaktivieren Sie diese unverzüglich!
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Sie sind dabei, [AVATAR_NAME] aus der Gruppe hinauszuwerfen.
 		<usetemplate ignoretext="Hinauswerfen eines einzelnen Gruppenmitglieds bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Hinauswerfen"/>
@@ -1618,14 +1602,6 @@ Diese Gruppe verlassen?
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="GroupDepartError">
-		Verlassen der Gruppe nicht möglich: [reason]
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="GroupDepart">
-		Sie haben die Gruppe [group_name] verlassen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
