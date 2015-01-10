@@ -87,7 +87,6 @@ LLShaderFeatures::LLShaderFeatures()
 	, mIndexedTextureChannels(0)
 	, disableTextureIndex(false)
 	, hasAlphaMask(false)
-	, attachNothing(false)
 {
 }
 
@@ -120,31 +119,28 @@ struct LLGLSLShaderCompareTimeElapsed
 };
 
 //static
-void LLGLSLShader::finishProfile(bool emit_report)
+void LLGLSLShader::finishProfile()
 {
 	sProfileEnabled = false;
 
-	if (emit_report)
+	std::vector<LLGLSLShader*> sorted;
+
+	for (std::set<LLGLSLShader*>::iterator iter = sInstances.begin(); iter != sInstances.end(); ++iter)
 	{
-		std::vector<LLGLSLShader*> sorted;
+		sorted.push_back(*iter);
+	}
 
-		for (std::set<LLGLSLShader*>::iterator iter = sInstances.begin(); iter != sInstances.end(); ++iter)
-		{
-			sorted.push_back(*iter);
-		}
+	std::sort(sorted.begin(), sorted.end(), LLGLSLShaderCompareTimeElapsed());
 
-		std::sort(sorted.begin(), sorted.end(), LLGLSLShaderCompareTimeElapsed());
+	for (std::vector<LLGLSLShader*>::iterator iter = sorted.begin(); iter != sorted.end(); ++iter)
+	{
+		(*iter)->dumpStats();
+	}
 
-		for (std::vector<LLGLSLShader*>::iterator iter = sorted.begin(); iter != sorted.end(); ++iter)
-		{
-			(*iter)->dumpStats();
-		}
-			
 	LL_INFOS() << "-----------------------------------" << LL_ENDL;
 	LL_INFOS() << "Total rendering time: " << llformat("%.4f ms", sTotalTimeElapsed/1000000.f) << LL_ENDL;
 	LL_INFOS() << "Total samples drawn: " << llformat("%.4f million", sTotalSamplesDrawn/1000000.f) << LL_ENDL;
 	LL_INFOS() << "Total triangles drawn: " << llformat("%.3f million", sTotalTrianglesDrawn/1000000.f) << LL_ENDL;
-	}
 }
 
 void LLGLSLShader::clearStats()
@@ -179,7 +175,7 @@ void LLGLSLShader::dumpStats()
 			}
 		}
 		LL_INFOS() << "=============================================" << LL_ENDL;
-	
+
 		F32 ms = mTimeElapsed/1000000.f;
 		F32 seconds = ms/1000.f;
 
@@ -225,7 +221,6 @@ void LLGLSLShader::placeProfileQuery()
 #if !LL_DARWIN
 	if (mTimerQuery == 0)
 	{
-		glGenQueriesARB(1, &mSamplesQuery);
 		glGenQueriesARB(1, &mTimerQuery);
 	}
 
@@ -262,7 +257,7 @@ void LLGLSLShader::placeProfileQuery()
 	}
 
 
-	glBeginQueryARB(GL_SAMPLES_PASSED, mSamplesQuery);
+	glBeginQueryARB(GL_SAMPLES_PASSED, 1);
 	glBeginQueryARB(GL_TIME_ELAPSED, mTimerQuery);
 #endif
 }
@@ -280,7 +275,7 @@ void LLGLSLShader::readProfileQuery(U32 count, U32 mode)
 
 	//U64 samples_passed = 0;
 	GLuint64 samples_passed = 0;
-	glGetQueryObjectui64v(mSamplesQuery, GL_QUERY_RESULT, &samples_passed);
+	glGetQueryObjectui64v(1, GL_QUERY_RESULT, &samples_passed);
 
 	sTotalTimeElapsed += time_elapsed;
 	mTimeElapsed += time_elapsed;
@@ -315,15 +310,14 @@ LLGLSLShader::LLGLSLShader()
 	  mShaderLevel(0), 
 	  mShaderGroup(SG_DEFAULT), 
 	  mUniformsDirty(FALSE),
-	  mTimerQuery(0),
-	  mSamplesQuery(0)
-
+	  mTimerQuery(0)
 {
 	
 }
 
 LLGLSLShader::~LLGLSLShader()
 {
+	
 }
 
 void LLGLSLShader::unload()
@@ -358,18 +352,6 @@ void LLGLSLShader::unload()
 		mProgramObject = 0;
 	}
 	
-	if (mTimerQuery)
-	{
-		glDeleteQueriesARB(1, &mTimerQuery);
-		mTimerQuery = 0;
-	}
-	
-	if (mSamplesQuery)
-	{
-		glDeleteQueriesARB(1, &mSamplesQuery);
-		mSamplesQuery = 0;
-	}
-
 	//hack to make apple not complain
 	glGetError();
 	

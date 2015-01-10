@@ -388,7 +388,6 @@ void LLRenderTarget::release()
 	//
 	if (mFBO && (mTex.size() > 1))
 	{		
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		S32 z;
 		for (z = mTex.size() - 1; z >= 1; z--)
 		{

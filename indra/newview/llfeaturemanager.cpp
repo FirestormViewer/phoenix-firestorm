@@ -422,67 +422,13 @@ bool LLFeatureManager::parseFeatureTable(std::string filename)
 	return parse_ok;
 }
 
-F32 gpu_benchmark();
-
 bool LLFeatureManager::loadGPUClass()
 {
-	//get memory bandwidth from benchmark
-	F32 gbps = gpu_benchmark();
-
-	if (gbps < -1.f)
-	{ //couldn't bench, use GLVersion
-
-		if (gGLManager.mGLVersion < 2.f)
-		{
-			mGPUClass = GPU_CLASS_0;
-		}
-		else if (gGLManager.mGLVersion < 3.f)
-		{
-			mGPUClass = GPU_CLASS_1;
-		}
-		else if (gGLManager.mGLVersion < 3.3f)
-		{
-			mGPUClass = GPU_CLASS_2;
-		}
-		else if (gGLManager.mGLVersion < 4.f)
-		{
-			mGPUClass = GPU_CLASS_3;
-		}
-		else 
-		{
-			mGPUClass = GPU_CLASS_4;
-		}
-	}
-	else if (gbps < 5.f)
-	{
-		mGPUClass = GPU_CLASS_0;
-	}
-	else if (gbps < 10.f)
-	{
-		mGPUClass = GPU_CLASS_1;
-	}
-	else if (gbps < 20.f)
-	{
-		mGPUClass = GPU_CLASS_2;
-	}
-	else if (gbps < 40.f)
-	{
-		mGPUClass = GPU_CLASS_3;
-	}
-	else if (gbps < 80.f)
-	{
-		mGPUClass = GPU_CLASS_4;
-	}
-	else 
-	{
-		mGPUClass = GPU_CLASS_5;
-	}
-	
 	// defaults
+	mGPUClass = GPU_CLASS_UNKNOWN;
 	mGPUString = gGLManager.getRawGLString();
-	mGPUSupported = TRUE;
+	mGPUSupported = FALSE;
 
-#if 0
 	// first table is in the app dir
 	std::string app_path = gDirUtilp->getAppRODataDir();
 	app_path += gDirUtilp->getDirDelimiter();
@@ -510,8 +456,8 @@ bool LLFeatureManager::loadGPUClass()
 	{
 		parse_ok = parseGPUTable(app_path);
 	}
-#endif
-	return true; // indicates that the file parsed correctly, not that the gpu was recognized
+    
+	return parse_ok; // indicates that the file parsed correctly, not that the gpu was recognized
 }
 
 	
@@ -832,7 +778,6 @@ void LLFeatureManager::init()
 
 void LLFeatureManager::applyRecommendedSettings()
 {
-	loadGPUClass();
 	// apply saved settings
 	// cap the level at 2 (high)
 	U32 level = llmax(GPU_CLASS_0, llmin(mGPUClass, GPU_CLASS_5));

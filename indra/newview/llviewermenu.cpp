@@ -8752,7 +8752,7 @@ class LLAdvancedClickRenderProfile: public view_listener_t
 	}
 };
 
-F32 gpu_benchmark();
+void gpu_benchmark();
 
 class LLAdvancedClickRenderBenchmark: public view_listener_t
 {
