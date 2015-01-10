@@ -1035,8 +1035,6 @@ F32 gpu_benchmark()
 	//wait for any previoius GL commands to finish
 	glFinish();
 	
-	bool busted_finish = false;
-
 	for (S32 c = -1; c < samples; ++c)
 	{
 		LLTimer timer;
@@ -1051,18 +1049,7 @@ F32 gpu_benchmark()
 		}
 		
 		//wait for current batch of copies to finish
-		if (busted_finish)
-		{
-			//read a pixel off the last target since some drivers seem to ignore glFinish
-			dest[count-1].bindTarget();
-			U32 pixel = 0;
-			glReadPixels(0,0,1,1,GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
-			dest[count-1].flush();
-		}
-		else
-		{
-			glFinish();
-		}
+		glFinish();
 
 		F32 time = timer.getElapsedTimeF32();
 
@@ -1073,14 +1060,7 @@ F32 gpu_benchmark()
 
 			F32 gbps = gb/time;
 
-			if (!gGLManager.mHasTimerQuery && !busted_finish && gbps > 128.f)
-			{ //unrealistically high bandwidth for a card without timer queries, glFinish is probably ignored
-				busted_finish = true;
-			}
-			else
-			{
-				results.push_back(gbps);
-			}		
+			results.push_back(gbps);
 		}
 	}
 
