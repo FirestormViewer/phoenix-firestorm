@@ -370,6 +370,18 @@ void RlvUIEnabler::onToggleShowMinimap()
 		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
 			pNetMapPanel->setVisible(false);
 	}
+
+	// Break/reestablish the visibility connection for the radar panel embedded minimap instance
+	LLFloater* pRadarFloater = LLFloaterReg::getInstance("fs_radar");
+	LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+	RLV_ASSERT( (pRadarFloater) && (pRadarNetMapPanel) );
+	if (pRadarNetMapPanel)
+	{
+		pRadarNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("ShowRadarMinimap").get() : NULL);
+		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
+		if ( (!fEnable) && (pRadarNetMapPanel->getVisible()) )
+			pRadarNetMapPanel->setVisible(false);
+	}
 }
 
 // Checked: 2010-12-08 (RLVa-1.4.0a) | Modified: RLVa-1.2.2c
