@@ -64,8 +64,11 @@ LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
 	mNameColumnIndex(p.name_column.column_index),
 	mNameColumn(p.name_column.column_name),
 	mAllowCallingCardDrop(p.allow_calling_card_drop),
-	mShortNames(p.short_names),
-	mPendingLookupsRemaining(0)
+	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
+	//mShortNames(p.short_names),
+	mShortNames(p.short_names)
+	//mAvatarNameCacheConnection()
+	// </FS:Ansariel>
 {}
 
 // public
@@ -354,17 +357,6 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 				}
 				mAvatarNameCacheConnections[id] = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, suffix, item->getHandle()));
 				// </FS:Ansariel>
-
-				if(mPendingLookupsRemaining <= 0)
-				{
-					// BAKER TODO:
-					// We might get into a state where mPendingLookupsRemaining might
-					//	go negative.  So just reset it right now and figure out if it's
-					//	possible later :)
-					mPendingLookupsRemaining = 0;
-					mNameListCompleteSignal(false);
-				}
-				mPendingLookupsRemaining++;
 			}
 			break;
 		}
@@ -416,8 +408,6 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 	{
 		selectNthItem(idx); // not sure whether this is needed, taken from previous implementation
 		deleteSingleItem(idx);
-
-		mPendingLookupsRemaining--;
 	}
 }
 
@@ -466,23 +456,6 @@ void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 		}
 	}
 	
-	//////////////////////////////////////////////////////////////////////////
-	// BAKER - FIX NameListCtrl
- 	//if (mPendingLookupsRemaining <= 0)
- 	{
- 		// We might get into a state where mPendingLookupsRemaining might
- 		//	go negative.  So just reset it right now and figure out if it's
- 		//	possible later :)
- 		//mPendingLookupsRemaining = 0;
-		
- 		mNameListCompleteSignal(true);
- 	}
- 	//else
- 	{
- 	//	mPendingLookupsRemaining--;
- 	}
-	//////////////////////////////////////////////////////////////////////////
-
 	dirtyColumns();
 }
 

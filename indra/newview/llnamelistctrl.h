@@ -70,7 +70,6 @@ class LLNameListCtrl
 :	public LLScrollListCtrl, public LLInstanceTracker<LLNameListCtrl>
 {
 public:
-	typedef boost::signals2::signal<void(bool)> namelist_complete_signal_t;
 
 	typedef enum e_name_type
 	{
@@ -166,7 +165,7 @@ public:
 
 	/*virtual*/ void updateColumns(bool force_update);
 
-	/*virtual*/ void mouseOverHighlightNthItem( S32 index );
+	/*virtual*/ void	mouseOverHighlightNthItem( S32 index );
 private:
 	void showInspector(const LLUUID& avatar_id, bool is_group);
 	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
@@ -184,16 +183,6 @@ private:
 	typedef boost::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 	// </FS:Ansariel>
-
-	S32 mPendingLookupsRemaining;
-	namelist_complete_signal_t mNameListCompleteSignal;
-	
-public:
-	boost::signals2::connection setOnNameListCompleteCallback(boost::function<void(bool)> onNameListCompleteCallback) 
-	{ 
-		return mNameListCompleteSignal.connect(onNameListCompleteCallback); 
-	}
-
 };
 
 

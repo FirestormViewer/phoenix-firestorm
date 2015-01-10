@@ -45,7 +45,6 @@
 //#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
-#include "llavataractions.h"
 
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
