@@ -1013,6 +1013,7 @@ F32 gpu_benchmark()
 		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, source[i]);
 		LLImageGL::setManualImage(GL_TEXTURE_2D, 0, GL_RGBA, res,res,GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	}
+	delete [] pixels;
 
     delete [] pixels;
 
