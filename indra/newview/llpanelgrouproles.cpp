@@ -2974,8 +2974,7 @@ BOOL LLPanelGroupBanListSubTab::postBuildSubTab(LLView* root)
 
 	setBanCount(0);
 
-	// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
-	//mBanList->setOnNameListCompleteCallback(boost::bind(&LLPanelGroupBanListSubTab::onBanListCompleted, this, _1));
+	mBanList->setOnNameListCompleteCallback(boost::bind(&LLPanelGroupBanListSubTab::onBanListCompleted, this, _1));
 	
 	populateBanList();
 
@@ -3142,16 +3141,14 @@ void LLPanelGroupBanListSubTab::handleRefreshBanList()
 	LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_GET, mGroupID);
 }
 
-// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
-//void LLPanelGroupBanListSubTab::onBanListCompleted(bool isComplete)
-//{
-//	if(isComplete)
-//	{
-//		mRefreshBanListButton->setEnabled(TRUE);
-//		populateBanList();
-//	}
-//}
-// </FS:Ansariel>
+void LLPanelGroupBanListSubTab::onBanListCompleted(bool isComplete)
+{
+	if(isComplete)
+	{
+		mRefreshBanListButton->setEnabled(TRUE);
+		populateBanList();
+	}
+}
 
 void LLPanelGroupBanListSubTab::setBanCount(U32 ban_count)
 {
