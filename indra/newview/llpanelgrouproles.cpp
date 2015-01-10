@@ -433,10 +433,7 @@ void LLPanelGroupRoles::setGroupID(const LLUUID& id)
 		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_VISIBLE_IN_DIR));
 	// [/FS:CR]
 	if(mSubTabContainer)
-		// <FS:Ansariel> FIRE-13501: Activate "Members" tab by default
-		//mSubTabContainer->selectTab(1);
-		mSubTabContainer->selectTab(0);
-		// </FS:Ansariel>
+		mSubTabContainer->selectTab(1);
 	group_roles_tab->mFirstOpen = TRUE;
 	activate();
 }
