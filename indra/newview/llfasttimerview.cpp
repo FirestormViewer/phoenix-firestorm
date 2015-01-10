@@ -412,15 +412,6 @@ void LLFastTimerView::draw()
 	if (!mPauseHistory)
 	{
 		mRecording.appendRecording(LLTrace::get_frame_recording().getLastRecording());
-		
-		// <FS:ND> Clean up memory. Would be clever if ~TimerBarRow existed and did that, but nope. So do it by hand.
-		if( mTimerBarRows.size() )
-		{
-			delete[] mTimerBarRows[ mTimerBarRows.size()-1 ].mBars;
-			mTimerBarRows[ mTimerBarRows.size()-1 ].mBars = 0; // Might look nonsensical, but in case someone adds a dtor later, make sure we're not double freeing.
-		}
-		// </FS:ND>
-
 		mTimerBarRows.pop_back();
 		mTimerBarRows.push_front(TimerBarRow());
 	}
@@ -469,18 +460,24 @@ void LLFastTimerView::onOpen(const LLSD& key)
 	setPauseState(false);
 	mRecording.reset();
 	mRecording.appendPeriodicRecording(LLTrace::get_frame_recording());
-	for(std::deque<TimerBarRow>::iterator it = mTimerBarRows.begin(), end_it = mTimerBarRows.end();
-		it != end_it; 
-		++it)
-	{
-		delete []it->mBars;
-		it->mBars = NULL;
-	}
+	// <FS:Ansariel> Use Drake Arconis' memory fix
+	//for(std::deque<TimerBarRow>::iterator it = mTimerBarRows.begin(), end_it = mTimerBarRows.end();
+	//	it != end_it; 
+	//	++it)
+	//{
+	//	delete []it->mBars;
+	//	it->mBars = NULL;
+	//}
+	// </FS:Ansariel>
 }
 										
 void LLFastTimerView::onClose(bool app_quitting)
 {
 	setVisible(FALSE);
+	// <FS:Ansariel> Use Drake Arconis' memory fix
+	mTimerBarRows.clear();
+	mTimerBarRows.resize(NUM_FRAMES_HISTORY);
+	// </FS:Ansariel>
 }
 
 void saveChart(const std::string& label, const char* suffix, LLImageRaw* scratch)
@@ -1710,3 +1707,14 @@ S32 LLFastTimerView::drawBar(LLRect bar_rect, TimerBarRow& row, S32 image_width,
 
 	return bar_index;
 }
+
+// <FS:Ansariel> Use Drake Arconis' memory fix
+LLFastTimerView::TimerBarRow::~TimerBarRow()
+{
+	if (mBars != NULL)
+	{
+		delete[] mBars;
+		mBars = NULL;
+	}
+}
+// </FS:Ansariel>
