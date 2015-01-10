@@ -2049,7 +2049,7 @@ bool LLPanelGroupRolesSubTab::needsApply(std::string& mesg)
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if(!gdatap)
 	{
-		LL_WARNS() << "Unable to get group data for group " << mGroupID << LL_ENDL;
+		llwarns << "Unable to get group data for group " << mGroupID << llendl;
 		return false;
 	}
 
@@ -2477,8 +2477,8 @@ void LLPanelGroupRolesSubTab::handleActionCheck(LLUICtrl* ctrl, bool force)
 		}
 		else
 		{
-			LL_WARNS() << "Unable to look up role information for role id: "
-				<< role_id << LL_ENDL;
+			llwarns << "Unable to look up role information for role id: "
+				<< role_id << llendl;
 		}
 		
 		//////////////////////////////////////////////////////////////////////////

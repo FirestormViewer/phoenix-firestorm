@@ -22,7 +22,7 @@
 		Wybierz funkcję dla nowej osoby:
 	</text>
 	<combo_box name="role_name" tool_tip="Wybierz rolę z listy funkcji, które możesz przypisać osobom w grupie"/>
-	<button label="Wyślij zaproszenia" name="invite_button"/>
+	<button label="Wyślij zaproszenia" name="ok_button"/>
 	<button label="Anuluj" name="cancel_button"/>
 	<string name="GroupInvitation">
 		Zaproszenie do grupy

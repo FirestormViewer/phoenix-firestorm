@@ -334,14 +334,14 @@ things in this group. There&apos;s a broad variety of Abilities.
     <panel
      border="false"
      height="303"
-     label="Banned Residents"
+     label="Banned Agents"
      layout="topleft"
      left="0"
      right="-1"
      help_topic="roles_banlist_tab"
      name="banlist_sub_tab"
      class="panel_group_banlist_subtab"
-     tool_tip="View the banned residents from this group."
+     tool_tip="View the banned agents from this group."
      width="310">
       <panel.string
        name="help_text">
