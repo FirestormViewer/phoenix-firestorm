@@ -155,20 +155,6 @@ Udzielaj tego przywileju z rozwagą.
 Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
-	<notification name="AssignBanAbilityWarning">
-		Dodajesz przywilej &apos;[ACTION_NAME]&apos; do funkcji &apos;[ROLE_NAME]&apos;
-
-*UWAGA*
-Osoba w funkcji z tym przywilejem otrzyma również &apos;[ACTION_NAME_2]&apos; oraz &apos;[ACTION_NAME_3]&apos;
-	</notification>
-	<notification name="RemoveBanAbilityWarning">
-		Zabierasz przywilej &apos;[ACTION_NAME]&apos; z funkcji &apos;[ROLE_NAME]&apos;
-
-*UWAGA*
-Zabranie tej funkcji NIE usunie &apos;[ACTION_NAME_2]&apos; oraz &apos;[ACTION_NAME_3]&apos;.
-
-Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to wyłącz je natychmiast!
-	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
 		<usetemplate ignoretext="Potwierdź wyrzucenie osoby z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>

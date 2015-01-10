@@ -20,7 +20,6 @@ Możesz wybrać wiele osób naciskając Ctrl i klikając na ich imionach.
 			</name_list>
 			<button label="Zaproś do grupy" name="member_invite"/>
 			<button label="Usuń z grupy" name="member_eject"/>
-			<button label="Zbanuj" name="member_ban"/>
 			<button name="export_list" label="Eksport listy"/>
 		</panel>
 		<panel label="Funkcje" name="roles_sub_tab" tool_tip="Funkcje">
@@ -48,21 +47,6 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 			</panel.string>
 			<filter_editor label="Filtruj przywileje" name="filter_input"/>
 			<scroll_list name="action_list" tool_tip="Wybierz przywilej aby zobaczyć szczegóły"/>
-		</panel>
-		<panel label="Zbanowani" name="banlist_sub_tab" tool_tip="Zobacz, jakie osoby są zbanowane w tej grupie.">
-			<panel.string name="help_text">
-				Jeśli rezydent znajduje się na liście banów, to nie będzie w stanie dołączyć do grupy.
-			</panel.string>
-			<panel.string name="ban_count_template">
-				Bany: [COUNT]/[LIMIT]
-			</panel.string>
-			<name_list name="ban_list">
-				<name_list.columns label="Rezydent" name="name"/>
-				<name_list.columns label="Zbanowano" name="ban_date"/>
-			</name_list>
-			<button label="Dodaj bana" name="ban_create" tool_tip="Zbanuj Rezydentów z Twojej grupy"/>
-			<button label="Usuń bana" name="ban_delete" tool_tip="Odbanuj zaznaczonych Rezydentów w Twojej grupie"/>
-			<button name="ban_refresh" tool_tip="Odśwież listę banów"/>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
