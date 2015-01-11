@@ -32,8 +32,6 @@
 
 #include "llfloatersnapshot.h" // FIXME: create a snapshot model
 
-// <FS:Zi> This file is not used in Firestorm
-
 /**
  * Provides several ways to save a snapshot.
  */
@@ -56,9 +54,6 @@ private:
 	void onSaveToEmail();
 	void onSaveToInventory();
 	void onSaveToComputer();
-	// <exodus>
-	void onSaveToFlickr();
-	// </exodus>
 };
 
 static LLPanelInjector<LLPanelSnapshotOptions> panel_class("llpanelsnapshotoptions");
@@ -69,10 +64,6 @@ LLPanelSnapshotOptions::LLPanelSnapshotOptions()
 	mCommitCallbackRegistrar.add("Snapshot.SaveToEmail",		boost::bind(&LLPanelSnapshotOptions::onSaveToEmail,		this));
 	mCommitCallbackRegistrar.add("Snapshot.SaveToInventory",	boost::bind(&LLPanelSnapshotOptions::onSaveToInventory,	this));
 	mCommitCallbackRegistrar.add("Snapshot.SaveToComputer",		boost::bind(&LLPanelSnapshotOptions::onSaveToComputer,	this));
-	// <exodus>
-	mCommitCallbackRegistrar.add("Snapshot.SaveToFlickr",		boost::bind(&LLPanelSnapshotOptions::onSaveToFlickr,	this)
-		);
-	// </exodus>
 
 	LLGlobalEconomy::Singleton::getInstance()->addObserver(this);
 }
@@ -104,11 +95,8 @@ void LLPanelSnapshotOptions::openPanel(const std::string& panel_name)
 	}
 
 	parent->openPanel(panel_name);
-	// <exodus>
-	// Order switched so onOpen can affect floater state.
-	LLFloaterSnapshot::postPanelSwitch();
 	parent->getCurrentPanel()->onOpen(LLSD());
-	// </exodus>
+	LLFloaterSnapshot::postPanelSwitch();
 }
 
 void LLPanelSnapshotOptions::onSaveToProfile()
@@ -130,10 +118,3 @@ void LLPanelSnapshotOptions::onSaveToComputer()
 {
 	openPanel("panel_snapshot_local");
 }
-
-// <exodus>
-void LLPanelSnapshotOptions::onSaveToFlickr()
-{
-	openPanel("panel_snapshot_flickr");
-}
-// </exodus>

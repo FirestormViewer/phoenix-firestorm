@@ -74,8 +74,6 @@ private:
 	LLUICtrl *mRefreshBtn, *mRefreshLabel;
 	LLUICtrl *mSucceessLblPanel, *mFailureLblPanel;
 
-	void onSelectDestination();		// <FS:Zi> Called whenever the snapshot destination is changed
-
 	class Impl;
 	Impl& impl;
 };
