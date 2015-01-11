@@ -1,5 +1,5 @@
 <panel
-	 height="400"
+	 height="392"
 	 width="304"
 	 layout="topleft"
     follows="all"
@@ -11,11 +11,8 @@
    name="facebook_friends_no_connected"
    value="You're currently not connected to Facebook. Please go to the Account tab to connect and enable this feature." />
   <accordion
- background_visible="true"
- bg_alpha_color="DkGray2"
- bg_opaque_color="DkGray2"
    follows="all"
-   height="408"
+   height="386"
    layout="topleft"
    left="3"
    name="friends_accordion"
@@ -23,7 +20,7 @@
    top_pad="2">
     <accordion_tab
      layout="topleft"
-     height="173"
+     height="192"
      name="tab_second_life_friends"
      title="SL friends">
       <avatar_list
@@ -40,7 +37,7 @@
     </accordion_tab>
     <accordion_tab
      layout="topleft"
-     height="173"
+     height="192"
      name="tab_suggested_friends"
      title="Add these people as SL friends">
       <avatar_list

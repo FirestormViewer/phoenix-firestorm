@@ -1,5 +1,5 @@
     <panel
-      height="400"
+      height="392"
       width="304"
 	  layout="topleft"
       follows="all"
@@ -11,7 +11,7 @@
         follows="all"
         orientation="vertical"
         name="stack_place"
-        top="8">
+        top="0">
         <layout_panel
           name="place_detail_panel"
           height="181">
@@ -29,7 +29,7 @@
           <text_editor
             follows="top|left|right"
             height="150"
-            width="250"
+            right="-12"
             left="9"
             length="1"
             max_length="700"
@@ -113,7 +113,7 @@
               height="23"
               label="Post"
               name="post_place_btn"
-              width="100">
+              width="135">
               <button.commit_callback
                  function="SocialSharing.SendCheckin" />
             </button>
@@ -124,7 +124,7 @@
               name="cancel_place_btn"
               left_pad="15"
               top_delta="0"
-              width="100">
+              width="135">
               <button.commit_callback
                   function="SocialSharing.Cancel" />
             </button>
