@@ -4,7 +4,7 @@
  layout="topleft"
  name="panel_snapshot_inventory"
  width="490">
-<!--    <icon
+    <icon
      follows="top|left"
      height="18"
      image_name="Snapshot_Inventory"
@@ -37,16 +37,17 @@
      name="hr"
      right="-10"
      top_pad="5"
-     />-->
+     />
     <text
+     bottom="35"
      follows="top|left|right"
      font="SansSerif"
-     height="68"
+     height="56"
      layout="topleft"
      left="12"
      length="1"
      name="hint_lbl"
-     top="5"
+     top_pad="10"
      type="string"
      word_wrap="true">
         Saving an image to your inventory costs L$[UPLOAD_COST]. To save your image as a texture select one of the square formats.
@@ -83,7 +84,6 @@
     </combo_box>
     <spinner
      allow_text_entry="false"
-     control_name="LastSnapshotToInventoryWidth"
      decimal_digits="0"
      follows="left|top"
      height="20"
@@ -99,7 +99,6 @@
      width="95" />
     <spinner
      allow_text_entry="false"
-     control_name="LastSnapshotToInventoryHeight"
      decimal_digits="0"
      follows="left|top"
      height="20"
@@ -114,8 +113,7 @@
      top_delta="0"
      width="95" />
     <check_box
-     control_name="KeepAspectForInventorySnapshot"
-     top_pad="4"
+     bottom_delta="20"
      height="10"
      follows="left|top"
      label="Constrain proportions"
@@ -123,18 +121,7 @@
      left="10"
      name="inventory_keep_aspect_check"
      visible="false" />
-	<!-- //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge. -->
-    <check_box
-     control_name="TemporaryUpload"
-     top_pad="4"
-     follows="left|top"
-     label="Temp upload"
-     layout="topleft"
-     left="10"
-     name="inventory_temp_upload"
-     visible="false" />
-	 <!-- //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge. -->
-<!--    <button
+    <button
      follows="right|bottom"
      height="23"
      label="Cancel"
@@ -145,15 +132,15 @@
      width="100">
       <button.commit_callback
        function="Inventory.Cancel" />
-   </button>-->
+    </button>
     <button
-     bottom="-1"
      follows="right|bottom"
      height="23"
      label="Save"
      layout="topleft"
-     right="-10"
+     left_delta="-106"
      name="save_btn"
+     top_delta="0"
      width="100">
       <button.commit_callback
        function="Inventory.Save" />
