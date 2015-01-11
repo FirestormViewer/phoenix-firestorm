@@ -142,7 +142,7 @@ public:
 	~FSAssetResponder();
 
 	virtual void uploadComplete(const LLSD& content);
-	virtual void error(U32 statusNum, const std::string& reason);
+	virtual void httpFailure();
 
 	LLResourceData* mData;
 };
