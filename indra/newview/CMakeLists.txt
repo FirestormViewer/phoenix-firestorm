@@ -126,10 +126,7 @@ set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     daeexport.cpp
     dialogstack.cpp
-    exoflickr.cpp
-    exoflickrauth.cpp
     exogroupmutelist.cpp
-    exopanelsnapshotflickr.cpp
     exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
@@ -847,8 +844,6 @@ set(viewer_HEADER_FILES
     chatbar_as_cmdline.h
     daeexport.h
     dialogstack.h
-    exoflickr.h
-    exoflickrauth.h
     exogroupmutelist.h
     exopostprocess.h
     floatermedialists.h
@@ -1538,16 +1533,6 @@ set(viewer_HEADER_FILES
     NACLantispam.h
     NACLfloaterexploresounds.h
     )
-
-# <exodus>
-# Generate the flickr keys header.
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/exoflickrkeys.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h
-    @ONLY
-)
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
-# </exodus>
 
 # <FS:TS> Generate the version information header file.
 configure_file(
