@@ -1521,6 +1521,12 @@ Chcesz ją opuścić?
 	<notification name="OwnerCannotLeaveGroup">
 		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
 	</notification>
+	<notification name="GroupDepartError">
+		Nie można opuścić grupy: [reason].
+	</notification>
+	<notification name="GroupDepart">
+		Opuściłeś/aś grupę [group_name].
+	</notification>
 	<notification name="ConfirmKick">
 		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
@@ -2722,8 +2728,8 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 		<form name="form">
 			<button name="Show" text="Pokaż"/>
 			<button name="Accept" text="Zachowaj"/>
-			<button name="Discard" text="Verwerfen"/>
-			<button name="ShowSilent" text="(Wyrzuć)"/>
+			<button name="Discard" text="Wyrzuć"/>
+			<button name="ShowSilent" text="(Pokaż)"/>
 			<button name="AcceptSilent" text="(Zachowaj)"/>
 			<button name="DiscardSilent" text="(Wyrzuć)"/>
 			<button name="Mute" text="Zablokuj"/>

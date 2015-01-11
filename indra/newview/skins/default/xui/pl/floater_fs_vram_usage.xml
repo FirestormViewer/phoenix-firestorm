@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="object_vram_usage" title="Wpływ obiektów na VRAM">
+	<scroll_list name="result_list">
+		<column name="name" label="Nazwa" />
+		<column name="distance" label="Odległość" />
+		<column name="faces" label="Strony" />
+		<column name="vertices" label="Wierzchołki" />
+		<column name="indices" label="Indeksy" />
+		<column name="vram_usage" label="VRAM (tekstury) w KB" />
+		<column name="vram_usage_vbo" label="VRAM (VBO) w KB" />
+	</scroll_list>
+	<button label="Odśwież" label_selected="Odśwież" name="refresh_button" />
+</floater>
