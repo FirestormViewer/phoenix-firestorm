@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
     <panel
-      height="392"
+      height="400"
       width="304"
 	  layout="topleft"
-      name="panel_social_place">
+      follows="all"
+      name="panel_facebook_place">
       <layout_stack
 	    layout="topleft"
         border_size="0"
@@ -11,7 +11,7 @@
         follows="all"
         orientation="vertical"
         name="stack_place"
-        top="0">
+        top="8">
         <layout_panel
           name="place_detail_panel"
           height="181">
@@ -27,9 +27,9 @@
             Say something about where you are:
           </text>
           <text_editor
-            follows="top|left"
+            follows="top|left|right"
             height="150"
-            right="-12"
+            width="250"
             left="9"
             length="1"
             max_length="700"
@@ -92,7 +92,6 @@
               name="add_place_view_cb"
               left_pad="5"/>
             <text
-              name="overhead_text"
               follows="left|top"
               font="SansSerif"
               height="32"
@@ -108,24 +107,24 @@
             name="place_button_panel"
             height="25">
             <button
-              follows="left|top"
+              follows="left|bottom"
               top="0"
               left="9"
               height="23"
               label="Post"
               name="post_place_btn"
-              width="135">
+              width="100">
               <button.commit_callback
                  function="SocialSharing.SendCheckin" />
             </button>
             <button
-              follows="left|top"
+              follows="left|bottom"
               height="23"
               label="Cancel"
               name="cancel_place_btn"
               left_pad="15"
               top_delta="0"
-              width="135">
+              width="100">
               <button.commit_callback
                   function="SocialSharing.Cancel" />
             </button>
