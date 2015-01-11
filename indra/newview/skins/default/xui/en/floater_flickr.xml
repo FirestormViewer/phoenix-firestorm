@@ -9,7 +9,7 @@
   save_rect="true"
   single_instance="true"
   reuse_instance="true"
-  title="UPLOAD TO FLICKR"
+  title="Upload to Flickr"
   height="622"
   width="304">
   <panel
@@ -34,13 +34,13 @@
        filename="panel_flickr_photo.xml"
        class="llflickrphotopanel"
        follows="all"
-       label="PHOTO"
+       label="Photo"
        name="panel_flickr_photo"/>
      <panel
        filename="panel_flickr_account.xml"
        class="llflickraccountpanel"
        follows="all"
-       label="ACCOUNT"
+       label="Account"
        name="panel_flickr_account"/>     
     </tab_container>
     <panel
