@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_social_place">
+<panel name="panel_facebook_place">
 	<layout_stack name="stack_place">
 		<layout_panel name="place_detail_panel">
 			<text name="place_caption_label">

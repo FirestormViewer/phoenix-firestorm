@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_social_account">
+<panel name="panel_facebook_account">
 	<string name="facebook_connected" value="Podłączony/a do Facebooka jako:" />
 	<string name="facebook_disconnected" value="Brak połączenia z Facebookiem" />
 	<text name="account_caption_label">

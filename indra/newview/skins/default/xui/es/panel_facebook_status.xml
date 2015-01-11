@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_social_status">
+<panel name="panel_facebook_status">
 	<layout_stack name="stack_status">
 		<layout_panel name="status_detail_panel">
 			<text name="status_caption_label">

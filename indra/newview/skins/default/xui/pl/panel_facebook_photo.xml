@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_social_photo">
+<panel name="panel_facebook_photo">
 	<layout_stack name="stack_photo">
 		<layout_panel name="snapshot_panel">
 			<combo_box name="resolution_combobox" tool_tip="Rozdzielczość obrazka">
