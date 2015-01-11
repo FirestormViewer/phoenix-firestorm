@@ -40,9 +40,9 @@ public:
 	FSLSLBridgeRequestResponder();
 	virtual ~FSLSLBridgeRequestResponder();
 	//If we get back a normal response, handle it here
-	virtual void result(const LLSD& content);
+	virtual void httpSuccess();
 	//If we get back an error (not found, etc...), handle it here
-	virtual void error(U32 status, const std::string& reason);
+	virtual void httpFailure();
 };
 
 
@@ -56,7 +56,7 @@ public:
 	FSLSLBridgeRequestRadarPosResponder();
 	virtual ~FSLSLBridgeRequestRadarPosResponder();
 	//If we get back a normal response, handle it here
-	void result(const LLSD& content);
+	void httpSuccess();
 };
 
 #endif // FS_LSLBRIDGEREQUEST_H

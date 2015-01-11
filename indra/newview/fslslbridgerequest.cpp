@@ -42,9 +42,9 @@ FSLSLBridgeRequestResponder::~FSLSLBridgeRequestResponder()
 }
 
 //If we get back a normal response, handle it here
-void FSLSLBridgeRequestResponder::result(const LLSD& content)
+void FSLSLBridgeRequestResponder::httpSuccess()
 {
-	std::string strContent = content.asString();
+	std::string strContent = getContent().asString();
 	LL_DEBUGS() << "Got info: " << strContent << LL_ENDL;
 
 	//do not use - infinite loop, only here for testing.
@@ -52,9 +52,9 @@ void FSLSLBridgeRequestResponder::result(const LLSD& content)
 }
 
 //If we get back an error (not found, etc...), handle it here
-void FSLSLBridgeRequestResponder::error(U32 status, const std::string& reason)
+void FSLSLBridgeRequestResponder::httpFailure()
 {
-	LL_WARNS() << "FSLSLBridgeRequest::error(" << status << ": " << reason << ")" << LL_ENDL;
+	LL_WARNS() << "FSLSLBridgeRequest::error(" << getStatus() << ": " << getReason() << ")" << LL_ENDL;
 }
 
 // AO: The below handler is used to parse return data from the bridge, requesting bulk ZOffset updates.
@@ -66,12 +66,12 @@ FSLSLBridgeRequestRadarPosResponder::~FSLSLBridgeRequestRadarPosResponder()
 {
 }
 
-void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
+void FSLSLBridgeRequestRadarPosResponder::httpSuccess()
 {
 	FSRadar* radar = FSRadar::getInstance();
 	if (radar)
 	{
-		std::string strContent = content.asString();
+		std::string strContent = getContent().asString();
 		//LL_INFOS() << "Got info: " << strContent << LL_ENDL;
 		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our peoplepanel radar for each one
 		
