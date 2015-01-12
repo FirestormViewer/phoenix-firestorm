@@ -409,61 +409,6 @@
     <key>Value</key>
     <integer>362394</integer>
   </map>
-  <key>FSContactSetsNameFormat</key>
-  <map>
-    <key>Comment</key>
-    <string> 0 = Old Style, 1 = Display Names and Username, 2 = Displayname only</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>S32</string>
-    <key>Value</key>
-    <integer>2</integer>
-  </map>
-  <key>FSContactSetSortNameFormat</key>
-  <map>
-    <key>Comment</key>
-    <string> 0 = Old Style, 1 = Display Names and Username, 2 = Displayname only</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>S32</string>
-    <key>Value</key>
-    <integer>2</integer>
-  </map>
-  <key>FSContactSetsDrawProfileIcon</key>
-  <map>
-    <key>Comment</key>
-    <string>Whether to draw the profile icon on the contact sets floater</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-  <key>FSContactSetsScrollSpeed</key>
-  <map>
-    <key>Comment</key>
-    <string>How fast to scroll the friends groups list while hovering over the bar 1-100</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>S32</string>
-    <key>Value</key>
-    <integer>50</integer>
-  </map>
-  <key>FSContactSetsMaxColorStrength</key>
-  <map>
-    <key>Comment</key>
-    <string>How bright we let the background of the contacts sets be 1-100</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>F32</string>
-    <key>Value</key>
-    <integer>100</integer>
-  </map>
     <key>FSContactSetsColorizeMiniMap</key>
     <map>
       <key>Comment</key>
@@ -474,50 +419,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSContactSetsShowFolders</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to show fake folders in constacts sets window</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsUseColorHighlight</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to use a stronger color where your mouse is in the contacts sets floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsDoZoom</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to zoom in over the friend in the floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsRequireCTRL</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to require the ctrl key to be pressed to multi select friends</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>FSContactSetsColorizeNameTag</key>
     <map>
@@ -541,28 +442,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSContactSetsColorizeText</key>
-    <map>
-      <key>Comment</key>
-      <string>Colorise text instead of backgrounds in the friends groups floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>FSContactSetsColorizeBar</key>
-    <map>
-      <key>Comment</key>
-      <string>Colorise only a small area of the backgrounds in the friends groups floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>FSContactSetsColorizeChat</key>
     <map>
       <key>Comment</key>
@@ -573,61 +452,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSContactSetsShowOnline</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to show online friends in the friends groups floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsShowOffline</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to show offline friends in the friends groups floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsShowAllFriends</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to show all friends in the window, instead of only the selected group</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsShowOtherGroups</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether to show and colorize other groups in the friends groups floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>FSContactSetsSelectedGroup</key>
-    <map>
-      <key>Comment</key>
-      <string>Current Selected group in the friends group floater (saved for logoffs)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string></string>
     </map>
   <key>FSMuteAllGroups</key>
   <map>
