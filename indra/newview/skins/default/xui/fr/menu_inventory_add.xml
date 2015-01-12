@@ -9,7 +9,6 @@
 		<menu_item_call label="Modèle..." name="Upload Model"/>
 		<menu_item_call label="Assistant Modèle..." name="Upload Model Wizard"/>
 		<menu_item_call label="Lot ([COST] par fichier)..." name="Bulk Upload"/>
-		<menu_item_call label="Définir les droits de chargement par défaut" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Nouveau dossier" name="New Folder"/>
 	<menu_item_call label="Nouveau script" name="New Script"/>

@@ -42,7 +42,7 @@
 			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
-			<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
+			<menu_item_call label="Ustaw domyślne uprawnienia..." name="perm prefs"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Zażądaj statusu administratora" name="Request Admin Options"/>
@@ -199,7 +199,8 @@
 			<menu_item_check label="Przyciągaj do siatki" name="Snap to Grid"/>
 			<menu_item_call label="Przeciągnij obiekt XY do siatki" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Wybierz zaznaczenie siatki" name="Use Selection for Grid"/>
-			<menu_item_call label="Opcje siatki" name="Grid Options"/>
+			<menu_item_call label="Opcje siatki..." name="Grid Options"/>
+			<menu_item_call label="Ustaw domyślne uprawnienia..." name="Set default permissions"/>
 		</menu>
 		<menu label="Załaduj" name="Upload">
 			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
@@ -207,7 +208,6 @@
 			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
-			<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>

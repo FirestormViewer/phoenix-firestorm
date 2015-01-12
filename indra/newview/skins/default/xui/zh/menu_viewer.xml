@@ -148,7 +148,8 @@
 			<menu_item_check label="貼齊格線" name="Snap to Grid"/>
 			<menu_item_call label="貼齊物件 XY 軸到格線" name="Snap Object XY to Grid"/>
 			<menu_item_call label="以所選擇作為格線" name="Use Selection for Grid"/>
-			<menu_item_call label="格線選項" name="Grid Options"/>
+			<menu_item_call label="格線選項..." name="Grid Options"/>
+			<menu_item_call label="设置默认权限..." name="Set default permissions"/>
 		</menu>
 		<menu label="上傳" name="Upload">
 			<menu_item_call label="圖像（[COST]）..." name="Upload Image"/>
@@ -156,7 +157,6 @@
 			<menu_item_call label="動作（[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="模型…" name="Upload Model"/>
 			<menu_item_call label="批量（每檔案 [COST] ）..." name="Bulk Upload"/>
-			<menu_item_call label="設定預設上傳權限" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="復原" name="Undo"/>
 		<menu_item_call label="重做" name="Redo"/>

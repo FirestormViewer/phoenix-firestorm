@@ -156,7 +156,8 @@
 			<menu_item_check label="Fixer sur la grille" name="Snap to Grid"/>
 			<menu_item_call label="Fixer les coordonnées XY de l&apos;objet sur la grille" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Utiliser la sélection pour la grille" name="Use Selection for Grid"/>
-			<menu_item_call label="Options de la grille" name="Grid Options"/>
+			<menu_item_call label="Options de la grille..." name="Grid Options"/>
+			<menu_item_call label="Définir les droits par défaut..." name="Set default permissions"/>
 		</menu>
 		<menu label="Charger" name="Upload">
 			<menu_item_call label="Image ([COST])..." name="Upload Image"/>
@@ -164,7 +165,6 @@
 			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modèle..." name="Upload Model"/>
 			<menu_item_call label="Lot ([COST] par fichier)..." name="Bulk Upload"/>
-			<menu_item_call label="Définir les droits de chargement par défaut" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Annuler" name="Undo"/>
 		<menu_item_call label="Refaire" name="Redo"/>

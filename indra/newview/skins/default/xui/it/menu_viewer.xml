@@ -43,7 +43,7 @@
 			<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modello..." name="Upload Model"/>
 			<menu_item_call label="Caricamento multiplo..." name="Bulk Upload"/>
-			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
+			<menu_item_call label="Definisci diritti predefiniti..." name="perm prefs"/>
 		</menu>
 		<!--<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
 		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
@@ -196,7 +196,8 @@
 			<menu_item_check label="Posiziona nella griglia" name="Snap to Grid"/>
 			<menu_item_call label="Posiziona coordinate XY dell&apos;oggetto sulla griglia" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Usa la selezione per la griglia" name="Use Selection for Grid"/>
-			<menu_item_call label="Opzioni della griglia" name="Grid Options"/>
+			<menu_item_call label="Opzioni della griglia..." name="Grid Options"/>
+			<menu_item_call label="Definisci diritti predefiniti" name="Set default permissions"/>
 		</menu>
 		<menu label="Carica sul server" name="Upload">
 			<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
@@ -204,7 +205,6 @@
 			<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modella..." name="Upload Model"/>
 			<menu_item_call label="In blocco ([COST] per file)..." name="Bulk Upload"/>
-			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Texture caricate localmente" name="Local Bitmap Browser"/>
 		<menu_item_call label="Annulla" name="Undo"/>

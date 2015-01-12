@@ -42,7 +42,7 @@
 			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
-			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
+			<menu_item_call label="Standard-Berechtigungen festlegen..." name="perm prefs"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
@@ -201,7 +201,8 @@
 			<menu_item_check label="An Raster ausrichten" name="Snap to Grid"/>
 			<menu_item_call label="Objekt-XY an Raster ausrichten" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Auswahl für Raster verwenden" name="Use Selection for Grid"/>
-			<menu_item_call label="Rasteroptionen" name="Grid Options"/>
+			<menu_item_call label="Rasteroptionen..." name="Grid Options"/>
+			<menu_item_call label="Standard-Berechtigungen festlegen..." name="Set default permissions"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
 			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
@@ -209,7 +210,6 @@
 			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
-			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
