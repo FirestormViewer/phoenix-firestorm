@@ -24,6 +24,7 @@
        left="0"
        width="430" /> 
       <text
+       name="txt_next_owner"
        type="string"
        length="1"
        follows="left|top"
@@ -36,6 +37,7 @@
          Next owner:
       </text>
       <text
+       name="txt_copy"
        type="string"
        length="1"
        follows="left|top"
@@ -48,6 +50,7 @@
           Copy
       </text>
       <text
+       name="txt_modify"
        type="string"
        length="1"
        follows="left|top"
@@ -60,6 +63,7 @@
           Modify
       </text>
       <text
+       name="txt_transfer"
        type="string"
        length="1"
        follows="left|top"
@@ -72,6 +76,7 @@
           Transfer
       </text>    
       <text
+       name="txt_share_with_group"
        type="string"
        length="1"
        follows="left|top"
@@ -85,6 +90,7 @@
           Share with group
       </text>
       <text
+       name="txt_anyone_copy"
        type="string"
        length="1"
        follows="left|top"
@@ -98,6 +104,7 @@
           Allow anyone to copy
       </text>
       <text
+       name="txt_objects"
        type="string"
        length="1"
        follows="left|top"
@@ -162,6 +169,7 @@
        top_delta="0"
        width="100" />
       <text
+       name="txt_uploads"
        type="string"
        length="1"
        follows="left|top"
@@ -225,6 +233,7 @@
        top_delta="0"
        width="100" />
       <text
+       name="txt_scripts"
        type="string"
        length="1"
        follows="left|top"
@@ -288,6 +297,7 @@
        top_delta="0"
        width="100" />
       <text
+       name="txt_notecards"
        type="string"
        length="1"
        follows="left|top"
@@ -351,6 +361,7 @@
        top_delta="0"
        width="100" />
       <text
+       name="txt_gestures"
        type="string"
        length="1"
        follows="left|top"
@@ -414,6 +425,7 @@
        top_delta="0"
        width="100" />
       <text
+       name="txt_wearables"
        type="string"
        length="1"
        follows="left|top"
