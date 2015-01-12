@@ -233,21 +233,6 @@
 			<text name="build_item_add_disp_rect_txt">
 				Actualmente establecido a: [ITEM]
 			</text>
-			<text name="text_box_permissions">
-				Permisos
-			</text>
-			<text name="text_box_permnextowner">
-				Próximo propietario:
-			</text>
-			<check_box label="Modificar" tool_tip="Permisos de modificación" name="next_owner_modify"/>
-			<check_box label="Copiar" tool_tip="Permisos de copia" name="next_owner_copy"/>
-			<check_box label="Transferir" tool_tip="Permisos de transferencia" name="next_owner_transfer"/>
-			<text name="text_box_permnote1">
-				También se aplicará
-			</text>
-			<text name="text_box_permnote2">
-				a las nuevas subidas.
-			</text>
 			<text name="text_box_pivotpoint">
 				Punto de pivotaje
 			</text>

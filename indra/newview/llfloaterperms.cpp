@@ -97,7 +97,10 @@ U32 LLFloaterPerms::getNextOwnerPermsInverted(std::string prefix)
 	return flags;
 }
 
-static bool mCapSent = false;
+// <FS:Ansariel> Getter for CapSent
+//static bool mCapSent = false;
+bool LLFloaterPermsDefault::sCapSent = false;
+// </FS:Ansariel>
 
 LLFloaterPermsDefault::LLFloaterPermsDefault(const LLSD& seed)
 	: LLFloater(seed)
@@ -196,7 +199,10 @@ private:
 
 void LLFloaterPermsDefault::sendInitialPerms()
 {
-	if(!mCapSent)
+	// <FS:Ansariel> Getter for CapSent
+	//if(!mCapSent)
+	if (!sCapSent)
+	// </FS:Ansariel>
 	{
 		updateCap();
 	}
@@ -222,7 +228,10 @@ void LLFloaterPermsDefault::updateCap()
 
 void LLFloaterPermsDefault::setCapSent(bool cap_sent)
 {
-	mCapSent = cap_sent;
+	// <FS:Ansariel> Getter for CapSent
+	//mCapSent = cap_sent;
+	sCapSent = cap_sent;
+	// </FS:Ansariel>
 }
 
 void LLFloaterPermsDefault::ok()

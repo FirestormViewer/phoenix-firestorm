@@ -62,6 +62,8 @@ public:
 	static void sendInitialPerms();
 	static void updateCap();
 	static void setCapSent(bool cap_sent);
+	// <FS:Ansariel> Getter for CapSent
+	static bool getCapSent() { return sCapSent; }
 
 // Update instantiation of sCategoryNames in the .cpp file to match if you change this!
 enum Categories
@@ -87,6 +89,9 @@ private:
 	bool mNextOwnerCopy[CAT_LAST];
 	bool mNextOwnerModify[CAT_LAST];
 	bool mNextOwnerTransfer[CAT_LAST];
+
+	// <FS:Ansariel> Getter for CapSent
+	static bool sCapSent;
 };
 
 #endif
