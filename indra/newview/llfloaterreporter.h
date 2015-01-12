@@ -122,6 +122,8 @@ private:
 	void callbackAvatarID(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void setFromAvatarID(const LLUUID& avatar_id);
 	void onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name);
+	// <FS:Ansariel> FIRE-15368: Don't include floater in screenshot update
+	void onUpdateScreenshot();
 
 private:
 	EReportType		mReportType;

@@ -179,7 +179,7 @@ BOOL LLFloaterReporter::postBuild()
 	getChild<LLUICtrl>("reporter_field")->setValue(reporter);
 	
 	// <FS:Ansariel> FIRE-15218: Refresh screenshot button
-	getChild<LLButton>("refresh_screenshot")->setCommitCallback(boost::bind(&LLFloaterReporter::takeScreenshot, this));
+	getChild<LLButton>("refresh_screenshot")->setCommitCallback(boost::bind(&LLFloaterReporter::onUpdateScreenshot, this));
 
 	center();
 
@@ -866,6 +866,15 @@ void LLFloaterReporter::setPosBox(const LLVector3d &pos)
 		mPosition.mV[VZ]);
 	getChild<LLUICtrl>("pos_field")->setValue(pos_string);
 }
+
+// <FS:Ansariel> FIRE-15368: Don't include floater in screenshot update
+void LLFloaterReporter::onUpdateScreenshot()
+{
+	setVisible(FALSE);
+	takeScreenshot();
+	setVisible(TRUE);
+}
+// </FS:Ansariel>
 
 // void LLFloaterReporter::setDescription(const std::string& description, LLMeanCollisionData *mcd)
 // {
