@@ -73,9 +73,7 @@
 	<check_box label="Редактировать объединенные" name="checkbox edit linked parts"/>
 	<button label="Объединить" name="link_btn"/>
 	<button label="Разъединить" name="unlink_btn"/>
-	<text label="Растяжка обеих сторон" name="checkbox uniform label">
-		Растяжка обеих сторон
-	</text>
+	<check_box label="Растяжка обеих сторон" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Растягивать текстуры" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Привязка" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="Выберите тип линейки сетки для размещения объекта">

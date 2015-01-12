@@ -73,9 +73,7 @@
 	<check_box label="編輯聯結部分" name="checkbox edit linked parts"/>
 	<button label="聯結" name="link_btn"/>
 	<button label="取消聯結" name="unlink_btn"/>
-	<text label="同時伸展兩側" name="checkbox uniform label">
-		同時伸展兩側
-	</text>
+	<techeck_boxxt label="同時伸展兩側" name="checkbox uniform label"/>
 	<check_box initial_value="true" label="伸展材質" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Snap" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="選擇物件定位參考的格線尺度類型">

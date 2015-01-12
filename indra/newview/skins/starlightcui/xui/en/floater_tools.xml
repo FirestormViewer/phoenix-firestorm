@@ -361,7 +361,9 @@
      left="143"
      name="checkbox uniform"
      top="48"
-     width="20" />
+     label_text.wrap="true"
+     label_text.width="120"
+     width="134" />
     <check_box
      control_name="ScaleStretchTextures"
      height="19"

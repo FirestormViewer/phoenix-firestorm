@@ -73,9 +73,7 @@
 	<check_box label="Bağlantılıları düzenle" name="checkbox edit linked parts"/>
 	<button label="Bağla" name="link_btn"/>
 	<button label="Bağlantıyı Kopar" name="unlink_btn"/>
-	<text label="Her İki Tarafı Uzat" name="checkbox uniform label">
-		Her İki Tarafı Uzat
-	</text>
+	<check_box label="Her İki Tarafı Uzat" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Dokuları Uzat" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Yasla" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="Nesneyi konumlandırmak için ağ cetvelini seçin">

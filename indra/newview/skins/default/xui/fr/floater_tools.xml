@@ -76,10 +76,6 @@
 	<text name="RenderingCost" tool_tip="Affiche le coût du rendu calculé pour cet objet">
 		þ : [COUNT]
 	</text>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="Étirer les deux côtés" name="checkbox uniform label">
-		Étirer les deux côtés
-	</text>
 	<check_box label="Étirer les deux côtés" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Étirer les textures" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>

@@ -75,9 +75,6 @@
 	<text name="RenderingCost" tool_tip="Mostra il costo di rendering calcolato per questo oggetto">
 		þ: [COUNT]
 	</text>
-	<text label="Allunga entrambi i lati" name="checkbox uniform label">
-		Allunga entrambi i lati
-	</text>
 	<check_box label="Stendi ambedue lati" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Ridimensiona le texture" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Scatto" name="checkbox snap to grid"/>
