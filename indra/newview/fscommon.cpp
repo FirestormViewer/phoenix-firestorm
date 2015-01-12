@@ -222,6 +222,9 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
 #ifdef OPENSIM
 	if (!LLGridManager::getInstance()->isInSecondLife() || !LLFloaterPermsDefault::getCapSent())
+#else
+	if (!LLFloaterPermsDefault::getCapSent())
+#endif
 	{
 		gMessageSystem->newMessageFast(_PREHASH_ObjectPermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
@@ -246,7 +249,6 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 		gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_TRANSFER);
 		gMessageSystem->sendReliable(object->getRegion()->getHost());
 	}
-#endif
 
 	gMessageSystem->newMessage(_PREHASH_ObjectFlagUpdate);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
