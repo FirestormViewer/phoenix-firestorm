@@ -82,10 +82,10 @@ add_subdirectory(${LIBS_OPEN_PREFIX}llplugin)
 add_subdirectory(${LIBS_OPEN_PREFIX}llui)
 add_subdirectory(${LIBS_OPEN_PREFIX}viewer_components)
 
-if (LL_TESTS OR NOT STANDALONE)
+if (LL_TESTS OR NOT USESYSTEMLIBS)
 # Legacy C++ tests. Build always, run if LL_TESTS is true.
 add_subdirectory(${VIEWER_PREFIX}test)
-endif (LL_TESTS OR NOT STANDALONE)
+endif (LL_TESTS OR NOT USESYSTEMLIBS)
 
 # viewer media plugins
 if( NOT (WINDOWS OR DARWIN) OR NOT ND_BUILD64BIT_ARCH )

@@ -61,6 +61,7 @@
 #include "llglheaders.h"
 #include "lltrans.h"
 #include "llvoavatarself.h"
+#include "llhudrender.h"
 
 const F32 RADIUS_PIXELS = 100.f;		// size in screen space
 const F32 SQ_RADIUS = RADIUS_PIXELS * RADIUS_PIXELS;
@@ -452,6 +453,9 @@ BOOL LLManipRotate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	// Route future Mouse messages here preemptively.  (Release on mouse up.)
 	setMouseCapture( TRUE );
 	LLSelectMgr::getInstance()->enableSilhouette(FALSE);
+
+	mHelpTextTimer.reset();
+	sNumTimesHelpTextShown++;
 	return TRUE;
 }
 
@@ -644,7 +648,7 @@ void LLManipRotate::drag( S32 x, S32 y )
 				// (which have no shared frame of reference other than their render positions)
 				LLXform* parent_xform = object->mDrawable->getXform()->getParent();
 				new_position = (selectNode->mSavedPositionLocal * parent_xform->getWorldRotation()) + parent_xform->getWorldPosition();
-				old_position = (object->getPosition() * parent_xform->getWorldRotation()) + parent_xform->getWorldPosition();
+				old_position = (object->getPosition() * parent_xform->getWorldRotation()) + parent_xform->getWorldPosition();//object->getRenderPosition();
 			}
 			else
 			{
@@ -1111,6 +1115,31 @@ void LLManipRotate::renderSnapGuides()
 			}
 		}
 	}
+
+
+	// render help text
+	if (mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	{
+		if (mHelpTextTimer.getElapsedTimeF32() < sHelpTextVisibleTime + sHelpTextFadeTime && sNumTimesHelpTextShown < sMaxTimesShowHelpText)
+		{
+			LLVector3 selection_center_start = LLSelectMgr::getInstance()->getSavedBBoxOfSelection().getCenterAgent();
+
+			LLVector3 offset_dir = LLViewerCamera::getInstance()->getUpAxis();
+
+			F32 line_alpha = gSavedSettings.getF32("GridOpacity");
+
+			LLVector3 help_text_pos = selection_center_start + (mRadiusMeters * 3.f * offset_dir);
+			const LLFontGL* big_fontp = LLFontGL::getFontSansSerif();
+
+			std::string help_text =  LLTrans::getString("manip_hint1");
+			LLColor4 help_text_color = LLColor4::white;
+			help_text_color.mV[VALPHA] = clamp_rescale(mHelpTextTimer.getElapsedTimeF32(), sHelpTextVisibleTime, sHelpTextVisibleTime + sHelpTextFadeTime, line_alpha, 0.f);
+			hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, false);
+			help_text =  LLTrans::getString("manip_hint2");
+			help_text_pos -= offset_dir * mRadiusMeters * 0.4f;
+			hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, false);
+		}
+	}
 }
 
 // Returns TRUE if center of sphere is visible.  Also sets a bunch of member variables that are used later (e.g. mCenterToCam)
@@ -1124,7 +1153,7 @@ BOOL LLManipRotate::updateVisiblity()
 	// JC - 03.26.2002
 	if (!hasMouseCapture())
 	{
-		mRotationCenter = gAgent.getPosGlobalFromAgent( getPivotPoint() );
+		mRotationCenter = gAgent.getPosGlobalFromAgent( getPivotPoint() );//LLSelectMgr::getInstance()->getSelectionCenterGlobal();
 	}
 
 	BOOL visible = FALSE;

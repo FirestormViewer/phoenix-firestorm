@@ -7,7 +7,6 @@
 		<menu_item_call label="Model meszowy..." name="Upload Model"/>
 		<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
 		<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
-		<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Nowy folder" name="New Folder"/>
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
@@ -23,7 +22,7 @@
 		<menu_item_call label="Nowe rękawiczki" name="New Gloves"/>
 		<menu_item_call label="Nowy podkoszulek" name="New Undershirt"/>
 		<menu_item_call label="Nowa bielizna" name="New Underpants"/>
-		<menu_item_call label="Nowa maska alpha" name="New Alpha"/>
+		<menu_item_call label="Nowa warstwa alpha" name="New Alpha"/>
 		<menu_item_call label="Nowy tatuaż" name="New Tattoo"/>
 		<menu_item_call label="Nowa fizyka" name="New Physics"/>
 	</menu>

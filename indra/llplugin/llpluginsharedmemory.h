@@ -28,8 +28,6 @@
 #ifndef LL_LLPLUGINSHAREDMEMORY_H
 #define LL_LLPLUGINSHAREDMEMORY_H
 
-#include <boost/shared_ptr.hpp>
-
 class LLPluginSharedMemoryPlatformImpl;
 
 /**
@@ -122,7 +120,6 @@ private:
 	
 };
 
-typedef boost::shared_ptr< LLPluginSharedMemory > LLPluginSharedMemoryPtr;
 
 
 #endif // LL_LLPLUGINSHAREDMEMORY_H

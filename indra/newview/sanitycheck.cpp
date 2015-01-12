@@ -44,9 +44,9 @@ void SanityCheck::init()
 		f(SanityCheck* s) : chk(s) {};
 		virtual void apply(const std::string& name, LLControlVariable* control)
 		{
-			if(control->getSanityType()!=SANITY_TYPE_NONE)
+			if (control->getSanityType() != SANITY_TYPE_NONE)
 			{
-				control->getSanitySignal()->connect(boost::bind(&SanityCheck::onSanity,_1));
+				control->getSanitySignal()->connect(boost::bind(&SanityCheck::onSanity, _1));
 				SanityCheck::instance().onSanity(control);
 			}
 		}
@@ -59,26 +59,26 @@ void SanityCheck::init()
 // static
 void SanityCheck::onSanity(LLControlVariable* controlp)
 {
-	static LLControlVariable* lastControl=NULL;
+	static LLControlVariable* lastControl = NULL;
 
-	if(controlp->isSane())
+	if (controlp->isSane())
 		return;
 
-	if(controlp==lastControl)
+	if (controlp == lastControl)
 		return;
 
-	lastControl=controlp;
+	lastControl = controlp;
 
-	std::string checkType="SanityCheck"+gSavedSettings.sanityTypeEnumToString(controlp->getSanityType());
-	std::vector<LLSD> sanityValues=controlp->getSanityValues();
+	std::string checkType = "SanityCheck" + gSavedSettings.sanityTypeEnumToString(controlp->getSanityType());
+	std::vector<LLSD> sanityValues = controlp->getSanityValues();
 
 	LLSD args;
 	LLStringUtil::format_map_t map;
-	map["VALUE_1"]=sanityValues[0].asString();
-	map["VALUE_2"]=sanityValues[1].asString();
-	map["CONTROL_NAME"]=controlp->getName();
-	args["SANITY_MESSAGE"]=LLTrans::getString(checkType,map);
-	args["SANITY_COMMENT"]=controlp->getSanityComment();
-	args["CURRENT_VALUE"]=controlp->getValue().asString();
-	LLNotificationsUtil::add("SanityCheck",args);
+	map["VALUE_1"] = sanityValues[0].asString();
+	map["VALUE_2"] = sanityValues[1].asString();
+	map["CONTROL_NAME"] = controlp->getName();
+	args["SANITY_MESSAGE"] = LLTrans::getString(checkType,map);
+	args["SANITY_COMMENT"] = controlp->getSanityComment();
+	args["CURRENT_VALUE"] = controlp->getValue().asString();
+	LLNotificationsUtil::add("SanityCheck", args);
 }

@@ -108,6 +108,8 @@ private:
 			mTop(0),
 			mBars(NULL)
 		{}
+		// <FS:Ansariel> Use Drake Arconis' memory fix
+		~TimerBarRow();
 		S32			mBottom,
 					mTop;
 		TimerBar*	mBars;

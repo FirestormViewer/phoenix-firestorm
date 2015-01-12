@@ -10,7 +10,7 @@
 			<text name="cache_size_label" height="19">
 				(Localizaciones, imágenes, web, historial de búsqueda)
 			</text>
-			<check_box label="Publicar mi avatar en los resultados de búsqueda" name="online_searchresults" top_pad="10"/>
+			<check_box label="Mostrarme información de perfil en los resultados de la búsqueda" name="online_searchresults"/>
 			<check_box label="Sólo mis amigos y grupos pueden ver si estoy conectado" name="online_visibility"/>
 			<check_box label="Sólo mis amigos y grupos pueden llamarme o enviarme MI" name="voice_call_friends_only_check"/>
 			<check_box label="Apagar micrófono cuando terminan las llamadas" name="auto_disengage_mic_check"/>

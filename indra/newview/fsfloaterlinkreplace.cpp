@@ -94,7 +94,7 @@ void FSFloaterLinkReplace::onTargetItemDrop(const LLUUID& target_item_id)
 
 void FSFloaterLinkReplace::updateFoundLinks()
 {
-	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID, gInventory.getRootFolderID());
+	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID);
 	mRemainingItems = (U32)items.size();
 
 	LLStringUtil::format_map_t args;
@@ -132,7 +132,7 @@ void FSFloaterLinkReplace::onStartClicked()
 		return;
 	}
 
-	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID, gInventory.getRootFolderID());
+	LLInventoryModel::item_array_t items = gInventory.collectLinkedItems(mSourceUUID);
 	LL_INFOS() << "Found " << items.size() << " inventory links that need to be replaced." << LL_ENDL;
 
 	if (items.size() > 0)
@@ -151,13 +151,12 @@ void FSFloaterLinkReplace::onStartClicked()
 			{
 				if ((*it)->getParentUUID() != cof_folder_id)
 				{
-					link_inventory_item(gAgentID,
-										target_item->getUUID(),
-										(*it)->getParentUUID(),
-										target_item->getName(),
-										target_item->getDescription(),
-										LLAssetType::AT_LINK,
-										new LLBoostFuncInventoryCallback(boost::bind(&FSFloaterLinkReplace::linkCreatedCallback, this, (*it)->getUUID())));
+					LLInventoryObject::const_object_list_t obj_array;
+					obj_array.push_back(LLConstPointer<LLInventoryObject>(target_item));
+					link_inventory_array((*it)->getParentUUID(),
+											obj_array,
+											new LLBoostFuncInventoryCallback(boost::bind(&FSFloaterLinkReplace::linkCreatedCallback, this, (*it)->getUUID())));
+
 				}
 				else
 				{
@@ -176,7 +175,7 @@ void FSFloaterLinkReplace::onStartClicked()
 void FSFloaterLinkReplace::linkCreatedCallback(const LLUUID& old_item_id)
 {
 	LL_DEBUGS() << "Inventory link replace: old_item_id = " << old_item_id.asString() << LL_ENDL;
-	gInventory.purgeObject(old_item_id);
+	remove_inventory_object(old_item_id, NULL);
 	decreaseOpenItemCount();
 }
 

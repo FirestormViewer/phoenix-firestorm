@@ -34,10 +34,11 @@
 #include "lliconctrl.h"
 #include "llframetimer.h"
 #include "llfloatergotoline.h"
+#include "llsyntaxid.h"
 
 class LLLiveLSLFile;
 class LLMessageSystem;
-class LLTextEditor;
+class LLScriptEditor;
 class LLButton;
 class LLCheckBoxCtrl;
 class LLScrollListCtrl;
@@ -77,14 +78,21 @@ protected:
 		const std::string& sample,
 		const LLHandle<LLFloater>& floater_handle,
 		void (*load_callback)(void* userdata),
-		void (*save_callback)(void* userdata, BOOL close_after_save),
+		// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+		//void (*save_callback)(void* userdata, BOOL close_after_save),
+		void (*save_callback)(void* userdata, BOOL close_after_save, bool sync),
+		// </FS:Ansariel>
 		void (*search_replace_callback)(void* userdata),
 		void* userdata,
+		bool live,
 		S32 bottom_pad = 0);	// pad below bottom row of buttons
 public:
 	~LLScriptEdCore();
 	
+	void			initializeKeywords();
 	void			initMenu();
+	void			processKeywords();
+	void			processLoaded();
 
 	virtual void	draw();
 	/*virtual*/	BOOL	postBuild();
@@ -95,13 +103,16 @@ public:
 	void            setScriptText(const std::string& text, BOOL is_valid);
 	// NaCL - LSL Preprocessor
 	std::string		getScriptText();
-	void			doSaveComplete(void* userdata, BOOL close_after_save );
+	void			doSaveComplete(void* userdata, BOOL close_after_save, bool sync);
 	// NaCl End
 	bool			loadScriptText(const std::string& filename);
 	bool			writeToFile(const std::string& filename, bool unprocessed);
 	void			sync();
 	
-	void			doSave( BOOL close_after_save );
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void			doSave( BOOL close_after_save );
+	void			doSave(BOOL close_after_save, bool sync = true);
+	// </FS:Ansariel>
 
 	bool			handleSaveChangesDialog(const LLSD& notification, const LLSD& response);
 	bool			handleReloadFromServerDialog(const LLSD& notification, const LLSD& response);
@@ -151,11 +162,16 @@ protected:
 	void addHelpItemToHistory(const std::string& help_string);
 	static void onErrorList(LLUICtrl*, void* user_data);
 
+	bool			mLive;
+
 private:
 	std::string		mSampleText;
-	LLTextEditor*	mEditor;
+	LLScriptEditor*	mEditor;
 	void			(*mLoadCallback)(void* userdata);
-	void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
+	void			(*mSaveCallback)(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 	void			(*mSearchReplaceCallback) (void* userdata);
 	void*			mUserdata;
 	LLComboBox		*mFunctions;
@@ -186,11 +202,15 @@ private:
 // </FS:CR>
 	// NaCl - LSL Preprocessor
 	FSLSLPreprocessor* mLSLProc;
-	LLTextEditor*	mPostEditor;
+	LLScriptEditor*	mPostEditor;
 	std::string		mPostScript;
 	// NaCl End
 
 	LLScriptEdContainer* mContainer; // parent view
+
+public:
+	boost::signals2::connection mSyntaxIDConnection;
+
 };
 
 class LLScriptEdContainer : public LLPreview
@@ -199,6 +219,7 @@ class LLScriptEdContainer : public LLPreview
 
 public:
 	LLScriptEdContainer(const LLSD& key);
+	LLScriptEdContainer(const LLSD& key, const bool live);
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	/*virtual*/ ~LLScriptEdContainer();
 
@@ -222,7 +243,7 @@ protected:
 // [/SL:KB]
 };
 
-// Used to view and edit a LSL from your inventory.
+// Used to view and edit an LSL script from your inventory.
 class LLPreviewLSL : public LLScriptEdContainer
 {
 public:
@@ -233,7 +254,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
 // [/SL:KB]
 
 protected:
@@ -254,7 +275,10 @@ protected:
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
-	static void onSave(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//static void onSave(void* userdata, BOOL close_after_save);
+	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 	
 	static void onLoadComplete(LLVFS *vfs, const LLUUID& uuid,
 							   LLAssetType::EType type,
@@ -274,7 +298,7 @@ protected:
 };
 
 
-// Used to view and edit an LSL that is attached to an object.
+// Used to view and edit an LSL script that is attached to an object.
 class LLLiveLSLEditor : public LLScriptEdContainer
 {
 	friend class LLLiveLSLFile;
@@ -302,7 +326,7 @@ public:
 // </FS:TT>
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
 // [/SL:KB]
 
 private:
@@ -327,7 +351,10 @@ private:
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
-	static void onSave(void* userdata, BOOL close_after_save);
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//static void onSave(void* userdata, BOOL close_after_save);
+	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	// </FS:Ansariel>
 
 	static void onLoadComplete(LLVFS *vfs, const LLUUID& asset_uuid,
 							   LLAssetType::EType type,

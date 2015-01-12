@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Zaproszenie do Grupy" name="invite_panel">
+<panel label="Zaproś do grupy" name="invite_panel">
 	<panel.string name="confirm_invite_owner_str">
 		Jesteś pewny/a, że chcesz wybrać nowych właścieli grupy? Ta decyzja jest ostateczna!
 	</panel.string>
@@ -7,7 +7,7 @@
 		(ładowanie...)
 	</panel.string>
 	<panel.string name="already_in_group">
-		Niektórzy Rezydenci, których wybrałeś już należą do grupy i nie otrzymali zaproszenia.
+		Niektórzy Rezydenci, których wybrałeś/aś już należą do grupy i nie otrzymali zaproszenia.
 	</panel.string>
 	<panel.string name="invite_selection_too_large">
 		Zaproszenia nie zostały wysłane: wybrano zbyt wielu Rezydentów. Limit to 100 zaproszeń na jedno żądanie.
@@ -21,7 +21,7 @@
 	<text name="role_text">
 		Wybierz funkcję dla nowej osoby:
 	</text>
-	<combo_box name="role_name" tool_tip="Wybierz z listy funkcje, które możesz przypisać osobom"/>
+	<combo_box name="role_name" tool_tip="Wybierz rolę z listy funkcji, które możesz przypisać osobom w grupie"/>
 	<button label="Wyślij zaproszenia" name="ok_button"/>
 	<button label="Anuluj" name="cancel_button"/>
 	<string name="GroupInvitation">

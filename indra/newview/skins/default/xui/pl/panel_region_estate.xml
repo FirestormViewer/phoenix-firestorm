@@ -22,8 +22,8 @@
 	<text name="Only Allow">
 		Dostęp tylko dla Rezydentów:
 	</text>
-	<check_box label="Z danymi płatniczymi na koncie" name="limit_payment" tool_tip="Tylko osoby z danymi płatniczymi na koncie mogą wejść na ten Majątek. Zobacz [SUPPORT_SITE] aby dowiedzieć się więcej."/>
-	<check_box label="Mają 18 lat lub więcej" name="limit_age_verified" tool_tip="Tylko osoby mające 18 lat lub więcej mogą wejść na ten Majątek. Zobacz [SUPPORT_SITE] aby dowiedzieć się więcej."/>
+	<check_box label="Zarejestrowanych w systemie płatniczym" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
+	<check_box label="Którzy mają 18+ lat" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji."/>
 	<text name="estate_manager_label">
 		Zarządcy Majątku:
 	</text>

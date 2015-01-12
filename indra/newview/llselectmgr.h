@@ -234,6 +234,11 @@ protected:
 	LLPointer<LLViewerObject>	mObject;
 	S32				mTESelectMask;
 	S32				mLastTESelected;
+
+// <FS:ND> For const access. Need to check for isDead yourself.
+public:
+	LLViewerObject const* getObject() const { return mObject; } 
+// </FS:ND>
 };
 
 class LLObjectSelection : public LLRefCount
@@ -380,6 +385,11 @@ private:
 	LLPointer<LLViewerObject> mPrimaryObject;
 	std::map<LLPointer<LLViewerObject>, LLSelectNode*> mSelectNodeMap;
 	ESelectType mSelectType;
+
+	// <FS:Zi> Fix for crash while selecting objects with derendered child prims
+	list_t mFailedNodesList;
+	bool checkNode(LLSelectNode* nodep);
+	// </FS:Zi>
 };
 
 typedef LLSafeHandle<LLObjectSelection> LLObjectSelectionHandle;
@@ -392,7 +402,47 @@ extern template class LLSelectMgr* LLSingleton<class LLSelectMgr>::getInstance()
 // For use with getFirstTest()
 struct LLSelectGetFirstTest;
 
-class LLSelectMgr : public LLEditMenuHandler, public LLSingleton<LLSelectMgr>
+// <FS:ND> To listened into received prop. messages
+namespace nd
+{
+	namespace selection
+	{
+		class PropertiesListener
+		{
+		public:
+			virtual void onProperties( LLSelectNode const * ) = 0;
+		};
+
+		class PropertiesServer
+		{
+		public:
+			PropertiesServer()
+				: mBatchMode( false )
+			{ }
+
+			void registerPropertyListener( nd::selection::PropertiesListener *aP) { mListener.insert( aP ); }
+			void removePropertyListener( nd::selection::PropertiesListener *aP) { mListener.erase( aP ); }
+
+			void enableBatchMode( ) { mBatchMode = true; }
+			void disableBatchMode( ) { mBatchMode = false; }
+			bool isBatchMode() const { return mBatchMode; }
+
+		protected:
+			void firePropertyReceived( LLSelectNode const *aNode  )
+			{
+				for( std::set< nd::selection::PropertiesListener * >::iterator itr = mListener.begin(); itr != mListener.end(); ++itr )
+					(*itr)->onProperties( aNode );
+			}
+
+		private:
+			std::set< nd::selection::PropertiesListener * > mListener;
+			bool mBatchMode;
+		};
+	}
+}
+// </FS:ND>
+
+class LLSelectMgr : public LLEditMenuHandler, public LLSingleton<LLSelectMgr>, public nd::selection::PropertiesServer
 {
 public:
 	static BOOL					sRectSelectInclusive;	// do we need to surround an object to pick it?

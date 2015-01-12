@@ -57,9 +57,7 @@ private:
 	/*virtual*/ std::string getAspectRatioCBName() const	{ return "local_keep_aspect_check"; }
 	/*virtual*/ std::string getImageSizeComboName() const	{ return "local_size_combo"; }
 	/*virtual*/ std::string getImageSizePanelName() const	{ return "local_image_size_lp"; }
-	/*virtual*/ std::string getTempUploadCBName() const		{ return LLStringUtil::null; } //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	/*virtual*/ LLFloaterSnapshot::ESnapshotFormat getImageFormat() const;
-	/*virtual*/ std::string getImageSizeControlName() const	{ return "LastSnapshotToDiskResolution"; }	// <FS:Zi> Save all settings
 	/*virtual*/ void updateControls(const LLSD& info);
 
 	void onFormatComboCommit(LLUICtrl* ctrl);
@@ -121,14 +119,10 @@ void LLPanelSnapshotLocal::updateControls(const LLSD& info)
 	getChild<LLComboBox>("local_format_combo")->selectNthItem((S32) fmt);
 
 	const bool show_quality_ctrls = (fmt == LLFloaterSnapshot::SNAPSHOT_FORMAT_JPEG);
-	// <FS:Zi> Save all settings
-	// getChild<LLUICtrl>("image_quality_slider")->setVisible(show_quality_ctrls);
-	// getChild<LLUICtrl>("image_quality_level")->setVisible(show_quality_ctrls);
-	getChild<LLUICtrl>("image_quality_slider")->setEnabled(show_quality_ctrls);
-	getChild<LLUICtrl>("image_quality_level")->setEnabled(show_quality_ctrls);
-	// </FS:Zi>
+	getChild<LLUICtrl>("image_quality_slider")->setVisible(show_quality_ctrls);
+	getChild<LLUICtrl>("image_quality_level")->setVisible(show_quality_ctrls);
 
-	// getChild<LLUICtrl>("image_quality_slider")->setValue(gSavedSettings.getS32("SnapshotQuality"));	// <FS:Zi> Save all settings
+	getChild<LLUICtrl>("image_quality_slider")->setValue(gSavedSettings.getS32("SnapshotQuality"));
 	updateImageQualityLevel();
 
 	const bool have_snapshot = info.has("have-snapshot") ? info["have-snapshot"].asBoolean() : true;

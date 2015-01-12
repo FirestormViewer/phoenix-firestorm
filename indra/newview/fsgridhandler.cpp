@@ -67,17 +67,16 @@ public:
 	}
 
 	// the grid info is no LLSD *sigh* ... override the default LLSD parsing behaviour 
-	virtual  void completedRaw(U32 status, const std::string& reason,
-									const LLChannelDescriptors& channels,
-									const LLIOPipe::buffer_ptr_t& buffer)
+	virtual  void completedRaw(const LLChannelDescriptors& channels,
+							   const LLIOPipe::buffer_ptr_t& buffer)
 	{
 		mOwner->decResponderCount();
-		LL_DEBUGS("GridManager") << mData->grid[GRID_VALUE] << " status: " << status << " reason: " << reason << LL_ENDL;
-		if(LLGridManager::TRYLEGACY == mState && 200 == status)
+		LL_DEBUGS("GridManager") << mData->grid[GRID_VALUE] << " status: " << getStatus() << " reason: " << getReason() << LL_ENDL;
+		if(LLGridManager::TRYLEGACY == mState && HTTP_OK == getStatus())
 		{
 			mOwner->addGrid(mData, LLGridManager::SYSTEM);
 		}
-		else if (200 == status)// OK
+		else if (HTTP_OK == getStatus())// OK
 		{
 			LL_DEBUGS("GridManager") << "Parsing gridinfo xml file from "
 				<< mData->grid[GRID_VALUE] << LL_ENDL;
@@ -101,29 +100,29 @@ public:
 				mOwner->addGrid(mData, LLGridManager::FAIL);
 			}
 		}
-		else if (304 == status && !LLGridManager::TRYLEGACY == mState)// not modified
+		else if (HTTP_NOT_MODIFIED == getStatus() && !LLGridManager::TRYLEGACY == mState)// not modified
 		{
 			mOwner->addGrid(mData, LLGridManager::FINISH);
 		}
-		else if (499 == status && LLGridManager::LOCAL == mState) //add localhost even if its not up
+		else if (HTTP_INTERNAL_ERROR == getStatus() && LLGridManager::LOCAL == mState) //add localhost even if its not up
 		{
 			mOwner->addGrid(mData,	LLGridManager::FINISH);
 			//since we know now that its not up we cold also start it
 		}
 		else
 		{
-			error(status, reason);
+			httpFailure();
 		}
 	}
 
-	virtual void result(const LLSD& content)
+	virtual void httpSuccess()
 	{
 
 	}
 
-	virtual void error(U32 status, const std::string& reason)
+	virtual void httpFailure()
 	{
-		if (504 == status)// gateway timeout ... well ... retry once >_>
+		if (HTTP_GATEWAY_TIME_OUT == getStatus())// gateway timeout ... well ... retry once >_>
 		{
 			if (LLGridManager::FETCH == mState)
 			{
@@ -150,7 +149,7 @@ public:
 		{
 			// remember the error we got when trying to get grid info where we expect it
 			std::ostringstream last_error;
-			last_error << status << " " << reason;
+			last_error << getStatus() << " " << getReason();
 			mData->last_http_error = last_error.str();
 
 			mOwner->addGrid(mData, LLGridManager::TRYLEGACY);

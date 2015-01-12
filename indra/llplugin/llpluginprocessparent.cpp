@@ -133,6 +133,8 @@ LLPluginProcessParent::~LLPluginProcessParent()
 	{
 		// destroy the shared memory region
 		iter->second->destroy();
+		delete iter->second;
+		iter->second = NULL;
 		
 		// and remove it from our map
 		mSharedMemoryRegions.erase(iter);
@@ -979,6 +981,8 @@ void LLPluginProcessParent::receiveMessage(const LLPluginMessage &message)
 			{
 				// destroy the shared memory region
 				iter->second->destroy();
+				delete iter->second;
+				iter->second = NULL;
 				
 				// and remove it from our map
 				mSharedMemoryRegions.erase(iter);
@@ -1002,10 +1006,7 @@ std::string LLPluginProcessParent::addSharedMemory(size_t size)
 {
 	std::string name;
 	
-	// <FS:ND> Use smartptr
-	// LLPluginSharedMemory *region = new LLPluginSharedMemory;
-	LLPluginSharedMemoryPtr region( new LLPluginSharedMemory );
-	// </FS:ND>
+	LLPluginSharedMemory *region = new LLPluginSharedMemory;
 
 	// This is a new region
 	if(region->create(size))
@@ -1024,7 +1025,7 @@ std::string LLPluginProcessParent::addSharedMemory(size_t size)
 		LL_WARNS("Plugin") << "Couldn't create a shared memory segment!" << LL_ENDL;
 
 		// Don't leak
-		// delete region; // <FS:ND/> Smartptr will autodelete.
+		delete region;
 	}
 
 	return name;

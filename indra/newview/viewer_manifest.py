@@ -120,6 +120,9 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 # ... and the entire windlight directory
                 self.path("windlight")
 
+                # ... and the entire image filters directory
+                self.path("filters")
+            
                 # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
 #                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')

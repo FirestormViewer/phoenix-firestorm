@@ -495,6 +495,12 @@ void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 	if (nearby_chat)
 	{
 		nearby_chat->updateChatHistoryStyle();
+		nearby_chat->mInputEditor->setFont(LLViewerChat::getChatFont());
+
+		// Re-set the current text to make style update instant
+		std::string text = nearby_chat->mInputEditor->getText();
+		nearby_chat->mInputEditor->clear();
+		nearby_chat->mInputEditor->setText(text);
 	}
 }
 
@@ -683,21 +689,21 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 	
 	if (KEY_RETURN == key)
 	{
-		if (mask == MASK_CONTROL)
+		if (mask == MASK_CONTROL && gSavedSettings.getBOOL("FSUseCtrlShout"))
 		{
 			// shout
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
 			handled = TRUE;
 		}
-		else if (mask == MASK_SHIFT)
+		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
 			handled = TRUE;
 		}
-		else if (mask == MASK_ALT)
+		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			mInputEditor->updateHistory();
@@ -1015,7 +1021,10 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 				utf8text = applyMuPose(utf8text);
 				
 				// discard returned "found" boolean
-				LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text);
+				if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
+				{
+					utf8_revised_text = utf8text;
+				}
 			}
 			else
 			{

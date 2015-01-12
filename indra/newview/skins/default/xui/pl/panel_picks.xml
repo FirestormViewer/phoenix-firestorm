@@ -7,7 +7,7 @@
 		<panel name="tab_classifieds" title="Reklamy"/>
 	</tab_container>
 	<panel name="edit_panel">
-		<button name="new_btn" tool_tip="Tworzy nowe Miejsce lub reklamę w obecnej lokalizacji"/>
+		<button name="new_btn" tool_tip="Stwórz nowe Miejsce lub reklamę w obecnej lokalizacji"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">

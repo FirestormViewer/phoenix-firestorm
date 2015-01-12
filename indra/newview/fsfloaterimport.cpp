@@ -1993,9 +1993,9 @@ void FSAssetResponder::uploadComplete(const LLSD& content)
 	delete data;
 }
 
-void FSAssetResponder::error(U32 statusNum, const std::string& reason)
+void FSAssetResponder::httpFailure()
 {
-	LL_WARNS("import")  << "Error " << statusNum << " reason: " << reason << LL_ENDL;
+	LL_WARNS("import")  << "Error " << getStatus() << " reason: " << getReason() << LL_ENDL;
 	LLResourceData* data = (LLResourceData*)mData;
 	FSResourceData* fs_data = (FSResourceData*)data->mUserData;
 	FSFloaterImport* self = (FSFloaterImport*)fs_data->user_data;

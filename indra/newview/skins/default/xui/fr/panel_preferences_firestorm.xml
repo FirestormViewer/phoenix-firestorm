@@ -424,30 +424,6 @@
 			tool_tip="Item actuellement intégré.">
 			Item actuel : [ITEM]
         </text>
-	<!--permissions-->
-		<text name="text_box_permissions">
-			Droits
-        </text>
-        <text name="text_box_permnextowner">
-			Proch. propriétaire :
-        </text>
-        <check_box name="next_owner_modify"
-			label="Modifier"
-			tool_tip="Le prochain propriétaire pourra modifier l'item"/>
-        <check_box name="next_owner_copy"
-			label="Copier"
-			tool_tip="Le prochain propriétaire pourra copier l'item">
-        </check_box>
-        <check_box name="next_owner_transfer"
-			label="Transférer"
-			tool_tip="Le prochain propriétaire pourra transférer l'item">
-		</check_box>
-        <text name="text_box_permnote1">
-			S'appliquera aussi à
-        </text>
-        <text name="text_box_permnote2">
-			tout nouv. télécharg.
-        </text>
 	<!--pivot point-->
 		<text name="text_box_pivotpoint">
 			Pivot

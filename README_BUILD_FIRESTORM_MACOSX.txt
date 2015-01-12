@@ -32,16 +32,15 @@ build, using openjpeg instead of KDU.
 
 Available premade firestorm-specific build targets:
 
-	ReleaseFS		(includes KDU, FMOD)
-	ReleaseFS_open		(no KDU, no FMOD)
-	RelWithDebInfo_open	(no KDU, no FMOD)
+	ReleaseFS (includes KDU, FMOD)
+	ReleaseFS_open (no KDU, no FMOD)
+	RelWithDebInfo_open (no KDU, no FMOD)
 
 To build firestorm:
 
         autobuild build -c ReleaseFS                        
 
 Other examples:
-
         autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure
         autobuild configure -c ReleaseFS -- --clean         # clean the output area first, then configure
         autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel

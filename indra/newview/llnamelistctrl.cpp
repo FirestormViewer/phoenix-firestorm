@@ -64,8 +64,7 @@ LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
 	mNameColumnIndex(p.name_column.column_index),
 	mNameColumn(p.name_column.column_name),
 	mAllowCallingCardDrop(p.allow_calling_card_drop),
-	mShortNames(p.short_names),
-	mPendingLookupsRemaining(0)
+	mShortNames(p.short_names)
 {}
 
 // public
@@ -334,15 +333,6 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 			else
 			{
 				// ...schedule a callback
-				// This is not correct and will likely lead to partially populated lists in cases where avatar names are not cached.
-				// *TODO : Change this to have 2 callbacks : one callback per list item and one for the whole list.
-				// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-				//if (mAvatarNameCacheConnection.connected())
-				//{
-				//	mAvatarNameCacheConnection.disconnect();
-				//}
-				//mAvatarNameCacheConnection = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, item->getHandle()));
-
 				avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(id);
 				if (it != mAvatarNameCacheConnections.end())
 				{
@@ -353,7 +343,6 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 					mAvatarNameCacheConnections.erase(it);
 				}
 				mAvatarNameCacheConnections[id] = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, suffix, item->getHandle()));
-				// </FS:Ansariel>
 
 				if(mPendingLookupsRemaining <= 0)
 				{
@@ -423,13 +412,9 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 
 void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 									   const LLAvatarName& av_name,
-									   // <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
 									   std::string suffix,
-									   // </FS:Ansariel>
 									   LLHandle<LLNameListItem> item)
 {
-	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-	//mAvatarNameCacheConnection.disconnect();
 	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(agent_id);
 	if (it != mAvatarNameCacheConnections.end())
 	{
@@ -439,7 +424,6 @@ void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 		}
 		mAvatarNameCacheConnections.erase(it);
 	}
-	// </FS:Ansariel>
 
 	std::string name;
 	if (mShortNames)
@@ -447,13 +431,11 @@ void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 	else
 		name = av_name.getCompleteName();
 
-	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
 	// Append optional suffix.
 	if (!suffix.empty())
 	{
 		name.append(suffix);
 	}
-	// </FS:Ansariel>
 
 	LLNameListItem* list_item = item.get();
 	if (list_item && list_item->getUUID() == agent_id)

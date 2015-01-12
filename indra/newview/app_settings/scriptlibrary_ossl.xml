@@ -12,6 +12,7 @@
 		<integer_constant name="OS_ATTACH_MSG_OBJECT_CREATOR" desc="Send only to those have the same CreatorID with host object CreatorID" />
 		<integer_constant name="OS_ATTACH_MSG_SCRIPT_CREATOR" desc="Send only to those have the same CreatorID with sender script CreatorID" />
 		
+		<integer_constant name="CHANGED_REGION_RESTART" desc="Parameter of changed event handler used to indicate the region has been restarted." />
 		<integer_constant name="CHANGED_ANIMATION" desc="The set of animations playing on the avatar to whom this object is attached has been changed." />
 		<integer_constant name="LIST_STAT_HARMONIC_MEAN" desc="Returns the harmonic mean of a list of numbers, Value 100." />
 		<integer_constant name="CAMERA_FOCUS_OFFSET_X" desc="Adjusts the camera focus x position relative to the target. (float)" />
@@ -143,7 +144,7 @@
 		<function name="osSetEstateSunSettings" sleep="0.0" energy="10.0"
 			desc="osSetEstateSunSettings(integer sunFixed, float sunHour);Set current estate's sun settings" />
 		<function name="osGetCurrentSunHour" sleep="0.0" energy="10.0"
-		desc="float osGetCurrentSunHour();Returns the value of the current region's sun hour" />
+			desc="float osGetCurrentSunHour();Returns the value of the current region's sun hour" />
 		<function name="osGetSunParam" sleep="0.0" energy="10.0"
 			desc="string osGetSunParam(string param);Returns region's current sun parameters.;Param are: day_length, year_length, day_night_offset, update_interval." />
 		<function name="osSetSunParam" sleep="0.0" energy="10.0"
@@ -296,6 +297,12 @@
 			desc="string osLoadedCreationID();Returns the original UUID of the current region" />
 		<function name="osGetLinkPrimitiveParams" sleep="0.0" energy="10.0"
 			desc="list osGetLinkPrimitiveParams(integer link_num, list parameters);Returns prim params for the prim specified by link_num" />
+		<function name="osForceCreateLink" sleep="0.0" energy="10.0"
+			desc="osForceCreateLink(key target, int parent);Idential to llCreateLink() except that it doesn't require the link permission to be granted. Attempt to link the script's object with target." />
+		<function name="osForceBreakLink" sleep="0.0" energy="10.0"
+			desc="osForceBreakLink(integer link);to llBreakLink(integer link) except that it doesn't require the link permission to be granted. Delinks the prim with the given link number in a linked object set." />
+		<function name="osForceBreakAllLinks" sleep="0.0" energy="10.0"
+			desc="osForceBreakAllLinks();Identical to llBreakAllLinks() except that it doesn't require the link permission to be granted. Delinks all prims in the link set." />
 		<function name="osIsNpc" sleep="0.0" energy="10.0"
 			desc="integer osIsNpc(key npc);Returns 1 if TRUE, 0 if FALSE" />
 		<function name="osNpcCreate" sleep="0.0" energy="10.0"
@@ -337,7 +344,7 @@
 		<function name="osNpcStopAnimation" sleep="0.0" energy="10.0"
 			desc="osNpcStopAnimation(key npc, string animation);Stops animation being played by the NPC" />
 		<function name="osOwnerSaveAppearance" sleep="0.0" energy="10.0"
-		desc="key osOwnerSaveAppearance(string notecard);Creates a notecard with the object owner&apos;s current appearance inside the object" />
+			desc="key osOwnerSaveAppearance(string notecard);Creates a notecard with the object owner&apos;s current appearance inside the object" />
 		<function name="osAgentSaveAppearance" sleep="0.0" energy="10.0"
 			desc="key osAgentSaveAppearance(key avatar, string notecard);Creates a notecard with the specified avatar&apos;s current appearance inside the object" />
 		<function name="osGetMapTexture" sleep="0.0" energy="10.0"

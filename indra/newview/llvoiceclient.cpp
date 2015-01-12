@@ -169,7 +169,12 @@ void LLVoiceClient::setHidden(bool hidden)
 {
     if (mVoiceModule)
     {
+        //mVoiceModule->setHidden(hidden);
+		#ifdef OPENSIM
+			mVoiceModule->setHidden(hidden && LLGridManager::getInstance()->isInSecondLife());
+		#else
         mVoiceModule->setHidden(hidden);
+		#endif
     }
 }
 

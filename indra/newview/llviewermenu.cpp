@@ -2793,12 +2793,14 @@ void derenderObject(bool permanent)
 			{
 				std::string entry_name = "";
 				std::string region_name;
+				LLAssetType::EType asset_type;
 
 				if (objp->isAvatar())
 				{
 					LLNameValue* firstname = objp->getNVPair("FirstName");
 					LLNameValue* lastname = objp->getNVPair("LastName");
-					entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
+					entry_name = llformat("%s %s", firstname->getString(), lastname->getString());
+					asset_type = LLAssetType::AT_PERSON;
 				}
 				else
 				{
@@ -2815,9 +2817,10 @@ void derenderObject(bool permanent)
 					{
 						region_name = region->getName();
 					}
+					asset_type = LLAssetType::AT_OBJECT;
 				}
 			
-				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
+				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, asset_type);
 			}
 
 			select_mgr->deselectObjectOnly(objp);
@@ -7683,25 +7686,44 @@ class LLLandEdit : public view_listener_t
 
 class LLMuteParticle : public view_listener_t
 {
+	// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
+	void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
+	{
+		LLMute mute(av_id, av_name.getLegacyName(), LLMute::AGENT);
+		if (LLMuteList::getInstance()->isMuted(mute.mID))
+		{
+			LLMuteList::getInstance()->remove(mute);
+		}
+		else
+		{
+			LLMuteList::getInstance()->add(mute);
+			LLPanelBlockedList::showPanelAndSelect(mute.mID);
+		}
+	}
+	// </FS:Ansariel>
+
 	bool handleEvent(const LLSD& userdata)
 	{
 		LLUUID id = LLToolPie::getInstance()->getPick().mParticleOwnerID;
 		
 		if (id.notNull())
 		{
-			std::string name;
-			gCacheName->getFullName(id, name);
+			// <FS:Ansariel> Blocklist sometimes shows "(waiting)" as avatar name when blocking particle owners
+			//std::string name;
+			//gCacheName->getFullName(id, name);
 
-			LLMute mute(id, name, LLMute::AGENT);
-			if (LLMuteList::getInstance()->isMuted(mute.mID))
-			{
-				LLMuteList::getInstance()->remove(mute);
-			}
-			else
-			{
-				LLMuteList::getInstance()->add(mute);
-				LLPanelBlockedList::showPanelAndSelect(mute.mID);
-			}
+			//LLMute mute(id, name, LLMute::AGENT);
+			//if (LLMuteList::getInstance()->isMuted(mute.mID))
+			//{
+			//	LLMuteList::getInstance()->remove(mute);
+			//}
+			//else
+			//{
+			//	LLMuteList::getInstance()->add(mute);
+			//	LLPanelBlockedList::showPanelAndSelect(mute.mID);
+			//}
+			LLAvatarNameCache::get(id, boost::bind(&LLMuteParticle::onAvatarNameCache, this, _1, _2));
+			// </FS:Ansariel>
 		}
 
 		return true;
@@ -9047,20 +9069,6 @@ BOOL check_show_xui_names(void *)
 	return gSavedSettings.getBOOL("DebugShowXUINames");
 }
 
-// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
-class FSToolSelectIncludeGroupOwned : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		BOOL cur_val = gSavedSettings.getBOOL("FSSelectIncludeGroupOwned");
-
-		gSavedSettings.setBOOL("FSSelectIncludeGroupOwned", ! cur_val );
-
-		return true;
-	}
-};
-// </FS:Ansariel>
-
 // <FS:CR> Resync Animations
 class FSToolsResyncAnimations : public view_listener_t
 {
@@ -9621,7 +9629,7 @@ void handle_report_bug(const LLSD& param)
 	replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
-	replace["[LOCATION]"] = location_url.getSLURLString();
+	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
 
 	LLUIString file_bug_url = gSavedSettings.getString("ReportBugURL");
 	file_bug_url.setArgs(replace);
@@ -9645,6 +9653,7 @@ void handle_buy_currency_test(void*)
 	LLFloaterReg::showInstance("buy_currency_html", LLSD(url));
 }
 
+// SUNSHINE CLEANUP - is only the request update at the end needed now?
 void handle_rebake_textures(void*)
 {
 	if (!isAgentAvatarValid()) return;
@@ -10654,8 +10663,6 @@ void initialize_menus()
 	commit.add("Tools.TakeCopy", boost::bind(&handle_take_copy));
 	view_listener_t::addMenu(new LLToolsSaveToObjectInventory(), "Tools.SaveToObjectInventory");
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
-	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
-	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
 	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
 	view_listener_t::addMenu(new FSToolsUndeform(), "Tools.Undeform");	// <FS:CR> FIRE-4345: Undeform
 

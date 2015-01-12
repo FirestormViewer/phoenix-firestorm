@@ -43,6 +43,7 @@
 #include "llgrouplist.h"
 #include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "lltabcontainer.h"
 #include "llviewermenu.h"
@@ -85,7 +86,8 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mObserver(NULL),
 	mFriendsList(NULL),
 	mGroupList(NULL),
-	mAllowRightsChange(TRUE),
+	mAllowRightsChange(true),
+	mRightsChangeNotificationTriggered(false),
 	mNumRightsChanged(0),
 	mRlvBehaviorCallbackConnection(),
 	mResetLastColumnDisplayModeChanged(false),
@@ -140,6 +142,8 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("remove_btn",			boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked,	this));
 	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
 	mFriendsTab->setDefaultBtn("im_btn");
+
+	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
 
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
@@ -552,11 +556,11 @@ void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
 				--mNumRightsChanged;
 				if (mNumRightsChanged > 0)
 				{
-					mAllowRightsChange = FALSE;
+					mAllowRightsChange = false;
 				}
 				else
 				{
-					mAllowRightsChange = TRUE;
+					mAllowRightsChange = true;
 				}
 			
 				const std::set<LLUUID>& changed_items = at.getChangedIDs();
@@ -870,12 +874,7 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 		// for single friend, show their name
 		if (ids.size() == 1)
 		{
-			LLUUID agent_id = ids.begin()->first;
-			std::string name;
-			if (gCacheName->getFullName(agent_id, name))
-			{
-				args["NAME"] = name;
-			}
+			args["NAME"] = LLSLURL("agent", ids.begin()->first, "completename").getSLURLString();
 			if (command == GRANT)
 			{
 				LLNotificationsUtil::add("GrantModifyRights", 
@@ -909,10 +908,13 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 			}
 		}
 	}
+	
 }
 
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
 {
+	mRightsChangeNotificationTriggered = false;
+
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (0 == option)
 	{
@@ -936,6 +938,11 @@ bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const
 
 void FSFloaterContacts::applyRightsToFriends()
 {
+	if (mRightsChangeNotificationTriggered)
+	{
+		return;
+	}
+
 	bool rights_changed = false;
 
 	// store modify rights separately for confirmation
@@ -1023,6 +1030,7 @@ void FSFloaterContacts::applyRightsToFriends()
 	if (need_confirmation)
 	{
 		confirmModifyRights(rights_updates, confirmation_type);
+		mRightsChangeNotificationTriggered = true;
 	}
 	else
 	{

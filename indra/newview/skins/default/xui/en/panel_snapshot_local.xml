@@ -4,7 +4,7 @@
  layout="topleft"
  name="panel_snapshot_local"
  width="490">
-<!--    <icon
+    <icon
      follows="top|left"
      height="18"
      image_name="Snapshot_Download"
@@ -37,16 +37,16 @@
      name="hr"
      right="-10"
      top_pad="5"
-     />-->
+     />
     <combo_box
      follows="left|top|right"
      height="23"
      label="Resolution"
      layout="topleft"
-     left="5"
+     left_delta="0"
      name="local_size_combo"
      right="-10"
-     top="5">
+     top_pad="10">
         <combo_box.item
          label="Current Window"
          name="CurrentWindow"
@@ -83,7 +83,7 @@
     <layout_stack
      animate="false"
      follows="all"
-     height="325"
+     height="275"
      layout="bottomleft"
      name="local_image_params_ls"
      left_delta="0"
@@ -102,7 +102,6 @@
          visible="true">
             <spinner
              allow_text_entry="false"
-             control_name="LastSnapshotToDiskWidth"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -118,7 +117,6 @@
              width="95" />
             <spinner
              allow_text_entry="false"
-             control_name="LastSnapshotToDiskHeight"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -133,7 +131,6 @@
              top_delta="0"
              width="95" />
             <check_box
-             control_name="KeepAspectForDiskSnapshot"
              bottom_delta="20"
              height="10"
              follows="left|top"
@@ -175,7 +172,6 @@
                  value="BMP" />
             </combo_box>
             <slider
-             control_name="SnapshotToDiskQuality"
              decimal_digits="0"
              follows="left|top"
              height="15"
@@ -196,17 +192,16 @@
              length="1"
              height="14"
              layout="topleft"
-			 left="95"
-			 top="50"
+             left_pad="-5"
              halign="left"
              name="image_quality_level"
              top_delta="0"
-             width="115">
+             width="60">
                ([QLVL])
             </text>
         </layout_panel>
     </layout_stack>
-<!--    <button
+    <button
      follows="right|bottom"
      height="23"
      label="Cancel"
@@ -217,16 +212,16 @@
      width="100">
       <button.commit_callback
        function="Local.Cancel" />
-   </button>-->
+    </button>
     <flyout_button
-     bottom="-1"
      follows="right|bottom"
      height="23"
      label="Save"
      layout="topleft"
-     right="-1"
+     left_delta="-106"
      name="save_btn"
      tool_tip="Save image to a file"
+     top_delta="0"
      width="100">
         <flyout_button.item
          label="Save"

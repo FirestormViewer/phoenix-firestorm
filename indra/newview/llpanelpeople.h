@@ -67,7 +67,7 @@ public:
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
-    bool mTryToConnectToFbc;
+    bool mTryToConnectToFacebook;
 
 	// internals
 	class Updater;

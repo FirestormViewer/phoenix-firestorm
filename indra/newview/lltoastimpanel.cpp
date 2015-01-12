@@ -55,6 +55,7 @@ LLToastIMPanel::LLToastIMPanel(LLToastIMPanel::Params &p) :	LLToastPanel(p.notif
 	mAvatarName = getChild<LLTextBox>("user_name");
 	mTime = getChild<LLTextBox>("time_box");
 	mMessage = getChild<LLTextBox>("message");
+	mMessage->setContentTrusted(false);
 
 	LLStyle::Params style_params;
 	LLFontGL* fontp = LLViewerChat::getChatFont();

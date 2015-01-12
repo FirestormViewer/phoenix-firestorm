@@ -313,7 +313,7 @@
              width="18" />
         </layout_panel>
     </layout_stack>
-    <text_editor
+    <script_editor
      left="0"
      type="string"
      length="1"
@@ -324,7 +324,7 @@
      ignore_tab="false"
      layout="topleft"
      line_spacing.pixels="-1"
-     max_length="65536"
+     max_length="262144"
      name="Script Editor"
      text_color="ScriptText"
      default_color="ScriptText"
@@ -333,11 +333,10 @@
      text_readonly_color="ScriptBackground"
      cursor_color="ScriptCursorColor"
      right="-1"
-     show_line_numbers="true"
      enable_tooltip_paste="true"
      word_wrap="true">
         Loading...
-    </text_editor>
+    </script_editor>
     <scroll_list
      top_pad="10"
      left="0"

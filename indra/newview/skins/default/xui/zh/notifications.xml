@@ -2654,7 +2654,21 @@ SHA1 指紋：[MD5_DIGEST]
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="顯示"/>
+			<button name="Keep" text="保留"/>
 			<button name="Discard" text="丟棄"/>
+			<button name="Mute" text="封鎖"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] 給了你這個 [OBJECTTYPE]：
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="顯示"/>
+			<button name="Accept" text="保留"/>
+			<button name="Discard" text="丟棄"/>
+			<button name="ShowSilent" text="（顯示）"/>
+			<button name="AcceptSilent" text="（保留）"/>
+			<button name="DiscardSilent" text="（丟棄）"/>
 			<button name="Mute" text="封鎖"/>
 		</form>
 	</notification>

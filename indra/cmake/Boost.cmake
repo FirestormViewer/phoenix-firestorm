@@ -4,7 +4,7 @@ include(Prebuilt)
 set(Boost_FIND_QUIETLY ON)
 set(Boost_FIND_REQUIRED ON)
 
-if (STANDALONE)
+if (USESYSTEMLIBS)
   include(FindBoost)
 
 # <FS:TS> boost::context isn't used, so don't try to include it
@@ -16,7 +16,7 @@ if (STANDALONE)
   set(BOOST_SYSTEM_LIBRARY boost_system-mt)
   set(BOOST_THREAD_LIBRARY boost_thread-mt)
   set(BOOST_WAVE_LIBRARY boost_wave-mt)
-else (STANDALONE)
+else (USESYSTEMLIBS)
   use_prebuilt_binary(boost)
   set(Boost_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
   set(BOOST_VERSION "1.52")
@@ -128,4 +128,4 @@ else (STANDALONE)
         optimized boost_wave-mt
         debug boost_wave-mt-d)
   endif (WINDOWS)
-endif (STANDALONE)
+endif (USESYSTEMLIBS)

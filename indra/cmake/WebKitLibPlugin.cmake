@@ -2,7 +2,7 @@
 include(Linking)
 include(Prebuilt)
 
-if (STANDALONE)
+if (USESYSTEMLIBS)
   # The minimal version, 4.4.3, is rather arbitrary: it's the version in Debian/Lenny.
   find_package(Qt4 4.4.3 COMPONENTS QtCore QtGui QtNetwork QtOpenGL QtWebKit REQUIRED)
   include(${QT_USE_FILE})
@@ -28,11 +28,11 @@ if (STANDALONE)
   list(APPEND QT_PLUGIN_LIBRARIES jpeg)
     set(WEBKITLIBPLUGIN OFF CACHE BOOL
         "WEBKITLIBPLUGIN support for the llplugin/llmedia test apps.")
-else (STANDALONE)
+else (USESYSTEMLIBS)
     use_prebuilt_binary(llqtwebkit)
     set(WEBKITLIBPLUGIN ON CACHE BOOL
         "WEBKITLIBPLUGIN support for the llplugin/llmedia test apps.")
-endif (STANDALONE)
+endif (USESYSTEMLIBS)
 
 if (WINDOWS)
     set(WEBKIT_PLUGIN_LIBRARIES 
@@ -62,9 +62,9 @@ elseif (DARWIN)
         )
 elseif (LINUX)
     # FIRE-6108, add missing if clause for standalone builds - TL
-    if (STANDALONE)
+    if (USESYSTEMLIBS)
       set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
-    else (STANDALONE)
+    else (USESYSTEMLIBS)
       set(WEBKIT_PLUGIN_LIBRARIES
           llqtwebkit
 #          qico
@@ -88,5 +88,5 @@ elseif (LINUX)
 #          Xi
 #          SM
           )
-    endif (STANDALONE)
+    endif (USESYSTEMLIBS)
 endif (WINDOWS)

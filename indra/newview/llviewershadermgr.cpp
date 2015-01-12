@@ -356,6 +356,16 @@ LLViewerShaderMgr * LLViewerShaderMgr::instance()
 	return static_cast<LLViewerShaderMgr*>(sInstance);
 }
 
+// static
+void LLViewerShaderMgr::releaseInstance()
+{
+	if (sInstance != NULL)
+	{
+		delete sInstance;
+		sInstance = NULL;
+	}
+}
+
 void LLViewerShaderMgr::initAttribsAndUniforms(void)
 {
 	if (mReservedAttribs.empty())

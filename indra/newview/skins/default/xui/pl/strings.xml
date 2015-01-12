@@ -62,7 +62,7 @@ Pole widzenia (Draw Distance): [DRAW_DISTANCE]
 Przepustowość (Bandwidth): [BANDWIDTH]
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
-Zaawansowane oświetlenie (Advanced Lightning Model): [ALMSTATUS]
+Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
@@ -323,7 +323,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Region jest niedostępny.
 	</string>
 	<string name="TestingDisconnect">
-		Nastąpiło rozłączenie testowania klienta
+		Testowanie rozłączenia klienta
 	</string>
 	<string name="SocialFacebookConnecting">
 		Łączenie z Facebookiem...
@@ -388,7 +388,7 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipMustSingleDrop">
 		Tylko pojedynczy obiekt może być tutaj przeciągnięty
 	</string>
-	<string name="TooltipPrice" value="[AMOUNT]L$:"/>
+	<string name="TooltipPrice" value="[AMOUNT]L$: "/>
 	<string name="TooltipFlagScript">
 		Skrypt
 	</string>
@@ -521,9 +521,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="SLappAgentUnmute">
 		Odblokuj
-	</string>
-	<string name="SLappAgentIM">
-		IM
 	</string>
 	<string name="SLappAgentPay">
 		Zapłać
@@ -695,9 +692,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="favorite">
 		ulubione
-	</string>
-	<string name="symbolic link">
-		link
 	</string>
 	<string name="symbolic folder link">
 		link folderu
@@ -951,9 +945,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="minimap_no_focus">
 		Kamera nie może skupić się na użytkowniku, ponieważ jest poza polem widzenia.
 	</string>
-	<string name="Ok">
-		OK
-	</string>
 	<string name="Premature end of file">
 		Przedwczesny koniec pliku
 	</string>
@@ -1065,15 +1056,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="UnknownScriptPermission">
 		(nieznane)!
 	</string>
-	<string name="SIM_ACCESS_PG">
-		General
-	</string>
-	<string name="SIM_ACCESS_MATURE">
-		Moderate
-	</string>
-	<string name="SIM_ACCESS_ADULT">
-		Adult
-	</string>
 	<string name="SIM_ACCESS_DOWN">
 		Niedostępny
 	</string>
@@ -1088,9 +1070,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Estate / Homestead">
 		Majątek / Homestead
-	</string>
-	<string name="Mainland / Homestead">
-		Mainland / Homestead
 	</string>
 	<string name="Mainland / Full Region">
 		Mainland / Pełny Region
@@ -1200,9 +1179,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="skirt">
 		Spódnica
 	</string>
-	<string name="alpha">
-		Alpha
-	</string>
 	<string name="tattoo">
 		Tatuaż
 	</string>
@@ -1243,7 +1219,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Spódnica nie jest założona
 	</string>
 	<string name="alpha_not_worn">
-		Alpha nie jest założone
+		Alpha nie jest założona
 	</string>
 	<string name="tattoo_not_worn">
 		Tatuaż nie jest założony
@@ -1310,9 +1286,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="next">
 		Dalej
-	</string>
-	<string name="ok">
-		OK
 	</string>
 	<string name="GroupNotifyGroupNotice">
 		Ogłoszenie grupowe
@@ -1456,7 +1429,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="no_modify" value=" (bez modyfikowania)"/>
 	<string name="no_copy" value=" (bez kopiowania)"/>
 	<string name="worn" value=" (założone)"/>
-	<string name="link" value=" (link)"/>
 	<string name="broken_link" value=" (zepsuty_link)"/>
 	<string name="LoadingContents">
 		Ładowanie zawartości...
@@ -1551,6 +1523,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InvFolder Gestures">
 		Gesty
 	</string>
+	<string name="InvFolder Favorite">
+		Ulubione
+	</string>
 	<string name="InvFolder Favorites">
 		Ulubione
 	</string>
@@ -1602,9 +1577,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="Stone">
 		Kamień
 	</string>
-	<string name="Metal">
-		Metal
-	</string>
 	<string name="Glass">
 		Szkło
 	</string>
@@ -1622,12 +1594,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Light">
 		Jasny
-	</string>
-	<string name="KBShift">
-		Shift
-	</string>
-	<string name="KBCtrl">
-		Ctrl
 	</string>
 	<string name="Chest">
 		Klatka piersiowa
@@ -1942,9 +1908,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="IMParentEstate">
 		majątek rodziców
-	</string>
-	<string name="IMMainland">
-		mainland
 	</string>
 	<string name="IMTeen">
 		dla niepełnoletnich
@@ -2340,44 +2303,11 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 	<string name="EditLandmarkNavBarMenu">
 		Edytuj Landmarka...
 	</string>
-	<string name="accel-mac-control">
-		&#8963;
-	</string>
-	<string name="accel-mac-command">
-		&#8984;
-	</string>
-	<string name="accel-mac-option">
-		&#8997;
-	</string>
-	<string name="accel-mac-shift">
-		&#8679;
-	</string>
-	<string name="accel-win-control">
-		Ctrl+
-	</string>
-	<string name="accel-win-alt">
-		Alt+
-	</string>
-	<string name="accel-win-shift">
-		Shift+
-	</string>
 	<string name="FileSaved">
 		Plik zapisany
 	</string>
 	<string name="Receiving">
 		Odbieranie
-	</string>
-	<string name="AM">
-		AM
-	</string>
-	<string name="PM">
-		PM
-	</string>
-	<string name="PST">
-		PST
-	</string>
-	<string name="PDT">
-		PDT
 	</string>
 	<string name="Direction_Forward">
 		Do przodu
@@ -2444,9 +2374,6 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 	</string>
 	<string name="Linden Location">
 		Lokalizacja Lindenów
-	</string>
-	<string name="Adult">
-		Adult
 	</string>
 	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Arts and Culture">
@@ -2683,7 +2610,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Detale ciała
 	</string>
 	<string name="Body Fat">
-		Zawartość tkanki tłuszczowej
+		Puszystość
 	</string>
 	<string name="Body Freckles">
 		Piegi
@@ -2858,9 +2785,6 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="more bustle">
 		Bardziej unoś
-	</string>
-	<string name="Chaplin">
-		Chaplin
 	</string>
 	<string name="Cheek Bones">
 		Kości policzkowe
@@ -4063,7 +3987,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Region Moderate
 	</string>
 	<string name="LocationCtrlGeneralIconTooltip">
-		Region ogólny
+		Region General
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
 		Awatary wewnątrz tej działki nie mogą być widziane lub słyszane przez awatary, które są poza nią
@@ -4565,7 +4489,7 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Sty:Lut:Mar:Kwi:Maj:Cze:Lip:Sie:Wrz:Paź:Lis:Gru
 	</string>
 	<string name="LocalEstimateUSD">
-		US$ [AMOUNT]
+		[AMOUNT] US$
 	</string>
 	<string name="free">
 		darmowe
@@ -4739,9 +4663,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Snapshot_Label">
 		Zdjęcie
-	</string>
-	<string name="Command_Social_Label">
-		Facebook
 	</string>
 	<string name="Command_Speak_Label">
 		Głos
@@ -5186,6 +5107,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="TeleportMaturityExceeded">
 		Rezydent nie może odwiedzić tego regionu.
+	</string>
+	<string name="UserDictionary">
+		[Użytkownika]
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.

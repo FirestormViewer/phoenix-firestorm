@@ -875,8 +875,8 @@
          name="PhoenixBeamPrev_rainbow"
          label=""
          scale_image="true"
-         image_color="White"
-         image_color_disabled="White"
+         image_color="SL-White"
+         image_color_disabled="SL-White"
          image_selected="beam_rainbow.png"
          image_unselected="beam_rainbow.png"
          image_hover_selected="beam_rainbow.png"
@@ -992,8 +992,8 @@
          height="80"
          name="PhoenixBeamPrev_Phoenix"
          label=""
-         image_color="White"
-         image_color_disabled="White"
+         image_color="SL-White"
+         image_color_disabled="SL-White"
          scale_image="true"
          image_selected="beam_phoenix.png"
          image_unselected="beam_phoenix.png"
@@ -1980,90 +1980,7 @@
         </text>
         <text
          top_pad="-60"
-         left_pad="20"
-         follows="left|top"
-         height="10"
-         name="text_box_permissions"
-         width="135">
-          Permissions
-        </text>
-        <view_border
-         top_pad="4"
-         bevel_style="none"
-         border_thickness="1"
-         follows="top|left"
-         height="120"
-         name="PermissionsBorder"
-         width="135"/>
-        <text
-         top_pad="-110"
-         left_delta="10"
-         follows="left|top"
-         height="10"
-         name="text_box_permnextowner"
-         width="135">
-          Next Owner:
-        </text>
-        <check_box
-         control_name="NextOwnerModify"
-         top_pad="10"
-         follows="left|top"
-         font="SansSerifSmall"
-         height="16"
-         label="Modify permission"
-         left_delta="-7"
-         tool_tip="Modify permissions"
-         name="next_owner_modify"
-         width="270"/>
-        <check_box
-         control_name="NextOwnerCopy"
-         top_pad="0"
-         follows="left|top"
-         font="SansSerifSmall"
-         height="16"
-         label="Copy permission"
-         left_delta="0"
-         tool_tip="Copy permissions"
-         name="next_owner_copy"
-         width="270">
-            <check_box.commit_callback
-			function="Perms.Copy" />
-        </check_box>
-        <check_box
-         control_name="NextOwnerTransfer"
-         top_pad="0"
-         follows="left|top"
-         font="SansSerifSmall"
-         height="16"
-         label="Transfer permission"
-         left_delta="0"
-         tool_tip="Transfer permissions"
-         name="next_owner_transfer"
-         width="270">
-			<check_box.commit_callback
-			function="Perms.Trans" />
-		</check_box>
-        <text
-         top_pad="5"
-         left_delta="5"
-         follows="left|top"
-         height="10"
-         name="text_box_permnote1"
-         width="135">
-          This will also apply
-        </text>
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="10"
-         name="text_box_permnote2"
-         width="135">
-          to new uploads.
-        </text>
-
-        <text
-         top_pad="-123"
-         left_pad="-5"
+         left_pad="155"
          follows="left|top"
          height="10"
          name="text_box_pivotpoint"

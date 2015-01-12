@@ -357,25 +357,31 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 	}
 	else if( KEY_RETURN == key )
 	{
-		if (mask == MASK_CONTROL)
+		if (mask == MASK_CONTROL && gSavedSettings.getBOOL("FSUseCtrlShout"))
 		{
 			// shout
 			type = CHAT_TYPE_SHOUT;
 			handled = TRUE;
 		}
-		else if (mask == MASK_SHIFT)
+		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			type = CHAT_TYPE_WHISPER;
 			handled = TRUE;
 		}
-		else if (mask == MASK_ALT)
+		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			type = CHAT_TYPE_OOC;
 			handled = TRUE;
 		}
 		else if (mask == MASK_NONE)
+		{
+			// say
+			type = CHAT_TYPE_NORMAL;
+			handled = TRUE;
+		}
+		else
 		{
 			// say
 			type = CHAT_TYPE_NORMAL;

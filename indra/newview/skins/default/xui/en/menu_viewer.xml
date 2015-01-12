@@ -3,7 +3,6 @@
  bg_visible="false"
  follows="left|top|right"
  name="Main Menu">
- <!-- #####  When editing entries in the menu, please also edit the V1 section below  ##### -->
     <menu
      create_jump_keys="true"
      label="Avatar"
@@ -75,17 +74,6 @@
          function="Floater.Show"
          parameter="picks" />
         </menu_item_call>
-         <menu_item_call
-        label="Post to Facebook..."
-        name="PostToFacebook">
-        <menu_item_call.on_click
-          function="Floater.Toggle"
-          parameter="social"/>
-        <menu_item_call.on_visible
-          function="GridCheck"
-          parameter="secondlife"/>
-      </menu_item_call>      
-      <menu_item_separator/>
         <menu_item_call
          label="Appearance"
          name="ChangeOutfit">
@@ -380,11 +368,11 @@
                  parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
-             label="Set Default Upload Permissions"
+             label="Set Default Permissions..."
              name="perm prefs">
                 <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="perm_prefs" />
+                 function="Floater.ToggleOrBringToFront"
+                 parameter="perms_default" />
             </menu_item_call>
             <menu_item_call
              label="Import Linkset..."
@@ -579,6 +567,28 @@
              function="Floater.Toggle"
              parameter="gestures" />
         </menu_item_check>
+        <menu_item_separator/>
+      <menu_item_call
+        label="Facebook..."
+        name="Facebook">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="facebook"/>
+      </menu_item_call>
+      <menu_item_call
+        label="Twitter..."
+        name="Twitter">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="twitter"/>
+      </menu_item_call>
+      <menu_item_call
+        label="Flickr..."
+        name="Flickr">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="flickr"/>
+      </menu_item_call>
         <menu_item_separator/>
         <menu
          label="Voice morphing"
@@ -1612,6 +1622,15 @@
                      parameter="movable" />
                 </menu_item_check>
                 <menu_item_check
+                 label="Select Only Copyable Objects"
+                 name="Select Only Copyable Objects">
+                    <menu_item_check.on_check
+                     control="FSSelectCopyableOnly" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSSelectCopyableOnly" />
+                </menu_item_check>
+                <menu_item_check
                  label="Select By Surrounding"
                  name="Select By Surrounding">
                     <menu_item_check.on_check
@@ -1625,7 +1644,8 @@
                     <menu_item_check.on_check
                      control="FSSelectIncludeGroupOwned" />
                     <menu_item_check.on_click
-                     function="Tools.SelectIncludeGroupOwned" />
+                     function="ToggleControl"
+                     parameter="FSSelectIncludeGroupOwned" />
                 </menu_item_check>
 
           <menu_item_separator/>
@@ -1699,8 +1719,9 @@
                     <menu_item_call.on_enable
                      function="SomethingSelected" />
                 </menu_item_call>
+                <menu_item_separator/>
                 <menu_item_call
-                 label="Grid Options"
+                 label="Grid Options..."
                  name="Grid Options"
                  shortcut="control|shift|B">
                     <menu_item_call.on_click
@@ -1708,6 +1729,13 @@
                      parameter="build_options" />
                     <menu_item_call.on_enable
                      function="Tools.EnableToolNotPie" />
+                </menu_item_call>
+                <menu_item_call
+                 label="Set Default Permissions..."
+                 name="Set default permissions">
+                    <menu_item_call.on_click
+                     function="Floater.ToggleOrBringToFront"
+                     parameter="perms_default" />
                 </menu_item_call>
         </menu>
         <menu
@@ -1778,13 +1806,6 @@
 		<menu_item_call.on_visible
                  function="Upload.CalculateCosts"
                  parameter="Bulk Upload" />
-            </menu_item_call>
-            <menu_item_call
-             label="Set Default Upload Permissions"
-             name="perm prefs">
-                <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="perm_prefs" />
             </menu_item_call>
 	    <menu_item_call
              label="Import Linkset..."
@@ -3277,6 +3298,13 @@
                  function="ToggleControl"
                  parameter="DebugShowTextureInfo" />
             </menu_item_check>
+            <menu_item_call
+              label="VRAM usage per object"
+              name="VRAM usage per object">
+              <menu_item_call.on_click
+                function="Floater.Show"
+                parameter="vram_usage" />
+            </menu_item_call>
             <menu_item_check
              label="Show Avatar Render Info"
              name="Show Avatar Render Info">
@@ -3630,6 +3658,16 @@
           <menu_item_check.on_click
            function="Advanced.ToggleInfoDisplay"
            parameter="lights" />
+        </menu_item_check>
+        <menu_item_check
+         label="Particles"
+         name="Particles">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="particles" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="particles" />
         </menu_item_check>
         <menu_item_check
          label="Collision Skeleton"

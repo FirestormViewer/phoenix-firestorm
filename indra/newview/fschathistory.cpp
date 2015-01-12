@@ -120,6 +120,7 @@ class FSChatHistoryHeader: public LLPanel
 public:
 	FSChatHistoryHeader()
 	:	LLPanel(),
+		mInfoCtrl(NULL),
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		mShowContextMenu(true), 
 		mShowInfoCtrl(true),
@@ -147,9 +148,6 @@ public:
 
 	~FSChatHistoryHeader()
 	{
-		// Detach the info button so that it doesn't get destroyed (EXT-8463).
-		hideInfoCtrl();
-
 		if (mAvatarNameCacheConnection.connected())
 		{
 			mAvatarNameCacheConnection.disconnect();
@@ -326,6 +324,11 @@ public:
 
 		mUserNameTextBox = getChild<LLTextBox>("user_name");
 		mTimeBoxTextBox = getChild<LLTextBox>("time_box");
+
+		mInfoCtrl = LLUICtrlFactory::getInstance()->createFromFile<LLUICtrl>("inspector_info_ctrl.xml", this, LLPanel::child_registry_t::instance());
+		llassert(mInfoCtrl != NULL);
+		mInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, mInfoCtrl));
+		mInfoCtrl->setVisible(FALSE);
 
 		return LLPanel::postBuild();
 	}
@@ -506,7 +509,14 @@ public:
 		switch (mSourceType)
 		{
 			case CHAT_SOURCE_AGENT:
-				icon->setValue(chat.mFromID);
+				if (!chat.mRlvNamesFiltered)
+				{
+					icon->setValue(chat.mFromID);
+				}
+				else
+				{
+					icon->setValue(LLSD("Unknown_Icon"));
+				}
 				break;
 			case CHAT_SOURCE_OBJECT:
 				icon->setValue(LLSD("OBJECT_Icon"));
@@ -516,7 +526,14 @@ public:
 				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 				if(chat.mChatType == CHAT_TYPE_RADAR)
 				{
-					icon->setValue(chat.mFromID);
+					if (!chat.mRlvNamesFiltered)
+					{
+						icon->setValue(chat.mFromID);
+					}
+					else
+					{
+						icon->setValue(LLSD("Unknown_Icon"));
+					}
 				}
 				else
 				{
@@ -681,42 +698,21 @@ protected:
 
 	void showInfoCtrl()
 	{
-//		if (mAvatarID.isNull() || mFrom.empty() || CHAT_SOURCE_SYSTEM == mSourceType) return;
+		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || (CHAT_SOURCE_SYSTEM == mSourceType && mType != CHAT_TYPE_RADAR)) ) return;
+		if (isVisible && mShowInfoCtrl)
 // [/RLVa:KB]
-				
-		if (!sInfoCtrl)
 		{
-			// *TODO: Delete the button at exit.
-			sInfoCtrl = LLUICtrlFactory::createFromFile<LLUICtrl>("inspector_info_ctrl.xml", NULL, LLPanel::child_registry_t::instance());
-			if (sInfoCtrl)
-			{
-				sInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, sInfoCtrl));
-			}
+			const LLRect sticky_rect = mUserNameTextBox->getRect();
+			S32 icon_x = llmin(sticky_rect.mLeft + mUserNameTextBox->getTextBoundingRect().getWidth() + 7, sticky_rect.mRight - 3);
+			mInfoCtrl->setOrigin(icon_x, sticky_rect.getCenterY() - mInfoCtrl->getRect().getHeight() / 2 ) ;
 		}
-
-		if (!sInfoCtrl)
-		{
-			llassert(sInfoCtrl != NULL);
-			return;
-		}
-
-		LLTextBox* name = getChild<LLTextBox>("user_name");
-		LLRect sticky_rect = name->getRect();
-		S32 icon_x = llmin(sticky_rect.mLeft + name->getTextBoundingRect().getWidth() + 7, sticky_rect.mRight - 3);
-		sInfoCtrl->setOrigin(icon_x, sticky_rect.getCenterY() - sInfoCtrl->getRect().getHeight() / 2 ) ;
-		addChild(sInfoCtrl);
+		mInfoCtrl->setVisible(isVisible);
 	}
 
 	void hideInfoCtrl()
 	{
-		if (!sInfoCtrl) return;
-
-		if (sInfoCtrl->getParent() == this)
-		{
-			removeChild(sInfoCtrl);
-		}
+		mInfoCtrl->setVisible(FALSE);
 	}
 
 private:
@@ -787,7 +783,7 @@ protected:
 	LLHandle<LLView>	mPopupMenuHandleAvatar;
 	LLHandle<LLView>	mPopupMenuHandleObject;
 
-	static LLUICtrl*	sInfoCtrl;
+	LLUICtrl*			mInfoCtrl;
 
 	LLUUID			    mAvatarID;
 	LLSD				mObjectData;
@@ -808,8 +804,6 @@ protected:
 private:
 	boost::signals2::connection mAvatarNameCacheConnection;
 };
-
-LLUICtrl* FSChatHistoryHeader::sInfoCtrl = NULL;
 
 FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 :	LLTextEditor(p),	// <FS:Zi> FIRE-8600: TAB out of chat history

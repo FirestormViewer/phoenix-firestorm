@@ -31,7 +31,7 @@
 
 // <FS:TS> This silliness is needed because LL renamed the Boost coroutines
 //         functions to dcoroutines.
-#if LL_STANDALONE
+#if LL_USESYSTEMLIBS
 #include <boost/coroutine/coroutine.hpp>
 #include <boost/coroutine/future.hpp>
 #define dcoroutines coroutines

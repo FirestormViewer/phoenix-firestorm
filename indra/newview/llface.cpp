@@ -954,6 +954,23 @@ LLVector2 LLFace::surfaceToTexture(LLVector2 surface_coord, const LLVector4a& po
 void LLFace::getPlanarProjectedParams(LLQuaternion* face_rot, LLVector3* face_pos, F32* scale) const
 {
 	const LLMatrix4& vol_mat = getWorldMatrix();
+	if( ! getViewerObject() )
+	{
+		LL_WARNS() << "No viewer object" << LL_ENDL;
+		return;
+	}
+	if( ! getViewerObject()->getVolume() )
+	{
+		LL_WARNS() << "No volume" << LL_ENDL;
+		return;
+	}
+
+	if( getViewerObject()->getVolume()->getNumVolumeFaces() <= mTEOffset )
+	{
+		LL_WARNS() << "No volume face" << (S32)mTEOffset << LL_ENDL;
+		return;
+	}
+
 	const LLVolumeFace& vf = getViewerObject()->getVolume()->getVolumeFace(mTEOffset);
 	const LLVector4a& normal4a = vf.mNormals[0];
 	const LLVector4a& tangent = vf.mTangents[0];

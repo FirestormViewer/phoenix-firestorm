@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_script_colors" title="Preferencias del editor de scripts">
+	<text name="color_pickers_label">
+		Elige los colores deseados:
+	</text>
+	<text name="text_label">
+		Texto
+	</text>
+	<text name="cursor_label">
+		Cursor
+	</text>
+	<text name="background_label">
+		Fondo
+	</text>
+	<text name="section_label">
+		Secciones
+	</text>
+	<text name="datatype_label">
+		Tipos de datos
+	</text>
+	<text name="event_label">
+		Eventos
+	</text>
+	<text name="comment_label">
+		Comentarios
+	</text>
+	<text name="function_label">
+		Función
+	</text>
+	<text name="string_literal_label">
+		Literales
+	</text>
+	<text name="i_constant_label">
+		Const. Entero
+	</text>
+	<text name="s_constant_label">
+		Const. Cadena
+	</text>
+	<text name="f_constant_label">
+		Const. P. flotante
+	</text>
+	<text name="c_constant_label">
+		Compuesto
+	</text>
+	<text name="flow_control_label">
+		Control de flujo
+	</text>
+	<text name="preprocessor_label">
+		Preprocesador
+	</text>
+	<text name="prefs_label">
+		Opciones del editor de scripts:
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Convertir tabuladores en espacios"/>
+	<check_box label="Activar preprocesador LSL" tool_tip="Marcándolo, se activa el preprocesador LSL." name="preproc_checkbox"/>
+	<check_box label="Optimizador de script" tool_tip="Marcándolo, el preprocesador LSL optimizará el espacio utilizado por los scripts, en detrimento de la legibilidad." name="preprocoptimizer_checkbox"/>
+	<check_box label="sentencia switch()" tool_tip="Marcándolo, el preprocesador LSL permitirá el uso de la sentencia switch() para el control de flujo del script." name="preprocswitch_checkbox"/>
+	<check_box label="Lazy lists" tool_tip="Marcándolo, el preprocesador LSL permitirá el uso de las extensiones de sintaxis para el manejo de listas." name="preproclazy_checkbox"/>
+	<check_box label="#includes desde el disco local" tool_tip="Marcándolo, el preprocesador permitirá sentencias #include que referencien a archivos de tu disco local." name="preprocinclude_checkbox"/>
+	<text name="lslpreprocinclude_textbox">
+		Ruta include del preprocesador:
+	</text>
+	<button label="..." label_selected="Establecer" name="SetPreprocInclude"/>
+	<button name="close_btn" label="Aceptar"/>
+</floater>

@@ -335,7 +335,7 @@
 	 name="Script"
 	 label="Script"
 	 width="497">
-		<text_editor
+		<script_editor
 		 left="0"
 		 top="0"
 		 type="string"
@@ -346,7 +346,7 @@
 		 height="353"
 		 ignore_tab="false"
 		 layout="topleft"
-		 max_length="65536"
+		 max_length="262144"
 		 name="Script Editor"
 		 text_color="ScriptText"
 		 default_color="ScriptText"
@@ -356,11 +356,10 @@
 		 bg_readonly_color="ScriptBackground"
 		 cursor_color="ScriptCursorColor"
 		 width="497"
-		 show_line_numbers="true"
 		 enable_tooltip_paste="true"
 		 word_wrap="true">
 			Loading...
-		</text_editor>
+		</script_editor>
 	</panel>
 	<panel
 	 bevel_style="none"
@@ -372,7 +371,7 @@
 	 name="Preprocessed"
 	 label="Preprocessed"
 	 width="497">
-		<text_editor
+		<script_editor
 		 left="0"
 		 top="0"
 		 type="string"
@@ -383,7 +382,7 @@
 		 height="353"
 		 ignore_tab="false"
 		 layout="topleft"
-		 max_length="65536"
+		 max_length="262144"
 		 name="Post Editor"
 		 text_color="ScriptText"
 		 default_color="ScriptText"
@@ -393,10 +392,9 @@
 		 bg_readonly_color="ScriptBackground"
 		 cursor_color="ScriptCursorColor"
 		 width="497"
-		 show_line_numbers="true" 
 		 word_wrap="true">
 			Loading...
-		</text_editor>
+		</script_editor>
 	</panel>
 	</tab_container>
     <scroll_list

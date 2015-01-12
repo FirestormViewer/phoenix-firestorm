@@ -246,12 +246,12 @@ if (LINUX)
   endif (WORD_SIZE EQUAL 32)
   add_definitions(-mfpmath=sse)
   #add_definitions(-ftree-vectorize) # THIS CRASHES GCC 3.1-3.2
-  if (NOT STANDALONE)
+  if (NOT USESYSTEMLIBS)
     # this stops us requiring a really recent glibc at runtime
     add_definitions(-fno-stack-protector)
     # linking can be very memory-hungry, especially the final viewer link
     set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib'")
-  endif (NOT STANDALONE)
+  endif (NOT USESYSTEMLIBS)
 
   # <FS:TS> Enable AVX optimizations if requested and at least GCC 4.6.
   if (USE_AVX_OPTIMIZATION)
@@ -344,14 +344,14 @@ if (LINUX OR DARWIN)
 endif (LINUX OR DARWIN)
 
 
-if (STANDALONE)
-  add_definitions(-DLL_STANDALONE=1)
+if (USESYSTEMLIBS)
+  add_definitions(-DLL_USESYSTEMLIBS=1)
 
   if (LINUX AND ${ARCH} STREQUAL "i686")
     add_definitions(-march=pentiumpro)
   endif (LINUX AND ${ARCH} STREQUAL "i686")
 
-else (STANDALONE)
+else (USESYSTEMLIBS)
   set(${ARCH}_linux_INCLUDES
       atk-1.0
       cairo
@@ -361,6 +361,6 @@ else (STANDALONE)
       gtk-2.0
       pango-1.0
       )
-endif (STANDALONE)
+endif (USESYSTEMLIBS)
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)

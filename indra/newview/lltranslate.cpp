@@ -36,7 +36,7 @@
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
 
-#if LL_STANDALONE
+#if LL_USESYSTEMLIBS
 #include "jsoncpp/reader.h"
 #else
 #include "reader.h"
@@ -88,7 +88,7 @@ bool LLGoogleTranslationHandler::parseResponse(
 		return false;
 	}
 
-	if (status != STATUS_OK)
+	if (status != HTTP_OK)
 	{
 		// Request failed. Extract error message from the response.
 		parseErrorResponse(root, status, err_msg);
@@ -190,7 +190,7 @@ bool LLBingTranslationHandler::parseResponse(
 	std::string& detected_lang,
 	std::string& err_msg) const
 {
-	if (status != STATUS_OK)
+	if (status != HTTP_OK)
 	{
 		static const std::string MSG_BEGIN_MARKER = "Message: ";
 		size_t begin = body.find(MSG_BEGIN_MARKER);
@@ -255,8 +255,6 @@ LLTranslate::TranslationReceiver::TranslationReceiver(const std::string& from_la
 
 // virtual
 void LLTranslate::TranslationReceiver::completedRaw(
-	U32 http_status,
-	const std::string& reason,
 	const LLChannelDescriptors& channels,
 	const LLIOPipe::buffer_ptr_t& buffer)
 {
@@ -266,8 +264,8 @@ void LLTranslate::TranslationReceiver::completedRaw(
 
 	const std::string body = strstrm.str();
 	std::string translation, detected_lang, err_msg;
-	int status = http_status;
-	LL_DEBUGS("Translate") << "HTTP status: " << status << " " << reason << LL_ENDL;
+	int status = getStatus();
+	LL_DEBUGS("Translate") << "HTTP status: " << status << " " << getReason() << LL_ENDL;
 	LL_DEBUGS("Translate") << "Response body: " << body << LL_ENDL;
 	if (mHandler.parseResponse(status, body, translation, detected_lang, err_msg))
 	{
@@ -305,12 +303,10 @@ LLTranslate::EService LLTranslate::KeyVerificationReceiver::getService() const
 
 // virtual
 void LLTranslate::KeyVerificationReceiver::completedRaw(
-	U32 http_status,
-	const std::string& reason,
 	const LLChannelDescriptors& channels,
 	const LLIOPipe::buffer_ptr_t& buffer)
 {
-	bool ok = (http_status == 200);
+	bool ok = (getStatus() == HTTP_OK);
 	setVerificationStatus(ok);
 }
 
@@ -402,8 +398,8 @@ void LLTranslate::sendRequest(const std::string& url, LLHTTPClient::ResponderPtr
 			LLVersionInfo::getPatch(),
 			LLVersionInfo::getBuild());
 
-		sHeader.insert("Accept", "text/plain");
-		sHeader.insert("User-Agent", user_agent);
+		sHeader.insert(HTTP_OUT_HEADER_ACCEPT, HTTP_CONTENT_TEXT_PLAIN);
+		sHeader.insert(HTTP_OUT_HEADER_USER_AGENT, user_agent);
 	}
 
 	LLHTTPClient::get(url, responder, sHeader, REQUEST_TIMEOUT);

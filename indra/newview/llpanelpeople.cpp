@@ -521,7 +521,7 @@ public:
 
 LLPanelPeople::LLPanelPeople()
 	:	LLPanel(),
-		mTryToConnectToFbc(true),
+		mTryToConnectToFacebook(true),
 		mTabContainer(NULL),
 		mOnlineFriendList(NULL),
 		mAllFriendList(NULL),
@@ -963,10 +963,10 @@ void LLPanelPeople::updateFacebookList(bool visible)
 		{
 			LLFacebookConnect::instance().loadFacebookFriends();
 		}
-		else if(mTryToConnectToFbc)
+		else if(mTryToConnectToFacebook)
 		{
 			LLFacebookConnect::instance().checkConnectionToFacebook();
-			mTryToConnectToFbc = false;
+			mTryToConnectToFacebook = false;
 		}
     
 		updateSuggestedFriendList();
@@ -1036,7 +1036,10 @@ void LLPanelPeople::updateButtons()
 				cur_panel->getChildView("friends_del_btn")->setEnabled(multiple_selected);
 			}
 
-			if (!group_tab_active)
+			// <FS:Ansariel> Fix warning about missing gear button on blocklist panel
+			//if (!group_tab_active)
+			if (!group_tab_active && cur_tab != BLOCKED_TAB_NAME)
+			// </FS:Ansariel>
 			{
 				cur_panel->getChildView("gear_btn")->setEnabled(multiple_selected);
 			}
@@ -1580,6 +1583,17 @@ void LLPanelPeople::onOpen(const LLSD& key)
 	std::string tab_name = key["people_panel_tab_name"];
 	if (!tab_name.empty())
 		mTabContainer->selectTabByName(tab_name);
+
+	// <FS:Ansariel> Call onOpen for the blocklist panel to select mute if necessary
+	if (tab_name == "blocked_panel")
+	{
+		LLPanel* blocklist_impl_panel = mTabContainer->getCurrentPanel()->findChild<LLPanel>("panel_block_list_sidetray");
+		if (blocklist_impl_panel)
+		{
+			blocklist_impl_panel->onOpen(key);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 bool LLPanelPeople::notifyChildren(const LLSD& info)

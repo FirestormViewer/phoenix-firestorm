@@ -6612,7 +6612,21 @@ Please select at least one type of content to search (General, Moderate, or Adul
   type="notifytip">
 [MESSAGE]
  </notification>
-    
+
+  <notification
+   icon="notify.tga"
+   name="FlickrConnect"
+   type="notifytip">
+    [MESSAGE]
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="TwitterConnect"
+   type="notifytip">
+    [MESSAGE]
+  </notification>
+
   <notification
    icon="notify.tga"
    name="PaymentReceived"
@@ -7180,6 +7194,7 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
     </form>
   </notification>
 
+  <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification
    icon="notify.tga"
    name="UserGiveItem"
@@ -7194,11 +7209,57 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
       <button
        index="3"
        name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Keep"
        text="Accept"/>
       <button
        index="1"
        name="Discard"
        text="Discard"/>
+      <button
+       index="2"
+       name="Mute"
+       text="Mute Sender"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="UserGiveItemLegacy"
+   label="Inventory offer from [NAME_LABEL]"
+   log_to_im ="true"
+   type="offer"
+   sound="UISndInventoryOffer">
+[NAME_SLURL] has given you this [OBJECTTYPE]:
+[ITEM_SLURL]
+Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
+    <form name="form">
+      <button
+       index="3"
+       name="Show"
+       text="Show"/>
+      <button
+       index="0"
+       name="Accept"
+       text="Accept"/>
+      <button
+       index="1"
+       name="Discard"
+       text="Discard"/>
+      <button
+       index="6"
+       name="ShowSilent"
+       text="(Show)"/>
+      <button
+       index="4"
+       name="AcceptSilent"
+       text="(Accept)"/>
+      <button
+       index="5"
+       name="DiscardSilent"
+       text="(Discard)"/>
       <button
        index="2"
        name="Mute"
@@ -7581,7 +7642,7 @@ The item you are trying to wear uses a feature that your viewer cannot read. Ple
 &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, an object owned by &apos;[NAME]&apos;, would like to:
 
 [QUESTIONS]
-Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&apos;.
+Is this OK?
   <tag>confirm</tag>
     <form name="form">
       <button
@@ -7595,7 +7656,7 @@ Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&a
       <button
        index="2"
        name="Mute"
-       text="Mute Owner"/>
+       text="Block"/>
     </form>
   </notification>
 
@@ -9188,7 +9249,7 @@ Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
    name="NewAOSet"
    type="alertmodal">
 Specify a name for the new AO set:
-(The name may not contain a ":" or "|" character)
+(The name may contain any ASCII character, except for ":" or "|")
     <form name="form">
       <input name="message" type="text" default="true">
 New AO Set
@@ -9207,10 +9268,10 @@ New AO Set
 
   <notification
    icon="alertmodal.tga"
-   name="NewAOCantContainColon"
+   name="NewAOCantContainNonASCII"
    type="alertmodal">
 Could not create new AO set "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -9218,10 +9279,10 @@ The name may not contain ":" or "|" characters.
 
   <notification
    icon="alertmodal.tga"
-   name="RenameAOCantContainColon"
+   name="RenameAOMustBeASCII"
    type="alertmodal">
-Could not rename new AO set to "[AO_SET_NAME]".
-The name may not contain ":" or "|" characters.
+Could not rename AO set "[AO_SET_NAME]".
+The name may only contain ASCII characters, excluding ":" and "|".
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -11420,6 +11481,17 @@ Changes won't take effect until after you restart [APP_NAME].
      yestext="OK"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="DefaultObjectPermissions"
+   type="alert">
+	There was a problem saving the default permissions due to the following reason: [REASON].  Please try setting the default permissions later.
+	<tag>fail</tag>
+   <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  
 <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"
@@ -11446,59 +11518,6 @@ We strongly recommend that you not set the bandwidth above 1500 KBPS. This is un
   </notification>
   <!-- </FS:TS> FIRE-6795 -->
   <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
-
-  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
-  <notification
-   icon="alertmodal.tga"
-   name="ExodusFlickrVerificationExplanation"
-   type="alertmodal">
-To use the Flickr upload feature you must authorize [APP_NAME] to access your account. If you proceed, your web browser will open Flickr's website, where you will be prompted to log in and authorize [APP_NAME]. You will then be given a code to copy back into [APP_NAME].
-
-Would you like to authorize [APP_NAME] to post to your Flickr account?
-    <tag>fail</tag>
-    <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="ExodusFlickrVerificationPrompt"
-   type="alertmodal">
-Please authorize [APP_NAME] to post to your Flickr account in your web browser, then type the code given by the website below:
-    <tag>confirm</tag>
-    <form name="form">
-      <input name="oauth_verifier" type="text" default="true"/>
-      <button
-       index="0"
-       name="OK"
-       text="OK"/>
-      <button
-       index="1"
-       name="Cancel"
-       text="Cancel"/>
-    </form>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="ExodusFlickrVerificationFailed"
-   type="alertmodal">
-Flickr verification failed. Please try again, and be sure to double check the verification code.
-    <tag>fail</tag>
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
-
-  <notification
-   icon="notifytip.tga"
-   name="ExodusFlickrUploadComplete"
-   type="notifytip">
-Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
-  </notification>
-  <!-- </FS:TS> FIRE-5453 -->
 
   <notification
    icon="alertmodal.tga"

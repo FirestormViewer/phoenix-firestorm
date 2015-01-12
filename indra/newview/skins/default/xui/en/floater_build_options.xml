@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="170"
+ height="185"
  layout="topleft"
  name="build options floater"
  help_topic="build_options_floater"

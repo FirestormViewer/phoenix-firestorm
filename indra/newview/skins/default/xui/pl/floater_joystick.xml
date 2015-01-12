@@ -3,7 +3,7 @@
 	<string name="NoDevice">
 		nie wykryto urządzenia
 	</string>
-	<check_box label="Aktywuj Joystick:" name="enable_joystick"/>
+	<check_box label="Włącz joystick:" name="enable_joystick"/>
 	<spinner label="Kalibruj oś X" name="JoystickAxis1"/>
 	<spinner label="Kalibruj oś Y" name="JoystickAxis2"/>
 	<spinner label="Kalibruj oś Z" name="JoystickAxis0"/>
@@ -74,6 +74,5 @@
 		Tolerancja powiększania
 	</text>
 	<button label="Ustawienia domyślne" name="SpaceNavigatorDefaults"/>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 </floater>

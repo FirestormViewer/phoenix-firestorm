@@ -249,6 +249,11 @@ public:
 	BOOL			selectItemByLabel( const std::string& item, BOOL case_sensitive = TRUE, S32 column = 0 );		// FALSE if item not found
 	BOOL			selectItemByPrefix(const std::string& target, BOOL case_sensitive = TRUE);
 	BOOL			selectItemByPrefix(const LLWString& target, BOOL case_sensitive = TRUE);
+	// <FS:Ansariel> Allow selection by substring match
+	BOOL			selectItemBySubstring(const std::string& target, BOOL case_sensitive = TRUE);
+	BOOL			selectItemBySubstring(const LLWString& target, BOOL case_sensitive = TRUE);
+	BOOL			selectItemByStringMatch(const LLWString& target, bool prefix_match, BOOL case_sensitive = TRUE);
+	// </FS:Ansariel>
 	LLScrollListItem*  getItemByLabel( const std::string& item, BOOL case_sensitive = TRUE, S32 column = 0 );
 	const std::string	getSelectedItemLabel(S32 column = 0) const;
 	LLSD			getSelectedValue();

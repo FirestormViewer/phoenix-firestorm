@@ -58,7 +58,7 @@ public:
 
 	void	processParcelInfo(const LLParcelData& parcel_data);
 	void	setParcelID(const LLUUID& parcel_id);
-	void	setErrorStatus(U32 status, const std::string& reason);
+	void	setErrorStatus(S32 status, const std::string& reason);
 
 protected:
 	LLVector3d	mPosGlobal;

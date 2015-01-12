@@ -132,6 +132,7 @@ BOOL LLPanelPlaceProfile::postBuild()
 
 	mEstateNameText = getChild<LLTextBox>("estate_name");
 	mEstateRatingText = getChild<LLTextBox>("estate_rating");
+	mEstateRatingIcon = getChild<LLIconCtrl>("estate_rating_icon");
 	mEstateOwnerText = getChild<LLTextBox>("estate_owner");
 	mCovenantText = getChild<LLTextEditor>("covenant");
 
@@ -218,6 +219,7 @@ void LLPanelPlaceProfile::resetLocation()
 
 	mEstateNameText->setValue(loading);
 	mEstateRatingText->setValue(loading);
+	mEstateRatingIcon->setValue(loading);
 	mEstateOwnerText->setValue(loading);
 	mCovenantText->setValue(loading);
 
@@ -365,6 +367,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
 		mParcelRatingIcon->setValue(icon_m);
 		mRegionRatingIcon->setValue(icon_m);
+		mEstateRatingIcon->setValue(icon_m);
 		break;
 
 	case SIM_ACCESS_ADULT:
@@ -372,6 +375,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
 		mParcelRatingIcon->setValue(icon_r);
 		mRegionRatingIcon->setValue(icon_r);
+		mEstateRatingIcon->setValue(icon_r);
 		break;
 
 	default:
@@ -379,6 +383,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
 		mParcelRatingIcon->setValue(icon_pg);
 		mRegionRatingIcon->setValue(icon_pg);
+		mEstateRatingIcon->setValue(icon_pg);
 	}
 
 	std::string rating = LLViewerRegion::accessToString(sim_access);

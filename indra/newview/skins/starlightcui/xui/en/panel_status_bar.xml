@@ -223,13 +223,12 @@
 	 follows="right|top"
 	 name="menu_search_panel"
 	 background_opaque="false"
-	 background_visible="true"
-	 visibility_control="FSMenuSearch">
+	 background_visible="true">
 		<search_editor
 		 clear_button_visible="true"
 		 follows="left|top"
 		 height="18"
-		 label="Search Menu"
+		 label="Search Menus"
 		 layout="topleft"
 		 left="0"
 		 max_length_bytes="255"

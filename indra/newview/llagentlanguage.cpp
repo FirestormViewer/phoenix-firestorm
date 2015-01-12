@@ -40,6 +40,7 @@ void LLAgentLanguage::init()
 	gSavedSettings.getControl("InstallLanguage")->getSignal()->connect(boost::bind(&onChange));
 	gSavedSettings.getControl("SystemLanguage")->getSignal()->connect(boost::bind(&onChange));
 	gSavedSettings.getControl("LanguageIsPublic")->getSignal()->connect(boost::bind(&onChange));
+	gSavedSettings.getControl("LanguageIsPublic")->getSignal()->connect(boost::bind(&update)); // <FS:Ansariel> Make change instant
 }
 
 // static

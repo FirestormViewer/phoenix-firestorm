@@ -2033,14 +2033,16 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
+		if (pAttachPt->getName() == "Bridge")
 		{
 			continue;
 		}
 		//</FS:TS> FIRE-11848
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
-			bool fWorn = (pAttachPt->getNumObjects() > 0) && 
+			// Ansa: Do not include the bridge when checking for number of objects
+			S32 bridge_correct = (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0;
+			bool fWorn = ((pAttachPt->getNumObjects() - bridge_correct) > 0) && 
 				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -2064,7 +2066,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME)
+		if (pAttachPt->getName() == "Bridge")
 		{
 			continue;
 		}
@@ -2075,7 +2077,11 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			switch (rlvCmd.getBehaviourType())
 			{
 				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object
-					fAdd = (pAttachPt->getNumObjects() > 0);
+					// Ansa: Do not include the bridge when checking for number of objects
+					{
+						S32 bridge_correct = ((pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0);
+						fAdd = ((pAttachPt->getNumObjects() - bridge_correct) > 0);
+					}
 					break;
 				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be attached to (wear replace OR wear add)
 					fAdd = (gRlvAttachmentLocks.canAttach(pAttachPt) & RLV_WEAR);

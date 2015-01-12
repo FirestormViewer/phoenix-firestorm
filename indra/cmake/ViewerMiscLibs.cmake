@@ -1,7 +1,7 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-if (NOT STANDALONE)
+if (NOT USESYSTEMLIBS)
   use_prebuilt_binary(libhunspell)
   use_prebuilt_binary(libuuid)
   use_prebuilt_binary(slvoice)
@@ -16,5 +16,5 @@ if (NOT STANDALONE)
       use_prebuilt_binary( slplugin_x86 )
     endif()
   endif( ND_BUILD64BIT_ARCH )
-endif(NOT STANDALONE)
+endif(NOT USESYSTEMLIBS)
 

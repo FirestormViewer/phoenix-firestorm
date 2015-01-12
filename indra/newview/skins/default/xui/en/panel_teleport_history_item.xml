@@ -111,7 +111,7 @@
      layout="topleft"
      parse_urls="false"
      use_ellipses="true"
-     name="date"
+     name="timestamp"
      text_color="White"
      top="4"
      value="01/01/2000 12:00PM"

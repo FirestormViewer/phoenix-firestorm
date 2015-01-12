@@ -83,8 +83,9 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
 	// <FS:Ansariel> Member variables needed for console chat bottom offset
 	//mBottomToolbarPanel(NULL)
 	mBottomToolbarPanel(NULL),
-	mBottomChatStack(NULL)
+	mBottomChatStack(NULL),
 	// </FS:Ansariel> Member variables needed for console chat bottom offset
+	mHideBottomOnEmpty(false) // <FS:Ansariel> Added to determine if toolbar gets hidden when empty
 {
 	for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; i++)
 	{
@@ -127,6 +128,11 @@ BOOL LLToolBarView::postBuild()
 	
 	// <FS:Ansariel> Member variable needed for console chat bottom offset
 	mBottomChatStack = findChild<LLView>("bottom_chat_stack");
+
+	// <FS:Ansariel> Added to determine if toolbar gets hidden when empty
+	std::string current_skin = gSavedSettings.getString("SkinCurrent");
+	mHideBottomOnEmpty = (current_skin == "vintage" || current_skin == "latency");
+	// </FS:Ansariel>
 
 	return TRUE;
 }
@@ -603,7 +609,10 @@ void LLToolBarView::draw()
 	for (S32 i = LLToolBarEnums::TOOLBAR_FIRST; i <= LLToolBarEnums::TOOLBAR_LAST; i++)
 	{
 		mToolbars[i]->getParent()->setVisible(mShowToolbars 
-											&& (mToolbars[i]->hasButtons() 
+											// <FS:Ansariel> FIRE-5141: Nearby chat floater can no longer be resized when all buttons are removed from bottom FUI panel
+											//&& (mToolbars[i]->hasButtons() 
+											&& (((i == LLToolBarEnums::TOOLBAR_BOTTOM && !mHideBottomOnEmpty) ? true : mToolbars[i]->hasButtons())
+											// </FS:Ansariel>
 											|| isToolDragged()));
 	}
 

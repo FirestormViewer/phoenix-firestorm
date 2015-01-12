@@ -123,6 +123,7 @@
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "llpanelblockedlist.h"
 #include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
 #include "llspellcheck.h"
@@ -480,6 +481,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.Proxy",					boost::bind(&LLFloaterPreference::onClickProxySettings, this));
 	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
 	mCommitCallbackRegistrar.add("Pref.AutoReplace",            boost::bind(&LLFloaterPreference::onClickAutoReplace, this));
+	mCommitCallbackRegistrar.add("Pref.PermsDefault",           boost::bind(&LLFloaterPreference::onClickPermsDefault, this));
 	mCommitCallbackRegistrar.add("Pref.SpellChecker",           boost::bind(&LLFloaterPreference::onClickSpellChecker, this));
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
@@ -1899,6 +1901,9 @@ void LLFloaterPreference::refreshEnabledState()
 	disableUnavailableSettings();
 
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
+
+	// Cannot have floater active until caps have been received
+	getChild<LLButton>("default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 }
 
 void LLFloaterPreference::disableUnavailableSettings()
@@ -2458,15 +2463,7 @@ void LLFloaterPreference::onClickBlockList()
 	// </FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
-	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-	{
-		LLFloaterReg::showInstance("fs_blocklist", LLSD());
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-			LLSD().with("people_panel_tab_name", "blocked_panel"));
-	}
+	LLPanelBlockedList::showPanelAndSelect();
 	// </FS:Ansariel>
 }
 
@@ -2493,6 +2490,11 @@ void LLFloaterPreference::onClickSpellChecker()
 void LLFloaterPreference::onClickActionChange()
 {
 	mClickActionDirty = true;
+}
+
+void LLFloaterPreference::onClickPermsDefault()
+{
+	LLFloaterReg::showInstance("perms_default");
 }
 
 void LLFloaterPreference::onDeleteTranscripts()

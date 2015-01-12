@@ -178,6 +178,9 @@ BOOL LLFloaterReporter::postBuild()
 	std::string reporter = LLSLURL("agent", gAgent.getID(), "inspect").getSLURLString();
 	getChild<LLUICtrl>("reporter_field")->setValue(reporter);
 	
+	// <FS:Ansariel> FIRE-15218: Refresh screenshot button
+	getChild<LLButton>("refresh_screenshot")->setCommitCallback(boost::bind(&LLFloaterReporter::takeScreenshot, this));
+
 	center();
 
 	return TRUE;
@@ -715,16 +718,18 @@ public:
 
 class LLUserReportResponder : public LLHTTPClient::Responder
 {
+	LOG_CLASS(LLUserReportResponder);
 public:
 	LLUserReportResponder(): LLHTTPClient::Responder()  {}
 
-	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+private:
+	void httpCompleted()
 	{
-		// *TODO do some user messaging here
-		LLUploadDialog::modalUploadFinished();
-	}
-	void result(const LLSD& content)
-	{
+		if (!isGoodStatus())
+		{
+			// *TODO do some user messaging here
+			LL_WARNS("UserReport") << dumpResponse() << LL_ENDL;
+		}
 		// we don't care about what the server returns
 		LLUploadDialog::modalUploadFinished();
 	}

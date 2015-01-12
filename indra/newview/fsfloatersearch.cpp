@@ -124,7 +124,7 @@ public:
 		}
 	}
 	
-	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
+	/*virtual*/ void setErrorStatus(S32 status, const std::string& reason)
 	{
 		LL_ERRS("Search") << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 	}
@@ -182,11 +182,6 @@ public:
 				}
 			}
 		}
-	}
-	
-	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
-	{
-		LL_ERRS("Search") << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 	}
 private:
 	std::set<LLUUID>	mAvatarIDs;

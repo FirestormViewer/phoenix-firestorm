@@ -54,6 +54,7 @@
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerwindow.h"
+#include "llviewerinventory.h"
 
 static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
 
@@ -84,8 +85,7 @@ public:
 protected:
 	/*virtual*/ void done()
 	{
-		mPlaceDetails->showAddedLandmarkInfo(mAdded);
-		mAdded.clear();
+		mPlaceDetails->showAddedLandmarkInfo(gInventory.getAddedIDs());
 	}
 
 private:
@@ -140,7 +140,7 @@ public:
 			LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(parcel_id);
 		}
 	}
-	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
+	/*virtual*/ void setErrorStatus(S32 status, const std::string& reason)
 	{
 		LL_WARNS() << "Can't complete remote parcel request. Http Status: "
 			    << status << ". Reason : " << reason << LL_ENDL;
@@ -460,9 +460,9 @@ void FSFloaterPlaceDetails::updateVerbs()
 
 
 
-void FSFloaterPlaceDetails::showAddedLandmarkInfo(const uuid_vec_t& items)
+void FSFloaterPlaceDetails::showAddedLandmarkInfo(const uuid_set_t& items)
 {
-	for (uuid_vec_t::const_iterator item_iter = items.begin();
+	for (uuid_set_t::const_iterator item_iter = items.begin();
 		 item_iter != items.end();
 		 ++item_iter)
 	{

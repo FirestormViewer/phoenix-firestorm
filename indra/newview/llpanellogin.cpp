@@ -504,7 +504,7 @@ void LLPanelLogin::showLoginWidgets()
 		sInstance->reshapeBrowser();
 		// *TODO: Append all the usual login parameters, like first_login=Y etc.
 		std::string splash_screen_url = LLGridManager::getInstance()->getLoginPage();
-		web_browser->navigateTo( splash_screen_url, "text/html" );
+		web_browser->navigateTo( splash_screen_url, HTTP_CONTENT_TEXT_HTML );
 		LLUICtrl* username_combo = sInstance->getChild<LLUICtrl>("username_combo");
 		username_combo->setFocus(TRUE);
 	}
@@ -663,7 +663,21 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	{
 		// Be lenient in terms of what separators we allow for two-word names
 		// and allow legacy users to login with firstname.lastname
+		// <FS:Ansariel> FIRE-15116: Usernames with underscores don't work on OpenSim
+		//separator_index = username.find_first_of(" ._");
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			separator_index = username.find_first_of(" ._");
+		}
+		else
+		{
+			separator_index = username.find_first_of(" .");
+		}
+#else
 		separator_index = username.find_first_of(" ._");
+#endif
+		// </FS:Ansariel>
 		std::string first = username.substr(0, separator_index);
 		std::string last;
 		if (separator_index != username.npos)
@@ -894,7 +908,7 @@ void LLPanelLogin::loadLoginPage()
 	if (web_browser->getCurrentNavUrl() != login_uri.asString())
 	{
 		LL_DEBUGS("AppInit") << "loading:    " << login_uri << LL_ENDL;
-		web_browser->navigateTo( login_uri.asString(), "text/html" );
+		web_browser->navigateTo( login_uri.asString(), HTTP_CONTENT_TEXT_HTML );
 	}
 }
 
@@ -1095,6 +1109,12 @@ void LLPanelLogin::updateServer()
 		// grid changed so show new splash screen (possibly)
 		updateServerCombo();
 		loadLoginPage();
+
+		// <FS:Ansariel> FIRE-12905: Allow longer passwords in OpenSim
+#ifdef OPENSIM
+		sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? 16 : 255);
+#endif
+		// </FS:Ansariel>
 	}
 	catch (LLInvalidGridName ex)
 	{

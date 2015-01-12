@@ -19,7 +19,7 @@
  right="-1"
  name="tabs"
  tab_min_width="50"
- tab_position="top" >
+ tab_position="top">
 
     <!--View-->
     <panel
@@ -29,7 +29,7 @@
      right="-1"
      follows="all"
      label="View"
-     name="tab-view" >
+     name="tab-view">
         <icon
          follows="left|top"
          height="18"
@@ -39,7 +39,7 @@
          mouse_opaque="false"
          visible="true"
          width="18"
-         left="30"
+         left="20"
          top="10"/>
         <slider
          can_edit_text="true"
@@ -52,7 +52,7 @@
          layout="topleft"
          label_width="100"
          label="View angle"
-         left_pad="30"
+         left_pad="20"
          max_val="2.97"
          min_val="0.17"
          name="camera_fov"
@@ -121,7 +121,7 @@
          left_delta="0"
          name="DisableCameraConstraints"
          tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
-         top_pad="7"
+         top_pad="10"
          width="315"/>
         <check_box
          control_name="FSDisableMouseWheelCameraZoom"
@@ -139,7 +139,7 @@
          left="80"
          name="heading2"
          width="300"
-         top_pad="5">
+         top_pad="10">
          Automatically pose avatar during (select one or more):
         </text>
         <check_box
@@ -168,10 +168,137 @@
          height="16"
          label="Add Additional Lighting"
          layout="topleft"
-		 left_pad="10"
+         left_pad="10"
          name="EditAppearanceLighting"
          tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
          width="150" />
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Clicking your avatar keeps camera position"
+         layout="topleft"
+         left="20"
+         name="clickonavatarkeepscamera"
+         width="270"
+         control_name="ClickOnAvatarKeepsCamera"
+         tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Reset camera position after teleport (within a region)"
+         layout="topleft"
+         left="20"
+         name="FSResetCameraOnTP"
+         width="270"
+         control_name="FSResetCameraOnTP"
+         tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         label="Reset camera position on avatar movement"
+         layout="topleft"
+         left="20"
+         name="FSResetCameraOnMovement"
+         width="270"
+         control_name="FSResetCameraOnMovement"/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Disable minimum camera zoom distance"
+         layout="topleft"
+         left="20"
+         name="disableminzoomdist"
+         width="350"
+         control_name="FSDisableMinZoomDist"
+         tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Turn avatar towards camera direction on reset view"
+         layout="topleft"
+         left="20"
+         name="resetviewturnsavatar"
+         width="350"
+         control_name="ResetViewTurnsAvatar"
+         tool_tip="This option keeps the camera direction and turns the avatar when Reset View is selected (hit ESC key)."/>
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Allow the camera to move without constraints through prims"
+         layout="topleft"
+         left="20"
+         name="ignorecameraconstraints"
+         width="350"
+         control_name="FSIgnoreSimulatorCameraConstraints"
+         tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
+        <text
+         name="ignorecameraconstraints_requires_restart"
+         follows="left|top"
+         layout="topleft"
+         left_pad="10"
+         top_delta="0"
+         height="20"
+         width="130"
+         text_color="White_25">
+            (requires restart)
+        </text>
+        <check_box
+         top_pad="0"
+         follows="left|top"
+         height="16"
+         label="Show the default camera controls minifloater always as opaque"
+         layout="topleft"
+         left="20"
+         name="FSAlwaysOpaqueCameraControls"
+         width="350"
+         control_name="FSAlwaysOpaqueCameraControls"/>
+
+        <check_box
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Notify if the simulator version changes while changing the region"
+         left="15"
+         name="FSShowServerVersionChangeNotice"
+         width="270"
+         control_name="FSShowServerVersionChangeNotice"
+         tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show simulator channel in status bar"
+         name="FSStatusbarShowSimulatorVersion"
+         width="270"
+         control_name="FSStatusbarShowSimulatorVersion"
+         tool_tip="Shows the current simulator channel in the V1-like status bar."/>
+
+	</panel>
+
+    <!--Mouselook-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Mouselook"
+     name="tab-mouselook">
         <icon
          follows="left|top"
          height="18"
@@ -181,8 +308,8 @@
          mouse_opaque="false"
          visible="true"
          width="18"
-         top_pad="6"
-         left="30" />
+         top="10"
+         left="20" />
         <check_box
          control_name="EnableMouselook"
          follows="top"
@@ -190,7 +317,7 @@
          initial_value="true"
          label="Enable Mouselook functionality"
          layout="topleft"
-         left_pad="30"
+         left_pad="20"
          name="EnableMouselook"
          tool_tip="Allow first person perspective and mouse control of camera"
          width="256" />
@@ -202,7 +329,7 @@
          label="Show avatar in Mouselook"
          layout="topleft"
          left_delta="10"
-         top_pad="2"
+         top_pad="8"
          name="first_person_avatar_visible"
          width="256" />
         <check_box
@@ -213,7 +340,7 @@
          label="Show user interface in Mouselook"
          layout="topleft"
          name="first_person_ui_visible"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="FSEnableRightclickMenuInMouselook"
@@ -224,7 +351,7 @@
          layout="topleft"
          name="FSEnableRightclickMenuInMouselook"
          tool_tip="Opens pie/context menu in mouselook mode upon ALT + right mouse button"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="FSScrollWheelExitsMouselook"
@@ -236,7 +363,7 @@
          layout="topleft"
          name="FSScrollWheelExitsMouselook"
          tool_tip="If enabled, turning the scroll wheel on the mouse will exit Mouselook"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="FSShowMouselookInstructions"
@@ -248,7 +375,7 @@
          layout="topleft"
          name="mouselook_instructions_visible"
          tool_tip="Show Mouselook Instructions"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="ShowCrosshairs"
@@ -260,7 +387,7 @@
          layout="topleft"
          name="ShowCrosshairs"
          tool_tip="Display crosshairs when in mouselook mode"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="FSMouselookCombatFeatures"
@@ -270,7 +397,7 @@
          label="Enable combat features"
          layout="topleft"
          name="FSMouselookCombatFeatures"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="ExodusMouselookIFF"
@@ -280,7 +407,7 @@
          layout="topleft"
          left_delta="10"
          name="ExodusMouselookIFF"
-         top_pad="2"
+         top_pad="5"
          width="256" />
         <slider
          control_name="ExodusMouselookIFFRange"
@@ -296,7 +423,7 @@
          left_delta="5"
          max_val="500"
          name="ExodusMouselookIFFRange"
-         top_pad="2"
+         top_pad="5"
          width="333" />
         <text
          type="string"
@@ -306,7 +433,7 @@
          layout="topleft"
          left_delta="-10"
          name="Mouse Sensitivity"
-         top_pad="7"
+         top_pad="10"
          width="160">
          Mouselook mouse sensitivity:
         </text>
@@ -321,7 +448,7 @@
          left_pad="5"
          max_val="15"
          name="mouse_sensitivity"
-         top_delta="-1"
+         top_delta="1"
          width="145" />
         <check_box
          control_name="InvertMouse"
@@ -343,7 +470,7 @@
      right="-1"
      follows="all"
      label="Movement"
-     name="tab-movement" >
+     name="tab-movement">
         <check_box
          control_name="ArrowKeysAlwaysMove"
          follows="left|top"
@@ -353,7 +480,7 @@
          left_delta="10"
          name="arrow_keys_move_avatar_check"
          width="237"
-         top_pad="2"/>
+         top_pad="8"/>
         <check_box
          control_name="FSUseAzertyKeyboardLayout"
          follows="left|top"
@@ -435,6 +562,22 @@
          name="FSFlyAfterTeleport"
          width="237"
          top_pad="0"/>
+        <check_box top_pad="0"
+         follows="left|top"
+         height="20"
+         label="Turn avatar around when walking backwards"
+         name="backwardsturnavatar"
+         width="270"
+         control_name="TurnAroundWhenWalkingBackwards"
+         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+        <check_box top_pad="0"
+         follows="left|top"
+         height="20"
+         label="Turn avatar towards a selected object"
+         name="FSTurnAvatarToSelectedObject"
+         width="270"
+         control_name="FSTurnAvatarToSelectedObject"
+         tool_tip="Turns your avatar around to face the object you are currently selecting."/>
         <text
          follows="left|top"
          type="string"
@@ -548,129 +691,18 @@
         </button>
     </panel>
     
-    <!-- Firestorm -->
+    <!-- Map & Minimap -->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="Firestorm"
-     name="tab-firestorm" >
-        <text
-         top_pad="5"
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="15"
-         name="camera_options_label"
-         width="200">
-           Camera options:
-        </text>
-
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Clicking your avatar keeps camera position"
-         layout="topleft"
-         left="30"
-         name="clickonavatarkeepscamera"
-         width="270"
-         control_name="ClickOnAvatarKeepsCamera"
-         tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
-
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Reset camera position after teleport (within a region)"
-         layout="topleft"
-         left="30"
-         name="FSResetCameraOnTP"
-         width="270"
-         control_name="FSResetCameraOnTP"
-         tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
-		 
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         label="Reset camera position on avatar movement"
-         layout="topleft"
-         left="30"
-         name="FSResetCameraOnMovement"
-         width="270"
-         control_name="FSResetCameraOnMovement"/>
-
-		<check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Disable minimum camera zoom distance"
-         layout="topleft"
-         left="30"
-         name="disableminzoomdist"
-         width="350"
-         control_name="FSDisableMinZoomDist"
-         tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
-
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Turn avatar towards camera direction on reset view"
-         layout="topleft"
-         left="30"
-         name="resetviewturnsavatar"
-         width="350"
-         control_name="ResetViewTurnsAvatar"
-         tool_tip="This option keeps the camera direction and turns the avatar when Reset View is selected (hit ESC key)."/>
-
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Allow the camera to move without constraints through prims"
-         layout="topleft"
-         left="30"
-         name="ignorecameraconstraints"
-         width="350"
-         control_name="FSIgnoreSimulatorCameraConstraints"
-         tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
+     label="Map &amp; Minimap"
+     name="tab-maps">
 
         <text
-         name="ignorecameraconstraints_requires_restart"
-         follows="left|top"
-         layout="topleft"
-         left_pad="10"
-         top_delta="0"
-         height="20"
-         width="130"
-         text_color="White_25">
-            (requires restart)
-        </text>
-
-        <check_box
-         top_pad="0"
-         follows="left|top"
-         height="16"
-         label="Show the default camera controls minifloater always as opaque"
-         layout="topleft"
-         left="30"
-         name="FSAlwaysOpaqueCameraControls"
-         width="350"
-         control_name="FSAlwaysOpaqueCameraControls"/>
-
-        <text
-         top_pad="4"
+         top_pad="10"
          type="string"
          length="1"
          follows="left|top"
@@ -683,7 +715,7 @@
         </text>
 
         <check_box
-         top_pad="4"
+         top_pad="10"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -750,7 +782,7 @@
          top_pad="5"/>
 
         <text
-         top_pad="4"
+         top_pad="10"
          type="string"
          length="1"
          follows="left|top"
@@ -762,7 +794,7 @@
          World map options:
         </text>
         
-        <check_box top_pad="5"
+        <check_box top_pad="10"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -793,44 +825,6 @@
          control_name="FSShowRegionGridCoordinates"
          tool_tip="Shows the grid coordinates (in units of regions) on the world map."/>
 
-        <check_box top_pad="5"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Notify if the simulator version changes while changing the region"
-         left="15"
-         name="FSShowServerVersionChangeNotice"
-         width="270"
-         control_name="FSShowServerVersionChangeNotice"
-         tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
-
-        <check_box top_pad="5"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Show simulator channel in status bar"
-         name="FSStatusbarShowSimulatorVersion"
-         width="270"
-         control_name="FSStatusbarShowSimulatorVersion"
-         tool_tip="Shows the current simulator channel in the V1-like status bar."/>
-        
-        <check_box top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Turn avatar around when walking backwards"
-         name="backwardsturnavatar"
-         width="270"
-         control_name="TurnAroundWhenWalkingBackwards"
-         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-        
-        <check_box top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Turn avatar towards a selected object"
-         name="FSTurnAvatarToSelectedObject"
-         width="270"
-         control_name="FSTurnAvatarToSelectedObject"
-         tool_tip="Turns your avatar around to face the object you are currently selecting."/>
 	 </panel>
 </tab_container>
 </panel>

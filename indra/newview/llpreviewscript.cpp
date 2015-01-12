@@ -34,6 +34,7 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldir.h"
+#include "llenvmanager.h"
 #include "llexternaleditor.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -51,14 +52,12 @@
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
 #include "llscrolllistcell.h"
+#include "llsdserialize.h"
 #include "llslider.h"
 // <FS:CR> Removed LSO Compiler
 //#include "lscript_rt_interface.h"
-//#include "lscript_library.h"
-//#include "lscript_export.h"
 #include "fsscriptlibrary.h"
 // </FS:CR>
-#include "lltextbox.h"
 #include "lltooldraganddrop.h"
 #include "llvfile.h"
 
@@ -74,6 +73,7 @@
 #include "llkeyboard.h"
 #include "llscrollcontainer.h"
 #include "llcheckboxctrl.h"
+#include "llscripteditor.h"
 #include "llselectmgr.h"
 #include "lltooldraganddrop.h"
 #include "llscrolllistctrl.h"
@@ -82,7 +82,6 @@
 #include "lldir.h"
 #include "llcombobox.h"
 #include "llviewerstats.h"
-#include "llviewertexteditor.h"
 #include "llviewerwindow.h"
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
@@ -400,9 +399,13 @@ LLScriptEdCore::LLScriptEdCore(
 	const std::string& sample,
 	const LLHandle<LLFloater>& floater_handle,
 	void (*load_callback)(void*),
-	void (*save_callback)(void*, BOOL),
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//void (*save_callback)(void*, BOOL),
+	void (*save_callback)(void*, BOOL, bool),
+	// </FS:Ansariel>
 	void (*search_replace_callback) (void* userdata),
 	void* userdata,
+	bool live,
 	S32 bottom_pad)
 	:
 	LLPanel(),
@@ -417,6 +420,7 @@ LLScriptEdCore::LLScriptEdCore(
 	mLiveHelpHistorySize(0),
 	mEnableSave(FALSE),
 	mLiveFile(NULL),
+	mLive(live),
 	mContainer(container),
 	// <FS:CR> FIRE-10606, patch by Sei Lisa
 	mLSLProc(NULL),
@@ -454,6 +458,10 @@ LLScriptEdCore::~LLScriptEdCore()
 //	}
 
 	delete mLiveFile;
+	if (mSyntaxIDConnection.connected())
+	{
+		mSyntaxIDConnection.disconnect();
+	}
 }
 
 
@@ -476,17 +484,16 @@ BOOL LLScriptEdCore::postBuild()
 
 	mErrorList = getChild<LLScrollListCtrl>("lsl errors");
 
-	mFunctions = getChild<LLComboBox>( "Insert...");
+	mFunctions = getChild<LLComboBox>("Insert...");
 
 	childSetCommitCallback("Insert...", &LLScriptEdCore::onBtnInsertFunction, this);
 
-	mEditor = getChild<LLViewerTextEditor>("Script Editor");
+	mEditor = getChild<LLScriptEditor>("Script Editor");
 
 	// NaCl - LSL Preprocessor
-	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-	if (_NACL_LSLPreprocessor)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
-		mPostEditor = getChild<LLViewerTextEditor>("Post Editor");
+		mPostEditor = getChild<LLScriptEditor>("Post Editor");
 		if (mPostEditor)
 		{
 			mPostEditor->setFollowsAll();
@@ -506,7 +513,23 @@ BOOL LLScriptEdCore::postBuild()
 	initMenu();
 	initButtonBar();	// <FS:CR> Advanced Script Editor
 
+	mSyntaxIDConnection = LLSyntaxIdLSL::getInstance()->addSyntaxIDCallback(boost::bind(&LLScriptEdCore::processKeywords, this));
 
+	// Intialise keyword highlighting for the current simulator's version of LSL
+	LLSyntaxIdLSL::getInstance()->initialize();
+	processKeywords();
+
+	return TRUE;
+}
+
+void LLScriptEdCore::processKeywords()
+{
+	LL_DEBUGS("SyntaxLSL") << "Processing keywords" << LL_ENDL;
+	mEditor->clearSegments();
+	mEditor->initKeywords();
+	mEditor->loadKeywords();
+
+	// <FS:Ansariel> Re-add legacy format support
 	std::vector<std::string> funcs;
 	std::vector<std::string> tooltips;
 	for (std::vector<LLScriptLibraryFunction>::const_iterator i = gScriptLibrary.mFunctions.begin();
@@ -517,11 +540,7 @@ BOOL LLScriptEdCore::postBuild()
 		{
 			std::string name = i->mName;
 			funcs.push_back(name);
-			
-			// <FS:CR> Dynamically loaded script library 
-			//std::string desc_name = "LSLTipText_";
-			//desc_name += name;
-			//std::string desc = LLTrans::getString(desc_name);
+
 			std::string desc = i->mDesc;
 			
 			F32 sleep_time = i->mSleepTime;
@@ -539,36 +558,30 @@ BOOL LLScriptEdCore::postBuild()
 			LLStringUtil::replaceString( desc, ";", "\n" );
 			
 			LL_DEBUGS() << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << LL_ENDL;
-			// </FS:CR>
 			
 			tooltips.push_back(desc);
 		}
 	}
-	
-	// <FS:CR> Customizable function color
-	//LLColor3 color(0.5f, 0.5f, 0.15f);
-	LLColor3 color(LLUIColorTable::instance().getColor("ScriptFunction"));
-	// </FS:CR>
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
-	if (_NACL_LSLPreprocessor)
+
+	LLColor3 color(LLUIColorTable::instance().getColor("SyntaxLslFunction"));
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
-// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
 	if (LLGridManager::getInstance()->isInAuroraSim())
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
-// </FS:CR>
+	// </FS:Ansariel>
 	
-	std::vector<std::string> primary_keywords;
-	std::vector<std::string> secondary_keywords;
+	string_vec_t primary_keywords;
+	string_vec_t secondary_keywords;
 	LLKeywordToken *token;
 	LLKeywords::keyword_iterator_t token_it;
 	for (token_it = mEditor->keywordsBegin(); token_it != mEditor->keywordsEnd(); ++token_it)
 	{
 		token = token_it->second;
-		if (token->getColor() == color) // Wow, what a disgusting hack.
+		if (token->getType() == LLKeywordToken::TT_FUNCTION)
 		{
 			primary_keywords.push_back( wstring_to_utf8str(token->getToken()) );
 		}
@@ -579,39 +592,32 @@ BOOL LLScriptEdCore::postBuild()
 	}
 
 	// NaCl - LSL Preprocessor
-	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
-	if(mPostEditor)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
 	{
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
+		mPostEditor->clearSegments();
+		mPostEditor->initKeywords();
+		mPostEditor->loadKeywords();
+
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
-		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
 		if (LLGridManager::getInstance()->isInAuroraSim())
 			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
-		// </FS:CR>
 	}
 	// NaCl End
 
-	// Case-insensitive dictionary sort for primary keywords. We don't sort the secondary
-	// keywords. They're intelligently grouped in keywords.ini.
-	std::stable_sort( primary_keywords.begin(), primary_keywords.end(), LLSECKeywordCompare() );
-
-	for (std::vector<std::string>::const_iterator iter= primary_keywords.begin();
-			iter!= primary_keywords.end(); ++iter)
+	for (string_vec_t::const_iterator iter = primary_keywords.begin();
+		 iter!= primary_keywords.end(); ++iter)
 	{
 		mFunctions->add(*iter);
 	}
-
-	for (std::vector<std::string>::const_iterator iter= secondary_keywords.begin();
-			iter!= secondary_keywords.end(); ++iter)
+	for (string_vec_t::const_iterator iter = secondary_keywords.begin();
+		 iter!= secondary_keywords.end(); ++iter)
 	{
 		mFunctions->add(*iter);
 	}
-
-	return TRUE;
 }
 
 void LLScriptEdCore::initMenu()
@@ -620,7 +626,10 @@ void LLScriptEdCore::initMenu()
 	LLMenuItemCallGL* menuItem;
 	
 	menuItem = getChild<LLMenuItemCallGL>("Save");
-	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));
+	// </FS:Ansariel>
 	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::hasChanged, this));
 	
 	menuItem = getChild<LLMenuItemCallGL>("Revert All Changes");
@@ -685,8 +694,8 @@ void LLScriptEdCore::initMenu()
 
 void LLScriptEdCore::initButtonBar()
 {
-	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
-	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));	// <FS:Zi> support extra save button
+	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));
+	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE, true));	// <FS:Zi> support extra save button
 	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
 	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
 	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
@@ -713,7 +722,7 @@ void LLScriptEdCore::updateButtonBar()
 //static
 void LLScriptEdCore::onBtnPrefs(void* userdata)
 {
-	LLFloaterReg::showInstance("fs_script_editor_prefs");
+	LLFloaterReg::showInstance("script_colors");
 }
 // </FS:CR>
 
@@ -911,7 +920,7 @@ void LLScriptEdCore::updateDynamicHelp(BOOL immediate)
 	std::vector<LLTextSegmentPtr>::iterator segment_iter;
 	for (segment_iter = selected_segments.begin(); segment_iter != selected_segments.end(); ++segment_iter)
 	{
-		if((*segment_iter)->getToken() && (*segment_iter)->getToken()->getType() == LLKeywordToken::WORD)
+		if((*segment_iter)->getToken() && (*segment_iter)->getToken()->getType() == LLKeywordToken::TT_WORD)
 		{
 			segment = *segment_iter;
 			break;
@@ -922,7 +931,7 @@ void LLScriptEdCore::updateDynamicHelp(BOOL immediate)
 	if (!segment)
 	{
 		const LLTextSegmentPtr test_segment = mEditor->getPreviousSegment();
-		if(test_segment->getToken() && test_segment->getToken()->getType() == LLKeywordToken::WORD)
+		if(test_segment->getToken() && test_segment->getToken()->getType() == LLKeywordToken::TT_WORD)
 		{
 			segment = test_segment;
 		}
@@ -1197,26 +1206,29 @@ void LLScriptEdCore::onBtnInsertFunction(LLUICtrl *ui, void* userdata)
 	self->setHelpPage(self->mFunctions->getSimple());
 }
 
-void LLScriptEdCore::doSave( BOOL close_after_save )
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLScriptEdCore::doSave( BOOL close_after_save )
+void LLScriptEdCore::doSave(BOOL close_after_save, bool sync /*= true*/)
+// </FS:Ansariel>
 {
 	// NaCl - LSL Preprocessor
 	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		LL_INFOS() << "passing to preproc" << LL_ENDL;
-		mLSLProc->preprocess_script(close_after_save);
+		mLSLProc->preprocess_script(close_after_save, sync);
 	}
 	else
 	{
 		if( mSaveCallback )
 		{
-			mSaveCallback( mUserdata, close_after_save );
+			mSaveCallback( mUserdata, close_after_save, sync );
 		}
 	}
 	// NaCl End
 }
 
 // NaCl - LSL Preprocessor
-void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
+void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save, bool sync)
 {
 	add( LLStatViewer::LSL_SAVES,1 );
 
@@ -1224,7 +1236,7 @@ void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
 
 	if( mSaveCallback )
 	{
-		mSaveCallback( mUserdata, close_after_save );
+		mSaveCallback( mUserdata, close_after_save, sync );
 	}
 }
 // NaCl End
@@ -1474,7 +1486,10 @@ void LLScriptEdCore::onBtnSaveToFile( void* userdata )
 			std::ofstream fout(filename.c_str());
 			fout<<(scriptText);
 			fout.close();
-			self->mSaveCallback( self->mUserdata, FALSE );
+			// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+			//self->mSaveCallback( self->mUserdata, FALSE );
+			self->mSaveCallback( self->mUserdata, FALSE, true );
+			// </FS:Ansariel>
 		}
 	}
 }
@@ -1504,8 +1519,8 @@ bool LLScriptEdCore::enableLoadFromFileMenu(void* userdata)
 /// LLScriptEdContainer
 /// ---------------------------------------------------------------------------
 
-LLScriptEdContainer::LLScriptEdContainer(const LLSD& key)
-:	LLPreview(key)
+LLScriptEdContainer::LLScriptEdContainer(const LLSD& key) :
+	LLPreview(key)
 ,	mScriptEd(NULL)
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 ,	mBackupTimer(NULL)
@@ -1597,8 +1612,14 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 	}
 
 	// Disable sync to avoid recursive load->save->load calls.
-	mScriptEd->doSave(FALSE);
-	saveIfNeeded(false);
+	// <FS> LSL preprocessor
+	// Ansariel: Don't call saveIfNeeded directly, as we might have to run the
+	// preprocessor first. saveIfNeeded will be invoked via callback. Make sure
+	// to pass sync = false - we don't need to update the external editor in this
+	// case or the next save will be ignored!
+	//saveIfNeeded(false);
+	mScriptEd->doSave(FALSE, false);
+	// </FS>
 	return true;
 }
 
@@ -1632,8 +1653,8 @@ void* LLPreviewLSL::createScriptEdPanel(void* userdata)
 								   LLPreviewLSL::onSave,
 								   LLPreviewLSL::onSearchReplace,
 								   self,
+								   false,
 								   0);
-
 	return self->mScriptEd;
 }
 
@@ -1648,7 +1669,7 @@ LLPreviewLSL::LLPreviewLSL(const LLSD& key )
 // virtual
 BOOL LLPreviewLSL::postBuild()
 {
-	const LLInventoryItem* item = getItem();	
+	const LLInventoryItem* item = getItem();
 
 	llassert(item);
 	if (item)
@@ -1801,11 +1822,17 @@ void LLPreviewLSL::onLoad(void* userdata)
 }
 
 // static
-void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save)
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save)
+void LLPreviewLSL::onSave(void* userdata, BOOL close_after_save, bool sync)
+// </FS:Ansariel>
 {
 	LLPreviewLSL* self = (LLPreviewLSL*)userdata;
 	self->mCloseAfterSave = close_after_save;
-	self->saveIfNeeded();
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//self->saveIfNeeded();
+	self->saveIfNeeded(sync);
+	// </FS:Ansariel>
 }
 
 // Save needs to compile the text in the buffer. If the compile
@@ -2149,7 +2176,6 @@ void LLPreviewLSL::onLoadComplete( LLVFS *vfs, const LLUUID& asset_uuid, LLAsset
 //static 
 void* LLLiveLSLEditor::createScriptEdPanel(void* userdata)
 {
-	
 	LLLiveLSLEditor *self = (LLLiveLSLEditor*)userdata;
 
 	self->mScriptEd =  new LLScriptEdCore(
@@ -2160,8 +2186,8 @@ void* LLLiveLSLEditor::createScriptEdPanel(void* userdata)
 								   &LLLiveLSLEditor::onSave,
 								   &LLLiveLSLEditor::onSearchReplace,
 								   self,
+								   true,
 								   0);
-
 	return self->mScriptEd;
 }
 
@@ -2907,12 +2933,18 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 }
 
 // static
-void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
+// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+//void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
+void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save, bool sync)
+// </FS:Ansariel>
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
 
 	self->mCloseAfterSave = close_after_save;
-	self->saveIfNeeded();
+	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+	//self->saveIfNeeded();
+	self->saveIfNeeded(sync);
+	// </FS:Ansariel>
 }
 
 

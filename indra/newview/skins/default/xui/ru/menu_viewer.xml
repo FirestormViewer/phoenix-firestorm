@@ -42,7 +42,7 @@
 			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
 			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
-			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
+			<menu_item_call label="Установить разрешения по умолчанию..." name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
 		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
@@ -185,7 +185,8 @@
 			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
 			<menu_item_call label="Сдвиг к ближайшему узлу XY сетки" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>
-			<menu_item_call label="Параметры сетки" name="Grid Options"/>
+			<menu_item_call label="Параметры сетки..." name="Grid Options"/>
+			<menu_item_call label="Установить разрешения по умолчанию..." name="Set default permissions"/>
 		</menu>
 		<menu label="Передача" name="Upload">
 			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
@@ -193,7 +194,6 @@
 			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
 			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
-			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>
 		<menu_item_call label="Вернуть" name="Redo"/>

@@ -2742,7 +2742,21 @@ URL: [AUDIOURL]
 [ITEM_SLURL]
 		<form name="form">
 			<button name="Show" text="表示"/>
+			<button name="Keep" text="キープ"/>
 			<button name="Discard" text="破棄"/>
+			<button name="Mute" text="ブロック"/>
+		</form>
+	</notification>
+	<notification name="UserGiveItemLegacy">
+		[NAME_SLURL] があなたに [OBJECTTYPE] を渡しました：
+[ITEM_SLURL]
+		<form name="form">
+			<button name="Show" text="表示"/>
+			<button name="Accept" text="キープ"/>
+			<button name="Discard" text="破棄"/>
+			<button name="ShowSilent" text="（表示）"/>
+			<button name="AcceptSilent" text="キープ"/>
+			<button name="DiscardSilent" text="破棄"/>
 			<button name="Mute" text="ブロック"/>
 		</form>
 	</notification>

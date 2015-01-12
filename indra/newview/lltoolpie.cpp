@@ -384,7 +384,10 @@ BOOL LLToolPie::handleLeftClickPick()
 			}
 			object = (LLViewerObject*)object->getParent();
 		}
-		if (object && object == gAgentAvatarp && !gSavedSettings.getBOOL("ClickToWalk"))
+		// <FS:Ansariel> FIRE-15189: Fix ClickToWalk not allowing mouse-walk (behavior change)
+		//if (object && object == gAgentAvatarp && !gSavedSettings.getBOOL("ClickToWalk"))
+		if (object && object == gAgentAvatarp)
+		// </FS:Ansariel>
 		{
 			// we left clicked on avatar, switch to focus mode
 			mMouseButtonDown = false;
@@ -1296,9 +1299,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				if (region)
 				{
 					LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
-					args.clear();
-					args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
-					tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
+
+					if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+					{
+						args.clear();
+						args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
+						tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
+					}
 
 					// Get distance
 					F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
@@ -2041,16 +2048,7 @@ BOOL LLToolPie::handleRightClickPick()
 			{
 				name = node->mName;
 			}
-			std::string mute_msg;
-			if (LLMuteList::getInstance()->isMuted(object->getID(), name))
-			{
-				mute_msg = LLTrans::getString("UnmuteObject");
-			}
-			else
-			{
-				mute_msg = LLTrans::getString("MuteObject2");
-			}
-			
+
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.el) | Modified: RLVa-1.1.0l
 			// Don't show the pie menu on empty selection when fartouch/interaction restricted
 			// (not entirely accurate in case of Tools / Select Only XXX [see LLToolSelect::handleObjectSelection()]
@@ -2063,13 +2061,20 @@ BOOL LLToolPie::handleRightClickPick()
 				// gMenuObject->show(x, y);
 				if(gSavedSettings.getBOOL("UsePieMenu"))
 				{
+					std::string mute_msg;
+					if (LLMuteList::getInstance()->isMuted(object->getID(), name))
+					{
+						mute_msg = LLTrans::getString("UnmuteObject");
+					}
+					else
+					{
+						mute_msg = LLTrans::getString("MuteObject2");
+					}
 					gPieMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 					gPieMenuObject->show(x, y);
 				}
 				else
 				{
-					// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
-					// gMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 					gMenuObject->show(x, y);
 				}
 				// </FS:Zi>

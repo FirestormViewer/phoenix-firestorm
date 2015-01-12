@@ -173,10 +173,12 @@ void LLMotionController::deleteAllMotions()
 	for_each(mAllMotions.begin(), mAllMotions.end(), DeletePairedPointer());
 	mAllMotions.clear();
 
-	// <FS:ND> There might still be motions in mDeprecatedMotions. Don't leak those.
-	for_each(mDeprecatedMotions.begin(), mDeprecatedMotions.end(), DeletePointer() );
+	// stinson 05/12/20014 : Ownership of the LLMotion pointers is transferred from
+	// mAllMotions to mDeprecatedMotions in method
+	// LLMotionController::deprecateMotionInstance().  Thus, we should also clean
+	// up the mDeprecatedMotions list as well.
+	for_each(mDeprecatedMotions.begin(), mDeprecatedMotions.end(), DeletePointer());
 	mDeprecatedMotions.clear();
-	// </FS:ND>
 }
 
 //-----------------------------------------------------------------------------

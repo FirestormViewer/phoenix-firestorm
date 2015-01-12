@@ -76,14 +76,9 @@ class LLServerReleaseNotesURLFetcher : public LLHTTPClient::Responder
 {
 	LOG_CLASS(LLServerReleaseNotesURLFetcher);
 public:
-
 	static void startFetch();
-	/*virtual*/ void completedHeader(U32 status, const std::string& reason, const LLSD& content);
-	/*virtual*/ void completedRaw(
-		U32 status,
-		const std::string& reason,
-		const LLChannelDescriptors& channels,
-		const LLIOPipe::buffer_ptr_t& buffer);
+private:
+	/* virtual */ void httpCompleted();
 };
 
 ///----------------------------------------------------------------------------
@@ -149,7 +144,8 @@ BOOL LLFloaterAbout::postBuild()
 	}
 	else // not logged in
 	{
-		setSupportText(LLStringUtil::null);
+		LL_DEBUGS("ViewerInfo") << "cannot display region info when not connected" << LL_ENDL;
+		setSupportText(LLTrans::getString("NotConnected"));
 	}
 
 	support_widget->blockUndo();
@@ -268,11 +264,10 @@ void LLFloaterAbout::setSupportText(const std::string& server_release_notes_url)
 	LLViewerTextEditor *support_widget =
 		getChild<LLViewerTextEditor>("support_editor", true);
 
+	LLUIColor about_color = LLUIColorTable::instance().getColor("TextFgReadOnlyColor");
 	support_widget->clear();
 	support_widget->appendText(LLAppViewer::instance()->getViewerInfoString(),
-								FALSE,
-								LLStyle::Params()
-									.color(LLUIColorTable::instance().getColor("TextFgReadOnlyColor")));
+							   FALSE, LLStyle::Params() .color(about_color));
 }
 
 ///----------------------------------------------------------------------------
@@ -304,11 +299,10 @@ void LLServerReleaseNotesURLFetcher::startFetch()
 }
 
 // virtual
-void LLServerReleaseNotesURLFetcher::completedHeader(U32 status, const std::string& reason, const LLSD& content)
+void LLServerReleaseNotesURLFetcher::httpCompleted()
 {
-	LL_DEBUGS() << "Status: " << status << LL_ENDL;
-	LL_DEBUGS() << "Reason: " << reason << LL_ENDL;
-	LL_DEBUGS() << "Headers: " << content << LL_ENDL;
+	LL_DEBUGS("ServerReleaseNotes") << dumpResponse() 
+									<< " [headers:" << getResponseHeaders() << "]" << LL_ENDL;
 
 	// <FS:Ansariel> Only update if about floater still exists
 	//LLFloaterAbout* floater_about = LLFloaterReg::getTypedInstance<LLFloaterAbout>("sl_about");
@@ -316,7 +310,7 @@ void LLServerReleaseNotesURLFetcher::completedHeader(U32 status, const std::stri
 	// </FS:Ansariel>
 	if (floater_about)
 	{
-		std::string location = content["location"].asString();
+		std::string location = getResponseHeader(HTTP_IN_HEADER_LOCATION);
 		if (location.empty())
 		{
 			location = LLTrans::getString("ErrorFetchingServerReleaseNotesURL");
@@ -327,14 +321,3 @@ void LLServerReleaseNotesURLFetcher::completedHeader(U32 status, const std::stri
 	}
 }
 
-// virtual
-void LLServerReleaseNotesURLFetcher::completedRaw(
-	U32 status,
-	const std::string& reason,
-	const LLChannelDescriptors& channels,
-	const LLIOPipe::buffer_ptr_t& buffer)
-{
-	// Do nothing.
-	// We're overriding just because the base implementation tries to
-	// deserialize LLSD which triggers warnings.
-}

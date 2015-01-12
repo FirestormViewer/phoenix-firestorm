@@ -687,8 +687,6 @@ void LLAvatarActions::teleportTo(const LLUUID& id)
 
 namespace action_give_inventory
 {
-	typedef std::set<LLUUID> uuid_set_t;
-
 	/**
 	 * Returns a pointer to 'Add More' inventory panel of Edit Outfit SP.
 	 */
@@ -2150,7 +2148,7 @@ void LLAvatarActions::onDerenderAvatarNameLookup(const LLUUID& agent_id, const L
 {
 	if (permanent)
 	{
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(agent_id, av_name.getUserName(), "", LLAssetType::AT_OBJECT);
+		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(agent_id, av_name.getUserName(), "", LLAssetType::AT_PERSON);
 	}
 
 	LLViewerObject* av_obj = gObjectList.findObject(agent_id);

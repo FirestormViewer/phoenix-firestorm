@@ -11,7 +11,7 @@
      <command name="chat"/>
      <command name="speak"/>
      <command name="voice"/>
-     <command name="social"/>
+     <command name="facebook"/>
      <command name="move"/>
      <command name="view"/>`
      <command name="people"/>

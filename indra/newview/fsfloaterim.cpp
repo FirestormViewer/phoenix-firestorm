@@ -763,6 +763,8 @@ BOOL FSFloaterIM::postBuild()
 
 	if ( im_session && im_session->isP2PSessionType())
 	{
+		mTypingStart.setArg("[NAME]", im_session->mName);
+		updateSessionName(im_session->mName, im_session->mName);
 		fetchAvatarName(im_session->mOtherParticipantID);
 	}
 	else
@@ -856,6 +858,10 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 
 	updateSessionName(name, name);
 	mTypingStart.setArg("[NAME]", name);
+	if (mOtherTyping)
+	{
+		setTitle((gSavedSettings.getBOOL("FSTypingChevronPrefix") ? "> " : "") + mTypingStart.getString());
+	}
 	LL_DEBUGS("FSFloaterIM") << "Setting IM tab name to '" << name << "'" << LL_ENDL;
 	// </FS:Ansariel>
 }
@@ -1462,6 +1468,11 @@ void FSFloaterIM::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		{
 			floater->updateChatHistoryStyle();
 			floater->mInputEditor->setFont(font);
+
+			// Re-set the current text to make style update instant
+			std::string text = floater->mInputEditor->getText();
+			floater->mInputEditor->clear();
+			floater->mInputEditor->setText(text);
 		}
 	}
 }

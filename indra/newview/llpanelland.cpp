@@ -149,7 +149,7 @@ void LLPanelLandInfo::refresh()
 						&& ((gAgent.getID() == auth_buyer_id)
 							|| (auth_buyer_id.isNull())));
 			
-		if (is_public)
+		if (is_public && !LLViewerParcelMgr::getInstance()->getParcelSelection()->getMultipleOwners())
 		{
 			getChildView("button buy land")->setEnabled(TRUE);
 		}

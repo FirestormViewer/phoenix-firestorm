@@ -28,7 +28,6 @@
 #ifndef PIESEPARATOR_H
 #define PIESEPARATOR_H
 
-#include "llinitparam.h"
 #include "lluictrl.h"
 
 // a pie slice that does nothing and is not highlighting by mouse hover

@@ -267,6 +267,7 @@
 			<check_box name="FSKeywordInChat" label="Lokalen Chat auf Schüsselwörter prüfen"/>
 			<check_box name="FSKeywordInIM" label="Instant Messages und Gruppenchats auf Schlüsselwörter prüfen"/>
 			<check_box name="FSKeywordCaseSensitive" label="Groß-/Kleinschreibung bei Schlüsselwörtern beachten"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Nur ganze Wörter prüfen"/>
 			<text name="textFSKeywords">
 				Schlüsselwörter (getrennt durch Komma):
 			</text>
@@ -285,6 +286,12 @@
 			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
 			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
+			<text name="textUseKeyboardShortcuts">
+				Tastatur-Shortcuts verwenden:
+			</text>
+			<check_box label="Strg + Return (Rufen)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Strg + Return zum Rufen im Chat in der Nähe verwendet werden soll." name="FSUseCtrlShout"/>
+			<check_box label="Umschalt + Return (Flüstern)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Umschalt + Return zum Flüstern im Chat in der Nähe verwendet werden soll." name="FSUseShiftWhisper"/>
+			<check_box label="Alt + Return (OOC)" tool_tip="Aktivieren, falls der Tastatur-Shortcut Alt + Return für OOC-Chat im Chat in der Nähe verwendet werden soll." name="FSUseAltOOC"/>
 		</panel>
 
 	</tab_container>

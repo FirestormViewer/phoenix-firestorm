@@ -5,7 +5,7 @@
 	</panel.string>
 	<layout_stack name="ls_item">
 		<layout_panel name="lp_date">
-			<text name="date" value="2000/01/01 12:00"/>
+			<text name="timestamp" value="2000/01/01 12:00"/>
 		</layout_panel>
 	</layout_stack>
 	<button name="profile_btn" tool_tip="Mostrar la información del ítem"/>

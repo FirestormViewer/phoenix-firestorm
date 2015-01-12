@@ -53,6 +53,7 @@
 #include "llfloatersearchreplace.h"
 #include "llpreviewnotecard.h"
 #include "llpreviewscript.h"
+#include "llscripteditor.h"
 // [/SL:KB]
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
@@ -100,8 +101,6 @@ void LLPreview::setObjectID(const LLUUID& object_id)
 	{
 		loadAsset();
 	}
-
-	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
 	refreshFromItem();
 }
 
@@ -112,8 +111,6 @@ void LLPreview::setItem( LLInventoryItem* item )
 	{
 		loadAsset();
 	}
-
-	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
 	refreshFromItem();
 }
 
@@ -438,13 +435,6 @@ void LLPreview::onDiscardBtn(void* data)
 
 	self->mForceClose = TRUE;
 	self->closeFloater();
-
-	// Delete the item entirely
-	/*
-	item->removeFromServer();
-	gInventory.deleteObject(item->getUUID());
-	gInventory.notifyObservers();
-	*/
 
 	// Move the item to the trash
 	const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);

@@ -6,9 +6,9 @@ include(Prebuilt)
 #set (USE_TCMALLOC ON)
 set (USE_TCMALLOC OFF) # <FS:ND> tcmalloc removal
 
-if (STANDALONE)
+if (USESYSTEMLIBS)
   include(FindGooglePerfTools)
-else (STANDALONE)
+else (USESYSTEMLIBS)
   if (WINDOWS)
     if (USE_TCMALLOC)
        use_prebuilt_binary(gperftools)
@@ -35,7 +35,7 @@ else (STANDALONE)
         ${LIBS_PREBUILT_DIR}/include)
     set(GOOGLE_PERFTOOLS_FOUND "YES")
   endif (LINUX)
-endif (STANDALONE)
+endif (USESYSTEMLIBS)
 
 if (GOOGLE_PERFTOOLS_FOUND)
   # XXX Disable temporarily, until we have compilation issues on 64-bit

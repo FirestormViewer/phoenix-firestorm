@@ -210,7 +210,7 @@ void LLGLSLShader::startProfile()
 //static
 void LLGLSLShader::stopProfile(U32 count, U32 mode)
 {
-	if (sProfileEnabled)
+	if (sProfileEnabled && sCurBoundShaderPtr)
 	{
 		sCurBoundShaderPtr->readProfileQuery(count, mode);
 	}

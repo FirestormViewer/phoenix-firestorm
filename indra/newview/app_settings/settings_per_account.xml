@@ -643,6 +643,17 @@
 		<key>Value</key>
 			<integer>0</integer>
 	</map>
+	<key>FSKeywordMatchWholeWords</key>
+	<map>
+		<key>Comment</key>
+			<string>Keywords will only match whole words</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+	</map>
 	<key>FSKeywords</key>
 	<map>
 		<key>Comment</key>
@@ -765,63 +776,6 @@
         </map>
     <!-- End of Firestorm settings -->
 
-    <!-- Settings imported from Exodus -->
-    <key>ExodusFlickrToken</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr OAuth Token</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
-    <key>ExodusFlickrTokenSecret</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr OAuth Token Secret</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
-    <key>ExodusFlickrNSID</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr User ID</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
-    <key>ExodusFlickrUsername</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr Username</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
-    <key>ExodusFlickrFullName</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr Username</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
-    <!-- End of settings imported from Exodus -->
     <key>FSStoredCameraPos</key>
         <map>
         <key>Comment</key>

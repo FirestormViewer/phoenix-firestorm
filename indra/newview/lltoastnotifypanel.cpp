@@ -50,7 +50,7 @@
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
 S32 BUTTON_WIDTH = 90;
-// *TODO: magic numbers(???) - copied from llnotify.cpp(250)
+// *TODO: magic numbers(?) - copied from llnotify.cpp(250)
 const S32 MAX_LENGTH = 512 + 20 + DB_FIRST_NAME_BUF_SIZE + DB_LAST_NAME_BUF_SIZE + DB_INV_ITEM_NAME_BUF_SIZE; 
 
 
@@ -276,8 +276,12 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
     // customize panel's attributes
     // is it intended for displaying a tip?
     mIsTip = mNotification->getType() == "notifytip";
+
+    std::string notif_name = mNotification->getName();
     // is it a script dialog?
-    mIsScriptDialog = (mNotification->getName() == "ScriptDialog" || mNotification->getName() == "ScriptDialogGroup");
+    mIsScriptDialog = (notif_name == "ScriptDialog" || notif_name == "ScriptDialogGroup");
+
+    bool is_content_trusted = (notif_name != "LoadWebPage");
     // is it a caution?
     //
     // caution flag can be set explicitly by specifying it in the notification payload, or it can be set implicitly if the
@@ -320,6 +324,7 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
     mTextBox->setMaxTextLength(MAX_LENGTH);
     mTextBox->setVisible(TRUE);
     mTextBox->setPlainText(!show_images);
+    mTextBox->setContentTrusted(is_content_trusted);
     mTextBox->setValue(mNotification->getMessage());
 	mTextBox->setIsFriendCallback(LLAvatarActions::isFriend);
 
@@ -503,6 +508,7 @@ void LLIMToastNotifyPanel::compactButtons()
 
 	const child_list_t* children = getControlPanel()->getChildList();
 	S32 offset = 0;
+	S32 last_bottom = 0; // <FS:Ansariel> Fix stacked buttons offset
 	// Children were added by addChild() which uses push_front to insert them into list,
 	// so to get buttons in correct order reverse iterator is used (EXT-5906) 
 	for (child_list_t::const_reverse_iterator it = children->rbegin(); it != children->rend(); it++)
@@ -510,6 +516,12 @@ void LLIMToastNotifyPanel::compactButtons()
 		LLButton * button = dynamic_cast<LLButton*> (*it);
 		if (button != NULL)
 		{
+			// <FS:Ansariel> Fix stacked buttons offset
+			if (last_bottom != button->getRect().mBottom)
+			{
+				offset = 0;
+			}
+			// </FS:Ansariel>
 			button->setOrigin( offset,button->getRect().mBottom);
 			button->setLeftHPad(2 * HPAD);
 			button->setRightHPad(2 * HPAD);
@@ -522,6 +534,8 @@ void LLIMToastNotifyPanel::compactButtons()
 			button->autoResize();
 			offset += HPAD + button->getRect().getWidth();
 			button->setFollowsNone();
+			// <FS:Ansariel> Fix stacked buttons offset
+			last_bottom = button->getRect().mBottom;
 		}
 	}
 

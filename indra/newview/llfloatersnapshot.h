@@ -59,8 +59,6 @@ public:
 	static LLFloaterSnapshot* findInstance();
 	static void saveTexture();
 	static BOOL saveLocal();
-	static void preUpdate();
-	static void postUpdate();
 	static void postSave();
 	static void postPanelSwitch();
 	static LLPointer<LLImageFormatted> getImageData();
@@ -73,8 +71,6 @@ private:
 	static LLUICtrl* sThumbnailPlaceholder;
 	LLUICtrl *mRefreshBtn, *mRefreshLabel;
 	LLUICtrl *mSucceessLblPanel, *mFailureLblPanel;
-
-	void onSelectDestination();		// <FS:Zi> Called whenever the snapshot destination is changed
 
 	class Impl;
 	Impl& impl;

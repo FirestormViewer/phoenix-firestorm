@@ -68,7 +68,7 @@
 #include "u64.h"
 #include "llviewertexturelist.h"
 #include "lldatapacker.h"
-#ifdef LL_STANDALONE
+#ifdef LL_USESYSTEMLIBS
 #include <zlib.h>
 #else
 #include "zlib/zlib.h"
@@ -76,6 +76,7 @@
 #include "object_flags.h"
 
 #include "llappviewer.h"
+#include "llfloaterperms.h"
 #include "llvocache.h"
 #include "fswsassetblacklist.h"
 #include "fsfloaterimport.h"
@@ -838,6 +839,7 @@ void LLViewerObjectList::updateApparentAngles(LLAgent &agent)
 
 class LLObjectCostResponder : public LLCurl::Responder
 {
+	LOG_CLASS(LLObjectCostResponder);
 public:
 	LLObjectCostResponder(const LLSD& object_ids)
 		: mObjectIDs(object_ids)
@@ -858,20 +860,19 @@ public:
 		}
 	}
 
-	void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+private:
+	/* virtual */ void httpFailure()
 	{
-		LL_WARNS()
-			<< "Transport error requesting object cost "
-			<< "[status: " << statusNum << "]: "
-			<< content << LL_ENDL;
+		LL_WARNS() << dumpResponse() << LL_ENDL;
 
 		// TODO*: Error message to user
 		// For now just clear the request from the pending list
 		clear_object_list_pending_requests();
 	}
 
-	void result(const LLSD& content)
+	/* virtual */ void httpSuccess()
 	{
+		const LLSD& content = getContent();
 		if ( !content.isMap() || content.has("error") )
 		{
 			// Improper response or the request had an error,
@@ -936,6 +937,7 @@ private:
 
 class LLPhysicsFlagsResponder : public LLCurl::Responder
 {
+	LOG_CLASS(LLPhysicsFlagsResponder);
 public:
 	LLPhysicsFlagsResponder(const LLSD& object_ids)
 		: mObjectIDs(object_ids)
@@ -956,20 +958,19 @@ public:
 		}
 	}
 
-	void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+private:
+	/* virtual */ void httpFailure()
 	{
-		LL_WARNS()
-			<< "Transport error requesting object physics flags "
-			<< "[status: " << statusNum << "]: "
-			<< content << LL_ENDL;
+		LL_WARNS() << dumpResponse() << LL_ENDL;
 
 		// TODO*: Error message to user
 		// For now just clear the request from the pending list
 		clear_object_list_pending_requests();
 	}
 
-	void result(const LLSD& content)
+	/* virtual void */ void httpSuccess()
 	{
+		const LLSD& content = getContent();
 		if ( !content.isMap() || content.has("error") )
 		{
 			// Improper response or the request had an error,

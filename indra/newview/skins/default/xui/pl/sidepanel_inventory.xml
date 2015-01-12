@@ -4,13 +4,17 @@
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_layout_panel">
 				<panel name="marketplace_inbox">
-					<string name="InboxLabelWithArg">Odebrane przedmioty ([NUM])</string>
-					<string name="InboxLabelNoArg">Odebrane przedmioty</string>
+					<string name="InboxLabelWithArg">
+						Odebrane przedmioty ([NUM])
+					</string>
+					<string name="InboxLabelNoArg">
+						Odebrane przedmioty
+					</string>
 					<button label="Odebrane przedmioty" name="inbox_btn"/>
 					<text name="inbox_fresh_new_count">
 						[NUM] nowe/y
 					</text>
-					<panel name="inbox_inventory_placeholder_panel" tool_tip="Przeciągnij przedmioty do swojej Szafy, aby je używać">
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="Przeciągnij przedmioty do swojej Szafy, aby ich używać">
 						<text name="inbox_inventory_placeholder">
 							Rzeczy kupione na Marketplace będą tu dostarczane.
 						</text>

@@ -1318,6 +1318,13 @@ BOOL LLScrollListCtrl::selectItemByPrefix(const std::string& target, BOOL case_s
 // Selects first enabled item that has a name where the name's first part matched the target string.
 // Returns false if item not found.
 BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sensitive)
+// <FS:Ansariel> Allow selection by substring match
+{
+	return selectItemByStringMatch(target, true, case_sensitive);
+}
+
+BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool prefix_match, BOOL case_sensitive)
+// </FS:Ansariel>
 {
 	BOOL found = FALSE;
 
@@ -1369,7 +1376,18 @@ BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sen
 			LLWString trimmed_label = item_label;
 			LLWStringUtil::trim(trimmed_label);
 			
-			BOOL select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
+			// <FS:Ansariel> Allow selection by substring match
+			//BOOL select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
+			BOOL select;
+			if (prefix_match)
+			{
+				select = item->getEnabled() && trimmed_label.compare(0, target_trimmed.size(), target_trimmed) == 0;
+			}
+			else
+			{
+				select = item->getEnabled() && trimmed_label.find(target_trimmed) != std::string::npos;
+			}
+			// </FS:Ansariel>
 
 			if (select)
 			{
@@ -1390,6 +1408,19 @@ BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sen
 
 	return found;
 }
+
+// <FS:Ansariel> Allow selection by substring match
+BOOL LLScrollListCtrl::selectItemBySubstring(const std::string& target, BOOL case_sensitive)
+{
+	return selectItemBySubstring(utf8str_to_wstring(target), case_sensitive);
+}
+
+// Returns false if item not found.
+BOOL LLScrollListCtrl::selectItemBySubstring(const LLWString& target, BOOL case_sensitive)
+{
+	return selectItemByStringMatch(target, false, case_sensitive);
+}
+// </FS:Ansariel>
 
 const std::string LLScrollListCtrl::getSelectedItemLabel(S32 column) const
 {
@@ -1954,6 +1985,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
 			delete mPopupMenu;
+			llassert(LLMenuGL::sMenuContainer != NULL);
 			mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
 				menu_name, LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
 			if (mPopupMenu)

@@ -470,7 +470,7 @@ bool NACLAntiSpamRegistry::checkNewlineFlood(EAntispamQueue queue, const LLUUID&
 		}
 		return false;
 	}
-	return false;
+	return true;
 }
 
 bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source)
@@ -656,8 +656,11 @@ void NACLAntiSpamRegistry::processObjectPropertiesFamily(LLMessageSystem* msg)
 	{
 		AntispamObjectData data = found->second;
 
-		data.mName = LLSLURL("objectim", id, "").getSLURLString() + "?name=" + LLURI::escape(name) + "&owner=" + owner_id.asString();
-		notify(data);
+		if (!isBlockedOnQueue(data.mQueue, owner_id))
+		{
+			data.mName = LLSLURL("objectim", id, "").getSLURLString() + "?name=" + LLURI::escape(name) + "&owner=" + owner_id.asString();
+			notify(data);
+		}
 
 		mObjectData.erase(found);
 	}

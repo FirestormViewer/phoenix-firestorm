@@ -118,11 +118,6 @@ protected:
 	LLNameListCtrl(const Params&);
 	virtual ~LLNameListCtrl()
 	{
-		// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-		//if (mAvatarNameCacheConnection.connected())
-		//{
-		//	mAvatarNameCacheConnection.disconnect();
-		//}
 		for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 		{
 			if (it->second.connected())
@@ -131,7 +126,6 @@ protected:
 			}
 		}
 		mAvatarNameCacheConnections.clear();
-		// </FS:Ansariel>
 	}
 	friend class LLUICtrlFactory;
 public:
@@ -169,21 +163,15 @@ public:
 	/*virtual*/ void mouseOverHighlightNthItem( S32 index );
 private:
 	void showInspector(const LLUUID& avatar_id, bool is_group);
-	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, LLHandle<LLNameListItem> item);
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, std::string suffix, LLHandle<LLNameListItem> item);
-	// </FS:Ansariel>
 
 private:
 	S32    			mNameColumnIndex;
 	std::string		mNameColumn;
 	BOOL			mAllowCallingCardDrop;
 	bool			mShortNames;  // display name only, no SLID
-	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-	//boost::signals2::connection mAvatarNameCacheConnection;
-	typedef boost::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
-	// </FS:Ansariel>
 
 	S32 mPendingLookupsRemaining;
 	namelist_complete_signal_t mNameListCompleteSignal;

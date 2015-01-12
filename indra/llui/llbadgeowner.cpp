@@ -35,8 +35,9 @@
 //
 
 LLBadgeOwner::LLBadgeOwner(LLHandle< LLView > viewHandle)
-	: mBadge(NULL)
-	, mBadgeOwnerView(viewHandle)
+	: mHasBadgeHolderParent(false),
+	mBadge(NULL),
+	mBadgeOwnerView(viewHandle)
 {
 }
 
@@ -45,16 +46,24 @@ void LLBadgeOwner::initBadgeParams(const LLBadge::Params& p)
 	if (!p.equals(LLUICtrlFactory::getDefaultParams<LLBadge>()))
 	{
 		mBadge = createBadge(p);
+		mHasBadgeHolderParent = false;
+
+		LLView * owner_view = mBadgeOwnerView.get();
+		if (owner_view)
+		{
+			mBadge->addToView(owner_view);
+		}
 	}
 }
 
+// <FS:Ansariel> Re-add setBadgeLabel
 void LLBadgeOwner::setBadgeLabel(const LLStringExplicit& label)
 {
 	if (mBadge == NULL)
 	{
 		mBadge = createBadge(LLUICtrlFactory::getDefaultParams<LLBadge>());
 
-		addBadgeToParentPanel();
+		addBadgeToParentHolder();
 	}
 
 	if (mBadge)
@@ -73,6 +82,7 @@ void LLBadgeOwner::setBadgeLabel(const LLStringExplicit& label)
 		}
 	}
 }
+// </FS:Ansariel>
 
 void LLBadgeOwner::setBadgeVisibility(bool visible)
 {
@@ -82,10 +92,8 @@ void LLBadgeOwner::setBadgeVisibility(bool visible)
 	}
 }
 
-bool LLBadgeOwner::addBadgeToParentPanel()
+void LLBadgeOwner::addBadgeToParentHolder()
 {
-	bool badge_added = false;
-
 	LLView * owner_view = mBadgeOwnerView.get();
 	
 	if (mBadge && owner_view)
@@ -110,16 +118,9 @@ bool LLBadgeOwner::addBadgeToParentPanel()
 
 		if (badge_holder)
 		{
-			badge_added = badge_holder->addBadge(mBadge);
-		}
-		else
-		{
-			// Badge parent is fallback badge owner if no valid holder exists in the hierarchy
-			badge_added = mBadge->addToView(owner_view);
+			mHasBadgeHolderParent = badge_holder->addBadge(mBadge);
 		}
 	}
-
-	return badge_added;
 }
 
 LLBadge* LLBadgeOwner::createBadge(const LLBadge::Params& p)

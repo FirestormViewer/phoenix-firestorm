@@ -113,5 +113,5 @@ private:
 };
 
 extern LLViewerKeyboard gViewerKeyboard;
-
+void agent_push_forward(EKeystate s);//<FS:JL> Mouse movement by Singularity
 #endif // LL_LLVIEWERKEYBOARD_H

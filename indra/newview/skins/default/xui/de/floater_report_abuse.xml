@@ -3,6 +3,7 @@
 	<floater.string name="Screenshot">
 		Foto
 	</floater.string>
+	<button name="refresh_screenshot" tool_tip="Foto aktualisieren"/>
 	<check_box bottom_delta="-20" label="Dieses Foto verwenden" name="screen_check"/>
 	<text name="reporter_title">
 		Melder:

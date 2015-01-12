@@ -644,7 +644,7 @@
              height="18"
              name="FSNotifyIMFlash"
              control_name="FSNotifyIMFlash"
-             label="Flash chat toolbar button if new a IM arrives"
+             label="Flash chat toolbar button if a new IM arrives"
              tool_tip="Flashes the chat toolbar button if a new (group) IM arrives. The IM window must be docked to the conversations window and the conversations window must be closed for the button to flash. This option is only available if IMs will be shown in tabs instead of separate windows (see &quot;General&quot; tab)."/>
 
             <check_box
@@ -1780,6 +1780,17 @@
              control_name="FSKeywordCaseSensitive"
              name="FSKeywordCaseSensitive"
              label="All Keywords are case-sensitive"/>
+            <check_box
+             enabled_control="FSKeywordOn"
+             layout="topleft"
+             follows="left|top"
+             top_delta="25"
+             left="20"
+             width="150"
+             height="20"
+             control_name="FSKeywordMatchWholeWords"
+             name="FSKeywordMatchWholeWords"
+             label="Only match whole words"/>
             <text
              layout="topleft"
              follows="left|top"
@@ -1929,6 +1940,44 @@
      commit_callback.function="Pref.TranslationSettings"
      label="Translation...">
     </button>
+    <text
+     top="45"
+     left="20"
+     height="14"
+     width="400"
+     name="textUseKeyboardShortcuts"
+     follows="left|top"
+     layout="topleft">
+          Use Keyboard Shortcuts:
+    </text>
+    <check_box
+     control_name="FSUseCtrlShout"
+     name="FSUseCtrlShout"
+     label="Ctrl+Enter (Shout)"
+     layout="topleft"
+     top_pad="5"
+     left_delta="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Ctrl+Enter to Shout in Nearby Chat."
+     width="155" />
+    <check_box
+     control_name="FSUseShiftWhisper"
+     name="FSUseShiftWhisper"
+     label="Shift+Enter (Whisper)"
+     layout="topleft"
+     left_pad="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Shift+Enter to Whisper in Nearby Chat"
+     width="170" />
+    <check_box
+     control_name="FSUseAltOOC"
+     name="FSUseAltOOC"
+     label="Alt+Enter ((OOC))"
+     layout="topleft"
+     left_pad="10"
+     height="18"
+     tool_tip="Enable this if you would like to use the keyboard shortcut Alt+Enter to send ((OOC)) messages to Nearby Chat."
+     width="110" />
   </panel>
 </tab_container>
 </panel>

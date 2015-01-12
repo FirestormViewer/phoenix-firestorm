@@ -75,43 +75,36 @@ bool LLTextBase::compare_segment_end::operator()(const LLTextSegmentPtr& a, cons
 
 
 // helper functors
-struct LLTextBase::compare_bottom
+bool LLTextBase::compare_bottom::operator()(const S32& a, const LLTextBase::line_info& b) const
 {
-	bool operator()(const S32& a, const LLTextBase::line_info& b) const
-	{
-		return a > b.mRect.mBottom; // bottom of a is higher than bottom of b
-	}
+	return a > b.mRect.mBottom; // bottom of a is higher than bottom of b
+}
 
-	bool operator()(const LLTextBase::line_info& a, const S32& b) const
-	{
-		return a.mRect.mBottom > b; // bottom of a is higher than bottom of b
-	}
+bool LLTextBase::compare_bottom::operator()(const LLTextBase::line_info& a, const S32& b) const
+{
+	return a.mRect.mBottom > b; // bottom of a is higher than bottom of b
+}
 
-	bool operator()(const LLTextBase::line_info& a, const LLTextBase::line_info& b) const
-	{
-		return a.mRect.mBottom > b.mRect.mBottom; // bottom of a is higher than bottom of b
-	}
-
-};
+bool LLTextBase::compare_bottom::operator()(const LLTextBase::line_info& a, const LLTextBase::line_info& b) const
+{
+	return a.mRect.mBottom > b.mRect.mBottom; // bottom of a is higher than bottom of b
+}
 
 // helper functors
-struct LLTextBase::compare_top
+bool LLTextBase::compare_top::operator()(const S32& a, const LLTextBase::line_info& b) const
 {
-	bool operator()(const S32& a, const LLTextBase::line_info& b) const
-	{
-		return a > b.mRect.mTop; // top of a is higher than top of b
-	}
+	return a > b.mRect.mTop; // top of a is higher than top of b
+}
 
-	bool operator()(const LLTextBase::line_info& a, const S32& b) const
-	{
-		return a.mRect.mTop > b; // top of a is higher than top of b
-	}
+bool LLTextBase::compare_top::operator()(const LLTextBase::line_info& a, const S32& b) const
+{
+	return a.mRect.mTop > b; // top of a is higher than top of b
+}
 
-	bool operator()(const LLTextBase::line_info& a, const LLTextBase::line_info& b) const
-	{
-		return a.mRect.mTop > b.mRect.mTop; // top of a is higher than top of b
-	}
-};
+bool LLTextBase::compare_top::operator()(const LLTextBase::line_info& a, const LLTextBase::line_info& b) const
+{
+	return a.mRect.mTop > b.mRect.mTop; // top of a is higher than top of b
+}
 
 struct LLTextBase::line_end_compare
 {
@@ -651,7 +644,8 @@ void LLTextBase::drawText()
 	if ( (getSpellCheck()) && (getWText().length() > 2) )
 	{
 		// Calculate start and end indices for the spell checking range
-		S32 start = line_start, end = getLineEnd(last_line);
+		S32 start = line_start;
+		S32 end   = getLineEnd(last_line);
 
 		if ( (mSpellCheckStart != start) || (mSpellCheckEnd != end) )
 		{
@@ -2163,6 +2157,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 
 	// create and return the context menu from the XUI file
 	delete mPopupMenu;
+	llassert(LLMenuGL::sMenuContainer != NULL);
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(xui_file, LLMenuGL::sMenuContainer,
 																		 LLMenuHolderGL::child_registry_t::instance());	
 	if (mIsFriendSignal)
@@ -2245,7 +2240,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 		LLUrlMatch match;
 		std::string text = new_text;
 		while ( LLUrlRegistry::instance().findUrl(text, match,
-				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
+				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3),isContentTrusted()))
 		{
 			start = match.getStart();
 			end = match.getEnd()+1;
@@ -2274,7 +2269,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// <FS:Ansariel> Optional icon position
 			if (mIconPositioning == LLTextBaseEnums::LEFT)
 			{
-				LLTextUtil::processUrlMatch(&match,this);
+				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 
@@ -2297,10 +2292,10 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			}
 
 			// <FS:Ansariel> Optional icon position
-			//LLTextUtil::processUrlMatch(&match,this);
+			//LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			if (mIconPositioning == LLTextBaseEnums::RIGHT)
 			{
-				LLTextUtil::processUrlMatch(&match,this);
+				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 

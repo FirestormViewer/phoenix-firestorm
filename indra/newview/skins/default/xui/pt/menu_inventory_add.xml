@@ -7,7 +7,6 @@
 		<menu_item_call label="Modelar..." name="Upload Model"/>
 		<menu_item_call label="Assistente de modelagem..." name="Upload Model Wizard"/>
 		<menu_item_call label="Volume ([COST] per file)..." name="Bulk Upload"/>
-		<menu_item_call label="Autorizações de upload padrão" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Nova pasta" name="New Folder"/>
 	<menu_item_call label="Novo script" name="New Script"/>

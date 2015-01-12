@@ -736,14 +736,11 @@ BOOL AOEngine::createAnimationLink(const AOSet* set,AOSet::AOState* state,const 
 		return FALSE;
 	}
 
-	link_inventory_item(
-		gAgent.getID(),
-		item->getUUID(),
-		state->mInventoryUUID,
-		item->getName(),
-		item->getDescription(),
-		LLAssetType::AT_LINK,
-		NULL);
+	LLInventoryObject::const_object_list_t obj_array;
+	obj_array.push_back(LLConstPointer<LLInventoryObject>(item));
+	link_inventory_array(state->mInventoryUUID,
+							obj_array,
+							LLPointer<LLInventoryCallback>(NULL));
 
 	return TRUE;
 }
@@ -840,11 +837,11 @@ void AOEngine::purgeFolder(const LLUUID& uuid) const
 	gInventory.removeCategory(uuid);
 
 	// clean it
-	gInventory.purgeDescendentsOf(uuid);
+	purge_descendents_of(uuid, NULL);
 	gInventory.notifyObservers();
 
 	// purge it
-	gInventory.purgeObject(uuid);
+	remove_inventory_object(uuid, NULL);
 	gInventory.notifyObservers();
 
 	// protect it
@@ -890,7 +887,7 @@ BOOL AOEngine::removeAnimation(const AOSet* set,AOSet::AOState* state,S32 index)
 
 	// purge the item from inventory
 	LL_DEBUGS("AOEngine") << __LINE__ << " purging: " << state->mAnimations[index].mInventoryUUID << LL_ENDL;
-	gInventory.purgeObject(state->mAnimations[index].mInventoryUUID); // item->getUUID());
+	remove_inventory_object(state->mAnimations[index].mInventoryUUID, NULL); // item->getUUID());
 	gInventory.notifyObservers();
 
 	state->mAnimations.erase(state->mAnimations.begin()+index);

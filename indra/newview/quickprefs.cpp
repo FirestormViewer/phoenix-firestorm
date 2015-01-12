@@ -1402,6 +1402,12 @@ void FloaterQuickPrefs::onValuesChanged()
 		return;
 	}
 
+	// don't crash when we try to update values without having a control selected
+	if(mSelectedControl=="")
+	{
+		return;
+	}
+
 	// remember the current and possibly new control names
 	std::string old_control_name=mSelectedControl;
 	std::string new_control_name=mControlNameCombo->getValue();

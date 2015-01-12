@@ -5,7 +5,6 @@
 	bg_alpha_image="floater_script_background"
 	bg_alpha_image_overlay="ScriptDialog"
 	can_close="false"
-	sound_flags="0"
 	background_visible="true"
 	legacy_header_height="18"
 	drop_shadow="false"

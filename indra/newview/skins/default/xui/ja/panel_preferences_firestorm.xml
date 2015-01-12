@@ -354,23 +354,6 @@
           <combo_item name="High" value="High" label="高"/>
         </combo_box>
 		
-        <text name="text_box_permissions">
-          権限
-        </text>
-        <view_border name="PermissionsBorder"/>
-        <text name="text_box_permnextowner">
-          次のオーナー:
-        </text>
-        <check_box label="修正を許可" name="next_owner_modify" tool_tip="修正権限を付与します。" />
-        <check_box label="コピーを許可" tool_tip="コピー権限を付与します。" name="next_owner_copy" />
-        <check_box label="転送を許可" tool_tip="転送権限を付与します。" name="next_owner_transfer" />
-        <text name="text_box_permnote1">
-          この設定は新規アップ
-        </text>
-        <text name="text_box_permnote2">
-          ロードにも適用される
-		</text>
-
         <text name="text_box_pivotpoint">
 			回転の中心
         </text>

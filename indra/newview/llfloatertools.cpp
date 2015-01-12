@@ -674,9 +674,16 @@ void LLFloaterTools::refresh()
 		getChild<LLTextBox>("selection_count")->setText(selection_info.str());
 
 		bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
-		childSetVisible("selection_count",  have_selection);
-		childSetVisible("remaining_capacity", have_selection);
-		childSetVisible("selection_empty", !have_selection);
+		// <FS:Ansariel> FIRE-13838 / VWR-29517: Text and link from other tools is presented in Land tool from Build floater
+		//childSetVisible("selection_count",  have_selection);
+		//childSetVisible("remaining_capacity", have_selection);
+		//childSetVisible("selection_empty", !have_selection);
+		LLTool *tool = LLToolMgr::getInstance()->getCurrentTool();
+		bool land_visible = (tool == LLToolBrushLand::getInstance() || tool == LLToolSelectLand::getInstance() );
+		childSetVisible("selection_count", !land_visible && have_selection);
+		childSetVisible("remaining_capacity", !land_visible && have_selection);
+		childSetVisible("selection_empty", !land_visible && !have_selection);
+		// </FS:Ansariel>
 	}
 
 	// <FS> disable the object and prim counts if nothing selected
@@ -1292,9 +1299,9 @@ void LLFloaterTools::setGridMode(S32 mode)
 
 void LLFloaterTools::onClickGridOptions()
 {
-	LLFloaterReg::showInstance("build_options");
-	// RN: this makes grid options dependent on build tools window
-	//floaterp->addDependentFloater(LLFloaterBuildOptions::getInstance(), FALSE);
+	LLFloater* floaterp = LLFloaterReg::showInstance("build_options");
+	// position floater next to build tools, not over
+	floaterp->setRect(gFloaterView->findNeighboringPosition(this, floaterp));
 }
 
 // static

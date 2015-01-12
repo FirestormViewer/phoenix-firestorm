@@ -137,7 +137,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	//addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     true));
 	//
 	//bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
-	//addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
+	//addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
 	//addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
 
 	addEntry(LLFolderType::FT_TEXTURE, 				new ViewerFolderEntry("Textures",				"Inv_TexturesOpen",		"Inv_TexturesClosed",	FALSE,     true));
@@ -162,7 +162,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_MeshesOpen",		"Inv_MeshesClosed",		FALSE,     true));
 	
-	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
+	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
 	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     !gSavedSettings.getBOOL("InventoryOutboxMakeVisible")));
 	// </FS:Ansariel> Use individual icons for different folder types
 
@@ -176,14 +176,10 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_RLV,					new ViewerFolderEntry("RLV",					"Inv_RLVOpen",			"Inv_RLVClosed",		FALSE,     true));
 	// </FS:Ansariel> Special Firestorm folder
 
-#if SUPPORT_ENSEMBLES
-	initEnsemblesFromFile();
-#else
 	for (U32 type = (U32)LLFolderType::FT_ENSEMBLE_START; type <= (U32)LLFolderType::FT_ENSEMBLE_END; ++type)
 	{
 		addEntry((LLFolderType::EType)type, 		new ViewerFolderEntry("New Folder",				"Inv_FolderOpen",		"Inv_FolderClosed",		FALSE,     false));
-	}	
-#endif
+	}
 }
 
 bool LLViewerFolderDictionary::initEnsemblesFromFile()
