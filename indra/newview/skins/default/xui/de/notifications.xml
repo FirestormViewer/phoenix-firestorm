@@ -4197,6 +4197,10 @@ Wählen Sie ein kleineres Stück Land aus.
 		Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="DefaultObjectPermissions">
+		Es ist ein Problem beim Speichern der Standardberechtigungen aufgetreten. Ursache: [REASON]. Bitte versuchen Sie in ein paar Minuten noch einmal die Standardberechtigungen zu speichern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ChatHistoryIsBusyAlert">
 		Chatverlaufsdatei ist noch mit vorheriger Operation beschäftigt. Versuchen Sie es in ein paar Minuten noch einmal oder chatten Sie mit einer anderen Person.
 		<usetemplate name="okbutton" yestext="OK"/>

@@ -12,5 +12,6 @@
 	<text name="BackgroundYieldTimeText">
 		Zeit in Millisekunden, die pro Frame an andere Anwendungen abgegeben werden, wenn [APP_NAME] nicht im Vordergrund ist [Standard: 40; 1 Sekunde = 1000 Millisekunden]
 	</text>
-    <button label="Alle Einstellungen zurücksetzen" label_selected="Alle Einstellungen zurücksetzen..." name="clear_settings"/>
+	<button label="Standard-Erstellungsberechtigungen" name="default_creation_permissions"/>
+	<button label="Alle Einstellungen zurücksetzen" label_selected="Alle Einstellungen zurücksetzen..." name="clear_settings"/>
 </panel>

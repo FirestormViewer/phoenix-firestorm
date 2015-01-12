@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="perms default" title="Standard-Erstellungsberechtigungen">
+	<panel name="default permissions" label="Standardberechtigungen">
+		<text name="txt_next_owner">
+			Nächster Besitzer:
+		</text>
+		<text name="txt_copy">
+			Kopieren
+		</text>
+		<text name="txt_modify">
+			Bearbeiten
+		</text>
+		<text name="txt_transfer">
+			Transferieren
+		</text>
+		<text name="txt_share_with_group">
+			Teilen mit Gruppe
+		</text>
+		<text name="txt_anyone_copy">
+			Jederman Kopieren erlauben
+		</text>
+		<text name="txt_objects" tool_tip="Standardberechtigungen für Objekte, die erzeugt werden">
+			Objekte
+		</text>
+		<text name="txt_uploads" tool_tip="Standardberechtigungen für hochgeladene Objekte">
+			Uploads
+		</text>
+		<text name="txt_scripts" tool_tip="Standardberechtigungen für Skripte, die erzeugt werden">
+			Skripte
+		</text>
+		<text name="txt_notecards" tool_tip="Standardberechtigungen für Notizkarten, die erzeugt werden">
+			Notizkarten
+		</text>
+		<text name="txt_gestures" tool_tip="Standardberechtigungen für Gesten, die erzeugt werden">
+			Gesten
+		</text>
+		<text name="txt_wearables" tool_tip="Standardberechtigungen für Kleidung oder Körperteile, die erzeugt werden">
+			Kleidung
+		</text>
+	</panel>
+	<button label="OK" label_selected="OK" name="ok"/>
+	<button label="Abbrechen" label_selected="Abbrechen" name="cancel"/>
+</floater>

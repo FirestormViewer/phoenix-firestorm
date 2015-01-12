@@ -428,6 +428,7 @@
 			<menu_item_check label="Detailstufeninfos" name="LOD Info"/>
 			<menu_item_check label="Konstruktionswarteschlange" name="Build Queue"/>
 			<menu_item_check label="Lichter" name="Lights"/>
+			<menu_item_check label="Partikel" name="Particles"/>
 			<menu_item_check label="Gelenkpunkte" name="Collision Skeleton"/>
 			<menu_item_check label="Joints" name="Joints"/>
 			<menu_item_check label="Raycast" name="Raycast"/>

@@ -956,6 +956,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="use_texture">
 		Textur verwenden
 	</string>
+	<string name="manip_hint1">
+		Mauscursor über Maßstab zum
+	</string>
+	<string name="manip_hint2">
+		Einrasten am Raster bewegen
+	</string>
 	<string name="texture_loading">
 		Wird geladen...
 	</string>
