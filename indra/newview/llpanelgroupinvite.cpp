@@ -492,7 +492,7 @@ void LLPanelGroupInvite::addUsers(uuid_vec_t& agent_ids)
 			} 
 			else 
 			{
-				LL_WARNS() << "llPanelGroupInvite: Selected avatar has no name: " << dest->getID() << LL_ENDL;
+				llwarns << "llPanelGroupInvite: Selected avatar has no name: " << dest->getID() << llendl;
 				names.push_back("(Unknown)");
 			}
 		}

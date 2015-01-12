@@ -64,7 +64,8 @@ LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
 	mNameColumnIndex(p.name_column.column_index),
 	mNameColumn(p.name_column.column_name),
 	mAllowCallingCardDrop(p.allow_calling_card_drop),
-	mShortNames(p.short_names)
+	mShortNames(p.short_names),
+	mPendingLookupsRemaining(0)
 {}
 
 // public

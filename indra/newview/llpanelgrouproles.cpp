@@ -2024,7 +2024,7 @@ bool LLPanelGroupRolesSubTab::needsApply(std::string& mesg)
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if(!gdatap)
 	{
-		LL_WARNS() << "Unable to get group data for group " << mGroupID << LL_ENDL;
+		llwarns << "Unable to get group data for group " << mGroupID << llendl;
 		return false;
 	}
 
@@ -2412,8 +2412,8 @@ void LLPanelGroupRolesSubTab::handleActionCheck(LLUICtrl* ctrl, bool force)
 		}
 		else
 		{
-			LL_WARNS() << "Unable to look up role information for role id: "
-					<< role_id << LL_ENDL;
+				LL_WARNS() << "Unable to look up role information for role id: "
+						<< role_id << LL_ENDL;
 		}
 	}
 
@@ -2452,9 +2452,8 @@ void LLPanelGroupRolesSubTab::handleActionCheck(LLUICtrl* ctrl, bool force)
 		}
 		else
 		{
-			LL_WARNS() << "Unable to look up role information for role id: "
-				<< role_id << 
-				LL_ENDL;
+			llwarns << "Unable to look up role information for role id: "
+				<< role_id << llendl;
 		}
 		
 		//////////////////////////////////////////////////////////////////////////
@@ -2903,6 +2902,7 @@ void LLPanelGroupActionsSubTab::setGroupID(const LLUUID& id)
 	LLPanelGroupSubTab::setGroupID(id);
 }
 
+
 // LLPanelGroupBanListSubTab /////////////////////////////////////////////
 static LLPanelInjector<LLPanelGroupBanListSubTab> t_panel_group_ban_subtab("panel_group_banlist_subtab");
 
@@ -3153,17 +3153,18 @@ void LLPanelGroupBanListSubTab::populateBanList()
 		
 		ban_entry.columns.add().column("name").font.name("SANSSERIF_SMALL").style("NORMAL");
 
+		// Baker TODO: MAINT-
 		// Check out utc_to_pacific_time()
 
 		std::string ban_date_str = bd.mBanDate.toHTTPDateString("%Y/%m/%d");
-		time_t utc_time;
-		utc_time = time_corrected();
-		LLSD substitution;
-		substitution["datetime"] = (S32) utc_time;
-		LLStringUtil::format (ban_date_str, substitution);
+// 		time_t utc_time;
+// 		utc_time = time_corrected();
+// 		LLSD substitution;
+// 		substitution["datetime"] = (S32) utc_time;
+// 		LLStringUtil::format (ban_date_str, substitution);
 
-		LL_INFOS("BAKER") << "[BAKER] BAN_DATE: " << bd.mBanDate.toHTTPDateString("%Y/%m/%d") << LL_ENDL;
-		LL_INFOS("BAKER") << "[BAKER] BAN_DATE_MODIFIED: " << ban_date_str << LL_ENDL;
+		//LL_INFOS("BAKER") << "[BAKER] BAN_DATE: " << bd.mBanDate.toHTTPDateString("%Y/%m/%d") << LL_ENDL;
+		//LL_INFOS("BAKER") << "[BAKER] BAN_DATE_MODIFIED: " << ban_date_str << LL_ENDL;
 
 		//ban_entry.columns.add().column("ban_date").value(ban_date_str.font.name("SANSSERIF_SMALL").style("NORMAL");
 		ban_entry.columns.add().column("ban_date").value(bd.mBanDate.toHTTPDateString("%Y/%m/%d")).font.name("SANSSERIF_SMALL").style("NORMAL");

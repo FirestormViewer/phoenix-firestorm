@@ -1893,8 +1893,8 @@ class GroupBanDataResponder : public LLHTTPClient::Responder
 public:
 	GroupBanDataResponder(const LLUUID& gropup_id, BOOL force_refresh=false);
 	virtual ~GroupBanDataResponder() {}
-	virtual void result(const LLSD& pContent);
-	virtual void errorWithContent(U32 pStatus, const std::string& pReason, const LLSD& pContent);
+	virtual void httpSuccess();
+	virtual void httpFailure();
 private:
 	LLUUID mGroupID;
 	BOOL mForceRefresh;
@@ -1905,18 +1905,18 @@ GroupBanDataResponder::GroupBanDataResponder(const LLUUID& gropup_id, BOOL force
 	mForceRefresh(force_refresh)
 {}
 
-void GroupBanDataResponder::errorWithContent(U32 pStatus, const std::string& pReason, const LLSD& pContent)
+void GroupBanDataResponder::httpFailure()
 {
 	LL_WARNS("GrpMgr") << "Error receiving group member data [status:" 
-		<< pStatus << "]: " << pContent << LL_ENDL;
+		<< mStatus << "]: " << mContent << LL_ENDL;
 }
 
-void GroupBanDataResponder::result(const LLSD& content)
+void GroupBanDataResponder::httpSuccess()
 {
-	if (content.has("ban_list"))
+	if (mContent.has("ban_list"))
 	{
 		// group ban data received
-		LLGroupMgr::processGroupBanRequest(content);
+		LLGroupMgr::processGroupBanRequest(mContent);
 	}
 	else if (mForceRefresh)
 	{
@@ -2179,6 +2179,22 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 			online_status,
 			is_owner);
 
+		LLGroupMemberData* member_old = group_datap->mMembers[member_id];
+		if (member_old && group_datap->mRoleMemberDataComplete)
+		{
+			LLGroupMemberData::role_list_t::iterator rit = member_old->roleBegin();
+			LLGroupMemberData::role_list_t::iterator end = member_old->roleEnd();
+
+			for ( ; rit != end; ++rit)
+			{
+				data->addRole((*rit).first,(*rit).second);
+			}
+		}
+		else
+		{
+			group_datap->mRoleMemberDataComplete = false;
+		}
+
 		group_datap->mMembers[member_id] = data;
 	}
 
@@ -2198,7 +2214,7 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 	group_datap->mMemberDataComplete = true;
 	group_datap->mMemberRequestID.setNull();
 	// Make the role-member data request
-	if (group_datap->mPendingRoleMemberRequest)
+	if (group_datap->mPendingRoleMemberRequest || !group_datap->mRoleMemberDataComplete)
 	{
 		group_datap->mPendingRoleMemberRequest = false;
 		LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(group_id);
