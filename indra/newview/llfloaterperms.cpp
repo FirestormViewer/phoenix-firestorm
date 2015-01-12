@@ -174,9 +174,15 @@ public:
 private:
 	static	std::string sPreviousReason;
 
-	void error(U32 status, const std::string& reason)
+	// <FS:Ansariel> Update for new cURL API
+	//void error(U32 status, const std::string& reason)
+	void httpFailure()
+	// </FS:Ansariel>
 	{
 		// Do not display the same error more than once in a row
+		// <FS:Ansariel> Update for new cURL API
+		std::string reason = getReason();
+		// </FS:Ansariel>
 		if (reason != sPreviousReason)
 		{
 			sPreviousReason = reason;
@@ -185,7 +191,10 @@ private:
 			LLNotificationsUtil::add("DefaultObjectPermissions", args);
 		}
 	}
-	void result(const LLSD& content)
+	// <FS:Ansariel> Update for new cURL API
+	//void result(const LLSD& content)
+	void httpSuccess()
+	// </FS:Ansariel>
 	{
 		// Since we have had a successful POST call be sure to display the next error message
 		// even if it is the same as a previous one.
