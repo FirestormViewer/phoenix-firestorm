@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_script_editor_prefs" title="Einstellungen Skript-Editor">
+<floater name="floater_script_colors" title="Einstellungen Skript-Editor">
 	<text name="color_pickers_label">
 		Gewünschte Farben auswählen:
 	</text>

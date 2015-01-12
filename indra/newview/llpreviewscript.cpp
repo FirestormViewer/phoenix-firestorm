@@ -722,7 +722,7 @@ void LLScriptEdCore::updateButtonBar()
 //static
 void LLScriptEdCore::onBtnPrefs(void* userdata)
 {
-	LLFloaterReg::showInstance("fs_script_editor_prefs");
+	LLFloaterReg::showInstance("script_colors");
 }
 // </FS:CR>
 
