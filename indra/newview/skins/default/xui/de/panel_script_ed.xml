@@ -58,9 +58,9 @@
 			<button tool_tip="Einstellungen Skript-Editor" name="prefs_btn"/>
 		</layout_panel>
 	</layout_stack>
-	<text_editor name="Script Editor">
+	<script_editor name="Script Editor">
 		Wird geladen...
-	</text_editor>
+	</script_editor>
 	<combo_box label="Einfügen..." name="Insert..."/>
 	<button label="Bearbeiten..." name="edit_btn_2"/>
 	<button label="Speichern" name="save_btn_2"/>

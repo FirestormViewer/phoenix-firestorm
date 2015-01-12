@@ -60,14 +60,14 @@
 	</layout_stack>
 	<tab_container name="Tabset">
 		<panel name="Script" label="Skript">
-			<text_editor name="Script Editor">
+			<script_editor name="Script Editor">
 				Wird geladen...
-			</text_editor>
+			</script_editor>
 		</panel>
 		<panel name="Preprocessed" label="Präprozessiert">
-			<text_editor name="Post Editor">
+			<script_editor name="Post Editor">
 				Wird geladen...
-			</text_editor>
+			</script_editor>
 		</panel>
 	</tab_container>
 	<combo_box label="Einfügen..." name="Insert..."/>

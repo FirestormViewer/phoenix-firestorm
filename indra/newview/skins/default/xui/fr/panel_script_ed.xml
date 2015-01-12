@@ -41,9 +41,9 @@
 			<menu_item_call label="Aide par mots-clés..." name="Keyword Help..."/>
 		</menu>
 	</menu_bar>
-	<text_editor name="Script Editor">
+	<script_editor name="Script Editor">
 		Chargement...
-	</text_editor>
+	</script_editor>
 	<combo_box label="Insérer..." name="Insert..."/>
 	<button label="Enregistrer" label_selected="Enregistrer" name="Save_btn"/>
 	<button label="Modifier..." name="Edit_btn"/>

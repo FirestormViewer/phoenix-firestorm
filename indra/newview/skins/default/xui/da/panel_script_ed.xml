@@ -38,9 +38,9 @@
 			<menu_item_call label="Hjælp med keywords..." name="Keyword Help..."/>
 		</menu>
 	</menu_bar>
-	<text_editor name="Script Editor">
+	<script_editor name="Script Editor">
 		Henter...
-	</text_editor>
+	</script_editor>
 	<combo_box label="Indsæt..." name="Insert..."/>
 	<button label="Gem" label_selected="Gem" name="Save_btn"/>
 	<button label="Redigér..." name="Edit_btn"/>

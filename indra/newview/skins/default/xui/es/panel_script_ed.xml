@@ -58,9 +58,9 @@
 			<button tool_tip="Preferencias" name="prefs_btn"/>
 		</layout_panel>
 	</layout_stack>
-	<text_editor name="Script Editor">
+	<script_editor name="Script Editor">
 		Cargando...
-	</text_editor>
+	</script_editor>
 	<combo_box label="Insertar..." name="Insert..."/>
 	<text name="line_col" value="Línea 0, Columna 0"/>
 	<button label="Editar..." name="edit_btn_2"/>
