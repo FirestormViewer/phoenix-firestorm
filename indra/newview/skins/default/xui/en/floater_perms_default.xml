@@ -6,7 +6,7 @@
  name="perms default"
  help_topic="perms_default"
  save_rect="true"
- title="DEFAULT CREATION PERMISSIONS"
+ title="Default Creation Permissions"
  width="700">
   <panel
    follows="left|top|right|bottom"
