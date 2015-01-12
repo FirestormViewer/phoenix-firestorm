@@ -100,6 +100,7 @@
 #include "lltrans.h"
 #include "llsdutil.h"
 #include "llmediaentry.h"
+#include "llfloaterperms.h"
 #include "llvocache.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
@@ -2781,6 +2782,7 @@ void LLViewerObject::saveScript(
 	 * interaction with doUpdateInventory() called below.
 	 */
 	LL_DEBUGS() << "LLViewerObject::saveScript() " << item->getUUID() << " " << item->getAssetUUID() << LL_ENDL;
+
 	LLPointer<LLViewerInventoryItem> task_item =
 		new LLViewerInventoryItem(item->getUUID(), mID, item->getPermissions(),
 								  item->getAssetUUID(), item->getType(),

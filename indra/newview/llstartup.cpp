@@ -2558,10 +2558,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 		
 		// <FS:CR> Load dynamic script library from xml
-		if (!gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "scriptlibrary_lsl.xml")))
-		{
-			gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_lsl.xml"));
-		}
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{

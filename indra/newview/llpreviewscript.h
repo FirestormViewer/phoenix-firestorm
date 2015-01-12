@@ -34,10 +34,11 @@
 #include "lliconctrl.h"
 #include "llframetimer.h"
 #include "llfloatergotoline.h"
+#include "llsyntaxid.h"
 
 class LLLiveLSLFile;
 class LLMessageSystem;
-class LLTextEditor;
+class LLScriptEditor;
 class LLButton;
 class LLCheckBoxCtrl;
 class LLScrollListCtrl;
@@ -83,11 +84,15 @@ protected:
 		// </FS:Ansariel>
 		void (*search_replace_callback)(void* userdata),
 		void* userdata,
+		bool live,
 		S32 bottom_pad = 0);	// pad below bottom row of buttons
 public:
 	~LLScriptEdCore();
 	
+	void			initializeKeywords();
 	void			initMenu();
+	void			processKeywords();
+	void			processLoaded();
 
 	virtual void	draw();
 	/*virtual*/	BOOL	postBuild();
@@ -157,9 +162,11 @@ protected:
 	void addHelpItemToHistory(const std::string& help_string);
 	static void onErrorList(LLUICtrl*, void* user_data);
 
+	bool			mLive;
+
 private:
 	std::string		mSampleText;
-	LLTextEditor*	mEditor;
+	LLScriptEditor*	mEditor;
 	void			(*mLoadCallback)(void* userdata);
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
 	//void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
@@ -195,11 +202,15 @@ private:
 // </FS:CR>
 	// NaCl - LSL Preprocessor
 	FSLSLPreprocessor* mLSLProc;
-	LLTextEditor*	mPostEditor;
+	LLScriptEditor*	mPostEditor;
 	std::string		mPostScript;
 	// NaCl End
 
 	LLScriptEdContainer* mContainer; // parent view
+
+public:
+	boost::signals2::connection mSyntaxIDConnection;
+
 };
 
 class LLScriptEdContainer : public LLPreview
@@ -208,6 +219,7 @@ class LLScriptEdContainer : public LLPreview
 
 public:
 	LLScriptEdContainer(const LLSD& key);
+	LLScriptEdContainer(const LLSD& key, const bool live);
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	/*virtual*/ ~LLScriptEdContainer();
 
@@ -231,7 +243,7 @@ protected:
 // [/SL:KB]
 };
 
-// Used to view and edit a LSL from your inventory.
+// Used to view and edit an LSL script from your inventory.
 class LLPreviewLSL : public LLScriptEdContainer
 {
 public:
@@ -242,7 +254,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
 // [/SL:KB]
 
 protected:
@@ -286,7 +298,7 @@ protected:
 };
 
 
-// Used to view and edit an LSL that is attached to an object.
+// Used to view and edit an LSL script that is attached to an object.
 class LLLiveLSLEditor : public LLScriptEdContainer
 {
 	friend class LLLiveLSLFile;
@@ -314,7 +326,7 @@ public:
 // </FS:TT>
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLTextEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
+	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
 // [/SL:KB]
 
 private:

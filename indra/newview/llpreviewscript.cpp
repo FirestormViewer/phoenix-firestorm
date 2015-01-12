@@ -34,6 +34,7 @@
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
 #include "lldir.h"
+#include "llenvmanager.h"
 #include "llexternaleditor.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -51,14 +52,12 @@
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
 #include "llscrolllistcell.h"
+#include "llsdserialize.h"
 #include "llslider.h"
 // <FS:CR> Removed LSO Compiler
 //#include "lscript_rt_interface.h"
-//#include "lscript_library.h"
-//#include "lscript_export.h"
 #include "fsscriptlibrary.h"
 // </FS:CR>
-#include "lltextbox.h"
 #include "lltooldraganddrop.h"
 #include "llvfile.h"
 
@@ -74,6 +73,7 @@
 #include "llkeyboard.h"
 #include "llscrollcontainer.h"
 #include "llcheckboxctrl.h"
+#include "llscripteditor.h"
 #include "llselectmgr.h"
 #include "lltooldraganddrop.h"
 #include "llscrolllistctrl.h"
@@ -82,7 +82,6 @@
 #include "lldir.h"
 #include "llcombobox.h"
 #include "llviewerstats.h"
-#include "llviewertexteditor.h"
 #include "llviewerwindow.h"
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
@@ -406,6 +405,7 @@ LLScriptEdCore::LLScriptEdCore(
 	// </FS:Ansariel>
 	void (*search_replace_callback) (void* userdata),
 	void* userdata,
+	bool live,
 	S32 bottom_pad)
 	:
 	LLPanel(),
@@ -420,6 +420,7 @@ LLScriptEdCore::LLScriptEdCore(
 	mLiveHelpHistorySize(0),
 	mEnableSave(FALSE),
 	mLiveFile(NULL),
+	mLive(live),
 	mContainer(container),
 	// <FS:CR> FIRE-10606, patch by Sei Lisa
 	mLSLProc(NULL),
@@ -457,6 +458,10 @@ LLScriptEdCore::~LLScriptEdCore()
 //	}
 
 	delete mLiveFile;
+	if (mSyntaxIDConnection.connected())
+	{
+		mSyntaxIDConnection.disconnect();
+	}
 }
 
 
@@ -479,17 +484,16 @@ BOOL LLScriptEdCore::postBuild()
 
 	mErrorList = getChild<LLScrollListCtrl>("lsl errors");
 
-	mFunctions = getChild<LLComboBox>( "Insert...");
+	mFunctions = getChild<LLComboBox>("Insert...");
 
 	childSetCommitCallback("Insert...", &LLScriptEdCore::onBtnInsertFunction, this);
 
-	mEditor = getChild<LLViewerTextEditor>("Script Editor");
+	mEditor = getChild<LLScriptEditor>("Script Editor");
 
 	// NaCl - LSL Preprocessor
-	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-	if (_NACL_LSLPreprocessor)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
-		mPostEditor = getChild<LLViewerTextEditor>("Post Editor");
+		mPostEditor = getChild<LLScriptEditor>("Post Editor");
 		if (mPostEditor)
 		{
 			mPostEditor->setFollowsAll();
@@ -509,7 +513,23 @@ BOOL LLScriptEdCore::postBuild()
 	initMenu();
 	initButtonBar();	// <FS:CR> Advanced Script Editor
 
+	mSyntaxIDConnection = LLSyntaxIdLSL::getInstance()->addSyntaxIDCallback(boost::bind(&LLScriptEdCore::processKeywords, this));
 
+	// Intialise keyword highlighting for the current simulator's version of LSL
+	LLSyntaxIdLSL::getInstance()->initialize();
+	processKeywords();
+
+	return TRUE;
+}
+
+void LLScriptEdCore::processKeywords()
+{
+	LL_DEBUGS("SyntaxLSL") << "Processing keywords" << LL_ENDL;
+	mEditor->clearSegments();
+	mEditor->initKeywords();
+	mEditor->loadKeywords();
+
+	// <FS:Ansariel> Re-add legacy format support
 	std::vector<std::string> funcs;
 	std::vector<std::string> tooltips;
 	for (std::vector<LLScriptLibraryFunction>::const_iterator i = gScriptLibrary.mFunctions.begin();
@@ -520,11 +540,7 @@ BOOL LLScriptEdCore::postBuild()
 		{
 			std::string name = i->mName;
 			funcs.push_back(name);
-			
-			// <FS:CR> Dynamically loaded script library 
-			//std::string desc_name = "LSLTipText_";
-			//desc_name += name;
-			//std::string desc = LLTrans::getString(desc_name);
+
 			std::string desc = i->mDesc;
 			
 			F32 sleep_time = i->mSleepTime;
@@ -542,36 +558,30 @@ BOOL LLScriptEdCore::postBuild()
 			LLStringUtil::replaceString( desc, ";", "\n" );
 			
 			LL_DEBUGS() << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << LL_ENDL;
-			// </FS:CR>
 			
 			tooltips.push_back(desc);
 		}
 	}
-	
-	// <FS:CR> Customizable function color
-	//LLColor3 color(0.5f, 0.5f, 0.15f);
-	LLColor3 color(LLUIColorTable::instance().getColor("ScriptFunction"));
-	// </FS:CR>
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
-	if (_NACL_LSLPreprocessor)
+
+	LLColor3 color(LLUIColorTable::instance().getColor("SyntaxLslFunction"));
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
-// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
 	if (LLGridManager::getInstance()->isInAuroraSim())
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
-// </FS:CR>
+	// </FS:Ansariel>
 	
-	std::vector<std::string> primary_keywords;
-	std::vector<std::string> secondary_keywords;
+	string_vec_t primary_keywords;
+	string_vec_t secondary_keywords;
 	LLKeywordToken *token;
 	LLKeywords::keyword_iterator_t token_it;
 	for (token_it = mEditor->keywordsBegin(); token_it != mEditor->keywordsEnd(); ++token_it)
 	{
 		token = token_it->second;
-		if (token->getColor() == color) // Wow, what a disgusting hack.
+		if (token->getType() == LLKeywordToken::TT_FUNCTION)
 		{
 			primary_keywords.push_back( wstring_to_utf8str(token->getToken()) );
 		}
@@ -582,39 +592,32 @@ BOOL LLScriptEdCore::postBuild()
 	}
 
 	// NaCl - LSL Preprocessor
-	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
-	if(mPostEditor)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
 	{
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
+		mPostEditor->clearSegments();
+		mPostEditor->initKeywords();
+		mPostEditor->loadKeywords();
+
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
-		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
 		if (LLGridManager::getInstance()->isInAuroraSim())
 			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
-		// </FS:CR>
 	}
 	// NaCl End
 
-	// Case-insensitive dictionary sort for primary keywords. We don't sort the secondary
-	// keywords. They're intelligently grouped in keywords.ini.
-	std::stable_sort( primary_keywords.begin(), primary_keywords.end(), LLSECKeywordCompare() );
-
-	for (std::vector<std::string>::const_iterator iter= primary_keywords.begin();
-			iter!= primary_keywords.end(); ++iter)
+	for (string_vec_t::const_iterator iter = primary_keywords.begin();
+		 iter!= primary_keywords.end(); ++iter)
 	{
 		mFunctions->add(*iter);
 	}
-
-	for (std::vector<std::string>::const_iterator iter= secondary_keywords.begin();
-			iter!= secondary_keywords.end(); ++iter)
+	for (string_vec_t::const_iterator iter = secondary_keywords.begin();
+		 iter!= secondary_keywords.end(); ++iter)
 	{
 		mFunctions->add(*iter);
 	}
-
-	return TRUE;
 }
 
 void LLScriptEdCore::initMenu()
@@ -917,7 +920,7 @@ void LLScriptEdCore::updateDynamicHelp(BOOL immediate)
 	std::vector<LLTextSegmentPtr>::iterator segment_iter;
 	for (segment_iter = selected_segments.begin(); segment_iter != selected_segments.end(); ++segment_iter)
 	{
-		if((*segment_iter)->getToken() && (*segment_iter)->getToken()->getType() == LLKeywordToken::WORD)
+		if((*segment_iter)->getToken() && (*segment_iter)->getToken()->getType() == LLKeywordToken::TT_WORD)
 		{
 			segment = *segment_iter;
 			break;
@@ -928,7 +931,7 @@ void LLScriptEdCore::updateDynamicHelp(BOOL immediate)
 	if (!segment)
 	{
 		const LLTextSegmentPtr test_segment = mEditor->getPreviousSegment();
-		if(test_segment->getToken() && test_segment->getToken()->getType() == LLKeywordToken::WORD)
+		if(test_segment->getToken() && test_segment->getToken()->getType() == LLKeywordToken::TT_WORD)
 		{
 			segment = test_segment;
 		}
@@ -1516,8 +1519,8 @@ bool LLScriptEdCore::enableLoadFromFileMenu(void* userdata)
 /// LLScriptEdContainer
 /// ---------------------------------------------------------------------------
 
-LLScriptEdContainer::LLScriptEdContainer(const LLSD& key)
-:	LLPreview(key)
+LLScriptEdContainer::LLScriptEdContainer(const LLSD& key) :
+	LLPreview(key)
 ,	mScriptEd(NULL)
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 ,	mBackupTimer(NULL)
@@ -1650,8 +1653,8 @@ void* LLPreviewLSL::createScriptEdPanel(void* userdata)
 								   LLPreviewLSL::onSave,
 								   LLPreviewLSL::onSearchReplace,
 								   self,
+								   false,
 								   0);
-
 	return self->mScriptEd;
 }
 
@@ -1666,7 +1669,7 @@ LLPreviewLSL::LLPreviewLSL(const LLSD& key )
 // virtual
 BOOL LLPreviewLSL::postBuild()
 {
-	const LLInventoryItem* item = getItem();	
+	const LLInventoryItem* item = getItem();
 
 	llassert(item);
 	if (item)
@@ -2173,7 +2176,6 @@ void LLPreviewLSL::onLoadComplete( LLVFS *vfs, const LLUUID& asset_uuid, LLAsset
 //static 
 void* LLLiveLSLEditor::createScriptEdPanel(void* userdata)
 {
-	
 	LLLiveLSLEditor *self = (LLLiveLSLEditor*)userdata;
 
 	self->mScriptEd =  new LLScriptEdCore(
@@ -2184,8 +2186,8 @@ void* LLLiveLSLEditor::createScriptEdPanel(void* userdata)
 								   &LLLiveLSLEditor::onSave,
 								   &LLLiveLSLEditor::onSearchReplace,
 								   self,
+								   true,
 								   0);
-
 	return self->mScriptEd;
 }
 

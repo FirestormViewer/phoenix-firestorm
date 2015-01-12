@@ -53,6 +53,7 @@
 #include "llfloatersearchreplace.h"
 #include "llpreviewnotecard.h"
 #include "llpreviewscript.h"
+#include "llscripteditor.h"
 // [/SL:KB]
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"

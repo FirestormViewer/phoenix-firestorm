@@ -130,8 +130,8 @@ Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 !include "FileFunc.nsh"     ; For GetParameters, GetOptions
 !insertmacro GetParameters
 !insertmacro GetOptions
-!include WinVer.nsh			; for OS and SP detection
-!include x64.nsh
+!include WinVer.nsh			; For OS and SP detection
+!include x64.nsh			; For 64bit OS detection
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; After install completes, launch app
@@ -869,7 +869,7 @@ SectionEnd 				; end of uninstall section
 ;;  entry to the language ID selector below
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInit
-Call CheckWindowsVersion		;Check the version of windows we are installing on
+Call CheckWindowsVersion		; Don't install On unsupported systems
     Push $0
     ${GetParameters} $COMMANDLINE              ; get our command line
 

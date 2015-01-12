@@ -2,7 +2,7 @@
 
 # Growl is actually libnotify on linux systems.
 
-if (STANDALONE)
+if (USESYSTEMLIBS)
     if( LINUX )
 	  add_definitions( -DHAS_GROWL)
     endif( LINUX )
@@ -10,7 +10,7 @@ if (STANDALONE)
     #include(FindLibnotify)
     #set(GROWL_INCLUDE_DIRS ${LIBNOTIFY_INCLUDE_DIR})
     #set(GROWL_LIBRARY ${LIBNOTIFY_LIBRARIES})
-else (STANDALONE)
+else (USESYSTEMLIBS)
     if (DARWIN OR WINDOWS)
       include(Prebuilt)
       use_prebuilt_binary(Growl)
@@ -20,4 +20,4 @@ else (STANDALONE)
 	elseif (LINUX)
       add_definitions( -DHAS_GROWL)
     endif ()
-endif (STANDALONE)
+endif (USESYSTEMLIBS)

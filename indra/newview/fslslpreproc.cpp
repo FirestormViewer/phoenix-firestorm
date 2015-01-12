@@ -51,6 +51,7 @@
 #include "llviewerinventory.h"
 #include "llvfile.h"
 #include "llvoavatarself.h"
+#include "llscripteditor.h"
 // NaCl End
 
 #include "fscommon.h"

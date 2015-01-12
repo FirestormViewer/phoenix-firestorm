@@ -123,10 +123,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxSection" />
+		parameter="SyntaxLslSection" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxSection" />
+		parameter="SyntaxLslSection" />
     </color_swatch>
     <text
 		type="string"
@@ -153,10 +153,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxDataType" />
+		parameter="SyntaxLslDataType" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxDataType" />
+		parameter="SyntaxLslDataType" />
     </color_swatch>
     <text
 		type="string"
@@ -183,10 +183,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxEvent" />
+		parameter="SyntaxLslEvent" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxEvent" />
+		parameter="SyntaxLslEvent" />
     </color_swatch>
     <text
 		type="string"
@@ -213,10 +213,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxComment" />
+		parameter="SyntaxLslComment" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxComment" />
+		parameter="SyntaxLslComment" />
     </color_swatch>
     <text
 		type="string"
@@ -243,10 +243,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="ScriptFunction" />
+		parameter="SyntaxLslFunction" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="ScriptFunction" />
+		parameter="SyntaxLslFunction" />
     </color_swatch>
     <text
 		type="string"
@@ -273,10 +273,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxStringLiteral" />
+		parameter="SyntaxLslStringLiteral" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxStringLiteral" />
+		parameter="SyntaxLslStringLiteral" />
     </color_swatch>
     <text
 		type="string"
@@ -304,10 +304,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxIntegerConstant" />
+		parameter="SyntaxLslIntegerConstant" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxIntegerConstant" />
+		parameter="SyntaxLslIntegerConstant" />
     </color_swatch>
     <text
 		type="string"
@@ -334,10 +334,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxStringConstant" />
+		parameter="SyntaxLslStringConstant" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxStringConstant" />
+		parameter="SyntaxLslStringConstant" />
     </color_swatch>
     <text
 		type="string"
@@ -364,10 +364,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxFloatConstant" />
+		parameter="SyntaxLslFloatConstant" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxFloatConstant" />
+		parameter="SyntaxLslFloatConstant" />
     </color_swatch>
     <text
 		type="string"
@@ -394,10 +394,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxCompoundConstant" />
+		parameter="SyntaxLslCompoundConstant" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxCompoundConstant" />
+		parameter="SyntaxLslCompoundConstant" />
     </color_swatch>
     <text
 		type="string"
@@ -424,10 +424,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxFlowControl" />
+		parameter="SyntaxLslControlFlow" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxFlowControl" />
+		parameter="SyntaxLslControlFlow" />
     </color_swatch>
     <text
 		type="string"
@@ -454,10 +454,10 @@
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
-		parameter="SyntaxPreprocessor" />
+		parameter="SyntaxLslPreprocessor" />
         <color_swatch.commit_callback
 		function="ScriptPref.applyUIColor"
-		parameter="SyntaxPreprocessor" />
+		parameter="SyntaxLslPreprocessor" />
     </color_swatch>
     <text
 		type="string"

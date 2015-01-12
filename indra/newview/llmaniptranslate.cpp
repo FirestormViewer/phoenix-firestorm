@@ -61,6 +61,7 @@
 #include "llui.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
+#include "lltrans.h"
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -114,7 +115,6 @@ LLManipTranslate::LLManipTranslate( LLToolComposite* composite )
 :	LLManip( std::string("Move"), composite ),
 	mLastHoverMouseX(-1),
 	mLastHoverMouseY(-1),
-	mSendUpdateOnMouseUp(FALSE),
 	mMouseOutsideSlop(FALSE),
 	mCopyMadeThisDrag(FALSE),
 	mWarningNoDragCopy(false),	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
@@ -129,7 +129,6 @@ LLManipTranslate::LLManipTranslate( LLToolComposite* composite )
 	mSnapOffsetMeters(0.f),
 	mSubdivisions(10.f),
 	mInSnapRegime(FALSE),
-	mSnapped(FALSE),
 	mArrowScales(1.f, 1.f, 1.f),
 	mPlaneScales(1.f, 1.f, 1.f),
 	mPlaneManipPositions(1.f, 1.f, 1.f, 1.f)
@@ -568,7 +567,6 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-
 		if (off_axis_magnitude > mSnapOffsetMeters)
 		{
 			mInSnapRegime = TRUE;
@@ -1464,18 +1462,18 @@ void LLManipTranslate::renderSnapGuides()
 					snap_offset_meters_up = -mSnapOffsetMeters;
 				}
 
-				LLVector3 selection_center_start = getSavedPivotPoint();
+				LLVector3 selection_center_start = getSavedPivotPoint();//LLSelectMgr::getInstance()->getSavedBBoxOfSelection().getCenterAgent();
 
 				LLVector3 help_text_pos = selection_center_start + (snap_offset_meters_up * 3.f * mSnapOffsetAxis);
 				const LLFontGL* big_fontp = LLFontGL::getFontSansSerif();
 
-				std::string help_text = "Move mouse cursor over ruler";
+				std::string help_text = LLTrans::getString("manip_hint1");
 				LLColor4 help_text_color = LLColor4::white;
 				help_text_color.mV[VALPHA] = clamp_rescale(mHelpTextTimer.getElapsedTimeF32(), sHelpTextVisibleTime, sHelpTextVisibleTime + sHelpTextFadeTime, line_alpha, 0.f);
-				hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, mObjectSelection->getSelectType() == SELECT_TYPE_HUD);
-				help_text = "to snap to grid";
+				hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, false);
+				help_text = LLTrans::getString("manip_hint2");
 				help_text_pos -= LLViewerCamera::getInstance()->getUpAxis() * mSnapOffsetMeters * 0.2f;
-				hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, mObjectSelection->getSelectType() == SELECT_TYPE_HUD);
+				hud_render_utf8text(help_text, help_text_pos, *big_fontp, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, -0.5f * big_fontp->getWidthF32(help_text), 3.f, help_text_color, false);
 			}
 		}
 	}

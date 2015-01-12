@@ -36,7 +36,7 @@
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
 
-#if LL_STANDALONE
+#if LL_USESYSTEMLIBS
 #include "jsoncpp/reader.h"
 #else
 #include "reader.h"

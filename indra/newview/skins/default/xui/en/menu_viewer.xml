@@ -3,7 +3,6 @@
  bg_visible="false"
  follows="left|top|right"
  name="Main Menu">
- <!-- #####  When editing entries in the menu, please also edit the V1 section below  ##### -->
     <menu
      create_jump_keys="true"
      label="Avatar"
@@ -1720,8 +1719,9 @@
                     <menu_item_call.on_enable
                      function="SomethingSelected" />
                 </menu_item_call>
+                <menu_item_separator/>
                 <menu_item_call
-                 label="Grid Options"
+                 label="Grid Options..."
                  name="Grid Options"
                  shortcut="control|shift|B">
                     <menu_item_call.on_click
@@ -1729,6 +1729,13 @@
                      parameter="build_options" />
                     <menu_item_call.on_enable
                      function="Tools.EnableToolNotPie" />
+                </menu_item_call>
+                <menu_item_call
+                 label="Set Default Permissions..."
+                 name="Set default permissions">
+                    <menu_item_call.on_click
+                     function="Floater.ToggleOrBringToFront"
+                     parameter="perms_default" />
                 </menu_item_call>
         </menu>
         <menu
@@ -1799,13 +1806,6 @@
 		<menu_item_call.on_visible
                  function="Upload.CalculateCosts"
                  parameter="Bulk Upload" />
-            </menu_item_call>
-            <menu_item_call
-             label="Set Default Upload Permissions"
-             name="perm prefs">
-                <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="perm_prefs" />
             </menu_item_call>
 	    <menu_item_call
              label="Import Linkset..."
@@ -3658,6 +3658,16 @@
           <menu_item_check.on_click
            function="Advanced.ToggleInfoDisplay"
            parameter="lights" />
+        </menu_item_check>
+        <menu_item_check
+         label="Particles"
+         name="Particles">
+          <menu_item_check.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="particles" />
+          <menu_item_check.on_click
+           function="Advanced.ToggleInfoDisplay"
+           parameter="particles" />
         </menu_item_check>
         <menu_item_check
          label="Collision Skeleton"

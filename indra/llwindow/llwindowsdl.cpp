@@ -232,7 +232,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 	mOriginalAspectRatio = 1024.0 / 768.0;
 
 	if (title.empty())
-		mWindowTitle = "SDL Window";  // *FIX: (???)
+		mWindowTitle = "SDL Window";  // *FIX: (?)
 	else
 		mWindowTitle = title;
 
@@ -979,7 +979,7 @@ BOOL LLWindowSDL::setPosition(const LLCoordScreen position)
 {
 	if(mWindow)
 	{
-        // *FIX: (???)
+        // *FIX: (?)
 		//MacMoveWindow(mWindow, position.mX, position.mY, false);
 	}
 

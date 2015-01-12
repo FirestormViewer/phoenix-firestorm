@@ -317,7 +317,7 @@
              width="18" />
         </layout_panel>
     </layout_stack>
-    <text_editor
+    <script_editor
      left="0"
      type="string"
      length="1"
@@ -326,22 +326,22 @@
      height="376"
      ignore_tab="false"
      layout="topleft"
-     max_length="65536"
+     max_length="262144"
      name="Script Editor"
      text_color="ScriptText"
      default_color="ScriptText"
      bg_writeable_color="ScriptBackground"
-	 bg_focus_color="ScriptBackground"
+     bg_focus_color="ScriptBackground"
      text_readonly_color="ScriptText"
      bg_readonly_color="ScriptBackground"
      bg_selected_color="ScriptSelectedColor"
      cursor_color="ScriptCursorColor"
      width="487"
-     show_line_numbers="true"
      enable_tooltip_paste="true"
-     word_wrap="true">
+     word_wrap="true"
+     show_context_menu="true">
         Loading...
-    </text_editor>
+    </script_editor>
     <scroll_list
     top_pad="10"
     left="0"
