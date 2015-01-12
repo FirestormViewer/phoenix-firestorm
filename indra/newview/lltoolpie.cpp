@@ -2048,16 +2048,7 @@ BOOL LLToolPie::handleRightClickPick()
 			{
 				name = node->mName;
 			}
-			std::string mute_msg;
-			if (LLMuteList::getInstance()->isMuted(object->getID(), name))
-			{
-				mute_msg = LLTrans::getString("UnmuteObject");
-			}
-			else
-			{
-				mute_msg = LLTrans::getString("MuteObject2");
-			}
-			
+
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.el) | Modified: RLVa-1.1.0l
 			// Don't show the pie menu on empty selection when fartouch/interaction restricted
 			// (not entirely accurate in case of Tools / Select Only XXX [see LLToolSelect::handleObjectSelection()]
@@ -2070,13 +2061,20 @@ BOOL LLToolPie::handleRightClickPick()
 				// gMenuObject->show(x, y);
 				if(gSavedSettings.getBOOL("UsePieMenu"))
 				{
+					std::string mute_msg;
+					if (LLMuteList::getInstance()->isMuted(object->getID(), name))
+					{
+						mute_msg = LLTrans::getString("UnmuteObject");
+					}
+					else
+					{
+						mute_msg = LLTrans::getString("MuteObject2");
+					}
 					gPieMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 					gPieMenuObject->show(x, y);
 				}
 				else
 				{
-					// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
-					// gMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 					gMenuObject->show(x, y);
 				}
 				// </FS:Zi>

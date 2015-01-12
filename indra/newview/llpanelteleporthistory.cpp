@@ -45,6 +45,7 @@
 #include "llviewermenu.h"
 #include "lllandmarkactions.h"
 #include "llclipboard.h"
+#include "lltrans.h"
 
 #include "llviewercontrol.h"
 
@@ -58,7 +59,8 @@ class LLTeleportHistoryFlatItem : public LLPanel
 {
 public:
 	// <FS:Ansariel> Extended TP history
-	//LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl);
+	//LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
+	//									 	 LLDate date, const std::string &hl);
 	LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl);
 	// </FS:Ansariel>
 	virtual ~LLTeleportHistoryFlatItem();
@@ -71,8 +73,12 @@ public:
 	void setIndex(S32 index) { mIndex = index; }
 	const std::string& getRegionName() { return mRegionName;}
 	void setRegionName(const std::string& name);
+	// <FS:Ansariel> Extended TP history
+	//void setDate(LLDate date);
 	void setHighlightedText(const std::string& text);
 	void updateTitle();
+	void updateTimestamp();
+	std::string getTimestamp();
 
 	// <FS:Ansariel> Extended TP history
 	void setDate(const LLDate& date);
@@ -94,19 +100,19 @@ private:
 
 	LLButton* mProfileBtn;
 	LLTextBox* mTitle;
+	LLTextBox* mTimeTextBox;
 	
 	LLTeleportHistoryPanel::ContextMenu *mContextMenu;
 
 	S32 mIndex;
 	std::string mRegionName;
 	std::string mHighlight;
+	LLDate 		mDate;
 	LLRootHandle<LLTeleportHistoryFlatItem> mItemHandle;
 
 	// <FS:Ansariel> Extended TP history
 	LLVector3	mLocalPos;
-	LLDate		mDate;
 
-	LLTextBox*	mDateBox;
 	LLTextBox*	mLocalPosBox;
 	// </FS:Ansariel>
 };
@@ -140,15 +146,16 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 // <FS:Ansariel> Extended TP history
-//LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl)
+//LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
+//																LLDate date, const std::string &hl)
 LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl)
 // </FS:Ansariel>
 :	LLPanel(),
 	mIndex(index),
 	mContextMenu(context_menu),
 	mRegionName(region_name),
-	// <FS:Ansariel> Extended TP history
 	mDate(date),
+	// <FS:Ansariel> Extended TP history
 	mLocalPos(local_pos),
 	// </FS:Ansariel>
 	mHighlight(hl)
@@ -165,8 +172,8 @@ BOOL LLTeleportHistoryFlatItem::postBuild()
 {
 	mTitle = getChild<LLTextBox>("region");
 
+	mTimeTextBox = getChild<LLTextBox>("timestamp");
 	// <FS:Ansariel> Extended TP history
-	mDateBox = getChild<LLTextBox>("date");
 	mLocalPosBox = getChild<LLTextBox>("position");
 	// </FS:Ansariel>
 
@@ -175,6 +182,8 @@ BOOL LLTeleportHistoryFlatItem::postBuild()
 	mProfileBtn->setClickedCallback(boost::bind(&LLTeleportHistoryFlatItem::onProfileBtnClick, this));
 
 	updateTitle();
+	// <FS:Ansariel> Extended TP history
+	//updateTimestamp();
 
 	return true;
 }
@@ -210,16 +219,46 @@ void LLTeleportHistoryFlatItem::setRegionName(const std::string& name)
 }
 
 // <FS:Ansariel> Extended TP history
+//void LLTeleportHistoryFlatItem::setDate(LLDate date)
 void LLTeleportHistoryFlatItem::setDate(const LLDate& date)
+// </FS:Ansariel>
 {
 	mDate = date;
 }
 
+// <FS:Ansariel> Extended TP history
 void LLTeleportHistoryFlatItem::setLocalPos(const LLVector3& local_pos)
 {
 	mLocalPos.set(local_pos);
 }
 // </FS:Ansariel>
+
+std::string LLTeleportHistoryFlatItem::getTimestamp()
+{
+	const LLDate &date = mDate;
+	std::string timestamp = "";
+
+	LLDate now = LLDate::now();
+	S32 now_year, now_month, now_day, now_hour, now_min, now_sec;
+	now.split(&now_year, &now_month, &now_day, &now_hour, &now_min, &now_sec);
+
+	const S32 seconds_in_day = 24 * 60 * 60;
+	S32 seconds_today = now_hour * 60 * 60 + now_min * 60 + now_sec;
+	S32 time_diff = (S32) now.secondsSinceEpoch() - (S32) date.secondsSinceEpoch();
+
+	// Only show timestamp for today and yesterday
+	if(time_diff < seconds_today + seconds_in_day)
+	{
+		timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
+						+ LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
+		LLSD substitution;
+		substitution["datetime"] = (S32) date.secondsSinceEpoch();
+		LLStringUtil::format(timestamp, substitution);
+	}
+
+	return timestamp;
+
+}
 
 void LLTeleportHistoryFlatItem::updateTitle()
 {
@@ -244,11 +283,22 @@ void LLTeleportHistoryFlatItem::updateTitle()
 	LLStringUtil::format(date, args);
 
 	LLTextUtil::textboxSetHighlightedVal(
-		mDateBox,
+		mTimeTextBox,
 		LLStyle::Params().color(sFgColor),
 		date,
 		mHighlight);
 	// </FS:Ansariel>
+}
+
+void LLTeleportHistoryFlatItem::updateTimestamp()
+{
+	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
+
+	LLTextUtil::textboxSetHighlightedVal(
+		mTimeTextBox,
+		LLStyle::Params().color(sFgColor),
+		getTimestamp(),
+		mHighlight);
 }
 
 void LLTeleportHistoryFlatItem::onMouseEnter(S32 x, S32 y, MASK mask)
@@ -325,13 +375,14 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 		{
 			item->setIndex(cur_item_index);
 			item->setRegionName(persistent_item.mTitle);
-			// <FS:Ansariel> Extended TP history
 			item->setDate(persistent_item.mDate);
+			// <FS:Ansariel> Extended TP history
 			item->setLocalPos(local_pos);
 			// </FS:Ansariel>
 			item->setHighlightedText(hl);
 			item->setVisible(TRUE);
 			item->updateTitle();
+			item->updateTimestamp();
 		}
 		else
 		{
@@ -345,8 +396,8 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 		item = new LLTeleportHistoryFlatItem(cur_item_index,
 											 context_menu,
 											 persistent_item.mTitle,
-											 // <FS:Ansariel> Extended TP history
 											 persistent_item.mDate,
+											 // <FS:Ansariel> Extended TP history
 											 local_pos,
 											 // </FS:Ansariel>
 											 hl);

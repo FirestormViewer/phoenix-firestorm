@@ -158,7 +158,7 @@
 	     parameter="Land" />
 	</button>
     <text
-     height="30"
+     height="20"
      word_wrap="true"
      use_ellipses="true"
      type="string"
@@ -363,7 +363,9 @@
      left="143"
      name="checkbox uniform"
      top="48"
-     width="20" />
+     label_text.wrap="true"
+     label_text.width="100"
+     width="134" />
     <check_box
      control_name="ScaleStretchTextures"
      height="19"

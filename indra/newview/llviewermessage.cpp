@@ -2898,8 +2898,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// <FS:Ansariel> Log autoresponse notification after initial message
 			bool has_session = true;
 
-			// return a standard "do not disturb" message, but only do it to online IM
-			// (i.e. not other auto responses and not store-and-forward IM)
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
 			// Session id will be null if avatar answers from offline IM via email
 			if (!gIMMgr->hasSession(session_id) && session_id.notNull())
@@ -2907,9 +2905,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// </FS:Ansariel>
 				// <FS:Ansariel> Log autoresponse notification after initial message
 				has_session = false;
-
 				// <FS:Ansariel> FS autoresponse feature
-				//send_do_not_disturb_message(msg, from_id, session_id);
 				std::string my_name;
 				std::string response;
 				LLAgentUI::buildFullname(my_name);
@@ -2982,6 +2978,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				region_id,
 				position,
 				true);
+
+			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
+			//if (!gIMMgr->isDNDMessageSend(session_id))
+			//{
+			//	// return a standard "do not disturb" message, but only do it to online IM
+			//	// (i.e. not other auto responses and not store-and-forward IM)
+			//	send_do_not_disturb_message(msg, from_id, session_id);
+			//	gIMMgr->setDNDMessageSent(session_id, true);
+			//}
+			// </FS:Ansariel>
 
 			if (!has_session)
 			{

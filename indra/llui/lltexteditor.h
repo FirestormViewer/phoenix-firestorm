@@ -330,7 +330,7 @@ private:
 	bool			mEnableTooltipPaste;
 	bool			mPassDelete;
 	bool			mKeepSelectionOnReturn;	// disabling of removing selected text after pressing of Enter
-	
+
 	LLUUID			mSourceID;
 
 	LLCoordGL		mLastIMEPosition;		// Last position of the IME editor
