@@ -158,9 +158,9 @@
 								Mouselook View
 							</panel_camera_item.text>
 							<panel_camera_item.picture
-							 image_name="Mouselook_View_Off"/>
+							 image_name="MouseLook_View_Off"/>
 							<panel_camera_item.selected_picture
-							 image_name="Mouselook_View_On"/>
+							 image_name="MouseLook_View_On"/>
 						</panel_camera_item>
 					</panel>
 					<!--TODO: replace + - images -->
