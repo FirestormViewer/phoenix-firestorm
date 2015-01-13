@@ -371,12 +371,12 @@ free_mode_title
             top="18"
             height="18"
             width="18"
-            image_name="Mouselook_View_Off" />
+            image_name="MouseLook_View_Off" />
             <panel_camera_item.selected_picture
             top="18"
             height="18"
             width="18"
-            image_name="Mouselook_View_On" />
+            image_name="MouseLook_View_On" />
             <panel_camera_item.text
             width="0"
             name="mouselook_view_text">
