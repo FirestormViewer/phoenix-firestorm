@@ -17,7 +17,7 @@ else (USESYSTEMLIBS)
 endif (USESYSTEMLIBS)
 
 if (LINUX)
-  set(CRYPTO_LIBRARIES crypto dl)
+  set(CRYPTO_LIBRARIES crypto)
 elseif (DARWIN)
   set(CRYPTO_LIBRARIES crypto)
 endif (LINUX)

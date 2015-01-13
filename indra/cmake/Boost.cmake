@@ -9,7 +9,6 @@ if (USESYSTEMLIBS)
 
 # <FS:TS> boost::context isn't used, so don't try to include it
 # set(BOOST_CONTEXT_LIBRARY boost_context-mt)
-  set(BOOST_COROUTINE_LIBRARY boost_coroutine-mt)
   set(BOOST_FILESYSTEM_LIBRARY boost_filesystem-mt)
   set(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-mt)
   set(BOOST_REGEX_LIBRARY boost_regex-mt)
@@ -20,11 +19,10 @@ if (USESYSTEMLIBS)
 else (USESYSTEMLIBS)
   use_prebuilt_binary(boost)
   set(Boost_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
-  set(BOOST_VERSION "1.55")
+  set(BOOST_VERSION "1.52")
 
   if (WINDOWS)
     if(MSVC80)
-      # This should be obsolete at this point
       set(BOOST_CONTEXT_LIBRARY 
           optimized libboost_context-vc80-mt-${BOOST_VERSION}
           debug libboost_context-vc80-mt-gd-${BOOST_VERSION})
@@ -57,9 +55,6 @@ else (USESYSTEMLIBS)
       set(BOOST_CONTEXT_LIBRARY 
           optimized libboost_context-mt
           debug libboost_context-mt-gd)
-      set(BOOST_COROUTINE_LIBRARY 
-          optimized libboost_coroutine-mt
-          debug libboost_coroutine-mt-gd)
       set(BOOST_FILESYSTEM_LIBRARY 
           optimized libboost_filesystem-mt
           debug libboost_filesystem-mt-gd)
@@ -86,9 +81,6 @@ else (USESYSTEMLIBS)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt
         debug boost_context-mt-d)
-    set(BOOST_COROUTINE_LIBRARY
-        optimized boost_coroutine-mt
-        debug boost_coroutine-mt-d)
     set(BOOST_FILESYSTEM_LIBRARY
         optimized boost_filesystem-mt
         debug boost_filesystem-mt-d)
@@ -114,9 +106,6 @@ else (USESYSTEMLIBS)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt
         debug boost_context-mt-d)
-    set(BOOST_COROUTINE_LIBRARY
-        optimized boost_coroutine-mt
-        debug boost_coroutine-mt-d)
     set(BOOST_FILESYSTEM_LIBRARY
         optimized boost_filesystem-mt
         debug boost_filesystem-mt-d)

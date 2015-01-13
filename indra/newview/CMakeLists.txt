@@ -49,8 +49,6 @@ include(VisualLeakDetector)
 include(GLOD)
 include(CMakeCopyIfDifferent)
 include(LLAppearance)
-include(PNG)
-include(ZLIB)
 include(Growl)
 include(ColladaDom)
 
@@ -2273,8 +2271,6 @@ endif (WINDOWS)
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
-    ${PNG_PRELOAD_ARCHIVES}
-    ${ZLIB_PRELOAD_ARCHIVES}
     ${UPDATER_LIBRARIES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}
@@ -2301,7 +2297,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
-    ${BOOST_COROUTINE_LIBRARY}
     ${BOOST_WAVE_LIBRARY} #FS specific
     ${BOOST_THREAD_LIBRARY} #FS specific
     ${DBUSGLIB_LIBRARIES}

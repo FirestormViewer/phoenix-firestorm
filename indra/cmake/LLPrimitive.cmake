@@ -6,40 +6,32 @@ include(Boost)
 
 use_prebuilt_binary(colladadom)
 use_prebuilt_binary(pcre)
-use_prebuilt_binary(libxml2)
 
 set(LLPRIMITIVE_INCLUDE_DIRS
     ${LIBS_OPEN_DIR}/llprimitive
     )
 if (WINDOWS)
-    set(LLPRIMITIVE_LIBRARIES 
+    set(LLPRIMITIVE_LIBRARIES
         debug llprimitive
         optimized llprimitive
-        debug libcollada14dom23-sd
-        optimized libcollada14dom23-s
-        libxml2_a
-        debug pcrecppd
-        optimized pcrecpp
-        debug pcred
-        optimized pcre
+        debug libcollada14dom22-d
+        optimized libcollada14dom22
         ${BOOST_SYSTEM_LIBRARIES}
         )
-elseif (DARWIN)
-    set(LLPRIMITIVE_LIBRARIES 
+elseif (LINUX)
+    use_prebuilt_binary(libxml2)
+    set(LLPRIMITIVE_LIBRARIES
         llprimitive
-        debug collada14dom-d
-        optimized collada14dom
+        collada14dom
         minizip
         xml2
         pcrecpp
         pcre
-        iconv           # Required by libxml2
         )
-elseif (LINUX)
-    set(LLPRIMITIVE_LIBRARIES 
+else (WINDOWS)
+    set(LLPRIMITIVE_LIBRARIES
         llprimitive
-        debug collada14dom-d
-        optimized collada14dom
+        collada14dom
         minizip
         xml2
         pcrecpp
