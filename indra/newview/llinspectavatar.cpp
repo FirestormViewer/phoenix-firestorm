@@ -639,15 +639,15 @@ void LLInspectAvatar::toggleSelectedVoice(bool enabled)
 				mSessionID = session_id;
 			}
 
-			virtual void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
+			virtual void httpFailure()
 			{
-				LL_WARNS() << "MuteVoiceResponder error [status:" << status << "]: " << content << LL_ENDL;
+				LL_WARNS() << "MuteVoiceResponder error [status:" << getStatus() << "]: " << getContent() << LL_ENDL;
 
 				if ( gIMMgr )
 				{
-					//403 == you're not a mod
+					//HTTP_FORBIDDEN == you're not a mod
 					//should be disabled if you're not a moderator
-					if ( 403 == status )
+					if ( HTTP_FORBIDDEN == getStatus() )
 					{
 						gIMMgr->showSessionEventError(
 							"mute",
