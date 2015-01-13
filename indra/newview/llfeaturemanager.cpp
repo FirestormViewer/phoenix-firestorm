@@ -673,8 +673,9 @@ public:
 	}
 
 	// <FS:Techwolf Lupindo> downloadable gpu table support
-	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	void completedHeader()
 	{
+		LLSD content = getResponseHeaders();
 		if (content.has("last-modified"))
 		{
 			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
