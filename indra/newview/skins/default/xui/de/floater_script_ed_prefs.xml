@@ -30,6 +30,9 @@
 	<text name="string_literal_label">
 		String-Literal
 	</text>
+	<text name="constant_label">
+		Konstante
+	</text>
 	<text name="i_constant_label">
 		Integer-Konstante
 	</text>

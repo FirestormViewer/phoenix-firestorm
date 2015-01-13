@@ -164,6 +164,7 @@ set(viewer_SOURCE_FILES
     fsfloaterteleporthistory.cpp
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
+    fsfloatervramusage.cpp
     fsfloaterwsassetblacklist.cpp
     fskeywords.cpp
     fslightshare.cpp
@@ -191,7 +192,7 @@ set(viewer_SOURCE_FILES
     fsradarmenu.cpp
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
-	fssearchableui.cpp
+    fssearchableui.cpp
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
@@ -204,7 +205,6 @@ set(viewer_SOURCE_FILES
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
     llpanelopenregionsettings.cpp
-	fsfloatervramusage.cpp
 
     llaccountingcostmanager.cpp
     llaisapi.cpp
@@ -887,6 +887,7 @@ set(viewer_HEADER_FILES
     fsfloaterteleporthistory.h
     fsfloatervoicecontrols.h
     fsfloatervolumecontrols.h
+    fsfloatervramusage.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fskeywords.h
@@ -915,7 +916,7 @@ set(viewer_HEADER_FILES
     fsradarmenu.h
     fsscriptlibrary.h
     fsscrolllistctrl.h
-	fssearchableui.h
+    fssearchableui.h
     fsslurl.h
     fsslurlcommand.h
     fswsassetblacklist.h
@@ -930,7 +931,6 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
-	fsfloatervramusage.h
 
     llaccountingcostmanager.h
     llaisapi.h

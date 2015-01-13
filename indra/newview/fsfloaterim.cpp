@@ -1595,18 +1595,18 @@ BOOL FSFloaterIM::isInviteAllowed() const
 			(IM_SESSION_INVITE == mDialog && !gAgent.isInGroup(mSessionID)));
 }
 
-class LLSessionInviteResponder : public LLHTTPClient::Responder
+class FSSessionInviteResponder : public LLHTTPClient::Responder
 {
 public:
-	LLSessionInviteResponder(const LLUUID& session_id)
+	FSSessionInviteResponder(const LLUUID& session_id)
 	{
 		mSessionID = session_id;
 	}
 
-	void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+	void httpFailure()
 	{
 		LL_WARNS("FSFloaterIM") << "Error inviting all agents to session [status:"
-								<< statusNum << "]: " << content << LL_ENDL;
+								<< getStatus() << "]: " << getContent() << LL_ENDL;
 		//TODO: throw something back to the viewer here?
 	}
 
@@ -1637,7 +1637,7 @@ BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 			}
 			data["method"] = "invite";
 			data["session-id"] = mSessionID;
-			LLHTTPClient::post(url,	data,new LLSessionInviteResponder(mSessionID));
+			LLHTTPClient::post(url,	data,new FSSessionInviteResponder(mSessionID));
 		}
 		else
 		{

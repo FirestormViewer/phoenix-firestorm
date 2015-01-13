@@ -1996,24 +1996,18 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, 
 
 	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
 	// but only if that segment is editable -Zi
-
 	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
-	
-	if (fsFixCursorPosition)
+	if (fsFixCursorPosition && fix_position && it != mSegments.end())
 	{
-		if (fix_position)
+		LLTextSegment* seg = *it;
+		if (!seg->canEdit() && it != mSegments.begin())
 		{
-			LLTextSegment* seg=*it;
-			if(!seg->canEdit())
-			{
-				if(it!=mSegments.begin())
-				{
-					--it;
+			--it;
 
-					seg=*it;
-					if(!seg->canEdit())
-						++it;
-				}
+			seg = *it;
+			if (!seg->canEdit())
+			{
+				++it;
 			}
 		}
 	}
@@ -2052,22 +2046,17 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
 	// but only if that segment is editable -Zi
 	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
-	
-	if (fsFixCursorPosition)
+	if (fsFixCursorPosition && fix_position && it != mSegments.end())
 	{
-		if (fix_position)
+		LLTextSegment* seg = *it;
+		if (!seg->canEdit() && it != mSegments.begin())
 		{
-			LLTextSegment* seg=*it;
-			if(!seg->canEdit())
-			{
-				if(it!=mSegments.begin())
-				{
-					--it;
+			--it;
 
-					seg=*it;
-					if(!seg->canEdit())
-						++it;
-				}
+			seg = *it;
+			if (!seg->canEdit())
+			{
+				++it;
 			}
 		}
 	}

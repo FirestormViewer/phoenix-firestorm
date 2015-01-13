@@ -65,8 +65,14 @@ public:
 	{
 	}
 
-	virtual void error(U32 statusNum, const std::string& reason)
+	// <FS:Ansariel> Fix cURL API
+	//virtual void error(U32 statusNum, const std::string& reason)
+	//{
+	virtual void httpFailure()
 	{
+		S32 statusNum = getStatus();
+		std::string reason = getReason();
+	// </FS:Ansariel>
 		LLViewerRegion * regionp = LLWorld::getInstance()->getRegionFromHandle(mRegionHandle);
 		if (regionp)
 		{
@@ -86,8 +92,13 @@ public:
 
 	}
 
-	virtual void result(const LLSD& content)
+	// <FS:Ansariel> Fix cURL API
+	//virtual void result(const LLSD& content)
+	//{
+	virtual void httpSuccess()
 	{
+		LLSD content = getContent();
+	// </FS:Ansariel>
 		LLViewerRegion * regionp = LLWorld::getInstance()->getRegionFromHandle(mRegionHandle);
 		if (regionp)
 		{
@@ -160,8 +171,14 @@ public:
 	{
 	}
 
-	virtual void error(U32 statusNum, const std::string& reason)
+	// <FS:Ansariel> Fix cURL API
+	//virtual void error(U32 statusNum, const std::string& reason)
+	//{
+	virtual void httpFailure()
 	{
+		S32 statusNum = getStatus();
+		std::string reason = getReason();
+	// </FS:Ansariel>
 		LLViewerRegion * regionp = LLWorld::getInstance()->getRegionFromHandle(mRegionHandle);
 		if (regionp)
 		{
@@ -180,8 +197,13 @@ public:
 		}
 	}
 
-	virtual void result(const LLSD& content)
+	// <FS:Ansariel> Fix cURL API
+	//virtual void result(const LLSD& content)
+	//{
+	virtual void httpSuccess()
 	{
+		LLSD content = getContent();
+	// </FS:Ansariel>
 		LLViewerRegion * regionp = LLWorld::getInstance()->getRegionFromHandle(mRegionHandle);
 		if (regionp)
 		{

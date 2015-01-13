@@ -101,13 +101,10 @@ class FSClassifiedClickMessageResponder : public LLHTTPClient::Responder
 
 public:
 	// If we get back an error (not found, etc...), handle it here
-	virtual void errorWithContent(
-		U32 status,
-		const std::string& reason,
-		const LLSD& content)
+	virtual void httpFailure()
 	{
-		LL_WARNS("FSClassifiedClickMessageResponder") << "Sending click message failed (" << status << "): [" << reason << "]" << LL_ENDL;
-		LL_WARNS("FSClassifiedClickMessageResponder") << "Content: [" << content << "]" << LL_ENDL;
+		LL_WARNS("FSClassifiedClickMessageResponder") << "Sending click message failed (" << getStatus() << "): [" << getReason() << "]" << LL_ENDL;
+		LL_WARNS("FSClassifiedClickMessageResponder") << "Content: [" << getContent() << "]" << LL_ENDL;
 	}
 };
 

@@ -298,6 +298,36 @@
 		label_height="0"
 		layout="topleft"
 		left="170"
+		name="constant"
+		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="SyntaxLslConstant" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="SyntaxLslConstant" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="constant_label"
+		top_delta="5"
+		width="100">
+        Constant
+    </text>
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
+		left="170"
 		name="i_constant"
 		top_pad="10"
 		width="44" >
