@@ -627,6 +627,10 @@ public:
 	virtual void completedRaw(const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 	{
+		// <FS:Techwolf Lupindo> downloadable gpu table support
+		completedHeader();
+		// </FS:Techwolf Lupindo>
+
 		if (isGoodStatus())
 		{
 			// write to file
