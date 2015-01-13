@@ -725,29 +725,31 @@ void LLManipScale::renderFaces( const LLBBox& bbox )
 	}
 }
 
-void LLManipScale::renderEdges( const LLBBox& bbox )
-{
-	LLVector3 extent = bbox.getExtentLocal();
-
-	for( U32 part = LL_EDGE_MIN; part <= LL_EDGE_MAX; part++ )
-	{
-		F32 edge_width = mBoxHandleSize[part] * .6f;
-		LLVector3 direction = edgeToUnitVector( part );
-		LLVector3 center_to_edge = unitVectorToLocalBBoxExtent( direction, bbox );
-
-		gGL.pushMatrix();
-		{
-			gGL.translatef( center_to_edge.mV[0], center_to_edge.mV[1], center_to_edge.mV[2] );
-			conditionalHighlight( part );
-			gGL.scalef(
-				direction.mV[0] ? edge_width : extent.mV[VX],
-				direction.mV[1] ? edge_width : extent.mV[VY],
-				direction.mV[2] ? edge_width : extent.mV[VZ] );
-			gBox.render();
-		}
-		gGL.popMatrix();
-	}
-}
+// <FS:Ansariel> Commented out due to overeager compiler complaining about array index out of bounds
+//void LLManipScale::renderEdges( const LLBBox& bbox )
+//{
+//	LLVector3 extent = bbox.getExtentLocal();
+//
+//	for( U32 part = LL_EDGE_MIN; part <= LL_EDGE_MAX; part++ )
+//	{
+//		F32 edge_width = mBoxHandleSize[part] * .6f;
+//		LLVector3 direction = edgeToUnitVector( part );
+//		LLVector3 center_to_edge = unitVectorToLocalBBoxExtent( direction, bbox );
+//
+//		gGL.pushMatrix();
+//		{
+//			gGL.translatef( center_to_edge.mV[0], center_to_edge.mV[1], center_to_edge.mV[2] );
+//			conditionalHighlight( part );
+//			gGL.scalef(
+//				direction.mV[0] ? edge_width : extent.mV[VX],
+//				direction.mV[1] ? edge_width : extent.mV[VY],
+//				direction.mV[2] ? edge_width : extent.mV[VZ] );
+//			gBox.render();
+//		}
+//		gGL.popMatrix();
+//	}
+//}
+// </FS:Ansariel>
 
 
 void LLManipScale::renderCorners( const LLBBox& bbox )
