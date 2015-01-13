@@ -78,6 +78,8 @@ public:
 
 	void httpSuccess()
 	{
+		completedHeader();
+
 		// check for parse failure that can happen with [200] OK result.
 		if (mDeserializeError)
 		{
@@ -87,15 +89,12 @@ public:
 		{
 			FSData::getInstance()->processResponder(getContent(), mURL, true, mLastModified);
 		}
-
-		completedHeader();
 	}
 	
 	void httpFailure()
 	{
-		FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
-
 		completedHeader();
+		FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
 	}
 	
 	void completedHeader()
