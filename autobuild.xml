@@ -1742,12 +1742,12 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ba20e2634b4c249a7064620d135f7972</string>
+              <string>819bf22602afa1fbbfef3bb067d21069</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-libxml-update/rev/290562/arch/CYGWIN/installer/libxml2-2.9.1-windows-20140602.tar.bz2</string>
+              <string>http://downloads.firestormviewer.org/installables/libxml2-2.7.8-linux-x64-20131212.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>windows</string>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2387,18 +2387,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9250f74fed826ad1b8700229e964519d</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-pcre-update/rev/290406/arch/CYGWIN/installer/pcre-8.35-windows-20140529.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
           <key>linux64</key>
           <map>
             <key>archive</key>
@@ -2410,6 +2398,18 @@
             </map>
             <key>name</key>
             <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9250f74fed826ad1b8700229e964519d</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-pcre-update/rev/290406/arch/CYGWIN/installer/pcre-8.35-windows-20140529.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
           </map>
         </map>
       </map>
