@@ -63,7 +63,7 @@ if (WINDOWS)
 # <FS:Ansariel> [AVX Optimization]
 #  add_definitions(
 #      /DLL_WINDOWS=1
-#      /DDOM_DYNAMIC
+##      /DDOM_DYNAMIC            # For shared library colladadom
 #      /DUNICODE
 #      /D_UNICODE 
 #      /GS
@@ -80,7 +80,7 @@ if (WINDOWS)
   if (USE_AVX_OPTIMIZATION)
     add_definitions(
         /DLL_WINDOWS=1
-        /DDOM_DYNAMIC
+#      /DDOM_DYNAMIC            # For shared library colladadom
         /DUNICODE
         /D_UNICODE 
         /GS
@@ -98,7 +98,7 @@ if (WINDOWS)
     add_definitions(
         /DLL_WINDOWS=1
       /DNOMINMAX
-        /DDOM_DYNAMIC
+#      /DDOM_DYNAMIC            # For shared library colladadom
         /DUNICODE
         /D_UNICODE 
         /GS

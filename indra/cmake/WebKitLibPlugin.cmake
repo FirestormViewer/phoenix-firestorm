@@ -1,6 +1,7 @@
 # -*- cmake -*-
 include(Linking)
 include(Prebuilt)
+include(OpenSSL)
 
 if (USESYSTEMLIBS)
   # The minimal version, 4.4.3, is rather arbitrary: it's the version in Debian/Lenny.
@@ -36,20 +37,20 @@ endif (USESYSTEMLIBS)
 
 if (WINDOWS)
     set(WEBKIT_PLUGIN_LIBRARIES 
-    debug llqtwebkitd
-    debug QtWebKitd4
-    debug QtOpenGLd4
-    debug QtNetworkd4
-    debug QtGuid4
-    debug QtCored4
-    debug qtmaind
-    optimized llqtwebkit
-    optimized QtWebKit4
-    optimized QtOpenGL4
-    optimized QtNetwork4
-    optimized QtGui4
-    optimized QtCore4
-    optimized qtmain
+        debug llqtwebkitd
+        debug QtWebKitd4
+        debug QtOpenGLd4
+        debug QtNetworkd4
+        debug QtGuid4
+        debug QtCored4
+        debug qtmaind
+        optimized llqtwebkit
+        optimized QtWebKit4
+        optimized QtOpenGL4
+        optimized QtNetwork4
+        optimized QtGui4
+        optimized QtCore4
+        optimized qtmain
     )
 elseif (DARWIN)
     set(WEBKIT_PLUGIN_LIBRARIES
@@ -59,8 +60,9 @@ elseif (DARWIN)
         ${ARCH_PREBUILT_DIRS_RELEASE}/libQtNetwork.4.dylib
         ${ARCH_PREBUILT_DIRS_RELEASE}/libQtGui.4.dylib
         ${ARCH_PREBUILT_DIRS_RELEASE}/libQtCore.4.dylib
-        )
+       )
 elseif (LINUX)
+    # *HUH:  What does this do?
     # FIRE-6108, add missing if clause for standalone builds - TL
     if (USESYSTEMLIBS)
       set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
@@ -75,10 +77,13 @@ elseif (LINUX)
           QtWebKit
           QtOpenGL
           QtNetwork
+        ${OPENSSL_LIBRARIES}
           QtGui
           QtCore
-          jpeg
-#          jscore
+#        jscore
+#        qgif
+#        qjpeg
+        jpeg
           fontconfig
           X11
           Xrender

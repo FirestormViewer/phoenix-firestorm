@@ -961,7 +961,6 @@ class DarwinManifest(ViewerManifest):
                     for libfile in dylibs:
                         symlinkf(os.path.join(os.pardir, os.pardir, os.pardir, libfile),
                                  os.path.join(resource_path, libfile))
-
                 # SLPlugin.app/Contents/Resources gets those Qt4 libraries it needs.
                 if self.prefix(src="", dst="SLPlugin.app/Contents/Resources"):
                     for libfile in ('libQtCore.4.dylib',
@@ -998,7 +997,6 @@ class DarwinManifest(ViewerManifest):
                                        "media_plugin_quicktime.dylib")
                     self.path2basename("../media_plugins/webkit/" + self.args['configuration'],
                                        "media_plugin_webkit.dylib")
-
                     self.end_prefix("llplugin")
 
                 self.end_prefix("Resources")
@@ -1279,6 +1277,7 @@ class LinuxManifest(ViewerManifest):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.end_prefix("bin/llplugin")
 
+        # llcommon
         if not self.path("../llcommon/libllcommon.so", "lib/libllcommon.so"):
             print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
