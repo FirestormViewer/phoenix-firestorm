@@ -1274,17 +1274,18 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 	//
 	// Draw the north and east region borders
 	//
-	const S32 borderY = originY + llround(REGION_WIDTH_METERS * mObjectMapTPM);
+	const F32 real_width(pRegion->getWidth());
+	const S32 borderY = originY + llround(real_width * mObjectMapTPM);
 	if ( (borderY >= 0) && (borderY < imgHeight) )
 	{
-		S32 curX = llclamp(originX, 0, imgWidth), endX = llclamp(originX + llround(REGION_WIDTH_METERS * mObjectMapTPM), 0, imgWidth - 1);
+		S32 curX = llclamp(originX, 0, imgWidth), endX = llclamp(originX + llround(real_width * mObjectMapTPM), 0, imgWidth - 1);
 		for (; curX <= endX; curX++)
 			pTextureData[borderY * imgWidth + curX] = clrOverlay.asRGBA();
 	}
-	const S32 borderX = originX + llround(REGION_WIDTH_METERS * mObjectMapTPM);
+	const S32 borderX = originX + llround(real_width * mObjectMapTPM);
 	if ( (borderX >= 0) && (borderX < imgWidth) )
 	{
-		S32 curY = llclamp(originY, 0, imgHeight), endY = llclamp(originY + llround(REGION_WIDTH_METERS * mObjectMapTPM), 0, imgHeight - 1);
+		S32 curY = llclamp(originY, 0, imgHeight), endY = llclamp(originY + llround(real_width * mObjectMapTPM), 0, imgHeight - 1);
 		for (; curY <= endY; curY++)
 			pTextureData[curY * imgWidth + borderX] = clrOverlay.asRGBA();
 	}
@@ -1293,7 +1294,7 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 	// Render parcel lines
 	//
 	static const F32 GRID_STEP = PARCEL_GRID_STEP_METERS;
-	static const S32 GRIDS_PER_EDGE = REGION_WIDTH_METERS / GRID_STEP;
+	static const S32 GRIDS_PER_EDGE = real_width / GRID_STEP;
 
 	const U8* pOwnership = pRegion->getParcelOverlay()->getOwnership();
 	const U8* pCollision = (pRegion->getHandle() == LLViewerParcelMgr::instance().getCollisionRegionHandle()) ? LLViewerParcelMgr::instance().getCollisionBitmap() : NULL;
