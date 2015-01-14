@@ -6,7 +6,7 @@
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
- title="INVENTORY_RECENT_ITEMS"
+ title="Inventory Recent Items"
  width="280">
     <icon
      height="16"

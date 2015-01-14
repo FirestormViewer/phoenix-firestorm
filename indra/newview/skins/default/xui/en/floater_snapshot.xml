@@ -11,7 +11,7 @@
  help_topic="snapshot"
  save_rect="true"
  save_visibility="false"
- title="SNAPSHOT"
+ title="Snapshot"
  width="624"
  min_height="455">
     <floater.string
@@ -91,7 +91,7 @@
 	 halign="left"
      layout="topleft"
      left="10"
-	 label="REFRESH"
+	 label="Refresh"
      name="new_snapshot_btn"
      top_pad="26"
      width="167" />
