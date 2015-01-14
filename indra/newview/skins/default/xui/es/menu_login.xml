@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Visor" name="File">
+	<menu label="Yo" name="File">
 		<menu_item_call label="Preferencias..." name="Preferences..."/>
 		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Ayuda" name="Help">
-		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
-		<menu_item_call label="Solución de problemas" name="Troubleshooting"/>
+		<menu_item_call label="Cómo..." name="How To"/>
+		<menu_item_call label="Guía rápida" name="Quickstart"/>
+		<menu_item_call label="Base de Conocimientos" name="Knowledge Base"/>
+		<menu_item_call label="Wiki" name="Wiki"/>
+		<menu_item_call label="Foros comunitarios" name="Community Forums"/>
+		<menu_item_call label="Portal de soporte" name="Support portal"/>
+		<menu_item_call label="Noticias de [SECOND_LIFE]" name="Second Life News"/>
+		<menu_item_call label="Blogs de [SECOND_LIFE]" name="Second Life Blogs"/>
+		<menu_item_call label="Informar de un fallo" name="Report Bug"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
-		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help_login"/>
-		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about_login"/>
 	</menu>
-	<menu_item_check label="Mostrar el menú &apos;Depuración&apos;" name="Show Debug Menu"/>
-	<menu label="Depuración" name="Debug">
+	<menu_item_check label="Mostrar el menú &apos;Debug&apos;" name="Show Debug Menu"/>
+	<menu label="Depurar" name="Debug">
 		<menu_item_call label="Mostrar las configuraciones del depurador" name="Debug Settings"/>
 		<menu_item_call label="Configuraciones del Visor/Color" name="UI/Color Settings"/>
-		<menu_item_call label="Herramienta de previsualización de XUI" name="UI Preview Tool"/>
-		<menu label="Pruebas de la interfaz" name="UI Tests">
-			<menu_item_call label="Caja de texto" name="Textbox"/>
-			<menu_item_call label="Editor de texto" name="Text Editor"/>
-			<menu_item_call label="Widgets" name="Widgets"/>
-			<menu_item_call label="Inspectores" name="Inspectors"/>
-		</menu>
+		<menu label="Pruebas de la interfaz" name="UI Tests"/>
 		<menu_item_call label="Definir el tamaño de la ventana..." name="Set Window Size..."/>
-		<menu_item_call label="Mostrar las Condiciones del Servicio (&apos;TOS&apos;)" name="TOS"/>
+		<menu_item_call label="Mostrar los &apos;TOS&apos;" name="TOS"/>
 		<menu_item_call label="Mostrar mensaje crítico" name="Critical"/>
 		<menu_item_call label="Prueba de depuración de ventanas de contenido web" name="Web Content Floater Debug Test"/>
-		<menu label="Nivel de registro" name="Set Logging Level">
-			<menu_item_check name="Debug" label="Depuración"/>
-			<menu_item_check name="Info" label="Información"/>
-			<menu_item_check name="Warning" label="Advertencias"/>
-			<menu_item_check name="Error" label="Errores"/>
-			<menu_item_check name="None" label="Ninguno"/>
+		<menu label="Configurar el nivel de registro" name="Set Logging Level">
+			<menu_item_check label="Depurar" name="Debug"/>
+			<menu_item_check label="Información" name="Info"/>
+			<menu_item_check label="¡Atención!" name="Warning"/>
+			<menu_item_check label="Error" name="Error"/>
+			<menu_item_check label="Ninguno" name="None"/>
 		</menu>
-		<menu_item_check label="Mostrar selector de red" name="Show Grid Picker"/>
+		<menu_item_check label="Mostrar el selector de Grid" name="Show Grid Picker"/>
 		<menu_item_call label="Mostrar la consola de notificaciones" name="Show Notifications Console"/>
 	</menu>
 </menu_bar>
