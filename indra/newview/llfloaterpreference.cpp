@@ -2842,10 +2842,10 @@ BOOL LLPanelPreference::postBuild()
 	}
 
 	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	if (hasChild("use_external_browser", TRUE))
-	{
-		getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
-	}
+	//if (hasChild("use_external_browser", TRUE))
+	//{
+	//	getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
+	//}
 	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
 	
 	////////////////////// PanelAlerts ///////////////////
@@ -2879,11 +2879,11 @@ LLPanelPreference::~LLPanelPreference()
 void LLPanelPreference::apply()
 {
 	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	if (hasChild("use_external_browser", TRUE))
-	{
-		BOOL useExternalBrowser = (getChild<LLRadioGroup>("use_external_browser")->getValue().asInteger() == 1);
-		gSavedSettings.setBOOL("UseExternalBrowser", useExternalBrowser);
-	}
+	//if (hasChild("use_external_browser", TRUE))
+	//{
+	//	BOOL useExternalBrowser = (getChild<LLRadioGroup>("use_external_browser")->getValue().asInteger() == 1);
+	//	gSavedSettings.setBOOL("UseExternalBrowser", useExternalBrowser);
+	//}
 	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
 }
 

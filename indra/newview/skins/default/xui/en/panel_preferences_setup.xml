@@ -111,7 +111,7 @@
      layout="topleft"
      left="20"
      name="connection_port_enabled"
-     top="10"
+     top="5"
      width="256">
         <!-- check_box.commit_callback
          function="Notification.Show"
@@ -353,7 +353,7 @@
      layout="topleft"
      left="15"
      name="log_path_desc"
-     top_pad="10"
+     top_pad="5"
      width="300">
         Conversation logs and transcripts location:
     </text>
@@ -449,8 +449,8 @@
      layout="topleft"
      left="15"
      name="Web:"
-     top_pad="10"
-     width="300">
+     top_pad="5"
+     width="80">
         Web browser:
     </text>
  <!-- <radio_group
@@ -487,18 +487,18 @@
    control_name="PreferredBrowserBehavior"
    draw_border="false"
    follows="left|top"
-   height="60"
+   height="50"
    layout="topleft"
-   left_delta="50"
+   left_pad="10"
    name="preferred_browser_behavior"
-   top_pad="0"
+   top_delta="0"
    width="480">
     <radio_item
       height="20"
       label="Use my browser (Chrome, Firefox, IE) for all links"
       layout="topleft"
       left="0"
-      name="internal"
+      name="new_external"
       value="0"
       tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
       top="0"
@@ -508,18 +508,19 @@
       label="Use built-in browser for Second Life links only"
       layout="topleft"
       left_delta="0"
-      name="external"
+      name="new_internal"
       value="1"      
       tool_tip="Use the default system web browser for help, web links, etc. Builtin browser will be used only for LindenLab/SecondLife links."
-      top_delta="20"
+      top_delta="15"
       width="480" />
     <radio_item
+      top_delta="15"
       height="20"
       label="Use built-in browser for all links"
       layout="topleft"
       left="0"
-      name="internal"
-      value="2"
+      name="new_internal_all"
+      value="2"/>
     </radio_group>
 
     <text
