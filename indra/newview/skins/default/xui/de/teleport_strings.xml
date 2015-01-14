@@ -49,6 +49,9 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 		<message name="MustGetAgeRegion">
 			Sie müssen mindestens 18 Jahre alt sein, um diese Region betreten zu können.
 		</message>
+		<message name="RegionTPSpecialUsageBlocked">
+			Region konnte nicht betreten werden. „[REGION_NAME]“ ist eine Glücksspiel-Region und Sie müssen bestimmte Kriterien erfüllen, um diese betreten zu können. Für weitere Informationen, lesen Sie bitte die [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Glücksspiel-FAQ].
+		</message>
 	</message_set>
 	<message_set name="progress">
 		<message name="sending_dest">

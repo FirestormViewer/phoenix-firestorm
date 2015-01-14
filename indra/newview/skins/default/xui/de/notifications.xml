@@ -73,6 +73,10 @@ Fehlerdetails: The notification called &apos;[_NAME]&apos; was not found in noti
 		[MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
 	</notification>
+	<notification name="GenericAlertOK">
+		[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="BadInstallation">
 		Beim Aktualisieren von [APP_NAME] ist ein Fehler aufgetreten.  Bitte [http://get.secondlife.com laden Sie die aktuellste Version des Viewers herunter].
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -1982,6 +1986,10 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
 		Wir haben technische Probleme mit Ihrem Teleport, da Ihre Einstellungen nicht mit dem Server synchronisiert sind.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RegionTPSpecialUsageBlocked">
+		Region konnte nicht betreten werden. „[REGION_NAME]“ ist eine Glücksspiel-Region und Sie müssen bestimmte Kriterien erfüllen, um diese betreten zu können. Für weitere Informationen, lesen Sie bitte die [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Glücksspiel-FAQ].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">

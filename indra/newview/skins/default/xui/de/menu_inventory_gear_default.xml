@@ -19,7 +19,7 @@
 	<!-- ## Zi: Extended Inventory Search -->
 	<menu_item_check label="Objekte hinzufügen per Doppelklick" name="add_inv_toggle"/>
 	<menu_item_check label="Kleidung hinzufügen per Doppelklick" name="add_invclothing_toggle"/>
-	<menu_item_call label="Filter anzeigen" name="show_filters"/>
+	<menu_item_call label="Filter anzeigen..." name="show_filters"/>
 	<menu_item_call label="Filter zurücksetzen" name="reset_filters"/>
 	<menu_item_call label="Alle Ordner schließen" name="close_folders"/>
 	<menu_item_call label="Fundbüro ausleeren" name="empty_lostnfound"/>

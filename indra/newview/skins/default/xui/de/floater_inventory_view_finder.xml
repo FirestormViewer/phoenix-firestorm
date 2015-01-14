@@ -19,7 +19,17 @@
 	<text name="- OR -">
 		- ODER -
 	</text>
+	<radio_group name="date_search_direction">
+		<radio_item label="neuer als" name="newer"/>
+		<radio_item label="älter als" name="older"/>
+	</radio_group>
 	<spinner label="Stunden zuvor" label_width="80" name="spin_hours_ago"/>
+	<text name="spin_hours_ago_lbl">
+		Stunden
+	</text>
 	<spinner label="Tage zuvor" name="spin_days_ago"/>
+	<text name="spin_days_ago_lbl">
+		Tage
+	</text>
 	<button label="Schließen" label_selected="Schließen" name="Close"/>
 </floater>
