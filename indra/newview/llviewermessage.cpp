@@ -8446,9 +8446,9 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
 	gAgent.stopTyping();
 
-	LL_INFOS() << "Teleport error, reason=" << reason << LL_ENDL;
+	LL_INFOS() << "Teleport error, message_id=" << message_id << LL_ENDL;
 	if (!FSLSLBridge::instance().canUseBridge() ||
-		(reason != "Could not teleport closer to destination"))
+		(message_id != "Could not teleport closer to destination"))
 	{
 		LLNotificationsUtil::add("CouldNotTeleportReason", args);
 	}
