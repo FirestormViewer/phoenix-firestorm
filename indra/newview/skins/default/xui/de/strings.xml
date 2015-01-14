@@ -36,27 +36,27 @@
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">
-		Kompiliert mit [COMPILER] version [COMPILER_VERSION]
+		Kompiliert mit [COMPILER], Version [COMPILER_VERSION]
 	</string>
 	<string name="AboutPosition">
 		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
-(globalen Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
+(globale Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
 	<string name="AboutSystem">
 		CPU: [CPU]
 Speicher: [MEMORY_MB] MB
-Betriebssystem: [OS_VERSION]
-Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
+Betriebssystemversion: [OS_VERSION]
+Grafikkartenhersteller: [GRAPHICS_CARD_VENDOR]
 Grafikkarte: [GRAPHICS_CARD]
 	</string>
 	<string name="AboutDriver">
-		Windows Grafiktreiber-Version: [GRAPHICS_DRIVER_VERSION]
+		Windows-Grafiktreiberversion: [GRAPHICS_DRIVER_VERSION]
 	</string>
 	<string name="AboutLibs">
-		OpenGL Version: [OPENGL_VERSION]
+		OpenGL-Version: [OPENGL_VERSION]
 
 RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
@@ -1064,14 +1064,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
 	</string>
+	<string name="TeleportYourAgent">
+		Sie teleportieren
+	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
 	<string name="AgentNameSubst">
 		(Sie)
-	</string>
-	<string name="TeleportYourAgent">
-		Sie teleportieren
 	</string>
 	<string name="ManageEstateSilently">
 		Grundbesitz leise verwalten
@@ -1433,7 +1433,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InventoryNoTexture">
 		Sie haben keine Kopie dieser Textur in Ihrem Inventar.
 	</string>
-  <string name="InventoryInboxNoItems">
+	<string name="InventoryInboxNoItems">
 		Einkäufe aus dem Marktplatz erscheinen hier. Sie können diese dann zur Verwendung in Ihr Inventar ziehen.
 	</string>
 	<string name="MarketplaceURL">
@@ -1466,20 +1466,16 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Ziehen Sie Ordner in dien Bereich und klicken Sie auf „In Marktplatz übertragen“, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
-		Initialisiere Marktplatz.
-	</string>
-	<string name="InventoryOutboxInitializingTooltip">
+		Marktplatz wird initialisiert.
 	</string>
 	<string name="InventoryOutboxInitializing">
-		Wir greifen auf Ihre Konto im [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Shop] zu.
+		Wir greifen auf Ihr Konto im [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Laden] zu.
 	</string>
 	<string name="InventoryOutboxErrorTitle">
-		Marktplatz-Fehler
-	</string>
-	<string name="InventoryOutboxErrorTooltip">
+		Marktplatzfehler.
 	</string>
 	<string name="InventoryOutboxError">
-		Der [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Shop] hat Fehler zurückgeliefert.
+		Der [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Laden] gibt Fehler zurück.
 	</string>
 	<string name="Marketplace Error None">
 		Keine Fehler
@@ -1916,6 +1912,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="CompileQueueDownloadedCompiling">
 		Heruntergeladen, wird kompiliert
+	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Kein Skriptkompilierungsdienst verfügbar
 	</string>
 	<string name="CompileQueueServiceUnavailable">
 		Kein Skriptkompilierungsdienst verfügbar

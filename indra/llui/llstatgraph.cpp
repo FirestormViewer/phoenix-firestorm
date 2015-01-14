@@ -44,16 +44,13 @@ LLStatGraph::LLStatGraph(const Params& p)
 :	LLView(p),
 	mMin(p.min),
 	mMax(p.max),
-	// <FS:Ansariel> Proper variable initialization
-	//mPerSec(true),
 	mPerSec(p.per_sec),
-	// </FS:Ansariel>
 	mPrecision(p.precision),
 	mValue(p.value),
+	mUnits(p.units),
 	mNewStatFloatp(p.stat.count_stat_float),
 	// <FS:Ansariel> Proper variable initialization
-	mLabel(p.label),
-	mUnits(p.units)
+	mLabel(p.label)
 	// </FS:Ansariel>
 {
 	setToolTip(p.name());

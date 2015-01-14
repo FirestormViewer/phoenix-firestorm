@@ -134,6 +134,8 @@ public:
 
 	virtual bool	hasAccelerators() const { return true; }
 
+	void 			setScriptName(const std::string& name){mScriptName = name;};
+
 private:
 	// NaCl - LSL Preprocessor
 	static void		onToggleProc(void* userdata);
@@ -166,6 +168,7 @@ protected:
 
 private:
 	std::string		mSampleText;
+	std::string		mScriptName;
 	LLScriptEditor*	mEditor;
 	void			(*mLoadCallback)(void* userdata);
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice

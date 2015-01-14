@@ -202,12 +202,10 @@ void agent_push_backward( EKeystate s )
 	{
 		camera_move_backward(s);
 	}
-	// <FS:Ansariel> Comment out what shouldn't be here at all but got back in LL merge fail
-	//else if (!gAgent.backwardGrabbed() && gAgentAvatarp->isSitting())
-	//{
-	//	gAgentCamera.changeCameraToThirdPerson();
-	//}
-	// </FS:Ansariel>
+	else if (!gAgent.backwardGrabbed() && gAgentAvatarp->isSitting() && gSavedSettings.getBOOL("LeaveMouselook"))
+	{
+		gAgentCamera.changeCameraToThirdPerson();
+	}
 	else
 	{
 		agent_push_forwardbackward(s, -1, LLAgent::DOUBLETAP_BACKWARD);

@@ -1423,10 +1423,7 @@ BOOL LLGestureMgr::matchPrefix(const std::string& in_str, std::string* out_str)
 				}
 				if (rest_of_match.compare("") == 0)
 				{
-					// <FS>
-					// return FALSE;
 					return TRUE;
-					// </FS>
 				}
 				if (buf.compare("") != 0)
 				{

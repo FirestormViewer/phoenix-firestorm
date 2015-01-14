@@ -292,11 +292,16 @@ void LLPanelLogin::addUsersWithFavoritesToUsername()
 {
 	LLComboBox* combo = getChild<LLComboBox>("username_combo");
 	if (!combo) return;
-	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites_" + LLGridManager::getInstance()->getGrid() + ".xml");
+	std::string old_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
 	file.open(filename);
-	if (!file.is_open()) return;
+	if (!file.is_open())
+	{
+		file.open(old_filename);
+		if (!file.is_open()) return;
+	}
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
 		iter != fav_llsd.endMap(); ++iter)
@@ -321,6 +326,9 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	// Load favorites into the combo.
 	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
 // <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//std::replace(user_defined_name.begin(), user_defined_name.end(), '.', ' ');
+	//std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites_" + LLGridManager::getInstance()->getGrid() + ".xml");
+	//std::string old_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	std::string canonical_user_name = canonicalize_username(user_defined_name);
 	U32 resident_pos = canonical_user_name.find("Resident");
 	if (resident_pos > 0)
@@ -330,12 +338,19 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	std::string current_grid = getChild<LLComboBox>("server_combo")->getSimple();
 	std::string current_user = canonical_user_name + " @ " + current_grid;
 	LL_DEBUGS("Favorites") << "Current user: \"" << current_user << "\"" << LL_ENDL;
-// </FS:CR>
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+// </FS:CR>
 	LLSD fav_llsd;
 	llifstream file;
 	file.open(filename);
+// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//if (!file.is_open())
+	//{
+	//	file.open(old_filename);
+	//	if (!file.is_open()) return;
+	//}
 	if (!file.is_open()) return;
+// </FS:CR>
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
 		iter != fav_llsd.endMap(); ++iter)
@@ -344,7 +359,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
 		// a single word account name, so it can be compared case-insensitive with the
 		// user defined "firstname lastname".
 // <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-		//S32 res = LLStringUtil::compareInsensitive(canonical_user_name, iter->first);
+		//S32 res = LLStringUtil::compareInsensitive(user_defined_name, iter->first);
 		S32 res = LLStringUtil::compareInsensitive(current_user, iter->first);
 // </FS:CR>
 		if (res != 0)
@@ -1131,11 +1146,13 @@ void LLPanelLogin::onSelectServer()
 	// The user twiddled with the grid choice ui.
 	// apply the selection to the grid setting.
 	LLPointer<LLCredential> credential;
-	
+
 	LLComboBox* server_combo = getChild<LLComboBox>("server_combo");
 	LLSD server_combo_val = server_combo->getSelectedValue();
 	LL_INFOS("AppInit") << "grid "<<server_combo_val.asString()<< LL_ENDL;
 	LLGridManager::getInstance()->setGridChoice(server_combo_val.asString());
+	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//addFavoritesToStartLocation();
 	
 	/*
 	 * Determine whether or not the value in the start_location_combo makes sense

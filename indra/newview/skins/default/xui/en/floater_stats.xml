@@ -334,6 +334,7 @@
           <stat_bar name="simsimpctsteppedcharacters"
                     label=" Characters Updated"
                     stat="simsimpctsteppedcharacters"
+                    unit_label="%"
                     decimal_digits="1"
                     setting="DebugStatModeSimSimPCTSteppedCharacters"/>
         </stat_view>

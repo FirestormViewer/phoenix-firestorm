@@ -1809,7 +1809,6 @@ BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 			sTargetPanX = sPanX;
 			sTargetPanY = sPanY;
 
-			// <FS:Ansariel> Backout MAINT-3250
 			gViewerWindow->moveCursorToCenter();
 		}
 

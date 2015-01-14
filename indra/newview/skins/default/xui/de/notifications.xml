@@ -4077,16 +4077,16 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="CantDivideLandMultipleParcelsSelected">
 		Land kann nicht geteilt werden.
 Mehr als eine Parzelle ist ausgewählt.
-Wählen Sie ein kleineres Stück Land aus.
+Wählen Sie eine kleinere Landfläche aus.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
 		Land kann nicht geteilt werden.
-Parzelle nicht auffindbar.
-Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“.
+Parzelle kann nicht gefunden werden.
+Bitte melden Sie den Fehler über „Hilfe“ -&gt; „Fehler melden“.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
 		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt.
-Wählen Sie ein kleineres Stück Land aus.
+Wählen Sie eine kleinere Landfläche aus.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Land wurde geteilt.

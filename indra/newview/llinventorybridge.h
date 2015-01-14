@@ -168,7 +168,6 @@ protected:
 	BOOL isProtectedFolder(bool ignore_setting = false) const;
 // </FS:TT>
 	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
-	BOOL isOutboxFolder() const; // true if COF or descendent of marketplace outbox
 	BOOL isOutboxFolderDirectParent() const;
 	const LLUUID getOutboxFolder() const;
 
@@ -188,6 +187,10 @@ protected:
 									 const LLUUID& new_parent,
 									 BOOL restamp);
 	void removeBatchNoCheck(std::vector<LLFolderViewModelItem*>& batch);
+
+public:
+	BOOL isOutboxFolder() const;    // true if COF or descendant of   marketplace outbox
+
 protected:
 	LLHandle<LLInventoryPanel> mInventoryPanel;
 	LLFolderView* mRoot;

@@ -299,14 +299,7 @@ void LLFloaterWebContent::onOpen(const LLSD& key)
 void LLFloaterWebContent::onClose(bool app_quitting)
 {
     // If we close the web browsing window showing the facebook login, we need to signal to this object that the connection will not happen
-
-	// <FS:ND> FIRE-12220; using getInstance can lead to endless recursion if the floater is not open, then gets created by getInstance, gets closed due to too many open
-	// webbrowsers and then calls getInstance once again in onClose.
-
-    // LLFloater* fbc_web = LLFloaterReg::getInstance("fbc_web");
     LLFloater* fbc_web = LLFloaterReg::findInstance("fbc_web");
-
-	// </FS:ND>
 
     if (fbc_web == this)
     {

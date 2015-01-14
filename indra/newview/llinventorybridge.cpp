@@ -126,6 +126,7 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
 static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit);
+static BOOL can_move_to_landmarks(LLInventoryItem* inv_item);
 // <FS:CR> Function left unused from FIRE-7219
 //static bool check_category(LLInventoryModel* model,
 //						   const LLUUID& cat_id,
@@ -2477,14 +2478,19 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 		&& (LLToolDragAndDrop::SOURCE_AGENT == source);
 
 	BOOL accept = FALSE;
+	U64 filter_types = filter->getFilterTypes();
+	BOOL use_filter = filter_types && (filter_types&LLInventoryFilter::FILTERTYPE_DATE || (filter_types&LLInventoryFilter::FILTERTYPE_OBJECT)==0);
+
 	if (is_agent_inventory)
 	{
 		const LLUUID &trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH, false);
 		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
 		//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
+		const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false);
 
 		const BOOL move_is_into_trash = (mUUID == trash_id) || model->isObjectDescendentOf(mUUID, trash_id);
-		const BOOL move_is_into_outfit = getCategory() && (getCategory()->getPreferredType() == LLFolderType::FT_OUTFIT);
+		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
+		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
 		//const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 
@@ -2534,6 +2540,29 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 					is_movable = FALSE;
 					break;
 				}
+			}
+		}
+		U32 max_items_to_wear = gSavedSettings.getU32("WearFolderLimit");
+		if (is_movable
+			&& move_is_into_current_outfit
+			&& descendent_items.size() > max_items_to_wear)
+		{
+			LLInventoryModel::cat_array_t cats;
+			LLInventoryModel::item_array_t items;
+			LLFindWearablesEx not_worn(/*is_worn=*/ false, /*include_body_parts=*/ false);
+			gInventory.collectDescendentsIf(cat_id,
+				cats,
+				items,
+				LLInventoryModel::EXCLUDE_TRASH,
+				not_worn);
+
+			if (items.size() > max_items_to_wear)
+			{
+				// Can't move 'large' folders into current outfit: MAINT-4086
+				is_movable = FALSE;
+				LLStringUtil::format_map_t args;
+				args["AMOUNT"] = llformat("%d", max_items_to_wear);
+				tooltip_msg = LLTrans::getString("TooltipTooManyWearables",args);
 			}
 		}
 		if (is_movable && move_is_into_trash)
@@ -2679,7 +2708,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 					is_movable = active_folder_view != NULL;
 				}
 
-				if (is_movable)
+				if (is_movable && use_filter)
 				{
 					// Check whether the folder being dragged from active inventory panel
 					// passes the filter of the destination panel.
@@ -2826,6 +2855,12 @@ BOOL move_inv_category_world_to_agent(const LLUUID& object_id,
 
 	BOOL accept = FALSE;
 	BOOL is_move = FALSE;
+	BOOL use_filter = FALSE;
+	if (filter)
+	{
+		U64 filter_types = filter->getFilterTypes();
+		use_filter = filter_types && (filter_types&LLInventoryFilter::FILTERTYPE_DATE || (filter_types&LLInventoryFilter::FILTERTYPE_OBJECT)==0);
+	}
 
 	// coming from a task. Need to figure out if the person can
 	// move/copy this item.
@@ -2858,7 +2893,7 @@ BOOL move_inv_category_world_to_agent(const LLUUID& object_id,
 			accept = TRUE;
 		}
 
-		if (filter && accept)
+		if (accept && use_filter)
 		{
 			accept = filter->check(item);
 		}
@@ -3071,10 +3106,7 @@ void LLInventoryCopyAndWearObserver::changed(U32 mask)
 				    mContentsCount)
 				{
 					gInventory.removeObserver(this);
-					// <FS:Ansariel> FIRE-938: "copy and wear" does replace
-					//LLAppearanceMgr::instance().wearInventoryCategory(category, FALSE, FALSE);
 					LLAppearanceMgr::instance().wearInventoryCategory(category, FALSE, TRUE);
-					// </FS:Ansariel>
 					delete this;
 				}
 			}
@@ -3092,7 +3124,7 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		LLFolderViewFolder *f = dynamic_cast<LLFolderViewFolder   *>(mInventoryPanel.get()->getItemByID(mUUID));
 		if (f)
 		{
-			f->setOpen(TRUE);
+			f->toggleOpen();
 		}
 		
 		return;
@@ -3418,10 +3450,14 @@ void LLFolderBridge::pasteFromClipboard()
 	{
 		const LLUUID &current_outfit_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, false);
 		const LLUUID &outbox_id = model->findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+		const LLUUID &favorites_id = model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE, false);
+		const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false);
 
 		const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
-		const BOOL move_is_into_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
+		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
+		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 		const BOOL move_is_into_outbox = model->isObjectDescendentOf(mUUID, outbox_id);
+		const BOOL move_is_into_favorites = (mUUID == favorites_id);
 
 		std::vector<LLUUID> objects;
 		LLClipboard::instance().pasteFromClipboard(objects);
@@ -3479,9 +3515,16 @@ void LLFolderBridge::pasteFromClipboard()
 			{
 				if (move_is_into_current_outfit || move_is_into_outfit)
 				{
-					if (can_move_to_outfit(item, move_is_into_current_outfit))
+					if (item && can_move_to_outfit(item, move_is_into_current_outfit))
 					{
 						dropToOutfit(item, move_is_into_current_outfit);
+					}
+				}
+				else if (move_is_into_favorites)
+				{
+					if (item && can_move_to_landmarks(item))
+					{
+						dropToFavorites(item);
 					}
 				}
 				else if (LLClipboard::instance().isCutMode())
@@ -3561,9 +3604,11 @@ void LLFolderBridge::pasteLinkFromClipboard()
 	{
 		const LLUUID &current_outfit_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, false);
 		const LLUUID &outbox_id = model->findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+		const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false);
 
 		const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
-		const BOOL move_is_into_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
+		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
+		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 		const BOOL move_is_into_outbox = model->isObjectDescendentOf(mUUID, outbox_id);
 
 		if (move_is_into_outbox)
@@ -4118,6 +4163,28 @@ void LLFolderBridge::modifyOutfit(BOOL append, BOOL replace)
 	LLViewerInventoryCategory* cat = getCategory();
 	if(!cat) return;
 
+	// checking amount of items to wear
+	U32 max_items = gSavedSettings.getU32("WearFolderLimit");
+	if (cat->getDescendentCount() > max_items)
+	{
+		LLInventoryModel::cat_array_t cats;
+		LLInventoryModel::item_array_t items;
+		LLFindWearablesEx not_worn(/*is_worn=*/ false, /*include_body_parts=*/ false);
+		gInventory.collectDescendentsIf(cat->getUUID(),
+			cats,
+			items,
+			LLInventoryModel::EXCLUDE_TRASH,
+			not_worn);
+
+		if (items.size() > max_items)
+		{
+			LLSD args;
+			args["AMOUNT"] = llformat("%d", max_items);
+			LLNotificationsUtil::add("TooManyWearables", args);
+			return;
+		}
+	}
+
 	LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, append, replace );
 }
 
@@ -4173,6 +4240,12 @@ static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_curr
 		(inv_item->getInventoryType() != LLInventoryType::IT_GESTURE) &&
 		(inv_item->getInventoryType() != LLInventoryType::IT_ATTACHMENT) &&
 		(inv_item->getInventoryType() != LLInventoryType::IT_OBJECT))
+	{
+		return FALSE;
+	}
+
+	U32 flags = inv_item->getFlags();
+	if(flags & LLInventoryItemFlags::II_FLAGS_OBJECT_HAS_MULTIPLE_ITEMS)
 	{
 		return FALSE;
 	}
@@ -4266,10 +4339,12 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
 	//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
 	const LLUUID &outbox_id = model->findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
+	const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false);
 
 	const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
 	const BOOL move_is_into_favorites = (mUUID == favorites_id);
-	const BOOL move_is_into_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
+	const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
+	const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 	// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
 	//const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 	const BOOL move_is_into_outbox = model->isObjectDescendentOf(mUUID, outbox_id);
@@ -4277,6 +4352,10 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 
 	LLToolDragAndDrop::ESource source = LLToolDragAndDrop::getInstance()->getSource();
 	BOOL accept = FALSE;
+	U64 filter_types = filter->getFilterTypes();
+	// We shouldn't allow to drop non recent items into recent tab (or some similar transactions)
+	// while we are allowing to interact with regular filtered inventory
+	BOOL use_filter = filter_types && (filter_types&LLInventoryFilter::FILTERTYPE_DATE || (filter_types&LLInventoryFilter::FILTERTYPE_OBJECT)==0);
 	LLViewerObject* object = NULL;
 	if(LLToolDragAndDrop::SOURCE_AGENT == source)
 	{
@@ -4397,7 +4476,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		// Check whether the item being dragged from active inventory panel
 		// passes the filter of the destination panel.
 		// <FS:Ansariel> Allow drag and drop in inventory regardless of filter (e.g. Recent)
-		//if (accept && active_panel)
+		//if (accept && active_panel && use_filter)
 		//{
 		//	LLFolderViewItem* fv_item =   active_panel->getItemByID(inv_item->getUUID());
 		//	if (!fv_item) return false;
@@ -4540,7 +4619,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		// Check whether the item being dragged from in world
 		// passes the filter of the destination panel.
 		// <FS:Ansariel> Allow dropping from inworld objects regardless of filter
-		//if (accept)
+		//if (accept && use_filter)
 		//{
 		//	accept = filter->check(inv_item);
 		//}
@@ -4586,7 +4665,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		// Check whether the item being dragged from notecard
 		// passes the filter of the destination panel.
 		// <FS:Ansariel> Allow dropping from notecards regardless of filter
-		//if (accept)
+		//if (accept && use_filter)
 		//{
 		//	accept = filter->check(inv_item);
 		//}
@@ -4630,7 +4709,7 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 
 			// Check whether the item being dragged from the library
 			// passes the filter of the destination panel.
-			if (accept && active_panel)
+			if (accept && active_panel && use_filter)
 			{
 				LLFolderViewItem* fv_item =   active_panel->getItemByID(inv_item->getUUID());
 				if (!fv_item) return false;

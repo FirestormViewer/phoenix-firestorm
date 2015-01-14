@@ -712,9 +712,22 @@ void LLSceneMonitorView::closeFloater(bool app_quitting)
 	setVisible(false);	
 }
 
+// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X
+//void LLSceneMonitorView::onClickCloseBtn(bool app_quitting)
+//{
+//	setVisible(false);
+//}
+// </FS:Ansariel>
+
 void LLSceneMonitorView::onVisibilityChange(BOOL visible)
 {
-	visible = visible && LLGLSLShader::sNoFixedFunction;
+	if (!LLGLSLShader::sNoFixedFunction && visible)
+	{
+		visible = false;
+		// keep Scene monitor and its view in sycn
+		setVisible(false);
+		LL_WARNS("SceneMonitor") << "Incompatible graphical settings, Scene Monitor can't be turned on" << LL_ENDL; 
+	}
 	LLSceneMonitor::getInstance()->setDebugViewerVisible(visible);
 
 	// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X

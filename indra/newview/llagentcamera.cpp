@@ -2819,6 +2819,11 @@ void LLAgentCamera::lookAtLastChat()
 	}
 }
 
+bool LLAgentCamera::isfollowCamLocked()
+{
+	return mFollowCam.getPositionLocked();
+}
+
 BOOL LLAgentCamera::setPointAt(EPointAtType target_type, LLViewerObject *object, LLVector3 position)
 {
 	// Ansariel: Remember the current object point pointed at - we might need it later

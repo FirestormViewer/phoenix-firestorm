@@ -59,6 +59,12 @@ void LLSceneView::closeFloater(bool)
 	setVisible(false);
 }
 
+// <FS:Ansariel> FIRE-14144 / MAINT-4256 / BUG-6664: Crash when opening stats after closing via X
+//void LLSceneView::onClickCloseBtn(bool)
+//{
+//	setVisible(false);
+//}
+// </FS:Ansariel>
 
 void LLSceneView::draw()
 {

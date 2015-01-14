@@ -16254,7 +16254,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>Default</string>
     </map>
-    <key>UseExternalBrowser</key>
+    <key>UseExternalBrowser</key> <!-- deprecated (see MAINT-4127) -->
     <map>
       <key>Comment</key>
       <string>Use default browser when opening web pages instead of in-world browser.</string>
@@ -16264,6 +16264,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <boolean>1</boolean>
+    </map>
+    <key>PreferredBrowserBehavior</key>
+    <map>
+      <key>Comment</key>
+      <string>Use system browser for any links (0), use builtin browser for SL links and system one for others (1) or use builtin browser only (2).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>UseFreezeFrame</key>
     <map>
@@ -17441,6 +17452,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>LeaveMouselook</key>
+    <map>
+      <key>Comment</key>
+      <string>Exit Mouselook mode via S or Down Arrow keys while sitting </string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>TextureLoggingThreshold</key>
@@ -20256,6 +20278,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string />
     </map>
+  <key>WearFolderLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>Limits number of items in the folder that can be replaced/added to current outfit</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>125</integer>
+  </map>
     <key>EveryoneCopy</key>
       <map>
         <key>Comment</key>

@@ -163,7 +163,7 @@ void LLAvatarActions::removeFriendsDialog(const uuid_vec_t& ids)
 		LLAvatarName av_name;
 		if(LLAvatarNameCache::get(agent_id, &av_name))
 		{
-			args["NAME"] = av_name.getDisplayName();
+			args["NAME"] = av_name.getCompleteName();
 		}
 
 		msgType = "RemoveFromFriends";
@@ -500,7 +500,7 @@ void LLAvatarActions::showOnMap(const LLUUID& id)
 	}
 
 	gFloaterWorldMap->trackAvatar(id, av_name.getDisplayName());
-	LLFloaterReg::showInstance("world_map");
+	LLFloaterReg::showInstance("world_map", "center");
 }
 
 // static
@@ -659,6 +659,16 @@ void LLAvatarActions::share(const LLUUID& id)
 	{
 		// we should always get here, but check to verify anyways
 		LLIMModel::getInstance()->addMessage(session_id, SYSTEM_FROM, LLUUID::null, LLTrans::getString("share_alert"), false);
+
+		// <FS:Ansariel> [FS Communication UI]
+		//LLFloaterIMSessionTab* session_floater = LLFloaterIMSessionTab::findConversation(session_id);
+		//if (session_floater && session_floater->isMinimized())
+		//{
+		//	session_floater->setMinimized(false);
+		//}
+		//LLFloaterIMContainer *im_container = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+		//im_container->selectConversationPair(session_id, true);
+		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 

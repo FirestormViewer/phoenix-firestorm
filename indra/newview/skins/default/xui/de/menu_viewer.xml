@@ -109,7 +109,7 @@
 			<menu_item_check label="Mittag" name="Noon"/>
 			<menu_item_check label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_check label="Mitternacht" name="Midnight"/>
-            <menu_item_check label="Grundbesitzzeit" name="Revert to Region Default"/>
+			<menu_item_check label="Regionseinstellungen verwenden" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Umgebungs-Editor" name="Environment Editor">
 			<menu_item_call label="Umgebungseinstellungen..." name="Environment Settings"/>
@@ -410,6 +410,7 @@
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
 			<menu_item_check label="Frame-Test" name="Frame Test"/>
 			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
+			<menu_item_call label="Benchmark" name="Benchmark"/>
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
@@ -430,7 +431,7 @@
 			<menu_item_check label="Lichter" name="Lights"/>
 			<menu_item_check label="Partikel" name="Particles"/>
 			<menu_item_check label="Gelenkpunkte" name="Collision Skeleton"/>
-			<menu_item_check label="Joints" name="Joints"/>
+			<menu_item_check label="Gelenke" name="Joints"/>
 			<menu_item_check label="Raycast" name="Raycast"/>
 			<menu_item_check label="Wind-Vektoren" name="Wind Vectors"/>
 			<menu_item_check label="Render-Komplexität" name="rendercomplexity"/>
@@ -505,7 +506,6 @@
 			<menu_item_call label="Agent-Info drucken" name="Print Agent Info"/>
 			<menu_item_check label="Doppel-Klick-Auto-Pilot" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Doppel-Klick-Teleport" name="DoubleClick Teleport"/>
-			<menu_item_check label="Regions-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_check label="SelectMgr debuggen" name="Debug SelectMgr"/>
 			<menu_item_check label="Klicks debuggen" name="Debug Clicks"/>
 			<menu_item_check label="Debug-Ansichten" name="Debug Views"/>

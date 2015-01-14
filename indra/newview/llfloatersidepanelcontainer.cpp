@@ -61,7 +61,7 @@ void LLFloaterSidePanelContainer::onOpen(const LLSD& key)
 	getChild<LLPanel>(sMainPanelName)->onOpen(key);
 }
 
-void LLFloaterSidePanelContainer::onClickCloseBtn(bool)
+void LLFloaterSidePanelContainer::closeFloater(bool app_quitting)
 {
 	LLPanelOutfitEdit* panel_outfit_edit =
 		dynamic_cast<LLPanelOutfitEdit*>(LLFloaterSidePanelContainer::getPanel("appearance", "panel_outfit_edit"));
@@ -79,7 +79,7 @@ void LLFloaterSidePanelContainer::onClickCloseBtn(bool)
 		}
 	}
 	
-	LLFloater::onClickCloseBtn();
+	LLFloater::closeFloater(app_quitting);
 }
 
 LLPanel* LLFloaterSidePanelContainer::openChildPanel(const std::string& panel_name, const LLSD& params)

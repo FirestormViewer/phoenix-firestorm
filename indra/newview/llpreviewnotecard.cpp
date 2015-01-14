@@ -516,12 +516,20 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 												&onSaveComplete,
 												(void*)info,
 												FALSE);
+				// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+				//return true;
 			}
 			else // !gAssetStorage
 			{
 				LL_WARNS() << "Not connected to an asset storage system." << LL_ENDL;
 				return false;
 			}
+			// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+			//if(mCloseAfterSave)
+			//{
+			//	closeFloater();
+			//}
+			// </FS:Ansariel>
 		}
 	}
 	return true;

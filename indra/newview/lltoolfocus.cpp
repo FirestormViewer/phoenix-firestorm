@@ -54,6 +54,7 @@
 #include "llmorphview.h"
 #include "llfloaterreg.h"
 #include "llfloatercamera.h"
+#include "llmenugl.h"
 
 // Globals
 BOOL gCameraBtnZoom = TRUE;
@@ -76,6 +77,7 @@ LLToolCamera::LLToolCamera()
 	mOutsideSlopX(FALSE),
 	mOutsideSlopY(FALSE),
 	mValidClickPoint(FALSE),
+	mValidSelection(FALSE),
 	mMouseSteering(FALSE),
 	mMouseUpX(0),
 	mMouseUpY(0),
@@ -92,6 +94,8 @@ void LLToolCamera::handleSelect()
 	if (gFloaterTools)
 	{
 		gFloaterTools->setStatusText("camera");
+		// in case we start from tools floater, we count any selection as valid
+		mValidSelection = gFloaterTools->getVisible();
 	}
 }
 
@@ -99,6 +103,14 @@ void LLToolCamera::handleSelect()
 void LLToolCamera::handleDeselect()
 {
 //	gAgent.setLookingAtAvatar(FALSE);
+
+	// Make sure that temporary selection won't pass anywhere except pie tool.
+	MASK override_mask = gKeyboard ? gKeyboard->currentMask(TRUE) : 0;
+	if (!mValidSelection && (override_mask != MASK_NONE || (gFloaterTools && gFloaterTools->getVisible())))
+	{
+		LLMenuGL::sMenuContainer->hideMenus();
+		LLSelectMgr::getInstance()->validateSelection();
+	}
 }
 
 BOOL LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
