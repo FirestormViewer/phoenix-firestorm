@@ -32,6 +32,7 @@
 			<menu_item_call label="Auf männlichen Standard-Avatar zurücksetzen" name="ResetDefaultAvM"/>
 			<menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
 			<menu_item_check label="Render-Weight für Avatare anzeigen (Ersatz für ARC)" name="Avatar Rendering Cost"/>
+			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
@@ -268,6 +269,7 @@
 		<menu_item_check label="Fotos in hoher Auflösung speichern" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos leise speichern" name="QuietSnapshotsToDisk"/>
 		<menu label="Performance-Tools" name="Performance Tools">
+			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
 			<menu_item_check label="Statistiken zum Laden von Szenen" name="Scene Load Statistics"/>
 			<menu_item_check label="Render-Weight für Avatare anzeigen (ARC-Ersatz)" name="Avatar Rendering Cost"/>
