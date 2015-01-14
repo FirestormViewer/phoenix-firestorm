@@ -1598,6 +1598,8 @@ void LLPanelLandObjects::onClickRefresh(void* userdata)
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	if (!region) return;
 
+	self->mBtnRefresh->setEnabled(false);
+
 	// ready the list for results
 	self->mOwnerList->deleteAllItems();
 	self->mOwnerList->setCommentText(LLTrans::getString("Searching"));
@@ -1672,6 +1674,7 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		{
 			msg->getU32("DataExtended", "TimeStamp", most_recent_time, i);
 		}
+
 		if (owner_id.isNull())
 		{
 			continue;
@@ -1735,10 +1738,10 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		item_params.columns.add().value(LLDate((time_t)most_recent_time)).font(FONT).column("mostrecent").type("date");
 
 		self->mOwnerList->addNameItemRow(item_params);
-
 		LL_DEBUGS() << "object owner " << owner_id << " (" << (is_group_owned ? "group" : "agent")
 				<< ") owns " << object_count << " objects." << LL_ENDL;
 	}
+
 	// check for no results
 	if (0 == self->mOwnerList->getItemCount())
 	{
@@ -1748,6 +1751,8 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 	{
 		self->mOwnerList->setEnabled(TRUE);
 	}
+
+	self->mBtnRefresh->setEnabled(true);
 }
 
 // static

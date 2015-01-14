@@ -2095,7 +2095,6 @@ if (WINDOWS)
       media_plugin_webkit
       winmm_shim
       windows-crash-logger
-      windows-updater
       )
 
     if( ND_BUILD64BIT_ARCH )
@@ -2160,7 +2159,6 @@ if (WINDOWS)
 
     add_dependencies(${VIEWER_BINARY_NAME}
       SLPlugin
-      windows-updater
       windows-crash-logger
       )
 

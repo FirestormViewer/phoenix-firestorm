@@ -178,6 +178,7 @@ public:
 	// ## Zi: Extended Inventory Search
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
+	void setDateSearchDirection(U32 direction);
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
 	U64 getFilterLinks();		// ## Zi: Filter Links Menu

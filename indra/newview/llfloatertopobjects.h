@@ -67,6 +67,7 @@ public:
 	void onRefresh();
 
 	static void setMode(U32 mode);
+	void disableRefreshBtn();
 
 private:
 	LLFloaterTopObjects(const LLSD& key);
