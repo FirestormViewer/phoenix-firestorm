@@ -49,7 +49,7 @@ Go to &apos;Welcome Island Public&apos; to repeat the tutorial.
       You must be age 18 or over to enter this region.
     </message>
     <message name="RegionTPSpecialUsageBlocked">
-      Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+      Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
     </message>
   </message_set>
 	<message_set name="progress">

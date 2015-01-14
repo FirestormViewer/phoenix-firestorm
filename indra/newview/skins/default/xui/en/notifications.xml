@@ -4885,7 +4885,7 @@ The region you're trying to visit contains [REGIONMATURITY] content, but your cu
    name="RegionTPSpecialUsageBlocked"
    type="alertmodal">
     <tag>fail</tag>
-    Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+    Unable to enter region. '[REGION_NAME]' is a Skill Gaming Region, and you must meet certain criteria in order to enter. For details, please review the [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
     <usetemplate
      name="okbutton"
      yestext="OK"/>
