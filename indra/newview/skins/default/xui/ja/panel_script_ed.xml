@@ -24,6 +24,7 @@
 			<menu_item_call label="変更を元に戻す" name="Revert All Changes"/>
 			<menu_item_call label="ファイルからロード..." name="LoadFromFile"/>
 			<menu_item_call label="ファイルに保存..." name="SaveToFile"/>
+			<menu_item_call label="色..." name="Colors"/>
 		</menu>
 		<menu label="編集" name="Edit">
 			<menu_item_call label="元に戻す" name="Undo"/>

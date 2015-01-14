@@ -34,4 +34,5 @@
 		<menu_item_call label="全員を無視" name="ModerateVoiceMute" />
 		<menu_item_call label="全員の無視を解除" name="ModerateVoiceUnmute" />
 	</context_menu>
+	<menu_item_call label="メンバーを立入禁止" name="BanMember"/>
 </toggleable_menu>

@@ -207,6 +207,22 @@ No podrás retirarles ese rol, sino que deberán renunciar a él por sí mismos.
 ¿Añadir esta capacidad a &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
+	<notification name="AssignBanAbilityWarning">
+		Vas a agregar la capacidad &apos;[ACTION_NAME]&apos; al rol &apos;[ROLE_NAME]&apos;.
+
+ *ATENCIÓN*
+Cualquier miembro de un rol que tenga esta capacidad también recibirá las capacidades &apos;[ACTION_NAME_2]&apos; y &apos;[ACTION_NAME_3]&apos;
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RemoveBanAbilityWarning">
+		Vas a quitar la capacidad &apos;[ACTION_NAME]&apos; del rol &apos;[ROLE_NAME]&apos;.
+
+ *ATENCIÓN*
+Al quitar esta capacidad NO se quitan las capacidades &apos;[ACTION_NAME_2]&apos; y &apos;[ACTION_NAME_3]&apos;.
+ 
+Si no quieres que este rol siga teniendo dichas capacidades, deshabilítalas inmediatamente.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Vas a expulsar a [AVATAR_NAME] del grupo.
 		<usetemplate ignoretext="Confirmar la expulsión de un miembro de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
@@ -1645,6 +1661,14 @@ visita [[INFO_URL] detalles sobre esta actualización]
 		No puedes abandonar el grupo porque eres el último propietario del mismo. Por favor, asigna el rol de propietario a otro usuario antes de abandonar el grupo.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
+	<notification name="GroupDepartError">
+		No se puede abandonar el grupo: [reason].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GroupDepart">
+		Has abandonado el grupo [group_name].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmKick">
 		¿Realmente quieres expulsar a todos los residentes fuera de la red de simuladores?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Expulsar a todos los Residentes"/>
@@ -2691,6 +2715,12 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 		[MESSAGE]
 	</notification>
 	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
+	<notification name="FlickrConnect">
+		[MESSAGE]
+	</notification>
+	<notification name="TwitterConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="PaymentReceived">
@@ -4381,6 +4411,10 @@ Prueba a seleccionar un terreno más pequeño.
 	<notification name="PreferenceChatPathChanged">
 		No se pueden mover los archivos. Ruta anterior restaurada.
 		<usetemplate ignoretext="No se pueden mover los archivos. Ruta anterior restaurada." name="okignore" yestext="Aceptar"/>
+	</notification>
+	<notification name="DefaultObjectPermissions">
+		Ha ocurrido un problema al guardar los permisos predeterminados por el siguiente motivo: [REASON]. Intenta configurar los permisos predeterminados más adelante.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ChatHistoryIsBusyAlert">
 		El archivo de historial de chat todavía está realizando la operación anterior. Repite la operación dentro de unos minutos o inicia un chat con otra persona.

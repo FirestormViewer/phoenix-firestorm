@@ -99,14 +99,12 @@ bool LLLoginHandler::handle(const LLSD& tokens,
 		return true;
 	}
 
+	// <FS:Ansariel> [FS Login Panel]
 	if (tokens.size() == 1
 		&& tokens[0].asString() == "show")
 	{
 		// We're using reg-in-client, so show the XUI login widgets
-		// <FS:Ansariel> [FS Login Panel]
-		//LLPanelLogin::showLoginWidgets();
 		FSPanelLogin::showLoginWidgets();
-		// </FS:Ansariel> [FS Login Panel]
 		return true;
 	}
 
@@ -128,6 +126,7 @@ bool LLLoginHandler::handle(const LLSD& tokens,
 		window->minimize();
 		return true;
 	}
+	// </FS:Ansariel> [FS Login Panel]
 
 	// Make sure window is visible
 	LLWindow* window = gViewerWindow->getWindow();

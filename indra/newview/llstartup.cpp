@@ -2435,6 +2435,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 
 		display_startup();
 
+		// <FS:Ansariel> [FS Login Panel]
 		// based on the comments, we've successfully logged in so we can delete the 'forced'
 		// URL that the updater set in settings.ini (in a mostly paranoid fashion)
 		std::string nextLoginLocation = gSavedSettings.getString( "NextLoginLocation" );
@@ -2447,6 +2448,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile") , TRUE );
 			LLUIColorTable::instance().saveUserSettings();
 		};
+		// </FS:Ansariel> [FS Login Panel]
 
 		display_startup();
 		// JC: Initializing audio requests many sounds for download.

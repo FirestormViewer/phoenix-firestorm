@@ -24,6 +24,7 @@
 			<menu_item_call label="Tüm Değişiklikleri Geri Çevir" name="Revert All Changes"/>
 			<menu_item_call label="Dosyadan yükle..." name="LoadFromFile"/>
 			<menu_item_call label="Dosyaya kaydet..." name="SaveToFile"/>
+			<menu_item_call label="Renkler..." name="Colors"/>
 		</menu>
 		<menu label="Düzenle" name="Edit">
 			<menu_item_call label="Geri Al" name="Undo"/>

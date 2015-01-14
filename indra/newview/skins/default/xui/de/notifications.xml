@@ -223,17 +223,17 @@ Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 	<notification name="AssignBanAbilityWarning">
 		Sie sind im Begriff, der Rolle „[ROLE_NAME]“ die Fähigkeit „[ACTION_NAME]“ zuzuweisen.
 
-*ACHTUNG*
-Jedes Mitglied in einer Rolle mit dieser Fähigkeit bekommt ebenfalls die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“ zugewiesen.
+ *ACHTUNG*
+Jedem Mitglied in einer Rolle mit dieser Fähigkeit werden auch die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“ zugewiesen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RemoveBanAbilityWarning">
-		Sie sind im Begriff, der Rolle „[ROLE_NAME]“ die Fähigkeit „[ACTION_NAME]“ zu entziehen.
+		Sie sind im Begriff, die Fähigkeit „[ACTION_NAME]“ aus der Rolle „[ROLE_NAME]“ zu entfernen.
 
-*ACHTUNG*
-Der Entzug dieser Fähigkeit entzieht NICHT die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“.
-
-Falls diese Fähigkeiten dieser Rolle nicht länger zugewiesen sein sollen, deaktivieren Sie diese unverzüglich!
+ *ACHTUNG*
+Durch Entfernen dieser Fähigkeit werden die Fähigkeiten „[ACTION_NAME_2]“ und „[ACTION_NAME_3]“ NICHT entfernt.
+ 
+Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie bitte umgehend.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="EjectGroupMemberWarning">
@@ -1632,7 +1632,7 @@ Diese Gruppe verlassen?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupDepart">
-		Sie haben die Gruppe [group_name] verlassen.
+		Sie haben die Gruppe „[group_name]“ verlassen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
@@ -2596,6 +2596,12 @@ Wählen Sie eine kleinere Landfläche.
 		[MESSAGE]
 	</notification>
 	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
+	<notification name="FlickrConnect">
+		[MESSAGE]
+	</notification>
+	<notification name="TwitterConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="PaymentReceived">

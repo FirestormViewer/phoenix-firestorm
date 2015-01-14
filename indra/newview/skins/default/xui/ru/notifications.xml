@@ -114,13 +114,13 @@
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportFailed">
-		Ошибка при передаче
+		Не удалось передать, ошибка: «[ERROR_CODE]»
 
 Папки не отправлены в торговый центр из-за ошибки системы или сети.  Повторите попытку позже.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxInitFailed">
-		Ошибка инициализации торгового центра
+		Не удалось инициализировать торговый центр, ошибка: «[ERROR_CODE]»
 
 Не удалось инициализировать торговый центр из-за ошибки системы или сети.  Повторите попытку позже.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -209,6 +209,22 @@
 
 Добавить эту способность к роли «[ROLE_NAME]»?
 		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+	<notification name="AssignBanAbilityWarning">
+		Вы собираетесь добавить способность «[ACTION_NAME]» к роли «[ROLE_NAME]».
+
+ *ПРЕДУПРЕЖДЕНИЕ*
+Любой участник в роли с этой способностью также получает способности «[ACTION_NAME_2]» и «[ACTION_NAME_3]»
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RemoveBanAbilityWarning">
+		Вы удаляете способность «[ACTION_NAME]» для роли «[ROLE_NAME]».
+
+ *ПРЕДУПРЕЖДЕНИЕ*
+При удалении этой способности НЕ БУДУТ удалены способности «[ACTION_NAME_2]» и «[ACTION_NAME_3]».
+ 
+Если вам больше не нужны эти способности для данной роли, немедленно отключите их!
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Вы собираетесь исключить [AVATAR_NAME] из группы.
@@ -1579,6 +1595,14 @@ http://secondlife.com/download.
 		Невозможно покинуть группу. Вы не можете покинуть группу, так как вы ее последний владелец. Сначала назначьте владельцем другого участника.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GroupDepartError">
+		Невозможно покинуть группу: [reason].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GroupDepart">
+		Вы покинули группу [group_name].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmKick">
 		Вы ДЕЙСТВИТЕЛЬНО хотите выбросить всех жителей с сетки?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Выбросить всех жителей"/>
@@ -2452,6 +2476,12 @@ http://secondlife.com/download.
 		Выберите хотя бы один тип контента для поиска («Общий», «Умеренный» или «Для взрослых»).
 	</notification>
 	<notification name="SystemMessage">
+		[MESSAGE]
+	</notification>
+	<notification name="FlickrConnect">
+		[MESSAGE]
+	</notification>
+	<notification name="TwitterConnect">
 		[MESSAGE]
 	</notification>
 	<notification name="PaymentReceived">
@@ -4039,5 +4069,9 @@ http://secondlife.com/download.
 	<notification name="PreferenceChatPathChanged">
 		Невозможно переместить файлы. Восстановлен прежний путь.
 		<usetemplate ignoretext="Невозможно переместить файлы. Восстановлен прежний путь." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="DefaultObjectPermissions">
+		Ошибка при сохранении стандартных разрешений по следующей причине: [REASON].  Попробуйте задать стандартные разрешения через некоторое время.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>

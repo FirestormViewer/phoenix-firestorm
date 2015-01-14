@@ -24,6 +24,7 @@
 			<menu_item_call label="Annulla tutte le modifiche" name="Revert All Changes"/>
 			<menu_item_call label="Carica da file..." name="LoadFromFile"/>
 			<menu_item_call label="Salva su file..." name="SaveToFile"/>
+			<menu_item_call label="Colori..." name="Colors"/>
 		</menu>
 		<menu label="Modifica" name="Edit">
 			<menu_item_call label="Annulla" name="Undo"/>
