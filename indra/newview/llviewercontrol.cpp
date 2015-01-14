@@ -69,7 +69,10 @@
 #include "llnavigationbar.h"
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
-#include "llpanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
+//#include "llpanellogin.h"
+#include "fspanellogin.h"
+// </FS:Ansariel> [FS Login Panel]
 #include "llpaneltopinfobar.h"
 #include "llspellcheck.h"
 #include "llslurl.h"
@@ -587,7 +590,10 @@ bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
-	LLPanelLogin::updateServer( );
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::updateServer( );
+	FSPanelLogin::updateServer( );
+	// </FS:Ansariel> [FS Login Panel]
 	return true;
 }
 

@@ -35,7 +35,10 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llfloaterworldmap.h"
 #include "llnotifications.h"
-#include "llpanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
+//#include "llpanellogin.h"
+#include "fspanellogin.h"
+// </FS:Ansariel> [FS Login Panel]
 #include "llregionhandle.h"
 #include "llslurl.h"
 #include "llstartup.h"			// gStartupState
@@ -206,7 +209,10 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 		// We're at the login screen, so make sure user can see
 		// the login location box to know where they are going.
 		
-		LLPanelLogin::setLocation(slurl);
+		// <FS:Ansariel> [FS Login Panel]
+		//LLPanelLogin::setLocation(slurl);
+		FSPanelLogin::setLocation(slurl);
+		// <FS:Ansariel> [FS Login Panel]
 		return true;
 	}
 // <FS:AW hypergrid support >

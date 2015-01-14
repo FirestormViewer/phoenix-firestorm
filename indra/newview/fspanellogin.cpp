@@ -1,5 +1,5 @@
 /** 
- * @file llpanellogin.cpp
+ * @file fspanellogin.cpp
  * @brief Login dialog and logo display
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
@@ -24,11 +24,11 @@
  * $/LicenseInfo$
  */
 
+// Original file: llpanellogin.cpp
+
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
-#include "llpanellogin.h"
+#include "fspanellogin.h"
 #include "lllayoutstack.h"
 
 #include "indra_constants.h"		// for key and mask constants
@@ -82,8 +82,8 @@
 const S32 BLACK_BORDER_HEIGHT = 160;
 const S32 MAX_PASSWORD = 16;
 
-LLPanelLogin *LLPanelLogin::sInstance = NULL;
-BOOL LLPanelLogin::sCapslockDidNotification = FALSE;
+FSPanelLogin *FSPanelLogin::sInstance = NULL;
+BOOL FSPanelLogin::sCapslockDidNotification = FALSE;
 
 // <FS:CR> We still use this in firestorm...
 // Helper for converting a user name into the canonical "Firstname Lastname" form.
@@ -100,7 +100,7 @@ public:
 	{	
 		if (LLStartUp::getStartupState() < STATE_LOGIN_CLEANUP)
 		{
-			LLPanelLogin::loadLoginPage();
+			FSPanelLogin::loadLoginPage();
 		}	
 		return true;
 	}
@@ -109,20 +109,20 @@ public:
 //---------------------------------------------------------------------------
 // Public methods
 //---------------------------------------------------------------------------
-LLPanelLogin::LLPanelLogin(const LLRect &rect,
+FSPanelLogin::FSPanelLogin(const LLRect &rect,
 						 void (*callback)(S32 option, void* user_data),
 						 void *cb_data)
 :	LLPanel(),
 	mLogoImage(),
 	mCallback(callback),
-	mCallbackData(cb_data),
-	mListener(new LLPanelLoginListener(this))
+	mCallbackData(cb_data)
+	//,mListener(new LLPanelLoginListener(this))
 {
 	setBackgroundVisible(FALSE);
 	setBackgroundOpaque(TRUE);
 
 	mPasswordModified = FALSE;
-	LLPanelLogin::sInstance = this;
+	FSPanelLogin::sInstance = this;
 
 	LLView* login_holder = gViewerWindow->getLoginPanelHolder();
 	if (login_holder)
@@ -133,30 +133,30 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	// Logo
 	mLogoImage = LLUI::getUIImage("startup_logo");
 
-	buildFromFile( "panel_login.xml");
+	buildFromFile( "panel_fs_login.xml");
 
 	reshape(rect.getWidth(), rect.getHeight());
 	
 	// <FS:CR> Mode Selector
 	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
 	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
-	mode_combo.setCommitCallback(boost::bind(&LLPanelLogin::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
+	mode_combo.setCommitCallback(boost::bind(&FSPanelLogin::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
 	// </FS:CR>
 
 	LLLineEditor* password_edit(getChild<LLLineEditor>("password_edit"));
 	password_edit->setKeystrokeCallback(onPassKey, this);
 	// STEAM-14: When user presses Enter with this field in focus, initiate login
-	//password_edit->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this)); // <FS:LO> Not needed because of the global fix below
+	//password_edit->setCommitCallback(boost::bind(&FSPanelLogin::onClickConnect, this)); // <FS:LO> Not needed because of the global fix below
 
 	// change z sort of clickable text to be behind buttons
 	sendChildToBack(getChildView("forgot_password_text"));
 
 	LLComboBox* location_combo = getChild<LLComboBox>("start_location_combo");
 	updateLocationSelectorsVisibility(); // separate so that it can be called from preferences
-	location_combo->setFocusLostCallback(boost::bind(&LLPanelLogin::onLocationSLURL, this));
+	location_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onLocationSLURL, this));
 	
 	LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
-	server_choice_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectServer, this));
+	server_choice_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectServer, this));
 
 // <FS:CR>
 	// Load all of the grids, sorted, and then add a bar and the current grid at the top
@@ -210,7 +210,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	//}
 	//else
 	//{
-	//	LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
+	//	FSPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	//}
 // </FS:CR>
 
@@ -256,10 +256,10 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	//addUsersWithFavoritesToUsername();
 // </FS:CR>
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
-	//username_combo->setTextChangedCallback(boost::bind(&LLPanelLogin::addFavoritesToStartLocation, this));
+	//username_combo->setTextChangedCallback(boost::bind(&FSPanelLogin::addFavoritesToStartLocation, this));
 // <FS:CR> Don't automatically connect on selection!
-	//username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this));
-	username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectUser, this));
+	//username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onClickConnect, this));
+	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
 	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
@@ -281,7 +281,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	}
 	else
 	{
-		LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
+		FSPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	}
 	
 	loadLoginPage();
@@ -290,7 +290,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
 // <FS:CR> We don't use addUsersWithFavoritesToUsername() in Firestorm. We use addUsersToCombo().
 #if 0
-void LLPanelLogin::addUsersWithFavoritesToUsername()
+void FSPanelLogin::addUsersWithFavoritesToUsername()
 {
 	LLComboBox* combo = getChild<LLComboBox>("username_combo");
 	if (!combo) return;
@@ -314,7 +314,7 @@ void LLPanelLogin::addUsersWithFavoritesToUsername()
 #endif
 // </FS:CR>
 
-void LLPanelLogin::addFavoritesToStartLocation()
+void FSPanelLogin::addFavoritesToStartLocation()
 {
 	// Clear the combo.
 	LLComboBox* combo = getChild<LLComboBox>("start_location_combo");
@@ -389,7 +389,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
 
 // force the size to be correct (XML doesn't seem to be sufficient to do this)
 // (with some padding so the other login screen doesn't show through)
-void LLPanelLogin::reshapeBrowser()
+void FSPanelLogin::reshapeBrowser()
 {
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	LLRect rect = gViewerWindow->getWindowRectScaled();
@@ -402,9 +402,9 @@ void LLPanelLogin::reshapeBrowser()
 	reshape( rect.getWidth(), rect.getHeight(), 1 );
 }
 
-LLPanelLogin::~LLPanelLogin()
+FSPanelLogin::~FSPanelLogin()
 {
-	LLPanelLogin::sInstance = NULL;
+	FSPanelLogin::sInstance = NULL;
 
 	// Controls having keyboard focus by default
 	// must reset it on destroy. (EXT-2748)
@@ -412,7 +412,7 @@ LLPanelLogin::~LLPanelLogin()
 }
 
 // virtual
-void LLPanelLogin::draw()
+void FSPanelLogin::draw()
 {
 	gGL.pushMatrix();
 	{
@@ -443,7 +443,7 @@ void LLPanelLogin::draw()
 }
 
 // virtual
-BOOL LLPanelLogin::handleKeyHere(KEY key, MASK mask)
+BOOL FSPanelLogin::handleKeyHere(KEY key, MASK mask)
 {
 	if ( KEY_F1 == key )
 	{
@@ -456,13 +456,13 @@ BOOL LLPanelLogin::handleKeyHere(KEY key, MASK mask)
 }
 
 // virtual 
-void LLPanelLogin::setFocus(BOOL b)
+void FSPanelLogin::setFocus(BOOL b)
 {
 	if(b != hasFocus())
 	{
 		if(b)
 		{
-			LLPanelLogin::giveFocus();
+			FSPanelLogin::giveFocus();
 		}
 		else
 		{
@@ -472,7 +472,7 @@ void LLPanelLogin::setFocus(BOOL b)
 }
 
 // static
-void LLPanelLogin::giveFocus()
+void FSPanelLogin::giveFocus()
 {
 	if( sInstance )
 	{
@@ -510,7 +510,7 @@ void LLPanelLogin::giveFocus()
 }
 
 // static
-void LLPanelLogin::showLoginWidgets()
+void FSPanelLogin::showLoginWidgets()
 {
 	if (sInstance)
 	{
@@ -528,21 +528,21 @@ void LLPanelLogin::showLoginWidgets()
 }
 
 // static
-void LLPanelLogin::show(const LLRect &rect,
+void FSPanelLogin::show(const LLRect &rect,
 						void (*callback)(S32 option, void* user_data),
 						void* callback_data)
 {
 	// instance management
-	if (LLPanelLogin::sInstance)
+	if (FSPanelLogin::sInstance)
 	{
 		LL_WARNS("AppInit") << "Duplicate instance of login view deleted" << LL_ENDL;
 		// Don't leave bad pointer in gFocusMgr
 		gFocusMgr.setDefaultKeyboardFocus(NULL);
 
-		delete LLPanelLogin::sInstance;
+		delete FSPanelLogin::sInstance;
 	}
 
-	new LLPanelLogin(rect, callback, callback_data);
+	new FSPanelLogin(rect, callback, callback_data);
 
 	if( !gFocusMgr.getKeyboardFocus() )
 	{
@@ -556,9 +556,9 @@ void LLPanelLogin::show(const LLRect &rect,
 
 // static
 // <FS:CR>
-//void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
+//void FSPanelLogin::setFields(LLPointer<LLCredential> credential,
 //							 BOOL remember)
-void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
+void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
 // </FS:CR>
 {
 	if (!sInstance)
@@ -623,7 +623,7 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 
 
 // static
-void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
+void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 							 BOOL& remember)
 {
 	if (!sInstance)
@@ -668,7 +668,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		identifier["type"] = CRED_IDENTIFIER_TYPE_ACCOUNT;
 		identifier["account_name"] = username;
 		
-		if (LLPanelLogin::sInstance->mPasswordModified)
+		if (FSPanelLogin::sInstance->mPasswordModified)
 		{
 			authenticator = LLSD::emptyMap();
 			// password is plaintext
@@ -718,7 +718,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 			identifier["first_name"] = first;
 			identifier["last_name"] = last;
 		
-			if (LLPanelLogin::sInstance->mPasswordModified)
+			if (FSPanelLogin::sInstance->mPasswordModified)
 			{
 				authenticator = LLSD::emptyMap();
 				authenticator["type"] = CRED_AUTHENTICATOR_TYPE_HASH;
@@ -739,7 +739,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 
 
 // static
-BOOL LLPanelLogin::areCredentialFieldsDirty()
+BOOL FSPanelLogin::areCredentialFieldsDirty()
 {
 	if (!sInstance)
 	{
@@ -766,7 +766,7 @@ BOOL LLPanelLogin::areCredentialFieldsDirty()
 
 
 // static
-void LLPanelLogin::updateLocationSelectorsVisibility()
+void FSPanelLogin::updateLocationSelectorsVisibility()
 {
 	if (sInstance) 
 	{
@@ -782,7 +782,7 @@ void LLPanelLogin::updateLocationSelectorsVisibility()
 }
 
 // static - called from LLStartUp::setStartSLURL
-void LLPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
+void FSPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
 {
 	if (!sInstance) return;
 
@@ -845,18 +845,18 @@ void LLPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
 	}
 }
 
-void LLPanelLogin::setLocation(const LLSLURL& slurl)
+void FSPanelLogin::setLocation(const LLSLURL& slurl)
 {
 	LL_DEBUGS("AppInit")<<"setting Location "<<slurl.asString()<<LL_ENDL;
 	LLStartUp::setStartSLURL(slurl); // calls onUpdateStartSLURL, above
 }
 
 // static
-void LLPanelLogin::closePanel()
+void FSPanelLogin::closePanel()
 {
 	if (sInstance)
 	{
-		LLPanelLogin::sInstance->getParent()->removeChild( LLPanelLogin::sInstance );
+		FSPanelLogin::sInstance->getParent()->removeChild( FSPanelLogin::sInstance );
 
 		delete sInstance;
 		sInstance = NULL;
@@ -864,7 +864,7 @@ void LLPanelLogin::closePanel()
 }
 
 // static
-void LLPanelLogin::setAlwaysRefresh(bool refresh)
+void FSPanelLogin::setAlwaysRefresh(bool refresh)
 {
 	if (sInstance && LLStartUp::getStartupState() < STATE_LOGIN_CLEANUP)
 	{
@@ -879,7 +879,7 @@ void LLPanelLogin::setAlwaysRefresh(bool refresh)
 
 
 
-void LLPanelLogin::loadLoginPage()
+void FSPanelLogin::loadLoginPage()
 {
 	if (!sInstance) return;
 
@@ -929,7 +929,7 @@ void LLPanelLogin::loadLoginPage()
 	}
 }
 
-void LLPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent event)
+void FSPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent event)
 {
 }
 
@@ -938,7 +938,7 @@ void LLPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent ev
 //---------------------------------------------------------------------------
 
 // static
-void LLPanelLogin::onClickConnect(void *)
+void FSPanelLogin::onClickConnect(void *)
 {
 	if (sInstance && sInstance->mCallback)
 	{
@@ -1023,7 +1023,7 @@ void LLPanelLogin::onClickConnect(void *)
 }
 
 // static
-void LLPanelLogin::onClickNewAccount(void*)
+void FSPanelLogin::onClickNewAccount(void*)
 {
 	if (sInstance)
 	{
@@ -1043,13 +1043,13 @@ void LLPanelLogin::onClickNewAccount(void*)
 
 
 // static
-void LLPanelLogin::onClickVersion(void*)
+void FSPanelLogin::onClickVersion(void*)
 {
 	LLFloaterReg::showInstance("sl_about"); 
 }
 
 //static
-void LLPanelLogin::onClickForgotPassword(void*)
+void FSPanelLogin::onClickForgotPassword(void*)
 {
 	if (sInstance)
 	{
@@ -1068,7 +1068,7 @@ void LLPanelLogin::onClickForgotPassword(void*)
 }
 
 //static
-void LLPanelLogin::onClickHelp(void*)
+void FSPanelLogin::onClickHelp(void*)
 {
 	if (sInstance)
 	{
@@ -1078,9 +1078,9 @@ void LLPanelLogin::onClickHelp(void*)
 }
 
 // static
-void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
+void FSPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 {
-	LLPanelLogin *This = (LLPanelLogin *) user_data;
+	FSPanelLogin *This = (FSPanelLogin *) user_data;
 	This->mPasswordModified = TRUE;
 	if (gKeyboard->getKeyDown(KEY_CAPSLOCK) && sCapslockDidNotification == FALSE)
 	{
@@ -1090,7 +1090,7 @@ void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 }
 
 
-void LLPanelLogin::updateServer()
+void FSPanelLogin::updateServer()
 {
 	if (!sInstance)
 	{
@@ -1143,7 +1143,7 @@ void LLPanelLogin::updateServer()
 	}
 }
 
-void LLPanelLogin::onSelectServer()
+void FSPanelLogin::onSelectServer()
 {
 	// The user twiddled with the grid choice ui.
 	// apply the selection to the grid setting.
@@ -1193,7 +1193,7 @@ void LLPanelLogin::onSelectServer()
 	updateServer();
 }
 
-void LLPanelLogin::onLocationSLURL()
+void FSPanelLogin::onLocationSLURL()
 {
 	LLComboBox* location_combo = getChild<LLComboBox>("start_location_combo");
 	std::string location = location_combo->getValue().asString();
@@ -1236,7 +1236,7 @@ std::string canonicalize_username(const std::string& name)
 	return first + ' ' + last;
 }
 
-void LLPanelLogin::addUsersToCombo(BOOL show_server)
+void FSPanelLogin::addUsersToCombo(BOOL show_server)
 {
 	LLComboBox* combo = getChild<LLComboBox>("username_combo");
 	if (!combo) return;
@@ -1303,18 +1303,18 @@ void LLPanelLogin::addUsersToCombo(BOOL show_server)
 }
 
 // static
-void LLPanelLogin::onClickRemove(void*)
+void FSPanelLogin::onClickRemove(void*)
 {
 	if (sInstance)
 	{
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		std::string credName = combo->getValue().asString();
-		LLNotificationsUtil::add("ConfirmRemoveCredential", LLSD().with("NAME", credName), LLSD().with("CredName", credName), boost::bind(&LLPanelLogin::onRemoveCallback, _1, _2));
+		LLNotificationsUtil::add("ConfirmRemoveCredential", LLSD().with("NAME", credName), LLSD().with("CredName", credName), boost::bind(&FSPanelLogin::onRemoveCallback, _1, _2));
 	}
 }
 
 // static
-void LLPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& response)
+void FSPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& response)
 {
 	if (sInstance)
 	{
@@ -1340,7 +1340,7 @@ void LLPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& respon
 }
 
 //static
-void LLPanelLogin::onClickGridMgrHelp(void*)
+void FSPanelLogin::onClickGridMgrHelp(void*)
 {
 	if (sInstance)
 	{
@@ -1349,7 +1349,7 @@ void LLPanelLogin::onClickGridMgrHelp(void*)
 	}
 }
 
-void LLPanelLogin::onSelectUser()
+void FSPanelLogin::onSelectUser()
 {
 	// *NOTE: The paramters for this method are ignored.
 	LL_INFOS("AppInit") << "onSelectUser()" << LL_ENDL;
@@ -1397,12 +1397,12 @@ void LLPanelLogin::onSelectUser()
 }
 
 // static
-void LLPanelLogin::updateServerCombo()
+void FSPanelLogin::updateServerCombo()
 {
 	if (!sInstance) return;
 	
 #ifdef OPENSIM
-	LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
+	LLGridManager::getInstance()->addGridListChangedCallback(&FSPanelLogin::gridListChanged);
 #endif // OPENSIM
 	// We add all of the possible values, sorted, and then add a bar and the current value at the top
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
@@ -1433,7 +1433,7 @@ void LLPanelLogin::updateServerCombo()
 }
 
 // static
-std::string LLPanelLogin::credentialName()
+std::string FSPanelLogin::credentialName()
 {
 	std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 	LLStringUtil::trim(username);
@@ -1447,7 +1447,7 @@ std::string LLPanelLogin::credentialName()
 }
 
 // static
-void LLPanelLogin::gridListChanged(bool success)
+void FSPanelLogin::gridListChanged(bool success)
 {
 	updateServer();
 }
@@ -1456,7 +1456,7 @@ void LLPanelLogin::gridListChanged(bool success)
 //    Mode selector    //
 /////////////////////////
 
-void LLPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_value)
+void FSPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_value)
 {
 	// <FS:AO> make sure toolbar settings are reset on mode change
 	LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
@@ -1464,11 +1464,11 @@ void LLPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_valu
 	
 	if (original_value.asString() != new_value.asString())
 	{
-		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&LLPanelLogin::onModeChangeConfirm, this, original_value, new_value, _1, _2));
+		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&FSPanelLogin::onModeChangeConfirm, this, original_value, new_value, _1, _2));
 	}
 }
 
-void LLPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response)
+void FSPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	switch (option)
@@ -1486,5 +1486,3 @@ void LLPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& n
 	}
 }
 // </FS:CR>
-
-#endif

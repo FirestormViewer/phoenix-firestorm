@@ -63,7 +63,10 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llnotificationtemplate.h"
-#include "llpanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
+//#include "llpanellogin.h"
+#include "fspanellogin.h"
+// </FS:Ansariel> [FS Login Panel]
 #include "llpanelvoicedevicesettings.h"
 #include "llradiogroup.h"
 #include "llsearchcombobox.h"
@@ -1053,7 +1056,10 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//onNotificationsChange("ObjectIMOptions");
 	// </FS:CR>
 
-	LLPanelLogin::setAlwaysRefresh(true);
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::setAlwaysRefresh(true);
+	FSPanelLogin::setAlwaysRefresh(true);
+	// </FS:Ansariel> [FS Login Panel]
 	refresh();
 
 	
@@ -1181,7 +1187,10 @@ void LLFloaterPreference::onClose(bool app_quitting)
 		gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
 	}
 	// </FS:Ansariel>
-	LLPanelLogin::setAlwaysRefresh(false);
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::setAlwaysRefresh(false);
+	FSPanelLogin::setAlwaysRefresh(false);
+	// </FS:Ansariel> [FS Login Panel]
 	if (!app_quitting)
 	{
 		cancel();
@@ -1251,7 +1260,10 @@ void LLFloaterPreference::onBtnOK()
 		LL_INFOS() << "Can't close preferences!" << LL_ENDL;
 	}
 
-	LLPanelLogin::updateLocationSelectorsVisibility();	
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::updateLocationSelectorsVisibility();	
+	FSPanelLogin::updateLocationSelectorsVisibility();
+	// </FS:Ansariel> [FS Login Panel]
 	//Need to reload the navmesh if the pathing console is up
 	LLHandle<LLFloaterPathfindingConsole> pathfindingConsoleHandle = LLFloaterPathfindingConsole::getInstanceHandle();
 	if ( !pathfindingConsoleHandle.isDead() )
@@ -1276,7 +1288,10 @@ void LLFloaterPreference::onBtnApply( )
 	apply();
 	saveSettings();
 
-	LLPanelLogin::updateLocationSelectorsVisibility();
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::updateLocationSelectorsVisibility();
+	FSPanelLogin::updateLocationSelectorsVisibility();
+	// </FS:Ansariel> [FS Login Panel]
 }
 
 // static 
@@ -4377,7 +4392,7 @@ void LLPanelPreferenceOpensim::apply()
 void LLPanelPreferenceOpensim::cancel()
 {
 	LLGridManager::getInstance()->resetGrids();
-	LLPanelLogin::updateServer();
+	FSPanelLogin::updateServer();
 }
 
 void LLPanelPreferenceOpensim::onClickAddGrid()

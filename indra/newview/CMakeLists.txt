@@ -180,6 +180,7 @@ set(viewer_SOURCE_FILES
     fspanelclassified.cpp
     fspanelcontactsets.cpp
     fspanelimcontrolpanel.cpp
+    fspanellogin.cpp
     fspanelprefs.cpp
     fspanelprofile.cpp
     fspanelprofileclassifieds.cpp
@@ -905,6 +906,7 @@ set(viewer_HEADER_FILES
     fspanelcontactsets.h
     fspanelclassified.h
     fspanelimcontrolpanel.h
+    fspanellogin.h
     fspanelprefs.h
     fspanelprofile.h
     fspanelprofileclassifieds.h

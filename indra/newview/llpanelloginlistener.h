@@ -26,6 +26,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #if ! defined(LL_LLPANELLOGINLISTENER_H)
 #define LL_LLPANELLOGINLISTENER_H
 
@@ -45,3 +47,5 @@ private:
 };
 
 #endif /* ! defined(LL_LLPANELLOGINLISTENER_H) */
+
+#endif

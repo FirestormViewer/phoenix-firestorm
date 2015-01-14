@@ -28,6 +28,9 @@
 
 // Precompiled header
 #include "llviewerprecompiledheaders.h"
+
+#if 0
+
 // associated header
 #include "llpanelloginlistener.h"
 // STL headers
@@ -49,3 +52,5 @@ void LLPanelLoginListener::onClickConnect(const LLSD&) const
 {
     mPanel->onClickConnect(NULL);
 }
+
+#endif

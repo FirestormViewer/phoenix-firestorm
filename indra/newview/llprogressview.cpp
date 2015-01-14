@@ -51,7 +51,10 @@
 #include "llappviewer.h"
 #include "llweb.h"
 #include "lluictrlfactory.h"
-#include "llpanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
+//#include "llpanellogin.h"
+#include "fspanellogin.h"
+// </FS:Ansariel> [FS Login Panel]
 
 LLProgressView* LLProgressView::sInstance = NULL;
 LLProgressViewMini* LLProgressViewMini::sInstance = NULL;
@@ -510,7 +513,10 @@ void LLProgressView::onIdle(void* user_data)
 		self->mFadeFromLoginTimer.getElapsedTimeF32() > FADE_TO_WORLD_TIME)
 	{
 		self->mFadeFromLoginTimer.stop();
-		LLPanelLogin::closePanel();
+		// <FS:Ansariel> [FS Login Panel]
+		//LLPanelLogin::closePanel();
+		FSPanelLogin::closePanel();
+		// </FS:Ansariel> [FS Login Panel]
 
 		// Nothing to do anymore.
 		gIdleCallbacks.deleteFunction(onIdle, user_data);

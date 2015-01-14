@@ -1,5 +1,5 @@
 /** 
- * @file llpanellogin.h
+ * @file fspanellogin.h
  * @brief Login username entry fields.
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
@@ -24,10 +24,10 @@
  * $/LicenseInfo$
  */
 
-#if 0
+// Original file: llpanellogin.cpp
 
-#ifndef LL_LLPANELLOGIN_H
-#define LL_LLPANELLOGIN_H
+#ifndef FS_PANELLOGIN_H
+#define FS_PANELLOGIN_H
 
 #include "llpanel.h"
 #include "llpointer.h"			// LLPointer<>
@@ -40,16 +40,16 @@ class LLPanelLoginListener;
 class LLSLURL;
 class LLCredential;
 
-class LLPanelLogin:	
+class FSPanelLogin:	
 	public LLPanel,
 	public LLViewerMediaObserver
 {
-	LOG_CLASS(LLPanelLogin);
+	LOG_CLASS(FSPanelLogin);
 public:
-	LLPanelLogin(const LLRect &rect,
+	FSPanelLogin(const LLRect &rect,
 				void (*callback)(S32 option, void* user_data),
 				void *callback_data);
-	~LLPanelLogin();
+	~FSPanelLogin();
 
 	virtual BOOL handleKeyHere(KEY key, MASK mask);
 	virtual void draw();
@@ -122,17 +122,15 @@ private:
 
 private:
 	LLPointer<LLUIImage> mLogoImage;
-	boost::scoped_ptr<LLPanelLoginListener> mListener;
+	//boost::scoped_ptr<LLPanelLoginListener> mListener;
 
 	void			(*mCallback)(S32 option, void *userdata);
 	void*			mCallbackData;
 
 	BOOL            mPasswordModified;
 
-	static LLPanelLogin* sInstance;
+	static FSPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
 };
 
-#endif
-
-#endif
+#endif //FS_PANELLOGIN_H

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<panel.string name="forgot_password_url">
+		http://secondlife.com/account/request.php?lang=it
+	</panel.string>
+	<layout_stack name="login_widgets">
+		<layout_panel name="login">
+			<text name="log_in_text">
+				ACCEDI
+			</text>
+			<text name="username_text">
+				Nome utente:
+			</text>
+			<combo_box name="username_combo" tool_tip="Il nome utente che hai scelto durante la registrazione, come robby12 o Stella Soleggiato"/>
+			<button label="Rimuovi questo utente" name="delete_saved_login_btn"/>
+			<text name="password_text">
+				Password:
+			</text>
+		</layout_panel>
+		<layout_panel name="start_location_panel">
+			<text name="start_location_text">
+				Inizia da:
+			</text>
+			<combo_box name="start_location_combo">
+				<combo_box.item label="La mia ultima ubicazione" name="MyLastLocation"/>
+				<combo_box.item label="Casa mia" name="MyHome"/>
+				<combo_box.item label="&lt;Scrivi nome regione&gt;" name="Typeregionname"/>
+			</combo_box>
+			<text name="grid_selection_text">
+				Accedi alla Grid:
+			</text>
+			<button label="Gestisci Grid" name="grids_btn"/>
+		</layout_panel>
+		<layout_panel name="links_login_panel">
+			<text name="login_help">
+				Ti serve aiuto con la fase di accesso?
+			</text>
+			<text name="forgot_password_text">
+				Hai dimenticato il nome utente o la password?
+			</text>
+			<button label="Accedi" name="connect_btn"/>
+			<check_box label="Ricorda password" name="remember_check"/>
+		</layout_panel>
+		<layout_panel name="links">
+			<text name="create_account_text">
+				CREA IL TUO ACCOUNT
+			</text>
+			<button label="Inizia adesso" name="create_new_account_btn"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

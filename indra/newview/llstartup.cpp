@@ -124,7 +124,10 @@
 #include "llkeyboard.h"
 #include "llloginhandler.h"			// gLoginHandler, SLURL support
 #include "lllogininstance.h" // Host the login module.
-#include "llpanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
+//#include "llpanellogin.h"
+#include "fspanellogin.h"
+// <FS:Ansariel> [FS Login Panel]
 #include "llmutelist.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llpanelclassified.h"
@@ -1089,11 +1092,14 @@ bool idle_startup()
 			{
 // <FS:CR>
 				//LLPanelLogin::setFields( gUserCredential, gRememberPassword);
-				LLPanelLogin::setFields(gUserCredential);
+				FSPanelLogin::setFields(gUserCredential);
 // </FS:CR>
 			}
 			display_startup();
-			LLPanelLogin::giveFocus();
+			// <FS:Ansariel> [FS Login Panel]
+			//LLPanelLogin::giveFocus();
+			FSPanelLogin::giveFocus();
+			// </FS:Ansariel> [FS Login Panel]
 
 			// MAINT-3231 Show first run dialog only for Desura viewer
 			if (gSavedSettings.getString("sourceid") == "1208_desura")
@@ -1195,7 +1201,10 @@ bool idle_startup()
 		{
 			// TODO if not use viewer auth
 			// Load all the name information out of the login view
-			LLPanelLogin::getFields(gUserCredential, gRememberPassword); 
+			// <FS:Ansariel> [FS Login Panel]
+			//LLPanelLogin::getFields(gUserCredential, gRememberPassword); 
+			FSPanelLogin::getFields(gUserCredential, gRememberPassword); 
+			// </FS:Ansariel> [FS Login Panel]
 			// end TODO
 	 
 			// HACK: Try to make not jump on login
@@ -1336,7 +1345,11 @@ bool idle_startup()
 		{
 			LLSLURL slurl;
 			// WS: Close the Panel only, if we have DisableLoginScreens enabled. Else fade away.
-			if(gSavedSettings.getBOOL("FSDisableLoginScreens")) LLPanelLogin::closePanel();
+			if(gSavedSettings.getBOOL("FSDisableLoginScreens"))
+				// <FS:Ansariel> [FS Login Panel]
+				//LLPanelLogin::closePanel();
+				FSPanelLogin::closePanel();
+				// </FS:Ansariel> [FS Login Panel]
 		}
 
 		
@@ -2839,7 +2852,10 @@ void login_show()
 		gToolBarView->setVisible(FALSE);
 	}
 	
-	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
+	FSPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
+	// </FS:Ansariel> [FS Login Panel]
 }
 
 // Callback for when login screen is closed.  Option 0 = connect, option 1 = quit.
@@ -2867,7 +2883,10 @@ void login_callback(S32 option, void *userdata)
 		
 		if (LLAppViewer::instance()->quitRequested())
 		{
-			LLPanelLogin::closePanel();
+			// <FS:Ansariel> [FS Login Panel]
+			//LLPanelLogin::closePanel();
+			FSPanelLogin::closePanel();
+			// </FS:Ansariel> [FS Login Panel]
 		}
 		return;
 	}
@@ -2892,7 +2911,10 @@ bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 		LLWeb::loadURLExternal(LLTrans::getString("create_account_url") );
 	}
 
-	LLPanelLogin::giveFocus();
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::giveFocus();
+	FSPanelLogin::giveFocus();
+	// </FS:Ansariel> [FS Login Panel]
 	return false;
 }
 
@@ -2926,7 +2948,10 @@ bool login_alert_status(const LLSD& notification, const LLSD& response)
             LL_WARNS("AppInit") << "Missing case in login_alert_status switch" << LL_ENDL;
     }
 
-	LLPanelLogin::giveFocus();
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::giveFocus();
+	FSPanelLogin::giveFocus();
+	// </FS:Ansariel> [FS Login Panel]
 	return false;
 }
 
@@ -3693,7 +3718,10 @@ bool LLStartUp::startLLProxy()
 
 bool login_alert_done(const LLSD& notification, const LLSD& response)
 {
-	LLPanelLogin::giveFocus();
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::giveFocus();
+	FSPanelLogin::giveFocus();
+	// </FS:Ansariel> [FS Login Panel]
 	return false;
 }
 
@@ -3754,7 +3782,10 @@ LLSD transform_cert_args(LLPointer<LLCertificate> cert)
 void general_cert_done(const LLSD& notification, const LLSD& response)
 {
 	LLStartUp::setStartupState( STATE_LOGIN_SHOW );			
-	LLPanelLogin::giveFocus();
+	// <FS:Ansariel> [FS Login Panel]
+	//LLPanelLogin::giveFocus();
+	FSPanelLogin::giveFocus();
+	// </FS:Ansariel> [FS Login Panel]
 }
 
 // check to see if the user wants to trust the cert.
@@ -3778,7 +3809,10 @@ void trust_cert_done(const LLSD& notification, const LLSD& response)
 			gSavedSettings.setBOOL("AutoLogin", FALSE);			
 			LLStartUp::setStartupState( STATE_LOGIN_SHOW );				
 		default:
-			LLPanelLogin::giveFocus();
+			// <FS:Ansariel> [FS Login Panel]
+			//LLPanelLogin::giveFocus();
+			FSPanelLogin::giveFocus();
+			// </FS:Ansariel> [FS Login Panel]
 			break;
 	}
 
