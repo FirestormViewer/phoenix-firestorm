@@ -594,6 +594,9 @@ Sie können die Grafikqualität unter Einstellungen &gt; Grafik wieder erhöhen.
 	<notification name="RegionNoTerraforming">
 		Die Region [REGION] erlaubt kein Terraforming.
 	</notification>
+	<notification name="ParcelNoTerraforming">
+		Sie sind nicht berechtigt, auf Parzelle [PARCEL] Terraforming durchzuführen.
+	</notification>
 	<notification name="CannotCopyWarning">
 		Sie sind nicht berechtigt, die folgenden Objekte zu kopieren:
 [ITEMS]
@@ -2299,6 +2302,9 @@ Möchten Sie es mit dem ausgewählten Objekt ersetzen?
 			<button ignore="Nie ersetzen" name="No" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="TooManyWearables">
+		Sie können keinen Ordner mit mehr als [AMOUNT] Gegenständen anziehen. Sie können dieses Limit unter Erweitert > Debug Einstellungen anzeigen > WearFolderLimit ändern.
+	</notification>
 	<notification label="Warnung für Nicht-stören-Modus" name="DoNotDisturbModePay">
 		Sie haben den Nicht-stören-Modus aktiviert. Sie erhalten keine Artikel, die im Gegenzug für diese Zahlung angeboten werden.
 
@@ -3308,6 +3314,10 @@ Sie haben eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME]
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] Sekunden am Leben)
 Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME] Sekunden aktualisiert.
+	</notification>
+	<notification name="CannotUploadTexture">
+		Texture konnte nicht hochgeladen werden.
+[REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
