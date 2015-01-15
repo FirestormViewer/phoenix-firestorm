@@ -6,7 +6,7 @@
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2014, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,6 +32,14 @@
 #include "../../llxml/llcontrol.h"
 #include "llsdserialize.h"
 
+namespace
+{
+
+// Should not collide with other test programs creating temp files.
+static const char * const TEST_FILENAME("llslurl_test.xml");
+
+}
+	
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 // Stub implementation to get the test to compile properly
 #include "../rlvhandler.h"
@@ -172,11 +180,11 @@ namespace tut
 	template<> template<>
 	void slurlTestObject::test<1>()
 	{
-		llofstream gridfile("grid_test.xml");
+		llofstream gridfile(TEST_FILENAME);
 		gridfile << gSampleGridFile;
 		gridfile.close();
 
-		LLGridManager::getInstance()->initialize("grid_test.xml");
+		LLGridManager::getInstance()->initialize(TEST_FILENAME);
 
 		LLGridManager::getInstance()->setGridChoice("util.agni.lindenlab.com");
 
@@ -289,11 +297,11 @@ namespace tut
 	template<> template<>
 	void slurlTestObject::test<2>()
 	{
-		llofstream gridfile("grid_test.xml");
+		llofstream gridfile(TEST_FILENAME);
 		gridfile << gSampleGridFile;
 		gridfile.close();
 
-		LLGridManager::getInstance()->initialize("grid_test.xml");
+		LLGridManager::getInstance()->initialize(TEST_FILENAME);
 
 		LLSLURL slurl = LLSLURL("my.grid.com", "my region");
 		ensure_equals("grid/region - type", slurl.getType(), LLSLURL::LOCATION);
@@ -322,11 +330,11 @@ namespace tut
 	template<> template<>
 	void slurlTestObject::test<3>()
 	{
-		llofstream gridfile("grid_test.xml");
+		llofstream gridfile(TEST_FILENAME);
 		gridfile << gSampleGridFile;
 		gridfile.close();
 
-		LLGridManager::getInstance()->initialize("grid_test.xml");
+		LLGridManager::getInstance()->initialize(TEST_FILENAME);
 
 		LLGridManager::getInstance()->setGridChoice("my.grid.com");
 		LLSLURL slurl = LLSLURL("https://my.grid.com/region/my%20region/1/2/3");

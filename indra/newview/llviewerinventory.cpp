@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2014, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -74,6 +74,10 @@
 void no_op_inventory_func(const LLUUID&) {} 
 void no_op_llsd_func(const LLSD&) {}
 void no_op() {}
+
+static const char * const LOG_INV("Inventory");
+static const char * const LOG_LOCAL("InventoryLocalize");
+static const char * const LOG_NOTECARD("copy_inventory_from_notecard");
 
 ///----------------------------------------------------------------------------
 /// Helper class to store special inventory item names and their localized values.
@@ -189,7 +193,7 @@ public:
 	 */
 	bool localizeInventoryObjectName(std::string& object_name)
 	{
-		LL_DEBUGS("InventoryLocalize") << "Searching for localization: " << object_name << LL_ENDL;
+		LL_DEBUGS(LOG_LOCAL) << "Searching for localization: " << object_name << LL_ENDL;
 
 		std::map<std::string, std::string>::const_iterator dictionary_iter = mInventoryItemsDict.find(object_name);
 
@@ -197,7 +201,7 @@ public:
 		if(found)
 		{
 			object_name = dictionary_iter->second;
-			LL_DEBUGS("InventoryLocalize") << "Found, new name is: " << object_name << LL_ENDL;
+			LL_DEBUGS(LOG_LOCAL) << "Found, new name is: " << object_name << LL_ENDL;
 		}
 		return found;
 	}
@@ -317,8 +321,8 @@ LLViewerInventoryItem::LLViewerInventoryItem(const LLViewerInventoryItem* other)
 	copyViewerItem(other);
 	if (!mIsComplete)
 	{
-		LL_WARNS() << "LLViewerInventoryItem copy constructor for incomplete item"
-			<< mUUID << LL_ENDL;
+		LL_WARNS(LOG_INV) << "LLViewerInventoryItem copy constructor for incomplete item"
+						  << mUUID << LL_ENDL;
 	}
 }
 
@@ -365,17 +369,17 @@ void LLViewerInventoryItem::updateServer(BOOL is_new) const
 	{
 		// *FIX: deal with this better.
 		// If we're crashing here then the UI is incorrectly enabled.
-		LL_WARNS() << "LLViewerInventoryItem::updateServer() - for incomplete item"
-			   << LL_ENDL;
+		LL_WARNS(LOG_INV) << "LLViewerInventoryItem::updateServer() - for incomplete item"
+						 << LL_ENDL;
                 LLNotificationsUtil::add("IncompleteInventoryItem");
 		return;
 	}
 	if(gAgent.getID() != mPermissions.getOwner())
 	{
 		// *FIX: deal with this better.
-		LL_WARNS() << "LLViewerInventoryItem::updateServer() - for unowned item "
-				   << ll_pretty_print_sd(this->asLLSD())
-				   << LL_ENDL;
+		LL_WARNS(LOG_INV) << "LLViewerInventoryItem::updateServer() - for unowned item "
+						  << ll_pretty_print_sd(this->asLLSD())
+						  << LL_ENDL;
 		return;
 	}
 	LLInventoryModel::LLCategoryUpdate up(mParentUUID, is_new ? 1 : 0);
@@ -403,18 +407,18 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 		// we have to check region. It can be null after region was destroyed. See EXT-245
 		if (region)
 		{
-		  if(gAgent.getID() != mPermissions.getOwner())
-		    {
+		  if (gAgent.getID() != mPermissions.getOwner())
+		  {
 		      url = region->getCapability("FetchLib2");
-		    }
+		  }
 		  else
-		    {	
+		  {	
 		      url = region->getCapability("FetchInventory2");
-		    }
+		  }
 		}
 		else
 		{
-			LL_WARNS() << "Agent Region is absent" << LL_ENDL;
+			LL_WARNS(LOG_INV) << "Agent Region is absent" << LL_ENDL;
 		}
 
 		if (!url.empty())
@@ -424,7 +428,8 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 			body["items"][0]["owner_id"]	= mPermissions.getOwner();
 			body["items"][0]["item_id"]		= mUUID;
 
-			LLHTTPClient::post(url, body, new LLInventoryModel::fetchInventoryResponder(body));
+			LLInventoryModel::FetchItemHttpHandler * handler(new LLInventoryModel::FetchItemHttpHandler(body));
+			gInventory.requestPost(true, url, body, handler, "Inventory Item");
 		}
 		else
 		{
@@ -660,7 +665,7 @@ bool LLViewerInventoryCategory::fetch()
 	if((VERSION_UNKNOWN == getVersion())
 	   && mDescendentsRequested.hasExpired())	//Expired check prevents multiple downloads.
 	{
-		LL_DEBUGS("InventoryFetch") << "Fetching category children: " << mName << ", UUID: " << mUUID << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "Fetching category children: " << mName << ", UUID: " << mUUID << LL_ENDL;
 		const F32 FETCH_TIMER_EXPIRY = 10.0f;
 		mDescendentsRequested.reset();
 		mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
@@ -685,7 +690,7 @@ bool LLViewerInventoryCategory::fetch()
 		}
 		else
 		{
-			LL_WARNS() << "agent region is null" << LL_ENDL;
+			LL_WARNS(LOG_INV) << "agent region is null" << LL_ENDL;
 		}
 		if (!url.empty()) //Capability found.  Build up LLSD and use it.
 		{
@@ -694,7 +699,8 @@ bool LLViewerInventoryCategory::fetch()
 		else
 		{	//Deprecated, but if we don't have a capability, use the old system.
 			//AO: too spammy!
-			//LL_INFOS() << "FetchInventoryDescendents2 capability not found.  Using deprecated UDP message." << LL_ENDL;
+			//LL_INFOS(LOG_INV) << "FetchInventoryDescendents2 capability not found.  Using deprecated UDP message." << LL_ENDL;
+			
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessage("FetchInventoryDescendents");
 			msg->nextBlock("AgentData");
@@ -789,8 +795,8 @@ bool LLViewerInventoryCategory::importFileLocal(LLFILE* fp)
 		}
 		else
 		{
-			LL_WARNS() << "unknown keyword '" << keyword
-					<< "' in inventory import category "  << mUUID << LL_ENDL;
+			LL_WARNS(LOG_INV) << "unknown keyword '" << keyword
+							  << "' in inventory import category "  << mUUID << LL_ENDL;
 		}
 	}
 	return true;
@@ -918,7 +924,7 @@ LLInventoryCallbackManager::LLInventoryCallbackManager() :
 {
 	if( sInstance != NULL )
 	{
-		LL_WARNS() << "LLInventoryCallbackManager::LLInventoryCallbackManager: unexpected multiple instances" << LL_ENDL;
+		LL_WARNS(LOG_INV) << "LLInventoryCallbackManager::LLInventoryCallbackManager: unexpected multiple instances" << LL_ENDL;
 		return;
 	}
 	sInstance = this;
@@ -928,7 +934,7 @@ LLInventoryCallbackManager::~LLInventoryCallbackManager()
 {
 	if( sInstance != this )
 	{
-		LL_WARNS() << "LLInventoryCallbackManager::~LLInventoryCallbackManager: unexpected multiple instances" << LL_ENDL;
+		LL_WARNS(LOG_INV) << "LLInventoryCallbackManager::~LLInventoryCallbackManager: unexpected multiple instances" << LL_ENDL;
 		return;
 	}
 	sInstance = NULL;
@@ -1165,7 +1171,7 @@ void link_inventory_object(const LLUUID& category,
 {
 	if (!baseobj)
 	{
-		LL_WARNS() << "Attempt to link to non-existent object" << LL_ENDL;
+		LL_WARNS(LOG_INV) << "Attempt to link to non-existent object" << LL_ENDL;
 		return;
 	}
 
@@ -1199,7 +1205,7 @@ void link_inventory_array(const LLUUID& category,
 		const LLInventoryObject* baseobj = *it;
 		if (!baseobj)
 		{
-			LL_WARNS() << "attempt to link to unknown object" << LL_ENDL;
+			LL_WARNS(LOG_INV) << "attempt to link to unknown object" << LL_ENDL;
 			continue;
 		}
 
@@ -1208,7 +1214,7 @@ void link_inventory_array(const LLUUID& category,
 			// Fail if item can be found but is of a type that can't be linked.
 			// Arguably should fail if the item can't be found too, but that could
 			// be a larger behavioral change.
-			LL_WARNS() << "attempt to link an unlinkable object, type = " << baseobj->getActualType() << LL_ENDL;
+			LL_WARNS(LOG_INV) << "attempt to link an unlinkable object, type = " << baseobj->getActualType() << LL_ENDL;
 			continue;
 		}
 		
@@ -1244,7 +1250,7 @@ void link_inventory_array(const LLUUID& category,
 			}
 			else
 			{
-				LL_WARNS() << "could not convert object into an item or category: " << baseobj->getUUID() << LL_ENDL;
+				LL_WARNS(LOG_INV) << "could not convert object into an item or category: " << baseobj->getUUID() << LL_ENDL;
 				continue;
 			}
 		}
@@ -1258,10 +1264,10 @@ void link_inventory_array(const LLUUID& category,
 		links.append(link);
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-		LL_DEBUGS("Inventory") << "Linking Object [ name:" << baseobj->getName() 
-							   << " UUID:" << baseobj->getUUID() 
-							   << " ] into Category [ name:" << cat_name 
-							   << " UUID:" << category << " ] " << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "Linking Object [ name:" << baseobj->getName() 
+						   << " UUID:" << baseobj->getUUID() 
+						   << " ] into Category [ name:" << cat_name 
+						   << " UUID:" << category << " ] " << LL_ENDL;
 #endif
 	}
 
@@ -1352,7 +1358,7 @@ void update_inventory_item(
 	if (!ais_ran)
 	{
 		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-		LL_DEBUGS("Inventory") << "item_id: [" << item_id << "] name " << (update_item ? update_item->getName() : "(NOT FOUND)") << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (update_item ? update_item->getName() : "(NOT FOUND)") << LL_ENDL;
 		if(obj)
 		{
 			LLMessageSystem* msg = gMessageSystem;
@@ -1394,7 +1400,7 @@ void update_inventory_item(
 	if (!ais_ran)
 	{
 		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-		LL_DEBUGS("Inventory") << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
 		if(obj)
 		{
 			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
@@ -1429,7 +1435,7 @@ void update_inventory_category(
 	LLPointer<LLInventoryCallback> cb)
 {
 	LLPointer<LLViewerInventoryCategory> obj = gInventory.getCategory(cat_id);
-	LL_DEBUGS("Inventory") << "cat_id: [" << cat_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+	LL_DEBUGS(LOG_INV) << "cat_id: [" << cat_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
 	if(obj)
 	{
 		if (LLFolderType::lookupIsProtectedType(obj->getPreferredType()))
@@ -1492,7 +1498,7 @@ void remove_inventory_item(
 	}
 	else
 	{
-		LL_DEBUGS("Inventory") << "item_id: [" << item_id << "] name " << "(NOT FOUND)" << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << "(NOT FOUND)" << LL_ENDL;
 	}
 }
 
@@ -1503,7 +1509,7 @@ void remove_inventory_item(
 	if(obj)
 	{
 		const LLUUID item_id(obj->getUUID());
-		LL_DEBUGS("Inventory") << "item_id: [" << item_id << "] name " << obj->getName() << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << obj->getName() << LL_ENDL;
 		if (AISCommand::isAPIAvailable())
 		{
 			LLPointer<AISCommand> cmd_ptr = new RemoveItemCommand(item_id, cb);
@@ -1532,7 +1538,7 @@ void remove_inventory_item(
 	else
 	{
 		// *TODO: Clean up callback?
-		LL_WARNS() << "remove_inventory_item called for invalid or nonexistent item." << LL_ENDL;
+		LL_WARNS(LOG_INV) << "remove_inventory_item called for invalid or nonexistent item." << LL_ENDL;
 	}
 }
 
@@ -1550,7 +1556,7 @@ public:
 		LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(mID);
 		if(children != LLInventoryModel::CHILDREN_NO)
 		{
-			LL_WARNS() << "remove descendents failed, cannot remove category " << LL_ENDL;
+			LL_WARNS(LOG_INV) << "remove descendents failed, cannot remove category " << LL_ENDL;
 		}
 		else
 		{
@@ -1566,7 +1572,7 @@ void remove_inventory_category(
 	const LLUUID& cat_id,
 	LLPointer<LLInventoryCallback> cb)
 {
-	LL_DEBUGS("Inventory") << "cat_id: [" << cat_id << "] " << LL_ENDL;
+	LL_DEBUGS(LOG_INV) << "cat_id: [" << cat_id << "] " << LL_ENDL;
 	LLPointer<LLViewerInventoryCategory> obj = gInventory.getCategory(cat_id);
 	if(obj)
 	{
@@ -1587,7 +1593,7 @@ void remove_inventory_category(
 			LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(cat_id);
 			if(children != LLInventoryModel::CHILDREN_NO)
 			{
-				LL_DEBUGS("Inventory") << "Will purge descendents first before deleting category " << cat_id << LL_ENDL;
+				LL_DEBUGS(LOG_INV) << "Will purge descendents first before deleting category " << cat_id << LL_ENDL;
 				LLPointer<LLInventoryCallback> wrap_cb = new LLRemoveCategoryOnDestroy(cat_id, cb); 
 				purge_descendents_of(cat_id, wrap_cb);
 				return;
@@ -1613,7 +1619,7 @@ void remove_inventory_category(
 	}
 	else
 	{
-		LL_WARNS() << "remove_inventory_category called for invalid or nonexistent item " << cat_id << LL_ENDL;
+		LL_WARNS(LOG_INV) << "remove_inventory_category called for invalid or nonexistent item " << cat_id << LL_ENDL;
 	}
 }
 
@@ -1641,7 +1647,7 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 	LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(id);
 	if(children == LLInventoryModel::CHILDREN_NO)
 	{
-		LL_DEBUGS("Inventory") << "No descendents to purge for " << id << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "No descendents to purge for " << id << LL_ENDL;
 		return;
 	}
 	LLPointer<LLViewerInventoryCategory> cat = gInventory.getCategory(id);
@@ -1650,8 +1656,8 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 		if (LLClipboard::instance().hasContents() && LLClipboard::instance().isCutMode())
 		{
 			// Something on the clipboard is in "cut mode" and needs to be preserved
-			LL_DEBUGS("Inventory") << "purge_descendents_of clipboard case " << cat->getName()
-								   << " iterate and purge non hidden items" << LL_ENDL;
+			LL_DEBUGS(LOG_INV) << "purge_descendents_of clipboard case " << cat->getName()
+							   << " iterate and purge non hidden items" << LL_ENDL;
 			LLInventoryModel::cat_array_t* categories;
 			LLInventoryModel::item_array_t* items;
 			// Get the list of direct descendants in tha categoy passed as argument
@@ -1686,7 +1692,7 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 			else // no cap
 			{
 				// Fast purge
-				LL_DEBUGS("Inventory") << "purge_descendents_of fast case " << cat->getName() << LL_ENDL;
+				LL_DEBUGS(LOG_INV) << "purge_descendents_of fast case " << cat->getName() << LL_ENDL;
 
 				// send it upstream
 				LLMessageSystem* msg = gMessageSystem;
@@ -1729,9 +1735,9 @@ void copy_inventory_from_notecard(const LLUUID& destination_id,
 {
 	if (NULL == src)
 	{
-		LL_WARNS("copy_inventory_from_notecard") << "Null pointer to item was passed for object_id "
-												 << object_id << " and notecard_inv_id "
-												 << notecard_inv_id << LL_ENDL;
+		LL_WARNS(LOG_NOTECARD) << "Null pointer to item was passed for object_id "
+							   << object_id << " and notecard_inv_id "
+							   << notecard_inv_id << LL_ENDL;
 		return;
 	}
 
@@ -1751,9 +1757,9 @@ void copy_inventory_from_notecard(const LLUUID& destination_id,
 
 	if (! viewer_region)
 	{
-        LL_WARNS("copy_inventory_from_notecard") << "Can't find region from object_id "
-                                                 << object_id << " or gAgent"
-                                                 << LL_ENDL;
+        LL_WARNS(LOG_NOTECARD) << "Can't find region from object_id "
+							   << object_id << " or gAgent"
+							   << LL_ENDL;
         return;
     }
 
@@ -1761,9 +1767,9 @@ void copy_inventory_from_notecard(const LLUUID& destination_id,
 	std::string url = viewer_region->getCapability("CopyInventoryFromNotecard");
 	if (url.empty())
 	{
-        LL_WARNS("copy_inventory_from_notecard") << "There is no 'CopyInventoryFromNotecard' capability"
-												 << " for region: " << viewer_region->getName()
-                                                 << LL_ENDL;
+        LL_WARNS(LOG_NOTECARD) << "There is no 'CopyInventoryFromNotecard' capability"
+							   << " for region: " << viewer_region->getName()
+							   << LL_ENDL;
 		return;
 	}
 
@@ -1837,15 +1843,15 @@ void slam_inventory_folder(const LLUUID& folder_id,
 {
 	if (AISCommand::isAPIAvailable())
 	{
-		LL_DEBUGS("Avatar") << "using AISv3 to slam folder, id " << folder_id
-							<< " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "using AISv3 to slam folder, id " << folder_id
+						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
 		LLPointer<AISCommand> cmd_ptr = new SlamFolderCommand(folder_id, contents, cb);
 		cmd_ptr->run_command();
 	}
 	else // no cap
 	{
-		LL_DEBUGS("Avatar") << "using item-by-item calls to slam folder, id " << folder_id
-							<< " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
+		LL_DEBUGS(LOG_INV) << "using item-by-item calls to slam folder, id " << folder_id
+						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
 		for (LLSD::array_const_iterator it = contents.beginArray();
 			 it != contents.endArray();
 			 ++it)
@@ -1947,7 +1953,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
 		}
 		else
 		{
-			LL_WARNS() << "Can't create unrecognized type " << type_name << LL_ENDL;
+			LL_WARNS(LOG_INV) << "Can't create unrecognized type " << type_name << LL_ENDL;
 		}
 	}
 	panel->getRootFolder()->setNeedsAutoRename(TRUE);	
@@ -2182,7 +2188,7 @@ LLViewerInventoryItem *LLViewerInventoryItem::getLinkedItem() const
 		LLViewerInventoryItem *linked_item = gInventory.getItem(mAssetUUID);
 		if (linked_item && linked_item->getIsLinkType())
 		{
-			LL_WARNS() << "Warning: Accessing link to link" << LL_ENDL;
+			LL_WARNS(LOG_INV) << "Warning: Accessing link to link" << LL_ENDL;
 			return NULL;
 		}
 		return linked_item;

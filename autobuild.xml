@@ -434,9 +434,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b35cfa9a08fbeb78f5819d921a1cd5fb</string>
+              <string>e4280eae792a5f13bc9d01d8cfb7c557</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.24.0-windows-20130810.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-curl-update/rev/295367/arch/CYGWIN/installer/curl-7.38.0-windows-20141010.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
