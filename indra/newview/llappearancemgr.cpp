@@ -3034,10 +3034,18 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInve
 			remove_inventory_item(item->getUUID(), cb, immediate_delete);
 		}
 // [/RLVa:KB]
+// <FS:Ansariel> Only difference here is item is of type LLInventoryItem.
+//               This has been changed because of former rlvPredCanRemoveItem()
+//               debug code.
 //		const LLInventoryItem* item = item_array.get(i).get();
 //		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 //		{
-//			gInventory.purgeObject(item->getUUID());
+//			bool immediate_delete = false;
+//			if (item->getType() == LLAssetType::AT_OBJECT)
+//			{
+//				immediate_delete = true;
+//			}
+//			remove_inventory_item(item->getUUID(), cb, immediate_delete);
 //		}
 	}
 }
