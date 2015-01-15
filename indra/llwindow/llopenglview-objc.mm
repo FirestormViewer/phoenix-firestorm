@@ -104,20 +104,20 @@ attributedStringInfo getSegments(NSAttributedString *str)
 - (unsigned long)getVramSize
 {
     CGLRendererInfoObj info = 0;
-	GLint vram_bytes = 0;
+	GLint vram_mbytes = 0;
     int num_renderers = 0;
     CGLError the_err = CGLQueryRendererInfo (CGDisplayIDToOpenGLDisplayMask(kCGDirectMainDisplay), &info, &num_renderers);
     if(0 == the_err)
     {
-        CGLDescribeRenderer (info, 0, kCGLRPTextureMemory, &vram_bytes);
+        CGLDescribeRenderer (info, 0, kCGLRPTextureMemoryMegabytes, &vram_mbytes);
         CGLDestroyRendererInfo (info);
     }
     else
     {
-        vram_bytes = (256 << 20);
+        vram_mbytes = 256;
     }
     
-	return (unsigned long)vram_bytes / 1048576; // We need this in megabytes.
+	return (unsigned long)vram_mbytes;
 }
 
 - (void)viewDidMoveToWindow
@@ -284,53 +284,46 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
     // Apparently people still use this?
     if ([theEvent modifierFlags] & NSCommandKeyMask &&
-        !([theEvent modifierFlags] & (NSControlKeyMask | NSShiftKeyMask
-									  | NSAlternateKeyMask | NSAlphaShiftKeyMask
-									  | NSFunctionKeyMask | NSHelpKeyMask)
-		  )
-		)
-	{
-        callRightMouseDown(mMousePos, mModifiers);
+        !([theEvent modifierFlags] & NSControlKeyMask) &&
+        !([theEvent modifierFlags] & NSShiftKeyMask) &&
+        !([theEvent modifierFlags] & NSAlternateKeyMask) &&
+        !([theEvent modifierFlags] & NSAlphaShiftKeyMask) &&
+        !([theEvent modifierFlags] & NSFunctionKeyMask) &&
+        !([theEvent modifierFlags] & NSHelpKeyMask))
+    {
+        callRightMouseDown(mMousePos, [theEvent modifierFlags]);
         mSimulatedRightClick = true;
     } else {
         if ([theEvent clickCount] >= 2)
         {
-            callDoubleClick(mMousePos, mModifiers);
+            callDoubleClick(mMousePos, [theEvent modifierFlags]);
         } else if ([theEvent clickCount] == 1) {
-            callLeftMouseDown(mMousePos, mModifiers);
+            callLeftMouseDown(mMousePos, [theEvent modifierFlags]);
         }
     }
 }
 
 - (void) mouseUp:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
     if (mSimulatedRightClick)
     {
-        callRightMouseUp(mMousePos, mModifiers);
+        callRightMouseUp(mMousePos, [theEvent modifierFlags]);
         mSimulatedRightClick = false;
     } else {
-        callLeftMouseUp(mMousePos, mModifiers);
+        callLeftMouseUp(mMousePos, [theEvent modifierFlags]);
     }
 }
 
 - (void) rightMouseDown:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
-	callRightMouseDown(mMousePos, mModifiers);
+	callRightMouseDown(mMousePos, [theEvent modifierFlags]);
 }
 
 - (void) rightMouseUp:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
-	callRightMouseUp(mMousePos, mModifiers);
+	callRightMouseUp(mMousePos, [theEvent modifierFlags]);
 }
 
 // <FS:LO> Fix FIRE-14282/BUG-6875 with the solution provided in LL's jira.
@@ -378,16 +371,12 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) otherMouseDown:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
-	callMiddleMouseDown(mMousePos, mModifiers);
+	callMiddleMouseDown(mMousePos, [theEvent modifierFlags]);
 }
 
 - (void) otherMouseUp:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
-	callMiddleMouseUp(mMousePos, mModifiers);
+	callMiddleMouseUp(mMousePos, [theEvent modifierFlags]);
 }
 
 - (void) otherMouseDragged:(NSEvent *)theEvent
@@ -407,32 +396,40 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) keyUp:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
-	callKeyUp([theEvent keyCode], mModifiers);
+	callKeyUp([theEvent keyCode], [theEvent modifierFlags]);
 }
 
 - (void) keyDown:(NSEvent *)theEvent
 {
-	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
-
     uint keycode = [theEvent keyCode];
+    // We must not depend on flagsChange event to detect modifier flags changed,
+    // must depend on the modifire flags in the event parameter.
+    // Because flagsChange event handler misses event when other window is activated,
+    // e.g. OS Window for upload something or Input Window...
+    // mModifiers instance variable is for insertText: or insertText:replacementRange:  (by Pell Smit)
+	mModifiers = [theEvent modifierFlags];
     bool acceptsText = mHasMarkedText ? false : callKeyDown(keycode, mModifiers);
+    unichar ch;
     if (acceptsText &&
         !mMarkedTextAllowed &&
+        !(mModifiers & (NSControlKeyMask | NSCommandKeyMask)) &&  // commands don't invoke InputWindow
         ![(LLAppDelegate*)[NSApp delegate] romanScript] &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSDeleteCharacter &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSBackspaceCharacter &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSDownArrowFunctionKey &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSUpArrowFunctionKey &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSLeftArrowFunctionKey &&
-        [[theEvent charactersIgnoringModifiers] characterAtIndex:0] != NSRightArrowFunctionKey)
+        (ch = [[theEvent charactersIgnoringModifiers] characterAtIndex:0]) > ' ' &&
+        ch != NSDeleteCharacter &&
+        (ch < 0xF700 || ch > 0xF8FF))  // 0xF700-0xF8FF: reserved for function keys on the keyboard(from NSEvent.h)
     {
         [(LLAppDelegate*)[NSApp delegate] showInputWindow:true withEvent:theEvent];
-    }
-	else
+    } else
     {
         [[self inputContext] handleEvent:theEvent];
+    }
+    
+    // OS X intentionally does not send us key-up information on cmd-key combinations.
+    // This behaviour is not a bug, and only applies to cmd-combinations (no others).
+    // Since SL assumes we receive those, we fake it here.
+    if (mModifiers & NSCommandKeyMask && !mHasMarkedText)
+    {
+        callKeyUp([theEvent keyCode], mModifiers);
     }
 }
 
@@ -536,31 +533,58 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
-    if ([aString class] == NSClassFromString(@"NSConcreteMutableAttributedString"))
+    // Apple says aString can be either an NSString or NSAttributedString instance.
+    // But actually it's NSConcreteMutableAttributedString or __NSCFConstantString.
+    // I observed aString was __NSCFConstantString only aString was null string(zero length).
+    // Apple also says when aString is an NSString object,
+    // the receiver is expected to render the marked text with distinguishing appearance.
+    // So I tried to make attributedStringInfo, but it won't be used...   (Pell Smit)
+
+    if (mMarkedTextAllowed)
     {
-        if (mMarkedTextAllowed)
+        unsigned int selected[2] = {
+            selectedRange.location,
+            selectedRange.length
+        };
+        
+        unsigned int replacement[2] = {
+            replacementRange.location,
+            replacementRange.length
+        };
+        
+        int string_length = [aString length];
+        unichar text[string_length];
+        attributedStringInfo segments;
+        // I used 'respondsToSelector:@selector(string)'
+        // to judge aString is an attributed string or not.
+        if ([aString respondsToSelector:@selector(string)])
         {
-            unsigned int selected[2] = {
-                selectedRange.location,
-                selectedRange.length
-            };
-            
-            unsigned int replacement[2] = {
-                replacementRange.location,
-                replacementRange.length
-            };
-            
-            unichar text[[aString length]];
-            [[aString mutableString] getCharacters:text range:NSMakeRange(0, [aString length])];
-            attributedStringInfo segments = getSegments((NSAttributedString *)aString);
-            setMarkedText(text, selected, replacement, [aString length], segments);
+            // aString is attibuted
+            [[aString string] getCharacters:text range:NSMakeRange(0, string_length)];
+            segments = getSegments((NSAttributedString *)aString);
+        }
+        else
+        {
+            // aString is not attributed
+            [aString getCharacters:text range:NSMakeRange(0, string_length)];
+            segments.seg_lengths.push_back(string_length);
+            segments.seg_standouts.push_back(true);
+        }
+        setMarkedText(text, selected, replacement, string_length, segments);
+        if (string_length > 0)
+        {
             mHasMarkedText = TRUE;
-            mMarkedTextLength = [aString length];
-        } else {
-            if (mHasMarkedText)
-            {
-                [self unmarkText];
-            }
+            mMarkedTextLength = string_length;
+        }
+        else
+        {
+            // we must clear the marked text when aString is null.
+            [self unmarkText];
+        }
+    } else {
+        if (mHasMarkedText)
+        {
+            [self unmarkText];
         }
     }
 }
@@ -626,7 +650,9 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) insertNewline:(id)sender
 {
-	if (!(mModifiers & (NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask)))
+	if (!(mModifiers & NSCommandKeyMask) &&
+		!(mModifiers & NSShiftKeyMask) &&
+		!(mModifiers & NSAlternateKeyMask))
 	{
 		callUnicodeCallback(13, 0);
 	} else {
@@ -677,37 +703,63 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 @implementation LLNonInlineTextView
 
+/*  Input Window is a legacy of 20 century, so we want to remove related classes.
+    But unfortunately, Viwer web browser has no support for modern inline input,
+    we need to leave these classes...
+    We will be back to get rid of Input Window after fixing viewer web browser.
+
+    How Input Window should work:
+        1) Input Window must not be empty.
+          It must close when it become empty result of edithing.
+        2) Input Window must not close when it still has input data.
+          It must keep open user types next char before commit.         by Pell Smit
+*/
+
 - (void) setGLView:(LLOpenGLView *)view
 {
 	glview = view;
 }
 
-- (void) insertText:(id)insertString
+- (void)keyDown:(NSEvent *)theEvent
 {
-	[[self inputContext] discardMarkedText];
-    [self setString:@""];
-    [_window orderOut:_window];
-	[self insertText:insertString replacementRange:NSMakeRange(0, [insertString length])];
+    // mKeyPressed is used later to determine whethere Input Window should close or not
+    mKeyPressed = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+    // setMarkedText and insertText is called indirectly from inside keyDown: method
+    [super keyDown:theEvent];
 }
 
+// setMarkedText: is called for incomplete input(on the way to conversion).
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
+{
+    [super setMarkedText:aString selectedRange:selectedRange replacementRange:replacementRange];
+    if ([aString length] == 0)      // this means Input Widow becomes empty
+    {
+        [_window orderOut:_window];     // Close this to avoid empty Input Window
+    }
+}
+
+// insertText: is called for inserting commited text.
+// There are two ways to be called here:
+//      a) explicitly commited (must close)
+//          In case of user typed commit key(usually return key) or delete key or something
+//      b) automatically commited (must not close)
+//          In case of user typed next letter after conversion
 - (void) insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
-	[glview insertText:aString replacementRange:replacementRange];
-}
-
-- (void) insertNewline:(id)sender
-{
-	[[self textStorage] setValue:@""];
-	[[self inputContext] discardMarkedText];
+    [[self inputContext] discardMarkedText];
     [self setString:@""];
-}
-
-- (void)doCommandBySelector:(SEL)aSelector
-{
-	if (aSelector == @selector(insertNewline:))
-	{
-		[self insertNewline:self];
-	}
+    [glview insertText:aString replacementRange:replacementRange];
+    if (mKeyPressed == NSEnterCharacter ||
+        mKeyPressed == NSBackspaceCharacter ||
+        mKeyPressed == NSTabCharacter ||
+        mKeyPressed == NSNewlineCharacter ||
+        mKeyPressed == NSCarriageReturnCharacter ||
+        mKeyPressed == NSDeleteCharacter ||
+        (mKeyPressed >= 0xF700 && mKeyPressed <= 0xF8FF))
+    {
+        // this is case a) of above comment
+        [_window orderOut:_window];     // to avoid empty Input Window
+    }
 }
 
 @end
