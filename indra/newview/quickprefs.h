@@ -124,7 +124,6 @@ private:
 	LLCheckBoxCtrl*		mCtrlDeferred;
 	LLCheckBoxCtrl*		mCtrlUseSSAO;
 	LLCheckBoxCtrl*		mCtrlUseDoF;
-	LLCheckBoxCtrl*		mCtrlUseSSR;
 	LLComboBox*			mCtrlShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
 	

@@ -1098,26 +1098,15 @@
         </text>
 
         <check_box
-         control_name="FSRenderSSR"
-         height="16"
-         initial_value="false"
-         label="Enable rendering of screen space reflections"
-         layout="topleft"
-         left_delta="10"
-         name="FSRenderSSR"
-         tool_tip="Enables the rendering of screen space reflections when Advanced Lighting Model is enabled. Requires atmmospheric shaders, avatar hardware skinning and enabled shadows."
-         top_pad="2"
-         width="256"/>
-        <check_box
          control_name="RenderGlow"
          height="16"
          initial_value="true"
          label="Render glow"
          tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
          layout="topleft"
-         left_delta="0"
+         left_delta="10"
          name="RenderGlow"
-         top_pad="2"
+         top_pad="6"
          width="256"/>
 		<slider
 		enabled_control="RenderGlow"

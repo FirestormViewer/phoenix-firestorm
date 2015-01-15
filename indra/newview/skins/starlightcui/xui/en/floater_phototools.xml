@@ -729,18 +729,6 @@
 				 width="240">
 				</check_box>
 				<check_box
-				 control_name="FSRenderSSR"
-				 height="16"
-				 initial_value="true"
-				 label="Enable Screen Space Reflections"
-				 layout="topleft"
-				 left="5"
-				 name="FSRenderSSR"
-				 top_pad="4"
-				 tool_tip="This will enable Screen Space Reflections which brings an essential level of realism to textures."
-				 width="240">
-				</check_box>
-				<check_box
 				 control_name="RenderLocalLights"
 				 height="16"
 				 label="Enable All Local Lights"

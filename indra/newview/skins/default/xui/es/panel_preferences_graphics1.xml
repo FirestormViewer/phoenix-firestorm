@@ -147,7 +147,6 @@
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>
-			<check_box label="Activar dibujo de Screen Space Reflections" name="FSRenderSSR" tool_tip="Habilita el dibujo de Screen Space Reflections cuando el Modelo Avanzado de Iluminación está activado. Requiere la activación de los efectos atmosféricos, la aplicación de la piel del avatar por hardware y las sombras."/>
 			<check_box label="Dibujar brillo" tool_tip="Dibujar brillo. Ten en cuenta que la intensidad debe configurarse a cero para desactivar el brillo cuando las sombras están activadas." name="RenderGlow"/>
 			<slider label="Intensidad:" tool_tip="Intensidad del brillo. Más alto = más amplio y suave (2 por defecto)." label_width="60" name="glow_strength" width="140"/>
 			<check_box label="Mostrar avatares que aún no se han terminado de cargar" name="RenderUnloadedAvatars"/>

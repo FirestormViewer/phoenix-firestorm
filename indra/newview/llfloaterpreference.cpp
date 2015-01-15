@@ -1903,9 +1903,6 @@ void LLFloaterPreference::refreshEnabledState()
 
 	ctrl_deferred->setEnabled(enabled);
 	//ctrl_deferred2->setEnabled(enabled); <FS:Ansariel> We don't have that
-
-	// <FS:Ansariel> Tofu's SSR
-	getChild<LLCheckBoxCtrl>("FSRenderSSR")->setEnabled(enabled && (ctrl_deferred->get() ? TRUE : FALSE) && gSavedSettings.getS32("RenderShadowDetail") > 0);
 	
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
@@ -1946,8 +1943,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	// <FS:Ansariel> Tofu's SSR
-	LLCheckBoxCtrl* ctrl_ssr = getChild<LLCheckBoxCtrl>("FSRenderSSR");
 
 	// if vertex shaders off, disable all shader related products
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
@@ -1981,10 +1976,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		// <FS:Ansariel> We don't have that
 		//ctrl_deferred2->setEnabled(FALSE);
 		//ctrl_deferred2->setValue(FALSE);
-
-		// <FS:Ansariel> Tofu's SSR
-		ctrl_ssr->setEnabled(FALSE);
-		ctrl_ssr->setValue(FALSE);
 	}
 	
 	// disabled windlight
@@ -2008,10 +1999,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		// <FS:Ansariel> We don't have that
 		//ctrl_deferred2->setEnabled(FALSE);
 		//ctrl_deferred2->setValue(FALSE);
-
-		// <FS:Ansariel> Tofu's SSR
-		ctrl_ssr->setEnabled(FALSE);
-		ctrl_ssr->setValue(FALSE);
 	}
 
 	// disabled deferred
@@ -2032,10 +2019,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		// <FS:Ansariel> We don't have that
 		//ctrl_deferred2->setEnabled(FALSE);
 		//ctrl_deferred2->setValue(FALSE);
-
-		// <FS:Ansariel> Tofu's SSR
-		ctrl_ssr->setEnabled(FALSE);
-		ctrl_ssr->setValue(FALSE);
 	}
 	
 	// disabled deferred SSAO
@@ -2050,10 +2033,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
-		// <FS:Ansariel> Tofu's SSR
-		ctrl_ssr->setEnabled(FALSE);
-		ctrl_ssr->setValue(FALSE);
 	}
 
 	// disabled reflections
@@ -2087,10 +2066,6 @@ void LLFloaterPreference::disableUnavailableSettings()
 		// <FS:Ansariel> We don't have that
 		//ctrl_deferred2->setEnabled(FALSE);
 		//ctrl_deferred2->setValue(FALSE);
-
-		// <FS:Ansariel> Tofu's SSR
-		ctrl_ssr->setEnabled(FALSE);
-		ctrl_ssr->setValue(FALSE);
 	}
 
 	// disabled cloth

@@ -59,7 +59,7 @@ public:
 	BOOL loadShadersInterface();
 	BOOL loadShadersWindLight();
 	BOOL loadTransformShaders();
-	
+
 	std::vector<S32> mVertexShaderLevel;
 	S32	mMaxAvatarShaderLevel;
 

@@ -132,7 +132,6 @@
 			<text name="Miscellaneous Rendering">
 				Inne opcje wyświetlania:
 			</text>
-			<check_box label="Włącz renderowanie odbić powierzchni ekranu (SSR)" name="FSRenderSSR" tool_tip="Włącza renderowanie odbić powierzchni ekranu (Screen Space Reflections, SSR), gdy włączone jest Zaawansowane Oświetlenie. Wymaga do działania shaderów atmosfery, renderingu awatarów przez GPU i włączonych cieni."/>
 			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
 			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
 			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>

@@ -181,7 +181,6 @@
             レンダリングその他：
         </text>
 
-		<check_box label="スクリーン空間の反射を有効にする" name="FSRenderSSR" tool_tip="「高度な照明モデル」が有効になっている時、スクリーン空間の反射をレンダリングします。「環境（大気）シェーダー」、アバターの「ハードウェアスキニング」、「影」が何れも有効になっている必要がありますEnables the rendering of screen space reflections when Advanced Lighting Model is enabled. Requires atmmospheric shaders, avatar hardware skinning and enabled shadows." />
         <check_box label="グローをレンダリング" tool_tip="グロー（輝き）をレンダリングします。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow" />
 		<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength" />
 		<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars" />
