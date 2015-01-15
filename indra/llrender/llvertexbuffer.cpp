@@ -845,9 +845,11 @@ void LLVertexBuffer::drawArrays(U32 mode, U32 first, U32 count) const
 		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
 		//LL_RECORD_BLOCK_TIME(FTM_GL_DRAW_ARRAYS);
 		stop_glerror();
-	LLGLSLShader::startProfile();
+		LLGLSLShader::startProfile();
+		stop_glerror();
 		glDrawArrays(sGLMode[mode], first, count);
-	LLGLSLShader::stopProfile(count, mode);
+		stop_glerror();
+		LLGLSLShader::stopProfile(count, mode);
 	}
 
 	stop_glerror();
