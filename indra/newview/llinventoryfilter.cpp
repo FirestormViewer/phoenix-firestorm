@@ -223,13 +223,6 @@ bool LLInventoryFilter::checkFolder(const LLFolderViewModelItem* item) const
 
 bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 {
-	// when applying a filter, matching folders get their contents downloaded first
-	if (isNotDefault()
-		&& !gInventory.isCategoryComplete(folder_id))
-	{
-		LLInventoryModelBackgroundFetch::instance().start(folder_id);
-	}
-
 	// Always check against the clipboard
 	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	// Don't hide cut items in inventory
@@ -241,6 +234,13 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 	if (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS)
 	{
 		return passed_clipboard;
+	}
+
+	// when applying a filter, matching folders get their contents downloaded first
+	if (mFilterSubString.size()
+		&& !gInventory.isCategoryComplete(folder_id))
+	{
+		LLInventoryModelBackgroundFetch::instance().start(folder_id);
 	}
 
 	// show folder links

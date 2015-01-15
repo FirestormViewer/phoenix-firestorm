@@ -44,7 +44,11 @@ std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
 	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
 		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
 	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
-		return llformat("%s (%s)", pItem->getName().c_str(), gAgentAvatarp->getAttachedPointName(pItem->getUUID()).c_str());
+	{
+		std::string attachment_point_name;
+		gAgentAvatarp->getAttachedPointName(pItem->getUUID(), attachment_point_name);
+		return llformat("%s (%s)", pItem->getName().c_str(), attachment_point_name.c_str());
+	}
 	return (pItem) ? pItem->getName() : LLStringUtil::null;
 }
 

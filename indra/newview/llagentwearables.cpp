@@ -1048,6 +1048,10 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 			continue;
 		}
 
+		// Don't care about this case - ordering of wearables with the same asset id has no effect.
+		// Causes the two-alphas error case in MAINT-4158.
+		// We should actually disallow wearing two wearables with the same asset id.
+#if 0
 		if (curr_wearable->getName() != new_item->getName() ||
 			curr_wearable->getItemID() != new_item->getUUID())
 		{
@@ -1058,6 +1062,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 			mismatched++;
 			continue;
 		}
+#endif
 		// If we got here, everything matches.
 		matched++;
 	}
@@ -1122,7 +1127,6 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->setCompositeUpdatesEnabled(TRUE);
-		gAgentAvatarp->updateVisualParams();
 
 		// If we have not yet declouded, we may want to use
 		// baked texture UUIDs sent from the first objectUpdate message
@@ -1146,6 +1150,12 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	}
 // [/SL:KB]
 	notifyLoadingFinished();
+
+	// Copy wearable params to avatar.
+	gAgentAvatarp->writeWearablesToAvatar();
+
+	// Then update the avatar based on the copied params.
+	gAgentAvatarp->updateVisualParams();
 
 	gAgentAvatarp->dumpAvatarTEs("setWearableOutfit");
 
@@ -1289,9 +1299,12 @@ void LLAgentWearables::setWearableFinal(LLInventoryItem* new_item, LLViewerWeara
 //	}
 //}
 
-// Combines userRemoveMulipleAttachments() and userAttachMultipleAttachments() logic to
-// get attachments into desired state with minimal number of adds/removes.
-void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
+// Given a desired set of attachments, find what objects need to be
+// removed, and what additional inventory items need to be added.
+void LLAgentWearables::findAttachmentsAddRemoveInfo(LLInventoryModel::item_array_t& obj_item_array,
+													llvo_vec_t& objects_to_remove,
+													llvo_vec_t& objects_to_retain,
+													LLInventoryModel::item_array_t& items_to_add)
 {
 	// Possible cases:
 	// already wearing but not in request set -> take off.
@@ -1310,7 +1323,6 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 	}
 
 	// Build up list of objects to be removed and items currently attached.
-	llvo_vec_t objects_to_remove;
 	for (LLVOAvatar::attachment_map_t::iterator iter = gAgentAvatarp->mAttachmentPoints.begin(); 
 		 iter != gAgentAvatarp->mAttachmentPoints.end();)
 	{
@@ -1345,12 +1357,12 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 				{
 					// LL_INFOS() << "found object to keep, id " << objectp->getID() << ", item " << objectp->getAttachmentItemID() << LL_ENDL;
 					current_item_ids.insert(object_item_id);
+					objects_to_retain.push_back(objectp);
 				}
 			}
 		}
 	}
 
-	LLInventoryModel::item_array_t items_to_add;
 	for (LLInventoryModel::item_array_t::iterator it = obj_item_array.begin();
 		 it != obj_item_array.end();
 		 ++it)
@@ -1369,12 +1381,6 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 	// S32 remove_count = objects_to_remove.size();
 	// S32 add_count = items_to_add.size();
 	// LL_INFOS() << "remove " << remove_count << " add " << add_count << LL_ENDL;
-
-	// Remove everything in objects_to_remove
-	userRemoveMultipleAttachments(objects_to_remove);
-
-	// Add everything in items_to_add
-	userAttachMultipleAttachments(items_to_add);
 }
 
 void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remove)
@@ -1422,6 +1428,7 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 		 ++it)
 	{
 		LLViewerObject *objectp = *it;
+		//gAgentAvatarp->resetJointPositionsOnDetach(objectp);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, objectp->getLocalID());
 	}

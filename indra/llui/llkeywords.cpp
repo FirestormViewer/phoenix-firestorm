@@ -528,11 +528,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 			}
 
 			// Skip white space
-			
-			// <FS:ND> use iswspace in case *cur > 0xFF
-			// while( *cur && isspace(*cur) && (*cur != '\n')  )
 			while( *cur && iswspace(*cur) && (*cur != '\n')  )
-			// </FS:ND>
 			{
 				cur++;
 			}
@@ -575,11 +571,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 		}
 
 		// Skip white space
-
-		// <FS:ND> use iswspace in case *cur > 0xFF
-		// while( *cur && isspace(*cur) && (*cur != '\n')  )
 		while( *cur && iswspace(*cur) && (*cur != '\n')  )
-		// </FS:ND>
 		{
 			cur++;
 		}
@@ -687,9 +679,11 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 			// check against words
 			llwchar prev = cur > base ? *(cur-1) : 0;
 			// NaCl - LSL Preprocessor
+			//if( !iswalnum( prev ) && (prev != '_') )
 			if( !iswalnum( prev ) && (prev != '_') && (prev != '#'))
 			{
 				const llwchar* p = cur;
+				//while( iswalnum( *p ) || (*p == '_') )
 				while( *p && ( iswalnum( *p ) || (*p == '_') || (*p == '#') ) )
 				// NaCl End
 				{

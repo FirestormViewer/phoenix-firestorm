@@ -124,6 +124,14 @@ attributedStringInfo getSegments(NSAttributedString *str)
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(windowResized:) name:NSWindowDidResizeNotification
+											   object:[self window]];    
+ 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(windowWillMiniaturize:) name:NSWindowWillMiniaturizeNotification
+											   object:[self window]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(windowDidDeminiaturize:) name:NSWindowDidDeminiaturizeNotification
 											   object:[self window]];
 }
 
@@ -139,6 +147,16 @@ attributedStringInfo getSegments(NSAttributedString *str)
         NSSize size = [self frame].size;
         callResize(size.width, size.height);
     }
+}
+
+- (void)windowWillMiniaturize:(NSNotification *)notification;
+{
+    callWindowHide();
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification;
+{
+    callWindowUnhide();
 }
 
 - (void)dealloc
@@ -326,13 +344,6 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	callRightMouseUp(mMousePos, [theEvent modifierFlags]);
 }
 
-// <FS:LO> Fix FIRE-14282/BUG-6875 with the solution provided in LL's jira.
-- (void) rightMouseDragged:(NSEvent *)theEvent
-{
-	[self mouseDragged:theEvent];
-}
-// </FS:LO>
-
 - (void)mouseMoved:(NSEvent *)theEvent
 {
 	float mouseDeltas[2] = {
@@ -379,9 +390,14 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	callMiddleMouseUp(mMousePos, [theEvent modifierFlags]);
 }
 
+- (void) rightMouseDragged:(NSEvent *)theEvent
+{
+	[self mouseDragged:theEvent];
+}
+
 - (void) otherMouseDragged:(NSEvent *)theEvent
 {
-	[self mouseDragged:theEvent];  // <FS:LO> Fix FIRE-14282/BUG-6875 with the solution provided in LL's jira.
+	[self mouseDragged:theEvent];        
 }
 
 - (void) scrollWheel:(NSEvent *)theEvent

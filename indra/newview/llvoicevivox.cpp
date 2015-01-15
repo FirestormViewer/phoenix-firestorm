@@ -831,7 +831,7 @@ void LLVivoxVoiceClient::stateMachine()
 						{
 							loglevel = "0";	// turn logging off completely
 						}
-
+							
 						params.args.add("-ll");
 						params.args.add(loglevel);
 
@@ -2524,6 +2524,14 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
             }
         }
         
+        if (mHidden)
+        {
+            for (int i=0;i<3;++i)
+            {
+                pos.mdV[i] = VX_NULL_POSITION;
+            }
+        }
+        
 		stream
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
@@ -3283,7 +3291,7 @@ void LLVivoxVoiceClient::mediaStreamUpdatedEvent(
 				session->mErrorStatusCode = statusCode;
 			break;
 		}
-		
+
 		switch(state)
 		{
 			case streamStateIdle:
@@ -5559,7 +5567,8 @@ void LLVivoxVoiceClient::notifyStatusObservers(LLVoiceClientStatusObserver::ESta
 
 	// skipped to avoid speak button blinking
 	if (   status != LLVoiceClientStatusObserver::STATUS_JOINING
-		&& status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL)
+		&& status != LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL
+		&& status != LLVoiceClientStatusObserver::STATUS_VOICE_DISABLED)
 	{
 		// <FS:Ansariel> Bypass LLCachedControls for voice status update
 		//bool voice_status = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();

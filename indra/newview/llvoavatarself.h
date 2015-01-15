@@ -87,12 +87,11 @@ public:
 	/*virtual*/ void 		requestStopMotion(LLMotion* motion);
 	/*virtual*/ LLJoint*	getJoint(const std::string &name);
 	
-				void		resetJointPositions( void );
-	
 	/*virtual*/ BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
 	/*virtual*/ BOOL setVisualParamWeight(const char* param_name, F32 weight);
 	/*virtual*/ BOOL setVisualParamWeight(S32 index, F32 weight);
 	/*virtual*/ void updateVisualParams();
+	void writeWearablesToAvatar();
 	/*virtual*/ void idleUpdateAppearanceAnimation();
 
 private:
@@ -297,7 +296,7 @@ public:
 // [RLVa:KB] - Checked: 2009-12-18 (RLVa-1.1.0i) | Added: RLVa-1.1.0i
 	LLViewerJointAttachment* getWornAttachmentPoint(const LLUUID& inv_item_id) const;
 // [/RLVa:KB]
-	const std::string   getAttachedPointName(const LLUUID& inv_item_id) const;
+	bool				getAttachedPointName(const LLUUID& inv_item_id, std::string& name) const;
 	/*virtual*/ const LLViewerJointAttachment *attachObject(LLViewerObject *viewer_object);
 	/*virtual*/ BOOL 	detachObject(LLViewerObject *viewer_object);
 	static BOOL			detachAttachmentIntoInventory(const LLUUID& item_id);

@@ -121,22 +121,29 @@ void agent_push_down( EKeystate s )
 	// </FS:Ansariel>
 }
 
+static void agent_check_temporary_run(LLAgent::EDoubleTapRunMode mode)
+{
+//	if (gAgent.mDoubleTapRunMode == mode &&
+//		gAgent.getRunning() &&
+//		!gAgent.getAlwaysRun())
+//	{
+//		// Turn off temporary running.
+//		gAgent.clearRunning();
+//		gAgent.sendWalkRun(gAgent.getRunning());
+//	}
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	if ( (gAgent.mDoubleTapRunMode == mode) && (gAgent.getTempRun()) )
+		gAgent.clearTempRun();
+// [/RLVa:KB]
+}
+
 static void agent_handle_doubletap_run(EKeystate s, LLAgent::EDoubleTapRunMode mode)
 {
 	if (KEYSTATE_UP == s)
 	{
-//		if (gAgent.mDoubleTapRunMode == mode &&
-//		    gAgent.getRunning() &&
-//		    !gAgent.getAlwaysRun())
-//		{
-//			// Turn off temporary running.
-//			gAgent.clearRunning();
-//			gAgent.sendWalkRun(gAgent.getRunning());
-//		}
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-		if ( (gAgent.mDoubleTapRunMode == mode) && (gAgent.getTempRun()) )
-			gAgent.clearTempRun();
-// [/RLVa:KB]
+		// Note: in case shift is already released, slide left/right run
+		// will be released in agent_turn_left()/agent_turn_right()
+		agent_check_temporary_run(mode);
 	}
 	else if (gSavedSettings.getBOOL("AllowTapTapHoldRun") &&
 		 KEYSTATE_DOWN == s &&
@@ -258,7 +265,12 @@ void agent_turn_left( EKeystate s )
 	}
 	else
 	{
-		if (KEYSTATE_UP == s) return;
+		if (KEYSTATE_UP == s)
+		{
+			// Check temporary running. In case user released 'left' key with shift already released.
+			agent_check_temporary_run(LLAgent::DOUBLETAP_SLIDELEFT);
+			return;
+		}
 		F32 time = gKeyboard->getCurKeyElapsedTime();
 		gAgent.moveYaw( LLFloaterMove::getYawRate( time ) );
 	}
@@ -281,7 +293,12 @@ void agent_turn_right( EKeystate s )
 	}
 	else
 	{
-		if (KEYSTATE_UP == s) return;
+		if (KEYSTATE_UP == s)
+		{
+			// Check temporary running. In case user released 'right' key with shift already released.
+			agent_check_temporary_run(LLAgent::DOUBLETAP_SLIDERIGHT);
+			return;
+		}
 		F32 time = gKeyboard->getCurKeyElapsedTime();
 		gAgent.moveYaw( -LLFloaterMove::getYawRate( time ) );
 	}
