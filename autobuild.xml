@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>221e2b4c7e75ee61a46ce1f63c143288</string>
+              <string>40b1c6b3727ebedafc2f1a172797ccd1</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.24.0-darwin-20140630.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-curl-update/rev/295367/arch/Darwin/installer/curl-7.38.0-darwin-20141010.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -410,9 +410,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>58b7bf45383c1b1bc24afb303b1519c8</string>
+              <string>06149da3d7a34adf40853f813ae55328</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-curl/rev/280289/arch/Linux/installer/curl-7.24.0-linux-20130826.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3pl_3p-curl-update/rev/295367/arch/Linux/installer/curl-7.38.0-linux-20141010.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
