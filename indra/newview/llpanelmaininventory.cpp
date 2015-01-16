@@ -271,6 +271,11 @@ BOOL LLPanelMainInventory::postBuild()
 				//recent_items_panel->getFilter().fromParams(p);
 				recent_items_panel->getFilter().fromParams(p.filter);
 				// </FS:Ansariel>
+
+				// </FS:Ansariel> Recent items panel doesn't filter empty folders until filter floater has been opened
+				LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
+				recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
+				// </FS:Ansariel>
 			}
 		}
 	}
