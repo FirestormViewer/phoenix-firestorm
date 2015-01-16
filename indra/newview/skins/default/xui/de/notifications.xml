@@ -2218,6 +2218,10 @@ Inventarobjekt(e) verschieben?
 			<ignore name="ignore" text="Ich habe die Aktion „Objekt bezahlen&quot; eingestellt, während ich ein Objekt gebaut habe, dass kein Geld()-Skript enthält."/>
 		</form>
 	</notification>
+	<notification name="PayConfirmation">
+		Bestätigen Sie, dass sie L$[AMOUNT] an [TARGET] zahlen möchten.
+		<usetemplate ignoretext="Bestätigen bevor Zahlungen getätigt werden (Summen über L$200)" name="okcancelignore" notext="Abbrechen" yestext="Bezahlen"/>
+	</notification>
 	<notification name="OpenObjectCannotCopy">
 		Sie haben keine Berechtigung zum Kopieren von Elementen in diesem Objekt.
 	</notification>

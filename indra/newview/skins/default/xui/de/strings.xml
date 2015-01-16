@@ -1865,6 +1865,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Invalid Attachment">
 		Ungültige Stelle für Anhang
 	</string>
+	<string name="ATTACHMENT_MISSING_ITEM">
+		Fehler: Fehlender Gegenstand
+	</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">
+		Fehler: Fehlender Basisgegenstand
+	</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">
+		Fehler: Objekt ist Teil des aktuellen Outfits, aber wird nicht getragen
+	</string>
 	<string name="YearsMonthsOld">
 		[AGEYEARS] [AGEMONTHS]
 	</string>
