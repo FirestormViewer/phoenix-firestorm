@@ -550,9 +550,9 @@ void LLPanelMainInventory::onClearSearch()
 		mActivePanel->setFilterSubString(LLStringUtil::null);
 		// <FS:Ansariel>
 		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-		if (mActivePanel->getName() == "Worn Items")
+		if (mActivePanel->getName() == "Recent Items" || mActivePanel->getName() == "Worn Items")
 		{
-			mActivePanel->setFilterTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+			mActivePanel->getFilter().resetDefault();
 		}
 		else
 		{
