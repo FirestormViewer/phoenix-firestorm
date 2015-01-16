@@ -4014,16 +4014,17 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		return;
 	}
 	
-// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	bool fUpdateAppearance = false;
 	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLViewerInventoryItem* linked_item = gInventory.getLinkedItem(*it);
+		const LLUUID& id_to_remove = *it;
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8) - Adjusted after AIS3 merge by Ansariel
+		const LLViewerInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
 		if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 		{
 			continue;
 		}
+// [/RLVa:KB]
 		// <FS:Ansariel> LSL Bridge
 		if (FSLSLBridge::instance().canUseBridge() && linked_item == FSLSLBridge::instance().getBridge())
 		{
@@ -4031,26 +4032,10 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		}
 		// </FS:Ansariel>
 
-		fUpdateAppearance = true;
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
-		addDoomedTempAttachment(linked_item_id);
+		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 		removeCOFItemLinks(linked_item_id, cb);
+		addDoomedTempAttachment(linked_item_id);
 	}
-
-	if (fUpdateAppearance)
-	{
-		updateAppearanceFromCOF();
-	}
-// [/RLVa:KB]
-//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
-//	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
-//	{
-//		const LLUUID& id_to_remove = *it;
-//		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-//		addDoomedTempAttachment(linked_item_id);
-//		removeCOFItemLinks(linked_item_id, cb);
-//	}
-//	updateAppearanceFromCOF();
 }
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
