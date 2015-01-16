@@ -2,12 +2,12 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="440"
+ height="470"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
  title="Inventory Recent Items"
- width="280">
+ width="160">
     <icon
      height="16"
      image_name="Inv_Animation"
@@ -226,9 +226,8 @@
      height="20"
      label="None"
      label_selected="None"
-     left_delta="0"
+     left="8"
      name="None"
-     left_pad="10"
      width="100" />
     <check_box
      height="16"
@@ -238,56 +237,46 @@
      name="check_show_empty"
      top_pad="6"
      width="144" />
-    <view_border
-     bevel_style="none"
-     follows="top|left"
-     height="0"
-     layout="topleft"
-     left="10"
-     name="horiz_separator"
-     top_pad="8"
-     width="260"/>
     <check_box
      height="16"
-     top="324"
      label="Since Logoff"
      layout="topleft"
      left_delta="0"
      name="check_since_logoff"
-     top_pad="4"
+     top_pad="0"
      width="144" />
     <text
      type="string"
      length="1"
      follows="left|top"
      halign="center"
-     height="12"
+     height="20"
      layout="topleft"
      left_delta="0"
      name="- OR -"
-     top="342"
+     top_pad="0"
      width="144">
         - OR -
     </text>
     <radio_group
-     height="16"
+     height="23"
      layout="topleft"
      name="date_search_direction"
-     top="360"
+     top_pad="0"
      left="8"
      width="270">
      <radio_item
       label="Newer than"
       layout="topleft"
       name="newer"
-      top_pad="6"
+      top_pad="0"
       left="0" />
      <radio_item
       label="Older than"
       layout="topleft"
       name="older"
-      top_delta="0"
-      left="120" />
+      top_pad="6"
+      left="0" />
     </radio_group>
     <spinner
      follows="left|top"
@@ -336,13 +325,13 @@
         Days
     </text>
     <button
-     follows="top|right"
+     right="-6"
+     follows="top|left"
      height="20"
      label="Close"
      label_selected="Close"
      layout="topleft"
      name="Close"
-     right="-6"
-     top="406"
+     top_pad="8"
      width="76" />
 </floater>
