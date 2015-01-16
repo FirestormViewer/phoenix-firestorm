@@ -59,9 +59,7 @@
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-//-TT Client LSL Bridge
 #include "fslslbridge.h"
-//-TT
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1543,7 +1541,7 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 // <FS:TT> Client LSL Bridge
 	if (FSLSLBridge::instance().canUseBridge())
 	{
-		LL_INFOS() << "reinserting bridge at outfit remove" << LL_ENDL;
+		LL_INFOS("FSLSLBridge") << "reinserting bridge at outfit remove" << LL_ENDL;
 		for (LLInventoryModel::item_array_t::iterator i = items.begin(); i != items.end(); ++i)
 		{
 			const LLViewerInventoryItem* item = *i;
@@ -1678,16 +1676,18 @@ void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LL
 		 ++iter)
 	{
 		const LLViewerInventoryItem* item = (*iter);
-		std::string item_name = item->getName();
+		// <FS:Ansariel> Skip LSL bridge
+		if (item->getName() == FSLSLBridge::instance().currentFullName())
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		switch (item->getActualType())
 		{
 			case LLAssetType::AT_LINK:
 			{
-				if (item_name != FSLSLBridge::instance().currentFullName())
-				{
-					LL_DEBUGS("Avatar") << "linking inventory item " << item->getName() << LL_ENDL;
-					link_array.push_back(LLConstPointer<LLInventoryObject>(item));
-				}
+				LL_DEBUGS("Avatar") << "linking inventory item " << item->getName() << LL_ENDL;
+				link_array.push_back(LLConstPointer<LLInventoryObject>(item));
 				break;
 			}
 			case LLAssetType::AT_LINK_FOLDER:
@@ -1706,17 +1706,13 @@ void LLAppearanceMgr::shallowCopyCategoryContents(const LLUUID& src_id, const LL
 			case LLAssetType::AT_BODYPART:
 			case LLAssetType::AT_GESTURE:
 			{
-				if (item_name != FSLSLBridge::instance().currentFullName())
-				{
-					LL_INFOS() << "copying inventory item " << item->getName() << LL_ENDL;
-
-					copy_inventory_item(gAgent.getID(),
-										item->getPermissions().getOwner(),
-										item->getUUID(),
-										dst_id,
-										item->getName(),
-										cb);
-				}
+				LL_DEBUGS("Avatar") << "copying inventory item " << item->getName() << LL_ENDL;
+				copy_inventory_item(gAgent.getID(),
+									item->getPermissions().getOwner(),
+									item->getUUID(),
+									dst_id,
+									item->getName(),
+									cb);
 				break;
 			}
 			default:
@@ -1942,7 +1938,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 								LLInventoryModel::item_array_t& wear_items_new, 
 								LLInventoryModel::item_array_t& obj_items_new,
 								LLInventoryModel::item_array_t& gest_items_new,
-								bool append /*=false*/, const LLUUID& idOutfit /*=LLUUID::null*/)
+								bool append /*=false*/, const LLUUID& category /*=LLUUID::null*/)
 // [/RLVa:KB]
 {
 //	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
@@ -2021,9 +2017,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/SL:KB]
 	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
 
-	//
 	// - Attachments: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
@@ -2042,18 +2036,19 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), obj_items_new.end());
 	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
 // [/RLVa:KB]
-//-TT Client LSL Bridge
+
+	// <FS:TT> Client LSL Bridge
 	if (FSLSLBridge::instance().canUseBridge())
 	{
 		//if replacing - make sure bridge stays.
 		if (!append && FSLSLBridge::instance().getBridge())
 		{
-			LL_INFOS() << "reinserting bridge at outfit replace" << LL_ENDL;
+			LL_INFOS("FSLSLBridge") << "reinserting bridge at outfit replace" << LL_ENDL;
 			obj_items.insert(obj_items.end(), FSLSLBridge::instance().getBridge());
-			LL_INFOS() << "reinserted bridge at outfit replace" << LL_ENDL;
 		}
 	}
-//-TT
+	// </FS:TT>
+
 	removeDuplicateItems(obj_items);
 
 	// - Gestures: include COF contents only if appending.
@@ -2107,7 +2102,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		item_contents["type"] = LLAssetType::AT_LINK; 
 		contents.append(item_contents);
 	}
-	const LLUUID& base_id = append ? getBaseOutfitUUID() : idOutfit;
+	const LLUUID& base_id = append ? getBaseOutfitUUID() : category;
 	LLViewerInventoryCategory *base_cat = gInventory.getCategory(base_id);
 	if (base_cat)
 	{
@@ -2434,7 +2429,6 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 				<< " descendent_count " << cof->getDescendentCount()
 				<< " viewer desc count " << cof->getViewerDescendentCount() << LL_ENDL;
 	}
-
 	if(!wear_items.size())
 	{
 		LLNotificationsUtil::add("CouldNotPutOnOutfit");

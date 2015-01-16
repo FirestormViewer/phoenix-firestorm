@@ -59,7 +59,7 @@ public:
 // [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 	void updateCOF(LLInventoryModel::item_array_t& body_items_new, LLInventoryModel::item_array_t& wear_items_new,
 				   LLInventoryModel::item_array_t& obj_items_new, LLInventoryModel::item_array_t& gest_items_new,
-				   bool append = false, const LLUUID& idOutfit = LLUUID::null);
+				   bool append = false, const LLUUID& category = LLUUID::null);
 // [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
 // <FS:TT> ReplaceWornItemsOnly
