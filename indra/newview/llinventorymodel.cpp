@@ -73,6 +73,9 @@
 
 #include "aoengine.h"
 #include "fslslbridge.h"
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif
 
 // Increment this if the inventory contents change in a non-backwards-compatible way.
 // For viewer 2, the addition of link items makes a pre-viewer-2 cache incorrect.
@@ -2345,11 +2348,17 @@ void LLInventoryModel::buildParentChildMap()
 	{
 		LLViewerInventoryCategory* cat = cats.at(i);
 		catsp = getUnlockedCatArray(cat->getParentUUID());
+#ifdef OPENSIM
+		if(catsp &&
+		   (!LLGridManager::getInstance()->isInSecondLife() || (cat->getParentUUID().notNull() || 
+			cat->getPreferredType() == LLFolderType::FT_ROOT_INVENTORY )))
+#else
 		if(catsp &&
 		   // Only the two root folders should be children of null.
 		   // Others should go to lost & found.
 		   (cat->getParentUUID().notNull() || 
 			cat->getPreferredType() == LLFolderType::FT_ROOT_INVENTORY ))
+#endif
 		{
 			catsp->push_back(cat);
 		}
