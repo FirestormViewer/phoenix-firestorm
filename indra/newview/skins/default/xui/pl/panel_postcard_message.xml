@@ -9,9 +9,7 @@
 	<text name="subject_label">
 		Temat:
 	</text>
-	<line_editor label="Wpisz tutaj temat." name="subject_form"/>
 	<text_editor name="msg_form">
 		Wpisz tutaj wiadomość.
 	</text_editor>
-	<button label="Wyślij" name="send_btn"/>
 </panel>

@@ -343,6 +343,72 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SocialFacebookErrorDisconnecting">
 		Problem z rozłączaniem z Facebookiem
 	</string>
+	<string name="SocialFlickrConnecting">
+		Łączenie z Flickr...
+	</string>
+	<string name="SocialFlickrPosting">
+		Wysyłanie...
+	</string>
+	<string name="SocialFlickrDisconnecting">
+		Rozłączanie z Flickr...
+	</string>
+	<string name="SocialFlickrErrorConnecting">
+		Problem z łączeniem z Flickr
+	</string>
+	<string name="SocialFlickrErrorPosting">
+		Problem z wysyłaniem na Flickr
+	</string>
+	<string name="SocialFlickrErrorDisconnecting">
+		Problem z rozłączaniem z Flickr
+	</string>
+	<string name="SocialTwitterConnecting">
+		Łączenie z Twitterem...
+	</string>
+	<string name="SocialTwitterPosting">
+		Wysyłanie...
+	</string>
+	<string name="SocialTwitterDisconnecting">
+		Rozłączanie z Twitterem...
+	</string>
+	<string name="SocialTwitterErrorConnecting">
+		Problem z łączeniem z Twitterem
+	</string>
+	<string name="SocialTwitterErrorPosting">
+		Problem z wysyłaniem na Twittera
+	</string>
+	<string name="SocialTwitterErrorDisconnecting">
+		Problem z rozłączaniem z Twittera
+	</string>
+	<string name="BlackAndWhite">
+		Czerń i biel
+	</string>
+	<string name="Colors1970">
+		Kolory lat 1970
+	</string>
+	<string name="Intense">
+		Intensywne
+	</string>
+	<string name="Newspaper">
+		Papier gazetowy
+	</string>
+	<string name="Spotlight">
+		Reflektor
+	</string>
+	<string name="Video">
+		Wideo
+	</string>
+	<string name="Autocontrast">
+		Autokontrast
+	</string>
+	<string name="LensFlare">
+		Flara
+	</string>
+	<string name="Miniature">
+		Miniatura
+	</string>
+	<string name="Toycamera">
+		Zabawkowy aparat
+	</string>
 	<string name="TooltipPerson">
 		Osoba
 	</string>
@@ -387,6 +453,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="TooltipMustSingleDrop">
 		Tylko pojedynczy obiekt może być tutaj przeciągnięty
+	</string>
+	<string name="TooltipTooManyWearables">
+		Nie możesz założyć folderu, który zawiera więcej niż [AMOUNT] przedmiotów. Możesz zmienić ten limit w Zaawansowane &gt; Pokaż ustawienia debugowania &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT]L$: "/>
 	<string name="TooltipFlagScript">
@@ -923,6 +992,12 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="use_texture">
 		Użyj tekstury
+	</string>
+	<string name="manip_hint1">
+		Przesuń kursor nad linijkę
+	</string>
+	<string name="manip_hint2">
+		by przyciągać do siatki
 	</string>
 	<string name="texture_loading">
 		Ładowanie...
@@ -1696,6 +1771,15 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Invalid Attachment">
 		Nieprawidłowy punkt dodatku
+	</string>
+	<string name="ATTACHMENT_MISSING_ITEM">
+		Błąd: brakujący przedmiot
+	</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">
+		Błąd: brakująca baza przedmiotu
+	</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">
+		Błąd: obiekt jest w obecnym stroju, ale nie jest założony
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS]
@@ -4127,6 +4211,12 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="facebook_post_success">
 		Wysłałeś/aś post na Facebooka.
 	</string>
+	<string name="flickr_post_success">
+		Wysłałeś/aś post na Flickr.
+	</string>
+	<string name="twitter_post_success">
+		Wysłałeś/aś post na Twittera.
+	</string>
 	<string name="no_session_message">
 		(Sesja IM wygasła)
 	</string>
@@ -4775,6 +4865,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Destinations_Tooltip">
 		Punkty, jakie mogą być interesujące
 	</string>
+	<string name="Command_Facebook_Tooltip">
+		Wyślij na Facebooka
+	</string>
+	<string name="Command_Flickr_Tooltip">
+		Wyślij na Flickr
+	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gesty Twojego awatara (CTRL+G)
 	</string>
@@ -4819,9 +4915,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Zrób zdjęcie (CTRL+SHIFT+S)
-	</string>
-	<string name="Command_Social_Tooltip">
-		Wyślij post na Facebooka
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Rozmawiaj z ludźmi w pobliżu używając mikrofonu

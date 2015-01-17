@@ -47,6 +47,14 @@
 			Zacznij odtwarzanie dźwięków
 		</playtip>
 	</widgetset>
+	<widgetset name="none">
+		<label name="none_label">
+			Brak zawartości
+		</label>
+		<tooltip name="none_tooltip">
+			Brak mediów
+		</tooltip>
+	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
 			Strumień w czasie rzeczywistym

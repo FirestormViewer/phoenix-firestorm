@@ -30,6 +30,9 @@
 	<text name="string_literal_label">
 		Łańcuchy znaków
 	</text>
+	<text name="constant_label">
+		Stałe
+	</text>
 	<text name="i_constant_label">
 		Liczby całkowite
 	</text>

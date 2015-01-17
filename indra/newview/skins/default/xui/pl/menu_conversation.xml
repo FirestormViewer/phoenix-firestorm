@@ -30,4 +30,5 @@
 		<menu_item_call label="Wycisz wszystkich" name="ModerateVoiceMute" />
 		<menu_item_call label="Odblokuj wszystkich" name="ModerateVoiceUnmute" />
 	</context_menu>
+	<menu_item_call label="Zbanuj" name="BanMember" />
 </toggleable_menu>

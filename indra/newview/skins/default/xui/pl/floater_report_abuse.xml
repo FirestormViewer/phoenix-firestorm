@@ -22,45 +22,21 @@
 		Właściciel:
 	</text>
 	<combo_box name="category_combo" tool_tip="Wybór kategorii - wybierz kategorię, której dotyczy raport">
-		<combo_box.item label="Wybierz kategorię" name="Select_category"/>
-		<combo_box.item label="Wiek &gt; Udawanie nieletniej osoby" name="Age__Age_play"/>
-		<combo_box.item label="Wiek &gt; Dorosły Rezydent w Teen Second Life" name="Age__Adult_resident_on_Teen_Second_Life"/>
-		<combo_box.item label="Wiek &gt; Nieletni Rezydent poza Teen Second Life" name="Age__Underage_resident_outside_of_Teen_Second_Life"/>
-		<combo_box.item label="Napaść &gt; Walka w piaskownicy / niebezpieczny obszar" name="Assault__Combat_sandbox___unsafe_area"/>
-		<combo_box.item label="Napaść &gt; Bezpieczny obszar" name="Assault__Safe_area"/>
-		<combo_box.item label="Napaść &gt; Piaskownica do testowania broni" name="Assault__Weapons_testing_sandbox"/>
-		<combo_box.item label="Handel &gt; Niedostarczenie produktu lub usługi" name="Commerce__Failure_to_deliver_product_or_service"/>
-		<combo_box.item label="Prywatność &gt; Dane osobiste ze świata realnego" name="Disclosure__Real_world_information"/>
-		<combo_box.item label="Prywatność &gt; Zdalne monitorowanie czatu" name="Disclosure__Remotely_monitoring chat"/>
-		<combo_box.item label="Prywatność &gt; Dane z Second Life / Czatu / IM" name="Disclosure__Second_Life_information_chat_IMs"/>
-		<combo_box.item label="Zakłócanie spokoju &gt; Nieuczciwe używanie zasobów Regionu" name="Disturbing_the_peace__Unfair_use_of_region_resources"/>
-		<combo_box.item label="Zakłócanie spokoju &gt; Przesadnie skryptowane obiekty" name="Disturbing_the_peace__Excessive_scripted_objects"/>
-		<combo_box.item label="Zakłócanie spokoju &gt; Śmiecenie obiektami" name="Disturbing_the_peace__Object_littering"/>
-		<combo_box.item label="Zakłócanie spokoju &gt; Ciągły spam" name="Disturbing_the_peace__Repetitive_spam"/>
-		<combo_box.item label="Zakłócanie spokoju &gt; Niepożądany spam reklamowy" name="Disturbing_the_peace__Unwanted_advert_spam"/>
-		<combo_box.item label="Oszustwo &gt; L$" name="Fraud__L$"/>
-		<combo_box.item label="Oszustwo &gt; Działki" name="Fraud__Land"/>
-		<combo_box.item label="Oszustwo &gt; Piramidy albo łańcuszki internetowe" name="Fraud__Pyramid_scheme_or_chain_letter"/>
-		<combo_box.item label="Oszustwo &gt; US$" name="Fraud__US$"/>
-		<combo_box.item label="Prześladowanie &gt; Farmy reklamowe / wizualny spam" name="Harassment__Advert_farms___visual_spam"/>
-		<combo_box.item label="Prześladowanie &gt; Zniesławianie jednostek lub grup" name="Harassment__Defaming_individuals_or_groups"/>
-		<combo_box.item label="Prześladowanie &gt; Ograniczanie ruchu" name="Harassment__Impeding_movement"/>
-		<combo_box.item label="Prześladowanie &gt; Molestowanie seksualne" name="Harassment__Sexual_harassment"/>
-		<combo_box.item label="Prześladowanie &gt; Namawianie/zachęcanie innych do łamania warunków umowy (ToS)" name="Harassment__Solicting_inciting_others_to_violate_ToS"/>
-		<combo_box.item label="Prześladowanie &gt; Znieważanie słowne" name="Harassment__Verbal_abuse"/>
-		<combo_box.item label="Nieprzyzwoitość &gt; Obraźliwa treść lub postępowanie" name="Indecency__Broadly_offensive_content_or_conduct"/>
-		<combo_box.item label="Nieprzyzwoitość &gt; Niestosowne imię awatara" name="Indecency__Inappropriate_avatar_name"/>
-		<combo_box.item label="Nieprzyzwoitość &gt; Obraźliwa treść i postępowanie w Regionie General" name="Indecency__Mature_content_in_PG_region"/>
-		<combo_box.item label="Nieprzyzwoitość &gt; Obraźliwa treść i postępowanie w Regionie Moderate" name="Indecency__Inappropriate_content_in_Mature_region"/>
-		<combo_box.item label="Naruszenie własności intelektualnej &gt; Usunięcie treści" name="Intellectual_property_infringement_Content_Removal"/>
-		<combo_box.item label="Naruszenie własności intelektualnej &gt; CopyBot albo nadużycie przywilejów" name="Intellectual_property_infringement_CopyBot_or_Permissions_Exploit"/>
-		<combo_box.item label="Nietolerancja" name="Intolerance"/>
-		<combo_box.item label="Działki &gt; Nadużywanie piaskownicy" name="Land__Abuse_of_sandbox_resources"/>
-		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Obiekty/tekstury" name="Land__Encroachment__Objects_textures"/>
-		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Cząsteczki" name="Land__Encroachment__Particles"/>
-		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Drzewa/rośliny" name="Land__Encroachment__Trees_plants"/>
-		<combo_box.item label="Zakłady/Hazard" name="Wagering_gambling"/>
-		<combo_box.item label="Inne" name="Other"/>
+		<combo_box.item label="Wybierz kategorię" name="Select_category" />
+		<combo_box.item label="Wiek &gt; Udawanie nieletniej osoby" name="Age__Age_play" />
+		<combo_box.item label="Napaść &gt; Bezpieczny obszar" name="Assault__Safe_area" />
+		<combo_box.item label="Prywatność &gt; Dane osobiste ze świata realnego" name="Disclosure__Real_world_information" />
+		<combo_box.item label="Zakłócanie spokoju &gt; Przesadnie skryptowane obiekty" name="Disturbing_the_peace__Excessive_scripted_objects" />
+		<combo_box.item label="Zakłócanie spokoju &gt; Śmiecenie obiektami" name="Disturbing_the_peace__Object_littering" />
+		<combo_box.item label="Zakłócanie spokoju &gt; Ciągły spam" name="Disturbing_the_peace__Repetitive_spam" />
+		<combo_box.item label="Oszustwo &gt; US$" name="Fraud__US$" />
+		<combo_box.item label="Prześladowanie &gt; Namawianie/zachęcanie innych do łamania warunków umowy (ToS)" name="Harassment__Solicting_inciting_others_to_violate_ToS" />
+		<combo_box.item label="Nieprzyzwoitość &gt; Obraźliwa treść lub postępowanie" name="Indecency__Broadly_offensive_content_or_conduct" />
+		<combo_box.item label="Nieprzyzwoitość &gt; Niestosowne imię awatara" name="Indecency__Inappropriate_avatar_name" />
+		<combo_box.item label="Nieprzyzwoitość &gt; Treść lub postępowanie niestosowne do regionu" name="Indecency__Mature_content_in_PG_region" />
+		<combo_box.item label="Nietolerancja" name="Intolerance" />
+		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Obiekty/tekstury" name="Land__Encroachment__Objects_textures" />
+		<combo_box.item label="Zakłady/Hazard" name="Wagering_gambling" />
 	</combo_box>
 	<text name="abuser_name_title">
 		Imię/nazwa sprawcy:

@@ -160,7 +160,6 @@ Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 
 *UWAGA*
 Osoba w funkcji z tym przywilejem otrzyma również &apos;[ACTION_NAME_2]&apos; oraz &apos;[ACTION_NAME_3]&apos;
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RemoveBanAbilityWarning">
 		Zabierasz przywilej &apos;[ACTION_NAME]&apos; z funkcji &apos;[ROLE_NAME]&apos;
@@ -169,7 +168,6 @@ Osoba w funkcji z tym przywilejem otrzyma również &apos;[ACTION_NAME_2]&apos; 
 Zabranie tej funkcji NIE usunie &apos;[ACTION_NAME_2]&apos; oraz &apos;[ACTION_NAME_3]&apos;.
 
 Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to wyłącz je natychmiast!
-		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="EjectGroupMemberWarning">
 		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
@@ -509,6 +507,9 @@ Możesz podnieść jakość grafiki pod Ustawienia &gt; Grafika.
 	</notification>
 	<notification name="RegionNoTerraforming">
 		Region [REGION] nie pozwala na zmianę powierzchni ziemi.
+	</notification>
+	<notification name="ParcelNoTerraforming">
+		Działka [PARCEL] nie pozwala Ci na zmianę powierzchni ziemi.
 	</notification>
 	<notification name="CannotCopyWarning">
 		Nie masz pozwolenia na kopiowanie następujących obiektów:
@@ -1825,6 +1826,9 @@ Kontynuować?
 	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
 		Mamy trudności techniczne z Twoim teleportem, ponieważ Twoje preferencje są rozsynchronizowane z serwerem.
 	</notification>
+	<notification name="RegionTPSpecialUsageBlocked">
+		Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+	</notification>
 	<notification name="RegionEntryAccessBlocked">
 		Region, który próbujesz odwiedzić zawiera treści przekraczające Twoje bieżące preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
 	</notification>
@@ -2075,6 +2079,10 @@ Przenieść obiekty szafy?
 			<ignore name="ignore" text="Opcja &apos;Zapłać Obiektowi&apos; została aktywowana podczas budowania obiektów bez skryptu z funkcją money()."/>
 		</form>
 	</notification>
+	<notification name="PayConfirmation">
+		Potwierdź, że na pewno chcesz zapłacić [AMOUNT]L$ dla [TARGET].
+		<usetemplate ignoretext="Potwierdź przed płaceniem (kwoty ponad 200 L$)" name="okcancelignore" notext="Anuluj" yestext="Zapłać" />
+	</notification>
 	<notification name="OpenObjectCannotCopy">
 		W tym obiekcie nie ma elementów które możesz skopiować.
 	</notification>
@@ -2159,6 +2167,9 @@ Chcesz go zamienić na wybrany obiekt?
 			<button ignore="Zamień automatycznie" name="Yes"/>
 			<button ignore="Nie zamieniaj" name="No" text="Anuluj"/>
 		</form>
+	</notification>
+	<notification name="TooManyWearables">
+		Nie możesz założyć folderu, który zawiera więcej niż [AMOUNT] przedmiotów. Możesz zmienić ten limit w Zaawansowane &gt; Pokaż ustawienia debugowania &gt; WearFolderLimit.
 	</notification>
 	<notification label="Ostrzeżenie Trybu Zajętości" name="DoNotDisturbModePay">
 		Jesteś w Trybie Zajętości co oznacza, że nie dostaniesz żadnych obiektów w zamian za tą opłatę.
@@ -3222,6 +3233,10 @@ Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zosta�
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] sekund w Second Life )
 Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dla &apos;[BODYREGION]&apos; po [TIME] sekundach.
+	</notification>
+	<notification name="CannotUploadTexture">
+		Nie można załadować tekstury.
+[REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">
 		Nie można wyświetlić podglądu tej tekstury - jest niekopiowalna lub/oraz nietransferowalna.
@@ -4367,6 +4382,9 @@ Spróbuj zaznaczyć mniejszy obszar ziemi.
 	<notification name="PreferenceChatPathChanged">
 		Nie można przenieść plików. Przywrócono poprzednią ścieżkę.
 		<usetemplate ignoretext="Nie można przenieść plików. Przywrócono poprzednią ścieżkę." name="okignore" />
+	</notification>
+	<notification name="DefaultObjectPermissions">
+		Wystąpił problem z zapisywaniem domyślnych zezwoleń z następującego powodu: [REASON]. Spróbuj ustawić je ponownie później.
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.

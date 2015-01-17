@@ -21,6 +21,12 @@
 	<floater.string name="none_descriptor">
 		Nieodnalezione
 	</floater.string>
+	<floater.string name="URLs">
+		URLe
+	</floater.string>
+	<floater.string name="memory">
+		Pamięć (KB)
+	</floater.string>
 	<text name="title_text">
 		Ładowanie...
 	</text>

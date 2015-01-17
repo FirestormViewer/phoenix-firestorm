@@ -50,6 +50,9 @@ Spróbuj jeszcze raz za kilka minut.
 		<message name="MustGetAgeRegion">
 			Musisz mieć 18 lat lub więcej, aby wejść do tego regionu.
 		</message>
+		<message name="RegionTPSpecialUsageBlocked">
+			Nie można wejść do tego regionu. '[REGION_NAME]' jest miejscem z grami (Skill Gaming Region) - musisz spełnić określone wymagania, jeśli chcesz go odwiedzić. Aby dowiedzieć się więcej zapoznaj się z [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+		</message>
 	</message_set>
 	<message_set name="progress">
 		<message name="sending_dest">

@@ -8,7 +8,6 @@
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
 		<menu_item_call label="Miejsca..." name="Picks"/>
-		<menu_item_call label="Wyślij na Facebooka..." name="PostToFacebook"/>
 		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Zrób zdjęcie" name="Take Snapshot"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>
@@ -43,7 +42,6 @@
 			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
-			<menu_item_call label="Ustaw domyślne uprawnienia..." name="perm prefs"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Zażądaj statusu administratora" name="Request Admin Options"/>
@@ -279,7 +277,7 @@
 		<menu_item_check label="Zdjęcie wysokiej jakości" name="HighResSnapshot"/>
 		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
-			<menu_item_call label="Pomiar lagów" name="Lag Meter"/>
+			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
 			<menu_item_check label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
 			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>
@@ -362,7 +360,7 @@
 			<menu_item_check label="Statystyki sceny" name="Scene Statistics"/>
 			<menu_item_check label="Monitor obciążenia sceny" name="Scene Loading Monitor"/>
 			<menu_item_call label="Konsola debugowania dla ładowania tekstur" name="Texture Fetch Debug Console"/>
-			<menu_item_call label="Konsola debugowania regionu" name="Region Debug Console"/>
+			<menu_item_check label="Konsola debugowania regionu" name="Region Debug Console"/>
 			<menu_item_call label="Info o regionie do konsoli debugowania" name="Region Info to Debug Console"/>
 			<menu_item_call label="Info o grupie do konsoli debugowania" name="Group Info to Debug Console"/>
 			<menu_item_call label="Info o możliwościach do konsoli debugowania" name="Capabilities Info to Debug Console"/>
@@ -420,6 +418,7 @@
 			<menu_item_check label="Poziomy detali" name="LOD Info"/>
 			<menu_item_check label="Kolejka budowania" name="Build Queue"/>
 			<menu_item_check label="Światła" name="Lights"/>
+			<menu_item_check label="Cząsteczki" name="Particles"/>
 			<menu_item_check label="Szkielet kolizji" name="Collision Skeleton"/>
 			<menu_item_check label="Stawy" name="Joints"/>
 			<menu_item_check label="Promienie" name="Raycast"/>
@@ -455,7 +454,6 @@
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
 			<menu_item_check label="Wyświetlaj obiekty odblaskowe" name="Hover Glow Objects"/>
-			<menu_item_call label="Wyczyść natychmiast pamięć podręczną" name="Cache Clear"/>
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>
