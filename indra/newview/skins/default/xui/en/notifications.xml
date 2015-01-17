@@ -5683,7 +5683,7 @@ Do you want to replace it with the selected object?
    icon="alertmodal.tga"
    name="TooManyWearables"
    type="alertmodal">
-    You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced > Show Debug Settings > WearFolderLimit.
+    You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.
     <tag>fail</tag>
   </notification>
 

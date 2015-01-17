@@ -2307,7 +2307,7 @@ Möchten Sie es mit dem ausgewählten Objekt ersetzen?
 		</form>
 	</notification>
 	<notification name="TooManyWearables">
-		Sie können keinen Ordner mit mehr als [AMOUNT] Gegenständen anziehen. Sie können dieses Limit unter Erweitert > Debug Einstellungen anzeigen > WearFolderLimit ändern.
+		Sie können keinen Ordner mit mehr als [AMOUNT] Gegenständen anziehen. Sie können dieses Limit unter Erweitert &gt; Debug Einstellungen anzeigen &gt; WearFolderLimit ändern.
 	</notification>
 	<notification label="Warnung für Nicht-stören-Modus" name="DoNotDisturbModePay">
 		Sie haben den Nicht-stören-Modus aktiviert. Sie erhalten keine Artikel, die im Gegenzug für diese Zahlung angeboten werden.
