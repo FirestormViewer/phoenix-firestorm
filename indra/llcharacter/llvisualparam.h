@@ -120,10 +120,16 @@ public:
 	//virtual BOOL			parseData( LLXmlTreeNode *node ) = 0;
 	virtual void			apply( ESex avatar_sex ) = 0;
 	//  Default functions
-	virtual void			setWeight(F32 weight);
-	virtual void			setAnimationTarget( F32 target_value);
-	virtual void			animate(F32 delta);
-	virtual void			stopAnimating();
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual void			setWeight(F32 weight);
+	//virtual void			setAnimationTarget( F32 target_value);
+	//virtual void			animate(F32 delta);
+	//virtual void			stopAnimating();
+	virtual void			setWeight(F32 weight, BOOL upload_bake);
+	virtual void			setAnimationTarget( F32 target_value, BOOL upload_bake);
+	virtual void			animate(F32 delta, BOOL upload_bake);
+	virtual void			stopAnimating(BOOL upload_bake);
+	// </FS:Ansariel> [Legacy Bake]
 
 	virtual BOOL			linkDrivenParams(visual_param_mapper mapper, BOOL only_cross_params);
 	virtual void			resetDrivenParams();

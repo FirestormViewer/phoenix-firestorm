@@ -108,6 +108,12 @@
 // [/RLVa:KB]
 #include "fswsassetblacklist.h"
 
+// <FS:Ansariel> [Legacy Bake]
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif
+// </FS:Ansariel> [Legacy Bake]
+
 //#define DEBUG_UPDATE_TYPE
 
 BOOL		LLViewerObject::sVelocityInterpolate = TRUE;
@@ -159,7 +165,18 @@ LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pco
 			{
 				gAgentAvatarp = new LLVOAvatarSelf(id, pcode, regionp);
 				gAgentAvatarp->initInstance();
+// <FS:Ansariel> [Legacy Bake]
+				//gAgentWearables.setAvatarObject(gAgentAvatarp);
+#ifdef OPENSIM
+				if (LLGridManager::getInstance()->isInSecondLife())
+				{
+					gAgentWearables.setAvatarObject(gAgentAvatarp);
+
+				}
+#else
 				gAgentWearables.setAvatarObject(gAgentAvatarp);
+#endif
+// </FS:Ansariel> [Legacy Bake]
 			}
 			else 
 			{

@@ -267,7 +267,9 @@ void LLViewerWearable::setParamsToDefaults()
 	{
 		if( (((LLViewerVisualParam*)param)->getWearableType() == mType ) && (param->isTweakable() ) )
 		{
-			setVisualParamWeight(param->getID(),param->getDefaultWeight());
+			// <FS:Ansariel> [Legacy Bake]
+			//setVisualParamWeight(param->getID(),param->getDefaultWeight());
+			setVisualParamWeight(param->getID(),param->getDefaultWeight(), FALSE);
 		}
 	}
 }
@@ -352,14 +354,18 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
 	ESex new_sex = avatarp->getSex();
 	if( old_sex != new_sex )
 	{
-		viewer_avatar->updateSexDependentLayerSets();
+		// <FS:Ansariel> [Legacy Bake]
+		//viewer_avatar->updateSexDependentLayerSets();
+		viewer_avatar->updateSexDependentLayerSets(FALSE);
 	}	
 }
 
 
 // Updates the user's avatar's appearance, replacing this wearables' parameters and textures with default values.
 // static 
-void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
+// <FS:Ansariel> [Legacy Bake]
+//void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
+void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, BOOL upload_bake)
 {
 	if (!isAgentAvatarValid()) return;
 
@@ -378,7 +384,9 @@ void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
 		if( (((LLViewerVisualParam*)param)->getWearableType() == type) && (param->isTweakable() ) )
 		{
 			S32 param_id = param->getID();
-			gAgentAvatarp->setVisualParamWeight( param_id, param->getDefaultWeight());
+			// <FS:Ansariel> [Legacy Bake]
+			//gAgentAvatarp->setVisualParamWeight( param_id, param->getDefaultWeight());
+			gAgentAvatarp->setVisualParamWeight( param_id, param->getDefaultWeight(), upload_bake);
 		}
 	}
 
@@ -388,7 +396,9 @@ void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
 	}
 
 	gAgentAvatarp->updateVisualParams();
-	gAgentAvatarp->wearableUpdated(type);
+	// <FS:Ansariel> [Legacy Bake]
+	//gAgentAvatarp->wearableUpdated(type);
+	gAgentAvatarp->wearableUpdated(type, FALSE);
 }
 
 // Does not copy mAssetID.
@@ -497,6 +507,15 @@ void LLViewerWearable::refreshName()
 		mName = item->getName();
 	}
 }
+
+// <FS:Ansariel> [Legacy Bake]
+//virtual
+void LLViewerWearable::addToBakedTextureHash(LLMD5& hash) const
+{
+	LLUUID asset_id = getAssetID();
+	hash.update((const unsigned char*)asset_id.mData, UUID_BYTES);
+}
+// </FS:Ansariel> [Legacy Bake]
 
 struct LLWearableSaveData
 {

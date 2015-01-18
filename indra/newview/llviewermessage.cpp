@@ -5270,6 +5270,12 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 
 		gAgent.setTeleportState( LLAgent::TELEPORT_START_ARRIVAL );
 
+		// <FS:Ansariel> [Legacy Bake]
+		// set the appearance on teleport since the new sim does not;
+		// know what you look like.
+		gAgent.sendAgentSetAppearance();
+		// </FS:Ansariel> [Legacy Bake]
+
 		if (isAgentAvatarValid())
 		{
 			// [FS:CR] Reimplement DEV-4907 (Maybe we like long distracting messages?)

@@ -678,7 +678,9 @@ BOOL LLPhysicsMotion::onUpdate(F32 time)
 			if ((driver_param->getGroup() != VISUAL_PARAM_GROUP_TWEAKABLE) &&
 			    (driver_param->getGroup() != VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT))
 			{
-				mCharacter->setVisualParamWeight(driver_param, 0);
+				// <FS:Ansariel> [Legacy Bake]
+				//mCharacter->setVisualParamWeight(driver_param, 0);
+				mCharacter->setVisualParamWeight(driver_param, 0, FALSE);
 			}
 			S32 num_driven = driver_param->getDrivenParamsCount();
 			for (S32 i = 0; i < num_driven; ++i)
@@ -778,5 +780,7 @@ void LLPhysicsMotion::setParamValue(const LLViewerVisualParam *param,
 	// Scale from [0,1] to [value_min_local,value_max_local]
         const F32 new_value_local = value_min_local + (value_max_local-value_min_local) * new_value_rescaled;
 
-        mCharacter->setVisualParamWeight(param, new_value_local);
+        // <FS:Ansariel> [Legacy Bake]
+        //mCharacter->setVisualParamWeight(param, new_value_local);
+        mCharacter->setVisualParamWeight(param, new_value_local, FALSE);
 }

@@ -454,7 +454,9 @@ public:
 	// Global colors
 	//--------------------------------------------------------------------
 public:
-	/*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color);
+	// <FS:Ansariel> [Legacy Bake]
+	///*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color);
+	/*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL upload_bake);
 
 	//--------------------------------------------------------------------
 	// Visibility
@@ -614,7 +616,9 @@ protected:
 	// Composites
 	//--------------------------------------------------------------------
 public:
-	virtual void	invalidateComposite(LLTexLayerSet* layerset);
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual void	invalidateComposite(LLTexLayerSet* layerset);
+	virtual void	invalidateComposite(LLTexLayerSet* layerset, BOOL upload_result);
 	virtual void	invalidateAll();
 	virtual void	setCompositeUpdatesEnabled(bool b) {}
 	virtual void 	setCompositeUpdatesEnabled(U32 index, bool b) {}
@@ -651,7 +655,9 @@ private:
 public:
 	void			debugColorizeSubMeshes(U32 i, const LLColor4& color);
 	virtual void 	updateMeshTextures();
-	void 			updateSexDependentLayerSets();
+	// <FS:Ansariel> [Legacy Bake]
+	//void 			updateSexDependentLayerSets();
+	void 			updateSexDependentLayerSets(BOOL upload_bake);
 	virtual void	dirtyMesh(); // Dirty the avatar mesh
 	void 			updateMeshData();
 protected:
@@ -684,7 +690,9 @@ public:
 	void 			processAvatarAppearance(LLMessageSystem* mesgsys);
 	void 			hideSkirt();
 	void			startAppearanceAnimation();
-	
+	// <FS:Ansariel> [Legacy Bake]
+	/*virtual*/ void bodySizeChanged();
+
 	//--------------------------------------------------------------------
 	// Appearance morphing
 	//--------------------------------------------------------------------
@@ -695,6 +703,13 @@ public:
 	// instead of baked textures, as for example during wearable
 	// editing or when waiting for a subsequent server rebake.
 	/*virtual*/ BOOL	isUsingLocalAppearance() const { return mUseLocalAppearance; }
+
+	// <FS:Ansariel> [Legacy Bake]
+	// True if this avatar should fetch its baked textures via the new
+	// appearance mechanism.
+	BOOL				isUsingServerBakes() const;
+	void 				setIsUsingServerBakes(BOOL newval);
+	// </FS:Ansariel> [Legacy Bake]
 
 	// True if we are currently in appearance editing mode. Often but
 	// not always the same as isUsingLocalAppearance().
@@ -709,6 +724,8 @@ private:
 	F32				mLastAppearanceBlendTime;
 	BOOL			mIsEditingAppearance; // flag for if we're actively in appearance editing mode
 	BOOL			mUseLocalAppearance; // flag for if we're using a local composite
+	// <FS:Ansariel> [Legacy Bake]
+	BOOL			mUseServerBakes; // flag for if baked textures should be fetched from baking service (false if they're temporary uploads)
 
 	//--------------------------------------------------------------------
 	// Visibility

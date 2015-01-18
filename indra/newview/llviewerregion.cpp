@@ -421,7 +421,10 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mSimAccess( SIM_ACCESS_MIN ),
 	mBillableFactor(1.0),
 	mMaxTasks(DEFAULT_MAX_REGION_WIDE_PRIM_COUNT),
-	mCentralBakeVersion(1),
+	// <FS:Ansariel> [Legacy Bake]
+	//mCentralBakeVersion(1),
+	mCentralBakeVersion(0),
+	// </FS:Ansariel> [Legacy Bake]
 	mClassID(0),
 	mCPURatio(0),
 	mColoName("unknown"),

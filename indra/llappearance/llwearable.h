@@ -95,14 +95,20 @@ public:
 
 	void				setLocalTextureObject(S32 index, LLLocalTextureObject &lto);
 	void				addVisualParam(LLVisualParam *param);
-	void 				setVisualParamWeight(S32 index, F32 value);
+	// <FS:Ansariel> [Legacy Bake]
+	//void 				setVisualParamWeight(S32 index, F32 value);
+	void 				setVisualParamWeight(S32 index, F32 value, BOOL upload_bake);
 	F32					getVisualParamWeight(S32 index) const;
 	LLVisualParam*		getVisualParam(S32 index) const;
 	void				getVisualParams(visual_param_vec_t &list);
-	void				animateParams(F32 delta);
+	// <FS:Ansariel> [Legacy Bake]
+	//void				animateParams(F32 delta);
+	void				animateParams(F32 delta, BOOL upload_bake);
 
 	LLColor4			getClothesColor(S32 te) const;
-	void 				setClothesColor( S32 te, const LLColor4& new_color);
+	// <FS:Ansariel> [Legacy Bake]
+	//void 				setClothesColor( S32 te, const LLColor4& new_color);
+	void 				setClothesColor( S32 te, const LLColor4& new_color, BOOL upload_bake);
 
 	virtual void		revertValues();
 	virtual void		saveValues();

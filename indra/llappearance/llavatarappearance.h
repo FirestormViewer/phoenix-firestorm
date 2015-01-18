@@ -112,7 +112,9 @@ public:
 
 	bool isBuilt() const { return mIsBuilt; }
 
-	
+	// <FS:Ansariel> [Legacy Bake]
+	virtual BOOL	isUsingServerBakes() const = 0;
+
 /**                    State
  **                                                                            **
  *******************************************************************************/
@@ -150,6 +152,8 @@ protected:
 // [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
 	virtual F32			getAvatarOffset() /*const*/;
 // [/RLVa:KB]
+	// <FS:Ansariel> [Legacy Bake]
+	virtual void		bodySizeChanged() = 0;
 
 	BOOL				setupBone(const LLAvatarBoneInfo* info, LLJoint* parent, S32 &current_volume_num, S32 &current_joint_num);
 	BOOL				allocateCharacterJoints(S32 num);
@@ -236,7 +240,9 @@ public:
 	// Composites
 	//--------------------------------------------------------------------
 public:
-	virtual void	invalidateComposite(LLTexLayerSet* layerset) = 0;
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual void	invalidateComposite(LLTexLayerSet* layerset) = 0;
+	virtual void	invalidateComposite(LLTexLayerSet* layerset, BOOL upload_result) = 0;
 
 /********************************************************************************
  **                                                                            **
@@ -267,7 +273,10 @@ protected:
 	// Clothing colors (convenience functions to access visual parameters)
 	//--------------------------------------------------------------------
 public:
-	void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color);
+	// <FS:Ansariel> [Legacy Bake]
+	//void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color);
+	void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color, BOOL upload_bake);
+	// </FS:Ansariel> [Legacy Bake]
 	LLColor4		getClothesColor(LLAvatarAppearanceDefines::ETextureIndex te);
 	static BOOL		teToColorParams(LLAvatarAppearanceDefines::ETextureIndex te, U32 *param_name);
 
@@ -276,7 +285,10 @@ public:
 	//--------------------------------------------------------------------
 public:
 	LLColor4		getGlobalColor(const std::string& color_name ) const;
-	virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color) = 0;
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color) = 0;
+	virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL upload_bake) = 0;
+	// </FS:Ansariel> [Legacy Bake]
 protected:
 	LLTexGlobalColor* mTexSkinColor;
 	LLTexGlobalColor* mTexHairColor;

@@ -190,9 +190,14 @@ public:
 	void addVisualParam(LLVisualParam *param);
 	void addSharedVisualParam(LLVisualParam *param);
 
-	virtual BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
-	virtual BOOL setVisualParamWeight(const char* param_name, F32 weight);
-	virtual BOOL setVisualParamWeight(S32 index, F32 weight);
+	// <FS:Ansariel> [Legacy Bake]
+	//virtual BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
+	//virtual BOOL setVisualParamWeight(const char* param_name, F32 weight);
+	//virtual BOOL setVisualParamWeight(S32 index, F32 weight);
+	virtual BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight, BOOL upload_bake = FALSE );
+	virtual BOOL setVisualParamWeight(const char* param_name, F32 weight, BOOL upload_bake = FALSE );
+	virtual BOOL setVisualParamWeight(S32 index, F32 weight, BOOL upload_bake = FALSE );
+	// </FS:Ansariel> [Legacy Bake]
 
 	// get visual param weight by param or name
 	F32 getVisualParamWeight(LLVisualParam *distortion);

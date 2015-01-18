@@ -691,6 +691,9 @@ public:
 protected:
 	bool 			teleportCore(bool is_local = false); 					// Stuff for all teleports; returns true if the teleport can proceed
 
+	// <FS:Ansariel> [Legacy Bake]
+	void			handleServerBakeRegionTransition(const LLUUID& region_id);
+
 	//--------------------------------------------------------------------
 	// Teleport State
 	//--------------------------------------------------------------------
@@ -967,6 +970,10 @@ public:
 	void 			sendAgentUserInfoRequest();
 	// IM to Email and Online visibility
 	void			sendAgentUpdateUserInfo(bool im_to_email, const std::string& directory_visibility);
+	// <FS:Ansariel> [Legacy Bake]
+	void 			dumpSentAppearance(const std::string& dump_prefix);
+	void			sendAgentSetAppearance();
+	// </FS:Ansariel> [Legacy Bake]
 
 	//--------------------------------------------------------------------
 	// Receive
@@ -976,7 +983,9 @@ public:
 	static void		processAgentGroupDataUpdate(LLMessageSystem *msg, void **);
 	static void		processAgentDropGroup(LLMessageSystem *msg, void **);
 	static void		processScriptControlChange(LLMessageSystem *msg, void **);
-	
+	// <FS:Ansariel> [Legacy Bake]
+	static void		processAgentCachedTextureResponse(LLMessageSystem *mesgsys, void **user_data);
+
 /**                    Messaging
  **                                                                            **
  *******************************************************************************/
@@ -1017,5 +1026,27 @@ inline bool operator==(const LLGroupData &a, const LLGroupData &b)
 {
 	return (a.mID == b.mID);
 }
+
+// <FS:Ansariel> [Legacy Bake]
+class LLAgentQueryManager
+{
+	friend class LLAgent;
+	friend class LLAgentWearables;
+	
+public:
+	LLAgentQueryManager();
+	virtual ~LLAgentQueryManager();
+	
+	BOOL 			hasNoPendingQueries() const 	{ return getNumPendingQueries() == 0; }
+	S32 			getNumPendingQueries() const 	{ return mNumPendingQueries; }
+private:
+	S32				mNumPendingQueries;
+	S32				mWearablesCacheQueryID;
+	U32				mUpdateSerialNum;
+	S32		    	mActiveCacheQueries[LLAvatarAppearanceDefines::BAKED_NUM_INDICES];
+};
+
+extern LLAgentQueryManager gAgentQueryManager;
+// </FS:Ansariel> [Legacy Bake]
 
 #endif

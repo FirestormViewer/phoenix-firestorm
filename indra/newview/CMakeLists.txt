@@ -206,6 +206,8 @@ set(viewer_SOURCE_FILES
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
     llpanelopenregionsettings.cpp
+    # <FS:Ansariel> [Legacy Bake]
+    llagentwearablesfetch.cpp
 
     llaccountingcostmanager.cpp
     llaisapi.cpp
@@ -934,6 +936,8 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
+    # <FS:Ansariel> [Legacy Bake]
+    llagentwearablesfetch.h
 
     llaccountingcostmanager.h
     llaisapi.h

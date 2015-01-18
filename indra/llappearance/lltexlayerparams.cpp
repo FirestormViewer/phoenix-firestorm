@@ -183,7 +183,10 @@ BOOL LLTexLayerParamAlpha::getMultiplyBlend() const
 	return ((LLTexLayerParamAlphaInfo *)getInfo())->mMultiplyBlend; 	
 }
 
-void LLTexLayerParamAlpha::setWeight(F32 weight)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamAlpha::setWeight(F32 weight)
+void LLTexLayerParamAlpha::setWeight(F32 weight, BOOL upload_bake)
+// </FS:Ansariel> [Legacy Bake]
 {
 	if (mIsAnimating || mTexLayer == NULL)
 	{
@@ -201,35 +204,50 @@ void LLTexLayerParamAlpha::setWeight(F32 weight)
 		if ((mAvatarAppearance->getSex() & getSex()) &&
 			(mAvatarAppearance->isSelf() && !mIsDummy)) // only trigger a baked texture update if we're changing a wearable's visual param.
 		{
-			mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet());
+			// <FS:Ansariel> [Legacy Bake]
+			//mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet());
+			mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet(), upload_bake);
+			// <FS:Ansariel> [Legacy Bake]
 			mTexLayer->invalidateMorphMasks();
 		}
 	}
 }
 
-void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value)
+void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value, BOOL upload_bake)
 { 
 	// do not animate dummy parameters
 	if (mIsDummy)
 	{
-		setWeight(target_value);
+		// <FS:Ansariel> [Legacy Bake]
+		//setWeight(target_value);
+		setWeight(target_value, upload_bake);
 		return;
 	}
 
 	mTargetWeight = target_value; 
-	setWeight(target_value); 
+	// <FS:Ansariel> [Legacy Bake]
+	//setWeight(target_value); 
+	setWeight(target_value, upload_bake); 
 	mIsAnimating = TRUE;
 	if (mNext)
 	{
-		mNext->setAnimationTarget(target_value);
+		// <FS:Ansariel> [Legacy Bake]
+		//mNext->setAnimationTarget(target_value);
+		mNext->setAnimationTarget(target_value, upload_bake);
 	}
 }
 
-void LLTexLayerParamAlpha::animate(F32 delta)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamAlpha::animate(F32 delta)
+void LLTexLayerParamAlpha::animate(F32 delta, BOOL upload_bake)
 {
 	if (mNext)
 	{
-		mNext->animate(delta);
+		// <FS:Ansariel> [Legacy Bake]
+		//mNext->animate(delta);
+		mNext->animate(delta, upload_bake);
 	}
 }
 
@@ -477,7 +495,9 @@ LLColor4 LLTexLayerParamColor::getNetColor() const
 }
 
 
-void LLTexLayerParamColor::setWeight(F32 weight)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamColor::setWeight(F32 weight)
+void LLTexLayerParamColor::setWeight(F32 weight, BOOL upload_bake)
 {
 	if (mIsAnimating)
 	{
@@ -503,10 +523,14 @@ void LLTexLayerParamColor::setWeight(F32 weight)
 
 		if ((mAvatarAppearance->getSex() & getSex()) && (mAvatarAppearance->isSelf() && !mIsDummy)) // only trigger a baked texture update if we're changing a wearable's visual param.
 		{
-			onGlobalColorChanged();
+			// <FS:Ansariel> [Legacy Bake]
+			//onGlobalColorChanged();
+			onGlobalColorChanged(upload_bake);
 			if (mTexLayer)
 			{
-				mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet());
+				// <FS:Ansariel> [Legacy Bake]
+				//mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet());
+				mAvatarAppearance->invalidateComposite(mTexLayer->getTexLayerSet(), upload_bake);
 			}
 		}
 
@@ -514,23 +538,33 @@ void LLTexLayerParamColor::setWeight(F32 weight)
 	}
 }
 
-void LLTexLayerParamColor::setAnimationTarget(F32 target_value)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamColor::setAnimationTarget(F32 target_value)
+void LLTexLayerParamColor::setAnimationTarget(F32 target_value, BOOL upload_bake)
 { 
 	// set value first then set interpolating flag to ignore further updates
 	mTargetWeight = target_value; 
-	setWeight(target_value);
+	// <FS:Ansariel> [Legacy Bake]
+	//setWeight(target_value);
+	setWeight(target_value, upload_bake);
 	mIsAnimating = TRUE;
 	if (mNext)
 	{
-		mNext->setAnimationTarget(target_value);
+		// <FS:Ansariel> [Legacy Bake]
+		//mNext->setAnimationTarget(target_value);
+		mNext->setAnimationTarget(target_value, upload_bake);
 	}
 }
 
-void LLTexLayerParamColor::animate(F32 delta)
+// <FS:Ansariel> [Legacy Bake]
+//void LLTexLayerParamColor::animate(F32 delta)
+void LLTexLayerParamColor::animate(F32 delta, BOOL upload_bake)
 {
 	if (mNext)
 	{
-		mNext->animate(delta);
+		// <FS:Ansariel> [Legacy Bake]
+		//mNext->animate(delta);
+		mNext->animate(delta, upload_bake);
 	}
 }
 

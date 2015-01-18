@@ -2617,7 +2617,14 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		}
 		// If not first login, we need to fetch COF contents and
 		// compute appearance from that.
+// <FS:Ansariel> [Legacy Bake]
+		//if (isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInSecondLife() && isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
+#else
 		if (isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
+#endif
+// </FS:Ansariel> [Legacy Bake]
 		{
 			gAgentWearables.notifyLoadingStarted();
 			gAgent.setOutfitChosen(TRUE);
@@ -2686,7 +2693,15 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		
 		display_startup();
 
+// <FS:Ansariel> [Legacy Bake]
+		//if (gAgent.isOutfitChosen() && (wearables_time > max_wearables_time))
+#ifdef OPENSIM
+		if ((LLGridManager::getInstance()->isInSecondLife() && gAgent.isOutfitChosen() && (wearables_time > max_wearables_time)) ||
+			(!LLGridManager::getInstance()->isInSecondLife() && (wearables_time > max_wearables_time)))
+#else
 		if (gAgent.isOutfitChosen() && (wearables_time > max_wearables_time))
+#endif
+// </FS:Ansariel> [Legacy Bake]
 		{
 			LLNotificationsUtil::add("ClothingLoading");
 			record(LLStatViewer::LOADING_WEARABLES_LONG_DELAY, wearables_time);
@@ -3012,6 +3027,10 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	msg->setHandlerFuncFast(_PREHASH_RemoveNameValuePair,	process_remove_name_value);
 	msg->setHandlerFuncFast(_PREHASH_AvatarAnimation,		process_avatar_animation);
 	msg->setHandlerFuncFast(_PREHASH_AvatarAppearance,		process_avatar_appearance);
+	// <FS:Ansariel> [Legacy Bake]
+	msg->setHandlerFunc("AgentCachedTextureResponse",	LLAgent::processAgentCachedTextureResponse);
+	msg->setHandlerFunc("RebakeAvatarTextures", LLVOAvatarSelf::processRebakeAvatarTextures);
+	// </FS:Ansariel> [Legacy Bake]
 	msg->setHandlerFuncFast(_PREHASH_CameraConstraint,		process_camera_constraint);
 	msg->setHandlerFuncFast(_PREHASH_AvatarSitResponse,		process_avatar_sit_response);
 	msg->setHandlerFunc("SetFollowCamProperties",			process_set_follow_cam_properties);
@@ -3090,6 +3109,9 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	// ratings deprecated
 	// msg->setHandlerFuncFast(_PREHASH_ReputationIndividualReply,
 	//					LLFloaterRate::processReputationIndividualReply);
+
+	// <FS:Ansariel> [Legacy Bake]
+	msg->setHandlerFuncFast(_PREHASH_AgentWearablesUpdate, LLAgentWearables::processAgentInitialWearablesUpdate );
 
 	msg->setHandlerFunc("ScriptControlChange",
 						LLAgent::processScriptControlChange );
@@ -3256,6 +3278,11 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 	}
 
 	gAgent.setOutfitChosen(TRUE);
+// <FS:Ansariel> [Legacy Bake]
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInSecondLife())
+#endif
+// </FS:Ansariel> [Legacy Bake]
 	gAgentWearables.sendDummyAgentWearablesUpdate();
 }
 
@@ -4085,6 +4112,14 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 			// requested and available, etc.
 
 			//gAgent.setGenderChosen(TRUE);
+			// <FS:Ansariel> [Legacy Bake]
+#ifdef OPENSIM
+			if (!LLGridManager::getInstance()->isInSecondLife())
+			{
+				gAgent.setOutfitChosen(TRUE);
+			}
+#endif
+			// </FS:Ansariel> [Legacy Bake]
 		}
 		
 		bool pacific_daylight_time = false;

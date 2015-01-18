@@ -1194,4 +1194,58 @@ void LLNewAgentInventoryVariablePriceResponder::showConfirmationDialog(
 	}
 }
 
+// <FS:Ansariel> [Legacy Bake]
+//-----------------------------------------------------------------------------
+// Legacy baking
+//-----------------------------------------------------------------------------
+LLSendTexLayerResponder::LLSendTexLayerResponder(const LLSD& post_data,
+												 const LLUUID& vfile_id,
+												 LLAssetType::EType asset_type,
+												 LLBakedUploadData * baked_upload_data) : 
+	LLAssetUploadResponder(post_data, vfile_id, asset_type),
+	mBakedUploadData(baked_upload_data)
+{
+}
+
+LLSendTexLayerResponder::~LLSendTexLayerResponder()
+{
+	// mBakedUploadData is normally deleted by calls to LLViewerTexLayerSetBuffer::onTextureUploadComplete() below
+	if (mBakedUploadData)
+	{	// ...but delete it in the case where uploadComplete() is never called
+		delete mBakedUploadData;
+		mBakedUploadData = NULL;
+	}
+}
+
+// Baked texture upload completed
+void LLSendTexLayerResponder::uploadComplete(const LLSD& content)
+{
+	LLUUID item_id = mPostData["item_id"];
+
+	std::string result = content["state"];
+	LLUUID new_id = content["new_asset"];
+
+	LL_INFOS() << "result: " << result << " new_id: " << new_id << LL_ENDL;
+	if (result == "complete"
+		&& mBakedUploadData != NULL)
+	{	// Invoke 
+		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, 0, LL_EXSTAT_NONE);
+		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+	}
+	else
+	{	// Invoke the original callback with an error result
+		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+	}
+}
+
+void LLSendTexLayerResponder::httpFailure()
+{
+	LL_WARNS() << dumpResponse() << LL_ENDL;
+	
+	// Invoke the original callback with an error result
+	LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+	mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
+}
+// </FS:Ansariel> [Legacy Bake]
 

@@ -93,7 +93,9 @@ void LLScrollingPanelParamBase::onSliderMoved(LLUICtrl* ctrl, void* userdata)
 	F32 new_weight = self->percentToWeight( (F32)slider->getValue().asReal() );
 	if (current_weight != new_weight )
 	{
-		self->mWearable->setVisualParamWeight( param->getID(), new_weight);
+		// <FS:Ansariel> [Legacy Bake]
+		//self->mWearable->setVisualParamWeight( param->getID(), new_weight);
+		self->mWearable->setVisualParamWeight( param->getID(), new_weight, FALSE);
 		self->mWearable->writeToAvatar(gAgentAvatarp);
 		gAgentAvatarp->updateVisualParams();
 	}

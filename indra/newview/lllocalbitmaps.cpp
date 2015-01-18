@@ -555,7 +555,9 @@ void LLLocalBitmap::updateUserLayers(LLUUID old_id, LLUUID new_id, LLWearableTyp
 					{
 						U32 index = gAgentWearables.getWearableIndex(wearable);
 						gAgentAvatarp->setLocalTexture(reg_texind, gTextureList.getImage(new_id), FALSE, index);
-						gAgentAvatarp->wearableUpdated(type);
+						// <FS:Ansariel> [Legacy Bake]
+						//gAgentAvatarp->wearableUpdated(type);
+						gAgentAvatarp->wearableUpdated(type, FALSE);
 
 						/* telling the manager to rebake once update cycle is fully done */
 						LLLocalBitmapMgr::setNeedsRebake();
