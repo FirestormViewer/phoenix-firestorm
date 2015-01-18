@@ -41,16 +41,16 @@
 			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
 			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
 			<text name="Web:">
-				Przeglądarka internetowa:
+				Sieć internet:
 			</text>
 			<!-- <radio_group name="use_external_browser">
 				<radio_item label="Wbudowana" name="internal" tool_tip="Używa wbudowanej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Ta przeglądarka otwiera się jako nowe okno wewnątrz [APP_NAME]."/>
 				<radio_item label="Własna (np. Firefox, Safari)" name="external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie."/>
 			</radio_group> -->
 			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Własna (Chrome, Firefox, IE) dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
-				<radio_item label="Wbudowana tylko dla linków Second Life" name="new_internal" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Przeglądarka wbudowana będzie używana tylko dla linków LindenLab/SecondLife." />
-				<radio_item label="Wbudowana dla wszystkich linków" name="new_internal_all" />
+				<radio_item label="Własna przeglądarka (Chrome, Firefox, IE) dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
+				<radio_item label="Wbudowana przeglądarka tylko dla linków Second Life" name="new_internal" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Przeglądarka wbudowana będzie używana tylko dla linków LindenLab/SecondLife." />
+				<radio_item label="Wbudowana przeglądarka dla wszystkich linków" name="new_internal_all" />
 			</radio_group>
 			<text name="numberwebfloaters_label">
 				Maksymalna liczba okien przeglądarki internetowej:
