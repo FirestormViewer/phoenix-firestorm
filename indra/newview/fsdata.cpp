@@ -81,14 +81,7 @@ public:
 		completedHeader();
 
 		// check for parse failure that can happen with [200] OK result.
-		if (mDeserializeError)
-		{
-			FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
-		}
-		else
-		{
-			FSData::getInstance()->processResponder(getContent(), mURL, true, mLastModified);
-		}
+		FSData::getInstance()->processResponder(getContent(), mURL, !mDeserializeError, mLastModified);
 	}
 	
 	void httpFailure()
