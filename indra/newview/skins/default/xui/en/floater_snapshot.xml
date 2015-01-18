@@ -127,7 +127,7 @@
 	   top_delta="0"
        width="31" />
 	<panel
-     height="154"
+     height="176"
      layout="topleft"
 	 follows="top|left"
      left="0"
@@ -181,6 +181,15 @@
          top_pad="8"
          width="180"
          name="ui_check" />
+        <check_box
+         enabled_control="RenderUIInSnapshot"
+         control_name="FSShowCurrencyBalanceInSnapshots"
+         label="L$ Balance"
+         layout="topleft"
+         left="30"
+         top_pad="8"
+         width="180"
+         name="currency_check" />
         <check_box
          label="HUDs"
          layout="topleft"
