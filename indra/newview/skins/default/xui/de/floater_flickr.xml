@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_flickr" title="AUF FLICKR HOCHLADEN">
+<floater name="floater_flickr" title="Auf Flickr hochladen">
 	<panel name="background">
 		<tab_container name="tabs">
-			<panel label="FOTO" name="panel_flickr_photo"/>
-			<panel label="KONTO" name="panel_flickr_account"/>
+			<panel label="Foto" name="panel_flickr_photo"/>
+			<panel label="Konto" name="panel_flickr_account"/>
 		</tab_container>
 		<panel name="connection_status_panel">
 			<text name="connection_error_text">

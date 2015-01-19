@@ -44,6 +44,14 @@
 			Das Audio dieses Standorts abspielen
 		</playtip>
 	</widgetset>
+	<widgetset name="none">
+		<label name="none_label">
+			Keine Inhalte
+		</label>
+		<label name="none_tooltip">
+			An diesem Ort befinden sich keine Medien.
+		</label>
+	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
 			Echtzeit-Streaming
