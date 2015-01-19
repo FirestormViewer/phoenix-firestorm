@@ -142,7 +142,14 @@ void LLPanelSnapshot::updateImageQualityLevel()
 		quality_lvl = LLTrans::getString("snapshot_quality_very_high");
 	}
 
-	getChild<LLTextBox>("image_quality_level")->setTextArg("[QLVL]", quality_lvl);
+	// <FS:Ansariel> Only update if it really exists
+	//getChild<LLTextBox>("image_quality_level")->setTextArg("[QLVL]", quality_lvl);
+	LLTextBox* image_quality_level_textbox = findChild<LLTextBox>("image_quality_level");
+	if (image_quality_level_textbox)
+	{
+		image_quality_level_textbox->setTextArg("[QLVL]", quality_lvl);
+	}
+	// </FS:Ansariel>
 }
 
 void LLPanelSnapshot::goBack()
