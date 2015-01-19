@@ -28,7 +28,7 @@
 #include "llbase64.h"
 
 // third-party
-#if LL_STANDALONE
+#if LL_USESYSTEMLIBS
 #include "jsoncpp/reader.h" // JSON
 #else
 #include "reader.h" // JSON
