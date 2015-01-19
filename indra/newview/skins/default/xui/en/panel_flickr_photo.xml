@@ -131,7 +131,7 @@
              width="250"
              left="10"
              length="1"
-             max_length="256"
+             max_length_chars="256"
              name="photo_title"
              type="string">
             </line_editor>
