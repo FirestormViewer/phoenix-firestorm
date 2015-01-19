@@ -102,6 +102,15 @@
      left="10"
      name="inventory_keep_aspect_check"
      visible="false" />
+    <check_box
+     control_name="TemporaryUpload"
+     top_pad="-10"
+     follows="left|top"
+     label="Temp upload"
+     layout="topleft"
+     left="10"
+     name="inventory_temp_upload"
+     visible="false" />
     <text
      follows="top|left"
      font="SansSerif"
@@ -110,7 +119,7 @@
      left="10"
      length="1"
      name="hint_lbl"
-     top_pad="6"
+     top_pad="1"
      width="200"
      type="string"
      word_wrap="true">

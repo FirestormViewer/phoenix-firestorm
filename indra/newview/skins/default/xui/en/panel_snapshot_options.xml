@@ -5,6 +5,22 @@
  layout="topleft"
  name="panel_snapshot_options"
  width="208">
+ <layout_stack
+  animate="false"
+  name="option_buttons"
+  orientation="vertical"
+  height="186"
+  width="208"
+  left="0"
+  top="9"
+  follows="all"
+  layout="topleft">
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_download">
  <button
    follows="left|top"
    font="SansSerif"
@@ -18,10 +34,17 @@
    layout="topleft"
    left="9"
    name="save_to_computer_btn"
-   top_pad="9">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SaveToComputer" />
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_inventory">
   <button
    follows="left|top"
    font="SansSerif"
@@ -33,12 +56,19 @@
    imgoverlay_label_space="10"
    label="Save to Inventory (L$[AMOUNT])"
    layout="topleft"
-   left_delta="0"
+   left="9"
    name="save_to_inventory_btn"
-   top_pad="5">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SaveToInventory" />
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_profile">
   <button
    follows="left|top"
    font="SansSerif"
@@ -51,11 +81,18 @@
    label="Upload to Profile"
    layout="topleft"
    name="save_to_profile_btn"
-   left_delta="0"
-   top_pad="5">
+   left="9"
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SaveToProfile" />
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_facebook">
   <button
    follows="left|top"
    font="SansSerif"
@@ -67,12 +104,19 @@
    imgoverlay_label_space="10"
    label="Upload to Facebook"
    layout="topleft"
-   left_delta="0"
+   left="9"
    name="send_to_facebook_btn"
-   top_pad="5">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SendToFacebook"/>
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_twitter">
   <button
    follows="left|top"
    font="SansSerif"
@@ -84,12 +128,19 @@
    imgoverlay_label_space="10"
    label="Upload to Twitter"
    layout="topleft"
-   left_delta="0"
+   left="9"
    name="send_to_twitter_btn"
-   top_pad="5">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SendToTwitter"/>
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_flickr">
   <button
    follows="left|top"
    font="SansSerif"
@@ -101,12 +152,19 @@
    imgoverlay_label_space="10"
    label="Upload to Flickr"
    layout="topleft"
-   left_delta="0"
+   left="9"
    name="send_to_flickr_btn"
-   top_pad="5">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SendToFlickr"/>
   </button>
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   user_resize="false"
+   top_pad="0"
+   height="22"
+   name="lp_email">
   <button
    follows="left|top"
    font="SansSerif"
@@ -118,10 +176,12 @@
    imgoverlay_label_space="10"
    label="Send via E-mail"
    layout="topleft"
-   left_delta="0"
+   left="9"
    name="save_to_email_btn"
-   top_pad="5">
+   top_pad="0">
     <button.commit_callback
      function="Snapshot.SaveToEmail" />
   </button>
+  </layout_panel>
+  </layout_stack>
 </panel>

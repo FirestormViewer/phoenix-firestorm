@@ -48,6 +48,12 @@
 #include "lltoolmgr.h"
 #include "llwebprofile.h"
 
+// <FS:CR> FIRE-9621 - Hide Profile panel on Snapshots on non-sl grids
+#ifdef OPENSIM
+#include "llviewernetwork.h" // isOpenSim()
+#endif // OPENSIM
+// </FS:CR>
+
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
@@ -1170,6 +1176,33 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 
 	// Initialize default tab.
 	getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
+
+// <FS:CR> FIRE-9621
+#ifdef OPENSIM
+	if (!LLGridManager::getInstance()->isInSecondLife())
+	{
+		LLLayoutStack* stackcontainer = findChild<LLLayoutStack>("option_buttons");
+		if (stackcontainer)
+		{
+			LLLayoutPanel* panel_snapshot_profile = stackcontainer->findChild<LLLayoutPanel>("lp_profile");
+			if (panel_snapshot_profile)
+			{
+				panel_snapshot_profile->setVisible(FALSE);
+			}
+			LLLayoutPanel* panel_snapshot_facebook = stackcontainer->findChild<LLLayoutPanel>("lp_facebook");
+			if (panel_snapshot_facebook)
+			{
+				panel_snapshot_facebook->setVisible(FALSE);
+			}
+			LLLayoutPanel* panel_snapshot_twitter = stackcontainer->findChild<LLLayoutPanel>("lp_twitter");
+			if (panel_snapshot_twitter)
+			{
+				panel_snapshot_twitter->setVisible(FALSE);
+			}
+		}
+	}
+#endif // OPENSIM
+// </FS:CR>
 }
 
 void LLFloaterSnapshot::onClose(bool app_quitting)
