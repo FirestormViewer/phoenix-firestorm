@@ -68,7 +68,6 @@
                 length="1"
                 halign="center"
                 name="working_lbl"
-                translate="false"
                 type="string"
                 visible="true"
                 width="251">
@@ -165,7 +164,7 @@
              follows="left|top"
 			 layout="topleft"
              initial_value="true"
-             label="Include SL location at end of description"
+             label="Include location at end of description"
              name="add_location_cb"
               left="9"
               height="16"
@@ -179,27 +178,14 @@
              left="10"
              name="tags_label"
              top_pad="6"
+             tool_tip="Separate tags with spaces. Use &quot;&quot; for multi-word tags"
              type="string">
               Tags:
-            </text>
-            <text
-              length="1"
-              follows="top|left"
-			  layout="topleft"
-              font="SansSerifSmall"
-              text_color="White_50"
-              height="30"
-              name="tags_help_label"
-              left="51"
-              top_pad="-16"
-              type="string">
-Separate tags with spaces
-Use "" for multi-word tags
             </text>
             <text_editor
              follows="left|top"
 			 layout="topleft"
-             height="50"
+             height="70"
              width="249"
              left="10"
              length="1"

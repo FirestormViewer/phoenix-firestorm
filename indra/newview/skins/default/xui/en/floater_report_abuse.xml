@@ -384,6 +384,7 @@
      name="bug_aviso"
      left_pad="10"
      word_wrap="true"
+     top_pad="-13"
      width="270">
         Please be as specific as possible
     </text>
@@ -396,6 +397,7 @@
      mouse_opaque="false"
      name="details_edit"
      width="313"
+     top_pad="-6"
      word_wrap="true" />
     <text
      type="string"

@@ -18,12 +18,8 @@
 		Opis:
 	</text>
 	<check_box label="Dołącz lokalizację z SL na końcu opisu" name="add_location_cb" />
-	<text name="tags_label">
+	<text name="tags_label" tool_tip="Rozdziel tagi spacjami. Użyj &quot;&quot; dla tagów wielosłownych.">
 		Tagi:
-	</text>
-	<text name="tags_help_label">
-		Rozdziel tagi spacjami
-Użyj "" dla tagów wielosłownych
 	</text>
 	<combo_box name="rating_combobox" tool_tip="Klasyfikacja treści Flickr">
 		<combo_box.item label="Flickr: Treść bezpieczna" name="SafeRating" />
