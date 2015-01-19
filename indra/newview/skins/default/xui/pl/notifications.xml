@@ -4551,4 +4551,22 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Aby móc ładować zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
+
+Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Przeprowadź autoryzację [APP_NAME] dla wysyłania zdjęć na Flickr w przeglądarce internetowej i wpisz otrzymany kod poniżej:
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		Autoryzacja Flickr nie powiodła się. Spróbuj ponownie i sprawdź dokładnie kod weryfikacyjny.
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
+	</notification>
 </notifications>

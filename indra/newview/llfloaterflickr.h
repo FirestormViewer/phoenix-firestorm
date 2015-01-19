@@ -61,6 +61,12 @@ public:
 	void checkAspectRatio(S32 index);
 	LLUICtrl* getRefreshBtn();
 
+	// <FS:Ansariel> Exodus' flickr upload
+	/*virtual*/ void onOpen(const LLSD& key);
+	void flickrAuthResponse(bool success, const LLSD& response);
+	void uploadCallback(bool success, const LLSD& response);
+	// </FS:Ansariel>
+
 private:
     bool isPreviewVisible();
     void attachPreview();
@@ -122,6 +128,9 @@ public:
 	void onCancel();
 	
 	void showPhotoPanel();
+
+	// <FS:Ansariel> Exodus' flickr upload
+	void onOpen(const LLSD& key);
 
 private:
 	LLFlickrPhotoPanel* mFlickrPhotoPanel;
