@@ -70,16 +70,10 @@
 				<text name="events_label">
 					Luogo:
 				</text>
-				<layout_stack name="layoutstack_bottom_buttons">
-					<layout_panel name="layoutstackpanel_left">
-						<button label="Teleport" name="Teleport" tool_tip="Teleport al luogo selezionato"/>
-						<button label="Eliminare" name="Clear" tool_tip="Elimina le linee di monitoraggio e reimposta la mappa"/>
-					</layout_panel>
-					<layout_panel name="layoutstackpanel_right">
-						<button label="Copia SLurl" name="copy_slurl" tool_tip="Copia la posizione attuale come un SLurl da usare nel Web."/>
-						<button label="Mostra la selezione" name="Show Destination" tool_tip="Centra la mappa sul luogo selezionato"/>
-					</layout_panel>
-				</layout_stack>
+				<button label="Teleport" name="Teleport" tool_tip="Teleport al luogo selezionato"/>
+				<button label="Copia SLurl" name="copy_slurl" tool_tip="Copia la posizione attuale come un SLurl da usare nel Web."/>
+				<button label="Eliminare" name="Clear" tool_tip="Elimina le linee di monitoraggio e reimposta la mappa"/>
+				<button label="Mostra la selezione" name="Show Destination" tool_tip="Centra la mappa sul luogo selezionato"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

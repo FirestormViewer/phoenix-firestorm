@@ -76,16 +76,10 @@
 				<text name="events_label">
 					Local:
 				</text>
-				<layout_stack name="layoutstack_bottom_buttons">
-					<layout_panel name="layoutstackpanel_left">
-						<button font="SansSerifSmall" label="Teletransportar" label_selected="Teletransporte" name="Teleport" tool_tip="Teletransportar para o lugar selecionado"/>
-						<button font="SansSerifSmall" label="Limpar" name="Clear" tool_tip="Limpar linhas e redefinir mapa"/>
-					</layout_panel>
-					<layout_panel name="layoutstackpanel_right">
-						<button font="SansSerifSmall" label="Copiar SLurl" name="copy_slurl" tool_tip="Copia a localização atual como um SLurl para usar na web."/>
-						<button font="SansSerifSmall" label="Mostrar seleção" label_selected="Mostrar Destino" left_delta="91" name="Show Destination" tool_tip="Centrar mapa no local selecionado" width="135"/>
-					</layout_panel>
-				</layout_stack>
+				<button font="SansSerifSmall" label="Teletransportar" label_selected="Teletransporte" name="Teleport" tool_tip="Teletransportar para o lugar selecionado"/>
+				<button font="SansSerifSmall" label="Copiar SLurl" name="copy_slurl" tool_tip="Copia a localização atual como um SLurl para usar na web."/>
+				<button font="SansSerifSmall" label="Limpar" name="Clear" tool_tip="Limpar linhas e redefinir mapa"/>
+				<button font="SansSerifSmall" label="Mostrar seleção" label_selected="Mostrar Destino" name="Show Destination" tool_tip="Centrar mapa no local selecionado"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

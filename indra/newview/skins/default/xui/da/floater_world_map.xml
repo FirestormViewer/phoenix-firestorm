@@ -70,16 +70,10 @@
 				<text name="events_label">
 					Lokation:
 				</text>
-				<layout_stack name="layoutstack_bottom_buttons">
-					<layout_panel name="layoutstackpanel_left">
-						<button label="Teleport" name="Teleport" tool_tip="Teleportér til valgte sted"/>
-						<button label="Slet" name="Clear" tool_tip="Fjern søgelinier og nulstil kort"/>
-					</layout_panel>
-					<layout_panel name="layoutstackpanel_right">
-						<button label="Kopiér SLurl" name="copy_slurl" tool_tip="Kopierer nuværende lokation som SLurl der kan sendes på web."/>
-						<button label="Vis valgte" name="Show Destination" tool_tip="Centrér kortet på valgte lokation"/>
-					</layout_panel>
-				</layout_stack>
+				<button label="Teleport" name="Teleport" tool_tip="Teleportér til valgte sted"/>
+				<button label="Kopiér SLurl" name="copy_slurl" tool_tip="Kopierer nuværende lokation som SLurl der kan sendes på web."/>
+				<button label="Slet" name="Clear" tool_tip="Fjern søgelinier og nulstil kort"/>
+				<button label="Vis valgte" name="Show Destination" tool_tip="Centrér kortet på valgte lokation"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

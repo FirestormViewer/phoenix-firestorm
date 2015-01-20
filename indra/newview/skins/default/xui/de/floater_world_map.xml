@@ -79,16 +79,10 @@
 				<text name="events_label">
 					Standort:
 				</text>
-				<layout_stack name="layoutstack_bottom_buttons">
-					<layout_panel name="layoutstackpanel_left">
-						<button label="Teleportieren" label_selected="Teleportieren" name="Teleport" tool_tip="Zu ausgewählter Position teleportieren"/>
-						<button label="Löschen" name="Clear" tool_tip="Verfolgung abschalten und Karte zurücksetzen."/>
-					</layout_panel>
-					<layout_panel name="layoutstackpanel_right">
-						<button font="SansSerifSmall" label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web."/>
-						<button label="Auswahl anzeigen" label_selected="Ziel anzeigen" name="Show Destination" tool_tip="Karte auf ausgewählte Position zentrieren"/>
-					</layout_panel>
-				</layout_stack>
+				<button label="Teleportieren" label_selected="Teleportieren" name="Teleport" tool_tip="Zu ausgewählter Position teleportieren"/>
+				<button label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web."/>
+				<button label="Löschen" name="Clear" tool_tip="Verfolgung abschalten und Karte zurücksetzen."/>
+				<button label="Auswahl anzeigen" label_selected="Ziel anzeigen" name="Show Destination" tool_tip="Karte auf ausgewählte Position zentrieren"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

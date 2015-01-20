@@ -665,80 +665,58 @@
           function="WMap.Coordinates"/>
       </spinner>
 
-    <layout_stack
-     name="layoutstack_bottom_buttons"
-     left="0"
-     top_pad="7"
-     right="-7"
-     height="52"
-     follows="bottom|right"
-     orientation="horizontal"
-     layout="topleft">
-    <layout_panel
-     follows="all"
-     layout="topleft"
-     width="100"
-     height="20"
-	 name="layoutstackpanel_left">
-      <button
-     follows="left|right|top"
+    <button
+     follows="left|right|bottom"
      height="23"
      label="Teleport"
      layout="topleft"
      left="0"
      name="Teleport"
      tool_tip="Teleport to selected location"
-     top="0"
-     right="-1">
+     top_pad="8"
+     width="123">
         <button.commit_callback
         function="WMap.Teleport" />
     </button>
     <button
-     follows="left|right|top"
-     height="23"
-     label="Clear"
-     layout="topleft"
-     name="Clear"
-     tool_tip="Clear tracking lines and reset map"
-     top_pad="5"
-     right="-1">
-        <button.commit_callback
-        function="WMap.Clear" />
-    </button>
-    </layout_panel>
-    <layout_panel
-     follows="left|right|top"
-     layout="topleft"
-     width="100"
-     height="20"
-	 name="layoutstackpanel_right">
-    <button
-     follows="left|right|top"
+     follows="left|right|bottom"
      height="23"
      label="Copy SLurl"
      layout="topleft"
-     left="0"
+     left_pad="4"
      name="copy_slurl"
      tool_tip="Copies current location as SLurl to be used on the web."
-     top="0"
-     right="-1">
+     top_delta="0"
+     width="123">
         <button.commit_callback
         function="WMap.CopySLURL" />
     </button>
     <button
-     follows="left|right|top"
+     follows="left|right|bottom"
+     height="23"
+     label="Clear"
+     layout="topleft"
+     left="0"
+     name="Clear"
+     tool_tip="Clear tracking lines and reset map"
+     top_pad="5"
+     width="123">
+        <button.commit_callback
+        function="WMap.Clear" />
+    </button>
+    <button
+     follows="left|right|bottom"
      enabled="false"
      height="23"
      label="Show Selection"
-     top_pad="5"
+     left_pad="4"
+     top_delta="0"
      name="Show Destination"
      tool_tip="Center map on selected location"
-     right="-1">
+     width="123">
         <button.commit_callback
         function="WMap.ShowTarget" />
     </button>
-    </layout_panel>
-    </layout_stack>
    </panel> 
   </layout_panel> 
  </layout_stack> 

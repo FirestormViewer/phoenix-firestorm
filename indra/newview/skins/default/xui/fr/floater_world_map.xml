@@ -89,7 +89,6 @@ title="CARTE DU MONDE">
 				<text name="events_label">
 				Position
 				</text>
-		<!--alba: Due to MetaHarper skins, the next 4 buttons have to be reproduced. See below-->
 				<button name="Clear" 
 				label="Purger" 
 				tool_tip="Purger les champs de recherche et d'affichage des régions">
@@ -106,32 +105,6 @@ title="CARTE DU MONDE">
 				label="Centrer la carte" 
 				tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
 				</button>
-		<!--alba: End of repro-->
-				<layout_stack name="layoutstack_bottom_buttons">
-					<layout_panel name="layoutstackpanel_left">
-		<!--alba: Here we go again-->
-						<button name="Clear" 
-						label="Effacer" 
-						tool_tip="Purger les champs de recherche et d'affichage des régions">
-						</button>
-						<button name="Teleport" 
-						label="Téléportation" 
-						tool_tip="Vous téléporter à la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
-						</button>
-					</layout_panel>
-
-					<layout_panel name="layoutstackpanel_right">
-						<button name="copy_slurl" 
-						label="Copier le SLurl" 
-						tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
-						</button>
-						<button name="Show Destination" 
-						label="Centrer la carte" 
-						tool_tip="Centrer la carte sur la position du marqueur. (Cliquer sur la carte pour définir un marqueur.)">
-						</button>
-		<!--alba: End of repro-->
-						</layout_panel>
-				</layout_stack>
 			</panel>
 
 		</layout_panel> 
