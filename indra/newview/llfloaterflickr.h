@@ -71,6 +71,9 @@ private:
     bool isPreviewVisible();
     void attachPreview();
 
+	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+	BOOL checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, BOOL isWidthChanged, S32 max_value);
+
 	LLHandle<LLView> mPreviewHandle;
 
 	LLUICtrl * mResolutionComboBox;

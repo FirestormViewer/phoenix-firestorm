@@ -54,6 +54,8 @@
 #include "llaccordionctrl.h"
 #include "llaccordionctrltab.h"
 
+#include "llspinctrl.h"
+
 static LLPanelInjector<LLFacebookStatusPanel> t_panel_status("llfacebookstatuspanel");
 static LLPanelInjector<LLFacebookPhotoPanel> t_panel_photo("llfacebookphotopanel");
 static LLPanelInjector<LLFacebookCheckinPanel> t_panel_checkin("llfacebookcheckinpanel");
@@ -336,7 +338,10 @@ mBigPreviewFloater(NULL),
 mQuality(MAX_QUALITY)
 {
 	mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", boost::bind(&LLFacebookPhotoPanel::onSend, this));
-	mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFacebookPhotoPanel::onClickNewSnapshot, this));
+	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+	//mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFacebookPhotoPanel::onClickNewSnapshot, this));
+	mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFacebookPhotoPanel::updateResolution, this, TRUE));
+	// </FS:Ansariel>
 	mCommitCallbackRegistrar.add("SocialSharing.BigPreview", boost::bind(&LLFacebookPhotoPanel::onClickBigPreview, this));
 }
 
@@ -365,6 +370,12 @@ BOOL LLFacebookPhotoPanel::postBuild()
 	mPostButton = getChild<LLUICtrl>("post_photo_btn");
 	mCancelButton = getChild<LLUICtrl>("cancel_photo_btn");
 	mBigPreviewFloater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+
+	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+	getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFacebookPhotoPanel::updateResolution, this, TRUE));
+	getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFacebookPhotoPanel::updateResolution, this, TRUE));
+	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFacebookPhotoPanel::updateResolution, this, TRUE));
+	// </FS:Ansariel>
 
 	// Update filter list
     std::vector<std::string> filter_list = LLImageFiltersManager::getInstance()->getFiltersList();
@@ -496,6 +507,11 @@ void LLFacebookPhotoPanel::onVisibilityChange(BOOL visible)
             previewp->setAllowRenderUI(FALSE);          // We do not want the rendered UI in our snapshots
             previewp->setAllowFullScreenPreview(FALSE);  // No full screen preview in SL Share mode
 			previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
+
+			// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+			getChild<LLSpinCtrl>("custom_snapshot_width")->set(gViewerWindow->getWindowWidthRaw());
+			getChild<LLSpinCtrl>("custom_snapshot_height")->set(gViewerWindow->getWindowHeightRaw());
+			// </FS:Ansariel>
 
 			updateControls();
 		}
@@ -632,6 +648,9 @@ void LLFacebookPhotoPanel::updateResolution(BOOL do_update)
 	LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
 	if (previewp && combobox->getCurrentIndex() >= 0)
 	{
+		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
+		checkAspectRatio(width);
+
 		S32 original_width = 0 , original_height = 0 ;
 		previewp->getSize(original_width, original_height) ;
 
@@ -641,6 +660,23 @@ void LLFacebookPhotoPanel::updateResolution(BOOL do_update)
 			LL_DEBUGS() << "Setting preview res from window: " << gViewerWindow->getWindowWidthRaw() << "x" << gViewerWindow->getWindowHeightRaw() << LL_ENDL;
 			previewp->setSize(gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw());
 		}
+		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+		else if (width == -1 || height == -1)
+		{
+			// take resolution from custom size
+			LLSpinCtrl* width_spinner = getChild<LLSpinCtrl>("custom_snapshot_width");
+			LLSpinCtrl* height_spinner = getChild<LLSpinCtrl>("custom_snapshot_height");
+			S32 custom_width = width_spinner->getValue().asInteger();
+			S32 custom_height = height_spinner->getValue().asInteger();
+			if (checkImageSize(previewp, custom_width, custom_height, TRUE, previewp->getMaxImageSize()))
+			{
+				width_spinner->set(custom_width);
+				height_spinner->set(custom_height);
+			}
+			LL_DEBUGS() << "Setting preview res from custom: " << custom_width << "x" << custom_height << LL_ENDL;
+			previewp->setSize(custom_width, custom_height);
+		}
+		// </FS:Ansariel>
 		else
 		{
 			// use the resolution from the selected pre-canned drop-down choice
@@ -648,7 +684,8 @@ void LLFacebookPhotoPanel::updateResolution(BOOL do_update)
 			previewp->setSize(width, height);
 		}
 
-		checkAspectRatio(width);
+		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
+		//checkAspectRatio(width);
 
 		previewp->getSize(width, height);
         
@@ -676,6 +713,13 @@ void LLFacebookPhotoPanel::updateResolution(BOOL do_update)
 				updateControls();
 			}
 		}
+
+		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+		BOOL custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
+		getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
+		getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
+		getChild<LLComboBox>("keep_aspect_ratio")->setEnabled(custom_resolution);
+		// </FS:Ansariel>
 	}
 }
 
@@ -689,6 +733,12 @@ void LLFacebookPhotoPanel::checkAspectRatio(S32 index)
 	{
 		keep_aspect = TRUE;
 	}
+	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+	else if (-1 == index)
+	{
+		keep_aspect = getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->get();
+	}
+	// </FS:Ansariel>
 	else // predefined resolution
 	{
 		keep_aspect = FALSE;
@@ -704,6 +754,52 @@ LLUICtrl* LLFacebookPhotoPanel::getRefreshBtn()
 {
 	return mRefreshBtn;
 }
+
+// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+BOOL LLFacebookPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, BOOL isWidthChanged, S32 max_value)
+{
+	S32 w = width ;
+	S32 h = height ;
+
+	if(previewp && previewp->mKeepAspectRatio)
+	{
+		if(gViewerWindow->getWindowWidthRaw() < 1 || gViewerWindow->getWindowHeightRaw() < 1)
+		{
+			return FALSE ;
+		}
+
+		//aspect ratio of the current window
+		F32 aspect_ratio = (F32)gViewerWindow->getWindowWidthRaw() / gViewerWindow->getWindowHeightRaw() ;
+
+		//change another value proportionally
+		if(isWidthChanged)
+		{
+			height = llround(width / aspect_ratio) ;
+		}
+		else
+		{
+			width = llround(height * aspect_ratio) ;
+		}
+
+		//bound w/h by the max_value
+		if(width > max_value || height > max_value)
+		{
+			if(width > height)
+			{
+				width = max_value ;
+				height = (S32)(width / aspect_ratio) ;
+			}
+			else
+			{
+				height = max_value ;
+				width = (S32)(height * aspect_ratio) ;
+			}
+		}
+	}
+
+	return (w != width || h != height) ;
+}
+// </FS:Ansariel>
 
 ////////////////////////
 //LLFacebookCheckinPanel//

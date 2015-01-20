@@ -2,13 +2,12 @@
 <panel name="panel_flickr_photo">
 	<combo_box name="resolution_combobox" tool_tip="Bildauflösung">
 		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Bildfilter">
 		<combo_box.item label="Kein Filter" name="NoFilter"/>
 	</combo_box>
+	<check_box label="Seitenverh. behalten" name="keep_aspect_ratio"/>
 	<text name="working_lbl">
 		Aktualisiere...
 	</text>

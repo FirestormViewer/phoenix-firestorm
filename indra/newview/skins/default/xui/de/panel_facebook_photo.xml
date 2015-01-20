@@ -2,10 +2,12 @@
 <panel name="panel_facebook_photo">
 	<combo_box name="resolution_combobox" tool_tip="Bild-Auflösung">
 		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow" />
+		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Bild-Filter">
 		<combo_box.item label="Kein Filter" name="NoFilter" />
 	</combo_box>
+	<check_box label="Seitenverh. behalten" name="keep_aspect_ratio"/>
 	<text name="working_lbl">
 		Aktualisiere...
 	</text>
