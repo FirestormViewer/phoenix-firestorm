@@ -3,67 +3,84 @@
  name="region_tracker"
  title="Region Tracker"
  help_topic="floater_region_tracker"
+ save_rect="true"
+ save_visibility="true"
  single_instance="true"
  reuse_instance="true"
  layout="topleft"
  height="250"
  width="408"
  min_height="150"
- min_width="30"
+ min_width="300"
  can_resize="true">
- <text
-  follows="left|top" 
-  height="31" 
-  left="5" 
-  top="0" 
-  right="-8"
-  layout="topleft" 
-  valign="center"
-  font="SansSerifBig" 
-  name="region_label_text" 
-  value="Add regions from the World Map" />
-  <button
-   right="-76"
-   top_pad="-29"
-   halign="center" 
+  <icon
+   follows="left|top|right"
+   image_name="Toolbar_Middle_Off"
+   left="5"
+   name="dummy_icon"
+   top="2"
+   height="25"
+   right="-104"/>
+  <text
+   follows="left|top|right" 
    height="31" 
+   font="SansSerifBig" 
+   left="10" 
+   top_delta="-4" 
+   right="-110"
+   layout="topleft" 
+   valign="center"
+   name="region_label_text"
+   use_ellipses="true"
+   value="Add regions from the World Map" />
+  <button
+   top="2"
+   right="-71"
+   halign="center" 
+   height="25" 
    layout="topleft" 
    follows="top|right"
    width="31" 
    mouse_opaque="true" 
    name="refresh"
    tool_tip="Refresh"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
    image_overlay="Refresh_Off" />
   <button
-   left_pad="5"
+   left_pad="2"
    halign="center" 
-   height="31" 
+   height="25" 
    layout="topleft" 
    follows="top|right"
    width="31" 
    mouse_opaque="true" 
    name="remove"
    tool_tip="Remove region(s)"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
    image_overlay="TrashItem_Off" />
   <button
-   left_pad="5"
+   left_pad="2"
    halign="center" 
-   height="31" 
+   height="25" 
    layout="topleft" 
    follows="top|right"
    width="31" 
    mouse_opaque="true" 
    name="open_map"
    tool_tip="Open map"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
    image_overlay="Command_Map_Icon" />
   <scroll_list
    name="region_list"
    tool_tip="Double click an entry to open it on the world map."
-   height="210"
-   width="400"
+   height="216"
+   right="-5"
    layout="topleft"
    follows="all" 
-   top_pad="5"
+   top_pad="1"
    left="5"
    multi_select="true"
    draw_heading="true"
@@ -72,21 +89,17 @@
    <scroll_list.columns
     name="region_label"
     label="Label"
-    dynamicwidth="true"
-    width="100" />
-   <scroll_list.columns 
+    dynamic_width="true"/>
+   <scroll_list.columns
     name="region_maturity_icon"
-    dynamicwidth="true"
     width="26" />
-   <scroll_list.columns 
+   <scroll_list.columns
     name="region_name"
     label="Region"
-    dynamicwidth="true"
-    width="130" />
-   <scroll_list.columns 
-    name="region_agent_count"	
-    label="Count"	
-    dynamicwidth="true" 
+    width="150"/>
+   <scroll_list.columns
+    name="region_agent_count"
+    label="#"
     width="30" />
   </scroll_list>
  </floater>

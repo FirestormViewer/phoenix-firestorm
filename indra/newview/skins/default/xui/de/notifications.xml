@@ -4879,7 +4879,7 @@ Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] be
 	</notification>
 <!-- </FS:TS> FIRE-5453 -->
 	<notification name="RegionTrackerAdd">
-Welche Bezeichnung soll für die region
+Welche Bezeichnung soll für die Region
 „[REGION]“ verwendet werden?
 		<form name="form">
 			<button name="OK" text="OK"/>
