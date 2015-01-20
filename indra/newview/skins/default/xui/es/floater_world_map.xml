@@ -71,8 +71,8 @@
 					Lugar:
 				</text>
 				<button label="Teleportar" name="Teleport" tool_tip="Teleportar a la localización seleccionada"/>
-				<button label="Copiar la SLurl" name="copy_slurl" tool_tip="Copiar la SLurl de esta posición para usarla en una web."/>
-				<button label="Eliminar" name="Clear" tool_tip="Limpia las marcas y actualiza el mapa"/>
+				<button label="Copiar la SLurl" name="copy_slurl" tool_tip="Copiar la SLurl de esta posición para usarla en una web." width="93"/>
+				<button label="Eliminar" name="Clear" tool_tip="Limpia las marcas y actualiza el mapa" width="70"/>
 				<button label="Ver lo elegido" name="Show Destination" tool_tip="Centrar el mapa en la localización seleccionada"/>
 			</panel>
 		</layout_panel> 

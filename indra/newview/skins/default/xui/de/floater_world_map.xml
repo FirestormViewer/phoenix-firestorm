@@ -80,9 +80,10 @@
 					Standort:
 				</text>
 				<button label="Teleportieren" label_selected="Teleportieren" name="Teleport" tool_tip="Zu ausgewählter Position teleportieren"/>
-				<button label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web."/>
-				<button label="Löschen" name="Clear" tool_tip="Verfolgung abschalten und Karte zurücksetzen."/>
+				<button label="SLurl kopieren" name="copy_slurl" tool_tip="Kopiert die aktuelle Position als SLurl zur Verwendung im Web." width="88"/>
+				<button label="Löschen" name="Clear" tool_tip="Verfolgung abschalten und Karte zurücksetzen." width="75"/>
 				<button label="Auswahl anzeigen" label_selected="Ziel anzeigen" name="Show Destination" tool_tip="Karte auf ausgewählte Position zentrieren"/>
+				<button label="Region verfolgen" name="track_region" tool_tip="Region zum Region-Tracker hinzufügen"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

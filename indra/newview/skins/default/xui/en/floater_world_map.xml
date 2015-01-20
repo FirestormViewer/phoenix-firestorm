@@ -674,7 +674,7 @@
      name="Teleport"
      tool_tip="Teleport to selected location"
      top_pad="8"
-     width="123">
+     width="81">
         <button.commit_callback
         function="WMap.Teleport" />
     </button>
@@ -683,39 +683,52 @@
      height="23"
      label="Copy SLurl"
      layout="topleft"
-     left_pad="4"
+     left_pad="3"
      name="copy_slurl"
      tool_tip="Copies current location as SLurl to be used on the web."
      top_delta="0"
-     width="123">
+     width="82">
         <button.commit_callback
         function="WMap.CopySLURL" />
     </button>
     <button
      follows="left|right|bottom"
+     enabled="false"
      height="23"
      label="Clear"
-     layout="topleft"
-     left="0"
+     left_pad="3"
+     top_delta="0"
      name="Clear"
      tool_tip="Clear tracking lines and reset map"
-     top_pad="5"
-     width="123">
+     width="81">
         <button.commit_callback
         function="WMap.Clear" />
     </button>
     <button
      follows="left|right|bottom"
-     enabled="false"
      height="23"
      label="Show Selection"
-     left_pad="4"
-     top_delta="0"
+     layout="topleft"
+     left="0"
      name="Show Destination"
      tool_tip="Center map on selected location"
+     top_pad="5"
      width="123">
         <button.commit_callback
         function="WMap.ShowTarget" />
+    </button>
+    <button
+     follows="left|right|bottom"
+     enabled="false"
+     height="23"
+     label="Track Region"
+     left_pad="4"
+     top_delta="0"
+     name="track_region"
+     tool_tip="Add the region to the region tracker"
+     width="123">
+        <button.commit_callback
+        function="WMap.TrackRegion" />
     </button>
    </panel> 
   </layout_panel> 

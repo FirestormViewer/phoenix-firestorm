@@ -151,6 +151,8 @@ protected:
 	void			onShowTargetBtn();
 	void			onShowAgentBtn();
 	void			onCopySLURL();
+	// <FS:Ansariel> Alchemy region tracker
+	void			onTrackRegion();
 
 	void			centerOnTarget(BOOL animate);
 	void			updateLocation();

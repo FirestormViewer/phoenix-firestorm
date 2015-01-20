@@ -91,7 +91,8 @@ title="CARTE DU MONDE">
 				</text>
 				<button name="Clear" 
 				label="Purger" 
-				tool_tip="Purger les champs de recherche et d'affichage des régions">
+				tool_tip="Purger les champs de recherche et d'affichage des régions"
+				width="70">
 				</button>
 				<button name="Teleport" 
 				label="Téléportation" 
@@ -99,7 +100,8 @@ title="CARTE DU MONDE">
 				</button>
 				<button name="copy_slurl" 
 				label="Copier le SLurl" 
-				tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL">
+				tool_tip="Copier la position du marqueur en tant que SLurl utilisable sur le Web et sur SL"
+				width="93">
 				</button>
 				<button name="Show Destination" 
 				label="Centrer la carte" 

@@ -119,6 +119,7 @@ include_directories(SYSTEM
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
+    alfloaterregiontracker.cpp
     animationexplorer.cpp
     ao.cpp
     aoengine.cpp
@@ -848,6 +849,7 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
 
 # <Add FS includes below this line>
+    alfloaterregiontracker.h
     animationexplorer.h
     ao.h
     aoengine.h

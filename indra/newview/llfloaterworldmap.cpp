@@ -80,6 +80,7 @@
 // [/RLVa:KB]
 #include "llsdutil.h"
 #include "llsdutil_math.h"
+#include "alfloaterregiontracker.h"
 
 //---------------------------------------------------------------------------
 // Constants
@@ -316,7 +317,9 @@ LLFloaterWorldMap::LLFloaterWorldMap(const LLSD& key)
 	mCommitCallbackRegistrar.add("WMap.ShowAgent",		boost::bind(&LLFloaterWorldMap::onShowAgentBtn, this));		
 	mCommitCallbackRegistrar.add("WMap.Clear",			boost::bind(&LLFloaterWorldMap::onClearBtn, this));		
 	mCommitCallbackRegistrar.add("WMap.CopySLURL",		boost::bind(&LLFloaterWorldMap::onCopySLURL, this));
-	
+	// <FS:Ansariel> Alchemy region tracker
+	mCommitCallbackRegistrar.add("WMap.TrackRegion",	boost::bind(&LLFloaterWorldMap::onTrackRegion, this));
+
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterWorldMap::onChangeMaturity, this));
 }
 
@@ -602,6 +605,8 @@ void LLFloaterWorldMap::draw()
 	copy_slurl_btn->setEnabled((mSLURL.isValid()) );
 	go_home_btn->setEnabled((!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
 	// </FS:Ansariel> Performance improvement
+	// <FS:Ansariel> Alchemy region tracker
+	getChild<LLButton>("track_region")->setEnabled((BOOL) tracking_status || LLWorldMap::getInstance()->isTracking());
 
 	setMouseOpaque(TRUE);
 	getDragHandle()->setMouseOpaque(TRUE);
@@ -1605,6 +1610,30 @@ void LLFloaterWorldMap::onCopySLURL()
 	
 	LLNotificationsUtil::add("CopySLURL", args);
 }
+
+// <FS:Ansariel> Alchemy region tracker
+void LLFloaterWorldMap::onTrackRegion()
+{
+	ALFloaterRegionTracker* floaterp = LLFloaterReg::getTypedInstance<ALFloaterRegionTracker>("region_tracker");
+	if (floaterp)
+	{
+		if (LLTracker::getTrackingStatus() != LLTracker::TRACKING_NOTHING)
+		{
+			std::string sim_name;
+			LLWorldMap::getInstance()->simNameFromPosGlobal(LLTracker::getTrackedPositionGlobal(), sim_name);
+			if (!sim_name.empty())
+			{
+				const std::string& temp_label = floaterp->getRegionLabelIfExists(sim_name);
+				LLSD args, payload;
+				args["REGION"] = sim_name;
+				args["LABEL"] = !temp_label.empty() ? temp_label : sim_name;
+				payload["name"] = sim_name;
+				LLNotificationsUtil::add("RegionTrackerAdd", args, payload, boost::bind(&ALFloaterRegionTracker::onRegionAddedCallback, floaterp, _1, _2));
+			}
+		}
+	}
+}
+// </FS:Ansariel>
 
 // protected
 void LLFloaterWorldMap::centerOnTarget(BOOL animate)
