@@ -5418,6 +5418,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
+	<string name="Command_RegionTracker_Label">
+		Regions-Tracker
+	</string>
 	<string name="Command_Appearance_Tooltip">
 		Avatar ändern
 	</string>
@@ -5579,6 +5582,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_ResyncAnimations_Tooltip">
 		Synchronisiert die Avatar-Animationen neu
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Verfolgt den Status von diversen Regionen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
