@@ -2524,14 +2524,6 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
             }
         }
         
-        if (mHidden)
-        {
-            for (int i=0;i<3;++i)
-            {
-                pos.mdV[i] = VX_NULL_POSITION;
-            }
-        }
-        
 		stream
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
