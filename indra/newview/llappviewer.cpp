@@ -3739,7 +3739,7 @@ bool LLAppViewer::initWindow()
 	//}
 
 	//if (use_watchdog)
-	if (gSavedSettings.getBOOL("WatchdogEnabled"))
+	if (gSavedSettings.getS32("WatchdogEnabled"))
 	// </FS:Ansariel>
 	{
 		LLWatchdog::getInstance()->init(watchdog_killer_callback);
