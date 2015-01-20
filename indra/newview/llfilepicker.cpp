@@ -684,9 +684,11 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
             break;
-	case FFLOAD_XML:
-            allowedv->push_back("xml");
-            break;
+        // <FS:TS> Compile fix
+	// case FFLOAD_XML:
+        //     allowedv->push_back("xml");
+        //     break;
+        // </FS:TS> Compile fix
         case FFLOAD_DIRECTORY:
             break;
 	// <FS:CR> Import filter
@@ -786,12 +788,13 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 			extension = "slg";
 			break;
 #endif	
-			
-		case FFSAVE_XML:
-			type = "\?\?\?\?";
-			creator = "\?\?\?\?";
-			extension = "xml";
-			break;
+		// <FS:TS> Compile fix
+		// case FFSAVE_XML:
+		//	type = "\?\?\?\?";
+		//	creator = "\?\?\?\?";
+		//	extension = "xml";
+		//	break;
+		// </FS:TS> Compile fix
 			
 		case FFSAVE_RAW:
 			type = "\?\?\?\?";
