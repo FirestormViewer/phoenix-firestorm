@@ -684,11 +684,6 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
             break;
-        // <FS:TS> Compile fix
-	// case FFLOAD_XML:
-        //     allowedv->push_back("xml");
-        //     break;
-        // </FS:TS> Compile fix
         case FFLOAD_DIRECTORY:
             break;
 	// <FS:CR> Import filter
