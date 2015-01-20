@@ -400,7 +400,7 @@
               <key>hash</key>
               <string>8fff9c2948517b8d3f512d58bbdf276f</string>
               <key>url</key>
-              <string>file:///opt/firestorm/curl-7.38.0.0-darwin-20150118.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.38.0.0-darwin-20150118.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
