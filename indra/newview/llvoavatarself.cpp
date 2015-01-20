@@ -3038,7 +3038,10 @@ void LLVOAvatarSelf::onCustomizeEnd(bool disable_camera_switch)
 		// </FS:Ansariel> [Legacy Bake]
 		gAgentAvatarp->invalidateAll();
 
-		if (gSavedSettings.getBOOL("AppearanceCameraMovement") && !disable_camera_switch)
+		// <FS:Ansariel> Cinder's fix for STORM-2096 / FIRE-5740
+		//if (gSavedSettings.getBOOL("AppearanceCameraMovement") && !disable_camera_switch)
+		if (gAgentCamera.cameraCustomizeAvatar() && !disable_camera_switch)
+		// </FS:Ansariel>
 		{
 			gAgentCamera.changeCameraToDefault();
 			gAgentCamera.resetView();
