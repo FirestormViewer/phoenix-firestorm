@@ -269,7 +269,10 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 			{
 				break;
 			}
-			if (bar.mSelfEnd > mouse_time_offset)
+			// <FS:Ansariel> FIRE-15356: mTimeBlock might be null
+			//if (bar.mSelfEnd > mouse_time_offset)
+			if (bar.mSelfEnd > mouse_time_offset && bar.mTimeBlock)
+			// </FS:Ansariel>
 			{
 				hover_bar = &bar;
 				if (bar.mTimeBlock->getTreeNode().mCollapsed)
