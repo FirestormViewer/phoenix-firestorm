@@ -1245,7 +1245,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (notification != NULL)
 		{
 			LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
-					notification, chat.mSessionID, LLRect::null);
+					notification, chat.mSessionID, LLRect::null, true, this);
 
 			//Prepare the rect for the view
 			LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
