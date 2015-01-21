@@ -53,6 +53,8 @@
 #include "llviewerregion.h"
 
 #include "llspinctrl.h"
+
+#include "llnotificationsutil.h"
 #ifdef OPENSIM
 #include "exoflickr.h"
 #include "exoflickrauth.h"
