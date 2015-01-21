@@ -61,6 +61,7 @@
 				<button label="Kopiuj SLurl" name="copy_slurl" tool_tip="Kopiuje obecną lokalizację jako SLurl, aby można było ją użyć na stronie internetowej."/>
 				<button label="Wyczyść" name="Clear" tool_tip="Wyczyść zapamiętane linie i zresetuj mapę"/>
 				<button label="Pokaż wybrane" name="Show Destination" tool_tip="Wyśrodkuj mapę w wybranym miejscu"/>
+				<button label="Śledź region" name="track_region" tool_tip="Dodaj region do Śledzenia Regionów"/>
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

@@ -4542,4 +4542,11 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 	<notification name="ExodusFlickrUploadComplete">
 		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
+	<notification name="RegionTrackerAdd">
+		Jaką etykietę chcesz nadać regionowi
+&quot;[REGION]&quot;?
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 </notifications>

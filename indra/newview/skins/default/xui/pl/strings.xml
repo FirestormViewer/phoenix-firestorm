@@ -4841,6 +4841,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_ResyncAnimations_Label">
 		Synchronizuj animacje
 	</string>
+	<string name="Command_RegionTracker_Label">
+		Śledzenie Regionów
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4996,6 +4999,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_ResyncAnimations_Tooltip">
 		Synchronizuj animacje awatarów (CTRL+S)
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Śledź statusy różnych regionów
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

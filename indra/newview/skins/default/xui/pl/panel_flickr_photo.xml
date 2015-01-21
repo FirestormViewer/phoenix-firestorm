@@ -2,10 +2,12 @@
 <panel name="panel_flickr_photo">
 	<combo_box name="resolution_combobox" tool_tip="Rozdzielczość obrazka">
 		<combo_box.item label="Obecne okno" name="CurrentWindow" />
+		<combo_box.item label="Własna" name="Custom" />
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="Filtry obrazka">
 		<combo_box.item label="Bez filtru" name="NoFilter" />
 	</combo_box>
+	<check_box label="Zachowaj proporcje" name="keep_aspect_ratio" />
 	<text name="working_lbl">
 		Odświeżanie...
 	</text>
@@ -17,7 +19,7 @@
 	<text name="description_label">
 		Opis:
 	</text>
-	<check_box label="Dołącz lokalizację z SL na końcu opisu" name="add_location_cb" />
+	<check_box label="Dołącz lokalizację na końcu opisu" name="add_location_cb" />
 	<text name="tags_label" tool_tip="Rozdziel tagi spacjami. Użyj &quot;&quot; dla tagów wielosłownych.">
 		Tagi:
 	</text>

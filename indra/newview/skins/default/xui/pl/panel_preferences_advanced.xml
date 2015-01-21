@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel label="Zaawansowane" name="advanced">
-	<panel.string name="aspect_ratio_text">
-		[NUM]:[DEN]
-	</panel.string>
 	<panel.string name="middle_mouse">
 		Środkowy przycisk myszki
 	</panel.string>

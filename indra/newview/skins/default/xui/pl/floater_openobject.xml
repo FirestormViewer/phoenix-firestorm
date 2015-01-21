@@ -2,7 +2,7 @@
 <floater name="objectcontents" title="Zawartość obiektu">
 	<layout_stack name="button_bar_ls">
 		<layout_panel name="copy_btn_lp">
-			<flyout_button label="Tylko skopiuj do Szafy" name="copy_flyout">
+			<flyout_button label="Kopiuj do Szafy" name="copy_flyout">
 				<flyout_button.item label="Zastąp strój" name="replace"/>
 				<flyout_button.item label="Dodaj do stroju" name="add"/>
 			</flyout_button>
