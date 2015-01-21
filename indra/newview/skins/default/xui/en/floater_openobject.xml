@@ -39,33 +39,71 @@
      top_pad="0"
      width="284" />
 
-    <flyout_button
-     follows="left|right|bottom"
-     height="23"
-     label="Copy To Inventory"
+    <layout_stack
+     follows="bottom|left|right"
+     height="25"
      layout="topleft"
-     left="10"
-     name="copy_flyout"
-     top_pad="5"
-     width="153">
-        <flyout_button.item
-         label="Replace outfit with contents"
-         name="replace"
-         value="replace" />
-        <flyout_button.item
-         label="Add contents to outfit"
-         name="add"
-         value="add" />
-    </flyout_button>
-    <button
-     follows="bottom|right"
-     height="23"
-     label="Cancel"
-     label_selected="Cancel"
-     layout="topleft"
-     left_pad="5"
-     name="cancel_button"
-     width="125">
-        <button.commit_callback
-         function="OpenObject.Cancel" />
-    </button></floater>
+     mouse_opaque="false"
+     name="button_bar_ls"
+     left="6"
+     orientation="horizontal"
+     bottom="-6"
+     right="-6">
+        <layout_panel
+         follows="bottom|left|right"
+         height="23"
+         layout="bottomleft"
+         left_pad="3"
+         mouse_opaque="false"
+         name="copy_btn_lp"
+         top="0"
+         auto_resize="true"
+         width="100">
+            <flyout_button
+             follows="left|right|bottom"
+             height="23"
+             label="Copy To Inventory"
+             layout="topleft"
+             left="0"
+             name="copy_flyout"
+             top="0"
+             width="100">
+                <flyout_button.item
+                 label="Replace outfit with contents"
+                 name="replace"
+                 value="replace" />
+                <flyout_button.item
+                 label="Add contents to outfit"
+                 name="add"
+                 value="add" />
+                <flyout_button.commit_callback
+                 function="OpenObject.CopyAction" />
+            </flyout_button>
+        </layout_panel>
+
+        <layout_panel
+         follows="bottom|left|right"
+         height="23"
+         layout="bottomleft"
+         left_pad="3"
+         mouse_opaque="false"
+         name="cancel_btn_lp"
+         top="0"
+         auto_resize="true"
+         width="100">
+            <button
+             follows="left|bottom|right"
+             height="23"
+             label="Cancel"
+             label_selected="Cancel"
+             layout="topleft"
+             left="0"
+             top="0"
+             name="cancel_button"
+             width="100">
+                <button.commit_callback
+                 function="OpenObject.Cancel" />
+            </button>
+        </layout_panel>
+    </layout_stack>
+</floater>

@@ -66,7 +66,7 @@ protected:
 	//void onClickMoveToInventory();
 	//void onClickMoveAndWear();
 	//void onClickReplace();
-	void onClickCopy(LLUICtrl* ctrl);
+	void onClickCopy(const LLSD& value);
 	// </FS:Ansariel>
 	void onClickCancel();
 	static void callbackCreateInventoryCategory(const LLUUID& category_id, LLUUID object_id, bool wear, bool replace = false);

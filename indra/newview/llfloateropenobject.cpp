@@ -60,6 +60,7 @@ LLFloaterOpenObject::LLFloaterOpenObject(const LLSD& key)
 	//mCommitCallbackRegistrar.add("OpenObject.MoveToInventory",	boost::bind(&LLFloaterOpenObject::onClickMoveToInventory, this));
 	//mCommitCallbackRegistrar.add("OpenObject.MoveAndWear",		boost::bind(&LLFloaterOpenObject::onClickMoveAndWear, this));
 	//mCommitCallbackRegistrar.add("OpenObject.ReplaceOutfit",	boost::bind(&LLFloaterOpenObject::onClickReplace, this));
+	mCommitCallbackRegistrar.add("OpenObject.CopyAction",		boost::bind(&LLFloaterOpenObject::onClickCopy, this, _2));
 	// </FS:Ansariel>
 	mCommitCallbackRegistrar.add("OpenObject.Cancel",			boost::bind(&LLFloaterOpenObject::onClickCancel, this));
 }
@@ -74,8 +75,6 @@ BOOL LLFloaterOpenObject::postBuild()
 {
 	getChild<LLUICtrl>("object_name")->setTextArg("[DESC]", std::string("Object") ); // *Note: probably do not want to translate this
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("object_contents");
-	// <FS:Ansariel> Cinder's fly-out button
-	getChild<LLUICtrl>("copy_flyout")->setCommitCallback(boost::bind(&LLFloaterOpenObject::onClickCopy, this, _1));
 
 	refresh();
 	return TRUE;
@@ -119,10 +118,12 @@ void LLFloaterOpenObject::refresh()
 	}
 	
 	getChild<LLUICtrl>("object_name")->setTextArg("[DESC]", name);
-	getChildView("copy_to_inventory_button")->setEnabled(enabled);
-	getChildView("copy_and_wear_button")->setEnabled(enabled);
-	getChildView("copy_and_replace_button")->setEnabled(enabled);
-
+	// <FS:Ansariel> Cinder's fly-out button
+	//getChildView("copy_to_inventory_button")->setEnabled(enabled);
+	//getChildView("copy_and_wear_button")->setEnabled(enabled);
+	//getChildView("copy_and_replace_button")->setEnabled(enabled);
+	getChildView("copy_flyout")->setEnabled(enabled);
+	// </FS:Ansariel>
 }
 
 void LLFloaterOpenObject::draw()
@@ -268,15 +269,21 @@ void LLFloaterOpenObject::onClickCancel()
 }
 
 // <FS:Ansariel> Cinder's fly-out button
-void LLFloaterOpenObject::onClickCopy(LLUICtrl* ctrl)
+void LLFloaterOpenObject::onClickCopy(const LLSD& value)
 {
-	const std::string& action = ctrl->getValue().asString();
+	const std::string& action = value.asString();
 	if (action == "replace")
+	{
 		moveToInventory(true, true);
+	}
 	else if (action == "add")
+	{
 		moveToInventory(true, false);
+	}
 	else
+	{
 		moveToInventory(false);
+	}
 	closeFloater();
 }
 // </FS:Ansariel>

@@ -3,6 +3,15 @@
 	<text name="object_name">
 		[DESC]:
 	</text>
-	<button label="In Inventar kopieren" label_selected="In Inventar kopieren" name="copy_to_inventory_button" width="120"/>
-	<button label="Kopieren und anziehen" label_selected="Kopieren und anziehen" left_pad="6" name="copy_and_wear_button" width="136"/>
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="In Inventar kopieren" name="copy_flyout">
+				<flyout_button.item label="Outfit mit Inhalt ersetzen" name="replace"/>
+				<flyout_button.item label="Inhalt zu Outfit hinzufügen" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Abbrechen" label_selected="Abbrechen" name="cancel_button"/>
+		</layout_panel>
+	</layout_stack>
 </floater>

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="objectcontents" title="Zawartość obiektu">
-	<text name="border_note">
-		Kopiuj do Szafy i załóż
-	</text>
-	<button label="Dodaj do stroju" label_selected="Dodaj do stroju" name="copy_and_wear_button" />
-	<button label="Zastąp strój" label_selected="Zastąp strój" name="copy_and_replace_button" />
-	<button label="Tylko skopiuj do Szafy" label_selected="Tylko skopiuj do Szafy" name="copy_to_inventory_button" />
-	<button label="Anuluj" label_selected="Anuluj" name="cancel_button" />
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Tylko skopiuj do Szafy" name="copy_flyout">
+				<flyout_button.item label="Zastąp strój" name="replace"/>
+				<flyout_button.item label="Dodaj do stroju" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Anuluj" label_selected="Anuluj" name="cancel_button" />
+		</layout_panel>
+	</layout_stack>
 </floater>
