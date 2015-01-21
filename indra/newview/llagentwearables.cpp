@@ -271,7 +271,7 @@ void LLAgentWearables::AddWearableToAgentInventoryCallback::fire(const LLUUID& i
 	}
 	if (mTodo & CALL_RECOVERDONE)
 	{
-		LLAppearanceMgr::instance().addCOFItemLink(inv_item,false);
+		LLAppearanceMgr::instance().addCOFItemLink(inv_item);
 		gAgentWearables.recoverMissingWearableDone();
 	}
 	// </FS:Ansariel> [Legacy Bake]
@@ -282,7 +282,7 @@ void LLAgentWearables::AddWearableToAgentInventoryCallback::fire(const LLUUID& i
 	// <FS:Ansariel> [Legacy Bake]
 	if (mTodo & CALL_CREATESTANDARDDONE)
 	{
-		LLAppearanceMgr::instance().addCOFItemLink(inv_item,false);
+		LLAppearanceMgr::instance().addCOFItemLink(inv_item);
 		gAgentWearables.createStandardWearablesDone(mType, mIndex);
 	}
 	// </FS:Ansariel> [Legacy Bake]
