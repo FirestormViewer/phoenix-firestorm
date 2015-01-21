@@ -31,8 +31,6 @@
 #include "lllistcontextmenu.h"
 #include "llscrolllistctrl.h"
 
-class LLListContextMenu;
-
 class FSScrollListCtrl
 : public LLScrollListCtrl
 {
