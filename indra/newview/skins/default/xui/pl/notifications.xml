@@ -3611,33 +3611,6 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 [REASON] skontaktuj się ze wsparciem [GRID].
 		
 	</notification>
-	<notification name="FirstPhoenixContactSetOpen">
-		To Twój pierwszy raz, gdy otwierasz Zestawy Kontaktów!
-Możesz tutaj organizować swoich znajomych w grupy.
-
-Aby rozpocząć wpisz żądaną nazwę grupy,
-a następnie naciśnij na Utwórz Zestaw.
-
-Aby dodać ludzi do grupy klikaj na nich trzymając klawisz CTRL,
-a następnie użyj prawego przycisku myszki.
-
-Aby znaleźć konkretnych znajomych po prostu zacznij wpisywać imiona.
-	</notification>
-	<notification name="FirstPhoenixContactSetNonFriend">
-		Właśnie dodałeś/aś kogoś, kto nie jest Twoim znajomym, do Zestawów Kontaktów!
-Możesz wykorzystać ten fakt do kolorowania lub zmiany nazwy.
-Miej na uwadze, że masowe teleporty i wywołania konferencji będą ciągle używać wyłącznie ludzi z Twojej listy znajomych.
-
-Osobę możesz usunąć z listy klikając na niej prawym przyciskiem myszki i wybierając odpowiednią opcję.
-	</notification>
-	<notification name="FirstPhoenixContactSetRename">
-		Właśnie zmieniłeś/aś nazwę awatara!
-Nazwa wyświetlana wybranego awatara będzie zastępowana przez tą wybraną przez Ciebie.
-
-Miej na uwadze, że to może zająć trochę czasu.
-
-Możesz usunąć to imię klikając na nim prawym przyciskiem myszki i wybierając Usuń Alias.
-	</notification>
 	<notification name="ParticleScriptFindFolderFailed">
 		Nie można znaleźć folderu na nowy skrypt w Twojej Szafie.
 	</notification>

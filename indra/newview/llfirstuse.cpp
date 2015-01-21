@@ -109,23 +109,6 @@ void LLFirstUse::useSandbox()
 {
 	firstUseNotification("FirstSandbox", true, "FirstSandbox", LLSD().with("HOURS", SANDBOX_CLEAN_FREQ).with("TIME", SANDBOX_FIRST_CLEAN_HOUR));
 }
-// static
-void LLFirstUse::usePhoenixContactSet()
-{
-	firstUseNotification("FirstPhoenixContactSetOpen", true, "FirstPhoenixContactSetOpen",LLSD(),LLSD().with("direction", "top"));
-}
-
-//static
-void LLFirstUse::usePhoenixFriendsNonFriend()
-{
-	firstUseNotification("FirstPhoenixContactSetNonFriend",true,"FirstPhoenixContactSetNonFriend",LLSD(),LLSD().with("direction", "top"));
-}
-
-// static 
-void LLFirstUse::usePhoenixContactSetRename()
-{
-	firstUseNotification("FirstPhoenixContactSetRename",true,"FirstPhoenixContactSetRename",LLSD(),LLSD().with("direction", "top"));
-}
 
 // static
 void LLFirstUse::notUsingDestinationGuide(bool enable)
