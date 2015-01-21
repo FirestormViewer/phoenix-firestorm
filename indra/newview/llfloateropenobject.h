@@ -62,9 +62,12 @@ protected:
 
 	void moveToInventory(bool wear, bool replace = false);
 
-	void onClickMoveToInventory();
-	void onClickMoveAndWear();
-	void onClickReplace();
+	// <FS:Ansariel> Cinder's fly-out button
+	//void onClickMoveToInventory();
+	//void onClickMoveAndWear();
+	//void onClickReplace();
+	void onClickCopy(LLUICtrl* ctrl);
+	// </FS:Ansariel>
 	void onClickCancel();
 	static void callbackCreateInventoryCategory(const LLUUID& category_id, LLUUID object_id, bool wear, bool replace = false);
 	static void callbackMoveInventory(S32 result, void* data);

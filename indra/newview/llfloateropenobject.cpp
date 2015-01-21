@@ -56,9 +56,11 @@ LLFloaterOpenObject::LLFloaterOpenObject(const LLSD& key)
 	mPanelInventoryObject(NULL),
 	mDirty(TRUE)
 {
-	mCommitCallbackRegistrar.add("OpenObject.MoveToInventory",	boost::bind(&LLFloaterOpenObject::onClickMoveToInventory, this));
-	mCommitCallbackRegistrar.add("OpenObject.MoveAndWear",		boost::bind(&LLFloaterOpenObject::onClickMoveAndWear, this));
-	mCommitCallbackRegistrar.add("OpenObject.ReplaceOutfit",	boost::bind(&LLFloaterOpenObject::onClickReplace, this));
+	// <FS:Ansariel> Cinder's fly-out button
+	//mCommitCallbackRegistrar.add("OpenObject.MoveToInventory",	boost::bind(&LLFloaterOpenObject::onClickMoveToInventory, this));
+	//mCommitCallbackRegistrar.add("OpenObject.MoveAndWear",		boost::bind(&LLFloaterOpenObject::onClickMoveAndWear, this));
+	//mCommitCallbackRegistrar.add("OpenObject.ReplaceOutfit",	boost::bind(&LLFloaterOpenObject::onClickReplace, this));
+	// </FS:Ansariel>
 	mCommitCallbackRegistrar.add("OpenObject.Cancel",			boost::bind(&LLFloaterOpenObject::onClickCancel, this));
 }
 
@@ -72,7 +74,9 @@ BOOL LLFloaterOpenObject::postBuild()
 {
 	getChild<LLUICtrl>("object_name")->setTextArg("[DESC]", std::string("Object") ); // *Note: probably do not want to translate this
 	mPanelInventoryObject = getChild<LLPanelObjectInventory>("object_contents");
-	
+	// <FS:Ansariel> Cinder's fly-out button
+	getChild<LLUICtrl>("copy_flyout")->setCommitCallback(boost::bind(&LLFloaterOpenObject::onClickCopy, this, _1));
+
 	refresh();
 	return TRUE;
 }
@@ -238,25 +242,41 @@ void LLFloaterOpenObject::callbackMoveInventory(S32 result, void* data)
 	delete cat;
 }
 
-void LLFloaterOpenObject::onClickMoveToInventory()
-{
-	moveToInventory(false);
-	closeFloater();
-}
-
-void LLFloaterOpenObject::onClickMoveAndWear()
-{
-	moveToInventory(true, false);
-	closeFloater();
-}
-
-void LLFloaterOpenObject::onClickReplace()
-{
-	moveToInventory(true, true);
-	closeFloater();
-}
+// <FS:Ansariel> Cinder's fly-out button
+//void LLFloaterOpenObject::onClickMoveToInventory()
+//{
+//	moveToInventory(false);
+//	closeFloater();
+//}
+//
+//void LLFloaterOpenObject::onClickMoveAndWear()
+//{
+//	moveToInventory(true, false);
+//	closeFloater();
+//}
+//
+//void LLFloaterOpenObject::onClickReplace()
+//{
+//	moveToInventory(true, true);
+//	closeFloater();
+//}
+// </FS:Ansariel>
 
 void LLFloaterOpenObject::onClickCancel()
 {
 	closeFloater();
 }
+
+// <FS:Ansariel> Cinder's fly-out button
+void LLFloaterOpenObject::onClickCopy(LLUICtrl* ctrl)
+{
+	const std::string& action = ctrl->getValue().asString();
+	if (action == "replace")
+		moveToInventory(true, true);
+	else if (action == "add")
+		moveToInventory(true, false);
+	else
+		moveToInventory(false);
+	closeFloater();
+}
+// </FS:Ansariel>
