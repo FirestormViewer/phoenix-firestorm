@@ -193,8 +193,8 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	setPrevalidateInput(p.prevalidate_input_callback());
 	setPrevalidate(p.prevalidate_callback());
 
-	llassert(LLMenuGL::sMenuContainer != NULL);
 	// <FS:Zi> Only allocate a menu when it's called for the first time
+	// llassert(LLMenuGL::sMenuContainer != NULL);
 	// LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
 	// 	("menu_text_editor.xml",
 	// 	 LLMenuGL::sMenuContainer,
@@ -2671,6 +2671,7 @@ void LLLineEditor::showContextMenu(S32 x, S32 y)
 	// <FS:Zi> Only allocate a menu when it's called for the first time
 	if(!menu)
 	{
+		llassert(LLMenuGL::sMenuContainer != NULL);
 		menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
 			("menu_text_editor.xml",
 			LLMenuGL::sMenuContainer,
