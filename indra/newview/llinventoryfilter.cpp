@@ -355,11 +355,14 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
 	// Pass if this item is worn (hiding COF and Outfits folders)
 	if (filterTypes & FILTERTYPE_WORN)
 	{
-		if (!object) return FALSE;
-		LLUUID cat_id = object->getParentUUID();
-		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
-		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
-			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
+		if (!object)
+		{
+			return FALSE;
+		}
+		const LLUUID& cat_id = object->getParentUUID();
+		const LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+		return !LLAppearanceMgr::instance().getIsInCOF(object_id)           // Not a link in COF
+			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT) // Not a link in an outfit folder
 			&& get_is_item_worn(object_id);
 	}
 	// </FS>
@@ -1173,6 +1176,7 @@ LLInventoryFilter& LLInventoryFilter::operator=( const  LLInventoryFilter&  othe
 	setFilterPermissions(other.getFilterPermissions());
 	setFilterSubString(other.getFilterSubString());
 	setDateRangeLastLogoff(other.isSinceLogoff());
+	setFilterWorn(other.getFilterWorn());
 	return *this;
 }
 

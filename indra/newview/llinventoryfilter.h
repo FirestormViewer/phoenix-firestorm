@@ -214,7 +214,7 @@ public:
 	U64					getFilterLinks() const;
 
 	void 				setFilterWorn(BOOL sl);
-	BOOL 				getFilterWorn() { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
+	BOOL 				getFilterWorn() const { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
 
 	// +-------------------------------------------------------------------+
 	// + Execution And Results
