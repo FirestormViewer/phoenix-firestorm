@@ -129,60 +129,62 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
 
-	// ## Zi: Filter Links Menu
+	// <FS:Zi> Filter Links Menu
 	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.FilterLinks.Check", boost::bind(&LLPanelMainInventory::isFilterLinksChecked, this, _2));
-	// ## Zi: Filter Links Menu
+	// </FS:Zi> Filter Links Menu
 
-	// ## Zi: Extended Inventory Search
+	// <FS:Zi> Extended Inventory Search
 	mCommitCallbackRegistrar.add("Inventory.SearchTarget.Set", boost::bind(&LLPanelMainInventory::onSearchTargetChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.SearchTarget.Check", boost::bind(&LLPanelMainInventory::isSearchTargetChecked, this, _2));
-	// ## Zi: Extended Inventory Search
+	// </FS:Zi> Extended Inventory Search
 
-	// ## Zi: Sort By menu handlers
+	// <FS:Zi> Sort By menu handlers
 	// we set up our own handlers here because the gear menu handlers are only set up
 	// later in the code, so our XML based menus can't reach them yet.
 	mCommitCallbackRegistrar.add("Inventory.SortBy.Set", boost::bind(&LLPanelMainInventory::setSortBy, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.SortBy.Check", boost::bind(&LLPanelMainInventory::isSortByChecked, this, _2));
-	// ## Zi: Sort By menu handlers
+	// </FS:Zi> Sort By menu handlers
 
 	mSavedFolderState = new LLSaveFolderState();
 	mSavedFolderState->setApply(FALSE);
 
-	// ## Zi: Filter dropdown
+	// <FS:Zi> Filter dropdown
 	// create name-to-number mapping for the dropdown filter
-	mFilterMap["filter_type_animations"]	=0x01 << LLInventoryType::IT_ANIMATION;
-	mFilterMap["filter_type_calling_cards"]	=0x01 << LLInventoryType::IT_CALLINGCARD;
-	mFilterMap["filter_type_clothing"]		=0x01 << LLInventoryType::IT_WEARABLE;
-	mFilterMap["filter_type_gestures"]		=0x01 << LLInventoryType::IT_GESTURE;
-	mFilterMap["filter_type_landmarks"]		=0x01 << LLInventoryType::IT_LANDMARK;
-	mFilterMap["filter_type_notecards"]		=0x01 << LLInventoryType::IT_NOTECARD;
-	mFilterMap["filter_type_objects"]		=0x01 << LLInventoryType::IT_OBJECT;
-	mFilterMap["filter_type_scripts"]		=0x01 << LLInventoryType::IT_LSL;
-	mFilterMap["filter_type_sounds"]		=0x01 << LLInventoryType::IT_SOUND;
-	mFilterMap["filter_type_textures"]		=0x01 << LLInventoryType::IT_TEXTURE;
-	mFilterMap["filter_type_snapshots"]		=0x01 << LLInventoryType::IT_SNAPSHOT;
-	mFilterMap["filter_type_meshes"]		=0x01 << LLInventoryType::IT_MESH;
+	mFilterMap["filter_type_animations"]	= 0x01 << LLInventoryType::IT_ANIMATION;
+	mFilterMap["filter_type_calling_cards"]	= 0x01 << LLInventoryType::IT_CALLINGCARD;
+	mFilterMap["filter_type_clothing"]		= 0x01 << LLInventoryType::IT_WEARABLE;
+	mFilterMap["filter_type_gestures"]		= 0x01 << LLInventoryType::IT_GESTURE;
+	mFilterMap["filter_type_landmarks"]		= 0x01 << LLInventoryType::IT_LANDMARK;
+	mFilterMap["filter_type_notecards"]		= 0x01 << LLInventoryType::IT_NOTECARD;
+	mFilterMap["filter_type_objects"]		= 0x01 << LLInventoryType::IT_OBJECT;
+	mFilterMap["filter_type_scripts"]		= 0x01 << LLInventoryType::IT_LSL;
+	mFilterMap["filter_type_sounds"]		= 0x01 << LLInventoryType::IT_SOUND;
+	mFilterMap["filter_type_textures"]		= 0x01 << LLInventoryType::IT_TEXTURE;
+	mFilterMap["filter_type_snapshots"]		= 0x01 << LLInventoryType::IT_SNAPSHOT;
+	mFilterMap["filter_type_meshes"]		= 0x01 << LLInventoryType::IT_MESH;
 
 	// initialize empty filter mask
-	mFilterMask=0;
+	mFilterMask = 0;
 	// add filter bits to the mask
-	for(std::map<std::string,U64>::iterator i=mFilterMap.begin();i!=mFilterMap.end();i++)
-		mFilterMask|=(*i).second;
-	// ## Zi: Filter dropdown
+	for (std::map<std::string, U64>::iterator it = mFilterMap.begin() ; it != mFilterMap.end(); ++it)
+	{
+		mFilterMask |= (*it).second;
+	}
+	// </FS:Zi> Filter dropdown
 }
 
 BOOL LLPanelMainInventory::postBuild()
 {
 	gInventory.addObserver(this);
 	
-	// ## Zi: Inventory Collapse and Expand Buttons
+	// <FS:Zi> Inventory Collapse and Expand Buttons
 	mCollapseBtn = getChild<LLButton>("collapse_btn");
 	mCollapseBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onCollapseButtonClicked, this));
 
 	mExpandBtn = getChild<LLButton>("expand_btn");
 	mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
-	// ## Zi: Inventory Collapse and Expand Buttons
+	// </FS:Zi> Inventory Collapse and Expand Buttons
 
 	mItemcountText=getChild<LLTextBox>("ItemcountText");
 
@@ -287,11 +289,10 @@ BOOL LLPanelMainInventory::postBuild()
 		mFilterEditor->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterEdit, this, _2));
 	}
 
-	// ## Zi: Filter dropdown
-	mFilterComboBox=getChild<LLComboBox>("filter_combo_box");
-	if(mFilterComboBox)
-		mFilterComboBox->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterTypeSelected, this, _2));
-	// ## Zi: Filter dropdown
+	// <FS:Zi> Filter dropdown
+	mFilterComboBox = getChild<LLComboBox>("filter_combo_box");
+	mFilterComboBox->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterTypeSelected, this, _2));
+	// </FS:Zi> Filter dropdown
 
 	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
 
