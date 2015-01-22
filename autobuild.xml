@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8fff9c2948517b8d3f512d58bbdf276f</string>
+              <string>7fdac14a769d4afd0bec502e47aa4f88</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.38.0.0-darwin-20150118.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.38.0.0-darwin-20150122.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
