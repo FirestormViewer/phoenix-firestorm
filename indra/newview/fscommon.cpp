@@ -34,6 +34,7 @@
 #include "llavatarnamecache.h"
 #include "llfloaterperms.h"
 #include "llinventorymodel.h"
+#include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
 #include "lltooldraganddrop.h"
@@ -338,6 +339,18 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	else if (action == FS_RGSTR_ACT_TELEPORT_TO)
 	{
 		return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
+	}
+	else if (action == FS_RGSTR_CHK_AVATAR_BLOCKED)
+	{
+		return (!isSelf && LLMuteList::getInstance()->isMuted(av_id));
+	}
+	else if (action == FS_RGSTR_CHK_IS_SELF)
+	{
+		return isSelf;
+	}
+	else if (action == FS_RGSTR_CHK_IS_NOT_SELF)
+	{
+		return !isSelf;
 	}
 
 	return false;

@@ -117,6 +117,15 @@ public:
 			return true;
 		}
 
+		if (verb == "blockavatar")
+		{
+			if (gAgentID != target_id)
+			{
+				LLAvatarActions::toggleBlock(target_id);
+			}
+			return true;
+		}
+
 		return false;
 	}
 };

@@ -95,6 +95,19 @@
         </menu_item_call>
     <menu_item_separator
      layout="topleft" />
+    <menu_item_check
+     label="Block"
+     layout="topleft"
+     name="Block">
+        <menu_item_check.on_click
+         function="FS.BlockAvatar"/>
+        <menu_item_check.on_check
+         function="FS.CheckIsAgentBlocked"/>
+        <menu_item_check.on_enable
+         function="FS.EnableBlockAvatar"/>
+  </menu_item_check>
+    <menu_item_separator
+     layout="topleft" />
     <menu_item_call
      label="Copy Name to clipboard"
      layout="topleft"
