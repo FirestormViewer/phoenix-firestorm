@@ -130,6 +130,11 @@ private:
 	static void setObjectType( LLPCode pcode );
 	void onClickGridOptions();
 
+	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	void buildTreeGrassCombo();
+	void onSelectTreeGrassCombo();
+	// </FS:Ansariel>
+
 public:
 	LLButton		*mBtnFocus;
 	LLButton		*mBtnMove;
@@ -177,6 +182,9 @@ public:
 	LLButton	*mBtnDelete;
 	LLButton	*mBtnDuplicate;
 	LLButton	*mBtnDuplicateInPlace;
+
+	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	LLComboBox*		mTreeGrassCombo;
 
 	// Create buttons
 	LLCheckBoxCtrl	*mCheckSticky;

@@ -653,6 +653,17 @@
      name="checkbox copy rotates"
      top_delta="16"
      width="134" />
+    <combo_box
+     height="20"
+     layout="topleft"
+     left="155"
+     follows="left|top"
+     name="tree_grass_combo"
+     top_pad="4"
+     width="130">
+      <combo_box.commit_callback
+       function="BuildTool.TreeGrass"/>
+    </combo_box>
     <radio_group
      height="105"
      layout="topleft"
