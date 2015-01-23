@@ -219,6 +219,7 @@ extern PieMenu			*gPieMenuObject;
 extern PieMenu			*gPieMenuAttachmentSelf;
 extern PieMenu			*gPieMenuAttachmentOther;
 extern PieMenu			*gPieMenuLand;
+extern PieMenu			*gPieMenuMuteParticle;
 
 // Needed to build pie menus when attachment site list available
 extern PieMenu* gPieAttachScreenMenu;

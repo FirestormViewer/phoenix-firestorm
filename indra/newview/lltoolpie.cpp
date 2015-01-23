@@ -2105,6 +2105,16 @@ BOOL LLToolPie::handleRightClickPick()
 	}
 	else if (mPick.mParticleOwnerID.notNull())
 	{
+		// <FS:Ansariel> FIRE-12355: Pie menu for mute particle menu
+		if (gSavedSettings.getBOOL("UsePieMenu"))
+		{
+			if (gPieMenuMuteParticle && mPick.mParticleOwnerID != gAgent.getID())
+			{
+				gPieMenuMuteParticle->show(x,y);
+			}
+		}
+		else
+		// </FS:Ansariel>
 		if (gMenuMuteParticle && mPick.mParticleOwnerID != gAgent.getID())
 		{
 			gMenuMuteParticle->show(x,y);

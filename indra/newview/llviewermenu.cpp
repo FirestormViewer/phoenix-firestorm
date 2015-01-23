@@ -208,6 +208,7 @@ PieMenu		*gPieMenuObject = NULL;
 PieMenu		*gPieMenuAttachmentSelf = NULL;
 PieMenu		*gPieMenuAttachmentOther = NULL;
 PieMenu		*gPieMenuLand	= NULL;
+PieMenu		*gPieMenuMuteParticle = NULL;
 // ## Zi: Pie menu
 
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
@@ -524,6 +525,9 @@ void init_menus()
 
 	gPieMenuLand = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_land.xml", gMenuHolder, registry);
+
+	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
+		"menu_pie_mute_particle.xml", gMenuHolder, registry);
 // ## Zi: Pie menu
 
 	///
