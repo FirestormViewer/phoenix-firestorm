@@ -415,7 +415,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mBtnDuplicateInPlace(NULL),
 
 	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
-	mTreeGrassCombo(nullptr),
+	mTreeGrassCombo(NULL),
 
 	mCheckSticky(NULL),
 	mCheckCopySelection(NULL),
