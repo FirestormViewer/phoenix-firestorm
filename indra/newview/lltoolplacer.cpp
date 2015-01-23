@@ -88,11 +88,11 @@ U32 get_selected_plant(const std::map<U32, P*>& list, const std::string& type, S
 		std::string last_selected = gSavedSettings.getString("LastSelected"+type);
 		if (!last_selected.empty())
 		{
-			for (U32 i = 0; i < list.size(); ++i)
+			for (size_t i = 0; i < list.size(); ++i)
 			{
 				if (list.at(i) && list.at(i)->mName == last_selected)
 				{
-					return i;
+					return (U32)i;
 				}
 			}
 		}
