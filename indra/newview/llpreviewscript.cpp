@@ -747,7 +747,7 @@ void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
 			if(mPostEditor)mPostEditor->setText(ntext);
 			ntext = mLSLProc->decode(ntext);
 		}
-		LLStringUtil::replaceTabsWithSpaces(ntext, 4);
+		LLStringUtil::replaceTabsWithSpaces(ntext, mEditor->spacesPerTab());
 		// NaCl End
 		mEditor->setText(ntext);
 		mHasScriptData = is_valid;
