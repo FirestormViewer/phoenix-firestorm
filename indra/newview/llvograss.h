@@ -97,7 +97,7 @@ public:
 		F32		mBladeSizeX;
 		F32		mBladeSizeY;
 
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		std::string	mName;
 	};
 
@@ -125,7 +125,7 @@ private:
 	F32 mLastHeight;		// For cheap update hack
 	S32 mNumBlades;
 
-// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 public:
 // </FS:Ansariel>
 	static SpeciesMap sSpeciesTable;

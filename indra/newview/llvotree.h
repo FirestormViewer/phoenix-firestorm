@@ -144,7 +144,7 @@ public:
 		F32				mTaper;			//  amount of perlin noise to deform by (0 = none)
 		F32				mRepeatTrunkZ;	//  Times to repeat the trunk texture vertically along trunk 
 
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		std::string		mName;			//  Designated name in XML
 	};
 
@@ -185,7 +185,7 @@ protected:
 	U32 mFrameCount;
 
 	typedef std::map<U32, TreeSpeciesData*> SpeciesMap;
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	//static SpeciesMap sSpeciesTable;
 
 	static S32 sLODIndexOffset[4];
@@ -195,7 +195,7 @@ protected:
 	static S32 sLODSlices[4];
 	static F32 sLODAngles[4];
 
-// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 public:
 	static SpeciesMap sSpeciesTable;
 // </FS:Ansariel>

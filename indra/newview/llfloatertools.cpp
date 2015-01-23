@@ -306,7 +306,7 @@ BOOL	LLFloaterTools::postBuild()
 	mSliderDozerForce		= getChild<LLSlider>("slider force");
 	// the setting stores the actual force multiplier, but the slider is logarithmic, so we convert here
 	getChild<LLUICtrl>("slider force")->setValue(log10(gSavedSettings.getF32("LandBrushForce")));
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	mTreeGrassCombo			= getChild<LLComboBox>("tree_grass_combo");
 
 	mCostTextBorder = getChild<LLViewBorder>("cost_text_border");
@@ -414,7 +414,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mBtnDuplicate(NULL),
 	mBtnDuplicateInPlace(NULL),
 
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	mTreeGrassCombo(nullptr),
 
 	mCheckSticky(NULL),
@@ -477,7 +477,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.Flip",				boost::bind(&LLPanelFace::onCommitFlip, _1, _2));
 	// </FS>
 
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	mCommitCallbackRegistrar.add("BuildTool.TreeGrass",			boost::bind(&LLFloaterTools::onSelectTreeGrassCombo, this));
 
 	mLandImpactsObserver = new LLLandImpactsObserver();
@@ -927,7 +927,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	// Create buttons
 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());
 
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	if (mTreeGrassCombo) mTreeGrassCombo->setVisible(create_visible);
 	if (create_visible) buildTreeGrassCombo();
 
@@ -1292,7 +1292,7 @@ void LLFloaterTools::setObjectType( LLPCode pcode )
 {
 	LLToolPlacer::setObjectType( pcode );
 	gSavedSettings.setBOOL("CreateToolCopySelection", FALSE);
-	// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	gFloaterTools->buildTreeGrassCombo();
 	// </FS:Ansariel>
 	gFocusMgr.setMouseCapture(NULL);
@@ -2270,7 +2270,7 @@ void LLFloaterTools::onClickExpand()
 	}
 }
 
-// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 template<class P>
 void build_plant_combo(const std::map<U32, P*>& list, LLComboBox* combo)
 {

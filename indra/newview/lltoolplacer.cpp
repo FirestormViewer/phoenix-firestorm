@@ -79,7 +79,7 @@ const LLVector3 DEFAULT_OBJECT_SCALE(0.5f, 0.5f, 0.5f);
 //static 
 LLPCode	LLToolPlacer::sObjectType = LL_PCODE_CUBE;
 
-// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 template<class P>
 U32 get_selected_plant(const std::map<U32, P*>& list, const std::string& type, S32 max) // MC
 {
@@ -264,7 +264,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	case LL_PCODE_LEGACY_GRASS:
 		//  Randomize size of grass patch 
 		scale.setVec(10.f + ll_frand(20.f), 10.f + ll_frand(20.f),  1.f + ll_frand(2.f));
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		//state = rand() % LLVOGrass::sMaxGrassSpecies;
 		state = get_selected_plant(LLVOGrass::sSpeciesTable, "Grass", LLVOGrass::sMaxGrassSpecies);
 		// </FS:Ansariel>
@@ -273,7 +273,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 
 	case LL_PCODE_LEGACY_TREE:
 	case LL_PCODE_TREE_NEW:
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		//state = rand() % LLVOTree::sMaxTreeSpecies;
 		state = get_selected_plant(LLVOTree::sSpeciesTable, "Tree", LLVOTree::sMaxTreeSpecies);
 		// </FS:Ansariel>

@@ -136,7 +136,7 @@ void LLVOGrass::initClass()
 		}
 		F32 F32_val;
 		LLUUID id;
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		std::string name;
 
 		BOOL success = TRUE;
@@ -170,7 +170,7 @@ void LLVOGrass::initClass()
 		success &= grass_def->getFastAttributeF32(blade_sizey_string, F32_val);
 		newGrass->mBladeSizeY = F32_val;
 
-		// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+		// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 		static LLStdStringHandle name_string = LLXmlTree::addAttributeString("name");
 		grass_def->getFastAttributeString(name_string, name);
 		newGrass->mName = name;
@@ -191,7 +191,7 @@ void LLVOGrass::initClass()
 
 		if (!success)
 		{
-			// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+			// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 			//std::string name;
 			//static LLStdStringHandle name_string = LLXmlTree::addAttributeString("name");
 			//grass_def->getFastAttributeString(name_string, name);

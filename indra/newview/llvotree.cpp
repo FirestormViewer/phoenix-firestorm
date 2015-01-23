@@ -130,7 +130,7 @@ void LLVOTree::initClass()
 			LLUUID id;
 			S32 S32_val;
 			
-			// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+			// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 			std::string name;
 
 			BOOL success = TRUE;
@@ -235,7 +235,7 @@ void LLVOTree::initClass()
 			success &= tree_def->getFastAttributeF32(repeat_z_string, F32_val);
 			newTree->mRepeatTrunkZ = F32_val;
 
-			// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+			// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 			static LLStdStringHandle name_string = LLXmlTree::addAttributeString("name"); // MC
 			tree_def->getFastAttributeString(name_string, name);
 			newTree->mName = name;
@@ -247,7 +247,7 @@ void LLVOTree::initClass()
 
 			if (!success)
 			{
-				// <FS:Ansariel> FIRE-6934: Grass and tree selection in build tool
+				// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 				//std::string name;
 				//static LLStdStringHandle name_string = LLXmlTree::addAttributeString("name");
 				//tree_def->getFastAttributeString(name_string, name);
