@@ -694,7 +694,6 @@
     </button>
     <button
      follows="left|right|bottom"
-     enabled="false"
      height="23"
      label="Clear"
      left_pad="3"
@@ -706,6 +705,7 @@
         function="WMap.Clear" />
     </button>
     <button
+     enabled="false"
      follows="left|right|bottom"
      height="23"
      label="Show Selection"
