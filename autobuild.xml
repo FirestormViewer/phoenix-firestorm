@@ -422,9 +422,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e381b2c553d338c97266b98362160051</string>
+              <string>8d69881b9172c0e0a431f0f0dfa99e8f</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/curl-7.24.0-linux-x64-20131214.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.38.0.0-linux-x64-20150124.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
