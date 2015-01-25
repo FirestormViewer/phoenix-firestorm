@@ -2236,9 +2236,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bcb331520266fbb2b581aaf7d0d8e9fa</string>
+              <string>6ac7d355ad071e9dca55b403397c3ff9</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/openal-1.12.854-1.1.0-linux-x64-20131215.tar.bz2</string>
+              <string>http://downloads.firestormviewer.org/installables/openjpeg-1.4-linux-x64-20131212.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
