@@ -1208,6 +1208,21 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 void LLFloaterSnapshot::onClose(bool app_quitting)
 {
 	getParent()->setMouseOpaque(FALSE);
+
+	// <FS:Ansariel> BUG-7748: Viewer is stuck in freeze frame after taking snapshot
+	LLSnapshotLivePreview* previewp = impl.getPreviewView(this);
+	if (previewp)
+	{
+		previewp->setVisible(FALSE);
+		previewp->setEnabled(FALSE);
+	}
+	impl.mAvatarPauseHandles.clear();
+	gSavedSettings.setBOOL("FreezeTime", FALSE);
+	if (impl.mLastToolset)
+	{
+		LLToolMgr::getInstance()->setCurrentToolset(impl.mLastToolset);
+	}
+	// </FS:Ansariel>
 }
 
 // virtual
