@@ -1593,6 +1593,18 @@
             <key>name</key>
             <string>darwin</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>9a915137a95612c1570f4a0c901755fa</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/libidn-1.28-linux-x64-20150125.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
         </map>
       </map>
       <key>libpng</key>

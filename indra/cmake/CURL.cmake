@@ -20,6 +20,11 @@ else (USESYSTEMLIBS)
                iconv
               )
       endif (DARWIN)
+      if (LINUX AND ND_BUILD64BIT_ARCH)
+          list(APPEND CURL_LIBRARIES
+               idn
+              )
+      endif (LINUX AND ND_BUILD64BIT_ARCH)
   endif (WINDOWS)
   set(CURL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
 endif (USESYSTEMLIBS)
