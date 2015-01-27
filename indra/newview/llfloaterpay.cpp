@@ -279,7 +279,8 @@ void LLFloaterPay::processPayPriceReply(LLMessageSystem* msg, void **userdata)
 				self->mQuickPayButton[i]->setLabelUnselected(button_str);
 				self->mQuickPayButton[i]->setVisible(TRUE);
 				self->mQuickPayInfo[i]->mAmount = pay_button;
-				self->getChildView("fastpay text")->setVisible(TRUE);
+				// <FS:Ansariel> Control doesn't exist as of 2015-01-27
+				//self->getChildView("fastpay text")->setVisible(TRUE);
 
 				if ( pay_button > max_pay_amount )
 				{
@@ -408,7 +409,7 @@ void LLFloaterPay::payDirectly(money_callback callback,
 	floater->getChildView("payment_message_label")->setVisible(TRUE);
 	floater->getChildView("payment_message")->setVisible(TRUE);
 
-	// Ansariel: Control doesn't exist as of 2011-12-12
+	// <FS:Ansariel> Control doesn't exist as of 2015-01-27
 	//floater->getChildView("fastpay text")->setVisible(TRUE);
 	for(S32 i=0;i<MAX_PAY_BUTTONS;++i)
 	{
