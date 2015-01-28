@@ -2120,7 +2120,7 @@ support@secondlife.com にお問い合わせください。
 		この不動産には約款がありません。
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され、Linden Lab は販売しません。  販売に関するお問い合わせは、不動産所有者までお願い致します。
+		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され。  販売に関するお問い合わせは、不動産所有者までお願い致します。
 	</string>
 	<string name="covenant_last_modified" value="最終修正日："/>
 	<string name="none_text" value=" （なし） "/>

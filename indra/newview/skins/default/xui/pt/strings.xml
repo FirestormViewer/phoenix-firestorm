@@ -2109,7 +2109,7 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 		Não foi definido um contrato para essa região.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Não foi definido um contrato para essa Região. O terreno nesta região está sendo vendido pelo Proprietário, não pela Linden Lab. Favor contatar o Proprietário da região para detalhes de venda.
+		Não foi definido um contrato para essa Região. O terreno nesta região está sendo vendido pelo Proprietário. Favor contatar o Proprietário da região para detalhes de venda.
 	</string>
 	<string name="covenant_last_modified" value="Última modificação: "/>
 	<string name="none_text" value="(nenhum)"/>

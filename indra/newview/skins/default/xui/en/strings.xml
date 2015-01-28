@@ -1075,7 +1075,7 @@ The [[MARKETPLACE_CREATE_STORE_URL] Marketplace store] is returning errors.
 
 	<!-- Region/Estate Covenant -->
 	<string name="RegionNoCovenant">There is no Covenant provided for this Estate.</string>
-	<string name="RegionNoCovenantOtherOwner">There is no Covenant provided for this Estate. The land on this estate is being sold by the Estate owner, not Linden Lab.  Please contact the Estate Owner for sales details.</string>
+	<string name="RegionNoCovenantOtherOwner">There is no Covenant provided for this Estate. The land on this estate is being sold by the Estate owner.  Please contact the Estate Owner for sales details.</string>
 	<string name="covenant_last_modified" value="Last Modified: " /> <!-- use value="" to keep the trailing space -->
 	<string name="none_text"  value=" (none) " />
 	<string name="never_text" value=" (never) " />

@@ -2304,7 +2304,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		No se ha aportado un contrato para este estado.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		No se ha aportado un contrato para este estado. El terreno de este estado lo vende el propietario del estado, no Linden Lab. Por favor, contacta con ese propietario para informarte sobre la venta.
+		No se ha aportado un contrato para este estado. El terreno de este estado lo vende el propietario del estado. Por favor, contacta con ese propietario para informarte sobre la venta.
 	</string>
 	<string name="covenant_last_modified"
 		 value="Última modificación: " />

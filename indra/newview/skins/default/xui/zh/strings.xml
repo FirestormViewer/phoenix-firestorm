@@ -2162,7 +2162,7 @@ http://secondlife.com/viewer-access-faq
 		此領地沒有任何契約要求。
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		此領地沒有任何契約要求。 本領地土地的出售人是領地所有人，不是林登實驗室。  請聯絡領地所有人獲知售地詳情。
+		此領地沒有任何契約要求。 本領地土地的出售人是領地所有人。  請聯絡領地所有人獲知售地詳情。
 	</string>
 	<string name="covenant_last_modified" value="最後修改時間："/>
 	<string name="none_text" value="（無）"/>

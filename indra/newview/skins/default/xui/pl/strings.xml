@@ -2243,7 +2243,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Brak umowy dla tego majątku.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Brak umowy dla tego majątku. Działka w tym majątku została sprzedana przez właściciela majątku, a nie przez Linden Lab. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
+		Brak umowy dla tego majątku. Działka w tym majątku została sprzedana przez właściciela majątku. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
 	</string>
 	<string name="covenant_last_modified" value="Ostatnia modyfikacja: "/>
 	<string name="none_text" value=" (brak) "/>

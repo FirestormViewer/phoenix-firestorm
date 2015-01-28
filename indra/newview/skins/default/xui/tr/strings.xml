@@ -2167,7 +2167,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		Bu Gayrimenkul için Sözleşmesi yok.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Bu Gayrimenkul için Sözleşmesi yok. Bu gayrimenkul üzerindeki arazi Linden Lab. değil, Gayrimenkul sahibi tarafından satılmaktadır.  Satış ayrıntılarını öğrenmek için lütfen Gayrimenkul Sahibiyle bağlantıya geçin.
+		Bu Gayrimenkul için Sözleşmesi yok. Gayrimenkul sahibi tarafından satılmaktadır.  Satış ayrıntılarını öğrenmek için lütfen Gayrimenkul Sahibiyle bağlantıya geçin.
 	</string>
 	<string name="covenant_last_modified" value="Son Değiştirildiği Tarih:"/>
 	<string name="none_text" value="(hiçbiri)"/>

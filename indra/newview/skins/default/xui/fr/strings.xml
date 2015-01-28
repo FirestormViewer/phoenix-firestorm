@@ -2169,7 +2169,7 @@ Veuillez réessayer de vous connecter dans une minute.
 		Il n&apos;y a aucun règlement pour ce domaine.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Il n&apos;y a aucun règlement pour ce domaine. Le terrain sur ce domaine est vendu par le propriétaire, non par Linden Lab.  Pour en savoir plus, veuillez contacter le propriétaire.
+		Il n&apos;y a aucun règlement pour ce domaine. Le terrain sur ce domaine est vendu par le propriétaire.  Pour en savoir plus, veuillez contacter le propriétaire.
 	</string>
 	<string name="covenant_last_modified" value="Dernière modification :"/>
 	<string name="none_text" value=" (aucun)"/>
