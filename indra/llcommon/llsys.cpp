@@ -116,7 +116,7 @@ static const F32 MEM_INFO_WINDOW = 10*60;
 #if LL_WINDOWS
 // We cannot trust GetVersionEx function on Win8.1 , we should check this value when creating OS string
 static const U32 WINNT_WINBLUE = 0x0603;
-static const U32 WINNT_WINTH = 0x0604;
+static const U32 WINNT_WINTH = 0x1;
 
 #ifndef DLLVERSIONINFO
 typedef struct _DllVersionInfo
