@@ -309,14 +309,14 @@ LLOSInfo::LLOSInfo() :
 				}
 				else if(osvi.dwMinorVersion == 2)
 				{
-					if (check_for_version(HIBYTE(WINNT_WINTH), LOBYTE(WINNT_WINTH), 0))
-					{
-						mOSStringSimple = "Microsoft Windows 10 ";
-						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
-					}
-					else if (check_for_version(HIBYTE(WINNT_WINBLUE), LOBYTE(WINNT_WINBLUE), 0))
+					if (check_for_version(HIBYTE(WINNT_WINBLUE), LOBYTE(WINNT_WINBLUE), 0))
 					{
 						mOSStringSimple = "Microsoft Windows 8.1 ";
+						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
+					}
+					else if (check_for_version(HIBYTE(WINNT_WINTH), LOBYTE(WINNT_WINTH), 0))
+					{
+						mOSStringSimple = "Microsoft Windows 10 ";
 						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
 					}
 					else
