@@ -89,10 +89,7 @@ mBigPreviewFloater(NULL),
 mPostButton(NULL)
 {
 	mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", boost::bind(&LLFlickrPhotoPanel::onSend, this));
-	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	//mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFlickrPhotoPanel::onClickNewSnapshot, this));
-	mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
-	// </FS:Ansariel>
+	mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFlickrPhotoPanel::onClickNewSnapshot, this));
 	mCommitCallbackRegistrar.add("SocialSharing.BigPreview", boost::bind(&LLFlickrPhotoPanel::onClickBigPreview, this));
 }
 
@@ -574,14 +571,14 @@ void LLFlickrPhotoPanel::updateResolution(BOOL do_update)
 				updateControls();
 			}
 		}
-
-		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-		BOOL custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
-		getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
-		getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
-		getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setEnabled(custom_resolution);
-		// </FS:Ansariel>
 	}
+
+	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+	BOOL custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
+	getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
+	getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
+	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setEnabled(custom_resolution);
+	// </FS:Ansariel>
 }
 
 void LLFlickrPhotoPanel::checkAspectRatio(S32 index)
