@@ -3687,9 +3687,6 @@ void LLViewerWindow::updateUI()
 
 	mLastMousePoint = mCurrentMousePoint;
 
-	// <FS:Ansariel> Backout MAINT-3250
-	mLastMousePoint = mCurrentMousePoint;
-
 	// cleanup unused selections when no modal dialogs are open
 	if (LLModalDialog::activeCount() == 0)
 	{
