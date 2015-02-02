@@ -1300,7 +1300,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		bool is_trusted = isContentTrusted();
 		setContentTrusted(chat.mFromID.isNull() && is_p2p); // <FS:Ansariel> Set trusted content temporarily for system messages
-		setPlainText(use_plain_text_chat_history ? (chat.mFromID.notNull() && is_p2p) : false);
+		setPlainText((use_plain_text_chat_history && is_p2p) ? chat.mFromID.notNull() : use_plain_text_chat_history);
 		appendText(message, prependNewLineState, body_message_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		setContentTrusted(is_trusted);
 		setPlainText(use_plain_text_chat_history);
