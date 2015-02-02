@@ -1641,7 +1641,11 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 				bump_t_primary_light_ray.load3((offset_multiple * t_scale * primary_light_ray).mV);
 			}
 
-			U8 texgen = getTextureEntry()->getTexGen();
+			// <FS:ND> FIRE-14261 Guard against null textures
+			// U8 texgen = getTextureEntry()->getTexGen();
+			U8 texgen = getTextureEntry() ? getTextureEntry()->getTexGen() : LLTextureEntry::TEX_GEN_DEFAULT;
+			// </FS:ND>
+			
 			if (rebuild_tcoord && texgen != LLTextureEntry::TEX_GEN_DEFAULT)
 			{ //planar texgen needs binormals
 				mVObjp->getVolume()->genTangents(f);
