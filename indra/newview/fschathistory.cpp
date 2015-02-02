@@ -933,7 +933,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	bool is_local = args.has("is_local") && args["is_local"].asBoolean();
 
 	bool from_me = chat.mFromID == gAgent.getID();
-	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
+	setPlainText(false);
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
@@ -1298,7 +1298,10 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			message += "]";
 		}
 
+		bool is_trusted = isContentTrusted();
+		setContentTrusted(chat.mFromID.isNull()); // <FS:Ansariel> Set trusted content temporarily for system messages
 		appendText(message, prependNewLineState, body_message_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+		setContentTrusted(is_trusted);
 		// Uncomment this if we never need to append to the end of a message. [FS:CR]
 		//prependNewLineState = false;
 	}
