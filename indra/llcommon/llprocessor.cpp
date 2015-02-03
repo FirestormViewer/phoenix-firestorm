@@ -224,6 +224,7 @@ namespace
 		return "Unknown";
 	}
 
+#if 0 // <FS:ND> Function is not used.
 	std::string compute_CPUFamilyName(const char* cpu_vendor, int family, int ext_family) 
 	{
 		const char* intel_string = "GenuineIntel";
@@ -242,7 +243,7 @@ namespace
 		}
 		return "Unknown";
 	}
-
+#endif // </FS:ND>
 } // end unnamed namespace
 
 // The base class for implementations.

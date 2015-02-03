@@ -104,7 +104,7 @@ char * os_strltrim(char * str);
 void os_strlower(char * str);
 
 // Error testing and reporting for libcurl status codes
-void check_curl_easy_code(CURLcode code);
+//void check_curl_easy_code(CURLcode code); // <FS:ND> Function is never used.
 void check_curl_easy_code(CURLcode code, int curl_setopt_option);
 
 static const char * const LOG_CORE("CoreHttp");
@@ -1151,7 +1151,7 @@ void check_curl_easy_code(CURLcode code, int curl_setopt_option)
 	}
 }
 
-
+#if 0 // <FS:ND> Function is not used
 void check_curl_easy_code(CURLcode code)
 {
 	if (CURLE_OK != code)
@@ -1164,5 +1164,5 @@ void check_curl_easy_code(CURLcode code)
 						   << LL_ENDL;
 	}
 }
-
+#endif // </FS:ND> 
 }  // end anonymous namespace
