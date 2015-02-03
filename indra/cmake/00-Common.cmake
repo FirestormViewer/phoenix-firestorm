@@ -167,7 +167,7 @@ if (LINUX)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
-  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
+  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[789].*")
   #</FS:ND>
 
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
@@ -179,7 +179,7 @@ if (LINUX)
   endif (${GXX_VERSION} STREQUAL ${CXX_VERSION})
 
   #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
-  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
+  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[789].*")
   #</FS:ND>
 
   # Let's actually get a numerical version of gxx's version
