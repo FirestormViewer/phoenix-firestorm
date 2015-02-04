@@ -224,7 +224,7 @@ namespace
 		return "Unknown";
 	}
 
-#if 0 // <FS:ND> Function is not used.
+#ifndef LL_LINUX // <FS:ND> Function is not used.
 	std::string compute_CPUFamilyName(const char* cpu_vendor, int family, int ext_family) 
 	{
 		const char* intel_string = "GenuineIntel";
