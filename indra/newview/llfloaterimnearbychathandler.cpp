@@ -52,6 +52,7 @@
 
 #include "fsconsoleutils.h"
 #include "fsfloaternearbychat.h"
+#include "llviewernetwork.h"
 
 //add LLFloaterIMNearbyChatHandler to LLNotificationsUI namespace
 
@@ -607,7 +608,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 			return;
 
 		// don't process debug messages from not owned objects, see EXT-7762
+		// <FS:Ansariel> FIRE-15014: [OpenSim] osMessageObject(target, message) fails silently
+		//if (gAgentID != chat_msg.mOwnerID)
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInSecondLife() && gAgentID != chat_msg.mOwnerID)
+#else
 		if (gAgentID != chat_msg.mOwnerID)
+#endif
+		// </FS:Ansariel>
 		{
 			return;
 		}

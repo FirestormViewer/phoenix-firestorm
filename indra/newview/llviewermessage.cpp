@@ -4791,7 +4791,14 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		// don't call notification for debug messages from not owned objects
 		if (chat.mChatType == CHAT_TYPE_DEBUG_MSG)
 		{
+			// <FS:Ansariel> FIRE-15014: [OpenSim] osMessageObject(target, message) fails silently
+			//if (gAgentID != chat.mOwnerID)
+#ifdef OPENSIM
+			if (LLGridManager::getInstance()->isInSecondLife() && gAgentID != chat.mOwnerID)
+#else
 			if (gAgentID != chat.mOwnerID)
+#endif
+			// </FS:Ansariel>
 			{
 				return;
 			}
