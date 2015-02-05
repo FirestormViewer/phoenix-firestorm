@@ -12023,4 +12023,17 @@ the region &quot;[REGION]&quot;?
        text="Cancel"/>
     </form>
   </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmUnlinkObjects"
+   type="alertmodal">
+Do you really want to unlink the selected object?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before I unlink an object"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Unlink"/>
+  </notification>
 </notifications>

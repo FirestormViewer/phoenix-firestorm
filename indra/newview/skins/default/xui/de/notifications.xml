@@ -2220,7 +2220,7 @@ Inventarobjekt(e) verschieben?
 	</notification>
 	<notification name="PayConfirmation">
 		Bestätigen Sie, dass sie L$[AMOUNT] an [TARGET] zahlen möchten.
-		<usetemplate ignoretext="Bestätigen bevor Zahlungen getätigt werden (Summen über L$200)" name="okcancelignore" notext="Abbrechen" yestext="Bezahlen"/>
+		<usetemplate ignoretext="Bestätigen, bevor Zahlungen getätigt werden (Summen über L$200)" name="okcancelignore" notext="Abbrechen" yestext="Bezahlen"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		Sie haben keine Berechtigung zum Kopieren von Elementen in diesem Objekt.
@@ -4885,5 +4885,9 @@ Welche Bezeichnung soll für die Region
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
+	</notification>
+	<notification name="ConfirmUnlinkObjects">
+		Sollen das ausgewählte Objekt wirklich getrennt werden?
+		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt trenne" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 </notifications>
