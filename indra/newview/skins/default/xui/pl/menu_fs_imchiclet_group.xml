@@ -2,5 +2,6 @@
 <menu name="IMChiclet Group Menu">
 	<menu_item_call label="Profil grupy" name="Show Profile" />
 	<menu_item_call label="Pokaż sesję" name="Chat" />
+	<menu_item_call label="Tymczasowo wycisz sesję" name="Snooze Session" />
 	<menu_item_call label="Zakończ sesję" name="End Session" />
 </menu>

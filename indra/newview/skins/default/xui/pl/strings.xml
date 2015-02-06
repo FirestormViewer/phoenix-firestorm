@@ -627,6 +627,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="BUTTON_HELP">
 		Pokaż Pomoc
 	</string>
+	<string name="BUTTON_SNOOZE">
+		Tymczasowo wycisz
+	</string>
 	<string name="Searching">
 		Wyszukiwanie...
 	</string>

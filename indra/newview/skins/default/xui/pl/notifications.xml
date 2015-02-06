@@ -4549,4 +4549,8 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="ConfirmUnlinkObjects">
+		Na pewno chcesz rozłączyć zaznaczony obiekt?
+		<usetemplate ignoretext="Potwierdź przed rozłączeniem obiektu" name="okcancelignore" notext="Anuluj" yestext="Rozłącz"/>
+	</notification>
 </notifications>
