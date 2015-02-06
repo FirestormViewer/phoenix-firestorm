@@ -1241,6 +1241,12 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				continue;
 			}
 
+			if (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY) &&
+				!RlvFolderLocks::instance().canMoveItem(obj->getUUID(), model->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()) ) ))
+			{
+				continue;
+			}
+
 			LLUUID target_cat_id = model->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()));
 			if (target_cat_id.notNull())
 			{

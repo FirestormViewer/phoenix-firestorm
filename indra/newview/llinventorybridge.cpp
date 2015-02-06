@@ -684,7 +684,9 @@ void LLInvFVBridge::checkMoveToDefaultFolder(menuentry_vec_t& items, menuentry_v
 	if (isAgentInventory() && !isOutboxFolder() && !isProtectedFolder(true) && obj &&
 		obj->getActualType() != LLAssetType::AT_CATEGORY &&
 		obj->getActualType() != LLAssetType::AT_LINK_FOLDER &&
-		obj->getActualType() != LLAssetType::AT_LINK
+		obj->getActualType() != LLAssetType::AT_LINK &&
+		(!RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY) || 
+			RlvFolderLocks::instance().canMoveItem(obj->getUUID(), getInventoryModel()->findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(obj->getActualType()) ) ))
 		)
 	{
 		items.push_back(std::string("Move to Default Folder"));
