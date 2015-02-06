@@ -806,7 +806,6 @@
 	     function="BuildTool.applyToSelection"/>
     </button>
     <text
-    text_color="LtGray_50"
      type="string"
      length="1"
      height="10"
@@ -820,7 +819,6 @@
         [DESC] [NUM]
     </text>
 	<text
-	 text_color="LtGray_50"
 	  type="string"
 	  length="1"
 	  height="16"
@@ -834,7 +832,6 @@
 		Nothing selected.
 	</text>
 	<text
-	 text_color="LtGray_50"
 	  type="string"
 	  length="1"
 	  height="16"
@@ -848,7 +845,6 @@
 	  width="280">
 	</text>
 	<text
-	 text_color="LtGray_50"
 	  type="string"
 	  length="1"
 	  height="16"
