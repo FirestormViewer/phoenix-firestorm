@@ -145,7 +145,10 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 		{
 			LLFile::remove(wav_path);
 		}
-		gAudiop->removeAudioData(id);
+		if (gAudiop)
+		{
+			gAudiop->removeAudioData(id);
+		}
 	}
 
 	if (save)
