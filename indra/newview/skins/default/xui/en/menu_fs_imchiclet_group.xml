@@ -24,12 +24,21 @@
          function="IMChicletMenu.Action"
          parameter="group chat" />
     </menu_item_call>
+    <menu_item_separator/>
+    <menu_item_call
+     label="Snooze Session"
+     layout="topleft"
+     name="Snooze Session">
+        <menu_item_call.on_click
+         function="IMChicletMenu.Action"
+         parameter="snooze" />
+    </menu_item_call>
     <menu_item_call
      label="End Session"
      layout="topleft"
      name="End Session">
         <menu_item_call.on_click
          function="IMChicletMenu.Action"
-         parameter="end" />
+         parameter="leave" />
     </menu_item_call>
 </menu>

@@ -651,6 +651,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="BUTTON_HELP">
 		Hilfe anzeigen
 	</string>
+	<string name="BUTTON_SNOOZE">
+		Temporär unterdrücken
+	</string>
 	<string name="Searching">
 		Suchen...
 	</string>

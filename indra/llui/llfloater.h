@@ -140,6 +140,9 @@ public:
 	enum EFloaterButton
 	{
 		BUTTON_CLOSE = 0,
+		// <FS:Ansariel> FIRE-11724: Snooze group chat
+		BUTTON_SNOOZE,
+		// </FS:Ansariel>
 		BUTTON_RESTORE,
 		BUTTON_MINIMIZE,
 		BUTTON_TEAR_OFF,
@@ -159,6 +162,7 @@ public:
 								can_resize,
 								can_minimize,
 								can_close,
+								can_snooze, 		// <FS:Ansariel> FIRE-11724: Snooze group chat
 								can_drag_on_left,
 								can_tear_off,
 								drop_shadow,		// ## Zi: Optional Drop Shadows
@@ -176,12 +180,14 @@ public:
 
 		// Images for top-right controls
 		Optional<LLUIImage*>	close_image,
+								snooze_image,		// <FS:Ansariel> FIRE-11724: Snooze group chat
 								restore_image,
 								minimize_image,
 								tear_off_image,
 								dock_image,
 								help_image;
 		Optional<LLUIImage*>	close_pressed_image,
+								snooze_pressed_image,		// <FS:Ansariel> FIRE-11724: Snooze group chat
 								restore_pressed_image,
 								minimize_pressed_image,
 								tear_off_pressed_image,
@@ -276,6 +282,7 @@ public:
 	virtual void	setCanResize(BOOL can_resize);
 	void			setCanDrag(BOOL can_drag);
 	bool			getCanDrag();
+	void			setCanSnooze(BOOL can_snooze);		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	void			setHost(LLMultiFloater* host);
 	BOOL			isResizable() const				{ return mResizable; }
 	void			setResizeLimits( S32 min_width, S32 min_height );
@@ -304,6 +311,7 @@ public:
 	
 	virtual void	onOpen(const LLSD& key) {}
 	virtual void	onClose(bool app_quitting) {}
+	virtual void	onSnooze() {}		// <FS:Ansariel> FIRE-11724: Snooze group chat
 
 	// This cannot be "const" until all derived floater canClose()
 	// methods are const as well.  JC
@@ -355,6 +363,7 @@ public:
 	static void		onClickTearOff(LLFloater* floater);
 	static void     onClickDock(LLFloater* floater);
 	static void		onClickHelp(LLFloater* floater);
+	static void		onClickSnooze(LLFloater* floater);		// <FS:Ansariel> FIRE-11724: Snooze group chat
 
 	static void		setFloaterHost(LLMultiFloater* hostp) {sHostp = hostp; }
 	static LLMultiFloater* getFloaterHost() {return sHostp; }
@@ -468,6 +477,7 @@ private:
 	BOOL			mCanClose;
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
+	BOOL			mCanSnooze;		// <FS:Ansariel> FIRE-11724: Snooze group chat
 
 	LLFloaterEnums::EOpenPositioning	mPositioning;
 	LLCoordFloater	mPosition;

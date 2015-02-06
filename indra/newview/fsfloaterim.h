@@ -69,6 +69,7 @@ public:
 	// LLFloater overrides
 	/*virtual*/ void onClose(bool app_quitting);
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
+	/*virtual*/ void onSnooze();
 
 	// Make IM conversion visible and update the message history
 	static FSFloaterIM* show(const LLUUID& session_id);

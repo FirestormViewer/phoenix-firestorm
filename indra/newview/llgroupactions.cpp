@@ -651,8 +651,8 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	}
 }
 
-// static
-void LLGroupActions::endIM(const LLUUID& group_id)
+// [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-17 (Catznip-3.3)
+static void close_group_im(const LLUUID& group_id, LLIMModel::LLIMSession::SCloseAction close_action)
 {
 	if (group_id.isNull())
 		return;
@@ -660,9 +660,43 @@ void LLGroupActions::endIM(const LLUUID& group_id)
 	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
 	if (session_id != LLUUID::null)
 	{
+		LLIMModel::LLIMSession* pIMSession = LLIMModel::getInstance()->findIMSession(session_id);
+		if (pIMSession)
+		{
+			pIMSession->mCloseAction = close_action;
+		}
 		gIMMgr->leaveSession(session_id);
 	}
 }
+
+void LLGroupActions::leaveIM(const LLUUID& group_id)
+{
+	close_group_im(group_id, LLIMModel::LLIMSession::CLOSE_LEAVE);
+}
+
+void LLGroupActions::snoozeIM(const LLUUID& group_id)
+{
+	close_group_im(group_id, LLIMModel::LLIMSession::CLOSE_SNOOZE);
+}
+
+void LLGroupActions::endIM(const LLUUID& group_id)
+{
+	close_group_im(group_id, LLIMModel::LLIMSession::CLOSE_DEFAULT);
+}
+
+// [/SL:KB]
+//// static
+//void LLGroupActions::endIM(const LLUUID& group_id)
+//{
+//	if (group_id.isNull())
+//		return;
+//	
+//	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
+//	if (session_id != LLUUID::null)
+//	{
+//		gIMMgr->leaveSession(session_id);
+//	}
+//}
 
 // static
 bool LLGroupActions::isInGroup(const LLUUID& group_id)

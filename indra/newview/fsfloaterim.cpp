@@ -124,11 +124,13 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 			mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelAdHocControl, this);
 			break;
 		case IM_SESSION_GROUP_START:
+			setCanSnooze(TRUE);
 			mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelGroupControl, this);
 			break;
 		case IM_SESSION_INVITE:		
 			if (gAgent.isInGroup(mSessionID))
 			{
+				setCanSnooze(TRUE);
 				mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelGroupControl, this);
 			}
 			else
@@ -209,6 +211,35 @@ void FSFloaterIM::onClose(bool app_quitting)
 	//</FS:ND> FIRE-6077 et al
 	
 	gIMMgr->leaveSession(mSessionID);
+}
+
+void FSFloaterIM::onSnooze()
+{
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(
+				mSessionID);
+
+	if (session == NULL)
+	{
+		LL_WARNS("FSFloaterIM") << "Empty session." << LL_ENDL;
+		return;
+	}
+
+	bool is_call_with_chat = session->isGroupSessionType()
+			|| session->isAdHocSessionType() || session->isP2PSessionType();
+
+	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
+
+	if (is_call_with_chat && voice_channel != NULL && voice_channel->isActive())
+	{
+		LLSD payload;
+		payload["session_id"] = mSessionID;
+		LLNotificationsUtil::add("ConfirmLeaveCall", LLSD(), payload, confirmLeaveCallCallback);
+		return;
+	}
+
+	session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
+
+	LLFloater::onClickCloseBtn();
 }
 
 /* static */
@@ -1790,7 +1821,7 @@ void FSFloaterIM::onNewIMReceived( const LLUUID& session_id )
 
 }
 
-void	FSFloaterIM::onClickCloseBtn(bool app_quitting)
+void FSFloaterIM::onClickCloseBtn(bool app_quitting)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(
 				mSessionID);
@@ -1813,6 +1844,8 @@ void	FSFloaterIM::onClickCloseBtn(bool app_quitting)
 		LLNotificationsUtil::add("ConfirmLeaveCall", LLSD(), payload, confirmLeaveCallCallback);
 		return;
 	}
+
+	session->mCloseAction = LLIMModel::LLIMSession::CLOSE_DEFAULT;
 
 	LLFloater::onClickCloseBtn();
 }

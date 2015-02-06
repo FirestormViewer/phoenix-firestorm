@@ -95,6 +95,10 @@ public:
 	/**
 	 * End group instant messaging session.
 	 */
+// [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-17 (Catznip-3.3)
+	static void leaveIM(const LLUUID& group_id);
+	static void snoozeIM(const LLUUID& group_id);
+// [/SL:KB]
 	static void endIM(const LLUUID& group_id);
 
 	/// Returns if the current user is a member of the group

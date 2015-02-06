@@ -3619,7 +3619,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 		// Only show messages if we have a session open (which
 		// should happen after you get an "invitation"
-		if ( !gIMMgr->hasSession(session_id) )
+// [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-16 (Catznip-3.3)
+		//if ( !gIMMgr->hasSession(session_id) )
+		if ( (!gIMMgr->hasSession(session_id)) &&
+			 ( (!gAgent.isInGroup(session_id)) || (!gIMMgr->checkSnoozeExpiration(session_id)) || (!gIMMgr->restoreSnoozedSession(session_id)) ) )
+// [/SL:KB]
 		{
 			return;
 		}

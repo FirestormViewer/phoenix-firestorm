@@ -2,5 +2,6 @@
 <menu name="IMChiclet Group Menu">
 	<menu_item_call label="Gruppeninfo" name="Show Profile"/>
 	<menu_item_call label="Sitzung anzeigen" name="Chat"/>
+	<menu_item_call label="Sitzung temporär unterdrücken" name="Snooze Session"/>
 	<menu_item_call label="Sitzung beenden" name="End Session"/>
 </menu>

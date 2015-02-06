@@ -1035,6 +1035,16 @@ void LLIMGroupChiclet::onMenuItemClicked(const LLSD& user_data)
 	{
 		LLGroupActions::show(group_id);
 	}
+// [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-17 (Catznip-3.3)
+	else if("snooze" == level)
+	{
+		LLGroupActions::snoozeIM(group_id);
+	}
+	else if("leave" == level)
+	{
+		LLGroupActions::leaveIM(group_id);
+	}
+// [/SL:KB]
 	else if("end" == level)
 	{
 		LLGroupActions::endIM(group_id);

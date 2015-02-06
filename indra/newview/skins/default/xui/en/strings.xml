@@ -320,6 +320,7 @@ Please try logging in again in a minute.</string>
 	<string name="BUTTON_TEAR_OFF">Tear Off</string>
 	<string name="BUTTON_DOCK">Dock</string>
 	<string name="BUTTON_HELP">Show Help</string>
+	<string name="BUTTON_SNOOZE">Snooze</string>
 
 	<!-- searching - generic -->
 	<string name="Searching">Searching...</string>

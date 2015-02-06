@@ -80,6 +80,9 @@ namespace LLInitParam
 std::string	LLFloater::sButtonNames[BUTTON_COUNT] = 
 {
 	"llfloater_close_btn",		//BUTTON_CLOSE
+	// <FS:Ansariel> FIRE-11724: Snooze group chat
+	"llfloater_snooze_btn",		//BUTTON_SNOOZE
+	// </FS:Ansariel>
 	"llfloater_restore_btn",	//BUTTON_RESTORE
 	"llfloater_minimize_btn",	//BUTTON_MINIMIZE
 	"llfloater_tear_off_btn",	//BUTTON_TEAR_OFF
@@ -96,6 +99,9 @@ std::string LLFloater::sButtonToolTipsIndex[BUTTON_COUNT]=
 #else
 	"BUTTON_CLOSE_WIN",		//"Close (Ctrl-W)",	//BUTTON_CLOSE
 #endif
+	// <FS:Ansariel> FIRE-11724: Snooze group chat
+	"BUTTON_SNOOZE",		//"Snooze",		//BOTTON_SNOOZE
+	// </FS:Ansariel>
 	"BUTTON_RESTORE",		//"Restore",	//BUTTON_RESTORE
 	"BUTTON_MINIMIZE",		//"Minimize",	//BUTTON_MINIMIZE
 	"BUTTON_TEAR_OFF",		//"Tear Off",	//BUTTON_TEAR_OFF
@@ -106,6 +112,9 @@ std::string LLFloater::sButtonToolTipsIndex[BUTTON_COUNT]=
 LLFloater::click_callback LLFloater::sButtonCallbacks[BUTTON_COUNT] =
 {
 	LLFloater::onClickClose,	//BUTTON_CLOSE
+	// <FS:Ansariel> FIRE-11724: Snooze group chat
+	LLFloater::onClickSnooze,	//BUTTON_SNOOZE
+	// </FS:Ansariel>
 	LLFloater::onClickMinimize, //BUTTON_RESTORE
 	LLFloater::onClickMinimize, //BUTTON_MINIMIZE
 	LLFloater::onClickTearOff,	//BUTTON_TEAR_OFF
@@ -172,6 +181,7 @@ LLFloater::Params::Params()
 	can_resize("can_resize", false),
 	can_minimize("can_minimize", true),
 	can_close("can_close", true),
+	can_snooze("can_snooze", false),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	can_drag_on_left("can_drag_on_left", false),
 	drop_shadow("drop_shadow",true),		// ## Zi: Optional Drop Shadows
 	label_v_padding("label_v_padding", -1),	// <FS:Zi> Make vertical label padding a per-skin option
@@ -185,12 +195,14 @@ LLFloater::Params::Params()
 	header_height("header_height", 0),
 	legacy_header_height("legacy_header_height", 0),
 	close_image("close_image"),
+	snooze_image("snooze_image"),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	restore_image("restore_image"),
 	minimize_image("minimize_image"),
 	tear_off_image("tear_off_image"),
 	dock_image("dock_image"),
 	help_image("help_image"),
 	close_pressed_image("close_pressed_image"),
+	snooze_pressed_image("snooze_pressed_image"),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	restore_pressed_image("restore_pressed_image"),
 	minimize_pressed_image("minimize_pressed_image"),
 	tear_off_pressed_image("tear_off_pressed_image"),
@@ -250,6 +262,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mCanTearOff(p.can_tear_off),
 	mCanMinimize(p.can_minimize),
 	mCanClose(p.can_close),
+	mCanSnooze(p.can_snooze),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	mDragOnLeft(p.can_drag_on_left),
 	mResizable(p.can_resize),
 	mPositioning(p.positioning),
@@ -328,6 +341,13 @@ void LLFloater::initFloater(const Params& p)
 	{
 		mButtonsEnabled[BUTTON_DOCK] = TRUE;
 	}
+
+	// <FS:Ansariel> FIRE-11724: Snooze group chat
+	if (mCanSnooze)
+	{
+		mButtonsEnabled[BUTTON_SNOOZE] = TRUE;
+	}
+	// </FS:Ansariel>
 
 	buildButtons(p);
 
@@ -1647,6 +1667,8 @@ BOOL LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 		if(offerClickToButton(x, y, mask, BUTTON_RESTORE)) return TRUE;
 		if(offerClickToButton(x, y, mask, BUTTON_TEAR_OFF)) return TRUE;
 		if(offerClickToButton(x, y, mask, BUTTON_DOCK)) return TRUE;
+		// <FS:Ansariel> FIRE-11724: Snooze group chat
+		if(offerClickToButton(x, y, mask, BUTTON_SNOOZE)) return TRUE;
 
 		// Otherwise pass to drag handle for movement
 		return mDragHandle->handleMouseDown(x, y, mask);
@@ -1864,6 +1886,23 @@ void LLFloater::onClickHelp( LLFloater* self )
 		}
 	}
 }
+
+// <FS:Ansariel> FIRE-11724: Snooze group chat
+void LLFloater::setCanSnooze(BOOL can_snooze)
+{
+	mCanSnooze = can_snooze;
+	mButtonsEnabled[BUTTON_SNOOZE] = mCanSnooze;
+	updateTitleButtons();
+}
+
+void LLFloater::onClickSnooze(LLFloater* self)
+{
+	if (self)
+	{
+		self->onSnooze();
+	}
+}
+// </FS:Ansariel>
 
 void LLFloater::initRectControl()
 {
@@ -2305,6 +2344,10 @@ LLUIImage* LLFloater::getButtonImage(const Params& p, EFloaterButton e)
 			return p.dock_image;
 		case BUTTON_HELP:
 			return p.help_image;
+		// <FS:Ansariel> FIRE-11724: Snooze group chat
+		case BUTTON_SNOOZE:
+			return p.snooze_image;
+		// </FS:Ansariel>
 	}
 }
 
@@ -2326,6 +2369,10 @@ LLUIImage* LLFloater::getButtonPressedImage(const Params& p, EFloaterButton e)
 			return p.dock_pressed_image;
 		case BUTTON_HELP:
 			return p.help_pressed_image;
+		// <FS:Ansariel> FIRE-11724: Snooze group chat
+		case BUTTON_SNOOZE:
+			return p.snooze_pressed_image;
+		// </FS:Ansariel>
 	}
 }
 
