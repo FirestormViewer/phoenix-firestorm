@@ -5,6 +5,18 @@
 			<text name="Maximum bandwidth">
 				Maximale Bandbreite ([http://wiki.phoenixviewer.com/fs_speedtest Empfehlungen anzeigen?]):
 			</text>
+			<text name="NetworkPrefText1">
+				Funk
+			</text>
+			<text name="NetworkPrefText2">
+				DSL
+			</text>
+			<text name="NetworkPrefText3">
+				Kabel
+			</text>
+			<text name="NetworkPrefText4">
+				Kann Probleme verursachen
+			</text>
 			<check_box label="Eigener Port" name="connection_port_enabled"/>
 			<spinner label="Port-Nummer:" name="connection_port" width="155" label_width="80"/>
 			<text name="Web:">
