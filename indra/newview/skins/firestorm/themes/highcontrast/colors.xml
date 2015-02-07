@@ -894,4 +894,7 @@
   <color
       name="ChatHeaderOpaqueBackground"
       reference="Black_25" />
+  <color
+      name="Slidermark"
+      reference="EmphasisColor" />
 </colors>

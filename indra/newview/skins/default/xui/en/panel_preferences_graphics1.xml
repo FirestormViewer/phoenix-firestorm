@@ -68,7 +68,7 @@
         Quality
       </text>
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -77,7 +77,7 @@
        top_delta="-2"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -86,7 +86,7 @@
        top_delta="0"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -95,7 +95,7 @@
        top_delta="0"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -104,7 +104,7 @@
        top_delta="0"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -113,7 +113,7 @@
        top_delta="0"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"
@@ -122,7 +122,7 @@
        top_delta="0"
        width="2" />
       <icon
-       color="DkGray"
+       color="Slidermark"
        height="14"
        image_name="Rounded_Square"
        layout="topleft"

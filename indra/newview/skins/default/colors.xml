@@ -1291,4 +1291,7 @@
   <color
       name="SearchableControlHighlightColor"
       reference="Red" />
+  <color
+      name="Slidermark"
+      reference="DkGray" />
 </colors>

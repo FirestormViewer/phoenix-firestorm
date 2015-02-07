@@ -1336,4 +1336,7 @@
   <color
       name="SearchableControlHighlightColor"
       value="0.036 0.349 0.651 1" />
+  <color
+      name="Slidermark"
+      reference="EmphasisColor" />
 </colors>
