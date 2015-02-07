@@ -5,6 +5,12 @@
 			<text name="Maximum bandwidth">
 				Maksymalna przepustowość ([http://wiki.phoenixviewer.com/fs_speedtest potrzebujesz sugestii?]):
 			</text>
+			<text name="NetworkPrefText3">
+				Światłowód
+			</text>
+			<text name="NetworkPrefText4">
+				Może powodować problemy
+			</text>
 			<check_box label="Własny port" name="connection_port_enabled"/>
 			<spinner label="Numer portu:" name="connection_port"/>
 			<text name="Web:">

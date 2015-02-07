@@ -45,7 +45,54 @@
 		 width="400">
 			Maximum bandwidth ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
 		</text>
+
+		<icon
+		 color="DkGray"
+		 height="14"
+		 image_name="Rounded_Square"
+		 layout="topleft"
+		 left="23"
+		 name="NetworkLowGraphicsDivet"
+		 top_delta="21"
+		 width="2" />
+		<icon
+		 color="DkGray"
+		 height="14"
+		 image_name="Rounded_Square"
+		 layout="topleft"
+		 left_pad="61"
+		 name="NetworkMidGraphicsDivet"
+		 top_delta="0"
+		 width="2" />
+		<icon
+		 color="DkGray"
+		 height="14"
+		 image_name="Rounded_Square"
+		 layout="topleft"
+		 left_pad="61"
+		 name="NetworkHighGraphicsDivet"
+		 top_delta="0"
+		 width="2" />
+		<icon
+		 color="DkGray"
+		 height="14"
+		 image_name="Rounded_Square"
+		 layout="topleft"
+		 left_pad="61"
+		 name="NetworkLimitGraphicsDivet"
+		 top_delta="0"
+		 width="2" />
+		<icon
+		 color="DkGray"
+		 height="14"
+		 image_name="Rounded_Square"
+		 layout="topleft"
+		 left_pad="201"
+		 name="NetworkScaleEndGraphicsDivet"
+		 top_delta="0"
+		 width="2" />
 		<slider
+		 left="15"
 		 can_edit_text="true"
 		 control_name="ThrottleBandwidthKBPS"
 		 decimal_digits="0"
@@ -56,9 +103,9 @@
 		 layout="topleft"
 		 max_val="3000"
 		 min_val="50"
-		 top_pad="10"
+		 top="35"
 		 name="max_bandwidth"
-		 width="279" />
+		 width="450" />
 		<text
 		 type="string"
 		 length="1"
@@ -71,6 +118,58 @@
 		 top_delta="1"
 		 width="100">
 			kbps
+		</text>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 halign="center"
+		 height="12"
+		 layout="topleft"
+		 left="20"
+		 name="NetworkPrefText1"
+		 top_delta="17"
+		 width="67">
+			Wi-Fi
+		</text>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 halign="center"
+		 height="12"
+		 layout="topleft"
+		 left_pad="0"
+		 name="NetworkPrefText2"
+		 top_delta="0"
+		 width="63">
+			DSL
+		</text>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 halign="center"
+		 height="12"
+		 layout="topleft"
+		 left_pad="0"
+		 name="NetworkPrefText3"
+		 top_delta="0"
+		 width="63">
+			Cable
+		</text>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 halign="center"
+		 height="12"
+		 layout="topleft"
+		 left_pad="0"
+		 name="NetworkPrefText4"
+		 top_delta="0"
+		 width="205">
+			May cause issues
 		</text>
 
 		<check_box
