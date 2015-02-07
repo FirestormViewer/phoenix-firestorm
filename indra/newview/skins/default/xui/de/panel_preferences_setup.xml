@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Hardware/Internet" name="Input panel">
 	<tab_container name="max_bandwidth_layout">
-		<panel label="Anschluss" name="tab-conn">
+		<panel label="Verbindung" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maximale Bandbreite ([http://wiki.phoenixviewer.com/fs_speedtest Vorschläge suchen?]):
+				Maximale Bandbreite ([http://wiki.phoenixviewer.com/fs_speedtest Empfehlungen anzeigen?]):
 			</text>
 			<check_box label="Eigener Port" name="connection_port_enabled"/>
 			<spinner label="Port-Nummer:" name="connection_port" width="155" label_width="80"/>
@@ -31,7 +31,7 @@
 			<check_box label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
 			<button label="Proxy-Einstellungen ändern" label_selected="Proxy-Einstellungen ändern" name="set_proxy"/>
 		</panel>
-		<panel label="Speicherort" name="tab-dir">
+		<panel label="Verzeichnisse" name="tab-dir">
 			<text name="cache_size_label_l">
 				Cache-Größe:
 			</text>
