@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sieć i bufory" name="Input panel">
-	<layout_stack name="max_bandwidth_layout">
-		<layout_panel name="bandwidth_panel">
+	<tab_container name="max_bandwidth_layout">
+		<panel label="Połączenie" name="tab-conn">
 			<text name="Maximum bandwidth">
-				Maks. przepustowość
+				Maksymalna przepustowość ([http://wiki.phoenixviewer.com/fs_speedtest potrzebujesz sugestii?]):
 			</text>
-		</layout_panel>
-		<!-- <layout_panel name="bandwidth_warning_visibility_panel">
-			<text name="bandwidth_warning_message">
-				Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps.
-			</text>
-		</layout_panel> -->
-		<layout_panel name="other_settings_panel">
 			<check_box label="Własny port" name="connection_port_enabled"/>
 			<spinner label="Numer portu:" name="connection_port"/>
+			<text name="Web:">
+				Przeglądarka internetowa:
+			</text>
+			<radio_group name="preferred_browser_behavior">
+				<radio_item label="Własna (Chrome, Firefox, IE) dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
+				<radio_item label="Wbudowana tylko dla linków Second Life" name="new_internal" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Przeglądarka wbudowana będzie używana tylko dla linków LindenLab/SecondLife." />
+				<radio_item label="Wbudowana dla wszystkich linków" name="new_internal_all" />
+			</radio_group>
+			<text name="numberwebfloaters_label">
+				Maksymalna liczba okien przeglądarki internetowej:
+			</text>
+			<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
+				<combo_box.item label="Bez limitu" name="web_unlimited"/>
+				<combo_box.item label="Jedno okno" name="web_1"/>
+				<combo_box.item label="Pięć okien" name="web_5"/>
+				<combo_box.item label="Dziesięć okien" name="web_10"/>
+			</combo_box>
+			<button label="Wyczyść bufor przeglądarki WWW" name="ClearWebBrowserCache" width="195"/>
+			<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
+			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
+			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
+			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
+			<button label="Dostosuj ustawienia proxy" label_selected="Dostosuj ustawienia proxy" name="set_proxy"/>
+		</panel>
+		<panel label="Lokalizacje" name="tab-dir">
 			<text name="cache_size_label_l">
-				Rozmiar pamięci podr.
+				Rozmiar pamięci podręcznej:
 			</text>
 			<button label="Wyczyść bufor Szafy" name="ClearInventoryCache"/>
 			<text name="Cache location">
@@ -40,36 +58,6 @@
 			<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
 			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
 			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
-			<text name="Web:">
-				Sieć internet:
-			</text>
-			<!-- <radio_group name="use_external_browser">
-				<radio_item label="Wbudowana" name="internal" tool_tip="Używa wbudowanej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Ta przeglądarka otwiera się jako nowe okno wewnątrz [APP_NAME]."/>
-				<radio_item label="Własna (np. Firefox, Safari)" name="external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie."/>
-			</radio_group> -->
-			<radio_group name="preferred_browser_behavior">
-				<radio_item label="Własna przeglądarka (Chrome, Firefox, IE) dla wszystkich linków" name="new_external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie." />
-				<radio_item label="Wbudowana przeglądarka tylko dla linków Second Life" name="new_internal" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Przeglądarka wbudowana będzie używana tylko dla linków LindenLab/SecondLife." />
-				<radio_item label="Wbudowana przeglądarka dla wszystkich linków" name="new_internal_all" />
-			</radio_group>
-			<text name="numberwebfloaters_label">
-				Maksymalna liczba okien przeglądarki internetowej:
-			</text>
-			<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
-				<combo_box.item label="Bez limitu" name="web_unlimited"/>
-				<combo_box.item label="Jedno okno" name="web_1"/>
-				<combo_box.item label="Pięć okien" name="web_5"/>
-				<combo_box.item label="Dziesięć okien" name="web_10"/>
-			</combo_box>
-			<button label="Wyczyść bufor przeglądarki WWW" name="ClearWebBrowserCache" width="195"/>
-			<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
-			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
-			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
-			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
-			<text name="Proxy Settings:" width="95">
-				Ustawienia proxy:
-			</text>
-			<button label="Dostosuj ustawienia" label_selected="Przeglądaj" name="set_proxy"/>
-		</layout_panel>
-	</layout_stack>
+		</panel>
+	</tab_container>
 </panel>

@@ -1,47 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Configurações" name="Input panel">
-	<layout_stack name="max_bandwidth_layout">
-		<layout_panel name="bandwidth_panel">
-
-	<text name="Network:">
-		Rede:
-	</text>
-	<text name="Maximum bandwidth">
-		Largura de banda máxima
-	</text>
-	<text name="text_box2">
-		kbps
-	</text>
-
-		</layout_panel>
-		<layout_panel name="other_settings_panel">
-
-	<check_box label="Personalizar porta" name="connection_port_enabled"/>
-	<spinner label="Número da porta:" name="connection_port"/>
-	<text name="Web:">
-		Web:
-	</text>
-	<radio_group name="use_external_browser">
-		<radio_item label="Usar meu navegador (IE, Firefox, Safari)" name="external" tool_tip="Use o navegador incluso para consultar a ajuda, abrir links da web, etc. Uso em tela inteira não recomendado."/>
-		<radio_item label="Usar navegador incluso" name="internal" tool_tip="Use este navegador para consultar a ajuda, abrir links da web, etc. As janelas abrem dentro do [APP_NAME]."/>
-	</radio_group>
-	<check_box initial_value="true" label="Habilitar plugins" name="browser_plugins_enabled"/>
-	<check_box initial_value="true" label="Aceitar cookies" name="cookies_enabled"/>
-	<check_box initial_value="true" label="Habilitar Javascript" name="browser_javascript_enabled"/>
-	<check_box initial_value="false" label="Ativar pop-ups no navegador de mídia" name="media_popup_enabled"/>
-	<text name="Software updates:">
-		Atualizações de software:
-	</text>
-	<combo_box name="updater_service_combobox">
-		<combo_box.item label="Instalar automaticamente" name="Install_automatically"/>
-		<combo_box.item label="Baixar e instalar atualizações manualmente" name="Install_manual"/>
-	</combo_box>
-	<check_box label="Disposto a atualizar para candidatos da versão" name="update_willing_to_test"/>
-	<text name="Proxy Settings:">
-		Configurações de proxy:
-	</text>
-	<button label="Ajustar configurações de proxy" label_selected="Procurar" name="set_proxy"/>
-
-		</layout_panel>
-	</layout_stack>
+	<tab_container name="max_bandwidth_layout">
+		<panel label="Rede" name="tab-conn">
+			<text name="Maximum bandwidth">
+				Largura de banda máxima ([http://wiki.phoenixviewer.com/fs_speedtest você precisa de uma sugestão?]):
+			</text>
+			<check_box label="Personalizar porta" name="connection_port_enabled"/>
+			<spinner label="Número da porta:" name="connection_port" width="160" label_width="85"/>
+			<text name="Web:">
+				Web:
+			</text>
+			<check_box label="Habilitar plugins" name="browser_plugins_enabled"/>
+			<check_box label="Aceitar cookies" name="cookies_enabled"/>
+			<check_box label="Habilitar Javascript" name="browser_javascript_enabled"/>
+			<check_box label="Ativar pop-ups no navegador de mídia" name="media_popup_enabled"/>
+			<button label="Configurações de proxy" label_selected="Configurações de proxy" name="set_proxy"/>
+		</panel>
+		<panel label="Localizações" name="tab-dir" />
+	</tab_container>
 </panel>

@@ -10,659 +10,602 @@
  label="Setup"
  name="Input panel">
     <!-- <FS:Zi> Do not change the name of this layout stack, it's referenced in LLPanelPreference -->
-    <layout_stack
+    <!-- <FS:PP> However, it seems to be commented out in llfloaterpreference.cpp because of FIRE-6340 and FIRE-6567; Changed to tab container (7 Feb 2015) -->
+    <tab_container
      name="max_bandwidth_layout"
-     left="0"
-     top="0"
-     width="539"
-     height="439"
-     border_size="0"
-     orientation="vertical"
-     layout="topleft">
-    <layout_panel
-     name="bandwidth_panel"
-     width="539"
-     height="24"
-     auto_resize="false">
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="15"
-     name="Maximum bandwidth"
-     mouse_opaque="false"
-     top_pad="10"
-     width="200">
-        Maximum bandwidth
-    </text>
-    <slider
-     can_edit_text="true"
-     control_name="ThrottleBandwidthKBPS"
-     decimal_digits="0"
-     follows="left|top"
-     height="15"
-     increment="50"
-     initial_value="500"
-     layout="topleft"
-     left_delta="150"
-     max_val="3000"
-     min_val="50"
-     name="max_bandwidth"
-     top_delta="-2"
-     width="179" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="6"
-     mouse_opaque="false"
-     name="text_box2"
-     top_delta="1"
-     width="100">
-        kbps
-    </text>
-    </layout_panel>
-    <!-- <FS:TS> FIRE-6795: Remove repetitive warning -->
-    <!--
-    <layout_panel
-     width="539"
-     height="24"
-     name="bandwidth_warning_visibility_panel"
-     visibility_control="BandwidthSettingTooHigh"
-     auto_resize="false">
-    <icon
-     follows="left|top"
-     image_name="Popup_Caution"
-     name="bandwidth_warning_icon"
-     left="15"
-     top="2"
-     width="16"
-     height="16"/>
-    <text
-     text_color="EmphasisColor"
-     font="SansSerif"
-     font.style="BOLD"
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="10"
-     top_delta="1"
-     name="bandwidth_warning_message"
-     width="540">
-    We strongly advise not to set the Bandwidth over 1500 kbps.
-    </text>
-    </layout_panel>
-    -->
-    <layout_panel
-     name="other_settings_panel"
-     width="539"
-     height="415"
-     auto_resize="true">
-    <check_box
-     control_name="ConnectionPortEnabled"
-     height="16"
-     label="Custom port"
-     layout="topleft"
-     left="20"
-     name="connection_port_enabled"
+     tab_min_width="50"
+     tab_position="top"
+     label="Setup"
+     left="1"
+     right="-1"
      top="5"
-     width="256">
-        <!-- check_box.commit_callback
-         function="Notification.Show"
-         parameter="ChangeConnectionPort" / -->
-    </check_box>
-    <spinner
-     control_name="ConnectionPort"
-     enabled_control="ConnectionPortEnabled"
-     decimal_digits="0"
-     follows="left|top"
-     height="23"
-     increment="1"
-     initial_value="13000"
-     label="Port number:"
-     label_width="109"
-     layout="topleft"
-     left_delta="152"
-     max_val="13050"
-     min_val="13000"
-     top_delta="-2"
-     name="connection_port"
-     width="174" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="25"
-     mouse_opaque="false"
-     name="cache_size_label_l"
+     bottom="-1"
+     follows="all"
+     layout="topleft">
+
+    <panel
      top_pad="5"
-     width="200">
-       Cache size
-    </text>
-    <slider
-     can_edit_text="true"
-     control_name="CacheSize"
-     decimal_digits="0"
-     follows="left|top"
-     height="15"
-     increment="64"
-     initial_value="1024"
-     layout="topleft"
-     left_delta="140"
-     max_val="9984"
-     min_val="64"
-     name="cache_size"
-     top_delta="-2"
-     width="179" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="6"
-     mouse_opaque="false"
-     name="text_box5"
-     width="40">
-        MB
-    </text>
-    <button
-     enabled="false"
-     follows="left|top"
-     height="23"
-     label="Clear Inventory Cache"
-     layout="topleft"
-     left="398"
-     name="ClearInventoryCache"
-     top_delta="-1"
-     width="130">
-        <button.commit_callback
-         function="Pref.InvClearCache" />
-    </button>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="15"
-     name="Cache location"
-     top_delta="20"
-     width="300">
-        Cache location:
-    </text>
-    <line_editor
-     control_name="CacheLocationTopFolder"
-     border_style="line"
-     border_thickness="1"
-     follows="left|top"
-     font="SansSerif"
-     height="23"
-     layout="topleft"
-     left="20"
-     max_length_chars="4096"
-     name="cache_location"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Connection"
+     name="tab-conn">
+
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="Maximum bandwidth"
+		 mouse_opaque="false"
+		 top_pad="15"
+		 width="400">
+			Maximum bandwidth ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
+		</text>
+		<slider
+		 can_edit_text="true"
+		 control_name="ThrottleBandwidthKBPS"
+		 decimal_digits="0"
+		 follows="left|top"
+		 height="15"
+		 increment="50"
+		 initial_value="500"
+		 layout="topleft"
+		 max_val="3000"
+		 min_val="50"
+		 top_pad="10"
+		 name="max_bandwidth"
+		 width="279" />
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left_pad="6"
+		 mouse_opaque="false"
+		 name="text_box2"
+		 top_delta="1"
+		 width="100">
+			kbps
+		</text>
+
+		<check_box
+		 control_name="ConnectionPortEnabled"
+		 height="16"
+		 label="Custom port"
+		 layout="topleft"
+		 left="15"
+		 name="connection_port_enabled"
+		 top_pad="20"
+		 width="256">
+			<!-- check_box.commit_callback
+			 function="Notification.Show"
+			 parameter="ChangeConnectionPort" / -->
+		</check_box>
+		<spinner
+		 control_name="ConnectionPort"
+		 enabled_control="ConnectionPortEnabled"
+		 decimal_digits="0"
+		 follows="left|top"
+		 height="23"
+		 increment="1"
+		 initial_value="13000"
+		 label="Port number:"
+		 label_width="75"
+		 layout="topleft"
+		 max_val="13050"
+		 min_val="13000"
+		 top_pad="5"
+		 left="20"
+		 name="connection_port"
+		 width="150" />
+
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="Web:"
+		 top_pad="15"
+		 width="400">
+			Web browser:
+		</text>
+
+	  <radio_group
+	   control_name="PreferredBrowserBehavior"
+	   draw_border="false"
+	   follows="left|top"
+	   height="50"
+	   layout="topleft"
+	   left_delta="0"
+	   name="preferred_browser_behavior"
+	   top_delta="20"
+	   width="480">
+		<radio_item
+		  height="20"
+		  label="Use my browser (Chrome, Firefox, IE) for all links"
+		  layout="topleft"
+		  left="0"
+		  name="new_external"
+		  value="0"
+		  tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
+		  top="0"
+		  width="480" />
+		<radio_item
+		  height="20"
+		  label="Use built-in browser for Second Life links only"
+		  layout="topleft"
+		  left_delta="0"
+		  name="new_internal"
+		  value="1"      
+		  tool_tip="Use the default system web browser for help, web links, etc. Builtin browser will be used only for LindenLab/SecondLife links."
+		  top_delta="15"
+		  width="480" />
+		<radio_item
+		  top_delta="15"
+		  height="20"
+		  label="Use built-in browser for all links"
+		  layout="topleft"
+		  left="0"
+		  name="new_internal_all"
+		  value="2"/>
+		</radio_group>
+
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="numberwebfloaters_label"
+		 mouse_opaque="false"
+		 top_pad="10"
+		 width="300">
+			Maximum number of web browser windows:
+		</text>
+		<combo_box
+		 control_name="WebContentWindowLimit"
+		 follows="left|top"
+		 height="23"
+		 layout="topleft"
+		 left_delta="0"
+		 top_pad="10"
+		 tool_tip="Maximum number of web brower windows that can be open at once in the Web content floater"
+		 name="web_number_combobox"
+		 width="200">
+			<combo_box.item
+			 label="Unlimited windows"
+			 name="web_unlimited"
+			 value="0" />
+			<combo_box.item
+			 label="One window"
+			 name="web_1"
+			 value="1" />
+			<combo_box.item
+			 label="Five windows"
+			 name="web_5"
+			 value="5" />
+			<combo_box.item
+			 label="Ten windows"
+			 name="web_10"
+			 value="10" />
+		</combo_box>
+
+		<button
+		 enabled="false"
+		 follows="right|top"
+		 height="23"
+		 label="Clear Browser Cache"
+		 layout="topleft"
+		 right="-10"
+		 name="ClearWebBrowserCache"
+		 top_delta="5"
+		 width="140">
+			<button.commit_callback
+			 function="Pref.WebBrowserClearCache" />
+		</button>
+
+		<check_box
+		 enabled="true"
+		 follows="left|top"
+		 height="16"
+		 initial_value="true"
+		 control_name="BrowserPluginsEnabled"
+		 label="Enable plugins"
+		 left="25"
+		 mouse_opaque="true"
+		 name="browser_plugins_enabled"
+		 radio_style="false"
+		 width="200"
+		 top_pad="5"/>
+
+		<check_box
+		 enabled="true"
+		 follows="left|top"
+		 height="16"
+		 initial_value="true"
+		 control_name="CookiesEnabled"
+		 label="Accept cookies"
+		 left_delta="0"
+		 mouse_opaque="true"
+		 name="cookies_enabled"
+		 radio_style="false"
+		 width="200"
+		 top_pad="5">
+			<check_box.commit_callback
+			 function="Pref.Cookies" />
+		</check_box>
+
+		<check_box
+		 enabled="true"
+		 follows="left|top"
+		 height="16"
+		 initial_value="true"
+		 control_name="BrowserJavascriptEnabled"
+		 label="Enable Javascript"
+		 left_delta="0"
+		 mouse_opaque="true"
+		 name="browser_javascript_enabled"
+		 radio_style="false"
+		 width="200"
+		 top_pad="5">
+			<check_box.commit_callback
+			 function="Pref.Javascript" />
+		</check_box>
+
+		<check_box
+		 enabled="true"
+		 follows="left|top"
+		 height="16"
+		 initial_value="false"
+		 control_name="MediaEnablePopups"
+		 label="Enable media browser pop-ups"
+		 left_delta="0"
+		 mouse_opaque="true"
+		 top_pad="5"
+		 name="media_popup_enabled"
+		 width="200"/>
+
+		<button
+		 label="Adjust proxy settings"
+		 follows="left|top"
+		 height="23"
+		 width="220"
+		 label_selected="Adjust proxy settings"
+		 layout="topleft"
+		 left="15"
+		 top_pad="15"
+		 name="set_proxy">
+			<button.commit_callback
+			  function="Pref.Proxy" />
+		</button>
+
+    </panel>
+
+    <panel
      top_pad="5"
-     width="270" />
-    <button
-     enabled="true"
-     follows="left|top"
-     height="23"
-     label="Open"
-     label_selected="Open"
-     layout="topleft"
-     left_pad="5"
-     name="open_cache"
-     top_delta="-1"
-     width="45">
-        <button.commit_callback
-         function="Pref.BrowseCache" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Set"
-     label_selected="Set"
-     layout="topleft"
-     left_pad="5"
-     name="set_cache"
-     top_delta="-0"
-     width="40">
-        <button.commit_callback
-         function="Pref.SetCache" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Reset"
-     label_selected="Reset"
-     layout="topleft"
-     left_pad="3"
-     name="reset_cache"
-     top_delta="0"
-     width="50">
-        <button.commit_callback
-         function="Pref.ResetCache" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Clear Cache"
-     label_selected="Clear Cache"
-     layout="topleft"
-     left_pad="10"
-     name="clear_cache"
-     top_delta="0"
-     width="80">
-        <button.commit_callback
-         function="Pref.ClearCache" />
-    </button>
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Directories"
+     name="tab-dir">
 
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="15"
-     name="Sound Cache location"
-     top_delta="25"
-     width="300">
-        Sound Cache location:
-    </text>
-    <line_editor
-     control_name="FSSoundCacheLocation"
-     border_style="line"
-     border_thickness="1"
-     follows="left|top"
-     font="SansSerif"
-     height="23"
-     layout="topleft"
-     left="20"
-     max_length_chars="4096"
-     name="FSSoundCacheLocation"
-     top_pad="5"
-     width="270" />
-    <button
-     enabled="true"
-     follows="left|top"
-     height="23"
-     label="Open"
-     label_selected="Open"
-     layout="topleft"
-     left_pad="5"
-     name="open_sound_cache"
-     top_delta="-1"
-     width="45">
-      <button.commit_callback
-       function="Pref.BrowseSoundCache" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Set"
-     label_selected="Set"
-     layout="topleft"
-     left_pad="5"
-     name="set_sound_cache"
-     top_delta="-0"
-     width="40">
-      <button.commit_callback
-       function="Pref.SetSoundCache" />
-    </button>
-    <button
-     follows="left|top"
-     height="23"
-     label="Reset"
-     label_selected="Reset"
-     layout="topleft"
-     left_pad="3"
-     name="reset_sound_cache"
-     top_delta="0"
-     width="50">
-      <button.commit_callback
-       function="Pref.ResetSoundCache" />
-    </button>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 mouse_opaque="false"
+		 name="cache_size_label_l"
+		 top_pad="15"
+		 width="400">
+		   Cache size:
+		</text>
+		<slider
+		 can_edit_text="true"
+		 control_name="CacheSize"
+		 decimal_digits="0"
+		 follows="left|top"
+		 height="15"
+		 increment="64"
+		 initial_value="1024"
+		 layout="topleft"
+		 max_val="9984"
+		 min_val="64"
+		 top_pad="10"
+		 name="cache_size"
+		 width="279" />
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left_pad="6"
+		 top_delta="1"
+		 mouse_opaque="false"
+		 name="text_box5"
+		 width="40">
+			MB
+		</text>
+		<button
+		 enabled="false"
+		 follows="left|top"
+		 height="23"
+		 label="Clear Inventory Cache"
+		 layout="topleft"
+		 left="398"
+		 name="ClearInventoryCache"
+		 top_delta="-1"
+		 width="130">
+			<button.commit_callback
+			 function="Pref.InvClearCache" />
+		</button>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="Cache location"
+		 top_delta="20"
+		 width="300">
+			Cache location:
+		</text>
+		<line_editor
+		 control_name="CacheLocationTopFolder"
+		 border_style="line"
+		 border_thickness="1"
+		 follows="left|top"
+		 font="SansSerif"
+		 height="23"
+		 layout="topleft"
+		 left="20"
+		 max_length_chars="4096"
+		 name="cache_location"
+		 top_pad="10"
+		 width="270" />
+		<button
+		 enabled="true"
+		 follows="left|top"
+		 height="23"
+		 label="Open"
+		 label_selected="Open"
+		 layout="topleft"
+		 left_pad="5"
+		 name="open_cache"
+		 top_delta="-1"
+		 width="45">
+			<button.commit_callback
+			 function="Pref.BrowseCache" />
+		</button>
+		<button
+		 follows="left|top"
+		 height="23"
+		 label="Set"
+		 label_selected="Set"
+		 layout="topleft"
+		 left_pad="5"
+		 name="set_cache"
+		 top_delta="-0"
+		 width="40">
+			<button.commit_callback
+			 function="Pref.SetCache" />
+		</button>
+		<button
+		 follows="left|top"
+		 height="23"
+		 label="Reset"
+		 label_selected="Reset"
+		 layout="topleft"
+		 left_pad="3"
+		 name="reset_cache"
+		 top_delta="0"
+		 width="50">
+			<button.commit_callback
+			 function="Pref.ResetCache" />
+		</button>
+		<button
+		 follows="left|top"
+		 height="23"
+		 label="Clear Cache"
+		 label_selected="Clear Cache"
+		 layout="topleft"
+		 left_pad="10"
+		 name="clear_cache"
+		 top_delta="0"
+		 width="80">
+			<button.commit_callback
+			 function="Pref.ClearCache" />
+		</button>
 
-    <check_box
-     follows="left|top"
-     height="16"
-     control_name="FSKeepUnpackedCacheFiles"
-     label="Don't delete unpacked DSF (sound) cache files when logging out"
-     tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill your cache directory very quickly, and does not adhere to the max cache setting. This may result in excessive disk space usage. Disabled by default."
-     left="15"
-     mouse_opaque="true"
-     name="keep_unpacked_cache"
-     radio_style="false"
-     width="400"
-     top_pad="5"/>
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="Sound Cache location"
+		 top_delta="35"
+		 width="300">
+			Sound Cache location:
+		</text>
+		<line_editor
+		 control_name="FSSoundCacheLocation"
+		 border_style="line"
+		 border_thickness="1"
+		 follows="left|top"
+		 font="SansSerif"
+		 height="23"
+		 layout="topleft"
+		 left="20"
+		 max_length_chars="4096"
+		 name="FSSoundCacheLocation"
+		 top_pad="10"
+		 width="270" />
+		<button
+		 enabled="true"
+		 follows="left|top"
+		 height="23"
+		 label="Open"
+		 label_selected="Open"
+		 layout="topleft"
+		 left_pad="5"
+		 name="open_sound_cache"
+		 top_delta="-1"
+		 width="45">
+		  <button.commit_callback
+		   function="Pref.BrowseSoundCache" />
+		</button>
+		<button
+		 follows="left|top"
+		 height="23"
+		 label="Set"
+		 label_selected="Set"
+		 layout="topleft"
+		 left_pad="5"
+		 name="set_sound_cache"
+		 top_delta="-0"
+		 width="40">
+		  <button.commit_callback
+		   function="Pref.SetSoundCache" />
+		</button>
+		<button
+		 follows="left|top"
+		 height="23"
+		 label="Reset"
+		 label_selected="Reset"
+		 layout="topleft"
+		 left_pad="3"
+		 name="reset_sound_cache"
+		 top_delta="0"
+		 width="50">
+		  <button.commit_callback
+		   function="Pref.ResetSoundCache" />
+		</button>
 
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="15"
-     name="log_path_desc"
-     top_pad="5"
-     width="300">
-        Conversation logs and transcripts location:
-    </text>
-    <line_editor
-     control_name="InstantMessageLogPath"
-     border_style="line"
-     border_thickness="1"
-     follows="left|top"
-     font="SansSerif"
-     height="23"
-     layout="topleft"
-     left="20"
-     max_length_chars="4096"
-     name="log_path_string-panelsetup"
-     top_pad="5"
-     width="270"/>
-    <button
-     enabled="false"
-     follows="left|top"
-     height="23"
-     label="Open"
-     label_selected="Open"
-     layout="topleft"
-     left_pad="5"
-     name="open_log_path_button-panelsetup"
-     top_delta="-1"
-     width="45">
-        <button.commit_callback
-         function="Pref.BrowseLogPath" />
-    </button>
-    <button
-     enabled="false"
-     follows="left|top"
-     height="23"
-     label="Set"
-     label_selected="Set"
-     layout="topleft"
-     left_pad="5"
-     name="log_path_button-panelsetup"
-     top_delta="0"
-     width="40">
-        <button.commit_callback
-         function="Pref.LogPath" />
-    </button>
-    <button
-     enabled="false"
-     follows="left|top"
-     height="23"
-     label="Reset"
-     label_selected="Reset"
-     layout="topleft"
-     left_pad="3"
-     name="reset_logpath"
-     top_delta="0"
-     width="50">
-        <button.commit_callback
-         function="Pref.ResetLogPath" />
-    </button>
-    <button
-     enabled="true"
-     follows="left|top"
-     height="23"
-     label="Open Crash Logs"
-     label_selected="Open Crash Logs"
-     layout="topleft"
-     left="20"
-     name="browse_crashlogs"
-     top_delta="30"
-     width="120">
-        <button.commit_callback
-         function="Pref.BrowseCrashLogs" />
-    </button>
-    <button
-     enabled="true"
-     follows="left|top"
-     height="23"
-     label="Open Settings folder"
-     label_selected="Open Settings folder"
-     layout="topleft"
-     left_pad="10"
-     name="browse_settingsdir"
-     top_delta="0"
-     width="140">
-        <button.commit_callback
-         function="Pref.BrowseSettingsDir" />
-    </button>
+		<check_box
+		 follows="left|top"
+		 height="16"
+		 control_name="FSKeepUnpackedCacheFiles"
+		 label="Don't delete unpacked DSF (sound) cache files when logging out"
+		 tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill your cache directory very quickly, and does not adhere to the max cache setting. This may result in excessive disk space usage. Disabled by default."
+		 left="15"
+		 mouse_opaque="true"
+		 name="keep_unpacked_cache"
+		 radio_style="false"
+		 width="400"
+		 top_pad="10"/>
 
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="15"
-     name="Web:"
-     top_pad="5"
-     width="80">
-        Web browser:
-    </text>
- <!-- <radio_group
-    follows="top|left"
-    height="20"
-    layout="topleft"
-    left_delta="10"
-    name="use_external_browser"
-    top_pad="4"
-    width="400">
-        <radio_item
-          height="20"
-          label="Built-in browser"
-          layout="topleft"
-          left_delta="0"
-          name="internal"
-          value="0"
-          tool_tip="Use the built-in web browser for help, web links, etc. This browser opens as a new window inside [APP_NAME]."
-          top="0"
-          width="150" />
-        <radio_item
-         height="20"
-         label="Own browser (i.e. Firefox, Safari)"
-         layout="topleft"
-         left_pad="0"
-         name="external"
-         value="1"
-         top_delta="0"
-         tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
-         width="200" />
-  </radio_group> -->
+		<text
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="10"
+		 layout="topleft"
+		 left="15"
+		 name="log_path_desc"
+		 top_pad="10"
+		 width="300">
+			Conversation logs and transcripts location:
+		</text>
+		<line_editor
+		 control_name="InstantMessageLogPath"
+		 border_style="line"
+		 border_thickness="1"
+		 follows="left|top"
+		 font="SansSerif"
+		 height="23"
+		 layout="topleft"
+		 left="20"
+		 max_length_chars="4096"
+		 name="log_path_string-panelsetup"
+		 top_pad="10"
+		 width="270"/>
+		<button
+		 enabled="false"
+		 follows="left|top"
+		 height="23"
+		 label="Open"
+		 label_selected="Open"
+		 layout="topleft"
+		 left_pad="5"
+		 name="open_log_path_button-panelsetup"
+		 top_delta="-1"
+		 width="45">
+			<button.commit_callback
+			 function="Pref.BrowseLogPath" />
+		</button>
+		<button
+		 enabled="false"
+		 follows="left|top"
+		 height="23"
+		 label="Set"
+		 label_selected="Set"
+		 layout="topleft"
+		 left_pad="5"
+		 name="log_path_button-panelsetup"
+		 top_delta="0"
+		 width="40">
+			<button.commit_callback
+			 function="Pref.LogPath" />
+		</button>
+		<button
+		 enabled="false"
+		 follows="left|top"
+		 height="23"
+		 label="Reset"
+		 label_selected="Reset"
+		 layout="topleft"
+		 left_pad="3"
+		 name="reset_logpath"
+		 top_delta="0"
+		 width="50">
+			<button.commit_callback
+			 function="Pref.ResetLogPath" />
+		</button>
+		<button
+		 enabled="true"
+		 follows="left|top"
+		 height="23"
+		 label="Open Crash Logs"
+		 label_selected="Open Crash Logs"
+		 layout="topleft"
+		 left="20"
+		 name="browse_crashlogs"
+		 top_delta="50"
+		 width="120">
+			<button.commit_callback
+			 function="Pref.BrowseCrashLogs" />
+		</button>
+		<button
+		 enabled="true"
+		 follows="left|top"
+		 height="23"
+		 label="Open Settings folder"
+		 label_selected="Open Settings folder"
+		 layout="topleft"
+		 left_pad="10"
+		 name="browse_settingsdir"
+		 top_delta="0"
+		 width="140">
+			<button.commit_callback
+			 function="Pref.BrowseSettingsDir" />
+		</button>
 
-  <radio_group
-   control_name="PreferredBrowserBehavior"
-   follows="left|top"
-   height="50"
-   layout="topleft"
-   left_pad="10"
-   name="preferred_browser_behavior"
-   top_delta="0"
-   width="480">
-    <radio_item
-      height="20"
-      label="Use my browser (Chrome, Firefox, IE) for all links"
-      layout="topleft"
-      left="0"
-      name="new_external"
-      value="0"
-      tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
-      top="0"
-      width="480" />
-    <radio_item
-      height="20"
-      label="Use built-in browser for Second Life links only"
-      layout="topleft"
-      left_delta="0"
-      name="new_internal"
-      value="1"      
-      tool_tip="Use the default system web browser for help, web links, etc. Builtin browser will be used only for LindenLab/SecondLife links."
-      top_delta="15"
-      width="480" />
-    <radio_item
-      top_delta="15"
-      height="20"
-      label="Use built-in browser for all links"
-      layout="topleft"
-      left="0"
-      name="new_internal_all"
-      value="2"/>
-    </radio_group>
+    </panel>
 
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="25"
-     name="numberwebfloaters_label"
-     mouse_opaque="false"
-     top_pad="0"
-     width="300">
-        Maximum number of web browser windows:
-    </text>
-    <combo_box
-     control_name="WebContentWindowLimit"
-     follows="left|top"
-     height="23"
-     layout="topleft"
-     left_delta="0"
-     top_pad="5"
-     tool_tip="Maximum number of web brower windows that can be open at once in the Web content floater"
-     name="web_number_combobox"
-     width="200">
-        <combo_box.item
-         label="Unlimited windows"
-         name="web_unlimited"
-         value="0" />
-        <combo_box.item
-         label="One window"
-         name="web_1"
-         value="1" />
-        <combo_box.item
-         label="Five windows"
-         name="web_5"
-         value="5" />
-        <combo_box.item
-         label="Ten windows"
-         name="web_10"
-         value="10" />
-    </combo_box>
-
-    <button
-     enabled="false"
-     follows="right|top"
-     height="23"
-     label="Clear Browser Cache"
-     layout="topleft"
-     right="-10"
-     name="ClearWebBrowserCache"
-     top_delta="0"
-     width="140">
-        <button.commit_callback
-         function="Pref.WebBrowserClearCache" />
-    </button>
-
-    <check_box
-     enabled="true"
-     follows="left|top"
-     height="16"
-     initial_value="true"
-     control_name="BrowserPluginsEnabled"
-     label="Enable plugins"
-     left="25"
-     mouse_opaque="true"
-     name="browser_plugins_enabled"
-     radio_style="false"
-     width="200"
-     top_pad="2"/>
-
-    <check_box
-     enabled="true"
-     follows="left|top"
-     height="16"
-     initial_value="true"
-     control_name="CookiesEnabled"
-     label="Accept cookies"
-     left_delta="0"
-     mouse_opaque="true"
-     name="cookies_enabled"
-     radio_style="false"
-     width="200"
-     top_pad="2">
-        <check_box.commit_callback
-         function="Pref.Cookies" />
-    </check_box>
-
-    <check_box
-     enabled="true"
-     follows="left|top"
-     height="16"
-     initial_value="true"
-     control_name="BrowserJavascriptEnabled"
-     label="Enable Javascript"
-     left_delta="0"
-     mouse_opaque="true"
-     name="browser_javascript_enabled"
-     radio_style="false"
-     width="200"
-     top_pad="2">
-        <check_box.commit_callback
-         function="Pref.Javascript" />
-    </check_box>
-
-    <check_box
-     enabled="true"
-     follows="left|top"
-     height="16"
-     initial_value="false"
-     control_name="MediaEnablePopups"
-     label="Enable media browser pop-ups"
-     left_delta="0"
-     mouse_opaque="true"
-     top_pad="2"
-     name="media_popup_enabled"
-     width="200"/>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left="30"
-     name="Proxy Settings:"
-     mouse_opaque="false"
-     top_pad="5"
-     width="80">
-        Proxy Settings:
-    </text>
-    <button
-     label="Adjust proxy settings"
-     follows="left|top"
-     height="23"
-     width="140"
-     label_selected="Browse"
-     layout="topleft"
-     left_pad="10"
-     name="set_proxy"
-     top_delta="-5" >
-        <button.commit_callback
-          function="Pref.Proxy" />
-    </button>
-    </layout_panel>
-    </layout_stack>
+    </tab_container>
 </panel>

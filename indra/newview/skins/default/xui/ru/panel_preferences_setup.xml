@@ -1,75 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Установки" name="Input panel">
-	<layout_stack name="max_bandwidth_layout">
-		<layout_panel name="bandwidth_panel">
-
-	<text name="Сеть:">
-		Сеть:
-	</text>
-	<text name="Maximum bandwidth">
-		Max. пропуск.способность:
-	</text>
-	<text name="text_box2">
-		kbit/s
-	</text>
-
-		</layout_panel>
-		<layout_panel name="bandwidth_warning_visibility_panel">
-			<text name="bandwidth_warning_message">
-				Рекомендуется, пропускную способность не ставить выше 1500 кбит/с!
+	<tab_container name="max_bandwidth_layout">
+		<panel label="подключение" name="tab-conn">
+			<text name="Maximum bandwidth">
+				Max. пропуск.способность ([http://wiki.phoenixviewer.com/fs_speedtest Вам нужен предложение?]):
 			</text>
-		</layout_panel>
-		<layout_panel name="other_settings_panel">
-
-	<check_box label="Свой порт" name="connection_port_enabled"/>
-	<spinner label="Номер порта:" name="connection_port"/>
-    <text name="cache_size_label_l">
-       Объем кэш-памяти:
-    </text>
-    <text name="text_box5">
-        MB
-    </text>
-    <text name="Cache location">
-         Местоположение кэш файлов:
-    </text>
-    <button label="Открыть" label_selected="Открыть" name="open_cache"/>
-    <button label="Установить" label_selected="Установить" name="set_cache" width="45"/>
-    <button label="Сброс" label_selected="Сброс" name="reset_cache" width="85"/>
-    <button label="Очистить кэш" label_selected="Очистить кэш" name="clear_cache" width="55" left_pad="5"/>
-    <text name="log_path_desc">
-        История чата:
-    </text>
-    <button label="Открыть" label_selected="Открыть" name="open_log_path_button-panelsetup"/>
-    <button label="Установить" label_selected="Установить" name="log_path_button-panelsetup" width="45"/>
-    <button label="Сброс" label_selected="Сброс" name="reset_logpath" width="85"/>
-    <button label="Открыть историю чата" label_selected="Открыть историю чата" name="browse_crashlogs" width="140"/>
-    <button label="Открыть настройки истории чата" label_selected="Открыть настройки истории чата" name="browse_settingsdir" width="190"/>
-
-	<text name="Web:">
-		Веб браузер:
-	</text>
-	<radio_group name="use_external_browser">
-		<radio_item label="Сторонний браузер (Firefox, Safari)" name="external" tool_tip="Использовать браузер вашей ОС для просмотра вэб страниц, помощи и т.д.. Не рекомендуется при полноэкранном режиме. ОПЕРА РУЛИТ"/>
-		<radio_item label="Встроенный браузер" name="internal" tool_tip="Использовать встроенный браузер для просмотра вэб страниц, помощи и т.д.. Этот браузер откроется как новое окно внутри [APP_NAME]."/>
-	</radio_group>
-    <text name="numberwebfloaters_label">
-        Максимальное количество окон:
-    </text>
-    <combo_box tool_tip="Maximale Anzahl an Webbrowser-Fenstern, die gleichzeitig geöffnet werden können." name="web_number_combobox">
-        <combo_box.item label="Неограниченное количество" name="web_unlimited"/>
-        <combo_box.item label="1 окно" name="web_1"/>
-        <combo_box.item label="5 окон" name="web_5"/>
-        <combo_box.item label="10 окон" name="web_10"/>
-    </combo_box>
-	<check_box initial_value="true" label="Включить плагины" name="browser_plugins_enabled"/>
-	<check_box initial_value="true" label="Принимать Cookies" name="cookies_enabled"/>
-	<check_box initial_value="true" label="Включить Javascript" name="browser_javascript_enabled"/>
-	<check_box initial_value="false" label="Включить media browser pop-ups" name="media_popup_enabled"/>
-	<text name="Proxy Settings:">
-		Включить прокси (Proxy):
-	</text>
-	<button label="Изменить настройки прокси" label_selected="Открыть" name="set_proxy" width="180"/>
-
-		</layout_panel>
-	</layout_stack>
+			<check_box label="Свой порт" name="connection_port_enabled"/>
+			<spinner label="Номер порта:" name="connection_port" width="155" label_width="80"/>
+			<text name="Web:">
+				Веб браузер:
+			</text>
+			<text name="numberwebfloaters_label">
+				Максимальное количество окон:
+			</text>
+			<combo_box name="web_number_combobox">
+				<combo_box.item label="Неограниченное количество" name="web_unlimited"/>
+				<combo_box.item label="1 окно" name="web_1"/>
+				<combo_box.item label="5 окон" name="web_5"/>
+				<combo_box.item label="10 окон" name="web_10"/>
+			</combo_box>
+			<check_box label="Включить плагины" name="browser_plugins_enabled"/>
+			<check_box label="Принимать Cookies" name="cookies_enabled"/>
+			<check_box label="Включить Javascript" name="browser_javascript_enabled"/>
+			<check_box label="Включить media browser pop-ups" name="media_popup_enabled"/>
+			<button label="Включить прокси (Proxy)" label_selected="Включить прокси (Proxy)" name="set_proxy"/>
+		</panel>
+		<panel label="Местоположение" name="tab-dir">
+			<text name="cache_size_label_l">
+				Объем кэш-памяти:
+			</text>
+			<text name="Cache location">
+				Местоположение кэш файлов:
+			</text>
+			<button label="Открыть" label_selected="Открыть" name="open_cache"/>
+			<button label="Установить" label_selected="Установить" name="set_cache" width="45"/>
+			<button label="Сброс" label_selected="Сброс" name="reset_cache"/>
+			<button label="Очистить кэш" label_selected="Очистить кэш" name="clear_cache" width="55" left_pad="5"/>
+			<button label="Открыть" label_selected="Открыть" name="open_sound_cache"/>
+			<button label="Установить" label_selected="Установить" name="set_sound_cache" width="45"/>
+			<button label="Сброс" label_selected="Сброс" name="reset_sound_cache"/>
+			<text name="log_path_desc">
+				История чата:
+			</text>
+			<button label="Открыть" label_selected="Открыть" name="open_log_path_button-panelsetup"/>
+			<button label="Установить" label_selected="Установить" name="log_path_button-panelsetup" width="45"/>
+			<button label="Сброс" label_selected="Сброс" name="reset_logpath"/>
+			<button label="Открыть историю чата" label_selected="Открыть историю чата" name="browse_crashlogs" width="140"/>
+			<button label="Открыть настройки истории чата" label_selected="Открыть настройки истории чата" name="browse_settingsdir" width="190"/>
+		</panel>
+	</tab_container>
 </panel>
