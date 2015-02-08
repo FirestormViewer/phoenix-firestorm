@@ -182,9 +182,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>16d9fbbc89d821d19a2fb2ed96b61913</string>
+              <string>c0a3ca6e3f17329f698a097991788a3e</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/apr_suite-1.4.5-linux-x64-20131215.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201502072210-linux-x64-201502072210.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -650,9 +650,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>419103d87bf383fc4e24f6d7a17dc957</string>
+              <string>1180518fc763d6dafeaeb271f7fac79c</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/expat-2.0.1-linux-x64-20131212.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.0.1.201502072206-linux-x64-201502072206.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1442,9 +1442,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>03350c4f0aa32e56bba4979b598a6fc2</string>
+              <string>1310525b07b37fb6c869ba1af24425ce</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.3.2-linux-20131204.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.5.0-linux-20141007.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1908,9 +1908,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fcd1bf2c028592c91a6f28e7238fd0c1</string>
+              <string>481c0e78eee98200b31bce52d00e4fea</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/llqtwebkit-4.7.1-linux-x64-20131227.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llqtwebkit-4.7.1-linux-x64-201502081629.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2660,9 +2660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2907cfba7436c417aeeb89fe94acee02</string>
+              <string>1aeacb726e534edc9c94bfcb71ec4af8</string>
               <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/zlib-1.2.6-linux-x64-20131216.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.201502072231-linux-x64-201502072231.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

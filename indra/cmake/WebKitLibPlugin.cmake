@@ -88,5 +88,8 @@ elseif (LINUX)
 #          Xi
 #          SM
           )
+      if( ND_BUILD64BIT_ARCH )
+        set(WEBKIT_PLUGIN_LIBRARIES ${WEBKIT_PLUGIN_LIBRARIES} jscore ) 
+      endif( ND_BUILD64BIT_ARCH )
     endif (USESYSTEMLIBS)
 endif (WINDOWS)
