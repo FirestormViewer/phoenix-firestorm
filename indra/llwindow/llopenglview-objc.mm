@@ -443,10 +443,12 @@ attributedStringInfo getSegments(NSAttributedString *str)
     // OS X intentionally does not send us key-up information on cmd-key combinations.
     // This behaviour is not a bug, and only applies to cmd-combinations (no others).
     // Since SL assumes we receive those, we fake it here.
-    if (mModifiers & NSCommandKeyMask && !mHasMarkedText)
-    {
-        callKeyUp([theEvent keyCode], mModifiers);
-    }
+    // <FS:Ansariel> Cinder Roxley's fix for FIRE-11648
+    //if (mModifiers & NSCommandKeyMask && !mHasMarkedText)
+    //{
+    //    callKeyUp([theEvent keyCode], mModifiers);
+    //}
+    // </FS:Ansariel>
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
