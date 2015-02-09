@@ -305,7 +305,7 @@ elseif(LINUX)
         libboost_wave-mt.so.${BOOST_VERSION}.0
         libcollada14dom.so
         libcrypto.so.1.0.0
-        libdb-5.1.so
+#        libdb-5.1.so
         libexpat.so
         libexpat.so.1
         libfreetype.so.6
