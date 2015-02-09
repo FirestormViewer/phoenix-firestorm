@@ -1794,7 +1794,17 @@ bool LLAppearanceMgr::getCanRemoveFromCOF(const LLUUID& outfit_cat_id)
 	}
 
 	LLFindWearablesEx is_worn(/*is_worn=*/ true, /*include_body_parts=*/ false);
-	return gInventory.hasMatchingDirectDescendent(outfit_cat_id, is_worn);
+	// <FS:Ansariel> FIRE-15516 / BUG-8431: Allow removing from outfits for folder hierarchy
+	//return gInventory.hasMatchingDirectDescendent(outfit_cat_id, is_worn);
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	gInventory.collectDescendentsIf(outfit_cat_id,
+		cats,
+		items,
+		LLInventoryModel::EXCLUDE_TRASH,
+		is_worn);
+	return items.size() > 0;
+	// </FS:Ansariel>
 }
 
 // static
