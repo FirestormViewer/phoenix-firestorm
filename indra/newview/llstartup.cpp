@@ -408,42 +408,41 @@ public:
 		strstrm << istr.rdbuf();
 		std::string fetchedNews = strstrm.str();
 
-		S32 itemStart = fetchedNews.find("<item>");
-		S32 itemEnd = fetchedNews.find("</item>");
+		size_t itemStart = fetchedNews.find("<item>");
+		size_t itemEnd = fetchedNews.find("</item>");
 		if (itemEnd != std::string::npos && itemStart != std::string::npos)
 		{
-
 			// Isolate latest news data
 			itemStart += 6;
 			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
 
 			// Check for and remove CDATA characters if they're present
-			S32 titleStart = theNews.find("<title><![CDATA[");
+			size_t titleStart = theNews.find("<title><![CDATA[");
 			if (titleStart != std::string::npos)
 			{
 				theNews.replace(titleStart, 16, "<title>");
 			}
-			S32 titleEnd = theNews.find("]]></title>");
+			size_t titleEnd = theNews.find("]]></title>");
 			if (titleEnd != std::string::npos)
 			{
 				theNews.replace(titleEnd, 11, "</title>");
 			}
-			S32 descStart = theNews.find("<description><![CDATA[");
+			size_t descStart = theNews.find("<description><![CDATA[");
 			if (descStart != std::string::npos)
 			{
 				theNews.replace(descStart, 22, "<description>");
 			}
-			S32 descEnd = theNews.find("]]></description>");
+			size_t descEnd = theNews.find("]]></description>");
 			if (descEnd != std::string::npos)
 			{
 				theNews.replace(descEnd, 17, "</description>");
 			}
-			S32 linkStart = theNews.find("<link><![CDATA[");
+			size_t linkStart = theNews.find("<link><![CDATA[");
 			if (linkStart != std::string::npos)
 			{
 				theNews.replace(linkStart, 15, "<link>");
 			}
-			S32 linkEnd = theNews.find("]]></link>");
+			size_t linkEnd = theNews.find("]]></link>");
 			if (linkEnd != std::string::npos)
 			{
 				theNews.replace(linkEnd, 10, "</link>");
@@ -457,7 +456,12 @@ public:
 			descEnd = theNews.find("</description>");
 			linkEnd = theNews.find("</link>");
 
-			if (titleStart != std::string::npos && descStart != std::string::npos && linkStart != std::string::npos && titleEnd != std::string::npos && descEnd != std::string::npos && linkEnd != std::string::npos)
+			if (titleStart != std::string::npos &&
+				descStart != std::string::npos &&
+				linkStart != std::string::npos &&
+				titleEnd != std::string::npos &&
+				descEnd != std::string::npos &&
+				linkEnd != std::string::npos)
 			{
 				titleStart += 7;
 				descStart += 13;
@@ -475,14 +479,12 @@ public:
 				reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
 				LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
 			}
-
 		}
 		else
 		{
 			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
 			LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
 		}
-
 	}
 };
 // </FS:PP>
