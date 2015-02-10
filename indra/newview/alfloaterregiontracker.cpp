@@ -213,7 +213,7 @@ void ALFloaterRegionTracker::removeRegions()
 
 bool ALFloaterRegionTracker::saveToJSON()
 {
-	const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, TRACKER_FILE);
+	const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, TRACKER_FILE);
 	llofstream out_file;
 	out_file.open(filename);
 	if (out_file.is_open())
@@ -227,7 +227,7 @@ bool ALFloaterRegionTracker::saveToJSON()
 
 bool ALFloaterRegionTracker::loadFromJSON()
 {
-	const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, TRACKER_FILE);
+	const std::string& filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, TRACKER_FILE);
 	llifstream in_file;
 	in_file.open(filename);
 	if (in_file.is_open())
