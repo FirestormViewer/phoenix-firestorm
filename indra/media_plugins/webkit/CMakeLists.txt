@@ -70,6 +70,7 @@ if (LINUX)
   endif (PULSEAUDIO_FOUND)
   list(APPEND media_plugin_webkit_LINK_LIBRARIES
        ${UI_LIBRARIES}     # for glib/GTK
+       Xext #<FS:ND/> force pulling libXext in, otherwise we get undefined symbols.
        )
 elseif (DARWIN)
   list(APPEND media_plugin_webkit_SOURCE_FILES mac_volume_catcher.cpp)
