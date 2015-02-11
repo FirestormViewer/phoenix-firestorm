@@ -851,7 +851,7 @@ void LLStatusBar::onClickMediaToggle(void* data)
 	// "Selected" means it was showing the "play" icon (so media was playing), and now it shows "pause", so turn off media
 	bool enable = ! status_bar->mMediaToggle->getValue();
 
-	// <FS:Zi> Split up handling here to allow external controls to switch media on/off
+// <FS:Zi> Split up handling here to allow external controls to switch media on/off
 // 	LLViewerMedia::setAllMediaEnabled(enable);
 // }
 	status_bar->toggleMedia(enable);
@@ -859,11 +859,11 @@ void LLStatusBar::onClickMediaToggle(void* data)
 
 void LLStatusBar::toggleMedia(bool enable)
 {
-	// </FS:Zi>
+// </FS:Zi>
 	LLViewerMedia::setAllMediaEnabled(enable);
 }
 
-// ## Zi: Media/Stream separation
+// <FS:Zi> Media/Stream separation
 // static
 void LLStatusBar::onClickStreamToggle(void* data)
 {
@@ -872,19 +872,21 @@ void LLStatusBar::onClickStreamToggle(void* data)
 
 	LLStatusBar *status_bar = (LLStatusBar*)data;
 	bool enable = ! status_bar->mStreamToggle->getValue();
-	// <FS:Zi> Split up handling here to allow external controls to switch media on/off
 	status_bar->toggleStream(enable);
 }
 
 void LLStatusBar::toggleStream(bool enable)
 {
-	// </FS:Zi>
+	if (!gAudiop)
+	{
+		return;
+	}
+
 	if(enable)
 	{
 		if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
 		{
 			// 'false' means unpause
-			//gAudiop->pauseInternetStream(false);
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
 		}
 		else
@@ -904,17 +906,14 @@ void LLStatusBar::toggleStream(bool enable)
 		LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 	}
 
-	// <FS:Zi> Split up handling cont.
-	// status_bar->mAudioStreamEnabled = enable;
 	mAudioStreamEnabled = enable;
-	// </FS:Zi>
 }
 
 BOOL LLStatusBar::getAudioStreamEnabled() const
 {
 	return mAudioStreamEnabled;
 }
-// ## Zi: Media/Stream separation
+// </FS:Zi> Media/Stream separation
 
 BOOL can_afford_transaction(S32 cost)
 {
