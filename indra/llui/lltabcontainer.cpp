@@ -1944,6 +1944,11 @@ void LLTabContainer::onNextBtn( const LLSD& data )
 		scrollNext();
 	}
 	mScrolled = FALSE;
+
+	if(mCurrentTabIdx < mTabList.size()-1)
+	{
+		selectNextTab();
+	}
 }
 
 void LLTabContainer::onNextBtnHeld( const LLSD& data )
@@ -1952,6 +1957,11 @@ void LLTabContainer::onNextBtnHeld( const LLSD& data )
 	{
 		mScrollTimer.reset();
 		scrollNext();
+
+		if(mCurrentTabIdx < mTabList.size()-1)
+		{
+			selectNextTab();
+		}
 		mScrolled = TRUE;
 	}
 }
@@ -1963,6 +1973,11 @@ void LLTabContainer::onPrevBtn( const LLSD& data )
 		scrollPrev();
 	}
 	mScrolled = FALSE;
+
+	if(mCurrentTabIdx > 0)
+	{
+		selectPrevTab();
+	}
 }
 
 void LLTabContainer::onJumpFirstBtn( const LLSD& data )
@@ -1981,6 +1996,11 @@ void LLTabContainer::onPrevBtnHeld( const LLSD& data )
 	{
 		mScrollTimer.reset();
 		scrollPrev();
+
+		if(mCurrentTabIdx > 0)
+		{
+			selectPrevTab();
+		}
 		mScrolled = TRUE;
 	}
 }
