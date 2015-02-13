@@ -60,7 +60,10 @@ LLNameListCtrl::Params::Params()
 }
 
 LLNameListCtrl::LLNameListCtrl(const LLNameListCtrl::Params& p)
-:	LLScrollListCtrl(p),
+// <FS:Ansariel> Inherit from FSScrollListCtrl for additional features
+//:	LLScrollListCtrl(p),
+:	FSScrollListCtrl(p),
+// </FS:Ansariel>
 	mNameColumnIndex(p.name_column.column_index),
 	mNameColumn(p.name_column.column_name),
 	mAllowCallingCardDrop(p.allow_calling_card_drop),

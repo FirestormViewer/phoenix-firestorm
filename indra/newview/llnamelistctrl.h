@@ -29,7 +29,10 @@
 
 #include <set>
 
-#include "llscrolllistctrl.h"
+// <FS:Ansariel> Inherit from FSScrollListCtrl for additional features
+//#include "llscrolllistctrl.h"
+#include "fsscrolllistctrl.h"
+// </FS:Ansariel>
 
 #include <boost/unordered_map.hpp>
 
@@ -67,7 +70,10 @@ private:
 
 
 class LLNameListCtrl
-:	public LLScrollListCtrl, public LLInstanceTracker<LLNameListCtrl>
+// <FS:Ansariel> Inherit from FSScrollListCtrl for additional features
+//:	public LLScrollListCtrl, public LLInstanceTracker<LLNameListCtrl>
+:	public FSScrollListCtrl, public LLInstanceTracker<LLNameListCtrl>
+// </FS:Ansariel>
 {
 public:
 	typedef boost::signals2::signal<void(bool)> namelist_complete_signal_t;
@@ -106,7 +112,10 @@ public:
 		{}
 	};
 
-	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
+	// <FS:Ansariel> Inherit from FSScrollListCtrl for additional features
+	//struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
+	struct Params : public LLInitParam::Block<Params, FSScrollListCtrl::Params>
+	// </FS:Ansariel>
 	{
 		Optional<NameColumn>	name_column;
 		Optional<bool>	allow_calling_card_drop;

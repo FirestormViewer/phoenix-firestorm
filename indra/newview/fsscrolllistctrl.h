@@ -35,6 +35,7 @@ class FSScrollListCtrl
 : public LLScrollListCtrl
 {
 public:
+	using LLScrollListCtrl::setContextMenu;
 
 	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
 	{
