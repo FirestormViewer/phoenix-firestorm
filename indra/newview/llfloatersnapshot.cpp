@@ -1436,6 +1436,22 @@ void LLFloaterSnapshot::postPanelSwitch()
 
 	// Remove the success/failure indicator whenever user presses a snapshot option button.
 	instance->impl.setStatus(Impl::STATUS_READY);
+
+	// <FS:Ansariel> Enable spinners and aspect ratio checkbox only for custom resolution
+	LLPanelSnapshot* panel = instance->impl.getActivePanel(instance);
+	if (panel)
+	{
+		std::string sdstring = panel->getImageSizeComboBox()->getSelectedValue();
+		LLSD sdres;
+		std::stringstream sstream(sdstring);
+		LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
+		bool is_custom_resolution = (sdres[0].asInteger() == -1 && sdres[1].asInteger() == -1);
+
+		panel->enableAspectRatioCheckbox(is_custom_resolution);
+		panel->getWidthSpinner()->setEnabled(is_custom_resolution);
+		panel->getHeightSpinner()->setEnabled(is_custom_resolution);
+	}
+	// </FS:Ansariel>
 }
 
 // static
