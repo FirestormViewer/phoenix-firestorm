@@ -20,6 +20,12 @@ Leder du efter nogen at være sammen med? Prøv [secondlife:///app/worldmap Verd
 	<string name="no_groups_msg" value="Leder du efter grupper at være med i? Prøv [secondlife:///app/search/groups Søg]."/>
 	<string name="MiniMapToolTipMsg" value="[REGION](Dobbeltklik for at åbne kort, træk for at panorere)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION](Dobbelt-klik fot at teleportere, træk for at panorere)"/>
+	<string name="AllFriendsTitle">
+		Alle ([ALL])
+	</string>
+	<string name="OnlineFriendsTitle">
+		Online ([ONLINE])
+	</string>
 	<filter_editor label="Filtrér" name="filter_input"/>
 	<tab_container name="tabs">
 		<panel label="TÆT PÅ" name="nearby_panel">

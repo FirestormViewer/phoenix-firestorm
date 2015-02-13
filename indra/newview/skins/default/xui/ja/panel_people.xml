@@ -23,7 +23,13 @@
 	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。"/>
 	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
 	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
-	
+	<string name="AllFriendsTitle">
+		全員（[ALL]）
+	</string>
+	<string name="OnlineFriendsTitle">
+		オンライン（[ONLINE]）
+	</string>
+
 	<tab_container name="tabs">
 	
 	<!--  NEARBY tab  -->

@@ -72,6 +72,14 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      name="pseudonyms">
     Aliases
     </panel.string>
+    <panel.string
+     name="AllFriendsTitle">
+    All ([ALL])
+    </panel.string>
+    <panel.string
+     name="OnlineFriendsTitle">
+    Online ([ONLINE])
+    </panel.string>
 
     <tab_container
      bottom="-10"

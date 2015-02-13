@@ -534,8 +534,10 @@ LLPanelPeople::LLPanelPeople()
 		// <FS:Ansariel> Firestorm radar
 		//mMiniMap(NULL)
 		mMiniMap(NULL),
-		mRadarPanel(NULL)
+		mRadarPanel(NULL),
 		// </FS:Ansariel> Firestorm radar
+		// <FS:Ansariel> FIRE-4740: Friend counter in people panel
+		mFriendsTabContainer(NULL)
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
 	// <FS:Ansariel> Firestorm radar
@@ -641,6 +643,8 @@ BOOL LLPanelPeople::postBuild()
     friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::removePicker, this));
 	friends_tab->setVisibleCallback(boost::bind(&LLPanelPeople::updateFacebookList, this, _2));
 
+	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
+	mFriendsTabContainer = friends_tab->findChild<LLTabContainer>("friends_accordion");
 	// <FS:Ansariel> Firestorm radar
 	friends_tab->childSetAction("GlobalOnlineStatusToggle", boost::bind(&LLPanelPeople::onGlobalVisToggleButtonClicked, this));
 	mOnlineFriendList = friends_tab->getChild<LLAvatarList>("avatars_online");
@@ -878,6 +882,17 @@ void LLPanelPeople::updateFriendList()
 	updateButtons();
 	updateSuggestedFriendList();
 	showFriendsAccordionsIfNeeded();
+
+	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
+	if (mFriendsTabContainer)
+	{
+		LLStringUtil::format_map_t args;
+		args["ALL"] = llformat("%d", all_friendsp.size());
+		args["ONLINE"] = llformat("%d", online_friendsp.size());
+		mFriendsTabContainer->setPanelTitle(0, getString("OnlineFriendsTitle", args));
+		mFriendsTabContainer->setPanelTitle(1, getString("AllFriendsTitle", args));
+	}
+	// </FS:Ansariel>
 }
 
 bool LLPanelPeople::updateSuggestedFriendList()

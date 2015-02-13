@@ -30,6 +30,12 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 	<panel.string name="pseudonyms">
 		Aliasy
 	</panel.string>
+	<string name="AllFriendsTitle">
+		Wszyscy ([ALL])
+	</string>
+	<string name="OnlineFriendsTitle">
+		Dostępni ([ONLINE])
+	</string>
 	<tab_container name="tabs">
 		<panel label="W pobliżu" name="nearby_panel">
 			<panel name="nearby_buttons_panel">

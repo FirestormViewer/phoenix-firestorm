@@ -162,6 +162,8 @@ private:
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
 	LLNetMap*				mMiniMap;
+	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
+	LLTabContainer*			mFriendsTabContainer;
 
 	std::vector<std::string> mSavedOriginalFilters;
 	std::vector<std::string> mSavedFilters;
