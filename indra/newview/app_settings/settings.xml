@@ -23040,6 +23040,105 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>900</integer>
     </map>
+    <key>FSLastSnapshotToFacebookHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>The height of the last Facebook snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>768</integer>
+    </map>
+    <key>FSLastSnapshotToFacebookWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The width of the last Facebook snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1024</integer>
+    </map>
+    <key>FSLastSnapshotToFacebookResolution</key>
+    <map>
+      <key>Comment</key>
+      <string>At what resolution should snapshots be posted on Facebook. 0=Current Window, 1=320x240, 2=640x480, 3=800x600, 4=1024x768, 5=1280x1024, 6=1600x1200, 7=Custom</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>4</integer>
+    </map>
+    <key>FSLastSnapshotToFlickrHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>The height of the last Flickr snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>768</integer>
+    </map>
+    <key>FSLastSnapshotToFlickrWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The width of the last Flickr snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1024</integer>
+    </map>
+    <key>FSLastSnapshotToFlickrResolution</key>
+    <map>
+      <key>Comment</key>
+      <string>At what resolution should snapshots be posted on Flickr. 0=Current Window, 1=320x240, 2=640x480, 3=800x600, 4=1024x768, 5=1280x1024, 6=1600x1200, 7=Custom</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>4</integer>
+    </map>
+    <key>FSLastSnapshotToTwitterHeight</key>
+    <map>
+      <key>Comment</key>
+      <string>The height of the last Twitter snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>768</integer>
+    </map>
+    <key>FSLastSnapshotToTwitterWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>The width of the last Twitter snapshot, in px</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1024</integer>
+    </map>
+    <key>FSLastSnapshotToTwitterResolution</key>
+    <map>
+      <key>Comment</key>
+      <string>At what resolution should snapshots be posted on Twitter. 0=Current Window, 1=320x240, 2=640x480, 3=800x600, 4=1024x768, 5=1280x1024, 6=1600x1200, 7=Custom</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>3</integer>
+    </map>
   </map>
 </llsd>
 

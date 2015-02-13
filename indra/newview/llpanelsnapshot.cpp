@@ -87,6 +87,13 @@ LLSpinCtrl* LLPanelSnapshot::getHeightSpinner()
 	return getChild<LLSpinCtrl>(getHeightSpinnerName());
 }
 
+// <FS:Ansariel> Store settings at logout
+LLComboBox* LLPanelSnapshot::getImageSizeComboBox()
+{
+	return getChild<LLComboBox>(getImageSizeComboName());
+}
+// </FS:Ansariel>
+
 S32 LLPanelSnapshot::getTypedPreviewWidth() const
 {
 	return getChild<LLUICtrl>(getWidthSpinnerName())->getValue().asInteger();

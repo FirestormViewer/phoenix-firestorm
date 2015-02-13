@@ -99,6 +99,12 @@ LLFlickrPhotoPanel::~LLFlickrPhotoPanel()
 	{
 		mPreviewHandle.get()->die();
 	}
+
+	// <FS:Ansariel> Store settings at logout
+	gSavedSettings.setS32("FSLastSnapshotToFlickrResolution", getChild<LLComboBox>("resolution_combobox")->getCurrentIndex());
+	gSavedSettings.setS32("FSLastSnapshotToFlickrWidth", getChild<LLSpinCtrl>("custom_snapshot_width")->getValue().asInteger());
+	gSavedSettings.setS32("FSLastSnapshotToFlickrHeight", getChild<LLSpinCtrl>("custom_snapshot_height")->getValue().asInteger());
+	// </FS:Ansariel>
 }
 
 BOOL LLFlickrPhotoPanel::postBuild()
@@ -127,6 +133,10 @@ BOOL LLFlickrPhotoPanel::postBuild()
 	getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
 	getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
 	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, TRUE));
+
+	getChild<LLComboBox>("resolution_combobox")->setCurrentByIndex(gSavedSettings.getS32("FSLastSnapshotToFlickrResolution"));
+	getChild<LLSpinCtrl>("custom_snapshot_width")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrWidth"));
+	getChild<LLSpinCtrl>("custom_snapshot_height")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrHeight"));
 	// </FS:Ansariel>
 
 	// Update filter list
@@ -272,11 +282,6 @@ void LLFlickrPhotoPanel::onVisibilityChange(BOOL visible)
             previewp->setAllowRenderUI(FALSE);          // We do not want the rendered UI in our snapshots
             previewp->setAllowFullScreenPreview(FALSE);  // No full screen preview in SL Share mode
 			previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
-
-			// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-			getChild<LLSpinCtrl>("custom_snapshot_width")->set(gViewerWindow->getWindowWidthRaw());
-			getChild<LLSpinCtrl>("custom_snapshot_height")->set(gViewerWindow->getWindowHeightRaw());
-			// </FS:Ansariel>
 
 			updateControls();
 		}

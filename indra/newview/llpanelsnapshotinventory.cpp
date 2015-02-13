@@ -51,6 +51,7 @@ class LLPanelSnapshotInventory
 
 public:
 	LLPanelSnapshotInventory();
+	/*virtual*/ ~LLPanelSnapshotInventory(); // <FS:Ansariel> Store settings at logout
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
@@ -78,6 +79,13 @@ BOOL LLPanelSnapshotInventory::postBuild()
 {
 	getChild<LLSpinCtrl>(getWidthSpinnerName())->setAllowEdit(FALSE);
 	getChild<LLSpinCtrl>(getHeightSpinnerName())->setAllowEdit(FALSE);
+
+	// <FS:Ansariel> Store settings at logout
+	getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToInventoryResolution"));
+	getWidthSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToInventoryWidth"));
+	getHeightSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToInventoryHeight"));
+	// </FS:Ansariel>
+
 	return LLPanelSnapshot::postBuild();
 }
 
@@ -108,3 +116,12 @@ void LLPanelSnapshotInventory::onSend()
 	LLFloaterSnapshot::saveTexture();
 	LLFloaterSnapshot::postSave();
 }
+
+// <FS:Ansariel> Store settings at logout
+LLPanelSnapshotInventory::~LLPanelSnapshotInventory()
+{
+	gSavedSettings.setS32("LastSnapshotToInventoryResolution", getImageSizeComboBox()->getCurrentIndex());
+	gSavedSettings.setS32("LastSnapshotToInventoryWidth", getTypedPreviewWidth());
+	gSavedSettings.setS32("LastSnapshotToInventoryHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>

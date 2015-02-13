@@ -53,6 +53,7 @@ class LLPanelSnapshotPostcard
 
 public:
 	LLPanelSnapshotPostcard();
+	/*virtual*/ ~LLPanelSnapshotPostcard(); // <FS:Ansariel> Store settings at logout
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ S32	notify(const LLSD& info);
@@ -104,6 +105,12 @@ BOOL LLPanelSnapshotPostcard::postBuild()
 	getChild<LLUICtrl>("to_form")->setFocus(TRUE);
 
 	getChild<LLUICtrl>("image_quality_slider")->setCommitCallback(boost::bind(&LLPanelSnapshotPostcard::onQualitySliderCommit, this, _1));
+
+	// <FS:Ansariel> Store settings at logout
+	getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToEmailResolution"));
+	getWidthSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToEmailWidth"));
+	getHeightSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToEmailHeight"));
+	// </FS:Ansariel>
 
 	return LLPanelSnapshot::postBuild();
 }
@@ -242,3 +249,12 @@ void LLPanelSnapshotPostcard::onSend()
 	// Send postcard.
 	sendPostcard();
 }
+
+// <FS:Ansariel> Store settings at logout
+LLPanelSnapshotPostcard::~LLPanelSnapshotPostcard()
+{
+	gSavedSettings.setS32("LastSnapshotToEmailResolution", getImageSizeComboBox()->getCurrentIndex());
+	gSavedSettings.setS32("LastSnapshotToEmailWidth", getTypedPreviewWidth());
+	gSavedSettings.setS32("LastSnapshotToEmailHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>

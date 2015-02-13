@@ -384,21 +384,31 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 		LLSpinCtrl* height_ctrl = getHeightSpinner(floater);
 
 		// Initialize spinners.
-		if (width_ctrl->getValue().asInteger() == 0)
-		{
-			S32 w = gViewerWindow->getWindowWidthRaw();
-			LL_DEBUGS() << "Initializing width spinner (" << width_ctrl->getName() << "): " << w << LL_ENDL;
-			width_ctrl->setValue(w);
-		}
-		if (height_ctrl->getValue().asInteger() == 0)
-		{
-			S32 h = gViewerWindow->getWindowHeightRaw();
-			LL_DEBUGS() << "Initializing height spinner (" << height_ctrl->getName() << "): " << h << LL_ENDL;
-			height_ctrl->setValue(h);
-		}
+		// <FS:Ansariel> Store settings at logout; Set in the particular panel classes
+		//if (width_ctrl->getValue().asInteger() == 0)
+		//{
+		//	S32 w = gViewerWindow->getWindowWidthRaw();
+		//	LL_DEBUGS() << "Initializing width spinner (" << width_ctrl->getName() << "): " << w << LL_ENDL;
+		//	width_ctrl->setValue(w);
+		//}
+		//if (height_ctrl->getValue().asInteger() == 0)
+		//{
+		//	S32 h = gViewerWindow->getWindowHeightRaw();
+		//	LL_DEBUGS() << "Initializing height spinner (" << height_ctrl->getName() << "): " << h << LL_ENDL;
+		//	height_ctrl->setValue(h);
+		//}
+		// </FS:Ansariel>
 
 		// Clamp snapshot resolution to window size when showing UI or HUD in snapshot.
-		if (gSavedSettings.getBOOL("RenderUIInSnapshot") || gSavedSettings.getBOOL("RenderHUDInSnapshot"))
+		// <FS:Ansariel> Store settings at logout; Spinners only change for custom resolution
+		//if (gSavedSettings.getBOOL("RenderUIInSnapshot") || gSavedSettings.getBOOL("RenderHUDInSnapshot"))
+		std::string sdstring = active_panel->getChild<LLComboBox>(active_panel->getImageSizeComboName())->getSelectedValue();
+		LLSD sdres;
+		std::stringstream sstream(sdstring);
+		LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
+		bool is_custom_resolution = (sdres[0].asInteger() == -1 && sdres[1].asInteger() == -1);
+		if (is_custom_resolution && (gSavedSettings.getBOOL("RenderUIInSnapshot") || gSavedSettings.getBOOL("RenderHUDInSnapshot")))
+		// </FS:Ansariel>
 		{
 			S32 width = gViewerWindow->getWindowWidthRaw();
 			S32 height = gViewerWindow->getWindowHeightRaw();
@@ -761,6 +771,9 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 	S32 width = sdres[0];
 	S32 height = sdres[1];
 	
+	// <FS:Ansariel> Store settings at logout
+	bool is_custom_resolution = (width == -1 && height == -1);
+	
 	LLSnapshotLivePreview* previewp = getPreviewView(view);
 	if (previewp && combobox->getCurrentIndex() >= 0)
 	{
@@ -823,6 +836,10 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 		// checkbox as well and we want height always changing to width by default.
 		// If we use the width spinner we would change width according to height by
 		// default, that is not what we want.
+		// <FS:Ansariel> Store settings at logout; Only update spinners when using custom resolution
+		if (is_custom_resolution)
+		{
+		// </FS:Ansariel>
 		updateSpinners(view, previewp, width, height, !getHeightSpinner(view)->isDirty()); // may change width and height
 		
 		if(getWidthSpinner(view)->getValue().asInteger() != width || getHeightSpinner(view)->getValue().asInteger() != height)
@@ -830,6 +847,12 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 			getWidthSpinner(view)->setValue(width);
 			getHeightSpinner(view)->setValue(height);
 		}
+		// <FS:Ansariel> Store settings at logout; Only update spinners when using custom resolution
+		}
+
+		getWidthSpinner(view)->setEnabled(is_custom_resolution);
+		getHeightSpinner(view)->setEnabled(is_custom_resolution);
+		// </FS:Ansariel>
 
 		if(original_width != width || original_height != height)
 		{
@@ -980,10 +1003,12 @@ void LLFloaterSnapshot::Impl::applyCustomResolution(LLFloaterSnapshot* view, S32
 
 			previewp->setSize(w,h);
 			checkAutoSnapshot(previewp, FALSE);
-			comboSetCustom(view, "profile_size_combo");
-			comboSetCustom(view, "postcard_size_combo");
-			comboSetCustom(view, "texture_size_combo");
-			comboSetCustom(view, "local_size_combo");
+			// <FS:Ansariel> Store settings at logout
+			//comboSetCustom(view, "profile_size_combo");
+			//comboSetCustom(view, "postcard_size_combo");
+			//comboSetCustom(view, "texture_size_combo");
+			//comboSetCustom(view, "local_size_combo");
+			// </FS:Ansariel>
 			LL_DEBUGS() << "applied custom resolution, updating thumbnail" << LL_ENDL;
 			previewp->updateSnapshot(TRUE);
 		}
@@ -1093,11 +1118,13 @@ BOOL LLFloaterSnapshot::postBuild()
 	gSnapshotFloaterView->addChild(this);
 
 	// Pre-select "Current Window" resolution.
-	getChild<LLComboBox>("profile_size_combo")->selectNthItem(0);
-	getChild<LLComboBox>("postcard_size_combo")->selectNthItem(0);
-	getChild<LLComboBox>("texture_size_combo")->selectNthItem(0);
-	getChild<LLComboBox>("local_size_combo")->selectNthItem(8);
-	getChild<LLComboBox>("local_format_combo")->selectNthItem(0);
+	// <FS:Ansariel> Store settings at logout
+	//getChild<LLComboBox>("profile_size_combo")->selectNthItem(0);
+	//getChild<LLComboBox>("postcard_size_combo")->selectNthItem(0);
+	//getChild<LLComboBox>("texture_size_combo")->selectNthItem(0);
+	//getChild<LLComboBox>("local_size_combo")->selectNthItem(8);
+	//getChild<LLComboBox>("local_format_combo")->selectNthItem(0);
+	// </FS:Ansariel>
 
 	impl.mPreviewHandle = previewp->getHandle();
     previewp->setContainer(this);

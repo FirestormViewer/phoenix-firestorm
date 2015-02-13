@@ -37,6 +37,7 @@
 #include "llpanelsnapshot.h"
 #include "llsidetraypanelcontainer.h"
 #include "llwebprofile.h"
+#include "llviewercontrol.h" // gSavedSettings
 
 /**
  * Posts a snapshot to My Profile feed.
@@ -48,6 +49,7 @@ class LLPanelSnapshotProfile
 
 public:
 	LLPanelSnapshotProfile();
+	/*virtual*/ ~LLPanelSnapshotProfile(); // <FS:Ansariel> Store settings at logout
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
@@ -75,6 +77,12 @@ LLPanelSnapshotProfile::LLPanelSnapshotProfile()
 // virtual
 BOOL LLPanelSnapshotProfile::postBuild()
 {
+	// <FS:Ansariel> Store settings at logout
+	getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToProfileResolution"));
+	getWidthSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToProfileWidth"));
+	getHeightSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToProfileHeight"));
+	// </FS:Ansariel>
+
 	return LLPanelSnapshot::postBuild();
 }
 
@@ -99,3 +107,12 @@ void LLPanelSnapshotProfile::onSend()
 	LLWebProfile::uploadImage(LLFloaterSnapshot::getImageData(), caption, add_location);
 	LLFloaterSnapshot::postSave();
 }
+
+// <FS:Ansariel> Store settings at logout
+LLPanelSnapshotProfile::~LLPanelSnapshotProfile()
+{
+	gSavedSettings.setS32("LastSnapshotToProfileResolution", getImageSizeComboBox()->getCurrentIndex());
+	gSavedSettings.setS32("LastSnapshotToProfileWidth", getTypedPreviewWidth());
+	gSavedSettings.setS32("LastSnapshotToProfileHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>

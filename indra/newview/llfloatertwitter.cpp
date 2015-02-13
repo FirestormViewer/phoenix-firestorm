@@ -89,6 +89,12 @@ LLTwitterPhotoPanel::~LLTwitterPhotoPanel()
 	{
 		mPreviewHandle.get()->die();
 	}
+
+	// <FS:Ansariel> Store settings at logout
+	gSavedSettings.setS32("FSLastSnapshotToTwitterResolution", getChild<LLComboBox>("resolution_combobox")->getCurrentIndex());
+	gSavedSettings.setS32("FSLastSnapshotToTwitterWidth", getChild<LLSpinCtrl>("custom_snapshot_width")->getValue().asInteger());
+	gSavedSettings.setS32("FSLastSnapshotToTwitterHeight", getChild<LLSpinCtrl>("custom_snapshot_height")->getValue().asInteger());
+	// </FS:Ansariel>
 }
 
 BOOL LLTwitterPhotoPanel::postBuild()
@@ -96,7 +102,8 @@ BOOL LLTwitterPhotoPanel::postBuild()
 	setVisibleCallback(boost::bind(&LLTwitterPhotoPanel::onVisibilityChange, this, _2));
 	
 	mResolutionComboBox = getChild<LLUICtrl>("resolution_combobox");
-	mResolutionComboBox->setValue("[i800,i600]"); // hardcoded defaults ftw!
+	// <FS:Ansariel> Store settings at logout; Nonsense!
+	//mResolutionComboBox->setValue("[i800,i600]"); // hardcoded defaults ftw!
 	mResolutionComboBox->setCommitCallback(boost::bind(&LLTwitterPhotoPanel::updateResolution, this, TRUE));
 	mFilterComboBox = getChild<LLUICtrl>("filters_combobox");
 	mFilterComboBox->setCommitCallback(boost::bind(&LLTwitterPhotoPanel::updateResolution, this, TRUE));
@@ -119,6 +126,10 @@ BOOL LLTwitterPhotoPanel::postBuild()
 	getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLTwitterPhotoPanel::updateResolution, this, TRUE));
 	getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLTwitterPhotoPanel::updateResolution, this, TRUE));
 	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLTwitterPhotoPanel::updateResolution, this, TRUE));
+
+	getChild<LLComboBox>("resolution_combobox")->setCurrentByIndex(gSavedSettings.getS32("FSLastSnapshotToTwitterResolution"));
+	getChild<LLSpinCtrl>("custom_snapshot_width")->setValue(gSavedSettings.getS32("FSLastSnapshotToTwitterWidth"));
+	getChild<LLSpinCtrl>("custom_snapshot_height")->setValue(gSavedSettings.getS32("FSLastSnapshotToTwitterHeight"));
 	// </FS:Ansariel>
 
 	// Update filter list
@@ -256,11 +267,6 @@ void LLTwitterPhotoPanel::onVisibilityChange(BOOL visible)
             previewp->setAllowRenderUI(FALSE);          // We do not want the rendered UI in our snapshots
             previewp->setAllowFullScreenPreview(FALSE);  // No full screen preview in SL Share mode
 			previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
-
-			// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-			getChild<LLSpinCtrl>("custom_snapshot_width")->set(gViewerWindow->getWindowWidthRaw());
-			getChild<LLSpinCtrl>("custom_snapshot_height")->set(gViewerWindow->getWindowHeightRaw());
-			// </FS:Ansariel>
 
 			updateControls();
 		}

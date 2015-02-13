@@ -48,6 +48,7 @@ class LLPanelSnapshotLocal
 
 public:
 	LLPanelSnapshotLocal();
+	/*virtual*/ ~LLPanelSnapshotLocal(); // <FS:Ansariel> Store settings at logout
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
@@ -78,6 +79,12 @@ BOOL LLPanelSnapshotLocal::postBuild()
 	getChild<LLUICtrl>("image_quality_slider")->setCommitCallback(boost::bind(&LLPanelSnapshotLocal::onQualitySliderCommit, this, _1));
 	getChild<LLUICtrl>("local_format_combo")->setCommitCallback(boost::bind(&LLPanelSnapshotLocal::onFormatComboCommit, this, _1));
 	getChild<LLUICtrl>("save_btn")->setCommitCallback(boost::bind(&LLPanelSnapshotLocal::onSaveFlyoutCommit, this, _1));
+
+	// <FS:Ansariel> Store settings at logout
+	getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToDiskResolution"));
+	getWidthSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToDiskWidth"));
+	getHeightSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToDiskHeight"));
+	// </FS:Ansariel>
 
 	return LLPanelSnapshot::postBuild();
 }
@@ -170,3 +177,12 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 		cancel();
 	}
 }
+
+// <FS:Ansariel> Store settings at logout
+LLPanelSnapshotLocal::~LLPanelSnapshotLocal()
+{
+	gSavedSettings.setS32("LastSnapshotToDiskResolution", getImageSizeComboBox()->getCurrentIndex());
+	gSavedSettings.setS32("LastSnapshotToDiskWidth", getTypedPreviewWidth());
+	gSavedSettings.setS32("LastSnapshotToDiskHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>

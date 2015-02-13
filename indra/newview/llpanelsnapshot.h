@@ -30,6 +30,7 @@
 #include "llfloatersnapshot.h"
 
 class LLSideTrayPanelContainer;
+class LLComboBox; // <FS:Ansariel> Store settings at logout
 
 /**
  * Snapshot panel base class.
@@ -37,6 +38,9 @@ class LLSideTrayPanelContainer;
 class LLPanelSnapshot: public LLPanel
 {
 public:
+	// <FS:Ansariel> Store settings at logout
+	/*virtual*/ ~LLPanelSnapshot() {}
+
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
@@ -50,6 +54,7 @@ public:
 	virtual S32 getTypedPreviewHeight() const;
 	virtual LLSpinCtrl* getWidthSpinner();
 	virtual LLSpinCtrl* getHeightSpinner();
+	virtual LLComboBox* getImageSizeComboBox(); // <FS:Ansariel> Store settings at logout
 	virtual void enableAspectRatioCheckbox(BOOL enable);
 	virtual LLFloaterSnapshot::ESnapshotFormat getImageFormat() const;
 	virtual void updateControls(const LLSD& info) = 0; ///< Update controls from saved settings
