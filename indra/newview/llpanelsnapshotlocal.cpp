@@ -92,6 +92,12 @@ BOOL LLPanelSnapshotLocal::postBuild()
 // virtual
 void LLPanelSnapshotLocal::onOpen(const LLSD& key)
 {
+	// <FS:Ansariel> FIRE-7090: Snapshot format for disk changes when selecting snapshot to inventory or email
+	S32 index = gSavedSettings.getS32("FSSnapshotLocalFormat");
+	gSavedSettings.setS32("SnapshotFormat", index);
+	getChild<LLComboBox>("local_format_combo")->setCurrentByIndex(index);
+	// </FS:Ansariel>
+
 	LLPanelSnapshot::onOpen(key);
 }
 
@@ -122,7 +128,10 @@ LLFloaterSnapshot::ESnapshotFormat LLPanelSnapshotLocal::getImageFormat() const
 void LLPanelSnapshotLocal::updateControls(const LLSD& info)
 {
 	LLFloaterSnapshot::ESnapshotFormat fmt =
+		// <FS:Ansariel> FIRE-7090: Snapshot format for disk changes when selecting snapshot to inventory or email
 		(LLFloaterSnapshot::ESnapshotFormat) gSavedSettings.getS32("SnapshotFormat");
+		//(LLFloaterSnapshot::ESnapshotFormat) gSavedSettings.getS32("FSSnapshotLocalFormat");
+		// </FS:Ansariel>
 	getChild<LLComboBox>("local_format_combo")->selectNthItem((S32) fmt);
 
 	const bool show_quality_ctrls = (fmt == LLFloaterSnapshot::SNAPSHOT_FORMAT_JPEG);
@@ -138,6 +147,9 @@ void LLPanelSnapshotLocal::updateControls(const LLSD& info)
 
 void LLPanelSnapshotLocal::onFormatComboCommit(LLUICtrl* ctrl)
 {
+	// <FS:Ansariel> FIRE-7090: Snapshot format for disk changes when selecting snapshot to inventory or email
+	gSavedSettings.setS32("FSSnapshotLocalFormat", getChild<LLComboBox>("local_format_combo")->getCurrentIndex());
+
 	// will call updateControls()
 	LLFloaterSnapshot::getInstance()->notify(LLSD().with("image-format-change", true));
 }
