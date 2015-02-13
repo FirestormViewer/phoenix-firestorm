@@ -132,6 +132,7 @@
      word_wrap="true">
     </text_editor>
     <check_box
+     control_name="SnapshotToProfileIncludeLocation"
      follows="left|top"
      initial_value="true"
      label="Include location"
