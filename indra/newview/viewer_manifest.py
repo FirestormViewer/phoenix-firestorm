@@ -1426,7 +1426,9 @@ class Linux_i686_Manifest(LinuxManifest):
         if self.is_packaging_viewer():
           if self.prefix("../packages/lib/release", dst="lib"):
 
-            self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
+            # <FS:TS> No, we don't need to dink with this. A usable library
+            # is now in the slvoice package, and we need to just use it as is.
+            # self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
 
             try:
                     self.path("libfmodex-*.so")
@@ -1457,7 +1459,9 @@ class Linux_x86_64_Manifest(LinuxManifest):
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
             # and place it in the prebuilt lib/release directory
-            self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
+            # <FS:TS> No, we don't need to dink with this. A usable library
+            # is now in the slvoice package, and we need to just use it as is.
+            # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
 
             try:
                     self.path("libfmodex64-*.so")

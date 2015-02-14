@@ -2400,9 +2400,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>957773fff7148ffaca42b1ea4a18d192</string>
+              <string>0f63c311c77c7f0a61a6a5b85639661b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-slvoice/rev/270512/arch/Linux/installer/slvoice-4.5.0009.17865-linux-20130216.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-4.5.0009.17865-linux-20150214.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2412,9 +2412,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>957773fff7148ffaca42b1ea4a18d192</string>
+              <string>0f63c311c77c7f0a61a6a5b85639661b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-slvoice/rev/270512/arch/Linux/installer/slvoice-4.5.0009.17865-linux-20130216.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-4.5.0009.17865-linux-20150214.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
