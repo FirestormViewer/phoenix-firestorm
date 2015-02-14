@@ -54,6 +54,8 @@
 #include "llpanelpick.h"
 #include "llpanelclassified.h"
 
+#include "rlvhandler.h"
+
 static const std::string XML_BTN_NEW = "new_btn";
 static const std::string XML_BTN_DELETE = "trash_btn";
 static const std::string XML_BTN_INFO = "info_btn";
@@ -341,7 +343,8 @@ LLPanelPicks::LLPanelPicks()
 	mClassifiedsAccTab(NULL),
 	mPanelClassifiedInfo(NULL),
 	mNoClassifieds(false),
-	mNoPicks(false)
+	mNoPicks(false),
+	mRlvBehaviorCallbackConnection() // <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
 {
 }
 
@@ -351,6 +354,13 @@ LLPanelPicks::~LLPanelPicks()
 	{
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
 	}
+
+	// <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 void* LLPanelPicks::create(void* data /* = NULL */)
@@ -551,6 +561,11 @@ BOOL LLPanelPicks::postBuild()
 	mEnableCallbackRegistrar.add("Picks.Plus.Enable", boost::bind(&LLPanelPicks::isActionEnabled, this, _2));
 	mPlusMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_picks_plus.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	
+	// <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLPanelPicks::updateRlvRestrictions, this, _1, _2));
+	childSetEnabled(XML_BTN_NEW, !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+	// </FS:Ansariel>
+
 	return TRUE;
 }
 
@@ -1225,6 +1240,16 @@ inline LLPanelProfile* LLPanelPicks::getProfilePanel()
 	llassert_always(NULL != mProfilePanel);
 	return mProfilePanel;
 }
+
+// <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+void LLPanelPicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SHOWLOC)
+	{
+		childSetEnabled(XML_BTN_NEW, type != RLV_TYPE_ADD);
+	}
+}
+// </FS:Ansariel>
 
 //-----------------------------------------------------------------------------
 // LLPanelPicks

@@ -74,7 +74,8 @@ FSPanelClassifieds::FSPanelClassifieds()
 	mPopupMenu(NULL),
 	mClassifiedsList(NULL),
 	mPanelClassifiedInfo(NULL),
-	mNoClassifieds(false)
+	mNoClassifieds(false),
+	mRlvBehaviorCallbackConnection()
 {
 }
 
@@ -83,6 +84,11 @@ FSPanelClassifieds::~FSPanelClassifieds()
 	if(getAvatarId().notNull())
 	{
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
+	}
+
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
 	}
 }
 
@@ -182,11 +188,12 @@ BOOL FSPanelClassifieds::postBuild()
 
 	mNoItemsLabel = getChild<LLUICtrl>("picks_panel_text");
 
+	childSetAction(XML_BTN_NEW, boost::bind(&FSPanelClassifieds::createNewClassified, this));
 	childSetAction(XML_BTN_DELETE, boost::bind(&FSPanelClassifieds::onClickDelete, this));
 	childSetAction(XML_BTN_TELEPORT, boost::bind(&FSPanelClassifieds::onClickTeleport, this));
 	childSetAction(XML_BTN_SHOW_ON_MAP, boost::bind(&FSPanelClassifieds::onClickMap, this));
 	childSetAction(XML_BTN_INFO, boost::bind(&FSPanelClassifieds::onClickInfo, this));
-	
+
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registar;
 	registar.add("Classified.Info", boost::bind(&FSPanelClassifieds::onClickInfo, this));
 	registar.add("Classified.Edit", boost::bind(&FSPanelClassifieds::onClickMenuEdit, this)); 
@@ -197,9 +204,10 @@ BOOL FSPanelClassifieds::postBuild()
 	enable_registar.add("Classified.Enable", boost::bind(&FSPanelClassifieds::onEnableMenuItem, this, _2));
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>("menu_classifieds.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-    
-	childSetAction(XML_BTN_NEW, boost::bind(&FSPanelClassifieds::createNewClassified, this));
-	
+
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelClassifieds::updateRlvRestrictions, this, _1, _2));
+	childSetEnabled(XML_BTN_NEW, !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+
 	return TRUE;
 }
 
@@ -658,6 +666,15 @@ void FSPanelClassifieds::closePanel(LLPanel* panel)
 		}
 	}
 }
+
+void FSPanelClassifieds::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SHOWLOC)
+	{
+		childSetEnabled(XML_BTN_NEW, type != RLV_TYPE_ADD);
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

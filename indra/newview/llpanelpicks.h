@@ -33,6 +33,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llpanelavatar.h"
 #include "llregistry.h"
+#include "rlvdefines.h"
 
 class LLAccordionCtrlTab;
 class LLPanelProfile;
@@ -100,6 +101,11 @@ private:
 
 	void onListCommit(const LLFlatListView* f_list);
 	void onAccordionStateChanged(const LLAccordionCtrlTab* acc_tab);
+
+	// <FS:Ansariel> FIRE-15556: Picks can circumvent RLVa @showloc restriction
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+	// </FS:Ansariel>
 
 	//------------------------------------------------
 	// Callbacks which require panel toggling

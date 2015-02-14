@@ -536,6 +536,9 @@ private:
 	void onClickDelete();
 	bool callbackDeletePick(const LLSD& notification, const LLSD& response);
 
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+
 	LLTabContainer*	mTabContainer;
 	LLUICtrl*		mNoItemsLabel;
 	LLButton*		mNewButton;

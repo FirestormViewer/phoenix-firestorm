@@ -85,6 +85,9 @@ private:
 
 	void onListCommit(const LLFlatListView* f_list);
 
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+
 	//------------------------------------------------
 	// Callbacks which require panel toggling
 	//------------------------------------------------

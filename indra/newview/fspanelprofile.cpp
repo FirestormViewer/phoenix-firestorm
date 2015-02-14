@@ -1577,12 +1577,17 @@ std::string FSPanelPick::createLocationText(const std::string& owner_name, const
 //////////////////////////////////////////////////////////////////////////
 
 FSPanelProfilePicks::FSPanelProfilePicks()
- : FSPanelProfileTab()
+ : FSPanelProfileTab(),
+	mRlvBehaviorCallbackConnection()
 {
 }
 
 FSPanelProfilePicks::~FSPanelProfilePicks()
 {
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
+	}
 }
 
 void FSPanelProfilePicks::onOpen(const LLSD& key)
@@ -1610,6 +1615,9 @@ BOOL FSPanelProfilePicks::postBuild()
 
 	mNewButton->setCommitCallback(boost::bind(&FSPanelProfilePicks::onClickNewBtn, this));
 	mDeleteButton->setCommitCallback(boost::bind(&FSPanelProfilePicks::onClickDelete, this));
+
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
+	mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 
 	return TRUE;
 }
@@ -1765,6 +1773,14 @@ void FSPanelProfilePicks::updateData()
 		mNoItemsLabel->setVisible(TRUE);
 
 		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPicksRequest(avatar_id);
+	}
+}
+
+void FSPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SHOWLOC)
+	{
+		mNewButton->setEnabled(type != RLV_TYPE_ADD);
 	}
 }
 
