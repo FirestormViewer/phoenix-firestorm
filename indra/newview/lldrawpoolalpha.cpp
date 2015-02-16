@@ -634,10 +634,11 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 					gPipeline.addTrianglesDrawn(params.mCount, params.mDrawMode);
 
 					// restore our alpha blend mode
-					gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
-
 					// <FS:Ansariel> LL materials support merge error
+					//gGL.blendFunc(mColorSFactor, mColorDFactor, mAlphaSFactor, mAlphaDFactor);
+
 					//current_shader->bind();
+					// </FS:Ansariel>
 				}
 			
 				if (tex_setup)
