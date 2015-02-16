@@ -41,12 +41,12 @@ public:
 		{}
 	};
 
-	BOOL	handleRightMouseDown(S32 x, S32 y, MASK mask);
+	virtual ~FSRadarListCtrl() {}
+	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 protected:
-	FSRadarListCtrl(const Params&);
-	virtual ~FSRadarListCtrl() {}
 	friend class LLUICtrlFactory;
+	FSRadarListCtrl(const Params&);
 };
 
 #endif // FS_RADARLISTCTRL_H
