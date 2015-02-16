@@ -1,10 +1,10 @@
 /** 
- * @file fsscrolllistctrl.h
- * @brief A Firestorm specific implementation of scrolllist
+ * @file fsnamelistavatarmenu.h
+ * @brief Special avatar menu used LLNameListCtrls
  *
- * $LicenseInfo:firstyear=2014&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2015&license=viewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (c) 2014 Ansariel Hiller @ Second Life
+ * Copyright (c) 2015 Ansariel Hiller @ Second Life
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,40 +25,25 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_SCROLLLISTCTRL_H
-#define FS_SCROLLLISTCTRL_H
+#ifndef FS_FSNAMELISTAVATARMENU_H
+#define FS_FSNAMELISTAVATARMENU_H
 
 #include "lllistcontextmenu.h"
-#include "llscrolllistctrl.h"
 
-class FSScrollListCtrl
-: public LLScrollListCtrl
+class FSNameListAvatarMenu : public LLListContextMenu
 {
 public:
-	using LLScrollListCtrl::setContextMenu;
-
-	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
-	{
-		Optional<S32>		desired_line_height;
-
-		Params()
-		:	desired_line_height("desired_line_height", -1)
-		{
-		}
-	};
-	
-	virtual ~FSScrollListCtrl() {};
-	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
-
-	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
-	void	refreshLineHeight();
-
-protected:
-	friend class LLUICtrlFactory;
-	FSScrollListCtrl(const Params&);
-
-	LLListContextMenu*	mContextMenu;
-	S32					mDesiredLineHeight;
+	/*virtual*/ LLContextMenu* createMenu();
+private:
+	bool enableContextMenuItem(const LLSD& userdata);
+	void offerTeleport();
+	void teleportToAvatar();
+	void onTrackAvatarMenuItemClick();
+	void addToContactSet();
+	void copyNameToClipboard(const LLUUID& id);
+	void copySLURLToClipboard(const LLUUID& id);
 };
 
-#endif // FS_SCROLLLISTCTRL_H
+extern FSNameListAvatarMenu gFSNameListAvatarMenu;
+
+#endif // FS_FSNAMELISTAVATARMENU_H

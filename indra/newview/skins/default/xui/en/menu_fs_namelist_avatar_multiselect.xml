@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+ layout="topleft"
+ name="Namelist Popup">
+    <menu_item_call
+     label="Send IM..."
+     layout="topleft"
+     name="send_im">
+        <menu_item_call.on_click
+         function="Namelist.SendIM"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Add to Set..."
+     layout="topleft"
+     name="Add to Set">
+        <menu_item_call.on_click
+         function="Namelist.AddToContactSet"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Offer Teleport"
+     layout="topleft"
+     name="offer_teleport">
+        <menu_item_call.on_click
+         function="Namelist.OfferTeleport"/>
+        <menu_item_call.on_enable
+         function="Namelist.EnableItem"
+         parameter="offer_teleport"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Remove Friends..."
+     layout="topleft"
+     name="remove_friend">
+        <menu_item_call.on_click
+         function="Namelist.RemoveFriend"/>
+        <menu_item_call.on_enable
+         function="Namelist.EnableItem"
+         parameter="remove_friend"/>
+    </menu_item_call>
+</context_menu>

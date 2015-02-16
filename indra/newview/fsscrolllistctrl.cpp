@@ -48,3 +48,45 @@ void FSScrollListCtrl::refreshLineHeight()
 	}
 	updateLayout();
 }
+
+BOOL FSScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
+{
+	BOOL handled = FALSE;
+
+	// If we set our own context menu handler (mContextMenu != NULL), skip the
+	// event handler in LLScrollListCtrl and perform our own context menu action.
+	// If we didn't set our own context menu handler, fall back to the default
+	// event handler, which will pop up the default context menu for a LLScrollListCtrl.
+	if (mContextMenu)
+	{
+		handled = LLUICtrl::handleRightMouseDown(x, y, mask);
+
+		std::vector<LLScrollListItem*> selected_items = getAllSelected();
+		if (selected_items.size() > 1)
+		{
+			uuid_vec_t selected_uuids;
+			for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
+			{
+				selected_uuids.push_back((*it)->getUUID());
+			}
+			mContextMenu->show(this, selected_uuids, x, y);
+		}
+		else
+		{
+			LLScrollListItem* hit_item = hitItem(x, y);
+			if (hit_item)
+			{
+				LLUUID val = hit_item->getValue();
+				selectByID(val);
+				uuid_vec_t selected_uuids;
+				selected_uuids.push_back(val);
+				mContextMenu->show(this, selected_uuids, x, y);
+			}
+		}
+	}
+	else
+	{
+		handled = LLScrollListCtrl::handleRightMouseDown(x, y, mask);
+	}
+	return handled;
+}

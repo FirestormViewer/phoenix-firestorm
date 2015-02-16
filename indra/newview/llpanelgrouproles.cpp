@@ -58,6 +58,7 @@
 
 // [FS:CR] FIRE-12276
 #include "llfilepicker.h"
+#include "fsnamelistavatarmenu.h"
 
 static LLPanelInjector<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
@@ -846,7 +847,10 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 	mMembersList->setCommitCallback(onMemberSelect, this);
 	// Show the member's profile on double click.
 	mMembersList->setDoubleClickCallback(onMemberDoubleClick, this);
-	mMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+	//mMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	mMembersList->setContextMenu(&gFSNameListAvatarMenu);
+	// </FS:Ansariel>
 	
 	LLSD row;
 	row["columns"][0]["column"] = "name";
