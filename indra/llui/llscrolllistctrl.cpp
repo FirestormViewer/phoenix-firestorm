@@ -1968,6 +1968,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
 			registrar.add("FS.AddToContactSet", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/addtocontactset"));	// [FS:CR]
 			registrar.add("FS.BlockAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/blockavatar"));
+			registrar.add("FS.ViewLog", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/viewlog"));
 			// </FS:Ansariel> Additional convenience options
 
 			// <FS:Ansariel> Add enable checks for menu items
@@ -1983,6 +1984,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			enable_registrar.add("FS.EnableRequestTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_REQUEST_TELEPORT));
 			enable_registrar.add("FS.CheckIsAgentBlocked", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_AVATAR_BLOCKED));
 			enable_registrar.add("FS.EnableBlockAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_IS_NOT_SELF));
+			enable_registrar.add("FS.EnableViewLog", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_VIEW_TRANSCRIPT));
 			// </FS:Ansariel>
 
 			// create the context menu from the XUI file and display it

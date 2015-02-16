@@ -24,6 +24,15 @@
          function="Url.EnableSendIM" />
     </menu_item_call>
     <menu_item_call
+     label="View chat transcripts..."
+     layout="topleft"
+     name="chat_history">
+        <menu_item_call.on_click
+         function="FS.ViewLog"/>
+        <menu_item_call.on_enable
+         function="FS.EnableViewLog"/>
+    </menu_item_call>
+    <menu_item_call
      label="Add Friend..."
      layout="topleft"
      name="add_friend">

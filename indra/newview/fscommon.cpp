@@ -34,6 +34,7 @@
 #include "llavatarnamecache.h"
 #include "llfloaterperms.h"
 #include "llinventorymodel.h"
+#include "lllogchat.h"
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
@@ -315,6 +316,10 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	else if (action == FS_RGSTR_ACT_SEND_IM)
 	{
 		return (!isSelf && RlvActions::canStartIM(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_VIEW_TRANSCRIPT)
+	{
+		return (!isSelf && LLLogChat::isTranscriptExist(av_id));
 	}
 	else if (action == FS_RGSTR_ACT_ZOOM_IN)
 	{
