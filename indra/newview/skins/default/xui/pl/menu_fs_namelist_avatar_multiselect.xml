@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Namelist Popup">
+	<menu_item_call label="Wyślij wiadomość IM" name="send_im" />
+	<menu_item_call label="Dodaj do Zestawu" name="Add to Set" />
+	<menu_item_call label="Proponuj teleport" name="offer_teleport" />
+	<menu_item_call label="Usuń ze znajomych" name="remove_friend" />
+</context_menu>

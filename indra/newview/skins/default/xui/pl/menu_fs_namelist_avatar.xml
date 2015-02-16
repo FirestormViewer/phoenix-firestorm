@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Namelist Popup">
+	<menu_item_call label="Pokaż profil" name="show_agent" />
+	<menu_item_call label="Wyślij wiadomość IM" name="send_im" />
+	<menu_item_call label="Pokaż logi czatu" name="chat_history" />
+	<menu_item_call label="Dodaj do znajomych" name="add_friend" />
+	<menu_item_call label="Dodaj do Zestawu" name="Add to Set" />
+	<menu_item_call label="Przybliż do Rezydenta" name="zoom_agent" />
+	<menu_item_call label="Teleportuj do Rezydenta" name="teleportto_agent" />
+	<menu_item_call label="Proponuj teleport" name="offer_teleport" />
+	<menu_item_call label="Poproś o teleport" name="request_teleport" />
+	<menu_item_call label="Śledź Rezydenta" name="track_agent" />
+	<menu_item_call label="Usuń ze znajomych" name="remove_friend" />
+	<menu_item_check label="Zablokuj" name="Block" />
+	<menu_item_call label="Kopiuj nazwę do schowka" name="url_copy_label" />
+	<menu_item_call label="Kopiuj SLurl do schowka" name="url_copy" />
+</context_menu>
