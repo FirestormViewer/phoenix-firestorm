@@ -31,8 +31,8 @@
 
 #include "fspanelblocklist.h"
 
-#include "fsblocklistctrl.h"
 #include "fsblocklistmenu.h"
+#include "fsscrolllistctrl.h"
 #include "llavataractions.h"
 #include "llavatarname.h"
 #include "llfiltereditor.h"
@@ -85,7 +85,7 @@ FSPanelBlockList::~FSPanelBlockList()
 
 BOOL FSPanelBlockList::postBuild()
 {
-	mBlockedList = getChild<FSBlockListCtrl>("block_list");
+	mBlockedList = getChild<FSScrollListCtrl>("block_list");
 	mBlockedList->setCommitOnSelectionChange(TRUE);
 	mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
 	mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));

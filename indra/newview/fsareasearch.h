@@ -47,12 +47,12 @@ class LLContextMenu;
 class LLSpinCtrl;
 class LLComboBox;
 
-class FSAreaSearchListCtrl;
 class FSPanelAreaSearchList;
 class FSPanelAreaSearchFind;
 class FSPanelAreaSearchFilter;
 class FSPanelAreaSearchAdvanced;
 class FSPanelAreaSearchOptions;
+class FSScrollListCtrl;
 
 struct FSObjectProperties
 {
@@ -275,7 +275,7 @@ public:
 	void updateName(LLUUID id, std::string name);
 	void touchObject(LLViewerObject* objectp);
 
-	FSAreaSearchListCtrl* getResultList() { return mResultList; }
+	FSScrollListCtrl* getResultList() { return mResultList; }
 	void updateResultListColumns();
 
 	void setAgentLastPosition(LLVector3d d) { mAgentLastPosition = d; }
@@ -299,7 +299,7 @@ private:
 
 	FSAreaSearch* mFSAreaSearch;
 	LLButton* mRefreshButton;
-	FSAreaSearchListCtrl* mResultList;
+	FSScrollListCtrl* mResultList;
 	LLCheckBoxCtrl* mCheckboxBeacons;
 	LLTextBox* mCounterText;
 

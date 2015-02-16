@@ -7,7 +7,7 @@
 	help_topic="blocked_list"
 	width="304">
 
-	<fs_block_list
+	<fs_scroll_list
 	 draw_heading="true"
 		height="70"
 		left="0"
@@ -20,17 +20,17 @@
 	 name="block_list"
 	 draw_stripes="true"
 	 multi_select="true">
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_name"
 		 label="Name"/>
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_type"
 		 label="Type"
 		 width="96"/>
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_mute_type"
 		 width="-1" />
-	</fs_block_list>
+	</fs_scroll_list>
 
 	<layout_stack
 		name="block_list_sidetray_main"

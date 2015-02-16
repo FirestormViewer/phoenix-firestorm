@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<friend_list name="friend_list">
-		<friend_list.column name="icon_online_status" tool_tip="Stato online"/>
-		<friend_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
-		<friend_list.column label="Nome" name="full_name" tool_tip="Nome scelto dal contatto."/>
-		<friend_list.column name="icon_visible_online" tool_tip="Un amico può vedere se sei online/offline"/>
-		<friend_list.column name="icon_visible_map" tool_tip="Il tuo amico ti può trovare sulla mappa"/>
-		<friend_list.column name="icon_edit_mine" tool_tip="Il tuo amico può modificare, cancellare, o prendere i tuoi oggetti oggetti"/>
-		<friend_list.column name="icon_visible_map_theirs" tool_tip="Lo puoi visualizzare sulla mappa"/>
-		<friend_list.column name="icon_edit_theirs" tool_tip="È possibile modificare gli oggetti di un amico"/>
-	</friend_list>
+	<fs_scroll_list name="friend_list">
+		<fs_scroll_list.column name="icon_online_status" tool_tip="Stato online"/>
+		<fs_scroll_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
+		<fs_scroll_list.column label="Nome" name="full_name" tool_tip="Nome scelto dal contatto."/>
+		<fs_scroll_list.column name="icon_visible_online" tool_tip="Un amico può vedere se sei online/offline"/>
+		<fs_scroll_list.column name="icon_visible_map" tool_tip="Il tuo amico ti può trovare sulla mappa"/>
+		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Il tuo amico può modificare, cancellare, o prendere i tuoi oggetti oggetti"/>
+		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Lo puoi visualizzare sulla mappa"/>
+		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="È possibile modificare gli oggetti di un amico"/>
+	</fs_scroll_list>
 	<button name="im_btn" tool_tip="Apri una conversazione privata (Instant message/IM)"/>
 	<button label="Profilo" name="profile_btn" tool_tip="Apri il profilo dell'amico selezionato"/>
 	<button name="offer_teleport_btn" tool_tip="Offri teleport all'amico selezionato"/>

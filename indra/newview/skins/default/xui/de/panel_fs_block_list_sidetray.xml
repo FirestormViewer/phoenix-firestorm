@@ -7,8 +7,8 @@
 		<menu_button name="plus_btn" tool_tip="Einwohner oder Objekt zum ignorieren auswählen"/>
 		<button name="unblock_btn" tool_tip="Einwohner oder Objekt aus der Liste der ignorierten Einwohner oder Objekte entfernen"/>
 	</panel>
-	<fs_block_list name="block_list">
-		<fs_block_list.columns name="item_name" label="Name"/>
-		<fs_block_list.columns name="item_type" label="Typ"/>
-	</fs_block_list>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Name"/>
+		<fs_scroll_list.columns name="item_type" label="Typ"/>
+	</fs_scroll_list>
 </panel>

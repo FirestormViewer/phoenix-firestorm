@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<friend_list name="friend_list" right="-90">
-		<friend_list.column name="icon_online_status" tool_tip="Online-Status"/>
-		<friend_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
-		<friend_list.column label="Anzeigename" name="display_name" tool_tip="Der Anzeigename dieses Freundes."/>
-		<friend_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
-		<friend_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
-		<friend_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
-		<friend_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
-		<friend_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
-		<friend_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
-	</friend_list>
+	<fs_scroll_list name="friend_list" right="-90">
+		<fs_scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
+		<fs_scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
+		<fs_scroll_list.column label="Anzeigename" name="display_name" tool_tip="Der Anzeigename dieses Freundes."/>
+		<fs_scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
+		<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
+		<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
+		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
+		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
+		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
+	</fs_scroll_list>
 	<button
 	 label="IM/Anruf"
 	 name="im_btn"

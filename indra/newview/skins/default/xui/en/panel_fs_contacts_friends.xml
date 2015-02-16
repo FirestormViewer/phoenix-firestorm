@@ -26,7 +26,7 @@
 	 top="-10"
 	 width="240" />
 -->
-	<friend_list
+	<fs_scroll_list
      left="4"
      right="-85"
      top="0"
@@ -38,55 +38,55 @@
 	 heading_height="20"
 	 multi_select="true"
      name="friend_list">
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_online_status"
 		 image="icon_avatar_online_h"
 		 tool_tip="Online status"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Username"
 		 name="user_name"
 		 tool_tip="This contact's username."/>
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Display name"
 		 name="display_name"
 		 tool_tip="This contact's display name."/>
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Name"
 		 name="full_name"
 		 tool_tip="This contact's chosen name." />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_visible_online"
 		 image="Permission_Visible_Online_h"
 		 tool_tip="Friend can see when you&apos;re online"
 		 width="16" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_visible_map"
 		 image="Permission_Visible_Map_h"
 		 tool_tip="Friend can locate you on the map"
 		 width="16" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_edit_mine"
 		 image="Permission_Edit_Objects_Mine_h"
 		 tool_tip="Friend can edit, delete or take objects"
 		 width="16" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_visible_map_theirs"
 		 image="Permission_Visible_Map_h"
 		 tool_tip="You can locate them on the map"
 		 width="16" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="icon_edit_theirs"
 		 image="Permission_Edit_Objects_Theirs_h"
 		 tool_tip="You can edit this friend&apos;s objects"
 		 width="16" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="friend_last_update_generation"
 		 width="-1" />
-	</friend_list>
+	</fs_scroll_list>
 	<button
 	 top="1"
 	 follows="top|right"

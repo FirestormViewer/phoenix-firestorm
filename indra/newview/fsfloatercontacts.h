@@ -34,7 +34,7 @@
 #include "llscrolllistcolumn.h"
 #include "rlvhandler.h"
 
-class FSContactsFriendsCtrl;
+class FSScrollListCtrl;
 class LLAvatarList;
 class LLAvatarTracker;
 class LLFriendObserver;
@@ -70,7 +70,7 @@ public:
 	void					onDisplayNameChanged();
 
 	LLPanel*				mFriendsTab;
-	FSContactsFriendsCtrl*	mFriendsList;
+	FSScrollListCtrl*		mFriendsList;
 	LLPanel*				mGroupsTab;
 	LLGroupList*			mGroupList;
 

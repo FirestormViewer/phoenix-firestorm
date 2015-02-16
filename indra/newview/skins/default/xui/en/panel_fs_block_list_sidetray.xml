@@ -88,7 +88,7 @@
           top_delta="0"
           width="31"/>
      </panel>
-	<fs_block_list
+	<fs_scroll_list
 	 draw_heading="true"
 	 follows="all"
 	 bottom="-4"
@@ -101,15 +101,15 @@
 	 draw_stripes="true"
 	 multi_select="true"
 	 right="-1">
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_name"
 		 label="Name"/>
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_type"
 		 label="Type"
 		 width="96"/>
-		<fs_block_list.columns
+		<fs_scroll_list.columns
 		 name="item_mute_type"
 		 width="-1" />
-	</fs_block_list>
+	</fs_scroll_list>
 </panel>

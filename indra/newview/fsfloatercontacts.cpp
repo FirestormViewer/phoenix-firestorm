@@ -30,9 +30,9 @@
 #include "fsfloatercontacts.h"
 
 #include "fscommon.h"
-#include "fscontactsfriendsctrl.h"
 #include "fscontactsfriendsmenu.h"
 #include "fsfloaterimcontainer.h"
+#include "fsscrolllistctrl.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
@@ -127,7 +127,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
 	mFriendListFontName = mFriendsTab->getString("FontName");
 
-	mFriendsList = mFriendsTab->getChild<FSContactsFriendsCtrl>("friend_list");
+	mFriendsList = mFriendsTab->getChild<FSScrollListCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);
 	mFriendsList->setCommitOnSelectionChange(TRUE);
 	mFriendsList->setCommitCallback(boost::bind(&FSFloaterContacts::onSelectName, this));

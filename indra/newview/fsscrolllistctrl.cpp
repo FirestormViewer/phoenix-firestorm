@@ -29,6 +29,8 @@
 
 #include "fsscrolllistctrl.h"
 
+static LLDefaultChildRegistry::Register<FSScrollListCtrl> r("fs_scroll_list");
+
 FSScrollListCtrl::FSScrollListCtrl(const Params& p)
 :	LLScrollListCtrl(p),
 	mContextMenu(NULL),

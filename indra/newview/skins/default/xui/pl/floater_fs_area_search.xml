@@ -8,18 +8,18 @@
 			<panel.string name="ListedPendingTotalFilled">
 				[LISTED] na liście | [PENDING] zostało | [TOTAL] w sumie
 			</panel.string>
-			<area_search_list name="result_list">
-				<area_search_list.columns name="distance" label="Odl." tool_tip="Odległość obiektu od Twojego awatara."/>
-				<area_search_list.columns name="name" label="Nazwa"/>
-				<area_search_list.columns name="description" label="Opis"/>
-				<area_search_list.columns name="price" label="Cena" tool_tip="Ile zapłacisz za kupno, jeśli obiekt jest wystawiony na sprzedaż."/>
-				<area_search_list.columns name="land_impact" label="Wpływ" tool_tip="Ilość prim, jaka jest odliczana od maksymalnie dostępnych na działce." width="45"/>
-				<area_search_list.columns name="prim_count" label="Primy" tool_tip="Ilość prim, z jakich zrobiony jest obiekt."/>
-				<area_search_list.columns name="owner" label="Właściciel"/>
-				<area_search_list.columns name="group" label="Grupa" tool_tip="Na jaką grupę ustawiony jest obiekt."/>
-				<area_search_list.columns name="creator" label="Twórca"/>
-				<area_search_list.columns name="last_owner" label="Ostatni właściciel" tool_tip="Do kogo obiekt ostatnio należał."/>
-			</area_search_list>
+			<fs_scroll_list name="result_list">
+				<fs_scroll_list.columns name="distance" label="Odl." tool_tip="Odległość obiektu od Twojego awatara."/>
+				<fs_scroll_list.columns name="name" label="Nazwa"/>
+				<fs_scroll_list.columns name="description" label="Opis"/>
+				<fs_scroll_list.columns name="price" label="Cena" tool_tip="Ile zapłacisz za kupno, jeśli obiekt jest wystawiony na sprzedaż."/>
+				<fs_scroll_list.columns name="land_impact" label="Wpływ" tool_tip="Ilość prim, jaka jest odliczana od maksymalnie dostępnych na działce." width="45"/>
+				<fs_scroll_list.columns name="prim_count" label="Primy" tool_tip="Ilość prim, z jakich zrobiony jest obiekt."/>
+				<fs_scroll_list.columns name="owner" label="Właściciel"/>
+				<fs_scroll_list.columns name="group" label="Grupa" tool_tip="Na jaką grupę ustawiony jest obiekt."/>
+				<fs_scroll_list.columns name="creator" label="Twórca"/>
+				<fs_scroll_list.columns name="last_owner" label="Ostatni właściciel" tool_tip="Do kogo obiekt ostatnio należał."/>
+			</fs_scroll_list>
 			<button name="Refresh" label="Odśwież"/>
 			<text name="counter">
 				Na liście | Zostało | W sumie

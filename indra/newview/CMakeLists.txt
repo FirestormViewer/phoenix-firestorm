@@ -133,16 +133,12 @@ set(viewer_SOURCE_FILES
     exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
-    fsareasearchlistctrl.cpp
     fsareasearchmenu.cpp
-    fsavatarsearchlistctrl.cpp
     fsavatarsearchmenu.cpp
-    fsblocklistctrl.cpp
     fsblocklistmenu.cpp
     fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
-    fscontactsfriendsctrl.cpp
     fscontactsfriendsmenu.cpp
     fsdata.cpp
     fsdroptarget.cpp
@@ -864,16 +860,12 @@ set(viewer_HEADER_FILES
     exopostprocess.h
     floatermedialists.h
     fsareasearch.h
-    fsareasearchlistctrl.h
     fsareasearchmenu.h
-    fsavatarsearchlistctrl.h
     fsavatarsearchmenu.h
-    fsblocklistctrl.h
     fsblocklistmenu.h
     fschathistory.h
     fscommon.h
     fsconsoleutils.h
-    fscontactsfriendsctrl.h
     fscontactsfriendsmenu.h
     fsdata.h
     fsdroptarget.h

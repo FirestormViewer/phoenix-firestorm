@@ -16,7 +16,7 @@
 	 bevel_style="in"
 	 name="info_border" />
 
-	<friend_list
+	<fs_scroll_list
      left="7"
      right="-88"
      top="1"
@@ -28,55 +28,55 @@
 	 heading_height="20"
 	 multi_select="true"
      name="friend_list">
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_online_status_button.tga"
 		 name="icon_online_status"
 		 tool_tip="Online status"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Username"
 		 name="user_name"
 		 tool_tip="This contact's username."/>
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Display name"
 		 name="display_name"
 		 tool_tip="This contact's display name."/>
-		<friend_list.column
+		<fs_scroll_list.column
 		 dynamicwidth="true"
 		 label="Name"
 		 name="full_name"
 		 tool_tip="This contact's chosen name." />
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_visible_online_button.tga"
 		 name="icon_visible_online"
 		 tool_tip="Friend can see when you&apos;re online"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_visible_map_button.tga"
 		 name="icon_visible_map"
 		 tool_tip="Friend can locate you on the map"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_edit_mine_button.tga"
 		 name="icon_edit_mine"
 		 tool_tip="Friend can edit, delete or take objects"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_visible_map_button_theirs.tga"
 		 name="icon_visible_map_theirs"
 		 tool_tip="You can locate them on the map"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 image="legacy/ff_edit_theirs_button.tga"
 		 name="icon_edit_theirs"
 		 tool_tip="You can edit this friend&apos;s objects"
 		 width="20" />
-		<friend_list.column
+		<fs_scroll_list.column
 		 name="friend_last_update_generation"
 		 width="-1" />
-	</friend_list>
+	</fs_scroll_list>
 	<button
 	 top="1"
 	 follows="top|right"

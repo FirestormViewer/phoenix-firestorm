@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="block_list_panel">
-	<fs_block_list name="block_list">
-		<fs_block_list.columns name="item_name" label="Nazwa" />
-		<fs_block_list.columns name="item_type" label="Typ" />
-	</fs_block_list>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Nazwa" />
+		<fs_scroll_list.columns name="item_type" label="Typ" />
+	</fs_scroll_list>
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
 			<button tool_tip="Wróć do Ludzi" name="back" />

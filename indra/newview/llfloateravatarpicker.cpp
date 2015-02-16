@@ -59,8 +59,8 @@
 
 //#include "llsdserialize.h"
 
-#include "fsavatarsearchlistctrl.h"
 #include "fsavatarsearchmenu.h"
+#include "fsscrolllistctrl.h"
 
 //put it back as a member once the legacy path is out?
 static std::map<LLUUID, LLAvatarName> sAvatarNameMap;
@@ -137,7 +137,7 @@ BOOL LLFloaterAvatarPicker::postBuild()
 	
 	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
 	//LLScrollListCtrl* searchresults = getChild<LLScrollListCtrl>("SearchResults");
-	FSAvatarSearchListCtrl* searchresults = getChild<FSAvatarSearchListCtrl>("SearchResults");
+	FSScrollListCtrl* searchresults = getChild<FSScrollListCtrl>("SearchResults");
 	searchresults->setContextMenu(&gFSAvatarSearchMenu);
 	// </FS:Ansariel>
 	searchresults->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
@@ -146,7 +146,7 @@ BOOL LLFloaterAvatarPicker::postBuild()
 	
 	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
 	//LLScrollListCtrl* nearme = getChild<LLScrollListCtrl>("NearMe");
-	FSAvatarSearchListCtrl* nearme = getChild<FSAvatarSearchListCtrl>("NearMe");
+	FSScrollListCtrl* nearme = getChild<FSScrollListCtrl>("NearMe");
 	nearme->setContextMenu(&gFSAvatarSearchMenu);
 	// </FS:Ansariel>
 	nearme->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
@@ -154,7 +154,7 @@ BOOL LLFloaterAvatarPicker::postBuild()
 
 	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
 	//LLScrollListCtrl* friends = getChild<LLScrollListCtrl>("Friends");
-	FSAvatarSearchListCtrl* friends = getChild<FSAvatarSearchListCtrl>("Friends");
+	FSScrollListCtrl* friends = getChild<FSScrollListCtrl>("Friends");
 	friends->setContextMenu(&gFSAvatarSearchMenu);
 	// </FS:Ansariel>
 	friends->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
@@ -183,7 +183,7 @@ BOOL LLFloaterAvatarPicker::postBuild()
 	childSetAction("FindUUID", boost::bind(&LLFloaterAvatarPicker::onBtnFindUUID, this));
 	getChildView("FindUUID")->setEnabled(FALSE);
 
-	FSAvatarSearchListCtrl* searchresultsuuid = getChild<FSAvatarSearchListCtrl>("SearchResultsUUID");
+	FSScrollListCtrl* searchresultsuuid = getChild<FSScrollListCtrl>("SearchResultsUUID");
 	searchresultsuuid->setContextMenu(&gFSAvatarSearchMenu);
 	searchresultsuuid->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
 	searchresultsuuid->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));

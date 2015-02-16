@@ -60,8 +60,8 @@
 #include "llviewerjoystick.h" // For disabling/re-enabling when requested to look at an object.
 #include "llmoveview.h" // For LLPanelStandStopFlying::clearStandStopFlyingMode
 #include "rlvhandler.h"
-#include "fsareasearchlistctrl.h"
 #include "fsareasearchmenu.h"
+#include "fsscrolllistctrl.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 const S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1031,7 +1031,7 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 		return;
 	}
 	
-	FSAreaSearchListCtrl* result_list = mPanelList->getResultList();
+	FSScrollListCtrl* result_list = mPanelList->getResultList();
 	if (result_list)
 	{
 		LLScrollListItem* list_row = result_list->getItem(LLSD(object_id));
@@ -1278,7 +1278,7 @@ FSPanelAreaSearchList::FSPanelAreaSearchList(FSAreaSearch* pointer)
 
 BOOL FSPanelAreaSearchList::postBuild()
 {
-	mResultList = getChild<FSAreaSearchListCtrl>("result_list");
+	mResultList = getChild<FSScrollListCtrl>("result_list");
 	mResultList->setDoubleClickCallback(boost::bind(&FSPanelAreaSearchList::onDoubleClick, this));
 	mResultList->sortByColumn("name", TRUE);
 	mResultList->setContextMenu(&gFSAreaSearchMenu);

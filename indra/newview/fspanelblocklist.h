@@ -35,7 +35,7 @@
 #include "llfloater.h"
 
 class LLAvatarName;
-class FSBlockListCtrl;
+class FSScrollListCtrl;
 
 class FSPanelBlockList
 	:	public LLPanel, public LLMuteListObserver
@@ -93,7 +93,7 @@ private:
 	void callbackBlockByName(const std::string& text);
 
 private:
-	FSBlockListCtrl* mBlockedList;
+	FSScrollListCtrl* mBlockedList;
 	LLHandle<LLFloater> mAvatarPicker;
 	LLHandle<LLFloater> mObjectPicker;
 	std::string mFilterSubString;
