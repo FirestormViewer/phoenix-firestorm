@@ -197,7 +197,6 @@ set(viewer_SOURCE_FILES
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
-    #growlmanager.cpp
     kcwlinterface.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
@@ -927,8 +926,6 @@ set(viewer_HEADER_FILES
     fswsassetblacklist.h
     groupchatlistener.h
     llaccountingcost.h
-    #growlmanager.h
-    #growlnotifier.h
     kcwlinterface.h
     lggbeamcolormapfloater.h
     lggbeammapfloater.h
