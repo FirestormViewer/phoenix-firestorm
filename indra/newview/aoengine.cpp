@@ -571,8 +571,19 @@ void AOEngine::cycle(eCycleMode cycleMode)
 	LLUUID motion=mCurrentSet->getMotion();
 
 	// assume stand if no motion is registered, happens after login when the avatar hasn't moved at all yet
+	// or if the agent has said something in local chat while sitting
 	if(motion.isNull())
-		motion=ANIM_AGENT_STAND;
+	{
+		if(gAgentAvatarp->isSitting())
+		{
+			motion=ANIM_AGENT_SIT;
+		}
+		else
+		{
+			motion=ANIM_AGENT_STAND;
+		}
+	}
+
 	// do not cycle if we're sitting and sit-override is off
 	else if(motion==ANIM_AGENT_SIT && !mCurrentSet->getSitOverride())
 		return;
