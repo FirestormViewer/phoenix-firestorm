@@ -271,6 +271,13 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 
 LLLayoutStack::~LLLayoutStack()
 {
+	// <FS:Zi> Record new size for this panel
+	if (mSaveSizes)
+	{
+		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName, mSavedSizes);
+	}
+	// </FS:Zi>
+
 	e_panel_list_t panels = mPanels; // copy list of panel pointers
 	mPanels.clear(); // clear so that removeChild() calls don't cause trouble
 	std::for_each(panels.begin(), panels.end(), DeletePointer());
@@ -484,7 +491,9 @@ void LLLayoutStack::updateLayout()
 
 	F32 cur_pos = (mOrientation == HORIZONTAL) ? 0.f : (F32)getRect().getHeight();
 
-	S32 index=0;
+	// <FS:Zi> Record new size for this panel
+	mSavedSizes = LLSD();
+	// </FS:Zi>
 	BOOST_FOREACH(LLLayoutPanel* panelp, mPanels)
 	{
 		F32 panel_dim = llmax(panelp->getExpandedMinDim(), panelp->mTargetDim);
@@ -562,18 +571,10 @@ void LLLayoutStack::updateLayout()
 		// <FS:Zi> Record new size for this panel
 		if (mSaveSizes)
 		{
-			mSavedSizes[index] = panelp->mTargetDim;
-			index++;
+			mSavedSizes.append(panelp->mTargetDim);
 		}
 		// </FS:Zi>
 	}
-
-	// <FS:Zi> Save new sizes for this layout stack's panels
-	if (mSaveSizes)
-	{
-		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName, mSavedSizes);
-	}
-	// </FS:Zi>
 
 	updateResizeBarLimits();
 
