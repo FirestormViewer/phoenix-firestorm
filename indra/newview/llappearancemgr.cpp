@@ -1498,6 +1498,9 @@ void LLAppearanceMgr::onOutfitRename(const LLSD& notification, const LLSD& respo
 	LLStringUtil::trim(outfit_name);
 	if (!outfit_name.empty())
 	{
+		// <FS:Ansariel> Debug code for FIRE-15571
+		LL_INFOS() << "OUTFIT RENAME: Invoking rename_category()" << LL_ENDL;
+
 		LLUUID cat_id = notification["payload"]["cat_id"].asUUID();
 		rename_category(&gInventory, cat_id, outfit_name);
 	}

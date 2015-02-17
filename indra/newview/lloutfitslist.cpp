@@ -632,6 +632,9 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 		}
 	}
 
+	// <FS:Ansariel> Debug code for FIRE-15571
+	LL_INFOS() << "OUTFIT RENAME: Outfits folder changed - processing changed categories" << LL_ENDL;
+
 	// Get changed items from inventory model and update outfit tabs
 	// which might have been renamed.
 	const LLInventoryModel::changed_items_t& changed_items = gInventory.getChangedIDs();
@@ -641,6 +644,9 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	{
 		updateOutfitTab(*items_iter);
 	}
+
+	// <FS:Ansariel> Debug code for FIRE-15571
+	LL_INFOS() << "OUTFIT RENAME: Outfits folder changed - processing changed categories FINISHED" << LL_ENDL;
 
 	mAccordion->sort();
 }
@@ -887,11 +893,21 @@ void LLOutfitsList::computeDifference(
 
 void LLOutfitsList::updateOutfitTab(const LLUUID& category_id)
 {
+	// <FS:Ansariel> Debug code for FIRE-15571
+	LL_INFOS() << "OUTFIT RENAME: Trying to update outfit tab for category" << category_id.asString() << LL_ENDL;
+
 	outfits_map_t::iterator outfits_iter = mOutfitsMap.find(category_id);
 	if (outfits_iter != mOutfitsMap.end())
 	{
 		LLViewerInventoryCategory *cat = gInventory.getCategory(category_id);
-		if (!cat) return;
+		// <FS:Ansariel> Debug code for FIRE-15571
+		//if (!cat) return;
+		if (!cat)
+		{
+			LL_INFOS() << "OUTFIT RENAME: Could not find inventory category" << LL_ENDL;
+			return;
+		}
+		// </FS:Ansariel>
 
 		std::string name = cat->getName();
 
@@ -899,10 +915,16 @@ void LLOutfitsList::updateOutfitTab(const LLUUID& category_id)
 		LLAccordionCtrlTab* tab = outfits_iter->second;
 		if (tab)
 		{
+			// <FS:Ansariel> Debug code for FIRE-15571
+			LL_INFOS() << "OUTFIT RENAME: Updating tab name" << LL_ENDL;
 			tab->setName(name);
 			tab->setTitle(name);
 		}
+		// <FS:Ansariel> Debug code for FIRE-15571
+		else LL_INFOS() << "OUTFIT RENAME: Cannot update tab name" << LL_ENDL;
 	}
+	// <FS:Ansariel> Debug code for FIRE-15571
+	else LL_INFOS() << "OUTFIT RENAME: Category id is not in outfit map" << LL_ENDL;
 }
 
 void LLOutfitsList::resetItemSelection(LLWearableItemsList* list, const LLUUID& category_id)
