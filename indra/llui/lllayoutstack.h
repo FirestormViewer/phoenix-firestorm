@@ -94,6 +94,9 @@ public:
 	
 	static void updateClass();
 
+	// <FS:Ansariel> Applier for dimensions
+	void refreshFromSettings();
+
 protected:
 	LLLayoutStack(const Params&);
 	friend class LLUICtrlFactory;

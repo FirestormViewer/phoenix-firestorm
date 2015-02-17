@@ -251,7 +251,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 		std::string res = std::string("layout_size_") + getName();
 		LLStringUtil::replaceChar(res, ' ', '_');
 		mSizeControlName = res;
-		LLControlGroup* controlGroup = LLUI::sSettingGroups["config"];
+		LLControlGroup* controlGroup = LLUI::sSettingGroups["account"];
 		if (!controlGroup->controlExists(mSizeControlName))
 		{
 			LL_WARNS() << "declaring control " << mSizeControlName << LL_ENDL;
@@ -263,7 +263,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 		}
 		else
 		{
-			mSavedSizes = LLControlGroup::getInstance("Global")->getLLSD(mSizeControlName);
+			mSavedSizes = controlGroup->getLLSD(mSizeControlName);
 		}
 	}
 	// </FS:Zi>
@@ -271,10 +271,10 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 
 LLLayoutStack::~LLLayoutStack()
 {
-	// <FS:Zi> Record new size for this panel
+	// <FS:Zi> Save new sizes for this layout stack's panels
 	if (mSaveSizes)
 	{
-		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName, mSavedSizes);
+		LLUI::sSettingGroups["account"]->setLLSD(mSizeControlName, mSavedSizes);
 	}
 	// </FS:Zi>
 
@@ -1069,3 +1069,39 @@ void LLLayoutStack::updateResizeBarLimits()
 	}
 }
 
+// <FS:Ansariel> Applier for dimensions
+void LLLayoutStack::refreshFromSettings()
+{
+	if (!mSaveSizes)
+	{
+		return;
+	}
+
+	LLSD dimensions = LLUI::sSettingGroups["account"]->getLLSD(mSizeControlName);
+	if (dimensions.size() < mPanels.size())
+	{
+		return;
+	}
+
+	for (size_t i = 0; i < mPanels.size(); ++i)
+	{
+		LLLayoutPanel* panelp = mPanels.at(i);
+
+		S32 width = panelp->getRect().getWidth();
+		S32 height = panelp->getRect().getHeight();
+
+		S32 dim = dimensions[i].asInteger();
+
+		if (mOrientation == LLLayoutStack::HORIZONTAL)
+		{
+			width = dim;
+		}
+		else
+		{
+			height = dim;
+		}
+		panelp->reshape(width, height, TRUE);
+	}
+	mNeedsLayout = true;
+}
+// </FS:Ansariel>

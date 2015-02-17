@@ -909,6 +909,20 @@
             <string></string>
         </map>
     <!-- End of settings imported from Exodus -->
+    <key>layout_size_chat_bar_stack</key>
+        <map>
+        <key>Backup</key>
+            <boolean>1</boolean>
+        <key>Comment</key>
+            <string>Fractional size for layout panel chat_bar_stack</string>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <array>
+                <integer>400</integer>
+                <integer>600</integer>
+            </array>
+        </map>
 
     </map>
 </llsd>

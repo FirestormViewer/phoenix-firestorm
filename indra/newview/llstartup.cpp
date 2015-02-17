@@ -1283,6 +1283,14 @@ bool idle_startup()
 		// Overwrite default user settings with user settings								 
 		LLAppViewer::instance()->loadSettingsFromDirectory("Account");
 
+		// <FS:Ansariel> Restore bottom toolbar layout now he have the user settings
+		LLLayoutStack* chat_bar_stack = gToolBarView->findChild<LLLayoutStack>("chat_bar_stack");
+		if (chat_bar_stack)
+		{
+			chat_bar_stack->refreshFromSettings();
+		}
+		// </FS:Ansariel>
+
 		// Convert 'LogInstantMessages' into 'KeepConversationLogTranscripts' for backward compatibility (CHUI-743).
 		// <FS:CR> FIRE-11410 - Don't do this, handle it in settings restore and first run
 		//LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
