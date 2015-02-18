@@ -310,6 +310,7 @@
 		<spinner label="Y-Position" name="Y pos" label_width="60" width="135"/>
 		<spinner label="Z-Position" name="Z pos" label_width="60" width="135"/>
 		<check_box label="Werte sind in Prozent" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="FSPivotPercToggle"/>
+		<button label="Standard-Erstellungsberechtigungen" name="fs_default_creation_permissions"/>
 		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
 		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz auf Kosten der Lesbarkeit." name="preprocoptimizer_checkbox"/>
 		<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>

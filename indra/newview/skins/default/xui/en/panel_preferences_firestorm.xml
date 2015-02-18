@@ -2055,10 +2055,23 @@
          width="100"
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
+        <button
+         follows="left|top"
+         height="25"
+         label="Default Creation Permissions"
+         layout="topleft"
+         name="fs_default_creation_permissions"
+         left="8"
+         top="185"
+         width="250">
+         <button.commit_callback
+             function="Pref.PermsDefault" />
+        </button>
+
         <check_box
          follows="left|top"
          height="16"
-         top_pad="70"
+         top_pad="105"
          left="5"
          label="Enable LSL preprocessor"
          tool_tip="When checked, the LSL preprocessor is enabled."
