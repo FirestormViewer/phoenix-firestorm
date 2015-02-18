@@ -1514,6 +1514,13 @@ void LLTabContainer::selectLastTab()
 
 void LLTabContainer::selectNextTab()
 {
+	// <FS:Ansariel> FIRE-15578: Crash fix (division by 0)
+	if (mTabList.size() == 0)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	BOOL tab_has_focus = FALSE;
 	if (mCurrentTabIdx >= 0 && mTabList[mCurrentTabIdx]->mButton->hasFocus())
 	{
