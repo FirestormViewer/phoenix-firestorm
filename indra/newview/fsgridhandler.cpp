@@ -46,6 +46,7 @@
 #else
 #include <unistd.h>
 #endif
+#include "llstartup.h"
 
 // <AW opensim>
 class GridInfoRequestResponder : public LLHTTPClient::Responder
@@ -1057,7 +1058,10 @@ std::string LLGridManager::getGridLabel(const std::string& grid)
 	}
 	else
 	{
-		LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+		if (LLStartUp::getStartupState() >= STATE_LOGIN_SHOW)
+		{
+			LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+		}
 	}
 	LL_DEBUGS("GridManager") << "returning " << grid_label << LL_ENDL;
 	return grid_label;
@@ -1198,7 +1202,10 @@ std::string LLGridManager::getGridId(const std::string& grid)
 	}
 	else
 	{
-		LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+		if (LLStartUp::getStartupState() >= STATE_LOGIN_SHOW)
+		{
+			LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+		}
 	}
 	LL_DEBUGS("GridManager") << "returning " << grid_id << LL_ENDL;
 	return grid_id;
