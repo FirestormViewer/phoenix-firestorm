@@ -179,14 +179,16 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	if (saved)
 	{
 		LLFloaterSnapshot::postSave();
-		goBack();
+		// <FS:Ansariel> Don't return to target selection after taking a snapshot
+		//goBack();
 		floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
 	}
 	else
 	{
 		// <FS:Ansariel> Notify user if we could not save file
 		LLNotificationsUtil::add("CannotSaveSnapshot");
-		cancel();
+		// <FS:Ansariel> Don't return to target selection after taking a snapshot
+		//cancel();
 	}
 }
 

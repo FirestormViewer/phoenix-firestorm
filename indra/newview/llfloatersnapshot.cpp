@@ -744,9 +744,24 @@ void LLFloaterSnapshot::Impl::setFinished(LLFloaterSnapshot* floater, bool finis
 		std::string result_text = floater->getString(msg + "_" + (ok ? "succeeded_str" : "failed_str"));
 		finished_lbl->setValue(result_text);
 
-		LLSideTrayPanelContainer* panel_container = floater->getChild<LLSideTrayPanelContainer>("panel_container");
-		panel_container->openPreviousPanel();
-		panel_container->getCurrentPanel()->onOpen(LLSD());
+		// <FS:Ansariel> Don't return to target selection after taking a snapshot
+		//LLSideTrayPanelContainer* panel_container = floater->getChild<LLSideTrayPanelContainer>("panel_container");
+		//panel_container->openPreviousPanel();
+		//panel_container->getCurrentPanel()->onOpen(LLSD());
+		LLPanelSnapshot* panel = getActivePanel(floater);
+		if (panel)
+		{
+			std::string sdstring = panel->getImageSizeComboBox()->getSelectedValue();
+			LLSD sdres;
+			std::stringstream sstream(sdstring);
+			LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
+			bool is_custom_resolution = (sdres[0].asInteger() == -1 && sdres[1].asInteger() == -1);
+
+			panel->enableAspectRatioCheckbox(is_custom_resolution);
+			panel->getWidthSpinner()->setEnabled(is_custom_resolution);
+			panel->getHeightSpinner()->setEnabled(is_custom_resolution);
+		}
+		// </FS:Ansariel>
 	}
 }
 
@@ -1202,7 +1217,14 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	impl.updateLayout(this);
 
 	// Initialize default tab.
-	getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
+	// <FS:Ansariel> Don't return to target selection after taking a snapshot
+	//getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
+	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
+	panel_container->selectTabByName("panel_snapshot_options");
+	panel_container->getCurrentPanel()->onOpen(LLSD());
+	mSucceessLblPanel->setVisible(FALSE);
+	mFailureLblPanel->setVisible(FALSE);
+	// </FS:Ansariel>
 
 // <FS:CR> FIRE-9621
 #ifdef OPENSIM
