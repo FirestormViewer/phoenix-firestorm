@@ -970,11 +970,15 @@ BOOL LLToolGrab::handleMouseUp(S32 x, S32 y, MASK mask)
 
 	mMode = GRAB_INACTIVE;
 
-	if(mClickedInMouselook && !gAgentCamera.cameraMouselook())
-	{
-		mClickedInMouselook = FALSE;
-	}
-	else
+	// <FS:Ansariel> FIRE-15578: After exiting mouselook, left clicking on a touchable object opens build floater
+	//if(mClickedInMouselook && !gAgentCamera.cameraMouselook())
+	//{
+	//	mClickedInMouselook = FALSE;
+	//}
+	//else
+	// </FS:Ansariel>
+	if ((mClickedInMouselook && gAgentCamera.cameraMouselook()) ||
+		(!mClickedInMouselook && !gAgentCamera.cameraMouselook()))
 	{
 		// HACK: Make some grabs temporary
 		if (gGrabTransientTool)
@@ -983,6 +987,8 @@ BOOL LLToolGrab::handleMouseUp(S32 x, S32 y, MASK mask)
 			gGrabTransientTool = NULL;
 		}
 	}
+	// <FS:Ansariel> FIRE-15578: After exiting mouselook, left clicking on a touchable object opens build floater
+	mClickedInMouselook = FALSE;
 
 	//gAgent.setObjectTracking(gSavedSettings.getBOOL("TrackFocusObject"));
 
