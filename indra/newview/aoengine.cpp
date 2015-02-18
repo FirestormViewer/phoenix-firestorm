@@ -1170,7 +1170,7 @@ void AOEngine::update()
 		mTimerCollection.enableInventoryTimer(FALSE);
 		mTimerCollection.enableSettingsTimer(TRUE);
 
-		LL_WARNS("AOEngine") << "sending update signal" << LL_ENDL;
+		LL_INFOS("AOEngine") << "sending update signal" << LL_ENDL;
 		mUpdatedSignal();
 		enable(mEnabled);
 	}
@@ -1293,7 +1293,7 @@ void AOEngine::saveSet(const AOSet* set)
 	rename_category(&gInventory,set->getInventoryUUID(),setParams);
 	gSavedPerAccountSettings.setBOOL("ProtectAOFolders",wasProtected);
 
-	LL_WARNS("AOEngine") << "sending update signal" << LL_ENDL;
+	LL_INFOS("AOEngine") << "sending update signal" << LL_ENDL;
 	mUpdatedSignal();
 }
 
@@ -1336,7 +1336,7 @@ void AOEngine::saveSettings()
 		if(set->getDirty())
 		{
 			saveSet(set);
-			LL_WARNS("AOEngine") << "dirty set saved " << set->getName() << LL_ENDL;
+			LL_INFOS("AOEngine") << "dirty set saved " << set->getName() << LL_ENDL;
 			set->setDirty(FALSE);
 		}
 
@@ -1346,7 +1346,7 @@ void AOEngine::saveSettings()
 			if(state->mDirty)
 			{
 				saveState(state);
-				LL_WARNS("AOEngine") << "dirty state saved " << state->mName << LL_ENDL;
+				LL_INFOS("AOEngine") << "dirty state saved " << state->mName << LL_ENDL;
 				state->mDirty=FALSE;
 			}
 		}
@@ -1512,7 +1512,7 @@ void AOEngine::tick()
 		}
 		else
 		{
-			LL_WARNS("AOEngine") << "AO basic folder structure intact." << LL_ENDL;
+			LL_INFOS("AOEngine") << "AO basic folder structure intact." << LL_ENDL;
 			update();
 		}
 	}
@@ -1522,7 +1522,7 @@ BOOL AOEngine::importNotecard(const LLInventoryItem* item)
 {
 	if(item)
 	{
-		LL_WARNS("AOEngine") << "importing AO notecard: " << item->getName() << LL_ENDL;
+		LL_INFOS("AOEngine") << "importing AO notecard: " << item->getName() << LL_ENDL;
 		if(getSetByName(item->getName()))
 		{
 			LLNotificationsUtil::add("AOImportSetAlreadyExists", LLSD());
