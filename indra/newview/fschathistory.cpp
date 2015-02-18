@@ -1282,7 +1282,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		if (irc_me && !use_plain_text_chat_history)
 		{
-			message = LLSLURL("agent", chat.mFromID, "completename").getSLURLString() + message;
+			std::string name_format = "completename";
+			if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			{
+				name_format = "rlvanonym";
+			}
+			message = LLSLURL("agent", chat.mFromID, name_format).getSLURLString() + message;
 		}
 
 		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
