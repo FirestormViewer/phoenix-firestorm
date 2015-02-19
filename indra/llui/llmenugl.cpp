@@ -61,6 +61,7 @@
 #include <set>
 #include <boost/tokenizer.hpp>
 
+#include "llclipboard.h" // <FS:ND/ To let someone copy a menus text + accelerator to clipboard
 // static
 LLMenuHolderGL *LLMenuGL::sMenuContainer = NULL;
 view_listener_t::listener_map_t view_listener_t::sListeners;
@@ -239,6 +240,16 @@ BOOL LLMenuItemGL::handleHover(S32 x, S32 y, MASK mask)
 //virtual
 BOOL LLMenuItemGL::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+	// <FS:ND> Holding CTRL & ALT while right clicking a menu entry will copy the menu
+	// text and shortcut (accelerator) to the clipboard. The menu items action will not be called.
+	if( (MASK_CONTROL|MASK_ALT) == ((MASK_CONTROL|MASK_ALT) & mask) )
+	{
+		LLWString label = utf8string_to_wstring( getLabel() + ": " + mDrawAccelLabel.getString() );
+		LLClipboard::instance().copyToClipboard( label, 0, label.size() );
+		return FALSE;
+	}
+	// </FS:ND>
+	
 	return LLUICtrl::handleRightMouseDown(x,y,mask);
 }
 
