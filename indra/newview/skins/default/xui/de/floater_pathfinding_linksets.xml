@@ -144,7 +144,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_attributes">
 		<text name="linksets_attributes_label">
-			Attribute ausgewählter Linksets bearbeiten; Den Übernehmen-Button drücken, um Änderungen anzuwenden
+			Attribute ausgewählter Linksets bearbeiten. Den Übernehmen-Button drücken, um Änderungen anzuwenden
 		</text>
 		<text name="walkability_coefficients_label">
 			Begehbarkeit:

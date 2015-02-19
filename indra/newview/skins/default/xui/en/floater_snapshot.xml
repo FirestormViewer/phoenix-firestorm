@@ -132,7 +132,7 @@
 	 follows="top|left"
      left="0"
      name="advanced_options_panel"
-     top_pad="-6"
+     top_pad="0"
      width="210">
         <view_border 
          bevel_style="in"
@@ -142,7 +142,7 @@
          layout="topleft"
          name="advanced_options_hr"
          right="-1"
-         top_pad="5"
+         top_pad="-1"
          />
         <text
          type="string"

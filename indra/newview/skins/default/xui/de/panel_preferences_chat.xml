@@ -23,7 +23,7 @@
 			<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
 			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
 			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
-			<check_box label="Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
+			<check_box label="Tipp-Klang abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
@@ -273,9 +273,9 @@
 			</text>
 			<check_box name="FSKeywordChangeColor" label="Farbliche Markierung aktivieren"/>
 			<color_swatch name="colorswatch" left="220" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
-			<check_box name="FSKeywordPlaySound" label="Sound abspielen"/>
+			<check_box name="FSKeywordPlaySound" label="Klang abspielen"/>
 			<text name="textFSKeywordSound" width="200">
-				UUID für Soundbenachrichtigung:
+				UUID für Klangbenachrichtigung:
 			</text>
 			<button label="V" name="Prev_UISndFSKeywordSound" tool_tip="Vorschau zu diesem Sound."/>
 			<button label="S" name="Def_UISndFSKeywordSound" tool_tip="Auf Standardwert zurücksetzen."/>
