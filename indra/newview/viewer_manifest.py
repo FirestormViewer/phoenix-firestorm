@@ -1386,7 +1386,7 @@ class LinuxManifest(ViewerManifest):
                 find %(dst)s -type f -perm 0600 | xargs --no-run-if-empty chmod 0644;
                 find %(dst)s -type f -perm 0400 | xargs --no-run-if-empty chmod 0444;
                 true""" %  {'dst':self.get_dst_prefix() })
-        self.package_file = installer_name + '.tar.bz2'
+        self.package_file = installer_name + '.tar.xz'
 
         # temporarily move directory tree so that it has the right
         # name in the tarfile
@@ -1398,15 +1398,15 @@ class LinuxManifest(ViewerManifest):
             if self.args['buildtype'].lower() == 'release':
                 # --numeric-owner hides the username of the builder for
                 # security etc.
-                self.run_command('tar -C %(dir)s --numeric-owner %(fs_excludes)s -cjf '
-                                 '%(inst_path)s.tar.bz2 %(inst_name)s' % {
+                self.run_command('tar -C %(dir)s --numeric-owner %(fs_excludes)s -cJf '
+                                 '%(inst_path)s.tar.xz %(inst_name)s' % {
                         'dir': self.get_build_prefix(),
                         'inst_name': installer_name,
                         'inst_path':self.build_path_of(installer_name),
                         'fs_excludes':self.fs_linux_tar_excludes()
                         })
             else:
-                print "Skipping %s.tar.bz2 for non-Release build (%s)" % \
+                print "Skipping %s.tar.xz for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype'])
         finally:
             self.run_command("mv %(inst)s %(dst)s" % {
