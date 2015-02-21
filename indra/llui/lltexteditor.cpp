@@ -238,7 +238,8 @@ LLTextEditor::Params::Params()
 	default_color("default_color"),
     commit_on_focus_lost("commit_on_focus_lost", false),
 	show_context_menu("show_context_menu"),
-	enable_tooltip_paste("enable_tooltip_paste")
+	enable_tooltip_paste("enable_tooltip_paste"),
+	enable_tab_remove("enable_tab_remove", true)	// <FS:Ansariel> FIRE-15591: Optional tab remove
 {
 	addSynonym(prevalidate_callback, "text_type");
 }
@@ -261,7 +262,8 @@ LLTextEditor::LLTextEditor(const LLTextEditor::Params& p) :
 	mShowContextMenu(p.show_context_menu),
 	mEnableTooltipPaste(p.enable_tooltip_paste),
 	mPassDelete(FALSE),
-	mKeepSelectionOnReturn(false)
+	mKeepSelectionOnReturn(false),
+	mEnableTabRemove(p.enable_tab_remove)	// <FS:Ansariel> FIRE-15591: Optional tab remove
 {
 	mSourceID.generate();
 
@@ -1052,7 +1054,10 @@ void LLTextEditor::removeCharOrTab()
 		S32 chars_to_remove = 1;
 
 		LLWString text = getWText();
-		if (text[mCursorPos - 1] == ' ')
+		// <FS:Ansariel> FIRE-15591: Optional tab remove
+		//if (text[mCursorPos - 1] == ' ')
+		if (mEnableTabRemove && text[mCursorPos - 1] == ' ')
+		// </FS:Ansariel>
 		{
 			// Try to remove a "tab"
 			S32 offset = getLineOffsetFromDocIndex(mCursorPos);

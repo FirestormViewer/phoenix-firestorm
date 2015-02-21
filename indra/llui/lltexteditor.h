@@ -61,6 +61,7 @@ public:
 								commit_on_focus_lost,
 								show_context_menu,
 								enable_tooltip_paste,
+								enable_tab_remove,	// <FS:Ansariel> FIRE-15591: Optional tab remove
 								auto_indent;
 
 		//colors
@@ -330,6 +331,7 @@ private:
 	bool			mEnableTooltipPaste;
 	bool			mPassDelete;
 	bool			mKeepSelectionOnReturn;	// disabling of removing selected text after pressing of Enter
+	bool			mEnableTabRemove;		// <FS:Ansariel> FIRE-15591: Optional tab remove
 
 	LLUUID			mSourceID;
 
