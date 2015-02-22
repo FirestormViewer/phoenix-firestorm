@@ -678,7 +678,10 @@ ParticleScriptCreationCallback::~ParticleScriptCreationCallback()
 
 void ParticleScriptCreationCallback::fire(const LLUUID& inventoryItem)
 {
-	mEditor->callbackReturned(inventoryItem);
+	if (mEditor)
+	{
+		mEditor->callbackReturned(inventoryItem);
+	}
 }
 
 // ---------------------------------- Responders ----------------------------------
@@ -696,5 +699,8 @@ ParticleScriptUploadResponder::ParticleScriptUploadResponder(const LLSD& post_da
 void ParticleScriptUploadResponder::uploadComplete(const LLSD& content)
 {
 	LLUpdateAgentInventoryResponder::uploadComplete(content);
-	mEditor->scriptInjectReturned(content);
+	if (mEditor)
+	{
+		mEditor->scriptInjectReturned(content);
+	}
 }
