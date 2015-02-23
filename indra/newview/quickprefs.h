@@ -2,9 +2,8 @@
  * @file quickprefs.h
  * @brief Quick preferences access panel for bottomtray
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
- * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * $LicenseInfo:firstyear=2011&license=viewerlgpl$
+ * Phoenix Firestorm Viewer Source Code
  * Copyright (C) 2011, WoLf Loonie @ Second Life
  * Copyright (C) 2013, Zi Ree @ Second Life
  * Copyright (C) 2013, Ansariel Hiller @ Second Life
@@ -24,6 +23,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -259,22 +259,22 @@ protected:
 	// returns the path to the quick_preferences.xml file. in save mode it will
 	// always return the user_settings path, if not in save mode, it will return
 	// the app_settings path in case the user_settings path does not (yet) exist
-	std::string getSettingsPath(BOOL save_mode);
+	std::string getSettingsPath(bool save_mode);
 
 	// adds a new control and returns a pointer to the chosen widget
-	LLUICtrl* addControl(const std::string& controlName,const std::string& controlLabel,LLView* slot=NULL,ControlType type=ControlTypeRadio,BOOL integer=FALSE,F32 min_value=-1000000.0f,F32 max_value=1000000.0,F32 increment=0.0f);
+	LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, BOOL integer = FALSE, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
 	// removes a control
-	void removeControl(const std::string& controlName,BOOL remove_slot=TRUE);
+	void removeControl(const std::string& controlName, bool remove_slot = true);
 	// updates a single control
-	void updateControl(const std::string& controlName,ControlEntry& entry);
+	void updateControl(const std::string& controlName, ControlEntry& entry);
 
 	// make this control the currently selected one
 	void selectControl(std::string controlName);
 
 	// toggles edit mode
-	void onDoubleClickLabel(LLUICtrl* ctrl,void* userdata);	// userdata is the associated panel
+	void onDoubleClickLabel(LLUICtrl* ctrl, void* userdata);	// userdata is the associated panel
 	// selects a control in edit mode
-	void onClickLabel(LLUICtrl* ctrl,void* userdata);		// userdata is the associated panel
+	void onClickLabel(LLUICtrl* ctrl, void* userdata);			// userdata is the associated panel
 
 	// will save settings when leaving edit mode
 	void onEditModeChanged();
@@ -282,13 +282,13 @@ protected:
 	void onValuesChanged();
 
 	void onAddNewClicked();
-	void onRemoveClicked(LLUICtrl* ctrl,void* userdata);	// userdata is the associated panel
-	void onAlphaChanged(LLUICtrl* ctrl,void* userdata);		// userdata is the associated color swatch
+	void onRemoveClicked(LLUICtrl* ctrl, void* userdata);		// userdata is the associated panel
+	void onAlphaChanged(LLUICtrl* ctrl, void* userdata);		// userdata is the associated color swatch
 	void onMoveUpClicked();
 	void onMoveDownClicked();
 
 	// swaps two controls, used for move up and down
-	void swapControls(const std::string& control1,const std::string& control2);
+	void swapControls(const std::string& control1, const std::string& control2);
 // </FS:Zi>
 
 	bool hasControl( std::string const &aName ) const
