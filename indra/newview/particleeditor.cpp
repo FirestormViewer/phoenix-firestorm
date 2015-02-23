@@ -26,6 +26,7 @@
 #include <fstream>
 
 #include "llagent.h"
+#include "llappviewer.h"
 #include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
 #include "llclipboard.h"
@@ -678,7 +679,7 @@ ParticleScriptCreationCallback::~ParticleScriptCreationCallback()
 
 void ParticleScriptCreationCallback::fire(const LLUUID& inventoryItem)
 {
-	if (mEditor)
+	if (!gDisconnected && !LLAppViewer::instance()->quitRequested() && mEditor)
 	{
 		mEditor->callbackReturned(inventoryItem);
 	}
@@ -699,7 +700,7 @@ ParticleScriptUploadResponder::ParticleScriptUploadResponder(const LLSD& post_da
 void ParticleScriptUploadResponder::uploadComplete(const LLSD& content)
 {
 	LLUpdateAgentInventoryResponder::uploadComplete(content);
-	if (mEditor)
+	if (!gDisconnected && !LLAppViewer::instance()->quitRequested() && mEditor)
 	{
 		mEditor->scriptInjectReturned(content);
 	}
