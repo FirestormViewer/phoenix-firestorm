@@ -3136,7 +3136,9 @@ void LLAppearanceMgr::updateIsDirty()
 
 		if(outfit_items.size() != cof_items.size())
 		{
-			LL_DEBUGS("Avatar") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
+			// <FS:Ansariel> Change log tag for easier debugging
+			//LL_DEBUGS("Avatar") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
+			LL_DEBUGS("Outfit") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
 			// Current outfit folder should have one more item than the outfit folder.
 			// this one item is the link back to the outfit folder itself.
 			mOutfitIsDirty = true;
@@ -3158,17 +3160,23 @@ void LLAppearanceMgr::updateIsDirty()
 			{
 				if (item1->getLinkedUUID() != item2->getLinkedUUID())
 				{
-					LL_DEBUGS("Avatar") << "link id different " << LL_ENDL;
+					// <FS:Ansariel> Change log tag for easier debugging
+					//LL_DEBUGS("Avatar") << "link id different " << LL_ENDL;
+					LL_DEBUGS("Outfit") << "link id different for " << item1->getName() << " " << item2->getName() << LL_ENDL;
 				}
 				else
 				{
 					if (item1->getName() != item2->getName())
 					{
-						LL_DEBUGS("Avatar") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
+						// <FS:Ansariel> Change log tag for easier debugging
+						//LL_DEBUGS("Avatar") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
+						LL_DEBUGS("Outfit") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
 					}
 					if (item1->getActualDescription() != item2->getActualDescription())
 					{
-						LL_DEBUGS("Avatar") << "desc different " << item1->getActualDescription()
+						// <FS:Ansariel> Change log tag for easier debugging
+						//LL_DEBUGS("Avatar") << "desc different " << item1->getActualDescription()
+						LL_DEBUGS("Outfit") << "desc different " << item1->getActualDescription()
 											<< " " << item2->getActualDescription() 
 											<< " names " << item1->getName() << " " << item2->getName() << LL_ENDL;
 					}
@@ -3179,7 +3187,9 @@ void LLAppearanceMgr::updateIsDirty()
 		}
 	}
 	llassert(!mOutfitIsDirty);
-	LL_DEBUGS("Avatar") << "clean" << LL_ENDL;
+	// <FS:Ansariel> Change log tag for easier debugging
+	//LL_DEBUGS("Avatar") << "clean" << LL_ENDL;
+	LL_DEBUGS("Outfit") << "clean" << LL_ENDL;
 }
 
 // *HACK: Must match name in Library or agent inventory
