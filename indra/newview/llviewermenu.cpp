@@ -2901,10 +2901,15 @@ class LLEditParticleSource : public view_listener_t
 	}
 };
 
-// ## Zi: Texture Refresh
+// <FS:Zi> Texture Refresh
 void destroy_texture(const LLUUID& id)		// will be used by the texture refresh functions below
 {
-	LLViewerFetchedTexture* tx=LLViewerTextureManager::getFetchedTexture(id);
+	if (id.isNull() || id == IMG_DEFAULT || FSCommon::isDefaultTexture(id))
+	{
+		return;
+	}
+
+	LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(id);
 	if (tx)
 	{
 		tx->clearFetchedResults();
@@ -2931,24 +2936,15 @@ class LLObjectTexRefresh : public view_listener_t
 				if (!node->isTESelected(i)) continue;
 
 				LLViewerTexture* img = node->getObject()->getTEImage(i);
-				if (img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
-				{
-					faces_per_texture[img->getID()].push_back(i);
-				}
+				faces_per_texture[img->getID()].push_back(i);
 
 				if (node->getObject()->getTE(i)->getMaterialParams().notNull())
 				{
 					LLViewerTexture* norm_img = node->getObject()->getTENormalMap(i);
-					if (norm_img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
-					{
-						faces_per_texture[norm_img->getID()].push_back(i);
-					}
+					faces_per_texture[norm_img->getID()].push_back(i);
 
 					LLViewerTexture* spec_img = node->getObject()->getTESpecularMap(i);
-					if (spec_img->getID() != ((LLViewerTexture*)(LLViewerFetchedTexture::sDefaultImagep))->getID())
-					{
-						faces_per_texture[spec_img->getID()].push_back(i);
-					}
+					faces_per_texture[spec_img->getID()].push_back(i);
 				}
 			}
 
@@ -3016,7 +3012,7 @@ class LLAvatarTexRefresh : public view_listener_t
 		return true;
 	}
 };
-// ## Zi: Texture Refresh
+// </FS:Zi> Texture Refresh
 
 class LLObjectReportAbuse : public view_listener_t
 {

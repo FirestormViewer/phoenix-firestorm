@@ -64,6 +64,7 @@
 
 #include "llfloaterreg.h"
 #include "llappviewer.h"
+#include "fscommon.h"
 
 #include <boost/algorithm/string_regex.hpp>
 
@@ -489,7 +490,7 @@ void FSFloaterObjectExport::addPrim(LLViewerObject* object, bool root)
 			LLTextureEntry *checkTE = object->getTE(i);
 			LL_DEBUGS("export") << "Checking texture number " << (S32)i
 				<< ", ID " << checkTE->getID() << LL_ENDL;
-			if (defaultTextureCheck(checkTE->getID()))	// <FS:CR> Check against default textures
+			if (FSCommon::isDefaultTexture(checkTE->getID()))	// <FS:CR> Check against default textures
 			{
 				LL_DEBUGS("export") << "...is a default texture." << LL_ENDL;
 				prim["texture"].append(checkTE->asLLSD());
@@ -703,30 +704,6 @@ void FSFloaterObjectExport::saveFormattedImage(LLPointer<LLImageFormatted> mForm
 	mManifest["asset"][id.asString()]["data"] = LLSD::Binary(str.begin(),str.end());
 	
 	removeRequestedTexture(id);
-}
-
-bool FSFloaterObjectExport::defaultTextureCheck(const LLUUID asset_id)
-{
-	if (asset_id == LL_DEFAULT_WOOD_UUID ||
-		asset_id == LL_DEFAULT_STONE_UUID ||
-		asset_id == LL_DEFAULT_METAL_UUID ||
-		asset_id == LL_DEFAULT_GLASS_UUID ||
-		asset_id == LL_DEFAULT_FLESH_UUID ||
-		asset_id == LL_DEFAULT_PLASTIC_UUID ||
-		asset_id == LL_DEFAULT_RUBBER_UUID ||
-		asset_id == LL_DEFAULT_LIGHT_UUID ||
-		asset_id == LLUUID("5748decc-f629-461c-9a36-a35a221fe21f") ||	// UIImgWhiteUUID
-		asset_id == LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903") ||	// UIImgTransparentUUID
-		asset_id == LLUUID("f54a0c32-3cd1-d49a-5b4f-7b792bebc204") ||	// UIImgInvisibleUUID
-		asset_id == LLUUID("6522e74d-1660-4e7f-b601-6f48c1659a77") ||	// UIImgDefaultEyesUUID
-		asset_id == LLUUID("7ca39b4c-bd19-4699-aff7-f93fd03d3e7b") ||	// UIImgDefaultHairUUID
-		asset_id == LLUUID("5748decc-f629-461c-9a36-a35a221fe21f")		// UIImgDefault for all clothing
-	   )
-	{
-		LL_DEBUGS("export") << "Using system texture for " << asset_id << LL_ENDL;
-		return true;
-	}
-	return false;
 }
 
 void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::object_list_t* inventory, S32 serial_num, void* user_data)

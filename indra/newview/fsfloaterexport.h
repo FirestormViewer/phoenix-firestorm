@@ -116,7 +116,6 @@ private:
 	
 	void onIdle();
 	void removeRequestedAsset(LLUUID asset_uuid);
-	bool defaultTextureCheck(const LLUUID asset_id);
 	
 	LLSD mManifest;
 	std::map<LLUUID, FSAssetResourceData> mRequestedTexture;

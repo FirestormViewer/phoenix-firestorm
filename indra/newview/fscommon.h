@@ -78,6 +78,8 @@ namespace FSCommon
 	LLSD populateGroupCount();
 
 	std::string getAvatarNameByDisplaySettings(const LLAvatarName& av_name);
+
+	bool isDefaultTexture(const LLUUID& asset_id);
 };
 
 #endif // FS_COMMON_H
