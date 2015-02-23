@@ -539,14 +539,14 @@ void LLToolBarView::onToolBarButtonAdded(LLView* button)
 			}
 		}
 	}
-	// <FS:Ansariel> Nearby Voices isn't a TransientDockableFloater and the button doesn't exist in V3 anymore
-	//else if (button->getName() == "voice")
-	//{
-	//	// Add the "Voice controls" button as a control view in LLTransientFloaterMgr
-	//	// to prevent hiding the transient IM floater upon pressing "Voice controls".
-	//	LLTransientFloaterMgr::getInstance()->addControlView(button);
-	//}
-	// </FS:Ansariel>
+	// <FS:Ansariel> Do not remove in case they get removed by LL! We need this for standalone
+	//               IM floaters.
+	else if (button->getName() == "voice")
+	{
+		// Add the "Voice controls" button as a control view in LLTransientFloaterMgr
+		// to prevent hiding the transient IM floater upon pressing "Voice controls".
+		LLTransientFloaterMgr::getInstance()->addControlView(button);
+	}
 	// <FS:Ansariel> Dockable QuickPrefs floater
 	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
 	{
@@ -591,12 +591,12 @@ void LLToolBarView::onToolBarButtonRemoved(LLView* button)
 			dock_control->setDock(NULL);
 		}
 	}
-	// <FS:Ansariel> Nearby Voices isn't a TransientDockableFloater and the button doesn't exist in V3 anymore
-	//else if (button->getName() == "voice")
-	//{
-	//	LLTransientFloaterMgr::getInstance()->removeControlView(button);
-	//}
-	// </FS:Ansariel>
+	// <FS:Ansariel> Do not remove in case they get removed by LL! We need this for standalone
+	//               IM floaters.
+	else if (button->getName() == "voice")
+	{
+		LLTransientFloaterMgr::getInstance()->removeControlView(button);
+	}
 	// <FS:Ansariel> Dockable QuickPrefs floater
 	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
 	{
