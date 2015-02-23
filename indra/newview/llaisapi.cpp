@@ -123,7 +123,10 @@ void AISCommand::httpFailure()
 //static
 bool AISCommand::isAPIAvailable()
 {
-	if (gAgent.getRegion())
+	// <FS:Ansariel> Add AIS3 debug setting
+	//if (gAgent.getRegion())
+	if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+	// </FS:Ansariel>
 	{
 		return gAgent.getRegion()->isCapabilityAvailable("InventoryAPIv3");
 	}
@@ -133,7 +136,10 @@ bool AISCommand::isAPIAvailable()
 //static
 bool AISCommand::getInvCap(std::string& cap)
 {
-	if (gAgent.getRegion())
+	// <FS:Ansariel> Add AIS3 debug setting
+	//if (gAgent.getRegion())
+	if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+	// </FS:Ansariel>
 	{
 		cap = gAgent.getRegion()->getCapability("InventoryAPIv3");
 	}
@@ -147,7 +153,10 @@ bool AISCommand::getInvCap(std::string& cap)
 //static
 bool AISCommand::getLibCap(std::string& cap)
 {
-	if (gAgent.getRegion())
+	// <FS:Ansariel> Add AIS3 debug setting
+	//if (gAgent.getRegion())
+	if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+	// </FS:Ansariel>
 	{
 		cap = gAgent.getRegion()->getCapability("LibraryAPIv3");
 	}
