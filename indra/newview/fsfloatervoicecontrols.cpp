@@ -101,7 +101,7 @@ static void* create_non_avatar_caller(void*)
 LLVoiceChannel* FSFloaterVoiceControls::sCurrentVoiceChannel = NULL;
 
 FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
-: LLTransientDockableFloater(NULL, false, key)
+: LLFloater(key)
 , mSpeakerManager(NULL)
 , mParticipants(NULL)
 , mAvatarList(NULL)
@@ -119,7 +119,6 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 
 	mFactoryMap["non_avatar_caller"] = LLCallbackMap(create_non_avatar_caller, NULL);
 	LLVoiceClient::instance().addObserver(this);
-	LLTransientFloaterMgr::getInstance()->addControlView(this);
 
 	// update the agent's name if display name setting change
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
@@ -142,7 +141,6 @@ FSFloaterVoiceControls::~FSFloaterVoiceControls()
 	{
 		LLVoiceClient::getInstance()->removeObserver(this);
 	}
-	LLTransientFloaterMgr::getInstance()->removeControlView(this);
 }
 
 // virtual

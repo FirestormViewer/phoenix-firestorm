@@ -279,7 +279,8 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="camera"
            />
-<!-- DO NOT DELETE IN CHUI MERGE!!! -->
+
+<!-- Firestorm command buttons -->
   <command name="voice"
            available_in_toybox="true"
            icon="Command_Voice_Icon"
@@ -290,8 +291,6 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_voice_controls"
            />
-
-<!-- Firestorm command buttons -->
   <command name="quickprefs"
            available_in_toybox="true"
            icon="phoenix_18"
