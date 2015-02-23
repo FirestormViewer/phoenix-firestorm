@@ -110,6 +110,8 @@ public:
 	void refreshSettings();
 	bool getIsPhototools() const { return getName() == PHOTOTOOLS_FLOATER; };
 
+	void dockToToolbarButton();
+
 private:
 
 	LLMultiSliderCtrl*	mWLSunPos;

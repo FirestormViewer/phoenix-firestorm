@@ -32,6 +32,7 @@
 
 #include "quickprefs.h"
 
+#include "fscommon.h"
 #include "llappviewer.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -97,6 +98,11 @@ FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
 {
 	// For Phototools
 	mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleSetShaderChanged, LLSD()));
+
+	if (!getIsPhototools() && !FSCommon::isLegacySkin())
+	{
+		LLTransientFloaterMgr::getInstance()->addControlView(this);
+	}
 }
 
 FloaterQuickPrefs::~FloaterQuickPrefs()
@@ -104,6 +110,11 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 	if (mRlvBehaviorCallbackConnection.connected())
 	{
 		mRlvBehaviorCallbackConnection.disconnect();
+	}
+
+	if (!getIsPhototools() && !FSCommon::isLegacySkin())
+	{
+		LLTransientFloaterMgr::getInstance()->removeControlView(this);
 	}
 }
 
@@ -140,6 +151,8 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 		}
 	}
 	// </FS:Zi>
+
+	dockToToolbarButton();
 }
 
 
@@ -375,7 +388,7 @@ BOOL FloaterQuickPrefs::postBuild()
 	// bail out here if this is a reused Phototools floater
 	if (getIsPhototools())
 	{
-		return LLDockableFloater::postBuild();
+		return LLTransientDockableFloater::postBuild();
 	}
 
 	// find the layout_stack to insert the controls into
@@ -432,7 +445,7 @@ BOOL FloaterQuickPrefs::postBuild()
 	mControlNameCombo->sortByName();
 	// </FS:Zi>
 
-	return LLDockableFloater::postBuild();
+	return LLTransientDockableFloater::postBuild();
 }
 
 void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_path)
@@ -653,7 +666,7 @@ void FloaterQuickPrefs::draw()
 
 	mWLSunPos->setCurSliderValue(val);
 
-	LLFloater::draw();
+	LLTransientDockableFloater::draw();
 }
 
 void FloaterQuickPrefs::onSunMoved()
@@ -1874,3 +1887,35 @@ void FloaterQuickPrefs::onClickRestoreDefaults()
 	LLNotificationsUtil::add("ConfirmRestoreQuickPrefsDefaults", LLSD(), LLSD(), boost::bind(&FloaterQuickPrefs::callbackRestoreDefaults, this, _1, _2));
 }
 // </FS:CR>
+
+void FloaterQuickPrefs::dockToToolbarButton()
+{
+	LLCommandId command_id("quickprefs");
+	S32 toolbar_loc = gToolBarView->hasCommand(command_id);
+	
+	if (toolbar_loc != LLToolBarEnums::TOOLBAR_NONE && !FSCommon::isLegacySkin())
+	{
+		LLDockControl::DocAt doc_at = LLDockControl::TOP;
+		switch (toolbar_loc)
+		{
+			case LLToolBarEnums::TOOLBAR_LEFT:
+				doc_at = LLDockControl::RIGHT;
+				break;
+			
+			case LLToolBarEnums::TOOLBAR_RIGHT:
+				doc_at = LLDockControl::LEFT;
+				break;
+		}
+		setCanDock(true);
+		LLView* anchor_panel = gToolBarView->findChildView("quickprefs");
+		setUseTongue(anchor_panel);
+		// Garbage collected by std::auto_ptr
+		setDockControl(new LLDockControl(anchor_panel, this, getDockTongue(doc_at), doc_at));
+	}
+	else
+	{
+		setUseTongue(false);
+		setDockControl(NULL);
+		setCanDock(false);
+	}
+}

@@ -413,3 +413,9 @@ bool FSCommon::isDefaultTexture(const LLUUID& asset_id)
 	}
 	return false;
 }
+
+bool FSCommon::isLegacySkin()
+{
+	std::string current_skin = gSavedSettings.getString("SkinCurrent");
+	return (current_skin == "vintage" || current_skin == "latency");
+}

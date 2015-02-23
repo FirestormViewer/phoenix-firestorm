@@ -47,6 +47,9 @@
 
 #include <boost/foreach.hpp>
 
+#include "fscommon.h"
+#include "quickprefs.h"
+
 LLToolBarView* gToolBarView = NULL;
 
 static LLDefaultChildRegistry::Register<LLToolBarView> r("toolbar_view");
@@ -130,9 +133,7 @@ BOOL LLToolBarView::postBuild()
 	mBottomChatStack = findChild<LLView>("bottom_chat_stack");
 
 	// <FS:Ansariel> Added to determine if toolbar gets hidden when empty
-	std::string current_skin = gSavedSettings.getString("SkinCurrent");
-	mHideBottomOnEmpty = (current_skin == "vintage" || current_skin == "latency");
-	// </FS:Ansariel>
+	mHideBottomOnEmpty = FSCommon::isLegacySkin();
 
 	return TRUE;
 }
@@ -544,6 +545,17 @@ void LLToolBarView::onToolBarButtonAdded(LLView* button)
 		// to prevent hiding the transient IM floater upon pressing "Voice controls".
 		LLTransientFloaterMgr::getInstance()->addControlView(button);
 	}
+	// <FS:Ansariel> Dockable QuickPrefs floater
+	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
+	{
+		LLTransientFloaterMgr::getInstance()->addControlView(button);
+		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
+		if (quickprefs_floater && quickprefs_floater->isShown())
+		{
+			quickprefs_floater->dockToToolbarButton();
+		}
+	}
+	// </FS:Ansariel>
 }
 
 void LLToolBarView::onToolBarButtonRemoved(LLView* button)
@@ -581,6 +593,19 @@ void LLToolBarView::onToolBarButtonRemoved(LLView* button)
 	{
 		LLTransientFloaterMgr::getInstance()->removeControlView(button);
 	}
+	// <FS:Ansariel> Dockable QuickPrefs floater
+	else if (button->getName() == "quickprefs" && !FSCommon::isLegacySkin())
+	{
+		LLTransientFloaterMgr::getInstance()->removeControlView(button);
+		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
+		if (quickprefs_floater && quickprefs_floater->isShown())
+		{
+			quickprefs_floater->setCanDock(false);
+			LLDockControl* dock_control = quickprefs_floater->getDockControl();
+			dock_control->setDock(NULL);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 void LLToolBarView::draw()

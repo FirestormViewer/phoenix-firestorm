@@ -80,6 +80,8 @@ namespace FSCommon
 	std::string getAvatarNameByDisplaySettings(const LLAvatarName& av_name);
 
 	bool isDefaultTexture(const LLUUID& asset_id);
+
+	bool isLegacySkin();
 };
 
 #endif // FS_COMMON_H
