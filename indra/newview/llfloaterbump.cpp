@@ -35,6 +35,10 @@
 #include "lluictrlfactory.h"
 #include "llviewermessage.h"
 
+#include "fsscrolllistctrl.h"
+#include "llclipboard.h"
+#include "llfloaterreg.h"
+
 ///----------------------------------------------------------------------------
 /// Class LLFloaterBump
 ///----------------------------------------------------------------------------
@@ -50,6 +54,16 @@ LLFloaterBump::LLFloaterBump(const LLSD& key)
 LLFloaterBump::~LLFloaterBump()
 {
 }
+
+// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
+BOOL LLFloaterBump::postBuild()
+{
+	FSScrollListCtrl* list = getChild<FSScrollListCtrl>("bump_list");
+	list->setContextMenu(&gFSBumpListMenu);
+
+	return LLFloater::postBuild();
+}
+// </FS:Ansariel>
 
 // virtual
 void LLFloaterBump::onOpen(const LLSD& key)
@@ -126,3 +140,57 @@ void LLFloaterBump::add(LLScrollListCtrl* list, LLMeanCollisionData* mcd)
 	row["columns"][0]["font"] = "SansSerifBold";
 	list->addElement(row);
 }
+
+// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
+LLContextMenu* FSBumpListMenu::createMenu()
+{
+	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+
+	registrar.add("BumpList.Action", boost::bind(&FSBumpListMenu::onContextMenuItemClick, this, _2));
+	enable_registrar.add("BumpList.Enable", boost::bind(&FSBumpListMenu::onContextMenuItemEnable, this, _2));
+
+	return createFromFile("menu_fs_bump_list.xml");
+}
+
+void FSBumpListMenu::onContextMenuItemClick(const LLSD& userdata)
+{
+	std::string item = userdata.asString();
+
+	if (item == "copy")
+	{
+		LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
+		if (floater && !gMeanCollisionList.empty() && !mUUIDs.empty())
+		{
+			std::string bumps_text;
+			FSScrollListCtrl* list = floater->getChild<FSScrollListCtrl>("bump_list");
+
+			std::vector<LLScrollListItem*> selected = list->getAllSelected();
+			for (std::vector<LLScrollListItem*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			{
+				bumps_text += ( (bumps_text.empty() ? "" : "\n") + (*it)->getColumn(0)->getValue().asString() );
+			}
+
+			if (!bumps_text.empty())
+			{
+				LLClipboard::instance().copyToClipboard(utf8str_to_wstring(bumps_text), 0, bumps_text.size() );
+			}
+		}
+	}
+}
+
+bool FSBumpListMenu::onContextMenuItemEnable(const LLSD& userdata)
+{
+	std::string item = userdata.asString();
+
+	if (item == "can_copy")
+	{
+		LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
+		return (floater && !gMeanCollisionList.empty() && !mUUIDs.empty());
+	}
+
+	return false;
+}
+
+FSBumpListMenu gFSBumpListMenu;
+// </FS:Ansariel>

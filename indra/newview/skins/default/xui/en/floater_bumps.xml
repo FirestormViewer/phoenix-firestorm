@@ -36,7 +36,7 @@
      name="timeStr">
         [[hour,datetime,slt]:[min,datetime,slt]]
     </floater.string>
-    <scroll_list
+    <fs_scroll_list
      draw_border="false"
      follows="left|top|right|bottom"
      height="152"

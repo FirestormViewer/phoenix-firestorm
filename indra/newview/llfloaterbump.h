@@ -29,6 +29,7 @@
 #define LL_LLFLOATERBUMP_H
 
 #include "llfloater.h"
+#include "lllistcontextmenu.h"
 
 class LLMeanCollisionData;
 class LLScrollListCtrl;
@@ -42,6 +43,8 @@ protected:
 
 public:
 	/*virtual*/ void onOpen(const LLSD& key);
+	// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
+	BOOL postBuild();
 	
 private:
 	
@@ -49,4 +52,16 @@ private:
 	virtual ~LLFloaterBump();
 };
 
+// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
+class FSBumpListMenu : public LLListContextMenu
+{
+public:
+	/*virtual*/ LLContextMenu* createMenu();
+private:
+	void onContextMenuItemClick(const LLSD& userdata);
+	bool onContextMenuItemEnable(const LLSD& userdata);
+};
+
+extern FSBumpListMenu gFSBumpListMenu;
+// </FS:Ansariel>
 #endif

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	name="Bump List Context Menu">
+	<menu_item_call
+		enabled="false"
+		label="Copy"
+		name="Copy">
+		<on_click
+			function="BumpList.Action"
+			parameter="copy"/>
+		<on_enable
+			function="BumpList.Enable"
+			parameter="can_copy"/>
+	</menu_item_call>
+</context_menu>
