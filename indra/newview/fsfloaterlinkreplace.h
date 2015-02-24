@@ -35,6 +35,8 @@ class LLTextBox;
 
 class FSFloaterLinkReplace : public LLFloater
 {
+	LOG_CLASS(FSFloaterLinkReplace);
+
 public:
 	FSFloaterLinkReplace(const LLSD& key);
 	virtual ~FSFloaterLinkReplace();
@@ -48,7 +50,12 @@ private:
 	void decreaseOpenItemCount();
 	void updateFoundLinks();
 
-	void linkCreatedCallback(const LLUUID& old_item_id);
+	void linkCreatedCallback(const LLUUID& old_item_id,
+								const LLUUID& target_item_id,
+								bool needs_wearable_ordering_update,
+								bool needs_description_update,
+								const LLUUID& outfit_folder_id);
+
 	void onSourceItemDrop(const LLUUID& source_item_id);
 	void onTargetItemDrop(const LLUUID& target_item_id);
 
