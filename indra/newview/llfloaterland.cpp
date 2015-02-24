@@ -85,6 +85,7 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
+#include "fsnamelistavatarmenu.h"
 
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
@@ -1229,7 +1230,10 @@ BOOL LLPanelLandObjects::postBuild()
 	mOwnerList->sortByColumnIndex(3, FALSE);
 	childSetCommitCallback("owner list", onCommitList, this);
 	mOwnerList->setDoubleClickCallback(onDoubleClickOwner, this);
-	mOwnerList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+	//mOwnerList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+	mOwnerList->setContextMenu(&gFSNameListAvatarMenu);
+	// </FS:Ansariel>
 
 	return TRUE;
 }
@@ -2562,14 +2566,20 @@ BOOL LLPanelLandAccess::postBuild()
 	if (mListAccess)
 	{
 		mListAccess->sortByColumnIndex(0, TRUE); // ascending
-		mListAccess->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+		//mListAccess->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		mListAccess->setContextMenu(&gFSNameListAvatarMenu);
+		// </FS:Ansariel>
 	}
 
 	mListBanned = getChild<LLNameListCtrl>("BannedList");
 	if (mListBanned)
 	{
 		mListBanned->sortByColumnIndex(0, TRUE); // ascending
-		mListBanned->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		// <FS:Ansariel> Special Firestorm menu also allowing multi-select action
+		//mListBanned->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		mListBanned->setContextMenu(&gFSNameListAvatarMenu);
+		// </FS:Ansariel>
 	}
 
 	return TRUE;
