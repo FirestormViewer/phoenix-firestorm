@@ -131,6 +131,7 @@
 #include "fslslbridge.h"
 #include "fsmoneytracker.h"
 #include "fswsassetblacklist.h"
+#include "llfloaterbump.h"
 #include "llfloaterreg.h"
 #include "llgiveinventory.h"
 #include "llnotificationmanager.h"
@@ -7720,6 +7721,13 @@ void mean_name_callback(const LLUUID &id, const std::string& full_name, bool is_
 			mcd->mFullName = full_name;
 		}
 	}
+	// <FS:Ansariel> Instant bump list floater update
+	LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
+	if (floater)
+	{
+		floater->setDirty();
+	}
+	// </FS:Ansariel>
 }
 
 void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **user_data)
@@ -7823,6 +7831,16 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 			gMeanCollisionList.push_front(mcd);
 			gCacheName->get(perp, false, boost::bind(&mean_name_callback, _1, _2, _3));
 		}
+		// <FS:Ansariel> Instant bump list floater update
+		else
+		{
+			LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
+			if (floater)
+			{
+				floater->setDirty();
+			}
+		}
+		// </FS:Ansariel>
 	}
 }
 

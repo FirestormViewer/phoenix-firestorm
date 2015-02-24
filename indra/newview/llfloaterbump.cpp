@@ -45,7 +45,8 @@
 
 // Default constructor
 LLFloaterBump::LLFloaterBump(const LLSD& key) 
-:	LLFloater(key)
+:	LLFloater(key),
+	mDirty(false) // <FS:Ansariel> Instant bump list floater update
 {
 }
 
@@ -68,6 +69,24 @@ BOOL LLFloaterBump::postBuild()
 // virtual
 void LLFloaterBump::onOpen(const LLSD& key)
 {
+// <FS:Ansariel> Instant bump list floater update
+	updateList();
+}
+
+void LLFloaterBump::draw()
+{
+	if (mDirty)
+	{
+		updateList();
+		mDirty = false;
+	}
+
+	LLFloater::draw();
+}
+
+void LLFloaterBump::updateList()
+{
+// </FS:Ansariel>
 	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("bump_list");
 	if (!list)
 		return;

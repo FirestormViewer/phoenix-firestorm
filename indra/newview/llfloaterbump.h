@@ -45,11 +45,19 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
 	BOOL postBuild();
+
+	// <FS:Ansariel> Instant bump list floater update
+	/*virtual*/ void draw();
+	void setDirty() { mDirty = true; }
 	
 private:
 	
 	LLFloaterBump(const LLSD& key);
 	virtual ~LLFloaterBump();
+
+	// <FS:Ansariel> Instant bump list floater update
+	void updateList();
+	bool mDirty;
 };
 
 // <FS:Ansariel> FIRE-13888: Add copy function to bumps list
