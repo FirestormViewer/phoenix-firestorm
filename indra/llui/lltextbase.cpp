@@ -2263,14 +2263,17 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				appendAndHighlightText(subtext, part, style_params); 
 			}
 
+			// add icon before url if need
 			// <FS:Ansariel> Optional icon position
-			if (mIconPositioning == LLTextBaseEnums::LEFT)
+			//LLTextUtil::processUrlMatch(&match,this,isContentTrusted() || match.isTrusted());
+			if (mIconPositioning == LLTextBaseEnums::LEFT || match.isTrusted())
 			{
 				LLTextUtil::processUrlMatch(&match,this,isContentTrusted() || match.isTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 
 			// output the styled Url
+			//appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
 			// <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
 			//appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
@@ -2289,8 +2292,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			}
 
 			// <FS:Ansariel> Optional icon position
-			//LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
-			if (mIconPositioning == LLTextBaseEnums::RIGHT)
+			if (mIconPositioning == LLTextBaseEnums::RIGHT && !match.isTrusted())
 			{
 				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
 			}
