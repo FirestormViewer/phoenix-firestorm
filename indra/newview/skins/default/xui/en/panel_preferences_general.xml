@@ -43,6 +43,11 @@
          value="en" />        
         <combo_box.item
          enabled="true"
+         label="Dansk (Danish) - Beta"
+         name="Danish"
+         value="da" />
+        <combo_box.item
+         enabled="true"
          label="Deutsch (German)"
          name="Deutsch(German)"
          value="de" />
@@ -61,6 +66,11 @@
          label="Italiano (Italian) - Beta"
          name="Italian"
          value="it" />        
+        <combo_box.item
+         enabled="true"
+         label="Polski (Polish)"
+         name="Polish"
+         value="pl" />
         <combo_box.item
          enabled="true"
          label="Português (Portuguese) - Beta"
