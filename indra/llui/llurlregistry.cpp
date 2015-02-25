@@ -55,7 +55,11 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntrySLURL());
 
 	// decorated links for host names like: secondlife.com and lindenlab.com
-	registerUrl(new LLUrlEntrySeconlifeURL());
+	// <FS:Ansariel> Normalize only trusted URL
+	//registerUrl(new LLUrlEntrySeconlifeURL());
+	mUrlEntryTrustedUrl = new LLUrlEntrySeconlifeURL();
+	registerUrl(mUrlEntryTrustedUrl);
+	// </FS:Ansariel>
 
 	registerUrl(new LLUrlEntryHTTP());
 	mUrlEntryHTTPLabel = new LLUrlEntryHTTPLabel();
@@ -266,7 +270,7 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
 		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
-		if (match_entry != mUrlEntryNoLink)
+		if (match_entry != mUrlEntryNoLink && match_entry == mUrlEntryTrustedUrl)
 		{
 		// </FS:Ansariel>
 		LLUriParser up(url);
