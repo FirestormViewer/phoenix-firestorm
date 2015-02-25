@@ -25,7 +25,7 @@
 		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
 	</panel>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="??? L$"/>
+		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="?? L$"/>
 		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
 	<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)">

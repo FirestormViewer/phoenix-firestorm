@@ -16,7 +16,7 @@
 		[AMT] L$
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="??? L$"/>
+		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="?? L$"/>
 		<button label="ACHETER L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$"/>
 	</panel>
 	<combo_box name="mode_combo" tool_tip="Sélectionnez un mode. Pour une exploration facile et rapide avec chat, choisissez Basique. Pour accéder à plus de fonctionnalités, choisissez Avancé.">
