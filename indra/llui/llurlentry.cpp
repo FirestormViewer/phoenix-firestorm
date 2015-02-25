@@ -376,8 +376,8 @@ LLUrlEntrySeconlifeURL::LLUrlEntrySeconlifeURL()
 std::string LLUrlEntrySeconlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
 	LLUriParser up(url);
-	up.extractParts();
 	// <FS:Ansariel> Show full normalized URL instead of just the host
+	//up.extractParts();
 	//return up.host();
 	return up.normalizedUri();
 	// </FS:Ansariel>
