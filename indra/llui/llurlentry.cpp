@@ -371,6 +371,9 @@ LLUrlEntrySeconlifeURL::LLUrlEntrySeconlifeURL()
 	
 	mIcon = "Hand";
 	mMenuName = "menu_url_http.xml";
+
+	// <FS:Ansariel> We show the full URL in the text - show normal tool tip
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
 }
 
 std::string LLUrlEntrySeconlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
@@ -385,8 +388,22 @@ std::string LLUrlEntrySeconlifeURL::getLabel(const std::string &url, const LLUrl
 
 std::string LLUrlEntrySeconlifeURL::getTooltip(const std::string &url) const
 {
-	return url;
+	// <FS:Ansariel> We show the full URL in the text - show normal tool tip
+	//return url;
+	return 	mTooltip;
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> BUG-8331: Clicking on trusted URLs open places panel
+std::string LLUrlEntrySeconlifeURL::getUrl(const std::string &string) const
+{
+	if (string.find("://") == std::string::npos)
+	{
+		return "http://" + escapeUrl(string);
+	}
+	return escapeUrl(string);
+}
+// </FS:Ansariel>
 
 //
 // LLUrlEntryAgent Describes a Second Life agent Url, e.g.,
