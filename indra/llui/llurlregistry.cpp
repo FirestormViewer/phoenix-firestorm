@@ -261,9 +261,16 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		// fill in the LLUrlMatch object and return it
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
+		// <FS:Ansariel> Fix the "nolink>" fail
+		if (url.find("<nolink>") != 0)
+		{
+		// </FS:Ansariel>
 		LLUriParser up(url);
 		up.normalize();
 		url = up.normalizedUri();
+		// <FS:Ansariel> Fix the "nolink>" fail
+		}
+		// </FS:Ansariel>
 
 		match.setValues(match_start, match_end,
 						match_entry->getUrl(url),
