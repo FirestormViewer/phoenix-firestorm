@@ -377,7 +377,10 @@ std::string LLUrlEntrySeconlifeURL::getLabel(const std::string &url, const LLUrl
 {
 	LLUriParser up(url);
 	up.extractParts();
-	return up.host();
+	// <FS:Ansariel> Show full normalized URL instead of just the host
+	//return up.host();
+	return up.normalizedUri();
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntrySeconlifeURL::getTooltip(const std::string &url) const
