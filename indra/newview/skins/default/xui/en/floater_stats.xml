@@ -38,6 +38,7 @@
        <stat_bar name="bandwidth"
                   label="UDP Data Received"
                   stat="activemessagedatareceived"
+                  decimal_digits="0"
                   show_bar="true"
                   setting="DebugStatModeBandwidth"/>
         <stat_bar name="packet_loss"

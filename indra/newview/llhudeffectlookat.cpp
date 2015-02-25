@@ -39,12 +39,10 @@
 #include "llrendersphere.h"
 #include "llselectmgr.h"
 #include "llglheaders.h"
-
 #include "llhudrender.h"
 #include "llresmgr.h"
 #include "llviewerwindow.h"
 #include "llavatarnamecache.h"
-
 #include "llxmltree.h"
 #include "llviewercontrol.h"
 

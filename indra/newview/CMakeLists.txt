@@ -49,6 +49,7 @@ include(VisualLeakDetector)
 include(GLOD)
 include(CMakeCopyIfDifferent)
 include(LLAppearance)
+include(URIPARSER)
 include(Growl)
 include(ColladaDom)
 
@@ -2284,6 +2285,7 @@ endif (WINDOWS)
 # modern version.
 
 target_link_libraries(${VIEWER_BINARY_NAME}
+    ${URIPARSER_PRELOAD_ARCHIVES}
     ${UPDATER_LIBRARIES}
     ${GOOGLE_PERFTOOLS_LIBRARIES}
     ${LLAUDIO_LIBRARIES}

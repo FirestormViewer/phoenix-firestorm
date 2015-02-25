@@ -4295,9 +4295,9 @@ class LLSelfSitDown : public view_listener_t
 bool enable_sitdown_self()
 {
 // [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgent.getFlying() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT);
+	return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT);
 // [/RLVa:KB]
-//    return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgent.getFlying();
+//    return isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gAgentAvatarp->isEditingAppearance() && !gAgent.getFlying();
 }
 
 // Force sit -KC
@@ -8535,11 +8535,6 @@ void handle_selected_texture_info(void*)
    		std::string msg;
    		msg.assign("Texture info for: ");
    		msg.append(node->mName);
-
-		LLSD args;
-		args["MESSAGE"] = msg;
-		// LLNotificationsUtil::add("SystemMessage", args);
-		LLNotificationsUtil::add("SystemMessageTip", args);	// <FS:Zi> use chat, not toasts
 	   
    		U8 te_count = node->getObject()->getNumTEs();
    		// map from texture ID to list of faces using it
@@ -8563,10 +8558,10 @@ void handle_selected_texture_info(void*)
    			S32 height = img->getHeight();
    			S32 width = img->getWidth();
    			S32 components = img->getComponents();
-   			msg = llformat("%dx%d %s on face ",
+   			msg.append(llformat("\n%dx%d %s on face ",
    								width,
    								height,
-   								(components == 4 ? "alpha" : "opaque"));
+   								(components == 4 ? "alpha" : "opaque")));
    			for (U8 i = 0; i < it->second.size(); ++i)
    			{
    				msg.append( llformat("%d ", (S32)(it->second[i])));

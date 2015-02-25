@@ -1623,6 +1623,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 		if (parcel == parcel_mgr.mAgentParcel)
 		{
+			// new agent parcel
 			S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
 								* parcel_mgr.mParcelsPerEdge
 								/ 8;
@@ -1654,6 +1655,11 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 			//KC: check for parcel changes for WL settings
 			KCWindlightInterface::instance().ParcelChange();
+		}
+		else if (local_id == parcel_mgr.mAgentParcel->getLocalID())
+		{
+			// updated agent parcel
+			parcel_mgr.mAgentParcel->unpackMessage(msg);
 		}
 	}
 

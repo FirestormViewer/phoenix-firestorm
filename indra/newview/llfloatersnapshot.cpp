@@ -390,12 +390,20 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 		//	S32 w = gViewerWindow->getWindowWidthRaw();
 		//	LL_DEBUGS() << "Initializing width spinner (" << width_ctrl->getName() << "): " << w << LL_ENDL;
 		//	width_ctrl->setValue(w);
+		//	if(getActiveSnapshotType(floater) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+		//	{
+		//		width_ctrl->setIncrement(w >> 1);
+		//	}
 		//}
 		//if (height_ctrl->getValue().asInteger() == 0)
 		//{
 		//	S32 h = gViewerWindow->getWindowHeightRaw();
 		//	LL_DEBUGS() << "Initializing height spinner (" << height_ctrl->getName() << "): " << h << LL_ENDL;
 		//	height_ctrl->setValue(h);
+		//	if(getActiveSnapshotType(floater) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+		//	{
+		//		height_ctrl->setIncrement(h >> 1);
+		//	}
 		//}
 		// </FS:Ansariel>
 
@@ -861,6 +869,11 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 		{
 			getWidthSpinner(view)->setValue(width);
 			getHeightSpinner(view)->setValue(height);
+			if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+			{
+				getWidthSpinner(view)->setIncrement(width >> 1);
+				getHeightSpinner(view)->setIncrement(height >> 1);
+			}
 		}
 		// <FS:Ansariel> Store settings at logout; Only update spinners when using custom resolution
 		}
@@ -986,6 +999,11 @@ void LLFloaterSnapshot::Impl::setImageSizeSpinnersValues(LLFloaterSnapshot *view
 {
 	getWidthSpinner(view)->forceSetValue(width);
 	getHeightSpinner(view)->forceSetValue(height);
+	if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+	{
+		getWidthSpinner(view)->setIncrement(width >> 1);
+		getHeightSpinner(view)->setIncrement(height >> 1);
+	}
 }
 
 // static

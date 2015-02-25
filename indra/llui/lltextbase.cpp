@@ -38,6 +38,7 @@
 #include "lltextutil.h"
 #include "lltooltip.h"
 #include "lluictrl.h"
+#include "lluriparser.h"
 #include "llurlaction.h"
 #include "llurlregistry.h"
 #include "llview.h"
@@ -2221,6 +2222,8 @@ static LLUIImagePtr image_from_icon_name(const std::string& icon_name)
 
 static LLTrace::BlockTimerStatHandle FTM_PARSE_HTML("Parse HTML");
 
+
+
 void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Params& input_params)
 {
 	LLStyle::Params style_params(input_params);
@@ -2263,7 +2266,7 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// <FS:Ansariel> Optional icon position
 			if (mIconPositioning == LLTextBaseEnums::LEFT)
 			{
-				LLTextUtil::processUrlMatch(&match,this,isContentTrusted());
+				LLTextUtil::processUrlMatch(&match,this,isContentTrusted() || match.isTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 
@@ -2279,10 +2282,10 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			{
 				segment_set_t::iterator it = getSegIterContaining(getLength()-1);
 				if (it != mSegments.end())
-					{
-						LLTextSegmentPtr segment = *it;
-						segment->setToolTip(match.getTooltip());
-					}
+				{
+					LLTextSegmentPtr segment = *it;
+					segment->setToolTip(match.getTooltip());
+				}
 			}
 
 			// <FS:Ansariel> Optional icon position

@@ -296,7 +296,7 @@
      v_pad="4"
      top="0"
      wrap="false"
-     value="L$???"
+     value="L$??" 
      width="35" />
     <button
      auto_resize="true"

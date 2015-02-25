@@ -182,6 +182,7 @@ protected:
 	LLSpinCtrl*		mCtrlScaleX;
 	LLSpinCtrl*		mCtrlScaleY;
 	LLSpinCtrl*		mCtrlScaleZ;
+	BOOL			mSizeChanged;
 
 	LLTextBox*		mLabelRotation;
 	LLSpinCtrl*		mCtrlRotX;
