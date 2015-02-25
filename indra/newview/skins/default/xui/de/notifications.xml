@@ -3910,9 +3910,11 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="TeleportedByAttachment">
 		Sie wurden von einem Anhang an [ITEM_ID] teleportiert
+		<usetemplate ignoretext="Teleport: Sie wurden von einem Anhang teleportiert." name="notifyignore"/> 
 	</notification>
 	<notification name="TeleportedByObjectOnParcel">
 		Sie wurden von Objekt „[OBJECT_NAME]“ auf der Parzelle „[PARCEL_NAME]“ teleportiert
+		<usetemplate ignoretext="Teleport: Sie wurden von einem Objekt auf einer Parzelle teleportiert." name="notifyignore"/> 
 	</notification>
 	<notification name="TeleportedByObjectOwnedBy">
 		Sie wurden von Objekt „[OBJECT_NAME]“, das [OWNER_ID] gehört, teleportiert
