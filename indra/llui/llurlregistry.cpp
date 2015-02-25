@@ -45,7 +45,11 @@ LLUrlRegistry::LLUrlRegistry()
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
-	registerUrl(new LLUrlEntryNoLink());
+	// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
+	//registerUrl(new LLUrlEntryNoLink());
+	mUrlEntryNoLink = new LLUrlEntryNoLink();
+	registerUrl(mUrlEntryNoLink);
+	// </FS:Ansariel>
 	mUrlEntryIcon = new LLUrlEntryIcon();
 	registerUrl(mUrlEntryIcon);
 	registerUrl(new LLUrlEntrySLURL());
@@ -261,14 +265,14 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		// fill in the LLUrlMatch object and return it
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
-		// <FS:Ansariel> Fix the "nolink>" fail
-		if (url.find("<nolink>") != 0)
+		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
+		if (match_entry != mUrlEntryNoLink)
 		{
 		// </FS:Ansariel>
 		LLUriParser up(url);
 		up.normalize();
 		url = up.normalizedUri();
-		// <FS:Ansariel> Fix the "nolink>" fail
+		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
 		}
 		// </FS:Ansariel>
 

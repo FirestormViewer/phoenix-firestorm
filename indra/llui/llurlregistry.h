@@ -96,6 +96,8 @@ private:
 	LLUrlEntryBase*	mUrlEntryIcon;
 	LLUrlEntryBase* mUrlEntryHTTPLabel;
 	LLUrlEntryBase* mUrlEntrySLLabel;
+	// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
+	LLUrlEntryBase* mUrlEntryNoLink;
 };
 
 #endif
