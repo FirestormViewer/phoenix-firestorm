@@ -120,6 +120,12 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		/*virtual*/ void clear();
 		/*virtual*/ void draw();
 
+		typedef boost::signals2::signal<void(S32 unread_messages)> unread_messages_update_callback_t;
+		boost::signals2::connection setUnreadMessagesUpdateCallback(const unread_messages_update_callback_t::slot_type& cb)
+		{
+			return mUnreadMessagesUpdateSignal.connect(cb);
+		}
+
 	private:
 		std::string mLastFromName;
 		LLUUID mLastFromID;
@@ -145,6 +151,9 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 	
 		std::string mDisplayName;
 		std::string mDisplayName_Username;
+
+		S32 mUnreadChatSources;
+		unread_messages_update_callback_t mUnreadMessagesUpdateSignal;
 
 	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	public:

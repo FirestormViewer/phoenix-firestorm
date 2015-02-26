@@ -820,7 +820,8 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	mIsLastMessageFromLog(false),
 	mNotifyAboutUnreadMsg(p.notify_unread_msg),
-	mScrollToBottom(false)
+	mScrollToBottom(false),
+	mUnreadChatSources(0)
 {
 	mLineSpacingPixels=llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"),0,36);
 }
@@ -934,6 +935,15 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);
+
+	if (!scrolledToEnd() && !from_me && !chat.mFromName.empty())
+	{
+		mUnreadChatSources++;
+		if (!mUnreadMessagesUpdateSignal.empty())
+		{
+			mUnreadMessagesUpdateSignal(mUnreadChatSources);
+		}
+	}
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
@@ -1368,6 +1378,15 @@ void FSChatHistory::draw()
 	{
 		mScroller->goToBottom();
 		mScrollToBottom = false;
+	}
+
+	if (scrolledToEnd() && mUnreadChatSources != 0)
+	{
+		mUnreadChatSources = 0;
+		if (!mUnreadMessagesUpdateSignal.empty())
+		{
+			mUnreadMessagesUpdateSignal(mUnreadChatSources);
+		}
 	}
 }
 // </FS:Zi>

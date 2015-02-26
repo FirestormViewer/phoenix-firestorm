@@ -78,6 +78,7 @@
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
 #include "llviewerregion.h"
+#include "lltextbox.h"
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
@@ -107,7 +108,9 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mAvatarNameCacheConnection(),
 	mVoiceChannel(NULL),
 	mMeTypingTimer(),
-	mOtherTypingTimer()
+	mOtherTypingTimer(),
+	mUnreadMessagesNotificationPanel(NULL),
+	mUnreadMessagesNotificationTextBox(NULL)
 {
 	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
 	if (im_session)
@@ -747,7 +750,11 @@ BOOL FSFloaterIM::postBuild()
 	mInputPanels = getChild<LLLayoutStack>("input_panels");
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
-	
+
+	mUnreadMessagesNotificationPanel = getChild<LLLayoutPanel>("unread_messages_holder");
+	mUnreadMessagesNotificationTextBox = getChild<LLTextBox>("unread_messages_text");
+	mChatHistory->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterIM::updateUnreadMessageNotification, this, _1));
+
 	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
 	mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterIM::onInputEditorFocusReceived, this));
 	mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterIM::onInputEditorFocusLost, this));
@@ -1918,4 +1925,17 @@ void FSFloaterIM::reshapeChatLayoutPanel()
 boost::signals2::connection FSFloaterIM::setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb)
 {
 	return FSFloaterIM::sIMFloaterShowedSignal.connect(cb);
+}
+
+void FSFloaterIM::updateUnreadMessageNotification(S32 unread_messages)
+{
+	if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadIMMessages"))
+	{
+		mUnreadMessagesNotificationPanel->setVisible(FALSE);
+	}
+	else
+	{
+		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
+		mUnreadMessagesNotificationPanel->setVisible(TRUE);
+	}
 }

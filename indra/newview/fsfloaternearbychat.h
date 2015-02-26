@@ -37,6 +37,7 @@
 class LLResizeBar;
 class LLComboBox;
 class FSChatHistory;
+class LLTextBox;
 #include "llchatentry.h"
 #include "lllayoutstack.h"
 
@@ -95,7 +96,9 @@ public:
 	
 	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
 	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
-	
+
+	void updateUnreadMessageNotification(S32 unread_messages);
+
 protected:
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	void onChatBoxKeystroke();
@@ -128,7 +131,10 @@ private:
 
 	LLLayoutPanel*		mChatLayoutPanel;
 	LLLayoutStack*		mInputPanels;
-	
+
+	LLLayoutPanel*		mUnreadMessagesNotificationPanel;
+	LLTextBox*			mUnreadMessagesNotificationTextBox;
+
 	S32 mInputEditorPad;
 	S32 mChatLayoutPanelHeight;
 	S32 mFloaterHeight;

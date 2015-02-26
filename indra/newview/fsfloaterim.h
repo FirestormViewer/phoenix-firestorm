@@ -39,6 +39,7 @@
 class LLAvatarName;
 class LLButton;		// support sysinfo button -Zi
 class LLChatEntry;
+class LLTextBox;
 class LLTextEditor;
 class FSPanelChatControlPanel;
 class FSChatHistory;
@@ -148,6 +149,8 @@ public:
 
 	LLVoiceChannel* getVoiceChannel() { return mVoiceChannel; }
 
+	void updateUnreadMessageNotification(S32 unread_messages);
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -221,6 +224,8 @@ private:
 	LLChatEntry* mInputEditor;
 	LLLayoutPanel* mChatLayoutPanel;
 	LLLayoutStack* mInputPanels;
+	LLLayoutPanel* mUnreadMessagesNotificationPanel;
+	LLTextBox* mUnreadMessagesNotificationTextBox;
 	// bool mPositioned;		// dead code -Zi
 
 	std::string mSavedTitle;

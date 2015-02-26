@@ -426,7 +426,7 @@
     width="394"
     layout="topleft"
     orientation="horizontal"
-    name="im_panels"
+    name="chat_stack"
     top="40"
     left="0">
     <layout_panel
@@ -477,9 +477,36 @@
           bottom="-1" />
         </layout_panel>
         <layout_panel
+          height="20"
+          visible="false"
+          auto_resize="false"
+          user_resize="false"
+          name="unread_messages_holder">
+          <icon
+            follows="left|right"
+            image_name="Toolbar_Middle_Off"
+            left="3"
+            name="unread_messages_background"
+            top="0"
+            height="20"
+            right="-4"/>
+          <text
+            type="string"
+            length="1"
+            follows="left|top|right"
+            font="SansSerif"
+            layout="topleft"
+            name="unread_messages_text"
+            right="-4"
+            left="6"
+            height="14"
+            bottom="-3">
+            Unread Messages: [NUM]
+          </text>
+        </layout_panel>
+        <layout_panel
           tab_group="3"
           top_delta="0"
-          top="0"
           height="26"
           bottom="-1"
           auto_resize="false"

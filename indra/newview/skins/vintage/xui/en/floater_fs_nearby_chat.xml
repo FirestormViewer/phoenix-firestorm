@@ -164,10 +164,38 @@
            bottom="-1" />
         </layout_panel>
         <layout_panel
+          height="20"
+          visible="false"
+          auto_resize="false"
+          user_resize="false"
+          name="unread_messages_holder">
+          <view_border
+            top="0"
+            left="3"
+            right="-4"
+            height="19"
+            layout="topleft"
+            follows="left|right"
+            name="unread_messages_background"
+            bevel_style="in" />
+          <text
+            type="string"
+            length="1"
+            follows="left|top|right"
+            font="SansSerif"
+            layout="topleft"
+            name="unread_messages_text"
+            right="-4"
+            left="6"
+            height="14"
+            bottom="-3">
+            Unread Messages: [NUM]
+          </text>
+        </layout_panel>
+        <layout_panel
           visibility_control="FSNearbyChatbar"
           tab_group="2"
           top_delta="0"
-          top="0"
           height="26"
           bottom="-1"
           auto_resize="false"

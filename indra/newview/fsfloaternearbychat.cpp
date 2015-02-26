@@ -63,6 +63,7 @@
 #include "llrootview.h"
 #include "llspinctrl.h"
 #include "llstylemap.h"
+#include "lltextbox.h"
 #include "lltrans.h"
 #include "lltranslate.h"
 #include "llviewercontrol.h"
@@ -99,6 +100,8 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 	,mChatLayoutPanel(NULL)
 	,mInputPanels(NULL)
 	,mChatLayoutPanelHeight(0)
+	,mUnreadMessagesNotificationPanel(NULL)
+	,mUnreadMessagesNotificationTextBox(NULL)
 {
 }
 
@@ -174,6 +177,11 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 	// <FS:Ansariel> Optional muted chat history
 	mChatHistoryMuted = getChild<FSChatHistory>("chat_history_muted");
+
+	mUnreadMessagesNotificationPanel = getChild<LLLayoutPanel>("unread_messages_holder");
+	mUnreadMessagesNotificationTextBox = getChild<LLTextBox>("unread_messages_text");
+	mChatHistory->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1));
+	mChatHistoryMuted->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1));
 	
 	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
@@ -1331,3 +1339,16 @@ void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType t
 	gAgent.sendReliableMessage();
 }
 //</FS:TS> FIRE-787
+
+void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages)
+{
+	if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadChatMessages"))
+	{
+		mUnreadMessagesNotificationPanel->setVisible(FALSE);
+	}
+	else
+	{
+		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
+		mUnreadMessagesNotificationPanel->setVisible(TRUE);
+	}
+}

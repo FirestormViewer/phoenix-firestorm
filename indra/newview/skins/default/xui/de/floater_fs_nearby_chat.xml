@@ -17,6 +17,11 @@
 	<layout_stack name="ls_chat">
 		<layout_panel name="panel_im_control_lp">
 			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Ungelesene Nachrichten: [NUM]
+					</text>
+				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
 						<layout_panel name="input_editor_layout_panel">
