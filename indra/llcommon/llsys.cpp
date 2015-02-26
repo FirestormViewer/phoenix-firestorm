@@ -950,7 +950,11 @@ void LLMemoryInfo::getAvailableMemoryKB(U32Kilobytes& avail_physical_mem_kb, U32
 #if LL_WINDOWS
 	// Sigh, this shouldn't be a static method, then we wouldn't have to
 	// reload this data separately from refresh()
-	LLSD statsMap(loadStatsMap());
+
+	// <FS:ND> We only care for a subset of what loadStatsMap calculates. Pass true to skip the expensive stuff
+	// LLSD statsMap(loadStatsMap());
+	LLSD statsMap( loadStatsMap( true ) );
+	// </FS:ND>
 
 	avail_physical_mem_kb = (U32Kilobytes)statsMap["Avail Physical KB"].asInteger();
 	avail_virtual_mem_kb  = (U32Kilobytes)statsMap["Avail Virtual KB"].asInteger();
@@ -1090,7 +1094,11 @@ LLMemoryInfo& LLMemoryInfo::refresh()
 	return *this;
 }
 
-LLSD LLMemoryInfo::loadStatsMap()
+// <FS:ND> Add aProcessMemoryOnly, which for Windows will only call GlobalMemoryStatusEx
+// This avoids calling GetPerformanceInfo which can be expensive.
+//LLSD LLMemoryInfo::loadStatsMap()
+LLSD LLMemoryInfo::loadStatsMap( bool aProcessMemoryOnly )
+ // </FS:ND>
 {
 	// This implementation is derived from stream() code (as of 2011-06-29).
 	Stats stats;
@@ -1113,6 +1121,11 @@ LLSD LLMemoryInfo::loadStatsMap()
 	stats.add("Total Virtual KB",   state.ullTotalVirtual/div);
 	stats.add("Avail Virtual KB",   state.ullAvailVirtual/div);
 
+	// <FS:ND> Early out in case only process memory is requested.
+	if( aProcessMemoryOnly )
+		return stats.get();
+	// </FS:ND>
+	
 	PERFORMANCE_INFORMATION perf;
 	perf.cb = sizeof(perf);
 	GetPerformanceInfo(&perf, sizeof(perf));

@@ -138,7 +138,12 @@ public:
 
 private:
 	// set mStatsMap
-	static LLSD loadStatsMap();
+
+	// <FS:ND> Add aProcessMemoryOnly, which for Windows will only call GlobalMemoryStatusEx
+	// This avoids calling GetPerformanceInfo which can be expensive.
+	// static LLSD loadStatsMap();
+	static LLSD loadStatsMap( bool aProcessMemoryOnly = false );
+	// </FS:ND>
 
 	// Memory stats for getStatsMap().
 	LLSD mStatsMap;
