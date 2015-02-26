@@ -565,11 +565,11 @@
         <check_box top_pad="0"
          follows="left|top"
          height="20"
-         label="Turn avatar around when walking backwards"
-         name="backwardsturnavatar"
+         label="Disable avatar turning to face camera locally when walking backwards"
+         name="FSDisableTurningAroundWhenWalkingBackwards"
          width="270"
-         control_name="TurnAroundWhenWalkingBackwards"
-         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+         control_name="FSDisableTurningAroundWhenWalkingBackwards"
+         tool_tip="Disables your avatar turning around to face the camera when you are walking backwards. This option affects only your local view and does not work with scripted AOs."/>
         <check_box top_pad="0"
          follows="left|top"
          height="20"

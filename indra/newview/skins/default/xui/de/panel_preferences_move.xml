@@ -60,7 +60,7 @@
 			<check_box label="Warten auf Vor-Sprung- und Lande-Animationen deaktivieren" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
 			<check_box label="Nach einem Teleport immer fliegen" name="FSFlyAfterTeleport"/>
-			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
+			<check_box label="Beim Rückwärtsgehen Drehen des Avatars zur Kamera lokal deaktivieren" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Deaktiviert das Drehen des Avatars mit dem Gesicht zur Kamera beim Rückwärtsgehen. Diese Option hat nur lokalen Effekt und funktioniert nicht mit geskripteten AOs."/>
 			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
 			<text name="movelock_lbl">
 				Falls Movelock in der LSL-Brücke aktiviert ist...

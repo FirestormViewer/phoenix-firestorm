@@ -3866,11 +3866,11 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 			}
 			LLVector3 velDir = getVelocity();
 			velDir.normalize();
-			// <FS:CR> Use Cached Control
-			//if (!gSavedSettings.getBOOL("TurnAroundWhenWalkingBackwards") && (mSignaledAnimations.find(ANIM_AGENT_WALK) != mSignaledAnimations.end()))
-			static LLCachedControl<bool> walk_backwards(gSavedSettings, "TurnAroundWhenWalkingBackwards");
-			if (!walk_backwards && mSignaledAnimations.find(ANIM_AGENT_WALK) != mSignaledAnimations.end())
-			// </FS:CR>
+			// <FS> Disable avatar turning towards camera when walking backwards
+			//if ( mSignaledAnimations.find(ANIM_AGENT_WALK) != mSignaledAnimations.end())
+			static LLCachedControl<bool> walk_backwards(gSavedSettings, "FSDisableTurningAroundWhenWalkingBackwards");
+			if (walk_backwards && mSignaledAnimations.find(ANIM_AGENT_WALK) != mSignaledAnimations.end())
+			// </FS>
 			{
 				F32 vpD = velDir * primDir;
 				if (vpD < -0.5f)
