@@ -819,7 +819,6 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mBottomHeaderPad(p.bottom_header_pad),
 	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	mIsLastMessageFromLog(false),
-	mNotifyAboutUnreadMsg(p.notify_unread_msg),
 	mScrollToBottom(false),
 	mUnreadChatSources(0)
 {

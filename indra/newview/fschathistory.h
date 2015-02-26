@@ -62,8 +62,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 			//Header bottom padding
 			Optional<S32>			bottom_header_pad;
 
-			Optional<bool>			notify_unread_msg;
-
 			Params()
 			:	message_header("message_header"),
 				message_separator("message_separator"),
@@ -74,9 +72,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 				top_separator_pad("top_separator_pad"),
 				bottom_separator_pad("bottom_separator_pad"),
 				top_header_pad("top_header_pad"),
-				bottom_header_pad("bottom_header_pad"),
-				// more_chat_text("more_chat_text"),	// <FS:Zi> FIRE-8600: TAB out of chat history
-				notify_unread_msg("notify_unread_msg", true)
+				bottom_header_pad("bottom_header_pad")
 			{}
 
 		};
@@ -131,8 +127,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		LLUUID mLastFromID;
 		LLDate mLastMessageTime;
 		bool mIsLastMessageFromLog;
-		bool mNotifyAboutUnreadMsg;
-		//std::string mLastMessageTimeStr;
 		bool mScrollToBottom;
 
 		std::string mMessageHeaderFilename;
