@@ -507,7 +507,7 @@ static std::string get_object_log(GLhandleARB ret)
 		delete[] log;
 	}
 	// <FS:LO> Fix intel GLSL compiler spitting out "No errors." instead of an empty string like others do when there are no errors, causing log spam.
-	if(res == "No errors.")
+	if(!strcmp(res.c_str(),"No errors.\n"))
 	{
 		res = "";
 	}
