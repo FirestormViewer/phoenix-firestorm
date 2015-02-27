@@ -1249,10 +1249,11 @@ void LLInventoryFilter::fromParams(const Params& params)
 	{
 		setFilterPermissions(params.filter_ops.permissions);
 	}
-	if (params.substring.isProvided())
-	{
-		setFilterSubString(params.substring);
-	}
+	// <FS:Ansariel> FIRE-8947: Don't restore filter string on relog
+	//if (params.substring.isProvided())
+	//{
+	//	setFilterSubString(params.substring);
+	//}
 	if (params.since_logoff.isProvided())
 	{
 		setDateRangeLastLogoff(params.since_logoff);
