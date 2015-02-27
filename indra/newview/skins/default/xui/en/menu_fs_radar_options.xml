@@ -293,7 +293,7 @@
 		 parameter="showminimap"/>
 	</menu_item_check>
 	<menu_item_check
-	 label="Enhance radar with LSL-Client Bridge"
+	 label="Enhance Radar with LSL-Client Bridge"
 	 name="FSRadarEnhanceByBridge"
 	 enabled_control="UseLSLBridge">
 		<menu_item_check.on_check
