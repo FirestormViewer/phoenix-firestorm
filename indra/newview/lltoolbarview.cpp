@@ -604,6 +604,8 @@ void LLToolBarView::onToolBarButtonRemoved(LLView* button)
 		FloaterQuickPrefs* quickprefs_floater = LLFloaterReg::getTypedInstance<FloaterQuickPrefs>("quickprefs");
 		if (quickprefs_floater && quickprefs_floater->isShown())
 		{
+			quickprefs_floater->setUseTongue(false);
+			quickprefs_floater->setDocked(false, false);
 			quickprefs_floater->setCanDock(false);
 			LLDockControl* dock_control = quickprefs_floater->getDockControl();
 			dock_control->setDock(NULL);

@@ -1915,7 +1915,8 @@ void FloaterQuickPrefs::dockToToolbarButton()
 	else
 	{
 		setUseTongue(false);
-		setDockControl(NULL);
+		setDocked(false, false);
 		setCanDock(false);
+		setDockControl(NULL);
 	}
 }
