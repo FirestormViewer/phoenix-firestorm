@@ -55,7 +55,7 @@
 			<check_box label="Wyłącz oczekiwanie na animacje przed-skoku oraz lądowania (szybki skok)" name="FSIgnoreFinishAnimation"/>
 			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
 			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
-			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
+			<check_box label="Wyłącz obracanie się awatara w stronę kamery podczas ruchu w tył" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Wyłącz obracanie awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery. Ta opcja ma wpływ tylko na to, co widzisz lokalnie i nie działa z oskryptowanymi AO."/>
 			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 			<text name="movelock_lbl">
 				Jeśli unieruchamianie wbudowane w Most LSL jest aktywne...

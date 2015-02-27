@@ -38,4 +38,15 @@
 			<check_box label="Dodawaj wersję" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki oraz informację o skórce przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
 		</layout_panel>
 	</layout_stack>
+	<layout_stack name="chat_stack">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Nieprzeczytanych: [NUM]
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
 </floater>
