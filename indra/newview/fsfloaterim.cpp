@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -30,55 +31,48 @@
 
 #include "fsfloaterim.h"
 
-#include "llnotificationsutil.h"
-
+#include "fschathistory.h"
+#include "fscommon.h"
+#include "fsdata.h"
+#include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
+#include "fsfloaternearbychat.h"
+#include "fspanelimcontrolpanel.h"
 #include "llagent.h"
 #include "llappviewer.h"
+#include "llautoreplace.h"
+#include "llavataractions.h"
 #include "llavatarnamecache.h"
 #include "llbutton.h"
 #include "llchannelmanager.h"
+#include "llchatentry.h"
+#include "llcheckboxctrl.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
-#include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
+#include "llgroupactions.h"
 #include "llhttpclient.h"
 #include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
 #include "lllayoutstack.h"
-#include "llchatentry.h"
 #include "lllogchat.h"
-#include "fspanelimcontrolpanel.h"
-#include "llscreenchannel.h"
-#include "llsyswellwindow.h"
-#include "lltrans.h"
-#include "fschathistory.h"
 #include "llnotifications.h"
+#include "llnotificationsutil.h"
+#include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
+#include "llrootview.h"
+#include "llscreenchannel.h"
+#include "llspeakers.h"
+#include "llsyswellwindow.h"
+#include "lltextbox.h"
+#include "lltrans.h"
+#include "lltransientfloatermgr.h"
+#include "llversioninfo.h"
+#include "llviewerchat.h"
+#include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llvoicechannel.h"
-#include "lltransientfloatermgr.h"
-#include "llinventorymodel.h"
-#include "llrootview.h"
-#include "llspeakers.h"
-#include "llviewerchat.h"
-#include "llautoreplace.h"
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
+#include "rlvactions.h"
 #include "rlvhandler.h"
-#include "rlvactions.h"	// <FS:CR> CHUI merge
-// [/RLVa:KB]
-
-//AO: For moving callbacks from control panel into this class
-#include "llavataractions.h"
-#include "llgroupactions.h"
-//TL: for support group chat prefix
-#include "fsdata.h"
-#include "llversioninfo.h"
-#include "llcheckboxctrl.h"
-
-#include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
-#include "fscommon.h"
-#include "fsfloaternearbychat.h"
-#include "llviewerregion.h"
-#include "lltextbox.h"
 
 const F32 ME_TYPING_TIMEOUT = 4.0f;
 const F32 OTHER_TYPING_TIMEOUT = 9.0f;
@@ -100,7 +94,6 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mOtherTyping(false),
 	mTypingTimer(),
 	mTypingTimeoutTimer(),
-//	mPositioned(false),			// dead code -Zi
 	mSessionInitialized(false),
 	mChatLayoutPanel(NULL),
 	mInputPanels(NULL),

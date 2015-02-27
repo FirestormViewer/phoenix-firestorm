@@ -441,7 +441,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
 	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
-	LLFloaterReg::add( "vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>( &LLFloaterReg::build< FSFloaterVRAMUsage >) );
+	LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>( &LLFloaterReg::build< FSFloaterVRAMUsage >) );
 	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving

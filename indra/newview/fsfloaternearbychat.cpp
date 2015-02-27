@@ -22,6 +22,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -94,9 +95,8 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key) 
 	: LLFloater(key)
 	,mChatHistory(NULL)
-	,mInputEditor(NULL)
-	// <FS:Ansariel> Optional muted chat history
 	,mChatHistoryMuted(NULL)
+	,mInputEditor(NULL)
 	,mChatLayoutPanel(NULL)
 	,mInputPanels(NULL)
 	,mChatLayoutPanelHeight(0)
@@ -174,8 +174,6 @@ BOOL FSFloaterNearbyChat::postBuild()
 	onChatTypeChanged();
 
 	mChatHistory = getChild<FSChatHistory>("chat_history");
-
-	// <FS:Ansariel> Optional muted chat history
 	mChatHistoryMuted = getChild<FSChatHistory>("chat_history_muted");
 
 	mUnreadMessagesNotificationPanel = getChild<LLLayoutPanel>("unread_messages_holder");
@@ -223,22 +221,14 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		}
 	}
 
-	// <FS:Ansariel> Optional muted chat history
 	tmp_chat.mFromName = chat.mFromName;
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
 	chat_args["show_time"] = show_timestamps_nearby_chat;
 	chat_args["is_local"] = true;
 	mChatHistoryMuted->appendMessage(chat, chat_args);
-	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)
 	{
-		// <FS:Ansariel> Optional muted chat history
-		//tmp_chat.mFromName = chat.mFromName;
-		//LLSD chat_args = args;
-		//chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		//chat_args["show_timestamps_nearby_chat"] = show_timestamps_nearby_chat;
-		// <(FS:Ansariel> Optional muted chat history
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
@@ -251,10 +241,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		}
 	}
 
-	// <FS:Ansariel> Optional muted chat history
-	//if (args["do_not_log"].asBoolean()) 
 	if (args["do_not_log"].asBoolean() || chat.mMuted) 
-	// </FS:Ansariel> Optional muted chat history
 	{
 		return;
 	}
@@ -479,7 +466,6 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 void FSFloaterNearbyChat::clearChatHistory()
 {
 	mChatHistory->clear();
-	// <FS:Ansariel> Optional muted chat history
 	mChatHistoryMuted->clear();
 }
 

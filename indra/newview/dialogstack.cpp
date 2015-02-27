@@ -64,11 +64,11 @@ void DialogStack::pop(const LLUUID& uuid)
 
 const LLUUID& DialogStack::flip(const LLUUID& uuid)
 {
-	for (std::list<LLUUID>::iterator it=notificationIDs.begin();it!=notificationIDs.end();++it)
+	for (std::list<LLUUID>::iterator it = notificationIDs.begin(); it != notificationIDs.end(); ++it)
 	{
-		if(*it==uuid)
+		if (*it == uuid)
 		{
-			if(it==notificationIDs.begin())
+			if (it == notificationIDs.begin())
 			{
 				return notificationIDs.back();
 			}

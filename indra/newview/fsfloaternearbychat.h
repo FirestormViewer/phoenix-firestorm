@@ -22,6 +22,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -30,16 +31,17 @@
 #ifndef FS_FLOATERNEARBYCHAT_H
 #define FS_FLOATERNEARBYCHAT_H
 
-#include "lldockablefloater.h"
-#include "llscrollbar.h"
+#include "llfloater.h"
 #include "llviewerchat.h"
 
-class LLResizeBar;
-class LLComboBox;
 class FSChatHistory;
+class LLChatEntry;
+class LLComboBox;
+class LLLayoutStack;
+class LLLayoutPanel;
+class LLResizeBar;
 class LLTextBox;
-#include "llchatentry.h"
-#include "lllayoutstack.h"
+
 
 class FSFloaterNearbyChat: public LLFloater
 {
@@ -50,7 +52,7 @@ public:
 	BOOL	postBuild			();
 
 	/** @param archive true - to save a message to the chat history log */
-	void	addMessage			(const LLChat& message,bool archive = true, const LLSD &args = LLSD());	
+	void	addMessage			(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
 	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
 	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
 
@@ -116,12 +118,11 @@ protected:
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	onNearbySpeakers	();
+	void	onNearbySpeakers();
 
 private:
 	LLHandle<LLView>	mPopupMenuHandle;
 	FSChatHistory*		mChatHistory;
-	// <FS:Ansariel> Optional muted chat history
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;
 

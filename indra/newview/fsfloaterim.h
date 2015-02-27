@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -34,17 +35,18 @@
 #include "lltooldraganddrop.h"
 #include "lltransientdockablefloater.h"
 #include "llvoicechannel.h"
-#include "lllayoutstack.h"
 
+class FSChatHistory;
+class FSPanelChatControlPanel;
 class LLAvatarName;
 class LLButton;		// support sysinfo button -Zi
 class LLChatEntry;
+class LLInventoryCategory;
+class LLInventoryItem;
+class LLLayoutPanel;
+class LLLayoutStack;
 class LLTextBox;
 class LLTextEditor;
-class FSPanelChatControlPanel;
-class FSChatHistory;
-class LLInventoryItem;
-class LLInventoryCategory;
 
 typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_signal_t;
 
@@ -104,9 +106,6 @@ public:
 	void changed(U32 mask);
 	// ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
-
-	// called when docked floater's position has been set by chiclet
-	// void setPositioned(bool b) { mPositioned = b; };		// dead code -Zi
 
 	void onVisibilityChange(BOOL new_visibility);
 	void processIMTyping(const LLIMInfo* im_info, BOOL typing);
@@ -249,6 +248,5 @@ private:
 	
 	boost::signals2::connection mAvatarNameCacheConnection;
 };
-
 
 #endif  // FS_FLOATERIM_H

@@ -102,21 +102,21 @@ AOSet::AOSet(const LLUUID inventoryID)
 		ANIM_AGENT_HOVER_DOWN	// needs special treatment
 	};
 
-	for(S32 index=0;index<AOSTATES_MAX;index++)
+	for (S32 index = 0; index < AOSTATES_MAX; ++index)
 	{
 		std::vector<std::string> stateNameList;
-		LLStringUtil::getTokens(stateNames[index],stateNameList,"|");
+		LLStringUtil::getTokens(stateNames[index], stateNameList, "|");
 
-		mStates[index].mName=stateNameList[0];			// for quick reference
-		mStates[index].mAlternateNames=stateNameList;	// to get all possible names, including mName
-		mStates[index].mRemapID=stateUUIDs[index];
-		mStates[index].mInventoryUUID=LLUUID::null;
-		mStates[index].mCurrentAnimation=0;
-		mStates[index].mCurrentAnimationID=LLUUID::null;
-		mStates[index].mCycle=FALSE;
-		mStates[index].mRandom=FALSE;
-		mStates[index].mCycleTime=0.0f;
-		mStates[index].mDirty=FALSE;
+		mStates[index].mName = stateNameList[0];			// for quick reference
+		mStates[index].mAlternateNames = stateNameList;		// to get all possible names, including mName
+		mStates[index].mRemapID = stateUUIDs[index];
+		mStates[index].mInventoryUUID = LLUUID::null;
+		mStates[index].mCurrentAnimation = 0;
+		mStates[index].mCurrentAnimationID = LLUUID::null;
+		mStates[index].mCycle = FALSE;
+		mStates[index].mRandom = FALSE;
+		mStates[index].mCycleTime = 0.0f;
+		mStates[index].mDirty = FALSE;
 		mStateNames.push_back(stateNameList[0]);
 	}
 	stopTimer();
@@ -134,12 +134,12 @@ AOSet::AOState* AOSet::getState(S32 eName)
 
 AOSet::AOState* AOSet::getStateByName(const std::string& name)
 {
-	for(S32 index=0;index<AOSTATES_MAX;index++)
+	for (S32 index = 0; index < AOSTATES_MAX; ++index)
 	{
-		AOState* state=&mStates[index];
-		for(U32 names=0;names<state->mAlternateNames.size();names++)
+		AOState* state = &mStates[index];
+		for (U32 names = 0; names < state->mAlternateNames.size(); ++names)
 		{
-			if(state->mAlternateNames[names].compare(name)==0)
+			if (state->mAlternateNames[names].compare(name) == 0)
 			{
 				return state;
 			}
@@ -150,15 +150,15 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 
 AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 {
-	LLUUID remap_id=id;
-	if(remap_id==ANIM_AGENT_SIT_GROUND)
+	LLUUID remap_id = id;
+	if (remap_id == ANIM_AGENT_SIT_GROUND)
 	{
-		remap_id=ANIM_AGENT_SIT_GROUND_CONSTRAINED;
+		remap_id = ANIM_AGENT_SIT_GROUND_CONSTRAINED;
 	}
 
-	for(S32 index=0;index<AOSTATES_MAX;index++)
+	for (S32 index = 0; index < AOSTATES_MAX; ++index)
 	{
-		if(mStates[index].mRemapID==remap_id)
+		if (mStates[index].mRemapID == remap_id)
 		{
 			return &mStates[index];
 		}
@@ -168,30 +168,34 @@ AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 
 const LLUUID& AOSet::getAnimationForState(AOState* state) const
 {
-	if(state)
+	if (state)
 	{
-		S32 numOfAnimations=state->mAnimations.size();
-		if(numOfAnimations)
+		S32 numOfAnimations = state->mAnimations.size();
+		if (numOfAnimations)
 		{
-			if(state->mCycle)
+			if (state->mCycle)
 			{
-				if(state->mRandom)
+				if (state->mRandom)
 				{
-					state->mCurrentAnimation=ll_frand()*numOfAnimations;
+					state->mCurrentAnimation = ll_frand() * numOfAnimations;
 					LL_DEBUGS("AOEngine") << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 				else
 				{
 					state->mCurrentAnimation++;
-					if(state->mCurrentAnimation>=state->mAnimations.size())
-						state->mCurrentAnimation=0;
+					if (state->mCurrentAnimation >= state->mAnimations.size())
+					{
+						state->mCurrentAnimation = 0;
+					}
 					LL_DEBUGS("AOEngine") << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 			}
 			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 		}
 		else
+		{
 			LL_DEBUGS("AOEngine") << "animation state has no animations assigned" << LL_ENDL;
+		}
 	}
 	return LLUUID::null;
 }
@@ -199,7 +203,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 void AOSet::startTimer(F32 timeout)
 {
 	mEventTimer.stop();
-	mPeriod=timeout;
+	mPeriod = timeout;
 	mEventTimer.start();
 	LL_DEBUGS("AOEngine") << "Starting state timer for " << getName() << " at " << timeout << LL_ENDL;
 }
@@ -223,7 +227,7 @@ const LLUUID& AOSet::getInventoryUUID() const
 
 void AOSet::setInventoryUUID(const LLUUID& inventoryID)
 {
-	mInventoryID=inventoryID;
+	mInventoryID = inventoryID;
 }
 
 const std::string& AOSet::getName() const
@@ -243,7 +247,7 @@ BOOL AOSet::getSitOverride() const
 
 void AOSet::setSitOverride(BOOL yes)
 {
-	mSitOverride=yes;
+	mSitOverride = yes;
 }
 
 BOOL AOSet::getSmart() const
@@ -253,7 +257,7 @@ BOOL AOSet::getSmart() const
 
 void AOSet::setSmart(BOOL yes)
 {
-	mSmart=yes;
+	mSmart = yes;
 }
 
 BOOL AOSet::getMouselookDisable() const
@@ -263,7 +267,7 @@ BOOL AOSet::getMouselookDisable() const
 
 void AOSet::setMouselookDisable(BOOL yes)
 {
-	mMouselookDisable=yes;
+	mMouselookDisable = yes;
 }
 
 BOOL AOSet::getComplete() const
@@ -273,7 +277,7 @@ BOOL AOSet::getComplete() const
 
 void AOSet::setComplete(BOOL yes)
 {
-	mComplete=yes;
+	mComplete = yes;
 }
 
 BOOL AOSet::getDirty() const
@@ -283,12 +287,12 @@ BOOL AOSet::getDirty() const
 
 void AOSet::setDirty(BOOL yes)
 {
-	mDirty=yes;
+	mDirty = yes;
 }
 
 void AOSet::setMotion(const LLUUID& motion)
 {
-	mCurrentMotion=motion;
+	mCurrentMotion = motion;
 }
 
 const LLUUID& AOSet::getMotion() const

@@ -37,8 +37,8 @@ class AOSet
 		// keep number and order in sync with list of names in the constructor
 		enum
 		{
-			Start=0,		// convenience, so we don't have to know the name of the first state
-			Standing=0,
+			Start = 0,		// convenience, so we don't have to know the name of the first state
+			Standing = 0,
 			Walking,
 			Running,
 			Sitting,

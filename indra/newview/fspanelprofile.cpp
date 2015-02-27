@@ -113,16 +113,16 @@ FSPanelProfileTab::~FSPanelProfileTab()
 
 void FSPanelProfileTab::setAvatarId(const LLUUID& id)
 {
-	if(id.notNull())
+	if (id.notNull())
 	{
-		if(getAvatarId().notNull())
+		if (getAvatarId().notNull())
 		{
-			LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId,this);
+			LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this);
 		}
 		mAvatarId = id;
-		LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(),this);
+		LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
 		
-		mSelfProfile = (getAvatarId() == gAgent.getID());
+		mSelfProfile = (getAvatarId() == gAgentID);
 	}
 }
 
@@ -254,12 +254,12 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	LLButton* copy_uri_button=findChild<LLButton>("copy_uri_button");
 	LLButton* copy_name_button=findChild<LLButton>("copy_name_button");
 
-	if(copy_uri_button)
+	if (copy_uri_button)
 	{
 		copy_uri_button->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onCopyURI, this));
 	}
 
-	if(copy_name_button)
+	if (copy_name_button)
 	{
 		copy_name_button->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onCopyToClipboard, this));
 	}
@@ -349,7 +349,7 @@ void FSPanelProfileSecondLife::updateData()
 
 void FSPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_PROPERTIES == type)
+	if (APT_PROPERTIES == type)
 	{
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
@@ -358,7 +358,7 @@ void FSPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorTyp
 			enableControls();
 		}
 	}
-	else if(APT_GROUPS == type)
+	else if (APT_GROUPS == type)
 	{
 		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
 		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
@@ -408,7 +408,9 @@ void FSPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
 {
 	//KC: the group_list ctrl can handle all this for us on our own profile
 	if (getSelfProfile() && !getEmbedded())
+	{
 		return;
+	}
 
 	// *NOTE dzaporozhan
 	// Group properties may arrive in two callbacks, we need to save them across
@@ -417,7 +419,7 @@ void FSPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
 	LLAvatarGroups::group_list_t::const_iterator it = avatar_groups->group_list.begin();
 	const LLAvatarGroups::group_list_t::const_iterator it_end = avatar_groups->group_list.end();
 
-	for(; it_end != it; ++it)
+	for (; it_end != it; ++it)
 	{
 		LLAvatarGroups::LLGroupData group_data = *it;
 		mGroups[group_data.group_name] = group_data.group_id;
@@ -450,7 +452,7 @@ void FSPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 	}
 
 	args["[AGE]"] = LLDateUtil::ageFromDate( avatar_data->born_on, LLDate::now());
-	args["[AGEDAYS]"] = LLSD((S32) (LLDate::now().secondsSinceEpoch()-avatar_data->born_on.secondsSinceEpoch())/86400).asString();
+	args["[AGEDAYS]"] = LLSD((S32) (LLDate::now().secondsSinceEpoch() - avatar_data->born_on.secondsSinceEpoch()) / 86400).asString();
 	std::string register_date = getString("RegisterDateFormat", args);
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
 	mDescriptionEdit->setValue(avatar_data->about_text);
@@ -654,9 +656,9 @@ void FSPanelProfileSecondLife::onChange(EStatusType status, const std::string &c
 
 void FSPanelProfileSecondLife::setAvatarId(const LLUUID& id)
 {
-	if(id.notNull())
+	if (id.notNull())
 	{
-		if(getAvatarId().notNull())
+		if (getAvatarId().notNull())
 		{
 			LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
 		}
@@ -758,9 +760,7 @@ void FSPanelProfileSecondLife::updateButtons()
 
 void FSPanelProfileSecondLife::onClickSetName()
 {	
-	LLAvatarNameCache::get(getAvatarId(), 
-			boost::bind(&FSPanelProfileSecondLife::onAvatarNameCacheSetName,
-				this, _1, _2));	
+	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfileSecondLife::onAvatarNameCacheSetName, this, _1, _2));
 
 	LLFirstUse::setDisplayName(false);
 }
@@ -844,10 +844,10 @@ BOOL FSPanelProfileWeb::postBuild()
 
 void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_PROPERTIES == type)
+	if (APT_PROPERTIES == type)
 	{
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
 			mURLHome = avatar_data->profile_url;
 			mUrlEdit->setValue(mURLHome);
@@ -880,7 +880,7 @@ void FSPanelProfileWeb::updateData()
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
-			mWebBrowser->navigateTo( mURLWebProfile, "text/html" );
+			mWebBrowser->navigateTo(mURLWebProfile, "text/html");
 		}
 	}
 }
@@ -918,7 +918,9 @@ void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatar
 	mWebProfileButton->setEnabled(TRUE);
 	
 	if (getIsLoading()) //if the tab was opened before name was resolved, load the panel now
+	{
 		updateData();
+	}
 }
 
 void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
@@ -1049,13 +1051,13 @@ BOOL FSPanelProfileInterests::postBuild()
 	mSkillsEditor = getChild<LLLineEditor>("skills_edit");
 	mLanguagesEditor = getChild<LLLineEditor>("languages_edit");
 
-	for (S32 i=0; i < WANT_CHECKS; ++i)
+	for (S32 i = 0; i < WANT_CHECKS; ++i)
 	{
 		std::string check_name = llformat("chk%d", i);
 		mWantChecks[i] = getChild<LLCheckBoxCtrl>(check_name);
 	}
 
-	for (S32 i=0; i < SKILL_CHECKS; ++i)
+	for (S32 i = 0; i < SKILL_CHECKS; ++i)
 	{
 		std::string check_name = llformat("schk%d", i);
 		mSkillChecks[i] = getChild<LLCheckBoxCtrl>(check_name);
@@ -1063,9 +1065,9 @@ BOOL FSPanelProfileInterests::postBuild()
 
 	//FS:KC - Due to a bug with LLLineEditor, it cannot be disabled from XUI
 	// It won't properly enable from code if it is.
-	mWantToEditor->setEnabled( FALSE );
-	mSkillsEditor->setEnabled( FALSE );
-	mLanguagesEditor->setEnabled( FALSE );
+	mWantToEditor->setEnabled(FALSE);
+	mSkillsEditor->setEnabled(FALSE);
+	mLanguagesEditor->setEnabled(FALSE);
 
 	return TRUE;
 }
@@ -1073,12 +1075,12 @@ BOOL FSPanelProfileInterests::postBuild()
 
 void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_INTERESTS_INFO == type)
+	if (APT_INTERESTS_INFO == type)
 	{
 		const FSInterestsData* interests_data = static_cast<const FSInterestsData*>(data);
 		if (interests_data && getAvatarId() == interests_data->avatar_id)
 		{
-			for (S32 i=0; i < WANT_CHECKS; i++)
+			for (S32 i = 0; i < WANT_CHECKS; ++i)
 			{
 				if (interests_data->want_to_mask & (1<<i))
 				{
@@ -1090,7 +1092,7 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
 				}
 			}
 
-			for (S32 i=0; i < SKILL_CHECKS; i++)
+			for (S32 i = 0; i < SKILL_CHECKS; ++i)
 			{
 				if (interests_data->skills_mask & (1<<i))
 				{
@@ -1117,12 +1119,12 @@ void FSPanelProfileInterests::resetData()
 	mSkillsEditor->setValue(LLStringUtil::null);
 	mLanguagesEditor->setValue(LLStringUtil::null);
 	
-	for (S32 i=0; i < WANT_CHECKS; i++)
+	for (S32 i = 0; i < WANT_CHECKS; ++i)
 	{
 		mWantChecks[i]->setValue(FALSE);
 	}
 
-	for (S32 i=0; i < SKILL_CHECKS; i++)
+	for (S32 i = 0; i < SKILL_CHECKS; ++i)
 	{
 		mSkillChecks[i]->setValue(FALSE);
 	}
@@ -1135,7 +1137,7 @@ void FSPanelProfileInterests::apply()
 		FSInterestsData interests_data = FSInterestsData();
 
 		interests_data.want_to_mask = 0;
-		for (S32 i=0; i < WANT_CHECKS; i++)
+		for (S32 i = 0; i < WANT_CHECKS; ++i)
 		{
 			if (mWantChecks[i]->getValue().asBoolean())
 			{
@@ -1219,14 +1221,14 @@ FSPanelPick::~FSPanelPick()
 
 void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 {
-	if(avatar_id.isNull())
+	if (avatar_id.isNull())
 	{
 		return;
 	}
 	FSPanelProfileTab::setAvatarId(avatar_id);
 
 	// creating new Pick
-	if(getPickId().isNull())
+	if (getPickId().isNull())
 	{
 		mNewPick = true;
 
@@ -1236,7 +1238,7 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 		std::string pick_name, pick_desc, region_name;
 
 		LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-		if(parcel)
+		if (parcel)
 		{
 			parcel_id = parcel->getID();
 			pick_name = parcel->getName();
@@ -1245,7 +1247,7 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 		}
 
 		LLViewerRegion* region = gAgent.getRegion();
-		if(region)
+		if (region)
 		{
 			region_name = region->getName();
 		}
@@ -1318,12 +1320,12 @@ void FSPanelPick::onDescriptionFocusReceived()
 
 void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_PICK_INFO != type)
+	if (APT_PICK_INFO != type)
 	{
 		return;
 	}
 	LLPickData* pick_info = static_cast<LLPickData*>(data);
-	if(!pick_info
+	if (!pick_info
 		|| pick_info->creator_id != getAvatarId()
 		|| pick_info->pick_id != getPickId())
 	{
@@ -1423,7 +1425,7 @@ void FSPanelPick::resetDirty()
 
 BOOL FSPanelPick::isDirty() const
 {
-	if( mNewPick
+	if (mNewPick
 		|| LLPanel::isDirty()
 		|| mLocationChanged
 		|| mSnapshotCtrl->isDirty()
@@ -1450,7 +1452,7 @@ void FSPanelPick::onClickSetLocation()
 	}
 
 	LLViewerRegion* region = gAgent.getRegion();
-	if(region)
+	if (region)
 	{
 		region_name = region->getName();
 	}
@@ -1680,10 +1682,10 @@ bool FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLS
 
 void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_PICKS == type)
+	if (APT_PICKS == type)
 	{
 		LLAvatarPicks* avatar_picks = static_cast<LLAvatarPicks*>(data);
-		if(avatar_picks && getAvatarId() == avatar_picks->target_id)
+		if (avatar_picks && getAvatarId() == avatar_picks->target_id)
 		{
 
 			LLUUID selected_id = LLUUID::null;
@@ -1699,7 +1701,7 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 			mTabContainer->deleteAllTabs();
 
 			LLAvatarPicks::picks_list_t::const_iterator it = avatar_picks->picks_list.begin();
-			for(; avatar_picks->picks_list.end() != it; ++it)
+			for (; avatar_picks->picks_list.end() != it; ++it)
 			{
 				LLUUID pick_id = it->first;
 				std::string pick_name = it->second;
@@ -1814,10 +1816,10 @@ void FSPanelProfileFirstLife::onOpen(const LLSD& key)
 
 void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_PROPERTIES == type)
+	if (APT_PROPERTIES == type)
 	{
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
 		{
 			mDescriptionEdit->setValue(avatar_data->fl_about_text);
 			mPicture->setValue(avatar_data->fl_image_id);
@@ -1978,12 +1980,18 @@ void FSPanelAvatarNotes::onCommitRights()
 
 	S32 rights = 0;
 
-	if(mOnlineStatus->getValue().asBoolean())
+	if (mOnlineStatus->getValue().asBoolean())
+	{
 		rights |= LLRelationship::GRANT_ONLINE_STATUS;
-	if(mMapRights->getValue().asBoolean())
+	}
+	if (mMapRights->getValue().asBoolean())
+	{
 		rights |= LLRelationship::GRANT_MAP_LOCATION;
-	if(mEditObjectRights->getValue().asBoolean())
+	}
+	if (mEditObjectRights->getValue().asBoolean())
+	{
 		rights |= LLRelationship::GRANT_MODIFY_OBJECTS;
+	}
 
 	bool allow_modify_objects = mEditObjectRights->getValue().asBoolean();
 
@@ -2003,10 +2011,10 @@ void FSPanelAvatarNotes::onCommitRights()
 
 void FSPanelAvatarNotes::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_NOTES == type)
+	if (APT_NOTES == type)
 	{
 		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
-		if(avatar_notes && getAvatarId() == avatar_notes->target_id)
+		if (avatar_notes && getAvatarId() == avatar_notes->target_id)
 		{
 			mNotesEditor->setValue(avatar_notes->notes);
 			mNotesEditor->setEnabled(TRUE);
@@ -2035,7 +2043,7 @@ void FSPanelAvatarNotes::enableCheckboxes(bool enable)
 
 FSPanelAvatarNotes::~FSPanelAvatarNotes()
 {
-	if(getAvatarId().notNull())
+	if (getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
 	}
@@ -2050,9 +2058,9 @@ void FSPanelAvatarNotes::changed(U32 mask)
 
 void FSPanelAvatarNotes::setAvatarId(const LLUUID& id)
 {
-	if(id.notNull())
+	if (id.notNull())
 	{
-		if(getAvatarId().notNull())
+		if (getAvatarId().notNull())
 		{
 			LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
 		}
@@ -2083,7 +2091,9 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 {
 	mTabContainer = getChild<LLTabContainer>("panel_profile_tabs");
 	if (mTabContainer)
+	{
 		mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
+	}
 	
 	// Load data on currently opened tab as well
 	onTabChange();
@@ -2180,7 +2190,7 @@ void FSPanelProfile::apply()
 		//KC - Avatar data is spread over 3 different panels
 		// collect data from the last 2 and give to the first to save
 		LLAvatarData data = LLAvatarData();
-		data.avatar_id = gAgent.getID();
+		data.avatar_id = gAgentID;
 		mPanelFirstlife->apply(&data);
 		mPanelWeb->apply(&data);
 		mPanelSecondlife->apply(&data);

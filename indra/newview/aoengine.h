@@ -102,7 +102,7 @@ class AOEngine
 		};
 
 		void enable(BOOL yes);
-		const LLUUID override(const LLUUID& motion,BOOL start);
+		const LLUUID override(const LLUUID& motion, BOOL start);
 		void tick();
 		void update();
 		void reload(bool);
@@ -111,19 +111,19 @@ class AOEngine
 
 		const LLUUID& getAOFolder() const;
 
-		LLUUID addSet(const std::string& name,BOOL reload=TRUE);
+		LLUUID addSet(const std::string& name, BOOL reload = TRUE);
 		BOOL removeSet(AOSet* set);
 
-		BOOL addAnimation(const AOSet* set,AOSet::AOState* state,const LLInventoryItem* item,BOOL reload=TRUE);
-		BOOL removeAnimation(const AOSet* set,AOSet::AOState* state,S32 index);
+		BOOL addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, BOOL reload = TRUE);
+		BOOL removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index);
 		void checkSitCancel();
 		void checkBelowWater(BOOL yes);
 
 		BOOL importNotecard(const LLInventoryItem* item);
-		void processImport( bool );
+		void processImport(bool);
 
-		BOOL swapWithPrevious(AOSet::AOState* state,S32 index);
-		BOOL swapWithNext(AOSet::AOState* state,S32 index);
+		BOOL swapWithPrevious(AOSet::AOState* state, S32 index);
+		BOOL swapWithNext(AOSet::AOState* state, S32 index);
 
 		void cycleTimeout(const AOSet* set);
 		void cycle(eCycleMode cycleMode);
@@ -139,15 +139,15 @@ class AOEngine
 		const std::vector<AOSet*> getSetList() const;
 		const std::string getCurrentSetName() const;
 		const AOSet* getDefaultSet() const;
-		BOOL renameSet(AOSet* set,const std::string& name);
+		BOOL renameSet(AOSet* set, const std::string& name);
 
 		void setDefaultSet(AOSet* set);
-		void setOverrideSits(AOSet* set,BOOL yes);
-		void setSmart(AOSet* set,BOOL yes);
-		void setDisableStands(AOSet* set,BOOL yes);
-		void setCycle(AOSet::AOState* set,BOOL yes);
-		void setRandomize(AOSet::AOState* state,BOOL yes);
-		void setCycleTime(AOSet::AOState* state,F32 time);
+		void setOverrideSits(AOSet* set, BOOL yes);
+		void setSmart(AOSet* set, BOOL yes);
+		void setDisableStands(AOSet* set, BOOL yes);
+		void setCycle(AOSet::AOState* set, BOOL yes);
+		void setRandomize(AOSet::AOState* state, BOOL yes);
+		void setCycleTime(AOSet::AOState* state, F32 time);
 
 		void saveSettings();
 
@@ -180,15 +180,15 @@ class AOEngine
 		void saveSet(const AOSet* set);
 		void saveState(const AOSet::AOState* state);
 
-		BOOL createAnimationLink(const AOSet* set,AOSet::AOState* state,const LLInventoryItem* item);
+		BOOL createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
 		BOOL findForeignItems(const LLUUID& uuid) const;
 		void purgeFolder(const LLUUID& uuid) const;
 
 		void onRegionChange();
 
 		void onToggleAOControl();
-		static void onNotecardLoadComplete(	LLVFS* vfs,const LLUUID& assetUUID,LLAssetType::EType type,
-												void* userdata,S32 status,LLExtStat extStatus);
+		static void onNotecardLoadComplete(LLVFS* vfs, const LLUUID& assetUUID, LLAssetType::EType type,
+												void* userdata, S32 status, LLExtStat extStatus);
 		void parseNotecard(const char* buffer);
 
 		updated_signal_t mUpdatedSignal;

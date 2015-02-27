@@ -81,7 +81,7 @@ FSPanelClassifieds::FSPanelClassifieds()
 
 FSPanelClassifieds::~FSPanelClassifieds()
 {
-	if(getAvatarId().notNull())
+	if (getAvatarId().notNull())
 	{
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
 	}
@@ -100,7 +100,7 @@ void* FSPanelClassifieds::create(void* data /* = NULL */)
 void FSPanelClassifieds::updateData()
 {
 	// Send Picks request only when we need to, not on every onOpen(during tab switch).
-	if(isDirty())
+	if (isDirty())
 	{
 		mNoClassifieds = false;
 
@@ -114,16 +114,16 @@ void FSPanelClassifieds::updateData()
 
 void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_CLASSIFIEDS == type)
+	if (APT_CLASSIFIEDS == type)
 	{
 		LLAvatarClassifieds* c_info = static_cast<LLAvatarClassifieds*>(data);
-		if(c_info && getAvatarId() == c_info->target_id)
+		if (c_info && getAvatarId() == c_info->target_id)
 		{
 			// do not clear classified list in case we will receive two or more data packets.
 			// list has been cleared in updateData(). (fix for EXT-6436)
 
 			LLAvatarClassifieds::classifieds_list_t::const_iterator it = c_info->classifieds_list.begin();
-			for(; c_info->classifieds_list.end() != it; ++it)
+			for (; c_info->classifieds_list.end() != it; ++it)
 			{
 				LLAvatarClassifieds::classified_data c_data = *it;
 
@@ -155,7 +155,7 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 		mNoItemsLabel->setVisible(no_data);
 		if (no_data)
 		{
-			if(getAvatarId() == gAgentID)
+			if (getAvatarId() == gAgentID)
 			{
 				mNoItemsLabel->setValue(LLTrans::getString("NoClassifiedsText"));
 			}
@@ -213,10 +213,10 @@ BOOL FSPanelClassifieds::postBuild()
 
 bool FSPanelClassifieds::isClassifiedPublished(FSClassifiedItem* c_item)
 {
-	if(c_item)
+	if (c_item)
 	{
 		FSPanelClassifiedEdit* panel = mEditClassifiedPanels[c_item->getClassifiedId()];
-		if(panel)
+		if (panel)
 		{
 			 return !panel->isNewWithErrors();
 		}
@@ -230,21 +230,21 @@ bool FSPanelClassifieds::isClassifiedPublished(FSClassifiedItem* c_item)
 void FSPanelClassifieds::onOpen(const LLSD& key)
 {
 	const LLUUID id(key.asUUID());
-	BOOL self = (gAgent.getID() == id);
+	BOOL self = (gAgentID == id);
 
 	// only agent can edit her picks 
 	getChildView("edit_panel")->setEnabled(self);
 	getChildView("edit_panel")->setVisible( self);
 
 	// Disable buttons when viewing profile for first time
-	if(getAvatarId() != id)
+	if (getAvatarId() != id)
 	{
 		getChildView(XML_BTN_INFO)->setEnabled(FALSE);
 		getChildView(XML_BTN_TELEPORT)->setEnabled(FALSE);
 		getChildView(XML_BTN_SHOW_ON_MAP)->setEnabled(FALSE);
 	}
 
-	if(getAvatarId() != id)
+	if (getAvatarId() != id)
 	{
 		mClassifiedsList->goToTop();
 		// Set dummy value to make panel dirty and make it reload picks
@@ -267,7 +267,6 @@ void FSPanelClassifieds::onClosePanel()
 
 void FSPanelClassifieds::onListCommit(const LLFlatListView* f_list)
 {
-
 	updateButtons();
 }
 
@@ -275,7 +274,7 @@ void FSPanelClassifieds::onListCommit(const LLFlatListView* f_list)
 void FSPanelClassifieds::onClickDelete()
 {
 	LLSD value = mClassifiedsList->getSelectedValue();
-	if(value.isDefined())
+	if (value.isDefined())
 	{
 		LLSD args; 
 		args["NAME"] = value[CLASSIFIED_NAME]; 
@@ -315,7 +314,7 @@ void FSPanelClassifieds::onClickTeleport()
 	FSClassifiedItem* c_item = getSelectedClassifiedItem();
 
 	LLVector3d pos;
-	if(c_item)
+	if (c_item)
 	{
 		pos = c_item->getPosGlobal();
 		FSPanelClassifiedInfo::sendClickMessage("teleport", false,
@@ -335,7 +334,7 @@ void FSPanelClassifieds::onClickMap()
 	FSClassifiedItem* c_item = getSelectedClassifiedItem();
 
 	LLVector3d pos;
-	if(c_item)
+	if (c_item)
 	{
 		FSPanelClassifiedInfo::sendClickMessage("map", false,
 			c_item->getClassifiedId(), LLUUID::null, pos, LLStringUtil::null);
@@ -384,7 +383,7 @@ void FSPanelClassifieds::updateButtons()
 	getChildView(XML_BTN_SHOW_ON_MAP)->setEnabled(has_selected);
 
 	FSClassifiedItem* c_item = dynamic_cast<FSClassifiedItem*>(mClassifiedsList->getSelectedItem());
-	if(c_item)
+	if (c_item)
 	{
 		getChildView(XML_BTN_INFO)->setEnabled(isClassifiedPublished(c_item));
 	}
@@ -401,7 +400,7 @@ void FSPanelClassifieds::createNewClassified()
 
 void FSPanelClassifieds::onClickInfo()
 {
-	if(mClassifiedsList->numSelected() > 0)
+	if (mClassifiedsList->numSelected() > 0)
 	{
 		openClassifiedInfo();
 	}
@@ -410,7 +409,10 @@ void FSPanelClassifieds::onClickInfo()
 void FSPanelClassifieds::openClassifiedInfo()
 {
 	LLSD selected_value = mClassifiedsList->getSelectedValue();
-	if (selected_value.isUndefined()) return;
+	if (selected_value.isUndefined())
+	{
+		return;
+	}
 
 	FSClassifiedItem* c_item = getSelectedClassifiedItem();
 	LLSD params;
@@ -444,12 +446,12 @@ void FSPanelClassifieds::onPanelPickClose(LLPanel* panel)
 
 void FSPanelClassifieds::onPanelClassifiedSave(FSPanelClassifiedEdit* panel)
 {
-	if(!panel->canClose())
+	if (!panel->canClose())
 	{
 		return;
 	}
 
-	if(panel->isNew())
+	if (panel->isNew())
 	{
 		mEditClassifiedPanels[panel->getClassifiedId()] = panel;
 
@@ -466,7 +468,7 @@ void FSPanelClassifieds::onPanelClassifiedSave(FSPanelClassifiedEdit* panel)
 		c_item->setMouseUpCallback(boost::bind(&FSPanelClassifieds::updateButtons, this));
 		c_item->childSetAction("info_chevron", boost::bind(&FSPanelClassifieds::onClickInfo, this));
 	}
-	else if(panel->isNewWithErrors())
+	else if (panel->isNewWithErrors())
 	{
 		FSClassifiedItem* c_item = dynamic_cast<FSClassifiedItem*>(mClassifiedsList->getSelectedItem());
 		llassert(c_item);
@@ -487,17 +489,16 @@ void FSPanelClassifieds::onPanelClassifiedSave(FSPanelClassifiedEdit* panel)
 
 void FSPanelClassifieds::onPanelClassifiedClose(FSPanelClassifiedInfo* panel)
 {
-	if(panel->getInfoLoaded() && !panel->isDirty())
+	if (panel->getInfoLoaded() && !panel->isDirty())
 	{
 		std::vector<LLSD> values;
 		mClassifiedsList->getValues(values);
-		for(size_t n = 0; n < values.size(); ++n)
+		for (size_t n = 0; n < values.size(); ++n)
 		{
 			LLUUID c_id = values[n][CLASSIFIED_ID].asUUID();
-			if(panel->getClassifiedId() == c_id)
+			if (panel->getClassifiedId() == c_id)
 			{
-				FSClassifiedItem* c_item = dynamic_cast<FSClassifiedItem*>(
-					mClassifiedsList->getItemByValue(values[n]));
+				FSClassifiedItem* c_item = dynamic_cast<FSClassifiedItem*>(mClassifiedsList->getItemByValue(values[n]));
 				llassert(c_item);
 				if (c_item)
 				{
@@ -523,7 +524,7 @@ void FSPanelClassifieds::createClassifiedInfoPanel()
 
 void FSPanelClassifieds::createClassifiedEditPanel(FSPanelClassifiedEdit** panel)
 {
-	if(panel)
+	if (panel)
 	{
 		FSPanelClassifiedEdit* new_panel = FSPanelClassifiedEdit::create();
 		new_panel->setExitCallback(boost::bind(&FSPanelClassifieds::onPanelClassifiedClose, this, new_panel));
@@ -557,7 +558,7 @@ FSClassifiedItem *FSPanelClassifieds::findClassifiedById(const LLUUID& classifie
 	std::vector<LLPanel*> items;
 	mClassifiedsList->getItems(items);
 	FSClassifiedItem* c_item = NULL;
-	for(std::vector<LLPanel*>::iterator it = items.begin(); it != items.end(); ++it)
+	for (std::vector<LLPanel*>::iterator it = items.begin(); it != items.end(); ++it)
 	{
 		FSClassifiedItem *test_item = dynamic_cast<FSClassifiedItem*>(*it);
 		if (test_item && test_item->getClassifiedId() == classified_id)
@@ -591,7 +592,7 @@ void FSPanelClassifieds::editClassified(const LLUUID&  classified_id)
 	params["location_text"] = c_item->getLocationText();
 
 	FSPanelClassifiedEdit* panel = mEditClassifiedPanels[c_item->getClassifiedId()];
-	if(!panel)
+	if (!panel)
 	{
 		createClassifiedEditPanel(&panel);
 		mEditClassifiedPanels[c_item->getClassifiedId()] = panel;
@@ -602,7 +603,7 @@ void FSPanelClassifieds::editClassified(const LLUUID&  classified_id)
 
 void FSPanelClassifieds::onClickMenuEdit()
 {
-	if(getSelectedClassifiedItem())
+	if (getSelectedClassifiedItem())
 	{
 		onPanelClassifiedEdit();
 	}
@@ -613,7 +614,7 @@ bool FSPanelClassifieds::onEnableMenuItem(const LLSD& user_data)
 	std::string param = user_data.asString();
 
 	FSClassifiedItem* c_item = dynamic_cast<FSClassifiedItem*>(mClassifiedsList->getSelectedItem());
-	if(c_item && "info" == param)
+	if (c_item && "info" == param)
 	{
 		// dont show Info panel if classified was not created
 		return isClassifiedPublished(c_item);
@@ -698,13 +699,13 @@ FSClassifiedItem::~FSClassifiedItem()
 
 void FSClassifiedItem::processProperties(void* data, EAvatarProcessorType type)
 {
-	if(APT_CLASSIFIED_INFO != type)
+	if (APT_CLASSIFIED_INFO != type)
 	{
 		return;
 	}
 
 	LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
-	if( !c_info || c_info->classified_id != getClassifiedId() )
+	if (!c_info || c_info->classified_id != getClassifiedId())
 	{
 		return;
 	}
@@ -731,14 +732,20 @@ BOOL FSClassifiedItem::postBuild()
 
 void FSClassifiedItem::setValue(const LLSD& value)
 {
-	if (!value.isMap()) return;;
-	if (!value.has("selected")) return;
+	if (!value.isMap())
+	{
+		return;
+	}
+	if (!value.has("selected"))
+	{
+		return;
+	}
 	getChildView("selected_icon")->setVisible( value["selected"]);
 }
 
 void FSClassifiedItem::fillIn(FSPanelClassifiedEdit* panel)
 {
-	if(!panel)
+	if (!panel)
 	{
 		return;
 	}
