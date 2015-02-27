@@ -892,21 +892,28 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 	// 		setModified(FILTER_LESS_RESTRICTIVE);
 	// }
 	// mFilterOps.mFilterLinks = filter_links;
-	if (mFilterOps.mFilterLinks!=filter_links)
+	if (mFilterOps.mFilterLinks != filter_links)
 	{
-		LLInventoryFilter::EFilterModified modifyMode=FILTER_RESTART;
+		LLInventoryFilter::EFilterModified modifyMode = FILTER_RESTART;
 
-		if(filter_links==FILTERLINK_INCLUDE_LINKS)
-			modifyMode=FILTER_LESS_RESTRICTIVE;
-		else if(mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
-			modifyMode=FILTER_MORE_RESTRICTIVE;
+		if (filter_links == FILTERLINK_INCLUDE_LINKS)
+		{
+			modifyMode = FILTER_LESS_RESTRICTIVE;
+		}
+		else if (mFilterOps.mFilterLinks == FILTERLINK_INCLUDE_LINKS)
+		{
+			modifyMode = FILTER_MORE_RESTRICTIVE;
+		}
+		else if (filter_links == FILTERLINK_EXCLUDE_LINKS && mFilterOps.mFilterLinks == FILTERLINK_INCLUDE_LINKS)
+		{
+			modifyMode = FILTER_MORE_RESTRICTIVE;
+		}
+		else if (filter_links == FILTERLINK_ONLY_LINKS && mFilterOps.mFilterLinks == FILTERLINK_INCLUDE_LINKS)
+		{
+			modifyMode = FILTER_MORE_RESTRICTIVE;
+		}
 
-		else if(filter_links==FILTERLINK_EXCLUDE_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
-			modifyMode=FILTER_MORE_RESTRICTIVE;
-		else if(filter_links==FILTERLINK_ONLY_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
-			modifyMode=FILTER_MORE_RESTRICTIVE;
-
-		mFilterOps.mFilterLinks=filter_links;
+		mFilterOps.mFilterLinks = filter_links;
 		setModified(modifyMode);
 	}
 	// </FS:Zi>
