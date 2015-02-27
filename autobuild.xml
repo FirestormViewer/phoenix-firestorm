@@ -2469,6 +2469,66 @@
           </map>
         </map>
       </map>
+      <key>uriparser</key>
+      <map>
+        <key>license</key>
+        <string>uriparser</string>
+        <key>license_file</key>
+        <string>LICENSES/uriparser.txt</string>
+        <key>name</key>
+        <string>uriparser</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>99c5a966ac74eea5a505317396152168</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294299/arch/Darwin/installer/uriparser-0.8.0.1-darwin-20140917.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>34306fb90364b182dc770375140d8557</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294298/arch/Linux/installer/uriparser-0.8.0.1-linux-20140918.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>e67a27e13e546cbb13fad2665a1896b7</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-x64-201502251606-r15.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>73817db47bc0f87269861b7887319414</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294274/arch/CYGWIN/installer/uriparser-0.8.0.1-windows-20140917.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
       <key>wix</key>
       <map>
         <key>license</key>
@@ -2488,54 +2548,6 @@
             <string>windows</string>
           </map>
         </map>
-      </map>
-      <key>uriparser</key>
-      <map>
-          <key>license</key>
-          <string>uriparser</string>
-          <key>license_file</key>
-          <string>LICENSES/uriparser.txt</string>
-          <key>name</key>
-          <string>uriparser</string>
-          <key>platforms</key>
-          <map>
-              <key>darwin</key>
-              <map>
-                  <key>archive</key>
-                  <map>
-                      <key>hash</key>
-                      <string>99c5a966ac74eea5a505317396152168</string>
-                      <key>url</key>
-                      <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294299/arch/Darwin/installer/uriparser-0.8.0.1-darwin-20140917.tar.bz2</string>
-                  </map>
-                  <key>name</key>
-                  <string>darwin</string>
-              </map>
-              <key>linux</key>
-              <map>
-                  <key>archive</key>
-                  <map>
-                      <key>hash</key>
-                      <string>34306fb90364b182dc770375140d8557</string>
-                      <key>url</key>
-                      <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294298/arch/Linux/installer/uriparser-0.8.0.1-linux-20140918.tar.bz2</string>
-                  </map>
-                  <key>name</key>
-                  <string>linux</string>
-              </map>
-              <key>windows</key>
-              <map>
-                  <key>archive</key>
-                  <map>
-                      <key>hash</key>
-                      <string>73817db47bc0f87269861b7887319414</string>
-                      <key>url</key>
-                      <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294274/arch/CYGWIN/installer/uriparser-0.8.0.1-windows-20140917.tar.bz2</string>
-                  </map>
-                  <key>name</key>
-                  <string>windows</string>
-              </map>
-          </map>
       </map>
       <key>xmlrpc-epi</key>
       <map>
@@ -2841,7 +2853,6 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-            <!-- FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_AVX</key>
             <map>
               <key>configure</key>
@@ -2859,7 +2870,6 @@
               <key>name</key>
               <string>ReleaseFS_AVX</string>
             </map>
-            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>configure</key>
@@ -3166,7 +3176,6 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-            <!-- FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_AVX</key>
             <map>
               <key>build</key>
@@ -3195,7 +3204,6 @@
               <key>name</key>
               <string>ReleaseFS_AVX</string>
             </map>
-            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>
@@ -3484,7 +3492,6 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-            <!-- FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_AVX</key>
             <map>
               <key>build</key>
@@ -3509,7 +3516,6 @@
               <key>name</key>
               <string>ReleaseFS_AVX</string>
             </map>
-            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>
@@ -3935,7 +3941,6 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
-            <!-- FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_AVX</key>
             <map>
               <key>build</key>
@@ -3973,7 +3978,6 @@
               <key>name</key>
               <string>ReleaseFS_AVX</string>
             </map>
-            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>
