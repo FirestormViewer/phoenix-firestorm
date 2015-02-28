@@ -48,6 +48,7 @@
 // <FS:Zi> Dialog Stacking browser
 #include "dialogstack.h"
 #include "llbutton.h"
+#include "llnavigationbar.h"
 // </FS:Zi>
 
 //////////////////////////////////////////////////////////////////////////
@@ -790,26 +791,26 @@ LLScriptFloaterManager::LLScriptFloaterManager()
 S32 LLScriptFloaterManager::getTopPad()
 {
 	// initialize if needed
-	if(mNavigationPanelPad==-1)
+	if (mNavigationPanelPad == -1)
 	{
-		mNavigationPanelPad=LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+		mNavigationPanelPad = LLNavigationBar::instance().getView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
 	}
 
 	// initialize if needed
-	if(mFavoritesPanelPad==-1)
+	if (mFavoritesPanelPad == -1)
 	{
-		mFavoritesPanelPad=LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+		mFavoritesPanelPad = LLNavigationBar::instance().getView()->getChild<LLView>("favorite")->getRect().getHeight();
 	}
 
-	S32 pad=0;
+	S32 pad = 0;
 	if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
 	{
-		pad=mNavigationPanelPad;
+		pad = mNavigationPanelPad;
 	}
 
 	if (gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
 	{
-		pad+=mFavoritesPanelPad;
+		pad += mFavoritesPanelPad;
 	}
 
 	return pad;
@@ -911,7 +912,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			floater->setDocked(false, true);
 		}
 
-		S32 topPad=LLScriptFloaterManager::instance().getTopPad();
+		S32 topPad = LLScriptFloaterManager::instance().getTopPad();
 
 		S32 bottomPad = 0;
 		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->hasButtons())
