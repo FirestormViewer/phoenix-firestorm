@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #ifdef INCLUDE_VLD
+#define VLD_FORCE_ENABLE 1
 #include "vld.h"
 #endif
 
@@ -4611,7 +4612,7 @@ void handle_visual_leak_detector_toggle(void*)
 	{
 #ifdef INCLUDE_VLD
 		// only works for debug builds (hard coded into vld.h)
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(VLD_FORCE_ENABLE)
 		// start with Visual Leak Detector turned off
 		VLDDisable();
 #endif // _DEBUG
@@ -4622,10 +4623,10 @@ void handle_visual_leak_detector_toggle(void*)
 	{
 #ifdef INCLUDE_VLD
 		// only works for debug builds (hard coded into vld.h)
-	#ifdef _DEBUG
+#if defined(_DEBUG) || defined(VLD_FORCE_ENABLE)
 		// start with Visual Leak Detector turned off
 		VLDEnable();
-	#endif // _DEBUG
+#endif // _DEBUG
 #endif // INCLUDE_VLD
 
 		vld_enabled = true;
