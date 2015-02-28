@@ -1652,9 +1652,9 @@ BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 
 	if (is_region_exist)
 	{
-		S32 count = ids.size();
+		size_t count = ids.size();
 
-		if( isInviteAllowed() && (count > 0) )
+		if (isInviteAllowed() && (count > 0))
 		{
 			LL_DEBUGS("FSFloaterIM") << "FSFloaterIM::inviteToSession() - inviting participants" << LL_ENDL;
 
@@ -1662,13 +1662,13 @@ BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 
 			LLSD data;
 			data["params"] = LLSD::emptyArray();
-			for (int i = 0; i < count; i++)
+			for (size_t i = 0; i < count; ++i)
 			{
 				data["params"].append(ids[i]);
 			}
 			data["method"] = "invite";
 			data["session-id"] = mSessionID;
-			LLHTTPClient::post(url,	data,new FSSessionInviteResponder(mSessionID));
+			LLHTTPClient::post(url, data, new FSSessionInviteResponder(mSessionID));
 		}
 		else
 		{
