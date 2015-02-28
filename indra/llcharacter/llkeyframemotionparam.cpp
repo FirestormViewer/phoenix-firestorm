@@ -100,7 +100,10 @@ LLMotion::LLMotionInitStatus LLKeyframeMotionParam::onInitialize(LLCharacter *ch
 			LLMotion* motion = paramMotion.mMotion;
 			motion->onInitialize(character);
 
-			if (motion->getDuration() > mEaseInDuration)
+			// <FS> Fix copy paste error
+			//if (motion->getDuration() > mEaseInDuration)
+			if (motion->getEaseInDuration() > mEaseInDuration)
+			// </FS>
 			{
 				mEaseInDuration = motion->getEaseInDuration();
 			}
