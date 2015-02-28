@@ -83,8 +83,12 @@ static int ExtensionExists(const char* extName, const char* sysExts)
 	if (0 == strcmp(extName, "GL_VERSION_1_2")) {
 		const char *version = (const char*)glGetString(GL_VERSION);
 		if (strstr(version, "1.0") == version || strstr(version, "1.1") == version) {
+			// <FS> Memleak fix by Drake Arconis
+			free(padExtName);
 			return FALSE;
 		} else {
+			// <FS> Memleak fix by Drake Arconis
+			free(padExtName);
 			return TRUE;
 		}
 	}
