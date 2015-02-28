@@ -4151,7 +4151,10 @@ bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_b
 
 	//to cause appearance of the agent to be updated
 	bool result = false;
-	if (result = gAgentWearables.moveWearable(item, closer_to_body))
+	// <FS> Compiler appeasement by Cinder Roxley
+	//if (result = gAgentWearables.moveWearable(item, closer_to_body))
+	if ((result = gAgentWearables.moveWearable(item, closer_to_body)))
+	// </FS>
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//gAgentAvatarp->wearableUpdated(item->getWearableType());

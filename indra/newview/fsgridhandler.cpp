@@ -101,7 +101,7 @@ public:
 				mOwner->addGrid(mData, LLGridManager::FAIL);
 			}
 		}
-		else if (HTTP_NOT_MODIFIED == getStatus() && !LLGridManager::TRYLEGACY == mState)// not modified
+		else if (HTTP_NOT_MODIFIED == getStatus() && LLGridManager::TRYLEGACY != mState)// not modified
 		{
 			mOwner->addGrid(mData, LLGridManager::FINISH);
 		}

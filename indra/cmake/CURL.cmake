@@ -8,6 +8,9 @@ if (USESYSTEMLIBS)
   include(FindCURL)
 else (USESYSTEMLIBS)
   use_prebuilt_binary(curl)
+  if (DARWIN)
+    use_prebuilt_libary(libidn)
+  endif (DARWIN)
   if (WINDOWS)
     set(CURL_LIBRARIES 
     debug libcurld.lib
