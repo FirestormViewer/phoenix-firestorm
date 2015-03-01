@@ -9,7 +9,7 @@ if (USESYSTEMLIBS)
 else (USESYSTEMLIBS)
   use_prebuilt_binary(curl)
   if (DARWIN)
-    use_prebuilt_libary(libidn)
+    use_prebuilt_binary(libidn)
   endif (DARWIN)
   if (WINDOWS)
     set(CURL_LIBRARIES 
