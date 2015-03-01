@@ -3,7 +3,7 @@
 	<tab_container name="tabs">
 
 		<!-- Chat: Visuals -->
-		<panel label="Visuals" name="ChatVisuals">
+		<panel label="Visualisierung" name="ChatVisuals">
 			<text name="console_font_size">
 				Schriftgröße für Konsole:
 			</text>
@@ -18,7 +18,7 @@
 			<check_box label="Im Chatverlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
 			<check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden"/>
 			<check_box name="FSEmphasizeShoutWhisper" label="Rufen fett, Flüstern kursiv hervorheben"/>
-			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>
+			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen, um Vortäuschungen zu unterbinden"/>
 			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
 			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/> 
 			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
@@ -40,7 +40,7 @@
 		</panel>
 
 		<!-- Chat: Windows -->
-		<panel label="Chat-Fenstern" name="ChatWindows">
+		<panel label="Chat-Fenster" name="ChatWindows">
 			<text name="font_size">
 				Schriftgröße:
 			</text>
@@ -123,7 +123,7 @@
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
 			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
 			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
-			<check_box label="Tipp-Klang abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
+			<check_box label="Tipp-Klang abspielen, wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
@@ -151,7 +151,7 @@
 		</panel>
 
 		<!-- Chat: Notices -->
-		<panel label="Notiz" name="ChatNotices">
+		<panel label="Benachrichtigung" name="ChatNotices">
 			<text name="disable_toast_label">
 				Chat-Popups aktivieren für eingehende:
 			</text>
