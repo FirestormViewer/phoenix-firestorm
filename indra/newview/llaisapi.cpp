@@ -32,6 +32,9 @@
 #include "llcallbacklist.h"
 #include "llinventorymodel.h"
 #include "llsdutil.h"
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+#include "llviewercontrol.h"
+// [/SL:KB]
 #include "llviewerregion.h"
 #include "llinventoryobserver.h"
 
@@ -120,11 +123,22 @@ void AISCommand::httpFailure()
 }
 
 //static
-bool AISCommand::isAPIAvailable()
+//bool AISCommand::isAPIAvailable()
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+bool AISCommand::isAPIAvailable(EAISCommand cmd)
+// [/SL:KB]
 {
 	if (gAgent.getRegion())
 	{
-		return gAgent.getRegion()->isCapabilityAvailable("InventoryAPIv3");
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		static LLCachedControl<U32> COMMAND_FILTER_MASK(gSavedSettings, "AISCommandFilterMask", U32_MAX);
+
+		bool aisAvailable = gAgent.getRegion()->isCapabilityAvailable("InventoryAPIv3");
+		return 
+			(aisAvailable) && 
+			( (CMD_UNKNOWN == cmd) || ((U32)cmd & COMMAND_FILTER_MASK) );
+// [/SL:KB]
+//		return gAgent.getRegion()->isCapabilityAvailable("InventoryAPIv3");
 	}
 	return false;
 }
