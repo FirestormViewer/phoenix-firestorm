@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Metin Sohbeti" name="chat">
-	<panel name="general_chat_settings">
-	<text name="font_size">
-		Font büyüklüğü:
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="Küçük" name="radio" value="0"/>
-		<radio_item label="Orta" name="radio2" value="1"/>
-		<radio_item label="Büyük" name="radio3" value="2"/>
-	</radio_group>
-	<check_box initial_value="true" label="Sohbet sırasında yazma animasyonunu oynat" name="play_typing_animation"/>
-	<check_box label="Çevrimdışı olduğunda Aİ&apos;ler e-posta ile bana gönderilsin ([EMAIL])" name="send_im_to_email"/>
-	<check_box label="Düz metin Aİ&apos;ler ve sohbet geçmişini etkinleştir" name="plain_text_chat_history"/>
-	<check_box label="Balon Sohbeti" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
-		Aİ&apos;leri şurada göster:
-	</text>
-	<text name="requires_restart_label">
-		(tekrar başlatma gerekir)
-		</text>
-		<check_box label="Sesi çal" name="play_sound_nearby_chat_im"/>
-		<text name="object_ims">
-			Nesne Aİ&apos;leri:
-		</text>
-		<combo_box name="ObjectIMOptions">
-			<item label="Sohbetler penceresini aç" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Mesajı açılır pencerede göster" name="PopUpMessage" value="toast"/>
-			<item label="Araç çubuğu düğmesi yanıp sönsün" name="FlashToolBarButton" value="flash"/>
-			<item label="Eylem yok" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sesi çal" name="play_sound_object_im"/>
-	</text>
-	<radio_group name="chat_window" tool_tip="Anlık İletileri ayrı gezdiricilerde veya çoklu sekmelere sahip tek bir gezdiricide gösterin (tekrar başlatma gerekir)">
-		<radio_item label="Ayrı Pencereler" name="radio" value="0"/>
-		<radio_item label="Sekmeler" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label">
-		Gelen sohbet için açılır pencereleri etkinleştir:
-	</text>
-	<check_box label="Grup Sohbetleri" name="EnableGroupChatPopups" tool_tip="Bir Grup Sohbet iletisi gönderildiğinde açılır pencereleri görmek için işaretle"/>
-	<check_box label="Aİ Sohbetleri" name="EnableIMChatPopups" tool_tip="Bir anlık ileti geldiğinde açılır pencereleri görmek için işaretle"/>
-	<spinner label="Yakındaki sohbet iletilerinin vurgulanma süresi:" name="nearby_toasts_lifetime"/>
-	<spinner label="Yakındaki sohbet iletilerinin sönme süresi:" name="nearby_toasts_fadingtime"/>
-	<button label="Çeviri..." name="ok_btn"/>
-	<button label="Otomatik Yerine Koy..." name="autoreplace_showgui"/>
-	<button label="Yazım Denetimi Yapılıyor..." name="spellcheck_showgui"/>
+	<tab_container name="tabs">
+		<panel name="ChatVisuals">
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Küçük" name="consradio"/>
+				<radio_item label="Orta" name="consradio2"/>
+				<radio_item label="Büyük" name="consradio3"/>
+			</radio_group>
+			<check_box label="Balon Sohbeti" name="bubble_text_chat"/>
+		</panel>
+		<panel name="ChatWindows">
+			<text name="font_size">
+				Font büyüklüğü:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Küçük" name="radio" />
+				<radio_item label="Orta" name="radio2" />
+				<radio_item label="Büyük" name="radio3" />
+			</radio_group>
+			<check_box label="Düz metin Aİ&apos;ler ve sohbet geçmişini etkinleştir" name="plain_text_chat_history"/>
+			<text name="show_ims_in_label">
+				Aİ&apos;leri şurada göster:
+			</text>
+			<radio_group name="chat_window" tool_tip="Anlık İletileri ayrı gezdiricilerde veya çoklu sekmelere sahip tek bir gezdiricide gösterin (tekrar başlatma gerekir)">
+				<radio_item label="Ayrı Pencereler" name="radio" />
+				<radio_item label="Sekmeler" name="radio2" />
+			</radio_group>
+			<text name="req_restart_ims" width="150" left_pad="20">
+				(tekrar başlatma gerekir)
+			</text>
+			<text name="req_restart_chattabs" width="150">
+				(tekrar başlatma gerekir)
+			</text>
+		</panel>
+		<panel name="ChatTyping">
+			<button name="autoreplace_showgui" label="Otomatik Yerine Koy"/>
+			<button name="spellcheck_showgui" label="Yazım Denetimi Yapılıyor"/>
+			<button label="Çeviri..." name="translation_settings_btn"/>
+			<check_box label="Sohbet sırasında yazma animasyonunu oynat" name="play_typing_animation"/>
+		</panel>
+		<panel name="ChatNotices">
+			<text name="disable_toast_label">
+				Gelen sohbet için açılır pencereleri etkinleştir:
+			</text>
+			<check_box label="Grup Sohbetleri" name="EnableGroupChatPopups" tool_tip="Bir Grup Sohbet iletisi gönderildiğinde açılır pencereleri görmek için işaretle"/>
+			<check_box label="Aİ Sohbetleri" name="EnableIMChatPopups" tool_tip="Bir anlık ileti geldiğinde açılır pencereleri görmek için işaretle"/>
+			<check_box label="Çevrimdışı olduğunda Aİ&apos;ler e-posta ile bana gönderilsin ([EMAIL])" name="send_im_to_email"/>
+		</panel>
+	</tab_container>
 </panel>

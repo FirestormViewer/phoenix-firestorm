@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Chat écrit" name="chat">
-	<text name="font_size">
-		Taille de la police :
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="Petite" name="radio" value="0"/>
-		<radio_item label="Moyenne" name="radio2" value="1"/>
-		<radio_item label="Grande" name="radio3" value="2"/>
-	</radio_group>
-	<check_box initial_value="true" label="Exécuter l&apos;animation clavier quand vous écrivez" name="play_typing_animation"/>
-	<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté ([EMAIL])" name="send_im_to_email"/>
-  <check_box label="Désactiver les en-têtes dans le chat et les MI (Style v1)" name="plain_text_chat_history"/>
-  <check_box label="Afficher les miniatures lorsque les en-têtes sont activés" name="ShowChatMiniIcons"/>
-	<check_box label="Bulles de chat" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
-		Afficher les IM dans :
-	</text>
-	<text name="requires_restart_label">
-		(redémarrage requis)
-	</text>
-	<radio_group name="chat_window" tool_tip="Afficher vos messages instantanés dans plusieurs fenêtres ou dans une seule fenêtre avec plusieurs onglets (redémarrage requis)">
-		<radio_item label="Plusieurs fenêtres" name="radio" value="0"/>
-		<radio_item label="Onglets" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label">
-		Activer les popups de chat entrant :
-	</text>
-	<check_box label="Chats de groupe" name="EnableGroupChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche à réception d&apos;un message de chat de groupe."/>
-	<check_box label="Chats IM" name="EnableIMChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche à réception d&apos;un message instantané."/>
-	<spinner label="Durée de vie du popup Chat près de moi :" name="nearby_toasts_lifetime"/>
-	<spinner label="Disparition progressive du popup Chat près de moi :" name="nearby_toasts_fadingtime"/>
-	<button label="Traduction..." name="ok_btn"/>
-	<button label="Rechercher/Remplacer..." name="autoreplace_showgui"/>
-	<button label="Orthographe..." name="spellcheck_showgui"/>
+	<tab_container name="tabs">
+		<panel name="ChatVisuals">
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Petite" name="consradio"/>
+				<radio_item label="Moyenne" name="consradio2"/>
+				<radio_item label="Grande" name="consradio3"/>
+			</radio_group>
+			<check_box label="Bulles de chat" name="bubble_text_chat"/>
+		</panel>
+		<panel name="ChatWindows">
+			<text name="font_size">
+				Taille de la police:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Petite" name="radio"/>
+				<radio_item label="Moyenne" name="radio2"/>
+				<radio_item label="Grande" name="radio3"/>
+			</radio_group>
+			<check_box label="Désactiver les en-tetes dans le chat et les MI (Style v1)" name="plain_text_chat_history"/>
+			<check_box label="Afficher les miniatures lorsque les en-tetes sont activés" name="ShowChatMiniIcons"/>
+			<text name="show_ims_in_label">
+				Afficher les IM dans :
+			</text>
+			<radio_group name="chat_window" tool_tip="Afficher vos messages instantanés dans plusieurs fenetres ou dans une seule fenetre avec plusieurs onglets (redémarrage requis)">
+				<radio_item label="Plusieurs fenetres" name="radio"/>
+				<radio_item label="Onglets" name="radio2"/>
+			</radio_group>
+			<text name="req_restart_ims" width="150">
+				(redémarrage requis)
+			</text>
+			<text name="req_restart_chattabs" width="150">
+				(redémarrage requis)
+			</text>
+		</panel>
+		<panel name="ChatTyping">
+			<button name="autoreplace_showgui" label="Rechercher/Remplacer"/>
+			<button name="spellcheck_showgui" label="Orthographe"/>
+			<button label="Traduction..." name="translation_settings_btn"/>
+			<check_box label="Exécuter l&apos;animation clavier quand vous écrivez" name="play_typing_animation"/>
+		</panel>
+		<panel name="ChatNotices">
+			<text name="disable_toast_label">
+				Activer les popups de chat entrant:
+			</text>
+			<check_box width="125" label="Chats de groupe" name="EnableGroupChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche a réception d&apos;un message de chat de groupe."/>
+			<check_box label="Chats IM" name="EnableIMChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche a réception d&apos;un message instantané."/>
+			<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté ([EMAIL])" name="send_im_to_email"/>
+		</panel>
+	</tab_container>
 </panel>
