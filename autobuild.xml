@@ -2484,9 +2484,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>99c5a966ac74eea5a505317396152168</string>
+              <string>d90211728ab2eede9b4c621acd3cb4e7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-uriparser/rev/294299/arch/Darwin/installer/uriparser-0.8.0.1-darwin-20140917.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-darwin-201502281912-r16.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
