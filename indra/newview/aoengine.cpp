@@ -53,12 +53,12 @@ const F32 INVENTORY_POLLING_INTERVAL = 5.0f;
 
 AOEngine::AOEngine() :
 	LLSingleton<AOEngine>(),
-	mCurrentSet(0),
-	mDefaultSet(0),
+	mCurrentSet(NULL),
+	mDefaultSet(NULL),
 	mEnabled(FALSE),
 	mInMouselook(FALSE),
 	mUnderWater(FALSE),
-	mImportSet(0),
+	mImportSet(NULL),
 	mImportCategory(LLUUID::null),
 	mAOFolder(LLUUID::null),
 	mLastMotion(ANIM_AGENT_STAND),
@@ -95,21 +95,21 @@ void AOEngine::onToggleAOControl()
 	enable(gSavedPerAccountSettings.getBOOL("UseAO"));
 }
 
-void AOEngine::clear( bool aFromTimer )
+void AOEngine::clear(bool aFromTimer)
 {
-	mOldSets.insert( mOldSets.end(), mSets.begin(), mSets.end() );
+	mOldSets.insert(mOldSets.end(), mSets.begin(), mSets.end());
 	mSets.clear();
 
-	mCurrentSet=0;
+	mCurrentSet = NULL;
 
 	//<ND/> FIRE-3801; We cannot delete any AOSet object if we're called from a timer tick. AOSet is derived from LLEventTimer and destruction will
 	// fail in ~LLInstanceTracker when a destructor runs during iteration.
-	if( !aFromTimer )
+	if (!aFromTimer)
 	{
-		std::for_each( mOldSets.begin(), mOldSets.end(), DeletePointer( ) );
+		std::for_each(mOldSets.begin(), mOldSets.end(), DeletePointer());
 		mOldSets.clear();
 
-		std::for_each( mOldImportSets.begin(), mOldImportSets.end(), DeletePointer() );
+		std::for_each(mOldImportSets.begin(), mOldImportSets.end(), DeletePointer());
 		mOldImportSets.clear();
 	}
 }
@@ -232,9 +232,9 @@ void AOEngine::checkBelowWater(BOOL yes)
 void AOEngine::enable(BOOL yes)
 {
 	LL_DEBUGS("AOEngine") << "using " << mLastMotion << " enable " << yes << LL_ENDL;
-	mEnabled=yes;
+	mEnabled = yes;
 
-	if(!mCurrentSet)
+	if (!mCurrentSet)
 	{
 		LL_DEBUGS("AOEngine") << "enable(" << yes << ") without animation set loaded." << LL_ENDL;
 		return;
@@ -1053,7 +1053,7 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
 		AOSet::AOAnimation anim;
 		anim.mAssetUUID = items->at(num)->getAssetUUID();
 		LLViewerInventoryItem* linkedItem = items->at(num)->getLinkedItem();
-		if (linkedItem == 0)
+		if (!linkedItem)
 		{
 			LL_WARNS("AOEngine") << "linked item for link " << items->at(num)->LLInventoryItem::getName() << " not found (broken link). Skipping." << LL_ENDL;
 			continue;
@@ -1135,7 +1135,7 @@ void AOEngine::update()
 		LLStringUtil::getTokens(setFolderName, params, ":");
 
 		AOSet* newSet = getSetByName(params[0]);
-		if (newSet == 0)
+		if (!newSet)
 		{
 			LL_DEBUGS("AOEngine") << "Adding set " << setFolderName << " to AO." << LL_ENDL;
 			newSet = new AOSet(currentCategory->getUUID());
@@ -1197,7 +1197,7 @@ void AOEngine::update()
 				std::string stateName = params[0];
 
 				AOSet::AOState* state = newSet->getStateByName(stateName);
-				if (state == NULL)
+				if (!state)
 				{
 					LL_WARNS("AOEngine") << "Unknown state " << stateName << ". Skipping." << LL_ENDL;
 					continue;
@@ -1683,8 +1683,7 @@ BOOL AOEngine::importNotecard(const LLInventoryItem* item)
 			LLUUID* newUUID = new LLUUID(item->getAssetUUID());
 			const LLHost sourceSim = LLHost::invalid;
 
-			gAssetStorage->getInvItemAsset
-			(
+			gAssetStorage->getInvItemAsset(
 				sourceSim,
 				gAgent.getID(),
 				gAgent.getSessionID(),
@@ -1729,7 +1728,7 @@ void AOEngine::parseNotecard(const char* buffer)
 {
 	LL_DEBUGS("AOEngine") << "parsing import notecard" << LL_ENDL;
 
-	BOOL isValid = FALSE;
+	bool isValid = false;
 
 	if (!buffer)
 	{
@@ -1858,7 +1857,7 @@ void AOEngine::parseNotecard(const char* buffer)
 			}
 			animation.mSortOrder = animIndex;
 			newState->mAnimations.push_back(animation);
-			isValid = TRUE;
+			isValid = true;
 		}
 	}
 
@@ -1908,13 +1907,13 @@ void AOEngine::processImport(bool aFromTimer)
 		mImportSet->setInventoryUUID(mImportCategory);
 	}
 
-	BOOL allComplete=TRUE;
+	bool allComplete = true;
 	for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
 	{
 		AOSet::AOState* state = mImportSet->getState(index);
 		if (state->mAnimations.size())
 		{
-			allComplete = FALSE;
+			allComplete = false;
 			LL_DEBUGS("AOEngine") << "state " << state->mName << " still has animations to link." << LL_ENDL;
 
 			for (S32 animationIndex = state->mAnimations.size() - 1; animationIndex >= 0; --animationIndex)
