@@ -1190,10 +1190,10 @@ void AOEngine::update()
 			gInventory.getDirectDescendentsOf(currentCategory->getUUID(), stateCategories, items);
 			newSet->setComplete(TRUE);
 
-			for (S32 index = 0; index < stateCategories->size(); ++index)
+			for (S32 state_index = 0; state_index < stateCategories->size(); ++state_index)
 			{
 				std::vector<std::string> params;
-				LLStringUtil::getTokens(stateCategories->at(index)->getName(), params, ":");
+				LLStringUtil::getTokens(stateCategories->at(state_index)->getName(), params, ":");
 				std::string stateName = params[0];
 
 				AOSet::AOState* state = newSet->getStateByName(stateName);
@@ -1204,7 +1204,7 @@ void AOEngine::update()
 				}
 				LL_DEBUGS("AOEngine") << "Reading state " << stateName << LL_ENDL;
 
-				state->mInventoryUUID=stateCategories->at(index)->getUUID();
+				state->mInventoryUUID = stateCategories->at(state_index)->getUUID();
 				for (U32 num = 1; num < params.size(); ++num)
 				{
 					if (params[num] == "CY")
