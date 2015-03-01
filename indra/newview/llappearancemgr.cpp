@@ -3932,7 +3932,7 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 		   if (!isLinkedInCOF(item_id))
 		   {
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-	 		   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback();
+	 		   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback(item_id);
 	 		   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
 // [/SL:KB]
 //			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
@@ -3976,29 +3976,25 @@ void LLAppearanceMgr::linkPendingAttachments()
 		if ( (gAgentAvatarp->isWearingAttachment(idAttachItem)) && (!isLinkInCOF(idAttachItem)) )
 		{
 			if (!cb)
-			{
-				cb = new LLRegisterAttachmentCallback();
-			}
+				cb = new LLRegisterAttachmentCallback(idAttachItem);
 			LLAppearanceMgr::addCOFItemLink(idAttachItem, cb);
 		}
 	}
 }
 
-void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idItem)
+void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idAttachItem)
 {
-	const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
-
 	// Remove the attachment from the pending list
-	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idItemBase);
+	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idAttachItem);
 	if (itPendingAttachLink != mPendingAttachLinks.end())
 	{
 		mPendingAttachLinks.erase(itPendingAttachLink);
 	}
 
 	// It may have been detached already in which case we should remove the COF link
-	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idItemBase)) )
+	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idAttachItem)) )
 	{
-		removeCOFItemLinks(idItemBase);
+		removeCOFItemLinks(idAttachItem);
 	}
 }
 // [/SL:KB]

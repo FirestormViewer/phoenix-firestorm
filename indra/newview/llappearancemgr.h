@@ -271,7 +271,7 @@ private:
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
 public:
 	void linkPendingAttachments();
-	void onRegisterAttachmentComplete(const LLUUID& idItem);
+	void onRegisterAttachmentComplete(const LLUUID& idAttachItem);
 private:
 	uuid_vec_t mPendingAttachLinks;
 // [/SL:KB]
@@ -310,10 +310,14 @@ private:
 class LLRegisterAttachmentCallback : public LLInventoryCallback
 {
 public:
-	/*virtual*/ void fire(const LLUUID& idItem)
+	LLRegisterAttachmentCallback(const LLUUID& idAttachItem) : m_idAttachItem(idAttachItem) {}
+	/*virtual*/ void fire(const LLUUID&)
 	{
-		LLAppearanceMgr::instance().onRegisterAttachmentComplete(idItem);
+		// NOTE: AISCommand::getResponseUUID() currently returns false so the passed UUID is NULL and hence useless
+		LLAppearanceMgr::instance().onRegisterAttachmentComplete(m_idAttachItem);
 	}
+protected:
+	LLUUID m_idAttachItem;
 };
 // [/SL:KB]
 
