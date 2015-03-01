@@ -269,14 +269,14 @@
 
         </panel>
 
-        <!-- Chat: Chat windows -->
+        <!-- Chat: Chat Windows -->
         <panel
          top_pad="1"
          bottom="-1"
          left="1"
          right="-1"
          follows="all"
-         label="Chat windows"
+         label="Chat Windows"
          name="ChatWindows">
 
             <text
