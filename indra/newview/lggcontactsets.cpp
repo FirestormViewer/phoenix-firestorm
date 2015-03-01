@@ -65,7 +65,7 @@ LGGContactSets::~LGGContactSets()
 
 void LGGContactSets::toneDownColor(LLColor4& color) const
 {
-	color.mV[VW] = COLOR_DAMPENING;
+	color.mV[VALPHA] = COLOR_DAMPENING;
 }
 
 bool LGGContactSets::callbackAliasReset(const LLSD& notification, const LLSD& response)

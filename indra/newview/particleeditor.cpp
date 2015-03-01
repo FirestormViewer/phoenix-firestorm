@@ -316,9 +316,9 @@ void ParticleEditor::onParameterChange()
 	mParticles.mAngularVelocity = LLVector3(mOmegaXSpinner->getValueF32(), mOmegaYSpinner->getValueF32(), mOmegaZSpinner->getValueF32());
 
 	LLColor4 color = mStartColorSelector->get();
-	mParticles.mPartData.setStartColor(LLVector3(color.mV[VX], color.mV[VY], color.mV[VZ]));
+	mParticles.mPartData.setStartColor(LLVector3(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE]));
 	color = mEndColorSelector->get();
-	mParticles.mPartData.setEndColor(LLVector3(color.mV[VX], color.mV[VY], color.mV[VZ]));
+	mParticles.mPartData.setEndColor(LLVector3(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE]));
 
 	updateUI();
 	updateParticles();
@@ -414,7 +414,7 @@ std::string ParticleEditor::lslVector(F32 x, F32 y, F32 z)
 
 std::string ParticleEditor::lslColor(const LLColor4& color)
 {
-	return lslVector(color.mV[VX], color.mV[VY], color.mV[VZ]);
+	return lslVector(color.mV[VRED], color.mV[VGREEN], color.mV[VBLUE]);
 }
 
 std::string ParticleEditor::createScript()
