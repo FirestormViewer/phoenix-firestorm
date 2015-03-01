@@ -2118,14 +2118,18 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	{
 		//checking integrity of the COF in terms of ordering of wearables, 
 		//checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		// Ordering information is pre-applied locally so no reason to reason to wait on the inventory backend
+		updateClothingOrderingInfo(LLUUID::null);
+// [/SL:KB]
 
-		// As with enforce_item_restrictions handling above, we want
-		// to wait for the update callbacks, then (finally!) call
-		// updateAppearanceFromCOF() with no additional COF munging needed.
-		LLPointer<LLInventoryCallback> cb(
-			new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
-		updateClothingOrderingInfo(LLUUID::null, cb);
-		return;
+//		// As with enforce_item_restrictions handling above, we want
+//		// to wait for the update callbacks, then (finally!) call
+//		// updateAppearanceFromCOF() with no additional COF munging needed.
+//		LLPointer<LLInventoryCallback> cb(
+//			new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
+//		updateClothingOrderingInfo(LLUUID::null, cb);
+//		return;
 	}
 
 	if (!validateClothingOrderingInfo())
