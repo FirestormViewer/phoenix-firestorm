@@ -3715,6 +3715,9 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		const LLUUID& id_to_remove = *it;
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 		removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
+		clearPendingAttachment(linked_item_id);
+// [/SL:KB]
 		addDoomedTempAttachment(linked_item_id);
 	}
 }
@@ -3724,6 +3727,9 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
+	clearPendingAttachment(linked_item_id);
+// [/SL:KB]
 	addDoomedTempAttachment(linked_item_id);
 }
 
@@ -3949,11 +3955,7 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 {
 	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-		uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), item_id);
-		if (itPendingAttachLink != mPendingAttachLinks.end())
-		{
-			mPendingAttachLinks.erase(itPendingAttachLink);
-		}
+	   clearPendingAttachment(item_id);
 // [/SL:KB]
 
 	   if (mAttachmentInvLinkEnabled)
@@ -3985,14 +3987,19 @@ void LLAppearanceMgr::linkPendingAttachments()
 	}
 }
 
-void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idAttachItem)
+void LLAppearanceMgr::clearPendingAttachment(const LLUUID& idItem)
 {
-	// Remove the attachment from the pending list
-	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idAttachItem);
+	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idItem);
 	if (itPendingAttachLink != mPendingAttachLinks.end())
 	{
 		mPendingAttachLinks.erase(itPendingAttachLink);
 	}
+}
+
+void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idAttachItem)
+{
+	// Remove the attachment from the pending list
+	clearPendingAttachment(idAttachItem);
 
 	// It may have been detached already in which case we should remove the COF link
 	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idAttachItem)) )
