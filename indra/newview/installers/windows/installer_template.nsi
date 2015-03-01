@@ -645,66 +645,63 @@ FunctionEnd
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Delete files in Documents and Settings\<user>\SecondLife
-; Delete files in Documents and Settings\All Users\SecondLife
+;; Delete files in \Users\<User>\AppData\
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function un.DocumentsAndSettingsFolder
+Function un.UserSettingsFiles
 
-; Delete files in Documents and Settings\<user>\SecondLife
+# Ask if user wants to keep data files or not
+MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
+
+Remove:
 Push $0
 Push $1
 Push $2
 
-  DetailPrint $(DeleteDocumentAndSettingsDP)
+  DetailPrint $(DeleteUserSettingsDP)
 
-  StrCpy $0 0 ; Index number used to iterate via EnumRegKey
+  StrCpy $0 0	# Index number used to iterate via EnumRegKey
 
   LOOP:
     EnumRegKey $1 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" $0
-    StrCmp $1 "" DONE               ; no more users
+    StrCmp $1 "" DONE               # No more users
 
     ReadRegStr $2 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$1" "ProfileImagePath" 
-    StrCmp $2 "" CONTINUE 0         ; "ProfileImagePath" value is missing
+    StrCmp $2 "" CONTINUE 0         # "ProfileImagePath" value is missing
 
-    ; Required since ProfileImagePath is of type REG_EXPAND_SZ
+# Required since ProfileImagePath is of type REG_EXPAND_SZ
     ExpandEnvStrings $2 $2
 
-	; If uninstalling a normal install remove everything
-	; Otherwise (preview/dmz etc) just remove cache
-
-        # Local Settings directory is the cache, there is no "cache" subdir
-        RMDir /r "$2\Local Settings\Application Data\Firestorm\user_settings"
-	RMDir /r "$2\Local Settings\Application Data\Firestorm\data"
-        # Vista version of the same
-        RMDir /r "$2\AppData\Local\Firestorm\user_settings"
-	RMDir /r "$2\AppData\Local\Firestorm\data"
+# Delete files in \Users\<User>\AppData\Roaming\Firestorm
+# Remove all settings files but leave any other .txt files to preserve the chat logs
+;    RMDir /r "$2\Application Data\Firestorm\logs"
+    RMDir /r "$2\Application Data\Firestorm\browser_profile"
+    RMDir /r "$2\Application Data\Firestorm\user_settings"
+    Delete  "$2\Application Data\Firestorm\*.xml"
     Delete  "$2\Application Data\Firestorm\*.bmp"
     Delete  "$2\Application Data\Firestorm\search_history.txt"
     Delete  "$2\Application Data\Firestorm\plugin_cookies.txt"
     Delete  "$2\Application Data\Firestorm\typed_locations.txt"
+# Delete files in \Users\<User>\AppData\Local\Firestorm
+    RmDir /r  "$2\Local Settings\Application Data\Firestorm"						#Delete the Havok cache folder
+    RmDir /r  "$2\Local Settings\Application Data\FirestormOS"						#Delete the OpenSim cache folder
 
   CONTINUE:
     IntOp $0 $0 + 1
     Goto LOOP
   DONE:
-  
-  MessageBox MB_OK $(UnChatlogsNoticeMB)
 
 Pop $2
 Pop $1
 Pop $0
 
-; Delete files in Documents and Settings\All Users\Firestorm
+# Delete files in ProgramData\Firestorm
 Push $0
   ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
   StrCmp $0 "" +2
   RMDir /r "$0\Firestorm"
 Pop $0
 
-; Delete files in C:\Windows\Application Data\SecondLife
-; If the user is running on a pre-NT system, Application Data lives here instead of
-; in Documents and Settings.
-RMDir /r "$WINDIR\Application Data\Firestorm"
+Keep:
 
 FunctionEnd
 
@@ -734,22 +731,6 @@ Function un.CloseSecondLife
   DONE:
     Pop $0
     Return
-FunctionEnd
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-;   Delete the stored password for the current Windows user
-;   DEV-10821 -- Unauthorised user can gain access to an SL account after a real user has uninstalled
-;
-Function un.RemovePassword
-
-DetailPrint $(UnRemovePasswordsDP)
-
-SetShellVarContext current
-Delete "$APPDATA\Firestorm\user_settings\password.dat"
-SetShellVarContext all
-
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -849,17 +830,11 @@ Delete "$DESKTOP\$INSTSHORTCUT.lnk"
 Delete "$INSTDIR\$INSTSHORTCUT.lnk"
 Delete "$INSTDIR\Uninstall $INSTSHORTCUT.lnk"
 
-; Clean up cache and log files.
-; Leave them in-place for non AGNI installs.
-
-!ifdef UNINSTALL_SETTINGS
-Call un.DocumentsAndSettingsFolder
-!endif
-
-; remove stored password on uninstall
-Call un.RemovePassword
-
+# Remove the main installation directory
 Call un.ProgramFiles
+
+# Clean up cache and log files, but leave them in-place for non AGNI installs.
+Call un.UserSettingsFiles
 
 SectionEnd 				; end of uninstall section
 
