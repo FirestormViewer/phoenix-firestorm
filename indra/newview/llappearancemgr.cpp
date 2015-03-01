@@ -3975,8 +3975,11 @@ void LLAppearanceMgr::linkPendingAttachments()
 		const LLUUID& idAttachItem = *itPendingAttachLink;
 		if ( (gAgentAvatarp->isWearingAttachment(idAttachItem)) && (!isLinkInCOF(idAttachItem)) )
 		{
-			if (!cb)
-				cb = new LLRegisterAttachmentCallback(idAttachItem);
+//			if (!cb)
+//				cb = new LLRegisterAttachmentCallback(idAttachItem);
+			// One LLInventoryCallback instance should handle multiple items but thanks to AIS we don't currently have access to the UUIDs of the new links
+			// so we need one instance per needed link - yay for progress
+			cb = new LLRegisterAttachmentCallback(idAttachItem);
 			LLAppearanceMgr::addCOFItemLink(idAttachItem, cb);
 		}
 	}
