@@ -623,7 +623,7 @@ BOOL LLFloaterPreference::postBuild()
 	// </FS:Ansariel>
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
-	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
+	// getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path - <FS:PP> Field removed from Privacy tab, we have it already in Network & Files tab along with few fancy buttons (03 Mar 2015)
 	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);

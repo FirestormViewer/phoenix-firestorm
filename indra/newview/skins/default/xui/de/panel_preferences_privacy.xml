@@ -43,9 +43,6 @@
 			</combo_box>
 			<button label="Protokoll löschen..." name="clear_log"/>
 			<button label="Verläufe löschen..." name="delete_transcripts"/>
-			<text name="log_location_label">
-				Speicherort:
-			</text>
 			<check_box name="UseLegacyIMLogNames" label="Klassisches Dateinamensformat für Verläufe verwenden" tool_tip="Falls aktiviert, wird das alte Namensformat für Verläufe (Benutzer Name) anstatt des aktuellen (benutzer_name) verwendet."/>
 			<check_box name="LogFileNamewithDate" label="Datum zum Verlaufsdateinamen hinzufügen" tool_tip="Fügt das aktuelle Datum zum Dateinamen des Verlaufs im Format „chat-JJJJ-MM-TT“ bzw. „Verlaufname-JJJJ-MM-TT“ hinzu."/>
 			<check_box name="FSUseBuiltInHistory" label="Integrierte Verlaufsansicht verwenden" tool_tip="Verwendet den integrierten Betrachter für Verläufe. Falls deaktiviert, wird der standardmäßige Texteditor des Betriebssystems verwendet."/>

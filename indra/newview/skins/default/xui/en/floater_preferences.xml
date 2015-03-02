@@ -132,7 +132,7 @@
         <panel
          class="panel_preference"
          filename="panel_preferences_setup.xml"
-         label="Network &amp; Cache"
+         label="Network &amp; Files"
          layout="topleft"
          help_topic="preferences_input_tab"
          name="input" />

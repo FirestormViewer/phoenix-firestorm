@@ -39,10 +39,6 @@
 				</combo_box>
 				<button label="記録をクリア..." name="clear_log" />
 				<button label="会話内容をクリア..." name="delete_transcripts" />
-				<text name="log_location_label">
-					保存場所:
-				</text>
-				<line_editor name="log_path_string" />
 				<check_box label="会話内容の保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話内容の古い形式のユーザー名でファイルが作成され、入れない場合は新しいユーザー名の形式でファイルが作成されます。" />
 				<!-- Deleted: Aug.03, 2013
 			<check_box label="IM ログをコンピューターに保存する" name="log_instant_messages"/>

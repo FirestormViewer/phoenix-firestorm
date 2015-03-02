@@ -31,9 +31,6 @@
 			</combo_box>
 			<button label="Limpiar registros..." name="clear_log"/>
 			<button label="Borrar transcripciones..." name="delete_transcripts"/>
-			<text name="log_location_label">
-				Ubicación:
-			</text>
 			<check_box label="Usar el formato clásico de nombre de archivo para las transcripciones" name="UseLegacyIMLogNames" tool_tip="Si lo activas, se usará el formato de nombre de archivo para las transcripciones (nombre de usuario) en vez del nuevo formato (nombre_de_usuario)."/>
 			<check_box label="Añadir marca horaria a los nombres de archivo de registro" name="LogFileNamewithDate" tool_tip="Añadir fecha y hora a los nombres de archivo de los registros de MI y chat, con formato chat-YYYY-MM-DD y 'nombre_MI'-YYYY-MM."/>
 			<check_box label="Usar el visor de transcripciones incorporado" name="FSUseBuiltInHistory" tool_tip="Utiliza el visor incorporado de transcripciones. Si lo desactivas, las transcripciones se abrirán en el editor de texto predefinido en tu sistema operativo."/>

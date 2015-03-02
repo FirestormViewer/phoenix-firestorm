@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Sieć i bufory" name="Input panel">
+<panel label="Sieć i pliki" name="Input panel">
 	<tab_container name="max_bandwidth_layout">
 		<panel label="Połączenie" name="tab-conn">
 			<text name="Maximum bandwidth">

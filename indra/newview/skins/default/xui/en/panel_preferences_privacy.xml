@@ -271,30 +271,6 @@
      <commit_callback
       function="Pref.DeleteTranscripts" />
     </button>
-    <text
-     name="log_location_label"
-     layout="topleft"
-     follows="left|top"
-     left="30"
-     height="12"
-     top_pad="4"
-     width="100">
-     Location:
-    </text>
-    <line_editor
-     control_name="InstantMessageLogPath"
-     follows="left|top"
-     border_style="line"
-     border_thickness="1"
-     font="SansSerif"
-     height="23"
-     layout="topleft"
-     left_pad="5"
-     max_length_bytes="4096"
-     name="log_path_string"
-     top_delta="-5"
-     width="285">
-    </line_editor>
    <check_box
      control_name="UseLegacyIMLogNames"
      label="Use legacy file name format for transcripts"
@@ -333,7 +309,7 @@
      layout="topleft"
      left="30"
      name="block_list"
-     top="380"
+     top="360"
      width="255">
      <!-- <button.commit_callback
       function="SideTray.ShowPanel"-->
