@@ -279,7 +279,17 @@ void LLToolMgr::toggleBuildMode(const LLSD& sdname)
 		return;
 	}
 
-	LLFloaterReg::toggleInstanceOrBringToFront("build");
+	// <FS:Ansariel> FIRE-15653: Prevent cheating around @editobj restriction
+	//LLFloaterReg::toggleInstanceOrBringToFront("build");
+	if (param == "toggleonly")
+	{
+		LLFloaterReg::toggleInstance("build");
+	}
+	else
+	{
+		LLFloaterReg::toggleInstanceOrBringToFront("build");
+	}
+	// </FS:Ansariel>
 
 	bool build_visible = LLFloaterReg::instanceVisible("build");
 	if (build_visible)
