@@ -1032,10 +1032,14 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 			utf8_revised_text = utf8str_trim(utf8_revised_text);
 			
 			EChatType nType;
-			if(type == CHAT_TYPE_OOC)
+			if (type == CHAT_TYPE_OOC)
+			{
 				nType = CHAT_TYPE_NORMAL;
+			}
 			else
+			{
 				nType = type;
+			}
 			
 			type = processChatTypeTriggers(nType, utf8_revised_text);
 			
@@ -1063,17 +1067,17 @@ void FSFloaterNearbyChat::onChatBoxCommit()
 {
 	if (mInputEditor->getText().length() > 0)
 	{
-		EChatType type=CHAT_TYPE_NORMAL;
-		if(gSavedSettings.getBOOL("FSShowChatType"))
+		EChatType type = CHAT_TYPE_NORMAL;
+		if (gSavedSettings.getBOOL("FSShowChatType"))
 		{
-			std::string typeString=mChatTypeCombo->getValue();
-			if(typeString=="whisper")
+			const std::string typeString = mChatTypeCombo->getValue();
+			if (typeString == "whisper")
 			{
-				type=CHAT_TYPE_WHISPER;
+				type = CHAT_TYPE_WHISPER;
 			}
-			else if(typeString=="shout")
+			else if (typeString == "shout")
 			{
-				type=CHAT_TYPE_SHOUT;
+				type = CHAT_TYPE_SHOUT;
 			}
 		}
 		sendChat(type);
