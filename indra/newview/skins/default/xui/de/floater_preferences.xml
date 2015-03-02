@@ -13,7 +13,7 @@
 		<panel label="Farben" name="colors"/>
 		<panel label="Grafik" name="display"/>
 		<panel label="Sound &amp; Medien" name="audio"/>
-		<panel label="Konfiguration" name="input"/>
+		<panel label="Netzwerk &amp; Dateien" name="input"/>
 		<panel label="Bewegen/Anzeigen" name="move"/>
 		<panel label="Meldungen" name="msgs"/>
 		<panel label="Privatsphäre" name="im"/>
