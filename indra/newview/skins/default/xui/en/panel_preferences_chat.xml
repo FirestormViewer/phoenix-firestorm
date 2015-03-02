@@ -362,7 +362,7 @@
              name="ShowChatMiniIcons"
              top_pad="1"
              width="400" />
-             <check_box
+            <check_box
              enabled="false"
              control_name="LogShowHistory"
              height="16"
@@ -372,14 +372,44 @@
              name="LogShowHistory"
              top_pad="1"
              width="400" />
-			<check_box
-			 layout="topleft"
-			 top_pad="1"
-			 height="16"
-			 width="400"
-			 name="FSTypingChevronPrefix"
-			 control_name="FSTypingChevronPrefix"
-			 label="Add additional chevron (&gt;) as typing indicator to IM sessions"/>
+            <check_box
+             layout="topleft"
+             top_pad="1"
+             height="16"
+             width="400"
+             name="FSTypingChevronPrefix"
+             control_name="FSTypingChevronPrefix"
+             label="Add additional chevron (&gt;) as typing indicator to IM sessions"/>
+            <text
+             name="show_unread_messages_label"
+             follows="left|top"
+             layout="topleft"
+             left="20"
+             height="12"
+             width="200"
+             top_pad="5">
+                 Show new message notification for:
+            </text>
+            <check_box
+             layout="topleft"
+             left_pad="5"
+             top_delta="0"
+             height="16"
+             width="100"
+             name="FSNotifyUnreadChatMessages"
+             control_name="FSNotifyUnreadChatMessages"
+             label="Nearby chat"
+             tool_tip="Shows a notification with the number of new unread messages in the nearby chat window if new messages arrive while the view is scrolled back to read the chat history."/>
+            <check_box
+             layout="topleft"
+             left_pad="10"
+             top_delta="0"
+             height="16"
+             width="200"
+             name="FSNotifyUnreadIMMessages"
+             control_name="FSNotifyUnreadIMMessages"
+             label="Instant and group messages"
+             tool_tip="Shows a notification with the number of new unread messages in the instant/group message window if new messages arrive while the view is scrolled back to read the chat history."/>
 
             <text
              name="show_ims_in_label"
@@ -675,6 +705,38 @@
              name="FSReportIgnoredAdHocSession"
              control_name="FSReportIgnoredAdHocSession"
              label="Report ignored conference chats in nearby chat"/>
+            <text
+             name="group_snooze_time_label"
+             layout="topleft"
+             left="20"
+             follows="left|top"
+             top_pad="8"
+             height="16"
+             tool_tip="Amount of time a group chat will be muted when pressing the &quot;Snooze&quot; button. Setting a value of 0 will effectively just close the window until the next group message arrives."
+             width="160">
+              Group Chat Snooze Duration:
+            </text>
+            <spinner
+             decimal_digits="0"
+             control_name="GroupSnoozeTime"
+             follows="left|top"
+             height="20"
+             increment="1"
+             left_pad="10"
+             min_val="0"
+             name="GroupSnoozeTime"
+             tool_tip="Amount of time a group chat will be muted when pressing the &quot;Snooze&quot; button. Setting a value of 0 will effectively just close the window until the next group message arrives."
+             width="60" />
+            <text
+             follows="left|top"
+             height="20"
+             left_pad="3"
+             top_delta="4"
+             name="group_snooze_time_seconds_label"
+             tool_tip="Amount of time a group chat will be muted when pressing the &quot;Snooze&quot; button. Setting a value of 0 will effectively just close the window until the next group message arrives."
+             width="70">
+                seconds
+            </text>
         </panel>
 
         <!-- Chat: Typing -->

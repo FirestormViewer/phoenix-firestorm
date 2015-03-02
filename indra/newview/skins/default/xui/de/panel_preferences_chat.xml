@@ -55,6 +55,11 @@
 			<check_box label="Miniaturicons anzeigen, falls V2/3-Chat-Stil verwendet wird" name="ShowChatMiniIcons"/>	
 			<check_box label="Ende der letzten Konversation anzeigen" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Zusätzlichen Pfeil (&gt;) als Schreib-Indikator in IM-Fenstern anzeigen"/>
+			<text name="show_unread_messages_label" width="245">
+				Hinweis über neue Nachrichten anzeigen für:
+			</text>
+			<check_box width="110" name="FSNotifyUnreadChatMessages" label="Chat in der Nähe" tool_tip="Zeigt einen Hinweis mit der Anzahl an neuen, ungelesenen Nachrichten innerhalb des Fensters an, falls neue Nachrichten eintreffen, während in der Ansicht zurückgescrollt wurde, um den Verlauf zu lesen."/>
+			<check_box width="200" name="FSNotifyUnreadIMMessages" label="IM- und Gruppenchats" tool_tip="Zeigt einen Hinweis mit der Anzahl an neuen, ungelesenen Nachrichten innerhalb des Fensters an, falls neue Nachrichten eintreffen, während in der Ansicht zurückgescrollt wurde, um den Verlauf zu lesen."/>
 			<text name="show_ims_in_label" width="115">
 				IMs anzeigen in:
 			</text>
@@ -112,9 +117,16 @@
 				<combo_box.item label="Fett, Kursiv &amp; Unterstreichen" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
 			<check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
-			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppenmitteilungen erhalten' deaktiviert auch Gruppenchat"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von „Gruppenmitteilungen erhalten“ deaktiviert auch Gruppenchat"/>
 			<check_box name="FSIgnoreAdHocSessions" label="Automatisch alle Konferenzen ignorieren und verlassen"/>
 			<check_box name="FSReportIgnoredAdHocSession" label="Ignorierte Konferenzen im Chat in der Nähe melden"/>
+			<text name="group_snooze_time_label" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen." width="185">
+				Gruppenchat-Stummschaltdauer:
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen."/>
+			<text name="group_snooze_time_seconds_label" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen.">
+				Sekunden
+			</text>
 		</panel>
 
 		<!-- Chat: Typing -->
