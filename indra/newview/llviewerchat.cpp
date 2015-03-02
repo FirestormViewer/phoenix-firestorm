@@ -144,7 +144,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 			{
 				std::string msg = chat.mFromName;
 				std::string prefix = chat.mText.substr(0, 4);
-				if(prefix == "/me " || prefix == "/me'" || prefix == "/ME " || prefix == "/ME'")
+				if (prefix == "/me " || prefix == "/me'")
 				{
 					msg = msg + chat.mText.substr(3);
 				}
