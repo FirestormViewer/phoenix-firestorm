@@ -2961,7 +2961,6 @@
                   <string>--btype Debug</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>configure</key>
@@ -2972,7 +2971,6 @@
                   <string>--btype Debug</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>name</key>
@@ -3046,7 +3044,6 @@
                   <string>--btype RelWithDebInfo</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3058,7 +3055,6 @@
                   <string>--btype RelWithDebInfo</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>default</key>
@@ -3160,7 +3156,6 @@
                   <string>--platform darwin</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3170,7 +3165,6 @@
                   <string>--platform darwin</string>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>name</key>
@@ -3188,7 +3182,6 @@
                   <string>--platform darwin</string>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3198,7 +3191,6 @@
                   <string>--platform darwin</string>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                 </array>
               </map>
               <key>name</key>
@@ -3648,7 +3640,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                   <string>--version</string>
                   <string>--btype Debug</string>
                   <string>--platform win32</string>
@@ -3933,7 +3924,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
@@ -3970,7 +3960,6 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
-                  <string>--leapmotion</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
