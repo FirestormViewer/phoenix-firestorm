@@ -102,6 +102,8 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 	,mChatLayoutPanelHeight(0)
 	,mUnreadMessagesNotificationPanel(NULL)
 	,mUnreadMessagesNotificationTextBox(NULL)
+	,mUnreadMessages(0)
+	,mUnreadMessagesMuted(0)
 {
 }
 
@@ -178,12 +180,14 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 	mUnreadMessagesNotificationPanel = getChild<LLLayoutPanel>("unread_messages_holder");
 	mUnreadMessagesNotificationTextBox = getChild<LLTextBox>("unread_messages_text");
-	mChatHistory->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1));
-	mChatHistoryMuted->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1));
+	mChatHistory->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1, false));
+	mChatHistoryMuted->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1, true));
 	
 	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 	
+	gSavedSettings.getControl("FSShowMutedChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
+
 	return LLFloater::postBuild();
 }
 
@@ -1326,8 +1330,27 @@ void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType t
 }
 //</FS:TS> FIRE-787
 
-void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages)
+void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, bool muted_history)
 {
+	BOOL show_muted_history = gSavedSettings.getBOOL("FSShowMutedChatHistory");
+
+	if (muted_history)
+	{
+		mUnreadMessagesMuted = unread_messages;
+		if (!show_muted_history)
+		{
+			return;
+		}
+	}
+	else
+	{
+		mUnreadMessages = unread_messages;
+		if (show_muted_history)
+		{
+			return;
+		}
+	}
+
 	if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadChatMessages"))
 	{
 		mUnreadMessagesNotificationPanel->setVisible(FALSE);
@@ -1337,4 +1360,10 @@ void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages)
 		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
 		mUnreadMessagesNotificationPanel->setVisible(TRUE);
 	}
+}
+
+void FSFloaterNearbyChat::updateShowMutedChatHistory(const LLSD &data)
+{
+	bool show_muted = data.asBoolean();
+	updateUnreadMessageNotification((show_muted ? mUnreadMessagesMuted : mUnreadMessages), show_muted);
 }
