@@ -51,6 +51,11 @@
 			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons" />
 			<check_box label="Pokazuj zakończenia ostatnich rozmów" name="LogShowHistory"/>
 			<check_box name="FSTypingChevronPrefix" label="Dodawaj znak (&gt;) w tytułach okien wiadomości IM przed imionami osób, które piszą"/>
+			<text name="show_unread_messages_label">
+				Informuj o nowych wiadomościach:
+			</text>
+			<check_box name="FSNotifyUnreadChatMessages" label="Czat Lokalny" tool_tip="Pokazuje powiadomienie o nieprzeczytanych jeszcze wiadomościach (wraz z ich liczbą) w oknie Czatu Lokalnego, jeśli nowe się pojawią, a widok historii jest przewinięty do góry." />
+			<check_box name="FSNotifyUnreadIMMessages" label="Wiadomości IM / grupowe" tool_tip="Pokazuje powiadomienie o nieprzeczytanych jeszcze wiadomościach (wraz z ich liczbą) w oknie czatu IM / grupowego, jeśli nowe się pojawią, a widok historii jest przewinięty do góry." />
 			<text name="show_ims_in_label">
 				Pokaż wiad. IM w:
 			</text>
@@ -111,6 +116,13 @@
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
 			<check_box name="FSIgnoreAdHocSessions" label="Automatycznie ignoruj i opuszczaj wszystkie czaty konferencji (ad-hoc)"/>
 			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie lokalnym"/>
+			<text width="290" name="group_snooze_time_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
+				Długość tymczasowego wyciszenia czatu grupowego:
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi." />
+			<text name="group_snooze_time_seconds_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
+				sekund
+			</text>
 		</panel>
 		<panel label="Pisanie" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Autokorekta"/>
