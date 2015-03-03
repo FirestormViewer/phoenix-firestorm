@@ -35,7 +35,7 @@
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
-		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
+		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
 		<menu label="Hochladen" name="Upload">
 			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>

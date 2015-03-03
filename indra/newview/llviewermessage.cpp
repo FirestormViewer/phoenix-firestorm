@@ -6871,21 +6871,6 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		// Notification is either PaymentReceived or PaymentSent
 		LLNotificationsUtil::add(notification, args, payload);
 	}
-	
-	//<AO> TipTracker Support
-	FSMoneyTracker* tipTracker = (FSMoneyTracker*)LLFloaterReg::getInstance("money_tracker");
-	if (tipTracker->isShown() || tipTracker->isMinimized())
-	{
-		args["MESSAGE"] = args["SLURLMESSAGE"]; // Always use slurl forms in money tracking
-		
-		LLChat chat;
-		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
-		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		LLSD chat_args;
-		tipTracker->addMessage(chat,false,chat_args);
-	}
-	//</AO>
-	
 }
 
 static void process_money_balance_reply_extended(LLMessageSystem* msg)
@@ -6900,9 +6885,9 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
     S32 amount = 0;
     std::string item_description;
 	BOOL success = FALSE;
-	// Ansariel: If we output to chat history and probably console,
-	//           don't create an SLURL for the name or we will end
-	//           up with a SLURL in the console
+	// <FS:Ansariel> If we output to chat history and probably console,
+	//               don't create an SLURL for the name or we will end
+	//               up with a SLURL in the console
 	static LLCachedControl<bool> balance_change_in_chat(gSavedSettings, "FSPaymentInfoInChat");
 
     msg->getS32("TransactionInfo", "TransactionType", transaction_type);
@@ -7014,7 +6999,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		final_args["MESSAGE"] = message;
 		notification = "PaymentSent";
 
-		//<AO>: Additionally, always add a SLURL-enabled form.
+		// <FS:AO> Additionally, always add a SLURL-enabled form.
 		args["NAME"] = dest_slurl;
 		is_name_group = is_dest_group;
 		name_id = dest_id;
@@ -7069,7 +7054,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		payload["from_id"] = source_id;
 		notification = "PaymentReceived";
 		
-		//<AO>: Additionally, always add a SLURL-enabled form.
+		// <FS:AO> Additionally, always add a SLURL-enabled form.
 		args["NAME"] = source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;
@@ -7082,8 +7067,16 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
 		final_args["SLURLMESSAGE"] = message;
-		//</AO>		
+		// </FS:AO>
 	}
+
+	// <FS:Ansariel> TipTracker Support
+	FSMoneyTracker* tipTracker = LLFloaterReg::getTypedInstance<FSMoneyTracker>("money_tracker");
+	if ((tipTracker->isShown() || tipTracker->isMinimized()) || gSavedSettings.getBOOL("FSAlwaysTrackPayments"))
+	{
+		tipTracker->addPayment(name_id, is_name_group, amount, !you_paid_someone);
+	}
+	// </FS:Ansariel>>
 
 	// Despite using SLURLs, wait until the name is available before
 	// showing the notification, otherwise the UI layout is strange and

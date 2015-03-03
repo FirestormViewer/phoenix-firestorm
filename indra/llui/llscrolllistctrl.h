@@ -300,6 +300,8 @@ public:
 	void			setMaxSelectable(U32 max_selected) { mMaxSelectable = max_selected; }
 	S32				getMaxSelectable() { return mMaxSelectable; }
 
+	// <FS:Ansariel> Convenience method
+	LLScrollbar*	getScrollbar() const { return mScrollbar; }
 
 	virtual S32		getScrollPos() const;
 	virtual void	setScrollPos( S32 pos );

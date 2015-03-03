@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	name="Money Tracker List Context Menu">
+	<menu_item_call
+		enabled="false"
+		label="Copy as CSV"
+		name="Copy">
+		<on_click
+			function="MoneyTrackerList.Action"
+			parameter="copy"/>
+		<on_enable
+			function="MoneyTrackerList.Enable"
+			parameter="can_copy"/>
+	</menu_item_call>
+	<menu_item_call
+		enabled="false"
+		label="Delete"
+		name="Delete">
+		<on_click
+			function="MoneyTrackerList.Action"
+			parameter="delete"/>
+		<on_enable
+			function="MoneyTrackerList.Enable"
+			parameter="can_delete"/>
+	</menu_item_call>
+</context_menu>

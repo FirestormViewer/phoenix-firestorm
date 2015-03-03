@@ -2,8 +2,9 @@
  * @file fsmoneytracker.h
  * @brief Tip Tracker Window
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Copyright (c) 2011 Arrehn Oberlander
+ * Copyright (c) 2015 Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +19,9 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
@@ -25,25 +29,35 @@
 #define FS_MONEYTRACKER_H
 
 #include "llfloater.h"
+#include "lllistcontextmenu.h"
 
-class FSChatHistory;
-class LLChat;
-class LLTextBox;
-class LLViewerRegion;
-	
+class LLNameListCtrl;
+
 class FSMoneyTracker: public LLFloater
 {
 public:
-	FSMoneyTracker(const LLSD& seed);
-	virtual ~FSMoneyTracker();
+	FSMoneyTracker(const LLSD& key);
+	virtual ~FSMoneyTracker() {};
+	virtual void onClose(bool app_quitting);
 
 	BOOL postBuild();
-	void addMessage(const LLChat& chat,bool archive,const LLSD &args);
+	void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
 
 private:
 	void clear();
-	std::string appendTime();
-	FSChatHistory* mTransactionHistory;
+	std::string getTime();
+	LLNameListCtrl* mTransactionHistory;
 };
+
+class FSMoneyTrackerListMenu : public LLListContextMenu
+{
+public:
+	/*virtual*/ LLContextMenu* createMenu();
+private:
+	void onContextMenuItemClick(const LLSD& userdata);
+	bool onContextMenuItemEnable(const LLSD& userdata);
+};
+
+extern FSMoneyTrackerListMenu gFSMoneyTrackerListMenu;
 
 #endif // FS_MONEYTRACKER_H

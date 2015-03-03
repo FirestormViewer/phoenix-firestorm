@@ -1294,4 +1294,10 @@
   <color
       name="Slidermark"
       reference="DkGray" />
+  <color
+      name="MoneyTrackerIncrease"
+      reference="Green" />
+  <color
+      name="MoneyTrackerDecrease"
+      reference="Red" />
 </colors>

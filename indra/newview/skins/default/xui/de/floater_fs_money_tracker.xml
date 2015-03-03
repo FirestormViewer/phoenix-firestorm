@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker" title="Tip-Tracker" width="250">
-	<fs_chat_history name="money_chat_history" width="248"/>
-	<button name="Clear" label="Löschen" width="242"/>
+<floater name="money_tracker" title="Money-Tracker">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Uhrzeit"/>
+		<name_list.columns name="name" label="Name"/>
+		<name_list.columns name="amount" label="Betrag"/>
+	</name_list>
+	<check_box label="Immer protokollieren" name="FSAlwaysTrackPayments" tool_tip="Zahlungen auch dann protokollieren, wenn der Money-Tracker geschlossen ist."/>
+	<button name="Clear" label="Löschen"/>
 </floater>

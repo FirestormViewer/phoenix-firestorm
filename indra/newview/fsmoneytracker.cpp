@@ -2,8 +2,9 @@
  * @file fsmoneytracker.cpp
  * @brief Tip Tracker Window
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Copyright (c) 2011 Arrehn Oberlander
+ * Copyright (c) 2015 Ansariel Hiller
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,69 +19,84 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "fschathistory.h"
+
 #include "fsmoneytracker.h"
-#include "llviewercontrol.h"
+
+#include "llclipboard.h"
+#include "llfloaterreg.h"
+#include "llnamelistctrl.h"
+#include "llslurl.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"
 
-FSMoneyTracker::FSMoneyTracker(const LLSD& seed)
-: LLFloater(seed)
+FSMoneyTracker::FSMoneyTracker(const LLSD& key)
+: LLFloater(key)
 {
-}
-
-FSMoneyTracker::~FSMoneyTracker()
-{
-	if (mTransactionHistory)
-		mTransactionHistory->clear();
 }
 
 BOOL FSMoneyTracker::postBuild()
 {
-	mTransactionHistory = getChild<FSChatHistory>("money_chat_history");
-	mTransactionHistory->clear();
+	mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
+	mTransactionHistory->setContextMenu(&gFSMoneyTrackerListMenu);
+	clear();
 	
 	// Button Actions
-	childSetAction("Clear", boost::bind(&FSMoneyTracker::clear,this)); 
+	childSetAction("Clear", boost::bind(&FSMoneyTracker::clear, this)); 
 
 	return TRUE;
 }
 
-void FSMoneyTracker::addMessage(const LLChat& chat,bool archive,const LLSD &args)
+void FSMoneyTracker::onClose(bool app_quitting)
 {
-	LLChat& tmp_chat = const_cast<LLChat&>(chat);
-	tmp_chat.mFromName = chat.mFromName;
-	LLSD chat_args = args;
-	chat_args["use_plain_text_chat_history"] = true;
-	chat_args["show_time"] = true;
-	if(tmp_chat.mTimeStr.empty())
-		tmp_chat.mTimeStr = appendTime();
-	
-	mTransactionHistory->appendMessage(tmp_chat, chat_args);
+	if (!gSavedSettings.getBOOL("FSAlwaysTrackPayments"))
+	{
+		clear();
+	}
 }
 
-std::string FSMoneyTracker::appendTime()
+void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming)
 {
-	time_t utc_time;
-	utc_time = time_corrected();
-	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:[" + LLTrans::getString("TimeMin")+"]";
-	
-	// <FS:PP> Attempt to speed up things a little
-	// if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
-	static LLCachedControl<bool> FSSecondsinChatTimestamps(gSavedSettings, "FSSecondsinChatTimestamps");
-	if (FSSecondsinChatTimestamps)
-	// </FS:PP>
+	S32 scroll_pos = mTransactionHistory->getScrollPos();
+	bool at_end = mTransactionHistory->getScrollbar()->isAtEnd();
+
+	LLNameListCtrl::NameItem item_params;
+	item_params.value = other_id;
+	item_params.name = LLTrans::getString("AvatarNameWaiting");
+	item_params.target = is_group ? LLNameListCtrl::GROUP : LLNameListCtrl::INDIVIDUAL;
+	item_params.columns.add().column("time").value(getTime());
+	item_params.columns.add().column("name");
+	item_params.columns.add().column("amount")
+		.value((incoming ? amount : -amount))
+		.color(LLUIColorTable::instance().getColor((incoming ? "MoneyTrackerIncrease" : "MoneyTrackerDecrease")));
+
+	mTransactionHistory->addNameItemRow(item_params);
+
+	if (at_end)
 	{
-		timeStr += ":[" + LLTrans::getString("TimeSec")+"]";
+		mTransactionHistory->setScrollPos(scroll_pos + 1);
+	}
+}
+
+std::string FSMoneyTracker::getTime()
+{
+	time_t utc_time = time_corrected();
+	std::string timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]";
+	
+	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	{
+		timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
 	}
 	
 	LLSD substitution;
-	
-	substitution["datetime"] = (S32) utc_time;
-	LLStringUtil::format (timeStr, substitution);
+	substitution["datetime"] = (S32)utc_time;
+	LLStringUtil::format(timeStr, substitution);
 	
 	return timeStr;
 }
@@ -88,5 +104,80 @@ std::string FSMoneyTracker::appendTime()
 void FSMoneyTracker::clear()
 {
 	LL_INFOS() << "Cleared." << LL_ENDL;
-	mTransactionHistory->clear();
+	mTransactionHistory->clearRows();
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// FSMoneyTrackerListMenu
+//////////////////////////////////////////////////////////////////////////////
+LLContextMenu* FSMoneyTrackerListMenu::createMenu()
+{
+	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+
+	registrar.add("MoneyTrackerList.Action", boost::bind(&FSMoneyTrackerListMenu::onContextMenuItemClick, this, _2));
+	enable_registrar.add("MoneyTrackerList.Enable", boost::bind(&FSMoneyTrackerListMenu::onContextMenuItemEnable, this, _2));
+
+	return createFromFile("menu_fs_moneytracker_list.xml");
+}
+
+void FSMoneyTrackerListMenu::onContextMenuItemClick(const LLSD& userdata)
+{
+	std::string option = userdata.asString();
+
+	if (option == "copy")
+	{
+		FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker");
+		if (floater)
+		{
+			std::string copy_text;
+			LLNameListCtrl* list = floater->getChild<LLNameListCtrl>("payment_list");
+
+			std::vector<LLScrollListItem*> selected = list->getAllSelected();
+			for (std::vector<LLScrollListItem*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			{
+				const LLScrollListItem* item = *it;
+				copy_text += ( (copy_text.empty() ? "" : "\n")
+								+ item->getColumn(0)->getValue().asString() + ";"
+								+ item->getColumn(1)->getValue().asString() + ";"
+								+ item->getColumn(2)->getValue().asString()
+								);
+			}
+
+			if (!copy_text.empty())
+			{
+				LLClipboard::instance().copyToClipboard(utf8str_to_wstring(copy_text), 0, copy_text.size() );
+			}
+		}
+	}
+	else if (option == "delete")
+	{
+		FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker");
+		if (floater)
+		{
+			std::string copy_text;
+			LLNameListCtrl* list = floater->getChild<LLNameListCtrl>("payment_list");
+
+			list->operateOnSelection(LLCtrlListInterface::OP_DELETE);
+		}
+	}
+}
+
+bool FSMoneyTrackerListMenu::onContextMenuItemEnable(const LLSD& userdata)
+{
+	std::string item = userdata.asString();
+
+	if (item == "can_copy" || item == "can_delete")
+	{
+		FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker");
+		if (floater)
+		{
+			LLNameListCtrl* list = floater->getChild<LLNameListCtrl>("payment_list");
+			return (list->getNumSelected() > 0);
+		}
+	}
+
+	return false;
+}
+
+FSMoneyTrackerListMenu gFSMoneyTrackerListMenu;

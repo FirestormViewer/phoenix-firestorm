@@ -1339,4 +1339,10 @@
   <color
       name="Slidermark"
       reference="EmphasisColor" />
+  <color
+      name="MoneyTrackerIncrease"
+      reference="Green" />
+  <color
+      name="MoneyTrackerDecrease"
+      reference="Red" />
 </colors>
