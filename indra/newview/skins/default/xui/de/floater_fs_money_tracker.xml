@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="money_tracker" title="Money-Tracker">
 	<name_list name="payment_list">
-		<name_list.columns name="time" label="Uhrzeit"/>
+		<name_list.columns name="time" label="Zeit"/>
 		<name_list.columns name="name" label="Name"/>
 		<name_list.columns name="amount" label="Betrag"/>
 	</name_list>

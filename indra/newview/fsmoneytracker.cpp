@@ -45,6 +45,7 @@ BOOL FSMoneyTracker::postBuild()
 {
 	mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
 	mTransactionHistory->setContextMenu(&gFSMoneyTrackerListMenu);
+	mTransactionHistory->sortByColumn("time", TRUE);
 	clear();
 	
 	// Button Actions
@@ -87,12 +88,7 @@ void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount
 std::string FSMoneyTracker::getTime()
 {
 	time_t utc_time = time_corrected();
-	std::string timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]";
-	
-	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
-	{
-		timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
-	}
+	std::string timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]:[" + LLTrans::getString("TimeSec") + "]";
 	
 	LLSD substitution;
 	substitution["datetime"] = (S32)utc_time;

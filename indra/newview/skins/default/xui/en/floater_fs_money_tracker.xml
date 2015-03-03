@@ -25,7 +25,7 @@
 	 name="payment_list"
 	 draw_stripes="true"
 	 multi_select="true"
-	 name_column="name"
+	 name_column_index="1"
 	 right="-1">
 		<name_list.columns
 		 name="time"
