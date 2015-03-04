@@ -566,11 +566,14 @@ void LLIMChiclet::toggleSpeakerControl()
 			mSpeakerCtrl->translate(mCounterCtrl->getRect().getWidth(), 0);
 		}
 
-		initSpeakerControl();		
+		initSpeakerControl();
+	}
+	else
+	{
+		mSpeakerCtrl->setSpeakerId(LLUUID::null);
 	}
 
 	setRequiredWidth();
-	mSpeakerCtrl->setSpeakerId(LLUUID::null);
 	mSpeakerCtrl->setVisible(getShowSpeaker());
 }
 
