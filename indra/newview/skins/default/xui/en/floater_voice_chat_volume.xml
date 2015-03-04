@@ -11,7 +11,7 @@
  name="floater_voice_volume"
  single_instance="true"
  sound_flags="0"
- title="VOICE CHAT VOLUME"
+ title="Voice Chat Volume"
  visible="true"
  width="245">
 	<slider
