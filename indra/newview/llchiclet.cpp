@@ -1211,7 +1211,7 @@ void LLChicletPanel::onCurrentVoiceChannelChanged(const LLUUID& session_id)
 	}
 
 	// <FS:Ansariel> [FS communication UI]
-	if(!s_previous_active_voice_session_id.isNull() && s_previous_active_voice_session_id != session_id)
+	if(s_previous_active_voice_session_id.notNull() && s_previous_active_voice_session_id != session_id)
 	{
 		chiclets = LLIMChiclet::sFindChicletsSignal(s_previous_active_voice_session_id);
 
