@@ -913,15 +913,15 @@ void RlvForceWear::done()
 	// Process removals
 	//
 
-	uuid_vec_t ids_to_remove;
-
 	// Wearables
+	uuid_vec_t ids_to_remove;
 	if (m_remWearables.size())
 	{
 		for (std::list<const LLViewerWearable*>::const_iterator itWearable = m_remWearables.begin(); itWearable != m_remWearables.end(); ++itWearable)
 			ids_to_remove.push_back((*itWearable)->getItemID());
 		m_remWearables.clear();
 	}
+	pAppearanceMgr->removeItemsFromAvatar(ids_to_remove);
 
 	// Gestures
 	if (m_remGestures.size())
@@ -941,13 +941,11 @@ void RlvForceWear::done()
 		for (std::vector<LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
 				itAttachObj != m_remAttachments.end(); ++itAttachObj)
 		{
-			ids_to_remove.push_back((*itAttachObj)->getAttachmentItemID());
+			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID());
 		}
 
 		m_remAttachments.clear();
 	}
-
-	pAppearanceMgr->removeItemsFromAvatar(ids_to_remove);
 
 	//
 	// Process additions
