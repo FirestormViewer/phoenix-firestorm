@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="money_tracker" title="Śledzenie napiwków">
-    <button name="Clear" label="Wyczyść"/>
+<floater name="money_tracker" title="Śledzenie transakcji">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Czas" />
+		<name_list.columns name="name" label="Imię" />
+		<name_list.columns name="amount" label="Ilość" />
+	</name_list>
+	<check_box label="Śledź gdy zamknięte" name="FSAlwaysTrackPayments" tool_tip="Zawsze śledź transakcje, nawet gdy okno jest zamknięte." />
+	<button name="Clear" label="Wyczyść"/>
 </floater>
