@@ -536,7 +536,7 @@ bool RlvGiveToRLVOffer::createDestinationFolder(const std::string& strPath)
 			const LLUUID& idRlvRoot = RlvInventory::instance().getSharedRootID();
 			if (idRlvRoot.notNull())
 			{
-				onCategoryCreateCallback(LLSD().with("folder_id", idRlvRoot), this);
+				onCategoryCreateCallback(idRlvRoot, this);
 			}
 			else
 			{
