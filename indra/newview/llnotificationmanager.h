@@ -59,6 +59,9 @@ public:
 	// this method reacts on chat notifications and calls an appropriate handler
 	void onChat(const LLChat& msg, const LLSD &args);
 
+	// <FS:Ansariel> Getter for mChatHandler
+	boost::shared_ptr<class LLFloaterIMNearbyChatHandler> getChatHandler() const { return mChatHandler; }
+
 private:
 	boost::shared_ptr<class LLFloaterIMNearbyChatHandler> mChatHandler;
 	std::vector<LLNotificationChannelPtr> mChannels;

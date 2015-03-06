@@ -75,11 +75,13 @@ private:
 	static bool filterOldNotifications(LLNotificationPtr pNotification);
 	static void onInstantMessage(const LLSD& im);
 	static void onScriptDialog(const LLSD& data);
+	static void onNearbyChatMessage(const LLSD& data);
 	static inline bool shouldNotify();
 
 	LLBoundListener				mNotificationConnection;
 	boost::signals2::connection	mInstantMessageConnection;
 	boost::signals2::connection	mScriptDialogConnection;
+	boost::signals2::connection	mChatMessageConnection;
 };
 
 extern GrowlManager *gGrowlManager;

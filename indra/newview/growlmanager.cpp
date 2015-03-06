@@ -42,6 +42,8 @@
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
+#include "llnotificationmanager.h"
+#include "llfloaterimnearbychathandler.h"
 
 #include "growlmanager.h"
 #include "growlnotifier.h"
@@ -61,7 +63,8 @@ GrowlManager::GrowlManager()
 	mNotifier(NULL),
 	mNotificationConnection(),
 	mInstantMessageConnection(),
-	mScriptDialogConnection()
+	mScriptDialogConnection(),
+	mChatMessageConnection()
 {
 	// Create a notifier appropriate to the platform.
 #ifndef LL_LINUX
@@ -114,6 +117,9 @@ GrowlManager::GrowlManager()
 	
 	// Hook into script dialogs
 	mScriptDialogConnection = LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
+
+	// Hook into new chat messages (needed for object IMs that will go into nearby chat)
+	mChatMessageConnection = LLNotificationsUI::LLNotificationManager::instance().getChatHandler()->addNewChatCallback(&GrowlManager::onNearbyChatMessage);
 }
 
 GrowlManager::~GrowlManager()
@@ -129,6 +135,10 @@ GrowlManager::~GrowlManager()
 	if (mScriptDialogConnection.connected())
 	{
 		mScriptDialogConnection.disconnect();
+	}
+	if (mChatMessageConnection.connected())
+	{
+		mChatMessageConnection.disconnect();
 	}
 
 	if (mNotifier)
@@ -362,6 +372,22 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 		}
 
 		gGrowlManager->notify(title, body, growl_notification->growlName);
+	}
+}
+
+void GrowlManager::onNearbyChatMessage(const LLSD& chat)
+{
+	if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
+	{
+		std::string message = chat["message"].asString();
+
+		const std::string prefix = message.substr(0, 4);
+		if (prefix == "/me " || prefix == "/me'")
+		{
+			message = message.substr(3);
+		}
+
+		gGrowlManager->notify(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
 	}
 }
 

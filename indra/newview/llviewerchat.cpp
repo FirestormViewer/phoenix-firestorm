@@ -109,23 +109,6 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 				else if ( chat.mChatType == CHAT_TYPE_IM )
 				{
 					r_color = LLUIColorTable::instance().getColor("ObjectIMColor");
-					// <FS:LO> FIRE-5889: Object IM's Not Triggering Growl Notifications
-					std::string msg = chat.mFromName;
-					std::string prefix = chat.mText.substr(0, 4);
-					if (prefix == "/me " || prefix == "/me'")
-					{
-						msg += chat.mText.substr(3);
-					}
-					else
-					{
-						msg += (": " + chat.mText);
-					}
-
-					if (!chat.mMuted)
-					{
-						gGrowlManager->notify(chat.mFromName, msg, GROWL_IM_MESSAGE_TYPE);
-					}
-					// </FS:LO>
 				}
 				else
 				{
