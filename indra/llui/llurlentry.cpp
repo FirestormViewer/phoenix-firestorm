@@ -502,7 +502,7 @@ std::string LLUrlEntryAgent::getLabel(const std::string &url, const LLUrlLabelCa
 	if (!gCacheName)
 	{
 		// probably at the login screen, use short string for layout
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 
 	std::string agent_id_string = getIDStringFromUrl(url);
@@ -535,7 +535,7 @@ std::string LLUrlEntryAgent::getLabel(const std::string &url, const LLUrlLabelCa
 		}
 		mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
 		addObserver(agent_id_string, url, cb);
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 }
 
@@ -613,7 +613,7 @@ std::string LLUrlEntryAgentName::getLabel(const std::string &url, const LLUrlLab
 	if (!gCacheName)
 	{
 		// probably at the login screen, use short string for layout
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 
 	std::string agent_id_string = getIDStringFromUrl(url);
@@ -642,7 +642,7 @@ std::string LLUrlEntryAgentName::getLabel(const std::string &url, const LLUrlLab
 		}
 		mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
 		addObserver(agent_id_string, url, cb);
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 }
 
@@ -757,7 +757,7 @@ std::string LLUrlEntryGroup::getLabel(const std::string &url, const LLUrlLabelCa
 	if (!gCacheName)
 	{
 		// probably at login screen, give something short for layout
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 
 	std::string group_id_string = getIDStringFromUrl(url);
@@ -783,7 +783,7 @@ std::string LLUrlEntryGroup::getLabel(const std::string &url, const LLUrlLabelCa
 			boost::bind(&LLUrlEntryGroup::onGroupNameReceived,
 				this, _1, _2, _3));
 		addObserver(group_id_string, url, cb);
-		return LLTrans::getString("LoadingData");
+		return LLTrans::getString("AvatarNameWaiting");
 	}
 }
 
