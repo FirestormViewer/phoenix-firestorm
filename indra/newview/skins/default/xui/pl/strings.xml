@@ -652,7 +652,7 @@ Spróbuj zalogować się ponownie za minutę.
 		(brak danych)
 	</string>
 	<string name="AvatarNameWaiting">
-		(ładowanie)
+		(Wczytywanie...)
 	</string>
 	<string name="AvatarNameMultiple">
 		(kilka)

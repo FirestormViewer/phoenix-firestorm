@@ -562,7 +562,7 @@ support@secondlife.com にお問い合わせください。
 		（なし）
 	</string>
 	<string name="AvatarNameWaiting">
-		（待機中）
+		（ローディング...）
 	</string>
 	<string name="AvatarNameMultiple">
 		（複数）

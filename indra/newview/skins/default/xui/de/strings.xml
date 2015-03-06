@@ -681,7 +681,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		(niemand)
 	</string>
 	<string name="AvatarNameWaiting">
-		(wartet)
+		(Wird geladen...)
 	</string>
 	<string name="AvatarNameMultiple">
 		(mehrere)

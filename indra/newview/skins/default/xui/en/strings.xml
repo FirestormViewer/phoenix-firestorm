@@ -345,7 +345,7 @@ Please try logging in again in a minute.</string>
 	<string name="AvatarNameNobody">(nobody)</string>
 
 	<!-- Avatar name: text shown while fetching name -->
-	<string name="AvatarNameWaiting">(waiting)</string>
+	<string name="AvatarNameWaiting">(Loading...)</string>
 
   <!-- Avatar name: More than one avatar is selected/used here -->
   <string name="AvatarNameMultiple">(multiple)</string>

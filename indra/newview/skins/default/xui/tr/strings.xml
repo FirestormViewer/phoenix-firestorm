@@ -605,7 +605,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		(hiçbiri)
 	</string>
 	<string name="AvatarNameWaiting">
-		(bekliyor)
+		(Yükleniyor...)
 	</string>
 	<string name="AvatarNameMultiple">
 		(birden çok)

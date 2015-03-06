@@ -639,7 +639,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		(nadie)
 	</string>
 	<string name="AvatarNameWaiting">
-		(esperando)
+		(Cargando...)
 	</string>
  	<string name="AvatarNameMultiple">
 		(multiple)

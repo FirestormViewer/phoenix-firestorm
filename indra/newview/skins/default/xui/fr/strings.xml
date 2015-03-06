@@ -601,7 +601,7 @@ Veuillez réessayer de vous connecter dans une minute.
 		(personne)
 	</string>
 	<string name="AvatarNameWaiting">
-		(en attente)
+		(Chargement...)
 	</string>
 	<string name="AvatarNameMultiple">
 		(multiple)
