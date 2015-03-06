@@ -37,6 +37,7 @@
 
 // newview
 #include "fscommon.h"
+#include "fskeywords.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
 #include "fswsassetblacklist.h"
@@ -164,6 +165,11 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		LLSD args;
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+
+		if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
 	} // <FS:CR />
 }
 

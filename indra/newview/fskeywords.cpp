@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fskeywords.h"
+#include "growlmanager.h"
 #include "llagent.h"
 #include "llchat.h"
 #include "llinstantmessage.h"
@@ -80,6 +81,12 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	static LLCachedControl<bool> sFSKeywordCaseSensitive(gSavedPerAccountSettings, "FSKeywordCaseSensitive", false);
 	static LLCachedControl<bool> sFSKeywordMatchWholeWords(gSavedPerAccountSettings, "FSKeywordMatchWholeWords", false);
 
+	// Don't check if message is from us - unless it's a radar notification
+	if (chat.mFromID == gAgentID && chat.mFromName != SYSTEM_FROM)
+	{
+		return false;
+	}
+
 	if (!sFSKeywordOn ||
 		(is_local && !sFSKeywordInChat) ||
 		(!is_local && !sFSKeywordInIM))
@@ -129,6 +136,22 @@ void FSKeywords::notify(const LLChat& chat)
 			if (PlayModeUISndFSKeywordSound)
 			{
 				LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
+			}
+
+			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
+			if (FSEnableGrowl)
+			{
+				std::string msg = chat.mFromName;
+				std::string prefix = chat.mText.substr(0, 4);
+				if (prefix == "/me " || prefix == "/me'")
+				{
+					msg = msg + chat.mText.substr(3);
+				}
+				else
+				{
+					msg = msg + ": " + chat.mText;
+				}
+				gGrowlManager->notify("Keyword Alert", msg, GROWL_KEYWORD_ALERT_TYPE);
 			}
 		}
 	}
