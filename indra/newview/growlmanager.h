@@ -76,7 +76,7 @@ private:
 	static bool filterOldNotifications(LLNotificationPtr pNotification);
 	static void onInstantMessage(const LLSD& im);
 	static void onScriptDialog(const LLSD& data);
-	static void onNearbyChatMessage(const LLSD& data);
+	static void onNearbyChatMessage(const LLSD& chat);
 	static inline bool shouldNotify();
 
 	LLBoundListener				mNotificationConnection;
