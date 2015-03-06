@@ -118,16 +118,14 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 				r_color.setToWhite();
 		}
 		
-		//Keyword alerts -KC
-		if (FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
+		// <FS:KC> Kyword alerts
+		static LLCachedControl<LLColor4> sFSKeywordColor(gSavedPerAccountSettings, "FSKeywordColor");
+		static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
+		if (sFSKeywordChangeColor && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
 		{
-			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
-			if (sFSKeywordChangeColor)
-			{
-				static LLCachedControl<LLColor4> sFSKeywordColor(gSavedPerAccountSettings, "FSKeywordColor");
-				r_color = sFSKeywordColor;
-			}
+			r_color = sFSKeywordColor;
 		}
+		// </FS:KC>
 		
 		if (!chat.mPosAgent.isExactlyZero())
 		{
