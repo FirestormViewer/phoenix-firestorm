@@ -47,8 +47,15 @@
 LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
 
 //static 
-void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local)
+// <FS:Ansariel> Add additional options
+//void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
+//{
+void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args)
 {
+	const bool is_local = args.has("is_local") ? args["is_local"].asBoolean() : true;
+	const bool for_console = args.has("for_console") && args["for_console"].asBoolean();
+// </FS:Ansariel>
+
 	// <FS:Ansariel> FIRE-1061 - Color friends, lindens, muted, etc
 	//if(chat.mMuted)
 	//{
@@ -77,12 +84,26 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 					//}
 					//else
 					//{
-						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
+					//	r_color = LLUIColorTable::instance().getColor("AgentChatColor");
 					//}
-					if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
-						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_IM);
+					static LLCachedControl<bool> im_coloring(gSavedSettings, "FSColorIMsDistinctly");
+					if (for_console && im_coloring)
+					{
+						r_color = LLUIColorTable::instance().getColor("AgentIMColor");
+					}
 					else
+					{
+						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
+					}
+
+					if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+					{
+						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_IM);
+					}
+					else
+					{
 						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_CHAT);
+					}
 					// </FS:CR>
 
 					//color based on contact sets prefs

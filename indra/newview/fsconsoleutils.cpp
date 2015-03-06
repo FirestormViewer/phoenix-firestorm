@@ -223,6 +223,8 @@ bool FSConsoleUtils::ProcessInstantMessage(const LLUUID& session_id, const LLUUI
 //static
 void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group)
 {
+	const bool is_group = !group.empty();
+
 	std::string senderName;
 	std::string message(message_str);
 	std::string delimiter = ": ";
@@ -239,23 +241,19 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	senderName = FSCommon::getAvatarNameByDisplaySettings(av_name);
 
 	// Replacing the "IM" in front of group chat messages with the actual group name
-	if (!group.empty())
+	if (is_group)
 	{
 		senderName = "[" + group + "] " + senderName;
 	}
 
-	static LLCachedControl<bool> im_coloring(gSavedSettings, "FSColorIMsDistinctly");
-	LLColor4 textColor = LLUIColorTable::instance().getColor( im_coloring ? "AgentIMColor" : "AgentChatColor" );
-	
-	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
-	textColor = LGGContactSets::getInstance()->colorize(agent_id, textColor, LGG_CS_CHAT);
-	// </FS:CR>
-
-	//color based on contact sets prefs
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id, LGG_CS_CHAT))
-	{
-		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
-	}
+	LLChat chat;
+	chat.mFromID = agent_id;
+	chat.mFromName = senderName;
+	chat.mText = message_str;
+	chat.mSourceType = CHAT_SOURCE_AGENT;
+	chat.mChatType = is_group ? CHAT_TYPE_IM_GROUP : CHAT_TYPE_IM;
+	LLColor4 textColor;
+	LLViewerChat::getChatColor(chat, textColor, LLSD().with("is_local", false).with("for_console", true));
 
 	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 	gConsole->setVisible(!isNearbyChatVisible());

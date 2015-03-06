@@ -946,7 +946,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-	LLViewerChat::getChatColor(chat, txt_color, is_local);
+	LLViewerChat::getChatColor(chat, txt_color, LLSD().with("is_local", is_local));
 	LLFontGL* fontp = LLViewerChat::getChatFont();
 	std::string font_name = LLFontGL::nameFromFont(fontp);
 	std::string font_size = LLFontGL::sizeFromFont(fontp);
