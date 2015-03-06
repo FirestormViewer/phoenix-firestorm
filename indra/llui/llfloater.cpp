@@ -304,7 +304,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	// if no padding is set, use default from settings.xml
 	if (mLabelVPadding == -1)
 	{
-		mLabelVPadding = LLControlGroup::getInstance("Global")->getS32("UIFloaterTitleVPad");
+		mLabelVPadding = LLUI::sSettingGroups["config"]->getS32("UIFloaterTitleVPad");
 	}
 	// </FS:Zi>
 
@@ -2789,16 +2789,17 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		col < snap_rect_local.getWidth() - minimized_width;
 		col += minimized_width)
 	{	
-		// AO: offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
+		// <FS:AO> offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
 		int offset = 0;
 		//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-		bool fbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarFavoritesPanel");
-		bool nbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarNavigationPanel");
+		bool fbVisible = LLUI::sSettingGroups["config"]->getBOOL("ShowNavbarFavoritesPanel");
+		bool nbVisible = LLUI::sSettingGroups["config"]->getBOOL("ShowNavbarNavigationPanel");
 		// TODO: Make this introspect controls to get the dynamic size.
 		if (fbVisible)
 			offset += 20;
 		if (nbVisible)
 			offset += 30;
+		// </FS:AO>
 		
 		for(S32 row = snap_rect_local.mTop - (floater_header_size + offset);
 		row > floater_header_size;
