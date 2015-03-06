@@ -1177,7 +1177,7 @@ void LLIMModel::sendNoUnreadMessages(const LLUUID& session_id)
 
 // <FS:Ansariel> Added is_announcement parameter
 //bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text) {
-bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement /* = FALSE */) {
+bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, bool is_announcement /* = false */) {
 	
 	LLIMSession* session = findIMSession(session_id);
 
@@ -1263,7 +1263,7 @@ bool LLIMModel::proccessOnlineOfflineNotification(
 //bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 //						   const std::string& utf8_text, bool log2file /* = true */) { 
 bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-						   const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */) { 
+						   const std::string& utf8_text, bool log2file /* = true */, bool is_announcement /* = false */) { 
 
 	LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file, is_announcement);
 	if (!session) return false;
@@ -1294,7 +1294,7 @@ bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, co
 //LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 //													 const std::string& utf8_text, bool log2file /* = true */)
 LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-													 const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */)
+													 const std::string& utf8_text, bool log2file /* = true */, bool is_announcement /* = false */)
 {
 	LLIMSession* session = findIMSession(session_id);
 
@@ -2949,7 +2949,7 @@ void LLIMMgr::addMessage(
 	const LLUUID& region_id,
 	const LLVector3& position,
 	bool link_name, // If this is true, then we insert the name and link it to a profile
-	BOOL is_announcement) // <FS:Ansariel> Special parameter indicating announcements
+	bool is_announcement) // <FS:Ansariel> Special parameter indicating announcements
 {
 	LLUUID other_participant_id = target_id;
 
@@ -3976,8 +3976,8 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				im_info->mParentEstateID,
 				im_info->mRegionID,
 				im_info->mPosition,
-				false, // <-- Wow! This parameter is never handled!!!
-				TRUE
+				false,
+				true
 				);
 		}
 
@@ -4041,8 +4041,8 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				im_info->mParentEstateID,
 				im_info->mRegionID,
 				im_info->mPosition,
-				false, // <-- Wow! This parameter is never handled!!!
-				TRUE
+				false,
+				true
 				);
 
 				// <FS:Ansariel> Send inventory item on autoresponse
@@ -4064,7 +4064,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 								im_info->mRegionID,
 								im_info->mPosition,
 								false,
-								TRUE);
+								true);
 						LLGiveInventory::doGiveInventoryItem(im_info->mFromID, item, session_id);
 					}
 				}

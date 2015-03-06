@@ -3004,8 +3004,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					parent_estate_id,
 					region_id,
 					position,
-					false, // <-- Wow! This parameter is never handled!!!
-					TRUE
+					false,
+					true
 					);
 				// </FS:LO>
 
@@ -3028,7 +3028,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 								region_id,
 								position,
 								false,
-								TRUE);
+								true);
 						LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
 					}
 				}
