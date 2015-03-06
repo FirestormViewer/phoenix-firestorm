@@ -2960,9 +2960,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = buffer;
+			bool keyword_alert = false;
 			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
+				keyword_alert = true;
 			}
 			// </FS:PP>
 
@@ -2978,7 +2980,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				parent_estate_id,
 				region_id,
 				position,
-				true);
+				true,
+				false,
+				keyword_alert);
 
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
 			//if (!gIMMgr->isDNDMessageSend(session_id))
@@ -3093,9 +3097,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 				chat.mText = message;
+				bool keyword_alert = false;
 				if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 				{
 					FSKeywords::notify(chat);
+					keyword_alert = true;
 				}
 				// </FS:PP>
 
@@ -3112,7 +3118,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					parent_estate_id,
 					region_id,
 					position,
-					true);
+					true,
+					false,
+					keyword_alert);
 			}
 			else
 			{
@@ -3666,9 +3674,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = message;
+			bool keyword_alert = false;
 			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
+				keyword_alert = true;
 			}
 			// </FS:PP>
 
@@ -3694,7 +3704,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				parent_estate_id,
 				region_id,
 				position,
-				true);
+				true,
+				false,
+				keyword_alert);
 		}
 		break;
 

@@ -317,7 +317,7 @@ bool GrowlManager::filterOldNotifications(LLNotificationPtr pNotification)
 void GrowlManager::onInstantMessage(const LLSD& im)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"].asUUID());
-	if (session->isP2PSessionType())
+	if (session->isP2PSessionType()/* && !im["keyword_alert"].asBoolean()*/) // Ansariel: Comment this out to filter IM duplication due to keyword alerts
 	{
 		// Don't show messages from ourselves or the system.
 		LLUUID from_id = im["from_id"].asUUID();

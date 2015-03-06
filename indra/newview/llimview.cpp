@@ -1263,7 +1263,7 @@ bool LLIMModel::proccessOnlineOfflineNotification(
 //bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 //						   const std::string& utf8_text, bool log2file /* = true */) { 
 bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-						   const std::string& utf8_text, bool log2file /* = true */, bool is_announcement /* = false */) { 
+						   const std::string& utf8_text, bool log2file /* = true */, bool is_announcement /* = false */, bool keyword_alert /* = false */) { 
 
 	LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file, is_announcement);
 	if (!session) return false;
@@ -1284,7 +1284,8 @@ bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, co
 	arg["from_id"] = from_id;
 	arg["time"] = LLLogChat::timestamp(false);
 	arg["session_type"] = session->mSessionType;
-	arg["is_announcement"] = is_announcement; // Ansariel: Indicator if it's an announcement
+	arg["is_announcement"] = is_announcement; // <FS:Ansariel> Indicator if it's an announcement
+	arg["keyword_alert"] = keyword_alert; // <FS:Ansariel> Pass info if keyword alert has been performed
 	mNewMsgSignal(arg);
 
 	return true;
@@ -2949,7 +2950,8 @@ void LLIMMgr::addMessage(
 	const LLUUID& region_id,
 	const LLVector3& position,
 	bool link_name, // If this is true, then we insert the name and link it to a profile
-	bool is_announcement) // <FS:Ansariel> Special parameter indicating announcements
+	bool is_announcement, // <FS:Ansariel> Special parameter indicating announcements
+	bool keyword_alert) // <FS:Ansariel> Pass info if keyword alert has been performed
 {
 	LLUUID other_participant_id = target_id;
 
@@ -3165,7 +3167,7 @@ void LLIMMgr::addMessage(
 	{
 		// <FS:Ansariel> Added is_announcement parameter
 		//LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg);
-		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement);
+		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement, keyword_alert);
 	}
 
 	// Open conversation floater if offline messages are present
