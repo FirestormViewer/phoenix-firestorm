@@ -43,10 +43,18 @@ public:
 
 	virtual void processChat(const LLChat& chat_msg, const LLSD &args);
 
+	// <FS:Ansariel> Add notification callback for new chat
+	typedef boost::signals2::signal<void(const LLSD&)> new_chat_signal_t;
+	boost::signals2::connection addNewChatCallback(const new_chat_signal_t::slot_type& cb) { return mNewChatSignal.connect(cb); }
+	// </FS:Ansariel>
+
 protected:
 	virtual void initChannel();
 
 	static boost::scoped_ptr<LLEventPump> sChatWatcher;
+
+	// <FS:Ansariel> Add notification callback for new chat
+	new_chat_signal_t mNewChatSignal;
 };
 
 }

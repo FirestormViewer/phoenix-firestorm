@@ -599,6 +599,9 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 		return;
 	}
 
+	// <FS:Ansariel> Add notification callback for new chat
+	mNewChatSignal(chat);
+
 	// don't show toast and add message to chat history on receive debug message
 	// with disabled setting showing script errors or enabled setting to show script
 	// errors in separate window.
