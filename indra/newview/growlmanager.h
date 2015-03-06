@@ -62,7 +62,8 @@ public:
 	void notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type);
 	BOOL tick();
 
-	static void InitiateManager();
+	static void initiateManager();
+	static void destroyManager();
 	static bool isUsable();
 
 private:

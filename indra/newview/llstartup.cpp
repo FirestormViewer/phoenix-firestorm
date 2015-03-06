@@ -592,7 +592,7 @@ bool idle_startup()
 // [/RLVa:KB]
 
 #if HAS_GROWL
-		GrowlManager::InitiateManager();
+		GrowlManager::initiateManager();
 #endif
 
 		// <FS:Ansariel> Store current font and skin for system info (FIRE-6806)

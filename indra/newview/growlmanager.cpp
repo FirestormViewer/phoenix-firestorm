@@ -402,9 +402,18 @@ bool GrowlManager::shouldNotify()
 	return (activated || (!gViewerWindow->getWindow()->getVisible() || !gFocusMgr.getAppHasFocus()));
 }
 
-void GrowlManager::InitiateManager()
+void GrowlManager::initiateManager()
 {
 	gGrowlManager = new GrowlManager();
+}
+
+void GrowlManager::destroyManager()
+{
+	if (gGrowlManager)
+	{
+		delete gGrowlManager;
+		gGrowlManager = NULL;
+	}
 }
 
 bool GrowlManager::isUsable()

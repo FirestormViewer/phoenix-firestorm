@@ -247,6 +247,9 @@
 #include "llviewereventrecorder.h"
 
 #include "llleapmotioncontroller.h"
+#if HAS_GROWL
+#include "growlmanager.h"
+#endif
 
 
 // *FIX: These extern globals should be cleaned up.
@@ -1971,6 +1974,10 @@ bool LLAppViewer::cleanup()
 
 	// workaround for DEV-35406 crash on shutdown
 	LLEventPumps::instance().reset();
+
+#if HAS_GROWL
+	GrowlManager::destroyManager();
+#endif
 
 	//dump scene loading monitor results
 	LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));

@@ -40,8 +40,17 @@ GrowlNotifierWin::GrowlNotifierWin() :
 	mApplicationName(""),
 	mGrowlImpl(NULL)
 {
-	LL_INFOS("GrowlNotifierWin") << "Windows growl notifications initialised." << LL_ENDL;
-	
+	LL_INFOS("GrowlNotifierWin") << "Windows growl notifier initialized." << LL_ENDL;
+}
+
+GrowlNotifierWin::~GrowlNotifierWin()
+{
+	LL_INFOS("GrowlNotifierWin") << "Windows growl notifier destroyed." << LL_ENDL;
+	if (mGrowlImpl)
+	{
+		delete mGrowlImpl;
+		mGrowlImpl = NULL;
+	}
 }
 
 void GrowlNotifierWin::registerApplication(const std::string& application, const std::set<std::string>& notificationTypes)
