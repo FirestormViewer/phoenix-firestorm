@@ -70,6 +70,7 @@ public:
 	{
 		Optional<bool>						allow_text_entry,
 											show_text_as_tentative,
+											force_disable_fulltext_search, // <FS:Ansariel> Allow fulltext search in comboboxes
 											allow_new_values;
 		Optional<S32>						max_chars;
 		Optional<commit_callback_t> 		prearrange_callback,
@@ -232,6 +233,7 @@ private:
 	commit_callback_t	mSelectionCallback;
 	boost::signals2::connection mTopLostSignalConnection;
 	S32                 mLastSelectedIndex;
+	bool				mForceDisableFulltextSearch; // <FS:Ansariel> Allow fulltext search in comboboxes
 };
 
 // A combo box with icons for the list of items.

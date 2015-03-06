@@ -72,6 +72,7 @@ LLComboBox::Params::Params()
 :	allow_text_entry("allow_text_entry", false),
 	allow_new_values("allow_new_values", false),
 	show_text_as_tentative("show_text_as_tentative", true),
+	force_disable_fulltext_search("force_disable_fulltext_search", false), // <FS:Ansariel> Allow fulltext search in comboboxes
 	max_chars("max_chars", 20),
 	list_position("list_position", BELOW),
 	items("item"),
@@ -88,6 +89,7 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
 :	LLUICtrl(p),
 	mTextEntry(NULL),
 	mTextEntryTentative(p.show_text_as_tentative),
+	mForceDisableFulltextSearch(p.force_disable_fulltext_search), // <FS:Ansariel> Allow fulltext search in comboboxes
 	mHasAutocompletedText(false),
 	mAllowTextEntry(p.allow_text_entry),
 	mAllowNewValues(p.allow_new_values),
@@ -939,7 +941,7 @@ void LLComboBox::updateSelection()
 	}
 	// <FS:Ansariel> Allow fulltext search in comboboxes
 	//else if (mList->selectItemByPrefix(left_wstring, FALSE))
-	else if (!LLControlGroup::getInstance("Global")->getBOOL("FSComboboxSubstringSearch") && mList->selectItemByPrefix(left_wstring, FALSE))
+	else if ((!LLUI::sSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") || mForceDisableFulltextSearch) && mList->selectItemByPrefix(left_wstring, FALSE))
 	// </FS:Ansariel>
 	{
 		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
@@ -952,7 +954,7 @@ void LLComboBox::updateSelection()
 		mLastSelectedIndex = mList->getFirstSelectedIndex();
 	}
 	// <FS:Ansariel> Allow fulltext search in comboboxes
-	else if (LLControlGroup::getInstance("Global")->getBOOL("FSComboboxSubstringSearch") && mList->selectItemBySubstring(left_wstring, FALSE))
+	else if (LLUI::sSettingGroups["config"]->getBOOL("FSComboboxSubstringSearch") && !mForceDisableFulltextSearch && mList->selectItemBySubstring(left_wstring, FALSE))
 	{
 		LLWString selected_item = utf8str_to_wstring(getSelectedItemLabel());
 		mTextEntry->setText(wstring_to_utf8str(left_wstring) + " (" + getSelectedItemLabel() + ")");
