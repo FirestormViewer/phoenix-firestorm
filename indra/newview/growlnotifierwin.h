@@ -40,15 +40,16 @@
 
 class GrowlNotifierWin : public GrowlNotifier
 {
-public:	
+public:
 	GrowlNotifierWin();
 	
 	void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type);
 	bool isUsable();
 	void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes);
+
 private:
-	std::string applicationName;
-	Growl *growl;
+	std::string mApplicationName;
+	Growl* mGrowlImpl;
 };
 
 #endif // GROWLNOTIFIERWIN_H

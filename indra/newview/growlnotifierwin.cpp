@@ -35,11 +35,10 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "growlnotifierwin.h"
-//#include "llviewercontrol.h"
 
 GrowlNotifierWin::GrowlNotifierWin() :
-	applicationName(""),
-	growl(NULL)
+	mApplicationName(""),
+	mGrowlImpl(NULL)
 {
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifications initialised." << LL_ENDL;
 	
@@ -47,20 +46,20 @@ GrowlNotifierWin::GrowlNotifierWin() :
 
 void GrowlNotifierWin::registerApplication(const std::string& application, const std::set<std::string>& notificationTypes)
 {
-	applicationName = application;
+	mApplicationName = application;
 	
 	char **arr = (char**)malloc(sizeof(*arr) * notificationTypes.size());
-	int i = 0;
+	S32 i = 0;
 	for (std::set<std::string>::const_iterator it = notificationTypes.begin(); it != notificationTypes.end(); ++it, ++i)
 	{
 		char *string = (char*)malloc(it->size() + 1);
 		strcpy(string, it->c_str());
 		arr[i] = string;
 	}
-	growl = new Growl (GROWL_TCP, NULL, application.c_str(), (const char **const)arr, notificationTypes.size(),
+	mGrowlImpl = new Growl (GROWL_TCP, NULL, application.c_str(), (const char **const)arr, notificationTypes.size(),
 		std::string(gDirUtilp->getDefaultSkinDir() + gDirUtilp->getDirDelimiter() + "textures" + gDirUtilp->getDirDelimiter() + "firestorm_icon.png").c_str());
 
-	for (i = 0; i < (int)notificationTypes.size(); ++i)
+	for (i = 0; i < (S32)notificationTypes.size(); ++i)
 	{
 		free(arr[i]);
 	}
@@ -70,13 +69,13 @@ void GrowlNotifierWin::registerApplication(const std::string& application, const
 void GrowlNotifierWin::showNotification(const std::string& notification_title, const std::string& notification_message, 
 										 const std::string& notification_type)
 {
-	if (growl)
+	if (mGrowlImpl)
 	{
-		growl->Notify(notification_type.c_str(), notification_title.c_str(), notification_message.c_str());
+		mGrowlImpl->Notify(notification_type.c_str(), notification_title.c_str(), notification_message.c_str());
 	}
 }
 
 bool GrowlNotifierWin::isUsable()
 {
-	return (growl && growl->isConnected());
+	return (mGrowlImpl && mGrowlImpl->isConnected());
 }
