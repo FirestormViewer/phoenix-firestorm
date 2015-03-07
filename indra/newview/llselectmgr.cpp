@@ -1340,6 +1340,8 @@ void LLSelectMgr::getGrid(LLVector3& origin, LLQuaternion &rotation, LLVector3 &
 			{
 				// this means this object *has* to be an attachment
 				LLXform* attachment_point_xform = first_object->getRootEdit()->mDrawable->mXform.getParent();
+				// <FS:Ansariel> Crash fix for FIRE-15206
+				if (!attachment_point_xform) break;
 				mGridOrigin = attachment_point_xform->getWorldPosition();
 				mGridRotation = attachment_point_xform->getWorldRotation();
 				mGridScale = LLVector3(1.f, 1.f, 1.f) * gSavedSettings.getF32("GridResolution");
