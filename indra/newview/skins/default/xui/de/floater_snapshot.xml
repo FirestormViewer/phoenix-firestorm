@@ -53,6 +53,7 @@
 		<combo_box label="Bildebenen" name="layer_types">
 			<combo_box.item label="Farben" name="Colors"/>
 			<combo_box.item label="Tiefe" name="Depth"/>
+			<combo_box.item label="Tiefe (24 Bit)" name="Depth24"/>
 		</combo_box>
 		<check_box label="Benutzeroberfläche" name="ui_check"/>
 		<check_box label="L$-Kontostand" name="currency_check"/>

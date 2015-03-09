@@ -173,6 +173,10 @@
              label="Depth"
              name="Depth"
              value="depth" />
+            <combo_box.item
+             label="Depth (24 bit)"
+             name="Depth24"
+             value="depth24" />
         </combo_box>
         <check_box
          label="Interface"

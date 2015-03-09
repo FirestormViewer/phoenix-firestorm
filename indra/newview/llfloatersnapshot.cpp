@@ -250,6 +250,10 @@ LLViewerWindow::ESnapshotType LLFloaterSnapshot::Impl::getLayerType(LLFloaterSna
 		type = LLViewerWindow::SNAPSHOT_TYPE_COLOR;
 	else if (id == "depth")
 		type = LLViewerWindow::SNAPSHOT_TYPE_DEPTH;
+	// <FS:Ansariel> FIRE-15667: 24bit depth maps
+	else if (id == "depth24")
+		type = LLViewerWindow::SNAPSHOT_TYPE_DEPTH24;
+	// </FS:Ansariel>
 	return type;
 }
 
