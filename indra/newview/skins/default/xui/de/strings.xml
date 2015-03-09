@@ -6157,7 +6157,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		SL-Grid-Status-Fehler: Zeitüberschreitung der Anfrage.
 	</string>
 	<string name="SLGridStatusOtherError">
-		SL-Grid-Status-Fehler: [STATUS] (https://de.wikipedia.org/wiki/HTTP-Statuscode).
+		SL-Grid-Status-Fehler: [STATUS] ( https://de.wikipedia.org/wiki/HTTP-Statuscode ).
 	</string>
 
 	<string name="DoubleClickTeleportEnabled">
