@@ -88,8 +88,10 @@ if(WINDOWS)
 
 # <FS:ND> Copy pdb files for symbol generation too
    if( NOT ND_BUILD64BIT_ARCH )
-     set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
-     set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+     #set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+     #set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+     set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb )
+     set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb )
    endif( NOT ND_BUILD64BIT_ARCH )
 # </FS:ND>
 
