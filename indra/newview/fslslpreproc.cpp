@@ -63,27 +63,21 @@
 class ScriptMatches : public LLInventoryCollectFunctor
 {
 public:
-	ScriptMatches(std::string name)
+	ScriptMatches(const std::string& name)
 	{
-		sName = name;
+		mName = name;
 	}
+
 	virtual ~ScriptMatches() {}
+
 	virtual bool operator()(LLInventoryCategory* cat,
 							LLInventoryItem* item)
 	{
-		if(item)
-		{
-			//LLViewerInventoryCategory* folderp = gInventory.getCategory((item->getParentUUID());
-			if(item->getName() == sName)
-			{
-				if(item->getType() == LLAssetType::AT_LSL_TEXT)return true;
-			}
-			//return (item->getName() == sName);// && cat->getName() == "#v");
-		}
-		return false;
+		return (item && item->getName() == mName && item->getType() == LLAssetType::AT_LSL_TEXT);
 	}
+
 private:
-	std::string sName;
+	std::string mName;
 };
 
 LLUUID FSLSLPreprocessor::findInventoryByName(std::string name)
@@ -91,14 +85,11 @@ LLUUID FSLSLPreprocessor::findInventoryByName(std::string name)
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	ScriptMatches namematches(name);
-	gInventory.collectDescendentsIf(gInventory.getRootFolderID(),cats,items,FALSE,namematches);
+	gInventory.collectDescendentsIf(gInventory.getRootFolderID(), cats, items, FALSE, namematches);
 
-	if (items.size())
+	if (!items.empty())
 	{
-		LLInventoryModel::item_array_t::iterator it = items.begin();
-		it = items.begin();
-		LLViewerInventoryItem* foo=it->get();
-		return foo->getUUID();
+		return items.front()->getUUID();
 	}
 	return LLUUID::null;
 }
@@ -135,11 +126,11 @@ using namespace boost::regex_constants;
 #define encode_start std::string("//start_unprocessed_text\n/*")
 #define encode_end std::string("*/\n//end_unprocessed_text")
 
-std::string FSLSLPreprocessor::encode(std::string script)
+std::string FSLSLPreprocessor::encode(const std::string& script)
 {
 	std::string otext = FSLSLPreprocessor::decode(script);
 	
-	BOOL mono = mono_directive(script);
+	bool mono = mono_directive(script);
 	
 	otext = boost::regex_replace(otext, boost::regex("([/*])(?=[/*|])",boost::regex::perl), "$1|");
 	
@@ -154,17 +145,23 @@ std::string FSLSLPreprocessor::encode(std::string script)
 	
 	otext += "\n";
 	
-	if(mono)otext += "//mono\n";
-	else otext += "//lsl2\n";
+	if (mono)
+	{
+		otext += "//mono\n";
+	}
+	else
+	{
+		otext += "//lsl2\n";
+	}
 
 	return otext;
 }
 
-std::string FSLSLPreprocessor::decode(std::string script)
+std::string FSLSLPreprocessor::decode(const std::string& script)
 {
 	static S32 startpoint = encode_start.length();
 	
-	std::string tip = script.substr(0,startpoint);
+	std::string tip = script.substr(0, startpoint);
 	
 	if (tip != encode_start)
 	{
@@ -181,12 +178,12 @@ std::string FSLSLPreprocessor::decode(std::string script)
 		return script;
 	}
 
-	std::string data = script.substr(startpoint,end-startpoint);
+	std::string data = script.substr(startpoint, end - startpoint);
 	LL_DEBUGS() << "data = " << data << LL_ENDL;
 
 	std::string otext = data;
 
-	otext = boost::regex_replace(otext, boost::regex("([/*])\\|",boost::regex::perl), "$1");
+	otext = boost::regex_replace(otext, boost::regex("([/*])\\|", boost::regex::perl), "$1");
 
 	//otext = curl_unescape(otext.c_str(),otext.length());
 
@@ -232,11 +229,11 @@ std::string scopeript2(std::string& top, S32 fstart, char left = '{', char right
 			}
 		}
 		ltoken = token;
-		cursor += 1;
+		cursor++;
 	}
 	while ((count > 0 || noscoped) && cursor < S32(top.length()));
 
-	S32 end = (cursor-fstart);
+	S32 end = (cursor - fstart);
 	if (end > S32(top.length()))
 	{
 		return "end out of bounds";
@@ -807,7 +804,7 @@ std::string reformat_switch_statements(std::string script)
 				//arg *will have* () around it
 				if(arg == "begin out of bounds" || arg == "end out of bounds")
 				{
-					////reportToNearbyChat(arg);
+					//reportToNearbyChat(arg);
 					break;
 				}
 				LL_DEBUGS() << "arg=[" << arg << "]" << LL_ENDL;;
@@ -1157,7 +1154,7 @@ void FSLSLPreprocessor::start_process()
 		errored = TRUE;
 		err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d",current_position.get_line()) + "): ";
 		err += std::string("exception caught: ") + e.what();
-		////reportToNearbyChat(err);
+		//reportToNearbyChat(err);
 		mCore->mErrorList->setCommentText(err);
 	}
 	catch (...)

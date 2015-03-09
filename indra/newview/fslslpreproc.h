@@ -50,8 +50,8 @@ public:
 	{}
 
 	static bool mono_directive(std::string const& text, bool agent_inv = true);
-	std::string encode(std::string script);
-	std::string decode(std::string script);
+	std::string encode(const std::string& script);
+	std::string decode(const std::string& script);
 
 	std::string lslopt(std::string script);
 	std::string lslcomp(std::string script);
