@@ -18,7 +18,7 @@
  *      may be used to endorse or promote products derived from this
  *      software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY MODULAR SYSTEMS AND CONTRIBUTORS “AS IS”
+ * THIS SOFTWARE IS PROVIDED BY MODULAR SYSTEMS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL MODULAR SYSTEMS OR CONTRIBUTORS
@@ -36,7 +36,6 @@
 #include "fslslpreproc.h"
 #include "llagent.h"
 #include "llappviewer.h"
-#include "llcurl.h"
 #include "llscrolllistctrl.h"
 #include "llviewertexteditor.h"
 #include "llinventorymodel.h"
@@ -949,6 +948,83 @@ void FSLSLPreprocessor::start_process()
 	boost::wave::util::file_position_type current_position;
 	std::string input = mCore->mEditor->getText();
 	std::string rinput = input;
+
+	// Convert multiline strings for preprocessor
+	{
+		std::ostringstream oaux;
+		// Simple DFA to parse the code for strings and comments,
+		// replacing newlines with '\n' inside strings so that the
+		// C preprocessor can interpret it correctly.
+		// states: 0=normal, 1=seen '"', 2=seen '"...\',
+		// 3=seen '/', 4=seen '/*', 5=seen '/*...*', 6=seen '//'
+		int state = 0;
+		int nlines = 0;
+		for (std::string::iterator it = input.begin(); it != input.end(); it++)
+		{
+			switch (state)
+			{
+				case 1: // inside string, no '\' seen last
+					if (*it == '\n')
+					{
+						// we're inside a string and detected a newline;
+						// replace with "\\n"
+						oaux << "\\n";
+						nlines++;
+						continue; // don't store the newline itself
+					}
+					else if (*it == '\\')
+						state = 2;
+					else if (*it == '"')
+					{
+						oaux << '"';
+						// add as many newlines as the string had,
+						// to respect original line numbers
+						while (nlines)
+						{
+							oaux << '\n';
+							nlines--;
+						}
+						state = 0;
+						continue;
+					}
+					break;
+				case 2: // inside string, '\' seen last
+					// just eat the escaped character
+					state = 1;
+					break;
+				case 3: // in code, '/' seen last
+					if (*it == '*')
+						state = 4; // multiline comment
+					else if (*it == '/')
+						state = 6; // single-line comment
+					else
+						state = 0; // it was just a slash
+					break;
+				case 4: // inside multiline comment, no '*' seen last
+					if (*it == '*')
+						state = 5;
+					break;
+				case 5: // inside multiline comment, '*' seen last
+					if (*it == '/')
+						state = 0;
+					else if (*it != '*')
+						state = 4;
+					break;
+				case 6: // inside single line comment ('//' style)
+					if (*it == '\n')
+						state = 0;
+					break;
+				default: // normal code
+					if (*it == '"')
+						state = 1;
+					else if (*it == '/')
+						state = 3;
+			}
+			oaux << *it;
+		}
+		input = oaux.str();
+	}
+	
 	//Make sure wave does not complain about missing newline at end of script.
 	input += "\n";
 	std::string output;
@@ -1029,7 +1105,6 @@ void FSLSLPreprocessor::start_process()
 		ctx.add_macro_definition("float(input)=((float)(input))",false);
 		ctx.add_macro_definition("integer(input)=((integer)(input))",false);
 		ctx.add_macro_definition("key(input)=((key)(input))",false);
-		ctx.add_macro_definition("list(input)=((list)(input))",false);
 		ctx.add_macro_definition("rotation(input)=((rotation)(input))",false);
 		ctx.add_macro_definition("quaternion(input)=((quaternion)(input))",false);
 		ctx.add_macro_definition("string(input)=((string)(input))",false);
