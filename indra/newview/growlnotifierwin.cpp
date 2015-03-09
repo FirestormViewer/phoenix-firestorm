@@ -36,11 +36,27 @@
 #include "llviewerprecompiledheaders.h"
 #include "growlnotifierwin.h"
 
+#include "growl.h"
+#include "llviewercontrol.h"
+
+#ifdef GROWL_HAS_LOG
+#pragma comment(lib,"growl.lib")
+void __cdecl GrowlLogSink( char const *aMessage, int aLevel )
+{
+	LL_INFOS( "Growl" ) << aMessage << LL_ENDL;
+}
+#endif
+
 GrowlNotifierWin::GrowlNotifierWin() :
 	mApplicationName(""),
 	mGrowlImpl(NULL)
 {
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifier initialized." << LL_ENDL;
+
+#ifdef GROWL_HAS_LOG
+	if( gSavedSettings.controlExists( "FSGrowlLog" ) && gSavedSettings.getBOOL( "FSGrowlLog" ) )
+		growl_set_log_sink( GrowlLogSink );
+#endif
 }
 
 GrowlNotifierWin::~GrowlNotifierWin()
