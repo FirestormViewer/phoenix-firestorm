@@ -680,7 +680,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 	}
 }
 
-void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, BOOL defcache)
+void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 {
 	mClose = close;
 	mSync = sync;
@@ -944,7 +944,7 @@ void FSLSLPreprocessor::start_process()
 		return;
 	}
 
-	mWaving = TRUE;
+	mWaving = true;
 	boost::wave::util::file_position_type current_position;
 	std::string input = mCore->mEditor->getText();
 	std::string rinput = input;
@@ -1117,7 +1117,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (caching_files.size() != 0)
 			{
-				mWaving = FALSE;
+				mWaving = false;
 				return;
 			}
 			current_position = (*first).get_position();
@@ -1251,7 +1251,7 @@ void FSLSLPreprocessor::start_process()
 		mCore->mPostScript = output;
 		mCore->doSaveComplete((void*)mCore, mClose, mSync);
 	}
-	mWaving = FALSE;
+	mWaving = false;
 }
 
 #else
@@ -1278,7 +1278,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAs
 {
 }
 
-void FSLSLPreprocessor::preprocess_script(BOOL close, BOOL defcache)
+void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 {
 	LLTextEditor* outfield = mCore->mPostEditor;
 	if(outfield)
