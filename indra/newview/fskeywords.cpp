@@ -139,7 +139,7 @@ void FSKeywords::notify(const LLChat& chat)
 			}
 
 			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
-			if (FSEnableGrowl)
+			if (FSEnableGrowl && gGrowlManager)
 			{
 				std::string msg = chat.mFromName;
 				std::string prefix = chat.mText.substr(0, 4);
