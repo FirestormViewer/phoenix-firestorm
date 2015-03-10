@@ -219,6 +219,11 @@ void GrowlManager::loadConfig()
 
 void GrowlManager::notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type)
 {
+	if (!gGrowlManager || !mNotifier)
+	{
+		return;
+	}
+
 	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
 	if (!enabled)
 	{
