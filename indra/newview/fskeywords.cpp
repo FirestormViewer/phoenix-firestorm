@@ -151,7 +151,7 @@ void FSKeywords::notify(const LLChat& chat)
 				{
 					msg = msg + ": " + chat.mText;
 				}
-				gGrowlManager->notify("Keyword Alert", msg, GROWL_KEYWORD_ALERT_TYPE);
+				GrowlManager::notify("Keyword Alert", msg, GROWL_KEYWORD_ALERT_TYPE);
 			}
 		}
 	}

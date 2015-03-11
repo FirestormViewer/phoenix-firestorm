@@ -217,13 +217,8 @@ void GrowlManager::loadConfig()
 
 }
 
-void GrowlManager::notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type)
+void GrowlManager::performNotification(const std::string& title, const std::string& message, const std::string& type)
 {
-	if (!gGrowlManager || !mNotifier)
-	{
-		return;
-	}
-
 	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
 	if (!enabled)
 	{
@@ -238,18 +233,18 @@ void GrowlManager::notify(const std::string& notification_title, const std::stri
 	if (mNotifier->needsThrottle())
 	{
 		U64 now = LLTimer::getTotalTime();
-		if (mTitleTimers.find(notification_title) != mTitleTimers.end())
+		if (mTitleTimers.find(title) != mTitleTimers.end())
 		{
-			if (mTitleTimers[notification_title] > now - GROWL_THROTTLE_TIME)
+			if (mTitleTimers[title] > now - GROWL_THROTTLE_TIME)
 			{
-				LL_WARNS("GrowlNotify") << "Discarded notification with title '" << notification_title << "' - spam ._." << LL_ENDL;
-				mTitleTimers[notification_title] = now;
+				LL_WARNS("GrowlNotify") << "Discarded notification with title '" << title << "' - spam ._." << LL_ENDL;
+				mTitleTimers[title] = now;
 				return;
 			}
 		}
-		mTitleTimers[notification_title] = now;
+		mTitleTimers[title] = now;
 	}
-	mNotifier->showNotification(notification_title, notification_message.substr(0, GROWL_MAX_BODY_LENGTH), notification_type);
+	mNotifier->showNotification(title, message.substr(0, GROWL_MAX_BODY_LENGTH), type);
 }
 
 BOOL GrowlManager::tick()
@@ -308,7 +303,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			}
 			body = wstring_to_utf8str(newLine);
 		}
-		gGrowlManager->notify(title, body, growl_notification->growlName);
+		gGrowlManager->performNotification(title, body, growl_notification->growlName);
 	}
 	return false;
 }
@@ -337,7 +332,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 		{
 			message = message.substr(3);
 		}
-		gGrowlManager->notify(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		gGrowlManager->performNotification(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
 	}
 }
 
@@ -376,7 +371,7 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 			LLStringUtil::format(body, substitutions);
 		}
 
-		gGrowlManager->notify(title, body, growl_notification->growlName);
+		gGrowlManager->performNotification(title, body, growl_notification->growlName);
 	}
 }
 
@@ -392,7 +387,7 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 			message = message.substr(3);
 		}
 
-		gGrowlManager->notify(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
 	}
 }
 
@@ -407,11 +402,13 @@ bool GrowlManager::shouldNotify()
 	return (activated || (!gViewerWindow->getWindow()->getVisible() || !gFocusMgr.getAppHasFocus()));
 }
 
+// static
 void GrowlManager::initiateManager()
 {
 	gGrowlManager = new GrowlManager();
 }
 
+// static
 void GrowlManager::destroyManager()
 {
 	if (gGrowlManager)
@@ -421,7 +418,17 @@ void GrowlManager::destroyManager()
 	}
 }
 
+// static
 bool GrowlManager::isUsable()
 {
 	return (gGrowlManager && gGrowlManager->mNotifier && gGrowlManager->mNotifier->isUsable());
+}
+
+// static
+void GrowlManager::notify(const std::string& title, const std::string& message, const std::string& type)
+{
+	if (isUsable())
+	{
+		gGrowlManager->performNotification(title, message, type);
+	}
 }

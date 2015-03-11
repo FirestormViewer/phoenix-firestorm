@@ -55,16 +55,16 @@ const std::string GROWL_KEYWORD_ALERT_TYPE = "Keyword Alert";
 class GrowlManager : public LLEventTimer
 {
 	LOG_CLASS(GrowlManager);
+
 public:
-	
 	GrowlManager();
 	~GrowlManager();
-	void notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type);
 	BOOL tick();
 
 	static void initiateManager();
 	static void destroyManager();
 	static bool isUsable();
+	static void notify(const std::string& title, const std::string& message, const std::string& type);
 
 private:
 	GrowlNotifier*								mNotifier;
@@ -73,6 +73,7 @@ private:
 	LLNotificationChannelPtr					mGrowlNotificationsChannel;
 	
 	void loadConfig();
+	void performNotification(const std::string& title, const std::string& message, const std::string& type);
 	static bool onLLNotification(const LLSD& notice);
 	static bool filterOldNotifications(LLNotificationPtr pNotification);
 	static void onInstantMessage(const LLSD& im);
