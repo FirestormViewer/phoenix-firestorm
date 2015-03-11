@@ -388,19 +388,22 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 						
 						boost::smatch calls;
 												//funcname has to be [a-zA-Z0-9_]+, so we know it's safe
-						boost::regex findcalls(std::string(rDOT_MATCHES_NEWLINE "[^a-zA-Z0-9_]")
-							+ funcname + std::string(rOPT_SPC "\\("));
+						boost::regex findcalls(std::string(rDOT_MATCHES_NEWLINE
+							"(?:" rCMNT_OR_STR "|(?<![a-zA-Z0-9_])(") + funcname
+							+ std::string(")" rOPT_SPC "\\(|.)*"));
 						
 						std::string::const_iterator bstart = bottom.begin();
 						std::string::const_iterator bend = bottom.end();
 
-						if (boost::regex_search(bstart, bend, calls, findcalls, boost::match_default))
+						if (boost::regex_match(bstart, bend, calls, findcalls, boost::match_default))
 						{
-							
-							std::string function = func_it->second;
-							kept_functions.insert(funcname);
-							bottom = function + bottom;
-							repass = true;
+							if (calls[1].matched)
+							{
+								std::string function = func_it->second;
+								kept_functions.insert(funcname);
+								bottom = function + bottom;
+								repass = true;
+							}
 						}
 					}
 				}
@@ -433,7 +436,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 			// (if it isn't, it means it has a syntax error such an extra semicolon etc.)
 			boost::smatch discarded;
 			// should always match but we guard it in an if() just in case
-			if (boost::regex_match(top, discarded, boost::regex(rOPT_SPC "(.*?)" rOPT_SPC)))
+			if (boost::regex_match(top, discarded, boost::regex(rDOT_MATCHES_NEWLINE rOPT_SPC "(.*?)" rOPT_SPC)))
 			{
 				if (discarded[1].matched)
 				{
@@ -450,14 +453,18 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 			{
 				
 				std::string varname = var_it->first;
-				boost::regex findvcalls(std::string("[^a-zA-Z0-9_.]") + varname + std::string("[^a-zA-Z0-9_\"]"));
+				boost::regex findvcalls(std::string(rDOT_MATCHES_NEWLINE
+					"(?:" rCMNT_OR_STR "|(?<![a-zA-Z0-9_.])(") + varname + std::string(")(?![a-zA-Z0-9_\"])|.)*"));
 				boost::smatch vcalls;
 				std::string::const_iterator bstart = bottom.begin();
 				std::string::const_iterator bend = bottom.end();
 				
-				if (boost::regex_search(bstart, bend, vcalls, findvcalls, boost::match_default))
+				if (boost::regex_match(bstart, bend, vcalls, findvcalls, boost::match_default))
 				{
-					bottom = var_it->second + bottom;
+					if (vcalls[1].matched)
+					{
+						bottom = var_it->second + bottom;
+					}
 				}
 			}
 
