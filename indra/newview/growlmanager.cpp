@@ -32,9 +32,14 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "growlmanager.h"
+
+#include "growlnotifier.h"
 #include "llagentdata.h"
 #include "llappviewer.h"
+#include "llfloaterimnearbychathandler.h"
 #include "llimview.h"
+#include "llnotificationmanager.h"
 #include "llscriptfloater.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
@@ -42,11 +47,6 @@
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
-#include "llnotificationmanager.h"
-#include "llfloaterimnearbychathandler.h"
-
-#include "growlmanager.h"
-#include "growlnotifier.h"
 
 // Platform-specific includes
 #ifndef LL_LINUX
@@ -108,7 +108,6 @@ GrowlManager::GrowlManager()
 
 	// Hook into LLNotifications...
 	// We hook into all of them, even though (at the time of writing) nothing uses "alert", so more notifications can be added easily.
-	// Ansa: Hope this works...
 	mGrowlNotificationsChannel = new LLNotificationChannel("GrowlNotifications", "Visible", &filterOldNotifications);
 	mNotificationConnection = LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
 
@@ -160,7 +159,7 @@ void GrowlManager::loadConfig()
 	llifstream configs(config_file);
 	LLSD notificationLLSD;
 	std::set<std::string> notificationTypes;
-	notificationTypes.insert("Keyword Alert");
+	notificationTypes.insert(GROWL_KEYWORD_ALERT_TYPE);
 	notificationTypes.insert(GROWL_IM_MESSAGE_TYPE);
 	if (configs.is_open())
 	{
@@ -232,7 +231,7 @@ void GrowlManager::performNotification(const std::string& title, const std::stri
 	
 	if (mNotifier->needsThrottle())
 	{
-		U64 now = LLTimer::getTotalTime();
+		const U64 now = LLTimer::getTotalTime();
 		if (mTitleTimers.find(title) != mTitleTimers.end())
 		{
 			if (mTitleTimers[title] > now - GROWL_THROTTLE_TIME)
@@ -261,7 +260,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 	}
 
 	LLNotificationPtr notification = LLNotifications::instance().find(notice["id"].asUUID());
-	std::string name = notification->getName();
+	const std::string name = notification->getName();
 	LLSD substitutions = notification->getSubstitutions();
 	if (gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
 	{
@@ -340,7 +339,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 void GrowlManager::onScriptDialog(const LLSD& data)
 {
 	LLNotificationPtr notification = LLNotifications::instance().find(data["notification_id"].asUUID());
-	std::string name = notification->getName();
+	const std::string name = notification->getName();
 	LLSD payload = notification->getPayload();
 	LLSD substitutions = notification->getSubstitutions();
 

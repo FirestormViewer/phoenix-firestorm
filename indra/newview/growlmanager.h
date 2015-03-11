@@ -46,8 +46,8 @@ struct GrowlNotification
 	bool useDefaultTextForBody;
 };
 
-const U64 GROWL_THROTTLE_TIME = 1000000; // Maximum spam rate (in microseconds).
-const F32 GROWL_THROTTLE_CLEANUP_PERIOD = 300; // How often we clean up the list (in seconds).
+const U64 GROWL_THROTTLE_TIME = 1000000u; // Maximum spam rate (in microseconds).
+const F32 GROWL_THROTTLE_CLEANUP_PERIOD = 300.f; // How often we clean up the list (in seconds).
 const int GROWL_MAX_BODY_LENGTH = 255; // Arbitrary.
 const std::string GROWL_IM_MESSAGE_TYPE = "Instant Message received";
 const std::string GROWL_KEYWORD_ALERT_TYPE = "Keyword Alert";
