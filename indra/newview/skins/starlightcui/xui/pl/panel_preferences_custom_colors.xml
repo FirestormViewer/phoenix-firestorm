@@ -27,13 +27,4 @@
   <text name="text_boxb1_restart">
     (wymaga restartu)
   </text>
-  <text name="general_colors_text">
-    Ogólne kolory UI (także w 'Kolorach' w Ustawieniach):
-  </text>
-  <text name="CustomScriptDialogBgLabel">
-    Tło powiadomień skryptów
-  </text>
-  <text name="CustomScriptDialogFgLabel">
-    Tekst powiadomień skryptów
-  </text>
 </panel>
