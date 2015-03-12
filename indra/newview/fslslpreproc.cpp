@@ -126,6 +126,17 @@ using namespace boost::regex_constants;
 #define encode_start std::string("//start_unprocessed_text\n/*")
 #define encode_end std::string("*/\n//end_unprocessed_text")
 
+// Definitions to split the expressions into parts to improve readablility
+// (using 'r' as namespace prefix for RE, to avoid conflicts)
+// The code relies on none of these expressions having capturing groups.
+#define rCMNT "//.*?\\n|/\\*.*?\\*/" // skip over single- or multi-line comments as a block
+#define rREQ_SPC "(?:" rCMNT "|\\s)+"
+#define rOPT_SPC "(?:" rCMNT "|\\s)*"
+#define rTYPE_ID "[a-z]+"
+#define rIDENT "[A-Za-z_][A-Za-z0-9_]*"
+#define rCMNT_OR_STR rCMNT "|\"(?:[^\"\\\\]|\\\\[^\\n])*\"" // skip over strings as a block too
+#define rDOT_MATCHES_NEWLINE "(?s)"
+
 std::string FSLSLPreprocessor::encode(const std::string& script)
 {
 	std::string otext = FSLSLPreprocessor::decode(script);
@@ -191,7 +202,7 @@ std::string FSLSLPreprocessor::decode(const std::string& script)
 }
 
 
-std::string scopeript2(std::string& top, S32 fstart, char left = '{', char right = '}')
+static std::string scopeript2(std::string& top, S32 fstart, char left = '{', char right = '}')
 {
 	if (fstart >= S32(top.length()))
 	{
@@ -242,12 +253,12 @@ std::string scopeript2(std::string& top, S32 fstart, char left = '{', char right
 	return top.substr(fstart,(cursor-fstart));
 }
 
-inline S32 const_iterator_to_pos(std::string::const_iterator begin, std::string::const_iterator cursor)
+static inline S32 const_iterator_to_pos(std::string::const_iterator begin, std::string::const_iterator cursor)
 {
 	return std::distance(begin, cursor);
 }
 
-void shredder(std::string& text)
+static void shredder(std::string& text)
 {
 	S32 cursor = 0;
 	if (text.length() == 0)
@@ -306,17 +317,6 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 	//Removes invalid characters from the script.
 	shredder(script);
 	
-	// Definitions to split the expressions into parts to improve readablility
-	// (using 'r' as namespace prefix for RE, to avoid conflicts)
-	// The code relies on none of these expressions having capturing groups.
-	#define rCMNT "//.*?\\n|/\\*.*?\\*/" // skip over single- or multi-line comments as a block
-	#define rREQ_SPC "(?:" rCMNT "|\\s)+"
-	#define rOPT_SPC "(?:" rCMNT "|\\s)*"
-	#define rTYPE_ID "[a-z]+"
-	#define rIDENT "[A-Za-z_][A-Za-z0-9_]*"
-	#define rCMNT_OR_STR rCMNT "|\"(?:[^\"\\\\]|\\\\[^\\n])*\"" // skip over strings as a block too
-	#define rDOT_MATCHES_NEWLINE "(?s)"
-
 	try
 	{
 		boost::smatch result;
@@ -484,14 +484,6 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		LL_WARNS() << "unexpected exception caught; optimization skipped" << LL_ENDL;
 	}
 	return script;
-
-	#undef rCMNT
-	#undef rREQ_SPC
-	#undef rOPT_SPC
-	#undef rTYPE_ID
-	#undef rIDENT
-	#undef rCMNT_OR_STR
-	#undef rDOT_MATCHES_NEWLINE
 }
 
 std::string FSLSLPreprocessor::lslcomp(std::string script)
@@ -521,7 +513,7 @@ struct ProcCacheInfo
 	FSLSLPreprocessor* self;
 };
 
-inline std::string shortfile(std::string in)
+static inline std::string shortfile(std::string in)
 {
 	return boost::filesystem::path(std::string(in)).filename().string();
 }
@@ -671,10 +663,12 @@ private:
 };
 
 
-std::string cachepath(std::string name)
+/* unused:
+static std::string cachepath(std::string name)
 {
 	return gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "lslpreproc", name);
 }
+*/
 
 void cache_script(std::string name, std::string content)
 {
@@ -786,37 +780,112 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 }
 
 const std::string lazy_list_set_func("\
-list lazy_list_set(list target, integer pos, list newval)\n\
+list lazy_list_set(list L, integer i, list v)\n\
 {\n\
-    integer end = llGetListLength(target);\n\
-    if(end > pos)\n\
-    {\n\
-        target = llListReplaceList(target,newval,pos,pos);\n\
-    }else if(end == pos)\n\
-    {\n\
-        target += newval;\n\
-    }else\n\
-    {\n\
-        do\n\
-        {\n\
-            target += [0];\n\
-            end += 1;\n\
-        }while(end < pos);\n\
-        target += newval;\n\
-    }\n\
-    return target;\n\
+    while (llGetListLength(L) < i)\n\
+        L = L + 0;\n\
+    return llListReplaceList(L, v, i, i);\n\
 }\n\
 ");
 
-std::string reformat_lazy_lists(std::string script)
+static void subst_lazy_references(std::string& script, std::string retype, std::string fn)
+{
+	script = boost::regex_replace(script, boost::regex(std::string(rDOT_MATCHES_NEWLINE
+		rCMNT_OR_STR "|"
+		"\\(" rOPT_SPC ) + retype + std::string(rOPT_SPC "\\)" rOPT_SPC
+		// group 1: leading parenthesis
+		"(\\()?"
+		// group 2: identifier
+		rOPT_SPC "([a-zA-Z_][a-zA-Z0-9_]*)"
+		rOPT_SPC "\\["
+		// group 3: subindex expression
+		"((?:"
+			rCMNT_OR_STR
+			// group 4: recursive bracketed expression
+			"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?4))\\])" // recursive bracketed expression (e.g. []!=[])
+			"|[^][]" // or anything else
+		")+?)" // (non-greedy)
+		"\\]"
+		// group 5: trailing parenthesis
+		"(\\))?"
+		)),
+		// Boost supports conditions in format strings used in regex_replace.
+		// ?nX:Y means output X if group n matched, else output Y. $n means output group n.
+		// $& means output the whole match, which is used here to not alter the string.
+		// Parentheses are used for grouping; they have to be prefixed with \ to output them.
+		std::string("?2" // if group 2 matched, we have a (type)variable[index] to substitute
+		// if first paren is present, require the second (output the original text if not present)
+		"(?1(?5$1") + fn + std::string("\\($2,$3\\)$5:$&):")
+		// if first parent is not present, copy $5 verbatim (matched or not)
+		+ fn + std::string("\\($2,$3\\)$5):"
+		// if $2 didn't match, output whatever matched (string or comment)
+		"$&"), boost::format_all); // format_all enables these features
+}
+
+static std::string reformat_lazy_lists(std::string script)
 {
 	bool add_set = false;
 	std::string nscript = script;
-	nscript = boost::regex_replace(nscript, boost::regex("([a-zA-Z0-9_]+)\\[([a-zA-Z0-9_()\"]+)]\\s*=\\s*([a-zA-Z0-9_()\"\\+\\-\\*/]+)([;)])",boost::regex::perl), "$1=lazy_list_set($1,$2,[$3])$4");
+	nscript = boost::regex_replace(nscript, boost::regex(rDOT_MATCHES_NEWLINE
+		rCMNT_OR_STR "|"
+		// group 1: identifier
+		"([a-zA-Z_][a-zA-Z0-9_]*)" rOPT_SPC
+		// group 2: expression within brackets
+		"\\[((?:" rCMNT_OR_STR
+		// group 3: recursive bracketed expression
+		"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?3))\\])" // recursive bracketed expression (e.g. []!=[])
+		"|[^][]" // or anything else
+		")+?)\\]" rOPT_SPC // non-greedy
+		"=" rOPT_SPC
+		// group 4: right-hand side expression
+		"((?:" rCMNT_OR_STR
+			// group 5: recursive parenthesized expression
+			"|(\\((?:" rCMNT_OR_STR "|[^()]|(?5))\\))" // recursive parenthesized expression
+			"|[^()]" // or anything else
+		")+?)" // non-greedy
+		"([;)])" // terminated only with a semicolon or a closing parenthesis
+		), "?1$1=lazy_list_set\\($1,$2,[$4]\\)$6:$&", boost::format_all);
+
 	if (nscript != script)
 	{
-		add_set = true;
+		// the function is only necessary if an assignment was made and it's not already defined
+		add_set = boost::regex_search(nscript, boost::regex(
+			// Find if the function is already defined.
+			rDOT_MATCHES_NEWLINE
+			"^(?:"
+				// Skip variable or function declarations.
+				// RE for a variable declaration follows.
+				rOPT_SPC // skip spaces and comments
+				// type<space or comments>identifier[<space or comments>]
+				rTYPE_ID rREQ_SPC rIDENT rOPT_SPC
+				"(?:=" // optionally with an assignment
+					// comments or strings or characters that are not a semicolon
+					"(?:" rCMNT_OR_STR "|[^;])+"
+				")?;" // the whole assignment is optional, the semicolon isn't
+				"|"
+				// RE for function declarations follows.
+				rOPT_SPC // skip spaces and comments
+				// [type<space or comments>] identifier
+				"(?:" rTYPE_ID rREQ_SPC ")?" rIDENT rOPT_SPC
+				// open parenthesis, comments or other stuff, close parenthesis
+				// (strings can't appear in the parameter list so don't bother to skip them)
+				"\\((?:" rCMNT "|[^()])*\\)" rOPT_SPC
+				// capturing group 1 used for nested curly braces
+				"(\\{(?:" rCMNT_OR_STR "|(?1)|[^{}])\\})" // recursively skip braces
+			")*?" // (zero or more variable/function declarations skipped)
+			rOPT_SPC "(?:" rTYPE_ID rREQ_SPC ")?lazy_list_set" rOPT_SPC "\\("
+		)) ? false : true;
 	}
+
+	// replace typed references followed by bracketed subindex with llList2XXXX,
+	// e.g. (rotation)mylist[3] is replaced with llList2Rot(mylist, (3))
+	subst_lazy_references(nscript, "integer", "llList2Integer");
+	subst_lazy_references(nscript, "float", "llList2Float");
+	subst_lazy_references(nscript, "string", "llList2String");
+	subst_lazy_references(nscript, "key", "llList2Key");
+	subst_lazy_references(nscript, "vector", "llList2Vector");
+	subst_lazy_references(nscript, "(?:rotation|quaternion)", "llList2Rot");
+	subst_lazy_references(nscript, "list", "llList2List");
 
 	if (add_set)
 	{
@@ -827,7 +896,7 @@ std::string reformat_lazy_lists(std::string script)
 }
 
 
-inline std::string randstr(S32 len, std::string chars)
+static inline std::string randstr(S32 len, std::string chars)
 {
 	S32 clen = S32(chars.length());
 	S32 built = 0;
@@ -842,17 +911,19 @@ inline std::string randstr(S32 len, std::string chars)
 	return ret;
 }
 
-inline std::string quicklabel()
+static inline std::string quicklabel()
 {
 	return std::string("c") + randstr(5, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 }
 
-std::string minimalize_whitespace(std::string in)
+/* unused:
+static std::string minimalize_whitespace(std::string in)
 {
 	return boost::regex_replace(in, boost::regex("\\s*",boost::regex::perl), "\n");
 }
+*/
 
-std::string reformat_switch_statements(std::string script)
+static std::string reformat_switch_statements(std::string script)
 {
 	std::string buffer = script;
 	{
