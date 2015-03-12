@@ -27,13 +27,4 @@
 	<text name="text_boxb1_restart">
 		(Erfordert Neustart)
 	</text>
-	<text name="general_colors_text">
-		Allgemeine Benutzerinterface-Farben (auch im "Farben"-Reiter):
-	</text>
-	<text name="CustomScriptDialogBgLabel">
-		Hintergrund Skript-Dialoge
-	</text>
-	<text name="CustomScriptDialogFgLabel">
-		Vordergrund Skript-Dialoge
-	</text>
 </panel>
