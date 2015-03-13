@@ -815,9 +815,8 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 		if (cur_pos && (raw_text[cur_pos - 1] != ' '))
 		{
 			// Get a list of avatars within range
-			std::vector<LLUUID> avatar_ids;
-			std::vector<LLVector3d> positions;
-			LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+			uuid_vec_t avatar_ids;
+			LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
 			
 			if (avatar_ids.empty()) return; // Nobody's in range!
 			
@@ -844,7 +843,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 			std::string name;
 			bool found = false;
 			bool full_name = false;
-			std::vector<LLUUID>::iterator iter = avatar_ids.begin();
+			uuid_vec_t::iterator iter = avatar_ids.begin();
 			
 			if (last_space != std::string::npos && !prefix.empty())
 			{
@@ -859,7 +858,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
-					if ((bool)gCacheName->getFullName(*iter++, name))
+					if (gCacheName->getFullName(*iter++, name))
 					{
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
@@ -885,7 +884,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
-					if ((bool)gCacheName->getFullName(*iter++, name))
+					if (gCacheName->getFullName(*iter++, name))
 					{
 						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 						{
