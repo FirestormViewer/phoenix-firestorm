@@ -712,7 +712,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 			if (boost::filesystem::native(name))
 			{
 				LL_DEBUGS() << "native name of " << name << LL_ENDL;
-				self->mCore->mErrorList->setCommentText("Cached " + name);
+				self->display_error("Cached " + name);
 				cache_script(name, content);
 				std::set<std::string>::iterator loc = self->caching_files.find(name);
 				if (loc != self->caching_files.end())
@@ -730,11 +730,11 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 					LL_DEBUGS() << "something went wrong" << LL_ENDL;
 				}
 			}
-			else self->mCore->mErrorList->setCommentText(std::string("Error: script named '") + name + "' isn't safe to copy to the filesystem. This include will fail.");
+			else self->display_error(std::string("Error: script named '") + name + "' isn't safe to copy to the filesystem. This include will fail.");
 		}
 		else
 		{
-			self->mCore->mErrorList->setCommentText(std::string("Error caching "+name));
+			self->display_error(std::string("Error caching "+name));
 		}
 	}
 
@@ -750,7 +750,7 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	mSync = sync;
 	mDefinitionCaching = defcache;
 	caching_files.clear();
-	mCore->mErrorList->setCommentText("PreProc Starting...");
+	display_error("PreProc Starting...");
 	
 	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
 	std::string script = mCore->mEditor->getText();
@@ -1212,7 +1212,7 @@ void FSLSLPreprocessor::start_process()
 		settings = settings + " Compress";
 	}
 	//display the settings
-	mCore->mErrorList->setCommentText(settings);
+	display_error(settings);
 
 	LL_DEBUGS() << settings << LL_ENDL;
 	bool errored = false;
@@ -1299,29 +1299,28 @@ void FSLSLPreprocessor::start_process()
 	}
 	catch(boost::wave::cpp_exception const& e)
 	{
-		errored = TRUE;
+		errored = true;
 		// some preprocessing error
 		err = name + "(" + llformat("%d",e.line_no()) + "): " + e.description();
 		LL_WARNS() << err << LL_ENDL;
-		mCore->mErrorList->setCommentText(err);
+		display_error(err);
 	}
 	catch(std::exception const& e)
 	{
 		FAILDEBUG
-		errored = TRUE;
-		err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d",current_position.get_line()) + "): ";
+		errored = true;
+		err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d", current_position.get_line()) + "): ";
 		err += std::string("exception caught: ") + e.what();
-		//reportToNearbyChat(err);
-		mCore->mErrorList->setCommentText(err);
+		display_error(err);
 	}
 	catch (...)
 	{
 		FAILDEBUG
-		errored = TRUE;
-		err = std::string(current_position.get_file().c_str()) + llformat("%d",current_position.get_line());
+		errored = true;
+		err = std::string(current_position.get_file().c_str()) + llformat("%d", current_position.get_line());
 		err += std::string("): unexpected exception caught.");
 		LL_WARNS() << err << LL_ENDL;
-		mCore->mErrorList->setCommentText(err);
+		display_error(err);
 	}
 
 	if (!errored)
@@ -1331,14 +1330,14 @@ void FSLSLPreprocessor::start_process()
 		{
 			try
 			{
-				mCore->mErrorList->setCommentText("Applying lazy list set transform");
+				display_error("Applying lazy list set transform");
 				output = reformat_lazy_lists(output);
 			}
 			catch(...)
 			{
-				errored = TRUE;
+				errored = true;
 				err = "unexpected exception in lazy list converter.";
-				mCore->mErrorList->setCommentText(err);
+				display_error(err);
 			}
 
 		}
@@ -1346,14 +1345,14 @@ void FSLSLPreprocessor::start_process()
 		{
 			try
 			{
-				mCore->mErrorList->setCommentText("Applying switch statement transform");
+				display_error("Applying switch statement transform");
 				output = reformat_switch_statements(output);
 			}
 			catch(...)
 			{
-				errored = TRUE;
+				errored = true;
 				err = "unexpected exception in switch statement converter.";
-				mCore->mErrorList->setCommentText(err);
+				display_error(err);
 			}
 		}
 	}
@@ -1364,16 +1363,16 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (use_optimizer)
 			{
-				mCore->mErrorList->setCommentText("Optimizing out unreferenced user-defined functions and global variables");
+				display_error("Optimizing out unreferenced user-defined functions and global variables");
 				try
 				{
 					output = lslopt(output);
 				}
 				catch(...)
 				{	
-					errored = TRUE;
+					errored = true;
 					err = "unexpected exception in lsl optimizer";
-					mCore->mErrorList->setCommentText(err);
+					display_error(err);
 				}
 			}
 		}
@@ -1381,23 +1380,23 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (use_compression)
 			{
-				mCore->mErrorList->setCommentText("Compressing lsltext by removing unnecessary space");
+				display_error("Compressing lsltext by removing unnecessary space");
 				try
 				{
 					output = lslcomp(output);
 				}
 				catch(...)
 				{
-					errored = TRUE;
+					errored = true;
 					err = "unexpected exception in lsl compressor";
-					mCore->mErrorList->setCommentText(err);
+					display_error(err);
 				}
 			}
 		}
 		output = encode(rinput) + "\n\n" + output;
 
 
-		LLTextEditor* outfield = mCore->mPostEditor;//getChild<LLViewerTextEditor>("post_process");
+		LLTextEditor* outfield = mCore->mPostEditor;
 		if (outfield)
 		{
 			outfield->setText(LLStringExplicit(output));
@@ -1444,7 +1443,7 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 
 #endif
 
-void FSLSLPreprocessor::display_error(std::string err)
+void FSLSLPreprocessor::display_error(const std::string& err)
 {
 	mCore->mErrorList->setCommentText(err);
 }

@@ -61,7 +61,7 @@ public:
 									void *userdata, S32 result, LLExtStat extstat);
 	void preprocess_script(BOOL close = FALSE, bool sync = false, bool defcache = false);
 	void start_process();
-	void display_error(std::string err);
+	void display_error(const std::string& err);
 
 	std::string uncollide_string_literals(std::string script);
 
