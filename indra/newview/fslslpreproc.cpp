@@ -929,19 +929,25 @@ static std::string reformat_switch_statements(std::string script)
 	{
 		try
 		{
-			boost::regex findswitches("\\sswitch\\(");//nasty
+			// This expression, combined with regex_match rather than regex_search, matches
+			// the last instance of a switch statement. This is important for nested
+			// switches (FIRE-10517). If they are scanned in forward order, case/default/break
+			// inside nested switches are replaced as if they were part of the same switch.
+			boost::regex findswitches(rDOT_MATCHES_NEWLINE
+				"(?:" rCMNT_OR_STR
+				"|(?<![A-Za-z0-9_])(switch" rOPT_SPC "\\()"
+				"|.)*"
+				);
 
 			boost::smatch matches;
 
-			static std::string switchstr = "switch(";
-
 			S32 escape = 100;
 
-			while(boost::regex_search(std::string::const_iterator(buffer.begin()), std::string::const_iterator(buffer.end()), matches, findswitches, boost::match_default) && escape > 1)
+			while(boost::regex_match(std::string::const_iterator(buffer.begin()), std::string::const_iterator(buffer.end()), matches, findswitches, boost::match_default) && matches[1].matched && escape > 1)
 			{
-				S32 res = matches.position(boost::match_results<std::string::const_iterator>::size_type(0))+1;
+				S32 res = matches.position(boost::match_results<std::string::const_iterator>::size_type(1));
 				
-				static S32 slen = switchstr.length();
+				static S32 slen = const_iterator_to_pos(matches[1].first, matches[1].second);
 
 				std::string arg = scopeript2(buffer, res+slen-1,'(',')');
 
@@ -966,21 +972,23 @@ static std::string reformat_switch_statements(std::string script)
 				rstate = rstate.substr(slicestart,(rstate.rfind("}")-slicestart)-1);
 				LL_DEBUGS() << "rstate=[" << rstate << "]" << LL_ENDL;
 
-				boost::regex findcases("\\scase\\s");
+				boost::regex findcases(rDOT_MATCHES_NEWLINE
+					"(?:" rCMNT_OR_STR "|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.)*");
 
 				boost::smatch statematches;
 
 				std::map<std::string,std::string> ifs;
 
-				while(boost::regex_search(std::string::const_iterator(rstate.begin()), std::string::const_iterator(rstate.end()), statematches, findcases, boost::match_default) && escape > 1)
+				while(boost::regex_match(std::string::const_iterator(rstate.begin()), std::string::const_iterator(rstate.end()), statematches, findcases, boost::match_default) && statematches[1].matched && escape > 1)
 				{
 					//if(statematches[0].matched)
 					{
-						S32 case_start = statematches.position(boost::match_results<std::string::const_iterator>::size_type(0))+1;//const_iterator2pos(statematches[0].first+1, std::string::const_iterator(rstate.begin()))-1;
+						S32 case_start = statematches.position(boost::match_results<std::string::const_iterator>::size_type(1));
 						S32 next_curl = rstate.find("{",case_start+1);
 						S32 next_semi = rstate.find(":",case_start+1);
-						S32 case_end = (next_curl < next_semi && next_curl != -1) ? next_curl : next_semi;
-						static S32 caselen = std::string("case").length();
+						S32 case_end = (next_semi == -1) ? next_curl :
+							(next_curl < next_semi && next_curl != -1) ? next_curl : next_semi;
+						S32 caselen = const_iterator_to_pos(statematches[1].first, statematches[1].second);
 						if(case_end != -1)
 						{
 							std::string casearg = rstate.substr(case_start+caselen,case_end-(case_start+caselen));
@@ -1011,8 +1019,10 @@ static std::string reformat_switch_statements(std::string script)
 				std::string deflt = quicklabel();
 				bool isdflt = false;
 				std::string defstate;
-				defstate = boost::regex_replace(rstate, boost::regex("(\\s)(default\\s*?):",boost::regex::perl), "$1\\@"+deflt+";");
-				defstate = boost::regex_replace(defstate, boost::regex("(\\s)(default\\s*?)\\{",boost::regex::perl), "$1\\@"+deflt+"; \\{");
+				defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
+					rCMNT_OR_STR "|"
+					"(?<![A-Za-z0-9_])(default)(?:" rOPT_SPC ":|(" rOPT_SPC "\\{))"
+					,boost::regex::perl), "?1@"+deflt+";$2:$&", boost::format_all);
 				if(defstate != rstate)
 				{
 					isdflt = true;
@@ -1041,7 +1051,10 @@ static std::string reformat_switch_statements(std::string script)
 				rstate = jumptable + rstate + "\n";
 			
 				std::string brk = quicklabel();
-				defstate = boost::regex_replace(rstate, boost::regex("(\\s)break\\s*;",boost::regex::perl), "$1jump "+brk+";");
+				defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
+					rCMNT_OR_STR "|"
+					"(?<![A-Za-z0-9_])break(" rOPT_SPC ";)"
+					), "?1jump "+brk+"$1:$&", boost::format_all);
 				if(defstate != rstate)
 				{
 					rstate = defstate;
