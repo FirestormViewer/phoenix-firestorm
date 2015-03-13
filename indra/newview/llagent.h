@@ -525,10 +525,10 @@ private:
 	BOOL 			mbFlagsNeedReset;				// ! HACK ! For preventing incorrect flags sent when crossing region boundaries
 
 	// <FS> Ignore prejump and always fly
-	static BOOL ignorePrejump;
-	static BOOL fsAlwaysFly;
-	void updateIgnorePrejump(const LLSD &data);
-	void updateFSAlwaysFly(const LLSD &data);
+	BOOL			mIgnorePrejump;
+	BOOL			mAlwaysFly;
+	void			updateIgnorePrejump(const LLSD &data);
+	void			updateFSAlwaysFly(const LLSD &data);
 	// </FS> Ignore prejump and always fly
 
 	//--------------------------------------------------------------------

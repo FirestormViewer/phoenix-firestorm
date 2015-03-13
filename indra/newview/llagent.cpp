@@ -242,10 +242,6 @@ private:
 const F32 LLAgent::MIN_AFK_TIME = 10.0f;
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
-// <FS> Ignore prejump and always fly
-BOOL LLAgent::ignorePrejump = FALSE;
-BOOL LLAgent::fsAlwaysFly;
-// </FS> Ignore prejump and always fly
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -411,6 +407,11 @@ LLAgent::LLAgent() :
 	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 	mAfkSitting(false), // <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
 
+	// <FS> Ignore prejump and always fly
+	mIgnorePrejump(FALSE),
+	mAlwaysFly(FALSE),
+	// </FS>
+
 	mControlFlags(0x00000000),
 	mbFlagsDirty(FALSE),
 	mbFlagsNeedReset(FALSE),
@@ -465,13 +466,13 @@ LLAgent::LLAgent() :
 // <FS> Ignore prejump and always fly
 void LLAgent::updateIgnorePrejump(const LLSD &data)
 {
-	ignorePrejump = data.asBoolean();
+	mIgnorePrejump = data.asBoolean();
 }
 
 void LLAgent::updateFSAlwaysFly(const LLSD &data)
 {
-	fsAlwaysFly = data.asBoolean();
-	if (fsAlwaysFly) 
+	mAlwaysFly = data.asBoolean();
+	if (mAlwaysFly) 
 	{
 		LL_INFOS() << "Enabling Fly Override" << LL_ENDL;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride"))
@@ -505,9 +506,9 @@ void LLAgent::init()
 	mLastKnownResponseMaturity = static_cast<U8>(gSavedSettings.getU32("PreferredMaturity"));
 	mLastKnownRequestMaturity = mLastKnownResponseMaturity;
 	mIsDoSendMaturityPreferenceToServer = true;
-	ignorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
+	mIgnorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
 	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
-	fsAlwaysFly = gSavedSettings.getBOOL("FSAlwaysFly");
+	mAlwaysFly = gSavedSettings.getBOOL("FSAlwaysFly");
 	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updateFSAlwaysFly, this, _2));
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
@@ -789,7 +790,7 @@ BOOL LLAgent::canFly()
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
 	// <FS> Always fly
-	if (fsAlwaysFly)
+	if (mAlwaysFly)
 	{
 		return TRUE;
 	}
@@ -1469,11 +1470,17 @@ LLQuaternion LLAgent::getQuat() const
 //-----------------------------------------------------------------------------
 U32 LLAgent::getControlFlags()
 {
+	// <FS> Ignore prejump and always fly
 	//return mControlFlags;
-	if(LLAgent::ignorePrejump)
+	if (LLAgent::mIgnorePrejump)
+	{
 		return mControlFlags | AGENT_CONTROL_FINISH_ANIM;
+	}
 	else
+	{
 		return mControlFlags;
+	}
+	// </FS>
 }
 
 //-----------------------------------------------------------------------------
