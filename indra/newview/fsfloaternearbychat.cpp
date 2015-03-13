@@ -923,7 +923,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				if (!rest_of_match.empty())
 				{
 					mInputEditor->setText(prefix + replaced_text + suffix);
-					mInputEditor->selectByCursorPosition(prefix.size() + match.size(), prefix.size() + replaced_text.size());
+					mInputEditor->selectByCursorPosition(utf8string_to_wstring(prefix).size() + utf8string_to_wstring(match).size(), utf8string_to_wstring(prefix).size() + utf8string_to_wstring(replaced_text).size());
 				}
 			}
 		}

@@ -277,7 +277,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 					prefix += match + rest_of_match + " ";
 				}
 				caller->setText(prefix + suffix);
-				caller->setSelection(prefix.length(), cur_pos);
+				caller->setSelection(utf8str_to_wstring(prefix).length(), cur_pos);
 			}
 		}
 	}
