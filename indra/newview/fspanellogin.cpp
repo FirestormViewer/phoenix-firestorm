@@ -115,7 +115,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 :	LLPanel(),
 	mLogoImage(),
 	mCallback(callback),
-	mCallbackData(cb_data)
+	mCallbackData(cb_data),
+	mShowFavorites(false)
 	//,mListener(new LLPanelLoginListener(this))
 {
 	setBackgroundVisible(FALSE);
@@ -316,6 +317,7 @@ void FSPanelLogin::addUsersWithFavoritesToUsername()
 
 void FSPanelLogin::addFavoritesToStartLocation()
 {
+	mShowFavorites = false;
 	// Clear the combo.
 	LLComboBox* combo = getChild<LLComboBox>("start_location_combo");
 	if (!combo) return;
@@ -351,7 +353,8 @@ void FSPanelLogin::addFavoritesToStartLocation()
 	//	file.open(old_filename);
 	//	if (!file.is_open()) return;
 	//}
-	if (!file.is_open()) return;
+	if (!file.is_open())
+		return;
 // </FS:CR>
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
@@ -380,11 +383,14 @@ void FSPanelLogin::addFavoritesToStartLocation()
 			std::string value = (*iter1)["slurl"].asString();
 			if(label != "" && value != "")
 			{
+				mShowFavorites = true;
 				combo->add(label, value);
 			}
 		}
 		break;
 	}
+
+	LLFloaterPreference::updateShowFavoritesCheckbox(mShowFavorites);
 }
 
 // force the size to be correct (XML doesn't seem to be sufficient to do this)
@@ -1486,3 +1492,16 @@ void FSPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& n
 	}
 }
 // </FS:CR>
+
+// static
+bool FSPanelLogin::getShowFavorites()
+{
+	if (sInstance)
+	{
+		return sInstance->mShowFavorites;
+	}
+	else
+	{
+		return gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
+	}
+}
