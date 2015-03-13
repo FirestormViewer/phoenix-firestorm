@@ -789,7 +789,7 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
 	items.push_back(std::string("Task Rename"));
 	items.push_back(std::string("Task Remove"));
-	if (!isItemRenameable() || (flags & FIRST_SELECTED_ITEM) == 0)
+	if (!isItemRenameable())
 	{
 		disabled_items.push_back(std::string("Task Rename"));
 	}
