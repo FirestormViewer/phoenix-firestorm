@@ -3,7 +3,7 @@
 	<tab_container name="tabs">
 
 		<!-- Chat: Visuals -->
-		<panel label="Visualisierung" name="ChatVisuals">
+		<panel label="Anzeige" name="ChatVisuals">
 			<text name="console_font_size">
 				Schriftgröße für Konsole:
 			</text>
@@ -130,7 +130,7 @@
 		</panel>
 
 		<!-- Chat: Typing -->
-		<panel label="Texteingabe" name="ChatTyping">
+		<panel label="Eingabe" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
 			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
