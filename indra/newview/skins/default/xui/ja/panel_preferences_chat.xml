@@ -187,5 +187,65 @@
 			通知音のUUID:
 		</text>
 	</panel>
+	<panel label="コマンドライン" name="tab-CmdLine">
+		<check_box label="チャットバーをコマンドラインとして使用" name="chat_cmd_toggle" />
+		<text name="FSCmdLineCalc_txt">
+			式を計算（例：cmd SIN(2+2)）
+		</text>
+		<text name="FSCmdLineDrawDistance_txt">
+			描画距離を変更（使用法：cmd 数字（m））
+		</text>
+		<text name="FSCmdLineBandWidth_txt">
+			最大帯域幅を設定（使用法：cmd 数字（kbps））
+		</text>
+		<text name="FSCmdLineAO_txt">
+			AOをオン／オフ（使用法：cmd on/off）
+		</text>
+		<text name="FSCmdLineClearChat_txt">
+			チャット履歴を消去（使用法：cmd）
+		</text>
+		<line_editor tool_tip="スパムチャットがあった時に、その影響でラグが発生するのを防ぐためにチャット履歴を消去します。" name="FSCmdLineClearChat"/>
+		<text name="FSCmdLineMedia_txt">
+			メディアurlを設定（使用法：cmd url タイプ）
+		</text>
+		<line_editor tool_tip="入力したurlのメディアに設定、メディアをプレイします。" name="FSCmdLineMedia"/>
+		<text name="FSCmdLineMusic_txt">
+			音楽ストリーミングurlを設定（使用法：cmd url）
+		</text>
+		<line_editor tool_tip="入力したurlの音楽ストリーミングに設定、音楽をプレイします。" name="FSCmdLineMusic"/>
+		<text name="FSCmdLineRezPlatform_txt">
+			プラットフォームをRez（使用法：cmd 0〜30）
+		</text>
+		<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="Rezするプラットフォームの幅を設定します。"/>
+		<text name="FSCmdLineKeyToName_txt">
+			UUIDからアバター名を取得（使用法：cmd UUID）
+		</text>
+		<text name="FSCmdLinePos_txt">
+			同じSIM内でテレポート（使用法：cmd x y z）
+		</text>
+		<text name="FSCmdLineGround_txt">
+			地上にテレポート（使用法：cmd）
+		</text>
+		<text name="FSCmdLineHeight_txt">
+			指定した高さにテレポート（使用法：cmd z）
+		</text>
+		<text name="FSCmdTeleportToCam_txt">
+			カメラ位置にテレポート（使用法：cmd）
+		</text>
+		<text name="FSCmdLineOfferTp_txt">
+			アバターにテレポートを送る（使用法：cmd UUID）
+		</text>
+		<text name="FSCmdLineTP2_txt">
+			アバターの所にテレポート（使用法：cmd アバター名）
+		</text>
+		<line_editor tool_tip="このコマンドで使用するアバター名はフルネームでなくてよく、また大文字小文字を区別しません。レーダーを開いて同様の名前の人がいないか確認してお使いになることをお勧めします。" name="FSCmdLineTP2"/>
+		<text name="FSCmdLineTeleportHome_txt">
+			ホームにテレポート（使用法：cmd）
+		</text>
+		<text name="FSCmdLineMapTo_txt">
+			指定したSIMに移動（使用法：cmd SIM名）
+		</text>
+		<check_box label="目標SIMの同じ座標に移動" name="toggle"/>
+	</panel>
 </tab_container>
 </panel>

@@ -202,5 +202,68 @@
 			<button name="Prev_UISndFSKeywordSound" label="P" tool_tip="Probar este sonido."/>
 			<button name="Def_UISndFSKeywordSound" label="R" tool_tip="Restablecer al UUID por defecto."/>
 		</panel>
+		<panel label="CmdLine" name="tab-CmdLine">
+			<check_box label="Activar el uso de la barra de chat como línea de comandos" name="chat_cmd_toggle"/>
+			<text name="FSCmdLineCalc_txt">
+				Calc. expresiones (uso: cmd SIN(2+2))
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Cambiar dist. de dibujo (uso: cmd m)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Máx. ancho de banda (uso: cmd kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Copiar pos. de cámara a portapapeles
+			</text>
+			<text name="FSCmdLineAO_txt">
+				Activar/desactivar el AO (uso: cmd on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Limpiar transcripción de chat (uso: cmd)
+			</text>
+			<line_editor tool_tip="Limpia la transcripción de chat para evitar efectos de lag procedentes de spammers." name="FSCmdLineClearChat"/>
+			<text name="FSCmdLineMedia_txt">
+				Conf. url de medios (uso: cmd url tipo)
+			</text>
+			<line_editor tool_tip="Establece y reproduce tu flujo de medios a la URL especificada" name="FSCmdLineMedia"/>
+			<text name="FSCmdLineMusic_txt">
+				Conf. url del flujo de música (uso: cmd url)
+			</text>
+			<line_editor tool_tip="Establece y reproduce tu flujo de audio a la URL especificada" name="FSCmdLineMusic"/>
+			<text name="FSCmdLineRezPlatform_txt">
+				Crear plataforma (uso: cmd 0 - 64)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Diámetro" label_width="60" tool_tip="Diámetro de la plataforma por defecto si no se usa ningún parámetro"/>
+			<text name="FSCmdLineKeyToName_txt">
+				Obt. nombre de av. de la clave (uso: cmd clave)
+			</text>
+			<text name="FSCmdLinePos_txt">
+				Teleportar dentro del sim (uso: cmd x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Teleportar al suelo (uso: cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Teleportar a altitud (uso: cmd z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Teleportar a pos. de cámara (uso: cmd)
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Ofrecer teleporte al avatar (uso: cmd clave)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Teleportar donde el avatar (uso: cmd nombre)
+			</text>
+			<line_editor tool_tip="La sintaxis de este comando permite nombres parciales y no es sensible a mayúsculas. Se obtienen mejores resultados si se usa con el radar abierto." name="FSCmdLineTP2"/>		
+			<text name="FSCmdLineTeleportHome_txt">
+				Teleportar a mi base (uso: cmd)
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Telep. al sim X (uso: cmd nombredelsim)
+			</text>
+			<check_box label="Usar misma posición entre sims" name="toggle"/>
+		</panel>
 	</tab_container>
 </panel>

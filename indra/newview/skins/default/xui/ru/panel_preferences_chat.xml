@@ -58,7 +58,7 @@
             <check_box name="FSMuteAllGroups" label="выкл. все групповые чаты"/>
             <check_box name="FSMuteGroupWhenNoticesDisabled" label="Если опция 'получить уведомления' выкл. также выкл. групповой чат."/>
 		</panel>
-		<panel label="Ввод текста" name="ChatTyping">
+		<panel label="Ввод" name="ChatTyping">
 			<check_box label="Воспроизводить анимацию набора когда пишете " name="play_typing_animation"/>
 			<check_box label="Воспроизводить звук когда пишут" name="play_typing_sound"/> 
             <check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
@@ -106,5 +106,57 @@
               UUID для звука:
             </text>
         </panel>
+		<panel label="Команды" name="tab-CmdLine">
+			<check_box label="Вкл. краткие команды" name="chat_cmd_toggle"/>
+			<text name="FSCmdLineCalc_txt">
+				Решить (кмд: cmd SIN(2+2))
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Дальность видемости (кмд: cmd Meter)
+			</text>
+			<text name="FSCmdLineAO_txt">
+				AO вкл.-/выкл. (кмд: cmd on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Удалить историю чата (кмд: cmd)
+			</text>
+			<text name="FSCmdLineMedia_txt">
+				Уст. УРЛ медия (кмд: cmd URL Typ)
+			</text>
+			<text name="FSCmdLineMusic_txt">
+				уст. УРЛ стрима (usage: cmd URL)
+			</text>
+			<text name="FSCmdLineRezPlatform_txt">
+				выложить платформу (кмд: cmd 0 - 64)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Ширина" />
+			<text name="FSCmdLineKeyToName_txt">
+				Узнать имя аватара по UUI (кмд: cmd key)
+			</text>
+			<text name="FSCmdLinePos_txt">
+				Телепорт (кмд: cmd x z y)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Телепорт на поверхность (кмд: cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Телепорт на высоту (кмд: cmd z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Телепорт к камере (кмд: cmd)
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				пред. телепорт аватару (кмд: cmd key)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Телепорт к аватару (кмд: cmd name)
+			</text>
+			<text name="FSCmdLineTeleportHome_txt">
+				Телепорт домой (кмд: cmd)
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Телепорт а регион (cmd regionname)
+			</text>
+		</panel>
 	</tab_container>
 </panel>

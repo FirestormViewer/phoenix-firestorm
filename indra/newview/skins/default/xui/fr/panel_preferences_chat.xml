@@ -48,5 +48,67 @@
 			<check_box label="Chats IM" name="EnableIMChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche a réception d&apos;un message instantané."/>
 			<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté ([EMAIL])" name="send_im_to_email"/>
 		</panel>
+		<panel name="tab-CmdLine" label="LigneCmd">
+			<check_box name="chat_cmd_toggle" label="Utiliser la ligne de chat comme ligne de commande"/>
+			<text name="FSCmdLineCalc_txt">
+				Express. math. (Taper cmd SIN(2+2))
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Distance d'affichage (Taper cmd dist.)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Bande Pass. max (Taper cmd kbps)
+			</text>
+			<text name="FSCmdLineAO_txt">
+				AO dés / activé (Taper cmd off / on)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Purger l'historique de chat (Taper cmd)
+			</text>
+			<line_editor name="FSCmdLineClearChat" tool_tip="Purge l'historique de chat pour vous prémunir du lag du aux spammers de chat."/>
+			<text name="FSCmdLineMedia_txt">
+				Changer l'URL média (Taper cmd url)
+			</text>
+			<line_editor name="FSCmdLineMedia" tool_tip="Entre et joue un URL dans le stream média de la parcelle. Identique a menu Monde › A propos du terrain › Média"/>
+			<text name="FSCmdLineMusic_txt">
+				Changer l'URL musique (Taper cmd url)
+			</text>
+			<line_editor name="FSCmdLineMusic" tool_tip="Entre et joue un URL dans le stream audio de la parcelle. Identique a menu Monde › A propos du terrain › Son"/>
+			<text name="FSCmdLineRezPlatform_txt">
+				Créer plateforme (Taper cmd 1 a 64)
+			</text>
+			<line_editor name="FSCmdLineRezPlatform" tool_tip="Créé une plateforme au diametre voulu juste sous vos pieds, peu importe l'altitude a laquelle vous vous trouvez."/>
+			<slider name="FSCmdLinePlatformSize" label="Dia." tool_tip="Diametre de la plateforme a créer."/>
+			<text name="FSCmdLineKeyToName_txt">
+				Nom depuis la clé UUID (Taper cmd clé)
+			</text>
+			<text name="FSCmdLinePos_txt">
+				TP interne au sim (taper cmd x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				TP au sol (taper cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				TP en altitude (Taper cmd Z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				TP a la pos. de la cam. (Taper cmd)
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Envoyer un TP a... (Taper cmd clé UUID)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Vous TP vers... (Taper cmd nom)
+			</text>
+			<line_editor name="FSCmdLineTP2" tool_tip="Vous téléporter vers quelqu'un. Cette commande accepte les noms partiels et est insensible a la casse (majuscule/minuscule). Un meilleur résultat s'obtient avec le radar ouvert (Ctl-Maj-A)."/>
+			<text name="FSCmdLineTeleportHome_txt">
+				TP au domicile (Taper cmd)
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				TP vers le sim x (Taper cmd NomDuSim)
+			</text>
+			<check_box name="toggle" label="Conserver la pos. entre les régions"/>
+		</panel>
+		
 	</tab_container>
 </panel>

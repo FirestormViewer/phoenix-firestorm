@@ -152,5 +152,65 @@
 				UUID Suono di allerta:
 			</text>
 		</panel>
+		<panel label="CmdLine" name="tab-CmdLine">
+			<check_box label="Abilita comandi dalla Chat" name="chat_cmd_toggle" />
+			<text name="FSCmdLineCalc_txt">
+				Calcolatrice (usa: cmd calcolo)
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Cambia Draw Distance (usa: cmd metri)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Max. Bandwidth (usa: cmd kbps)
+			</text>
+			<text name="FSCmdLineAO_txt">
+				AO on/off (usa: cmd on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Canc. la cronologia della chat (usa: cmd)
+			</text>
+			<line_editor tool_tip="Pulisce la chat per prevenire la lag dovuta allo spam." name="FSCmdLineClearChat" />
+			<text name="FSCmdLineMedia_txt">
+				Setta URL Video (usa: cmd url)
+			</text>
+			<line_editor tool_tip="Setta i Video della parcella e lì fa partire tramite l'url indicato" name="FSCmdLineMedia" />
+			<text name="FSCmdLineMusic_txt">
+				Setta URL Musica (usa: cmd url)
+			</text>
+			<line_editor tool_tip="Setta nella parcella e riproduce lo streaming audio da URL" name="FSCmdLineMusic" />
+			<text name="FSCmdLineRezPlatform_txt">
+				Rezza una piattaforma (usa: cmd n)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Grandezza" tool_tip="Quanto vuoi che sia grande la piattaforma che apparira?" />
+			<text name="FSCmdLineKeyToName_txt">
+				Trova il nome tramite Key (usa: cmd key)
+			</text>
+			<text name="FSCmdLinePos_txt">
+				Teleport nella Sim (usa: cmd x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Teleport al suolo (usa: cmd)
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Teleport ad altezza (usa: cmd z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Teleport alla posizione della Cam (usa: cmd)
+			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Offri Teleport ad Avatar (usa: cmd key)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Teleport ad avatar (usa: cmd nome)
+			</text>
+			<line_editor tool_tip="Potrete effettuare un Teleport per raggiungere un'altro avatar anche scrivendo parzialmente il nome della persona a cui arrivare. Funziona meglio se si ha il radar aperto." name="FSCmdLineTP2" />
+			<text name="FSCmdLineTeleportHome_txt">
+				Teleport a casa (usa: cmd)
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Teleport alla sim X (usa: cmd NomeSim)
+			</text>
+			<check_box label="Usa la posizione attuale" name="toggle" />
+		</panel>
 	</tab_container>
 </panel>
