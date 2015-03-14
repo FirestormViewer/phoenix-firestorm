@@ -244,9 +244,18 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			 iter != potentials.end(); iter++)
 		{
 			LLDrawable* drawable = *iter;
+			// <FS:Ansariel> FIRE-15206: Crash fixing
+			if (!drawable)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
 			LLViewerObject* vobjp = drawable->getVObj();
 
-			if (!drawable || !vobjp ||
+			// <FS:Ansariel> FIRE-15206: Crash fixing
+			//if (!drawable || !vobjp ||
+			if (!vobjp ||
+			// </FS:Ansariel>
 				vobjp->getPCode() != LL_PCODE_VOLUME || 
 				vobjp->isAttachment() ||
 				(deselect && !vobjp->isSelected()))
