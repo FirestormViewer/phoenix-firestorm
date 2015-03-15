@@ -89,5 +89,4 @@
 	<text name="image_res_text">
 		[WIDTH]px (szerokość) x [HEIGHT]px (wysokość)
 	</text>
-	<button name="advanced_options_btn" tool_tip="Opcje zaawansowane" />
 </floater>
