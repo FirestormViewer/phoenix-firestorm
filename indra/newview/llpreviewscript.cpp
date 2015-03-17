@@ -1232,6 +1232,10 @@ void LLScriptEdCore::doSave(BOOL close_after_save, bool sync /*= true*/)
 // </FS:Ansariel>
 {
 	// NaCl - LSL Preprocessor
+	// Clear status list *before* running the preprocessor (FIRE-10172) -Sei
+	mErrorList->deleteAllItems();
+	mErrorList->setCommentText(std::string());
+
 	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		LL_INFOS() << "passing to preproc" << LL_ENDL;
@@ -1706,10 +1710,12 @@ BOOL LLPreviewLSL::postBuild()
 void LLPreviewLSL::callbackLSLCompileSucceeded()
 {
 	LL_INFOS() << "LSL Bytecode saved" << LL_ENDL;
-//	## Zi: setCommentText() only allows one line anyway, so we just remove the compile
-//	       successful message here, since it's meaningless anyway.
-//	mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
-	mScriptEd->mErrorList->setCommentText(LLTrans::getString("SaveComplete"));
+	// <FS> Append comment text
+	//mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
+	//mScriptEd->mErrorList->setCommentText(LLTrans::getString("SaveComplete"));
+	mScriptEd->mErrorList->addCommentText(LLTrans::getString("CompileSuccessful"));
+	mScriptEd->mErrorList->addCommentText(LLTrans::getString("SaveComplete"));
+	// </FS>
 
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine
@@ -1870,9 +1876,9 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	}
 
 	mPendingUploads = 0;
-	mScriptEd->mErrorList->deleteAllItems();
+	// <FS> FIRE-10172: Fix LSL editor error display
+	//mScriptEd->mErrorList->deleteAllItems();
 	mScriptEd->mEditor->makePristine();
-	mScriptEd->mErrorList->setCommentText(std::string());	// ## Zi: Clear out comment overlay, too.
 
 	// save off asset into file
 	LLTransactionID tid;
@@ -2251,8 +2257,12 @@ void LLLiveLSLEditor::callbackLSLCompileSucceeded(const LLUUID& task_id,
 												  bool is_script_running)
 {
 	LL_DEBUGS() << "LSL Bytecode saved" << LL_ENDL;
-	mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
-	mScriptEd->mErrorList->setCommentText(LLTrans::getString("SaveComplete"));
+	// <FS> Append comment text
+	//mScriptEd->mErrorList->setCommentText(LLTrans::getString("CompileSuccessful"));
+	//mScriptEd->mErrorList->setCommentText(LLTrans::getString("SaveComplete"));
+	mScriptEd->mErrorList->addCommentText(LLTrans::getString("CompileSuccessful"));
+	mScriptEd->mErrorList->addCommentText(LLTrans::getString("SaveComplete"));
+	// </FS>
 
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine
@@ -2675,8 +2685,8 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 	// save the script
 	mScriptEd->enableSave(FALSE);
 	mScriptEd->mEditor->makePristine();
-	mScriptEd->mErrorList->deleteAllItems();
-	mScriptEd->mErrorList->setCommentText(std::string());	// ## Zi: Clear out comment overlay, too.
+	// <FS> FIRE-10172: Fix LSL editor error display
+	//mScriptEd->mErrorList->deleteAllItems();
 
 	// set up the save on the local machine.
 	mScriptEd->mEditor->makePristine();
@@ -2850,6 +2860,8 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 
 void LLLiveLSLEditor::onSaveTextComplete(const LLUUID& asset_uuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)
 {
+// <FS> Remove more legacy stuff -Sei
+#if 0
 	LLLiveLSLSaveData* data = (LLLiveLSLSaveData*)user_data;
 
 	if (status)
@@ -2878,11 +2890,14 @@ void LLLiveLSLEditor::onSaveTextComplete(const LLUUID& asset_uuid, void* user_da
 	}
 	delete data;
 	data = NULL;
+#endif
 }
 
 
 void LLLiveLSLEditor::onSaveBytecodeComplete(const LLUUID& asset_uuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)
 {
+// <FS> Remove more legacy stuff -Sei
+#if 0
 	LLLiveLSLSaveData* data = (LLLiveLSLSaveData*)user_data;
 	if(!data)
 		return;
@@ -2929,6 +2944,7 @@ void LLLiveLSLEditor::onSaveBytecodeComplete(const LLUUID& asset_uuid, void* use
 	std::string dst_filename = llformat("%s.lso", filepath.c_str());
 	LLFile::remove(dst_filename);
 	delete data;
+#endif
 }
 
 BOOL LLLiveLSLEditor::canClose()

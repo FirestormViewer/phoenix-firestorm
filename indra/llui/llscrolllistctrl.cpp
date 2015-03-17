@@ -268,6 +268,9 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	text_p.wrap(true);
 	// set up label text color for empty lists in a way it's always readable -Zi
 	text_p.text_color = mFgUnselectedColor;
+	// show scroll bar when applicable -Sei
+	text_p.allow_scroll(true);
+	text_p.track_end(true);
 	addChild(LLUICtrlFactory::create<LLTextBox>(text_p));
 	// </FS:Ansariel>
 
@@ -1240,7 +1243,8 @@ void LLScrollListCtrl::setCommentText(const std::string& comment_text)
 // <FS:Ansariel> Allow appending of comment text
 void LLScrollListCtrl::addCommentText(const std::string& comment_text)
 {
-	getChild<LLTextBox>("comment_text")->appendText(comment_text, true);
+	LLTextBox *ctrl = getChild<LLTextBox>("comment_text");
+	ctrl->appendText(comment_text, !ctrl->getText().empty()); // don't prepend newline if empty (Sei)
 }
 // </FS:Ansariel> Allow appending of comment text
 

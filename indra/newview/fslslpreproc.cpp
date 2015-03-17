@@ -553,8 +553,8 @@ public:
 					std::set<std::string>::iterator it = mProc->caching_files.find(cfilename);
 					if (it == mProc->caching_files.end())
 					{
-						if(not_cached)mProc->display_error(std::string("Caching ")+cfilename);
-						else /*if(changed)*/mProc->display_error(cfilename+std::string(" has changed, recaching..."));
+						if(not_cached)mProc->display_message(std::string("Caching ")+cfilename);
+						else /*if(changed)*/mProc->display_message(cfilename+std::string(" has changed, recaching..."));
 						//one is always true
 						mProc->caching_files.insert(cfilename);
 						ProcCacheInfo* info = new ProcCacheInfo;
@@ -712,7 +712,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 			if (boost::filesystem::native(name))
 			{
 				LL_DEBUGS() << "native name of " << name << LL_ENDL;
-				self->display_error("Cached " + name);
+				self->display_message("Cached " + name);
 				cache_script(name, content);
 				std::set<std::string>::iterator loc = self->caching_files.find(name);
 				if (loc != self->caching_files.end())
@@ -750,7 +750,7 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	mSync = sync;
 	mDefinitionCaching = defcache;
 	caching_files.clear();
-	display_error("PreProc Starting...");
+	display_message("PreProc Starting...");
 	
 	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
 	std::string script = mCore->mEditor->getText();
@@ -1190,10 +1190,10 @@ void FSLSLPreprocessor::start_process()
 	bool enable_hdd_include = gSavedSettings.getBOOL("_NACL_PreProcEnableHDDInclude");
 	bool use_compression = gSavedSettings.getBOOL("_NACL_PreProcLSLTextCompress");
 	std::string settings;
-	settings = "Settings: preproc ";
+	settings = "Settings: preproc";
 	if (lazy_lists)
 	{
-		settings = settings + " Lazy Lists";
+		settings = settings + " LazyLists";
 	}
 	if (use_switch)
 	{
@@ -1212,7 +1212,7 @@ void FSLSLPreprocessor::start_process()
 		settings = settings + " Compress";
 	}
 	//display the settings
-	display_error(settings);
+	display_message(settings);
 
 	LL_DEBUGS() << settings << LL_ENDL;
 	bool errored = false;
@@ -1330,7 +1330,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			try
 			{
-				display_error("Applying lazy list set transform");
+				display_message("Applying lazy list set transform");
 				output = reformat_lazy_lists(output);
 			}
 			catch(...)
@@ -1345,7 +1345,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			try
 			{
-				display_error("Applying switch statement transform");
+				display_message("Applying switch statement transform");
 				output = reformat_switch_statements(output);
 			}
 			catch(...)
@@ -1363,7 +1363,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (use_optimizer)
 			{
-				display_error("Optimizing out unreferenced user-defined functions and global variables");
+				display_message("Optimizing out unreferenced user-defined functions and global variables");
 				try
 				{
 					output = lslopt(output);
@@ -1380,7 +1380,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (use_compression)
 			{
-				display_error("Compressing lsltext by removing unnecessary space");
+				display_message("Compressing lsltext by removing unnecessary space");
 				try
 				{
 					output = lslcomp(output);
@@ -1443,9 +1443,17 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 
 #endif
 
+void FSLSLPreprocessor::display_message(const std::string& err)
+{
+	mCore->mErrorList->addCommentText(err);
+}
+
 void FSLSLPreprocessor::display_error(const std::string& err)
 {
-	mCore->mErrorList->setCommentText(err);
+	LLSD row;
+	row["columns"][0]["value"] = err;
+	row["columns"][0]["font"] = "SANSSERIF_SMALL";
+	mCore->mErrorList->addElement(row);
 }
 
 
