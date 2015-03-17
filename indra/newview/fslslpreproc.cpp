@@ -1255,14 +1255,14 @@ void FSLSLPreprocessor::start_process()
 		def = llformat("__SHORTFILE__=\"%s\"", name.c_str());
 		ctx.add_macro_definition(def,false);
 
-		ctx.add_macro_definition("list(input)=((list)(input))",false);
-		ctx.add_macro_definition("float(input)=((float)(input))",false);
-		ctx.add_macro_definition("integer(input)=((integer)(input))",false);
-		ctx.add_macro_definition("key(input)=((key)(input))",false);
-		ctx.add_macro_definition("rotation(input)=((rotation)(input))",false);
-		ctx.add_macro_definition("quaternion(input)=((quaternion)(input))",false);
-		ctx.add_macro_definition("string(input)=((string)(input))",false);
-		ctx.add_macro_definition("vector(input)=((vector)(input))",false);
+		ctx.add_macro_definition("list(...)=((list)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("float(...)=((float)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("integer(...)=((integer)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("key(...)=((key)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("rotation(...)=((rotation)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("quaternion(...)=((quaternion)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("string(...)=((string)(__VA_ARGS__))",false);
+		ctx.add_macro_definition("vector(...)=((vector)(__VA_ARGS__))",false);
 
 		context_type::iterator_type first = ctx.begin();
 		context_type::iterator_type last = ctx.end();
@@ -1301,7 +1301,7 @@ void FSLSLPreprocessor::start_process()
 	{
 		errored = true;
 		// some preprocessing error
-		err = name + "(" + llformat("%d",e.line_no()) + "): " + e.description();
+		err = name + "(" + llformat("%d",e.line_no()-1) + "): " + e.description();
 		LL_WARNS() << err << LL_ENDL;
 		display_error(err);
 	}
