@@ -2960,11 +2960,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = buffer;
-			bool keyword_alert = false;
+			bool keyword_alert_performed = false;
 			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
-				keyword_alert = true;
+				keyword_alert_performed = true;
 			}
 			// </FS:PP>
 
@@ -2982,7 +2982,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				position,
 				true,
 				false,
-				keyword_alert);
+				keyword_alert_performed);
 
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
 			//if (!gIMMgr->isDNDMessageSend(session_id))
@@ -3097,11 +3097,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 				chat.mText = message;
-				bool keyword_alert = false;
+				bool keyword_alert_performed = false;
 				if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 				{
 					FSKeywords::notify(chat);
-					keyword_alert = true;
+					keyword_alert_performed = true;
 				}
 				// </FS:PP>
 
@@ -3120,7 +3120,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					position,
 					true,
 					false,
-					keyword_alert);
+					keyword_alert_performed);
 			}
 			else
 			{
@@ -3674,11 +3674,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = message;
-			bool keyword_alert = false;
+			bool keyword_alert_performed = false;
 			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
-				keyword_alert = true;
+				keyword_alert_performed = true;
 			}
 			// </FS:PP>
 
@@ -3706,7 +3706,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				position,
 				true,
 				false,
-				keyword_alert);
+				keyword_alert_performed);
 		}
 		break;
 

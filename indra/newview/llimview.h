@@ -241,7 +241,7 @@ public:
 	 */
 	// <FS:Ansariel> Added is_announcement parameter
 	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
-	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, bool is_announcement = false, bool keyword_alert = false);
+	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, bool is_announcement = false, bool keyword_alert_performed = false);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
@@ -376,7 +376,7 @@ public:
 					const LLVector3& position = LLVector3::zero,
 					bool link_name = false,
 					bool is_announcement = false, // <FS:Ansariel> Special parameter indicating announcement
-					bool keyword_alert = false // <FS:Ansariel> Pass info if keyword alert has been performed
+					bool keyword_alert_performed = false // <FS:Ansariel> Pass info if keyword alert has been performed
 					);
 
 	void addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args);
