@@ -1717,6 +1717,13 @@ void LLScrollListCtrl::setEnabled(BOOL enabled)
 
 BOOL LLScrollListCtrl::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
+	// <FS> FIRE-10721: Let the LLTextbox handle the mouse scroll if it's visible
+	if (mCommentTextView->getVisible())
+	{
+		return mCommentTextView->handleScrollWheel(x, y, clicks);
+	}
+	// </FS>
+
 	BOOL handled = FALSE;
 	// Pretend the mouse is over the scrollbar
 	handled = mScrollbar->handleScrollWheel( 0, 0, clicks );
