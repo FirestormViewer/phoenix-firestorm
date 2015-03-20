@@ -682,8 +682,8 @@ Push $2
     Delete  "$2\Application Data\Firestorm\plugin_cookies.txt"
     Delete  "$2\Application Data\Firestorm\typed_locations.txt"
 # Delete files in \Users\<User>\AppData\Local\Firestorm
-    RmDir /r  "$2\Local Settings\Application Data\Firestorm"						#Delete the Havok cache folder
-    RmDir /r  "$2\Local Settings\Application Data\FirestormOS"						#Delete the OpenSim cache folder
+    RMDir /r  "$2\Local Settings\Application Data\Firestorm"						#Delete the Havok cache folder
+    RMDir /r  "$2\Local Settings\Application Data\FirestormOS"						#Delete the OpenSim cache folder
 
   CONTINUE:
     IntOp $0 $0 + 1
