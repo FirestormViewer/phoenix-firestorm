@@ -66,7 +66,11 @@ BOOL LLTextBox::handleMouseDown(S32 x, S32 y, MASK mask)
 	if (handled)
 	{
 		// Route future Mouse messages here preemptively.  (Release on mouse up.)
-		gFocusMgr.setMouseCapture( this );
+		// <FS> FIRE-10172: This interferes with the scroll bar buttons.
+		//gFocusMgr.setMouseCapture( this );
+		if (!gFocusMgr.getMouseCapture())
+			gFocusMgr.setMouseCapture( this );
+		// </FS>
 	}
 
 	return handled;
