@@ -657,7 +657,7 @@ Push $0
 Push $1
 Push $2
 
-  DetailPrint $(DeleteUserSettingsDP)
+  DetailPrint $(DeleteDocumentAndSettingsDP)
 
   StrCpy $0 0	# Index number used to iterate via EnumRegKey
 
