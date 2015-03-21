@@ -129,7 +129,7 @@ using namespace boost::regex_constants;
 // Definitions to split the expressions into parts to improve readablility
 // (using 'r' as namespace prefix for RE, to avoid conflicts)
 // The code relies on none of these expressions having capturing groups.
-#define rCMNT "//.*?\\n|/\\*.*?\\*/" // skip over single- or multi-line comments as a block
+#define rCMNT "//[^\\n]*\\n|/\\*(?:(?!\\*/).)*\\*/" // skip over single- or multi-line comments as a block
 #define rREQ_SPC "(?:" rCMNT "|\\s)+"
 #define rOPT_SPC "(?:" rCMNT "|\\s)*"
 #define rTYPE_ID "[a-z]+"
