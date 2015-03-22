@@ -6170,4 +6170,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSRegionRestartInLocalChat">
 		Die Region, in der Sie sich gerade befinden, ist dabei neu zu starten. Falls Sie in dieser Region bleiben, werden Sie ausgeloggt.
 	</string>
+	<string name="Mute_Add">
+		„[NAME]“ has been added to the blocklist.
+	</string>
+	<string name="Mute_Remove">
+		„[NAME]“ has been removed from the blocklist.
+	</string>
 </strings>

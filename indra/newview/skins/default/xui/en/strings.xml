@@ -2551,7 +2551,7 @@ Try enclosing path to the editor with double quotes.
 
   <!-- Settings sanity checks -->
   <string name="SanityCheckEquals">The settings control &quot;[CONTROL_NAME]&quot; should be at [VALUE_1].</string>
-  <string name="SanityCheckNotEquals">The settings control&quot;[CONTROL_NAME]&quot; should not be set to [VALUE_1].</string>
+  <string name="SanityCheckNotEquals">The settings control &quot;[CONTROL_NAME]&quot; should not be set to [VALUE_1].</string>
   <string name="SanityCheckLessThan">The settings control &quot;[CONTROL_NAME]&quot; should be lower than [VALUE_1].</string>
   <string name="SanityCheckGreaterThan">The settings control &quot;[CONTROL_NAME]&quot; should be higher than [VALUE_1].</string>
   <string name="SanityCheckBetween">The settings control &quot;[CONTROL_NAME]&quot; should be between [VALUE_1] and [VALUE_2].</string>
@@ -2775,4 +2775,6 @@ Try enclosing path to the editor with double quotes.
 
   <string name="FSRegionRestartInLocalChat">The region you are in now is about to restart. If you stay in this region you will be logged out.</string>
 
+  <string name="Mute_Add">'[NAME]' has been added to the blocklist.</string>
+  <string name="Mute_Remove">'[NAME]' has been removed from the blocklist.</string>
 </strings>

@@ -93,6 +93,16 @@
      name="FSShowDisplayNameUpdateNotification"
      width="180" />
 
+    <check_box
+     control_name="FSReportBlockToNearbyChat"
+     height="16"
+     label="When I block or unblock somebody"
+     layout="topleft"
+     left="10"
+     top_pad="2"
+     name="FSReportBlockToNearbyChat"
+     width="180" />
+
 	<check_box
      control_name="ShowScriptErrors"
      follows="left|top"

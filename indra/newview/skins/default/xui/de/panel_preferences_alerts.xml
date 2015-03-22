@@ -12,6 +12,7 @@
 	<check_box label="Wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
 	<check_box label="Wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
 	<check_box label="Wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
+	<check_box label="Wenn ich jemanden blockiere oder freischalte" name="FSReportBlockToNearbyChat"/>
 	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
 	<radio_group name="show_script_errors_location">
 		<radio_item label="Lokaler Chat" name="script_0"/>
