@@ -31,7 +31,7 @@ const S32 OXP_FORMAT_VERSION = 2;
 
 namespace FSExportPermsCheck
 {
-	bool canExportNode(LLSelectNode* node);
+	bool canExportNode(LLSelectNode* node, bool dae);
 	bool canExportAsset(LLUUID asset_id, std::string* name = NULL, std::string* description = NULL);
 };
 

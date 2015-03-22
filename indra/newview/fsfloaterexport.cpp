@@ -372,7 +372,7 @@ void FSFloaterObjectExport::addPrim(LLViewerObject* object, bool root)
 	} func(object_id);
 	
 	LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode(&func);
-	default_prim = (!FSExportPermsCheck::canExportNode(node));
+	default_prim = (!FSExportPermsCheck::canExportNode(node, false));
 
 	if (root)
 	{
@@ -1155,7 +1155,7 @@ void FSFloaterObjectExport::addSelectedObjects()
 			{
 				node = *iter;
 				mTotal++;
-				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
+				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node, false)) continue;
 				mIncluded++;
 				addObject(node->getObject(), node->mName);
 			}

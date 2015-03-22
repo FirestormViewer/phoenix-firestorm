@@ -35,7 +35,7 @@
 
 #define FOLLOW_PERMS 1
 
-bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
+bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
 {
 	if (!node)
 	{
@@ -97,8 +97,17 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 			{
 				if(volobjp->isMesh())
 				{
-					LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
-					exportable = mesh_header["creator"].asUUID() == gAgentID;
+					if (dae)
+					{
+						LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
+						exportable = mesh_header["creator"].asUUID() == gAgentID;
+					}
+					else
+					{
+						// can not export mesh to oxp
+						LL_INFOS("export") << "Mesh can not be exported to oxp." << LL_ENDL;
+						return false;
+					}
 				}
 				else if (sculpt_params)
 				{

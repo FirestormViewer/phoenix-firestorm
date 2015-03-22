@@ -260,7 +260,7 @@ void ColladaExportFloater::addSelectedObjects()
 			{
 				mTotal++;
 				LLSelectNode* node = *iter;
-				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
+				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node, true)) continue;
 				mIncluded++;
 				mSaver.add(node->getObject(), node->mName);
 			}
