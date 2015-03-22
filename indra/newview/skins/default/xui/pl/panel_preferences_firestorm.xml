@@ -193,7 +193,7 @@
         <spinner label="Blask" name="glow"/>
         <check_box label="Pełna jasność" name="EmFBToggle"/>
         <combo_box name="combobox shininess" tool_tip="Określ, jak mocny połysk ma mieć obiekt">
-          <combo_item name="None" label="Żadny"/>
+          <combo_item name="None" label="Żaden"/>
           <combo_item name="Low" label="Niski"/>
           <combo_item name="Medium" label="Średni"/>
           <combo_item name="High" label="Wysoki"/>
