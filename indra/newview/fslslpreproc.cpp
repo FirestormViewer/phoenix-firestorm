@@ -333,7 +333,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 
 			boost::regex findfuncts(
 				rDOT_MATCHES_NEWLINE
-				"^(?:" // Skip variable declarations. RE for a variable declaration follows.
+				"(?:" // RE for a variable declaration follows.
 					// skip leading whitespace and comments
 					rOPT_SPC
 					// type<space or comments>identifier[<space or comments>]
@@ -342,7 +342,8 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 						// comments or strings or characters that are not a semicolon
 						"(?:" rCMNT_OR_STR "|[^;])+"
 					")?;" // the whole assignment is optional, the semicolon isn't
-				")*" // (zero or more variable declarations skipped)
+				")"
+				"|"
 				"(" // start capturing group 1 here (to identify the starting point of the fn def)
 					rOPT_SPC // skip whitespace
 					// optionally: type<space or comments>
@@ -357,19 +358,26 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 			boost::smatch TOPfmatch;
 			std::set<std::string> kept_functions;
 			std::map<std::string, std::string> functions;
+			std::string::const_iterator search_start = top.begin();
 			
-			while (boost::regex_search(std::string::const_iterator(top.begin()), std::string::const_iterator(top.end()), TOPfmatch, findfuncts, boost::match_default))
+			while (boost::regex_search(search_start, std::string::const_iterator(top.end()), TOPfmatch, findfuncts, boost::match_default))
 			{
-				
-				//std::string type = TOPfmatch[1];
-				std::string funcname = TOPfmatch[2];
+				if (TOPfmatch[1].matched)
+				{
+					std::string funcname = TOPfmatch[2];
 
-				// Grab starting position of group 1
-				S32 pos = TOPfmatch.position(boost::match_results<std::string::const_iterator>::size_type(1));
-				std::string funcb = scopeript2(top, pos);
-				functions[funcname] = funcb;
-				LL_DEBUGS() << "func " << funcname << " added to list[" << funcb << "]" << LL_ENDL;
-				top.erase(pos,funcb.size());
+					// Grab starting position of group 1
+					S32 pos = TOPfmatch.position(boost::match_results<std::string::const_iterator>::size_type(1));
+					std::string funcb = scopeript2(top, pos);
+					functions[funcname] = funcb;
+					LL_DEBUGS() << "func " << funcname << " added to list[" << funcb << "]" << LL_ENDL;
+					top.erase(pos,funcb.size());
+					search_start = top.begin() + pos;
+				}
+				else
+				{
+					search_start = TOPfmatch[0].second;
+				}
 			}
 			
 			bool repass = false;
@@ -475,6 +483,13 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 	catch (boost::regex_error& e)
 	{
 		std::string err = "not a valid regular expression: \"";
+		err += e.what();
+		err += "\"; optimization skipped";
+		LL_WARNS() << err << LL_ENDL;
+	}
+	catch (std::exception& e)
+	{
+		std::string err = "std::exception caught: \"";
 		err += e.what();
 		err += "\"; optimization skipped";
 		LL_WARNS() << err << LL_ENDL;
