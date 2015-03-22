@@ -3086,7 +3086,7 @@
              parameter="all" />
         </menu_item_call>
      <menu_item_check
-         label="Show Develop Menu"
+         label="Show Developer Menu"
          name="Debug Mode"
          shortcut="control|alt|Q">
             <menu_item_check.on_check
