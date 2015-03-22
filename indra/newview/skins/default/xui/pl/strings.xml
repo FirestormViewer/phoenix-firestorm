@@ -5549,4 +5549,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSRegionRestartInLocalChat">
 		Region, w którym teraz jesteś zostanie za chwilę zrestartowany. Jeśli w nim zostaniesz, to symulator Cię wyloguje.
 	</string>
+	<string name="Mute_Add">
+		Dodano '[NAME]' do listy zablokowanych.
+	</string>
+	<string name="Mute_Remove">
+		Usunięto '[NAME]' z listy zablokowanych.
+	</string>
 </strings>
