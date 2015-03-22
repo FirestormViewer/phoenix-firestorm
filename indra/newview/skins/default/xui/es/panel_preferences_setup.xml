@@ -27,7 +27,7 @@
 		</panel>
 		<panel label="Directorio" name="tab-dir">
 			<text name="cache_size_label_l">
-				Tamaño de la caché:
+				Tamaño de la caché ([http://wiki.phoenixviewer.com/cache necesita una sugerencia?]):
 			</text>
 			<text name="Cache location">
 				Directorio de la caché:

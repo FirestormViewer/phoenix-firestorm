@@ -27,7 +27,7 @@
 		</panel>
 		<panel label="Местоположение" name="tab-dir">
 			<text name="cache_size_label_l">
-				Объем кэш-памяти:
+				Объем кэш-памяти ([http://wiki.phoenixviewer.com/cache Вам нужен предложение?]):
 			</text>
 			<text name="Cache location">
 				Местоположение кэш файлов:

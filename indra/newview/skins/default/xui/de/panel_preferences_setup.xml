@@ -45,7 +45,7 @@
 		</panel>
 		<panel label="Verzeichnisse" name="tab-dir">
 			<text name="cache_size_label_l">
-				Cache-Größe:
+				Cache-Größe ([http://wiki.phoenixviewer.com/cache Empfehlungen anzeigen?]):
 			</text>
 			<button label="Inventar-Cache löschen" width="137" name="ClearInventoryCache"/>
 			<text name="Cache location">

@@ -27,7 +27,7 @@
 		</panel>
 		<panel label="場所" name="tab-dir">
 			<text name="cache_size_label_l">
-				キャッシュサイズ:
+				キャッシュサイズ ([http://wiki.phoenixviewer.com/cache あなたは提案が必要なのですか?]):
 			</text>
 			<text name="Cache location">
 				キャッシュの場所:

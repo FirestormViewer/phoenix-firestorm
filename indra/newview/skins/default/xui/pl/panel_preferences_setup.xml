@@ -39,7 +39,7 @@
 		</panel>
 		<panel label="Lokalizacje" name="tab-dir">
 			<text name="cache_size_label_l">
-				Rozmiar pamięci podręcznej:
+				Rozmiar pamięci podręcznej ([http://wiki.phoenixviewer.com/cache potrzebujesz sugestii?]):
 			</text>
 			<button label="Wyczyść bufor Szafy" name="ClearInventoryCache"/>
 			<text name="Cache location">

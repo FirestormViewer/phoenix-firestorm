@@ -24,7 +24,7 @@
 		</panel>
 		<panel label="Posizione" name="tab-dir">
 			<text name="cache_size_label_l">
-				Grandezza Cache:
+				Grandezza Cache ([http://wiki.phoenixviewer.com/cache avete bisogno di un consiglio?]):
 			</text>
 			<text name="Cache location">
 				Posizione cache:

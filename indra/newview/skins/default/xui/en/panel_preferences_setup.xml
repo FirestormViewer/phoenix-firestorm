@@ -42,7 +42,7 @@
 		 name="Maximum bandwidth"
 		 mouse_opaque="false"
 		 top_pad="15"
-		 width="400">
+		 width="500">
 			Maximum bandwidth ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
 		</text>
 
@@ -407,8 +407,8 @@
 		 mouse_opaque="false"
 		 name="cache_size_label_l"
 		 top_pad="15"
-		 width="400">
-		   Cache size:
+		 width="500">
+		   Cache size ([http://wiki.phoenixviewer.com/cache need a suggestion?]):
 		</text>
 		<slider
 		 can_edit_text="true"

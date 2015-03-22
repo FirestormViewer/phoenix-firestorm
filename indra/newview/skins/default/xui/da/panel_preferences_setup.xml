@@ -14,7 +14,7 @@
 		</panel>
 		<panel label="Placering" name="tab-dir">
 			<text name="cache_size_label_l">
-				Cache størrelse:
+				Cache størrelse ([http://wiki.phoenixviewer.com/cache need a suggestion?]):
 			</text>
 			<text name="Cache location">
 				Cache placering:
