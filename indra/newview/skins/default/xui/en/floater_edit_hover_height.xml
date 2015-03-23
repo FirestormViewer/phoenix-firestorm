@@ -2,20 +2,20 @@
 <floater
  positioning="cascading"
  ignore_ui_scale="false"
- legacy_header_height="225"
+ legacy_header_height="18"
  can_minimize="true"
  can_close="true"
  can_resize="true"
- min_height="65"
+ min_height="55"
  min_width="515"
- height="65"
+ height="55"
  layout="topleft"
  name="HoverHeight"
  single_instance="true"
  help_topic="hover_height"
  save_rect="true"
  save_visibility="true"
- title="SET HOVER HEIGHT"
+ title="Set Hover Height"
  width="515">
       <slider
      enabled="false"
@@ -31,7 +31,7 @@
      width="501"
      layout="topleft"
      name="HoverHeightSlider"
-     top="35"
+     top="25"
      can_edit_text="true"
      >
     </slider>
