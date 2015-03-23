@@ -33,6 +33,7 @@
 		<pie_slice label="Tex Refresh" name="Texture Refresh"/>
 		<pie_slice label="Outfit bearb." name="Edit My Outfit"/>
 		<pie_slice label="XML ausg." name="Dump XML"/>
+		<pie_slice label="Hover-Höhe" name="Hover Height"/>
 	</pie_menu>
 	<pie_slice label="Texturen" name="Debug..."/>
 </pie_menu>
