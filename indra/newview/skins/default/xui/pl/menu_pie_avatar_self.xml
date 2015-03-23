@@ -33,6 +33,7 @@
         <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
         <pie_slice label="Edytuj strój" name="Edit My Outfit"/>
         <pie_slice label="Zrzuć XML" name="Dump XML"/>
+        <pie_slice label="Uniesienie" name="Hover Height"/>
     </pie_menu>
     <pie_slice label="Pokaż tekstury" name="Debug..."/>
 </pie_menu>
