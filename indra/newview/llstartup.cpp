@@ -2847,6 +2847,8 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		llassert(LLPathfindingManager::getInstance() != NULL);
 		LLPathfindingManager::getInstance()->initSystem();
 
+		gAgentAvatarp->sendHoverHeight();
+
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
 		{

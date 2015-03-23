@@ -82,7 +82,7 @@ protected:
 	LLSliderCtrl(const Params&);
 	friend class LLUICtrlFactory;
 public:
-	virtual ~LLSliderCtrl() {} // Children all cleaned up by default view destructor.
+	virtual ~LLSliderCtrl();
 
 	/*virtual*/ F32	getValueF32() const { return mSlider->getValueF32(); }
 	void			setValue(F32 v, BOOL from_event = FALSE);
@@ -113,6 +113,7 @@ public:
 
 	boost::signals2::connection setSliderMouseDownCallback(	const commit_signal_t::slot_type& cb );
 	boost::signals2::connection setSliderMouseUpCallback( const commit_signal_t::slot_type& cb );
+	boost::signals2::connection setSliderEditorCommitCallback( const commit_signal_t::slot_type& cb );
 
 	/*virtual*/ void	onTabInto();
 
@@ -152,6 +153,7 @@ private:
 	LLUIColor	mTextEnabledColor;
 	LLUIColor	mTextDisabledColor;
 
+	commit_signal_t*	mEditorCommitSignal;
 	// <FS:ND> Searchable text for UI filter
 protected:
 	virtual std::string _getSearchText() const

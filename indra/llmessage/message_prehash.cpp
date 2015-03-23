@@ -1383,6 +1383,8 @@ char const* const _PREHASH_GroupAVSounds = LLMessageStringTable::getInstance()->
 char const* const _PREHASH_AppearanceData = LLMessageStringTable::getInstance()->getString("AppearanceData");
 char const* const _PREHASH_AppearanceVersion = LLMessageStringTable::getInstance()->getString("AppearanceVersion");
 char const* const _PREHASH_CofVersion = LLMessageStringTable::getInstance()->getString("CofVersion");
+char const* const _PREHASH_AppearanceHover = LLMessageStringTable::getInstance()->getString("AppearanceHover");
+char const* const _PREHASH_HoverHeight = LLMessageStringTable::getInstance()->getString("HoverHeight");
 
 // <FS:CR> Aurora Sim
 char const* const _PREHASH_RegionSizeX = LLMessageStringTable::getInstance()->getString("RegionSizeX");

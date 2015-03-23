@@ -35,6 +35,8 @@
 #include "llagent.h"
 #include "llviewerregion.h"
 #include "llnotificationsutil.h"
+#include "llsdserialize.h"
+#include "llvoavatar.h"
 
 LLFloaterPerms::LLFloaterPerms(const LLSD& seed)
 : LLFloater(seed)
@@ -174,15 +176,10 @@ public:
 private:
 	static	std::string sPreviousReason;
 
-	// <FS:Ansariel> Update for new cURL API
-	//void error(U32 status, const std::string& reason)
 	void httpFailure()
-	// </FS:Ansariel>
 	{
+		const std::string& reason = getReason();
 		// Do not display the same error more than once in a row
-		// <FS:Ansariel> Update for new cURL API
-		std::string reason = getReason();
-		// </FS:Ansariel>
 		if (reason != sPreviousReason)
 		{
 			sPreviousReason = reason;
@@ -191,11 +188,12 @@ private:
 			LLNotificationsUtil::add("DefaultObjectPermissions", args);
 		}
 	}
-	// <FS:Ansariel> Update for new cURL API
-	//void result(const LLSD& content)
+
 	void httpSuccess()
-	// </FS:Ansariel>
 	{
+		//const LLSD& content = getContent();
+		//dump_sequential_xml("perms_responder_result.xml", content);
+
 		// Since we have had a successful POST call be sure to display the next error message
 		// even if it is the same as a previous one.
 		sPreviousReason = "";

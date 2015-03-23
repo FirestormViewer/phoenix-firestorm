@@ -1383,6 +1383,8 @@ extern char const* const _PREHASH_GroupAVSounds;
 extern char const* const _PREHASH_AppearanceData;
 extern char const* const _PREHASH_AppearanceVersion;
 extern char const* const _PREHASH_CofVersion;
+extern char const* const _PREHASH_AppearanceHover;
+extern char const* const _PREHASH_HoverHeight;
 
 // <FS:CR> Aurora Sim
 extern char const* const _PREHASH_RegionSizeX;
