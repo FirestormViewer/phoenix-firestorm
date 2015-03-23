@@ -367,9 +367,12 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 					std::string funcname = TOPfmatch[2];
 
 					// Grab starting position of group 1
-					S32 pos = TOPfmatch.position(boost::match_results<std::string::const_iterator>::size_type(1));
+					S32 pos = const_iterator_to_pos(top.begin(), TOPfmatch[1].first);
 					std::string funcb = scopeript2(top, pos);
-					functions[funcname] = funcb;
+					if (functions.find(funcname) != functions.end())
+						functions[funcname] += funcb; // don't hide duplicate definitions
+					else
+						functions[funcname] = funcb;
 					LL_DEBUGS() << "func " << funcname << " added to list[" << funcb << "]" << LL_ENDL;
 					top.erase(pos,funcb.size());
 					search_start = top.begin() + pos;
