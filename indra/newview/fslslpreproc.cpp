@@ -129,12 +129,12 @@ using namespace boost::regex_constants;
 // Definitions to split the expressions into parts to improve readablility
 // (using 'r' as namespace prefix for RE, to avoid conflicts)
 // The code relies on none of these expressions having capturing groups.
-#define rCMNT "//[^\\n]*\\n|/\\*(?:(?!\\*/).)*\\*/" // skip over single- or multi-line comments as a block
-#define rREQ_SPC "(?:" rCMNT "|\\s)+"
-#define rOPT_SPC "(?:" rCMNT "|\\s)*"
-#define rTYPE_ID "[a-z]+"
-#define rIDENT "[A-Za-z_][A-Za-z0-9_]*"
-#define rCMNT_OR_STR rCMNT "|\"(?:[^\"\\\\]|\\\\[^\\n])*\"" // skip over strings as a block too
+#define rCMNT "//[^\\n]*+\\n|/\\*(?:(?!\\*/).)*+\\*/" // skip over single- or multi-line comments as a block
+#define rREQ_SPC "(?:" rCMNT "|\\s)++"
+#define rOPT_SPC "(?:" rCMNT "|\\s)*+"
+#define rTYPE_ID "[a-z]++"
+#define rIDENT "[A-Za-z_][A-Za-z0-9_]*+"
+#define rCMNT_OR_STR rCMNT "|\"(?:[^\"\\\\]|\\\\[^\\n])*+\"" // skip over strings as a block too
 #define rDOT_MATCHES_NEWLINE "(?s)"
 
 std::string FSLSLPreprocessor::encode(const std::string& script)
@@ -310,178 +310,176 @@ static void shredder(std::string& text)
 std::string FSLSLPreprocessor::lslopt(std::string script)
 {
 	
-	script = " \n" + script;//HACK//this should prevent regex fail for functions starting on line 0, column 0
-	//added more to prevent split fail on scripts with no global data
-	//this should be fun
-
-	//Removes invalid characters from the script.
-	shredder(script);
-	
 	try
 	{
-		boost::smatch result;
-		if (boost::regex_match(script, result, boost::regex(rDOT_MATCHES_NEWLINE
-			"((?:" rCMNT_OR_STR "|.)*?)" // any tokens (non-greedy)
-			"(" // capture states (include any whitespace and comments preceding 'default')
-				rOPT_SPC "default" rOPT_SPC "\\{.*"
-			")"
-		)))
-		{
-			
-			std::string top = result[1];
-			std::string bottom = result[2];
+		std::string bottom;
+		std::set<std::string> kept_functions;
+		std::map<std::string, std::string> functions;
+		std::vector<std::pair<std::string, std::string> > gvars;
 
-			boost::regex findfuncts(
+		{	// open new scope for local vars
+
+			// Loop over every declaration in the script, classifying it according to type.
+
+			boost::regex finddecls(
 				rDOT_MATCHES_NEWLINE
-				"(?:" // RE for a variable declaration follows.
-					// skip leading whitespace and comments
-					rOPT_SPC
+				"(^" // Group 1: RE for a variable declaration.
+					rOPT_SPC // skip (but capture) leading whitespace and comments
 					// type<space or comments>identifier[<space or comments>]
-					rTYPE_ID rREQ_SPC rIDENT rOPT_SPC
+					rTYPE_ID rREQ_SPC "(" rIDENT ")" rOPT_SPC // Group 2: Identifier
 					"(?:=" // optionally with an assignment
 						// comments or strings or characters that are not a semicolon
-						"(?:" rCMNT_OR_STR "|[^;])+"
+						"(?:" rCMNT_OR_STR "|[^;])++"
 					")?;" // the whole assignment is optional, the semicolon isn't
 				")"
 				"|"
-				"(" // start capturing group 1 here (to identify the starting point of the fn def)
-					rOPT_SPC // skip whitespace
-					// optionally: type<space or comments>
-					"(?:" rTYPE_ID rREQ_SPC ")?"
-					// identifier (captured as group 2)
-					"(" rIDENT ")"
-				")" // end of group 1
+				"(^" // Group 3: RE for a function declaration (captures up to the identifier inclusive)
+					rOPT_SPC // skip (but capture) whitespace
+					// optionally: type<space or comments>, then ident
+					"(?:" rTYPE_ID rREQ_SPC ")?(" rIDENT ")" // Group 4: identifier
+				")"
 				rOPT_SPC
 				"\\(" // this opening paren is the key for it to be a function
+				"|"
+				"(^" // Group 5: State default, possibly preceded by syntax errors
+					rOPT_SPC // skip (but capture) whitespace
+					"(?:"
+						rCMNT_OR_STR // skip strings and comments
+						"|(?!"
+							rCMNT_OR_STR
+							"|(?<![A-Za-z0-9_])default(?![A-Za-z0-9_])"
+						")." // any character that does not start a comment/string/'default'
+					")*+" // don't backtrack
+					"(?<![A-Za-z0-9_])default(?![A-Za-z0-9_])"
+				")"
 			);
-			
-			boost::smatch TOPfmatch;
-			std::set<std::string> kept_functions;
-			std::map<std::string, std::string> functions;
-			std::string::const_iterator search_start = top.begin();
-			
-			while (boost::regex_search(search_start, std::string::const_iterator(top.end()), TOPfmatch, findfuncts, boost::match_default))
-			{
-				if (TOPfmatch[1].matched)
-				{
-					std::string funcname = TOPfmatch[2];
 
-					// Grab starting position of group 1
-					S32 pos = const_iterator_to_pos(top.begin(), TOPfmatch[1].first);
-					std::string funcb = scopeript2(top, pos);
-					if (functions.find(funcname) != functions.end())
-						functions[funcname] += funcb; // don't hide duplicate definitions
-					else
-						functions[funcname] = funcb;
-					LL_DEBUGS() << "func " << funcname << " added to list[" << funcb << "]" << LL_ENDL;
-					top.erase(pos,funcb.size());
-					search_start = top.begin() + pos;
-				}
-				else
+			boost::smatch result;
+
+			std::string top = std::string("\n") + script;
+
+			while (boost::regex_search(std::string::const_iterator(top.begin()), std::string::const_iterator(top.end()), result, finddecls))
+			{
+				S32 len;
+
+				if (result[1].matched)
 				{
-					search_start = TOPfmatch[0].second;
+					// variable declaration
+					gvars.push_back(std::make_pair(result[2], result[0]));
+					len = const_iterator_to_pos(top.begin(), result[0].second);
 				}
+				else if (result[3].matched)
+				{
+					// function declaration
+					std::string funcname = result[4];
+					std::string funcb = scopeript2(top, 0);
+					functions[funcname] = funcb;
+					len = funcb.length();
+				}
+				else //if (result[5].matched) // assumed
+				{
+					// found end of globals or syntax error
+					bottom = top;
+					break;
+				}
+
+				// Delete the declaration just found
+				top.erase(0, len);
 			}
-			
-			bool repass = false;
-			do
-			{
-				
-				repass = false;
-				std::map<std::string, std::string>::iterator func_it;
-				for (func_it = functions.begin(); func_it != functions.end(); func_it++)
-				{
-					
-					std::string funcname = func_it->first;
-					
-					if (kept_functions.find(funcname) == kept_functions.end())
-					{
-						
-						boost::smatch calls;
-												//funcname has to be [a-zA-Z0-9_]+, so we know it's safe
-						boost::regex findcalls(std::string(rDOT_MATCHES_NEWLINE
-							"(?:" rCMNT_OR_STR "|(?<![a-zA-Z0-9_])(") + funcname
-							+ std::string(")" rOPT_SPC "\\(|.)*"));
-						
-						std::string::const_iterator bstart = bottom.begin();
-						std::string::const_iterator bend = bottom.end();
 
-						if (boost::regex_match(bstart, bend, calls, findcalls, boost::match_default))
+			if (bottom.empty())
+				return script; // don't optimize if there's no default state
+		}
+
+		// Find function calls and add the used function declarations back.
+		// Each time a function is added to the script a new pass is done
+		// so that function calls inside the added functions are seen.
+
+		bool repass;
+		do
+		{
+			repass = false;
+			std::map<std::string, std::string>::iterator func_it;
+			for (func_it = functions.begin(); func_it != functions.end(); func_it++)
+			{
+
+				std::string funcname = func_it->first;
+
+				if (kept_functions.find(funcname) == kept_functions.end())
+				{
+
+					boost::smatch calls;
+											//funcname has to be [a-zA-Z0-9_]+, so we know it's safe
+					boost::regex findcalls(std::string() +
+						rDOT_MATCHES_NEWLINE
+						"(?<![A-Za-z0-9_])(" + funcname + ")" rOPT_SPC "\\(" // a call to the function...
+						"|(?:"
+							rCMNT_OR_STR // or comment or string...
+							"|(?!"
+								rCMNT_OR_STR
+								"|(?<![A-Za-z0-9_])" + funcname + rOPT_SPC "\\("
+							")." // or any other character that is not the start for a match of the above
+						")++" // eat as many uninteresting characters/sequences as possible
+					);
+
+					std::string::const_iterator bstart = bottom.begin();
+					std::string::const_iterator bend = bottom.end();
+
+					while (boost::regex_search(bstart, bend, calls, findcalls, boost::match_default))
+					{
+						if (calls[1].matched)
 						{
-							if (calls[1].matched)
-							{
-								std::string function = func_it->second;
-								kept_functions.insert(funcname);
-								bottom = function + bottom;
-								repass = true;
-							}
+							std::string function = func_it->second;
+							kept_functions.insert(funcname);
+							bottom = function + bottom;
+							repass = true;
+							break;
+						}
+						else
+						{
+							bstart = calls[0].second;
 						}
 					}
 				}
 			}
-			while (repass);
-
-			std::vector<std::pair<std::string, std::string> > gvars;
-			boost::regex findvars(rDOT_MATCHES_NEWLINE
-				"^" // must be at start of script (we're deleting them as they are found)
-				rOPT_SPC // skip whitespace or comments
-				// type<space or comments>identifier (captured as group 1)
-				rTYPE_ID rREQ_SPC "(" rIDENT ")" rOPT_SPC
-				// optional assignment, non-optional semicolon
-				"(?:=(?:" rCMNT_OR_STR "|[^;])+)?;"
-			);
-			boost::smatch TOPvmatch;
-			
-			while(boost::regex_search(std::string::const_iterator(top.begin()), std::string::const_iterator(top.end()), TOPvmatch, findvars, boost::match_default))
-			{
-				
-				std::string varname = TOPvmatch[1];
-				std::string fullref = TOPvmatch[0];
-
-				gvars.insert(gvars.begin(), std::make_pair(varname, fullref));
-				S32 start = const_iterator_to_pos(std::string::const_iterator(top.begin()), TOPvmatch[0].first);
-				top.erase(start, fullref.length());
-			}
-
-			// top must be empty now, after removing all var and function declarations
-			// (if it isn't, it means it has a syntax error such an extra semicolon etc.)
-			boost::smatch discarded;
-			// should always match but we guard it in an if() just in case
-			if (boost::regex_match(top, discarded, boost::regex(rDOT_MATCHES_NEWLINE rOPT_SPC "(.*?)" rOPT_SPC)))
-			{
-				if (discarded[1].matched)
-				{
-					top = discarded[1];
-					if (!top.empty())
-					{
-						LL_DEBUGS() << "syntax error in globals section: \"" << top << "\"" << LL_ENDL;
-					}
-				}
-			}
-			
-			std::vector<std::pair<std::string, std::string> >::iterator var_it;
-			for (var_it = gvars.begin(); var_it != gvars.end(); var_it++)
-			{
-				
-				std::string varname = var_it->first;
-				boost::regex findvcalls(std::string(rDOT_MATCHES_NEWLINE
-					"(?:" rCMNT_OR_STR "|(?<![a-zA-Z0-9_.])(") + varname + std::string(")(?![a-zA-Z0-9_\"])|.)*"));
-				boost::smatch vcalls;
-				std::string::const_iterator bstart = bottom.begin();
-				std::string::const_iterator bend = bottom.end();
-				
-				if (boost::regex_match(bstart, bend, vcalls, findvcalls, boost::match_default))
-				{
-					if (vcalls[1].matched)
-					{
-						bottom = var_it->second + bottom;
-					}
-				}
-			}
-
-			// Don't hide syntax errors - append the unmatched part of the top to the script too
-			script = top + bottom;
 		}
+		while (repass);
+
+		// Find variable invocations and add the declarations back if used.
+
+		std::vector<std::pair<std::string, std::string> >::reverse_iterator var_it;
+		for (var_it = gvars.rbegin(); var_it != gvars.rend(); var_it++)
+		{
+
+			std::string varname = var_it->first;
+			boost::regex findvcalls(std::string() + rDOT_MATCHES_NEWLINE
+				"(?<![a-zA-Z0-9_.])(" + varname + ")(?![a-zA-Z0-9_\"])" // invocation of the variable
+				"|(?:" rCMNT_OR_STR // a comment or string...
+					"|(?!"
+						rCMNT_OR_STR
+						"|(?<![a-zA-Z0-9_.])" + varname + "(?![a-zA-Z0-9_\"])"
+					")." // or any other character that is not the start for a match of the above
+				")++" // eat as many uninteresting characters/sequences as possible
+			);
+			boost::smatch vcalls;
+			std::string::const_iterator bstart = bottom.begin();
+			std::string::const_iterator bend = bottom.end();
+
+			while (boost::regex_search(bstart, bend, vcalls, findvcalls, boost::match_default))
+			{
+				if (vcalls[1].matched)
+				{
+					bottom = var_it->second + bottom;
+					break;
+				}
+				else
+				{
+					bstart = vcalls[0].second;
+				}
+			}
+		}
+
+		script = bottom;
 	}
 	catch (boost::regex_error& e)
 	{
@@ -489,17 +487,17 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		err += e.what();
 		err += "\"; optimization skipped";
 		LL_WARNS() << err << LL_ENDL;
+		display_error(err);
+		throw;
 	}
 	catch (std::exception& e)
 	{
-		std::string err = "std::exception caught: \"";
+		std::string err = "Exception caught: \"";
 		err += e.what();
 		err += "\"; optimization skipped";
 		LL_WARNS() << err << LL_ENDL;
-	}
-	catch (...)
-	{
-		LL_WARNS() << "unexpected exception caught; optimization skipped" << LL_ENDL;
+		display_error(err);
+		throw;
 	}
 	return script;
 }
@@ -515,12 +513,19 @@ std::string FSLSLPreprocessor::lslcomp(std::string script)
 	{
 		std::string err = "not a valid regular expression: \"";
 		err += e.what();
-		err += "\"; compression skipped";
+		err += "\"";
 		LL_WARNS() << err << LL_ENDL;
+		display_error(err);
+		throw;
 	}
-	catch (...)
+	catch (std::exception& e)
 	{
-		LL_WARNS() << "unexpected exception caught; compression skipped" << LL_ENDL;
+		std::string err = "Exception caught: \"";
+		err += e.what();
+		err += "\"";
+		LL_WARNS() << err << LL_ENDL;
+		display_error(err);
+		throw;
 	}
 	return script;
 }
@@ -808,36 +813,42 @@ list lazy_list_set(list L, integer i, list v)\n\
 
 static void subst_lazy_references(std::string& script, std::string retype, std::string fn)
 {
-	script = boost::regex_replace(script, boost::regex(std::string(rDOT_MATCHES_NEWLINE
-		rCMNT_OR_STR "|"
-		"\\(" rOPT_SPC ) + retype + std::string(rOPT_SPC "\\)" rOPT_SPC
-		// group 1: leading parenthesis
-		"(\\()?"
-		// group 2: identifier
-		rOPT_SPC "([a-zA-Z_][a-zA-Z0-9_]*)"
-		rOPT_SPC "\\["
-		// group 3: subindex expression
-		"((?:"
-			rCMNT_OR_STR
-			// group 4: recursive bracketed expression
-			"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?4))\\])" // recursive bracketed expression (e.g. []!=[])
-			"|[^][]" // or anything else
-		")+?)" // (non-greedy)
-		"\\]"
-		// group 5: trailing parenthesis
-		"(\\))?"
-		)),
-		// Boost supports conditions in format strings used in regex_replace.
-		// ?nX:Y means output X if group n matched, else output Y. $n means output group n.
-		// $& means output the whole match, which is used here to not alter the string.
-		// Parentheses are used for grouping; they have to be prefixed with \ to output them.
-		std::string("?2" // if group 2 matched, we have a (type)variable[index] to substitute
-		// if first paren is present, require the second (output the original text if not present)
-		"(?1(?5$1") + fn + std::string("\\($2,$3\\)$5:$&):")
-		// if first parent is not present, copy $5 verbatim (matched or not)
-		+ fn + std::string("\\($2,$3\\)$5):"
-		// if $2 didn't match, output whatever matched (string or comment)
-		"$&"), boost::format_all); // format_all enables these features
+	std::string ref;
+	do
+	{
+		ref = script;
+		script = boost::regex_replace(script, boost::regex(std::string(rDOT_MATCHES_NEWLINE
+			rCMNT_OR_STR "|"
+			"\\(" rOPT_SPC ) + retype + std::string(rOPT_SPC "\\)" rOPT_SPC
+			// group 1: leading parenthesis
+			"(\\()?"
+			// group 2: identifier
+			rOPT_SPC "([a-zA-Z_][a-zA-Z0-9_]*+)"
+			rOPT_SPC "\\["
+			// group 3: subindex expression
+			"((?:"
+				rCMNT_OR_STR
+				// group 4: recursive bracketed expression
+				"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?4))*+\\])" // recursive bracketed expression (e.g. []!=[])
+				"|[^][]" // or anything else
+			")+?)" // (non-greedy)
+			"\\]"
+			// group 5: trailing parenthesis
+			"(\\))?"
+			)),
+			// Boost supports conditions in format strings used in regex_replace.
+			// ?nX:Y means output X if group n matched, else output Y. $n means output group n.
+			// $& means output the whole match, which is used here to not alter the string.
+			// Parentheses are used for grouping; they have to be prefixed with \ to output them.
+			std::string("?2" // if group 2 matched, we have a (type)variable[index] to substitute
+			// if first paren is present, require the second (output the original text if not present)
+			"(?1(?5$1") + fn + std::string("\\($2,$3\\)$5:$&):")
+			// if first parent is not present, copy $5 verbatim (matched or not)
+			+ fn + std::string("\\($2,$3\\)$5):"
+			// if $2 didn't match, output whatever matched (string or comment)
+			"$&"), boost::format_all); // format_all enables these features
+	}
+	while (script != ref);
 }
 
 static std::string reformat_lazy_lists(std::string script)
@@ -847,18 +858,18 @@ static std::string reformat_lazy_lists(std::string script)
 	nscript = boost::regex_replace(nscript, boost::regex(rDOT_MATCHES_NEWLINE
 		rCMNT_OR_STR "|"
 		// group 1: identifier
-		"([a-zA-Z_][a-zA-Z0-9_]*)" rOPT_SPC
+		"([a-zA-Z_][a-zA-Z0-9_]*+)" rOPT_SPC
 		// group 2: expression within brackets
 		"\\[((?:" rCMNT_OR_STR
 		// group 3: recursive bracketed expression
-		"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?3))\\])" // recursive bracketed expression (e.g. []!=[])
+		"|(\\[(?:" rCMNT_OR_STR "|[^][]|(?3))*+\\])" // recursive bracketed expression (e.g. []!=[])
 		"|[^][]" // or anything else
 		")+?)\\]" rOPT_SPC // non-greedy
 		"=" rOPT_SPC
 		// group 4: right-hand side expression
 		"((?:" rCMNT_OR_STR
 			// group 5: recursive parenthesized expression
-			"|(\\((?:" rCMNT_OR_STR "|[^()]|(?5))\\))" // recursive parenthesized expression
+			"|(\\((?:" rCMNT_OR_STR "|[^()]|(?5))*+\\))" // recursive parenthesized expression
 			"|[^()]" // or anything else
 		")+?)" // non-greedy
 		"([;)])" // terminated only with a semicolon or a closing parenthesis
@@ -878,7 +889,7 @@ static std::string reformat_lazy_lists(std::string script)
 				rTYPE_ID rREQ_SPC rIDENT rOPT_SPC
 				"(?:=" // optionally with an assignment
 					// comments or strings or characters that are not a semicolon
-					"(?:" rCMNT_OR_STR "|[^;])+"
+					"(?:" rCMNT_OR_STR "|[^;])++"
 				")?;" // the whole assignment is optional, the semicolon isn't
 				"|"
 				// RE for function declarations follows.
@@ -887,9 +898,9 @@ static std::string reformat_lazy_lists(std::string script)
 				"(?:" rTYPE_ID rREQ_SPC ")?" rIDENT rOPT_SPC
 				// open parenthesis, comments or other stuff, close parenthesis
 				// (strings can't appear in the parameter list so don't bother to skip them)
-				"\\((?:" rCMNT "|[^()])*\\)" rOPT_SPC
+				"\\((?:" rCMNT "|[^()])*+\\)" rOPT_SPC
 				// capturing group 1 used for nested curly braces
-				"(\\{(?:" rCMNT_OR_STR "|(?1)|[^{}])\\})" // recursively skip braces
+				"(\\{(?:" rCMNT_OR_STR "|(?1)|[^{}])*+\\})" // recursively skip braces
 			")*?" // (zero or more variable/function declarations skipped)
 			rOPT_SPC "(?:" rTYPE_ID rREQ_SPC ")?lazy_list_set" rOPT_SPC "\\("
 		)) ? false : true;
@@ -954,7 +965,7 @@ static std::string reformat_switch_statements(std::string script)
 			boost::regex findswitches(rDOT_MATCHES_NEWLINE
 				"(?:" rCMNT_OR_STR
 				"|(?<![A-Za-z0-9_])(switch" rOPT_SPC "\\()"
-				"|.)*"
+				"|.)*+"
 				);
 
 			boost::smatch matches;
@@ -991,7 +1002,7 @@ static std::string reformat_switch_statements(std::string script)
 				LL_DEBUGS() << "rstate=[" << rstate << "]" << LL_ENDL;
 
 				boost::regex findcases(rDOT_MATCHES_NEWLINE
-					"(?:" rCMNT_OR_STR "|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.)*");
+					"(?:" rCMNT_OR_STR "|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.)*+");
 
 				boost::smatch statematches;
 
@@ -1093,16 +1104,10 @@ static std::string reformat_switch_statements(std::string script)
 			}
 			script = buffer;
 		}
-		catch (boost::regex_error& e)
-		{
-			std::string err = "not a valid regular expression: \"";
-			err += e.what();
-			err += "\"; switch statements skipped";
-			LL_WARNS() << err << LL_ENDL;
-		}
 		catch (...)
 		{
 			LL_WARNS() << "unexpected exception caught; buffer=[" << buffer << "]" << LL_ENDL;
+			throw;
 		}
 	}
 	return script;
@@ -1349,12 +1354,33 @@ void FSLSLPreprocessor::start_process()
 			try
 			{
 				display_message("Applying lazy list set transform");
-				output = reformat_lazy_lists(output);
+				try
+				{
+					output = reformat_lazy_lists(output);
+				}
+				catch (boost::regex_error& e)
+				{
+					std::string err = "not a valid regular expression: \"";
+					err += e.what();
+					err += "\"";
+					LL_WARNS() << err << LL_ENDL;
+					display_error(err);
+					throw;
+				}
+				catch (std::exception& e)
+				{
+					std::string err = "Exception caught: \"";
+					err += e.what();
+					err += "\"";
+					LL_WARNS() << err << LL_ENDL;
+					display_error(err);
+					throw;
+				}
 			}
 			catch(...)
 			{
 				errored = true;
-				err = "unexpected exception in lazy list converter.";
+				err = "unexpected exception in lazy list converter; not applied";
 				display_error(err);
 			}
 
@@ -1364,12 +1390,33 @@ void FSLSLPreprocessor::start_process()
 			try
 			{
 				display_message("Applying switch statement transform");
-				output = reformat_switch_statements(output);
+				try
+				{
+					output = reformat_switch_statements(output);
+				}
+				catch (boost::regex_error& e)
+				{
+					std::string err = "not a valid regular expression: \"";
+					err += e.what();
+					err += "\"";
+					LL_WARNS() << err << LL_ENDL;
+					display_error(err);
+					throw;
+				}
+				catch (std::exception& e)
+				{
+					std::string err = "Exception caught: \"";
+					err += e.what();
+					err += "\"";
+					LL_WARNS() << err << LL_ENDL;
+					display_error(err);
+					throw;
+				}
 			}
 			catch(...)
 			{
 				errored = true;
-				err = "unexpected exception in switch statement converter.";
+				err = "unexpected exception in switch statement converter; not applied";
 				display_error(err);
 			}
 		}
@@ -1389,7 +1436,7 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{	
 					errored = true;
-					err = "unexpected exception in lsl optimizer";
+					err = "unexpected exception in lsl optimizer; not applied";
 					display_error(err);
 				}
 			}
@@ -1406,7 +1453,7 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{
 					errored = true;
-					err = "unexpected exception in lsl compressor";
+					err = "unexpected exception in lsl compressor; not applied";
 					display_error(err);
 				}
 			}
