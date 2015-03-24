@@ -24,6 +24,7 @@
 		</text>
 		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
 		<check_box label="Partikeleffekte erzeugen, wenn Skripte kommunizieren" name="EffectScriptChatParticles" tool_tip="Falls aktiviert, werden Partikeleffekte um kommunizierende Objekte erzeugt."/>
+		<check_box label="Bei Teleports immer „Abbrechen“-Button anzeigen" name="FSAlwaysShowTPCancel" tool_tip="Falls aktiviert, wird immer der „Abbrechen“-Button bei einem Teleport anzeigt, auch wenn der Simulator anderweitiges behauptet. Der Simulator weiß zu jeder Zeit, ob ein Teleport abgebrochen werden kann und ignoriert einen Abbruch-Befehl bei Gott- und Todes-TPs sowieso. RLVa-Restriktionen können diese Einstellung übersteuern."/>
 		<check_box label="Deaktiviere Leitstrahl, wenn Zielavatar erreicht wird (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Falls aktiviert, wird der Leitstrahl zum Zielavatar deaktiviert, wenn die Distanz weniger als 3m beträgt. (Standard)"/>
 		<check_box label="Deaktiviere Teleport-Leitstrahl" name="tp_beam_toggle" tool_tip="Deaktiviert den Leitstrahl zum Teleportziel nach Teleports."/>
 		<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>

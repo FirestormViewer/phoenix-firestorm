@@ -67,7 +67,7 @@
 	</panel>
 
 	<!--Interface Windows-->
-	<panel label="Interface Windows" name="UI-interface-windows-tab">
+	<panel label="Fenster" name="UI-interface-windows-tab">
 		<check_box label="Beim Klicken auf Avatarnamen direkt Profil öffnen" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Falls aktiviert, wird bei einem Klick auf den Namenslink eines Avatars direkt dessen komplettes Profil geöffnet."/>
 		<check_box name="FSUseWebProfiles" label="Webprofile als Standard nutzen" tool_tip="Zeigt profile als Webseite anstelle des Profilfensters im Viewer-1-Stil"/>
 		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
@@ -108,7 +108,7 @@
 		</radio_group>
 		<check_box label="Berechtigungsspalte anzeigen" name="FSFriendListColumnShowPermissions" tool_tip="Die Kontaktliste zeigt eine Spalte mit Berechtigungen an, die diesem Avatar gegeben wurden - und umgekehrt."/>
 		<text name="textInventoryOptions">
-			Inventory options:
+			Inventar-Optionen:
 		</text>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
 		<check_box label="Ordner &quot;Erhaltene Artikel&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Erhaltene Artikel&quot; als normaler Ordner im Inventar angezeigt."/>

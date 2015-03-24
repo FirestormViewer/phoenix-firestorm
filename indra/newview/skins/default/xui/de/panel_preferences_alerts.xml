@@ -41,6 +41,7 @@
 	<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
 	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
 	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
+	<check_box label="Doppelte IM-Nachrichten filtern, wenn sie bereits als Schlüsselwort-Alarm angezeigt wurden" name="FSFilterGrowlKeywordDuplicateIMs"/>
     </panel>
 
     <!-- Alerts -->
