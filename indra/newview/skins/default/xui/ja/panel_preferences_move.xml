@@ -31,6 +31,7 @@
 				（再起動が必要）
 			</text>
 			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
+			<check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
 			<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
 			<check_box label="シミュレーターのチャネルをステータスバーに表示" name="FSStatusbarShowSimulatorVersion" tool_tip="１系仕様のステータスバーにシミューレーターのチャネルを表示します。"/>
 		</panel>
@@ -112,6 +113,7 @@
 			<check_box label="世界地図上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="世界地図のランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
 			<check_box label="世界地図にその地域の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="世界地図上にその地域の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>
 			<check_box label="世界地図にグリッド座標を表示" name="FSShowRegionGridCoordinates" tool_tip="世界地図上にグリッド座標を地域単位で表示します。" />
+			<check_box label="世界地図でダブルクリックテレポート" name="FSWorldMapDoubleclickTeleport" tool_tip="世界地図をダブルクリックしてその場所にテレポートできるようにします"/>
 		</panel>
 	 
 	</tab_container>

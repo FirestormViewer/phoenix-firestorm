@@ -22,6 +22,7 @@
 			<text name="ignorecameraconstraints_requires_restart">
 				(Richiesto riavvio)
 			</text>
+			<check_box label="Gli avatar bloccati saranno visualizati come nuvole" name="ShowMutedAvatarsAsCloud" tool_tip="Gli avatar Bloccati saranno visualizati come nuvole di un colore speciale." />
 		</panel>
 		<!--Mouselook-->
 		<panel name="tab-mouselook" label="Mouselook">
@@ -75,6 +76,7 @@
 			</combo_box>
 			<check_box label="Filtra i Landmarks sulla World Map" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra i Lanmarks doppi quando si effettua la visualizzazione del posto dalla World Map"/>
 			<check_box label="Mostra ulteriori informazioni sulla regione nella Mappa del mondo" name="FSAdvancedWorldmapRegionInfo" tool_tip="Mostra informazioni aggiuntive sulla Mappa del mondo(Numero degli avatar in sim e livello di accesso)."/>
+			<check_box label="Abilita doppio click teleport sulla Mappa del mondo" name="FSWorldMapDoubleclickTeleport" tool_tip="Abilita il doppio click per teleportarsi a destinazione sulla Mappa del mondo"/>
 		</panel>
 	</tab_container>
 </panel>

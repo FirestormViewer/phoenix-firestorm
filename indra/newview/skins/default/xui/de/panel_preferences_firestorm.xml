@@ -16,51 +16,20 @@
 
 <tab_container label="Firestorm Prefs" name="tabs">
 
-	<!--General-->
-	<panel label="Allgemein" name="tab-general" >
+	<!--Extras-->
+	<panel label="Extras" name="tab-extras" >
 		<check_box name="checkMiscRLVa" label="Skripten Kontrolle über Viewer erlauben (RLVa)"/>
 		<text name="textMiscRLVaRestart">
 			(Erfordert Neustart)
 		</text>
-		<check_box label="Aktiviere Teleport via Doppelklick auf der Weltkarte" name="FSWorldMapDoubleclickTeleport" tool_tip="Aktiviert das Teleportieren zu einem Ziel auf der Weltkarte mittels Doppelklick."/>
+		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
+		<check_box label="Partikeleffekte erzeugen, wenn Skripte kommunizieren" name="EffectScriptChatParticles" tool_tip="Falls aktiviert, werden Partikeleffekte um kommunizierende Objekte erzeugt."/>
+		<check_box label="Deaktiviere Leitstrahl, wenn Zielavatar erreicht wird (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Falls aktiviert, wird der Leitstrahl zum Zielavatar deaktiviert, wenn die Distanz weniger als 3m beträgt. (Standard)"/>
 		<check_box label="Deaktiviere Teleport-Leitstrahl" name="tp_beam_toggle" tool_tip="Deaktiviert den Leitstrahl zum Teleportziel nach Teleports."/>
 		<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logins" name="login_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logins."/>
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logouts" name="logout_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logouts."/>
-		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
-		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
-		<text name="textFriendlistOptions">
-			Einstellungen für Kontaktliste:
-		</text>
-		<text name="textFriendlistColumns" width="145">
-			Sichtbare Namensspalten:
-		</text>
-		<check_box label="Benutzername" name="FSFriendListColumnShowUserName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem Benutzernamen des Freundes an." width="95"/>
-		<check_box label="Anzeigename" name="FSFriendListColumnShowDisplayName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem Anzeigenamen des Freundes an."/>
-		<check_box label="Vollständiger Name" name="FSFriendListColumnShowFullName" tool_tip="Die Kontaktliste zeigt eine Spalte mit dem vollständigen Namen des Freundes an."/>
-		<text name="textFriendListSortOrder" width="85">
-			Sortieren nach:
-		</text>
-		<radio_group name="FSFriendListSortOrder">
-			<radio_item label="Benutzername" name="username" width="95"/>
-			<radio_item label="Anzeigename" name="displayname" width="95"/>
-		</radio_group>
-		<text name="textFriendListFullNameFormat" width="155">
-			Format vollständiger Name:
-		</text>
-		<radio_group name="FSFriendListFullNameFormat">
-			<radio_item label="Benutzern. (Anzeigen.)" name="username_displayname" width="140"/>
-			<radio_item label="Anzeigen. (Benutzern.)" name="displayname_username" width="140"/>
-		</radio_group>
-		<check_box label="Berechtigungsspalte anzeigen" name="FSFriendListColumnShowPermissions" tool_tip="Die Kontaktliste zeigt eine Spalte mit Berechtigungen an, die diesem Avatar gegeben wurden - und umgekehrt."/>
-		<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
-		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
-		<check_box label="Ordner &quot;Erhaltene Artikel&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Erhaltene Artikel&quot; als normaler Ordner im Inventar angezeigt."/>
-		<check_box label="Deaktiviere Leitstrahl, wenn Zielavatar erreicht wird (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Falls aktiviert, wird der Leitstrahl zum Zielavatar deaktiviert, wenn die Distanz weniger als 3m beträgt. (Standard)"/>
-		<check_box label="Unterschiedliche Suchbegriffe pro Registerkarte im Inventar erlauben" name="FSSplitInventorySearchOverTabs" tool_tip="Falls aktiviert, können im Inventarfenster für jede Registerkarte unterschiedliche Suchbegriffe eingegeben werden."/>
-		<check_box label="Partikeleffekte erzeugen, wenn Skripte kommunizieren" name="EffectScriptChatParticles" tool_tip="Falls aktiviert, werden Partikeleffekte um kommunizierende Objekte erzeugt."/>
-		<check_box label="Beim Klicken auf Avatarnamen direkt Profil öffnen" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Falls aktiviert, wird bei einem Klick auf den Namenslink eines Avatars direkt dessen komplettes Profil geöffnet."/>
-		<check_box label="Aktiviere progressives Draw-Distance-Stepping" name="FSRenderFarClipStepping" tool_tip="Falls aktiviert wird Firestorm nach einem Teleport die Draw Distance progressiv erhöhen." width="270"/>
+		<check_box label="Aktiviere progressives Draw-Distance-Stepping" name="FSRenderFarClipStepping" tool_tip="Falls aktiviert wird Firestorm nach einem Teleport die Draw Distance progressiv erhöhen."/>
 		<slider name="progressive_draw_distance_interval" tool_tip="Intervall in Sekunden zwischen den jeweiligen Erhöhungen der Draw Distance."/>
 		<check_box name="UseLSLBridge" label="LSL-Client-Brücke aktivieren" tool_tip="Erlaub dem Viewer die Nutzung eines geskripteten Objektes (Brücke), um weitergehende Funktionen anzubieten."/>
 		<combo_box name="UseLSLFlightAssist" tool_tip="Aktiviert ein Skript, dass Fliegen und Schweben in größeren Höhen ermöglicht.">

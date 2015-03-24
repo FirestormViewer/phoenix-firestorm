@@ -10,7 +10,6 @@
         <text name="UI Size:" >
             UIサイズ（副作用の可能性あり）：
         </text>
-        <slider name="ui_scale_slider" />
 
         <text name="HoverTipText">
             ヒント：
@@ -48,20 +47,6 @@
 		
 		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
 
-		<text name="standalone_textbox">
-			次の項目に独立したウィンドウを使用:
-		</text>
-		<check_box name="FSUseStandaloneGroupFloater" label="グループのプロフィール" tool_tip="チェックを入れるとグループのプロフィールは別のウィンドウで開くようになります。" />
-		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="テレポート履歴" tool_tip="チェックを入れると、ショートカットを使ってテレポート履歴が別ウィンドウで開くようになります。" />
-		<check_box name="FSUseStandaloneBlocklistFloater" label="無視リスト" tool_tip="チェックを入れると、ブロックしたりミュートしたレジデントやオブジェクトの一覧が別ウィンドウで開くようになります。"/>
-		<check_box name="FSUseStandalonePlaceDetailsFloater" label="ランドバーク、土地の詳細情報、テレポート履歴の詳細" tool_tip="チェックを入れると、ランドマーク、土地の詳細情報、テレポート履歴の詳細情報が別ウィンドウで開くようになります。"/>
-
-		<text name="ExtendedTeleportHistoryLabel">
-			テレポート履歴項目の拡張:
-		</text>	  
-		<check_box name="FSTeleportHistoryShowPosition" label="位置" tool_tip="チェックを入れると、テレポート履歴にその地域での座標が表示されるようになります。"/>
-		<check_box name="FSTeleportHistoryShowDate" label="日付" tool_tip="チェックを入れると、テレポート履歴にテレポートした日時が表示されるようになります。"/>
-
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>
@@ -88,7 +73,26 @@
         </text>
 -->
     </panel>
-	
+
+    <panel label="Okna interfejsu" name="UI-interface-windows-tab">
+		<check_box label="普段はWebプロフィールを使用" name="FSUseWebProfiles" tool_tip="プロフィールの表示に、V1型のパネルでなく、Webページのプロフイールを表示"/>
+		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。"/>
+		<text name="standalone_textbox">
+			次の項目に独立したウィンドウを使用:
+		</text>
+		<check_box name="FSUseStandaloneGroupFloater" label="グループのプロフィール" tool_tip="チェックを入れるとグループのプロフィールは別のウィンドウで開くようになります。" />
+		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="テレポート履歴" tool_tip="チェックを入れると、ショートカットを使ってテレポート履歴が別ウィンドウで開くようになります。" />
+		<check_box name="FSUseStandaloneBlocklistFloater" label="無視リスト" tool_tip="チェックを入れると、ブロックしたりミュートしたレジデントやオブジェクトの一覧が別ウィンドウで開くようになります。"/>
+		<check_box name="FSUseStandalonePlaceDetailsFloater" label="ランドバーク、土地の詳細情報、テレポート履歴の詳細" tool_tip="チェックを入れると、ランドマーク、土地の詳細情報、テレポート履歴の詳細情報が別ウィンドウで開くようになります。"/>
+		<text name="ExtendedTeleportHistoryLabel">
+			テレポート履歴項目の拡張:
+		</text>	  
+		<check_box name="FSTeleportHistoryShowPosition" label="位置" tool_tip="チェックを入れると、テレポート履歴にその地域での座標が表示されるようになります。"/>
+		<check_box name="FSTeleportHistoryShowDate" label="日付" tool_tip="チェックを入れると、テレポート履歴にテレポートした日時が表示されるようになります。"/>
+        <check_box label="空のシステムフォルダを持ち物に表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、持ち物ウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。" />
+        <check_box label="受け取りアイテムフォルダを通常の持ち物フォルダとして表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、持ち物ウィンドウにに受け取りアイテムフォルダが表示されるようになります。" />
+        <check_box label="持ち物のそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="ここにチェックを入れると、持ち物のそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
+    </panel>
 
     <!-- トースト -->
 	

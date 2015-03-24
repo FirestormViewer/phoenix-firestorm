@@ -47,6 +47,12 @@
         <slider label="Numero delle volte che lampeggiano:" tool_tip="Quante volte deve lampeggiare un pulsante" name="ButtonsFlashCount" />
         <slider label="Intensità:" tool_tip="Con che velocità devono lampeggiare. Viene usata per le notifiche delle IM" name="ButtonFlashRate" />
     </panel>
+    <panel name="UI-interface-windows-tab">
+        <check_box name="FSUseWebProfiles" label="Usa i profili web" tool_tip="Se NON spuntata verranno visualizzati i profili come quelli del viewer 1.x"/>
+        <check_box label="Nascondi le cartelle di sistema vuote dall'inventario" name="DebugHideEmptySystemFolders" tool_tip="Se attiva nascondera le cartelle vuote di sistema come Landmarks, Preferiti, Notecard ecc..."/>
+		<check_box label="Mostra la cartella Recived Items nell'inventario normalmente" name="FSShowInboxFolder" tool_tip="Se attiva, la finestra dell'inventario non presentera la cartella Recived Items sotto l'inventario ma verra visualizzata come una normale cartella di sistema"/>
+        <check_box label="Abilita ricerca separata per ogni tab dell'inventario" name="FSSplitInventorySearchOverTabs" tool_tip="Se abilitato, per ogni scheda dell'inventario (Tutti gli elementi, Elementi recenti, Indossati) si potra effettuare una ricerca diversa."/>
+    </panel>
     <panel label="Notifiche Toasts" name="UI-toasts-tab">
         <text name="ToastSettings" width="360">
             Impostazioni notifiche sullo schermo (popups, toasts, console):

@@ -3,9 +3,9 @@
 <panel name="firestorm">
 <tab_container name="tabs">
 
-<!--General-->
-	<panel name="tab-general"
-		label="Général">
+<!--Extras-->
+	<panel name="tab-extras"
+		label="Extras">
 		<check_box name="checkMiscRLVa"
 			label="Autoriser le contrôle à distance du viewer (RLVa)">
 		</check_box>
@@ -13,45 +13,27 @@
 			left_pad="20">
 			(Reconnexion)
 		</text>
-		<check_box name="FSWorldMapDoubleclickTeleport"
-			label="Activer la téléportation au double clic sur la carte du monde"
-			tool_tip="Téléportation directe à la destination lorsque vous faites un double clic sur la carte du monde."/>
-		<check_box name="tp_screen_toggle"
-			label="Désactiver l'écran de téléportation"
-			tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
+		<check_box name="grouplandrez"
+			label="Toujours attribuer aux objets le groupe propriétaire du terrain"
+			tool_tip="Sous condition que vôtre rôle le permette, attribuer à l'objet créé ou posé le groupe propriétaire du terrain, sans tenir compte de celui que vous portez. (Cela ne transfère pas l'objet au groupe)"/>
+		<check_box name="EffectScriptChatParticles"
+			label="Emettre des particules lorsqu'un script communique"
+			tool_tip="Activer l'émission d'un tourbillon de particules lorsqu'un objet scripté communique."/>
+        <check_box name="FSDisableAvatarTrackerAtCloseIn"
+			label="Désactiver la balise à l'approche de l'avatar tracé (-3m)"
+			tool_tip="Lorsque l'on trace un avatar depuis le radar (Ctl-Maj-A), une balise rouge indique la direction à suivre, à la manière d'une boussole. Il faut cliquer dessus pour l'effacer. Avec cette option, elle s'éteindra automatiquement lorsque vous arriverez à moins de 3m de l'avatar ciblé. (par défaut)."/>
 		<check_box name="tp_beam_toggle"
 			label="Désactiver les balises de destination après la téléportation"
 			tool_tip=""/>
+		<check_box name="tp_screen_toggle"
+			label="Désactiver l'écran de téléportation"
+			tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
 		<check_box name="login_screen_toggle"
 			label="Désactiver l'écran de connexion"
 			tool_tip="Lors de la connexion, remplacer l'écran et la barre de progression par une image fixe."/>
 		<check_box name="logout_screen_toggle"
 			label="Désactiver l'écran de déconnexion"
 			tool_tip="Lors de la déconnexion, remplacer l'écran et la barre de progression par une image fixe."/>
-		<check_box name="grouplandrez"
-			label="Toujours attribuer aux objets le groupe propriétaire du terrain"
-			tool_tip="Sous condition que vôtre rôle le permette, attribuer à l'objet créé ou posé le groupe propriétaire du terrain, sans tenir compte de celui que vous portez. (Cela ne transfère pas l'objet au groupe)"/>
-		<check_box name="sortcontactsbyun"
-			label="Trier les contacts par nom d'utilisateur même si 'Nom d'affichage' est sélectionné"
-			tool_tip="Forcer le tri par nom d'utilisateur dans les listes de contacts en ignorant les noms d'affichage (display names)."/>
-		<check_box name="ShowMutedAvatarsAsCloud"
-			label="Afficher un nuage de particules pour les avatars bloqués"
-			tool_tip="Afficher les avatars bloqués (mutés) en nuages de particules de couleur particulière."/>
-		<check_box name="DebugHideEmptySystemFolders"
-			label="Masquer les dossiers système vides dans l'inventaire"
-			tool_tip="Lorsqu'ils sont inutilisés, désactive l'affichage des dossiers système tels que Favoris, Repères, etc... dans la fenêtre de l'inventaire."/>
-        <check_box name="FSShowInboxFolder"
-			label="Afficher le dossier Objets Reçus dans l'inventaire normal"
-			tool_tip=""/>
-        <check_box name="FSSplitInventorySearchOverTabs"
-			label="Permettre des termes de recherches différents dans l'inventaire"
-			tool_tip="Donne la possibilité d'entrer des termes de recherche différents dans chacun des onglets de l'inventaire."/>
-        <check_box name="FSDisableAvatarTrackerAtCloseIn"
-			label="Désactiver la balise à l'approche de l'avatar tracé (-3m)"
-			tool_tip="Lorsque l'on trace un avatar depuis le radar (Ctl-Maj-A), une balise rouge indique la direction à suivre, à la manière d'une boussole. Il faut cliquer dessus pour l'effacer. Avec cette option, elle s'éteindra automatiquement lorsque vous arriverez à moins de 3m de l'avatar ciblé. (par défaut)."/>
-		<check_box name="EffectScriptChatParticles"
-			label="Emettre des particules lorsqu'un script communique"
-			tool_tip="Activer l'émission d'un tourbillon de particules lorsqu'un objet scripté communique."/>
 		<check_box name="FSRenderFarClipStepping"
 			label="Activer la distance progressive d'affichage"
 			tool_tip="Firestorm réduira la distance d'affichage avant le TP et la restaurera à l'identique après, mais par palliers successifs. Plus rapide et moins coûteux en ressource."/>
@@ -60,9 +42,9 @@
 		<check_box name="UseLSLBridge"
 			label="Activer le 'LSL-Client Bridge'"
 			tool_tip="Autoriser le viewer à créer et utiliser un attachement scripté améliorant notablement ses performances. Le brige ne peut pas être créé lorsque la Bibliothèque est désactivée."/>
-		<check_box name="UseLSLFlightAssist"
+		<!-- <check_box name="UseLSLFlightAssist"
 			label="Activer l'assistant de vol du Bridge"
-			tool_tip="Activer le script d'assistance au vol à haute altitude."/>
+			tool_tip="Activer le script d'assistance au vol à haute altitude."/> -->
 	</panel>
 
 <!--Protection-->

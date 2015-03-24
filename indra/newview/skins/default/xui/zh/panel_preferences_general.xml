@@ -36,7 +36,7 @@
 	<text name="name_tags_textbox">
 		名稱標籤：
 	</text>
-	<radio_group name="Name_Tag_Preference">
+	<radio_group name="Name_Tag_Preference" width="175">
 		<radio_item label="關閉" name="radio"/>
 		<radio_item label="啟動" name="radio2"/>
 		<radio_item label="簡短顯示" name="radio3"/>

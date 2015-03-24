@@ -4,41 +4,24 @@
 <tab_container label="Firestorm Prefs" name="tabs" >
 
 
-    <!-- 一般 -->
+    <!-- お好み -->
 	
-    <panel label="一般" name="tab-general" >
-	
+    <panel label="お好み" name="tab-extras" >
         <check_box name="checkMiscRLVa" label="他のビューワからのリモートコントロールを許可する。（RLVa機能）" />
         <text name="textMiscRLVaRestart" left_pad="70" >
             （再起動が必要）
         </text>
-        
-        <check_box label="世界地図でダブルクリックテレポート" name="FSWorldMapDoubleclickTeleport" tool_tip="世界地図をダブルクリックしてその場所にテレポートできるようにします"/>
-        <check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
+        <check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
+		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
+        <check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
         <check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
+        <check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
         <check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
         <check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
-		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。"/>
-        <check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
-
-        <check_box label="表示名が表示されている場合でも、ユーザー名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザー名で並べ替わるようになります。" />
-
-        <check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
-
-        <check_box label="空のシステムフォルダを持ち物に表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、持ち物ウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。" />
-
-        <check_box label="受け取りアイテムフォルダを通常の持ち物フォルダとして表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、持ち物ウィンドウにに受け取りアイテムフォルダが表示されるようになります。" />
-
-        <check_box label="持ち物のそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="ここにチェックを入れると、持ち物のそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
-
-        <check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
-		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
 		<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的にレンダリングすることができます。" />
 		<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものをレンダリングするまでの秒数です。"/>
-
         <check_box name="UseLSLBridge" label="LSLクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューワの機能を拡張できるようにします。"/>
-        <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/>
-		
+        <!-- <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/> -->
     </panel>
 
 

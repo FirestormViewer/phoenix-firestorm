@@ -35,21 +35,21 @@
  tab_min_width="50"
  tab_position="top" >
 
-    <!--General-->
+    <!--Extras-->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="General"
-     name="tab-general" >
+     label="Extras"
+     name="tab-extras" >
         <check_box
          control_name="RestrainedLove"
          layout="topleft"
          follows="left|top"
-         top_pad="3"
-         left="15"
+         top_pad="6"
+         left="10"
          width="270"
          height="20"
          name="checkMiscRLVa"
@@ -67,64 +67,9 @@
          text_color="White_25">
             (requires restart)
         </text>
-        
         <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Enable double click teleports on the world map"
-         left="15"
-         name="FSWorldMapDoubleclickTeleport"
-         width="270"
-         control_name="FSWorldMapDoubleclickTeleport"
-         tool_tip="Enables teleporting via double click to a destination on the world map."/>
-		<check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Disable Teleport Beacons"
-         name="tp_beam_toggle"
-         width="270"
-         control_name="FSDisableBeaconAfterTeleport"
-         tool_tip="Disables the teleport destination beacons after teleports."/>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Disable Teleport Screens"
-         name="tp_screen_toggle"
-         width="270"
-         control_name="FSDisableTeleportScreens"
-         tool_tip="Disables the black teleport screen during all teleports."/>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Disable Login Progress Screen"
-         name="login_screen_toggle"
-         width="270"
-         control_name="FSDisableLoginScreens"
-         tool_tip="Disables the black login progress Screen"/>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Disable Logout Progress Screen"
-         name="logout_screen_toggle"
-         width="270"
-         control_name="FSDisableLogoutScreens"
-         tool_tip="Disables the black Logout progress screen."/>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Disable automatic opening of block list"
-         name="FSDisableBlockListAutoOpen"
-         width="270"
-         control_name="FSDisableBlockListAutoOpen"
-         tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
-        <check_box
-         top_pad="2"
+         top_pad="3"
+         left="10"
          follows="left|top"
          height="16"
          label="Always rez objects under the land group if possible"
@@ -132,193 +77,6 @@
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-        <text
-         top_pad="2"
-         left="18"
-         layout="topleft"
-         follows="left|top"
-         height="16"
-         width="300"
-         name="textFriendlistOptions">
-            Contact list options:
-        </text>
-        <text
-         top_pad="2"
-         left="30"
-         layout="topleft"
-         follows="left|top"
-         height="16"
-         width="125"
-         name="textFriendlistColumns">
-            Visible name columns:
-        </text>
-        <check_box
-         top_delta="0"
-         left_pad="15"
-         follows="left|top"
-         height="16"
-         label="Username"
-         name="FSFriendListColumnShowUserName"
-         width="70"
-         control_name="FSFriendListColumnShowUserName"
-         tool_tip="The contact list will show a column with the friend's username.">
-            <check_box.commit_callback
-             function="FS.CheckContactListColumnMode" />
-        </check_box>
-        <check_box
-         top_delta="0"
-         left_pad="15"
-         follows="left|top"
-         height="16"
-         label="Display name"
-         name="FSFriendListColumnShowDisplayName"
-         width="90"
-         control_name="FSFriendListColumnShowDisplayName"
-         tool_tip="The contact list will show a column with the friend's display name.">
-            <check_box.commit_callback
-             function="FS.CheckContactListColumnMode" />
-        </check_box>
-        <check_box
-         top_delta="0"
-         left_pad="15"
-         follows="left|top"
-         height="16"
-         label="Full name"
-         name="FSFriendListColumnShowFullName"
-         width="70"
-         control_name="FSFriendListColumnShowFullName"
-         tool_tip="The contact list will show a column with the friend's full name.">
-            <check_box.commit_callback
-             function="FS.CheckContactListColumnMode" />
-        </check_box>
-        <text
-         top_pad="2"
-         left="30"
-         follows="left|top"
-         name="textFriendListSortOrder"
-         width="60">
-         Sort list by:
-        </text>
-        <radio_group
-         top_delta="0"
-         left_pad="15"
-         height="16"
-         layout="topleft"
-         control_name="FSFriendListSortOrder"
-         name="FSFriendListSortOrder"
-         tool_tip=""
-         width="331">
-            <radio_item
-             label="Username"
-             layout="topleft"
-             name="username"
-             value="0"
-             top_pad="7"
-             width="75" />
-            <radio_item
-             left_pad="15"
-             label="Display name"
-             layout="topleft"
-             top_delta="0"
-             name="displayname"
-             value="1"
-             width="75" />
-        </radio_group>
-        <text
-         top_pad="2"
-         left="30"
-         follows="left|top"
-         name="textFriendListFullNameFormat"
-         width="105">
-         Show full name as:
-        </text>
-        <radio_group
-         top_delta="0"
-         left_pad="15"
-         height="16"
-         layout="topleft"
-         enabled_control="FSFriendListColumnShowFullName"
-         control_name="FSFriendListFullNameFormat"
-         name="FSFriendListFullNameFormat"
-         tool_tip=""
-         width="331">
-            <radio_item
-             label="Username (Display name)"
-             layout="topleft"
-             name="username_displayname"
-             value="0"
-             top_pad="7"
-             width="160" />
-            <radio_item
-             left_pad="15"
-             label="Display name (Username)"
-             layout="topleft"
-             top_delta="0"
-             name="displayname_username"
-             value="1"
-             width="75" />
-        </radio_group>
-        <check_box
-         top_pad="2"
-         left="27"
-         follows="left|top"
-         height="16"
-         label="Show permissions column"
-         name="FSFriendListColumnShowPermissions"
-         width="270"
-         control_name="FSFriendListColumnShowPermissions"
-         tool_tip="The contact list will show the columns with the permissions you granted this avatar and vice versa.">
-        </check_box>
-        <check_box
-         top_pad="4"
-         left="18"
-         follows="left|top"
-         height="16"
-         label="Render blocked avatars as particle cloud"
-         name="ShowMutedAvatarsAsCloud"
-         width="270"
-         control_name="ShowMutedAvatarsAsCloud"
-         tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
-        </check_box>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Hide empty system folders from inventory"
-         name="DebugHideEmptySystemFolders"
-         width="270"
-         control_name="DebugHideEmptySystemFolders"
-         tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
-        </check_box>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Show the Received Items folder in normal inventory"
-         name="FSShowInboxFolder"
-         width="270"
-         control_name="FSShowInboxFolder"
-         tool_tip="If enabled, the inventory windows will also show the Received Items folder">
-        </check_box>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Allow separate search terms on each tab in inventory"
-         name="FSSplitInventorySearchOverTabs"
-         width="270"
-         control_name="FSSplitInventorySearchOverTabs"
-         tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
-        </check_box>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
-         name="FSDisableAvatarTrackerAtCloseIn"
-         width="270"
-         control_name="FSDisableAvatarTrackerAtCloseIn"
-         tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
 		<check_box
 		 control_name="EffectScriptChatParticles"
 		 height="16"
@@ -327,18 +85,64 @@
 		 name="EffectScriptChatParticles"
 		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
 		 initial_value="true"
-		 top_pad="2"
+		 top_pad="3"
 		 width="350" />
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
+         name="FSDisableAvatarTrackerAtCloseIn"
+         width="270"
+         control_name="FSDisableAvatarTrackerAtCloseIn"
+         tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
+
 		<check_box
-		 control_name="FSInspectAvatarSlurlOpensProfile"
-		 height="16"
-		 label="Open avatar profile directly when clicking on its name"
-		 layout="topleft"
-		 name="FSInspectAvatarSlurlOpensProfile"
-		 tool_tip="If enabled, Firestorm will open the profile of an avatar directly when clicking on a link with its name"
-		 initial_value="true"
-		 top_pad="2"
-		 width="250" />
+         top_pad="10"
+         follows="left|top"
+         height="16"
+         label="Always show the Teleport cancel button"
+         name="FSAlwaysShowTPCancel"
+         width="270"
+         control_name="FSAlwaysShowTPCancel"
+         tool_tip="Always show the TP cancel button even if the sim says it can't be canceled. The sim will always know if it can and will ignore cancel requests on death/god TPs anyways. Ignores RLVa (i.e. RLV restrictions can still disable it)."/>
+		<check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Disable Teleport Beacons"
+         name="tp_beam_toggle"
+         width="270"
+         control_name="FSDisableBeaconAfterTeleport"
+         tool_tip="Disables the teleport destination beacons after teleports."/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Disable Teleport Screens"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="FSDisableTeleportScreens"
+         tool_tip="Disables the black teleport screen during all teleports."/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Disable Login Progress Screen"
+         name="login_screen_toggle"
+         width="270"
+         control_name="FSDisableLoginScreens"
+         tool_tip="Disables the black login progress Screen"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Disable Logout Progress Screen"
+         name="logout_screen_toggle"
+         width="270"
+         control_name="FSDisableLogoutScreens"
+         tool_tip="Disables the black Logout progress screen."/>
+
 		<check_box
 		 control_name="FSRenderFarClipStepping"
 		 height="16"
@@ -347,46 +151,47 @@
 		 name="FSRenderFarClipStepping"
 		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
-		 top_pad="2"
+		 top_pad="10"
 		 width="250" />
 		<slider
 		 name="progressive_draw_distance_interval"
 		 control_name="FSRenderFarClipSteppingInterval"
 		 enabled_control="FSRenderFarClipStepping"
 		 decimal_digits="0"
-		 left_pad="5"
-		 top_delta="0"
+		 left="10"
+		 top_pad="2"
 		 follows="left|top"
+		 layout="topleft"
 		 height="18"
 		 increment="1"
 		 initial_value="20"
 		 max_val="30"
 		 min_val="5"
-		 width="150"
+		 width="225"
 		 tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
-         top_pad="2"
+         top_pad="10"
          control_name="UseLSLBridge"
          follows="left|top"
          height="16"
          initial_value="true"
          name="UseLSLBridge"
          label="Enable LSL-Client Bridge"
-         left="15"
+         left="10"
          width="270"
          tool_tip="Allows the Viewer to use a scripted attachment (Bridge) to extend its features"/>
         <combo_box
          control_name="UseLSLFlightAssist"
          enabled_control="UseLSLBridge"
          layout="topleft"
-         left_delta="200"
-         top_delta="0"
+		 left="10"
+		 top_pad="2"
          follows="left|top"
-         height="20"
+         height="25"
          name="UseLSLFlightAssist"
          tool_tip="Enables the script that assists flying and hovering at extended altitudes"
-         width="200">
+         width="225">
             <combo_box.item
              label="Flight Assist: Disabled"
              name="flight_disabled"

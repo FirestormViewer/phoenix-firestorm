@@ -37,7 +37,7 @@
 	<text name="name_tags_textbox">
 		Avatarnamen:
 	</text>
-	<radio_group name="Name_Tag_Preference">
+	<radio_group name="Name_Tag_Preference" width="210">
 		<radio_item label="Aus" name="radio"/>
 		<radio_item label="An" name="radio2"/>
 		<radio_item label="Kurz anzeigen" name="radio3"/>
@@ -97,20 +97,4 @@ Privatsphäre, Automatische Antwort konfiguriert werden.
 		log_in_to_change
 	</text_editor>
 
-    <panel name="general_extras">
-        <text name="text_box3">
-           Extras:
-        </text>
-        <check_box name="FSUseWebProfiles" label="Webprofile als Standard nutzen" tool_tip="Zeigt profile als Webseite anstelle des Profilfensters im Viewer-1-Stil"/>
-
-<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
-        <text name="inworld_typing_rg_label">
-           Buchstabeneingabe:
-        </text>
-        <radio_group name="inworld_typing_preference">
-            <radio_item label="Startet Chat" name="radio_start_chat"/>
-            <radio_item label="Beeinflusst Bewegung" name="radio_move"/>
-        </radio_group>
-
-    </panel>
 </panel>

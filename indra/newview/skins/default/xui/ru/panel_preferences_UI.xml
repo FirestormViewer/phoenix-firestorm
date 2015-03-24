@@ -23,7 +23,7 @@
 			<combo_box.item label="6 секунд" name="tt_item4"/>
 		</combo_box>
 
-		<text name="HoverTipText">
+		<text name="ScriptDialogsPerObjectLabel" width="185">
 			Размещение диалогов скриптов:
 		</text>
 		<check_box label="Справа наверху" name="ShowScriptDialogsTopRight" tool_tip=""/>
@@ -94,6 +94,10 @@
 		<text name="NearbyToastWidthText">
 			%
 		</text>
+	</panel>
+
+	<panel name="UI-interface-windows-tab">
+		<check_box name="FSUseWebProfiles" label="Использование Веб профилей" tool_tip="Открыть профиль в браузере"/>
 	</panel>
 
 	<!--Font-->

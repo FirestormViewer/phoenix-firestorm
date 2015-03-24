@@ -13,58 +13,28 @@
 	Zaloguj się
 </string>
 <tab_container label="Ust. Firestorma" name="tabs">
-    <panel label="Ogólne" name="tab-general">
+    <panel label="Dodatki" name="tab-extras">
         <check_box name="checkMiscRLVa" label="Sterowanie Firestormem przez skrypty (RLVa)" />
         <text name="textMiscRLVaRestart">
             (wymaga restartu)
         </text>
-        <check_box label="Włącz teleport przez dwuklik na mapie świata" name="FSWorldMapDoubleclickTeleport" tool_tip="Włącza teleportację do punktu docelowego przez podwójne kliknięcie klawiszem myszki na mapie świata."/>
+        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
+        <check_box label="Twórz efekty cząsteczkowe, gdy skrypty się komunikują" name="EffectScriptChatParticles" tool_tip="Gdy włączysz tą opcję, to oskryptowane obiekty będą wyświetlać wirujące cząsteczki świetlne, gdy skrypty będą się komunikować." />
+        <check_box label="Wyłączaj emiter śledzenia po osiągnięciu awatara docelowego (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Gdy włączysz tą opcję, to emiter śledzenia będzie wyłączany automatycznie, jeśli dystans od awatara docelowego jest mniejszy niż 3m (domyślne)." />
+        <check_box label="Zawsze pokazuj przycisk anulowania teleportacji" name="FSAlwaysShowTPCancel" tool_tip="Zawsze pokazuj przycisk anulowania teleportacji nawet, jeśli symulator uważa, że nie może ona być anulowana. Symulator zawsze będzie wiedzieć, kiedy faktycznie będzie to możliwe - i będzie ignorować takie próby podczas teleportacji wymuszonych/po śmierci. Opcja ta jest ignorowana przez RLVa (to znaczy, że restrykcje RLV mogą ciągle przycisk wyłączyć)."/>
         <check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
         <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
-        <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
-        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
-        <text name="textFriendlistOptions">
-            Opcje listy kontaktów:
-        </text>
-        <text name="textFriendlistColumns" width="113">
-            Widoczne kolumny:
-        </text>
-        <check_box width="80" label="Nazwa konta" name="FSFriendListColumnShowUserName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z nazwami kont znajomych." />
-        <check_box width="105" label="Wyświetlane Imię" name="FSFriendListColumnShowDisplayName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z Imionami Wyświetlanymi znajomych." />
-        <check_box label="Pełne imię" name="FSFriendListColumnShowFullName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z imionami znajomych w pełnym formacie." />
-        <text name="textFriendListSortOrder" width="83">
-            Sortuj listę po:
-        </text>
-        <radio_group name="FSFriendListSortOrder">
-            <radio_item label="Nazwa konta" name="username" width="80" />
-            <radio_item label="Wyświetlane Imię" name="displayname" />
-        </radio_group>
-        <text name="textFriendListFullNameFormat" width="93">
-            Pełne imię jako:
-        </text>
-        <radio_group name="FSFriendListFullNameFormat">
-            <radio_item label="Nazwa konta (Wyświetlane)" name="username_displayname" />
-            <radio_item label="Wyświetlane (Nazwa konta)" name="displayname_username" />
-        </radio_group>
-        <check_box label="Pokaż kolumny zezwoleń" name="FSFriendListColumnShowPermissions" tool_tip="Lista kontaktów będzie pokazywać kolumny z zezwoleniami, jakie zostały udzielone temu awatarowi, a także przez tego awatara - innym." />
-        <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
-        <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
-        <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
-        <check_box label="Wyłączaj emiter śledzenia po osiągnięciu awatara docelowego (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Gdy włączysz tą opcję, to emiter śledzenia będzie wyłączany automatycznie, jeśli dystans od awatara docelowego jest mniejszy niż 3m (domyślne)." />
-        <check_box label="Twórz efekty cząsteczkowe, gdy skrypty się komunikują" name="EffectScriptChatParticles" tool_tip="Gdy włączysz tą opcję, to oskryptowane obiekty będą wyświetlać wirujące cząsteczki świetlne, gdy skrypty będą się komunikować." />
-        <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />
-        <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
+        <check_box label="Stopniowe powiększanie pola widzenia" name="FSRenderFarClipStepping" tool_tip="Jeśli włączysz tą opcję, to Firestorm będzie stopniowo zwiększać pole widzenia po teleportacji." />
+        <slider name="progressive_draw_distance_interval" tool_tip="Odstęp w sekundach pomiędzy każdym kolejnym powiększeniem pola widzenia." />
         <check_box name="UseLSLBridge" label="Włącz Most w LScript Language" tool_tip="Pozwala Firestormowi na używanie oskryptowanego dodatku (Mostu), aby rozszerzyć znacznie swoje możliwości" />
-        <combo_box width="275" name="UseLSLFlightAssist" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach">
+        <combo_box name="UseLSLFlightAssist" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach">
             <combo_box.item label="Pomocnik lotu: Wyłączony" name="flight_disabled" />
             <combo_box.item label="Pomocnik lotu: Lekkie przyspieszanie" name="flight_mild" />
             <combo_box.item label="Pomocnik lotu: Umiarkowane przyspieszanie" name="flight_moderate" />
             <combo_box.item label="Pomocnik lotu: Silne przyspieszanie" name="flight_strong" />
         </combo_box>
-        <check_box label="Stopniowe powiększanie pola widzenia" name="FSRenderFarClipStepping" tool_tip="Jeśli włączysz tą opcję, to Firestorm będzie stopniowo zwiększać pole widzenia po teleportacji." />
-        <slider name="progressive_draw_distance_interval" tool_tip="Odstęp w sekundach pomiędzy każdym kolejnym powiększeniem pola widzenia." />
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />

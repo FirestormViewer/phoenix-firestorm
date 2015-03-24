@@ -32,18 +32,6 @@
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" width="135" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <check_box label="Stary sposób odświeżania wartości w mierniku lagów" name="FSStatbarLegacyMeanPerSec" tool_tip="Gdy ta opcja jest włączona, to Firestorm będzie używał starego sposobu odświeżania wartości w mierniku lagów, uśredniając je dynamicznie co sekundę, zamiast podmieniać bez przerwy na te bieżące" />
         <check_box label="Pokaż kontrolki mediów w menu na górze" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
-        <text name="standalone_textbox">
-            Używaj osobnych okien dla:
-        </text>
-        <check_box name="FSUseStandaloneGroupFloater" label="Profili grup" tool_tip="Gdy włączysz tą opcję, to profile grup będą otwierane w osobnych oknach." />
-        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Historii teleportacji" tool_tip="Gdy włączysz tą opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
-        <check_box name="FSUseStandaloneBlocklistFloater" label="Listy wyciszonych" tool_tip="Gdy włączysz tą opcję, to lista wyciszonych / zablokowanych rezydentów i obiektów będzie otwierana w osobnym oknie." />
-        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tą opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />
-        <text name="ExtendedTeleportHistoryLabel" width="160">
-            Dodaj do historii teleportacji:
-        </text>
-        <check_box name="FSTeleportHistoryShowPosition" label="Pozycję" tool_tip="Gdy włączysz tą opcję, to lokalne koordynaty wewnętrzne regionu będą pokazywane w historii teleportacji."/>
-        <check_box name="FSTeleportHistoryShowDate" label="Datę" tool_tip="Gdy włączysz tą opcję, to daty i czasy teleportacji będą pokazywane w historii teleportacji."/>
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Komunikatów skryptów na obiekt:
         </text>
@@ -63,7 +51,7 @@
             <combo_box.item label="Lewy dolny róg ekranu" name="ScriptDialogPositionOption_4" />
             <combo_box.item label="Prawy dolny róg ekranu" name="ScriptDialogPositionOption_5" />
         </combo_box>
-        <check_box label="Animuj komunikaty skryptów" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x). Działa tylko wtedy, gdy komunikaty skryptów otwierają się z góry na dół." />
+        <check_box label="Animuj komunikaty" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x). Działa tylko wtedy, gdy komunikaty skryptów otwierają się z góry na dół." />
         <check_box label="Ikony i ogł. grup w prawym górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
@@ -74,6 +62,53 @@
         <text name="ButtonFlashRateText">
             sek
         </text>
+    </panel>
+    <panel label="Okna interfejsu" name="UI-interface-windows-tab">
+        <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />
+        <check_box name="FSUseWebProfiles" label="Profile sieciowe jako domyślne" tool_tip="Pokazuj profile jako strony internetowe zamiast panelów w stylu Viewera 1.x" />
+        <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
+        <text name="standalone_textbox">
+            Używaj osobnych okien dla:
+        </text>
+        <check_box name="FSUseStandaloneGroupFloater" label="Profili grup" tool_tip="Gdy włączysz tą opcję, to profile grup będą otwierane w osobnych oknach." />
+        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Historii teleportacji" tool_tip="Gdy włączysz tą opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Listy wyciszonych" tool_tip="Gdy włączysz tą opcję, to lista wyciszonych / zablokowanych rezydentów i obiektów będzie otwierana w osobnym oknie." />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tą opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />
+        <text name="ExtendedTeleportHistoryLabel">
+            Dodaj do historii teleportacji:
+        </text>
+        <check_box name="FSTeleportHistoryShowPosition" label="Pozycję" tool_tip="Gdy włączysz tą opcję, to lokalne koordynaty wewnętrzne regionu będą pokazywane w historii teleportacji."/>
+        <check_box name="FSTeleportHistoryShowDate" label="Datę" tool_tip="Gdy włączysz tą opcję, to daty i czasy teleportacji będą pokazywane w historii teleportacji."/>
+        <text name="textFriendlistOptions">
+            Opcje listy kontaktów:
+        </text>
+        <text name="textFriendlistColumns" width="113">
+            Widoczne kolumny:
+        </text>
+        <check_box width="80" label="Nazwa konta" name="FSFriendListColumnShowUserName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z nazwami kont znajomych." />
+        <check_box width="105" label="Wyświetlane Imię" name="FSFriendListColumnShowDisplayName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z Imionami Wyświetlanymi znajomych." />
+        <check_box label="Pełne imię" name="FSFriendListColumnShowFullName" tool_tip="Lista kontaktów będzie pokazywać kolumnę z imionami znajomych w pełnym formacie." />
+        <text name="textFriendListSortOrder" width="83">
+            Sortuj listę po:
+        </text>
+        <radio_group name="FSFriendListSortOrder">
+            <radio_item label="Nazwa konta" name="username" width="80" />
+            <radio_item label="Wyświetlane Imię" name="displayname" />
+        </radio_group>
+        <text name="textFriendListFullNameFormat" width="93">
+            Pełne imię jako:
+        </text>
+        <radio_group name="FSFriendListFullNameFormat">
+            <radio_item label="Nazwa konta (Wyświetlane)" name="username_displayname" />
+            <radio_item label="Wyświetlane (Nazwa konta)" name="displayname_username" />
+        </radio_group>
+        <check_box label="Pokaż kolumny zezwoleń" name="FSFriendListColumnShowPermissions" tool_tip="Lista kontaktów będzie pokazywać kolumny z zezwoleniami, jakie zostały udzielone temu awatarowi, a także przez tego awatara - innym." />
+        <text name="textInventoryOptions">
+            Opcje Szafy:
+        </text>
+        <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
+        <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
+        <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
     </panel>
     <panel label="Tosty" name="UI-toasts-tab">
         <text name="ToastSettings">

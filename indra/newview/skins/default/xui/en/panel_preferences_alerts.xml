@@ -331,11 +331,20 @@
       layout="topleft"
       follows="left|top"
       left_delta="10"
-      top_pad="2"
+      top_pad="0"
       height="18"
       control_name="FSGrowlWhenActive"
       name="notify_growl_always_checkbox"
       label="Show Growl Notifications even when Firestorm is active"/>
+    <check_box
+      enabled_control="FSEnableGrowl"
+      layout="topleft"
+      follows="left|top"
+      top_pad="0"
+      height="18"
+      control_name="FSFilterGrowlKeywordDuplicateIMs"
+      name="FSFilterGrowlKeywordDuplicateIMs"
+      label="Filter duplicate IMs if they have already been shown as part of a keyword alert"/>
     </panel>
 
     <!-- Alerts -->

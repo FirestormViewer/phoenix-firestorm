@@ -66,11 +66,11 @@
 	<text name="name_tags_textbox">
 		Label et contenu :
 	</text>
-	<radio_group name="Name_Tag_Preference">
+	<radio_group name="Name_Tag_Preference" width="290">
 		<radio_item name="radio"
-			label="Désactiver" />
+			label="Désactiver" width="85" />
 		<radio_item name="radio2"
-			label="Activer" />
+			label="Activer" width="65" />
 		<radio_item name="radio3"
 			label="Afficher brièvement" />
 	</radio_group>
@@ -151,23 +151,4 @@
 		log_in_to_change
 	</text_editor>
 
-<!--extras-->
-	<panel name="general_extras" >
-        <text name="text_box3">
-			Options supplémentaires :
-        </text>
-        <check_box name="FSUseWebProfiles"
-			label="Utiliser le profil web par défaut"
-			tool_tip="Affiche les profils comme une page web plutôt que comme une fenêtre style v1"/>
-	<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
-		<text name="inworld_typing_rg_label">
-			Presser une touche du clavier :
-		</text>
-		<radio_group name="inworld_typing_preference">
-			<radio_item name="radio_start_chat"
-				label="Lance le chat local" />
-			<radio_item name="radio_move"
-				label="Affecte le déplacement (WASD)" />
-		</radio_group>
-	</panel>
 </panel>

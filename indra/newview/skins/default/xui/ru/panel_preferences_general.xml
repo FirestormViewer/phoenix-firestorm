@@ -35,8 +35,8 @@
 	<text name="name_tags_textbox">
 		Теги имен:
 	</text>
-	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Выкл." name="radio"/>
+	<radio_group name="Name_Tag_Preference" width="240">
+		<radio_item label="Выкл." width="60" name="radio"/>
 		<radio_item label="Вкл." name="radio2"/>
 		<radio_item label="Временный показ" name="radio3"/>
 	</radio_group>
@@ -90,19 +90,4 @@
 		log_in_to_change
 	</text_editor>
 
-    <panel name="general_extras">
-        <text name="text_box3">
-           Дополнительно:
-        </text>
-        <check_box name="FSUseWebProfiles" label="Использование Веб профилей" tool_tip="Открыть профиль в браузере"/>
-
-<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
-        <text name="inworld_typing_rg_label">
-           Нажатие букв:
-        </text>
-        <radio_group name="inworld_typing_preference">
-            <radio_item label="Писать в чат" name="radio_start_chat"/>
-            <radio_item label="Ходить (WASD)" name="radio_move"/>
-        </radio_group>
-	</panel>
 </panel>

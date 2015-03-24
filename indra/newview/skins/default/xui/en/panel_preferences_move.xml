@@ -186,7 +186,7 @@
          control_name="ClickOnAvatarKeepsCamera"
          tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
         <check_box
-         top_pad="4"
+         top_pad="3"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -198,7 +198,7 @@
          control_name="FSResetCameraOnTP"
          tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
         <check_box
-         top_pad="4"
+         top_pad="3"
          follows="left|top"
          height="16"
          label="Reset camera position on avatar movement"
@@ -208,7 +208,7 @@
          width="270"
          control_name="FSResetCameraOnMovement"/>
         <check_box
-         top_pad="4"
+         top_pad="3"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -220,7 +220,7 @@
          control_name="FSDisableMinZoomDist"
          tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
         <check_box
-         top_pad="4"
+         top_pad="3"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -232,7 +232,7 @@
          control_name="ResetViewTurnsAvatar"
          tool_tip="This option keeps the camera direction and turns the avatar when Reset View is selected (hit ESC key)."/>
         <check_box
-         top_pad="4"
+         top_pad="3"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -255,7 +255,7 @@
             (requires restart)
         </text>
         <check_box
-         top_pad="0"
+         top_pad="-1"
          follows="left|top"
          height="16"
          label="Show the default camera controls minifloater always as opaque"
@@ -264,9 +264,20 @@
          name="FSAlwaysOpaqueCameraControls"
          width="350"
          control_name="FSAlwaysOpaqueCameraControls"/>
+        <check_box
+         top_pad="3"
+         follows="left|top"
+         height="16"
+         label="Render blocked avatars as particle cloud"
+         layout="topleft"
+         left="20"
+         name="ShowMutedAvatarsAsCloud"
+         width="350"
+         tool_tip="Blocked avatars will be rendered as a particle cloud in special color."
+         control_name="ShowMutedAvatarsAsCloud"/>
 
         <check_box
-         top_pad="10"
+         top_pad="8"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -278,7 +289,7 @@
          tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
 
         <check_box
-         top_pad="5"
+         top_pad="3"
          follows="left|top"
          height="16"
          initial_value="false"
@@ -791,7 +802,7 @@
          left="15"
          name="world_map_options_label"
          width="200">
-         World map options:
+         World Map options:
         </text>
         
         <check_box top_pad="10"
@@ -813,17 +824,26 @@
          name="FSAdvancedWorldmapRegionInfo"
          width="270"
          control_name="FSAdvancedWorldmapRegionInfo"
-         tool_tip="Shows additional region infos on the world map (avatar count and maturity level)."/>
+         tool_tip="Shows additional region infos on the World Map (avatar count and maturity level)."/>
         
         <check_box top_pad="5"
          follows="left|top"
          height="16"
          initial_value="false"
-         label="Show grid coordinates on the world map."
+         label="Show grid coordinates on the World Map"
          name="FSShowRegionGridCoordinates"
          width="270"
          control_name="FSShowRegionGridCoordinates"
-         tool_tip="Shows the grid coordinates (in units of regions) on the world map."/>
+         tool_tip="Shows the grid coordinates (in units of regions) on the World Map."/>
+		 
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Enable double click teleports on the World Map"
+         name="FSWorldMapDoubleclickTeleport"
+         width="270"
+         control_name="FSWorldMapDoubleclickTeleport"
+         tool_tip="Enables teleporting via double click to a destination on the World Map."/>
 
 	 </panel>
 </tab_container>

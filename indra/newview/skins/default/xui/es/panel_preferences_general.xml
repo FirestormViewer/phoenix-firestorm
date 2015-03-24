@@ -36,12 +36,12 @@
 	<text name="name_tags_textbox">
 		Etiquetas de los nombres:
 	</text>
-	<radio_group name="Name_Tag_Preference">
-		<radio_item label="No mostrar" name="radio"/>
-		<radio_item label="Mostrar" name="radio2"/>
+	<radio_group name="Name_Tag_Preference" width="290">
+		<radio_item width="85" label="No mostrar" name="radio"/>
+		<radio_item width="65" label="Mostrar" name="radio2"/>
 		<radio_item label="Mostrar brevemente" name="radio3"/>
 	</radio_group>
-	<text name="RenderNameShowTime_LabelPrefix" left_pad="47">
+	<text name="RenderNameShowTime_LabelPrefix">
 		(
 	</text>
 	<text name="RenderNameShowTime_LabelSuffix">
@@ -92,20 +92,4 @@ permanecer ausente:
 	<text name="text_box3">
 		Configura los mensajes de autorrespuesta y no disponible en Privacidad &gt; Autorrespuesta
 	</text>
-	<panel name="general_extras" >
-        	<text name="text_box4">
-			Extras:
-		</text>
-		<check_box name="FSUseWebProfiles" label="Usar perfiles web por defecto" tool_tip="Muestra los perfiles como una página web en vez de usar los paneles de estilo V1"/>
-		<text name="inworld_typing_rg_label">
-			Pulsar teclas alfanuméricas:
-		</text>
-	<text_editor name="do_not_disturb_response">
-		log_in_to_change
-	</text_editor>
-		<radio_group name="inworld_typing_preference">
-			<radio_item label="Inicia chat local" name="radio_start_chat"/>
-			<radio_item label="Afecta al movimiento" name="radio_move"/>
-		</radio_group>
-	</panel>
 </panel>

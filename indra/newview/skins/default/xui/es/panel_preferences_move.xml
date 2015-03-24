@@ -24,6 +24,7 @@
 				(requiere reiniciar)
 			</text>
 			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
 			<check_box label="Notificar los cambios de versión de simulador al cambiar de región" name="FSShowServerVersionChangeNotice" tool_tip="Muestra un aviso si la versión de simulador cambia durante un teleporte o al cruzar a otra región."/>
 			<check_box label="Mostrar canal del simulador en la barra de estado" name="FSStatusbarShowSimulatorVersion" tool_tip="Muestra el canal del simulador actual en la barra de estado estilo V1."/>
 		</panel>
@@ -85,9 +86,10 @@
 			<text name="world_map_options_label">
 				Opciones del mapa mundial:
 			</text>
-			<check_box top_pad="5" label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
+			<check_box label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
 			<check_box label="Mostrar informacion adicional de la región en el Mapa Mundial" name="FSAdvancedWorldmapRegionInfo" tool_tip="Muestra informaciones adicionales en el mapa del mundo (número de avatares y calificación de contenidos)."/>
-			<check_box top_pad="5" label="Mostrar coordenadas de la red en el mapa mundial." name="FSShowRegionGridCoordinates" tool_tip="Muestra las coordinadas de la red (en unidades de región) en el mapa mundial."/>
+			<check_box label="Mostrar coordenadas de la red en el mapa mundial." name="FSShowRegionGridCoordinates" tool_tip="Muestra las coordinadas de la red (en unidades de región) en el mapa mundial."/>
+			<check_box label="Activar teleportes con doble clic en el mapa del mundo" name="FSWorldMapDoubleclickTeleport" tool_tip="Permite teleportarse mediante doble clic a una destinación en el mapa del mundo."/>
 		</panel>
 	</tab_container>
 </panel>

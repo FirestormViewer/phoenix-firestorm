@@ -39,9 +39,9 @@
 	<text name="name_tags_textbox">
 		Imiona:
 	</text>
-	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Wyłącz" name="radio"/>
-		<radio_item label="Włącz" name="radio2"/>
+	<radio_group name="Name_Tag_Preference" width="220">
+		<radio_item width="65" label="Wyłącz" name="radio"/>
+		<radio_item width="65" label="Włącz" name="radio2"/>
 		<radio_item label="Pokaż na chwilę" name="radio3"/>
 	</radio_group>
 	<text name="RenderNameShowTime_LabelPrefix" left_pad="25">
@@ -84,17 +84,4 @@
 	<text name="text_box3">
 		Wiadomości automatyczne możesz znaleźć w Prywatność / Autoodpowiedzi
 	</text>
-	<panel name="general_extras">
-		<text name="text_box3">
-			Dodatki:
-		</text>
-		<check_box name="FSUseWebProfiles" label="Profile sieciowe jako domyślne" tool_tip="Pokazuj profile jako strony internetowe zamiast panelów w stylu Viewera 1.x"/>
-		<text name="inworld_typing_rg_label">
-			Naciskanie liter:
-		</text>
-		<radio_group name="inworld_typing_preference">
-			<radio_item label="Rozpoczyna czat" name="radio_start_chat"/>
-			<radio_item label="Wpływa na ruch (tzn. WASD)" name="radio_move"/>
-		</radio_group>
-	</panel>
 </panel>

@@ -61,7 +61,7 @@
         <text
          type="string"
          left="10"
-         top_pad="5"
+         top_pad="8"
          length="1"
          follows="left|top"
          height="12"
@@ -79,7 +79,7 @@
          left_delta="10"
          name="ShowHoverTips"
          tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"
-         top_pad="5"
+         top_pad="7"
          width="256" />
         <check_box
          enabled_control="ShowHoverTips"
@@ -110,7 +110,7 @@
 		name="FSAdvancedTooltips"
 		label="Show extended information in hovertips (Phoenix style)"
 		layout="topleft"
-		top_pad="2"
+		top_pad="5"
 		left_delta="-10"
 		height="16"
 		width="350" />
@@ -132,7 +132,7 @@
          layout="topleft"
          left="265"
          name="tooltip_textbox"
-         top="30"
+         top="31"
          width="200">
            Hovertip Trigger Delays:
         </text>
@@ -152,7 +152,7 @@
          min_val="0"
          name="ToolTipDelay_slider"
          tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"
-         top_pad="1"
+         top_pad="7"
          left="275"
          width="200" />
         <text
@@ -236,12 +236,11 @@
        initial_value="true"
        label="Use Pie Menu"
        layout="topleft"
-       left="5"
+       left="10"
        name="UsePieMenu"
        tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top="140"
+       top="150"
        width="256" />
-      
       <check_box
        top_pad="2"
        control_name="ShowNetStats"
@@ -263,106 +262,20 @@
        tool_tip="If enabled, Firestorm will use the legacy method of showing the period mean per second value in the lag meter instead of the current observed value"
        top_delta="0"
        width="250" />
-
       <check_box
+       top_pad="2"
        control_name="FSEnableVolumeControls"
        height="16"
        name="FSEnableVolumeControls"
        label="Show media controls in top menu"
-       left="5"
+       left="10"
        width="256"
        tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
 
       <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="16"
-        layout="topleft"
-        name="standalone_textbox"
-        left="5"
-        top_pad="2"
-        width="200">
-        Use stand-alone windows for:
-      </text>
-      
-      <check_box
-       top_pad="2"
-       control_name="FSUseStandaloneGroupFloater"
-       follows="left|top"
-       height="16"
-       name="FSUseStandaloneGroupFloater"
-       label="Group profiles"
-       left="15"
-       width="170"
-       tool_tip="If enabled, group profiles will open in separate windows."/>
-      <check_box
-       control_name="FSUseStandaloneTeleportHistoryFloater"
-       follows="left|top"
-       height="16"
-       name="FSUseStandaloneTeleportHistoryFloater"
-       label="Teleport history"
-       left_pad="5"
-       width="170"
-       tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
-      <check_box
-       top_pad="2"
-       control_name="FSUseStandaloneBlocklistFloater"
-       follows="left|top"
-       height="16"
-       name="FSUseStandaloneBlocklistFloater"
-       label="Block/mute list"
-       left="15"
-       width="170"
-       tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
-      <check_box
-       control_name="FSUseStandalonePlaceDetailsFloater"
-       follows="left|top"
-       height="16"
-       name="FSUseStandalonePlaceDetailsFloater"
-       label="Landmarks, place details and teleport history details"
-       left_pad="5"
-       width="170"
-       tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
-
-      <text
        type="string"
-       left="5"
-       top_pad="2"
-       width="140"
-       follows="left|top"
-       height="16"
-       layout="topleft"
-       name="ExtendedTeleportHistoryLabel">
-        Extend teleport history by:
-      </text>
-	  
-      <check_box
-       top_delta="0"
-       control_name="FSTeleportHistoryShowPosition"
-       follows="left|top"
-       height="16"
-       name="FSTeleportHistoryShowPosition"
-       label="Position"
-       left_pad="15"
-       width="75"
-       tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
-
-      <check_box
-       top_delta="0"
-       control_name="FSTeleportHistoryShowDate"
-       follows="left|top"
-       height="16"
-       name="FSTeleportHistoryShowDate"
-       label="Date"
-       left_pad="5"
-       width="75"
-       tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
-
-      <text
-       type="string"
-       left="5"
-       top_pad="6"
+       left="10"
+       top_pad="12"
        width="140"
        follows="left|top"
        height="16"
@@ -394,7 +307,7 @@
 
       <text
        type="string"
-       left="5"
+       left="10"
        top_pad="6"
        width="140"
        follows="left|top"
@@ -447,11 +360,12 @@
          initial_value="true"
          label="Animate Script Dialogs"
          layout="topleft"
-         left="15"
+         left_pad="5"
          name="FSAnimatedScriptDialogs"
          tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior). Only works when dialogs open from the top down."
-         top_pad="2"
+         top_delta="4"
          width="256" />
+
         <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
@@ -461,7 +375,7 @@
          left="5"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="2"
+         top_pad="16"
          width="256" />
         <text
          type="string"
@@ -483,7 +397,7 @@
          left="5"
          name="FSDisableIMChiclets"
          tool_tip="If checked, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."
-         top_pad="4"
+         top_pad="6"
          width="256" />
 
         <slider
@@ -493,13 +407,13 @@
          height="16"
          increment="1"
          label="Number of times IM tabs flash:"
-         label_width="300"
+         label_width="200"
          layout="topleft"
-         left="30"
+         left="10"
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="6"
+         top_pad="12"
          width="471" />
         <slider
          control_name="FlashPeriod"
@@ -509,9 +423,9 @@
          increment="0.25"
          label="IM tab flash period:"
          tool_tip="Time in seconds a single flash of IM tabs takes - used for IM notifications"
-         label_width="300"
+         label_width="200"
          layout="topleft"
-         left="30"
+         left="10"
          min_val="0.25"
          max_val="4"
          name="ButtonFlashRate"
@@ -529,6 +443,311 @@
          width="50">
             sec
         </text>
+    </panel>
+
+    <!--Interface Windows-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Interface Windows"
+     name="UI-interface-windows-tab" >
+
+		<check_box
+		 control_name="FSInspectAvatarSlurlOpensProfile"
+		 height="16"
+		 label="Open avatar profile directly when clicking on its name"
+		 layout="topleft"
+		 name="FSInspectAvatarSlurlOpensProfile"
+		 tool_tip="If enabled, Firestorm will open the profile of an avatar directly when clicking on a link with its name"
+		 initial_value="true"
+		 top_pad="8"
+		 left="10"
+		 width="250" />
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="Use web profiles by default"
+		 name="FSUseWebProfiles"
+		 width="270"
+		 control_name="FSUseWebProfiles"
+		 tool_tip="Shows profiles as a web page instead of a v1-style panel."/>
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="Disable automatic opening of block list"
+		 name="FSDisableBlockListAutoOpen"
+		 width="270"
+		 control_name="FSDisableBlockListAutoOpen"
+		 tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
+
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		name="standalone_textbox"
+		left="10"
+		top_pad="10"
+		width="200">
+		Use stand-alone windows for:
+		</text>
+		<check_box
+		top_pad="2"
+		control_name="FSUseStandaloneGroupFloater"
+		follows="left|top"
+		height="16"
+		name="FSUseStandaloneGroupFloater"
+		label="Group profiles"
+		left="20"
+		width="170"
+		tool_tip="If enabled, group profiles will open in separate windows."/>
+		<check_box
+		control_name="FSUseStandaloneTeleportHistoryFloater"
+		follows="left|top"
+		height="16"
+		name="FSUseStandaloneTeleportHistoryFloater"
+		label="Teleport history"
+		left_pad="5"
+		width="170"
+		tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
+		<check_box
+		top_pad="2"
+		control_name="FSUseStandaloneBlocklistFloater"
+		follows="left|top"
+		height="16"
+		name="FSUseStandaloneBlocklistFloater"
+		label="Block/mute list"
+		left="20"
+		width="170"
+		tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+		<check_box
+		control_name="FSUseStandalonePlaceDetailsFloater"
+		follows="left|top"
+		height="16"
+		name="FSUseStandalonePlaceDetailsFloater"
+		label="Landmarks, place details and teleport history details"
+		left_pad="5"
+		width="170"
+		tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
+
+		<text
+		 top_pad="10"
+		 left="10"
+		 layout="topleft"
+		 follows="left|top"
+		 height="16"
+		 width="300"
+		 name="ExtendedTeleportHistoryLabel">
+			Extend teleport history by:
+		</text>
+		<check_box
+		control_name="FSTeleportHistoryShowPosition"
+		top_pad="2"
+		left="20"
+		layout="topleft"
+		follows="left|top"
+		height="16"
+		name="FSTeleportHistoryShowPosition"
+		label="Position"
+		width="75"
+		tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
+		<check_box
+		top_delta="0"
+		control_name="FSTeleportHistoryShowDate"
+		follows="left|top"
+		height="16"
+		name="FSTeleportHistoryShowDate"
+		label="Date"
+		left_pad="5"
+		width="75"
+		tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
+
+		<text
+		 top_pad="10"
+		 left="10"
+		 layout="topleft"
+		 follows="left|top"
+		 height="16"
+		 width="300"
+		 name="textFriendlistOptions">
+			Contact list options:
+		</text>
+		<text
+		 top_pad="2"
+		 left="20"
+		 layout="topleft"
+		 follows="left|top"
+		 height="16"
+		 width="125"
+		 name="textFriendlistColumns">
+			Visible name columns:
+		</text>
+		<check_box
+		 top_delta="0"
+		 left_pad="15"
+		 follows="left|top"
+		 height="16"
+		 label="Username"
+		 name="FSFriendListColumnShowUserName"
+		 width="70"
+		 control_name="FSFriendListColumnShowUserName"
+		 tool_tip="The contact list will show a column with the friend's username.">
+			<check_box.commit_callback
+			 function="FS.CheckContactListColumnMode" />
+		</check_box>
+		<check_box
+		 top_delta="0"
+		 left_pad="15"
+		 follows="left|top"
+		 height="16"
+		 label="Display name"
+		 name="FSFriendListColumnShowDisplayName"
+		 width="90"
+		 control_name="FSFriendListColumnShowDisplayName"
+		 tool_tip="The contact list will show a column with the friend's display name.">
+			<check_box.commit_callback
+			 function="FS.CheckContactListColumnMode" />
+		</check_box>
+		<check_box
+		 top_delta="0"
+		 left_pad="15"
+		 follows="left|top"
+		 height="16"
+		 label="Full name"
+		 name="FSFriendListColumnShowFullName"
+		 width="70"
+		 control_name="FSFriendListColumnShowFullName"
+		 tool_tip="The contact list will show a column with the friend's full name.">
+			<check_box.commit_callback
+			 function="FS.CheckContactListColumnMode" />
+		</check_box>
+		<text
+		 top_pad="2"
+		 left="20"
+		 follows="left|top"
+		 name="textFriendListSortOrder"
+		 width="60">
+		 Sort list by:
+		</text>
+		<radio_group
+		 top_delta="0"
+		 left_pad="15"
+		 height="16"
+		 layout="topleft"
+		 control_name="FSFriendListSortOrder"
+		 name="FSFriendListSortOrder"
+		 tool_tip=""
+		 width="331">
+			<radio_item
+			 label="Username"
+			 layout="topleft"
+			 name="username"
+			 value="0"
+			 top_pad="7"
+			 width="75" />
+			<radio_item
+			 left_pad="15"
+			 label="Display name"
+			 layout="topleft"
+			 top_delta="0"
+			 name="displayname"
+			 value="1"
+			 width="75" />
+		</radio_group>
+		<text
+		 top_pad="2"
+		 left="20"
+		 follows="left|top"
+		 name="textFriendListFullNameFormat"
+		 width="105">
+		 Show full name as:
+		</text>
+		<radio_group
+		 top_delta="0"
+		 left_pad="15"
+		 height="16"
+		 layout="topleft"
+		 enabled_control="FSFriendListColumnShowFullName"
+		 control_name="FSFriendListFullNameFormat"
+		 name="FSFriendListFullNameFormat"
+		 tool_tip=""
+		 width="331">
+			<radio_item
+			 label="Username (Display name)"
+			 layout="topleft"
+			 name="username_displayname"
+			 value="0"
+			 top_pad="7"
+			 width="160" />
+			<radio_item
+			 left_pad="15"
+			 label="Display name (Username)"
+			 layout="topleft"
+			 top_delta="0"
+			 name="displayname_username"
+			 value="1"
+			 width="75" />
+		</radio_group>
+		<check_box
+		 top_pad="2"
+		 left="20"
+		 follows="left|top"
+		 height="16"
+		 label="Show permissions column"
+		 name="FSFriendListColumnShowPermissions"
+		 width="270"
+		 control_name="FSFriendListColumnShowPermissions"
+		 tool_tip="The contact list will show the columns with the permissions you granted this avatar and vice versa.">
+		</check_box>
+
+		<text
+		 top_pad="10"
+		 left="10"
+		 layout="topleft"
+		 follows="left|top"
+		 height="16"
+		 width="300"
+		 name="textInventoryOptions">
+			Inventory options:
+		</text>
+		<check_box
+		 top_pad="2"
+		 left="20"
+		 follows="left|top"
+		 height="16"
+		 label="Hide empty system folders from inventory"
+		 name="DebugHideEmptySystemFolders"
+		 width="270"
+		 control_name="DebugHideEmptySystemFolders"
+		 tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
+		</check_box>
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="Show the Received Items folder in normal inventory"
+		 name="FSShowInboxFolder"
+		 width="270"
+		 control_name="FSShowInboxFolder"
+		 tool_tip="If enabled, the inventory windows will also show the Received Items folder">
+		</check_box>
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="Allow separate search terms on each tab in inventory"
+		 name="FSSplitInventorySearchOverTabs"
+		 width="270"
+		 control_name="FSSplitInventorySearchOverTabs"
+		 tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
+		</check_box>
+
     </panel>
 
     <!--Toasts-->
@@ -887,7 +1106,7 @@
        top_pad="5"
        width="256" />
 	</panel>
-	
+
     <!--Font-->
     <panel
      top_pad="5"

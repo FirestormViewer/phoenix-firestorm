@@ -10,7 +10,8 @@
 			</text>
 			<check_box label="Construire/Modifier" name="edit_camera_movement" tool_tip="Utiliser le positionnement automatique de la caméra lorsque vous entrez en mode de modification et le quittez."/>
 			<check_box label="Apparence" name="appearance_camera_movement" tool_tip="Utiliser le positionnement automatique de la caméra en mode de modification."/>
-			<check_box initial_value="true" label="Panneau latéral" name="appearance_sidebar_positioning" tool_tip="Utiliser le positionnement automatique de la caméra pour le panneau latéral."/>
+			<check_box label="Panneau latéral" name="appearance_sidebar_positioning" tool_tip="Utiliser le positionnement automatique de la caméra pour le panneau latéral."/>
+			<check_box name="ShowMutedAvatarsAsCloud" label="Afficher un nuage de particules pour les avatars bloqués" tool_tip="Afficher les avatars bloqués (mutés) en nuages de particules de couleur particuliere."/>
 		</panel>
 		<!--Mouselook-->
 		<panel name="tab-mouselook">
@@ -30,6 +31,10 @@
 				<radio_item label="Pilotage auto" name="radio_autopilot"/>
 			</radio_group>
 			<button label="Autres accessoires" name="joystick_setup_button"/>
+		</panel>
+		<!--Maps-->
+		<panel name="tab-maps">
+			<check_box name="FSWorldMapDoubleclickTeleport" label="Activer la téléportation au double clic sur la carte du monde" tool_tip="Téléportation directe a la destination lorsque vous faites un double clic sur la carte du monde."/>
 		</panel>
 	</tab_container>
 </panel>

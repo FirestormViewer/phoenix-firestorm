@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Firestorm" name="firestorm">
 	<tab_container label="Prefs Firestorm" name="tabs">
-		<panel label="General" name="tab-general">
+		<panel label="Extras" name="tab-extras">
 			<check_box name="checkMiscRLVa" label="Permitir control remoto del visor mediante scripts (RLVa)" width="330"/>
 			<text name="textMiscRLVaRestart">
 				(requiere reiniciar)
 			</text>
-			<check_box label="Activar teleportes con doble clic en el mapa del mundo" name="FSWorldMapDoubleclickTeleport" tool_tip="Permite teleportarse mediante doble clic a una destinación en el mapa del mundo."/>
+			<check_box label="Si es posible, rezzear objetos siempre bajo el grupo del terreno" name="grouplandrez" tool_tip="Procura rezzear los objetos bajo el grupo del terreno si perteneces al mismo, aunque no tengas activa la etiqueta correspondiente"/>
+			<check_box label="Crear efectos de partículas cuando los scripts se comunican" name="EffectScriptChatParticles" tool_tip="Si lo activas, los objetos con scripts mostrarán remolinos de partículas de luz cuando los scripts se comuniquen"/>
+			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Si lo activas, la baliza de seguimiento se desactivará automáticamente si la distancia con el avatar es menor que 3 metros. (Por defecto)."/>
 			<check_box label="Desactivar las balizas de teleporte" name="tp_beam_toggle" tool_tip="Desactiva las balizas de destino de teleporte que se muestran tras teleportarse"/>
 			<check_box label="Desactivar pantalla de teleporte" name="tp_screen_toggle" tool_tip="Desactiva la pantalla negra durante todos los teleportes."/>
 			<check_box label="Desactivar la pantalla de progreso del inicio de sesión" name="login_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del inicio de la sesión"/>
 			<check_box label="Desactivar la pantalla de progreso del cierre de sesión" name="logout_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del cierre de la sesión."/>
-			<check_box label="Desactivar la apertura automática de la lista de bloqueados" name="FSDisableBlockListAutoOpen" tool_tip="Desactiva la apertura automática de la lista de bloqueados cuando se bloquean avatares u objetos."/>
-			<check_box label="Si es posible, rezzear objetos siempre bajo el grupo del terreno" name="grouplandrez" tool_tip="Procura rezzear los objetos bajo el grupo del terreno si perteneces al mismo, aunque no tengas activa la etiqueta correspondiente"/>
-			<check_box label="Ordenar lista de contactos por nombre de usuario aunque se muestren los Displaynames" name="sortcontactsbyun" tool_tip="Si está activado, todas las listas de contactos se ordenan siempre por nombre de usuario"/>
-			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
-			<check_box label="Ocultar carpetas de sistema vacías en el inventario" name="DebugHideEmptySystemFolders" tool_tip="Si lo activas, las ventanas de inventario no mostrará ninguna carpeta de sistema que esté vacía, como las de Favoritos, Hitos, etc."/>
-			<check_box label="Mostrar la carpeta Items Recibidos en el inventario" name="FSShowInboxFolder" tool_tip="Si lo activas, las ventanas de invantario también mostrarán la carpeta Items Recibidos"/>
-			<check_box label="Permitir diferentes términos de búsqueda en cada pestaña del inventario" name="FSSplitInventorySearchOverTabs" tool_tip="Si lo activas se pueden usar diferentes términos de búsqueda en cada pestaña del inventario."/>
-			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Si lo activas, la baliza de seguimiento se desactivará automáticamente si la distancia con el avatar es menor que 3 metros. (Por defecto)."/>
-			<check_box label="Crear efectos de partículas cuando los scripts se comunican" name="EffectScriptChatParticles" tool_tip="Si lo activas, los objetos con scripts mostrarán remolinos de partículas de luz cuando los scripts se comuniquen"/>
 			<check_box label="Activar escalado progresivo de distancia de dibujo" name="FSRenderFarClipStepping" tool_tip="Si lo activas, Firestorm aumentará progresivamente la distancia de dibujo después de un teleporte." width="300"/>
 			<slider name="progressive_draw_distance_interval" tool_tip="Intérvalo en segundos entre cada incremento de distancia de dibujo"/>
 			<check_box name="UseLSLBridge" label="Activar el LSL-Client Bridge" tool_tip="Permite al visor usar un accesorio con scripts (Bridge) para extender sus características"/>
-			<check_box name="UseLSLFlightAssist" label="Activar asistente de vuelo del Bridge" tool_tip="Activa el script que permite volar y flotar a mayor altitud"/>
+			<!-- <check_box name="UseLSLFlightAssist" label="Activar asistente de vuelo del Bridge" tool_tip="Activa el script que permite volar y flotar a mayor altitud"/> -->
 		</panel>
 		<panel label="Protección" name="ProtectionTab">
 			<check_box label="Impedir que pueda sentarme con un clic del botón izquierdo del ratón" name="FSBlockClickSit"/>
