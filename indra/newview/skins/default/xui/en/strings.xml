@@ -232,6 +232,27 @@ Please try logging in again in a minute.</string>
     <string name="LensFlare">Lens Flare</string>
     <string name="Miniature">Miniature</string>
     <string name="Toycamera">Toy Camera</string>
+    <string name="Antique">Antique</string>
+    <string name="Badtrip">Bad Trip</string>
+    <string name="Blownhighlights">Blown Highlights</string>
+    <string name="Softfocus">Soft Focus</string>
+    <string name="Brighten">Brighten</string>
+    <string name="Cartoon">Cartoon</string>
+    <string name="Darken">Darken</string>
+    <string name="Edges">Glowing Edges</string>
+    <string name="Focus">Center Focus</string>
+    <string name="Heatwave">Heatwave</string>
+    <string name="Julesverne">Jules Verne</string>
+    <string name="Lightleak">Light Leak</string>
+    <string name="Linearize">Linearize</string>
+    <string name="Negative">Negative</string>
+    <string name="Overcast">Overcast</string>
+    <string name="Posterize">Posterize</string>
+    <string name="Rotatecolors180">Color Shift</string>
+    <string name="Sharpen">Sharpen</string>
+    <string name="Thematrix">The Matrix</string>
+	
+	
 	
     <!-- Tooltip -->
 	<string name="TooltipPerson">Person</string><!-- Object under mouse pointer is an avatar -->
