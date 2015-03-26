@@ -535,7 +535,7 @@ void LLLocalBitmap::updateUserSculpts(LLUUID old_id, LLUUID new_id)
 void LLLocalBitmap::updateUserLayers(LLUUID old_id, LLUUID new_id, LLWearableType::EType type)
 {
 	// <FS:Ansariel> FIRE-15787: Crash fix
-	if (!gAgentAvatarp)
+	if (!isAgentAvatarValid())
 	{
 		return;
 	}
