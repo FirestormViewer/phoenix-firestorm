@@ -29,6 +29,10 @@
 #include "linden_common.h"
 #include "lluriparser.h"
 
+#if !LL_WINDOWS
+#include <stdint.h>
+#endif
+
 LLUriParser::LLUriParser(const std::string& u) : mTmpScheme(false), mRes(0)
 {
 	mState.uri = &mUri;
