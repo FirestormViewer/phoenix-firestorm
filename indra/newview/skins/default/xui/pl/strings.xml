@@ -409,6 +409,60 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="Toycamera">
 		Zabawkowy aparat
 	</string>
+	<string name="Antique">
+		Antyk
+	</string>
+	<string name="Badtrip">
+		Zła podróż
+	</string>
+	<string name="Blownhighlights">
+		Wzmocnione podświetlenia
+	</string>
+	<string name="Softfocus">
+		Miękkie skupienie
+	</string>
+	<string name="Brighten">
+		Rozjaśnienie
+	</string>
+	<string name="Cartoon">
+		Kreskówka
+	</string>
+	<string name="Darken">
+		Przyciemnienie
+	</string>
+	<string name="Edges">
+		Świecące krawędzie
+	</string>
+	<string name="Focus">
+		Wycentrowane skupienie
+	</string>
+	<string name="Heatwave">
+		Upał
+	</string>
+	<string name="Julesverne">
+		Juliusz Verne
+	</string>
+	<string name="Lightleak">
+		Lekki wyciek
+	</string>
+	<string name="Linearize">
+		Zlinearyzowanie
+	</string>
+	<string name="Negative">
+		Negatyw
+	</string>
+	<string name="Overcast">
+		Pochmurnie
+	</string>
+	<string name="Posterize">
+		Plakat
+	</string>
+	<string name="Rotatecolors180">
+		Przemieszczenie barw
+	</string>
+	<string name="Sharpen">
+		Wyostrzenie
+	</string>
 	<string name="TooltipPerson">
 		Osoba
 	</string>

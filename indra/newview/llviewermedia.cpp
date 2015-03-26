@@ -2209,16 +2209,31 @@ void LLViewerMediaImpl::updateVolume()
 
 		if (mProximityCamera > 0) 
 		{
-			if (mProximityCamera > gSavedSettings.getF32("MediaRollOffMax"))
+			// <FS:PP> It seems, that updateVolume() is called per frame with mMediaSource as stated in the "TODO: this is updated every frame - is this bad?" comment in this file, in LLViewerMediaImpl::update()... let's place some LLCachedControls here for performance reasons
+			// if (mProximityCamera > gSavedSettings.getF32("MediaRollOffMax"))
+			static LLCachedControl<F32> sMediaRollOffMax(gSavedSettings, "MediaRollOffMax");
+			static LLCachedControl<F32> sMediaRollOffMin(gSavedSettings, "MediaRollOffMin");
+			if (mProximityCamera > sMediaRollOffMax)
+			// </FS:PP>
 			{
 				volume = 0;
 			}
-			else if (mProximityCamera > gSavedSettings.getF32("MediaRollOffMin"))
+			// <FS:PP> Speed up with LLCachedControls
+			// else if (mProximityCamera > gSavedSettings.getF32("MediaRollOffMin"))
+			else if (mProximityCamera > sMediaRollOffMin)
+			// </FS:PP>
 			{
 				// attenuated_volume = 1 / (roll_off_rate * (d - min))^2
 				// the +1 is there so that for distance 0 the volume stays the same
-				F64 adjusted_distance = mProximityCamera - gSavedSettings.getF32("MediaRollOffMin");
-				F64 attenuation = 1.0 + (gSavedSettings.getF32("MediaRollOffRate") * adjusted_distance);
+
+				// <FS:PP> Speed up with LLCachedControls
+				// F64 adjusted_distance = mProximityCamera - gSavedSettings.getF32("MediaRollOffMin");
+				// F64 attenuation = 1.0 + (gSavedSettings.getF32("MediaRollOffRate") * adjusted_distance);
+				static LLCachedControl<F32> sMediaRollOffRate(gSavedSettings, "MediaRollOffRate");
+				F64 adjusted_distance = mProximityCamera - sMediaRollOffMin;
+				F64 attenuation = 1.0 + (sMediaRollOffRate * adjusted_distance);
+				// </FS:PP>
+
 				attenuation = 1.0 / (attenuation * attenuation);
 				// the attenuation multiplier should never be more than one since that would increase volume
 				volume = volume * llmin(1.0, attenuation);
