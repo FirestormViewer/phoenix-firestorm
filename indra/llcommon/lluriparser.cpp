@@ -131,7 +131,7 @@ void LLUriParser::textRangeToString(UriTextRangeA& textRange, std::string& str)
 		const ptrdiff_t len = textRange.afterLast - textRange.first;
 		if (len)
 		{
-			str.assign(textRange.first, uintptr_t(len));
+			str.assign(textRange.first, std::string::size_type(len));
 			return;
 		}
 	}
