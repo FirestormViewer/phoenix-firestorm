@@ -37,13 +37,13 @@
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button"/>
         <text name="Media Rolloff">
-            Lautstärkeabfall-Distanz:
+            Lautstärkeabfall-Distanz für Medien-Quellen:
         </text>
-        <slider name="MediaRollOffMin" tool_tip="Minimale Distanz von der Soundquelle, ab der die Lautstärke abzufallen beginnt."/>
+        <slider label="Wird leiser ab:" name="MediaRollOffMin" tool_tip="Minimale Distanz von der Soundquelle, ab der die Lautstärke abzufallen beginnt."/>
         <text name="MinMeters">
             Meter
         </text>
-        <slider name="MediaRollOffMax" tool_tip="Maximale Distanz von der Soundquelle, ab der sie stummgeschaltet wird."/>
+        <slider label="Wird lauter ab:" name="MediaRollOffMax" tool_tip="Maximale Distanz von der Soundquelle, ab der sie stummgeschaltet wird."/>
         <text name="MaxMeters">
             Meter
         </text>
