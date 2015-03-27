@@ -47,6 +47,7 @@
 			<text name="object_name_header_label">
 				Obiekty
 			</text>
+			<slider label="Współczynnik zanikania koloru poza zasięgiem czatu:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Współczynnik zanikania koloru czcionki czatu dla osób przebywających poza normalnym zasięgiem pisania." />
 			<check_box name="FSColorIMsDistinctly" label="Koloruj czat IM/Grup oddzielnie w konsoli:" />
 			<panel name="im_color_panel">
 				<text name="console_im_label">
