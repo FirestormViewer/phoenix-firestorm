@@ -7,7 +7,7 @@
 <tab_container label="Firestorm環境設定" name="tabs">
 
 	<!-- 一般 -->
-	<panel label="一般"  name="Media General Panel" >
+	<panel label="一般"  name="Media Sounds Panel" >
 	
 		<slider label="全体の音量" name="System Volume"/>
 		<check_box initial_value="true" label="最小化でミュート" name="mute_when_minimized"/>
@@ -29,31 +29,24 @@
 		<check_box label="有効" name="enable_media"/>
 		<slider label="ボイスチャット" name="Voice Volume"/>
 		<check_box label="有効" name="enable_voice_check_volume"/>
-		<check_box label="メディアを自動再生する" name="media_auto_play_btn" tool_tip="ここにチェックを入れてメディアの自動再生を許可します" value="true"/>
+		<text name="friends_logon_sounds_label">
+			フレンドのステータスが変わったら通知音:
+		</text>
+		<check_box name="friends_notify_online_sound" label="ログイン時" />
+		<check_box name="friends_notify_offline_sound" label="ログアウト時" />
+		<text name="money_change_threshold_label" tool_tip="ここに設定した額より大きい金額を消費または受領した場合に音を鳴らします。">
+            L$入出金通知音の閾値：
+        </text>
+        <spinner name="money_change_threshold" left_pad="5" />
+		
+	</panel>
+
+	<panel name="Media Media Panel">
+		<check_box label="メディアを自動再生する" name="media_auto_play_btn" tool_tip="ここにチェックを入れてメディアの自動再生を許可します"/>
 		<check_box label="他の住人のスクリプトがメディアを再生することを許可" name="media_allowscript_btn" tool_tip="他の住人がスクリプトの入ったオブジェクトを使って土地のメディアをコントロールすることを許可／禁止します"/>
-		<check_box label="他のアバターに取り付けられたメディアを再生する" name="media_show_on_others_btn" tool_tip="このチェックを外すと、近くにいる他のアバターに取り付けられたメディアを非表示にします" value="true"/>
+		<check_box label="他のアバターに取り付けられたメディアを再生する" name="media_show_on_others_btn" tool_tip="このチェックを外すと、近くにいる他のアバターに取り付けられたメディアを非表示にします"/>
 		<check_box label="メディアフィルターを有効にする（セキュリティレベルが上がります）" name="media_filter" tool_tip="このチェックを入れることで、特定のサイトのメディアを再生するかどうかフィルターをかけることができるようになります"/>
-		<button label="メディアフィルター編集" name="edit_media_lists_button" left_pad="120"/>
-		<text name="show_stream_metadata_text">
-			曲のタイトルの通知方法:
-        </text>
-		<radio_group name="show_stream_metadata">
-            <radio_item label="通知しない" name="radio_off" value="0" />
-            <radio_item label="トースト" name="radio_toasts" value="1" />
-            <radio_item label="周辺チャット" name="radio_chat" value="2" />
-        </radio_group>
-		<check_box label="曲のタイトルを次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
-		<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする:" />
-        <slider label="フェードイン" name="FSAudioMusicFadeIn"          width="280"
-         label_width="80" tool_tip="区画に流れている音声のフェードインする時間を設定します。" />
-        <text name="FSAudioMusicFadeInSeconds" left_delta="285">
-            秒
-        </text>
-        <slider label="フェードアウト" name="FSAudioMusicFadeOut"          width="280"
-         label_width="80" tool_tip="区画に流れている音声のフェードアウトする時間を設定します。"/>
-        <text name="FSAudioMusicFadeOutSeconds" left_delta="285">
-            秒
-        </text>
+		<button label="メディアフィルター編集" name="edit_media_lists_button"/>
 		<text name="Media Rolloff" width="400">
 			メディア音量のロールオフ距離（それ以上大きく或いは小さくならない距離）：
 		</text>
@@ -65,13 +58,28 @@
 		<text name="MaxMeters">
 			メートル
 		</text>
-		<text name="money_change_threshold_label" tool_tip="ここに設定した額より大きい金額を消費または受領した場合に音を鳴らします。">
-            L$入出金通知音の閾値：
-        </text>
-        <spinner name="money_change_threshold" left_pad="5" />
-		
 	</panel>
-	
+	<panel name="Media Music Panel">
+		<text name="show_stream_metadata_text">
+			曲のタイトルの通知方法:
+        </text>
+		<radio_group name="show_stream_metadata">
+            <radio_item label="通知しない" width="75" name="radio_off" value="0" />
+            <radio_item label="トースト" name="radio_toasts" value="1" />
+            <radio_item label="周辺チャット" name="radio_chat" value="2" />
+        </radio_group>
+		<check_box label="曲のタイトルを次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
+		<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする:" />
+        <slider label="フェードイン" name="FSAudioMusicFadeIn" width="280" label_width="80" tool_tip="区画に流れている音声のフェードインする時間を設定します。" />
+        <text name="FSAudioMusicFadeInSeconds" left_delta="285">
+            秒
+        </text>
+        <slider label="フェードアウト" name="FSAudioMusicFadeOut" width="280" label_width="80" tool_tip="区画に流れている音声のフェードアウトする時間を設定します。"/>
+        <text name="FSAudioMusicFadeOutSeconds" left_delta="285">
+            秒
+        </text>
+	</panel>
+
 	<!-- ボイス -->
 	<panel label="ボイス設定" name="Media Voice tab" >
 	

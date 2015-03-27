@@ -23,11 +23,6 @@
 	<check_box name="friends_online_notify_checkbox" label="En tostadas" width="95"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="En el chat local y en la consola" width="195"/>
 	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
-	<text name="friends_logon_sounds_label">
-		Reproducir un sonido cuando mis amigos:
-	</text>
-	<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
-	<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
 	<check_box label="Cuando el total de scripts de la región cambie:" name="FSReportTotalScriptCountChanges"/>
 	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Umbral de cambios de total de scripts antes de reportarlo (Por defecto: 100)"/>
 	<check_box label="Mostrar notificaciones de colisión en el chat local" name="FSCollisionMessagesInChat"/>

@@ -4,8 +4,8 @@
 	Mittlere Maustaste
 </panel.string>
 <tab_container label="Firestorm Prefs" name="tabs">
-    <!-- General -->
-    <panel label="Allgemein" name="Media General Panel">
+    <!-- Sounds -->
+    <panel label="Allgemein" name="Media Sounds Panel">
 		<slider label="Master-Lautstärke" name="System Volume"/>
 		<check_box name="mute_when_minimized" label="Stummschalten, wenn minimiert"/>
 		<slider label="Schaltflächen" name="UI Volume"/>
@@ -19,30 +19,23 @@
 		<check_box label="Aktiviert" name="enable_media"/>
 		<slider label="Voice-Chat" name="Voice Volume"/>
 		<check_box label="Aktiviert" name="enable_voice_check_volume"/>
-		<check_box label="Automatische Audio-Wiedergabe zulassen" name="audio_auto_play_btn" tool_tip="Hier aktivieren, um Audio-Streams automatisch wiederzugeben."/>
+		<text name="friends_logon_sounds_label">
+			Klang abspielen wenn sich Freunde:
+		</text>
+		<check_box label="Einloggen" name="friends_notify_online_sound"/>
+		<check_box label="Ausloggen" name="friends_notify_offline_sound"/>
+		<text name="money_change_threshold_label" tool_tip="Spielt einen Soundbenachrichtung ab, wenn der angegebene Geldbetrag empfangen oder ausgegeben wird." width="160">
+			Schwellwert für L$-Änderung:
+		</text>
+    </panel>
+	
+	<!-- Media -->
+	<panel label="Media" name="Media Media Panel">
 		<check_box label="Automatische Medien-Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben."/>
 		<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
-		<button label="Listen bearbeiten..." name="edit_media_lists_button" left_pad="45"/>
-		<text name="show_stream_metadata_text">
-			Musikstream-Titel anzeigen:
-		</text>
-		<radio_group name="show_stream_metadata">
-			<radio_item label="Aus" name="radio_off"/>
-			<radio_item label="Toasts" name="radio_toasts"/>
-			<radio_item label="Chat in der Nähe" name="radio_chat"/>
-		</radio_group>
-        <check_box name="StreamMetadataAnnounceToChat" label="Stream-Titel an diesen Kanal senden:" width="230"/>
-        <check_box name="FSFadeAudioStream" tool_tip="Aktiviert Fading, wenn sich der Parzellen-Audiostream ändert" label="Parzellen-Audiostream-Fading aktivieren:"/>
-		<slider label="Einblenden" label_width="70" name="FSAudioMusicFadeIn" tool_tip="Einblenddauer für Parzellen-Audiostream."/>
-		<text name="FSAudioMusicFadeInSeconds">
-			Sekunden
-		</text>
-		<slider label="Ausblenden" label_width="70" name="FSAudioMusicFadeOut" tool_tip="Ausblenddauer für Parzellen-Audiostream."/>
-		<text name="FSAudioMusicFadeOutSeconds">
-			Sekunden
-		</text>
+		<button label="Listen bearbeiten..." name="edit_media_lists_button"/>
         <text name="Media Rolloff">
             Lautstärkeabfall-Distanz:
         </text>
@@ -54,13 +47,33 @@
         <text name="MaxMeters">
             Meter
         </text>
-		<text name="money_change_threshold_label" tool_tip="Spielt einen Soundbenachrichtung ab, wenn der angegebene Geldbetrag empfangen oder ausgegeben wird." width="160">
-			Schwellwert für L$-Änderung:
+    </panel>
+	
+	<!-- Music -->
+	<panel label="Musik" name="Media Music Panel">
+		<check_box label="Automatische Audio-Wiedergabe zulassen" name="audio_auto_play_btn" tool_tip="Hier aktivieren, um Audio-Streams automatisch wiederzugeben."/>
+        <check_box name="FSFadeAudioStream" tool_tip="Aktiviert Fading, wenn sich der Parzellen-Audiostream ändert" label="Parzellen-Audiostream-Fading aktivieren:"/>
+		<slider label="Einblenden:" width="270" label_width="70" name="FSAudioMusicFadeIn" tool_tip="Einblenddauer für Parzellen-Audiostream."/>
+		<text left_delta="275" name="FSAudioMusicFadeInSeconds">
+			Sekunden
 		</text>
+		<slider label="Ausblenden:" width="270" label_width="70" name="FSAudioMusicFadeOut" tool_tip="Ausblenddauer für Parzellen-Audiostream."/>
+		<text left_delta="275" name="FSAudioMusicFadeOutSeconds">
+			Sekunden
+		</text>
+		<text name="show_stream_metadata_text">
+			Musikstream-Titel anzeigen:
+		</text>
+		<radio_group name="show_stream_metadata">
+			<radio_item label="Aus" name="radio_off"/>
+			<radio_item label="Toasts" name="radio_toasts"/>
+			<radio_item label="Chat in der Nähe" name="radio_chat"/>
+		</radio_group>
+        <check_box name="StreamMetadataAnnounceToChat" label="Stream-Titel an diesen Kanal senden:" width="230"/>
     </panel>
 
 	<!-- Voice -->
-	<panel label="Voice-Chat-Einstellungen" name="Media Voice tab">
+	<panel label="Voice-Chat" name="Media Voice tab">
 		<check_box label="Voice-Chat aktivieren" name="enable_voice_check" width="140"/>
 		<button name="reset_voice_button" tool_tip="Voice-Chat zurücksetzen"/>
 		<check_box label="Voice-Chat in mehreren Viewer-Instanzen gleichzeitig erlauben" name="VoiceMultiInstance"/>

@@ -4,7 +4,7 @@
 		Pulsante centrale del mouse
 	</panel.string>
 	<tab_container label="Preferenze Firestorm" name="tabs">
-		<panel label="Generale" name="Media General Panel">
+		<panel label="Generale" name="Media Sounds Panel">
 			<slider label="Volume generale" name="System Volume"/>
 			<check_box label="Muta quando ridotto ad icona" name="mute_when_minimized"/>
 			<slider label="Interfaccia" name="UI Volume"/>
@@ -17,26 +17,30 @@
 			<check_box label="Abilita" name="enable_media"/>
 			<slider label="Volume Voice" name="Voice Volume"/>
 			<check_box label="Abilita" name="enable_voice_check_volume"/>
+		</panel>
+		<panel name="Media Media Panel">
 			<check_box label="Riproduci automaticamente lo streaming quando entri in Regione" name="media_auto_play_btn" tool_tip="Spunta per startare automaticamente i Media quando entri in una Sim."/>
 			<check_box name="media_allowscript_btn" tool_tip="Questa impostazione consente/impedisce di controllare le connessioni multimediali da parte di script di altri utenti" label="Consenti agli script di un residente di riprodurre Media"/>
 			<check_box label="Riproduci media indossati da altri Avatar" name="media_show_on_others_btn" tool_tip="Non selezionare se non si vogliono ascoltare i media indossati su altri avatar."/>
 			<check_box name="media_filter" tool_tip="Selezionare questa opzione per abilitare il filtro che permette di scegliere se riprodurre file multimediali da un host specifico" label="Attiva filtro Media (Aumenta la sicrezza)"/>
 			<button label="Gestisci siti Media" name="edit_media_lists_button"/>
-			<check_box name="ShowStreamMetadata" label="Mostra titoli Media nella local chat"/>
-			<check_box name="StreamMetadataAnnounceToChat" label="Trasmetti titolo su un Canale:"/>
 			<text name="Media Rolloff" width="220">
 				Distanza di attenuazione Audio/Media:
 			</text>
-			<slider label="Min" name="MediaRollOffMin" tool_tip="Distanza minima dalla sorgente per la quale avvenga l'effetto di attenuazione."/>
+			<slider name="MediaRollOffMin" tool_tip="Distanza minima dalla sorgente per la quale avvenga l'effetto di attenuazione."/>
 			<text name="MinMeters">
 				metri
 			</text>
-			<slider label="Max" name="MediaRollOffMax" tool_tip="Distanza massima dalla fonte sonora per disattivare completamente l'audio."/>
+			<slider name="MediaRollOffMax" tool_tip="Distanza massima dalla fonte sonora per disattivare completamente l'audio."/>
 			<text name="MaxMeters">
 				metri
 			</text>
 		</panel>
-		<panel label="Impostazioni Voice" name="Media Voice tab">
+		<panel name="Media Music Panel">
+			<check_box name="ShowStreamMetadata" label="Mostra titoli Media nella local chat"/>
+			<check_box name="StreamMetadataAnnounceToChat" label="Trasmetti titolo su un Canale:"/>
+		</panel>
+		<panel label="Voice" name="Media Voice tab">
 			<check_box label="Abilita Voice" name="enable_voice_check"/>
 			<text name="Listen from">
 				Ascolta da:

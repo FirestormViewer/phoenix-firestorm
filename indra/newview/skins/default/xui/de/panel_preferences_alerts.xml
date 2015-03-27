@@ -24,11 +24,6 @@
 	<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
 	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory"/>
-	<text name="friends_logon_sounds_label">
-		Klang abspielen wenn sich Freunde:
-	</text>
-	<check_box label="Einloggen" name="friends_notify_online_sound"/>
-	<check_box label="Ausloggen" name="friends_notify_offline_sound"/>
 	<check_box label="Wenn sich die Skriptanzahl in der Region ändert" name="FSReportTotalScriptCountChanges"/>
 	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
 	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>

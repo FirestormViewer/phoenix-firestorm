@@ -24,13 +24,7 @@
 	<check_box label="トーストで通知" name="friends_online_notify_checkbox" />
     <check_box name="OnlineOfflinetoNearbyChat" label="チャット履歴とコンソールで通知" />
 	<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
-	
-	<text name="friends_logon_sounds_label">
-        フレンドのステータスが変わったら通知音:
-    </text>
-    <check_box name="friends_notify_online_sound" label="ログイン時" />
-    <check_box name="friends_notify_offline_sound" label="ログアウト時" />
-      
+	      
     <check_box label="地域全体のスクリプト数に変化があった時W:" name="FSReportTotalScriptCountChanges" />
     <spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="通知の対象とするスクリプト数の閾値を設定します。（デフォルトは100）" />
 	

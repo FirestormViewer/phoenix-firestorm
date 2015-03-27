@@ -418,7 +418,7 @@
              left="20"
              height="12"
              width="110"
-             top_pad="10">
+             top_pad="15">
                  Show IMs in:
             </text>
             <radio_group

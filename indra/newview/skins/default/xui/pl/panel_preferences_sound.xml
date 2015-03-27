@@ -4,7 +4,7 @@
 		Środkowy przycisk myszy
 	</panel.string>
 	<tab_container label="Ust. Firestorma" name="tabs">
-		<panel label="Ogólne" name="Media General Panel">
+		<panel label="Dźwięki" name="Media Sounds Panel">
 			<slider label="Głośność ogólna" name="System Volume"/>
 			<check_box label="Wycisz gdy zminimalizowane" name="mute_when_minimized"/>
 			<slider label="Interfejs" name="UI Volume"/>
@@ -17,21 +17,35 @@
 			<check_box label="Włączone" name="enable_media"/>
 			<slider label="Rozmowy głosowe" name="Voice Volume"/>
 			<check_box label="Włączone" name="enable_voice_check_volume"/>
-			<check_box label="Automatycznie odtwarzaj muzykę" name="audio_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać muzykę strumieniową."/>
+			<text name="friends_logon_sounds_label">
+				Odtwórz dźwięk gdy moi znajomi:
+			</text>
+			<check_box label="Logują się" name="friends_notify_online_sound"/>
+			<check_box label="Wylogowywują się" name="friends_notify_offline_sound"/>
+			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
+				Próg zmiany ilości L$:
+			</text>
+		</panel>
+		<panel name="Media Media Panel">
 			<check_box label="Automatycznie odtwarzaj media" name="media_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać media."/>
 			<check_box name="media_allowscript_btn" tool_tip="To ustawienie pozwala lub zabrania oskryptowanym primom kontrolować Twoje media" label="Pozwalaj skryptom w świecie odtwarzać media"/>
 			<check_box label="Uruchamiaj media dołączone do innych awatarów" name="media_show_on_others_btn" tool_tip="Odznacz tę funkcję by ukryć media załączone do awatarów w pobliżu"/>
-			<check_box name="media_filter" tool_tip="Zaznacz tą opcję, aby móc wybierać, czy odtwarzać media z konkretnego hosta, czy nie" label="Włącz filtr mediów (zwiększone bezp.)"/>
+			<check_box name="media_filter" tool_tip="Zaznacz tą opcję, aby móc wybierać, czy odtwarzać media z konkretnego hosta, czy nie" label="Włącz filtr mediów (zwiększone bezpieczeństwo)"/>
 			<button label="Zarządzaj witrynami" name="edit_media_lists_button"/>
-			<text name="show_stream_metadata_text">
-				Powiadomienia o tytule strumienia:
+			<text name="Media Rolloff">
+				Rozchodzenie się dźwięku mediów:
 			</text>
-			<radio_group name="show_stream_metadata">
-				<radio_item label="Wyłącz" name="radio_off" />
-				<radio_item label="Tosty" name="radio_toasts" />
-				<radio_item label="Czat lokalny" name="radio_chat" />
-			</radio_group>
-			<check_box name="StreamMetadataAnnounceToChat" label="Wysyłaj tytuł strum. na kanał:"/>
+			<slider label="Zaczyna być ciszej po:" name="MediaRollOffMin" tool_tip="Minimalny dystans od źródła, aby ściszanie mediów zaczęło działać."/>
+			<text name="MinMeters">
+				metrach
+			</text>
+			<slider label="Całkowicie zanika po:" name="MediaRollOffMax" tool_tip="Maksymalny dystans od źródła, aby dźwięk był słyszalny."/>
+			<text name="MaxMeters">
+				metrach
+			</text>
+		</panel>
+		<panel label="Muzyka" name="Media Music Panel">
+			<check_box label="Automatycznie odtwarzaj muzykę" name="audio_auto_play_btn" tool_tip="Zaznacz tę funkcję, aby automatycznie uruchamiać muzykę strumieniową."/>
 			<check_box name="FSFadeAudioStream" tool_tip="Zaznacz to pole, jeśli wygładzanie ma być używane, gdy zmieni się muzyka strumieniowa na działce" label="Płynnie wygładzaj przechodzenie między strumieniami muzyki na działkach:"/>
 			<slider label="Wejście" name="FSAudioMusicFadeIn" tool_tip="Czas wygładzania dla dźwięku działki przy wchodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
 			<text name="FSAudioMusicFadeInSeconds">
@@ -41,22 +55,17 @@
 			<text name="FSAudioMusicFadeOutSeconds">
 				sekund
 			</text>
-			<text name="Media Rolloff">
-				Rozchodzenie się dźwięku:
+			<text name="show_stream_metadata_text">
+				Powiadomienia o tytule strumienia:
 			</text>
-			<slider label="Min" name="MediaRollOffMin" tool_tip="Minimalny dystans od źródła, aby media były słyszalne."/>
-			<text name="MinMeters">
-				metry
-			</text>
-			<slider label="Max" name="MediaRollOffMax" tool_tip="Maksymalny dystans od źródła, aby dźwięk został całkowicie wyciszony."/>
-			<text name="MaxMeters">
-				metry
-			</text>
-			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
-				Próg zmiany ilości L$:
-			</text>
+			<radio_group name="show_stream_metadata">
+				<radio_item label="Wyłącz" width="75" name="radio_off" />
+				<radio_item label="Tosty" name="radio_toasts" />
+				<radio_item label="Czat lokalny" name="radio_chat" />
+			</radio_group>
+			<check_box name="StreamMetadataAnnounceToChat" width="210" label="Wysyłaj tytuł strumienia na kanał:"/>
 		</panel>
-		<panel label="Rozmowy głosowe" name="Media Voice tab">
+		<panel label="Głos" name="Media Voice tab">
 			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check" width="155"/>
 			<button tool_tip="Resetuj rozmowy głosowe" name="reset_voice_button"/>
 			<check_box label="Gdy działa kilka kopii przeglądarki na raz, to zezwól na rozmowy głosowe w każdej z nich" name="VoiceMultiInstance" />

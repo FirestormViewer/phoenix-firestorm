@@ -22,11 +22,6 @@
 		<check_box label="W tostach" name="friends_online_notify_checkbox"/>
 		<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
 		<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
-		<text name="friends_logon_sounds_label">
-			Odtwórz dźwięk gdy moi znajomi:
-		</text>
-		<check_box label="Logują się" name="friends_notify_online_sound"/>
-		<check_box label="Wylogowywują się" name="friends_notify_offline_sound"/>
 		<check_box label="Gdy zmienia się liczba skryptów w regionie:" name="FSReportTotalScriptCountChanges"/>
 		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Próg zmiany całkowitej ilości skryptów w regionie, od którego pokazana zostanie informacja [Domyślnie: 100]"/>
 		<check_box label="Powiadomienia o kolizjach w czacie lokalnym" name="FSCollisionMessagesInChat"/>

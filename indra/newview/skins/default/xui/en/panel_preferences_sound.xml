@@ -26,15 +26,15 @@
  tab_min_width="50"
  tab_position="top" >
 
-    <!-- General -->
+    <!-- Sounds -->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="General"
-     name="Media General Panel" >
+     label="Sounds"
+     name="Media Sounds Panel" >
 
         <slider
          control_name="AudioLevelMaster"
@@ -50,7 +50,7 @@
          name="System Volume"
          show_text="false"
          slider_label.halign="right"
-         top="5"
+         top="10"
          volume="true"
          width="300">
             <slider.commit_callback
@@ -351,17 +351,78 @@
          name="enable_voice_check_volume"
          width="110"/>
 
-        <check_box
-         name="audio_auto_play_btn"
-         control_name="FSParcelMusicAutoPlay"
-         enabled_control="AudioStreamingMusic"
+        <text
+         type="string"
+         length="1"
+         follows="top|left"
+         height="15"
          layout="topleft"
-         height="16"
-         width="230"
-         tool_tip="Check this to automatically start audio streams."
-         label="Allow Audio to auto-play"
+         left="26"
+         top_pad="15"
+         name="friends_logon_sounds_label"
+         width="225">
+            Play a sound when my friends:
+        </text>
+        <check_box
+         control_name="PlayModeUISndFriendOnline"
+         name="friends_notify_online_sound"
+         label="Log in"
+         layout="topleft"
          top_pad="5"
-         left="25"/>
+         left_delta="5"
+         height="16"
+         width="85" />
+        <check_box
+         control_name="PlayModeUISndFriendOffline"
+         name="friends_notify_offline_sound"
+         label="Log out"
+         layout="topleft"
+         left_pad="0"
+         height="18"
+         width="85" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="26"
+         name="money_change_threshold_label"
+         tool_tip="Plays a sound when money is spent or received higher then the amount set here."
+         mouse_opaque="false"
+         top_pad="10"
+         width="117">
+            L$ change threshold:
+        </text>
+        <spinner
+         control_name="UISndMoneyChangeThreshold"
+         enabled="true"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         top_pad="7"
+         left_delta="5"
+         increment="10"
+         initial_value="10"
+         max_val="10000"
+         min_val="0"
+         name="money_change_threshold"
+         width="75" />
+
+    </panel>
+
+    <!-- Media -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Media"
+     name="Media Media Panel" >
+
         <check_box
          name="media_auto_play_btn"
          control_name="ParcelMediaAutoPlayEnable"
@@ -370,8 +431,8 @@
          height="16"
          width="230"
          tool_tip="Check this to automatically start media."
-         label="Allow Media to auto-play"
-         top_pad="1"
+         label="Allow media to auto-play"
+         top_pad="10"
          left="25"/>
         <check_box
          name="media_allowscript_btn"
@@ -382,7 +443,7 @@
          width="230"
          tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
          label="Allow inworld scripts to play media"
-         top_pad="1"
+         top_pad="3"
          left="25"/>
         <check_box
          name="media_show_on_others_btn"
@@ -393,7 +454,7 @@
          width="230"
          tool_tip="Uncheck this to hide media attached to other avatars nearby"
          label="Play media attached to other avatars"
-         top_pad="1"
+         top_pad="3"
          left="25"/>
 
         <check_box
@@ -412,63 +473,237 @@
          follows="left|top"
          height="23"
          label="Manage Media Sites"
-         top_delta="-5"
-         left_pad="10"
+         top_pad="3"
          name="edit_media_lists_button"
-         width="150">
+         width="200">
             <button.commit_callback
              function="Floater.Show"
              parameter="media_lists" />
         </button>
-        
-		<text
-			type="string"
-			length="1"
-			follows="left|top"
-			height="20"
-			layout="topleft"
-			left="26"
-			name="show_stream_metadata_text"
-			top_pad="2"
-			width="200">
-			Show stream title notifications:
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="25"
+         name="Media Rolloff"
+         mouse_opaque="false"
+         top_pad="15"
+         width="450">
+            Media source volume rolloff distance:
         </text>
-		<radio_group
-			control_name="ShowStreamMetadata"
-			height="20"
-			width="300"
-			layout="topleft"
-			left_pad="0"
-			name="show_stream_metadata">
+        <slider
+         can_edit_text="true"
+         control_name="MediaRollOffMin"
+         decimal_digits="0"
+         label="Starts getting quieter at:"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="5"
+         layout="topleft"
+         left="45"
+         max_val="512"
+         min_val="1"
+         name="MediaRollOffMin"
+         top_delta="20"
+         width="380"
+         label_width="165"
+         tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="385"
+         name="MinMeters"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            meters
+        </text>
+        <slider
+         can_edit_text="true"
+         control_name="MediaRollOffMax"
+         decimal_digits="0"
+         label="Completely disappears at:"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="30"
+         layout="topleft"
+         left="45"
+         max_val="512"
+         min_val="1"
+         name="MediaRollOffMax"
+         top_delta="17"
+         width="380"
+         label_width="165"
+         tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="385"
+         name="MaxMeters"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            meters
+        </text>
+
+    </panel>
+
+    <!-- Music -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Music"
+     name="Media Music Panel" >
+
+        <check_box
+         name="audio_auto_play_btn"
+         control_name="FSParcelMusicAutoPlay"
+         enabled_control="AudioStreamingMusic"
+         layout="topleft"
+         height="16"
+         width="230"
+         tool_tip="Check this to automatically start audio streams."
+         label="Allow audio streams to auto-play"
+         top_pad="10"
+         left="25"/>
+
+        <check_box
+         name="FSFadeAudioStream"
+         control_name="FSFadeAudioStream"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         tool_tip="Check this if fading should be used when the parcel audio stream changes"
+         label="Enable Parcel Audio Fading:"
+         top_pad="3"
+         left="25"/>
+        <slider
+         can_edit_text="true"
+         control_name="FSAudioMusicFadeIn"
+         decimal_digits="2"
+         enabled_control="FSFadeAudioStream"
+         label="Fade in:"
+         follows="left|top"
+         height="15"
+         increment="0.05"
+         initial_value="3"
+         layout="topleft"
+         left="45"
+         max_val="10"
+         min_val="0"
+         name="FSAudioMusicFadeIn"
+         top_delta="20"
+         width="250"
+         label_width="50"
+         tool_tip="Audio fade in time for parcel audio."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="255"
+         name="FSAudioMusicFadeInSeconds"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            seconds
+        </text>
+        <slider
+         can_edit_text="true"
+         control_name="FSAudioMusicFadeOut"
+         decimal_digits="2"
+         enabled_control="FSFadeAudioStream"
+         label="Fade out:"
+         follows="left|top"
+         height="15"
+         increment="0.05"
+         initial_value="2"
+         layout="topleft"
+         left="45"
+         max_val="10"
+         min_val="0"
+         name="FSAudioMusicFadeOut"
+         top_delta="17"
+         width="250"
+         label_width="50"
+         tool_tip="Audio fade out time for parcel audio."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="255"
+         name="FSAudioMusicFadeOutSeconds"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            seconds
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="20"
+         layout="topleft"
+         left="26"
+         name="show_stream_metadata_text"
+         top_pad="20"
+         width="250">
+            Show stream title notifications:
+        </text>
+        <radio_group
+         control_name="ShowStreamMetadata"
+         height="20"
+         width="350"
+         layout="topleft"
+         top_pad="1"
+         left_delta="20"
+         name="show_stream_metadata">
             <radio_item
-				label="Off"
-				name="radio_off"
-				top="0"
-				layout="topleft"
-				height="16"
-				left="0"
-				value="0"
-				width="90" />
+                label="Off"
+                name="radio_off"
+                top="0"
+                layout="topleft"
+                height="16"
+                left="0"
+                value="0"
+                width="50" />
             <radio_item
-				label="Toasts"
-				left_pad="1"
-				layout="topleft"
-				height="16"
-				name="radio_toasts"
-				value="1"
-				width="90" />
+                label="Toasts"
+                left_pad="1"
+                layout="topleft"
+                height="16"
+                name="radio_toasts"
+                value="1"
+                width="65" />
             <radio_item
-				label="Nearby Chat"
-				left_pad="1"
-				layout="topleft"
-				height="16"
-				name="radio_chat"
-				value="2"
-				width="90" />
+                label="Nearby Chat"
+                left_pad="1"
+                layout="topleft"
+                height="16"
+                name="radio_chat"
+                value="2"
+                width="70" />
         </radio_group>
         <check_box
-         top_pad="1"
-         left="45"
+         top_pad="3"
          control_name="StreamMetadataAnnounceToChat"
          name="StreamMetadataAnnounceToChat"
          label="Send stream title to channel:"
@@ -491,187 +726,6 @@
          name="StreamMetadataAnnounceChannel"
          width="90" />
 
-        <check_box
-         name="FSFadeAudioStream"
-         control_name="FSFadeAudioStream"
-         follows="left|top"
-         layout="topleft"
-         height="16"
-         tool_tip="Check this if fading should be used when the parcel audio stream changes"
-         label="Enable Parcel Audio Fading:"
-         top_delta="28"
-         left="25"/>
-        <slider
-         can_edit_text="true"
-         control_name="FSAudioMusicFadeIn"
-         decimal_digits="2"
-         enabled_control="FSFadeAudioStream"
-         label="Fade in"
-         follows="left|top"
-         height="15"
-         increment="0.05"
-         initial_value="3"
-         layout="topleft"
-         left="45"
-         max_val="10"
-         min_val="0"
-         name="FSAudioMusicFadeIn"
-         top_delta="17"
-         width="250"
-         label_width="50"
-         tool_tip="Audio fade in time for parcel audio."/>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_delta="255"
-         name="FSAudioMusicFadeInSeconds"
-         mouse_opaque="false"
-         top_delta="2"
-         width="90">
-            seconds
-        </text>
-        <slider
-         can_edit_text="true"
-         control_name="FSAudioMusicFadeOut"
-         decimal_digits="2"
-         enabled_control="FSFadeAudioStream"
-         label="Fade out"
-         follows="left|top"
-         height="15"
-         increment="0.05"
-         initial_value="2"
-         layout="topleft"
-         left="45"
-         max_val="10"
-         min_val="0"
-         name="FSAudioMusicFadeOut"
-         top_delta="15"
-         width="250"
-         label_width="50"
-         tool_tip="Audio fade out time for parcel audio."/>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_delta="255"
-         name="FSAudioMusicFadeOutSeconds"
-         mouse_opaque="false"
-         top_delta="2"
-         width="90">
-            seconds
-        </text>
-		 
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left="25"
-         name="Media Rolloff"
-         mouse_opaque="false"
-         top_delta="18"
-         width="250">
-            Sound source rolloff distance:
-        </text>
-        <slider
-         can_edit_text="true"
-         control_name="MediaRollOffMin"
-         decimal_digits="0"
-         label="Min"
-         follows="left|top"
-         height="15"
-         increment="1"
-         initial_value="5"
-         layout="topleft"
-         left="45"
-         max_val="512"
-         min_val="1"
-         name="MediaRollOffMin"
-         top_delta="17"
-         width="240"
-         label_width="25"
-         tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_delta="245"
-         name="MinMeters"
-         mouse_opaque="false"
-         top_delta="2"
-         width="90">
-            meters
-        </text>
-        <slider
-         can_edit_text="true"
-         control_name="MediaRollOffMax"
-         decimal_digits="0"
-         label="Max"
-         follows="left|top"
-         height="15"
-         increment="1"
-         initial_value="30"
-         layout="topleft"
-         left="45"
-         max_val="512"
-         min_val="1"
-         name="MediaRollOffMax"
-         top_delta="15"
-         width="240"
-         label_width="25"
-         tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_delta="245"
-         name="MaxMeters"
-         mouse_opaque="false"
-         top_delta="2"
-         width="90">
-            meters
-        </text>
-		
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left="26"
-         name="money_change_threshold_label"
-         tool_tip="Plays a sound when money is spent or received higher then the amount set here."
-         mouse_opaque="false"
-         top_delta="18"
-         width="117">
-            L$ change threshold:
-        </text>
-        <spinner
-         top_delta="-4"
-         control_name="UISndMoneyChangeThreshold"
-         enabled="true"
-         decimal_digits="0"
-         layout="topleft"
-         follows="left|top"
-         height="18"
-         left_pad="5"
-         increment="10"
-         initial_value="10"
-         max_val="10000"
-         min_val="0"
-         name="money_change_threshold"
-         width="60" />
-
     </panel>
 
     <!-- Voice -->
@@ -681,7 +735,7 @@
      left="1"
      right="-1"
      follows="all"
-     label="Voice Settings"
+     label="Voice"
      name="Media Voice tab" >
 
         <check_box
@@ -935,7 +989,7 @@
          label="Audio Device Settings"
          layout="topleft"
          left="20"
-         top_pad="3"
+         top_pad="6"
          name="device_settings_btn"
          width="190">
         </button>

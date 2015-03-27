@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sonidos" name="Preference Media panel">
 	<tab_container label="Prefs. Firestorm" name="tabs">
-		<panel label="General" name="Media General Panel">
+		<panel label="General" name="Media Sounds Panel">
 			<slider label="Volumen general" name="System Volume"/>
 			<check_box label="Silenciar al minimizar" name="mute_when_minimized"/>
 			<slider label="Botones" name="UI Volume"/>
@@ -15,46 +15,55 @@
 			<check_box label="Activado" name="enable_media"/>
 			<slider label="Chat de voz" name="Voice Volume"/>
 			<check_box label="Activado" name="enable_voice_check_volume"/>
-			<check_box name="media_auto_play_btn" tool_tip="Activa/desactiva la reproducción automática de medios cuando te conectas o cambias de región." label="Permitir reproducción automática de medios al entrar en una región"/>
-			<check_box name="media_allowscript_btn" tool_tip="Permite/impide que los scripts de los prims controlen tus conexiones de medios" label="Permitir que los scripts prims reproduzcan medios"/>
-			<check_box name="media_show_on_others_btn" tool_tip="Desactiva para ocultar los medios anexados a avatares de tu entorno" label="Reproducir medios anexados a otros avatares"/>
-			<check_box name="media_filter" tool_tip="Activa/desactiva el filtro que te permite escoger a qué servidores permites la reproducción de medios" label="Activar filtro de medios (seguridad mejorada)"/>
-			<button label="Administrar servidores de medios" name="edit_media_lists_button" width="200" left_pad="50"/>
+			<text name="friends_logon_sounds_label">
+				Reproducir un sonido cuando mis amigos:
+			</text>
+			<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
+			<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
+			<text name="money_change_threshold_label" tool_tip="Reproduce un sonido cuando se gasta o recibe una cantidad de dinero superior a la configurada.">
+				Umbral de L$:
+			</text>
+		</panel>
+		<panel name="Media Music Panel">
+			<check_box name="FSFadeAudioStream" tool_tip="Activa el fundido de sonido cuando cambia el flujo de audio de parcela" label="Fundido de audio de parcela:"/>
+			<slider label="Entrada:" name="FSAudioMusicFadeIn" tool_tip="Tiempo de fundido de entrada de audio de parcela."/>
+			<text name="FSAudioMusicFadeInSeconds">
+				segundos
+			</text>
+			<slider label="Salida:" name="FSAudioMusicFadeOut" tool_tip="Tiempo de fundido de salida de audio de parcela."/>
+			<text name="FSAudioMusicFadeOutSeconds">
+				segundos
+			</text>
 			<text name="show_stream_metadata_text" width="230">
 				Mostrar notificaciones de título de flujo:
 			</text>
 			<radio_group name="show_stream_metadata" width="270">
 				<radio_item label="No" name="radio_off"/>
-				<radio_item label="Tostadas" name="radio_toasts"/>
+				<radio_item label="Tostadas" width="75" name="radio_toasts"/>
 				<radio_item label="Chat local" name="radio_chat"/>
 			</radio_group>
 			<check_box name="StreamMetadataAnnounceToChat" label="Enviar el título del flujo al canal:"/>
 			<spinner top_delta="-3" left_pad="25" name="StreamMetadataAnnounceChannel"/>
-			<check_box name="FSFadeAudioStream" tool_tip="Activa el fundido de sonido cuando cambia el flujo de audio de parcela" label="Fundido de audio de parcela:"/>
-			<slider label="Entrada" name="FSAudioMusicFadeIn" tool_tip="Tiempo de fundido de entrada de audio de parcela."/>
-			<text name="FSAudioMusicFadeInSeconds">
-				segundos
-			</text>
-			<slider label="Salida" name="FSAudioMusicFadeOut" tool_tip="Tiempo de fundido de salida de audio de parcela."/>
-			<text name="FSAudioMusicFadeOutSeconds">
-				segundos
-			</text>
+		</panel>
+		<panel name="Media Media Panel">
+			<check_box name="media_auto_play_btn" tool_tip="Activa/desactiva la reproducción automática de medios cuando te conectas o cambias de región." label="Permitir reproducción automática de medios al entrar en una región"/>
+			<check_box name="media_allowscript_btn" tool_tip="Permite/impide que los scripts de los prims controlen tus conexiones de medios" label="Permitir que los scripts prims reproduzcan medios"/>
+			<check_box name="media_show_on_others_btn" tool_tip="Desactiva para ocultar los medios anexados a avatares de tu entorno" label="Reproducir medios anexados a otros avatares"/>
+			<check_box name="media_filter" tool_tip="Activa/desactiva el filtro que te permite escoger a qué servidores permites la reproducción de medios" label="Activar filtro de medios (seguridad mejorada)"/>
+			<button label="Administrar servidores de medios" name="edit_media_lists_button" width="200" />
 			<text name="Media Rolloff" width="270">
 				Distancia de atenuación de la fuente del audio:
 			</text>
-			<slider label="Mín" name="MediaRollOffMin" tool_tip="Distancia mínima de la fuente de sonido para que la atenuación empiece a tener efecto."/>
+			<slider name="MediaRollOffMin" tool_tip="Distancia mínima de la fuente de sonido para que la atenuación empiece a tener efecto."/>
 			<text name="MinMeters">
 				metros
 			</text>
-			<slider label="Máx" name="MediaRollOffMax" tool_tip="Distancia de la fuente de sonido para silenciarlo completamente."/>
+			<slider name="MediaRollOffMax" tool_tip="Distancia de la fuente de sonido para silenciarlo completamente."/>
 			<text name="MaxMeters">
 				metros
 			</text>
-			<text name="money_change_threshold_label" tool_tip="Reproduce un sonido cuando se gasta o recibe una cantidad de dinero superior a la configurada.">
-				Umbral de L$:
-			</text>
 		</panel>
-		<panel label="Configuración de voz" name="Media Voice tab">
+		<panel label="Voz" name="Media Voice tab">
 			<check_box label="Activar voz" name="enable_voice_check"/>
 			<text name="Listen from">
 				Escuchar desde:

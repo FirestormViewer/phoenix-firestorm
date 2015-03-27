@@ -3,60 +3,59 @@
 	<panel.string name="middle_mouse">
 		Midterste museknap
 	</panel.string>
-	<slider label="Generel" name="System Volume"/>
-	<check_box initial_value="true" name="mute_when_minimized"/>
-	<text name="mute_chb_label">
-		Sluk for lyd når minimeret
-	</text>
-	<slider label="Knapper" name="UI Volume"/>
-	<slider label="Omgivelser" name="Wind Volume"/>
-	<slider label="Lyd effekter" name="SFX Volume"/>
-	<slider label="Musik" name="Music Volume"/>
-	<check_box label="Aktiveret" name="enable_music"/>
-	<slider label="Media" name="Media Volume"/>
-	<check_box label="Aktiveret" name="enable_media"/>
-	<slider label="Stemme chat" name="Voice Volume"/>
-	<check_box label="Aktiveret" name="enable_voice_check_volume"/>
-	<check_box label="Tillad media at afspilles automatisk" name="media_auto_play_btn" tool_tip="Vælg dette for at media afspille automatisk hvis det ønsker det" value="true"/>
-	<check_box label="Afspil media vedhæftet andre avatarer" name="media_show_on_others_btn" tool_tip="Deaktiver dette for at skjule vedhæftet media for avatarer i nærheden" value="true"/>
-	<text name="voice_chat_settings">
-		Stemme chat opsætning
-	</text>
-	<text name="Listen from">
-		Hør stemmer fra:
-	</text>
-	<radio_group name="ear_location">
-		<radio_item label="Kamera position" name="0"/>
-		<radio_item label="Avatar position" name="1"/>
-	</radio_group>
-	<check_box label="Bevæg avatar-læber når der snakkes" name="enable_lip_sync"/>
-	<check_box label="Skift tale tænd/sluk når jeg trykker:" name="push_to_talk_toggle_check" tool_tip="Når du er i skift-modus, vil hvert tryk tænde eller slukke din mikrofon. Når du ikke er i skift-modus, vil din mikrofon kun være tændt når knappen/tasten holdes nede (som en Walkie Talkie)"/>
-	<line_editor label="Tryk-for-tale udløser" name="modifier_combo"/>
-	<button label="Angiv taste" name="set_voice_hotkey_button"/>
-	<button name="set_voice_middlemouse_button" tool_tip="Nulstil til midterste muse-knap"/>
-	<button label="Input/Output enheder" name="device_settings_btn"/>
-	<panel label="Enhedsopsætning" name="device_settings_panel">
-		<panel.string name="default_text">
-			Standard
-		</panel.string>
-		<panel.string name="default system device">
-			Standard systemenhed
-		</panel.string>
-		<panel.string name="no device">
-			Ingen enheder
-		</panel.string>
-		<text name="Input">
-			Input
-		</text>
-		<text name="My volume label">
-			Min lydstyrke:
-		</text>
-		<slider_bar initial_value="1.0" name="mic_volume_slider" tool_tip="Ændre lydstyrke med denne skyder"/>
-		<text name="wait_text">
-			Vent venligst
-		</text>
-		<text name="Output">
-			Output
-		</text>
-	</panel>
+	<tab_container name="tabs">
+		<panel name="Media Sounds Panel">
+			<slider label="Generel" name="System Volume"/>
+			<check_box label="Sluk for lyd når minimeret" name="mute_when_minimized"/>
+			<slider label="Knapper" name="UI Volume"/>
+			<slider label="Omgivelser" name="Wind Volume"/>
+			<slider label="Lyd effekter" name="SFX Volume"/>
+			<slider label="Musik" name="Music Volume"/>
+			<check_box label="Aktiveret" name="enable_music"/>
+			<slider label="Media" name="Media Volume"/>
+			<check_box label="Aktiveret" name="enable_media"/>
+			<slider label="Stemme chat" name="Voice Volume"/>
+			<check_box label="Aktiveret" name="enable_voice_check_volume"/>
+		</panel>
+		<panel name="Media Media Panel">
+			<check_box label="Tillad media at afspilles automatisk" name="media_auto_play_btn" tool_tip="Vælg dette for at media afspille automatisk hvis det ønsker det" value="true"/>
+			<check_box label="Afspil media vedhæftet andre avatarer" name="media_show_on_others_btn" tool_tip="Deaktiver dette for at skjule vedhæftet media for avatarer i nærheden" value="true"/>
+		</panel>
+		<panel name="Media Voice tab">
+			<radio_group name="ear_location">
+				<radio_item label="Kamera position" name="0"/>
+				<radio_item label="Avatar position" name="1"/>
+			</radio_group>
+			<check_box label="Bevæg avatar-læber når der snakkes" name="enable_lip_sync"/>
+			<check_box label="Skift tale tænd/sluk når jeg trykker:" name="push_to_talk_toggle_check" tool_tip="Når du er i skift-modus, vil hvert tryk tænde eller slukke din mikrofon. Når du ikke er i skift-modus, vil din mikrofon kun være tændt når knappen/tasten holdes nede (som en Walkie Talkie)"/>
+			<line_editor label="Tryk-for-tale udløser" name="modifier_combo"/>
+			<button label="Angiv taste" name="set_voice_hotkey_button"/>
+			<button name="set_voice_middlemouse_button" tool_tip="Nulstil til midterste muse-knap"/>
+			<button label="Input/Output enheder" name="device_settings_btn"/>
+			<panel label="Enhedsopsætning" name="device_settings_panel">
+				<panel.string name="default_text">
+					Standard
+				</panel.string>
+				<panel.string name="default system device">
+					Standard systemenhed
+				</panel.string>
+				<panel.string name="no device">
+					Ingen enheder
+				</panel.string>
+				<text name="Input">
+					Input
+				</text>
+				<text name="My volume label">
+					Min lydstyrke:
+				</text>
+				<slider_bar name="mic_volume_slider" tool_tip="Ændre lydstyrke med denne skyder"/>
+				<text name="wait_text">
+					Vent venligst
+				</text>
+				<text name="Output">
+					Output
+				</text>
+			</panel>
+		</panel>
+	</tab_container>
 </panel>
