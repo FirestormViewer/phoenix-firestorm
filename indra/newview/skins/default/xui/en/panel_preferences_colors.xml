@@ -494,12 +494,27 @@
      width="95">
      Objects
     </text>
+     <slider
+      control_name="FSBeyondNearbyChatColorDiminishFactor"
+      follows="left|top"
+      height="16"
+      increment="0.05"
+      label="Beyond chat range diminish factor:"
+      layout="topleft"
+      left="30"
+      label_width="200"
+      min_val="0"
+      max_val="1"
+      name="FSBeyondNearbyChatColorDiminishFactor"
+      tool_tip="The factor used to diminish the actual chat color if the sender is beyond normal chat range."
+      top_pad="20"
+      width="450" />
      <check_box
        control_name="FSColorIMsDistinctly"
        follows="left|top"
        layout="topleft"
        left="20"
-       top_pad="24"
+       top_pad="14"
        height="12"
        name="FSColorIMsDistinctly"
        width="450"

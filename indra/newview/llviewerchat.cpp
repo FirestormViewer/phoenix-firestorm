@@ -160,7 +160,11 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
-				r_color.mV[VALPHA] = 0.8f;
+				// <FS:Ansariel> FIRE-3572: Customize local chat color brightness change based on distance
+				//r_color.mV[VALPHA] = 0.8f;
+				static LLCachedControl<F32> fsBeyondNearbyChatColorDiminishFactor(gSavedSettings, "FSBeyondNearbyChatColorDiminishFactor", 0.8f);
+				r_color.mV[VALPHA] = fsBeyondNearbyChatColorDiminishFactor();
+				// </FS:Ansariel>
 			}
 		}
 	}
