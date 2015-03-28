@@ -3086,7 +3086,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
 	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 	static LLCachedControl<bool> LetterKeysAffectsMovementNotFocusChatBar(gSavedSettings, "LetterKeysAffectsMovementNotFocusChatBar");
-	if ( LetterKeysAffectsMovementNotFocusChatBar && 
+	if ( !LetterKeysAffectsMovementNotFocusChatBar && 
 	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
