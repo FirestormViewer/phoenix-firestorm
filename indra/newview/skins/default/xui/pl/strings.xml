@@ -404,7 +404,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Flara
 	</string>
 	<string name="Miniature">
-		Miniatura
+		Miniatura (tilt-shift)
 	</string>
 	<string name="Toycamera">
 		Zabawkowy aparat
@@ -419,7 +419,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Wzmocnione podświetlenia
 	</string>
 	<string name="Softfocus">
-		Miękkie skupienie
+		Lekkie skupienie
 	</string>
 	<string name="Brighten">
 		Rozjaśnienie
@@ -431,10 +431,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Przyciemnienie
 	</string>
 	<string name="Edges">
-		Świecące krawędzie
+		Błyszczące krawędzie
 	</string>
 	<string name="Focus">
-		Wycentrowane skupienie
+		Mocne skupienie
 	</string>
 	<string name="Heatwave">
 		Upał
@@ -443,7 +443,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Juliusz Verne
 	</string>
 	<string name="Lightleak">
-		Lekki wyciek
+		Wyciek światła
 	</string>
 	<string name="Linearize">
 		Zlinearyzowanie
