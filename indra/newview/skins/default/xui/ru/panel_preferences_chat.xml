@@ -67,13 +67,6 @@
             <check_box name="FSShowChatChannel" label="Отображать канал в окне чата"/>
             <check_box label="Скрыть главную строку ввода." name="AutohideChatBar" tool_tip="снизу, возле символов."/>
             <check_box label="Выкл. строку ввода после ввода." name="CloseChatOnReturn"/>
-			<text name="inworld_typing_rg_label" width="115">
-			   При нажатии букв:
-			</text>
-			<radio_group name="inworld_typing_preference">
-				<radio_item label="Начать общий чат" name="radio_start_chat" width="130"/>
-				<radio_item label="Влияет на движение (папример WASD)" name="radio_move"/>
-			</radio_group>
 		</panel>
 		<panel label="Уведомления" name="ChatNotices">
 			<text name="disable_toast_label">

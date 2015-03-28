@@ -28,6 +28,7 @@
 				鍵盤：
 			</text>
 			<check_box label="總是使用方向鍵移動" name="arrow_keys_move_avatar_check"/>
+			<check_box label="按下字母鍵 - 影響移動（例如 WASD鍵）" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="連點按住後跑步" name="tap_tap_hold_to_run"/>
 			<text name="single_click_action_lbl">
 				在土地上點按一下：

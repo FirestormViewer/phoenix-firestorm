@@ -9,8 +9,6 @@
 			<check_box label="Si es posible, rezzear objetos siempre bajo el grupo del terreno" name="grouplandrez" tool_tip="Procura rezzear los objetos bajo el grupo del terreno si perteneces al mismo, aunque no tengas activa la etiqueta correspondiente"/>
 			<check_box label="Crear efectos de partículas cuando los scripts se comunican" name="EffectScriptChatParticles" tool_tip="Si lo activas, los objetos con scripts mostrarán remolinos de partículas de luz cuando los scripts se comuniquen"/>
 			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Si lo activas, la baliza de seguimiento se desactivará automáticamente si la distancia con el avatar es menor que 3 metros. (Por defecto)."/>
-			<check_box label="Desactivar las balizas de teleporte" name="tp_beam_toggle" tool_tip="Desactiva las balizas de destino de teleporte que se muestran tras teleportarse"/>
-			<check_box label="Desactivar pantalla de teleporte" name="tp_screen_toggle" tool_tip="Desactiva la pantalla negra durante todos los teleportes."/>
 			<check_box label="Desactivar la pantalla de progreso del inicio de sesión" name="login_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del inicio de la sesión"/>
 			<check_box label="Desactivar la pantalla de progreso del cierre de sesión" name="logout_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del cierre de la sesión."/>
 			<check_box label="Activar escalado progresivo de distancia de dibujo" name="FSRenderFarClipStepping" tool_tip="Si lo activas, Firestorm aumentará progresivamente la distancia de dibujo después de un teleporte." width="300"/>

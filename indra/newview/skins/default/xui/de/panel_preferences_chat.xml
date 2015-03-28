@@ -147,13 +147,6 @@
 			<check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
 			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
 			<check_box label="Chatverlauf ebenfalls deaktivieren" name="FSUnfocusChatHistoryOnReturn"/>
-			<text name="inworld_typing_rg_label" width="115">
-				Buchstabeneingabe:
-			</text>
-			<radio_group name="inworld_typing_preference">
-				<radio_item label="Startet Chat" name="radio_start_chat" width="130"/>
-				<radio_item label="Beeinflusst Bewegung (z.B. WASD)" name="radio_move"/>
-			</radio_group>
 			<text name="textUseKeyboardShortcuts">
 				Tastatur-Shortcuts verwenden:
 			</text>

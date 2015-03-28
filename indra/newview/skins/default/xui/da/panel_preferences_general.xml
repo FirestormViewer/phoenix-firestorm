@@ -48,13 +48,6 @@
 	<check_box label="Fremhæv venner" name="show_friends" tool_tip="Fremhæv navne-tags for dine venner"/>
 	<check_box label="Vis visningsnavne" name="display_names_check" tool_tip="Vælg for at bruge visningsnavne i chat, IM, navne-tags m.v."/>
 	<check_box label="Aktivér UI tips i klient" name="viewer_hints_check"/>
-	<text name="inworld_typing_rg_label">
-		Trykker bogstav taster:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Starter lokal chat" name="radio_start_chat"/>
-		<radio_item label="Påvirker bevægelse (f.eks. WASD)" name="radio_move"/>
-	</radio_group>
 	<text name="title_afk_text">
 		Tid inden &quot;væk&quot;:
 	</text>

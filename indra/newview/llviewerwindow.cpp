@@ -3085,8 +3085,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
 	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
 	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
-	static LLCachedControl<S32> LetterKeysFocusChatBar(gSavedSettings, "LetterKeysFocusChatBar");
-	if ( LetterKeysFocusChatBar && 
+	static LLCachedControl<bool> LetterKeysAffectsMovementNotFocusChatBar(gSavedSettings, "LetterKeysAffectsMovementNotFocusChatBar");
+	if ( LetterKeysAffectsMovementNotFocusChatBar && 
 	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{

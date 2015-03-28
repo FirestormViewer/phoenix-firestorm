@@ -59,16 +59,6 @@
 	<text name="title_afk_text">
 		Ausente tras:
 	</text>
-	<text name="inworld_typing_rg_label">
-		Si pulsas las teclas de letras:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Inicia el chat local" name="radio_start_chat"/>
-		<radio_item label="Afecta al movimiento (por ejemplo, en las teclas WASD)" name="radio_move"/>
-	</radio_group>
-	<text name="title_afk_text">
-		Ausente tras:
-	</text>
 	<text name="title_afk_quit_text" top_delta="-15" width="120" height="25" left_pad="55">
 		Desconectar tras
 permanecer ausente:

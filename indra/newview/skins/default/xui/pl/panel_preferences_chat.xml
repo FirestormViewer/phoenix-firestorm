@@ -141,13 +141,6 @@
 			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>
 			<check_box label="Odznaczaj pasek czatu po wysłaniu wiadomości" name="CloseChatOnReturn"/>
 			<check_box label="Odznaczaj także historię czatu" name="FSUnfocusChatHistoryOnReturn" />
-			<text name="inworld_typing_rg_label">
-				Naciskanie klawiszy liter:
-			</text>
-			<radio_group name="inworld_typing_preference">
-				<radio_item label="Rozpoczyna czat" name="radio_start_chat"/>
-				<radio_item label="Wpływa na ruch (tzn. WASD)" name="radio_move"/>
-			</radio_group>
 			<text name="textUseKeyboardShortcuts">
 				Używaj skrótów klawiszowych:
 			</text>

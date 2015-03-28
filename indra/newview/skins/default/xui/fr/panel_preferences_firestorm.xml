@@ -22,12 +22,6 @@
         <check_box name="FSDisableAvatarTrackerAtCloseIn"
 			label="Désactiver la balise à l'approche de l'avatar tracé (-3m)"
 			tool_tip="Lorsque l'on trace un avatar depuis le radar (Ctl-Maj-A), une balise rouge indique la direction à suivre, à la manière d'une boussole. Il faut cliquer dessus pour l'effacer. Avec cette option, elle s'éteindra automatiquement lorsque vous arriverez à moins de 3m de l'avatar ciblé. (par défaut)."/>
-		<check_box name="tp_beam_toggle"
-			label="Désactiver les balises de destination après la téléportation"
-			tool_tip=""/>
-		<check_box name="tp_screen_toggle"
-			label="Désactiver l'écran de téléportation"
-			tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
 		<check_box name="login_screen_toggle"
 			label="Désactiver l'écran de connexion"
 			tool_tip="Lors de la connexion, remplacer l'écran et la barre de progression par une image fixe."/>

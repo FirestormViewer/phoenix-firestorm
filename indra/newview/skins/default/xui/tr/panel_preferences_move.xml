@@ -22,6 +22,7 @@
 		</panel>
 		<panel name="tab-movement">
 			<check_box label="Ok tuşları beni her zaman hareket ettirir" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Basılacak harf tuşları hareketi etkiler (yani WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Koşmak için iki kez dokun ve tut" name="tap_tap_hold_to_run"/>
 			<text name="single_click_action_lbl">
 				Arazi üzerine tek tıklama:

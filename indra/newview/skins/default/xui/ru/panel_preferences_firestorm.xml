@@ -10,7 +10,6 @@
 			(требуется перезапуск)
 		</text>
 		<check_box label="Строить и выкладывать под группой земли(при возм.)" name="grouplandrez" tool_tip=""/>
-		<check_box label="Отключить Экраны Телепортов" name="tp_screen_toggle" tool_tip=""/>
 		<check_box label="Отключение экрана входа" name="login_screen_toggle" tool_tip=""/>
 		<check_box label="Отключение экрана выхода" name="logout_screen_toggle" tool_tip=""/>
 		<check_box name="UseLSLBridge" label="Активировать мост LSL" tool_tip=""/>

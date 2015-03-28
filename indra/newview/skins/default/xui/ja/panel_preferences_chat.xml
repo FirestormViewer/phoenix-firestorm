@@ -114,13 +114,6 @@
 		<check_box label="チャットバーにチャンネル選択を表示" name="FSShowChatChannel"/>
 		<check_box label="チャットバーを自動的に非表示にする" name="AutohideChatBar" tool_tip="チャットバーを画面下のボタンバーに表示しないようにし、必要な時だけ表示されるようにする"/>
 		<check_box label="メッセージ送信後はチャットバーが選択されていない状態にする" name="CloseChatOnReturn"/>
-		<text name="inworld_typing_rg_label">
-			文字キーを押した時：
-		</text>
-		<radio_group name="inworld_typing_preference">
-			<radio_item label="ローカルチャットを開始" name="radio_start_chat" />
-			<radio_item label="ムーブメントに影響（WASD など）" name="radio_move" />
-		</radio_group>
 	</panel>
 	<panel name="ChatNotices">
 		<text name="disable_toast_label">

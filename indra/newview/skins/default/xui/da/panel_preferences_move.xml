@@ -23,6 +23,7 @@
 		<!--Movement-->
 		<panel name="tab-movement">
 			<check_box label="Piletaster bevæger altid avatar" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Trykker bogstav taster påvirker bevægelse (f.eks. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Tryk to gange for at løbe" name="tap_tap_hold_to_run"/>
 			<check_box label="Dobbelt-klik for at:" name="double_click_chkbox"/>
 			<radio_group name="double_click_action">

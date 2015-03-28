@@ -98,13 +98,6 @@
 			<check_box name="FSShowChatChannel" label="Mostra selezione canale nella chat bar" />
 			<check_box label="Nascondi automaticamente la Chat bar principale" name="AutohideChatBar" tool_tip="Nascondi automaticamente la Chat bar principale dopo aver inviato il messaggio e ricomparira quando inizierete a scrivere" />
 			<check_box label="Deseleziona la Chat Bar dopo aver inviato il messaggio" name="CloseChatOnReturn"/>
-			<text name="inworld_typing_rg_label">
-				Premendo i tasti delle lettere:
-			</text>
-			<radio_group name="inworld_typing_preference">
-				<radio_item label="Avvia chat locale" name="radio_start_chat"/>
-				<radio_item label="Permette movimento(es. WASD)" name="radio_move"/>
-			</radio_group>
 		</panel>
 		<panel name="ChatNotices">
 			<text name="disable_toast_label">

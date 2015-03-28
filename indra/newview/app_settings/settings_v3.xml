@@ -123,16 +123,16 @@
     <string>Original Orange</string>
   </map>
 
-  <key>LetterKeysFocusChatBar</key>
+  <key>LetterKeysAffectsMovementNotFocusChatBar</key>
   <map>
     <key>Comment</key>
-    <string>When printable characters keys (possibly with Shift held) are pressed, the chat bar takes focus</string>
+    <string>When printable characters keys (possibly with Shift held) are pressed, the chat bar does not takes focus and movement is affected instead (WASD etc.)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>S32</string>
+    <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
 
   <key>FSColorClienttags</key>

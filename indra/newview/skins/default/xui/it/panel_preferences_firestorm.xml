@@ -9,8 +9,6 @@
         </text>
         <check_box label="Rezza sempre con il gruppo della land se è possibile" name="grouplandrez" tool_tip="Il viewer cercherà automaticamente di rezzare con il gruppo della land se ne fate parte." />
 		<check_box label="Disattivare il segnalatore quando l'avatar segnato viene raggiunto (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Se attivato, il segnalatore per indicare l'avatar si disattiva se la distanza è inferiore a 3m. (Default)"/>
-        <check_box label="Disabilita segnali Teleport" name="tp_beam_toggle" tool_tip="Disabilita tutti gli effetti del Teleport dopo essere arrivati a destinazione." />
-        <check_box label="Disabilita schermata Teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
         <check_box label="Disabilita schermata di Accesso" name="login_screen_toggle" tool_tip="Disabilita la schermata nera durante l'Accesso."/>
         <check_box label="Disabilita schermata di Uscita" name="logout_screen_toggle" tool_tip="Disabilita la schermata nera durante la Disconnessione" />
 		<check_box label="Abilita LSL-Client Bridge" name="UseLSLBridge" tool_tip="Permette al Viewer di utilizare lo script del Bridge per consentire caratteristiche avanzate" />

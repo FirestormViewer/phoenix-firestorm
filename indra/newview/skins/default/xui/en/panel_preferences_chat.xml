@@ -896,46 +896,7 @@
 		 name="FSUnfocusChatHistoryOnReturn"
 		 enabled_control="CloseChatOnReturn" />
 		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="12"
-		 layout="topleft"
-		 left="20"
-		 name="inworld_typing_rg_label"
-		 top_pad="8"
-		 width="110">
-			Pressing letter keys:
-		</text>
-		<radio_group
-		 control_name="LetterKeysFocusChatBar"
-		 width="310"
-		 height="16"
-		 layout="topleft"
-		 left_pad="10"
-		 top_delta="-1"
-		 name="inworld_typing_preference">
-			<radio_item
-			 top="0"
-			 left="0"
-			 label="Starts local chat"
-			 name="radio_start_chat"
-			 layout="topleft"
-			 height="16"
-			 value="1"
-			 width="125" />
-			<radio_item
-			 top="0"
-			 left="130"
-			 label="Affects movement (i.e. WASD)"
-			 layout="topleft"
-			 height="16"
-			 name="radio_move"
-			 value="0"
-			 width="125" />
-		</radio_group>
-		<text
-		 top_pad="8"
+		 top_pad="15"
 		 left="20"
 		 height="14"
 		 width="400"

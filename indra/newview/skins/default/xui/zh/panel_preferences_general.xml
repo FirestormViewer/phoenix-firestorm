@@ -52,13 +52,6 @@
 	<check_box label="群組頭銜" name="show_all_title_checkbox1" tool_tip="顯示群組頭銜，如職員或成員"/>
 	<check_box label="高亮標示朋友" name="show_friends" tool_tip="高亮顯示你朋友的名稱標籤"/>
 	<check_box label="察看顯示名稱" name="display_names_check" tool_tip="若勾選，將在聊天、IM 和名稱標籤等處使用顯示名稱。"/>
-	<text name="inworld_typing_rg_label">
-		按下字母鍵：
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="開始本地聊天" name="radio_start_chat"/>
-		<radio_item label="影響移動（例如 WASD鍵）" name="radio_move"/>
-	</radio_group>
 	<text name="title_afk_text">
 		離開逾時設定：
 	</text>

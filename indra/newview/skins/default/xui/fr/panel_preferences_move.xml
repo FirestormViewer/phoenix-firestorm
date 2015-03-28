@@ -24,6 +24,7 @@
 		<!--Movement-->
 		<panel name="tab-movement">
 			<check_box label="Les touches de direction me font toujours me déplacer" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Presser une touche du clavier affecte le déplacement (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Appuyer deux fois et maintenir enfoncé pour courir" name="tap_tap_hold_to_run"/>
 			<check_box label="Double-cliquer pour :" name="double_click_chkbox"/>
 			<radio_group name="double_click_action">
@@ -31,6 +32,11 @@
 				<radio_item label="Pilotage auto" name="radio_autopilot"/>
 			</radio_group>
 			<button label="Autres accessoires" name="joystick_setup_button"/>
+		</panel>
+		<!--Teleports-->
+		<panel name="tab-teleports">
+			<check_box name="tp_beam_toggle" label="Désactiver les balises de destination après la téléportation"/>
+			<check_box name="tp_screen_toggle" label="Désactiver l'écran de téléportation" tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
 		</panel>
 		<!--Maps-->
 		<panel name="tab-maps">

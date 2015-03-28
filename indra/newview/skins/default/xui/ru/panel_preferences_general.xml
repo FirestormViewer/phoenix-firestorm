@@ -55,13 +55,6 @@
 	<check_box label="Показать Viewer" name="show_viewerID" tool_tip="Показывает рядом с именем пользователя используемый Viewer" />
 	<check_box label="Старый формат" name="FSshow_legacyun" tool_tip="Имя Фамилия в замен имя.фамилия" />
 
-	<text name="inworld_typing_rg_label">
-		Нажатие клавиш с буквами:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Начинает локальный чат" name="radio_start_chat"/>
-		<radio_item label="Приводит к перемещению (т. е. WASD)" name="radio_move"/>
-	</radio_group>
 	<text name="title_afk_text" >
 		Статус "Отошел" через:
 	</text>

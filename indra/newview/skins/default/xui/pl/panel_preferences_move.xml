@@ -46,6 +46,7 @@
 		</panel>
 		<panel label="Ruch" name="tab-movement">
 			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Naciskanie klawiszy liter wpływa na ruch (tzn. WASD) zamiast rozpoczynać czat" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Użyj układu klawiatury AZERTY" name="FSUseAzertyKeyboardLayout"/>
 			<text name="FSUseAzertyKeyboardLayout_requires_restart">
 				(wymaga restartu)
@@ -54,8 +55,6 @@
 			<check_box label="Przytrzymaj klawisz skoku lub kucania, aby zacząć lub przestać latać" name="automatic_fly"/>
 			<check_box label="Włącz tryb przełączania kucania" name="crouch_toggle_mode"/>
 			<check_box label="Wyłącz oczekiwanie na animacje przed-skoku oraz lądowania (szybki skok)" name="FSIgnoreFinishAnimation"/>
-			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
-			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
 			<check_box label="Wyłącz obracanie się awatara w stronę kamery podczas ruchu w tył" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Wyłącz obracanie awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery. Ta opcja ma wpływ tylko na to, co widzisz lokalnie i nie działa z oskryptowanymi AO."/>
 			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 			<text name="movelock_lbl">
@@ -79,6 +78,13 @@
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
 			<button label="Konfiguruj joystick" name="joystick_setup_button"/>
+		</panel>
+		<panel label="Teleportacja" name="tab-teleports">
+			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
+			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
+			<check_box label="Zawsze pokazuj przycisk anulowania teleportacji" name="FSAlwaysShowTPCancel" tool_tip="Zawsze pokazuj przycisk anulowania teleportacji nawet, jeśli symulator uważa, że nie może ona być anulowana. Symulator zawsze będzie wiedzieć, kiedy faktycznie będzie to możliwe - i będzie ignorować takie próby podczas teleportacji wymuszonych/po śmierci. Opcja ta jest ignorowana przez RLVa (to znaczy, że restrykcje RLV mogą ciągle przycisk wyłączyć)."/>
+			<check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
+			<check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
 		</panel>
 		<panel label="Mapa i minimapa" name="tab-maps">
 			<text name="minimap_options_label">

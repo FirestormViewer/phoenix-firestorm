@@ -46,13 +46,6 @@
 	<check_box label="Grup unvanları" name="show_all_title_checkbox1" tool_tip="Grup unvanlarını göster, Görevli veya Üye gibi"/>
 	<check_box label="Arkadaşları vurgula" name="show_friends" tool_tip="Arkadaşlarının ad etiketlerini vurgula"/>
 	<check_box label="Ekran Adlarını Görüntüle" name="display_names_check" tool_tip="Sohbet, Aİ, ad etiketleri, vb.de ekran adlarını kullanmak için işaretle"/>
-	<text name="inworld_typing_rg_label">
-		Basılacak harf tuşları:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Yerel sohbet başlat" name="radio_start_chat"/>
-		<radio_item label="Hareketi etkiler (yani WASD)" name="radio_move"/>
-	</radio_group>
 	<text name="title_afk_text">
 		Uzakta süre sonu:
 	</text>

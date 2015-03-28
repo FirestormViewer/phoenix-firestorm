@@ -23,6 +23,7 @@
 		<!--Movement-->
 		<panel name="tab-movement">
 			<check_box label="Teclas de seta sempre me movem" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Teclas de letras afeta o movimento (ex.: WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Dê dois toques e pressione para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Dar dois cliques para:" name="double_click_chkbox"/>
 			<radio_group name="double_click_action">

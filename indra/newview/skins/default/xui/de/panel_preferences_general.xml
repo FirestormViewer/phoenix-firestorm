@@ -60,13 +60,6 @@
 	<check_box label="Alte Position für Avatarnamen" name="FSLegacyNametagPosition" tool_tip="Falls aktiviert, wird die Position des Avatarnamens fest an der Position des Avatars angezeigt und folgt nicht der Bewegung des Kopfes bei Animationen." />
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
-	<text name="inworld_typing_rg_label">
-		Drücken von Buchstabentasten:
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Startet lokalen Chat" name="radio_start_chat"/>
-		<radio_item label="Beeinflusst Bewegung (z. B. WASD)" name="radio_move"/>
-	</radio_group>
 	<text name="title_afk_text" width="275">
 		Zeit bis zur Abwesenheit:
 	</text>

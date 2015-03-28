@@ -42,6 +42,7 @@
 		</panel>
 		<panel label="Movimiento" name="tab-movement">
 			<check_box label="Las teclas de cursor siempre me mueven" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Pulsar teclas alfanuméricas afecta al movimiento (p. ej. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Usar disposición de teclado AZERTY" name="FSUseAzertyKeyboardLayout" width="210"/>
 			<text name="FSUseAzertyKeyboardLayout_requires_restart">
 				(requiere reiniciar)
@@ -49,8 +50,6 @@
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run" left_delta="-220"/>
 			<check_box label="Volar/aterrizar al mantener arriba/abajo" name="automatic_fly"/>
 			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>
-			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
-			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
 			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box label="Si movelock está activado, volver a bloquear tras cambiar de región" name="RelockMoveLockAfterRegionChange"/>
 			<text name="single_click_action_lbl">
@@ -69,6 +68,12 @@
 				<combo_box.item label="Teleportarme a ese punto" name="2"/>
 			</combo_box>
 			<button label="Configuración del Joystick" name="joystick_setup_button" width="160"/>
+		</panel>
+		<panel name="tab-teleports">
+			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
+			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
+			<check_box label="Desactivar las balizas de teleporte" name="tp_beam_toggle" tool_tip="Desactiva las balizas de destino de teleporte que se muestran tras teleportarse"/>
+			<check_box label="Desactivar pantalla de teleporte" name="tp_screen_toggle" tool_tip="Desactiva la pantalla negra durante todos los teleportes."/>
 		</panel>
 		<panel label="Mapa mundial &amp; minimapa" name="tab-maps">
 			<text name="minimap_options_label">

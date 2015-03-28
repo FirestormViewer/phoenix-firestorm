@@ -55,6 +55,7 @@
 		
 		<panel label="移動" name="tab-movement">
 			<check_box label="常にキー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
+			<check_box label="文字キーを押した時 - ムーブメントに影響（WASD など）" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" width="230" />
 			<text name="FSUseAzertyKeyboardLayout_requires_restart">
 				（再起動が必要）
@@ -62,8 +63,6 @@
 			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run" left_delta="-240"/>
 			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
 			<check_box label="身をかがめる動作を有効にする" name="crouch_toggle_mode" />
-			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
-			<check_box label="テレポート後は飛行状態のままにする" name="FSFlyAfterTeleport" />
 			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
 			<text name="single_click_action_lbl">
 				地面をシングルクリック：
@@ -86,7 +85,15 @@
 
 			<button label="その他のディバイス" name="joystick_setup_button"/>
 		</panel>
-		
+
+		<!-- Teleports -->
+
+		<panel name="tab-teleports">
+			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
+			<check_box label="テレポート後は飛行状態のままにする" name="FSFlyAfterTeleport" />
+			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
+			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
+		</panel>
 		
 		<!-- Maps -->
 		

@@ -34,10 +34,10 @@
 		<!-- Movement -->
 		<panel label="Движение" name="tab-movement">
 			<check_box label="Клавиши стрелок всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
+			<check_box label="При нажатии букв - Влияет на движение (папример WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Бег после двойного нажатия на клавишу" name="tap_tap_hold_to_run"/>
 			<check_box label="Взлететь / Приземлиться при удержании вверх / вниз" name="automatic_fly" />
 			<check_box label="Повернуть Аватара если он идёт задом" name="backwardsturnavatar" tool_tip="Задом, в смысле тороны..."/>
-			<check_box label="Звуковой эффект при телепортации" name="PlayTeleportSound"/>
 			<text name="single_click_action_lbl">
 				Простой щелчок для:
 			</text>
@@ -54,6 +54,12 @@
 				<combo_box.item label="Телепортации" name="2"/>
 			</combo_box>
 			<button label="Настройки 3D джойстика" name="joystick_setup_button"/>
+		</panel>
+
+		<!-- Teleports -->
+		<panel name="tab-teleports">
+			<check_box label="Звуковой эффект при телепортации" name="PlayTeleportSound"/>
+			<check_box label="Отключить Экраны Телепортов" name="tp_screen_toggle"/>
 		</panel>
 
 		<!-- Maps -->

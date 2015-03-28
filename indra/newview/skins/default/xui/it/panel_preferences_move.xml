@@ -36,14 +36,13 @@
 		<!--Movimento-->
 		<panel name="tab-movement" label="Movimento">
 			<check_box label="Le frecce di direzione mi fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Premendo i tasti delle lettere permette movimento(es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="Usa la configurazione tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
 			<text name="FSUseAzertyKeyboardLayout_requires_restart" left_pad="50" >
 				(Richiesto Riavvio)
 			</text>
 			<check_box label="Doppio click e tieni premuto per correre" name="tap_tap_hold_to_run" left_delta="-230"/>
 			<check_box label="Volare/Atterrare tenendo premuto Pag su/Pag giù" name="automatic_fly"/>
-			<check_box label="Riprodurre effetto sonoro quando si effettua il Teleport" name="PlayTeleportSound"/>
-			<check_box label="Vola sempre dopo il teleport" name="FSFlyAfterTeleport"/>
 			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
 			<text name="single_click_action_lbl">
 				Click singolo a terra:
@@ -61,6 +60,13 @@
 				<combo_box.item label="Teleport al punto cliccato" name="2"/>
 			</combo_box>
 			<button label="Altri dispositivi" name="joystick_setup_button"/>
+		</panel>
+		<!--Teleports-->
+		<panel name="tab-teleports">
+			<check_box label="Riprodurre effetto sonoro quando si effettua il Teleport" name="PlayTeleportSound"/>
+			<check_box label="Vola sempre dopo il teleport" name="FSFlyAfterTeleport"/>
+			<check_box label="Disabilita segnali Teleport" name="tp_beam_toggle" tool_tip="Disabilita tutti gli effetti del Teleport dopo essere arrivati a destinazione." />
+			<check_box label="Disabilita schermata Teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
 		</panel>
 		<!--Maps-->
 		<panel label="World Map &amp; Minimappa" name="tab-maps">
