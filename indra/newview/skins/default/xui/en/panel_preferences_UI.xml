@@ -271,6 +271,16 @@
        left="10"
        width="256"
        tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
+      <check_box
+       initial_value="false"
+       top_pad="2"
+       control_name="FSStatusbarShowSimulatorVersion"
+       height="16"
+       name="FSStatusbarShowSimulatorVersion"
+       label="Show simulator channel in status bar"
+       left="10"
+       width="256"
+       tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
 
       <text
        type="string"

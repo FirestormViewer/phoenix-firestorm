@@ -26,7 +26,6 @@
 			<check_box label="Pokazuj standardowe, małe okienko sterowania kamerą zawsze jako nieprzezroczyste" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze."/>
 			<check_box label="Powiadom, jeśli wersja symulatora ulegnie zmianie podczas zmiany regionu" name="FSShowServerVersionChangeNotice" tool_tip="Wyświetla powiadomienie, jeśli wersja symulatora ulegnie zmianie podczas teleportowania się lub przekraczania granicy regionu."/>
-			<check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora na pasku statusu w stylu V1."/>
 		</panel>
 		<panel label="Widok pierwszoosobowy" name="tab-mouselook">
 			<check_box label="Włącz funkcjonalność widoku pierwszoosobowego" name="EnableMouselook" tool_tip="Zezwól przeglądarce na używanie perspektywy pierwszej osoby oraz sterowanie w niej kamerą za pomocą myszy"/>

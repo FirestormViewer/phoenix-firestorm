@@ -46,6 +46,7 @@
 		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
 		
 		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
+		<check_box label="シミュレーターのチャネルをステータスバーに表示" name="FSStatusbarShowSimulatorVersion" tool_tip="１系仕様のステータスバーにシミューレーターのチャネルを表示します。 (RC Magnum, RC Le Tigre, RC BlueSteel)"/>
 
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
