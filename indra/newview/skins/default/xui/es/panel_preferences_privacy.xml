@@ -7,7 +7,7 @@
 			</panel.string>
 			<button label="Limpiar historial"
 	     tool_tip="Borra la imagen de fondo de la conexión, la última posición, el historial de teleportes y la caché web y de texturas" name="clear_cache"/>
-			<text name="cache_size_label" height="19">
+			<text name="cache_size_label">
 				(Localizaciones, imágenes, web, historial de búsqueda)
 			</text>
 			<check_box label="Mostrarme información de perfil en los resultados de la búsqueda" name="online_searchresults"/>
@@ -20,10 +20,12 @@
 			<check_box label="Mostrar automáticamente las notas, texturas e hitos al aceptarlos" name="Show_New_Inventory"/>
 			<check_box label="Crear efecto de partículas al entregar items del inventario a otros avatares" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Mostrar mis hitos favoritos en el desplegable &apos;Iniciar en&apos; de la pantalla de conexión" name="favorites_on_login_check"/>
+			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
+		</panel>
+		<panel label="Registro y transcripciones" name="tab-logging">
 			<text name="logging_label">
 				Guardar:
 			</text>
-			<check_box name="LogNearbyChat" label="Guardar transcripción del chat local" tool_tip="Guardar una transcripción del chat local en mi equipo"/>
 			<combo_box name="conversation_log_combo" width="170" tool_tip="Registro (Registro de conversación): La lista de de conversaciones iniciadas por ti o por otras partes. Transcripción: El texto escrito real tal como aparece en pantalla.">
 				<item name="log_and_transcripts" label="Registro y transcripciones"/>
 				<item name="log_only" label="Sólo registro"/>
@@ -31,10 +33,10 @@
 			</combo_box>
 			<button label="Limpiar registros..." name="clear_log"/>
 			<button label="Borrar transcripciones..." name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Guardar transcripción del chat local" tool_tip="Guardar una transcripción del chat local en mi equipo"/>
 			<check_box label="Usar el formato clásico de nombre de archivo para las transcripciones" name="UseLegacyIMLogNames" tool_tip="Si lo activas, se usará el formato de nombre de archivo para las transcripciones (nombre de usuario) en vez del nuevo formato (nombre_de_usuario)."/>
 			<check_box label="Añadir marca horaria a los nombres de archivo de registro" name="LogFileNamewithDate" tool_tip="Añadir fecha y hora a los nombres de archivo de los registros de MI y chat, con formato chat-YYYY-MM-DD y 'nombre_MI'-YYYY-MM."/>
 			<check_box label="Usar el visor de transcripciones incorporado" name="FSUseBuiltInHistory" tool_tip="Utiliza el visor incorporado de transcripciones. Si lo desactivas, las transcripciones se abrirán en el editor de texto predefinido en tu sistema operativo."/>
-			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
 		</panel>
 		<panel label="Puntos de mira" name="tab-lookat">
 			<check_box label="Mostrar puntos de mira de foco:" name="showlookat" tool_tip="El punto de mira es una pista para la animación que los visores usan para saber hacia dónde mover tus ojos, cabeza y torso. También puede ser usado para determinar hacia dónde está enfoncando la cámara de un avatar."/>

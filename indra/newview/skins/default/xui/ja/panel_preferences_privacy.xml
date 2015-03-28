@@ -28,18 +28,6 @@
 			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory" />
 			<check_box label="他のアバターにものを送った時にはパーティクル効果が出る" name="FSCreateGiveInventoryParticleEffect" />
 			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
-			<text name="logging_label">
-				保存：
-			</text>
-			<check_box label="周辺チャットのメッセージをハードディスクに記録する" name="LogNearbyChat"/>
-			<combo_box name="conversation_log_combo">
-				<item name="log_and_transcripts" label="会話した記録と会話内容を保存" value="2"/>
-				<item name="log_only" label="会話した記録のみ" value="1"/>
-				<item name="no_log_or_transcript" label="会話した記録も会話内容も保存しない" value="0"/>
-				</combo_box>
-				<button label="記録をクリア..." name="clear_log" />
-				<button label="会話内容をクリア..." name="delete_transcripts" />
-				<check_box label="会話内容の保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話内容の古い形式のユーザー名でファイルが作成され、入れない場合は新しいユーザー名の形式でファイルが作成されます。" />
 				<!-- Deleted: Aug.03, 2013
 			<check_box label="IM ログをコンピューターに保存する" name="log_instant_messages"/>
 			<check_box label="チャットログでラインごとに時間を入れる" name="show_timestamps_check_im"/>
@@ -49,7 +37,23 @@
 			<button label="ブロック／無視リスト管理" name="block_list"/>
 		</panel>
 		
+		<!--Logging-->
 
+		<panel label="会話した記録と会話内容を保存" name="tab-logging">
+			<text name="logging_label">
+				保存：
+			</text>
+			<combo_box name="conversation_log_combo">
+				<item name="log_and_transcripts" label="会話した記録と会話内容を保存" />
+				<item name="log_only" label="会話した記録のみ" />
+				<item name="no_log_or_transcript" label="会話した記録も会話内容も保存しない" />
+			</combo_box>
+			<button label="記録をクリア..." name="clear_log" />
+			<button label="会話内容をクリア..." name="delete_transcripts" />
+			<check_box label="周辺チャットのメッセージをハードディスクに記録する" name="LogNearbyChat"/>
+			<check_box label="会話内容の保存には古い形式のファイル名を使用" name="UseLegacyIMLogNames" tool_tip="ここにチェックを入れると会話内容の古い形式のユーザー名でファイルが作成され、入れない場合は新しいユーザー名の形式でファイルが作成されます。" />
+		</panel>
+		
 		<!--LookAt-->
 
 		<panel label="視線" name="tab-lookat" >

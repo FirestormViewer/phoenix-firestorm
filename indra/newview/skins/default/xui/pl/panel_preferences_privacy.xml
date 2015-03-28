@@ -30,10 +30,12 @@
 			<check_box label="Automatycznie pokazuj zdjęcia w Szafie po załadowaniu" name="FSOpenInventoryAfterSnapshot"/>
 			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
+			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
+		</panel>
+		<panel label="Dzienniki i logi rozmów" name="tab-logging">
 			<text name="logging_label">
 				Zapisywanie:
 			</text>
-			<check_box name="LogNearbyChat" label="Czat lokalny" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
 			<combo_box name="conversation_log_combo" tool_tip="Dziennik: Lista konwersacji rozpoczętych przez Ciebie lub kogoś innego. Logi rozmów: Rzeczywisty tekst pokazywany na ekranie.">
 				<item name="log_and_transcripts" label="Dziennik i logi rozmów"/>
 				<item name="log_only" label="Tylko dziennik"/>
@@ -41,10 +43,10 @@
 			</combo_box>
 			<button label="Wyczyść dziennik" name="clear_log"/>
 			<button label="Usuń logi rozmów" name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Zapisuj log czatu lokalnego" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
 			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
 			<check_box label="Dodawaj datę do nazw plików logów rozmów" name="LogFileNamewithDate" tool_tip="Dodawaj znaczniki czasu do logów czatów oraz IM w formacie czat-RRRR-MM-DD oraz 'Nazwa pliku IM'-RRRR-MM."/>
 			<check_box label="Używaj wbudowanej przeglądarki logów" name="FSUseBuiltInHistory" tool_tip="Używaj wbudowanej przeglądarki logów do przeglądania logów czatów. Gdy wyłączysz tą opcję, to logi będą się otwierać w domyślnym edytorze tekstowym Twojego systemu operacyjnego."/>
-			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">
 			<check_box label="Pokazuj na co patrzą inni:" name="showlookat" tool_tip="To ustawienie pozwala włączyć wizualne pokazywanie wskaźnika animacji (punktu LookAt), którego używa przeglądarka do obracania oczami, głową oraz tułowiem. Może on także być używany do określenia punktu zaczepienia kamery awatara."/>
