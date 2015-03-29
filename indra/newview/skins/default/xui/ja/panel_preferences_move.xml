@@ -32,7 +32,6 @@
 			</text>
 			<check_box label="デフォルトのカメラコントロールのミニウィンドウを常に不透明で表示" name="FSAlwaysOpaqueCameraControls" />
 			<check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
-			<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
 		</panel>
 
 		<!--Mouselook-->

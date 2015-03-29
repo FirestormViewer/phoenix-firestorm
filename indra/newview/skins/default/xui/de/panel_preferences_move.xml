@@ -26,7 +26,6 @@
 			</text>
 			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
-			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
 		</panel>
 
 		<!--Mouselook-->

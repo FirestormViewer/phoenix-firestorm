@@ -276,18 +276,6 @@
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color."
          control_name="ShowMutedAvatarsAsCloud"/>
 
-        <check_box
-         top_pad="8"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         label="Notify if the simulator version changes while changing the region"
-         left="15"
-         name="FSShowServerVersionChangeNotice"
-         width="270"
-         control_name="FSShowServerVersionChangeNotice"
-         tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
-
 	</panel>
 
     <!--Mouselook-->

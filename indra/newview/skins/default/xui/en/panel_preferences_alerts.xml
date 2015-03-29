@@ -21,146 +21,141 @@
  tab_min_width="50"
  tab_position="top">
  
-    <!-- Notifications -->
+    <!-- World -->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="Notifications"
-     name="tab-notifications">
-
-    <text
-     type="string"
-     length="1"
-     follows="top|left"
-     height="15"
-     layout="topleft"
-     left="10"
-     name="tell_me_label"
-     top="8"
-     width="300">
-        Notify me:
-    </text>
+     label="World"
+     name="tab-world">
 
     <check_box
      control_name="NotifyMoneyChange"
      height="16"
-     label="When I spend or get L$"
+     label="Notify me when I spend or get L$"
      layout="topleft"
      left="10"
      name="notify_money_change_checkbox"
-     top_pad="2"
-     width="160" />
+     top="10"
+     width="450" />
     <check_box
      enabled_control="NotifyMoneyChange"
      layout="topleft"
      follows="left|top"
      left="20"
-     top_pad="2"
+     top_pad="3"
      height="16"
      control_name="FSPaymentInfoInChat"
      name="FSPaymentInfoInChat"
      label="Report L$ transactions in nearby chat instead of toasts"/>
     <check_box
-     layout="topleft"
-     follows="left|top"
-     top_pad="2"
+     control_name="FSShowServerVersionChangeNotice"
      height="16"
+     label="Notify if the simulator version changes while changing the region"
+     layout="topleft"
      left="10"
-     control_name="FSShowUploadPaymentToast"
-     name="FSShowUploadPaymentToast"
-     label="When I am charged for an upload" />
+     name="FSShowServerVersionChangeNotice"
+     top_pad="3"
+     tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."
+     width="450"/>
+    <check_box
+     control_name="AutoQueryGridStatus"
+     height="16"
+     label="Query status.secondlifegrid.net for latest news at login"
+     layout="topleft"
+     name="AutoQueryGridStatus"
+     top_pad="3"
+     width="450"/>
 
     <check_box
-     control_name="FSLandmarkCreatedNotification"
+      control_name="FSEnableGrowl"
+      height="16"
+      label="Enable Growl Notifications"
+      layout="topleft"
+      left="10"
+      name="notify_growl_checkbox"
+      top_pad="15"
+      width="450"/>
+    <check_box
+      enabled_control="FSEnableGrowl"
+      layout="topleft"
+      follows="left|top"
+      left_delta="10"
+      top_pad="3"
+      height="16"
+      control_name="FSGrowlWhenActive"
+      name="notify_growl_always_checkbox"
+      label="Show Growl Notifications even when Firestorm is active"/>
+    <check_box
+      enabled_control="FSEnableGrowl"
+      layout="topleft"
+      follows="left|top"
+      top_pad="3"
+      height="16"
+      control_name="FSFilterGrowlKeywordDuplicateIMs"
+      name="FSFilterGrowlKeywordDuplicateIMs"
+      label="Filter duplicate IMs if they have already been shown as part of a keyword alert"/>
+
+    </panel>
+
+    <!-- People -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="People"
+     name="tab-people">
+
+    <check_box
+     control_name="FSFlashOnMessage"
      height="16"
-     label="When a landmark has been created"
+     label="Flash the app icon when receiving a message and [APP_NAME] is not in focus"
      layout="topleft"
      left="10"
-     name="landmark_created_checkbox"
-     top_pad="2"
-     width="210" />
-
+     name="FSFlashOnMessage"
+     top="10"
+     width="450"/>
     <check_box
      control_name="FSShowDisplayNameUpdateNotification"
      height="16"
-     label="When somebody changes their display name"
+     label="Notify me when somebody changes their display name"
      layout="topleft"
-     left="10"
-     top_pad="2"
+     top_pad="3"
      name="FSShowDisplayNameUpdateNotification"
-     width="180" />
-
+     width="450" />
     <check_box
      control_name="FSReportBlockToNearbyChat"
      height="16"
-     label="When I block or unblock somebody"
+     label="Notify me when I block or unblock somebody"
      layout="topleft"
      left="10"
-     top_pad="2"
+     top_pad="3"
      name="FSReportBlockToNearbyChat"
-     width="180" />
-
-	<check_box
-     control_name="ShowScriptErrors"
-     follows="left|top"
-     height="16"
-     label="When I have Script Errors in:"
-     layout="topleft"
-     left="10"
-     top_pad="2"
-     name="show_script_errors"
-     width="180" />
-    <radio_group
-     enabled_control="ShowScriptErrors"
-     control_name="ShowScriptErrorsLocation"
-     follows="top|left"
-     height="16"
-     layout="topleft"
-     left_pad="5"
-     name="show_script_errors_location"
-     width="250">
-        <radio_item
-         height="16"
-         label="Nearby chat"
-         layout="topleft"
-         left_delta="5"
-         name="script_0"
-         top="0"
-         value="0"
-         width="100" />
-        <radio_item
-         height="16"
-         label="Separate window"
-         layout="topleft"
-         left_delta="100"
-         name="script_1"
-         top_delta="0"
-         value="1"
-         width="100" />
-    </radio_group>
+     width="450" />
     <text
         type="string"
         length="1"
         follows="top|left"
         height="15"
         layout="topleft"
-        left="30"
-        top_pad="2"
+        left="10"
+        top_pad="10"
         name="friends_logon_label"
-        width="400">
-        When my friends log in or out:
+        width="430">
+        Notify me when my friends log in or out:
     </text>
-        
     <check_box
     control_name="ChatOnlineNotification"
     height="16"
     label="As toasts"
     layout="topleft"
     name="friends_online_notify_checkbox"
-    top_pad="2"
+    top_pad="5"
+    left_delta="5"
     width="100" />
     <check_box
       control_name="OnlineOfflinetoNearbyChat"
@@ -183,75 +178,19 @@
       left_pad="0"
       name="OnlineOfflinetoNearbyChatHistory"
       width="180" />
-      
-      <check_box
-      control_name="FSReportTotalScriptCountChanges"
-      height="16"
-      label="When the region's total script count changes:"
-      layout="topleft"
-      left="10"
-      top_pad="7"
-      name="FSReportTotalScriptCountChanges"
-      width="300" />
-      <spinner
-      top_delta="0"
-      control_name="FSReportTotalScriptCountChangesThreshold"
-      enabled_control="FSReportTotalScriptCountChanges"
-      decimal_digits="0"
-      layout="topleft"
-      follows="left|top"
-      height="18"
-      left_pad="0"
-      increment="1"
-      max_val="10000"
-      min_val="0"
-      name="FSReportTotalScriptCountChangesThreshold"
-      width="90"
-      tool_tip="The threshold for total script count changes before reporting [Default: 100]"/>
-	
-    <check_box
-     control_name="FSCollisionMessagesInChat"
-     height="16"
-     label="Report collision notifications to nearby chat"
-     layout="topleft"
-     left="10"
-     top_pad="2"
-     name="FSCollisionMessagesInChat"
-     width="180" />
-    <check_box
-     control_name="FSReportCollisionMessages"
-     height="16"
-     label="Report collision notifications to scripts on channel"
-     layout="topleft"
-     left="10"
-     top_pad="2"
-     name="FSReportCollisionMessages"
-     width="300" />
-    <spinner
-      top_delta="-5"
-      control_name="FSReportCollisionMessagesChannel"
-      enabled_control="FSReportCollisionMessages"
-      decimal_digits="0"
-      layout="topleft"
-      follows="left|top"
-      height="18"
-      left_pad="0"
-      increment="1"
-      initial_value="-25000"
-      max_val="2147483647"
-      min_val="-2147483648"
-      name="FSReportCollisionMessagesChannel"
-      width="90"
-      tool_tip="The channel used for reporting collision messages to scripts [Default: -25000]"/>
-    <check_box
-     control_name="FSFlashOnMessage"
-     height="16"
-     label="Flash the app icon when receiving a message and [APP_NAME] is not in focus"
-     layout="topleft"
-     left="10"
-     name="FSFlashOnMessage"
+
+	</panel>
+
+    <!-- Objects & Scripts -->
+    <panel
      top_pad="5"
-     width="160"/>
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Objects &amp; Scripts"
+     name="tab-objects">
+
     <check_box
      control_name="FSFlashOnScriptDialog"
      height="16"
@@ -259,65 +198,150 @@
      layout="topleft"
      left="10"
      name="FSFlashOnScriptDialog"
-     top_pad="2"
-     width="160"/>
+     top="10"
+     width="450"/>
+    <check_box
+     top_pad="3"
+     control_name="FSCollisionMessagesInChat"
+     height="16"
+     label="Report collision notifications to nearby chat"
+     layout="topleft"
+     name="FSCollisionMessagesInChat"
+     width="450" />
+	<check_box
+     control_name="ShowScriptErrors"
+     follows="left|top"
+     height="16"
+     label="Report Script Errors in:"
+     layout="topleft"
+     left="10"
+     top_pad="3"
+     name="show_script_errors"
+     width="450" />
+    <radio_group
+     enabled_control="ShowScriptErrors"
+     control_name="ShowScriptErrorsLocation"
+     follows="top|left"
+     height="16"
+     layout="topleft"
+     top_pad="5"
+     name="show_script_errors_location"
+     width="250">
+        <radio_item
+         height="16"
+         label="Nearby chat"
+         layout="topleft"
+         left_delta="5"
+         name="script_0"
+         top="0"
+         value="0"
+         width="100" />
+        <radio_item
+         height="16"
+         label="Separate window"
+         layout="topleft"
+         left_delta="100"
+         name="script_1"
+         top_delta="0"
+         value="1"
+         width="100" />
+    </radio_group>
+
+	<check_box
+		control_name="FSReportTotalScriptCountChanges"
+		height="16"
+		label="Report region's total script count changes:"
+		layout="topleft"
+		left="10"
+		top_pad="15"
+		name="FSReportTotalScriptCountChanges"
+		width="450" />
+	<spinner
+		top_pad="3"
+		control_name="FSReportTotalScriptCountChangesThreshold"
+		enabled_control="FSReportTotalScriptCountChanges"
+		decimal_digits="0"
+		layout="topleft"
+		follows="left|top"
+		height="18"
+		left_delta="10"
+		increment="1"
+		max_val="10000"
+		min_val="0"
+		name="FSReportTotalScriptCountChangesThreshold"
+		width="90"
+		tool_tip="The threshold for total script count changes before reporting [Default: 100]"/>
+
+    <check_box
+     control_name="FSReportCollisionMessages"
+     height="16"
+     label="Report collision notifications to scripts on channel:"
+     layout="topleft"
+     left="10"
+     top_pad="20"
+     name="FSReportCollisionMessages"
+     width="450" />
+    <spinner
+      top_pad="3"
+      control_name="FSReportCollisionMessagesChannel"
+      enabled_control="FSReportCollisionMessages"
+      decimal_digits="0"
+      layout="topleft"
+      follows="left|top"
+      height="18"
+      left_delta="10"
+      increment="1"
+      initial_value="-25000"
+      max_val="2147483647"
+      min_val="-2147483648"
+      name="FSReportCollisionMessagesChannel"
+      width="90"
+      tool_tip="The channel used for reporting collision messages to scripts [Default: -25000]"/>
+
+    </panel>
+
+    <!-- Inventory -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Inventory"
+     name="tab-inventory">
+
+    <check_box
+     layout="topleft"
+     follows="left|top"
+     top="10"
+     height="16"
+     left="10"
+     control_name="FSShowUploadPaymentToast"
+     name="FSShowUploadPaymentToast"
+     label="Notify me when I am charged for an upload" />
+    <check_box
+     control_name="FSLandmarkCreatedNotification"
+     height="16"
+     label="Notify me when a landmark has been created"
+     layout="topleft"
+     name="landmark_created_checkbox"
+     top_pad="3" />
     <check_box
      control_name="FSDisableReturnObjectNotification"
      height="16"
      label="Disable 'object has been returned to your inventory' notifications"
      layout="topleft"
-     left="10"
      name="FSDisableReturnObjectNotification"
-     top_pad="2"
-     width="160"/>
-    <check_box
-     control_name="AutoQueryGridStatus"
-     height="16"
-     label="Query status.secondlifegrid.net for latest news at login"
-     layout="topleft"
-     left="10"
-     name="AutoQueryGridStatus"
-     top_pad="2"
-     width="160"/>
+     top_pad="3" />
     <check_box
      control_name="FSLogSnapshotsToLocal"
      height="16"
      label="Log filename of saved snapshots in to chat history"
      layout="topleft"
-     left="10"
      name="FSLogSnapshotsToLocal"
-     top_pad="2"
-     width="160"/>
-      
-    <check_box
-      control_name="FSEnableGrowl"
-      height="16"
-      label="Enable Growl Notifications"
-      layout="topleft"
-      left="10"
-      name="notify_growl_checkbox"
-      top_pad="8"
-      width="160"/>
-    <check_box
-      enabled_control="FSEnableGrowl"
-      layout="topleft"
-      follows="left|top"
-      left_delta="10"
-      top_pad="0"
-      height="18"
-      control_name="FSGrowlWhenActive"
-      name="notify_growl_always_checkbox"
-      label="Show Growl Notifications even when Firestorm is active"/>
-    <check_box
-      enabled_control="FSEnableGrowl"
-      layout="topleft"
-      follows="left|top"
-      top_pad="0"
-      height="18"
-      control_name="FSFilterGrowlKeywordDuplicateIMs"
-      name="FSFilterGrowlKeywordDuplicateIMs"
-      label="Filter duplicate IMs if they have already been shown as part of a keyword alert"/>
-    </panel>
+     top_pad="3" />
+
+	</panel>
 
     <!-- Alerts -->
     <panel

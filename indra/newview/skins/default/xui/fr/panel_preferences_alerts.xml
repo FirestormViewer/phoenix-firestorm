@@ -2,12 +2,9 @@
 <panel label="Pop-ups" name="popups" title="Pop-ups">
 <tab_container name="tabs">
  
-    <!-- Notifications -->
-    <panel label="Notifications" name="tab-notifications">
-	<text name="tell_me_label">
-		Me prévenir :
-	</text>
-	<check_box label="Quand je dépense ou que je reçois des L$" name="notify_money_change_checkbox"/>
+    <!-- World -->
+    <panel label="Monde" name="tab-world">
+	<check_box label="Me prévenir: Quand je dépense ou que je reçois des L$" name="notify_money_change_checkbox"/>
     </panel>
 
     <!-- Alerts -->
@@ -19,5 +16,6 @@
 		Ne jamais afficher :
 	</text>
 	</panel>
+
 </tab_container>
 </panel>

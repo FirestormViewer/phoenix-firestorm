@@ -2,12 +2,9 @@
 <panel label="突顯式視窗" name="popups">
 <tab_container name="tabs">
  
-    <!-- Notifications -->
-    <panel label="Notifications" name="tab-notifications">
-	<text name="tell_me_label">
-		告訴我：
-	</text>
-	<check_box label="當我花費或取得 L$" name="notify_money_change_checkbox"/>
+    <!-- World -->
+    <panel label="世界" name="tab-world">
+	<check_box label="告訴我：: 當我花費或取得 L$" name="notify_money_change_checkbox"/>
     </panel>
 
     <!-- Alerts -->
@@ -19,5 +16,6 @@
 		絕不顯示：
 	</text>
 	</panel>
+
 </tab_container>
 </panel>

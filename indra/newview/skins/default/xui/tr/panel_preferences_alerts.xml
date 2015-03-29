@@ -2,12 +2,9 @@
 <panel label="Açılır Uyarılar" name="popups">
 <tab_container name="tabs">
  
-    <!-- Notifications -->
-    <panel label="Notifications" name="tab-notifications">
-	<text name="tell_me_label">
-		Bana söyle:
-	</text>
-	<check_box label="L$ harcadığımda veya aldığımda" name="notify_money_change_checkbox"/>
+    <!-- World -->
+    <panel label="Dünya" name="tab-world">
+	<check_box label="Bana söyle: L$ harcadığımda veya aldığımda" name="notify_money_change_checkbox"/>
     </panel>
 
     <!-- Alerts -->
@@ -19,5 +16,6 @@
 		Asla gösterme:
 	</text>
 	</panel>
+
 </tab_container>
 </panel>

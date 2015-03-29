@@ -25,7 +25,6 @@
 			</text>
 			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
-			<check_box label="Notificar los cambios de versión de simulador al cambiar de región" name="FSShowServerVersionChangeNotice" tool_tip="Muestra un aviso si la versión de simulador cambia durante un teleporte o al cruzar a otra región."/>
 		</panel>
 		<panel label="Vista subjetiva" name="tab-mouselook">
 			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>
