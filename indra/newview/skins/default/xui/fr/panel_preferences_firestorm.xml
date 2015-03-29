@@ -96,8 +96,6 @@
         <button name="AntiSpamUnblock"
 			label="Débloquer toutes les sources"/>
 	<!--spec-->
-		<check_box name="FSRemoveScriptBlockButton"
-			label="Supprimer le bouton 'Bloquer' sur le menu interactif des scripts"/>
         <check_box name="FSNotifyIncomingObjectSpam"
 			label="Notifier lors du blocage d'items arrivant trop vite via un objet"/>
         <check_box name="FSNotifyIncomingObjectSpamFrom"

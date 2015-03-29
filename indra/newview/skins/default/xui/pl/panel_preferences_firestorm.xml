@@ -67,7 +67,6 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Mnożnik dla zdarzeń buforowania dźwięku [domyślnie: 4]" />
         <button name="AntiSpamUnblock" label="Odblokuj wszystkie źródła spamu" />
-        <check_box label="Usuń przycisk &quot;Blokuj&quot; z okien dialogowych skryptów" name="FSRemoveScriptBlockButton" />
         <check_box label="Usuń przycisk &quot;Zaakceptuj&quot; z zaproszeń do grup, które pobierają opłatę za dołączenie" name="FSAllowGroupInvitationOnlyWithoutFee" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez obiekty" name="FSNotifyIncomingObjectSpam" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez innych Rezydentów" name="FSNotifyIncomingObjectSpamFrom" />

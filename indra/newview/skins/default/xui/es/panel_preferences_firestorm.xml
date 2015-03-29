@@ -51,7 +51,6 @@
 			</text>
 			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicador de eventos para peticiones de precarga de sonido [Por defecto: 4]"/>
 			<button name="AntiSpamUnblock" label="Desbloquear todas las fuentes de spam" width="250"/>
-			<check_box label="Quitar el botón &quot;Bloquear&quot; de los diálogos de script" name="FSRemoveScriptBlockButton"/>
 			<check_box label="Eliminar el botón &quot;Entrar&quot; de las invitaciones de grupo cuando éstas tengan coste" name="FSAllowGroupInvitationOnlyWithoutFee"/>
 			<check_box label="Notificar cuando se reciben items demasiado rápido" name="FSNotifyIncomingObjectSpam"/>
 			<check_box label="Notificar cuando se reciben items de otros residentes demasiado rápido" name="FSNotifyIncomingObjectSpamFrom"/>

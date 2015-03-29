@@ -51,11 +51,12 @@
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>
-		<combo_box name="ScriptDialogPerObjectDropdown">
-			<combo_box.item label="１つのオブジェクトに対し１個" name="ScriptDialogOption_0" value="0"/>
-			<combo_box.item label="１つのオブジェクト及びチャンネルに対して１個" name="ScriptDialogOption_1" value="1"/>
+		<combo_box name="ScriptDialogPerObjectDropdown" width="150">
+			<combo_box.item label="１つのオブジェクトに対し１個" name="ScriptDialogOption_0" />
+			<combo_box.item label="１つのオブジェクト及びチャンネルに対して１個" name="ScriptDialogOption_1" />
 			<combo_box.item label="無制限" name="ScriptDialogOption_2" value="2"/>
 		</combo_box>
+		<check_box label="「ブロック」ボタンを削除" name="FSRemoveScriptBlockButton" />
       
         <check_box label="スクリプトダイアログを右上に表示" name="ShowScriptDialogsTopRight" tool_tip="ここにチェックを入れると、スクリプトが出すダイアログ通知を画面の右上に表示します。（旧式の１系スタイル）" />
         <check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />

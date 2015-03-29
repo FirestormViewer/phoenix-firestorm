@@ -64,7 +64,6 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
-		<check_box label="スクリプトダイアログから「無視」ボタンを外す" name="FSRemoveScriptBlockButton" />
 		 
         <check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
         <check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />

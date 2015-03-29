@@ -41,6 +41,7 @@
             <combo_box.item label="Jeden na obiekt i kanał" name="ScriptDialogOption_1" />
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
         </combo_box>
+        <check_box label="Usuń przycisk &quot;Blokuj&quot;" name="FSRemoveScriptBlockButton" />
         <text name="ScriptDialogsPositionLabel" width="185">
             Pozycja komunikatów skryptów:
         </text>

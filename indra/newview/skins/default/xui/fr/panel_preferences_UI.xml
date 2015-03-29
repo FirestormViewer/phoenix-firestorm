@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Display panel">
 	<tab_container name="tabs">
+		<panel label="Allgemein" name="UI Prefs Panel">
+			<check_box name="FSRemoveScriptBlockButton" label="Supprimer le bouton 'Bloquer'"/>
+		</panel>
 		<panel name="UI-interface-windows-tab">
 			<check_box name="FSUseWebProfiles" label="Utiliser le profil web par défaut" tool_tip="Affiche les profils comme une page web plutôt que comme une fenêtre style v1"/>
 			<check_box name="DebugHideEmptySystemFolders" label="Masquer les dossiers systeme vides dans l'inventaire" tool_tip="Lorsqu'ils sont inutilisés, désactive l'affichage des dossiers systeme tels que Favoris, Reperes, etc... dans la fenetre de l'inventaire."/>

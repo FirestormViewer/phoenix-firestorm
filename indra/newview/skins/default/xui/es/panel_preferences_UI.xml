@@ -41,6 +41,7 @@
 				<combo_box.item name="ScriptDialogOption_1" label="Uno por objeto y canal"/>
 				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
 			</combo_box>
+			<check_box label="Quitar el &quot;Bloquear&quot;" name="FSRemoveScriptBlockButton"/>
 			<text name="ScriptDialogsPositionLabel" width="180">
 				Posición de los diálogos de script:
 			</text>
