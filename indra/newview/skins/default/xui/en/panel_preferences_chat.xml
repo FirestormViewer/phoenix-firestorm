@@ -724,6 +724,7 @@
              increment="1"
              left_pad="10"
              min_val="0"
+             max_val="2147483647"
              name="GroupSnoozeTime"
              tool_tip="Amount of time a group chat will be muted when pressing the &quot;Snooze&quot; button. Setting a value of 0 will effectively just close the window until the next group message arrives."
              width="60" />
