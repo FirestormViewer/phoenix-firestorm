@@ -342,14 +342,14 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="123"
+     height="170"
      layout="topleft"
      left="10"
      multi_select="true"
      name="enabled_popups"
      sort_column="0"
      sort_ascending="true"
-     width="495" />
+     width="515" />
     <button
      enabled_control="FirstSelectedDisabledPopups"
      follows="top|left"
@@ -357,7 +357,7 @@
      image_overlay="Arrow_Up"
      hover_glow_amount="0.25"
      layout="topleft"
-     left="200"
+     left="218"
      name="enable_this_popup"
      top_pad="5"
      width="40">
@@ -392,14 +392,14 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="123"
+     height="170"
      layout="topleft"
      left="10"
      sort_column="0"
      sort_ascending="true"
      multi_select="true"
      name="disabled_popups"
-     width="495" />
+     width="515" />
     </panel>
 </tab_container>
 </panel>
