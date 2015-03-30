@@ -195,10 +195,20 @@ public:
 	LLUrlEntryAgent();
 	~LLUrlEntryAgent()
 	{
-		if (mAvatarNameCacheConnection.connected())
+		// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+		//if (mAvatarNameCacheConnection.connected())
+		//{
+		//	mAvatarNameCacheConnection.disconnect();
+		//}
+		for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 		{
-			mAvatarNameCacheConnection.disconnect();
+			if (it->second.connected())
+			{
+				it->second.disconnect();
+			}
 		}
+		mAvatarNameCacheConnections.clear();
+		// </FS:Ansariel>
 	}
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
 	/*virtual*/ std::string getIcon(const std::string &url);
@@ -209,8 +219,13 @@ public:
 protected:
 	/*virtual*/ void callObservers(const std::string &id, const std::string &label, const std::string& icon);
 private:
-	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
-	boost::signals2::connection mAvatarNameCacheConnection;
+	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+	//void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	//boost::signals2::connection mAvatarNameCacheConnection;
+	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name, const LLUUID& query_id);
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
+	// </FS:Ansariel>
 };
 
 ///
@@ -224,10 +239,20 @@ public:
 	LLUrlEntryAgentName();
 	~LLUrlEntryAgentName()
 	{
-		if (mAvatarNameCacheConnection.connected())
+		// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+		//if (mAvatarNameCacheConnection.connected())
+		//{
+		//	mAvatarNameCacheConnection.disconnect();
+		//}
+		for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 		{
-			mAvatarNameCacheConnection.disconnect();
+			if (it->second.connected())
+			{
+				it->second.disconnect();
+			}
 		}
+		mAvatarNameCacheConnections.clear();
+		// </FS:Ansariel>
 	}
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
 	/*virtual*/ LLStyle::Params getStyle() const;
@@ -235,8 +260,13 @@ protected:
 	// override this to pull out relevant name fields
 	virtual std::string getName(const LLAvatarName& avatar_name) = 0;
 private:
-	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
-	boost::signals2::connection mAvatarNameCacheConnection;
+	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+	//void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	//boost::signals2::connection mAvatarNameCacheConnection;
+	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name, const LLUUID& query_id);
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
+	// </FS:Ansariel>
 };
 
 
