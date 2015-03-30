@@ -25,6 +25,10 @@
  * $/LicenseInfo$
  */
 
+#if LL_LINUX
+ #pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+
 #include "linden_common.h"
 #include "llallocator_heap_profile.h"
 
