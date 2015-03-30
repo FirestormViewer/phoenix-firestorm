@@ -1173,6 +1173,8 @@ void LLWindowMacOSX::beforeDialog()
 
 void LLWindowMacOSX::afterDialog()
 {
+    //For fix problem with Core Flow view on OSX
+    restoreGLContext();
 }
 
 
