@@ -294,19 +294,19 @@ elseif(LINUX)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
     set(release_files
-        libapr-1.so.0
-        libaprutil-1.so.0
+#        libapr-1.so.0
+#        libaprutil-1.so.0
         libatk-1.0.so
-        libboost_context-mt.so.${BOOST_VERSION}.0
-        libboost_filesystem-mt.so.${BOOST_VERSION}.0
-        libboost_program_options-mt.so.${BOOST_VERSION}.0
-        libboost_regex-mt.so.${BOOST_VERSION}.0
-        libboost_signals-mt.so.${BOOST_VERSION}.0
-        libboost_system-mt.so.${BOOST_VERSION}.0
-        libboost_thread-mt.so.${BOOST_VERSION}.0
-        libboost_wave-mt.so.${BOOST_VERSION}.0
-        libcollada14dom.so
-        libcrypto.so.1.0.0
+#        libboost_context-mt.so.${BOOST_VERSION}.0
+#        libboost_filesystem-mt.so.${BOOST_VERSION}.0
+#        libboost_program_options-mt.so.${BOOST_VERSION}.0
+#        libboost_regex-mt.so.${BOOST_VERSION}.0
+#        libboost_signals-mt.so.${BOOST_VERSION}.0
+#        libboost_system-mt.so.${BOOST_VERSION}.0
+#        libboost_thread-mt.so.${BOOST_VERSION}.0
+#        libboost_wave-mt.so.${BOOST_VERSION}.0
+#        libcollada14dom.so
+#        libcrypto.so.1.0.0
 #        libdb-5.1.so
         libexpat.so
         libexpat.so.1
@@ -319,30 +319,18 @@ elseif(LINUX)
 #        libgtest_main.so
 #        libgtest.so.0
         libhunspell-1.3.so.0.0.0
-        libminizip.so
+#        libminizip.so
         libopenal.so
         libopenjpeg.so
-        libssl.so
+#        libssl.so
         libuuid.so.16
         libuuid.so.16.0.22
-        libssl.so.1.0.0
-        libfontconfig.so.1.4.4
+#        libssl.so.1.0.0
+#        libfontconfig.so.1.4.4
 #        libpng15.so.15
 #        libpng15.so.15.13.0
         #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
-
-    if( NOT ND_BUILD64BIT_ARCH )
-      set(release_files ${release_files}
-          libpng15.so.15
-          libpng15.so.15.13.0
-        )
-    else( NOT ND_BUILD64BIT_ARCH )
-      set(release_files ${release_files}
-          libpng15.so.15
-          libpng15.so.15.1.0
-        )
-    endif( NOT ND_BUILD64BIT_ARCH )
 
     if (USE_TCMALLOC)
       set(release_files ${release_files} "libtcmalloc_minimal.so")

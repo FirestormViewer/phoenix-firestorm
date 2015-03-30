@@ -193,7 +193,7 @@ if (LINUX)
   endif (${CXX_VERSION_NUMBER} LESS 420)
 
   if(${CXX_VERSION_NUMBER} GREATER 459)
-    set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable -Wno-maybe-uninitialized ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 459)
 
   # gcc 4.3 and above don't like the LL boost and also

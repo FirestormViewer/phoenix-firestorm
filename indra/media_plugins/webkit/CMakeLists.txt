@@ -15,6 +15,7 @@ include(PluginAPI)
 include(MediaPluginBase)
 include(OpenGL)
 include(PulseAudio)
+include(OpenSSL)
 
 include(WebKitLibPlugin)
 
@@ -70,6 +71,7 @@ if (LINUX)
   endif (PULSEAUDIO_FOUND)
   list(APPEND media_plugin_webkit_LINK_LIBRARIES
        ${UI_LIBRARIES}     # for glib/GTK
+	   ${OPENSSL_LIBRARIES}
        Xext #<FS:ND/> force pulling libXext in, otherwise we get undefined symbols.
        )
 elseif (DARWIN)

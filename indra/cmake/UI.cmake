@@ -18,8 +18,10 @@ if (USESYSTEMLIBS)
         libpng
         pango
         pangoft2
-        pangox
-        pangoxft
+# <FS:ND> pangox is deprecated and removed
+#        pangox
+#        pangoxft
+# </FS:ND>
         sdl
         )
   endif (LINUX)
@@ -46,8 +48,10 @@ else (USESYSTEMLIBS)
         gtk-x11-2.0
         pango-1.0
         pangoft2-1.0
-        pangox-1.0
-        pangoxft-1.0
+# <FS:ND> pangox is deprecated and removed
+#        pangox-1.0
+#        pangoxft-1.0
+# </FS:ND>
         )
 
     if (ND_BUILD64BIT_ARCH)
@@ -68,7 +72,7 @@ else (USESYSTEMLIBS)
       set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
     endforeach(libname)
 
-    set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
+#    set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)
 
   include_directories (
