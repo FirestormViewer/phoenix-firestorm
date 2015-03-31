@@ -220,9 +220,8 @@ protected:
 	/*virtual*/ void callObservers(const std::string &id, const std::string &label, const std::string& icon);
 private:
 	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
-	//void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
 	//boost::signals2::connection mAvatarNameCacheConnection;
-	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name, const LLUUID& query_id);
 	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 	// </FS:Ansariel>
@@ -261,9 +260,8 @@ protected:
 	virtual std::string getName(const LLAvatarName& avatar_name) = 0;
 private:
 	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
-	//void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
 	//boost::signals2::connection mAvatarNameCacheConnection;
-	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name, const LLUUID& query_id);
 	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 	// </FS:Ansariel>
