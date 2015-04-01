@@ -195,7 +195,7 @@ public:
 	LLUrlEntryAgent();
 	~LLUrlEntryAgent()
 	{
-		// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+		// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
 		//if (mAvatarNameCacheConnection.connected())
 		//{
 		//	mAvatarNameCacheConnection.disconnect();
@@ -219,10 +219,10 @@ public:
 protected:
 	/*virtual*/ void callObservers(const std::string &id, const std::string &label, const std::string& icon);
 private:
-	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
 	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
 	//boost::signals2::connection mAvatarNameCacheConnection;
-	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	typedef std::multimap<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 	// </FS:Ansariel>
 };
@@ -238,7 +238,7 @@ public:
 	LLUrlEntryAgentName();
 	~LLUrlEntryAgentName()
 	{
-		// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
+		// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
 		//if (mAvatarNameCacheConnection.connected())
 		//{
 		//	mAvatarNameCacheConnection.disconnect();
@@ -259,10 +259,10 @@ protected:
 	// override this to pull out relevant name fields
 	virtual std::string getName(const LLAvatarName& avatar_name) = 0;
 private:
-	// <FS:Ansariel> FIRE-11330: Names in chat gets stuck as "Loading..."
 	void onAvatarNameCache(const LLUUID& id, const LLAvatarName& av_name);
+	// <FS:Ansariel> FIRE-11330: Names in chat get stuck as "Loading..."
 	//boost::signals2::connection mAvatarNameCacheConnection;
-	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	typedef std::multimap<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 	// </FS:Ansariel>
 };
