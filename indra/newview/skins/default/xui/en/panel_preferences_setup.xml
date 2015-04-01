@@ -233,7 +233,7 @@
 		  left="0"
 		  name="new_external"
 		  value="0"
-		  tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
+		  tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running fullscreen."
 		  top="0"
 		  width="480" />
 		<radio_item

@@ -222,7 +222,7 @@
              height="18"
              name="ChatFullWidth"
              control_name="ChatFullWidth"
-             label="Use full screen width for console"/>
+             label="Use full width of screen for console"/>
             <spinner
              top_pad="2"
              control_name="NearbyToastLifeTime"
