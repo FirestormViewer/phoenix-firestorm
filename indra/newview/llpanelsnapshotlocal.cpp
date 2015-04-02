@@ -187,6 +187,7 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	{
 		// <FS:Ansariel> Notify user if we could not save file
 		LLNotificationsUtil::add("CannotSaveSnapshot");
+		floater->notify(LLSD().with("set-ready", true));
 		// <FS:Ansariel> Don't return to target selection after taking a snapshot
 		//cancel();
 	}
