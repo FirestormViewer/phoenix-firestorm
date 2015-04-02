@@ -551,7 +551,7 @@ std::string LLUrlEntryAgent::getLabel(const std::string &url, const LLUrlLabelCa
 		//}
 		//mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
 		boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgent::onAvatarNameCache, this, _1, _2));
-		mAvatarNameCacheConnections.insert(std::pair<LLUUID, boost::signals2::connection>(agent_id, connection));
+		mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
 		// </FS:Ansariel>
 		addObserver(agent_id_string, url, cb);
 		return LLTrans::getString("AvatarNameWaiting");
@@ -677,7 +677,7 @@ std::string LLUrlEntryAgentName::getLabel(const std::string &url, const LLUrlLab
 		//}
 		//mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
 		boost::signals2::connection connection = LLAvatarNameCache::get(agent_id, boost::bind(&LLUrlEntryAgentName::onAvatarNameCache, this, _1, _2));
-		mAvatarNameCacheConnections.insert(std::pair<LLUUID, boost::signals2::connection>(agent_id, connection));
+		mAvatarNameCacheConnections.insert(std::make_pair(agent_id, connection));
 		// </FS:Ansariel>
 		addObserver(agent_id_string, url, cb);
 		return LLTrans::getString("AvatarNameWaiting");
