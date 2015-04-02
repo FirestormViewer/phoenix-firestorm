@@ -2560,6 +2560,13 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(TRUE);
 #endif
 	getChild<LLComboBox>("UseLSLFlightAssist")->setValue((int)gSavedPerAccountSettings.getF32("UseLSLFlightAssist")); // Flight Assist combo box; Not sound-related, but better to place it here instead of creating whole new void
+
+	// FIRE-9856: Mute sound effects disable plays sound from collisions and plays sound from gestures checkbox not disable after restart/relog
+	bool mute_sound_effects = gSavedSettings.getBOOL("MuteSounds");
+	bool mute_all_sounds = gSavedSettings.getBOOL("MuteAudio");
+	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
+	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
+
 }
 // </FS:PP>
 

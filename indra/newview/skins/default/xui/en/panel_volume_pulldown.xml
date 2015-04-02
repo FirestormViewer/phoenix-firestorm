@@ -47,7 +47,11 @@
 	 image_unselected="Audio_Off"
 	 is_toggle="true"
 	 tab_stop="false"
-	/>
+	>
+		<button.commit_callback
+		 function="Pref.SetSounds"
+		/>
+	</button>
 	<button
 	 name="prefs_btn"
 	 left_pad="8"

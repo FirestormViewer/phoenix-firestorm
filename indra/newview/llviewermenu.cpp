@@ -10506,8 +10506,16 @@ void volume_controls_on_click_set_sounds(const LLUICtrl* ctrl)
 	{
 		// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
 		// or if sound effects are disabled.
-		volume_control_panel->getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
-		volume_control_panel->getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+
+		// <FS:PP> FIRE-9856: Mute sound effects disable plays sound from collisions and plays sound from gestures checkbox not disable after restart/relog
+		// volume_control_panel->getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+		// volume_control_panel->getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+		bool mute_sound_effects = gSavedSettings.getBOOL("MuteSounds");
+		bool mute_all_sounds = gSavedSettings.getBOOL("MuteAudio");
+		volume_control_panel->getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
+		volume_control_panel->getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
+		// </FS:PP> 
+
 	}
 }
 
