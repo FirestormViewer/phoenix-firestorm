@@ -73,8 +73,7 @@ LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifo
 	LLUUID folder = gInventory.findCategoryByName(ifolder);
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
-	//ObjectContentNameMatches objectnamematches(ifolder);
-	gInventory.collectDescendents(folder,cats,items,FALSE);//,objectnamematches);
+	gInventory.collectDescendents(folder, cats, items, FALSE);
 
 	return items;
 }
@@ -88,81 +87,82 @@ public:
 	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string sFolder, std::string sUUID, bool package = false) : LLEventTimer(1.f), mRunning(FALSE)
 	{
 		mPackage = package;
-		instack = stack;
-		indest = dest;
-		dFolder = sFolder;
-		dUUID = sUUID;
+		mStack = stack;
+		mDestination = dest;
+		mFolderName = sFolder;
+		mDropUUID = sUUID;
 	}
+
 	~JCZdrop()
 	{
 		doZdCleanup();
-		if (errorCode == 1)
+		if (mErrorCode == 1)
 		{
-			reportToNearbyChat(llformat("The object with the UUID of \"%s\" can no longer be found in-world.",dUUID.c_str()));
+			reportToNearbyChat(llformat("The object with the UUID of \"%s\" can no longer be found in-world.", mDropUUID.c_str()));
 			reportToNearbyChat("This can occur if the object was returned or deleted, or if your client is no longer rendering it.");
-			reportToNearbyChat(llformat("Transfer from \"%s\" to \"%s\" aborted.",dFolder.c_str(),dUUID.c_str()));
+			reportToNearbyChat(llformat("Transfer from \"%s\" to \"%s\" aborted.", mFolderName.c_str(), mDropUUID.c_str()));
 		}
 		else
 		{
-			if(mPackage)
+			if (mPackage)
 			{
 				reportToNearbyChat("Packager finished, you may now pick up the prim that contains the objects.");
-				reportToNearbyChat(llformat("Packaged what you had selected in world into the folder \"%s\" in your inventory and into the prim with the UUID of \"%s\"",dFolder.c_str(),dUUID.c_str()));
+				reportToNearbyChat(llformat("Packaged what you had selected in world into the folder \"%s\" in your inventory and into the prim with the UUID of \"%s\"", mFolderName.c_str(), mDropUUID.c_str()));
 				reportToNearbyChat("Don't worry if you look at the contents of package right now, it may show as empty, it isn't, it's just a bug with Second Life itself.");
 				reportToNearbyChat("If you take it into your inventory then rez it back out, all the contents will be there.");
 			}
 			else
 			{
-				reportToNearbyChat(llformat("Completed transfer from \"%s\" to \"%s\".",dFolder.c_str(),dUUID.c_str()));
+				reportToNearbyChat(llformat("Completed transfer from \"%s\" to \"%s\".", mFolderName.c_str(), mDropUUID.c_str()));
 			}
 		}
 	}
+
 	BOOL tick()
 	{
-		LLViewerInventoryItem* subj = instack.top();
-		instack.pop();
-		LLViewerObject *objectp = gObjectList.findObject(indest);
-		if(objectp)
+		LLViewerInventoryItem* subj = mStack.top();
+		mStack.pop();
+		LLViewerObject* objectp = gObjectList.findObject(mDestination);
+		if (objectp)
 		{
-			reportToNearbyChat(std::string("transferring ")+subj->getName());
-			LLToolDragAndDrop::dropInventory(objectp,subj,LLToolDragAndDrop::SOURCE_AGENT,gAgent.getID());
-			if (instack.size() > 0)
+			reportToNearbyChat(std::string("transferring ") + subj->getName());
+			LLToolDragAndDrop::dropInventory(objectp, subj, LLToolDragAndDrop::SOURCE_AGENT, gAgentID);
+			if (mStack.size() > 0)
 			{
 				return mRunning;
 			}
 			else
 			{
-				return (instack.size() == 0);
+				return (mStack.size() == 0);
 			}
 		}
 		else
 		{
-			errorCode = 1;
+			mErrorCode = 1;
 			return TRUE;
 		}
 	}
 
 
 private:
-	std::stack<LLViewerInventoryItem*> instack;
-	LLUUID indest;
-	std::string dFolder;
-	std::string dUUID;
-	int errorCode;
+	std::stack<LLViewerInventoryItem*> mStack;
+	LLUUID mDestination;
+	std::string mFolderName;
+	std::string mDropUUID;
+	S32 mErrorCode;
 	bool mPackage;
 };
 
-JCZdrop *zdrop;
+JCZdrop* zdrop;
 
 class ZdCleanup: public LLEventTimer
 {
 public:
 	ZdCleanup() : LLEventTimer(0.2f) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
-	{
-	}
-	~ZdCleanup()
-	{
-	}
+	{}
+
+	~ZdCleanup() {}
+
 	BOOL tick()
 	{
 		zdrop = NULL;
@@ -174,16 +174,23 @@ void doZdCleanup()
 {
 	new ZdCleanup();
 }
+
 void doZtCleanup();
 class JCZtake : public LLEventTimer
 {
 public:
 	BOOL mRunning;
 
-	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "") : LLEventTimer(0.66f), mTarget(target), mRunning(FALSE), mCountdown(5), mPackage(package), mPackageDest(destination)
+	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "") :
+		LLEventTimer(0.66f),
+		mTarget(target),
+		mRunning(FALSE),
+		mCountdown(5),
+		mPackage(package),
+		mPackageDest(destination)
 	{
 		mFolderName = dtarget;
-		if(mPackage)
+		if (mPackage)
 		{
 			reportToNearbyChat("Packager started. Phase 1 (taking in-world objects into inventory) starting in: ");
 		}
@@ -192,40 +199,42 @@ public:
 			reportToNearbyChat("Ztake activated. Taking selected in-world objects into inventory in: ");
 		}
 	}
+
 	~JCZtake()
 	{
-		if(!mPackage)
+		if (!mPackage)
 		{
 			reportToNearbyChat("Ztake deactivated.");
 		}
 	}
+
 	BOOL tick()
 	{
 		{
-			LLMessageSystem *msg = gMessageSystem;
-			for(LLObjectSelection::root_iterator itr=LLSelectMgr::getInstance()->getSelection()->root_begin();
-				itr!=LLSelectMgr::getInstance()->getSelection()->root_end();++itr)
+			LLMessageSystem* msg = gMessageSystem;
+			for (LLObjectSelection::root_iterator itr = LLSelectMgr::getInstance()->getSelection()->root_begin();
+				itr != LLSelectMgr::getInstance()->getSelection()->root_end(); ++itr)
 			{
 				LLSelectNode* node = (*itr);
 				LLViewerObject* objectp = node->getObject();
-				U32 localid=objectp->getLocalID();
-				if(mDonePrims.find(localid) == mDonePrims.end())
+				U32 localid = objectp->getLocalID();
+				if (mDonePrims.find(localid) == mDonePrims.end())
 				{
 					mDonePrims.insert(localid);
 					mToTake.push_back(localid);
 				}
 			}
 
-			if(mCountdown > 0)
+			if (mCountdown > 0)
 			{
 				reportToNearbyChat(llformat("%i...", mCountdown--));
 			}
-			else if(mToTake.size() > 0)
+			else if (mToTake.size() > 0)
 			{
 				msg->newMessageFast(_PREHASH_DeRezObject);
 				msg->nextBlockFast(_PREHASH_AgentData);
-				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+				msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+				msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 				msg->nextBlockFast(_PREHASH_AgentBlock);
 				msg->addUUIDFast(_PREHASH_GroupID, LLUUID::null);
 				msg->addU8Fast(_PREHASH_Destination, 4);
@@ -239,36 +248,40 @@ public:
 				msg->addU32Fast(_PREHASH_ObjectLocalID, mToTake[0]);
 				gAgent.sendReliableMessage();
 				mToTake.erase(mToTake.begin());
-				if(mToTake.size() % 10 == 0)
+
+				if (mToTake.size() % 10 == 0)
 				{
-					if(mToTake.size() == 0)
+					if (mToTake.size() == 0)
 					{
-						if(mPackage)
+						if (mPackage)
 						{
 							reportToNearbyChat("Phase 1 of the packager finished.");
-							std::stack<LLViewerInventoryItem*> lolstack;
+							std::stack<LLViewerInventoryItem*> itemstack;
 							std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(mFolderName);
-							for(std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+							
+							for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
 							{
 								LLViewerInventoryItem* item = *it;
-								lolstack.push(item);
+								itemstack.push(item);
 							}
-							if(lolstack.size())
+
+							if (itemstack.size())
 							{
 								reportToNearbyChat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 								LLUUID sdest = LLUUID(mPackageDest);
-								new JCZdrop(lolstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
-							} 
+								new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
+							}
+
 							doZtCleanup();
 						}
 						else
 						{
-							reportToNearbyChat("Ztake has taken all selected objects.  Say \"ztake off\" to deactivate ztake or select more objects to continue.");
+							reportToNearbyChat("Ztake has taken all selected objects. Say \"ztake off\" to deactivate ztake or select more objects to continue.");
 						}
 					} 
 					else
 					{
-						if(mPackage)
+						if (mPackage)
 						{
 							reportToNearbyChat(llformat("Packager: %i objects left to take.", mToTake.size()));
 						}
@@ -287,23 +300,22 @@ private:
 	std::set<U32> mDonePrims;
 	std::vector<U32> mToTake;
 	LLUUID mTarget;
-	int mCountdown;
+	S32 mCountdown;
 	bool mPackage;
 	LLUUID mPackageDest;
 	std::string mFolderName;
 };
 
-JCZtake *ztake;
+JCZtake* ztake;
 
 class LOZtCleanup: public LLEventTimer
 {
 public:
 	LOZtCleanup() : LLEventTimer(0.2f) //Don't really need this long of a timer, but it can't be to short or tick() below may get called before the packager's tick() returns to the timer system. Things get ugly otherwise.
-	{
-	}
-	~LOZtCleanup()
-	{
-	}
+	{}
+
+	~LOZtCleanup() {}
+
 	BOOL tick()
 	{
 		ztake->mRunning = TRUE;
@@ -328,86 +340,88 @@ public:
 	{
 		reportToNearbyChat("Mtake activated. Taking selected in-world objects into inventory in: ");
 	}
+
 	~TMZtake()
 	{
 		reportToNearbyChat("Mtake deactivated.");
 	}
+
 	BOOL tick()
 	{
+		LLMessageSystem* msg = gMessageSystem;
+		for (LLObjectSelection::iterator itr = LLSelectMgr::getInstance()->getSelection()->begin();
+			itr != LLSelectMgr::getInstance()->getSelection()->end(); ++itr)
 		{
-			LLMessageSystem *msg = gMessageSystem;
-			for(LLObjectSelection::iterator itr=LLSelectMgr::getInstance()->getSelection()->begin();
-				itr!=LLSelectMgr::getInstance()->getSelection()->end();++itr)
-			{
-				LLSelectNode* node = (*itr);
-				LLViewerObject* object = node->getObject();
-				U32 localid=object->getLocalID();
-				if(mDonePrims.find(localid) == mDonePrims.end())
-				{// would like to add ability to reset prim parameters to default.
-					mDonePrims.insert(localid);
-					std::string primX = llformat("%f",(float)object->getScale().mV[VX]);
-					std::string primY = llformat("%f",(float)object->getScale().mV[VY]);
-					std::string primZ = llformat("%f",(float)object->getScale().mV[VZ]);
-					zeroClearX = primX.find_last_not_of("0")+1;
-					primX = primX.substr(0,zeroClearX);
-					zeroClearY = primY.find_last_not_of("0")+1;
-					primY = primY.substr(0,zeroClearY);
-					zeroClearZ = primZ.find_last_not_of("0")+1;
-					primZ = primZ.substr(0,zeroClearZ);
-					zeroClearX = primX.find_last_not_of(".")+1;
-					primX = primX.substr(0,zeroClearX);
-					zeroClearY = primY.find_last_not_of(".")+1;
-					primY = primY.substr(0,zeroClearY);
-					zeroClearZ = primZ.find_last_not_of(".")+1;
-					primZ = primZ.substr(0,zeroClearZ);
-					std::string name = llformat("%sx%sx%s",primX.c_str(),primY.c_str(),primZ.c_str()); 
-					msg->newMessageFast(_PREHASH_ObjectName);
-					msg->nextBlockFast(_PREHASH_AgentData);
-					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-					msg->nextBlockFast(_PREHASH_ObjectData);
-					msg->addU32Fast(_PREHASH_LocalID, localid);
-					msg->addStringFast(_PREHASH_Name, name);
-					gAgent.sendReliableMessage();
-					mToTake.push_back(localid);
-				}
-			}
-			if(mCountdown > 0)
-			{
-				reportToNearbyChat(llformat("%i...", mCountdown--));
-			}
-			else if(mToTake.size() > 0)
-			{
-				msg->newMessageFast(_PREHASH_DeRezObject);
+			LLSelectNode* node = (*itr);
+			LLViewerObject* object = node->getObject();
+			U32 localid = object->getLocalID();
+			if (mDonePrims.find(localid) == mDonePrims.end())
+			{// would like to add ability to reset prim parameters to default.
+				mDonePrims.insert(localid);
+				std::string primX = llformat("%f", object->getScale().mV[VX]);
+				std::string primY = llformat("%f", object->getScale().mV[VY]);
+				std::string primZ = llformat("%f", object->getScale().mV[VZ]);
+				zeroClearX = primX.find_last_not_of("0") + 1;
+				primX = primX.substr(0, zeroClearX);
+				zeroClearY = primY.find_last_not_of("0") + 1;
+				primY = primY.substr(0, zeroClearY);
+				zeroClearZ = primZ.find_last_not_of("0") + 1;
+				primZ = primZ.substr(0, zeroClearZ);
+				zeroClearX = primX.find_last_not_of(".") + 1;
+				primX = primX.substr(0, zeroClearX);
+				zeroClearY = primY.find_last_not_of(".") + 1;
+				primY = primY.substr(0, zeroClearY);
+				zeroClearZ = primZ.find_last_not_of(".") + 1;
+				primZ = primZ.substr(0, zeroClearZ);
+				std::string name = llformat("%sx%sx%s", primX.c_str(), primY.c_str(), primZ.c_str()); 
+				msg->newMessageFast(_PREHASH_ObjectName);
 				msg->nextBlockFast(_PREHASH_AgentData);
-				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-				msg->nextBlockFast(_PREHASH_AgentBlock);
-				msg->addUUIDFast(_PREHASH_GroupID, LLUUID::null);
-				msg->addU8Fast(_PREHASH_Destination, 4);
-				msg->addUUIDFast(_PREHASH_DestinationID, mTarget);
-				LLUUID rand;
-				rand.generate();
-				msg->addUUIDFast(_PREHASH_TransactionID, rand);
-				msg->addU8Fast(_PREHASH_PacketCount, 1);
-				msg->addU8Fast(_PREHASH_PacketNumber, 0);
+				msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+				msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 				msg->nextBlockFast(_PREHASH_ObjectData);
-				msg->addU32Fast(_PREHASH_ObjectLocalID, mToTake[0]);
+				msg->addU32Fast(_PREHASH_LocalID, localid);
+				msg->addStringFast(_PREHASH_Name, name);
 				gAgent.sendReliableMessage();
-				mToTake.erase(mToTake.begin());
-				if(mToTake.size() % 10 == 0) 
-				{
-					if(mToTake.size() == 0) 
-					{
-						reportToNearbyChat("Mtake has taken all selected objects.  Say \"Mtake off\" to deactivate Mtake or select more objects to continue.");
-					} 
-					else
-					{
-						reportToNearbyChat(llformat("Mtake: %i objects left to take.", mToTake.size()));
-					}
-				}
-			}	
+				mToTake.push_back(localid);
+			}
 		}
+		if (mCountdown > 0)
+		{
+			reportToNearbyChat(llformat("%i...", mCountdown--));
+		}
+		else if (mToTake.size() > 0)
+		{
+			msg->newMessageFast(_PREHASH_DeRezObject);
+			msg->nextBlockFast(_PREHASH_AgentData);
+			msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+			msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+			msg->nextBlockFast(_PREHASH_AgentBlock);
+			msg->addUUIDFast(_PREHASH_GroupID, LLUUID::null);
+			msg->addU8Fast(_PREHASH_Destination, 4);
+			msg->addUUIDFast(_PREHASH_DestinationID, mTarget);
+			LLUUID rand;
+			rand.generate();
+			msg->addUUIDFast(_PREHASH_TransactionID, rand);
+			msg->addU8Fast(_PREHASH_PacketCount, 1);
+			msg->addU8Fast(_PREHASH_PacketNumber, 0);
+			msg->nextBlockFast(_PREHASH_ObjectData);
+			msg->addU32Fast(_PREHASH_ObjectLocalID, mToTake[0]);
+			gAgent.sendReliableMessage();
+			mToTake.erase(mToTake.begin());
+
+			if (mToTake.size() % 10 == 0) 
+			{
+				if (mToTake.size() == 0) 
+				{
+					reportToNearbyChat("Mtake has taken all selected objects. Say \"mtake off\" to deactivate Mtake or select more objects to continue.");
+				} 
+				else
+				{
+					reportToNearbyChat(llformat("Mtake: %i objects left to take.", mToTake.size()));
+				}
+			}
+		}
+
 		return mRunning;
 	}
 
@@ -415,54 +429,53 @@ private:
 	std::set<U32> mDonePrims;
 	std::vector<U32> mToTake;
 	LLUUID mTarget;
-	int mCountdown;
-	int zeroClearX;
-	int zeroClearY;
-	int zeroClearZ;
+	S32 mCountdown;
+	S32 zeroClearX;
+	S32 zeroClearY;
+	S32 zeroClearZ;
 };
-TMZtake *mtake;
+TMZtake* mtake;
 
 void invrepair()
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
-	//ObjectContentNameMatches objectnamematches(ifolder);
-	gInventory.collectDescendents(gInventory.getRootFolderID(),cats,items,FALSE);//,objectnamematches);
+	gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
 }
 
 bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_gesture)
 {
 	static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
-	static LLCachedControl<std::string> sFSCmdLinePos(gSavedSettings,  "FSCmdLinePos");
-	static LLCachedControl<std::string> sFSCmdLineDrawDistance(gSavedSettings,  "FSCmdLineDrawDistance");
-	static LLCachedControl<std::string> sFSCmdTeleportToCam(gSavedSettings,  "FSCmdTeleportToCam");
-	static LLCachedControl<std::string> sFSCmdLineAO(gSavedSettings,  "FSCmdLineAO");
-	static LLCachedControl<std::string> sFSCmdLineKeyToName(gSavedSettings,  "FSCmdLineKeyToName");
-	static LLCachedControl<std::string> sFSCmdLineOfferTp(gSavedSettings,  "FSCmdLineOfferTp");
-	static LLCachedControl<std::string> sFSCmdLineGround(gSavedSettings,  "FSCmdLineGround");
-	static LLCachedControl<std::string> sFSCmdLineHeight(gSavedSettings,  "FSCmdLineHeight");
-	static LLCachedControl<std::string> sFSCmdLineTeleportHome(gSavedSettings,  "FSCmdLineTeleportHome");
-	static LLCachedControl<std::string> sFSCmdLineRezPlatform(gSavedSettings,  "FSCmdLineRezPlatform");
-	static LLCachedControl<std::string> sFSCmdLineMapTo(gSavedSettings,  "FSCmdLineMapTo");
+	static LLCachedControl<std::string> sFSCmdLinePos(gSavedSettings, "FSCmdLinePos");
+	static LLCachedControl<std::string> sFSCmdLineDrawDistance(gSavedSettings, "FSCmdLineDrawDistance");
+	static LLCachedControl<std::string> sFSCmdTeleportToCam(gSavedSettings, "FSCmdTeleportToCam");
+	static LLCachedControl<std::string> sFSCmdLineAO(gSavedSettings, "FSCmdLineAO");
+	static LLCachedControl<std::string> sFSCmdLineKeyToName(gSavedSettings, "FSCmdLineKeyToName");
+	static LLCachedControl<std::string> sFSCmdLineOfferTp(gSavedSettings, "FSCmdLineOfferTp");
+	static LLCachedControl<std::string> sFSCmdLineGround(gSavedSettings, "FSCmdLineGround");
+	static LLCachedControl<std::string> sFSCmdLineHeight(gSavedSettings, "FSCmdLineHeight");
+	static LLCachedControl<std::string> sFSCmdLineTeleportHome(gSavedSettings, "FSCmdLineTeleportHome");
+	static LLCachedControl<std::string> sFSCmdLineRezPlatform(gSavedSettings, "FSCmdLineRezPlatform");
+	static LLCachedControl<std::string> sFSCmdLineMapTo(gSavedSettings, "FSCmdLineMapTo");
 	static LLCachedControl<bool> sFSCmdLineMapToKeepPos(gSavedSettings, "FSCmdLineMapToKeepPos");
-	static LLCachedControl<std::string> sFSCmdLineCalc(gSavedSettings,  "FSCmdLineCalc");
-	static LLCachedControl<std::string> sFSCmdLineTP2(gSavedSettings,  "FSCmdLineTP2");
-	static LLCachedControl<std::string> sFSCmdLineClearChat(gSavedSettings,  "FSCmdLineClearChat");
-	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings,  "FSCmdLineMedia");
-	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings,  "FSCmdLineMusic");
-	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings,  "FSCmdLineCopyCam");
-	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings,  "FSCmdLineRollDice");
+	static LLCachedControl<std::string> sFSCmdLineCalc(gSavedSettings, "FSCmdLineCalc");
+	static LLCachedControl<std::string> sFSCmdLineTP2(gSavedSettings, "FSCmdLineTP2");
+	static LLCachedControl<std::string> sFSCmdLineClearChat(gSavedSettings, "FSCmdLineClearChat");
+	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings, "FSCmdLineMedia");
+	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
+	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
+	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
+	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 	
 	if (sFSCmdLine)
 	{
 		std::istringstream i(revised_text);
 		std::string command;
 		i >> command;
-		if (command != "")
+		if (!command.empty())
 		{
-			if(command == std::string(sFSCmdLinePos))
+			if (command == sFSCmdLinePos())
 			{
 				F32 x, y, z;
 				if (i >> x && i >> y)
@@ -482,7 +495,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 				}
 			}
-			else if (command == std::string(sFSCmdLineDrawDistance))
+			else if (command == sFSCmdLineDrawDistance())
 			{
 				if (from_gesture)
 				{
@@ -490,23 +503,23 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
 					return false;
 				}
-                int drawDist;
-                if (i >> drawDist)
-                {
+				S32 drawDist;
+				if (i >> drawDist)
+				{
 					gSavedSettings.setF32("RenderFarClip", drawDist);
 					gAgentCamera.mDrawDistance = drawDist;
 					LLStringUtil::format_map_t args;
 					args["DISTANCE"] = llformat("%d", drawDist);
 					reportToNearbyChat(LLTrans::getString("FSCmdLineDrawDistanceSet", args));
 					return false;
-                }
+				}
 			}
-			else if (command == std::string(sFSCmdTeleportToCam))
-            {
+			else if (command == sFSCmdTeleportToCam())
+			{
 				gAgent.teleportViaLocation(gAgentCamera.getCameraPositionGlobal());
 				return false;
-            }
-			else if (command == std::string(sFSCmdLineMedia))
+			}
+			else if (command == sFSCmdLineMedia())
 			{
 				std::string url;
 				std::string type;
@@ -531,7 +544,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 				}
 			}
-			else if (command == std::string(sFSCmdLineMusic))
+			else if (command == sFSCmdLineMusic())
 			{
 				std::string status;
 				if (i >> status)
@@ -548,11 +561,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 			}
 			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-			else if (command == std::string(sFSCmdLineBandwidth))
+			else if (command == sFSCmdLineBandwidth())
 			{
 				S32 band_width;
-                if (i >> band_width)
-                {
+				if (i >> band_width)
+				{
 					band_width = llclamp(band_width, 50, 3000);
 					gSavedSettings.setF32("ThrottleBandwidthKBPS", band_width);
 					LLStringUtil::format_map_t args;
@@ -561,87 +574,83 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					bw_cmd_respond = LLTrans::getString("FSCmdLineRSP", args);
 					reportToNearbyChat(bw_cmd_respond);
 					return false;
-                }
+				}
 			}
 			//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-			else if (command == std::string(sFSCmdLineAO))
-            {
+			else if (command == sFSCmdLineAO())
+			{
 				std::string status;
-                if (i >> status)
-                {
-					if (status == "on" )
+				if (i >> status)
+				{
+					if (status == "on")
 					{
-						gSavedPerAccountSettings.setBOOL("UseAO",TRUE);
+						gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
 					}
-					else if (status == "off" )
+					else if (status == "off")
 					{
-						gSavedPerAccountSettings.setBOOL("UseAO",FALSE);
+						gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
 					}
-					else if (status == "sit" )
+					else if (status == "sit")
 					{
 						AOSet* tmp;
 						tmp = AOEngine::instance().getSetByName(AOEngine::instance().getCurrentSetName());
 						if (i >> status)
 						{
-							if(status == "off")
+							if (status == "off")
 							{
-								AOEngine::instance().setOverrideSits(tmp,TRUE);
+								AOEngine::instance().setOverrideSits(tmp, TRUE);
 							}
-							else if(status == "on")
+							else if (status == "on")
 							{
-								AOEngine::instance().setOverrideSits(tmp,FALSE);
+								AOEngine::instance().setOverrideSits(tmp, FALSE);
 							}
 						}
 						else
 						{
-							AOEngine::instance().setOverrideSits(tmp,!tmp->getSitOverride());
+							AOEngine::instance().setOverrideSits(tmp, !tmp->getSitOverride());
 						}
 					}
 				}
 				return false;
-            }
-			else if (command == std::string(sFSCmdLineKeyToName))
-            {
-                LLUUID targetKey;
-                if (i >> targetKey)
-                {
-                    std::string object_name;
-                    gCacheName->getFullName(targetKey, object_name);
-                    char buffer[DB_IM_MSG_BUF_SIZE * 2];
+			}
+			else if (command == sFSCmdLineKeyToName())
+			{
+				LLUUID targetKey;
+				if (i >> targetKey)
+				{
+					std::string object_name;
+					gCacheName->getFullName(targetKey, object_name);
 					if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 					{
 						object_name = RlvStrings::getAnonym(object_name);
 					}
-                    snprintf(buffer,sizeof(buffer),"%s: (%s)",targetKey.asString().c_str(), object_name.c_str());
-					reportToNearbyChat(std::string(buffer));
-                }
+					reportToNearbyChat(llformat("%s: (%s)", targetKey.asString().c_str(), object_name.c_str()));
+				}
 				return false;
-            }
+			}
 			else if (command == "/touch")
-            {
-                LLUUID targetKey;
-                if (i >> targetKey)
-                {
+			{
+				LLUUID targetKey;
+				if (i >> targetKey)
+				{
 					LLViewerObject* myObject = gObjectList.findObject(targetKey);
-					char buffer[DB_IM_MSG_BUF_SIZE * 2];
 
 					if (!myObject)
 					{
-						snprintf(buffer,sizeof(buffer),"Object with key %s not found!",targetKey.asString().c_str());
-						reportToNearbyChat(std::string(buffer));
+						reportToNearbyChat(llformat("Object with key %s not found!", targetKey.asString().c_str()));
 						return false;
 					}
 
 					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(myObject)))
 					{
-						LLMessageSystem	*msg = gMessageSystem;
+						LLMessageSystem* msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_ObjectGrab);
-						msg->nextBlockFast( _PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-						msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-						msg->nextBlockFast( _PREHASH_ObjectData);
-						msg->addU32Fast(    _PREHASH_LocalID, myObject->mLocalID);
-						msg->addVector3Fast(_PREHASH_GrabOffset, LLVector3::zero );
+						msg->nextBlockFast(_PREHASH_AgentData);
+						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+						msg->nextBlockFast(_PREHASH_ObjectData);
+						msg->addU32Fast(_PREHASH_LocalID, myObject->mLocalID);
+						msg->addVector3Fast(_PREHASH_GrabOffset, LLVector3::zero);
 						msg->nextBlock("SurfaceInfo");
 						msg->addVector3("UVCoord", LLVector3::zero);
 						msg->addVector3("STCoord", LLVector3::zero);
@@ -649,15 +658,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						msg->addVector3("Position", myObject->getPosition());
 						msg->addVector3("Normal", LLVector3::zero);
 						msg->addVector3("Binormal", LLVector3::zero);
-						msg->sendMessage( myObject->getRegion()->getHost());
+						msg->sendMessage(myObject->getRegion()->getHost());
 
 						// *NOTE: Hope the packets arrive safely and in order or else
 						// there will be some problems.
 						// *TODO: Just fix this bad assumption.
 						msg->newMessageFast(_PREHASH_ObjectDeGrab);
 						msg->nextBlockFast(_PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-						msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 						msg->nextBlockFast(_PREHASH_ObjectData);
 						msg->addU32Fast(_PREHASH_LocalID, myObject->mLocalID);
 						msg->nextBlock("SurfaceInfo");
@@ -668,24 +677,21 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						msg->addVector3("Normal", LLVector3::zero);
 						msg->addVector3("Binormal", LLVector3::zero);
 						msg->sendMessage(myObject->getRegion()->getHost());
-						snprintf(buffer,sizeof(buffer),"Touched object with key %s",targetKey.asString().c_str());
-						reportToNearbyChat(std::string(buffer));
+						reportToNearbyChat(llformat("Touched object with key %s", targetKey.asString().c_str()));
 					}
-                }
+				}
 				return false;
-            }
+			}
 			else if (command == "/siton")
-            {
-                LLUUID targetKey;
-                if (i >> targetKey)
-                {
+			{
+				LLUUID targetKey;
+				if (i >> targetKey)
+				{
 					LLViewerObject* myObject = gObjectList.findObject(targetKey);
-					char buffer[DB_IM_MSG_BUF_SIZE * 2];
 
 					if (!myObject)
 					{
-						snprintf(buffer,sizeof(buffer),"Object with key %s not found!",targetKey.asString().c_str());
-						reportToNearbyChat(std::string(buffer));
+						reportToNearbyChat(llformat("Object with key %s not found!", targetKey.asString().c_str()));
 						return false;
 					}
 					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(myObject, LLVector3::zero)))
@@ -693,95 +699,92 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						LLMessageSystem	*msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_AgentRequestSit);
 						msg->nextBlockFast(_PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-						msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 						msg->nextBlockFast(_PREHASH_TargetObject);
 						msg->addUUIDFast(_PREHASH_TargetID, targetKey);
 						msg->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
 						gAgent.getRegion()->sendReliableMessage();
 
-						snprintf(buffer,sizeof(buffer),"Sat on object with key %s",targetKey.asString().c_str());
-						reportToNearbyChat(std::string(buffer));
+						reportToNearbyChat(llformat("Sat on object with key %s", targetKey.asString().c_str()));
 					}
-                }
+				}
 				return false;
-            }
+			}
 			else if (command == "/standup")
-            {
+			{
 				if ((!rlv_handler_t::isEnabled()) || (RlvActions::canStand(	)))
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					reportToNearbyChat(std::string("Standing up"));
 				}
 				return false;
-            }
-			else if (command == std::string(sFSCmdLineOfferTp))
-            {
-                std::string avatarKey;
+			}
+			else if (command == sFSCmdLineOfferTp())
+			{
+				std::string avatarKey;
 //				LL_INFOS() << "CMD DEBUG 0 " << command << " " << avatarName << LL_ENDL;
-                if (i >> avatarKey)
-                {
+				if (i >> avatarKey)
+				{
 //				LL_INFOS() << "CMD DEBUG 0 afterif " << command << " " << avatarName << LL_ENDL;
-                    LLUUID tempUUID;
-                    if (LLUUID::parseUUID(avatarKey, &tempUUID))
-                    {
-                        char buffer[DB_IM_MSG_BUF_SIZE * 2];
-                        std::vector<LLUUID> ids;
-                        ids.push_back(tempUUID);
-                        std::string tpMsg="Join me!";
-                        LLMessageSystem* msg = gMessageSystem;
-                        msg->newMessageFast(_PREHASH_StartLure);
-                        msg->nextBlockFast(_PREHASH_AgentData);
-                        msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-                        msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-                        msg->nextBlockFast(_PREHASH_Info);
-                        msg->addU8Fast(_PREHASH_LureType, (U8)0); 
+					LLUUID tempUUID;
+					if (LLUUID::parseUUID(avatarKey, &tempUUID))
+					{
+						uuid_vec_t ids;
+						ids.push_back(tempUUID);
+						std::string tpMsg = "Join me!";
+						LLMessageSystem* msg = gMessageSystem;
+						msg->newMessageFast(_PREHASH_StartLure);
+						msg->nextBlockFast(_PREHASH_AgentData);
+						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+						msg->nextBlockFast(_PREHASH_Info);
+						msg->addU8Fast(_PREHASH_LureType, (U8)0);
 
-                        msg->addStringFast(_PREHASH_Message, tpMsg);
-                        for (std::vector<LLUUID>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
-                        {
-                            msg->nextBlockFast(_PREHASH_TargetData);
-                            msg->addUUIDFast(_PREHASH_TargetID, *itr);
-                        }
-                        gAgent.sendReliableMessage();
-                        snprintf(buffer,sizeof(buffer),"Offered TP to key %s",tempUUID.asString().c_str());
-						reportToNearbyChat(std::string(buffer));
+						msg->addStringFast(_PREHASH_Message, tpMsg);
+						for (uuid_vec_t::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+						{
+							msg->nextBlockFast(_PREHASH_TargetData);
+							msg->addUUIDFast(_PREHASH_TargetID, *itr);
+						}
+						gAgent.sendReliableMessage();
+						reportToNearbyChat(llformat("Offered TP to key %s", tempUUID.asString().c_str()));
 						return false;
-                    }
-                }
-            }
+					}
+				}
+			}
 			
-			else if (command == std::string(sFSCmdLineGround))
+			else if (command == sFSCmdLineGround())
 			{
 				LLVector3 agentPos = gAgent.getPositionAgent();
 				U64 agentRegion = gAgent.getRegion()->getHandle();
-				LLVector3 targetPos(agentPos.mV[0],agentPos.mV[1],LLWorld::getInstance()->resolveLandHeightAgent(agentPos));
+				LLVector3 targetPos(agentPos.mV[VX],agentPos.mV[VY], LLWorld::getInstance()->resolveLandHeightAgent(agentPos));
 				LLVector3d pos_global = from_region_handle(agentRegion);
-				pos_global += LLVector3d((F64)targetPos.mV[0],(F64)targetPos.mV[1],(F64)targetPos.mV[2]);
+				pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
 				gAgent.teleportViaLocation(pos_global);
 				return false;
 			}
-			else if (command == std::string(sFSCmdLineHeight))
+			else if (command == sFSCmdLineHeight())
 			{
 				F32 z;
 				if (i >> z)
 				{
 					LLVector3 agentPos = gAgent.getPositionAgent();
 					U64 agentRegion = gAgent.getRegion()->getHandle();
-					LLVector3 targetPos(agentPos.mV[0],agentPos.mV[1],z);
+					LLVector3 targetPos(agentPos.mV[VX], agentPos.mV[VY], z);
 					LLVector3d pos_global = from_region_handle(agentRegion);
-					pos_global += LLVector3d((F64)targetPos.mV[VX],(F64)targetPos.mV[VY],(F64)targetPos.mV[VZ]);
+					pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
 					gAgent.teleportViaLocation(pos_global);
 					return false;
 				}
 			}
-			else if (command == std::string(sFSCmdLineTeleportHome))
+			else if (command == sFSCmdLineTeleportHome())
 			{
 				gAgent.teleportHome();
 				return false;
-            }
-			else if (command == std::string(sFSCmdLineRezPlatform))
-            {
+			}
+			else if (command == sFSCmdLineRezPlatform())
+			{
 				if (!(gRlvHandler.hasBehaviour(RLV_BHVR_REZ)))
 				{
 					F32 width;
@@ -790,7 +793,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			else if (command == std::string(sFSCmdLineMapTo))
+			else if (command == sFSCmdLineMapTo())
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
@@ -801,19 +804,19 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length()+1));
 					std::string url;
 
-					if(!sFSCmdLineMapToKeepPos)
+					if (!sFSCmdLineMapToKeepPos)
 					{
 						agent_x = 128;
 						agent_y = 128;
 						agent_z = 0;
 					}
 
-					url = llformat("secondlife:///app/teleport/%s/%d/%d/%d",region_name.c_str(),agent_x,agent_y,agent_z);
+					url = llformat("secondlife:///app/teleport/%s/%d/%d/%d", region_name.c_str(), agent_x, agent_y, agent_z);
 					LLURLDispatcher::dispatch(url, "clicked", NULL, true);
 				}
 				return false;
 			}
-			else if (command == std::string(sFSCmdLineCalc))//Cryogenic Blitz
+			else if (command == sFSCmdLineCalc())//Cryogenic Blitz
 			{
 				bool success;
 				F32 result = 0.f;
@@ -864,7 +867,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 
 					if (!success)
 					{
-						out =  "Calculation Failed";
+						out = "Calculation Failed";
 					}
 					else
 					{
@@ -879,17 +882,17 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					return false;
 				}
 			}
-			else if (command == std::string(sFSCmdLineTP2))
+			else if (command == sFSCmdLineTP2())
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
-					std::string name = revised_text.substr(command.length()+1);
+					std::string name = revised_text.substr(command.length() + 1);
 					cmdline_tp2name(name);
 				}
 				return false;
 			}
 
-			else if (command == std::string(sFSCmdLineClearChat))
+			else if (command == sFSCmdLineClearChat())
 			{
 				FSFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
 				if (chat)
@@ -906,42 +909,42 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (zdrop != NULL)
+						if (zdrop)
 						{
 							reportToNearbyChat("Zdrop is already active.");
 						}
 						else
 						{
-							std::string loldest;
-							if (i >> loldest)
+							std::string destination;
+							if (i >> destination)
 							{
 								reportToNearbyChat("Beginning Zdrop.");
 								reportToNearbyChat("Verifying destination prim is present inworld...");
-								if (loldest.length() != 36)
+								if (!LLUUID::validate(destination))
 								{
-									reportToNearbyChat("UUID entered is of an invalid length! (Hint: use the \"copy key\" button in the build menu.)");
+									reportToNearbyChat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
 								}
-								else if (gObjectList.findObject(LLUUID(loldest)) == false) 
+								else if (!gObjectList.findObject(LLUUID(destination)))
 								{
-									reportToNearbyChat("Unable to locate object.  Please verify the object is rezzed and in view, and that the UUID is correct.");
+									reportToNearbyChat("Unable to locate object. Please verify the object is rezzed and in view, and that the UUID is correct.");
 								}
 								else
 								{
-									std::string lolfolder;
+									std::string folder;
 									std::string tmp;
 									while (i >> tmp)
 									{
-										lolfolder = lolfolder + tmp+ " ";
+										folder = folder + tmp + " ";
 									}
 									try
 									{
-										lolfolder = lolfolder.substr(0,lolfolder.length() - 1);
-										LLUUID folder = gInventory.findCategoryByName(lolfolder);
-										if (folder.notNull())
+										folder = folder.substr(0, folder.length() - 1);
+										LLUUID folder_id = gInventory.findCategoryByName(folder);
+										if (folder_id.notNull())
 										{
 											reportToNearbyChat("Verifying folder location...");
 											std::stack<LLViewerInventoryItem*> lolstack;
-											std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(lolfolder);
+											std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(folder);
 											for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
 											{
 												LLViewerInventoryItem* item = *it;
@@ -949,25 +952,25 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 											}
 											if (lolstack.size())
 											{
-												reportToNearbyChat(llformat("Found folder \"%s\".", lolfolder.c_str()));
-												reportToNearbyChat(llformat("Found prim \"%s\".", loldest.c_str()));
-												reportToNearbyChat(llformat("Transferring inventory items from \"%s\" to prim \"%s\".", lolfolder.c_str(), loldest.c_str()));
+												reportToNearbyChat(llformat("Found folder \"%s\".", folder.c_str()));
+												reportToNearbyChat(llformat("Found prim \"%s\".", destination.c_str()));
+												reportToNearbyChat(llformat("Transferring inventory items from \"%s\" to prim \"%s\".", folder.c_str(), destination.c_str()));
 												reportToNearbyChat("WARNING: No-copy items will be moved to the destination prim!");
 												reportToNearbyChat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 												reportToNearbyChat("Use \"zdrop off\" to stop the transfer");
-												LLUUID sdest = LLUUID(loldest);
-												zdrop = new JCZdrop(lolstack, sdest, lolfolder.c_str(), loldest.c_str());
+												LLUUID sdest = LLUUID(destination);
+												zdrop = new JCZdrop(lolstack, sdest, folder.c_str(), destination.c_str());
 											}
 										}
 										else
 										{
-											reportToNearbyChat(llformat("\"%s\" folder not found.  Please check the spelling.", lolfolder.c_str()));
+											reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder.c_str()));
 											reportToNearbyChat("Zdrop cannot work if the folder is inside another folder.");
 										}
 									}
 									catch (std::out_of_range e)
 									{
-										reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load.  No-copy items are moved to the prim. All other items are copied.");
+										reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
 										reportToNearbyChat("Valid command: Zdrop (rezzed prim UUID) (source inventory folder name)");
 									}
 								}
@@ -980,7 +983,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (zdrop == NULL)
+						if (!zdrop)
 						{
 							reportToNearbyChat("Zdrop is already deactivated.");
 						}
@@ -993,13 +996,13 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: zdrop on (source inventory folder) (rezzed prim UUID) ; zdrop off", setting.c_str()));
+						reportToNearbyChat(llformat("Invalid command: \"%s\". Valid commands: zdrop on (source inventory folder) (rezzed prim UUID); zdrop off", setting.c_str()));
 					}
 				}
 				else
 				{
-					reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load.  No-copy items are moved to the prim. All other items are copied.");
-					reportToNearbyChat("Valid commands: zdrop on (rezzed prim UUID) (source inventory folder name) ; zdrop off");
+					reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
+					reportToNearbyChat("Valid commands: zdrop on (rezzed prim UUID) (source inventory folder name); zdrop off");
 				}
 				return false;
 			}
@@ -1010,7 +1013,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (ztake != NULL)
+						if (ztake)
 						{
 							reportToNearbyChat("Ztake is already active.");
 						}
@@ -1026,7 +1029,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							}
 							try
 							{
-								folder_name = folder_name.substr(0,folder_name.length() - 1);
+								folder_name = folder_name.substr(0, folder_name.length() - 1);
 								LLUUID folder = gInventory.findCategoryByName(folder_name);
 								if (folder.notNull())
 								{
@@ -1035,7 +1038,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								}
 								else
 								{
-									reportToNearbyChat(llformat("\"%s\" folder not found.  Please check the spelling.", folder_name.c_str()));
+									reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
 									reportToNearbyChat("Ztake cannot work if the folder is inside another folder.");
 								}
 							}
@@ -1047,7 +1050,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (ztake == NULL)
+						if (!ztake)
 						{
 							reportToNearbyChat("Ztake is already deactivated.");
 						}
@@ -1060,30 +1063,30 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: ztake on (destination inventory folder) ; ztake off", setting.c_str()));
+						reportToNearbyChat(llformat("Invalid command: \"%s\". Valid commands: ztake on (destination inventory folder); ztake off", setting.c_str()));
 					}
 					return false;
 				}
 				else
 				{
 					reportToNearbyChat("The Ztake command copies selected rezzed objects into the folder you specify in your inventory.");
-					reportToNearbyChat("Valid commands: ztake on (destination inventory folder name) ; ztake off");
+					reportToNearbyChat("Valid commands: ztake on (destination inventory folder name); ztake off");
 				}
 				return false;
 			}
 			else if (command == "lpackage")
 			{
-				std::string loldest;
-				if (i >> loldest)
+				std::string destination;
+				if (i >> destination)
 				{
 					reportToNearbyChat("Verifying destination prim is present inworld...");
-					if (loldest.length() != 36)
+					if (!LLUUID::validate(destination))
 					{
-						reportToNearbyChat("UUID entered is of an invalid length! (Hint: use the \"copy key\" button in the build menu.)");
+						reportToNearbyChat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
 					}
-					else if (gObjectList.findObject(LLUUID(loldest)) == false) 
+					else if (!gObjectList.findObject(LLUUID(destination)))
 					{
-						reportToNearbyChat("Unable to locate object.  Please verify the object is rezzed, in view, and that the UUID is correct.");
+						reportToNearbyChat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
 					}
 					else
 					{
@@ -1095,16 +1098,16 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						}
 						try
 						{
-							folder_name = folder_name.substr(0,folder_name.length() - 1);
+							folder_name = folder_name.substr(0, folder_name.length() - 1);
 							LLUUID folder = gInventory.findCategoryByName(folder_name);
 							if (folder.notNull())
 							{
 								reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-								ztake = new JCZtake(folder, true, LLUUID(loldest), folder_name);
+								ztake = new JCZtake(folder, true, LLUUID(destination), folder_name);
 							}
 							else
 							{
-								reportToNearbyChat(llformat("\"%s\" folder not found.  Please check the spelling.", folder_name.c_str()));
+								reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
 								reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
 							}
 						}
@@ -1127,7 +1130,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					if (setting == "on")
 					{
-						if (mtake != NULL)
+						if (mtake)
 						{
 							reportToNearbyChat("Mtake is already active.");
 						}
@@ -1143,7 +1146,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							}
 							try
 							{
-								folder_name = folder_name.substr(0,folder_name.length() - 1);
+								folder_name = folder_name.substr(0, folder_name.length() - 1);
 								LLUUID folder = gInventory.findCategoryByName(folder_name);
 								if (folder.notNull())
 								{
@@ -1152,7 +1155,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								}
 								else
 								{
-									reportToNearbyChat(llformat("\"%s\" folder not found.  Please check the spelling.", folder_name.c_str()));
+									reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
 									reportToNearbyChat("Mtake cannot work if the folder is inside another folder.");
 								}
 							}
@@ -1164,7 +1167,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else if (setting == "off")
 					{
-						if (mtake == NULL)
+						if (!mtake)
 						{
 							reportToNearbyChat("Mtake is already deactivated.");
 						}
@@ -1177,14 +1180,14 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: Mtake on (destination inventory folder) ; Mtake off", setting.c_str()));
+						reportToNearbyChat(llformat("Invalid command: \"%s\". Valid commands: mtake on (destination inventory folder); mtake off", setting.c_str()));
 					}
 					return false;
 				}
 				else
 				{
 					reportToNearbyChat("The Mtake command renames selected rezzed objects to the dimensions of the prim, then copies them into the folder you specify in your inventory.");
-					reportToNearbyChat("Valid commands: Mtake on (destination inventory folder name) ; Mtake off");
+					reportToNearbyChat("Valid commands: mtake on (destination inventory folder name); mtake off");
 				}
 				return false;
 			}
@@ -1192,7 +1195,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			{
 				invrepair();
 			}
-			else if (command == std::string(sFSCmdLineCopyCam))
+			else if (command == sFSCmdLineCopyCam())
 			{
 				LLViewerRegion* agentRegionp = gAgent.getRegion();
 				if (agentRegionp)
@@ -1212,7 +1215,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			else if (command == std::string(sFSCmdLineRollDice))
+			else if (command == sFSCmdLineRollDice())
 			{
 				S32 dice;
 				S32 faces;
@@ -1236,7 +1239,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								modifier_error = 1;
 							}
 						}
-						else if (modifier_type != "")
+						else if (!modifier_type.empty())
 						{
 							// Modifier type invalid
 							modifier_error = 1;
@@ -1415,21 +1418,21 @@ void cmdline_tp2name(const std::string& target)
 
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value
 {
-    LLVector3 agentPos = gAgent.getPositionAgent()+(gAgent.getVelocity()*(F32)0.333);
-    LLMessageSystem* msg = gMessageSystem;
-    msg->newMessageFast(_PREHASH_ObjectAdd);
-    msg->nextBlockFast(_PREHASH_AgentData);
-    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-    msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
-    msg->nextBlockFast(_PREHASH_ObjectData);
-    msg->addU8Fast(_PREHASH_PCode, LL_PCODE_VOLUME);
-    msg->addU8Fast(_PREHASH_Material, LL_MCODE_METAL);
+	LLVector3 agentPos = gAgent.getPositionAgent()+(gAgent.getVelocity()*(F32)0.333);
+	LLMessageSystem* msg = gMessageSystem;
+	msg->newMessageFast(_PREHASH_ObjectAdd);
+	msg->nextBlockFast(_PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	msg->nextBlockFast(_PREHASH_ObjectData);
+	msg->addU8Fast(_PREHASH_PCode, LL_PCODE_VOLUME);
+	msg->addU8Fast(_PREHASH_Material, LL_MCODE_METAL);
 
-    if(agentPos.mV[2] > 4096.0)msg->addU32Fast(_PREHASH_AddFlags, FLAGS_CREATE_SELECTED);
-    else msg->addU32Fast(_PREHASH_AddFlags, 0);
+	if(agentPos.mV[2] > 4096.0)msg->addU32Fast(_PREHASH_AddFlags, FLAGS_CREATE_SELECTED);
+	else msg->addU32Fast(_PREHASH_AddFlags, 0);
 
-    LLVolumeParams    volume_params;
+	LLVolumeParams volume_params;
 
 	volume_params.setType( LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_LINE );
 	volume_params.setBeginAndEndS( 0.f, 1.f );
@@ -1437,14 +1440,17 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	volume_params.setRatio	( 1, 1 );
 	volume_params.setShear	( 0, 0 );
 
-    LLVolumeMessage::packVolumeParams(&volume_params, msg);
-    LLVector3 rezpos = agentPos - LLVector3(0.0f,0.0f,2.5f);
-    LLQuaternion rotation;
-    rotation.setQuat(90.f * DEG_TO_RAD, LLVector3::y_axis);
+	LLVolumeMessage::packVolumeParams(&volume_params, msg);
+	LLVector3 rezpos = agentPos - LLVector3(0.0f,0.0f,2.5f);
+	LLQuaternion rotation;
+	rotation.setQuat(90.f * DEG_TO_RAD, LLVector3::y_axis);
 
-	static LLCachedControl<F32> sFSCmdLinePlatformSize(gSavedSettings,  "FSCmdLinePlatformSize");
+	static LLCachedControl<F32> sFSCmdLinePlatformSize(gSavedSettings, "FSCmdLinePlatformSize");
 
-	if (use_saved_value) visual_radius = sFSCmdLinePlatformSize;
+	if (use_saved_value)
+	{
+		visual_radius = sFSCmdLinePlatformSize;
+	}
 	F32 max_scale = LLWorld::getInstance()->getRegionMaxPrimScale();
 	F32 min_scale = LLWorld::getInstance()->getRegionMinPrimScale();
 	F32 realsize = visual_radius;// / 3.0f;
@@ -1457,13 +1463,13 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 		realsize = max_scale;
 	}
 
-    msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f,realsize,realsize) );
-    msg->addQuatFast(_PREHASH_Rotation, rotation );
-    msg->addVector3Fast(_PREHASH_RayStart, rezpos );
-    msg->addVector3Fast(_PREHASH_RayEnd, rezpos );
-    msg->addU8Fast(_PREHASH_BypassRaycast, (U8)1 );
-    msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE );
-    msg->addU8Fast(_PREHASH_State, 0);
-    msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null );
-    msg->sendReliable(gAgent.getRegionHost());
+	msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f, realsize,realsize));
+	msg->addQuatFast(_PREHASH_Rotation, rotation);
+	msg->addVector3Fast(_PREHASH_RayStart, rezpos);
+	msg->addVector3Fast(_PREHASH_RayEnd, rezpos);
+	msg->addU8Fast(_PREHASH_BypassRaycast, (U8)1);
+	msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE);
+	msg->addU8Fast(_PREHASH_State, 0);
+	msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
+	msg->sendReliable(gAgent.getRegionHost());
 }
