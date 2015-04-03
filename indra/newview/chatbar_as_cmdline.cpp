@@ -954,7 +954,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 												reportToNearbyChat(llformat("Transferring inventory items from \"%s\" to prim \"%s\".", lolfolder.c_str(), loldest.c_str()));
 												reportToNearbyChat("WARNING: No-copy items will be moved to the destination prim!");
 												reportToNearbyChat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
-												reportToNearbyChat("Use \"Zdrop off\" to stop the transfer");
+												reportToNearbyChat("Use \"zdrop off\" to stop the transfer");
 												LLUUID sdest = LLUUID(loldest);
 												zdrop = new JCZdrop(lolstack, sdest, lolfolder.c_str(), loldest.c_str());
 											}
@@ -993,13 +993,13 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: Zdrop on (source inventory folder) (rezzed prim UUID) ; Zdrop off", setting.c_str()));
+						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: zdrop on (source inventory folder) (rezzed prim UUID) ; zdrop off", setting.c_str()));
 					}
 				}
 				else
 				{
 					reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load.  No-copy items are moved to the prim. All other items are copied.");
-					reportToNearbyChat("Valid commands: Zdrop on (rezzed prim UUID) (source inventory folder name) ; Zdrop off");
+					reportToNearbyChat("Valid commands: zdrop on (rezzed prim UUID) (source inventory folder name) ; zdrop off");
 				}
 				return false;
 			}
@@ -1060,14 +1060,14 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					}
 					else
 					{
-						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: Ztake on (destination inventory folder) ; Ztake off", setting.c_str()));
+						reportToNearbyChat(llformat("Invalid command: \"%s\".  Valid commands: ztake on (destination inventory folder) ; ztake off", setting.c_str()));
 					}
 					return false;
 				}
 				else
 				{
 					reportToNearbyChat("The Ztake command copies selected rezzed objects into the folder you specify in your inventory.");
-					reportToNearbyChat("Valid commands: Ztake on (destination inventory folder name) ; Ztake off");
+					reportToNearbyChat("Valid commands: ztake on (destination inventory folder name) ; ztake off");
 				}
 				return false;
 			}
