@@ -257,9 +257,9 @@ public:
 						{
 							reportToNearbyChat("Phase 1 of the packager finished.");
 							std::stack<LLViewerInventoryItem*> itemstack;
-							std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(mFolderName);
+							std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
 							
-							for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+							for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
 							{
 								LLViewerInventoryItem* item = *it;
 								itemstack.push(item);
@@ -503,7 +503,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
 					return false;
 				}
-				S32 drawDist;
+				F32 drawDist;
 				if (i >> drawDist)
 				{
 					gSavedSettings.setF32("RenderFarClip", drawDist);
@@ -713,7 +713,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == "/standup")
 			{
-				if ((!rlv_handler_t::isEnabled()) || (RlvActions::canStand(	)))
+				if ((!rlv_handler_t::isEnabled()) || (RlvActions::canStand()))
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					reportToNearbyChat(std::string("Standing up"));
@@ -785,11 +785,17 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == sFSCmdLineRezPlatform())
 			{
-				if (!(gRlvHandler.hasBehaviour(RLV_BHVR_REZ)))
+				if (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ))
 				{
 					F32 width;
-					if (i >> width) cmdline_rezplat(false, width);
-					else cmdline_rezplat();
+					if (i >> width)
+					{
+						cmdline_rezplat(false, width);
+					}
+					else
+					{
+						cmdline_rezplat();
+					}
 				}
 				return false;
 			}
@@ -801,7 +807,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					S32 agent_x = llround( (F32)fmod( agentPos.mdV[VX], (F64)REGION_WIDTH_METERS ) );
 					S32 agent_y = llround( (F32)fmod( agentPos.mdV[VY], (F64)REGION_WIDTH_METERS ) );
 					S32 agent_z = llround( (F32)agentPos.mdV[VZ] );
-					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length()+1));
+					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
 					std::string url;
 
 					if (!sFSCmdLineMapToKeepPos)
@@ -943,14 +949,14 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 										if (folder_id.notNull())
 										{
 											reportToNearbyChat("Verifying folder location...");
-											std::stack<LLViewerInventoryItem*> lolstack;
-											std::vector<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(folder);
-											for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+											std::stack<LLViewerInventoryItem*> inventorystack;
+											std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(folder);
+											for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
 											{
 												LLViewerInventoryItem* item = *it;
-												lolstack.push(item);
+												inventorystack.push(item);
 											}
-											if (lolstack.size())
+											if (inventorystack.size())
 											{
 												reportToNearbyChat(llformat("Found folder \"%s\".", folder.c_str()));
 												reportToNearbyChat(llformat("Found prim \"%s\".", destination.c_str()));
@@ -959,7 +965,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 												reportToNearbyChat("Do not have the prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
 												reportToNearbyChat("Use \"zdrop off\" to stop the transfer");
 												LLUUID sdest = LLUUID(destination);
-												zdrop = new JCZdrop(lolstack, sdest, folder.c_str(), destination.c_str());
+												zdrop = new JCZdrop(inventorystack, sdest, folder.c_str(), destination.c_str());
 											}
 										}
 										else
@@ -1418,7 +1424,7 @@ void cmdline_tp2name(const std::string& target)
 
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value
 {
-	LLVector3 agentPos = gAgent.getPositionAgent()+(gAgent.getVelocity()*(F32)0.333);
+	LLVector3 agentPos = gAgent.getPositionAgent() + (gAgent.getVelocity() * 0.333f);
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_ObjectAdd);
 	msg->nextBlockFast(_PREHASH_AgentData);
@@ -1429,19 +1435,25 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->addU8Fast(_PREHASH_PCode, LL_PCODE_VOLUME);
 	msg->addU8Fast(_PREHASH_Material, LL_MCODE_METAL);
 
-	if(agentPos.mV[2] > 4096.0)msg->addU32Fast(_PREHASH_AddFlags, FLAGS_CREATE_SELECTED);
-	else msg->addU32Fast(_PREHASH_AddFlags, 0);
+	if (agentPos.mV[VZ] > 4096.0f)
+	{
+		msg->addU32Fast(_PREHASH_AddFlags, FLAGS_CREATE_SELECTED);
+	}
+	else
+	{
+		msg->addU32Fast(_PREHASH_AddFlags, 0);
+	}
 
 	LLVolumeParams volume_params;
 
-	volume_params.setType( LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_LINE );
-	volume_params.setBeginAndEndS( 0.f, 1.f );
-	volume_params.setBeginAndEndT( 0.f, 1.f );
-	volume_params.setRatio	( 1, 1 );
-	volume_params.setShear	( 0, 0 );
+	volume_params.setType(LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_LINE);
+	volume_params.setBeginAndEndS(0.f, 1.f);
+	volume_params.setBeginAndEndT(0.f, 1.f);
+	volume_params.setRatio(1.f, 1.f);
+	volume_params.setShear(0.f, 0.f);
 
 	LLVolumeMessage::packVolumeParams(&volume_params, msg);
-	LLVector3 rezpos = agentPos - LLVector3(0.0f,0.0f,2.5f);
+	LLVector3 rezpos = agentPos - LLVector3(0.0f, 0.0f, 2.5f);
 	LLQuaternion rotation;
 	rotation.setQuat(90.f * DEG_TO_RAD, LLVector3::y_axis);
 
@@ -1453,7 +1465,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	}
 	F32 max_scale = LLWorld::getInstance()->getRegionMaxPrimScale();
 	F32 min_scale = LLWorld::getInstance()->getRegionMinPrimScale();
-	F32 realsize = visual_radius;// / 3.0f;
+	F32 realsize = visual_radius;
 	if (realsize < min_scale)
 	{
 		realsize = min_scale;
@@ -1463,7 +1475,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 		realsize = max_scale;
 	}
 
-	msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f, realsize,realsize));
+	msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f, realsize, realsize));
 	msg->addQuatFast(_PREHASH_Rotation, rotation);
 	msg->addVector3Fast(_PREHASH_RayStart, rezpos);
 	msg->addVector3Fast(_PREHASH_RayEnd, rezpos);
