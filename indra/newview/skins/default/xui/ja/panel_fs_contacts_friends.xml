@@ -16,10 +16,11 @@
 	<button label="IM/コール" name="im_btn" tool_tip="インスタントメッセージ・セッションを開く" />
 	<button label="プロフィール" name="profile_btn" tool_tip="写真、グループ、およびその他の情報を表示します。" />
 	<button label="テレポート..." name="offer_teleport_btn" tool_tip="このフレンドに、あなたの現在のロケーションまでのテレポートを送ります。" />
+	<button label="地図..." name="map_btn" tool_tip="このフレンドの現在の居場所を世界地図に表示します。" />
 	<button label="支払う..." name="pay_btn" tool_tip="リンデンドル (L$) をこのフレンドに送金します。" />
 	<button label="削除..." name="remove_btn" tool_tip="この人物をフレンドリストから除外します。" />
 	<button label="追加..." name="add_btn" tool_tip="住人にフレンドシップを申請します。" />
 	<text name="friend_count">
-		フレンドの数: [COUNT]
+		フレンド数: [COUNT]
 	</text>
 </panel>

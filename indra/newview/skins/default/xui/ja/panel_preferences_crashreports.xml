@@ -6,9 +6,9 @@
         ミニダンプのタイプ：
     </text>
     <combo_box name="comboSaveMiniDumpType" >
-        <combo_box.item name="Minimal" label="最小" value="0" />
-        <combo_box.item name="Default" label="デフォルト" value="1" />
-        <combo_box.item name="Extended" label="拡張" value="2" />
+        <combo_box.item name="Minimal" label="最小"/>
+        <combo_box.item name="Default" label="デフォルト"/>
+        <combo_box.item name="Extended" label="拡張"/>
     </combo_box>
 
     <check_box label="送信前に必ず確認する" name="checkSendCrashReportsAlwaysAsk" />

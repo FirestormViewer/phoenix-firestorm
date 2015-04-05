@@ -50,18 +50,29 @@
 			<text name="htmllink_label">
 				URL
 			</text>
-			<color_swatch name="ChatNameColor" />
-			<text name="chat_name_label">
-				チャット見出し
-			</text>
 			<color_swatch name="Direct" />
 			<text name="direct_label">
 				ダイレクト
 			</text>
-			<color_swatch name="console_im" />
-			<text name="console_im_label">
-				IM／グループ
+			<text name="header_colors">
+				チャット見出し:
 			</text>
+			<color_swatch name="chat_header" />
+			<text name="chat_name_label">
+				アバター
+			</text>
+			<color_swatch name="object_name_header" />
+			<text name="object_name_header_label">
+				オブジェクト
+			</text>
+			<slider label="チャット範囲外低減係数:" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="話している人が通常のチャット範囲の外に出た場合、チャットの色を薄くするのに使用する係数です。" />
+			<check_box name="FSColorIMsDistinctly" label="コンソール上でIMとグループチャットとを色で区別する:" />
+			<panel label="" name="im_color_panel" >
+				<color_swatch name="console_im" />
+				<text name="console_im_label">
+					IM／グループ
+				</text>
+			</panel>
 		</panel>
 	 
 		<panel label="名前タグ" name="tab-nametag">
@@ -159,6 +170,12 @@
 		</panel>
 		
 		<panel label="ミニマップ" name="tab-minimap">
+			<slider label="背景の不透明度:" name="FSMiniMapOpacity" />
+			<text name="netmap_pickradius_textbox">
+				ピックする半径:
+			</text>
+			<color_swatch name="MapPickRadiusColor" />
+			<slider name="MapPickRadiusTransparency" />
 			<text name="netmap_dots_textbox">
 				ミニマップの点:
 			</text>
@@ -213,7 +230,11 @@
 				コンソールの不透明度:
 			</text>
 			<color_swatch name="console_background" tool_tip="コンソールの色を選択します。" />
-			<slider label="不透明度:" name="console_background_opacity" tool_tip="チャットコンソールの背景の不透明度を選択します。" />     
+			<slider label="不透明度:" name="console_background_opacity" tool_tip="チャットコンソールの背景の不透明度を選択します。" />
+			<text name="preferences_search_label">
+				検索結果の強調色:
+			</text>
+			<color_swatch name="preferences_search_color" tool_tip="検索結果を強調する色を選択します" />
 			<check_box name="FSScriptDialogNoTransparency" label="スクリプトからの通知の背景は常に不透明にする" />
 			<check_box name="FSGroupNotifyNoTransparency" label="グループ通知の背景は常に不透明にする" />
      

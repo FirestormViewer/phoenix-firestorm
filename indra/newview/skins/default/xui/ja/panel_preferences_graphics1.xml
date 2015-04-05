@@ -33,13 +33,13 @@
 		<text name="ShadersText">
 			シェーダー：
 		</text>
-		<check_box initial_value="true" label="透明な水" name="TransparentWater"/>
-		<check_box initial_value="true" label="バンプマッピングと光沢" name="BumpShiny"/>
-		<check_box initial_value="true" label="近くの光" name="LocalLights"/>
-		<check_box initial_value="true" label="基本シェーダー" name="BasicShaders" tool_tip="このオプションを無効にすると、グラフィックカードのドライバの種類によっては、クラッシュするのを防ぎます。"/>
-		<check_box initial_value="true" label="環境（大気）シェーダー" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="高度な照明モデル" name="UseLightShaders"/>
-		<check_box initial_value="true" label="アンビエントオクルージョン" name="UseSSAO"/>
+		<check_box label="透明な水" name="TransparentWater"/>
+		<check_box label="バンプマッピングと光沢" name="BumpShiny"/>
+		<check_box label="近くの光" name="LocalLights"/>
+		<check_box label="基本シェーダー" name="BasicShaders" tool_tip="このオプションを無効にすると、グラフィックカードのドライバの種類によっては、クラッシュするのを防ぎます。"/>
+		<check_box label="環境（大気）シェーダー" name="WindLightUseAtmosShaders"/>
+		<check_box label="高度な照明モデル" name="UseLightShaders"/>
+		<check_box label="アンビエントオクルージョン" name="UseSSAO"/>
 		
 		<text name="shadows_label">
 			影：
@@ -52,7 +52,7 @@
 		<text name="reflection_label">
 			水の反射：
 		</text>
-		<combo_box initial_value="true" label="水の反射" name="Reflections">
+		<combo_box label="水の反射" name="Reflections">
 			<combo_box.item label="最小" name="0"/>
 			<combo_box.item label="地形と樹木" name="1"/>
 			<combo_box.item label="すべての静止オブジェクト" name="2"/>
@@ -63,9 +63,9 @@
 			近くの光の強さ（再起動が必要）
         </text>
 		<combo_box name="LocalLightsDetail">
-            <combo_box.item label="全開（デフォルト）" name="3" value="3"/>
-            <combo_box.item label="減少" name="2" value="2"/>
-            <combo_box.item label="太陽と月のみ" name="1" value="1"/>
+            <combo_box.item label="全開（デフォルト）" name="3"/>
+            <combo_box.item label="減少" name="2"/>
+            <combo_box.item label="太陽と月のみ" name="1"/>
         </combo_box>
 			
 		<slider label="描画距離：" name="DrawDistance"/>
@@ -94,9 +94,9 @@
 		<text name="AvatarRenderingText">
 			アバターレンダリング：
 		</text>
-		<check_box initial_value="true" label="アバターの描画を簡略化" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="ハードウェアスキニング" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="アバターの布" name="AvatarCloth"/>
+		<check_box label="アバターの描画を簡略化" name="AvatarImpostors"/>
+		<check_box label="ハードウェアスキニング" name="AvatarVertexProgram"/>
+		<check_box label="アバターの布" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			地形詳細：
 		</text>
@@ -122,11 +122,11 @@
             アンチエイリアス：
         </text>
         <combo_box label="Antialiasing" name="fsaa">
-            <combo_box.item label="使用しない" name="FSAADisabled" value="0" />
-            <combo_box.item label="2倍" name="2x" value="2" />
-            <combo_box.item label="4倍" name="4x" value="4" />
-            <combo_box.item label="8倍" name="8x" value="8" />
-            <combo_box.item label="16倍" name="16x" value="16" />
+            <combo_box.item label="使用しない" name="FSAADisabled"/>
+            <combo_box.item label="2倍" name="2x"/>
+            <combo_box.item label="4倍" name="4x"/>
+            <combo_box.item label="8倍" name="8x"/>
+            <combo_box.item label="16倍" name="16x"/>
         </combo_box>
 
         <spinner label="ガンマ：" name="gamma" />
@@ -165,9 +165,9 @@
         </text>
         <combo_box name="TextureDetail"
          width="150">
-            <combo_box.item label="標準品質" name="0" value="0"/>
-            <combo_box.item label="低品質" name="3" value="3"/>
-            <combo_box.item label="テクスチャなし" name="5" value="5"/>
+            <combo_box.item label="標準品質" name="0"/>
+            <combo_box.item label="低品質" name="3"/>
+            <combo_box.item label="テクスチャなし" name="5"/>
         </combo_box>
 
         <text name="Alpha Mask Rendering">
@@ -181,9 +181,14 @@
             レンダリングその他：
         </text>
 
+		<!--
+		<check_box label="スクリーン空間の反射を有効にする" name="FSRenderSSR" tool_tip="「高度な照明モデル」が有効になっている時、スクリーン空間の反射をレンダリングします。「環境（大気）シェーダー」、アバターの「ハードウェアスキニング」、「影」が何れも有効になっている必要がありますEnables the rendering of screen space reflections when Advanced Lighting Model is enabled. Requires atmmospheric shaders, avatar hardware skinning and enabled shadows." />
+		-->
         <check_box label="グローをレンダリング" tool_tip="グロー（輝き）をレンダリングします。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow" />
 		<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength" />
 		<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars" />
+		<check_box label="フレームレートを制限" name="FSLimitFramerate" />
+		<slider label="FPS:" name="MaxFPS" />
         <slider label="世界を表示する前のプレキャッシングを遅らせる時間" tool_tip="あなたに世界が見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay" />
         <text name="PrecachingDelayText">
             秒
@@ -198,7 +203,8 @@
 
 	<panel label="被写界深度（DOF）" name="DOF panel" >
 	
-		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />	
+		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />
+		<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode" />
         <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
         <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />
         <slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="DOF効果を得るためのカメラの垂直画角（単位は度）" />

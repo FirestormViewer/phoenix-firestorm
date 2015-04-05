@@ -1,49 +1,82 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu
-    name="Attachment Pie">
-    <pie_slice
-        label="プロフィール..."
-        name="Profile..."/>
-    <pie_slice
-        label="地面に置く"
-        name="Drop"/>
-    <pie_menu
-        name="Attachment Pie More"
-        label="詳細">
-        <pie_slice
-            label="テクスチャ更新"
-            name="Texture Refresh"/>
-        <pie_slice
-            label="スクリプト情報"
-            name="ScriptInfo"/>
-        <pie_slice
-            label="触る"
-            name="Attachment Object Touch"/>
-        <pie_slice
-            label="表示しない"
-            name="Derender"/>
-    </pie_menu>
-    <pie_slice
-        label="ここに座る"
-        name="Sit Down Here"/>
-    <pie_slice
-        label="立ち上がる"
-        name="Stand Up"/>
-    <pie_slice
-        label="取り外す"
-        name="Detach"/>
-    <pie_slice
-        label="ジェスチャー..."
-        name="Gestures"/>
-    <pie_menu
-        label="容姿＞"
-        name="Appearance &gt;"/>
-        <pie_slice label="シェイプを編集"
-           name="Edit My Shape"/>
-        <pie_slice label="服装を編集"
-           name="Edit My Outfit"/>
-    </pie_menu>
-    <pie_slice
-        label="編集..."
-        name="Edit..."/>
+	name="Attachment Pie">
+	<pie_slice
+		label="プロフィール..."
+		name="Profile..."/>
+	<pie_slice
+		label="地面に置く"
+		name="Drop"/>
+	<pie_menu
+		name="Attachment Pie More"
+		label="詳細 &gt;">
+		<pie_slice
+			label="テクスチャ更新"
+			name="Texture Refresh"/>
+		<pie_slice
+			label="スクリプト情報"
+			name="ScriptInfo"/>
+		<pie_slice
+			label="触る"
+			name="Attachment Object Touch"/>
+		<pie_menu
+			label="表示しない &gt;"
+			name="DerenderMenu">
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_slice
+				label="臨時"
+				name="Derender" />
+			<pie_slice
+				label="ブラックリスト"
+				name="DerenderPermanent" />
+		</pie_menu>
+		<pie_menu
+			name="ExportMenu"
+			label="別名で保存 &gt;">
+			<pie_slice
+				label="バックアップ"
+				name="Backup" />
+			<pie_slice
+				label="メッシュ"
+				name="Collada" />
+		</pie_menu>
+		<pie_separator name="inspect_placeholder" />
+		<pie_separator/>
+			<pie_slice
+				label="テクスチャ"
+				name="Debug..." />
+	</pie_menu>
+	<pie_slice
+		label="ここに座る"
+		name="Sit Down Here"/>
+	<pie_slice
+		label="立ち上がる"
+		name="Stand Up"/>
+	<pie_slice
+		label="取り外す"
+		name="Detach"/>
+	<pie_slice
+		label="ジェスチャー..."
+		name="Gestures"/>
+	<pie_menu
+		label="容姿 &gt;"
+		name="Appearance &gt;">
+		<pie_slice label="シェイプを編集"
+			name="Edit My Shape"/>
+		<pie_separator />
+		<pie_separator />
+		<pie_separator />
+		<pie_slice label="服装を編集"
+			name="Edit My Outfit"/>
+		<pie_separator />
+		<pie_slice
+			label="XMLをダンプ"
+			name="Dump XML" />
+		<pie_slice label="宙に浮く高さ" name="Hover Height" />
+	</pie_menu>
+	<pie_slice
+		label="編集..."
+		name="Edit..."/>
 </pie_menu>

@@ -18,9 +18,9 @@
         	<button tool_tip="この住人にフレンドシップを申請します。" name="add_friend_btn" />
        </layout_panel>
        
-       <layout_panel name="tp_panel">
-			<button tool_tip="この住人にテレポートを送って呼びます。" name="teleport_btn" />
-       </layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="この住人にテレポートを送って呼ぶ、またはテレポートを要求して呼んでもらいます。" />
+		</layout_panel>
        
        <layout_panel name="share_panel">
 			<button tool_tip="この住人にアイテムを送ります。" name="share_btn" />
@@ -55,5 +55,30 @@
 			<check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" width="125" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
         </layout_panel>
       
+	</layout_stack>
+	<layout_stack orientation="horizontal" name="chat_stack">
+		<layout_panel name="im_control_panel_holder">
+			<panel name="panel_im_control_panel" />
+		</layout_panel>
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack orientation="vertical" name="im_panels">
+				<layout_panel name="chat_holder">
+					<fs_chat_history name="chat_history" />
+				</layout_panel>
+				<layout_panel name="unread_messages_holder">
+					<icon name="unread_messages_background" />
+					<text  name="unread_messages_text">
+						未読メッセージ: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack orientation="horizontal" name="input_panels">
+						<layout_panel name="input_editor_layout_panel">
+							<chat_editor name="chat_editor" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
 	</layout_stack>
 </floater>

@@ -26,7 +26,7 @@
         label="支払い" 
 		name="Pay..."/>
     <pie_menu
-        label="詳細＞"
+        label="詳細 >"
         name="Object Pie More 1">
     <pie_slice
         label="削除"
@@ -38,7 +38,7 @@
         label="コピーを取る"
         name="Take Copy"/>
     <pie_menu
-        label="HUD装着先＞"
+        label="HUD装着先 >"
         name="Pie Object Attach HUD" />
     <pie_menu
         label="装着先 >"
@@ -47,26 +47,50 @@
         label="返却" 
 		name="Return..."/>
     <pie_menu
-        label="詳細＞"
+        label="詳細 >"
         name="Object Pie More 2">
         <pie_slice
             label="テクスチャ更新"
             name="Texture Refresh"/>
-        <pie_slice
-            label="表示しない"
-            name="Derender"/>
+        <pie_menu
+            label="表示しない &gt;"
+            name="DerenderMenu">
+			<pie_slice
+				label="ブラックリスト"
+				name="DerenderPermanent" />
+			<pie_slice
+				label="臨時"
+				name="Derender" />
+        </pie_menu>
         <pie_slice
             label="報告..."
             name="Report Abuse..."/>
+        <pie_menu
+            name="ExportMenu"
+            label="別名で保存 &gt;">
+            <pie_slice
+                label="バックアップ"
+                name="Backup" />
+            <pie_slice
+                label="メッシュ"
+                name="Collada" />
+        </pie_menu>
         <pie_menu label="パスファインディング >" name="Pathfinding">
             <pie_slice label="リンクセットで表示" name="show_in_linksets" />
             <pie_slice label="キャラクターで表示" name="show_in_characters" />
             <pie_separator name="autohide_end_crash_protection" />
         </pie_menu>
+        <pie_menu
+            label="無視 &gt;"
+            name="mute_menu">
         <pie_slice
             label="無視"
-            name="Object Mute"/>
-        <pie_menu label="スクリプト" name="ScriptsMenu">
+            name="Object Mute" />
+        <pie_slice
+            label="パーティクル"
+            name="Mute Particle" />
+    </pie_menu>
+        <pie_menu label="スクリプト &gt;" name="ScriptsMenu">
 			<pie_slice label="コンパイル（Mono）" name="CompileMono"/>
 			<pie_slice label="コンパイル（LSL）" name="CompileLSL"/>
 			<pie_slice label="スクリプトリセット" name="Object Reset Scripts"/>

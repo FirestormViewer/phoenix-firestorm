@@ -14,6 +14,9 @@
         label="ここに座る"
         name="Sit Here"/>
     <pie_slice
+        label="パーティクルを無視"
+        name="Mute Particle" />
+    <pie_slice
         label="入場許可購入"
         name="Land Buy Pass Pie"/>
     <pie_slice

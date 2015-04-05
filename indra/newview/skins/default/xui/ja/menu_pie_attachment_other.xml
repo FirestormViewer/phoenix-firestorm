@@ -6,25 +6,37 @@
     <pie_slice
         label="プロフィール..."
         name="Profile..."/>
+    <pie_menu
+        label="無視 &gt;"
+        name="mute_menu">
+        <pie_slice
+            label="無視"
+            name="Avatar Mute" />
+        <pie_slice
+            label="パーティクル"
+            name="Mute Particle" />
+    </pie_menu>
     <pie_slice
-        label="無視"
-        name="Avatar Mute"/>
     <pie_slice
         label="会いに行く"
         name="Go to"/>
     <pie_slice
         label="報告..."
         name="abuse"/>
-    <pie_menu label="Add &gt;" name="add_avatar">
+    <pie_menu label="追加 &gt;" name="add_avatar">
+        <pie_separator/>
+        <pie_separator/>
+        <pie_separator/>
+        <pie_separator/>
         <pie_slice label="フレンドに追加..." name="Add Friend"/>
-        <pie_slice label="To Set" name="Add to set"/>
+        <pie_slice label="セットに追加" name="Add to set"/>
     </pie_menu>
     <pie_slice
         label="支払い..."
         name="Pay..."/>
     <pie_menu
         name="Avatar Pie More 1"
-        label="詳細">
+        label="詳細 >">
         <pie_slice
             label="動けなくする..."
             name="Freeze..."/>
@@ -39,10 +51,10 @@
             name="Eject..."/>
         <pie_menu
             name="Avatar Pie More 2"
-            label="詳細＞">
+            label="詳細 >">
             <!-- ## Zi: Is this the right thing to use for avatar textures? -->
             <pie_slice
-                label="デバッグ..."
+                label="テクスチャ"
                 name="Debug..."/>
             <pie_slice
 	            label="スクリプト情報"
@@ -56,13 +68,39 @@
             <pie_slice
                 label="テクスチャ更新"
                 name="Texture Refresh"/>
+			<pie_menu
+				name="ExportMenu"
+				label="別名で保存 &gt;">
+				<pie_slice
+					label="バックアップ"
+					name="Backup" />
+				<pie_slice
+					label="メッシュ"
+					name="Collada" />
+			</pie_menu>
+			<pie_slice
+				label="XMLをダンプ"
+				name="Dump XML" />
         </pie_menu>
         <pie_slice
             label="検査"
             name="Avatar Inspect"/>
-        <pie_slice
-            label="表示しない"
-            name="Derender"/>
+        <pie_menu
+            label="表示しない &gt;"
+            name="DerenderMenu">
+            			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_slice
+				label="ブラックリスト"
+				name="DerenderPermanent" />
+			<pie_slice
+				label="臨時"
+				name="Derender" />
+        </pie_menu>
     </pie_menu>
     <pie_slice
         label="IMを送信..."

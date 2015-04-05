@@ -4,26 +4,41 @@
 <tab_container label="Firestorm Prefs" name="tabs" >
 
 
-    <!-- お好み -->
+	<!-- Extras -->
 	
-    <panel label="お好み" name="tab-extras" >
-        <check_box name="checkMiscRLVa" label="他のビューワからのリモートコントロールを許可する。（RLVa機能）" />
-        <text name="textMiscRLVaRestart" left_pad="70" >
-            （再起動が必要）
-        </text>
-        <check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
+	<panel label="特別機能" name="tab-extras" >
+	
+		<check_box name="checkMiscRLVa" label="他のビューワからのリモートコントロールを許可する。（RLVa機能）" />
+		<text name="textMiscRLVaRestart" left_pad="70" >
+			（再起動が必要）
+		</text>
+		<check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。" />
 		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
-        <check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
-        <check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
-        <check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
+		<check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。" />
+		<!--
+
+		-->
+		<check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
+		<check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
+		<!-- 
+		<check_box label="表示名が表示されている場合でも、ユーザー名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザー名で並べ替わるようになります。" />
+		 -->
 		<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的にレンダリングすることができます。" />
 		<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものをレンダリングするまでの秒数です。"/>
+
         <check_box name="UseLSLBridge" label="LSLクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューワの機能を拡張できるようにします。"/>
-        <!-- <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/> -->
+		<combo_box name="UseLSLFlightAssist" tool_tip="より高い場所での飛行やホバリングを支援するスクリプトを有効にします。">
+			<combo_box.item label="フライトアシスト＝無効" name="flight_disabled"/>
+			<combo_box.item label="フライトアシスト＝弱" name="flight_mild"/>
+			<combo_box.item label="フライトアシスト＝中" name="flight_moderate"/>
+			<combo_box.item label="フライトアシスト＝強" name="flight_strong"/>
+		</combo_box>
+        <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/>
+		
     </panel>
 
 
-    <!-- 保護 -->
+    <!-- Protection -->
 	
     <panel label="保護" name="ProtectionTab">
 	
@@ -34,10 +49,10 @@
 			オブジェクトのアニメーション権限取消：
 		</text>
         <radio_group name="FSRevokePerms" tool_tip="座ったり立ち上がったりした際に、それまで作用していたアニメーションを停止するか設定します">
-            <radio_item label="取消しない（標準の動作）" name="never_radio" value="0" />
-            <radio_item label="座る時に取消" name="sit_radio" value="1" />
-            <radio_item label="立ち上がる時に取消" layout="topleft" name="stand_radio" value="2" />
-            <radio_item label="座るまたは立ち上がる時に取消" value="3" />
+            <radio_item label="取消しない（標準の動作）" name="never_radio"/>
+            <radio_item label="座る時に取消" name="sit_radio"/>
+            <radio_item label="立ち上がる時に取消" name="stand_radio"/>
+            <radio_item label="座るまたは立ち上がる時に取消"  name="sitnstand_radio"/>
         </radio_group>
 
         <text name="SurfaceAreaThreshholdLabel">
@@ -64,17 +79,17 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
-		 
+		<check_box label="参加費用がかかる場合はグループ招待の「参加」ボタンを表示しない
+" name="FSAllowGroupInvitationOnlyWithoutFee" />
         <check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
         <check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
         <slider name="FSOfferThrottleMaxCount" label="オブジェクト受け取り量の閾値：" tool_tip="10秒以内に送られて来るオブジェクト個数の閾値を設定します。5個がデフォルトです。" />
 		 
 	</panel>
 
-
-    <!-- アバター -->
+	<!-- アバター -->
 	
-    <panel label="アバター" name="firestorm_avatar" >
+	<panel label="アバター" name="firestorm_avatar" >
 
         <text name="HeadMovement" >
             マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
@@ -128,9 +143,14 @@
 
         <slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。" />
 
+		<text name="BridgeProtocols">
+			LSL-Client Bridge による外部プロトコルの統合:
+		</text>
+		<check_box label="内蔵AOを有効または無効にするのに OpenCollar プロトコルの使用を許可" name="BridgeIntegrationOC" />
+		<check_box label="内蔵AOを有効または無効にするのに LockMeister プロトコルの使用を許可" name="BridgeIntegrationLM" />
     </panel>
-
-    <!-- Windlight -->
+	
+	<!-- Windlight -->
 	
     <panel label="Windlight" name="WindlightTab">
 
@@ -181,13 +201,13 @@
         <check_box label="物理" name="FSBuildPrefs_PhysicalToggle"/>
         <check_box label="臨時" name="FSBuildPrefs_TemporaryToggle"/>
         <combo_box name="material" left="180">
-             <combo_item name="Stone" value="Stone" label="石"/>
-             <combo_item name="Metal" value="Metal" label="金属"/>
-             <combo_item name="Glass" value="Glass" label="ガラス"/>
-             <combo_item name="Wood" value="Wood" label="木"/>
-             <combo_item name="Flesh" value="Flesh" label="肌"/>
-             <combo_item name="Plastic" value="Plastic" label="プラスチック"/>
-             <combo_item name="Rubber" value="Rubber" label="ゴム"/>
+             <combo_item name="Stone" label="石"/>
+             <combo_item name="Metal" label="金属"/>
+             <combo_item name="Glass" label="ガラス"/>
+             <combo_item name="Wood" label="木"/>
+             <combo_item name="Flesh" label="肌"/>
+             <combo_item name="Plastic" label="プラスチック"/>
+             <combo_item name="Rubber" label="ゴム"/>
         </combo_box>
 		<texture_picker label="テクスチャ" name="texture control" tool_tip="クリックして画像を選択します。" />
         <color_swatch label="色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。" />
@@ -195,12 +215,39 @@
         <spinner label="グロー" name="glow" />
         <check_box label="明るさ全開" name="EmFBToggle" />
         <combo_box name="combobox shininess" tool_tip="Set the amount of shine for the object" >
-          <combo_item name="None" value="None" label="なし"/>
-          <combo_item name="Low" value="Low" label="低"/>
-          <combo_item name="Medium" value="Medium" label="中"/>
-          <combo_item name="High" value="High" label="高"/>
+          <combo_item name="None" label="なし"/>
+          <combo_item name="Low" label="低"/>
+          <combo_item name="Medium" label="中"/>
+          <combo_item name="High" label="高"/>
         </combo_box>
 		
+		<check_box name="FSBuildPrefs_EmbedItem" label="新規作成プリムにアイテムを埋め込む" />
+		<view_border name="embed_item_drop_target_rect" />
+		<fs_embedded_item_drop_target name="embed_item" tool_tip="ここに持ち物をドロップします。">
+			ここに持ち物をドロップ
+		</fs_embedded_item_drop_target>
+		<view_border name="build_item_add_disp_rect" />
+		<text name="build_item_add_disp_rect_txt" tool_tip="">
+			現在の設定: [ITEM]
+		</text>
+		<!--
+        <text name="text_box_permissions">
+          権限
+        </text>
+        <view_border name="PermissionsBorder"/>
+        <text name="text_box_permnextowner">
+          次のオーナー:
+        </text>
+        <check_box label="修正を許可" name="next_owner_modify" tool_tip="修正権限を付与します。" />
+        <check_box label="コピーを許可" tool_tip="コピー権限を付与します。" name="next_owner_copy" />
+        <check_box label="転送を許可" tool_tip="転送権限を付与します。" name="next_owner_transfer" />
+        <text name="text_box_permnote1">
+          この設定は新規アップ
+        </text>
+        <text name="text_box_permnote2">
+          ロードにも適用される
+		</text>
+		-->
         <text name="text_box_pivotpoint">
 			回転の中心
         </text>
@@ -211,7 +258,7 @@
         <spinner label="Y軸" name="Y pos" label_width="40" width="120"/>
         <spinner label="Z軸" name="Z pos" label_width="40" width="120"/>
         <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="FSPivotPercToggle"/>
-
+		<button label="デフォルトの作成権限" name="fs_default_creation_permissions" />
 		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
 		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />
 		<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox" />
@@ -229,15 +276,23 @@
 
 		<check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="FSBuildPrefsRenderHighlight_toggle"/>
 		<check_box label="遠くのオブジェクトを選択しない" name="LimitSelectDistance"/>
+		<check_box label="ドラッグできる距離を制限 (m):" name="LimitDragDistance" />
+		<spinner name="MaxDragDistance" tool_tip="移動ツールの一回の操作で移動できる最大の距離を設定します。(開始位置からメートル単位で設定) [Default: 48.000]" />
+		<text name="RotationStepText1">
+			「グリッドにスナップ」を使用していない時
+		</text>
+		<spinner name="RotationStep" tool_tip="回転ツールで回転できる範囲をここに設定した値の倍数に制限するようにします。 [Default: 1.0]" />
+		<text name="RotationStepText2">
+			度の倍数に回転できる範囲を制限
+		</text>
 		<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
         <check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
         <check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab" />
         <check_box label="制作モードにおいて、CAPSロックの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、制作モードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture" />
+		<check_box label="アップロード中にアニメーションを自分のアバターで確認" tool_tip="ここにチェックを入れると、アニメーションのアップロード処理中に自分のアバターでそのアニメーションを再生して確認できます。" name="FSUploadAnimationOnOwnAvatar" />
 
 	</panel>
-
-    <!--Tags-->
 	
 </tab_container>
 </panel>

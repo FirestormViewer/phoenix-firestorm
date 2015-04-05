@@ -287,75 +287,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="TestingDisconnect">
 		ビューワの接続を切るテスト中
 	</string>
-	<string name="SocialFlickrConnecting">
-		Flickr に接続中...
-	</string>
-	<string name="SocialFlickrPosting">
-		投稿中...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Flickr から切断中...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Flickr への接続時のエラー
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Flickr への投稿時のエラー
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Flickr からの切断時のエラー
-	</string>
-	<string name="SocialTwitterConnecting">
-		Twitter に接続中...
-	</string>
-	<string name="SocialTwitterPosting">
-		投稿中...
-	</string>
-	<string name="SocialTwitterDisconnecting">
-		Twitter から切断中...
-	</string>
-	<string name="SocialTwitterErrorConnecting">
-		Twitter への接続時のエラー
-	</string>
-	<string name="SocialTwitterErrorPosting">
-		Twitter への投稿時のエラー
-	</string>
-	<string name="SocialTwitterErrorDisconnecting">
-		Twitter からの切断時のエラー
-	</string>
-	<string name="BlackAndWhite">
-		白黒
-	</string>
-	<string name="Colors1970">
-		1970 年代のカラー
-	</string>
-	<string name="Intense">
-		強調
-	</string>
-	<string name="Newspaper">
-		新聞紙
-	</string>
-	<string name="Sepia">
-		セピア
-	</string>
-	<string name="Spotlight">
-		スポットライト
-	</string>
-	<string name="Video">
-		ビデオ
-	</string>
-	<string name="Autocontrast">
-		オートコントラスト
-	</string>
-	<string name="LensFlare">
-		レンズフレア
-	</string>
-	<string name="Miniature">
-		ミニチュア
-	</string>
-	<string name="Toycamera">
-		おもちゃのカメラ
-	</string>
 	<string name="TooltipPerson">
 		人
 	</string>
@@ -401,6 +332,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="TooltipMustSingleDrop">
 		アイテムは 1 つだけここにドラッグできます
 	</string>
+	<string name="TooltipTooManyWearables">[AMOUNT]以上のアイテムを含むフォルダを装着することはできません。この制限はアドバンスメニュー「デバッグ設定を表示」の「WearFolderLimit」で変更することができます。</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]："/>
 	<string name="TooltipOutboxDragToWorld">
 		マーチャントボックス内のアイテムを Rez することはできません
@@ -538,6 +470,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="BUTTON_HELP">
 		ヘルプを表示
 	</string>
+	<string name="BUTTON_SNOOZE">居眠り</string>
 	<string name="Searching">
 		検索中...
 	</string>
@@ -909,12 +842,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="use_texture">
 		テクスチャを使用
 	</string>
-	<string name="manip_hint1">
-		マウスカーソルをルーラに合わせて
-	</string>
-	<string name="manip_hint2">
-		グリッドにスナップ
-	</string>
+	<string name="manip_hint1">グリッドにスナップするにはマウスを</string>
+    <string name="manip_hint2">ルーラーの上に持って来ます</string>
 	<string name="texture_loading">
 		ローディング...
 	</string>
@@ -944,8 +873,7 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	
 	<!-- Chat -->
-	<string name="NearbyChatTitle">
-		周辺チャット</string>
+	<string name="NearbyChatTitle">周辺チャット</string>
 	<string name="NearbyChatLabel">
 		(周辺チャット)
 	</string>
@@ -1414,6 +1342,7 @@ support@secondlife.com にお問い合わせください。
 		コンテンツなし
 	</string>
 	<string name="WornOnAttachmentPoint" value=" （[ATTACHMENT_POINT] に装着中）"/>
+	<string name="AttachmentErrorMessage" value=" ([ATTACHMENT_ERROR])" />
 	<string name="ActiveGesture" value="[GESLABEL] （アクティブ）"/>
 	<string name="PermYes">
 		はい
@@ -1684,6 +1613,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="Invalid Attachment">
 		装着先が正しくありません
 	</string>
+	<string name="ATTACHMENT_MISSING_ITEM">エラー：アイテムがありません</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">エラー：ベースとなるアイテムがありません</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">エラー：オブジェクトは現在のアウトフィットに含まれていますが装着されていません</string>
 	<string name="YearsMonthsOld">
 		[AGEYEARS] [AGEMONTHS]
 	</string>
@@ -2120,7 +2052,7 @@ support@secondlife.com にお問い合わせください。
 		この不動産には約款がありません。
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され。  販売に関するお問い合わせは、不動産所有者までお願い致します。
+		この不動産には約款がありません。 この不動産上の土地は不動産所有者により販売され、Linden Lab は販売しません。  販売に関するお問い合わせは、不動産所有者までお願い致します。
 	</string>
 	<string name="covenant_last_modified" value="最終修正日："/>
 	<string name="none_text" value=" （なし） "/>
@@ -4129,12 +4061,15 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="share_alert">
 		インベントリからここにアイテムをドラッグします
 	</string>
+	<string name="facebook_post_success">
+		フェイスブックに投稿しました
+	</string>
 	<string name="flickr_post_success">
-		Flickr に投稿しました。
+		Flickr に投稿しました
 	</string>
 	<string name="twitter_post_success">
-		Twitter に投稿しました。
-	</string>
+		ツイッターに投稿しました
+		</string>
 	<string name="no_session_message">
 		（IM セッションが存在しません）
 	</string>
@@ -4591,9 +4526,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
 	</string>
-	<string name="Group Ban">
-		グループへの立入禁止
-	</string>
 	<string name="Membership">
 		会員
 	</string>
@@ -5016,12 +4948,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Destinations_Label">
 		行き先
 	</string>
-	<string name="Command_Facebook_Label">
-		Facebook
-	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
+	<string name="Command_Facebook_Label">フェイスブック</string>
+  <string name="Command_Flickr_Label">Flickr</string>
 	<string name="Command_Gestures_Label">
 		ジェスチャー
 	</string>
@@ -5070,9 +4998,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Speak_Label">
 		話す
 	</string>
-	<string name="Command_Twitter_Label">
-		Twitter
-	</string>
+	<string name="Command_Twitter_Label">ツイッター</string>
 	<string name="Command_View_Label">
 		カメラコントロール
 	</string>
@@ -5108,6 +5034,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<!-- Added Jun.30, 2013 -->
 	
 	<string name="Command_Conversation_Log_Label">会話ログ</string>
+	<string name="Command_RegionTracker_Label">地域別アバター数</string>
 	
 	<string name="Command_AboutLand_Tooltip">
 		訪問先に関する情報
@@ -5133,12 +5060,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Destinations_Tooltip">
 		行ってみたい場所
 	</string>
-	<string name="Command_Facebook_Tooltip">
-		Facebook へ投稿
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Flickr にアップロード
-	</string>
+	<string name="Command_Facebook_Tooltip">フェイスブックに投稿</string>
+	<string name="Command_Flickr_Tooltip">Flickr にアップロード</string>
 	<string name="Command_Gestures_Tooltip">
 		アバターのジェスチャー
 	</string>
@@ -5187,9 +5110,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Speak_Tooltip">
 		マイクを使って近くの人と話す
 	</string>
-	<string name="Command_Twitter_Tooltip">
-		Twitter
-	</string>
+	<string name="Command_Twitter_Tooltip">ツイッター</string>
 	<string name="Command_View_Tooltip">
 		カメラの角度を変更
 	</string>
@@ -5263,6 +5184,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Conversation_Log_Tooltip">
 		会話ログを開いて過去に交わしたチャットをテキストで確認します。
 	</string>
+	<string name="Command_RegionTracker_Tooltip">複数の地域のステータス（アバター数）を確認します</string>
 
  	<string name="Toolbar_Bottom_Tooltip">
 		現在、下のツールバーにあります
@@ -5471,4 +5393,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
+  
+    <string name="groupcountstring">あなたは [COUNT] グループに所属しています。 (残 [REMAINING]).</string>
+  <string name="groupcountunlimitedstring">あなたは [COUNT] グループに所属しています</string>
+  <string name="Mute_Add">'[NAME]' は無視リストに追加されました</string>
+  <string name="Mute_Remove">'[NAME]' は無視リストの対象から外されました</string>
 </strings>

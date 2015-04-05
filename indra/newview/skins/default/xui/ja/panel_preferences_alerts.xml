@@ -1,56 +1,74 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="ポップアップ" name="popups" title="ポップアップ">
 <tab_container name="tabs">
+ 
+	<!-- World -->
 
-    <!-- World -->
-    <panel label="世界" name="tab-world">
-	<check_box label="リンデンドルを使用・受け取るとき" name="notify_money_change_checkbox"/>
-	<check_box label="リンデンドル取引の通知はウィンドウでなくチャットで知らせる" name="FSPaymentInfoInChat"/>
-	<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
-     <check_box label="Growlで通知" name="notify_growl_checkbox" />
-	  <check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
-    </panel>
-
-    <!-- People -->
-    <panel label="人" name="tab-people">
-	<check_box label="誰かが表示名を変更した時" name="FSShowDisplayNameUpdateNotification" />
-	<text name="friends_logon_label">
-        フレンドがログイン／ログアウトした時
-    </text>
-	<check_box label="トーストで通知" name="friends_online_notify_checkbox" />
-    <check_box name="OnlineOfflinetoNearbyChat" label="チャット履歴とコンソールで通知" />
-	<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
-    </panel>
-
-    <!-- Objects -->
-    <panel label="オブジェクト、 &amp; スクリプト、" name="tab-objects">
-    <check_box label="衝突の通知を周辺チャットに表示します" name="FSCollisionMessagesInChat" />
-	<check_box label="スクリプトエラーが発生した時" name="show_script_errors"/>
-	<radio_group name="show_script_errors_location">
-		<radio_item label="チャットに表示" name="script_0"/>
-		<radio_item label="別のウィンドウに表示" name="script_1"/>
-	</radio_group>
-    <check_box label="地域全体のスクリプト数に変化があった時W:" name="FSReportTotalScriptCountChanges" />
-    <spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="通知の対象とするスクリプト数の閾値を設定します。（デフォルトは100）" />
-    <check_box label="衝突の通知を指定したスクリプトチャンネルに表示します。" name="FSReportCollisionMessages" />
-    <spinner name="FSReportCollisionMessagesChannel" tool_tip="衝突の通知に使用するスクリプトチャンネルを指定します。（デフォルトは-25000）" />
-    </panel>
-
-    <!-- Inventory -->
-    <panel label="インベントリ" name="tab-inventory">
-	<check_box name="FSShowUploadPaymentToast" label="アップロードの料金を支払った時" />
-	<check_box label="ランドマークを作成した時" name="landmark_created_checkbox"/>
-    </panel>
-
-    <!-- Alerts -->
-    <panel label="メッセージ表示" name="tab-alerts">
-	<text name="show_label" width="300">
-		常に表示するメッセージ：
+	<panel label="世界" name="tab-world">
+	<!--
+	<text name="tell_me_label">
+		知らせる：
 	</text>
-	<text name="dont_show_label">
-		表示しないメッセージ：
-	</text>
+	-->
+		<check_box label="リンデンドルを使用・受け取るとき" name="notify_money_change_checkbox"/>
+		<check_box label="リンデンドル取引の通知はウィンドウでなくチャットで知らせる" name="FSPaymentInfoInChat"/>
+		<check_box label="地域間を移動する時、シミュレーターのバージョンが異なる場合に通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポートしたり、SIMを地域をまたいで移動した場合に、シミュレーターのバージョンが異なるとその旨の通知を表示します。" />
+		<check_box label="ログイン時に status.secondlifegrid.net の最新情報を取得する" name="AutoQueryGridStatus" />
+		<check_box label="Growlで通知" name="notify_growl_checkbox" />
+		<check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
+		<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="キーワード通知の一部として既に一度表示されている場合、重複したIMは表示しない"/>
 	</panel>
 
+	<!-- People -->
+
+	<panel label="人" name="tab-people">
+		<check_box label="メッセージを受信した時 [APP_NAME] が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnMessage" />
+		<check_box label="誰かが表示名を変更したら通知" name="FSShowDisplayNameUpdateNotification" />
+		<check_box label="誰かをブロックまたはブロック解除したら通知" name="FSReportBlockToNearbyChat" />
+		<text name="friends_logon_label">
+			フレンドがログイン／ログアウトした時
+		</text>
+		<check_box label="トーストで通知" name="friends_online_notify_checkbox" />
+		<check_box name="OnlineOfflinetoNearbyChat" label="チャット履歴とコンソールで通知" />
+		<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
+
+	</panel>
+	
+	<!-- Objects & Scripts -->
+	
+	<panel label="オブジェクト／スクリプト" name="tab-objects">
+		<check_box label="スクリプトダイアログを受信した時 [APP_NAME] が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnScriptDialog" />
+		<check_box label="衝突の通知を周辺チャットに表示します" name="FSCollisionMessagesInChat" />
+		<check_box label="スクリプトエラーが発生した時" name="show_script_errors" />
+		<radio_group name="show_script_errors_location">
+			<radio_item label="チャットに表示" name="script_0"/>
+			<radio_item label="別のウィンドウに表示" name="script_1"/>
+		</radio_group>
+		<check_box label="地域全体のスクリプト数に変化があった時:" name="FSReportTotalScriptCountChanges" />
+		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="通知の対象とするスクリプト数の閾値を設定します。（デフォルトは100）" />
+		<check_box label="衝突の通知を指定したスクリプトチャンネルに表示します。" name="FSReportCollisionMessages" />
+		<spinner name="FSReportCollisionMessagesChannel" tool_tip="衝突の通知に使用するスクリプトチャンネルを指定します。（デフォルトは-25000）" />
+	</panel>
+	
+	<!-- Inventory -->
+	
+	<panel label="インベントリ" name="tab-inventory">
+		<check_box name="FSShowUploadPaymentToast" label="アップロードの料金を支払った時" />
+		<check_box label="ランドマークを作成した時" name="landmark_created_checkbox" />
+		<check_box label="オブジェクトがインベントリに返却されましたという通知をしないようにする"
+ name="FSDisableReturnObjectNotification" />
+		<check_box label="保存したスナップショットのファイル名を会話履歴に記録する" name="FSLogSnapshotsToLocal" />
+	</panel>
+	
+	<!-- Alerts -->
+	
+	<panel label="メッセージ表示" name="tab-alerts">
+		<text name="show_label" width="300">
+			常に表示するメッセージ：
+		</text>
+		<text name="dont_show_label">
+			表示しないメッセージ：
+		</text>
+	</panel>
 </tab_container>
 </panel>

@@ -8,11 +8,11 @@
         label="グループ..."
         name="Groups..."/>
     <pie_menu
-        label="取り外す＞"
+        label="取り外す >"
         name="Take Off &gt;">
         <pie_menu
-            label="服＞"
-            name="Clothes &gt;"/>
+            label="服 >"
+            name="Clothes &gt;">
             <pie_slice
                 label="シャツ"
                 name="Shirt"/>
@@ -32,14 +32,16 @@
                 label="手袋"
                 name="Gloves"/>
             <pie_menu
-                label="詳細"
+                label="詳細 >"
                 name="Clothes More">
                 <pie_slice
                     label="（下着の）シャツ"
                     name="Self Undershirt"/>
+                <pie_separator />
                 <pie_slice
                     label="すべての服"
                     name="All Clothes"/>
+                <pie_separator />
                 <pie_slice
                     label="（下着の）パンツ"
                     name="Self Underpants"/>
@@ -58,14 +60,16 @@
                 name="Skirt"/>
         </pie_menu>
         <pie_menu
-            label="HUD＞"
+            label="HUD >"
             name="Pie Object Detach HUD" />
+        <pie_separator />
         <pie_menu
             label="取り外す"
             name="Pie Object Detach" />
+        <pie_separator />
         <pie_slice
             label="すべて取り外す"
-            name="Detach All"/>
+            name="Detach All" />
     </pie_menu>
     <pie_slice
         label="ここに座る"
@@ -80,17 +84,24 @@
         label="ジェスチャー..."
         name="Gestures"/>
     <pie_menu
-        label="容姿＞"
+        label="容姿 &gt;"
         name="Appearance &gt;">
         <pie_slice label="シェイプを編集"
            name="Edit My Shape"/>
+        <pie_separator />
         <pie_slice
             label="テクスチャ更新"
             name="Texture Refresh"/>
+        <pie_separator />
         <pie_slice label="服装を編集"
            name="Edit My Outfit"/>
+		<pie_separator />
+		<pie_slice
+			label="XMLをダンプ"
+			name="Dump XML" />
+		<pie_slice label="宙に浮く高さ" name="Hover Height" />
     </pie_menu>
     <pie_slice
-        label="デバッグ..."
+        label="テクスチャ"
         name="Debug..."/>
 </pie_menu>
