@@ -196,10 +196,6 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-deprecated -Wno-unused-but-set-variable -Wno-unused-variable ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 459)
 
-  if( ( ${CXX_VERSION_NUMBER} GREATER 459 AND NOT ND_BUILD64BIT_ARCH ) OR ( ${CXX_VERSION_NUMBER} GREATER 463 ) )
-    set(CMAKE_CXX_FLAGS "-Wno-maybe-uninitialized ${CMAKE_CXX_FLAGS}")
-  endif( ( ${CXX_VERSION_NUMBER} GREATER 459 AND NOT ND_BUILD64BIT_ARCH ) OR ( ${CXX_VERSION_NUMBER} GREATER 463 ) )
-
   # gcc 4.3 and above don't like the LL boost and also
   # cause warnings due to our use of deprecated headers
   if(${CXX_VERSION_NUMBER} GREATER 429)

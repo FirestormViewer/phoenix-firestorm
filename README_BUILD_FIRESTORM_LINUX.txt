@@ -1,5 +1,4 @@
-First, make sure gcc-4.6 and g++-4.6 are installed. If you are using a newer gcc/binutils version, you might
-have to use ld/gold to get rid of some linker errors when linking boost.
+First, make sure gcc-4.4 and g++-4.4 are installed.
 
 32bit build platforms are better tested at this point and strongly recommended.
 

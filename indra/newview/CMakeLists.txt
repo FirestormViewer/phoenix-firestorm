@@ -1671,9 +1671,9 @@ if (LINUX)
 
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
-#    set(viewer_LIBRARIES
-#        Xinerama
-#        )
+    set(viewer_LIBRARIES
+        Xinerama
+        )
 
     # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
     if( ND_CTAGS )
