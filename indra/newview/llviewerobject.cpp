@@ -2871,8 +2871,12 @@ void LLViewerObject::dirtyInventory()
 		mInventory->clear(); // will deref and delete entries
 		delete mInventory;
 		mInventory = NULL;
+	// <FS:Ansariel> FIRE-15508: Partially backing out MAINT-2245 for now because of object corruption until MAINT-4897 is fixed
+	//}
+	//mInventoryDirty = TRUE;
+		mInventoryDirty = TRUE;
 	}
-	mInventoryDirty = TRUE;
+	// </FS:Ansariel>
 }
 
 void LLViewerObject::registerInventoryListener(LLVOInventoryListener* listener, void* user_data)
@@ -2909,13 +2913,16 @@ void LLViewerObject::clearInventoryListeners()
 
 void LLViewerObject::requestInventory()
 {
-	if(mInventoryDirty && mInventory && !mInventoryCallbacks.empty())
-	{
-		mInventory->clear(); // will deref and delete entries
-		delete mInventory;
-		mInventory = NULL;
-		mInventoryDirty = FALSE; //since we are going to request it now
-	}
+	// <FS:Ansariel> FIRE-15508: Partially backing out MAINT-2245 for now because of object corruption until MAINT-4897 is fixed
+	//if(mInventoryDirty && mInventory && !mInventoryCallbacks.empty())
+	//{
+	//	mInventory->clear(); // will deref and delete entries
+	//	delete mInventory;
+	//	mInventory = NULL;
+	//	mInventoryDirty = FALSE; //since we are going to request it now
+	//}
+	mInventoryDirty = FALSE;
+	// </FS:Ansariel>
 	if(mInventory)
 	{
 		doInventoryCallback();
