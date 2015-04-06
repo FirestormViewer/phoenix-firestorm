@@ -110,6 +110,7 @@
         </text>
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
         <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
+        <check_box label="Zawsze pokazuj &quot;Odebrane przedmioty&quot; na dole okna Szafy" name="FSAlwaysShowInboxButton" tool_tip="Gdy włączysz tą opcję, to w folder &quot;Odebrane przedmioty&quot; będzie zawsze pokazywany na dole okna Szafy nawet, jeśli jest widoczny na liście folderów." />
         <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
     </panel>
     <panel label="Tosty" name="UI-toasts-tab">
