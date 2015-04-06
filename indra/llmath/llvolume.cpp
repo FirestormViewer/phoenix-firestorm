@@ -6364,6 +6364,9 @@ BOOL LLVolumeFace::createSide(LLVolume* volume, BOOL partial_build)
 	num_vertices = mNumS*mNumT;
 	num_indices = (mNumS-1)*(mNumT-1)*6;
 
+	// <FS:Ansariel> Pull relevant part for current version of fix for MAINT-4435
+	partial_build = (num_vertices > mNumVertices || num_indices > mNumIndices) ? FALSE : partial_build;
+
 	if (!partial_build)
 	{
 		resizeVertices(num_vertices);
