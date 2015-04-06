@@ -114,6 +114,7 @@
 		</text>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
 		<check_box label="Ordner &quot;Erhaltene Artikel&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Erhaltene Artikel&quot; als normaler Ordner im Inventar angezeigt."/>
+		<check_box label="Button für &quot;Erhaltene Artikel&quot; immer im Inventar anzeigen" name="FSAlwaysShowInboxButton" tool_tip="Falls aktiviert, wird der Button &quot;Erhaltene Artikel&quot; immer im Inventarfenster angezeigt, selbst wenn Ordner im Inventar angezeigt wird."/>
 		<check_box label="Unterschiedliche Suchbegriffe pro Registerkarte im Inventar erlauben" name="FSSplitInventorySearchOverTabs" tool_tip="Falls aktiviert, können im Inventarfenster für jede Registerkarte unterschiedliche Suchbegriffe eingegeben werden."/>
 	</panel>
 
