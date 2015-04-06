@@ -117,7 +117,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	//left mouse down always picks transparent
 //	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE, FALSE);
 // [/SL:KB]
 	mPick.mKeyMask = mask;
 
@@ -592,7 +592,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
 //	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE, FALSE);
 // [/SL:KB]
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
@@ -661,7 +661,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
 //		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE, FALSE);
 // [/SL:KB]
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
