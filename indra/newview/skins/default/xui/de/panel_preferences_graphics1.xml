@@ -155,6 +155,9 @@
 		<slider label="Stärke:" tool_tip="Leuchtstärke. Größer = Breitere und weichere Darstellung (Standardwert: 2)" name="glow_strength"/>
 		<check_box label="Avatare anzeigen, die nicht vollständig geladen sind" name="RenderUnloadedAvatars"/>
 		<check_box label="Framerate begrenzen" name="FSLimitFramerate"/>
+		<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
+		<check_box label="Angehängte Lichter rendern" tool_tip="Diese Option aktiviert alle Lichtquellen, die Avatare angehängt haben, wie z.B. Facelights. Nützlich, um beispielsweise Facelights zu deaktivieren falls notwendig." name="Render Attached Lights"/>
+		<check_box label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 		<slider name="MaxFPS" label="FPS:"/>
 		<slider label="Pre-Caching-Verzögerung bevor die Welt angezeigt wird." tool_tip="Setzt die Verzögerung, nach der die Welt angezeigt wird, nachdem man selbst als Online gemeldet wird. (Standard: 6 Sekunden)" name="PrecachingDelay"/>
 		<text name="PrecachingDelayText" width="60">
