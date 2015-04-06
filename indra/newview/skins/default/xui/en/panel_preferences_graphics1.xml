@@ -990,7 +990,7 @@
          layout="topleft"
          left="10"
          name="Texture Rendering"
-         top_pad="20"
+         top_pad="10"
          width="308">
             Texture Rendering:
         </text>
@@ -1056,7 +1056,7 @@
          layout="topleft"
          left="10"
          name="Alpha Mask Rendering"
-         top_pad="20"
+         top_pad="10"
          width="308">
             Alpha Mask Rendering:
         </text>
@@ -1092,7 +1092,7 @@
          layout="topleft"
          left="10"
          name="Miscellaneous Rendering"
-         top_pad="20"
+         top_pad="10"
          width="308">
             Miscellaneous Rendering:
         </text>
@@ -1166,7 +1166,48 @@
          mouse_opaque="true"
          show_text="true"
          width="200" />
-
+        <check_box
+         follows="top|left"
+         layout="topleft"
+         left="20"
+         top_pad="9"
+         label="Show the Scene as Wireframe"
+         name="Wireframe">
+        <check_box.on_check
+         function="Advanced.CheckWireframe"
+         parameter="Wireframe"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.ToggleWireframe"/>
+        </check_box>
+        <check_box
+         follows="top|left"
+         layout="topleft"
+         left="20"
+         top_pad="9"
+         label="Enable Attached Lights (Face Lights)"
+         tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
+         name="Render Attached Lights">
+        <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedLights"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedLights"/>
+        </check_box>
+        <check_box
+         follows="top|left"
+         layout="topleft"
+         left="20"
+         top_pad="9"
+         label="Render Attached Particles"
+         name="Render Attached Particles">
+        <check_box.on_check
+         function="CheckControl"
+         parameter="RenderAttachedParticles"/>
+        <check_box.check_button.commit_callback
+         function="Advanced.HandleAttachedLightParticles"
+         parameter="RenderAttachedParticles"/>
+        </check_box>
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"
@@ -1182,7 +1223,7 @@
          min_val="1"
          name="PrecachingDelay"
          left="10"
-         top_pad="20"
+         top_pad="10"
          width="405" />
         <text
          type="string"
