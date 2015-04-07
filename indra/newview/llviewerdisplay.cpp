@@ -327,6 +327,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			stop_glerror();
 		}
 
+		// <FS:ND> FIRE-15789; Make sure there's not backlog for thousands and thousands of beam objects
+		LLHUDObject::renderAllForTimer();
+		// </FS:ND>
+
 		stop_glerror();
 		gViewerWindow->returnEmptyPicks();
 		stop_glerror();
