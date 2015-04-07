@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_facebook" title="FACEBOOK に投稿">
+<floater name="floater_facebook" title="Facebook に投稿">
 	<panel name="background">
 		<tab_container name="tabs">
 			<panel label="ステータス" name="panel_facebook_status"/>

@@ -135,6 +135,7 @@
 		</text>
 		<check_box label="空のシステムフォルダをインベントリに表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、持ち物ウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。" />
 		<check_box label="受け取りアイテムフォルダを通常のインベントリ内に表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、インベントリウィンドウに受け取りアイテムフォルダも表示されるようになります。" />
+		<check_box label="受け取りアイテムボタンをインベントリの下に常に表示" name="FSAlwaysShowInboxButton" tool_tip="ここにチェックを入れると、インベントリ内にそのフォルダが表示されている場合でも、受け取りアイテムのボタンを常に表示するようにします。"/>
 		<check_box label="インベントリのそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="こにチェックを入れると、インベントリのそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
 
     </panel>

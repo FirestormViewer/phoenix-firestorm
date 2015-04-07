@@ -4,7 +4,7 @@
 		連絡先セットに何も登録がありません。
 	</panel.string>
 	<panel.string name="no_sets">
-		セットなし
+		セット未登録
 	</panel.string>
 	<panel.string name="all_sets">
 		全てのセット

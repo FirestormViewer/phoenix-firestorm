@@ -3,7 +3,7 @@
 	<layout_stack name="stack_photo">
 		<layout_panel name="text_panel">
 			<text name="status_label">
-				何が起きているのでしょうか?
+				いまどうしてる？
 			</text>
 			<text name="status_counter_label">
 				140

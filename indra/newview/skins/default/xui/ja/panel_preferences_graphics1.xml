@@ -189,6 +189,9 @@
 		<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars" />
 		<check_box label="フレームレートを制限" name="FSLimitFramerate" />
 		<slider label="FPS:" name="MaxFPS" />
+		<check_box label="風景をワイヤーフレームで表示" name="Wireframe"/>
+		<check_box label="装着している光源 (フェイスライト) を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。必要がない場合にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights"/>
+		<check_box label="装着しているパーティクルを描画する" name="Render Attached Particles"/>
         <slider label="世界を表示する前のプレキャッシングを遅らせる時間" tool_tip="あなたに世界が見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay" />
         <text name="PrecachingDelayText">
             秒

@@ -6,18 +6,34 @@
 	<string name="postcard_progress_str">
 		メールの送信
 	</string>
+	<string name="facebook_progress_str">
+		Facebookに投稿
+	</string>
 	<string name="profile_progress_str">
 		投稿
 	</string>
+	<!--
+	<string name="flickr_progress_str">
+		Flickrにアクセス
+	</string>
+	-->
 	<string name="inventory_progress_str">
 		インベントリに保存
 	</string>
 	<string name="local_progress_str">
 		コンピュータに保存
 	</string>
+	<string name="facebook_succeeded_str">
+		画像がアップロードされました
+ 	</string>
 	<string name="profile_succeeded_str">
 		画像がアップロードされました
 	</string>
+	<!--
+	<string name="flickr_succeeded_str">
+ 		Flickr に画像がアップロードされました
+ 	</string>
+ 	-->
 	<string name="postcard_succeeded_str">
 		メールが送信されました
 	</string>
@@ -27,6 +43,9 @@
 	<string name="local_succeeded_str">
 		コンピュータに保存されました
 	</string>
+	<string name="facebook_failed_str">
+ 		Facebook のタイムラインに画像をアップロードできませんでした。
+ 	</string>
 	<string name="profile_failed_str">
 		プロフィールフィードに画像をアップロードできませんでした。
 	</string>
@@ -39,33 +58,71 @@
 	<string name="local_failed_str">
 		コンピュータに保存できませんでした。
 	</string>
-	<button name="advanced_options_btn" tool_tip="詳しい設定"/>
+	<!--
+	<string name="flickr_failed_str">
+ 		Flickr  にアップロードできませんでした。
+ 	</string>
+ 	-->
+ 	<button label="更新" name="new_snapshot_btn" />
+	<button name="retract_btn" />
+	<button name="extend_btn" />
+	<panel name="advanced_options_panel">
+		<view_border  name="advanced_options_hr" />
+		<text name="layer_type_label">
+			キャプチャ：
+		</text>
+		<combo_box label="画像レイヤー" name="layer_types">
+			<combo_box.item label="色" name="Colors" />
+			<combo_box.item label="深度" name="Depth" />
+			<combo_box.item label="深度 (24 bit)" name="Depth24" />
+		</combo_box>
+		<check_box label="インターフェース" name="ui_check" />
+		<check_box label="L$ 残高" name="currency_check" />
+		<check_box label="HUD" name="hud_check" />
+		<check_box label="画面全体を静止" name="freeze_frame_check" />
+		<check_box label="自動更新" name="auto_snapshot_check" />
+		<text name="filter_list_label">
+			フィルター：
+		</text>
+		<combo_box name="filters_combobox" tool_tip="画像フィルター">
+			<combo_box.item label="フィルターなし" name="NoFilter" />
+		</combo_box>
+		<view_border  name="advanced_options_hr" />
+	</panel>
+	<panel_container name="panel_container">
+		<panel name="panel_snapshot_options" />
+		<panel name="panel_snapshot_profile" />
+		<panel name="panel_snapshot_postcard" />
+		<panel name="panel_snapshot_inventory" />
+		<panel name="panel_snapshot_local" />
+	</panel_container>
+	<view_border  name="status_hr" />
+	<panel name="succeeded_panel">
+		<text name="succeeded_lbl">
+			成功
+		</text>
+	</panel>
+	<panel name="failed_panel">
+		<text name="failed_lbl">
+			失敗
+		</text>
+	</panel>
+	<loading_indicator name="working_indicator" />
+	<text name="working_lbl">
+		処理中
+	</text>
+	<!--
+	<button name="new_snapshot_btn" />
+	-->
+	<text name="refresh_lbl">
+		更新して保存
+	</text>
+	<ui_ctrl  name="thumbnail_placeholder" />
+	<view_border  name="img_info_border" />
 	<text name="image_res_text">
 		[WIDTH] x [HEIGHT] px
 	</text>
 	<text name="file_size_label">
 		[SIZE] キロバイト
 	</text>
-	<panel name="advanced_options_panel">
-		<text name="advanced_options_label">
-			詳しい設定
-		</text>
-		<text name="layer_type_label">
-			キャプチャ：
-		</text>
-		<combo_box label="画像レイヤー" name="layer_types">
-			<combo_box.item label="色" name="Colors"/>
-			<combo_box.item label="深度" name="Depth"/>
-		</combo_box>
-		<check_box label="インターフェース" name="ui_check"/>
-		<check_box label="HUD" name="hud_check"/>
-		<check_box label="画面全体を静止" name="freeze_frame_check"/>
-		<check_box label="自動更新" name="auto_snapshot_check"/>
-		<text name="filter_list_label">
-			フィルター:
-		</text>
-		<combo_box name="filters_combobox" tool_tip="画像フィルター">
-			<combo_box.item label="フィルターなし" name="NoFilter"/>
-		</combo_box>
-	</panel>
 </floater>

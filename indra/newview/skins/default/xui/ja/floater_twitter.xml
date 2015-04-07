@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_twitter" title="TWITTER">
+<floater name="floater_twitter" title="Twitter">
 	<panel name="background">
 		<tab_container name="tabs">
 			<panel label="作成" name="panel_twitter_photo"/>

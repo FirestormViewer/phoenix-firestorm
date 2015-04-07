@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_options">
-	<button label="プロフィールフィードに投稿する" name="save_to_profile_btn"/>
-	<button label="メール" name="save_to_email_btn"/>
-	<button label="インベントリに保存（L$[Amount]）" name="save_to_inventory_btn"/>
-	<button label="コンピューターに保存" name="save_to_computer_btn"/>
-	<text name="send_to_facebook_textbox">
-		宛先:  [secondlife:/// Facebook]
-	</text>
-	<text name="send_to_twitter_textbox">
-		[secondlife:/// Twitter]
-	</text>
-	<text name="send_to_flickr_textbox">
-		[secondlife:/// Flickr]
-	</text>
+	<layout_stack name="option_buttons">
+		<layout_panel name="lp_download">
+			<button label="ディスクに保存" name="save_to_computer_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_inventory">
+			<button label="インベントリに保存（L$[Amount]）" name="save_to_inventory_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_profile">
+			<button label="プロフィールにアップロード" name="save_to_profile_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_facebook">
+			<button label="Facebook にアップロード" name="send_to_facebook_btn" />
+		</layout_panel>
+		<layout_panel name="lp_twitter">
+			<button label="Twitter にアップロード" name="send_to_twitter_btn" />
+		</layout_panel>
+		<layout_panel name="lp_flickr">
+			<button label="Flickr にアップロード" name="send_to_flickr_btn" />
+		</layout_panel>
+		<layout_panel name="lp_email">
+			<button label="メールで送信" name="save_to_email_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

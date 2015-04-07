@@ -3526,18 +3526,12 @@ M キーを押して変更します。
 		[NUM_ITEMS] 個のアイテムを削除中です。続けますか？
 		<usetemplate ignoretext="複数のアイテムを削除しますか？" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
-	
-	<notification name="ServerVersionChanged">
-到着した地域はこれまでいた場所とは異なるサーバのバージョンで稼働しています。
-現在のSIM: [NEWVERSION]
-前にいたSIM: [OLDVERSION]
-  </notification>
-	
+
 	<notification name="PreferenceChatClearLog">
     この操作によって以前の会話ログは削除され、このファイルのバックアップも削除されます。
 		<usetemplate ignoretext="以前の会話ログを削除する前に確認。" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
-    
+	
 	<notification name="PreferenceChatDeleteTranscripts">
     この操作によって過去の会話の記録は全て削除されます。過去の会話リストは影響を受けません。[FOLDER]フォルダにある「.txt」と「txt.backup」の拡張子の全てのファイルが削除されます。
 		<usetemplate ignoretext="会話記録を削除する前に確認。" name="okcancelignore" notext="キャンセル" yestext="OK"/>
@@ -3552,14 +3546,69 @@ M キーを押して変更します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	
+	<!-- Duplicated
 	<notification name="EjectGroupMemberWarning">
 [AVATAR_NAME] をこのグループから除名しようとしています。
 		<usetemplate ignoretext="参加者をこのグループから除名するか確認" name="okcancelignore" notext="取り消し" yestext="除名"/>
-    </notification>
-    
-    <notification name="EjectGroupMembersWarning">
+	</notification>
+	
+	<notification name="EjectGroupMembersWarning">
 [COUNT] 人のメンバーをこのグループから除名しようとしています。members from the group.
 		<usetemplate ignoretext="このグループから複数のメンバーを除名するか確認。" name="okcancelignore" notext="取り消し" yestext="除名"/>
-    </notification>
+	</notification>
+	-->
 	
+	<notification name="ServerVersionChanged">
+到着した地域はこれまでいた場所とは異なるサーバのバージョンで稼働しています。
+現在のSIM: [NEWVERSION]
+前にいたSIM: [OLDVERSION]
+	</notification>
+	
+	<notification name="AddNewContactSet">
+		次の名前で新しい連絡先セットを作成します。
+		<form name="form">
+			<input name="message">
+				新しい連絡先セット
+			</input>
+			<button name="Create" text="作成"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	
+	<notification name="RemoveContactSet">
+		[SET_NAME] を削除してもよろしいですか？　この操作は元に戻せません。
+		<usetemplate ignoretext="連絡先セットを削除する前に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
+	</notification>
+	
+	<notification name="RemoveContactFromSet">
+		[TARGET] を [SET_NAME] から削除してもよろしいですか？
+		<usetemplate ignoretext="住人を連絡先セットから削除する前に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
+	</notification>
+	
+	<notification name="RemoveContactsFromSet">
+		これら [TARGET] のアバターを [SET_NAME] から削除してもよろしいですか？
+		<usetemplate ignoretext="複数の住人を連絡先セットから削除する前に確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
+	</notification>
+	
+	<notification name="AddToContactSetSingleSuccess">
+		[NAME] は [SET] に追加されました。
+	</notification>
+	
+	<notification name="AddToContactSetMultipleSuccess">
+		[COUNT] 人のアバターが [SET] に追加されました。
+	</notification>
+	
+	<notification name="SetAvatarPseudonym">
+		[AVATAR] のニックネームを入力して下さい。
+		<form name="form">
+			<input name="message" />
+			<button name="Create" text="作成"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	
+	<notification name="RenameContactSetFailure">
+		「[SET]」を「[NEW_NAME]」に変更できませんでした。既に同じ名前が存在しているか、無効な名前を指定しようとしています。
+	</notification>
+  
 </notifications>

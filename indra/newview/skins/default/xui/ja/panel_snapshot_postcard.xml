@@ -12,6 +12,11 @@
 	<text name="title">
 		メール
 	</text>
-	<button label="メッセージ" name="message_btn"/>
-	<button label="設定" name="settings_btn"/>
+	<view_border  name="hr" />
+	<tab_container name="postcard_tabs">
+		<panel label="メッセージ" name="panel_postcard_message" />
+		<panel label="設定" name="panel_postcard_settings" />
+	</tab_container>
+	<button label="取り消し" name="cancel_btn" />
+	<button label="送信" />
 </panel>
