@@ -581,7 +581,7 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 // <FS:Zi> Moved Avatar Z offset from RLVa to here
 bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 {
-	if (gAgent.getRegion() && !gAgent.getRegion()->avatarHoverHeightEnabled() && isAgentAvatarValid() && !gAgentAvatarp->isUsingServerBakes())
+	if (isAgentAvatarValid() && !gAgent.getRegion()->avatarHoverHeightEnabled() && !gAgentAvatarp->isUsingServerBakes())
 	{
 		gAgentAvatarp->computeBodySize();
 	}
