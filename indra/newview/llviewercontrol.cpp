@@ -92,6 +92,7 @@
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
 #include "NACLantispam.h"
+#include "llviewerregion.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -577,16 +578,16 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 	return true;
 }
 
-// ## Zi: Moved Avatar Z offset from RLVa to here
+// <FS:Zi> Moved Avatar Z offset from RLVa to here
 bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 {
-	if (isAgentAvatarValid())
+	if (gAgent.getRegion() && !gAgent.getRegion()->avatarHoverHeightEnabled() && isAgentAvatarValid() && !gAgentAvatarp->isUsingServerBakes())
 	{
 		gAgentAvatarp->computeBodySize();
 	}
 	return true;
 }
-// ## Zi: Moved Avatar Z offset from RLVa to here
+// </FS:Zi> Moved Avatar Z offset from RLVa to here
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
@@ -965,8 +966,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
-	// <FS:CR> FIRE-9759 - Temporarily remove AvatarZOffset since it's broken
-	//gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
+	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // <FS:Zi> Moved Avatar Z offset from RLVa to here
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
 	// </FS:Zi>

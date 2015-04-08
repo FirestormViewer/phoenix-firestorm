@@ -3361,7 +3361,7 @@ void LLVOAvatar::idleUpdateNameTagPosition(const LLVector3& root_pos_last)
 
 		name_position = mRoot->getWorldPosition();
 		name_position[VZ] -= mPelvisToFoot;
-		name_position[VZ] += ((mBodySize[VZ] + mAvatarOffset[VZ])* 0.55f);
+		name_position[VZ] += ((mBodySize[VZ] - mAvatarOffset[VZ] * 0.9f) * 0.55f);
 		name_position += (local_camera_up * root_rot) - (projected_vec(local_camera_at * root_rot, camera_to_av));	
 		name_position += pixel_up_vec * 15.f;
 	}
