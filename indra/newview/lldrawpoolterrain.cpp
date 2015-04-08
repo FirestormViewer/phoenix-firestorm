@@ -73,7 +73,7 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
 	static LLCachedControl<F32> RenderTerrainScale(gSavedSettings, "RenderTerrainScale");
 	static LLCachedControl<S32> RenderTerrainDetail(gSavedSettings, "RenderTerrainDetail");
 	sDetailScale = 1.f/RenderTerrainScale;
-	sDetailMode = RenderTerrainDetail;
+	sDetailMode = RenderTerrainDetail();
 	// </FS:PP>
 
 	mAlphaRampImagep = LLViewerTextureManager::getFetchedTextureFromFile("alpha_gradient.tga", 
@@ -135,7 +135,7 @@ void LLDrawPoolTerrain::prerender()
 	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
 	//sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
 	static LLCachedControl<S32> renderTerrainDetail(gSavedSettings, "RenderTerrainDetail");
-	sDetailMode = (S32)renderTerrainDetail;
+	sDetailMode = renderTerrainDetail();
 	// </FS:Ansariel>
 }
 
