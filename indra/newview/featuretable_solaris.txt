@@ -36,7 +36,7 @@ RenderLighting		1	1
 RenderObjectBump	1	1
 RenderParticleCount	1	4096
 RenderRippleWater	1	1
-RenderTerrainDetail	1	2
+RenderTerrainDetail	1	1
 VertexShaderEnable	1	1
 RenderTextureMemoryMultiple		1	1.0
 UseOcclusion		1       1
