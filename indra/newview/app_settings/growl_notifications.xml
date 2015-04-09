@@ -15,7 +15,6 @@
 -->
 <llsd>
   <map>
-		FriendOnlineOffline
     <key>FriendOnlineOffline</key>
     <map>
       <key>GrowlName</key>

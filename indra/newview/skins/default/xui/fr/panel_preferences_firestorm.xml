@@ -298,7 +298,7 @@
 			tool_tip="When checked, the LSL preprocessor is enabled."/>
         <check_box name="preprocoptimizer_checkbox"
 			label="Script optimizer"
-			tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."/>
+			tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."/>
         <check_box name="preprocswitch_checkbox"
 			label="switch() statement"
 			tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."/>

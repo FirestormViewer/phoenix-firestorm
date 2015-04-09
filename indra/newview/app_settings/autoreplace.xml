@@ -7,6 +7,10 @@
       <map>
         <key>afaic</key>
         <string>As far as I am concerned</string>
+        <key>afaicr</key>
+        <string>As far as I can remember</string>
+        <key>afair</key>
+        <string>As far as I recall</string>
         <key>afaik</key>
         <string>As far as I know</string>
         <key>afk</key>
@@ -27,22 +31,36 @@
         <string>For what its worth</string>
         <key>gtg</key>
         <string>got to go</string>
+        <key>hb</key>
+        <string>hurry back</string>
+        <key>hth</key>
+        <string>hope that helps</string>
         <key>idk</key>
         <string>I don't know</string>
         <key>iirc</key>
         <string>if I recall correctly</string>
+        <key>iiuc</key>
+        <string>if I understand correctly</string>
         <key>imho</key>
         <string>in my humble opinion</string>
         <key>imo</key>
         <string>in my opinion</string>
+        <key>iow</key>
+        <string>in other words</string>
         <key>irl</key>
         <string>in real life</string>
+        <key>istm</key>
+        <string>it seems to me</string>
+        <key>istr</key>
+        <string>I seem to remember</string>
         <key>np</key>
         <string>no problem</string>
         <key>nsfw</key>
         <string>not safe for work</string>
         <key>nvm</key>
         <string>nevermind</string>
+        <key>tbh</key>
+        <string>to be honest</string>
         <key>tc</key>
         <string>take care</string>
         <key>thx</key>
@@ -51,12 +69,22 @@
         <string>ta-ta for now</string>
         <key>ttyl</key>
         <string>talk to you later</string>
+        <key>ttys</key>
+        <string>talk to you soon</string>
         <key>ty</key>
         <string>thank you</string>
         <key>tyvm</key>
         <string>thank you very much</string>
+        <key>tysm</key>
+        <string>thank you so much</string>
+        <key>tysvm</key>
+        <string>thank you so very much</string>
         <key>wb</key>
         <string>welcome back</string>
+        <key>wip</key>
+        <string>work-in-progress</string>
+        <key>ymmv</key>
+        <string>your mileage may vary</string>
         <key>yw</key>
         <string>you&apos;re welcome</string>
         <key>yvw</key>

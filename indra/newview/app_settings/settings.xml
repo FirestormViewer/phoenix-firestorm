@@ -607,7 +607,7 @@
   <key>LimitRadarByRange</key>
     <map>
       <key>Comment</key>
-      <string>RestrictRadarToNearmeRange</string>
+      <string>Restrict Radar to a range near you</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1406,7 +1406,7 @@
     <key>DebugSearch</key>
     <map>
       <key>Comment</key>
-      <string>If TRUE use search url as given  in SearchURLDebug</string>
+      <string>If TRUE use search url as given in SearchURLDebug</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1419,7 +1419,7 @@
     <key>SearchURLDebug</key>
     <map>
       <key>Comment</key>
-      <string>Debug URL for Search website. Overrides any other search URL if DebugSearch is   true. Displayed in the Find floater</string>
+      <string>Debug URL for Search website. Overrides any other search URL if DebugSearch is true. Displayed in the Find floater</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3392,7 +3392,7 @@
     <key>ConnectAsGod</key>
     <map>
       <key>Comment</key>
-      <string>Log in a god if you have god access.</string>
+      <string>Log in as god if you have god access.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -13475,7 +13475,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>ShowObjectRenderingCost</key>                
     <map>
       <key>Comment</key>
-      <string>Show the object rendering cost in  build tools</string>
+      <string>Show the object rendering cost in build tools</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -19534,7 +19534,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>FSContactsSortOrder</key>
   <map>
     <key>Comment</key>
-    <string>Specifies sort order for friends (0 = by display name, 1 = usernmae, 2 = by online status then display, 3 = by online status then username)</string>
+    <string>Specifies sort order for friends (0 = by display name, 1 = username, 2 = by online status then display, 3 = by online status then username)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19546,7 +19546,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 	<key>UseEnvironmentFromRegionAlways</key>
 	<map>
 		<key>Comment</key>
-		<string>Choose whether to always use the region's environment settings when they are availabe or to allow the manual selections to remain unchanging.</string>
+		<string>Choose whether to always use the region's environment settings when they are available or to allow the manual selections to remain unchanged.</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -19621,7 +19621,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>UseAntiSpam</key>
   <map>    
     <key>Comment</key>    
-    <string>Active the Anti-Spam System</string>
+    <string>Activate the Anti-Spam System</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19655,7 +19655,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_AntiSpamAmount</key>
   <map>
     <key>Comment</key>
-    <string>Number of messages needed over NACL_AntiSpamTime seconds to trigger the spam system</string>
+    <string>Number of messages needed over _NACL_AntiSpamTime seconds to trigger the spam system</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19743,7 +19743,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_PreProcLSLSwitch</key>
   <map>
     <key>Comment</key>
-    <string>LSL Switch</string>
+    <string>LSL Switch Statements</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19754,7 +19754,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_PreProcEnableHDDInclude</key>
   <map>
     <key>Comment</key>
-    <string>orly</string>
+    <string>Enable #include from local disk</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19765,7 +19765,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>_NACL_PreProcHDDIncludeLocation</key>
   <map>
     <key>Comment</key>
-    <string>toast</string>
+    <string>Path for local disk includes</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

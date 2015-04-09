@@ -1397,7 +1397,7 @@
          left="15"
          enabled_control="_NACL_LSLPreprocessor"
          label="Script optimizer"
-         tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
+         tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."
          name="preprocoptimizer_checkbox"
          control_name="_NACL_PreProcLSLOptimizer" />
         <check_box
