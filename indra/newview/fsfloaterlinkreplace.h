@@ -28,12 +28,15 @@
 #define FS_FLOATERLINKREPLACE_H
 
 #include "llfloater.h"
+#include "lleventtimer.h"
+#include "llinventoryfunctions.h"
+#include "llviewerinventory.h"
 
 class FSInventoryLinkReplaceDropTarget;
 class LLButton;
 class LLTextBox;
 
-class FSFloaterLinkReplace : public LLFloater
+class FSFloaterLinkReplace : public LLFloater, LLEventTimer
 {
 	LOG_CLASS(FSFloaterLinkReplace);
 
@@ -44,11 +47,14 @@ public:
 	BOOL postBuild();
 	virtual void onOpen(const LLSD& key);
 
+	virtual BOOL tick();
+
 private:
 	void checkEnableStart();
 	void onStartClicked();
 	void decreaseOpenItemCount();
 	void updateFoundLinks();
+	void processBatch(LLInventoryModel::item_array_t items);
 
 	void linkCreatedCallback(const LLUUID& old_item_id,
 								const LLUUID& target_item_id,
@@ -62,11 +68,16 @@ private:
 	FSInventoryLinkReplaceDropTarget*	mSourceEditor;
 	FSInventoryLinkReplaceDropTarget*	mTargetEditor;
 	LLButton*							mStartBtn;
+	LLButton*							mRefreshBtn;
 	LLTextBox*							mStatusText;
 
 	LLUUID	mSourceUUID;
 	LLUUID	mTargetUUID;
 	U32		mRemainingItems;
+
+	LLInventoryModel::item_array_t	mRemainingInventoryItems;
+
+	FSFloaterLinkReplace* mInstance;
 };
 
 #endif // FS_FLOATERLINKREPLACE_H
