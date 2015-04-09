@@ -78,7 +78,6 @@ template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting
 class RlvSettings
 {
 public:
-	static F32  getAvatarOffsetZ()				{ return rlvGetPerUserSetting<F32>("AvatarHoverOffsetZ", 0.0f); }
 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
 	static bool getCanOOC()						{ return fCanOOC; }
 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
