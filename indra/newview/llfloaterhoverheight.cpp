@@ -168,7 +168,7 @@ void LLFloaterHoverHeight::updateEditEnabled()
 {
 	bool enabled = gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled();
 	// <FS:Ansariel> Legacy baking avatar z-offset
-	if (!enabled && !gAgentAvatarp->isUsingServerBakes())
+	if (!enabled && isAgentAvatarValid() && !gAgentAvatarp->isUsingServerBakes())
 	{
 		enabled = true;
 	}
