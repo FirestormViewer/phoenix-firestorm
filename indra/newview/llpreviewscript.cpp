@@ -2429,6 +2429,16 @@ void LLLiveLSLEditor::onLoadComplete(LLVFS *vfs, const LLUUID& asset_id,
 	{
 		if( LL_ERR_NOERR == status )
 		{
+			// <FS:ND> FIRE-15524 opt to not crash if the item went away ....
+			if( !instance->getItem() )
+			{
+				LL_WARNS() << "getItem() returns 0, item went away while loading script()" << LL_ENDL;
+				instance->mAssetStatus = PREVIEW_ASSET_ERROR;
+				delete xored_id;
+				return;
+			}
+			// </FS:ND>
+			
 			instance->loadScriptText(vfs, asset_id, type);
 			instance->mScriptEd->setEnableEditing(TRUE);
 			instance->mAssetStatus = PREVIEW_ASSET_LOADED;
