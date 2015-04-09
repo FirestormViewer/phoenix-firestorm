@@ -581,9 +581,17 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 // <FS:Zi> Moved Avatar Z offset from RLVa to here
 bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 {
-	if (isAgentAvatarValid() && !gAgent.getRegion()->avatarHoverHeightEnabled() && !gAgentAvatarp->isUsingServerBakes())
+	if (isAgentAvatarValid())
 	{
-		gAgentAvatarp->computeBodySize();
+		if (gAgent.getRegion()->avatarHoverHeightEnabled())
+		{
+			LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(sdValue.asReal(), MIN_HOVER_Z, MAX_HOVER_Z));
+			gAgentAvatarp->setHoverOffset(avOffset, true);
+		}
+		else if (!gAgentAvatarp->isUsingServerBakes())
+		{
+			gAgentAvatarp->computeBodySize();
+		}
 	}
 	return true;
 }
