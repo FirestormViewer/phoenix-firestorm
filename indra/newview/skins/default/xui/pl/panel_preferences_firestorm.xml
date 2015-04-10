@@ -181,7 +181,7 @@
         <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
         <button label="Domyślne uprawnienia tworzenia" name="fs_default_creation_permissions" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
-        <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
+        <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
         <check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
         <check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
