@@ -509,7 +509,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					gSavedSettings.setF32("RenderFarClip", drawDist);
 					gAgentCamera.mDrawDistance = drawDist;
 					LLStringUtil::format_map_t args;
-					args["DISTANCE"] = llformat("%d", drawDist);
+					args["DISTANCE"] = llformat("%.0f", drawDist);
 					reportToNearbyChat(LLTrans::getString("FSCmdLineDrawDistanceSet", args));
 					return false;
 				}
@@ -1337,10 +1337,9 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceFreezeGuard"));
 								return false;
 							}
-
 						}
 
-						if (modifier_type != "")
+						if (!modifier_type.empty())
 						{
 							if (modifier_type == "+")
 							{
@@ -1359,7 +1358,6 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							}
 							modifier_type = modifier_type + llformat("%d", modifier);
 						}
-
 					}
 					else
 					{
@@ -1428,8 +1426,8 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_ObjectAdd);
 	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+	msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 	msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
 	msg->nextBlockFast(_PREHASH_ObjectData);
 	msg->addU8Fast(_PREHASH_PCode, LL_PCODE_VOLUME);
