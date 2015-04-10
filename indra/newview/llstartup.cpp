@@ -1682,6 +1682,17 @@ bool idle_startup()
 		// We should have an agent id by this point.
 		llassert(!(gAgentID == LLUUID::null));
 
+		// <FS:Ansariel> Force HTTP inventory enabled on Second Life
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+#endif
+			gSavedSettings.setBOOL("UseHTTPInventory", TRUE);
+#ifdef OPENSIM
+		}
+#endif
+		// </FS:Ansariel>
+
 		// Finish agent initialization.  (Requires gSavedSettings, builds camera)
 		gAgent.init();
 		display_startup();
