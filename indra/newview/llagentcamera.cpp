@@ -1716,7 +1716,10 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 	F32			camera_land_height;
 	LLVector3d	frame_center_global = !isAgentAvatarValid() ? 
 		gAgent.getPositionGlobal() :
-		gAgent.getPosGlobalFromAgent(gAgentAvatarp->mRoot->getWorldPosition());
+		// <FS:Ansariel> FIRE-15772: Adjusting Hover Height changes camera view when camera view is at default
+		//gAgent.getPosGlobalFromAgent(gAgentAvatarp->mRoot->getWorldPosition());
+		gAgent.getPosGlobalFromAgent(gAgentAvatarp->mRoot->getWorldPosition() - gAgentAvatarp->getHoverOffset() );
+		// </FS:Ansariel>
 	
 	BOOL		isConstrained = FALSE;
 	LLVector3d	head_offset;
