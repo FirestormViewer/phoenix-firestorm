@@ -1961,6 +1961,17 @@ bool LLAudioData::load()
 		gAudiop->cleanupBuffer(mBufferp);
 		mBufferp = NULL;
 
+		// <FS:Ansariel> FIRE-480: Opening multiple instances causes sound failures
+		if (!gDirUtilp->fileExists(wav_path))
+		{
+			mHasLocalData = false;
+			mHasDecodedData = false;
+			mHasCompletedDecode = false;
+			mHasValidData = true;
+			gAudiop->preloadSound(mID);
+		}
+		// </FS:Ansariel>
+
 		return false;
 	}
 	mBufferp->mAudioDatap = this;
