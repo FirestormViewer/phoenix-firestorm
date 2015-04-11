@@ -33,17 +33,16 @@
 #include "llappearancemgr.h"
 #include "lllineeditor.h"
 #include "lltextbox.h"
-
-const F32 BATCH_PAUSE_TIME = 1.f;
-const U32 MAX_BATCH_SIZE = 25;
+#include "llviewercontrol.h"
 
 FSFloaterLinkReplace::FSFloaterLinkReplace(const LLSD& key)
 	: LLFloater(key),
-	LLEventTimer(BATCH_PAUSE_TIME),
+	LLEventTimer(gSavedSettings.getF32("FSLinkReplaceBatchPauseTime")),
 	mRemainingItems(0),
 	mSourceUUID(LLUUID::null),
 	mTargetUUID(LLUUID::null),
-	mInstance(NULL)
+	mInstance(NULL),
+	mBatchSize(gSavedSettings.getU32("FSLinkReplaceBatchSize"))
 {
 	mEventTimer.stop();
 	mInstance = this;
@@ -267,7 +266,7 @@ BOOL FSFloaterLinkReplace::tick()
 
 	LLInventoryModel::item_array_t current_batch;
 
-	for (U32 i = 0; i < MAX_BATCH_SIZE; ++i)
+	for (U32 i = 0; i < mBatchSize; ++i)
 	{
 		if (!mRemainingInventoryItems.size())
 		{

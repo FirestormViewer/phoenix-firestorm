@@ -74,6 +74,7 @@ private:
 	LLUUID	mSourceUUID;
 	LLUUID	mTargetUUID;
 	U32		mRemainingItems;
+	U32		mBatchSize;
 
 	LLInventoryModel::item_array_t	mRemainingInventoryItems;
 
