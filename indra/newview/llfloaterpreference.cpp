@@ -729,9 +729,22 @@ void LLFloaterPreference::onPieColorsOverrideChanged()
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
-	std::vector<std::string> list_of_transcriptions_file_names;
-	LLLogChat::getListOfTranscriptFiles(list_of_transcriptions_file_names);
-	getChild<LLButton>("delete_transcripts")->setEnabled(list_of_transcriptions_file_names.size() > 0);
+	// <FS:ND> LLLogChat::getListOfTranscriptFiles will go through the whole chatlog dir, reach a bit of each file,
+	// then append this file to the return-list if it seems to be valid.
+	// All this only to see if there is at least one item.
+	// There's two ways to make this faster:
+	//   1. Make a new function which returns just true/false and exist with true as soon as one valid file is found.
+	//   2. Always enable this button.
+	// There seems to be little reason why this button should ever be disabled, so 2. it is, unless someone knows 
+	// a good reason why 1. is the better way to handle this.
+	
+	// std::vector<std::string> list_of_transcriptions_file_names;
+	// LLLogChat::getListOfTranscriptFiles(list_of_transcriptions_file_names);
+	// getChild<LLButton>("delete_transcripts")->setEnabled(list_of_transcriptions_file_names.size() > 0);
+
+	getChild<LLButton>("delete_transcripts")->setEnabled( true );
+
+	// </FS:ND>
 }
 
 void LLFloaterPreference::onDoNotDisturbResponseChanged()
