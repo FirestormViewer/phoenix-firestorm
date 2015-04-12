@@ -103,6 +103,8 @@ public:
 	//static void onClickAdvanceSnap(LLUICtrl *ctrl, void* data);
 	static void onClickUICheck(LLUICtrl *ctrl, void* data);
 	static void onClickHUDCheck(LLUICtrl *ctrl, void* data);
+	// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+	static void onClickCurrencyCheck(LLUICtrl *ctrl, void* data);
 	static void applyKeepAspectCheck(LLFloaterSnapshot* view, BOOL checked);
 	static void updateResolution(LLUICtrl* ctrl, void* data, BOOL do_update = TRUE);
 	static void onCommitFreezeFrame(LLUICtrl* ctrl, void* data);
@@ -621,7 +623,14 @@ void LLFloaterSnapshot::Impl::onClickUICheck(LLUICtrl *ctrl, void* data)
 	LLFloaterSnapshot *view = (LLFloaterSnapshot *)data;
 	if (view)
 	{
-		checkAutoSnapshot(getPreviewView(view), TRUE);
+		// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+		//checkAutoSnapshot(getPreviewView(view), TRUE);
+		LLSnapshotLivePreview* previewp = getPreviewView(view);
+		if (previewp)
+		{
+			previewp->updateSnapshot(TRUE);
+		}
+		// </FS:Ansariel>
 		updateControls(view);
 	}
 }
@@ -635,10 +644,34 @@ void LLFloaterSnapshot::Impl::onClickHUDCheck(LLUICtrl *ctrl, void* data)
 	LLFloaterSnapshot *view = (LLFloaterSnapshot *)data;
 	if (view)
 	{
-		checkAutoSnapshot(getPreviewView(view), TRUE);
+		// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+		//checkAutoSnapshot(getPreviewView(view), TRUE);
+		LLSnapshotLivePreview* previewp = getPreviewView(view);
+		if (previewp)
+		{
+			previewp->updateSnapshot(TRUE);
+		}
+		// </FS:Ansariel>
 		updateControls(view);
 	}
 }
+
+// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+// static
+void LLFloaterSnapshot::Impl::onClickCurrencyCheck(LLUICtrl *ctrl, void* data)
+{
+	LLFloaterSnapshot *view = (LLFloaterSnapshot *)data;
+	if (view)
+	{
+		LLSnapshotLivePreview* previewp = getPreviewView(view);
+		if (previewp)
+		{
+			previewp->updateSnapshot(TRUE);
+		}
+		updateControls(view);
+	}
+}
+// </FS:Ansariel>
 
 // static
 void LLFloaterSnapshot::Impl::applyKeepAspectCheck(LLFloaterSnapshot* view, BOOL checked)
@@ -1115,6 +1148,9 @@ BOOL LLFloaterSnapshot::postBuild()
 
 	childSetCommitCallback("hud_check", Impl::onClickHUDCheck, this);
 	getChild<LLUICtrl>("hud_check")->setValue(gSavedSettings.getBOOL("RenderHUDInSnapshot"));
+
+	// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+	childSetCommitCallback("currency_check", Impl::onClickCurrencyCheck, this);
 
 	impl.setAspectRatioCheckboxValue(this, gSavedSettings.getBOOL("KeepAspectForSnapshot"));
 
