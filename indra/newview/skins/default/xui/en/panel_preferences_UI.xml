@@ -503,6 +503,14 @@
 		 width="270"
 		 control_name="FSDisableBlockListAutoOpen"
 		 tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
+		<check_box
+		 top_pad="2"
+		 follows="left|top"
+		 height="16"
+		 label="'Friends' and 'Groups' in 'Comm' menu opens the V2/3 based windows"
+		 name="FSUseV2Friends"
+		 width="270"
+		 control_name="FSUseV2Friends"/>
 
 		<text
 		type="string"
