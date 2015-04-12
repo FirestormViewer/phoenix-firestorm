@@ -69,6 +69,7 @@
         <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />
         <check_box name="FSUseWebProfiles" label="Profile sieciowe jako domyślne" tool_tip="Pokazuj profile jako strony internetowe zamiast panelów w stylu Viewera 1.x" />
         <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
+		<check_box label="'Znajomi' oraz 'Grupy' w menu 'Komunikacja' otwierają okna w stylu V2/3" name="FSUseV2Friends" />
         <text name="standalone_textbox">
             Używaj osobnych okien dla:
         </text>
