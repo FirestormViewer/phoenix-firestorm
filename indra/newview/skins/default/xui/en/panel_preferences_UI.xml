@@ -511,7 +511,7 @@
 		 name="FSUseV2Friends"
 		 width="270"
 		 control_name="FSUseV2Friends"
-		 tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Conversation panel."/>
+		 tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Contacts panel."/>
 
 		<text
 		type="string"
