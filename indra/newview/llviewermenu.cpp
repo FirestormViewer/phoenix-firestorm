@@ -4474,7 +4474,7 @@ class LLTogglePanelPeopleTab : public view_listener_t
 
 		// <FS:Zi> Open groups and friends lists in communicate floater
 		// <FS:Lo> Adding an option to still use v2 windows
-		if(gSavedSettings.getBOOL("FSUseV2Friends"))
+		if(gSavedSettings.getBOOL("FSUseV2Friends") && gSavedSettings.getString("SkinCurrent") != "vintage")
 		{
 			if (   panel_name == "friends_panel"
 				|| panel_name == "groups_panel"
