@@ -510,7 +510,8 @@
 		 label="'Friends' and 'Groups' in 'Comm' menu opens the V2/3 based windows"
 		 name="FSUseV2Friends"
 		 width="270"
-		 control_name="FSUseV2Friends"/>
+		 control_name="FSUseV2Friends"
+		 tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Conversation panel."/>
 
 		<text
 		type="string"
