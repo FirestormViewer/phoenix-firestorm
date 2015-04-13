@@ -97,7 +97,7 @@ public:
 				//LLSD params;
 				//params["people_panel_tab_name"] = "groups_panel";
 				//LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
-				if (gSavedSettings.getBOOL("FSUseV2Friends") && gSavedSettings.getString("SkinCurrent") != "vintage")
+				if (gSavedSettings.getBOOL("FSUseV2Friends") && gSavedSettings.getString("FSInternalSkinCurrent") != "Vintage")
 				{
 					LLSD params;
 					params["people_panel_tab_name"] = "groups_panel";
