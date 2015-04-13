@@ -507,7 +507,7 @@
 		 top_pad="2"
 		 follows="left|top"
 		 height="16"
-		 label="'Friends' and 'Groups' in 'Comm' menu opens the V2/3 based windows"
+		 label="'Friends' and 'Groups' in 'Comm' menu opens the V3 based windows"
 		 name="FSUseV2Friends"
 		 width="270"
 		 control_name="FSUseV2Friends"
@@ -1268,7 +1268,7 @@ Default 0. Larger values may not work well.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-V2/3 default 0. V1 default 2.
+V3 default 0. V1 default 2.
         </text>
 
         <text
@@ -1309,7 +1309,7 @@ V2/3 default 0. V1 default 2.
          length="1"
          line_spacing.pixels="5">
           pixels (requires restart)
-V2/3 default 20. V1 default 18.
+V3 default 20. V1 default 18.
         </text>
 
 <!-- not a live preview

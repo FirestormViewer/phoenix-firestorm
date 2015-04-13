@@ -120,14 +120,14 @@
 		</text>
 		<text name="tooltip_textbox4">
 			Пиксель (рестарт)
-V2/3-Standard 0. V1-Standard 2.
+V3-Standard 0. V1-Standard 2.
 		</text>
 		<text name="Label_FolderItemViewHeight">
 			Высота записи папки:
 		</text>
 		<text name="Label_FolderItemViewHeight_Scale">
 			Пиксель (рестарт)
-V2/3-Standard 20. V1-Standard 18.
+V3-Standard 20. V1-Standard 18.
 		</text>
 	</panel>
 </tab_container>
