@@ -265,7 +265,10 @@ void LLAssetUploadResponder::httpFailure()
 		if (preview)
 		{
 			LLSD errors;
-			errors.append(LLTrans::getString("UploadFailed") + reason);
+			// <FS:Ansariel> Translation format fix
+			//errors.append(LLTrans::getString("UploadFailed") + reason);
+			errors.append(LLTrans::getString("UploadFailed", args));
+			// </FS:Ansariel>
 			preview->callbackLSLCompileFailed(errors);
 		}
 	}
@@ -332,7 +335,12 @@ void LLAssetUploadResponder::uploadFailure(const LLSD& content)
 		if (preview)
 		{
 			LLSD errors;
-			errors.append(LLTrans::getString("UploadFailed") + content["message"].asString());
+			// <FS:Ansariel> Translation format fix
+			//errors.append(LLTrans::getString("UploadFailed") + content["message"].asString());
+			LLStringUtil::format_map_t args;
+			args["REASON"] = content["message"].asString();
+			errors.append(LLTrans::getString("UploadFailed", args));
+			// </FS:Ansariel>
 			preview->callbackLSLCompileFailed(errors);
 		}
 	}

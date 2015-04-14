@@ -2114,6 +2114,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SaveComplete">
 		Speichervorgang abgeschlossen.
 	</string>
+	<string name="UploadFailed">
+		Datei-Upload fehlgeschlagen: [REASON]
+	</string>
 	<string name="ObjectOutOfRange">
 		Skript (Objekt außerhalb des Bereichs)
 	</string>
