@@ -143,19 +143,9 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 											  mFormattedImage->getHeight(),
 											  mFormattedImage->getComponents());
 		}
-
-		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
-
+		done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
 		// some decoders are removing data when task is complete and there were errors
-		//mDecodedRaw = done && mDecodedImageRaw->getData();
-
-		if( mDecodedImageRaw && !mDecodedImageRaw->isBufferInvalid() )
-			done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
-		else
-			done = false;
-		mDecodedRaw = done;
-		// </FS:ND>
-
+		mDecodedRaw = done && mDecodedImageRaw->getData();
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
 	{
@@ -166,19 +156,8 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 											  mFormattedImage->getHeight(),
 											  1);
 		}
-
-		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
-
-		//done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
-		//mDecodedAux = done && mDecodedImageAux->getData();
-
-		if( mDecodedImageAux && !mDecodedImageAux->isBufferInvalid() )
-			done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
-		else
-			done = false;
-		mDecodedAux = done;
-		// </FS:ND>
-
+		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
+		mDecodedAux = done && mDecodedImageAux->getData();
 	}
 
 	return done;
