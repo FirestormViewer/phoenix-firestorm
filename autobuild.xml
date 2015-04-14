@@ -2356,9 +2356,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7dde5d6bfa45124a4c7b342a7a4f3f77</string>
+              <string>023d2788992a76f7a303b4da439c0859</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.6.9.42958-darwin-20141122.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.1.45291-darwin-20150413.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
