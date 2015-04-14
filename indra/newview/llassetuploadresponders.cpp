@@ -695,10 +695,7 @@ void LLUpdateTaskInventoryResponder::uploadComplete(const LLSD& content)
 		  }
 		  else
 		  {
-			  // <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
-			  //LLLiveLSLEditor* preview = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(item_id));
-			  LLLiveLSLEditor* preview = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD().with("xoredid", item_id ^ task_id).with("assetid", item_id));
-			  // </FS:Ansariel>
+			  LLLiveLSLEditor* preview = LLFloaterReg::findTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(item_id));
 			  if (preview)
 			  {
 				  // Bytecode save completed

@@ -1219,10 +1219,7 @@ void LLTaskLSLBridge::openItem()
 // [/RLVa:KB]
 	if (object->permModify() || gAgent.isGodlike())
 	{
-		// <FS:Ansariel> FIRE-511 / VWR-27512: Can't open script editors from objects individually
-		//LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(mUUID), TAKE_FOCUS_YES);
-		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD().with("xoredid", mUUID ^ mPanel->getTaskUUID()).with("assetid", mUUID), TAKE_FOCUS_YES);
-		// </FS:Ansariel>
+		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(mUUID), TAKE_FOCUS_YES);
 		if (preview)
 		{
 			preview->setObjectID(mPanel->getTaskUUID());
