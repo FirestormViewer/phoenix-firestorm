@@ -15,6 +15,10 @@
      name="timeStamp">
         [year,datetime,local] [mth,datetime,local] [day,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], [wkday,datetime,local]
     </floater.string>
+    <floater.string
+     name="Group">
+        (Group)
+    </floater.string>
     <scroll_list
      bottom="268"
      column_padding="0"
