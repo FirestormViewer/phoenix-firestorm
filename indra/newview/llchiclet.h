@@ -378,6 +378,8 @@ public:
 	 */
 	virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
+	void hidePopupMenu();
+
 	// <FS:Ansariel> [FS communication UI]
 	/**
 	 * Gets id of person/group user is chatting with.

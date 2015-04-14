@@ -736,7 +736,9 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mUseServerBakes(FALSE),
 	// </FS:Ansariel> [Legacy Bake]
 	mLastUpdateRequestCOFVersion(-1),
-	mLastUpdateReceivedCOFVersion(-1)
+	mLastUpdateReceivedCOFVersion(-1),
+	mCachedMuteListUpdateTime(0),
+	mCachedInMuteList(false)
 {
 	//VTResume();  // VTune
 	setHoverOffset(LLVector3(0.0, 0.0, 0.0));
@@ -3483,7 +3485,7 @@ bool LLVOAvatar::isVisuallyMuted()
 	bool muted = false;
 
 	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
-	if (!isSelf() && LLMuteList::instance().isMuted(getID()))
+	if (!isSelf() && isInMuteList())
 	{
 		return true;
 	}
@@ -3528,10 +3530,9 @@ bool LLVOAvatar::isVisuallyMuted()
 
 					U32 max_cost = (U32) (max_render_cost*(LLVOAvatar::sLODFactor+0.5));
 
-					muted = /*LLMuteList::getInstance()->isMuted(getID()) ||*/ // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
-						(mAttachmentGeometryBytes > max_attachment_bytes && max_attachment_bytes > 0) ||
-						(mAttachmentSurfaceArea > max_attachment_area && max_attachment_area > 0.f) ||
-						(mVisualComplexity > max_cost && max_render_cost > 0);
+					muted = (mAttachmentGeometryBytes > max_attachment_bytes && max_attachment_bytes > 0) ||
+							(mAttachmentSurfaceArea > max_attachment_area && max_attachment_area > 0.f) ||
+							(mVisualComplexity > max_cost && max_render_cost > 0);
 
 					// Could be part of the grand || collection above, but yanked out to make the logic visible
 					// <FS:Ansariel> FIRE-15074: Render normal imposters properly (Don't tie visual mute to RenderAvatarMaxVisible)
@@ -3565,6 +3566,8 @@ bool LLVOAvatar::isVisuallyMuted()
 		}
 	}
 
+	// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
+	//return muted || isInMuteList();
 	return muted;
 }
 
@@ -3574,6 +3577,24 @@ void	LLVOAvatar::forceUpdateVisualMuteSettings()
 	mCachedVisualMuteUpdateTime = LLFrameTimer::getTotalSeconds() - 1.0;
 }
 
+bool LLVOAvatar::isInMuteList()
+{
+	bool muted = false;
+	F64 now = LLFrameTimer::getTotalSeconds();
+	if (now < mCachedMuteListUpdateTime)
+	{
+		muted = mCachedInMuteList;
+	}
+	else
+	{
+		muted = LLMuteList::getInstance()->isMuted(getID());
+
+		const F64 SECONDS_BETWEEN_MUTE_UPDATES = 1;
+		mCachedMuteListUpdateTime = now + SECONDS_BETWEEN_MUTE_UPDATES;
+		mCachedInMuteList = muted;
+	}
+	return muted;
+}
 
 void LLVOAvatar::updateDebugText()
 {
@@ -8832,7 +8853,7 @@ void LLVOAvatar::updateImpostors()
 
 BOOL LLVOAvatar::isImpostor()
 {
-	return sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD)) ? TRUE : FALSE;
+	return (sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD))) || isInMuteList() ? TRUE : FALSE;
 }
 
 

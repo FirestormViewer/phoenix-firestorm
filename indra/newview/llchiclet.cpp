@@ -654,6 +654,14 @@ BOOL LLIMChiclet::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return TRUE;
 }
 
+void LLIMChiclet::hidePopupMenu()
+{
+	if (mPopupMenu)
+	{
+		mPopupMenu->setVisible(FALSE);
+	}
+}
+
 bool LLIMChiclet::canCreateMenu()
 {
 	if(mPopupMenu)

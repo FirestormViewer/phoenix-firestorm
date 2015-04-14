@@ -73,6 +73,7 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mShowKeepDiscard(FALSE),
 	  mCopyToInv(FALSE),
 	  mIsCopyable(FALSE),
+	  mIsFullPerm(FALSE),
 	  mUpdateDimensions(TRUE),
 	  mLastHeight(0),
 	  mLastWidth(0),
@@ -262,12 +263,6 @@ void LLPreviewTexture::draw()
 
 		if ( mImage.notNull() )
 		{
-			// Automatically bring up SaveAs dialog if we opened this to save the texture.
-			if (mPreviewToSave)
-			{
-				mPreviewToSave = FALSE;
-				saveAs();
-			}
 			// Draw the texture
 			gGL.diffuseColor3f( 1.f, 1.f, 1.f );
 			gl_draw_scaled_image(interior.mLeft,
@@ -349,7 +344,7 @@ void LLPreviewTexture::draw()
 // virtual
 BOOL LLPreviewTexture::canSaveAs() const
 {
-	return mIsCopyable && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
+	return mIsFullPerm && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
 }
 
 
@@ -399,6 +394,12 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 		// User canceled or we failed to acquire save file.
 		return;
 	}
+	if(mPreviewToSave)
+	{
+		mPreviewToSave = FALSE;
+		LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", item->getUUID());
+	}
+
 	// remember the user-approved/edited file name.
 	mSaveFileName = file_picker.getFirstFile();
 	mLoadingFullImage = TRUE;
@@ -951,6 +952,11 @@ void LLPreviewTexture::loadAsset()
 	updateDimensions();
 	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	getChildView("save_tex_btn")->setVisible(canSaveAs());
+	if (mObjectUUID.notNull())
+	{
+		// check that we can copy inworld items into inventory
+		getChildView("Keep")->setEnabled(mIsCopyable);
+	}
 }
 
 LLPreview::EAssetStatus LLPreviewTexture::getAssetStatus()
@@ -1015,7 +1021,9 @@ void LLPreviewTexture::updateImageID()
 		mShowKeepDiscard = TRUE;
 
 		mCopyToInv = FALSE;
-		mIsCopyable = item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
+		LLPermissions perm(item->getPermissions());
+		mIsCopyable = perm.allowCopyBy(gAgent.getID(), gAgent.getGroupID()) && perm.allowTransferTo(gAgent.getID());
+		mIsFullPerm = item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
 	}
 	else // not an item, assume it's an asset id
 	{
@@ -1023,6 +1031,7 @@ void LLPreviewTexture::updateImageID()
 		mShowKeepDiscard = FALSE;
 		mCopyToInv = TRUE;
 		mIsCopyable = TRUE;
+		mIsFullPerm = TRUE;
 	}
 
 }

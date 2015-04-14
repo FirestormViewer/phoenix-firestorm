@@ -926,7 +926,7 @@ namespace action_give_inventory
 		}
 
 		std::string residents;
-		LLAvatarActions::buildResidentsString(avatar_names, residents);
+		LLAvatarActions::buildResidentsString(avatar_names, residents, true);
 
 		std::string items;
 		build_items_string(inventory_selected_uuids, items);
@@ -966,7 +966,7 @@ namespace action_give_inventory
 }
 
 // static
-void LLAvatarActions::buildResidentsString(std::vector<LLAvatarName> avatar_names, std::string& residents_string)
+void LLAvatarActions::buildResidentsString(std::vector<LLAvatarName> avatar_names, std::string& residents_string, bool complete_name)
 {
 	llassert(avatar_names.size() > 0);
 	
@@ -975,9 +975,17 @@ void LLAvatarActions::buildResidentsString(std::vector<LLAvatarName> avatar_name
 	for (std::vector<LLAvatarName>::const_iterator it = avatar_names.begin(); ; )
 	{
 		// <FS:Ansariel> FIRE-7923: Always show complete name when adding people to something!
-		//residents_string.append((*it).getDisplayName());
+		//if(complete_name)
+		//{
+		//	residents_string.append((*it).getCompleteName());
+		//}
+		//else
+		//{
+		//	residents_string.append((*it).getDisplayName());
+		//}
 		residents_string.append((*it).getCompleteName());
 		// </FS:Ansariel>
+
 		if	(++it == avatar_names.end())
 		{
 			break;

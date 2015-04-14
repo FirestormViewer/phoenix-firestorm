@@ -2011,6 +2011,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 				return TRUE;
 			}
 		}
+		return LLUICtrl::handleRightMouseDown(x, y, mask);
 	}
 	return FALSE;
 }

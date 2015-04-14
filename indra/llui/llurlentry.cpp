@@ -48,7 +48,8 @@ std::string localize_slapp_label(const std::string& url, const std::string& full
 
 
 LLUrlEntryBase::LLUrlEntryBase()
-{}
+{
+}
 
 LLUrlEntryBase::~LLUrlEntryBase()
 {
@@ -187,6 +188,30 @@ bool LLUrlEntryBase::isWikiLinkCorrect(std::string url)
 	return (LLUrlRegistry::instance().hasUrl(label)) ? false : true;
 }
 
+std::string LLUrlEntryBase::urlToLabelWithGreyQuery(const std::string &url) const
+{
+	LLUriParser up(unescapeUrl(url));
+	up.normalize();
+
+	std::string label;
+	up.extractParts();
+	up.glueFirst(label);
+
+	return label;
+}
+
+std::string LLUrlEntryBase::urlToGreyQuery(const std::string &url) const
+{
+	LLUriParser up(unescapeUrl(url));
+
+	std::string query;
+	up.extractParts();
+	up.glueSecond(query);
+
+	return query;
+}
+
+
 static std::string getStringAfterToken(const std::string str, const std::string token)
 {
 	size_t pos = str.find(token);
@@ -203,6 +228,7 @@ static std::string getStringAfterToken(const std::string str, const std::string 
 // LLUrlEntryHTTP Describes generic http: and https: Urls
 //
 LLUrlEntryHTTP::LLUrlEntryHTTP()
+	: LLUrlEntryBase()
 {
 	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
 	//mPattern = boost::regex("https?://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
@@ -214,6 +240,25 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 }
 
 std::string LLUrlEntryHTTP::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	return urlToLabelWithGreyQuery(url);
+}
+
+std::string LLUrlEntryHTTP::getQuery(const std::string &url) const
+{
+	return urlToGreyQuery(url);
+}
+
+std::string LLUrlEntryHTTP::getUrl(const std::string &string) const
+{
+	if (string.find("://") == std::string::npos)
+	{
+		return "http://" + escapeUrl(string);
+	}
+	return escapeUrl(string);
+}
+
+std::string LLUrlEntryHTTP::getTooltip(const std::string &url) const
 {
 	return unescapeUrl(url);
 }
@@ -253,6 +298,7 @@ std::string LLUrlEntryHTTPLabel::getUrl(const std::string &string) const
 // LLUrlEntryHTTPNoProtocol Describes generic Urls like www.google.com
 //
 LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
+	: LLUrlEntryBase()
 {
 	mPattern = boost::regex("("
 				// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
@@ -269,7 +315,12 @@ LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
 
 std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	return unescapeUrl(url);
+	return urlToLabelWithGreyQuery(url);
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
+{
+	return urlToGreyQuery(url);
 }
 
 std::string LLUrlEntryHTTPNoProtocol::getUrl(const std::string &string) const
@@ -279,6 +330,95 @@ std::string LLUrlEntryHTTPNoProtocol::getUrl(const std::string &string) const
 		return "http://" + escapeUrl(string);
 	}
 	return escapeUrl(string);
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getTooltip(const std::string &url) const
+{
+	return unescapeUrl(url);
+}
+
+LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
+	: LLUrlEntryBase()
+{
+	mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|secondlife://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
+									boost::regex::perl|boost::regex::icase);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+std::string LLUrlEntryInvalidSLURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+
+	return escapeUrl(url);
+}
+
+std::string LLUrlEntryInvalidSLURL::getUrl(const std::string &string) const
+{
+	return escapeUrl(string);
+}
+
+std::string LLUrlEntryInvalidSLURL::getTooltip(const std::string &url) const
+{
+	return unescapeUrl(url);
+}
+
+bool LLUrlEntryInvalidSLURL::isSLURLvalid(const std::string &url) const
+{
+	S32 actual_parts;
+
+	if(url.find(".com/secondlife/") != std::string::npos)
+	{
+	   actual_parts = 5;
+	}
+	else if(url.find("/app/") != std::string::npos)
+	{
+		actual_parts = 6;
+	}
+	else
+	{
+		actual_parts = 3;
+	}
+
+	LLURI uri(url);
+	LLSD path_array = uri.pathArray();
+	S32 path_parts = path_array.size();
+	S32 x,y,z;
+
+	if (path_parts == actual_parts)
+	{
+		// handle slurl with (X,Y,Z) coordinates
+		LLStringUtil::convertToS32(path_array[path_parts-3],x);
+		LLStringUtil::convertToS32(path_array[path_parts-2],y);
+		LLStringUtil::convertToS32(path_array[path_parts-1],z);
+
+		if((x>= 0 && x<= 256) && (y>= 0 && y<= 256) && (z>= 0))
+		{
+			return TRUE;
+		}
+	}
+	else if (path_parts == (actual_parts-1))
+	{
+		// handle slurl with (X,Y) coordinates
+
+		LLStringUtil::convertToS32(path_array[path_parts-2],x);
+		LLStringUtil::convertToS32(path_array[path_parts-1],y);
+		;
+		if((x>= 0 && x<= 256) && (y>= 0 && y<= 256))
+		{
+				return TRUE;
+		}
+	}
+	else if (path_parts == (actual_parts-2))
+	{
+		// handle slurl with (X) coordinate
+		LLStringUtil::convertToS32(path_array[path_parts-1],x);
+		if(x>= 0 && x<= 256)
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
 }
 
 //
@@ -302,6 +442,7 @@ std::string LLUrlEntrySLURL::getLabel(const std::string &url, const LLUrlLabelCa
 	//   - http://slurl.com/secondlife/Place/X
 	//   - http://slurl.com/secondlife/Place
 	//
+
 	LLURI uri(url);
 	LLSD path_array = uri.pathArray();
 	S32 path_parts = path_array.size();
@@ -362,11 +503,11 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 }
 
 //
-// LLUrlEntrySeconlifeURLs Describes *secondlife.com and *lindenlab.com urls to substitute icon 'hand.png' before link
+// LLUrlEntrySeconlifeURL Describes *secondlife.com/ and *lindenlab.com/ urls to substitute icon 'hand.png' before link
 //
-LLUrlEntrySeconlifeURL::LLUrlEntrySeconlifeURL()
-{ 
-	mPattern = boost::regex("\\b(https?://)?([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?(/\\S*)?\\b",
+LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
+{                              
+	mPattern = boost::regex("(https?://)?([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?\\/\\S*",
 		boost::regex::perl|boost::regex::icase);
 	
 	mIcon = "Hand";
@@ -376,26 +517,29 @@ LLUrlEntrySeconlifeURL::LLUrlEntrySeconlifeURL()
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
 }
 
-std::string LLUrlEntrySeconlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+std::string LLUrlEntrySecondlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	LLUriParser up(url);
 	// <FS:Ansariel> Show full normalized URL instead of just the host
-	//up.extractParts();
-	//return up.host();
+	//return urlToLabelWithGreyQuery(url);
+	LLUriParser up(url);
 	return up.normalizedUri();
 	// </FS:Ansariel>
 }
 
-std::string LLUrlEntrySeconlifeURL::getTooltip(const std::string &url) const
+std::string LLUrlEntrySecondlifeURL::getQuery(const std::string &url) const
+{
+	return urlToGreyQuery(url);
+}
+
+std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 {
 	// <FS:Ansariel> We show the full URL in the text - show normal tool tip
 	//return url;
-	return 	mTooltip;
+	return mTooltip;
 	// </FS:Ansariel>
 }
 
-// <FS:Ansariel> BUG-8331: Clicking on trusted URLs open places panel
-std::string LLUrlEntrySeconlifeURL::getUrl(const std::string &string) const
+std::string LLUrlEntrySecondlifeURL::getUrl(const std::string &string) const
 {
 	if (string.find("://") == std::string::npos)
 	{
@@ -403,7 +547,18 @@ std::string LLUrlEntrySeconlifeURL::getUrl(const std::string &string) const
 	}
 	return escapeUrl(string);
 }
-// </FS:Ansariel>
+
+//
+// LLUrlEntrySimpleSecondlifeURL Describes *secondlife.com and *lindenlab.com urls to substitute icon 'hand.png' before link
+//
+LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
+{
+	mPattern = boost::regex("(https?://)?([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(?!\\S)",
+		boost::regex::perl|boost::regex::icase);
+
+	mIcon = "Hand";
+	mMenuName = "menu_url_http.xml";
+}
 
 //
 // LLUrlEntryAgent Describes a Second Life agent Url, e.g.,

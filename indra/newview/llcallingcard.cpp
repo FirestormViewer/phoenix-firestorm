@@ -1019,8 +1019,7 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( buddy_id, &av_name);
-	// <FS:Ansariel> Friend names on worldmap should respect display name settings
-	buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
+	buddy_map_t::value_type value(buddy_id, av_name.getDisplayName());
 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
 	{ 
 		// <FS:Ansariel> Friend names on worldmap should respect display name settings
@@ -1032,12 +1031,12 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 		if (LLAvatarName::useDisplayNames() && NameTagShowUsernames) 
 		// </FS:PP>
 		{
-			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
+			buddy_map_t::value_type value(buddy_id, av_name.getCompleteName());
 			mMappable.insert(value);
 		}
 		else
 		{
-			buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
+			buddy_map_t::value_type value(buddy_id, av_name.getDisplayName());
 			mMappable.insert(value);
 		}
 	// </FS:Ansariel>
@@ -1048,7 +1047,7 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 bool LLCollectOnlineBuddies::operator()(const LLUUID& buddy_id, LLRelationship* buddy)
 {
 	gCacheName->getFullName(buddy_id, mFullName);
-	buddy_map_t::value_type value(mFullName, buddy_id);
+	buddy_map_t::value_type value(buddy_id, mFullName);
 	if(buddy->isOnline())
 	{
 		mOnline.insert(value);
@@ -1064,7 +1063,7 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 	//mFullName = av_name.getDisplayName();
 	mFullName = FSCommon::getAvatarNameByDisplaySettings(av_name);
 	// </FS:Ansariel>
-	buddy_map_t::value_type value(mFullName, buddy_id);
+	buddy_map_t::value_type value(buddy_id, mFullName);
 	if(buddy->isOnline())
 	{
 		mOnline.insert(value);

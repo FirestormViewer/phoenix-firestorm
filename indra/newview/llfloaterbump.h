@@ -29,10 +29,12 @@
 #define LL_LLFLOATERBUMP_H
 
 #include "llfloater.h"
+#include "llmenugl.h"
 #include "lllistcontextmenu.h"
 
 class LLMeanCollisionData;
 class LLScrollListCtrl;
+class FSScrollListCtrl;
 
 class LLFloaterBump 
 : public LLFloater
@@ -40,24 +42,46 @@ class LLFloaterBump
 	friend class LLFloaterReg;
 protected:
 	void add(LLScrollListCtrl* list, LLMeanCollisionData *mcd);
+	void onScrollListRightClicked(LLUICtrl* ctrl, S32 x, S32 y);
 
 public:
+	/*virtual*/	BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
-	// <FS:Ansariel> FIRE-13888: Add copy function to bumps list
-	BOOL postBuild();
 
 	// <FS:Ansariel> Instant bump list floater update
 	/*virtual*/ void draw();
 	void setDirty() { mDirty = true; }
 	
+	void startIM();
+	void startCall();
+	void reportAbuse();
+	void showProfile();
+	void addFriend();
+	void inviteToGroup();
+	bool enableAddFriend();
+	void muteAvatar();
+	void payAvatar();
+	void zoomInAvatar();
+	bool enableMute();
+
 private:
 	
 	LLFloaterBump(const LLSD& key);
 	virtual ~LLFloaterBump();
 
 	// <FS:Ansariel> Instant bump list floater update
+	//LLScrollListCtrl* mList;
+	FSScrollListCtrl* mList;
+	LLMenuGL* mPopupMenu;
+	LLUUID mItemUUID;
+
+	// <FS:Ansariel> Instant bump list floater update
 	void updateList();
 	bool mDirty;
+
+	typedef std::map<LLUUID, std::string> uuid_map_t;
+	uuid_map_t mNames;
+
 };
 
 // <FS:Ansariel> FIRE-13888: Add copy function to bumps list

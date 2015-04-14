@@ -30,9 +30,9 @@
 	<check_box label="En el terreno de otros" name="return_other_land" tool_tip="Devolver sólo los objetos que están en terreno de otro"/>
 	<check_box label="En todas las regiones de este estado" name="return_estate_wide" tool_tip="Devolver los objetos de todas las regiones que forman este estado"/>
 	<button label="Devolver" name="return_btn"/>
-	<button label="Listar los objetos que colisionan..." name="top_colliders_btn" tool_tip="Lista de los objetos con más posibles colisiones potenciales" width="280"/>
+	<button label="Listar los objetos que colisionan..." name="top_colliders_btn" tool_tip="Lista de los objetos con más posibles colisiones potenciales" width="240"/>
 	<button label="?" left="297" name="top_colliders_help"/>
-	<button label="Listar los scripts según su uso..." name="top_scripts_btn" tool_tip="Lista de los objetos que más tiempo emplean ejecutando scripts" width="280"/>
+	<button label="Listar los scripts según su uso..." name="top_scripts_btn" tool_tip="Lista de los objetos que más tiempo emplean ejecutando scripts" width="240"/>
 	<button label="?" left="297" name="top_scripts_help"/>
 	<button label="Reiniciar la región" name="restart_btn" tool_tip="Cuenta atrás del tiempo seleccionado a continuación y reinicio de la región"/>
 	<text name="label_restart_delay" width="70">

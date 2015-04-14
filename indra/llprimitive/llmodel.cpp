@@ -2064,7 +2064,7 @@ bool LLModel::loadModel(std::istream& is)
 		}
 	}
 
-	std::string nm[] = 
+	static const std::string nm[] = 
 	{
 		"lowest_lod",
 		"low_lod",

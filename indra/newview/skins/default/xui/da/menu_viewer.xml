@@ -262,7 +262,7 @@
 		<menu label="Netværk" name="Network">
 			<menu_item_check label="Pause avatar" name="AgentPause"/>
 			<menu_item_call label="Mist en netværkspakke" name="Drop a Packet"/>
-		</menu>
+		</menu>		
 		<menu label="Verden" name="DevelopWorld">
 			<menu_item_check label="Vælg anden sol end region" name="Sim Sun Override"/>
 			<menu_item_check label="Fast vejr" name="Fixed Weather"/>

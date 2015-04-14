@@ -3092,9 +3092,13 @@ static LLStringExplicit get_default_item_label(const std::string& item_name)
 
 bool enable_object_touch(LLUICtrl* ctrl)
 {
+	bool new_value = false;
 	LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-
-	bool new_value = obj && obj->flagHandleTouch();
+	//if (obj)
+	//{
+	//	LLViewerObject* parent = (LLViewerObject*)obj->getParent();
+	//	new_value = obj->flagHandleTouch() || (parent && parent->flagHandleTouch());
+	//}
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Added: RLVa-1.2.1g
 	if ( (rlv_handler_t::isEnabled()) && (new_value) )
 	{
@@ -5377,7 +5381,10 @@ static bool get_derezzable_objects(
 			break;
 
 		case DRD_RETURN_TO_OWNER:
-			can_derez_current = TRUE;
+			if(!object->isAttachment())
+			{
+				can_derez_current = TRUE;
+			}
 			break;
 
 		default:
@@ -5811,7 +5818,7 @@ BOOL enable_take()
 			&& object->permModify())
 			|| (node->mPermissions->getOwner() == gAgent.getID())))
 		{
-			return TRUE;
+			return !object->isAttachment();
 		}
 #endif
 	}
@@ -10142,6 +10149,10 @@ class LLWorldEnableEnvSettings : public view_listener_t
 			else if (tod == "midnight")
 			{
 				result = (LLEnvManagerNew::instance().getSkyPresetName() == "Midnight");
+			}
+			else if (tod == "region")
+			{
+				return false;
 			}
 			else
 			{

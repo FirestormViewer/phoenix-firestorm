@@ -2725,7 +2725,8 @@ static void notification_group_name_cb(const std::string& group_name,
 	args["GROUP"] = group_name;
 	args["SUBJECT"] = subject;
 	args["MESSAGE"] = message;
-	LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
+	LLDate notice_date = LLDate(timestamp).notNull() ? LLDate(timestamp) : LLDate::now();
+	LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(notice_date));
 	make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
 }
 // </FS:Ansariel>
@@ -3286,8 +3287,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// <FS:Ansariel> FIRE-505: Group name not shown in notification well
 				//LLSD args;
 				//args["SUBJECT"] = subj;
-				//args["MESSAGE"] = mes;
-				//LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(LLDate(timestamp)));
+				//LLDate notice_date = LLDate(timestamp).notNull() ? LLDate(timestamp) : LLDate::now();
+				//LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(notice_date));
 				//make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
 				if (group_id.isNull())
 				{

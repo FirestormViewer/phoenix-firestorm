@@ -2125,7 +2125,6 @@
             </menu_item_call>
 
         <menu_item_separator/>
-		
         <menu_item_call
              label="Bumps, Pushes &amp; Hits"
              name="Bumps, Pushes &amp;amp; Hits">
@@ -4095,8 +4094,7 @@
          name="Dump Scripted Camera">
             <menu_item_call.on_click
              function="Advanced.DumpScriptedCamera" />
-        </menu_item_call>
-
+        </menu_item_call>      
         <menu
          create_jump_keys="true"
          label="Recorder"

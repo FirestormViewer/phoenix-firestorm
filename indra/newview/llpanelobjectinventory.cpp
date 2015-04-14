@@ -717,7 +717,7 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		return;
 	}
 
-	if(gAgent.allowOperation(PERM_OWNER, item->getPermissions(),
+	if(!gAgent.allowOperation(PERM_OWNER, item->getPermissions(),
 							 GP_OBJECT_MANIPULATE)
 	   && item->getSaleInfo().isForSale())
 	{
@@ -755,12 +755,8 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 	else if (canOpenItem())
 	{
 		items.push_back(std::string("Task Open"));
-		if (!isItemCopyable())
-		{
-			disabled_items.push_back(std::string("Task Open"));
-		}
 // [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
-		else if (rlv_handler_t::isEnabled())
+		if (rlv_handler_t::isEnabled())
 		{
 			LLViewerObject* pAttachObj = gObjectList.findObject(mPanel->getTaskUUID());
 			bool fLocked = (pAttachObj) ? gRlvAttachmentLocks.isLockedAttachment(pAttachObj->getRootEdit()) : false;
@@ -1219,7 +1215,10 @@ void LLTaskLSLBridge::openItem()
 // [/RLVa:KB]
 	if (object->permModify() || gAgent.isGodlike())
 	{
-		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(mUUID), TAKE_FOCUS_YES);
+		LLSD floater_key;
+		floater_key["taskid"] = mPanel->getTaskUUID();
+		floater_key["itemid"] = mUUID;
+		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", floater_key, TAKE_FOCUS_YES);
 		if (preview)
 		{
 			preview->setObjectID(mPanel->getTaskUUID());

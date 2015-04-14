@@ -304,6 +304,8 @@ private:
     bool mLogoutRequestSent;			// Disconnect message sent to simulator, no longer safe to send messages to the sim.
 	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
     //S32 mYieldTime;
+	U32 mLastAgentControlFlags;
+	F32 mLastAgentForceUpdate;
 	struct SettingsFiles* mSettingsLocationList;
 
 	LLWatchdogTimeout* mMainloopTimeout;
@@ -348,6 +350,7 @@ public:
 
 // consts from viewer.h
 const S32 AGENT_UPDATES_PER_SECOND  = 10;
+const S32 AGENT_FORCE_UPDATES_PER_SECOND  = 1;
 
 // Globals with external linkage. From viewer.h
 // *NOTE:Mani - These will be removed as the Viewer App Cleanup project continues.

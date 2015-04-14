@@ -183,6 +183,7 @@ private:
 public:
 	static std::set<LLSnapshotLivePreview*> sList;
 	BOOL                        mKeepAspectRatio ;
+	BOOL						mForceUpdateSnapshot;
 };
 
 #endif // LL_LLSNAPSHOTLIVEPREVIEW_H

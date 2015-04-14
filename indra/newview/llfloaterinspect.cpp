@@ -32,6 +32,7 @@
 #include "llfloatertools.h"
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
+#include "llgroupactions.h"
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
 #include "llselectmgr.h"
@@ -160,12 +161,21 @@ void LLFloaterInspect::onClickOwnerProfile()
 		LLSelectNode* node = mObjectSelection->getFirstNode(&func);
 		if(node)
 		{
-			const LLUUID& owner_id = node->mPermissions->getOwner();
+			if(node->mPermissions->isGroupOwned())
+			{
+				const LLUUID& idGroup = node->mPermissions->getGroup();
+				LLGroupActions::show(idGroup);
+			}
+			else
+			{
+				const LLUUID& owner_id = node->mPermissions->getOwner();
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a) | Modified: RLVa-1.0.0e
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				return;
 // [/RLVa:KB]
-			LLAvatarActions::showProfile(owner_id);
+				LLAvatarActions::showProfile(owner_id);
+			}
+
 		}
 	}
 }
@@ -241,26 +251,47 @@ void LLFloaterInspect::refresh()
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
 		LLAvatarName av_name;
 
-		// Only work with the names if we actually get a result
-		// from the name cache. If not, defer setting the
-		// actual name and set a placeholder.
-		if (LLAvatarNameCache::get(idOwner, &av_name))
+		if(obj->mPermissions->isGroupOwned())
 		{
-//			owner_name = av_name.getCompleteName();
-// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-			bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (idOwner != gAgent.getID()) && 
-				(!obj->mPermissions->isGroupOwned());
-			owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
-// [/RLVa:KB]
+			std::string group_name;
+			const LLUUID& idGroup = obj->mPermissions->getGroup();
+			if(gCacheName->getGroupName(idGroup, group_name))
+			{
+				owner_name = "[" + group_name + "] (group)";
+			}
+			else
+			{
+				owner_name = LLTrans::getString("RetrievingData");
+				if (mOwnerNameCacheConnection.connected())
+				{
+					mOwnerNameCacheConnection.disconnect();
+				}
+				mOwnerNameCacheConnection = gCacheName->getGroup(idGroup, boost::bind(&LLFloaterInspect::onGetOwnerNameCallback, this));
+			}
 		}
 		else
 		{
-			owner_name = LLTrans::getString("RetrievingData");
-			if (mOwnerNameCacheConnection.connected())
+			// Only work with the names if we actually get a result
+			// from the name cache. If not, defer setting the
+			// actual name and set a placeholder.
+			if (LLAvatarNameCache::get(idOwner, &av_name))
 			{
-				mOwnerNameCacheConnection.disconnect();
+//				owner_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+				bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (idOwner != gAgent.getID()) && 
+					(!obj->mPermissions->isGroupOwned());
+				owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [/RLVa:KB]
 			}
-			mOwnerNameCacheConnection = LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetOwnerNameCallback, this));
+			else
+			{
+				owner_name = LLTrans::getString("RetrievingData");
+				if (mOwnerNameCacheConnection.connected())
+				{
+					mOwnerNameCacheConnection.disconnect();
+				}
+				mOwnerNameCacheConnection = LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetOwnerNameCallback, this));
+			}
 		}
 
 		if (LLAvatarNameCache::get(idCreator, &av_name))

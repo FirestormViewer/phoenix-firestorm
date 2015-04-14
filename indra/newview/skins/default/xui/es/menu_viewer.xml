@@ -457,7 +457,7 @@
 			<menu_item_check label="Reproducción en bucle" name="Loop Playback"/>
 			<menu_item_call label="Iniciar grabación" name="Start Record"/>
 			<menu_item_call label="Detener greabación" name="Stop Record"/>
-		</menu>
+		</menu>		
 		<menu label="Mundo virtual" name="DevelopWorld">
 			<menu_item_check label="Anular el sol de la región" name="Sim Sun Override"/>
 			<menu_item_check label="Meteorología fija" name="Fixed Weather"/>

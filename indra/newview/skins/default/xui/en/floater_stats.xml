@@ -43,6 +43,7 @@
                   setting="DebugStatModeBandwidth"/>
         <stat_bar name="packet_loss"
                   label="Packet Loss"
+                  decimal_digits="1"
                   stat="packetslostpercentstat"
                   setting="DebugStatModePacketLoss"/>
         <stat_bar name="ping"

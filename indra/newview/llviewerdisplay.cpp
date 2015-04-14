@@ -1041,8 +1041,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// </FS:Ansariel>
 			{
 				gGL.setColorMask(false, false);
-				
-				U32 types[] = { 
+
+				static const U32 types[] = { 
 					LLRenderPass::PASS_SIMPLE, 
 					LLRenderPass::PASS_FULLBRIGHT, 
 					LLRenderPass::PASS_SHINY 

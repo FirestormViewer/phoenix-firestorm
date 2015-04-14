@@ -94,6 +94,7 @@ private:
 
 	std::vector<LLUrlEntryBase *> mUrlEntry;
 	LLUrlEntryBase*	mUrlEntryIcon;
+	LLUrlEntryBase* mLLUrlEntryInvalidSLURL;
 	LLUrlEntryBase* mUrlEntryHTTPLabel;
 	LLUrlEntryBase* mUrlEntrySLLabel;
 	// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis

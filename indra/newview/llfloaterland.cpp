@@ -2134,6 +2134,7 @@ void LLPanelLandOptions::refresh()
 	else
 	{
 		// something selected, hooray!
+		LLViewerRegion* regionp = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 
 		// Display options
 		BOOL can_change_options = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_OPTIONS);
@@ -2149,14 +2150,16 @@ void LLPanelLandOptions::refresh()
 		mCheckGroupObjectEntry	->set( parcel->getAllowGroupObjectEntry() ||  parcel->getAllowAllObjectEntry());
 		mCheckGroupObjectEntry	->setEnabled( can_change_options && !parcel->getAllowAllObjectEntry() );
 		
-	// <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
-	    BOOL can_change_terraform = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_EDIT);
+		BOOL region_damage = regionp ? regionp->getAllowDamage() : FALSE;
+		
+		// <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+		BOOL can_change_terraform = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_EDIT);
 		mCheckEditLand		->set( parcel->getAllowTerraform() );
 		mCheckEditLand		->setEnabled( can_change_terraform );
-	// <FS:WF>	
+		// <FS:WF>	
 		
 		mCheckSafe			->set( !parcel->getAllowDamage() );
-		mCheckSafe			->setEnabled( can_change_options );
+		mCheckSafe			->setEnabled( can_change_options && region_damage );
 
 		mCheckFly			->set( parcel->getAllowFly() );
 		mCheckFly			->setEnabled( can_change_options );
@@ -2242,7 +2245,6 @@ void LLPanelLandOptions::refresh()
 			
 			// they can see the checkbox, but its disposition depends on the 
 			// state of the region
-			LLViewerRegion* regionp = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 			if (regionp)
 			{
 				if (regionp->getSimAccess() == SIM_ACCESS_PG)
