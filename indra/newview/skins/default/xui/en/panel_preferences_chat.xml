@@ -1715,7 +1715,7 @@
 		 height="20"
 		 control_name="FSKeywordSpeakersName"
 		 name="FSKeywordSpeakersName"
-		 label="Look for Keywords in the names of speakers or objects"/>
+		 label="Check sender's name for keywords"/>
 		<check_box
 		 enabled_control="FSKeywordOn"
 		 layout="topleft"
