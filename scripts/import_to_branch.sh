@@ -16,6 +16,7 @@ then
 fi
 
 hg revert indra/
+hg revert autobuild.xml
 hg purge indra/
 
 for i in $(cat exp.txt|sort -n)
@@ -35,6 +36,7 @@ case "$ANSWER" in
 esac
 
 hg revert indra/
+hg revert autobuild.xml
 hg purge indra/
 
 for i in $(cat exp.txt|sort -n)
