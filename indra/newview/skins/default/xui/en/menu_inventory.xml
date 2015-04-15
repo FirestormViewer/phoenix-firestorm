@@ -704,6 +704,14 @@
          parameter="wear" />
     </menu_item_call>
     <menu_item_call
+     label="Find in Main View"
+     layout="topleft"
+     name="Find in Main">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="find_in_main" />
+    </menu_item_call>
+    <menu_item_call
      label="Add"
      layout="topleft"
      name="Wearable Add">
