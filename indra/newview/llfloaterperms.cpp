@@ -173,6 +173,9 @@ class LLFloaterPermsResponder : public LLHTTPClient::Responder
 {
 public:
 	LLFloaterPermsResponder(): LLHTTPClient::Responder() {}
+	// <FS:Ansariel> Add some retry function
+	static U32 sRetryCount;
+
 private:
 	static	std::string sPreviousReason;
 
@@ -182,10 +185,23 @@ private:
 		// Do not display the same error more than once in a row
 		if (reason != sPreviousReason)
 		{
+			// <FS:Ansariel> Add some retry function
+			if (sRetryCount >= 5)
+			{
+			// </FS:Ansariel>
 			sPreviousReason = reason;
 			LLSD args;
 			args["REASON"] = reason;
 			LLNotificationsUtil::add("DefaultObjectPermissions", args);
+			// <FS:Ansariel> Add some retry function
+			}
+			else
+			{
+				LL_WARNS("FloaterPermsResponder") << "Sending default permissions to simulator failed. Retrying (attempt " << sRetryCount << ")" << LL_ENDL;
+				sRetryCount++;
+				LLFloaterPermsDefault::sendInitialPerms();
+			}
+			// </FS:Ansariel>
 		}
 	}
 
@@ -197,10 +213,15 @@ private:
 		// Since we have had a successful POST call be sure to display the next error message
 		// even if it is the same as a previous one.
 		sPreviousReason = "";
+		// <FS:Ansariel> Add some retry function
+		sRetryCount = 0;
 		LLFloaterPermsDefault::setCapSent(true);
 		LL_INFOS("FloaterPermsResponder") << "Sent default permissions to simulator" << LL_ENDL;
 	}
 };
+
+// <FS:Ansariel> Add some retry function
+U32 LLFloaterPermsResponder::sRetryCount = 0;
 
 	std::string	LLFloaterPermsResponder::sPreviousReason;
 
@@ -229,6 +250,8 @@ void LLFloaterPermsDefault::updateCap()
 		report["default_object_perm_masks"]["NextOwner"] =
 			(LLSD::Integer)LLFloaterPerms::getNextOwnerPerms(sCategoryNames[CAT_OBJECTS]);
 
+		// <FS:Ansariel> Add some retry function
+		LLFloaterPermsResponder::sRetryCount++;
 		LLHTTPClient::post(object_url, report, new LLFloaterPermsResponder());
 	}
 }
@@ -243,6 +266,9 @@ void LLFloaterPermsDefault::setCapSent(bool cap_sent)
 
 void LLFloaterPermsDefault::ok()
 {
+	// <FS:Ansariel> Add some retry function
+	LLFloaterPermsResponder::sRetryCount = 0;
+
 //	Changes were already applied automatically to saved settings.
 //	Refreshing internal values makes it official.
 	refresh();
