@@ -93,7 +93,7 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 		return false;
 	}
 
-	static LLCachedControl<bool> sFSKeywordSpeakersName(gSavedPerAccountSettings, "sFSKeywordSpeakersName", false);
+	static LLCachedControl<bool> sFSKeywordSpeakersName(gSavedPerAccountSettings, "FSKeywordSpeakersName", false);
 
 	std::string source;
 	if (sFSKeywordSpeakersName)
