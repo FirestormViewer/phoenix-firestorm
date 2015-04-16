@@ -1536,8 +1536,7 @@ void deliverMessage(const std::string& utf8_text,
 		case IM_NOTHING_SPECIAL:
 		case IM_GROUP_INVITATION:
 		case IM_INVENTORY_OFFERED:
-		// <FS:Ansariel> FIRE-2762: Talking to group chat might unmute a muted avatar
-		//case IM_SESSION_INVITE:
+		case IM_SESSION_INVITE:
 		case IM_SESSION_P2P_INVITE:
 		case IM_SESSION_CONFERENCE_START:
 		case IM_SESSION_SEND: // This one is marginal - erring on the side of hearing.
