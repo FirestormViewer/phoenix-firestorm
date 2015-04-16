@@ -69,19 +69,18 @@ private:
 	LLFloaterBump(const LLSD& key);
 	virtual ~LLFloaterBump();
 
-	// <FS:Ansariel> Instant bump list floater update
+	// <FS:Ansariel> Improved bump list
 	//LLScrollListCtrl* mList;
-	FSScrollListCtrl* mList;
-	LLMenuGL* mPopupMenu;
-	LLUUID mItemUUID;
+	//LLMenuGL* mPopupMenu;
+	//LLUUID mItemUUID;
 
-	// <FS:Ansariel> Instant bump list floater update
+	//typedef std::map<LLUUID, std::string> uuid_map_t;
+	//uuid_map_t mNames;
+	FSScrollListCtrl* mList;
+
 	void updateList();
 	bool mDirty;
-
-	typedef std::map<LLUUID, std::string> uuid_map_t;
-	uuid_map_t mNames;
-
+	// </FS:Ansariel>
 };
 
 // <FS:Ansariel> FIRE-13888: Add copy function to bumps list

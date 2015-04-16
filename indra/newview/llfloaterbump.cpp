@@ -42,6 +42,7 @@
 #include "llviewermenu.h"
 #include "llviewerobjectlist.h"
 
+#include "fsradar.h"
 #include "fsscrolllistctrl.h"
 #include "llclipboard.h"
 #include "llfloaterreg.h"
@@ -58,18 +59,20 @@ LLFloaterBump::LLFloaterBump(const LLSD& key)
 	mList(NULL)
 	// </FS:Ansariel>
 {
-	mCommitCallbackRegistrar.add("Avatar.SendIM", boost::bind(&LLFloaterBump::startIM, this));
-	mCommitCallbackRegistrar.add("Avatar.ReportAbuse", boost::bind(&LLFloaterBump::reportAbuse, this));
-	mCommitCallbackRegistrar.add("ShowAgentProfile", boost::bind(&LLFloaterBump::showProfile, this));
-	mCommitCallbackRegistrar.add("Avatar.InviteToGroup", boost::bind(&LLFloaterBump::inviteToGroup, this));
-	mCommitCallbackRegistrar.add("Avatar.Call", boost::bind(&LLFloaterBump::startCall, this));
-	mEnableCallbackRegistrar.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
-	mCommitCallbackRegistrar.add("Avatar.AddFriend", boost::bind(&LLFloaterBump::addFriend, this));
-	mEnableCallbackRegistrar.add("Avatar.EnableAddFriend", boost::bind(&LLFloaterBump::enableAddFriend, this));
-	mCommitCallbackRegistrar.add("Avatar.Mute", boost::bind(&LLFloaterBump::muteAvatar, this));
-	mEnableCallbackRegistrar.add("Avatar.EnableMute", boost::bind(&LLFloaterBump::enableMute, this));
-	mCommitCallbackRegistrar.add("PayObject", boost::bind(&LLFloaterBump::payAvatar, this));
-	mCommitCallbackRegistrar.add("Tools.LookAtSelection", boost::bind(&LLFloaterBump::zoomInAvatar, this));
+	// <FS:Ansariel> Improved bump list
+	//mCommitCallbackRegistrar.add("Avatar.SendIM", boost::bind(&LLFloaterBump::startIM, this));
+	//mCommitCallbackRegistrar.add("Avatar.ReportAbuse", boost::bind(&LLFloaterBump::reportAbuse, this));
+	//mCommitCallbackRegistrar.add("ShowAgentProfile", boost::bind(&LLFloaterBump::showProfile, this));
+	//mCommitCallbackRegistrar.add("Avatar.InviteToGroup", boost::bind(&LLFloaterBump::inviteToGroup, this));
+	//mCommitCallbackRegistrar.add("Avatar.Call", boost::bind(&LLFloaterBump::startCall, this));
+	//mEnableCallbackRegistrar.add("Avatar.EnableCall", boost::bind(&LLAvatarActions::canCall));
+	//mCommitCallbackRegistrar.add("Avatar.AddFriend", boost::bind(&LLFloaterBump::addFriend, this));
+	//mEnableCallbackRegistrar.add("Avatar.EnableAddFriend", boost::bind(&LLFloaterBump::enableAddFriend, this));
+	//mCommitCallbackRegistrar.add("Avatar.Mute", boost::bind(&LLFloaterBump::muteAvatar, this));
+	//mEnableCallbackRegistrar.add("Avatar.EnableMute", boost::bind(&LLFloaterBump::enableMute, this));
+	//mCommitCallbackRegistrar.add("PayObject", boost::bind(&LLFloaterBump::payAvatar, this));
+	//mCommitCallbackRegistrar.add("Tools.LookAtSelection", boost::bind(&LLFloaterBump::zoomInAvatar, this));
+	// </FS:Ansariel>
 }
 
 
@@ -195,9 +198,10 @@ void LLFloaterBump::add(LLScrollListCtrl* list, LLMeanCollisionData* mcd)
 	row["columns"][0]["font"] = "SansSerifBold";
 	list->addElement(row);
 
-
-	// <FS:Ansariel> Instant bump list floater update
-	//mNames[mcd->mPerp] = mcd->mFullName;
+// <FS:Ansariel> Improved bump list
+}
+#if 0
+	mNames[mcd->mPerp] = mcd->mFullName;
 }
 
 
@@ -286,6 +290,8 @@ void LLFloaterBump::inviteToGroup()
 {
 	LLAvatarActions::inviteToGroup(mItemUUID);
 }
+#endif
+// </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-13888: Add copy function to bumps list
 LLContextMenu* FSBumpListMenu::createMenu()
@@ -303,7 +309,38 @@ void FSBumpListMenu::onContextMenuItemClick(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
 
-	if (item == "copy")
+	if (item == "show_profile")
+	{
+		LLAvatarActions::showProfile(mUUIDs.front());
+	}
+	else if (item == "sendim")
+	{
+		if (mUUIDs.size() == 1)
+		{
+			LLAvatarActions::startIM(mUUIDs.front());
+		}
+		else
+		{
+			LLAvatarActions::startConference(mUUIDs);
+		}
+	}
+	else if (item == "zoom")
+	{
+		LLAvatarActions::zoomIn(mUUIDs.front());
+	}
+	else if (item == "teleportto")
+	{
+		LLAvatarActions::teleportTo(mUUIDs.front());
+	}
+	else if (item == "block")
+	{
+		LLAvatarActions::toggleBlock(mUUIDs.front());
+	}
+	else if (item == "report")
+	{
+		LLAvatarActions::report(mUUIDs.front());
+	}
+	else if (item == "copy")
 	{
 		LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
 		if (floater && !gMeanCollisionList.empty() && !mUUIDs.empty())
@@ -327,12 +364,54 @@ void FSBumpListMenu::onContextMenuItemClick(const LLSD& userdata)
 
 bool FSBumpListMenu::onContextMenuItemEnable(const LLSD& userdata)
 {
-	std::string item = userdata.asString();
+	const LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
+	const std::string item = userdata.asString();
 
-	if (item == "can_copy")
+	if (!floater)
 	{
-		LLFloaterBump* floater = LLFloaterReg::findTypedInstance<LLFloaterBump>("bumps");
-		return (floater && !gMeanCollisionList.empty() && !mUUIDs.empty());
+		return false;
+	}
+
+	if (item == "can_show_profile")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() == 1);
+	}
+	else if (item == "can_sendim")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() > 0);
+	}
+	else if (item == "can_zoom")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() == 1 && LLAvatarActions::canZoomIn(mUUIDs.front()));
+	}
+	else if (item == "can_teleportto")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() == 1 && FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+	}
+	else if (item == "can_block")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() == 1);
+	}
+	else if (item == "is_blocked")
+	{
+		if (!gMeanCollisionList.empty() && mUUIDs.size() == 1)
+		{
+			std::string name;
+			gCacheName->getFullName(mUUIDs.front(), name);
+			return LLMuteList::getInstance()->isMuted(mUUIDs.front(), name);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else if (item == "can_report")
+	{
+		return (!gMeanCollisionList.empty() && mUUIDs.size() == 1);
+	}
+	else if (item == "can_copy")
+	{
+		return (!gMeanCollisionList.empty() && !mUUIDs.empty());
 	}
 
 	return false;
