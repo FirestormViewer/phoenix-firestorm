@@ -1063,7 +1063,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// compact mode: show a timestamp and name
 	if (use_plain_text_chat_history)
 	{
-		square_brackets = (chat.mFromName == SYSTEM_FROM && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
+		square_brackets = (chat.mSourceType == CHAT_SOURCE_SYSTEM && chat.mChatType != CHAT_TYPE_RADAR && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
 
 		LLStyle::Params timestamp_style(body_message_params);
 
