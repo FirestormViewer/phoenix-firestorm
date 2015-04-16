@@ -1634,6 +1634,7 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
 
 	if (is_not_group_id)
 	{
+		LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id); // <FS:Ansariel> Re-added; required because of FIRE-787
 		if( session == 0)//??? shouldn't really happen
 		{
 			LLRecentPeople::instance().add(other_participant_id);
