@@ -2223,7 +2223,7 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 
 	// <FS:Ansariel> Show muted avatars as cloud
 	static LLUICachedControl<bool> showMutedAvatarsAsCloud("ShowMutedAvatarsAsCloud", false);
-	mMutedAsCloud = !isSelf() && showMutedAvatarsAsCloud && LLMuteList::instance().isMuted(getID());
+	mMutedAsCloud = !isSelf() && showMutedAvatarsAsCloud && isInMuteList();
 	// </FS:Ansariel>
 	
 	// animate the character
@@ -2913,7 +2913,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 	else
 	{
-		is_muted = LLMuteList::getInstance()->isMuted(getID());
+		// <FS:Ansariel> Performance tweak
+		//is_muted = LLMuteList::getInstance()->isMuted(getID());
+		is_muted = isInMuteList();
+		// </FS:Ansariel>
 	}
 //	bool is_friend = LLAvatarTracker::instance().isBuddy(getID());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
