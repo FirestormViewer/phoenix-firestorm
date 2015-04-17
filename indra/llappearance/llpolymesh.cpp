@@ -605,7 +605,7 @@ BOOL LLPolyMeshSharedData::loadMesh( const std::string& fileName )
                         //-------------------------------------------------------------------------
                         char morphName[64+1];
                         morphName[sizeof(morphName)-1] = '\0'; // ensure nul-termination
-                        while(fread(&morphName, sizeof(char), 64, fp) == 64)
+                        while(fread(morphName, sizeof(char), 64, fp) == 64)
                         {
                                 if (!strcmp(morphName, "End Morphs"))
                                 {
