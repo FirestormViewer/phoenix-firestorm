@@ -591,11 +591,20 @@ void LLVOCacheEntry::updateParentBoundingInfo(const LLVOCacheEntry* child)
 	const LLVector4a* parent_exts = getSpatialExtents();
 	update_min_max(newMin, newMax, parent_exts[0]);
 	update_min_max(newMin, newMax, parent_exts[1]);
-	for(S32 i = 0; i < 4; i++)
-	{
-		llclamp(newMin[i], 0.f, 256.f);
-		llclamp(newMax[i], 0.f, 256.f);
-	}
+
+	// <FS:ND> Either the next to lines are useless, or there was an assignment missing.
+
+	// for(S32 i = 0; i < 4; i++)
+	// {
+	// 	llclamp(newMin[i], 0.f, 256.f);
+	// 	llclamp(newMax[i], 0.f, 256.f);
+	// }
+
+	newMin.clamp( LLVector4a( 0.f ), LLVector4a( 256.f ) );
+	newMax.clamp( LLVector4a( 0.f ), LLVector4a( 256.f ) );
+
+	// </FS:ND>
+	
 	setSpatialExtents(newMin, newMax);
 
 	//update parent's bbox center
