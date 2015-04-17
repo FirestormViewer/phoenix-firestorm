@@ -382,6 +382,8 @@ void FSFloaterImport::processPrim(LLSD& prim)
 			if (!gesture->deserialize(dp))
 			{
 				LL_WARNS("export") << "Unable to load gesture " << asset_id << LL_ENDL;
+				delete gesture;
+				gesture = NULL;
 				break;
 			}
 
