@@ -1182,6 +1182,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	if(!buffer)
 	{
 		LL_WARNS() << "could not allocate memory for image loading, size: " << file_size << LL_ENDL;
+		fclose(file); // <FS:ND/> Do not leak the file handle.
 		return false;
 	}
 
@@ -1190,6 +1191,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	{
 		deleteData();
 		LL_WARNS() << "Couldn't read file " << path << LL_ENDL;
+		fclose(file); // <FS:ND/> Do not leak the file handle.
 		return false;
 	}
 
