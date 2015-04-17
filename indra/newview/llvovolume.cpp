@@ -867,7 +867,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	}
 	else if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_SIZE))
 	{
-		mDrawable->getNumFaces();
+		// mDrawable->getNumFaces();
 		std::set<LLViewerFetchedTexture*> tex_list;
 		std::string output="";
 		for(S32 i = 0 ; i < num_faces; i++)
