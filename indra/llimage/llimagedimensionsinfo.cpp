@@ -192,6 +192,7 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 	if (memcmp(signature, jpeg_magic, JPEG_MAGIC_SIZE) != 0)
 	{
 		LL_WARNS() << "Not a JPEG" << LL_ENDL;
+		fclose(fp); // <FS:ND/> Don't leak the file handle
 		return false;
 	}
 	fseek(fp, 0, SEEK_SET); // go back to start of the file
