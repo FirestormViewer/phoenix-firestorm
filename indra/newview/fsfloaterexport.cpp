@@ -892,6 +892,8 @@ void FSFloaterObjectExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid,
 		if (!gesture->deserialize(dp))
 		{
 			LL_WARNS("export") << "Unable to load gesture " << asset_uuid << LL_ENDL;
+			delete gesture;
+			gesture = NULL;
 			break;
 		}
 		std::string name;
