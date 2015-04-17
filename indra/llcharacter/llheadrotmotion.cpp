@@ -458,7 +458,11 @@ BOOL LLEyeMotion::onUpdate(F32 time, U8* joint_mask)
 		// calculate vergence
 		F32 interocular_dist = (mLeftEyeState->getJoint()->getWorldPosition() - mRightEyeState->getJoint()->getWorldPosition()).magVec();
 		vergence = -atan2((interocular_dist / 2.f), lookAtDistance);
-		llclamp(vergence, -F_PI_BY_TWO, 0.f);
+
+		// <FS:ND> Guess we should take the return value of that llclamp...
+		// llclamp(vergence, -F_PI_BY_TWO, 0.f);
+		vergence = llclamp(vergence, -F_PI_BY_TWO, 0.f);
+		// </FS:ND>
 	}
 	else
 	{
