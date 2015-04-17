@@ -129,6 +129,7 @@ void LLStandardBumpmap::addstandard()
 	if( file_version > STD_BUMP_LATEST_FILE_VERSION )
 	{
 		LL_WARNS() << "LLStandardBumpmap has newer version (" << file_version << ") than viewer (" << STD_BUMP_LATEST_FILE_VERSION << ")" << LL_ENDL;
+		fclose( file ); // <FS:ND/> Do not leak the file handle
 		return;
 	}
 
@@ -146,6 +147,7 @@ void LLStandardBumpmap::addstandard()
 		if( fields_read != 2 )
 		{
 			LL_WARNS() << "Bad LLStandardBumpmap entry" << LL_ENDL;
+			fclose( file ); // <FS:ND/> Do not leak the file handle
 			return;
 		}
 
