@@ -268,6 +268,8 @@ void LLTaskInvFVBridge::buyItem()
 		payload["item_id"] = inv->mItemID;
 		payload["type"] = inv->mType;
 		LLNotificationsUtil::add(alertdesc, args, payload, LLTaskInvFVBridge::commitBuyItem);
+
+		delete inv; // <FS:ND/> Fix for memory leak
 	}
 }
 
