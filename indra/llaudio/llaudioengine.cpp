@@ -1270,6 +1270,7 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
         {
 			// Should never happen
 			LL_WARNS() << "Got asset callback without audio data for " << uuid << LL_ENDL;
+			gAudiop->removeAudioData( uuid ); // <FS:ND/> Remove this corrupt asset from the queue, or we're in danger of endless recursion.
         }
 		else
 		{
