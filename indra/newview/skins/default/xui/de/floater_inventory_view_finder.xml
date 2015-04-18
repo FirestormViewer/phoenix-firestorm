@@ -31,5 +31,6 @@
 	<text name="spin_days_ago_lbl">
 		Tage
 	</text>
+	<button label="Zurückset." label_selected="Zurückset." name="btnReset"/>
 	<button label="Schließen" label_selected="Schließen" name="Close"/>
 </floater>

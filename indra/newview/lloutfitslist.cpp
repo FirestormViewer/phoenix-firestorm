@@ -711,6 +711,16 @@ void LLOutfitsList::performAction(std::string action)
 
 void LLOutfitsList::removeSelected()
 {
+	// <FS:Ansariel> FIRE-15888: Include outfit name in delete outfit confirmation dialog
+	LLViewerInventoryCategory* cat = gInventory.getCategory(mSelectedOutfitUUID);
+	if (cat)
+	{
+		LLSD args;
+		args["NAME"] = cat->getName();
+		LLNotificationsUtil::add("DeleteOutfitsWithName", args, LLSD(), boost::bind(&LLOutfitsList::onOutfitsRemovalConfirmation, this, _1, _2));
+	}
+	else
+	// </FS:Ansariel>
 	LLNotificationsUtil::add("DeleteOutfits", LLSD(), LLSD(), boost::bind(&LLOutfitsList::onOutfitsRemovalConfirmation, this, _1, _2));
 }
 
