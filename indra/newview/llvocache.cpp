@@ -593,15 +593,13 @@ void LLVOCacheEntry::updateParentBoundingInfo(const LLVOCacheEntry* child)
 	update_min_max(newMin, newMax, parent_exts[1]);
 
 	// <FS:ND> Either the next to lines are useless, or there was an assignment missing.
+	// The lines are unused, using the clamped values causes big items to go poof.
 
 	// for(S32 i = 0; i < 4; i++)
 	// {
 	// 	llclamp(newMin[i], 0.f, 256.f);
 	// 	llclamp(newMax[i], 0.f, 256.f);
 	// }
-
-	newMin.clamp( LLVector4a( 0.f ), LLVector4a( 256.f ) );
-	newMax.clamp( LLVector4a( 0.f ), LLVector4a( 256.f ) );
 
 	// </FS:ND>
 	
