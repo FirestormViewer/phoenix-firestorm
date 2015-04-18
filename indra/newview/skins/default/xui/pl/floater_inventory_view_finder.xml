@@ -29,5 +29,6 @@
 	<text name="spin_days_ago_lbl">
 		Dni
 	</text>
+	<button label="Resetuj" label_selected="Resetuj" name="btnReset" />
 	<button label="Zamknij" label_selected="Zamknij" name="Close" />
 </floater>

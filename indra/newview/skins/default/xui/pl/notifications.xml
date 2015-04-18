@@ -367,6 +367,10 @@ Czy na pewno chcesz kontynuować?
 		Skasować wybrane stroje?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
+	<notification name="DeleteOutfitsWithName">
+		Na pewno chcesz usunąć strój &quot;[NAME]&quot;?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="PromptGoToEventsPage">
 		Odwiedzić internetową stronę imprez [CURRENT_GRID]?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
