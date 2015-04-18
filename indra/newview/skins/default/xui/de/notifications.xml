@@ -440,6 +440,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		Das/Die ausgewählte(n) Outfit(s) löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="DeleteOutfitsWithName">
+		Outfit „[NAME]“ löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="PromptGoToEventsPage">
 		Zur [CURRENT_GRID] Events-Webseite?
 		<url name="url">
