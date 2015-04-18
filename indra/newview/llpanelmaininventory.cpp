@@ -574,6 +574,10 @@ void LLPanelMainInventory::onClearSearch()
 //		updateFilterDropdown(&filter);
 //		// </FS:Zi>
 //	}
+	if (mActivePanel)
+	{
+		mActivePanel->setFilterSubString(LLStringUtil::null);
+	}
 // </FS:Ansariel>
 
 	if (finder)
