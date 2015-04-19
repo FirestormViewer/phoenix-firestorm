@@ -1594,6 +1594,10 @@ Wiadomości przychodzące od osób spoza listy znajomych będą teraz otrzymywa�
 Wszystkie nadchodzące propozycje i prośby o teleportację będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
 		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich propozycji i próśb o teleportację" name="okignore" />
 	</notification>
+	<notification name="RejectTeleportOffersModeWarning">
+		Nie można w tej chwili poprosić o teleport, ponieważ tryb odrzucania wszystkich propozycji i próśb o teleportację jest włączony.
+Jeśli chcesz go wyłączyć, to możesz to zrobić w menu 'Komunikacja' &gt; 'Status online'.
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.

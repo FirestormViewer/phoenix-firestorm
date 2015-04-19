@@ -570,6 +570,15 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 // static
 void LLAvatarActions::teleportRequest(const LLUUID& id)
 {
+
+	// <FS:PP> Warn if 'reject teleport offers and requests' mode is active
+	if (gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersMode"))
+	{
+		LLNotificationsUtil::add("RejectTeleportOffersModeWarning");
+		return;
+	}
+	// </FS:PP>
+
 	LLSD notification;
 	notification["uuid"] = id;
 	LLAvatarName av_name;

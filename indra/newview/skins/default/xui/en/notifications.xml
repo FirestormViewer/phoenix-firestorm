@@ -4078,6 +4078,17 @@ Incoming teleport offers and requests from anyone will now be rejected with your
      yestext="OK"/>
   </notification>
 
+    <notification
+   icon="alert.tga"
+   name="RejectTeleportOffersModeWarning"
+   type="alert">
+You cannot send a teleport request at the moment, because 'reject all incoming teleport offers and requests' mode is on.
+Go to the 'Comm' &gt; 'Online Status' menu if you wish to disable it.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
   <notification
    icon="alert.tga"
    name="JoinedTooManyGroupsMember"
