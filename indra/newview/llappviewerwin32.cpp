@@ -660,7 +660,10 @@ bool LLAppViewerWin32::initHardwareTest()
 
 		LL_DEBUGS("AppInit") << "Attempting to poll DirectX for hardware info" << LL_ENDL;
 		gDXHardware.setWriteDebugFunc(write_debug_dx);
-		BOOL probe_ok = gDXHardware.getInfo(vram_only);
+		// <FS:Ansariel> FIRE-15891: Add option to disable WMI check in case of problems
+		//BOOL probe_ok = gDXHardware.getInfo(vram_only);
+		BOOL probe_ok = gDXHardware.getInfo(vram_only, gSavedSettings.getBOOL("FSDisableWMIProbing"));
+		// </FS:Ansariel>
 
 		if (!probe_ok
 			&& gWarningSettings.getBOOL("AboutDirectX9"))
