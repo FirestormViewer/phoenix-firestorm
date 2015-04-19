@@ -83,6 +83,7 @@
 				<button label="SLurl をコピー" name="copy_slurl" tool_tip="現在地の SLurl をコピーして Web で使用します"/>
 				<button label="削除" name="Clear" tool_tip="追跡ラインをクリアして地図をリセットします"/>
 				<button label="選択を表示する" label_selected="目的地を表示" name="Show Destination" tool_tip="選択した場所を地図の中心に表示します"/>
+				<button label="一覧に追加" name="track_region" tool_tip="この地域を地域別アバター数の一覧に追加します。" />
 			</panel>
 		</layout_panel> 
 	</layout_stack> 

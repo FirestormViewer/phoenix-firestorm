@@ -104,7 +104,6 @@
 			<check_box label="テレポート後は常に飛行状態のままにする" name="FSFlyAfterTeleport" />
 			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRLVaでは無効です（つまり、RLVの制約により、この機能は停止されています）。"/>
 			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
-			<text name="camera_options_label">
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
 		</panel>
 		

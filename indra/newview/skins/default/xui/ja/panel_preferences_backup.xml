@@ -2,7 +2,7 @@
 <panel label="Backup" name="backup">
 
     <text name="backup_path_label">
-		バックアップのパス:
+		バックアップパス:
     </text>
 
     <line_editor name="settings_backup_path" />
