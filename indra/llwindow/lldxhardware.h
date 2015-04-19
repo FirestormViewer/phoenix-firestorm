@@ -86,7 +86,10 @@ public:
 
 	// Returns TRUE on success.
 	// vram_only TRUE does a "light" probe.
-	BOOL getInfo(BOOL vram_only);
+	// <FS:Ansariel> FIRE-15891: Add option to disable WMI check in case of problems
+	//BOOL getInfo(BOOL vram_only);
+	BOOL getInfo(BOOL vram_only, bool disable_wmi);
+	// </FS:Ansariel>
 
 	S32 getVRAM() const { return mVRAM; }
 
