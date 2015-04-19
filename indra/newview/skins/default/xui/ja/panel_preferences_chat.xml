@@ -5,13 +5,14 @@
 	<!-- Chat: Visuals -->
 	
 	<panel label="表示" name="ChatVisuals" >
-		<text name="font_size">
+		<text name="console_font_size">
 			画面コンソールの文字の大きさ：
 		</text>
 		<radio_group name="chat_console_font_size">
 			<radio_item label="小" name="consradio"/>
 			<radio_item label="中" name="consradio2"/>
 			<radio_item label="大" name="consradio3"/>
+			<radio_item label="特大" name="consradio4" />
 		</radio_group>
 		<check_box label="アバターのアニメを再生（叫ぶ時など）" name="play_avatar_animations"/>
 		<check_box name="FSIMSystemMessageBrackets" label="システムからの通知は角かっこで囲む" />
@@ -43,13 +44,14 @@
 	<!-- Chat: Chat Windows -->
 	
 	<panel label="チャットウインドウ" name="ChatWindows">
-		<text name="console_font_size">
-			チャットウィンドウの文字の大きさ：
+		<text name="font_size">
+			チャット画面の文字の大きさ：
 		</text>
 		<radio_group name="chat_font_size">
 			<radio_item label="小" name="radio"/>
 			<radio_item label="中" name="radio2"/>
 			<radio_item label="大" name="radio3"/>
+			<radio_item label="特大" name="radio4" />
 		</radio_group>
 		<check_box name="IMShowNamesForP2PConv" label="一対一のIMで名前を表示する" />
 		<check_box label="IM とチャット履歴に文字だけ表示する（V1形式）" name="plain_text_chat_history"/>
@@ -138,7 +140,7 @@
 	<panel label="タイピング" name="ChatTyping" >
 		<button name="autoreplace_showgui" label="自動置換..." />
 		<button name="spellcheck_showgui" label="スペルチェック..." />
-		<button name="translation_settings_btn" label="翻訳..." >
+		<button name="translation_settings_btn" label="翻訳..." />
 		<check_box label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
 		<check_box label="人が会話している時にタイピング音が聞こえるようにする" name="play_typing_sound"/>
 		<check_box label="IM中に入力中であることを相手に通知する" name="FSSendTypingState"/>
