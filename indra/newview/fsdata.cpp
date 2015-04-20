@@ -982,6 +982,7 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("Font: %s\n", info["FONT"].asString().c_str());
 	sysinfo2 += llformat("Font Size Adjustment: %d pt\n", info["FONT_SIZE"].asInteger());
 	sysinfo2 += llformat("Font Screen DPI: %d\n", info["FONT_SCREEN_DPI"].asInteger());
+	sysinfo2 += llformat("UI Scaling: %.3f\n", info["UI_SCALE_FACTOR"].asReal());
 	sysinfo2 += llformat("Draw Distance: %d m\n", info["DRAW_DISTANCE"].asInteger());
 	sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
 	sysinfo2 += llformat("LOD Factor: %.3f\n", info["LOD"].asReal());

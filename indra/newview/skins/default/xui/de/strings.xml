@@ -68,9 +68,11 @@ Voice-Serverversion: [VOICE_VERSION]
 	<string name="AboutSettings">
 Modus: [MODE]
 Oberflächendesign: [SKIN] ([THEME])
-Schriftart: [FONT] ([FONT_SCREEN_DPI])
-Draw Distance: [DRAW_DISTANCE]
-Bandbreite: [BANDWIDTH]
+Schriftart: [FONT] ([FONT_SCREEN_DPI] dpi)
+Schriftart Größenanpassung: [FONT_SIZE] pt
+UI-Skalierung: [UI_SCALE_FACTOR]
+Draw Distance: [DRAW_DISTANCE] m
+Bandbreite: [BANDWIDTH] kbit/s
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Erweitertes Beleuchtungsmodell: [ALMSTATUS]

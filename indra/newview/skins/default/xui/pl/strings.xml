@@ -57,9 +57,11 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	<string name="AboutSettings">
 Tryb ustawień (Settings Mode): [MODE]
 Skórka i schemat (Skin): [SKIN] ([THEME])
-Czcionka (Font): [FONT] ([FONT_SCREEN_DPI])
-Pole widzenia (Draw Distance): [DRAW_DISTANCE]
-Przepustowość (Bandwidth): [BANDWIDTH]
+Czcionka (Font): [FONT] ([FONT_SCREEN_DPI] dpi)
+Dostrojenie rozmiaru czcionki: [FONT_SIZE] pt
+Skalowanie interfejsu (UI Scaling): [UI_SCALE_FACTOR]
+Pole widzenia (Draw Distance): [DRAW_DISTANCE] m
+Przepustowość (Bandwidth): [BANDWIDTH] kbit/s
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
 Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
