@@ -312,20 +312,20 @@
      left_pad="5"
      layout="topleft"
      follows="left|top"
-     name="ComboSaleType"
+     name="ComboBoxSaleType"
      width="110">
-        <combo_box.item
-         label="Original"
-         name="Original"
-         value="Original" />
-        <combo_box.item
-         label="Copy"
+       <combo_box.item
          name="Copy"
-         value="Copy" />
-        <combo_box.item
-         label="Contents"
+         label="Copy"
+         value="2" />
+       <combo_box.item
          name="Contents"
-         value="Contents" />
+         label="Contents"
+         value="3" />
+       <combo_box.item
+         name="Original"
+         label="Original"
+         value="1" />
     </combo_box>
     <spinner
         follows="left|top"

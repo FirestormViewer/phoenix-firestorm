@@ -56,7 +56,7 @@
 	<check_box label="恚庨" name="CheckNextOwnerCopy"/>
 	<check_box label="轉售" name="CheckNextOwnerTransfer"/>
 	<check_box label="出售" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy">
+	<combo_box name="ComboBoxSaleType">
 		<combo_box.item label="恚庨" name="Copy"/>
 		<combo_box.item label="原件" name="Original"/>
 	</combo_box>

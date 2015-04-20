@@ -58,10 +58,10 @@
 	<check_box label="Copiar" name="CheckNextOwnerCopy"/>
 	<check_box label="Transferir" name="CheckNextOwnerTransfer"/>
 	<check_box label="En venta" name="CheckPurchase"/>
-	<combo_box name="ComboSaleType">
-		<combo_box.item label="Original" name="Original"/>
+	<combo_box name="ComboBoxSaleType">
 		<combo_box.item label="Copia" name="Copy"/>
 		<combo_box.item label="Contenidos" name="Contents"/>
+		<combo_box.item label="Original" name="Original"/>
 	</combo_box>
 	<spinner name="Edit Cost" label="Precio:"/>
 	<text name="CurrencySymbol">

@@ -56,7 +56,7 @@
 	<check_box label="Kopiere" name="CheckNextOwnerCopy"/>
 	<check_box label="Sælg" name="CheckNextOwnerTransfer"/>
 	<check_box label="Til salg" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy">
+	<combo_box name="ComboBoxSaleType">
 		<combo_box.item label="Kopiér" name="Copy"/>
 		<combo_box.item label="Original" name="Original"/>
 	</combo_box>
