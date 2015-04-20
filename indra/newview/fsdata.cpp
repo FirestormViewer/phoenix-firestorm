@@ -954,20 +954,20 @@ LLSD FSData::getSystemInfo()
 // </FS:CR>
 	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
 	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
-	sysinfo1 += llformat("%s\n", info["SERVER_VERSION"].asString().c_str());
+	sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());
 
-	std::string sysinfo2("\n");
-	sysinfo2 += llformat("CPU: %s\n", info["CPU"].asString().c_str());
-	sysinfo2 += llformat("Memory: %d MB\n", info["MEMORY_MB"].asInteger());
-	sysinfo2 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
-	sysinfo2 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
-	sysinfo2 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());
+	sysinfo1 += llformat("CPU: %s\n", info["CPU"].asString().c_str());
+	sysinfo1 += llformat("Memory: %d MB\n", info["MEMORY_MB"].asInteger());
+	sysinfo1 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
+	sysinfo1 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
+	sysinfo1 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());
 	
 	if (info.has("GRAPHICS_DRIVER_VERSION"))
 	{
-		sysinfo2 += llformat("Graphics Card Driver Version: %s\n", info["GRAPHICS_DRIVER_VERSION"].asString().c_str());
+		sysinfo1 += llformat("Graphics Card Driver Version: %s\n", info["GRAPHICS_DRIVER_VERSION"].asString().c_str());
 	}
 
+	std::string sysinfo2("\n");
 	sysinfo2 += llformat("OpenGL Version: %s\n\n", info["OPENGL_VERSION"].asString().c_str());
 	sysinfo2 += llformat("libcurl Version: %s\n", info["LIBCURL_VERSION"].asString().c_str());
 	sysinfo2 += llformat("J2C Decoder Version: %s\n", info["J2C_VERSION"].asString().c_str());
