@@ -122,6 +122,7 @@ void LLStandardBumpmap::addstandard()
 	S32 fields_read = fscanf( file, "LLStandardBumpmap version %d", &file_version );
 	if( fields_read != 1 )
 	{
+		fclose( file ); // <FS:ND/> Do not leak teh file handle.
 		LL_WARNS() << "Bad LLStandardBumpmap header" << LL_ENDL;
 		return;
 	}
