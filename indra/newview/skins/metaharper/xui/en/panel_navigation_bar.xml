@@ -156,7 +156,7 @@
 	     layout="topleft"
 	     left="7"
 	     max_chars="254"
-	     mouse_opaque="false"
+	     mouse_opaque="true"
 	     name="location_combo"
 	     top="0"
 	     width="587">

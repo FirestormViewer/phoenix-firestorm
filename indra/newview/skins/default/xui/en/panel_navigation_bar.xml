@@ -184,7 +184,7 @@
 	     height="23"
 	     label="Search"
 	     layout="topleft"
-	     mouse_opaque="false"
+	     mouse_opaque="true"
 	     name="search_combo_box"
 	     tool_tip="Search"
 	     top="0"
