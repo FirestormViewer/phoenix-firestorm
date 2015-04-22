@@ -325,6 +325,16 @@
         Days
     </text>
     <button
+     left="5"
+     follows="top|left"
+     height="20"
+     label="Reset"
+     label_selected="Reset"
+     layout="topleft"
+     name="btnReset"
+     top_pad="8"
+     width="72" />
+    <button
      right="-6"
      follows="top|left"
      height="20"
@@ -332,6 +342,6 @@
      label_selected="Close"
      layout="topleft"
      name="Close"
-     top_pad="8"
-     width="76" />
+     top_delta="0"
+     width="72" />
 </floater>

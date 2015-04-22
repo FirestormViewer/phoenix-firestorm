@@ -2541,6 +2541,16 @@ std::string LLXMLNode::escapeXML(const std::string& xml)
 	for (std::string::size_type i = 0; i < xml.size(); ++i)
 	{
 		char c = xml[i];
+		
+		// <FS:ND> Skip invalid characters. There a s few more, but those would need inspecting of the UTF-8 sequence.
+		// See http://en.wikipedia.org/wiki/Valid_characters_in_XML
+		if( c >= 0 && c < 20 && c != 0x09 && c != 0x0A && c != 0x0D )
+		{
+			out.append( "?" );
+			continue;
+		}
+		// </FS:ND>
+		
 		switch(c)
 		{
 		case '"':	out.append("&quot;");	break;

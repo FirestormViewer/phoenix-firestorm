@@ -1063,7 +1063,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// compact mode: show a timestamp and name
 	if (use_plain_text_chat_history)
 	{
-		square_brackets = (chat.mFromName == SYSTEM_FROM && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
+		square_brackets = (chat.mSourceType == CHAT_SOURCE_SYSTEM && chat.mChatType != CHAT_TYPE_RADAR && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
 
 		LLStyle::Params timestamp_style(body_message_params);
 
@@ -1291,12 +1291,19 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		if (irc_me && !use_plain_text_chat_history)
 		{
-			std::string name_format = "completename";
-			if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			if (chat.mSourceType == CHAT_SOURCE_AGENT)
 			{
-				name_format = "rlvanonym";
+				std::string name_format = "completename";
+				if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				{
+					name_format = "rlvanonym";
+				}
+				message = LLSLURL("agent", chat.mFromID, name_format).getSLURLString() + message;
 			}
-			message = LLSLURL("agent", chat.mFromID, name_format).getSLURLString() + message;
+			else
+			{
+				message = chat.mFromName + message;
+			}
 		}
 
 		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.

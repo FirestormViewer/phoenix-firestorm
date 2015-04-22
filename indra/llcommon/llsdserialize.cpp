@@ -2252,7 +2252,7 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 	strm.avail_in = size;
 	strm.next_in = in;
 
-	
+	valid = true; // <FS:ND/> Default is all okay.
 	S32 ret = inflateInit2(&strm,  windowBits | ENABLE_ZLIB_GZIP );
 	do
 	{
@@ -2264,6 +2264,7 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 			inflateEnd(&strm);
 			free(result);
 			delete [] in;
+			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
 			valid = false;
 		}
 		
@@ -2274,17 +2275,24 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
 			inflateEnd(&strm);
-			free(result);
+			// free(result);
+			if( result )
+				free(result);
 			delete [] in;
 			valid = false;
+			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
 			break;
 		}
 
+		if( valid ) {// <FS:ND> in case this stream is invalid, do not pass the already freed buffer to realloc.
+			
 		U32 have = CHUNK-strm.avail_out;
 
 		result = (U8*) realloc(result, cur_size + have);
 		memcpy(result+cur_size, out, have);
 		cur_size += have;
+
+		} // </FS:ND>
 
 	} while (ret == Z_OK);
 
@@ -2293,7 +2301,12 @@ U8* unzip_llsdNavMesh( bool& valid, unsigned int& outsize, std::istream& is, S32
 
 	if (ret != Z_STREAM_END)
 	{
-		free(result);
+		// <FS:ND> result might have been freed above. And calling free with a null pointer is not defined.
+		// free(result);
+		if( result )
+			free(result);
+		// </FS:ND>
+		
 		valid = false;
 		return NULL;
 	}

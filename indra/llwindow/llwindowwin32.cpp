@@ -1868,8 +1868,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 
 	// Ignore the double click received right after activating app.
 	// This is to avoid triggering double click teleport after returning focus (see MAINT-3786).
-	// <FS:Ansariel> FIRE-15529: Double clicks not working after giving focus back to the viewer
-	//static bool sHandleDoubleClick = true;
+	static bool sHandleDoubleClick = true;
 
 	// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(h_wnd, GWL_USERDATA);
 	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
@@ -1998,12 +1997,10 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 					}
 				}
 
-				// <FS:Ansariel> FIRE-15529: Double clicks not working after giving focus back to the viewer
-				//if (!activating)
-				//{
-				//	sHandleDoubleClick = false;
-				//}
-				// </FS:Ansariel>
+				if (!activating)
+				{
+					sHandleDoubleClick = false;
+				}
 
 				window_imp->mCallbacks->handleActivateApp(window_imp, activating);
 
@@ -2229,8 +2226,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 				window_imp->mCallbacks->handlePingWatchdog(window_imp, "Main:WM_NCLBUTTONDOWN");
 				// A click in a non-client area, e.g. title bar or window border.
 				sHandleLeftMouseUp = false;
-				// <FS:Ansariel> FIRE-15529: Double clicks not working after giving focus back to the viewer
-				//sHandleDoubleClick = true;
+				sHandleDoubleClick = true;
 			}
 			break;
 
@@ -2276,13 +2272,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 			{
 				window_imp->mCallbacks->handlePingWatchdog(window_imp, "Main:WM_LBUTTONDBLCLK");
 
-				// <FS:Ansariel> FIRE-15529: Double clicks not working after giving focus back to the viewer
-				//if (!sHandleDoubleClick)
-				//{
-				//	sHandleDoubleClick = true;
-				//	break;
-				//}
-				// </FS:Ansariel>
+				if (!sHandleDoubleClick)
+				{
+					sHandleDoubleClick = true;
+					break;
+				}
 
 				// Because we move the cursor position in the app, we need to query
 				// to find out where the cursor at the time the event is handled.
@@ -2319,6 +2313,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 					sHandleLeftMouseUp = true;
 					break;
 				}
+				sHandleDoubleClick = true;
 
 				//if (gDebugClicks)
 				//{

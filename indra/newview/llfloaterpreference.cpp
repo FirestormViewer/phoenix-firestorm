@@ -4460,9 +4460,10 @@ void LLPanelPreferenceOpensim::onClickSaveGrid()
 	grid_info[GRID_FORGOT_PASSWORD] = mEditorPassword->getValue();
 	grid_info["search"] = mEditorSearch->getValue();
 	grid_info["message"] = mEditorGridMessage->getValue();
-	GridEntry* grid_entry = new GridEntry;
-	grid_entry->grid = grid_info;
-	grid_entry->set_current = false;
+
+	// GridEntry* grid_entry = new GridEntry;
+	// grid_entry->grid = grid_info;
+	// grid_entry->set_current = false;
 	
 	//getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
 	//LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::addedGrid, this, _1));

@@ -440,6 +440,10 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		Das/Die ausgewählte(n) Outfit(s) löschen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="DeleteOutfitsWithName">
+		Outfit „[NAME]“ löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="PromptGoToEventsPage">
 		Zur [CURRENT_GRID] Events-Webseite?
 		<url name="url">
@@ -1684,6 +1688,11 @@ Eingehende Instant Messages von Personen, die sich nicht auf der Freundesliste b
 		Abweisen von Teleport-Angeboten und -Anforderungen ist eingeschaltet.
 Eingehende Teleport-Angebote und Teleport-Anforderungen werden jetzt mit der konfigurierten Antwort abgewiesen. Sie erhalten hierüber keine Benachrichtigung.
 		<usetemplate ignoretext="Wenn Abweisen von Teleport-Angeboten und -Anforderungen eingeschaltet wird." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="RejectTeleportOffersModeWarning">
+		Sie können aktuell keinen Teleport anfordern, da „Teleport-Angebote und -Anfragen abweisen“ aktiviert ist.
+Falls Sie wünschen, können Sie diesen im Menü unter „Unterhalten“ &gt; „Online-Status“ deaktivieren.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Sie haben die maximale Anzahl an Gruppen erreicht. Bitte verlassen Sie eine andere Gruppe, um dieser beitreten zu können oder lehnen Sie das Angebot ab.

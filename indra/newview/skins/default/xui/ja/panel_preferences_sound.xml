@@ -8,7 +8,7 @@
 
 	<!-- Sounds -->
 	
-	<panel label="サウンド" name="Preference Media panel">
+	<panel label="サウンド" name="Media Sounds Panel">
 	
 		<slider label="全体の音量" name="System Volume"/>
 		<check_box label="最小化でミュート" name="mute_when_minimized"/>

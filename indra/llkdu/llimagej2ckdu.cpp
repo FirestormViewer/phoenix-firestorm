@@ -658,6 +658,7 @@ BOOL LLImageJ2CKDU::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, co
 			// cannot be open or are very blurry. Avoiding that last layer prevents the problem to happen.
 			if ((base.getWidth() >= 32) || (base.getHeight() >= 32))
 			{
+				if( nb_layers >= MAX_NB_LAYERS ) nb_layers = MAX_NB_LAYERS-1; // <FS:ND/> Adjust layer index in case we reached the arrays end.
 				layer_bytes[nb_layers++] = 0;
 			}
 			codestream.access_siz()->parse_string("Creversible=yes");
@@ -962,7 +963,8 @@ void LLImageJ2CKDU::findDiscardLevelsBoundaries(LLImageJ2C &base)
 		// Clean-up
 		cleanupCodeStream();
 		codestream_out.destroy();
-		delete[] output_buffer;	
+		delete[] output_buffer;
+		delete[] layer_bytes; // <FS:ND/> Don't leak those
 	}
 	return;
 }

@@ -153,7 +153,7 @@ std::string LLKeywords::getArguments(LLSD& arguments)
 			}
 			else
 			{
-				LL_WARNS("SyntaxLSL") << "Argument array comtains a non-map element!" << LL_ENDL;
+				LL_WARNS("SyntaxLSL") << "Argument array contains a non-map element!" << LL_ENDL;
 			}
 		}
 	}

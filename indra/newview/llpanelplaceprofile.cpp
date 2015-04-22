@@ -559,9 +559,18 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
 		mForSalePanel->setVisible(for_sale);
 
-		const U8* sign = (U8*)getString("price_text").c_str();
-		const U8* sqm = (U8*)getString("area_text").c_str();
+		// <FS:ND> getString returns a temporary, taking the c_str will point to a location that is destroyed.
+		
+		// const U8* sign = (U8*)getString("price_text").c_str();
+		// const U8* sqm = (U8*)getString("area_text").c_str();
 
+		std::string ssign = getString("price_text");
+		std::string ssqm = getString("area_text");
+		const U8* sign = (U8*)ssign.c_str();
+		const U8* sqm = (U8*)ssqm.c_str();
+
+		// </FS:ND>
+		
 		mSalesPriceText->setText(llformat("%s%d ", sign, parcel->getSalePrice()));
 		mAreaText->setText(llformat("%d %s", area, sqm));
 		mTrafficText->setText(llformat("%.0f", dwell));

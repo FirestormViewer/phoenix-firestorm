@@ -591,6 +591,20 @@ void LLScriptEdCore::processKeywords()
 		}
 	}
 
+	// <FS:Ansariel> FIRE-15906: Clear combobox values before adding new
+	mFunctions->clearRows();
+
+	for (string_vec_t::const_iterator iter = primary_keywords.begin();
+		 iter!= primary_keywords.end(); ++iter)
+	{
+		mFunctions->add(*iter);
+	}
+	for (string_vec_t::const_iterator iter = secondary_keywords.begin();
+		 iter!= secondary_keywords.end(); ++iter)
+	{
+		mFunctions->add(*iter);
+	}
+
 	// NaCl - LSL Preprocessor
 	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
 	{
@@ -607,17 +621,6 @@ void LLScriptEdCore::processKeywords()
 #endif // OPENSIM
 	}
 	// NaCl End
-
-	for (string_vec_t::const_iterator iter = primary_keywords.begin();
-		 iter!= primary_keywords.end(); ++iter)
-	{
-		mFunctions->add(*iter);
-	}
-	for (string_vec_t::const_iterator iter = secondary_keywords.begin();
-		 iter!= secondary_keywords.end(); ++iter)
-	{
-		mFunctions->add(*iter);
-	}
 }
 
 void LLScriptEdCore::initMenu()

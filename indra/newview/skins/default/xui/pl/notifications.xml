@@ -367,6 +367,10 @@ Czy na pewno chcesz kontynuować?
 		Skasować wybrane stroje?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
+	<notification name="DeleteOutfitsWithName">
+		Na pewno chcesz usunąć strój &quot;[NAME]&quot;?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="PromptGoToEventsPage">
 		Odwiedzić internetową stronę imprez [CURRENT_GRID]?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -1589,6 +1593,10 @@ Wiadomości przychodzące od osób spoza listy znajomych będą teraz otrzymywa�
 		Tryb odrzucania wszystkich propozycji i próśb o teleportację jest włączony.
 Wszystkie nadchodzące propozycje i prośby o teleportację będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
 		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich propozycji i próśb o teleportację" name="okignore" />
+	</notification>
+	<notification name="RejectTeleportOffersModeWarning">
+		Nie można w tej chwili poprosić o teleport, ponieważ tryb odrzucania wszystkich propozycji i próśb o teleportację jest włączony.
+Jeśli chcesz go wyłączyć, to możesz to zrobić w menu 'Komunikacja' &gt; 'Status online'.
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.

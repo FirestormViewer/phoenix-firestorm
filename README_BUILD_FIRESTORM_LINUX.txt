@@ -27,7 +27,6 @@ To build firestorm:
 	autobuild build -c ReleaseFS                        
 
 Other examples:
-
 	autobuild configure -c ReleaseFS  		    # basic configuration step, don't build, just configure
 	autobuild configure -c ReleaseFS -- --clean	    # clean the output area first, then configure
 	autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel

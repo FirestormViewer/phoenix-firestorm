@@ -867,7 +867,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	}
 	else if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_SIZE))
 	{
-		mDrawable->getNumFaces();
+		// mDrawable->getNumFaces();
 		std::set<LLViewerFetchedTexture*> tex_list;
 		std::string output="";
 		for(S32 i = 0 ; i < num_faces; i++)
@@ -4329,7 +4329,21 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 						// Insure ref'd bone is in our clamped array of mats
 						llassert(idx[k] < kMaxJoints);
 						// clamp k to kMaxJoints to avoid reading garbage off stack in release
-						src.setMul(mp[idx[(k < kMaxJoints) ? k : 0]], w);
+
+						// <FS:ND> k will always be lower than kMaxJoints, as k runs from [0,3]
+						// Second we should check against maxJoints, as this can be lower thab kMaxJoints.
+						// And third is is probably better to not cram it all into one line, as that makes
+						// errors as below slip by easily.
+						
+						// src.setMul(mp[idx[(k < kMaxJoints) ? k : 0]], w);
+
+						S32 l = idx[k];
+						if( l >= maxJoints )
+							l = 0;
+						src.setMul( mp[ l ], w );
+
+						// </FS:ND>
+						
 						final_mat.add(src);
 					}
 

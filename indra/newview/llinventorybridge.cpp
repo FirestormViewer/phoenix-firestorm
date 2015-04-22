@@ -1520,6 +1520,24 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 		gotoItem();
 	}
 
+	// <FS:Sei> Find item in main inventory tab
+	if ("find_in_main" == action)
+	{
+		// Go to the item. Similar to gotoItem() but with normal items, not links.
+		LLInventoryObject *obj = getInventoryObject();
+
+		mInventoryPanel.get()->getParentByType<LLTabContainer>()->selectFirstTab();
+		if (obj)
+		{
+			LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel();
+			if (active_panel)
+			{
+				active_panel->setSelection(obj->getUUID(), TAKE_FOCUS_YES);
+			}
+		}
+	}
+	// </FS:Sei>
+
 	if ("open" == action || "open_original" == action)
 	{
 		openItem();
@@ -6130,6 +6148,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
 					disabled_items.push_back(std::string("Detach From Yourself"));
 // [/RLVa:KB]
+				// <FS:Sei> Add "Find in Main" option to Worn Items
+				if (mInventoryPanel.get()->getName() == "Worn Items")
+					items.push_back(std::string("Find in Main")); // This should appear only in Worn Items tab
+				// </FS:Sei>
 			}
 			else if (!isItemInTrash() && !isLinkedObjectInTrash() && !isLinkedObjectMissing() && !isCOFFolder())
 			{
@@ -6417,6 +6439,10 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
 							disabled_items.push_back(std::string("Take Off"));
 // [/RLVa:KB]
+						// <FS:Sei> Add "Find in Main" option to Worn Items
+						if (mInventoryPanel.get()->getName() == "Worn Items")
+							items.push_back(std::string("Find in Main"));
+						// </FS:Sei>
 					}
 					else
 					{

@@ -60,9 +60,11 @@ Voice Server Version: [VOICE_VERSION]
   <string name="AboutSettings">
 Settings mode: [MODE]
 Viewer Skin: [SKIN] ([THEME])
-Font Used: [FONT] ([FONT_SCREEN_DPI])
-Draw distance: [DRAW_DISTANCE]
-Bandwidth: [BANDWIDTH]
+Font Used: [FONT] ([FONT_SCREEN_DPI] dpi)
+Font Size Adjustment: [FONT_SIZE] pt
+UI Scaling: [UI_SCALE_FACTOR]
+Draw distance: [DRAW_DISTANCE] m
+Bandwidth: [BANDWIDTH] kbit/s
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
 Advanced Lighting Model: [ALMSTATUS]

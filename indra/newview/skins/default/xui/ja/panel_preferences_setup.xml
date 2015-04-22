@@ -5,10 +5,10 @@
 		ネットワーク：
 	</text>
 	-->
-	<tab_container name="max_bandwidth_layout" label="Setup">
-		<panel label="Connection" name="tab-conn">
+	<tab_container name="max_bandwidth_layout" label="セットアップ">
+		<panel label="接続" name="tab-conn">
 			<text name="Maximum bandwidth">
-				最大帯域幅 ([http://wiki.phoenixviewer.com/fs_speedtest need a suggestion?]):
+				最大帯域幅 ([http://wiki.phoenixviewer.com/fs_speedtest 適正な値を設定するには？]):
 			</text>
 			<icon name="NetworkLowGraphicsDivet" />
 			<icon name="NetworkMidGraphicsDivet" />
@@ -53,7 +53,7 @@
 			<check_box label="プラグインを有効にする" name="browser_plugins_enabled" />
 			<check_box label="Cookie を受け入れる" name="cookies_enabled" />
 			<check_box label="Javascript を有効にする" name="browser_javascript_enabled" />
-			<check_box label="メディアブラウザのポップアップを有効にする" />
+			<check_box label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled" />
 			<button label="プロキシ設定を調整" name="set_proxy" />
 		</panel>
 		

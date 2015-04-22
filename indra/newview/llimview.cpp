@@ -1519,8 +1519,15 @@ void deliverMessage(const std::string& utf8_text,
 		gAgent.sendReliableMessage();
 	}
 
+	bool is_group_chat = false;
+	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
+	if(session)
+	{
+		is_group_chat = session->isGroupSessionType();
+	}
+
 	// If there is a mute list and this is not a group chat...
-	if ( LLMuteList::getInstance() )
+	if ( LLMuteList::getInstance() && !is_group_chat)
 	{
 		// ... the target should not be in our mute list for some message types.
 		// Auto-remove them if present.
@@ -1529,8 +1536,7 @@ void deliverMessage(const std::string& utf8_text,
 		case IM_NOTHING_SPECIAL:
 		case IM_GROUP_INVITATION:
 		case IM_INVENTORY_OFFERED:
-		// <FS:Ansariel> FIRE-2762: Talking to group chat might unmute a muted avatar
-		//case IM_SESSION_INVITE:
+		case IM_SESSION_INVITE:
 		case IM_SESSION_P2P_INVITE:
 		case IM_SESSION_CONFERENCE_START:
 		case IM_SESSION_SEND: // This one is marginal - erring on the side of hearing.
@@ -1628,7 +1634,7 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
 
 	if (is_not_group_id)
 	{
-		LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id);
+		LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(im_session_id); // <FS:Ansariel> Re-added; required because of FIRE-787
 		if( session == 0)//??? shouldn't really happen
 		{
 			LLRecentPeople::instance().add(other_participant_id);

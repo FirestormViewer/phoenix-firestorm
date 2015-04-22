@@ -3,7 +3,6 @@
 	<text name="title">
 		インベントリ
 	</text>
-	</text>
 	<view_border  name="hr" />
 	<combo_box label="解像度" name="texture_size_combo">
 		<!--

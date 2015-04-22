@@ -3895,10 +3895,13 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
 
+	// <FS:PP> FIRE-15714: UI Scaling in SysInfo
+	info["UI_SCALE_FACTOR"] = gSavedSettings.getF32("UIScaleFactor");
+
 	//[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
 	info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
 	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
-	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
+	info["LOD"] = gSavedSettings.getF32("RenderVolumeLODFactor");
 
 	//[FIRE 3113 : SJ] Added Settingsfile to info
 	info["MODE"] = "Unknown Mode";

@@ -98,6 +98,9 @@ public:
 	static void onCloseBtn(void* user_data);
 	static void selectAllTypes(void* user_data);
 	static void selectNoTypes(void* user_data);
+
+	// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+	void onResetBtn();
 private:
 	LLPanelMainInventory*	mPanelMainInventory;
 	LLSpinCtrl*			mSpinSinceDays;
@@ -462,7 +465,7 @@ void LLPanelMainInventory::resetFilters()
 	setFilterTextFromFilter();
 }
 
-// ## Zi: Sort By menu handlers
+// <FS:Zi> Sort By menu handlers
 void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 {
 	U32 sort_order_mask = getActivePanel()->getSortOrder();
@@ -531,7 +534,7 @@ BOOL LLPanelMainInventory::isSortByChecked(const LLSD& userdata)
 
 	return FALSE;
 }
-// ## Zi: Sort By menu handlers
+// </FS:Zi> Sort By menu handlers
 
 // static
 BOOL LLPanelMainInventory::filtersVisible(void* user_data)
@@ -546,30 +549,36 @@ void LLPanelMainInventory::onClearSearch()
 {
 	BOOL initially_active = FALSE;
 	LLFloater *finder = getFinder();
+// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+//	if (mActivePanel)
+//	{
+//		initially_active = mActivePanel->getFilter().isNotDefault();
+//		mActivePanel->setFilterSubString(LLStringUtil::null);
+//		// <FS:Ansariel>
+//		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+//		if (mActivePanel->getName() == "Recent Items" || mActivePanel->getName() == "Worn Items")
+//		{
+//			mActivePanel->getFilter().resetDefault();
+//		}
+//		else
+//		{
+//			mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+//		}
+//		// </FS:Ansariel>
+//
+//		// ## Zi: Filter Links Menu
+//		// We don't do this anymore, we have a menu option for it now. -Zi
+////		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+//		// <FS:Zi> make sure the dropdown shows "All Types" once again
+//		LLInventoryFilter &filter = mActivePanel->getFilter();
+//		updateFilterDropdown(&filter);
+//		// </FS:Zi>
+//	}
 	if (mActivePanel)
 	{
-		initially_active = mActivePanel->getFilter().isNotDefault();
 		mActivePanel->setFilterSubString(LLStringUtil::null);
-		// <FS:Ansariel>
-		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-		if (mActivePanel->getName() == "Recent Items" || mActivePanel->getName() == "Worn Items")
-		{
-			mActivePanel->getFilter().resetDefault();
-		}
-		else
-		{
-			mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-		}
-		// </FS:Ansariel>
-
-		// ## Zi: Filter Links Menu
-		// We don't do this anymore, we have a menu option for it now. -Zi
-//		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
-		// <FS:Zi> make sure the dropdown shows "All Types" once again
-		LLInventoryFilter &filter = mActivePanel->getFilter();
-		updateFilterDropdown(&filter);
-		// </FS:Zi>
 	}
+// </FS:Ansariel>
 
 	if (finder)
 	{
@@ -1008,6 +1017,9 @@ BOOL LLFloaterInventoryFinder::postBuild()
 
 	childSetAction("Close", onCloseBtn, this);
 
+	// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+	getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
+
 	updateElementsFromFilter();
 	return TRUE;
 }
@@ -1045,6 +1057,26 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 		}
 	}
 }
+
+// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+void LLFloaterInventoryFinder::onResetBtn()
+{
+	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
+	if (panel->getName() == "Recent Items" || panel->getName() == "Worn Items")
+	{
+		panel->getFilter().resetDefault();
+	}
+	else
+	{
+		panel->setFilterTypes(0xffffffffffffffffULL);
+	}
+
+	LLInventoryFilter &filter = panel->getFilter();
+	mPanelMainInventory->updateFilterDropdown(&filter);
+
+	updateElementsFromFilter();
+}
+// </FS:Ansariel>
 
 void LLFloaterInventoryFinder::changeFilter(LLInventoryFilter* filter)
 {

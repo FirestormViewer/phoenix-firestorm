@@ -28,6 +28,15 @@
 
 #include "stdtypes.h"
 
+#ifdef ND_DECL_GCC_INTRINSICS
+
+U32 __sync_val_compare_and_swap( volatile U32*, U32, U32 );
+void* __sync_val_compare_and_swap( void volatile * aLoc, void *aCmp, void *aVal );
+void __sync_add_and_fetch( volatile U32* aLoc, U32 );
+U32 __sync_sub_and_fetch( volatile U32 *aLoc, U32 );
+
+#endif
+
 namespace nd
 {
 	namespace intrin
