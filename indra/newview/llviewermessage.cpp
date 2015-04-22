@@ -893,7 +893,8 @@ public:
 		// <FS:Ansariel> FIRE-3234: Don't need a check for ShowNewInventory here;
 		// This only gets called if the user explicity clicks "Show" or
 		// AutoAcceptNewInventory and ShowNewInventory are TRUE.
-		open_inventory_offer(mComplete, mFromName);
+		//open_inventory_offer(mComplete, mFromName);
+		open_inventory_offer(mComplete, mFromName, true);
 		gInventory.removeObserver(this);
 		delete this;
 	}
@@ -1349,7 +1350,9 @@ bool check_asset_previewable(const LLAssetType::EType asset_type)
 			(asset_type == LLAssetType::AT_SOUND);
 }
 
-void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name)
+// <FS:Ansariel> FIRE-15886
+//void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name)
+void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_name, bool from_agent /* = false*/)
 {
 	for (uuid_vec_t::const_iterator obj_iter = objects.begin();
 		 obj_iter != objects.end();
@@ -1478,7 +1481,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 		// Highlight item
 		// <FS:Ansariel> Only show if either ShowInInventory is true OR we use legacy
 		//               accept messages and clicked on the show button and the asset is not previewable
-		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && !check_asset_previewable(asset_type));
+		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && !check_asset_previewable(asset_type));
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
 		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
