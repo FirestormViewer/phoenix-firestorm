@@ -720,18 +720,17 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 		{
 			LLVFile file(vfs, uuid, type);
 			S32 file_length = file.getSize();
-			char* buffer = new char[file_length+1];
-			file.read((U8*)buffer, file_length);
-			// put a EOS at the end
-			buffer[file_length] = 0;
 
-			std::string content(buffer);
+			std::string content;
+			content.resize( file_length+1, 0 );
+			file.read((U8*)&content[0], file_length);
+
 			content = utf8str_removeCRLF(content);
 			content = self->decode(content);
 			/*content += llformat("\n#define __UP_ITEMID__ __ITEMID__\n#define __ITEMID__ %s\n",uuid.asString().c_str())+content;
 			content += "\n#define __ITEMID__ __UP_ITEMID__\n";*/
 			//prolly wont work and ill have to be not lazy, but worth a try
-			delete buffer;
+
 			if (boost::filesystem::native(name))
 			{
 				LL_DEBUGS() << "native name of " << name << LL_ENDL;
