@@ -170,7 +170,7 @@ LLNetMap::~LLNetMap()
 	}
 	if (mParcelOverlayConn.connected())
 	{
-		mParcelMgrConn.disconnect();
+		mParcelOverlayConn.disconnect();
 	}
 // [/SL:KB]
 }
