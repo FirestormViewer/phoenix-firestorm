@@ -66,6 +66,7 @@
 
 #include "llhttpretrypolicy.h"
 #include "fswsassetblacklist.h" //For Asset blacklist
+#include "llviewermenu.h"
 
 bool LLTextureFetchDebugger::sDebuggerEnabled = false ;
 LLTrace::EventStatHandle<LLUnit<F32, LLUnits::Percent> > LLTextureFetch::sCacheHitRate("texture_cache_hits");
@@ -1339,10 +1340,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			}
 		}
 
-		static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTP", true);
+		// <FS:Ansariel> Force HTTP features on SL
+		//static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTP", true);
 
-// 		if (mHost != LLHost::invalid) get_url = false;
-		if ( use_http && mCanUseHTTP && mUrl.empty())//get http url.
+//// 		if (mHost != LLHost::invalid) get_url = false;
+		//if ( use_http && mCanUseHTTP && mUrl.empty())//get http url.
+		if ( use_http_textures() && mCanUseHTTP && mUrl.empty())//get http url.
+		// </FS:Ansariel>
 		{
 			LLViewerRegion* region = NULL;
 			if (mHost == LLHost::invalid)

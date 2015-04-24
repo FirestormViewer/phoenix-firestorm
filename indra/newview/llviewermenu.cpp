@@ -10549,6 +10549,27 @@ void initialize_volume_controls_callbacks()
 }
 //</FS:KC>
 
+// <FS:Ansariel> Force HTTP features on SL
+bool use_http_inventory()
+{
+#ifdef OPENSIM
+	return (LLGridManager::getInstance()->isInSecondLife() || gSavedSettings.getBOOL("UseHTTPInventory"));
+#else
+	return true;
+#endif
+}
+
+bool use_http_textures()
+{
+#ifdef OPENSIM
+	static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTP", true);
+	return (LLGridManager::getInstance()->isInSecondLife() || use_http);
+#else
+	return true;
+#endif
+}
+// <FS:Ansariel>
+
 void initialize_menus()
 {
 	// A parameterized event handler used as ctrl-8/9/0 zoom controls below.

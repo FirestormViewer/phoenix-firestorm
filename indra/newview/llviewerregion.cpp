@@ -85,6 +85,7 @@
 #include "llviewernetwork.h"
 #endif
 // </FS:CR>
+#include "llviewermenu.h"
 
 #ifdef LL_WINDOWS
 	#pragma warning(disable:4355)
@@ -2894,7 +2895,10 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("FlickrConnect");
 	capabilityNames.append("TwitterConnect");
 
-	if (gSavedSettings.getBOOL("UseHTTPInventory"))
+	// <FS:Ansariel> Force HTTP features on SL
+	//if (gSavedSettings.getBOOL("UseHTTPInventory"))
+	if (use_http_inventory())
+	// </FS:Ansariel>
 	{	
 		capabilityNames.append("FetchLib2");
 		capabilityNames.append("FetchLibDescendents2");

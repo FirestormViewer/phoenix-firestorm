@@ -367,6 +367,7 @@
 			<menu_item_call label="Depurar texturas do avatar" name="Debug Avatar Textures"/>
 		</menu>
 		<menu_item_check label="Texturas HTTP" name="HTTP Textures"/>
+		<menu_item_check label="Inventário HTTP" name="HTTP Inventory"/>
 		<menu_item_call label="Habilitar Visual Leak Detector" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Console Window on next Run" name="Console Window"/>
 		<menu label="Configurar nível de registro em log" name="Set Logging Level">

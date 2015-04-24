@@ -304,6 +304,7 @@
 			<menu_item_call label="Debug avatar teksturer" name="Debug Avatar Textures"/>
 		</menu>
 		<menu_item_check label="HTTP teksturer" name="HTTP Textures"/>
+		<menu_item_check label="HTTP Inventory" name="HTTP Inventory"/>
 		<menu_item_check label="Benyt consol vindue ved næste opstart" name="Console Window"/>
 		<menu_item_call label="Anmod om administrator status" name="Request Admin Options"/>
 		<menu_item_call label="Forlad administrationsstatus" name="Leave Admin Options"/>
