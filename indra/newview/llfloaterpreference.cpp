@@ -3222,6 +3222,9 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 #endif // LL_DARWIN
 // </FS:CR>
 
+	// <FS:Ansariel> Texture memory management
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue((F32)gMaxVideoRam.value());
+
 	return LLPanelPreference::postBuild();
 }
 void LLPanelPreferenceGraphics::draw()
