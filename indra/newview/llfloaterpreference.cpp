@@ -2583,6 +2583,10 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 
+#if !LL_WINDOWS
+	getChild<LLCheckBoxCtrl>("FSDisableWMIProbing")->setEnabled(FALSE); // VRAM detection via WMI probing on Windows systems
+#endif
+
 }
 // </FS:PP>
 

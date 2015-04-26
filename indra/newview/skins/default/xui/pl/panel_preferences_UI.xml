@@ -29,10 +29,6 @@
             sek.
         </text>
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
-        <check_box name="ShowNetStats" label="Pokaż miernik lagów" width="135" tool_tip="Pokaż miernik lagów w pasku statusu" />
-        <check_box label="Stary sposób odświeżania wartości w mierniku lagów" name="FSStatbarLegacyMeanPerSec" tool_tip="Gdy ta opcja jest włączona, to Firestorm będzie używał starego sposobu odświeżania wartości w mierniku lagów, uśredniając je dynamicznie co sekundę, zamiast podmieniać bez przerwy na te bieżące" />
-        <check_box label="Pokaż kontrolki mediów w menu na górze" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
-		<check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora (RC Magnum, RC Le Tigre, RC BlueSteel itd.) na pasku statusu w stylu V1."/>
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Komunikatów skryptów na obiekt:
         </text>
@@ -64,6 +60,24 @@
         <text name="ButtonFlashRateText">
             sek
         </text>
+    </panel>
+    <panel label="Górne paski" name="UI-interface-top-bars">
+        <text name="statusbar_textbox">
+            Pasek statusu:
+        </text>
+        <check_box name="ShowNetStats" label="Pokaż wskaźnik ruchu sieciowego w prawym górnym rogu ekranu" tool_tip="Pokaż wskaźnik ruchu sieciowego w pasku statusu" />
+        <check_box label="Stary sposób odświeżania wartości we wskaźniku ruchu sieciowego" name="FSStatbarLegacyMeanPerSec" tool_tip="Gdy ta opcja jest włączona, to Firestorm będzie używał starego sposobu odświeżania wartości we wskaźniku ruchu sieciowego, uśredniając je dynamicznie co sekundę, zamiast podmieniać bez przerwy na te bieżące" />
+        <check_box label="Kliknięcie na wskaźniku ruchu sieciowego otwiera statystyki zamiast miernika lagów" name="FSUseStatsInsteadOfLagMeter" />
+        <check_box label="Pokaż kontrolki mediów w menu na górze" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
+        <check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora (RC Magnum, RC Le Tigre, RC BlueSteel itd.) na pasku statusu w stylu V1." />
+        <check_box label="Pokaż lokalizację w menu na górze" name="ShowMenuBarLocation" />
+        <check_box label="Pokaż wyszukiwarkę pozycji w menu" name="show_search_menu_check" />
+        <text name="navfav_textbox">
+            Paski nawigacji i ulubionych:
+        </text>
+        <check_box label="Pokaż pasek ulubionych" name="ShowNavbarFavoritesPanel" />
+        <check_box label="Pokaż pasek nawigacji i wyszukiwarki" name="ShowNavbarNavigationPanel" />
+        <check_box label="Pokaż pasek wyszukiwarki" name="ShowSearchTopBar" />
     </panel>
     <panel label="Okna interfejsu" name="UI-interface-windows-tab">
         <check_box label="Otwieraj profil od razu po kliknięciu na imię awatara" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Gdy ta opcja jest włączona, to kliknięcie na linku z imieniem awatara otworzy od razu jego profil." />

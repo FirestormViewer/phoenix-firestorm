@@ -241,46 +241,6 @@
        tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
        top="150"
        width="256" />
-      <check_box
-       top_pad="2"
-       control_name="ShowNetStats"
-       follows="left|top"
-       height="16"
-       initial_value="false"
-       name="ShowNetStats"
-       label="Show lag meter"
-       width="110"
-       tool_tip="Show lag meter in the Status Overlay"/>
-      <check_box
-       enabled_control="ShowNetStats"
-       control_name="FSStatbarLegacyMeanPerSec"
-       height="16"
-       label="Use legacy period mean per second display for lag meter"
-       layout="topleft"
-       left_pad="10"
-       name="FSStatbarLegacyMeanPerSec"
-       tool_tip="If enabled, Firestorm will use the legacy method of showing the period mean per second value in the lag meter instead of the current observed value"
-       top_delta="0"
-       width="250" />
-      <check_box
-       top_pad="2"
-       control_name="FSEnableVolumeControls"
-       height="16"
-       name="FSEnableVolumeControls"
-       label="Show media controls in top menu"
-       left="10"
-       width="256"
-       tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
-      <check_box
-       initial_value="false"
-       top_pad="2"
-       control_name="FSStatusbarShowSimulatorVersion"
-       height="16"
-       name="FSStatusbarShowSimulatorVersion"
-       label="Show simulator channel in status bar"
-       left="10"
-       width="256"
-       tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
 
       <text
        type="string"
@@ -462,6 +422,140 @@
          width="50">
             sec
         </text>
+    </panel>
+
+    <!--Top Bars-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Top Bars"
+     name="UI-interface-top-bars" >
+
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		name="statusbar_textbox"
+		left="10"
+		top_pad="8"
+		width="200">
+		Status bar:
+		</text>
+
+		<check_box
+		 control_name="ShowNetStats"
+		 height="16"
+		 tool_tip="Show traffic indicator in the Status Overlay"
+		 label="Show traffic indicator in upper right corner of the screen"
+		 layout="topleft"
+		 name="ShowNetStats"
+		 top_pad="8"
+		 left="10"
+		 width="250" />
+		<check_box
+		 enabled_control="ShowNetStats"
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Use legacy period mean per second display for traffic indicator"
+		 name="FSStatbarLegacyMeanPerSec"
+		 width="270"
+		 left="20"
+		 control_name="FSStatbarLegacyMeanPerSec"
+		 tool_tip="If enabled, Firestorm will use the legacy method of showing the period mean per second value in the traffic indicator instead of the current observed value"/>
+		<check_box
+		 enabled_control="ShowNetStats"
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Clicking on traffic indicator opens Statistics instead of the Lag Meter"
+		 name="FSUseStatsInsteadOfLagMeter"
+		 width="270"
+		 left="20"
+		 control_name="FSUseStatsInsteadOfLagMeter"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show media controls in top menu"
+		 name="FSEnableVolumeControls"
+		 left="10"
+		 width="270"
+		 control_name="FSEnableVolumeControls"
+		 tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show simulator channel in status bar"
+		 name="FSStatusbarShowSimulatorVersion"
+		 width="270"
+		 control_name="FSStatusbarShowSimulatorVersion"
+		 tool_tip="Shows the current simulator channel (RC Magnum, RC Le Tigre, RC BlueSteel etc.) in the V1-like status bar."/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show Location in Top Menu"
+		 name="ShowMenuBarLocation"
+		 width="270"
+		 left="10"
+		 control_name="ShowMenuBarLocation"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show Menu Search"
+		 name="show_search_menu_check"
+		 width="270"
+		 control_name="FSMenuSearch"/>
+
+		<text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="16"
+		layout="topleft"
+		name="navfav_textbox"
+		left="10"
+		top_pad="10"
+		width="200">
+		Navigation &amp; Favourites bars:
+		</text>
+
+		<check_box
+		 top_pad="8"
+		 follows="left|top"
+		 height="16"
+		 label="Show Favorites Bar"
+		 name="ShowNavbarFavoritesPanel"
+		 width="270"
+		 left="10"
+		 control_name="ShowNavbarFavoritesPanel"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show Navigation and Search Bar"
+		 name="ShowNavbarNavigationPanel"
+		 width="270"
+		 control_name="ShowNavbarNavigationPanel"/>
+		<check_box
+		 enabled_control="ShowNavbarNavigationPanel"
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show Search Bar"
+		 name="ShowSearchTopBar"
+		 width="270"
+		 left="20"
+		 control_name="ShowSearchTopBar"/>
+
     </panel>
 
     <!--Interface Windows-->
