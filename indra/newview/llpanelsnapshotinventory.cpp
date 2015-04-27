@@ -82,8 +82,8 @@ BOOL LLPanelSnapshotInventory::postBuild()
 	getChild<LLSpinCtrl>(getWidthSpinnerName())->setAllowEdit(FALSE);
 	getChild<LLSpinCtrl>(getHeightSpinnerName())->setAllowEdit(FALSE);
 
-	getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshotInventory::onResolutionCommit, this, _1));
-
+	// <FS:Ansariel> Don't hide resolution spinners - they get disabled if needed
+	//getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshotInventory::onResolutionCommit, this, _1));
 
 	// <FS:Ansariel> Store settings at logout
 	getImageSizeComboBox()->setCurrentByIndex(gSavedSettings.getS32("LastSnapshotToInventoryResolution"));
