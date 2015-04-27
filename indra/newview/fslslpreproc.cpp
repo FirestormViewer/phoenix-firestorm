@@ -121,7 +121,7 @@ std::map<std::string,LLUUID> FSLSLPreprocessor::cached_assetids;
 using namespace boost::regex_constants;
 
 
-#define FAILDEBUG LL_INFOS() << "line:" << __LINE__ << LL_ENDL;
+#define FAILDEBUG LL_INFOS("FSLSLPreprocessor") << "line:" << __LINE__ << LL_ENDL;
 
 
 #define encode_start std::string("//start_unprocessed_text\n/*")
@@ -177,7 +177,7 @@ std::string FSLSLPreprocessor::decode(const std::string& script)
 	
 	if (tip != encode_start)
 	{
-		LL_DEBUGS() << "No start" << LL_ENDL;
+		LL_DEBUGS("FSLSLPreprocessor") << "No start" << LL_ENDL;
 		//if(sp != -1)trigger warningg/error?
 		return script;
 	}
@@ -186,12 +186,12 @@ std::string FSLSLPreprocessor::decode(const std::string& script)
 	
 	if (end == -1)
 	{
-		LL_DEBUGS() << "No end" << LL_ENDL;
+		LL_DEBUGS("FSLSLPreprocessor") << "No end" << LL_ENDL;
 		return script;
 	}
 
 	std::string data = script.substr(startpoint, end - startpoint);
-	LL_DEBUGS() << "data = " << data << LL_ENDL;
+	LL_DEBUGS("FSLSLPreprocessor") << "data = " << data << LL_ENDL;
 
 	std::string otext = data;
 
@@ -487,7 +487,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		std::string err = "not a valid regular expression: \"";
 		err += e.what();
 		err += "\"; optimization skipped";
-		LL_WARNS() << err << LL_ENDL;
+		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
@@ -496,7 +496,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		std::string err = "Exception caught: \"";
 		err += e.what();
 		err += "\"; optimization skipped";
-		LL_WARNS() << err << LL_ENDL;
+		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
@@ -515,7 +515,7 @@ std::string FSLSLPreprocessor::lslcomp(std::string script)
 		std::string err = "not a valid regular expression: \"";
 		err += e.what();
 		err += "\"";
-		LL_WARNS() << err << LL_ENDL;
+		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
@@ -524,7 +524,7 @@ std::string FSLSLPreprocessor::lslcomp(std::string script)
 		std::string err = "Exception caught: \"";
 		err += e.what();
 		err += "\"";
-		LL_WARNS() << err << LL_ENDL;
+		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
@@ -558,7 +558,7 @@ public:
 	bool found_include_directive(ContextT const& ctx, std::string const &filename, bool include_next)
 	{
 		std::string cfilename = filename.substr(1,filename.length()-2);
-		LL_DEBUGS() << cfilename << ":found_include_directive" << LL_ENDL;
+		LL_DEBUGS("FSLSLPreprocessor") << cfilename << ":found_include_directive" << LL_ENDL;
 		LLUUID item_id = FSLSLPreprocessor::findInventoryByName(cfilename);
 		if(item_id.notNull())
 		{
@@ -672,7 +672,7 @@ public:
 		{
 			err = "Ignoring warning: ";
 			err += e.description();
-			LL_WARNS() << err << LL_ENDL;
+			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		}
 		else
 		{
@@ -698,7 +698,7 @@ void cache_script(std::string name, std::string content)
 {
 	
 	content += "\n";/*hack!*/
-	LL_DEBUGS() << "writing " << name << " to cache" << LL_ENDL;
+	LL_DEBUGS("FSLSLPreprocessor") << "writing " << name << " to cache" << LL_ENDL;
 	std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"lslpreproc",name);
 	LLAPRFile infile(path.c_str(), LL_APR_WB);
 	if( infile.getFileHandle() )
@@ -710,7 +710,7 @@ void cache_script(std::string name, std::string content)
 void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLAssetType::EType type, void *userdata, S32 result, LLExtStat extstat)
 {
 	LLUUID uuid = iuuid;
-	LL_DEBUGS() << "cachecallback called" << LL_ENDL;
+	LL_DEBUGS("FSLSLPreprocessor") << "cachecallback called" << LL_ENDL;
 	ProcCacheInfo* info = (ProcCacheInfo*)userdata;
 	LLViewerInventoryItem* item = info->item;
 	FSLSLPreprocessor* self = info->self;
@@ -734,13 +734,13 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 
 			if (boost::filesystem::native(name))
 			{
-				LL_DEBUGS() << "native name of " << name << LL_ENDL;
+				LL_DEBUGS("FSLSLPreprocessor") << "native name of " << name << LL_ENDL;
 				self->display_message("Cached " + name);
 				cache_script(name, content);
 				std::set<std::string>::iterator loc = self->caching_files.find(name);
 				if (loc != self->caching_files.end())
 				{
-					LL_DEBUGS() << "finalizing cache" << LL_ENDL;
+					LL_DEBUGS("FSLSLPreprocessor") << "finalizing cache" << LL_ENDL;
 					self->caching_files.erase(loc);
 					//self->cached_files.insert(name);
 					if(uuid.isNull())uuid.generate();
@@ -750,7 +750,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 				}
 				else
 				{
-					LL_DEBUGS() << "something went wrong" << LL_ENDL;
+					LL_DEBUGS("FSLSLPreprocessor") << "something went wrong" << LL_ENDL;
 				}
 			}
 			else self->display_error(std::string("Error: script named '") + name + "' isn't safe to copy to the filesystem. This include will fail.");
@@ -986,7 +986,7 @@ static std::string reformat_switch_statements(std::string script)
 					//reportToNearbyChat(arg);
 					break;
 				}
-				LL_DEBUGS() << "arg=[" << arg << "]" << LL_ENDL;;
+				LL_DEBUGS("FSLSLPreprocessor") << "arg=[" << arg << "]" << LL_ENDL;;
 				std::string rstate = scopeript2(buffer, res+slen+arg.length()-1);
 
 				S32 cutlen = slen;
@@ -999,7 +999,7 @@ static std::string reformat_switch_statements(std::string script)
 				//rip off the scope edges
 				S32 slicestart = rstate.find("{")+1;
 				rstate = rstate.substr(slicestart,(rstate.rfind("}")-slicestart)-1);
-				LL_DEBUGS() << "rstate=[" << rstate << "]" << LL_ENDL;
+				LL_DEBUGS("FSLSLPreprocessor") << "rstate=[" << rstate << "]" << LL_ENDL;
 
 				boost::regex findcases(rDOT_MATCHES_NEWLINE
 					"(?:" rCMNT_OR_STR "|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.)*+");
@@ -1021,10 +1021,10 @@ static std::string reformat_switch_statements(std::string script)
 						if(case_end != -1)
 						{
 							std::string casearg = rstate.substr(case_start+caselen,case_end-(case_start+caselen));
-							LL_DEBUGS() << "casearg=[" << casearg << "]" << LL_ENDL;
+							LL_DEBUGS("FSLSLPreprocessor") << "casearg=[" << casearg << "]" << LL_ENDL;
 							std::string label = quicklabel();
 							ifs[casearg] = label;
-							LL_DEBUGS() << "BEFORE[" << rstate << "]" << LL_ENDL;
+							LL_DEBUGS("FSLSLPreprocessor") << "BEFORE[" << rstate << "]" << LL_ENDL;
 							bool addcurl = (case_end == next_curl ? 1 : 0);
 							label = "@"+label+";\n";
 							if(addcurl)
@@ -1033,11 +1033,11 @@ static std::string reformat_switch_statements(std::string script)
 							}
 							rstate.erase(case_start,(case_end-case_start) + 1);
 							rstate.insert(case_start,label);
-							LL_DEBUGS() << "AFTER[" << rstate << "]" << LL_ENDL;
+							LL_DEBUGS("FSLSLPreprocessor") << "AFTER[" << rstate << "]" << LL_ENDL;
 						}
 						else
 						{
-							LL_DEBUGS() << "error in regex case_end != -1" << LL_ENDL;
+							LL_DEBUGS("FSLSLPreprocessor") << "error in regex case_end != -1" << LL_ENDL;
 							rstate.erase(case_start,caselen);
 							rstate.insert(case_start,"error; cannot find { or :");
 						}
@@ -1091,7 +1091,7 @@ static std::string reformat_switch_statements(std::string script)
 				}
 				rstate = rstate + "}";
 
-				LL_DEBUGS() << "replacing[" << buffer.substr(res,cutlen) << "] with [" << rstate << "]" << LL_ENDL;
+				LL_DEBUGS("FSLSLPreprocessor") << "replacing[" << buffer.substr(res,cutlen) << "] with [" << rstate << "]" << LL_ENDL;
 				buffer.erase(res,cutlen);
 				buffer.insert(res,rstate);
 
@@ -1106,7 +1106,7 @@ static std::string reformat_switch_statements(std::string script)
 		}
 		catch (...)
 		{
-			LL_WARNS() << "unexpected exception caught; buffer=[" << buffer << "]" << LL_ENDL;
+			LL_WARNS("FSLSLPreprocessor") << "unexpected exception caught; buffer=[" << buffer << "]" << LL_ENDL;
 			throw;
 		}
 	}
@@ -1117,7 +1117,7 @@ void FSLSLPreprocessor::start_process()
 {
 	if (mWaving)
 	{
-		LL_WARNS() << "already waving?" << LL_ENDL;
+		LL_WARNS("FSLSLPreprocessor") << "already waving?" << LL_ENDL;
 		return;
 	}
 
@@ -1253,7 +1253,7 @@ void FSLSLPreprocessor::start_process()
 		//display the settings
 		display_message(settings);
 
-		LL_DEBUGS() << settings << LL_ENDL;
+		LL_DEBUGS("FSLSLPreprocessor") << settings << LL_ENDL;
 		std::string err;
 		try
 		{
@@ -1340,7 +1340,7 @@ void FSLSLPreprocessor::start_process()
 			errored = true;
 			// some preprocessing error
 			std::string err = name + "(" + llformat("%d",e.line_no()-1) + "): " + e.description();
-			LL_WARNS() << err << LL_ENDL;
+			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
 		catch(std::exception const& e)
@@ -1357,7 +1357,7 @@ void FSLSLPreprocessor::start_process()
 			errored = true;
 			std::string err = std::string(current_position.get_file().c_str()) + llformat("%d", current_position.get_line());
 			err += std::string("): unexpected exception caught.");
-			LL_WARNS() << err << LL_ENDL;
+			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
 	}
@@ -1379,7 +1379,7 @@ void FSLSLPreprocessor::start_process()
 					std::string err = "not a valid regular expression: \"";
 					err += e.what();
 					err += "\"";
-					LL_WARNS() << err << LL_ENDL;
+					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
@@ -1388,7 +1388,7 @@ void FSLSLPreprocessor::start_process()
 					std::string err = "Exception caught: \"";
 					err += e.what();
 					err += "\"";
-					LL_WARNS() << err << LL_ENDL;
+					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
@@ -1415,7 +1415,7 @@ void FSLSLPreprocessor::start_process()
 					std::string err = "not a valid regular expression: \"";
 					err += e.what();
 					err += "\"";
-					LL_WARNS() << err << LL_ENDL;
+					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
@@ -1424,7 +1424,7 @@ void FSLSLPreprocessor::start_process()
 					std::string err = "Exception caught: \"";
 					err += e.what();
 					err += "\"";
-					LL_WARNS() << err << LL_ENDL;
+					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
