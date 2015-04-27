@@ -862,14 +862,13 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 				LL_DEBUGS() << "Loading typed res from panel " << spanel->getName() << LL_ENDL;
 				new_width = spanel->getTypedPreviewWidth();
 				new_height = spanel->getTypedPreviewHeight();
-				//<FS:JL> FIRE-15794. Back out MAINT-4341 FIXED Pixel width and height of the preview is not matched to value of Width or Height text-box in the ?Snapshot to inventory? window 
-				//        Because having cropped snapshots of UI is worse than having mismatched values. 
+
 				// Limit custom size for inventory snapshots to 512x512 px.
-				//if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
-				//{
-				//	new_width = llmin(new_width, MAX_TEXTURE_SIZE);
-				//	new_height = llmin(new_height, MAX_TEXTURE_SIZE);
-				//}</FS:JL>*/
+				if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+				{
+					new_width = llmin(new_width, MAX_TEXTURE_SIZE);
+					new_height = llmin(new_height, MAX_TEXTURE_SIZE);
+				}
 			}
 			else
 			{
@@ -907,13 +906,11 @@ void LLFloaterSnapshot::Impl::updateResolution(LLUICtrl* ctrl, void* data, BOOL 
 		{
 			getWidthSpinner(view)->setValue(width);
 			getHeightSpinner(view)->setValue(height);
-			//<FS:JL> FIRE-15794. Back out MAINT-4341 FIXED Pixel width and height of the preview is not matched to value of Width or Height text-box in the ?Snapshot to inventory? window 
-			//        Because having cropped snapshots of UI is worse than having mismatched values. 
-			//if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
-			//{
-			//	getWidthSpinner(view)->setIncrement(width >> 1);
-			//	getHeightSpinner(view)->setIncrement(height >> 1);
-			//}</FS:JL>*/
+			if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+			{
+				getWidthSpinner(view)->setIncrement(width >> 1);
+				getHeightSpinner(view)->setIncrement(height >> 1);
+			}
 		}
 		// <FS:Ansariel> Store settings at logout; Only update spinners when using custom resolution
 		}
@@ -1039,13 +1036,11 @@ void LLFloaterSnapshot::Impl::setImageSizeSpinnersValues(LLFloaterSnapshot *view
 {
 	getWidthSpinner(view)->forceSetValue(width);
 	getHeightSpinner(view)->forceSetValue(height);
-	//<FS:JL> FIRE-15794. Back out MAINT-4341 FIXED Pixel width and height of the preview is not matched to value of Width or Height text-box in the ?Snapshot to inventory? window 
-	//        Because having cropped snapshots of UI is worse than having mismatched values. 
-	//if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
-	//{
-	//	getWidthSpinner(view)->setIncrement(width >> 1);
-	//	getHeightSpinner(view)->setIncrement(height >> 1);
-	//}</FS:JL>*/
+	if (getActiveSnapshotType(view) == LLSnapshotLivePreview::SNAPSHOT_TEXTURE)
+	{
+		getWidthSpinner(view)->setIncrement(width >> 1);
+		getHeightSpinner(view)->setIncrement(height >> 1);
+	}
 }
 
 // static
