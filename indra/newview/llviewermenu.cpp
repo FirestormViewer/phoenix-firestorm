@@ -8588,11 +8588,14 @@ void handle_selected_texture_info(void*)
    				msg.append( llformat("%d ", (S32)(it->second[i])));
    			}
 
-			LLSD args;
-			args["MESSAGE"] = msg;
-			// LLNotificationsUtil::add("SystemMessage", args);
-			LLNotificationsUtil::add("SystemMessageTip", args);	// <FS:Zi> use chat, not toasts
+			// <FS:Ansariel> FIRE-15946: Texture info gets wrongly reported multiple times
+			//LLSD args;
+			//args["MESSAGE"] = msg;
+			//LLNotificationsUtil::add("SystemMessage", args);
+			// </FS:Ansariel>
    		}
+		// <FS:Ansariel> Report texture info to local chat instead of toasts
+		reportToNearbyChat(msg);
 	}
 }
 
