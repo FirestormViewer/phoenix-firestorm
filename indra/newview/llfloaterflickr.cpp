@@ -367,7 +367,8 @@ bool LLFlickrPhotoPanel::onFlickrConnectStateChange(const LLSD& data)
 
 		case LLFlickrConnect::FLICKR_POSTED:
 			LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrPhotoPanel");
-			clearAndClose();
+			// <FS:Ansariel> FIRE-15948: Don't close floater after each post and retain entered text
+			//clearAndClose();
 			break;
 	}
 
