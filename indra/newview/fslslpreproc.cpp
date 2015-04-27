@@ -44,6 +44,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 // NaCl - missing LSL Preprocessor includes
 #include "llinventoryfunctions.h"
@@ -1124,8 +1125,22 @@ void FSLSLPreprocessor::start_process()
 	boost::wave::util::file_position_type current_position;
 	std::string input = mCore->mEditor->getText();
 	std::string rinput = input;
+	bool preprocessor_enabled = true;
+
+	// Simple check for the "do not preprocess" marker.  This logic will NOT survive a conversion into some form of sectional preprocessing as discussed in FIRE-9335, but will serve the basic use case given therein.
+	{
+		std::string::size_type location_index = rinput.find("//fspreprocessor off");
+		
+		if (location_index != std::string::npos)
+		{
+			std::string section_scanned = input.substr(0, location_index); // Used to compute the line number at which the marker was found.
+			display_message("Firestorm preprocessor disabled by directive at line " + llformat("%d", std::count(section_scanned.begin(), section_scanned.end(), '\n')) + ".");
+			preprocessor_enabled = false;
+		}
+	}
 
 	// Convert multiline strings for preprocessor
+	if (preprocessor_enabled)
 	{
 		std::ostringstream oaux;
 		// Simple DFA to parse the code for strings and comments,
@@ -1211,141 +1226,143 @@ void FSLSLPreprocessor::start_process()
 	bool use_optimizer = gSavedSettings.getBOOL("_NACL_PreProcLSLOptimizer");
 	bool enable_hdd_include = gSavedSettings.getBOOL("_NACL_PreProcEnableHDDInclude");
 	bool use_compression = gSavedSettings.getBOOL("_NACL_PreProcLSLTextCompress");
-	std::string settings;
-	settings = "Settings: preproc";
-	if (lazy_lists)
-	{
-		settings = settings + " LazyLists";
-	}
-	if (use_switch)
-	{
-		settings = settings + " Switches";
-	}
-	if (use_optimizer)
-	{
-		settings = settings + " Optimize";
-	}
-	if (enable_hdd_include)
-	{
-		settings = settings + " HDDInclude";
-	}
-	if (use_compression)
-	{
-		settings = settings + " Compress";
-	}
-	//display the settings
-	display_message(settings);
-
-	LL_DEBUGS() << settings << LL_ENDL;
 	bool errored = false;
-	std::string err;
-	try
-	{
-		trace_include_files tracer(this);
-		typedef boost::wave::cpplexer::lex_token<> token_type;
-		typedef boost::wave::cpplexer::lex_iterator<token_type> lex_iterator_type;
-		typedef boost::wave::context<std::string::iterator, lex_iterator_type, boost::wave::iteration_context_policies::load_file_to_string, trace_include_files >
-				context_type;
-
-		context_type ctx(input.begin(), input.end(), name.c_str(), tracer);
-		ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
-		ctx.set_language(boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
-		ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
-		
-		std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc" + gDirUtilp->getDirDelimiter();
-		ctx.add_include_path(path.c_str());
+	if (preprocessor_enabled) {
+		std::string settings;
+		settings = "Settings: preproc";
+		if (lazy_lists)
+		{
+			settings = settings + " LazyLists";
+		}
+		if (use_switch)
+		{
+			settings = settings + " Switches";
+		}
+		if (use_optimizer)
+		{
+			settings = settings + " Optimize";
+		}
 		if (enable_hdd_include)
 		{
-			std::string hddpath = gSavedSettings.getString("_NACL_PreProcHDDIncludeLocation");
-			if (!hddpath.empty())
-			{
-				ctx.add_include_path(hddpath.c_str());
-				ctx.add_sysinclude_path(hddpath.c_str());
-			}
+			settings = settings + " HDDInclude";
 		}
-		std::string def = llformat("__AGENTKEY__=\"%s\"", gAgentID.asString().c_str());//legacy because I used it earlier
-		ctx.add_macro_definition(def,false);
-		def = llformat("__AGENTID__=\"%s\"", gAgentID.asString().c_str());
-		ctx.add_macro_definition(def,false);
-		def = llformat("__AGENTIDRAW__=%s", gAgentID.asString().c_str());
-		ctx.add_macro_definition(def,false);
-		std::string aname = gAgentAvatarp->getFullname();
-		def = llformat("__AGENTNAME__=\"%s\"", aname.c_str());
-		ctx.add_macro_definition(def,false);
-		def = llformat("__ASSETID__=%s", LLUUID::null.asString().c_str());
-		ctx.add_macro_definition(def,false);
-		def = llformat("__SHORTFILE__=\"%s\"", name.c_str());
-		ctx.add_macro_definition(def,false);
-
-		ctx.add_macro_definition("list(...)=((list)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("float(...)=((float)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("integer(...)=((integer)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("key(...)=((key)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("rotation(...)=((rotation)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("quaternion(...)=((quaternion)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("string(...)=((string)(__VA_ARGS__))",false);
-		ctx.add_macro_definition("vector(...)=((vector)(__VA_ARGS__))",false);
-
-		context_type::iterator_type first = ctx.begin();
-		context_type::iterator_type last = ctx.end();
-
-		while (first != last)
+		if (use_compression)
 		{
-			if (caching_files.size() != 0)
-			{
-				mWaving = false;
-				return;
-			}
-			current_position = (*first).get_position();
-			
-			std::string token = std::string((*first).get_value().c_str());//stupid boost bitching even though we know its a std::string
-			
-			if(token == "#line")
-			{
-				token = "//#line";
-			}
+			settings = settings + " Compress";
+		}
+		//display the settings
+		display_message(settings);
 
-			output += token;
+		LL_DEBUGS() << settings << LL_ENDL;
+		std::string err;
+		try
+		{
+			trace_include_files tracer(this);
+			typedef boost::wave::cpplexer::lex_token<> token_type;
+			typedef boost::wave::cpplexer::lex_iterator<token_type> lex_iterator_type;
+			typedef boost::wave::context<std::string::iterator, lex_iterator_type, boost::wave::iteration_context_policies::load_file_to_string, trace_include_files >
+					context_type;
+
+			context_type ctx(input.begin(), input.end(), name.c_str(), tracer);
+			ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
+			ctx.set_language(boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
+			ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
 			
-			if (!lazy_lists)
+			std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc" + gDirUtilp->getDirDelimiter();
+			ctx.add_include_path(path.c_str());
+			if (enable_hdd_include)
 			{
-				lazy_lists = ctx.is_defined_macro(std::string("USE_LAZY_LISTS"));
+				std::string hddpath = gSavedSettings.getString("_NACL_PreProcHDDIncludeLocation");
+				if (!hddpath.empty())
+				{
+					ctx.add_include_path(hddpath.c_str());
+					ctx.add_sysinclude_path(hddpath.c_str());
+				}
 			}
-			
-			if (!use_switch)
+			std::string def = llformat("__AGENTKEY__=\"%s\"", gAgentID.asString().c_str());//legacy because I used it earlier
+			ctx.add_macro_definition(def,false);
+			def = llformat("__AGENTID__=\"%s\"", gAgentID.asString().c_str());
+			ctx.add_macro_definition(def,false);
+			def = llformat("__AGENTIDRAW__=%s", gAgentID.asString().c_str());
+			ctx.add_macro_definition(def,false);
+			std::string aname = gAgentAvatarp->getFullname();
+			def = llformat("__AGENTNAME__=\"%s\"", aname.c_str());
+			ctx.add_macro_definition(def,false);
+			def = llformat("__ASSETID__=%s", LLUUID::null.asString().c_str());
+			ctx.add_macro_definition(def,false);
+			def = llformat("__SHORTFILE__=\"%s\"", name.c_str());
+			ctx.add_macro_definition(def,false);
+
+			ctx.add_macro_definition("list(...)=((list)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("float(...)=((float)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("integer(...)=((integer)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("key(...)=((key)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("rotation(...)=((rotation)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("quaternion(...)=((quaternion)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("string(...)=((string)(__VA_ARGS__))",false);
+			ctx.add_macro_definition("vector(...)=((vector)(__VA_ARGS__))",false);
+
+			context_type::iterator_type first = ctx.begin();
+			context_type::iterator_type last = ctx.end();
+
+			while (first != last)
 			{
-				use_switch = ctx.is_defined_macro(std::string("USE_SWITCHES"));
+				if (caching_files.size() != 0)
+				{
+					mWaving = false;
+					return;
+				}
+				current_position = (*first).get_position();
+				
+				std::string token = std::string((*first).get_value().c_str());//stupid boost bitching even though we know its a std::string
+				
+				if(token == "#line")
+				{
+					token = "//#line";
+				}
+
+				output += token;
+				
+				if (!lazy_lists)
+				{
+					lazy_lists = ctx.is_defined_macro(std::string("USE_LAZY_LISTS"));
+				}
+				
+				if (!use_switch)
+				{
+					use_switch = ctx.is_defined_macro(std::string("USE_SWITCHES"));
+				}
+				++first;
 			}
-			++first;
+		}
+		catch(boost::wave::cpp_exception const& e)
+		{
+			errored = true;
+			// some preprocessing error
+			std::string err = name + "(" + llformat("%d",e.line_no()-1) + "): " + e.description();
+			LL_WARNS() << err << LL_ENDL;
+			display_error(err);
+		}
+		catch(std::exception const& e)
+		{
+			FAILDEBUG
+			errored = true;
+			std::string err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d", current_position.get_line()) + "): ";
+			err += std::string("exception caught: ") + e.what();
+			display_error(err);
+		}
+		catch (...)
+		{
+			FAILDEBUG
+			errored = true;
+			std::string err = std::string(current_position.get_file().c_str()) + llformat("%d", current_position.get_line());
+			err += std::string("): unexpected exception caught.");
+			LL_WARNS() << err << LL_ENDL;
+			display_error(err);
 		}
 	}
-	catch(boost::wave::cpp_exception const& e)
-	{
-		errored = true;
-		// some preprocessing error
-		err = name + "(" + llformat("%d",e.line_no()-1) + "): " + e.description();
-		LL_WARNS() << err << LL_ENDL;
-		display_error(err);
-	}
-	catch(std::exception const& e)
-	{
-		FAILDEBUG
-		errored = true;
-		err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d", current_position.get_line()) + "): ";
-		err += std::string("exception caught: ") + e.what();
-		display_error(err);
-	}
-	catch (...)
-	{
-		FAILDEBUG
-		errored = true;
-		err = std::string(current_position.get_file().c_str()) + llformat("%d", current_position.get_line());
-		err += std::string("): unexpected exception caught.");
-		LL_WARNS() << err << LL_ENDL;
-		display_error(err);
-	}
-
-	if (!errored)
+	
+	if (preprocessor_enabled && !errored)
 	{
 		FAILDEBUG
 		if (lazy_lists)
@@ -1379,7 +1396,7 @@ void FSLSLPreprocessor::start_process()
 			catch(...)
 			{
 				errored = true;
-				err = "unexpected exception in lazy list converter; not applied";
+				std::string err = "unexpected exception in lazy list converter; not applied";
 				display_error(err);
 			}
 
@@ -1415,7 +1432,7 @@ void FSLSLPreprocessor::start_process()
 			catch(...)
 			{
 				errored = true;
-				err = "unexpected exception in switch statement converter; not applied";
+				std::string err = "unexpected exception in switch statement converter; not applied";
 				display_error(err);
 			}
 		}
@@ -1425,7 +1442,7 @@ void FSLSLPreprocessor::start_process()
 	{
 		if (!errored)
 		{
-			if (use_optimizer)
+			if (preprocessor_enabled && use_optimizer)
 			{
 				display_message("Optimizing out unreferenced user-defined functions and global variables");
 				try
@@ -1435,14 +1452,14 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{	
 					errored = true;
-					err = "unexpected exception in lsl optimizer; not applied";
+					std::string err = "unexpected exception in lsl optimizer; not applied";
 					display_error(err);
 				}
 			}
 		}
 		if (!errored)
 		{
-			if (use_compression)
+			if (preprocessor_enabled && use_compression)
 			{
 				display_message("Compressing lsltext by removing unnecessary space");
 				try
@@ -1452,12 +1469,18 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{
 					errored = true;
-					err = "unexpected exception in lsl compressor; not applied";
+					std::string err = "unexpected exception in lsl compressor; not applied";
 					display_error(err);
 				}
 			}
 		}
-		output = encode(rinput) + "\n\n" + output;
+		
+		if (preprocessor_enabled) {
+			output = encode(rinput) + "\n\n" + output;
+		}
+		else {
+			output = rinput;
+		}
 
 
 		LLTextEditor* outfield = mCore->mPostEditor;
