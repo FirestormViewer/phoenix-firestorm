@@ -2771,6 +2771,43 @@ Try enclosing path to the editor with double quotes.
   <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
 
+  <!-- <FS:Cron> FIRE-9335 -->
+  <!-- <LSL Preprocessor -->
+  <string name="fs_preprocessor_starting">Firestorm preprocessor starting...</string>
+  <string name="fs_preprocessor_not_supported">Warning: Preprocessor not supported in this build. ([WHERE])</string>
+  <string name="fs_preprocessor_disabled_by_script_marker">Firestorm preprocessor disabled by directive at line [LINENUMBER].</string>
+  <string name="fs_preprocessor_settings_list_prefix">Settings:</string>
+  <string name="fs_preprocessor_wave_exception">[ERR_NAME] ([LINENUMBER]): [ERR_DESC]</string>
+  <string name="fs_preprocessor_exception">[ERR_NAME] ([LINENUMBER]): exception caught: [ERR_DESC]</string>
+  <string name="fs_preprocessor_error">[ERR_NAME] ([LINENUMBER]): unexpected exception caught.</string>
+  <!-- LSL Optimizer -->
+  <string name="fs_preprocessor_optimizer_start">Optimizing out unreferenced user-defined functions and global variables.</string>
+  <string name="fs_preprocessor_optimizer_regex_err">Not a valid regular expression: "[WHAT]"; LSL optimization skipped.</string>
+  <string name="fs_preprocessor_optimizer_exception">Exception caught: "[WHAT]"; LSL optimization skipped.</string>
+  <string name="fs_preprocessor_optimizer_unexpected_exception">Unexpected exception in LSL optimizer; not applied.</string>
+  <!-- LSL Compressor -->
+  <string name="fs_preprocessor_compress_start"> Compressing script text by removing unnecessary space.</string>
+  <string name="fs_preprocessor_compress_regex_err">Not a valid regular expression: "[WHAT]"; LSL compression skipped.</string>
+  <string name="fs_preprocessor_compress_exception">Exception caught: "[WHAT]"; LSL compression skipped.</string>
+  <string name="fs_preprocessor_compress_unexpected_exception">Unexpected exception in LSL compressor; not applied.</string>
+  <!-- LSL Lazy lists -->
+  <string name="fs_preprocessor_lazylist_start">Applying lazy list conversion.</string>
+  <string name="fs_preprocessor_lazylist_regex_err">Not a valid regular expression: "[WHAT]"; Lazy list converter skipped.</string>
+  <string name="fs_preprocessor_lazylist_exception">Exception caught: "[WHAT]"; Lazy list converter skipped.</string>
+  <string name="fs_preprocessor_lazylist_unexpected_exception">Unexpected exception in lazy list converter; not applied.</string>
+  <!-- LSL switch statement -->
+  <string name="fs_preprocessor_switchstatement_start">Applying switch statement conversion.</string>
+  <string name="fs_preprocessor_switchstatement_regex_err">Not a valid regular expression: "[WHAT]"; Switch statement converter skipped.</string>
+  <string name="fs_preprocessor_switchstatement_exception">Exception caught: "[WHAT]"; Switch statement converter skipped.</string>
+  <string name="fs_preprocessor_switchstatement_unexpected_exception">Unexpected exception in switch statement converter; not applied.</string>
+  <!-- LSL Cache -->
+  <string name="fs_preprocessor_cache_miss">Caching included file: "[FILENAME]"</string>
+  <string name="fs_preprocessor_cache_invalidated">Included file "[FILENAME]" has changed, recaching.</string>
+  <string name="fs_preprocessor_cache_completed">Caching completed for "[FILENAME]"</string>
+  <string name="fs_preprocessor_cache_unsafe">Error: script named "[FILENAME]" isn't safe to copy to the filesystem. This include will fail.</string>
+  <string name="fs_preprocessor_caching_err">Error caching included file "[FILENAME]"</string>
+  <!-- </FS:Cron> -->
+
   <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
   <string name="skin_defaults_starlight_location">Showing your current location in the menu bar was disabled as a default for the Starlight skin series.</string>
   <string name="skin_defaults_starlight_navbar">Showing the navigation bar was enabled as a default for the Starlight skin series.</string>

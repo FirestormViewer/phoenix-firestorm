@@ -36,10 +36,11 @@
 #include "fslslpreproc.h"
 #include "llagent.h"
 #include "llappviewer.h"
+#include "lltrans.h"	// getString()
 #include "llscrolllistctrl.h"
-#include "llviewertexteditor.h"
 #include "llinventorymodel.h"
 #include "llviewercontrol.h"
+#include "llviewertexteditor.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -484,18 +485,18 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 	}
 	catch (boost::regex_error& e)
 	{
-		std::string err = "not a valid regular expression: \"";
-		err += e.what();
-		err += "\"; optimization skipped";
+		LLStringUtil::format_map_t args;
+		args["[WHAT]"] = e.what();
+		std::string err = LLTrans::getString("fs_preprocessor_optimizer_regex_err", args);
 		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
 	catch (std::exception& e)
 	{
-		std::string err = "Exception caught: \"";
-		err += e.what();
-		err += "\"; optimization skipped";
+		LLStringUtil::format_map_t args;
+		args["[WHAT]"] = e.what();
+		std::string err = LLTrans::getString("fs_preprocessor_optimizer_exception", args);
 		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
@@ -512,18 +513,18 @@ std::string FSLSLPreprocessor::lslcomp(std::string script)
 	}
 	catch (boost::regex_error& e)
 	{
-		std::string err = "not a valid regular expression: \"";
-		err += e.what();
-		err += "\"";
+		LLStringUtil::format_map_t args;
+		args["[WHAT]"] = e.what();
+		std::string err = LLTrans::getString("fs_preprocessor_compress_regex_err", args);
 		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
 	}
 	catch (std::exception& e)
 	{
-		std::string err = "Exception caught: \"";
-		err += e.what();
-		err += "\"";
+		LLStringUtil::format_map_t args;
+		args["[WHAT]"] = e.what();
+		std::string err = LLTrans::getString("fs_preprocessor_compress_exception", args);
 		LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 		display_error(err);
 		throw;
@@ -577,8 +578,18 @@ public:
 					std::set<std::string>::iterator it = mProc->caching_files.find(cfilename);
 					if (it == mProc->caching_files.end())
 					{
-						if(not_cached)mProc->display_message(std::string("Caching ")+cfilename);
-						else /*if(changed)*/mProc->display_message(cfilename+std::string(" has changed, recaching..."));
+						if (not_cached)
+						{
+							LLStringUtil::format_map_t args;
+							args["[FILENAME]"] = cfilename;
+							mProc->display_message(LLTrans::getString("fs_preprocessor_cache_miss", args));
+						}
+						else /*if(changed)*/
+						{
+							LLStringUtil::format_map_t args;
+							args["[FILENAME]"] = cfilename;
+							mProc->display_message(LLTrans::getString("fs_preprocessor_cache_invalidated", args));
+						}
 						//one is always true
 						mProc->caching_files.insert(cfilename);
 						ProcCacheInfo* info = new ProcCacheInfo;
@@ -735,7 +746,9 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 			if (boost::filesystem::native(name))
 			{
 				LL_DEBUGS("FSLSLPreprocessor") << "native name of " << name << LL_ENDL;
-				self->display_message("Cached " + name);
+				LLStringUtil::format_map_t args;
+				args["[FILENAME]"] = name;
+				self->display_message(LLTrans::getString("fs_preprocessor_cache_completed", args));
 				cache_script(name, content);
 				std::set<std::string>::iterator loc = self->caching_files.find(name);
 				if (loc != self->caching_files.end())
@@ -753,11 +766,18 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 					LL_DEBUGS("FSLSLPreprocessor") << "something went wrong" << LL_ENDL;
 				}
 			}
-			else self->display_error(std::string("Error: script named '") + name + "' isn't safe to copy to the filesystem. This include will fail.");
+			else
+			{
+				LLStringUtil::format_map_t args;
+				args["[FILENAME]"] = name;
+				self->display_error(LLTrans::getString("fs_preprocessor_cache_unsafe", args));
+			}
 		}
 		else
 		{
-			self->display_error(std::string("Error caching "+name));
+			LLStringUtil::format_map_t args;
+			args["[FILENAME]"] = name;
+			self->display_error(LLTrans::getString("fs_preprocessor_caching_err", args));
 		}
 	}
 
@@ -773,7 +793,8 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	mSync = sync;
 	mDefinitionCaching = defcache;
 	caching_files.clear();
-	display_message("PreProc Starting...");
+	LLStringUtil::format_map_t args;
+	display_message(LLTrans::getString("fs_preprocessor_starting"));
 	
 	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
 	std::string script = mCore->mEditor->getText();
@@ -1134,7 +1155,9 @@ void FSLSLPreprocessor::start_process()
 		if (location_index != std::string::npos)
 		{
 			std::string section_scanned = input.substr(0, location_index); // Used to compute the line number at which the marker was found.
-			display_message("Firestorm preprocessor disabled by directive at line " + llformat("%d", std::count(section_scanned.begin(), section_scanned.end(), '\n')) + ".");
+			LLStringUtil::format_map_t args;
+			args["[LINENUMBER]"] = llformat("%d", std::count(section_scanned.begin(), section_scanned.end(), '\n'));
+			display_message(LLTrans::getString("fs_preprocessor_disabled_by_script_marker", args));
 			preprocessor_enabled = false;
 		}
 	}
@@ -1229,7 +1252,7 @@ void FSLSLPreprocessor::start_process()
 	bool errored = false;
 	if (preprocessor_enabled) {
 		std::string settings;
-		settings = "Settings: preproc";
+		settings = LLTrans::getString("fs_preprocessor_settings_list_prefix") + " preproc";
 		if (lazy_lists)
 		{
 			settings = settings + " LazyLists";
@@ -1339,7 +1362,11 @@ void FSLSLPreprocessor::start_process()
 		{
 			errored = true;
 			// some preprocessing error
-			std::string err = name + "(" + llformat("%d",e.line_no()-1) + "): " + e.description();
+			LLStringUtil::format_map_t args;
+			args["[NAME]"] = name;
+			args["[LINENUMBER]"] = llformat("%d",e.line_no()-1);
+			args["[ERR_DESC]"] = e.description();
+			std::string err = LLTrans::getString("fs_preprocessor_wave_exception", args);
 			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
@@ -1347,16 +1374,20 @@ void FSLSLPreprocessor::start_process()
 		{
 			FAILDEBUG
 			errored = true;
-			std::string err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d", current_position.get_line()) + "): ";
-			err += std::string("exception caught: ") + e.what();
-			display_error(err);
+			LLStringUtil::format_map_t args;
+			args["[NAME]"] = std::string(current_position.get_file().c_str());
+			args["[LINENUMBER]"] = llformat("%d", current_position.get_line());
+			args["[ERR_DESC]"] = e.what();
+			display_error(LLTrans::getString("fs_preprocessor_exception", args));
 		}
 		catch (...)
 		{
 			FAILDEBUG
 			errored = true;
-			std::string err = std::string(current_position.get_file().c_str()) + llformat("%d", current_position.get_line());
-			err += std::string("): unexpected exception caught.");
+			LLStringUtil::format_map_t args;
+			args["[NAME]"] = std::string(current_position.get_file().c_str());
+			args["[LINENUMBER]"] = llformat("%d", current_position.get_line());
+			std::string err = LLTrans::getString("fs_preprocessor_error", args);
 			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 			display_error(err);
 		}
@@ -1369,25 +1400,25 @@ void FSLSLPreprocessor::start_process()
 		{
 			try
 			{
-				display_message("Applying lazy list set transform");
+				display_message(LLTrans::getString("fs_preprocessor_lazylist_start"));
 				try
 				{
 					output = reformat_lazy_lists(output);
 				}
 				catch (boost::regex_error& e)
 				{
-					std::string err = "not a valid regular expression: \"";
-					err += e.what();
-					err += "\"";
+					LLStringUtil::format_map_t args;
+					args["[WHAT]"] = e.what();
+					std::string err = LLTrans::getString("fs_preprocessor_lazylist_regex_err", args);
 					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
 				catch (std::exception& e)
 				{
-					std::string err = "Exception caught: \"";
-					err += e.what();
-					err += "\"";
+					LLStringUtil::format_map_t args;
+					args["[WHAT]"] = e.what();
+					std::string err = LLTrans::getString("fs_preprocessor_lazylist_exception", args);
 					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
@@ -1396,34 +1427,33 @@ void FSLSLPreprocessor::start_process()
 			catch(...)
 			{
 				errored = true;
-				std::string err = "unexpected exception in lazy list converter; not applied";
-				display_error(err);
+				display_error(LLTrans::getString("fs_preprocessor_lazylist_unexpected_exception"));
 			}
-
 		}
+
 		if (use_switch)
 		{
 			try
 			{
-				display_message("Applying switch statement transform");
+				display_message(LLTrans::getString("fs_preprocessor_switchstatement_start"));
 				try
 				{
 					output = reformat_switch_statements(output);
 				}
 				catch (boost::regex_error& e)
 				{
-					std::string err = "not a valid regular expression: \"";
-					err += e.what();
-					err += "\"";
+					LLStringUtil::format_map_t args;
+					args["[WHAT]"] = e.what();
+					std::string err = LLTrans::getString("fs_preprocessor_switchstatement_regex_err", args);
 					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
 				}
 				catch (std::exception& e)
 				{
-					std::string err = "Exception caught: \"";
-					err += e.what();
-					err += "\"";
+					LLStringUtil::format_map_t args;
+					args["[WHAT]"] = e.what();
+					std::string err = LLTrans::getString("fs_preprocessor_switchstatement_exception", args);
 					LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
 					display_error(err);
 					throw;
@@ -1432,8 +1462,7 @@ void FSLSLPreprocessor::start_process()
 			catch(...)
 			{
 				errored = true;
-				std::string err = "unexpected exception in switch statement converter; not applied";
-				display_error(err);
+				display_error(LLTrans::getString("fs_preprocessor_switchstatement_unexpected_exception"));
 			}
 		}
 	}
@@ -1444,7 +1473,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (preprocessor_enabled && use_optimizer)
 			{
-				display_message("Optimizing out unreferenced user-defined functions and global variables");
+				display_message(LLTrans::getString("fs_preprocessor_optimizer_start"));
 				try
 				{
 					output = lslopt(output);
@@ -1452,8 +1481,7 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{	
 					errored = true;
-					std::string err = "unexpected exception in lsl optimizer; not applied";
-					display_error(err);
+					display_error(LLTrans::getString("fs_preprocessor_optimizer_unexpected_exception"));
 				}
 			}
 		}
@@ -1461,7 +1489,7 @@ void FSLSLPreprocessor::start_process()
 		{
 			if (preprocessor_enabled && use_compression)
 			{
-				display_message("Compressing lsltext by removing unnecessary space");
+				display_message(LLTrans::getString("fs_preprocessor_compress_exception"));
 				try
 				{
 					output = lslcomp(output);
@@ -1469,8 +1497,7 @@ void FSLSLPreprocessor::start_process()
 				catch(...)
 				{
 					errored = true;
-					std::string err = "unexpected exception in lsl compressor; not applied";
-					display_error(err);
+					display_error(LLTrans::getString("fs_preprocessor_compress_unexpected_exception"));
 				}
 			}
 		}
@@ -1498,19 +1525,25 @@ void FSLSLPreprocessor::start_process()
 
 std::string FSLSLPreprocessor::encode(std::string script)
 {
-	display_error("(encode) Warning: Preprocessor not supported in this build.");
+	LLStringUtil::format_map_t args;
+	args["[WHERE]"] = "encode";
+	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
 	return script;
 }
 
 std::string FSLSLPreprocessor::decode(std::string script)
 {
-	display_error("(decode) Warning: Preprocessor not supported in this build.");
+	LLStringUtil::format_map_t args;
+	args["[WHERE]"] = "decode";
+	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
 	return script;
 }
 
 std::string FSLSLPreprocessor::lslopt(std::string script)
 {
-	display_error("(lslopt) Warning: Preprocessor not supported in this build.");
+	LLStringUtil::format_map_t args;
+	args["[WHERE]"] = "lslopt";
+	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
 	return script;
 }
 
