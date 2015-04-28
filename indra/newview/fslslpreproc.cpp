@@ -1523,7 +1523,7 @@ void FSLSLPreprocessor::start_process()
 
 #else
 
-std::string FSLSLPreprocessor::encode(std::string script)
+std::string FSLSLPreprocessor::encode(const std::string& script)
 {
 	LLStringUtil::format_map_t args;
 	args["[WHERE]"] = "encode";
@@ -1531,7 +1531,7 @@ std::string FSLSLPreprocessor::encode(std::string script)
 	return script;
 }
 
-std::string FSLSLPreprocessor::decode(std::string script)
+std::string FSLSLPreprocessor::decode(const std::string& script)
 {
 	LLStringUtil::format_map_t args;
 	args["[WHERE]"] = "decode";
