@@ -229,7 +229,7 @@
         <key>gridnick</key>
             <string>Inworldz</string>
         <key>help</key>
-            <string>http://inworldz.com/faq.php</string>
+            <string>http://inworldz.com/support.php</string>
         <key>helperuri</key>
             <string>http://inworldz.com/</string>
         <key>login_identifier_types</key>
@@ -246,13 +246,13 @@
         <key>name</key>
             <string>inworldz.com:8002</string>
         <key>password</key>
-            <string>http://inworldz.com/</string>
+            <string>http://inworldz.com/loginerror.php?error=2</string>
         <key>platform</key>
             <string>OpenSim</string>
         <key>register</key>
             <string>http://inworldz.com/register.php</string>
         <key>slurl_base</key>
-            <string>hop://inworldz.com:8002/</string>
+            <string>http://places.inworldz.com/</string>
         </map>
     <key>islandoasisgrid.biz:8002</key>
         <map>
