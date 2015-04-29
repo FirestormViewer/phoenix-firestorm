@@ -223,7 +223,6 @@ void FloaterQuickPrefs::initCallbacks()
 void FloaterQuickPrefs::loadPresets()
 {
 	// WL Water combo box
-	if (mWaterPresetsCombo != NULL)
 	{
 		std::list<std::string> user_presets, system_presets;
 		LLWaterParamManager::instance().getPresetNames(user_presets, system_presets);
@@ -241,7 +240,7 @@ void FloaterQuickPrefs::loadPresets()
 			}
 		}
 
-		if (user_presets.size() > 0)
+		if (!user_presets.empty() && !system_presets.empty())
 		{
 			mWaterPresetsCombo->addSeparator();
 		}
@@ -258,7 +257,6 @@ void FloaterQuickPrefs::loadPresets()
 	}
 
 	// WL Sky combo box
-	if (mWLPresetsCombo != NULL)
 	{
 		LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
 		LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
@@ -277,7 +275,7 @@ void FloaterQuickPrefs::loadPresets()
 			}
 		}
 
-		if (!user_presets.empty())
+		if (!user_presets.empty() && !sys_presets.empty())
 		{
 			mWLPresetsCombo->addSeparator();
 		}
@@ -294,7 +292,6 @@ void FloaterQuickPrefs::loadPresets()
 	}
 
 	// WL Day Cycle combo box
-	if (mWLPresetsCombo != NULL)
 	{
 		LLDayCycleManager::preset_name_list_t user_presets, sys_presets;
 		LLDayCycleManager::instance().getPresetNames(user_presets, sys_presets);
@@ -313,7 +310,7 @@ void FloaterQuickPrefs::loadPresets()
 			}
 		}
 
-		if (!user_presets.empty())
+		if (!user_presets.empty() && !sys_presets.empty())
 		{
 			mDayCyclePresetsCombo->addSeparator();
 		}
