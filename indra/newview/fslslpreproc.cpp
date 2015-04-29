@@ -1566,11 +1566,11 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAs
 void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 {
 	LLTextEditor* outfield = mCore->mPostEditor;
-	if(outfield)
+	if (outfield)
 	{
 		outfield->setText(LLStringExplicit(mCore->mEditor->getText()));
 	}
-	mCore->doSaveComplete((void*)mCore,close);
+	mCore->doSaveComplete((void*)mCore, close, sync);
 }
 
 #endif
