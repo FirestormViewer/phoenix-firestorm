@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  can_close="true"
+  can_minimize="true"
+  can_resize="true"
+  height="200"
+  min_height="200"
+  min_width="500"
+  name="rlvLocks"
+  save_rect="true"
+  save_visibility="false"
+  single_instance="true"
+  positioning="cascading"
+  reuse_instance="true"
+  title="ACTIVE RLV LOCKS"
+  width="500">
+  <panel
+    class="panel_rlvLocks"
+    filename="panel_rlv_locks.xml"
+    layout="topleft"
+    left="9" 
+    name="panel_rlvLocks"
+    right="-8"
+    top="0" />
+</floater>
