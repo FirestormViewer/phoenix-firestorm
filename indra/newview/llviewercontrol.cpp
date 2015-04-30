@@ -792,7 +792,6 @@ static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 {
-	gSavedSettings.setBOOL("FSTrimLegacyNames", newvalue.asBoolean());
 	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
 	LLAvatarNameCache::cleanupClass();
 	LLVOAvatar::invalidateNameTags();
@@ -802,7 +801,6 @@ void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 
 void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 {
-	gSavedSettings.setBOOL("FSNameTagShowLegacyUsernames", newvalue.asBoolean());
 	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
 	LLAvatarNameCache::cleanupClass();
 	LLVOAvatar::invalidateNameTags();
