@@ -183,12 +183,19 @@ std::string LLAvatarName::getCompleteName() const
 			// If this particular display name is defaulted (i.e. based on user name),
 			// then display only the easier to read instance of the person's name.
 			// <FS:CR> FIRE-6659 - Trim "Resident" from legacy name
+			//name = mDisplayName;
 			if (sTrimResidentSurname || mLegacyFirstName.empty())
+			{
 				name = mDisplayName;
+			}
 			else if (mLegacyLastName.empty())
+			{
 				name = mLegacyFirstName + " Resident";
+			}
 			else
+			{
 				name = mLegacyFirstName + " " + mLegacyLastName;
+			}
 			// </FS:CR>
 		}
 		// <FS:CR> Option to show legacy name format instead of username
@@ -196,11 +203,17 @@ std::string LLAvatarName::getCompleteName() const
 		{
 			// FIRE-6659
 			if (sTrimResidentSurname && (mLegacyLastName == "Resident" || mLegacyLastName.empty()))
+			{
 				name = mDisplayName + " (" + mLegacyFirstName + ")";
+			}
 			else if (mLegacyLastName.empty() && !sTrimResidentSurname)
+			{
 				name = mDisplayName + " (" + mLegacyLastName + " Resident)";
+			}
 			else
+			{
 				name = mDisplayName + " (" + mLegacyFirstName + " " + mLegacyLastName + ")";
+			}
 		}
 		// </FS:CR>
 		else
