@@ -2577,6 +2577,8 @@ Try enclosing path to the editor with double quotes.
   <string name="SanityCheckNotEquals">The settings control &quot;[CONTROL_NAME]&quot; should not be set to [VALUE_1].</string>
   <string name="SanityCheckLessThan">The settings control &quot;[CONTROL_NAME]&quot; should be lower than [VALUE_1].</string>
   <string name="SanityCheckGreaterThan">The settings control &quot;[CONTROL_NAME]&quot; should be higher than [VALUE_1].</string>
+  <string name="SanityCheckLessThanEquals">The settings control &quot;[CONTROL_NAME]&quot; should be lower than or equal [VALUE_1].</string>
+  <string name="SanityCheckGreaterThanEquals">The settings control &quot;[CONTROL_NAME]&quot; should be higher than or equal [VALUE_1].</string>
   <string name="SanityCheckBetween">The settings control &quot;[CONTROL_NAME]&quot; should be between [VALUE_1] and [VALUE_2].</string>
   <string name="SanityCheckNotBetween">The settings control &quot;[CONTROL_NAME]&quot; should not be between [VALUE_1] and [VALUE_2].</string>
 
