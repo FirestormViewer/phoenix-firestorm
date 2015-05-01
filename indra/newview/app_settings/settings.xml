@@ -90,10 +90,10 @@
 		<key>Value</key>
 		<real>0.5</real>
 		<key>SanityCheckType</key>
-		<string>GreaterThan</string>
+		<string>GreaterThanEquals</string>
 		<key>SanityValue</key>
 		<array>
-			<real>0.24</real>
+			<real>0.25</real>
 		</array>
 		<key>SanityComment</key>
 		<string>If you make this too small you might not be able to read IMs that are shown in chat transcript.</string>
@@ -9305,10 +9305,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>33</integer>
       <key>SanityCheckType</key>
-      <string>GreaterThan</string>
+      <string>GreaterThanEquals</string>
       <key>SanityValue</key>
       <array>
-        <integer>19</integer>
+        <integer>20</integer>
       </array>
       <key>SanityComment</key>
       <string>If you make this too small your viewer might crash.</string>
@@ -12861,10 +12861,10 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>8</integer>
     <key>SanityCheckType</key>
-    <string>LessThan</string>
+    <string>LessThanEquals</string>
     <key>SanityValue</key>
     <array>
-      <integer>13</integer>
+      <integer>12</integer>
     </array>
     <key>SanityComment</key>
     <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
@@ -12880,10 +12880,10 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>16</integer>
     <key>SanityCheckType</key>
-    <string>LessThan</string>
+    <string>LessThanEquals</string>
     <key>SanityValue</key>
     <array>
-      <integer>33</integer>
+      <integer>32</integer>
     </array>
     <key>SanityComment</key>
     <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
@@ -22563,10 +22563,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>3.0</real>
       <key>SanityCheckType</key>
-      <string>GreaterThan</string>
+      <string>GreaterThanEquals</string>
       <key>SanityValue</key>
       <array>
-        <real>0.4999</real>
+        <real>0.5</real>
       </array>
       <key>SanityComment</key>
       <string>This value should at least be 0.5.</string>
