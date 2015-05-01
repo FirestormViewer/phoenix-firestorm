@@ -500,6 +500,14 @@
          function="Inventory.DoToSelected"
          parameter="paste_link" />
     </menu_item_call>
+    <menu_item_call 
+     label="Find All Links"
+     layout="topleft"
+     name="Find Links">
+        <menu_item_call.on_click
+         function="Inventory.CustomAction"
+         parameter="find_links" />
+    </menu_item_call>
     <menu_item_call
      label="Replace Links"
      layout="topleft"
