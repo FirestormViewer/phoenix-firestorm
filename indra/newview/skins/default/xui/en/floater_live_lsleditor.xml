@@ -58,7 +58,7 @@
      name="running"
      width="205" />
     <check_box
-    left_delta="140"
+    left_delta="130"
      enabled="true"
      follows="left|bottom"
      font="SansSerif"
