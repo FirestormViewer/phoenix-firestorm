@@ -643,7 +643,7 @@ default
 		height="15"
 		layout="topleft"
 		left="12"
-		name="prefs_label"
+		name="advanced_label"
 		top_pad="6"
 		width="150">
 		Advanced Options:
@@ -657,7 +657,7 @@ default
 		name="FSllOwnerSayToScriptDebugWindow_checkbox"
 		top_pad="6"
 		width="200"
-		label="Route llOwnerSays to script debug window" />
+		label="Route llOwnerSay to script debug window" />
         
 	<button
 		follows="top|left"

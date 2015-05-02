@@ -747,7 +747,7 @@
                 name="FSllOwnerSayToScriptDebugWindow_checkbox"
                 top_pad="6"
                 width="200"
-                label="Route llOwnerSays to script debug window" />
+                label="Route llOwnerSay to script debug window" />
         </panel>
 
         <!-- Chat: Typing -->
