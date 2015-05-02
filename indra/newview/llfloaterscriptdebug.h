@@ -39,8 +39,8 @@ public:
 	LLFloaterScriptDebug(const LLSD& key);
 	virtual ~LLFloaterScriptDebug();
 	virtual BOOL postBuild();
-    static void show(const LLUUID& object_id);
-    // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+	static void show(const LLUUID& object_id);
+	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// static void addScriptLine(const std::string &utf8mesg, const std::string &user_name, const LLColor4& color, const LLUUID& source_id);
 	static void addScriptLine(const LLChat& chat);
 
@@ -60,7 +60,7 @@ public:
 	LLFloaterScriptDebugOutput(const LLSD& object_id);
 	~LLFloaterScriptDebugOutput();
 
-    // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// void addLine(const std::string &utf8mesg, const std::string &user_name, const LLColor4& color);
 	void addLine(const LLChat& chat, const std::string &user_name);
 

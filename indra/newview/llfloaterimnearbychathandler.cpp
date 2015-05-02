@@ -605,12 +605,12 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// don't show toast and add message to chat history on receive debug message
 	// with disabled setting showing script errors or enabled setting to show script
 	// errors in separate window.
-    // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
-    static LLCachedControl<bool> FSllOwnerSayToScriptDebugWindow(gSavedSettings, "FSllOwnerSayToScriptDebugWindow");
-    if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG || (chat_msg.mChatType == CHAT_TYPE_OWNER && FSllOwnerSayToScriptDebugWindow))
+	static LLCachedControl<bool> FSllOwnerSayToScriptDebugWindow(gSavedSettings, "FSllOwnerSayToScriptDebugWindow");
+	if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG || (chat_msg.mChatType == CHAT_TYPE_OWNER && FSllOwnerSayToScriptDebugWindow))
 	{
-        // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow] Show llOwnerSays in the script debug window instead of local chat
+		// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow] Show llOwnerSays in the script debug window instead of local chat
 		// if(gSavedSettings.getBOOL("ShowScriptErrors") == FALSE)
 		if(gSavedSettings.getBOOL("ShowScriptErrors") == FALSE && chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
 			return;
@@ -632,7 +632,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 		//if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
 		{
 
-            // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+			// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 			// LLColor4 txt_color;
 
 			// LLViewerChat::getChatColor(chat_msg,txt_color);
@@ -644,7 +644,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 			LLFloaterScriptDebug::addScriptLine(chat_msg);
 			// <FS:Ansariel> Script debug icon
 			//return;
-            // <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+			// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 			// if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)
 			if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1 || chat_msg.mChatType == CHAT_TYPE_OWNER)
 			{
