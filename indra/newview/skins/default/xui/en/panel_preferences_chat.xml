@@ -139,6 +139,14 @@
 			 control_name="FSMarkObjects"
 			 label="Mark objects with (no name) when they speak to avoid spoofing"/>
             <check_box
+             control_name="FSllOwnerSayToScriptDebugWindow"
+             height="16"
+             label="Route llOwnerSay to script debug window"
+             layout="topleft"
+             name="FSllOwnerSayToScriptDebugWindow_checkbox"
+             top_pad="1"
+             width="400" />
+            <check_box
              control_name="UseChatBubbles"
              follows="left|top"
              height="16"
@@ -371,14 +379,6 @@
              label="Show the end of last conversation"
              layout="topleft"
              name="LogShowHistory"
-             top_pad="1"
-             width="400" />
-            <check_box
-             control_name="FSllOwnerSayToScriptDebugWindow"
-             height="16"
-             label="Route llOwnerSay to script debug window"
-             layout="topleft"
-             name="FSllOwnerSayToScriptDebugWindow_checkbox"
              top_pad="1"
              width="400" />
             <check_box

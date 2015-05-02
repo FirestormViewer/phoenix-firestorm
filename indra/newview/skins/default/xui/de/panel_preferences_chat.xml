@@ -19,6 +19,7 @@
 			<check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden"/>
 			<check_box name="FSEmphasizeShoutWhisper" label="Rufen fett, Flüstern kursiv hervorheben"/>
 			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen, um Vortäuschungen zu unterbinden"/>
+			<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
 			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/> 
 			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
@@ -77,7 +78,7 @@
 				<radio_item label="Horizontal" name="radio_horizontal"/>
 				<radio_item label="Vertikal" name="radio_vertical"/>
 			</radio_group>
-			<text name="req_restart_chattabs">
+			<text name="req_restart_chattabs" width="120">
 				(Erfordert Neustart)
 			</text>
 			<text name="FSIMTabNameFormat_label">
@@ -127,7 +128,6 @@
 			<text name="group_snooze_time_seconds_label" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen.">
 				Sekunden
 			</text>
-			<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 		</panel>
 
 		<!-- Chat: Typing -->
