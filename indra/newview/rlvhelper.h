@@ -374,6 +374,7 @@ public:
 	virtual BOOL tick();
 };
 
+// NOTE: Unused as of SL-3.7.2
 class RlvCallbackTimerOnce : public LLEventTimer
 {
 public:
@@ -389,6 +390,7 @@ protected:
 	nullary_func_t m_Callback;
 };
 
+// NOTE: Unused as of SL-3.7.2
 inline void rlvCallbackTimerOnce(F32 nPeriod, RlvCallbackTimerOnce::nullary_func_t cb)
 {
 	// Timer will automatically delete itself after the callback
