@@ -8,7 +8,7 @@
  name="script debug floater"
  help_topic="script_debug_floater"
  save_rect="true"
- title="Script Warning/Error"
+ title="Script Warning/Error/Debug"
  width="450">
     <tab_container
      background_visible="false"

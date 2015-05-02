@@ -738,6 +738,16 @@
              width="70">
                 seconds
             </text>
+            <check_box
+                control_name="FSllOwnerSayToScriptDebugWindow"
+                follows="left|top"
+                layout="topleft"
+                left="20"
+                height="12"
+                name="FSllOwnerSayToScriptDebugWindow_checkbox"
+                top_pad="6"
+                width="200"
+                label="Route llOwnerSays to script debug window" />
         </panel>
 
         <!-- Chat: Typing -->

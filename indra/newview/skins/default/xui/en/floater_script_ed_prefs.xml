@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_resize="false"
- height="630"
+ height="660"
  layout="topleft"
  name="floater_script_colors"
  help_topic="lsl_editor_preferences"
@@ -506,12 +506,11 @@
      left="8"
      right="-8"
      top="250"
-     bottom="-208"
      type="string"
      length="1"
      follows="left|top|right|bottom"
      font="Monospace"
-     height="100"
+     height="165"
      ignore_tab="false"
      layout="topleft"
      max_length="300"
@@ -544,7 +543,7 @@ default
 		layout="topleft"
 		left="12"
 		name="prefs_label"
-		top="430"
+		top_pad="6"
 		width="150">
 		Script Editor Options:
     </text>
@@ -638,6 +637,28 @@ default
 		<button.commit_callback
 		function="NACL.SetPreprocInclude" />
 	</button>
+    
+	<text
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="12"
+		name="prefs_label"
+		top_pad="6"
+		width="150">
+		Advanced Options:
+    </text>
+	<check_box
+		control_name="FSllOwnerSayToScriptDebugWindow"
+		follows="left|top"
+		layout="topleft"
+		left_delta="5"
+		height="12"
+		name="FSllOwnerSayToScriptDebugWindow_checkbox"
+		top_pad="6"
+		width="200"
+		label="Route llOwnerSays to script debug window" />
+        
 	<button
 		follows="top|left"
 		height="23"
