@@ -44,14 +44,6 @@
 
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
 
-		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
-		<check_box label="ラグメーターに１秒当り平均周期を表示（旧式の表示方法）" name="FSStatbarLegacyMeanPerSec" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示する旧式の表示方法を使用します。" />
-		
-		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
-
-		<check_box name="FSStatusbarShowSimulatorVersion" label="ステータスバーにシミュレータのチャンネルを表示" tool_tip="V1形式のステータスバーに現在のシミュレータのチャンネル（RC Magnum, RC Le Tigre, RC BlueSteel 等）を表示します。" />
-
-		
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>
@@ -85,6 +77,20 @@
 		<text name="ButtonFlashRateText">
 			秒
 		</text>
+	</panel>
+	
+	<!-- Top Bars -->
+
+	<panel name="UI-interface-top-bars" >
+
+		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
+		<check_box label="ラグメーターに１秒当り平均周期を表示（旧式の表示方法）" name="FSStatbarLegacyMeanPerSec" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示する旧式の表示方法を使用します。" />
+		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
+		<check_box name="FSStatusbarShowSimulatorVersion" label="ステータスバーにシミュレータのチャンネルを表示" tool_tip="V1形式のステータスバーに現在のシミュレータのチャンネル（RC Magnum, RC Le Tigre, RC BlueSteel 等）を表示します。" />
+		<check_box label="メニュー検索を表示" name="show_search_menu_check"/>
+        <check_box label="お気に入りバーを表示" name="ShowNavbarFavoritesPanel" />
+        <check_box label="ナビゲーションバーとお気に入りバーを表示" name="ShowNavbarNavigationPanel" />
+
 	</panel>
 	
 	<!-- Interface Windows -->

@@ -230,6 +230,9 @@ public:
 	virtual void setParent(LLFolderViewModelItem* parent) = 0;
 	virtual bool hasParent() = 0;
 
+	// <FS:ND/>
+	virtual LLFolderViewModelItem* getParent() const = 0;
+
 	// <FS:Ansariel> Special for protected items
 	virtual bool isProtected() const { return false; }
 
@@ -301,14 +304,23 @@ public:
 	{ 
 		// Avoid duplicates: bail out if that child is already present in the list
 		// Note: this happens when models are created before views
-		child_list_t::const_iterator iter;
-		for (iter = mChildren.begin(); iter != mChildren.end(); iter++)
-		{
-			if (child == *iter)
-			{
-				return;
-			}
-		}
+
+		// <FS:ND> Ugh, linear search! Replace this by simply looking if the parent matches
+
+		// child_list_t::const_iterator iter;
+		// for (iter = mChildren.begin(); iter != mChildren.end(); iter++)
+		// {
+		// 	if (child == *iter)
+		// 	{
+		// 		return;
+		// 	}
+		// }
+
+		if( child->getParent() == this )
+			return;
+		
+		// </FS:ND>
+		
 		mChildren.push_back(child);
 		child->setParent(this); 
 		dirtyFilter();
@@ -382,6 +394,9 @@ public:
 protected:
 	virtual void setParent(LLFolderViewModelItem* parent) { mParent = parent; }
 	virtual bool hasParent() { return mParent != NULL; }
+
+	// <FS:ND/>
+	virtual LLFolderViewModelItem* getParent() const { return mParent; }
 
 	S32							mSortVersion;
 	bool						mPassedFilter;

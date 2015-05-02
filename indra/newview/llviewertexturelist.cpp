@@ -1412,11 +1412,29 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 	}
 	//</FS:TS>
 	
+// <FS:Ansariel> Texture memory management
+	//mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
+#ifndef ND_BUILD64BIT_ARCH
+// </FS:Ansariel>
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
+
 	if (mMaxResidentTexMemInMegaBytes > (S32Megabytes)640)
 	{
 		mMaxTotalTextureMemInMegaBytes -= (mMaxResidentTexMemInMegaBytes / 4);
 	}
+// <FS:Ansariel> Texture memory management
+	mMaxTotalTextureMemInMegaBytes = llclamp(mMaxTotalTextureMemInMegaBytes, (S32Megabytes)0, (S32Megabytes)768);
+#else
+	if (mMaxResidentTexMemInMegaBytes > gMaxVideoRam / 2)
+	{
+		mMaxTotalTextureMemInMegaBytes = gMaxVideoRam + (S32Megabytes)(mMaxResidentTexMemInMegaBytes * 0.25f);
+	}
+	else
+	{
+		mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
+	}
+#endif
+// </FS:Ansariel>
 
 	//system mem
 	S32Megabytes system_ram = gSysMemory.getPhysicalMemoryClamped();

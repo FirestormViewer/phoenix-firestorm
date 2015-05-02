@@ -1685,12 +1685,11 @@ bool idle_startup()
 		// <FS:Ansariel> Force HTTP inventory enabled on Second Life
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInSecondLife())
+#endif
 		{
-#endif
-			gSavedSettings.setBOOL("UseHTTPInventory", TRUE);
-#ifdef OPENSIM
+			gMenuBarView->getChild<LLMenuItemGL>("HTTP Textures")->setVisible(FALSE);
+			gMenuBarView->getChild<LLMenuItemGL>("HTTP Inventory")->setVisible(FALSE);
 		}
-#endif
 		// </FS:Ansariel>
 
 		// Finish agent initialization.  (Requires gSavedSettings, builds camera)

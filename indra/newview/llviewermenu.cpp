@@ -8595,11 +8595,14 @@ void handle_selected_texture_info(void*)
    				msg.append( llformat("%d ", (S32)(it->second[i])));
    			}
 
-			LLSD args;
-			args["MESSAGE"] = msg;
-			// LLNotificationsUtil::add("SystemMessage", args);
-			LLNotificationsUtil::add("SystemMessageTip", args);	// <FS:Zi> use chat, not toasts
+			// <FS:Ansariel> FIRE-15946: Texture info gets wrongly reported multiple times
+			//LLSD args;
+			//args["MESSAGE"] = msg;
+			//LLNotificationsUtil::add("SystemMessage", args);
+			// </FS:Ansariel>
    		}
+		// <FS:Ansariel> Report texture info to local chat instead of toasts
+		reportToNearbyChat(msg);
 	}
 }
 
@@ -10559,6 +10562,27 @@ void initialize_volume_controls_callbacks()
 	commit.add("Pref.setControlFalse",			boost::bind(&volume_controls_set_control_false, _1, _2));
 }
 //</FS:KC>
+
+// <FS:Ansariel> Force HTTP features on SL
+bool use_http_inventory()
+{
+#ifdef OPENSIM
+	return (LLGridManager::getInstance()->isInSecondLife() || gSavedSettings.getBOOL("UseHTTPInventory"));
+#else
+	return true;
+#endif
+}
+
+bool use_http_textures()
+{
+#ifdef OPENSIM
+	static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTP", true);
+	return (LLGridManager::getInstance()->isInSecondLife() || use_http);
+#else
+	return true;
+#endif
+}
+// <FS:Ansariel>
 
 void initialize_menus()
 {

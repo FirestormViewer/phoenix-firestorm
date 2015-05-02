@@ -57,17 +57,17 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>
+
     <check_box
-     control_name="FSMenuSearch"
+     control_name="FSDisableWMIProbing"
      follows="top|left"
      height="15"
-     label="Show Menu Search"
+     label="Disable VRAM detection via WMI probing on Windows systems"
      layout="topleft"
      left="30"
-     name="show_search_menu_check"
-     top_pad="5"
+     name="FSDisableWMIProbing"
+     top_pad="10"
      width="237"/>
-
     <check_box
      control_name="UseAnimationTimeSteps"
      tool_tip="This setting may reduce render load for distant avatars but, may also cause their animations to play at incorrect speeds"
@@ -77,7 +77,7 @@
      layout="topleft"
      left="30"
      name="UseAnimationTimeSteps"
-     top_pad="10"
+     top_pad="5"
      width="237"/>
 
     <text

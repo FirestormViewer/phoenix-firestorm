@@ -139,6 +139,14 @@
 			 control_name="FSMarkObjects"
 			 label="Mark objects with (no name) when they speak to avoid spoofing"/>
             <check_box
+             control_name="FSllOwnerSayToScriptDebugWindow"
+             height="16"
+             label="Route llOwnerSay to script debug window"
+             layout="topleft"
+             name="FSllOwnerSayToScriptDebugWindow_checkbox"
+             top_pad="1"
+             width="400" />
+            <check_box
              control_name="UseChatBubbles"
              follows="left|top"
              height="16"
@@ -353,7 +361,8 @@
              name="plain_text_chat_history"
              top_pad="1"
              width="400" />
-             <check_box
+            <check_box
+             disabled_control="PlainTextChatHistory"
              control_name="ShowChatMiniIcons"
              height="16"
              initial_value="false"
@@ -416,7 +425,7 @@
              follows="left|top"
              layout="topleft"
              left="20"
-             height="12"
+             height="16"
              width="110"
              top_pad="15">
                  Show IMs in:
@@ -454,9 +463,9 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
-             top_delta="-2"
+             top_delta="0"
              text_color="White_50"
-             height="12"
+             height="16"
              width="100">
                  (requires restart)
             </text>
@@ -465,10 +474,10 @@
              follows="left|top"
              layout="topleft"
              left="20"
-             height="12"
+             height="16"
              name="tab_direction_label"
              width="150"
-             top_pad="12">
+             top_pad="3">
               Chat Tab Mode Orientation:
             </text>
             <radio_group
@@ -504,9 +513,9 @@
              follows="left|top"
              layout="topleft"
              left_pad="10"
-             top_delta="0"
+             top_delta="2"
              text_color="White_50"
-             height="12"
+             height="16"
              width="100">
                  (requires restart)
             </text>
@@ -516,9 +525,9 @@
 			 follows="left|top"
 			 layout="topleft"
 			 left="20"
-			 height="12"
+			 height="16"
 			 width="150"
-			 top_pad="12">
+			 top_pad="3">
 				Name format for IM tabs:
 			</text>
 			<combo_box
@@ -526,8 +535,9 @@
 			 enabled_control="UseDisplayNames"
 			 layout="topleft"
 			 follows="left|top"
+			 height="16"
 			 left_pad="10"
-			 top_delta="-5"
+			 top_delta="0"
 			 name="FSIMTabNameFormat"
 			 width="200">
 				<combo_box.item
@@ -552,7 +562,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-			 top_pad="10"
+             top_pad="10"
              left="20"
              width="50"
              height="20"
@@ -566,19 +576,19 @@
              top_pad="3"
              left="30"
              height="16"
-             width="75">
-              Name Style:
+             width="50">
+              Names:
             </text>
             <combo_box
              enabled_control="FSHighlightGroupMods"
              control_name="FSModNameStyle"
              layout="topleft"
              follows="left|top"
-             height="20"             
-             left_pad="10"
-             top_delta="-3"
+             height="16"
+             left_pad="1"
+             top_delta="0"
              name="mod_name_style"
-             width="170">
+             width="150">
             <combo_box.item
              label="Normal"
              name="normal"
@@ -615,23 +625,23 @@
             <text
              name="Moderator Text Style"
              layout="topleft"
-             follows="left|top"             
-             top_pad="3"
-             left="30"
+             follows="left|top"
+             left_pad="10"
+             top_delta="0"
              height="16"
-             width="75">
-              Text Style:
+             width="40">
+              Text:
             </text>
             <combo_box
              enabled_control="FSHighlightGroupMods"
              control_name="FSModTextStyle"
              layout="topleft"
              follows="left|top"
-             height="20"
-             left_pad="10"
-             top_delta="-3"
+             height="16"
+             left_pad="1"
+             top_delta="0"
              name="mod_text_style"
-             width="170">
+             width="150">
             <combo_box.item
               label="Normal"
               name="normal"

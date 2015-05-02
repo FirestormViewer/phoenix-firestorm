@@ -5137,6 +5137,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="SanityCheckGreaterThan">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być większe niż [VALUE_1]
 	</string>
+	<string name="SanityCheckLessThanEquals">
+		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być mniejsze niż lub równe [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być większe niż lub równe [VALUE_1].
+	</string>
 	<string name="SanityCheckBetween">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno mieć wartość pomiędzy [VALUE_1] i [VALUE_2]
 	</string>
@@ -5556,6 +5562,87 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="preproc_toggle_warning">
 		Przełączenie trybu preprocesora odniesie pełny skutek dopiero po zamknięciu i ponownym otwarciu tego edytora.
+	</string>
+	<string name="fs_preprocessor_starting">
+		Inicjalizacja preprocesora przeglądarki [APP_NAME]...
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		Uwaga: Preprocesor nie jest wspierany. ([WHERE])
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		Preprocesor przeglądarki [APP_NAME] został wyłączony przez dyrektywę w linii [LINENUMBER].
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		Ustawienia:
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME] ([LINENUMBER]): wyjątek: [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME] ([LINENUMBER]): wystąpił nieoczekiwany wyjątek.
+	</string>
+	<string name="fs_preprocessor_optimizer_start">
+		Optymalizacja funkcji i zmiennych globalnych zdefiniowanych przez użytkownika.
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		Nieprawidłowe wyrażenie regularne: '[WHAT]'; Optymalizacja LSL pominięta.
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		Wystąpił nieoczekiwany wyjątek: '[WHAT]'; Optymalizacja LSL pominięta.
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		Wystąpił nieoczekiwany wyjątek podczas optymalizacji LSL; Nie zaaplikowano.
+	</string>
+	<string name="fs_preprocessor_compress_start">
+		Kompresja skryptu poprzez wyeliminowanie niepotrzebnych miejsc.
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		Nieprawidłowe wyrażenie regularne: '[WHAT]'; Kompresja LSL pominięta.
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		Wystąpił nieoczekiwany wyjątek: '[WHAT]'; Kompresja LSL pominięta.
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		Wystąpił nieoczekiwany wyjątek podczas kompresji LSL; Nie zaaplikowano.
+	</string>
+	<string name="fs_preprocessor_lazylist_start">
+		Stosowanie konwersji wolnych list (lazy lists).
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		Nieprawidłowe wyrażenie regularne: '[WHAT]'; Konwersja pominięta.
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		Wystąpił nieoczekiwany wyjątek: '[WHAT]'; Konwersja pominięta.
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		Wystąpił nieoczekiwany wyjątek podczas konwersji wolnych list; Nie zaaplikowano.
+	</string>
+	<string name="fs_preprocessor_switchstatement_start">
+		Stosowanie konwersji instrukcji switch.
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		Nieprawidłowe wyrażenie regularne: '[WHAT]'; Konwersja instrukcji switch pominięta.
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		Wystąpił nieoczekiwany wyjątek: '[WHAT]'; Konwersja instrukcji switch pominięta.
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Wystąpił nieoczekiwany wyjątek podczas konwersji instrukcji switch; Nie zaaplikowano.
+	</string>
+	<string name="fs_preprocessor_cache_miss">
+		Buforowanie dołączonego pliku: '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		Dołączony plik '[FILENAME]' uległ zmianie, buforowanie ponowne.
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		Buforowanie zakończone dla '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		Błąd: skopiowanie skryptu '[FILENAME]' do systemu plików nie jest bezpieczne. To dołączenie nie powiedzie się.
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		Błąd podczas buforowania pliku '[FILENAME]'
 	</string>
 	<string name="skin_defaults_starlight_location">
 		Pokazywanie Twojej obecnej lokalizacji w pasku menu zostało wyłączone, to domyślne zachowanie dla skórek linii StarLight.

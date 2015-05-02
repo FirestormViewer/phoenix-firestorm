@@ -47,7 +47,6 @@
 			Hz
 		</text>
 -->
-		<check_box name="ShowNetStats" label="Показать лаги" tool_tip=""/>
 		<text name="ToastSettings">
 			Настройки отображения уведомлений: (Popups, Консоль, Тосты):
 		</text>
@@ -94,6 +93,13 @@
 		<text name="NearbyToastWidthText">
 			%
 		</text>
+	</panel>
+
+	<panel name="UI-interface-top-bars">
+		<check_box name="ShowNetStats" label="Показать лаги"/>
+		<check_box label="Показать мини-панель местоположения" name="ShowMenuBarLocation" />
+        <check_box label="Показать панель избранного" name="ShowNavbarFavoritesPanel" />
+        <check_box label="Показать панель навигации и избранного" name="ShowNavbarNavigationPanel" />
 	</panel>
 
 	<panel name="UI-interface-windows-tab">

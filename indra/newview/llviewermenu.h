@@ -163,6 +163,10 @@ U32 info_display_from_string(std::string info_display);
 bool enable_object_export();
 // </FS:Techwolf Lupindo>
 
+// <FS:Ansariel> Force HTTP features on SL
+bool use_http_inventory();
+bool use_http_textures();
+// <FS:Ansariel>
 
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {

@@ -802,7 +802,8 @@ void LLFloaterReporter::takeScreenshot()
 	{
 		texture->setImageAssetID(mResourceDatap->mAssetInfo.mUuid);
 		texture->setDefaultImageAssetID(mResourceDatap->mAssetInfo.mUuid);
-		texture->setCaption(getString("Screenshot"));
+		// <FS:Ansariel> Don't need the caption - should be obvious and messes up layout
+		//texture->setCaption(getString("Screenshot"));
 	}
 
 }

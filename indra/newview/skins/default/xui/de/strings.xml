@@ -5823,6 +5823,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SanityCheckGreaterThan">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert größer als [VALUE_1] haben.
 	</string>
+	<string name="SanityCheckLessThanEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert kleiner als oder gleich [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert größer als oder gleich [VALUE_1] haben.
+	</string>
 	<string name="SanityCheckBetween">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert zwischen [VALUE_1] und [VALUE_2] haben.
 	</string>
@@ -6175,6 +6181,95 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="preproc_toggle_warning">
 		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
+	</string>
+	<string name="fs_preprocessor_starting">
+		[APP_NAME]-Präprozessor startet...
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		Warnung: Präprozessor wird in diesem Build nicht unterstützt. ([WHERE])
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		[APP_NAME]-Präprozessor deaktiviert durch Direktive in Zeile [LINENUMBER].
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		Einstellungen:
+	</string>
+	<string name="fs_preprocessor_wave_exception">
+		[ERR_NAME] ([LINENUMBER]): [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME] ([LINENUMBER]): Gefangener Ausnahmefehler: [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME] ([LINENUMBER]): Unerwarteter Ausnahmefehler aufgetreten.
+	</string>
+	<!-- LSL Optimizer -->
+	<string name="fs_preprocessor_optimizer_start">
+		Entfernung von nicht-referenzierten benutzerdefinierten Funktionen und globalen Variablen.
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		Kein gültiger regulärer Ausdruck: „[WHAT]“; LSL-Optimierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		Ausnahmefehler aufgetreten: „[WHAT]“; LSL-Optimierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		Unerwarteter Ausnahmefehler in LSL-Optimierer; nicht angewandt.
+	</string>
+	<!-- LSL Compressor -->
+	<string name="fs_preprocessor_compress_start">
+		Komprimiere Skript-Text durch Entfernung von unnötigen Leerzeichen.
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		Kein gültiger regulärer Ausdruck: „[WHAT]“; LSL-Komprimierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		Ausnahmefehler aufgetreten: „[WHAT]“; LSL-Komprimierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		Unerwarteter Ausnahmefehler in LSL-Komprimierer; nicht angewandt.
+	</string>
+	<!-- LSL Lazy lists -->
+	<string name="fs_preprocessor_lazylist_start">
+		Wende Lazy-List-Konvertierung an.
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		Kein gültiger regulärer Ausdruck: „[WHAT]“; Lazy-List-Konvertierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		Ausnahmefehler aufgetreten: „[WHAT]“; Lazy-List-Konvertierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		Unerwarteter Ausnahmefehler in Lazy-List-Konvertierer; nicht angewandt.
+	</string>
+	<!-- LSL switch statement -->
+	<string name="fs_preprocessor_switchstatement_start">
+		Wende Switch-Befehl-Konvertierung an.
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		Kein gültiger regulärer Ausdruck: „[WHAT]“; Switch-Befehl-Konvertierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		Ausnahmefehler aufgetreten: „[WHAT]“; Switch-Befehl-Konvertierung übersprungen.
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Unerwarteter Ausnahmefehler in Switch-Befehl-Konvertierer; nicht angewandt.
+	</string>
+	<!-- LSL Cache -->
+	<string name="fs_preprocessor_cache_miss">
+		Cache eingebundene Datei: „[FILENAME]“
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		Eingebundene Datei „[FILENAME]“ wurde geändert - erneuere Cache.
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		Cachen von „[FILENAME]“ beendet.
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		Fehler: Skript „[FILENAME]“ kann nicht sicher auf das Dateisystem kopiert werden. Einbinden wird fehlschlagen.
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		Fehler beim Cachen der eingebundenen Datei „[FILENAME]“.
 	</string>
 
 	<string name="skin_defaults_starlight_location">

@@ -272,50 +272,53 @@ LLHUDEffectLookAt::~LLHUDEffectLookAt()
 //-----------------------------------------------------------------------------
 void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 {
-	// pack both target object and position 
-	// position interpreted as offset if target object is non-null 
-	ELookAtType  target_type     = mTargetType; 
-	LLVector3d  target_offset_global   = mTargetOffsetGlobal; 
-	LLViewerObject* target_object    = (LLViewerObject*)mTargetObject; 
-	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
-	LLVOAvatar* source_avatar = NULL; 
-	if (!source_object)//kokua TODO: find out why this happens at all and fix there 
-	{ 
-		LL_DEBUGS("HUDEffect")<<"NULL-Object HUDEffectLookAt message" <<  LL_ENDL; 
-		markDead(); 
-		return; 
-	} 
-	if (source_object->isAvatar()) 
-	{ 
-		source_avatar = (LLVOAvatar*)source_object; 
-	} 
-	else //AW: TODO: find out why this happens at all and fix there 
-	{ 
-		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectLookAt message for ID: " <<  source_object->getID().asString()<< LL_ENDL; 
-		markDead(); 
-		return; 
-	} 
-	bool is_self = source_avatar->isSelf(); 
+	// pack both target object and position
+	// position interpreted as offset if target object is non-null
+	ELookAtType target_type = mTargetType;
+	LLVector3d target_offset_global = mTargetOffsetGlobal;
+	LLViewerObject* target_object = (LLViewerObject*)mTargetObject;
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject;
+	LLVOAvatar* source_avatar = NULL;
+
+	if (!source_object) //kokua TODO: find out why this happens at all and fix there
+	{
+		LL_DEBUGS("HUDEffect") << "NULL-Object HUDEffectLookAt message" << LL_ENDL;
+		markDead();
+		return;
+	}
+
+	if (source_object->isAvatar())
+	{
+		source_avatar = (LLVOAvatar*)source_object;
+	}
+	else //AW: TODO: find out why this happens at all and fix there
+	{
+		LL_DEBUGS("HUDEffect") << "Non-Avatar HUDEffectLookAt message for ID: " << source_object->getID().asString() << LL_ENDL;
+		markDead();
+		return;
+	}
+
+	bool is_self = source_avatar && source_avatar->isSelf();
 	static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
 	static LLCachedControl<bool> isLocalPrivate(gSavedSettings, "PrivateLocalLookAtTarget", false);
-	if (!is_self) //AW: TODO: find out why this happens at all and fix there 
-	{ 
-		LL_DEBUGS("HUDEffect")<< "Non-self Avatar HUDEffectLookAt message for ID: " << source_avatar->getID().asString() << LL_ENDL; 
-		markDead(); 
-		return; 
-	} 
+	if (!is_self) //AW: TODO: find out why this happens at all and fix there
+	{
+		LL_DEBUGS("HUDEffect") << "Non-self Avatar HUDEffectLookAt message for ID: " << source_avatar->getID().asString() << LL_ENDL;
+		markDead();
+		return;
+	}
 	else if (isLocalPrivate && is_private) // AO: send nothing if we're not showing anything ourselves
 	{
 		markDead();
 		return;
 	}
 	else if (is_private && target_type != LOOKAT_TARGET_AUTO_LISTEN) // AW: spoof boring lookat target to others if we still want real local effects.
-	{ 
-		//this mimicks "do nothing" 
-		target_type = LOOKAT_TARGET_AUTO_LISTEN; 
-		target_offset_global.setVec(2.5, 0.0, 0.0); 
-		target_object = mSourceObject; 
-	} 
+	{
+		//this mimicks "do nothing"
+		target_type = LOOKAT_TARGET_AUTO_LISTEN;
+		target_offset_global.setVec(2.5, 0.0, 0.0);
+		target_object = mSourceObject;
+	}
 	// Pack the default data
 	LLHUDEffect::packData(mesgsys);
 
@@ -568,30 +571,32 @@ void LLHUDEffectLookAt::render()
 		if ((show_names > 0) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			// render name for crosshair
-			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::NORMAL));
-			LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
+			const LLFontGL* fontp = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::NORMAL));
+			LLVector3 position = target + LLVector3(0.f, 0.f, 0.3f);
 
-			LLAvatarName nameBuffer;
-			LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
 			std::string name;
-			switch (show_names)
+			LLAvatarName nameBuffer;
+			if (LLAvatarNameCache::get(mSourceObject->getID(), &nameBuffer))
 			{
-				case 1: // Display Name (user.name)
-					name = nameBuffer.getCompleteName();
-					break;
-				case 2: // Display Name
-					name = nameBuffer.getDisplayName();
-					break;
-				case 3: // First Last
-					name = nameBuffer.getUserNameForDisplay();
-					break;
-				default: //user.name
-					name = nameBuffer.getAccountName();
-					break;
+				switch (show_names)
+				{
+					case 1: // Display Name (user.name)
+						name = nameBuffer.getCompleteName();
+						break;
+					case 2: // Display Name
+						name = nameBuffer.getDisplayName();
+						break;
+					case 3: // First Last
+						name = nameBuffer.getUserNameForDisplay();
+						break;
+					default: //user.name
+						name = nameBuffer.getAccountName();
+						break;
+				}
 			}
 
 			gGL.pushMatrix();
-			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::DROP_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+			hud_render_utf8text(name, position, *fontp, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW, -0.5f * fontp->getWidthF32(name), 3.0f, lookAtColor, FALSE);
 			gGL.popMatrix();
 		}
 

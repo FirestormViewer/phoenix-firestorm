@@ -182,6 +182,9 @@ void RlvCommand::initLookupTable()
 		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
 			m_BhvrMap.insert(std::pair<std::string, ERlvBehaviour>(arBehaviours[idxBvhr], (ERlvBehaviour)idxBvhr));
 
+		// <FS:Ansariel> FIRE-4358: Add "touchfar" synonym for "fartouch"
+		m_BhvrMap.insert(std::pair<std::string, ERlvBehaviour>("touchfar", RLV_BHVR_FARTOUCH));
+
 		fInitialized = true;
 	}
 }

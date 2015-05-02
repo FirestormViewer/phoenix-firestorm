@@ -1100,6 +1100,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	getChild<LLPanel>("client_tags_panel")->setVisible(in_opensim);
 // </FS:CR>
 
+	// <FS:Ansariel> Force HTTP features on SL
+	getChild<LLCheckBoxCtrl>("TexturesHTTP")->setEnabled(in_opensim);
+
 	// <FS:Ansariel> Group mutes backup
 	LLScrollListItem* groupmute_item = getChild<LLScrollListCtrl>("restore_per_account_files_list")->getItem(LLSD("groupmutes"));
 	groupmute_item->setEnabled(in_opensim);
@@ -2593,6 +2596,10 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!(mute_sound_effects || mute_all_sounds));
 
+#if !LL_WINDOWS
+	getChild<LLCheckBoxCtrl>("FSDisableWMIProbing")->setEnabled(FALSE); // VRAM detection via WMI probing on Windows systems
+#endif
+
 }
 // </FS:PP>
 
@@ -3231,6 +3238,9 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(FALSE);
 #endif // LL_DARWIN
 // </FS:CR>
+
+	// <FS:Ansariel> Texture memory management
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue((F32)gMaxVideoRam.value());
 
 	return LLPanelPreference::postBuild();
 }

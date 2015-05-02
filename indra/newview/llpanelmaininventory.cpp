@@ -149,6 +149,9 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mEnableCallbackRegistrar.add("Inventory.SortBy.Check", boost::bind(&LLPanelMainInventory::isSortByChecked, this, _2));
 	// </FS:Zi> Sort By menu handlers
 
+	// <FS:Ansariel> Add handler for being able to directly route to onCustomAction
+	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
+
 	mSavedFolderState = new LLSaveFolderState();
 	mSavedFolderState->setApply(FALSE);
 

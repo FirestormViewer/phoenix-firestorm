@@ -41,6 +41,7 @@
 #include "bufferarray.h"
 #include "bufferstream.h"
 #include "llcorehttputil.h"
+#include "llviewermenu.h"
 
 // History (may be apocryphal)
 //
@@ -351,7 +352,10 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 	if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived())
 	{
 		// If we'll be using the capability, we'll be sending batches and the background thing isn't as important.
-		if (gSavedSettings.getBOOL("UseHTTPInventory")) 
+		// <FS:Ansariel> Force HTTP features on SL
+		//if (gSavedSettings.getBOOL("UseHTTPInventory")) 
+		if (use_http_inventory())
+		// </FS:Ansariel>
 		{
 			bulkFetch();
 			return;

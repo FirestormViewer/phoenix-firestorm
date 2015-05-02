@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Display panel">
 	<tab_container name="tabs">
-		<panel label="Allgemein" name="UI Prefs Panel">
+		<panel name="UI Prefs Panel">
 			<check_box name="FSRemoveScriptBlockButton" label="Supprimer le bouton 'Bloquer'"/>
+		</panel>
+		<panel name="UI-interface-top-bars">
+			<check_box label="Afficher la mini-barre d&apos;emplacement" name="ShowMenuBarLocation" />
+			<check_box label="Afficher la barre des favoris" name="ShowNavbarFavoritesPanel" />
+			<check_box label="Afficher la barre de navigation &amp; favoris" name="ShowNavbarNavigationPanel" />
 		</panel>
 		<panel name="UI-interface-windows-tab">
 			<check_box name="FSUseWebProfiles" label="Utiliser le profil web par défaut" tool_tip="Affiche les profils comme une page web plutôt que comme une fenêtre style v1"/>

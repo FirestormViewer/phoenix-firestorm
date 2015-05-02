@@ -28,7 +28,6 @@
 	<check_box label="ログイン時にグリッド選択を表示" name="show_grid_selection_check"/>
 	<check_box label="アドバンスメニューを表示" name="show_advanced_menu_check"/>
 	<check_box label="デベロッパーメニューを表示" name="show_develop_menu_check"/>
-	<check_box label="メニュー検索を表示" name="show_search_menu_check" />
 	<check_box tool_tip="この設定は、遠くにいるアバターのレンダリング負荷を軽減するかもしれませんが、同時に、アニメーションの再生スピードが正確でなくなる可能性があります。" label="アニメーション・タイムステップを使用する（試験中の機能）" name="UseAnimationTimeSteps" />
 	<text name="BackgroundYieldTimeText">
 			[APP_NAME] が前面に出ていない時に他のアプリケーションに渡すミリ秒単位のフレーム時間（デフォルトは40、1 秒 = 1000 ミリ秒):

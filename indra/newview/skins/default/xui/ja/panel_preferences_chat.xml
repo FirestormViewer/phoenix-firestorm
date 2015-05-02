@@ -95,7 +95,7 @@
 		</combo_box>
 		<!--<FS:HG> FS-1734 seperate name and text styles for moderator--> 
 		<check_box label="グループチャットの議長の発言は太字にする" name="FSHighlightGroupMods"/>
-		<text name="Moderator Name Style">
+		<text name="Moderator Name Style" width="85">
 			名前のスタイル：
 		</text>
 		<combo_box name="mod_name_style">
@@ -108,7 +108,7 @@
 			<combo_box.item label="斜字体＋下線" name="ITALICUNDERLINE"/>
 			<combo_box.item label="太字＋斜字体＋下線" name="BOLDITALICUNDERLINE"/>
 		</combo_box>
-		<text name="Moderator Text Style">
+		<text name="Moderator Text Style" width="85">
 			発言のスタイル：
 		</text>
 		<combo_box name="mod_text_style">

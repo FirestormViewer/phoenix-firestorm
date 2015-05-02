@@ -77,7 +77,7 @@ void SanityCheck::onSanity(LLControlVariable* controlp)
 	map["VALUE_1"] = sanityValues[0].asString();
 	map["VALUE_2"] = sanityValues[1].asString();
 	map["CONTROL_NAME"] = controlp->getName();
-	args["SANITY_MESSAGE"] = LLTrans::getString(checkType,map);
+	args["SANITY_MESSAGE"] = LLTrans::getString(checkType, map);
 	args["SANITY_COMMENT"] = controlp->getSanityComment();
 	args["CURRENT_VALUE"] = controlp->getValue().asString();
 	LLNotificationsUtil::add("SanityCheck", args);

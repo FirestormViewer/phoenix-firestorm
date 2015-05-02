@@ -5711,8 +5711,12 @@ BOOL LLModelPreview::render()
 								{
 									// <FS:Ansariel> Proper matrix array length for fitted mesh
 									//F32* src = (F32*) mat[idx[k]].mMatrix;
-									F32* src = (F32*) mat[idx[(k < JOINT_COUNT) ? k : 0]].mMatrix;
+									S32 l = idx[k];
+									if( l >= JOINT_COUNT )
+										l = 0;
+									F32* src = (F32*) mat[l].mMatrix;
 									// </FS:Ansariel>
+
 									F32* dst = (F32*) final_mat.mMatrix;
 
 									F32 w = wght.mV[k];
