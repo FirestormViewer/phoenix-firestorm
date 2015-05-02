@@ -3043,12 +3043,10 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInve
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-#ifdef RLV_DEBUG
 			if (rlv_handler_t::isEnabled())
 			{
 				RLV_ASSERT(rlvPredCanRemoveItem(item));
 			}
-#endif // RLV_DEBUG
 // [/RLVa:KB]
 			bool immediate_delete = false;
 			if (item->getType() == LLAssetType::AT_OBJECT)
@@ -3074,12 +3072,10 @@ void LLAppearanceMgr::removeCOFLinksOfType(LLWearableType::EType type, LLPointer
 		if (item->getIsLinkType()) // we must operate on links only
 		{
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-#ifdef RLV_DEBUG
 			if (rlv_handler_t::isEnabled())
 			{
 				RLV_ASSERT(rlvPredCanRemoveItem(item));
 			}
-#endif // RLV_DEBUG
 // [/RLVa:KB]
 			remove_inventory_item(item->getUUID(), cb);
 		}
