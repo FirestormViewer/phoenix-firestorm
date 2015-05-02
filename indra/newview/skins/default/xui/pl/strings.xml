@@ -5137,6 +5137,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="SanityCheckGreaterThan">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być większe niż [VALUE_1]
 	</string>
+	<string name="SanityCheckLessThanEquals">
+		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być mniejsze niż lub równe [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być większe niż lub równe [VALUE_1].
+	</string>
 	<string name="SanityCheckBetween">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno mieć wartość pomiędzy [VALUE_1] i [VALUE_2]
 	</string>

@@ -123,6 +123,7 @@
 			<text name="group_snooze_time_seconds_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
 				sekund
 			</text>
+			<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Kieruj llOwnerSay do okna debugowania skryptów" />
 		</panel>
 		<panel label="Pisanie" name="ChatTyping">
 			<button name="autoreplace_showgui" label="Autokorekta"/>
