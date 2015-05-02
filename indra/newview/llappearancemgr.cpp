@@ -2181,14 +2181,18 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	{
 		//checking integrity of the COF in terms of ordering of wearables, 
 		//checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		// Ordering information is pre-applied locally so no reason to reason to wait on the inventory backend
+		updateClothingOrderingInfo(LLUUID::null);
+// [/SL:KB]
 
-		// As with enforce_item_restrictions handling above, we want
-		// to wait for the update callbacks, then (finally!) call
-		// updateAppearanceFromCOF() with no additional COF munging needed.
-		LLPointer<LLInventoryCallback> cb(
-			new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
-		updateClothingOrderingInfo(LLUUID::null, cb);
-		return;
+//		// As with enforce_item_restrictions handling above, we want
+//		// to wait for the update callbacks, then (finally!) call
+//		// updateAppearanceFromCOF() with no additional COF munging needed.
+//		LLPointer<LLInventoryCallback> cb(
+//			new LLUpdateAppearanceOnDestroy(false, false, post_update_func));
+//		updateClothingOrderingInfo(LLUUID::null, cb);
+//		return;
 	}
 
 	if (!validateClothingOrderingInfo())
@@ -3812,6 +3816,9 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		const LLUUID& id_to_remove = *it;
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 		removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
+		clearPendingAttachment(linked_item_id);
+// [/SL:KB]
 		addDoomedTempAttachment(linked_item_id);
 	}
 }
@@ -3821,6 +3828,9 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
+	clearPendingAttachment(linked_item_id);
+// [/SL:KB]
 	addDoomedTempAttachment(linked_item_id);
 }
 
@@ -4029,7 +4039,7 @@ void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 		   if (!isLinkedInCOF(item_id))
 		   {
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-	 		   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback();
+	 		   LLPointer<LLInventoryCallback> cb = new LLRegisterAttachmentCallback(item_id);
 	 		   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
 // [/SL:KB]
 //			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
@@ -4046,11 +4056,7 @@ void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 {
 	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
-		uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), item_id);
-		if (itPendingAttachLink != mPendingAttachLinks.end())
-		{
-			mPendingAttachLinks.erase(itPendingAttachLink);
-		}
+	   clearPendingAttachment(item_id);
 // [/SL:KB]
 
 	   if (mAttachmentInvLinkEnabled)
@@ -4072,30 +4078,34 @@ void LLAppearanceMgr::linkPendingAttachments()
 		const LLUUID& idAttachItem = *itPendingAttachLink;
 		if ( (gAgentAvatarp->isWearingAttachment(idAttachItem)) && (!isLinkInCOF(idAttachItem)) )
 		{
-			if (!cb)
-			{
-				cb = new LLRegisterAttachmentCallback();
-			}
+//			if (!cb)
+//				cb = new LLRegisterAttachmentCallback(idAttachItem);
+			// One LLInventoryCallback instance should handle multiple items but thanks to AIS we don't currently have access to the UUIDs of the new links
+			// so we need one instance per needed link - yay for progress
+			cb = new LLRegisterAttachmentCallback(idAttachItem);
 			LLAppearanceMgr::addCOFItemLink(idAttachItem, cb);
 		}
 	}
 }
 
-void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idItem)
+void LLAppearanceMgr::clearPendingAttachment(const LLUUID& idItem)
 {
-	const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
-
-	// Remove the attachment from the pending list
-	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idItemBase);
+	uuid_vec_t::iterator itPendingAttachLink = std::find(mPendingAttachLinks.begin(), mPendingAttachLinks.end(), idItem);
 	if (itPendingAttachLink != mPendingAttachLinks.end())
 	{
 		mPendingAttachLinks.erase(itPendingAttachLink);
 	}
+}
+
+void LLAppearanceMgr::onRegisterAttachmentComplete(const LLUUID& idAttachItem)
+{
+	// Remove the attachment from the pending list
+	clearPendingAttachment(idAttachItem);
 
 	// It may have been detached already in which case we should remove the COF link
-	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idItemBase)) )
+	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isWearingAttachment(idAttachItem)) )
 	{
-		removeCOFItemLinks(idItemBase);
+		removeCOFItemLinks(idAttachItem);
 	}
 }
 // [/SL:KB]

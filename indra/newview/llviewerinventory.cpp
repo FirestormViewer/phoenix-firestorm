@@ -1257,7 +1257,10 @@ void link_inventory_array(const LLUUID& category,
 	}
 
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable( (baseobj_array.size() > 1) ? AISCommand::CMD_OBJ_LINKBATCH : AISCommand::CMD_OBJ_LINK ))
+// [/SL:KB]
 	{
 		LLSD new_inventory = LLSD::emptyMap();
 		new_inventory["links"] = links;
@@ -1323,7 +1326,10 @@ void update_inventory_item(
 {
 	const LLUUID& item_id = update_item->getUUID();
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_UPDATE))
+// [/SL:KB]
 	{
 		LLSD updates = update_item->asLLSD();
 		// Replace asset_id and/or shadow_id with transaction_id (hash_id)
@@ -1376,22 +1382,45 @@ void update_inventory_item(
 	const LLSD& updates,
 	LLPointer<LLInventoryCallback> cb)
 {
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
+	LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+	LLPointer<LLViewerInventoryItem> new_item = NULL;
+
+	if (obj)
+	{
+		new_item = new LLViewerInventoryItem(obj);
+		new_item->fromLLSD(updates,false);
+
+		LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
+		gInventory.accountForUpdate(up);
+		gInventory.updateItem(new_item);
+	}
+// [/SL:KB]
+
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_UPDATE))
+// [/SL:KB]
 	{
 		LLPointer<AISCommand> cmd_ptr = new UpdateItemCommand(item_id, updates, cb);
 		ais_ran = cmd_ptr->run_command();
 	}
 	if (!ais_ran)
 	{
-		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
-		if(obj)
-		{
-			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
-			new_item->copyViewerItem(obj);
-			new_item->fromLLSD(updates,false);
+//		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
+//		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+//		if(obj)
+//		{
+//			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
+//			new_item->copyViewerItem(obj);
+//			new_item->fromLLSD(updates,false);
 
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (new_item)
+		{
+// [/SL:KB]
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessageFast(_PREHASH_UpdateInventoryItem);
 			msg->nextBlockFast(_PREHASH_AgentData);
@@ -1403,9 +1432,9 @@ void update_inventory_item(
 			new_item->packMessage(msg);
 			gAgent.sendReliableMessage();
 
-			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
-			gInventory.accountForUpdate(up);
-			gInventory.updateItem(new_item);
+//			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
+//			gInventory.accountForUpdate(up);
+//			gInventory.updateItem(new_item);
 			if (cb)
 			{
 				cb->fire(item_id);
@@ -1432,7 +1461,10 @@ void update_inventory_category(
 		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(obj);
 		new_cat->fromLLSD(updates);
 		// FIXME - restore this once the back-end work has been done.
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_UPDATE))
+// [/SL:KB]
 		{
 			LLSD new_llsd = new_cat->asLLSD();
 			LLPointer<AISCommand> cmd_ptr = new UpdateCategoryCommand(cat_id, new_llsd, cb);
@@ -1498,7 +1530,10 @@ void remove_inventory_item(
 	{
 		const LLUUID item_id(obj->getUUID());
 		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << obj->getName() << LL_ENDL;
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_REMOVE))
+// [/SL:KB]
 		{
 			LLPointer<AISCommand> cmd_ptr = new RemoveItemCommand(item_id, cb);
 			cmd_ptr->run_command();
@@ -1574,7 +1609,10 @@ void remove_inventory_category(
 			LLNotificationsUtil::add("CannotRemoveProtectedCategories");
 			return;
 		}
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_REMOVE))
+// [/SL:KB]
 		{
 			LLPointer<AISCommand> cmd_ptr = new RemoveCategoryCommand(cat_id, cb);
 			cmd_ptr->run_command();
@@ -1677,7 +1715,10 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 		}
 		else
 		{
-			if (AISCommand::isAPIAvailable())
+//			if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+			if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_PURGE))
+// [/SL:KB]
 			{
 				LLPointer<AISCommand> cmd_ptr = new PurgeDescendentsCommand(id, cb);
 				cmd_ptr->run_command();
@@ -1834,7 +1875,10 @@ void slam_inventory_folder(const LLUUID& folder_id,
 						   const LLSD& contents,
 						   LLPointer<LLInventoryCallback> cb)
 {
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_SLAM))
+// [/SL:KB]
 	{
 		LL_DEBUGS(LOG_INV) << "using AISv3 to slam folder, id " << folder_id
 						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
