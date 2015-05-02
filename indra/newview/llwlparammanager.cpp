@@ -61,6 +61,10 @@
 #include "curl/curl.h"
 #include "llstreamtools.h"
 
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+#include <boost/algorithm/string.hpp>
+// [/RLVa:KB]
+
 LLWLParamManager::LLWLParamManager() :
 
 	//set the defaults for the controls
@@ -643,6 +647,19 @@ void LLWLParamManager::getPresetNames(preset_name_list_t& region, preset_name_li
 		}
 	}
 }
+
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+const std::string& LLWLParamManager::findPreset(const std::string& strPresetName, LLEnvKey::EScope eScope)
+{
+	for (std::map<LLWLParamKey, LLWLParamSet>::const_iterator itList = mParamList.begin(); itList != mParamList.end(); itList++)
+	{
+		const LLWLParamKey& wlKey = itList->first;
+		if ( (wlKey.scope == eScope) && (boost::iequals(wlKey.name, strPresetName)) )
+			return wlKey.name;
+	}
+	return LLStringUtil::null;
+}
+// [/RLVa:KB]
 
 void LLWLParamManager::getUserPresetNames(preset_name_list_t& user) const
 {
