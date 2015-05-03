@@ -241,7 +241,10 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 
 std::string LLUrlEntryHTTP::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	return urlToLabelWithGreyQuery(url);
+	// <FS:Ansariel> Unfail URI display
+	//return urlToLabelWithGreyQuery(url);
+	return unescapeUrl(url);
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntryHTTP::getQuery(const std::string &url) const
@@ -315,7 +318,10 @@ LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
 
 std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	return urlToLabelWithGreyQuery(url);
+	// <FS:Ansariel> Unfail URI display
+	//return urlToLabelWithGreyQuery(url);
+	return unescapeUrl(url);
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
