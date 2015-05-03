@@ -525,6 +525,8 @@ BOOL LLScriptEdCore::postBuild()
 void LLScriptEdCore::processKeywords()
 {
 	LL_DEBUGS("SyntaxLSL") << "Processing keywords" << LL_ENDL;
+	// <FS:Ansariel> FIRE-15906: Clear combobox values before adding new
+	mFunctions->clearRows();
 	mEditor->clearSegments();
 	mEditor->initKeywords();
 	mEditor->loadKeywords();
@@ -590,9 +592,6 @@ void LLScriptEdCore::processKeywords()
 			secondary_keywords.push_back( wstring_to_utf8str(token->getToken()) );
 		}
 	}
-
-	// <FS:Ansariel> FIRE-15906: Clear combobox values before adding new
-	mFunctions->clearRows();
 
 	for (string_vec_t::const_iterator iter = primary_keywords.begin();
 		 iter!= primary_keywords.end(); ++iter)
