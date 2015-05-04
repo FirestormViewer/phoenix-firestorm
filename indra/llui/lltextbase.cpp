@@ -2265,10 +2265,10 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 
 			// add icon before url if need
 			// <FS:Ansariel> Optional icon position
-			//LLTextUtil::processUrlMatch(&match,this,isContentTrusted() || match.isTrusted());
+			//LLTextUtil::processUrlMatch(&match, this, isContentTrusted() || match.isTrusted());
 			if (mIconPositioning == LLTextBaseEnums::LEFT || match.isTrusted())
 			{
-				LLTextUtil::processUrlMatch(&match,this,isContentTrusted() || match.isTrusted());
+				LLTextUtil::processUrlMatch(&match, this, isContentTrusted() || match.isTrusted());
 			}
 			// </FS:Ansariel> Optional icon position
 
@@ -2279,16 +2279,29 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 									   input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
 			// </FS:CR>
 
-			// show query part of url with gray color only for LLUrlEntryHTTP and LLUrlEntryHTTPNoProtocol url entries
-			// <FS:Ansariel> Show full normalized URL instead of just the host
-			//std::string label = match.getQuery();
-			//if (label.size())
-			//{
-			//	link_params.color = LLColor4::grey;
-			//	link_params.readonly_color = LLColor4::grey;
-			//	appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
-			//}
+			// <FS:Ansariel> Unfail URI display
+			// set the tooltip for the Url label (host part)
+			if (! match.getTooltip().empty())
+			{
+				segment_set_t::iterator it = getSegIterContaining(getLength()-1);
+				if (it != mSegments.end())
+				{
+					LLTextSegmentPtr segment = *it;
+					segment->setToolTip(match.getTooltip());
+				}
+			}
 			// </FS:Ansariel>
+
+			// show query part of url with gray color only for LLUrlEntryHTTP and LLUrlEntryHTTPNoProtocol url entries
+			std::string label = match.getQuery();
+			if (label.size())
+			{
+				link_params.color = LLColor4::grey;
+				link_params.readonly_color = LLColor4::grey;
+			// <FS:Ansariel> Unfail URI display; add tooltip for query part
+				//appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
+				appendAndHighlightTextImpl(label, part, link_params, input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
+			//}
 			
 			// set the tooltip for the Url label
 			if (! match.getTooltip().empty())
@@ -2299,6 +2312,8 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 					LLTextSegmentPtr segment = *it;
 					segment->setToolTip(match.getTooltip());
 				}
+			}
+			// <FS:Ansariel> Unfail URI display
 			}
 
 			// <FS:Ansariel> Optional icon position

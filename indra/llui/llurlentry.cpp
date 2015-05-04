@@ -190,25 +190,37 @@ bool LLUrlEntryBase::isWikiLinkCorrect(std::string url)
 
 std::string LLUrlEntryBase::urlToLabelWithGreyQuery(const std::string &url) const
 {
-	LLUriParser up(unescapeUrl(url));
+	// <FS:Ansariel> Unfail URI display
+	//LLUriParser up(unescapeUrl(url));
+	LLUriParser up(url);
+	// </FS:Ansariel>
 	up.normalize();
 
 	std::string label;
 	up.extractParts();
 	up.glueFirst(label);
 
-	return label;
+	// <FS:Ansariel> Unfail URI display
+	//return label;
+	return unescapeUrl(label);
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntryBase::urlToGreyQuery(const std::string &url) const
 {
-	LLUriParser up(unescapeUrl(url));
+	// <FS:Ansariel> Unfail URI display
+	//LLUriParser up(unescapeUrl(url));
+	LLUriParser up(url);
+	// </FS:Ansariel>
 
 	std::string query;
 	up.extractParts();
 	up.glueSecond(query);
 
-	return query;
+	// <FS:Ansariel> Unfail URI display
+	//return query;
+	return unescapeUrl(query);
+	// </FS:Ansariel>
 }
 
 
@@ -241,10 +253,7 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 
 std::string LLUrlEntryHTTP::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	// <FS:Ansariel> Unfail URI display
-	//return urlToLabelWithGreyQuery(url);
-	return unescapeUrl(url);
-	// </FS:Ansariel>
+	return urlToLabelWithGreyQuery(url);
 }
 
 std::string LLUrlEntryHTTP::getQuery(const std::string &url) const
@@ -263,7 +272,10 @@ std::string LLUrlEntryHTTP::getUrl(const std::string &string) const
 
 std::string LLUrlEntryHTTP::getTooltip(const std::string &url) const
 {
-	return unescapeUrl(url);
+	// <FS:Ansariel> Unfail URI display
+	//return unescapeUrl(url);
+	return mTooltip;
+	// </FS:Ansariel>
 }
 
 //
@@ -318,10 +330,7 @@ LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
 
 std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	// <FS:Ansariel> Unfail URI display
-	//return urlToLabelWithGreyQuery(url);
-	return unescapeUrl(url);
-	// </FS:Ansariel>
+	return urlToLabelWithGreyQuery(url);
 }
 
 std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
@@ -340,7 +349,10 @@ std::string LLUrlEntryHTTPNoProtocol::getUrl(const std::string &string) const
 
 std::string LLUrlEntryHTTPNoProtocol::getTooltip(const std::string &url) const
 {
-	return unescapeUrl(url);
+	// <FS:Ansariel> Unfail URI display
+	//return unescapeUrl(url);
+	return mTooltip;
+	// </FS:Ansariel>
 }
 
 LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
@@ -525,11 +537,7 @@ LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 
 std::string LLUrlEntrySecondlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	// <FS:Ansariel> Show full normalized URL instead of just the host
-	//return urlToLabelWithGreyQuery(url);
-	LLUriParser up(url);
-	return up.normalizedUri();
-	// </FS:Ansariel>
+	return urlToLabelWithGreyQuery(url);
 }
 
 std::string LLUrlEntrySecondlifeURL::getQuery(const std::string &url) const
