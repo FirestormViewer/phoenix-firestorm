@@ -1300,4 +1300,7 @@
   <color
       name="MoneyTrackerDecrease"
       reference="Red" />
+  <color
+      name="UriQueryPartColor"
+      reference="Gray" />
 </colors>

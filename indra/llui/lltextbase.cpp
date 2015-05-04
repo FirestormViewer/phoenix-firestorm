@@ -2296,8 +2296,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			std::string label = match.getQuery();
 			if (label.size())
 			{
-				link_params.color = LLColor4::grey;
-				link_params.readonly_color = LLColor4::grey;
+				// <FS:Ansariel> Custom URI query part color
+				//link_params.color = LLColor4::grey;
+				//link_params.readonly_color = LLColor4::grey;
+				static LLUIColor query_part_color = LLUIColorTable::getInstance()->getColor("UriQueryPartColor", LLColor4::grey);
+				link_params.color = query_part_color;
+				link_params.readonly_color = query_part_color;
+				// </FS:Ansariel>
 			// <FS:Ansariel> Unfail URI display; add tooltip for query part
 				//appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
 				appendAndHighlightTextImpl(label, part, link_params, input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
