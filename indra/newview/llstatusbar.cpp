@@ -149,6 +149,7 @@ private:
 
 
 // TODO: these values ought to be in the XML too
+const S32 MENU_PARCEL_SPACING = 1;	// Distance from right of menu item to parcel information
 const S32 SIM_STAT_WIDTH = 8;
 const LLColor4 SIM_OK_COLOR(0.f, 1.f, 0.f, 1.f);
 const LLColor4 SIM_WARN_COLOR(1.f, 1.f, 0.f, 1.f);
