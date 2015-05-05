@@ -469,7 +469,7 @@ void LLWorldMapView::draw()
 				x_draw_size *= (info->mSizeX / REGION_WIDTH_METERS);
 				y_draw_size *= (info->mSizeY / REGION_WIDTH_METERS);
 
-				overlayimage->setKnownDrawSize(ll_round(draw_size * LLUI::getScaleFactor().mV[VX]), llround(draw_size * LLUI::getScaleFactor().mV[VY]));
+				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::getScaleFactor().mV[VX]), llround(y_draw_size * LLUI::getScaleFactor().mV[VY]));
 // </FS:CR> Aurora Sim
 				// Draw something whenever we have enough info
 				if (overlayimage->hasGLTexture())
