@@ -227,7 +227,6 @@ namespace
 		}
 		return "Unknown";
 	}
-#endif // </FS:ND>
 } // end unnamed namespace
 
 // The base class for implementations.
