@@ -318,7 +318,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         mkdir -p build-darwin-i386/logs
 
     elif [ $PLATFORM == "win32" ] ; then
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
            rm -rf build-vc100_x64/*
            mkdir -p build-vc100_x64/logs
@@ -329,7 +329,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
  
 
     elif [ $PLATFORM == "linux32" ] ; then
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
            rm -rf build-linux-x86_64/*
            mkdir -p build-linux-x86_64/logs
@@ -410,26 +410,26 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
           TARGET_ARCH="x64"
           WORD_SIZE=64
         fi
     elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
         TARGET="Unix Makefiles"
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
           TARGET_ARCH="x64"
           WORD_SIZE=64
         fi
     elif [ \( $PLATFORM == "win32" \) ] ; then
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
-          TARGET="Visual Studio 10 Win64"
+          TARGET="Visual Studio 12 Win64"
           TARGET_ARCH="x64"
           WORD_SIZE=64
         else
-          TARGET="Visual Studio 10"
+          TARGET="Visual Studio 12"
         fi
         UNATTENDED="-DUNATTENDED=ON"
     fi
@@ -437,9 +437,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $LEAPMOTION $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
-    if [ $PLATFORM == "win32" ] ; then
-    ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
-    fi
+#    if [ $PLATFORM == "win32" ] ; then
+#    ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
+#    fi
 
 fi
 
@@ -459,7 +459,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         make -j $JOBS | tee -a $LOG
     elif [ $PLATFORM == "win32" ] ; then
         SLN_PLATFORM="Win32"
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
           SLN_PLATFORM="x64"
         fi
