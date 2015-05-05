@@ -5460,8 +5460,9 @@ void LLAgent::sendAgentSetAppearance()
 
 	// To guard against out of order packets
 	// Note: always start by sending 1.  This resets the server's count. 0 on the server means "uninitialized"
-	mAppearanceSerialNum++;
-	msg->addU32Fast(_PREHASH_SerialNum, mAppearanceSerialNum );
+	static U32 sAppearanceSerialNum;
+	++sAppearanceSerialNum;
+	msg->addU32Fast(_PREHASH_SerialNum, sAppearanceSerialNum );
 
 	// is texture data current relative to wearables?
 	// KLW - TAT this will probably need to check the local queue.
