@@ -36,20 +36,20 @@ endif (USESYSTEMLIBS)
 
 if (WINDOWS)
     set(WEBKIT_PLUGIN_LIBRARIES 
-    debug llqtwebkitd
-    debug QtWebKitd4
-    debug QtOpenGLd4
-    debug QtNetworkd4
-    debug QtGuid4
-    debug QtCored4
-    debug qtmaind
-    optimized llqtwebkit
-    optimized QtWebKit4
-    optimized QtOpenGL4
-    optimized QtNetwork4
-    optimized QtGui4
-    optimized QtCore4
-    optimized qtmain
+        debug llqtwebkitd
+        debug QtWebKitd4
+        debug QtOpenGLd4
+        debug QtNetworkd4
+        debug QtGuid4
+        debug QtCored4
+        debug qtmaind
+        optimized llqtwebkit
+        optimized QtWebKit4
+        optimized QtOpenGL4
+        optimized QtNetwork4
+        optimized QtGui4
+        optimized QtCore4
+        optimized qtmain
     )
 elseif (DARWIN)
     set(WEBKIT_PLUGIN_LIBRARIES
@@ -66,30 +66,29 @@ elseif (LINUX)
       set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
     else (USESYSTEMLIBS)
       set(WEBKIT_PLUGIN_LIBRARIES
-          llqtwebkit
-#          qico
-#          qpng
-#          qtiff
-#          qsvg
-#          QtSvg
-          QtWebKit
-          QtOpenGL
-          QtNetwork
-          QtGui
-          QtCore
+        llqtwebkit
+#        qico
+#        qpng
+#        qtiff
+#        qsvg
+#        QtSvg
+        QtWebKit
+        QtOpenGL
+        QtNetwork
+        QtGui
+        QtCore
           jpeg
-#          jscore
-          fontconfig
-          X11
-          Xrender
-          GL
+#        jscore
+#        qgif
+#        qjpeg
+#        jpeg
+        fontconfig
+        X11
+        Xrender
+        GL
 
-#          sqlite3
-#          Xi
-#          SM
-          )
-      if( ND_BUILD64BIT_ARCH )
-        set(WEBKIT_PLUGIN_LIBRARIES ${WEBKIT_PLUGIN_LIBRARIES} jscore ) 
-      endif( ND_BUILD64BIT_ARCH )
-    endif (USESYSTEMLIBS)
+#        sqlite3
+#        Xi
+#        SM
+        )
 endif (WINDOWS)
