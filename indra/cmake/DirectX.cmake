@@ -11,25 +11,26 @@ if (WINDOWS)
     set (DIRECTX_ARCHITECTURE x86)
   endif (WORD_SIZE EQUAL 32)
 
+  set(PROG_x86 "ProgramFiles(x86)" )
   find_path(DIRECTX_ROOT_DIR Include/dxdiag.h
             PATHS
             "$ENV{DXSDK_DIR}"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (June 2010)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (June 2010)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (June 2010)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (February 2010)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (February 2010)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (February 2010)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (March 2009)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (March 2009)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (March 2009)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (August 2008)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (August 2008)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (August 2008)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (June 2008)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (June 2008)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (June 2008)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (March 2008)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (March 2008)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (March 2008)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (November 2007)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (November 2007)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (November 2007)"
             "$ENV{ProgramFiles}/Microsoft DirectX SDK (August 2007)"
-            "$ENV{ProgramFiles(x86)}/Microsoft DirectX SDK (August 2007)"
+            "$ENV{${PROG_x86}}/Microsoft DirectX SDK (August 2007)"
             )
 
   if (DIRECTX_ROOT_DIR)
@@ -39,9 +40,9 @@ if (WINDOWS)
     find_path (WIN_KIT_ROOT_DIR Include/um/windows.h
                PATHS
                "$ENV{ProgramFiles}/Windows Kits/8.1"
-               "$ENV{ProgramFiles(x86)}/Windows Kits/8.1"
+               "$ENV{${PROG_x86}}/Windows Kits/8.1"
                "$ENV{ProgramFiles}/Windows Kits/8.0"
-               "$ENV{ProgramFiles(x86)}/Windows Kits/8.0"
+               "$ENV{${PROG_x86}}/Windows Kits/8.0"
                )
 
     find_path (WIN_KIT_LIB_DIR dxguid.lib
