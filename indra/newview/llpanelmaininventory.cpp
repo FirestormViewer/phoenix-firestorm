@@ -373,9 +373,7 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	llofstream filtersFile(filterSaveName.c_str());
 	if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
 	{
-		// <FS:TM> VS2013 compile fix
-		//LL_WARNS() << "Could not write to filters save file " << filterSaveName << LL_ENDL;
-		LL_WARNS() << "Could not write to filters save file " << filterSaveName.str() << LL_ENDL;
+		LL_WARNS() << "Could not write to filters save file " << filterSaveName << LL_ENDL;
 	}
 	else
     {
