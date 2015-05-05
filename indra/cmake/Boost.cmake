@@ -20,6 +20,7 @@ else (USESYSTEMLIBS)
   use_prebuilt_binary(boost)
   set(Boost_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
   set(BOOST_VERSION "1.52")
+  add_definitions(-DBOOST_ALL_NO_LIB)
 
   if (WINDOWS)
     if(MSVC80)
