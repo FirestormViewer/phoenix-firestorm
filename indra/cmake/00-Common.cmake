@@ -80,7 +80,7 @@ if (WINDOWS)
   if (USE_AVX_OPTIMIZATION)
     add_definitions(
         /DLL_WINDOWS=1
-        /DDOM_DYNAMIC
+#        /DDOM_DYNAMIC
         /DUNICODE
         /D_UNICODE 
         /GS
@@ -98,7 +98,7 @@ if (WINDOWS)
     add_definitions(
         /DLL_WINDOWS=1
       /DNOMINMAX
-        /DDOM_DYNAMIC
+#        /DDOM_DYNAMIC
         /DUNICODE
         /D_UNICODE 
         /GS
@@ -109,9 +109,13 @@ if (WINDOWS)
         /nologo
         /Oy-
         /Zc:wchar_t-
-        /arch:SSE2
+#        /arch:SSE2
 #        /fp:fast
         )
+    if( NOT ND_BUILD64BIT_ARCH )
+      add_definitions( /arch:SSE2 )
+    endif( NOT ND_BUILD64BIT_ARCH )
+
   endif (USE_AVX_OPTIMIZATION)
 # </FS:Ansariel> [AVX Optimization]	
      
