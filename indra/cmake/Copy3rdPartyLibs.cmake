@@ -40,7 +40,7 @@ if(WINDOWS)
         libapriconv-1.dll
         ssleay32.dll
         libeay32.dll
-        libcollada14dom22-d.dll
+#        libcollada14dom22-d.dll
         glod.dll
         libhunspell.dll
         )
@@ -53,13 +53,13 @@ if(WINDOWS)
         libapriconv-1.dll
         ssleay32.dll
         libeay32.dll
-        libcollada14dom22.dll
+#        libcollada14dom22.dll
         glod.dll
         libhunspell.dll
         )
     
-    set(debug_files ${debug_files} growl++.dll growl.dll )
-    set(release_files ${release_files} growl++.dll growl.dll )
+#    set(debug_files ${debug_files} growl++.dll growl.dll )
+#    set(release_files ${release_files} growl++.dll growl.dll )
 
     if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
