@@ -294,7 +294,7 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 		bool own_full_perm = (objectp->permYouOwner() && objectp->permModify() && objectp->permTransfer() && objectp->permCopy());
 		if (own_full_perm)
 		{
-			import_handled = mNewObjectSignal(objectp);
+			import_handled = mNewObjectSignal(objectp).get();
 			mNewObjectSignal.disconnect_all_slots();
 		}
 		if (!import_handled)
