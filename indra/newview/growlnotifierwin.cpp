@@ -36,7 +36,10 @@
 #include "llviewerprecompiledheaders.h"
 #include "growlnotifierwin.h"
 
+#ifdef HAS_GROWL
 #include "growl.h"
+#endif
+
 #include "llviewercontrol.h"
 
 #ifdef GROWL_HAS_LOG
@@ -48,9 +51,11 @@ void __cdecl GrowlLogSink( char const *aMessage, int aLevel )
 #endif
 
 GrowlNotifierWin::GrowlNotifierWin() :
-	mApplicationName(""),
-	mGrowlImpl(NULL)
+	mApplicationName("")
 {
+#ifdef HAS_GROWL
+	mGrowlImpl = NULL;
+#endif
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifier initialized." << LL_ENDL;
 
 #ifdef GROWL_HAS_LOG
@@ -62,17 +67,20 @@ GrowlNotifierWin::GrowlNotifierWin() :
 GrowlNotifierWin::~GrowlNotifierWin()
 {
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifier destroyed." << LL_ENDL;
+#ifdef HAS_GROWL
 	if (mGrowlImpl)
 	{
 		delete mGrowlImpl;
 		mGrowlImpl = NULL;
 	}
+#endif
 }
 
 void GrowlNotifierWin::registerApplication(const std::string& application, const std::set<std::string>& notificationTypes)
 {
 	mApplicationName = application;
 	
+#ifdef HAS_GROWL
 	char **arr = (char**)malloc(sizeof(*arr) * notificationTypes.size());
 	S32 i = 0;
 	for (std::set<std::string>::const_iterator it = notificationTypes.begin(); it != notificationTypes.end(); ++it, ++i)
@@ -89,18 +97,25 @@ void GrowlNotifierWin::registerApplication(const std::string& application, const
 		free(arr[i]);
 	}
 	free(arr);
+#endif
 }
 
 void GrowlNotifierWin::showNotification(const std::string& notification_title, const std::string& notification_message, 
 										 const std::string& notification_type)
 {
+#ifdef HAS_GROWL
 	if (mGrowlImpl)
 	{
 		mGrowlImpl->Notify(notification_type.c_str(), notification_title.c_str(), notification_message.c_str());
 	}
+#endif
 }
 
 bool GrowlNotifierWin::isUsable()
 {
+#ifdef HAS_GROWL
 	return (mGrowlImpl && mGrowlImpl->isConnected());
+#else
+	return false;
+#endif
 }
