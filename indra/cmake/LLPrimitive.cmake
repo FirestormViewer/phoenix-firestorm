@@ -14,8 +14,10 @@ if (WINDOWS)
     set(LLPRIMITIVE_LIBRARIES
         debug llprimitive
         optimized llprimitive
-        debug libcollada14dom22-d
-        optimized libcollada14dom22
+#        debug libcollada14dom22-d
+        debug libcollada14dom23-d
+#        optimized libcollada14dom22
+        optimized libcollada14dom23
         ${BOOST_SYSTEM_LIBRARIES}
         )
 elseif (LINUX)
