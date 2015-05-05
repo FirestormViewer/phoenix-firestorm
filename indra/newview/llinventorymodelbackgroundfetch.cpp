@@ -182,6 +182,8 @@ private:
 };
 
 
+const S32 MAX_FETCH_RETRIES = 10; // <FS:ND/> For legacy inventory
+
 const char * const LOG_INV("Inventory");
 
 } // end of namespace anonymous

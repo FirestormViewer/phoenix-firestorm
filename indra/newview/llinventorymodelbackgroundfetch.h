@@ -90,6 +90,12 @@ private:
 
 	LLFrameTimer mFetchTimer;
 	F32 mMinTimeBetweenFetches;
+	
+	// <FS:ND> For legacy inventory
+	BOOL mTimelyFetchPending;
+	S32 mNumFetchRetries;
+	F32 mMaxTimeBetweenFetches;
+	// </FS:ND>
 
 	struct FetchQueueInfo
 	{
