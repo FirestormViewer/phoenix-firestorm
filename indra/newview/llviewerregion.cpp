@@ -2900,7 +2900,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("FetchInventoryDescendents2");
 	capabilityNames.append("IncrementCOFVersion");
 	AISCommand::getCapabilityNames(capabilityNames);
-	} </FS:Ansariel>
+	} //</FS:Ansariel>
 
 	capabilityNames.append("GetDisplayNames");
 	capabilityNames.append("GroupMemberData");
