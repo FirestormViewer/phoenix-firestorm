@@ -182,8 +182,15 @@ public:
 	bool updateBaseOutfit();
 
 	//Remove clothing or detach an object from the agent (a bodypart cannot be removed)
-	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
-	void removeItemFromAvatar(const LLUUID& item_id);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+	void removeItemFromAvatar(const LLUUID& id_to_remove) { removeItemFromAvatar(id_to_remove, NULL, false); }
+	void removeItemFromAvatar(const LLUUID& id_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/);
+
+	void removeItemsFromAvatar(const uuid_vec_t& ids_to_remove) { removeItemsFromAvatar(ids_to_remove, NULL, false); }
+	void removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/);
+// [/SL:KB]
+//	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
+//	void removeItemFromAvatar(const LLUUID& item_id);
 
 
 	void onOutfitFolderCreated(const LLUUID& folder_id, bool show_panel);
