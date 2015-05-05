@@ -23,7 +23,7 @@ set(cmake_SOURCE_FILES
     DirectX.cmake
     DragDrop.cmake
     EXPAT.cmake
-    ExamplePlugin.cmake
+##  ExamplePlugin.cmake
     FindAPR.cmake
     FindAutobuild.cmake
     FindBerkeleyDB.cmake
@@ -45,9 +45,9 @@ set(cmake_SOURCE_FILES
     GLEXT.cmake
     GLH.cmake
     GLOD.cmake
-    GStreamer010Plugin.cmake
+##  GStreamer010Plugin.cmake
     GetPrerequisites_2_8.cmake
-    Glui.cmake
+##  Glui.cmake
     Glut.cmake
     GoogleBreakpad.cmake
     GoogleMock.cmake
@@ -84,18 +84,18 @@ set(cmake_SOURCE_FILES
     LeapMotion.cmake
     # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
-    MediaPluginBase.cmake
+##  MediaPluginBase.cmake
     NDOF.cmake
     OPENAL.cmake
     OpenGL.cmake
     OpenJPEG.cmake
     OpenSSL.cmake
     PNG.cmake
-    PluginAPI.cmake
+##  PluginAPI.cmake
     Prebuilt.cmake
     PulseAudio.cmake
     Python.cmake
-    QuickTimePlugin.cmake
+##  QuickTimePlugin.cmake
     Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
@@ -105,7 +105,7 @@ set(cmake_SOURCE_FILES
     Variables.cmake
     ViewerMiscLibs.cmake
     VisualLeakDetector.cmake
-    WebKitLibPlugin.cmake
+##  WebKitLibPlugin.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
     )

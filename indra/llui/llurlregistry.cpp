@@ -251,7 +251,7 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 			if (start < match_start || match_entry == NULL)
 			{
 
-				if((mLLUrlEntryInvalidSLURL == *it))
+				if (mLLUrlEntryInvalidSLURL == *it)
 				{
 					if(url_entry && url_entry->isSLURLvalid(text.substr(start, end - start + 1)))
 					{
@@ -284,9 +284,9 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		if (match_entry != mUrlEntryNoLink && match_entry == mUrlEntryTrustedUrl)
 		{
 		// </FS:Ansariel>
-		LLUriParser up(url);
-		up.normalize();
-		url = up.normalizedUri();
+			LLUriParser up(url);
+			up.normalize();
+			url = up.normalizedUri();
 		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
 		}
 		// </FS:Ansariel>
@@ -322,7 +322,7 @@ bool LLUrlRegistry::findUrl(const LLWString &text, LLUrlMatch &match, const LLUr
 		// character encoding, so we need to update the start
 		// and end values to be correct for the wide string.
 		LLWString wurl = utf8str_to_wstring(match.getUrl());
-		S32 start = text.find(wurl);
+		size_t start = text.find(wurl);
 		if (start == std::string::npos)
 		{
 			return false;

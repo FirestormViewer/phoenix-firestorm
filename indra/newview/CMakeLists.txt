@@ -4,17 +4,19 @@ project(viewer)
 
 include(00-Common)
 include(Boost)
+include(BuildPackagesInfo)
 include(BuildVersion)
+include(CMakeCopyIfDifferent)
 include(DBusGlib)
 include(DirectX)
-include(OpenSSL)
 include(DragDrop)
 include(EXPAT)
 include(FMODEX)
-include(OPENAL)
-include(OpenGL)
+include(GLOD)
+include(GooglePerfTools)
 include(Hunspell)
 include(JsonCpp)
+include(LLAppearance)
 include(LLAudio)
 include(LLCharacter)
 include(LLCommon)
@@ -22,6 +24,8 @@ include(LLCoreHttp)
 include(LLImage)
 include(LLImageJ2COJ)
 include(LLInventory)
+include(LLKDU)
+include(LLLogin)
 include(LLMath)
 include(LLMessage)
 include(LLPhysicsExtensions)
@@ -37,18 +41,17 @@ include(LeapMotion)
 include(Linking)
 include(NDOF)
 include(NVAPI)
-include(GooglePerfTools)
+include(OPENAL)
+include(OpenGL)
+include(OpenSSL)
+include(PNG)
+include(Prebuilt)
 include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
 include(UnixInstall)
-include(LLKDU)
 include(ViewerMiscLibs)
-include(LLLogin)
 include(VisualLeakDetector)
-include(GLOD)
-include(CMakeCopyIfDifferent)
-include(LLAppearance)
 include(URIPARSER)
 include(Growl)
 include(ColladaDom)
@@ -70,6 +73,8 @@ if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
 
+# install SLPlugin host executable and its dynamic-library plugins
+use_prebuilt_binary(slplugins)
 if(LEAPMOTION)
   add_definitions(-DUSE_LEAPMOTION=1)
   include_directories(${LEAP_MOTION_INCLUDE_DIR})
@@ -1574,7 +1579,7 @@ list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
-# the viewer_version.txt file created here is for passing to viewer_manifest
+# the viewer_version.txt file created here is for passing to viewer_manifest and autobuild
 # the summary.json file is created for the benefit of the TeamCity builds, where
 #   it is used to provide descriptive information to the build results page
 add_custom_target(generate_viewer_version ALL
@@ -1674,6 +1679,9 @@ if (LINUX)
     set(viewer_LIBRARIES
         Xinerama
         )
+    if (OPENAL)
+      LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
+    endif (OPENAL)
 
     # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
     if( ND_CTAGS )
@@ -1915,7 +1923,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/viewerart.xml
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
-    #app_settings/growl_notifications.xml
+    packages-info.txt
     )
 	
 if (WINDOWS)
@@ -2004,8 +2012,11 @@ if (WINDOWS)
         # *TODO -reenable this once we get server usage sorted out
         LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS} /LARGEADDRESSAWARE"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE"
-        LINK_FLAGS_RELEASE "/MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
+        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
         )
+
+    add_dependencies(${VIEWER_BINARY_NAME} generate_viewer_version)
+
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
             ${VIEWER_BINARY_NAME}
@@ -2161,7 +2172,6 @@ if (WINDOWS)
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/copy_touched.bat
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-        generate_viewer_version
         stage_third_party_libs
         ${COPY_INPUT_DEPENDENCIES}
       COMMENT "Performing viewer_manifest copy"
@@ -2175,10 +2185,10 @@ if (WINDOWS)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
 
-    add_dependencies(${VIEWER_BINARY_NAME}
-      SLPlugin
-      windows-crash-logger
-      )
+##  add_dependencies(${VIEWER_BINARY_NAME}
+##    SLPlugin
+##    windows-crash-logger
+##    )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
@@ -2235,10 +2245,9 @@ if (WINDOWS)
             ${COPY_INPUT_DEPENDENCIES}
         )
 
-      add_custom_target(package ALL DEPENDS
+      add_custom_target(llpackage ALL DEPENDS
         ${CMAKE_CFG_INTDIR}/touched.bat
         windows-setup-build-all
-        generate_viewer_version
         )
         # temporarily disable packaging of event_host until hg subrepos get
         # sorted out on the parabuild cluster...
@@ -2364,11 +2373,13 @@ if (LINUX)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
-    SLPlugin
-    media_plugin_webkit
-    media_plugin_gstreamer010
+##  SLPlugin
+##  media_plugin_webkit
+##  media_plugin_gstreamer010
     llcommon
     )
+
+  add_dependencies(${VIEWER_BINARY_NAME} generate_viewer_version)
 
   add_custom_command(
       OUTPUT ${product}.tar.bz2
@@ -2389,7 +2400,6 @@ if (LINUX)
         --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-        generate_viewer_version
         ${COPY_INPUT_DEPENDENCIES}
       )
 
@@ -2412,7 +2422,6 @@ if (LINUX)
       --source=${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-      generate_viewer_version
       ${COPY_INPUT_DEPENDENCIES}
     COMMENT "Performing viewer_manifest copy"
     )
@@ -2420,10 +2429,10 @@ if (LINUX)
   add_custom_target(copy_l_viewer_manifest ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.copy_touched)
 
   if (PACKAGE)
-    add_custom_target(package ALL DEPENDS ${product}.tar.bz2)
+    add_custom_target(llpackage ALL DEPENDS ${product}.tar.bz2)
     # Make sure we don't run two instances of viewer_manifest.py at the same time.
-    add_dependencies(package copy_l_viewer_manifest)
-    check_message_template(package)
+    add_dependencies(llpackage copy_l_viewer_manifest)
+    check_message_template(llpackage)
   endif (PACKAGE)
 endif (LINUX)
 
@@ -2458,6 +2467,8 @@ if (DARWIN)
      "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app/Contents/Info.plist"
     )
 
+  add_dependencies(${VIEWER_BINARY_NAME} generate_viewer_version)
+
   add_custom_command(
     TARGET ${VIEWER_BINARY_NAME} POST_BUILD
     COMMAND ${PYTHON_EXECUTABLE}
@@ -2477,10 +2488,10 @@ if (DARWIN)
     DEPENDS
       ${VIEWER_BINARY_NAME}
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-      generate_viewer_version
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
+##add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_webkit mac-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
 
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")
@@ -2489,11 +2500,11 @@ if (DARWIN)
   endif (ENABLE_SIGNING)
 
   if (PACKAGE)
-      add_custom_target(package ALL DEPENDS ${VIEWER_BINARY_NAME})
-      add_dependencies(package generate_viewer_version)
+      add_custom_target(llpackage ALL DEPENDS ${VIEWER_BINARY_NAME})
+      add_dependencies(llpackage generate_viewer_version)
 
       add_custom_command(
-        TARGET package POST_BUILD
+        TARGET llpackage POST_BUILD
         COMMAND ${PYTHON_EXECUTABLE}
         ARGS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2513,7 +2524,6 @@ if (DARWIN)
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
-          generate_viewer_version
       )
   endif (PACKAGE)
 endif (DARWIN)
@@ -2536,19 +2546,21 @@ if (PACKAGE)
   if (DARWIN)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
     # *TODO: Generate these search dirs in the cmake files related to each binary.
-    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
+##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
-    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
-    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
-    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
+##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
+##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
+##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin.tar.bz2")
-    set(VIEWER_EXE_GLOBS "'Firestorm' SLPlugin mac-crash-logger")
+##  set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
+    set(VIEWER_EXE_GLOBS "'Firestorm' mac-crash-logger")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-linux.tar.bz2")
-    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin SLPlugin")
+##  set(VIEWER_EXE_GLOBS "do-not-directly-run-secondlife-bin SLPlugin")
+    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)
@@ -2576,8 +2588,8 @@ if (PACKAGE)
 
   add_custom_target(generate_breakpad_symbols DEPENDS "${VIEWER_SYMBOL_FILE}")
   add_dependencies(generate_breakpad_symbols "${VIEWER_BINARY_NAME}" "${VIEWER_COPY_MANIFEST}")
-  add_dependencies(package generate_breakpad_symbols)
-  endif( (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) )
+  add_dependencies(llpackage generate_breakpad_symbols)
+  endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
 endif (PACKAGE)
 
 if (LL_TESTS)
@@ -2764,11 +2776,6 @@ include(LLAddBuildTest)
 SET(viewer_TEST_SOURCE_FILES
   llagentaccess.cpp
   llwlparammanager.cpp
-  # Not *actually* a unit test, it's an integration test.
-  # Because it won't work in the new unit test iface, i've commented out
-  # and notified Nat. Delete this when it's replaced!
-  # + poppy & brad 2009-06-05
-  # llcapabilitylistener.cpp
   )
 set_source_files_properties(
   ${viewer_TEST_SOURCE_FILES}

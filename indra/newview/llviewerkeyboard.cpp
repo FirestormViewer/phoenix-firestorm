@@ -61,7 +61,6 @@ const F32 FLY_FRAMES = 4;
 const F32 NUDGE_TIME = 0.25f;  // in seconds
 const S32 NUDGE_FRAMES = 2;
 const F32 ORBIT_NUDGE_RATE = 0.05f;  // fraction of normal speed
-const F32 YAW_NUDGE_RATE = 0.05f;  // fraction of normal speed
 
 struct LLKeyboardActionRegistry 
 :	public LLRegistrySingleton<std::string, boost::function<void (EKeystate keystate)>, LLKeyboardActionRegistry>
@@ -74,7 +73,7 @@ void agent_jump( EKeystate s )
 {
 	if( KEYSTATE_UP == s  ) return;
 	F32 time = gKeyboard->getCurKeyElapsedTime();
-	S32 frame_count = llround(gKeyboard->getCurKeyElapsedFrameCount());
+	S32 frame_count = ll_round(gKeyboard->getCurKeyElapsedFrameCount());
 
 	// <FS:Ansariel> Chalice Yao's crouch toggle
 	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
@@ -173,7 +172,7 @@ static void agent_push_forwardbackward( EKeystate s, S32 direction, LLAgent::EDo
 	if (KEYSTATE_UP == s) return;
 
 	F32 time = gKeyboard->getCurKeyElapsedTime();
-	S32 frame_count = llround(gKeyboard->getCurKeyElapsedFrameCount());
+	S32 frame_count = ll_round(gKeyboard->getCurKeyElapsedFrameCount());
 
 	if( time < NUDGE_TIME || frame_count <= NUDGE_FRAMES)
 	{
@@ -228,7 +227,7 @@ static void agent_slide_leftright( EKeystate s, S32 direction, LLAgent::EDoubleT
 	agent_handle_doubletap_run(s, mode);
 	if( KEYSTATE_UP == s ) return;
 	F32 time = gKeyboard->getCurKeyElapsedTime();
-	S32 frame_count = llround(gKeyboard->getCurKeyElapsedFrameCount());
+	S32 frame_count = ll_round(gKeyboard->getCurKeyElapsedFrameCount());
 
 	if( time < NUDGE_TIME || frame_count <= NUDGE_FRAMES)
 	{

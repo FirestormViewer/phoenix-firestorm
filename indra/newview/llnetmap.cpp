@@ -91,7 +91,6 @@ const F32 LLNetMap::MAP_SCALE_MIN = 32;
 const F32 LLNetMap::MAP_SCALE_MID = 1024;
 const F32 LLNetMap::MAP_SCALE_MAX = 4096;
 
-const F32 MAP_SCALE_INCREMENT = 16;
 const F32 MAP_SCALE_ZOOM_FACTOR = 1.04f; // Zoom in factor per click of scroll wheel (4%)
 const F32 MIN_DOT_RADIUS = 3.5f;
 const F32 DOT_SCALE = 0.75f;
@@ -372,8 +371,8 @@ void LLNetMap::draw()
 
 		// figure out where agent is
 // <FS:CR> Aurora Sim
-		//S32 region_width = llround(LLWorld::getInstance()->getRegionWidthInMeters());
-		S32 region_width = llround(REGION_WIDTH_METERS);
+		//S32 region_width = ll_round(LLWorld::getInstance()->getRegionWidthInMeters());
+		S32 region_width = ll_round(REGION_WIDTH_METERS);
 // </FS:CR> Aurora Sim
 
 		for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
@@ -707,8 +706,8 @@ void LLNetMap::draw()
 						(pos_map.mV[VX] >= getRect().getWidth()) ||
 						(pos_map.mV[VY] >= getRect().getHeight()) )
 					{
-						S32 x = llround( pos_map.mV[VX] );
-						S32 y = llround( pos_map.mV[VY] );
+						S32 x = ll_round( pos_map.mV[VX] );
+						S32 y = ll_round( pos_map.mV[VY] );
 						LLWorldMapView::drawTrackingCircle( getRect(), x, y, color, 1, 10);
 					} else
 					{
@@ -768,12 +767,12 @@ void LLNetMap::draw()
 		static LLUIColor self_tag_color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::yellow); // <FS:CR> FIRE-1061
 		LLVector3d pos_global = gAgent.getPositionGlobal();
 		pos_map = globalPosToView(pos_global);
-		S32 dot_width = llround(mDotRadius * 2.f);
+		S32 dot_width = ll_round(mDotRadius * 2.f);
 		LLUIImagePtr you = LLWorldMapView::sAvatarYouLargeImage;
 		if (you)
 		{
-			you->draw(llround(pos_map.mV[VX] - mDotRadius),
-					  llround(pos_map.mV[VY] - mDotRadius),
+			you->draw(ll_round(pos_map.mV[VX] - mDotRadius),
+					  ll_round(pos_map.mV[VY] - mDotRadius),
 					  dot_width,
 					  dot_width,
 					  self_tag_color);	// <FS:CR> FIRE-1061
@@ -922,8 +921,8 @@ void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color,
 	{
 		if (draw_arrow)
 		{
-			S32 x = llround( pos_local.mV[VX] );
-			S32 y = llround( pos_local.mV[VY] );
+			S32 x = ll_round( pos_local.mV[VX] );
+			S32 y = ll_round( pos_local.mV[VY] );
 			LLWorldMapView::drawTrackingCircle( getRect(), x, y, color, 1, 10 );
 			LLWorldMapView::drawTrackingArrow( getRect(), x, y, color );
 		}
@@ -939,8 +938,8 @@ void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color,
 
 LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y )
 {
-	x -= llround(getRect().getWidth() / 2 + mCurPan.mV[VX]);
-	y -= llround(getRect().getHeight() / 2 + mCurPan.mV[VY]);
+	x -= ll_round(getRect().getWidth() / 2 + mCurPan.mV[VX]);
+	y -= ll_round(getRect().getHeight() / 2 + mCurPan.mV[VY]);
 
 	LLVector3 pos_local( (F32)x, (F32)y, 0 );
 
@@ -1169,7 +1168,7 @@ void LLNetMap::renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &
 	LLVector3 local_pos;
 	local_pos.setVec( pos - mObjectImageCenterGlobal );
 
-	S32 diameter_pixels = llround(2 * radius_meters * mObjectMapTPM);
+	S32 diameter_pixels = ll_round(2 * radius_meters * mObjectMapTPM);
 	renderPoint( local_pos, color, diameter_pixels );
 }
 
@@ -1185,8 +1184,8 @@ void LLNetMap::renderPoint(const LLVector3 &pos_local, const LLColor4U &color,
 	const S32 image_width = (S32)mObjectImagep->getWidth();
 	const S32 image_height = (S32)mObjectImagep->getHeight();
 
-	S32 x_offset = llround(pos_local.mV[VX] * mObjectMapTPM + image_width / 2);
-	S32 y_offset = llround(pos_local.mV[VY] * mObjectMapTPM + image_height / 2);
+	S32 x_offset = ll_round(pos_local.mV[VX] * mObjectMapTPM + image_width / 2);
+	S32 y_offset = ll_round(pos_local.mV[VY] * mObjectMapTPM + image_height / 2);
 
 	if ((x_offset < 0) || (x_offset >= image_width))
 	{
@@ -1359,7 +1358,7 @@ bool LLNetMap::createImage(LLPointer<LLImageRaw>& rawimagep) const
 	// ... which is, the diagonal of the rect.
 	F32 width = (F32)getRect().getWidth();
 	F32 height = (F32)getRect().getHeight();
-	S32 square_size = llround( sqrt(width*width + height*height) );
+	S32 square_size = ll_round( sqrt(width*width + height*height) );
 
 	// Find the least power of two >= the minimum size.
 	const S32 MIN_SIZE = 64;

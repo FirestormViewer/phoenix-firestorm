@@ -333,7 +333,7 @@ public:
 		{
 			ND_OCTREE_LOG << "Inserting data, isInside(data->getPositionGroup()) true " << ND_OCTREE_LOG_END;
 
-			if (((getElementCount() < gOctreeMaxCapacity || getSize()[0] <= gOctreeMinSize) && contains(data->getBinRadius()) ||
+			if ((((getElementCount() < gOctreeMaxCapacity || getSize()[0] <= gOctreeMinSize) && contains(data->getBinRadius())) ||
 				(data->getBinRadius() > getSize()[0] &&	parent && parent->getElementCount() >= gOctreeMaxCapacity))) 
 			{ //it belongs here
 				ND_OCTREE_LOG << "Inserting data into this" << ND_OCTREE_LOG_END;

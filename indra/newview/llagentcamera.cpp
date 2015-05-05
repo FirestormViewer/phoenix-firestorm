@@ -907,8 +907,6 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	}
 
 
-	// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
-	// LLVector3d	camera_offset(mCameraFocusOffsetTarget);
 	LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 	F32 min_zoom = LAND_MIN_ZOOM;
 	F32 current_distance = (F32)camera_offset_unit.normalize();
@@ -987,8 +985,6 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 	}
 	else
 	{
-		// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
-		//LLVector3d	camera_offset(mCameraFocusOffsetTarget);
 		LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 		F32 current_distance = (F32)camera_offset_unit.normalize();
 		F32 new_distance = current_distance - meters;

@@ -306,7 +306,7 @@ typedef MMRESULT (WINAPI *joySetCapture_type)( HWND hwnd, UINT uJoyID, UINT uPer
 extern joySetCapture_type joySetCapture_orig;
 typedef MMRESULT (WINAPI *joySetThreshold_type)( UINT uJoyID, UINT uThreshold);
 extern joySetThreshold_type joySetThreshold_orig;
-typedef BOOL (WINAPI  *mciDriverNotify_type)(HANDLE hwndCallback, UINT uDeviceID, UINT uStatus);
+typedef BOOL(WINAPI  *mciDriverNotify_type)(HANDLE hwndCallback, MCIDEVICEID uDeviceID, UINT uStatus);
 extern mciDriverNotify_type mciDriverNotify_orig;
 typedef UINT (WINAPI  *mciDriverYield_type)(UINT uDeviceID);
 extern mciDriverYield_type mciDriverYield_orig;

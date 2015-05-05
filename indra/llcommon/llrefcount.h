@@ -170,34 +170,24 @@ private:
  * this allows you to use boost::intrusive_ptr with any LLThreadSafeRefCount-derived type
  */
 
-// <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.
-// namespace boost
-// {
-// </FS:ND>
+inline void intrusive_ptr_add_ref(LLThreadSafeRefCount* p) 
+{
+	p->ref();
+}
 
-	inline void intrusive_ptr_add_ref(LLThreadSafeRefCount* p) 
-	{
-		p->ref();
-	}
+inline void intrusive_ptr_release(LLThreadSafeRefCount* p) 
+{
+	p->unref(); 
+}
 
-	inline void intrusive_ptr_release(LLThreadSafeRefCount* p) 
-	{
-		p->unref(); 
-	}
+inline void intrusive_ptr_add_ref(LLRefCount* p) 
+{
+	p->ref();
+}
 
-	inline void intrusive_ptr_add_ref(LLRefCount* p) 
-	{
-		p->ref();
-	}
-
-	inline void intrusive_ptr_release(LLRefCount* p) 
-	{
-		p->unref(); 
-	}
-
-// <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.
-// };
-// </FS:ND>
-
+inline void intrusive_ptr_release(LLRefCount* p) 
+{
+	p->unref(); 
+}
 
 #endif

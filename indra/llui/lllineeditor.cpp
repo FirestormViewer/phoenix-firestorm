@@ -88,6 +88,7 @@ LLLineEditor::Params::Params()
 	background_image("background_image"),
 	background_image_disabled("background_image_disabled"),
 	background_image_focused("background_image_focused"),
+	bg_image_always_focused("bg_image_always_focused", false),
 	select_on_focus("select_on_focus", false),
 	revert_on_esc("revert_on_esc", true),
 	spellcheck("spellcheck", false),
@@ -147,6 +148,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mBgImage( p.background_image ),
 	mBgImageDisabled( p.background_image_disabled ),
 	mBgImageFocused( p.background_image_focused ),
+	mShowImageFocused( p.bg_image_always_focused ),
 	mHaveHistory(FALSE),
 	mReplaceNewlinesWithSpaces( TRUE ),
 	mLabel(p.label),
@@ -848,7 +850,7 @@ BOOL LLLineEditor::handleHover(S32 x, S32 y, MASK mask)
 		// Scroll if mouse cursor outside of bounds
 		if (mScrollTimer.hasExpired())
 		{
-			S32 increment = llround(mScrollTimer.getElapsedTimeF32() / AUTO_SCROLL_TIME);
+			S32 increment = ll_round(mScrollTimer.getElapsedTimeF32() / AUTO_SCROLL_TIME);
 			mScrollTimer.reset();
 			mScrollTimer.setTimerExpirySec(AUTO_SCROLL_TIME);
 			if( (x < mTextLeftEdge) && (mScrollHPos > 0 ) )
@@ -1761,7 +1763,7 @@ void LLLineEditor::drawBackground()
 	{
 		image = mBgImageDisabled;
 	}
-	else if ( has_focus )
+	else if ( has_focus || mShowImageFocused)
 	{
 		image = mBgImageFocused;
 	}
@@ -1919,7 +1921,7 @@ void LLLineEditor::draw()
 				0,
 				LLFontGL::NO_SHADOW,
 				select_left - mScrollHPos,
-				mTextRightEdge - llround(rendered_pixels_right),
+				mTextRightEdge - ll_round(rendered_pixels_right),
 				&rendered_pixels_right);
 		}
 		
@@ -1929,8 +1931,8 @@ void LLLineEditor::draw()
 			color.setAlpha(alpha);
 			// selected middle
 			S32 width = mGLFont->getWidth(mText.getWString().c_str(), mScrollHPos + rendered_text, select_right - mScrollHPos - rendered_text);
-			width = llmin(width, mTextRightEdge - llround(rendered_pixels_right));
-			gl_rect_2d(llround(rendered_pixels_right), cursor_top, llround(rendered_pixels_right)+width, cursor_bottom, color);
+			width = llmin(width, mTextRightEdge - ll_round(rendered_pixels_right));
+			gl_rect_2d(ll_round(rendered_pixels_right), cursor_top, ll_round(rendered_pixels_right)+width, cursor_bottom, color);
 
 			LLColor4 tmp_color( 1.f - text_color.mV[0], 1.f - text_color.mV[1], 1.f - text_color.mV[2], alpha );
 			rendered_text += mGLFont->render( 
@@ -1941,7 +1943,7 @@ void LLLineEditor::draw()
 				0,
 				LLFontGL::NO_SHADOW,
 				select_right - mScrollHPos - rendered_text,
-				mTextRightEdge - llround(rendered_pixels_right),
+				mTextRightEdge - ll_round(rendered_pixels_right),
 				&rendered_pixels_right);
 		}
 
@@ -1956,7 +1958,7 @@ void LLLineEditor::draw()
 				0,
 				LLFontGL::NO_SHADOW,
 				S32_MAX,
-				mTextRightEdge - llround(rendered_pixels_right),
+				mTextRightEdge - ll_round(rendered_pixels_right),
 				&rendered_pixels_right);
 		}
 	}
@@ -1970,7 +1972,7 @@ void LLLineEditor::draw()
 			0,
 			LLFontGL::NO_SHADOW,
 			S32_MAX,
-			mTextRightEdge - llround(rendered_pixels_right),
+			mTextRightEdge - ll_round(rendered_pixels_right),
 			&rendered_pixels_right);
 	}
 #if 1 // for when we're ready for image art.
@@ -2130,7 +2132,7 @@ void LLLineEditor::draw()
 							0,
 							LLFontGL::NO_SHADOW,
 							S32_MAX,
-							mTextRightEdge - llround(rendered_pixels_right),
+							mTextRightEdge - ll_round(rendered_pixels_right),
 							&rendered_pixels_right, FALSE);
 		}
 
@@ -2155,7 +2157,7 @@ void LLLineEditor::draw()
 							0,
 							LLFontGL::NO_SHADOW,
 							S32_MAX,
-							mTextRightEdge - llround(rendered_pixels_right),
+							mTextRightEdge - ll_round(rendered_pixels_right),
 							&rendered_pixels_right, FALSE);
 		}
 		// Draw children (border)
@@ -2659,7 +2661,7 @@ void LLLineEditor::markAsPreedit(S32 position, S32 length)
 
 S32 LLLineEditor::getPreeditFontSize() const
 {
-	return llround(mGLFont->getLineHeight() * LLUI::getScaleFactor().mV[VY]);
+	return ll_round(mGLFont->getLineHeight() * LLUI::getScaleFactor().mV[VY]);
 }
 
 void LLLineEditor::setReplaceNewlinesWithSpaces(BOOL replace)

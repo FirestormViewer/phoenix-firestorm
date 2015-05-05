@@ -124,7 +124,6 @@ private:
 
 private:
 	LLUUID mInitialBakeIDs[6];
-	bool mInitialBakesLoaded;
 
 
 /********************************************************************************

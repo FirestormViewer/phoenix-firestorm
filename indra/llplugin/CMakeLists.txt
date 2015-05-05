@@ -70,9 +70,7 @@ list(APPEND llplugin_SOURCE_FILES ${llplugin_HEADER_FILES})
 
 add_library (llplugin ${llplugin_SOURCE_FILES})
 
-if( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
-  add_subdirectory(slplugin)
-endif( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
+##add_subdirectory(slplugin)
 
 # Add tests
 if (LL_TESTS)

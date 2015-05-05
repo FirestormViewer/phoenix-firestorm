@@ -356,10 +356,10 @@ inline LLColor4U LLColor4U::multAll(const F32 k)
 {
 	// Round to nearest
 	return LLColor4U(
-		(U8)llround(mV[VX] * k),
-		(U8)llround(mV[VY] * k),
-		(U8)llround(mV[VZ] * k),
-		(U8)llround(mV[VW] * k));
+		(U8)ll_round(mV[VX] * k),
+		(U8)ll_round(mV[VY] * k),
+		(U8)ll_round(mV[VZ] * k),
+		(U8)ll_round(mV[VW] * k));
 }
 /*
 inline LLColor4U operator*(const LLColor4U &a, U8 k)
@@ -474,7 +474,7 @@ void LLColor4U::setVecScaleClamp(const LLColor4& color)
 		color_scale_factor /= max_color;
 	}
 	const S32 MAX_COLOR = 255;
-	S32 r = llround(color.mV[0] * color_scale_factor);
+	S32 r = ll_round(color.mV[0] * color_scale_factor);
 	if (r > MAX_COLOR)
 	{
 		r = MAX_COLOR;
@@ -485,7 +485,7 @@ void LLColor4U::setVecScaleClamp(const LLColor4& color)
 	}
 	mV[0] = r;
 
-	S32 g = llround(color.mV[1] * color_scale_factor);
+	S32 g = ll_round(color.mV[1] * color_scale_factor);
 	if (g > MAX_COLOR)
 	{
 		g = MAX_COLOR;
@@ -496,7 +496,7 @@ void LLColor4U::setVecScaleClamp(const LLColor4& color)
 	}
 	mV[1] = g;
 
-	S32 b = llround(color.mV[2] * color_scale_factor);
+	S32 b = ll_round(color.mV[2] * color_scale_factor);
 	if (b > MAX_COLOR)
 	{
 		b = MAX_COLOR;
@@ -508,7 +508,7 @@ void LLColor4U::setVecScaleClamp(const LLColor4& color)
 	mV[2] = b;
 
 	// Alpha shouldn't be scaled, just clamped...
-	S32 a = llround(color.mV[3] * MAX_COLOR);
+	S32 a = ll_round(color.mV[3] * MAX_COLOR);
 	if (a > MAX_COLOR)
 	{
 		a = MAX_COLOR;
@@ -530,7 +530,7 @@ void LLColor4U::setVecScaleClamp(const LLColor3& color)
 	}
 
 	const S32 MAX_COLOR = 255;
-	S32 r = llround(color.mV[0] * color_scale_factor);
+	S32 r = ll_round(color.mV[0] * color_scale_factor);
 	if (r > MAX_COLOR)
 	{
 		r = MAX_COLOR;
@@ -542,7 +542,7 @@ void LLColor4U::setVecScaleClamp(const LLColor3& color)
 	}
 	mV[0] = r;
 
-	S32 g = llround(color.mV[1] * color_scale_factor);
+	S32 g = ll_round(color.mV[1] * color_scale_factor);
 	if (g > MAX_COLOR)
 	{
 		g = MAX_COLOR;
@@ -554,7 +554,7 @@ void LLColor4U::setVecScaleClamp(const LLColor3& color)
 	}
 	mV[1] = g;
 
-	S32 b = llround(color.mV[2] * color_scale_factor);
+	S32 b = ll_round(color.mV[2] * color_scale_factor);
 	if (b > MAX_COLOR)
 	{
 		b = MAX_COLOR;

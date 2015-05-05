@@ -45,12 +45,6 @@ else (USE_AVX_OPTIMIZATION)
 endif (USE_AVX_OPTIMIZATION)
 # </FS:Ansariel> [AVX Optimization]
 
-# For the library installation process;
-# see cmake/Prebuild.cmake for the counterpart code.
-if ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")
-  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/temp)
-  file(WRITE ${CMAKE_BINARY_DIR}/temp/sentinel_installed "0")
-endif ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")
 add_subdirectory(cmake)
 
 add_subdirectory(${LIBS_OPEN_PREFIX}llaudio)
@@ -87,21 +81,22 @@ if (LL_TESTS OR NOT USESYSTEMLIBS)
 add_subdirectory(${VIEWER_PREFIX}test)
 endif (LL_TESTS OR NOT USESYSTEMLIBS)
 
+if (ENABLE_MEDIA_PLUGINS)
 # viewer media plugins
-if( NOT (WINDOWS OR DARWIN) OR NOT ND_BUILD64BIT_ARCH )
-  add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
-endif( NOT (WINDOWS OR DARWIN) OR NOT ND_BUILD64BIT_ARCH )
+add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
 
-# <FS:AW opensim currency support>
-#teapot helper library
-add_subdirectory(${LIBS_OPEN_PREFIX}teapot)
-# </FS:AW opensim currency support>
 
   # llplugin testbed code (is this the right way to include it?)
   if (LL_TESTS AND NOT LINUX)
     add_subdirectory(${VIEWER_PREFIX}test_apps/llplugintest)
     add_subdirectory(${VIEWER_PREFIX}test_apps/llfbconnecttest)
   endif (LL_TESTS AND NOT LINUX)
+endif (ENABLE_MEDIA_PLUGINS)
+
+# <FS:AW opensim currency support>
+#teapot helper library
+add_subdirectory(${LIBS_OPEN_PREFIX}teapot)
+# </FS:AW opensim currency support>
 
 if (LINUX)
   add_subdirectory(${VIEWER_PREFIX}linux_crash_logger)

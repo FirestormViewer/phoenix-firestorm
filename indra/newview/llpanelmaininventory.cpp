@@ -252,10 +252,9 @@ BOOL LLPanelMainInventory::postBuild()
 	// </FS:ND>
 
 	// Now load the stored settings from disk, if available.
-	std::ostringstream filterSaveName;
-	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
-	LL_INFOS() << "LLPanelMainInventory::init: reading from " << filterSaveName.str() << LL_ENDL;
-	llifstream file(filterSaveName.str());
+	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
+	LL_INFOS() << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
+	llifstream file(filterSaveName.c_str());
 	LLSD savedFilterState;
 	if (file.is_open())
 	{
@@ -370,9 +369,8 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	if (sSaveFilters)
 	{
 	// </FS:Ansariel>
-	std::ostringstream filterSaveName;
-	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
-	llofstream filtersFile(filterSaveName.str());
+	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
+	llofstream filtersFile(filterSaveName.c_str());
 	if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
 	{
 		// <FS:TM> VS2013 compile fix
@@ -380,11 +378,13 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		LL_WARNS() << "Could not write to filters save file " << filterSaveName.str() << LL_ENDL;
 	}
 	else
+    {
 		filtersFile.close();
+    }
 	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
 	}
 	// </FS:Ansariel>
-
+    
 	gInventory.removeObserver(this);
 	delete mSavedFolderState;
 }

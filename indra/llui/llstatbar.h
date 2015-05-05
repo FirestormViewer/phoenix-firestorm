@@ -85,7 +85,6 @@ private:
 				 mFloatingTargetMaxBar,
 				 mCurMaxBar,
 				 mCurMinBar,
-				 mLabelSpacing,
 				 mTickSpacing;
 	S32          mDecimalDigits,
 				 mNumHistoryFrames,

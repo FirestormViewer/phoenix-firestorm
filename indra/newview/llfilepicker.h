@@ -176,11 +176,9 @@ private:
 #if LL_DARWIN
     S32 mPickOptions;
 	std::vector<std::string> mFileVector;
-	// [FS:CR] Unused 2013.10.24 UInt32 mFileIndex;
 	
 	bool doNavChooseDialog(ELoadFilter filter);
 	bool doNavSaveDialog(ESaveFilter filter, const std::string& filename);
-	//static Boolean navOpenFilterProc(AEDesc *theItem, void *info, void *callBackUD, NavFilterModes filterMode);
     std::vector<std::string>* navOpenFilterProc(ELoadFilter filter);
 #endif
 

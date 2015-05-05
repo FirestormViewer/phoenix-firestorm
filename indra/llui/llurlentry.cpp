@@ -39,9 +39,7 @@
 #include "lluicolortable.h"
 #include "message.h"
 
-#include "uriparser/Uri.h"
-
-#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))" // <AW: hop:// protocol>
+#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
 
 // Utility functions
 std::string localize_slapp_label(const std::string& url, const std::string& full_name);
@@ -530,9 +528,17 @@ LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 	
 	mIcon = "Hand";
 	mMenuName = "menu_url_http.xml";
-
-	// <FS:Ansariel> We show the full URL in the text - show normal tool tip
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+/// Return the url from a string that matched the regex
+std::string LLUrlEntrySecondlifeURL::getUrl(const std::string &string) const
+{
+	if (string.find("://") == std::string::npos)
+	{
+		return "https://" + escapeUrl(string);
+	}
+	return escapeUrl(string);
 }
 
 std::string LLUrlEntrySecondlifeURL::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
@@ -551,15 +557,6 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 	//return url;
 	return mTooltip;
 	// </FS:Ansariel>
-}
-
-std::string LLUrlEntrySecondlifeURL::getUrl(const std::string &string) const
-{
-	if (string.find("://") == std::string::npos)
-	{
-		return "http://" + escapeUrl(string);
-	}
-	return escapeUrl(string);
 }
 
 //
@@ -1136,9 +1133,9 @@ void LLUrlEntryParcel::processParcelInfo(const LLParcelData& parcel_data)
 	// If parcel name is empty use Sim_name (x, y, z) for parcel label.
 	else if (!parcel_data.sim_name.empty())
 	{
-		S32 region_x = llround(parcel_data.global_x) % REGION_WIDTH_UNITS;
-		S32 region_y = llround(parcel_data.global_y) % REGION_WIDTH_UNITS;
-		S32 region_z = llround(parcel_data.global_z);
+		S32 region_x = ll_round(parcel_data.global_x) % REGION_WIDTH_UNITS;
+		S32 region_y = ll_round(parcel_data.global_y) % REGION_WIDTH_UNITS;
+		S32 region_z = ll_round(parcel_data.global_z);
 
 		label = llformat("%s (%d, %d, %d)",
 				parcel_data.sim_name.c_str(), region_x, region_y, region_z);

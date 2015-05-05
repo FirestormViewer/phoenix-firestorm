@@ -49,13 +49,13 @@ if (WINDOWS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MDd /MP -D_SCL_SECURE_NO_WARNINGS=1"
       CACHE STRING "C++ compiler debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
-      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /Ob0 /MP -D_SECURE_STL=0"
+      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /Zo /MD /MP /Ob0 -D_SECURE_STL=0"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE
-      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 /Oi /Ot /GF /Gy -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
+      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /Zo /MD /MP /Ob2 -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
       CACHE STRING "C++ compiler release options" FORCE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
-
+  # zlib has assembly-language object files incompatible with SAFESEH
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE /SAFESEH:NO /NODEFAULTLIB:LIBCMT")
 
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
   set(CMAKE_C_STANDARD_LIBRARIES "")
@@ -300,10 +300,8 @@ if (DARWIN)
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_CXX_FLAGS_RELEASE}")
 	set(CMAKE_C_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_C_FLAGS_RELEASE}")
   endif (USE_AVX_OPTIMIZATION)
-  if (XCODE_VERSION GREATER 4.2)
     set(ENABLE_SIGNING TRUE)
     set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")
-  endif (XCODE_VERSION GREATER 4.2)
   # <FS:ND> Build without frame pointer if requested. Otherwise profiling might not work reliable. N.B. Win32 uses FP based calling by default.
   if( NO_OMIT_FRAMEPOINTER )
     set(CMAKE_CXX_FLAGS_RELEASE "-fno-omit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
@@ -314,7 +312,15 @@ endif (DARWIN)
 
 
 if (LINUX OR DARWIN)
-  set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  if (CMAKE_CXX_COMPILER MATCHES ".*clang")
+    set(CMAKE_COMPILER_IS_CLANGXX 1)
+  endif (CMAKE_CXX_COMPILER MATCHES ".*clang")
+
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  elseif (CMAKE_COMPILER_IS_CLANGXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  endif()
 
   if (NOT GCC_DISABLE_FATAL_WARNINGS)
     set(GCC_WARNINGS "${GCC_WARNINGS} -Werror")

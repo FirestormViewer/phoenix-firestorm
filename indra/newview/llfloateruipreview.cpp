@@ -181,8 +181,6 @@ private:
 	LLButton*					mToggleOverlapButton;				// button to togle overlap panel/highlighting
 	LLComboBox*					mLanguageSelection;					// combo box for primary language selection
 	LLComboBox*					mLanguageSelection_2;				// combo box for secondary language selection
-	// [FS:CR] Unused 2013.12.7
-	//LLScrollContainer*			mOverlapScrollView;					// overlapping elements scroll container
 	S32							mLastDisplayedX, mLastDisplayedY;	// stored position of last floater so the new one opens up in the same place
 	std::string 				mDelim;								// the OS-specific delimiter character (/ or \) (*TODO: this shouldn't be needed, right?)
 

@@ -92,14 +92,9 @@ private:
 	friend class LLPanelLoginListener;
 	void addFavoritesToStartLocation();
 	void addUsersWithFavoritesToUsername();
-	void onLocationEditChanged(LLUICtrl* ctrl);
-	void onSelectFavorite();
 	void onSelectServer();
 	void onLocationSLURL();
 
-	static void onClickConnectLast(void*);
-	static void onClickConnectFavorite(void*);
-	static void onClickConnectLocation(void*);
 	static void onClickConnect(void*);
 	static void onClickNewAccount(void*);
 	static void onClickVersion(void*);
@@ -122,7 +117,7 @@ private:
 	static LLPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
 	bool			mFirstLoginThisInstall;
-	bool mFavoriteSelected;
+
 	unsigned int mUsernameLength;
 	unsigned int mPasswordLength;
 	unsigned int mLocationLength;

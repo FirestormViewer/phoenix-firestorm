@@ -173,7 +173,6 @@ private:
 	//Updater*				mNearbyListUpdater;
 	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
-	Updater*				mFacebookListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
 	

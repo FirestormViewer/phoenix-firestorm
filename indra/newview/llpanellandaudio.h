@@ -66,7 +66,6 @@ private:
 	LLButton* mBtnStreamDelete;
 	LLButton* mBtnStreamCopyToClipboard;
 // </FS:CR>
-	LLCheckBoxCtrl* mMusicUrlCheck;
 	LLCheckBoxCtrl* mCheckAVSoundAny;
 	LLCheckBoxCtrl* mCheckAVSoundGroup;
 

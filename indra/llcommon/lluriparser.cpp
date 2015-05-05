@@ -122,51 +122,19 @@ void LLUriParser::fragment(const std::string& s)
 
 void LLUriParser::textRangeToString(UriTextRangeA& textRange, std::string& str)
 {
-	// <FS> Fix for pointer arithmetics by Drake Arconis
-	//str = "";
-
-	//if(&textRange == NULL)
-	//{
-	//	return;
-	//}
-
-	//if(textRange.first == NULL)
-	//{
-	//	return;
-	//}
-
-	//if(textRange.afterLast == NULL)
-	//{
-	//	return;
-	//}
-
-	//S32 len = textRange.afterLast - textRange.first;
-	//if (len)
-	//{
-	//	str.assign(textRange.first, len);
-	//}
-	if (textRange.first != NULL && textRange.afterLast != NULL && !(textRange.first >= textRange.afterLast))
+	if (textRange.first != NULL && textRange.afterLast != NULL && textRange.first < textRange.afterLast)
 	{
 		const ptrdiff_t len = textRange.afterLast - textRange.first;
-		if (len)
-		{
-			str.assign(textRange.first, std::string::size_type(len));
-			return;
-		}
+		str.assign(textRange.first, static_cast<std::string::size_type>(len));
 	}
-
-	str = LLStringUtil::null;
-	// </FS>
+	else
+	{
+		str = LLStringUtil::null;
+	}
 }
 
 void LLUriParser::extractParts()
 {
-	if(&mUri == NULL)
-	{
-		LL_WARNS() << "mUri is NULL for uri: " << mNormalizedUri << LL_ENDL;
-		return;
-	}
-
 	if (mTmpScheme || mNormalizedTmp)
 	{
 		mScheme.clear();

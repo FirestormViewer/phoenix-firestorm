@@ -35,10 +35,7 @@
 class LLTextureManagerBridge
 {
 public:
-	// <FS:ND> virtual dtor or dtors or derived class might not be properly called
-	virtual ~LLTextureManagerBridge()
-	{ }
-	// </FS:ND>
+    virtual ~LLTextureManagerBridge() {}
 
 	virtual LLPointer<LLGLTexture> getLocalTexture(BOOL usemipmaps = TRUE, BOOL generate_gl_tex = TRUE) = 0;
 	virtual LLPointer<LLGLTexture> getLocalTexture(const U32 width, const U32 height, const U8 components, BOOL usemipmaps, BOOL generate_gl_tex = TRUE) = 0;

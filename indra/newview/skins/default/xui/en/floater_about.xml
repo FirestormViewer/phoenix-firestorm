@@ -280,7 +280,7 @@ Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, H
        left="4"
        text_color="LtGray"
        max_length="65536"
-       name="credits_editor"
+       name="licenses_editor"
        top="16"
        width="444"
        word_wrap="true">

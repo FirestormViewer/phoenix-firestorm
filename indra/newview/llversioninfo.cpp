@@ -42,8 +42,6 @@
  #error "Channel or Version information is undefined"
 #endif
 
-const char * const LL_CHANNEL = LL_VIEWER_CHANNEL;
-
 //
 // Set the version numbers in indra/VIEWER_VERSION
 //

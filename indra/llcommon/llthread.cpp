@@ -95,15 +95,9 @@ void set_thread_name( DWORD dwThreadID, const char* threadName)
 // 
 //----------------------------------------------------------------------------
 
-#if LL_DARWIN
-// statically allocated thread local storage not supported in Darwin executable formats
-#elif LL_WINDOWS
-uintptr_t __declspec(thread) sThreadID = 0;
-#elif LL_LINUX
-uintptr_t __thread sThreadID = 0;
-#endif 
+U32 LL_THREAD_LOCAL sThreadID = 0;
 
-uintptr_t LLThread::sIDIter = 0;
+U32 LLThread::sIDIter = 0;
 
 
 LL_COMMON_API void assert_main_thread()
@@ -118,9 +112,7 @@ LL_COMMON_API void assert_main_thread()
 
 void LLThread::registerThreadID()
 {
-#if !LL_DARWIN
 	sThreadID = ++sIDIter;
-#endif
 }
 
 //
@@ -137,9 +129,7 @@ void *APR_THREAD_FUNC LLThread::staticRun(apr_thread_t *apr_threadp, void *datap
 	// for now, hard code all LLThreads to report to single master thread recorder, which is known to be running on main thread
 	threadp->mRecorder = new LLTrace::ThreadRecorder(*LLTrace::get_master_thread_recorder());
 
-#if !LL_DARWIN
 	sThreadID = threadp->mID;
-#endif
 
 	// Run the user supplied function
 	threadp->run();
@@ -348,15 +338,9 @@ void LLThread::setQuitting()
 }
 
 // static
-uintptr_t LLThread::currentID()
+U32 LLThread::currentID()
 {
-#if LL_DARWIN
-	// statically allocated thread local storage not supported in Darwin executable formats
-	return reinterpret_cast<uintptr_t>(apr_os_thread_current());
-#else
 	return sThreadID;
-#endif
-
 }
 
 // static

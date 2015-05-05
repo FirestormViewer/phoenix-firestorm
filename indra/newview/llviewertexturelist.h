@@ -61,8 +61,6 @@ typedef	void (*LLImageCallback)(BOOL success,
 
 class LLViewerTextureList
 {
-    LOG_CLASS(LLViewerTextureList);
-
 	friend class LLTextureView;
 	friend class LLViewerTextureManager;
 	friend class LLLocalBitmap;
@@ -211,6 +209,7 @@ private:
 private:
 	static S32 sNumImages;
 	static void (*sUUIDCallback)(void**, const LLUUID &);
+    LOG_CLASS(LLViewerTextureList);
 };
 
 class LLUIImageList : public LLImageProviderInterface, public LLSingleton<LLUIImageList>

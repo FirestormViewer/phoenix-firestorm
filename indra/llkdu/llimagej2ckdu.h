@@ -41,7 +41,17 @@
 #include "kdu_elementary.h"
 #include "kdu_messaging.h"
 #include "kdu_params.h"
+
+// don't *really* want to rebuild KDU so turn off specific warnings for this header
+#if LL_DARWIN
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-private-field"
 #include "kdu_compressed.h"
+#pragma clang diagnostic pop
+#else
+#include "kdu_compressed.h"
+#endif
+
 #include "kdu_sample_processing.h"
 
 // <FS:ND> KDU >= 7.5.0 uses namespaces for nicer encapsulation. To avoid cluttering this all over LLs source we're going with this.
