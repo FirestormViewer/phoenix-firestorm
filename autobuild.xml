@@ -37,18 +37,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>f787b5b8e4b7fcba36602565cc5d8fe0</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/glod-1.0pre4-linux-x64-20131227.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -129,18 +117,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4551308262b8d24f6d8dab7d8d690d5d</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/SDL-1.2.14-linux-x64-20131228.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
         </map>
       </map>
       <key>apr_suite</key>
@@ -176,18 +152,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>c0a3ca6e3f17329f698a097991788a3e</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201502072210-linux-x64-201502072210.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -237,18 +201,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>691aa373708bdf72b1153893f7578dd8</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/ares-1.10.0-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -296,18 +248,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>01a37a2400190d73638ec404d3aef065</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/boost-1.52.0-linux-x64-20131214.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -357,18 +297,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7553b62c7ca7df04fa25fb70430c79d6</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/colladadom-2.2-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -417,18 +345,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8d69881b9172c0e0a431f0f0dfa99e8f</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.38.0.0-linux-x64-20150124.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -465,18 +381,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>02cf031da2eaa733d4458840e9513e88</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/dbus_glib-0.76-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
         </map>
       </map>
       <key>dictionaries</key>
@@ -512,18 +416,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>d1fcbdd80e8748455ba528cbf0514801</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/dictionaries-1-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -573,18 +465,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>1180518fc763d6dafeaeb271f7fac79c</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/expat-2.0.1.201502072206-linux-x64-201502072206.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -633,18 +513,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>93d450e246e7aeb7ba25d93adc3ebc9d</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.41-linux-20140819.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -680,18 +548,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cde73209ae2a74d1fa2dcc4b70db6e67</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/fontconfig-2.8.0-linux-x64-20131216.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
         </map>
       </map>
@@ -753,18 +609,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6f59fd0dc976a12f3053d0ea8371438e</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/freetype-2.4.11-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -800,18 +644,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>ea2524f19d53c12645413543930731b0</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/glext-68-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -860,18 +692,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>31211ab614a1b8f634615194ab7f2360</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/glh_linear-0.0.0-linux-x64-20131213.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -945,18 +765,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>8aae0c236af596e794fe009f344b3d3b</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/gmock-1.6.0-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1005,18 +813,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b497e91203227c236f291c8cc83a5076</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/google_breakpad-0.0.0-rev1099-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1052,18 +848,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cac55fe6c0069fd8209ab48a6c8372c2</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/gperftools-2.0-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -1101,18 +885,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9ffe8e4a52f425fc951200e8689b5cdf</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/gstreamer-0.10.28-linux-x64-20131223.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
         </map>
       </map>
       <key>gtk-atk-pango-glib</key>
@@ -1136,18 +908,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0c5990879c99cb5aad9c89862c8c2203</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/gtk-atk-pango-glib-linux-x64-20131223.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -1245,18 +1005,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>cbf3fde6c5a9567813c591d399e69f11</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/jpeglib-8c-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1305,18 +1053,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4e56cf7e6dafcd124c09d70c7ab47cd2</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/jsoncpp-0.5.0-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1364,18 +1100,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>1310525b07b37fb6c869ba1af24425ce</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.5.0-linux-20141007.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -1473,18 +1197,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0b4442ab57af206253c47876a0220c63</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/libhunspell-1.3.2-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1520,18 +1232,6 @@
             </map>
             <key>name</key>
             <string>darwin</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>9a915137a95612c1570f4a0c901755fa</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libidn-1.28-linux-x64-20150125.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
         </map>
       </map>
@@ -1569,18 +1269,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bac1f696d942610da5c8d371f1c51703</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/libpng-1.5.1-linux-x64-20131220.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1617,18 +1305,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>4729178d1d0bdc9c7d1d1c66712e9646</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/uuid-1.6.2-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
         </map>
       </map>
       <key>libxml2</key>
@@ -1652,18 +1328,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>819bf22602afa1fbbfef3bb067d21069</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/libxml2-2.7.8-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
         </map>
       </map>
@@ -1831,18 +1495,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>481c0e78eee98200b31bce52d00e4fea</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llqtwebkit-4.7.1-linux-x64-201502081629.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1915,18 +1567,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>351ebe8e638cea6f6c3dd85dd0b5b00c</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/ndPhysicsStub-1.0-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -1974,18 +1614,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>016f6f2fa3dcc616f67749f2bf0ef201</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/libndofdev-0.3-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2059,18 +1687,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7af891ac1fb52d0c43b0a466d1d2b2d5</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/ogg_vorbis-1.2.2-1.3.2-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2108,18 +1724,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>bcb331520266fbb2b581aaf7d0d8e9fa</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/openal-1.12.854-1.1.0-linux-x64-20131215.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2171,18 +1775,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6ac7d355ad071e9dca55b403397c3ff9</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/openjpeg-1.4-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2231,18 +1823,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0b26c12dd20aa928453ee18f4793a2dd</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/openssl-1.0.1g-linux-x64-20140417.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2290,18 +1870,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>c31f766db43797f9e95995819ebc36e6</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/pcre-8.32-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2407,18 +1975,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>0f63c311c77c7f0a61a6a5b85639661b</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slvoice-4.5.0009.17865-linux-20150214.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2455,18 +2011,6 @@
             <key>name</key>
             <string>common</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>130be9c2677de96b1013cde9b0920b06</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/tut-2008-11-30-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
         </map>
       </map>
       <key>uriparser</key>
@@ -2502,18 +2046,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>e67a27e13e546cbb13fad2665a1896b7</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-linux-x64-201502251606-r15.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -2583,18 +2115,6 @@
             <key>name</key>
             <string>linux</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>7c5937ee2795f27a27dba687cc9305ee</string>
-              <key>url</key>
-              <string>http://downloads.firestormviewer.org/installables/xmlrpc_epi-0.54.1-linux-x64-20131212.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
           <key>windows</key>
           <map>
             <key>archive</key>
@@ -2642,18 +2162,6 @@
             </map>
             <key>name</key>
             <string>linux</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>1aeacb726e534edc9c94bfcb71ec4af8</string>
-              <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.8.201502072231-linux-x64-201502072231.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
