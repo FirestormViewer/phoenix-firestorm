@@ -56,8 +56,8 @@ if(WINDOWS)
         libhunspell.dll
         )
     
-#    set(debug_files ${debug_files} growl++.dll growl.dll )
-#    set(release_files ${release_files} growl++.dll growl.dll )
+    set(debug_files ${debug_files} growl++.dll growl.dll )
+    set(release_files ${release_files} growl++.dll growl.dll )
 
     if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
@@ -83,15 +83,6 @@ if(WINDOWS)
         set(release_files ${release_files} x64/Leap.dll)
       endif( NOT ND_BUILD64BIT_ARCH )
     endif (LEAPMOTION)
-
-# <FS:ND> Copy pdb files for symbol generation too
-   if( NOT ND_BUILD64BIT_ARCH )
-     #set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
-     #set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
-     set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb )
-     set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb )
-   endif( NOT ND_BUILD64BIT_ARCH )
-# </FS:ND>
 
     #*******************************
     # Copy MS C runtime dlls, required for packaging.
