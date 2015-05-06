@@ -178,32 +178,32 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
             # skins
             if self.prefix(src="skins"):
-		    self.path("skins.xml")
-                    # include the entire textures directory recursively
-                    if self.prefix(src="*/textures"):
-                            self.path("*/*.tga")
-                            self.path("*/*.j2c")
-                            self.path("*/*.jpg")
-                            self.path("*/*.png")
-                            self.path("*.tga")
-                            self.path("*.j2c")
-                            self.path("*.jpg")
-                            self.path("*.png")
-                            self.path("textures.xml")
-                            self.end_prefix("*/textures")
-                    self.path("*/xui/*/*.xml")
-                    self.path("*/xui/*/widgets/*.xml")
-		    self.path("*/themes/*/colors.xml")
-		    if self.prefix(src="*/themes/*/textures"):
-                            self.path("*/*.tga")
-                            self.path("*/*.j2c")
-                            self.path("*/*.jpg")
-                            self.path("*/*.png")
-                            self.path("*.tga")
-                            self.path("*.j2c")
-                            self.path("*.jpg")
-                            self.path("*.png")
-                            self.end_prefix("*/themes/*/textures")
+                self.path("skins.xml")
+                # include the entire textures directory recursively
+                if self.prefix(src="*/textures"):
+                    self.path("*/*.tga")
+                    self.path("*/*.j2c")
+                    self.path("*/*.jpg")
+                    self.path("*/*.png")
+                    self.path("*.tga")
+                    self.path("*.j2c")
+                    self.path("*.jpg")
+                    self.path("*.png")
+                    self.path("textures.xml")
+                    self.end_prefix("*/textures")
+                self.path("*/xui/*/*.xml")
+                self.path("*/xui/*/widgets/*.xml")
+                self.path("*/themes/*/colors.xml")
+                if self.prefix(src="*/themes/*/textures"):
+                    self.path("*/*.tga")
+                    self.path("*/*.j2c")
+                    self.path("*/*.jpg")
+                    self.path("*/*.png")
+                    self.path("*.tga")
+                    self.path("*.j2c")
+                    self.path("*.jpg")
+                    self.path("*.png")
+                    self.end_prefix("*/themes/*/textures")
 
             # <FS:AO> - We intentionally do not package xui for themes, the reasoning is: 
             #         Themes are defined as color/texture mods, not structual mods. Structural changes are done as "skins".
@@ -563,39 +563,17 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("winmm.dll")
             self.end_prefix()
 
-
-        if self.args['configuration'].lower() == 'debug' and not self.fs_is_64bit_build():
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'debug'),
-                           dst="llplugin"):
+        if self.args['configuration'].lower() == 'debug':
+            if self.prefix(src=debpkgdir, dst="llplugin"):
                 self.path("libeay32.dll")
                 self.path("ssleay32.dll")
-
-
                 self.end_prefix()
-        elif not self.fs_is_64bit_build():
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'),
-                           dst="llplugin"):
+
+        else:
+            if self.prefix(src=relpkgdir, dst="llplugin"):
                 self.path("libeay32.dll")
                 self.path("ssleay32.dll")
-
                 self.end_prefix()
-        elif self.fs_is_64bit_build() and self.prefix( src = "../packages/bin_x86/slplugin", dst="" ):
-            self.path( "slplugin.exe" )
-
-            if self.prefix( src = "llplugin", dst="llplugin" ):
-              self.path( "*.dll" )
-
-              if self.prefix( src = "imageformats", dst="imageformats" ):
-                self.path( "*.dll" )
-                self.end_prefix()
-              if self.prefix( src = "codecs", dst="codecs" ):
-                self.path( "*.dll" )
-                self.end_prefix()
-
-              self.end_prefix()
-
-            self.end_prefix()
-
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -862,9 +840,9 @@ class DarwinManifest(ViewerManifest):
                                        dst=libfile)
 
                 for libfile in (
-                                "libcollada14dom.dylib",
                                 "libapr-1.0.dylib",
                                 "libaprutil-1.0.dylib",
+                                "libcollada14dom.dylib",
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libGLOD.dylib",
@@ -1386,7 +1364,6 @@ class LinuxManifest(ViewerManifest):
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
             self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
-
 class Linux_i686_Manifest(LinuxManifest):
     def construct(self):
         super(Linux_i686_Manifest, self).construct()
@@ -1452,8 +1429,8 @@ class Linux_i686_Manifest(LinuxManifest):
                 self.path("libfmodex.so")
                 pass
             except:
-                    print "Skipping libfmodex.so - not found"
-                    pass
+                print "Skipping libfmodex.so - not found"
+                pass
 
             self.end_prefix("lib")
 
