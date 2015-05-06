@@ -2229,7 +2229,8 @@ void LLVFS::unlockAndClose(LLFILE *fp)
 std::string LLVFS::getCreationDataUTC() const
 {
 	llifstream date_file;
-	date_file.open(mIndexFilename + ".date");
+	std::string fileName = mIndexFilename + ".date";
+	date_file.open( fileName.c_str() );
 	if (date_file.is_open())
 	{
 		std::string date;

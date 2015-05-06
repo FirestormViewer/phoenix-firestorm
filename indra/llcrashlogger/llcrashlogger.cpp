@@ -520,7 +520,11 @@ bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg
 				 << "Content-Type: application/octet-stream"
 				 << "\r\n\r\n";
 
-			llifstream fstream(itFile->second, std::iostream::binary | std::iostream::out);
+			// <FS:ND> Linux wants a char const * here
+			// llifstream fstream(itFile->second, std::iostream::binary | std::iostream::out);
+			llifstream fstream(itFile->second.c_str(), std::iostream::binary | std::iostream::out);
+			// </FS:ND>
+
 			if (fstream.is_open())
 			{
 				fstream.seekg(0, std::ios::end);

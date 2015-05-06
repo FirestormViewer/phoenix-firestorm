@@ -161,7 +161,7 @@ void FSFloaterObjectExport::onIdle()
 			mWaitTimer.stop();
 
 			llofstream file;
-			file.open(mFilename, std::ios_base::out | std::ios_base::binary);
+			file.open(mFilename.c_str(), std::ios_base::out | std::ios_base::binary);
 			std::string zip_data = zip_llsd(mManifest);
 			file.write(zip_data.data(), zip_data.size());
 			file.close();

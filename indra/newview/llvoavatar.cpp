@@ -1187,7 +1187,10 @@ void LLVOAvatar::initCloud()
 		filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "cloud.xml");
 	}
 	LLSD cloud;
-	llifstream in_file(filename);
+	// <FS:ND> On Linux ifstream only has a const char* constructor
+	// llifstream in_file(filename);
+	llifstream in_file(filename.c_str());
+	// </FS:ND>
 	LLSDSerialize::fromXMLDocument(cloud, in_file);
 	sCloud.fromLLSD(cloud);
 	LLViewerTexture* cloud_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");
@@ -1204,7 +1207,11 @@ void LLVOAvatar::initCloud()
 	{
 		filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "cloud_muted.xml");
 	}
-	llifstream in_file_muted(filename);
+	// <FS:ND> On Linux ifstream only has a const char* constructor
+	// llifstream in_file_muted(filename);
+	llifstream in_file_muted(filename.c_str());
+	// </FS:ND>
+
 	LLSDSerialize::fromXMLDocument(cloud_muted, in_file_muted);
 	sCloudMuted.fromLLSD(cloud_muted);
 	LLViewerTexture* cloud_muted_texture = LLViewerTextureManager::getFetchedTextureFromFile("cloud-particle.j2c");

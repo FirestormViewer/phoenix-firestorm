@@ -156,7 +156,7 @@ void GrowlManager::loadConfig()
 	}
 
 	LL_INFOS("GrowlConfig") << "Loading growl notification config from " << config_file << LL_ENDL;
-	llifstream configs(config_file);
+	llifstream configs(config_file.c_str());
 	LLSD notificationLLSD;
 	std::set<std::string> notificationTypes;
 	notificationTypes.insert(GROWL_KEYWORD_ALERT_TYPE);

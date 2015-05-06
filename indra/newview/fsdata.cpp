@@ -295,7 +295,7 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 
 bool FSData::loadFromFile(LLSD& data, std::string filename)
 {
-	llifstream file(filename);
+	llifstream file(filename.c_str());
 	if(file.is_open())
 	{
 		if(LLSDSerialize::fromXML(data, file) != LLSDParser::PARSE_FAILURE)
@@ -706,7 +706,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
 {
 	LL_INFOS("fsdata") << "Saving " << filename << LL_ENDL;
 	llofstream file;
-	file.open(filename);
+	file.open(filename.c_str());
 	if(!file.is_open())
 	{
 		LL_WARNS("fsdata") << "Unable to open " << filename << LL_ENDL;

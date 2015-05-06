@@ -100,7 +100,7 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
 void FSFloaterPoseStand::loadPoses()
 {
 	const std::string pose_filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "posestand.xml");
-	llifstream pose_file(pose_filename);
+	llifstream pose_file(pose_filename.c_str());
 	LLSD poses;
 	if (pose_file.is_open())
 	{

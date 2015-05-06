@@ -187,7 +187,7 @@ void RlvStrings::initClass()
 // Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride)
 {
-	llifstream fileStream(strFilePath, std::ios::binary); LLSD sdFileData;
+	llifstream fileStream(strFilePath.c_str(), std::ios::binary); LLSD sdFileData;
 	if ( (!fileStream.is_open()) || (!LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 		return;
 	fileStream.close();
@@ -238,7 +238,7 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 			sdStrings[itString->first]["value"] = listValues.back();
 	}
 
-	llofstream fileStream(strFilePath);
+	llofstream fileStream(strFilePath.c_str());
 	if (!fileStream.good())
 		return;
 

@@ -111,7 +111,7 @@ bool exoGroupMuteList::loadMuteList()
 		LL_INFOS("GroupMute") << "Mute file doesn't exist; skipping load." << LL_ENDL;
 		return true;
 	}
-	llifstream file(path);
+	llifstream file(path.c_str());
 	if(!file.is_open())
 	{
 		LL_WARNS("GroupMute") << "Failed to open group muting list." << LL_ENDL;
@@ -134,7 +134,7 @@ bool exoGroupMuteList::saveMuteList()
 		data.append(*it);
 	}
 
-	llofstream file(getFilePath());
+	llofstream file(getFilePath().c_str());
 	if(!file.is_open())
 	{
 		LL_WARNS("GroupMute") << "Unable to save group muting list!" << LL_ENDL;

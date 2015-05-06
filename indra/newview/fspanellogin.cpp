@@ -346,7 +346,7 @@ void FSPanelLogin::addFavoritesToStartLocation()
 // </FS:CR>
 	LLSD fav_llsd;
 	llifstream file;
-	file.open(filename);
+	file.open(filename.c_str());
 // <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
 	//if (!file.is_open())
 	//{

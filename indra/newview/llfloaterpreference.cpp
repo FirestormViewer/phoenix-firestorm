@@ -3583,7 +3583,7 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins()
 	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
 
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
-	llifstream fileSkins(strSkinsPath, std::ios::binary);
+	llifstream fileSkins(strSkinsPath.c_str(), std::ios::binary);
 	if (fileSkins.is_open())
 	{
 		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);

@@ -190,7 +190,7 @@ void FSWSAssetBlacklist::loadBlacklist()
 {
 	if (gDirUtilp->fileExists(mBlacklistFileName))
 	{
-		llifstream blacklist_data_stream(mBlacklistFileName);
+		llifstream blacklist_data_stream(mBlacklistFileName.c_str());
 		if (blacklist_data_stream.is_open())
 		{
 			LLSD data;
@@ -267,7 +267,7 @@ void FSWSAssetBlacklist::loadBlacklist()
 
 void FSWSAssetBlacklist::saveBlacklist()
 {
-	llofstream save_file(mBlacklistFileName);
+	llofstream save_file(mBlacklistFileName.c_str());
 	LLSD savedata;
 
 	for (blacklist_data_t::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)

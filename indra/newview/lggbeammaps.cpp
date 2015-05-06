@@ -81,7 +81,7 @@ void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F3
 LLSD lggBeamMaps::getPic(const std::string& filename)
 {
 	LLSD data;
-	llifstream importer(filename);
+	llifstream importer(filename.c_str());
 	LLSDSerialize::fromXMLDocument(data, importer);
 
 	return data;

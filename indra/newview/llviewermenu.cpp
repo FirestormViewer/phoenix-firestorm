@@ -9165,7 +9165,7 @@ class FSStreamListExportXML :public view_listener_t
 		if(file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, LLDir::getScrubbedFileName("stream_list.xml")))
 		{
 			std::string filename = file_picker.getFirstFile();
-			llofstream export_file(filename);
+			llofstream export_file(filename.c_str());
 			LLSDSerialize::toPrettyXML(gSavedSettings.getLLSD("FSStreamList"), export_file);
 			export_file.close();
 			LLSD args;
@@ -9187,7 +9187,7 @@ class FSStreamListImportXML :public view_listener_t
 		if(file_picker.getOpenFile(LLFilePicker::FFLOAD_XML))
 		{
 			std::string filename = file_picker.getFirstFile();
-			llifstream stream_list(filename);
+			llifstream stream_list(filename.c_str());
 			if(!stream_list.is_open())
 			{
 				LL_WARNS() << "Couldn't open the xml file for reading. Aborting import!" << LL_ENDL;
