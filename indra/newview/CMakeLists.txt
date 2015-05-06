@@ -1676,9 +1676,9 @@ if (LINUX)
 
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
-    set(viewer_LIBRARIES
-        Xinerama
-        )
+#    set(viewer_LIBRARIES
+#        Xinerama
+#        )
     if (OPENAL)
       LIST(APPEND viewer_LIBRARIES ${OPENAL_LIBRARIES})
     endif (OPENAL)
