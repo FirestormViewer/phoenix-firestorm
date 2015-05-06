@@ -63,16 +63,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d8fdf76fbeda3bcd592759780fd3cbe1</string>
+              <string>7ffe5a6165e6808e0674754b56545034</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-r65-win32.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-windows-201505061845-r74.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
       </map>
-      <key>Growl</key>
+      <key>gntp-growl</key>
       <map>
         <key>copyright</key>
         <string>The Growl Project</string>
@@ -81,7 +81,7 @@
         <key>license</key>
         <string>bsd</string>
         <key>name</key>
-        <string>Growl</string>
+        <string>gntp-growl</string>
         <key>platforms</key>
         <map>
           <key>darwin</key>
@@ -346,9 +346,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>76a607d8a625062b9a63a88b62819894</string>
+              <string>45f4805a9f58c63e5bcb16b0f3fe962e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/boost_3p-update-boost/rev/297445/arch/CYGWIN/installer/boost-1.57-windows-297445.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-windows-201505061806-r134.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>220897a1893a188aa9d31efb48909878</string>
+              <string>c359a02f6ed2cfb0c683a6318eab976e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/colladadom_3p-update-colladadom/rev/297450/arch/CYGWIN/installer/colladadom-2.3.297450-windows-297450.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/3p-colladadom\colladadom-2.3.201505061818-r95-windows-201505061818-r95.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2535,13 +2535,13 @@
       <key>copyright</key>
       <string>Copyright (c) 2014, Linden Research, Inc.</string>
       <key>description</key>
-      <string>Second Life Viewer</string>
+      <string>Firestorm Viewer</string>
       <key>license</key>
       <string>LGPL</string>
       <key>license_file</key>
       <string>docs/LICENSE-source.txt</string>
       <key>name</key>
-      <string>Second Life Viewer</string>
+      <string>firestorm</string>
       <key>platforms</key>
       <map>
         <key>common</key>
