@@ -71,7 +71,7 @@ else (USESYSTEMLIBS)
       set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
     endforeach(libname)
 
-#    set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
+    set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)
 
   include_directories (
