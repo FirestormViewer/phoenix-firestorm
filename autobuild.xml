@@ -51,9 +51,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a77a8daf932e6f32f1511f528762ae81</string>
+              <string>0ea99b626d4d5e3dc43f9f35f88625ba</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-r65-linux32.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.201502162025-r74-linux-201502162025-r74.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dd0135d53706a4040d65974f7e804d6f</string>
+              <string>22eb436784b7c74d48802de7eb772ab2</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/fmodex_3p-update-fmodex/rev/297261/arch/Linux/installer/fmodex-4.44.31.297261-linux-297261.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44432-linux-201502162016-r20.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -672,9 +672,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5aa7b826e7c1cf95e9cd3ef77e314f35</string>
+              <string>518a872b592a5c47ebb5c8ac7c302f7b</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/fmodex_3p-update-fmodex/rev/297261/arch/CYGWIN/installer/fmodex-4.44.31.297261-windows-297261.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/fmodex-44432-windows-201412091607.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1392,9 +1392,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ed952c0cb86329e63a8db190953962d8</string>
+              <string>0cfc0582e29b907c2bd7529a318a9b1b</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/kdu_3p-update-kdu/rev/296932/arch/Linux/installer/kdu-7.2.296932-linux-296932.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.5.0-linux-201502142055-r24.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1404,9 +1404,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a0e5c050a4975c81611d9f1862ac57fb</string>
+              <string>66f4e374ff8a4ea90e7132078eeac2e9</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/kdu_3p-update-kdu/rev/296932/arch/CYGWIN/installer/kdu-7.2.296932-windows-296932.tar.bz2</string>
+              <string>file:///c:/cywgin/opt/kdu-7.5.0-windows-201412091319.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
