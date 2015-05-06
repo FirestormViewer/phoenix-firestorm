@@ -76,6 +76,7 @@
 		<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an (RC Magnum, RC Le Tigre, RC BlueSteel usw.), auf dem die aktuelle Region läuft."/>
 		<check_box label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation" />
 		<check_box label="Menüsuche anzeigen" name="show_search_menu_check"/>
+		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 		<text name="navfav_textbox">
 			Navigations- und Favoriten-Leiste:
 		</text>
