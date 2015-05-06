@@ -1636,6 +1636,10 @@ void LLFloaterWorldMap::onTrackRegion()
 				LL_WARNS() << "Cannot add region to region tracker because sim name is empty." << LL_ENDL;
 			}
 		}
+		else
+		{
+			LL_WARNS() << "Cannot add region to region tracker because we aren't tracking anything." << LL_ENDL;
+		}
 	}
 }
 // </FS:Ansariel>
