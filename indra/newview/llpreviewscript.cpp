@@ -456,6 +456,12 @@ LLScriptEdCore::~LLScriptEdCore()
 //		script_search->closeFloater();
 //		delete script_search;
 //	}
+	// <FS:Sei> FIRE-16042: Warn when preproc is toggled.
+	if (mTogglePreprocConnection.connected())
+	{
+		mTogglePreprocConnection.disconnect();
+	}
+	// </FS:Sei>
 
 	delete mLiveFile;
 	if (mSyntaxIDConnection.connected())
@@ -500,6 +506,9 @@ BOOL LLScriptEdCore::postBuild()
 			mPostEditor->setEnabled(TRUE);
 		}
 	}
+	// FIRE-16042: Warn when preproc is toggled.
+	mTogglePreprocConnection = gSavedSettings.getControl("_NACL_LSLPreprocessor")->getSignal()
+		->connect(boost::bind(&LLScriptEdCore::onToggleProc, this));
 	// NaCl End
 
 	childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
@@ -729,12 +738,10 @@ void LLScriptEdCore::onBtnPrefs(void* userdata)
 // </FS:CR>
 
 // NaCl - LSL Preprocessor
-void LLScriptEdCore::onToggleProc(void* userdata)
+void LLScriptEdCore::onToggleProc()
 {
-	LLScriptEdCore* corep = (LLScriptEdCore*)userdata;
-	corep->mErrorList->setCommentText(LLTrans::getString("preproc_toggle_warning"));
-	corep->mErrorList->selectFirstItem();
-	gSavedSettings.setBOOL("_NACL_LSLPreprocessor",!gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
+	mErrorList->setCommentText(LLTrans::getString("preproc_toggle_warning"));
+	mErrorList->deleteAllItems(); // Make it visible
 }
 // NaCl End
 
