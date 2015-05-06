@@ -109,9 +109,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad4d439bfd9e8768ba0d99e10087b333</string>
+              <string>7f6bb72573a33fd16909a2df6e031219</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201503091206-r9d.tar.bz2</uri>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-windows-201505061408-r10.tar.bz2</uri>
             </map>
           </map>
         </map>
@@ -334,9 +334,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fb1537f7ad0b490fcb4f096c15dce9cd</string>
+              <string>5ff95c28897a7bb4da93bd4f5b3d9d06</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/boost_3p-update-boost/rev/297445/arch/Linux/installer/boost-1.57-linux-297445.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-linux-201505061539-r135.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -386,9 +386,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d627c2a679f3afb8d3e090d42f53cd2e</string>
+              <string>f73cbdc220605119cf5f1b0c42d3bb9c</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/colladadom_3p-update-colladadom/rev/297450/arch/Linux/installer/colladadom-2.3.297450-linux-297450.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505061613-r94-linux-201505061613-r94.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
