@@ -121,6 +121,7 @@
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von „Gruppenmitteilungen erhalten“ deaktiviert auch Gruppenchat"/>
 			<check_box name="FSIgnoreAdHocSessions" label="Automatisch alle Konferenzen ignorieren und verlassen"/>
 			<check_box name="FSReportIgnoredAdHocSession" label="Ignorierte Konferenzen im Chat in der Nähe melden"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Konferenz-Einladungen von Freunden nicht ignorieren"/>
 			<text name="group_snooze_time_label" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen." width="185">
 				Gruppenchat-Stummschaltdauer:
 			</text>
