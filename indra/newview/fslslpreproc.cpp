@@ -118,8 +118,9 @@ using namespace boost::regex_constants;
 // (using 'r' as namespace prefix for RE, to avoid conflicts)
 // The code relies on none of these expressions having capturing groups.
 #define rCMNT "//[^\\n]*+\\n|/\\*(?:(?!\\*/).)*+\\*/" // skip over single- or multi-line comments as a block
-#define rREQ_SPC "(?:" rCMNT "|\\s)++"
-#define rOPT_SPC "(?:" rCMNT "|\\s)*+"
+#define rSPC "[^][{}()<>@A-Za-z0-9_.,:;!~&|^\"=%/*+-]"
+#define rREQ_SPC "(?:" rCMNT "|" rSPC ")++"
+#define rOPT_SPC "(?:" rCMNT "|" rSPC ")*+"
 #define rTYPE_ID "[a-z]++"
 #define rIDENT "[A-Za-z_][A-Za-z0-9_]*+"
 #define rCMNT_OR_STR rCMNT "|\"(?:[^\"\\\\]|\\\\[^\\n])*+\"" // skip over strings as a block too
