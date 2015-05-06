@@ -7,4 +7,5 @@
 	<menu_item_check label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation"/>
 	<menu_item_check label="Simulator-Version in Menüleiste anzeigen" name="FSStatusbarShowSimulatorVersion"/>
 	<menu_item_check label="Menüsuche anzeigen" name="FSMenuSearch"/>
+	<menu_item_check label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
 </menu>

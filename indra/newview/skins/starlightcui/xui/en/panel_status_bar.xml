@@ -262,6 +262,7 @@
     top="0"
     follows="right|top"
     name="balance_bg"
+    visibility_control="FSShowCurrencyBalanceInStatusbar"
     background_opaque="false"
     background_visible="true">
     <text
