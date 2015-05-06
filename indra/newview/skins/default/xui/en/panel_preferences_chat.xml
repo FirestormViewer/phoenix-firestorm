@@ -715,6 +715,16 @@
              name="FSReportIgnoredAdHocSession"
              control_name="FSReportIgnoredAdHocSession"
              label="Report ignored conference chats in nearby chat"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             enabled_control="FSIgnoreAdHocSessions"
+             top_pad="-1"
+             width="30"
+             height="18"
+             name="FSDontIgnoreAdHocFromFriends"
+             control_name="FSDontIgnoreAdHocFromFriends"
+             label="Don't ignore conference chats invitations from my friends"/>
             <text
              name="group_snooze_time_label"
              layout="topleft"

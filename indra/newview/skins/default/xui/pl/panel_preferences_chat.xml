@@ -117,6 +117,7 @@
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
 			<check_box name="FSIgnoreAdHocSessions" label="Automatycznie ignoruj i opuszczaj wszystkie czaty konferencji (ad-hoc)"/>
 			<check_box name="FSReportIgnoredAdHocSession" label="Zgłaszaj ignorowanie czatu konferencji w czacie lokalnym"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Nie ignoruj zaproszeń do czatów konferencji od moich znajomych"/>
 			<text width="290" name="group_snooze_time_label" tool_tip="Ilość czasu, przez jaką czat grupowy będzie zablokowany po naciśnięciu przycisku tymczasowego jego wyciszenia. Ustawienie tej wartości na 0 zwyczajnie zamknie czat grupy do czasu, gdy następna wiadomość się w nim nie pojawi.">
 				Długość tymczasowego wyciszenia czatu grupowego:
 			</text>

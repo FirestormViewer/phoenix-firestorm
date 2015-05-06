@@ -3092,18 +3092,24 @@ void LLIMMgr::addMessage(
 		}
 
 		// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
-		if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && gSavedSettings.getBOOL("FSIgnoreAdHocSessions") && !from_linden)
+		static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
+		if (dialog != IM_NOTHING_SPECIAL && !is_group_chat && ignoreAdHocSessions && !from_linden)
 		{
-			LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
-			if (!gIMMgr->leaveSession(new_session_id))
+			static LLCachedControl<bool> dontIgnoreAdHocFromFriends(gSavedSettings, "FSDontIgnoreAdHocFromFriends");
+			if (!dontIgnoreAdHocFromFriends || (dontIgnoreAdHocFromFriends && LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL))
 			{
-				LL_WARNS() << "Ad-hoc session " << new_session_id.asString() << " does not exist." << LL_ENDL;
+				static LLCachedControl<bool> reportIgnoredAdHocSession(gSavedSettings, "FSReportIgnoredAdHocSession");
+				LL_INFOS() << "Ignoring conference (ad-hoc) chat from " << new_session_id.asString() << LL_ENDL;
+				if (!gIMMgr->leaveSession(new_session_id))
+				{
+					LL_WARNS() << "Ad-hoc session " << new_session_id.asString() << " does not exist." << LL_ENDL;
+				}
+				else if (reportIgnoredAdHocSession)
+				{
+					reportToNearbyChat(LLTrans::getString("IgnoredAdHocSession"));
+				}
+				return;
 			}
-			if (gSavedSettings.getBOOL("FSReportIgnoredAdHocSession"))
-			{
-				reportToNearbyChat(LLTrans::getString("IgnoredAdHocSession"));
-			}
-			return;
 		}
 		// </FS:PP>
 
