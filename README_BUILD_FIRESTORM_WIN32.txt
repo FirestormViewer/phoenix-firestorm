@@ -2,7 +2,7 @@ Before you start configuring your Windows build system, be aware of our tested c
 	Memory: You will need at least 2GB RAM, 4GB strongly recommended.
 	CPU: Multiple CPUs are strongly recommended. 
 	  A build can take over an hour.
-	Visual Studio 2010 SP1. 
+	Visual Studio 2013 Community Edition.
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help
 compiling Firestorm, make sure you can build viewer-development first. If you try and skip this step, you may
@@ -47,8 +47,8 @@ If you want to set custom configuration, do this in the configure step separatel
 build -c ReleaseFS --no-configure" as a secondary step.
 
 Logs:
-	Look for logs in build-vc100/logs
+	Look for logs in build-vc120/logs
 
 Output:
-	Look for output in build-vc100/newview/Release
+	Look for output in build-vc120/newview/Release
 
