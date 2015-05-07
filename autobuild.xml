@@ -400,7 +400,7 @@
               <key>hash</key>
               <string>c359a02f6ed2cfb0c683a6318eab976e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/3p-colladadom\colladadom-2.3.201505061818-r95-windows-201505061818-r95.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505061818-r95-windows-201505061818-r95.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -674,7 +674,7 @@
               <key>hash</key>
               <string>518a872b592a5c47ebb5c8ac7c302f7b</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/fmodex-44432-windows-201412091607.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44432-windows-201412091607.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1406,7 +1406,7 @@
               <key>hash</key>
               <string>66f4e374ff8a4ea90e7132078eeac2e9</string>
               <key>url</key>
-              <string>file:///c:/cywgin/opt/kdu-7.5.0-windows-201412091319.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.5.0-windows-201412091319.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
