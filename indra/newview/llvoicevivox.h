@@ -207,7 +207,7 @@ public:
 	virtual void removeObserver(LLVoiceClientParticipantObserver* observer);
 
 	// <FS:Ansariel> Add callback for user volume change
-	boost::signals2::connection setUserVolumeUpdateCallback(const user_volume_change_t::slot_type& cb)
+	boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb)
 	{
 		return mUserVolumeUpdateSignal.connect(cb);
 	}
@@ -835,7 +835,7 @@ private:
 	void notifyFriendObservers();
 
 	// <FS:Ansariel> Add callback for user volume change
-	user_volume_change_t mUserVolumeUpdateSignal;
+	user_voice_volume_change_callback_t mUserVolumeUpdateSignal;
 
 	// Voice Fonts
 

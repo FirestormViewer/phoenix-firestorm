@@ -43,7 +43,7 @@ class LLVOAvatar;
 typedef std::vector<std::string> LLVoiceDeviceList;	
 
 // <FS:Ansariel> Add callback for user volume change
-typedef boost::signals2::signal<void(const LLUUID&)> user_volume_change_t;
+typedef boost::signals2::signal<void(const LLUUID&)> user_voice_volume_change_callback_t;
 
 class LLVoiceClientParticipantObserver
 {
@@ -237,7 +237,7 @@ public:
 	virtual void addObserver(LLVoiceClientParticipantObserver* observer)=0;
 	virtual void removeObserver(LLVoiceClientParticipantObserver* observer)=0;	
 	// <FS:Ansariel> Add callback for user volume change
-	virtual boost::signals2::connection setUserVolumeUpdateCallback(const user_volume_change_t::slot_type& cb) = 0;
+	virtual boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb) = 0;
 	//@}
 	
 	virtual std::string sipURIFromID(const LLUUID &id)=0;
@@ -436,7 +436,7 @@ public:
 	boost::signals2::connection MicroChangedCallback(const micro_changed_signal_t::slot_type& cb ) { return mMicroChangedSignal.connect(cb); }
 
 	// <FS:Ansariel> Add callback for user volume change
-	boost::signals2::connection setUserVolumeUpdateCallback(const user_volume_change_t::slot_type& cb);
+	boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb);
 	
 	/////////////////////////////
 	// Accessors for data related to nearby speakers
