@@ -200,6 +200,11 @@ protected:
 	LLUIColor mBeyondShoutRangeColor;
 	// [/Ansariel: Colorful radar]
 
+	// <FS:Ansariel> Add callback for user volume change
+	boost::signals2::connection mVoiceLevelChangeCallbackConnection;
+	void onUserVoiceLevelChange(const LLUUID& avatar_id);
+	void updateVoiceLevelSlider();
+
 private:
 
 	typedef enum e_online_status {

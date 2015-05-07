@@ -123,6 +123,10 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	}
 	// *NOTE: mantipov: do not use any member here. They can be uninitialized here in case instance
 	// is created from the UICtrlFactory
+
+	// <FS:Ansariel> Add callback for user volume change
+	mVoiceLevelChangeCallbackConnection = LLVoiceClient::getInstance()->setUserVolumeUpdateCallback(boost::bind(&LLAvatarListItem::onUserVoiceLevelChange, this, _1));
+	// </FS:Ansariel>
 }
 
 LLAvatarListItem::~LLAvatarListItem()
@@ -142,6 +146,13 @@ LLAvatarListItem::~LLAvatarListItem()
 	{
 		mAvatarNameCacheConnection.disconnect();
 	}
+
+	// <FS:Ansariel> Add callback for user volume change
+	if (mVoiceLevelChangeCallbackConnection.connected())
+	{
+		mVoiceLevelChangeCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 BOOL  LLAvatarListItem::postBuild()
@@ -378,25 +389,7 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 	mSpeakingIndicator->setSpeakerId(id, session_id);
 
 	// <FS:Ansariel> FIRE-10278: Show correct voice volume if we have it stored
-	if (LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarId))
-	{
-		bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarId);
-
-		F32 volume;
-		if (is_muted)
-		{
-			// it's clearer to display their volume as zero
-			volume = 0.f;
-		}
-		else
-		{
-			// actual volume
-			volume = LLVoiceClient::getInstance()->getUserVolume(mAvatarId);
-		}
-		mVoiceSlider->setValue((F64)volume);
-	}
-	// </FS:Ansariel>
-
+	updateVoiceLevelSlider();
 
 	// We'll be notified on avatar online status changes
 	if (!ignore_status_changes && mAvatarId.notNull())
@@ -418,6 +411,37 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
 }
+
+// <FS:Ansariel> Add callback for user volume change
+void LLAvatarListItem::onUserVoiceLevelChange(const LLUUID& avatar_id)
+{
+	if (avatar_id == mAvatarId)
+	{
+		updateVoiceLevelSlider();
+	}
+}
+
+void LLAvatarListItem::updateVoiceLevelSlider()
+{
+	if (LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarId))
+	{
+		bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarId);
+
+		F32 volume;
+		if (is_muted)
+		{
+			// it's clearer to display their volume as zero
+			volume = 0.f;
+		}
+		else
+		{
+			// actual volume
+			volume = LLVoiceClient::getInstance()->getUserVolume(mAvatarId);
+		}
+		mVoiceSlider->setValue((F64)volume);
+	}
+}
+// </FS:Ansariel>
 
 void LLAvatarListItem::showLastInteractionTime(bool show)
 {
