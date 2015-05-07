@@ -377,6 +377,27 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 	mAvatarId = id;
 	mSpeakingIndicator->setSpeakerId(id, session_id);
 
+	// <FS:Ansariel> FIRE-10278: Show correct voice volume if we have it stored
+	if (LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarId))
+	{
+		bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarId);
+
+		F32 volume;
+		if (is_muted)
+		{
+			// it's clearer to display their volume as zero
+			volume = 0.f;
+		}
+		else
+		{
+			// actual volume
+			volume = LLVoiceClient::getInstance()->getUserVolume(mAvatarId);
+		}
+		mVoiceSlider->setValue((F64)volume);
+	}
+	// </FS:Ansariel>
+
+
 	// We'll be notified on avatar online status changes
 	if (!ignore_status_changes && mAvatarId.notNull())
 		LLAvatarTracker::instance().addParticularFriendObserver(mAvatarId, this);
