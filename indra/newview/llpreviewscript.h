@@ -35,6 +35,7 @@
 #include "llframetimer.h"
 #include "llfloatergotoline.h"
 #include "llsyntaxid.h"
+#include <boost/signals2.hpp>
 
 class LLLiveLSLFile;
 class LLMessageSystem;
@@ -138,7 +139,8 @@ public:
 
 private:
 	// NaCl - LSL Preprocessor
-	static void		onToggleProc(void* userdata);
+	void		onToggleProc();
+	boost::signals2::connection	mTogglePreprocConnection;
 	// NaCl End
 	void		onBtnHelp();
 	void		onBtnDynamicHelp();

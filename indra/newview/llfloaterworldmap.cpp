@@ -1631,6 +1631,14 @@ void LLFloaterWorldMap::onTrackRegion()
 				payload["name"] = sim_name;
 				LLNotificationsUtil::add("RegionTrackerAdd", args, payload, boost::bind(&ALFloaterRegionTracker::onRegionAddedCallback, floaterp, _1, _2));
 			}
+			else
+			{
+				LL_WARNS() << "Cannot add region to region tracker because sim name is empty." << LL_ENDL;
+			}
+		}
+		else
+		{
+			LL_WARNS() << "Cannot add region to region tracker because we aren't tracking anything." << LL_ENDL;
 		}
 	}
 }

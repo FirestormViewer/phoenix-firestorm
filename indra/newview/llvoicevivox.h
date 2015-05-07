@@ -205,6 +205,13 @@ public:
 	virtual void removeObserver(LLFriendObserver* observer);		
 	virtual void addObserver(LLVoiceClientParticipantObserver* observer);
 	virtual void removeObserver(LLVoiceClientParticipantObserver* observer);
+
+	// <FS:Ansariel> Add callback for user volume change
+	boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb)
+	{
+		return mUserVolumeUpdateSignal.connect(cb);
+	}
+	// </FS:Ansariel>
 	//@}
 	
 	virtual std::string sipURIFromID(const LLUUID &id);
@@ -826,6 +833,9 @@ private:
 	typedef std::set<LLFriendObserver*> friend_observer_set_t;
 	friend_observer_set_t mFriendObservers;
 	void notifyFriendObservers();
+
+	// <FS:Ansariel> Add callback for user volume change
+	user_voice_volume_change_callback_t mUserVolumeUpdateSignal;
 
 	// Voice Fonts
 

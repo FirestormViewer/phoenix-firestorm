@@ -87,4 +87,15 @@
              function="CheckControl"
              parameter="FSMenuSearch" />
     </menu_item_check>
+    <menu_item_check
+         label="Show Currency Balance"
+         layout="topleft"
+         name="FSShowCurrencyBalanceInStatusbar">
+           <on_click
+             function="ToggleControl"
+             parameter="FSShowCurrencyBalanceInStatusbar" /> 
+             <on_check
+             function="CheckControl"
+             parameter="FSShowCurrencyBalanceInStatusbar" />
+    </menu_item_check>
 </menu>

@@ -189,10 +189,10 @@ if [ $LL_RUN_ERR -ne 0 ]; then
 You are running the Firestorm Viewer on a x86_64 platform.  The
 most common problems when launching the Viewer (particularly
 'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
-loading shared libraries') may be solved by installing your Linux
-distribution's 32-bit compatibility packages.
-For example, on Ubuntu and other Debian-based Linuxes you might run:
-$ sudo apt-get install ia32-libs ia32-libs-gtk ia32-libs-kde ia32-libs-sdl
+loading shared libraries') may be solved by enabling 32-bit
+architecture and installing one or more 32-bit compatibility libraries.
+Consult the Firestorm wiki at
+http://wiki.phoenixviewer.com/32-bit_viewer_in_64-bit_linux
 EOFMARKER
 	fi
 fi

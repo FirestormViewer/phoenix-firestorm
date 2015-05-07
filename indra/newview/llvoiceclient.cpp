@@ -803,6 +803,17 @@ void LLVoiceClient::setUserVolume(const LLUUID& id, F32 volume)
 	if (mVoiceModule) mVoiceModule->setUserVolume(id, volume);
 }
 
+// <FS:Ansariel> Add callback for user volume change
+boost::signals2::connection LLVoiceClient::setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb)
+{
+	if (mVoiceModule)
+	{
+		return mVoiceModule->setUserVolumeUpdateCallback(cb);
+	}
+	return boost::signals2::connection();
+}
+// </FS:Ansariel>
+
 // <FS:Ansariel> Centralized voice power level
 EVoicePowerLevel LLVoiceClient::getPowerLevel(const LLUUID& id)
 {

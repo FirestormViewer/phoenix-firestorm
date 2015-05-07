@@ -72,6 +72,7 @@
         <check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora (RC Magnum, RC Le Tigre, RC BlueSteel itd.) na pasku statusu w stylu V1." />
         <check_box label="Pokaż lokalizację w menu na górze" name="ShowMenuBarLocation" />
         <check_box label="Pokaż wyszukiwarkę pozycji w menu" name="show_search_menu_check" />
+        <check_box label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar" />
         <text name="navfav_textbox">
             Paski nawigacji i ulubionych:
         </text>

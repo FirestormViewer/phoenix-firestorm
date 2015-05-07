@@ -264,6 +264,7 @@
     top="0"
     follows="right|top"
     name="balance_bg"
+    visibility_control="FSShowCurrencyBalanceInStatusbar"
     background_opaque="true"
     background_visible="true"
     bg_opaque_color="MouseGray">

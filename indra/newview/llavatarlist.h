@@ -29,6 +29,7 @@
 
 #include "llflatlistview.h"
 #include "llavatarlistitem.h"
+#include "rlvdefines.h"
 
 class LLTimer;
 class LLListContextMenu;
@@ -187,6 +188,11 @@ private:
 
 	commit_signal_t mRefreshCompleteSignal;
 	mouse_signal_t mItemDoubleClickSignal;
+
+	// <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
+	boost::signals2::connection mRlvBehaviorCallbackConnection;
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+	// </FS:Ansariel>
 };
 
 /** Abstract comparator for avatar items */

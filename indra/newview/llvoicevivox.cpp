@@ -3745,7 +3745,11 @@ void LLVivoxVoiceClient::muteListChanged()
 			
 			// Check to see if this participant is on the mute list already
 			if(p->updateMuteState())
+			{
 				mAudioSession->mVolumeDirty = true;
+				// <FS:Ansariel> Add callback for user volume change
+				mUserVolumeUpdateSignal(p->mAvatarID);
+			}
 		}
 	}
 }
@@ -5017,6 +5021,8 @@ void LLVivoxVoiceClient::setUserVolume(const LLUUID& id, F32 volume)
 			participant->mVolume = llclamp(volume, LLVoiceClient::VOLUME_MIN, LLVoiceClient::VOLUME_MAX);
 			participant->mVolumeDirty = true;
 			mAudioSession->mVolumeDirty = true;
+			// <FS:Ansariel> Add callback for user volume change
+			mUserVolumeUpdateSignal(id);
 		}
 	}
 }

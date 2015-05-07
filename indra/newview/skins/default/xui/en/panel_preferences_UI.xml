@@ -514,6 +514,14 @@
 		 name="show_search_menu_check"
 		 width="270"
 		 control_name="FSMenuSearch"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Show Currency Balance"
+		 name="FSShowCurrencyBalanceInStatusbar"
+		 width="270"
+		 control_name="FSShowCurrencyBalanceInStatusbar"/>
 
 		<text
 		type="string"
