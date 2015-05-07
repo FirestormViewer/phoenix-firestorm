@@ -139,7 +139,8 @@ public:
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
+	void setRlvCheckShowNames(bool fRlvCheckShowNames);
+	void updateRlvRestrictions();
 // [/RLVa:KB]
 	
 	const LLUUID& getAvatarId() const;

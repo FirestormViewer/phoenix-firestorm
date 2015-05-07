@@ -284,6 +284,9 @@ LLAvatarList::LLAvatarList(const Params& p)
 
 	// <FS:Ansariel> FIRE-1089: List needs to update also if we change the username setting
 	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
+
+	// <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
+	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&LLAvatarList::updateRlvRestrictions, this, _1, _2));
 }
 
 
@@ -309,6 +312,13 @@ void LLAvatarList::handleDisplayNamesOptionChanged()
 LLAvatarList::~LLAvatarList()
 {
 	delete mLITUpdateTimer;
+
+	// <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
+	if (mRlvBehaviorCallbackConnection.connected())
+	{
+		mRlvBehaviorCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 void LLAvatarList::setShowIcons(std::string param_name)
@@ -348,6 +358,22 @@ void LLAvatarList::setUseRangeColors(bool UseRangeColors)
 	}
 }
 // [Ansariel: Colorful radar]
+
+// <FS:Ansariel> Update voice volume slider on RLVa shownames restriction update
+void LLAvatarList::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SHOWNAMES)
+	{
+		std::vector<LLPanel*> items;
+		getItems(items);
+		for (std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+		{
+			LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+			item->updateRlvRestrictions();
+		}
+	}
+}
+// </FS:Ansariel>
 
 // virtual
 void LLAvatarList::draw()

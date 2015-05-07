@@ -423,7 +423,7 @@ void LLAvatarListItem::onUserVoiceLevelChange(const LLUUID& avatar_id)
 
 void LLAvatarListItem::updateVoiceLevelSlider()
 {
-	if (LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarId))
+	if (mVoiceSlider->getVisible() && LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarId))
 	{
 		bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarId);
 
@@ -464,7 +464,25 @@ void LLAvatarListItem::setShowVoiceVolume(bool show)
 {
 	mShowVoiceVolume = show;
 	mVoiceSlider->setVisible( (mShowVoiceVolume) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	if (show)
+	{
+		updateVoiceLevelSlider();
+	}
 }
+
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+void LLAvatarListItem::setRlvCheckShowNames(bool fRlvCheckShowNames)
+{
+	mRlvCheckShowNames = fRlvCheckShowNames;
+	updateRlvRestrictions();
+}
+
+void LLAvatarListItem::updateRlvRestrictions()
+{
+	setShowVoiceVolume(mShowVoiceVolume);
+	setShowInfoBtn(mShowInfoBtn);
+}
+// [/RLVa:KB]
 
 void LLAvatarListItem::setShowProfileBtn(bool show)
 {
