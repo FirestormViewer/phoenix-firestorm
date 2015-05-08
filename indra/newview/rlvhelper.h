@@ -276,6 +276,15 @@ protected:
 		return std::find(m_remWearables.begin(), m_remWearables.end(), pWearable) != m_remWearables.end();
 	}
 
+	/*
+	 * Pending attachments
+	 */
+public:
+	static void updatePendingAttachments();
+protected:
+	void addPendingAttachment(const LLUUID& idItem, U8 idxPoint);
+	void remPendingAttachment(const LLUUID& idItem);
+
 protected:
 	typedef std::pair<LLWearableType::EType, LLInventoryModel::item_array_t> addwearable_pair_t;
 	typedef std::map<LLWearableType::EType, LLInventoryModel::item_array_t> addwearables_map_t;
@@ -287,6 +296,9 @@ protected:
 	std::vector<LLViewerObject*>     m_remAttachments;	// This should match the definition of LLAgentWearables::llvo_vec_t
 	std::list<const LLViewerWearable*> m_remWearables;
 	LLInventoryModel::item_array_t   m_remGestures;
+
+	typedef std::map<LLUUID, U8> pendingattachments_map_t;
+	pendingattachments_map_t         m_pendingAttachments;
 
 private:
 	friend class LLSingleton<RlvForceWear>;
