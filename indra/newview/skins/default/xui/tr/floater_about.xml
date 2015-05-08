@@ -64,7 +64,7 @@ Ses Sunucusu Sürümü: [VOICE_VERSION]
 			</text_editor>
 		</panel>
 		<panel label="Lisanslar" name="licenses_panel">
-			<text_editor name="credits_editor">
+			<text_editor name="licenses_editor">
 				3Dconnexion SDK Telif Hakkı (C) 1992-2009 3Dconnexion
 APR Telif Hakkı (C) 2011 The Apache Software Foundation
 Collada DOM Telif Hakkı 2006 Sony Computer Entertainment Inc.

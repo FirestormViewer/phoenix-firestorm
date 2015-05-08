@@ -88,7 +88,7 @@ Artistas y Diseñadores de la interfaz:
 			</scroll_container>
 		</panel>
 		<panel label="Licencias" name="licenses_panel">
-			 <text_editor name="credits_editor">
+			 <text_editor name="licenses_editor">
 3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
 APR Copyright (C) 2011 The Apache Software Foundation
 Collada DOM Copyright 2006 Sony Computer Entertainment Inc.

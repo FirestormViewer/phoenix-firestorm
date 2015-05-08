@@ -63,7 +63,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 			</text_editor>
 		</panel>
 		<panel label="Лицензии" name="licenses_panel">
-			<text_editor name="credits_editor">
+			<text_editor name="licenses_editor">
 				3Dconnexion SDK (C) 1992-2009 3Dconnexion
 APR (C) 2011 The Apache Software Foundation
 Collada DOM (C) 2006 Sony Computer Entertainment Inc.
