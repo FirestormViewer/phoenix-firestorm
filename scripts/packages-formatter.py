@@ -57,6 +57,11 @@ def autobuild(*args):
     # no exceptions yet, let caller read stdout
     return child.stdout
 
+# <FS:ND> Pass -m64 down to autobuild if needed
+if len( sys.argv ) > 1 and sys.argv[1] == "-m64":
+    os.environ[ "ND_AUTOBUILD_ARCH" ] = "x64"
+# </FS:ND>
+    
 version={}
 versions=autobuild('install', '--versions')
 for line in versions:
