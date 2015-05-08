@@ -219,7 +219,9 @@ def main():
             args['version'] = vf.read().strip().split('.')
         except:
             print "Unable to read versionfile '%s'" % args['versionfile']
-            raise
+            # <FS:ND> This will break copy_w_viewer_manifest on Windows 32 and 64 bit builds, the versionfile will not create until the firestorm project.
+            # As copy_w_viewer_manifest does not seem to need the version attribute, we supress the exception for now.
+            # raise
 
     # unspecified, default, and agni are default
     if args['grid'] in ['', 'default', 'agni']:
