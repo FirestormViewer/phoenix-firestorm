@@ -2903,7 +2903,6 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	} //</FS:Ansariel>
 
 	capabilityNames.append("GetDisplayNames");
-	capabilityNames.append("GroupMemberData");
 	capabilityNames.append("GetMesh");
 	capabilityNames.append("GetMesh2");
 	capabilityNames.append("GetObjectCost");
