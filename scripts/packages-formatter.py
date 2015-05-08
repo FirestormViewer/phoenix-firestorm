@@ -65,7 +65,7 @@ for line in versions:
         pkg = pkg_info.group(1)
         if pkg not in version:
             version[pkg] = pkg_info.group(2).strip()
-        else:
+        elif version[pkg] != pkg_info.group(2).strip(): #<FS:ND/> Only error out if the version is duplicate and does not match.
             sys.exit("Duplicate version for %s" % pkg)
     else:
         sys.exit("Unrecognized --versions output: %s" % line)
@@ -79,10 +79,11 @@ for line in copyrights:
         pkg = pkg_info.group(1)
         if pkg not in copyright:
             copyright[pkg] = pkg_info.group(2).strip()
-        else:
-            sys.exit("Duplicate copyright for %s" % pkg)
+        #else:
+        #    sys.exit("Duplicate copyright for %s" % pkg)
     else:
-        sys.exit("Unrecognized --copyrights output: %s" % line)
+        pass
+        #sys.exit("Unrecognized --copyrights output: %s" % line)
 
 print viewer_copyright
 for pkg in sorted(version):
