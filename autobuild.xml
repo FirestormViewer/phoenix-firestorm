@@ -72,7 +72,7 @@
           </map>
         </map>
       </map>
-      <key>gntp_growl</key>
+      <key>gntp-growl</key>
       <map>
         <key>copyright</key>
         <string>The Growl Project</string>
@@ -80,10 +80,8 @@
         <string>A unified notification system for Mac OS X</string>
         <key>license</key>
         <string>bsd</string>
-        <key>license_file</key>
-        <string>LICENSES/gntp-growl.txt</string>
         <key>name</key>
-        <string>gntp_growl</string>
+        <string>gntp-growl</string>
         <key>platforms</key>
         <map>
           <key>darwin</key>
