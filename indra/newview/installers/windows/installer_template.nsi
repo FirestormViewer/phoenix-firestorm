@@ -645,7 +645,7 @@ Push $2
     EnumRegKey $1 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" $0
     StrCmp $1 "" DONE               # No more users
 
-    ReadRegStr $2 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$1" "ProfileImagePath" 
+    ReadRegStr $2 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$1" "ProfileImagePath"
     StrCmp $2 "" CONTINUE 0         # "ProfileImagePath" value is missing
 
 # Required since ProfileImagePath is of type REG_EXPAND_SZ
@@ -713,7 +713,7 @@ Delete "$INSTDIR\SecondLife.exe"
 # MAINT-3099 workaround - prevent these log files, if present, from causing a user alert
 Delete "$INSTDIR\VivoxVoiceService-*.log"
 # Remove entire help directory
-RMDir  "$INSTDIR\help"
+RMDir /r  "$INSTDIR\help"
 
 Delete "$INSTDIR\uninst.exe"
 RMDir "$INSTDIR"
