@@ -355,7 +355,6 @@ void NACLFloaterExploreSounds::handleStop()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	uuid_vec_t asset_list;
 	for( ; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
@@ -391,7 +390,6 @@ void NACLFloaterExploreSounds::blacklistSound()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	uuid_vec_t asset_list;
 
 	for ( ; selection_iter != selection_end; ++selection_iter)
 	{

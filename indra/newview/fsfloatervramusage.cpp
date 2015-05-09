@@ -30,7 +30,6 @@
 #include "lldrawable.h"
 #include "llviewertexture.h"
 #include "lltoolpie.h"
-#include "llfloaterreg.h"
 #include "llface.h"
 #include "llvertexbuffer.h"
 #include "llcallbacklist.h"

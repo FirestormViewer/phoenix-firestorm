@@ -9,7 +9,6 @@
 #include "qtoolalign.h"
 
 // Library includes
-#include "llfloaterreg.h"
 #include "llbbox.h"
 #include "v3math.h"
 
@@ -21,15 +20,14 @@
 #include "llselectmgr.h"
 #include "lltrans.h"
 #include "llviewercamera.h"
-#include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "llviewerwindow.h"
 #include "lleventtimer.h"
 
 #include "fscommon.h"
 
-const F32 MANIPULATOR_SIZE = 5.0;
-const F32 MANIPULATOR_SELECT_SIZE = 20.0;
+const F32 MANIPULATOR_SIZE = 5.0f;
+const F32 MANIPULATOR_SELECT_SIZE = 20.0f;
 
 
 

@@ -31,7 +31,6 @@
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
 
-#include "aoengine.h"
 #include "apr_base64.h" // For getScriptInfo()
 #include "llagent.h"
 #include "llattachmentsmgr.h"
@@ -167,7 +166,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			
 			// If something that looks like our current bridge is attached but failed auth, detach and recreate.
 			LLUUID catID = findFSCategory();
-			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			if (fsBridge && get_is_item_worn(fsBridge->getUUID()))
 			{
 				mAllowDetach = true;
@@ -202,10 +201,10 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 		mCurrentURL = bURL;
 		LL_INFOS("FSLSLBridge") << "New Bridge URL is: " << mCurrentURL << LL_ENDL;
 		
-		if (mpBridge == NULL)
+		if (!mpBridge)
 		{
 			LLUUID catID = findFSCategory();
-			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			mpBridge = fsBridge;
 		}
 
@@ -643,7 +642,7 @@ void FSLSLBridge::startCreation()
 	//if bridge object doesn't exist - create and attach it, update script.
 	LLUUID catID = findFSCategory();
 
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 
 	//detach everything else
 	LL_INFOS("FSLSLBridge") << "Detaching other bridges..." << LL_ENDL;
@@ -693,7 +692,7 @@ void FSLSLBridge::createNewBridge()
 
 	//attach the Linden rock from the library (will resize as soon as attached)
 	LLUUID libID = gInventory.getLibraryRootFolderID();
-	LLViewerInventoryItem* libRock = findInvObject(LIB_ROCK_NAME, libID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* libRock = findInvObject(LIB_ROCK_NAME, libID);
 	//shouldn't happen but just in case
 	if (libRock != NULL)
 	{
@@ -900,7 +899,7 @@ void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 
 	//add bridge script to object
 	LL_INFOS("FSLSLBridge") << "Creating bridge script..." << LL_ENDL;
-	create_script_inner(object);
+	create_script_inner();
 }
 
 void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment)
@@ -1033,7 +1032,7 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 	LL_DEBUGS("FSLSLBridge") << "End bridge container setup." << LL_ENDL;
 }
 
-void FSLSLBridge::create_script_inner(LLViewerObject* object)
+void FSLSLBridge::create_script_inner()
 {
 	if (!isBridgeValid())
 	{
@@ -1430,7 +1429,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 	return LLUUID();
 }
 
-LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, const LLUUID& catID, LLAssetType::EType type)
+LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, const LLUUID& catID)
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -1518,8 +1517,8 @@ void FSLSLBridge::cleanUpOldVersions()
 	}
 }
 
-bool FSLSLBridge::isOldBridgeVersion(LLInventoryItem* item)
-{
+//bool FSLSLBridge::isOldBridgeVersion(LLInventoryItem* item)
+//{
 	//if (!item)
 	//	return false;
 	////if (!boost::regex_match(item->getName(), FSBridgePattern))
@@ -1540,8 +1539,8 @@ bool FSLSLBridge::isOldBridgeVersion(LLInventoryItem* item)
 	////int iMajor = atoi(sMajor);
 	////float fMinor = atof(sMinor);
 
-	return false;
-}
+//	return false;
+//}
 
 void FSLSLBridge::detachOtherBridges()
 {
@@ -1549,7 +1548,7 @@ void FSLSLBridge::detachOtherBridges()
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 
 	//detach everything except current valid bridge - if any
 	gInventory.collectDescendents(catID,cats,items,FALSE);

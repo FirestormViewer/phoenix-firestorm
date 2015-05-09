@@ -28,38 +28,19 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsnearbychathub.h"
-#include "fsnearbychatcontrol.h"
-#include "fsfloaternearbychat.h"
 
-#include "llviewercontrol.h"
-#include "llviewerwindow.h"
-#include "llrootview.h"
-#include "llspinctrl.h"
-#include "llfocusmgr.h"
-#include "lllogchat.h"
-#include "llmenugl.h"
-#include "llviewermenu.h"//for gMenuHolder
-
-#include "llfloaterimnearbychathandler.h"
-#include "llchannelmanager.h"
-
-#include "llagent.h" 			// gAgent
-
-//AO - includes for textentry
-#include "rlvhandler.h"
-#include "llcommandhandler.h"
-#include "llkeyboard.h"
-#include "llgesturemgr.h"
-#include "llmultigesture.h"
-
-#include "llconsole.h"
-
-// <FS:Zi> Moved nearby chat functionality here
 #include "chatbar_as_cmdline.h"
-#include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
-#include "llviewerstats.h"
-// </FS:Zi>
 #include "fscommon.h"
+#include "fsfloaternearbychat.h"
+#include "fsnearbychatcontrol.h"
+#include "llagent.h" 			// gAgent
+#include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
+#include "llcommandhandler.h"
+#include "llgesturemgr.h"
+#include "llspinctrl.h"
+#include "llviewercontrol.h"
+#include "llviewerstats.h"
+#include "rlvhandler.h"
 
 // <FS:KC> Fix for bad edge snapping
 // *HACK* chat bar cannot return its correct height for some reason

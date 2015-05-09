@@ -111,14 +111,14 @@ private:
 	uuid_vec_t				mAllowedDetachables;
 
 protected:
-	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID, LLAssetType::EType type);
+	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID);
 	LLUUID findFSCategory();
 	LLUUID findFSBridgeContainerCategory();
 
 	bool isItemAttached(const LLUUID& iID);
 	void createNewBridge();
-	void create_script_inner(LLViewerObject* object);
-	bool isOldBridgeVersion(LLInventoryItem* item);
+	void create_script_inner();
+	//bool isOldBridgeVersion(LLInventoryItem* item);
 	void cleanUpBridgeFolder();
 	void cleanUpBridgeFolder(const std::string& nameToCleanUp);
 	void setupBridgePrim(LLViewerObject* object);

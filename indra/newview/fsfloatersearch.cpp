@@ -34,7 +34,6 @@
 #include "llagent.h"
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
-#include "llcallingcard.h"
 #include "llclassifiedflags.h"
 #include "llclassifiedstatsresponder.h"
 #include "lldateutil.h"
@@ -49,7 +48,6 @@
 #include "llproductinforequest.h"
 #include "lllogininstance.h"
 #include "llviewercontrol.h"
-#include "llviewerfloaterreg.h"
 #include "llviewergenericmessage.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
@@ -68,11 +66,8 @@
 #include "llfloaterworldmap.h"
 #include "fspanelclassified.h"
 #include "fspanelprofile.h"
-#include "fspanelprofileclassifieds.h"
 
-#include <iostream>
 #include <string>
-#include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -858,8 +853,6 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	std::string   first_name;
 	std::string   last_name;
 	LLUUID agent_id;
-	LLUUID  avatar_id;
-	//U8 online;
 	
 	msg->getUUIDFast(_PREHASH_QueryData,	_PREHASH_QueryID,	query_id);
 	msg->getUUIDFast(_PREHASH_AgentData,	_PREHASH_AgentID,	agent_id);
@@ -1560,8 +1553,6 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			
-			std::string place_name;
-			
 			LLSD content;
 			LLSD element;
 			
@@ -1931,9 +1922,9 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 					ppm = (F32)price / (F32)area;
 				else
 					ppm = 0.f;
-				std::string buffer = llformat("%.1f", ppm);
+				std::string ppm_buffer = llformat("%.1f", ppm);
 				element["columns"][4]["column"]	= "ppm";
-				element["columns"][4]["value"]	= buffer;
+				element["columns"][4]["value"] = ppm_buffer;
 			}
 			else
 			{
@@ -2233,8 +2224,6 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << classified_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
-			
-			std::string classified_name;
 			
 			LLSD content;
 			LLSD element;
@@ -2634,7 +2623,6 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setEnabled(TRUE);
 		found_one = TRUE;
 
-		std::string event_name;
 		LLSD content;
 		LLSD element;
 		

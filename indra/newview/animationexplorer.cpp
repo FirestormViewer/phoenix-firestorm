@@ -38,7 +38,6 @@
 #include "llcheckboxctrl.h"
 #include "llfloater.h"
 #include "llfloaterreg.h"
-#include "llgl.h"
 #include "llkeyframefallmotion.h"
 #include "llrect.h"
 #include "llscrolllistctrl.h"

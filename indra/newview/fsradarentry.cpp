@@ -28,7 +28,6 @@
 
 #include "fsradarentry.h"
 
-#include <boost/algorithm/string.hpp>
 #include "fscommon.h"
 #include "fsradar.h"
 #include "llagent.h"

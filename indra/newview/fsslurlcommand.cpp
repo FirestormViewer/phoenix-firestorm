@@ -27,8 +27,6 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsslurlcommand.h"
 
-#include "fscommon.h"
-#include "fsradar.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcommandhandler.h"

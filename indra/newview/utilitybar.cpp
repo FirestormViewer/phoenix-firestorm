@@ -27,9 +27,6 @@
 #include "utilitybar.h"
 
 #include "llbutton.h"
-#include "llfloaterreg.h"
-#include "llpanel.h"
-#include "lltabcontainer.h"
 
 #include "llagent.h"
 #include "llstatusbar.h"

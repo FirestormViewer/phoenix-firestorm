@@ -35,9 +35,7 @@
 #include "lllogchat.h"
 #include "llmenugl.h"
 #include "llslurl.h"
-#include "lluictrlfactory.h"
 #include "llurlaction.h"
-#include "llviewercontrol.h"
 #include "rlvactions.h"
 
 FSNameListAvatarMenu gFSNameListAvatarMenu;

@@ -29,7 +29,6 @@
 
 // llui
 #include "lllineeditor.h"
-#include "llmenugl.h"
 #include "llspinctrl.h"
 
 // newview
@@ -39,14 +38,11 @@
 #include "llagent.h" 		// gAgent
 #include "llagentcamera.h"	// gAgentCamera
 #include "llfloaterimnearbychathandler.h"
-#include "llviewermenu.h"	//for gMenuHolder
 
 //AO - includes for textentry
 #include "llautoreplace.h"
-#include "llcommandhandler.h"
 #include "llgesturemgr.h"
 #include "llkeyboard.h"
-#include "llmultigesture.h"
 #include "llworld.h"	// <FS:CR> FIRE-3192 - Name Prediction
 #include "rlvhandler.h"
 

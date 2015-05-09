@@ -22,14 +22,12 @@
 #include "llviewerprecompiledheaders.h"
 #include "particleeditor.h"
 
-#include <iostream>
 #include <fstream>
 
 #include "llagent.h"
 #include "llappviewer.h"
 #include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
-#include "llclipboard.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "lldir.h"
@@ -40,7 +38,6 @@
 #include "lllineeditor.h"
 #include "llnotificationsutil.h"
 #include "llpermissions.h"
-#include "llpreviewscript.h"
 #include "llsd.h"
 #include "llspinctrl.h"
 #include "lltexturectrl.h"
@@ -647,7 +644,7 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	}
 }
 
-void ParticleEditor::scriptInjectReturned(const LLSD& content)
+void ParticleEditor::scriptInjectReturned()
 {
 	setCanClose(TRUE);
 
@@ -702,6 +699,6 @@ void ParticleScriptUploadResponder::uploadComplete(const LLSD& content)
 	LLUpdateAgentInventoryResponder::uploadComplete(content);
 	if (!gDisconnected && !LLAppViewer::instance()->quitRequested() && mEditor)
 	{
-		mEditor->scriptInjectReturned(content);
+		mEditor->scriptInjectReturned();
 	}
 }

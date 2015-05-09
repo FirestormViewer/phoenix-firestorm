@@ -70,7 +70,7 @@ class ParticleEditor : public LLFloater
 		static void onTargetPicked(void* userdata);
 
 		void callbackReturned(const LLUUID& inv_item);
-		void scriptInjectReturned(const LLSD& content);
+		void scriptInjectReturned();
 
 		std::string lslVector(F32 x, F32 y, F32 z);
 		std::string lslColor(const LLColor4& color);

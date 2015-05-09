@@ -73,7 +73,7 @@ void FSLightshare::processLightshareMessage(LLMessageSystem* msg)
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_ParamList);
 	for (S32 i = 0; i < count; ++i)
 	{
-		S32 size = msg->getSizeFast(_PREHASH_ParamList, i, _PREHASH_Parameter);
+		size = msg->getSizeFast(_PREHASH_ParamList, i, _PREHASH_Parameter);
 		if (size >= 0)
 		{
 			char buffer[250];

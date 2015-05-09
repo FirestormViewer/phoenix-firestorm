@@ -39,7 +39,6 @@
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "llavatarlist.h"
-#include "lldraghandle.h"
 #include "fsfloaterim.h"
 #include "llimview.h"
 #include "llfloaterreg.h"
@@ -636,8 +635,6 @@ void FSFloaterVoiceControls::initParticipantsVoiceState()
 
 void FSFloaterVoiceControls::updateParticipantsVoiceState()
 {
-	uuid_vec_t speakers_list;
-
 	// Get a list of participants from VoiceClient
 	uuid_vec_t speakers_uuids;
 	get_voice_participants_uuids(speakers_uuids);

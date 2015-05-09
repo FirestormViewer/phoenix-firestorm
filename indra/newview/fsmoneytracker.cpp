@@ -32,7 +32,6 @@
 #include "llclipboard.h"
 #include "llfloaterreg.h"
 #include "llnamelistctrl.h"
-#include "llslurl.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 
@@ -151,7 +150,6 @@ void FSMoneyTrackerListMenu::onContextMenuItemClick(const LLSD& userdata)
 		FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker");
 		if (floater)
 		{
-			std::string copy_text;
 			LLNameListCtrl* list = floater->getChild<LLNameListCtrl>("payment_list");
 
 			list->operateOnSelection(LLCtrlListInterface::OP_DELETE);

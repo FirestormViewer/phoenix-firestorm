@@ -29,14 +29,11 @@
 
 // libs
 #include "llmenugl.h"
-#include "lluictrlfactory.h"
 
 #include "fsradarmenu.h"
 
 // newview
-#include "fsradar.h"
 #include "llagent.h"
-#include "llagentdata.h"			// for gAgentID
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llnetmap.h"

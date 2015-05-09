@@ -42,7 +42,6 @@
 #include "llagent.h"
 #include "llclassifiedflags.h"
 #include "llclassifiedstatsresponder.h"
-#include "llcommandhandler.h" // for classified HTML detail page click tracking
 #include "lliconctrl.h"
 #include "lllineeditor.h"
 #include "llcombobox.h"
