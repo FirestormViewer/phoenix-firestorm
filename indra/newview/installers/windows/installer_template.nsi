@@ -59,8 +59,6 @@ RequestExecutionLevel admin	# For when we write to Program Files
 !include "%%SOURCE%%\installers\windows\lang_tr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
-;;!include "%%SOURCE%%\installers\windowsMUI.nsh"
-
 # *TODO: Move these into the language files themselves
 LangString LanguageCode ${LANG_DANISH}   "da"
 LangString LanguageCode ${LANG_GERMAN}   "de"
@@ -115,8 +113,7 @@ Var INSTEXE
 Var INSTSHORTCUT
 Var COMMANDLINE         # Command line passed to this installer, set in .onInit
 Var SHORTCUT_LANG_PARAM # "--set InstallLanguage de", Passes language to viewer
-Var SKIP_DIALOGS        # Set from command line in  .onInit. autoinstall 
-                        # GUI and the defaults.
+Var SKIP_DIALOGS        # Set from command line in  .onInit. autoinstall GUI and the defaults.
 # Var SKIP_AUTORUN		# Skip automatic launch of viewer after install -- <FS:PP> Commented out: Disable autorun
 Var DO_UNINSTALL_V2     # If non-null, path to a previous Viewer 2 installation that will be uninstalled.
 Var NO_STARTMENU        # <FS:Ansariel> Optional start menu entry
@@ -163,24 +160,25 @@ FunctionEnd
 ;; entry to the language ID selector below
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInit
+Call CheckCPUFlags							# Make sure we have SSE2 support
 Call CheckWindowsVersion					# Don't install On unsupported systems
     Push $0
     ${GetParameters} $COMMANDLINE			# Get our command line
 
     ${GetOptions} $COMMANDLINE "/SKIP_DIALOGS" $0   
     # <FS:Ansariel> Auto-close if auto-updating
-    ; IfErrors +2 0	# If error jump past setting SKIP_DIALOGS
-    ;    StrCpy $SKIP_DIALOGS "true"
+    # IfErrors +2 0	# If error jump past setting SKIP_DIALOGS
+    #    StrCpy $SKIP_DIALOGS "true"
     IfErrors +3 0	# If error jump past setting SKIP_DIALOGS
         StrCpy $SKIP_DIALOGS "true"
         SetAutoClose true
     # </FS:Ansariel>
 
-	; <FS:PP> Disable autorun
-	; ${GetOptions} $COMMANDLINE "/SKIP_AUTORUN" $0
-    ; IfErrors +2 0	# If error jump past setting SKIP_AUTORUN
-	; 	StrCpy $SKIP_AUTORUN "true"
-	; </FS:PP>
+	# <FS:PP> Disable autorun
+	# ${GetOptions} $COMMANDLINE "/SKIP_AUTORUN" $0
+    # IfErrors +2 0	# If error jump past setting SKIP_AUTORUN
+	# 	StrCpy $SKIP_AUTORUN "true"
+	# </FS:PP>
 
     ${GetOptions} $COMMANDLINE "/LANGID=" $0	# /LANGID=1033 implies US English
 
@@ -233,6 +231,7 @@ Function un.onInit
 	StrCpy $LANGUAGE $0
 lbl_end:
     Return
+
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -248,11 +247,12 @@ Function CheckCPUFlags
   OK_SSE2:
     Pop $1
     Return
+
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make sure this computer meets the minimum system requirements.
-;; Currently: Windows 32bit XP SP3, 64bit XP SP2 and Server 2003 SP2
+;; Currently: Windows Vista SP2
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
   ${If} ${AtMostWin2003}
@@ -286,7 +286,6 @@ StrCpy $INSTPROG "${INSTNAME}"
 StrCpy $INSTEXE "${INSTEXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
-Call CheckCPUFlags				# Make sure we have SSE2 support
 Call CheckIfAdministrator		# Make sure the user can install/uninstall
 Call CheckIfAlreadyCurrent		# Make sure this version is not already installed
 Call CloseSecondLife			# Make sure Second Life not currently running
@@ -380,7 +379,7 @@ WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$INSTEXE"'
 WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$INSTEXE" -url "%1"'
 # </FS:CR>
 
-# write out uninstaller
+# Write out uninstaller
 WriteUninstaller "$INSTDIR\uninst.exe"
 
 # Uninstall existing "Second Life Viewer 2" install if needed.
@@ -406,7 +405,7 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 # Make sure the user can install/uninstall
 Call un.CheckIfAdministrator
 
-# uninstall for all users (if you change this, change it in the install as well)
+# Uninstall for all users (if you change this, change it in the install as well)
 SetShellVarContext all			
 
 # Make sure we're not running
@@ -433,6 +432,11 @@ Call un.ProgramFiles
 Call un.UserSettingsFiles
 
 SectionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Uninstall settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+UninstallText $(UninstallTextMsg)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make sure the user can install
@@ -487,12 +491,12 @@ FunctionEnd
 ;; If called through auto-update, need to uninstall any existing V2 installation.
 ;; Don't want to end up with SecondLifeViewer2 and SecondLifeViewer installations
 ;;  existing side by side with no indication on which to use.
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWillUninstallV2
 
   StrCpy $DO_UNINSTALL_V2 ""
 
-  ; <FS:Ansariel> Don't mess with the official viewer
+  # <FS:Ansariel> Don't mess with the official viewer
   Return
 
   StrCmp $SKIP_DIALOGS "true" 0 CHECKV2_DONE
@@ -534,6 +538,7 @@ Function CloseSecondLife
   DONE:
     Pop $0
     Return
+
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -572,7 +577,7 @@ FunctionEnd
 ;; if it is up to date.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckNetworkConnection
-    ; Disabling this, not needed for Firestorm -AO
+    # Disabling this, not needed for Firestorm -AO
     Return 
     Push $0
     Push $1
@@ -710,8 +715,10 @@ Delete "$INSTDIR\motions\*.lla"
 Delete "$INSTDIR\trial\*.html"
 Delete "$INSTDIR\newview.exe"
 Delete "$INSTDIR\SecondLife.exe"
+
 # MAINT-3099 workaround - prevent these log files, if present, from causing a user alert
 Delete "$INSTDIR\VivoxVoiceService-*.log"
+
 # Remove entire help directory
 RMDir /r  "$INSTDIR\help"
 
@@ -734,7 +741,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInstSuccess
 Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launch.
-    Push $R0					# Option value, unused
+	Push $R0					# Option value, unused
 	# <FS:PP> Disable autorun
 	# StrCmp $SKIP_AUTORUN "true" +2;
 # Assumes SetOutPath $INSTDIR
@@ -763,7 +770,7 @@ label_no_launch:
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Recommend Upgrading Service Pack
+;; Recommend Upgrading to Service Pack 1 for Windows 7, if not present
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsServPack
   ${If} ${IsWin7}
@@ -782,7 +789,6 @@ Function CheckWindowsServPack
 
 FunctionEnd
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clobber user files - TEST ONLY
 ;; This is here for testing, DO NOT USE UNLESS YOU KNOW WHAT YOU ARE TESTING FOR!
@@ -799,7 +805,7 @@ FunctionEnd
 ;    EnumRegKey $1 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList" $0
 ;    StrCmp $1 "" DONE               # no more users
 ;
-;    ReadRegStr $2 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$1" "ProfileImagePath" 
+;    ReadRegStr $2 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$1" "ProfileImagePath"
 ;    StrCmp $2 "" CONTINUE 0         # "ProfileImagePath" value is missing
 ;
 ;# Required since ProfileImagePath is of type REG_EXPAND_SZ
@@ -824,11 +830,5 @@ FunctionEnd
 ;Pop $0
 ;
 ;FunctionEnd
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Uninstall settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-UninstallText $(UninstallTextMsg)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EOF  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
