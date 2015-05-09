@@ -14,7 +14,7 @@ else (USESYSTEMLIBS)
     if (DARWIN OR WINDOWS)
 	# Growl is making some problems still
       include(Prebuilt)
-      use_prebuilt_binary(gntp-growl)
+      use_prebuilt_binary(gntp_growl)
       set(GROWL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/Growl)
       set(GROWL_LIBRARY growl++)
       add_definitions( -DHAS_GROWL)
