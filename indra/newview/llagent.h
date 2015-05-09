@@ -869,6 +869,8 @@ public:
 	
 private:
 	BOOL			mShowAvatar; 		// Should we render the avatar?
+	// <FS:Ansariel> [Legacy Bake]
+	U32				mAppearanceSerialNum;
 
 	//--------------------------------------------------------------------
 	// Rendering state bitmap helpers
