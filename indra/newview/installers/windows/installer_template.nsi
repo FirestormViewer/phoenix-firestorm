@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; secondlife setup.nsi
+;; Second Life setup.nsi
 ;; Copyright 2004-2015, Linden Research, Inc.
 ;;
 ;; This library is free software; you can redistribute it and/or
@@ -290,7 +290,7 @@ Call CheckIfAdministrator		# Make sure the user can install/uninstall
 Call CheckIfAlreadyCurrent		# Make sure this version is not already installed
 Call CloseSecondLife			# Make sure Second Life not currently running
 Call CheckNetworkConnection		# Ping secondlife.com
-Call CheckWillUninstallV2		# Check if SecondLife is already installed
+Call CheckWillUninstallV2		# Check if Second Life is already installed
 
 StrCmp $DO_UNINSTALL_V2 "" PRESERVE_DONE
 PRESERVE_DONE:
@@ -387,8 +387,8 @@ WriteUninstaller "$INSTDIR\uninst.exe"
 # Uninstall existing "Second Life Viewer 2" install if needed.
 StrCmp $DO_UNINSTALL_V2 "" REMOVE_SLV2_DONE
   ExecWait '"$PROGRAMFILES\SecondLifeViewer2\uninst.exe" /S _?=$PROGRAMFILES\SecondLifeViewer2'
-  Delete "$PROGRAMFILES\SecondLifeViewer2\uninst.exe"	# with _? option above, uninst.exe will be left behind.
-  RMDir "$PROGRAMFILES\SecondLifeViewer2"	# will remove only if empty.
+  Delete "$PROGRAMFILES\SecondLifeViewer2\uninst.exe"	# With _? option above, uninst.exe will be left behind.
+  RMDir "$PROGRAMFILES\SecondLifeViewer2"	# Will remove only if empty.
 
 REMOVE_SLV2_DONE:
 
@@ -585,7 +585,7 @@ Function CheckNetworkConnection
     StrCpy $2 ""
     ${GetOptions} $COMMANDLINE "/STUBTAG=" $2
     GetTempFileName $0
-    !define HTTP_TIMEOUT 5000 # milliseconds
+    !define HTTP_TIMEOUT 5000		# Milliseconds
 # Don't show secondary progress bar, this will be quick.
     NSISdl::download_quiet \
         /TIMEOUT=${HTTP_TIMEOUT} \
@@ -596,7 +596,7 @@ Function CheckNetworkConnection
     ; Result ignored for now
 	; StrCmp $1 "success" +2
 	;	DetailPrint "Connection failed: $1"
-    Delete $0	# temporary file
+    Delete $0	# Temporary file
     Pop $2
     Pop $1
     Pop $0
@@ -605,14 +605,14 @@ Function CheckNetworkConnection
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Delete files on install if previous isntall exsists to prevent undesiered behavior
+;; Delete files on install if previous install exists to prevent undesired behavior
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function RemoveProgFilesOnInst
 
 # Remove old SecondLife.exe to invalidate any old shortcuts to it that may be in non-standard locations. See MAINT-3575
 Delete "$INSTDIR\$INSTEXE"
 
-# Remove old shader files first so fallbacks will work. see DEV-5663
+# Remove old shader files first so fallbacks will work. See DEV-5663
 RMDir /r "$INSTDIR\app_settings\shaders"
 
 # Remove skins folder to clean up files removed during development
@@ -629,7 +629,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.UserSettingsFiles
 
-StrCmp $DO_UNINSTALL_V2 "" Keep			# don't remove user's settings files on auto upgrade
+StrCmp $DO_UNINSTALL_V2 "true" Keep			# Don't remove user's settings files on auto upgrade
 
 # Ask if user wants to keep data files or not
 MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
@@ -692,7 +692,7 @@ FunctionEnd
 ;; This deletes the uninstall executable, but it works because it is copied to temp directory before running
 ;;
 ;; Note:  You must list all files here, because we only want to delete our files,
-;; not things users left in the application directories.
+;; not things users left in the program directory.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.ProgramFiles
 
@@ -715,15 +715,6 @@ Delete "$INSTDIR\SecondLife.exe"
 # MAINT-3099 workaround - prevent these log files, if present, from causing a user alert
 Delete "$INSTDIR\VivoxVoiceService-*.log"
 # Remove entire help directory
-Delete "$INSTDIR\help\Advanced\*"
-RMDir  "$INSTDIR\help\Advanced"
-Delete "$INSTDIR\help\basics\*"
-RMDir  "$INSTDIR\help\basics"
-Delete "$INSTDIR\help\Concepts\*"
-RMDir  "$INSTDIR\help\Concepts"
-Delete "$INSTDIR\help\welcome\*"
-RMDir  "$INSTDIR\help\welcome"
-Delete "$INSTDIR\help\*"
 RMDir  "$INSTDIR\help"
 
 Delete "$INSTDIR\uninst.exe"
