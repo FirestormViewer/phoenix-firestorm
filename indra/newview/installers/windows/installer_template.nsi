@@ -214,7 +214,7 @@ lbl_configure_default_lang:
 		Abort
     StrCpy $LANGUAGE $0
 
-# save language in registry
+# Save language in registry
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage" $LANGUAGE
 lbl_return:
     Pop $0
@@ -291,24 +291,12 @@ Call CheckIfAlreadyCurrent		# Make sure this version is not already installed
 Call CloseSecondLife			# Make sure Second Life not currently running
 Call CheckNetworkConnection		# Ping secondlife.com
 Call CheckWillUninstallV2		# Check if SecondLife is already installed
-Call CheckOldExeName            # Clean up a previous version of the exeicutable
 
 StrCmp $DO_UNINSTALL_V2 "" PRESERVE_DONE
   Call PreserveUserFiles
 PRESERVE_DONE:
 
-# Don't remove cache files during a regular install,
-# removing the inventory cache on upgrades results in lots of damage to the servers.
-;Call RemoveCacheFiles			# Installing over removes potentially corrupted VFS and cache files.
-
-# Need to clean out shader files from previous installs to fix DEV-5663
-Call RemoveOldShaders
-
-# Need to clean out old XUI files that predate skinning
-Call RemoveOldXUI
-
-# Clear out old releasenotes.txt files. These are now on the public wiki.
-Call RemoveOldReleaseNotes
+Call RemoveProgFilesOnInst		# Remove existing files to prevent certain errors when running the new version of the viewer
 
 # This placeholder is replaced by the complete list of all the files in the installer, by viewer_manifest.py
 %%INSTALL_FILES%%
@@ -749,64 +737,22 @@ Pop $0
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Function CheckOldExeName
-;; Viewer versions < 3.6.12 used the name 'SecondLife.exe'
-;; If that name is found in the install folder, delete it to invalidate any
-;;  old shortcuts to it that may be in non-standard locations. This is to prevent
-;;  the userpotentially getting caught in an infinite update loop). See MAINT-3575
-; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-Function CheckOldExeName
-  ; <FS:Ansariel> We don't need that
-  Return
-
-  IfFileExists "$INSTDIR\SecondLife.exe" CHECKOLDEXE_FOUND CHECKOLDEXE_DONE
-
-CHECKOLDEXE_FOUND:
-  Delete "$INSTDIR\SecondLife.exe"
-CHECKOLDEXE_DONE:
-
-FunctionEnd
-
+;; Delete files on install if previous isntall exsists to prevent undesiered behavior
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Delete the installed shader files
-;; Since shaders are in active development, we'll likely need to shuffle them
-;;  around a bit from build to build.  This ensures that shaders that were removed
-;;  or renamed don't get left behind in the install directory.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function RemoveOldShaders
+Function RemoveProgFilesOnInst
 
-;; Remove old shader files first so fallbacks will work. see DEV-5663
-RMDir /r "$INSTDIR\app_settings\shaders\*"
+# Remove old SecondLife.exe to invalidate any old shortcuts to it that may be in non-standard locations. See MAINT-3575
+Delete "$INSTDIR\$INSTEXE"
 
-FunctionEnd
+# Remove old shader files first so fallbacks will work. see DEV-5663
+RMDir /r "$INSTDIR\app_settings\shaders"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Delete the installed XUI files
-;; We've changed the directory hierarchy for skins, putting all XUI and texture
-;; files under a specific skin directory, i.e. skins/default/xui/en-us as opposed
-;; to skins/xui/en-us.  Need to clean up the old path when upgrading.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function RemoveOldXUI
-
-# <FS:Ansariel> FIRE-869: Delete all existing skins prior installation
-;RmDir /r "$INSTDIR\skins\html"
-;RmDir /r "$INSTDIR\skins\xui"
-;RmDir /r "$INSTDIR\skins\textures"
-;Delete "$INSTDIR\skins\*.txt"
+# Remove skins folder to clean up files removed during development
 RMDir /r "$INSTDIR\skins"
-# </FS:Ansariel>
 
-FunctionEnd
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Remove any release notes files.
-;; We are no longer including release notes with the viewer, so remove them.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function RemoveOldReleaseNotes
-
-Delete "$SMPROGRAMS\$INSTSHORTCUT\SL Release Notes.lnk"
-Delete "$INSTDIR\releasenotes.txt"
+# We are no longer including release notes with the viewer, so remove them.
+;Delete "$SMPROGRAMS\$INSTSHORTCUT\SL Release Notes.lnk"
+;Delete "$INSTDIR\releasenotes.txt"
 
 FunctionEnd
 
@@ -893,9 +839,6 @@ S;etShellVarContext all
 ;; not things users left in the application directories.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.ProgramFiles
-
-# Remove mozilla file first so recursive directory deletion doesn't get hung up
-Delete "$INSTDIR\app_settings\mozilla\components"
 
 # This placeholder is replaced by the complete list of files to uninstall by viewer_manifest.py
 %%DELETE_FILES%%
