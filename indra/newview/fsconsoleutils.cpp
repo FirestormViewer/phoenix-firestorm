@@ -31,7 +31,6 @@
 
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
-#include "lggcontactsets.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llconsole.h"

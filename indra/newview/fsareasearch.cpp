@@ -46,7 +46,6 @@
 #include "llsaleinfo.h"
 #include "llcheckboxctrl.h"
 #include "llviewermenu.h"		// handle_object_touch(), handle_buy()
-#include "llclickaction.h"
 #include "lltabcontainer.h"
 #include "llspinctrl.h"
 #include "lltoolgrab.h"
@@ -1074,8 +1073,8 @@ void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& ful
 	{
 		if (object_it->second.name_requested && !object_it->second.listed)
 		{
-			LLUUID id = object_it->second.id;
-			LLViewerObject* objectp = gObjectList.findObject(id);
+			LLUUID object_id = object_it->second.id;
+			LLViewerObject* objectp = gObjectList.findObject(object_id);
 			if (objectp && isSearchableObject(objectp, our_region))
 			{
 				matchObject(object_it->second, objectp);

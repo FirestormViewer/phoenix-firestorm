@@ -515,7 +515,6 @@ void FloaterAO::onClickRemove()
 
 BOOL FloaterAO::removeSetCallback(const LLSD& notification, const LLSD& response)
 {
-	std::string newSetName = response["message"].asString();
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
 	if (option ==0 )
@@ -731,7 +730,6 @@ void FloaterAO::onClickNext()
 void FloaterAO::onClickMore()
 {
 	LLRect fullSize = gSavedPerAccountSettings.getRect("floater_rect_animation_overrider_full");
-	LLRect smallSize = getRect();
 
 	if (fullSize.getHeight() < getMinHeight())
 	{

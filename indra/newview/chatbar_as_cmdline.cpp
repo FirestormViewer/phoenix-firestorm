@@ -45,7 +45,6 @@
 #include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llfloaterreg.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
 #include "llparcel.h"
@@ -522,15 +521,15 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			else if (command == sFSCmdLineMedia())
 			{
 				std::string url;
-				std::string type;
+				std::string media_type;
 
-				if (i >> url && i >> type)
+				if (i >> url && i >> media_type)
 				{
 					LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 					if (parcel)
 					{
 						parcel->setMediaURL(url);
-						parcel->setMediaType(type);
+						parcel->setMediaType(media_type);
 						if (gSavedSettings.getBOOL("MediaEnableFilter"))
 						{
 							LLViewerParcelMedia::filterMediaUrl(parcel);
@@ -974,7 +973,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 											reportToNearbyChat("Zdrop cannot work if the folder is inside another folder.");
 										}
 									}
-									catch (std::out_of_range e)
+									catch (std::out_of_range)
 									{
 										reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load. No-copy items are moved to the prim. All other items are copied.");
 										reportToNearbyChat("Valid command: Zdrop (rezzed prim UUID) (source inventory folder name)");
@@ -1048,7 +1047,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 									reportToNearbyChat("Ztake cannot work if the folder is inside another folder.");
 								}
 							}
-							catch (std::out_of_range e)
+							catch (std::out_of_range)
 							{
 								reportToNearbyChat("Please specify a destination folder in your inventory.");
 							}
@@ -1117,7 +1116,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 								reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
 							}
 						}
-						catch (std::out_of_range e)
+						catch (std::out_of_range)
 						{
 							reportToNearbyChat("Please specify a destination folder in your inventory.");
 						}
@@ -1165,7 +1164,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 									reportToNearbyChat("Mtake cannot work if the folder is inside another folder.");
 								}
 							}
-							catch (std::out_of_range e)
+							catch (std::out_of_range)
 							{
 								reportToNearbyChat("Please specify a destination folder in your inventory.");
 							}

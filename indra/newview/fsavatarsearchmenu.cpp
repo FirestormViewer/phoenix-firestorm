@@ -29,11 +29,9 @@
 
 #include "fsavatarsearchmenu.h"
 
-#include "fsradar.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"
-#include "llfloaterreg.h"
 #include "lluictrl.h"
 #include "llviewermenu.h"
 #include "rlvhandler.h"

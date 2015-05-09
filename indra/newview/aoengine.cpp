@@ -34,16 +34,13 @@
 #include "llagentcamera.h"
 #include "llanimationstates.h"
 #include "llassetstorage.h"
-#include "llcommon.h"
 #include "llinventoryfunctions.h"		// for ROOT_FIRESTORM_FOLDER
 #include "llinventorymodel.h"
-#include "llinventoryobserver.h"  
 #include "llnotificationsutil.h"
 #include "llstring.h"
 #include "llvfs.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
-#include "llinventorybridge.h"
 
 //#define ROOT_FIRESTORM_FOLDER 	"#Firestorm" //moved to llinventoryfunctions.h
 #define ROOT_AO_FOLDER			"#AO"
@@ -978,17 +975,18 @@ BOOL AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
 		LLInventoryModel::cat_array_t* cats;
 		gInventory.getDirectDescendentsOf(set->getInventoryUUID(), cats, items);
 
-		for (S32 index = 0; index < cats->size(); ++index)
+		for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
 		{
+			LLPointer<LLInventoryCategory> cat = (*it);
 			std::vector<std::string> params;
-			LLStringUtil::getTokens(cats->at(index)->getName(), params, ":");
+			LLStringUtil::getTokens(cat->getName(), params, ":");
 			std::string stateName = params[0];
 
 			if (state->mName.compare(stateName) == 0)
 			{
-				LL_DEBUGS("AOEngine") << "folder found: " << cats->at(index)->getName() << " purging uuid " << cats->at(index)->getUUID() << LL_ENDL;
+				LL_DEBUGS("AOEngine") << "folder found: " << cat->getName() << " purging uuid " << cat->getUUID() << LL_ENDL;
 
-				purgeFolder(cats->at(index)->getUUID());
+				purgeFolder(cat->getUUID());
 				state->mInventoryUUID.setNull();
 				break;
 			}
@@ -1192,9 +1190,9 @@ void AOEngine::update()
 
 			for (S32 state_index = 0; state_index < stateCategories->size(); ++state_index)
 			{
-				std::vector<std::string> params;
-				LLStringUtil::getTokens(stateCategories->at(state_index)->getName(), params, ":");
-				std::string stateName = params[0];
+				std::vector<std::string> state_params;
+				LLStringUtil::getTokens(stateCategories->at(state_index)->getName(), state_params, ":");
+				std::string stateName = state_params[0];
 
 				AOSet::AOState* state = newSet->getStateByName(stateName);
 				if (!state)
@@ -1205,26 +1203,26 @@ void AOEngine::update()
 				LL_DEBUGS("AOEngine") << "Reading state " << stateName << LL_ENDL;
 
 				state->mInventoryUUID = stateCategories->at(state_index)->getUUID();
-				for (U32 num = 1; num < params.size(); ++num)
+				for (U32 num = 1; num < state_params.size(); ++num)
 				{
-					if (params[num] == "CY")
+					if (state_params[num] == "CY")
 					{
 						state->mCycle = TRUE;
 						LL_DEBUGS("AOEngine") << "Cycle on" << LL_ENDL;
 					}
-					else if (params[num] == "RN")
+					else if (state_params[num] == "RN")
 					{
 						state->mRandom = TRUE;
 						LL_DEBUGS("AOEngine") << "Random on" << LL_ENDL;
 					}
-					else if (params[num].substr(0, 2) == "CT")
+					else if (state_params[num].substr(0, 2) == "CT")
 					{
-						LLStringUtil::convertToS32(params[num].substr(2, params[num].size() - 2), state->mCycleTime);
+						LLStringUtil::convertToS32(state_params[num].substr(2, state_params[num].size() - 2), state->mCycleTime);
 						LL_DEBUGS("AOEngine") << "Cycle Time specified:" << state->mCycleTime << LL_ENDL;
 					}
 					else
 					{
-						LL_WARNS("AOEngine") << "Unknown AO set option " << params[num] << LL_ENDL;
+						LL_WARNS("AOEngine") << "Unknown AO set option " << state_params[num] << LL_ENDL;
 					}
 				}
 
