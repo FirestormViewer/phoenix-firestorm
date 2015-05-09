@@ -740,7 +740,7 @@ Call CheckWindowsServPack		# Warn if not on the latest SP before asking to launc
 	# <FS:PP> Disable autorun
 	# StrCmp $SKIP_AUTORUN "true" +2;
 # Assumes SetOutPath $INSTDIR
-	# Exec '"$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM'
+	# Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTEXE"'
 	# Pop $R0
     StrCmp $SKIP_DIALOGS "true" label_launch 
 
@@ -757,7 +757,7 @@ label_ask_launch:
 
 label_launch:
 	# Assumes SetOutPath $INSTDIR
-	Exec '"$INSTDIR\$INSTEXE" $SHORTCUT_LANG_PARAM'
+	Exec '"$WINDIR\explorer.exe" "$INSTDIR\$INSTEXE"'
 label_no_launch:
 	Pop $R0
 	# </FS:PP>
