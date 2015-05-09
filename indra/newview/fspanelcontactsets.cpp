@@ -40,7 +40,6 @@
 #include "llfloaterreg.h"
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
-#include "lltrans.h"
 
 #include <boost/foreach.hpp>
 

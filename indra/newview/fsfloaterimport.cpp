@@ -30,7 +30,6 @@
 #include "fsfloaterimport.h"
 
 #include "llagent.h"
-#include "llagentcamera.h"
 #include "llappviewer.h"
 #include "llbuycurrencyhtml.h"
 #include "llcallbacklist.h"
@@ -38,13 +37,9 @@
 #include "lldatapacker.h"
 #include "lldir.h"
 #include "lleconomy.h"
-#include "llfilepicker.h"
 #include "llfloaterperms.h"
-#include "llfloaterreg.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
-#include "lllineeditor.h"
-#include "llmaterialmgr.h"
 #include "llmultigesture.h"
 #include "llnotificationsutil.h"
 #include "llparcel.h"
@@ -65,10 +60,8 @@
 #include "llvfile.h"
 #include "llvfs.h"
 #include "llvolumemessage.h"
-#include "llviewerstats.h"
 #include "lltrace.h"
 #include "fsexportperms.h"
-#include "material_codes.h"
 #include <boost/algorithm/string_regex.hpp>
 #include <boost/lexical_cast.hpp>
 

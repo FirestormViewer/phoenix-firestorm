@@ -30,10 +30,7 @@
 
 // libs
 #include "llfiltereditor.h"
-#include "llfloaterreg.h"
-#include "lllayoutstack.h"
 #include "llmenugl.h"
-#include "llnotificationsutil.h"
 #include "lluictrlfactory.h"
 #include "llmenubutton.h"
 #include "lltoggleablemenu.h"
@@ -41,7 +38,6 @@
 // newview
 #include "fsradarmenu.h"
 #include "llavataractions.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llnetmap.h"
 #include "llpanelblockedlist.h"
 #include "llviewercontrol.h"		// for gSavedSettings

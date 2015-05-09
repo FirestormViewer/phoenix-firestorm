@@ -20,7 +20,6 @@
 #include "lfsimfeaturehandler.h"
 
 #include "llagent.h"
-#include "llenvmanager.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 

@@ -34,17 +34,13 @@
 #include "lggbeammaps.h"
 #include "llagent.h"
 #include "llcheckboxctrl.h"
-#include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
 #include "llfloaterreg.h"
 #include "llinventorymodel.h"
-#include "llspinctrl.h"
 #include "llstartup.h"
 #include "lltexturectrl.h"
 #include "llviewercontrol.h"
-#include "llvoavatar.h"
-#include "llvoavatarself.h"
 
 static LLPanelInjector<FSPanelPrefs> t_pref_fs("panel_preference_firestorm");
 

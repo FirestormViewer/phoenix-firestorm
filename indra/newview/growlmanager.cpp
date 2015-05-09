@@ -340,7 +340,7 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 {
 	LLNotificationPtr notification = LLNotifications::instance().find(data["notification_id"].asUUID());
 	const std::string name = notification->getName();
-	LLSD payload = notification->getPayload();
+	//LLSD payload = notification->getPayload();
 	LLSD substitutions = notification->getSubstitutions();
 
 	//LL_INFOS("GrowlLLNotification") << "Script dialog: name=" << name << " - payload=" << payload << " subs=" << substitutions << LL_ENDL;

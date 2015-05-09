@@ -45,8 +45,6 @@
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llavataractions.h"
-//#include "llavatarconstants.h"		// for range constants
-#include "llgroupactions.h"
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "lltracker.h"
@@ -62,12 +60,12 @@
 
 using namespace boost;
 
-#define FS_RADAR_LIST_UPDATE_INTERVAL 1
+static const F32 FS_RADAR_LIST_UPDATE_INTERVAL = 1.f;
 
 /**
  * Periodically updates the nearby people list while the Nearby tab is active.
  * 
- * The period is defined by FS_NEARBY_LIST_UPDATE_INTERVAL constant.
+ * The period is defined by FS_RADAR_LIST_UPDATE_INTERVAL constant.
  */
 class FSRadarListUpdater : public FSRadar::Updater, public LLEventTimer
 {
@@ -147,11 +145,10 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		LLSD args;
 		args["NAME"] = FSRadarEntry::getRadarName(av_name);
 		args["MESSAGE"] = postMsg;
-		LLNotificationPtr notification;
-		notification = LLNotificationsUtil::add("RadarAlert",
-												args,
-												payload.with("respond_on_mousedown", TRUE),
-												boost::bind(&LLAvatarActions::zoomIn, agent_id));
+		LLNotificationsUtil::add("RadarAlert",
+									args,
+									payload.with("respond_on_mousedown", TRUE),
+									boost::bind(&LLAvatarActions::zoomIn, agent_id));
 	}
 	else
 	{

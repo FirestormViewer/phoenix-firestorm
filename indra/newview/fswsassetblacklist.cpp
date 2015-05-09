@@ -201,19 +201,19 @@ void FSWSAssetBlacklist::loadBlacklist()
 					LLUUID uid = LLUUID(itr->first);
 					LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 					cipher.decrypt(uid.mData, UUID_BYTES);
-					LLSD data = itr->second;
+					LLSD entry_data = itr->second;
 					if (uid.isNull())
 					{
 						continue;
 					}
 
-					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
+					LLAssetType::EType type = S32toAssetType(entry_data["asset_type"].asInteger());
 					if (type == LLAssetType::AT_NONE)
 					{
 						continue;
 					}
 					
-					addNewItemToBlacklistData(uid, data, false);
+					addNewItemToBlacklistData(uid, entry_data, false);
 				}
 			}
 		}

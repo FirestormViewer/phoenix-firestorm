@@ -61,7 +61,7 @@ public:
 	/**
 	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
 	 */
-	void setAvatarId(const LLUUID& id);
+	virtual void setAvatarId(const LLUUID& id);
 
 	/**
 	 * Processes data received from server.

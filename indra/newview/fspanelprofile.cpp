@@ -60,7 +60,6 @@
 #include "llfloaterreg.h"
 #include "llfirstuse.h"
 #include "llnotificationsutil.h"
-#include "llnotificationsutil.h"
 #include "lltrans.h"
 #include "llvoiceclient.h"
 #include "llgroupactions.h"
@@ -70,7 +69,6 @@
 #include "llparcel.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
-#include "llworldmap.h"
 
 static LLPanelInjector<FSPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
 static LLPanelInjector<FSPanelProfileWeb> t_panel_web("panel_profile_web");

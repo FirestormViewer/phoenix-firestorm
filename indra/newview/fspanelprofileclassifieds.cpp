@@ -29,21 +29,15 @@
 #include "fspanelprofileclassifieds.h"
 
 #include "llagent.h"
-#include "llagentpicksinfo.h"
-//#include "llavatarconstants.h"
 #include "llflatlistview.h"
 #include "llfloaterreg.h"
 #include "llfloaterworldmap.h"
 #include "llnotificationsutil.h"
-#include "lltexturectrl.h"
 #include "lltrans.h"
-#include "llviewergenericmessage.h"	// send_generic_message
 #include "llmenugl.h"
 #include "llviewermenu.h"
 #include "llregistry.h"
 
-#include "llaccordionctrl.h"
-#include "llaccordionctrltab.h"
 #include "llavatarpropertiesprocessor.h"
 #include "fspanelprofile.h"
 #include "fspanelclassified.h"

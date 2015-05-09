@@ -108,8 +108,6 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
-#include "rlvui.h"
-#include "utilitybar.h"
 #include "NACLantispam.h"
 
 using namespace LLAvatarAppearanceDefines;

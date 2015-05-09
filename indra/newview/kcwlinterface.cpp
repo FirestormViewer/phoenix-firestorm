@@ -70,11 +70,10 @@ void KCWindlightInterface::ParcelChange()
 	
 	mDisabled = false;
 
-	LLParcel *parcel = NULL;
 	S32 this_parcel_id = 0;
 	std::string desc;
 
- 	parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+ 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	// Since we cannot depend on the order in which the EnvironmentSettings cap and parcel info
 	// will come in, we must check if the other has set something before this one for the current region.
@@ -141,15 +140,14 @@ BOOL KCWindlightInterface::tick()
 		return FALSE;
 	}
 
-	LLParcel *parcel = NULL;
-
-	parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
 	if (parcel)
 	{
-		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 		if (!LoadFromParcel(parcel) || !mCurrentSettings.has("sky"))
+		{
 			mEventTimer.stop();
+		}
 	}
 
 	return FALSE;
@@ -366,7 +364,7 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 		const boost::regex Parcel_exp("(?i)\\/\\*(?:Windlight)?([\\s\\S]*?)\\*\\/");
 		if(boost::regex_search(desc, mat_block, Parcel_exp))
 		{
-			std::string data1(mat_block[1].first, mat_block[1].second);
+			//std::string data1(mat_block[1].first, mat_block[1].second);
 			//LL_INFOS() << "found parcel flags block: " << mat_block[1] << LL_ENDL;
 			
 			S32 sky_index = 0;
@@ -376,8 +374,8 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 			std::string::const_iterator start = mat_block[1].first;
 			std::string::const_iterator end = mat_block[1].second;
 			//Sky: "preset" Water: "preset"
-			const boost::regex key("(?i)(?:(?:(Sky)(?:\\s?@\\s?([\\d]+)m?\\s?(?:to|-)\\s?([\\d]+)m?)?)|(Water))\\s?:\\s?\"([^\"\\r\\n]+)\"|(RegionOverride)");
-			while (boost::regex_search(start, end, match, key, boost::match_default))
+			const boost::regex key_regex("(?i)(?:(?:(Sky)(?:\\s?@\\s?([\\d]+)m?\\s?(?:to|-)\\s?([\\d]+)m?)?)|(Water))\\s?:\\s?\"([^\"\\r\\n]+)\"|(RegionOverride)");
+			while (boost::regex_search(start, end, match, key_regex, boost::match_default))
 			{
 				if (match[1].matched)
 				{
@@ -422,7 +420,7 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 				}
 				else if (match[6].matched)
 				{
-					std::string preset(match[5]);
+					//std::string preset(match[5]);
 					LL_INFOS() << "got region override flag" << LL_ENDL;
 					settings["region_override"] = true;
 				}
@@ -452,8 +450,7 @@ void KCWindlightInterface::onClickWLStatusButton()
 
 	if (mWLset)
 	{
-		LLParcel *parcel = NULL;
- 		parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+ 		LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
  		if (parcel)
 		{
 			//TODO: this could be better
