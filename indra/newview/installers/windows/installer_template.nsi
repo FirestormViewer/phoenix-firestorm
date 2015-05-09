@@ -91,8 +91,6 @@ WindowIcon on							# Show our icon in left corner
 BGGradient off							# No big background window
 CRCCheck on								# Make sure CRC is OK
 InstProgressFlags smooth colored		# New colored smooth look
-# <FS:Ansariel> Expose details button (details hidden by default)
-#ShowInstDetails nevershow				# No details, no "show" button
 SetOverwrite on							# Overwrite files by default
 # <FS:Ansariel> Don't auto-close so we can check details
 #AutoCloseWindow true					# After all files install, close window
@@ -771,8 +769,6 @@ FunctionEnd
 ;; Uninstall settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 UninstallText $(UninstallTextMsg)
-#<FS:TM> Expose detail button instead of always showing detailed uninstall info
-;ShowUninstDetails show 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Uninstall Section
@@ -813,8 +809,6 @@ Call un.ProgramFiles
 
 # Clean up cache and log files, but leave them in-place for non AGNI installs.
 Call un.DocumentsAndSettingsFolder
-
-# End of uninstall section
 
 SectionEnd
 
@@ -901,9 +895,9 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Default Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Section ""						# (default section)
+Section ""
 
-SetShellVarContext all			# install for all users (if you change this, change it in the uninstall as well)
+SetShellVarContext all			# Install for all users (if you change this, change it in the uninstall as well)
 
 # Start with some default values.
 StrCpy $INSTPROG "${INSTNAME}"
@@ -912,11 +906,11 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 Call CheckCPUFlags				# Make sure we have SSE2 support
 Call CheckIfAdministrator		# Make sure the user can install/uninstall
-Call CheckIfAlreadyCurrent		# Make sure that we haven't already installed this version
-Call CloseSecondLife			# Make sure we're not running
-Call CheckNetworkConnection		# ping secondlife.com
-Call CheckWillUninstallV2		# See if a V2 install exists and will be removed.
-Call CheckOldExeName            # Clean up a previous version of the exe
+Call CheckIfAlreadyCurrent		# Make sure this version is not already installed
+Call CloseSecondLife			# Make sure Second Life not currently running
+Call CheckNetworkConnection		# Ping secondlife.com
+Call CheckWillUninstallV2		# Check if SecondLife is already installed
+Call CheckOldExeName            # Clean up a previous version of the exeicutable
 
 StrCmp $DO_UNINSTALL_V2 "" PRESERVE_DONE
   Call PreserveUserFiles
@@ -924,8 +918,7 @@ PRESERVE_DONE:
 
 # Don't remove cache files during a regular install,
 # removing the inventory cache on upgrades results in lots of damage to the servers.
-;Call RemoveCacheFiles			# Installing over removes potentially corrupted
-								# VFS and cache files.
+;Call RemoveCacheFiles			# Installing over removes potentially corrupted VFS and cache files.
 
 # Need to clean out shader files from previous installs to fix DEV-5663
 Call RemoveOldShaders
@@ -1033,7 +1026,6 @@ StrCmp $DO_UNINSTALL_V2 "" REMOVE_SLV2_DONE
   Call RemoveTempUserFiles
 REMOVE_SLV2_DONE:
 
-# end of default section
 SectionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EOF  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
