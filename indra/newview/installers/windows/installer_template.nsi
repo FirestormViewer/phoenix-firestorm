@@ -435,7 +435,7 @@ Delete "$INSTDIR\Uninstall $INSTSHORTCUT.lnk"
 Call un.ProgramFiles
 
 # Clean up cache and log files, but leave them in-place for non AGNI installs.
-Call un.DocumentsAndSettingsFolder
+Call un.UserSettingsFiles
 
 SectionEnd
 
@@ -759,7 +759,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Delete files in \Users\<User>\AppData\
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function un.DocumentsAndSettingsFolder
+Function un.UserSettingsFiles
 
 # Ask if user wants to keep data files or not
 MessageBox MB_YESNO|MB_ICONQUESTION $(RemoveDataFilesMB) IDYES Remove IDNO Keep
@@ -816,20 +816,6 @@ Pop $0
 Keep:
 
 FunctionEnd
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Delete the stored password for the current Windows user
-;; DEV-10821 -- Unauthorised user can gain access to an SL account after a real user has uninstalled
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;Function un.RemovePassword
-;
-;DetailPrint "Removing Second Life password"
-;
-;SetShellVarContext current
-;Delete "$APPDATA\SecondLife\user_settings\password.dat"
-S;etShellVarContext all
-;
-;FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Delete the installed files
