@@ -38,6 +38,7 @@ RequestExecutionLevel admin	# For when we write to Program Files
 ;; Project flags
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+# This placeholder is replaced by viewer_manifest.py
 %%VERSION%%
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,7 +75,7 @@ LangString LanguageCode ${LANG_RUSSIAN}  "ru"
 LangString LanguageCode ${LANG_TURKISH}  "tr"
 LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
-# this placeholder is replaced by viewer_manifest.py
+# This placeholder is replaced by viewer_manifest.py
 %%INST_VARS%%
 
 Name ${INSTNAME}
@@ -345,19 +346,17 @@ WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version" "${VERSION_LONG}"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Shortcut" "$INSTSHORTCUT"
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$INSTEXE"
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG (remove only)"
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
-# <FS:Ansariel> Add additional data for uninstall list in Windows
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "The Phoenix Firestorm Project, Inc."
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.firestormviewer.org"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "http://www.firestormviewer.org/support"
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG (remove only)"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
-WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00" ; 195 MB
-# </FS:Ansariel>
-
-# <FS:ND> BUG-2707 Disable SEHOP for installed viewer.
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00" # 195 MB
+# <FS:Ansariel> Add additional data for uninstall list in Windows
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+# BUG-2707 Disable SEHOP for installed viewer.
 WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE" "DisableExceptionChainValidation" 1
 
 # Write URL registry info
@@ -416,8 +415,7 @@ Call un.CloseSecondLife
 # Clean up registry keys and subkeys (these should all be !defines somewhere)
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG"
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG"
-
-# <FS:ND> BUG-2707 Remove entry that disabled SEHOP
+# BUG-2707 Remove entry that disabled SEHOP
 DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
 
 # Clean up shortcuts
