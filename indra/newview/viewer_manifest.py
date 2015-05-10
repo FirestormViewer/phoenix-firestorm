@@ -1477,6 +1477,7 @@ class Linux_i686_Manifest(LinuxManifest):
                 self.path("libqtwcodecs.so")
                 self.end_prefix("bin/llplugin/codecs")
 
+            self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
             self.strip_binaries()
 
 
