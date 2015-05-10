@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>22eb436784b7c74d48802de7eb772ab2</string>
+              <string>fd13f6392cb117c4217973b4d49a89cb</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44432-linux-201502162016-r20.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44453-linux-201505100200-r21.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -672,9 +672,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>518a872b592a5c47ebb5c8ac7c302f7b</string>
+              <string>b69af3c55b0c83a634667cbbf58f9126</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44432-windows-201412091607.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44453-windows-201505100141-r21.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
