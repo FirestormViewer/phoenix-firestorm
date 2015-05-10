@@ -12,19 +12,11 @@ http://www.firestormviewer.org
 			<text name="linden_intro">
 Ohne Linden Labs Entscheidung, den Second Life-Viewer quelloffen zu machen, wäre Firestorm nicht möglich gewesen.
 
-Second Life wird präsentiert von den Lindens:
-			</text>
-			<text name="contrib_intro">
-				mit Open-Source-Beiträgen von:
+Second Life wird präsentiert von den Lindens,
+mit Open-Source-Beiträgen von:
 			</text>
 			<text_editor name="contrib_names">
 				Dummy-Name wird zur Laufzeit ersetzt
-			</text_editor>
-			<text name="trans_intro">
-				mit Übersetzungen von:
-			</text>
-			<text_editor name="trans_names">
-				Dummy Name wird zur Laufzeit ersetzt
 			</text_editor>
 		</panel>
 <!-- Firestorm Credits -->

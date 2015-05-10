@@ -47,18 +47,10 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 		</panel>
 		<panel label="Создатели" name="credits_panel">
 			<text name="linden_intro">
-				Игра Second Life разработана лабораторией Lindens:
-			</text>
-			<text name="contrib_intro">
-				в написании открытого кода участвовали:
+				Игра Second Life разработана лабораторией Lindens,
+в написании открытого кода участвовали:
 			</text>
 			<text_editor name="contrib_names">
-				Псевдо-имя изменено при запуске
-			</text_editor>
-			<text name="trans_intro">
-				перевод:
-			</text>
-			<text_editor name="trans_names">
 				Псевдо-имя изменено при запуске
 			</text_editor>
 		</panel>

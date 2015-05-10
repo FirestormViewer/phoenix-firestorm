@@ -12,13 +12,8 @@ http://www.firestormviewer.org
 			<text name="linden_intro">
 				Stworzenie Firestorma nie byłoby możliwe bez decyzji Linden Lab o upublicznieniu kodu oryginalnego klienta Second Life.
 
-Lindeni to:
-			</text>
-			<text name="contrib_intro">
-				z wkładem open source od:
-			</text>
-			<text name="trans_intro">
-				i tłumaczeniami od:
+Lindeni to,
+z wkładem open source od:
 			</text>
 		</panel>
 		<panel label="Firestorm" name="fs_credits_panel" height="860">

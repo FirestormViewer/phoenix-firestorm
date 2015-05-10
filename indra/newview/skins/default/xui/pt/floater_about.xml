@@ -55,18 +55,10 @@ http://www.firestormviewer.org
 			<text name="linden_intro">
 			Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
 			
-O Second Life é trazido a você pela Lindens:
-			</text>
-			<text name="contrib_intro">
-				com contribuições de código aberto de:
+O Second Life é trazido a você pela Lindens,
+com contribuições de código aberto de:
 			</text>
 			<text_editor name="contrib_names">
-				Dummy Name substituído durante a execução
-			</text_editor>
-			<text name="trans_intro">
-				e traduções de:
-			</text>
-			<text_editor name="trans_names">
 				Dummy Name substituído durante a execução
 			</text_editor>
 		</panel>

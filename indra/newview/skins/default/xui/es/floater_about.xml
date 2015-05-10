@@ -56,13 +56,8 @@ http://www.firestormviewer.org
         		<text name="linden_intro">
 				Firestorm no sería posible sin la decisión de Linden Lab de liberar el código fuente de su Visor para Second Life.
 
-Los Linden son:
-			</text>
-			<text name="contrib_intro">
-				Con contribuciones de código de:
-			</text>
-			<text name="trans_intro">
-				Y traducciones de:
+Los Linden son,
+con contribuciones de código de:
 			</text>
 		</panel>
 		<panel label="Créditos de Firestorm" name="fs_credits_panel" height="850">

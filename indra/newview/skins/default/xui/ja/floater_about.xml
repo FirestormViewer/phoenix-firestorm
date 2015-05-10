@@ -55,18 +55,10 @@ http://www.firestormviewer.org
 			<text name="linden_intro">
 			Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
 
-Second Life の提供元： Lindens の：
-			</text>
-			<text name="contrib_intro">
-				オープンソースの提供：
+Second Life の提供元： Lindens の,
+とともにオープンソースの提供：
 			</text>
 			<text_editor name="contrib_names">
-				Dummy Name は実行時間に置き換え
-			</text_editor>
-			<text name="trans_intro">
-				翻訳会社：
-			</text>
-			<text_editor name="trans_names">
 				Dummy Name は実行時間に置き換え
 			</text_editor>
 		</panel>
