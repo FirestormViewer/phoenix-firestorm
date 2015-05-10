@@ -11,15 +11,13 @@ http://www.firestormviewer.org
 		<panel label="Podziękowania" name="credits_panel">
 			<text name="linden_intro">
 				Stworzenie Firestorma nie byłoby możliwe bez decyzji Linden Lab o upublicznieniu kodu oryginalnego klienta Second Life.
-
-Lindeni to,
-z wkładem open source od:
+Wkład open source od:
 			</text>
 		</panel>
-		<panel label="Firestorm" name="fs_credits_panel" height="860">
+		<panel label="Firestorm" name="fs_credits_panel">
 			<scroll_container name="fs_credits_scroll_container">
 				<panel name="fs_credits_scroll_container_content_panel">
-					<text name="firestorm_intro" height="120">
+					<text name="firestorm_intro">
 						Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Firestorm Project, Inc., organizacji non-profit.
 
 Zespół programistów Firestorma:
