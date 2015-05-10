@@ -658,17 +658,17 @@ Push $2
 
 # Delete files in \Users\<User>\AppData\Roaming\Firestorm
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-;    RMDir /r "$2\Application Data\Firestorm\logs"
-    RMDir /r "$2\Application Data\Firestorm\browser_profile"
-    RMDir /r "$2\Application Data\Firestorm\user_settings"
-    Delete  "$2\Application Data\Firestorm\*.xml"
-    Delete  "$2\Application Data\Firestorm\*.bmp"
-    Delete  "$2\Application Data\Firestorm\search_history.txt"
-    Delete  "$2\Application Data\Firestorm\plugin_cookies.txt"
-    Delete  "$2\Application Data\Firestorm\typed_locations.txt"
+    RMDir /r "$2\AppData\Roaming\Firestorm\logs"
+    RMDir /r "$2\AppData\Roaming\Firestorm\browser_profile"
+    RMDir /r "$2\AppData\Roaming\Firestorm\user_settings"
+    Delete  "$2\AppData\Roaming\Firestorm\*.xml"
+    Delete  "$2\AppData\Roaming\Firestorm\*.bmp"
+    Delete  "$2\AppData\Roaming\Firestorm\search_history.txt"
+    Delete  "$2\AppData\Roaming\Firestorm\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\Firestorm\typed_locations.txt"
 # Delete files in \Users\<User>\AppData\Local\Firestorm
-    RMDir /r  "$2\Local Settings\Application Data\Firestorm"						#Delete the Havok cache folder
-    RMDir /r  "$2\Local Settings\Application Data\FirestormOS"						#Delete the OpenSim cache folder
+    RMDir /r  "$2\AppData\Local\Firestorm"						#Delete the Havok cache folder
+    RMDir /r  "$2\AppData\Local\FirestormOS"						#Delete the OpenSim cache folder
 
   CONTINUE:
     IntOp $0 $0 + 1
