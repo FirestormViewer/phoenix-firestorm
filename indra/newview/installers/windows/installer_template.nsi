@@ -114,7 +114,7 @@ Var INSTSHORTCUT
 Var COMMANDLINE         # Command line passed to this installer, set in .onInit
 Var SHORTCUT_LANG_PARAM # "--set InstallLanguage de", Passes language to viewer
 Var SKIP_DIALOGS        # Set from command line in  .onInit. autoinstall GUI and the defaults.
-# Var SKIP_AUTORUN		# Skip automatic launch of viewer after install -- <FS:PP> Commented out: Disable autorun
+# Var SKIP_AUTORUN		# Skip automatic launch of the viewer after install -- <FS:PP> Commented out: Disable autorun
 Var DO_UNINSTALL_V2     # If non-null, path to a previous Viewer 2 installation that will be uninstalled.
 Var NO_STARTMENU        # <FS:Ansariel> Optional start menu entry
 
@@ -201,7 +201,7 @@ lbl_configure_default_lang:
 
 # <FS:Ansariel> Commented out; Warning in build log about not being used
 ;lbl_build_menu:
-# </FS:Ansariel> Commented out; Warning in build log about not being used
+
 	Push ""
 # Use separate file so labels can be UTF-16 but we can still merge changes into this ASCII file. JC
     !include "%%SOURCE%%\installers\windows\language_menu.nsi"
@@ -349,7 +349,7 @@ WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninst
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.firestormviewer.org"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "http://www.firestormviewer.org/support"
-WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG (remove only)"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
 WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00" # 195 MB
@@ -577,8 +577,9 @@ FunctionEnd
 ;; if it is up to date.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckNetworkConnection
-    # Disabling this, not needed for Firestorm -AO
-    Return 
+    # <FS:AO> Disabling this, not needed for Firestorm
+    Return
+
     Push $0
     Push $1
     Push $2	# Option value for GetOptions
