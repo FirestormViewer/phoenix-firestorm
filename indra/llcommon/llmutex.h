@@ -56,18 +56,18 @@ public:
 	void unlock();		// undefined behavior when called on mutex not being held
 	bool isLocked(); 	// non-blocking, but does do a lock/unlock so not free
 	bool isSelfLocked(); //return true if locked in a same thread
-	uintptr_t lockingThread() const; //get ID of locking thread
+	U32 lockingThread() const; //get ID of locking thread
 	
 protected:
 	apr_thread_mutex_t *mAPRMutexp;
 	mutable U32			mCount;
-	mutable uintptr_t	mLockingThread;
+	mutable U32			mLockingThread;
 	
 	apr_pool_t			*mAPRPoolp;
 	BOOL				mIsLocalPool;
 	
 #if MUTEX_DEBUG
-	std::map<uintptr_t, BOOL> mIsLocked;
+	std::map<U32, BOOL> mIsLocked;
 #endif
 };
 

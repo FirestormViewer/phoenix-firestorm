@@ -87,7 +87,7 @@ public:
 	apr_pool_t *getAPRPool() { return mAPRPoolp; }
 	LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
 
-	uintptr_t getID() const { return mID; }
+	U32 getID() const { return mID; }
 
 	// Called by threads *not* created via LLThread to register some
 	// internal state used by LLMutex.  You must call this once early
@@ -109,7 +109,7 @@ protected:
 	apr_pool_t			*mAPRPoolp;
 	BOOL				mIsLocalPool;
 	EThreadStatus		mStatus;
-	uintptr_t			mID;
+	U32					mID;
 	LLTrace::ThreadRecorder* mRecorder;
 
 	//a local apr_pool for APRFile operations in this thread. If it exists, LLAPRFile::sAPRFilePoolp should not be used.
