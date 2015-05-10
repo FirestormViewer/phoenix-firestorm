@@ -786,9 +786,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>207aa1a29bfe4ba63edbca38170970a1</string>
+              <string>b7e8ccd822eafaf757be3a4f600d80f2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/freetype_3p-update-freetype/rev/297053/arch/CYGWIN/installer/freetype-2.4.4.297053-windows-297053.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.201505100249-r61-windows-201505100249-r61.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
