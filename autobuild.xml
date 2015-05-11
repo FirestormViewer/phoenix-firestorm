@@ -2753,8 +2753,10 @@
                   <string>'Xcode'</string>
                 </array>
               </map>
+              <!--
               <key>default</key>
               <string>True</string>
+              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
@@ -3008,8 +3010,10 @@
                   <string>'Unix Makefiles'</string>
                 </array>
               </map>
+              <!--
               <key>default</key>
               <string>True</string>
+              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
@@ -3267,8 +3271,10 @@
                   <string>"Visual Studio 12"</string>
                 </array>
               </map>
+              <!--
               <key>default</key>
               <string>True</string>
+              -->
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
