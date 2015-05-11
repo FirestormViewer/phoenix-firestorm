@@ -1750,11 +1750,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1175977a191ffc936fd0ccca433c8278</string>
+              <string>2b201c98e2092443615397eb7b78a339</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/llphysicsextensions-stub_llphysicsextensions-update/rev/298370/arch/Darwin/installer/llphysicsextensions_stub-1.0.298370-darwin-298370.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.300918-darwin-300918.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1764,9 +1764,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d13d7927692eab2d6a63e36166b72a8a</string>
+              <string>5ac120c50cf434e7b0fc181c4dd4e9f9</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/llphysicsextensions-stub_llphysicsextensions-update/rev/298370/arch/Linux/installer/llphysicsextensions_stub-1.0.298370-linux-298370.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.300918-linux-300918.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1776,9 +1776,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9594f6fd79ee924fe675a4a23e30516e</string>
+              <string>79f8d9dae7dcc4eb4a45435b9216780f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/llphysicsextensions-stub_llphysicsextensions-update/rev/298370/arch/CYGWIN/installer/llphysicsextensions_stub-1.0.298370-windows-298370.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.300918-windows-300918.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
