@@ -61,6 +61,7 @@ using namespace llsd;
 #if LL_WINDOWS
 #	include "llwin32headerslean.h"
 #   include <psapi.h>               // GetPerformanceInfo() et al.
+#	include <VersionHelpers.h> // <FS:Ansariel> FIRE-15573: Switch to VersionHelper API to determine Windows version
 #elif LL_DARWIN
 #	include <errno.h>
 #	include <sys/sysctl.h>
@@ -261,6 +262,8 @@ LLOSInfo::LLOSInfo() :
 	mBuild = osvi.dwBuildNumber;
 
 	DWORD shell32_major, shell32_minor, shell32_build;
+// <FS:Ansariel> FIRE-15573: Switch to VersionHelper API to determine Windows version
+#if 0
 	bool got_shell32_version = get_shell32_dll_version(shell32_major, 
 													   shell32_minor, 
 													   shell32_build);
@@ -440,7 +443,114 @@ LLOSInfo::LLOSInfo() :
 		}
 	}
 	mOSString += compatibility_mode;
+#endif
 
+	if (IsWindowsVersionOrGreater(10, 0, 0))
+	{
+		mOSStringSimple = "Microsoft Windows 10 ";
+		bShouldUseShellVersion = true;
+	}
+	else if (IsWindows8Point1OrGreater())
+	{
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2012 R2 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows 8.1 ";
+		}
+		bShouldUseShellVersion = true;
+	}
+	else if (IsWindows8OrGreater())
+	{
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2012 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows 8 ";
+		}
+	}
+	else if (IsWindows7SP1OrGreater())
+	{
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2008 R2 SP1 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows 7 SP1 ";
+		}
+	}
+	else if (IsWindows7OrGreater())
+	{
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2008 R2 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows 7 ";
+		}
+	}
+	else if (IsWindowsVistaSP2OrGreater())
+	{
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2008 SP2 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows Vista SP2 ";
+		}
+	}
+	else
+	{
+		mOSStringSimple = "Unsupported Windows version ";
+	}
+
+	///get native system info if available..
+	typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO); ///function pointer for loading GetNativeSystemInfo
+	SYSTEM_INFO si; //System Info object file contains architecture info
+	PGNSI pGNSI; //pointer object
+	ZeroMemory(&si, sizeof(SYSTEM_INFO)); //zero out the memory in information
+	pGNSI = (PGNSI) GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")),  "GetNativeSystemInfo"); //load kernel32 get function
+	if(NULL != pGNSI) //check if it has failed
+		pGNSI(&si); //success
+	else 
+		GetSystemInfo(&si); //if it fails get regular system info 
+	//(Warning: If GetSystemInfo it may result in incorrect information in a WOW64 machine, if the kernel fails to load)
+
+	//msdn microsoft finds 32 bit and 64 bit flavors this way..
+	//http://msdn.microsoft.com/en-us/library/ms724429(VS.85).aspx (example code that contains quite a few more flavors
+	//of windows than this code does (in case it is needed for the future)
+	if ( si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64 ) //check for 64 bit
+	{
+		mOSStringSimple += "64-bit ";
+	}
+	else if (si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL )
+	{
+		mOSStringSimple += "32-bit ";
+	}
+
+	std::string tmpstr;
+	std::string csdversion = utf16str_to_utf8str(osvi.szCSDVersion);
+	if (bShouldUseShellVersion)
+	{
+		get_shell32_dll_version(shell32_major, shell32_minor, shell32_build);
+		tmpstr = llformat("(Build %d)", shell32_build);
+	}
+	else
+	{
+		tmpstr = llformat("(Build %d)", (osvi.dwBuildNumber & 0xffff));
+	}
+	mOSString = mOSStringSimple + tmpstr;
+
+	LLStringUtil::trim(mOSStringSimple);
+	LLStringUtil::trim(mOSString);
+// </FS:Ansariel>
 #elif LL_DARWIN
 	
 	// Initialize mOSStringSimple to something like:
