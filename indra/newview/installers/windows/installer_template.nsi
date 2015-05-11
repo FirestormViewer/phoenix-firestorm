@@ -96,6 +96,7 @@ SetOverwrite on							# Overwrite files by default
 
 InstallDir "$PROGRAMFILES\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
+UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 
 Page license
@@ -176,7 +177,7 @@ Call CheckWindowsVersion					# Don't install On unsupported systems
 
 	# <FS:PP> Disable autorun
 	# ${GetOptions} $COMMANDLINE "/SKIP_AUTORUN" $0
-    # IfErrors +2 0	# If error jump past setting SKIP_AUTORUN
+	# IfErrors +2 0	# If error jump past setting SKIP_AUTORUN
 	# 	StrCpy $SKIP_AUTORUN "true"
 	# </FS:PP>
 
@@ -201,7 +202,6 @@ lbl_configure_default_lang:
 
 # <FS:Ansariel> Commented out; Warning in build log about not being used
 ;lbl_build_menu:
-
 	Push ""
 # Use separate file so labels can be UTF-16 but we can still merge changes into this ASCII file. JC
     !include "%%SOURCE%%\installers\windows\language_menu.nsi"
@@ -352,7 +352,7 @@ WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninst
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
-WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00" # 195 MB
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00"		# 195 MB
 # <FS:Ansariel> Add additional data for uninstall list in Windows
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
 # BUG-2707 Disable SEHOP for installed viewer.
@@ -432,11 +432,6 @@ Call un.ProgramFiles
 Call un.UserSettingsFiles
 
 SectionEnd
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Uninstall settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-UninstallText $(UninstallTextMsg)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make sure the user can install
