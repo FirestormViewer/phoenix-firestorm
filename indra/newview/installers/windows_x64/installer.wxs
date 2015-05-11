@@ -27,21 +27,39 @@
 
     <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]Firestorm$(var.CHANNEL_SUFFIX)\" /> 
 
-    <Chain> 
+    <Chain>
+	  <!-- Redist 2010, needed for plugins -->
 	  <ExePackage
 		  Id="vcredist_x86"
-		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x86.exe"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist2010_x86.exe"
 		  InstallCommand="/q"
 		  PerMachine="yes"
 		  Vital="no"
 		  />
 	  <ExePackage
 		  Id="vcredist_x64"
-		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x64.exe"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist2010_x64.exe"
 		  InstallCommand="/q"
 		  PerMachine="yes"
 		  Vital="no"
 		  />
+
+	  <!-- Redist 2013, needed for viewer -->
+	  <ExePackage
+		  Id="vcredist2013_x86"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist2013_x86.exe"
+		  InstallCommand="/q"
+		  PerMachine="yes"
+		  Vital="no"
+		  />
+	  <ExePackage
+		  Id="vcredist2013_x64"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist2013_x64.exe"
+		  InstallCommand="/q"
+		  PerMachine="yes"
+		  Vital="no"
+		  />
+
       <MsiPackage 
           Id="Setup" 
           Compressed="yes" 
