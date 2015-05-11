@@ -52,6 +52,9 @@ public:
 	LLAudioStreamManagerFMODEX(FMOD::System *system, const std::string& url);
 	FMOD::Channel* startStream();
 	bool stopStream(); // Returns true if the stream was successfully stopped.
+	// <FS:GF> Safe stop and release for FMOD Ex music streams
+	void forceReleaseStream(); // This should rarely if ever be called.
+	// <FS:GF>
 	bool ready();
 
 	const std::string& getURL() 	{ return mInternetStreamURL; }
@@ -126,22 +129,31 @@ void LLStreamingAudio_FMODEX::start(const std::string& url)
 
 void LLStreamingAudio_FMODEX::update()
 {
-	// Kill dead internet streams, if possible
-	std::list<LLAudioStreamManagerFMODEX *>::iterator iter;
-	for (iter = mDeadStreams.begin(); iter != mDeadStreams.end();)
+	// <FS:GF> Safe stop and release for FMOD Ex music streams
+	//// Kill dead internet streams, if possible
+	//std::list<LLAudioStreamManagerFMODEX *>::iterator iter;
+	//for (iter = mDeadStreams.begin(); iter != mDeadStreams.end();)
+	//{
+	//	LLAudioStreamManagerFMODEX *streamp = *iter;
+	//	if (streamp->stopStream())
+	//	{
+	//		LL_INFOS() << "Closed dead stream" << LL_ENDL;
+	//		delete streamp;
+	//		mDeadStreams.erase(iter++);
+	//	}
+	//	else
+	//	{
+	//		iter++;
+	//	}
+	//}
+	
+	// Doesn't matter if this returns true or false here. Calling it is what kills delayed release streams
+	// if safe to do so. Returning true or false only matters when called from llappviewer during shutdown
+	if (delayedRelease())
 	{
-		LLAudioStreamManagerFMODEX *streamp = *iter;
-		if (streamp->stopStream())
-		{
-			LL_INFOS() << "Closed dead stream" << LL_ENDL;
-			delete streamp;
-			mDeadStreams.erase(iter++);
-		}
-		else
-		{
-			iter++;
-		}
+		// Do nothing.
 	}
+	// <FS:GF>
 
 	// Don't do anything if there are no streams playing
 	if (!mCurrentInternetStreamp)
@@ -305,8 +317,11 @@ void LLStreamingAudio_FMODEX::stop()
 {
 	if (mFMODInternetStreamChannelp)
 	{
-		mFMODInternetStreamChannelp->setPaused(true);
-		mFMODInternetStreamChannelp->setPriority(0);
+		// <FS:GF> Safe stop and release for FMOD Ex music streams
+		//mFMODInternetStreamChannelp->setPaused(true);
+		//mFMODInternetStreamChannelp->setPriority(0);
+		mFMODInternetStreamChannelp->stop();
+		// <FS:GF>
 		mFMODInternetStreamChannelp = NULL;
 	}
 
@@ -315,17 +330,59 @@ void LLStreamingAudio_FMODEX::stop()
 		LL_INFOS() << "Stopping internet stream: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
 		if (mCurrentInternetStreamp->stopStream())
 		{
+			// <FS:GF> Safe stop and release for FMOD Ex music streams
+			LL_INFOS() << "Successfully released internet stream: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
+			// <FS:GF>
 			delete mCurrentInternetStreamp;
 		}
 		else
 		{
-			LL_WARNS() << "Pushing stream to dead list: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
-			mDeadStreams.push_back(mCurrentInternetStreamp);
+			// <FS:GF> Safe stop and release for FMOD Ex music streams
+			//LL_WARNS() << "Pushing stream to dead list: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
+			//mDeadStreams.push_back(mCurrentInternetStreamp);
+			LL_INFOS() << "Delaying release of internet stream: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
+			mDelayedReleaseStreams.push_back(mCurrentInternetStreamp);
+			// <FS:GF>
 		}
 		mCurrentInternetStreamp = NULL;
 		//mURL.clear();
 	}
 }
+
+// <FS:GF> Safe stop and release for FMOD Ex music streams
+bool LLStreamingAudio_FMODEX::delayedRelease(bool force)
+{
+	bool streams = false;
+	std::list<LLAudioStreamManagerFMODEX *>::iterator iter;
+	for (iter = mDelayedReleaseStreams.begin(); iter != mDelayedReleaseStreams.end();)
+	{
+		streams = true;
+		LLAudioStreamManagerFMODEX *streamp = *iter;
+		
+		if (!force)
+		{
+			if (streamp->stopStream())
+			{
+				LL_INFOS() << "Successfully released internet stream: " << streamp->getURL() << LL_ENDL;
+				delete streamp;
+				mDelayedReleaseStreams.erase(iter++);
+			}
+			else
+			{
+				iter++;
+			}
+		}
+		else
+		{
+			streamp->forceReleaseStream();
+			LL_INFOS() << "Force released internet stream: " << streamp->getURL() << LL_ENDL;
+			delete streamp;
+			mDelayedReleaseStreams.erase(iter++);
+		}
+	}
+	return streams;
+}
+// <FS:GF>
 
 void LLStreamingAudio_FMODEX::pause(int pauseopt)
 {
@@ -457,16 +514,25 @@ bool LLAudioStreamManagerFMODEX::stopStream()
 {
 	if (mInternetStream)
 	{
-
-
-		bool close = true;
+		// <FS:GF> Safe stop and release for FMOD Ex music streams
+		mSystem->update();
+		
+		//bool close = true;
+		bool close = false;
 		switch (getOpenState())
 		{
-		case FMOD_OPENSTATE_CONNECTING:
-			close = false;
+		//case FMOD_OPENSTATE_CONNECTING:
+		case FMOD_OPENSTATE_READY:
+			//close = false;
+			close = true;
+			break;
+		case FMOD_OPENSTATE_ERROR:
+			close = true;
 			break;
 		default:
-			close = true;
+			//close = true;
+			close = false;
+		// <FS:GF>
 		}
 
 		if (close)
@@ -486,6 +552,18 @@ bool LLAudioStreamManagerFMODEX::stopStream()
 		return true;
 	}
 }
+
+// <FS:GF> Safe stop and release for FMOD Ex music streams
+void LLAudioStreamManagerFMODEX::forceReleaseStream()
+{
+	if (mInternetStream)
+	{
+		mInternetStream->release();
+		mStreamChannel = NULL;
+		mInternetStream = NULL;
+	}
+}
+// <FS:GF>
 
 FMOD_OPENSTATE LLAudioStreamManagerFMODEX::getOpenState(unsigned int* percentbuffered, bool* starving, bool* diskbusy)
 {

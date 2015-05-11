@@ -358,7 +358,9 @@ void LLAudioEngine_FMODEX::allocateListener(void)
 
 void LLAudioEngine_FMODEX::shutdown()
 {
-	stopInternetStream();
+	// <FS:GF> Safe stop and release for FMOD Ex music streams
+	//stopInternetStream();
+	// <FS:GF>
 
 	LL_INFOS() << "About to LLAudioEngine::shutdown()" << LL_ENDL;
 	LLAudioEngine::shutdown();
