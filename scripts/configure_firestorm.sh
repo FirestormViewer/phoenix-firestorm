@@ -320,11 +320,11 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     elif [ $PLATFORM == "win32" ] ; then
         if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
-           rm -rf build-vc100_x64/*
-           mkdir -p build-vc100_x64/logs
+           rm -rf build-vc120_x64/*
+           mkdir -p build-vc120_x64/logs
          else
-           rm -rf build-vc100/* 
-           mkdir -p build-vc100/logs
+           rm -rf build-vc120/* 
+           mkdir -p build-vc120/logs
         fi
  
 
