@@ -451,6 +451,10 @@ L$ が不足しているのでこのグループに参加することができ�
 		選択したアウトフィットを削除しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
+	<notification name="DeleteOutfitsWithName">
+		アウトフィット &quot;[NAME]&quot; を削除しますか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
 	<notification name="PromptGoToEventsPage">
 		[CURRENT_GRID] イベント Web ページに移動しますか？
 		<url name="url">
@@ -904,6 +908,19 @@ L$ が不足しているのでこのグループに参加することができ�
 
 区画を 1 つ選択してください。
 	</notification>
+	
+	<notification name="ParcelCanPlayMedia">
+		この土地ではメディアをストリーミングしています。メディア再生にはより多くのネットワーク帯域幅が必要になる可能性があります。
+
+		可能な場合、ストリーミング・メディアを再生しますか？
+		（このオプションは「環境設定」＞「サウンド」タブで変更できます。）
+		<form name="form">
+			<button name="Play Media Now" text="今回は再生"/>
+			<button name="Always Play Media" text="常に再生"/>
+			<button name="Do Not Pley Media" text="再生しない"/>
+		</form>
+	</notification>
+
 	<notification name="CannotDeedLandWaitingForServer">
 		土地を譲渡できません：
 サーバーからの所有権情報を待っています。
@@ -1666,6 +1683,12 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 フレンドでない人からのインスタントメッセージを受信した場合、あなたの設定内容に従って自動応答が返信されます。
     <usetemplate ignoretext="フレンドでない人に対する自動応答モードにログイン状態を変更しました。" name="okignore" yestext="OK"/>
   </notification>
+
+	<notification name="RejectTeleportOffersModeWarning">
+		現在「テレポートのオファーや依頼を拒否する」モードになっているためテレポートの要求ができません。
+		変更したい場合は「コミュニケーション」メニューの「ログイン状態」から行って下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		加入できるグループの最大限に達しました。 このグループに加入するために他のグループを脱退するか、この申し入れを断ってください。
 [NAME] があなたをグループのメンバーとして勧誘しています。
@@ -2360,6 +2383,41 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="MissingString">
 		文字列 [STRING_NAME] が strings.xml に含まれていません。
 	</notification>
+	
+	<notification name="EnableMediaFilter"> 
+メディアや音楽を再生することは、あなたに関する情報をセカンドライフの外に晒すことになります。メディアフィルターを有効にすることで、どのサイトにメディア送信要求をするかを選ぶことができ、ご自身のプライバシーを守ることにつながります。
+
+メディアフィルターを有効にしますか？
+（このオプションは「環境設定」＞「サウンド＆メディア」タブで後から変更することができます。）
+		<form name="form">
+			<button name="Enable" text="有効"/>
+			<button name="Disable" text="無効"/>
+		</form>
+	</notification>
+	
+	<notification name="MediaAlert"> 
+		この土地には次のメディアが設定されています。
+		
+		ドメイン: [MEDIADOMAIN]
+		URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="許可"/>
+			<button name="Deny" text="拒否"/>
+		</form>
+	</notification>
+	
+	<notification name="MediaAlert2"> 
+		あなたが選択したものを記憶させて、この配信元からのメディアを[LCONDITION]許可するようにしたいですか？
+		
+		ドメイン: [MEDIADOMAIN]
+		URL: [MEDIAURL]
+		<form name="form">
+			<button name="Do Now" text="今回のみ[ACTION]"/>
+			<button name="RememberDomain" text="このドメインは[CONDITION]許可"/>
+			<button name="RememberURL" text="このURLは[CONDITION]許可"/>
+		</form>
+	</notification>
+	
 	<notification name="MediaAlertSingle"> 
 この土地には次のメディアが設定されています。
 
@@ -2372,6 +2430,30 @@ URL: [MEDIAURL]
 			<button index="3" name="WhitelistDomain" text="ホワイトリスト"/>
 		</form>
 	</notification>
+	
+	<notification name="AudioAlert"> 
+この土地には次の音楽が設定されています。
+
+ドメイン: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="許可"/>
+			<button name="Deny" text="拒否"/>
+		</form>
+	</notification>
+	
+	<notification name="AudioAlert2"> 
+あなたが選択したものを記憶させて、この配信元からの音楽を[LCONDITION]許可するようにしたいですか？
+
+ドメイン: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Do Now" text="今回のみ[ACTION]"/>
+			<button name="RememberDomain" text="このドメインは[CONDITION]許可"/>
+			<button name="RememberURL" text="このURLは[CONDITION]許可"/>
+		</form>
+	</notification>
+  
 	<notification name="AudioAlertSingle"> 
 あなたが選択したものを記憶させて、この音源からの音楽を[LCONDITION]で許可するようにしたいですか？
 
@@ -2382,6 +2464,29 @@ URL: [AUDIOURL]
 			<button index="1" name="Deny" text="拒否"/>
 			<button index="2" name="BlacklistDomain" text="ブラックリスト"/>
 			<button index="3" name="WhitelistDomain" text="ホワイトリスト"/>
+		</form>
+	</notification>
+	
+	<notification name="MOAPAlert"> 
+次の共有メディアが設定されているオブジェクトがあります。
+
+ドメイン: [MOAPDOMAIN]
+URL: [MOAPURL]
+		<form name="form">
+			<button name="Allow" text="許可"/>
+			<button name="Deny" text="拒否"/>
+		</form>
+	</notification>
+	
+	<notification name="MOAPAlert2"> 
+あなたが選択したものを記憶させて、この配信元からの共有メディアを[LCONDITION]許可するようにしたいですか？
+
+Domain: [MOAPDOMAIN]
+URL: [MOAPURL]
+		<form name="form">
+			<button name="Do Now" text="今回のみ[ACTION]"/>
+			<button name="RememberDomain" text="このドメインは[CONDITION]許可"/>
+			<button name="RememberURL" text="このURLは[CONDITION]許可"/>
 		</form>
 	</notification>
   
@@ -3525,6 +3630,10 @@ M キーを押して変更します。
 	<notification name="PathfindingDeleteMultipleItems">
 		[NUM_ITEMS] 個のアイテムを削除中です。続けますか？
 		<usetemplate ignoretext="複数のアイテムを削除しますか？" name="okcancelignore" notext="いいえ" yestext="はい"/>
+	</notification>
+
+	<notification name="HomePositionSet">
+		ホームの場所が設定されました。
 	</notification>
 
 	<notification name="PreferenceChatClearLog">

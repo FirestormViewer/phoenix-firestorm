@@ -56,7 +56,7 @@
             label="表示しない &gt;"
             name="DerenderMenu">
 			<pie_slice
-				label="ブラックリスト"
+				label="非表示リストに追加"
 				name="DerenderPermanent" />
 			<pie_slice
 				label="臨時"

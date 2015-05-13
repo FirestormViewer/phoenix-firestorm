@@ -112,9 +112,15 @@
 		
 		<!-- BLOCKED tab -->
 
-        <panel label="ブロック" name="blocked_panel">
-			<panel name="panel_block_list_sidetray" label="ブロックｈした住人とオブジェクト" />
-        </panel>
+		<panel label="ブロック" name="blocked_panel">
+			<panel name="panel_block_list_sidetray" label="ブロックした住人とオブジェクト" />
+		</panel>
+		
+		<!-- CONTACT SETS tab -->
+		
+		<panel label="連絡先セット" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="連絡先セット" />
+		</panel>
 		
 	</tab_container>
 	

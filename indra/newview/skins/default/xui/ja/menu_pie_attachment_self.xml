@@ -29,7 +29,7 @@
 				label="臨時"
 				name="Derender" />
 			<pie_slice
-				label="ブラックリスト"
+				label="非表示リストに追加"
 				name="DerenderPermanent" />
 		</pie_menu>
 		<pie_menu

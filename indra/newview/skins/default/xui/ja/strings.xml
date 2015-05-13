@@ -1856,6 +1856,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="SaveComplete">
 		保存完了。
 	</string>
+	<string name="UploadFailed">
+		ファイルアップロード失敗：[REASON]
+	</string>
 	<string name="ObjectOutOfRange">
 		スクリプト（オブジェクトが範囲外にあります）
 	</string>
@@ -5357,6 +5360,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	
 	<!-- Settings sanity checks -->
 	<!-- Media filter options -->
+	<string name="MediaFilterActionAllow">許可</string>
+	<string name="MediaFilterActionDeny">拒否</string>
+	<string name="MediaFilterConditionAlways">常に</string>
+	<string name="MediaFilterConditionAlwaysLower">常に</string>
+	<string name="MediaFilterConditionNever">常に不</string>
+	<string name="MediaFilterConditionNeverLower">常に不</string>
+  
 	<!-- Replacement for hardcoded UI strings -->
 	<!-- CmdLine Response Strings-->
 	
@@ -5436,8 +5446,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="fsbridge_failure_not_found">The bridge object could not be found. Cannot proceed with its creation, exiting.</string>
   <string name="fsbridge_warning_unexpected_items">The bridge inventory contains unexpected items.</string>
   <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
-  <string name="fsbridge_detached">Bridge detached.</string>
-  <string name="fsbridge_created">Bridge created.</string>
+  <string name="fsbridge_detached">ブリッジが外されました。</string>
+  <string name="fsbridge_created">ブリッジが作成されました。</string>
 
   <!-- <FS:Zi> Quick preferences default options -->
   <string name="QP Draw Distance">描画距離</string>
@@ -5470,18 +5480,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
   
   <!-- <FS:Ansariel> Radar notifications -->
-  <string name="camera_no_focus">The camera cannot focus user [AVATARNAME] because they are outside your draw distance.</string>
-  <string name="entering_draw_distance">entered draw distance ([DISTANCE] m).</string>
-  <string name="leaving_draw_distance">left draw distance.</string>
-  <string name="entering_chat_range">entered chat range ([DISTANCE] m).</string>
-  <string name="leaving_chat_range">left chat range.</string>
-  <string name="entering_region">entered the region.</string>
-  <string name="entering_region_distance">entered the region ([DISTANCE] m).</string>
-  <string name="leaving_region">left the region.</string>
+  <string name="camera_no_focus">ユーザー [AVATARNAME] は設定した描画距離の外にいるためにカメラが焦点を当てることができません。</string>
+  <string name="entering_draw_distance">が描画距離内に入りました。([DISTANCE] m)</string>
+  <string name="leaving_draw_distance">は描画距離から外れました。</string>
+  <string name="entering_chat_range">がチャットレンジ内に入りました。([DISTANCE] m)</string>
+  <string name="leaving_chat_range">がチャットレンジから外れました。</string>
+  <string name="entering_region">がこの地域に入りました。</string>
+  <string name="entering_region_distance">がこの地域に入りました。([DISTANCE] m)</string>
+  <string name="leaving_region">がこの地域を離れました。</string>
+  <string name="avatar_age_alert">は年齢警告対象です。年齢：[AGE] 日</string>
 
   <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
-  <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
-  <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
+  <string name="TotalScriptCountChangeIncrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に急増しました。([DIFFERENCE])</string>
+  <string name="TotalScriptCountChangeDecrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に激減しました。([DIFFERENCE])</string>
   <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
   
     <string name="groupcountstring">あなたは [COUNT] グループに所属しています。 (残 [REMAINING]).</string>

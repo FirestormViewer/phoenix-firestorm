@@ -47,7 +47,7 @@
 		<combo_box name="ShadowDetail">
 			<combo_box.item label="なし" name="0"/>
 			<combo_box.item label="太陽/月" name="1"/>
-			<combo_box.item label="太陽/月・プロジェクタ" name="2"/>
+			<combo_box.item label="太陽/月とプロジェクタ" name="2"/>
 		</combo_box>
 		<text name="reflection_label">
 			水の反射：
@@ -114,7 +114,7 @@
 	
 	<panel label="ハードウェア設定" name="Hardware Settings" >
 	
-        <check_box label="異方的フィルタリング（有効にすると速度が低下します）" name="ani" />
+        <check_box label="異方性フィルタリング（有効にすると速度が低下します）" name="ani" />
         <check_box label="OpenGL Vertex Buffer Objectsを有効化" name="vbo" tool_tip="最新のハードウェアでこの設定を有効にすると、パフォーマンスが向上します。しかし、旧型のハードウェアではVBOの実装が貧弱な場合が多く、この設定を有効にすることでクラッシュにつながるおそれがあります。" />
         <check_box label="VBOのストリームを有効にする" name="vbo_stream" tool_tip="VBOを有効にしている時に、このオプションをオフにするとパフォーマンスが向上する可能性があります。多くのAMDのGPUにおいて、このオプションをオフにしたことで顕著なパフォーマンスの向上が見られました。" />
         <check_box label="テクスチャの不可逆圧縮（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。" />

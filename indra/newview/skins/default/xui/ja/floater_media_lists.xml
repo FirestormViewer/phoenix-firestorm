@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Media Lists">
+	<floater.string name="EnterUrlAllow">
+		許可するドメインまたはURLを入力して下さい：
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		絶対に許可しないドメインまたはURLを入力して下さい：
+	</floater.string>
+
+	<layout_stack name="lists_layout_stack">
+		<layout_panel name="whitelist_layout_panel">
+			<text name="whitelist_text">
+				許可したドメイン：
+			</text>
+			<scroll_list name="whitelist">
+				<column label="Whitelist" name="list" width="195" />
+			</scroll_list>
+			<layout_stack name="whitelist_buttons_layout_stack">
+				<layout_panel name="whitelist_buttons_panel_add">
+					<button label="追加..." name="add_whitelist" />
+				</layout_panel>
+				<layout_panel name="whitelist_buttons_panel_remove">
+					<button label="削除" name="remove_whitelist" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+
+		<layout_panel name="blacklist_layout_panel">
+			<text name="blacklist_text">
+				拒否したドメイン：
+			</text>
+			<scroll_list name="blacklist">
+				<column label="Blacklist" name="list" width="195" />
+			</scroll_list>
+			<layout_stack name="blacklist_buttons_layout_stack">
+				<layout_panel name="blacklist_buttons_panel_add">
+					<button label="追加..." name="add_blacklist" />
+				</layout_panel>
+				<layout_panel name="blacklist_buttons_panel_remove">
+					<button label="削除" name="remove_blacklist" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		
+	</layout_stack>
+</floater>

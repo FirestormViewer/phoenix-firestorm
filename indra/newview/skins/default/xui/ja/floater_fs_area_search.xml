@@ -12,6 +12,9 @@
 				<fs_scroll_list.columns name="distance" label="距離" />
 				<fs_scroll_list.columns name="name" label="名前" />
 				<fs_scroll_list.columns name="description" label="説明" />
+				<fs_scroll_list.columns name="price" label="価格" tool_tip="オブジェクトが販売対象の場合、購入に際して支払う金額です。"/>
+				<fs_scroll_list.columns name="land_impact" label="ランドインパクト" tool_tip="土地が受ける最大のランドインパクトです。"/>
+				<fs_scroll_list.columns name="prim_count" label="プリム数" tool_tip="各オブジェクトを構成するプリムの数です。"/>
 				<fs_scroll_list.columns name="owner" label="オーナー" />
 				<fs_scroll_list.columns name="group" label="グループ" tool_tip="オブジェクトに設定されたグループ名です。" />
 				<fs_scroll_list.columns name="creator" label="クリエイター" />
@@ -106,12 +109,15 @@
 			<check_box name="show_distance" label="距離" />
 			<check_box name="show_name" label="名前" />
 			<check_box name="show_description" label="説明" />
+			<check_box name="show_price" label="価格" />
+			<check_box name="show_land_impact" label="ランドインパクト" />
+			<check_box name="show_prim_count" label="プリム数" />
 			<check_box name="show_owner" label="オーナー" />
 			<check_box name="show_group" label="グループ" />
 			<check_box name="show_creator" label="クリエイター" />
 			<check_box name="show_last_owner" label="最終オーナー" />
 		</panel>
-		<panel name="area_search_advanced_panel">
+		<panel  label="詳細" name="area_search_advanced_panel">
 			<check_box name="double_click_touch" label="ダブルクリックでオブジェクトに触る" />
 			<check_box name="double_click_buy" label="ダブルクリックでオブジェクトを買う" />
 		</panel>
