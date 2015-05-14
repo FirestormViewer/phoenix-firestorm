@@ -294,7 +294,11 @@
 	 <color
 	 name="AnsaStorm_HtmlLink"
 	 value="0 0.6 0.82 1" />
-	 
+
+	 <color
+	 name="AnsaStorm_HtmlLink_QueryPart"
+	 value="0.463 0.729 0.826 1" />
+
 	 <!-- END AnsaStorm Definitions -->
 
   <!-- This color name makes potentially unused colors show up bright purple.
@@ -1347,5 +1351,5 @@
       reference="Red" />
   <color
       name="UriQueryPartColor"
-      reference="Gray" />
+      reference="AnsaStorm_HtmlLink_QueryPart" />
 </colors>

@@ -897,4 +897,7 @@
   <color
       name="Slidermark"
       reference="EmphasisColor" />
+  <color
+      name="UriQueryPartColor"
+      value="0.688 0.465 0.242 1" />
 </colors>

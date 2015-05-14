@@ -1302,5 +1302,5 @@
       reference="Red" />
   <color
       name="UriQueryPartColor"
-      reference="Gray" />
+      value="0.780 0.850 0.674 1.0" />
 </colors>
