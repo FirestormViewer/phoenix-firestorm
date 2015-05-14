@@ -392,15 +392,47 @@
      </text>
      <color_swatch
        can_apply_immediately="true"
-       color="DirectChatColor"
+       color="UriQueryPartColor"
        follows="left|top"
        height="24"
        label_height="0"
        label_width="60"
        layout="topleft"
        left="360"
-       name="direct"
+       name="UriQueryPartColor"
        top_pad="-15"
+       width="44">
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="UriQueryPartColor" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="UriQueryPartColor" />
+     </color_swatch>
+     <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="10"
+       layout="topleft"
+       left_pad="5"
+       mouse_opaque="false"
+       name="uriquerypart_label"
+       top_delta="5"
+       width="110">
+       URL Query Part
+     </text>
+     <color_swatch
+       can_apply_immediately="true"
+       color="DirectChatColor"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       label_width="60"
+       layout="topleft"
+       left="40"
+       name="direct"
+       top_pad="19"
        width="44">
        <color_swatch.init_callback
        function="Pref.getUIColor"

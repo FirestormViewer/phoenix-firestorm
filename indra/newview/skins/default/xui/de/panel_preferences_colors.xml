@@ -38,6 +38,9 @@
 			<text name="htmllink_label">
 				URLs
 			</text>
+			<text name="uriquerypart_label">
+				URL-Abfrageteil
+			</text>
 			<text name="direct_label">
 				Direkt
 			</text>
