@@ -74,6 +74,9 @@ private:
 
 	class Impl;
 	Impl& impl;
+
+	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+	bool mIsOpen;
 };
 
 class LLSnapshotFloaterView : public LLFloaterView

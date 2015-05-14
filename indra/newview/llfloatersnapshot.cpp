@@ -1115,7 +1115,8 @@ LLFloaterSnapshot::LLFloaterSnapshot(const LLSD& key)
 	  mRefreshLabel(NULL),
 	  mSucceessLblPanel(NULL),
 	  mFailureLblPanel(NULL),
-	  impl (*(new Impl))
+	  impl (*(new Impl)),
+	  mIsOpen(false) // <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
 {
 }
 
@@ -1280,6 +1281,14 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	impl.updateControls(this);
 	impl.updateLayout(this);
 
+	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+	if (mIsOpen)
+	{
+		return;
+	}
+	mIsOpen = true;
+	// </FS:Ansariel>
+
 	// Initialize default tab.
 	// <FS:Ansariel> Don't return to target selection after taking a snapshot
 	//getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
@@ -1337,6 +1346,9 @@ void LLFloaterSnapshot::onClose(bool app_quitting)
 	{
 		LLToolMgr::getInstance()->setCurrentToolset(impl.mLastToolset);
 	}
+
+	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+	mIsOpen = false;
 }
 
 // virtual
