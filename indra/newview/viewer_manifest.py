@@ -538,6 +538,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("qtwebkit4.dll")
             self.path("qtxmlpatterns4.dll")
 
+            # <FS:ND> we need 32 bit openssl from the pre build plugins
+            self.path("ssleay32.dll")
+            self.path("libeay32.dll")
+            # </FS:ND>
+
             # For WebKit/Qt plugin runtimes (image format plugins)
             if self.prefix(src="imageformats", dst="imageformats"):
                 self.path("qgif4.dll")
@@ -563,6 +568,10 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("winmm.dll")
             self.end_prefix()
 
+
+        """
+        <FS:ND> This would clobber the 32 bit openssl dlls with 64 bit ones from a 64 bit viewer, skip this step.
+
         if self.args['configuration'].lower() == 'debug':
             if self.prefix(src=debpkgdir, dst="llplugin"):
                 self.path("libeay32.dll")
@@ -574,7 +583,8 @@ class Windows_i686_Manifest(ViewerManifest):
                 self.path("libeay32.dll")
                 self.path("ssleay32.dll")
                 self.end_prefix()
-
+        """
+            
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
         self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'],
