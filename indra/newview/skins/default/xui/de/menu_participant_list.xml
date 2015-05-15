@@ -21,4 +21,5 @@
 		<menu_item_call label="Alle stummschalten" name="ModerateVoiceMute"/>
 		<menu_item_call label="Alle freischalten" name="ModerateVoiceUnmute"/>
 	</context_menu>
+	<menu_item_call label="Mitglied verbannen" name="BanMember"/>
 </context_menu>

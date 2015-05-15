@@ -30,6 +30,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llevent.h"
 #include "llavatarlist.h" // for LLAvatarItemRecentSpeakerComparator
+#include "llgroupmgr.h"
 #include "lllistcontextmenu.h"
 
 class LLSpeakerMgr;
@@ -41,6 +42,16 @@ class FSParticipantList
 {
 	LOG_CLASS(FSParticipantList);
 public:
+	enum EConversationType
+	{
+		CONV_UNKNOWN         = 0,
+		CONV_PARTICIPANT     = 1,
+		CONV_SESSION_NEARBY  = 2,
+		CONV_SESSION_1_ON_1  = 3,
+		CONV_SESSION_AD_HOC  = 4,
+		CONV_SESSION_GROUP   = 5,
+		CONV_SESSION_UNKNOWN = 6
+	};
 
 	typedef boost::function<bool (const LLUUID& speaker_id)> validate_speaker_callback_t;
 
@@ -84,6 +95,8 @@ public:
 	 * @see onAddItemEvent()
 	 */
 	void setValidateSpeakerCallback(validate_speaker_callback_t cb);
+
+	EConversationType const getType() const { return mConvType; }
 
 protected:
 	/**
@@ -175,6 +188,10 @@ protected:
 		 * Return true if Agent is group moderator(and moderator of group call).
 		 */
 		bool isGroupModerator();
+
+		bool hasAbilityToBan();
+		bool canBanSelectedMember(const LLUUID& participant_uuid);
+		void banSelectedMember(const LLUUID& participant_uuid);
 
 		// Voice moderation support
 		/**
@@ -285,6 +302,8 @@ private:
 	LLPointer<LLAvatarItemRecentSpeakerComparator> mSortByRecentSpeakers;
 	validate_speaker_callback_t mValidateSpeakerCallback;
 	LLAvalineUpdater* mAvalineUpdater;
+
+	EConversationType mConvType;
 };
 
 #endif // FS_PARTICIPANTLIST_H

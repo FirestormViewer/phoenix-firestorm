@@ -35,6 +35,7 @@
 #include "llgroupactions.h"
 // [/SL:KB]
 #include "llimview.h"
+#include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llspeakers.h"
 #include "llviewercontrol.h"
@@ -208,7 +209,8 @@ FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source,
 	mAvatarList(avatar_list),
 	mParticipantListMenu(NULL),
 	mExcludeAgent(exclude_agent),
-	mValidateSpeakerCallback(NULL)
+	mValidateSpeakerCallback(NULL),
+	mConvType(CONV_UNKNOWN)
 {
 
 	mAvalineUpdater = new LLAvalineUpdater(boost::bind(&FSParticipantList::onAvalineCallerFound, this, _1),
@@ -266,6 +268,28 @@ FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source,
 			mModeratorToRemoveList.insert(speakerp->mID);
 		}
 	}
+
+	// Identify and store what kind of session we are
+	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(data_source->getSessionID());
+	if (im_session)
+	{
+		// By default, sessions that can't be identified as group or ad-hoc will be considered P2P (i.e. 1 on 1)
+		mConvType = CONV_SESSION_1_ON_1;
+		if (im_session->isAdHocSessionType())
+		{
+			mConvType = CONV_SESSION_AD_HOC;
+		}
+		else if (im_session->isGroupSessionType())
+		{
+			mConvType = CONV_SESSION_GROUP;
+		}
+	}
+	else 
+	{
+		// That's the only session that doesn't get listed in the LLIMModel as a session...
+		mConvType = CONV_SESSION_NEARBY;
+	}
+
 	// we need to exclude agent id for non group chat
 	sort();
 }
@@ -696,6 +720,7 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
 	registrar.add("Avatar.Call", boost::bind(&LLAvatarActions::startCall, mUUIDs.front()));
 	registrar.add("Avatar.AddToContactSet", boost::bind(&FSParticipantList::FSParticipantListMenu::handleAddToContactSet, this));
 	registrar.add("Avatar.ZoomIn", boost::bind(&LLAvatarActions::zoomIn, mUUIDs.front()));
+	registrar.add("Avatar.BanMember", boost::bind(&FSParticipantList::FSParticipantListMenu::banSelectedMember, this, mUUIDs.front()));
 	
 	registrar.add("ParticipantList.ModerateVoice", boost::bind(&FSParticipantList::FSParticipantListMenu::moderateVoice, this, _2));
 
@@ -717,6 +742,9 @@ LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
 	main_menu->setItemVisible("Moderator Options", isGroupModerator());
 	main_menu->setItemVisible("View Icons Separator", mParent.mAvatarListToggleIconsConnection.connected());
 	main_menu->setItemVisible("View Icons", mParent.mAvatarListToggleIconsConnection.connected());
+	bool show_ban_member = mParent.getType() == FSParticipantList::CONV_SESSION_GROUP && hasAbilityToBan();
+	main_menu->setItemVisible("Group Ban Separator", show_ban_member);
+	main_menu->setItemVisible("BanMember", show_ban_member);
 	main_menu->arrangeAndClear();
 
 	return main_menu;
@@ -836,6 +864,99 @@ bool FSParticipantList::FSParticipantListMenu::isGroupModerator()
 		return speaker && speaker->mIsModerator;
 	}
 	return false;
+}
+
+bool FSParticipantList::FSParticipantListMenu::hasAbilityToBan()
+{
+	LLSpeakerMgr * speaker_manager = mParent.mSpeakerMgr;
+	if (NULL == speaker_manager)
+	{
+		LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
+		return false;
+	}
+	LLUUID group_uuid = speaker_manager->getSessionID();
+
+	return gAgent.isInGroup(group_uuid) && gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS);
+}
+
+bool FSParticipantList::FSParticipantListMenu::canBanSelectedMember(const LLUUID& participant_uuid)
+{
+	LLSpeakerMgr * speaker_manager = mParent.mSpeakerMgr;
+	if (NULL == speaker_manager)
+	{
+		LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
+		return false;
+	}
+	LLUUID group_uuid = speaker_manager->getSessionID();
+	LLGroupMgrGroupData* gdatap	= LLGroupMgr::getInstance()->getGroupData(group_uuid);
+	if(!gdatap)
+	{
+		LL_WARNS("Groups") << "Unable to get group data for group " << group_uuid << LL_ENDL;
+		return false;
+	}
+
+	if (participant_uuid == gAgentID)
+	{
+		return false;
+	}
+
+	if (!gdatap->mMembers.size())
+	{
+		return false;
+	}
+
+	LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find((participant_uuid));
+	if (mi == gdatap->mMembers.end())
+	{
+		return false;
+	}
+
+	LLGroupMemberData* member_data = (*mi).second;
+	// Is the member an owner?
+	if ( member_data && member_data->isInRole(gdatap->mOwnerRole) )
+	{
+		return false;
+	}
+
+	if(	gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER) &&
+		gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS)	)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void FSParticipantList::FSParticipantListMenu::banSelectedMember(const LLUUID& participant_uuid)
+{
+	LLSpeakerMgr * speaker_manager = mParent.mSpeakerMgr;
+	if (NULL == speaker_manager)
+	{
+		LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
+		return;
+	}
+
+	LLUUID group_uuid = speaker_manager->getSessionID();
+	LLGroupMgrGroupData* gdatap	= LLGroupMgr::getInstance()->getGroupData(group_uuid);
+	if(!gdatap)
+	{
+		LL_WARNS("Groups") << "Unable to get group data for group " << group_uuid << LL_ENDL;
+		return;
+	}
+	std::vector<LLUUID> ids;
+	ids.push_back(participant_uuid);
+
+	LLGroupBanData ban_data;
+	gdatap->createBanEntry(participant_uuid, ban_data);
+	LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, group_uuid, LLGroupMgr::BAN_CREATE, ids);
+	LLGroupMgr::getInstance()->sendGroupMemberEjects(group_uuid, ids);
+	LLGroupMgr::getInstance()->sendGroupMembersRequest(group_uuid);
+	LLSD args;
+	std::string name;
+	gCacheName->getFullName(participant_uuid, name);
+	args["AVATAR_NAME"] = name;
+	args["GROUP_NAME"] = gdatap->mName;
+	LLNotifications::instance().add(LLNotification::Params("EjectAvatarFromGroup").substitutions(args));
 }
 
 bool FSParticipantList::FSParticipantListMenu::isMuted(const LLUUID& avatar_id)
@@ -968,7 +1089,11 @@ bool FSParticipantList::FSParticipantListMenu::enableContextMenuItem(const LLSD&
 	{
 		return LLAvatarActions::canZoomIn(mUUIDs.front());
 	}
-
+	else if (item == "can_ban_member")
+	{
+		return canBanSelectedMember(mUUIDs.front());
+	}
+	
 	return true;
 }
 
