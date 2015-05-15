@@ -135,7 +135,23 @@ LLDir_Mac::LLDir_Mac()
 		{
             mOSCacheDir = *cachedir;
             //TODO:  This changes from ~/Library/Cache/Secondlife to ~/Library/Cache/com.app.secondlife/Secondlife.  Last dir level could go away.
-            CreateDirectory(mOSCacheDir, secondLifeString, NULL);
+            //<FS:TS> Adjust the cache directory to match what's expected in lldir.
+            //CreateDirectory(mOSCacheDir, secondLifeString, NULL);
+            std::string FSCacheDirName = secondLifeString;
+            // This was lifted from Cinder's fix for FIRE-8226.
+#ifdef OPENSIM
+  #ifdef ND_BUILD64BIT_ARCH
+                FSCacheDirName.append("OS_x64");
+  #else
+                FSCacheDirName.append("OS");
+  #endif
+#else
+  #ifdef ND_BUILD64BIT_ARCH
+                FSCacheDirName.append("_x64");
+  #endif
+#endif // OPENSIM
+            CreateDirectory(mOSCacheDir, FSCacheDirName, NULL);
+            //</FS:TS>
 		}
 		
 		// mOSUserAppDir
