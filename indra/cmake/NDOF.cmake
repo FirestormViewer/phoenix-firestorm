@@ -1,7 +1,11 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-set(NDOF ON CACHE BOOL "Use NDOF space navigator joystick library.")
+if( NOT ND_BUILD64BIT_ARCH OR NOT LINUX )
+  set(NDOF ON CACHE BOOL "Use NDOF space navigator joystick library.")
+else( NOT ND_BUILD64BIT_ARCH OR NOT LINUX )
+  set(NDOF OFF CACHE BOOL "Use NDOF space navigator joystick library.")
+endif( NOT ND_BUILD64BIT_ARCH OR NOT LINUX )
 
 if (NDOF)
   if (USESYSTEMLIBS)

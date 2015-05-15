@@ -234,14 +234,14 @@ elseif(LINUX)
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     # *FIX - figure out what to do with duplicate libalut.so here -brad
     set(release_files
-        libapr-1.so.0
-        libaprutil-1.so.0
+        #libapr-1.so.0
+        #libaprutil-1.so.0
         libatk-1.0.so
-        libdb-5.1.so
+        #libdb-5.1.so
         libexpat.so
         libexpat.so.1
-        libfreetype.so.6.6.2
-        libfreetype.so.6
+        #libfreetype.so.6.6.2
+        #libfreetype.so.6
         libGLOD.so
         libgmodule-2.0.so
         libgobject-2.0.so
@@ -253,6 +253,16 @@ elseif(LINUX)
         libfontconfig.so.1.8.0
         libfontconfig.so.1
        )
+    if( NOT ND_BUILD64BIT_ARCH )
+      set(release_files ${release_files}
+          libapr-1.so.0
+          libaprutil-1.so.0
+          libdb-5.1.so
+          libfreetype.so.6.6.2
+          libfreetype.so.6
+		 )
+    endif( NOT ND_BUILD64BIT_ARCH )
+
 
     if (USE_TCMALLOC)
       set(release_files ${release_files} "libtcmalloc_minimal.so")

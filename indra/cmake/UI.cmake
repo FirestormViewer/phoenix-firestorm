@@ -56,7 +56,8 @@ else (USESYSTEMLIBS)
     if (ND_BUILD64BIT_ARCH)
       set(UI_LIB_NAMES ${UI_LIB_NAMES}
           gio-2.0
-          pangocairo-1.0
+		  pangocairo-1.0
+          ffi
           )
     endif(ND_BUILD64BIT_ARCH)
 
