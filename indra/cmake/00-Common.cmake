@@ -274,11 +274,6 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS_RELEASE "-fno-omit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
   endif( NO_OMIT_FRAMEPOINTER )
   # </FS:ND>
-
-  if (ND_BUILD64BIT_ARCH)
-    set( ENABLE_MEDIA_PLUGINS ON CACHE BOOL "Build with media plugins" )
-  endif (ND_BUILD64BIT_ARCH)
-
 endif (LINUX)
 
 
