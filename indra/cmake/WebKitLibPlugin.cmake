@@ -89,6 +89,10 @@ elseif (LINUX)
 #        sqlite3
 #        Xi
 #        SM
+# <FS:ND> Link against ssl and crypto (in this order) to avoid webkit fail
+        ssl
+        crypto
+# </FS:ND>
         )
     endif (USESYSTEMLIBS)	
 endif (WINDOWS)
