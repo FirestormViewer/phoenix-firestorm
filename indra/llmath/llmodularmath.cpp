@@ -24,7 +24,8 @@
  * $/LicenseInfo$
  */
 
-#include "linden_common.h"
+// <FS:Ansariel> Get rid of LNK4221 linker warning since we don't run the unit tests anyway
+//#include "linden_common.h"
 
 // implementation is all in the header, this include dep ensures the unit test is rerun if the implementation changes.
-#include "llmodularmath.h"
+//#include "llmodularmath.h"
