@@ -89,10 +89,10 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0cae15bc577943760b97be370e100ea1</string>
+              <string>33300134846d0f00ac4f31c1a190e3e6</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-20140629.tar.bz2</uri>
-            </map>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-201505101047-r12.tar.bz2</uri>
+           </map>
           </map>
           <key>linux</key>
           <map>
@@ -322,9 +322,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c296845cad075250c1ae2620f175a957</string>
+              <string>d0abfb393024eea8cffdfde3ec5b673d</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/boost_3p-update-boost/rev/297445/arch/Darwin/installer/boost-1.57-darwin-297445.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-darwin-201505120538-r136.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -374,9 +374,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>66849777a83cb69cec3c06b07da7cd3d</string>
+              <string>b93d42a16c5a9e6731ca57d363c231e0</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/colladadom_3p-update-colladadom/rev/297450/arch/Darwin/installer/colladadom-2.3.297450-darwin-297450.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505131932-r98-darwin-201505131932-r98.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -428,9 +428,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d1c5125650a339a5209f429c70f4d395</string>
+              <string>c2c18782baee63f556e21a42527919e6</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/curl_3p-update-curl/rev/297172/arch/Darwin/installer/curl-7.38.0.297172-darwin-297172.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.38.0.201505121710-r147-darwin-201505121710-r147.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -762,9 +762,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83618d16d974eb0af93926a10ac13297</string>
+              <string>99ef90fa2f04ff8b2a840cb27c7c8182</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/freetype_3p-update-freetype/rev/297053/arch/Darwin/installer/freetype-2.4.4.297053-darwin-297053.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9.201505141836-r63-darwin-201505141836-r63.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1530,9 +1530,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>14cb5c8686a472e9e60179e46cd196f7</string>
+              <string>d93906d020f339c2ff99f4554f003bfc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libpng_3p-update-libpng/rev/297708/arch/Darwin/installer/libpng-1.6.8.297708-darwin-297708.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.6.8.201505132056-r54-darwin-201505132056-r54.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1614,9 +1614,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9303f0dd174129e297eca6cc2eb1ab3f</string>
+              <string>47b55146473e68f02899ab3902d31686</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libxml_3p-update-libxml/rev/297050/arch/Darwin/installer/libxml2-2.9.1.297050-darwin-297050.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libxml2-2.9.1.201505121844-r42-darwin-201505121844-r42.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2106,9 +2106,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0a77d56769e6075957f614be6575423e</string>
+              <string>078b044b6da4f47ab6a97e72b1f058e8</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openssl_3p-update-openssl/rev/297168/arch/Darwin/installer/openssl-1.0.1h.297168-darwin-297168.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1i.201505121514-r129-darwin-201505121514-r129.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2160,9 +2160,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6d2b38897f1adf354b299345d5fc759b</string>
+              <string>64b2e1e2e4869c56c235ba43c1e66bdb</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/pcre_3p-update-pcre/rev/297155/arch/Darwin/installer/pcre-8.35.-darwin-297155.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.-darwin-201505122041-r52.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2492,9 +2492,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1a79eeac199c2d94e4ae4e5d0194e25f</string>
+              <string>2910dc2dc73792fa2dcf8c7881ec07b2</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/zlib_3p-update-zlib/rev/296881/arch/Darwin/installer/zlib-1.2.8.296881-darwin-296881.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8-darwin-201505101620-r86.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
