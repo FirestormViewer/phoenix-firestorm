@@ -968,6 +968,9 @@ class DarwinManifest(ViewerManifest):
     def package_finish(self):
         global CHANNEL_VENDOR_BASE
         substitution_strings = self.fs_get_substitution_strings()         # <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
+
+        imagename = ("Phoenix-" + self.app_name() + '-' + '-'.join(self.args['version']))
+
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
