@@ -74,7 +74,10 @@ if(FMODEX)
 endif(FMODEX)
 
 # install SLPlugin host executable and its dynamic-library plugins
-use_prebuilt_binary(slplugins)
+if (NOT ENABLE_MEDIA_PLUGINS)
+  use_prebuilt_binary(slplugins)
+endif (NOT ENABLE_MEDIA_PLUGINS)
+
 if(LEAPMOTION)
   add_definitions(-DUSE_LEAPMOTION=1)
   include_directories(${LEAP_MOTION_INCLUDE_DIR})
@@ -2370,6 +2373,7 @@ if (LINUX)
   set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
+if (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
@@ -2378,6 +2382,16 @@ if (LINUX)
 ##  media_plugin_gstreamer010
     llcommon
     )
+else (NOT ENABLE_MEDIA_PLUGINS)
+  set(COPY_INPUT_DEPENDENCIES
+    ${VIEWER_BINARY_NAME}
+    linux-crash-logger
+    SLPlugin
+    media_plugin_webkit
+    media_plugin_gstreamer010
+    llcommon
+    )
+endif (NOT ENABLE_MEDIA_PLUGINS)
 
   add_dependencies(${VIEWER_BINARY_NAME} generate_viewer_version)
 

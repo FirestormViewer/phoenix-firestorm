@@ -70,7 +70,9 @@ list(APPEND llplugin_SOURCE_FILES ${llplugin_HEADER_FILES})
 
 add_library (llplugin ${llplugin_SOURCE_FILES})
 
-##add_subdirectory(slplugin)
+if (ENABLE_MEDIA_PLUGINS)
+  add_subdirectory(slplugin)
+endif (ENABLE_MEDIA_PLUGINS)
 
 # Add tests
 if (LL_TESTS)

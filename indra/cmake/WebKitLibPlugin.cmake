@@ -78,7 +78,7 @@ elseif (LINUX)
         QtGui
         QtCore
           jpeg
-#        jscore
+        jscore
 #        qgif
 #        qjpeg
 #        jpeg
@@ -86,9 +86,9 @@ elseif (LINUX)
         X11
         Xrender
         GL
-
 #        sqlite3
 #        Xi
 #        SM
         )
+    endif (USESYSTEMLIBS)	
 endif (WINDOWS)

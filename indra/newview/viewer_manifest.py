@@ -1500,6 +1500,7 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
         if self.is_packaging_viewer():
           if self.prefix("../packages/lib/release", dst="lib"):
+            self.path("libffi*.so*")
 
             # vivox 32-bit hack.
             # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
@@ -1525,7 +1526,17 @@ class Linux_x86_64_Manifest(LinuxManifest):
               print "Leap Motion library not found"
           self.end_prefix("lib")
 
-        # support file for valgrind debug tool
+        if self.prefix(src="", dst="bin"):
+            self.path2basename("../llplugin/slplugin", "SLPlugin")
+            self.end_prefix("bin")        # support file for valgrind debug tool
+
+        # plugins
+        if self.prefix(src="", dst="bin/llplugin"):
+            self.path2basename("../media_plugins/webkit", "libmedia_plugin_webkit.so")
+            self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
+            self.end_prefix("bin/llplugin")
+                                                        
+            
         self.path("secondlife-i686.supp")
 
 ################################################################
