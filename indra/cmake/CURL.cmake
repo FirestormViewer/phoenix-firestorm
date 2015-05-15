@@ -28,11 +28,6 @@ else (USESYSTEMLIBS)
                pthread
               )
       endif (LINUX)
-      if (LINUX AND ND_BUILD64BIT_ARCH)
-          list(APPEND CURL_LIBRARIES
-               idn pthread
-              )
-      endif (LINUX AND ND_BUILD64BIT_ARCH)
   endif (WINDOWS)
   set(CURL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
 endif (USESYSTEMLIBS)
