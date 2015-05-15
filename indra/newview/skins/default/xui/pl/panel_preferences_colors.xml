@@ -35,6 +35,9 @@
 			<text name="htmllink_label">
 				URLe
 			</text>
+			<text name="uriquerypart_label">
+				Żądanie URL
+			</text>
 			<text name="direct_label">
 				Bezpośrednie
 			</text>
