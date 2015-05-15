@@ -34,12 +34,12 @@
 #include "llvoicechannel.h"
 #include "llvoiceclient.h"
 
+class FSParticipantList;
 class LLAvatarList;
 class LLAvatarListItem;
 class LLAvatarName;
 class LLNonAvatarCaller;
 class LLOutputMonitorCtrl;
-class LLParticipantList;
 class LLSpeakerMgr;
 class LLSpeakersDelayActionsStorage;
 class LLSliderCtrl;
@@ -251,7 +251,7 @@ private:
 private:
 	speaker_state_map_t mSpeakerStateMap;
 	LLSpeakerMgr* mSpeakerManager;
-	LLParticipantList* mParticipants;
+	FSParticipantList* mParticipants;
 	LLAvatarList* mAvatarList;
 	LLNonAvatarCaller* mNonAvatarCaller;
 	EVoiceControls mVoiceType;

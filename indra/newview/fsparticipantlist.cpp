@@ -1,6 +1,6 @@
 /** 
  * @file fsparticipantlist.cpp
- * @brief LLParticipantList intended to update view(LLAvatarList) according to incoming messages
+ * @brief FSParticipantList intended to update view(LLAvatarList) according to incoming messages
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -41,7 +41,7 @@
 #include "llviewermenu.h"
 #include "llvoiceclient.h"
 
-//LLParticipantList retrieves add, clear and remove events and updates view accordingly 
+//FSParticipantList retrieves add, clear and remove events and updates view accordingly 
 #if LL_MSVC
 #pragma warning (disable : 4355) // 'this' used in initializer list: yes, intentionally
 #endif
@@ -132,7 +132,7 @@ private:
 	 * In this case this speaker is created as avatar and will be recreated when it appears in
 	 * Avatar's Voice session.
 	 *
-	 * @see LLParticipantList::onAvalineCallerFound()
+	 * @see FSParticipantList::onAvalineCallerFound()
 	 */
 	void findAvalineCaller(const uuid_set_t& participant_uuids)
 	{
@@ -161,7 +161,7 @@ private:
 	 * This method implements a HUCK to notify subscribers that watched Avaline callers by class
 	 * are not anymore in the call.
 	 *
-	 * @see LLParticipantList::onAvalineCallerRemoved()
+	 * @see FSParticipantList::onAvalineCallerRemoved()
 	 */
 	void checkIfAvalineCallersExist(const uuid_set_t& participant_uuids)
 	{
@@ -199,7 +199,7 @@ private:
 	uuid_set_t mAvalineCallers;
 };
 
-LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source, 
+FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source, 
 									 LLAvatarList* avatar_list,
 									 bool use_context_menu/* = true*/,
 									 bool exclude_agent /*= true*/, 
@@ -211,8 +211,8 @@ LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source,
 	mValidateSpeakerCallback(NULL)
 {
 
-	mAvalineUpdater = new LLAvalineUpdater(boost::bind(&LLParticipantList::onAvalineCallerFound, this, _1),
-										   boost::bind(&LLParticipantList::onAvalineCallerRemoved, this, _1));
+	mAvalineUpdater = new LLAvalineUpdater(boost::bind(&FSParticipantList::onAvalineCallerFound, this, _1),
+										   boost::bind(&FSParticipantList::onAvalineCallerRemoved, this, _1));
 
 	mSpeakerAddListener = new SpeakerAddListener(*this);
 	mSpeakerRemoveListener = new SpeakerRemoveListener(*this);
@@ -228,14 +228,14 @@ LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source,
 	mAvatarList->setNoItemsCommentText(LLTrans::getString("LoadingData"));
 	LL_DEBUGS("SpeakingIndicator") << "Set session for speaking indicators: " << mSpeakerMgr->getSessionID() << LL_ENDL;
 	mAvatarList->setSessionID(mSpeakerMgr->getSessionID());
-	mAvatarListDoubleClickConnection = mAvatarList->setItemDoubleClickCallback(boost::bind(&LLParticipantList::onAvatarListDoubleClicked, this, _1));
-	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&LLParticipantList::onAvatarListRefreshed, this, _1, _2));
+	mAvatarListDoubleClickConnection = mAvatarList->setItemDoubleClickCallback(boost::bind(&FSParticipantList::onAvatarListDoubleClicked, this, _1));
+	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSParticipantList::onAvatarListRefreshed, this, _1, _2));
     // Set onAvatarListDoubleClicked as default on_return action.
-	mAvatarListReturnConnection = mAvatarList->setReturnCallback(boost::bind(&LLParticipantList::onAvatarListDoubleClicked, this, mAvatarList));
+	mAvatarListReturnConnection = mAvatarList->setReturnCallback(boost::bind(&FSParticipantList::onAvatarListDoubleClicked, this, mAvatarList));
 
 	if (use_context_menu)
 	{
-		mParticipantListMenu = new LLParticipantListMenu(*this);
+		mParticipantListMenu = new FSParticipantListMenu(*this);
 		mAvatarList->setContextMenu(mParticipantListMenu);
 	}
 	else
@@ -270,7 +270,7 @@ LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source,
 	sort();
 }
 
-LLParticipantList::~LLParticipantList()
+FSParticipantList::~FSParticipantList()
 {
 	mAvatarListDoubleClickConnection.disconnect();
 	mAvatarListRefreshConnection.disconnect();
@@ -297,12 +297,12 @@ LLParticipantList::~LLParticipantList()
 	delete mAvalineUpdater;
 }
 
-void LLParticipantList::setSpeakingIndicatorsVisible(BOOL visible)
+void FSParticipantList::setSpeakingIndicatorsVisible(BOOL visible)
 {
 	mAvatarList->setSpeakingIndicatorsVisible(visible);
 };
 
-void LLParticipantList::onAvatarListDoubleClicked(LLUICtrl* ctrl)
+void FSParticipantList::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 {
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
 	if(!item)
@@ -318,7 +318,7 @@ void LLParticipantList::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 	LLAvatarActions::startIM(clicked_id);
 }
 
-void LLParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
+void FSParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
 {
 	LLAvatarList* list = dynamic_cast<LLAvatarList*>(ctrl);
 	if (list)
@@ -413,7 +413,7 @@ void LLParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
   Probably Avaline caller should be removed from the LLSpeakerMgr list ONLY if it ends call itself.
   Asked in EXT-4301.
 */
-void LLParticipantList::onAvalineCallerFound(const LLUUID& participant_id)
+void FSParticipantList::onAvalineCallerFound(const LLUUID& participant_id)
 {
 	LLPanel* item = mAvatarList->getItemByValue(participant_id);
 
@@ -444,14 +444,14 @@ void LLParticipantList::onAvalineCallerFound(const LLUUID& participant_id)
 	addAvatarIDExceptAgent(participant_id);
 }
 
-void LLParticipantList::onAvalineCallerRemoved(const LLUUID& participant_id)
+void FSParticipantList::onAvalineCallerRemoved(const LLUUID& participant_id)
 {
 	LL_DEBUGS("Avaline") << "Removing avaline caller from the list: " << participant_id << LL_ENDL;
 
 	mSpeakerMgr->removeAvalineSpeaker(participant_id);
 }
 
-void LLParticipantList::setSortOrder(EParticipantSortOrder order)
+void FSParticipantList::setSortOrder(EParticipantSortOrder order)
 {
 	const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
 
@@ -462,18 +462,18 @@ void LLParticipantList::setSortOrder(EParticipantSortOrder order)
 	}
 }
 
-const LLParticipantList::EParticipantSortOrder LLParticipantList::getSortOrder() const
+const FSParticipantList::EParticipantSortOrder FSParticipantList::getSortOrder() const
 {
 	const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
 	return EParticipantSortOrder(speaker_sort_order);
 }
 
-void LLParticipantList::setValidateSpeakerCallback(validate_speaker_callback_t cb)
+void FSParticipantList::setValidateSpeakerCallback(validate_speaker_callback_t cb)
 {
 	mValidateSpeakerCallback = cb;
 }
 
-void LLParticipantList::update()
+void FSParticipantList::update()
 {
 	mSpeakerMgr->update(true);
 
@@ -484,14 +484,14 @@ void LLParticipantList::update()
 	}
 }
 
-bool LLParticipantList::isHovered()
+bool FSParticipantList::isHovered()
 {
 	S32 x, y;
 	LLUI::getMousePositionScreen(&x, &y);
 	return mAvatarList->calcScreenRect().pointInRect(x, y);
 }
 
-bool LLParticipantList::onAddItemEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::onAddItemEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	LLUUID uu_id = event->getValue().asUUID();
 
@@ -505,7 +505,7 @@ bool LLParticipantList::onAddItemEvent(LLPointer<LLOldEvents::LLEvent> event, co
 	return true;
 }
 
-bool LLParticipantList::onRemoveItemEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::onRemoveItemEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	uuid_vec_t& group_members = mAvatarList->getIDs();
 	uuid_vec_t::iterator pos = std::find(group_members.begin(), group_members.end(), event->getValue().asUUID());
@@ -517,7 +517,7 @@ bool LLParticipantList::onRemoveItemEvent(LLPointer<LLOldEvents::LLEvent> event,
 	return true;
 }
 
-bool LLParticipantList::onClearListEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::onClearListEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	uuid_vec_t& group_members = mAvatarList->getIDs();
 	group_members.clear();
@@ -525,7 +525,7 @@ bool LLParticipantList::onClearListEvent(LLPointer<LLOldEvents::LLEvent> event, 
 	return true;
 }
 
-bool LLParticipantList::onModeratorUpdateEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::onModeratorUpdateEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	const LLSD& evt_data = event->getValue();
 	if ( evt_data.has("id") && evt_data.has("is_moderator") )
@@ -553,7 +553,7 @@ bool LLParticipantList::onModeratorUpdateEvent(LLPointer<LLOldEvents::LLEvent> e
 	return true;
 }
 
-bool LLParticipantList::onSpeakerMuteEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::onSpeakerMuteEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	LLPointer<LLSpeaker> speakerp = (LLSpeaker*)event->getSource();
 	if (speakerp.isNull()) return false;
@@ -566,7 +566,7 @@ bool LLParticipantList::onSpeakerMuteEvent(LLPointer<LLOldEvents::LLEvent> event
 	return true;
 }
 
-void LLParticipantList::sort()
+void FSParticipantList::sort()
 {
 	if ( !mAvatarList )
 		return;
@@ -597,7 +597,7 @@ void LLParticipantList::sort()
 	}
 }
 
-void LLParticipantList::addAvatarIDExceptAgent(const LLUUID& avatar_id)
+void FSParticipantList::addAvatarIDExceptAgent(const LLUUID& avatar_id)
 {
 	if (mExcludeAgent && gAgent.getID() == avatar_id) return;
 	if (mAvatarList->contains(avatar_id)) return;
@@ -618,7 +618,7 @@ void LLParticipantList::addAvatarIDExceptAgent(const LLUUID& avatar_id)
 	adjustParticipant(avatar_id);
 }
 
-void LLParticipantList::adjustParticipant(const LLUUID& speaker_id)
+void FSParticipantList::adjustParticipant(const LLUUID& speaker_id)
 {
 	LLPointer<LLSpeaker> speakerp = mSpeakerMgr->findSpeaker(speaker_id);
 	if (speakerp.isNull()) return;
@@ -628,9 +628,9 @@ void LLParticipantList::adjustParticipant(const LLUUID& speaker_id)
 }
 
 //
-// LLParticipantList::SpeakerAddListener
+// FSParticipantList::SpeakerAddListener
 //
-bool LLParticipantList::SpeakerAddListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::SpeakerAddListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	/**
 	 * We need to filter speaking objects. These objects shouldn't appear in the list
@@ -646,43 +646,43 @@ bool LLParticipantList::SpeakerAddListener::handleEvent(LLPointer<LLOldEvents::L
 }
 
 //
-// LLParticipantList::SpeakerRemoveListener
+// FSParticipantList::SpeakerRemoveListener
 //
-bool LLParticipantList::SpeakerRemoveListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::SpeakerRemoveListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	return mParent.onRemoveItemEvent(event, userdata);
 }
 
 //
-// LLParticipantList::SpeakerClearListener
+// FSParticipantList::SpeakerClearListener
 //
-bool LLParticipantList::SpeakerClearListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::SpeakerClearListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	return mParent.onClearListEvent(event, userdata);
 }
 
 //
-// LLParticipantList::SpeakerModeratorListener
+// FSParticipantList::SpeakerModeratorListener
 //
-bool LLParticipantList::SpeakerModeratorUpdateListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::SpeakerModeratorUpdateListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	return mParent.onModeratorUpdateEvent(event, userdata);
 }
 
-bool LLParticipantList::SpeakerMuteListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSParticipantList::SpeakerMuteListener::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	return mParent.onSpeakerMuteEvent(event, userdata);
 }
 
-LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
+LLContextMenu* FSParticipantList::FSParticipantListMenu::createMenu()
 {
 	// set up the callbacks for all of the avatar menu items
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
-	registrar.add("ParticipantList.Sort", boost::bind(&LLParticipantList::LLParticipantListMenu::sortParticipantList, this, _2));
-	registrar.add("ParticipantList.ToggleAllowTextChat", boost::bind(&LLParticipantList::LLParticipantListMenu::toggleAllowTextChat, this, _2));
-	registrar.add("ParticipantList.ToggleMuteText", boost::bind(&LLParticipantList::LLParticipantListMenu::toggleMuteText, this, _2));
+	registrar.add("ParticipantList.Sort", boost::bind(&FSParticipantList::FSParticipantListMenu::sortParticipantList, this, _2));
+	registrar.add("ParticipantList.ToggleAllowTextChat", boost::bind(&FSParticipantList::FSParticipantListMenu::toggleAllowTextChat, this, _2));
+	registrar.add("ParticipantList.ToggleMuteText", boost::bind(&FSParticipantList::FSParticipantListMenu::toggleMuteText, this, _2));
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
 	registrar.add("ParticipantList.Eject", boost::bind(&LLGroupActions::ejectFromGroup, mParent.mSpeakerMgr->getSessionID(), mUUIDs.front()));
 // [SL:KB]
@@ -690,18 +690,18 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	registrar.add("Avatar.Profile",	boost::bind(&LLAvatarActions::showProfile, mUUIDs.front()));
 	registrar.add("Avatar.IM", boost::bind(&LLAvatarActions::startIM, mUUIDs.front()));
 	registrar.add("Avatar.AddFriend", boost::bind(&LLAvatarActions::requestFriendshipDialog, mUUIDs.front()));
-	registrar.add("Avatar.BlockUnblock", boost::bind(&LLParticipantList::LLParticipantListMenu::toggleMuteVoice, this, _2));
+	registrar.add("Avatar.BlockUnblock", boost::bind(&FSParticipantList::FSParticipantListMenu::toggleMuteVoice, this, _2));
 	registrar.add("Avatar.Share", boost::bind(&LLAvatarActions::share, mUUIDs.front()));
 	registrar.add("Avatar.Pay",	boost::bind(&LLAvatarActions::pay, mUUIDs.front()));
 	registrar.add("Avatar.Call", boost::bind(&LLAvatarActions::startCall, mUUIDs.front()));
-	registrar.add("Avatar.AddToContactSet", boost::bind(&LLParticipantList::LLParticipantListMenu::handleAddToContactSet, this));
+	registrar.add("Avatar.AddToContactSet", boost::bind(&FSParticipantList::FSParticipantListMenu::handleAddToContactSet, this));
 	registrar.add("Avatar.ZoomIn", boost::bind(&LLAvatarActions::zoomIn, mUUIDs.front()));
 	
-	registrar.add("ParticipantList.ModerateVoice", boost::bind(&LLParticipantList::LLParticipantListMenu::moderateVoice, this, _2));
+	registrar.add("ParticipantList.ModerateVoice", boost::bind(&FSParticipantList::FSParticipantListMenu::moderateVoice, this, _2));
 
-	enable_registrar.add("ParticipantList.EnableItem", boost::bind(&LLParticipantList::LLParticipantListMenu::enableContextMenuItem,	this, _2));
-	enable_registrar.add("ParticipantList.EnableItem.Moderate", boost::bind(&LLParticipantList::LLParticipantListMenu::enableModerateContextMenuItem,	this, _2));
-	enable_registrar.add("ParticipantList.CheckItem",  boost::bind(&LLParticipantList::LLParticipantListMenu::checkContextMenuItem,	this, _2));
+	enable_registrar.add("ParticipantList.EnableItem", boost::bind(&FSParticipantList::FSParticipantListMenu::enableContextMenuItem,	this, _2));
+	enable_registrar.add("ParticipantList.EnableItem.Moderate", boost::bind(&FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem,	this, _2));
+	enable_registrar.add("ParticipantList.CheckItem",  boost::bind(&FSParticipantList::FSParticipantListMenu::checkContextMenuItem,	this, _2));
 
 	// create the context menu from the XUI
 	LLContextMenu* main_menu = createFromFile("menu_participant_list.xml");
@@ -722,7 +722,7 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	return main_menu;
 }
 
-void LLParticipantList::LLParticipantListMenu::show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y)
+void FSParticipantList::FSParticipantListMenu::show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y)
 {
 	if (uuids.size() == 0) return;
 
@@ -741,7 +741,7 @@ void LLParticipantList::LLParticipantListMenu::show(LLView* spawning_view, const
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::sortParticipantList(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::sortParticipantList(const LLSD& userdata)
 {
 	std::string param = userdata.asString();
 	if ("sort_by_name" == param)
@@ -754,7 +754,7 @@ void LLParticipantList::LLParticipantListMenu::sortParticipantList(const LLSD& u
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::toggleAllowTextChat(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::toggleAllowTextChat(const LLSD& userdata)
 {
 
 	LLIMSpeakerMgr* mgr = dynamic_cast<LLIMSpeakerMgr*>(mParent.mSpeakerMgr);
@@ -765,7 +765,7 @@ void LLParticipantList::LLParticipantListMenu::toggleAllowTextChat(const LLSD& u
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::toggleMute(const LLSD& userdata, U32 flags)
+void FSParticipantList::FSParticipantListMenu::toggleMute(const LLSD& userdata, U32 flags)
 {
 	const LLUUID speaker_id = mUUIDs.front();
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(speaker_id, flags);
@@ -809,17 +809,17 @@ void LLParticipantList::LLParticipantListMenu::toggleMute(const LLSD& userdata, 
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::toggleMuteText(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::toggleMuteText(const LLSD& userdata)
 {
 	toggleMute(userdata, LLMute::flagTextChat);
 }
 
-void LLParticipantList::LLParticipantListMenu::toggleMuteVoice(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::toggleMuteVoice(const LLSD& userdata)
 {
 	toggleMute(userdata, LLMute::flagVoiceChat);
 }
 
-bool LLParticipantList::LLParticipantListMenu::isGroupModerator()
+bool FSParticipantList::FSParticipantListMenu::isGroupModerator()
 {
 	if (!mParent.mSpeakerMgr)
 	{
@@ -838,7 +838,7 @@ bool LLParticipantList::LLParticipantListMenu::isGroupModerator()
 	return false;
 }
 
-bool LLParticipantList::LLParticipantListMenu::isMuted(const LLUUID& avatar_id)
+bool FSParticipantList::FSParticipantListMenu::isMuted(const LLUUID& avatar_id)
 {
 	LLPointer<LLSpeaker> selected_speakerp = mParent.mSpeakerMgr->findSpeaker(avatar_id);
 	if (!selected_speakerp) return true;
@@ -846,7 +846,7 @@ bool LLParticipantList::LLParticipantListMenu::isMuted(const LLUUID& avatar_id)
 	return selected_speakerp->mStatus == LLSpeaker::STATUS_MUTED;
 }
 
-void LLParticipantList::LLParticipantListMenu::moderateVoice(const LLSD& userdata)
+void FSParticipantList::FSParticipantListMenu::moderateVoice(const LLSD& userdata)
 {
 	if (!gAgent.getRegion()) return;
 
@@ -865,7 +865,7 @@ void LLParticipantList::LLParticipantListMenu::moderateVoice(const LLSD& userdat
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::moderateVoiceParticipant(const LLUUID& avatar_id, bool unmute)
+void FSParticipantList::FSParticipantListMenu::moderateVoiceParticipant(const LLUUID& avatar_id, bool unmute)
 {
 	LLIMSpeakerMgr* mgr = dynamic_cast<LLIMSpeakerMgr*>(mParent.mSpeakerMgr);
 	if (mgr)
@@ -874,7 +874,7 @@ void LLParticipantList::LLParticipantListMenu::moderateVoiceParticipant(const LL
 	}
 }
 
-void LLParticipantList::LLParticipantListMenu::moderateVoiceAllParticipants(bool unmute)
+void FSParticipantList::FSParticipantListMenu::moderateVoiceAllParticipants(bool unmute)
 {
 	LLIMSpeakerMgr* mgr = dynamic_cast<LLIMSpeakerMgr*>(mParent.mSpeakerMgr);
 	if (mgr)
@@ -892,7 +892,7 @@ void LLParticipantList::LLParticipantListMenu::moderateVoiceAllParticipants(bool
 }
 
 // static
-void LLParticipantList::LLParticipantListMenu::confirmMuteAllCallback(const LLSD& notification, const LLSD& response)
+void FSParticipantList::FSParticipantListMenu::confirmMuteAllCallback(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	// if Cancel pressed
@@ -915,7 +915,7 @@ void LLParticipantList::LLParticipantListMenu::confirmMuteAllCallback(const LLSD
 }
 
 
-bool LLParticipantList::LLParticipantListMenu::enableContextMenuItem(const LLSD& userdata)
+bool FSParticipantList::FSParticipantListMenu::enableContextMenuItem(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
 	const LLUUID& participant_id = mUUIDs.front();
@@ -977,7 +977,7 @@ bool LLParticipantList::LLParticipantListMenu::enableContextMenuItem(const LLSD&
   can_allow_text_chat
   can_moderate_voice
 */
-bool LLParticipantList::LLParticipantListMenu::enableModerateContextMenuItem(const LLSD& userdata)
+bool FSParticipantList::FSParticipantListMenu::enableModerateContextMenuItem(const LLSD& userdata)
 {
 	// only group moderators can perform actions related to this "enable callback"
 	if (!isGroupModerator()) return false;
@@ -1002,7 +1002,7 @@ bool LLParticipantList::LLParticipantListMenu::enableModerateContextMenuItem(con
 	return true;
 }
 
-bool LLParticipantList::LLParticipantListMenu::checkContextMenuItem(const LLSD& userdata)
+bool FSParticipantList::FSParticipantListMenu::checkContextMenuItem(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
 	const LLUUID& id = mUUIDs.front();
@@ -1036,12 +1036,12 @@ bool LLParticipantList::LLParticipantListMenu::checkContextMenuItem(const LLSD& 
 	return false;
 }
 
-void LLParticipantList::LLParticipantListMenu::handleAddToContactSet()
+void FSParticipantList::FSParticipantListMenu::handleAddToContactSet()
 {
 	LLAvatarActions::addToContactSet(mUUIDs);
 }
 
-bool LLParticipantList::LLAvatarItemRecentSpeakerComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
+bool FSParticipantList::LLAvatarItemRecentSpeakerComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
 {
 	if (mParent.mSpeakerMgr)
 	{

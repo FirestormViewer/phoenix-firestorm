@@ -356,10 +356,10 @@ void FSFloaterVoiceControls::refreshParticipantList()
 	if (!non_avatar_caller)
 	{
 		llassert(mParticipants == NULL); // check for possible memory leak
-		mParticipants = new LLParticipantList(mSpeakerManager, mAvatarList, true, mVoiceType != VC_GROUP_CHAT && mVoiceType != VC_AD_HOC_CHAT, false);
+		mParticipants = new FSParticipantList(mSpeakerManager, mAvatarList, true, mVoiceType != VC_GROUP_CHAT && mVoiceType != VC_AD_HOC_CHAT, false);
 		mParticipants->setValidateSpeakerCallback(boost::bind(&FSFloaterVoiceControls::validateSpeaker, this, _1));
 		const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
-		mParticipants->setSortOrder(LLParticipantList::EParticipantSortOrder(speaker_sort_order));
+		mParticipants->setSortOrder(FSParticipantList::EParticipantSortOrder(speaker_sort_order));
 		
 		if (LLLocalSpeakerMgr::getInstance() == mSpeakerManager)
 		{

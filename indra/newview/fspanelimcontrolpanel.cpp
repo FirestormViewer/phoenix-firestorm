@@ -72,7 +72,7 @@ void FSPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
 	if(!mParticipantList)
 	{
 		LLSpeakerMgr* speaker_manager = LLIMModel::getInstance()->getSpeakerManager(session_id);
-		mParticipantList = new LLParticipantList(speaker_manager, getChild<LLAvatarList>("grp_speakers_list"), true,false);
+		mParticipantList = new FSParticipantList(speaker_manager, getChild<LLAvatarList>("grp_speakers_list"), true,false);
 	}
 }
 

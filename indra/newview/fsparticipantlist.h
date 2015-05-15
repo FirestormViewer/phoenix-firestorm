@@ -1,6 +1,6 @@
 /** 
  * @file fsparticipantlist.h
- * @brief LLParticipantList intended to update view(LLAvatarList) according to incoming messages
+ * @brief FSParticipantList intended to update view(LLAvatarList) according to incoming messages
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_PARTICIPANTLIST_H
-#define LL_PARTICIPANTLIST_H
+#ifndef FS_PARTICIPANTLIST_H
+#define FS_PARTICIPANTLIST_H
 
 #include "llviewerprecompiledheaders.h"
 #include "llevent.h"
@@ -37,19 +37,19 @@ class LLAvatarList;
 class LLUICtrl;
 class LLAvalineUpdater;
 
-class LLParticipantList
+class FSParticipantList
 {
-	LOG_CLASS(LLParticipantList);
+	LOG_CLASS(FSParticipantList);
 public:
 
 	typedef boost::function<bool (const LLUUID& speaker_id)> validate_speaker_callback_t;
 
-	LLParticipantList(LLSpeakerMgr* data_source, 
+	FSParticipantList(LLSpeakerMgr* data_source, 
 					  LLAvatarList* avatar_list, 
 					  bool use_context_menu = true, 
 					  bool exclude_agent = true, 
 					  bool can_toggle_icons = true);
-	~LLParticipantList();
+	~FSParticipantList();
 	void setSpeakingIndicatorsVisible(BOOL visible);
 
 	enum EParticipantSortOrder
@@ -108,43 +108,43 @@ protected:
 	class BaseSpeakerListener : public LLOldEvents::LLSimpleListener
 	{
 	public:
-		BaseSpeakerListener(LLParticipantList& parent) : mParent(parent) {}
+		BaseSpeakerListener(FSParticipantList& parent) : mParent(parent) {}
 	protected:
-		LLParticipantList& mParent;
+		FSParticipantList& mParent;
 	};
 
 	class SpeakerAddListener : public BaseSpeakerListener
 	{
 	public:
-		SpeakerAddListener(LLParticipantList& parent) : BaseSpeakerListener(parent) {}
+		SpeakerAddListener(FSParticipantList& parent) : BaseSpeakerListener(parent) {}
 		/*virtual*/ bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata);
 	};
 
 	class SpeakerRemoveListener : public BaseSpeakerListener
 	{
 	public:
-		SpeakerRemoveListener(LLParticipantList& parent) : BaseSpeakerListener(parent) {}
+		SpeakerRemoveListener(FSParticipantList& parent) : BaseSpeakerListener(parent) {}
 		/*virtual*/ bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata);
 	};
 
 	class SpeakerClearListener : public BaseSpeakerListener
 	{
 	public:
-		SpeakerClearListener(LLParticipantList& parent) : BaseSpeakerListener(parent) {}
+		SpeakerClearListener(FSParticipantList& parent) : BaseSpeakerListener(parent) {}
 		/*virtual*/ bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata);
 	};
 
 	class SpeakerModeratorUpdateListener : public BaseSpeakerListener
 	{
 	public:
-		SpeakerModeratorUpdateListener(LLParticipantList& parent) : BaseSpeakerListener(parent) {}
+		SpeakerModeratorUpdateListener(FSParticipantList& parent) : BaseSpeakerListener(parent) {}
 		/*virtual*/ bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata);
 	};
 		
 	class SpeakerMuteListener : public BaseSpeakerListener
 	{
 	public:
-		SpeakerMuteListener(LLParticipantList& parent) : BaseSpeakerListener(parent) {}
+		SpeakerMuteListener(FSParticipantList& parent) : BaseSpeakerListener(parent) {}
 
 		/*virtual*/ bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata);
 	};
@@ -152,14 +152,14 @@ protected:
 	/**
 	 * Menu used in the participant list.
 	 */
-	class LLParticipantListMenu : public LLListContextMenu
+	class FSParticipantListMenu : public LLListContextMenu
 	{
 	public:
-		LLParticipantListMenu(LLParticipantList& parent):mParent(parent){};
+		FSParticipantListMenu(FSParticipantList& parent):mParent(parent){};
 		/*virtual*/ LLContextMenu* createMenu();
 		/*virtual*/ void show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y);
 	protected:
-		LLParticipantList& mParent;
+		FSParticipantList& mParent;
 	private:
 		bool enableContextMenuItem(const LLSD& userdata);
 		bool enableModerateContextMenuItem(const LLSD& userdata);
@@ -231,12 +231,12 @@ protected:
 	{
 		LOG_CLASS(LLAvatarItemRecentSpeakerComparator);
 	public:
-		LLAvatarItemRecentSpeakerComparator(LLParticipantList& parent):mParent(parent){};
+		LLAvatarItemRecentSpeakerComparator(FSParticipantList& parent):mParent(parent){};
 		virtual ~LLAvatarItemRecentSpeakerComparator() {};
 	protected:
 		virtual bool doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const;
 	private:
-		LLParticipantList& mParent;
+		FSParticipantList& mParent;
 	};
 
 private:
@@ -267,7 +267,7 @@ private:
 	LLPointer<SpeakerModeratorUpdateListener>	mSpeakerModeratorListener;
 	LLPointer<SpeakerMuteListener>				mSpeakerMuteListener;
 
-	LLParticipantListMenu*    mParticipantListMenu;
+	FSParticipantListMenu*    mParticipantListMenu;
 
 	/**
 	 * This field manages an adding  a new avatar_id in the mAvatarList
@@ -287,4 +287,4 @@ private:
 	LLAvalineUpdater* mAvalineUpdater;
 };
 
-#endif // LL_PARTICIPANTLIST_H
+#endif // FS_PARTICIPANTLIST_H

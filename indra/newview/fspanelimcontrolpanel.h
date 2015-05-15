@@ -1,6 +1,6 @@
 /** 
  * @file fspanelimcontrolpanel.h
- * @brief LLPanelIMControlPanel and related class definitions
+ * @brief FSPanelChatControlPanel and related class definitions
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -31,7 +31,7 @@
 
 #include "llpanel.h"
 
-class LLParticipantList;
+class FSParticipantList;
 
 class FSPanelChatControlPanel 
 	: public LLPanel
@@ -69,7 +69,7 @@ public:
 protected:
 	LLUUID mGroupID;
 
-	LLParticipantList* mParticipantList;
+	FSParticipantList* mParticipantList;
 };
 
 class FSPanelAdHocControlPanel : public FSPanelGroupControlPanel
