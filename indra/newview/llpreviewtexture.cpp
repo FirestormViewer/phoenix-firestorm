@@ -101,6 +101,7 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 		mCopyToInv = FALSE;
 		mIsCopyable = FALSE;
 		mPreviewToSave = FALSE;
+		mIsFullPerm = FALSE;
 	}
 }
 
