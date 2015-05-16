@@ -342,6 +342,10 @@
     <color
      name="AvatarListItemIconDefaultColor"
      reference="TextFgColor" />
-
-
+  <color
+      name="MoneyTrackerIncrease"
+      value="0.0 0.4 0.0 1" />
+  <color
+      name="MoneyTrackerDecrease"
+      value="0.4 0.0 0.0 1" />
 </colors>

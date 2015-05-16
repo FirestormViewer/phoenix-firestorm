@@ -290,4 +290,10 @@
 	<color
 		name="XUITooltipFileName"
 		value="0.4 0.4 .7 1" />
+  <color
+      name="MoneyTrackerIncrease"
+      value="0.0 0.4 0.0 1" />
+  <color
+      name="MoneyTrackerDecrease"
+      value="0.4 0.0 0.0 1" />
 </colors>
