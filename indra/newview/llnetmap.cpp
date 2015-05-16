@@ -1304,8 +1304,9 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 			S32 overlay = pOwnership[idxRow * GRIDS_PER_EDGE + idxCol];
 			S32 idxCollision = idxRow * GRIDS_PER_EDGE + idxCol;
 			bool fForSale = ((overlay & PARCEL_COLOR_MASK) == PARCEL_FOR_SALE);
+			bool fAuction = ((overlay & PARCEL_COLOR_MASK) == PARCEL_AUCTION);
 			bool fCollision = (pCollision) && (pCollision[idxCollision / 8] & (1 << (idxCollision % 8)));
-			if ( (!fForSale) && (!fCollision) && (0 == (overlay & (PARCEL_SOUTH_LINE | PARCEL_WEST_LINE))) )
+			if ( (!fForSale) && (!fCollision) && (!fAuction) && (0 == (overlay & (PARCEL_SOUTH_LINE | PARCEL_WEST_LINE))) )
 				continue;
 
 			const S32 posX = originX + llround(idxCol * GRID_STEP * mObjectMapTPM);
@@ -1313,7 +1314,7 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 
 			static LLCachedControl<bool> s_fForSaleParcels(gSavedSettings, "MiniMapForSaleParcels");
 			static LLCachedControl<bool> s_fShowCollisionParcels(gSavedSettings, "MiniMapCollisionParcels");
-			if ( ((s_fForSaleParcels) && (fForSale)) || ((s_fShowCollisionParcels) && (fCollision)) )
+			if ( ((s_fForSaleParcels) && (fForSale || fAuction)) || ((s_fShowCollisionParcels) && (fCollision)) )
 			{
 				S32 curY = llclamp(posY, 0, imgHeight), endY = llclamp(posY + ll_round(GRID_STEP * mObjectMapTPM), 0, imgHeight - 1);
 				for (; curY <= endY; curY++)
@@ -1321,8 +1322,17 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 					S32 curX = llclamp(posX, 0, imgWidth) , endX = llclamp(posX + ll_round(GRID_STEP * mObjectMapTPM), 0, imgWidth - 1);
 					for (; curX <= endX; curX++)
 					{
-						pTextureData[curY * imgWidth + curX] = (fForSale) ? LLColor4U(255, 255, 128, 192).asRGBA()
-						                                                  : LLColor4U(255, 128, 128, 192).asRGBA();
+						U32 texcolor = LLColor4U(255, 128, 128, 192).asRGBA();
+						if (fForSale)
+						{
+							texcolor = LLColor4U(255, 255, 128, 192).asRGBA();
+						}
+						else if (fAuction)
+						{
+							texcolor = LLColor4U(128, 0, 255, 102).asRGBA();
+						}
+						
+						pTextureData[curY * imgWidth + curX] = texcolor;
 					}
 				}
 			}
