@@ -7,19 +7,18 @@
 //
 
     // Bridge platform
-    string  bridgeAuth = "BRIDGEKEY";  // Filled in dynamically
-    string  bridgeVersion = "2.18";    // This should match fslslbridge.cpp
-    string  latestURL;
+    string bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
+    string bridgeVersion = "2.18"; // This should match fslslbridge.cpp
+    string latestURL;
     integer viewerIsFirestorm;
     integer tryHandshakeOnce = TRUE;
-    integer useHTTPS = FALSE;
     key owner;
 
     // Teleport
-    float   TP_TARGET_DISTANCE = 1.0;// Distance to target when move to target should stop
-    integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
-    float   TP_TIMER_TICK = 0.05;
-    vector  mttVector;               // Target for llMoveToTarget() teleport
+    float TP_TARGET_DISTANCE = 1.0; // Distance to target when move to target should stop
+    integer MAX_TIME_TO_TP = 10; // (seconds) should be set to 10 for normal use
+    float TP_TIMER_TICK = 0.05;
+    vector mttVector; // Target for llMoveToTarget() teleport
     integer startTPTimer;
 
     // Movelock
@@ -40,7 +39,7 @@
     integer aoChannelLM = -8888;
     integer aoListenerOC = -1;
     integer aoListenerLM = -1;
-    key     aoCollarKey = NULL_KEY;
+    key aoCollarKey = NULL_KEY;
 
 //
 // Bridge platform helper functions
@@ -50,14 +49,8 @@
     {
         llReleaseURL(latestURL);
         latestURL = "";
-        if (useHTTPS)
-        {
-            llRequestSecureURL();
-        }
-        else
-        {
-            llRequestURL();
-        }
+        // llRequestSecureURL(); // Uncomment this line and comment next one for HTTPS instead of HTTP (experimental)
+        llRequestURL();
     }
 
     detachBridge()
@@ -128,36 +121,6 @@
         {
             llSensorRepeat("set-Timer-Event-2", NULL_KEY, AGENT_BY_LEGACY_NAME, 0.001, 0.001, time);
         }
-    }
-
-    tpMoveStep()
-    {
-        vector loc = llGetPos();
-        vector targ = mttVector - loc;
-        float dist = llVecMag(targ);
-
-        // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
-
-        // If we are out of time or distance - stop
-        if ((dist < TP_TARGET_DISTANCE) || (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
-        {
-            setTimerEvent2(0);
-            movelock_init(useMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
-        }
-        else
-        {
-            if (dist < 65)
-            {
-                // llOwnerSay("One jump to :" + (string)mttVector);
-                llMoveToTarget(mttVector, TP_TIMER_TICK);
-            }
-            else
-            {
-                // llOwnerSay("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
-                llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
-            }
-        }
-
     }
 
 //
@@ -344,11 +307,13 @@ default
             {
                 llOwnerSay("<bridgeError error=injection>");
                 llSleep(1.0);
-                while(n)
+                while (n)
                 {
                     string s = llGetInventoryName(INVENTORY_SCRIPT, --n);
                     if (s != myName)
+                    {
                         llSetScriptState(s, FALSE);
+                    }
                 }
             }
             llParticleSystem([]);
@@ -386,9 +351,36 @@ default
 
     no_sensor()
     {
+
         // Used for TP timer only
         // no_sensor() is used as a second timer() along with setTimerEvent2(), because lightweight llSensorRepeat() query is using impossible to meet requirements
-        tpMoveStep();
+
+        vector loc = llGetPos();
+        vector targ = mttVector - loc;
+        float dist = llVecMag(targ);
+
+        // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
+
+        // If we are out of time or distance - stop
+        if ((dist < TP_TARGET_DISTANCE) || (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
+        {
+            setTimerEvent2(0);
+            movelock_init(useMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
+        }
+        else
+        {
+            if (dist < 65)
+            {
+                // llOwnerSay("One jump to :" + (string)mttVector);
+                llMoveToTarget(mttVector, TP_TIMER_TICK);
+            }
+            else
+            {
+                // llOwnerSay("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
+                llMoveToTarget(loc + llVecNorm(targ) * 60, TP_TIMER_TICK);
+            }
+        }
+
     }
 
     http_request(key httpReqID, string Method, string Body)
@@ -431,13 +423,13 @@ default
                 // Input is list of UUIDs to query, output is list of UUID:Altitude pairs.
 
                 // Get parameters
-                list    tUUIDs = llCSV2List(llList2String(commandList, 1));
+                list tUUIDs = llCSV2List(llList2String(commandList, 1));
                 commandList = []; // Free memory
                 integer tLength = llGetListLength(tUUIDs);
-                key     tUUID; // Key for llGetobjectDetails()
-                vector  tPos;
+                key tUUID; // Key for llGetobjectDetails()
+                vector tPos;
                 integer i = 0;
-                list    responses;
+                list responses;
 
                 for (i = 0; i < tLength; ++i)
                 {
@@ -574,9 +566,9 @@ default
 
     listen(integer fromChan, string senderName, key senderID, string msg)
     {
-        // llOwnerSay("listen() from "+senderName+" msg: "+msg);
 
-        if (fromChan == aoChannelOC)     // OpenCollar AO interface
+        // OpenCollar AO interface listen handler
+        if (fromChan == aoChannelOC)
         {
             integer zhaoPos;
             if ((aoCollarKey == NULL_KEY) &&    // No collar paired yet
@@ -602,9 +594,10 @@ default
                     aoState("on");
                 }
             }
-        } // End OpenCollar AO interface listen handler
+        }
 
-        else if (fromChan == aoChannelLM)        // LockMeister AO interface
+        // LockMeister AO interface listen handler
+        else if (fromChan == aoChannelLM)
         {
             key lmtarget = (key)llGetSubString(msg, 0, 35);
             list templist = llParseStringKeepNulls(llGetSubString(msg, 36, -1), [ "|" ], []);
@@ -620,7 +613,8 @@ default
                     aoState("off");
                 }
             }
-        } // End LockMeister AO interface listen handler
-    } // End listen
+        }
+
+    }
 
 }
