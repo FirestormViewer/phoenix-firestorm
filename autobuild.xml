@@ -648,9 +648,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ed0d8767652aecd65a7fef3e28645bad</string>
+              <string>4be74ad3be7ca2a80c93a148e6e07c15</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/fmodex_3p-update-fmodex/rev/297261/arch/Darwin/installer/fmodex-4.44.31.297261-darwin-297261.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44453-darwin-201505171651-r21.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1380,9 +1380,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e62f2fc1ee9ab791d603c5b717b46119</string>
+              <string>4e5f56e2d09c3c2e5bc3c1bb46ace164</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/kdu_3p-update-kdu/rev/296932/arch/Darwin/installer/kdu-7.2.296932-darwin-296932.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.5.0-darwin-201505151424-r24.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
