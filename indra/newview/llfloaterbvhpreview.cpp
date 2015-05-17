@@ -1153,6 +1153,7 @@ void LLFloaterBvhPreview::onBtnOK(void* userdata)
 		{
 			LL_WARNS() << "Could not find motion data." << LL_ENDL;
 			LLNotificationsUtil::add("WriteAnimationFail");
+			return;
 		}
 		// </FS>
 
