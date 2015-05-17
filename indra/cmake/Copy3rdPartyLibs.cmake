@@ -183,7 +183,7 @@ elseif(DARWIN)
         libapr-1.dylib
         libaprutil-1.0.dylib
         libaprutil-1.dylib
-        #libexception_handler.dylib
+        libexception_handler.dylib
         libexpat.1.5.2.dylib
         libexpat.dylib
         libGLOD.dylib
@@ -193,11 +193,6 @@ elseif(DARWIN)
         libgrowl++.dylib
        )
 
-    # <FS:ND> We only ever need google breakpad when crash reporting is used
-    if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
-      set(release_files ${release_files} "libexception_handler.dylib")
-    endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
-    
     if (FMODEX)
       set(debug_files ${debug_files} libfmodexL.dylib)
       set(release_files ${release_files} libfmodex.dylib)

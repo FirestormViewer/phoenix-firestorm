@@ -1000,9 +1000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>171b39db6d0702535b41fad5b476e39d</string>
+              <string>af760536a469b6e28df675d4c7eca54b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/google-breakpad_3p-update-google-breakpad/rev/298033/arch/Darwin/installer/google_breakpad-1413.298033-darwin-298033.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.201505171732-r96-darwin-201505171732-r96.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
