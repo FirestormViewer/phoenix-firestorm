@@ -1149,6 +1149,11 @@ void LLFloaterBvhPreview::onBtnOK(void* userdata)
 		// <FS> Preview on own avatar
 		//LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getDummyAvatar()->findMotion(floaterp->mMotionID);
 		LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getPreviewAvatar(floaterp)->findMotion(floaterp->mMotionID);
+		if (!motionp)
+		{
+			LL_WARNS() << "Could not find motion data." << LL_ENDL;
+			LLNotificationsUtil::add("WriteAnimationFail");
+		}
 		// </FS>
 
 		S32 file_size = motionp->getFileSize();
