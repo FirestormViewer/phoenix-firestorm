@@ -214,9 +214,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0c53148aa00e51c06fa246c4130915be</string>
+              <string>94187a3606a93c0ce197c543cc34a881</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/apr_3p-update-apr/rev/297252/arch/Darwin/installer/apr_suite-1.4.5.297252-darwin-297252.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201505181533-r92-darwin-201505181533-r92.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -268,9 +268,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>637b4996f703f3e5bf835d847fc4cb81</string>
+              <string>d0c95e3e704da4bf228479bccf0a9888</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/ares_3p-update-ares/rev/295506/arch/Darwin/installer/ares-1.10.0.295506-darwin-295506.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ares-1.10.0.201505181308-r65-darwin-201505181308-r65.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -596,9 +596,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>452d1910ef853329cd59858e6c5b2c48</string>
+              <string>b721882a43edf36ffc3a3a3d4a2df373</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/expat_3p-update-expat/rev/297014/arch/Darwin/installer/expat-2.0.1.297014-darwin-297014.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.0.1.201505181444-r32-darwin-201505181444-r32.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -886,11 +886,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>71e678d70e276fc42a56926fc28a7abd</string>
+              <string>c79d090128279a73822ad894cb3448f6</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/glod_3p-update-glod/rev/296895/arch/Darwin/installer/glod-1.0pre4.296895-darwin-296895.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/glod-1.0pre4.201505182056-r82-darwin-201505182056-r82.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1272,9 +1272,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4d7658997fd0f93a9c55e40e40b1b0e5</string>
+              <string>cfe660fb52fd4bfa59206ee1823a4b42</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jpeglib_3p-update-jpeglib/rev/296854/arch/Darwin/installer/jpeglib-8c.296854-darwin-296854.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c.201505181921-r28-darwin-201505181921-r28.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1434,9 +1434,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>05eda16106df26a211f8bdd874d1fca5</string>
+              <string>dc6fe05a5541515d7e5f543609663527</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/hunspell_3p-update-hunspell/rev/296916/arch/Darwin/installer/libhunspell-1.3.2.296916-darwin-296916.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libhunspell-1.3.2.201505181737-r22-darwin-201505181737-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1488,9 +1488,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a01b411433dbf8a4b481de9e76d9a652</string>
+              <string>288d49ce663b227686c0d5848fd3939b</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libndofdev_3p-update-libndofdev/rev/297264/arch/Darwin/installer/libndofdev-0.1.297264-darwin-297264.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libndofdev-0.1.201505182345-r17-darwin-201505182345-r17.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1922,9 +1922,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>07fca1531a27915f642a5c1d95008d54</string>
+              <string>e78abd7517f28fa28b1b6c9ca8b62f87</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/oggvorbis_3p-update-oggvorbis/rev/296878/arch/Darwin/installer/ogg_vorbis-1.2.2-1.3.2.296878-darwin-296878.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.2.2-1.3.2.201505181907-r33-darwin-201505181907-r33.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2052,9 +2052,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2adb5b8bd2493d576c5d02b992d8f819</string>
+              <string>4e278d789c5d6e448d1e39211d19bf41</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/Darwin/installer/openjpeg-1.4.297018-darwin-297018.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4.201505181816-r27-darwin-201505181816-r27.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2384,9 +2384,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>22608adaf54e8ddc9182a719ba6e2b32</string>
+              <string>881126a7ebf17df5bf5d664ea8207e63</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/uriparser_3p-update-uriparser/rev/299435/arch/Darwin/installer/uriparser-0.8.0.1-darwin-299435.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/uriparser-0.8.0.1-darwin-201505181414-r17.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2438,9 +2438,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ffd3aab8e0c0ff6dadbce49ca2809078</string>
+              <string>272c1cf7c714fcc3faa9f13c4b4adb3e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/xmlrpc-emi_3p-update-xmlrpc-epi/rev/297075/arch/Darwin/installer/xmlrpc_epi-0.54.1.297075-darwin-297075.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/xmlrpc_epi-0.54.1.201505181658-r65-darwin-201505181658-r65.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
