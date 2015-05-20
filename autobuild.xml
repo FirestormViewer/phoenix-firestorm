@@ -39,9 +39,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fd4fa7d8b15db7c90ee1860bf070ac6f</string>
+              <string>370de49a91ce91516697db8968f5e8b0</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-20140629.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201505191946-r76.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1326,9 +1326,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b25a4f480e07c670ffef00c3da578f87</string>
+              <string>93ac0c66466c263430babf773839e136</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jsoncpp_3p-update-jsoncpp/rev/297281/arch/Darwin/installer/jsoncpp-0.5.0.297281-darwin-297281.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201505192025-r31-darwin-201505192025-r31.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
