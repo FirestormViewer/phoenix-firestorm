@@ -1866,6 +1866,12 @@ if (WINDOWS)
     if (INTEL_MEMOPS_LIBRARY)
       list(APPEND viewer_LIBRARIES ${INTEL_MEMOPS_LIBRARY})
     endif (INTEL_MEMOPS_LIBRARY)
+
+    # <FS:Ansariel> Build 32bit Windows with LTCG linker flag because of OpenJPG
+    if (NOT ND_BUILD64BIT_ARCH)
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
+    endif (NOT ND_BUILD64BIT_ARCH)
+    # </FS:Ansariel>
 endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
