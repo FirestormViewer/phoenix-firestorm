@@ -230,11 +230,20 @@ void ColladaExportFloater::onTextureExportCheck()
 
 void ColladaExportFloater::onTexturesSaved()
 {
-	mSaver.saveDAE( nd::aprhelper::ndConvertFilename( mFilename ) );
+	bool success = mSaver.saveDAE( nd::aprhelper::ndConvertFilename( mFilename ) );
 	LLSD args;
 	args["OBJECT"] = mObjectName;
 	args["FILENAME"] = mFilename;
-	LLNotificationsUtil::add("ExportColladaSuccess", args);
+	if (success)
+	{
+		LL_INFOS() << "Collada DAE export successful" << LL_ENDL;
+		LLNotificationsUtil::add("ExportColladaSuccess", args);
+	}
+	else
+	{
+		LL_WARNS() << "Collada DAE export failed" << LL_ENDL;
+		LLNotificationsUtil::add("ExportColladaFailure", args);
+	}
 	closeFloater();
 }
 

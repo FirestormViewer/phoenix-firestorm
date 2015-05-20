@@ -4778,6 +4778,10 @@ Export unerwartet fehlgeschlagen. Siehe Log-Datei für weitergehende Details.
 [OBJECT] erfolreich als [FILENAME] gespeichert.
 	</notification>
 
+	<notification name="ExportColladaSuccess">
+Export von [OBJECT] nach [FILENAME] fehlgeschlagen.
+	</notification>
+
 	<notification name="ImportSuccess">
 Erfolgreich [COUNT] [OBJECT] importiert.
 	</notification>

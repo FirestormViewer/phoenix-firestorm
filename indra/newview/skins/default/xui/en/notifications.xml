@@ -11771,6 +11771,14 @@ Export failed unexpectedly. Please see the log for details.
 
     <notification
      icon="alertmodal.tga"
+     name="ExportColladaFailure"
+     type="notify">
+      <tag>Export</tag>
+		Export of [OBJECT] to [FILENAME] failed.
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
      name="MeshMaxConcurrentReqTooHigh"
      type="alertmodal">
 The value you set, [VALUE], for the number of concurrent requests to load mesh objects (debug setting [DEBUGNAME]) is higher than the maximum of [MAX]. It has been reset to the default of [DEFAULT].
