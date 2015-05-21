@@ -14,6 +14,7 @@ include(LLXML)
 include(Linking)
 include(LLSharedLibs)
 include(GoogleBreakpad)
+include(WinManifest)
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -99,6 +100,8 @@ if (WINDOWS)
         LINK_FLAGS "/NODEFAULTLIB:LIBCMT"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\""
         )
+
+    EMBED_MANIFEST(windows-crash-logger 1)
 endif (WINDOWS)
 
 ll_deploy_sharedlibs_command(windows-crash-logger)

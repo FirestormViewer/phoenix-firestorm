@@ -52,6 +52,7 @@ include(UI)
 include(UnixInstall)
 include(ViewerMiscLibs)
 include(VisualLeakDetector)
+include(WinManifest)
 include(URIPARSER)
 include(Growl)
 include(ColladaDom)
@@ -2033,6 +2034,8 @@ if (WINDOWS)
             COMPILE_FLAGS "/Yullviewerprecompiledheaders.h"
             )
     endif(USE_PRECOMPILED_HEADERS)
+
+    EMBED_MANIFEST(${VIEWER_BINARY_NAME} 1)
 
     # If adding a file to viewer_manifest.py in the WindowsManifest.construct() method, be sure to add the dependency
     # here.
