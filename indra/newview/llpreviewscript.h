@@ -159,7 +159,7 @@ private:
 	void	updateButtonBar();
 // </FS:CR>
 
-    void    updateIndicators(bool compiling, bool success); // <FS:Kadah> Compile indicators
+	void	updateIndicators(bool compiling, bool success); // <FS:Kadah> Compile indicators
 
 protected:
 	void deleteBridges();
