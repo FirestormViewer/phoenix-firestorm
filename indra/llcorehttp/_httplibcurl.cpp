@@ -337,7 +337,7 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
 		// a pointer to a long, not a pointer to an int, here.
 		//int http_status(HTTP_OK);
 		long int http_status(HTTP_OK);
-                                
+
 		curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &http_status);
 		if (http_status >= 100 && http_status <= 999)
 		{
