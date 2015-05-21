@@ -14,4 +14,4 @@
         -outputresource:\"$<TARGET_FILE:${_target}>\"\;\#${type}
       COMMENT "Adding compatibility manifest to ${_target}"
     )
-  ENDMACRO(EMBED_MANIFEST _target)
+  ENDMACRO(EMBED_MANIFEST _target type)
