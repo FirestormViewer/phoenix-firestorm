@@ -1,17 +1,17 @@
 # - Embeds a specific manifest file in a Windows binary
 # Defines the following:
 # EMBED_MANIFEST - embed manifest in a windows binary with mt
-# Parameters - _target is the target file, type - 1 for EXE, 2 for DLL
+# Parameters - _target is the target file, resourceid specifies the resource identifier
 
-  MACRO(EMBED_MANIFEST _target type)
+  MACRO(EMBED_MANIFEST _target resourceid)
     ADD_CUSTOM_COMMAND(
       TARGET ${_target}
       POST_BUILD
       COMMAND "mt.exe"
       ARGS
         -manifest \"${CMAKE_SOURCE_DIR}\\tools\\manifests\\compatibility.manifest\"
-        -inputresource:\"$<TARGET_FILE:${_target}>\"\;\#${type}
-        -outputresource:\"$<TARGET_FILE:${_target}>\"\;\#${type}
+        -inputresource:\"$<TARGET_FILE:${_target}>\"\;\#${resourceid}
+        -outputresource:\"$<TARGET_FILE:${_target}>\"\;\#${resourceid}
       COMMENT "Adding compatibility manifest to ${_target}"
     )
-  ENDMACRO(EMBED_MANIFEST _target type)
+  ENDMACRO(EMBED_MANIFEST _target resourceid)
