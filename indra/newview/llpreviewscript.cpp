@@ -90,6 +90,8 @@
 #include "llviewercontrol.h"
 #include "llappviewer.h"
 #include "llfloatergotoline.h"
+#include "llloadingindicator.h" // <FS:Kadah> Compile indicator
+#include "lliconctrl.h" // <FS:Kadah> Compile indicator
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -727,6 +729,27 @@ void LLScriptEdCore::updateButtonBar()
 	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 }
 
+//<FS:Kadah> Compile Indicators
+void LLScriptEdCore::updateIndicators(bool compiling, bool success)
+{
+    LLLoadingIndicator* compile_indicator = getChild<LLLoadingIndicator>("progress_indicator");
+	if (compile_indicator)
+	{
+		compile_indicator->setVisible(compiling);
+		if (compiling) compile_indicator->start();
+		else compile_indicator->stop();
+	}
+    LLIconCtrl* status_indicator = getChild<LLIconCtrl>("status_indicator");
+    if (status_indicator)
+    {
+		status_indicator->setVisible(!compiling);
+        if (success) status_indicator->setValue("Script_Running");
+        else status_indicator->setValue("Script_Error");
+        // status_indicator->setValue("Script_NotRunning");
+    }
+}
+//</FS:Kadah>
+
 //static
 void LLScriptEdCore::onBtnPrefs(void* userdata)
 {
@@ -1242,6 +1265,8 @@ void LLScriptEdCore::doSave(BOOL close_after_save, bool sync /*= true*/)
 	mErrorList->deleteAllItems();
 	mErrorList->setCommentText(std::string());
 
+    updateIndicators(true, false); //<FS:Kadah> Compile Indicators
+
 	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		LL_INFOS() << "passing to preproc" << LL_ENDL;
@@ -1723,6 +1748,8 @@ void LLPreviewLSL::callbackLSLCompileSucceeded()
 	mScriptEd->mErrorList->addCommentText(LLTrans::getString("SaveComplete"));
 	// </FS>
 
+    mScriptEd->updateIndicators(false, true); //<FS:Kadah> Compile Indicators
+
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine
 	if ( (!mBackupFilename.empty()) && (!mScriptEd->hasChanged()) )
@@ -1752,6 +1779,8 @@ void LLPreviewLSL::callbackLSLCompileFailed(const LLSD& compile_errors)
 		mScriptEd->mErrorList->addElement(row);
 	}
 	mScriptEd->selectFirstError();
+
+    mScriptEd->updateIndicators(false, false); //<FS:Kadah> Compile Indicators
 
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine
@@ -2267,6 +2296,8 @@ void LLLiveLSLEditor::callbackLSLCompileSucceeded(const LLUUID& task_id,
 	mScriptEd->mErrorList->addCommentText(LLTrans::getString("SaveComplete"));
 	// </FS>
 
+    mScriptEd->updateIndicators(false, true); //<FS:Kadah> Compile Indicators
+
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine
 	if ( (!mBackupFilename.empty()) && (!mScriptEd->hasChanged()) )
@@ -2296,6 +2327,8 @@ void LLLiveLSLEditor::callbackLSLCompileFailed(const LLSD& compile_errors)
 		mScriptEd->mErrorList->addElement(row);
 	}
 	mScriptEd->selectFirstError();
+
+    mScriptEd->updateIndicators(false, false); //<FS:Kadah> Compile Indicators
 
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0
 	// Script was successfully saved so delete our backup copy if we have one and the editor is still pristine

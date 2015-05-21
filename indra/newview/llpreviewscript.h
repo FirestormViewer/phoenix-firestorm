@@ -159,6 +159,8 @@ private:
 	void	updateButtonBar();
 // </FS:CR>
 
+    void    updateIndicators(bool compiling, bool success); // <FS:Kadah> Compile indicators
+
 protected:
 	void deleteBridges();
 	void setHelpPage(const std::string& help_string);
