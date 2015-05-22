@@ -179,14 +179,14 @@
     <button
      follows="top|left"
      height="16"
-     image_selected="lag_status_good.tga"
-     image_unselected="lag_status_good.tga"
+     image_selected="LagStatus_Good"
+     image_unselected="LagStatus_Good"
      layout="topleft"
      left="8"
      name="client_lagmeter"
      tab_stop="false"
      tool_tip="Client lag status"
-     top="24"
+     top="22"
      width="16" />
     <text
      type="string"
@@ -197,7 +197,7 @@
      layout="topleft"
      left_pad="3"
      name="client"
-     top_delta="0"
+     top_delta="2"
      width="128">
         Client
     </text>
@@ -227,14 +227,14 @@
     <button
      follows="top|left"
      height="16"
-     image_selected="lag_status_good.tga"
-     image_unselected="lag_status_good.tga"
+     image_selected="LagStatus_Warning"
+     image_unselected="LagStatus_Warning"
      layout="topleft"
      left="8"
      name="network_lagmeter"
      tab_stop="false"
      tool_tip="Network lag status"
-     top="64"
+     top="62"
      width="16" />
     <text
      type="string"
@@ -245,7 +245,7 @@
      layout="topleft"
      left_pad="3"
      name="network"
-     top_delta="0"
+     top_delta="2"
      width="128">
         Network
     </text>
@@ -275,14 +275,14 @@
     <button
      follows="top|left"
      height="16"
-     image_selected="lag_status_good.tga"
-     image_unselected="lag_status_good.tga"
+     image_selected="LagStatus_Critical"
+     image_unselected="LagStatus_Critical"
      layout="topleft"
      left="8"
      name="server_lagmeter"
      tab_stop="false"
      tool_tip="Server lag status"
-     top="104"
+     top="102"
      width="16" />
     <text
      type="string"
@@ -293,7 +293,7 @@
      layout="topleft"
      left_pad="3"
      name="server"
-     top_delta="0"
+     top_delta="2"
      width="60">
         Server
     </text>

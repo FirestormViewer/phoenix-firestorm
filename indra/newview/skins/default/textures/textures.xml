@@ -1032,4 +1032,8 @@ with the same filename but different name
 <texture name="TrashItem_Menu" file_name="icons/TrashItem_Menu.png" preload="false" />
 
 <texture name="Active_Voice_Tab" file_name="legacy/active_voice_tab.tga" preload="false" />
+
+<texture name="LagStatus_Good" file_name="icons/green_square.png" preload="false" />
+<texture name="LagStatus_Warning" file_name="icons/yellow_square.png" preload="false" />
+<texture name="LagStatus_Critical" file_name="icons/red_square.png" preload="false" />
 </textures>

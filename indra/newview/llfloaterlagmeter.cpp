@@ -40,9 +40,14 @@
 #include "llfocusmgr.h"
 #include "lltextbox.h"
 
-const std::string LAG_CRITICAL_IMAGE_NAME = "lag_status_critical.tga";
-const std::string LAG_WARNING_IMAGE_NAME  = "lag_status_warning.tga";
-const std::string LAG_GOOD_IMAGE_NAME     = "lag_status_good.tga";
+// <FS:Ansariel> Nicer icons
+//const std::string LAG_CRITICAL_IMAGE_NAME = "lag_status_critical.tga";
+//const std::string LAG_WARNING_IMAGE_NAME  = "lag_status_warning.tga";
+//const std::string LAG_GOOD_IMAGE_NAME     = "lag_status_good.tga";
+const std::string LAG_CRITICAL_IMAGE_NAME = "LagStatus_Critical";
+const std::string LAG_WARNING_IMAGE_NAME = "LagStatus_Warning";
+const std::string LAG_GOOD_IMAGE_NAME = "LagStatus_Good";
+// </FS:Ansariel>
 
 LLFloaterLagMeter::LLFloaterLagMeter(const LLSD& key)
 	:	LLFloater(key)
@@ -171,7 +176,7 @@ void LLFloaterLagMeter::determineClient()
 
 	if(find_cause)
 	{
-		if(gSavedSettings.getF32("RenderFarClip") > 128)
+		if(gSavedSettings.getF32("RenderFarClip") > 128.f)
 		{
 			mClientCause->setText( getString("client_draw_distance_cause_msg", mStringArgs) );
 		}
