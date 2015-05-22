@@ -4456,6 +4456,9 @@ Nie można tego cofnąć.
 	<notification name="ExportColladaSuccess">
 		Zapisano z powodzeniem [OBJECT] do [FILENAME].
 	</notification>
+	<notification name="ExportColladaFailure">
+		Eksport [OBJECT] do [FILENAME] nie powiódł się.
+	</notification>
 	<notification name="MeshMaxConcurrentReqTooHigh">	
 		Wartość ustawienia ([VALUE]) dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie (ustawienie debugowania [DEBUGNAME]) jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
 	</notification>
