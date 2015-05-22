@@ -7,7 +7,7 @@
 		<menu_item_check label="Wyświetlane" name="radarFmtDN"/>
 		<menu_item_check label="Nazwa konta" name="radarFmtUN"/>
 		<menu_item_check label="Wyświetlane (Nazwa konta)" name="radarFmtDNUN"/>
-		<menu_item_check label="Wyświetlane (Wyświetlane)" name="radarFmtUNDN"/>
+		<menu_item_check label="Nazwa konta (Wyświetlane)" name="radarFmtUNDN"/>
 	</context_menu>
 	<context_menu label="Widoczne kolumny" name="visible_columns">
 		<menu_item_check label="Rozmawia głosowo" name="voice_level"/>
