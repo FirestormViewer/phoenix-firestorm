@@ -942,7 +942,10 @@ void LLFloaterBvhPreview::onCommitPriority()
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
-	motionp->setPriority(llfloor((F32)getChild<LLUICtrl>("priority")->getValue().asReal()));
+	if (motionp)
+	{
+		motionp->setPriority(llfloor((F32)getChild<LLUICtrl>("priority")->getValue().asReal()));
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -959,7 +962,10 @@ void LLFloaterBvhPreview::onCommitEaseIn()
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
-	motionp->setEaseIn((F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal());
+	if (motionp)
+	{
+		motionp->setEaseIn((F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal());
+	}
 	resetMotion();
 }
 
@@ -977,7 +983,10 @@ void LLFloaterBvhPreview::onCommitEaseOut()
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
-	motionp->setEaseOut((F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal());
+	if (motionp)
+	{
+		motionp->setEaseOut((F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal());
+	}
 	resetMotion();
 }
 
@@ -995,7 +1004,7 @@ bool LLFloaterBvhPreview::validateEaseIn(const LLSD& data)
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
-	if (!motionp->getLoop())
+	if (motionp && !motionp->getLoop())
 	{
 		F32 new_ease_in = llclamp((F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal(), 0.f, motionp->getDuration() - motionp->getEaseOutDuration());
 		getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(new_ease_in));
@@ -1018,7 +1027,7 @@ bool LLFloaterBvhPreview::validateEaseOut(const LLSD& data)
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
-	if (!motionp->getLoop())
+	if (motionp && !motionp->getLoop())
 	{
 		F32 new_ease_out = llclamp((F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal(), 0.f, motionp->getDuration() - motionp->getEaseInDuration());
 		getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(new_ease_out));
