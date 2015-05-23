@@ -874,6 +874,17 @@
             <key>Value</key>
                 <string/>
         </map>
+	<key>FSllOwnerSayToScriptDebugWindow</key>
+		<map>
+			<key>Comment</key>
+				<string>Show llOwnerSays in script debug window instead of local chat</string>
+			<key>Persist</key>
+				<integer>1</integer>
+			<key>Type</key>
+				<string>Boolean</string>
+			<key>Value</key>
+				<integer>0</integer>
+		</map>
     <!-- Settings imported from Exodus -->
     <key>ExodusFlickrToken</key>
         <map>

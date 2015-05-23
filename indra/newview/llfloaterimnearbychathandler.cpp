@@ -607,7 +607,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// errors in separate window.
 	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	// if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
-	static LLCachedControl<bool> FSllOwnerSayToScriptDebugWindow(gSavedSettings, "FSllOwnerSayToScriptDebugWindow");
+	static LLCachedControl<bool> FSllOwnerSayToScriptDebugWindow(gSavedPerAccountSettings, "FSllOwnerSayToScriptDebugWindow");
 	if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG || (chat_msg.mChatType == CHAT_TYPE_OWNER && FSllOwnerSayToScriptDebugWindow))
 	{
 		// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow] Show llOwnerSays in the script debug window instead of local chat
