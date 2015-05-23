@@ -185,12 +185,16 @@ void LLPanelSnapshotPostcard::sendPostcard()
 	postcard["name"] = getChild<LLUICtrl>("name_form")->getValue().asString();
 	postcard["subject"] = subject;
 	postcard["msg"] = getChild<LLUICtrl>("msg_form")->getValue().asString();
-	LLPostCard::send(LLFloaterSnapshot::getImageData(), postcard);
+	// <FS:Ansariel> FIRE-16201: Snapshot floater might get stuck if snapshot to email fails
+	//LLPostCard::send(LLFloaterSnapshot::getImageData(), postcard);
 
 	// Give user feedback of the event.
 	gViewerWindow->playSnapshotAnimAndSound();
 
 	LLFloaterSnapshot::postSave();
+
+	// <FS:Ansariel> FIRE-16201: Snapshot floater might get stuck if snapshot to email fails
+	LLPostCard::send(LLFloaterSnapshot::getImageData(), postcard);
 }
 
 void LLPanelSnapshotPostcard::onMsgFormFocusRecieved()
