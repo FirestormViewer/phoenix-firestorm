@@ -317,8 +317,8 @@
              width="18" />
             
             <loading_indicator
-             top="0"
-             right="-12"
+             top="2"
+             right="-10"
              height="18"
              width="18"
              layout="topleft"
@@ -326,10 +326,10 @@
              name="progress_indicator"
              visible="false" />
             <icon
-             top="0"
-             right="-12"
-             height="16"
-             width="16"
+             top="2"
+             right="-10"
+             height="18"
+             width="18"
              layout="topleft"
              follows="top|right"
              name="status_indicator"
