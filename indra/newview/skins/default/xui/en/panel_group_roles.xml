@@ -407,10 +407,11 @@ things in this group. There&apos;s a broad variety of Abilities.
         type="string"
         height="18"
         left_pad="5"
-        follows="top|left"
+        follows="top|left|right"
         layout="topleft"
         name="ban_count"
-        width="100">
+        use_ellipses="true"
+        right="-1">
       </text>
     </panel>
   </tab_container>
