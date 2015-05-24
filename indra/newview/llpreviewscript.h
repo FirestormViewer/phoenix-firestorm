@@ -170,6 +170,7 @@ protected:
 	static void onErrorList(LLUICtrl*, void* user_data);
 
 	bool			mLive;
+	bool			mCompiling; // <FS:Kadah> Compile indicators
 
 private:
 	std::string		mSampleText;

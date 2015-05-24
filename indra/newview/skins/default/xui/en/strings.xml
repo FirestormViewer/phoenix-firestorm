@@ -597,6 +597,7 @@ Please try logging in again in a minute.</string>
 	<string name="backup_files">Object Backups</string>
 	<string name="collada_files">COLLADA Models</string>
 	<string name="csv_files">Comma separated values</string>
+	<string name="recompile_script_verb">Recompile</string>
 
   <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>

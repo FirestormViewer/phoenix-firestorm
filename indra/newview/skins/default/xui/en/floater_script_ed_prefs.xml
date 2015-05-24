@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_resize="false"
- height="660"
+ height="680"
  layout="topleft"
  name="floater_script_colors"
  help_topic="lsl_editor_preferences"
@@ -658,6 +658,15 @@ default
 		top_pad="6"
 		width="200"
 		label="Route llOwnerSay to script debug window" />
+	<check_box
+		control_name="FSScriptEditiorRecompileButton"
+		follows="left|top"
+		layout="topleft"
+		height="12"
+		name="FSScriptEditiorRecompileButton_checkbox"
+		top_pad="6"
+		width="200"
+		label="Enable recompile button (useful for #include scripts)" />
         
 	<button
 		follows="top|left"

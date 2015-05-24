@@ -425,6 +425,7 @@ LLScriptEdCore::LLScriptEdCore(
 	mLSLProc(NULL),
 	mPostEditor(NULL),
 	// </FS:CR>
+	mCompiling(false), //<FS:KC> Compile indicators, recompile button
 	mHasScriptData(FALSE)
 {
 	setFollowsAll();
@@ -719,7 +720,7 @@ void LLScriptEdCore::initButtonBar()
 void LLScriptEdCore::updateButtonBar()
 {
 	mSaveBtn->setEnabled(hasChanged());
-	mSaveBtn2->setEnabled(hasChanged());	// <FS:Zi> support extra save button
+	// mSaveBtn2->setEnabled(hasChanged());	// <FS:Zi> support extra save button
 	mCutBtn->setEnabled(mEditor->canCut());
 	mCopyBtn->setEnabled(mEditor->canCopy());
 	mPasteBtn->setEnabled(mEditor->canPaste());
@@ -727,14 +728,20 @@ void LLScriptEdCore::updateButtonBar()
 	mRedoBtn->setEnabled(mEditor->canRedo());
 	mSaveToDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
 	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
+	//<FS:Kadah> Recompile button
+	static LLCachedControl<bool> FSScriptEditiorRecompileButton(gSavedSettings, "FSScriptEditiorRecompileButton");
+	mSaveBtn2->setEnabled(hasChanged() || (mLSLProc && FSScriptEditiorRecompileButton && !mCompiling));
+	mSaveBtn2->setLabel((!mLSLProc || !FSScriptEditiorRecompileButton || hasChanged()) ? LLTrans::getString("save_file_verb") : LLTrans::getString("recompile_script_verb"));
+	//</FS:Kadah>
 }
 
 //<FS:Kadah> Compile Indicators
 void LLScriptEdCore::updateIndicators(bool compiling, bool success)
 {
+	mCompiling = compiling;
 	LLLoadingIndicator* compile_indicator = getChild<LLLoadingIndicator>("progress_indicator");
-	compile_indicator->setVisible(compiling);
-	if (compiling)
+	compile_indicator->setVisible(mCompiling);
+	if (mCompiling)
 	{
 		compile_indicator->start();
 	}
@@ -744,7 +751,7 @@ void LLScriptEdCore::updateIndicators(bool compiling, bool success)
 	}
 
 	LLIconCtrl* status_indicator = getChild<LLIconCtrl>("status_indicator");
-	status_indicator->setVisible(!compiling);
+	status_indicator->setVisible(!mCompiling);
 	status_indicator->setValue((success ? "Script_Running" : "Script_Error"));
 }
 //</FS:Kadah>
