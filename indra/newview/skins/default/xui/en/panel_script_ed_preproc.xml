@@ -452,9 +452,9 @@
      label="Edit..."
      layout="topleft"
      top_delta="-4"
-     right="-95"
+     right="-104"
      name="edit_btn_2"
-     width="81" />
+     width="90" />
     <button
      follows="right|bottom"
      height="23"
@@ -463,5 +463,5 @@
      layout="topleft"
      left_pad="4"
      name="save_btn_2"
-     width="81" />
+     width="90" />
 </panel>

@@ -8,7 +8,7 @@
  help_topic="lsl_editor_preferences"
  save_rect="true"
  title="Script Editor Preferences"
- width="320">
+ width="330">
 	<text
 	 follows="left|top"
 	 height="15"
