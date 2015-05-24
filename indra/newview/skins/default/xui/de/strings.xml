@@ -1324,6 +1324,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="csv_files">
 		Komma-separierte Werte
 	</string>
+	<string name="recompile_script_verb">
+		Rekompilieren
+	</string>
 	<string name="AvatarSetNotAutorespond">
 		Automatische Antwort AUS
 	</string>

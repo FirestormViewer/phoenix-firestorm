@@ -68,5 +68,6 @@
 		Erweiterte Optionen:
 	</text>
 	<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
+	<check_box label="Rekompilieren-Button akt. (u.a. für #include-Skripte)" name="FSScriptEditiorRecompileButton_checkbox"/>
 	<button name="close_btn" label="OK"/>
 </floater>
