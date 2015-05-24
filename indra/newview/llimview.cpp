@@ -538,7 +538,6 @@ LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string&
 	mHasOfflineMessage(has_offline_msg),
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-08-01 (Catznip-3.3)
 	mCloseAction(CLOSE_DEFAULT),
-	mParticipantLastMessageTime(LLDate::now()),
 // [/SL:KB]
 	mParticipantUnreadMessageCount(0),
 	mNumUnread(0),
@@ -1328,9 +1327,6 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
 			|| INTERACTIVE_SYSTEM_FROM == from)
 	{
 		++(session->mParticipantUnreadMessageCount);
-// [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-08-01 (Catznip-3.3)
-		session->mParticipantLastMessageTime = LLDate::now();
-// [/SL:K]
 	}
 
 	return session;
@@ -3416,11 +3412,14 @@ bool LLIMMgr::leaveSession(const LLUUID& session_id)
 	// Only group sessions can be snoozed
 	if ( (im_session->isGroupSessionType()) && (LLIMModel::LLIMSession::CLOSE_SNOOZE == im_session->mCloseAction) )
 	{
+		static LLCachedControl<S32> s_nSnoozeTime(gSavedSettings, "GroupSnoozeTime", 900);
 		snoozed_sessions_t::iterator itSession = mSnoozedSessions.find(session_id);
+		F64 expirationTime = LLTimer::getTotalSeconds() + F64(s_nSnoozeTime);
+
 		if (mSnoozedSessions.end() != itSession)
-			itSession->second = im_session->mParticipantLastMessageTime.secondsSinceEpoch();
+			itSession->second = expirationTime;
 		else
-			mSnoozedSessions.insert(std::pair<LLUUID, F64>(session_id, im_session->mParticipantLastMessageTime.secondsSinceEpoch()));
+			mSnoozedSessions.insert(std::pair<LLUUID, F64>(session_id, expirationTime));
 	}
 	else
 	{
@@ -3613,10 +3612,8 @@ BOOL LLIMMgr::hasSession(const LLUUID& session_id)
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-16 (Catznip-3.3)
 bool LLIMMgr::checkSnoozeExpiration(const LLUUID& session_id) const
 {
-	static LLCachedControl<S32> s_nSnoozeTime(gSavedSettings, "GroupSnoozeTime", 900);
-
 	snoozed_sessions_t::const_iterator itSession = mSnoozedSessions.find(session_id);
-	return (mSnoozedSessions.end() != itSession) && (itSession->second + s_nSnoozeTime < LLTimer::getTotalSeconds());
+	return (mSnoozedSessions.end() != itSession) && (itSession->second <= LLTimer::getTotalSeconds());
 }
 
 bool LLIMMgr::isSnoozedSession(const LLUUID& session_id) const
