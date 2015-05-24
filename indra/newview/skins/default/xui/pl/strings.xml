@@ -1274,6 +1274,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="csv_files">
 		Wartości oddzielone przecinkami
 	</string>
+	<string name="recompile_script_verb">
+		Rekompiluj
+	</string>
 	<string name="shape">
 		Kształt
 	</string>

@@ -68,4 +68,5 @@
 		Zaawansowane:
 	</text>
 	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Kieruj llOwnerSay do okna debugowania skryptów" />
+	<check_box name="FSScriptEditiorRecompileButton_checkbox" label="Przycisk rekompilacji (dobre dla skryptów #includes)" />
 </floater>
