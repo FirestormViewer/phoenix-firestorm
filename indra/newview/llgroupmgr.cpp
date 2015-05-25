@@ -33,8 +33,9 @@
 
 // <FS:ND> Disable some warnings on newer GCC versions.
 // This might also trigger on something like 4.8, but I did not suchh a GCC to test anything lower than 4.9 and higher than 4.6
+//<FS:TS? This breaks on gcc 4.8, too. Dunno about 4.7.
 #if LL_LINUX
- #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 40900
+ #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ ) >= 40800
    #pragma GCC diagnostic ignored "-Wuninitialized"
    #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
  #endif
