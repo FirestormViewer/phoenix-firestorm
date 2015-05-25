@@ -9444,8 +9444,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToggleUIHints(), "ToggleUIHints");
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0
-	commit.add("RLV.ToggleEnabled", boost::bind(&rlvMenuToggleEnabled));
-	enable.add("RLV.CheckEnabled", boost::bind(&rlvMenuCheckEnabled));
+	enable.add("RLV.MainToggleVisible", boost::bind(&rlvMenuMainToggleVisible, _1));
 	if (rlv_handler_t::isEnabled())
 	{
 		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));

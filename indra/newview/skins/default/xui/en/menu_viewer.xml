@@ -2289,9 +2289,13 @@
            label="RestrainedLove API"
            name="RLV API">
               <menu_item_check.on_check
-               function="RLV.CheckEnabled" />
+               function="CheckControl"
+               parameter="RestrainedLove" />
               <menu_item_check.on_click
-               function="RLV.ToggleEnabled" />
+               function="ToggleControl"
+               parameter="RestrainedLove" />
+              <menu_item_check.on_visible
+               function="RLV.MainToggleVisible" />
         </menu_item_check>
         <menu_item_call
          label="Show Debug Settings"
