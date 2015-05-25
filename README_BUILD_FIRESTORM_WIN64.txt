@@ -12,7 +12,7 @@ chain might accidentally pick up a 32 bit compiler, resulting in x86<>x64 mismat
 
 Configure/build is nearly the same as building a 32 bit version.
 autobuild -m64 configure -c ReleaseFS -- --chan <channel> --package -DFS_UPGRADECODES='<MSI_UPGRADE_CODE>,<EXE_UPGRADE_CODE>'
-autobuild -m64 build -c ReleaseFS --no_configure
+autobuild -m64 build -c ReleaseFS --no-configure
 
 The resulting installer/exe gets created in build-vc120_x64/newview/Release
 
