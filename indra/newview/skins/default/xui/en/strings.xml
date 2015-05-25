@@ -2584,9 +2584,6 @@ Try enclosing path to the editor with double quotes.
   <string name="SanityCheckBetween">The settings control &quot;[CONTROL_NAME]&quot; should be between [VALUE_1] and [VALUE_2].</string>
   <string name="SanityCheckNotBetween">The settings control &quot;[CONTROL_NAME]&quot; should not be between [VALUE_1] and [VALUE_2].</string>
 
-  <string name="RlvEnabled">RestrainedLove Support will be enabled after you restart.</string>
-  <string name="RlvDisabled">RestrainedLove Support will be disabled after you restart.</string>
-
   <!-- Media filter options -->
   <string name="MediaFilterActionAllow">Allow</string>
   <string name="MediaFilterActionDeny">Deny</string>

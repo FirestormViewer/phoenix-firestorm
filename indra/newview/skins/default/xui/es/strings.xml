@@ -5569,12 +5569,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="SanityCheckNotBetween">
 		La configuración de &quot;[CONTROL_NAME]&quot; no debería estar entre [VALUE_1] y [VALUE_2].
 	</string>
-	<string name="RlvEnabled">
-		Se activará el soporte para RestrainedLove después de reiniciar.
-	</string>
-	<string name="RlvDisabled">
-		Se desactivará el soporte para RestrainedLove después de reiniciar.
-	</string>
 	<string name="MediaFilterActionAllow">Permitir</string>
 	<string name="MediaFilterActionDeny">Denegar</string>
 	<string name="MediaFilterConditionAlways">Siempre</string>

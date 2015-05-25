@@ -5155,12 +5155,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="SanityCheckNotBetween">
 		Ustawienie &quot;[CONTROL_NAME]&quot; nie powinno mieć wartości pomiędzy [VALUE_1] i [VALUE_2]
 	</string>
-	<string name="RlvEnabled">
-		Wsparcie dla RestrainedLove zostanie włączone po restarcie
-	</string>
-	<string name="RlvDisabled">
-		Wsparcie dla RestrainedLove zostanie wyłączone po restarcie
-	</string>
 	<string name="MediaFilterActionAllow">
 		Zezwól
 	</string>

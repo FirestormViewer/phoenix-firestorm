@@ -5737,12 +5737,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	
 <!-- Firestorm-specific translations -->
-	<string name="RlvEnabled">
-		RestrainedLove-Unterstützung ist beim nächsten Start eingeschaltet.
-	</string>
-	<string name="RlvDisabled">
-		RestrainedLove-Unterstützung ist beim nächsten Start ausgeschaltet.
-	</string>
 	<string name="MediaFilterActionAllow">
 		erlauben
 	</string>
