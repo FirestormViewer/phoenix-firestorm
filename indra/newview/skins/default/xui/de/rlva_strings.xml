@@ -86,6 +86,28 @@
 			<key>value</key>
 			<string>Gitternetz-Modus konnte aufgrund von RLV-Einschränkungen nicht aktiviert werden.</string>
 		</map>
+
+		<!-- System messages -->
+		<key>message_toggle_restart</key>
+		<map>
+			<key>value</key>
+			<string>RestrainedLove-Support wird nach einem Neustart %s.</string>
+		</map>
+		<key>message_toggle_restart_pending</key>
+		<map>
+			<key>value</key>
+			<string> (Neustart ausstehend)</string>
+		</map>
+		<key>message_toggle_restart_enabled</key>
+		<map>
+			<key>value</key>
+			<string>aktiviert</string>
+		</map>
+		<key>message_toggle_restart_disabled</key>
+		<map>
+			<key>value</key>
+			<string>deaktiviert</string>
+		</map>
 	</map>
 </map>
 </llsd>
