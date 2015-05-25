@@ -83,6 +83,8 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
+		gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
+
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
@@ -142,6 +144,19 @@ bool RlvSettings::onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting)
 	if (pfSetting)
 		*pfSetting = sdValue.asBoolean();
 	return true;
+}
+
+// Checked: 2015-05-25 (RLVa-1.5.0)
+void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
+{
+	if (sdValue.asBoolean() != (bool)rlv_handler_t::isEnabled())
+	{
+		LLNotificationsUtil::add(
+			"GenericAlert",
+			LLSD().with("MESSAGE", llformat(RlvStrings::getString("message_toggle_restart").c_str(), 
+				(sdValue.asBoolean()) ? RlvStrings::getString("message_toggle_restart_enabled").c_str()
+				                      : RlvStrings::getString("message_toggle_restart_disabled").c_str())));
+	}
 }
 
 // ============================================================================
@@ -538,21 +553,18 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 // Generic menu enablers
 //
 
-// Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-bool rlvMenuCheckEnabled()
+// Checked: 2015-05-25 (RLVa-1.5.0)
+bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 {
-	return rlv_handler_t::isEnabled();
-}
-
-// Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-bool rlvMenuToggleEnabled()
-{
-	gSavedSettings.setBOOL(RLV_SETTING_MAIN, !rlv_handler_t::isEnabled());
-
-	LLSD args;
-	args["MESSAGE"] = (rlv_handler_t::isEnabled() ? LLTrans::getString("RlvDisabled") : LLTrans::getString("RlvEnabled"));
-	LLNotificationsUtil::add("GenericAlert", args);
-	
+	LLMenuItemCheckGL* pMenuItem = dynamic_cast<LLMenuItemCheckGL*>(pMenuCtrl);
+	if (pMenuItem)
+	{
+		static std::string strLabel = pMenuItem->getLabel();
+		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
+			pMenuItem->setLabel(strLabel);
+		else
+			pMenuItem->setLabel(strLabel + RlvStrings::getString("message_toggle_restart_pending"));
+	}
 	return true;
 }
 
