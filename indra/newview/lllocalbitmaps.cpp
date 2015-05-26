@@ -561,14 +561,16 @@ void LLLocalBitmap::updateUserLayers(LLUUID old_id, LLUUID new_id, LLWearableTyp
 					LLAvatarAppearanceDefines::ETextureIndex reg_texind = getTexIndex(type, baked_texind);
 					if (reg_texind != LLAvatarAppearanceDefines::TEX_NUM_INDICES)
 					{
-						U32 index = gAgentWearables.getWearableIndex(wearable);
-						gAgentAvatarp->setLocalTexture(reg_texind, gTextureList.getImage(new_id), FALSE, index);
-						// <FS:Ansariel> [Legacy Bake]
-						//gAgentAvatarp->wearableUpdated(type);
-						gAgentAvatarp->wearableUpdated(type, FALSE);
-
-						/* telling the manager to rebake once update cycle is fully done */
-						LLLocalBitmapMgr::setNeedsRebake();
+						U32 index;
+						if (gAgentWearables.getWearableIndex(wearable,index))
+						{
+							gAgentAvatarp->setLocalTexture(reg_texind, gTextureList.getImage(new_id), FALSE, index);
+							// <FS:Ansariel> [Legacy Bake]
+							//gAgentAvatarp->wearableUpdated(type);
+							gAgentAvatarp->wearableUpdated(type, FALSE);
+							/* telling the manager to rebake once update cycle is fully done */
+							LLLocalBitmapMgr::setNeedsRebake();
+						}
 					}
 
 				}
