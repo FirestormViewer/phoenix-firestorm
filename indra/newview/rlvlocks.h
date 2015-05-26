@@ -533,7 +533,7 @@ inline ERlvWearMask RlvWearableLocks::canWear(LLWearableType::EType eType) const
 	return (!isLockedWearableType(eType, RLV_LOCK_ADD))
 	  ? ((!hasLockedWearable(eType)) 
 			? RLV_WEAR 
-			: (gAgentWearables.getWearableCount(eType) < LLAgentWearables::MAX_CLOTHING_PER_TYPE) ? RLV_WEAR_ADD : RLV_WEAR_LOCKED)
+			: (gAgentWearables.canAddWearable(eType)) ? RLV_WEAR_ADD : RLV_WEAR_LOCKED)
 	  : RLV_WEAR_LOCKED;
 }
 

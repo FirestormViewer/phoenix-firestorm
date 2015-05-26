@@ -1405,11 +1405,11 @@ void LLAppearanceMgr::wearItemsOnAvatar(const uuid_vec_t& item_ids_to_wear,
         }
 
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	replace |= (LLAssetType::AT_BODYPART == item_to_wear->getType()); // Body parts should always replace
-	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item_to_wear, (replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
-	{
-		return false;
-	}
+		replace |= (LLAssetType::AT_BODYPART == item_to_wear->getType()); // Body parts should always replace
+		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item_to_wear, (replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
+		{
+			continue;
+		}
 // [/RLVa:KB]
 
         switch (item_to_wear->getType())
@@ -2502,11 +2502,11 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	remove_non_link_items(obj_items);
 	remove_non_link_items(gest_items);
 // [SL:KB] - Patch: Apperance-Misc | Checked: 2010-11-24 (Catznip-2.4)
-	// Since we're following folder links we might have picked up new duplicates, or exceeded MAX_CLOTHING_PER_TYPE
+	// Since we're following folder links we might have picked up new duplicates, or exceeded MAX_CLOTHING_LAYERS
 	removeDuplicateItems(wear_items);
 	removeDuplicateItems(obj_items);
 	removeDuplicateItems(gest_items);
-	filterWearableItems(wear_items, LLAgentWearables::MAX_CLOTHING_PER_TYPE);
+	filterWearableItems(wear_items, 0, LLAgentWearables::MAX_CLOTHING_LAYERS);
 // [/SL:KB]
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
 	// Wearing two wearables that share the same asset causes some issues
