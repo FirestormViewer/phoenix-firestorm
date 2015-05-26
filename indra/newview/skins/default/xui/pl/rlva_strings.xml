@@ -102,6 +102,26 @@
 				<key>customizable</key>
 				<boolean>1</boolean>
 			</map>
+			<key>message_toggle_restart</key>
+			<map>
+				<key>value</key>
+				<string>Wsparcie dla RestrainedLove zostanie %s po restarcie</string>
+			</map>
+			<key>message_toggle_restart_pending</key>
+			<map>
+				<key>value</key>
+				<string> (wymagany restart)</string>
+			</map>
+			<key>message_toggle_restart_enabled</key>
+			<map>
+				<key>value</key>
+				<string>włączone</string>
+			</map>
+			<key>message_toggle_restart_disabled</key>
+			<map>
+				<key>value</key>
+				<string>wyłączone</string>
+			</map>
 		</map>
 		<key>anonyms</key>
 		<array>
