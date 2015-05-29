@@ -122,8 +122,8 @@ extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
 extern F32 ANIM_SPEED_MIN;
 extern U32 JOINT_COUNT_REQUIRED_FOR_FULLRIG;
-const F32 MAX_HOVER_Z = 2.0;
-const F32 MIN_HOVER_Z = -2.0;
+const F32 MAX_HOVER_Z = 2.0f;
+const F32 MIN_HOVER_Z = -2.0f;
 
 // #define OUTPUT_BREAST_DATA
 
@@ -2619,7 +2619,8 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 			mFirstFullyVisible = FALSE;
 			LLAppearanceMgr::instance().onFirstFullyVisible();
 
-			AOEngine::instance().onLoginComplete();		// ## Zi: Animation Overrider
+			// <FS:Zi> Animation Overrider
+			AOEngine::instance().onLoginComplete();
 		}
 		if (isFullyLoaded() && mFirstFullyVisible && !isSelf())
 		{
@@ -3459,12 +3460,15 @@ void LLVOAvatar::idleUpdateBelowWater()
 	F32 water_height;
 	water_height = getRegion()->getWaterHeight();
 
-	BOOL wasBelowWater = mBelowWater;			// ## Zi: Animation Overrider
+	// <FS:Zi> Animation Overrider
+	BOOL wasBelowWater = mBelowWater;
 	mBelowWater =  avatar_height < water_height;
-	// ## Zi: Animation Overrider
-	if (isSelf() && wasBelowWater!=mBelowWater)
+	// <FS:Zi> Animation Overrider
+	if (isSelf() && wasBelowWater != mBelowWater)
+	{
 		AOEngine::instance().checkBelowWater(mBelowWater);
-	// ## Zi: Animation Overrider
+	}
+	// </FS:Zi> Animation Overrider
 }
 
 void LLVOAvatar::slamPosition()
@@ -5497,19 +5501,26 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 {
 	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
-	// ## Zi: Animation Overrider
+	// <FS:Zi> Animation Overrider
+	//LLUUID remap_id = remapMotionID(id);
 	LLUUID remap_id;
-	if(isSelf())
+	if (isSelf())
 	{
-		remap_id=AOEngine::getInstance()->override(id,TRUE);
-		if(remap_id.isNull())
-			remap_id=remapMotionID(id);
+		remap_id = AOEngine::getInstance()->override(id, TRUE);
+		if (remap_id.isNull())
+		{
+			remap_id = remapMotionID(id);
+		}
 		else
-			gAgent.sendAnimationRequest(remap_id,ANIM_REQUEST_START);
+		{
+			gAgent.sendAnimationRequest(remap_id, ANIM_REQUEST_START);
+		}
 	}
 	else
-		remap_id=remapMotionID(id);
-	// ## Zi: Animation Overrider
+	{
+		remap_id = remapMotionID(id);
+	}
+	// </FS:Zi> Animation Overrider
 
 	if (remap_id != id)
 	{
@@ -5531,19 +5542,26 @@ BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
 {
 	LL_DEBUGS() << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
-	// ## Zi: Animation Overrider
+	// <FS:Zi> Animation Overrider
+	//LLUUID remap_id = remapMotionID(id);
 	LLUUID remap_id;
-	if(isSelf())
+	if (isSelf())
 	{
-		remap_id=AOEngine::getInstance()->override(id,FALSE);
-		if(remap_id.isNull())
-			remap_id=remapMotionID(id);
+		remap_id = AOEngine::getInstance()->override(id, FALSE);
+		if (remap_id.isNull())
+		{
+			remap_id = remapMotionID(id);
+		}
 		else
-			gAgent.sendAnimationRequest(remap_id,ANIM_REQUEST_STOP);
+		{
+			gAgent.sendAnimationRequest(remap_id, ANIM_REQUEST_STOP);
+		}
 	}
 	else
-		remap_id=remapMotionID(id);
-	// ## Zi: Animation Overrider
+	{
+		remap_id = remapMotionID(id);
+	}
+	// </FS:Zi> Animation Overrider
 
 	if (remap_id != id)
 	{

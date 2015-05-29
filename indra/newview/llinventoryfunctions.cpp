@@ -91,10 +91,9 @@
 
 #include <boost/foreach.hpp>
 
-#include "aoengine.h"			// ## Zi: Animation Overrider
-//-TT Client LSL Bridge
-#include "fslslbridge.h"		
-//-TT
+// Firestorm includes
+#include "aoengine.h"
+#include "fslslbridge.h"
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
