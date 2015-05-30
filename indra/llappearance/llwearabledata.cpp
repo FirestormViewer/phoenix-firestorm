@@ -103,7 +103,16 @@ void LLWearableData::pushWearable(const LLWearableType::EType type,
 	}
 	if (canAddWearable(type))
 	{
-		mWearableDatas[type].push_back(wearable);
+// [RLVa:KB] - Checked: 2010-06-08 (RLVa-1.2.0)
+		// Don't add the same wearable twice
+		U32 idxWearable;
+		if (!getWearableIndex(wearable, idxWearable))
+		{
+			mWearableDatas[type].push_back(wearable);
+		}
+// [/RLVa:KB]
+		//mWearableDatas[type].push_back(wearable);
+
 		if (trigger_updated)
 		{
 			const BOOL removed = FALSE;
