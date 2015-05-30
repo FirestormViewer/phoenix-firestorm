@@ -100,6 +100,8 @@ void LLWearableData::pushWearable(const LLWearableType::EType type,
 	{
 		// no null wearables please!
 		LL_WARNS() << "Null wearable sent for type " << type << LL_ENDL;
+		// <FS:Ansariel> Prevent adding null wearables
+		return;
 	}
 	if (canAddWearable(type))
 	{
