@@ -118,6 +118,38 @@
 // </AW: opensim-limits>
 #include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
 
+// <FS:ND> Logging for error and warning messages from colladadom
+#include "dae/daeErrorHandler.h"
+
+class FSdaeErrorHandler: public daeErrorHandler
+{
+public:
+	virtual void handleError( daeString msg )
+	{
+		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
+	}
+	virtual void handleWarning( daeString msg )
+	{
+		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
+	}
+};
+
+FSdaeErrorHandler gDaeErrorHandler;
+class FSDaeSetErrorHandler
+{
+public:
+	FSDaeSetErrorHandler()
+	{
+		daeErrorHandler::setErrorHandler( &gDaeErrorHandler );
+	}
+	~FSDaeSetErrorHandler()
+	{
+		daeErrorHandler::setErrorHandler( NULL );
+	}
+};
+
+// </FS:ND>
+
 // <FS:Ansariel> Proper matrix array length for fitted mesh
 #define JOINT_COUNT 52
 
@@ -417,7 +449,6 @@ mCalculateBtn(NULL)
 	mLastMouseY = 0;
 	mStatusLock = new LLMutex(NULL);
 	mModelPreview = NULL;
-
 	mLODMode[LLModel::LOD_HIGH] = 0;
 	for (U32 i = 0; i < LLModel::LOD_HIGH; i++)
 	{
@@ -1542,6 +1573,8 @@ bool LLModelLoader::doLoadModel()
 {
 	//first, look for a .slm file of the same name that was modified later
 	//than the .dae
+
+	FSDaeSetErrorHandler oErrorHandlerSerror; // <FS:ND/> Set up colladadom error handler.
 
 	if (mTrySLM)
 	{

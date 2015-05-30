@@ -9,6 +9,8 @@
 #   LINUX   - Linux
 #   WINDOWS - Windows
 
+set(NDTARGET_ARCH "x86" CACHE STRING "Build 64 or 32 bit viewer. Defaults to 32 bit.")
+
 if( ${NDTARGET_ARCH} STREQUAL "x64" )
   set( ND_BUILD64BIT_ARCH ON )
 elseif( ${NDTARGET_ARCH} STREQUAL "universal" )

@@ -435,7 +435,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     fi
 
     cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $LEAPMOTION $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
-          -DNDTARGET_ARCH="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+          -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
 		../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE

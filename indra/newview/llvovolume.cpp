@@ -4303,22 +4303,44 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					LLMatrix4a final_mat;
 					final_mat.clear();
 
-					S32 idx[4];
+					// <FS:ND> Avoid the 8 floorf by using SSE2.
+					// Using _mm_cvttps_epi32 (truncate) under the assumption that the index can never be negative.
+					
+					// S32 idx[4];
+					// 
+					// LLVector4 wght;
+					// 
+					// F32 scale = 0.f;
+					// for (U32 k = 0; k < 4; k++)
+					// {
+					// 	F32 w = weight[j][k];
+					// 
+					// 	idx[k] = (S32) floorf(w);
+					// 	wght[k] = w - floorf(w);
+					// 	scale += wght[k];
+					// }
+					// 
+					// wght *= 1.f/scale;
 
-					LLVector4 wght;
+					LL_ALIGN_16( S32 idx[4] );
+					LL_ALIGN_16( F32 wght[4] );
 
-					F32 scale = 0.f;
-					for (U32 k = 0; k < 4; k++)
-					{
-						F32 w = weight[j][k];
+					__m128i _mIdx = _mm_cvttps_epi32( weight[j] );
+					__m128 _mWeight = _mm_sub_ps( weight[j], _mm_cvtepi32_ps( _mIdx ) );
 
-						idx[k] = (S32) floorf(w);
-						wght[k] = w - floorf(w);
-						scale += wght[k];
-					}
+					_mm_store_si128( (__m128i*)idx, _mIdx );
 
-					wght *= 1.f/scale;
+					__m128 _mScale = _mm_add_ps( _mWeight, _mm_movehl_ps( _mWeight, _mWeight ));
+					_mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
+					_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
 
+					_mWeight = _mm_div_ps( _mWeight, _mScale );
+
+					_mm_store_ps( wght, _mWeight );
+
+					// </FS:ND>
+					
+					
 					for (U32 k = 0; k < 4; k++)
 					{
 						F32 w = wght[k];
