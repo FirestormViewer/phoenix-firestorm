@@ -1965,6 +1965,7 @@ bool LLAudioData::load()
 		// <FS:Ansariel> FIRE-480: Opening multiple instances causes sound failures
 		if (!gDirUtilp->fileExists(wav_path))
 		{
+			LL_WARNS() << "Tried to play sound " << mID.asString() << " which should be cached, but was missing. Trying to re-fetch..." << LL_ENDL;
 			mHasLocalData = false;
 			mHasDecodedData = false;
 			mHasCompletedDecode = false;
