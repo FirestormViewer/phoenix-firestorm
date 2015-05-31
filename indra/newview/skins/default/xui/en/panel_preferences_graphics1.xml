@@ -1305,6 +1305,16 @@
          name="RenderDepthOfFieldInEditMode"
          top_pad="4"
          width="256"/>
+        <check_box
+         control_name="FSRenderDoFUnderwater"
+         enabled_control="RenderDepthOfField"
+         height="16"
+         initial_value="false"
+         label="Enable while underwater"
+         layout="topleft"
+         name="FSRenderDoFUnderwater"
+         top_pad="4"
+         width="256"/>
         <slider
          enabled_control="RenderDepthOfField"
          control_name="CameraFNumber"

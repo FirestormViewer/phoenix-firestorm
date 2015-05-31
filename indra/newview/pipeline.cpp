@@ -176,6 +176,9 @@ F32 LLPipeline::RenderGlowWidth;
 F32 LLPipeline::RenderGlowStrength;
 BOOL LLPipeline::RenderDepthOfField;
 BOOL LLPipeline::RenderDepthOfFieldInEditMode;
+//<FS:TS> FIRE-16251: Depth of field does not work underwater
+BOOL LLPipeline::FSRenderDepthOfFieldUnderwater;
+//</FS:TS> FIRE-16251
 F32 LLPipeline::CameraFocusTransitionTime;
 F32 LLPipeline::CameraFNumber;
 F32 LLPipeline::CameraFocalLength;
@@ -632,6 +635,9 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderGlowStrength");
 	connectRefreshCachedSettingsSafe("RenderDepthOfField");
 	connectRefreshCachedSettingsSafe("RenderDepthOfFieldInEditMode");
+	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
+	connectRefreshCachedSettingsSafe("FSRenderDoFUnderwater");
+	//</FS:TS> FIRE-16251
 	connectRefreshCachedSettingsSafe("CameraFocusTransitionTime");
 	connectRefreshCachedSettingsSafe("CameraFNumber");
 	connectRefreshCachedSettingsSafe("CameraFocalLength");
@@ -1183,6 +1189,9 @@ void LLPipeline::refreshCachedSettings()
 	RenderGlowStrength = gSavedSettings.getF32("RenderGlowStrength");
 	RenderDepthOfField = gSavedSettings.getBOOL("RenderDepthOfField");
 	RenderDepthOfFieldInEditMode = gSavedSettings.getBOOL("RenderDepthOfFieldInEditMode");
+	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
+	FSRenderDepthOfFieldUnderwater = gSavedSettings.getBOOL("FSRenderDoFUnderwater");
+	//</FS:TS> FIRE-16251
 	CameraFocusTransitionTime = gSavedSettings.getF32("CameraFocusTransitionTime");
 	CameraFNumber = gSavedSettings.getF32("CameraFNumber");
 	CameraFocalLength = gSavedSettings.getF32("CameraFocalLength");
@@ -7750,9 +7759,12 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 	if (LLPipeline::sRenderDeferred)
 	{
 
-		bool dof_enabled = !LLViewerCamera::getInstance()->cameraUnderWater() &&
+		//<FS:TS> FIRE-16251: Depth of Field does not work underwater
+		//bool dof_enabled = !LLViewerCamera::getInstance()->cameraUnderWater() &&
+		bool dof_enabled = (FSRenderDepthOfFieldUnderwater || !LLViewerCamera::getInstance()->cameraUnderWater()) &&
 			(RenderDepthOfFieldInEditMode || !LLToolMgr::getInstance()->inBuildMode()) &&
 							RenderDepthOfField;
+                //</FS:TS> FIRE-16251
 
 
 		bool multisample = RenderFSAASamples > 1 && mFXAABuffer.isComplete();

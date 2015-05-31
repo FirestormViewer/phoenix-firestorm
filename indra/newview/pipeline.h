@@ -911,6 +911,9 @@ public:
 	static F32 RenderGlowStrength;
 	static BOOL RenderDepthOfField;
 	static BOOL RenderDepthOfFieldInEditMode;
+	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
+	static BOOL FSRenderDepthOfFieldUnderwater;
+	//</FS:TS> FIRE-16251
 	static F32 CameraFocusTransitionTime;
 	static F32 CameraFNumber;
 	static F32 CameraFocalLength;
