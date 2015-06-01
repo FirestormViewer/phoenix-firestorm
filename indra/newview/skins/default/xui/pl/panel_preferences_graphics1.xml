@@ -149,6 +149,7 @@
 		<panel label="Głębia ostrości" name="DOF panel">
 			<check_box label="Włącz głębię ostrości (rozmywaj widok z wyjątkiem miejsca, gdzie skupiona jest kamera)" name="UseDoF"/>
 			<check_box label="Włączaj w trybie budowania" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Włączaj pod wodą" name="FSRenderDoFUnderwater"/>
 			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
 			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
 			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>
