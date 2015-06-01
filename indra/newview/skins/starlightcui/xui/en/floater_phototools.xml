@@ -1505,7 +1505,7 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="50"
+			 height="69"
 			 border_visible="true"
 			 bevel_style="none"
 			 bg_alpha_color="SL-CustomBackground_Light"
@@ -1521,6 +1521,18 @@
 				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Advanced Lighting Model' in tab 'Light'."
 				 top_pad="10"
 				 width="230"/>
+				<check_box
+				 control_name="FSRenderDoFUnderwater"
+				 enabled_control="RenderDepthOfField"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="3"
+				 height="16"
+				 label="Enable DoF when underwater"
+				 tool_tip="Normally, Depth of Field is disabled when underwater, even with the above box checked. This setting will remove that restriction. Note that you may have to manually refocus your camera on desired objects by alt-clicking on them when you're underwater."
+				 name="UseDoFUnderwater">
+				</check_box>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"

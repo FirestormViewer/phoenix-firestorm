@@ -1470,7 +1470,7 @@
 				 top_pad="3"
 				 height="16"
 				 label="Enable DoF when underwater"
-				 tool_tip="Normally, Depth of Field is disabled when underwater, even with the above bix checked. This setting will remove that restriction. Note that you may have to manually refocus your camera on desired objects by alt-clicking on them when you're underwater."
+				 tool_tip="Normally, Depth of Field is disabled when underwater, even with the above box checked. This setting will remove that restriction. Note that you may have to manually refocus your camera on desired objects by alt-clicking on them when you're underwater."
 				 name="UseDoFUnderwater">
 				</check_box>
 				<check_box
