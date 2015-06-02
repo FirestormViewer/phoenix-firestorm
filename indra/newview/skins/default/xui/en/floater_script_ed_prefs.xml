@@ -659,11 +659,11 @@ default
 		width="200"
 		label="Route llOwnerSay to script debug window" />
 	<check_box
-		control_name="FSScriptEditiorRecompileButton"
+		control_name="FSScriptEditorRecompileButton"
 		follows="left|top"
 		layout="topleft"
 		height="12"
-		name="FSScriptEditiorRecompileButton_checkbox"
+		name="FSScriptEditorRecompileButton_checkbox"
 		top_pad="6"
 		width="200"
 		label="Enable recompile button (useful for #include scripts)" />
