@@ -59,9 +59,9 @@
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 
 // dump responder replies to LL_INFOS() for debugging
-//#define DUMP_REPLIES_TO_LL_INFOS()
+//#define DUMP_REPLIES_TO_LLINFOS
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS
+#ifdef DUMP_REPLIES_TO_LLINFOS
 #include "llsdserialize.h"
 #include "llwindow.h"
 #endif
@@ -193,7 +193,7 @@ void fetchScriptLimitsRegionInfoResponder::httpSuccess()
 	}
 	//we don't need to test with a fake respose here (shouldn't anyway)
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS
+#ifdef DUMP_REPLIES_TO_LLINFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
@@ -282,7 +282,7 @@ void fetchScriptLimitsRegionSummaryResponder::httpSuccess()
 	}
 
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS
+#ifdef DUMP_REPLIES_TO_LLINFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
