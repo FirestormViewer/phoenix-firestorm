@@ -2049,12 +2049,6 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 			itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
-		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == "Bridge")
-		{
-			continue;
-		}
-		//</FS:TS> FIRE-11848
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
 			// Ansa: Do not include the bridge when checking for number of objects
@@ -2082,12 +2076,6 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
 	{
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
-		//<FS:TS> FIRE-11848 @getattach includes the LSL bridge
-		if (pAttachPt->getName() == "Bridge")
-		{
-			continue;
-		}
-		//</FS:TS> FIRE-11848
 		if ( (RLV_ATTACHGROUP_INVALID == eAttachGroup) || (rlvAttachGroupFromIndex(pAttachPt->getGroup()) == eAttachGroup) )
 		{
 			bool fAdd = false;
