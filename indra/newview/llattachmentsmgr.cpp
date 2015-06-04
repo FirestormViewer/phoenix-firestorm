@@ -267,6 +267,10 @@ void LLAttachmentsMgr::requestAttachments(attachments_vec_t& attachment_requests
 		}
         attachment_requests.pop_front();
 	}
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	sInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
