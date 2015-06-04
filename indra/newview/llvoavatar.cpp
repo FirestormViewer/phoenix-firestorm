@@ -8894,7 +8894,10 @@ void LLVOAvatar::updateImpostors()
 
 BOOL LLVOAvatar::isImpostor()
 {
-	return (sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD))) || isInMuteList() ? TRUE : FALSE;
+	// <FS:Ansariel> Show muted avatars as grey imposters as it has always been the case
+	//return (sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD))) || isInMuteList() ? TRUE : FALSE;
+	return sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD)) ? TRUE : FALSE;
+	// </FS:Ansariel>
 }
 
 
