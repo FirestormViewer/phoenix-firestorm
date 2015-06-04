@@ -2034,16 +2034,6 @@ if (WINDOWS)
             )
     endif(USE_PRECOMPILED_HEADERS)
 
-    add_custom_command(
-        TARGET ${VIEWER_BINARY_NAME} POST_BUILD
-        COMMAND
-        mt.exe -manifest \"${CMAKE_CURRENT_SOURCE_DIR}/viewer.manifest\" 
-        "-inputresource:\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${VIEWER_BINARY_NAME}.exe\";#1"
-        " -outputresource:\"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${VIEWER_BINARY_NAME}.exe\";#1"
-        COMMENT
-        "Appending Windows manifest."
-    )
-
     # If adding a file to viewer_manifest.py in the WindowsManifest.construct() method, be sure to add the dependency
     # here.
     # *NOTE:Mani - This is a crappy hack to have important dependencies for the viewer_manifest copy action
