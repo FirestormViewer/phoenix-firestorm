@@ -337,8 +337,8 @@ public:
 	enum EAttachAction { ACTION_ATTACH, ACTION_DETACH };
 	typedef boost::signals2::signal<void (LLViewerObject*, const LLViewerJointAttachment*, EAttachAction)> attachment_signal_t;
 	boost::signals2::connection setAttachmentCallback(const attachment_signal_t::slot_type& cb);
-// [/RLVa:KB]
-// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+
+private:
 	attachment_signal_t* mAttachmentSignal;
 // [/RLVa:KB]
 	//--------------------------------------------------------------------
