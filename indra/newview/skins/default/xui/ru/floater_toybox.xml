@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="КНОПКИ ПАНЕЛИ ИНСТРУМЕНТОВ">
+<floater name="Toybox" title="Кнопки панели инструментов">
 	<text name="toybox label 1">
 		Добавьте или удалите кнопки, перетягивая их на панели инструментов или с них.
 	</text>

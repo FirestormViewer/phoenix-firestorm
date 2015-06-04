@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Резервная копия" name="backup">
+	<text name="backup_path_label" width="180">
+		Путь резервного копирования:
+	</text>
+	<button label="Задать" name="set_backup_settings_path" />
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">
+				В настоящее время вы не вошли. Помните, что Ваш некоторые настройки вашего аккаунта могут быть сохранены и восстановлены только когда вы вошли в систему. Тем не менее, создать резервную копию настроеу, которые применяются ко всем учетным записям можно без захода в систему.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Группы настроек, которые будут сохраняться:
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="Общие файлы:" name="restore_global_files_label" />
+						<column label="Значение" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Данные входа</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Цвета</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Игнорируемые диалоги</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">Пользовательские Сетки</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Автозамена</column>
+						</row>
+						<row name="restore_global_row_quickprefs">
+							<column name="restore_global_files_label">Быстрые настройки</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="Файлы аккаунта:" name="restore_per_account_files_label" />
+						<column label="Значение" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Черный список активов</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Контактные группы</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">Фильтры инвентаря</column>
+						</row>
+						<row name="restore_per_account_row_favsort">
+							<column name="restore_per_account_files_label">Сортировка избранных</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Черный/Белый списки медиа</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Панели инструментов</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Громкости голосового чата</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Истории телепорта</column>
+						</row>
+						<row name="restore_per_account_row_groupmutes">
+							<column name="restore_per_account_files_label">Отключенные чаты групп</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Папки:" name="restore_global_folders_label" />
+						<column label="Значение" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Лучи выбора</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Цвета луча выбора</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Проверка правописания</column>
+						</row>
+						<row name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Windlight (Обязательное)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Windlight: Дневной цикл</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Windlight: Небо</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Windlight: Вода</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
+			<button label="Выбрать все" name="select_all_button" />
+			<button label="Отменить все" name="deselect_all_button" />
+			<check_box label="Восстановление глобальных настроек" name="restore_global_settings_checkbox" />
+			<check_box label="Восстановление настроек аккаунта" name="restore_per_account_settings_checkbox" />
+			<button width="165" label="Сохранить настройки" name="backup_settings" />
+			<button width="165" label="Восстановить настройки" name="restore_settings" />
+		</layout_panel>
+	</layout_stack>
+</panel>

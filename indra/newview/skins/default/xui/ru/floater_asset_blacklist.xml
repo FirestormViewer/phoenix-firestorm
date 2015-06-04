@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ws_asset_blacklist" title="Черный список">
+	<floater.string name="asset_object">
+		Объект
+	</floater.string>
+	<floater.string name="asset_texture">
+		Текстура
+	</floater.string>
+	<floater.string name="asset_sound">
+		Звук
+	</floater.string>
+	<floater.string name="asset_resident">
+		Житель
+	</floater.string>
+	<floater.string name="asset_unknown">
+		Неизвестный
+	</floater.string>
+	<floater.string name="unknown_object">
+		Неизвестный объект
+	</floater.string>
+	<floater.string name="unknown_region">
+		Неизвестный регион
+	</floater.string>
+	<scroll_list name="result_list">
+		<scroll_list.columns name="name" label="Имя" />
+		<scroll_list.columns name="type" label="Тип" />
+		<scroll_list.columns name="date" label="Дата" />
+	</scroll_list>
+	<button name="remove_btn" label="Удалить из черного списка" />
+</floater>

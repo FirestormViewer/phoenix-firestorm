@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Места" name="voice_effects" title="ПРОСМОТР ИЗМЕНЕНИЯ ГОЛОСА">
+<floater label="Места" name="voice_effects" title="Изменение голоса">
 	<string name="no_voice_effect">
 		(Нет изменения голоса)
 	</string>
@@ -13,7 +13,7 @@
 		(Новый!)
 	</string>
 	<string name="effect_Arena">
-		Arena
+		Арена
 	</string>
 	<string name="effect_Beast">
 		Beast

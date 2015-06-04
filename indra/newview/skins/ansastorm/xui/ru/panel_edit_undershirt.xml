@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_undershirt_panel">
+	<panel name="avatar_undershirt_color_panel">
+		<texture_picker label="Текстура" name="Fabric" tool_tip="Нажмите, чтобы выбрать изображение"/>
+		<color_swatch label="Цвет" name="Color/Tint" tool_tip="Нажмите, чтобы выбрать цвет"/>
+	</panel>
+	<panel name="undershirt_main_tab_holder">
+		<accordion name="undershirt_main_accordion">
+			<accordion_tab name="undershirt_main_tab" title="Майка"/>
+		</accordion>
+	</panel>
+</panel>

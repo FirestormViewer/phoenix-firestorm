@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_search" title="Поиск Firestorm">
+	<floater.string name="string.location">
+		Место: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Трафик: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Площадь: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Человек: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Основатель: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Возраст: [AGE]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Стоимость: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.duration">
+		Продолжительность: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Вступительный взнос: [COVERCHARGE]
+	</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="Web" name="panel_ls_web" />
+		<panel label="Люди" name="panel_ls_people" />
+		<panel label="Группы" name="panel_ls_groups" />
+		<panel label="Места" name="panel_ls_places" />
+		<panel label="Продажа земли" name="panel_ls_land" />
+		<panel label="События" name="panel_ls_events" />
+		<panel label="Реклама" name="panel_ls_classifieds" />
+	</tab_container>
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="Имя не определено" />
+		<text_editor name="aux1" value="Дополнительное поле информации 1" />
+		<text_editor name="aux2" value="Дополнительное поле информации 2" />
+		<text_editor name="location" value="Информация о месте" />
+		<button label="Профиль" name="people_profile_btn" />
+		<button label="ЛС" name="people_message_btn" />
+		<button label="В друзья" name="people_friend_btn" />
+		<button label="Профиль" name="group_profile_btn" />
+		<button label="Чат" name="group_message_btn" />
+		<button label="Вступить" name="group_join_btn" />
+		<button label="Телепорт" name="teleport_btn" />
+		<button label="На карте" name="map_btn" />
+		<button label="Напомнить мне" name="event_reminder_btn" />
+	</panel>
+</floater>

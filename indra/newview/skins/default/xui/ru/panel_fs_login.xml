@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php
-	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
 			<text name="log_in_text">
-				ВОЙТИ
+				Вход
 			</text>
 			<text name="username_text">
 				Имя пользователя:
 			</text>
-			<combo_box name="username_combo" tool_tip="Имя пользователя, которое вы выбрали при регистрации, например, «bobsmith12» или «Steller Sunshine»"/>
+			<button tool_tip="Удалить имя пользователя" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="Имя пользователя выбирается при регистрации, например bobsmith12 или Steller Sunshine"/>
 			<text name="password_text">
 				Пароль:
 			</text>
 		</layout_panel>
 		<layout_panel name="start_location_panel">
 			<text name="start_location_text">
-				Место старта:
+				Место запуска:
 			</text>
 			<combo_box name="start_location_combo">
-				<combo_box.item label="Последнее местоположение" name="MyLastLocation"/>
+				<combo_box.item label="Последнее место" name="MyLastLocation"/>
 				<combo_box.item label="Мой дом" name="MyHome"/>
-				<combo_box.item label="&lt;Введите название региона&gt;" name="Typeregionname"/>
+				<combo_box.item label="&lt;Написать название региона&gt;" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
+				Подключиться к сетке:
+			</text>
+		</layout_panel>
 		<layout_panel name="links_login_panel">
-			<text name="login_help">
-				Нужна помощь при входе?
+			<text name="create_new_account_text">
+				Создать аккаунт
 			</text>
 			<text name="forgot_password_text">
-				Забыли имя или пароль?
+				Забыли имя пользователя или пароль?
 			</text>
 			<button label="Войти" name="connect_btn"/>
 			<check_box label="Запомнить пароль" name="remember_check"/>
 		</layout_panel>
-		<layout_panel name="links">
-			<text name="create_account_text">
-				СОЗДАЙТЕ СВОЙ АККАУНТ
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">
+				Выбор режима
 			</text>
-			<button label="Начать" name="create_new_account_btn"/>
+			<combo_box name="mode_combo" tool_tip="Выберите режим настройки, с которой вы наиболее знакомы. По умолчанию будет установлен режим Firestorm">
+				<combo_box.item label="Гибридный" name="Hybrid"/>
+			</combo_box>
 		</layout_panel>
 	</layout_stack>
 </panel>

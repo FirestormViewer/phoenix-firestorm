@@ -1,8 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="objectcontents" title="СОДЕРЖИМОЕ ОБЪЕКТА">
-	<text name="object_name">
-		[DESC]:
-	</text>
-	<button label="Копировать в инвентарь" label_selected="Копировать в инвентарь" name="copy_to_inventory_button"/>
-	<button label="Копировать и надеть" label_selected="Копировать и надеть" name="copy_and_wear_button"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="objectcontents" title="Содержание объекта">
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Копировать в инвентарь" name="copy_flyout">
+				<flyout_button.item label="Заменить комплект" name="replace"/>
+				<flyout_button.item label="Добавить в комплект" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Отмена" label_selected="Отмена" name="cancel_button" />
+		</layout_panel>
+	</layout_stack>
 </floater>

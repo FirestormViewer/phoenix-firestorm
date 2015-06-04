@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="ВЫБРАТЬ: ТЕКСТУРУ">
+<floater name="texture picker" title="Выбрать: Текстуру">
 	<floater.string name="choose_picture">
 		Щелкните для выбора изображения
 	</floater.string>

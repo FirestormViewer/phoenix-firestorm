@@ -1,36 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Map" title="МИНИКАРТА">
+<floater name="Map">
 	<floater.string name="ToolTipMsg">
-		[REGION](Двойной щелчок открывает карту, shift+перетягивание – обзор)
+		[AGENT][REGION](Двойное нажатие, чтобы открыть карту, переместить мышку с Shift для изменения масштаба)
 	</floater.string>
 	<floater.string name="AltToolTipMsg">
-		[REGION](Двойной щелчок – телепортация, shift+перетягивание – обзор)
+		[REGION](Двойное нажатие, чтобы телепортироваться, переместить мышку с Shift для изменения масштаба)
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		Миникарта
 	</floater.string>
-	<text label="С" name="floater_map_north">
-		С
-	</text>
-	<text label="E" name="floater_map_east">
-		E
-	</text>
-	<text label="З" name="floater_map_west">
-		З
-	</text>
-	<text label="Ю" name="floater_map_south">
-		Ю
-	</text>
-	<text label="ЮВ" name="floater_map_southeast">
-		ЮВ
-	</text>
-	<text label="СВ" name="floater_map_northeast">
-		СВ
-	</text>
-	<text label="ЮЗ" name="floater_map_southwest">
-		ЮЗ
-	</text>
-	<text label="СЗ" name="floater_map_northwest">
-		СЗ
-	</text>
 </floater>

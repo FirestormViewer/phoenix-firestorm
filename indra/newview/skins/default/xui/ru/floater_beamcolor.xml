@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamColor" title="Цвет луча">
+	<floater.string name="start_hue">
+		Начальный цвет
+	</floater.string>
+	<floater.string name="end_hue">
+		Конечный цвет
+	</floater.string>
+	<text name="beamcolor_text">
+Используйте мышь, чтобы указать, какой цвет
+начальный, а какой конечный.
+Левая кнопка мыши для выбора начального.
+Правая кнопка мыши для выбора конечного.
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="Нажмите, чтобы открыть палитру цветов" />
+	<text name="beamcolor_text2">
+		Просмотр
+	</text>
+	<slider name="BeamColor_Speed" label="Скорость вращения:" tool_tip="Она контролирует скорость цикла смены цвета" />
+	<button label="Сохранить" name="BeamColor_Save" />
+	<button label="Загрузить" name="BeamColor_Load" />
+	<button label="Отмена" name="BeamColor_Cancel" />
+</floater>

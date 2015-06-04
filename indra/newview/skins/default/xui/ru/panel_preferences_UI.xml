@@ -1,141 +1,220 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="UI-Настройки" name="Display panel">
-<tab_container label="Настройки Файершторм" name="tabs">
+<panel label="Настройки интерфейса" name="Display panel">
+<tab_container label="Настройки Firestorm" name="tabs">
+    <panel label="Общее" name="UI Prefs Panel">
+        <text name="UI Size:">
+            Масштабирование интерфейса:
+        </text>
+        <text name="HoverTipText" width="150">
+            Всплывающие подсказки:
+        </text>
+        <check_box label="Показывать всплывающие подсказки" name="ShowHoverTips" tool_tip="Установите, чтобы показывать подсказки при наведении на аватаров и некоторые другие вещи (CTRL+SHIFT+T)" />
+        <check_box label="На всех объектах" tool_tip="Установите для отображения подсказок при наведении на объекты" name="ShowAllHoverTips" />
+        <check_box label="На земле" tool_tip="Установите для отображения подсказок при наведении на землю" name="ShowLandHoverTips" />
+        <check_box name="FSAdvancedTooltips" label="Показать расширенную информацию в подсказках (стиль Phoenix)" />
+        <check_box name="FSShowGroupTitleInTooltip" label="Показывать роли групп в подсказках" />
+        <text name="tooltip_textbox">
+           Задержка подсказок:
+        </text>
+        <slider label="Инструменты:" name="ToolTipDelay_slider" tool_tip="(По умолчанию: 0.7)" />
+        <text name="ToolTipDelay_text">
+            секунд.
+        </text>
+        <slider label="Аватары:" name="AvatarInspectorTooltipDelay_slider" tool_tip="(По умолчанию: 0.35)" />
+        <text name="AvatarInspectorTooltipDelay_text">
+            секунд.
+        </text>
+        <slider label="Объекты:" name="ObjectInspectorTooltipDelay_slider" tool_tip="(По умолчанию: 0.35)" />
+        <text name="ObjectInspectorTooltipDelay_text">
+            секунд.
+        </text>
+        <check_box label="Использовать круглое меню" name="UsePieMenu" tool_tip="Использовать стиль V1 для отображения круглого меню при нажатии правой кнопкой мыши на объекты, аватары и землю" />
+        
+        <check_box label="Использовать старое отображение значений для измерителя лагов" name="FSStatbarLegacyMeanPerSec" tool_tip="Если опция включена, Firestorm будет использовать традиционный способ отображения данных" />
+        <check_box label="Показывать управление медиа в верхнем меню" name="FSEnableVolumeControls" tool_tip="Отображает справа наверху возможность управления включением и отключением потокового аудию, медиа." />
+		<check_box label="Показать канал симулятора в верхней панели" name="FSStatusbarShowSimulatorVersion" tool_tip="Показать канал симулятора (RC Magnum, RC Le Tigre, RC BlueSteel etc.) в верхней панели "/>
+        <text name="ScriptDialogsPerObjectLabel" width="185">
+            Диалогов скрипта на объект:
+        </text>
+        <combo_box name="ScriptDialogPerObjectDropdown">
+            <combo_box.item label="Один на объект" name="ScriptDialogOption_0" />
+            <combo_box.item label="Один на объект и канал" name="ScriptDialogOption_1" />
+            <combo_box.item label="Без ограничений" name="ScriptDialogOption_2" />
+        </combo_box>
+        <check_box label="Убрать кнопку &quot;Блок&quot; " name="FSRemoveScriptBlockButton" />
+        <text name="ScriptDialogsPositionLabel" width="185">
+            Размещение диалогов скрипта:
+        </text>
+        <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Выберите в какой части экрана будет отображаться окно диалогового меню скрипта">
+            <combo_box.item label="Импортировать старое значение" name="ScriptDialogPositionOption_0" />
+            <combo_box.item label="Пристыкован в поле иконок" name="ScriptDialogPositionOption_1" />
+            <combo_box.item label="Сверху слева" name="ScriptDialogPositionOption_2" />
+            <combo_box.item label="Сверху справа" name="ScriptDialogPositionOption_3" />
+            <combo_box.item label="Снизу слева" name="ScriptDialogPositionOption_4" />
+            <combo_box.item label="Снизу справа" name="ScriptDialogPositionOption_5" />
+        </combo_box>
+        <check_box label="Анимация диалогов" name="FSAnimatedScriptDialogs" tool_tip="Показывает анимацио диалогового окна при его открытии (Разворачивается сверху вниз)" />
+        <check_box label="Уведомления групп и ЛС справа наверху" width="250" name="ShowGroupNoticesTopRight" tool_tip="Отображение иконок ЛС и уведомлений групп справа наверху вашего экрана ." />
+        <text name="GroupTopRightRequiresRestart">
+            (Необходим перезапуск)
+        </text>
+        <check_box label="Скрыть иконки чатов групп и ЛС" name="FSDisableIMChiclets" tool_tip="Будут убраны иконки личных сообщений и чатов групп (Уведомления по прежнему будут отображаться)." />
+        <slider label="Количество миганий вкладки ЛС:" name="ButtonsFlashCount" />
+        <slider label="Частота мигания вкладок ЛС:" tool_tip="Частота мигания вкладок личных сообщений:" name="ButtonFlashRate" />
+        <text name="ButtonFlashRateText">
+            сек
+        </text>
+    </panel>
+	<panel label="Верхняя панель" name="UI-interface-top-bars" >
 
-	<!--General-->
-	<panel label="Основное" name="UI Prefs Panel">
-		<text name="UI Size:" width="220">
-			Интерфейс пользователя (UI):
+		<text name="statusbar_textbox">
+		Панель статуса:
 		</text>
-		<text name="HoverTipText">
-			Всплывающие подсказки:
-		</text>
-		<check_box label="Стандартные подсказки " name="ShowHoverTips" tool_tip="Установка данного параметра отображает подсказки при наведении на аватаров и другие объекты. Необходимо устанавливать первым"/>
-		<check_box label="На всех объектах" tool_tip="Установите, для отображения всплывающих подсказок на всех объектах." name="ShowAllHoverTips"/>
-		<check_box label="На земле" tool_tip="Установите, для отображения подсказок на земле." name="ShowLandHoverTips"/>
-		<text name="tooltip_textbox">
-			Задержка подсказки:
-		</text>
-		<combo_box name="Tooltipdelay">
-			<combo_box.item label="0,7 секунд" name="tt_item1"/>
-			<combo_box.item label="1,5 секунды" name="tt_item2"/>
-			<combo_box.item label="3 секунды" name="tt_item3"/>
-			<combo_box.item label="6 секунд" name="tt_item4"/>
-		</combo_box>
 
-		<text name="ScriptDialogsPerObjectLabel" width="185">
-			Размещение диалогов скриптов:
-		</text>
-		<check_box label="Справа наверху" name="ShowScriptDialogsTopRight" tool_tip=""/>
-		<check_box label="Нотисы сверху справа" name="ShowGroupNoticesTopRight" tool_tip=""/>
-		<text name="GroupTopRightRequiresRestart">
-			(рестарт)
-		</text>
-        <check_box name="FSAdvancedTooltips" label="Доп. информация в подсказках"/>		
-		<text name="UsePieMenuLabel">
-			Использовать круглое меню
-		</text>
-		<check_box label="Использовать PIE меню" name="UsePieMenu" tool_tip="Использование классического круглого меню при нажатии правой кнопкой на пользователей, на землю или на объекты"/>
+		<check_box tool_tip="Показать измерение трафика в правом верхнем углу экрана" label="Показать измерение трафика в правом верхнем углу экрана" name="ShowNetStats"/>
+		<check_box label="Использовать старое отображение значений для измерителя лагов" name="FSStatbarLegacyMeanPerSec" tool_tip="Если опция включена, Firestorm будет использовать традиционный способ отображения данных"/>
+		<check_box label="Нажатие на индикатор трафика открывает Статистику" name="FSUseStatsInsteadOfLagMeter"/>
+		<check_box label="Показывать управление медиа в верхнем меню" name="FSEnableVolumeControls" tool_tip="Отображает справа наверху возможность управления включением и отключением потокового аудию, медиа."/>
+		<check_box label="Показать канал симулятора в статус панели" name="FSStatusbarShowSimulatorVersion" tool_tip="Показать канал симулятора (RC Magnum, RC Le Tigre, RC BlueSteel etc.) в верхней панели "/>
+		<check_box label="Показать локацию в верхнем меню" name="ShowMenuBarLocation"/>
+		<check_box label="Показать поиск в меню" name="show_search_menu_check"/>
+		<check_box label="Показать текущий баланс L$" name="FSShowCurrencyBalanceInStatusbar"/>
 
-		<text name="ButtonFlashing">
-			Мигающие кнопки:
+		<text name="navfav_textbox">
+		Панель навигации и закладок:
 		</text>
-		<slider label="Количество миганий ЛС:" tool_tip="" name="ButtonsFlashCount"/>
-<!--
-		<slider label="Скорость мигания кнопки:" tool_tip="Скорость мигания кнопки ( Hz) - используется для ЛС" name="ButtonFlashRate"/>
-		<text name="ButtonFlashRateText">
-			Hz
-		</text>
--->
-		<text name="ToastSettings">
-			Настройки отображения уведомлений: (Popups, Консоль, Тосты):
-		</text>
-		<text name="ToastSpaceTextLabel">
-			Раст. среди
-		</text>
-		<slider label="тосты и нижний UI:" tool_tip="" name="ToastSpace"/>
-		<text name="ToastSpaceText">
-			пиксельем
-		</text>
-		<slider label="AПродолжительность уведомления:" tool_tip="" name="ToastLifetime"/>
-		<text name="ToastLifetimeText">
-			сек.
-		</text>
-		<slider label="Длительность подсказки::" tool_tip="" name="TipToastLifetime"/>
-		<text name="TipToastLifetimeText">
-			сек.
-		</text>
-		<slider label="Сообщение чата:" tool_tip="" name="NearbyToastLifetime"/>
-		<text name="NearbyToastLifetimeText">
-			сек.
-		</text>
-		<slider label="Стартовый тост:" tool_tip="" name="StartupToastLifetime"/>
-		<text name="StartupToastLifetimeText">
-			Sek.
-		</text>
-		<slider label="Время глушения тоста чата:" tool_tip="" name="NearbyToastFadingTime"/>
-		<text name="NearbyToastFadingTimeText">
-			Sek.
-		</text>
-		<slider label="Глушение норм. тоста:" tool_tip="" name="ToastFadingTime"/>
-		<text name="ToastFadingTimeText">
-			Sek.
-		</text>
-		<slider label="Раст. среди тостов:" tool_tip="" name="ToastGap"/>
-		<text name="ToastGapText">
-			Pixel
-		</text>
-		<slider label="Высота от пред. тоста:" tool_tip="" name="OverflowToastHeight"/>
-		<text name="OverflowToastHeightText">
-			Pixel
-		</text>
-		<slider label="Ширина тостов чата:" tool_tip="" name="NearbyToastWidth"/>
-		<text name="NearbyToastWidthText">
-			%
-		</text>
-	</panel>
 
-	<panel name="UI-interface-top-bars">
-		<check_box name="ShowNetStats" label="Показать лаги"/>
-		<check_box label="Показать мини-панель местоположения" name="ShowMenuBarLocation" />
-        <check_box label="Показать панель избранного" name="ShowNavbarFavoritesPanel" />
-        <check_box label="Показать панель навигации и избранного" name="ShowNavbarNavigationPanel" />
-	</panel>
+		<check_box label="Показать панель закладок" name="ShowNavbarFavoritesPanel"/>
+		<check_box label="Показать панель навигации и поиск" name="ShowNavbarNavigationPanel"/>
+		<check_box label="Показать поиск" name="ShowSearchTopBar"/>
 
-	<panel name="UI-interface-windows-tab">
-		<check_box name="FSUseWebProfiles" label="Использование Веб профилей" tool_tip="Открыть профиль в браузере"/>
-	</panel>
-
-	<!--Font-->
-	<panel label="Шрифты" name="UI-font-tab">
-		<text name="tooltip_textbox1">
-			Схема шрифтов:
-		</text>
-		<text name="tooltip_textbox2">
-			(рестарт)
-		</text>
-		<text name="tooltip_textbox5">
-			Изменение размера:
-		</text>
-		<text name="tooltip_textbox6">
-			точка (рестарт)
-Стандарт 0. Более может не работать.
-		</text>
-		<text name="tooltip_textbox3">
-			Раст. среди строками в чате:
-		</text>
-		<text name="tooltip_textbox4">
-			Пиксель (рестарт)
-V3-Standard 0. V1-Standard 2.
-		</text>
-		<text name="Label_FolderItemViewHeight">
-			Высота записи папки:
-		</text>
-		<text name="Label_FolderItemViewHeight_Scale">
-			Пиксель (рестарт)
-V3-Standard 20. V1-Standard 18.
-		</text>
-	</panel>
+    </panel>
+    <panel label="Интерфейс окон" name="UI-interface-windows-tab">
+        <check_box label="Открыть профиль аватара при нажатии на его имя" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Открыть профиль аватара при нажатии на его имя" />
+        <check_box name="FSUseWebProfiles" label="Использовать web профили по умолчанию" tool_tip="Использовать web профили по умолчанию" />
+        <check_box label="Отключить автоматическое открытие списка заблокированного" name="FSDisableBlockListAutoOpen" tool_tip="Отключить автоматическое открытие списка заблокированного, юкогда вы блокируете аватара или объект" />
+        <check_box label="Открывать окна в стиле V3 для 'Друзья' и 'Группы'" name="FSUseV2Friends" tool_tip="Когда вы включите эту опцию, друзья / группы будут открыты в окнах - в противном случае, это будет сделано в Контактах." />
+        <text name="standalone_textbox">
+            Использовать отдельные окна для:
+        </text>
+        <check_box name="FSUseStandaloneGroupFloater" label="Профилей групп" tool_tip="Если включено, профили групп будут отображаться в отдельном окне" />
+        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Истории телепортаций" tool_tip="Если включено, истории телепортаций будут отображаться в отдельном окне" />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Списка заблокированных" tool_tip="Если включено, список заблокированных будут отображаться в отдельном окне" />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Закладок, деталей места и подробностей истории телепортаций" tool_tip="Если включено, закладки, детали места и подробности истории телепортаций будут отображаться в отдельном окне" />
+        <text name="ExtendedTeleportHistoryLabel">
+            Добавить к истории телепортаций:
+        </text>
+        <check_box name="FSTeleportHistoryShowPosition" label="Позицию" tool_tip="Если опция включена, локальные координаты в регионе будет показано в истории телепортаций."/>
+        <check_box name="FSTeleportHistoryShowDate" label="Дату" tool_tip="Если включено, дата и время телепорта будет показано в истории телепортаций."/>
+        <text name="textFriendlistOptions">
+            Настройки списка контактов:
+        </text>
+        <text name="textFriendlistColumns" width="113">
+            Столбец имени:
+        </text>
+        <check_box width="80" label="Имя" name="FSFriendListColumnShowUserName" tool_tip="Столбец отображаемого имени показывает только имя пользователя." />
+        <check_box width="105" label="Отображаемое" name="FSFriendListColumnShowDisplayName" tool_tip="Столбец отображаемого имени показывает только отображаемое имя." />
+        <check_box label="Полное имя" name="FSFriendListColumnShowFullName" tool_tip="Столбец отображаемого имени показывает полное имя." />
+        <text name="textFriendListSortOrder" width="83">
+            Сортировать по:
+        </text>
+        <radio_group name="FSFriendListSortOrder">
+            <radio_item label="Имени" name="username" width="80" />
+            <radio_item label="Отображаемому имени" name="displayname" />
+        </radio_group>
+        <text name="textFriendListFullNameFormat" width="93">
+            Показать как:
+        </text>
+        <radio_group name="FSFriendListFullNameFormat">
+            <radio_item label="Имя (Отображаемое)" name="username_displayname" />
+            <radio_item label="Отображаемое (Имя)" name="displayname_username" />
+        </radio_group>
+        <check_box label="Показать столбец с правами" name="FSFriendListColumnShowPermissions" tool_tip="Список контактов отображает столбцы с разрешениями, которые вы дали этим аватарам, и наоборот." />
+        <text name="textInventoryOptions">
+            Настройки инвентаря:
+        </text>
+        <check_box label="Скрывать пустые системные папки в инвентаре" name="DebugHideEmptySystemFolders" tool_tip="Если включено, то системные папки в инвентаре отображаться не будут (Закладки, Заметки и т.д.)" />
+        <check_box label="Показывать папку полученных элементов в инвентаре" name="FSShowInboxFolder" tool_tip="Если включено, то все купленные товары будут отобразаться в папке Полученные." />
+        <check_box label="Всегда показывать 'Полученные товары' в нижней части инвентаря" name="FSAlwaysShowInboxButton" tool_tip="Всегда показывать 'Полученные товары' в нижней части инвентаря" />
+        <check_box label="Разрешить отдельные условия поиска на каждой вкладки инвентаря" name="FSSplitInventorySearchOverTabs" tool_tip="Разрешить отдельные условия поиска на каждой вкладки инвентаря" />
+    </panel>
+    <panel label="Тоасты" name="UI-toasts-tab">
+        <text name="ToastSettings">
+            Настройки отображения уведомлений (всплывающие окна, консоль, тоасты):
+        </text>
+        <slider label="Между нижним тоастом и низом интерфейса:" tool_tip="Между нижним тоастом и нижней частью интерфейса:" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            пикселей
+        </text>
+        <slider label="Продолжительность уведомления:" tool_tip="Продолжительность уведомления перед затуханием" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Длительность подсказки:" tool_tip="Liczba sekund, po jakich tost z mniej ważnymi informacjami jest usuwany z ekranu" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Длительность отображения общего чата:" tool_tip="Длительность отображения общего чата перед затуханием" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            секунд
+        </text>
+        <slider label="z-смещение для тоастов чата:" tool_tip="Смещение по оси Z для тоастов общего чата" name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            пикселей
+        </text>
+        <slider label="Время затухания общего чата:" tool_tip="Время, необходимое на эффект затухания" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            секунд
+        </text>
+        <slider label="Длительность перед исчезанием:" tool_tip="Длительность перед появлением:" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Время исчезновения тоаста:" tool_tip="Время, которое необходимо для исчезновения тоаста" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            секунд
+        </text>
+        <slider label="Зазор между тоастами:" tool_tip="Зазор между тоастами" name="ToastGap" />
+        <text name="ToastGapText">
+            пикселей
+        </text>
+        <slider label="Высота переполнения тоаста:" tool_tip="Высота переполнения тоаста" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            пикселей
+        </text>
+        <slider label="Ширина консоли общего чата:" tool_tip="Ширина консоли общего чата" name="NearbyToastWidth" />
+        <check_box label="Показывать тоасты над другими окнами" name="FSShowToastsInFront" />
+        <check_box label="Использовать новое уведомление перезагрузки региона" name="FSUseNewRegionRestartNotification" />
+        <check_box label="Не встряхивать мой экран, при получении уведомления о перезагрузке региона" name="FSNoScreenShakeOnRegionRestart" />
+    </panel>
+    <panel label="Шрифт" name="UI-font-tab">
+        <text name="tooltip_textbox1">
+           Схема шрифта:
+        </text>
+        <text name="tooltip_textbox2">
+           (Необходим перезапуск)
+        </text>
+        <text name="tooltip_textbox5">
+           Изменение размера:
+        </text>
+        <text name="tooltip_textbox6" >
+           pt (необходим перезапуск)
+По умолчанию 0. Значения выше могут вызвать ошибки.
+        </text>
+        <text name="tooltip_textbox3">
+           Расстояние строк:
+        </text>
+        <text name="tooltip_textbox4">
+          пикселей (необходим перезапуск)
+V2/3 по умолчанию 0. V1 по умолчанию 2.
+        </text>
+        <text name="Label_FolderItemViewHeight">
+           Высота папок:
+        </text>
+        <text name="Label_FolderItemViewHeight_Scale">
+          пикселей (необходим перезапуск)
+V2/3 по умолчанию 20. V1 по умолчанию 18.
+        </text>
+    </panel>
 </tab_container>
 </panel>
-

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script_recover" title="Восстановление скриптов">
+	<text name="txt2">
+		[APP_NAME] обнаружил скрипты, которые могут быть восстановлены после последнего сбоя клиента.
+
+Если вы решили восстановить, то скрипты будут размещены в папке 'Найденные вещи'.
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="Название скрипта" name="script_name" />
+	</scroll_list>
+	<button label="Восстановить" name="recover_btn" />
+	<button label="Отмена" name="cancel_btn" />
+</floater>

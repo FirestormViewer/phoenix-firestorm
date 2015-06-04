@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <teleport_messages>
 	<message_set name="errors">
 		<message name="invalid_tport">
@@ -21,8 +21,8 @@
 Повторите попытку позже.
 		</message>
 		<message name="NoHelpIslandTP">
-			Телепортироваться назад на Остров прибытия нельзя.
-Для повторения учебника перейдите на «Остров прибытия - общий».
+Телепортироваться назад на Остров прибытия нельзя.
+Для повторения обучения перейдите на 'Остров прибытия - общий'.
 		</message>
 		<message name="noaccess_tport">
 			У вас нет доступа к точке назначения этого телепорта.
@@ -40,51 +40,54 @@
 			Системе не удалось своевременно выполнить ваше пересечение границы. Повторите попытку через несколько минут.
 		</message>
 		<message name="no_host">
-			Не удалось найти точку назначения телепорта. Возможно, назначение временно недоступно или уже не существует. Повторите попытку через несколько минут.
+			Не удается найти назначение телепорта. Назначение может быть временно недоступно или не существует. Пожалуйста, попробуйте еще раз через несколько минут.
 		</message>
 		<message name="no_inventory_host">
-			Система инвентаря сейчас недоступна.
+			Система инвентаря в настоящее время недоступена.
 		</message>
-		<message name="MustGetAgeRegion">
-			Входить в этот регион могут только жители 18 лет и старше.
-		</message>
-	</message_set>
+    <message name="MustGetAgeRegion">
+      Для посещения данного региона вам должно быть не менее 18 лет.
+    </message>
+    <message name="RegionTPSpecialUsageBlocked">
+      Невозможно войти в регион. '[REGION_NAME]' является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+    </message>
+  </message_set>
 	<message_set name="progress">
 		<message name="sending_dest">
 			Отправка по назначению.
 		</message>
 		<message name="redirecting">
-			Перенаправление в другое место.
+			Перенаправление в другую локацию.
 		</message>
 		<message name="relaying">
-			Перенаправление по назначению.
+			Ретрансляция по назначению.
 		</message>
 		<message name="sending_home">
-			Отправка запроса домашнего местоположения.
+			Отправка запроса домашней локации.
 		</message>
 		<message name="sending_landmark">
-			Отправка запроса местоположения закладки.
+			Отправка запроса закладки локации.
 		</message>
 		<message name="completing">
-			Выполнение телепортации.
+			Телепортация завершена.
 		</message>
 		<message name="completed_from">
-			Выполнена телепоратция из [T_SLURL]
+			Телепортация завершена из [T_SLURL]
 		</message>
 		<message name="resolving">
-			Определение назначения.
+			Решение назначения
 		</message>
 		<message name="contacting">
 			Соединение с новым регионом.
 		</message>
 		<message name="arriving">
-			Прибытие…
+			Прибытие...
 		</message>
 		<message name="requesting">
-			Запрос телепортации…
+			Запрашивается телепортация...
 		</message>
-		<message name="pending">
-			Телепортация не закончена...
-		</message>
-	</message_set>
+    <message name="pending">
+      Ожидается телепортация...
+    </message>
+  </message_set>
 </teleport_messages>

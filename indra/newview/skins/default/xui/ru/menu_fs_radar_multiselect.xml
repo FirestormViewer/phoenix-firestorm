@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+	<menu_item_call label="Добавить в друзья" name="Add Friends"/>
+	<menu_item_call label="Добавить в набор контактов" name="Add to Set"/>
+	<menu_item_call label="Удалить из друзей" name="Remove Friend"/>
+	<menu_item_call label="Отправить ЛС" name="IM"/>
+	<menu_item_call label="Звонок" name="Call"/>
+	<menu name="MarkAvatar" label="Отметить...">
+		<menu_item_call label="Красным" name="MarkRed"/>
+		<menu_item_call label="Зеленым" name="MarkGreen"/>
+		<menu_item_call label="Голубым" name="MarkBlue"/>
+		<menu_item_call label="Фиолетовым" name="MarkPurple"/>
+		<menu_item_call label="Желтым" name="MarkYellow"/>
+		<menu_item_call label="Удалить метку" name="Clear Mark"/>
+		<menu_item_call label="Удалить все метки" name="Clear Marks"/>
+	</menu>
+	<menu_item_call label="Поделиться" name="Share"/>
+	<menu_item_call label="Заплатить" name="Pay"/>
+	<menu_item_call label="Предложить телепорт" name="teleport"/>
+	<menu_item_call label="Заморозить" name="freeze"/>
+	<menu_item_call label="Участок: Выкинуть с земли" name="eject"/>
+	<menu_item_call label="Остров: Выкинуть" name="kick"/>
+	<menu_item_call label="Остров: Отправить домой" name="teleport_home"/>
+	<menu_item_call label="Остров: Заблокировать" name="estate_ban"/>
+	<menu_item_call label="Не отображать" name="derender"/>
+	<menu_item_call label="Не отображать всегда" name="derender_permanent"/>
+</context_menu>

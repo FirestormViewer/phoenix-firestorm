@@ -1,139 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel
- height="300"
- layout="topleft"
- mouse_opaque="true"
- name="friends"
- width="350">
-<!--
-	<view_border
-	 top="-9"
-	 bottom="9"
-	 left="9"
-	 right="-91"
-	 follows="left|top|right|bottom"
-	 bevel_style="in"
-	 name="info_border" />
-	<avatar_list
-	 allow_select="true"
-	 bottom="10"
-	 follows="left|top|right|bottom"
-	 left="10"
-	 multi_select="true"
-	 name="avatars_all"
-	 show_permissions_granted="true"
-	 top="-10"
-	 width="240" />
--->
-	<fs_scroll_list
-     left="4"
-     right="-100"
-     top="10"
-     bottom="-10"
-	 follows="all"
-	 layout="topleft"
-     column_padding="1"
-     draw_heading="true"
-	 heading_height="24"
-	 multi_select="true"
-     name="friend_list">
-		<fs_scroll_list.column
-		 name="icon_online_status"
-		 image="legacy/icon_avatar_online_h.tga"
-		 tool_tip="Online status"
-		 width="20" />
-		<fs_scroll_list.column
-		 label="Имя пользователя"
-		 name="user_name"
-		 tool_tip="This contact's username."
-		 width="-1" />
-		<fs_scroll_list.column
-		 dynamicwidth="true"
-		 label="Отображаемое имя"
-		 name="full_name"
-		 tool_tip="Выбраный контактом отображаемый ник. Пример: Шашлык Кифировна." />
-		<fs_scroll_list.column
-		 name="icon_visible_online"
-		 image="Permission_Visible_Online_h"
-		 tool_tip="Friend can see when you&apos;re online"
-		 width="16" />
-		<fs_scroll_list.column
-		 name="icon_visible_map"
-		 image="Permission_Visible_Map_h"
-		 tool_tip="Friend can locate you on the map"
-		 width="16" />
-		<fs_scroll_list.column
-		 name="icon_edit_mine"
-		 image="Permission_Edit_Objects_Mine_h"
-		 tool_tip="Friend can edit, delete or take objects"
-		 width="16" />
-		<fs_scroll_list.column
-		 name="icon_visible_map_theirs"
-		 image="Permission_Visible_Map_h"
-		 tool_tip="You can locate them on the map"
-		 width="16" />
-		<fs_scroll_list.column
-		 name="icon_edit_theirs"
-		 image="Permission_Edit_Objects_Theirs_h"
-		 tool_tip="You can edit this friend&apos;s objects"
-		 width="16" />
-		<fs_scroll_list.column
-		 name="friend_last_update_generation"
-		 width="-1" />
+<panel name="friends">
+	<fs_scroll_list name="friend_list">
+		<fs_scroll_list.column name="icon_online_status" tool_tip="Статус в сети"/>
+		<fs_scroll_list.column label="Имя" name="user_name" tool_tip="Имя пользователя"/>
+		<fs_scroll_list.column label="Отображаемое" name="display_name" tool_tip="Отображаемое имя"/>
+		<fs_scroll_list.column label="Полное" name="full_name" tool_tip="Полное имя пользователя"/>
+		<fs_scroll_list.column name="icon_visible_online" tool_tip="Друг может видеть, что вы в сети"/>
+		<fs_scroll_list.column name="icon_visible_map" tool_tip="Друг может искать вас на карте мира"/>
+		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Друг может редактировать, удалять, или брать ваши объекты"/>
+		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Вы можете найти на карте"/>
+		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Вы можете редактировать, удалять, или брать объекты друга"/>
 	</fs_scroll_list>
-	<button
-	 top="10"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="ЛС/Звонк"
-	 right="-10"
-	 name="im_btn"
-	 tool_tip="Откроет окно переписки."
-	 width="80" />
-	<button
-	 top_pad="3"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="Профиль"
-	 name="profile_btn"
-	 tool_tip="Откроет профиль Аватара"
-	 width="80" />
-	<button
-	 top_pad="3"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="Телепорт..."
-	 name="offer_teleport_btn"
-	 tool_tip="Предложит телепорт на локацию на которой вы находитесь. Не кидайте нежданные телепорты к примеру в клубы или на мафию."
-	 width="80" />
-	<button
-	 top_pad="3"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="Платить..."
-	 name="pay_btn"
-	 tool_tip="Give Linden dollars (L$) to this friend"
-	 width="80" />
-	<button
-	 top_pad="3"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="Удалить..."
-	 name="remove_btn"
-	 tool_tip="Remove this person from your friends list"
-	 width="80" />
-	<button
-	 top_pad="3"
-	 follows="top|right"
-	 layout="topleft"
-	 height="22"
-	 label="Добаваить..."
-	 name="add_btn"
-	 tool_tip="Offer friendship to a resident"
-	 width="80" />
+	<button label="ЛС/Звонок" name="im_btn" tool_tip="Отправить личное сообщение (ЛС)"/>
+	<button label="Профиль" name="profile_btn" tool_tip="Показать профиль"/>
+	<button label="Телепорт..." name="offer_teleport_btn" tool_tip="Предложить телепортироваться к вам"/>
+	<button label="Карта..." name="map_btn" tool_tip="Показать местоположение друга на карте мира"/>
+	<button label="Заплатить..." name="pay_btn" tool_tip="Передать денег(L$)"/>
+	<button label="Удалить..." name="remove_btn" tool_tip="Удалить из списка друзей"/>
+	<button label="Добавить..." name="add_btn" tool_tip="Предложить дружбу пользователю"/>
+	<text name="friend_count">
+	 Друзей: [COUNT]
+	</text>
 </panel>

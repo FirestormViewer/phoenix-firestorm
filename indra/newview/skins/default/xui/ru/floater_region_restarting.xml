@@ -1,23 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="region_restarting" title="ПЕРЕЗАПУСК РЕГИОНА">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_restarting" title="Перезагрузка региона">
 	<string name="RegionName">
 		Регион, в котором вы находитесь ([NAME]), будет перезапущен.
 
-Если вы останетесь в этом регионе, вы выйдете из системы.
+Если вы останетесь в этом регионе, когда он выключится, вы автоматически выйдите.
 	</string>
 	<string name="RestartSeconds">
-		Секунд до перезапуска
+		Секунд до перезагрузки
 [SECONDS]
 	</string>
 	<panel name="layout_panel_1">
 		<text name="region_name">
-			Регион, в котором вы находитесь (-длинное название региона-), будет перезапущен.
+			Регион, в котором вы находитесь (-Длинное название региона-) , будет перезапущен.
 
-Если вы останетесь в этом регионе, вы выйдете из системы.
+Если вы останетесь в этом регионе, когда он выключится, вы автоматически выйдите.
 		</text>
 		<text name="restart_seconds">
-			Секунд до перезапуска
-     32767
+			Секунд до перезагрузки
+32767
 		</text>
+		<combo_box label="Мои закладки" name="landmark combo">
+			<combo_box.item label="Мои закладки" name="item1" />
+		</combo_box>
+		<button tool_tip="Телепортироваться к закладке" name="teleport_btn" />
 	</panel>
 </floater>

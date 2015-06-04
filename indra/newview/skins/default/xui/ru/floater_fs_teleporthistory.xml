@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="История телепортаций">
+	<filter_editor label="Фильт мест" name="Filter" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Телепорт" name="teleport_btn" tool_tip="Телепортироваться к выбранному месту" />
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Карта" name="map_btn" tool_tip="Показать соответствующую область на карте мира" />
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Профиль" name="profile_btn" tool_tip="Показать профиль данного места" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
+</floater>

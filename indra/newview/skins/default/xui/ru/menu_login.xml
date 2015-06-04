@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Я" name="File">
+	<menu label="Клиент" name="File">
 		<menu_item_call label="Настройки..." name="Preferences..."/>
-		<menu_item_call label="Выход из [APP_NAME]" name="Quit"/>
+		<menu_item_call label="Выйти из [APP_NAME]" name="Quit"/>
 	</menu>
-	<menu label="Справка" name="Help">
-		<menu_item_call label="Инструкции..." name="How To"/>
-		<menu_item_call label="Краткое руководство" name="Quickstart"/>
+	<menu label="Помощь" name="Help">
+		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Решение проблем" name="Troubleshooting"/>
+		<!-- <menu_item_call label="Обучение" name="How To"/>
+		<menu_item_call label="Быстрый старт" name="Quickstart"/>
 		<menu_item_call label="База знаний" name="Knowledge Base"/>
-		<menu_item_call label="Wiki" name="Wiki"/>
-		<menu_item_call label="Форумы сообщества" name="Community Forums"/>
+		<menu_item_call label="Wiki Second Life" name="Wiki"/>
+		<menu_item_call label="Forum сообщества" name="Community Forums"/>
 		<menu_item_call label="Портал поддержки" name="Support portal"/>
-		<menu_item_call label="Новости [SECOND_LIFE]" name="Second Life News"/>
-		<menu_item_call label="Блоги [SECOND_LIFE]" name="Second Life Blogs"/>
+		<menu_item_call label="Новости: [SECOND_LIFE]" name="Second Life News"/>
+		<menu_item_call label="Блоги: [SECOND_LIFE]" name="Second Life Blogs"/> -->
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
-		<menu_item_call label="О [APP_NAME]" name="About Second Life"/>
+		<menu_item_call label="Информация о [APP_NAME]" name="About Second Life"/>
+		<menu_item_call label="Помощь для [CURRENT_GRID]" name="current_grid_help_login"/>
+		<menu_item_call label="Информация о [CURRENT_GRID]" name="current_grid_about_login"/>
 	</menu>
 	<menu_item_check label="Показать меню отладки" name="Show Debug Menu"/>
 	<menu label="Отладка" name="Debug">
-		<menu_item_call label="Настройки отладки" name="Debug Settings"/>
-		<menu_item_call label="Настройки интерфейса/цвета" name="UI/Color Settings"/>
-		<menu_item_call label="Просмотр XUI" name="UI Preview Tool"/>
-		<menu label="Тест UI" name="UI Tests"/>
-		<menu_item_call label="Задать размер окна..." name="Set Window Size..."/>
-		<menu_item_call label="Показать лицензионное соглашение" name="TOS"/>
-		<menu_item_call label="Показать сообщение об ошибке" name="Critical"/>
-		<menu_item_call label="Тест отладки плавающего окна с веб-контентом" name="Web Content Floater Debug Test"/>
-		<menu label="Уровень журнала" name="Set Logging Level">
+		<menu_item_call label="Показать настройки отладки" name="Debug Settings"/>
+		<menu_item_call label="Настройки цветов/интерфейса" name="UI/Color Settings"/>
+		<menu_item_call label="Инструменты просмотра XUI" name="UI Preview Tool"/>
+		<menu label="Тесты интерфейса" name="UI Tests"/>
+		<menu_item_call label="Установить размер окна..." name="Set Window Size..."/>
+		<menu_item_call label="Показать условия использования (ТОS)" name="TOS"/>
+		<menu_item_call label="Показать критические сообщения" name="Critical"/>
+		<menu_item_call label="Тест отладки окна web содержимого" name="Web Content Floater Debug Test"/>
+		<menu_item_check label="Показать выбор сетки" name="Show Grid Picker"/>
+		<menu_item_call label="Показать консольь уведомлений" name="Show Notifications Console"/>
+		<menu label="Задать уровень журнала" name="Set Logging Level">
 			<menu_item_check label="Отладка" name="Debug"/>
 			<menu_item_check label="Информация" name="Info"/>
-			<menu_item_check label="Внимание!" name="Warning"/>
-			<menu_item_check label="Ошибка" name="Error"/>
+			<menu_item_check label="Предупреждения" name="Warning"/>
+			<menu_item_check label="Ошибки" name="Error"/>
 			<menu_item_check label="Нет" name="None"/>
 		</menu>
-		<menu_item_check label="Выбор сетки" name="Show Grid Picker"/>
-		<menu_item_call label="Консоль уведомлений" name="Show Notifications Console"/>
 	</menu>
 </menu_bar>

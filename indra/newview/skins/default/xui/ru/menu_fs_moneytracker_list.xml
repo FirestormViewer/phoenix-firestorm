@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Money Tracker List Context Menu">
+	<menu_item_call label="Копировать в CSV" name="Copy" />
+	<menu_item_call label="Удалить" name="Delete" />
+</context_menu>

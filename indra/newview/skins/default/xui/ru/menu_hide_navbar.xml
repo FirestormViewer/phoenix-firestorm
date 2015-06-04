@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
-	<menu_item_check label="Показать панель навигации и избранного" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Показать панель навигации и поиска" name="ShowNavbarNavigationPanel"/>
 	<menu_item_check label="Показать панель избранного" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Показать мини-панель местоположения" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Показать панель поиска" name="ShowSearchTopBar"/>
+	<menu_item_check label="Показать расположение в верхнем меню" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Показать канал симулятора в строке состояния" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Показать поиск разделов в меню" name="FSMenuSearch"/>
 </menu>

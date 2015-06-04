@@ -3,12 +3,14 @@
 	<menu_item_call label="Заменить" name="wear_replace"/>
 	<menu_item_call label="Надеть" name="wear_wear"/>
 	<menu_item_call label="Добавить" name="wear_add"/>
+	<context_menu label="Присоединить" name="wearable_attach_to"/>
+	<context_menu label="Присоединить к HUD" name="wearable_attach_to_hud"/>
+	<menu_item_call label="Изменить" name="edit"/>
 	<menu_item_call label="Снять / отсоединить" name="take_off_or_detach"/>
 	<menu_item_call label="Отсоединить" name="detach"/>
-	<context_menu label="Присоединить" name="wearable_attach_to"/>
-	<context_menu label="Присоединить к данным в игре" name="wearable_attach_to_hud"/>
 	<menu_item_call label="Снять" name="take_off"/>
-	<menu_item_call label="Изменить" name="edit"/>
 	<menu_item_call label="Профиль объекта" name="object_profile"/>
 	<menu_item_call label="Показать оригинал" name="show_original"/>
+	<menu_item_call label="Создать" name="create_new"/>
+	<menu_item_call label="--Нет опций--" name="--no options--"/>
 </context_menu>

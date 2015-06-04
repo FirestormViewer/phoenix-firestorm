@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string name="TypingColumnIcon" value="radarbox_p"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (Двойное нажатие открывает карту)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Двойное нажатие открывает карту)"/>
+	<string name="avatar_name_count" value="Имя [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel name="nearby_buttons_panel">
+			<filter_editor label="Фильтр людей" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Действия с выбранным пользователем"/>
+			<menu_button name="options_btn" tool_tip="Опции радара"/>
+			<button name="add_friend_btn" tool_tip="Добавить в друзья"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Имя" name="name" tool_tip="[TOTAL] аватаров, [IN_REGION] в этом же регионе, [IN_CHAT_RANGE] в радиусе чата"/>
+							<radar_list.columns name="voice_level" tool_tip="Говорит"/>
+							<radar_list.columns name="in_region" tool_tip="В этом же регионе"/>
+							<radar_list.columns name="typing_status" tool_tip="Набирает текст"/>
+							<radar_list.columns name="sitting_status" tool_tip="Сидит"/>
+							<radar_list.columns name="flags" tool_tip="Платежная информация"/>
+							<radar_list.columns name="has_notes" tool_tip="Заметки аватара"/>
+							<radar_list.columns label="Возраст" name="age"/>
+							<radar_list.columns label="Время" name="seen"/>
+							<radar_list.columns label="Расстояние" name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout">
+				<slider label="Расстояние (м):" name="NearMeRange" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

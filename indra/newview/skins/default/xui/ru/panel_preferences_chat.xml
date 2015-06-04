@@ -1,155 +1,312 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Чат" name="chat">
-	<tab_container name="tabs">
-		<panel name="ChatVisuals">
+<panel label="Чат/ЛС" name="chat">
+	<tab_container label="Настройки Firestorm" name="tabs">
+		<panel label="Визуальные" name="ChatVisuals">
 			<text name="console_font_size">
-				Размер шрифта на экране:
+				Размер шрифта консоли:
 			</text>
 			<radio_group name="chat_console_font_size">
-				<radio_item label="Мален" name="consradio"/>
+				<radio_item label="Мини" name="consradio" />
 				<radio_item label="Средний" name="consradio2"/>
 				<radio_item label="Большой" name="consradio3"/>
+				<radio_item label="Огромный" name="consradio4"/>
 			</radio_group>
-			<check_box label="Воспроизводить анимации аватара (например, если кричит)" name="play_avatar_animations"/>
-			<check_box name="EmotesUseItalic" label="Курсив для использования эмоций"/>
-            <check_box name="FSMarkObjects" label="Маркировать обьекты без имени"/>
-			<check_box label="Чат в пузырьках" name="bubble_text_chat"/>
-			<check_box label="Показать индикатор ввода над аватаром в пузыре" name="bubble_text_typing"/>
-            <check_box name="ChatFullWidth" label="Ширина экрана для консолья"/>
-			<spinner label="Скрыть чат:" name="fade_chat_time"/>
+			<check_box label="Отображать анимации аватара (например, кричит)" name="play_avatar_animations"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Показывать системные сообщения в скобках"/>
+			<check_box name="FSChatHistoryShowYou" label="Показывать &quot;Вы&quot; в истории чата вместо вашего имени" />
+			<check_box name="EmotesUseItalic" label="Использовать курсив для эмоций"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Жирным крик, курсивом шепот"/>
+			<check_box name="FSMarkObjects" label="Помечать объекты, при отправке в чат, чтобы избежать мошенничества"/>
+			<check_box label="Направлять скрипт llOwnerSay в окно отладки" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
+			<check_box label="Показать чат в пузырьках над аватарами" name="bubble_text_chat"/>
+			<check_box label="Показать индикатор набора в пузырьках над аватарами" name="bubble_text_typing"/>
+			<check_box label="Показывать секунды в истории переписки [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
+			<text name="show_timestamps_label" width="150">
+				Показывать время в:
+			</text>
+			<check_box label="Общем чате" name="show_timestamps_nearby_chat" width="95"/>
+			<check_box label="ЛС" name="show_timestamps_im" width="75"/>
+			<check_box label="Историях чата и ЛС" name="show_timestamps_transcripts"/>
+			<check_box name="FSConsoleClassicDrawMode" label="Использовать классическую консоль" tool_tip="Этот вариант отображает фон консоли как один большой блок под всеми линиями текста, по ширине самой длинной из них."/>
+			<check_box name="ChatFullWidth" label="Использовать всю ширину экрана"/>
+			<spinner label="Затухание после:" name="fade_chat_time" width="170"/>
 			<text name="text_box4">
 				(секунд)
 			</text>
 			<text name="text_box5">
-				(строк)
+				(линий)
 			</text>
 		</panel>
-		<panel name="ChatWindows">
-			<text name="font_size">
-				Размер шрифта чата:
+		<panel label="Окна чата" name="ChatWindows">
+			<text name="font_size" width="150">
+				Шрифт окна чата:
 			</text>
 			<radio_group name="chat_font_size">
-				<radio_item label="Мален" name="radio" />
-				<radio_item label="Средний" name="radio2" />
-				<radio_item label="Большой" name="radio3" />
+				<radio_item label="Мини" width="100" name="radio"/>
+				<radio_item label="Средний" name="radio2"/>
+				<radio_item label="Большой" name="radio3"/>
+				<radio_item label="Огромный" name="radio4"/>
 			</radio_group>
-			<check_box label="Убрать заголовки чата (вернуться к стилю V1)" name="plain_text_chat_history"/>
-			<check_box label="При использовании заголовков чата показывать мини-ярлыки" name="ShowChatMiniIcons"/>
-			<text name="show_ims_in_label" width="115">
-				Показать ЛС в:
+			<check_box name="IMShowNamesForP2PConv" label="Показывать имена в открытых ЛС" />
+			<check_box label="Использовать стиль V1 для заголовков чата" name="plain_text_chat_history" />
+			<check_box label="При использовании заголовков в V3 стиле, показывать мини аватарки" name="ShowChatMiniIcons" />
+			<check_box label="Показывать конец предыдущей беседы" name="LogShowHistory"/>
+			<check_box name="FSTypingChevronPrefix" label="Добавить (&gt;) как индикатор набора текста в ЛС"/>
+			<text name="show_unread_messages_label">
+				Оповещать о новых сообщениях:
 			</text>
-			<radio_group name="chat_window" tool_tip="Отображать ваши ЛС в отдельных окнах или в виде вкладок (Требуется перезагрузка)." left_pad="10">
-				<radio_item label="Отдельном окне" name="radio" />
-				<radio_item label="Закладках" name="radio2" />
+			<check_box name="FSNotifyUnreadChatMessages" label="Общего чата" tool_tip="Показывает уведомление еще непрочитанных сообщениях (и их количество) в общем чате, когда появляются новые, история прокручивается вверх." />
+			<check_box name="FSNotifyUnreadIMMessages" label="Сообщениях ЛС/Групп" tool_tip="Показывает уведомление еще непрочитанных сообщениях (и их количество) в общем чате, когда появляются новые, история прокручивается вверх." />
+			<text name="show_ims_in_label">
+				Показывать ЛС в:
+			</text>
+			<radio_group name="chat_window" tool_tip="Показать сообщения в отдельных окнах или во вкладках (требуется перезапуск).">
+				<radio_item label="Окнах" name="radio"/>
+				<radio_item label="Вкладках" width="170" name="radio2"/>
 			</radio_group>
-			<text name="req_restart_ims" left_pad="30">
-				(Перезагрузка)
+			<text name="req_restart_ims" >
+				(перезапуск)
 			</text>
-            <text name="tab_direction_label" width="160">
-              Чат табы:
-            </text>
-            <radio_group name="chat_tab_direction" tool_tip="Изменить расположение чат табов">
-                <radio_item label="Горизон." name="radio_horizontal"/>
-                <radio_item label="Верти." name="radio_vertical"/>
-            </radio_group>
-			<text name="req_restart_chattabs">
-				(Перезагрузка)
+			<text name="tab_direction_label">
+				Ориентация вкладок:
+			</text>	
+			<radio_group name="chat_tab_direction" tool_tip="Изменить направление размещения вкладок чата горизонтально или вертикально , когда включен режим отображения во вкладках (требуется перезапуск).">
+				<radio_item label="Горизон."  name="radio_horizontal"/>
+				<radio_item label="Вертикально"  width="170" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs" >
+				(перезапуск)
 			</text>
-            <check_box name="FSMuteAllGroups" label="выкл. все групповые чаты"/>
-            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Если опция 'получить уведомления' выкл. также выкл. групповой чат."/>
+			<text name="FSIMTabNameFormat_label">
+				Формат имен во вкладках ЛС:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Отображаемое имя" name="display_name"/>
+				<combo_box.item label="Имя пользователя" name="user_name"/>
+				<combo_box.item label="Отображаемое имя (Имя пользователя)" name="display_user_name"/>
+				<combo_box.item label="Имя пользователя (Отображаемое имя)" name="user_display_name"/>
+			</combo_box>
+			<check_box name="FSHighlightGroupMods" label="Выделение текста модераторов груп"/>
+			<text name="Moderator Name Style">
+				Имя:
+			</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Нормальный" name="normal"/>
+				<combo_box.item label="Жирный" name="BOLD"/>
+				<combo_box.item label="Курсив" name="ITALIC"/>
+				<combo_box.item label="Жирный и курсив" name="BOLDITALIC"/>
+				<combo_box.item label="Подчеркнутый" name="UNDERLINE"/>
+				<combo_box.item label="Жирный и подчеркнутый" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Курсив и подчеркнутый" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Жирный, курсив и подчеркнутый" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Текст:
+			</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Нормальный" name="normal"/>
+				<combo_box.item label="Жирный" name="BOLD"/>
+				<combo_box.item label="Курсив" name="ITALIC"/>
+				<combo_box.item label="Жирный и курсив" name="BOLDITALIC"/>
+				<combo_box.item label="Подчеркнутый" name="UNDERLINE"/>
+				<combo_box.item label="Жирный и подчеркнутый" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Курсив и подчеркнутый" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Жирный, курсив и подчеркнутый" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="Отключить ВСЕ групповые чаты"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Если отключено 'прием уведомлений групп - отключить чаты групп также"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Автоматически игнорировать и отказываться от всех конференции (Ad-Hoc)"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Уведомлять в общий чат о всех отклоненных конференциях"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Не игнорировать предложения конференций от моих друзей"/>
+			<text width="290" name="group_snooze_time_label" tool_tip="Количество времени, которое групповой чат будет временно заблокирован после нажатия кнопки 'Отдохнуть'. Установка этого значения в 0 просто закроет чат группы до появления следующего сообщения в ней.">
+				Длительность временного отключения группы:
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Количество времени, которое групповой чат будет временно заблокирован после нажатия кнопки 'Отдохнуть'. Установка этого значения в 0 просто закроет чат группы до появления следующего сообщения в ней." />
+			<text name="group_snooze_time_seconds_label" tool_tip="Количество времени, которое групповой чат будет временно заблокирован после нажатия кнопки 'Отдохнуть'. Установка этого значения в 0 просто закроет чат группы до появления следующего сообщения в ней.">
+				секунд
+			</text>
 		</panel>
-		<panel label="Ввод" name="ChatTyping">
-			<check_box label="Воспроизводить анимацию набора когда пишете " name="play_typing_animation"/>
-			<check_box label="Воспроизводить звук когда пишут" name="play_typing_sound"/> 
-            <check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
-			<check_box name="AutoCloseOOC" label="Закрывать ((OOC))-Скобки"/>
-            <check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно чата"/>
-            <check_box name="FSShowChatChannel" label="Отображать канал в окне чата"/>
-            <check_box label="Скрыть главную строку ввода." name="AutohideChatBar" tool_tip="снизу, возле символов."/>
-            <check_box label="Выкл. строку ввода после ввода." name="CloseChatOnReturn"/>
+		<panel label="Печать" name="ChatTyping">
+			<button name="autoreplace_showgui" label="Автозамена"/>
+			<button name="spellcheck_showgui" label="Проверка орфографии"/>
+			<button label="Перевод..." name="translation_settings_btn"/>
+			<check_box label="Использовать анимацию при наборе текста" name="play_typing_animation"/>
+			<check_box label="Слышать звук печати, когда кто-то пишет в общий чат" name="play_typing_sound"/>
+			<check_box label="Уведомлять других аватаров о наборе текста в ЛС" name="FSSendTypingState"/>
+			<check_box label="Включить автозаполнение жестов в общем чате" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Включить автоматическую подстановку имени в общем чате" name="FSChatbarNamePrediction"/>
+			<check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
+			<check_box name="AutoCloseOOC" label="Закрывает ((скобки)) для чата OOC"/>
+			<check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно общего чата"/>
+			<check_box name="FSShowChatChannel" label="Показать выбор канала в окне общего чата"/>
+			<check_box name="FSShowChatType" label="Добавить кнопку 'Отправить' в окно общего чата"/>
+			<check_box label="Автоматически скрывать строку ввода чата" name="AutohideChatBar" tool_tip="Скрывает строку ввода текста в общий чат. При начале ввода текста, данная строка появляется снова"/>
+			<check_box label="Снимать выделение чата после отправки сообщения" name="CloseChatOnReturn"/>
+			<check_box label="Также снимать выделение с истории чата" name="FSUnfocusChatHistoryOnReturn" />
+			<text name="textUseKeyboardShortcuts">
+				Использовать сочетания клавиш:
+			</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (Крик)" tool_tip="Выберите эту опцию, если вы хотите использовать сочетание клавиш Ctrl + Enter, чтобы кричать в общем чате." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (Шепот)" tool_tip="Выберите эту опцию, если вы хотите использовать сочетание клавиш Shift + Enter, чтобы прошептать в общем чате" />
+			<check_box name="FSUseAltOOC" tool_tip="Выберите эту опцию, если вы хотите использовать сочетание клавиш Alt + Enter для отправки сообщений ((ООС)) в общем чате." />
 		</panel>
 		<panel label="Уведомления" name="ChatNotices">
 			<text name="disable_toast_label">
-				Всплывающие окна для входящего чата:
+				Включить всплывающие окна разговоров:
 			</text>
-            <check_box name="EnableGroupChatPopups" label="Групповые" />
-            <check_box name="EnableIMChatPopups" label="ЛС" />
-            <check_box name="FSUseNearbyChatConsole" label="Чат консоли вместо тост нотификацый (Viewer 1.x стиль)"/>
-            <check_box name="FSLogImToChatConsole" label="Показать ЛС и Групповые чаты в консоли"/>
-			<check_box label="Отправлять ЛС на E-Mail, если я offline ([EMAIL])" name="send_im_to_email"/>
-            <check_box name="FSShowIMInChatHistory" label="Показать ЛС в локальном чате"/>
-            <check_box name="FSLogIMInChatHistory" label="сохранить ЛС в локальном чате"/>
+			<check_box label="Чаты групп" name="EnableGroupChatPopups" tool_tip="Выберите опцию, чтобы увидеть всплывающее окно, когда есть сообщение в одном из чате групп"/>
+			<check_box label="Личные сообщения" name="EnableIMChatPopups" tool_tip="Выберите опцию, чтобы увидеть всплывающее окно, когда есть новое сообщение ЛС (Личное сообщение)"/>
+			<check_box name="FSUseNearbyChatConsole" label="Использовать консоль для всплывающих окон вместо подложки (стиль клиента 1.x)"/>
+			<check_box name="FSLogImToChatConsole" label="Показывать сообщения ЛС в консоли чата"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Показывать сообщения групп в консоли чата"/>
+			<text name="FSShowGroupNameLength_label" width="270">
+				Длина имени группы отображаемая в истории чата
+			</text>
+			<spinner tool_tip="-1 Для полного имени группы, 0 для отключения" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Открыть разговоры, если есть сообщения пока вас не было"/>
+			<check_box label="Отправлять ЛС на мой e-mail, когда я не в сети ([EMAIL])" name="send_im_to_email"/>
+			<check_box name="FSShowIMInChatHistory" label="Показывать ЛС в окне общего чата"/>
+			<check_box name="FSLogIMInChatHistory" label="Сохранять ЛС в окне общего чата"/>
+			<text name="FSIMChatHistoryFade_label" width="220">
+				Затухание текста ЛС в общем чате
+			</text>
+			<spinner tool_tip="0.25-1.0, 0.25 для сильного затухания, 1 для отключения затухания" name="FSIMChatHistoryFade"/>
+			<check_box name="FSAnnounceIncomingIM" label="Сообщить мне о новых IM, как только отправитель начинает писать"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Мигание вкладок IM, когда ваши друзья 'в сети' или 'не в сети'"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Мигание вкладки общего чата при поступлении сообщений" tool_tip="Мерцание вкладки общего чата при поступлении новых сообщений. Необходимо, чтоб вкладка общего чата была прикреплена к общему окну разговоров"/>
+			<check_box name="FSNotifyIMFlash" label="Мигание вкладки ЛС при поступлении новых сообщений" tool_tip="Мигание вкладки ЛС при поступлении новых сообщений. Необходимо, чтоб вкладка ЛС была прикреплена к общему окну разговоров"/>
+			<check_box name="FSReportMutedGroupChat" label="Сообщить отключеный групповой чат в общий чат"/>
+			<check_box name="FSGroupNoticesToIMLog" label="Показать уведомления групп в общий чат, в дополнение к всплывающим окнам"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Показывать также заголовки и авторов"/>
 		</panel>
-        <panel label="Радар" name="ChatRadar">
-            <check_box name="reportChatRange" label="Радар сообшит, если Аватары покинули или вошли в радиус чата"/>
-            <check_box name="reportDrawRange" label="Радар сообшит, если Аватары покинули или вошли в радиус прорисовки"/>
-            <check_box name="RadarReportSimRange" label="Радар сообшит, если Аватары покинули или вошли в регион"/>
-        </panel>
-        <panel label="Ключевые слова" name="ChatKeywordAlerts">
-            <check_box name="FSKeywordOn" label="Вкл. Ключевые слова"/>
-            <check_box name="FSKeywordInChat" label="Проверять локальный чат на Ключевые слова"/>
-            <check_box name="FSKeywordInIM" label="Проверять ЛС на Ключевые слова"/>
-            <text name="textFSKeywords">
+		<panel name="ChatRadar" label="Радар">
+			<check_box name="reportChatRangeEnter" label="Сообщение радара, когда аватар входит в радиус чата"/>
+			<check_box name="PlayModeUISndRadarChatEnter" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarChatEnter" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarChatEnter" tool_tip="UUID по умолчанию."/>
+			<check_box name="reportChatRangeLeave" label="Сообщение радара, когда аватар покидает радиус чата"/>
+			<check_box name="PlayModeUISndRadarChatLeave" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarChatLeave" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarChatLeave" tool_tip="UUID по умолчанию."/>
+			<check_box name="reportDrawRangeEnter" label="Сообщение радара, когда аватар входит в границу прорисовки"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarDrawEnter" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarDrawEnter" tool_tip="UUID по умолчанию."/>
+			<check_box name="reportDrawRangeLeaave" label="Сообщение радара, когда аватар покидает границу прорисовки"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarDrawLeave" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarDrawLeave" tool_tip="UUID по умолчанию."/>
+			<check_box name="RadarReportSimRangeEnter" label="Сообщение радара, когда аватар входит в регион"/>
+			<check_box name="PlayModeUISndRadarSimEnter" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarSimEnter" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarSimEnter" tool_tip="UUID по умолчанию."/>
+			<check_box name="RadarReportSimRangeLeave" label="Сообщение радара, когда аватар покидает регион"/>
+			<check_box name="PlayModeUISndRadarSimLeave" width="150" label="Воспроизвести звук:"/>
+			<button name="Prev_UISndRadarSimLeave" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRadarSimLeave" tool_tip="UUID по умолчанию."/>
+			<check_box name="RadarEnterChannelAlert" label="Уведомление о входе скриптов"/>
+			<check_box name="RadarLeaveChannelAlert" label="Уведомление о выходе скриптов"/>
+			<check_box name="FSRadarEnhanceByBridge" label="Усиление радара с помощью моста LSL" tool_tip="Если эта опция включена, функции радара, ответственные за определение местоположения аватара на больших высотах вспомогается мостом LSL"/>
+			<text name="AgeAlertLabel">
+				Возрастные оповещения:
+			</text>
+			<text name="RadarAvatarAgeAlertValueLabel">
+				Порог:
+			</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Также цвет столбца возраста в радаре. Установите -1, чтобы отключить." />
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">
+				Дней
+			</text>
+			<check_box name="RadarAvatarAgeAlert" label="Сообщение радара, об аватаре младше установленного возраста" />
+			<check_box name="PlayModeUISndRadarAgeAlert" width="150" label="Воспроизвести звук:" />
+			<button name="Prev_UISndRadarAgeAlert" tool_tip="Прослушать этот звук." />
+			<button name="Def_UISndRadarAgeAlert" tool_tip="UUID по умолчанию." />
+		</panel>
+		<panel label="Детектор слов" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Включить детектор слов"/>
+			<check_box name="FSKeywordInChat" label="Поиск слов в общем чате"/>
+			<check_box name="FSKeywordInIM" label="Поиск слов в ЛС и чатах групп"/>
+			<check_box name="FSKeywordSpeakersName" label="Искать слова в именах людей названиях объектов"/>
+			<check_box name="FSKeywordCaseSensitive" label="Примите во внимание регистр букв"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Подходят только целые слова"/>
+			<text name="textFSKeywords">
 				Ключевые слова (через запятую):
-            </text>
-            <check_box name="FSKeywordChangeColor" label="Выделить цветом"/>
-            <color_swatch name="colorswatch" left="220" tool_tip="Нажмите, для выбора"/>
-            <check_box name="FSKeywordPlaySound" label="Звук"/>
-            <text name="textFSKeywordSound" width="200">
-              UUID для звука:
-            </text>
-        </panel>
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Цвет выделения"/>
+			<color_swatch name="colorswatch" tool_tip="Нажмите, чтобы выбрать цвет"/>
+			<check_box name="FSKeywordPlaySound" label="Воспроизведение звука при найденом слове"/>
+			<text name="textFSKeywordSound">
+				Звук оповещения:
+			</text>
+			<button name="Prev_UISndFSKeywordSound" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndFSKeywordSound" tool_tip="UUID по умолчанию."/>
+		</panel>
 		<panel label="Команды" name="tab-CmdLine">
-			<check_box label="Вкл. краткие команды" name="chat_cmd_toggle"/>
+			<check_box label="Включить использование строки чата как командную строку" name="chat_cmd_toggle" />
 			<text name="FSCmdLineCalc_txt">
-				Решить (кмд: cmd SIN(2+2))
+				Калькулятор
 			</text>
 			<text name="FSCmdLineDrawDistance_txt">
-				Дальность видемости (кмд: cmd Meter)
+				Дальность видимости (в метрах)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Пропускная способность (kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Копировать положение камеры в буфер
 			</text>
 			<text name="FSCmdLineAO_txt">
-				AO вкл.-/выкл. (кмд: cmd on/off)
+				Включить/Выключить АО (on/off)
 			</text>
 			<text name="FSCmdLineClearChat_txt">
-				Удалить историю чата (кмд: cmd)
+				Очистить историю чата
 			</text>
+			<line_editor tool_tip="Czyści logi czatu, aby zapobiec lagom pochodzącym od spamerów." name="FSCmdLineClearChat" />
 			<text name="FSCmdLineMedia_txt">
-				Уст. УРЛ медия (кмд: cmd URL Typ)
+				Установить url для медиа
 			</text>
+			<line_editor tool_tip="Ustawia i odtwarza strumień mediów dla podanego URL" name="FSCmdLineMedia" />
 			<text name="FSCmdLineMusic_txt">
-				уст. УРЛ стрима (usage: cmd URL)
+				Установить url для потоковой музыки
 			</text>
+			<line_editor tool_tip="Ustawia i odtwarza strumień muzyki dla podanego URL" name="FSCmdLineMusic" />
 			<text name="FSCmdLineRezPlatform_txt">
-				выложить платформу (кмд: cmd 0 - 64)
+				Выложить платформу (0 - 64)
 			</text>
-			<slider name="FSCmdLinePlatformSize" label="Ширина" />
+			<slider name="FSCmdLinePlatformSize" label="Ширина:" tool_tip="Насколько большой будет платформа?" />
 			<text name="FSCmdLineKeyToName_txt">
-				Узнать имя аватара по UUI (кмд: cmd key)
+				Узнать имя аватара по UUID
 			</text>
+			<text name="FSCmdLineRollDice_txt">
+				Бросать кости
+			</text>
+			<line_editor tool_tip="Бросать кости - [количество костей] [количество стенок] [модификатор типа (опционально)] [значение модификатора (по желанию)]. Пример: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
 			<text name="FSCmdLinePos_txt">
-				Телепорт (кмд: cmd x z y)
+				Телепорт внутри сима (x y z)
 			</text>
 			<text name="FSCmdLineGround_txt">
-				Телепорт на поверхность (кмд: cmd)
+				Телепорт на землю
 			</text>
 			<text name="FSCmdLineHeight_txt">
-				Телепорт на высоту (кмд: cmd z)
+				Телепорт на высоту (z)
 			</text>
 			<text name="FSCmdTeleportToCam_txt">
-				Телепорт к камере (кмд: cmd)
+				Телепортироваться к позиции камеры
 			</text>
 			<text name="FSCmdLineOfferTp_txt">
-				пред. телепорт аватару (кмд: cmd key)
+				Предложить телепорт аватару (UUID)
 			</text>
 			<text name="FSCmdLineTP2_txt">
-				Телепорт к аватару (кмд: cmd name)
+				Телепортироваться к аватару (имя)
 			</text>
+			<line_editor tool_tip="Синтаксис не чувствителен к регистру, но рекомендуется писать имя как это указано в радаре" name="FSCmdLineTP2" />	
 			<text name="FSCmdLineTeleportHome_txt">
-				Телепорт домой (кмд: cmd)
+				Телепортация домой
 			</text>
 			<text name="FSCmdLineMapTo_txt">
-				Телепорт а регион (cmd regionname)
+				Телепорт в другой регион (имя региона)
 			</text>
+			<check_box label="Сохранять положение после телепорта" name="toggle" />
 		</panel>
 	</tab_container>
 </panel>

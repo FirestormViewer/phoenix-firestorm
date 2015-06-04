@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Object Pie">
-	<menu_item_call label="Коснуться" name="Object Touch"/>
-	<menu_item_call label="Изменить" name="Edit..."/>
-	<menu_item_call label="Строительство" name="Build"/>
-	<menu_item_call label="Открыто" name="Open"/>
-	<menu_item_call label="Сесть здесь" name="Object Sit"/>
+	<menu_item_call label="Коснуться" name="Object Touch">
+		<menu_item_call.on_enable name="EnableTouch" parameter="Коснуться"/>
+	</menu_item_call>
+	<menu_item_call label="Редактировать" name="Edit..."/>
+	<menu_item_call label="Строить" name="Build"/>
+	<menu_item_call label="Открыть" name="Open"/>
+	<menu_item_call label="Сесть" name="Object Sit"/>
 	<menu_item_call label="Встать" name="Object Stand Up"/>
-	<menu_item_call label="Профиль объекта" name="Object Inspect"/>
+	<context_menu label="Объект" name="Object Features">
+		<menu_item_call label="Профиль" name="Object Inspect"/>
+		<menu_item_call label="Инспектировать" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Информация о скриптах" name="ScriptInfo"/>
+		<menu_item_call label="Соеденить" name="Object Link"/>
+		<menu_item_call label="Разделить" name="Object Unlink"/>
+		<menu_item_check label="Редактировать соедененные части" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Компилировать (Mono)" name="Mono"/>
+		<menu_item_call label="Компилировать (LSL)" name="LSL"/>
+		<menu_item_call label="Сбросить скрипты" name="Object Reset Scripts"/>
+		<menu_item_call label="Включить скрипты" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Выключить скрипты" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Удалить скрипты" name="Remove Scripts From Selection"/>
+	</context_menu>
 	<menu_item_call label="Приблизить" name="Zoom In"/>
 	<menu_item_call label="Показывать в наборах связей" name="show_in_linksets"/>
 	<menu_item_call label="Показывать в персонажах" name="show_in_characters"/>
-	<context_menu label="Надеть" name="Put On">
+	<context_menu label="Одеваться..." name="Put On">
 		<menu_item_call label="Надеть" name="Wear"/>
 		<menu_item_call label="Добавить" name="Add"/>
-		<context_menu label="Присоединить" name="Object Attach"/>
-		<context_menu label="Присоединить HUD" name="Object Attach HUD"/>
+		<context_menu label="Добавить" name="Object Attach"/>
+		<context_menu label="Добавить HUD" name="Object Attach HUD"/>
 	</context_menu>
 	<context_menu label="Управление" name="Remove">
-		<menu_item_call label="Жалоба" name="Report Abuse..."/>
+		<menu_item_call label="Сообщить о нарушении" name="Report Abuse..."/>
 		<menu_item_call label="Заблокировать" name="Object Mute"/>
 		<menu_item_call label="Разблокировать" name="Object Unmute"/>
-		<menu_item_call label="Возврат" name="Return..."/>
 	</context_menu>
+	<menu_item_call label="Обновить текстуры" name="Texture Refresh"/>
+	<menu_item_call label="Не отображать" name="Derender"/>
+	<menu_item_call label="Не отображать всегда" name="DerenderPermanent"/>
+	<menu_item_call label="Вернуть" name="Return..."/>
 	<menu_item_call label="Взять" name="Pie Object Take"/>
 	<menu_item_call label="Взять копию" name="Take Copy"/>
 	<menu_item_call label="Заплатить" name="Pay..."/>
 	<menu_item_call label="Купить" name="Buy..."/>
+	<context_menu label="Сохранить как" name="Export Menu">
+		<menu_item_call label="Резервную копию" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Удалить" name="Delete"/>
-	<menu_item_call label="Блокировать владельца участка" name="Mute Particle"/>
+	<menu_item_call label="Заблокировать владельца частиц" name="Mute Particle"/>
 </context_menu>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="Отслеживание денег">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Время" />
+		<name_list.columns name="name" label="Имя" />
+		<name_list.columns name="amount" label="Сумма" />
+	</name_list>
+	<check_box label="Отслеживать при закрытии" name="FSAlwaysTrackPayments" tool_tip="Отслеживание денежных переводов будет производиться при закрытом окне" />
+	<button name="Clear" label="Очистить"/>
+</floater>

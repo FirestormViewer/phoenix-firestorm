@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Закладка">
+	<string name="title_place">
+		Подробности места
+	</string>
+	<string name="title_remote_place">
+		Подробности места
+	</string>
+	<string name="title_remote_place_detail">
+		Подробности места: [NAME]
+	</string>
+	<string name="title_landmark">
+		Закладка
+	</string>
+	<string name="title_landmark_detail">
+		Закладка: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Создать закладку (LM)
+	</string>
+	<string name="title_teleport_history_item">
+		Подробности истории телепортации: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Телепорт" name="teleport_btn" tool_tip="Телепортироваться к выбранному месту" />
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Карта" name="map_btn" tool_tip="Показать соответствующую область на карте мира" />
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Изменить" name="edit_btn" tool_tip="Изменить выбранную закладку" />
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Показать дополнительные опции" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Закрыть" name="close_btn" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Сохранить" name="save_btn" />
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Отмена" name="cancel_btn" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

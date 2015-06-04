@@ -1,90 +1,88 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Общие" name="general_panel">
+<panel label="Общее" name="general_panel">
 	<text name="language_textbox">
 		Язык:
 	</text>
 	<combo_box name="language_combobox">
-		<combo_box.item label="Системный" name="System Default Language"/>
-		<combo_box.item label="English (английский)" name="English"/>
+		<combo_box.item label="По умолчанию" name="System Default Language"/>
+		<combo_box.item label="English (Английский)" name="English"/>
 		<combo_box.item label="Dansk (Датский) - Beta" name="Danish"/>
 		<combo_box.item label="Deutsch (Немецкий)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Испанский) - Beta" name="Spanish"/>
 		<combo_box.item label="Français (Французский) - Beta" name="French"/>
 		<combo_box.item label="Italiano (Итальянский) - Beta" name="Italian"/>
-		<combo_box.item label="Nederlands (Голландский) - Beta" name="Dutch"/>
 		<combo_box.item label="Polski (Польский)" name="Polish"/>
 		<combo_box.item label="Português (Португальский) - Beta" name="Portugese"/>
-		<combo_box.item label="日本語 (Японский) - Beta" name="Japanese"/>
-		<combo_box.item label="Русский (Русский) - Beta v2.0" name="Russian"/>
+		<combo_box.item label="Русский" name="Russian"/>
+		<combo_box.item label="Türkçe (Турецкий) - Beta" name="Turkish"/>
+		<combo_box.item label="日本語 (Японский) - Beta" name="(Japanese)"/>
+		<combo_box.item label="正體中文 (Традиционный Китайский) - Beta" name="Traditional Chinese"/>
 	</combo_box>
-	<text name="language_textbox2">
-		(Требуется перезапуск)
+	<text name="language_textbox2" width="145">
+		(Необходим перезапуск)
 	</text>
-	<text name="maturity_desired_prompt">
-		Показывать контент:
+	<text name="maturity_desired_prompt" width="250">
+		Получить доступ к местам с рейтингом:
 	</text>
 	<combo_box name="maturity_desired_combobox">
-		<combo_box.item label="Общий, умеренный, для взрослых" name="Desired_Adult"/>
-		<combo_box.item label="Общий и умеренный" name="Desired_Mature"/>
-		<combo_box.item label="Общий" name="Desired_PG"/>
+		<combo_box.item label="Общий, Умеренный, Для взрослых" name="Desired_Adult"/>
+		<combo_box.item label="Общий, Умеренный" name="Desired_Mature"/> 
+		<combo_box.item label="Общий" name="Desired_PG"/>        
 	</combo_box>
 	<text name="start_location_textbox">
-		Место старта:
+		Место запуска:
 	</text>
 	<combo_box name="start_location_combo">
-		<combo_box.item label="Мое последнее место" name="MyLastLocation"/>
-		<combo_box.item label="Мой дом" name="MyHome"/>
+		<combo_box.item label="Последнее место" name="MyLastLocation" tool_tip="По умолчанию. Войти в последнее посещенное место."/>
+		<combo_box.item label="Мой дом" name="MyHome" tool_tip="Войти в место, которое установлено домом"/>
 	</combo_box>
-	<check_box initial_value="true" label="Показывать на экране входа" name="show_location_checkbox"/>
+	<check_box label="Показать на экране входа" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
-		Теги имен:
+		Отображение имени:
 	</text>
-	<radio_group name="Name_Tag_Preference" width="240">
-		<radio_item label="Выкл." width="60" name="radio"/>
-		<radio_item label="Вкл." name="radio2"/>
-		<radio_item label="Временный показ" name="radio3"/>
+	<radio_group name="Name_Tag_Preference" width="220">
+		<radio_item width="95" label="Выключить" name="radio"/>
+		<radio_item width="85" label="Включить" name="radio2"/>
+		<radio_item label="На некоторое время" name="radio3"/>
 	</radio_group>
-	<text name="RenderNameShowTime_LabelPrefix">
+	<text name="RenderNameShowTime_LabelPrefix" left_pad="105">
 		(
 	</text>
 	<text name="RenderNameShowTime_LabelSuffix">
-		seconds)
+		секунд)
 	</text>
-	<check_box label="Мое имя" name="show_my_name_checkbox1"/>
-	<check_box label="Имена пользователей" name="show_slids" tool_tip="Показывать имя пользователя, например, bobsmith123"/>
-	<check_box label="Титулы групп" name="show_all_title_checkbox1" tool_tip="Показывать титулы групп, например, Officer или Member"/>
-	<check_box label="Подсветка друзей" name="show_friends" tool_tip="Подсвечивать теги имен ваших друзей"/>
-	<check_box label="Экранные имена" name="display_names_check" tool_tip="Показывать экранные имена в чате, IM, тегах имен и пр."/>
-	<check_box label="Показать титул группы" name="RenderHideGroupTitle" tool_tip="EПоказать титул своей активной группы" />
-	<check_box label="Показать Viewer" name="show_viewerID" tool_tip="Показывает рядом с именем пользователя используемый Viewer" />
-	<check_box label="Старый формат" name="FSshow_legacyun" tool_tip="Имя Фамилия в замен имя.фамилия" />
-
-	<text name="title_afk_text" >
-		Статус "Отошел" через:
+	<check_box label="Показывать мое имя" name="show_my_name_checkbox1"/>
+	<check_box label="Имена пользователей" name="show_slids" tool_tip="Отображать имена учетных записей пользователей, например Bobsmith123"/>
+	<check_box label="Показывать титул группы" name="show_all_title_checkbox1" tool_tip="Показывать титул группыю Например, Owner"/>
+	<check_box label="Скрыть собственный титул группы" name="RenderHideGroupTitle" tool_tip="Показать или скрыть свой титул группы для вас и всех остальных."/>
+	<check_box label="Отображаемое имя" name="display_names_check" tool_tip="Показать Отображаемое имя (Display Names) в чате, ЛС, тегах над аватарами"/>
+	<check_box label="Старый способ отображения имени" name="FSshow_legacyun" tool_tip="Отображение имени в старом формате (Имя Фамилия) вместо имени пользователя (имя.фамилия)"/>
+	<check_box label="Выделение друзей" name="show_friends" tool_tip="Выделение имени друзей другим цветом"/>
+	<check_box label="Убирать 'Resident' с имен старого типа" name="legacy_trim_check" tool_tip="Убирать 'Resident' с имен старого типа"/>
+	<check_box label="Старый способ позиционирования тегов имени" name="FSLegacyNametagPosition" tool_tip="Когда вы включите эту опцию, тег имени не будет на постоянной высоте над аватаром и не будет наплывать на его голову, если он движется. Например, в результате анимации."/>
+	<text name="title_afk_text">
+		Статус 'Отошел' по истечении:
 	</text>
-	<text name="title_afk_quit_text" left_pad="40">
-		Выйти из системы через:
-	</text> 
-	<combo_box label="Статус 'Отошел' через:" name="afk">
-		<combo_box.item label="2 минуты" name="item0"/>
+	<text name="title_afk_quit_text">
+		Выйти по истечении:
+	</text>
+	<combo_box label="'Отошел' по истечении:" name="afk">
+		<combo_box.item label="2 минут" name="item0"/>
 		<combo_box.item label="5 минут" name="item1"/>
 		<combo_box.item label="10 минут" name="item2"/>
 		<combo_box.item label="30 минут" name="item3"/>
-		<combo_box.item label="никогда" name="item4"/>
+		<combo_box.item label="60 минут" name="item4"/>
+		<combo_box.item label="Никогда" name="item5"/>
 	</combo_box>
-	<combo_box  layout="topleft" left_pad="60" name="quitafk">
-		<combo_box.item label="2 минуты" name="item0"/>
+	<combo_box label="Выйти по истечении:" name="quitafk">
+		<combo_box.item label="2 минут" name="item0"/>
 		<combo_box.item label="5 минут" name="item1"/>
 		<combo_box.item label="10 минут" name="item2"/>
 		<combo_box.item label="30 минут" name="item3"/>
-		<combo_box.item label="никогда" name="item4"/>
+		<combo_box.item label="Никогда" name="item4"/>
 	</combo_box>
-	<check_box name="AvatarSitOnAway" label="Сесть, если статус 'Отошел'" />
+	<check_box name="AvatarSitOnAway" label="Сесть, когда 'Отошел'"/>
 	<text name="text_box3">
-		Ответ в режиме «Не беспокоить»:
+		Автоматические сообщения можно изменить в Приватность / Автоответ
 	</text>
-	<text_editor name="do_not_disturb_response">
-		log_in_to_change
-	</text_editor>
-
 </panel>

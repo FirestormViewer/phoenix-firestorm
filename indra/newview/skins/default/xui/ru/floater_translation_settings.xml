@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_translation_settings" title="НАСТРОЙКИ ПЕРЕВОДА ЧАТА">
+<floater name="floater_translation_settings" title="Настройки перевода чата">
 	<string name="bing_api_key_not_verified">
 		Bing appID не подтвержден. Повторите попытку.
 	</string>

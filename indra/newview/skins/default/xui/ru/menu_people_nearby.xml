@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Avatar Context Menu">
-	<menu_item_call label="Смотреть профиль" name="view_profile"/>
-	<menu_item_call label="IM" name="im"/>
+<context_menu name="Nearby People Context Menu">
+	<menu_item_call label="Просмотреть профиль" name="view_profile"/>
+	<menu_item_call label="Отправить ЛС" name="im"/>
 	<menu_item_call label="Предложить телепорт" name="offer_teleport"/>
+	<menu_item_call label="Попросить телепорт" name="request_teleport"/>
 	<menu_item_call label="Голосовой вызов" name="voice_call"/>
-	<menu_item_call label="Посмотреть журнал чата..." name="chat_history"/>
-	<menu_item_call label="Добавить друга" name="add_friend"/>
+	<menu_item_call label="Показать историю чата" name="chat_history"/>
+	<menu_item_call label="Добавить в друзья" name="add_friend"/>
+	<menu_item_call label="Добавить в набор" name="Add to Set"/>
 	<menu_item_call label="Удалить из друзей" name="remove_friend"/>
-	<menu_item_call label="Пригласить в группу..." name="invite_to_group"/>
-	<menu_item_call label="Приблизить" name="zoom_in"/>
-	<menu_item_call label="Карта" name="map"/>
-	<menu_item_call label="Поделиться" name="share"/>
+	<menu_item_call label="Запрос в группу" name="invite_to_group"/>
+	<menu_item_call label="Приблизить камеру" name="zoom_in"/>
+	<menu_item_call label="Показать на карте" name="map"/>
+	<menu_item_call label="Поделиться предметом" name="share"/>
 	<menu_item_call label="Заплатить" name="pay"/>
-	<menu_item_check label="Черный список" name="block_unblock"/>
+	<menu_item_check label="Заблокировать/Разблокировать" name="block_unblock"/>
 </context_menu>

@@ -1,90 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Self Pie">
-    <pie_slice
-        label="Профиль..."
-        name="Profile..."/>
-    <pie_slice
-        label="Группы"
-        name="Groups..."/>
-    <pie_menu
-        label="Снять >"
-        name="Take Off &gt;">
-        <pie_menu
-            label="Одежду >"
-            name="Clothes &gt;">
-            <pie_slice
-                label="Футболку"
-                name="Shirt"/>
-            <pie_slice
-                label="Штаны"
-                name="Pants"/>
-            <pie_slice
-                label="Обувь"
-                name="Shoes"/>
-            <pie_slice
-                label="Носки"
-                name="Socks"/>
-            <pie_slice
-                label="Куртку"
-                name="Jacket"/>
-            <pie_slice
-                label="Перчатки"
-                name="Gloves"/>
-            <pie_menu
-                label="Еще >"
-                name="Clothes More">
-                <pie_slice
-                    label="Майку"
-                    name="Self Undershirt"/>
-                <pie_slice
-                    label="Всю одежду"
-                    name="All Clothes"/>
-                <pie_slice
-                    label="Трусы"
-                    name="Self Underpants"/>
-                <pie_slice
-                    label="Тату"
-                    name="Self Tattoo"/>
-                <pie_slice
-					label="Физику"
-					name="Self Physics"/>
-                <pie_slice
-                    label="Альфу"
-                    name="Self Alpha"/>
+<pie_menu name="Self Pie">
+    <pie_slice label="Профиль" name="Profile..."/>
+    <pie_slice label="Группы" name="Groups..."/>
+    <pie_menu label="Снять &gt;" name="Take Off &gt;">
+        <pie_menu label="Одежду &gt;" name="Clothes &gt;">
+            <pie_slice label="Рубашку" name="Shirt"/>
+            <pie_slice label="Штаны" name="Pants"/>
+            <pie_slice label="Обувь" name="Shoes"/>
+            <pie_slice label="Носки" name="Socks"/>
+            <pie_slice label="Куртку" name="Jacket"/>
+            <pie_slice label="Перчатки" name="Gloves"/>
+            <pie_menu label="Дальше &gt;" name="Clothes More">
+                <pie_slice label="Майку" name="Self Undershirt"/>
+                <pie_slice label="Всю одежду" name="All Clothes"/>
+                <pie_slice label="Трусы" name="Self Underpants"/>
+                <pie_slice label="Татуировку" name="Self Tattoo"/>
+                <pie_slice label="Физику" name="Self Physics"/>
+                <pie_slice label="Альфа" name="Self Alpha"/>
             </pie_menu>
-            <pie_slice
-                label="Юбку"
-                name="Skirt"/>
+            <pie_slice label="Юбку" name="Skirt"/>
         </pie_menu>
-        <pie_menu
-            label="HUD >"
-            name="Pie Object Detach HUD" />
-        <pie_menu
-            label="Отделить >"
-            name="Pie Object Detach" />
-        <pie_slice
-            label="Отделить все"
-            name="Detach All"/>
+        <pie_menu name="Pie Object Detach HUD"/>
+        <pie_menu label="Отделить &gt;" name="Pie Object Detach"/>
+        <pie_slice label="Отделить все" name="Detach All"/>
     </pie_menu>
-    <pie_slice
-        label="Сесть"
-        name="Sit Down Here"/>
-    <pie_slice
-        label="Встать"
-        name="Stand Up"/>
-    <pie_slice
-        label="Жесты..."
-        name="Gestures"/>
-    <pie_menu
-        label="Внешность &gt;"
-        name="Appearance &gt;">
-        <pie_slice label="Править тело"
-           name="Edit My Shape"/>
-        <pie_slice label="Править костюм"
-           name="Edit My Outfit"/>
+    <pie_slice label="Сесть" name="Sit Down Here"/>
+    <pie_slice label="Встать" name="Stand Up"/>
+    <pie_slice label="Скрипты" name="ScriptInfo"/>
+    <pie_slice label="Жесты..." name="Gestures"/>
+    <pie_menu label="Внешность &gt;" name="Appearance &gt;">
+        <pie_slice label="Фигура" name="Edit My Shape"/>
+        <pie_slice label="Обновить текстуры" name="Texture Refresh"/>
+        <pie_slice label="Комплект" name="Edit My Outfit"/>
+        <pie_slice label="Дамп XML" name="Dump XML"/>
+        <pie_slice label="Высота" name="Hover Height"/>
     </pie_menu>
-    <pie_slice
-        label="Отладка текстур"
-        name="Debug..."/>
+    <pie_slice label="Отладка" name="Debug..."/>
 </pie_menu>

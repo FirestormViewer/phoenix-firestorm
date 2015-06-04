@@ -1,8 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-	<layout_stack name="im_panels">
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Показать профиль данной группы"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="Показать профиль данного жителя"/>
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="Добавить пользователя в друзья"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="Предложить или попросить телепорт"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="Поделиться предметом с данным жителем"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="Отправить деньги данному жителю"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="Добавить звонок в данный чат"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="Завершить звонок"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="Настройки голоса"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="Открыть журнал разговора"/>
+		</layout_panel>
+		<layout_panel name="send_sysinfo_btn_panel">
+			<button tool_tip="Отправить системную информацию" name="send_sysinfo_btn"/>
+		</layout_panel>
+		<layout_panel name="support_panel">
+			<check_box label="Добавить версию" name="FSSupportGroupChatPrefix_toggle" tool_tip="Добавляет текущую версию клиента и информацию о теме в сообщения, отправленные вами в этой группе. Данная информация поможет сотрудникам поддержки в правильной диагностике Ваших проблем и повышения точности ответов на ваши вопросы"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="Кому" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Непрочитанных сообщений: [NUM]
+					</text>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </floater>

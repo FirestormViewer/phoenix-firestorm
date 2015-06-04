@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy land" title="КУПИТЬ ЗЕМЛЮ">
+<floater name="buy land" title="Покупка земли">
 	<floater.string name="can_resell">
 		Может быть перепродана.
 	</floater.string>
@@ -228,6 +228,6 @@
 		У вас L$ 2100.
 	</text>
 	<check_box label="Удалить [AMOUNT] м² взноса из группы." name="remove_contribution"/>
-	<button label="Покупка" name="buy_btn"/>
+	<button label="Купить" name="buy_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
 </floater>

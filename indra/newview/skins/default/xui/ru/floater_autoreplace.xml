@@ -17,16 +17,3 @@
 	<button label="Сохранить изменения" name="autoreplace_save_changes" tool_tip="Сохранить все изменения."/>
 	<button label="Отмена" name="autoreplace_cancel" tool_tip="Отменить все изменения."/>
 </floater>
-<!--
-  <text 
-   top_pad="10"
-   left="10"
-   height="16"
-   width="260"
-   follows="left|top"
-   halign="center"
-   mouse_opaque="true"
-   name="autoreplace_text2">
-    Entries
-  </text>
--->

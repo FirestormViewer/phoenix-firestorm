@@ -1,27 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">
-		http://secondlife.com/account/request.php
-	</panel.string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_container">
-			<combo_box label="Имя пользователя" name="username_combo" tool_tip="Имя пользователя, которое вы выбрали при регистрации, например, «bobsmith12» или «Steller Sunshine»"/>
-			<line_editor label="Пароль" name="password_edit"/>
-			<check_box label="Запомнить меня" name="remember_check"/>
+			<combo_box label="Имя пользователя:" tool_tip="Имя пользователя выбирается при регистрации, например bobsmith12 или Steller Sunshine" name="username_combo" />
+			<line_editor name="password_edit" label="Пароль" />
+			<check_box label="Запомнить пароль" name="remember_check" />
 			<text name="forgot_password_text">
-				Забыли пароль?
+				Забыли имя пользователя или пароль?
 			</text>
-			<button label="Войти" name="connect_btn"/>
-			<text name="At_My_Last_Location_Label" font="SansSerifSmall">
-				В последнее место
+			<button label="Войти" name="connect_btn" />
+			<text name="At_My_Last_Location_Label">
+				в локацию
 			</text>
 			<combo_box label="Мои любимые места" name="start_location_combo">
-				<combo_box.item label="Мой дом" name="MyHome"/>
+				<combo_box.item label="Мой дом" name="MyHome" />
 			</combo_box>
-			<button label="Войти" name="connect_favorite_btn"/>
-			<line_editor label="Введите местоположение" name="location_edit" font="SansSerifSmall" />
-			<button label="Войти" name="connect_location_btn"/>
-			<combo_box label="Выберите сетку" name="server_combo"/>
+			<button label="Войти" name="connect_favorite_btn" />
+			<line_editor name="location_edit" label="Написать локацию" />
+			<button label="Войти" name="connect_location_btn" />
+			<combo_box label="Выберите сетку" name="server_combo" />
 		</layout_panel>
 	</layout_stack>
 </panel>

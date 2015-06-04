@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="МЕТКИ">
+<floater name="beacons" title="Метки">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			Показать:
@@ -13,7 +13,7 @@
 			Для этих объектов:
 		</text>
 		<check_box label="Физический" name="physical"/>
-		<check_box label="Скриптовые" name="scripted"/>
+		<check_box label="Со скриптами" name="scripted"/>
 		<check_box label="Только касание" name="touch_only"/>
 		<check_box label="Источники звука" name="sounds"/>
 		<check_box label="Источники частиц" name="particles"/>

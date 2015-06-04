@@ -1,114 +1,113 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Участники и роли" name="roles_tab">
 	<panel.string name="default_needs_apply_text">
-		Есть несохраненные изменения
+		Панель содержит несохраненные изменения
 	</panel.string>
 	<panel.string name="want_apply_text">
 		Хотите сохранить изменения?
 	</panel.string>
 	<tab_container name="roles_tab_container">
-		<panel label="УЧАСТНИКИ" name="members_sub_tab" tool_tip="Участники">
+		<panel label="Участники" name="members_sub_tab" tool_tip="Участники">
 			<panel.string name="help_text">
-				Можно добавлять или удалять роли, назначенные участникам.
-Чтобы выбрать несколько участников, удерживайте клавишу CTRL и
-щелкайте нужные имена.
-			</panel.string>
-			<panel.string name="donation_area">
-				[AREA] м²
+				Вы можете добавлять и удалять функции, возложенные на людей.
+Вы можете выбрать несколько человек, нажав Ctrl и нажав на их имена.
 			</panel.string>
 			<filter_editor label="Фильтр участников" name="filter_input"/>
 			<name_list name="member_list">
-				<name_list.columns label="Участник" name="name"/>
+				<name_list.columns label="Имя" name="name"/>
 				<name_list.columns label="Вклад" name="donated"/>
-				<name_list.columns label="Статус" name="online"/>
-				<name_list.columns label="Роль" name="title"/>
+				<name_list.columns label="Титул" name="title"/>
 			</name_list>
 			<button label="Пригласить" name="member_invite"/>
 			<button label="Выкинуть" name="member_eject"/>
-			<button label="Заблокировать участников" name="member_ban"/>
+			<button label="Забанить" name="member_ban"/>
+			<button name="export_list" label="Экспорт списка"/>
 		</panel>
-		<panel label="РОЛИ" name="roles_sub_tab">
+		<panel label="Роли" name="roles_sub_tab" tool_tip="Роли">
 			<panel.string name="help_text">
-				У ролей есть название и список способностей,
-        доступных участникам. У участников может быть
-        одна или несколько ролей. У группы может быть до 10 ролей,
-        в том числе роли «Все» и «Владелец».
+				Ролям присваиваются название и привилегии
+которые выполняют определенную функцию. Любой человек может иметь
+одну или более ролей. Каждая группа может иметь до 10 ролей,
+в том числе роль &quot;Все&quot; и &quot;Владелец&quot;.
 			</panel.string>
 			<panel.string name="cant_delete_role">
-				Роли «Все» и «Владелец» являются особыми и не могут быть удалены.
+				Роли &quot;Все&quot; и &quot;Владелец&quot; являются специальными и не могут быть удалены.
 			</panel.string>
 			<filter_editor label="Фильтр ролей" name="filter_input"/>
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Роль" name="name"/>
-				<scroll_list.columns label="Название" name="title"/>
-				<scroll_list.columns label="#" name="members"/>
+				<scroll_list.columns label="Титул" name="title"/>
 			</scroll_list>
-			<button label="Создать роль" name="role_create"/>
+			<button label="Новая роль" name="role_create"/>
 			<button label="Удалить роль" name="role_delete"/>
 		</panel>
-		<panel label="СПОСОБНОСТИ" name="actions_sub_tab" tool_tip="Можно просмотреть описание способности, а также какие участники и роли ею обладают.">
+		<panel label="Привилегии" name="actions_sub_tab" tool_tip="Можно просмотреть описание привилегии, а также какие участники и роли ею обладают.">
 			<panel.string name="help_text">
-				Способности позволяют участникам, которым назначены соответствующие роли, выполнять особые
-        действия в группе. Имеется широкий выбор способностей.
+				Привилегии позволяют участникам, которым назначены соответствующие роли, выполнять особые
+действия в группе. Имеется широкий выбор способностей.
 			</panel.string>
-			<filter_editor label="Фильтр способностей" name="filter_input"/>
-			<scroll_list name="action_list" tool_tip="Выберите способность, чтобы просмотреть данные о ней"/>
+			<filter_editor label="Фильтр привилегий" name="filter_input"/>
+			<scroll_list name="action_list" tool_tip="Выберите привилегию, чтобы просмотреть данные о ней"/>
 		</panel>
-		<panel label="ЗАБЛОКИРОВАННЫЕ ЖИТЕЛИ" name="banlist_sub_tab" tool_tip="Просмотреть заблокированных жителей из этой группы.">
+		<panel label="Забаненные" name="banlist_sub_tab" tool_tip="Посмотреть, какие жители забанены в этой группе.">
 			<panel.string name="help_text">
-				Любой житель из списка заблокированных пользователей не сможет присоединиться к группе.
+				Если пользователь в списке забаненных, он не сможет присоединиться к группе.
 			</panel.string>
 			<panel.string name="ban_count_template">
-				Кол-во заблокированных: [COUNT]/[LIMIT]
+				Забанено: [COUNT]/[LIMIT]
 			</panel.string>
 			<name_list name="ban_list">
-				<name_list.columns label="Житель" name="name"/>
-				<name_list.columns label="Дата блокировки" name="ban_date"/>
+				<name_list.columns label="Пользователь" name="name"/>
+				<name_list.columns label="Забанен" name="ban_date"/>
 			</name_list>
-			<button label="Заблокировать жителей" name="ban_create" tool_tip="Заблокировать жителей из вашей группы"/>
-			<button label="Разблокировать" name="ban_delete" tool_tip="Разблокировать выбранных жителей из вашей группы"/>
-			<button name="ban_refresh" tool_tip="Обновить список заблокированных пользователей"/>
+			<button label="Забанить" name="ban_create" tool_tip="Забанить пользователя группы"/>
+			<button label="Разбанить" name="ban_delete" tool_tip="Разбанить выбранного пользователя в группе"/>
+			<button name="ban_refresh" tool_tip="Обновить список"/>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
-		<text name="static">
-			Назначенные роли
+		<text name="assigned_roles_label">
+			Роли
 		</text>
 		<text name="static2">
-			Доступные способности
+			Привилегии
 		</text>
-		<scroll_list name="member_allowed_actions" tool_tip="Данные о каждой доступной способности см. на вкладке «Способности»"/>
+		<scroll_list name="member_allowed_actions" tool_tip="Чтобы увидеть подробную информацию, выберите привилегию"/>
 	</panel>
 	<panel name="roles_footer">
-		<text name="static">
-			Имя роли
+		<text name="role_name_label">
+			Роль
 		</text>
-		<text name="static3">
-			Название роли
-		</text>
-		<text name="static2">
-			Описание
-		</text>
-		<text name="static4">
-			Назначенные участники
+		<text name="role_title_label">
+			Титул роли
 		</text>
 		<check_box label="Показывать участников" name="role_visible_in_list" tool_tip="Определяет, будут ли участники этой роли видны на вкладке «Основные» жителям, которые не входят в группу."/>
-		<text name="static5">
-			Доступные способности
+		<text name="description_label">
+			Описание
 		</text>
-		<scroll_list name="role_allowed_actions" tool_tip="Данные о каждой доступной способности см. на вкладке «Способности»"/>
+		<panel name="group_roles_layout_panel">
+			<text name="assigned_members_label">
+				Назначенный участник
+			</text>
+		</panel>
+		<panel name="group_roles_layout_panel2">
+			<text name="allowed_abilities_label">
+				Допустимые привилегии
+			</text>
+			<scroll_list name="role_allowed_actions" tool_tip="Чтобы увидеть подробную информацию о привилегии, перейдите во вкладку 'Привилегии'"/>
+		</panel>
 	</panel>
 	<panel name="actions_footer">
 		<panel name="action_description_panel">
 			<text_editor name="action_description">
-				Это способность «Исключать участников из группы». Владельца может исключить только другой владелец.
+				Привилегия &apos;Удалить участника из группы&apos;. Только владелец может удалить другому владельцу.
 			</text_editor>
 		</panel>
 		<text name="action_roles_label">
-			Роли с этой способностью
+			Роли с этой привилегией
 		</text>
 		<text name="action_members_label">
-			Участники с этой способностью
+			Участники с этой привилегией
 		</text>
 	</panel>
 </panel>

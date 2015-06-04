@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Preferences" title="НАСТРОЙКИ">
-	<button label="ОК" label_selected="ОК" name="OK"/>
-	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
+<floater name="Preferences" title="Настройки">
+	<floater.string name="LoginToChange">
+		Войдите для изменений
+	</floater.string>
+	<button label="Применить" label_selected="Применить" name="Apply"/>
+	<button label="Отменить" label_selected="Отменить" name="Cancel"/>
+	<search_editor label="Поиск в настройках" name="search_prefs_edit" tool_tip="Введите в этом месте интересную вас фразу. Результаты будут выделены для подходящих фрагментов названий или комментариев, приписанных в настройках" />
 	<tab_container name="pref core">
 		<panel label="Общие" name="general"/>
+		<panel label="Чат" name="chat"/>
+		<panel label="Цвета" name="colors"/>
 		<panel label="Графика" name="display"/>
 		<panel label="Звук и медиа" name="audio"/>
-		<panel label="Чат" name="chat"/>
-		<panel label="Движение и обзор" name="move"/>
+		<panel label="Сеть и файлы" name="input"/>
+		<panel label="Движение и вид" name="move"/>
 		<panel label="Уведомления" name="msgs"/>
-		<panel label="Цвета" name="colors"/>
 		<panel label="Приватность" name="im"/>
-		<panel label="Конфигурация" name="input"/>
-		<panel label="Дополнительно" name="advanced1"/>
+		<panel label="Расширеное" name="advanced1"/>
+		<panel label="Интерфейс" name="starlightUI1"/>
+		<panel label="Темы" name="skins"/>
+		<panel label="Ошибки" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
+		<panel label="Резервная копия" name="backup"/>
 	</tab_container>
 </floater>

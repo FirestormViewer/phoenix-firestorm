@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Hardware Settings Floater" title="АППАРАТНЫЕ НАСТРОЙКИ">
+<floater name="Hardware Settings Floater" title="Аппаратные установки">
 	<text name="Filtering:">
 		Фильтрация:
 	</text>

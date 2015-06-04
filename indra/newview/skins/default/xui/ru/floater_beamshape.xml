@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="Мастер создания лучей">
+	<text name="beamcreator_text">
+		Чтобы создать новый луч нажмите левую кнопку мыши
+на нижней панели и определите его с выбранным цветом или
+Щелкните правой кнопкой мыши, чтобы удалить его. Нажмите на
+Сохранить, когда вы закончите.
+	</text>
+	<color_swatch label="Цвет" name="beam_color_swatch" tool_tip="Нажмите, чтобы открыть палитру цветов" />
+	<button label="Сохранить" name="beamshape_save" />
+	<button label="Загрузить" name="beamshape_load" />
+	<button label="Очистить" name="beamshape_clear" />
+</floater>

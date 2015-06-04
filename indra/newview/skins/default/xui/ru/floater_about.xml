@@ -1,92 +1,48 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="О [APP_NAME]">
-	<floater.string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	</floater.string>
-	<floater.string name="AboutCompiler">
-		Использован компилятор [COMPILER], версия [COMPILER_VERSION]
-	</floater.string>
-	<floater.string name="AboutPosition">
-		Вы в точке [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] в регионе «[REGION]», расположенном на &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
-SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
-(глобальные координаты [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
-[SERVER_VERSION]
-[SERVER_RELEASE_NOTES_URL]
-	</floater.string>
-	<floater.string name="AboutSystem">
-		ЦП: [CPU]
-Память: [MEMORY_MB] МБ
-Версия ОС: [OS_VERSION]
-Производитель графической платы: [GRAPHICS_CARD_VENDOR]
-Графическая плата: [GRAPHICS_CARD]
-	</floater.string>
-	<floater.string name="AboutDriver">
-		Версия графического драйвера Windows: [GRAPHICS_DRIVER_VERSION]
-	</floater.string>
-	<floater.string name="AboutLibs">
-		Версия OpenGL: [OPENGL_VERSION]
-Версия libcurl: [LIBCURL_VERSION]
-Версия декодера J2C: [J2C_VERSION]
-Версия драйвера звука: [AUDIO_DRIVER_VERSION]
-Версия Qt Webkit: [QT_WEBKIT_VERSION]
-Версия голосового сервера: [VOICE_VERSION]
-	</floater.string>
-	<floater.string name="none">
-		(нет)
-	</floater.string>
-	<floater.string name="AboutTraffic">
-		Потеряно пакетов: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
-	</floater.string>
-	<floater.string name="ErrorFetchingServerReleaseNotesURL">
-		Ошибка при получении URL-адреса заметок о выпуске сервера.
-	</floater.string>
+<floater name="floater_about" title="O [APP_NAME]">
 	<tab_container name="about_tab">
-		<panel label="Данные" name="support_panel">
-			<button label="Копировать в буфер обмена" name="copy_btn"/>
-		</panel>
-		<panel label="Создатели" name="credits_panel">
-			<text name="linden_intro">
-				Игра Second Life разработана лабораторией Lindens,
-в написании открытого кода участвовали:
+		<panel label="Информация" name="support_panel">
+			<text name="support_intro">
+				Новая информация о Firestorm доступна по адресу 
+http://www.firestormviewer.org
 			</text>
-			<text_editor name="contrib_names">
-				Псевдо-имя изменено при запуске
-			</text_editor>
+			<button label="Копировать в буфер" name="copy_btn"/>
 		</panel>
-		<panel label="Лицензии" name="licenses_panel">
-			<text_editor name="licenses_editor">
-				3Dconnexion SDK (C) 1992-2009 3Dconnexion
-APR (C) 2011 The Apache Software Foundation
-Collada DOM (C) 2006 Sony Computer Entertainment Inc.
-cURL (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
-DBus/dbus-glib (C) 2002, 2003  CodeFactory AB / (C) 2003, 2004 Red Hat, Inc.
-expat (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-FMOD Sound System (C) Firelight Technologies Pty, Ltd., 1994-2013
-FreeType (C) 1996-2002, 2006 David Turner, Robert Wilhelm и Werner Lemberg.
-GL (C) 1999-2004 Brian Paul.
-GLOD (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Университет Джона Гопкинса и David Luebke, Brenden Schubert, Университет Вирджинии.
-google-perftools (c) 2005, Google Inc.
-Havok.com(TM) (C) 1999-2001, Telekinesys Research Limited.
-HACD Copyright (C) 2011, Khaled Mamou (kmamou@gmail.com)
-jpeg2000 (C) 2001, David Taubman, Университет Нового Южного Уэльса (UNSW)
-jpeglib (C) 1991-1998, Thomas G. Lane.
-ogg/vorbis (C) 2002, Xiphophorus
-OpenSSL (C) 1998-2008 The OpenSSL Project.
-PCRE (c) 1997-2012, Кембриджский университет
-SDL (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-SSLeay (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-xmlrpc-epi (C) 2000 Epinions, Inc.
-zlib (C) 1995-2012 Jean-loup Gailly и Mark Adler.
+		<panel label="Благодарности" name="credits_panel">
+			<text name="linden_intro">
+				Создание Firestorma не было бы возможно без решения Linden Lab об обнародовании кода оригинального клиента Second Life.
 
-В клиенте Second Life используется технология Havok (TM) Physics. (C) 1999-2010 Havok.com Inc. (и лицензиары компании). Все права защищены. Подробнее см. веб-сайт www.havok.com.
-
-Это программное обеспечение содержит исходный код, предоставленный корпорацией NVIDIA.
-
-Все права защищены.  Подробные сведения см. в файле licenses.txt.
-
-Кодирование звука для голосового чата: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
-			</text_editor>
+Linden это:
+			</text>
+			<text name="contrib_intro">
+				с вкладом open source от:
+			</text>
+			<text name="trans_intro">
+				и переводами от:
+			</text>
 		</panel>
+		<panel label="Firestorm" name="fs_credits_panel" height="860">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro" height="120">
+						Firestorm является проектом сообщества программистов, имеющих цели на улучшение качества основаных из опыта использования SecondLife (tm) Viewer. Мы объединяем в одно целое вклад разных программистов, которые представляют разные сообщества, в сочетании с кодом Linden Lab и нашим собственным, чтобы создавать хороший, функциональный клиент поддержку которого обеспечивает команда состоящая из волонтеров. Firestorm существует благодаря The Phoenix Firestorm Project, Inc., некомерческой организации.
+
+Команда разработчиков Firestorm:
+					</text>
+					<text name="fs_contrib_intro">
+						Дополнительный вклад в развитие кода Firestorm:
+					</text>
+					<text name="fs_support_intro">
+						Специальные благодарности для команды поддержки, издателей wiki, учителей и переводчиков:
+					</text>
+					<text name="fs_art_intro">
+						Firestorm использует Starlight, модифицированный для Firestorm. Он создан пользователями для пользователей, с целью предоставления альтернативного, более ясного и в более легкого в использовании интерфейса. Больше подробностей на &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+Художники и дизайнеры интерфейса:
+					</text>
+				</panel>
+			</scroll_container>
+		</panel>
+		<panel label="Лицензии" name="licenses_panel" />
 	</tab_container>
 </floater>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Груди прыгают">
+			<text name="physics_breast_updown_not_available">
+				Доступно только для женских аватаров.
+			</text>
+		</panel>
+		<panel name="physics_breast_inout_tab_holder" title="Ложбинка между грудей">
+			<text name="physics_breast_inout_not_available">
+				Доступно только для женских аватаров.
+			</text>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Груди покачиваются">
+			<text name="physics_breast_leftright_not_available">
+				Доступно только для женских аватаров.
+			</text>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Ягодицы прыгают"/>
+		<panel name="physics_butt_tab_holder" title="Живот прыгает"/>
+		<panel name="physics_butt_leftright_tab_holder" title="Ягодицы покачиваются"/>
+		<panel name="physics_advanced_tab_holder" title="Дополнительные параметры"/>
+	</tab_container>
+</panel>
