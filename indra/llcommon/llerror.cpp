@@ -121,6 +121,7 @@ namespace {
 				LL_INFOS() << "Error setting log file to " << filename << LL_ENDL;
 			}
 			mWantsTime = true;
+            mWantsTags = true;
 		}
 		
 		~RecordToFile()
@@ -565,13 +566,13 @@ namespace LLError
 		{
 			// <FS:ND> Tags can be 0, so work around that.
 
-			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : " ");
+			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : ",");
 
 			char const *pTag = mTags[i];
 			if( !pTag )
 				pTag = "<NULL>";
 
-			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : " ");
+			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : ",");
 
 			// </FS:ND>
 		}
@@ -971,14 +972,19 @@ namespace
 			}
 
 			if (show_level && r->wantsLevel())
-				{
-				message_stream << site.mLevelString << " ";
-				}
+            {
+				message_stream << site.mLevelString;
+            }
 				
 			if (show_tags && r->wantsTags())
 			{
-				message_stream << site.mTagString << " ";
+				message_stream << site.mTagString;
 			}
+			if ((show_level && r->wantsLevel())||
+                (show_tags && r->wantsTags()))
+            {
+                message_stream << " ";
+            }
 
 			if (show_function && r->wantsFunctionName())
 			{

@@ -8039,7 +8039,7 @@ class LLAttachmentDetachFromPoint : public view_listener_t
 				ids_to_remove.push_back(attached_object->getAttachmentItemID());
 // [/RLVa:KB]
 			}
-			}
+        }
 		if (!ids_to_remove.empty())
 		{
 			LLAppearanceMgr::instance().removeItemsFromAvatar(ids_to_remove);

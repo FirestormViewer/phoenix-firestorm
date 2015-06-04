@@ -2327,5 +2327,3 @@ BOOL LLViewerInventoryItem::regenerateLink()
 	gInventory.notifyObservers();
 	return TRUE;
 }
-
-

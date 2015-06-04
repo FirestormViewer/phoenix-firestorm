@@ -981,7 +981,7 @@ void RlvForceWear::done()
 		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
 		{
 			LLViewerInventoryItem* pItem = wearItems.at(idxItem);
-			if (!pAppearanceMgr->isLinkInCOF(pItem->getUUID()))		// It's important to examine COF here and *not* gAgentWearables
+			if (!pAppearanceMgr->instance().isLinkedInCOF(pItem->getUUID()))		// It's important to examine COF here and *not* gAgentWearables
 			{
 				if (LLAssetType::AT_BODYPART == pItem->getType())
 					addBodyParts.push_back(pItem);
@@ -1000,11 +1000,7 @@ void RlvForceWear::done()
 		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
 		{
 			const LLUUID& idItem = wearItems.at(idxItem)->getLinkedUUID();
-			if (gAgentAvatarp->attachmentWasRequested(idItem))
-				continue;
-			gAgentAvatarp->addAttachmentRequest(idItem);
-
-			LLAttachmentsMgr::instance().addAttachment(idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first & ATTACHMENT_ADD);
+			LLAttachmentsMgr::instance().addAttachmentRequest(idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first & ATTACHMENT_ADD);
 		}
 	}
 	m_addAttachments.clear();

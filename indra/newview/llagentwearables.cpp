@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagentwearables.h"
 
+#include "llattachmentsmgr.h"
 #include "llaccordionctrltab.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -1495,7 +1496,7 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 				itObj = objects_to_remove.erase(itObj);
 
 				// Fall-back code: re-add the attachment if it got removed from COF somehow (compensates for possible bugs elsewhere)
-				bool fInCOF = LLAppearanceMgr::isLinkInCOF(pAttachObj->getAttachmentItemID());
+				bool fInCOF = LLAppearanceMgr::instance().isLinkedInCOF(pAttachObj->getAttachmentItemID());
 				RLV_ASSERT(fInCOF);
 				if (!fInCOF)
 				{
@@ -1513,6 +1514,7 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 	if (objects_to_remove.empty())
 		return;
 
+	LL_DEBUGS("Avatar") << "ATT [ObjectDetach] removing " << objects_to_remove.size() << " objects" << LL_ENDL;
 	gMessageSystem->newMessage("ObjectDetach");
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
@@ -1526,88 +1528,30 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 		//gAgentAvatarp->resetJointPositionsOnDetach(objectp);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, objectp->getLocalID());
+		const LLUUID& item_id = objectp->getAttachmentItemID();
+		LLViewerInventoryItem *item = gInventory.getItem(item_id);
+		LL_DEBUGS("Avatar") << "ATT removing object, item is " << (item ? item->getName() : "UNKNOWN") << " " << item_id << LL_ENDL;
+        LLAttachmentsMgr::instance().onDetachRequested(item_id);
 	}
 	gMessageSystem->sendReliable(gAgent.getRegionHost());
 }
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
-	static bool sInitialAttachmentsRequested = false;
-
-	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
-	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
-	{
-		// Fall-back code: everything should really already have been pruned before we get this far
-		for (S32 idxItem = obj_item_array.size() - 1; idxItem >= 0; idxItem--)
-		{
-			const LLInventoryItem* pItem = obj_item_array.at(idxItem).get();
-			if (!gRlvAttachmentLocks.canAttach(pItem))
-			{
-				obj_item_array.erase( obj_item_array.begin()+idxItem );
-				RLV_ASSERT(false);
-			}
-		}
-	}
-// [/RLVa:KB]
-
 	// Build a compound message to send all the objects that need to be rezzed.
 	S32 obj_count = obj_item_array.size();
-
-	// Limit number of packets to send
-	const S32 MAX_PACKETS_TO_SEND = 10;
-	const S32 OBJECTS_PER_PACKET = 4;
-	const S32 MAX_OBJECTS_TO_SEND = MAX_PACKETS_TO_SEND * OBJECTS_PER_PACKET;
-	if( obj_count > MAX_OBJECTS_TO_SEND )
+	if (obj_count > 0)
 	{
-		obj_count = MAX_OBJECTS_TO_SEND;
-	}
-				
-	// Create an id to keep the parts of the compound message together
-	LLUUID compound_msg_id;
-	compound_msg_id.generate();
-	LLMessageSystem* msg = gMessageSystem;
-
-	for(S32 i = 0; i < obj_count; ++i)
-	{
-		if( 0 == (i % OBJECTS_PER_PACKET) )
-		{
-			// Start a new message chunk
-			msg->newMessageFast(_PREHASH_RezMultipleAttachmentsFromInv);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-			msg->nextBlockFast(_PREHASH_HeaderData);
-			msg->addUUIDFast(_PREHASH_CompoundMsgID, compound_msg_id );
-			msg->addU8Fast(_PREHASH_TotalObjects, obj_count );
-			msg->addBOOLFast(_PREHASH_FirstDetachAll, false );
-		}
-
-		const LLInventoryItem* item = obj_item_array.at(i).get();
-		msg->nextBlockFast(_PREHASH_ObjectData );
-		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
-		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
-		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
-		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
-		{
-			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
-		}
-// [/RLVa:KB]
-		pack_permissions_slam(msg, item->getFlags(), item->getPermissions());
-		msg->addStringFast(_PREHASH_Name, item->getName());
-		msg->addStringFast(_PREHASH_Description, item->getDescription());
-
-		if( (i+1 == obj_count) || ((OBJECTS_PER_PACKET-1) == (i % OBJECTS_PER_PACKET)) )
-		{
-			// End of message chunk
-			msg->sendReliable( gAgent.getRegion()->getHost() );
-		}
+		LL_DEBUGS("Avatar") << "ATT attaching multiple, total obj_count " << obj_count << LL_ENDL;
 	}
 
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
-	sInitialAttachmentsRequested = true;
-// [/RLVa:KB]
+    for(LLInventoryModel::item_array_t::const_iterator it = obj_item_array.begin();
+        it != obj_item_array.end();
+        ++it)
+    {
+		const LLInventoryItem* item = *it;
+        LLAttachmentsMgr::instance().addAttachmentRequest(item->getLinkedUUID(), 0, TRUE);
+    }
 }
 
 // Returns false if the given wearable is already topmost/bottommost

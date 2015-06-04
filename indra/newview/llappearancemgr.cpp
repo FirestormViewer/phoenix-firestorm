@@ -531,6 +531,15 @@ LLUpdateAppearanceAndEditWearableOnDestroy::LLUpdateAppearanceAndEditWearableOnD
 {
 }
 
+LLRequestServerAppearanceUpdateOnDestroy::~LLRequestServerAppearanceUpdateOnDestroy()
+{
+	LL_DEBUGS("Avatar") << "ATT requesting server appearance update" << LL_ENDL;
+    if (!LLApp::isExiting())
+    {
+        LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+    }
+}
+
 void edit_wearable_and_customize_avatar(LLUUID item_id)
 {
 	// Start editing the item if previously requested.
@@ -833,6 +842,12 @@ void LLWearableHoldingPattern::onAllComplete()
 		// needed to get joint positions all slammed down to their
 		// pre-attachment states.
 		gAgentAvatarp->clearAttachmentPosOverrides();
+
+		if (objects_to_remove.size() || items_to_add.size())
+		{
+			LL_DEBUGS("Avatar") << "ATT will remove " << objects_to_remove.size()
+								<< " and add " << items_to_add.size() << " items" << LL_ENDL;
+		}
 
 		// Take off the attachments that will no longer be in the outfit.
 		LLAgentWearables::userRemoveMultipleAttachments(objects_to_remove);
@@ -3011,28 +3026,23 @@ void LLAppearanceMgr::addCOFItemLink(const LLInventoryItem *item,
 
 LLInventoryModel::item_array_t LLAppearanceMgr::findCOFItemLinks(const LLUUID& item_id)
 {
-
 	LLInventoryModel::item_array_t result;
-	const LLViewerInventoryItem *vitem =
-		dynamic_cast<const LLViewerInventoryItem*>(gInventory.getItem(item_id));
 
-	if (vitem)
-	{
-		LLInventoryModel::cat_array_t cat_array;
-		LLInventoryModel::item_array_t item_array;
-		gInventory.collectDescendents(LLAppearanceMgr::getCOF(),
-									  cat_array,
-									  item_array,
-									  LLInventoryModel::EXCLUDE_TRASH);
-		for (S32 i=0; i<item_array.size(); i++)
-		{
-			const LLViewerInventoryItem* inv_item = item_array.at(i).get();
-			if (inv_item->getLinkedUUID() == vitem->getLinkedUUID())
-			{
-				result.push_back(item_array.at(i));
-			}
-		}
-	}
+    LLUUID linked_id = gInventory.getLinkedItemID(item_id);
+    LLInventoryModel::cat_array_t cat_array;
+    LLInventoryModel::item_array_t item_array;
+    gInventory.collectDescendents(LLAppearanceMgr::getCOF(),
+                                  cat_array,
+                                  item_array,
+                                  LLInventoryModel::EXCLUDE_TRASH);
+    for (S32 i=0; i<item_array.size(); i++)
+    {
+        const LLViewerInventoryItem* inv_item = item_array.at(i).get();
+        if (inv_item->getLinkedUUID() == linked_id)
+        {
+            result.push_back(item_array.at(i));
+        }
+    }
 	return result;
 }
 
@@ -3647,7 +3657,7 @@ void RequestAgentUpdateAppearanceResponder::onRequestRequested()
 	}
 
 	// Actually send the request.
-	LL_DEBUGS("Avatar") << "Will send request for cof_version " << cof_version << LL_ENDL;
+	LL_DEBUGS("Avatar") << "ATT sending bake request for cof_version " << cof_version << LL_ENDL;
 	mRetryPolicy->reset();
 	sendRequest();
 }
@@ -4135,6 +4145,11 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		// </FS:Ansariel>
 
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+		LLViewerInventoryItem *item = gInventory.getItem(linked_item_id);
+		if (item && item->getType() == LLAssetType::AT_OBJECT)
+		{
+			LL_DEBUGS("Avatar") << "ATT removing attachment " << item->getName() << " id " << item->getUUID() << LL_ENDL;
+		}
 		removeCOFItemLinks(linked_item_id, cb);
 		addDoomedTempAttachment(linked_item_id);
 	}
@@ -4150,10 +4165,9 @@ void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 		return;
 	}
 // [/RLVA:KB]
-	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
-	removeCOFItemLinks(linked_item_id, cb);
-	addDoomedTempAttachment(linked_item_id);
+	uuid_vec_t ids_to_remove;
+	ids_to_remove.push_back(id_to_remove);
+	removeItemsFromAvatar(ids_to_remove);
 }
 
 
@@ -4343,37 +4357,32 @@ void dumpAttachmentSet(const std::set<LLUUID>& atts, const std::string& msg)
 
 void LLAppearanceMgr::registerAttachment(const LLUUID& item_id)
 {
-	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
+	LLViewerInventoryItem *item = gInventory.getItem(item_id);
+	LL_DEBUGS("Avatar") << "ATT registering attachment "
+						<< (item ? item->getName() : "UNKNOWN") << " " << item_id << LL_ENDL;
+	gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
 
-	   if (mAttachmentInvLinkEnabled)
-	   {
-		   // we have to pass do_update = true to call LLAppearanceMgr::updateAppearanceFromCOF.
-		   // it will trigger gAgentWariables.notifyLoadingFinished()
-		   // But it is not acceptable solution. See EXT-7777
-		   if (!isLinkedInCOF(item_id))
-		   {
-			   LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy();
-			   LLAppearanceMgr::addCOFItemLink(item_id, cb);  // Add COF link for item.
-		   }
-	   }
-	   else
-	   {
-		   //LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
-	   }
+	LLAttachmentsMgr::instance().onAttachmentArrived(item_id);
 }
 
 void LLAppearanceMgr::unregisterAttachment(const LLUUID& item_id)
 {
-	   gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
+	LLViewerInventoryItem *item = gInventory.getItem(item_id);
+	LL_DEBUGS("Avatar") << "ATT unregistering attachment "
+						<< (item ? item->getName() : "UNKNOWN") << " " << item_id << LL_ENDL;
+	gInventory.addChangedMask(LLInventoryObserver::LABEL, item_id);
 
-	   if (mAttachmentInvLinkEnabled)
-	   {
-		   LLAppearanceMgr::removeCOFItemLinks(item_id);
-	   }
-	   else
-	   {
-		   //LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
-	   }
+    LLAttachmentsMgr::instance().onDetachCompleted(item_id);
+	if (mAttachmentInvLinkEnabled && isLinkedInCOF(item_id))
+	{
+		LL_DEBUGS("Avatar") << "ATT removing COF link for attachment "
+							<< (item ? item->getName() : "UNKNOWN") << " " << item_id << LL_ENDL;
+		LLAppearanceMgr::removeCOFItemLinks(item_id);
+	}
+	else
+	{
+		//LL_INFOS() << "no link changes, inv link not enabled" << LL_ENDL;
+	}
 }
 
 BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const
@@ -4385,14 +4394,6 @@ BOOL LLAppearanceMgr::getIsInCOF(const LLUUID& obj_id) const
 	if (obj && obj->getParentUUID() == cof)
 		return TRUE;
 	return FALSE;
-}
-
-// static
-bool LLAppearanceMgr::isLinkInCOF(const LLUUID& obj_id)
-{
-	const LLUUID& target_id = gInventory.getLinkedItemID(obj_id);
-	LLLinkedItemIDMatches find_links(target_id);
-	return gInventory.hasMatchingDirectDescendent(LLAppearanceMgr::instance().getCOF(), find_links);
 }
 
 BOOL LLAppearanceMgr::getIsProtectedCOFItem(const LLUUID& obj_id) const
