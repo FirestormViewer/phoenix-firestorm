@@ -1,9 +1,6 @@
 # -*- cmake -*-
 include(Prebuilt)
 
-# <FS:ND> We only ever need google breakpad when crash reporting is used
-if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING OR DARWIN)
-
 if (USESYSTEMLIBS)
   set(BREAKPAD_EXCEPTION_HANDLER_FIND_REQUIRED ON)
   include(FindGoogleBreakpad)
@@ -23,8 +20,3 @@ else (USESYSTEMLIBS)
   set(BREAKPAD_INCLUDE_DIRECTORIES "${LIBS_PREBUILT_DIR}/include/google_breakpad" "${LIBS_PREBUILT_DIR}/include/google_breakpad/google_breakpad")
 endif (USESYSTEMLIBS)
 
-# <FS:ND> Otherwise just disable it
-else(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING OR DARWIN)
-  add_definitions( -DND_NO_BREAKPAD )
-endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING OR DARWIN)
-# </FS:ND>

@@ -246,7 +246,6 @@ SET(  llcommon_ND_HEADER_FILES
 	  nd/ndallocstats.h
 	  nd/ndboolswitch.h
 	  nd/ndcallstack.h
-	  nd/ndexception_handler_stub.h
 	  nd/ndexceptions.h
 	  nd/ndfile.h
 	  nd/ndintrin.h
