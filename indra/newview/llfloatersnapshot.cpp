@@ -1293,7 +1293,8 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	// <FS:Ansariel> Don't return to target selection after taking a snapshot
 	//getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
 	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
-	panel_container->selectTabByName("panel_snapshot_options");
+	std::string last_snapshot_panel = gSavedSettings.getString("FSLastSnapshotPanel");
+	panel_container->selectTabByName(last_snapshot_panel.empty() ? "panel_snapshot_options" : last_snapshot_panel);
 	panel_container->getCurrentPanel()->onOpen(LLSD());
 	mSucceessLblPanel->setVisible(FALSE);
 	mFailureLblPanel->setVisible(FALSE);
@@ -1349,6 +1350,10 @@ void LLFloaterSnapshot::onClose(bool app_quitting)
 
 	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
 	mIsOpen = false;
+
+	// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
+	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
+	gSavedSettings.setString("FSLastSnapshotPanel", panel_container->getCurrentPanel()->getName());
 }
 
 // virtual
