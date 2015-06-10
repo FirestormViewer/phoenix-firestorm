@@ -277,18 +277,18 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 	//BD - Automatically calculate the size of our snapshot window to enlarge
 	//     the snapshot preview to its maximum size, this is especially helpfull
 	//     for pretty much every aspect ratio other than 1:1.
-	F32 panel_width = 400.f * gViewerWindow->getWorldViewAspectRatio();
+	S32 panel_width = llfloor(400.f * gViewerWindow->getWorldViewAspectRatio());
 
 	//BD - Make sure we clamp at 700 here because 700 would be for 16:9 which we
 	//     consider the maximum. Everything bigger will be clamped and will have
 	//     a slightly smaller preview window which most likely won't fill up the
 	//     whole snapshot floater as it should.
-	if(panel_width > 700.f)
+	if(panel_width > 700)
 	{
-		panel_width = 700.f;
+		panel_width = 700;
 	}
 
-	S32 floater_width = 224.f;
+	S32 floater_width = 224;
 	if(advanced)
 	{
 		floater_width = floater_width + panel_width;
