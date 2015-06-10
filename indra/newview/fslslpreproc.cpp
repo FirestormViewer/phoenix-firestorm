@@ -1529,6 +1529,7 @@ void FSLSLPreprocessor::start_process()
 			outfield->setText(LLStringExplicit(output));
 		}
 		mCore->mPostScript = output;
+		mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
 		mCore->doSaveComplete((void*)mCore, mClose, mSync);
 	}
 	mWaving = false;
