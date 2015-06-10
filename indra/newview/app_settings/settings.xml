@@ -23378,6 +23378,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSLastSnapshotPanel</key>
+    <map>
+      <key>Comment</key>
+      <string>The last snapshot panel that was opened and will be restored the next time the snapshot floater is opened.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string/>
+    </map>
   </map>
 </llsd>
 
