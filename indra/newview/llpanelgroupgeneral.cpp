@@ -1041,6 +1041,16 @@ void LLPanelGroupGeneral::updateMembers()
 	}
 	// </FS:ND> FIRE-6074
 
+	// <FS:Ansariel> Clear old callbacks so we don't end up adding people twice
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
 
 	LLAvatarName av_name;
 
