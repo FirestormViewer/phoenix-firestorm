@@ -1419,6 +1419,9 @@ bool LLAppViewer::init()
 	// initializing the settings sanity checker
 	SanityCheck::instance().init();
 
+	// <FS:Ansariel> Init debug rects
+	LLView::sDebugRects = gSavedSettings.getBOOL("DebugViews");
+
 	return true;
 }
 
