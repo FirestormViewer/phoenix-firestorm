@@ -46,6 +46,7 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
+	<panel name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
 			進階選項
@@ -67,5 +68,6 @@
 		<combo_box name="filters_combobox" tool_tip="圖像濾鏡">
 			<combo_box.item label="不用濾鏡" name="NoFilter"/>
 		</combo_box>
+	</panel>
 	</panel>
 </floater>

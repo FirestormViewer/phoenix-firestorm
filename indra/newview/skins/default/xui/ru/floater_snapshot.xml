@@ -46,6 +46,7 @@
 	<text name="file_size_label">
 		[SIZE] КБ
 	</text>
+	<panel name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
 			Дополнительные параметры
@@ -61,5 +62,6 @@
 		<check_box label="Данные в игре" name="hud_check"/>
 		<check_box label="Стоп-кадр (полноэкранный)" name="freeze_frame_check"/>
 		<check_box label="Автообновление" name="auto_snapshot_check"/>
+	</panel>
 	</panel>
 </floater>

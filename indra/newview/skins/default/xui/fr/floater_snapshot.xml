@@ -46,6 +46,7 @@
 	<text name="file_size_label">
 		[SIZE] Ko
 	</text>
+	<panel name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
 			OPTIONS AVANCÉES
@@ -67,5 +68,6 @@
 		<combo_box name="filters_combobox" tool_tip="Filtres d&apos;image">
 			<combo_box.item label="Aucun filtre" name="NoFilter"/>
 		</combo_box>
+	</panel>
 	</panel>
 </floater>

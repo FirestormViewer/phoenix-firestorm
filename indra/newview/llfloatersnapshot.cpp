@@ -294,15 +294,64 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 		floater_width = floater_width + panel_width;
 	}
 
+	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+	//LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
+	//thumbnail_placeholder->setVisible(advanced);
+	//thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
+	//floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
+	//floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
+	//if(!floaterp->isMinimized())
+	//{
+	//	floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+	//}
+
+	previewp->setFixedThumbnailSize(panel_width, 400);
 	LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
-	thumbnail_placeholder->setVisible(advanced);
-	thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
 	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
 	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
 	if(!floaterp->isMinimized())
 	{
-		floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+		LLPanel* controls_container = floaterp->getChild<LLPanel>("controls_container");
+		if (advanced)
+		{
+			LLRect cc_rect = controls_container->getRect();
+
+			floaterp->reshape(floater_width, 463);
+
+			controls_container->setRect(cc_rect);
+			controls_container->updateBoundingRect();
+
+			thumbnail_placeholder->reshape(panel_width, 400);
+
+			LLRect tn_rect = thumbnail_placeholder->getRect();
+			tn_rect.setLeftTopAndSize(215, floaterp->getRect().getHeight() - 30, tn_rect.getWidth(), tn_rect.getHeight());
+			thumbnail_placeholder->setRect(tn_rect);
+			thumbnail_placeholder->updateBoundingRect();
+
+			previewp->setThumbnailPlaceholderRect(getThumbnailPlaceholderRect());
+			previewp->setThumbnailImageSize();
+		}
+		else
+		{
+			LLRect cc_rect = controls_container->getRect();
+
+			floaterp->reshape(floater_width, 593);
+
+			controls_container->setRect(cc_rect);
+			controls_container->updateBoundingRect();
+
+			thumbnail_placeholder->reshape(216, 124);
+
+			LLRect tn_rect = thumbnail_placeholder->getRect();
+			tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, 216, 124);
+			thumbnail_placeholder->setRect(tn_rect);
+			thumbnail_placeholder->updateBoundingRect();
+
+			previewp->setThumbnailPlaceholderRect(getThumbnailPlaceholderRect());
+			previewp->setThumbnailImageSize();
+		}
 	}
+	// </FS:Ansariel>
 
 	bool use_freeze_frame = floaterp->getChild<LLUICtrl>("freeze_frame_check")->getValue().asBoolean();
 

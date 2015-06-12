@@ -48,6 +48,7 @@
 	<string name="local_failed_str">
 		Zapis na dysku nieudany.
 	</string>
+	<panel name="controls_container">
 	<button label="Odśwież" name="new_snapshot_btn" />
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
