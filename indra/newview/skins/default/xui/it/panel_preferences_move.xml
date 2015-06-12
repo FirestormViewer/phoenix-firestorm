@@ -38,10 +38,7 @@
 			<check_box label="Le frecce di direzione mi fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Premendo i tasti delle lettere permette movimento(es. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar" />
 			<check_box label="Usa la configurazione tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
-			<text name="FSUseAzertyKeyboardLayout_requires_restart" left_pad="50" >
-				(Richiesto Riavvio)
-			</text>
-			<check_box label="Doppio click e tieni premuto per correre" name="tap_tap_hold_to_run" left_delta="-230"/>
+			<check_box label="Doppio click e tieni premuto per correre" name="tap_tap_hold_to_run"/>
 			<check_box label="Volare/Atterrare tenendo premuto Pag su/Pag giù" name="automatic_fly"/>
 			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
 			<text name="single_click_action_lbl">

@@ -884,6 +884,18 @@ LLViewerKeyboard::Keys::Keys()
 
 S32 LLViewerKeyboard::loadBindingsXML(const std::string& filename)
 {
+	// <FS:Ansariel> Allow instant change of keyboard layout
+	for (S32 i = 0; i < MODE_COUNT; i++)
+	{
+		mBindingCount[i] = 0;
+
+		for (S32 j = 0; j < MAX_KEY_BINDINGS; j++)
+		{
+			mBindings[i][j] = LLKeyBinding();
+		}
+	}
+	// </FS:Ansariel>
+
 	S32 binding_count = 0;
 	Keys keys;
 	LLSimpleXUIParser parser;

@@ -19892,7 +19892,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>FSUseAzertyKeyboardLayout</key>
   <map>
     <key>Comment</key>
-    <string>Uses a keyboard layout suitable for keyboards with AZERTY layout. This setting requires a restart.</string>
+    <string>Uses a keyboard layout suitable for keyboards with AZERTY layout.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
