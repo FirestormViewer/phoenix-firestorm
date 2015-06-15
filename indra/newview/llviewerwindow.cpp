@@ -3108,9 +3108,6 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	static LLCachedControl<bool> LetterKeysAffectsMovementNotFocusChatBar(gSavedSettings, "LetterKeysAffectsMovementNotFocusChatBar");
 	static LLCachedControl<bool> fsLetterKeysFocusNearbyChatBar(gSavedSettings, "FSLetterKeysFocusNearbyChatBar");
 	static LLCachedControl<bool> fsNearbyChatbar(gSavedSettings, "FSNearbyChatbar");
-
-	LL_INFOS() << "ADBG: Key = " << llformat("%d", key) << LL_ENDL;
-
 	if ( !LetterKeysAffectsMovementNotFocusChatBar && 
 		!keyboard_focus && ((key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT)) || (key == 0x98 && mask == MASK_SHIFT)) )
 	{
