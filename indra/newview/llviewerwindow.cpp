@@ -3082,33 +3082,38 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
 
-	// <FS:PP> Attempt to speed up things a little
+	// <FS:Ansariel> [FS Communication UI]
 	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
 	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
-	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+	//if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+	//	!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
+	//{
+	//	// Initialize nearby chat if it's missing
+	//	LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	//	if (!nearby_chat)
+	//	{	
+	//		LLSD name("im_container");
+	//		LLFloaterReg::toggleInstanceOrBringToFront(name);
+	//	}
+
+	//	LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
+	//	if (chat_editor)
+	//	{
+	//		// passing NULL here, character will be added later when it is handled by character handler.
+	//		nearby_chat->startChat(NULL);
+	//		return TRUE;
+	//	}
+	//}
+
 	static LLCachedControl<bool> LetterKeysAffectsMovementNotFocusChatBar(gSavedSettings, "LetterKeysAffectsMovementNotFocusChatBar");
 	static LLCachedControl<bool> fsLetterKeysFocusNearbyChatBar(gSavedSettings, "FSLetterKeysFocusNearbyChatBar");
 	static LLCachedControl<bool> fsNearbyChatbar(gSavedSettings, "FSNearbyChatbar");
-	if ( !LetterKeysAffectsMovementNotFocusChatBar && 
-	// </FS:PP>
-		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
-	{
-		// Initialize nearby chat if it's missing
-		// <FS:Ansariel> [FS Communication UI]
-		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
-		//if (!nearby_chat)
-		//{	
-		//	LLSD name("im_container");
-		//	LLFloaterReg::toggleInstanceOrBringToFront(name);
-		//}
 
-		//LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
-		//if (chat_editor)
-		//{
-		//	// passing NULL here, character will be added later when it is handled by character handler.
-		//	nearby_chat->startChat(NULL);
-		//	return TRUE;
-		//}
+	LL_INFOS() << "ADBG: Key = " << llformat("%d", key) << LL_ENDL;
+
+	if ( !LetterKeysAffectsMovementNotFocusChatBar && 
+		!keyboard_focus && ((key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT)) || (key == 0x98 && mask == MASK_SHIFT)) )
+	{
 		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::findInstance();
 		if (fsLetterKeysFocusNearbyChatBar && fsNearbyChatbar && nearby_chat && nearby_chat->getVisible())
 		{
@@ -3119,8 +3124,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 			FSNearbyChat::instance().showDefaultChatBar(TRUE);
 		}
 		return TRUE;
-		// </FS:Ansariel> [FS Communication UI]
 	}
+	// </FS:Ansariel> [FS Communication UI]
 
 	// give menus a chance to handle unmodified accelerator keys
 	if ((gMenuBarView && gMenuBarView->handleAcceleratorKey(key, mask))
