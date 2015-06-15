@@ -3085,6 +3085,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// <FS:Ansariel> [FS Communication UI]
 	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
 	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
+	// -- Also check for KEY_DIVIDE as we remapped VK_OEM_2 to KEY_DIVIDE in LLKeyboardWin32 to fix starting gestures
 	//if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 	//	!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	//{
@@ -3109,7 +3110,11 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	static LLCachedControl<bool> fsLetterKeysFocusNearbyChatBar(gSavedSettings, "FSLetterKeysFocusNearbyChatBar");
 	static LLCachedControl<bool> fsNearbyChatbar(gSavedSettings, "FSNearbyChatbar");
 	if ( !LetterKeysAffectsMovementNotFocusChatBar && 
-		!keyboard_focus && ((key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT)) || (key == 0x98 && mask == MASK_SHIFT)) )
+#if LL_WINDOWS
+		!keyboard_focus && ((key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT)) || (key == KEY_DIVIDE && mask == MASK_SHIFT)) )
+#else
+		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
+#endif
 	{
 		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::findInstance();
 		if (fsLetterKeysFocusNearbyChatBar && fsNearbyChatbar && nearby_chat && nearby_chat->getVisible())
