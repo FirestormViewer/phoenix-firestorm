@@ -55,9 +55,6 @@ class LLStreamingAudio_FMODEX : public LLStreamingAudioInterface
 	/*virtual*/ void setGain(F32 vol);
 	/*virtual*/ F32 getGain();
 	/*virtual*/ std::string getURL();
-	// <FS:GF> Safe stop and release for FMOD Ex music streams
-	/*virtual*/ bool delayedRelease(bool force = false);
-	// <FS:GF>
 
 	/*virtual*/ bool supportsAdjustableBufferSizes(){return true;}
 	/*virtual*/ void setBufferSizes(U32 streambuffertime, U32 decodebuffertime);
@@ -71,10 +68,7 @@ private:
 
 	LLAudioStreamManagerFMODEX *mCurrentInternetStreamp;
 	FMOD::Channel *mFMODInternetStreamChannelp;
-	// <FS:GF> Safe stop and release for FMOD Ex music streams
-	//std::list<LLAudioStreamManagerFMODEX *> mDeadStreams;
-	std::list<LLAudioStreamManagerFMODEX *> mDelayedReleaseStreams;
-	// <FS:GF>
+	std::list<LLAudioStreamManagerFMODEX *> mDeadStreams;
 
 	std::string mURL;
 	F32 mGain;
