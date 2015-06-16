@@ -64,6 +64,8 @@ class LLStreamingAudio_FMODEX : public LLStreamingAudioInterface
 	// </FS:CR>
 
 private:
+	bool releaseDeadStreams();
+
 	FMOD::System *mSystem;
 
 	LLAudioStreamManagerFMODEX *mCurrentInternetStreamp;
@@ -71,8 +73,9 @@ private:
 	std::list<LLAudioStreamManagerFMODEX *> mDeadStreams;
 
 	std::string mURL;
+	std::string mPendingURL;
 	F32 mGain;
-	
+
 	// <FS:CR> Streamtitle display
 	bool mNewMetadata;
 	LLSD mMetadata;
