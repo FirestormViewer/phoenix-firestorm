@@ -64,6 +64,7 @@ class LLStreamingAudio_FMODEX : public LLStreamingAudioInterface
 	// </FS:CR>
 
 private:
+	// <FS> FMOD fixes
 	bool releaseDeadStreams();
 
 	FMOD::System *mSystem;
@@ -73,7 +74,7 @@ private:
 	std::list<LLAudioStreamManagerFMODEX *> mDeadStreams;
 
 	std::string mURL;
-	std::string mPendingURL;
+	std::string mPendingURL; // <FS> FMOD fixes
 	F32 mGain;
 
 	// <FS:CR> Streamtitle display
