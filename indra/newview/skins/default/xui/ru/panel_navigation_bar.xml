@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="navigation_bar">
-	<layout_stack name="nvp_stack">
-		<layout_panel name="navigation_layout_panel">
-			<panel name="navigation_panel">
-				<pull_button name="back_btn" tool_tip="Вернуться в предыдущее место"/>
-				<pull_button name="forward_btn" tool_tip="Перейти в следующее место"/>
-				<button name="home_btn" tool_tip="Телепортация домой"/>
-				<location_input label="Место" name="location_combo"/>
-			</panel>
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel" right="225">
+					<pull_button name="back_btn" tool_tip="Вернуться в предыдущую локацию"/>
+					<pull_button name="forward_btn" tool_tip="Идти вперед на одну локацию"/>
+					<button name="home_btn" tool_tip="Телепортироваться домой"/>
+					<button name="About_Land" label="Земля" tool_tip="Появится окно информации об участке" width="60"/>
+					<button name="Sky" label="Небо" tool_tip="Появится окно редактирования неба" width="45"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Локация" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Поиск" name="search_combo_box" tool_tip="Поиск">
+						<combo_editor label="Поиск (MetaVerse)" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
-		<layout_panel name="favorites_layout_panel">
-			<favorites_bar name="favorite" tool_tip="Перетаскивайте сюда закладки, чтобы было удобнее переходить в любимые места в Second Life!">
-				<label name="favorites_bar_label" tool_tip="Перетаскивайте сюда закладки, чтобы было удобнее переходить в любимые места в Second Life!">
-					Избранное
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам в Second Life!">
+				<label name="favorites_bar_label" tool_tip="Перетащите закладку для быстрого доступа к вашим любимым местам в Second Life!">
+					Избранные закладки
 				</label>
-				<more_button name="more_btn" tool_tip="Показать больше избранного">
-					Больше ▼
-				</more_button>
+				<chevron_button name="more_btn" tool_tip="Показать больше в 'Избранные'"/>
 			</favorites_bar>
 		</layout_panel>
 	</layout_stack>

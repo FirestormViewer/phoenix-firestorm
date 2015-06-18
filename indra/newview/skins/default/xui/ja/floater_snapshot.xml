@@ -64,8 +64,7 @@
  	</string>
  	-->
  	<button label="更新" name="new_snapshot_btn" />
-	<button name="retract_btn" />
-	<button name="extend_btn" />
+	<panel name="controls_container">
 	<panel name="advanced_options_panel">
 		<view_border  name="advanced_options_hr" />
 		<text name="layer_type_label">
@@ -117,6 +116,7 @@
 	<text name="refresh_lbl">
 		更新して保存
 	</text>
+	</panel>
 	<ui_ctrl  name="thumbnail_placeholder" />
 	<view_border  name="img_info_border" />
 	<text name="image_res_text">

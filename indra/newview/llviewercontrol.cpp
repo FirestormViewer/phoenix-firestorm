@@ -92,6 +92,7 @@
 #include "llpanelplaces.h"
 #include "llstatusbar.h"
 #include "NACLantispam.h"
+#include "llviewerkeyboard.h"
 #include "llviewerregion.h"
 
 // Third party library includes
@@ -809,6 +810,23 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 }
 // </FS:CR>
 
+// <FS:Ansariel> Allow instant change of keyboard layout
+void handleKeyboardLayoutChanged(const LLSD& newvalue)
+{
+	std::string keyBindingFileName("keys.xml");
+	if (newvalue.asBoolean())
+	{
+		keyBindingFileName = "keys_azerty.xml";
+	}
+
+	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
+														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
+														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
+
+	gViewerKeyboard.loadBindingsXML(key_bindings_file);
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1003,6 +1021,8 @@ void settings_setup_listeners()
 
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
 	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
+
+	gSavedSettings.getControl("FSUseAzertyKeyboardLayout")->getCommitSignal()->connect(boost::bind(&handleKeyboardLayoutChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

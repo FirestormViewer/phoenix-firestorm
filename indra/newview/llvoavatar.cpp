@@ -2402,7 +2402,7 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 				LLViewerObject* attached_object = (*attachment_iter);
 				BOOL visibleAttachment = visible || (attached_object && 
 													 !(attached_object->mDrawable->getSpatialBridge() &&
-													   attached_object->mDrawable->getSpatialBridge()->getRadius() < 2.0));
+													   attached_object->mDrawable->getSpatialBridge()->getRadius() < 2.0f));
 				
 				if (visibleAttachment && attached_object && !attached_object->isDead() && attachment->getValid())
 				{
@@ -6460,7 +6460,10 @@ void LLVOAvatar::resetHUDAttachments()
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
-		if (attachment->getIsHUDAttachment())
+		// <FS:Ansariel> Fix possible crash
+		//if (attachment->getIsHUDAttachment())
+		if (attachment && attachment->getIsHUDAttachment())
+		// </FS:Ansariel>
 		{
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 				 attachment_iter != attachment->mAttachedObjects.end();

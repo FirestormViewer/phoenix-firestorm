@@ -1,43 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Attachment Pie">
-    <pie_slice
-        label="Профиль..."
-        name="Profile..."/>
-    <pie_slice
-        label="Бросить"
-        name="Drop"/>
-    <pie_menu
-        name="Attachment Pie More"
-        label="Еще &gt;">
-        <pie_slice
-            label="Коснуться"
-            name="Attachment Object Touch"/>
-        <pie_slice
-            label="Скрыть"
-            name="Derender"/>
+<pie_menu name="Attachment Pie">
+    <pie_slice label="Профиль..." name="Profile..."/>
+    <pie_slice label="Бросить" name="Drop"/>
+    <pie_menu name="Attachment Pie More" label="Дальше &gt;">
+        <pie_slice label="Обновить текстуру" name="Texture Refresh"/>
+        <pie_slice label="О скриптах" name="ScriptInfo"/>
+        <pie_slice label="Коснуться" name="Attachment Object Touch"/>
+        <pie_menu name="DerenderMenu" label="Не отобразать &gt;">
+            <pie_slice label="Временно" name="Derender"/>
+            <pie_slice label="Всегда" name="DerenderPermanent"/>
+        </pie_menu>
+        <pie_menu name="ExportMenu" label="Сохранить как &gt;">
+            <pie_slice label="Backup" name="Backup"/>
+            <pie_slice label="Collada" name="Collada"/>
+        </pie_menu>
+        <pie_slice label="Отладка" name="Debug..."/>
     </pie_menu>
-    <pie_slice
-        label="Сесть"
-        name="Sit Down Here"/>
-    <pie_slice
-        label="Встать"
-        name="Stand Up"/>
-    <pie_slice
-        label="Отделить"
-        name="Detach"/>
-    <pie_slice
-        label="Жесты..."
-        name="Gestures"/>
-    <pie_menu
-        label="Внешность &gt;"
-        name="Appearance &gt;">
-        <pie_slice label="Править тело"
-           name="Править тело"/>
-        <pie_slice label="Править костюм"
-           name="Править костюм"/>
+    <pie_slice label="Сесть" name="Sit Down Here"/>
+    <pie_slice label="Встать" name="Stand Up"/>
+    <pie_slice label="Отделить" name="Detach"/>
+    <pie_slice label="Жесты..." name="Gestures"/>
+    <pie_menu label="Внешность &gt;" name="Appearance &gt;">
+        <pie_slice label="Фигура" name="Edit My Shape"/>
+        <pie_slice label="Комплект" name="Edit My Outfit"/>
+        <pie_slice label="Дамп XML" name="Dump XML"/>
+        <pie_slice label="Высота" name="Hover Height"/>
     </pie_menu>
-    <pie_slice
-        label="Править..."
-        name="Edit..."/>
+    <pie_slice label="Править" name="Edit..."/>
 </pie_menu>

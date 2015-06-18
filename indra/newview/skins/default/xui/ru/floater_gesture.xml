@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Места" name="gestures" title="ЖЕСТЫ">
+<floater label="Места" name="gestures" title="Жесты">
 	<floater.string name="loading">
 		Загрузка...
 	</floater.string>

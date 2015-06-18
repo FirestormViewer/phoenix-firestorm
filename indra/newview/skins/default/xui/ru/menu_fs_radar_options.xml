@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Показать миникарту над радаром" name="ShowRadarMinimap"/>
+	<menu_item_check label="Ограничить результаты на заданном расстоянии" name="LimitRadarByRange"/>
+	<menu_item_check label="Показать заблокированые аватары" name="FSRadarShowMutedAndDerendered"/>
+	<context_menu label="Формат имен на радаре" name="radarNameFormat">
+		<menu_item_check label="Отображаемое имя" name="radarFmtDN"/>
+		<menu_item_check label="Имя пользователя" name="radarFmtUN"/>
+		<menu_item_check label="Отображаемое имя (Имя пользователя)" name="radarFmtDNUN"/>
+		<menu_item_check label="Имя пользователя (Отображаемое имя)" name="radarFmtUNDN"/>
+	</context_menu>
+	<context_menu label="Отображаемые колонки" name="visible_columns">
+		<menu_item_check label="Голос" name="voice_level"/>
+		<menu_item_check label="В этом же регионе" name="in_region"/>
+		<menu_item_check label="Индикатор набора" name="typing_status"/>
+		<menu_item_check label="Сидячее состояние" name="sitting_status"/>
+		<menu_item_check label="Состояние платежной информации" name="flags"/>
+		<menu_item_check label="Заметки" name="has_notes"/>
+		<menu_item_check label="Возраст" name="age"/>
+		<menu_item_check label="Время" name="seen"/>
+	</context_menu>
+	<menu_item_check label="Цвета имен основанны на расстоянии" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Сообщать в" name="report_to_menu">
+		<menu_item_check label="Общий чат" name="radar_nearby_chat"/>
+		<menu_item_check label="Всплывающим окном" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Кольца покрытия общего чата" name="MiniMapChatRing"/>
+	<menu_item_check label="Сообщить о появлении в радиусе прорисовки" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Сообщить о выходе из радиуса прорисовки" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Сообщить о появлении в радиусе чата" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Сообщить о выходе из радиуса чата" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Сообщить о появлении пользователя в регионе" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Сообщить о выходе пользователя из региона" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Сообщать о возрасте аватара" name="RadarReportAgeAlert"/>
+	<menu_item_check label="Отправлять оповещения о появлении скриптов" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Отправлять оповещения о выходе скриптов" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="Усиление радара с помощью моста LSL" name="FSRadarEnhanceByBridge"/>
+	<menu_item_call label="Показывать заблокированных пользователей и объекты" name="show_blocked_list"/>
+</toggleable_menu>

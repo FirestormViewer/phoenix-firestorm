@@ -7,8 +7,8 @@
 		Надеть выбранные вещи
 	</panel.string>
 	<tab_container name="appearance_tabs">
-		<panel label="МОИ КОСТЮМЫ" name="outfitslist_tab"/>
-		<panel label="НАДЕТО" name="cof_tab"/>
+		<panel label="Мои комплекты" name="outfitslist_tab"/>
+		<panel label="Надето" name="cof_tab"/>
 	</tab_container>
 	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Люди" name="panel_ls_people">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Введите запрос:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<fs_scroll_list name="search_results_people">
+			<columns label="Имя" name="username" />
+		</fs_scroll_list>
+		<button label="Назад" name="people_back" />
+		<button label="Далее" name="people_next" />
+	</panel>
+</panel>

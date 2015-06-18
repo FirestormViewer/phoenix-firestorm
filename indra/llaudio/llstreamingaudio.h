@@ -45,9 +45,6 @@ class LLStreamingAudioInterface
 	virtual void setGain(F32 vol) = 0;
 	virtual F32 getGain() = 0;
 	virtual std::string getURL() = 0;
-	// <FS:GF> Safe stop and release for FMOD Ex music streams
-	virtual bool delayedRelease(bool force = false){return false;}
-	// <FS:GF>
 	virtual bool supportsAdjustableBufferSizes(){return false;}
 	virtual void setBufferSizes(U32 streambuffertime, U32 decodebuffertime){};
 

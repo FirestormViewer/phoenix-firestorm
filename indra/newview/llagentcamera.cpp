@@ -2025,19 +2025,19 @@ void LLAgentCamera::handleScrollWheel(S32 clicks)
 		else if (mFocusOnAvatar && (mCameraMode == CAMERA_MODE_THIRD_PERSON))
 		{
 			// <FS:Zi> Camera focus and offset with CTRL/SHIFT + Scroll wheel
-			MASK mask=gKeyboard->currentMask(TRUE);
-			if(mask & MASK_SHIFT)
+			MASK mask = gKeyboard->currentMask(TRUE);
+			if (mask & MASK_SHIFT)
 			{
-				LLVector3d offset=gSavedSettings.getVector3d("FocusOffsetRearView");
-				offset.mdV[VZ]+=0.1f*(F32) clicks;
-				gSavedSettings.setVector3d("FocusOffsetRearView",offset);
+				LLVector3d offset = gSavedSettings.getVector3d("FocusOffsetRearView");
+				offset.mdV[VZ] += 0.1f * (F32)clicks;
+				gSavedSettings.setVector3d("FocusOffsetRearView", offset);
 				return;
 			}
-			else if(mask & MASK_CONTROL)
+			else if (mask & MASK_CONTROL)
 			{
-				LLVector3 offset=gSavedSettings.getVector3("CameraOffsetRearView");
-				offset.mV[VZ]+=0.1f*(F32) clicks;
-				gSavedSettings.setVector3("CameraOffsetRearView",offset);
+				LLVector3 offset = gSavedSettings.getVector3("CameraOffsetRearView");
+				offset.mV[VZ] += 0.1f * (F32)clicks;
+				gSavedSettings.setVector3("CameraOffsetRearView", offset);
 				return;
 			}
 			// </FS:Zi>

@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Popups" name="popups" title="Popups">
+<panel label="Уведомления" name="popups">
 <tab_container name="tabs">
-
-	<panel label="мир" name="tab-world">
-	<check_box label="Сообщить мне: Когда я трачу или получаю L$" name="notify_money_change_checkbox" width="225"/>
-	<check_box name="FSPaymentInfoInChat" label="Показать L$-Сделки в локальном чате"/>
+	<panel label="Мир" name="tab-world">
+		<check_box label="Когда я трачу или получаю L$" name="notify_money_change_checkbox"/>
+		<check_box name="FSPaymentInfoInChat" label="Сообщать об операциях с L$ в общем чате вместо всплавающего окна"/>
+		<check_box label="Сообщить об изменении версии симулятора при изменении региона" name="FSShowServerVersionChangeNotice" tool_tip="Отображает уведомление, если меняется версия симулятора при телепортации или при пересечении региона."/>
+		<check_box label="Запросить status.secondlifegrid.net для получения последних новостей при входе" name="AutoQueryGridStatus"/>
+		<check_box label="Включить Growl уведомления" name="notify_growl_checkbox"/>
+		<check_box label="Показывать Growl уведомления даже когда Firestorm активен" name="notify_growl_always_checkbox"/>
+		<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="Фильтр повторных ЛС, если они уже были отражены как часть ключевых слов"/>
 	</panel>
-
 	<panel label="Люди" name="tab-people">
-	<check_box label="Когда мои друзья online / offline" name="friends_online_notify_checkbox" left_delta="0" width="200" />
-	<check_box label="Только в локальном чате" name="OnlineOfflinetoNearbyChatHistory" width="250"/>
-	<check_box name="OnlineOfflinetoNearbyChat" label="В локальном и консолье" width="160"/>
+		<check_box label="Мигание значка приложения при получении новых сообщение, если [APP_NAME] свернут" name="FSFlashOnMessage"/>
+		<check_box label="Сообщать мне, если кто-то изменил свое отображаемое имя" name="FSShowDisplayNameUpdateNotification"/>
+		<check_box label="Сообщать мне, если я кого-то заблокировал или разблокировал" name="FSReportBlockToNearbyChat"/>
+		<text name="friends_logon_label">
+			Когда мои друзья заходят или выходят из сети:
+		</text>
+		<check_box label="Как всплывающее окно" width="170" name="friends_online_notify_checkbox"/>
+		<check_box name="OnlineOfflinetoNearbyChat" label="В консоль общего чата"/>
+		<check_box label="Только в общий чат" name="OnlineOfflinetoNearbyChatHistory"/>
 	</panel>
-
-	<panel label="Объекты &amp; Скрипты" name="tab-objects">
-	<check_box label="Ошибки скриптов в:" name="show_script_errors"/>
-	<radio_group name="show_script_errors_location">
-		<radio_item label="Локоал. чате"  name="script_0"/>
-		<radio_item label="В отдельном окне" name="script_1"/>
-	</radio_group>
+	<panel label="Объекты и скрипты" name="tab-objects">
+		<check_box label="Мигание значка приложения при получении диалога скриптов, когда [APP_NAME] свернут" name="FSFlashOnScriptDialog"/>
+		<check_box label="Показывать уведомления о столкновениях в общем чате" name="FSCollisionMessagesInChat"/>
+		<check_box label="Сообщать об ошибках скрипта в:" name="show_script_errors"/>
+		<radio_group name="show_script_errors_location">
+			<radio_item label="Общий чат" name="script_0"/>
+			<radio_item label="Отдельное окно" name="script_1"/>
+		</radio_group>
+		<check_box label="Когда регионы изменяют общее значение скриптов:" name="FSReportTotalScriptCountChanges"/>
+		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Порог общих изменений количества скриптов, прежде чем сообщить [По умолчанию: 100]"/>
+		<check_box label="Уведомлять о столкновении скриптов в канале:" name="FSReportCollisionMessages"/>
+		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Канал, используемый для уведомления сообщений о столкновениях на скриптах [По умолчанию: -25000]"/>
 	</panel>
-
-	<panel label="Мой инвентарь" name="tab-inventory">
-	<check_box label="Сообщить мне: Когда я создаю закладку" name="landmark_created_checkbox"/>
+	<panel label="Инвентарь" name="tab-inventory">
+		<check_box label="Когда я заплатил за загрузку" name="FSShowUploadPaymentToast" />
+		<check_box label="Когда была создана закладка" name="landmark_created_checkbox"/>
+		<check_box label="Отключить уведомление 'Объект был возвращен в ваш инвентарь'" name="FSDisableReturnObjectNotification"/>
+		<check_box label="Записывать название файла сохраненных снимков в историю чата" name="FSLogSnapshotsToLocal"/>
 	</panel>
-
-    <!-- Alerts -->
-    <panel label="Alerts" name="tab-alerts">
-	<text name="show_label">
-		Всегда показывать:
-	</text>
-	<text name="dont_show_label">
-		Никогда не показывать:
-	</text>
+	<panel label="Оповещения" name="tab-alerts">
+		<text name="show_label">
+			Всегда показывать:
+		</text>
+		<text name="dont_show_label">
+			Никогда не показывать:
+		</text>
 	</panel>
 </tab_container>
 </panel>

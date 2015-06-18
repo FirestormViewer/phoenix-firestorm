@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Стили" name="skin_panel">
-	<text name="skin_textbox">
-        Стиль :
+<panel label="Темы" name="skin_panel">
+    <text name="skin_textbox">
+        Темы:
     </text>
     <text name="skin_textbox1">
-        (Требуется перезагрузка)
+        (Необходим перезапуск)
     </text>
     <text name="theme_textbox">
         Цветовая схема:
     </text>
     <text name="theme_textbox2">
-        (Требуется перезагрузка)
+        (Необходим перезапуск)
     </text>
+    <check_box label="Сброс панели инструментов темы заменяемым слоем, когда меняется тема" tool_tip="Сброс панели инструментов темы заменяемым слоем, когда меняется тема" name="reset_toolbar_settings"/>
     <check_box label="Использовать курсор стиля Viewer 1" name="use_legacy_cursors"/>
     <text name="theme_textbox3">
-        (Требуется перезагрузка)
+        (Необходим перезапуск)
     </text>
 </panel>

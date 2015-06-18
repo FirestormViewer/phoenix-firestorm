@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #ifdef INCLUDE_VLD
+#define VLD_FORCE_ENABLE 1
 #include "vld.h"
 #endif
 #include "llwin32headers.h"

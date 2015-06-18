@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="Conversation Context Menu">
-	<menu_item_call label="IM..." name="IM"/>
-	<menu_item_call label="Голосовой вызов..." name="Call"/>
-	<menu_item_call label="Открыть журнал чата..." name="Chat history"/>
-	<menu_item_call label="Смотреть профиль" name="View Profile"/>
-	<menu_item_call label="Предложить телепорт" name="teleport"/>
-	<menu_item_call label="Добавить друга" name="add_friend"/>
-	<menu_item_call label="Удалить из друзей" name="remove_friend"/>
-	<menu_item_call label="Пригласить в группу..." name="Invite"/>
-	<menu_item_call label="Карта" name="Map"/>
-	<menu_item_call label="Поделиться" name="Share"/>
-	<menu_item_call label="Заплатить" name="Pay"/>
-	<menu_item_check label="Черный список" name="Block/Unblock"/>
+	<menu_item_call label="Отправить ЛС..." name="IM" />
+	<menu_item_call label="Голосовой вызов..." name="Call" />
+	<menu_item_call label="Открыть историю чата..." name="Chat history" />
+	<menu_item_call label="Открыть историю чата во внешнем окне" name="Chat history External" />
+	<menu_item_call label="Показать профиль" name="View Profile" />
+	<menu_item_call label="Предложить телепорт" name="teleport" />
+	<menu_item_call label="Попросить телепорт" name="request_teleport" />
+	<menu_item_call label="Добавить в друзья" name="add_friend" />
+	<menu_item_call label="Удалить из друзей" name="remove_friend" />
+	<menu_item_call label="Пригласить в группу..." name="Invite" />
+	<menu_item_call label="Карта" name="Map" />
+	<menu_item_call label="Поделиться" name="Share" />
+	<menu_item_call label="Заплптить" name="Pay" />
+	<menu_item_check label="Заблокировать/Разблокировать" name="Block/Unblock" />
 </toggleable_menu>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Post-Process Floater" title="НАСТРОЙКИ ПОСЛЕДУЮЩЕЙ ОБРАБОТКИ">
+<floater name="Post-Process Floater" title="Настройки последующей обработки">
 	<tab_container name="Post-Process Tabs">
 		<panel label="Цветовой фильтр" name="wmiColorFilterPanel">
 			<check_box label="Вкл." name="wmiColorFilterToggle"/>

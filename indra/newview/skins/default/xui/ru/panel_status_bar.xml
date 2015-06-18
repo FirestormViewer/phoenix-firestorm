@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
+		<button name="status_wl_btn" tool_tip="Настройки окружающей среды"/>
+		<button name="status_lightshare_btn" tool_tip="Настройки освещения"/>
+		<text tool_tip="Имя земельного участка, на котором вы стоите. Нажмите о земле." name="parcel_info_text" value="(загрузка...)"/>
+	</panel>
 	<panel.string name="packet_loss_tooltip">
-		Потери пакетов
+		Потеря пакетов
 	</panel.string>
 	<panel.string name="bandwidth_tooltip">
-		Ширина канала
+		Ширина полосы
 	</panel.string>
 	<panel.string name="time">
-		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
-	</panel.string>
-	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
+		[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel name="parcel_info_panel">
-		<button name="buy_land_btn" tool_tip="Этот участок продается."/>
-		<button name="status_wl_btn" tool_tip="Настройки окружности"/>
-		<text name="parcel_info_text" value="(загрузка)" tool_tip="Название участка, на котором вы находитесь. Нажмите для информации."/>
+	<panel name="menu_search_panel">
+		<search_editor label="Поиск в меню" name="search_menu_edit" tool_tip="Начните вводить название меню, которое вас интересует" />
 	</panel>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Щелкните для обновления вашего баланса L$" value="?? L$"/>
-		<button label="L$-покупка" name="buyL" tool_tip="Щелкните для покупки L$"/>
+		<text name="balance" tool_tip="Нажмите, для обновления баланса"/>
+		<button label="Купить L$" name="buyL" tool_tip="Нажмите, чтобы купить L$"/>
 	</panel>
-	<text name="TimeText" tool_tip="Текущее время (тихоокеанское)">
-		24:00 H PST
-	</text>
 	<panel name="time_and_media_bg">
-		<button name="stream_toggle_btn" tool_tip="Запуск/остановка  аудио (музика)"/>
-		<button name="media_toggle_btn" tool_tip="Запуск/остановка  медиа (видео, веб-страницы)"/>
-		<button name="volume_btn" tool_tip="Регулятор громкости"/>
+		<text name="TimeText" tool_tip="Текущее время (Тихоокеанское)"/>
+		<button name="stream_toggle_btn" tool_tip="Включить/Выключить воспроизведение потокового аудио"/>
+		<button name="media_toggle_btn" tool_tip="Включить/Выключить воспроизведение всего медиа (Музыка, Видео, Web)"/>
 	</panel>
 </panel>

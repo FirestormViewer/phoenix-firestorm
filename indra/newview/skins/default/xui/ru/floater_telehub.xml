@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Explicit left edge to avoid overlapping build tools -->
-<floater name="telehub" title="ТЕЛЕХАБ">
+<floater name="telehub" title="Телехаб">
 	<text name="status_text_connected">
 		Телехаб подключен к объекту [OBJECT]
 	</text>

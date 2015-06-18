@@ -2,6 +2,5 @@
 <menu name="menu_topinfobar">
 	<menu_item_check label="Показать координаты" name="Show Coordinates"/>
 	<menu_item_check label="Показать свойства участка" name="Show Parcel Properties"/>
-	<menu_item_call label="Закладка" name="Landmark"/>
 	<menu_item_call label="Копировать" name="Copy"/>
 </menu>

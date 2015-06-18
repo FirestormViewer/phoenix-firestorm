@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterbulkperms" title="НАСТРОИТЬ РАЗРЕШЕНИЯ НА ИСПОЛЬЗОВАНИЕ КОНТЕНТА">
+<floater name="floaterbulkperms" title="Настройка прав на использование содержимого">
 	<floater.string name="nothing_to_modify_text">
-		В выбранной области нет контента, который можно изменять.
+		В выбранной области нет содержимого, которое можно изменять.
 	</floater.string>
 	<floater.string name="status_text">
 		Задание разрешений для [NAME]
@@ -24,7 +24,7 @@
 	<button label="√ Все" name="check_all"/>
 	<button label="Очистить" label_selected="Нет" name="check_none"/>
 	<text name="newperms">
-		Настроить разрешения на использование контента:
+		Настроить разрешения на использование содержимого:
 	</text>
 	<text name="GroupLabel">
 		Группа:

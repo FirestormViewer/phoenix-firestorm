@@ -3,5 +3,5 @@
 	<menu_item_call label="Вырезать" name="Cut"/>
 	<menu_item_call label="Копировать" name="Copy"/>
 	<menu_item_call label="Вставить" name="Paste"/>
-	<menu_item_call label="Открыть веб-инспектор" name="open_webinspector"/>
+	<menu_item_call label="Открыть Web Inspector" name="open_webinspector"/>
 </context_menu>

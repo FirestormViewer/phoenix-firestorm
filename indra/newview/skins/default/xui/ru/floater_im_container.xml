@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="floater_im_box" title="ОБЩЕНИЕ">
+<multi_floater name="floater_im_box" title="Разговор">
 	<string name="collapse_icon" value="Conv_toolbar_collapse"/>
 	<string name="expand_icon" value="Conv_toolbar_expand"/>
 	<layout_stack name="conversations_stack">

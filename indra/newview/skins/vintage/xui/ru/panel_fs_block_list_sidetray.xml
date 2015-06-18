@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="block_list_panel">
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Имя" />
+		<fs_scroll_list.columns name="item_type" label="Тип" />
+	</fs_scroll_list>
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
+			<button tool_tip="Вернуться к 'Люди'" name="back" />
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
+			<layout_stack name="block_list_blocklaystack">
+				<layout_panel name="block_panels_btnsort">
+					<menu_button label="Сортировать..." name="view_btn" tool_tip="Опции сортировки" />
+				</layout_panel>
+				<layout_panel name="block_panels_btnpersonobject">
+					<menu_button label="Заблокировать..." name="plus_btn" tool_tip="Выберите жителя или объект для блокировки"/>
+				</layout_panel>
+				<layout_panel name="block_panels_btnunblock">
+					<button label="Разблокировать" name="unblock_btn" tool_tip="Удалить жителя или объект из списка заблокированных" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

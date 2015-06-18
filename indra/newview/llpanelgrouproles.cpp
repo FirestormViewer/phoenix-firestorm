@@ -1766,6 +1766,17 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		mMembersList->deleteAllItems();
 	}
 
+	// <FS:Ansariel> Clear old callbacks so we don't end up adding people twice
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
+
 	LLGroupMgrGroupData::member_list_t::iterator end = gdatap->mMembers.end();
 
 	LLTimer update_time;

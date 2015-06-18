@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="contents" title="КУПИТЬ КОПИЮ ОБЪЕКТА">
+<floater name="contents" title="Купить копию объекта">
 	<floater.string name="title_buy_text">
 		Купить
 	</floater.string>

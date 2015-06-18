@@ -487,29 +487,18 @@
          layout="topleft"
          left_delta="0"
          name="FSUseAzertyKeyboardLayout"
-         width="180"
+         width="400"
          top_pad="0"/>
-        <text
-         name="FSUseAzertyKeyboardLayout_requires_restart"
-         follows="left|top"
-         layout="topleft"
-         left_pad="10"
-         top_delta="3"
-         height="20"
-         width="130"
-         text_color="White_25">
-            (requires restart)
-        </text>
         <check_box
          control_name="AllowTapTapHoldRun"
          follows="left|top"
          height="20"
          label="Tap-tap-hold to run"
          layout="topleft"
-         left_delta="-190"
+         left_delta="0"
          name="tap_tap_hold_to_run"
          width="237"
-         top_pad="-3"/>
+         top_pad="0"/>
         <check_box
          control_name="AutomaticFly"
          follows="left|top"

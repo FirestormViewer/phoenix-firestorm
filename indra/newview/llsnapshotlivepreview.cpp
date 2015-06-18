@@ -96,7 +96,11 @@ LLSnapshotLivePreview::LLSnapshotLivePreview (const LLSnapshotLivePreview::Param
     mFilterName(""),
     mAllowRenderUI(TRUE),
     mAllowFullScreenPreview(TRUE),
-    mViewContainer(NULL)
+    mViewContainer(NULL),
+	mFixedThumbnailWidth(0),
+	mFixedThumbnailHeight(0),
+	mFixedThumbnailImageWidth(0),
+	mFixedThumbnailImageHeight(0)
 {
 	setSnapshotQuality(gSavedSettings.getS32("SnapshotQuality"));
 	mSnapshotDelayTimer.setTimerExpirySec(0.0f);
@@ -499,6 +503,24 @@ BOOL LLSnapshotLivePreview::setThumbnailImageSize()
 		return FALSE ;//if the window is too small, ignore thumbnail updating.
 	}
 
+	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+	if (mFixedThumbnailWidth > 0 && mFixedThumbnailHeight > 0)
+	{
+		if (aspect_ratio > (F32)mFixedThumbnailWidth / (F32)mFixedThumbnailHeight)
+		{
+			// image too wide, shrink to width
+			mFixedThumbnailImageWidth = mFixedThumbnailWidth;
+			mFixedThumbnailImageHeight = ll_round((F32)mFixedThumbnailWidth / aspect_ratio);
+		}
+		else
+		{
+			// image too tall, shrink to height
+			mFixedThumbnailImageHeight = mFixedThumbnailHeight;
+			mFixedThumbnailImageWidth = ll_round((F32)mFixedThumbnailHeight * aspect_ratio);
+		}
+	}
+	// </FS:Ansariel>
+
 	S32 left = 0 , top = mThumbnailHeight, right = mThumbnailWidth, bottom = 0 ;
 	if (!mKeepAspectRatio)
 	{
@@ -573,9 +595,22 @@ void LLSnapshotLivePreview::generateThumbnailImage(BOOL force_update)
     }
     else
     {
+		// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+		S32 width = mThumbnailWidth;
+		S32 height = mThumbnailHeight;
+		if (mFixedThumbnailImageWidth > 0 && mFixedThumbnailImageHeight > 0)
+		{
+			width = mFixedThumbnailImageWidth;
+			height = mFixedThumbnailImageHeight;
+		}
+		// </FS:Ansariel>
+
         // The thumbnail is a screen view with screen grab positioning preview
         if(!gViewerWindow->thumbnailSnapshot(raw,
-                                         mThumbnailWidth, mThumbnailHeight,
+                                         // <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+                                         //mThumbnailWidth, mThumbnailHeight,
+                                         width, height,
+                                         // </FS:Ansariel>
                                          mAllowRenderUI && gSavedSettings.getBOOL("RenderUIInSnapshot"),
                                          FALSE,
                                          mSnapshotBufferType) )

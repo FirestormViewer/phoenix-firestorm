@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarpicker" title="ВЫБЕРИТЕ ЖИТЕЛЯ">
+<floater name="avatarpicker" title="Выбор аватара">
 	<floater.string name="not_found">
-		Текст «[TEXT]» не найден
+		Текст '[TEXT]' не найден
 	</floater.string>
 	<floater.string name="no_one_near">
 		Рядом никого нет
@@ -24,10 +24,10 @@
 				Наберите часть имени жителя:
 			</text>
 			<button label="Перейти" label_selected="Перейти" name="Find"/>
-			<fs_scroll_list name="SearchResults">
+			<fs_avatar_search_list name="SearchResults">
 				<columns label="Название" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</fs_scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 		<panel label="Друзья" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,10 +42,10 @@
 			<text name="meters">
 				Метров
 			</text>
-			<fs_scroll_list name="NearMe">
+			<fs_avatar_search_list name="NearMe">
 				<columns label="Название" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</fs_scroll_list>
+			</fs_avatar_search_list>
 		</panel>
 	</tab_container>
 	<button label="ОК" label_selected="ОК" name="ok_btn"/>

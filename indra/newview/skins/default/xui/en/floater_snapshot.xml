@@ -79,6 +79,15 @@
  	 name="local_failed_str">
  	    Failed to save to computer.
  	</string>
+	<panel
+	 name="controls_container"
+	 layout="topleft"
+	 follows="left|top"
+	 left="0"
+	 top="25"
+	 bottom="-1"
+	 width="213"
+	 >
     <button
      follows="left|top"
      height="25"
@@ -94,7 +103,7 @@
      left="10"
 	 label="Refresh"
      name="new_snapshot_btn"
-     top_pad="26"
+     top_pad="0"
      width="167" />
 	<button
        follows="left|top"
@@ -408,6 +417,7 @@
        width="130">
           Refresh to save.
       </text>
+	</panel>
   <ui_ctrl 
     layout="topleft"
     name="thumbnail_placeholder"

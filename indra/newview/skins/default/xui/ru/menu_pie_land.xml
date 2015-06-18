@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Land Pie">
-    <pie_slice
-        label="О земле..."
-        name="Place Information..."/>
-    <pie_slice
-        label="Создать"
-        name="Create"/>
-    <pie_slice
-        label="Идти сюда"
-        name="Go Here"/>
-    <pie_slice
-        label="Сесть"
-        name="Sit Here"/>
-    <pie_slice
-        label="Купить доступ"
-        name="Land Buy Pass Pie"/>
-    <pie_slice
-        label="Править ландшафт"
-        name="Edit Terrain"/>
-    <pie_slice
-        label="Купить землю"
-        name="Land Buy Pie"/>
+<pie_menu name="Land Pie">
+    <pie_slice label="О земле..." name="Place Information..." />
+    <pie_slice label="Строить" name="Create" />
+    <pie_slice label="Идти" name="Go Here" />
+    <pie_slice label="Сесть" name="Sit Here" />
+    <pie_slice label="Блокировать частицы" name="Mute Particle" />
+    <pie_slice label="Пропуск" name="Land Buy Pass Pie" />
+    <pie_slice label="Править" name="Edit Terrain" />
+    <pie_slice label="Купить" name="Land Buy Pie" />
 </pie_menu>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_bumps" title="СТОЛКНОВЕНИЯ, ТОЛЧКИ И УДАРЫ">
+<floater name="floater_bumps" title="Столкновения, толчки и удары">
 	<floater.string name="none_detected">
 		Ничего не обнаружено
 	</floater.string>

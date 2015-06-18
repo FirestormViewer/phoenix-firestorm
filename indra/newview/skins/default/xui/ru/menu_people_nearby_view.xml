@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="menu_group_plus">
-	<menu_item_check label="Сортировать по недавно говорившим" name="sort_by_recent_speakers"/>
-	<menu_item_check label="Сортировать по имени" name="sort_name"/>
-	<menu_item_check label="Сортировать по расстоянию" name="sort_distance"/>
-	<menu_item_check label="Показывать значки людей" name="view_icons"/>
-	<menu_item_check label="Смотреть карту" name="view_map"/>
+	<menu_item_check label="Сортировать по последнему говорившему" name="sort_by_recent_speakers" />
+	<menu_item_check label="Сортировать по имени" name="sort_name" />
+	<menu_item_check label="Сортировать по отдаленности" name="sort_distance" />
+	<menu_item_check name="view_icons" label="Показать иконки" />
+	<menu_item_check name="view_map" label="Показать на карте" />
 </toggleable_menu>

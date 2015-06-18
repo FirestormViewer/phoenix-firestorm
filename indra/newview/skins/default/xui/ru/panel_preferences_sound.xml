@@ -1,90 +1,472 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Sounds" name="Preference Media panel">
-<panel.string name="middle_mouse">
-	Cредней кнопки мыши
-</panel.string>
-<tab_container label="Настройки Файршторма" name="tabs">
-    <!-- General -->
-    <panel label="Основное" name="Media Sounds Panel">
-		<slider label="Общая громкость" name="System Volume"/>
-		<check_box name="mute_when_minimized" label="Заглушить если свернуть"/>
-		<slider label="Кнопки" name="UI Volume"/>
-		<slider label="Окружающий" name="Wind Volume"/>
-		<slider label="Звуковые эффекты" name="SFX Volume"/>
-		<check_box label="Звуки жестов" name="gesture_audio_play_btn" tool_tip="" value="true"/>
-		<slider label="Потоковая музыка" name="Music Volume"/>
-		<check_box label="Вкл." name="enable_music"/>
-		<slider label="Медия" name="Media Volume"/>
-		<check_box label="Вкл." name="enable_media"/>
-		<slider label="Голосовой чат" name="Voice Volume"/>
-		<check_box label="Вкл." name="enable_voice_check_volume"/>
-    </panel>
+<panel label="Звуки" name="Preference Media panel">
+	<panel.string name="middle_mouse">
+		Средняя кнопка мышки
+	</panel.string>
+	<tab_container label="Настройки Firestorm" name="tabs">
+		<panel label="Звуки" name="Media Sounds Panel">
+			<slider label="Общая громкость" name="System Volume"/>
+			<check_box label="Отключение при сворачивании" name="mute_when_minimized"/>
+			<slider label="Интерфейс" name="UI Volume"/>
+			<slider label="Окружение" name="Wind Volume"/>
+			<check_box name="collisions_audio_play_btn" tool_tip="Отметьте, чтобы слышать звуки по умолчанию в результате столкновений" label="Включить звуки столкновений"/>
+			<slider label="Звуковые эффекты" name="SFX Volume"/>
+			<check_box name="gesture_audio_play_btn" tool_tip="Отметьте, чтобы слышать звуки из жестов" label="Включить звуки жестов"/>
+			<slider label="Потоковая музыка" name="Music Volume"/>
+			<check_box label="Включено" name="enable_music"/>
+			<check_box label="Включено" name="enable_media"/>
+			<slider label="Голосовой чат" name="Voice Volume"/>
+			<check_box label="Включено" name="enable_voice_check_volume"/>
+			<text name="friends_logon_sounds_label">
+				Воспроизводить звук, когда друзья:
+			</text>
+			<check_box label="В сети" name="friends_notify_online_sound"/>
+			<check_box label="Не в сети" name="friends_notify_offline_sound"/>
+			<text name="money_change_threshold_label" tool_tip="Воспроизведение звука при увеличении или уменьшении вашего баланса">
+				Порог изменения L$:
+			</text>
+		</panel>
+		<panel name="Media Media Panel" label="Медиа">
+			<check_box label="Разрешить автовоспроизведение медиа" name="media_auto_play_btn" tool_tip="Выберите для автоматического запуска медиа."/>
+			<check_box name="media_allowscript_btn" tool_tip="Эта настройка разрешает / запрещает скриптовым примам управлять медиа потоками" label="Разрешить скриптам воспроизводить медиа"/>
+			<check_box label="Воспроизведение медиа прикрепленных к другим аватарам" name="media_show_on_others_btn" tool_tip="Воспроизведение медиа прикрепленных к другим аватарам"/>
+			<check_box name="media_filter" tool_tip="Выберить это для того, чтобы фильтровать, будет ли играть медиа с определенного хоста" label="Включить медиа фильтр (повышение безопасности)"/>
+			<button label="Управление сайтами с медиа" name="edit_media_lists_button"/>
+			<text name="Media Rolloff">
+				Расстояние уменьшения слышимости источника звука:
+			</text>
+			<slider label="Минимум" name="MediaRollOffMin" tool_tip="Минимальное расстояние уменьшения слышимости источника звука"/>
+			<text name="MinMeters">
+				метров
+			</text>
+			<slider label="Максимум" name="MediaRollOffMax" tool_tip="Максимальное расстояние уменьшения слышимости источника звука."/>
+			<text name="MaxMeters">
+				метров
+			</text>
+		</panel>
+		<panel label="Музыка" name="Media Music Panel">
+			<check_box label="Разрешить автовоспроизведение музыки" name="audio_auto_play_btn" tool_tip="Выберите для автоматического запуска аудио потоков."/>
+			<check_box name="FSFadeAudioStream" tool_tip="Включить затухание аудио на участке" label="Включить затухание аудио на участке:"/>
+			<slider label="Проявление" name="FSAudioMusicFadeIn" tool_tip="Время проявления аудио на участке."/>
+			<text name="FSAudioMusicFadeInSeconds">
+				секунд
+			</text>
+			<slider label="Затухания" name="FSAudioMusicFadeOut" tool_tip="Время затухания аудио на участке."/>
+			<text name="FSAudioMusicFadeOutSeconds">
+				секунд
+			</text>
+			<text name="show_stream_metadata_text" >
+				Показать уведомления заголовка потока:
+			</text>
+			<radio_group name="show_stream_metadata">
+				<radio_item label="Выключено" width="110" name="radio_off" />
+				<radio_item label="Всплывающее окно" width="150" name="radio_toasts" />
+				<radio_item label="Общий чат" name="radio_chat" />
+			</radio_group>
+			<check_box name="StreamMetadataAnnounceToChat" width="210" label="Заголовки потока по каналу:"/>
+		</panel>
+		<panel label="Настройки голоса" name="Media Voice tab">
+			<check_box label="Включить голос" name="enable_voice_check" width="155"/>
+			<button tool_tip="Сброс голоса" name="reset_voice_button"/>
+			<check_box label="Разрешить голос в нескольких клиентах одновременно" name="VoiceMultiInstance" />
+			<radio_group name="ear_location">
+				<radio_item label="Слышать голос из положения камеры" name="0"/>
+				<radio_item label="Слышать голос из положения аватара" name="1"/>
+				<radio_item label="Слышать голос одинаково отовсюду" name="2"/>
+			</radio_group>
+			<check_box label="Двигать губами аватара во время разговора" name="enable_lip_sync"/>
+			<check_box label="Показать голосовой индикатор над аватарами" tool_tip="Показывает голосовой индикатор (белую точку) над аватарами" name="FSShowVoiceVisualizer"/>
+			<check_box label="Показать голосовые визуализаторы при звонке" tool_tip="Показывает голосовой индикатор и двигать губами в мире, находясь в частных и групповых вызовах" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Показать состояние голосовых каналов во вкладках разговоров" tool_tip="Показать состояние голосовых каналов во вкладках разговоров" name="FSShowConversationVoiceStateIndicator"/>
+			<check_box label="Автоматически отклонять все входящие групповые голосовые вызовы" name="VoiceCallsRejectGroup"/>
+			<check_box label="Автоматически отклонять все входящие специальные голосовые вызовы AdHoc" name="VoiceCallsRejectAdHoc"/>
+			<check_box label="Автоматически отклонять все входящие P2P (аватар с аватаром) голосовые вызовы" name="VoiceCallsRejectP2P"/>
+			<check_box label="'Включить / Выключить' микрофон при нажатии:" name="push_to_talk_toggle_check" tool_tip="Когда в режиме переключения, нажмите и отпустите клавишу включения один раз, чтобы переключить микрофон 'Включить / Выключить'. Когда не в режиме переключения, микрофон передает голос только тогда, когда нажата кнопка."/>
+			<line_editor label="Переключатель Нажать-и-говорить" name="modifier_combo"/>
+			<button label="Задать кнопку" name="set_voice_hotkey_button"/>
+			<button name="set_voice_middlemouse_button" tool_tip="Вернуть на 'Средняя кнопка мыши'"/>
+			<button label="Настройки звукового устройства" name="device_settings_btn"/>
+			<panel label="Настройки устройства" name="device_settings_panel">
+				<panel.string name="default_text">
+					По умолчанию
+				</panel.string>
+				<panel.string name="default system device">
+					Системное устройство по умолчанию
+				</panel.string>
+				<panel.string name="name_default_system_device">
+					Системное устройство по умолчанию
+				</panel.string>
+				<panel.string name="no device">
+					Нет устройства
+				</panel.string>
+				<panel.string name="name_no_device">
+					Нет устройства
+				</panel.string>
+				<text name="Input">
+					Ввод
+				</text>
+				<text name="Output">
+					Вывод
+				</text>
+				<text name="Volume label" width="110">
+					Моя громкость:
+				</text>
+				<slider_bar name="mic_volume_slider" tool_tip="Измените громкость используя ползунок"/>
+				<text name="wait_text">
+					Пожалуйста, подождите
+				</text>
+			</panel>
+		</panel>
+		<panel label="Интерфейс 1" name="UI Sounds tab 1">
+			<text name="textFSExplanation_tab1">
+				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
+Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
+			</text>
 
-	<panel name="Media Media Panel">
-		<check_box label="Разрешить автоматическое воспроизведение" name="media_auto_play_btn" tool_tip="" value="true"/>
-		<check_box name="media_allowscript_btn" tool_tip="Эта установка разрешает / запрещает объектам со скриптами использовать медиа" label="Разрешить медиа для скриптов" />
-		<check_box label="Воспроизводить медиа других аватаров" name="media_show_on_others_btn" tool_tip="Отключите данную опцию, чтоб не слышать медиа, которые прикреплены к ближайшим пользователям" value="true"/>
-		<check_box name="media_filter" tool_tip="Установка данного фильтра позволяет вам выбирать в каких регионах воспроизводить медиа" label="Медиа фильтр (Повышенная безопасность)"/>
-		<button label="Редактировать список медиа..." name="edit_media_lists_button" />
-        <text name="Media Rolloff">
-            Расстояние слышимости:
-        </text>
-        <slider name="MediaRollOffMin" tool_tip="минимально."/>
-        <text name="MinMeters">
-            Метров
-        </text>
-        <slider name="MediaRollOffMax" tool_tip="максимально."/>
-        <text name="MaxMeters">
-            Метров
-        </text>
-	</panel>
+			<text tool_tip="UUID звука воспроизводимый на оповещения по умолчанию." name="textFSSndAlert">
+				Оповещения:
+			</text>
+			<button name="Prev_UISndAlert" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndAlert" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndAlert"/>
 
-	<panel name="Media Music Panel">
-        <check_box name="ShowStreamMetadata" label="Показать титул песни"/>
-        <check_box name="StreamMetadataAnnounceToChat" label="Послать титул песни на канал:" width="230"/>
-	</panel>
+			<text tool_tip="UUID звука воспроизводимый на неверное нажатие клавиши." name="textFSBadKeystroke">
+				Неверное нажатие:
+			</text>
+			<button name="Prev_UISndBadKeystroke" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndBadKeystroke" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndBadKeystroke"/>
 
-    <!-- Voice -->
-    <panel label="Настройки голоса" name="Media Voice tab">
-        <check_box label="Вкл. голосовой чат" name="enable_voice_check" width="130"/>
-		<text name="Listen from">
-			Слушать с:
-		</text>
-		<radio_group name="ear_location">
-			<radio_item label="Положения камеры" name="0"/>
-			<radio_item label="Положения аватара" name="1"/>
-		</radio_group>
-		<check_box label="Губы аватара двигаются при разговоре" name="enable_lip_sync"/>
-		<check_box label="Показать индикатор голосового чата в групповом чате." name="Show_Voice_Visualizers_In_Calls" tool_tip=""/>
-		<check_box label="Включить / Выключить микрофон, при нажатии:" name="push_to_talk_toggle_check" tool_tip="В режиме переключения однократное нажатие и отпускание данной клавиши включает/выключает микрофон. Если режим переключения отключен, то микрофон передает голос только когда клавиша нажата."/>
-		<line_editor label="Релиз речи:" name="modifier_combo"/>
-		<button label="Уст. кнопку" name="set_voice_hotkey_button"/>
-		<button name="set_voice_middlemouse_button" tool_tip="Сбросить на &lt;ср. кн. Мыши&gt;"/>
-        <button label="Настройки устройства" name="device_settings_btn"/>
-        <panel name="device_settings_panel">
-			<panel.string name="default_text">
-				Стандарт
-			</panel.string>
-			<string name="name_no_device">
-				Нету устройсва
-			</string>
-			<string name="name_default_system_device">
-				Стандартое устройства
-			</string>
-			<text name="Input">
-				Вход
+			<text tool_tip="UUID звука воспроизводимый на нажатие кнопки мыши." name="textFSClick">
+				Нажатие кнопки мыши:
 			</text>
-			<text name="Output">
-				Выход
+			<button name="Prev_UISndClick" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndClick" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndClick"/>
+
+			<text tool_tip="UUID звука воспроизводимый на освобождение кнопки мыши." name="textFSClickRelease">
+				Отпускание кнопки мыши:
 			</text>
-			<text name="Volume label" width="100">
-				Моя громкость:
+			<button name="Prev_UISndClickRelease" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndClickRelease" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndClickRelease"/>
+
+			<text tool_tip="UUID звука воспроизводимый, при повреждении женского аватара." name="textFSHealthReductionF">
+				Боль женского аватара:
 			</text>
-			<slider_bar initial_value="1,0" name="mic_volume_slider" tool_tip="Изменить можно этой кнопочкой"/>
-			<text name="wait_text">
-				подождите
+			<button name="Prev_UISndHealthReductionF" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndHealthReductionF" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndHealthReductionF"/>
+
+			<text tool_tip="UUID звука воспроизводимый, при повреждении мужского аватара." name="textFSHealthReductionM">
+				Боль мужского аватара:
 			</text>
-        </panel>
-	</panel>
-</tab_container>
+			<button name="Prev_UISndHealthReductionM" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndHealthReductionM" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndHealthReductionM"/>
+
+			<text tool_tip="UUID звука воспроизводимый на снижение баланса денег." name="textFSMoneyChangeDown">
+				Снижение баланса:
+			</text>
+			<button name="Prev_UISndMoneyChangeDown" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndMoneyChangeDown" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndMoneyChangeDown"/>
+
+			<text tool_tip="UUID звука воспроизводимый на увеличение баланса денег." name="textFSMoneyChangeUp">
+				Увеличение баланса:
+			</text>
+			<button name="Prev_UISndMoneyChangeUp" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndMoneyChangeUp" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndMoneyChangeUp"/>
+
+			<text tool_tip="UUID звука воспроизводимый на входящее личное сообщение." name="textFSNewIncomingIMSession">
+				Входящее ЛС:
+			</text>
+			<button name="Prev_UISndNewIncomingIMSession" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndNewIncomingIMSession" tool_tip="Сброс к UUID по умолчанию."/>
+			<combo_box name="PlayModeUISndNewIncomingIMSession">
+				<combo_box.item label="Воспроизвести только на новую сессию" name="1"/>
+				<combo_box.item label="Воспроизвести на каждое сообщение" name="2"/>
+				<combo_box.item label="Воспроизводить, если не выбрана вкладка" name="3"/>
+				<combo_box.item label="Не воспроизводить звук" name="0"/>
+			</combo_box>
+
+			<text tool_tip="UUID звука воспроизводимый на сообщения от группы." name="textFSNewGroupIncomingIMSession">
+				Сообщения от группы:
+			</text>
+			<button name="Prev_UISndNewIncomingGroupIMSession" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndNewIncomingGroupIMSession" tool_tip="Сброс к UUID по умолчанию."/>
+			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+				<combo_box.item label="Воспроизвести только на новую сессию" name="1"/>
+				<combo_box.item label="Воспроизвести на каждое сообщение" name="2"/>
+				<combo_box.item label="Воспроизводить, если не выбрана вкладка" name="3"/>
+				<combo_box.item label="Не воспроизводить звук" name="0"/>
+			</combo_box>
+
+			<text tool_tip="UUID звука воспроизводимый при специальных сообщениях." name="textFSNewConferenceIncomingIMSession">
+				Сообщения конференции:
+			</text>
+			<button name="Prev_UISndNewIncomingConfIMSession" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndNewIncomingConfIMSession" tool_tip="Сброс к UUID по умолчанию."/>
+			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
+				<combo_box.item label="Воспроизвести только на новую сессию" name="1"/>
+				<combo_box.item label="Воспроизвести на каждое сообщение" name="2"/>
+				<combo_box.item label="Воспроизводить, если не выбрана вкладка" name="3"/>
+				<combo_box.item label="Не воспроизводить звук" name="0"/>
+			</combo_box>
+
+			<text tool_tip="UUID звука воспроизводимый, при начале сессии ЛС." name="textFSStartIM">
+				Начало сессии ЛС:
+			</text>
+			<button name="Prev_UISndStartIM" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndStartIM" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndStartIM"/>
+
+			<text tool_tip="UUID звука воспроизводимый на создание объекта." name="textFSObjectCreate">
+				Создание объекта:
+			</text>
+			<button name="Prev_UISndObjectCreate" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndObjectCreate" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndObjectCreate"/>
+
+			<text tool_tip="UUID звука воспроизводимый на удаление объекта." name="textFSObjectDelete">
+				Удаление объекта:
+			</text>
+			<button name="Prev_UISndObjectDelete" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndObjectDelete" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndObjectDelete"/>
+
+			<text tool_tip="UUID звука воспроизводимый на появление объекта. (Rezz)" name="textFSObjectRezIn">
+				Появление объекта:
+			</text>
+			<button name="Prev_UISndObjectRezIn" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndObjectRezIn" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndObjectRezIn"/>
+
+			<text tool_tip="UUID звука воспроизводимый на исчезновение объекта. (DeRezz)" name="textFSObjectRezOut">
+				Исчезновение объекта:
+			</text>
+			<button name="Prev_UISndObjectRezOut" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndObjectRezOut" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndObjectRezOut"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда создается снимок" name="textFSSnapshot">
+				Создание снимка:
+			</text>
+			<button name="Prev_UISndSnapshot" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndSnapshot" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Отключение звука" name="QuietSnapshotsToDiskCheckBox"/>
+
+			<text tool_tip="UUID звука воспроизводимый на телепортацию" name="textFSTeleportOut">
+				Телепортация:
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTeleportOut" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndTeleportOut"/>
+
+		</panel>
+		<panel label="Интерфейс 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">
+				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
+Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
+			</text>
+
+			<text tool_tip="UUID звука воспроизводимый, появляется круглое меню. (Pie Menu)." name="textFSPieMenuAppear">
+				Открытие круглого меню:
+			</text>
+			<button name="Prev_UISndPieMenuAppear" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuAppear" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuAppear"/>
+
+			<text tool_tip="UUID звука воспроизводимый, круглое меню исчезает (Pie Menu)." name="textFSPieMenuHide">
+				Закрытие круглого меню:
+			</text>
+			<button name="Prev_UISndPieMenuHide" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuHide" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuHide"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 1. (Pie Menu)." name="textFSPieMenuSliceHighlight0">
+				Круглое меню, опция 1:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight0" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight0" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight0"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 2. (Pie Menu)." name="textFSPieMenuSliceHighlight1">
+				Круглое меню, опция 2:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight1" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight1" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight1"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 3. (Pie Menu)." name="textFSPieMenuSliceHighlight2">
+				Круглое меню, опция 3:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight2" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight2" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight2"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 4. (Pie Menu)." name="textFSPieMenuSliceHighlight3">
+				Круглое меню, опция 4:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight3" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight3" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight3"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 5. (Pie Menu)." name="textFSPieMenuSliceHighlight4">
+				Круглое меню, опция 5:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight4" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight4" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight4"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 6. (Pie Menu)." name="textFSPieMenuSliceHighlight5">
+				Круглое меню, опция 6:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight5" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight5" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight5"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 7. (Pie Menu)." name="textFSPieMenuSliceHighlight6">
+				Круглое меню, опция 7:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight6" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight6" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight6"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда выбран элемент круглого меню 8. (Pie Menu)." name="textFSPieMenuSliceHighlight7">
+				Круглое меню, опция 8:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight7" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndPieMenuSliceHighlight7" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndPieMenuSliceHighlight7"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда набирается сообщение в общий чат." name="textFSTyping">
+				Набирается сообщение:
+			</text>
+			<button name="Prev_UISndTyping" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTyping" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="FSPlayTypingSoundCheckBox"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда закрывается окно." name="textFSWindowClose">
+				Закрытие окна:
+			</text>
+			<button name="Prev_UISndWindowClose" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndWindowClose" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndWindowClose"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда открывается окно." name="textFSWindowOpen">
+				Открытие окна:
+			</text>
+			<button name="Prev_UISndWindowOpen" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndWindowOpen" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndWindowOpen"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда скрипт открывает диалоговое окно." name="textFSScriptFloaterOpen">
+				Диалог скрипта:
+			</text>
+			<button name="Prev_UISndScriptFloaterOpen" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndScriptFloaterOpen" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndScriptFloaterOpen"/>
+
+			<text tool_tip="UUID звука воспроизводимый, друг заходит в сеть." name="textFSFriendOnline">
+				Друг заходит в сеть:
+			</text>
+			<button name="Prev_UISndFriendOnline" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndFriendOnline" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndFriendOnline"/>
+
+			<text tool_tip="UUID звука воспроизводимый, друг выходит из сети." name="textFSFriendOffline">
+				Друг выходит из сети:
+			</text>
+			<button name="Prev_UISndFriendOffline" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndFriendOffline" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndFriendOffline"/>
+
+			<text tool_tip="UUID звука воспроизводимый на предложение дружбы." name="textFSFriendshipOffer">
+				Предложение дружбы:
+			</text>
+			<button name="Prev_UISndFriendshipOffer" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndFriendshipOffer" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndFriendshipOffer"/>
+
+			<text tool_tip="UUID звука воспроизводимый на предложение телепортации." name="textFSTeleportOffer">
+				Предложение телепорта:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndTeleportOffer"/>
+
+		</panel>
+		<panel label="Интерфейс 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">
+				Здесь вы можете изменить (путем замены звуковых UUID), включить или выключить звуки интерфейса по умолчанию.
+Нажмите на кнопку 'D' рядом с UUID, чтобы вернуть значение по умолчанию.
+			</text>
+			
+			<text tool_tip="UUID звука воспроизводимый на предложение инвентаря." name="textFSInventoryOffer">
+				Предложение передачи:
+			</text>
+			<button name="Prev_UISndInventoryOffer" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndInventoryOffer" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndInventoryOffer"/>
+
+			<text tool_tip="UUID звука воспроизводимый на входящий голосовой вызов." name="textFSIncomingVoiceCall">
+				Голосовой вызов:
+			</text>
+			<button name="Prev_UISndIncomingVoiceCall" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndIncomingVoiceCall" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndIncomingVoiceCall"/>
+
+			<text tool_tip="UUID звука воспроизводимый на приглашение в группу." name="textFSGroupInvitation">
+				Приглашение в группу:
+			</text>
+			<button name="Prev_UISndGroupInvitation" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndGroupInvitation" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndGroupInvitation"/>
+
+			<text tool_tip="UUID звука воспроизводимый на уведомление группы." name="textFSGroupNotice">
+				Объявление группы:
+			</text>
+			<button name="Prev_UISndGroupNotice" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndGroupNotice" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndGroupNotice"/>
+
+			<text tool_tip="UUID звука воспроизводимый на неверные операции." name="textFSInvalidOp">
+				Неверная операция:
+			</text>
+			<button name="Prev_UISndInvalidOp" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndInvalidOp" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndInvalidOp"/>
+
+			<text tool_tip="UUID звука воспроизводимый на блокировку движения." name="textFSMovelockToggle">
+				Блокировка движения:
+			</text>
+			<button name="Prev_UISndMovelockToggle" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndMovelockToggle" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndMovelockToggle"/>
+
+			<text tool_tip="UUID звука воспроизводимый при ходьбе." name="textFSFootsteps">
+				Шаги по умолчанию:
+			</text>
+			<button name="Prev_UISndFootsteps" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndFootsteps" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndFootsteps"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда происходит перезагрузка региона." name="textFSRestart">
+				Перезагрузка региона:
+			</text>
+			<button name="Prev_UISndRestart" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRestart" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndRestart"/>
+
+			<text tool_tip="UUID звука воспроизводимый, когда происходит перезагрузка региона (OpenSim)." name="textFSRestartOpenSim">
+				Перезагрузка (OpenSim):
+			</text>
+			<button name="Prev_UISndRestartOpenSim" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndRestartOpenSim" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box label="Включить звук" name="PlayModeUISndRestartOpenSim"/>
+
+		</panel>
+	</tab_container>
 </panel>

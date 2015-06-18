@@ -527,6 +527,11 @@ void LLVorbisDecodeState::flushBadFile()
 	{
 		LL_WARNS("AudioEngine") << "Flushing bad vorbis file from VFS for " << mUUID << LL_ENDL;
 		mInFilep->remove();
+
+		// <FS:ND> FIRE-15975; Delete the current file, or we might end with stale locks during the re-transfer
+		delete mInFilep;
+		mInFilep = NULL;
+		// </FS:ND>
 	}
 }
 

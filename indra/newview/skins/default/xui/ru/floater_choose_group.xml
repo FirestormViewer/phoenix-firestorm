@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="groups" title="ГРУППЫ">
+<floater name="groups" title="Группы">
 	<text name="groupdesc">
 		Выберите группу:
 	</text>
-	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
 </floater>

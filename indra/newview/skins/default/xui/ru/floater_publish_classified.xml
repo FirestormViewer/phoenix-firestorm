@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="publish_classified" title="Публикация рекламы">
 	<text name="explanation_text">
-		Ваша реклама будет действительна в течение недели с момента публикации.
-        
-Помните, оплата за рекламу не возвращается.
+		Ваше объявление будет отображаться в течение одной недели со дня публикации.
+
+Имейте в виду, что сборы не подчиняется закону возврата.
 	</text>
-	<spinner label="Цена: L$" name="price_for_listing" tool_tip="Цена за размещение." value="50"/>
+	<spinner label="Цена: L$" name="price_for_listing" tool_tip="Цена за размешение рекламы в поиске"/>
 	<button label="Опубликовать" name="publish_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
 </floater>

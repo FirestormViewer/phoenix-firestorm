@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_tracker" title="Отслеживание региона">
+	<text name="region_label_text" value="Добавить регионы с карты мира" />
+	<button name="refresh" tool_tip="Обновить" />
+	<button name="remove" tool_tip="Удалить" />
+	<button name="open_map" tool_tip="Открыть карту" />
+	<scroll_list name="region_list" tool_tip="Двойное нажатие откроет на карте мира">
+		<scroll_list.columns name="region_label" label="Метка" />
+	</scroll_list>
+</floater>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_info">
+	<floater.string name="title_create_group">
+		Создать новую группу...
+	</floater.string>
+	<floater.string name="title_loading">
+		Профиль группы - Загрузка...
+	</floater.string>
+	<floater.string name="title">
+		Профиль группы - [NAME]
+	</floater.string>
+</floater>

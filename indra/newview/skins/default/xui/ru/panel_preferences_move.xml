@@ -1,72 +1,107 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Движение" name="move_panel">
-	<tab_container label="Move and View" name="tabs">
-		<!--View-->
-		<panel name="tab-view">
-			<slider label="Угол обзора:" name="camera_fov"/>
-			<slider label="Расстояние:" name="camera_offset_scale"/>
-			<check_box label="Разрешить большую свободу камере" name="DisableCameraConstraints" tool_tip="" />
+<panel label="Движение и вид" name="move_panel">
+	<tab_container label="Движение и вид" name="tabs">
+		<panel label="Вид" name="tab-view">
+			<slider label="Угол обзора" name="camera_fov"/>
+			<slider label="Расстояние" name="camera_offset_scale"/>
+			<slider label="Время перехода" name="camera_transition_time"/>
+			<slider label="Сглаживание" name="camera_position_smoothing"/>
+			<check_box label="Отключить ограничения камеры" name="DisableCameraConstraints" tool_tip="Установите, чтобы переместить камеру за ее нормальные границы и ниже уровня земли."/>
+			<check_box label="Не использовать колесо мыши для управления уровнем масштабирования" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
-			  Автоматическая установка позиции для:
+				Автоматические позиционирование аватара:
 			</text>
-			<check_box label="Режима создания/редактирования" name="edit_camera_movement" tool_tip="Производить автоматическое позиционирование камеры при входе в режим редактирования и выходе из него"/>
-			<check_box label="Изменения внешности" name="appearance_camera_movement" tool_tip="Производить автоматическое позиционирование камеры в режиме изменения внешности" width="150"/>
-			<check_box initial_value="true" label="Боковой панели" name="appearance_sidebar_positioning" tool_tip="Производить автоматическое позиционирование камеры для боковой панели"/>			
-			<check_box label="Нажатие на ваш аватар держит положение камеры" name="clickonavatarkeepscamera" tool_tip=""/>
-			<check_box label="Отключить минимальное расстояние приближения камеры" name="disableminzoomdist" tool_tip=""/>
-			<check_box label="Разрешить двигаться камере без ограничений(не через примитивы)" name="ignorecameraconstraints" tool_tip=""/>
-			<text name="ignorecameraconstraints_requires_restart" left_pad="70">
+			<check_box label="Строительства / Редактирования" name="edit_camera_movement" tool_tip="Использовать автоматическое позиционирование камеры при входе и выходе из режима редактирования"/>
+			<check_box label="Внешности" name="appearance_camera_movement" tool_tip="Используйте автоматическое позиционирование камеры в режиме редактирования"/>
+			<check_box label="Добавление дополнительного освещения" name="EditAppearanceLighting" tool_tip="Включить или отключить дополнительное освещение, используемое при редактировании внешности аватара."/>
+			<check_box label="Нажатие на ваш аватар сохраняет положение камеры" name="clickonavatarkeepscamera" tool_tip="Обычно, при нажатии на аватаре сбрасывает положение камеры. Эта опция удаляет это поведение."/>
+			<check_box label="Сброс положения камеры после телепортации (в пределах региона)" name="FSResetCameraOnTP" tool_tip="Как правило, положение камеры сбрасывается при телепортации. Эта опция предотвращает это поведение."/>
+			<check_box label="Сброс положения камеры при движении аватара" name="FSResetCameraOnMovement"/>
+			<check_box label="Отключить минимальное расстояние приближения камеры" name="disableminzoomdist" tool_tip="Отключение ограничения на близкое расстояние камеры позволит приблизиться больше к объекту."/>
+			<check_box label="Повернуть аватар в направлении камеры при сбросе вида" name="resetviewturnsavatar" tool_tip="Эта опция поворачивает аватара в направлении камеры при сбросе режима вида (нажмитие клавиши ESC)."/>
+			<check_box label="Разрешить камере двигаться через примы" name="ignorecameraconstraints" tool_tip="Разрешить камере двигаться без ограничений через примы"/>
+			<text name="ignorecameraconstraints_requires_restart">
 				(перезапуск)
 			</text>
-			<check_box label="Показать заблокированых аватаров, как облако" name="ShowMutedAvatarsAsCloud" tool_tip=""/>
+			<check_box label="Показывать стандартное окно управления камерой всегда прозрачным" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Показывать заблокированных аватаров как облако частиц" name="ShowMutedAvatarsAsCloud" tool_tip="Заблокированные аватары будут отображаться как облако частиц специального цвета"/>
 		</panel>
-
-		<!-- Mouselook -->
-		<panel name="tab-mouselook">
-			<check_box label="Показать аватара от 1-го лица" name="first_person_avatar_visible"/>
-			<check_box label="Показать настройки от 1ого лица" name="mouselook_instructions_visible"/>
-			<text name="Mouse Sensitivity" width="195">
+		<panel label="От первого лица" name="tab-mouselook">
+			<check_box label="Включить функциональность вида от первого лица (Mouselook)" name="EnableMouselook" tool_tip="Разрешить вид от первого лица и контроль камеры мышью"/>
+			<check_box label="Показывать аватара в режиме от первого лица" name="first_person_avatar_visible"/>
+			<check_box label="Показывать пользовательский интерфейс в режиме от первого лица" name="first_person_ui_visible"/>
+			<check_box label="Включить контекстное меню в режиме от первого лица" tool_tip="Открыть контекстное меню в режиме от первого лица при нажатии ALT + правая кнопка мыши" name="FSEnableRightclickMenuInMouselook"/>
+			<check_box label="Выйти из вида от первого лица используя колесо прокрутки" name="FSScrollWheelExitsMouselook" tool_tip="Выйти из вида от первого лица используя колесо прокрутки"/>
+			<check_box label="Показывать инструкции вида от первого лица" name="mouselook_instructions_visible" tool_tip="Показывать инструкции вида от первого лица"/>
+			<check_box label="Показывать прицел" name="ShowCrosshairs" tool_tip="Показывать прицел при виде от первого лица"/>
+			<check_box label="Включить боевые возможности" name="FSMouselookCombatFeatures"/>
+			<check_box label="Рисовать маркеры цели (стрелки)" name="ExodusMouselookIFF"/>
+			<slider label="Расстояние (м)" name="ExodusMouselookIFFRange"/>
+			<text name="Mouse Sensitivity">
 				Чувствительность мыши:
 			</text>
 			<check_box label="Инвертировать" name="invert_mouse"/>
 		</panel>
-
-		<!-- Movement -->
 		<panel label="Движение" name="tab-movement">
-			<check_box label="Клавиши стрелок всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
-			<check_box label="При нажатии букв - Влияет на движение (папример WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="Бег после двойного нажатия на клавишу" name="tap_tap_hold_to_run"/>
-			<check_box label="Взлететь / Приземлиться при удержании вверх / вниз" name="automatic_fly" />
-			<check_box label="Повернуть Аватара если он идёт задом" name="backwardsturnavatar" tool_tip="Задом, в смысле тороны..."/>
+			<check_box label="Клавиши со стрелками всегда перемещают меня" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Буквенные клавиши влияют на движение не запуская локальный чат (т.e. WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Использовать раскладку AZERTY"  name="FSUseAzertyKeyboardLayout"/>
+			<check_box label="Двойное нажатие для бега" name="tap_tap_hold_to_run"/>
+			<check_box label="Летать / Приземлиться (верх (прыжок) / вниз (присесть))" name="automatic_fly"/>
+			<check_box label="Включить режим переключения приседания" name="crouch_toggle_mode"/>
+			<check_box label="Отключить анимацию подготовки прыжка" name="FSIgnoreFinishAnimation"/>
+			<check_box label="Отключить поворот аватара лицом к камере при движении назад" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Отключить поворот аватара лицом к камере при движении назад"/>
+			<check_box label="Повернуть аватара лицом к объекту, который выбран" name="FSTurnAvatarToSelectedObject" tool_tip="Повернуть аватара лицом к объекту, который выбран"/>
+			<text name="movelock_lbl">
+				Если в построеном LSL мост активна блокировка движения...
+			</text>
+			<check_box label="Всегда повторять блокировку после изменения региона" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Блокировка и разблокировка позиции после остановки и запуска движения" name="RelockMoveLockAfterMovement"/>
 			<text name="single_click_action_lbl">
-				Простой щелчок для:
+				Одиночное нажатие:
 			</text>
 			<combo_box name="single_click_action_combo">
-				<combo_box.item label="нету" name="0"/>
-				<combo_box.item label="Автопилота" name="1"/>
+				<combo_box.item label="Нет действия" name="0"/>
+				<combo_box.item label="Идти в точку нажатия" name="1"/>
 			</combo_box>
 			<text name="double_click_action_lbl">
-				Двойной щелчок для:
+				Двойное нажатие:
 			</text>
 			<combo_box name="double_click_action_combo">
-				<combo_box.item label="нету" name="0"/>
-				<combo_box.item label="Автопилота" name="1"/>
-				<combo_box.item label="Телепортации" name="2"/>
+				<combo_box.item label="Нет действия" name="0"/>
+				<combo_box.item label="Идти в точку нажатия" name="1"/>
+				<combo_box.item label="Телепортироваться в точку нажатия" name="2"/>
 			</combo_box>
-			<button label="Настройки 3D джойстика" name="joystick_setup_button"/>
+			<button label="Конфигурация джойстика" name="joystick_setup_button"/>
 		</panel>
-
-		<!-- Teleports -->
-		<panel name="tab-teleports">
-			<check_box label="Звуковой эффект при телепортации" name="PlayTeleportSound"/>
-			<check_box label="Отключить Экраны Телепортов" name="tp_screen_toggle"/>
+		<panel label="Телепортация" name="tab-teleports">
+			<check_box label="Востпроизводить звуковой эффект при телепортации" name="PlayTeleportSound"/>
+			<check_box label="Всегда летать после телепортации" name="FSFlyAfterTeleport"/>
+			<check_box label="Всегда отображать кнопку отмены телепортации" name="FSAlwaysShowTPCancel" tool_tip="Этот параметр игнорируется RLVa"/>
+			<check_box label="Отключить метки телепорта" name="tp_beam_toggle" tool_tip="Отклучение отображения метки назначения после телепортации" />
+			<check_box label="Отключение экрана телепортации" name="tp_screen_toggle" tool_tip="Отключение черного экрана телепортации" />
 		</panel>
-
-		<!-- Maps -->
-		<panel label="Файршторм" name="tab-maps">
-			<check_box label="Повернуть радар по поз. аватара" name="minimaprotate" tool_tip=""/>
-			<check_box name="MiniMapChatRing" label="Показать кольцо на радаре, который указывает диапазона чата"/>
-			<check_box label="Фильтра дубликатов закладок(LM) на карте мира" name="WorldmapFilterDuplicateLandmarks" tool_tip=""/>
+		<panel label="Карта и Миникарта" name="tab-maps">
+			<text name="minimap_options_label">
+				Опции миникарты:
+			</text>
+			<check_box label="Включить вращение миникарты" name="minimaprotate" tool_tip="Вращать миникарту при изменении направления аватара"/>
+			<text name="netmap_double_click_action_lbl">
+				Двойное нажатие:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Нет действия" name="0"/>
+				<combo_box.item label="Открыть карту мира" name="1"/>
+				<combo_box.item label="Телепортация в точку нажатия" name="2"/>
+			</combo_box>
+			<slider label="Выбор масштаба:" name="FSMinimapPickScale" tool_tip="Управляет радиусом круга, указанного на миникарте"/>
+			<text name="world_map_options_label">
+				Опции карты мира:
+			</text>
+			<check_box label="Фильтр дубликатов закладок на карте мира" name="WorldmapFilterDuplicateLandmarks" tool_tip="Фильтр дубликатов закладок на карте мира"/>
+			<check_box label="Показать дополнительную информацию о регионе на карте мира" name="FSAdvancedWorldmapRegionInfo" tool_tip="Показать дополнительную информацию о регионе на карте мира (Количество аватар и уровень зрелости)."/>
+			<check_box label="Показать сетку координат на карте мира." name="FSShowRegionGridCoordinates" tool_tip="Показать сетку координат на карте мира."/>
+			<check_box label="Телепортация при двойном нажатии на карте мира" name="FSWorldMapDoubleclickTeleport" tool_tip="Включение возможности телепортации при двойном нажатии на карте мира"/>
 		</panel>
 	</tab_container>
 </panel>

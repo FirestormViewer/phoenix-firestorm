@@ -277,32 +277,81 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 	//BD - Automatically calculate the size of our snapshot window to enlarge
 	//     the snapshot preview to its maximum size, this is especially helpfull
 	//     for pretty much every aspect ratio other than 1:1.
-	F32 panel_width = 400.f * gViewerWindow->getWorldViewAspectRatio();
+	S32 panel_width = llfloor(400.f * gViewerWindow->getWorldViewAspectRatio());
 
 	//BD - Make sure we clamp at 700 here because 700 would be for 16:9 which we
 	//     consider the maximum. Everything bigger will be clamped and will have
 	//     a slightly smaller preview window which most likely won't fill up the
 	//     whole snapshot floater as it should.
-	if(panel_width > 700.f)
+	if(panel_width > 700)
 	{
-		panel_width = 700.f;
+		panel_width = 700;
 	}
 
-	S32 floater_width = 224.f;
+	S32 floater_width = 224;
 	if(advanced)
 	{
 		floater_width = floater_width + panel_width;
 	}
 
+	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+	//LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
+	//thumbnail_placeholder->setVisible(advanced);
+	//thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
+	//floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
+	//floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
+	//if(!floaterp->isMinimized())
+	//{
+	//	floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+	//}
+
+	previewp->setFixedThumbnailSize(panel_width, 400);
 	LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
-	thumbnail_placeholder->setVisible(advanced);
-	thumbnail_placeholder->reshape(panel_width, thumbnail_placeholder->getRect().getHeight());
 	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(advanced);
 	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
 	if(!floaterp->isMinimized())
 	{
-		floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+		LLPanel* controls_container = floaterp->getChild<LLPanel>("controls_container");
+		if (advanced)
+		{
+			LLRect cc_rect = controls_container->getRect();
+
+			floaterp->reshape(floater_width, 463);
+
+			controls_container->setRect(cc_rect);
+			controls_container->updateBoundingRect();
+
+			thumbnail_placeholder->reshape(panel_width, 400);
+
+			LLRect tn_rect = thumbnail_placeholder->getRect();
+			tn_rect.setLeftTopAndSize(215, floaterp->getRect().getHeight() - 30, tn_rect.getWidth(), tn_rect.getHeight());
+			thumbnail_placeholder->setRect(tn_rect);
+			thumbnail_placeholder->updateBoundingRect();
+
+			previewp->setThumbnailPlaceholderRect(getThumbnailPlaceholderRect());
+			previewp->setThumbnailImageSize();
+		}
+		else
+		{
+			LLRect cc_rect = controls_container->getRect();
+
+			floaterp->reshape(floater_width, 593);
+
+			controls_container->setRect(cc_rect);
+			controls_container->updateBoundingRect();
+
+			thumbnail_placeholder->reshape(216, 124);
+
+			LLRect tn_rect = thumbnail_placeholder->getRect();
+			tn_rect.setLeftTopAndSize(5, floaterp->getRect().getHeight() - 30, 216, 124);
+			thumbnail_placeholder->setRect(tn_rect);
+			thumbnail_placeholder->updateBoundingRect();
+
+			previewp->setThumbnailPlaceholderRect(getThumbnailPlaceholderRect());
+			previewp->setThumbnailImageSize();
+		}
 	}
+	// </FS:Ansariel>
 
 	bool use_freeze_frame = floaterp->getChild<LLUICtrl>("freeze_frame_check")->getValue().asBoolean();
 
@@ -1293,7 +1342,8 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	// <FS:Ansariel> Don't return to target selection after taking a snapshot
 	//getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
 	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
-	panel_container->selectTabByName("panel_snapshot_options");
+	std::string last_snapshot_panel = gSavedSettings.getString("FSLastSnapshotPanel");
+	panel_container->selectTabByName(last_snapshot_panel.empty() ? "panel_snapshot_options" : last_snapshot_panel);
 	panel_container->getCurrentPanel()->onOpen(LLSD());
 	mSucceessLblPanel->setVisible(FALSE);
 	mFailureLblPanel->setVisible(FALSE);
@@ -1349,6 +1399,10 @@ void LLFloaterSnapshot::onClose(bool app_quitting)
 
 	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
 	mIsOpen = false;
+
+	// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
+	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
+	gSavedSettings.setString("FSLastSnapshotPanel", panel_container->getCurrentPanel()->getName());
 }
 
 // virtual

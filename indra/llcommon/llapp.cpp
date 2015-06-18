@@ -48,18 +48,7 @@
 #include "lleventtimer.h"
 
 
-// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
-// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
-
-// #include "google_breakpad/exception_handler.h"
-
-#ifndef ND_NO_BREAKPAD
-  #include "google_breakpad/exception_handler.h"
-#else
-  #include "nd/ndexception_handler_stub.h"
-#endif
-
-// </FS:ND>
+#include "google_breakpad/exception_handler.h"
 #include "stringize.h"
 
 //
@@ -86,15 +75,7 @@ void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
 #if LL_LINUX
 
-// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
-// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
-// #include "google_breakpad/minidump_descriptor.h"
-
-#ifndef ND_NO_BREAKPAD
- #include "google_breakpad/minidump_descriptor.h"
-#endif
-
-// </FS:ND>
+#include "google_breakpad/minidump_descriptor.h"
 
 static bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, 
                                    void* context, 

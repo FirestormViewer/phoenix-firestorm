@@ -768,6 +768,7 @@ void LLScriptEdCore::onToggleProc()
 {
 	mErrorList->setCommentText(LLTrans::getString("preproc_toggle_warning"));
 	mErrorList->deleteAllItems(); // Make it visible
+	updateButtonBar(); // Update the save button in particular (FIRE-10173)
 }
 // NaCl End
 
@@ -1940,6 +1941,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
 
 	// NaCL - LSL Preprocessor
+	mScriptEd->enableSave(FALSE); // Clear the enable save flag (FIRE-10173)
 	BOOL domono = FSLSLPreprocessor::mono_directive(mScriptEd->getScriptText());
 	if(domono == FALSE)
 	{

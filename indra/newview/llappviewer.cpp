@@ -1419,6 +1419,9 @@ bool LLAppViewer::init()
 	// initializing the settings sanity checker
 	SanityCheck::instance().init();
 
+	// <FS:Ansariel> Init debug rects
+	LLView::sDebugRects = gSavedSettings.getBOOL("DebugViews");
+
 	return true;
 }
 
@@ -2134,41 +2137,14 @@ bool LLAppViewer::cleanup()
 	{
 		// shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.
 
-		LLStreamingAudioInterface *sai = gAudiop->getStreamingAudioImpl();
-		// <FS:GF> Safe stop and release for FMOD Ex music streams
-		if (sai)
-		{
-			sai->stop();
-			
-			LLTimer streamReleaseTimer;
-			streamReleaseTimer.start();
-			
-			// Kill delayed release streams if any. Most streams will release almost instantly
-			// but there is a timeout in place just in case.
-			while (sai->delayedRelease() && streamReleaseTimer.getElapsedTimeF32() < 5.0f);
-			{
-				// Do nothing while waiting for delayedRelease to kill the streams.
-			}
-			streamReleaseTimer.stop();
-			
-			// We should rarely if ever enter this loop, but we will if there are streams that
-			// were not released before the 5 second timeout above. Show no mercy and call release
-			// on them right away.
-			while (sai->delayedRelease(true));
-			{
-				// Do nothing again while delayedRelease force kills the streams.
-			}
-		}
-		
+		// <FS> FMOD fixes
+		//LLStreamingAudioInterface *sai = gAudiop->getStreamingAudioImpl();
 		//delete sai;
 		//gAudiop->setStreamingAudioImpl(NULL);
+		// </FS>
 
 		// shut down the audio subsystem
-		gAudiop->shutdown();
-		
-		delete sai;
-		gAudiop->setStreamingAudioImpl(NULL);
-		// <FS:GF>
+        gAudiop->shutdown();
 
 		delete gAudiop;
 		gAudiop = NULL;

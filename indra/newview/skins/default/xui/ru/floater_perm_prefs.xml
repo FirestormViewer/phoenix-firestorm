@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="perm prefs" title="СТАНДАРТНЫЕ РАЗРЕШЕНИЯ НА ПЕРЕДАЧУ">
+<floater name="perm prefs" title="Стандартные разрешения">
 	<panel label="Разрешения" name="permissions">
 		<check_box label="Поделиться с группой" name="share_with_group"/>
 		<check_box label="Разрешить всем копировать" name="everyone_copy"/>

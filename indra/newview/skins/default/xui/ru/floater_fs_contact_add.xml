@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_add_contact" title="Добавить в набор контактов...">
+	<floater.string name="no_sets">
+		Нет доступных наборов контактов
+	</floater.string>
+	<floater.string name="text_add_single">
+		Выберите, в какой набор контактов добавить [NAME]:
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		Выберите, в какой набор контактов добавить [COUNT] аватаров:
+	</floater.string>
+	<button label="Добавить" name="add_btn" />
+	<button label="Отмена" name="cancel_btn" />
+</floater>

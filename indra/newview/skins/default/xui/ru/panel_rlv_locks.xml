@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_rlvLocks" title="Активная блокировка RLV">
+  <scroll_list name="lock_list">
+    <scroll_list.columns label="Тип блокировки" name="lock_type" />
+    <scroll_list.columns label="Метод" name="lock_addrem" />
+    <scroll_list.columns label="Блокировать объект" name="lock_target" />
+  </scroll_list>
+  <panel name="bottom_panel">
+    <button label="Обновить" name="refresh_btn" />
+  </panel>
+</panel>

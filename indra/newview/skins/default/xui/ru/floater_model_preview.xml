@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="ПЕРЕДАЧА МОДЕЛИ">
+<floater name="Model Preview" title="Загрузка модели">
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Ошибка. Проблема при анализе файла DAE – см. подробности в журнале.

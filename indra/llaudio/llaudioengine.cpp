@@ -72,6 +72,10 @@ LLStreamingAudioInterface* LLAudioEngine::getStreamingAudioImpl()
 
 void LLAudioEngine::setStreamingAudioImpl(LLStreamingAudioInterface *impl)
 {
+	// <FS> FMOD fixes
+	if (mStreamingAudioImpl)
+		delete mStreamingAudioImpl;
+	// </FS>
 	mStreamingAudioImpl = impl;
 }
 
@@ -134,6 +138,12 @@ bool LLAudioEngine::init(const S32 num_channels, void* userdata)
 
 void LLAudioEngine::shutdown()
 {
+	// <FS> FMOD fixes
+	// Clean up streaming audio
+	delete mStreamingAudioImpl;
+	mStreamingAudioImpl = NULL;
+	// </FS>
+
 	// Clean up decode manager
 	delete gAudioDecodeMgrp;
 	gAudioDecodeMgrp = NULL;

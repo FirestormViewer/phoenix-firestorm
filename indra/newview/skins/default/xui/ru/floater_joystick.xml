@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="КОНФИГУРАЦИЯ ДЖОЙСТИКА">
+<floater name="Joystick" title="Конфигурация джойстика">
 	<floater.string name="NoDevice">
 		устройство не выбрано
 	</floater.string>

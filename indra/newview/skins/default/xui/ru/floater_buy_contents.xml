@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_buy_contents" title="ПОКУПКА СОДЕРЖИМОГО">
+<floater name="floater_buy_contents" title="Покупка содержимого">
 	<floater.string name="no_copy_text">
 		(не копируется)
 	</floater.string>

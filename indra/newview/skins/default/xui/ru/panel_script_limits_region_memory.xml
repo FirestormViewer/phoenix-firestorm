@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="ПАМЯТЬ РЕГИОНА" name="script_limits_region_memory_panel">
+<panel label="Память региона" name="script_limits_region_memory_panel">
 	<text name="script_memory">
 		Память под скрипты на участке
 	</text>

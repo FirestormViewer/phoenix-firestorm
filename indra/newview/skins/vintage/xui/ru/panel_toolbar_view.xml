@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+  <layout_stack name="bottom_toolbar_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <layout_stack name="chat_bar_utility_bar_stack">
+  <layout_panel name="chat_panel">
+  <layout_stack name="bottom_chat_stack">
+  <layout_panel name="bottom_chat_bar_panel">
+  <button name="local_chat_button" tool_tip="Показать/Скрыть окно общего чата (CTRL+H)" label="Общий чат" />
+  <fs_nearby_chat_control name="default_chat_bar" label="В общий чат" />
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="utility_bar_layout_panel">
+  <panel name="utility_bar_panel">
+  <button name="utility_parcel_audio_stream_button" tool_tip="Воспроизведение / Пауза потоковой музыки на участке" />
+  <button name="utility_parcel_media_button" tool_tip="Воспроизведение / Пауза медиа на участке" />
+  <slider name="System Volume" tool_tip="Громкость" />
+  <button name="mute_audio" tool_tip="Выключить звуки" />
+  <button name="show_volume_controls_button" tool_tip="Показать управление громкости" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="voice_chat_controls_layout_panel">
+  <panel name="voice_chat_controls_panel">
+  <button name="show_voice_controls_button" tool_tip="Показать голосовой чат рядом" />
+  <button name="utility_talk_button" tool_tip="Нажмите на кнопку, чтобы поговорить. Нажмите на замок, чтобы установить нажать-для разговора." label="Говорить" />
+  <button name="utility_push_to_talk_lock_button" tool_tip="Переключатель функции нажать-и-говорить" />
+  <nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Текущая активность голосового канала" />
+  </panel>
+  </layout_panel>
+  <layout_panel name="quick_preferences_button_layout_panel">
+  <panel name="quick_preferences_button_panel">
+  <button name="enable_disable_ao_button" tool_tip="Включить/Выключить АО" />
+  <button name="show_ao_interface_button" tool_tip="Показать/Скрыть интерфейс АО" />
+  <button name="show_quick_prefs_button" tool_tip="Всплывающие параметры часто изменяемых опций" />
+  </panel>
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  <layout_panel name="bottom_toolbar_panel">
+    <button name="open_chat_bar_button" tool_tip="Показать панель чата (Enter)" />
+  </layout_panel>
+  </layout_stack>
+</toolbar_view>

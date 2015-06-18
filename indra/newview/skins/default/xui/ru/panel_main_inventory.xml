@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Вещи" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Обнаружено [ITEM_COUNT] вещей... [FILTER]
+		Обнаружено [ITEM_COUNT] элементов... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] вещей [FILTER]
+		[ITEM_COUNT] Элементов [FILTER]
 	</panel.string>
 	<text name="ItemcountText">
-		Вещи:
+		Объекты:
 	</text>
-	<filter_editor label="Фильтр для инвентаря" name="inventory search editor"/>
+	<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
+	<button name="collapse_btn" label="Свернуть"/>
+	<button name="expand_btn" label="Развернуть" />
+	<text name="filter_label" width="60" value="Фильтр:"/>
+	<combo_box name="filter_combo_box">
+		<combo_box.item value="filter_type_all" label="Все типы" />
+		<combo_box.item value="filter_type_animations" label="Анимации" />
+		<combo_box.item value="filter_type_calling_cards" label="Визитные карточки" />
+		<combo_box.item value="filter_type_clothing" label="Одежда / Части тела" />
+		<combo_box.item value="filter_type_gestures" label="Жесты" />
+		<combo_box.item value="filter_type_landmarks" label="Закладки" />
+		<combo_box.item value="filter_type_notecards" label="Заметки" />
+		<combo_box.item value="filter_type_objects" label="Объекты" />
+		<combo_box.item value="filter_type_scripts" label="Скрипты" />
+		<combo_box.item value="filter_type_sounds" label="Звуки" />
+		<combo_box.item value="filter_type_textures" label="Текстуры" />
+		<combo_box.item value="filter_type_snapshots" label="Снимки" />
+		<combo_box.item value="filter_type_meshes" label="Меш" />
+		<combo_box.item value="filter_type_custom" label="Другое..." />
+	</combo_box>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="МОЙ ИНВЕНТАРЬ" name="All Items"/>
-		<recent_inventory_panel label="НЕДАВНИЕ" name="Recent Items"/>
+		<inventory_panel label="Инвентарь" name="All Items"/>
+		<recent_inventory_panel label="Недавние" name="Recent Items"/>
+		<worn_inventory_panel label="Надетые" name="Worn Items"/>
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<menu_button name="options_gear_btn" tool_tip="Показать дополнительные параметры"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
-			<button name="add_btn" tool_tip="Добавить новую вещь"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="Удалить выбранную вещь"/>
-		</layout_panel>
-	</layout_stack>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Показать дополнительные настройки"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Добавить новый элемент"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Дополнительное окно инвентаря"/>
+		</panel>
+		<!-- Used by StarLight skins -->
+		<panel name="collapse_panel">
+			<button label="Свернуть" name="collapse_btn" tool_tip="Свернуть все папки" />
+		</panel>
+		<panel name="expand_panel">
+			<button label="Развернуть" name="expand_btn" tool_tip="Развернуть все папки" />
+		</panel>
+		<!-- / Used by StarLight skins -->
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				Элементов
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Удалить выбранный элемент"/>
+		</panel>
+	</panel>
 </panel>

@@ -622,16 +622,14 @@ void start_chat( EKeystate s )
 
 void start_gesture( EKeystate s )
 {
-	// Ansariel: If avatar is pointing at something, don't start
-	//           gesture. This works around the bug with Shared
-	//           Media prims.
+	// <FS:Ansariel> If avatar is pointing at something, don't start gesture.
+	//               This works around the bug with Shared Media prims.
 	if (gAgentCamera.mPointAtObject)
 	{
 		return;
 	}
 
-	// Ansariel: FIRE-4167: Don't start gesture if a floater with
-	//           web content has focus
+	// <FS:Ansariel> FIRE-4167: Don't start gesture if a floater with web content has focus
 	LLFloater* focused_floater = gFloaterView->getFocusedFloater();
 	if (focused_floater && dynamic_cast<LLFloaterWebContent*>(focused_floater))
 	{
@@ -642,20 +640,20 @@ void start_gesture( EKeystate s )
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
-		// <FS:Ansariel> Changed for new chatbar
- 		// ((LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->getCurrentChat().empty()) <FS:TM> CHUI Merge new
+		// <FS:Ansariel> [FS Communication UI]
+ 		//if ((LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->getCurrentChat().empty())
  		//{
  		//	// No existing chat in chat editor, insert '/'
- 		//	LLFloaterIMNearbyChat::startChat("/"); <FS:TM> CHUI Merge new
+ 		//	LLFloaterIMNearbyChat::startChat("/");
  		//}
  		//else
  		//{
  		//	// Don't overwrite existing text in chat editor
- 		//	LLFloaterIMNearbyChat::startChat(NULL); <FS:TM> CHUI Merge new
+ 		//	LLFloaterIMNearbyChat::startChat(NULL);
  		//}
 
-		FSNearbyChat::instance().showDefaultChatBar(TRUE,"/"); // <FS:TM> CHUI Merge Check this
- 		// </FS:Ansariel>
+		FSNearbyChat::instance().showDefaultChatBar(TRUE, "/");
+ 		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 
@@ -884,6 +882,18 @@ LLViewerKeyboard::Keys::Keys()
 
 S32 LLViewerKeyboard::loadBindingsXML(const std::string& filename)
 {
+	// <FS:Ansariel> Allow instant change of keyboard layout
+	for (S32 i = 0; i < MODE_COUNT; i++)
+	{
+		mBindingCount[i] = 0;
+
+		for (S32 j = 0; j < MAX_KEY_BINDINGS; j++)
+		{
+			mBindings[i][j] = LLKeyBinding();
+		}
+	}
+	// </FS:Ansariel>
+
 	S32 binding_count = 0;
 	Keys keys;
 	LLSimpleXUIParser parser;

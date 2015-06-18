@@ -92,6 +92,9 @@ public:
 	BOOL getThumbnailUpToDate() const { return mThumbnailUpToDate ;}
     void setThumbnailSubsampled(BOOL subsampled) { mThumbnailSubsampled = subsampled; }
 
+	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+	void setFixedThumbnailSize(S32 width, S32 height) { mFixedThumbnailWidth = width; mFixedThumbnailHeight = height; }
+
 	LLViewerTexture* getCurrentImage();
 	F32 getImageAspect();
 	const LLRect& getImageRect() const { return mImageRect[mCurImageIndex]; }
@@ -154,6 +157,13 @@ private:
     S32                         mBigThumbnailWidth;
     S32                         mBigThumbnailHeight;
     BOOL                        mBigThumbnailUpToDate;
+
+	// <FS:Ansariel> Show miniature thumbnail on collapsed snapshot panel
+	S32							mFixedThumbnailWidth;
+	S32							mFixedThumbnailHeight;
+	S32							mFixedThumbnailImageWidth;
+	S32							mFixedThumbnailImageHeight;
+	// </FS:Ansariel>
 
 	S32							mCurImageIndex;
     // The logic is mPreviewImage (raw frame) -> mFormattedImage (formatted / filtered) -> mPreviewImageEncoded (decoded back, to show artifacts)

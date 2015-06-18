@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Opensim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel label="Оправление сеткой" name="grid_management_panel">
+			<text name="add_grid_text">
+				Добавить новую сетку
+			</text>
+			<line_editor name="add_grid" label="Введите LoginURI" />
+			<button label="Очистить" label_selected="Очистить" width="80" name="clear_grid" />
+			<button label="Применить" width="80" name="apply_new_grid" />
+			<text name="add_grid_text">
+				Управление сетками
+			</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Название сетки" name="grid_label" />
+				<scroll_list.columns label="URI Входа" name="login_uri" />
+			</scroll_list>
+			<button label="Обновить" name="refresh_grid" />
+			<button label="Удалить" name="remove_grid" />
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text">
+					Название сетки:
+				</text>
+				<text name="grid_uri_text">
+					URI Сетки:
+				</text>
+				<text name="login_page_text">
+					Страница входа:
+				</text>
+				<button label="Zapisz" name="save_grid" />
+				<text name="helper_uri_text">
+					URI помощи:
+				</text>
+				<text name="website_text">
+					Сайт сетки:
+				</text>
+				<text name="support_text">
+					Поддержка сетки:
+				</text>
+				<text name="register_text">
+					Регистрация сетки:
+				</text>
+				<text name="password_text">
+					URI пароля сетки:
+				</text>
+				<text name="search_text">
+					Поиск сетки:
+				</text>
+				<text name="message_text">
+					URI сообщений сетки:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Разное" name="opensim_misc_panel">
+			<check_box label="Включить настройки освещения региона" name="Lightshare" />
+			<check_box label="Отладка поиска" name="DebugSearch" />
+			<text name="search_url_debug_text">
+				Замена текущего url поиска: (без замены если пусто)
+			</text>
+			<button label="Очистить" label_selected="Очистить" name="clear_search_url_debug" />
+			<button label="Выбрать" name="pick_current_search_url" />
+		</panel>
+	</tab_container>
+</panel>
