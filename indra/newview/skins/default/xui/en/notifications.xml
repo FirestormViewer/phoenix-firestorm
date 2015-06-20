@@ -5613,7 +5613,7 @@ You cannot undo this action.
      name="ConfirmUnlink"
      type="alertmodal">
     <unique/>
-    This is a large linkset. If you unlink it, you may not be able to link it again. You may wish to take a copy of the linkset into your inventory as a precaution.
+    Do you really want to unlink the selected object?
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Confirm when unlinking a linkset"
@@ -5621,7 +5621,7 @@ You cannot undo this action.
      notext="Cancel"
      yestext="Unlink"/>
   </notification>
-
+  
   <notification
    icon="alertmodal.tga"
    name="HelpReportAbuseSelectCategory"
@@ -12078,18 +12078,5 @@ the region &quot;[REGION]&quot;?
        name="Cancel"
        text="Cancel"/>
     </form>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="ConfirmUnlinkObjects"
-   type="alertmodal">
-Do you really want to unlink the selected object?
-    <tag>confirm</tag>
-    <usetemplate
-     ignoretext="Confirm before I unlink an object"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="Unlink"/>
   </notification>
 </notifications>

@@ -370,22 +370,6 @@ void LLFloaterTools::changePrecision(S32 decimal_precision)
 	mPanelFace->changePrecision(decimal_precision);
 }
 
-// <FS:Ansariel> FIRE-15489: Confirm before unlinking objects
-void cb_confirm_unlink_objects(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (option == 0)
-	{
-		LLSelectMgr::getInstance()->unlinkObjects();
-	}
-}
-
-void confirm_unlink_objects()
-{
-	LLNotificationsUtil::add("ConfirmUnlinkObjects", LLSD(), LLSD(), boost::bind(&cb_confirm_unlink_objects, _1, _2));
-}
-// </FS:Ansariel>
-
 // Create the popupview with a dummy center.  It will be moved into place
 // during LLViewerWindow's per-frame hover processing.
 LLFloaterTools::LLFloaterTools(const LLSD& key)
@@ -486,10 +470,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.EditMedia",			boost::bind(&LLFloaterTools::onClickBtnEditMedia,this));
 
 	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
-	// <FS:Ansariel> FIRE-15489: Confirm before unlinking objects
-	//mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
-	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&confirm_unlink_objects));
-	// </FS:Ansariel>
+	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 
 	// <FS>
 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
