@@ -78,6 +78,15 @@ public:
 	/// Return the platform the viewer was built for
 	static const std::string& getBuildPlatform();
 // [/SL:KB]
+
+    typedef enum
+    {
+        TEST_VIEWER,
+        PROJECT_VIEWER,
+        BETA_VIEWER,
+        RELEASE_VIEWER
+    } ViewerMaturity;
+    static ViewerMaturity getViewerMaturity();
 };
 
 #endif

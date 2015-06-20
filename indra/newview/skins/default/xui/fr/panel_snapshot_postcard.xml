@@ -12,6 +12,8 @@
 	<text name="title">
 		E-mail
 	</text>
-	<button label="Message" name="message_btn"/>
-	<button label="Paramètres" name="settings_btn"/>
+        <tab_container name="postcard_tabs">
+		<panel name="panel_postcard_message" label="Message"/>
+		<panel name="panel_postcard_settings" label="Paramètres"/>
+		</tab_container>
 </panel>

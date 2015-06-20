@@ -4959,7 +4959,7 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 		LLModel* base_mdl = *base_iter;
 		base_iter++;
 
-		for (S32 i = 0; i < mdl->getNumVolumeFaces(); ++i)
+		for (S32 i = 0, e = mdl->getNumVolumeFaces(); i < e; ++i)
 		{
 			const LLVolumeFace &vf = mdl->getVolumeFace(i);
 			U32 num_vertices = vf.mNumVertices;
@@ -5407,7 +5407,7 @@ BOOL LLModelPreview::render()
 
 				gGL.multMatrix((GLfloat*) mat.mMatrix);
 
-				for (U32 i = 0; i < mVertexBuffer[mPreviewLOD][model].size(); ++i)
+				for (U32 i = 0, e = mVertexBuffer[mPreviewLOD][model].size(); i < e; ++i)
 				{
 					LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
 				
@@ -5682,7 +5682,7 @@ BOOL LLModelPreview::render()
 
 					if (!model->mSkinWeights.empty())
 					{
-						for (U32 i = 0; i < mVertexBuffer[mPreviewLOD][model].size(); ++i)
+						for (U32 i = 0, e = mVertexBuffer[mPreviewLOD][model].size(); i < e; ++i)
 						{
 							LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
 
@@ -5769,6 +5769,7 @@ BOOL LLModelPreview::render()
 							{
 							// </FS:ND>
 
+							llassert(model->mMaterialList.size() > i);
 							const std::string& binding = instance.mModel->mMaterialList[i];
 							const LLImportMaterial& material = instance.mMaterial[binding];
 

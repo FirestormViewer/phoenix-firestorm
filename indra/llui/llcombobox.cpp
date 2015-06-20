@@ -446,6 +446,7 @@ void LLComboBox::onFocusLost()
 	{
 		mTextEntry->selectAll();
 	}
+	mButton->setForcePressedState(false);
 	LLUICtrl::onFocusLost();
 }
 

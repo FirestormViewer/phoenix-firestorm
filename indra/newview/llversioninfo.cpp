@@ -29,6 +29,7 @@
 #include <iostream>
 #include <sstream>
 #include "llversioninfo.h"
+#include <boost/regex.hpp>
 
 // <FS:TS> Use configured file instead of compile time definitions to avoid
 //         rebuilding the world with every Mercurial pull
@@ -161,6 +162,44 @@ void LLVersionInfo::resetChannel(const std::string& channel)
 	sVersionChannel.clear(); // Reset version and channel string til next use.
 }
 
+//static
+LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
+{
+    ViewerMaturity maturity;
+    
+    std::string channel = getChannel();
+
+	static const boost::regex is_test_channel("\\bTest\\b");
+	static const boost::regex is_beta_channel("\\bBeta\\b");
+	static const boost::regex is_project_channel("\\bProject\\b");
+	static const boost::regex is_release_channel("\\bRelease\\b");
+
+    if (boost::regex_search(channel, is_release_channel))
+    {
+        maturity = RELEASE_VIEWER;
+    }
+    else if (boost::regex_search(channel, is_beta_channel))
+    {
+        maturity = BETA_VIEWER;
+    }
+    else if (boost::regex_search(channel, is_project_channel))
+    {
+        maturity = PROJECT_VIEWER;
+    }
+    else if (boost::regex_search(channel, is_test_channel))
+    {
+        maturity = TEST_VIEWER;
+    }
+    else
+    {
+        LL_WARNS() << "Channel '" << channel
+                   << "' does not follow naming convention, assuming Test"
+                   << LL_ENDL;
+        maturity = TEST_VIEWER;
+    }
+    return maturity;
+}
+
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 const char* getBuildPlatformString()
 {
@@ -195,3 +234,5 @@ const std::string& LLVersionInfo::getBuildPlatform()
 	return strPlatform;
 }
 // [/SL:KB]
+
+    

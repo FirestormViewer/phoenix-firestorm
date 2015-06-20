@@ -61,6 +61,8 @@ private:
 	/*virtual*/ LLFloaterSnapshot::ESnapshotFormat getImageFormat() const;
 	/*virtual*/ void updateControls(const LLSD& info);
 
+	S32 mLocalFormat;
+
 	void onFormatComboCommit(LLUICtrl* ctrl);
 	void onQualitySliderCommit(LLUICtrl* ctrl);
 	void onSaveFlyoutCommit(LLUICtrl* ctrl);
@@ -70,6 +72,7 @@ static LLPanelInjector<LLPanelSnapshotLocal> panel_class("llpanelsnapshotlocal")
 
 LLPanelSnapshotLocal::LLPanelSnapshotLocal()
 {
+	mLocalFormat = gSavedSettings.getS32("SnapshotFormat");
 	mCommitCallbackRegistrar.add("Local.Cancel",	boost::bind(&LLPanelSnapshotLocal::cancel,		this));
 }
 
@@ -93,6 +96,10 @@ BOOL LLPanelSnapshotLocal::postBuild()
 void LLPanelSnapshotLocal::onOpen(const LLSD& key)
 {
 	// <FS:Ansariel> FIRE-7090: Snapshot format for disk changes when selecting snapshot to inventory or email
+	//if(gSavedSettings.getS32("SnapshotFormat") != mLocalFormat)
+	//{
+	//	getChild<LLComboBox>("local_format_combo")->selectNthItem(mLocalFormat);
+	//}
 	S32 index = gSavedSettings.getS32("FSSnapshotLocalFormat");
 	gSavedSettings.setS32("SnapshotFormat", index);
 	getChild<LLComboBox>("local_format_combo")->setCurrentByIndex(index);
@@ -147,6 +154,7 @@ void LLPanelSnapshotLocal::updateControls(const LLSD& info)
 
 void LLPanelSnapshotLocal::onFormatComboCommit(LLUICtrl* ctrl)
 {
+	mLocalFormat = getImageFormat();
 	// <FS:Ansariel> FIRE-7090: Snapshot format for disk changes when selecting snapshot to inventory or email
 	gSavedSettings.setS32("FSSnapshotLocalFormat", getChild<LLComboBox>("local_format_combo")->getCurrentIndex());
 

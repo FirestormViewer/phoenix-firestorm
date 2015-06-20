@@ -87,6 +87,8 @@
 #endif // OPENSIM
 #include "fsnamelistavatarmenu.h"
 
+const F64 COVENANT_REFRESH_TIME_SEC = 60.0f;
+
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
 static std::string OWNER_GROUP 		= "2";
@@ -2629,33 +2631,33 @@ void LLPanelLandAccess::refresh()
 				 cit != parcel->mAccessList.end(); ++cit)
 			{
 				const LLAccessEntry& entry = (*cit).second;
-				std::string suffix;
+				std::string prefix;
 				if (entry.mTime != 0)
 				{
 					LLStringUtil::format_map_t args;
 					S32 now = time(NULL);
 					S32 seconds = entry.mTime - now;
 					if (seconds < 0) seconds = 0;
-					suffix.assign(" (");
+					prefix.assign(" (");
 					if (seconds >= 120)
 					{
 						args["[MINUTES]"] = llformat("%d", (seconds/60));
 						std::string buf = parent_floater->getString ("Minutes", args);
-						suffix.append(buf);
+						prefix.append(buf);
 					}
 					else if (seconds >= 60)
 					{
-						suffix.append("1 " + parent_floater->getString("Minute"));
+						prefix.append("1 " + parent_floater->getString("Minute"));
 					}
 					else
 					{
 						args["[SECONDS]"] = llformat("%d", seconds);
 						std::string buf = parent_floater->getString ("Seconds", args);
-						suffix.append(buf);
+						prefix.append(buf);
 					}
-					suffix.append(" " + parent_floater->getString("Remaining") + ")");
+					prefix.append(" " + parent_floater->getString("Remaining") + ") ");
 				}
-				mListAccess->addNameItem(entry.mID, ADD_DEFAULT, TRUE, suffix);
+				mListAccess->addNameItem(entry.mID, ADD_DEFAULT, TRUE, "", prefix);
 			}
 			mListAccess->sortByName(TRUE);
 		}
@@ -2679,33 +2681,33 @@ void LLPanelLandAccess::refresh()
 				 cit != parcel->mBanList.end(); ++cit)
 			{
 				const LLAccessEntry& entry = (*cit).second;
-				std::string suffix;
+				std::string prefix;
 				if (entry.mTime != 0)
 				{
 					LLStringUtil::format_map_t args;
 					S32 now = time(NULL);
 					S32 seconds = entry.mTime - now;
 					if (seconds < 0) seconds = 0;
-					suffix.assign(" (");
+					prefix.assign(" (");
 					if (seconds >= 120)
 					{
 						args["[MINUTES]"] = llformat("%d", (seconds/60));
 						std::string buf = parent_floater->getString ("Minutes", args);
-						suffix.append(buf);
+						prefix.append(buf);
 					}
 					else if (seconds >= 60)
 					{
-						suffix.append("1 " + parent_floater->getString("Minute"));
+						prefix.append("1 " + parent_floater->getString("Minute"));
 					}
 					else
 					{
 						args["[SECONDS]"] = llformat("%d", seconds);
 						std::string buf = parent_floater->getString ("Seconds", args);
-						suffix.append(buf);
+						prefix.append(buf);
 					}
-					suffix.append(" " + parent_floater->getString("Remaining") + ")");
+					prefix.append(" " + parent_floater->getString("Remaining") + ") ");
 				}
-				mListBanned->addNameItem(entry.mID, ADD_DEFAULT, TRUE, suffix);
+				mListBanned->addNameItem(entry.mID, ADD_DEFAULT, TRUE, "",  prefix);
 			}
 			mListBanned->sortByName(TRUE);
 		}
@@ -3127,17 +3129,21 @@ void LLPanelLandAccess::onClickRemoveBanned(void* data)
 //---------------------------------------------------------------------------
 LLPanelLandCovenant::LLPanelLandCovenant(LLParcelSelectionHandle& parcel)
 	: LLPanel(),
-	  // <FS:Zi> Fix covenant loading slowdowns
-	  mCovenantChanged(true),
-	  mCovenantRequested(false),
-	  mPreviousRegion(NULL),
-	  // <FS:Zi>
-	  mParcel(parcel)
-{	
+	  mParcel(parcel),
+	  mNextUpdateTime(0)
+{
 }
 
 LLPanelLandCovenant::~LLPanelLandCovenant()
 {
+}
+
+BOOL LLPanelLandCovenant::postBuild()
+{
+	mLastRegionID = LLUUID::null;
+	mNextUpdateTime = 0;
+
+	return TRUE;
 }
 
 // virtual
@@ -3146,20 +3152,6 @@ void LLPanelLandCovenant::refresh()
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	if(!region) return;
 		
-	// <FS:Zi> Fix covenant loading slowdowns
-	// Only refresh the covenant panel when we are looking at a different region now
-	if(region==mPreviousRegion)
-	{
-		return;
-	}
-
-	// We save the region pointer only here so a NULL region does not update mPreviousRegion.
-	// This means we don't update the covenant even when the user right clicked somewhere that
-	// invalidated the About Land floater. The covenant page does not clean up its elements,
-	// so the last region's data is still showing. -Zi
-	mPreviousRegion=region;
-	// </FS:Zi>
-
 	LLTextBox* region_name = getChild<LLTextBox>("region_name_text");
 	if (region_name)
 	{
@@ -3200,39 +3192,30 @@ void LLPanelLandCovenant::refresh()
 			changeable_clause->setText(getString("can_not_change"));
 		}
 	}
-	
-	// <FS:Zi> Fix covenant loading slowdowns
-	// only request a covenant when we are not already waiting for one
-	if(mCovenantRequested)
-	{
-		return;
-	}
-	mCovenantRequested=true;
-	// </FS:Zi>
 
-	// send EstateCovenantInfo message
-	LLMessageSystem *msg = gMessageSystem;
-	msg->newMessage("EstateCovenantRequest");
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID,	gAgent.getID());
-	msg->addUUIDFast(_PREHASH_SessionID,gAgent.getSessionID());
-	msg->sendReliable(region->getHost());
+	if (mLastRegionID != region->getRegionID()
+		|| mNextUpdateTime < LLTimer::getElapsedSeconds())
+	{
+		// Request Covenant Info
+		// Note: LLPanelLandCovenant doesn't change Covenant's content and any
+		// changes made by Estate floater should be requested by Estate floater
+		LLMessageSystem *msg = gMessageSystem;
+		msg->newMessage("EstateCovenantRequest");
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID,	gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID,gAgent.getSessionID());
+		msg->sendReliable(region->getHost());
+
+		mLastRegionID = region->getRegionID();
+		mNextUpdateTime = LLTimer::getElapsedSeconds() + COVENANT_REFRESH_TIME_SEC;
+	}
 }
 
 // static
 void LLPanelLandCovenant::updateCovenantText(const std::string &string)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	// <FS:Zi> Fix covenant loading slowdowns
-	// if (self)
-	// covenant received, allow requesting another one next time
-	self->mCovenantRequested=false;
-
-	// Only update covenant when Last Modified was found to be different and
-	// we still have a parcel selected. "Last Modified" will always be set before
-	// the covenant (see llviewermessage.cpp, process_covenant_reply()) -Zi
-	if(self && self->mCovenantChanged && self->mParcel->getParcel())
-	// </FS:Zi>
+	if (self)
 	{
 		LLViewerTextEditor* editor = self->getChild<LLViewerTextEditor>("covenant_editor");
 		editor->setText(string);
@@ -3254,32 +3237,10 @@ void LLPanelLandCovenant::updateEstateName(const std::string& name)
 void LLPanelLandCovenant::updateLastModified(const std::string& text)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	// <FS:Zi> Fix covenant loading slowdowns
-	// if (self)
-
-	// only update the last modified field when we still have no parcel selected
-	if(self && self->mParcel->getParcel())
+	if (self)
 	{
-	// </FS:Zi>
 		LLTextBox* editor = self->getChild<LLTextBox>("covenant_timestamp_text");
-		// <FS:Zi> Fix covenant loading slowdowns
-		// if (editor) editor->setText(text);
-		if(editor)
-		{
-			// check if Last Modified is different from before
-			if(editor->getText()!=text)
-			{
-				// Update Last Modified field and remember to allow covenant to change
-				editor->setText(text);
-				self->mCovenantChanged=true;
-			}
-			else
-			{
-				// Last Modified was the same, so don't allow the covenant to change
-				self->mCovenantChanged=false;
-			}
-		}
-		// </FS:Zi>
+		if (editor) editor->setText(text);
 	}
 }
 

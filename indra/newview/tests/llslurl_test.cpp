@@ -39,7 +39,21 @@ namespace
 static const char * const TEST_FILENAME("llslurl_test.xml");
 
 }
-	
+
+//
+// Stub implementation for LLTrans
+//
+class LLTrans
+{
+public:
+	static std::string getString(const std::string &xml_desc, const LLStringUtil::format_map_t& args);
+};
+
+std::string LLTrans::getString(const std::string &xml_desc, const LLStringUtil::format_map_t& args)
+{
+	return std::string();
+}
+
 // [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 // Stub implementation to get the test to compile properly
 #include "../rlvhandler.h"

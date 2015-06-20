@@ -275,7 +275,8 @@ static LLVector3 gAgentStartLookAt(1.0f, 0.f, 0.f);
 static std::string gAgentStartLocation = "safe";
 static bool mLoginStatePastUI = false;
 
-const S32 DEFAULT_MAX_AGENT_GROUPS = 25;
+const S32 DEFAULT_MAX_AGENT_GROUPS = 42;
+const S32 ALLOWED_MAX_AGENT_GROUPS = 500;
 
 boost::scoped_ptr<LLEventPump> LLStartUp::sStateWatcher(new LLEventStream("StartupState"));
 boost::scoped_ptr<LLStartupListener> LLStartUp::sListener(new LLStartupListener());
@@ -4299,16 +4300,33 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		std::string openid_token = response["openid_token"];
 		LLViewerMedia::openIDSetup(openid_url, openid_token);
 	}
-// <FS:AW  opensim max groups support>
-//	if(response.has("max-agent-groups")) {		
-//		std::string max_agent_groups(response["max-agent-groups"]);
+	// <FS:AW> opensim max groups support
+	//gMaxAgentGroups = DEFAULT_MAX_AGENT_GROUPS;
+	//if(response.has("max-agent-groups"))
+	//{
+	//	S32 agent_groups = atoi(std::string(response["max-agent-groups"]).c_str());
+	//	if (agent_groups > 0 && agent_groups <= ALLOWED_MAX_AGENT_GROUPS)
+	//	{
+	//		gMaxAgentGroups = agent_groups;
+	//		LL_INFOS("LLStartup") << "gMaxAgentGroups read from login.cgi: "
+	//			<< gMaxAgentGroups << LL_ENDL;
+	//	}
+	//	else
+	//	{
+	//		LL_INFOS("LLStartup") << "Invalid value received, using defaults for gMaxAgentGroups: "
+	//			<< gMaxAgentGroups << LL_ENDL;
+	//	}
+	//}
+	//else {
+	//	LL_INFOS("LLStartup") << "Missing max-agent-groups, using default value for gMaxAgentGroups: "
+	//						  << gMaxAgentGroups << LL_ENDL;
+	//}
 	if(response.has("max-agent-groups") || response.has("max_groups"))
 	{
 		std::string max_agent_groups;
 		response.has("max_groups") ?
 			max_agent_groups = response["max_groups"].asString()
 			: max_agent_groups = response["max-agent-groups"].asString();
-// </FS:AW  opensim max groups support>
 
 		gMaxAgentGroups = atoi(max_agent_groups.c_str());
 		LL_INFOS("LLStartup") << "gMaxAgentGroups read from login.cgi: "
@@ -4316,7 +4334,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	else
 	{
-// [CR] FIRE-12229
 #ifdef OPENSIM
 		gMaxAgentGroups = 0;
 		LL_INFOS("LLStartup") << "did not receive max-agent-groups. unlimited groups activated" << LL_ENDL;
@@ -4325,8 +4342,8 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		LL_INFOS("LLStartup") << "using gMaxAgentGroups default: "
 							  << gMaxAgentGroups << LL_ENDL;
 #endif
-// [CR] FIRE-12229
 	}
+	// </FS:AW>
 
 // <FS:AW opensim currency support>
 	std::string currency = "L$";

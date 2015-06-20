@@ -402,7 +402,6 @@ protected:
 	LLSafeHandle<LLParcelSelection>&	mParcel;
 };
 
-class LLViewerRegion;		// <FS:Zi> Fix covenant loading slowdowns
 
 class LLPanelLandCovenant
 :	public LLPanel
@@ -410,6 +409,7 @@ class LLPanelLandCovenant
 public:
 	LLPanelLandCovenant(LLSafeHandle<LLParcelSelection>& parcelp);
 	virtual ~LLPanelLandCovenant();
+	virtual BOOL postBuild();
 	void refresh();
 	static void updateCovenantText(const std::string& string);
 	static void updateEstateName(const std::string& name);
@@ -419,11 +419,9 @@ public:
 protected:
 	LLSafeHandle<LLParcelSelection>&	mParcel;
 
-	// <FS:Zi> Fix covenant loading slowdowns
-	bool mCovenantChanged;				// flag to allow covenant to be changed
-	bool mCovenantRequested;			// flag to remember if a covenant was already requested
-	LLViewerRegion* mPreviousRegion;	// remember the last region we requested a covenant from
-	// </FS:Zi>
+private:
+	LLUUID mLastRegionID;
+	F64 mNextUpdateTime; //seconds since client start
 };
 
 #endif

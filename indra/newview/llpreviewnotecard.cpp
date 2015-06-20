@@ -247,7 +247,7 @@ void LLPreviewNotecard::loadAsset()
 		LLPermissions perm(item->getPermissions());
 		BOOL is_owner = gAgent.allowOperation(PERM_OWNER, perm, GP_OBJECT_MANIPULATE);
 		BOOL allow_copy = gAgent.allowOperation(PERM_COPY, perm, GP_OBJECT_MANIPULATE);
-		BOOL allow_modify = gAgent.allowOperation(PERM_MODIFY, perm, GP_OBJECT_MANIPULATE);
+		BOOL allow_modify = canModify(mObjectUUID, item);
 
 		if (allow_copy || gAgent.isGodlike())
 		{
@@ -367,14 +367,11 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 			}
 
 			previewEditor->makePristine();
-
+			BOOL modifiable = preview->canModify(preview->mObjectID, preview->getItem());
 			// <FS:Ansariel> Force spell checker to check again after saving a NC,
 			//               or misspelled words wouldn't be shown
 			previewEditor->onSpellCheckSettingsChange();
 
-			const LLInventoryItem* item = preview->getItem();
-			BOOL modifiable = item && gAgent.allowOperation(PERM_MODIFY,
-								item->getPermissions(), GP_OBJECT_MANIPULATE);
 			preview->setEnabled(modifiable);
 			preview->mAssetStatus = PREVIEW_ASSET_LOADED;
 		}

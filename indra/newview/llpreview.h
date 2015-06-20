@@ -108,7 +108,11 @@ public:
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2012-02-06 (Catznip-3.2.1) | Added: Catznip-3.2.1
 	virtual void refreshFromItem();
 // [/SL:KB]
-	
+
+	// We can't modify Item or description in preview if either in-world Object
+	// or Item  itself is unmodifiable
+	static BOOL canModify(const LLUUID taskUUID, const LLInventoryItem* item);
+
 protected:
 	virtual void onCommit();
 

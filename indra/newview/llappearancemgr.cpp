@@ -1818,19 +1818,15 @@ bool LLAppearanceMgr::getCanRemoveFromCOF(const LLUUID& outfit_cat_id)
 	{
 		return false;
 	}
-
-	LLFindWearablesEx is_worn(/*is_worn=*/ true, /*include_body_parts=*/ false);
-	// <FS:Ansariel> FIRE-15516 / BUG-8431: Allow removing from outfits for folder hierarchy
-	//return gInventory.hasMatchingDirectDescendent(outfit_cat_id, is_worn);
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
+	LLFindWearablesEx is_worn(/*is_worn=*/ true, /*include_body_parts=*/ false);
 	gInventory.collectDescendentsIf(outfit_cat_id,
 		cats,
 		items,
 		LLInventoryModel::EXCLUDE_TRASH,
 		is_worn);
 	return items.size() > 0;
-	// </FS:Ansariel>
 }
 
 // static
@@ -2707,7 +2703,7 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 		LLPointer<LLInventoryCallback> copy_cb = new LLWearCategoryAfterCopy(append);
 		LLPointer<LLInventoryCallback> track_cb = new LLTrackPhaseWrapper(
 													std::string("wear_inventory_category_callback"), copy_cb);
-		LLPointer<AISCommand> cmd_ptr = new CopyLibraryCategoryCommand(category->getUUID(), parent_id, track_cb);
+		LLPointer<AISCommand> cmd_ptr = new CopyLibraryCategoryCommand(category->getUUID(), parent_id, track_cb, false);
 		ais_ran=cmd_ptr->run_command();
 	}
 
