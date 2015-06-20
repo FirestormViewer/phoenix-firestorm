@@ -329,7 +329,7 @@ Objekte: [N]
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ReturnAllTopObjects">
-		Möchten Sie alle aufgeführten Objekte ihren Eigentümern zurückgeben?
+		Möchten Sie alle aufgeführten Objekte ihren Eigentümern zurückgeben? Dies wird ALLE geskripteten Objekte in der Region zurückgeben!
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="DisableAllTopObjects">
@@ -2266,10 +2266,8 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		[QUESTION]
 		<usetemplate ignoretext="Vor dem Löschen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="HelpReportAbuseEmailLL">
-		Mit dieser Funktion können Sie Verstöße gegen die [http://secondlife.com/corporate/tos.php Servicebedingungen (EN)] und [http://secondlife.com/corporate/cs.php Community-Standards] melden.
-
-Alle gemeldeten Verstöße werden bearbeitet.
+	<notification name="ConfirmUnlink">Soll das ausgewählte Objekt wirklich getrennt werden?
+		<usetemplate ignoretext="Vor dem Trennen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.
@@ -3230,7 +3228,7 @@ Die Schaltfläche wird angezeigt, wenn genügend Platz vorhanden ist.
 	<notification name="MeshUploadError">
 		[LABEL] konnte nicht hochgeladen werden: [MESSAGE] [IDENTIFIER] 
 
-Details finden Sie in der Protokolldatei.
+[DETAILS] Siehe Firestorm.log für Details.
 	</notification>
 	<notification name="MeshUploadPermError">
 		Fehler beim Anfordern der Berechtigungen zum Hochladen des Netzes
@@ -4904,9 +4902,5 @@ Welche Bezeichnung soll für die Region
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
-	</notification>
-	<notification name="ConfirmUnlinkObjects">
-		Sollen das ausgewählte Objekt wirklich getrennt werden?
-		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt trenne" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 </notifications>

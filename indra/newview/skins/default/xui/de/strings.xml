@@ -5732,7 +5732,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="loading_chat_logs">
 		Laden...
 	</string>
-	
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">Die physische Form enthält Dreiecke, die zu klein sind. Versuchen Sie, das physische Modell zu vereinfachen.</string>
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">Die physische Form enthält fehlerhafte Bestätigungsdaten. Versuchen Sie, das physische Modell zu korrigieren.</string>
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">Die physische Form hat nicht die korrekte Version. Setzen Sie die Version für das physische Modell.</string>
+
 <!-- Firestorm-specific translations -->
 	<string name="MediaFilterActionAllow">
 		erlauben

@@ -10,13 +10,13 @@
 		&quot;Parcel_R_Dark&quot;
 	</floater.string>
 	<floater.string name="Minutes">
-		[MINUTES] Minuten
+		[MINUTES] Min.
 	</floater.string>
 	<floater.string name="Minute">
-		Minute
+		Min.
 	</floater.string>
 	<floater.string name="Seconds">
-		[SECONDS] Sekunden
+		[SECONDS] Sek.
 	</floater.string>
 	<floater.string name="Remaining">
 		Restzeit
