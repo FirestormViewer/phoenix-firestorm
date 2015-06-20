@@ -353,7 +353,9 @@ BOOL LLToolPie::handleLeftClickPick()
 
 		gGrabTransientTool = this;
 		mMouseButtonDown = false;
-		LLToolGrab::getInstance()->setClickedInMouselook(gAgentCamera.cameraMouselook());
+		// <FS:Ansariel> FIRE-15578: After exiting mouselook, left clicking on a touchable object opens build floater; We have it fixed within LLToolGrab
+		//LLToolGrab::getInstance()->setClickedInMouselook(gAgentCamera.cameraMouselook());
+		// </FS:Ansariel>
 		LLToolMgr::getInstance()->getCurrentToolset()->selectTool( LLToolGrab::getInstance() );
 		return LLToolGrab::getInstance()->handleObjectHit( mPick );
 	}
