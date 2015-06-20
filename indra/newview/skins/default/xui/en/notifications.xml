@@ -8364,7 +8364,7 @@ Select residents to share with.
     icon="alert.tga"
     type="alert">
       [LABEL] failed to upload: [MESSAGE] [IDENTIFIER]
-[DETAILS]See SecondLife.log for details
+[DETAILS] See Firestorm.log for details
   </notification>
    
   <notification
