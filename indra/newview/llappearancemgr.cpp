@@ -3882,19 +3882,31 @@ void LLAppearanceMgr::wearBaseOutfit()
 	updateCOF(base_outfit_id);
 }
 
-void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
+//void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
+// [/SL:KB]
 {
 	if (ids_to_remove.empty())
 	{
 		LL_WARNS() << "called with empty list, nothing to do" << LL_ENDL;
 		return;
 	}
-	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+	if (!cb)
+	{
+		cb = new LLUpdateAppearanceOnDestroy;
+	}
+// [/SL:KB]
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLUUID& id_to_remove = *it;
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-		removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+		removeCOFItemLinks(linked_item_id, cb, immediate_delete);
+// [/SL:KB]
+//		removeCOFItemLinks(linked_item_id, cb);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
 		clearPendingAttachment(linked_item_id);
 // [/SL:KB]
@@ -3902,11 +3914,21 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	}
 }
 
-void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
+//void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
+// [/SL:KB]
 {
 	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
-	removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+	if (!cb)
+	{
+		cb = new LLUpdateAppearanceOnDestroy;
+	}
+	removeCOFItemLinks(linked_item_id, cb, immediate_delete);
+// [/SL:KB]
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
+//	removeCOFItemLinks(linked_item_id, cb);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
 	clearPendingAttachment(linked_item_id);
 // [/SL:KB]
