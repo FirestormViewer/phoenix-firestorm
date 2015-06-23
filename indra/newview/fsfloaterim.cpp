@@ -229,6 +229,7 @@ void FSFloaterIM::onSnooze()
 	{
 		LLSD payload;
 		payload["session_id"] = mSessionID;
+		payload["snooze"] = true;
 		LLNotificationsUtil::add("ConfirmLeaveCall", LLSD(), payload, confirmLeaveCallCallback);
 		return;
 	}
@@ -1761,10 +1762,23 @@ void FSFloaterIM::confirmLeaveCallCallback(const LLSD& notification, const LLSD&
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	const LLSD& payload = notification["payload"];
 	LLUUID session_id = payload["session_id"];
+	bool snooze = payload["snooze"].asBoolean();
 
 	LLFloater* im_floater = LLFloaterReg::findInstance("fs_impanel", session_id);
 	if (option == 0 && im_floater != NULL)
 	{
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+		if (session)
+		{
+			if (snooze)
+			{
+				session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
+			}
+			else
+			{
+				session->mCloseAction = LLIMModel::LLIMSession::CLOSE_DEFAULT;
+			}
+		}
 		im_floater->closeFloater();
 	}
 
@@ -1841,6 +1855,7 @@ void FSFloaterIM::onClickCloseBtn(bool app_quitting)
 	{
 		LLSD payload;
 		payload["session_id"] = mSessionID;
+		payload["snooze"] = false;
 		LLNotificationsUtil::add("ConfirmLeaveCall", LLSD(), payload, confirmLeaveCallCallback);
 		return;
 	}
