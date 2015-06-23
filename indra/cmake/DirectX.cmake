@@ -3,6 +3,7 @@
 if (WINDOWS)
   find_path(DIRECTX_INCLUDE_DIR dxdiag.h
             "$ENV{DXSDK_DIR}/Include"
+            "$ENV{PROGRAMFILES}/Windows Kits/8.0/Include/um"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2010)/Include"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2009)/Include"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2009)/Include"
@@ -26,6 +27,7 @@ if (WINDOWS)
 
   find_path(DIRECTX_LIBRARY_DIR dxguid.lib
             "$ENV{DXSDK_DIR}/Lib/x86"
+            "$ENV{PROGRAMFILES}/Windows Kits/8.0/Lib/Win8/um/x86"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (June 2010)/Lib/x86"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (August 2009)/Lib/x86"
             "$ENV{PROGRAMFILES}/Microsoft DirectX SDK (March 2009)/Lib/x86"
