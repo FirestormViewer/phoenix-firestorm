@@ -1266,6 +1266,12 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
+		// <FS:Ansariel> Possible crash fix
+		if (!attachment)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		if (attachment->getIsHUDAttachment())
 		{
 			attachment->setAttachmentVisibility(TRUE);
