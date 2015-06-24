@@ -213,6 +213,10 @@ private:
 	
 	void sendParticipantsAddedNotification(const uuid_vec_t& uuids);
 
+	void confirmSnooze();
+	void snoozeDurationCallback(const LLSD& notification, const LLSD& response);
+	void snooze(S32 duration = -1);
+
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
 	S32 mLastMessageIndex;

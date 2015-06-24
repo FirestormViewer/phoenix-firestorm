@@ -4909,4 +4909,15 @@ Welche Bezeichnung soll für die Region
 		Sollen das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt trenne" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
+	<notification name="SnoozeDuration">
+		Zeitspanne in Sekunden, für die der Gruppenchat temporär unterdrückt werden soll:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="SnoozeDurationInvalidInput">
+		Bitte geben Sie einen gültigen Wert für die Zeitspanne ein!
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 </notifications>

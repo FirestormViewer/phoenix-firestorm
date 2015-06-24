@@ -211,8 +211,7 @@ void FSFloaterIM::onClose(bool app_quitting)
 
 void FSFloaterIM::onSnooze()
 {
-	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(
-				mSessionID);
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
 
 	if (session == NULL)
 	{
@@ -234,6 +233,52 @@ void FSFloaterIM::onSnooze()
 		return;
 	}
 
+	confirmSnooze();
+}
+
+void FSFloaterIM::confirmSnooze()
+{
+	if (gSavedSettings.getBOOL("FSEnablePerGroupSnoozeDuration"))
+	{
+		LLSD args;
+		args["DURATION"] = gSavedSettings.getS32("GroupSnoozeTime");
+
+		LLNotificationsUtil::add("SnoozeDuration", args, LLSD(), boost::bind(&FSFloaterIM::snoozeDurationCallback, this, _1, _2));
+		return;
+	}
+
+	snooze();
+}
+
+void FSFloaterIM::snoozeDurationCallback(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (0 == option)
+	{
+		std::istringstream duration_str(response["duration"].asString());
+		S32 duration(-1);
+		if (duration_str >> duration && duration >= 0)
+		{
+			snooze(duration);
+		}
+		else
+		{
+			LLNotificationsUtil::add("SnoozeDurationInvalidInput");
+		}
+	}
+}
+
+void FSFloaterIM::snooze(S32 duration /*= -1*/)
+{
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+
+	if (session == NULL)
+	{
+		LL_WARNS("FSFloaterIM") << "Empty session." << LL_ENDL;
+		return;
+	}
+
+	session->mSnoozeTime = duration;
 	session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
 
 	LLFloater::onClickCloseBtn();
@@ -1764,7 +1809,7 @@ void FSFloaterIM::confirmLeaveCallCallback(const LLSD& notification, const LLSD&
 	LLUUID session_id = payload["session_id"];
 	bool snooze = payload["snooze"].asBoolean();
 
-	LLFloater* im_floater = LLFloaterReg::findInstance("fs_impanel", session_id);
+	FSFloaterIM* im_floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
 	if (option == 0 && im_floater != NULL)
 	{
 		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
@@ -1772,12 +1817,11 @@ void FSFloaterIM::confirmLeaveCallCallback(const LLSD& notification, const LLSD&
 		{
 			if (snooze)
 			{
-				session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
+				im_floater->confirmSnooze();
+				return;
 			}
-			else
-			{
-				session->mCloseAction = LLIMModel::LLIMSession::CLOSE_DEFAULT;
-			}
+
+			session->mCloseAction = LLIMModel::LLIMSession::CLOSE_DEFAULT;
 		}
 		im_floater->closeFloater();
 	}
