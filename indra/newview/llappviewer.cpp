@@ -4008,8 +4008,8 @@ LLSD LLAppViewer::getViewerInfo() const
 	//}
 	if (gPacketsIn > 0)
 	{
-		info["PACKETS_LOST"] = LLStatViewer::PACKETS_LOST.getTotalSamples();
-		info["PACKETS_IN"] = LLStatViewer::PACKETS_IN.getTotalSamples();
+		info["PACKETS_LOST"] = S32(LLStatViewer::PACKETS_LOST.getTotalSamples());
+		info["PACKETS_IN"] = S32(LLStatViewer::PACKETS_IN.getTotalSamples());
 
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
