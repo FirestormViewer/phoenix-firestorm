@@ -4449,17 +4449,6 @@
       <key>Value</key>
       <integer>255</integer>
     </map>
-    <key>ForceInitialCOFDelay</key>
-    <map>
-      <key>Comment</key>
-      <string>Number of seconds to delay initial processing of COF contents</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <integer>0.0</integer>
-    </map>
     <key>ForceLoginURL</key>
     <map>
       <key>Comment</key>
