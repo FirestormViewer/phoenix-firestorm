@@ -39,6 +39,9 @@
 #include "llui.h"
 #include "llviewertexturelist.h"
 #include "llviewercamera.h"
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+#include "llfocusmgr.h"
+// [/RLVa:KB]
 #include "llhudmanager.h"
 #include "lltoolmgr.h"
 #include "lltoolgrab.h"
@@ -54,10 +57,17 @@ LLToolGun::LLToolGun( LLToolComposite* composite )
 
 void LLToolGun::handleSelect()
 {
-	gViewerWindow->hideCursor();
-	gViewerWindow->moveCursorToCenter();
-	gViewerWindow->getWindow()->setMouseClipping(TRUE);
-	mIsSelected = TRUE;
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+	if (gFocusMgr.getAppHasFocus())
+	{
+// [/RLVa:KB]
+		gViewerWindow->hideCursor();
+		gViewerWindow->moveCursorToCenter();
+		gViewerWindow->getWindow()->setMouseClipping(TRUE);
+		mIsSelected = TRUE;
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+	}
+// [/RLVa:KB]
 }
 
 void LLToolGun::handleDeselect()
