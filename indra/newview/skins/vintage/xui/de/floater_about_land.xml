@@ -496,5 +496,6 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				<button label="Entfernen" label_selected="Entfernen" name="remove_banned"/>
 			</panel>
 		</panel>
+		<panel label="Erlebnisse" name="land_experiences_panel"/>
 	</tab_container>
 </floater>

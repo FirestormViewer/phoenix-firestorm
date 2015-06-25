@@ -2157,7 +2157,7 @@ Only large parcels can be listed in search.
        <panel
           border="true"
           follows="all"
-          label="EXPERIENCES"
+          label="Experiences"
           layout="topleft"
           left="0"
           top="0"
