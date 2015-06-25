@@ -6,7 +6,7 @@
   enabled="true"
   can_resize="true"
   help_topic="floater_experienceprofile"
-  title="EXPERIENCE PROFILE"
+  title="Experience Profile"
   save_rect="true"
   min_width="325"
   min_height="325"
@@ -88,6 +88,7 @@
             animate="false"
             top="0"
             orientation="vertical"
+            name="ls1"
             width="315">
             <layout_panel
               follows="all"
@@ -264,6 +265,7 @@
               auto_resize="false"
               name="marketplace panel">
               <text
+                name="Marketplace"
                 type="string"
                 length="1"
                 follows="left|top"
@@ -287,6 +289,7 @@
               </text>
             </layout_panel>
             <layout_panel
+              name="owner panel"
               follows="left|top|right"
               height="18"
               left="0"
