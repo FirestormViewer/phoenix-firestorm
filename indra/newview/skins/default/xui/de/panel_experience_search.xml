@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="SEARCH">
+<panel name="panel_experience_search" label="Suche">
 	<string name="not_found">
 		„[TEXT]“ nicht gefunden
 	</string>
@@ -22,7 +22,13 @@
 		&quot;Parcel_R_Light&quot;
 	</string>
 	<panel name="search_panel">
+		<text name="lbl name part">
+			Teil des Names eingeben:
+		</text>
 		<button label="Los" name="find"/>
+		<text name="lbl max content rating">
+			Maximale Inhalts-Einstufung:
+		</text>
 		<icons_combo_box label="Moderat" name="maturity">
 			<icons_combo_box.item label="Adult" name="Adult" value="42"/>
 			<icons_combo_box.item label="Moderat" name="Mature" value="21"/>
