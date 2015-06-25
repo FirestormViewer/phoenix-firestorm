@@ -219,6 +219,13 @@ void LLAttachmentsMgr::requestAttachments(attachments_vec_t& attachment_requests
 
 void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
 {
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	if (!LLAppearanceMgr::instance().getAttachmentInvLinkEnable())
+	{
+		return;
+	}
+// [/SL:KB]
+
     if (mRecentlyArrivedAttachments.size())
     {
         // One or more attachments have arrived but have not yet been
