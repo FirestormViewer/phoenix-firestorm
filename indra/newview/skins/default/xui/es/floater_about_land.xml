@@ -323,7 +323,6 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			</panel.string>
 			<panel.string name="DirectoryFee">
 				Mostrar en la Búsqueda ([DIRECTORY_FEE] L$/semana)
-			</panel.string>
 			<text name="allow_label">
 				Permitir a otros Residentes:
 			</text>
@@ -461,9 +460,6 @@ los medios:
 			<panel.string name="estate_override">
 				Una o más de esta opciones está configurada a nivel del estado
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Acceso a esta parcela
-			</text>
 			<check_box label="Permitir el acceso público (en caso contrario, se crearán líneas de prohibición)" name="public_access"/>
 			<text name="Only Allow">
 				Permitir únicamente el acceso a los Residentes que:
@@ -495,5 +491,6 @@ los medios:
 				<button label="Quitar" label_selected="Quitar" name="remove_banned"/>
 			</panel>
 		</panel>
+		<panel label="Experiencas" name="land_experiences_panel"/>
 	</tab_container>
 </floater>

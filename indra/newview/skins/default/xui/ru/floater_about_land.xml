@@ -453,5 +453,6 @@
             <button label="Удалить" label_selected="Удалить"  name="remove_banned" />
              </panel>
         </panel>
+		<panel label="ПРИКЛЮЧЕНИЯ" name="land_experiences_panel"/>
     </tab_container>
 </floater>
