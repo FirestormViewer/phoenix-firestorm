@@ -79,6 +79,11 @@ void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
 
 void LLAttachmentsMgr::onAttachmentRequested(const LLUUID& item_id)
 {
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	if (item_id.isNull())
+		return;
+// [/SL:KB]
+
 	LLViewerInventoryItem *item = gInventory.getItem(item_id);
 	LL_DEBUGS("Avatar") << "ATT attachment was requested "
 						<< (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;
