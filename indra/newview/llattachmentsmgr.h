@@ -87,6 +87,15 @@ public:
     void onDetachRequested(const LLUUID& inv_item_id);
     void onDetachCompleted(const LLUUID& inv_item_id);
 
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
+public:
+	void clearPendingAttachmentLink(const LLUUID& idItem);
+	bool getPendingAttachments(std::set<LLUUID>& ids) const;
+protected:
+	void onRegisterAttachmentComplete(const LLUUID& idAttachLink);
+	friend class LLRegisterAttachmentCallback;
+// [/SL:KB]
+
 private:
 
     class LLItemRequestTimes: public std::map<LLUUID,LLTimer>
@@ -124,6 +133,11 @@ private:
     // Attachments that have arrived but have not been linked in the COF yet.
     std::set<LLUUID> mRecentlyArrivedAttachments;
     LLTimer mCOFLinkBatchTimer;
+
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
+	// Attachments that have pending link creation
+	std::set<LLUUID> mPendingAttachLinks;
+// [/SL:KB]
 
 //    // Attachments that are linked in the COF but may be invalid.
 //	LLItemRequestTimes mQuestionableCOFLinks;

@@ -2365,6 +2365,26 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 	// Update attachments to match those requested.
 	if (isAgentAvatarValid())
 	{
+		// Include attachments which should be in COF but don't have their link created yet
+		std::set<LLUUID> pendingAttachments;
+		if (LLAttachmentsMgr::instance().getPendingAttachments(pendingAttachments))
+		{
+			for (const LLUUID& idAttachItem : pendingAttachments)
+			{
+				if ( (!gAgentAvatarp->isWearingAttachment(idAttachItem)) || (isLinkedInCOF(idAttachItem)) )
+				{
+					LLAttachmentsMgr::instance().clearPendingAttachmentLink(idAttachItem);
+					continue;
+				}
+
+				LLViewerInventoryItem* pAttachItem = gInventory.getItem(idAttachItem);
+				if (pAttachItem)
+				{
+					obj_items.push_back(pAttachItem);
+				}
+			}
+		}
+
 		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << obj_items.size() << " attachments" << LL_ENDL;
 
 		LLAgentWearables::llvo_vec_t objects_to_remove;
@@ -3925,6 +3945,9 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		removeCOFItemLinks(linked_item_id, cb, immediate_delete);
 // [/SL:KB]
 //		removeCOFItemLinks(linked_item_id, cb);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-03-01 (Catznip-3.7)
+		LLAttachmentsMgr::instance().clearPendingAttachmentLink(linked_item_id);
+// [/SL:KB]
 		addDoomedTempAttachment(linked_item_id);
 	}
 }
