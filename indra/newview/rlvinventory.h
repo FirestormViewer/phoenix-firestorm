@@ -18,12 +18,9 @@
 #define RLV_INVENTORY_H
 
 #include "llinventoryfunctions.h"
-#include "llinventorymodel.h"
 #include "llinventoryobserver.h"
 #include "llsingleton.h"
-#include "llviewerinventory.h"
 
-#include "rlvcommon.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 
