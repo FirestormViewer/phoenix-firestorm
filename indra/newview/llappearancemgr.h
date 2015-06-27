@@ -235,6 +235,9 @@ public:
 	void requestServerAppearanceUpdate();
 
 	void incrementCofVersion(LLHTTPClient::ResponderPtr responder_ptr = NULL);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+	void syncCofVersionAndRefresh();
+// [/SL:KB]
 
 	U32 getNumAttachmentsInCOF();
 
