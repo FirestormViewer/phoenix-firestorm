@@ -505,14 +505,14 @@ bool RlvGiveToRLVOffer::createDestinationFolder(const std::string& strPath)
 			const LLUUID& idRlvRoot = RlvInventory::instance().getSharedRootID();
 			if (idRlvRoot.notNull())
 			{
-				onCategoryCreateCallback(LLSD().with("folder_id", idRlvRoot), this);
+				onCategoryCreateCallback(idRlvRoot, this);
 			}
 			else
 			{
 				inventory_func_type f = boost::bind(RlvGiveToRLVOffer::onCategoryCreateCallback, _1, this);
 				const LLUUID idTemp = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, RLV_ROOT_FOLDER, f);
 				if (idTemp.notNull())
-					onCategoryCreateCallback(LLSD().with("folder_id", idTemp), this);
+					onCategoryCreateCallback(idTemp, this);
 			}
 			return true;
 		}
