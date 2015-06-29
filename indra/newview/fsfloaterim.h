@@ -150,6 +150,8 @@ public:
 
 	void updateUnreadMessageNotification(S32 unread_messages);
 
+	void loadInitialInvitedIDs();
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -174,8 +176,9 @@ private:
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 	void fetchAvatarName(LLUUID& agent_id);
 	
-	BOOL dropCallingCard(LLInventoryItem* item, BOOL drop);
-	BOOL dropCategory(LLInventoryCategory* category, BOOL drop);
+	bool dropCallingCard(LLInventoryItem* item, bool drop);
+	bool dropCategory(LLInventoryCategory* category, bool drop);
+	bool dropPerson(LLUUID* person_id, bool drop);
 
 	BOOL isInviteAllowed() const;
 	BOOL inviteToSession(const uuid_vec_t& agent_ids);
@@ -217,6 +220,11 @@ private:
 	void snoozeDurationCallback(const LLSD& notification, const LLSD& response);
 	void snooze(S32 duration = -1);
 
+	void onAddButtonClicked();
+	bool canAddSelectedToChat(const uuid_vec_t& uuids);
+	void addSessionParticipants(const uuid_vec_t& uuids);
+	void addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids);
+
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
 	S32 mLastMessageIndex;
@@ -244,12 +252,17 @@ private:
 	bool mSessionInitialized;
 	LLSD mQueuedMsgsForInit;
 
+	bool mIsP2PChat;
+
 	LLVoiceChannel* mVoiceChannel;
 	
 	S32 mInputEditorPad;
 	S32 mChatLayoutPanelHeight;
 	S32 mFloaterHeight;
-	
+
+	uuid_vec_t mInvitedParticipants;
+	uuid_vec_t mPendingParticipants;
+
 	boost::signals2::connection mAvatarNameCacheConnection;
 };
 

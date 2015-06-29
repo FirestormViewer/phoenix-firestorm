@@ -120,6 +120,8 @@ public:
 // [/SL:KB]
 		LLUUID mOtherParticipantID;
 		uuid_vec_t mInitialTargetIDs;
+		// <FS:Ansariel> Needed to store IDs of initially invited agents; required for FS Communication UI, as original IM floater gets destroyed
+		uuid_vec_t mInitialInvitedIDs;
 		std::string mHistoryFileName;
 
 		// connection to voice channel state change signal

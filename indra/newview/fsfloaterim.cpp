@@ -49,6 +49,7 @@
 #include "llchiclet.h"
 #include "llchicletbar.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
+#include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
 #include "llgroupactions.h"
 #include "llhttpclient.h"
@@ -105,13 +106,10 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mUnreadMessagesNotificationPanel(NULL),
 	mUnreadMessagesNotificationTextBox(NULL)
 {
-	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
-	if (im_session)
+	initIMSession(session_id);
+	
+	switch (mDialog)
 	{
-		mSessionInitialized = im_session->mSessionInitialized;
-		
-		mDialog = im_session->mType;
-		switch(mDialog){
 		case IM_NOTHING_SPECIAL:
 		case IM_SESSION_P2P_INVITE:
 			mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelIMControl, this);
@@ -123,7 +121,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 			setCanSnooze(TRUE);
 			mFactoryMap["panel_im_control_panel"] = LLCallbackMap(createPanelGroupControl, this);
 			break;
-		case IM_SESSION_INVITE:		
+		case IM_SESSION_INVITE:
 			if (gAgent.isInGroup(mSessionID))
 			{
 				setCanSnooze(TRUE);
@@ -135,9 +133,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 			}
 			break;
 		default: break;
-		}
 	}
-	
+
 	mCommitCallbackRegistrar.add("IMSession.Menu.Action", boost::bind(&FSFloaterIM::doToSelected, this, _2));
 	mEnableCallbackRegistrar.add("IMSession.Menu.Enable", boost::bind(&FSFloaterIM::checkEnabled, this, _2));
 	
@@ -523,6 +520,8 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
 		LLAvatarActions::teleportRequest(mOtherParticipantUUID);
 	else if (command == "share")
 		LLAvatarActions::share(mOtherParticipantUUID);
+	else if (command == "add_participant")
+		onAddButtonClicked();
 	else if (command == "pay")
 		LLAvatarActions::pay(mOtherParticipantUUID);
 	else if (command == "show_profile")
@@ -743,6 +742,7 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("add_participant_panel")->setVisible(false);
 				
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION end" << LL_ENDL;
 				break;
@@ -970,6 +970,13 @@ void FSFloaterIM::draw()
 		LL_DEBUGS("TypingMsgs") << "Received: is typing cleared due to timeout" << LL_ENDL;
 		removeTypingIndicator();
 		mOtherTyping = false;
+	}
+
+	// add people who were added via dropPerson()
+	if (!mPendingParticipants.empty())
+	{
+		addSessionParticipants(mPendingParticipants);
+		mPendingParticipants.clear();
 	}
 
 	LLTransientDockableFloater::draw();
@@ -1260,14 +1267,17 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
 
 
 	//need to send delayed messaged collected while waiting for session initialization
-	if (!mQueuedMsgsForInit.size()) return;
-	LLSD::array_iterator iter;
-	for ( iter = mQueuedMsgsForInit.beginArray();
-		iter != mQueuedMsgsForInit.endArray();
-		++iter)
+	if (mQueuedMsgsForInit.size())
 	{
-		LLIMModel::sendMessage(iter->asString(), mSessionID,
-			mOtherParticipantUUID, mDialog);
+		LLSD::array_iterator iter;
+		for ( iter = mQueuedMsgsForInit.beginArray();
+					iter != mQueuedMsgsForInit.endArray(); ++iter)
+		{
+			LLIMModel::sendMessage(iter->asString(), mSessionID,
+				mOtherParticipantUUID, mDialog);
+		}
+
+		mQueuedMsgsForInit.clear();
 	}
 }
 
@@ -1489,31 +1499,68 @@ void FSFloaterIM::processIMTyping(const LLIMInfo* im_info, BOOL typing)
 
 void FSFloaterIM::processAgentListUpdates(const LLSD& body)
 {
-	if ( !body.isMap() ) return;
+	loadInitialInvitedIDs();
 
-	if ( body.has("agent_updates") && body["agent_updates"].isMap() )
+	uuid_vec_t joined_uuids;
+
+	if (body.isMap() && body.has("agent_updates") && body["agent_updates"].isMap())
 	{
-		LLSD agent_data = body["agent_updates"].get(gAgentID.asString());
-		if (agent_data.isMap() && agent_data.has("info"))
+		LLSD::map_const_iterator update_it;
+		for(update_it = body["agent_updates"].beginMap();
+			update_it != body["agent_updates"].endMap();
+			++update_it)
 		{
-			LLSD agent_info = agent_data["info"];
+			LLUUID agent_id(update_it->first);
+			LLSD agent_data = update_it->second;
 
-			if (agent_info.has("mutes"))
+			if (agent_data.isMap())
 			{
-				BOOL moderator_muted_text = agent_info["mutes"]["text"].asBoolean(); 
-				mInputEditor->setEnabled(!moderator_muted_text);
-				std::string label;
-				if (moderator_muted_text)
-					label = LLTrans::getString("IM_muted_text_label");
-				else
-					label = LLTrans::getString("IM_to_label") + " " + LLIMModel::instance().getName(mSessionID);
-				mInputEditor->setLabel(label);
+				// store the new participants in joined_uuids
+				if (agent_data.has("transition") && agent_data["transition"].asString() == "ENTER")
+				{
+					joined_uuids.push_back(agent_id);
+				}
 
-				if (moderator_muted_text)
-					LLNotificationsUtil::add("TextChatIsMutedByModerator");
+				// process the moderator mutes
+				if (agent_id == gAgentID && agent_data.has("info") && agent_data["info"].has("mutes"))
+				{
+					BOOL moderator_muted_text = agent_data["info"]["mutes"]["text"].asBoolean();
+					mInputEditor->setEnabled(!moderator_muted_text);
+					std::string label;
+					if (moderator_muted_text)
+						label = LLTrans::getString("IM_muted_text_label");
+					else
+						label = LLTrans::getString("IM_to_label") + " " + LLIMModel::instance().getName(mSessionID);
+					mInputEditor->setLabel(label);
+
+					if (moderator_muted_text)
+						LLNotificationsUtil::add("TextChatIsMutedByModerator");
+				}
 			}
 		}
 	}
+
+	// the vectors need to be sorted for computing the intersection and difference
+	std::sort(mInvitedParticipants.begin(), mInvitedParticipants.end());
+	std::sort(joined_uuids.begin(), joined_uuids.end());
+
+	uuid_vec_t intersection; // uuids of invited residents who have joined the conversation
+	std::set_intersection(mInvitedParticipants.begin(), mInvitedParticipants.end(),
+						  joined_uuids.begin(), joined_uuids.end(),
+						  std::back_inserter(intersection));
+
+	if (intersection.size() > 0)
+	{
+		sendParticipantsAddedNotification(intersection);
+	}
+
+	// Remove all joined participants from invited array.
+	// The difference between the two vectors (the elements in mInvitedParticipants which are not in joined_uuids)
+	// is placed at the beginning of mInvitedParticipants, then all other elements are erased.
+	mInvitedParticipants.erase(std::set_difference(mInvitedParticipants.begin(), mInvitedParticipants.end(),
+												   joined_uuids.begin(), joined_uuids.end(),
+												   mInvitedParticipants.begin()),
+							   mInvitedParticipants.end());
 }
 
 void FSFloaterIM::sendParticipantsAddedNotification(const uuid_vec_t& uuids)
@@ -1583,15 +1630,26 @@ BOOL FSFloaterIM::handleDragAndDrop(S32 x, S32 y, MASK mask,
 						   void *cargo_data, EAcceptance *accept,
 						   std::string& tooltip_msg)
 {
+	if (cargo_type == DAD_PERSON)
+	{
+		if (dropPerson(static_cast<LLUUID*>(cargo_data), drop))
+		{
+			*accept = ACCEPT_YES_MULTI;
+		}
+		else
+		{
+			*accept = ACCEPT_NO;
+		}
+	}
 
-	if (mDialog == IM_NOTHING_SPECIAL)
+	else if (mDialog == IM_NOTHING_SPECIAL)
 	{
 		LLToolDragAndDrop::handleGiveDragAndDrop(mOtherParticipantUUID, mSessionID, drop,
 												 cargo_type, cargo_data, accept);
 	}
 
 	// handle case for dropping calling cards (and folders of calling cards) onto invitation panel for invites
-	else if (isInviteAllowed())
+	else if (isInviteAllowed() && !mIsP2PChat)
 	{
 		*accept = ACCEPT_NO;
 
@@ -1613,30 +1671,37 @@ BOOL FSFloaterIM::handleDragAndDrop(S32 x, S32 y, MASK mask,
 	return TRUE;
 }
 
-BOOL FSFloaterIM::dropCallingCard(LLInventoryItem* item, BOOL drop)
+bool FSFloaterIM::dropCallingCard(LLInventoryItem* item, bool drop)
 {
-	BOOL rv = isInviteAllowed();
-	if(rv && item && item->getCreatorUUID().notNull())
+	bool rv = true;
+	if(item && item->getCreatorUUID().notNull())
 	{
-		if(drop)
+		uuid_vec_t ids;
+		ids.push_back(item->getCreatorUUID());
+		if (canAddSelectedToChat(ids))
 		{
-			uuid_vec_t ids;
-			ids.push_back(item->getCreatorUUID());
-			inviteToSession(ids);
+			if (drop)
+			{
+				mPendingParticipants.push_back(item->getCreatorUUID());
+			}
+		}
+		else
+		{
+			rv = false;
 		}
 	}
 	else
 	{
 		// set to false if creator uuid is null.
-		rv = FALSE;
+		rv = false;
 	}
 	return rv;
 }
 
-BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
+bool FSFloaterIM::dropCategory(LLInventoryCategory* category, bool drop)
 {
-	BOOL rv = isInviteAllowed();
-	if(rv && category)
+	bool rv = true;
+	if(category)
 	{
 		LLInventoryModel::cat_array_t cats;
 		LLInventoryModel::item_array_t items;
@@ -1649,9 +1714,9 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 		S32 count = items.size();
 		if(count == 0)
 		{
-			rv = FALSE;
+			rv = false;
 		}
-		else if(drop)
+		else
 		{
 			uuid_vec_t ids;
 			ids.reserve(count);
@@ -1659,17 +1724,48 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 			{
 				ids.push_back(items.at(i)->getCreatorUUID());
 			}
-			inviteToSession(ids);
+
+			if (canAddSelectedToChat(ids))
+			{
+				if (drop)
+				{
+					mPendingParticipants.insert(mPendingParticipants.end(), ids.begin(), ids.end());
+				}
+			}
+			else
+			{
+				rv = false;
+			}
 		}
 	}
 	return rv;
 }
 
+bool FSFloaterIM::dropPerson(LLUUID* person_id, bool drop)
+{
+	bool res = person_id && person_id->notNull();
+	if(res)
+	{
+		uuid_vec_t ids;
+		ids.push_back(*person_id);
+
+		res = canAddSelectedToChat(ids);
+		if(res && drop)
+		{
+			// these people will be added during the next draw() call
+			// (so they can be added all at once)
+			mPendingParticipants.push_back(*person_id);
+		}
+	}
+
+	return res;
+}
+
 BOOL FSFloaterIM::isInviteAllowed() const
 {
-
-	return ((IM_SESSION_CONFERENCE_START == mDialog) ||
-			(IM_SESSION_INVITE == mDialog && !gAgent.isInGroup(mSessionID)));
+	return ( (IM_SESSION_CONFERENCE_START == mDialog)
+			 || (IM_SESSION_INVITE == mDialog && !gAgent.isInGroup(mSessionID))
+			 || mIsP2PChat);
 }
 
 class FSSessionInviteResponder : public LLHTTPClient::Responder
@@ -1964,6 +2060,7 @@ void FSFloaterIM::initIMSession(const LLUUID& session_id)
 	
 	if (session)
 	{
+		mIsP2PChat = session->isP2PSessionType();
 		mSessionInitialized = session->mSessionInitialized;
 		mDialog = session->mType;
 	}
@@ -1989,5 +2086,160 @@ void FSFloaterIM::updateUnreadMessageNotification(S32 unread_messages)
 	{
 		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
 		mUnreadMessagesNotificationPanel->setVisible(TRUE);
+	}
+}
+
+void FSFloaterIM::onAddButtonClicked()
+{
+	LLView* button = findChild<LLButton>("add_participant_btn");
+	LLFloater* root_floater = this;
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterIM::addSessionParticipants, this, _1), TRUE, TRUE, FALSE, root_floater->getName(), button);
+	if (!picker)
+	{
+		return;
+	}
+
+	// Need to disable 'ok' button when selected users are already in conversation.
+	picker->setOkBtnEnableCb(boost::bind(&FSFloaterIM::canAddSelectedToChat, this, _1));
+	
+	if (root_floater)
+	{
+		root_floater->addDependentFloater(picker);
+	}
+}
+
+bool FSFloaterIM::canAddSelectedToChat(const uuid_vec_t& uuids)
+{
+	if (!LLIMModel::instance().findIMSession(mSessionID)
+		|| mDialog == IM_SESSION_GROUP_START
+		|| (mDialog == IM_SESSION_INVITE && gAgent.isInGroup(mSessionID)))
+	{
+		return false;
+	}
+
+	if (mIsP2PChat)
+	{
+		// For a P2P session just check if we are not adding the other participant.
+
+		for (uuid_vec_t::const_iterator id = uuids.begin();
+				id != uuids.end(); ++id)
+		{
+			if (*id == mOtherParticipantUUID)
+			{
+				return false;
+			}
+		}
+	}
+	else
+	{
+		// For a conference session we need to check against the list from LLSpeakerMgr,
+		// because this list may change when participants join or leave the session.
+
+		LLSpeakerMgr::speaker_list_t speaker_list;
+		LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+		if (speaker_mgr)
+		{
+			speaker_mgr->getSpeakerList(&speaker_list, true);
+		}
+	
+		for (uuid_vec_t::const_iterator id = uuids.begin();
+				id != uuids.end(); ++id)
+		{
+			for (LLSpeakerMgr::speaker_list_t::const_iterator it = speaker_list.begin();
+					it != speaker_list.end(); ++it)
+			{
+				const LLPointer<LLSpeaker>& speaker = *it;
+				if (*id == speaker->mID)
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+void FSFloaterIM::addSessionParticipants(const uuid_vec_t& uuids)
+{
+	if (mIsP2PChat)
+	{
+		LLSD payload;
+		LLSD args;
+
+		LLNotificationsUtil::add("ConfirmAddingChatParticipants", args, payload,
+				boost::bind(&FSFloaterIM::addP2PSessionParticipants, this, _1, _2, uuids));
+	}
+	else
+	{
+		if(findInstance(mSessionID))
+		{
+			// remember whom we have invited, to notify others later, when the invited ones actually join
+			mInvitedParticipants.insert(mInvitedParticipants.end(), uuids.begin(), uuids.end());
+		}
+		
+		inviteToSession(uuids);
+	}
+}
+
+void FSFloaterIM::addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option != 0)
+	{
+		return;
+	}
+
+	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
+
+	// first check whether this is a voice session
+	bool is_voice_call = voice_channel != NULL && voice_channel->isActive();
+
+	uuid_vec_t temp_ids;
+	uuid_vec_t invited_ids;
+
+	// Add the initial participant of a P2P session
+	temp_ids.push_back(mOtherParticipantUUID);
+	temp_ids.insert(temp_ids.end(), uuids.begin(), uuids.end());
+
+	LLUUID session_id = mSessionID;
+
+	// then we can close the current session
+	if(findInstance(mSessionID))
+	{
+		// remember whom we have invited, to notify others later, when the invited ones actually join
+		mInvitedParticipants.insert(mInvitedParticipants.end(), uuids.begin(), uuids.end());
+
+		invited_ids.insert(invited_ids.end(), mInvitedParticipants.begin(), mInvitedParticipants.end());
+
+		// Ansariel: This will result in the floater actually being closed as opposed in CHUI!
+		onClose(false);
+	}
+
+	// Start a new ad hoc voice call if we invite new participants to a P2P call,
+	// or start a text chat otherwise.
+	if (is_voice_call)
+	{
+		session_id = LLAvatarActions::startAdhocCall(temp_ids, session_id);
+	}
+	else
+	{
+		session_id = LLAvatarActions::startConference(temp_ids, session_id);
+	}
+
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+	if (session)
+	{
+		session->mInitialInvitedIDs = invited_ids;
+	}
+}
+
+void FSFloaterIM::loadInitialInvitedIDs()
+{
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+	if (session && !session->mInitialInvitedIDs.empty())
+	{
+		mInvitedParticipants = session->mInitialInvitedIDs;
+		session->mInitialInvitedIDs.clear();
 	}
 }
