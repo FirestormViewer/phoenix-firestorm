@@ -540,7 +540,7 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
 	{
 		if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
 		{
-			LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
+			LLFloaterReg::showInstance("preview_conversation", mSessionID, TRUE);
 		}
 		else
 		{
@@ -620,7 +620,7 @@ void FSFloaterIM::updateCallButton()
 	
 	if (!session) 
 	{
-		getChild<LLButton>("call_btn")->setEnabled(false);
+		getChild<LLButton>("call_btn")->setEnabled(FALSE);
 		return;
 	}
 	
@@ -677,7 +677,7 @@ BOOL FSFloaterIM::postBuild()
 	
 	// AO: always hide the control panel to start.
 	LL_DEBUGS("FSFloaterIM") << "mControlPanel->getParent()" << mControlPanel->getParent() << LL_ENDL;
-	mControlPanel->getParent()->setVisible(false);
+	mControlPanel->getParent()->setVisible(FALSE);
 
 	LL_DEBUGS("FSFloaterIM") << "buttons setup in IM start" << LL_ENDL;
 
@@ -702,10 +702,10 @@ BOOL FSFloaterIM::postBuild()
 			case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
 			{
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::P2P_SESSION" << LL_ENDL;
-				getChild<LLLayoutPanel>("slide_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("slide_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
 				
 				LL_DEBUGS("FSFloaterIM") << "adding FSFloaterIM removing/adding particularfriendobserver" << LL_ENDL;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
@@ -735,14 +735,14 @@ BOOL FSFloaterIM::postBuild()
 			case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
 			{
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION start" << LL_ENDL;
-				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("add_participant_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("profile_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("friend_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("tp_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("share_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("pay_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("add_participant_panel")->setVisible(FALSE);
 				
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::GROUP_SESSION end" << LL_ENDL;
 				break;
@@ -750,21 +750,21 @@ BOOL FSFloaterIM::postBuild()
 			case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
 			{
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << LL_ENDL;
-				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("profile_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("friend_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("tp_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("share_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("pay_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
 				LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION end" << LL_ENDL;
 				break;
 			}
 			default:
 				LL_DEBUGS("FSFloaterIM") << "default buttons start" << LL_ENDL;
-				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);		
+				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(FALSE);
+				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(FALSE);
 				LL_DEBUGS("FSFloaterIM") << "default buttons end" << LL_ENDL;
 				break;
 		}
