@@ -684,7 +684,6 @@ support@secondlife.com.</string>
 	<string name="MarketplaceURL_LearnMore">https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more</string>
 	<string name="InventoryOutboxNotMerchantTitle">Любой желающий может продавать товары на Торговой площадке.</string>
 	<string name="InventoryOutboxNotMerchantTooltip"></string>
-	<string name="JoinAnExperience"/>
 	<string name="InventoryOutboxNotMerchant">
 Если вы хотите стать торговцем, вы должны будете создать магазин на [[MARKETPLACE_CREATE_STORE_URL] Торговой площадке].</string>
 	<string name="InventoryOutboxNoItemsTitle">Ваша папка 'Исходящие' пуста.</string>
@@ -2388,7 +2387,6 @@ We are accessing your account on the [[MARKETPLACE_CREATE_STORE_URL] Marketplace
   <string name="UserDictionary">[User]</string>
   
   <!-- Conversation log messages -->
-	</string>
 	<string name="experience_tools_experience">
 		Приключение
 	</string>
@@ -2469,6 +2467,7 @@ We are accessing your account on the [[MARKETPLACE_CREATE_STORE_URL] Marketplace
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Разрешение
+	</string>
   <string name="logging_calls_disabled_log_empty">
     Conversations are not being logged. To begin keeping a log, choose "Save: Log only" or "Save: Log and transcripts" under Preferences > Privacy.
   </string>
