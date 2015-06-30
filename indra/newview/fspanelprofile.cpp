@@ -1364,6 +1364,7 @@ void FSPanelPick::setSnapshotId(const LLUUID& id)
 void FSPanelPick::setPickName(const std::string& name)
 {
 	mPickName->setValue(name);
+	updateTabLabel(name);
 }
 
 const std::string FSPanelPick::getPickName()
@@ -1409,6 +1410,11 @@ void FSPanelPick::onSnapshotChanged()
 
 void FSPanelPick::onPickChanged(LLUICtrl* ctrl)
 {
+	if (ctrl && ctrl == mPickName)
+	{
+		updateTabLabel(mPickName->getText());
+	}
+
 	enableSaveButton(isDirty());
 }
 
@@ -1586,6 +1592,15 @@ std::string FSPanelPick::createLocationText(const std::string& owner_name, const
 	return location_text;
 }
 
+void FSPanelPick::updateTabLabel(const std::string& title)
+{
+	setLabel(title);
+	LLTabContainer* parent = dynamic_cast<LLTabContainer*>(getParent());
+	if (parent)
+	{
+		parent->setCurrentTabName(title);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 

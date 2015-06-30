@@ -399,6 +399,8 @@ public:
 	 */
 	virtual void apply();
 
+	void updateTabLabel(const std::string& title);
+
 	//This stuff we got from LLRemoteParcelObserver, in the last one we intentionally do nothing
 	/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data);
 	/*virtual*/ void setParcelID(const LLUUID& parcel_id) { mParcelId = parcel_id; }
