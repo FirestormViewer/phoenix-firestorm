@@ -1269,9 +1269,9 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mPickName->setEnabled( TRUE );
-		mPickDescription->setEnabled( TRUE );
-		mSetCurrentLocationButton->setVisible( TRUE );
+		mPickName->setEnabled(TRUE);
+		mPickDescription->setEnabled(TRUE);
+		mSetCurrentLocationButton->setVisible(TRUE);
 	}
 	/*else
 	{
@@ -1296,7 +1296,7 @@ BOOL FSPanelPick::postBuild()
 	mSetCurrentLocationButton->setCommitCallback(boost::bind(&FSPanelPick::onClickSetLocation, this));
 
 	mPickName->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1), NULL);
-	mPickName->setEnabled( FALSE );
+	mPickName->setEnabled(FALSE);
 
 	mPickDescription->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
 	mPickDescription->setFocusReceivedCallback(boost::bind(&FSPanelPick::onDescriptionFocusReceived, this));
@@ -1322,6 +1322,7 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 	{
 		return;
 	}
+
 	LLPickData* pick_info = static_cast<LLPickData*>(data);
 	if (!pick_info
 		|| pick_info->creator_id != getAvatarId()
@@ -1532,7 +1533,6 @@ void FSPanelPick::sendUpdate()
 	pick_data.sort_order = 0;
 	pick_data.enabled = TRUE;
 
-	// LLAvatarPropertiesProcessor::instance().sendPickInfoUpdate(&pick_data);
 	LLAvatarPropertiesProcessor::getInstance()->sendPickInfoUpdate(&pick_data);
 
 	if(mNewPick)
@@ -1547,21 +1547,30 @@ void FSPanelPick::sendUpdate()
 // static
 std::string FSPanelPick::createLocationText(const std::string& owner_name, const std::string& original_name, const std::string& sim_name, const LLVector3d& pos_global)
 {
-	std::string location_text;
-	location_text.append(owner_name);
+	std::string location_text(owner_name);
 	if (!original_name.empty())
 	{
-		if (!location_text.empty()) location_text.append(", ");
+		if (!location_text.empty())
+		{
+			location_text.append(", ");
+		}
 		location_text.append(original_name);
 
 	}
+
 	if (!sim_name.empty())
 	{
-		if (!location_text.empty()) location_text.append(", ");
+		if (!location_text.empty())
+		{
+			location_text.append(", ");
+		}
 		location_text.append(sim_name);
 	}
 
-	if (!location_text.empty()) location_text.append(" ");
+	if (!location_text.empty())
+	{
+		location_text.append(" ");
+	}
 
 	if (!pos_global.isNull())
 	{
@@ -1624,7 +1633,7 @@ BOOL FSPanelProfilePicks::postBuild()
 
 void FSPanelProfilePicks::onClickNewBtn()
 {
-	mNoItemsLabel->setVisible(false);
+	mNoItemsLabel->setVisible(FALSE);
 	FSPanelPick* pick_panel = FSPanelPick::create();
 	pick_panel->setAvatarId(getAvatarId());
 	mTabContainer->addTabPanel(
@@ -1663,7 +1672,7 @@ bool FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLS
 
 		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
 		{
-			FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
 			if (pick_panel)
 			{
 				if (pick_id == pick_panel->getPickId())
@@ -1753,7 +1762,7 @@ void FSPanelProfilePicks::apply()
 	{
 		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
 		{
-			FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
 			if (pick_panel)
 			{
 				pick_panel->apply();
