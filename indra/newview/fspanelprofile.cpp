@@ -1731,7 +1731,7 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 			mNewButton->setEnabled(canAddNewPick());
 			mDeleteButton->setEnabled(canDeletePick());
 
-			bool no_data = !mTabContainer->getTabCount();
+			BOOL no_data = !mTabContainer->getTabCount();
 			mNoItemsLabel->setVisible(no_data);
 			if (no_data)
 			{
