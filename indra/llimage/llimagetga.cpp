@@ -17,7 +17,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation,s:: Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
@@ -1163,8 +1163,17 @@ bool LLImageTGA::loadFile( const std::string& path )
 	{
 		return false;
 	}
-	
+	//< FS:ND> FIRE-16342 make sure no one overwrites this file while we load it	
+
+	// LLFILE* file = LLFile::fopen(path, "rb");	/* Flawfinder: ignore */
+#ifndef LL_WINDOWS
 	LLFILE* file = LLFile::fopen(path, "rb");	/* Flawfinder: ignore */
+#else
+	LLFILE* file = LLFile::_fsopen(path, "rb", _SH_DENYWR);/* Flawfinder: ignore */
+#endif
+
+	// </FS:ND:
+	
 	if( !file )
 	{
 		LL_WARNS() << "Couldn't open file " << path << LL_ENDL;
