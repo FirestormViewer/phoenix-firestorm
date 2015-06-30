@@ -180,12 +180,12 @@ FSPanelProfileSecondLife::FSPanelProfileSecondLife()
 
 FSPanelProfileSecondLife::~FSPanelProfileSecondLife()
 {
-	if(getAvatarId().notNull())
+	if (getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
 	}
 
-	if(LLVoiceClient::instanceExists())
+	if (LLVoiceClient::instanceExists())
 	{
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
@@ -214,7 +214,7 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mIMButton = getChild<LLButton>("im");
 	mOverflowButton = getChild<LLMenuButton>("overflow_btn");
 
-	mStatusText->setVisible(false);
+	mStatusText->setVisible(FALSE);
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	registrar.add("Profile.Call",					boost::bind(&FSPanelProfileSecondLife::onCallButtonClick, this));
@@ -249,8 +249,8 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mOverflowButton->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
 
 	// allow skins to have copy buttons for name and avatar URI -Zi
-	LLButton* copy_uri_button=findChild<LLButton>("copy_uri_button");
-	LLButton* copy_name_button=findChild<LLButton>("copy_name_button");
+	LLButton* copy_uri_button = findChild<LLButton>("copy_uri_button");
+	LLButton* copy_name_button = findChild<LLButton>("copy_name_button");
 
 	if (copy_uri_button)
 	{
@@ -277,50 +277,50 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 	resetData();
 
 	LLUUID avatar_id = getAvatarId();
-	LLAvatarPropertiesProcessor::getInstance()->addObserver(avatar_id,this);
+	LLAvatarPropertiesProcessor::getInstance()->addObserver(avatar_id, this);
 
 	BOOL own_profile = getSelfProfile();
 	
-	mGroupInviteButton->setVisible( !own_profile );
-	mShowOnMapButton->setVisible( !own_profile );
-	mPayButton->setVisible( !own_profile );
-	mTeleportButton->setVisible( !own_profile );
-	mIMButton->setVisible( !own_profile );
-	mAddFriendButton->setVisible( !own_profile );
-	mBlockButton->setVisible( !own_profile );
-	mUnblockButton->setVisible( !own_profile );
-	mOverflowButton->setVisible( !own_profile );
-	mGroupList->setShowNone( !own_profile );
+	mGroupInviteButton->setVisible(!own_profile);
+	mShowOnMapButton->setVisible(!own_profile);
+	mPayButton->setVisible(!own_profile);
+	mTeleportButton->setVisible(!own_profile);
+	mIMButton->setVisible(!own_profile);
+	mAddFriendButton->setVisible(!own_profile);
+	mBlockButton->setVisible(!own_profile);
+	mUnblockButton->setVisible(!own_profile);
+	mOverflowButton->setVisible(!own_profile);
+	mGroupList->setShowNone(!own_profile);
 		
 	if (own_profile && !getEmbedded())
 	{
 		// Group list control cannot toggle ForAgent loading
 		// Less than ideal, but viewing own profile via search is edge case
-		mGroupList->enableForAgent( false );
+		mGroupList->enableForAgent(false);
 	}
 
-	if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded() )
+	if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded())
 	{
-		mDisplayNameButton->setVisible( true );
-		mDisplayNameButton->setEnabled( true );
+		mDisplayNameButton->setVisible(TRUE);
+		mDisplayNameButton->setEnabled(TRUE);
 	}
 
 	mDescriptionEdit->setParseHTML( !own_profile && !getEmbedded() );
 
-	FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
-	drop_target->setVisible( !own_profile );
-	drop_target->setEnabled( !own_profile );
+	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
+	drop_target->setVisible(!own_profile);
+	drop_target->setEnabled(!own_profile);
 	
 	if (!own_profile)
 	{
 		mVoiceStatus = LLAvatarActions::canCall() && (LLAvatarActions::isFriend(avatar_id) ? LLAvatarTracker::instance().isBuddyOnline(avatar_id) : TRUE);
-		drop_target->setAgentID( avatar_id );
+		drop_target->setAgentID(avatar_id);
 		updateOnlineStatus();
 	}
 
 	updateButtons();
 
-	getChild<LLUICtrl>("user_key")->setValue( avatar_id.asString() );
+	getChild<LLUICtrl>("user_key")->setValue(avatar_id.asString());
 }
 
 void FSPanelProfileSecondLife::apply(LLAvatarData* data)
@@ -769,7 +769,7 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 	{
 		// something is wrong, tell user to try again later
 		LLNotificationsUtil::add("SetDisplayNameFailedGeneric");
-		return;		
+		return;
 	}
 
 	LL_INFOS("LegacyProfile") << "name-change now " << LLDate::now() << " next_update "
@@ -780,7 +780,7 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 	{
 		// if the update time is more than a year in the future, it means updates have been blocked
 		// show a more general message
-		const int YEAR = 60*60*24*365; 
+		static const S32 YEAR = 60*60*24*365; 
 		if (now_secs + YEAR < av_name.mNextUpdate)
 		{
 			LLNotificationsUtil::add("SetDisplayNameBlocked");
@@ -835,7 +835,7 @@ BOOL FSPanelProfileWeb::postBuild()
 	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
 	mWebBrowser->addObserver(this);
 
-	mUrlEdit->setEnabled( FALSE );
+	mUrlEdit->setEnabled(FALSE);
 
 	return TRUE;
 }
@@ -926,7 +926,7 @@ void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 	if (!mURLHome.empty())
 	{
 		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr == "")
+		if (valstr.empty())
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
@@ -950,7 +950,7 @@ void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
 	if (!mURLWebProfile.empty())
 	{
 		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr == "")
+		if (valstr.empty())
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
@@ -1479,7 +1479,7 @@ void FSPanelPick::apply()
 
 std::string FSPanelPick::getLocationNotice()
 {
-	static std::string notice = getString("location_notice");
+	static const std::string notice = getString("location_notice");
 	return notice;
 }
 
