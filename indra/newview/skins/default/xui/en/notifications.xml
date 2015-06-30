@@ -12123,4 +12123,16 @@ Do you really want to unlink the selected object?
      name="okbutton"
      yestext="OK"/>
   </notification>
+  <notification
+   name="PickLimitReached"
+   label=""
+   type="alertmodal">
+    <unique/>
+    <tag>fail</tag>
+    <tag>confirm</tag>
+    Can't create another pick because the maximum number of picks have been created already.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
 </notifications>

@@ -131,6 +131,14 @@ public:
 
 	void createPick()
 	{
+		// <FS:Ansariel> FIRE-7694 / BUG-932 / MAINT-1999
+		if (LLAgentPicksInfo::getInstance()->isPickLimitReached())
+		{
+			LLNotificationsUtil::add("PickLimitReached");
+			return;
+		}
+		// </FS:Ansariel>
+
 		// open the new pick panel on the Picks floater
 		LLFloater* picks_floater = LLFloaterReg::showInstance("picks");
 
