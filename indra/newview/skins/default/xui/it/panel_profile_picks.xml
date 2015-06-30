@@ -2,7 +2,7 @@
 <panel name="panel_picks" label="Preferiti">
  <string name="no_picks" value="Nessun Preferito" />
     <text name="Tell everyone about your favorite places in Second Life.">
-        Di a tutti i tuoi loghi preferiti di Second Life!
+        Di a tutti i tuoi loghi preferiti di [GRID]!
     </text>
     <button name="new_btn" label="Nuovo..." />
     <button name="delete_btn" label="Elimina..." />

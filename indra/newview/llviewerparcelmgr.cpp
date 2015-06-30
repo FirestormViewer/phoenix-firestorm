@@ -754,7 +754,8 @@ bool LLViewerParcelMgr::allowAgentScripts(const LLViewerRegion* region, const LL
 bool LLViewerParcelMgr::allowAgentDamage(const LLViewerRegion* region, const LLParcel* parcel) const
 {
 	return (region && region->getAllowDamage())
-		&& (parcel && parcel->getAllowDamage());
+		//&& (parcel && parcel->getAllowDamage());
+		|| (parcel && parcel->getAllowDamage());  // <FS:LO> FIRE-16112 fix
 }
 
 BOOL LLViewerParcelMgr::isOwnedAt(const LLVector3d& pos_global) const

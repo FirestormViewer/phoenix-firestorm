@@ -5014,4 +5014,8 @@ Welche Bezeichnung soll für die Region
 		Bitte geben Sie einen gültigen Wert für die Zeitspanne ein!
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="PickLimitReached">
+		Neue Auswahl kann nicht erstellt werden, da bereits die maximale Anzahl an Auswahlen erstellt wurde.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 </notifications>
