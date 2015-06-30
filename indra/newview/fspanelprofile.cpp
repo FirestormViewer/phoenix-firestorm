@@ -1628,6 +1628,9 @@ BOOL FSPanelProfilePicks::postBuild()
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
 	mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 
+	LLTextBox* intro_txt = getChild<LLTextBox>("Tell everyone about your favorite places in Second Life.");
+	intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
+
 	return TRUE;
 }
 
