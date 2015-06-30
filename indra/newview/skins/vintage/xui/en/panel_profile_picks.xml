@@ -86,6 +86,7 @@
      right="-6"
      layout="topleft"
      follows="all"
+     halign="left"
      name="tab_picks"
      label_pad_left="10"
      tab_position="left" />
