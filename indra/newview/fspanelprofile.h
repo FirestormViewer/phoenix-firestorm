@@ -64,6 +64,11 @@ public:
 	virtual void setAvatarId(const LLUUID& id);
 
 	/**
+	 * Sends update data request to server.
+	 */
+	virtual void updateData() { }
+
+	/**
 	 * Processes data received from server.
 	 */
 	virtual void processProperties(void* data, EAvatarProcessorType type) = 0;
@@ -152,7 +157,7 @@ public:
 	/**
 	 * Sends update data request to server.
 	 */
-	void updateData();
+	/*virtual*/ void updateData();
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
@@ -297,7 +302,7 @@ public:
 	/**
 	 * Loads web profile.
 	 */
-	void updateData();
+	/*virtual*/ void updateData();
 
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 
@@ -529,7 +534,7 @@ public:
 	/**
 	 * Sends update data request to server.
 	 */
-	void updateData();
+	/*virtual*/ void updateData();
 
 private:
 	void onClickNewBtn();
@@ -606,7 +611,7 @@ public:
 	
 	void resetData();
 
-	void updateData();
+	/*virtual*/ void updateData();
 
 	/**
 	 * Saves changes.
@@ -646,6 +651,8 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+	/*virtual*/ void updateData();
+
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
 	/*virtual*/ void onOpen(const LLSD& key);
@@ -658,7 +665,6 @@ public:
 private:
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 	void onTabChange();
-	void updateData();
 	
 	FSPanelProfileSecondLife*	mPanelSecondlife;
 	FSPanelProfileWeb*			mPanelWeb;

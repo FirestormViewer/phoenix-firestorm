@@ -2127,27 +2127,10 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 
 void FSPanelProfile::onTabChange()
 {
-	LLPanel* active_panel = mTabContainer->getCurrentPanel();
-	
-	if (active_panel == mPanelSecondlife)
+	FSPanelProfileTab* active_panel = dynamic_cast<FSPanelProfileTab*>(mTabContainer->getCurrentPanel());
+	if (active_panel)
 	{
-		mPanelSecondlife->updateData(); // load groups
-	}
-	else if (active_panel == mPanelWeb)
-	{
-		mPanelWeb->updateData(); // load web profile
-	}
-	else if (active_panel == mPanelPicks)
-	{
-		mPanelPicks->updateData();
-	}
-	else if (active_panel == mPanelClassifieds)
-	{
-		mPanelClassifieds->updateData();
-	}
-	else if (active_panel == mPanelNotes)
-	{
-		mPanelNotes->updateData();
+		active_panel->updateData();
 	}
 }
 
@@ -2192,8 +2175,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	// Only show commit buttons on own profile on floater version
 	if (getSelfProfile() && !getEmbedded())
 	{
-		getChild<LLUICtrl>("ok_btn")->setVisible( true );
-		getChild<LLUICtrl>("cancel_btn")->setVisible( true );
+		getChild<LLUICtrl>("ok_btn")->setVisible(TRUE);
+		getChild<LLUICtrl>("cancel_btn")->setVisible(TRUE);
 	}
 
 	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfile::onAvatarNameCache, this, _1, _2));
