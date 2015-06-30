@@ -534,10 +534,13 @@ public:
 private:
 	void onClickNewBtn();
 	void onClickDelete();
-	bool callbackDeletePick(const LLSD& notification, const LLSD& response);
+	void callbackDeletePick(const LLSD& notification, const LLSD& response);
 
 	boost::signals2::connection mRlvBehaviorCallbackConnection;
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+
+	bool canAddNewPick();
+	bool canDeletePick();
 
 	LLTabContainer*	mTabContainer;
 	LLUICtrl*		mNoItemsLabel;

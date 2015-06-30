@@ -1608,10 +1608,10 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 	if (getSelfProfile() && !getEmbedded())
 	{
 		mNewButton->setVisible(TRUE);
-		mNewButton->setEnabled(TRUE);
+		mNewButton->setEnabled(FALSE);
 
 		mDeleteButton->setVisible(TRUE);
-		mDeleteButton->setEnabled(TRUE);
+		mDeleteButton->setEnabled(FALSE);
 	}
 }
 
@@ -1626,7 +1626,9 @@ BOOL FSPanelProfilePicks::postBuild()
 	mDeleteButton->setCommitCallback(boost::bind(&FSPanelProfilePicks::onClickDelete, this));
 
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
-	mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+	
+	mNewButton->setEnabled(canAddNewPick());
+	mDeleteButton->setEnabled(canDeletePick());
 
 	LLTextBox* intro_txt = getChild<LLTextBox>("Tell everyone about your favorite places in Second Life.");
 	intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
@@ -1643,6 +1645,8 @@ void FSPanelProfilePicks::onClickNewBtn()
 		LLTabContainer::TabPanelParams().
 		panel(pick_panel).
 		select_tab(true));
+	mNewButton->setEnabled(canAddNewPick());
+	mDeleteButton->setEnabled(canDeletePick());
 }
 
 void FSPanelProfilePicks::onClickDelete()
@@ -1651,42 +1655,38 @@ void FSPanelProfilePicks::onClickDelete()
 	if (pick_panel)
 	{
 		LLUUID pick_id = pick_panel->getPickId();
-		if (!pick_id.isNull())
-		{
-			LLSD args;
-			args["PICK"] = pick_panel->getPickName();
-			LLSD payload;
-			payload["pick_id"] = pick_id;
-			LLNotificationsUtil::add("DeleteAvatarPick", args, payload, boost::bind(&FSPanelProfilePicks::callbackDeletePick, this, _1, _2));
-			return;
-		}
+		LLSD args;
+		args["PICK"] = pick_panel->getPickName();
+		LLSD payload;
+		payload["pick_id"] = pick_id;
+		payload["tab_idx"] = mTabContainer->getCurrentPanelIndex();
+		LLNotificationsUtil::add("DeleteAvatarPick", args, payload, boost::bind(&FSPanelProfilePicks::callbackDeletePick, this, _1, _2));
 	}
 }
 
-bool FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLSD& response)
+void FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
 	if (0 == option)
 	{
 		LLUUID pick_id = notification["payload"]["pick_id"].asUUID();
-		LLAvatarPropertiesProcessor::getInstance()->sendPickDelete(pick_id);
-		mNewButton->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+		S32 tab_idx = notification["payload"]["tab_idx"].asInteger();
 
-		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+		FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
+		if (pick_panel && pick_panel->getPickId() == pick_id)
 		{
-			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
-			if (pick_panel)
-			{
-				if (pick_id == pick_panel->getPickId())
-				{
-					mTabContainer->removeTabPanel(pick_panel);
-				}
-			}
+			mTabContainer->removeTabPanel(pick_panel);
 		}
-	}
 
-	return false;
+		if (pick_id.notNull())
+		{
+			LLAvatarPropertiesProcessor::getInstance()->sendPickDelete(pick_id);
+		}
+
+		mNewButton->setEnabled(canAddNewPick());
+		mDeleteButton->setEnabled(canDeletePick());
+	}
 }
 
 void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType type)
@@ -1728,7 +1728,8 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 					label(pick_name));
 			}
 
-			mNewButton->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+			mNewButton->setEnabled(canAddNewPick());
+			mDeleteButton->setEnabled(canDeletePick());
 
 			bool no_data = !mTabContainer->getTabCount();
 			mNoItemsLabel->setVisible(no_data);
@@ -1791,8 +1792,20 @@ void FSPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvPara
 {
 	if (behavior == RLV_BHVR_SHOWLOC)
 	{
-		mNewButton->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached() && type != RLV_TYPE_ADD);
+		mNewButton->setEnabled(canAddNewPick());
 	}
+}
+
+bool FSPanelProfilePicks::canAddNewPick()
+{
+	return (!LLAgentPicksInfo::getInstance()->isPickLimitReached() &&
+		mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks() &&
+		!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+}
+
+bool FSPanelProfilePicks::canDeletePick()
+{
+	return (mTabContainer->getTabCount() > 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
