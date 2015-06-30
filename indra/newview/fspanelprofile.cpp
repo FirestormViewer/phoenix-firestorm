@@ -1226,7 +1226,7 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 	FSPanelProfileTab::setAvatarId(avatar_id);
 
 	// creating new Pick
-	if (getPickId().isNull())
+	if (getPickId().isNull() && getSelfProfile())
 	{
 		mNewPick = true;
 
