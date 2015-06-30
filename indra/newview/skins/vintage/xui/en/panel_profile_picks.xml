@@ -95,10 +95,11 @@
     <text
      top="55"
      left="20"
-     height="18"
-     width="300"
+     height="100"
+     right="-20"
+     wrap="true"
      layout="topleft"
-     follows="left|top"
+     follows="left|top|right"
      name="picks_panel_text"
      mouse_opaque="false">
         Loading...
