@@ -1487,6 +1487,10 @@ void FSPanelPick::sendParcelInfoRequest()
 {
 	if (mParcelId != mRequestedId)
 	{
+		if (mRequestedId.notNull())
+		{
+			LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mRequestedId, this);
+		}
 		LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelId, this);
 		LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelId);
 
