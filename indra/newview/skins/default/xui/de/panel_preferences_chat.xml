@@ -129,6 +129,7 @@
 			<text name="group_snooze_time_seconds_label" tool_tip="Legt die Zeitspanne fest, für die ein Gruppenchat beim Klicken auf den Button „Temporär unterdrücken“ unterdrückt wird. Bei einem Wert von 0 wird das Fenster bis zum Eintreffen der nächsten Nachricht geschlossen.">
 				Sekunden
 			</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="Zeitspanne für temporäres Unterdrücken von Gruppenchats per Gruppe setzen"/>
 		</panel>
 
 		<!-- Chat: Typing -->

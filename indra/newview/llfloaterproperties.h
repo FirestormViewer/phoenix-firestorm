@@ -75,6 +75,9 @@ protected:
 	void refreshFromItem(LLInventoryItem* item);
 	virtual void draw();
 
+	// <FS:Ansariel> Experience info
+	static void setAssociatedExperience( LLHandle<LLFloaterProperties> hInfo, const LLSD& experience );
+
 protected:
 	// The item id of the inventory item in question.
 	LLUUID mItemID;

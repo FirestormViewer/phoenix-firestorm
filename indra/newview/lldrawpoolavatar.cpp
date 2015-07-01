@@ -1738,28 +1738,50 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 		LLMatrix4a bind_shape_matrix;
 		bind_shape_matrix.loadu(skin->mBindShapeMatrix);
 
+		__m128i _mMaxIdx = _mm_set_epi16( count-1, count-1, count-1, count-1, count-1, count-1, count-1, count-1 );
+		
 		for (U32 j = 0; j < buffer->getNumVerts(); ++j)
 		{
 			LLMatrix4a final_mat;
 			final_mat.clear();
 
-			S32 idx[4];
+			// <FS:ND> Avoid the 8 floorf by using SSE2.
+			// S32 idx[4];
+			// 
+			// LLVector4 wght;
+			// 
+			// F32 scale = 0.f;
+			// for (U32 k = 0; k < 4; k++)
+			// {
+			// 	F32 w = weight[j][k];
+			// 
+			// 	idx[k] = llclamp((S32) floorf(w), 0, JOINT_COUNT-1);
+			// 
+			// 
+			// 	wght[k] = w - floorf(w);
+			// 	scale += wght[k];
+			// }
+			// 
+			// wght *= 1.f/scale;
 
-			LLVector4 wght;
+			LL_ALIGN_16( S32 idx[4] );
+			LL_ALIGN_16( F32 wght[4] );
 
-			F32 scale = 0.f;
-			for (U32 k = 0; k < 4; k++)
-			{
-				F32 w = weight[j][k];
+			__m128i _mIdx = _mm_cvttps_epi32( weight[j] );
+			__m128 _mWeight = _mm_sub_ps( weight[j], _mm_cvtepi32_ps( _mIdx ) );
 
-				idx[k] = llclamp((S32) floorf(w), 0, JOINT_COUNT-1);
+			_mIdx = _mm_min_epi16( _mIdx, _mMaxIdx );
+			_mm_store_si128( (__m128i*)idx, _mIdx );
+			
+			__m128 _mScale = _mm_add_ps( _mWeight, _mm_movehl_ps( _mWeight, _mWeight ));
+			_mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
+			_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
 
-
-				wght[k] = w - floorf(w);
-				scale += wght[k];
-			}
-
-			wght *= 1.f/scale;
+			_mWeight = _mm_div_ps( _mWeight, _mScale );
+			
+			_mm_store_ps( wght, _mWeight );
+			
+			// </FS:ND>
 
 			for (U32 k = 0; k < 4; k++)
 			{

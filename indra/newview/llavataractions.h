@@ -84,12 +84,18 @@ public:
 	/**
 	 * Start an ad-hoc conference voice call with multiple users in a specific IM floater.
 	 */
-	static void startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	// <FS:Ansariel> [FS Communication UI]
+	//static void startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	static const LLUUID startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	// </FS:Ansariel>
 
 	/**
 	 * Start conference chat with the given avatars in a specific IM floater.
 	 */
-	static void startConference(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	// <FS:Ansariel> [FS Communication UI]
+	//static void startConference(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	static const LLUUID startConference(const uuid_vec_t& ids, const LLUUID& floater_id = LLUUID::null);
+	// </FS:Ansariel>
 
 	/**
 	 * Show avatar profile.

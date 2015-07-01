@@ -1169,9 +1169,7 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
 	</string>
-	<string name="JoinAnExperience">
-		Rozpocznij przygodę
-	</string>
+	<string name="JoinAnExperience"/>
 	<string name="SilentlyManageEstateAccess">
 		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
 	</string>

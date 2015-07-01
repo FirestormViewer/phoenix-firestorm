@@ -3,7 +3,7 @@
  <string name="no_picks" value="Нет мест" />
  <string name="no_classifieds" value="Нет объявлений" />
     <text name="Tell everyone about your favorite places in Second Life.">
-        Показать другим ваши любимые места в Second Life.
+        Показать другим ваши любимые места в [GRID].
     </text>
     <button name="new_btn" label="Создать..." />
     <button name="delete_btn" label="Удалить..." />

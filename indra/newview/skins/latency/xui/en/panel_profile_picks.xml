@@ -27,18 +27,19 @@
 
     <text
      top="5"
-     left="114"
+     left="5"
      height="16"
-     width="302"
+     right="-5"
      layout="topleft"
-     follows="left|top"
+     follows="left|top|right"
+     halign="center"
      name="Tell everyone about your favorite places in Second Life.">
-        Tell everyone about your favorite places in Second Life.
+        Tell everyone about your favorite places in [GRID].
     </text>
 
     <button
      top_pad="4"
-     left="114"
+     left="5"
      height="20"
      width="70"
      layout="topleft"
@@ -86,16 +87,18 @@
      right="-4"
      layout="topleft"
      follows="all"
+     halign="left"
      name="tab_picks"
      tab_position="left" />
 
     <text
      top="55"
      left="20"
-     height="18"
-     width="300"
+     height="100"
+     right="-20"
+     wrap="true"
      layout="topleft"
-     follows="left|top"
+     follows="left|top|right"
      name="picks_panel_text"
      mouse_opaque="false">
         Loading...
