@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <floater
+  name="experience_profile"
   positioning="cascading"
   can_close="true"
   enabled="true"
