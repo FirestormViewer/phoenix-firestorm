@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater title="EXPERIENCE PROFILE">
+<floater name="experience_profile">
 	<floater.string name="empty_slurl">
 		(nessuno)
 	</floater.string>
@@ -17,7 +17,7 @@
 		<panel name="panel_experience_info">
 			<scroll_container name="xp_scroll">
 				<panel name="scrolling_panel">
-					<layout_stack>
+					<layout_stack name="ls1">
 						<layout_panel name="top panel">
 							<button label="Modifica" name="edit_btn"/>
 						</layout_panel>
@@ -31,7 +31,7 @@
 								Luogo:
 							</text>
 						</layout_panel>
-						<layout_panel>
+						<layout_panel name="owner panel">
 							<text name="Owner">
 								Proprietario:
 							</text>

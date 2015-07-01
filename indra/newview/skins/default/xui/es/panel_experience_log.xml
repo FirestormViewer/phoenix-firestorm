@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="EVENTS">
+<panel name="panel_experience_log">
 	<string name="no_events" value="No hay eventos."/>
 	<string name="loading" value="cargando..."/>
-	<layout_stack>
-		<layout_panel>
+	<layout_stack name="ls1">
+		<layout_panel name="list panel">
 			<scroll_list name="experience_log_list">
 				<columns label="Hora" name="time"/>
 				<columns label="Evento" name="event"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater title="EXPERIENCE PROFILE">
+<floater name="experience_profile" title="Erlebnis-Profil">
 	<floater.string name="empty_slurl">
 		(keines)
 	</floater.string>

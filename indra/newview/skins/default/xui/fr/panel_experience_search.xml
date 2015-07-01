@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="SEARCH">
+<panel name="panel_experience_search">
 	<string name="not_found">
 		&apos;[TEXT]&apos; introuvable
 	</string>
