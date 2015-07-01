@@ -3551,6 +3551,14 @@ void LLStartUp::initExperiences()
 	LLExperienceLog::instance().initialize();
 }
 
+
+void LLStartUp::initExperiences()
+{
+	LLAppViewer::instance()->loadExperienceCache();
+	LLExperienceCache::initClass();
+	LLExperienceLog::instance().initialize();
+}
+
 void LLStartUp::cleanupNameCache()
 {
 	LLAvatarNameCache::cleanupClass();
