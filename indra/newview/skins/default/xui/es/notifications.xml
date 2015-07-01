@@ -2067,10 +2067,6 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		No puedes entrar en la región. &apos;[REGION_NAME]&apos; es una región de juegos de habilidad, y debes cumplir determinados criterios para poder entrar en ella. Consulta los detalles en las [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life P+F de juegos de habilidad].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="RegionTPSpecialUsageBlocked">
-		No puedes entrar en la región. &apos;[REGION_NAME]&apos; es una región de juegos de habilidad, y debes cumplir determinados criterios para poder entrar en ella. Consulta los detalles en las [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life P+F de juegos de habilidad].
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="PreferredMaturityChanged">
 		No recibirás más notificaciones cuando vayas a visitar una región con un contenido [RATING]. En el futuro, puedes cambiar tus preferencias de contenido en Avatar &gt; Preferencias &gt; General en la barra de menús.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
@@ -3156,72 +3152,6 @@ Del objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME]
 			<button name="Yes" text="Sí"/>
 			<button name="No" text="No"/>
 			<button name="Mute" text="Bloquear"/>
-		</form>
-	</notification>
-	<notification name="ExperienceAcquireFailed">
-		No se puede adquirir una experiencia nueva:
-    [ERROR_MESSAGE]
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="NotInGroupExperienceProfileMessage">
-		Se ha omitido un cambio en el grupo de la experiencia porque el propietario no es miembro del grupo seleccionado.
-	</notification>
-	<notification name="UneditableExperienceProfileMessage">
-		El campo no modificable &apos;[field]&apos; se ha omitido al actualizar el perfil de la experiencia.
-	</notification>
-	<notification name="RestrictedToOwnerExperienceProfileMessage">
-		Cambios omitidos en el campo &apos;[field]&apos; que solo puede configurar el propietario de la experiencia.
-	</notification>
-	<notification name="MaturityRatingExceedsOwnerExperienceProfileMessage">
-		No puedes definir un nivel de calificación de una experiencia superior al establecido por el propietario.
-	</notification>
-	<notification name="RestrictedTermExperienceProfileMessage">
-		Las condiciones siguientes han impedido la actualización del nombre o la descripción del perfil de la experiencia: [extra_info]
-	</notification>
-	<notification name="TeleportedHomeExperienceRemoved">
-		Te has teleportado desde la región [region_name] porque al quitar la experiencia secondlife:///app/experience/[public_id]/profile ya no tienes permiso para entrar en la región.
-		<form name="form">
-			<ignore name="ignore" text="Expulsado de la región por quitar una experiencia"/>
-		</form>
-	</notification>
-	<notification name="TrustedExperienceEntry">
-		La participación en la experiencia clave secondlife:///app/experience/[public_id]/profile te otorga permiso para entrar en la región [region_name]. Si quitas esta experiencia, puede que te expulsen de la región.
-		<form name="form">
-			<ignore name="ignore" text="Admitido en una región por una experiencia"/>
-		</form>
-	</notification>
-	<notification name="TrustedExperiencesAvailable">
-		No tienes permiso de acceso a este destino. Puedes obtener el permiso para entrar en la región si aceptas una de las siguientes experiencias:
-
-[EXPERIENCE_LIST]
-
-Pueden estar disponibles otras experiencias clave.
-	</notification>
-	<notification name="ExperienceEvent">
-		La experiencia secondlife:///app/experience/[public_id]/profile permitió la siguiente operación con un objeto: [EventType].
-    Propietario: secondlife:///app/agent/[OwnerID]/inspect
-    Nombre del objeto: [ObjectName]
-    Nombre de la parcela: [ParcelName]
-	</notification>
-	<notification name="ExperienceEventAttachment">
-		La experiencia secondlife:///app/experience/[public_id]/profile permitió la siguiente operación con un anexo: [EventType].
-    Propietario: secondlife:///app/agent/[OwnerID]/inspect
-	</notification>
-	<notification name="ScriptQuestionExperience">
-		&apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, un objeto de propiedad de &apos;[NAME]&apos;, solicita tu participación en la experiencia [GRID_WIDE]:
-
-[EXPERIENCE]
-
-Una vez concedido el permiso, este mensaje no volverá a aparecer para la experiencia salvo que se revoque en el perfil de la experiencia.
-
-Los scripts asociados a esta experiencia podrán hacer lo siguiente en las regiones donde la experiencia esté activa: 
-
-[QUESTIONS]¿Lo aceptas?
-		<form name="form">
-			<button name="BlockExperience" text="Bloquear experiencia"/>
-			<button name="Mute" text="Bloquear objeto"/>
-			<button name="Yes" text="Sí"/>
-			<button name="No" text="No"/>
 		</form>
 	</notification>
 	<notification name="ExperienceAcquireFailed">
