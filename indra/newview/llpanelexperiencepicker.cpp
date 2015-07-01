@@ -122,8 +122,9 @@ BOOL LLPanelExperiencePicker::postBuild()
 	childSetAction(BTN_CANCEL, boost::bind(&LLPanelExperiencePicker::onBtnClose, this));
 	childSetAction(BTN_PROFILE, boost::bind(&LLPanelExperiencePicker::onBtnProfile, this));
 	getChildView(BTN_PROFILE)->setEnabled(FALSE);
-
-	getChild<LLComboBox>(TEXT_MATURITY)->setCurrentByIndex(2);
+	
+	// <FS:Ansariel> Remember maturity level
+	//getChild<LLComboBox>(TEXT_MATURITY)->setCurrentByIndex(2);
 	getChild<LLComboBox>(TEXT_MATURITY)->setCommitCallback(boost::bind(&LLPanelExperiencePicker::onMaturity, this));
 	getChild<LLUICtrl>(TEXT_EDIT)->setFocus(TRUE);
 
