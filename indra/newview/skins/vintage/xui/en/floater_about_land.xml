@@ -44,7 +44,7 @@
      left="0"
      name="landtab"
      tab_position="top"
-     tab_min_width="67"
+     tab_min_width="50"
      top="10"
      width="489">
         <panel
