@@ -687,7 +687,7 @@
 		<key>Type</key>
 			<string>String</string>
 		<key>Value</key>
-			<string></string>
+			<string/>
 	</map>
 	<key>FSKeywordChangeColor</key>
 	<map>
@@ -726,9 +726,9 @@
 	    <string>Color4</string>
 	    <key>Value</key>
 	    <array>
-	    <real>1</real>
-	    <real>0</real>
-	    <real>0</real>
+	    <real>1.0</real>
+	    <real>0.0</real>
+	    <real>0.0</real>
 	    <real>1.0</real>
 	</array>
 	</map>
@@ -839,7 +839,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <key>FSAutoresponseItemUUID</key>
         <map>
@@ -895,7 +895,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <key>ExodusFlickrTokenSecret</key>
         <map>
@@ -906,7 +906,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <key>ExodusFlickrNSID</key>
         <map>
@@ -917,7 +917,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <key>ExodusFlickrUsername</key>
         <map>
@@ -928,7 +928,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <key>ExodusFlickrFullName</key>
         <map>
@@ -939,7 +939,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string></string>
+            <string/>
         </map>
     <!-- End of settings imported from Exodus -->
     <key>layout_size_chat_bar_stack</key>
