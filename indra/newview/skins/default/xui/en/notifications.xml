@@ -12311,7 +12311,6 @@ the region &quot;[REGION]&quot;?
        text="Cancel"/>
     </form>
   </notification>
-  </notification>
 
    <notification
     icon="alertmodal.tga"
@@ -12356,4 +12355,5 @@ the region &quot;[REGION]&quot;?
     <usetemplate
      name="okbutton"
      yestext="OK"/>
+  </notification>
 </notifications>

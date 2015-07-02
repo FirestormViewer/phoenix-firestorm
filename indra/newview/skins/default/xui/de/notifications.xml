@@ -4997,7 +4997,6 @@ Welche Bezeichnung soll für die Region
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
-	</notification>
 	<notification name="SnoozeDuration">
 		Zeitspanne in Sekunden, für die der Gruppenchat temporär unterdrückt werden soll:
 		<form name="form">
@@ -5012,4 +5011,5 @@ Welche Bezeichnung soll für die Region
 	<notification name="PickLimitReached">
 		Neue Auswahl kann nicht erstellt werden, da bereits die maximale Anzahl an Auswahlen erstellt wurde.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 </notifications>
