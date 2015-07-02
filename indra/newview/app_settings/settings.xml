@@ -1484,7 +1484,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>0</real>
+      <integer>0</integer>
     </map>
     <key>AckCollectTime</key>
     <map>
