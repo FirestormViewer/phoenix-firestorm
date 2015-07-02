@@ -2296,6 +2296,11 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 	}
 }
 
+S32 LLTabContainer::getTotalTabWidth() const
+{
+    return mTotalTabWidth;
+}
+
 // <FS:ND> Hide one tab. Will switch to the first visible tab if one exists. Otherwise the Tabcontainer is hidden
 void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
 {

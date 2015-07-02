@@ -14,7 +14,7 @@
 		<menu_item_check name="inventory_search_by_all" label="Tutti"/>
 	</context_menu>
 	<menu_item_check label="Aggiungi oggetto con doppio click" name="add_inv_toggle"/>
-	<menu_item_call label="Mostra filtri" name="show_filters"/>
+	<menu_item_call label="Mostra filtri..." name="show_filters"/>
 	<menu_item_call label="Ripristina filtri" name="reset_filters"/>
 	<menu_item_call label="Chiudi tutte le cartelle" name="close_folders"/>
 	<menu_item_call label="Svuota oggetti smarriti" name="empty_lostnfound"/>

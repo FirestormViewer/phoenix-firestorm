@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
+	<floater.string name="participant_added" value="[NAME] wurde zur Unterhaltung eingeladen."/>
+	<floater.string name="multiple_participants_added" value="[NAME] wurden zur Unterhaltung eingeladen."/>
 	<layout_stack name="ls_control_panel">
 		<layout_panel name="gprofile_panel">
 			<button name="group_info_btn" tool_tip="Zeige Gruppenprofil"/>
@@ -33,6 +35,9 @@
 		</layout_panel>
 		<layout_panel name="im_history_btn_panel">
 			<button name="im_history_btn" tool_tip="Gesprächsverlauf öffnen"/>
+		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button name="add_participant_btn" tool_tip="Jemanden zu dieser Unterhaltung hinzufügen"/>
 		</layout_panel>
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button name="send_sysinfo_btn" tool_tip="System-Informationen übermitteln"/>

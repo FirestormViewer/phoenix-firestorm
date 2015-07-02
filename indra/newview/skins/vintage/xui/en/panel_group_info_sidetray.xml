@@ -176,6 +176,15 @@ background_visible="true"
         left="0"
         name="group_land_tab_panel"
         top="0" />
+    <panel
+        border="false"
+        class="panel_group_experiences"
+        filename="panel_experiences.xml"
+        follows="left|top|right"
+        layout="topleft"
+        left="0"
+        name="group_experiences_tab_panel"
+        top="0" />
     </tab_container>
    </layout_panel>
   </layout_stack>

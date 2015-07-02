@@ -66,6 +66,22 @@ const F32 SECONDS_TO_SHOW_FILE_SAVED_MSG = 8.f;
 const F32 PREVIEW_TEXTURE_MAX_ASPECT = 200.f;
 const F32 PREVIEW_TEXTURE_MIN_ASPECT = 0.005f;
 
+// <FS:Ansariel> FIRE-14111: File extension missing on Linux when saving a texture
+std::string checkFileExtension(const std::string& filename, LLPreviewTexture::EFileformatType format)
+{
+	std::string tmp_name = filename;
+	std::string extension = (format == LLPreviewTexture::FORMAT_TGA ? ".tga" : ".png");
+
+	LLStringUtil::toLower(tmp_name);
+	size_t result = tmp_name.rfind(extension);
+	if (result == std::string::npos || result != tmp_name.length() - extension.size())
+	{
+		return (filename + extension);
+	}
+
+	return filename;
+}
+// </FS:Ansariel>
 
 LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	: LLPreview((key.has("uuid") ? key.get("uuid") : key)), // Changed for texture preview mode
@@ -390,7 +406,10 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 			break;
 	}
 
-	if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
+	// <FS:Ansariel> FIRE-14111: File extension missing on Linux when saving a texture
+	//if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
+	if( !file_picker.getSaveFile( saveFilter, item ? checkFileExtension(LLDir::getScrubbedFileName(item->getName()), format) : LLStringUtil::null) )
+	// </FS:Ansariel>
 	{
 		// User canceled or we failed to acquire save file.
 		return;
@@ -402,7 +421,10 @@ void LLPreviewTexture::saveAs(EFileformatType format)
 	}
 
 	// remember the user-approved/edited file name.
-	mSaveFileName = file_picker.getFirstFile();
+	// <FS:Ansariel> FIRE-14111: File extension missing on Linux when saving a texture
+	//mSaveFileName = file_picker.getFirstFile();
+	mSaveFileName = checkFileExtension(file_picker.getFirstFile(), format);
+	// </FS:Ansariel>
 	mLoadingFullImage = TRUE;
 	getWindow()->incBusyCount();
 

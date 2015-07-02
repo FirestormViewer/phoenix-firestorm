@@ -21,6 +21,12 @@
 	<floater.string name="none_descriptor">
 		Nicht gefunden.
 	</floater.string>
+	<floater.string name="URLs">
+		URLs
+	</floater.string>
+	<floater.string name="memory">
+		Speicher (KB)
+	</floater.string>
 	<text name="title_text">
 		Wird geladen...
 	</text>

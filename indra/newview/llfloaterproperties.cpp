@@ -63,6 +63,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llviewernetwork.h"	// <FS:CR> For OpenSim export perms
+#include "llexperienceassociationresponder.h"
+#include "llexperiencecache.h"
+#include "llslurl.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPropertiesObserver
@@ -264,6 +267,17 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	{
 		is_obj_modify = object->permOwnerModify();
 	}
+
+	// <FS:Ansariel> Experience info
+	if(item->getInventoryType() == LLInventoryType::IT_LSL)
+	{
+		getChildView("LabelItemExperienceTitle")->setVisible(TRUE);
+		LLTextBox* tb = getChild<LLTextBox>("LabelItemExperience");
+		tb->setText(getString("loading_experience"));
+		tb->setVisible(TRUE);
+		ExperienceAssociationResponder::fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), boost::bind(&LLFloaterProperties::setAssociatedExperience, getDerivedHandle<LLFloaterProperties>(), _1));
+	}
+	// </FS:Ansariel>
 
 	//////////////////////
 	// ITEM NAME & DESC //
@@ -573,6 +587,29 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		combo_sale_type->setValue(LLSaleInfo::FS_COPY);
 	}
 }
+
+// <FS:Ansariel> Experience info
+void LLFloaterProperties::setAssociatedExperience( LLHandle<LLFloaterProperties> hInfo, const LLSD& experience )
+{
+	LLFloaterProperties* info = hInfo.get();
+	if(info)
+	{
+		LLUUID id;
+		if(experience.has(LLExperienceCache::EXPERIENCE_ID))
+		{
+			id=experience[LLExperienceCache::EXPERIENCE_ID].asUUID();
+		}
+		if(id.notNull())
+		{
+			info->getChild<LLTextBox>("LabelItemExperience")->setText(LLSLURL("experience", id, "profile").getSLURLString());
+		}
+		else
+		{
+			info->getChild<LLTextBox>("LabelItemExperience")->setText(LLTrans::getString("ExperienceNameNull"));
+		}
+	}
+}
+// </FS:Ansariel>
 
 void LLFloaterProperties::onClickCreator()
 {

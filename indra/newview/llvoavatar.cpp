@@ -44,6 +44,7 @@
 #include "llanimationstates.h"
 #include "llavatarnamecache.h"
 #include "llavatarpropertiesprocessor.h"
+#include "llexperiencecache.h"
 #include "llphysicsmotion.h"
 #include "llviewercontrol.h"
 #include "llcallingcard.h"		// IDEVO for LLAvatarTracker
@@ -1420,7 +1421,10 @@ void LLVOAvatar::getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
 
-		if (attachment->getValid())
+		// <FS:Ansariel> Possible crash fix
+		//if (attachment->getValid())
+		if (attachment && attachment->getValid())
+		// </FS:Ansariel>
 		{
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 				 attachment_iter != attachment->mAttachedObjects.end();
@@ -1640,6 +1644,13 @@ BOOL LLVOAvatar::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 			{
 				LLViewerJointAttachment* attachment = iter->second;
 
+				// <FS:Ansariel> Possible crash fix
+				if (!attachment)
+				{
+					continue;
+				}
+				// </FS:Ansariel>
+
 				for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 					 attachment_iter != attachment->mAttachedObjects.end();
 					 ++attachment_iter)
@@ -1704,6 +1715,13 @@ LLViewerObject* LLVOAvatar::lineSegmentIntersectRiggedAttachments(const LLVector
 			++iter)
 		{
 			LLViewerJointAttachment* attachment = iter->second;
+
+			// <FS:Ansariel> Possible crash fix
+			if (!attachment)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
 
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 					attachment_iter != attachment->mAttachedObjects.end();
@@ -1854,7 +1872,10 @@ void LLVOAvatar::releaseMeshData()
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
-		if (!attachment->getIsHUDAttachment())
+		// <FS:Ansariel> Possible crash fix
+		//if (!attachment->getIsHUDAttachment())
+		if (attachment && !attachment->getIsHUDAttachment())
+		// </FS:Ansariel>
 		{
 			attachment->setAttachmentVisibility(FALSE);
 		}
@@ -2241,7 +2262,7 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
 		idleUpdateBelowWater();	// wind effect uses this
 		idleUpdateWindEffect();
 	}
-	
+		
 	idleUpdateNameTag( root_pos_last );
 	idleUpdateRenderCost();
 }
@@ -2394,6 +2415,13 @@ void LLVOAvatar::idleUpdateMisc(bool detailed_update)
 			 ++iter)
 		{
 			LLViewerJointAttachment* attachment = iter->second;
+
+			// <FS:Ansariel> Possible crash fix
+			if (!attachment)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
 
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 				 attachment_iter != attachment->mAttachedObjects.end();
@@ -4331,6 +4359,13 @@ void LLVOAvatar::updateVisibility()
 				 ++iter)
 			{
 				LLViewerJointAttachment* attachment = iter->second;
+
+				// <FS:Ansariel> Possible crash fix
+				if (!attachment)
+				{
+					continue;
+				}
+				// </FS:Ansariel>
 
 				for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 					 attachment_iter != attachment->mAttachedObjects.end();
@@ -6373,6 +6408,12 @@ U32 LLVOAvatar::getNumAttachments() const
 		 ++iter)
 	{
 		const LLViewerJointAttachment *attachment_pt = (*iter).second;
+		// <FS:Ansariel> Possible crash fix
+		if (!attachment_pt)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		num_attachments += attachment_pt->getNumObjects();
 	}
 	return num_attachments;
@@ -6458,6 +6499,14 @@ void LLVOAvatar::rebuildRiggedAttachments( void )
 	for ( attachment_map_t::iterator iter = mAttachmentPoints.begin(); iter != mAttachmentPoints.end(); ++iter )
 	{
 		LLViewerJointAttachment* pAttachment = iter->second;
+
+		// <FS:Ansariel> Possible crash fix
+		if (!pAttachment)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		LLViewerJointAttachment::attachedobjs_vec_t::iterator attachmentIterEnd = pAttachment->mAttachedObjects.end();
 		
 		for ( LLViewerJointAttachment::attachedobjs_vec_t::iterator attachmentIter = pAttachment->mAttachedObjects.begin();
@@ -6501,7 +6550,10 @@ BOOL LLVOAvatar::detachObject(LLViewerObject *viewer_object)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
 		
-		if (attachment->isObjectAttached(viewer_object))
+		// <FS:Ansariel> Possible crash fix
+		//if (attachment->isObjectAttached(viewer_object))
+		if (attachment && attachment->isObjectAttached(viewer_object))
+		// </FS:Ansariel>
 		{
 			mVisualComplexityStale = TRUE;
 			cleanupAttachedMesh( viewer_object );
@@ -6770,6 +6822,14 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 		++attachment_points_iter)
 	{
 		LLViewerJointAttachment* attachment = attachment_points_iter->second;
+
+		// <FS:Ansariel> Possible crash fix
+		if (!attachment)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 			 attachment_iter != attachment->mAttachedObjects.end();
 			 ++attachment_iter)
@@ -7596,6 +7656,14 @@ BOOL LLVOAvatar::hasHUDAttachment() const
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
+
+		// <FS:Ansariel> Possible crash fix
+		if (!attachment)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
+
 		if (attachment->getIsHUDAttachment() && attachment->getNumObjects() > 0)
 		{
 			return TRUE;
@@ -7612,7 +7680,10 @@ LLBBox LLVOAvatar::getHUDBBox() const
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
-		if (attachment->getIsHUDAttachment())
+		// <FS:Ansariel> Possible crash fix
+		//if (attachment->getIsHUDAttachment())
+		if (attachment && attachment->getIsHUDAttachment())
+		// </FS:Ansariel>
 		{
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 				 attachment_iter != attachment->mAttachedObjects.end();
@@ -8978,6 +9049,14 @@ void LLVOAvatar::calculateUpdateRenderCost()
 			 ++iter)
 		{
 			LLViewerJointAttachment* attachment = iter->second;
+
+			// <FS:Ansariel> Possible crash fix
+			if (!attachment)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
 			for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 				 attachment_iter != attachment->mAttachedObjects.end();
 				 ++attachment_iter)

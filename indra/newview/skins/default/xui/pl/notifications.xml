@@ -4569,4 +4569,13 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
 		<usetemplate ignoretext="Potwierdź przed rozłączeniem obiektu" name="okcancelignore" notext="Anuluj" yestext="Rozłącz"/>
 	</notification>
+	<notification name="SnoozeDuration">
+		Okres (w sekundach) tymczasowego wyciszenia czatu grupowego:
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="SnoozeDurationInvalidInput">
+		Okres tymczasowego wyciszenia czatu grupowego musi być liczbą!
+	</notification>
 </notifications>
