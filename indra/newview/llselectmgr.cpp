@@ -653,28 +653,17 @@ bool LLSelectMgr::linkObjects()
 
 bool LLSelectMgr::unlinkObjects()
 {
-	// <FS:Ansariel> Comment this out as it's buggy (BUG-9499) and doesn't work properly. Simply always show the confirmation like we did before
-	//LLViewerObject *object = mSelectedObjects->getFirstRootObject();
-	//if (!object) return false;
+	S32 min_objects_for_confirm = gSavedSettings.getS32("MinObjectsForUnlinkConfirm");
+	S32 unlink_object_count = mSelectedObjects->getObjectCount(); // clears out nodes with NULL objects
+	if (unlink_object_count >= min_objects_for_confirm
+		&& unlink_object_count > mSelectedObjects->getRootObjectCount())
+	{
+		// total count > root count means that there are childer inside and that there are linksets that will be unlinked
+		LLNotificationsUtil::add("ConfirmUnlink", LLSD(), LLSD(), boost::bind(&LLSelectMgr::confirmUnlinkObjects, this, _1, _2));
+		return true;
+	}
 
-	//S32 min_objects_for_confirm = gSavedSettings.getS32("MinObjectsForUnlinkConfirm");
-	//for (LLObjectSelection::root_iterator iter = getSelection()->root_begin();  iter != getSelection()->root_end(); iter++)
-	//{
-	//	object = (*iter)->getObject();
-	//	if(object)
-	//	{
-	//		S32 objects_in_linkset = object->numChildren() + 1;
-	//		if(objects_in_linkset >= min_objects_for_confirm)
-	//		{
-	//			LLNotificationsUtil::add("ConfirmUnlink", LLSD(), LLSD(), boost::bind(&LLSelectMgr::confirmUnlinkObjects, this, _1, _2));
-	//			return true;
-	//		}
-	//	}
-	//}
-
-	//LLSelectMgr::getInstance()->sendDelink();
-	LLNotificationsUtil::add("ConfirmUnlink", LLSD(), LLSD(), boost::bind(&LLSelectMgr::confirmUnlinkObjects, this, _1, _2));
-	// </FS:Ansariel>
+	LLSelectMgr::getInstance()->sendDelink();
 	return true;
 }
 
