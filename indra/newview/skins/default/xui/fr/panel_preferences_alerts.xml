@@ -7,6 +7,16 @@
 	<check_box label="Me prévenir: Quand je dépense ou que je reçois des L$" name="notify_money_change_checkbox"/>
     </panel>
 
+	<panel name="tab-inventory">
+        <check_box name="FSNotifyIncomingObjectSpam"
+			label="Notifier lors du blocage d'items arrivant trop vite via un objet"/>
+        <check_box name="FSNotifyIncomingObjectSpamFrom"
+			label="Notifier lors du blocage d'items arrivant trop vite via un résident"/>
+        <slider name="FSOfferThrottleMaxCount"
+			label="Seuil d'offres, sur 10 sec, des objets :"
+			tool_tip="Défini, sur 10 secondes, le seuil d'offres entrantes successives émanant des objets avant qu'elles ne soient étranglées. [Défaut : 5]"/>
+	</panel>
+
     <!-- Alerts -->
     <panel label="Alerts" name="tab-alerts">
 	<text name="show_label">

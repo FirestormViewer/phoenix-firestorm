@@ -39,6 +39,9 @@
 		<check_box label="Powiadom, gdy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
 		<check_box label="Wyłącz powiadomienia mówiące o zwróceniu przedmiotów do szafy" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Pokazuj nazwy zapisanych zdjęć w historii czatu" name="FSLogSnapshotsToLocal"/>
+		<check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez obiekty" name="FSNotifyIncomingObjectSpam" />
+		<check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez innych Rezydentów" name="FSNotifyIncomingObjectSpamFrom" />
+		<slider name="FSOfferThrottleMaxCount" label="Limit ofert przychodzących obiektów:" tool_tip="Ustaw limit dla ofert przychodzących obiektów, w ciągu 10 sekund zanim zostaną one ograniczone. Domyślnie 5" />
 	</panel>
 	<panel label="Ostrzeżenia" name="tab-alerts">
 		<text name="show_label">
