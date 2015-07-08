@@ -9268,6 +9268,17 @@ BOOL LLVOAvatar::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type,
 	}
 	else
 	{
+		// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
+		if (LLPipeline::sShadowRender)
+		{
+			static LLCachedControl<U32> fsSimpleAvatarShadows(gSavedSettings, "FSSimpleAvatarShadows", 3);
+			if (fsSimpleAvatarShadows == 1)
+			{
+				return TRUE;
+			}
+		}
+		// </FS:Ansariel>
+
 		// baked textures can use TE images directly
 		return ((isTextureDefined(type) || isSelf())
 				&& (getTEImage(type)->getID() != IMG_INVISIBLE 
