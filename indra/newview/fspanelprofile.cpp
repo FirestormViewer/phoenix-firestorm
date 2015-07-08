@@ -1364,7 +1364,6 @@ void FSPanelPick::setSnapshotId(const LLUUID& id)
 void FSPanelPick::setPickName(const std::string& name)
 {
 	mPickName->setValue(name);
-	updateTabLabel(name);
 }
 
 const std::string FSPanelPick::getPickName()
@@ -1663,7 +1662,8 @@ void FSPanelProfilePicks::onClickNewBtn()
 	mTabContainer->addTabPanel(
 		LLTabContainer::TabPanelParams().
 		panel(pick_panel).
-		select_tab(true));
+		select_tab(true).
+		label(pick_panel->getPickName()));
 	mNewButton->setEnabled(canAddNewPick());
 	mDeleteButton->setEnabled(canDeletePick());
 }
