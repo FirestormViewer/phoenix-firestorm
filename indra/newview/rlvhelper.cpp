@@ -1015,8 +1015,17 @@ void RlvForceWear::done()
 		LLAppearanceMgr::instance().removeItemsFromAvatar(remItems, cb, true);
 	}
 
-	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
+	if ( (addBodyParts.empty()) && (!addClothing.empty()) && (m_addGestures.empty()) )
 	{
+		// Clothing items only
+		uuid_vec_t idClothing;
+		for (const LLViewerInventoryItem* pItem : addClothing)
+			idClothing.push_back(pItem->getUUID());
+		LLAppearanceMgr::instance().wearItemsOnAvatar(idClothing, false, false, cb);
+	}
+	else if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
+	{
+		// Mixture of body parts, clothing and/or gestures
 		LLInventoryModel::item_array_t addAttachments;
 		LLAppearanceMgr::instance().updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true, LLUUID::null, cb);
 
