@@ -1943,6 +1943,10 @@ void LLFloaterPreference::refreshEnabledState()
 
 	ctrl_shadow->setEnabled(enabled);
 	
+	// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
+	ctrl_avatar_shadow->setEnabled(enabled && ctrl_shadow->getValue().asInteger() > 0);
+	// </FS:Ansariel>
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -1968,6 +1972,8 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
+	// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+	LLComboBox* ctrl_avatar_shadow = getChild<LLComboBox>("AvatarShadowDetail");
 
 	// if vertex shaders off, disable all shader related products
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
@@ -1989,7 +1995,12 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
+
+		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+		ctrl_avatar_shadow->setEnabled(FALSE);
+		ctrl_avatar_shadow->setValue(0);
+		// </FS:Ansariel>
+
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2012,6 +2023,11 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs windlight, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
+
+		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+		ctrl_avatar_shadow->setEnabled(FALSE);
+		ctrl_avatar_shadow->setValue(0);
+		// </FS:Ansariel>
 		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
@@ -2032,7 +2048,12 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-		
+
+		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+		ctrl_avatar_shadow->setEnabled(FALSE);
+		ctrl_avatar_shadow->setValue(0);
+		// </FS:Ansariel>
+
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2058,6 +2079,11 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
+
+		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+		ctrl_avatar_shadow->setEnabled(FALSE);
+		ctrl_avatar_shadow->setValue(0);
+		// </FS:Ansariel>
 	}
 
 	// disabled reflections
@@ -2079,6 +2105,11 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
+
+		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
+		ctrl_avatar_shadow->setEnabled(FALSE);
+		ctrl_avatar_shadow->setValue(0);
+		// </FS:Ansariel>
 		
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
