@@ -107,10 +107,7 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 					// </FS:CR>
 
 					//color based on contact sets prefs
-					if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, LGG_CS_CHAT))
-					{
-						r_color = LGGContactSets::getInstance()->getFriendColor(chat.mFromID);
-					}
+					LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, LGG_CS_CHAT, r_color);
 				}
 				break;
 			case CHAT_SOURCE_OBJECT:

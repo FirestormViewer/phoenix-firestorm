@@ -2783,10 +2783,7 @@ void LLViewerWindow::draw()
 					targetColor = LGGContactSets::getInstance()->colorize(targetKey, targetColor, LGG_CS_MINIMAP);
 
 					//color based on contact sets prefs
-					if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP))
-					{
-						targetColor = LGGContactSets::getInstance()->getFriendColor(targetKey);
-					}
+					LGGContactSets::getInstance()->hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
 
 					LLColor4 mark_color;
 					if (LLNetMap::getAvatarMarkColor(targetKey, mark_color))

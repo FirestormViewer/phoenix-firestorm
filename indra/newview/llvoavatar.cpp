@@ -3229,10 +3229,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, LGG_CS_CHAT);
 		
 		//color based on contact sets prefs
-		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT))
-		{
-			new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
-		}
+		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT, new_chat);
 		// </FS:CR>
 		
 		if (mVisibleChat)
@@ -3471,10 +3468,7 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
 	// </FS:CR>
 	
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))
-	{
-		color = LGGContactSets::getInstance()->getFriendColor(getID());
-	}
+	LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG, color);
 
 	LLNetMap::getAvatarMarkColor(getID(), color);
 

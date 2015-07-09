@@ -585,14 +585,12 @@ void FSRadar::updateRadarList()
 		}
 		entry_options["name_style"] = nameCellStyle;
 
-		LLUIColor name_color = LLUIColorTable::instance().getColor("AvatarListItemIconDefaultColor", LLColor4::white);
+		LLColor4 name_color = LLUIColorTable::instance().getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
 		name_color = LGGContactSets::getInstance()->colorize(avId, (sRadarColorNamesByDistance ? range_color : name_color), LGG_CS_RADAR);
 
-		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
-		{
-			name_color = LGGContactSets::getInstance()->getFriendColor(avId);
-		}
-		entry_options["name_color"] = name_color.get().getValue();
+		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
+
+		entry_options["name_color"] = name_color.getValue();
 
 		// Voice power level indicator
 		LLVoiceClient* voice_client = LLVoiceClient::getInstance();
