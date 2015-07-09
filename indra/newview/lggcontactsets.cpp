@@ -494,7 +494,8 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 
 bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type)
 {
-	return hasFriendColorThatShouldShow(friend_id, type, LLColor4());
+	LLColor4 color = LLColor4::white;
+	return hasFriendColorThatShouldShow(friend_id, type, color);
 }
 
 // handle all settings and rlv that would prevent us from showing the cs color

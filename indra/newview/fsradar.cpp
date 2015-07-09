@@ -586,7 +586,7 @@ void FSRadar::updateRadarList()
 		entry_options["name_style"] = nameCellStyle;
 
 		LLColor4 name_color = LLUIColorTable::instance().getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
-		name_color = LGGContactSets::getInstance()->colorize(avId, (sRadarColorNamesByDistance ? range_color : name_color), LGG_CS_RADAR);
+		name_color = LGGContactSets::getInstance()->colorize(avId, (sRadarColorNamesByDistance ? range_color.get() : name_color), LGG_CS_RADAR);
 
 		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
 
