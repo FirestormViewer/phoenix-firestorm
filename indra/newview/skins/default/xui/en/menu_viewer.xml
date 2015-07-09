@@ -68,14 +68,14 @@
         </menu_item_call>
         
       <menu_item_call
-       label="Picks..."
+       label="Picks"
        name="Picks">
         <menu_item_call.on_click
          function="Floater.Show"
          parameter="picks" />
         </menu_item_call>
       <menu_item_call
-        label="Experiences..."
+        label="Experiences"
         name="Experiences">
         <menu_item_call.on_click
           function="Floater.ToggleOrBringToFront"
@@ -89,7 +89,17 @@
             <menu_item_call.on_enable
              function="Edit.EnableCustomizeAvatar" />
         </menu_item_call>
-        
+      <menu_item_call
+       label="Choose an avatar"
+       name="Avatar Picker">
+        <menu_item_call.on_click
+         function="Floater.Toggle"
+         parameter="avatar" />
+        <menu_item_call.on_visible
+         function="GridCheck"
+         parameter="secondlife"/>
+      </menu_item_call>
+
         <menu_item_call
          label="Snapshot"
          name="Take Snapshot"
@@ -757,6 +767,17 @@
              function="Floater.Toggle"
              parameter="places" />
             </menu_item_check>
+
+        <menu_item_call
+         label="Destinations"
+         name="Destinations">
+            <menu_item_call.on_click
+             function="Floater.Toggle"
+             parameter="destinations" />
+            <menu_item_call.on_visible
+             function="GridCheck"
+             parameter="secondlife"/>
+        </menu_item_call>
             
         <menu_item_check
              label="Mini-Map"

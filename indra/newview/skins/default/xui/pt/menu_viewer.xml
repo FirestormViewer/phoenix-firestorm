@@ -8,8 +8,9 @@
 		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Meu perfil" name="Profile"/>
 		<menu_item_call label="Minha aparência" name="ChangeOutfit"/>
+		<menu_item_call label="Selecione um avatar" name="Avatar Picker"/>
 		<menu_item_check label="Meu inventário" name="Inventory"/>
-		<menu_item_call label="Experiências..." name="Experiences"/>
+		<menu_item_call label="Experiências" name="Experiences"/>
 		<menu_item_check label="Meu inventário" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Meus gestos" name="Gestures"/>
 		<menu_item_check label="Minha voz" name="ShowVoice"/>
@@ -54,7 +55,7 @@
 	</menu>
 	<menu label="Mundo" name="World">
 		<menu_item_call label="Criar marco deste lugar" name="Create Landmark Here"/>
-		<menu_item_call label="Destinos..." name="Destinations"/>
+		<menu_item_call label="Destinos" name="Destinations"/>
 		<menu_item_check label="Mapa-múndi" name="World Map"/>
 		<menu_item_check label="Mini Mapa" name="Mini-Map"/>
 		<menu_item_check label="Busca" name="Search"/>
