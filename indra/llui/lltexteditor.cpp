@@ -1597,7 +1597,16 @@ void LLTextEditor::pasteTextWithLinebreaks(LLWString & clean_string)
 		pos = clean_string.find('\n',start);
 	}
 
-	if (pos != start)
+	// <FS:Ansariel> FIRE-4314: Paste from clipboard shows block character if last character is a linefeed
+	if (pos != start && pos == clean_string.length() - 1)
+	{
+		std::basic_string<llwchar> str = std::basic_string<llwchar>(clean_string,start,clean_string.length()-start-1);
+		setCursorPos(mCursorPos + insert(mCursorPos, str, TRUE, LLTextSegmentPtr()));
+		addLineBreakChar(FALSE);
+	}
+	else if (pos != start)
+	//if (pos != start)
+	// </FS:Ansariel>
 	{
 		std::basic_string<llwchar> str = std::basic_string<llwchar>(clean_string,start,clean_string.length()-start);
 		setCursorPos(mCursorPos + insert(mCursorPos, str, FALSE, LLTextSegmentPtr()));
