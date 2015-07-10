@@ -2450,6 +2450,18 @@ void LLTextEditor::insertText(LLWString &new_text)
 	setEnabled( enabled );
 }
 
+// <FS:Ansariel> Allow inserting a linefeed
+void LLTextEditor::insertLinefeed()
+{
+	BOOL enabled = getEnabled();
+	setEnabled( TRUE );
+
+	addLineBreakChar(FALSE);
+
+	setEnabled( enabled );
+}
+// </FS:Ansariel>
+
 void LLTextEditor::appendWidget(const LLInlineViewSegment::Params& params, const std::string& text, bool allow_undo)
 {
 	// Save old state
