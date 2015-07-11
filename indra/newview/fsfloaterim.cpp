@@ -1787,7 +1787,8 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 			}
 			else
 			{
-				mInputEditor->insertText(LLWString(1, llwchar(182)));
+				LLWString line_break(1, llwchar(182));
+				mInputEditor->insertText(line_break);
 			}
 		}
 
