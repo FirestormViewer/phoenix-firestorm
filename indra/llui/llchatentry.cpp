@@ -280,7 +280,7 @@ void LLChatEntry::paste()
 	{
 		S32 cursor_pos = getCursorPos();
 		LLWString content = getWText();
-		LLWStringUtil::replaceChar(content, '\n', 182);
+		LLWStringUtil::replaceChar(content, '\n', llwchar(182));
 		setWText(content);
 		setCursorPos(cursor_pos);
 	}
