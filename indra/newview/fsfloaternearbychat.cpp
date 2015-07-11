@@ -729,7 +729,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 				}
 				else
 				{
-					mInputEditor->insertText(LLWString(1, 182));
+					mInputEditor->insertText(LLWString(1, llwchar(182)));
 				}
 			}
 
