@@ -69,7 +69,7 @@
 					</text>
 					<button name="location_btn" label="Ustaw na obecne" />
 					<button name="clear_btn" label="Wyczyść" />
-					<text>
+					<text name="edit_marketplace">
 						Sklep Marketplace:
 					</text>
 					<check_box label="Aktywuj przygodę" name="edit_enable_btn" />
