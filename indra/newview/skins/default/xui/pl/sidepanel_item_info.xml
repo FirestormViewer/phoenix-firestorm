@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="item properties" title="Profil obiektu">
+	<panel.string name="loading_experience">
+		(wczytywanie)
+	</panel.string>
 	<panel.string name="unknown">
 		(nieznany)
 	</panel.string>
@@ -39,6 +42,9 @@
 			</text>
 			<text name="LabelAcquiredTitle">
 				Nabyte:
+			</text>
+			<text name="LabelItemExperienceTitle">
+				Przygoda:
 			</text>
 			<panel name="perms_inv">
 				<text name="perm_modify">

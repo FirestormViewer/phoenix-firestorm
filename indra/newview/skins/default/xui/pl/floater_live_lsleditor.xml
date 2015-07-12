@@ -9,6 +9,22 @@
 	<floater.string name="Title">
 		Skrypt: [NAME]
 	</floater.string>
+	<floater.string name="experience_enabled">
+		Odznacz, aby usunąć obecną przygodę
+	</floater.string>
+	<floater.string name="no_experiences">
+		Nie masz zezwoleń do żadnych przygód
+	</floater.string>
+	<floater.string name="add_experiences">
+		Zaznacz, aby dodać przygodę
+	</floater.string>
+	<floater.string name="show_experience_profile">
+		Kliknij, aby otworzyć profil przygody
+	</floater.string>
+	<floater.string name="loading">
+		Wczytywanie...
+	</floater.string>
 	<button label="Zresetuj" label_selected="Zresetuj" name="Reset"/>
 	<check_box label="Włączony" name="running"/>
+	<check_box label="Przygoda:" name="enable_xp"/>
 </floater>

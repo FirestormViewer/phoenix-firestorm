@@ -439,5 +439,6 @@ teksturę:
 				<button label="Usuń" label_selected="Usuń" name="remove_banned"/>
 			</panel>
 		</panel>
+		<panel label="Przygody" name="land_experiences_panel"/>
 	</tab_container>
 </floater>

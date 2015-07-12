@@ -25,8 +25,9 @@
 		Chcę mieć dostęp do miejsc:
 	</text>
 	<combo_box name="maturity_desired_combobox">
-		<combo_box.item label="General, Moderate oraz Adult" name="Desired_Adult"/>
-		<combo_box.item label="General oraz Moderate" name="Desired_Mature"/>
+		<combo_box.item label="General (wszyscy), Moderate (umiarkowane) i Adult (dorośli)" name="Desired_Adult"/>
+		<combo_box.item label="General (wszyscy) i Moderate (umiarkowane)" name="Desired_Mature"/>
+		<combo_box.item label="General (wszyscy)" name="Desired_PG"/>
 	</combo_box>
 	<text name="start_location_textbox">
 		Miejsce Startu:
