@@ -70,9 +70,21 @@ public:
 	/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleHover(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+									  EDragAndDropType cargo_type,
+									  void* cargo_data,
+									  EAcceptance* accept,
+									  std::string& tooltip_msg);
 
 	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	void	refreshLineHeight();
+
+
+	typedef boost::function<BOOL(S32, S32, MASK, BOOL, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
+	void setHandleDaDCallback(const handle_dad_callback_signal_t& func)
+	{
+		mHandleDaDCallback = func;
+	}
 
 protected:
 	friend class LLUICtrlFactory;
@@ -81,6 +93,8 @@ protected:
 	LLListContextMenu*	mContextMenu;
 	S32					mDesiredLineHeight;
 	EContentType		mContentType;
+
+	handle_dad_callback_signal_t	mHandleDaDCallback;
 };
 
 #endif // FS_SCROLLLISTCTRL_H

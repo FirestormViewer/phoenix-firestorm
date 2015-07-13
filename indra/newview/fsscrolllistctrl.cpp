@@ -36,7 +36,8 @@ FSScrollListCtrl::FSScrollListCtrl(const Params& p)
 :	LLScrollListCtrl(p),
 	mContextMenu(NULL),
 	mDesiredLineHeight(p.desired_line_height),
-	mContentType(p.content_type)
+	mContentType(p.content_type),
+	mHandleDaDCallback(NULL)
 {
 }
 
@@ -161,5 +162,22 @@ BOOL FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
 	{
 		return LLScrollListCtrl::handleHover(x, y, mask);
 	}
+}
+
+//virtual
+
+BOOL FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+											EDragAndDropType cargo_type,
+											void* cargo_data,
+											EAcceptance* accept,
+											std::string& tooltip_msg)
+{
+	if (mHandleDaDCallback)
+	{
+		return mHandleDaDCallback(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
+	}
+
+	return FALSE;
+	
 }
 
