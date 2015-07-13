@@ -21,7 +21,6 @@
      left="1"
      name="im_box_tab_container"
      tab_position="left"
-     tab_drag_commit="true"
      open_tabs_on_drag_and_drop="true"
      tab_width="115"
      tab_max_width = "115"

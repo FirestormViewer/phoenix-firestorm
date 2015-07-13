@@ -92,7 +92,6 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		layout="topleft"
 		left="2"
 		name="tabs"
-		tab_drag_commit="true"
 		tab_group="1"
 		tab_position="top"
 		top="2"
