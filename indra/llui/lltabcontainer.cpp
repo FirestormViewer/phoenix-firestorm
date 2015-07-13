@@ -1962,6 +1962,8 @@ void LLTabContainer::initButtons()
 	
 	if (mIsVertical)
 	{
+		// <FS:Ansariel> Nicer scrollbuttons
+		static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
 		static LLUICachedControl<S32> tabcntrv_arrow_btn_size ("UITabCntrvArrowBtnSize", 0);
 		// Left and right scroll arrows (for when there are too many tabs to show all at once).
 		S32 btn_top = getRect().getHeight();
@@ -1971,21 +1973,31 @@ void LLTabContainer::initButtons()
 		// </FS:Zi>
 
 		LLRect up_arrow_btn_rect;
-		up_arrow_btn_rect.setLeftTopAndSize( mMinTabWidth/2 , btn_top, tabcntrv_arrow_btn_size, tabcntrv_arrow_btn_size );
+		// <FS:Ansariel> Nicer scrollbuttons
+		//up_arrow_btn_rect.setLeftTopAndSize( mMinTabWidth/2 , btn_top, tabcntrv_arrow_btn_size, tabcntrv_arrow_btn_size );
+		up_arrow_btn_rect.setLeftTopAndSize( tabcntrv_pad + LLPANEL_BORDER_WIDTH + 2 , btn_top, mMinTabWidth, tabcntrv_arrow_btn_size );
+		// </FS:Ansariel>
 
 		LLRect down_arrow_btn_rect;
-		down_arrow_btn_rect.setLeftTopAndSize( mMinTabWidth/2 , btn_top_lower, tabcntrv_arrow_btn_size, tabcntrv_arrow_btn_size );
+		// <FS:Ansariel> Nicer scrollbuttons
+		//down_arrow_btn_rect.setLeftTopAndSize( mMinTabWidth/2 , btn_top_lower, tabcntrv_arrow_btn_size, tabcntrv_arrow_btn_size );
+		down_arrow_btn_rect.setLeftTopAndSize( tabcntrv_pad + LLPANEL_BORDER_WIDTH + 2 , btn_top_lower, mMinTabWidth, tabcntrv_arrow_btn_size );
+		// </FS:Ansariel>
 
 		LLButton::Params prev_btn_params;
 		prev_btn_params.name(std::string("Up Arrow"));
 		prev_btn_params.rect(up_arrow_btn_rect);
 		prev_btn_params.follows.flags(FOLLOWS_TOP | FOLLOWS_LEFT);
-		prev_btn_params.image_unselected.name("scrollbutton_up_out_blue.tga");
-		prev_btn_params.image_selected.name("scrollbutton_up_in_blue.tga");
+		// <FS:Ansariel> Nicer scrollbuttons
+		//prev_btn_params.image_unselected.name("scrollbutton_up_out_blue.tga");
+		//prev_btn_params.image_selected.name("scrollbutton_up_in_blue.tga");
+		prev_btn_params.image_overlay(LLUI::getUIImage("up_arrow.tga"));
+		// </FS:Ansariel>
 		prev_btn_params.click_callback.function(boost::bind(&LLTabContainer::onPrevBtn, this, _2));
 		// <FS:Zi> Fix vertical tab scrolling
 		prev_btn_params.mouse_held_callback.function(boost::bind(&LLTabContainer::onPrevBtnHeld, this, _2));
 		// </FS:Zi>
+
 
 		// <FS:Ansariel> Enable tab flashing
 		prev_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
@@ -1999,8 +2011,11 @@ void LLTabContainer::initButtons()
 		next_btn_params.name(std::string("Down Arrow"));
 		next_btn_params.rect(down_arrow_btn_rect);
 		next_btn_params.follows.flags(FOLLOWS_BOTTOM | FOLLOWS_LEFT);
-		next_btn_params.image_unselected.name("scrollbutton_down_out_blue.tga");
-		next_btn_params.image_selected.name("scrollbutton_down_in_blue.tga");
+		// <FS:Ansariel> Nicer scrollbuttons
+		//next_btn_params.image_unselected.name("scrollbutton_down_out_blue.tga");
+		//next_btn_params.image_selected.name("scrollbutton_down_in_blue.tga");
+		next_btn_params.image_overlay(LLUI::getUIImage("down_arrow.tga"));
+		// </FS:Ansariel>
 		next_btn_params.click_callback.function(boost::bind(&LLTabContainer::onNextBtn, this, _2));
 		// <FS:Zi> Fix vertical tab scrolling
 		next_btn_params.mouse_held_callback.function(boost::bind(&LLTabContainer::onNextBtnHeld, this, _2));
