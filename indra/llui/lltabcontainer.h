@@ -46,10 +46,16 @@ public:
 	};
 	typedef enum e_insertion_point
 	{
-		START,
-		END,
-		LEFT_OF_CURRENT,
-		RIGHT_OF_CURRENT
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3)
+		START = -1,
+		END = -2,
+		LEFT_OF_CURRENT = -3,
+		RIGHT_OF_CURRENT = -4
+// [/SL:KB]
+//		START,
+//		END,
+//		LEFT_OF_CURRENT,
+//		RIGHT_OF_CURRENT
 	} eInsertionPoint;
 
 	struct TabPositions : public LLInitParam::TypeValuesHelper<LLTabContainer::TabPosition, TabPositions>
@@ -83,6 +89,9 @@ public:
 											label_pad_left;
 
 		Optional<bool>						hide_tabs;
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-3.3)
+		Optional<bool>						tab_allow_rearrange;
+// [/SL:KB]
 		Optional<S32>						tab_padding_right;
 
 		Optional<TabParams>					first_tab,
@@ -140,9 +149,11 @@ public:
 	/*virtual*/ BOOL handleMouseDown( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL handleHover( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL handleMouseUp( S32 x, S32 y, MASK mask );
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2014-04-06 (Catznip-3.6)
+	/*virtual*/ BOOL handleScrollWheel(S32 x, S32 y, S32 clicks);
+// [/SL:KB]
 	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ BOOL handleScrollWheel(S32 x, S32 y, S32 clicks); // <FS:LO> FIRE-8024 Ability to scroll tab containers with the scroll wheel on the mouse
 	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,
 									   EDragAndDropType type, void* cargo_data,
 									   EAcceptance* accept, std::string& tooltip);
@@ -234,6 +245,14 @@ public:
 	void onJumpFirstBtn( const LLSD& data );
 	void onJumpLastBtn( const LLSD& data );
 
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
+	void setAllowRearrange(bool enable) { mAllowRearrange = enable; }
+	bool getAllowRearrange() const      { return mAllowRearrange; }
+
+	typedef boost::signals2::signal<void(S32, LLPanel*)> tab_rearrange_signal_t;
+	boost::signals2::connection setRearrangeCallback(const tab_rearrange_signal_t::slot_type& cb);
+// [/SL:KB]
+
 private:
 
 	void initButtons();
@@ -271,6 +290,10 @@ private:
 	
 	S32								mCurrentTabIdx;
 	BOOL							mTabsHidden;
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
+	bool							mAllowRearrange;
+	tab_rearrange_signal_t*			mRearrangeSignal;
+// [/SL:KB]
 
 	BOOL							mScrolled;
 	LLFrameTimer					mScrollTimer;

@@ -214,6 +214,9 @@ LLTabContainer::Params::Params()
 	label_pad_left("label_pad_left"),
 	tab_position("tab_position"),
 	hide_tabs("hide_tabs", false),
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-3.3)
+	tab_allow_rearrange("tab_allow_rearrange", false),
+// [/SL:KB]
 	tab_padding_right("tab_padding_right"),
 	first_tab("first_tab"),
 	middle_tab("middle_tab"),
@@ -230,6 +233,10 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 :	LLPanel(p),
 	mCurrentTabIdx(-1),
 	mTabsHidden(p.hide_tabs),
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
+	mAllowRearrange(p.tab_allow_rearrange),
+	mRearrangeSignal(NULL),
+// [/SL:KB]
 	mScrolled(FALSE),
 	mScrollPos(0),
 	mScrollPosPixels(0),
@@ -304,6 +311,10 @@ LLTabContainer::~LLTabContainer()
 {
 	std::for_each(mTabList.begin(), mTabList.end(), DeletePointer());
 	mTabList.clear();
+
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
+	delete mRearrangeSignal;
+// [/SL:KB]
 }
 
 //virtual
@@ -623,11 +634,20 @@ BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 		}
 		if( tab_rect.pointInRect( x, y ) )
 		{
-			S32 index = getCurrentPanelIndex();
-			index = llclamp(index, 0, tab_count-1);
-			LLButton* tab_button = getTab(index)->mButton;
+//			S32 index = getCurrentPanelIndex();
+//			index = llclamp(index, 0, tab_count-1);
+//			LLButton* tab_button = getTab(index)->mButton;
 			gFocusMgr.setMouseCapture(this);
-			tab_button->setFocus(TRUE);
+//			tab_button->setFocus(TRUE);
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.0)
+			// Only set keyboard focus to the tab button of the active panel (if we have one) if the user actually clicked on it
+			if (mCurrentTabIdx >= 0)
+			{
+				LLButton* pActiveTabBtn = mTabList[mCurrentTabIdx]->mButton;
+				if (pActiveTabBtn->pointInView(x - pActiveTabBtn->getRect().mLeft, y - pActiveTabBtn->getRect().mBottom))
+					pActiveTabBtn->setFocus(TRUE);
+			}
+// [/SL:KB]
 		}
 	}
 	if (handled) {
@@ -825,6 +845,12 @@ BOOL LLTabContainer::handleToolTip( S32 x, S32 y, MASK mask)
 // virtual
 BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 {
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.0)
+	if ( (mAllowRearrange) && (hasMouseCapture()) )
+	{
+		return FALSE;	// Don't process movement keys while the user might be rearranging tabs
+	}
+// [/SL:KB]
 	BOOL handled = FALSE;
 	if (key == KEY_LEFT && mask == MASK_ALT)
 	{
@@ -925,27 +951,43 @@ BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDrag
 				{
 					if (mJumpPrevArrowBtn && mJumpPrevArrowBtn->getRect().pointInRect(x, y))
 					{
-						S32	local_x	= x	- mJumpPrevArrowBtn->getRect().mLeft;
-						S32	local_y	= y	- mJumpPrevArrowBtn->getRect().mBottom;
-						mJumpPrevArrowBtn->handleHover(local_x,	local_y, mask);
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2014-03-17 (Catznip-3.6)
+						mJumpPrevArrowBtn->onCommit();
+						mDragAndDropDelayTimer.reset();
+// [/SL:KB]
+//						S32	local_x	= x	- mJumpPrevArrowBtn->getRect().mLeft;
+//						S32	local_y	= y	- mJumpPrevArrowBtn->getRect().mBottom;
+//						mJumpPrevArrowBtn->handleHover(local_x,	local_y, mask);
 					}
 					if (mJumpNextArrowBtn && mJumpNextArrowBtn->getRect().pointInRect(x, y))
 					{
-						S32	local_x	= x	- mJumpNextArrowBtn->getRect().mLeft;
-						S32	local_y	= y	- mJumpNextArrowBtn->getRect().mBottom;
-						mJumpNextArrowBtn->handleHover(local_x,	local_y, mask);
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2014-03-17 (Catznip-3.6)
+						mJumpNextArrowBtn->onCommit();
+						mDragAndDropDelayTimer.reset();
+// [/SL:KB]
+//						S32	local_x	= x	- mJumpNextArrowBtn->getRect().mLeft;
+//						S32	local_y	= y	- mJumpNextArrowBtn->getRect().mBottom;
+//						mJumpNextArrowBtn->handleHover(local_x,	local_y, mask);
 					}
 					if (mPrevArrowBtn->getRect().pointInRect(x,	y))
 					{
-						S32	local_x	= x	- mPrevArrowBtn->getRect().mLeft;
-						S32	local_y	= y	- mPrevArrowBtn->getRect().mBottom;
-						mPrevArrowBtn->handleHover(local_x,	local_y, mask);
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2014-03-17 (Catznip-3.6)
+						mPrevArrowBtn->onCommit();
+						mDragAndDropDelayTimer.reset();
+// [/SL:KB]
+//						S32	local_x	= x	- mPrevArrowBtn->getRect().mLeft;
+//						S32	local_y	= y	- mPrevArrowBtn->getRect().mBottom;
+//						mPrevArrowBtn->handleHover(local_x,	local_y, mask);
 					}
 					else if	(mNextArrowBtn->getRect().pointInRect(x, y))
 					{
-						S32	local_x	= x	- mNextArrowBtn->getRect().mLeft;
-						S32	local_y	= y	- mNextArrowBtn->getRect().mBottom;
-						mNextArrowBtn->handleHover(local_x, local_y, mask);
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2014-03-17 (Catznip-3.6)
+						mNextArrowBtn->onCommit();
+						mDragAndDropDelayTimer.reset();
+// [/SL:KB]
+//						S32	local_x	= x	- mNextArrowBtn->getRect().mLeft;
+//						S32	local_y	= y	- mNextArrowBtn->getRect().mBottom;
+//						mNextArrowBtn->handleHover(local_x, local_y, mask);
 					}
 				}
 
@@ -2199,9 +2241,21 @@ void LLTabContainer::insertTuple(LLTabTuple * tuple, eInsertionPoint insertion_p
 		mTabList.insert(current_iter, tuple);
 		}
 		break;
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3)
 	case END:
-	default:
 		mTabList.push_back( tuple );
+		break;
+	// All of the pre-defined insertion points are negative so if we encounter a positive number, assume it's an index
+	default:
+		S32 idxInsertion = (S32)insertion_point;
+		if ( (idxInsertion >= 0) && (idxInsertion < mTabList.size()) )
+			mTabList.insert(mTabList.begin() + llmax(mLockedTabCount, idxInsertion), tuple);
+		else
+			mTabList.push_back(tuple);
+// [/SL:KB]
+//	case END:
+//	default:
+//		mTabList.push_back( tuple );
 	}
 }
 
@@ -2278,7 +2332,48 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 			S32 local_y = y - tuple->mButton->getRect().mBottom;
 			if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
 			{
-				tuple->mButton->onCommit();
+//				tuple->mButton->onCommit();
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.5)
+				if ( (mAllowRearrange) && (mCurrentTabIdx >= 0) && (mTabList[mCurrentTabIdx]->mButton->hasFocus()) )
+				{
+					S32 idxHover = iter - mTabList.begin();
+					if ( (mCurrentTabIdx >= mLockedTabCount) && (idxHover >= mLockedTabCount) && (mCurrentTabIdx != idxHover) )
+					{
+						LLRect rctCurTab = mTabList[mCurrentTabIdx]->mButton->getRect();
+						LLRect rctHoverTab = mTabList[idxHover]->mButton->getRect();
+
+						// Only rearrange the tabs if the mouse pointer has cleared the overlap area
+						bool fClearedOverlap = 
+						  (mIsVertical) 
+							? ( (idxHover < mCurrentTabIdx) && (y > rctHoverTab.mTop - rctCurTab.getHeight()) ) ||
+							  ( (idxHover > mCurrentTabIdx) && (y < rctCurTab.mTop - rctHoverTab.getHeight()) )
+							: ( (idxHover < mCurrentTabIdx) && (x < rctHoverTab.mLeft + rctCurTab.getWidth()) ) ||
+							  ( (idxHover > mCurrentTabIdx) && (x > rctCurTab.mLeft + rctHoverTab.getWidth()) );
+						if (fClearedOverlap)
+						{
+							tuple = mTabList[mCurrentTabIdx];
+
+							mTabList.erase(mTabList.begin() + mCurrentTabIdx);
+							mTabList.insert(mTabList.begin() + idxHover, tuple);
+
+							if (mRearrangeSignal)
+								(*mRearrangeSignal)(idxHover, tuple->mTabPanel);
+
+							tuple->mButton->onCommit();
+							tuple->mButton->setFocus(TRUE);
+						}
+					}
+				}
+				else
+				{
+					tuple->mButton->onCommit();
+					tuple->mButton->setFocus(TRUE);
+// [SL:KB] - Patch: Control-TabContainer | Checked: 2012-08-10 (Catznip-3.3)
+					return;
+// [/SL:KB]
+				}
+				break;
+// [/SL:KB]
 			}
 		}
 	}
@@ -2288,6 +2383,15 @@ S32 LLTabContainer::getTotalTabWidth() const
 {
     return mTotalTabWidth;
 }
+
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3)
+boost::signals2::connection LLTabContainer::setRearrangeCallback(const tab_rearrange_signal_t::slot_type& cb)
+{
+	if (!mRearrangeSignal)
+		mRearrangeSignal = new tab_rearrange_signal_t();
+	return mRearrangeSignal->connect(cb);
+}
+// [/SL:KB]
 
 // <FS:ND> Hide one tab. Will switch to the first visible tab if one exists. Otherwise the Tabcontainer is hidden
 void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )

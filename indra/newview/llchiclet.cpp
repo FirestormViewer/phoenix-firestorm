@@ -1336,6 +1336,22 @@ S32 LLChicletPanel::getChicletIndex(const LLChiclet* chiclet)
 	return -1;
 }
 
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
+void LLChicletPanel::setChicletIndex(const LLChiclet* chiclet, S32 index)
+{
+	if ( (index >= mChicletList.size()) || (index < 0) )
+		return;
+
+	S32 cur_index = getChicletIndex(chiclet);
+	if ( (-1 == cur_index) && (cur_index != index) )
+		return;
+
+	mChicletList.erase(mChicletList.begin() + cur_index);
+	mChicletList.insert(mChicletList.begin() + index, const_cast<LLChiclet*>(chiclet));
+	arrange();
+}
+// [/SL:KB]
+
 void LLChicletPanel::removeChiclet(LLChiclet*chiclet)
 {
 	chiclet_list_t::iterator it = mChicletList.begin();
