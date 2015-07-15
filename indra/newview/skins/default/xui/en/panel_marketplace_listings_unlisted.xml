@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <inventory_panel
-    label="UNLISTED"
+    label="Unlisted"
     name="Inactive Items"
     help_topic="marketplace_tab"
     layout="topleft"

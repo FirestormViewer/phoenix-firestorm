@@ -5,7 +5,7 @@
  layout="topleft"
  name="Item Properties"
  help_topic="item+properties"
- title="ITEM PROPERTIES"
+ title="Item Properties"
  width="330">
  <panel
    follows="all"

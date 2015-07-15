@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater
-  title="MARKETPLACE LISTINGS"
+  title="Marketplace Listings"
   name="floater_marketplace_listings"
   help_topic="floater_marketplace_listings"
   positioning="cascading"

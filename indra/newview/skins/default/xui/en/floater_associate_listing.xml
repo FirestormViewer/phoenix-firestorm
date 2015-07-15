@@ -6,7 +6,7 @@
  layout="topleft"
  name="associate listing"
  help_topic="associate_listing"
- title="ASSOCIATE LISTING"
+ title="Associate Listing"
  width="375">
     <text
      type="string"

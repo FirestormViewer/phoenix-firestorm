@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <inventory_panel
-    label="ALL"
+    label="All"
     name="All Items"
     help_topic="marketplace_tab"
     layout="topleft"
