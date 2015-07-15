@@ -22,6 +22,7 @@
     height="440"
     width="333">
     <panel
+      name="background_panel"
       follows="all"
       left="10"
       height="440"
