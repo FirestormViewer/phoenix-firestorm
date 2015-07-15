@@ -148,8 +148,6 @@
 
 
   <InstallExecuteSequence>
-	<RemoveExistingProducts After="InstallValidate" />
-
     <Custom Action="ExtractSkins_pre" After="InstallInitialize">Not Installed</Custom>
     <Custom Action="ExtractSkins" Before="InstallFinalize">Not Installed</Custom>
     <Custom Action="DeleteSkins_pre" After="InstallInitialize">REMOVE</Custom>
