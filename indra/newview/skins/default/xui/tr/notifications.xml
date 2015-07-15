@@ -2246,7 +2246,7 @@ Envanter öğesi/öğeleri taşınsın mı?
 	</notification>
 	<notification name="PayConfirmation">
 		[TARGET] hedefine [AMOUNT]L$ ödemek istediğinizi doğrulayın.
-		<usetemplate ignoretext="Ödeme yapılmadan önce doğrulama iste (200L$ üzerinde tutarlar için)" name="okcancelignore" notext="İptal" yestext="Öde"/>
+		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Öde"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		Bu nesne içinde kopyalama izniniz olan bir öğe yok.

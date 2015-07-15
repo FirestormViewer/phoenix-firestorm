@@ -2113,7 +2113,7 @@ Przenieść obiekty szafy?
 	</notification>
 	<notification name="PayConfirmation">
 		Potwierdź, że na pewno chcesz zapłacić [AMOUNT]L$ dla [TARGET].
-		<usetemplate ignoretext="Potwierdź przed płaceniem (kwoty ponad 200 L$)" name="okcancelignore" notext="Anuluj" yestext="Zapłać" />
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zapłać" />
 	</notification>
 	<notification name="PayObjectFailed">
 		Płatność nie powiodła się: nie można znaleźć obiektu.

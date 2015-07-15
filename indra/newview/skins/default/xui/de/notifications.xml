@@ -2346,7 +2346,7 @@ Inventarobjekt(e) verschieben?
 	</notification>
 	<notification name="PayConfirmation">
 		Bestätigen Sie, dass Sie L$ [AMOUNT] an [TARGET] zahlen möchten.
-		<usetemplate ignoretext="Vor den Bezahlen bestätigen (Summen über L$ 200)" name="okcancelignore" notext="Abbrechen" yestext="Bezahlen"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Bezahlen"/>
 	</notification>
 	<notification name="PayObjectFailed">
 		Zahlung fehlgeschlagen: Objekt wurde nicht gefunden.

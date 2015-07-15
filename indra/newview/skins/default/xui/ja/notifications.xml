@@ -2318,7 +2318,7 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	</notification>
 	<notification name="PayConfirmation">
 		L$[AMOUNT] を [TARGET] に支払うことを確認してください。
-		<usetemplate ignoretext="支払い前に確認 (合計金額が L$200 以上の場合)" name="okcancelignore" notext="取り消し" yestext="支払い"/>
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="支払い"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		このオブジェクトには、あなたがコピーできるアイテムはありません。

@@ -2230,7 +2230,7 @@ SHA1 指紋：[MD5_DIGEST]
 	</notification>
 	<notification name="PayConfirmation">
 		確認你真要支付 L$[AMOUNT] 給 [TARGET]。
-		<usetemplate ignoretext="付款前跟我確認（超過 L$200 的總額）" name="okcancelignore" notext="取消" yestext="支付"/>
+		<usetemplate name="okcancelbuttons" notext="取消" yestext="支付"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		這物件中沒有任何准許你複製的物項。

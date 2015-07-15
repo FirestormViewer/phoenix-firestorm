@@ -2380,7 +2380,7 @@ Dado que estos objetos tienen scripts, moverlos a tu inventario puede provocar u
 	</notification>
 	<notification name="PayConfirmation">
 		Confirma que deseas pagar L$[AMOUNT] a [TARGET].
-		<usetemplate ignoretext="Confirmar antes de pagar (sumas mayores de 200 L$)" name="okcancelignore" notext="Cancelar" yestext="Pagar"/>
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Pagar"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		En este objeto no hay items que estés autorizado a copiar.

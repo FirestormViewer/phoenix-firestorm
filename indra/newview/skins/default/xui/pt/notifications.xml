@@ -2240,7 +2240,7 @@ Mover para o inventário o(s) item(s)?
 	</notification>
 	<notification name="PayConfirmation">
 		Confirme que você deseja pagar L$[AMOUNT] a [TARGET].
-		<usetemplate ignoretext="Confirmar antes de pagar (somas acima de L$ 200)" name="okcancelignore" notext="Cancelar" yestext="Pagar"/>
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Pagar"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		Não há itens neste objeto que você está autorizado a copiar.

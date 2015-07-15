@@ -53,6 +53,8 @@
 #include "lltransactiontypes.h"
 #include "lluictrlfactory.h"
 
+#include "llviewercontrol.h"
+
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
@@ -120,7 +122,8 @@ protected:
 
 
 const S32 FASTPAY_BUTTON_WIDTH = 80;
-const S32 PAY_AMOUNT_NOTIFICATION = 200;
+// <FS:Ansariel> FIRE-16092: Make payment confirmation customizable
+//const S32 PAY_AMOUNT_NOTIFICATION = 200;
 
 LLFloaterPay::LLFloaterPay(const LLSD& key)
 	: LLFloater(key),
@@ -494,7 +497,10 @@ void LLFloaterPay::onGive(void* data)
 		{
 			amount = atoi(floater->getChild<LLUICtrl>("amount")->getValue().asString().c_str());
 		}
-		if (amount > PAY_AMOUNT_NOTIFICATION && gStatusBar && gStatusBar->getBalance() > amount)
+		// <FS:Ansariel> FIRE-16092: Make payment confirmation customizable
+		//if (amount > PAY_AMOUNT_NOTIFICATION && gStatusBar && gStatusBar->getBalance() > amount)
+		if (gSavedSettings.getBOOL("FSConfirmPayments") && amount > gSavedSettings.getS32("FSPaymentConfirmationThreshold") && gStatusBar && gStatusBar->getBalance() > amount)
+		// </FS:Ansariel>
 		{
 			LLUUID payee_id = LLUUID::null;
 			BOOL is_group = false;
