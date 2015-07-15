@@ -7379,9 +7379,9 @@
          <key>llCastRay</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>list</string>
             <key>arguments</key>
@@ -7676,9 +7676,9 @@
          <key>llCreateCharacter</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -7754,9 +7754,9 @@
          <key>llDeleteCharacter</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -8477,9 +8477,9 @@
          <key>llEvade</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -8509,9 +8509,9 @@
          <key>llExecCharacterCmd</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -8564,9 +8564,9 @@
          <key>llFleeFrom</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -8982,9 +8982,9 @@
          <key>llGetClosestNavPoint</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>list</string>
             <key>arguments</key>
@@ -9660,7 +9660,7 @@
          <key>llGetMassMKS</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
             <real>0.0</real>
             <key>return</key>
@@ -9686,7 +9686,7 @@
          <key>llGetMemoryLimit</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
             <real>0.0</real>
             <key>return</key>
@@ -10088,9 +10088,9 @@
          <key>llGetParcelMusicURL</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>string</string>
             <key>arguments</key>
@@ -10191,9 +10191,9 @@
          <key>llGetPhysicsMaterial</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>list</string>
             <key>arguments</key>
@@ -10474,7 +10474,7 @@
          <key>llGetSPMaxMemory</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
             <real>0.0</real>
             <key>return</key>
@@ -12733,9 +12733,9 @@
          <key>llManageEstateAccess</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>integer</string>
             <key>arguments</key>
@@ -13016,9 +13016,9 @@
          <key>llNavigateTo</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -13347,9 +13347,9 @@
          <key>llPatrolPoints</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -13498,9 +13498,9 @@
          <key>llPursue</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -15117,7 +15117,7 @@
          <key>llSetAngularVelocity</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
             <real>0.0</real>
             <key>return</key>
@@ -15328,9 +15328,9 @@
          <key>llSetContentType</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -15540,9 +15540,9 @@
          <key>llSetKeyframedMotion</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -16108,9 +16108,9 @@
          <key>llSetPhysicsMaterial</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
-            <real/>
+            <real>0.0</real>
             <key>return</key>
             <string>void</string>
             <key>arguments</key>
@@ -16865,7 +16865,7 @@
          <key>llSetVelocity</key>
          <map>
             <key>energy</key>
-            <real/>
+            <real>0.0</real>
             <key>sleep</key>
             <real>0.0</real>
             <key>return</key>

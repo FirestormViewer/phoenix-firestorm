@@ -122,6 +122,8 @@ public:
 							   void *cargo_data, EAcceptance *accept,
 							   std::string& tooltip_msg);
 
+	virtual BOOL handleKeyHere( KEY key, MASK mask );
+
 	/**
 	 * Returns true if chat is displayed in multi tabbed floater
 	 *         false if chat is displayed in multiple windows

@@ -370,11 +370,11 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 			type = CHAT_TYPE_OOC;
 			handled = TRUE;
 		}
-		else if (mask == MASK_NONE)
+		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
-			// say
-			type = CHAT_TYPE_NORMAL;
-			handled = TRUE;
+			addChar(llwchar(182));
+
+			return TRUE;
 		}
 		else
 		{

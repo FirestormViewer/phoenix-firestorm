@@ -78,6 +78,9 @@
 					</text>
 					<button label="Aktuellen Standort verwenden" name="location_btn"/>
 					<button label="Standort löschen" name="clear_btn"/>
+					<text name="edit_marketplace">
+						Marktplatz-Laden:
+					</text>
 					<check_box label="Erlebnis aktivieren" name="edit_enable_btn" tool_tip=""/>
 					<check_box label="Aus Suche ausschließen" name="edit_private_btn"/>
 					<text name="changes" value="Es kann mehrere Minuten dauern, bis Erlebnisänderungen in allen Regionen umgesetzt werden."/>

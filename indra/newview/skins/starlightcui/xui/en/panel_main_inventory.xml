@@ -90,7 +90,6 @@
      layout="topleft"
      left="7"
      name="inventory filter tabs"
-     tab_drag_commit="true"
      open_tabs_on_drag_and_drop="true"
      tab_height="23"
      tab_group="1"

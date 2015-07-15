@@ -172,6 +172,7 @@
 						 name="radar_list"
 						 draw_stripes="true"
 						 multi_select="true"
+						 content_type="Agents"
 						 width="321">
 							<radar_list.columns
 							 label="Name"

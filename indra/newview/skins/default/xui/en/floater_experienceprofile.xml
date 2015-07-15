@@ -616,6 +616,7 @@
             name="clear_btn"
             label="Clear Location"/>
           <text
+            name="edit_marketplace"
             type="string"
             length="1"
             follows="left|top|right"

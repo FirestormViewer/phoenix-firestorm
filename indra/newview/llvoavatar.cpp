@@ -3229,10 +3229,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, LGG_CS_CHAT);
 		
 		//color based on contact sets prefs
-		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT))
-		{
-			new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
-		}
+		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT, new_chat);
 		// </FS:CR>
 		
 		if (mVisibleChat)
@@ -3471,10 +3468,7 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
 	// </FS:CR>
 	
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))
-	{
-		color = LGGContactSets::getInstance()->getFriendColor(getID());
-	}
+	LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG, color);
 
 	LLNetMap::getAvatarMarkColor(getID(), color);
 
@@ -9295,6 +9289,17 @@ BOOL LLVOAvatar::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type,
 	}
 	else
 	{
+		// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
+		if (LLPipeline::sShadowRender)
+		{
+			static LLCachedControl<U32> fsSimpleAvatarShadows(gSavedSettings, "FSSimpleAvatarShadows", 3);
+			if (fsSimpleAvatarShadows == 1)
+			{
+				return TRUE;
+			}
+		}
+		// </FS:Ansariel>
+
 		// baked textures can use TE images directly
 		return ((isTextureDefined(type) || isSelf())
 				&& (getTEImage(type)->getID() != IMG_INVISIBLE 

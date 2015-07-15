@@ -132,6 +132,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsList->setCommitOnSelectionChange(TRUE);
 	mFriendsList->setCommitCallback(boost::bind(&FSFloaterContacts::onSelectName, this));
 	mFriendsList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
+	mFriendsList->setHandleDaDCallback(boost::bind(&FSFloaterContacts::handleFriendsListDragAndDrop, this, _1, _2, _3, _4, _5, _6, _7, _8));
 	mFriendsList->setContextMenu(&gFSContactsFriendsMenu);
 	
 	mFriendsTab->childSetAction("im_btn",				boost::bind(&FSFloaterContacts::onImButtonClicked,				this));
@@ -1279,6 +1280,33 @@ void FSFloaterContacts::disconnectAvatarNameCacheConnection(const LLUUID& reques
 		}
 		mAvatarNameCacheConnections.erase(found);
 	}
+}
+
+BOOL FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+														EDragAndDropType cargo_type,
+														void* cargo_data,
+														EAcceptance* accept,
+														std::string& tooltip_msg)
+{
+	if (cargo_type == DAD_PERSON)
+	{
+		LLUUID* av_id = static_cast<LLUUID*>(cargo_data);
+		if (av_id && !LLAvatarActions::isFriend(*av_id))
+		{
+			*accept = ACCEPT_YES_SINGLE;
+
+			if (drop)
+			{
+				LLAvatarActions::requestFriendshipDialog(*av_id);
+			}
+		}
+	}
+	else
+	{
+		*accept = ACCEPT_NO;
+	}
+
+	return TRUE;
 }
 
 // EOF

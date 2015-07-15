@@ -1761,6 +1761,43 @@ bool FSFloaterIM::dropPerson(LLUUID* person_id, bool drop)
 	return res;
 }
 
+// virtual
+BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
+{
+	BOOL handled = FALSE;
+	
+	if (key == KEY_RETURN && mask == (MASK_SHIFT | MASK_CONTROL))
+	{
+		if (!gSavedSettings.getBOOL("FSUseSingleLineChatEntry"))
+		{
+			if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
+			{
+				LLUI::reportBadKeystroke();
+			}
+			else
+			{
+				mInputEditor->insertLinefeed();
+			}
+		}
+		else
+		{
+			if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
+			{
+				LLUI::reportBadKeystroke();
+			}
+			else
+			{
+				LLWString line_break(1, llwchar(182));
+				mInputEditor->insertText(line_break);
+			}
+		}
+
+		handled = TRUE;
+	}
+
+	return handled;
+}
+
 BOOL FSFloaterIM::isInviteAllowed() const
 {
 	return ( (IM_SESSION_CONFERENCE_START == mDialog)

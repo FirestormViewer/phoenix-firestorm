@@ -1794,6 +1794,30 @@ Kontynuować?
 		Usunąć zarządcę majątku tylko z tego majątku czy z [ALL_ESTATES]?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
 	</notification>
+	<notification label="Wybierz Majątek" name="EstateAllowedExperienceAdd">
+		Dodać do listy dostępu tylko do tego majątku czy do [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>
+	<notification label="Wybierz Majątek" name="EstateAllowedExperienceRemove">
+		Usunąć z listy dostępu tylko z tego majątku czy do [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>
+	<notification label="Wybierz Majątek" name="EstateBlockedExperienceAdd">
+		Zablokować dostęp tylko dla tego majątku czy dla [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>
+	<notification label="Wybierz Majątek" name="EstateBlockedExperienceRemove">
+		Odblokować dostęp tylko dla tego majątku czy dla [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>
+	<notification label="Wybierz Majątek" name="EstateTrustedExperienceAdd">
+		Dodać do listy kluczy tylko dla tego majątku czy dla [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>
+	<notification label="Wybierz Majątek" name="EstateTrustedExperienceRemove">
+		Usunąć z listy kluczy tylko dla tego majątku czy dla [ALL_ESTATES]?
+		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
+	</notification>  
 	<notification label="Potwierdź Wyrzucenie" name="EstateKickUser">
 		Wyrzucić [EVIL_USER] z tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2924,6 +2948,73 @@ Czy się zgadzasz?
 			<button name="Yes" text="Tak"/>
 			<button name="No" text="Nie"/>
 			<button name="Mute" text="Zablokuj"/>
+		</form>
+	</notification>
+	<notification name="ExperienceAcquireFailed">
+		Nie można uzyskać nowej przygody:
+[ERROR_MESSAGE]
+	</notification>
+	<notification name="NotInGroupExperienceProfileMessage">
+		Zmiana do grupy przygody została zignorowana, ponieważ właściciel nie jest członkiem wybranej grupy.
+	</notification>
+	<notification name="UneditableExperienceProfileMessage">
+		Niemodyfikowalne pole '[field]' zostało zignorowane podczas aktualizacji profilu przygody.
+	</notification>
+	<notification name="RestrictedToOwnerExperienceProfileMessage">
+		Zignorowano zmiany dla pola '[field]', ponieważ może ono być zmieniane tylko przez właściciela przygody.
+	</notification>
+	<notification name="MaturityRatingExceedsOwnerExperienceProfileMessage">
+		Nie możesz ustawić poziomu treści dla przygody większego, niż ten właściciela.
+	</notification>
+	<notification name="RestrictedTermExperienceProfileMessage">
+		Następujące rzeczy uniemożliwiły zaktualizowanie nazwy/opisu profilu przygody: [extra_info]
+	</notification>
+	<notification name="TeleportedHomeExperienceRemoved">
+		Zostałeś/aś wyteleportowany/a z regionu [region_name] za usunięcie przygody secondlife:///app/experience/[public_id]/profile i wobec tego nie możesz tam dłużej przebywać.
+		<form name="form">
+			<ignore name="ignore" text="Wyteleportowanie z regionu za usunięcie przygody"/>
+		</form>
+	</notification>
+	<notification name="TrustedExperienceEntry">
+		Dostałeś/aś przyzwolenie na przebywanie w regionie [region_name], ponieważ zgodziłeś/aś się uczestniczyć w przygodzie secondlife:///app/experience/[public_id]/profile - usunięcie jej może spowodować, że zostaniesz usunięty/a z regionu.
+		<form name="form">
+			<ignore name="ignore" text="Przyzwolenie na przebywanie w regionie po akceptacji przygody"/>
+		</form>
+	</notification>
+	<notification name="TrustedExperiencesAvailable">
+		Nie masz dostępu do tego miejsca. Może będziesz go mieć, jeśli zaakceptujesz następującą przygodę:
+
+[EXPERIENCE_LIST]
+
+Inne przygody również mogą stać się dostępne.
+	</notification>
+	<notification name="ExperienceEvent">
+		Obiekt dostał zezwolenie: [EventType] - poprzez przygodę: secondlife:///app/experience/[public_id]/profile
+Właściciel: secondlife:///app/agent/[OwnerID]/inspect
+Nazwa obiektu: [ObjectName]
+Nazwa działki: [ParcelName]
+	</notification>
+	<notification name="ExperienceEventAttachment">
+		Dodatek na Tobie dostał zezwolenie: [EventType] - poprzez przygodę: secondlife:///app/experience/[public_id]/profile
+Właściciel: secondlife:///app/agent/[OwnerID]/inspect
+	</notification>
+	<notification name="ScriptQuestionExperience">
+		Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; którego właścicielem jest &apos;[NAME]&apos; prosi Cię o udział w przygodzie ([GRID_WIDE]):
+
+[EXPERIENCE]
+
+Gdy zezwolenie zostanie zatwierdzone nie zobaczysz tej wiadomości ponownie, dla tej przygody - chyba, że zostanie ono cofnięte w profilu przygody.
+
+Skrypty powiązane z tą przygodą będą mogły robić następujące rzeczy w regionach, gdzie przygoda jest aktywna:
+
+[QUESTIONS]
+
+Czy wyrażasz na to zgodę?
+		<form name="form">
+			<button name="BlockExperience" text="Zablokuj przygodę"/>
+			<button name="Mute" text="Zablokuj obiekt"/>
+			<button name="Yes" text="Tak"/>
+			<button name="No" text="Nie"/>
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
@@ -4577,5 +4668,8 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">
 		Okres tymczasowego wyciszenia czatu grupowego musi być liczbą!
+	</notification>
+	<notification name="PickLimitReached">
+		Nie można utworzyć kolejnego Miejsca, ponieważ limit ich ilości został osiągnięty.
 	</notification>
 </notifications>

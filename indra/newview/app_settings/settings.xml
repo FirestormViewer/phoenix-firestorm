@@ -33,19 +33,19 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <string />
+    <integer>0</integer>
   </map>
-	<key>FSUseV2Friends</key>
-	<map>
-		<key>Comment</key>
-		<string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
+  <key>FSUseV2Friends</key>
+  <map>
+    <key>Comment</key>
+    <string>Makes Comm->Friends and Comm->Groups open the v2 based windows.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSFolderViewItemHeight</key>
   <map>
     <key>Comment</key>
@@ -57,47 +57,47 @@
     <key>Value</key>
     <integer>20</integer>
   </map>
-	<key>FSShowGroupNameLength</key>
-	<map>
-		<key>Comment</key>
-		<string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>S32</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
-    <key>FSIMChatFlashOnFriendStatusChange</key>
-    <map>
-        <key>Comment</key>
-        <string>Flash IM tab when friend goes online or offline.</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>Boolean</string>
-        <key>Value</key>
-        <integer>0</integer>
-    </map>
-	<key>FSIMChatHistoryFade</key>
-	<map>
-		<key>Comment</key>
-		<string>Amount to fade IM text into the background of the chat transcript floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>F32</string>
-		<key>Value</key>
-		<real>0.5</real>
-		<key>SanityCheckType</key>
-		<string>GreaterThanEquals</string>
-		<key>SanityValue</key>
-		<array>
-			<real>0.25</real>
-		</array>
-		<key>SanityComment</key>
-		<string>If you make this too small you might not be able to read IMs that are shown in chat transcript.</string>
-	</map>
+  <key>FSShowGroupNameLength</key>
+  <map>
+    <key>Comment</key>
+    <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSIMChatFlashOnFriendStatusChange</key>
+  <map>
+    <key>Comment</key>
+    <string>Flash IM tab when friend goes online or offline.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSIMChatHistoryFade</key>
+  <map>
+    <key>Comment</key>
+    <string>Amount to fade IM text into the background of the chat transcript floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+    <key>SanityCheckType</key>
+    <string>GreaterThanEquals</string>
+    <key>SanityValue</key>
+    <array>
+      <real>0.25</real>
+    </array>
+    <key>SanityComment</key>
+    <string>If you make this too small you might not be able to read IMs that are shown in chat transcript.</string>
+  </map>
   <key>UsePieMenu</key>
   <map>
     <key>Comment</key>
@@ -288,28 +288,28 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-	<key>FSResetCameraOnTP</key>
-	<map>
-		<key>Comment</key>
-		<string>If true the camera will be reset to behind the avatar on teleporting</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
-	<key>FSShowIMInChatHistory</key>
-	<map>
-		<key>Comment</key>
-		<string>If true, IM will also be shown in the nearby chat transcript.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
+  <key>FSResetCameraOnTP</key>
+  <map>
+    <key>Comment</key>
+    <string>If true the camera will be reset to behind the avatar on teleporting</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSShowIMInChatHistory</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, IM will also be shown in the nearby chat transcript.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSShowMouselookInstructions</key>
   <map>
     <key>Comment</key>
@@ -321,50 +321,50 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-	<key>FSLogIMInChatHistory</key>
-	<map>
-		<key>Comment</key>
-		<string>If true, IM will also be logged in the nearby chat transcript if logging nearby chat and showing IMs in nearby chat is enabled.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
-	<key>FSPaymentInfoInChat</key>
-	<map>
-		<key>Comment</key>
-		<string>If true, L$ balance changes will be shown in nearby chat instead of toasts.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
-	<key>FSScriptDialogNoTransparency</key>
-	<map>
-		<key>Comment</key>
-		<string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
-	<key>FSGroupNotifyNoTransparency</key>
-	<map>
-		<key>Comment</key>
-		<string>If true, group notices will be shown opaque and ignore the floater opacity settings.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>0</integer>
-	</map>
+  <key>FSLogIMInChatHistory</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, IM will also be logged in the nearby chat transcript if logging nearby chat and showing IMs in nearby chat is enabled.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSPaymentInfoInChat</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, L$ balance changes will be shown in nearby chat instead of toasts.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSScriptDialogNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSGroupNotifyNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, group notices will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSUseWebProfiles</key>
   <map>
     <key>Comment</key>
@@ -810,8 +810,8 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-	
-	<key>RadarReportChatRangeLeave</key>
+
+  <key>RadarReportChatRangeLeave</key>
     <map>
       <key>Comment</key>
       <string>Display a chat message when avatar leaves chat distance</string>
@@ -822,7 +822,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-	
+
   <key>RadarReportDrawRangeEnter</key>
     <map>
       <key>Comment</key>
@@ -834,7 +834,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-	
+
   <key>RadarReportDrawRangeLeave</key>
     <map>
       <key>Comment</key>
@@ -858,8 +858,8 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-	
-	<key>RadarReportSimRangeLeave</key>	
+
+  <key>RadarReportSimRangeLeave</key>	
     <map>
       <key>Comment</key>
       <string>Display a chat message when avatar leaves local region</string>
@@ -1484,7 +1484,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>0</real>
+      <integer>0</integer>
     </map>
     <key>AckCollectTime</key>
     <map>
@@ -19536,7 +19536,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>	
+    </map>
     <key>FSFontChatLineSpacingPixels</key>
     <map>
       <key>Comment</key>
@@ -19581,54 +19581,54 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>3</integer>
     </map>
-	
-	<key>UseEnvironmentFromRegionAlways</key>
-	<map>
-		<key>Comment</key>
-		<string>Choose whether to always use the region's environment settings when they are available or to allow the manual selections to remain unchanged.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
-	
-	<key>FSInterpolateSky</key>
-	<map>
-		<key>Comment</key>
-		<string>FSInterpolateSky</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
-	
-	<key>FSInterpolateWater</key>
-	<map>
-		<key>Comment</key>
-		<string>FSInterpolateWater</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
-	
-	<key>FSInterpolateParcelWL</key>
-	<map>
-		<key>Comment</key>
-		<string>FSInterpolateParcelWL</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>Boolean</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
+
+    <key>UseEnvironmentFromRegionAlways</key>
+    <map>
+      <key>Comment</key>
+      <string>Choose whether to always use the region's environment settings when they are available or to allow the manual selections to remain unchanged.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>FSInterpolateSky</key>
+    <map>
+      <key>Comment</key>
+      <string>FSInterpolateSky</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>FSInterpolateWater</key>
+    <map>
+      <key>Comment</key>
+      <string>FSInterpolateWater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>FSInterpolateParcelWL</key>
+    <map>
+      <key>Comment</key>
+      <string>FSInterpolateParcelWL</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>FSWindlightInterpolateTime</key>
     <map>
       <key>Comment</key>
@@ -19810,7 +19810,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string></string>
+    <string/>
 </map>
   <key>FSMarkObjects</key>
   <map>
@@ -20168,7 +20168,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>20</real>
+      <integer>20</integer>
     </map>
   <key>FSShowInboxFolder</key>
   <map>
@@ -21394,17 +21394,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-	<key>FSLegacySearchActionOnTeleport</key>
-	<map>
-		<key>Comment</key>
-		<string>Controls what action Legacy Search should take when teleporting: 0 = No effect, 1 = Close floater, 2 Minimise floater</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>U32</string>
-		<key>Value</key>
-		<integer>1</integer>
-	</map>
+    <key>FSLegacySearchActionOnTeleport</key>
+    <map>
+        <key>Comment</key>
+        <string>Controls what action Legacy Search should take when teleporting: 0 = No effect, 1 = Close floater, 2 Minimise floater</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>1</integer>
+    </map>
     <key>FSDisableMouseWheelCameraZoom</key>
     <map>
       <key>Comment</key>
@@ -21509,13 +21509,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>QuickPrefsSelectedControl</key>
     <map>
       <key>Comment</key>
-	  <string>Internal, volatile control that holds the currently selected control. Used for enabling/disabling editor widgets.</string>
+      <string>Internal, volatile control that holds the currently selected control. Used for enabling/disabling editor widgets.</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-	  <string />
+      <string />
     </map>
     <!-- </FS:Zi> -->
 
@@ -21541,7 +21541,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-	  <integer>1</integer>
+      <integer>1</integer>
     </map>
 
     <key>RestorePerAccountSettings</key>
@@ -21553,21 +21553,21 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-	  <integer>1</integer>
+      <integer>1</integer>
     </map>
     <!-- <FS:Zi> -->
     <key>FSLastSearchTab</key>
     <map>
-		<key>Comment</key>
-		<string>Last selected tab in search window</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>S32</string>
-		<key>Value</key>
-		<integer>0</integer>
-		<key>Backup</key>
-		<integer>0</integer>
+        <key>Comment</key>
+        <string>Last selected tab in search window</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>0</integer>
+        <key>Backup</key>
+        <integer>0</integer>
     </map>
     <key>FSCloudTexture</key>
     <map>
@@ -21654,8 +21654,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>44e98907-3764-119f-1c13-cba9945d2ff4</string>
     </map>
-	<key>FSStreamList</key>
-	<map>
+    <key>FSStreamList</key>
+    <map>
       <key>Comment</key>
       <string>Saved list of media streams</string>
       <key>Persist</key>
@@ -21796,10 +21796,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Color4</string>
       <key>Value</key>
       <array>
-        <real>1</real>
-        <real>1</real>
-        <real>1</real>
-        <real>1</real>
+        <real>1.0</real>
+        <real>1.0</real>
+        <real>1.0</real>
+        <real>1.0</real>
       </array>
     </map>
     <key>FSBuildPrefs_Alpha</key>
@@ -23410,6 +23410,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>13</integer>
+    </map>
+    <key>FSSimpleAvatarShadows</key>
+    <map>
+      <key>Comment</key>
+      <string>How to render deferred avatar shadows. 0=none, 1=simplified (no rigged mesh shadows), 2=optimized (slower but still faster than legacy when several avatars are around), 3=legacy (like the SL viewer, slow with complex rigged attachments).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>3</integer>
     </map>
   </map>
 </llsd>

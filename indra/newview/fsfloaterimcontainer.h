@@ -103,6 +103,12 @@ private:
 
 	void checkFlashing();
 	uuid_vec_t	mFlashingSessions;
+
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
+protected:
+	void onIMTabRearrange(S32 tab_index, LLPanel* tab_panel);
+// [/SL:KB]
+
 };
 
 #endif // FS_FLOATERIMCONTAINER_H

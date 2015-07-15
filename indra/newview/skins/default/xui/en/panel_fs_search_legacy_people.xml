@@ -50,6 +50,7 @@
 		top_pad="1"
 		name="panel_ls_scrolllist">
 		<fs_scroll_list
+			content_type="Agents"
 			draw_heading="true"
 			follows="all"
 			height="485"
