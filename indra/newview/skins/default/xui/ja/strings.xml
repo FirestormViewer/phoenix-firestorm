@@ -406,28 +406,46 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]："/>
 	<string name="TooltipOutboxDragToWorld">
-		マーチャントボックス内のアイテムを Rez することはできません
-	</string>
-	<string name="TooltipOutboxNoTransfer">
-		これらオブジェクトの 1 つまたは複数は売り渡したり譲渡したりできないものです。
-	</string>
-	<string name="TooltipOutboxNotInInventory">
-		マーチャントアウトボックスでは、ご自分のインベントリからのアイテムしか受け入れることができません
+		マーケットプレイスのリストフォルダからアイテムを Rez できません
 	</string>
 	<string name="TooltipOutboxWorn">
-		着用しているアイテムをマーチャントアウトボックスに入れることはできません
-	</string>
-	<string name="TooltipOutboxCallingCard">
-		コーリングカードをマーチャントアウトボックスに入れることはできません
+		着ているアイテムをマーケットプレイスのリストフォルダに置くことはできません
 	</string>
 	<string name="TooltipOutboxFolderLevels">
-		ネスト入りフォルダの深さが 3 を超えています
+		ネスト入りフォルダの深さが [AMOUNT] 階層を超えています必要に応じてアイテムを箱に入れ、フォルダの階層を減らします。
 	</string>
 	<string name="TooltipOutboxTooManyFolders">
-		最上位フォルダ内のサブフォルダ数が 20 を超えています
+		サブフォルダ数が [AMOUNT] 個を超えています。必要に応じてアイテムを箱に入れ、リストのフォルダ階層を減らします。
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
-		最上位フォルダ内のアイテム数が 200 を超えています
+		アイテム数が [AMOUNT] 個を超えています。1 つのリスト内で [AMOUNT] 個を超えるアイテムを販売するためには、いくつかのアイテムを箱に入れる必要があります。
+	</string>
+	<string name="TooltipOutboxTooManyStockItems">
+		在庫アイテム数が [AMOUNT] 個を超えています。
+	</string>
+	<string name="TooltipOutboxCannotDropOnRoot">
+		アイテムまたはフォルダは「すべて」タブによってのみドロップできます。このタブを選択してから、もう一度アイテムまたはフォルダを選択してください。
+	</string>
+	<string name="TooltipOutboxNoTransfer">
+		これらのオブジェクトの 1 つまたは複数は売り渡したり譲渡したりできないものです
+	</string>
+	<string name="TooltipOutboxNotInInventory">
+		アイテムはインベントリからマーケットプレイスへの移動のみできます
+	</string>
+	<string name="TooltipOutboxLinked">
+		リンクされた相手またはフォルダをマーケットプレイスに置くことはできません
+	</string>
+	<string name="TooltipOutboxCallingCard">
+		コーリングカードをマーケットプレイスに置くことはできません
+	</string>
+	<string name="TooltipOutboxDragActive">
+		表示されているリストを移動できません
+	</string>
+	<string name="TooltipOutboxCannotMoveRoot">
+		ルートフォルダをリストに表示するマーケットプレイスを移動できません
+	</string>
+	<string name="TooltipOutboxMixedStock">
+		在庫フォルダ内のアイテムはすべて同じ種類と権限でなければなりません
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		フォルダをその子フォルダに移動することはできません
@@ -1106,6 +1124,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="bitmap_image_files">
 		ビットマップ画像
 	</string>
+	<string name="png_image_files">
+		PNG 画像
+	</string>
+	<string name="save_texture_image_files">
+		Targa または PNG 画像
+	</string>
 	<string name="avi_movie_file">
 		AVI ムービーファイル
 	</string>
@@ -1341,6 +1365,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="FavoritesNoMatchingItems">
 		ここにランドマークをドラッグしてお気に入りに追加します。
 	</string>
+	<string name="MarketplaceNoMatchingItems">
+		アイテムが見つかりませんでした。検索文字列のスペルを確認して、もう一度やり直してください。
+	</string>
 	<string name="InventoryNoTexture">
 		インベントリ内にこのテクスチャのコピーがありません
 	</string>
@@ -1377,29 +1404,95 @@ support@secondlife.com にお問い合わせください。
 	<string name="InventoryOutboxNoItems">
 		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグし、「マーケットプレイスに送信」をクリックします。
 	</string>
+	<string name="InventoryMarketplaceError">
+		この機能は、現在、ベータ版の機能です。参加するには、この [http://goo.gl/forms/FCQ7UXkakz Google form] に名前を追加してください。
+	</string>
+	<string name="InventoryMarketplaceListingsNoItemsTitle">
+		マーケットプレイスのリストフォルダが空です。
+	</string>
+	<string name="InventoryMarketplaceListingsNoItems">
+		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグします。
+	</string>
+	<string name="Marketplace Validation Warning Stock">
+		バージョンフォルダに在庫フォルダが含まれなければなりません
+	</string>
+	<string name="Marketplace Validation Error Mixed Stock">
+		: エラー：在庫フォルダ内のすべてのアイテムはコピー不可で同じ種類でなければなりません
+	</string>
+	<string name="Marketplace Validation Error Subfolder In Stock">
+		: エラー：在庫フォルダにサブフォルダを含めることはできません
+	</string>
+	<string name="Marketplace Validation Warning Empty">
+		: 警告：フォルダにアイテムが含まれていません
+	</string>
+	<string name="Marketplace Validation Warning Create Stock">
+		: 警告：在庫フォルダを作成しています
+	</string>
+	<string name="Marketplace Validation Warning Create Version">
+		: 警告：バージョンフォルダ作成中
+	</string>
+	<string name="Marketplace Validation Warning Move">
+		: 警告：アイテム移動中
+	</string>
+	<string name="Marketplace Validation Warning Delete">
+		: 警告：フォルダの中身が在庫フォルダに移されました。空のフォルダを削除します
+	</string>
+	<string name="Marketplace Validation Error Stock Item">
+		: エラー：在庫フォルダにコピー不可アイテムを含める必要があります
+	</string>
+	<string name="Marketplace Validation Warning Unwrapped Item">
+		: 警告：バージョンフォルダにアイテムが含まれていなければなりません
+	</string>
+	<string name="Marketplace Validation Error">
+		: エラー：
+	</string>
+	<string name="Marketplace Validation Warning">
+		: 警告：
+	</string>
+	<string name="Marketplace Validation Error Empty Version">
+		: 警告：バージョンフォルダには、最低 1 アイテムが含まれなければなりません
+	</string>
+	<string name="Marketplace Validation Error Empty Stock">
+		: 警告：在庫フォルダには、最低 1 アイテムが含まれていなければなりません
+	</string>
+	<string name="Marketplace Validation No Error">
+		報告するエラーまたは警告はありません
+	</string>
 	<string name="Marketplace Error None">
 		エラーなし
 	</string>
+	<string name="Marketplace Error Prefix">
+		エラー：
+	</string>
 	<string name="Marketplace Error Not Merchant">
-		エラー：マーケットプレイスにアイテムを送る前に、あなた自身をマーチャント登録する必要があります（登録は無料です）。
+		マーケットプレイスに商品を送る前に、あなた自身をマーチャント登録する必要があります（登録は無料です）。
 	</string>
-	<string name="Marketplace Error Empty Folder">
-		エラー：このフォルダは空です。
-	</string>
-	<string name="Marketplace Error Unassociated Products">
-		エラー：あなたのマーチャントアカウントには、商品に関連付けられていないアイテムが多すぎるため、このアイテムをアップロードできませんでした。このエラーを解消するには、マーケットプレイスの Web サイトにログインし、関連付けられていないアイテムの数を減らしてください。
-	</string>
-	<string name="Marketplace Error Object Limit">
-		エラー：このアイテムに含まれるオブジェクトが多すぎます。オブジェクトをいくつかボックスにまとめ、オブジェクト数を200以下に減らしてください。
-	</string>
-	<string name="Marketplace Error Folder Depth">
-		エラー：このアイテムはネスト入りフォルダの階層が多すぎます。ネスト入りフォルダを 3 階層以内にまとめ直してください。
+	<string name="Marketplace Error Not Accepted">
+		アイテムをそのフォルダに移動できません。
 	</string>
 	<string name="Marketplace Error Unsellable Item">
-		エラー：このアイテムをマーケットプレイスで販売することはできません。
+		このアイテムをマーケットプレイスで販売することはできません。
 	</string>
-	<string name="Marketplace Error Internal Import">
-		エラー：このアイテムに関して問題が発生しました。しばらくしてからお試しください。
+	<string name="MarketplaceNoID">
+		Mkt ID なし
+	</string>
+	<string name="MarketplaceLive">
+		リスト掲載済み
+	</string>
+	<string name="MarketplaceActive">
+		有効
+	</string>
+	<string name="MarketplaceMax">
+		最大
+	</string>
+	<string name="MarketplaceStock">
+		在庫
+	</string>
+	<string name="MarketplaceNoStock">
+		在庫なし
+	</string>
+	<string name="MarketplaceUpdating">
+		アップデート中...
 	</string>
 	<string name="Open landmarks">
 		ランドマークを開く
@@ -1417,7 +1510,7 @@ support@secondlife.com にお問い合わせください。
 		コンテンツなし
 	</string>
 	<string name="WornOnAttachmentPoint" value=" （[ATTACHMENT_POINT] に装着中）"/>
-	<string name="AttachmentErrorMessage" value=" ([ATTACHMENT_ERROR])" />
+	<string name="AttachmentErrorMessage" value="([ATTACHMENT_ERROR])"/>
 	<string name="ActiveGesture" value="[GESLABEL] （アクティブ）"/>
 	<string name="PermYes">
 		はい
@@ -1688,9 +1781,15 @@ support@secondlife.com にお問い合わせください。
 	<string name="Invalid Attachment">
 		装着先が正しくありません
 	</string>
-	<string name="ATTACHMENT_MISSING_ITEM">エラー：アイテムがありません</string>
-	<string name="ATTACHMENT_MISSING_BASE_ITEM">エラー：ベースとなるアイテムがありません</string>
-	<string name="ATTACHMENT_NOT_ATTACHED">エラー：オブジェクトは現在のアウトフィットに含まれていますが装着されていません</string>
+	<string name="ATTACHMENT_MISSING_ITEM">
+		エラー：アイテムが見つかりません
+	</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">
+		エラー：ベースアイテムが見つかりません
+	</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">
+		エラー：オブジェクトは現在のアウトフィット内にありますが、添付されていません
+	</string>
 	<string name="YearsMonthsOld">
 		[AGEYEARS] [AGEMONTHS]
 	</string>
@@ -1823,9 +1922,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="CompileQueueUnknownFailure">
 		原因不明の失敗によりダウンロードができません
 	</string>
-	<string name="CompileNoExperiencePerm">
-		[EXPERIENCE] 体験による [SCRIPT] スクリプトのスキップ。
-	</string>
 	<string name="CompileQueueTitle">
 		リコンパイル進行
 	</string>
@@ -1870,6 +1966,9 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="GroupsNone">
 		なし
+	</string>
+	<string name="CompileNoExperiencePerm">
+		[EXPERIENCE] 体験による [SCRIPT] スクリプトのスキップ。
 	</string>
 	<string name="Group" value=" （グループ）"/>
 	<string name="Unknown">
@@ -5053,6 +5152,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Marketplace_Label">
 		マーケットプレイス
 	</string>
+	<string name="Command_MarketplaceListings_Label">
+		マーケットプレイス
+	</string>
 	<string name="Command_MiniMap_Label">
 		ミニマップ
 	</string>
@@ -5170,6 +5272,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		ショッピングに出掛ける
+	</string>
+	<string name="Command_MarketplaceListings_Tooltip">
+		創作アイテムを販売します
 	</string>
 	<string name="Command_MiniMap_Tooltip">
 		近くの人を表示する
@@ -5394,9 +5499,20 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		住人はこの地域（リージョン）を訪問できません。
 	</string>
 	
-	<!-- Spell check settings floater -->
 	<string name="UserDictionary">
 		[User]
+	</string>
+	<string name="logging_calls_disabled_log_empty">
+		会話はログに記録されていません。ログの記録を開始するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		これ以上の会話は記録されません。ログの記録を再開するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		ログイン時の会話はありません。誰かにご連絡した後、または誰かがあなたに連絡した後、ログエントリがここに表示されます。
+	</string>
+	<string name="loading_chat_logs">
+		ロード中...
 	</string>
 	<string name="experience_tools_experience">
 		体験
@@ -5479,22 +5595,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExperiencePermissionShort12">
 		権限
 	</string>
-	
-	<!-- Conversation log messages -->
-	<string name="logging_calls_disabled_log_empty">
-		会話のログは記録されていません。ログの記録を開始するには、「環境設定」＞「プライバシー」で「保存；ログのみ」または「保存：ログとテキスト」を選択して下さい。
-	</string>
-	<string name="logging_calls_disabled_log_not_empty">
-		会話のログは記録されなくなります。ログの記録を再開するには、「環境設定」＞「プライバシー」で「保存；ログのみ」または「保存：ログとテキスト」を選択して下さい。
-	</string>
-	<string name="logging_calls_enabled_log_empty">
-		ログが記録された会話はありません。あなたが誰かに話しかけるか、誰かがあなたに話しかけるとここにログが表示されるようになります。
-	</string>
-	<string name="loading_chat_logs">
-		ロード中...
-	</string>
-	
-	<!-- Build types for about floater -->
 	
 	<!-- added Jun.30, 2013 -->
 	<!-- Firestorm search -->

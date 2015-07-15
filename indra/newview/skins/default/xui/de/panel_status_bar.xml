@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
-	<panel.string name="packet_loss_tooltip">
-		Paketverlust
-	</panel.string>
-	<panel.string name="bandwidth_tooltip">
-		Bandbreite
-	</panel.string>
-	<panel.string name="time">
-		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
-	</panel.string>
-	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
-	</panel.string>
-	<panel.string name="buycurrencylabel">
-		[AMT] L$
-	</panel.string>
+	<panel.string name="packet_loss_tooltip">Paketverlust</panel.string>
+	<panel.string name="bandwidth_tooltip">Bandbreite</panel.string>
+	<panel.string name="time">[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]</panel.string>
+	<panel.string name="timeTooltip">[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]</panel.string>
+	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
 	<panel name="menu_search_panel">
 		<search_editor label="Menü durchs." name="search_menu_edit" tool_tip="Den Suchbegriff hier eingeben. Ergebnisse werden für Treffer im Namen eines Menüeintrags angezeigt."/>
 	</panel>

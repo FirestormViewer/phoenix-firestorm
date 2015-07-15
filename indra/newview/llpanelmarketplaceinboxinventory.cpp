@@ -64,7 +64,7 @@ LLInboxInventoryPanel::LLInboxInventoryPanel(const LLInboxInventoryPanel::Params
 LLInboxInventoryPanel::~LLInboxInventoryPanel()
 {}
 
-LLFolderViewFolder * LLInboxInventoryPanel::createFolderViewFolder(LLInvFVBridge * bridge)
+LLFolderViewFolder * LLInboxInventoryPanel::createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop)
 {
 	LLUIColor item_color = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
 
@@ -76,6 +76,7 @@ LLFolderViewFolder * LLInboxInventoryPanel::createFolderViewFolder(LLInvFVBridge
 	params.tool_tip = params.name;
 	params.font_color = item_color;
 	params.font_highlight_color = item_color;
+    params.allow_drop = allow_drop;
 	
 	return LLUICtrlFactory::create<LLInboxFolderViewFolder>(params);
 }

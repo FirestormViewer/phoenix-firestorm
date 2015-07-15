@@ -206,6 +206,7 @@ public:
 	U32 commandCount() const;
 	LLCommand * getCommand(U32 commandIndex);
 	LLCommand * getCommand(const LLCommandId& commandId);
+	LLCommand * getCommand(const std::string& name);
 
 	static bool load();
 

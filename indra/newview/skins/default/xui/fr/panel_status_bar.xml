@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
-	<panel.string name="packet_loss_tooltip">
-		Perte de paquets
-	</panel.string>
-	<panel.string name="bandwidth_tooltip">
-		Bande passante
-	</panel.string>
-	<panel.string name="time">
-		[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
-	</panel.string>
-	<panel.string name="timeTooltip">
-		[weekday, datetime, slt] [sday, datetime, slt] [month, datetime, slt] [year, datetime, slt]
-	</panel.string>
-	<panel.string name="buycurrencylabel">
-		[AMT] L$
-	</panel.string>
+	<panel.string name="packet_loss_tooltip">Perte de paquets</panel.string>
+	<panel.string name="bandwidth_tooltip">Bande passante</panel.string>
+	<panel.string name="time">[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]</panel.string>
+	<panel.string name="timeTooltip">[weekday, datetime, slt] [sday, datetime, slt] [month, datetime, slt] [year, datetime, slt]</panel.string>
+	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="?? L$"/>
 		<button label="ACHETER L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$"/>

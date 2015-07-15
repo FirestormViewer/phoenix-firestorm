@@ -8,9 +8,8 @@
 		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Meu perfil" name="Profile"/>
 		<menu_item_call label="Minha aparência" name="ChangeOutfit"/>
-		<menu_item_call label="Selecione um avatar" name="Avatar Picker"/>
 		<menu_item_check label="Meu inventário" name="Inventory"/>
-		<menu_item_call label="Experiências" name="Experiences"/>
+		<menu_item_call label="Experiências..." name="Experiences"/>
 		<menu_item_check label="Meu inventário" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Meus gestos" name="Gestures"/>
 		<menu_item_check label="Minha voz" name="ShowVoice"/>
@@ -27,6 +26,7 @@
 		</menu>
 		<menu_item_call label="Comprar L$..." name="Buy and Sell L$"/>
 		<menu_item_call label="Caixa de saída do lojista..." name="MerchantOutbox"/>
+		<menu_item_call label="Listagens do Marketplace..." name="MarketplaceListings"/>
 		<menu_item_call label="Painel da conta..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=pt"/>
 		</menu_item_call>
@@ -55,7 +55,7 @@
 	</menu>
 	<menu label="Mundo" name="World">
 		<menu_item_call label="Criar marco deste lugar" name="Create Landmark Here"/>
-		<menu_item_call label="Destinos" name="Destinations"/>
+		<menu_item_call label="Destinos..." name="Destinations"/>
 		<menu_item_check label="Mapa-múndi" name="World Map"/>
 		<menu_item_check label="Mini Mapa" name="Mini-Map"/>
 		<menu_item_check label="Busca" name="Search"/>
@@ -252,6 +252,7 @@
 			<menu_item_check label="Painel de textura" name="Texture Console"/>
 			<menu_item_check label="Console de depuração" name="Debug Console"/>
 			<menu_item_call label="Painel de avisos" name="Notifications"/>
+			<menu_item_check label="Console de depuração de região" name="Region Debug Console"/>
 			<menu_item_check label="Tempos" name="Fast Timers"/>
 			<menu_item_check label="Memória" name="Memory"/>
 			<menu_item_check label="Estatísticas da cena" name="Scene Statistics"/>

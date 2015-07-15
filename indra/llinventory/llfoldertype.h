@@ -87,10 +87,14 @@ public:
 
 		FT_BASIC_ROOT = 52,
 
+		FT_MARKETPLACE_LISTINGS = 53,
+		FT_MARKETPLACE_STOCK = 54,
+		FT_MARKETPLACE_VERSION = 55,    // Note: We actually *never* create folders with that type. This is used for icon override only.
+
 		// <FS:Ansariel> Folder types for our own virtual system folders
-		FT_FIRESTORM = 53,		
-		FT_PHOENIX = 54,
-		FT_RLV = 55,
+		FT_FIRESTORM = 56,		
+		FT_PHOENIX = 57,
+		FT_RLV = 58,
 		// </FS:Ansariel> Folder types for our own virtual system folders
 
 		FT_COUNT,

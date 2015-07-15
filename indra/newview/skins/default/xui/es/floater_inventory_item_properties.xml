@@ -1,85 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="item properties" title="Propiedades del ítem">
-	<floater.string name="unknown">
-		(desconocido)
-	</floater.string>
-	<floater.string name="public">
-		(público)
-	</floater.string>
-	<floater.string name="you_can">
-		Puedes:
-	</floater.string>
-	<floater.string name="owner_can">
-		El propietario puede:
-	</floater.string>
-	<floater.string name="acquiredDate">
-		[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
-	</floater.string>
-	<text name="LabelItemNameTitle">
-		Nombre:
-	</text>
-	<line_editor name="LabelItemName"/>
-	<text name="LabelItemDescTitle">
-		Descripción:
-	</text>
-	<text name="LabelCreatorTitle">
-		Creador:
-	</text>
-	<button label="Perfil..." name="BtnCreator"/>
-	<text name="LabelOwnerTitle">
-		Propietario:
-	</text>
-	<button label="Perfil..." name="BtnOwner"/>
-	<text name="LabelAcquiredTitle">
-		Adquirido:
-	</text>
-	<text name="LabelAcquiredDate">
-		Mié 24 May 2006 12:50:46
-	</text>
-	<text name="OwnerLabel">
-		Tú puedes:
-	</text>
-	<check_box label="Modificar" name="CheckOwnerModify"/>
-	<check_box label="Copiar" name="CheckOwnerCopy"/>
-	<check_box label="Transferir" name="CheckOwnerTransfer"/>
-	<check_box label="Exportar" name="CheckOwnerExport"/>
-	<text name="AnyoneLabel">
-		Cualquiera:
-	</text>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="item properties" title="PROPIEDADES DEL ÍTEM DEL INVENTARIO">
+	<floater.string name="unknown">(desconocido)</floater.string>
+	<floater.string name="public">(público)</floater.string>
+	<floater.string name="you_can">Usted puede:</floater.string>
+	<floater.string name="owner_can">El propietario puede:</floater.string>
+	<floater.string name="acquiredDate">[wkday,datetime,local][day,datetime,local] [mth,datetime,local] [year,datetime,local][hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<text name="LabelItemNameTitle">Nombre:</text>
+	<text name="LabelItemDescTitle">Descripción:</text>
+	<text name="LabelCreatorTitle">Creador:</text>
+	<button label="Perfil..." label_selected="" name="BtnCreator"/>
+	<text name="LabelOwnerTitle">Propietario:</text>
+	<button label="Perfil..." label_selected="" name="BtnOwner"/>
+	<text name="LabelAcquiredTitle">Adquirido:</text>
+	<text name="LabelAcquiredDate">May Mié 24 12:50:46 2006</text>
+	<text name="OwnerLabel">Tú:</text>
+	<check_box label="Editar" name="CheckOwnerModify"/>
+	<check_box label="Copiarlo" left_delta="88" name="CheckOwnerCopy"/>
+	<check_box label="Revender" name="CheckOwnerTransfer"/>
+	<text name="AnyoneLabel">Cualquiera:</text>
 	<check_box label="Copiar" name="CheckEveryoneCopy"/>
-	<text name="GroupLabel">
-		Grupo:
-	</text>
+	<text name="GroupLabel">Grupo:</text>
 	<check_box label="Compartir" name="CheckShareWithGroup"/>
-	<text name="NextOwnerLabel">
-		Próximo propietario:
-	</text>
-	<check_box label="Modificar" name="CheckNextOwnerModify"/>
-	<check_box label="Copiar" name="CheckNextOwnerCopy"/>
-	<check_box label="Transferir" name="CheckNextOwnerTransfer"/>
+	<text name="NextOwnerLabel" width="230">Próximo propietario:</text>
+	<check_box label="Editar" name="CheckNextOwnerModify"/>
+	<check_box label="Copiarlo" left_delta="88" name="CheckNextOwnerCopy"/>
+	<check_box label="Revender" name="CheckNextOwnerTransfer"/>
 	<check_box label="En venta" name="CheckPurchase"/>
 	<combo_box name="ComboBoxSaleType">
-		<combo_box.item label="Copia" name="Copy"/>
+		<combo_box.item label="Copiar" name="Copy"/>
 		<combo_box.item label="Contenidos" name="Contents"/>
 		<combo_box.item label="Original" name="Original"/>
 	</combo_box>
-	<spinner name="Edit Cost" label="Precio:"/>
-	<text name="CurrencySymbol">
-		L$
-	</text>
-	<text name="BaseMaskDebug">
-		B:
-	</text>
-	<text name="OwnerMaskDebug">
-		P:
-	</text>
-	<text name="GroupMaskDebug">
-		G:
-	</text>
-	<text name="EveryoneMaskDebug">
-		T:
-	</text>
-	<text name="NextMaskDebug">
-		PP:
-	</text>
+	<spinner label="Precio:" name="Edit Cost"/>
+	<text name="CurrencySymbol">L$</text>
 </floater>

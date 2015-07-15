@@ -978,9 +978,6 @@ void LLFolderView::cut()
 			if (listener)
 			{
 				listener->cutToClipboard();
-				// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
-				//listener->removeItem();
-				// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 			}
 		}
 		
