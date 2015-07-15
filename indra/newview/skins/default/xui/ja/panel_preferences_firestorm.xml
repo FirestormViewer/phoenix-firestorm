@@ -79,12 +79,7 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
-		<check_box label="参加費用がかかる場合はグループ招待の「参加」ボタンを表示しない
-" name="FSAllowGroupInvitationOnlyWithoutFee" />
-        <check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
-        <check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
-        <slider name="FSOfferThrottleMaxCount" label="オブジェクト受け取り量の閾値：" tool_tip="10秒以内に送られて来るオブジェクト個数の閾値を設定します。5個がデフォルトです。" />
-		 
+		<check_box label="参加費用がかかる場合はグループ招待の「参加」ボタンを表示しない" name="FSAllowGroupInvitationOnlyWithoutFee" />
 	</panel>
 
 	<!-- アバター -->

@@ -43,10 +43,13 @@
 
     <!-- Inventory -->
     <panel label="Inventar" name="tab-inventory">
-	<check_box label="Benachrichtigen, wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
-	<check_box label="Benachrichtigen, wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
-	<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
-	<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
+		<check_box label="Benachrichtigen, wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
+		<check_box label="Benachrichtigen, wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
+		<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
+		<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
+		<check_box label="Benachrichtigen, falls Objekte zu schnell eintreffen" name="FSNotifyIncomingObjectSpam"/>
+		<check_box label="Benachrichtigen, falls Objekte von anderen Einwohnern zu schnell eintreffen" name="FSNotifyIncomingObjectSpamFrom"/>
+		<slider name="FSOfferThrottleMaxCount" label="Schwellwert für zu schnell eintreffende Objekte:" label_width="260" width="385" tool_tip="Setzt den Schwellwert für die Anzahl an eintreffenden Objekten innerhalb von 10 Sekunden, ab dem eine Drosselung einsetzt. Standardwert: 5"/>
     </panel>
 
     <!-- Alerts -->

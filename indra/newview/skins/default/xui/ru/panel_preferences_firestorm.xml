@@ -68,9 +68,6 @@
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Множитель запросов предзагрузки звуков [По умолчанию: 4]" />
         <button name="AntiSpamUnblock" label="Разблокировать все источники спама" />
         <check_box label="Убрать кнопку &quot;Присоедениться&quot; для приглашения вступить в платную группу" name="FSAllowGroupInvitationOnlyWithoutFee" />
-        <check_box label="Сообщать об элементах из объектов, приходящих слишком быстро" name="FSNotifyIncomingObjectSpam" />
-        <check_box label="Сообщать об элементах от других жителей, приходящих слишком быстро" name="FSNotifyIncomingObjectSpamFrom" />
-        <slider name="FSOfferThrottleMaxCount" label="Порог количества поступающих объектов:" tool_tip="Установите порог количества поступающих объектов в течении 10 секунд. По умолчанию 5" />
     </panel>
     <panel label="Аватар" name="firestorm_avatar">
         <text name="HeadMovement">

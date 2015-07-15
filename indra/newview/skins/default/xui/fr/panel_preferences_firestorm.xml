@@ -95,14 +95,6 @@
 			tool_tip="Nombre maximum de demandes successives à précharger un son. [Défaut : 4]"/>
         <button name="AntiSpamUnblock"
 			label="Débloquer toutes les sources"/>
-	<!--spec-->
-        <check_box name="FSNotifyIncomingObjectSpam"
-			label="Notifier lors du blocage d'items arrivant trop vite via un objet"/>
-        <check_box name="FSNotifyIncomingObjectSpamFrom"
-			label="Notifier lors du blocage d'items arrivant trop vite via un résident"/>
-        <slider name="FSOfferThrottleMaxCount"
-			label="Seuil d'offres, sur 10 sec, des objets :"
-			tool_tip="Défini, sur 10 secondes, le seuil d'offres entrantes successives émanant des objets avant qu'elles ne soient étranglées. [Défaut : 5]"/>
 	</panel>
 
 <!--Avatar-->

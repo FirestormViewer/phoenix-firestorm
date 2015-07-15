@@ -2336,9 +2336,6 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ATTACH_AVATAR_CENTER">
 		Centro del avatar
 	</string>
-	<string name="ATTACH_BRIDGE">
-		Bridge
-	</string>
 	<string name="CursorPos">
 		Línea [LINE], Columna [COLUMN]
 	</string>
