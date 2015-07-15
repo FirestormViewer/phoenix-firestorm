@@ -596,7 +596,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Anzahl von Bestandsobjekten überschreitet [AMOUNT].
 	</string>
 	<string name="TooltipOutboxCannotDropOnRoot">
-		Sie können Objekte oder Ordner nur in der Registerkarte „Alle“ ablegen. Wählen Sie diese Registerkarte aus und verschieben Sie Ihre Objekte bzw. Ordner noch einmal.
+		Sie können Objekte oder Ordner nur in der Registerkarte „Alle“ oder „Nicht verknüpft“ ablegen. Wählen Sie diese Registerkarte aus und verschieben Sie Ihre Objekte bzw. Ordner noch einmal.
 	</string>
 	<string name="TooltipOutboxNoTransfer">
 		Mindestens eines dieser Objekte kann nicht verkauft oder übertragen werden
@@ -4963,7 +4963,7 @@ Missbrauchsbericht
 	<string name="texture_load_dimensions_error">
 		Bilder, die größer sind als [WIDTH]*[HEIGHT] können nicht geladen werden
 	</string>
-	<string name="words_separator" value=","/>
+	<string name="words_separator" value=", "/>
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 

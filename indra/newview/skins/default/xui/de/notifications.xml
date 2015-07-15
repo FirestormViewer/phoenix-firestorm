@@ -164,6 +164,10 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
         „[ERROR_CODE]“
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MerchantForceValidateListing">
+		Um die Auflistung zu erstellen wurde die Hierarchie des Inhalts korrigiert.
+		<usetemplate ignoretext="Warnen, wenn das Erstellen einer Auflistung die Hierarchie des Inhalts korrigiert" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Diese Aktion ändert den aktiven Inhalt dieser Auflistung. Möchten Sie fortfahren?
 		<usetemplate ignoretext="Vor Ändern einer aktiven Auflistung im Marktplatz bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
@@ -210,6 +214,10 @@ Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschl
 	<notification name="AlertMerchantStockFolderEmpty">
 		Wir haben Ihre Auflistung entfernt, da der Bestandsordner leer ist. Um diese Auflistung wieder zu listen, müssen Sie weitere Einheiten zum Bestandsordner hinzufügen.
 		<usetemplate ignoretext="Benachrichtigen, wenn Auflistung aufgrund eines leeren Bestandsordners nicht aufgelistet wird" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="AlertMerchantVersionFolderEmpty">
+		Wir haben Ihre Auflistung entfernt, da der Versionsordner leer ist. Um diese Auflistung wieder zu listen, müssen Sie weitere Einheiten zum Versionsordner hinzufügen.
+		<usetemplate ignoretext="Benachrichtigen, wenn Auflistung aufgrund eines leeren Versionsordners nicht aufgelistet wird" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="CompileQueueSaveText">
 		Der Text für ein Skript konnte aus folgendem Grund nicht hochgeladen werden: [REASON]. Bitte versuchen Sie es erneut.
