@@ -43,6 +43,9 @@
 	<check_box name="FSShowUploadPaymentToast" label="Avisarme: Cuando se me cobra por una subida"/>
 	<check_box label="Avisarme: Cuando se cree un hito" name="landmark_created_checkbox"/>
 	<check_box label="Desactivar notificaciones de 'el objeto ha sido devuelto a tu inventario'" name="FSDisableReturnObjectNotification"/>
+	<check_box label="Notificar cuando se reciben items demasiado rápido" name="FSNotifyIncomingObjectSpam"/>
+	<check_box label="Notificar cuando se reciben items de otros residentes demasiado rápido" name="FSNotifyIncomingObjectSpamFrom"/>
+	<slider name="FSOfferThrottleMaxCount" label="Umbral para acelerar la entrada de items:" tool_tip="Establece el umbral de ofertas de items entrantes en un intérvalo de 10 segundos para que se produzca la aceleración de la entrada. Por defecto, 5." label_width="235" width="360"/>
     </panel>
 
     <!-- Alerts -->

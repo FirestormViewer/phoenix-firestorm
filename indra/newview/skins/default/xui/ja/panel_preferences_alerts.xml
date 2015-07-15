@@ -55,9 +55,11 @@
 	<panel label="インベントリ" name="tab-inventory">
 		<check_box name="FSShowUploadPaymentToast" label="アップロードの料金を支払った時" />
 		<check_box label="ランドマークを作成した時" name="landmark_created_checkbox" />
-		<check_box label="オブジェクトがインベントリに返却されましたという通知をしないようにする"
- name="FSDisableReturnObjectNotification" />
+		<check_box label="オブジェクトがインベントリに返却されましたという通知をしないようにする" name="FSDisableReturnObjectNotification" />
 		<check_box label="保存したスナップショットのファイル名を会話履歴に記録する" name="FSLogSnapshotsToLocal" />
+		<check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
+		<check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
+		<slider name="FSOfferThrottleMaxCount" label="オブジェクト受け取り量の閾値：" tool_tip="10秒以内に送られて来るオブジェクト個数の閾値を設定します。5個がデフォルトです。" />
 	</panel>
 	
 	<!-- Alerts -->

@@ -2250,9 +2250,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ATTACH_AVATAR_CENTER">
 		Środek awatara
 	</string>
-	<string name="ATTACH_BRIDGE">
-		Most
-	</string>
 	<string name="CursorPos">
 		Linia [LINE], Kolumna [COLUMN]
 	</string>

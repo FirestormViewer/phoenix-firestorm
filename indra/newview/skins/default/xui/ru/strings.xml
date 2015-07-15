@@ -1039,7 +1039,6 @@ We are accessing your account on the [[MARKETPLACE_CREATE_STORE_URL] Marketplace
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">Дисплей управления внизу справа</string>
 	<string name="ATTACH_NECK">Шея</string>
 	<string name="ATTACH_AVATAR_CENTER">Центр аватара</string>
-	<string name="ATTACH_BRIDGE">Мост</string>
 			
   <!-- script editor -->
 	<string name="CursorPos">Строка [LINE], Столбец [COLUMN]</string>
