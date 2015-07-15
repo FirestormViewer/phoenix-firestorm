@@ -72,6 +72,10 @@
 		[MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="はい"/>
 	</notification>
+	<notification name="GenericAlertOK">
+		[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="BadInstallation">
 		[APP_NAME] をアップデート中にエラーが発生しました。  ビューワの [http://get.secondlife.com 最新バージョンをダウンロード] してください。
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -2663,11 +2667,7 @@ URL: [MOAPURL]
 件名： [SUBJECT]、メッセージ： [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		<tag>friendship</tag>
 		[NAME]は[STATUS]です。
-		<unique combine="cancel_old">
-			<context>NAME</context>
-		</unique>
 	</notification>
 	<notification name="AddSelfFriend">
 		残念ながら自分自身をフレンド登録することはできません。

@@ -579,8 +579,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TooltipSLAPP">
 		Pulsa para ejecutar el comando secondlife://
 	</string>
-	<string name="CurrentURL"
-		 value="URL actual: [CurrentURL]" />
+	<string name="CurrentURL" value="URL actual: [CurrentURL]"/>
 	<string name="SLurlLabelTeleport">
 		Teleportarse a
 	</string>
@@ -1614,18 +1613,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="Unconstrained">
 		Sin restricciones
 	</string>
-	<string name="no_transfer"
-		 value="(no transferible)" />
-	<string name="no_modify"
-		 value="(no modificable)" />
-	<string name="no_copy"
-		 value="(no copiable)" />
-	<string name="worn"
-		 value="(puesto)" />
-	<string name="link"
-		 value="(enlace)" />
-	<string name="broken_link"
-		 value="(enlace roto)&quot;" />
+	<string name="no_transfer" value="(no transferible)"/>
+	<string name="no_modify" value="(no modificable)"/>
+	<string name="no_copy" value="(no copiable)"/>
+	<string name="worn" value="(puesto)"/>
+	<string name="link" value="(enlace)"/>
+	<string name="broken_link" value="(enlace roto)&quot;"/>
 	<string name="LoadingContents">
 		Cargando el contenido...
 	</string>
@@ -2109,17 +2102,13 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="Unknown">
 		(Desconocido)
 	</string>
-	<string name="SummaryForTheWeek"
-		 value="Resumen de esta semana, empezando el " />
-	<string name="NextStipendDay"
-		 value=". El próximo día de pago es el " />
+	<string name="SummaryForTheWeek" value="Resumen de esta semana, empezando el "/>
+	<string name="NextStipendDay" value=". El próximo día de pago es el "/>
 	<string name="GroupPlanningDate">
 		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
 	</string>
-	<string name="GroupIndividualShare"
-		 value="Grupo       Aportaciones individuales" />
-	<string name="GroupColumn"
-		 value="Grupo" />
+	<string name="GroupIndividualShare" value="Grupo       Aportaciones individuales"/>
+	<string name="GroupColumn" value="Grupo"/>
 	<string name="Balance">
 		Saldo
 	</string>
@@ -2683,7 +2672,7 @@ Error:
 	</string>
 	<string name="MBUnableToAccessFile">
 		[APP_NAME] no puede acceder a un archivo que necesita.
- 
+
 Puede ser porque estés ejecutando varias copias, o porque tu sistema crea -equivocadamente- que el archivo está abierto.
 Si este mensaje persiste, reinicia tu ordenador y vuelve a intentarlo.
 Si aun así sigue apareciendo el mensaje, debes desinstalar completamente [APP_NAME] y reinstalarlo.
@@ -2717,7 +2706,7 @@ Si este mensaje persiste, reinicia tu ordenador.
 	<string name="MBNoDirectX">
 		[APP_NAME] no encuentra DirectX 9.0b o superior.
 [APP_NAME] usa DirectX para detectar el hardware o los drivers no actualizados que pueden provocar problemas de estabilidad, ejecución pobre y caídas.  Aunque puedes ejecutar [APP_NAME] sin él, recomendamos encarecidamente hacerlo con DirectX 9.0b.
- 
+
 ¿Quieres continuar?
 	</string>
 	<string name="MBWarning">
@@ -4817,11 +4806,10 @@ Denuncia de infracción
 	<string name="texture_load_dimensions_error">
 		No se puede subir imágenes mayores de [WIDTH]*[HEIGHT]
 	</string>
-	<string name="words_separator"
-		 value="," />
+	<string name="words_separator" value=","/>
 	<string name="server_is_down">
 		Parece que hay algún problema que ha escapado a nuestros controles.
- 
+
 	Visita status.secondlifegrid.net para ver si hay alguna incidencia conocida que esté afectando al servicio.
         Si sigues teniendo problemas, comprueba la configuración de la red y del servidor de seguridad.
 	</string>

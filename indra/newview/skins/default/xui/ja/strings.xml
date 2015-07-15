@@ -964,8 +964,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="ST_NO_JOINT">
 		ROOT または JOINT が見つかりません
 	</string>
-	
-	<!-- Chat -->
 	<string name="NearbyChatTitle">
 		周辺チャット
 	</string>
@@ -1232,8 +1230,45 @@ support@secondlife.com にお問い合わせください。
 	<string name="none">
 		なし
 	</string>
-	
-	<!-- Create new wearable of the specified type -->
+	<string name="shirt_not_worn">
+		シャツ未着用
+	</string>
+	<string name="pants_not_worn">
+		パンツ未着用
+	</string>
+	<string name="shoes_not_worn">
+		靴未着用
+	</string>
+	<string name="socks_not_worn">
+		靴下未着用
+	</string>
+	<string name="jacket_not_worn">
+		ジャケット未着用
+	</string>
+	<string name="gloves_not_worn">
+		手袋未着用
+	</string>
+	<string name="undershirt_not_worn">
+		下着（上）未着用
+	</string>
+	<string name="underpants_not_worn">
+		下着（下）未着用
+	</string>
+	<string name="skirt_not_worn">
+		スカート未着用
+	</string>
+	<string name="alpha_not_worn">
+		アルファ未着用
+	</string>
+	<string name="tattoo_not_worn">
+		タトゥー未着用
+	</string>
+	<string name="physics_not_worn">
+		物理作用なし
+	</string>
+	<string name="invalid_not_worn">
+		無効
+	</string>
 	<string name="create_new_shape">
 		新しいシェイプを作成
 	</string>
@@ -1324,8 +1359,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="OverflowInfoChannelString">
 		あなたにはさらに %d 通の通知があります
 	</string>
-	
-	<!-- body parts -->
 	<string name="BodyPartsRightArm">
 		右腕
 	</string>
@@ -1374,8 +1407,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="InventoryInboxNoItems">
 		マーケットプレイスで購入した商品はここに表示されます。その後、アイテムをインベントリにドラッグすれば、それらのアイテムを使用できます。
 	</string>
-  <string name="Unconstrained">非拘束</string>
-  <string name="MarketplaceURL">
+	<string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
@@ -1403,6 +1435,18 @@ support@secondlife.com にお問い合わせください。
 	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
 		[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグし、「マーケットプレイスに送信」をクリックします。
+	</string>
+	<string name="InventoryOutboxInitializingTitle">
+		マーケットプレイスの初期化。
+	</string>
+	<string name="InventoryOutboxInitializing">
+		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイス ストア] のアカウントにアクセスしています。
+	</string>
+	<string name="InventoryOutboxErrorTitle">
+		マーケットプレイス エラー。
+	</string>
+	<string name="InventoryOutboxError">
+		[[MARKETPLACE_CREATE_STORE_URL] マーケットプレイス ストア] がエラーを返しています。
 	</string>
 	<string name="InventoryMarketplaceError">
 		この機能は、現在、ベータ版の機能です。参加するには、この [http://goo.gl/forms/FCQ7UXkakz Google form] に名前を追加してください。
@@ -1496,6 +1540,9 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="Open landmarks">
 		ランドマークを開く
+	</string>
+	<string name="Unconstrained">
+		非拘束
 	</string>
 	<string name="no_transfer" value=" （再販・プレゼント不可）"/>
 	<string name="no_modify" value=" （編集不可）"/>
@@ -1907,6 +1954,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="CompileQueueDownloadedCompiling">
 		ダウンロード完了、コンパイル中
 	</string>
+	<string name="CompileQueueServiceUnavailable">
+		スクリプト コンパイル サービスを利用できません
+	</string>
 	<string name="CompileQueueScriptNotFound">
 		サーバー上にスクリプトが見つかりません。
 	</string>
@@ -2185,9 +2235,6 @@ support@secondlife.com にお問い合わせください。
 	<string name="ATTACH_AVATAR_CENTER">
 		アバターの中央
 	</string>
-	
-	<!-- added Jun.30, 2013 -->
-		
 	<string name="CursorPos">
 		[LINE] 行目、[COLUMN] 列目
 	</string>
@@ -2245,16 +2292,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="RegionSettings">
 		リージョン（地域）の設定
 	</string>
-	
-	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">
 		クリック数： [TELEPORT] テレポート、 [MAP] 地図、 [PROFILE] プロフィール
 	</string>
 	<string name="ClassifiedUpdateAfterPublish">
 		（掲載後更新）
 	</string>
-	
-	<!-- panel picks -->
 	<string name="NoPicksClassifiedsText">
 		ピックやクラシファイド広告を作成していません。 作成するには、下にある「プラス」ボタンをクリックします。
 	</string>
@@ -4110,13 +4153,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="LocationCtrlGeneralIconTooltip">
 		General リージョン
 	</string>
-	
-	<!-- modified Jun.30, 2013 -->
 	<string name="LocationCtrlSeeAVsTooltip">
 		この区画外にいるアバターからは中にいるアバターが見えず、会話も聞こえないようにする
 	</string>
-	<!-- modified Jun.30, 2013 -->
-	
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		地域（リージョン）が再構築されるまで、移動するオブジェクトは正しく動作しない可能性があります。
 	</string>
@@ -4241,11 +4280,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		Facebook に投稿しました。
 	</string>
 	<string name="flickr_post_success">
-		Flickr  に投稿しました。
+		Flickr に投稿しました。
 	</string>
 	<string name="twitter_post_success">
 		Twitter に投稿しました。
-		</string>
+	</string>
 	<string name="no_session_message">
 		（IM セッションが存在しません）
 	</string>
@@ -5424,8 +5463,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Normal">
 		普通
 	</string>
-	
-	<!-- Pathfinding -->
 	<string name="Pathfinding_Wiki_URL">
 		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
@@ -5441,8 +5478,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Pathfinding_Object_Attr_MultiSelect">
 		（複数）
 	</string>
-	
-	<!-- Snapshot image quality levels -->
 	<string name="snapshot_quality_very_low">
 		非常に低い
 	</string>
@@ -5494,7 +5529,6 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="TeleportMaturityExceeded">
 		住人はこの地域（リージョン）を訪問できません。
 	</string>
-	
 	<string name="UserDictionary">
 		[User]
 	</string>

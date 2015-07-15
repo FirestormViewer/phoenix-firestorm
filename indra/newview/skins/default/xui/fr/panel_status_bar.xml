@@ -13,9 +13,7 @@
 		<combo_box.item label="Mode basique" name="Basic"/>
 		<combo_box.item label="Mode avancé" name="Advanced"/>
 	</combo_box>
-	<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">
-		00h00 PST
-	</text>
+	<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">00h00 PST</text>
 	<panel name="time_and_media_bg">
 		<button name="media_toggle_btn" tool_tip="Arrêter tous les médias (musique, vidéo, pages web)"/>
 		<button name="volume_btn" tool_tip="Contrôle du volume global"/>
