@@ -100,6 +100,7 @@
       bevel_style="in"
       visible="true">
       <text
+          name="drop_zone_label"
           type="string"
           follows="bottom|left|right"
           layout="topleft"
