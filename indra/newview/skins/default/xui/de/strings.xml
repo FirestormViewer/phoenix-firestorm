@@ -1225,7 +1225,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AgentNameSubst">
 		(Sie)
 	</string>
-	<string name="JoinAnExperience"/>
+	<string name="JoinAnExperience"/><!-- intentionally blank -->
 	<string name="ManageEstateSilently">
 		Grundbesitz leise verwalten
 	</string>

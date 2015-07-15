@@ -1055,7 +1055,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="TeleportYourAgent">
 		あなたをテレポート
 	</string>
-	<string name="JoinAnExperience"/>
+	<string name="JoinAnExperience"/><!-- intentionally blank -->
 	<string name="SilentlyManageEstateAccess">
 		土地のアクセスリストを管理するときにアラートを表示しない
 	</string>

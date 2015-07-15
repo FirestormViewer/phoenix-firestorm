@@ -1080,7 +1080,7 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="AgentNameSubst">
 		(Vous)
 	</string>
-	<string name="JoinAnExperience"/>
+	<string name="JoinAnExperience"/><!-- intentionally blank -->
 	<string name="SilentlyManageEstateAccess">
 		Supprimer les alertes lors de la gestion des listes d&apos;accès aux domaines
 	</string>

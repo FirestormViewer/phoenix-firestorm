@@ -1122,7 +1122,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="AgentNameSubst">
 		(Tú)
 	</string>
-	<string name="JoinAnExperience"/>
+	<string name="JoinAnExperience"/><!-- intentionally blank -->
 	<string name="ManageEstateSilently">
 		Gestionar tus fincas silenciosamente
 	</string>
