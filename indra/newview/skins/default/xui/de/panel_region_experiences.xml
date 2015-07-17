@@ -2,10 +2,8 @@
 <panel label="Erlebnisse" name="Experiences">
 	<panel.string name="trusted_estate_text">
 		Jedes Erlebnis kann ein Schlüsselerlebnis sein.
-
 Schlüsselerlebnisse können in diesem Grundbesitz ausgeführt werden.
-
-Wenn der Grundbesitz keinen öffentlichen Zugang gestattet, können Einwohner, die an einem Schlüsselerlebnis teilnehmen, den Grundbesitz betreten und sich dort aufhalten, solange sie an einem Schlüsselerlebnis beteiligt sind.
+Wenn der Grundbesitz keinen öffentlichen Zugang gestattet, können Einwohner diesen betreten und sich dort aufhalten, falls und solange sie an irgendeinem Schlüsselerlebnis beteiligt sind.
 	</panel.string>
 	<panel.string name="allowed_estate_text">
 		Nur Erlebnisse mit Landumfang können zulässig sein.
