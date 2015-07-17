@@ -2089,7 +2089,10 @@ void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 	}
 	const LLUUID& base_id = append ? getBaseOutfitUUID() : category;
 	LLViewerInventoryCategory *base_cat = gInventory.getCategory(base_id);
-	if (base_cat)
+//	if (base_cat)
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+	if ((base_cat) && (base_cat->getPreferredType() == LLFolderType::FT_OUTFIT))
+// [/SL:KB]
 	{
 		LLSD base_contents;
 		base_contents["name"] = base_cat->getName();
@@ -3772,6 +3775,76 @@ private:
 	LLPointer<LLHTTPRetryPolicy> mRetryPolicy;
 };
 
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+// Bad hack but if the viewer and server COF versions get out of sync all appearance requests will start to fail from that point on and require a relog to fix
+class LLSyncCofVersionResponder : public LLHTTPClient::Responder
+{
+	LOG_CLASS(LLSyncCofVersionResponder);
+public:
+	LLSyncCofVersionResponder() : LLHTTPClient::Responder()
+	{
+		mRetryPolicy = new LLAdaptiveRetryPolicy(1.0, 16.0, 2.0, 3);
+	}
+
+	virtual ~LLSyncCofVersionResponder()
+	{
+		// Try and request an update even if we fail
+		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+	}
+
+protected:
+	virtual void httpSuccess()
+	{
+		LL_INFOS() << "Successfully incremented agent's COF." << LL_ENDL;
+
+		const LLSD& sdContent = getContent();
+		if (!sdContent.isMap())
+		{
+			failureResult(HTTP_INTERNAL_ERROR, "Malformed response contents", sdContent);
+			return;
+		}
+
+		// Slam the server version onto the local version
+		LLViewerInventoryCategory* pCOF = gInventory.getCategory(LLAppearanceMgr::instance().getCOF());
+		if (pCOF)
+		{
+			S32 cofVersion = sdContent["version"].asInteger();
+			LL_INFOS() << "Slamming server COF version: was " << pCOF->getVersion() << " now " << cofVersion << LL_ENDL;
+			pCOF->setVersion(cofVersion);
+			llassert(gAgentAvatarp->mLastUpdateReceivedCOFVersion < cofVersion);
+		}
+
+		// The viewer version tends to be ahead of the server version so make sure our new request doesn't appear to be stale
+		gAgentAvatarp->mLastUpdateRequestCOFVersion = gAgentAvatarp->mLastUpdateReceivedCOFVersion;
+	}
+
+	virtual void httpFailure()
+	{
+		LL_WARNS("Avatar") << "While attempting to increment the agent's cof we got an error " << dumpResponse() << LL_ENDL;
+
+		F32 seconds_to_wait;
+		mRetryPolicy->onFailure(getStatus(), getResponseHeaders());
+		if (mRetryPolicy->shouldRetry(seconds_to_wait))
+		{
+			LL_INFOS() << "retrying" << LL_ENDL;
+			doAfterInterval(boost::bind(&LLAppearanceMgr::incrementCofVersion, LLAppearanceMgr::getInstance(), LLHTTPClient::ResponderPtr(this)), seconds_to_wait);
+		}
+		else
+		{
+			LL_WARNS() << "giving up after too many retries" << LL_ENDL;
+		}
+	}
+
+private:
+	LLPointer<LLHTTPRetryPolicy> mRetryPolicy;
+};
+
+void LLAppearanceMgr::syncCofVersionAndRefresh()
+{
+	incrementCofVersion(LLHTTPClient::ResponderPtr(new LLSyncCofVersionResponder()));
+}
+// [/SL:KB]
+
 void LLAppearanceMgr::incrementCofVersion(LLHTTPClient::ResponderPtr responder_ptr)
 {
 	// If we don't have a region, report it as an error
@@ -3781,7 +3854,10 @@ void LLAppearanceMgr::incrementCofVersion(LLHTTPClient::ResponderPtr responder_p
 		return;
 	}
 
-	std::string url = gAgent.getRegion()->getCapability("IncrementCofVersion");
+//	std::string url = gAgent.getRegion()->getCapability("IncrementCofVersion");
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+	std::string url = gAgent.getRegion()->getCapability("IncrementCOFVersion");
+// [/SL:KB]
 	if (url.empty())
 	{
 		LL_WARNS() << "No cap for IncrementCofVersion." << LL_ENDL;

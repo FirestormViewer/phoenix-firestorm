@@ -209,6 +209,28 @@ RemoveItemCommand::RemoveItemCommand(const LLUUID& item_id,
 	setCommandFunc(cmd);
 }
 
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+// virtual
+void RemoveItemCommand::httpFailure()
+{
+	S32 status = getStatus();
+
+	// 410 - Gone (remote deleted but not local deleted)
+	if (410 == status)
+	{
+		if (mContent.has("item_id"))
+		{
+			gInventory.onObjectDeletedFromServer(mContent["item_id"].asUUID());
+		}
+
+		// No use in retrying
+		mRetryPolicy->cancelRetry();
+	}
+
+	AISCommand::httpFailure();
+}
+// [/SL:KB]
+
 RemoveCategoryCommand::RemoveCategoryCommand(const LLUUID& item_id,
 											 LLPointer<LLInventoryCallback> callback):
 	AISCommand(callback)

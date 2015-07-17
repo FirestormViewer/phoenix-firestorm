@@ -85,7 +85,7 @@ protected:
 // [/SL:KB]
 //	virtual bool getResponseUUID(const LLSD& content, LLUUID& id);
 
-private:
+//private:
 	command_func_type mCommandFunc;
 	LLPointer<LLHTTPRetryPolicy> mRetryPolicy;
 	LLPointer<LLInventoryCallback> mCallback;
@@ -96,6 +96,10 @@ class RemoveItemCommand: public AISCommand
 public:
 	RemoveItemCommand(const LLUUID& item_id,
 					  LLPointer<LLInventoryCallback> callback);
+
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+	/*virtual*/ void httpFailure();
+// [/SL:KB]
 };
 
 class RemoveCategoryCommand: public AISCommand
