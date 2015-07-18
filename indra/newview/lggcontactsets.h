@@ -78,6 +78,7 @@ public:
 	void removeFriendFromAllSets(const LLUUID& friend_id);
 	bool isFriendInSet(const LLUUID& friend_id, const std::string& set_name);
 	bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type);
+	bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color);
 
 	void addSet(const std::string& set_name);
 	bool renameSet(const std::string& set_name, const std::string& new_set_name);

@@ -674,7 +674,7 @@ void FSLSLBridge::startCreation()
 				LL_INFOS("FSLSLBridge") << "Bridge not attached but found in inventory, reattaching..." << LL_ENDL;
 
 				//Is this a valid bridge - wear it.
-				LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+				LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
 				//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
 			}
 			else
@@ -928,7 +928,7 @@ void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttac
 		LLViewerInventoryItem* inv_object = gInventory.getItem(object->getAttachmentItemID());
 		if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 		{
-			LLAttachmentsMgr::instance().addAttachment(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+			LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
 		}
 
 		return;
@@ -1109,7 +1109,7 @@ void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
 	FSLSLBridge::instance().setBridge(item);
 	
 	LL_INFOS("FSLSLBridge") << "Attaching bridge to the 'bridge' attachment point..." << LL_ENDL;
-	LLAttachmentsMgr::instance().addAttachment(inv_item, FS_BRIDGE_POINT, TRUE, TRUE);
+	LLAttachmentsMgr::instance().addAttachmentRequest(inv_item, FS_BRIDGE_POINT, TRUE, TRUE);
 }
 
 
@@ -1570,7 +1570,7 @@ BOOL FSLSLBridgeReAttachTimer::tick()
 	LLViewerInventoryItem* inv_object = gInventory.getItem(mBridgeUUID);
 	if (inv_object && FSLSLBridge::instance().mpBridge && FSLSLBridge::instance().mpBridge->getUUID() == inv_object->getUUID())
 	{
-		LLAttachmentsMgr::instance().addAttachment(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+		LLAttachmentsMgr::instance().addAttachmentRequest(inv_object->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
 	}
 
 	return TRUE;

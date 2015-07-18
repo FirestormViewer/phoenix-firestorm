@@ -381,7 +381,8 @@
 		 cursor_color="ScriptCursorColor"
 		 width="487"
 		 enable_tooltip_paste="true"
-		 word_wrap="true">
+		 word_wrap="true"
+		 show_context_menu="true">
 			Loading...
 		</script_editor>
 	</panel>
@@ -416,7 +417,8 @@
 		 bg_selected_color="ScriptSelectedColor"
 		 cursor_color="ScriptCursorColor"
 		 width="487"
-		 word_wrap="true">
+		 word_wrap="true"
+		 show_context_menu="true">
 			Loading...
 		</script_editor>
 	</panel>

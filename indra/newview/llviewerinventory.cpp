@@ -69,6 +69,9 @@
 #include "llfloaterperms.h"
 #include "llclipboard.h"
 #include "llhttpretrypolicy.h"
+// [RLVa:KB] - Checked: 2014-11-02 (RLVa-1.4.11)
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 // do-nothing ops for use in callbacks.
 void no_op_inventory_func(const LLUUID&) {} 
@@ -1272,7 +1275,10 @@ void link_inventory_array(const LLUUID& category,
 	}
 
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable( (baseobj_array.size() > 1) ? AISCommand::CMD_OBJ_LINKBATCH : AISCommand::CMD_OBJ_LINK ))
+// [/SL:KB]
 	{
 		LLSD new_inventory = LLSD::emptyMap();
 		new_inventory["links"] = links;
@@ -1338,7 +1344,10 @@ void update_inventory_item(
 {
 	const LLUUID& item_id = update_item->getUUID();
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_UPDATE))
+// [/SL:KB]
 	{
 		LLSD updates = update_item->asLLSD();
 		// Replace asset_id and/or shadow_id with transaction_id (hash_id)
@@ -1391,22 +1400,45 @@ void update_inventory_item(
 	const LLSD& updates,
 	LLPointer<LLInventoryCallback> cb)
 {
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
+	LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+	LLPointer<LLViewerInventoryItem> new_item = NULL;
+
+	if (obj)
+	{
+		new_item = new LLViewerInventoryItem(obj);
+		new_item->fromLLSD(updates,false);
+
+		LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
+		gInventory.accountForUpdate(up);
+		gInventory.updateItem(new_item);
+	}
+// [/SL:KB]
+
 	bool ais_ran = false;
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_UPDATE))
+// [/SL:KB]
 	{
 		LLPointer<AISCommand> cmd_ptr = new UpdateItemCommand(item_id, updates, cb);
 		ais_ran = cmd_ptr->run_command();
 	}
 	if (!ais_ran)
 	{
-		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
-		if(obj)
-		{
-			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
-			new_item->copyViewerItem(obj);
-			new_item->fromLLSD(updates,false);
+//		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
+//		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+//		if(obj)
+//		{
+//			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
+//			new_item->copyViewerItem(obj);
+//			new_item->fromLLSD(updates,false);
 
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (new_item)
+		{
+// [/SL:KB]
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessageFast(_PREHASH_UpdateInventoryItem);
 			msg->nextBlockFast(_PREHASH_AgentData);
@@ -1418,9 +1450,9 @@ void update_inventory_item(
 			new_item->packMessage(msg);
 			gAgent.sendReliableMessage();
 
-			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
-			gInventory.accountForUpdate(up);
-			gInventory.updateItem(new_item);
+//			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
+//			gInventory.accountForUpdate(up);
+//			gInventory.updateItem(new_item);
 			if (cb)
 			{
 				cb->fire(item_id);
@@ -1447,7 +1479,10 @@ void update_inventory_category(
 		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(obj);
 		new_cat->fromLLSD(updates);
 		// FIXME - restore this once the back-end work has been done.
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_UPDATE))
+// [/SL:KB]
 		{
 			LLSD new_llsd = new_cat->asLLSD();
 			LLPointer<AISCommand> cmd_ptr = new UpdateCategoryCommand(cat_id, new_llsd, cb);
@@ -1513,7 +1548,10 @@ void remove_inventory_item(
 	{
 		const LLUUID item_id(obj->getUUID());
 		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << obj->getName() << LL_ENDL;
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_ITEM_REMOVE))
+// [/SL:KB]
 		{
 			LLPointer<AISCommand> cmd_ptr = new RemoveItemCommand(item_id, cb);
 			cmd_ptr->run_command();
@@ -1589,7 +1627,10 @@ void remove_inventory_category(
 			LLNotificationsUtil::add("CannotRemoveProtectedCategories");
 			return;
 		}
-		if (AISCommand::isAPIAvailable())
+//		if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_REMOVE))
+// [/SL:KB]
 		{
 			LLPointer<AISCommand> cmd_ptr = new RemoveCategoryCommand(cat_id, cb);
 			cmd_ptr->run_command();
@@ -1692,7 +1733,10 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 		}
 		else
 		{
-			if (AISCommand::isAPIAvailable())
+//			if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+			if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_PURGE))
+// [/SL:KB]
 			{
 				LLPointer<AISCommand> cmd_ptr = new PurgeDescendentsCommand(id, cb);
 				cmd_ptr->run_command();
@@ -1845,11 +1889,73 @@ void create_new_item(const std::string& name,
 						  cb);
 }	
 
+// [RLVa:KB] - Checked: 2014-11-02 (RLVa-1.4.11)
+void sync_inventory_folder(const LLUUID& folder_id, const LLInventoryModel::item_array_t& items, LLInventoryModel::item_array_t& items_to_add, LLInventoryModel::item_array_t& items_to_remove)
+{
+	LLInventoryModel::item_array_t curItems, newItems = items;
+
+	// Grab the current contents
+	LLInventoryModel::cat_array_t cats;
+	gInventory.collectDescendents(folder_id, cats, curItems, LLInventoryModel::EXCLUDE_TRASH);
+
+	// Purge everything in curItems that isn't part of newItems
+	for (LLInventoryModel::item_array_t::const_iterator itCurItem = curItems.begin(); itCurItem != curItems.end(); ++itCurItem)
+	{
+		LLViewerInventoryItem* pItem = *itCurItem;
+		if (std::find_if(newItems.begin(), newItems.end(), RlvPredIsEqualOrLinkedItem(pItem)) == newItems.end())
+		{
+			// Item doesn't exist in newItems => purge (if it's a link)
+			if ( (pItem->getIsLinkType()) && 
+				 (LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
+			     (items_to_remove.end() == std::find(items_to_remove.begin(), items_to_remove.end(), pItem)) )
+			{
+				items_to_remove.push_back(pItem);
+			}
+		}
+		else
+		{
+			// Item exists in newItems => remove *all* occurances in newItems (removes duplicate COF links to this item as well)
+			newItems.erase(std::remove_if(newItems.begin(), newItems.end(), RlvPredIsEqualOrLinkedItem(pItem)), newItems.end());
+		}
+	}
+
+	// Whatever remains in newItems will need to have a link created
+	for (LLInventoryModel::item_array_t::const_iterator itNewItem = newItems.begin(); itNewItem != newItems.end(); ++itNewItem)
+	{
+		LLViewerInventoryItem* pItem = *itNewItem;
+		if (items_to_add.end() == std::find(items_to_add.begin(), items_to_add.end(), pItem))
+			items_to_add.push_back(pItem);
+	}
+}
+
+void link_inventory_items(const LLUUID& folder_id, const LLInventoryModel::item_array_t& items, LLPointer<LLInventoryCallback> cb)
+{
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		const LLViewerInventoryItem* pItem = *itItem;
+		link_inventory_object(folder_id, pItem, cb);
+	}
+}
+
+void remove_inventory_items(const LLInventoryModel::item_array_t& items, LLPointer<LLInventoryCallback> cb)
+{
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (pItem->getIsLinkType())
+			remove_inventory_item(pItem->getUUID(), cb);
+	}
+}
+// [/RLVa:KB]
+
 void slam_inventory_folder(const LLUUID& folder_id,
 						   const LLSD& contents,
 						   LLPointer<LLInventoryCallback> cb)
 {
-	if (AISCommand::isAPIAvailable())
+//	if (AISCommand::isAPIAvailable())
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	if (AISCommand::isAPIAvailable(AISCommand::CMD_CAT_SLAM))
+// [/SL:KB]
 	{
 		LL_DEBUGS(LOG_INV) << "using AISv3 to slam folder, id " << folder_id
 						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
@@ -1858,18 +1964,36 @@ void slam_inventory_folder(const LLUUID& folder_id,
 	}
 	else // no cap
 	{
+// [RLVa:KB] - Checked: 2014-11-02 (RLVa-1.4.11)
 		LL_DEBUGS(LOG_INV) << "using item-by-item calls to slam folder, id " << folder_id
 						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
-		for (LLSD::array_const_iterator it = contents.beginArray();
-			 it != contents.endArray();
-			 ++it)
+
+		LLInventoryModel::item_array_t items;
+		for (LLSD::array_const_iterator itItem = contents.beginArray(); itItem != contents.endArray(); ++itItem)
 		{
-			const LLSD& item_contents = *it;
-			LLViewerInventoryItem *item = new LLViewerInventoryItem;
-			item->fromLLSD(item_contents);
-			link_inventory_object(folder_id, item, cb);
+			LLViewerInventoryItem* pItem = new LLViewerInventoryItem;
+			pItem->fromLLSD(*itItem);
+			items.push_back(pItem);
 		}
-		remove_folder_contents(folder_id,false,cb);
+
+		LLInventoryModel::item_array_t items_to_add, items_to_remove;
+		sync_inventory_folder(folder_id, items, items_to_add, items_to_remove);
+
+		link_inventory_items(folder_id, items_to_add, cb);
+		remove_inventory_items(items_to_remove, cb);
+// [/RLVa:KB]
+//		LL_DEBUGS(LOG_INV) << "using item-by-item calls to slam folder, id " << folder_id
+//						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;
+//		for (LLSD::array_const_iterator it = contents.beginArray();
+//			 it != contents.endArray();
+//			 ++it)
+//		{
+//			const LLSD& item_contents = *it;
+//			LLViewerInventoryItem *item = new LLViewerInventoryItem;
+//			item->fromLLSD(item_contents);
+//			link_inventory_object(folder_id, item, cb);
+//		}
+//		remove_folder_contents(folder_id,false,cb);
 	}
 }
 
@@ -2327,5 +2451,3 @@ BOOL LLViewerInventoryItem::regenerateLink()
 	gInventory.notifyObservers();
 	return TRUE;
 }
-
-

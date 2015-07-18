@@ -71,6 +71,9 @@ public:
 	// <FS:Ansariel> Changed to public so we can update history when using modifier keys
 	void	updateHistory();
 
+	// <FS:Ansariel> Fix linefeed pasting
+	/*virtual*/ void	paste();
+
 private:
 
 	/**

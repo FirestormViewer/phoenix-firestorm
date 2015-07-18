@@ -177,6 +177,8 @@ public:
 	// inserts text at cursor
 	void			insertText(const std::string &text);
 	void			insertText(LLWString &text);
+	// <FS:Ansariel> Allow inserting a linefeed
+	void			insertLinefeed();
 
 	void			appendWidget(const LLInlineViewSegment::Params& params, const std::string& text, bool allow_undo);
 	// Non-undoable

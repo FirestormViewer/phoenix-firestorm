@@ -37,21 +37,54 @@ class FSScrollListCtrl
 public:
 	using LLScrollListCtrl::setContextMenu;
 
+	typedef enum e_content_type
+	{
+		AGENTS,
+		MISC
+	} EContentType;
+
+	// provide names for enums
+	struct ContentTypeNames : public LLInitParam::TypeValuesHelper<FSScrollListCtrl::EContentType, ContentTypeNames>
+	{
+		static void declareValues()
+		{
+			declare("Agents", FSScrollListCtrl::AGENTS);
+			declare("Misc", FSScrollListCtrl::MISC);
+		}
+	};
+
 	struct Params : public LLInitParam::Block<Params, LLScrollListCtrl::Params>
 	{
-		Optional<S32>		desired_line_height;
+		Optional<S32>								desired_line_height;
+		Optional<EContentType, ContentTypeNames>	content_type;
 
 		Params()
-		:	desired_line_height("desired_line_height", -1)
+		:	desired_line_height("desired_line_height", -1),
+			content_type("content_type", MISC)
 		{
 		}
 	};
 	
 	virtual ~FSScrollListCtrl() {};
 	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleHover(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+									  EDragAndDropType cargo_type,
+									  void* cargo_data,
+									  EAcceptance* accept,
+									  std::string& tooltip_msg);
 
 	void	setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	void	refreshLineHeight();
+
+
+	typedef boost::function<BOOL(S32, S32, MASK, BOOL, EDragAndDropType, void*, EAcceptance*, std::string&)> handle_dad_callback_signal_t;
+	void setHandleDaDCallback(const handle_dad_callback_signal_t& func)
+	{
+		mHandleDaDCallback = func;
+	}
 
 protected:
 	friend class LLUICtrlFactory;
@@ -59,6 +92,9 @@ protected:
 
 	LLListContextMenu*	mContextMenu;
 	S32					mDesiredLineHeight;
+	EContentType		mContentType;
+
+	handle_dad_callback_signal_t	mHandleDaDCallback;
 };
 
 #endif // FS_SCROLLLISTCTRL_H

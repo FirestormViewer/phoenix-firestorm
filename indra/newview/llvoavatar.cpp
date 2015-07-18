@@ -737,7 +737,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	const BOOL needsSendToSim = false; // currently, this HUD effect doesn't need to pack and unpack data to do its job
 	mVoiceVisualizer = ( LLVoiceVisualizer *)LLHUDManager::getInstance()->createViewerEffect( LLHUDObject::LL_HUD_EFFECT_VOICE_VISUALIZER, needsSendToSim );
 
-	LL_DEBUGS("Avatar") << "LLVOAvatar Constructor (0x" << this << ") id:" << mID << LL_ENDL;
+	LL_DEBUGS("Avatar","Message") << "LLVOAvatar Constructor (0x" << this << ") id:" << mID << LL_ENDL;
 
 	mPelvisp = NULL;
 
@@ -3229,10 +3229,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, LGG_CS_CHAT);
 		
 		//color based on contact sets prefs
-		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT))
-		{
-			new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
-		}
+		LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT, new_chat);
 		// </FS:CR>
 		
 		if (mVisibleChat)
@@ -3471,10 +3468,7 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
 	// </FS:CR>
 	
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))
-	{
-		color = LGGContactSets::getInstance()->getFriendColor(getID());
-	}
+	LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG, color);
 
 	LLNetMap::getAvatarMarkColor(getID(), color);
 
@@ -6296,12 +6290,20 @@ BOOL LLVOAvatar::setParent(LLViewerObject* parent)
 void LLVOAvatar::addChild(LLViewerObject *childp)
 {
 	childp->extractAttachmentItemID(); // find the inventory item this object is associated with.
+	if (isSelf())
+	{
+	    const LLUUID& item_id = childp->getAttachmentItemID();
+		LLViewerInventoryItem *item = gInventory.getItem(item_id);
+		LL_DEBUGS("Avatar") << "ATT attachment child added " << (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;
+
+	}
+
 	LLViewerObject::addChild(childp);
 	if (childp->mDrawable)
 	{
 		if (!attachObject(childp))
 		{
-			LL_WARNS() << "addChild() failed for " 
+			LL_WARNS() << "ATT addChild() failed for " 
 					<< childp->getID()
 					<< " item " << childp->getAttachmentItemID()
 					<< LL_ENDL;
@@ -6379,10 +6381,21 @@ LLViewerJointAttachment* LLVOAvatar::getTargetAttachmentPoint(LLViewerObject* vi
 //-----------------------------------------------------------------------------
 const LLViewerJointAttachment *LLVOAvatar::attachObject(LLViewerObject *viewer_object)
 {
+	if (isSelf())
+	{
+		const LLUUID& item_id = viewer_object->getAttachmentItemID();
+		LLViewerInventoryItem *item = gInventory.getItem(item_id);
+		LL_DEBUGS("Avatar") << "ATT attaching object "
+							<< (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;	
+	}
 	LLViewerJointAttachment* attachment = getTargetAttachmentPoint(viewer_object);
 
 	if (!attachment || !attachment->addObject(viewer_object))
 	{
+		const LLUUID& item_id = viewer_object->getAttachmentItemID();
+		LLViewerInventoryItem *item = gInventory.getItem(item_id);
+		LL_WARNS("Avatar") << "ATT attach failed "
+						   << (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;	
 		return 0;
 	}
 
@@ -6448,6 +6461,13 @@ void LLVOAvatar::lazyAttach()
 		LLPointer<LLViewerObject> cur_attachment = mPendingAttachment[i];
 		if (cur_attachment->mDrawable)
 		{
+			if (isSelf())
+			{
+				const LLUUID& item_id = cur_attachment->getAttachmentItemID();
+				LLViewerInventoryItem *item = gInventory.getItem(item_id);
+				LL_DEBUGS("Avatar") << "ATT attaching object "
+									<< (item ? item->getName() : "UNKNOWN") << " id " << item_id << LL_ENDL;
+			}
 			if (!attachObject(cur_attachment))
 			{	// Drop it
 				LL_WARNS() << "attachObject() failed for " 
@@ -8944,7 +8964,10 @@ void LLVOAvatar::updateImpostors()
 
 BOOL LLVOAvatar::isImpostor()
 {
-	return (sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD))) || isInMuteList() ? TRUE : FALSE;
+	// <FS:Ansariel> Show muted avatars as grey imposters as it has always been the case
+	//return (sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD))) || isInMuteList() ? TRUE : FALSE;
+	return sUseImpostors && (isVisuallyMuted() || (mUpdatePeriod >= IMPOSTOR_PERIOD)) ? TRUE : FALSE;
+	// </FS:Ansariel>
 }
 
 
@@ -9268,6 +9291,17 @@ BOOL LLVOAvatar::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type,
 	}
 	else
 	{
+		// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
+		if (LLPipeline::sShadowRender)
+		{
+			static LLCachedControl<U32> fsSimpleAvatarShadows(gSavedSettings, "FSSimpleAvatarShadows", 3);
+			if (fsSimpleAvatarShadows == 1)
+			{
+				return TRUE;
+			}
+		}
+		// </FS:Ansariel>
+
 		// baked textures can use TE images directly
 		return ((isTextureDefined(type) || isSelf())
 				&& (getTEImage(type)->getID() != IMG_INVISIBLE 

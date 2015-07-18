@@ -2374,6 +2374,10 @@ void LLAgent::endAnimationUpdateUI()
 				skip_list.insert(tmp);
 			}
 			// </FS:LO>
+			// <FS:Ansariel> Skip restoring conversations and radar floater
+			skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
+			skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+			// </FS:Ansariel>
 
 			// <FS:Ansariel> [FS communication UI] Commented out so far.
 			//               Maybe check if need it to close standalone IM floater
@@ -2539,6 +2543,10 @@ void LLAgent::endAnimationUpdateUI()
 			skip_list.insert(tmp);
 		}
 		// </FS:LO>
+		// <FS:Ansariel> Skip hiding conversations and radar floater
+		skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
+		skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+		// </FS:Ansariel>
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
 

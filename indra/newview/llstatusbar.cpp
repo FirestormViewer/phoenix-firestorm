@@ -1533,6 +1533,12 @@ void LLStatusBar::collectSearchableItems()
 
 void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
 {
-	mSearchPanel->setVisible(data.asBoolean());
+	bool visible = data.asBoolean();
+	mSearchPanel->setVisible(visible);
+	if (!visible)
+	{
+		mFilterEdit->setText(LLStringUtil::null);
+		onUpdateFilterTerm();
+	}
 	update();
 }

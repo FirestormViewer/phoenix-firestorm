@@ -33,12 +33,13 @@
 #include "llpanelpeople.h"				// "People" sidebar panel
 #include "llpanelwearing.h"				// "Current Outfit" sidebar panel
 #include "llparcel.h"
+#include "llpaneltopinfobar.h"
 #include "llsidepanelappearance.h"
 #include "lltabcontainer.h"
 #include "llteleporthistory.h"
-#include "llteleporthistorystorage.h"
 #include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "roles_constants.h"			// Group "powers"
 
@@ -280,8 +281,10 @@ void RlvUIEnabler::onToggleShowLoc()
 {
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
 
-	// RELEASE-RLVa: [SL-2.0.1] Check that the code below still evaluates to *only* LLNavigationBar::instance().mCmbLocation->refresh()
-	LLNavigationBar::instance().handleLoginComplete();
+	if (LLNavigationBar::instanceExists())
+		LLNavigationBar::instance().refreshLocationCtrl();
+	if (LLPanelTopInfoBar::instanceExists())
+		LLPanelTopInfoBar::instance().update();
 
 	if (!fEnable)
 	{

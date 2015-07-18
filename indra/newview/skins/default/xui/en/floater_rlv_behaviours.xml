@@ -86,13 +86,13 @@
      left="0"
      name="copy_btn"
      top="1"
-     width="129" />
+     width="150" />
     <icon
      follows="left|right"
      image_name="Toolbar_Right_Off"
      left_pad="1"
      name="dummy_icon"
      top="1"
-     width="153" />
+     right="-1" />
   </panel>
 </floater>

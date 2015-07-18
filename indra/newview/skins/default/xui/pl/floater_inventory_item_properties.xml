@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="item properties" title="Właściwości obiektów w szafie">
+	<floater.string name="loading_experience">
+		(wczytywanie)
+	</floater.string>
 	<floater.string name="unknown">
 		(nieznany)
 	</floater.string>
@@ -28,6 +31,9 @@
 	<button label="Profil..." name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">
 		Nabyte:
+	</text>
+	<text name="LabelItemExperienceTitle">
+		Przygoda:
 	</text>
 	<text name="OwnerLabel">
 		Ty:

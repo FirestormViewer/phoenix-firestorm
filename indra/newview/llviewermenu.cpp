@@ -8041,7 +8041,7 @@ class LLAttachmentDetachFromPoint : public view_listener_t
 				ids_to_remove.push_back(attached_object->getAttachmentItemID());
 // [/RLVa:KB]
 			}
-			}
+        }
 		if (!ids_to_remove.empty())
 		{
 			LLAppearanceMgr::instance().removeItemsFromAvatar(ids_to_remove);
@@ -9710,7 +9710,10 @@ void handle_rebake_textures(void*)
 	gAgentAvatarp->forceBakeAllTextures(slam_for_debug);
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
-		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+// [/SL:KB]
+//		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
 		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
 	}
 }

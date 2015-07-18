@@ -335,6 +335,7 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
+		mCtrlAvatarShadowDetail = getChild<LLComboBox>("AvatarShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 // <FS:CR> FIRE-9630 - Vignette UI controls
 		mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
@@ -768,6 +769,7 @@ void FloaterQuickPrefs::refreshSettings()
 
 	mCtrlShadowDetail->setEnabled(enabled);
 
+	mCtrlAvatarShadowDetail->setEnabled(enabled && mCtrlShadowDetail->getValue().asInteger() > 0);
 
 	// if vertex shaders off, disable all shader related products
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
@@ -783,6 +785,9 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
+
+		mCtrlAvatarShadowDetail->setEnabled(FALSE);
+		mCtrlAvatarShadowDetail->setValue(0);
 		
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
@@ -804,6 +809,9 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
 		
+		mCtrlAvatarShadowDetail->setEnabled(FALSE);
+		mCtrlAvatarShadowDetail->setValue(0);
+
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
 
@@ -820,7 +828,10 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-		
+
+		mCtrlAvatarShadowDetail->setEnabled(FALSE);
+		mCtrlAvatarShadowDetail->setValue(0);
+
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);
 
@@ -843,6 +854,9 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
+
+		mCtrlAvatarShadowDetail->setEnabled(FALSE);
+		mCtrlAvatarShadowDetail->setValue(0);
 	}
 
 	// disabled reflections
@@ -858,6 +872,10 @@ void FloaterQuickPrefs::refreshSettings()
 		//deferred needs AvatarVP, disable deferred
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
+
+		mCtrlAvatarShadowDetail->setEnabled(FALSE);
+		mCtrlAvatarShadowDetail->setValue(0);
+
 		
 		mCtrlUseSSAO->setEnabled(FALSE);
 		mCtrlUseSSAO->setValue(FALSE);

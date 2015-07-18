@@ -37,6 +37,7 @@
      draw_heading="true"
 	 heading_height="20"
 	 multi_select="true"
+	 content_type="Agents"
      name="friend_list">
 		<fs_scroll_list.column
 		 image="legacy/ff_online_status_button.tga"

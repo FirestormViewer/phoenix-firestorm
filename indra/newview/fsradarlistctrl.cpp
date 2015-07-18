@@ -29,7 +29,6 @@
 
 #include "fsradarlistctrl.h"
 #include "llscrolllistitem.h"
-#include "lltooldraganddrop.h"
 #include "rlvhandler.h"
 
 static LLDefaultChildRegistry::Register<FSRadarListCtrl> r("radar_list");
@@ -69,59 +68,3 @@ BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	}
 	return handled;
 }
-
-BOOL FSRadarListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
-{
-	gFocusMgr.setMouseCapture(this);
-
-	S32 screen_x;
-	S32 screen_y;
-	localPointToScreen(x, y, &screen_x, &screen_y);
-	LLToolDragAndDrop::getInstance()->setDragStart(screen_x, screen_y);
-
-	return FSScrollListCtrl::handleMouseDown(x, y, mask);
-}
-
-BOOL FSRadarListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
-{
-	if (hasMouseCapture())
-	{
-		gFocusMgr.setMouseCapture(NULL);
-	}
-
-	return FSScrollListCtrl::handleMouseUp(x, y, mask);
-}
-
-BOOL FSRadarListCtrl::handleHover(S32 x, S32 y, MASK mask)
-{
-	bool handled = hasMouseCapture();
-	if (handled)
-	{
-		S32 screen_x;
-		S32 screen_y;
-		localPointToScreen(x, y, &screen_x, &screen_y);
-
-		if(LLToolDragAndDrop::getInstance()->isOverThreshold(screen_x, screen_y))
-		{
-			// First, create the global drag and drop object
-			std::vector<EDragAndDropType> types;
-			uuid_vec_t cargo_ids;
-			typedef std::vector<LLScrollListItem*> item_vec_t;
-			item_vec_t selected_items = getAllSelected();
-			for (item_vec_t::const_iterator it = selected_items.begin(); it != selected_items.end(); ++it)
-			{
-				cargo_ids.push_back((*it)->getUUID());
-			}
-			types.resize(cargo_ids.size(), DAD_PERSON);
-			LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_PEOPLE;
-			LLToolDragAndDrop::getInstance()->beginMultiDrag(types, cargo_ids, src);
-		}
-	}
-	else
-	{
-		handled = FSScrollListCtrl::handleHover(x, y, mask);
-	}
-
-	return handled;
-}
-
