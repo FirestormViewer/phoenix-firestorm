@@ -504,7 +504,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	// Grab a list of all the items we'll be wearing/attaching
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
 	RlvWearableItemCollector f(pFolder, eAction, eFlags);
-	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, TRUE);
+	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, true);
 
 	// TRUE if we've already encountered this LLWearableType::EType (used only on wear actions and only for AT_CLOTHING)
 	bool fSeenWType[LLWearableType::WT_COUNT] = { false };
@@ -919,7 +919,35 @@ void RlvForceWear::remWearable(const LLViewerWearable* pWearable)
 		m_remWearables.push_back(pWearable);
 }
 
-// Checked: 2010-09-18 (RLVa-1.2.1)
+// Checked: 2015-05-05 (RLVa-1.4.12)
+void RlvForceWear::updatePendingAttachments()
+{
+	if (RlvForceWear::instanceExists())
+	{
+		RlvForceWear* pThis = RlvForceWear::getInstance();
+		for (const pendingattachments_map_t::value_type& itAttach : pThis->m_pendingAttachments)
+			LLAttachmentsMgr::instance().addAttachmentRequest(itAttach.first, itAttach.second & ~ATTACHMENT_ADD, itAttach.second & ATTACHMENT_ADD);
+		pThis->m_pendingAttachments.clear();
+	}
+}
+
+// Checked: 2015-05-05 (RLVa-1.4.12)
+void RlvForceWear::addPendingAttachment(const LLUUID& idItem, U8 idxPoint)
+{
+	auto itAttach = m_pendingAttachments.find(idItem);
+	if (m_pendingAttachments.end() == itAttach)
+		m_pendingAttachments.insert(std::make_pair(idItem, idxPoint));
+	else
+		itAttach->second = idxPoint;
+}
+
+// Checked: 2015-05-05 (RLVa-1.4.12)
+void RlvForceWear::remPendingAttachment(const LLUUID& idItem)
+{
+	m_pendingAttachments.erase(idItem);
+}
+
+// Checked: 2015-05-05 (RLVa-1.4.12)
 void RlvForceWear::done()
 {
 	// Sanity check - don't go through all the motions below only to find out there's nothing to actually do
@@ -929,43 +957,35 @@ void RlvForceWear::done()
 		return;
 	}
 
-	LLAppearanceMgr* pAppearanceMgr = LLAppearanceMgr::getInstance();
-	
 	//
 	// Process removals
 	//
 
+	uuid_vec_t remItems;
+
 	// Wearables
-	uuid_vec_t ids_to_remove;
 	if (m_remWearables.size())
 	{
-		for (std::list<const LLViewerWearable*>::const_iterator itWearable = m_remWearables.begin(); itWearable != m_remWearables.end(); ++itWearable)
-			ids_to_remove.push_back((*itWearable)->getItemID());
+		for (const LLViewerWearable* pWearable : m_remWearables)
+			remItems.push_back(pWearable->getItemID());
 		m_remWearables.clear();
 	}
-	pAppearanceMgr->removeItemsFromAvatar(ids_to_remove);
 
 	// Gestures
 	if (m_remGestures.size())
 	{
-		// NOTE: LLGestureMgr::deactivateGesture() will call LLAppearanceMgr::removeCOFItemLinks() for us
-		for (S32 idxItem = 0, cntItem = m_remGestures.size(); idxItem < cntItem; idxItem++)
-			LLGestureMgr::instance().deactivateGesture(m_remGestures.at(idxItem)->getUUID());
+		// NOTE: LLGestureMgr::deactivateGesture() will call LLAppearanceMgr::removeCOFItemLinks() for us and supply its own callback
+		for (const LLViewerInventoryItem* pItem : m_remGestures)
+			LLGestureMgr::instance().deactivateGesture(pItem->getUUID());
 		m_remGestures.clear();
 	}
 
 	// Attachments
 	if (m_remAttachments.size())
 	{
-		// Don't bother with COF if all we're doing is detaching some attachments (keeps people from rebaking on every @remattach=force)
 		LLAgentWearables::userRemoveMultipleAttachments(m_remAttachments);
-
-		for (std::vector<LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
-				itAttachObj != m_remAttachments.end(); ++itAttachObj)
-		{
-			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID());
-		}
-
+		for (const LLViewerObject* pAttachObj : m_remAttachments)
+			remItems.push_back(pAttachObj->getAttachmentItemID());
 		m_remAttachments.clear();
 	}
 
@@ -975,46 +995,51 @@ void RlvForceWear::done()
 
 	// Wearables need to be split into AT_BODYPART and AT_CLOTHING for COF
 	LLInventoryModel::item_array_t addBodyParts, addClothing;
-	for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.begin(); itAddWearables != m_addWearables.end(); ++itAddWearables)
+	for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.cbegin(); itAddWearables != m_addWearables.cend(); ++itAddWearables)
 	{
-		const LLInventoryModel::item_array_t& wearItems = itAddWearables->second;
-		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
+		// NOTE: LLAppearanceMgr will filter our duplicates so no need for us to check here
+		for (LLViewerInventoryItem* pItem : itAddWearables->second)
 		{
-			LLViewerInventoryItem* pItem = wearItems.at(idxItem);
-			if (!pAppearanceMgr->instance().isLinkedInCOF(pItem->getUUID()))		// It's important to examine COF here and *not* gAgentWearables
-			{
-				if (LLAssetType::AT_BODYPART == pItem->getType())
-					addBodyParts.push_back(pItem);
-				else
-					addClothing.push_back(pItem);
-			}
+			if (LLAssetType::AT_BODYPART == pItem->getType())
+				addBodyParts.push_back(pItem);
+			else
+				addClothing.push_back(pItem);
 		}
 	}
 	m_addWearables.clear();
 
 	// Until LL provides a way for updateCOF to selectively attach add/replace we have to deal with attachments ourselves
-	for (addattachments_map_t::const_iterator itAddAttachments = m_addAttachments.begin(); 
-			itAddAttachments != m_addAttachments.end(); ++itAddAttachments)
+	for (addattachments_map_t::const_iterator itAddAttachments = m_addAttachments.cbegin(); itAddAttachments != m_addAttachments.cend(); ++itAddAttachments)
 	{
-		const LLInventoryModel::item_array_t& wearItems = itAddAttachments->second;
-		for (S32 idxItem = 0, cntItem = wearItems.size(); idxItem < cntItem; idxItem++)
-		{
-			const LLUUID& idItem = wearItems.at(idxItem)->getLinkedUUID();
-			LLAttachmentsMgr::instance().addAttachmentRequest(idItem, itAddAttachments->first & ~ATTACHMENT_ADD, itAddAttachments->first & ATTACHMENT_ADD);
-		}
+		for (const LLViewerInventoryItem* pItem : itAddAttachments->second)
+			addPendingAttachment(pItem->getLinkedUUID(), itAddAttachments->first);
 	}
 	m_addAttachments.clear();
 
-	// If there are additions we need to call LLAppearanceManager::updateCOF(), otherwise LLAppearanceManager::updateAppearanceFromCOF()
+	//
+	// Tie it all together
+	//
+
+	//          |    Wearables    |   Attachments    |   Gestures      |
+	//          |======================================================|
+	// Add    : | LLAppearanceMgr | <custom>         | LLAppearanceMgr |
+	// Remove : | LLAppearanceMgr | LLAppearanceMgr  | LLGestureMgr    |
+	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy(false, false, boost::bind(RlvForceWear::updatePendingAttachments));
+
+	if (!remItems.empty())
+	{
+		LLAppearanceMgr::instance().removeItemsFromAvatar(remItems, cb, true);
+	}
+
 	if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
 	{
 		LLInventoryModel::item_array_t addAttachments;
-		pAppearanceMgr->updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true);
+		LLAppearanceMgr::instance().updateCOF(addBodyParts, addClothing, addAttachments, m_addGestures, true, LLUUID::null, cb);
 
 		m_addGestures.clear();
 	}
 
-	// Since RlvForceWear is a singleton now we want to be sure there aren't any leftovers
+	// Make sure there are no leftovers for the next cycle
 	RLV_ASSERT( (m_remWearables.empty()) && (m_remAttachments.empty()) && (m_remGestures.empty()) );
 	RLV_ASSERT( (m_addWearables.empty()) && (m_addAttachments.empty()) && (m_addGestures.empty()) );
 }

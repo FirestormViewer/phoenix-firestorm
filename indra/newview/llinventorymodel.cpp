@@ -770,13 +770,19 @@ void LLInventoryModel::collectDescendents(const LLUUID& id,
 	collectDescendentsIf(id, cats, items, include_trash, always);
 }
 
+//void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
+//											cat_array_t& cats,
+//											item_array_t& items,
+//											BOOL include_trash,
+//											LLInventoryCollectFunctor& add)
+// [RLVa:KB] - Checked: 2013-04-15 (RLVa-1.4.8)
 void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 											cat_array_t& cats,
 											item_array_t& items,
 											BOOL include_trash,
 											LLInventoryCollectFunctor& add,
-											// <FS:Ansariel> Follow folder links
 											bool follow_folder_links)
+// [/RLVa:KB]
 {
 	// Start with categories
 	if(!include_trash)
@@ -827,6 +833,9 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 	// This breaks the "finish collecting all folders before collecting items (top to bottom and then bottom to top)" 
 	// assumption but no functor is (currently) relying on it (and likely never should since it's an implementation detail?)
 	// [Only LLAppearanceMgr actually ever passes in 'follow_folder_links == TRUE']
+	// Follow folder links recursively.  Currently never goes more
+	// than one level deep (for current outfit support)
+	// Note: if making it fully recursive, need more checking against infinite loops.
 	if (follow_folder_links && item_array)
 	{
 		S32 count = item_array->size();

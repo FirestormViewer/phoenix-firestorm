@@ -59,7 +59,7 @@ public:
 // [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 	void updateCOF(LLInventoryModel::item_array_t& body_items_new, LLInventoryModel::item_array_t& wear_items_new,
 				   LLInventoryModel::item_array_t& obj_items_new, LLInventoryModel::item_array_t& gest_items_new,
-				   bool append = false, const LLUUID& category = LLUUID::null);
+				   bool append = false, const LLUUID& idOutfit = LLUUID::null, LLPointer<LLInventoryCallback> link_waiter = NULL);
 // [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
 // <FS:TT> ReplaceWornItemsOnly
@@ -159,6 +159,9 @@ public:
 	// Attachment link management
 	void unregisterAttachment(const LLUUID& item_id);
 	void registerAttachment(const LLUUID& item_id);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	bool getAttachmentInvLinkEnable() { return mAttachmentInvLinkEnabled; }
+// [/SL:KB]
 	void setAttachmentInvLinkEnable(bool val);
 
 	// Add COF link to individual item.
@@ -170,7 +173,10 @@ public:
 	bool isLinkedInCOF(const LLUUID& item_id);
 
 	// Remove COF entries
-	void removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInventoryCallback> cb = NULL);
+//	void removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInventoryCallback> cb = NULL);
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-05-02 (Catznip-3.7)
+	void removeCOFItemLinks(const LLUUID& item_id, LLPointer<LLInventoryCallback> cb = NULL, bool immediate_delete = false);
+// [/SL:KB]
 	void removeCOFLinksOfType(LLWearableType::EType type, LLPointer<LLInventoryCallback> cb = NULL);
 	void removeAllClothesFromAvatar();
 	void removeAllAttachmentsFromAvatar();
@@ -203,8 +209,15 @@ public:
 	bool updateBaseOutfit();
 
 	//Remove clothing or detach an object from the agent (a bodypart cannot be removed)
-	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
-	void removeItemFromAvatar(const LLUUID& item_id);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+	void removeItemFromAvatar(const LLUUID& id_to_remove) { removeItemFromAvatar(id_to_remove, NULL, false); }
+	void removeItemFromAvatar(const LLUUID& id_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/);
+
+	void removeItemsFromAvatar(const uuid_vec_t& ids_to_remove) { removeItemsFromAvatar(ids_to_remove, NULL, false); }
+	void removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/);
+// [/SL:KB]
+//	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
+//	void removeItemFromAvatar(const LLUUID& item_id);
 
 
 	void onOutfitFolderCreated(const LLUUID& folder_id, bool show_panel);
@@ -237,6 +250,9 @@ public:
 	void requestServerAppearanceUpdate();
 
 	void incrementCofVersion(LLHTTPClient::ResponderPtr responder_ptr = NULL);
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
+	void syncCofVersionAndRefresh();
+// [/SL:KB]
 
 	U32 getNumAttachmentsInCOF();
 
@@ -269,10 +285,6 @@ private:
 
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
-// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	void purgeItems(const LLInventoryModel::item_array_t& items);
-	void purgeItemsOfType(LLAssetType::EType asset_type);
-// [/SL:KB]
 
 	bool mAttachmentInvLinkEnabled;
 	bool mOutfitIsDirty;

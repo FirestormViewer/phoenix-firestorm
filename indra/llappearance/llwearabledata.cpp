@@ -107,14 +107,13 @@ void LLWearableData::pushWearable(const LLWearableType::EType type,
 	{
 // [RLVa:KB] - Checked: 2010-06-08 (RLVa-1.2.0)
 		// Don't add the same wearable twice
-		U32 idxWearable;
+		U32 idxWearable = 0;
 		if (!getWearableIndex(wearable, idxWearable))
-		{
 			mWearableDatas[type].push_back(wearable);
-		}
+		else
+			llassert(false); // pushWearable() on an already added wearable is a bug *somewhere*
 // [/RLVa:KB]
-		//mWearableDatas[type].push_back(wearable);
-
+//		mWearableDatas[type].push_back(wearable);		mWearableDatas[type].push_back(wearable);
 		if (trigger_updated)
 		{
 			const BOOL removed = FALSE;

@@ -23,6 +23,7 @@
 #include "llsingleton.h"
 #include "llviewerinventory.h"
 
+#include "rlvcommon.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 
@@ -116,7 +117,7 @@ public:
 	virtual void done();
 protected:
 	void doneIdle();
-	static void onCategoryCreate(const LLUUID& category_id, LLUUID item_id);
+	static void onCategoryCreate(const LLUUID& idFolder, const LLUUID idItem);
 };
 
 // ============================================================================
@@ -133,7 +134,7 @@ protected:
 	virtual void onDestinationCreated(const LLUUID& idFolder, const std::string& strName) = 0;
 	void         moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName);
 private:
-	static void  onCategoryCreateCallback(const LLUUID& category_id, void* pInstance);
+	static void  onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOffer* pInstance);
 
 private:
 	std::list<std::string> m_DestPath;

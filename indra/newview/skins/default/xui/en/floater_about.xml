@@ -10,6 +10,7 @@
  title="About [APP_NAME]"
  width="470">
   
+RestrainedLove API: [RLV_VERSION]
   <tab_container
     follows="all" 
     top="20"
