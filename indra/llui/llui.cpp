@@ -327,7 +327,7 @@ std::string LLUI::getLanguage()
 		if (!language_enabled)
 		{
 			language = "en";
-			sSettingGroups["config"]->setString("default");
+			sSettingGroups["config"]->setString("Language", "default");
 		}
 		// </FS:Ansariel>
 	}
