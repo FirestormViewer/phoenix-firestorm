@@ -17,18 +17,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llappearancemgr.h"
-#include "llinventoryobserver.h"
 #include "llstartup.h"
 #include "llviewerfoldertype.h"
 #include "llviewermessage.h"
-#include "llviewerobject.h"
-#include "llvoavatarself.h"
 
-#include "rlvdefines.h"
-#include "rlvcommon.h"
-#include "rlvlocks.h"
 #include "rlvinventory.h"
-#include "rlvhandler.h"
 
 #include "boost/algorithm/string.hpp"
 
@@ -535,7 +528,7 @@ bool RlvGiveToRLVOffer::createDestinationFolder(const std::string& strPath)
 			const LLUUID& idRlvRoot = RlvInventory::instance().getSharedRootID();
 			if (idRlvRoot.notNull())
 			{
-			onCategoryCreateCallback(idRlvRoot, this);
+				onCategoryCreateCallback(idRlvRoot, this);
 			}
 			else
 			{

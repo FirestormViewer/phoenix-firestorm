@@ -27,6 +27,7 @@
 #include "llviewerregion.h"
 
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 #include "rlvinventory.h"
 #include "rlvlocks.h"
 #include "rlvui.h"
