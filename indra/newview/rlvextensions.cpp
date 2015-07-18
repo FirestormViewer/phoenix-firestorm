@@ -18,7 +18,6 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "lldaycyclemanager.h"
-#include "llviewercontrol.h"
 #include "llvoavatarself.h"
 #include "llwlparammanager.h"
 

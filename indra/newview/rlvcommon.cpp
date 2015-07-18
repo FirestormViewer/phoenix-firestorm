@@ -24,7 +24,6 @@
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
-#include "llviewerstats.h"
 #include "llworld.h"
 
 #include "rlvactions.h"
