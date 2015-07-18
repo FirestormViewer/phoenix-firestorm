@@ -126,21 +126,21 @@
 	<floater.string name="bigger_label">
 		&lt;&lt;
 	</floater.string>
-	<button name="client_lagmeter" tool_tip="クライアント ラグ ステータス"/>
+	<button name="client_lagmeter" tool_tip="クライアントのラグ状態"/>
 	<text name="client">
 		クライアント
 	</text>
 	<text name="client_text">
 		標準
 	</text>
-	<button name="network_lagmeter" tool_tip="ネットワーク ラグ ステータス"/>
+	<button name="network_lagmeter" tool_tip="ネットワークのラグ状態"/>
 	<text name="network">
 		ネットワーク
 	</text>
 	<text name="network_text">
 		標準
 	</text>
-	<button name="server_lagmeter" tool_tip="サーバー ラグ ステータス"/>
+	<button name="server_lagmeter" tool_tip="サーバーのラグ状態"/>
 	<text name="server">
 		サーバー
 	</text>

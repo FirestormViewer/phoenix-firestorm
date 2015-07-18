@@ -63,8 +63,8 @@
  		Flickr  にアップロードできませんでした。
  	</string>
  	-->
- 	<button label="更新" name="new_snapshot_btn" />
 	<panel name="controls_container">
+		 <button label="更新" name="new_snapshot_btn" />
 	<panel name="advanced_options_panel">
 		<view_border  name="advanced_options_hr" />
 		<text name="layer_type_label">

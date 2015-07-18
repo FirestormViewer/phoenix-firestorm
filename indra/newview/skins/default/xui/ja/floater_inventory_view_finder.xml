@@ -25,5 +25,6 @@
 	</radio_group>
 	<spinner label="経過時間" name="spin_hours_ago"/>
 	<spinner label="経過日数" name="spin_days_ago"/>
+	<button label="リセット" label_selected="リセット" name="btnReset" />
 	<button label="閉じる" label_selected="閉じる" name="Close"/>
 </floater>

@@ -6,7 +6,8 @@
 		<combo_box.item label="640x480" name="640x480"/>
 		<combo_box.item label="800x600" name="800x600"/>
 		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="1200x630" name="1200x630"/>
+		<combo_box.item label="1280x1024" name="1280x1024" />
+		<combo_box.item label="1600x1200" name="1600x1200" />
 		<combo_box.item label="カスタム" name="Custom" />
 	</combo_box>
 	<combo_box name="filters_combobox" tool_tip="画像フィルター">

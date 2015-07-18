@@ -3,11 +3,15 @@
 	<text name="object_name">
 		[DESC]:
 	</text>
-	<text name="border_note">
-		インベントリおよびウェアにコピー
-	</text>
-	<button label="アウトフィットに追加" label_selected="アウトフィットに追加" name="copy_and_wear_button"/>
-	<button label="アウトフィットを交換" label_selected="アウトフィットを交換" name="copy_and_replace_button"/>
-	<button label="インベントリにコピーするだけ" label_selected="インベントリにコピーするだけ" name="copy_to_inventory_button"/>
-	<button label="取り消し" label_selected="取り消し" name="cancel_button"/>
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="持ち物にコピー" name="copy_flyout">
+				<flyout_button.item label="アウトフィットと中身を入れ替え" name="replace" value="replace" />
+				<flyout_button.item label="アウトフィットに中身を追加" name="add" value="add" />
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="取り消し" label_selected="取り消し" name="cancel_button" />
+		</layout_panel>
+	</layout_stack>
 </floater>

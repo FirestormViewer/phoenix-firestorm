@@ -74,13 +74,13 @@
 			<check_box label="販売中" name="CheckPurchase"/>
 			<combo_box name="ComboBoxSaleType">
 				<combo_box.item label="コピー" name="Copy"/>
-				<combo_box.item label="コンテンツ" name="Contents"/>
+				<combo_box.item label="中身" name="Contents"/>
 				<combo_box.item label="オリジナル" name="Original"/>
 			</combo_box>
 			<spinner label="価格： L$" name="Edit Cost"/>
 		</panel>
 	</scroll_container>
 	<panel name="button_panel">
-		<button label="キャンセル" name="cancel_btn"/>
+		<button label="取り消し" name="cancel_btn"/>
 	</panel>
 </panel>
