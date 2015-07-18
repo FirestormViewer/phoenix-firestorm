@@ -127,6 +127,15 @@
 					<combo_box.item label="太陽/月" name="1" />
 					<combo_box.item label="太陽/月とプロジェクタ" name="2" />
 				</combo_box>
+				<text name="avatar_shadows_label">
+					アバターの影
+				</text>
+				<combo_box name="AvatarShadowDetail">
+					<combo_box.item label="なし" name="0" />
+					<combo_box.item label="簡略化" name="1" />
+					<combo_box.item label="最適化" name="2" />
+					<combo_box.item label="複雑化" name="3" />
+				</combo_box>
 			</panel>		
 
 			<panel name="P_Shadow_Res">
@@ -241,6 +250,7 @@
 
 			<panel name="P_DoF_Settings">
 				<check_box label="被写界深度（DOF）を有効にする" name="UseDepthofField" tool_tip="この設定は「写真の焦点が合っているように見える被写体側の距離の範囲」（Wikipedia）を決める「被写界深度」を決定するものです。この機能を無効にするとフレームレートのスピードが向上します。もしこの機能を有効にできない場合は、「光と影」タブの「高度な照明モデル」を有効にして下さい。" />
+				<check_box label="水中でも被写界深度（DOF）を有効にする" tool_tip="通常は、上のチェックボックスにチェックが入っている場合でも、被写界深度（DOF）は無効になります。この設定はその制約を取り払うものです。注意しておきたいのは、水中にいる時は、狙っている対象を Alt クリックして、手動でカメラのフォーカスをし直さないといけなくなる場合があるということです。" name="UseDoFUnderwater" />
 				<check_box label="現在のビューワ画面の画角（FOV）を表示" tool_tip="ここにチェックを入れると、カメラの垂直画角（FOV）を表示します。ビューワの中でも、現実世界のカメラと同じようにレンズ距離を変えることができます。画角（FOV）が小さいほどカメラのレンズ距離は長くなります。50mmのレンズは27.0度の画角（FOV）を有しています。画角（FOV）を調整するには、下のスライダーを使用します。画角（FOV）とレンズの焦点距離の関係を示した一覧表については、 'http://ja.m.wikipedia.org/wiki/画角' を参照。この機能はスナップショットを撮る前にオフにすること！　そうしないと画面に映り込みます！" name="MIC_Show_FOV" />
 			</panel>
 

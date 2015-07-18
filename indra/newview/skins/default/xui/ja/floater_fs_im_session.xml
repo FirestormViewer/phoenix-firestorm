@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
+	<floater.string name="participant_added" value="[NAME] がこの会話に招待されました。"/>
+	<floater.string name="multiple_participants_added" value="[NAME] がこの会話に招待されました。"/>
 	<layout_stack orientation="horizontal" name="ls_control_panel">
 		<layout_panel name="slide_panel">
 			<button name="slide_left_btn" />
@@ -45,6 +47,10 @@
        <layout_panel name="im_history_btn_panel">             
 			<button tool_tip="このIMの会話履歴を開きます。" name="im_history_btn" />
         </layout_panel>
+	
+	<layout_panel name="add_participant_panel">
+		<button tool_tip="人をこの会話に追加します。" name="add_participant_btn" />
+	</layout_panel>
       
        <layout_panel name="send_sysinfo_btn_panel">             
 			<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />

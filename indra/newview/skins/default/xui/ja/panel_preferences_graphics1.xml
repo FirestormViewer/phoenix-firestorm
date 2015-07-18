@@ -49,6 +49,15 @@
 			<combo_box.item label="太陽/月" name="1"/>
 			<combo_box.item label="太陽/月とプロジェクタ" name="2"/>
 		</combo_box>
+		<text name="avatar_shadows_label">
+			アバターの影：
+		</text>
+		<combo_box name="AvatarShadowDetail">
+			<combo_box.item label="なし" name="0" />
+			<combo_box.item label="簡略化" name="1" />
+			<combo_box.item label="最適化" name="2" />
+			<combo_box.item label="複雑化" name="3" />
+		</combo_box>
 		<text name="reflection_label">
 			水の反射：
 		</text>
@@ -208,6 +217,7 @@
 	
 		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />
 		<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode" />
+		<check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
         <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
         <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />
         <slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="DOF効果を得るためのカメラの垂直画角（単位は度）" />

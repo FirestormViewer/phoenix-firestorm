@@ -4567,5 +4567,32 @@ M キーを押して変更します。
 	<notification name="RenameContactSetFailure">
 		「[SET]」を「[NEW_NAME]」に変更できませんでした。既に同じ名前が存在しているか、無効な名前を指定しようとしています。
 	</notification>
-  
+	
+	<notification name="SnoozeDuration">
+		<unique/>
+    グループチャットを居眠りさせておく時間（秒）
+		<tag>confirm</tag>
+		<form name="form">
+			<input name="duration" type="text" default="true">
+        [DURATION]
+			</input>
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	
+	<notification name="SnoozeDurationInvalidInput">
+    居眠り時間には有効な数字を入力して下さい！
+		<tag>fail</tag>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
+	<notification name="PickLimitReached" label="">
+		<unique/>
+		<tag>fail</tag>
+		<tag>confirm</tag>
+    既にピック数の上限に達しているため、新しいピックを追加することはできません。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	
 </notifications>

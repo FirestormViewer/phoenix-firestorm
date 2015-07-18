@@ -20,6 +20,7 @@
 		<check_box label="感情表現（叫び、囁きなど）は斜字体にする" name="EmotesUseItalic"/>
 		<check_box name="FSEmphasizeShoutWhisper" label="叫びは太字、ささやきは斜字体にする" />
 		<check_box label="オブジェクトの発言には、会話の混乱を避けるため (no name) と表示する" name="FSMarkObjects"/>
+		<check_box label="llOwnerSay をスクリプトのデバッグウィンドウに送る" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
 		<check_box label="吹き出しチャット" name="bubble_text_chat"/>
 		<check_box label="入力中に吹き出しを表示する" name="bubble_text_typing"/>
 		<check_box name="FSSecondsinChatTimestamps" label="タイムスタンプに秒を表示 [HH:MM:SS]" />
@@ -96,7 +97,7 @@
 		<!--<FS:HG> FS-1734 seperate name and text styles for moderator--> 
 		<check_box label="グループチャットの議長の発言は太字にする" name="FSHighlightGroupMods"/>
 		<text name="Moderator Name Style" width="85">
-			名前のスタイル：
+			名前：
 		</text>
 		<combo_box name="mod_name_style">
 			<combo_box.item label="標準" name="normal"/>
@@ -109,7 +110,7 @@
 			<combo_box.item label="太字＋斜字体＋下線" name="BOLDITALICUNDERLINE"/>
 		</combo_box>
 		<text name="Moderator Text Style" width="85">
-			発言のスタイル：
+			発言：
 		</text>
 		<combo_box name="mod_text_style">
 			<combo_box.item label="標準" name="normal"/>
@@ -126,6 +127,7 @@
 		<check_box label="グループ通知を無効にしている時、グループチャットも無効にする" name="FSMuteGroupWhenNoticesDisabled"/>
 		<check_box name="FSIgnoreAdHocSessions" label="全てのカンファレンスを自動的に無視、退席する"/>
 		<check_box name="FSReportIgnoredAdHocSession" label="無視したカンファレンスを周辺チャットで報告する"/>
+		<check_box name="FSDontIgnoreAdHocFromFriends" label="フレンドからのカンファレンスチャットへの招待は無視しない"/>
 		<text name="group_snooze_time_label" tool_tip="「居眠り」ボタンを押した時、グループチャットを無視する時間の長さ。「0」に設定すると、次のグループメッセージが届くまでウィンドウを閉じます。">
 			グループチャットの居眠り時間:
 		</text>
@@ -133,6 +135,7 @@
 		<text name="group_snooze_time_seconds_label" tool_tip="居眠り」ボタンを押した時、グループチャットを無視する時間の長さ。「0」に設定すると、次のグループメッセージが届くまでウィンドウを閉じます。">
 			秒
 		</text>
+		<check_box name="FSEnablePerGroupSnoozeDuration" label="グループチャットの居眠り時間はグループごとに個別に設定する"/>
 	</panel>
 	
 	<!-- Chat: Typing -->
