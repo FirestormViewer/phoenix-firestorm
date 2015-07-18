@@ -2514,7 +2514,10 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 				}
 			}
 
-			if (phys_volume->mHullPoints)
+			// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
+			//if (phys_volume->mHullPoints)
+			if (phys_volume->mHullPoints && phys_volume->mHullIndices && phys_volume->mNumHullPoints > 0 && phys_volume->mNumHullIndices > 0)
+			// </FS:Ansariel>
 			{
 				//render hull
 			

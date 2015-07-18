@@ -8,7 +8,6 @@
   width="200"
   height="300"
   label="Experiences"
-  bg_opaque_color="0 0.5 0 0.3"
   follows="all">
   <string
     name="loading_experiences"
