@@ -93,7 +93,10 @@ void LLPanelExperienceListEditor::addExperienceIds( const uuid_vec_t& experience
 void LLPanelExperienceListEditor::setExperienceIds( const LLSD& experience_ids )
 {
 	mExperienceIds.clear();
-	mExperienceIds.insert(experience_ids.beginArray(), experience_ids.endArray());
+//	mExperienceIds.insert(experience_ids.beginArray(), experience_ids.endArray());
+// [SL:KB] - Because GCC likes to be special
+	std::transform(experience_ids.beginArray(), experience_ids.endArray(), std::inserter(mExperienceIds, mExperienceIds.end()), [](const LLSD& sd) { return sd.asUUID(); });
+// [/SL:KB]
 	onItems();
 }
 

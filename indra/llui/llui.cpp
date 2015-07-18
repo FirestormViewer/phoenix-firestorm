@@ -311,6 +311,25 @@ std::string LLUI::getLanguage()
 		{
 			language = "en";
 		}
+
+		// <FS:Ansariel> Limit available languages
+		bool language_enabled = false;
+		LLSD enabled_languages = sSettingGroups["config"]->getLLSD("FSEnabledLanguages");
+		for (LLSD::array_const_iterator it = enabled_languages.beginArray(); it != enabled_languages.endArray(); ++it)
+		{
+			if ((*it).asString() == language)
+			{
+				language_enabled = true;
+				break;
+			}
+		}
+		
+		if (!language_enabled)
+		{
+			language = "en";
+			sSettingGroups["config"]->setString("Language", "default");
+		}
+		// </FS:Ansariel>
 	}
 	return language;
 }

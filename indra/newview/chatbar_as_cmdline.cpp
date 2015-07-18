@@ -48,6 +48,7 @@
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
 #include "llparcel.h"
+#include "llslurl.h"
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
 #include "llurldispatcher.h"
@@ -721,36 +722,27 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == sFSCmdLineOfferTp())
 			{
-				std::string avatarKey;
-//				LL_INFOS() << "CMD DEBUG 0 " << command << " " << avatarName << LL_ENDL;
-				if (i >> avatarKey)
+				std::string av_id_str;
+				LLUUID av_id;
+				if (i >> av_id_str && LLUUID::parseUUID(av_id_str, &av_id))
 				{
-//				LL_INFOS() << "CMD DEBUG 0 afterif " << command << " " << avatarName << LL_ENDL;
-					LLUUID tempUUID;
-					if (LLUUID::parseUUID(avatarKey, &tempUUID))
-					{
-						uuid_vec_t ids;
-						ids.push_back(tempUUID);
-						std::string tpMsg = "Join me!";
-						LLMessageSystem* msg = gMessageSystem;
-						msg->newMessageFast(_PREHASH_StartLure);
-						msg->nextBlockFast(_PREHASH_AgentData);
-						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-						msg->nextBlockFast(_PREHASH_Info);
-						msg->addU8Fast(_PREHASH_LureType, (U8)0);
-
-						msg->addStringFast(_PREHASH_Message, tpMsg);
-						for (uuid_vec_t::iterator itr = ids.begin(); itr != ids.end(); ++itr)
-						{
-							msg->nextBlockFast(_PREHASH_TargetData);
-							msg->addUUIDFast(_PREHASH_TargetID, *itr);
-						}
-						gAgent.sendReliableMessage();
-						reportToNearbyChat(llformat("Offered TP to key %s", tempUUID.asString().c_str()));
-						return false;
-					}
+					std::string tpMsg = "Join me!"; // Intentionally left English because this is the message the other avatar gets
+					LLMessageSystem* msg = gMessageSystem;
+					msg->newMessageFast(_PREHASH_StartLure);
+					msg->nextBlockFast(_PREHASH_AgentData);
+					msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+					msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+					msg->nextBlockFast(_PREHASH_Info);
+					msg->addU8Fast(_PREHASH_LureType, (U8)0);
+					msg->addStringFast(_PREHASH_Message, tpMsg);
+					msg->nextBlockFast(_PREHASH_TargetData);
+					msg->addUUIDFast(_PREHASH_TargetID, av_id);
+					gAgent.sendReliableMessage();
+					LLStringUtil::format_map_t args;
+					args["NAME"] = LLSLURL("agent", av_id, "inspect").getSLURLString();
+					reportToNearbyChat(LLTrans::getString("FSCmdLineTpOffered", args));
 				}
+				return false;
 			}
 			
 			else if (command == sFSCmdLineGround())
