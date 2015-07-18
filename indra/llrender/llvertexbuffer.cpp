@@ -616,6 +616,14 @@ void LLVertexBuffer::drawElements(U32 mode, const LLVector4a* pos, const LLVecto
 {
 	llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShaderPtr != NULL);
 
+	// <FS:Ansariel> Crash fix due to invalid calls to drawElements by Drake Arconis
+	if (num_indices <= 0)
+	{
+		LL_WARNS() << "Called drawElements with 0 indices" << LL_ENDL;
+		return;
+	}
+	// </FS:Ansariel>
+
 	gGL.syncMatrices();
 
 	U32 mask = LLVertexBuffer::MAP_VERTEX;

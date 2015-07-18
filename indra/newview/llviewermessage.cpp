@@ -8362,7 +8362,6 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			payload["owner_name"] = owner_name;
 
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
-			const char* notification = "ScriptQuestion";
 			if (rlv_handler_t::isEnabled())
 			{
 				RlvUtil::filterScriptQuestions(questions, payload);
@@ -8386,17 +8385,18 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 				}
 			}
 
-			if ( (!caution) && (!questions) )
+			if ( (!caution) && (!questions) && (experienceid.isNull()) )
 			{
 				LLNotifications::instance().forceResponse(
 					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
+				return;
 			}
-			else if (caution && gSavedSettings.getBOOL("PermissionsCautionEnabled"))
 // [/RLVa:KB]
-			// check whether cautions are even enabled or not
-			//const char* notification = "ScriptQuestion";
 
-			//if(caution && gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+			// check whether cautions are even enabled or not
+			const char* notification = "ScriptQuestion";
+
+			if(caution && gSavedSettings.getBOOL("PermissionsCautionEnabled"))
 			{
 				args["FOOTERTEXT"] = (count > 1) ? LLTrans::getString("AdditionalPermissionsRequestHeader") + "\n\n" + script_question : "";
 				notification = "ScriptQuestionCaution";

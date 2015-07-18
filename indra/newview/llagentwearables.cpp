@@ -71,6 +71,9 @@ BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+bool LLAgentWearables::mInitialAttachmentsRequested = false;
+// [/RLVa:KB]
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -1222,6 +1225,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
+
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.2)
 	if (!mInitialWearablesLoaded)
 	{
@@ -1248,7 +1252,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 }
 
 
-//// User has picked "wear on avatar" from a menu.
+// User has picked "wear on avatar" from a menu.
 //void LLAgentWearables::setWearableItem(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
 //{
 //	//LLAgentDumper dumper("setWearableItem");
@@ -1290,89 +1294,78 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 //}
 
 // static 
-bool LLAgentWearables::onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	LLInventoryItem* new_item = gInventory.getItem(notification["payload"]["item_id"].asUUID());
-	U32 index;
-	if (!gAgentWearables.getWearableIndex(wearable,index))
-	{
-		LL_WARNS() << "Wearable not found" << LL_ENDL;
-		delete wearable;
-		return false;
-	}
-	if (!new_item)
-	{
-		delete wearable;
-		return false;
-	}
-
-	switch(option)
-	{
-		case 0:  // "Save"
-			gAgentWearables.saveWearable(wearable->getType(),index);
-			gAgentWearables.setWearableFinal(new_item, wearable);
-			break;
-
-		case 1:  // "Don't Save"
-			gAgentWearables.setWearableFinal(new_item, wearable);
-			break;
-
-		case 2: // "Cancel"
-			break;
-
-		default:
-			llassert(0);
-			break;
-	}
-
-	delete wearable;
-	return false;
-}
+//bool LLAgentWearables::onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable)
+//{
+//	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+//	LLInventoryItem* new_item = gInventory.getItem(notification["payload"]["item_id"].asUUID());
+//	U32 index;
+//	if (!gAgentWearables.getWearableIndex(wearable,index))
+//	{
+//		LL_WARNS() << "Wearable not found" << LL_ENDL;
+//		delete wearable;
+//		return false;
+//	}
+//	switch(option)
+//	{
+//		case 0:  // "Save"
+//			gAgentWearables.saveWearable(wearable->getType(),index);
+//			gAgentWearables.setWearableFinal(new_item, wearable);
+//			break;
+//
+//		case 1:  // "Don't Save"
+//			gAgentWearables.setWearableFinal(new_item, wearable);
+//			break;
+//
+//		case 2: // "Cancel"
+//			break;
+//
+//		default:
+//			llassert(0);
+//			break;
+//	}
+//
+//	delete wearable;
+//	return false;
+//}
 
 // Called from setWearableItem() and onSetWearableDialog() to actually set the wearable.
 // MULTI_WEARABLE: unify code after null objects are gone.
-void LLAgentWearables::setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
-{
-	const LLWearableType::EType type = new_wearable->getType();
-
-	if (do_append && getWearableItemID(type,0).notNull())
-	{
-		new_wearable->setItemID(new_item->getUUID());
-		const bool trigger_updated = false;
-		pushWearable(type, new_wearable, trigger_updated);
-		LL_INFOS() << "Added additional wearable for type " << type
-				<< " size is now " << getWearableCount(type) << LL_ENDL;
-		checkWearableAgainstInventory(new_wearable);
-	}
-	else
-	{
-		// Replace the old wearable with a new one.
-		llassert(new_item->getAssetUUID() == new_wearable->getAssetID());
-
-		LLViewerWearable *old_wearable = getViewerWearable(type,0);
-		LLUUID old_item_id;
-		if (old_wearable)
-		{
-			old_item_id = old_wearable->getItemID();
-		}
-		new_wearable->setItemID(new_item->getUUID());
-		setWearable(type,0,new_wearable);
-
-		if (old_item_id.notNull())
-		{
-			gInventory.addChangedMask(LLInventoryObserver::LABEL, old_item_id);
-			gInventory.notifyObservers();
-		}
-		LL_INFOS() << "Replaced current element 0 for type " << type
-				<< " size is now " << getWearableCount(type) << LL_ENDL;
-	}
-
-	// <FS:Ansariel> [Legacy Bake]
-	queryWearableCache();
-	updateServer();
-	// </FS:Ansariel> [Legacy Bake]
-}
+//void LLAgentWearables::setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
+//{
+//	const LLWearableType::EType type = new_wearable->getType();
+//
+//	if (do_append && getWearableItemID(type,0).notNull())
+//	{
+//		new_wearable->setItemID(new_item->getUUID());
+//		const bool trigger_updated = false;
+//		pushWearable(type, new_wearable, trigger_updated);
+//		LL_INFOS() << "Added additional wearable for type " << type
+//				<< " size is now " << getWearableCount(type) << LL_ENDL;
+//		checkWearableAgainstInventory(new_wearable);
+//	}
+//	else
+//	{
+//		// Replace the old wearable with a new one.
+//		llassert(new_item->getAssetUUID() == new_wearable->getAssetID());
+//
+//		LLViewerWearable *old_wearable = getViewerWearable(type,0);
+//		LLUUID old_item_id;
+//		if (old_wearable)
+//		{
+//			old_item_id = old_wearable->getItemID();
+//		}
+//		new_wearable->setItemID(new_item->getUUID());
+//		setWearable(type,0,new_wearable);
+//
+//		if (old_item_id.notNull())
+//		{
+//			gInventory.addChangedMask(LLInventoryObserver::LABEL, old_item_id);
+//			gInventory.notifyObservers();
+//		}
+//		LL_INFOS() << "Replaced current element 0 for type " << type
+//				<< " size is now " << getWearableCount(type) << LL_ENDL;
+//	}
+//}
 
 // User has picked "remove from avatar" from a menu.
 // static
@@ -1552,6 +1545,10 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		const LLInventoryItem* item = *it;
         LLAttachmentsMgr::instance().addAttachmentRequest(item->getLinkedUUID(), 0, TRUE);
     }
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	mInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 // Returns false if the given wearable is already topmost/bottommost
@@ -1750,7 +1747,7 @@ bool LLAgentWearables::changeInProgress() const
 }
 
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
-boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
+boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(const loaded_callback_t& cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);
 }

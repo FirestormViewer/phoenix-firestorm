@@ -83,6 +83,9 @@ public:
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
 	bool			areInitalWearablesLoaded() const { return mInitialWearablesLoaded; }
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	bool			areInitialAttachmentsRequested() const { return mInitialAttachmentsRequested;  }
+// [/RLVa:KB]
 	bool			isCOFChangeInProgress() const { return mCOFChangeInProgress; }
 	F32				getCOFChangeTime() const { return mCOFChangeTimer.getElapsedTimeF32(); }
 	void			updateWearablesLoaded();
@@ -127,8 +130,8 @@ public:
 	void			addLocalTextureObject(const LLWearableType::EType wearable_type, const LLAvatarAppearanceDefines::ETextureIndex texture_type, U32 wearable_index);
 
 protected:
-	void			setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append = false);
-	static bool		onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable);
+//	void			setWearableFinal(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append = false);
+//	static bool		onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable);
 
 	void			addWearableToAgentInventory(LLPointer<LLInventoryCallback> cb,
 												LLViewerWearable* wearable, 
@@ -243,7 +246,7 @@ public:
 	typedef boost::signals2::signal<void()>	loaded_signal_t;
 	boost::signals2::connection				addLoadedCallback(loaded_callback_t cb);
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
-	boost::signals2::connection				addInitialWearablesLoadedCallback(loaded_callback_t cb);
+	boost::signals2::connection				addInitialWearablesLoadedCallback(const loaded_callback_t& cb);
 // [/SL:KB]
 
 	bool									changeInProgress() const;
@@ -265,6 +268,9 @@ private:
 // [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.2)
 	static bool		mInitialWearablesLoaded;
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	static bool		mInitialAttachmentsRequested;
+// [/RLVa:KB]
 	BOOL			mWearablesLoaded;
 	// <FS:Ansariel> [Legacy Bake]
 	std::set<LLUUID>	mItemsAwaitingWearableUpdate;

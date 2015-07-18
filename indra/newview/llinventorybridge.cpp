@@ -7171,8 +7171,7 @@ void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						items.push_back(std::string("Wearable Add"));
 //						if (!gAgentWearables.canAddWearable(mWearableType))
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2011-07-24 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-						if ( (!gAgentWearables.canAddWearable(mWearableType)) ||
-							 (gAgentWearables.getWearableFromAssetID(item->getAssetUUID())) )
+						if ( (!gAgentWearables.canAddWearable(mWearableType)) || (gAgentWearables.getWearableFromAssetID(item->getAssetUUID())) )
 // [/SL:KB]
 						{
 							disabled_items.push_back(std::string("Wearable Add"));

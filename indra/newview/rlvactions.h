@@ -25,9 +25,9 @@
 
 class RlvActions
 {
-	// =============
-	// Communication
-	// =============
+	// ================================
+	// Communication/Avatar interaction
+	// ================================
 public:
 	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
@@ -43,6 +43,19 @@ public:
 	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID.
 	 */
 	static bool canStartIM(const LLUUID& idRecipient);								// @startim and @startimto
+
+	/*
+	 * Returns true if an avatar's name should be hidden for the requested operation/context
+	 * (This is used to hide an avatar name in one case but not a near-identical case - such as teleporting a friend vs a nearby agent -
+	 *  in a way that limits the amount of code that needs to be changed to carry context from one function to another)
+	 */
+	enum EShowNamesContext { SNC_TELEPORTOFFER = 0, SNC_TELEPORTREQUEST, SNC_COUNT };
+	static bool canShowName(EShowNamesContext eContext) { return (eContext < SNC_COUNT) ? !s_BlockNamesContexts[eContext] : false; }
+	static void setShowName(EShowNamesContext eContext, bool fShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fShowName; } }
+
+protected:
+	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
+	static bool s_BlockNamesContexts[SNC_COUNT];
 
 	// ========
 	// Movement

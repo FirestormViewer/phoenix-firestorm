@@ -124,7 +124,6 @@ private:
 
 private:
 	LLUUID mInitialBakeIDs[6];
-	//bool mInitialBakesLoaded;
 
 
 /********************************************************************************
@@ -326,10 +325,10 @@ public:
 	void 				updateAttachmentVisibility(U32 camera_mode);
 	BOOL 				isWearingAttachment(const LLUUID& inv_item_id) const;
 	LLViewerObject* 	getWornAttachment(const LLUUID& inv_item_id);
+	bool				getAttachedPointName(const LLUUID& inv_item_id, std::string& name) const;
 // [RLVa:KB] - Checked: 2009-12-18 (RLVa-1.1.0i) | Added: RLVa-1.1.0i
 	LLViewerJointAttachment* getWornAttachmentPoint(const LLUUID& inv_item_id) const;
 // [/RLVa:KB]
-	bool				getAttachedPointName(const LLUUID& inv_item_id, std::string& name) const;
 	/*virtual*/ const LLViewerJointAttachment *attachObject(LLViewerObject *viewer_object);
 	/*virtual*/ BOOL 	detachObject(LLViewerObject *viewer_object);
 	static BOOL			detachAttachmentIntoInventory(const LLUUID& item_id);
@@ -338,8 +337,8 @@ public:
 	enum EAttachAction { ACTION_ATTACH, ACTION_DETACH };
 	typedef boost::signals2::signal<void (LLViewerObject*, const LLViewerJointAttachment*, EAttachAction)> attachment_signal_t;
 	boost::signals2::connection setAttachmentCallback(const attachment_signal_t::slot_type& cb);
-
-private:
+// [/RLVa:KB]
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 	attachment_signal_t* mAttachmentSignal;
 // [/RLVa:KB]
 	//--------------------------------------------------------------------

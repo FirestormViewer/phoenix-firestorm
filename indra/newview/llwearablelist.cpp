@@ -117,7 +117,7 @@ void LLWearableList::processGetAssetReply( const char* filename, const LLAssetID
 	}
 // [/SL:KB]
 	LLAvatarAppearance *avatarp = data->mAvatarp;
-
+	
 	if( !filename )
 	{
 		LL_WARNS("Wearable") << "Bad Wearable Asset: missing file." << LL_ENDL;
