@@ -708,8 +708,36 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 			sendChat(CHAT_TYPE_OOC);
 			handled = TRUE;
 		}
+		else if (mask == (MASK_SHIFT | MASK_CONTROL))
+		{
+			if (!gSavedSettings.getBOOL("FSUseSingleLineChatEntry"))
+			{
+				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
+				{
+					LLUI::reportBadKeystroke();
+				}
+				else
+				{
+					mInputEditor->insertLinefeed();
+				}
+			}
+			else
+			{
+				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
+				{
+					LLUI::reportBadKeystroke();
+				}
+				else
+				{
+					LLWString line_break(1, llwchar(182));
+					mInputEditor->insertText(line_break);
+				}
+			}
+
+			handled = TRUE;
+		}
 	}
-	
+
 	return handled;
 }
 

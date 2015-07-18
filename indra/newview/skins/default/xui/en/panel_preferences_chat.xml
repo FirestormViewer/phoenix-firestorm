@@ -758,6 +758,16 @@
              width="70">
                 seconds
             </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             left="20"
+             top_pad="-1"
+             width="400"
+             height="18"
+             name="FSEnablePerGroupSnoozeDuration"
+             control_name="FSEnablePerGroupSnoozeDuration"
+             label="Set group chat snooze duration individually per group"/>
         </panel>
 
         <!-- Chat: Typing -->

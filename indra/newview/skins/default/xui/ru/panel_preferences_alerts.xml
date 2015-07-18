@@ -39,6 +39,9 @@
 		<check_box label="Когда была создана закладка" name="landmark_created_checkbox"/>
 		<check_box label="Отключить уведомление 'Объект был возвращен в ваш инвентарь'" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Записывать название файла сохраненных снимков в историю чата" name="FSLogSnapshotsToLocal"/>
+		<check_box label="Сообщать об элементах из объектов, приходящих слишком быстро" name="FSNotifyIncomingObjectSpam" />
+		<check_box label="Сообщать об элементах от других жителей, приходящих слишком быстро" name="FSNotifyIncomingObjectSpamFrom" />
+		<slider name="FSOfferThrottleMaxCount" label="Порог количества поступающих объектов:" tool_tip="Установите порог количества поступающих объектов в течении 10 секунд. По умолчанию 5" />
 	</panel>
 	<panel label="Оповещения" name="tab-alerts">
 		<text name="show_label">

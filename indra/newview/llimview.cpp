@@ -538,6 +538,7 @@ LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string&
 	mHasOfflineMessage(has_offline_msg),
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-08-01 (Catznip-3.3)
 	mCloseAction(CLOSE_DEFAULT),
+	mSnoozeTime(-1),
 // [/SL:KB]
 	mParticipantUnreadMessageCount(0),
 	mNumUnread(0),
@@ -3415,6 +3416,11 @@ bool LLIMMgr::leaveSession(const LLUUID& session_id)
 		static LLCachedControl<S32> s_nSnoozeTime(gSavedSettings, "GroupSnoozeTime", 900);
 		snoozed_sessions_t::iterator itSession = mSnoozedSessions.find(session_id);
 		F64 expirationTime = LLTimer::getTotalSeconds() + F64(s_nSnoozeTime);
+		if (im_session->mSnoozeTime > -1)
+		{
+			expirationTime = LLTimer::getTotalSeconds() + F64(im_session->mSnoozeTime);
+			im_session->mSnoozeTime = -1;
+		}
 
 		if (mSnoozedSessions.end() != itSession)
 			itSession->second = expirationTime;

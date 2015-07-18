@@ -43,6 +43,8 @@
 #include "fsfloaterim.h"
 #include "llvoiceclient.h"
 #include "lltoolbarview.h"
+#include "llchiclet.h"
+#include "llchicletbar.h"
 
 static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
@@ -78,6 +80,9 @@ BOOL FSFloaterIMContainer::postBuild()
 	mNewMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&FSFloaterIMContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
 	// mTabContainer will be initialized in LLMultiFloater::addChild()
+
+	mTabContainer->setAllowRearrange(true);
+	mTabContainer->setRearrangeCallback(boost::bind(&FSFloaterIMContainer::onIMTabRearrange, this, _1, _2));
 
 	mActiveVoiceUpdateTimer.setTimerExpirySec(VOICE_STATUS_UPDATE_INTERVAL);
 	mActiveVoiceUpdateTimer.start();
@@ -139,6 +144,23 @@ void FSFloaterIMContainer::initTabs()
 	}
 }
 
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
+void FSFloaterIMContainer::onIMTabRearrange(S32 tab_index, LLPanel* tab_panel)
+{
+	LLFloater* pIMFloater = dynamic_cast<LLFloater*>(tab_panel);
+	if (!pIMFloater)
+		return;
+
+	const LLUUID& idSession = pIMFloater->getKey().asUUID();
+	if (idSession.isNull())
+		return;
+
+	LLChicletPanel* pChicletPanel = LLChicletBar::instance().getChicletPanel();
+	LLChiclet* pIMChiclet = pChicletPanel->findChiclet<LLChiclet>(idSession);
+	pChicletPanel->setChicletIndex(pIMChiclet, tab_index - mTabContainer->getNumLockedTabs());
+}
+// [/SL:KB]
+
 void FSFloaterIMContainer::onOpen(const LLSD& key)
 {
 	LLMultiFloater::onOpen(key);
@@ -197,6 +219,39 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		
 		floaterp->setCanClose(FALSE);
 		return;
+	}
+	else
+	{
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3.0)
+		// If we're redocking a torn off IM floater, return it back to its previous place
+		if ( (floaterp->isTornOff()) && (LLTabContainer::END == insertion_point) )
+		{
+			LLChicletPanel* pChicletPanel = LLChicletBar::instance().getChicletPanel();
+
+			LLIMChiclet* pChiclet = pChicletPanel->findChiclet<LLIMChiclet>(floaterp->getKey());
+			S32 idxChiclet = pChicletPanel->getChicletIndex(pChiclet);
+			if ( (idxChiclet > 0) && (idxChiclet < pChicletPanel->getChicletCount()) )
+			{
+				// Look for the first IM session to the left of this one
+				while (--idxChiclet >= 0)
+				{
+					if (pChiclet = dynamic_cast<LLIMChiclet*>(pChicletPanel->getChiclet(idxChiclet)))
+					{
+						FSFloaterIM* pFloater = FSFloaterIM::findInstance(pChiclet->getSessionId());
+						if (pFloater)
+						{
+							insertion_point = (LLTabContainer::eInsertionPoint)(mTabContainer->getIndexForPanel(pFloater) + 1);
+							break;
+						}
+					}
+				}
+			}
+			else 
+			{
+				insertion_point = (0 == idxChiclet) ? LLTabContainer::START : LLTabContainer::END;
+			}
+		}
+// [/SL:KB]
 	}
 
 	LLMultiFloater::addFloater(floaterp, select_added_floater, insertion_point);

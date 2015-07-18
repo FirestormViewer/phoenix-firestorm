@@ -10,8 +10,10 @@
 		<menu_item_call label="Symbolleistenschaltflächen" name="Toolbar Buttons"/>
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_call label="Auswahlen" name="Picks"/>
+		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Auf Facebook posten" name="PostToFacebook"/>
-		<menu_item_call label="Outfit ändern" name="ChangeOutfit"/>
+		<menu_item_call label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu_item_call label="Foto machen" name="Take Snapshot"/>
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
@@ -86,6 +88,7 @@
 		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Teleport-Liste" name="Teleport History"/>
 		<menu_item_check label="Orte" name="Places"/>
+		<menu_item_call label="Ziele" name="Destinations"/>
 		<menu_item_check label="Minikarte" name="Mini-Map"/>
 		<menu_item_check label="Karte" name="World Map"/>
 		<menu_item_check label="Regions-Tracker" name="Region Tracker"/>

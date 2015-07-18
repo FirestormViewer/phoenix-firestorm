@@ -31,6 +31,7 @@
 				<accordion_tab name="group_roles_tab" title="Роли"/>
 				<accordion_tab name="group_notices_tab" title="Объявления"/>
 				<accordion_tab name="group_land_tab" title="Земля/активы"/>
+				<accordion_tab name="group_experiences_tab" title="Приключения"/>
 			</accordion>
 		</layout_panel>
 	</layout_stack>

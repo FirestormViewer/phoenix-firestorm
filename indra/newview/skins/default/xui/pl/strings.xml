@@ -1169,9 +1169,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SnapshotSavedToDisk">
 		Zdjęcie zapisane: [FILENAME]
 	</string>
-	<string name="JoinAnExperience">
-		Rozpocznij przygodę
-	</string>
 	<string name="SilentlyManageEstateAccess">
 		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
 	</string>
@@ -1972,6 +1969,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="CompileQueueUnknownFailure">
 		Nieznany błąd podczas pobierania
 	</string>
+	<string name="CompileNoExperiencePerm">
+		Pomijanie skryptu [SCRIPT] z Przygodą [EXPERIENCE].
+	</string>
 	<string name="CompileQueueTitle">
 		Postęp rekompilacji
 	</string>
@@ -2249,9 +2249,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
 		Środek awatara
-	</string>
-	<string name="ATTACH_BRIDGE">
-		Most
 	</string>
 	<string name="CursorPos">
 		Linia [LINE], Kolumna [COLUMN]
@@ -4757,7 +4754,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Wygląd
 	</string>
 	<string name="Command_Avatar_Label">
-		Awatar
+		Biblioteka awatarów
 	</string>
 	<string name="Command_Build_Label">
 		Buduj
@@ -5274,6 +5271,90 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="UserDictionary">
 		[Użytkownika]
+	</string>
+	<string name="experience_tools_experience">
+		Przygoda
+	</string>
+	<string name="ExperienceNameNull">
+		(bez przygody)
+	</string>
+	<string name="ExperienceNameUntitled">
+		(przygoda bez nazwy)
+	</string>
+	<string name="Land-Scope">
+		Zakres: Ziemia
+	</string>
+	<string name="Grid-Scope">
+		Zakres: Cała siatka
+	</string>
+	<string name="Allowed_Experiences_Tab">
+		Zezwalam
+	</string>
+	<string name="Blocked_Experiences_Tab">
+		Blokuję
+	</string>
+	<string name="Contrib_Experiences_Tab">
+		Tworzę
+	</string>
+	<string name="Admin_Experiences_Tab">
+		Zarządzam
+	</string>
+	<string name="Recent_Experiences_Tab">
+		Ostatnie
+	</string>
+	<string name="Owned_Experiences_Tab">
+		Moje
+	</string>
+	<string name="ExperiencesCounter">
+		([EXPERIENCES], maks. [MAXEXPERIENCES])
+	</string>
+	<string name="ExperiencePermission1">
+		kontrolować klawisze
+	</string>
+	<string name="ExperiencePermission3">
+		animować Twojego awatara
+	</string>
+	<string name="ExperiencePermission4">
+		dołączać do Twojego awatara
+	</string>
+	<string name="ExperiencePermission9">
+		śledzić Twoją kamerę
+	</string>
+	<string name="ExperiencePermission10">
+		kontrolować Twoją kamerę
+	</string>
+	<string name="ExperiencePermission11">
+		teleportować Cię
+	</string>
+	<string name="ExperiencePermission12">
+		automatycznie akceptować uprawnienia przygody
+	</string>
+	<string name="ExperiencePermissionShortUnknown">
+		wykonać nieznaną operację: [Permission]
+	</string>
+	<string name="ExperiencePermissionShort1">
+		Kontrola klawiszy
+	</string>
+	<string name="ExperiencePermissionShort3">
+		Rozpoczynanie animacji
+	</string>
+	<string name="ExperiencePermissionShort4">
+		Dołączanie
+	</string>
+	<string name="ExperiencePermissionShort9">
+		Śledzenie kamery
+	</string>
+	<string name="ExperiencePermissionShort10">
+		Kontrola kamery
+	</string>
+	<string name="ExperiencePermissionShort11">
+		Teleportacja
+	</string>
+	<string name="ExperiencePermissionShort12">
+		Uprawnienia
+	</string>
+	<string name="ExperiencePermissionShortUnknown">
+		Nieznane: [Permission]
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.

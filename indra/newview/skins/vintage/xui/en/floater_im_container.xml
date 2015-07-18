@@ -20,7 +20,6 @@
      left="1"
      name="im_box_tab_container"
      tab_position="left"
-     tab_drag_commit="true"
      tab_width="115"
      tab_max_width = "115"
      tab_height="20"

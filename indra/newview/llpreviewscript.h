@@ -52,6 +52,7 @@ class LLVFS;
 class LLViewerInventoryItem;
 class LLScriptEdContainer;
 class LLFloaterGotoLine;
+class LLFloaterExperienceProfile;
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0)
 class LLEventTimer;
 // [/SL:KB]
@@ -127,13 +128,15 @@ public:
 	static void		onBtnInsertSample(void*);
 	static void		onBtnInsertFunction(LLUICtrl*, void*);
 	static void		onBtnLoadFromFile(void*);
-	static void		onBtnSaveToFile(void*);
+    static void		onBtnSaveToFile(void*);
 	static void		onBtnPrefs(void*);	// <FS:CR> Advanced Script Editor
 
 	static bool		enableSaveToFileMenu(void* userdata);
 	static bool		enableLoadFromFileMenu(void* userdata);
 
-	virtual bool	hasAccelerators() const { return true; }
+    virtual bool	hasAccelerators() const { return true; }
+	LLUUID 			getAssociatedExperience()const;
+	void            setAssociatedExperience( const LLUUID& experience_id );
 
 	void 			setScriptName(const std::string& name){mScriptName = name;};
 
@@ -182,8 +185,8 @@ private:
 	void			(*mSaveCallback)(void* userdata, BOOL close_after_save, bool sync);
 	// </FS:Ansariel>
 	void			(*mSearchReplaceCallback) (void* userdata);
-	void*			mUserdata;
-	LLComboBox		*mFunctions;
+    void*			mUserdata;
+    LLComboBox		*mFunctions;
 	BOOL			mForceClose;
 	LLPanel*		mCodePanel;
 	LLScrollListCtrl* mErrorList;
@@ -195,6 +198,7 @@ private:
 	BOOL			mEnableSave;
 	BOOL			mHasScriptData;
 	LLLiveLSLFile*	mLiveFile;
+	LLUUID			mAssociatedExperience;
 	LLTextBox*		mLineCol;
 // <FS:CR> Advanced Script Editor
 	//LLView*			mSaveBtn;
@@ -324,7 +328,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	
-	void setIsNew() { mIsNew = TRUE; }
+    void setIsNew() { mIsNew = TRUE; }
 // <FS:TT> Client LSL Bridge
 	static void uploadAssetViaCapsStatic(const std::string& url,
 							const std::string& filename, 
@@ -338,6 +342,17 @@ public:
 	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
 // [/SL:KB]
 
+	static void setAssociatedExperience( LLHandle<LLLiveLSLEditor> editor, const LLSD& experience );
+	static void onToggleExperience(LLUICtrl *ui, void* userdata);
+	static void onViewProfile(LLUICtrl *ui, void* userdata);
+
+	void setExperienceIds(const LLSD& experience_ids);
+	void buildExperienceList();
+	void updateExperiencePanel();
+	void requestExperiences();
+	void experienceChanged();
+	void addAssociatedExperience(const LLSD& experience);
+	
 private:
 	virtual BOOL canClose();
 	void closeIfNeeded();
@@ -347,10 +362,11 @@ private:
 	void loadAsset(BOOL is_new);
 	/*virtual*/ void saveIfNeeded(bool sync = true);
 	void uploadAssetViaCaps(const std::string& url,
-							const std::string& filename, 
+							const std::string& filename,
 							const LLUUID& task_id,
 							const LLUUID& item_id,
-							BOOL is_running);
+							BOOL is_running,
+							const LLUUID& experience_public_id);
 	void uploadAssetLegacy(const std::string& filename,
 						   LLViewerObject* object,
 						   const LLTransactionID& tid,
@@ -394,9 +410,16 @@ private:
 	S32					mPendingUploads;
 
 	BOOL getIsModifiable() const { return mIsModifiable; } // Evaluated on load assert
-	
+
 	LLCheckBoxCtrl*	mMonoCheckbox;
 	BOOL mIsModifiable;
+
+
+	LLComboBox*		mExperiences;
+	LLCheckBoxCtrl*	mExperienceEnabled;
+	LLSD			mExperienceIds;
+
+	LLHandle<LLFloater> mExperienceProfile;
 };
 
 #endif  // LL_LLPREVIEWSCRIPT_H

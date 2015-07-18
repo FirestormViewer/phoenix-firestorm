@@ -1267,6 +1267,12 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 		 ++iter)
 	{
 		LLViewerJointAttachment* attachment = iter->second;
+		// <FS:Ansariel> Possible crash fix
+		if (!attachment)
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 		if (attachment->getIsHUDAttachment())
 		{
 			attachment->setAttachmentVisibility(TRUE);
@@ -1872,6 +1878,17 @@ BOOL LLVOAvatarSelf::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex t
 	{
 		return LLVOAvatar::isTextureVisible(type, (U32)0);
 	}
+
+	// <FS:Ansariel> Chalice Yao's simple avatar shadows via Marine Kelley
+	if (LLPipeline::sShadowRender)
+	{
+		static LLCachedControl<U32> fsSimpleAvatarShadows(gSavedSettings, "FSSimpleAvatarShadows", 3);
+		if (fsSimpleAvatarShadows == 1)
+		{
+			return TRUE;
+		}
+	}
+	// </FS:Ansariel>
 
 	LLUUID tex_id = getLocalTextureID(type,index);
 	return (tex_id != IMG_INVISIBLE) 

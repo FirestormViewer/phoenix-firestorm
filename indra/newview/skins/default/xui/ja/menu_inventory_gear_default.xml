@@ -22,7 +22,7 @@
     <menu_item_separator />
 	
 	<menu_item_check label="ダブルクリックしてオブジェクトを追加装着" name="add_inv_toggle" />
-	<menu_item_call label="フィルターを表示" name="show_filters"/>
+	<menu_item_call label="フィルターを表示..." name="show_filters"/>
 	<menu_item_call label="フィルターをリセット" name="reset_filters"/>
 	<menu_item_call label="すべてのフォルダを閉じる" name="close_folders"/>
 	<menu_item_call label="紛失物を空にする" name="empty_lostnfound"/>

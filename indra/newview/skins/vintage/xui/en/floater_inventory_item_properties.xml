@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="350"
+ height="370"
  layout="topleft"
  name="item properties"
  help_topic="item_properties"
  save_rect="true"
  title="Inventory Item Properties"
  width="350">
+    <floater.string
+     name="loading_experience">
+        (loading)
+    </floater.string>
     <floater.string
      name="unknown">
         (unknown)
@@ -182,11 +186,33 @@
      type="string"
      length="1"
      follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="LabelItemExperienceTitle"
+     top="125"
+     width="78">
+        Experience:
+    </text>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left_delta="78"
+     name="LabelItemExperience"
+     top_delta="0"
+     width="252"/>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
      height="10"
      layout="topleft"
      left="10"
      name="OwnerLabel"
-     top="125"
+     top="145"
      width="200">
         You:
     </text>

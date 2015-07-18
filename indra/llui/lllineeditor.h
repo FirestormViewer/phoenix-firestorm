@@ -280,15 +280,21 @@ public:
 
 	void			setContextMenu(LLContextMenu* new_context_menu);
 
+	// <FS:Ansariel> Make these protected
+	void			removeChar();
+	void			removeWord(bool prev);
+	void			addChar(const llwchar c);
+	// </FS:Ansariel>
+
 private:
 	// private helper methods
 
 	void                    pasteHelper(bool is_primary);
 
-	void			removeChar();
-	// <FS> Ctrl-Backspace remove word
-	void			removeWord(bool prev);
-	void			addChar(const llwchar c);
+	// <FS:Ansariel> Make these protected
+	//void			removeChar();
+	//void			addChar(const llwchar c);
+	// </FS:Ansariel>
 	void			setCursorAtLocalPos(S32 local_mouse_x);
 	S32				findPixelNearestPos(S32 cursor_offset = 0) const;
 	S32				calcCursorPos(S32 mouse_x);

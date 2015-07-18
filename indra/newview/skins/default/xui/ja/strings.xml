@@ -401,7 +401,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="TooltipMustSingleDrop">
 		アイテムは 1 つだけここにドラッグできます
 	</string>
-	<string name="TooltipTooManyWearables">[AMOUNT]以上のアイテムを含むフォルダを装着することはできません。この制限はアドバンスメニュー「デバッグ設定を表示」の「WearFolderLimit」で変更することができます。</string>
+	<string name="TooltipTooManyWearables">
+		[AMOUNT] 以上のアイテムを含むフォルダを装着できません。「詳細設定」 &gt; 「デバッグ設定を表示」 &gt; 「WearFolderLimit」でこの制限を変更できます。
+	</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]："/>
 	<string name="TooltipOutboxDragToWorld">
 		マーチャントボックス内のアイテムを Rez することはできません
@@ -1037,9 +1039,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="TeleportYourAgent">
 		あなたをテレポート
 	</string>
-	<string name="JoinAnExperience">
-		体験に参加する
-	</string>
+	<string name="JoinAnExperience"/>
 	<string name="SilentlyManageEstateAccess">
 		土地のアクセスリストを管理するときにアラートを表示しない
 	</string>
@@ -1823,6 +1823,9 @@ support@secondlife.com にお問い合わせください。
 	<string name="CompileQueueUnknownFailure">
 		原因不明の失敗によりダウンロードができません
 	</string>
+	<string name="CompileNoExperiencePerm">
+		[EXPERIENCE] 体験による [SCRIPT] スクリプトのスキップ。
+	</string>
 	<string name="CompileQueueTitle">
 		リコンパイル進行
 	</string>
@@ -2084,10 +2087,6 @@ support@secondlife.com にお問い合わせください。
 		アバターの中央
 	</string>
 	
-	<!-- added Jun.30, 2013 -->
-	<string name="ATTACH_BRIDGE">
-		ブリッジ
-	</string>
 	<!-- added Jun.30, 2013 -->
 		
 	<string name="CursorPos">
@@ -5394,6 +5393,87 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<!-- Spell check settings floater -->
 	<string name="UserDictionary">
 		[User]
+	</string>
+	<string name="experience_tools_experience">
+		体験
+	</string>
+	<string name="ExperienceNameNull">
+		（体験なし）
+	</string>
+	<string name="ExperienceNameUntitled">
+		(タイトルのない体験)
+	</string>
+	<string name="Land-Scope">
+		ランドスコープ
+	</string>
+	<string name="Grid-Scope">
+		グリッドスコープ
+	</string>
+	<string name="Allowed_Experiences_Tab">
+		許可
+	</string>
+	<string name="Blocked_Experiences_Tab">
+		停止
+	</string>
+	<string name="Contrib_Experiences_Tab">
+		貢献者
+	</string>
+	<string name="Admin_Experiences_Tab">
+		管理
+	</string>
+	<string name="Recent_Experiences_Tab">
+		最新
+	</string>
+	<string name="Owned_Experiences_Tab">
+		所有
+	</string>
+	<string name="ExperiencesCounter">
+		([EXPERIENCES], max [MAXEXPERIENCES])
+	</string>
+	<string name="ExperiencePermission1">
+		コントロールを引き継ぐ
+	</string>
+	<string name="ExperiencePermission3">
+		アバターでアニメーションをトリガー
+	</string>
+	<string name="ExperiencePermission4">
+		アバターに装着
+	</string>
+	<string name="ExperiencePermission9">
+		カメラ追従
+	</string>
+	<string name="ExperiencePermission10">
+		カメラのコントロール
+	</string>
+	<string name="ExperiencePermission11">
+		あなたをテレポート
+	</string>
+	<string name="ExperiencePermission12">
+		体験の権限を自動的に承諾
+	</string>
+	<string name="ExperiencePermissionShortUnknown">
+		が不明な操作を実行しました: [Permission]
+	</string>
+	<string name="ExperiencePermissionShort1">
+		コントロールする
+	</string>
+	<string name="ExperiencePermissionShort3">
+		アニメーションをトリガー
+	</string>
+	<string name="ExperiencePermissionShort4">
+		取り付ける
+	</string>
+	<string name="ExperiencePermissionShort9">
+		カメラを追跡
+	</string>
+	<string name="ExperiencePermissionShort10">
+		カメラを制御
+	</string>
+	<string name="ExperiencePermissionShort11">
+		テレポート
+	</string>
+	<string name="ExperiencePermissionShort12">
+		権限
 	</string>
 	
 	<!-- Conversation log messages -->

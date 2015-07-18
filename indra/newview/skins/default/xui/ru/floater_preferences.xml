@@ -5,7 +5,9 @@
 	</floater.string>
 	<button label="Применить" label_selected="Применить" name="Apply"/>
 	<button label="Отменить" label_selected="Отменить" name="Cancel"/>
-	<search_editor label="Поиск в настройках" name="search_prefs_edit" tool_tip="Введите в этом месте интересную вас фразу. Результаты будут выделены для подходящих фрагментов названий или комментариев, приписанных в настройках" />
+	<panel name="search_panel">
+		<search_editor label="Поиск в настройках" name="search_prefs_edit" tool_tip="Введите в этом месте интересную вас фразу. Результаты будут выделены для подходящих фрагментов названий или комментариев, приписанных в настройках" />
+	</panel>
 	<tab_container name="pref core">
 		<panel label="Общие" name="general"/>
 		<panel label="Чат" name="chat"/>

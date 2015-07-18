@@ -180,12 +180,12 @@ FSPanelProfileSecondLife::FSPanelProfileSecondLife()
 
 FSPanelProfileSecondLife::~FSPanelProfileSecondLife()
 {
-	if(getAvatarId().notNull())
+	if (getAvatarId().notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
 	}
 
-	if(LLVoiceClient::instanceExists())
+	if (LLVoiceClient::instanceExists())
 	{
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
@@ -214,7 +214,7 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mIMButton = getChild<LLButton>("im");
 	mOverflowButton = getChild<LLMenuButton>("overflow_btn");
 
-	mStatusText->setVisible(false);
+	mStatusText->setVisible(FALSE);
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	registrar.add("Profile.Call",					boost::bind(&FSPanelProfileSecondLife::onCallButtonClick, this));
@@ -249,8 +249,8 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	mOverflowButton->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
 
 	// allow skins to have copy buttons for name and avatar URI -Zi
-	LLButton* copy_uri_button=findChild<LLButton>("copy_uri_button");
-	LLButton* copy_name_button=findChild<LLButton>("copy_name_button");
+	LLButton* copy_uri_button = findChild<LLButton>("copy_uri_button");
+	LLButton* copy_name_button = findChild<LLButton>("copy_name_button");
 
 	if (copy_uri_button)
 	{
@@ -277,50 +277,50 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 	resetData();
 
 	LLUUID avatar_id = getAvatarId();
-	LLAvatarPropertiesProcessor::getInstance()->addObserver(avatar_id,this);
+	LLAvatarPropertiesProcessor::getInstance()->addObserver(avatar_id, this);
 
 	BOOL own_profile = getSelfProfile();
 	
-	mGroupInviteButton->setVisible( !own_profile );
-	mShowOnMapButton->setVisible( !own_profile );
-	mPayButton->setVisible( !own_profile );
-	mTeleportButton->setVisible( !own_profile );
-	mIMButton->setVisible( !own_profile );
-	mAddFriendButton->setVisible( !own_profile );
-	mBlockButton->setVisible( !own_profile );
-	mUnblockButton->setVisible( !own_profile );
-	mOverflowButton->setVisible( !own_profile );
-	mGroupList->setShowNone( !own_profile );
+	mGroupInviteButton->setVisible(!own_profile);
+	mShowOnMapButton->setVisible(!own_profile);
+	mPayButton->setVisible(!own_profile);
+	mTeleportButton->setVisible(!own_profile);
+	mIMButton->setVisible(!own_profile);
+	mAddFriendButton->setVisible(!own_profile);
+	mBlockButton->setVisible(!own_profile);
+	mUnblockButton->setVisible(!own_profile);
+	mOverflowButton->setVisible(!own_profile);
+	mGroupList->setShowNone(!own_profile);
 		
 	if (own_profile && !getEmbedded())
 	{
 		// Group list control cannot toggle ForAgent loading
 		// Less than ideal, but viewing own profile via search is edge case
-		mGroupList->enableForAgent( false );
+		mGroupList->enableForAgent(false);
 	}
 
-	if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded() )
+	if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded())
 	{
-		mDisplayNameButton->setVisible( true );
-		mDisplayNameButton->setEnabled( true );
+		mDisplayNameButton->setVisible(TRUE);
+		mDisplayNameButton->setEnabled(TRUE);
 	}
 
 	mDescriptionEdit->setParseHTML( !own_profile && !getEmbedded() );
 
-	FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
-	drop_target->setVisible( !own_profile );
-	drop_target->setEnabled( !own_profile );
+	FSDropTarget* drop_target = getChild<FSDropTarget>("drop_target");
+	drop_target->setVisible(!own_profile);
+	drop_target->setEnabled(!own_profile);
 	
 	if (!own_profile)
 	{
 		mVoiceStatus = LLAvatarActions::canCall() && (LLAvatarActions::isFriend(avatar_id) ? LLAvatarTracker::instance().isBuddyOnline(avatar_id) : TRUE);
-		drop_target->setAgentID( avatar_id );
+		drop_target->setAgentID(avatar_id);
 		updateOnlineStatus();
 	}
 
 	updateButtons();
 
-	getChild<LLUICtrl>("user_key")->setValue( avatar_id.asString() );
+	getChild<LLUICtrl>("user_key")->setValue(avatar_id.asString());
 }
 
 void FSPanelProfileSecondLife::apply(LLAvatarData* data)
@@ -769,7 +769,7 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 	{
 		// something is wrong, tell user to try again later
 		LLNotificationsUtil::add("SetDisplayNameFailedGeneric");
-		return;		
+		return;
 	}
 
 	LL_INFOS("LegacyProfile") << "name-change now " << LLDate::now() << " next_update "
@@ -780,7 +780,7 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 	{
 		// if the update time is more than a year in the future, it means updates have been blocked
 		// show a more general message
-		const int YEAR = 60*60*24*365; 
+		static const S32 YEAR = 60*60*24*365; 
 		if (now_secs + YEAR < av_name.mNextUpdate)
 		{
 			LLNotificationsUtil::add("SetDisplayNameBlocked");
@@ -835,7 +835,7 @@ BOOL FSPanelProfileWeb::postBuild()
 	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
 	mWebBrowser->addObserver(this);
 
-	mUrlEdit->setEnabled( FALSE );
+	mUrlEdit->setEnabled(FALSE);
 
 	return TRUE;
 }
@@ -926,7 +926,7 @@ void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 	if (!mURLHome.empty())
 	{
 		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr == "")
+		if (valstr.empty())
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
@@ -950,7 +950,7 @@ void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
 	if (!mURLWebProfile.empty())
 	{
 		LLSD::String valstr = ctrl->getValue().asString();
-		if (valstr == "")
+		if (valstr.empty())
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
@@ -1226,7 +1226,7 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 	FSPanelProfileTab::setAvatarId(avatar_id);
 
 	// creating new Pick
-	if (getPickId().isNull())
+	if (getPickId().isNull() && getSelfProfile())
 	{
 		mNewPick = true;
 
@@ -1269,9 +1269,9 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mPickName->setEnabled( TRUE );
-		mPickDescription->setEnabled( TRUE );
-		mSetCurrentLocationButton->setVisible( TRUE );
+		mPickName->setEnabled(TRUE);
+		mPickDescription->setEnabled(TRUE);
+		mSetCurrentLocationButton->setVisible(TRUE);
 	}
 	/*else
 	{
@@ -1296,7 +1296,7 @@ BOOL FSPanelPick::postBuild()
 	mSetCurrentLocationButton->setCommitCallback(boost::bind(&FSPanelPick::onClickSetLocation, this));
 
 	mPickName->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1), NULL);
-	mPickName->setEnabled( FALSE );
+	mPickName->setEnabled(FALSE);
 
 	mPickDescription->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
 	mPickDescription->setFocusReceivedCallback(boost::bind(&FSPanelPick::onDescriptionFocusReceived, this));
@@ -1322,6 +1322,7 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 	{
 		return;
 	}
+
 	LLPickData* pick_info = static_cast<LLPickData*>(data);
 	if (!pick_info
 		|| pick_info->creator_id != getAvatarId()
@@ -1408,6 +1409,11 @@ void FSPanelPick::onSnapshotChanged()
 
 void FSPanelPick::onPickChanged(LLUICtrl* ctrl)
 {
+	if (ctrl && ctrl == mPickName)
+	{
+		updateTabLabel(mPickName->getText());
+	}
+
 	enableSaveButton(isDirty());
 }
 
@@ -1478,7 +1484,7 @@ void FSPanelPick::apply()
 
 std::string FSPanelPick::getLocationNotice()
 {
-	static std::string notice = getString("location_notice");
+	static const std::string notice = getString("location_notice");
 	return notice;
 }
 
@@ -1486,6 +1492,10 @@ void FSPanelPick::sendParcelInfoRequest()
 {
 	if (mParcelId != mRequestedId)
 	{
+		if (mRequestedId.notNull())
+		{
+			LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mRequestedId, this);
+		}
 		LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelId, this);
 		LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelId);
 
@@ -1532,7 +1542,6 @@ void FSPanelPick::sendUpdate()
 	pick_data.sort_order = 0;
 	pick_data.enabled = TRUE;
 
-	// LLAvatarPropertiesProcessor::instance().sendPickInfoUpdate(&pick_data);
 	LLAvatarPropertiesProcessor::getInstance()->sendPickInfoUpdate(&pick_data);
 
 	if(mNewPick)
@@ -1547,21 +1556,30 @@ void FSPanelPick::sendUpdate()
 // static
 std::string FSPanelPick::createLocationText(const std::string& owner_name, const std::string& original_name, const std::string& sim_name, const LLVector3d& pos_global)
 {
-	std::string location_text;
-	location_text.append(owner_name);
+	std::string location_text(owner_name);
 	if (!original_name.empty())
 	{
-		if (!location_text.empty()) location_text.append(", ");
+		if (!location_text.empty())
+		{
+			location_text.append(", ");
+		}
 		location_text.append(original_name);
 
 	}
+
 	if (!sim_name.empty())
 	{
-		if (!location_text.empty()) location_text.append(", ");
+		if (!location_text.empty())
+		{
+			location_text.append(", ");
+		}
 		location_text.append(sim_name);
 	}
 
-	if (!location_text.empty()) location_text.append(" ");
+	if (!location_text.empty())
+	{
+		location_text.append(" ");
+	}
 
 	if (!pos_global.isNull())
 	{
@@ -1573,6 +1591,15 @@ std::string FSPanelPick::createLocationText(const std::string& owner_name, const
 	return location_text;
 }
 
+void FSPanelPick::updateTabLabel(const std::string& title)
+{
+	setLabel(title);
+	LLTabContainer* parent = dynamic_cast<LLTabContainer*>(getParent());
+	if (parent)
+	{
+		parent->setCurrentTabName(title);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -1598,11 +1625,11 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 
 	if (getSelfProfile() && !getEmbedded())
 	{
-		mNewButton->setVisible( TRUE );
-		mNewButton->setEnabled( TRUE );
+		mNewButton->setVisible(TRUE);
+		mNewButton->setEnabled(FALSE);
 
-		mDeleteButton->setVisible( TRUE );
-		mDeleteButton->setEnabled( TRUE );
+		mDeleteButton->setVisible(TRUE);
+		mDeleteButton->setEnabled(FALSE);
 	}
 }
 
@@ -1617,20 +1644,28 @@ BOOL FSPanelProfilePicks::postBuild()
 	mDeleteButton->setCommitCallback(boost::bind(&FSPanelProfilePicks::onClickDelete, this));
 
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FSPanelProfilePicks::updateRlvRestrictions, this, _1, _2));
-	mNewButton->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+	
+	mNewButton->setEnabled(canAddNewPick());
+	mDeleteButton->setEnabled(canDeletePick());
+
+	LLTextBox* intro_txt = getChild<LLTextBox>("Tell everyone about your favorite places in Second Life.");
+	intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
 
 	return TRUE;
 }
 
 void FSPanelProfilePicks::onClickNewBtn()
 {
-	mNoItemsLabel->setVisible(false);
+	mNoItemsLabel->setVisible(FALSE);
 	FSPanelPick* pick_panel = FSPanelPick::create();
 	pick_panel->setAvatarId(getAvatarId());
 	mTabContainer->addTabPanel(
 		LLTabContainer::TabPanelParams().
 		panel(pick_panel).
-		select_tab(true));
+		select_tab(true).
+		label(pick_panel->getPickName()));
+	mNewButton->setEnabled(canAddNewPick());
+	mDeleteButton->setEnabled(canDeletePick());
 }
 
 void FSPanelProfilePicks::onClickDelete()
@@ -1639,43 +1674,38 @@ void FSPanelProfilePicks::onClickDelete()
 	if (pick_panel)
 	{
 		LLUUID pick_id = pick_panel->getPickId();
-		if (!pick_id.isNull())
-		{
-			LLSD args;
-			args["PICK"] = pick_panel->getPickName();
-			LLSD payload;
-			payload["pick_id"] = pick_id;
-			LLNotificationsUtil::add("DeleteAvatarPick", args, payload, boost::bind(&FSPanelProfilePicks::callbackDeletePick, this, _1, _2));
-			return;
-		}
+		LLSD args;
+		args["PICK"] = pick_panel->getPickName();
+		LLSD payload;
+		payload["pick_id"] = pick_id;
+		payload["tab_idx"] = mTabContainer->getCurrentPanelIndex();
+		LLNotificationsUtil::add("DeleteAvatarPick", args, payload, boost::bind(&FSPanelProfilePicks::callbackDeletePick, this, _1, _2));
 	}
 }
 
-bool FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLSD& response)
+void FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
 	if (0 == option)
 	{
 		LLUUID pick_id = notification["payload"]["pick_id"].asUUID();
-		LLAvatarPropertiesProcessor::getInstance()->sendPickDelete(pick_id);
-		// LLAvatarPropertiesProcessor::instance().sendPickDelete(pick_id);
-		mNewButton->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached());
+		S32 tab_idx = notification["payload"]["tab_idx"].asInteger();
 
-		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+		FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
+		if (pick_panel && pick_panel->getPickId() == pick_id)
 		{
-			FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
-			if (pick_panel)
-			{
-				if (pick_id == pick_panel->getPickId())
-				{
-					mTabContainer->removeTabPanel(pick_panel);
-				}
-			}
+			mTabContainer->removeTabPanel(pick_panel);
 		}
-	}
 
-	return false;
+		if (pick_id.notNull())
+		{
+			LLAvatarPropertiesProcessor::getInstance()->sendPickDelete(pick_id);
+		}
+
+		mNewButton->setEnabled(canAddNewPick());
+		mDeleteButton->setEnabled(canDeletePick());
+	}
 }
 
 void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType type)
@@ -1717,9 +1747,10 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 					label(pick_name));
 			}
 
-			mNewButton->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached());
+			mNewButton->setEnabled(canAddNewPick());
+			mDeleteButton->setEnabled(canDeletePick());
 
-			bool no_data = !mTabContainer->getTabCount();
+			BOOL no_data = !mTabContainer->getTabCount();
 			mNoItemsLabel->setVisible(no_data);
 			if (no_data)
 			{
@@ -1754,7 +1785,7 @@ void FSPanelProfilePicks::apply()
 	{
 		for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
 		{
-			FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+			FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getPanelByIndex(tab_idx));
 			if (pick_panel)
 			{
 				pick_panel->apply();
@@ -1780,8 +1811,20 @@ void FSPanelProfilePicks::updateRlvRestrictions(ERlvBehaviour behavior, ERlvPara
 {
 	if (behavior == RLV_BHVR_SHOWLOC)
 	{
-		mNewButton->setEnabled(type != RLV_TYPE_ADD);
+		mNewButton->setEnabled(canAddNewPick());
 	}
+}
+
+bool FSPanelProfilePicks::canAddNewPick()
+{
+	return (!LLAgentPicksInfo::getInstance()->isPickLimitReached() &&
+		mTabContainer->getTabCount() < LLAgentPicksInfo::getInstance()->getMaxNumberOfPicks() &&
+		!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+}
+
+bool FSPanelProfilePicks::canDeletePick()
+{
+	return (mTabContainer->getTabCount() > 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -2099,27 +2142,10 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 
 void FSPanelProfile::onTabChange()
 {
-	LLPanel* active_panel = mTabContainer->getCurrentPanel();
-	
-	if (active_panel == mPanelSecondlife)
+	FSPanelProfileTab* active_panel = dynamic_cast<FSPanelProfileTab*>(mTabContainer->getCurrentPanel());
+	if (active_panel)
 	{
-		mPanelSecondlife->updateData(); // load groups
-	}
-	else if (active_panel == mPanelWeb)
-	{
-		mPanelWeb->updateData(); // load web profile
-	}
-	else if (active_panel == mPanelPicks)
-	{
-		mPanelPicks->updateData();
-	}
-	else if (active_panel == mPanelClassifieds)
-	{
-		mPanelClassifieds->updateData();
-	}
-	else if (active_panel == mPanelNotes)
-	{
-		mPanelNotes->updateData();
+		active_panel->updateData();
 	}
 }
 
@@ -2164,8 +2190,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	// Only show commit buttons on own profile on floater version
 	if (getSelfProfile() && !getEmbedded())
 	{
-		getChild<LLUICtrl>("ok_btn")->setVisible( true );
-		getChild<LLUICtrl>("cancel_btn")->setVisible( true );
+		getChild<LLUICtrl>("ok_btn")->setVisible(TRUE);
+		getChild<LLUICtrl>("cancel_btn")->setVisible(TRUE);
 	}
 
 	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfile::onAvatarNameCache, this, _1, _2));

@@ -45,7 +45,7 @@
      name="landtab"
      tab_position="top"
      tab_height="25"
-     tab_min_width="67"
+     tab_min_width="50"
      top="10"
      width="489">
         <panel
@@ -2206,5 +2206,17 @@ Only large parcels can be listed in search.
              width="100" />
              </panel>
         </panel>
+       <panel
+          border="true"
+          follows="all"
+          label="Experiences"
+          layout="topleft"
+          left="0"
+          top="0"
+          help_topic="land_experiences_tab"
+          name="land_experiences_panel"
+            class="land_experiences_panel"
+          filename="panel_region_experiences.xml">
+       </panel>
     </tab_container>
 </floater>

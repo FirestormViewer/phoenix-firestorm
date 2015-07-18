@@ -70,7 +70,7 @@
 	<xsd:element name="uuid">
 		<xsd:simpleType>
 			<xsd:restriction base="xsd:string">
-				<xsd:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|" />
+				<xsd:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" />
 			</xsd:restriction>
 		</xsd:simpleType>
 	</xsd:element>

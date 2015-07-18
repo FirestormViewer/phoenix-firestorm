@@ -381,7 +381,8 @@
 		 cursor_color="ScriptCursorColor"
 		 width="497"
 		 enable_tooltip_paste="true"
-		 word_wrap="true">
+		 word_wrap="true"
+		 show_context_menu="true">
 			Loading...
 		</script_editor>
 	</panel>

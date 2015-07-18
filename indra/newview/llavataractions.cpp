@@ -300,11 +300,17 @@ void LLAvatarActions::startCall(const LLUUID& id)
 }
 
 // static
-void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id)
+// <FS:Ansariel> [FS Communication UI]
+//void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id)
+const LLUUID LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id)
+// </FS:Ansariel>
 {
 	if (ids.size() == 0)
 	{
-		return;
+		// <FS:Ansariel> [FS Communication UI]
+		//return;
+		return LLUUID::null;
+		// </FS:Ansariel>
 	}
 
 	// convert vector into std::vector for addSession
@@ -318,7 +324,7 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floate
 		{
 			make_ui_sound("UISndInvalidOp");
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
-			return;
+			return LLUUID::null;
 		}
 		id_array.push_back(idAgent);
 // [/RLVa:KB]
@@ -331,12 +337,18 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floate
 										   ids[0], id_array, true, floater_id);
 	if (session_id == LLUUID::null)
 	{
-		return;
+		// <FS:Ansariel> [FS Communication UI]
+		//return;
+		return session_id;
+		// </FS:Ansariel>
 	}
 
 	gIMMgr->autoStartCallOnStartup(session_id);
 
 	make_ui_sound("UISndStartIM");
+
+	// <FS:Ansariel> [FS Communication UI]
+	return session_id;
 }
 
 /* AD *TODO: Is this function needed any more?
@@ -361,7 +373,10 @@ bool LLAvatarActions::canCall()
 }
 
 // static
-void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& floater_id)
+// <FS:Ansariel> [FS Communication UI]
+//void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& floater_id)
+const LLUUID LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& floater_id)
+// </FS:Ansariel>
 {
 	// *HACK: Copy into dynamic array
 	std::vector<LLUUID> id_array;
@@ -375,7 +390,7 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 		{
 			make_ui_sound("UISndInvalidOp");
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
-			return;
+			return LLUUID::null;
 		}
 		id_array.push_back(idAgent);
 // [/RLVa:KB]
@@ -386,7 +401,10 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 
 	if (session_id == LLUUID::null)
 	{
-		return;
+		// <FS:Ansariel> [FS Communication UI]
+		//return;
+		return session_id;
+		// </FS:Ansariel>
 	}
 	
 	// <FS:Ansariel> [FS communication UI]
@@ -395,6 +413,9 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 	// </FS:Ansariel> [FS communication UI]
 
 	make_ui_sound("UISndStartIM");
+
+	// <FS:Ansariel> [FS Communication UI]
+	return session_id;
 }
 
 static const char* get_profile_floater_name(const LLUUID& avatar_id)

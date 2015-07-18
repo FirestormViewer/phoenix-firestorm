@@ -1046,6 +1046,13 @@ public:
 	 */
 	S32 getChicletIndex(const LLChiclet* chiclet);
 
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
+	/**
+	 * Sets the index of the specified chiclet in the list.
+	 */
+	void setChicletIndex(const LLChiclet* chiclet, S32 index);
+// [/SL:KB]
+
 	/**
 	 * Removes chiclet by index.
 	 */

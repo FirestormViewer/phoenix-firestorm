@@ -7,8 +7,10 @@
 		<menu_item_call label="Настройки" name="Preferences"/>
 		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
 		<menu_item_call label="Профиль" name="Profile"/>
-		<menu_item_call label="Места..." name="Picks"/>
+		<menu_item_call label="Места" name="Picks"/>
 		<menu_item_call label="Внешность" name="ChangeOutfit"/>
+		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
+		<menu_item_call label="Приключения" name="Experiences"/>
 		<menu_item_call label="Снимок" name="Take Snapshot"/>
 		<menu_item_check label="Инвентарь" name="Inventory"/>
 		<menu_item_check label="Инвентарь" name="ShowSidetrayInventory"/>
@@ -81,6 +83,7 @@
 		<menu_item_check label="Радар" name="Radar"/>
 		<menu_item_call label="История телепортаций" name="Teleport History"/>
 		<menu_item_check label="Места" name="Places"/>
+		<menu_item_call label="Пункты" name="Destinations"/>
 		<menu_item_check label="Мини карта" name="Mini-Map"/>
 		<menu_item_check label="Карта мира" name="World Map"/>
 		<menu_item_check label="Отслеживание региона" name="Region Tracker"/>

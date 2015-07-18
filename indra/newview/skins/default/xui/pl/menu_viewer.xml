@@ -7,8 +7,10 @@
 		<menu_item_call label="Ustawienia" name="Preferences"/>
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
-		<menu_item_call label="Miejsca..." name="Picks"/>
+		<menu_item_call label="Miejsca" name="Picks"/>
+		<menu_item_call label="Przygody" name="Experiences"/>
 		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
+		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu_item_call label="Zrób zdjęcie" name="Take Snapshot"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>
 		<menu_item_check label="Moja Szafa" name="ShowSidetrayInventory"/>
@@ -81,6 +83,7 @@
 		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
 		<menu_item_check label="Landmarki" name="Places"/>
+		<menu_item_call label="Cele podróży" name="Destinations"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa Świata" name="World Map"/>
 		<menu_item_check label="Śledzenie Regionów" name="Region Tracker"/>

@@ -116,9 +116,12 @@ public:
 		SType mSessionType;
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2014-03-01 (Catznip-3.6)
 		SCloseAction mCloseAction;
+		S32 mSnoozeTime;
 // [/SL:KB]
 		LLUUID mOtherParticipantID;
 		uuid_vec_t mInitialTargetIDs;
+		// <FS:Ansariel> Needed to store IDs of initially invited agents; required for FS Communication UI, as original IM floater gets destroyed
+		uuid_vec_t mInitialInvitedIDs;
 		std::string mHistoryFileName;
 
 		// connection to voice channel state change signal

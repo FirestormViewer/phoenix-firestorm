@@ -492,8 +492,14 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 	return color;
 }
 
-// handle all settings and rlv that would prevent us from showing the cs color
 bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type)
+{
+	LLColor4 color = LLColor4::white;
+	return hasFriendColorThatShouldShow(friend_id, type, color);
+}
+
+// handle all settings and rlv that would prevent us from showing the cs color
+bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color)
 {
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
@@ -533,10 +539,14 @@ bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGC
 		return false;
 	}
 
-	if (getFriendColor(friend_id) == getDefaultColor())
+	LLColor4 friend_color = getFriendColor(friend_id);
+	if (friend_color == getDefaultColor())
 	{
 		return false;
 	}
+
+	color = friend_color;
+
 	return true;
 }
 

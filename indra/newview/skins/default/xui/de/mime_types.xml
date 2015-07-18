@@ -48,9 +48,9 @@
 		<label name="none_label">
 			Keine Inhalte
 		</label>
-		<label name="none_tooltip">
-			An diesem Ort befinden sich keine Medien.
-		</label>
+		<tooltip name="none_tooltip">
+			Keine Medien gefunden
+		</tooltip>
 	</widgetset>
 	<scheme name="rtsp">
 		<label name="rtsp_label">
@@ -125,11 +125,6 @@
 	<mimetype name="application/x-director">
 		<label name="application/x-director_label">
 			Macromedia Director
-		</label>
-	</mimetype>
-	<mimetype name="application/x-shockwave-flash">
-		<label name="application/x-shockwave-flash_label">
-			Flash
 		</label>
 	</mimetype>
 	<mimetype name="audio/mid">

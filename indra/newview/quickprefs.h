@@ -127,6 +127,7 @@ private:
 	LLCheckBoxCtrl*		mCtrlUseSSAO;
 	LLCheckBoxCtrl*		mCtrlUseDoF;
 	LLComboBox*			mCtrlShadowDetail;
+	LLComboBox*			mCtrlAvatarShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
 	
 	// <FS:CR> FIRE-9630 Vignette UI controls

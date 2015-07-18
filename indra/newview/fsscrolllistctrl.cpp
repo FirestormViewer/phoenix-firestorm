@@ -28,13 +28,16 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsscrolllistctrl.h"
+#include "lltooldraganddrop.h"
 
 static LLDefaultChildRegistry::Register<FSScrollListCtrl> r("fs_scroll_list");
 
 FSScrollListCtrl::FSScrollListCtrl(const Params& p)
 :	LLScrollListCtrl(p),
 	mContextMenu(NULL),
-	mDesiredLineHeight(p.desired_line_height)
+	mDesiredLineHeight(p.desired_line_height),
+	mContentType(p.content_type),
+	mHandleDaDCallback(NULL)
 {
 }
 
@@ -92,3 +95,89 @@ BOOL FSScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	}
 	return handled;
 }
+
+BOOL FSScrollListCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
+{
+	if (mContentType == FSScrollListCtrl::AGENTS)
+	{
+		gFocusMgr.setMouseCapture(this);
+
+		S32 screen_x;
+		S32 screen_y;
+		localPointToScreen(x, y, &screen_x, &screen_y);
+		LLToolDragAndDrop::getInstance()->setDragStart(screen_x, screen_y);
+	}
+
+	return LLScrollListCtrl::handleMouseDown(x, y, mask);
+}
+
+BOOL FSScrollListCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
+{
+	if (mContentType == FSScrollListCtrl::AGENTS)
+	{
+		if (hasMouseCapture())
+		{
+			gFocusMgr.setMouseCapture(NULL);
+		}
+	}
+
+	return LLScrollListCtrl::handleMouseUp(x, y, mask);
+}
+
+BOOL FSScrollListCtrl::handleHover(S32 x, S32 y, MASK mask)
+{
+	if (mContentType == FSScrollListCtrl::AGENTS)
+	{
+		bool handled = hasMouseCapture();
+		if (handled)
+		{
+			S32 screen_x;
+			S32 screen_y;
+			localPointToScreen(x, y, &screen_x, &screen_y);
+
+			if (LLToolDragAndDrop::getInstance()->isOverThreshold(screen_x, screen_y))
+			{
+				// First, create the global drag and drop object
+				std::vector<EDragAndDropType> types;
+				uuid_vec_t cargo_ids;
+				typedef std::vector<LLScrollListItem*> item_vec_t;
+				item_vec_t selected_items = getAllSelected();
+				for (item_vec_t::const_iterator it = selected_items.begin(); it != selected_items.end(); ++it)
+				{
+					cargo_ids.push_back((*it)->getUUID());
+				}
+				types.resize(cargo_ids.size(), DAD_PERSON);
+				LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_PEOPLE;
+				LLToolDragAndDrop::getInstance()->beginMultiDrag(types, cargo_ids, src);
+			}
+		}
+		else
+		{
+			handled = LLScrollListCtrl::handleHover(x, y, mask);
+		}
+
+		return handled;
+	}
+	else
+	{
+		return LLScrollListCtrl::handleHover(x, y, mask);
+	}
+}
+
+//virtual
+
+BOOL FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+											EDragAndDropType cargo_type,
+											void* cargo_data,
+											EAcceptance* accept,
+											std::string& tooltip_msg)
+{
+	if (mHandleDaDCallback)
+	{
+		return mHandleDaDCallback(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
+	}
+
+	return FALSE;
+	
+}
+

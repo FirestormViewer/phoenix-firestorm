@@ -6,10 +6,10 @@
         <File Source="$(var.PLUGIN_SOURCEDIR)/slplugin.exe" />
        </Component>
        <Directory Id="llplugin_dir" Name="llplugin">
-         <Component Id="llplugin_libs" Guid="{09911740-D305-4b46-AC19-17D366D78F70}">
-           <File Id="llplugin_lib_libeay32" KeyPath="yes" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\libeay32.dll" />
+         <Component Id="llplugin_libs" Guid="{2bc1c2b0-2971-11e5-a2cb-0800200c9a66}">
+		   <File Id="llplugin_lib_libeay32" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\libeay32.dll" />
            <File Id="llplugin_lib_media_plugin_quicktime" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_quicktime.dll" />
-           <File Id="llplugin_lib_media_plugin_webkit" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_webkit.dll" />
+           <File Id="llplugin_lib_media_plugin_webkit" KeyPath="yes" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_webkit.dll" />
            <File Id="llplugin_lib_qtcore4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtcore4.dll" />
            <File Id="llplugin_lib_qtgui4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtgui4.dll" />
            <File Id="llplugin_lib_qtnetwork4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtnetwork4.dll" />
