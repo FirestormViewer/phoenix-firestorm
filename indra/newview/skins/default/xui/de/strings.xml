@@ -6014,6 +6014,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' ist kein gültiger Ausdruck für RAND(min,max). MAX muss größer als MIN sein und beide Werte müssen sich im Intervall von -10000 bis 10000 befinden.
 	</string>
+	<string name="FSCmdLineTpOffered">
+		Teleport-Angebot an [NAME] gesendet.
+	</string>
 	<string name="FSWithHavok">
 		mit Havok-Unterstützung
 	</string>
