@@ -921,8 +921,8 @@ void RlvForceWear::updatePendingAttachments()
 	if (RlvForceWear::instanceExists())
 	{
 		RlvForceWear* pThis = RlvForceWear::getInstance();
-		for (const pendingattachments_map_t::value_type& itAttach : pThis->m_pendingAttachments)
-			LLAttachmentsMgr::instance().addAttachmentRequest(itAttach.first, itAttach.second & ~ATTACHMENT_ADD, itAttach.second & ATTACHMENT_ADD);
+		for (pendingattachments_map_t::const_iterator itAttach = pThis->m_pendingAttachments.begin(); itAttach != pThis->m_pendingAttachments.end(); ++itAttach)
+			LLAttachmentsMgr::instance().addAttachmentRequest(itAttach->first, itAttach->second & ~ATTACHMENT_ADD, itAttach->second & ATTACHMENT_ADD);
 		pThis->m_pendingAttachments.clear();
 	}
 }
@@ -962,8 +962,8 @@ void RlvForceWear::done()
 	// Wearables
 	if (m_remWearables.size())
 	{
-		for (const LLViewerWearable* pWearable : m_remWearables)
-			remItems.push_back(pWearable->getItemID());
+		for (std::list<const LLViewerWearable*>::const_iterator itRemWearable = m_remWearables.begin(); itRemWearable != m_remWearables.end(); ++itRemWearable)
+			remItems.push_back((*itRemWearable)->getItemID());
 		m_remWearables.clear();
 	}
 
@@ -971,8 +971,8 @@ void RlvForceWear::done()
 	if (m_remGestures.size())
 	{
 		// NOTE: LLGestureMgr::deactivateGesture() will call LLAppearanceMgr::removeCOFItemLinks() for us and supply its own callback
-		for (const LLViewerInventoryItem* pItem : m_remGestures)
-			LLGestureMgr::instance().deactivateGesture(pItem->getUUID());
+		for (LLInventoryModel::item_array_t::const_iterator itRemGesture = m_remGestures.begin(); itRemGesture != m_remGestures.end(); ++itRemGesture)
+			LLGestureMgr::instance().deactivateGesture((*itRemGesture)->getUUID());
 		m_remGestures.clear();
 	}
 
@@ -980,8 +980,8 @@ void RlvForceWear::done()
 	if (m_remAttachments.size())
 	{
 		LLAgentWearables::userRemoveMultipleAttachments(m_remAttachments);
-		for (const LLViewerObject* pAttachObj : m_remAttachments)
-			remItems.push_back(pAttachObj->getAttachmentItemID());
+		for (std::vector<LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); itAttachObj != m_remAttachments.end(); ++itAttachObj)
+			remItems.push_back((*itAttachObj)->getAttachmentItemID());
 		m_remAttachments.clear();
 	}
 
@@ -991,11 +991,12 @@ void RlvForceWear::done()
 
 	// Wearables need to be split into AT_BODYPART and AT_CLOTHING for COF
 	LLInventoryModel::item_array_t addBodyParts, addClothing;
-	for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.cbegin(); itAddWearables != m_addWearables.cend(); ++itAddWearables)
+	for (addwearables_map_t::const_iterator itAddWearables = m_addWearables.begin(); itAddWearables != m_addWearables.end(); ++itAddWearables)
 	{
 		// NOTE: LLAppearanceMgr will filter our duplicates so no need for us to check here
-		for (LLViewerInventoryItem* pItem : itAddWearables->second)
+		for (LLInventoryModel::item_array_t::const_iterator itItem = itAddWearables->second.begin(); itItem != itAddWearables->second.end(); ++itItem)
 		{
+			LLViewerInventoryItem* pItem = *itItem;
 			if (LLAssetType::AT_BODYPART == pItem->getType())
 				addBodyParts.push_back(pItem);
 			else
@@ -1005,10 +1006,10 @@ void RlvForceWear::done()
 	m_addWearables.clear();
 
 	// Until LL provides a way for updateCOF to selectively attach add/replace we have to deal with attachments ourselves
-	for (addattachments_map_t::const_iterator itAddAttachments = m_addAttachments.cbegin(); itAddAttachments != m_addAttachments.cend(); ++itAddAttachments)
+	for (addattachments_map_t::const_iterator itAddAttachments = m_addAttachments.begin(); itAddAttachments != m_addAttachments.end(); ++itAddAttachments)
 	{
-		for (const LLViewerInventoryItem* pItem : itAddAttachments->second)
-			addPendingAttachment(pItem->getLinkedUUID(), itAddAttachments->first);
+		for (LLInventoryModel::item_array_t::const_iterator itItem = itAddAttachments->second.begin(); itItem != itAddAttachments->second.end(); ++itItem)
+			addPendingAttachment((*itItem)->getLinkedUUID(), itAddAttachments->first);
 	}
 	m_addAttachments.clear();
 
@@ -1031,8 +1032,8 @@ void RlvForceWear::done()
 	{
 		// Clothing items only
 		uuid_vec_t idClothing;
-		for (const LLViewerInventoryItem* pItem : addClothing)
-			idClothing.push_back(pItem->getUUID());
+		for (LLInventoryModel::item_array_t::const_iterator itItem = addClothing.begin(); itItem != addClothing.end(); ++itItem)
+			idClothing.push_back((*itItem)->getUUID());
 		LLAppearanceMgr::instance().wearItemsOnAvatar(idClothing, false, false, cb);
 	}
 	else if ( (!addBodyParts.empty()) || (!addClothing.empty()) || (!m_addGestures.empty()) )
