@@ -1301,19 +1301,23 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2015-06-30 (Catznip-3.7)
 static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
 {
-	std::set<LLUUID> idsAsset;
-	items.erase(std::remove_if(items.begin(), items.end(), 
-		[&idsAsset](const LLViewerInventoryItem* pItem)
+	struct is_duplicate_asset
+	{
+		bool operator()(const LLViewerInventoryItem* pItem)
 		{
 			if (pItem->isWearableType())
 			{
 				const LLUUID& idAsset = pItem->getAssetUUID();
-				if ( (idAsset.notNull()) &&  (idsAsset.end() != idsAsset.find(idAsset)) )
+				if ( (idAsset.notNull()) &&  (m_idsAsset.end() != m_idsAsset.find(idAsset)) )
 					return true;
-				idsAsset.insert(idAsset);
+				m_idsAsset.insert(idAsset);
 			}
 			return false;
-		}), items.end());
+		}
+	protected:
+		std::set<LLUUID> m_idsAsset;
+	};
+	items.erase(std::remove_if(items.begin(), items.end(), is_duplicate_asset()), items.end());
 }
 // [/SL:KB]
 
@@ -2604,8 +2608,9 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		std::set<LLUUID> pendingAttachments;
 		if (LLAttachmentsMgr::instance().getPendingAttachments(pendingAttachments))
 		{
-			for (const LLUUID& idAttachItem : pendingAttachments)
+			for (std::set<LLUUID>::const_iterator itAttachItem = pendingAttachments.begin(); itAttachItem != pendingAttachments.end(); ++itAttachItem)
 			{
+				const LLUUID& idAttachItem = *itAttachItem;
 				if ( (!gAgentAvatarp->isWearingAttachment(idAttachItem)) || (isLinkedInCOF(idAttachItem)) )
 				{
 					LLAttachmentsMgr::instance().clearPendingAttachmentLink(idAttachItem);
