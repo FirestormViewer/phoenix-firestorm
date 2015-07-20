@@ -139,6 +139,7 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 	mSelectPending(FALSE),
 	mLabelStyle( LLFontGL::NORMAL ),
 	mHasVisibleChildren(FALSE),
+	mIsFolderComplete(true),
     mLocalIndentation(p.folder_indentation),
 	mIndentation(0),
 	mItemHeight(p.item_height),
@@ -739,7 +740,7 @@ void LLFolderViewItem::drawOpenFolderArrow(const Params& default_params, const L
 	//
 	const S32 TOP_PAD = default_params.item_top_pad;
 
-	if (hasVisibleChildren())
+	if (hasVisibleChildren() || !isFolderComplete())
 	{
 		LLUIImage* arrow_image = default_params.folder_arrow_image;
 		gl_draw_scaled_rotated_image(
@@ -1041,6 +1042,8 @@ LLFolderViewFolder::LLFolderViewFolder( const LLFolderViewItem::Params& p ):
 	mLastArrangeGeneration( -1 ),
 	mLastCalculatedWidth(0)
 {
+	// folder might have children that are not loaded yet. Mark it as incomplete until chance to check it.
+	mIsFolderComplete = false;
 }
 
 void LLFolderViewFolder::updateLabelRotation()
@@ -1123,6 +1126,12 @@ S32 LLFolderViewFolder::arrange( S32* width, S32* height )
 
 		mHasVisibleChildren = found;
 	}
+	if (!mIsFolderComplete)
+	{
+		mIsFolderComplete = getFolderViewModel()->isFolderComplete(this);
+	}
+
+
 
 	// calculate height as a single item (without any children), and reshapes rectangle to match
 	LLFolderViewItem::arrange( width, height );
@@ -1782,7 +1791,9 @@ void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType r
 	mIsOpen = openitem;
 		if(!was_open && openitem)
 		{
-		getViewModelItem()->openItem();
+			getViewModelItem()->openItem();
+			// openItem() will request content, it won't be incomplete
+			mIsFolderComplete = true;
 		}
 		else if(was_open && !openitem)
 		{

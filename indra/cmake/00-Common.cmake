@@ -245,6 +245,10 @@ if (LINUX)
       -pthread
       )
 
+  # <FS:ND> Enable C++11 support + gnu extensions
+  add_definitions(-std=gnu++11)
+  # </FS:ND>
+
   add_definitions(-DAPPID=secondlife)
   add_definitions(-fvisibility=hidden)
   # don't catch SIGCHLD in our base application class for the viewer - some of our 3rd party libs may need their *own* SIGCHLD handler to work.  Sigh!  The viewer doesn't need to catch SIGCHLD anyway.
