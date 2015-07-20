@@ -23500,6 +23500,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <array>
         <string>de</string>
         <string>en</string>
+        <string>es</string>
         <string>it</string>
         <string>ja</string>
         <string>pl</string>

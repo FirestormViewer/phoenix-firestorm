@@ -5121,13 +5121,17 @@ bool LLAppViewer::initCache()
 	}
 
 	// <FS:Ansariel> FIRE-13066
-	if (mPurgeTextures && !read_only)
+	//if (mPurgeTextures && !read_only)
 	{
 		LL_INFOS("AppCache") << "Purging Texture Cache..." << LL_ENDL;
 		LLSplashScreen::update(LLTrans::getString("StartupClearingTextureCache"));
 		LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
 	}
 	// </FS:Ansariel>
+
+	// <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
+	startCachePurge();
+	// </FS:ND>
 
 	LLSplashScreen::update(LLTrans::getString("StartupInitializingTextureCache"));
 	

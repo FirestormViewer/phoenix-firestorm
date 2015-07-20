@@ -8378,7 +8378,10 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 		{
 			if (!aux_src->getData())
 			{
-				LL_ERRS() << "No auxiliary source (morph mask) data for image id " << id << LL_ENDL;
+				// <FS:Ansariel> FIRE-16122: Don't crash if we didn't receive any data
+				//LL_ERRS() << "No auxiliary source (morph mask) data for image id " << id << LL_ENDL;
+				LL_WARNS() << "No auxiliary source (morph mask) data for image id " << id << LL_ENDL;
+				// </FS:Ansariel>
 				return;
 			}
 
