@@ -481,7 +481,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion, BOOL start)
 					<< " of set " << mCurrentSet->getName()
 					<< " (" << mCurrentSet << ")" << LL_ENDL;
 
-		if (animation.notNull())
+		if (animation.notNull() && state->mCurrentAnimation < state->mAnimations.size())
 		{
 			mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
 		}
