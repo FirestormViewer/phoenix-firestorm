@@ -322,6 +322,10 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     elif [ $PLATFORM == "win32" ] ; then
         if [ "${ND_AUTOBUILD_ARCH}" == "x64" ]
         then
+           rm -rf build-vc120_x64/ipch
+           rm -rf build-vc120_x64/llcommon
+           rm -rf build-vc120_x64/newview/firestorm-bin.dir 
+           rm -rf build-vc120_x64/packages/include
            rm -rf build-vc120_x64/*
            mkdir -p build-vc120_x64/logs
          else
