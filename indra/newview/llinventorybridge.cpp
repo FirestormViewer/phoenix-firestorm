@@ -2595,6 +2595,11 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 		}
 		if (is_movable && LLFolderType::lookupIsProtectedType(inv_cat->getPreferredType()))
 		{
+			is_movable = FALSE;
+			// tooltip?
+		}
+		if (is_movable && move_is_into_outfit)
+		{
 			if((mUUID == my_outifts_id) || (getCategory() && getCategory()->getPreferredType() == LLFolderType::FT_NONE))
 			{
 				is_movable = ((inv_cat->getPreferredType() == LLFolderType::FT_NONE) || (inv_cat->getPreferredType() == LLFolderType::FT_OUTFIT));
@@ -2603,11 +2608,6 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 			{
 				is_movable = false;
 			}
-		}
-		if (is_movable && move_is_into_outfit)
-		{
-			is_movable = FALSE;
-			// tooltip?
 		}
 		if (is_movable && (mUUID == model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE)))
 		{
