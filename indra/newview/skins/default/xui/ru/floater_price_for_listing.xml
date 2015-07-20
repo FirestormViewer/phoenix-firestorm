@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="price_for_listing" title="Публикация рекламы">
-    <text name="explanation_text">
-        Ваше объявление будет отображаться в течение одной недели со дня публикации.
+	<text name="explanation_text">
+		Ваше объявление будет отображаться в течение одной недели со дня публикации.
 
 Позиция объявления в списке зависит от того, сколько вы платите за это.
 
 Лучше платные объявления появляются вверху и выше в результатах поиска.
-    </text>
-    <text name="price_text">
-        Задать цену:
-    </text>
-    <button label="Отмена" name="cancel_btn" />
+	</text>
+	<text name="price_text">
+		Задать цену:
+	</text>
+	<button label="Отмена" name="cancel_btn"/>
 </floater>

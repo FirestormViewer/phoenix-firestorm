@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_facebook_place">
 	<text name="place_caption_label">
 		Расскажите что-то о месте, где вы находитесь:

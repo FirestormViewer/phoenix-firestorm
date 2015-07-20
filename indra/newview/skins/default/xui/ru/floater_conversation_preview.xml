@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_conversation" title="Разговор:">
 	<floater.string name="Title">
 		Разговор: [NAME]

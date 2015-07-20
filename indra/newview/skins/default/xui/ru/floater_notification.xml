@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="notification" title="Консоль уведомлений">
-    <text_editor name="payload">
-        Загрузка...
-    </text_editor>
-    <combo_box label="Ответ" name="response" />
+	<text_editor name="payload">
+		Загрузка...
+	</text_editor>
+	<combo_box label="Ответ" name="response"/>
 </floater>

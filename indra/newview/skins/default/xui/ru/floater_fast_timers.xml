@@ -1,15 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fast_timers">
-  <string name="pause">Пауза</string>
-  <string name="run">Старт</string>
-  <combo_box name="time_scale_combo">
-    <item name="2x Average" label="2x среднее"/>
-    <item name="Max" label="Максимум"/>
-    <item name="Recent Max" label="Последнее максимальное"/>
-  </combo_box>
-  <combo_box name="metric_combo">
-    <item name="Time" label="Время"/>
-    <item name="Number of Calls" label="Количество обращений"/>
-  </combo_box>
-  <button name="pause_btn" label="Пауза" />
+	<string name="pause">
+		Пауза
+	</string>
+	<string name="run">
+		Старт
+	</string>
+	<combo_box name="time_scale_combo">
+		<item name="2x Average" label="2x среднее"/>
+		<item name="Max" label="Максимум"/>
+		<item name="Recent Max" label="Последнее максимальное"/>
+	</combo_box>
+	<combo_box name="metric_combo">
+		<item name="Time" label="Время"/>
+		<item name="Number of Calls" label="Количество обращений"/>
+	</combo_box>
+	<button label="Пауза" name="pause_btn"/>
 </floater>

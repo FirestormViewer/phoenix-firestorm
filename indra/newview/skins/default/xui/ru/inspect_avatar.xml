@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  Not can_close / no title to avoid window chrome
+  Single instance - only have one at a time, recycle it each spawn
+-->
 <floater name="inspect_avatar">
 	<slider name="volume_slider" tool_tip="Громкость"/>
 	<button label="Добавить в друзья" name="add_friend_btn"/>

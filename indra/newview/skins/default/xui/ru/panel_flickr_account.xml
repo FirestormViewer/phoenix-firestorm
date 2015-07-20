@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <panel name="panel_flickr_account">
 	<string name="flickr_connected" value="Подключен к Flickr как:" />
 	<string name="flickr_disconnected" value="Ошибка соединения с Flickr" />
@@ -6,8 +6,8 @@
 		Нет подключения к Flickr.
 	</text>
 	<panel name="panel_buttons">
-		<button label="Подключить" name="connect_btn" />
-		<button label="Отключить" name="disconnect_btn" />
+		<button label="Подключить" name="connect_btn"/>
+		<button label="Отключить" name="disconnect_btn"/>
 		<text name="account_learn_more_label">
 			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Подробнее об отправке на Flickr]
 		</text>

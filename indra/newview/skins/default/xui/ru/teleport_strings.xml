@@ -21,7 +21,7 @@
 Повторите попытку позже.
 		</message>
 		<message name="NoHelpIslandTP">
-Телепортироваться назад на Остров прибытия нельзя.
+			Телепортироваться назад на Остров прибытия нельзя.
 Для повторения обучения перейдите на 'Остров прибытия - общий'.
 		</message>
 		<message name="noaccess_tport">
@@ -45,16 +45,13 @@
 		<message name="no_inventory_host">
 			Система инвентаря в настоящее время недоступена.
 		</message>
-    <message name="MustGetAgeRegion">
-      Для посещения данного региона вам должно быть не менее 18 лет.
-    </message>
-    <message name="RegionTPSpecialUsageBlocked">
-      Невозможно войти в регион. '[REGION_NAME]' является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
-    </message>
-		<message name="RegionTPSpecialUsageBlocked">
-			Не удалось войти в регион. «[REGION_NAME]» – это регион развивающих игр, и для входа в него надо соответствовать определенным условиям. Подробнее см. на странице [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Skill_Gaming_in_Second_Life Skill Gaming FAQ].
+		<message name="MustGetAgeRegion">
+			Для посещения данного региона вам должно быть не менее 18 лет.
 		</message>
-  </message_set>
+		<message name="RegionTPSpecialUsageBlocked">
+			Невозможно войти в регион. '[REGION_NAME]' является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+		</message>
+	</message_set>
 	<message_set name="progress">
 		<message name="sending_dest">
 			Отправка по назначению.
@@ -89,8 +86,8 @@
 		<message name="requesting">
 			Запрашивается телепортация...
 		</message>
-    <message name="pending">
-      Ожидается телепортация...
-    </message>
-  </message_set>
+		<message name="pending">
+			Ожидается телепортация...
+		</message>
+	</message_set>
 </teleport_messages>
