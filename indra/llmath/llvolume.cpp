@@ -5664,7 +5664,7 @@ BOOL LLVolumeFace::createCap(LLVolume* volume, BOOL partial_build)
 	{
 		resizeVertices(num_vertices+1);
 		
-		if (!partial_build)
+		//if (!partial_build)
 		{
 			resizeIndices(num_indices+3);
 		}
@@ -5672,7 +5672,7 @@ BOOL LLVolumeFace::createCap(LLVolume* volume, BOOL partial_build)
 	else
 	{
 		resizeVertices(num_vertices);
-		if (!partial_build)
+		//if (!partial_build)
 		{
 			resizeIndices(num_indices);
 		}
@@ -5794,10 +5794,10 @@ BOOL LLVolumeFace::createCap(LLVolume* volume, BOOL partial_build)
 		
 	LL_CHECK_MEMORY
 		
-	if (partial_build)
-	{
-		return TRUE;
-	}
+	//if (partial_build)
+	//{
+	//	return TRUE;
+	//}
 
 	if (mTypeMask & HOLLOW_MASK)
 	{

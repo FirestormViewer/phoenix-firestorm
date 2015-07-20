@@ -1944,6 +1944,11 @@ void LLTabContainer::onNextBtn( const LLSD& data )
 		scrollNext();
 	}
 	mScrolled = FALSE;
+
+	if(mCurrentTabIdx < mTabList.size()-1)
+	{
+		selectNextTab();
+	}
 }
 
 void LLTabContainer::onNextBtnHeld( const LLSD& data )
@@ -1952,6 +1957,11 @@ void LLTabContainer::onNextBtnHeld( const LLSD& data )
 	{
 		mScrollTimer.reset();
 		scrollNext();
+
+		if(mCurrentTabIdx < mTabList.size()-1)
+		{
+			selectNextTab();
+		}
 		mScrolled = TRUE;
 	}
 }
@@ -1963,6 +1973,11 @@ void LLTabContainer::onPrevBtn( const LLSD& data )
 		scrollPrev();
 	}
 	mScrolled = FALSE;
+
+	if(mCurrentTabIdx > 0)
+	{
+		selectPrevTab();
+	}
 }
 
 void LLTabContainer::onJumpFirstBtn( const LLSD& data )
@@ -1981,6 +1996,11 @@ void LLTabContainer::onPrevBtnHeld( const LLSD& data )
 	{
 		mScrollTimer.reset();
 		scrollPrev();
+
+		if(mCurrentTabIdx > 0)
+		{
+			selectPrevTab();
+		}
 		mScrolled = TRUE;
 	}
 }
@@ -2330,7 +2350,10 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 			LLTabTuple* tuple = *iter;
 			S32 local_x = x - tuple->mButton->getRect().mLeft;
 			S32 local_y = y - tuple->mButton->getRect().mBottom;
-			if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
+			// <FS:Ansariel> FIRE-16498: Only commit visible button
+			//if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
+			if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && tuple->mButton->getVisible() && !tuple->mTabPanel->getVisible())
+			// </FS:Ansariel>
 			{
 //				tuple->mButton->onCommit();
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.5)
