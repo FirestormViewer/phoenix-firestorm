@@ -4181,6 +4181,8 @@ LLCullResult::LLCullResult()
 		mRenderMapAllocated[i] = 0;
 	}
 
+	memset( mRenderMapSize, 0, sizeof(mRenderMapSize) ); // <FS:ND> Initialize with 0.
+	
 	clear();
 }
 
