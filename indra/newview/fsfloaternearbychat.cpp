@@ -139,25 +139,25 @@ BOOL FSFloaterNearbyChat::postBuild()
 	registrar.add("NearbyChat.Action", boost::bind(&FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked, this, _2));
 	
 	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_nearby_chat.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if(menu)
+	if (menu)
+	{
 		mPopupMenuHandle = menu->getHandle();
+	}
 
-	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings");
+	gSavedSettings.declareS32("nearbychat_showicons_and_names", 2, "NearByChat header settings");
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
-	if (mInputEditor)
-	{
-		mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
-		mInputEditor->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit, this));
-		mInputEditor->setKeystrokeCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxKeystroke, this));
-		mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusLost, this));
-		mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusReceived, this));
-		mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
-		mInputEditor->setPassDelete(TRUE);
-		mInputEditor->setFont(LLViewerChat::getChatFont());
-		mInputEditor->setLabel(getString("chatbox_label"));
-		mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
-	}
+	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
+	mInputEditor->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit, this));
+	mInputEditor->setKeystrokeCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxKeystroke, this));
+	mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusLost, this));
+	mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusReceived, this));
+	mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
+	mInputEditor->setPassDelete(TRUE);
+	mInputEditor->setFont(LLViewerChat::getChatFont());
+	mInputEditor->setLabel(getString("chatbox_label"));
+	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
+
 	mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
 	mInputPanels = getChild<LLLayoutStack>("input_panels");
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
@@ -165,14 +165,14 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
-	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
+	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 
 	// chat type selector and send chat button
-	mChatTypeCombo=getChild<LLComboBox>("chat_type");
+	mChatTypeCombo = getChild<LLComboBox>("chat_type");
 	mChatTypeCombo->selectByValue("say");
-	mChatTypeCombo->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatTypeChanged,this));
-	mSendChatButton=getChild<LLButton>("send_chat");
-	mSendChatButton->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit,this));
+	mChatTypeCombo->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatTypeChanged, this));
+	mSendChatButton = getChild<LLButton>("send_chat");
+	mSendChatButton->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit, this));
 	onChatTypeChanged();
 
 	mChatHistory = getChild<FSChatHistory>("chat_history");
@@ -193,14 +193,11 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 std::string appendTime()
 {
-	time_t utc_time;
-	utc_time = time_corrected();
-	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:["
-		+LLTrans::getString("TimeMin")+"]";
+	time_t utc_time = time_corrected();
+	std::string timeStr ="[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]";
 	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
 	{
-		timeStr += ":["
-			+LLTrans::getString("TimeSec")+"]";
+		timeStr += ":[" + LLTrans::getString("TimeSec") + "]";
 	}
 
 	LLSD substitution;
@@ -254,9 +251,8 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	if (isChatMultiTab())
 	{
 		LLMultiFloater* hostp = getHost();
-        // KC: Don't flash tab on system messages
-		if (!isInVisibleChain() && hostp
-        && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
+		// KC: Don't flash tab on system messages
+		if (!isInVisibleChain() && hostp && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
 		{
 			hostp->setFloaterFlashing(this, TRUE);
 		}
@@ -328,8 +324,7 @@ void FSFloaterNearbyChat::onNearbySpeakers()
 	LLFloaterSidePanelContainer::showPanel("people", "panel_people", param);
 }
 
-// static
-void FSFloaterNearbyChat::onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata)
+void FSFloaterNearbyChat::onHistoryButtonClicked()
 {
 	if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
 	{
@@ -1337,8 +1332,8 @@ void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType t
 	{
 		msg->newMessageFast(_PREHASH_ChatFromViewer);
 		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		msg->nextBlockFast(_PREHASH_ChatData);
 		msg->addStringFast(_PREHASH_Message, utf8_out_text);
 		msg->addU8Fast(_PREHASH_Type, type);
@@ -1348,10 +1343,10 @@ void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType t
 	{
 		msg->newMessage("ScriptDialogReply");
 		msg->nextBlock("AgentData");
-		msg->addUUID("AgentID", gAgent.getID());
-		msg->addUUID("SessionID", gAgent.getSessionID());
+		msg->addUUID("AgentID", gAgentID);
+		msg->addUUID("SessionID", gAgentSessionID);
 		msg->nextBlock("Data");
-		msg->addUUID("ObjectID", gAgent.getID());
+		msg->addUUID("ObjectID", gAgentID);
 		msg->addS32("ChatChannel", channel);
 		msg->addS32("ButtonIndex", 0);
 		msg->addString("ButtonLabel", utf8_out_text);
