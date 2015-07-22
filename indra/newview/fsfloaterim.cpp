@@ -1773,6 +1773,7 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 		{
 			mInputEditor->updateHistory();
 			sendMsgFromInputEditor(CHAT_TYPE_OOC);
+			handled = TRUE;
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
@@ -1799,9 +1800,8 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 					mInputEditor->insertText(line_break);
 				}
 			}
+			handled = TRUE;
 		}
-
-		handled = TRUE;
 	}
 
 	return handled;
