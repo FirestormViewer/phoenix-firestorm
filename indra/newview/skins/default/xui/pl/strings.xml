@@ -5224,9 +5224,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="UnknownPosition">
 		(nieznana pozycja)
 	</string>
-	<string name="FSCmdLineRSP">
-		Maks. przepustowość ustawiona na: [VALUE] kbps.
-	</string>
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
 		[AGENT][REGION](Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
 	</string>
@@ -5377,11 +5374,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="DrawDistanceSteppingGestureObsolete">
 		Ze względu na zmiany w kodzie używanie tego gestu nie jest już potrzebne. Stopniowe powiększanie pola widzenia zostało włączone.
 	</string>
-	<string name="FSCmdLineDrawDistanceSet">
-		Pole widzenia zostało ustawione na [DISTANCE]m.
-	</string>
 	<string name="FSCameraPositionCopied">
 		Pozycja kamery [POS] została skopiowana do schowka.
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Pole widzenia zostało ustawione na [DISTANCE]m.
 	</string>
 	<string name="FSCmdLineRollDiceTotal">
 		Wynik całkowity dla [DICE]d[FACES][MODIFIER]: [RESULT].
@@ -5410,6 +5407,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSCmdLineCalcRandError">
 		'[RAND]' nie jest poprawnym wyrażeniem dla RAND(min,max). MAX musi być większe niż MIN, oba w zakresie od -10000 do 10000.
 	</string>
+	<string name="FSCmdLineRSP">
+		Maks. przepustowość ustawiona na: [VALUE] kbps.
+	</string>
+	<string name="FSCmdLineTpOffered">
+		Zaproponowano teleportację [NAME].
+	</string>	
 	<string name="FSWithHavok">
 		ze wsparciem dla Havoka
 	</string>
