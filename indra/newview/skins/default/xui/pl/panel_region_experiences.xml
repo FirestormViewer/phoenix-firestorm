@@ -5,7 +5,7 @@ Każda przygoda może być kluczową.
 
 Przygody kluczowe są dozwolone w tym Majątku.
 
-Ponadto, jeśli Majątek ma wyłączony dostęp publiczny, Rezydenci uczestniczący w dowolnej przygodzie kluczowej mogą wejść i pozostać w nim tak długo, jak mają oni aktywną przygodę kluczową.
+Jeśli Majątek ma wyłączony dostęp publiczny, Rezydenci uczestniczący w dowolnej przygodzie kluczowej mogą wejść i pozostać tak długo, jak mają oni ją aktywną.
 	</panel.string>
 	<panel.string name="allowed_estate_text">
 Tylko przygody o zasięgu ziemi mogą zostać dozwolone.
