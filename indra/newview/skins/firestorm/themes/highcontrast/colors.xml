@@ -453,12 +453,6 @@
      name="FilterTextColor"
      reference="EmphasisColor" />
     <color
-     name="inventory_bg_color"
-     reference="DkGray2_10"/>
-    <color
-     name="inventory_bg_color_a"
-     reference="DkGray2_10"/>
-    <color
      name="floater_bg_color"
      reference="SL-Background"/>
     <color

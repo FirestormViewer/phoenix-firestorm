@@ -314,14 +314,7 @@ void FSFloaterIM::onVisibilityChange(BOOL new_visibility)
 	}
 }
 
-void FSFloaterIM::onSendMsg( LLUICtrl* ctrl, void* userdata )
-{
-	FSFloaterIM* self = (FSFloaterIM*) userdata;
-	self->sendMsgFromInputEditor();
-	self->setTyping(false);
-}
-
-void FSFloaterIM::sendMsgFromInputEditor()
+void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 {
 	if (gAgent.isGodlike()
 		|| (mDialog != IM_NOTHING_SPECIAL)
@@ -341,6 +334,13 @@ void FSFloaterIM::sendMsgFromInputEditor()
 			LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
 			if(!text.empty())
 			{
+				if(type == CHAT_TYPE_OOC)
+				{
+					std::string tempText = wstring_to_utf8str( text );
+					tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
+					text = utf8str_to_wstring(tempText);
+				}
+
 				// Truncate and convert to UTF8 for transport
 				std::string utf8_text = wstring_to_utf8str(text);
 				
@@ -408,6 +408,8 @@ void FSFloaterIM::sendMsgFromInputEditor()
 	{
 		LL_INFOS("FSFloaterIM") << "Cannot send IM to everyone unless you're a god." << LL_ENDL;
 	}
+
+	setTyping(false);
 }
 
 void FSFloaterIM::sendMsg(const std::string& msg)
@@ -803,8 +805,7 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setPassDelete(TRUE);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
-
-	childSetCommitCallback("chat_editor", onSendMsg, this);
+	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
 	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);
@@ -1766,33 +1767,41 @@ BOOL FSFloaterIM::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	
-	if (key == KEY_RETURN && mask == (MASK_SHIFT | MASK_CONTROL))
+	if (key == KEY_RETURN)
 	{
-		if (!gSavedSettings.getBOOL("FSUseSingleLineChatEntry"))
+		if (mask == MASK_ALT)
 		{
-			if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
+			mInputEditor->updateHistory();
+			sendMsgFromInputEditor(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
+		else if (mask == (MASK_SHIFT | MASK_CONTROL))
+		{
+			if (!gSavedSettings.getBOOL("FSUseSingleLineChatEntry"))
 			{
-				LLUI::reportBadKeystroke();
+				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
+				{
+					LLUI::reportBadKeystroke();
+				}
+				else
+				{
+					mInputEditor->insertLinefeed();
+				}
 			}
 			else
 			{
-				mInputEditor->insertLinefeed();
+				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
+				{
+					LLUI::reportBadKeystroke();
+				}
+				else
+				{
+					LLWString line_break(1, llwchar(182));
+					mInputEditor->insertText(line_break);
+				}
 			}
+			handled = TRUE;
 		}
-		else
-		{
-			if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length(llwchar(182))) > mInputEditor->getMaxTextLength())
-			{
-				LLUI::reportBadKeystroke();
-			}
-			else
-			{
-				LLWString line_break(1, llwchar(182));
-				mInputEditor->insertText(line_break);
-			}
-		}
-
-		handled = TRUE;
 	}
 
 	return handled;

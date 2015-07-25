@@ -248,6 +248,13 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 			mHoverBarIndex = 0;
 		}
 
+		// <FS:Ansariel> Check for index out of range
+		if (mHoverBarIndex > 0 && ((mScrollIndex + mHoverBarIndex - 1) >= (S32)mTimerBarRows.size() || (mScrollIndex + mHoverBarIndex - 1) < 0))
+		{
+			return TRUE;
+		}
+		// </FS:Ansariel>
+
 		TimerBarRow& row = mHoverBarIndex == 0 ? mAverageTimerRow : mTimerBarRows[mScrollIndex + mHoverBarIndex - 1];
 
 		TimerBar* hover_bar = NULL;
