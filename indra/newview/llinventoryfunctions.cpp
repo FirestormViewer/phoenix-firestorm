@@ -2831,7 +2831,10 @@ void LLInventoryAction::buildMarketplaceFolders(LLFolderView* root)
     for (; set_iter != selected_items.end(); ++set_iter)
     {
         viewModel = dynamic_cast<LLFolderViewModelItemInventory *>((*set_iter)->getViewModelItem());
-        if (viewModel && gInventory.isObjectDescendentOf(viewModel->getInventoryObject()->getParentUUID(), marketplacelistings_id))
+        // <FS:ND> FIRE-16515 make sure the inventory object exists as well
+        // if (viewModel && gInventory.isObjectDescendentOf(viewModel->getInventoryObject()->getParentUUID(), marketplacelistings_id))
+        if (viewModel && viewModel->getInventoryObject() && gInventory.isObjectDescendentOf(viewModel->getInventoryObject()->getParentUUID(), marketplacelistings_id))
+        // </FS:ND>
         {
             const LLUUID &parent_id = viewModel->getInventoryObject()->getParentUUID();
             if (parent_id != marketplacelistings_id)
