@@ -1,45 +1,38 @@
-// HTTP Bridge script v.2.18
+// HTTP Bridge script
 // Firestorm
 // Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
 //
-// Global Variables and CONSTANTS
+// Global variables
 //
 
     // Bridge platform
-    string bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string bridgeVersion = "2.18"; // This should match fslslbridge.cpp
-    string latestURL;
-    integer viewerIsFirestorm;
-    integer tryHandshakeOnce = TRUE;
-    key owner;
+    string gBridgeVersion = "2.19"; // This should match fslslbridge.cpp
+    string gLatestURL;
+    integer gViewerIsFirestorm;
+    integer gTryHandshakeOnce = TRUE;
+    key gOwner;
 
     // Teleport
-    float TP_TARGET_DISTANCE = 1.0; // Distance to target when move to target should stop
-    integer MAX_TIME_TO_TP = 10; // (seconds) should be set to 10 for normal use
-    float TP_TIMER_TICK = 0.05;
-    vector mttVector; // Target for llMoveToTarget() teleport
-    integer startTPTimer;
+    vector gMttVector; // Target for llMoveToTarget() teleport
+    integer gStartTPTimer;
 
     // Movelock
-    integer useMoveLock = FALSE;
-    integer relockMoveLockAfterMovement = FALSE;
-    integer relockIsUserMoving = FALSE;
+    integer gUseMoveLock;
+    integer gRelockMoveLockAfterMovement;
+    integer gRelockIsUserMoving;
 
     // Flight assist
-    integer isFlyingNow = -1;
-    float flightAssistPushForce = 0.0;
-    float flightAirCheckNormal = 1.0;
-    float flightAirCheckSlow = 5.0;
+    integer gIsFlyingNow;
+    float gFlightAssistPushForce;
 
     // OpenCollar/LockMeister AO interface
-    integer aoEnabledOC = FALSE;
-    integer aoEnabledLM = FALSE;
-    integer aoChannelOC;
-    integer aoChannelLM = -8888;
-    integer aoListenerOC = -1;
-    integer aoListenerLM = -1;
-    key aoCollarKey = NULL_KEY;
+    integer gAO_EnabledOC;
+    integer gAO_EnabledLM;
+    integer gAO_ChannelOC;
+    integer gAO_ListenerOC;
+    integer gAO_ListenerLM;
+    key gAO_CollarKey;
 
 //
 // Bridge platform helper functions
@@ -47,16 +40,16 @@
 
     requestBridgeURL()
     {
-        llReleaseURL(latestURL);
-        latestURL = "";
+        llReleaseURL(gLatestURL);
+        gLatestURL = "";
         // llRequestSecureURL(); // Uncomment this line and comment next one for HTTPS instead of HTTP (experimental)
         llRequestURL();
     }
 
     detachBridge()
     {
-        llReleaseURL(latestURL);
-        llRequestPermissions(owner, PERMISSION_ATTACH);
+        llReleaseURL(gLatestURL);
+        llRequestPermissions(gOwner, PERMISSION_ATTACH);
     }
 
 //
@@ -65,15 +58,15 @@
 
     aoListenOC(key collarid, integer enabled)
     {
-        llListenRemove(aoListenerOC);
+        llListenRemove(gAO_ListenerOC);
         if (enabled)
         {
-            aoListenerOC = llListen(aoChannelOC, "", collarid, "");
-            aoCollarKey = collarid;
+            gAO_ListenerOC = llListen(gAO_ChannelOC, "", collarid, "");
+            gAO_CollarKey = collarid;
         }
         else
         {
-            aoCollarKey = NULL_KEY;
+            gAO_CollarKey = NULL_KEY;
         }
     }
 
@@ -84,10 +77,10 @@
 
     integrationCheckOC()
     {
-        if (aoEnabledOC)
+        if (gAO_EnabledOC)
         {
             aoListenOC(NULL_KEY, TRUE);
-            llWhisper(aoChannelOC, "OpenCollar?");
+            llWhisper(gAO_ChannelOC, "OpenCollar?");
         }
         else
         {
@@ -97,13 +90,13 @@
 
     integrationCheckLM()
     {
-        if (aoEnabledLM)
+        if (gAO_EnabledLM)
         {
-            aoListenerLM = llListen(aoChannelLM, "", NULL_KEY, "");
+            gAO_ListenerLM = llListen(-8888, "", NULL_KEY, "");
         }
         else
         {
-            llListenRemove(aoListenerLM);
+            llListenRemove(gAO_ListenerLM);
         }
     }
 
@@ -127,7 +120,7 @@
 // Flight Assist
 //
 
-    flight_hover(integer yes)
+    flightHover(integer yes)
     {
         if (yes)
         {
@@ -143,11 +136,11 @@
 // Movelock
 //
 
-    movelock_init(integer lock)
+    movelockMe(integer lock)
     {
         if (lock)
         {
-            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
+            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.045);
             llSetVehicleType(VEHICLE_TYPE_SLED);
             llSetVehicleFloatParam(VEHICLE_LINEAR_FRICTION_TIMESCALE, 0.05);
             llSetVehicleFloatParam(VEHICLE_ANGULAR_FRICTION_TIMESCALE, 0.05);
@@ -175,25 +168,25 @@ default
     attach(key k)
     // Initialize bridge functionality when worn as an attachment
     {
-        if (k != NULL_KEY)
+        if (k)
         {
 
             // Set owner and request control perms
-            owner = llGetOwner();
-            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
+            gOwner = llGetOwner();
+            llRequestPermissions(gOwner, PERMISSION_TAKE_CONTROLS);
 
             // Assume everything is disabled for now and synchronize later with the viewer via HTTP
-            useMoveLock = FALSE;
-            flightAssistPushForce = 0.0;
-            isFlyingNow = -1;
-            aoEnabledOC = FALSE;
-            aoEnabledLM = FALSE;
+            gUseMoveLock = FALSE;
+            gFlightAssistPushForce = 0.0;
+            gIsFlyingNow = -1;
+            gAO_EnabledOC = FALSE;
+            gAO_EnabledLM = FALSE;
 
             // Disable all secondary stateful services
             setTimerEvent2(0);
             llSetTimerEvent(0);
-            flight_hover(FALSE);
-            movelock_init(FALSE);
+            flightHover(FALSE);
+            movelockMe(FALSE);
 
             // Check VM version
             if (llGetMemoryLimit() <= 16384)
@@ -202,10 +195,10 @@ default
             }
 
             // Set the channel for the AO OC interface
-            aoChannelOC = (integer)("0x" + llGetSubString(owner, 30, -1));
-            if (aoChannelOC > 0)
+            gAO_ChannelOC = (integer)("0x" + llGetSubString(gOwner, 30, -1));
+            if (gAO_ChannelOC > 0)
             {
-                aoChannelOC = -aoChannelOC;
+                gAO_ChannelOC = -gAO_ChannelOC;
             }
 
             // Remove previous AO listeners if present
@@ -213,8 +206,8 @@ default
             integrationCheckLM();
 
             // Assume the worst and let the viewer convince us otherwise
-            tryHandshakeOnce = TRUE;
-            viewerIsFirestorm = FALSE;
+            gTryHandshakeOnce = TRUE;
+            gViewerIsFirestorm = FALSE;
             requestBridgeURL();
 
         }
@@ -236,24 +229,24 @@ default
     control(key id, integer level, integer edge)
     {
 
-        if (useMoveLock && relockMoveLockAfterMovement)
+        if (gUseMoveLock && gRelockMoveLockAfterMovement)
         {
             if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {
-                if (!relockIsUserMoving)
+                if (!gRelockIsUserMoving)
                 {
-                    relockIsUserMoving = TRUE;
-                    movelock_init(FALSE);
+                    gRelockIsUserMoving = TRUE;
+                    movelockMe(FALSE);
                 }
             }
-            else if (relockIsUserMoving)
+            else if (gRelockIsUserMoving)
             {
-                relockIsUserMoving = FALSE;
-                movelock_init(TRUE);
+                gRelockIsUserMoving = FALSE;
+                movelockMe(TRUE);
             }
         }
 
-        if (flightAssistPushForce > 0 && isFlyingNow)
+        if (gFlightAssistPushForce > 0 && gIsFlyingNow)
         {
             if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
             {
@@ -261,29 +254,29 @@ default
                 // Forward / back
                 if (level & CONTROL_FWD)
                 {
-                    pushingForce += <flightAssistPushForce, 0, 0>;
+                    pushingForce += <gFlightAssistPushForce, 0, 0>;
                 }
                 else if (level & CONTROL_BACK)
                 {
-                    pushingForce += <-flightAssistPushForce, 0, 0>;
+                    pushingForce += <-gFlightAssistPushForce, 0, 0>;
                 }
                 // Left / right
                 if (level & CONTROL_LEFT)
                 {
-                    pushingForce += <0, flightAssistPushForce, 0>;
+                    pushingForce += <0, gFlightAssistPushForce, 0>;
                 }
                 else if (level & CONTROL_RIGHT)
                 {
-                    pushingForce += <0, -flightAssistPushForce, 0>;
+                    pushingForce += <0, -gFlightAssistPushForce, 0>;
                 }
                 // Up / down
                 if (level & CONTROL_UP)
                 {
-                    pushingForce += <0, 0, flightAssistPushForce>;
+                    pushingForce += <0, 0, gFlightAssistPushForce>;
                 }
                 else if (level & CONTROL_DOWN)
                 {
-                    pushingForce += <0, 0, -flightAssistPushForce>;
+                    pushingForce += <0, 0, -gFlightAssistPushForce>;
                 }
                 llApplyImpulse(pushingForce, 1);
             }
@@ -320,9 +313,9 @@ default
             llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
             llAllowInventoryDrop(FALSE);
             llSetTorque(ZERO_VECTOR, 0);
-            flight_hover(FALSE);
-            isFlyingNow = -1;
-            movelock_init(useMoveLock);
+            flightHover(FALSE);
+            gIsFlyingNow = -1;
+            movelockMe(gUseMoveLock);
         }
         else if (change & CHANGED_OWNER)
         {
@@ -332,20 +325,20 @@ default
 
     timer()
     {
-        if (llGetAgentInfo(owner) & AGENT_FLYING)
+        if (llGetAgentInfo(gOwner) & AGENT_FLYING)
         {
-            if (isFlyingNow != TRUE)
+            if (gIsFlyingNow != TRUE)
             {
-                isFlyingNow = TRUE;
-                flight_hover(TRUE);
-                llSetTimerEvent(flightAirCheckNormal);
+                gIsFlyingNow = TRUE;
+                flightHover(TRUE);
+                llSetTimerEvent(1.0);
             }
         }
-        else if (isFlyingNow != FALSE)
+        else if (gIsFlyingNow != FALSE)
         {
-            isFlyingNow = FALSE;
-            flight_hover(FALSE);
-            llSetTimerEvent(flightAirCheckSlow);
+            gIsFlyingNow = FALSE;
+            flightHover(FALSE);
+            llSetTimerEvent(5.0);
         }
     }
 
@@ -356,28 +349,28 @@ default
         // no_sensor() is used as a second timer() along with setTimerEvent2(), because lightweight llSensorRepeat() query is using impossible to meet requirements
 
         vector loc = llGetPos();
-        vector targ = mttVector - loc;
+        vector targ = gMttVector - loc;
         float dist = llVecMag(targ);
 
         // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
 
         // If we are out of time or distance - stop
-        if ((dist < TP_TARGET_DISTANCE) || (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
+        if (dist < 1.0 || llGetUnixTime() - 10.0 > gStartTPTimer || gMttVector == loc)
         {
             setTimerEvent2(0);
-            movelock_init(useMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
+            movelockMe(gUseMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
         }
         else
         {
             if (dist < 65)
             {
-                // llOwnerSay("One jump to :" + (string)mttVector);
-                llMoveToTarget(mttVector, TP_TIMER_TICK);
+                // llOwnerSay("One jump to :" + (string)gMttVector);
+                llMoveToTarget(gMttVector, 0.045);
             }
             else
             {
-                // llOwnerSay("Multiple jump to :" + (string)(loc+llVecNorm(targ)*60));
-                llMoveToTarget(loc + llVecNorm(targ) * 60, TP_TIMER_TICK);
+                // llOwnerSay("Multiple jump to :" + (string)(loc + llVecNorm(targ) * 60));
+                llMoveToTarget(loc + llVecNorm(targ) * 60, 0.045);
             }
         }
 
@@ -388,17 +381,17 @@ default
         // llOwnerSay("Received HTTP " + Method + " message. Command body: " + Body);
         if (Method == URL_REQUEST_GRANTED)
         {
-            latestURL = Body;
-            if (viewerIsFirestorm || tryHandshakeOnce)
+            gLatestURL = Body;
+            if (gViewerIsFirestorm || gTryHandshakeOnce)
             {
                 // Firestorm viewer and handshake
-                llOwnerSay("<bridgeURL>" + latestURL + "</bridgeURL><bridgeAuth>" + bridgeAuth + "</bridgeAuth><bridgeVer>" + bridgeVersion + "</bridgeVer>");
-                tryHandshakeOnce = FALSE;
+                llOwnerSay("<bridgeURL>" + gLatestURL + "</bridgeURL><bridgeAuth>BRIDGEKEY</bridgeAuth><bridgeVer>" + gBridgeVersion + "</bridgeVer>");
+                gTryHandshakeOnce = FALSE;
             }
             else
             {
                 // We're in a wrong viewer, just sit quietly and call llDetachFromAvatar();
-                // This place is reached via CHANGED_REGION - when viewerIsFirestorm is still not Firestorm and handshake was already done (tryHandshakeOnce is FALSE)
+                // This place is reached via CHANGED_REGION - when gViewerIsFirestorm is still not Firestorm and handshake was already done (gTryHandshakeOnce is FALSE)
                 detachBridge();
             }
         }
@@ -450,9 +443,9 @@ default
 
             else if (cmd == "UseMoveLock")
             {
-                useMoveLock = llList2Integer(commandList, 1);
-                movelock_init(useMoveLock);
-                llOwnerSay("<bridgeMovelock state=" + (string)useMoveLock + ">");
+                gUseMoveLock = llList2Integer(commandList, 1);
+                movelockMe(gUseMoveLock);
+                llOwnerSay("<bridgeMovelock state=" + (string)gUseMoveLock + ">");
             }
 
             else if (cmd == "llMoveToTarget")
@@ -466,24 +459,22 @@ default
                 }
 
                 // Pause movelock for now, if present
-                if (useMoveLock)
+                if (gUseMoveLock)
                 {
-                    movelock_init(FALSE);
+                    movelockMe(FALSE);
                 }
 
                 // Get parameters
-                string params = "<" + llList2String(commandList, 1) + ">";
-                mttVector = (vector)params;
-                vector relpos = mttVector - llGetPos();
-                float groundLevel = llGround(relpos);
-                if (mttVector.z < groundLevel) // Trying to go underground? I think not!
+                gMttVector = (vector)("<" + llList2String(commandList, 1) + ">");
+                float groundLevel = llGround(gMttVector - llGetPos());
+                if (gMttVector.z < groundLevel) // Trying to go underground? I think not!
                 {
-                    mttVector.z = groundLevel + 1;
+                    gMttVector.z = groundLevel + 1;
                 }
-                startTPTimer = llGetUnixTime();
+                gStartTPTimer = llGetUnixTime();
 
                 // TP commands immediately configure a TP timer consumer
-                setTimerEvent2(TP_TIMER_TICK);
+                setTimerEvent2(0.05);
 
             }
 
@@ -503,43 +494,43 @@ default
             else if (cmd == "UseLSLFlightAssist")
             {
                 float speed = llList2Float(commandList, 1);
-                if (speed != flightAssistPushForce)
+                if (speed != gFlightAssistPushForce)
                 {
-                    flightAssistPushForce = speed;
-                    if (flightAssistPushForce > 0)
+                    gFlightAssistPushForce = speed;
+                    if (gFlightAssistPushForce > 0)
                     {
-                        if (flightAssistPushForce > 5.0)
+                        if (gFlightAssistPushForce > 5.0)
                         {
                             // No lightspeed please!
-                            flightAssistPushForce = 5.0;
+                            gFlightAssistPushForce = 5.0;
                         }
-                        llSetTimerEvent(flightAirCheckNormal);
+                        llSetTimerEvent(1.0);
                     }
                     else
                     {
                         llSetTimerEvent(0);
-                        flight_hover(FALSE);
+                        flightHover(FALSE);
                     }
                 }
             }
 
             else if (cmd == "RelockMoveLockAfterMovement")
             {
-                relockMoveLockAfterMovement = llList2Integer(commandList, 1);
+                gRelockMoveLockAfterMovement = llList2Integer(commandList, 1);
             }
 
             else if (cmd == "ExternalIntegration")
             {
                 integer integrationOpenCollar = llList2Integer(commandList, 1);
-                integer integrationLockMeister = llList2Integer(commandList, 2);
-                if (integrationOpenCollar != aoEnabledOC)
+                if (integrationOpenCollar != gAO_EnabledOC)
                 {
-                    aoEnabledOC = integrationOpenCollar;
+                    gAO_EnabledOC = integrationOpenCollar;
                     integrationCheckOC();
                 }
-                if (integrationLockMeister != aoEnabledLM)
+                integer integrationLockMeister = llList2Integer(commandList, 2);
+                if (integrationLockMeister != gAO_EnabledLM)
                 {
-                    aoEnabledLM = integrationLockMeister;
+                    gAO_EnabledLM = integrationLockMeister;
                     integrationCheckLM();
                 }
             }
@@ -547,7 +538,7 @@ default
             else if (cmd == "URL Confirmed")
             {
                 // We're in the right viewer, go on.
-                viewerIsFirestorm = TRUE;
+                gViewerIsFirestorm = TRUE;
             }
 
             else if (cmd == "DetachBridge")
@@ -568,10 +559,10 @@ default
     {
 
         // OpenCollar AO interface listen handler
-        if (fromChan == aoChannelOC)
+        if (fromChan == gAO_ChannelOC)
         {
             integer zhaoPos;
-            if ((aoCollarKey == NULL_KEY) &&    // No collar paired yet
+            if ((gAO_CollarKey == NULL_KEY) &&    // No collar paired yet
                 (msg == "OpenCollar=Yes"))      // A collar is saying hello
             {
                 aoListenOC(senderID, TRUE);     // Pair with it
@@ -583,13 +574,11 @@ default
             else if ((zhaoPos = llSubStringIndex(msg, "ZHAO_")) >= 0)
             {
                 zhaoPos += 5;               // Skip past prefix
-                if ((llGetSubString(msg, zhaoPos, zhaoPos+4) == "AOOFF") ||
-                    (llGetSubString(msg, zhaoPos, zhaoPos+7) == "STANDOFF"))
+                if (llGetSubString(msg, zhaoPos, zhaoPos + 4) == "AOOFF" || llGetSubString(msg, zhaoPos, zhaoPos + 7) == "STANDOFF")
                 {
                     aoState("off");
                 }
-                else if ((llGetSubString(msg, zhaoPos, zhaoPos+3) == "AOON") ||
-                    (llGetSubString(msg, zhaoPos, zhaoPos+6) == "STANDON"))
+                else if (llGetSubString(msg, zhaoPos, zhaoPos + 3) == "AOON" || llGetSubString(msg, zhaoPos, zhaoPos + 6) == "STANDON")
                 {
                     aoState("on");
                 }
@@ -597,21 +586,16 @@ default
         }
 
         // LockMeister AO interface listen handler
-        else if (fromChan == aoChannelLM)
+        else if (fromChan == -8888 && (key)llGetSubString(msg, 0, 35) == gOwner)
         {
-            key lmtarget = (key)llGetSubString(msg, 0, 35);
-            list templist = llParseStringKeepNulls(llGetSubString(msg, 36, -1), [ "|" ], []);
-            string command = llList2String(templist, 0);
-            if (lmtarget == owner)
+            string command = llList2String(llParseStringKeepNulls(llGetSubString(msg, 36, -1), [ "|" ], []), 0);
+            if (command == "booton")
             {
-                if (command == "booton")
-                {
-                    aoState("on");
-                }
-                else if (command == "bootoff")
-                {
-                    aoState("off");
-                }
+                aoState("on");
+            }
+            else if (command == "bootoff")
+            {
+                aoState("off");
             }
         }
 
