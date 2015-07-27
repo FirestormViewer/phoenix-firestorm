@@ -489,6 +489,16 @@ private:
 	BOOL			mIsRejectTeleportOffers;
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
+// <FS:PP> Option to block/reject all group invites
+public:
+	void			setRejectAllGroupInvites();
+	void			clearRejectAllGroupInvites();
+	void			selectRejectAllGroupInvites(BOOL);
+	BOOL			getRejectAllGroupInvites() const;
+private:
+	BOOL			mIsRejectAllGroupInvites;
+// </FS:PP> Option to block/reject all group invites
+
 	//--------------------------------------------------------------------
 	// Grab
 	//--------------------------------------------------------------------

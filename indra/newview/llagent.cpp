@@ -403,6 +403,7 @@ LLAgent::LLAgent() :
 	mIsAutorespond(FALSE),
 	mIsAutorespondNonFriends(FALSE),
 	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
+	mIsRejectAllGroupInvites(FALSE), // <FS:PP> Option to block/reject all group invites
 	mAfkSitting(false), // <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
 
 	// <FS> Ignore prejump and always fly
@@ -514,6 +515,7 @@ void LLAgent::init()
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
 	selectRejectTeleportOffers(gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersMode")); // <FS:PP> FIRE-1245: Option to block/reject teleport offers
+	selectRejectAllGroupInvites(gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode")); // <FS:PP> Option to block/reject all group invites
 
 	if (!mTeleportFinishedSlot.connected())
 	{
@@ -1760,6 +1762,44 @@ BOOL LLAgent::getRejectTeleportOffers() const
 }
 
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
+
+// <FS:PP> Option to block/reject all group invites
+
+//-----------------------------------------------------------------------------
+// setRejectAllGroupInvites()
+//-----------------------------------------------------------------------------
+void LLAgent::setRejectAllGroupInvites()
+{
+	selectRejectAllGroupInvites(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// clearRejectAllGroupInvites()
+//-----------------------------------------------------------------------------
+void LLAgent::clearRejectAllGroupInvites()
+{
+	selectRejectAllGroupInvites(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectRejectAllGroupInvites()
+//-----------------------------------------------------------------------------
+void LLAgent::selectRejectAllGroupInvites(BOOL selected)
+{
+	LL_INFOS() << "Setting rejecting group invites mode to " << selected << LL_ENDL;
+	mIsRejectAllGroupInvites = selected;
+	gSavedPerAccountSettings.setBOOL("FSRejectAllGroupInvitesMode", selected);
+}
+
+//-----------------------------------------------------------------------------
+// getRejectAllGroupInvites()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getRejectAllGroupInvites() const
+{
+	return mIsRejectAllGroupInvites;
+}
+
+// </FS:PP> Option to block/reject all group invites
 
 //-----------------------------------------------------------------------------
 // startAutoPilotGlobal()

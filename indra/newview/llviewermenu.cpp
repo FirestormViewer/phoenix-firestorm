@@ -6965,6 +6965,34 @@ class LLWorldGetRejectTeleportOffers : public view_listener_t
 };
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
+// <FS:PP> Option to block/reject all group invites
+class LLWorldSetRejectAllGroupInvites : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getRejectAllGroupInvites())
+		{
+			gAgent.clearRejectAllGroupInvites();
+		}
+		else
+		{
+			gAgent.setRejectAllGroupInvites();
+		}
+		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetRejectAllGroupInvites : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getRejectAllGroupInvites();
+		return new_value;
+	}
+};
+// </FS:PP> Option to block/reject all group invites
+
 class LLWorldCreateLandmark : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10710,6 +10738,10 @@ void initialize_menus()
 	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
 	view_listener_t::addMenu(new LLWorldSetRejectTeleportOffers(), "World.SetRejectTeleportOffers");
 	view_listener_t::addMenu(new LLWorldGetRejectTeleportOffers(), "World.GetRejectTeleportOffers");
+	// </FS:PP>
+	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+	view_listener_t::addMenu(new LLWorldSetRejectAllGroupInvites(), "World.SetRejectAllGroupInvites");
+	view_listener_t::addMenu(new LLWorldGetRejectAllGroupInvites(), "World.GetRejectAllGroupInvites");
 	// </FS:PP>
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
