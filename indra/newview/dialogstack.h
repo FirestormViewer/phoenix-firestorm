@@ -30,23 +30,23 @@
 class DialogStack
 :	public LLSingleton<DialogStack>
 {
-	friend class LLSingleton<DialogStack>;
+friend class LLSingleton<DialogStack>;
 
-	private:
-		DialogStack();
-		~DialogStack();
+private:
+	DialogStack();
+	~DialogStack();
 
-	protected:
-		void update();
+protected:
+	void update();
 
-		// since we can't push a floater to the back we need to keep our own list of notification ids
-		// to know which one to bring to the front instead
-		std::list<LLUUID> notificationIDs;
+	// since we can't push a floater to the back we need to keep our own list of notification ids
+	// to know which one to bring to the front instead
+	std::list<LLUUID> mNotificationIDs;
 
-	public:
-		void push(const LLUUID& uuid);
-		void pop(const LLUUID& uuid);
-		const LLUUID& flip(const LLUUID& uuid);
+public:
+	void push(const LLUUID& uuid);
+	void pop(const LLUUID& uuid);
+	const LLUUID& flip(const LLUUID& uuid);
 };
 
 #endif // DIALOGSTACK_H
