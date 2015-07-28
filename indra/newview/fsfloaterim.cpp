@@ -144,9 +144,10 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	// only dock when chiclets are visible, or the floater will get stuck in the top left
 	// FIRE-9984 -Zi
-	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
+	bool disable_chiclets = gSavedSettings.getBOOL("FSDisableIMChiclets");
+	setDocked(!disable_chiclets);
 	// make sure to save position and size with chiclets disabled (torn off floater does that)
-	setTornOff(gSavedSettings.getBOOL("FSDisableIMChiclets"));
+	setTornOff(disable_chiclets);
 }
 
 // virtual
@@ -269,7 +270,7 @@ void FSFloaterIM::snooze(S32 duration /*= -1*/)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
 
-	if (session == NULL)
+	if (!session)
 	{
 		LL_WARNS("FSFloaterIM") << "Empty session." << LL_ENDL;
 		return;
@@ -291,7 +292,7 @@ void FSFloaterIM::newIMCallback(const LLSD& data){
 		FSFloaterIM* floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
 		if (floater == NULL) return;
 
-        // update if visible, otherwise will be updated when opened
+		// update if visible, otherwise will be updated when opened
 		if (floater->getVisible())
 		{
 			floater->updateMessages();
@@ -516,28 +517,51 @@ void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_s
 void FSFloaterIM::doToSelected(const LLSD& userdata)
 {
 	const std::string command = userdata.asString();
+
 	if (command == "offer_tp")
+	{
 		LLAvatarActions::offerTeleport(mOtherParticipantUUID);
+	}
 	else if (command == "request_tp")
+	{
 		LLAvatarActions::teleportRequest(mOtherParticipantUUID);
+	}
 	else if (command == "share")
+	{
 		LLAvatarActions::share(mOtherParticipantUUID);
+	}
 	else if (command == "add_participant")
+	{
 		onAddButtonClicked();
+	}
 	else if (command == "pay")
+	{
 		LLAvatarActions::pay(mOtherParticipantUUID);
+	}
 	else if (command == "show_profile")
+	{
 		LLAvatarActions::showProfile(mOtherParticipantUUID);
+	}
 	else if (command == "group_info")
+	{
 		LLGroupActions::show(mSessionID);
+	}
 	else if (command == "call")
+	{
 		gIMMgr->startCall(mSessionID);
+	}
 	else if (command == "end_call")
+	{
 		gIMMgr->endCall(mSessionID);
+	}
 	else if (command == "volume")
+	{
 		LLFloaterReg::showInstance("fs_voice_controls");
+	}
 	else if (command == "add_friend")
+	{
 		LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID);
+	}
 	else if (command == "history")
 	{
 		if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
@@ -550,12 +574,15 @@ void FSFloaterIM::doToSelected(const LLSD& userdata)
 		}
 	}
 	else
+	{
 		LL_WARNS("FSFloaterIM") << "Unhandled command '" << command << "'. Ignoring." << LL_ENDL;
+	}
 }
 
 bool FSFloaterIM::checkEnabled(const LLSD& userdata)
 {
 	const std::string command = userdata.asString();
+
 	if (command == "enable_offer_tp")
 	{
 		return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
@@ -620,7 +647,7 @@ void FSFloaterIM::updateCallButton()
 	bool voice_enabled = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
 	
-	if (!session) 
+	if (!session)
 	{
 		getChild<LLButton>("call_btn")->setEnabled(FALSE);
 		return;
@@ -826,20 +853,21 @@ BOOL FSFloaterIM::postBuild()
 
 	// only dock when chiclets are visible, or the floater will get stuck in the top left
 	// FIRE-9984 -Zi
-	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
+	bool disable_chiclets = gSavedSettings.getBOOL("FSDisableIMChiclets");
+	setDocked(!disable_chiclets);
 
 	mTypingStart = LLTrans::getString("IM_typing_start_string");
 
 	// Disable input editor if session cannot accept text
 	LLIMModel::LLIMSession* im_session =
 		LLIMModel::instance().findIMSession(mSessionID);
-	if( im_session && !im_session->mTextIMPossible )
+	if (im_session && !im_session->mTextIMPossible)
 	{
 		mInputEditor->setEnabled(FALSE);
 		mInputEditor->setLabel(LLTrans::getString("IM_unavailable_text_label"));
 	}
 
-	if ( im_session && im_session->isP2PSessionType())
+	if (im_session && im_session->isP2PSessionType())
 	{
 		mTypingStart.setArg("[NAME]", im_session->mName);
 		updateSessionName(im_session->mName, im_session->mName);
@@ -856,7 +884,7 @@ BOOL FSFloaterIM::postBuild()
 
 	// don't call dockable floater functions when chiclets are disabled, it will dock the floater
 	// FIRE-9984 -Zi
-	if(isChatMultiTab() || gSavedSettings.getBOOL("FSDisableIMChiclets"))
+	if (isChatMultiTab() || disable_chiclets)
 	{
 		return LLFloater::postBuild();
 	}
@@ -873,7 +901,7 @@ void FSFloaterIM::updateSessionName(const std::string& ui_title,
 	mSavedTitle = ui_title;
 
 	mInputEditor->setLabel(LLTrans::getString("IM_to_label") + " " + ui_label);
-	setTitle(ui_title);	
+	setTitle(ui_title);
 }
 
 void FSFloaterIM::fetchAvatarName(LLUUID& agent_id)
@@ -893,12 +921,6 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 									const LLAvatarName& av_name)
 {
 	mAvatarNameCacheConnection.disconnect();
-	// <FS:Ansariel> FIRE-8658: Let the user decide how the name should be displayed
-	// Use display name only for labels, as the extended name will be in the
-	// floater title
-	//std::string ui_title = av_name.getCompleteName();
-	//updateSessionName(ui_title, av_name.getDisplayName());
-	//mTypingStart.setArg("[NAME]", ui_title);
 
 	std::string name = av_name.getCompleteName();
 	if (LLAvatarName::useDisplayNames())
@@ -941,7 +963,6 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 		setTitle((gSavedSettings.getBOOL("FSTypingChevronPrefix") ? "> " : "") + mTypingStart.getString());
 	}
 	LL_DEBUGS("FSFloaterIM") << "Setting IM tab name to '" << name << "'" << LL_ENDL;
-	// </FS:Ansariel>
 }
 
 // virtual
@@ -1029,7 +1050,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 
 	if (!gIMMgr->hasSession(session_id)) return NULL;
 
-	if(!isChatMultiTab())
+	if (!isChatMultiTab())
 	{
 		//hide all
 		LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
@@ -1047,9 +1068,12 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 	bool exist = findInstance(session_id);
 
 	FSFloaterIM* floater = getInstance(session_id);
-	if (!floater) return NULL;
+	if (!floater)
+	{
+		return NULL;
+	}
 
-	if(isChatMultiTab())
+	if (isChatMultiTab())
 	{
 		FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
 
