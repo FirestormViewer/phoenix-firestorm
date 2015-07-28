@@ -141,8 +141,7 @@ public:
 			return;
 		}
 
-		U8* data = NULL;
-		data = new U8[data_size];
+		U8* data = new U8[data_size];
 		buffer->readAfter(channels.in(), NULL, data, data_size);
 
 		// basic check for valid data received
@@ -345,10 +344,7 @@ void FSData::startDownload()
 	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
 
 #if OPENSIM
-	std::string filenames[] = {"scriptlibrary_lsl.xml", "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
-#else
-	std::string filenames[] = {"scriptlibrary_lsl.xml"};
-#endif
+	std::string filenames[] = {"scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
 	BOOST_FOREACH(std::string script_name, filenames)
 	{
 		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, script_name);
@@ -361,6 +357,7 @@ void FSData::startDownload()
 		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
 		LLHTTPClient::getIfModified(url, new FSDownloaderScript(filename, url), last_modified, mHeaders, HTTP_TIMEOUT);
 	}
+#endif
 }
 
 // call this _after_ the login screen to pick up grid data.
@@ -376,7 +373,7 @@ void FSData::downloadAgents()
 	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		// TODO: Let the opensim devs and opensim group figure out the best way
-		// to add "agents.xml" URL to the gridinfo protucule.
+		// to add "agents.xml" URL to the gridinfo protocol.
 		//getAgentsURL();
 		
 		// there is no need for assets.xml URL for opensim grids as the grid owner can just delete
