@@ -7077,18 +7077,19 @@ public:
 		// TODO: investigate wearables may not be loaded at this point EXT-8231
 
 		LLViewerInventoryItem* item = getItem();
-		if(item)
+		if (item)
 		{
-			if ( get_is_item_worn(mUUID) )
+			bool is_bodypart = item->getType() == LLAssetType::AT_BODYPART;
+			if (get_is_item_worn(mUUID))
 			{
-				if (item->getType() != LLAssetType::AT_BODYPART)
+				if (!is_bodypart)
 				{
 					LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
 				}
 			}
 			else
 			{
-				LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
+				LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, (is_bodypart || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing")));
 			}
 		}
 		// </FS>
