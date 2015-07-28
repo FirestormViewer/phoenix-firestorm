@@ -615,29 +615,29 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == sFSCmdLineKeyToName())
 			{
-				LLUUID targetKey;
-				if (i >> targetKey)
+				LLUUID target_key;
+				if (i >> target_key)
 				{
 					std::string object_name;
-					gCacheName->getFullName(targetKey, object_name);
+					gCacheName->getFullName(target_key, object_name);
 					if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 					{
 						object_name = RlvStrings::getAnonym(object_name);
 					}
-					reportToNearbyChat(llformat("%s: (%s)", targetKey.asString().c_str(), object_name.c_str()));
+					reportToNearbyChat(llformat("%s: (%s)", target_key.asString().c_str(), object_name.c_str()));
 				}
 				return false;
 			}
 			else if (command == "/touch")
 			{
-				LLUUID targetKey;
-				if (i >> targetKey)
+				LLUUID target_key;
+				if (i >> target_key)
 				{
-					LLViewerObject* myObject = gObjectList.findObject(targetKey);
+					LLViewerObject* myObject = gObjectList.findObject(target_key);
 
 					if (!myObject)
 					{
-						reportToNearbyChat(llformat("Object with key %s not found!", targetKey.asString().c_str()));
+						reportToNearbyChat(llformat("Object with key %s not found!", target_key.asString().c_str()));
 						return false;
 					}
 
@@ -677,21 +677,21 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						msg->addVector3("Normal", LLVector3::zero);
 						msg->addVector3("Binormal", LLVector3::zero);
 						msg->sendMessage(myObject->getRegion()->getHost());
-						reportToNearbyChat(llformat("Touched object with key %s", targetKey.asString().c_str()));
+						reportToNearbyChat(llformat("Touched object with key %s", target_key.asString().c_str()));
 					}
 				}
 				return false;
 			}
 			else if (command == "/siton")
 			{
-				LLUUID targetKey;
-				if (i >> targetKey)
+				LLUUID target_key;
+				if (i >> target_key)
 				{
-					LLViewerObject* myObject = gObjectList.findObject(targetKey);
+					LLViewerObject* myObject = gObjectList.findObject(target_key);
 
 					if (!myObject)
 					{
-						reportToNearbyChat(llformat("Object with key %s not found!", targetKey.asString().c_str()));
+						reportToNearbyChat(llformat("Object with key %s not found!", target_key.asString().c_str()));
 						return false;
 					}
 					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(myObject, LLVector3::zero)))
@@ -702,11 +702,11 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
 						msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 						msg->nextBlockFast(_PREHASH_TargetObject);
-						msg->addUUIDFast(_PREHASH_TargetID, targetKey);
+						msg->addUUIDFast(_PREHASH_TargetID, target_key);
 						msg->addVector3Fast(_PREHASH_Offset, LLVector3::zero);
 						gAgent.getRegion()->sendReliableMessage();
 
-						reportToNearbyChat(llformat("Sat on object with key %s", targetKey.asString().c_str()));
+						reportToNearbyChat(llformat("Sat on object with key %s", target_key.asString().c_str()));
 					}
 				}
 				return false;
@@ -722,11 +722,10 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == sFSCmdLineOfferTp())
 			{
-				std::string av_id_str;
-				LLUUID av_id;
-				if (i >> av_id_str && LLUUID::parseUUID(av_id_str, &av_id))
+				LLUUID target_key;
+				if (i >> target_key)
 				{
-					std::string tpMsg = "Join me!"; // Intentionally left English because this is the message the other avatar gets
+					const std::string tpMsg = "Join me!"; // Intentionally left English because this is the message the other avatar gets
 					LLMessageSystem* msg = gMessageSystem;
 					msg->newMessageFast(_PREHASH_StartLure);
 					msg->nextBlockFast(_PREHASH_AgentData);
@@ -736,10 +735,10 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					msg->addU8Fast(_PREHASH_LureType, (U8)0);
 					msg->addStringFast(_PREHASH_Message, tpMsg);
 					msg->nextBlockFast(_PREHASH_TargetData);
-					msg->addUUIDFast(_PREHASH_TargetID, av_id);
+					msg->addUUIDFast(_PREHASH_TargetID, target_key);
 					gAgent.sendReliableMessage();
 					LLStringUtil::format_map_t args;
-					args["NAME"] = LLSLURL("agent", av_id, "inspect").getSLURLString();
+					args["NAME"] = LLSLURL("agent", target_key, "inspect").getSLURLString();
 					reportToNearbyChat(LLTrans::getString("FSCmdLineTpOffered", args));
 				}
 				return false;
