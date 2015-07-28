@@ -3,17 +3,20 @@
 // Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
 //
-// Global variables
+// Global variables and CONSTANTS
 //
 
     // Bridge platform
-    string gBridgeVersion = "2.19"; // This should match fslslbridge.cpp
+    string BRIDGE_VERSION = "2.20"; // This should match fslslbridge.cpp
     string gLatestURL;
     integer gViewerIsFirestorm;
     integer gTryHandshakeOnce = TRUE;
     key gOwner;
 
     // Teleport
+    float TP_TARGET_DISTANCE = 1.0; // Distance to target when move to target should stop
+    integer MAX_TIME_TO_TP = 10; // (seconds) Should be set to 10 for normal use
+    float TP_TIMER_TICK = 0.05;
     vector gMttVector; // Target for llMoveToTarget() teleport
     integer gStartTPTimer;
 
@@ -23,6 +26,8 @@
     integer gRelockIsUserMoving;
 
     // Flight assist
+    float FLIGHT_CHECK_NORMAL = 1.0;
+    float FLIGHT_CHECK_SLOW = 5.0;
     integer gIsFlyingNow;
     float gFlightAssistPushForce;
 
@@ -30,6 +35,7 @@
     integer gAO_EnabledOC;
     integer gAO_EnabledLM;
     integer gAO_ChannelOC;
+    integer AO_CHANNEL_LM = -8888;
     integer gAO_ListenerOC;
     integer gAO_ListenerLM;
     key gAO_CollarKey;
@@ -92,7 +98,7 @@
     {
         if (gAO_EnabledLM)
         {
-            gAO_ListenerLM = llListen(-8888, "", NULL_KEY, "");
+            gAO_ListenerLM = llListen(AO_CHANNEL_LM, "", NULL_KEY, "");
         }
         else
         {
@@ -331,14 +337,14 @@ default
             {
                 gIsFlyingNow = TRUE;
                 flightHover(TRUE);
-                llSetTimerEvent(1.0);
+                llSetTimerEvent(FLIGHT_CHECK_NORMAL);
             }
         }
         else if (gIsFlyingNow != FALSE)
         {
             gIsFlyingNow = FALSE;
             flightHover(FALSE);
-            llSetTimerEvent(5.0);
+            llSetTimerEvent(FLIGHT_CHECK_SLOW);
         }
     }
 
@@ -355,7 +361,7 @@ default
         // llOwnerSay("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
 
         // If we are out of time or distance - stop
-        if (dist < 1.0 || llGetUnixTime() - 10.0 > gStartTPTimer || gMttVector == loc)
+        if (dist < TP_TARGET_DISTANCE || llGetUnixTime() - MAX_TIME_TO_TP > gStartTPTimer || gMttVector == loc)
         {
             setTimerEvent2(0);
             movelockMe(gUseMoveLock); // llStopMoveToTarget() if FALSE, lock on place if TRUE
@@ -365,12 +371,12 @@ default
             if (dist < 65)
             {
                 // llOwnerSay("One jump to :" + (string)gMttVector);
-                llMoveToTarget(gMttVector, 0.045);
+                llMoveToTarget(gMttVector, TP_TIMER_TICK);
             }
             else
             {
                 // llOwnerSay("Multiple jump to :" + (string)(loc + llVecNorm(targ) * 60));
-                llMoveToTarget(loc + llVecNorm(targ) * 60, 0.045);
+                llMoveToTarget(loc + llVecNorm(targ) * 60, TP_TIMER_TICK);
             }
         }
 
@@ -385,7 +391,7 @@ default
             if (gViewerIsFirestorm || gTryHandshakeOnce)
             {
                 // Firestorm viewer and handshake
-                llOwnerSay("<bridgeURL>" + gLatestURL + "</bridgeURL><bridgeAuth>BRIDGEKEY</bridgeAuth><bridgeVer>" + gBridgeVersion + "</bridgeVer>");
+                llOwnerSay("<bridgeURL>" + gLatestURL + "</bridgeURL><bridgeAuth>BRIDGEKEY</bridgeAuth><bridgeVer>" + BRIDGE_VERSION + "</bridgeVer>");
                 gTryHandshakeOnce = FALSE;
             }
             else
@@ -474,7 +480,7 @@ default
                 gStartTPTimer = llGetUnixTime();
 
                 // TP commands immediately configure a TP timer consumer
-                setTimerEvent2(0.05);
+                setTimerEvent2(TP_TIMER_TICK);
 
             }
 
@@ -504,7 +510,7 @@ default
                             // No lightspeed please!
                             gFlightAssistPushForce = 5.0;
                         }
-                        llSetTimerEvent(1.0);
+                        llSetTimerEvent(FLIGHT_CHECK_NORMAL);
                     }
                     else
                     {
@@ -586,7 +592,7 @@ default
         }
 
         // LockMeister AO interface listen handler
-        else if (fromChan == -8888 && (key)llGetSubString(msg, 0, 35) == gOwner)
+        else if (fromChan == AO_CHANNEL_LM && (key)llGetSubString(msg, 0, 35) == gOwner)
         {
             string command = llList2String(llParseStringKeepNulls(llGetSubString(msg, 36, -1), [ "|" ], []), 0);
             if (command == "booton")
