@@ -7072,27 +7072,7 @@ class LLWearableBridgeAction: public LLInvFVBridgeAction
 public:
 	virtual void doIt()
 	{
-		// <FS> FIRE-303: Double-click remove wearable
-		//wearOnAvatar();
-		// TODO: investigate wearables may not be loaded at this point EXT-8231
-
-		LLViewerInventoryItem* item = getItem();
-		if (item)
-		{
-			bool is_bodypart = item->getType() == LLAssetType::AT_BODYPART;
-			if (get_is_item_worn(mUUID))
-			{
-				if (!is_bodypart)
-				{
-					LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
-				}
-			}
-			else
-			{
-				LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, (is_bodypart || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing")));
-			}
-		}
-		// </FS>
+		wearOnAvatar();
 	}
 
 	virtual ~LLWearableBridgeAction(){}
@@ -7102,8 +7082,7 @@ protected:
 	// return true if the item is in agent inventory. if false, it
 	// must be lost or in the inventory library.
 	BOOL isAgentInventory() const;
-	// <FS> FIRE-303: Double-click remove wearable
-	//void wearOnAvatar();
+	void wearOnAvatar();
 };
 
 BOOL LLWearableBridgeAction::isItemInTrash() const
@@ -7120,18 +7099,30 @@ BOOL LLWearableBridgeAction::isAgentInventory() const
 	return mModel->isObjectDescendentOf(mUUID, gInventory.getRootFolderID());
 }
 
-// <FS> FIRE-303: Double-click remove wearable
-//void LLWearableBridgeAction::wearOnAvatar()
-//{
-//	// TODO: investigate wearables may not be loaded at this point EXT-8231
-//
-//	LLViewerInventoryItem* item = getItem();
-//	if(item)
-//	{
-//		LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
-//	}
-//}
-// </FS>
+void LLWearableBridgeAction::wearOnAvatar()
+{
+	// TODO: investigate wearables may not be loaded at this point EXT-8231
+
+	LLViewerInventoryItem* item = getItem();
+	if(item)
+	{
+		// <FS> FIRE-303: Double-click remove wearable
+		//LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
+		bool is_bodypart = item->getType() == LLAssetType::AT_BODYPART;
+		if (get_is_item_worn(mUUID))
+		{
+			if (!is_bodypart)
+			{
+				LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
+			}
+		}
+		else
+		{
+			LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, (is_bodypart || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing")));
+		}
+		// </FS>
+	}
+}
 
 LLInvFVBridgeAction* LLInvFVBridgeAction::createAction(LLAssetType::EType asset_type,
 													   const LLUUID& uuid,
