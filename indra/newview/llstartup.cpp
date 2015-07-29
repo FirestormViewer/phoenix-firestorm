@@ -3430,8 +3430,6 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 #define RTNENUM(E) case E: return #E
 	switch(state){
 		RTNENUM( STATE_FIRST );
-		RTNENUM( STATE_FETCH_GRID_INFO);
-		RTNENUM( STATE_AUDIO_INIT);
 		RTNENUM( STATE_BROWSER_INIT );
 		RTNENUM( STATE_LOGIN_SHOW );
 		RTNENUM( STATE_LOGIN_WAIT );
@@ -3453,6 +3451,12 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 		RTNENUM( STATE_WEARABLES_WAIT );
 		RTNENUM( STATE_CLEANUP );
 		RTNENUM( STATE_STARTED );
+		// <FS:Ansariel> Add FS-specific startup states
+		RTNENUM( STATE_FETCH_GRID_INFO );
+		RTNENUM( STATE_AUDIO_INIT);
+		RTNENUM( STATE_AGENTS_WAIT );
+		RTNENUM( STATE_LOGIN_CONFIRM_NOTIFICATON );
+		// </FS:Ansariel>
 	default:
 		return llformat("(state #%d)", state);
 	}
