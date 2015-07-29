@@ -80,16 +80,15 @@
 #include "llsdserialize.h"
 
 const S32 BLACK_BORDER_HEIGHT = 160;
-const S32 MAX_PASSWORD = 16;
+const S32 MAX_PASSWORD_SL = 16;
+const S32 MAX_PASSWORD_OPENSIM = 255;
 
 FSPanelLogin *FSPanelLogin::sInstance = NULL;
 BOOL FSPanelLogin::sCapslockDidNotification = FALSE;
 
-// <FS:CR> We still use this in firestorm...
 // Helper for converting a user name into the canonical "Firstname Lastname" form.
 // For new accounts without a last name "Resident" is added as a last name.
 static std::string canonicalize_username(const std::string& name);
-// </FS:CR>
 
 class LLLoginRefreshHandler : public LLCommandHandler
 {
@@ -117,7 +116,6 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	mCallback(callback),
 	mCallbackData(cb_data),
 	mShowFavorites(false)
-	//,mListener(new LLPanelLoginListener(this))
 {
 	setBackgroundVisible(FALSE);
 	setBackgroundOpaque(TRUE);
@@ -138,16 +136,12 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 
 	reshape(rect.getWidth(), rect.getHeight());
 	
-	// <FS:CR> Mode Selector
 	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
 	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
 	mode_combo.setCommitCallback(boost::bind(&FSPanelLogin::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
-	// </FS:CR>
 
 	LLLineEditor* password_edit(getChild<LLLineEditor>("password_edit"));
 	password_edit->setKeystrokeCallback(onPassKey, this);
-	// STEAM-14: When user presses Enter with this field in focus, initiate login
-	//password_edit->setCommitCallback(boost::bind(&FSPanelLogin::onClickConnect, this)); // <FS:LO> Not needed because of the global fix below
 
 	// change z sort of clickable text to be behind buttons
 	sendChildToBack(getChildView("forgot_password_text"));
@@ -159,67 +153,18 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectServer, this));
 
-// <FS:CR>
-	// Load all of the grids, sorted, and then add a bar and the current grid at the top
-	//server_choice_combo->removeall();
-
-	//std::string current_grid = LLGridManager::getInstance()->getGrid();
-	//std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
-	//for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
-	//	 grid_choice != known_grids.end();
-	//	 grid_choice++)
-	//{
-	//	if (!grid_choice->first.empty() && current_grid != grid_choice->first)
-	//	{
-	//		LL_DEBUGS("AppInit")<<"adding "<<grid_choice->first<<LL_ENDL;
-	//		server_choice_combo->add(grid_choice->second, grid_choice->first);
-	//	}
-	//}
-	//server_choice_combo->sortByName();
-	//server_choice_combo->addSeparator(ADD_TOP);
-	//LL_DEBUGS("AppInit")<<"adding current "<<current_grid<<LL_ENDL;
-	//server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(), 
-	//						 current_grid,
-	//						 ADD_TOP);	
-	//server_choice_combo->selectFirstItem();
 	updateServer();
 	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
 	{
 		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
 		LLStartUp::setStartSLURL(slurl);
 	}
-// </FS:CR>
-	
-// <FS:CR> Moved this down further
-	//LLSLURL start_slurl(LLStartUp::getStartSLURL());
-	//if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
-	//{
-		// no, so get the preference setting
-	//	std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
-	//	LL_INFOS("AppInit") << "default LoginLocation '" << defaultStartLocation << "'" << LL_ENDL;
-	//	LLSLURL defaultStart(defaultStartLocation);
-	//	if ( defaultStart.isSpatial() )
-	//	{
-	//		LLStartUp::setStartSLURL(defaultStart);
-	//	}
-	//	else
-	//	{
-	//		LL_INFOS("AppInit")<<"no valid LoginLocation, using home"<<LL_ENDL;
-	//		LLSLURL homeStart(LLSLURL::SIM_LOCATION_HOME);
-	//		LLStartUp::setStartSLURL(homeStart);
-	//	}
-	//}
-	//else
-	//{
-	//	FSPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
-	//}
-// </FS:CR>
 
-	childSetAction("remove_user_btn", onClickRemove, this); // <FS:CR> Remove credentials
+	childSetAction("remove_user_btn", onClickRemove, this);
 	childSetAction("connect_btn", onClickConnect, this);
 	
-	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn")); // <FS:LO> manualy find the button with findChild() as setDefaultButton() uses getChild(), which cant be used in a ctor as it makes a dummy instead
-	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn")); // <FS:CR> Yeah, do that here too.
+	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn"));
+	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn"));
 
 	std::string channel = LLVersionInfo::getChannel();
 	std::string version = llformat("%s (%d)",
@@ -232,15 +177,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	LLTextBox* create_new_account_text = getChild<LLTextBox>("create_new_account_text");
 	create_new_account_text->setClickedCallback(onClickNewAccount, NULL);
 
-	// <FS:Ansariel> We don't have the help link
-	//LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
-	//need_help_text->setClickedCallback(onClickHelp, NULL);
-	// </FS:Ansariel>
-	
-// <FS:CR> Grid Manager Help link
 	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_login_text");
 	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
-// </FS:CR>
 	
 	// get the web browser control
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
@@ -248,18 +186,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 
 	reshapeBrowser();
 
-	// </FS:CR> Moved below
-	//loadLoginPage();
-
 	// Show last logged in user favorites in "Start at" combo.
-/// <FS:CR> We don't use addUsersWithFavoritesToUsername() in Firestorm. We use addUsersToCombo() when setting
-/// visibility.
-	//addUsersWithFavoritesToUsername();
-// </FS:CR>
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
-	//username_combo->setTextChangedCallback(boost::bind(&FSPanelLogin::addFavoritesToStartLocation, this));
-// <FS:CR> Don't automatically connect on selection!
-	//username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onClickConnect, this));
 	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
@@ -286,34 +214,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	}
 	
 	loadLoginPage();
-// </FS:CR>
 }
-
-// <FS:CR> We don't use addUsersWithFavoritesToUsername() in Firestorm. We use addUsersToCombo().
-#if 0
-void FSPanelLogin::addUsersWithFavoritesToUsername()
-{
-	LLComboBox* combo = getChild<LLComboBox>("username_combo");
-	if (!combo) return;
-	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites_" + LLGridManager::getInstance()->getGrid() + ".xml");
-	std::string old_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
-	LLSD fav_llsd;
-	llifstream file;
-	file.open(filename);
-	if (!file.is_open())
-	{
-		file.open(old_filename);
-		if (!file.is_open()) return;
-	}
-	LLSDSerialize::fromXML(fav_llsd, file);
-	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
-		iter != fav_llsd.endMap(); ++iter)
-	{
-		combo->add(iter->first);
-	}
-}
-#endif
-// </FS:CR>
 
 void FSPanelLogin::addFavoritesToStartLocation()
 {
@@ -329,10 +230,6 @@ void FSPanelLogin::addFavoritesToStartLocation()
 
 	// Load favorites into the combo.
 	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
-// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//std::replace(user_defined_name.begin(), user_defined_name.end(), '.', ' ');
-	//std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites_" + LLGridManager::getInstance()->getGrid() + ".xml");
-	//std::string old_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	std::string canonical_user_name = canonicalize_username(user_defined_name);
 	U32 resident_pos = canonical_user_name.find("Resident");
 	if (resident_pos > 0)
@@ -343,19 +240,14 @@ void FSPanelLogin::addFavoritesToStartLocation()
 	std::string current_user = canonical_user_name + " @ " + current_grid;
 	LL_DEBUGS("Favorites") << "Current user: \"" << current_user << "\"" << LL_ENDL;
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
-// </FS:CR>
+
 	LLSD fav_llsd;
 	llifstream file;
 	file.open(filename.c_str());
-// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//if (!file.is_open())
-	//{
-	//	file.open(old_filename);
-	//	if (!file.is_open()) return;
-	//}
 	if (!file.is_open())
+	{
 		return;
-// </FS:CR>
+	}
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
 		iter != fav_llsd.endMap(); ++iter)
@@ -363,10 +255,7 @@ void FSPanelLogin::addFavoritesToStartLocation()
 		// The account name in stored_favorites.xml has Resident last name even if user has
 		// a single word account name, so it can be compared case-insensitive with the
 		// user defined "firstname lastname".
-// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-		//S32 res = LLStringUtil::compareInsensitive(user_defined_name, iter->first);
 		S32 res = LLStringUtil::compareInsensitive(current_user, iter->first);
-// </FS:CR>
 		if (res != 0)
 		{
 			LL_DEBUGS() << "Skipping favorites for " << iter->first << LL_ENDL;
@@ -561,11 +450,7 @@ void FSPanelLogin::show(const LLRect &rect,
 }
 
 // static
-// <FS:CR>
-//void FSPanelLogin::setFields(LLPointer<LLCredential> credential,
-//							 BOOL remember)
 void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
-// </FS:CR>
 {
 	if (!sInstance)
 	{
@@ -586,26 +471,16 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
 		    login_id += " ";
 		    login_id += lastname;
 	    }
-// <FS:CR>
-		//sInstance->getChild<LLComboBox>("username_combo")->setLabel(login_id);
 	}
-	//else if((std::string)identifier["type"] == "account")
-	//{
-	//	sInstance->getChild<LLComboBox>("username_combo")->setLabel((std::string)identifier["account_name"]);
-	//}
-	//else
-	//{
-	//  sInstance->getChild<LLComboBox>("username_combo")->setLabel(std::string());
-	//}
+
 	std::string credName = credential->getCredentialName();
 	sInstance->getChild<LLComboBox>("username_combo")->selectByValue(credName);
-// </FS:CR>
 	sInstance->addFavoritesToStartLocation();
 	// if the password exists in the credential, set the password field with
 	// a filler to get some stars
 	LLSD authenticator = credential->getAuthenticator();
 	LL_INFOS("Credentials") << "Setting authenticator field " << authenticator["type"].asString() << LL_ENDL;
-	bool remember; // <FS:CR>
+	bool remember;
 	if(authenticator.isMap() && 
 	   authenticator.has("secret") && 
 	   (authenticator["secret"].asString().size() > 0))
@@ -617,12 +492,12 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
 		// nice row of asterixes.
 		const std::string filler("123456789!123456");
 		sInstance->getChild<LLUICtrl>("password_edit")->setValue(filler);
-		remember = true; // <FS:CR>
+		remember = true;
 	}
 	else
 	{
 		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());
-		remember = false; // <FS:CR>
+		remember = false;
 	}
 	sInstance->getChild<LLUICtrl>("remember_check")->setValue(remember);
 }
@@ -640,11 +515,7 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	
 	// load the credential so we can pass back the stored password or hash if the user did
 	// not modify the password field.
-	
-// <FS:CR>
-	//credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
 	credential = gSecAPIHandler->loadCredential(credentialName());
-// </FS:CR>
 
 	LLSD identifier = LLSD::emptyMap();
 	LLSD authenticator = LLSD::emptyMap();
@@ -656,11 +527,11 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 
 	std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 	LLStringUtil::trim(username);
-// <FS:CR>
 	size_t arobase = username.find("@");
-	if(arobase != std::string::npos)
+	if (arobase != std::string::npos)
+	{
 		username = username.substr(0, arobase);
-// </FS:CR>
+	}
 	std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
 
 	LL_INFOS("Credentials", "Authentication") << "retrieving username:" << username << LL_ENDL;
@@ -686,8 +557,6 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	{
 		// Be lenient in terms of what separators we allow for two-word names
 		// and allow legacy users to login with firstname.lastname
-		// <FS:Ansariel> FIRE-15116: Usernames with underscores don't work on OpenSim
-		//separator_index = username.find_first_of(" ._");
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInSecondLife())
 		{
@@ -700,7 +569,6 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 #else
 		separator_index = username.find_first_of(" ._");
 #endif
-		// </FS:Ansariel>
 		std::string first = username.substr(0, separator_index);
 		std::string last;
 		if (separator_index != username.npos)
@@ -736,10 +604,7 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 			}
 		}
 	}
-// <FS:CR>
-	//credential = gSecAPIHandler->createCredential(LLGridManager::getInstance()->getGrid(), identifier, authenticator);
 	credential = gSecAPIHandler->createCredential(credentialName(), identifier, authenticator);
-// </FS:CR>
 	remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
 }
 
@@ -781,9 +646,7 @@ void FSPanelLogin::updateLocationSelectorsVisibility()
 
 		BOOL show_server = gSavedSettings.getBOOL("ForceShowGrid");
 		sInstance->getChild<LLLayoutPanel>("grid_panel")->setVisible(show_server);
-// <FS:CR> Refresh the username combo
 		sInstance->addUsersToCombo(show_server);
-// </FS:CR>
 	}	
 }
 
@@ -923,10 +786,6 @@ void FSPanelLogin::loadLoginPage()
 									 login_page.path(),
 									 params));
 
-// <FS:CR>
-	//gViewerWindow->setMenuBackgroundColor(false, !LLGridManager::getInstance()->isInProductionGrid());
-// </FS:CR>
-
 	LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
 	if (web_browser->getCurrentNavUrl() != login_uri.asString())
 	{
@@ -973,20 +832,15 @@ void FSPanelLogin::onClickConnect(void *)
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
 		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
 
-// <FS:CR> Block release
 		LLSD blocked = FSData::instance().allowedLogin();
 		if (!blocked.isMap()) //hack for testing for an empty LLSD
 		{
-// </FS:CR>
 			if(username.empty())
 			{
 				// user must type in something into the username field
-// <FS:CR>
-				//LLNotificationsUtil::add("MustHaveAccountToLogIn");
 				LLSD args;
 				args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 				LLNotificationsUtil::add("MustHaveAccountToLogIn", args);
-// </FS:CR>
 			}
 			else
 			{
@@ -1019,12 +873,10 @@ void FSPanelLogin::onClickConnect(void *)
 				LLNotificationsUtil::add("InvalidCredentialFormat");
 			}
 		}
-// <FS:CR> Blocked Release
 		else
 		{
 			LLNotificationsUtil::add("BlockLoginInfo", blocked);
 		}
-// </FS:CR>
 	}
 }
 
@@ -1033,7 +885,6 @@ void FSPanelLogin::onClickNewAccount(void*)
 {
 	if (sInstance)
 	{
-// <AW: opensim>
 #ifdef OPENSIM
 		LLSD grid_info;
 		LLGridManager::getInstance()->getGridData(grid_info);
@@ -1042,7 +893,6 @@ void FSPanelLogin::onClickNewAccount(void*)
 			LLWeb::loadURLInternal(grid_info[GRID_REGISTER_NEW_ACCOUNT]);
 		else
 #endif // OPENSIM
-// </AW: opensim>
 			LLWeb::loadURLExternal(LLTrans::getString("create_account_url"));
 	}
 }
@@ -1059,7 +909,6 @@ void FSPanelLogin::onClickForgotPassword(void*)
 {
 	if (sInstance)
 	{
-// <AW: opensim>
 #ifdef OPENSIM
 		LLSD grid_info;
 		LLGridManager::getInstance()->getGridData(grid_info);
@@ -1068,7 +917,6 @@ void FSPanelLogin::onClickForgotPassword(void*)
 			LLWeb::loadURLInternal(grid_info[GRID_FORGOT_PASSWORD]);
 		else
 #endif // OPENSIM
-// </AW: opensim>
 		LLWeb::loadURLExternal(sInstance->getString( "forgot_password_url" ));
 	}
 }
@@ -1108,36 +956,17 @@ void FSPanelLogin::updateServer()
 		// for that grid and set them to the UI.
 		if(!sInstance->areCredentialFieldsDirty())
 		{
-// <FS:CR>
-			//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
 			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
-			//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-			//sInstance->setFields(credential, remember);
 			sInstance->setFields(credential);
-// </FS:CR>
 		}
-
-		// update the login panel links
-		// <FS:CR> Unused by Firestorm
-		//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
-		// </FS:CR>
-		
-		// Want to vanish not only create_new_account_btn, but also the
-		// title text over it, so turn on/off the whole layout_panel element.
-		// <FS:CR> or not!
-		//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
-		//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
-		// </FS:CR>
 
 		// grid changed so show new splash screen (possibly)
 		updateServerCombo();
 		loadLoginPage();
 
-		// <FS:Ansariel> FIRE-12905: Allow longer passwords in OpenSim
 #ifdef OPENSIM
-		sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? 16 : 255);
+		sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? MAX_PASSWORD_SL : MAX_PASSWORD_OPENSIM);
 #endif
-		// </FS:Ansariel>
 	}
 	catch (LLInvalidGridName ex)
 	{
@@ -1159,8 +988,6 @@ void FSPanelLogin::onSelectServer()
 	LLSD server_combo_val = server_combo->getSelectedValue();
 	LL_INFOS("AppInit") << "grid "<<server_combo_val.asString()<< LL_ENDL;
 	LLGridManager::getInstance()->setGridChoice(server_combo_val.asString());
-	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//addFavoritesToStartLocation();
 	
 	/*
 	 * Determine whether or not the value in the start_location_combo makes sense
@@ -1368,9 +1195,6 @@ void FSPanelLogin::onSelectUser()
 	}
 	LLPointer<LLCredential> credential =  gSecAPIHandler->loadCredential(combo_val);
 	
-	//combo = sInstance->getChild<LLComboBox>("start_location_combo");
-	//LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
-	
 	std::string credName = combo_val.asString();
 	
 	// if they've selected another grid, we should load the credentials
@@ -1491,7 +1315,6 @@ void FSPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& n
 			break;
 	}
 }
-// </FS:CR>
 
 // static
 bool FSPanelLogin::getShowFavorites()
