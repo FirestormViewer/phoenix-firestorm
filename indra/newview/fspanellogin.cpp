@@ -455,49 +455,55 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
 {
 	if (!sInstance)
 	{
-		LL_WARNS() << "Attempted fillFields with no login view shown" << LL_ENDL;
+		LL_WARNS() << "Attempted setFields with no login view shown" << LL_ENDL;
 		return;
 	}
 	LL_INFOS("Credentials") << "Setting login fields to " << *credential << LL_ENDL;
 
+	std::string login_id;
 	LLSD identifier = credential->getIdentifier();
-	if((std::string)identifier["type"] == "agent") 
+	if (identifier["type"].asString() == "agent")
 	{
 		std::string firstname = identifier["first_name"].asString();
 		std::string lastname = identifier["last_name"].asString();
-	    std::string login_id = firstname;
-	    if (!lastname.empty() && lastname != "Resident")
-	    {
-		    // support traditional First Last name SLURLs
-		    login_id += " ";
-		    login_id += lastname;
-	    }
+		login_id = firstname;
+		if (!lastname.empty() && lastname != "Resident")
+		{
+			// support traditional First Last name SLURLs
+			login_id += " ";
+			login_id += lastname;
+		}
 	}
 
-	std::string credName = credential->getCredentialName();
-	sInstance->getChild<LLComboBox>("username_combo")->selectByValue(credName);
+	const std::string cred_name = credential->getCredentialName();
+	LLComboBox* username_combo = sInstance->getChild<LLComboBox>("username_combo");
+	if (!username_combo->selectByValue(cred_name))
+	{
+		username_combo->setTextEntry(login_id);
+		sInstance->mPasswordModified = TRUE;
+	}
 	sInstance->addFavoritesToStartLocation();
 	// if the password exists in the credential, set the password field with
 	// a filler to get some stars
 	LLSD authenticator = credential->getAuthenticator();
 	LL_INFOS("Credentials") << "Setting authenticator field " << authenticator["type"].asString() << LL_ENDL;
 	bool remember;
-	if(authenticator.isMap() && 
-	   authenticator.has("secret") && 
+	if (authenticator.isMap() &&
+	   authenticator.has("secret") &&
 	   (authenticator["secret"].asString().size() > 0))
 	{
 		
 		// This is a MD5 hex digest of a password.
 		// We don't actually use the password input field, 
-		// fill it with MAX_PASSWORD characters so we get a 
+		// fill it with MAX_PASSWORD_SL characters so we get a 
 		// nice row of asterixes.
 		const std::string filler("123456789!123456");
-		sInstance->getChild<LLUICtrl>("password_edit")->setValue(filler);
+		sInstance->getChild<LLLineEditor>("password_edit")->setText(filler);
 		remember = true;
 	}
 	else
 	{
-		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());
+		sInstance->getChild<LLLineEditor>("password_edit")->clear();
 		remember = false;
 	}
 	sInstance->getChild<LLUICtrl>("remember_check")->setValue(remember);
@@ -1197,11 +1203,10 @@ void FSPanelLogin::onSelectUser()
 	if (combo_val.isUndefined())
 	{
 		// Previously unknown username was entered
-		LLLineEditor* password_edit = sInstance->getChild<LLLineEditor>("password_edit");
-		if (!password_edit->isDirty())
+		if (!sInstance->mPasswordModified)
 		{
 			// Clear password unless manually entered
-			password_edit->clear();
+			sInstance->getChild<LLLineEditor>("password_edit")->clear();
 		}
 		sInstance->addFavoritesToStartLocation();
 		return;
