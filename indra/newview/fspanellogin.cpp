@@ -189,6 +189,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	// Show last logged in user favorites in "Start at" combo.
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
 	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
+	username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
 	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
@@ -1043,11 +1044,11 @@ std::string canonicalize_username(const std::string& name)
 {
 	std::string cname = name;
 	
-// <FS:CR> Strip off any grid appendage
-	U32 arobase = cname.find("@");
-	if(arobase > 0)
+	size_t arobase = cname.find("@");
+	if (arobase > 0)
+	{
 		cname = cname.substr(0, arobase - 1);
-// </FS:CR>
+	}
 	
 	// determine if the username is a first/last form or not.
 	size_t separator_index = cname.find_first_of(" ._");
@@ -1184,46 +1185,56 @@ void FSPanelLogin::onClickGridMgrHelp(void*)
 
 void FSPanelLogin::onSelectUser()
 {
-	// *NOTE: The paramters for this method are ignored.
 	LL_INFOS("AppInit") << "onSelectUser()" << LL_ENDL;
 	
+	if (!sInstance)
+	{
+		return;
+	}
+
 	LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 	LLSD combo_val = combo->getSelectedValue();
 	if (combo_val.isUndefined())
 	{
-		combo_val = combo->getValue();
-	}
-	LLPointer<LLCredential> credential =  gSecAPIHandler->loadCredential(combo_val);
-	
-	std::string credName = combo_val.asString();
-	
-	// if they've selected another grid, we should load the credentials
-	// for that grid and set them to the UI.
-	if(sInstance && !sInstance->areCredentialFieldsDirty())
-	{
-		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
-		sInstance->setFields(credential);
-	}
-	U32 arobase = credName.find("@");
-	if (arobase != -1 && arobase +1 < credName.length())
-		credName = credName.substr(arobase + 1, credName.length() - arobase - 1);
-	if(LLGridManager::getInstance()->getGrid() == credName)
-	{
-		// Even if we didn't change grids, this user might have favorites stored.
-		addFavoritesToStartLocation();
+		// Previously unknown username was entered
+		LLLineEditor* password_edit = sInstance->getChild<LLLineEditor>("password_edit");
+		if (!password_edit->isDirty())
+		{
+			// Clear password unless manually entered
+			password_edit->clear();
+		}
+		sInstance->addFavoritesToStartLocation();
 		return;
 	}
-	
-	try
+
+	// Saved username was either selected or entered; continue...
+	const std::string cred_name = combo_val.asString();
+
+	LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(cred_name);
+	sInstance->setFields(credential);
+	sInstance->mPasswordModified = FALSE;
+
+	size_t arobase = cred_name.find("@");
+	if (arobase != std::string::npos && arobase + 1 < cred_name.length())
 	{
-		LLGridManager::getInstance()->setGridChoice(credName);
+		const std::string grid_name = cred_name.substr(arobase + 1, cred_name.length() - arobase - 1);
+
+		// Grid has changed - set new grid and update server combo
+		if (LLGridManager::getInstance()->getGrid() != grid_name)
+		{
+			try
+			{
+				LLGridManager::getInstance()->setGridChoice(grid_name);
+			}
+			catch (LLInvalidGridName ex)
+			{
+				LL_WARNS("AppInit") << "Could not set grid '" << ex.name() << "'" << LL_ENDL;
+			}
+			updateServer();
+		}
 	}
-	catch (LLInvalidGridName ex)
-	{
-		// do nothing
-	}
-	updateServer();
-	addFavoritesToStartLocation();
+
+	sInstance->addFavoritesToStartLocation();
 }
 
 // static
@@ -1270,7 +1281,9 @@ std::string FSPanelLogin::credentialName()
 	
 	size_t arobase = username.find("@");
 	if (arobase != std::string::npos && arobase + 1 < username.length())
-		username = username.substr(0,arobase);
+	{
+		username = username.substr(0, arobase);
+	}
 	LLStringUtil::trim(username);
 	
 	return username + "@" + LLGridManager::getInstance()->getGrid();
