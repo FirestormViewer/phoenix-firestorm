@@ -1176,7 +1176,7 @@ void FSPanelLogin::onClickRemove(void*)
 	{
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		std::string credName = combo->getValue().asString();
-		LLNotificationsUtil::add("ConfirmRemoveCredential", LLSD().with("NAME", credName), LLSD().with("CredName", credName), boost::bind(&FSPanelLogin::onRemoveCallback, _1, _2));
+		LLNotificationsUtil::add("ConfirmRemoveCredential", LLSD().with("NAME", combo->getSelectedItemLabel()), LLSD().with("CredName", credName), boost::bind(&FSPanelLogin::onRemoveCallback, _1, _2));
 	}
 }
 
