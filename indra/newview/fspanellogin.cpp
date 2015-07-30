@@ -402,6 +402,7 @@ void FSPanelLogin::giveFocus()
 		else if (combo)
 		{
 			combo->setFocus(TRUE);
+			combo->focusEditor();
 		}
 	}
 }
