@@ -190,6 +190,7 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
 	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
 	username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
+	mPreviousUsername = username_combo->getValue().asString();
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
 	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
@@ -482,6 +483,7 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 		username_combo->setTextEntry(login_id);
 		sInstance->mPasswordModified = TRUE;
 	}
+	sInstance->mPreviousUsername = username_combo->getValue().asString();
 	sInstance->addFavoritesToStartLocation();
 	// if the password exists in the credential, set the password field with
 	// a filler to get some stars
@@ -1203,6 +1205,12 @@ void FSPanelLogin::onSelectUser()
 	}
 
 	LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
+
+	if (combo->getValue().asString() == sInstance->mPreviousUsername)
+	{
+		return;
+	}
+
 	LLSD combo_val = combo->getSelectedValue();
 	if (combo_val.isUndefined())
 	{
@@ -1213,6 +1221,7 @@ void FSPanelLogin::onSelectUser()
 			sInstance->getChild<LLLineEditor>("password_edit")->clear();
 		}
 		sInstance->addFavoritesToStartLocation();
+		sInstance->mPreviousUsername = combo->getValue().asString();
 		return;
 	}
 

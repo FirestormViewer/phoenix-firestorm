@@ -126,6 +126,8 @@ private:
 
 	static FSPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
+
+	std::string		mPreviousUsername;
 };
 
 #endif //FS_PANELLOGIN_H
