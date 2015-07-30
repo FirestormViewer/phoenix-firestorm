@@ -1097,7 +1097,7 @@ bool idle_startup()
 			{
 // <FS:CR>
 				//LLPanelLogin::setFields( gUserCredential, gRememberPassword);
-				FSPanelLogin::setFields(gUserCredential);
+				FSPanelLogin::setFields(gUserCredential, true);
 // </FS:CR>
 			}
 			display_startup();

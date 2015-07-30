@@ -451,7 +451,7 @@ void FSPanelLogin::show(const LLRect &rect,
 }
 
 // static
-void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
+void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_startup /* = false*/)
 {
 	if (!sInstance)
 	{
@@ -505,6 +505,10 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential)
 	{
 		sInstance->getChild<LLLineEditor>("password_edit")->clear();
 		remember = false;
+	}
+	if (from_startup)
+	{
+		remember = gSavedSettings.getBOOL("RememberPassword");
 	}
 	sInstance->getChild<LLUICtrl>("remember_check")->setValue(remember);
 }

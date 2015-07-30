@@ -63,7 +63,7 @@ public:
 		void (*callback)(S32 option, void* user_data), 
 		void* callback_data);
 
-	static void setFields(LLPointer<LLCredential> credential);
+	static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
 
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
 
