@@ -1663,6 +1663,7 @@ bool idle_startup()
 				LLVoiceChannel::initClass();
 				
 				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+				FSPanelLogin::clearPassword();
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 				LLTrace::get_frame_recording().reset();
 			}

@@ -91,6 +91,8 @@ public:
 	// called from prefs when initializing pane
 	static bool getShowFavorites();
 
+	static void clearPassword() { sPassword.clear(); }
+
 private:
 	friend class LLPanelLoginListener;
 	void reshapeBrowser();
@@ -128,6 +130,8 @@ private:
 	static BOOL		sCapslockDidNotification;
 
 	std::string		mPreviousUsername;
+
+	static std::string	sPassword;
 };
 
 #endif //FS_PANELLOGIN_H

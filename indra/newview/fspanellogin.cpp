@@ -85,6 +85,7 @@ const S32 MAX_PASSWORD_OPENSIM = 255;
 
 FSPanelLogin *FSPanelLogin::sInstance = NULL;
 BOOL FSPanelLogin::sCapslockDidNotification = FALSE;
+std::string FSPanelLogin::sPassword = "";
 
 // Helper for converting a user name into the canonical "Firstname Lastname" form.
 // For new accounts without a last name "Resident" is added as a last name.
@@ -503,6 +504,24 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 		const std::string filler("123456789!123456");
 		sInstance->getChild<LLLineEditor>("password_edit")->setText(filler);
 		remember = true;
+
+		// We run into this case, if a user tries to login with a newly entered password
+		// and the login fails with some error (except wrong credentials). In that case,
+		// LLStartUp will bring us back here and provide us with the credentials that were
+		// used for the login. In case we don't have credentials already saved for this
+		// username OR the password hash is different, we have to set the password back
+		// to the one the user entered or we will end up trying to login with the filler
+		// as password!
+		if (from_startup)
+		{
+			LLPointer<LLCredential> stored_credential = gSecAPIHandler->loadCredential(cred_name);
+			if (stored_credential->getAuthenticator().size() == 0 ||
+				(stored_credential->getAuthenticator().has("secret") && stored_credential->getAuthenticator()["secret"].asString() != authenticator["secret"].asString()))
+			{
+				sInstance->getChild<LLLineEditor>("password_edit")->setText(sPassword);
+				sInstance->mPasswordModified = TRUE;
+			}
+		}
 	}
 	else
 	{
@@ -547,6 +566,7 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		username = username.substr(0, arobase);
 	}
 	std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
+	sPassword = password;
 
 	LL_INFOS("Credentials", "Authentication") << "retrieving username:" << username << LL_ENDL;
 	// determine if the username is a first/last form or not.
