@@ -1270,6 +1270,12 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 
 	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
+		if (!isBridgeValid())
+		{
+			cleanUpBridge();
+			return;
+		}
+
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
 		if (obj == NULL)
@@ -1278,12 +1284,9 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 			cleanUpBridge();
 			return;
 		}
-		//registerVOInventoryListener(obj, NULL);
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
 		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
 		objTimer->startTimer();
-		//obj->doInventoryCallback();
-		//requestVOInventory();
 	}
 }
 
@@ -1317,7 +1320,6 @@ void FSLSLBridge::finishBridge()
 
 	setBridgeCreating(false);
 	mIsFirstCallDone = false;
-	//removeVOInventoryListener();
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
 
