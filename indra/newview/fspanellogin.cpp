@@ -652,9 +652,6 @@ BOOL FSPanelLogin::areCredentialFieldsDirty()
 	}
 	else
 	{
-		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
-		LLStringUtil::trim(username);
-		std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		if(combo && combo->isDirty())
 		{
@@ -666,7 +663,7 @@ BOOL FSPanelLogin::areCredentialFieldsDirty()
 			return true;
 		}
 	}
-	return false;	
+	return false;
 }
 
 
@@ -1004,7 +1001,7 @@ void FSPanelLogin::updateServer()
 	}
 	catch (LLInvalidGridName ex)
 	{
-		LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
+		LL_WARNS("AppInit") << "server '" << ex.name() << "' selection failed"<<LL_ENDL;
 		LLSD args;
 		args["GRID"] = ex.name();
 		LLNotificationsUtil::add("InvalidGrid", args);
@@ -1054,7 +1051,7 @@ void FSPanelLogin::onSelectServer()
 				location_combo->setCurrentByIndex(0); // last location on the new grid
 				location_combo->setTextEntry(LLStringUtil::null);
 			}
-		}			
+		}
 		break;
 	}
 	updateServer();
