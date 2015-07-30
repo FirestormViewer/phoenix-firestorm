@@ -484,6 +484,7 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 	{
 		username_combo->setTextEntry(login_id);
 		sInstance->mPasswordModified = TRUE;
+		sInstance->getChild<LLButton>("remove_user_btn")->setEnabled(FALSE);
 	}
 	sInstance->mPreviousUsername = username_combo->getValue().asString();
 	sInstance->addFavoritesToStartLocation();
@@ -1240,6 +1241,7 @@ void FSPanelLogin::onSelectUser()
 		}
 		sInstance->addFavoritesToStartLocation();
 		sInstance->mPreviousUsername = combo->getValue().asString();
+		sInstance->getChild<LLButton>("remove_user_btn")->setEnabled(FALSE);
 		return;
 	}
 
@@ -1249,6 +1251,7 @@ void FSPanelLogin::onSelectUser()
 	LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(cred_name);
 	sInstance->setFields(credential);
 	sInstance->mPasswordModified = FALSE;
+	sInstance->getChild<LLButton>("remove_user_btn")->setEnabled(TRUE);
 
 	size_t arobase = cred_name.find("@");
 	if (arobase != std::string::npos && arobase + 1 < cred_name.length())
