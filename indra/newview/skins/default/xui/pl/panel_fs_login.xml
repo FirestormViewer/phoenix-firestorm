@@ -45,6 +45,7 @@
 			</text>
 			<combo_box name="mode_combo" tool_tip="Wybierz ten tryb ustawień, z którym jesteś najbardziej obeznany/a, aby Firestorm mógł dobrać odpowiednie ustawienia domyślne.">
 				<combo_box.item label="Hybrydowy" name="Hybrid"/>
+				<combo_box.item label="Tekstowy" name="Text"/>
 			</combo_box>
 		</layout_panel>
 	</layout_stack>

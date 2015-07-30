@@ -3919,6 +3919,7 @@ LLSD LLAppViewer::getViewerInfo() const
 	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
 	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
 	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
+	else if (sessionSettingsFile == "settings_text.xml") info["MODE"] = "Text";
 
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456

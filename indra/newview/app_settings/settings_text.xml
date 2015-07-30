@@ -1,0 +1,727 @@
+<llsd>
+<map>
+
+    <key>ShowNetStats</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the Status Indicators for the Viewer and Network Usage in the Status Overlay.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+  <key>ShowNavbarNavigationPanel</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/Hide Navigation Bar Navigation Panel</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>OnlineOfflinetoNearbyChat</key>
+    <map>
+      <key>Comment</key>
+      <string>Send online/offline notifications to Nearby Chat panel (v1-style behavior)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>ChatOnlineNotification</key>
+    <map>
+      <key>Comment</key>
+      <string>Provide notifications for when friend log on and off of SL</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
+  <key>OpenSidePanelsInFloaters</key>
+  <map>
+    <key>Comment</key>
+    <string>Open Panels in Floaters</string>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <boolean>1</boolean>
+  </map>
+
+  <key>SkinCurrent</key>
+  <map>
+    <key>Comment</key>
+    <string>The currently selected skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>firestorm</string>
+  </map>
+
+  <key>SkinCurrentTheme</key>
+  <map>
+    <key>Comment</key>
+    <string>The selected theme for the current skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>highcontrast</string>
+  </map>
+
+  <key>FSSkinCurrentReadableName</key>
+  <map>
+    <key>Comment</key>
+    <string>The readable name of the currently selected skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>Firestorm</string>
+  </map>
+
+  <key>FSSkinCurrentThemeReadableName</key>
+  <map>
+    <key>Comment</key>
+    <string>The readable name of the selected theme for the current skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>High Contrast</string>
+  </map>
+
+  <key>LetterKeysAffectsMovementNotFocusChatBar</key>
+  <map>
+    <key>Comment</key>
+    <string>When printable characters keys (possibly with Shift held) are pressed, the chat bar does not take focus and movement is affected instead (WASD etc.)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSScriptDialogNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseNearbyChatConsole</key>
+  <map>
+    <key>Comment</key>
+    <string>Display popup chat embedded into the read-only world console (v1-style) instead of overlayed floaters (v2-style)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowScriptDialogsTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Show script llDialog floaters always in the top right corner of the screen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>EnableGroupChatPopups</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable Incoming Group Chat Popups</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>EnableIMChatPopups</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable Incoming IM Chat Popups</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>PlainTextChatHistory</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable/Disable plain text chat history style</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowChatMiniIcons</key>
+  <map>
+    <key>Comment</key>
+    <string>Toggles the display of mini icons in chat history</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSChatWindow</key>
+  <map>
+    <key>Comment</key>
+    <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseWebProfiles</key>
+  <map>
+    <key>Comment</key>
+    <string>Shows web profiles instead of the v1-style profile floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSFolderViewItemHeight</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls the height of folder items, for instance in inventory</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>18</integer>
+  </map>
+
+  <key>ShowGroupNoticesTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Show group notifications to the top right corner of the screen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSConsoleClassicDrawMode</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables classic console draw mode (single background block over all lines with width of the longest line)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>RenderVolumeSAProtection</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables automatic derendering of prims with high surface area (can protect against some video card crashers)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSIMChatFlashOnFriendStatusChange</key>
+  <map>
+    <key>Comment</key>
+    <string>Flash IM tab when friend goes online or offline.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>UsePieMenu</key>
+  <map>
+    <key>Comment</key>
+    <string>Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>AnimateTextures</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable texture animation (debug)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>PrivateLookAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, viewer shows simulated look-at behavior to others.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>PrivateLocalLookAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, your avatar's lookat target will not affect your local display. Head/Eye movement that normally would follow a lookat target will not be shown to you.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>PrivatePointAtTarget</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, viewer won't show the editing arm motion.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>AvatarBacklight</key>
+  <map>
+    <key>Comment</key>
+    <string>Add rim lighting to avatar rendering to approximate shininess of skin</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>AvatarPhysics</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable avatar physics.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>BackgroundYieldTime</key>
+  <map>
+    <key>Comment</key>
+    <string>Amount of time to yield every frame to other applications when SL is not the foreground window (milliseconds)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>200</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>MaxFPS</key>
+  <map>
+    <key>Comment</key>
+    <string>Yield some time to the local host if we reach a threshold framerate.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>45.0</real>
+  </map>
+
+  <key>FSLimitFramerate</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable framerate limitation defined by MaxFPS</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>EffectScriptChatParticles</key>
+    <map>
+    <key>Comment</key>
+    <string>1 = normal behavior, 0 = disable display of swirling lights when scripts communicate</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>EnableMouselook</key>
+  <map>
+    <key>Comment</key>
+    <string>Allow first person perspective and mouse control of camera</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>JoystickAvatarEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables the Joystick to control Avatar movement.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>LipSyncEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>0 disable lip-sync, 1 enable babble loop</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>MiniMapChatRing</key>
+  <map>
+    <key>Comment</key>
+    <string>Display chat distance ring on mini map</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>PluginUseReadThread</key>
+  <map>
+    <key>Comment</key>
+    <string>Use a separate thread to read incoming messages from plugins</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>RenderAttachedLights</key>
+  <map>
+    <key>Comment</key>
+    <string>Render lighted prims that are attached to avatars</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderAttachedParticles</key>
+  <map>
+    <key>Comment</key>
+    <string>Render particle systems that are attached to avatars</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderAvatar</key>
+  <map>
+    <key>Comment</key>
+    <string>Render Avatars</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderVolumeLODFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls level of detail of primitives (multiplier for current screen area when calculated level of detail)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>RenderAvatarCloth</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls if avatars use wavy cloth</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderAvatarMaxVisible</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum number of avatars to display at any one time</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderAvatarPhysicsLODFactor</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls level of detail of avatar physics (such as breast physics).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>RenderLocalLights</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether or not to render local lights.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderNoAlpha</key>
+  <map>
+    <key>Comment</key>
+    <string>Disable rendering of alpha objects (render all alpha objects as alpha masks).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderFarClip</key>
+  <map>
+    <key>Comment</key>
+    <string>Distance of far clip plane from camera (meters)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>32.0</real>
+  </map>
+
+  <key>RenderGround</key>
+  <map>
+    <key>Comment</key>
+    <string>Determines whether we can render the ground pool or not</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>DisableAllRenderTypes</key>
+  <map>
+    <key>Comment</key>
+    <string>Disables all rendering types.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>RenderMaxPartCount</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum number of particles to display on screen</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderObjectBump</key>
+  <map>
+    <key>Comment</key>
+    <string>Show bumpmapping on primitives</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderTransparentWater</key>
+  <map>
+    <key>Comment</key>
+    <string>Render water as transparent.  Setting to false renders water as opaque with a simple texture applied.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderWater</key>
+  <map>
+    <key>Comment</key>
+    <string>Display water</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>TextureDisable</key>
+  <map>
+    <key>Comment</key>
+    <string>If TRUE, do not load textures for in-world content</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+
+  <key>WLSkyDetail</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls vertex detail on the WindLight sky.  Lower numbers will give better performance and uglier skies.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>16</integer>
+  </map>
+
+  <key>WindLightUseAtmosShaders</key>
+  <map>
+    <key>Comment</key>
+    <string>Whether to enable or disable WindLight atmospheric shaders.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+</map>
+</llsd>

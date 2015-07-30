@@ -311,6 +311,11 @@
                  label="Latency"
                  value="settings_latency.xml"
                 />
+                <combo_box.item
+                 name="Text"
+                 label="Text"
+                 value="settings_text.xml"
+                />
             </combo_box>
         </layout_panel>
     </layout_stack>
