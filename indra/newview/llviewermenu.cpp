@@ -4312,17 +4312,21 @@ bool enable_sitdown_self()
 
 // Force sit -KC
 class FSSelfForceSit : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
-				gAgent.sitDown();
-			else if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
-				gAgent.standUp();
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+		{
+			gAgent.sitDown();
+		}
+		else if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+		{
+			gAgent.standUp();
+		}
 
-            return true;
-        }
-    };
+		return true;
+	}
+};
 
 bool enable_forcesit_self()
 {
@@ -4335,46 +4339,44 @@ class FSSelfCheckForceSit : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		// <FS:ND> don't use gAgentAvatarp if it's not valid yet/anymore.
-		//		bool new_value = gAgentAvatarp->isSitting();
-		//		return new_value;
-		if( !isAgentAvatarValid() )
+		if (!isAgentAvatarValid())
+		{
 			return false;
+		}
 
 		return gAgentAvatarp->isSitting();
-		// </FS:ND>
 	}
 };
 
 // Phantom mode -KC & <FS:CR>
 class FSSelfToggleMoveLock : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			if (LLGridManager::getInstance()->isInSecondLife())
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			make_ui_sound("UISndMovelockToggle");
+			bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
+			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
+			if (new_value)
 			{
-				make_ui_sound("UISndMovelockToggle");
-				bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
-				gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
-				if (new_value)
-				{
-					reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
-				}
-				else
-				{
-					reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
-				}
+				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 			}
-#ifdef OPENSIM
 			else
 			{
-				gAgent.togglePhantom();
+				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
 			}
+		}
+#ifdef OPENSIM
+		else
+		{
+			gAgent.togglePhantom();
+		}
 #endif // OPENSIM
-			//TODO: feedback to local chat
-            return true;
-        }
-    };
+		//TODO: feedback to local chat
+		return true;
+	}
+};
 
 
 class FSSelfCheckMoveLock : public view_listener_t
@@ -4420,13 +4422,13 @@ bool enable_script_info()
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfToggleIgnorePreJump : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			gSavedSettings.setBOOL("FSIgnoreFinishAnimation", !gSavedSettings.getBOOL("FSIgnoreFinishAnimation"));
-            return true;
-        }
-    };
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		gSavedSettings.setBOOL("FSIgnoreFinishAnimation", !gSavedSettings.getBOOL("FSIgnoreFinishAnimation"));
+		return true;
+	}
+};
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfCheckIgnorePreJump : public view_listener_t
