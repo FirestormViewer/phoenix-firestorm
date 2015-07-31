@@ -5122,7 +5122,7 @@ bool LLAppViewer::initCache()
 	}
 
 	// <FS:Ansariel> FIRE-13066
-	//if (mPurgeTextures && !read_only)
+	if (mPurgeTextures && !read_only)
 	{
 		LL_INFOS("AppCache") << "Purging Texture Cache..." << LL_ENDL;
 		LLSplashScreen::update(LLTrans::getString("StartupClearingTextureCache"));
