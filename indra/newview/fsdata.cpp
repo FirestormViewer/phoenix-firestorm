@@ -862,9 +862,7 @@ std::string FSData::processRequestForInfo(const LLUUID& requester, const std::st
 	LLSD args;
 	args["REASON"] = reason;
 	args["NAME"] = name;
-	args["FROMUUID"] = requester;
-	args["SESSIONID"] = sessionid;
-	LLNotifications::instance().add("FireStormReqInfo", args, LLSD(), callbackReqInfo);
+	LLNotifications::instance().add("FireStormReqInfo", args, LLSD().with("from_id", requester).with("session_id", sessionid), callbackReqInfo);
 
 	return outmessage;
 }
@@ -914,15 +912,14 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 {
 	S32 option = LLNotification::getSelectedOption(notification, response);
 	std::string my_name;
-	LLSD subs = notification["substitutions"];
-	LLUUID uuid = subs["FROMUUID"].asUUID();
-	LLUUID sessionid = subs["SESSIONID"].asUUID();
+	LLUUID from_id = notification["payload"]["from_id"].asUUID();
+	LLUUID session_id = notification["payload"]["session_id"].asUUID();
 
 	LLAgentUI::buildFullname(my_name);
 
 	if (option == 0) //yes
 	{
-		sendInfo(uuid, sessionid, my_name, IM_NOTHING_SPECIAL);
+		sendInfo(from_id, session_id, my_name, IM_NOTHING_SPECIAL);
 	}
 	else
 	{
@@ -931,15 +928,15 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 			gAgentID,
 			FALSE,
 			gAgentSessionID,
-			uuid,
+			from_id,
 			my_name,
 			"Request Denied.", // Left English intentionally as it gets sent to the support staff
 			IM_ONLINE,
 			IM_NOTHING_SPECIAL,
-			sessionid
+			session_id
 			);
 		gAgent.sendReliableMessage();
-		gIMMgr->addMessage(sessionid, uuid, my_name, LLTrans::getString("Reqsysinfo_Chat_Request_Denied"));
+		gIMMgr->addMessage(session_id, from_id, my_name, LLTrans::getString("Reqsysinfo_Chat_Request_Denied"));
 	}
 }
 
