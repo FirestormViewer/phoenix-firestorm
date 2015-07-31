@@ -4499,7 +4499,7 @@ Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
   </notification>
 
   <notification name="FireStormReqInfo">
-[NAME] hat die eine Anfrage geschickt, Informationen über Ihre Firestorm-Konfiguration zu übermitteln.
+[NAME] hat die eine Anfrage geschickt, Informationen über Ihre [APP_NAME]-Konfiguration zu übermitteln.
 (Dies sind dieselben Informationen, die unter Hilfe->Info über [APP_NAME] zu finden sind.)
 [REASON]
 Möchten Sie diese Informationen übermitteln?
