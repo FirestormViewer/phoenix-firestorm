@@ -138,6 +138,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "fsdata.h"
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
@@ -9702,7 +9703,12 @@ void handle_report_bug(const LLSD& param)
 	LLUIString url(param.asString());
 	
 	LLStringUtil::format_map_t replace;
-	replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
+	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
+	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
+	LLSD sysinfo = FSData::getSystemInfo();
+	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
+	// </FS:Ansariel>
+
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
 	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
