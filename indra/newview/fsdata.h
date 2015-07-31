@@ -49,7 +49,7 @@ public:
 	{
 		SUPPORT		= (1 << 0), //0x01
 		DEVELOPER	= (1 << 1), //0x02
-		QA		= (1 << 2), //0x04
+		QA			= (1 << 2), //0x04
 		CHAT_COLOR	= (1 << 3), //0x08
 		NO_SUPPORT	= (1 << 4), //0x16
 		NO_USE		= (1 << 5), //0x32
@@ -80,7 +80,7 @@ public:
 	
 
 private:
-	static void sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& myName, EInstantMessage dialog);
+	static void sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& my_name, EInstantMessage dialog);
 	void processAssets(const LLSD& assets);
 	void processAgents(const LLSD& data);
 	void saveLLSD(const LLSD& data, const std::string& filename, const LLDate& last_modified);
