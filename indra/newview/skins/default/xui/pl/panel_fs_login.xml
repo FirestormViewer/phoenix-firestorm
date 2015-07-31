@@ -37,6 +37,7 @@
 				Zapomniałeś/aś nazwy lub hasła?
 			</text>
 			<button label="Zaloguj" name="connect_btn"/>
+			<check_box label="Zapamiętaj login" name="remember_username_check"/>
 			<check_box label="Zapamiętaj hasło" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">

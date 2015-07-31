@@ -5779,4 +5779,19 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Mute_Remove">
 		Usunięto '[NAME]' z listy zablokowanych.
 	</string>
+	<string name="Reqsysinfo_Chat_NoReason">
+		Wysyłam prośbę o udzielenie informacji o Twojej konfiguracji systemu.
+	</string>
+	<string name="Reqsysinfo_Chat_Reason">
+		Wysyłam prośbę o udzielenie informacji o Twojej konfiguracji systemu z powodu: [REASON]
+	</string>
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Informacje wysłane: [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Prośba odrzucona.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		Podany powód: [REASON]
+	</string>
 </strings>

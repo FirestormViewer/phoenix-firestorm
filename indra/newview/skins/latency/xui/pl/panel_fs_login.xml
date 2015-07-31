@@ -10,6 +10,7 @@
 			</text>
 			<button tool_tip="Usuń tą nazwę użytkownika" name="remove_user_btn"/>
 			<combo_box name="username_combo" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine"/>
+			<check_box name="remember_username_check" label="Zapamiętaj login"/>
 			<text name="password_text">
 				Hasło:
 			</text>
