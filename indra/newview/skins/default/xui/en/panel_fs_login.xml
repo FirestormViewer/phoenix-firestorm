@@ -236,14 +236,24 @@
           name="connect_btn"
           width="90" />
       <check_box
-          control_name="RememberPassword"
+          control_name="FSRememberUsername"
           follows="left|bottom"
           font="SansSerifSmall"
           left="110"
-          top="56"
+          top="45"
+          height="16"
+          label="Remember username"
+          name="remember_username_check"
+          width="145" />
+      <check_box
+          control_name="RememberPassword"
+          enabled_control="FSRememberUsername"
+          follows="left|bottom"
+          font="SansSerifSmall"
+          left="110"
           height="16"
           label="Remember password"
-          top_pad="3"
+          top_pad="1"
           name="remember_check"
           width="145" />
     </layout_panel>

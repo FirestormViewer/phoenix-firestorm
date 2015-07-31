@@ -1662,7 +1662,10 @@ bool idle_startup()
 				// create the default proximal channel
 				LLVoiceChannel::initClass();
 				
-				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+				if (gSavedSettings.getBOOL("FSRememberUsername"))
+				{
+					gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+				}
 				FSPanelLogin::clearPassword();
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 				LLTrace::get_frame_recording().reset();

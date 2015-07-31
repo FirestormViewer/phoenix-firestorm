@@ -85,6 +85,16 @@
              max_chars="128"
             >
             </combo_box>
+            <check_box
+             name="remember_username_check"
+             label="Remember username"
+             top_pad="4"
+             height="16"
+             width="180"
+             follows="left|bottom"
+             control_name="FSRememberUsername"
+             font="SansSerifSmall"
+            />
             <text
              name="password_text"
              top="8"
@@ -115,6 +125,7 @@
              width="130"
              follows="left|bottom"
              control_name="RememberPassword"
+             enabled_control="FSRememberUsername"
              font="SansSerifSmall"
             />
             <button
