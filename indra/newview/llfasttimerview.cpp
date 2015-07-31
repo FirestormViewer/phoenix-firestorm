@@ -249,7 +249,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 		}
 
 		// <FS:Ansariel> Check for index out of range
-		if (mHoverBarIndex > 0 && ((mScrollIndex + mHoverBarIndex - 1) >= (S32)mTimerBarRows.size() || (mScrollIndex + mHoverBarIndex - 1) < 0))
+		if (mHoverBarIndex != 0 && ((mScrollIndex + mHoverBarIndex - 1) >= (S32)mTimerBarRows.size() || (mScrollIndex + mHoverBarIndex - 1) < 0))
 		{
 			return TRUE;
 		}
