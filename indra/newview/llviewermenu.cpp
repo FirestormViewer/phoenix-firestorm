@@ -487,6 +487,15 @@ void set_merchant_outbox_menu(U32 status, const LLSD& content)
 
 void check_merchant_status()
 {
+	// <FS:Ansariel> FIRE-16547: Merchant Outbox options are not hidden in FS-VMM for migrated users
+	if (!LLGridManager::getInstance()->isInSecondLife())
+	{
+		gMenuHolder->getChild<LLView>("MerchantOutbox")->setVisible(FALSE);
+		gMenuHolder->getChild<LLView>("MarketplaceListings")->setVisible(FALSE);
+		return;
+	}
+	// </FS:Ansariel>
+
     if (!gSavedSettings.getBOOL("InventoryOutboxDisplayBoth"))
     {
         // Reset the SLM status: we actually want to check again, that's the point of calling check_merchant_status()
