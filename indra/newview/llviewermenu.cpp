@@ -487,7 +487,7 @@ void set_merchant_outbox_menu(U32 status, const LLSD& content)
 
 void check_merchant_status()
 {
-	// <FS:Ansariel> FIRE-16547: Merchant Outbox options are not hidden in FS-VMM for migrated users
+	// <FS:Ansariel> Don't show merchant outbox or SL Marketplace stuff outside SL
 	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		gMenuHolder->getChild<LLView>("MerchantOutbox")->setVisible(FALSE);
