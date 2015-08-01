@@ -228,6 +228,7 @@
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
+#include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
 #include "rlvhandler.h"
@@ -1690,6 +1691,9 @@ bool idle_startup()
 	// <FS:Ansariel> Wait for notification confirmation
 	if (STATE_LOGIN_CONFIRM_NOTIFICATON == LLStartUp::getStartupState())
 	{
+		display_startup();
+		gViewerWindow->getProgressView()->setVisible(FALSE);
+		display_startup();
 		ms_sleep(1);
 		return FALSE;
 	}
