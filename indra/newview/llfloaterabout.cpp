@@ -291,19 +291,19 @@ void LLServerReleaseNotesURLFetcher::httpCompleted()
 									<< " [headers:" << getResponseHeaders() << "]" << LL_ENDL;
 
 	// <FS:Ansariel> Only update if about floater still exists
-	//LLFloaterAbout* floater_about = LLFloaterReg::getTypedInstance<LLFloaterAbout>("sl_about");
 	LLFloaterAbout* floater_about = LLFloaterReg::findTypedInstance<LLFloaterAbout>("sl_about");
-	// </FS:Ansariel>
 	if (floater_about)
 	{
-		std::string location = getResponseHeader(HTTP_IN_HEADER_LOCATION);
-		if (location.empty())
-		{
-			location = LLTrans::getString("ErrorFetchingServerReleaseNotesURL");
-		}
-		LLAppViewer::instance()->setServerReleaseNotesURL(location);
-		// <FS:Ansariel> Yes, please update the release notes URL after we received it!
+	// </FS:Ansariel>
+	std::string location = getResponseHeader(HTTP_IN_HEADER_LOCATION);
+	if (location.empty())
+	{
+		location = LLTrans::getString("ErrorFetchingServerReleaseNotesURL");
+	}
+	LLAppViewer::instance()->setServerReleaseNotesURL(location);
+	// <FS:Ansariel> Yes, please update the release notes URL after we received it!
 		floater_about->setSupportText(location);
 	}
+	// </FS:Ansariel>
 }
 
