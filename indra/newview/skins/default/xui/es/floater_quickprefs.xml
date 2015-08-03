@@ -3,10 +3,10 @@
 	<panel name="quickprefs" width="265">
 		<layout_stack name="wl_options_stack">
 			<layout_panel name="wl_options_panel">
-				<text name="Maximum bandwidth" tool_tip="Configura el ancho de banda de red máximo que puede consumir Firestorm Viewer (en kilobits por segundo)" width="120">
+				<text name="Maximum bandwidth" tool_tip="Configura el ancho de banda de red máximo que puede consumir Firestorm Viewer (en kilobits por segundo)" width="91">
 					Ancho de banda:
 				</text>
-				<slider name="max_bandwidth" left_delta="107"/>
+				<slider name="max_bandwidth"/>
 				<check_box label="Usar WL de la región" name="UseRegionWindlight" width="200"/>
 				<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 					Cielo WL:

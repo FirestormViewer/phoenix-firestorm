@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="160"
+    height="179"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="144"
+    height="163"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="134"
+      height="153"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,35 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="134">
+      height="153">
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="HoverHeightLabel"
+            tool_tip="Set the hover height of your avatar"
+            mouse_opaque="false"
+            top_pad="5"
+            width="90">
+            Hover Height:
+        </text>
+        <slider
+            text_width="40"
+            enabled="false"
+            can_edit_text="true"
+            decimal_digits="3"
+            follows="left|right|top"
+            height="16"
+            increment="0.001"
+            initial_value="0.0"
+            layout="topleft"
+            left_pad="5"
+            name="HoverHeightSlider"
+            top_delta="-2"
+            right="-7" />
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
@@ -84,6 +112,7 @@
             Max Bandwidth:
         </text>
         <slider
+            text_width="40"
             can_edit_text="true"
             control_name="ThrottleBandwidthKBPS"
             decimal_digits="0"
@@ -92,7 +121,7 @@
             increment="50"
             initial_value="500"
             layout="topleft"
-            left_delta="94"
+            left_pad="5"
             max_val="3000"
             min_val="50"
             name="max_bandwidth"
