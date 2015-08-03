@@ -460,7 +460,7 @@
          height="18"
          left_pad="5"
          increment="1"
-         initial_value="5000"
+         initial_value="200"
          max_val="2147483647"
          min_val="0"
          name="FSPaymentConfirmationThreshold"
