@@ -26,7 +26,7 @@
     top="0" >
     <panel
       follows="all"  height="265"
-      label="RESTRICTIONS"
+      label="Restrictions"
       layout="topleft"
       name="behaviour_panel"
       top="0">
@@ -47,7 +47,7 @@
     </panel>
     <panel
       follows="all"  height="265"
-      label="EXCEPTIONS"
+      label="Exceptions"
       layout="topleft"
       name="exception_panel"
       top="0"> 
