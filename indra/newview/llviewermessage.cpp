@@ -739,9 +739,15 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		LLSD args;
 		args["MESSAGE"] = message;
 
+		// <FS:PP> Option to block/reject all group invites
+		if (gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode"))
+		{
+			LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
+		}
+		// </FS:PP> Option to block/reject all group invites
 		// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
 		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
-		if(fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
+		else if (fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
 		{
 			LLNotificationsUtil::add("JoinGroupProtectionNotice", args, notification_adjusted["payload"]);
 		}
@@ -3363,16 +3369,22 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = message;
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 
-				make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
-
+				// <FS:PP> Option to block/reject all group invites
+				if (gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode"))
+				{
+					LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
+				}
+				// </FS:PP> Option to block/reject all group invites
 				// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
 				// LLNotificationsUtil::add("JoinGroup", args, payload);
-				if(membership_fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
+				else if (membership_fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
 				{
+					make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 					LLNotificationsUtil::add("JoinGroupProtectionNotice", args, payload);
 				}
 				else
 				{
+					make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 					LLNotificationsUtil::add("JoinGroup", args, payload);
 				}
 				// </FS:PP>

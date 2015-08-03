@@ -537,6 +537,16 @@ void LLComboBox::createLineEditor(const LLComboBox::Params& p)
 	}
 }
 
+// <FS:Ansariel> For setting the focus to the LLLineEditor
+void LLComboBox::focusEditor()
+{
+	if (mTextEntry)
+	{
+		mTextEntry->setFocus(TRUE);
+	}
+}
+// </FS:Ansariel>
+
 void LLComboBox::setLeftTextPadding(S32 pad)
 {
 	S32 left_pad, right_pad;

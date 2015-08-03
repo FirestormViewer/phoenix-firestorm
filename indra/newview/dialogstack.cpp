@@ -40,41 +40,40 @@ DialogStack::~DialogStack()
 void DialogStack::update()
 {
 	// show dialog stack browse icon when more than one dialog is on the screen
-	gSavedSettings.setBOOL("DialogStackIconVisible",(notificationIDs.size()>1));
+	gSavedSettings.setBOOL("DialogStackIconVisible", mNotificationIDs.size() > 1);
 }
 
 void DialogStack::push(const LLUUID& uuid)
 {
-	notificationIDs.push_back(uuid);
+	mNotificationIDs.push_back(uuid);
 	update();
 }
 
 void DialogStack::pop(const LLUUID& uuid)
 {
-	if(notificationIDs.empty())
+	if (mNotificationIDs.empty())
 	{
 		LL_WARNS() << "Dialog Stack count was 0 when pop() was called." << LL_ENDL;
 	}
 	else
 	{
-		notificationIDs.remove(uuid);
+		mNotificationIDs.remove(uuid);
 		update();
 	}
 }
 
 const LLUUID& DialogStack::flip(const LLUUID& uuid)
 {
-	for (std::list<LLUUID>::iterator it = notificationIDs.begin(); it != notificationIDs.end(); ++it)
+	std::list<LLUUID>::iterator found = std::find(mNotificationIDs.begin(), mNotificationIDs.end(), uuid);
+	if (found != mNotificationIDs.end())
 	{
-		if (*it == uuid)
+		if (found == mNotificationIDs.begin())
 		{
-			if (it == notificationIDs.begin())
-			{
-				return notificationIDs.back();
-			}
-			--it;
-			return *it;
+			return mNotificationIDs.back();
 		}
+		--found;
+		return *found;
 	}
+
 	return LLUUID::null;
 }

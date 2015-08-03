@@ -72,6 +72,7 @@
             <menu_item_check label="Automatische Antwort" name="Set Autorespond"/>
             <menu_item_check label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
             <menu_item_check label="Teleport-Angebote und -Anforderungen abweisen" name="Automatically reject teleport offers"/>
+            <menu_item_check label="Alle Gruppeneinladungen abweisen" name="Reject all group invites"/>
         </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
 		<menu label="Voice-Morphing" name="VoiceMorphing">

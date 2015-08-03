@@ -160,6 +160,9 @@ public:
 
 	void			createLineEditor(const Params&);
 
+	// <FS:Ansariel> For setting the focus to the LLLineEditor
+	void			focusEditor();
+
 	//========================================================================
 	LLCtrlSelectionInterface* getSelectionInterface()	{ return (LLCtrlSelectionInterface*)this; };
 	LLCtrlListInterface* getListInterface()				{ return (LLCtrlListInterface*)this; };

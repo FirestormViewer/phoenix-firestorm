@@ -1355,15 +1355,15 @@ void LLPanelEditWearable::toggleTypeSpecificControls(LLWearableType::EType type)
 
 void LLPanelEditWearable::updateTypeSpecificControls(LLWearableType::EType type)
 {
-        const F32 ONE_METER = 1.0;
-        const F32 ONE_FOOT = 0.3048 * ONE_METER; // in meters
+        const F32 ONE_METER = 1.0f;
+        const F32 ONE_FOOT = 0.3048f * ONE_METER; // in meters
         // Update controls specific to shape editing panel.
         if (type == LLWearableType::WT_SHAPE)
         {
                 // Update avatar height
 				// The .195 is a fudge factor derived by measuring against
 				//  prims inworld, and carried forward from Phoenix. -- TS
-				F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195;
+				F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195f;
 
                 if (gSavedSettings.getBOOL("HeightUnits") == FALSE)
                 {

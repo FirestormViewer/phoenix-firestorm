@@ -229,8 +229,8 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
 	mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
 	if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
-		(gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_LEFT ||
-		gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_RIGHT))
+		((eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") == POS_TOP_LEFT ||
+		(eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") == POS_TOP_RIGHT))
 	{
 		mCurrentHeight = 0;
 		mStartTime = LLFrameTimer::getElapsedSeconds();
@@ -244,9 +244,9 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	setShape(toast_rect);
 
 	// <FS:Zi> Dialog Stacking browser
-	mScriptForm->getChild<LLButton>("DialogStackButton")->setCommitCallback(boost::bind(&LLScriptFloater::onStackClicked,this));
+	mScriptForm->getChild<LLButton>("DialogStackButton")->setCommitCallback(boost::bind(&LLScriptFloater::onStackClicked, this));
 
-	if(gSavedSettings.getS32("ScriptDialogsPosition")!=(eDialogPosition) POS_DOCKED)
+	if ((eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") != POS_DOCKED)
 	{
 		DialogStack::instance().push(notification_id);
 	}
@@ -256,13 +256,13 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 // <FS:Zi> Dialog Stacking browser
 void LLScriptFloater::onStackClicked()
 {
-	LLFloater* floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",getNotificationId());
-	if(floater->isFrontmost())
+	LLFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", getNotificationId());
+	if (floater->isFrontmost())
 	{
-		const LLUUID& nextNotification=DialogStack::instance().flip(getNotificationId());
-		floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",nextNotification);
+		const LLUUID& next_notification = DialogStack::instance().flip(getNotificationId());
+		floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", next_notification);
 	}
-	gFloaterView->bringToFront(floater,TRUE);
+	gFloaterView->bringToFront(floater, TRUE);
 }
 // </FS:Zi>
 

@@ -507,6 +507,14 @@
                 <menu_item_check.on_click
                  function="World.SetRejectTeleportOffers"/>
             </menu_item_check>
+                <menu_item_check
+             label="Reject all group invites"
+             name="Reject all group invites">
+                <menu_item_check.on_check
+                 function="World.GetRejectAllGroupInvites"/>
+                <menu_item_check.on_click
+                 function="World.SetRejectAllGroupInvites"/>
+            </menu_item_check>
         
         </menu>
         

@@ -4592,10 +4592,10 @@ Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
   </notification>
 
   <notification name="FireStormReqInfo">
-[NAME] hat die eine Anfrage geschickt, Informationen über deine Firestorm-Konfiguration zu übermitteln.
-(Dies sind dieselben Informationen, die unter Hilfe->INFO ÜBER Firestorm zu finden sind.)
+[NAME] hat die eine Anfrage geschickt, Informationen über Ihre [APP_NAME]-Konfiguration zu übermitteln.
+(Dies sind dieselben Informationen, die unter Hilfe->Info über [APP_NAME] zu finden sind.)
 [REASON]
-Möchtest du diese Informationen übermitteln?
+Möchten Sie diese Informationen übermitteln?
     <form name="form">
       <button name="Yes" text="Ja"/>
       <button name="No" text="Nein"/>

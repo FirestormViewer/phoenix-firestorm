@@ -52,10 +52,8 @@
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
 const U32 FS_BRIDGE_MAJOR_VERSION = 2;
-const U32 FS_BRIDGE_MINOR_VERSION = 18;
+const U32 FS_BRIDGE_MINOR_VERSION = 20;
 const U32 FS_MAX_MINOR_VERSION = 99;
-
-//current script version is 2.18
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -1272,6 +1270,12 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 
 	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
+		if (!isBridgeValid())
+		{
+			cleanUpBridge();
+			return;
+		}
+
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
 		if (obj == NULL)
@@ -1280,12 +1284,9 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 			cleanUpBridge();
 			return;
 		}
-		//registerVOInventoryListener(obj, NULL);
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
 		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
 		objTimer->startTimer();
-		//obj->doInventoryCallback();
-		//requestVOInventory();
 	}
 }
 
@@ -1319,7 +1320,6 @@ void FSLSLBridge::finishBridge()
 
 	setBridgeCreating(false);
 	mIsFirstCallDone = false;
-	//removeVOInventoryListener();
 	cleanUpOldVersions();
 	cleanUpBridgeFolder();
 

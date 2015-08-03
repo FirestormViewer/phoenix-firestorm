@@ -10013,10 +10013,10 @@ This will send the following information to the current IM session:
    icon="alertmodal.tga"
    name="FireStormReqInfo"
    type="alertmodal">
-    [NAME] is requesting that you send them information about your Firestorm setup.
-    (This is the same information that can be found by going to Help->ABOUT Firestorm)    
-    [REASON]
-    Would you like to send them this information?
+    [NAME] is requesting that you send them information about your [APP_NAME] setup.
+(This is the same information that can be found by going to Help->About [APP_NAME])
+[REASON]
+Would you like to send them this information?
     <form name="form">
       <button
        index="0"

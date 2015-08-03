@@ -140,6 +140,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "fsdata.h"
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
@@ -4383,17 +4384,21 @@ bool enable_sitdown_self()
 
 // Force sit -KC
 class FSSelfForceSit : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
-				gAgent.sitDown();
-			else if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
-				gAgent.standUp();
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+		{
+			gAgent.sitDown();
+		}
+		else if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+		{
+			gAgent.standUp();
+		}
 
-            return true;
-        }
-    };
+		return true;
+	}
+};
 
 bool enable_forcesit_self()
 {
@@ -4406,46 +4411,44 @@ class FSSelfCheckForceSit : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		// <FS:ND> don't use gAgentAvatarp if it's not valid yet/anymore.
-		//		bool new_value = gAgentAvatarp->isSitting();
-		//		return new_value;
-		if( !isAgentAvatarValid() )
+		if (!isAgentAvatarValid())
+		{
 			return false;
+		}
 
 		return gAgentAvatarp->isSitting();
-		// </FS:ND>
 	}
 };
 
 // Phantom mode -KC & <FS:CR>
 class FSSelfToggleMoveLock : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			if (LLGridManager::getInstance()->isInSecondLife())
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			make_ui_sound("UISndMovelockToggle");
+			bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
+			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
+			if (new_value)
 			{
-				make_ui_sound("UISndMovelockToggle");
-				bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
-				gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
-				if (new_value)
-				{
-					reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
-				}
-				else
-				{
-					reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
-				}
+				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
 			}
-#ifdef OPENSIM
 			else
 			{
-				gAgent.togglePhantom();
+				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
 			}
+		}
+#ifdef OPENSIM
+		else
+		{
+			gAgent.togglePhantom();
+		}
 #endif // OPENSIM
-			//TODO: feedback to local chat
-            return true;
-        }
-    };
+		//TODO: feedback to local chat
+		return true;
+	}
+};
 
 
 class FSSelfCheckMoveLock : public view_listener_t
@@ -4491,13 +4494,13 @@ bool enable_script_info()
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfToggleIgnorePreJump : public view_listener_t
-    {
-        bool handleEvent(const LLSD& userdata)
-        {
-			gSavedSettings.setBOOL("FSIgnoreFinishAnimation", !gSavedSettings.getBOOL("FSIgnoreFinishAnimation"));
-            return true;
-        }
-    };
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		gSavedSettings.setBOOL("FSIgnoreFinishAnimation", !gSavedSettings.getBOOL("FSIgnoreFinishAnimation"));
+		return true;
+	}
+};
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfCheckIgnorePreJump : public view_listener_t
@@ -7035,6 +7038,34 @@ class LLWorldGetRejectTeleportOffers : public view_listener_t
 	}
 };
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
+
+// <FS:PP> Option to block/reject all group invites
+class LLWorldSetRejectAllGroupInvites : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getRejectAllGroupInvites())
+		{
+			gAgent.clearRejectAllGroupInvites();
+		}
+		else
+		{
+			gAgent.setRejectAllGroupInvites();
+		}
+		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetRejectAllGroupInvites : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getRejectAllGroupInvites();
+		return new_value;
+	}
+};
+// </FS:PP> Option to block/reject all group invites
 
 class LLWorldCreateLandmark : public view_listener_t
 {
@@ -9743,7 +9774,12 @@ void handle_report_bug(const LLSD& param)
 	LLUIString url(param.asString());
 	
 	LLStringUtil::format_map_t replace;
-	replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
+	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
+	//replace["[ENVIRONMENT]"] = LLURI::escape(LLAppViewer::instance()->getViewerInfoString());
+	LLSD sysinfo = FSData::getSystemInfo();
+	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
+	// </FS:Ansariel>
+
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
 	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
@@ -10781,6 +10817,10 @@ void initialize_menus()
 	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
 	view_listener_t::addMenu(new LLWorldSetRejectTeleportOffers(), "World.SetRejectTeleportOffers");
 	view_listener_t::addMenu(new LLWorldGetRejectTeleportOffers(), "World.GetRejectTeleportOffers");
+	// </FS:PP>
+	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+	view_listener_t::addMenu(new LLWorldSetRejectAllGroupInvites(), "World.SetRejectAllGroupInvites");
+	view_listener_t::addMenu(new LLWorldGetRejectAllGroupInvites(), "World.GetRejectAllGroupInvites");
 	// </FS:PP>
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]

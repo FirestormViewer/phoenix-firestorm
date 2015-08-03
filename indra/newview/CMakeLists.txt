@@ -1943,6 +1943,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/settings_hybrid.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
+    app_settings/settings_text.xml
     app_settings/settings.xml
     app_settings/settings_crash_behavior.xml
     app_settings/settings_files.xml

@@ -10,9 +10,11 @@
 			</text>
 			<button tool_tip="Usuń tą nazwę użytkownika" name="remove_user_btn"/>
 			<combo_box name="username_combo" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine"/>
+			<check_box name="remember_username_check" label="Zapamiętaj login"/>
 			<text name="password_text">
 				Hasło:
 			</text>
+			<check_box label="Zapamiętaj hasło" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="start_location_panel">
 			<text name="start_location_text">
@@ -37,8 +39,6 @@
 				Zapomniałeś/aś nazwy lub hasła?
 			</text>
 			<button label="Zaloguj" name="connect_btn"/>
-			<check_box label="Zapamiętaj login" name="remember_username_check"/>
-			<check_box label="Zapamiętaj hasło" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
 			<text name="mode_selection_text">
