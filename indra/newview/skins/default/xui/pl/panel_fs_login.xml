@@ -37,6 +37,7 @@
 				Zapomniałeś/aś nazwy lub hasła?
 			</text>
 			<button label="Zaloguj" name="connect_btn"/>
+			<check_box label="Zapamiętaj login" name="remember_username_check"/>
 			<check_box label="Zapamiętaj hasło" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
@@ -45,6 +46,7 @@
 			</text>
 			<combo_box name="mode_combo" tool_tip="Wybierz ten tryb ustawień, z którym jesteś najbardziej obeznany/a, aby Firestorm mógł dobrać odpowiednie ustawienia domyślne.">
 				<combo_box.item label="Hybrydowy" name="Hybrid"/>
+				<combo_box.item label="Tekstowy" name="Text"/>
 			</combo_box>
 		</layout_panel>
 	</layout_stack>

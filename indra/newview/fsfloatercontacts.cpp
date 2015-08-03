@@ -91,7 +91,7 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mNumRightsChanged(0),
 	mRlvBehaviorCallbackConnection(),
 	mResetLastColumnDisplayModeChanged(false),
-	mDirtyNames(false)
+	mDirtyNames(true)
 {
 	mObserver = new LLLocalFriendsObserver(this);
 	LLAvatarTracker::instance().addObserver(mObserver);

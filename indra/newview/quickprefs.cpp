@@ -33,6 +33,7 @@
 #include "quickprefs.h"
 
 #include "fscommon.h"
+#include "llagent.h"
 #include "llappviewer.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -50,6 +51,7 @@
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
 #include "llviewercontrol.h"
+#include "llviewerregion.h"
 #include "llwaterparammanager.h"
 #include "llwlparamset.h"
 #include "llwlparammanager.h"
@@ -91,7 +93,9 @@ FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
 :	LLTransientDockableFloater(NULL, true, key),
-	mRlvBehaviorCallbackConnection()
+	mAvatarZOffsetSlider(NULL),
+	mRlvBehaviorCallbackConnection(),
+	mRegionChangedSlot()
 {
 	// For Phototools
 	mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleSetShaderChanged, LLSD()));
@@ -107,6 +111,11 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 	if (mRlvBehaviorCallbackConnection.connected())
 	{
 		mRlvBehaviorCallbackConnection.disconnect();
+	}
+
+	if (mRegionChangedSlot.connected())
+	{
+		mRegionChangedSlot.disconnect();
 	}
 
 	if (!getIsPhototools() && !FSCommon::isLegacySkin())
@@ -212,6 +221,26 @@ void FloaterQuickPrefs::initCallbacks()
 	{
 		getChild<LLButton>("Restore_Btn")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickRestoreDefaults, this));
 		gSavedSettings.getControl("QuickPrefsEditMode")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::onEditModeChanged, this));	// <FS:Zi> Dynamic Quickprefs
+
+		mAvatarZOffsetSlider->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetFinalCommit, this));
+		mAvatarZOffsetSlider->setSliderEditorCommitCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetFinalCommit, this));
+		mAvatarZOffsetSlider->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetSliderMoved, this));
+
+		syncAvatarZOffsetFromPreferenceSetting();
+		// Update slider on future pref changes.
+		if (gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ"))
+		{
+			gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::syncAvatarZOffsetFromPreferenceSetting, this));
+		}
+		else
+		{
+			LL_WARNS() << "Control not found for AvatarHoverOffsetZ" << LL_ENDL;
+		}
+
+		if (!mRegionChangedSlot.connected())
+		{
+			mRegionChangedSlot = gAgent.addRegionChangedCallback(boost::bind(&FloaterQuickPrefs::onRegionChanged, this));
+		}
 	}
 
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
@@ -361,6 +390,10 @@ BOOL FloaterQuickPrefs::postBuild()
 	else
 	{
 		mBtnResetDefaults = getChild<LLButton>("Restore_Btn");
+
+		mAvatarZOffsetSlider = getChild<LLSliderCtrl>("HoverHeightSlider");
+		mAvatarZOffsetSlider->setMinValue(MIN_HOVER_Z);
+		mAvatarZOffsetSlider->setMaxValue(MAX_HOVER_Z);
 	}
 
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
@@ -439,6 +472,9 @@ BOOL FloaterQuickPrefs::postBuild()
 	gSavedPerAccountSettings.applyToAll(&func);
 	mControlNameCombo->sortByName();
 	// </FS:Zi>
+
+	updateAvatarZOffsetEditEnabled();
+	onRegionChanged();
 
 	return LLTransientDockableFloater::postBuild();
 }
@@ -1931,4 +1967,70 @@ void FloaterQuickPrefs::dockToToolbarButton()
 		setCanDock(false);
 		setDockControl(NULL);
 	}
+}
+
+void FloaterQuickPrefs::onAvatarZOffsetSliderMoved()
+{
+	F32 value = mAvatarZOffsetSlider->getValueF32();
+	LLVector3 offset(0.0f, 0.0f, llclamp(value, MIN_HOVER_Z, MAX_HOVER_Z));
+	LL_INFOS("Avatar") << "setting hover from slider moved" << offset[VZ] << LL_ENDL;
+	if (gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled())
+	{
+		gAgentAvatarp->setHoverOffset(offset, false);
+	}
+	else if (!gAgentAvatarp->isUsingServerBakes())
+	{
+		gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", value);
+	}
+}
+
+void FloaterQuickPrefs::onAvatarZOffsetFinalCommit()
+{
+	F32 value = mAvatarZOffsetSlider->getValueF32();
+	LLVector3 offset(0.0f, 0.0f, llclamp(value,MIN_HOVER_Z,MAX_HOVER_Z));
+	gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ",value);
+
+	LL_INFOS("Avatar") << "setting hover from slider final commit " << offset[VZ] << LL_ENDL;
+}
+
+void FloaterQuickPrefs::updateAvatarZOffsetEditEnabled()
+{
+	bool enabled = gAgent.getRegion() && gAgent.getRegion()->avatarHoverHeightEnabled();
+	if (!enabled && isAgentAvatarValid() && !gAgentAvatarp->isUsingServerBakes())
+	{
+		enabled = true;
+	}
+	mAvatarZOffsetSlider->setEnabled(enabled);
+	if (enabled)
+	{
+		syncAvatarZOffsetFromPreferenceSetting();
+	}
+}
+
+void FloaterQuickPrefs::onRegionChanged()
+{
+	LLViewerRegion* region = gAgent.getRegion();
+	if (region && region->simulatorFeaturesReceived())
+	{
+		updateAvatarZOffsetEditEnabled();
+	}
+	else if (region)
+	{
+		region->setSimulatorFeaturesReceivedCallback(boost::bind(&FloaterQuickPrefs::onSimulatorFeaturesReceived, this, _1));
+	}
+}
+
+void FloaterQuickPrefs::onSimulatorFeaturesReceived(const LLUUID &region_id)
+{
+	LLViewerRegion *region = gAgent.getRegion();
+	if (region && (region->getRegionID() == region_id))
+	{
+		updateAvatarZOffsetEditEnabled();
+	}
+}
+
+void FloaterQuickPrefs::syncAvatarZOffsetFromPreferenceSetting()
+{
+	F32 value = gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ");
+	mAvatarZOffsetSlider->setValue(value, FALSE);
 }

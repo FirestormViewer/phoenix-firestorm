@@ -5,10 +5,14 @@
 		<layout_stack name="wl_options_stack" width="280">
 			<layout_panel name="wl_options_panel">
 				<check_box label="Regions-Windlight-Vorstellungen verwenden" name="UseRegionWindlight"/>
+				<text name="HoverHeightLabel" width="105" tool_tip="Legt die Schwebehöhe des eigenen Avatars fest.">
+					Schwebehöhe:
+				</text>
+				<slider name="HoverHeightSlider"/>
 				<text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
 					Max. Bandbreite:
 				</text>
-				<slider left_delta="108" name="max_bandwidth"/>		
+				<slider name="max_bandwidth"/>
 				<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
 					WL-Himmel:
 				</text>

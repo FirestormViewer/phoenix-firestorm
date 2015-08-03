@@ -351,9 +351,9 @@
        height="20"
        left_delta="2"
        image_overlay="Conv_toolbar_add_person"
-       image_hover_unselected="Toolbar_Middle_Over"
-       image_selected="Toolbar_Middle_Selected"
-       image_unselected="Toolbar_Middle_Off"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
        tool_tip="Add someone to this conversation"
        name="add_participant_btn"
        width="24">

@@ -3438,7 +3438,10 @@ void LLPipeline::markRebuild(LLDrawable *drawablep, LLDrawable::EDrawableFlags f
 			mBuildQ2.push_back(drawablep);
 			drawablep->setState(LLDrawable::IN_REBUILD_Q2); // need flag here because it is just a list
 		}
-		if (flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION))
+		// <FS:Ansariel> FIRE-16485: Crash when calling texture refresh on an object that has a blacklisted copy
+		//if (flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION))
+		if ((flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION)) && drawablep->getVObj().notNull())
+		// </FS:Ansariel>
 		{
 			drawablep->getVObj()->setChanged(LLXform::SILHOUETTE);
 		}

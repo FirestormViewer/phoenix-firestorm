@@ -1363,7 +1363,10 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     {
         wear_multiple(ids, false);
     }
-    else if (isRemoveAction(action))
+    // <FS:Ansariel> FIRE-16511 / BUG-9739: Unable to deactivate gestures from inventory
+    //else if (isRemoveAction(action))
+    else if (isRemoveAction(action) && action != "deactivate")
+    // </FS:Ansariel>
     {
         LLAppearanceMgr::instance().removeItemsFromAvatar(ids);
     }

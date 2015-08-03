@@ -30,6 +30,7 @@
 #ifndef FS_FLOATERIM_H
 #define FS_FLOATERIM_H
 
+#include "llchat.h"
 #include "llinstantmessage.h"
 #include "lllogchat.h"
 #include "lltooldraganddrop.h"
@@ -90,8 +91,7 @@ public:
 	// get new messages from LLIMModel
 	void updateMessages();
 	void reloadMessages(bool clean_messages = false);
-	static void onSendMsg( LLUICtrl*, void*);
-	void sendMsgFromInputEditor();
+	void sendMsgFromInputEditor(EChatType type);
 	void sendMsg(const std::string& msg);
 
 	// callback for LLIMModel on new messages

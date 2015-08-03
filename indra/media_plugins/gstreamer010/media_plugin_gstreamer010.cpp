@@ -113,7 +113,7 @@ private:
 	bool play(double rate);
 	bool getTimePos(double &sec_out);
 
-	static const double MIN_LOOP_SEC = 1.0F;
+	static constexpr double MIN_LOOP_SEC = 1.0F;
 
 	bool mIsLooping;
 

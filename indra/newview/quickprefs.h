@@ -44,6 +44,7 @@ class LLLayoutStack;
 class LLLineEditor;
 class LLMultiSliderCtrl;
 class LLSlider;
+class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
 // </FS:Zi>
@@ -149,6 +150,8 @@ private:
 	LLSlider*			mSliderRenderSSAOEffectX;
 	LLSpinCtrl*			mSpinnerRenderSSAOEffectX;
 
+	LLSliderCtrl*		mAvatarZOffsetSlider;
+
 	// <FS:CR>
 	LLButton*			mBtnResetDefaults;
 	
@@ -182,6 +185,15 @@ private:
 	void loadSavedSettingsFromFile(const std::string& settings_path);
 	void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
 	// </FS:CR>
+
+	void onAvatarZOffsetSliderMoved();
+	void onAvatarZOffsetFinalCommit();
+	void updateAvatarZOffsetEditEnabled();
+	void onRegionChanged();
+	void onSimulatorFeaturesReceived(const LLUUID &region_id);
+	void syncAvatarZOffsetFromPreferenceSetting();
+
+	boost::signals2::connection mRegionChangedSlot;
 
 // <FS:Zi> Dynamic quick prefs
 public:

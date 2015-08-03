@@ -6415,4 +6415,19 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Mute_Remove">
 		„[NAME]“ has been removed from the blocklist.
 	</string>
+	<string name="Reqsysinfo_Chat_NoReason">
+		Ich frage Informationen über Ihr System ab.
+	</string>
+	<string name="Reqsysinfo_Chat_Reason">
+		Ich frage aus folgendem Grund Informationen über Ihr System ab: [REASON]
+	</string>
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Gesendete Intomationen: [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Anfrage abgelehnt.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		Der übermittelte Grund lautet: [REASON]
+	</string>
 </strings>

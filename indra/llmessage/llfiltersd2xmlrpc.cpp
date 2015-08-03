@@ -131,6 +131,15 @@ std::string xml_escape_string(const std::string& in)
 	std::string::const_iterator end = in.end();
 	for(; it != end; ++it)
 	{
+		// <FS:ND> Skip invalid characters. There a s few more, but those would need inspecting of the UTF-8 sequence.
+		// See http://en.wikipedia.org/wiki/Valid_characters_in_XML
+		if( *it >= 0 && *it < 20 && *it != 0x09 && *it != 0x0A && *it != 0x0D )
+		{
+			out << "?";
+			continue;
+		}
+		// </FS:ND>
+
 		switch((*it))
 		{
 		case '<':

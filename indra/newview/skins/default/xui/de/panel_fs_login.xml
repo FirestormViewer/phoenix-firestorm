@@ -43,6 +43,7 @@
 				Benutzernamen oder Kennwort vergessen?
 			</text>
 			<button label="Anmelden" name="connect_btn"/>
+			<check_box label="Benutzername speichern" name="remember_username_check"/>
 			<check_box label="Kennwort speichern" name="remember_check"/>
 		</layout_panel>
 		<layout_panel name="mode_selection">
@@ -50,6 +51,8 @@
 				MODUS-WAHL
 			</text>
 			<combo_box name="mode_combo" tool_tip="Wählen Sie welcher Viewer Style ihnen am meisten vertraut ist, um die Standards ihren bedürfnissen anzupassen.">
+				<combo_box.item label="Hybrid" name="Hybrid"/>
+				<combo_box.item label="Text" name="Text"/>
 			</combo_box>
 		</layout_panel>
 	</layout_stack>

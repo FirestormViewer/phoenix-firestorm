@@ -2878,4 +2878,9 @@ Try enclosing path to the editor with double quotes.
 
   <string name="Mute_Add">'[NAME]' has been added to the blocklist.</string>
   <string name="Mute_Remove">'[NAME]' has been removed from the blocklist.</string>
+  <string name="Reqsysinfo_Chat_NoReason">I am requesting information about your system setup.</string>
+  <string name="Reqsysinfo_Chat_Reason">I am requesting information about your system setup for this reason: [REASON]</string>
+  <string name="Reqsysinfo_Chat_Information_sent">Information Sent: [DATA]</string>
+  <string name="Reqsysinfo_Chat_Request_Denied">Request denied.</string>
+  <string name="Reqsysinfo_Reason">The reason provided was: [REASON]</string>
 </strings>

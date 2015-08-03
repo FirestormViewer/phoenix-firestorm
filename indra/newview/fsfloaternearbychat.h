@@ -78,7 +78,7 @@ public:
 	
 	BOOL getVisible();
 
-	static void onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata);
+	void onHistoryButtonClicked();
 
 	// overridden to fix the multitab focus bug -Zi
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );

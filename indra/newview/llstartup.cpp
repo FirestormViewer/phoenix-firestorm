@@ -228,6 +228,7 @@
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
+#include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
 #include "rlvhandler.h"
@@ -1098,7 +1099,7 @@ bool idle_startup()
 			{
 // <FS:CR>
 				//LLPanelLogin::setFields( gUserCredential, gRememberPassword);
-				FSPanelLogin::setFields(gUserCredential);
+				FSPanelLogin::setFields(gUserCredential, true);
 // </FS:CR>
 			}
 			display_startup();
@@ -1603,7 +1604,8 @@ bool idle_startup()
 								LLNotificationsUtil::add("TrustCertificateError", args, response,
 														trust_cert_done);
 								
-								show_connect_box = true;
+								// <FS:Ansariel> Not needed here - done below
+								//show_connect_box = true;
 							}
 							else
 							{
@@ -1615,9 +1617,11 @@ bool idle_startup()
 								LLNotificationsUtil::add("GeneralCertificateError", args, response,
 														 general_cert_done);
 								
-								reset_login();
-								gSavedSettings.setBOOL("AutoLogin", FALSE);
-								show_connect_box = true;
+								// <FS:Ansariel> Not needed here - done below & in transition_back_to_login_panel()
+								//reset_login();
+								//gSavedSettings.setBOOL("AutoLogin", FALSE);
+								//show_connect_box = true;
+								// </FS:Ansariel>
 								
 							}
 
@@ -1636,7 +1640,10 @@ bool idle_startup()
 				//setup map of datetime strings to codes and slt & local time offset from utc
 				// *TODO: Does this need to be here?
 				LLStringOps::setupDatetimeInfo (false);
-				transition_back_to_login_panel(emsg.str());
+				// <FS:Ansariel> Wait for notification confirmation
+				//transition_back_to_login_panel(emsg.str());
+				LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
+				// </FS:Ansariel>
 				show_connect_box = true;
 			}
 		}
@@ -1657,7 +1664,11 @@ bool idle_startup()
 				// create the default proximal channel
 				LLVoiceChannel::initClass();
 				
-				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+				if (gSavedSettings.getBOOL("FSRememberUsername"))
+				{
+					gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
+				}
+				FSPanelLogin::clearPassword();
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 				LLTrace::get_frame_recording().reset();
 			}
@@ -1667,13 +1678,27 @@ bool idle_startup()
 				args["ERROR_MESSAGE"] = emsg.str();
 				LL_INFOS("LLStartup") << "Notification: " << args << LL_ENDL;
 				LLNotificationsUtil::add("ErrorMessage", args, LLSD(), login_alert_done);
-				transition_back_to_login_panel(emsg.str());
+				// <FS:Ansariel> Wait for notification confirmation
+				//transition_back_to_login_panel(emsg.str());
+				LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
+				// </FS:Ansariel>
 				show_connect_box = true;
 				return FALSE;
 			}
 		}
 		return FALSE;
 	}
+
+	// <FS:Ansariel> Wait for notification confirmation
+	if (STATE_LOGIN_CONFIRM_NOTIFICATON == LLStartUp::getStartupState())
+	{
+		display_startup();
+		gViewerWindow->getProgressView()->setVisible(FALSE);
+		display_startup();
+		ms_sleep(1);
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	//---------------------------------------------------------------------
 	// World Init
@@ -3414,8 +3439,6 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 #define RTNENUM(E) case E: return #E
 	switch(state){
 		RTNENUM( STATE_FIRST );
-		RTNENUM( STATE_FETCH_GRID_INFO);
-		RTNENUM( STATE_AUDIO_INIT);
 		RTNENUM( STATE_BROWSER_INIT );
 		RTNENUM( STATE_LOGIN_SHOW );
 		RTNENUM( STATE_LOGIN_WAIT );
@@ -3437,6 +3460,12 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 		RTNENUM( STATE_WEARABLES_WAIT );
 		RTNENUM( STATE_CLEANUP );
 		RTNENUM( STATE_STARTED );
+		// <FS:Ansariel> Add FS-specific startup states
+		RTNENUM( STATE_FETCH_GRID_INFO );
+		RTNENUM( STATE_AUDIO_INIT);
+		RTNENUM( STATE_AGENTS_WAIT );
+		RTNENUM( STATE_LOGIN_CONFIRM_NOTIFICATON );
+		// </FS:Ansariel>
 	default:
 		return llformat("(state #%d)", state);
 	}
@@ -3786,7 +3815,7 @@ bool login_alert_done(const LLSD& notification, const LLSD& response)
 {
 	// <FS:Ansariel> [FS Login Panel]
 	//LLPanelLogin::giveFocus();
-	FSPanelLogin::giveFocus();
+	transition_back_to_login_panel(std::string());
 	// </FS:Ansariel> [FS Login Panel]
 	return false;
 }
@@ -3847,10 +3876,10 @@ LLSD transform_cert_args(LLPointer<LLCertificate> cert)
 // when we handle a cert error, give focus back to the login panel
 void general_cert_done(const LLSD& notification, const LLSD& response)
 {
-	LLStartUp::setStartupState( STATE_LOGIN_SHOW );			
 	// <FS:Ansariel> [FS Login Panel]
+	//LLStartUp::setStartupState( STATE_LOGIN_SHOW );			
 	//LLPanelLogin::giveFocus();
-	FSPanelLogin::giveFocus();
+	transition_back_to_login_panel(std::string());
 	// </FS:Ansariel> [FS Login Panel]
 }
 
@@ -3871,13 +3900,16 @@ void trust_cert_done(const LLSD& notification, const LLSD& response)
 			break;
 		}
 		case OPT_CANCEL_TRUST:
-			reset_login();
-			gSavedSettings.setBOOL("AutoLogin", FALSE);			
-			LLStartUp::setStartupState( STATE_LOGIN_SHOW );				
+			// <FS:Ansariel> That's what transition_back_to_login_panel is for and does!
+			//reset_login();
+			//gSavedSettings.setBOOL("AutoLogin", FALSE);			
+			//LLStartUp::setStartupState( STATE_LOGIN_SHOW );				
+			transition_back_to_login_panel(std::string());
+			// </FS:Ansariel>
 		default:
 			// <FS:Ansariel> [FS Login Panel]
 			//LLPanelLogin::giveFocus();
-			FSPanelLogin::giveFocus();
+			transition_back_to_login_panel(std::string());
 			// </FS:Ansariel> [FS Login Panel]
 			break;
 	}

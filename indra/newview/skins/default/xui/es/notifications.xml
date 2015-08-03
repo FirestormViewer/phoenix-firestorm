@@ -5249,7 +5249,7 @@ El nombre NO puede contener los caracteres ":" o "|".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="FireStormReqInfo">
-		[NAME] te solicita que le envíes información sobre tu configuración de Firestorm (Ésta es la misma información que puedes encontrar en Ayuda->Acerca de Firestorm)    
+		[NAME] te solicita que le envíes información sobre tu configuración de [APP_NAME] (Ésta es la misma información que puedes encontrar en Ayuda->Acerca de [APP_NAME])    
 [REASON]
 ¿Aceptas enviarle esta información?
 		<form name="form">

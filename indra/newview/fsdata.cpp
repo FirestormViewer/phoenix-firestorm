@@ -48,6 +48,7 @@
 #include "llmutelist.h"
 #include "llnotifications.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 #include "llversioninfo.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -141,8 +142,7 @@ public:
 			return;
 		}
 
-		U8* data = NULL;
-		data = new U8[data_size];
+		U8* data = new U8[data_size];
 		buffer->readAfter(channels.in(), NULL, data, data_size);
 
 		// basic check for valid data received
@@ -345,10 +345,7 @@ void FSData::startDownload()
 	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
 
 #if OPENSIM
-	std::string filenames[] = {"scriptlibrary_lsl.xml", "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
-#else
-	std::string filenames[] = {"scriptlibrary_lsl.xml"};
-#endif
+	std::string filenames[] = {"scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
 	BOOST_FOREACH(std::string script_name, filenames)
 	{
 		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, script_name);
@@ -361,6 +358,7 @@ void FSData::startDownload()
 		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
 		LLHTTPClient::getIfModified(url, new FSDownloaderScript(filename, url), last_modified, mHeaders, HTTP_TIMEOUT);
 	}
+#endif
 }
 
 // call this _after_ the login screen to pick up grid data.
@@ -376,7 +374,7 @@ void FSData::downloadAgents()
 	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
 		// TODO: Let the opensim devs and opensim group figure out the best way
-		// to add "agents.xml" URL to the gridinfo protucule.
+		// to add "agents.xml" URL to the gridinfo protocol.
 		//getAgentsURL();
 		
 		// there is no need for assets.xml URL for opensim grids as the grid owner can just delete
@@ -838,51 +836,51 @@ void FSData::addAgents()
 
 std::string FSData::processRequestForInfo(const LLUUID& requester, const std::string& message, const std::string& name, const LLUUID& sessionid)
 {
-	std::string detectstring = "/reqsysinfo";
-	if(!message.find(detectstring) == 0)
+	const std::string detectstring = "/reqsysinfo";
+	if (message.find(detectstring) != 0)
 	{
 		return message;
 	}
 
-	if(!(isSupport(requester)||isDeveloper(requester)))
+	if (!isSupport(requester) && !isDeveloper(requester))
 	{
 		return message;
 	}
 
-	std::string outmessage("I am requesting information about your system setup.");
+	std::string outmessage = LLTrans::getString("Reqsysinfo_Chat_NoReason");
 	std::string reason("");
-	if(message.length() > detectstring.length())
+	if (message.length() > detectstring.length())
 	{
-		reason = std::string(message.substr(detectstring.length()));
 		//there is more to it!
-		outmessage = std::string("I am requesting information about your system setup for this reason : " + reason);
-		reason = "The reason provided was : " + reason;
+		reason = message.substr(detectstring.length());
+		LLStringUtil::format_map_t reason_args;
+		reason_args["REASON"] = reason;
+		outmessage = LLTrans::getString("Reqsysinfo_Chat_Reason", reason_args);
+		reason = LLTrans::getString("Reqsysinfo_Reason", reason_args);
 	}
 	
 	LLSD args;
 	args["REASON"] = reason;
 	args["NAME"] = name;
-	args["FROMUUID"] = requester;
-	args["SESSIONID"] = sessionid;
-	LLNotifications::instance().add("FireStormReqInfo", args, LLSD(), callbackReqInfo);
+	LLNotifications::instance().add("FireStormReqInfo", args, LLSD().with("from_id", requester).with("session_id", sessionid), callbackReqInfo);
 
 	return outmessage;
 }
 
 //static
-void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& myName, EInstantMessage dialog)
+void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& my_name, EInstantMessage dialog)
 {
-	LLSD system_info = getSystemInfo();
-	std::string part1 = system_info["Part1"].asString();
-	std::string part2 = system_info["Part2"].asString();
+	const LLSD system_info = getSystemInfo();
+	const std::string part1 = system_info["Part1"].asString();
+	const std::string part2 = system_info["Part2"].asString();
 
 	pack_instant_message(
 		gMessageSystem,
-		gAgent.getID(),
+		gAgentID,
 		FALSE,
-		gAgent.getSessionID(),
+		gAgentSessionID,
 		destination,
-		myName,
+		my_name,
 		part1,
 		IM_ONLINE,
 		dialog,
@@ -891,11 +889,11 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
 	gAgent.sendReliableMessage();
 	pack_instant_message(
 		gMessageSystem,
-		gAgent.getID(),
+		gAgentID,
 		FALSE,
-		gAgent.getSessionID(),
+		gAgentSessionID,
 		destination,
-		myName,
+		my_name,
 		part2,
 		IM_ONLINE,
 		dialog,
@@ -903,8 +901,10 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
 		);
 	gAgent.sendReliableMessage();
 
-	gIMMgr->addMessage(gIMMgr->computeSessionID(dialog,destination),destination,myName,
-				"Information Sent: " + part1 + "\n" + part2);
+	LLStringUtil::format_map_t args;
+	args["DATA"] = part1 + "\n" + part2;
+	gIMMgr->addMessage(gIMMgr->computeSessionID(dialog, destination), destination, my_name,
+						LLTrans::getString("Reqsysinfo_Chat_Information_sent", args));
 }
 
 //static
@@ -912,40 +912,38 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 {
 	S32 option = LLNotification::getSelectedOption(notification, response);
 	std::string my_name;
-	LLSD subs = LLNotification(notification).getSubstitutions();
-	LLUUID uid = subs["FROMUUID"].asUUID();
-	LLUUID sessionid = subs["SESSIONID"].asUUID();
+	LLUUID from_id = notification["payload"]["from_id"].asUUID();
+	LLUUID session_id = notification["payload"]["session_id"].asUUID();
 
-	LL_INFOS() << "the uuid is " << uid.asString().c_str() << LL_ENDL;
 	LLAgentUI::buildFullname(my_name);
 
-	if ( option == 0 )//yes
+	if (option == 0) //yes
 	{
-		sendInfo(uid,sessionid,my_name,IM_NOTHING_SPECIAL);
+		sendInfo(from_id, session_id, my_name, IM_NOTHING_SPECIAL);
 	}
 	else
 	{
 		pack_instant_message(
 			gMessageSystem,
-			gAgent.getID(),
+			gAgentID,
 			FALSE,
-			gAgent.getSessionID(),
-			uid,
+			gAgentSessionID,
+			from_id,
 			my_name,
-			"Request Denied.",
+			"Request Denied.", // Left English intentionally as it gets sent to the support staff
 			IM_ONLINE,
 			IM_NOTHING_SPECIAL,
-			sessionid
+			session_id
 			);
 		gAgent.sendReliableMessage();
-		gIMMgr->addMessage(sessionid,uid,my_name,"Request Denied");
+		gIMMgr->addMessage(session_id, from_id, my_name, LLTrans::getString("Reqsysinfo_Chat_Request_Denied"));
 	}
 }
 
 //static
 LLSD FSData::getSystemInfo()
 {
-	LLSD info=LLAppViewer::instance()->getViewerInfo();
+	LLSD info = LLAppViewer::instance()->getViewerInfo();
 
 	std::string sysinfo1("\n");
 	sysinfo1 += llformat("%s %s (%d) %s %s (%s) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),
