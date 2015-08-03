@@ -2595,9 +2595,10 @@ void LLFloaterPreference::updateClickActionSettings()
 
 void LLFloaterPreference::updateClickActionControls()
 {
- 	const bool click_to_walk = gSavedSettings.getBOOL("ClickToWalk");
- 	const bool dbl_click_to_walk = gSavedSettings.getBOOL("DoubleClickAutoPilot");
- 	const bool dbl_click_to_teleport = gSavedSettings.getBOOL("DoubleClickTeleport");
+	const bool click_to_walk = gSavedSettings.getBOOL("ClickToWalk");
+	const bool dbl_click_to_walk = gSavedSettings.getBOOL("DoubleClickAutoPilot");
+	const bool dbl_click_to_teleport = gSavedSettings.getBOOL("DoubleClickTeleport");
+
 	getChild<LLComboBox>("single_click_action_combo")->setValue((int)click_to_walk);
 	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
 }
@@ -2629,30 +2630,6 @@ void LLFloaterPreference::updateUISoundsControls()
 
 }
 // </FS:PP>
-
-//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
-//void LLFloaterPreference::onChangeDoubleClickSettings()
-//{
-//	bool double_click_action_enabled = gSavedSettings.getBOOL("DoubleClickAutoPilot") || gSavedSettings.getBOOL("DoubleClickTeleport");
-//	LLCheckBoxCtrl* double_click_action_cb = getChild<LLCheckBoxCtrl>("double_click_chkbox");
-//	if (double_click_action_cb)
-//	{
-//		// check checkbox if one of double-click actions settings enabled, uncheck otherwise
-//		double_click_action_cb->setValue(double_click_action_enabled);
-//	}
-//	LLRadioGroup* double_click_action_radio = getChild<LLRadioGroup>("double_click_action");
-//	if (!double_click_action_radio) return;
-//	// set radio-group enabled if one of double-click actions settings enabled
-//	double_click_action_radio->setEnabled(double_click_action_enabled);
-//	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-//	{
-//		double_click_action_radio->setSelectedIndex(0);
-//	}
-//	else
-//	{
-//		double_click_action_radio->setSelectedIndex(1);
-//	}
-//}
 
 void LLFloaterPreference::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {
@@ -2949,13 +2926,7 @@ LLPanelPreference::~LLPanelPreference()
 }
 void LLPanelPreference::apply()
 {
-	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	//if (hasChild("use_external_browser", TRUE))
-	//{
-	//	BOOL useExternalBrowser = (getChild<LLRadioGroup>("use_external_browser")->getValue().asInteger() == 1);
-	//	gSavedSettings.setBOOL("UseExternalBrowser", useExternalBrowser);
-	//}
-	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
+	// no-op
 }
 
 void LLPanelPreference::saveSettings()
