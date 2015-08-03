@@ -625,11 +625,9 @@ BOOL LLFloaterPreference::postBuild()
 
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
-	// <FS:Ansariel> Preferences search
-	//LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
-	//if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
-	//	tabcontainer->selectFirstTab();
-	// </FS:Ansariel>
+	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
+	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
+		tabcontainer->selectFirstTab();
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
 	// getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path - <FS:PP> Field removed from Privacy tab, we have it already in Network & Files tab along with few fancy buttons (03 Mar 2015)
@@ -1124,12 +1122,15 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	saveSettings();
 
 	// <FS:ND> Hook up and init for filtering
-	mFilterEdit->setText(LLStringExplicit(""));
 	collectSearchableItems();
-	onUpdateFilterTerm(true);
+	if (!mFilterEdit->getText().empty())
+	{
+		mFilterEdit->setText(LLStringExplicit(""));
+		onUpdateFilterTerm(true);
 
-	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
-		tabcontainer->selectFirstTab();
+		if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
+			tabcontainer->selectFirstTab();
+	}
 	// </FS:ND>
 }
 
@@ -4676,7 +4677,7 @@ void collectChildren( LLView const *aView, nd::prefs::PanelDataPtr aParentPanel,
 void LLFloaterPreference::collectSearchableItems()
 {
 	delete mSearchData;
-	mSearchData = 0;
+	mSearchData = NULL;
 	LLTabContainer *pRoot = getChild< LLTabContainer >( "pref core" );
 	if( mFilterEdit && pRoot )
 	{
