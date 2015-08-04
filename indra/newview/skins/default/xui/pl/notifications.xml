@@ -72,6 +72,89 @@ Foldery nie zostały wysłane na Marketplace z powodu błędu sieci lub systemu.
 
 Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj później.
 	</notification>
+	<notification name="StockPasteFailed">
+		Kopiowanie lub przeniesienie do folderu Magazynowego nie powiodło się:
+
+        &apos;[ERROR_CODE]&apos;
+	</notification>
+	<notification name="MerchantPasteFailed">
+		Kopiowanie lub przenoszenie przedmiotów na Marketplace nie powiodło się:
+
+&apos;[ERROR_CODE]&apos;
+	</notification>
+	<notification name="MerchantTransactionFailed">
+		Transakcja z Marketplace nie powiodła się:
+
+        Powód: &apos;[ERROR_REASON]&apos;
+        [ERROR_DESCRIPTION]
+	</notification>
+	<notification name="MerchantUnprocessableEntity">
+		Wylistowanie tej rzeczy lub aktywowanie folderu z wersją nie było możliwe. Zazwyczaj jest to spowodowane brakującymi informacjami w formularzu z opisem przedmiotu, ale może to również wynikać z błędów w strukturze folderów. Zmień opis przedmiotu lub sprawdź foldery, aby znaleźć błędy.
+	</notification>
+	<notification name="MerchantListingFailed">
+		Listowanie na Marketplace nie powiodło się:
+
+        &apos;[ERROR_CODE]&apos;
+	</notification>
+	<notification name="MerchantFolderActivationFailed">
+		Aktywacja tego folderu wersji nie powiodła się:
+
+        &apos;[ERROR_CODE]&apos;
+	</notification>
+	<notification name="MerchantForceValidateListing">
+		Aby wylistowanie tej rzeczy było możliwe hierarchia w jej zawartości została automatycznie naprawiona.
+		<usetemplate ignoretext="Ostrzegaj, gdy wylistowanie rzeczy automatycznie naprawia hierarchię zawartości" name="okignore" />
+    </notification>
+	<notification name="ConfirmMerchantActiveChange">
+		Jeśli kontynuujesz, to zmieni się aktywna zawartość tej rzeczy. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź przed zmodyfikowaniem aktywnej rzeczy na Marketplace" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="ConfirmMerchantMoveInventory">
+		Przedmioty przeciągnięte do okna listowania na Marketplace są przenoszone z ich oryginalnych lokalizacji, a nie kopiowane. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź, zanim prześlę na Marketplace przedmiot z mojej Szafy" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="ConfirmListingCutOrDelete">
+		Przeniesienie lub usunięcie folderu usunie również Twój przedmiot na Marketplace. Jeśli chcesz, aby przedmiot był ciągle widoczny na Marketplace musisz przesunąć lub usunąć zawartość folderu z wersją, którą chcesz zmodyfikować. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź, zanim usunę lub przeniosę przedmiot z Marketplace" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="ConfirmCopyToMarketplace">
+		Nie masz praw do skopiowania jednego lub więcej obiektów na Marketplace. Możesz je przenieść lub pozostawić.
+		<usetemplate canceltext="Anuluj" ignoretext="Potwierdź, zanim wyślę na Marketplace przedmioty bez praw kopiowania" name="yesnocancelbuttons" notext="Nie przenoś" yestext="Przenieś"/>
+	</notification>
+	<notification name="ConfirmMerchantUnlist">
+		Jeśli kontynuujesz, to ta rzecz zostanie usunięta z listy. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź, zanim usunę z listy rzecz na Marketplace" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="ConfirmMerchantClearVersion">
+		Jeśli kontynuujesz, to folder wersji tej rzeczy zostanie zdeaktywowany. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Potwierdź przed wyłączeniem folderu wersji dla rzeczy na Marketplace" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="AlertMerchantListingNotUpdated">
+		Ta rzecz nie może zostać zaktualizowana.
+[[URL] Kliknij tutaj] aby zaktualizować ją na Marketplace.
+	</notification>
+	<notification name="AlertMerchantListingCannotWear">
+		Nie możesz założyć ubrań lub części ciała, które znajdują się w folderze listy rzeczy Marketplace.
+	</notification>
+	<notification name="AlertMerchantListingInvalidID">
+		Nieprawidłowy ID rzeczy.
+	</notification>
+	<notification name="AlertMerchantListingActivateRequired">
+		Istnieje kilka, lub żadna, wersji folderu dla tej rzeczy. Będziesz musiał/a wybrać i uaktywnić jedną oddzielnie później.
+		<usetemplate ignoretext="Powiadamiaj o aktywacji folderu wersji, gdy tworzę rzecz z kilkoma folderami wersji" name="okignore" />
+	</notification>
+	<notification name="AlertMerchantStockFolderSplit">
+		Przedmioty z ograniczonymi zasobami magazynowymi różnych typów zostały rozdzielone do osobnych folderów, aby ogólna hierarchia katalogów umożliwiała ich listowanie.
+		<usetemplate ignoretext="Powiadom, gdy folder Magazynowy jest dzielony przed listowaniem" name="okignore" />
+	</notification>
+	<notification name="AlertMerchantStockFolderEmpty">
+		Twoja rzecz została usunięta z listy, ponieważ nie ma jej już w Magazynie. Musisz dodać więcej jej jednostek do folderu Magazynowego, aby można było ją ponownie wyświetlać na liście.
+		<usetemplate ignoretext="Powiadom, gdy rzecz jest zdjęta z listy, bo folder zasobów Magazynowych jest pusty" name="okignore" />
+	</notification>
+	<notification name="AlertMerchantVersionFolderEmpty">
+		Twoja rzecz została usunięta z listy, ponieważ folder wersji jest pusty. Musisz dodać więcej jej jednostek do folderu wersji, aby można było ją ponownie wyświetlać na liście.
+		<usetemplate ignoretext="Powiadom, gdy rzecz jest zdjęta z listy, bo folder wersji jest pusty" name="okignore" />
+	</notification>
 	<notification name="CompileQueueSaveText">
 		W trakcie ładowania tekstu dla skryptu pojawił się problem z następującego powodu: [REASON]. Spróbuj ponownie za kilka minut.
 	</notification>
