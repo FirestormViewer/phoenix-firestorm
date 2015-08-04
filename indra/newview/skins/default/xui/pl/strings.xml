@@ -551,28 +551,46 @@ Spróbuj zalogować się ponownie za minutę.
 		Pozycja: [POSITION]
 	</string>
 	<string name="TooltipOutboxDragToWorld">
-		Nie możesz rezzować obiektów w skrzynce nadawczej kupca
-	</string>
-	<string name="TooltipOutboxNoTransfer">
-		Jeden lub kilka z tych obiektów nie może zostać sprzedany / przetransferowany.
-	</string>
-	<string name="TooltipOutboxNotInInventory">
-		Twoja skrzynka nadawcza kupca akceptuje tylko przedmioty bezpośrednio z Twojej Szafy.
+		Nie możesz rezzować obiektów z folderu rzeczy na Marketplace
 	</string>
 	<string name="TooltipOutboxWorn">
-		Nie możesz umieszczać w skrzynce nadawczej kupca przedmiotów, które masz na sobie założone
-	</string>
-	<string name="TooltipOutboxCallingCard">
-		Nie możesz umieszczać wizytówek w skrzynce nadawczej kupca
+		Nie możesz umieszczać na Marketplace przedmiotów, które masz na sobie założone
 	</string>
 	<string name="TooltipOutboxFolderLevels">
-		Głębokość zagnieżdżonych folderów przekracza 3
+		Głębokość zagnieżdżonych folderów przekracza [AMOUNT]. Zmniejsz ilość zagdzieżdżeń; Spakuj przedmioty w pudełka, jeśli to pomoże.
 	</string>
 	<string name="TooltipOutboxTooManyFolders">
-		Ilość podfolderów w folderze najwyższego poziomu przekracza 20
+		Ilość podfolderów przekracza [AMOUNT]. Zmniejsz ilość folderów; Spakuj przedmioty w pudełka, jeśli to pomoże.
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
-		Ilość pozycji w folderze najwyższego poziomu przekracza 200
+		Ilość rzeczy przekracza [AMOUNT]. Jeśli chcesz sprzedać więcej, niż [AMOUNT] rzeczy jako jedną pozycję, to musisz je spakować w pudełka.
+	</string>
+	<string name="TooltipOutboxTooManyStockItems">
+		Ilość przedmiotów w folderze Magazynowym przekracza [AMOUNT].
+	</string>
+	<string name="TooltipOutboxCannotDropOnRoot">
+		Możesz przenosić foldery lub przedmioty wyłącznie do kart WSZYSTKO lub NIEPRZYPISANE. Wybierz teraz jedną z tych kart i spróbuj ponownie.
+	</string>
+	<string name="TooltipOutboxNoTransfer">
+		Jeden lub kilka z tych obiektów nie może zostać sprzedany / przetransferowany
+	</string>
+	<string name="TooltipOutboxNotInInventory">
+		Marketplace akceptuje tylko przedmioty bezpośrednio z Twojej Szafy.
+	</string>
+	<string name="TooltipOutboxLinked">
+		Nie możesz sprzedać zlinkowanych folderów lub przedmiotów na Marketplace
+	</string>
+	<string name="TooltipOutboxCallingCard">
+		Nie możesz umieszczać wizytówek na Marketplace
+	</string>
+	<string name="TooltipOutboxDragActive">
+		Nie można przenieść wylistowanej rzeczy
+	</string>
+	<string name="TooltipOutboxCannotMoveRoot">
+		Nie możesz przenieść folderu głównego rzeczy na Marketplace
+	</string>
+	<string name="TooltipOutboxMixedStock">
+		Wszystkie rzeczy w folderze Magazynowym muszą mieć ten sam typ i zezwolenia
 	</string>
 	<string name="TooltipDragOntoOwnChild">
 		Nie możesz przenieść folderu do jego obiektu podrzędnego
@@ -1157,7 +1175,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ControlYourCamera">
 		Kontrolować kamerę
 	</string>
-	<string name="JoinAnExperience"/><!-- intentionally blank -->
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
@@ -1494,6 +1511,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="FavoritesNoMatchingItems">
 		Przeciągnij landmark tutaj aby dodać go do swoich ulubionych.
 	</string>
+	<string name="MarketplaceNoMatchingItems">
+		Niczego nie znaleziono. Sprawdź pisownię i spróbuj ponownie.
+	</string>
 	<string name="InventoryNoTexture">
 		Nie posiadasz kopii tej tekstury w swojej Szafie.
 	</string>
@@ -1515,6 +1535,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InventoryOutboxNoItemsTitle">
 		Twoja skrzynka nadawcza kupca jest pusta.
 	</string>
+	<string name="InventoryOutboxNoItems">
+		Przeciągnij foldery do tego obszaru i kliknij "Wyślij na Marketplace", aby dodać je na listę sprzedaży w [[MARKETPLACE_DASHBOARD_URL] Marketplace].
+	</string>
 	<string name="InventoryOutboxInitializingTitle">
 		Inicjalizacja Marketplace.
 	</string>
@@ -1527,35 +1550,95 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InventoryOutboxError">
 		[[MARKETPLACE_CREATE_STORE_URL] Sklep na Marketplace] zwraca błędy.
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip">
-		Umieść tutaj przedmioty, aby przygotować je do wysyłki na Marketplace.
+	<string name="InventoryMarketplaceError">
+		Ta funkcjonalność jest obecnie w fazie Beta. Dodaj proszę swoje imię do tego [http://goo.gl/forms/FCQ7UXkakz formularza Google] (w języku angielskim), jeśli chcesz wziąć udział w programie Beta i pomóc.
 	</string>
-	<string name="InventoryOutboxNoItems">
-		Przeciągnij foldery do tego obszaru i kliknij "Wyślij na Marketplace", aby dodać je na listę sprzedaży w [[MARKETPLACE_DASHBOARD_URL] Marketplace].
+	<string name="InventoryMarketplaceListingsNoItemsTitle">
+		Twój folder rzeczy na Marketplace jest pusty.
+	</string>
+	<string name="InventoryMarketplaceListingsNoItems">
+		Przeciągnij foldery do tego obszaru, aby dodać je na listę sprzedaży w [[MARKETPLACE_DASHBOARD_URL] Marketplace].
+	</string>
+	<string name="Marketplace Validation Warning Stock">
+		folder Magazynowy musi być zawarty w folderze wersji
+	</string>
+	<string name="Marketplace Validation Error Mixed Stock">
+		: Błąd: wszystkie przedmioty w folderze Magazynowym muszą mieć ten sam typ i być niekopiowalne
+	</string>
+	<string name="Marketplace Validation Error Subfolder In Stock">
+		: Błąd: folder Magazynowy nie może zawierać podfolderów
+	</string>
+	<string name="Marketplace Validation Warning Empty">
+		: Uwaga: folder jest pusty
+	</string>
+	<string name="Marketplace Validation Warning Create Stock">
+		: Uwaga: tworzę folder Magazynowy
+	</string>
+	<string name="Marketplace Validation Warning Create Version">
+		: Uwaga: tworzę folder wersji
+	</string>
+	<string name="Marketplace Validation Warning Move">
+		: Uwaga: przenoszę przedmioty
+	</string>
+	<string name="Marketplace Validation Warning Delete">
+		: Uwaga: zawartość folderu przeniesiona do folderu Magazynowego, usuwam pusty katalog
+	</string>
+	<string name="Marketplace Validation Error Stock Item">
+		: Błąd: przedmioty bez praw kopiowania muszą się znajdować w folderze Magazynowym
+	</string>
+	<string name="Marketplace Validation Warning Unwrapped Item">
+		: Uwaga: przedmioty muszą się znajdować w folderze wersji
+	</string>
+	<string name="Marketplace Validation Error">
+		: Błąd:
+	</string>
+	<string name="Marketplace Validation Warning">
+		: Uwaga:
+	</string>
+	<string name="Marketplace Validation Error Empty Version">
+		: Uwaga: folder wersji musi zawierać przynajmniej jedną pozycję
+	</string>
+	<string name="Marketplace Validation Error Empty Stock">
+		: Uwaga: folder Magazynowy musi zawierać przynajmniej jedną pozycję
+	</string>
+	<string name="Marketplace Validation No Error">
+		Brak błędów lub ostrzeżeń
 	</string>
 	<string name="Marketplace Error None">
 		Brak błędów
 	</string>
+	<string name="Marketplace Error Prefix">
+		Błąd:
+	</string>
 	<string name="Marketplace Error Not Merchant">
-		Błąd: Przed wysłaniem przedmiotów na Marketplace musisz zostać kupcem (darmowe).
+		Przed wysłaniem przedmiotów na Marketplace musisz zostać kupcem (darmowe).
 	</string>
-	<string name="Marketplace Error Empty Folder">
-		Błąd: Ten folder nie ma zawartości.
-	</string>
-	<string name="Marketplace Error Unassociated Products">
-		Błąd: Ta pozycja nie może zostać załadowana, ponieważ Twoje konto kupca ma zbyt wiele nieprzypisanych przedmiotów. Aby naprawić ten błąd zaloguj się na stronę Marketplace i zmniejsz ilość nieprzypisanych (unassociated) przedmiotów.
-	</string>
-	<string name="Marketplace Error Object Limit">
-		Błąd: Ta pozycja zawiera zbyt wiele elementów. Umieść przedmioty razem w pudełkach, aby zmniejszyć ich całkowitą liczbę do mniej niż 200.
-	</string>
-	<string name="Marketplace Error Folder Depth">
-		Błąd: Ta pozycja zawiera zbyt wiele zagnieżdżonych folderów. Zreorganizuj wszystko tak, aby były obecne maksymalnie 3 poziomy zagnieżdżonych folderów.
+	<string name="Marketplace Error Not Accepted">
+		Nie można przenieść tego przedmiotu.
 	</string>
 	<string name="Marketplace Error Unsellable Item">
-		Błąd: Ta pozycja nie może być sprzedana na Marketplace.
+		Ta pozycja nie może być sprzedana na Marketplace.
 	</string>
-	<string name="Marketplace Error Internal Import">
-		Błąd: Wystąpił problem z tą pozycją. Spróbuj ponownie później.
+	<string name="MarketplaceNoID">
+		Brak Mkt ID
+	</string>
+	<string name="MarketplaceLive">
+		na liście
+	</string>
+	<string name="MarketplaceActive">
+		aktywne
+	</string>
+	<string name="MarketplaceMax">
+		maks
+	</string>
+	<string name="MarketplaceStock">
+		magazyn
+	</string>
+	<string name="MarketplaceNoStock">
+		brak w Magazynie
+	</string>
+	<string name="MarketplaceUpdating">
+		aktualizacja...
 	</string>
 	<string name="Open landmarks">
 		Otwórz landmarki
@@ -4784,9 +4867,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Map_Label">
 		Mapa
 	</string>
-	<string name="Command_Marketplace_Label">
-		Marketplace
-	</string>
 	<string name="Command_MiniMap_Label">
 		Minimapa
 	</string>
@@ -4948,6 +5028,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		Idź na zakupy
+	</string>
+	<string name="Command_MarketplaceListings_Tooltip">
+		Sprzedaj owoce swojej twórczości
 	</string>
 	<string name="Command_MiniMap_Tooltip">
 		Pokaż ludzi w pobliżu (CTRL+SHIFT+M)
