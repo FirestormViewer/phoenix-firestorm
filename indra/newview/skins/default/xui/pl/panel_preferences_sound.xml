@@ -432,6 +432,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndGroupNotice" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndGroupNotice"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się informacja o nowej Przygodzie." name="textFSQuestionExperience">
+				Nowa Przygoda:
+			</text>
+			<button name="Prev_UISndQuestionExperience" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndQuestionExperience" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndQuestionExperience"/>
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy nastąpi nieprawidłowa operacja." name="textFSInvalidOp">
 				Nieprawidłowa operacja:
 			</text>
