@@ -1040,6 +1040,11 @@ static void items_removal_confirmation(const LLSD& notification, const LLSD& res
 		//because once removed from root folder view the item is no longer a selected item
 		LLInventoryAction::removeItemFromDND(folder_root);
 		folder_root->removeSelectedItems();
+
+		// <FS:Ansariel> Nicely screwed up, ProductEngines!
+		// Update the marketplace listings that have been affected by the operation
+		LLInventoryAction::updateMarketplaceFolders();
+		// </FS:Ansariel>
 	}
 }
 
@@ -2807,9 +2812,22 @@ void LLInventoryAction::removeItemFromDND(LLFolderView* root)
     }
 }
 
-        
-        // Update the marketplace listings that have been affected by the operation
-        updateMarketplaceFolders();
+// <FS:Ansariel> Nicely screwed up, ProductEngines!
+//void LLInventoryAction::onItemsRemovalConfirmation( const LLSD& notification, const LLSD& response, LLFolderView* root )
+//{
+//	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+//	if (option == 0)
+//	{
+//        //Need to remove item from DND before item is removed from root folder view
+//        //because once removed from root folder view the item is no longer a selected item
+//        removeItemFromDND(root);
+//		root->removeSelectedItems();
+//        
+//        // Update the marketplace listings that have been affected by the operation
+//        updateMarketplaceFolders();
+//	}
+//}
+// </FS:Ansariel>
 
 void LLInventoryAction::buildMarketplaceFolders(LLFolderView* root)
 {

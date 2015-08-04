@@ -480,10 +480,13 @@ struct LLInventoryAction
     static void callback_doToSelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
     static void callback_copySelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
     static void removeItemFromDND(LLFolderView* root);
+    // <FS:Ansariel> Nicely screwed up, ProductEngines!
+    static void updateMarketplaceFolders();
     
 private:
     static void buildMarketplaceFolders(LLFolderView* root);
-    static void updateMarketplaceFolders();
+    // <FS:Ansariel> Nicely screwed up, ProductEngines!
+    //static void updateMarketplaceFolders();
     static std::list<LLUUID> sMarketplaceFolders; // Marketplace folders that will need update once the action is completed
 };
 
