@@ -7051,6 +7051,7 @@ class LLWorldSetRejectAllGroupInvites : public view_listener_t
 		else
 		{
 			gAgent.setRejectAllGroupInvites();
+			LLNotificationsUtil::add("RejectAllGroupInvitesModeSet");
 		}
 		return true;
 	}

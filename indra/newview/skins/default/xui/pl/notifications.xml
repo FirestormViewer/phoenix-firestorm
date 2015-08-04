@@ -1681,6 +1681,11 @@ Wszystkie nadchodzące propozycje i prośby o teleportację będą teraz otrzymy
 		Nie można w tej chwili poprosić o teleport, ponieważ tryb odrzucania wszystkich propozycji i próśb o teleportację jest włączony.
 Jeśli chcesz go wyłączyć, to możesz to zrobić w menu 'Komunikacja' &gt; 'Status online'.
 	</notification>
+	<notification name="RejectAllGroupInvitesModeSet">
+		Tryb odrzucania wszystkich zaproszeń do grup jest włączony.
+Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
+		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich zaproszeń do grup" name="okignore" />
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.
