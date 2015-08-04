@@ -30,6 +30,7 @@
 
 #include "llinventorymodel.h"
 #include "llinventory.h"
+#include "llhandle.h"
 #include "llwearabletype.h"
 
 // compute_stock_count() return error code
@@ -464,7 +465,8 @@ protected:
  *******************************************************************************/
 class LLFolderViewItem;
 class LLFolderViewFolder;
-
+class LLInventoryModel;
+class LLFolderView;
 
 class LLInventoryState
 {
@@ -476,17 +478,15 @@ public:
 
 struct LLInventoryAction
 {
-	static void doToSelected(class LLInventoryModel* model, class LLFolderView* root, const std::string& action, BOOL user_confirm = TRUE);
-    static void callback_doToSelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
-    static void callback_copySelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
-    static void removeItemFromDND(LLFolderView* root);
-    // <FS:Ansariel> Nicely screwed up, ProductEngines!
-    static void updateMarketplaceFolders();
+	static void doToSelected(LLInventoryModel* model, LLFolderView* root, const std::string& action, BOOL user_confirm = TRUE);
+	static void callback_doToSelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
+	static void callback_copySelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
+	static void removeItemFromDND(LLFolderView* root);
+	static void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response, LLHandle<LLFolderView> root);
     
 private:
     static void buildMarketplaceFolders(LLFolderView* root);
-    // <FS:Ansariel> Nicely screwed up, ProductEngines!
-    //static void updateMarketplaceFolders();
+    static void updateMarketplaceFolders();
     static std::list<LLUUID> sMarketplaceFolders; // Marketplace folders that will need update once the action is completed
 };
 
