@@ -438,6 +438,13 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndGroupNotice"/>
 
+		<text tool_tip="UUID des Klangs für neue Erlebnisnachrichten." name="textFSQuestionExperience">
+			Erlebnisnachrichten:
+		</text>
+		<button label="V" name="Prev_UISndQuestionExperience" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Def_UISndQuestionExperience" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndQuestionExperience"/>
+
 		<text tool_tip="UUID des Klangs bei einer ungültigen Aktion." name="textFSInvalidOp">
 			Ungültige Aktion:
 		</text>
