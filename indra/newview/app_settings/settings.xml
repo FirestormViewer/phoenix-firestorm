@@ -6762,17 +6762,6 @@
         <key>Value</key>
         <integer>0</integer>
     </map>
-    <key>InventoryDisplayOutbox</key>
-    <map>
-        <key>Comment</key>
-        <string>Override merchant inventory outbox display</string>
-        <key>Persist</key>
-        <integer>0</integer>
-        <key>Type</key>
-        <string>Boolean</string>
-        <key>Value</key>
-        <integer>0</integer>
-    </map>
     <key>InventoryInboxToggleState</key>
     <map>
         <key>Comment</key>
@@ -6797,6 +6786,17 @@
 		<key>Backup</key>
 		<integer>0</integer>
 	</map>
+    <key>InventoryOutboxDisplayBoth</key>
+    <map>
+        <key>Comment</key>
+        <string>Show the legacy Merchant Outbox UI as well as the Marketplace Listings UI</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
 	<key>InventoryOutboxLogging</key>
 	<map>
 		<key>Comment</key>
@@ -6830,7 +6830,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>21</integer>
+      <integer>20</integer>
     </map>
     <key>InventoryOutboxMaxFolderDepth</key>
     <map>
@@ -6854,6 +6854,17 @@
       <key>Value</key>
       <integer>200</integer>
     </map>
+    <key>InventoryOutboxMaxStockItemCount</key>
+    <map>
+        <key>Comment</key>
+        <string>Maximum number of items allowed in a stock folder.</string>
+        <key>Persist</key>
+        <integer>0</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>200</integer>
+    </map>
     <key>InventorySortOrder</key>
     <map>
       <key>Comment</key>
@@ -6864,6 +6875,17 @@
       <string>U32</string>
       <key>Value</key>
       <integer>7</integer>
+    </map>
+    <key>MarketplaceListingsSortOrder</key>
+    <map>
+      <key>Comment</key>
+      <string>Specifies sort for marketplace listings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>2</integer>
     </map>
     <key>InvertMouse</key>
     <map>
@@ -7907,6 +7929,17 @@
       <key>Value</key>
       <string />
     </map>
+	<key>MarketplaceListingsLogging</key>
+	<map>
+		<key>Comment</key>
+		<string>Enable debug output associated with the Marketplace Listings (SLM) API.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
     <key>MarketplaceURL</key>
     <map>
       <key>Comment</key>
@@ -12726,6 +12759,14 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>1.0</real>
+      <key>SanityCheckType</key>
+      <string>LessThanEquals</string>
+      <key>SanityValue</key>
+      <array>
+        <real>8.0</real>
+      </array>
+      <key>SanityComment</key>
+      <string>Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4. Setting this too high also seriously lowers your graphics performance.</string>
     </map>
     <key>RenderWater</key>
     <map>
@@ -23454,6 +23495,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>3</integer>
+    </map>
+    <key>FSConfirmPayments</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables confirmation dialogs for payments.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSPaymentConfirmationThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Threshold when payment confirmation dialogs are triggered</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>200</integer>
     </map>
     <key>FSEnabledLanguages</key>
     <map>

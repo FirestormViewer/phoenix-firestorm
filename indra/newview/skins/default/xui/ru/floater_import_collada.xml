@@ -1,16 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Import Collada" title="Импорт сцены">
-  <text name="mesh count">
-	Меш: [COUNT]
-  </text>
-  <text name="texture count">
-	Текстуры: [COUNT]
-  </text>
-  <text name="status">
-	Статус: [STATUS]
-  </text>
-   <button name="cancel" label="Отмена"/>
-  <string name="status_idle">Простой</string>
-  <string name="status_uploading">Загрузка [NAME]</string>
-  <string name="status_creating">Создание объекта [NAME]</string>
- </floater>
+	<text name="mesh count">
+		Меш: [COUNT]
+	</text>
+	<text name="texture count">
+		Текстуры: [COUNT]
+	</text>
+	<text name="status">
+		Статус: [STATUS]
+	</text>
+	<button name="cancel" label="Отмена"/>
+	<string name="status_idle">
+		Простой
+	</string>
+	<string name="status_uploading">
+		Загрузка [NAME]
+	</string>
+	<string name="status_creating">
+		Создание объекта [NAME]
+	</string>
+</floater>

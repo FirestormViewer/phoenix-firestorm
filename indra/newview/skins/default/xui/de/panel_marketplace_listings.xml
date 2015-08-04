@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Marktplatz" name="Marketplace Panel">
+	<panel name="tool_panel">
+		<menu_button name="sort_btn" tool_tip="Anzeige-/Sortieroptionen"/>
+		<button name="add_btn" tool_tip="Neuen Auflistungsordner erstellen"/>
+		<button label="Auf Fehler prüfen" name="audit_btn" tool_tip="Marktplatz-Auflistungen überprüfen" width="105" left_pad="137"/>
+	</panel>
+	<panel name="tab_container_panel">
+		<filter_editor label="Marktplatz-Auflistungen filtern" name="filter_editor"/>
+	</panel>
+	<panel name="marketplace_drop_zone">
+		<text name="drop_zone_label">
+			Ordner ablegen, um Auflistungen zu erstellen
+		</text>
+	</panel>
+</panel>

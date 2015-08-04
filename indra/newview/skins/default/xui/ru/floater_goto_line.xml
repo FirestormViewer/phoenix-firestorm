@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="script goto" title="Перейти к линии">
-	<button label="OK" label_selected="OK" name="goto_btn" />
+	<button label="OK" label_selected="OK" name="goto_btn"/>
 	<text name="txt">
 		Перейти к линии
 	</text>

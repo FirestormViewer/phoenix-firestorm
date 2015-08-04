@@ -2454,7 +2454,12 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		}
 		
 		display_startup();
-		
+        
+        // *TODO : Uncomment that line once the whole grid migrated to SLM and suppress it from LLAgent::handleTeleportFinished() (llagent.cpp)
+        //check_merchant_status();
+
+		display_startup();
+
 		// <FS:CR> Compatibility with old backups
 		// Put gSavedPerAccountSettings here, put gSavedSettings in llappviewer.cpp
 		// *TODO: Should we keep these around forever or just three release cycles?

@@ -30,6 +30,7 @@
 		</menu>
 		<menu_item_call label="Acheter des L$..." name="Buy and Sell L$"/>
 		<menu_item_call label="Boîte d&apos;envoi vendeur..." name="MerchantOutbox"/>
+		<menu_item_call label="Annonces de Place du marché..." name="MarketplaceListings"/>
 		<menu_item_call label="Page d&apos;accueil du compte..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=fr"/>
 		</menu_item_call>
@@ -256,6 +257,7 @@
 			<menu_item_check label="Console de textures" name="Texture Console"/>
 			<menu_item_check label="Console de débogage" name="Debug Console"/>
 			<menu_item_call label="Console de notifications" name="Notifications"/>
+			<menu_item_check label="Console de débogage de région" name="Region Debug Console"/>
 			<menu_item_check label="Chronos" name="Fast Timers"/>
 			<menu_item_check label="Mémoire" name="Memory"/>
 			<menu_item_check label="Statistiques de la scène" name="Scene Statistics"/>

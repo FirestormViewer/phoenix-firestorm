@@ -316,16 +316,16 @@ bool LLControlVariable::isSane()
 {
 	if (mSanityType <= 0)
 	{
-		return TRUE;
+		return true;
 	}
 
 	// it's the default value, or we can't check sanity, assume it's sane
 	if (mValues.size() < 2 || !mValues[1] || mValues[1].isUndefined())
 	{
-		return TRUE;
+		return true;
 	}
 
-	bool sanity = FALSE;
+	bool sanity = false;
 
 	switch (mSanityType)
 	{
@@ -354,10 +354,10 @@ bool LLControlVariable::isSane()
 			sanity = (mValues[1].asReal() <= mSanityValues[0].asReal() || mValues[1].asReal() >= mSanityValues[1].asReal());
 			break;
 		case SANITY_TYPE_NONE:
-			sanity = TRUE;
+			sanity = true;
 			break;
 		default:
-			sanity = FALSE;
+			sanity = false;
 	}
 
 	return sanity;

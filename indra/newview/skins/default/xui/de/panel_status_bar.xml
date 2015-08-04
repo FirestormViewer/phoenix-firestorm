@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
-	<panel.string name="packet_loss_tooltip">
-		Paketverlust
-	</panel.string>
-	<panel.string name="bandwidth_tooltip">
-		Bandbreite
-	</panel.string>
-	<panel.string name="time">
-		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
-	</panel.string>
-	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
-	</panel.string>
-	<panel.string name="buycurrencylabel">
-		[AMT] L$
-	</panel.string>
+	<panel.string name="packet_loss_tooltip">Paketverlust</panel.string>
+	<panel.string name="bandwidth_tooltip">Bandbreite</panel.string>
+	<panel.string name="time">[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]</panel.string>
+	<panel.string name="timeTooltip">[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]</panel.string>
+	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
 	<panel name="menu_search_panel">
 		<search_editor label="Menü durchs." name="search_menu_edit" tool_tip="Den Suchbegriff hier eingeben. Ergebnisse werden für Treffer im Namen eines Menüeintrags angezeigt."/>
 	</panel>
@@ -28,9 +18,7 @@
 		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="?? L$"/>
 		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
-	<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)">
-		24:00 H PST
-	</text>
+	<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)">24:00 H PST</text>
 	<panel name="time_and_media_bg">
 		<button name="stream_toggle_btn" tool_tip="Audiostream der Parzelle starten/stoppen"/>
 		<button name="media_toggle_btn" tool_tip="Alle Medien starten/stoppen (Musik, Video, Webseiten)"/>

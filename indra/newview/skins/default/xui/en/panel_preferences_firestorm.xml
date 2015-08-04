@@ -430,7 +430,6 @@
          name="AntiSpamUnblock"
          label="Unblock all spam sources"
          commit_callback.function="NACL.AntiSpamUnblock"/>
-		 
 
         <check_box
          top_pad="8"
@@ -441,7 +440,33 @@
          height="16"
          name="FSAllowGroupInvitationOnlyWithoutFee"
          width="200" />
-	</panel>
+        <check_box
+         top_pad="8"
+         left="10"
+         label="Confirm before paying. Threshold:"
+         control_name="FSConfirmPayments"
+         follows="left|top"
+         height="16"
+         name="FSConfirmPayments"
+         width="205"
+         tool_tip="Show a confirmation dialog before paying sums greater than the threshold. To always show a confirmation, set the threshold to 0."/>
+        <spinner
+         enabled_control="FSConfirmPayments"
+         top_delta="-5"
+         control_name="FSPaymentConfirmationThreshold"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="5"
+         increment="1"
+         initial_value="200"
+         max_val="2147483647"
+         min_val="0"
+         name="FSPaymentConfirmationThreshold"
+         tool_tip="Show a confirmation dialog before paying sums greater than the threshold. To always show a confirmation, set the threshold to 0."
+         width="100"/>
+    </panel>
 
 
     <!--Avatar-->

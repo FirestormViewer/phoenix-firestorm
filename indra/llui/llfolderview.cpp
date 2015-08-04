@@ -761,7 +761,7 @@ void LLFolderView::removeSelectedItems()
 		// structures.
 		std::vector<LLFolderViewItem*> items;
 		S32 count = mSelectedItems.size();
-		if(count == 0) return;
+		if(count <= 0) return;
 		LLFolderViewItem* item = NULL;
 		selected_items_t::iterator item_it;
 		for (item_it = mSelectedItems.begin(); item_it != mSelectedItems.end(); ++item_it)
@@ -978,9 +978,6 @@ void LLFolderView::cut()
 			if (listener)
 			{
 				listener->cutToClipboard();
-				// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
-				//listener->removeItem();
-				// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 			}
 		}
 		

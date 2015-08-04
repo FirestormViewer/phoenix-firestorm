@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="HoverHeight" title="Hover-Höhe einstellen">
+<floater name="HoverHeight" title="Schwebehöhe festlegen">
 	<slider label="Höhe" name="HoverHeightSlider"/>
 </floater>

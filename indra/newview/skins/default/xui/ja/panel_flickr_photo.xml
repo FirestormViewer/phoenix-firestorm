@@ -26,7 +26,7 @@
 		説明：
 	</text>
 	<check_box initial_value="true" label="SL の場所を説明の最後に含める" name="add_location_cb"/>
-	<text name="tags_label">
+	<text name="tags_label" tool_tip="タグはスペースで区切って下さい。複数の単語から成るタグについては、&quot;&quot; で囲んで下さい。">
 		タグ:
 	</text>
 	<combo_box name="rating_combobox" tool_tip="Flickr コンテンツのレーティング区分">

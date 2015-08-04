@@ -162,12 +162,17 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_MeshesOpen",		"Inv_MeshesClosed",		FALSE,     true));
 	
+	bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
 	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
-	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     !gSavedSettings.getBOOL("InventoryOutboxMakeVisible")));
+	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     boxes_invisible));
 	// </FS:Ansariel> Use individual icons for different folder types
 
 	addEntry(LLFolderType::FT_BASIC_ROOT, 			new ViewerFolderEntry("Basic Root",				"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     true));
-		 
+
+	addEntry(LLFolderType::FT_MARKETPLACE_LISTINGS, new ViewerFolderEntry("Marketplace Listings",   "Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
+	addEntry(LLFolderType::FT_MARKETPLACE_STOCK,    new ViewerFolderEntry("New Stock",              "Inv_StockFolderOpen",	"Inv_StockFolderClosed",		FALSE,     false, "default"));
+	addEntry(LLFolderType::FT_MARKETPLACE_VERSION,  new ViewerFolderEntry("New Version",            "Inv_VersionFolderOpen","Inv_VersionFolderClosed",		FALSE,     false, "default"));
+
 	addEntry(LLFolderType::FT_NONE, 				new ViewerFolderEntry("New Folder",				"Inv_FolderOpen",		"Inv_FolderClosed",		FALSE,     false, "default"));
 
 	// <FS:Ansariel> Special Firestorm folder

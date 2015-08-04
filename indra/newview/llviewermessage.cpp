@@ -75,6 +75,7 @@
 //#include "llfloaterimnearbychat.h"
 #include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
+#include "llmarketplacefunctions.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpanelgrouplandmoney.h"
@@ -7510,7 +7511,25 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			}
 		}
 // </FS:CR>
-		
+        
+        // Special Marketplace update notification
+		if (notificationID == "SLM_UPDATE_FOLDER")
+        {
+            std::string state = llsdBlock["state"].asString();
+            if (state == "deleted")
+            {
+                // Perform the deletion viewer side, no alert shown in this case
+                LLMarketplaceData::instance().deleteListing(llsdBlock["listing_id"].asInteger());
+                return true;
+            }
+            else
+            {
+                // In general, no message will be displayed, all we want is to get the listing updated in the marketplace floater
+                // If getListing() fails though, the message of the alert will be shown by the caller of attempt_standard_notification()
+                return LLMarketplaceData::instance().getListing(llsdBlock["listing_id"].asInteger());
+            }
+        }
+        
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;
 	}	

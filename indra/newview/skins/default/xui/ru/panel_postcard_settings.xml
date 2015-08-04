@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_postcard_settings">
 	<combo_box label="Разрешение" name="postcard_size_combo">
 		<combo_box.item label="Текущее окно" name="CurrentWindow" />

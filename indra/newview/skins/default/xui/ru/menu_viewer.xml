@@ -360,6 +360,7 @@
 			<menu_item_check label="Консоль текстур" name="Texture Console"/>
 			<menu_item_check label="Консоль отладки" name="Debug Console"/>
 			<menu_item_call label="Консоль уведомлений" name="Notifications"/>
+			<menu_item_check label="Консоль отладки региона" name="Region Debug Console"/>
 			<menu_item_check label="Оперативные таймеры" name="Fast Timers"/>
 			<menu_item_check label="Память" name="Memory"/>
 			<menu_item_check label="Статистика по сцене" name="Scene Statistics"/>

@@ -323,6 +323,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			</panel.string>
 			<panel.string name="DirectoryFee">
 				Mostrar en la Búsqueda ([DIRECTORY_FEE] L$/semana)
+			</panel.string>
 			<text name="allow_label">
 				Permitir a otros Residentes:
 			</text>
