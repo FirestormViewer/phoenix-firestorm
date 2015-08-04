@@ -12752,7 +12752,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>LessThanEquals</string>
       <key>SanityValue</key>
       <array>
-        <integer>8.0</integer>
+        <real>8.0</real>
       </array>
       <key>SanityComment</key>
       <string>Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4. Setting this too high also seriously lowers your graphics performance.</string>
