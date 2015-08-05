@@ -163,6 +163,10 @@
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MerchantForceValidateListing">
+		リストを作成するために、リスト内容の構造を修復しました。
+		 <usetemplate ignoretext="内容の構造を修復してリストを作成する時は警告する" name="okignore"  yestext="OK"/>
+	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		この操作により、このリストの有効な内容が変更されます。続けますか？
 		<usetemplate ignoretext="マーケットプレイスで有効なリストを変更する前に確認する" name="okcancelignore" notext="取り消し" yestext="OK"/>
@@ -210,6 +214,11 @@
 		在庫が空のため、リストを削除しました。もう一度リストを表示するには、在庫フォルダにユニットを追加する必要があります。
 		<usetemplate ignoretext="在庫フォルダが空のためにリストが表示されないと警告が表示されます" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="AlertMerchantVersionFolderEmpty">
+		バージョンフォルダが空のため、リストを削除しました。もう一度リストを表示するには、バージョンフォルダにアイテムを追加する必要があります。
+		<usetemplate ignoretext="バージョンフォルダが空のためにリストが表示されないと警告が表示されます。" name="okignore" yestext="OK"/>
+	</notification>
+	
 	<notification name="CompileQueueSaveText">
 		次の理由で、スクリプト用テキストのアップロード時に問題が起こりました。
 [REASON]
@@ -1800,6 +1809,11 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		変更したい場合は「コミュニケーション」メニューの「ログイン状態」から行って下さい。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RejectAllGroupInvitesModeSet">
+「グループ招待をすべて拒否」モードになっています。
+誰が発信するものでも、グループ招待はすべて自動的に拒否されます。このため、招待があっても通知はされません。
+		<usetemplate ignoretext="「グループ招待をすべて拒否」モードにログイン状態を変更する" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		加入できるグループの最大限に達しました。 このグループに加入するために他のグループを脱退するか、この申し入れを断ってください。
 [NAME] があなたをグループのメンバーとして勧誘しています。
@@ -2323,6 +2337,10 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	<notification name="PayConfirmation">
 		L$[AMOUNT] を [TARGET] に支払うことを確認してください。
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="支払い"/>
+	</notification>
+	<notification name="PayObjectFailed">
+		支払いに失敗しました。オブジェクトがみつかりませんでした。
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
 		このオブジェクトには、あなたがコピーできるアイテムはありません。
