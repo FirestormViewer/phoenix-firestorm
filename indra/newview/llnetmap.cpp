@@ -1265,8 +1265,8 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 	const S32 imgHeight = (S32)mParcelImagep->getHeight();
 
 	const LLVector3 originLocal(pRegion->getOriginGlobal() - mParcelImageCenterGlobal);
-	const S32 originX = llround(originLocal.mV[VX] * mObjectMapTPM + imgWidth / 2);
-	const S32 originY = llround(originLocal.mV[VY] * mObjectMapTPM + imgHeight / 2);
+	const S32 originX = ll_round(originLocal.mV[VX] * mObjectMapTPM + imgWidth / 2);
+	const S32 originY = ll_round(originLocal.mV[VY] * mObjectMapTPM + imgHeight / 2);
 
 	U32* pTextureData = (U32*)mParcelRawImagep->getData();
 
@@ -1274,14 +1274,14 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 	// Draw the north and east region borders
 	//
 	const F32 real_width(pRegion->getWidth());
-	const S32 borderY = originY + llround(real_width * mObjectMapTPM);
+	const S32 borderY = originY + ll_round(real_width * mObjectMapTPM);
 	if ( (borderY >= 0) && (borderY < imgHeight) )
 	{
 		S32 curX = llclamp(originX, 0, imgWidth), endX = llclamp(originX + ll_round(real_width * mObjectMapTPM), 0, imgWidth - 1);
 		for (; curX <= endX; curX++)
 			pTextureData[borderY * imgWidth + curX] = clrOverlay.asRGBA();
 	}
-	const S32 borderX = originX + llround(real_width * mObjectMapTPM);
+	const S32 borderX = originX + ll_round(real_width * mObjectMapTPM);
 	if ( (borderX >= 0) && (borderX < imgWidth) )
 	{
 		S32 curY = llclamp(originY, 0, imgHeight), endY = llclamp(originY + ll_round(real_width * mObjectMapTPM), 0, imgHeight - 1);
@@ -1309,8 +1309,8 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 			if ( (!fForSale) && (!fCollision) && (!fAuction) && (0 == (overlay & (PARCEL_SOUTH_LINE | PARCEL_WEST_LINE))) )
 				continue;
 
-			const S32 posX = originX + llround(idxCol * GRID_STEP * mObjectMapTPM);
-			const S32 posY = originY + llround(idxRow * GRID_STEP * mObjectMapTPM);
+			const S32 posX = originX + ll_round(idxCol * GRID_STEP * mObjectMapTPM);
+			const S32 posY = originY + ll_round(idxRow * GRID_STEP * mObjectMapTPM);
 
 			static LLCachedControl<bool> s_fForSaleParcels(gSavedSettings, "MiniMapForSaleParcels");
 			static LLCachedControl<bool> s_fShowCollisionParcels(gSavedSettings, "MiniMapCollisionParcels");

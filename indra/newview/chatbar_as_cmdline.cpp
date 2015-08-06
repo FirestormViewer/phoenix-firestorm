@@ -794,9 +794,9 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
 					LLVector3d agentPos = gAgent.getPositionGlobal();
-					S32 agent_x = llround( (F32)fmod( agentPos.mdV[VX], (F64)REGION_WIDTH_METERS ) );
-					S32 agent_y = llround( (F32)fmod( agentPos.mdV[VY], (F64)REGION_WIDTH_METERS ) );
-					S32 agent_z = llround( (F32)agentPos.mdV[VZ] );
+					S32 agent_x = ll_round( (F32)fmod( agentPos.mdV[VX], (F64)REGION_WIDTH_METERS ) );
+					S32 agent_y = ll_round( (F32)fmod( agentPos.mdV[VY], (F64)REGION_WIDTH_METERS ) );
+					S32 agent_z = ll_round( (F32)agentPos.mdV[VZ] );
 					std::string region_name = LLWeb::escapeURL(revised_text.substr(command.length() + 1));
 					std::string url;
 

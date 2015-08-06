@@ -434,9 +434,9 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	S32 region_x;
 	S32 region_y;
 	S32 region_z;
-	region_x = llround(parcel_data.global_x) % REGION_WIDTH_UNITS;
-	region_y = llround(parcel_data.global_y) % REGION_WIDTH_UNITS;
-	region_z = llround(parcel_data.global_z);
+	region_x = ll_round(parcel_data.global_x) % REGION_WIDTH_UNITS;
+	region_y = ll_round(parcel_data.global_y) % REGION_WIDTH_UNITS;
+	region_z = ll_round(parcel_data.global_z);
 	// HACK: Flag 0x2 == adult region,
 	// Flag 0x1 == mature region, otherwise assume PG
 	if (parcel_data.flags & 0x2)
@@ -560,9 +560,9 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 	S32 region_x;
 	S32 region_y;
 	S32 region_z;
-	region_x = llround(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
-	region_y = llround(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
-	region_z = llround(eventGlobalPos.mdV[VZ]);
+	region_x = ll_round(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
+	region_y = ll_round(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
+	region_z = ll_round(eventGlobalPos.mdV[VZ]);
 	LLStringUtil::format_map_t map;
 	map["DURATION"] = llformat("%d:%.2d", eventDuration / 60, eventDuration % 60);
 	map["LOCATION"] = llformat("%s (%d, %d, %d)", simName.c_str(), region_x, region_y, region_z);
