@@ -6117,7 +6117,7 @@ void LLPickInfo::getSurfaceInfo()
 
 	if (objectp)
 	{
-//		if (gViewerWindow->cursorIntersect(llround((F32)mMousePt.mX), ll_round((F32)mMousePt.mY), 1024.f,
+//		if (gViewerWindow->cursorIntersect(ll_round((F32)mMousePt.mX), ll_round((F32)mMousePt.mY), 1024.f,
 //										   objectp, -1, mPickTransparent,
 //										   &mObjectFace,
 //										   &mIntersection,

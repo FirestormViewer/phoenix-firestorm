@@ -1080,11 +1080,11 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	// if it's an integer entry, round the numbers
 	if (entry.integer)
 	{
-		entry.min_value = llround(entry.min_value);
-		entry.max_value = llround(entry.max_value);
+		entry.min_value = ll_round(entry.min_value);
+		entry.max_value = ll_round(entry.max_value);
 
 		// recalculate increment
-		entry.increment = llround(entry.increment);
+		entry.increment = ll_round(entry.increment);
 		if (entry.increment == 0.f)
 		{
 			entry.increment = 1.f;

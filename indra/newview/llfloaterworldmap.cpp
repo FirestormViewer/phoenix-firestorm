@@ -686,9 +686,9 @@ void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const
 	F32 region_y = pos_global.mdV[VY] - locY;
 	std::string full_name = llformat("%s (%d, %d, %d)", 
 									 sim_name.c_str(), 
-									 llround(region_x), 
-									 llround(region_y),
-									 llround((F32)pos_global.mdV[VZ]));
+									 ll_round(region_x), 
+									 ll_round(region_y),
+									 ll_round((F32)pos_global.mdV[VZ]));
 
 	LLTracker::trackLocation(pos_global, parcel_data.name, full_name);
 }

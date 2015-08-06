@@ -30,7 +30,7 @@ F32 convertXToHue(S32 place)
 
 S32 convertHueToX(F32 place)
 {
-	return llround((place / 720.0f) * 396.0f) + 6;
+	return ll_round((place / 720.0f) * 396.0f) + 6;
 }
 
 

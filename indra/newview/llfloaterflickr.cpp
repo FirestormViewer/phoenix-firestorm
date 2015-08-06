@@ -685,11 +685,11 @@ BOOL LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& wi
 		//change another value proportionally
 		if(isWidthChanged)
 		{
-			height = llround(width / aspect_ratio) ;
+			height = ll_round(width / aspect_ratio) ;
 		}
 		else
 		{
-			width = llround(height * aspect_ratio) ;
+			width = ll_round(height * aspect_ratio) ;
 		}
 
 		//bound w/h by the max_value

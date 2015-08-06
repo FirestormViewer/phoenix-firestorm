@@ -127,7 +127,7 @@ LLColor4U lggBeamMaps::beamColorFromData(const lggBeamsColors& data)
 	LLColor4U toReturn;
 	F32 timeinc =  timer.getElapsedTimeF32() * 0.3f * ((data.mRotateSpeed + .01f)) * (360 / (data.mEndHue - data.mStartHue));
 
-	S32 diference = llround(data.mEndHue  - data.mStartHue);
+	S32 diference = ll_round(data.mEndHue  - data.mStartHue);
 	if (diference == 360 || diference == 720)
 	{
 		//full rainbow
