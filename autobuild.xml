@@ -648,9 +648,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4be74ad3be7ca2a80c93a148e6e07c15</string>
+              <string>10f4a24948b129e342e908609e65dd66</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44453-darwin-201505171651-r21.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44456-darwin-201508061336-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
