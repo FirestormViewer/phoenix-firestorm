@@ -572,9 +572,9 @@ std::string LLSLURL::getLoginString() const
 	case LOCATION:
 		unescaped_start << "uri:"
 		                << mRegion << "&"
-		                << ll_round(mPosition[0]) << "&"
-		                << ll_round(mPosition[1]) << "&"
-		                << ll_round(mPosition[2]);
+		                << ll_round(mPosition[VX]) << "&"
+		                << ll_round(mPosition[VY]) << "&"
+		                << ll_round(mPosition[VZ]);
 		break;
 	case HOME_LOCATION:
 		unescaped_start << "home";
@@ -618,9 +618,9 @@ std::string LLSLURL::getLocationString() const
 {
 	return llformat("%s/%d/%d/%d",
 	                mRegion.c_str(),
-	                (S32)ll_round(mPosition[0]),
-	                (S32)ll_round(mPosition[1]),
-	                (S32)ll_round(mPosition[2]));
+	                (S32)ll_round(mPosition[VX]),
+	                (S32)ll_round(mPosition[VY]),
+	                (S32)ll_round(mPosition[VZ]));
 }
 std::string LLSLURL::asString() const
 {
