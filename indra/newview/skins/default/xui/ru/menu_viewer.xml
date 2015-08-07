@@ -3,6 +3,7 @@
 	<menu label="Аватар" name="Me">
 		<menu_item_call label="Ваш аккаунт" name="Manage Account"/>
 		<menu_item_call label="Исходящие продавца..." name="MerchantOutbox"/>
+		<menu_item_call label="Торговый списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Настройки" name="Preferences"/>
 		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
@@ -20,7 +21,7 @@
 			<menu_item_check label="Летать" name="Fly"/>
 			<menu_item_call label="Прекратить летать" name="Stop flying"/>
 			<menu_item_check label="Всегда бежать" name="Always Run"/>
-			<menu_item_check label="Принудительно сесть на землю" name="Force Toggle Sitting" shortcut="control|alt|K"/>
+			<menu_item_check label="Принудительно сесть на землю" name="Force Toggle Sitting" shortcut="control|alt|S"/>
 			<menu_item_check label="Заблокировать перемещение" name="Move Lock"/>
 			<menu_item_check label="Быстрый прыжок" name="Avatar Ignore Prejump"/>
 		</menu>
@@ -62,7 +63,7 @@
 		</menu>
 		<menu_item_call label="Друзья" name="My Friends"/>
 		<menu_item_check label="Контакты" name="Contacts"/>
-		<menu_item_call label="Набор контактов" name="Contact Sets" shortcut=""/>
+		<menu_item_call label="Набор контактов" name="Contact Sets" shortcut="control|alt|shift|C"/>
 		<menu_item_call label="Группы" name="My Groups"/>
 		<menu_item_check label="Общий чат..." name="Nearby Chat"/>
 		<menu_item_check label="Люди" name="People"/>
@@ -95,7 +96,7 @@
 		<menu_item_call label="Показать собственные земли" name="My Land"/>
 		<menu label="Показать больше" name="LandShow">
 			<menu_item_check label="Запрещающие линии" name="Ban Lines"/>
-			<menu_item_check label="Маяки" name="beacons" shortcut=""/>
+			<menu_item_check label="Маяки" name="beacons" shortcut="control|alt|shift|N"/>
 			<menu_item_check label="Линии собственности" name="Property Lines"/>
 			<menu_item_check label="Владельцев земли" name="Land Owners" shortcut="control|alt|W"/>
 			<menu_item_check label="Координаты" name="Coordinates"/>
@@ -352,7 +353,7 @@
 		</menu>
 		<menu_item_check label="Летать принудительно" name="Fly Override"/>
 		<menu_item_check label="Контроль скриптами (RLVa)" name="RLV API"/>
-		<menu_item_call label="Показать настройки отладки" name="Debug Settings" shortcut=""/>
+		<menu_item_call label="Показать настройки отладки" name="Debug Settings" shortcut="control|alt|shift|S"/>
 		<menu_item_check label="Показать меню разработчиков" name="Debug Mode"/>
 	</menu>
 	<menu label="Разработка" name="Develop">
@@ -467,7 +468,7 @@
 			<menu_item_call label="Отключить журнал сообщений" name="Disable Message Log"/>
 			<menu_item_check label="Скорость интерполяции объектов" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Время ответа интерполяции позиции объекта" name="Ping Interpolate Object Positions"/>
-			<menu_item_call label="Снижение пакета" name="Drop a Packet" shortcut=""/>
+			<menu_item_call label="Снижение пакета" name="Drop a Packet" shortcut="control|alt|L"/>
 		</menu>
 		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
 		<menu label="Запись" name="Recorder">
@@ -549,7 +550,7 @@
 			<menu_item_check label="Показать скелет" name="Show Collision Skeleton"/>
 			<menu_item_check label="Отобразить действие агента" name="Display Agent Target"/>
 			<menu_item_call label="Дамп присоединений" name="Dump Attachments"/>
-			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures" shortcut=""/>
+			<menu_item_call label="Отладка текстур аватара" name="Debug Avatar Textures" shortcut="control|alt|shift|A"/>
 			<menu_item_call label="Дамп локальных текстур" name="Dump Local Textures"/>
 			<menu_item_call label="Перезагрузка частиц облака аватара" name="Reload Avatar Cloud Particle"/>
 		</menu>

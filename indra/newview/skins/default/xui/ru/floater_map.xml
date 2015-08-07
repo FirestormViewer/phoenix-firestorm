@@ -9,4 +9,28 @@
 	<floater.string name="mini_map_caption">
 		Миникарта
 	</floater.string>
+	<text label="С" name="floater_map_north">
+        С
+    </text>
+    <text label="В" name="floater_map_east">
+        В
+    </text>
+    <text label="З" name="floater_map_west">
+        З
+    </text>
+    <text label="Ю" name="floater_map_south">
+        Ю
+    </text>
+    <text label="ЮВ" name="floater_map_southeast">
+        ЮВ
+    </text>
+    <text label="СВ" name="floater_map_northeast">
+        СВ
+    </text>
+    <text label="ЮЗ" name="floater_map_southwest">
+        ЮЗ
+    </text>
+    <text label="СЗ" name="floater_map_northwest">
+        СЗ
+    </text>
 </floater>

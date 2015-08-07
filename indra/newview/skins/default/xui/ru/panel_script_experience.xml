@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<panel name="script_experience" title="ПРИКЛЮЧЕНИЕ">
+<panel name="script_experience" title="Приключение">
 	<button label="Приключение" name="Expand Experience"/>
 	<check_box label="Используется приключение" name="enable_xp"/>
 	<layout_stack name="xp_details">

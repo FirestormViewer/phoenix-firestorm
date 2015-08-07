@@ -14,7 +14,7 @@
 		<pie_slice label="Взять копию" name="Take Copy"/>
 		<pie_menu label="Добавить HUD &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Добавить &gt;" name="Pie Object Attach"/>
-		<pie_slice label="Вернить" name="Return..."/>
+		<pie_slice label="Вернуть" name="Return..."/>
 		<pie_menu label="Далее &gt;" name="Object Pie More 2">
 			<pie_slice label="Обновить текстуру" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Не отображать &gt;">
