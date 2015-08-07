@@ -13,7 +13,7 @@
 	<menu_item_call label="Купить" name="Task Buy"/>
 	<menu_item_call label="Открыть" name="Task Open"/>
 	<menu_item_call label="Проиграть" name="Task Play"/>
-	<menu_item_call label="Настройки" name="Task Properties"/>
+	<menu_item_call label="Свойства" name="Task Properties"/>
 	<menu_item_call label="Переименовать" name="Task Rename"/>
 	<menu_item_call label="Удалить" name="Task Remove"/>
 	<menu_item_call label="Очистить корзину" name="Empty Trash"/>
@@ -66,7 +66,7 @@
 	<menu_item_call label="Восстановить объект" name="Restore Item"/>
 	<menu_item_call label="Открыть" name="Open"/>
 	<menu_item_call label="Открыть оригинал" name="Open Original"/>
-	<menu_item_call label="Настройки" name="Properties"/>
+	<menu_item_call label="Свойства" name="Properties"/>
 	<menu_item_call label="Переименовать" name="Rename"/>
 	<menu_item_call label="Копировать идентификатор UUID" name="Copy Asset UUID"/>
 	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
