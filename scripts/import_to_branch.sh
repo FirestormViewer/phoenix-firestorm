@@ -17,6 +17,8 @@ fi
 
 hg revert indra/
 hg revert autobuild.xml
+hg revert package_override_gcc.ini
+hg revert package_override_vc12.ini
 hg purge indra/
 
 for i in $(cat exp.txt|sort -n)
@@ -37,6 +39,8 @@ esac
 
 hg revert indra/
 hg revert autobuild.xml
+hg revert package_override_gcc.ini
+hg revert package_override_vc12.ini
 hg purge indra/
 
 for i in $(cat exp.txt|sort -n)
