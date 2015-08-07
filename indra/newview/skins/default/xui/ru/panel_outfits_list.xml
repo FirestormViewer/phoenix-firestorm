@@ -6,6 +6,9 @@
 	</accordion>
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Показать дополнительные параметры"/>
+		<text name="OutfitcountText">
+          [COUNT] комплектов
+      </text>
 		<button name="trash_btn" tool_tip="Удалить выбранный костюм"/>
 	</panel>
 </panel>

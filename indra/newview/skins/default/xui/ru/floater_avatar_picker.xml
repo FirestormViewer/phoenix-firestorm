@@ -23,11 +23,11 @@
 			<text name="InstructSearchResidentName">
 				Наберите часть имени жителя:
 			</text>
-			<button label="Перейти" label_selected="Перейти" name="Find"/>
-			<fs_avatar_search_list name="SearchResults">
-				<columns label="Название" name="name"/>
+			<button label="Поиск" label_selected="Поиск" name="Find"/>
+			<fs_scroll_list name="SearchResults">
+				<columns label="Имя" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</fs_avatar_search_list>
+			</fs_scroll_list>
 		</panel>
 		<panel label="Друзья" name="FriendsPanel">
 			<text name="InstructSelectFriend">
@@ -42,11 +42,22 @@
 			<text name="meters">
 				Метров
 			</text>
-			<fs_avatar_search_list name="NearMe">
-				<columns label="Название" name="name"/>
+			<fs_scroll_list name="NearMe">
+				<columns label="Имя" name="name"/>
 				<columns label="Имя пользователя" name="username"/>
-			</fs_avatar_search_list>
+			</fs_scroll_list>
 		</panel>
+		<panel label="Поиск по UUID" name="SearchPanelUUID">
+            <text name="SearchByUUIDLabel">
+                Введите UUID:
+            </text>
+            <line_editor name="EditUUID"/>
+            <button label="Поиск" label_selected="Поиск" name="FindUUID"/>
+            <fs_scroll_list name="SearchResultsUUID">
+             <columns label="Имя" name="nameUUID"/>
+             <columns label="Имя пользователя" name="usernameUUID"/>
+          </fs_scroll_list>
+        </panel>
 	</tab_container>
 	<button label="ОК" label_selected="ОК" name="ok_btn"/>
 	<button label="Отмена" label_selected="Отмена" name="cancel_btn"/>

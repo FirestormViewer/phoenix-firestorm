@@ -245,7 +245,7 @@
                 <name_list.columns label="Тип" name="type" />
                 <name_list.columns label="Имя" name="name" />
                 <name_list.columns label="Штук" name="count"/>
-                <name_list.columns label="Последние" name="mostrecent" />
+                <name_list.columns label="Последний" name="mostrecent" />
             </name_list>
         </panel>
         <panel label="Настройки" name="land_options_panel">
@@ -325,7 +325,7 @@
                 <combo_box.item label="Бизнес" name="item4"/>
                 <combo_box.item label="Образование" name="item5"/>
                 <combo_box.item label="Игры" name="item6" />
-                <combo_box.item label="Тусовки" name="item7"/>
+                <combo_box.item label="Места встреч" name="item7"/>
                 <combo_box.item label="Для новичков" name="item8" />
                 <combo_box.item label="Парки и природа" name="item9" />
                 <combo_box.item label="Проживание" name="item10" />
@@ -453,6 +453,6 @@
             <button label="Удалить" label_selected="Удалить"  name="remove_banned" />
              </panel>
         </panel>
-		<panel label="ПРИКЛЮЧЕНИЯ" name="land_experiences_panel"/>
+		<panel label="Приключения" name="land_experiences_panel"/>
     </tab_container>
 </floater>
