@@ -681,6 +681,7 @@ void FSFloaterIM::changed(U32 mask)
 		bool is_online = LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID);
 		getChild<LLButton>("teleport_btn")->setEnabled(is_online);
 		getChild<LLButton>("call_btn")->setEnabled(is_online);
+		getChild<LLButton>("add_friend_btn")->setEnabled(FALSE);
 	}
 	else
 	{
@@ -688,6 +689,7 @@ void FSFloaterIM::changed(U32 mask)
 		// know about their online status anymore
 		getChild<LLButton>("teleport_btn")->setEnabled(TRUE);
 		getChild<LLButton>("call_btn")->setEnabled(TRUE);
+		getChild<LLButton>("add_friend_btn")->setEnabled(TRUE);
 	}
 }
 
@@ -2090,13 +2092,6 @@ BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 	return result;
 }
 // </FS:Zi>
-
-// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-void FSFloaterIM::setEnableAddFriendButton(BOOL enabled)
-{
-	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
-}
-// </FS:Ansariel>
 
 // <FS:CR> FIRE-11734
 //static

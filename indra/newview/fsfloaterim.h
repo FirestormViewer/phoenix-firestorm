@@ -139,9 +139,6 @@ public:
 	static void onNewIMReceived(const LLUUID& session_id);
 
 	virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
-
-	// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-	void setEnableAddFriendButton(BOOL enabled);
 	
 	static boost::signals2::connection setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb);
 	static floater_showed_signal_t sIMFloaterShowedSignal;
