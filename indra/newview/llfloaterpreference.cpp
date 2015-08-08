@@ -1708,6 +1708,10 @@ void LLFloaterPreference::buildPopupLists()
 		bool show_popup = !formp->getIgnored();
 		if (!show_popup)
 		{
+// <FS:Ansariel> Don't show chosen option for ignored dialogs in the list. There is only one
+//               notification that makes use of it ("ReplaceAttachment") and it would make the
+//               list appear truncated.
+#if 0
 			if (ignore == LLNotificationForm::IGNORE_WITH_LAST_RESPONSE)
 			{
 				// <FS:Ansariel> Default responses are declared in "ignores" settings group, see llnotifications.cpp
@@ -1727,11 +1731,10 @@ void LLFloaterPreference::buildPopupLists()
 						}
 					}
 				}
-				// <FS:LO> FIRE-7938 - Some Dialog Alerts text in preferences get truncated 
-				//row["columns"][1]["font"] = "SANSSERIF_SMALL";
-				//row["columns"][1]["width"] = 360;
-				// </FS:LO>
+				row["columns"][1]["font"] = "SANSSERIF_SMALL";
+				row["columns"][1]["width"] = 360;
 			}
+#endif
 			item = disabled_popups.addElement(row);
 		}
 		else
