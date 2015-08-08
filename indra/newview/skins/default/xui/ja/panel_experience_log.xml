@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_log">
+<panel name="panel_experience_log" label="イベント">
 	<string name="no_events" value="イベントなし。"/>
 	<string name="loading" value="ロード中..."/>
 	<layout_stack name="ls1">

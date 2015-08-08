@@ -5625,7 +5625,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="ExperiencePermissionShort12">
 		権限
 	</string>
-	
+	<string name="ExperiencePermissionShortUnknown">
+		不明：[Permission]
+	</string>
 	<!-- added Jun.30, 2013 -->
 	<!-- Firestorm search -->
   <string name="not_found">&apos;[TEXT]&apos; は見つかりません</string>
@@ -5636,30 +5638,74 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="search_short">検索キーワードが短すぎたため、検索が実行されませんでした。</string>
   <string name="search_disabled">この地域では旧タイプの検索は実行できないようになっています。</string>
   
-  <string name="render_quality_low">Low (1/7)</string>
-  <string name="render_quality_mediumlow">Medium-Low (2/7)</string>
-  <string name="render_quality_medium">Medium (3/7)</string>
-  <string name="render_quality_mediumhigh">Medium-High (4/7)</string>
-  <string name="render_quality_high">High (5/7)</string>
-  <string name="render_quality_highultra">High-Ultra (6/7)</string>
-  <string name="render_quality_ultra">Ultra (7/7)</string>
-  <string name="render_quality_unknown">Unknown, beyond the normal range, check RenderQualityPerformance debug setting</string>
-
-  <string name="qtool_busy">Please wait, the align tool is busy working.</string>
-  <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
-  <string name="qtool_done">The align tool has finished.</string>
-
-  <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
-  <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
-  <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
-  <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_wrong_location">Bridge failed to attach. The bridge wasn't found in the right inventory location. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_attach_point_in_use">Bridge failed to attach. Something else was using the bridge attachment point. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
-  <string name="fsbridge_failure_not_found">The bridge object could not be found. Cannot proceed with its creation, exiting.</string>
-  <string name="fsbridge_warning_unexpected_items">The bridge inventory contains unexpected items.</string>
-  <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
+	<string name="render_quality_low">
+		低 (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		中低 (2/7)
+	</string>
+	<string name="render_quality_medium">
+		中 (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		中高 (4/7)
+	</string>
+	<string name="render_quality_high">
+		高 (5/7)
+	</string>
+	<string name="render_quality_highultra">
+		高超高a (6/7)
+	</string>
+	<string name="render_quality_ultra">
+		超高 (7/7)
+	</string>
+	<string name="render_quality_unknown">
+		不明：通常の範囲を超えています。デバッグ設定で「RenderQualityPerformance」を確認して下さい。
+	</string>
+	
+	<string name="qtool_busy">
+		お待ち下さい。整列ツールが稼働中です。
+	</string>
+	<string name="qtool_still_busy">
+		もう暫くお待ち下さい。整列ツールは引き続き稼働中です。
+	</string>
+	<string name="qtool_done">
+		整列ツールの処理が終わりました。
+	</string>
+	
+	<string name="fsbridge_no_library">
+		Firestorm は LSL ブリッジを作成できませんでした。ライブラリを有効にしてリログして下さい。
+	</string>
+	<string name="fsbridge_already_creating">
+		現在ブリッジを作成中ですので、別のインスタンスを開始することはできません。２，３分待ってからもう一度お試し下さい。
+	</string>
+	<string name="fsbridge_creating">
+		現在ブリッジを作成中です。この処理には時間がかかることがあります。お待ち下さい。
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		ブリッジは作成されませんでした。ブリッジの名前が正しくありません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		ブリッジは作成されませんでした。ブリッジがインベントリにみつかりません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		ブリッジを装着できませんでした。このブリッジは現行バージョンのものではありません。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		ブリッジを装着できませんでした。ブリッジがインベントリ内の正しい場所にみつかりませんでした。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+	ブリッジを装着できませんでした。何か別のものがブリッジの装着ポイントを使用しています。Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行って下さい。
+	</string>
+	<string name="fsbridge_failure_not_found">
+		ブリッジのオブジェクトがみつかりませんでした。作成処理を進めることができませんので中止します。
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		ブリッジのインベントリに想定外のアイテムが入っています。
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		ブリッジの作成が完了していません。ブリッジを使用するには、Firestorm のメニューから「アバター＞アバターの状態＞ブリッジの再作成」を選択し、ブリッジの再作成を行う必要があるかもしれません。
+	</string>
   <string name="fsbridge_detached">ブリッジが外されました。</string>
   <string name="fsbridge_created">ブリッジが作成されました。</string>
 
@@ -5704,13 +5750,42 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
   <string name="leaving_region">がこの地域を離れました。</string>
   <string name="avatar_age_alert">は年齢警告対象です。年齢：[AGE] 日</string>
 
-  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
+  <string name="export_fail_no_mesh">メッシュのエクスポートには現在対応していません。エクスポート処理を中止しました。</string>
   <string name="TotalScriptCountChangeIncrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に急増しました。([DIFFERENCE])</string>
   <string name="TotalScriptCountChangeDecrease">この地域のスクリプト総数が [OLD_VALUE] から [NEW_VALUE] に激減しました。([DIFFERENCE])</string>
-  <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
-  
+  <string name="preproc_toggle_warning">このエディタを一旦閉じて開き直すまでプリプロセッサの切り替えは有効になりません。</string>
+	
+	<string name="skin_defaults_starlight_location">Starlight スキンの初期設定により、メニューバーには現在いる場所が表示されません。</string>
+	<string name="skin_defaults_starlight_navbar">Starlight スキンの初期設定により、ナビゲーションバーが表示されます。</string>
+	
+	<!-- Animation Explorer -->
+	<string name="animation_explorer_seconds_ago">[SECONDS] 秒前</string>
+	<string name="animation_explorer_still_playing">実行中のアニメーション：</string>
+	
+	<string name="FriendOnlineNotification">はオンラインです。</string>
+	<string name="FriendOfflineNotification">はオフラインです。</string>
+	
+	<string name="Inbox_Folderview_New">新規</string>
+	
+	<string name="Mouselook_Unknown_Avatar">不明なアバター</string>
+
     <string name="groupcountstring">あなたは [COUNT] グループに所属しています。 (残 [REMAINING]).</string>
   <string name="groupcountunlimitedstring">あなたは [COUNT] グループに所属しています</string>
+	
+	<string name="SLGridStatusInvalidMsg">SL Grid Status のエラー：無効なメッセージ形式です。あとでもう一度試してみて下さい。</string>
+	<string name="SLGridStatusTimedOut">SL Grid Status のエラー：要求がタイムアウトしました。</string>
+	<string name="SLGridStatusOtherError">SL Grid Status のエラー：[STATUS] ( https://en.wikipedia.org/wiki/List_of_HTTP_status_codes ).</string>
+	
+	<string name="DoubleClickTeleportEnabled">ダブルクリック・テレポートが有効になりました。</string>
+	<string name="DoubleClickTeleportDisabled">ダブルクリック・テレポートが無効になりました。</string>
+	
+	<string name="FSRegionRestartInLocalChat">今いる地域は間もなく再起動します。このままこの地域にいるとログアウトされます。</string>
+	
   <string name="Mute_Add">'[NAME]' は無視リストに追加されました</string>
   <string name="Mute_Remove">'[NAME]' は無視リストの対象から外されました</string>
+	<string name="Reqsysinfo_Chat_NoReason">あなたのシステム設定に関する情報を要求しています。</string>
+	<string name="Reqsysinfo_Chat_Reason">次の理由であなたのシステム設定に関する情報を要求しています：[REASON]</string>
+	<string name="Reqsysinfo_Chat_Information_sent">情報が送信されました。：[DATA]</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">要求は拒否されました。</string>
+	<string name="Reqsysinfo_Reason">理由：[REASON]</string>
 </strings>
