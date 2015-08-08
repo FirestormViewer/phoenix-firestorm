@@ -90,6 +90,7 @@
      halign="left"
      name="tab_picks"
      border_visible="true"
+     use_ellipses="true"
      tab_position="left" />
 
     <text

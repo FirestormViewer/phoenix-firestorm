@@ -89,6 +89,7 @@
      follows="all"
      halign="left"
      name="tab_picks"
+     use_ellipses="true"
      tab_position="left" />
 
     <text
