@@ -46,6 +46,7 @@
 #include "llslurl.h"
 #include "llstartup.h"
 #include "lltabcontainer.h"
+#include "lltooldraganddrop.h"
 #include "llviewermenu.h"
 #include "llvoiceclient.h"
 
@@ -1303,7 +1304,16 @@ BOOL FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BO
 	}
 	else
 	{
-		*accept = ACCEPT_NO;
+		LLScrollListItem* hit_item = mFriendsList->hitItem(x, y);
+		if (hit_item)
+		{
+			LLToolDragAndDrop::handleGiveDragAndDrop(hit_item->getUUID(), LLUUID::null, drop,
+				cargo_type, cargo_data, accept);
+		}
+		else
+		{
+			*accept = ACCEPT_NO;
+		}
 	}
 
 	return TRUE;
