@@ -105,10 +105,10 @@ public:
 	#endif // RLV_EXTENSION_STARTLOCATION
 
 	static void initClass();
+	static void onChangedSettingMain(const LLSD& sdValue);
 protected:
 	static bool onChangedMenuLevel();
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
-	static void onChangedSettingMain(const LLSD& sdValue);
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL fCompositeFolders;
