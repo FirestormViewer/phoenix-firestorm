@@ -82,7 +82,8 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
+		// Ansariel: Wired up in LLViewerControl because of FIRE-16601
+		//gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
 
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
@@ -211,7 +212,7 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride
 		const LLSD& sdStrings = sdFileData["strings"];
 		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
 		{
-			if ( (!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))) )
+			if ((!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))))
 				continue;
 
 			std::list<std::string>& listValues = m_StringMap[itString->first];
@@ -276,6 +277,7 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 const std::string& RlvStrings::getString(const std::string& strStringName)
 {
 	static const std::string strMissing = "(Missing RLVa string)";
+	initClass(); // Ansariel: Make sure RlvStrings gets initialized before accessing it
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
 	return (itString != m_StringMap.end()) ? itString->second.back() : strMissing;
 }
