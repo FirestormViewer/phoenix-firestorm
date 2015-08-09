@@ -1380,9 +1380,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>036b86aa976f14e958cc27457b6dc79b</string>
+              <string>e1668e9baf2823d2ff225d3f04d09a49</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.6.0-darwin-201507161944-r31.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.7.0-darwin-201508071405-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1392,9 +1392,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6ed5fbe7dff605a2b3271aa5896ac271</string>
+              <string>2a0b26323dec2b063f7d37974e2a4345</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.6.0-linux-201507161434-r27.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.7.0-linux-201508071358-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1404,9 +1404,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e4da5eccc1b0f1d2e51d7cf3d2390b58</string>
+              <string>fc043599d277c6ab2b0371a81eb81e81</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.6.0-windows-201507161525-r30.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.7.0-windows-201508071211-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
