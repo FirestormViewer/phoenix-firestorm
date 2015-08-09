@@ -161,7 +161,7 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 	// add to "All" floater
 	if ((chat.mChatType == CHAT_TYPE_DEBUG_MSG) || (FSllOwnerSayRouting != 1))
 	{
-		LLFloaterScriptDebugOutput* floaterp = 	LLFloaterReg::getTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
+		LLFloaterScriptDebugOutput* floaterp = LLFloaterReg::findTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
 		if (floaterp)
 		{
 			floaterp->addLine(chat, chat.mFromName);
@@ -172,7 +172,7 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 	if ((chat.mChatType == CHAT_TYPE_DEBUG_MSG) || (FSllOwnerSayRouting != 2))
 	{	
 		addOutputWindow(chat.mFromID);
-		LLFloaterScriptDebugOutput* floaterp = LLFloaterReg::getTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", chat.mFromID);
+		LLFloaterScriptDebugOutput* floaterp = LLFloaterReg::findTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", chat.mFromID);
 		if (floaterp)
 		{
 			floaterp->addLine(chat, floater_label);
@@ -203,8 +203,11 @@ void LLFloaterScriptDebug::onClickCloseBtn(bool app_qutting)
 {
 	if (gSavedSettings.getBOOL("FSScriptDebugWindowClearOnClose"))
 	{
-		LLFloaterScriptDebugOutput* floaterp = 	LLFloaterReg::getTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
-		if (floaterp) floaterp->clear();
+		LLFloaterScriptDebugOutput* floaterp = LLFloaterReg::findTypedInstance<LLFloaterScriptDebugOutput>("script_debug_output", LLUUID::null);
+		if (floaterp)
+		{
+			floaterp->clear();
+		}
 	}
 	LLMultiFloater::onClickCloseBtn(app_qutting);
 }
@@ -271,21 +274,25 @@ void LLFloaterScriptDebugOutput::addLine(const LLChat& chat, const std::string &
 	else
 	{
 		// Print object name slurl to output on first output or name change
-		if((mHistoryEditor->getText().empty()) || (mUserName.compare(user_name) != 0))
+		if (mHistoryEditor->getText().empty() || mUserName.compare(user_name) != 0)
 		{
 			mUserName = user_name;
 			setTitle(user_name);
 			setShortTitle(user_name);
-			std::string url = chat.mURL;
-			if ( (url.empty()) || (std::string::npos == url.find("objectim")) )
+
+			if (gSavedSettings.getBOOL("FSllOwnerSayToScriptDebugWindow") && getKey().asUUID().isNull())
 			{
-				url = LLViewerChat::getSenderSLURL(chat, LLSD());
+				std::string url = chat.mURL;
+				if ((url.empty()) || (std::string::npos == url.find("objectim")))
+				{
+					url = LLViewerChat::getSenderSLURL(chat, LLSD());
+				}
+				LLStyle::Params link_params(message_params);
+				link_params.readonly_color(LLUIColorTable::instance().getColor("ChatNameObjectColor"));
+				link_params.is_link = true;
+				link_params.link_href = url;
+				mHistoryEditor->appendText(chat.mFromName, (!mHistoryEditor->getText().empty()), link_params);
 			}
-			LLStyle::Params link_params(message_params);
-			link_params.readonly_color(LLUIColorTable::instance().getColor("ChatNameObjectColor"));
-			link_params.is_link = true;
-			link_params.link_href = url;
-			mHistoryEditor->appendText(chat.mFromName, (!mHistoryEditor->getText().empty()), link_params);
 		}
 	}
 
