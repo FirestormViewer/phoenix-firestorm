@@ -1237,7 +1237,7 @@
          left_delta="0"
          mouse_opaque="false"
          name="embed_item_drop_target_rect"
-         width="220"/>
+         width="250"/>
         <fs_embedded_item_drop_target
          bg_visible="false"
          border_visible="false"
@@ -1252,7 +1252,7 @@
          name="embed_item"
          tool_tip="Drop an inventory item here."
          v_pad="2"
-         width="220">
+         width="250">
          Drop an inventory item here.
         </fs_embedded_item_drop_target>
         <view_border
@@ -1263,7 +1263,7 @@
          left_delta="0"
          mouse_opaque="false"
          name="build_item_add_disp_rect"
-         width="220"/>
+         width="250"/>
         <text
          bg_visible="false"
          border_visible="false"
@@ -1278,12 +1278,12 @@
          name="build_item_add_disp_rect_txt"
          tool_tip=""
          v_pad="2"
-         width="220">
+         width="250">
          Currently set to: [ITEM]
         </text>
         <text
          top_pad="-60"
-         left_pad="155"
+         left_pad="125"
          follows="left|top"
          height="10"
          name="text_box_pivotpoint"
