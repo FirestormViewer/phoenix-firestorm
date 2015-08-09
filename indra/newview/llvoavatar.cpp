@@ -698,6 +698,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mTitle(),
 	mNameAway(false),
 	mNameDoNotDisturb(false),
+	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag
 	mNameMute(false),
 	mNameAppearance(false),
 	mNameFriend(false),
@@ -2928,6 +2929,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
+	// <FS:Ansariel> Show auto-response in nametag
+	static LLCachedControl<bool> fsAutorespondMode(gSavedPerAccountSettings, "FSAutorespondMode");
+	static LLCachedControl<bool> fsAutorespondNonFriendsMode(gSavedPerAccountSettings, "FSAutorespondNonFriendsMode");
+	bool is_autoresponse = isSelf() && (fsAutorespondMode || fsAutorespondNonFriendsMode);
+	// </FS:Ansariel>
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_do_not_disturb = mSignaledAnimations.find(ANIM_AGENT_DO_NOT_DISTURB) != mSignaledAnimations.end();
 	bool is_appearance = mSignaledAnimations.find(ANIM_AGENT_CUSTOMIZE) != mSignaledAnimations.end();
@@ -3034,6 +3040,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| (title && mTitle != title->getString())
 		|| is_away != mNameAway 
 		|| is_do_not_disturb != mNameDoNotDisturb 
+		|| is_autoresponse != mNameAutoResponse
 		|| is_muted != mNameMute
 		|| is_appearance != mNameAppearance 
 		|| is_friend != mNameFriend
@@ -3061,7 +3068,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		clearNameTag();
 
-		if (is_away || is_muted || is_do_not_disturb || is_appearance)
+		// <FS:Ansariel> Show auto-response in nametag
+		//if (is_away || is_muted || is_do_not_disturb || is_appearance)
+		if (is_away || is_muted || is_do_not_disturb || is_autoresponse || is_appearance)
+		// </FS:Ansariel>
 		{
 			std::string line;
 			if (is_away)
@@ -3074,6 +3084,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				line += LLTrans::getString("AvatarDoNotDisturb");
 				line += ", ";
 			}
+			// <FS:Ansariel> Show auto-response in nametag
+			if (is_autoresponse)
+			{
+				line += LLTrans::getString("AvatarAutoResponse");
+				line += ", ";
+			}
+			// </FS:Ansariel>
 			if (is_muted)
 			{
 				line += LLTrans::getString("AvatarMuted");
@@ -3201,6 +3218,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		mNameAway = is_away;
 		mNameDoNotDisturb = is_do_not_disturb;
+		mNameAutoResponse = is_autoresponse; // <FS:Ansariel> Show auto-response in nametag
 		mNameMute = is_muted;
 		mNameAppearance = is_appearance;
 		mNameFriend = is_friend;

@@ -895,6 +895,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AvatarMuted">
 		Ignoriert
 	</string>
+	<string name="AvatarAutoResponse">
+		Automatische Antwort
+	</string>
 	<string name="anim_express_afraid">
 		Ängstlich
 	</string>

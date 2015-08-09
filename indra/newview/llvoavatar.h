@@ -935,6 +935,7 @@ private:
 	std::string  	mTitle;
 	bool	  		mNameAway;
 	bool	  		mNameDoNotDisturb;
+	bool			mNameAutoResponse; // <FS:Ansariel> Show auto-response in nametag
 	bool	  		mNameMute;
 	bool      		mNameAppearance;
 	bool			mNameFriend;
