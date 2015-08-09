@@ -52,6 +52,10 @@ protected:
 
 protected:
 	static LLFloaterScriptDebug*	sInstance;
+
+// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+private:
+	/*virtual*/ void onClickCloseBtn(bool app_qutting);
 };
 
 class LLFloaterScriptDebugOutput : public LLFloater
@@ -65,11 +69,17 @@ public:
 	void addLine(const LLChat& chat, const std::string &user_name);
 
 	virtual BOOL postBuild();
+
+	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+	void clear();
 	
 protected:
 	LLTextEditor* mHistoryEditor;
 
 	LLUUID mObjectID;
+
+	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
+	std::string mUserName; //KC: This should be "object_name", but LL.
 };
 
 #endif // LL_LLFLOATERSCRIPTDEBUG_H
