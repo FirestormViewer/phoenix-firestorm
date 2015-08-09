@@ -2842,19 +2842,6 @@
          name="Shortcuts"
          tear_off="true"
          visible="false">
-          <menu_item_call
-             label="Upload Image ([COST])..."
-             name="Upload Image"
-             shortcut="control|U">
-            <menu_item_call.on_click
-               function="File.UploadImage"
-               parameter="" />
-            <menu_item_call.on_enable
-               function="File.EnableUpload" />
-            <menu_item_call.on_visible
-               function="Upload.CalculateCosts"
-               parameter="Upload Image" />
-            </menu_item_call>
             <menu_item_check
                label="Search"
                name="Search"
