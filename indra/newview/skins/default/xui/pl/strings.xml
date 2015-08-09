@@ -852,10 +852,13 @@ Spróbuj zalogować się ponownie za minutę.
 		Śpi
 	</string>
 	<string name="AvatarDoNotDisturb">
-		Zajęty
+		Zajęty/a
 	</string>
 	<string name="AvatarMuted">
 		Wyciszony
+	</string>
+	<string name="AvatarAutoResponse">
+		Autoodpowiedź
 	</string>
 	<string name="anim_express_afraid">
 		Strach
@@ -5030,7 +5033,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Idź na zakupy
 	</string>
 	<string name="Command_MarketplaceListings_Tooltip">
-		Sprzedaj owoce swojej twórczości
+		Sprzedawaj owoce swojej kreatywności
 	</string>
 	<string name="Command_MiniMap_Tooltip">
 		Pokaż ludzi w pobliżu (CTRL+SHIFT+M)
