@@ -2936,7 +2936,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// <FS:Ansariel> Show auto-response in nametag
 	static LLCachedControl<bool> fsAutorespondMode(gSavedPerAccountSettings, "FSAutorespondMode");
 	static LLCachedControl<bool> fsAutorespondNonFriendsMode(gSavedPerAccountSettings, "FSAutorespondNonFriendsMode");
-	bool is_autoresponse = isSelf() && (fsAutorespondMode || fsAutorespondNonFriendsMode);
+	static LLCachedControl<bool> fsShowAutorespondInNametag(gSavedPerAccountSettings, "FSShowAutorespondInNametag");
+	bool is_autoresponse = isSelf() && fsShowAutorespondInNametag && (fsAutorespondMode || fsAutorespondNonFriendsMode);
 	// </FS:Ansariel>
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_do_not_disturb = mSignaledAnimations.find(ANIM_AGENT_DO_NOT_DISTURB) != mSignaledAnimations.end();
