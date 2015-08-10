@@ -1356,6 +1356,8 @@ bool LLAppViewer::init()
 	}
 	catch (LLProtectedDataException ex)
 	{
+		// <FS:Ansariel> Write exception message to log
+		LL_WARNS() << "Error initializing SecHandlers: " << ex.getMessage() << LL_ENDL;
 	  LLNotificationsUtil::add("CorruptedProtectedDataStore");
 	}
 	LLHTTPClient::setCertVerifyCallback(secapiSSLCertVerifyCallback);
