@@ -62,6 +62,7 @@
 	<check_box label="Freunde hervorheben" name="show_friends" tool_tip="Avatarnamen Ihrer Freunde hervorheben"/>
 	<check_box label="Im alten Namensformat „Resident“ abschneiden" name="legacy_trim_check" tool_tip="Schneidet den Nachnamen „Resident“ im alten Namensformat ab." />
 	<check_box label="Alte Position für Avatarnamen" name="FSLegacyNametagPosition" tool_tip="Falls aktiviert, wird die Position des Avatarnamens fest an der Position des Avatars angezeigt und folgt nicht der Bewegung des Kopfes bei Animationen." />
+	<check_box label="„Automatische Antwort“-Modus anzeigen" name="FSShowAutorespondInNameTag" tool_tip="Falls aktiviert, wird der Modus „Automatische Antwort“ im eigenen Avatarnamen angezeigt."/>
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
 	<text name="title_afk_text" width="275">
