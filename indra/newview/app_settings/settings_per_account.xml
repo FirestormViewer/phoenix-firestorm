@@ -176,17 +176,6 @@
         <key>Value</key>
             <integer>0</integer>
         </map>
-    <key>FSShowAutorespondInNametag</key>
-        <map>
-        <key>Comment</key>
-            <string>Does the user want to see autorespond mode in his own nametag?</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>Boolean</string>
-        <key>Value</key>
-            <integer>0</integer>
-        </map>
     <key>FSRejectAllGroupInvitesMode</key>
         <map>
         <key>Comment</key>
