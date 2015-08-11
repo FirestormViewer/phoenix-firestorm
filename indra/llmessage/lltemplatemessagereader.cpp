@@ -512,40 +512,21 @@ BOOL LLTemplateMessageReader::decodeTemplate(
 
 void LLTemplateMessageReader::logRanOffEndOfPacket( const LLHost& host, const S32 where, const S32 wanted )
 {
-	// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
-
 	// we've run off the end of the packet!
-	//LL_WARNS() << "Ran off end of packet " << mCurrentRMessageTemplate->mName
-// //			<< " with id " << mCurrentRecvPacketID 
-// 			<< " from " << host
-// 			<< " trying to read " << wanted
-// 			<< " bytes at position " << where
-// 			<< " going past packet end at " << mReceiveSize
-// 			<< LL_ENDL;
-// 	if(gMessageSystem->mVerboseLog)
-// 	{
-// 		LL_INFOS() << "MSG: -> " << host << "\tREAD PAST END:\t"
-// //				<< mCurrentRecvPacketID << " "
-// 				<< getMessageName() << LL_ENDL;
-// 	}
-// 	gMessageSystem->callExceptionFunc(MX_RAN_OFF_END_OF_PACKET);
-
-	std::stringstream strm;
-	strm << "Ran off end of packet " << mCurrentRMessageTemplate->mName
+	LL_WARNS() << "Ran off end of packet " << mCurrentRMessageTemplate->mName
 //			<< " with id " << mCurrentRecvPacketID 
 			<< " from " << host
 			<< " trying to read " << wanted
 			<< " bytes at position " << where
 			<< " going past packet end at " << mReceiveSize
-			<< std::endl;
+			<< LL_ENDL;
 	if(gMessageSystem->mVerboseLog)
 	{
-		strm << "MSG: -> " << host << "\tREAD PAST END:\t"
+		LL_INFOS() << "MSG: -> " << host << "\tREAD PAST END:\t"
 //				<< mCurrentRecvPacketID << " "
-			 << getMessageName() << std::endl;
+				<< getMessageName() << LL_ENDL;
 	}
 	gMessageSystem->callExceptionFunc(MX_RAN_OFF_END_OF_PACKET);
-	throw nd::exceptions::xran( strm.str() );
 }
 
 static LLTrace::BlockTimerStatHandle FTM_PROCESS_MESSAGES("Process Messages");
