@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fd13f6392cb117c4217973b4d49a89cb</string>
+              <string>2e1b76fa4f9b42679ca5e97c57d1006b</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44453-linux-201505100200-r21.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44456-linux-201508111340-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
