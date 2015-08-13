@@ -65,6 +65,9 @@ public:
 	bool test() const;
 	S32 normalize();
 
+	// <FS:Ansariel> Getter for mRes
+	S32 getLastRes() const { return mRes; }
+
 private:
 	S32 parse();
 	void textRangeToString(UriTextRangeA& textRange, std::string& str);
