@@ -255,7 +255,16 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 
 std::string LLUrlEntryHTTP::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	return urlToLabelWithGreyQuery(url);
+	// <FS:Ansariel> FIRE-16642: Show invalid Hypergrid node URIs
+	//return urlToLabelWithGreyQuery(url);
+	LLUriParser up(url);
+	if (!up.normalize())
+	{
+		return urlToLabelWithGreyQuery(url);
+	}
+
+	return url;
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntryHTTP::getQuery(const std::string &url) const
@@ -332,7 +341,16 @@ LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
 
 std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	return urlToLabelWithGreyQuery(url);
+	// <FS:Ansariel> FIRE-16642: Show invalid Hypergrid node URIs
+	//return urlToLabelWithGreyQuery(url);
+	LLUriParser up(url);
+	if (!up.normalize())
+	{
+		return urlToLabelWithGreyQuery(url);
+	}
+
+	return url;
+	// </FS:Ansariel>
 }
 
 std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
