@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
  <Product Id="*"
    Name="Firestorm SecondLife and OpenSim viewer"
-   Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="Phoenix Viewer Project"
+   Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="The Phoenix Firestorm Project, Inc."
    UpgradeCode="$(var.UPGRADECODE)">
 
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
@@ -11,23 +11,23 @@
   <Property Id="MSIFASTINSTALL" Value="7"/>
   <Property Id="ARPSIZE" Value="256000"/>
   <Property Id="ARPURLINFOABOUT" Value="http://www.firestormviewer.org"/>
-  <Property Id="ARPURLUPDATEINFO" Value="http://www.firestormviewer.org/downloads/"/>
-  <Property Id="ARPHELPLINK" Value="http://www.firestormviewer.org/support/"/>
+  <Property Id="ARPURLUPDATEINFO" Value="http://www.firestormviewer.org/downloads"/>
+  <Property Id="ARPHELPLINK" Value="http://www.firestormviewer.org/support"/>
   <Property Id="ARPPRODUCTICON" Value="firestorm.ico"/>
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
   <!-- VersionNT64 is undefined if the operating system is not 64-bit: http://msdn.microsoft.com/en-us/library/aa372497%28v=vs.85%29.aspx -->
-  <Condition Message="Installing the 64 bit version of Firestorm viewer on a 32 bit Operating System is not supported. Installation canceled.">
+  <Condition Message="Installing the 64 bit version of [ProductName] on a 32 bit Operating System is not supported. Installation cancelled.">
     <![CDATA[VersionNT64]]>
   </Condition>
 
   <!-- Do not allow to install the MSI without using the bootstrapper. Mixing MSI and EXE installer has certain implications. Only remove this check if you're aware of them. -->
-  <Condition Message="This package cannot be installed by using the msi package">
+  <Condition Message="This package cannot be installed by using the MSI package.">
     <![CDATA[Installed OR FS_FROM_BURN]]>
   </Condition>
 
   <!-- OS list: http://msdn.microsoft.com/library/aa370556.aspx -->
-  <Condition Message="Your system does not meet the minimum requirement of Vista x64 with Service Pack 2 or newer. Installation canceled.">
+  <Condition Message="Your system does not meet the minimum requirement of Vista x64 with Service Pack 2 or newer. Installation cancelled.">
     <![CDATA[Installed OR (VersionNT64 >= 601) OR (VersionNT64 = 600 AND ServicePackLevel = 2)]]>
   </Condition>
 
@@ -48,8 +48,8 @@
       <File Source="$(var.BUILDDIR)/fmodex64.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/glod.dll" CompanionFile="firestorm" />
 
-	  <File Source="$(var.WIX_SOURCEDIR)/msvcp100.dll" CompanionFile="firestorm" />
-	  <File Source="$(var.WIX_SOURCEDIR)/msvcr100.dll" CompanionFile="firestorm" />
+      <File Source="$(var.WIX_SOURCEDIR)/msvcp100.dll" CompanionFile="firestorm" />
+      <File Source="$(var.WIX_SOURCEDIR)/msvcr100.dll" CompanionFile="firestorm" />
 
       <File Source="$(var.BUILDDIR)/libapr-1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/libapriconv-1.dll" CompanionFile="firestorm" />
@@ -63,7 +63,6 @@
 
       <File Source="$(var.BUILDDIR)/featuretable.txt" />
       <File Source="$(var.BUILDDIR)/featuretable_xp.txt" />
-      <File Source="$(var.BUILDDIR)/gpu_table.txt" />
       <File Source="$(var.BUILDDIR)/licenses.txt" />
       <File Source="$(var.BUILDDIR)/VivoxAUP.txt" />
 
