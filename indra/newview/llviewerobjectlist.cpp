@@ -103,6 +103,7 @@ std::map<U64, U32>		LLViewerObjectList::sIPAndPortToIndex;
 std::map<U64, LLUUID>	LLViewerObjectList::sIndexAndLocalIDToUUID;
 
 LLViewerObjectList::LLViewerObjectList()
+	: mNewObjectSignal() // <FS:Ansariel> FIRE-16647: Default object properties randomly aren't applied
 {
 	mCurLazyUpdateIndex = 0;
 	mCurBin = 0;
@@ -292,7 +293,7 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 		// <FS:Techwolf Lupindo> import support
 		bool import_handled = false;
 		bool own_full_perm = (objectp->permYouOwner() && objectp->permModify() && objectp->permTransfer() && objectp->permCopy());
-		if (own_full_perm)
+		if (own_full_perm && !mNewObjectSignal.empty())
 		{
 			import_handled = mNewObjectSignal(objectp).get();
 			mNewObjectSignal.disconnect_all_slots();
