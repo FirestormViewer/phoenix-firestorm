@@ -1265,27 +1265,29 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 		return;
 	}
 
+	if (!isAgentAvatarValid())
+	{
+		LL_WARNS("FSLSLBridge") << "No agent avatar" << LL_ENDL;
+		cleanUpBridge();
+		return;
+	}
+
 	//need to parse out the last length of a GUID and compare to saved possible names.
 	const std::string fileOnly = fileName.substr(fileName.length() - UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
 	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
-		if (!isBridgeValid())
-		{
-			cleanUpBridge();
-			return;
-		}
-
 		//this is our script upload
 		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
-		if (obj == NULL)
+		if (!obj)
 		{
 			//something happened to our object. Try to fail gracefully.
+			LL_WARNS("FSLSLBridge") << "Couldn't find worn bridge attachment" << LL_ENDL;
 			cleanUpBridge();
 			return;
 		}
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
+		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer(1.0f);
 		objTimer->startTimer();
 	}
 }
