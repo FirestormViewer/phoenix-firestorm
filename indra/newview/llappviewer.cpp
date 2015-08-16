@@ -5132,10 +5132,6 @@ bool LLAppViewer::initCache()
 	}
 	// </FS:Ansariel>
 
-	// <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
-	startCachePurge();
-	// </FS:ND>
-
 	LLSplashScreen::update(LLTrans::getString("StartupInitializingTextureCache"));
 	
 	// Init the texture cache

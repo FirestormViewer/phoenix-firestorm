@@ -350,11 +350,6 @@ public:
 	void setSaveSettingsOnExit(bool state) {mSaveSettingsOnExit = state; };
 	bool mSaveSettingsOnExit;
 	// </FS:Zi>
-
-// <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
-private:
-	virtual void startCachePurge() {}
-// </FS:ND>
 };
 
 // consts from viewer.h
