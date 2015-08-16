@@ -26,7 +26,7 @@ To build firestorm:
 that sets your dev environment variables. You will use this shell to kick off command line builds. CYGWIN or standard
 CMD.EXE will not work.
 
-After launching the VS2010 cmd shell and navigating to your firestorm code repo:
+After launching the VS2013 cmd shell and navigating to your firestorm code repo:
 
         autobuild build -c ReleaseFS
 
