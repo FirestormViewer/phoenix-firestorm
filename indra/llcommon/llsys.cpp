@@ -1140,10 +1140,26 @@ LLSD LLMemoryInfo::loadStatsMap( bool aProcessMemoryOnly )
 				}
 				catch (const boost::bad_lexical_cast&)
 				{
-					LL_WARNS("LLMemoryInfo") << "couldn't parse '" << value_str
-											 << "' in " << MEMINFO_FILE << " line: "
-											 << line << LL_ENDL;
-					continue;
+				        //<FS:TS> FIRE-10950: Deal with VM sizes too big to fit in 32 bits
+					//LL_WARNS("LLMemoryInfo") << "couldn't parse '" << value_str
+					//						 << "' in " << MEMINFO_FILE << " line: "
+					//						 << line << LL_ENDL;
+					//continue;
+				        U64 bigvalue = 0;
+					try
+					{
+					        bigvalue = boost::lexical_cast<U64>(value_str);
+                                        }
+                			catch (const boost::bad_lexical_cast&)
+		        		{
+			        		LL_WARNS("LLMemoryInfo") << "couldn't parse '" << value_str
+				        							 << "' in " << MEMINFO_FILE << " line: "
+					        						 << line << LL_ENDL;
+                                                continue;
+                                        }
+                                        stats.add(key,bigvalue);
+                                        continue;
+                                        //</FS:TS> FIRE-10950
 				}
 				// Store this statistic.
 				stats.add(key, value);
