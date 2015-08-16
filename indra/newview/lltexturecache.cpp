@@ -1542,25 +1542,6 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 {
 	if (!mReadOnly)
 	{
-// <FS:ND> Windows can be really slow deleting a huge texture cache.
-// In case of a full purge rename the directory and then purge this using a low priority background thread. 
-#if LL_WINDOWS
-		bool bOldPurge = true;
-		if( purge_directories )
-		{
-			std::string strNewName = mCacheParentDirName + gDirUtilp->getDirDelimiter() + LLUUID::generateNewID().asString() + ".old_texturecache";
-			if( LLFile::isdir( mTexturesDirName ) )
-				bOldPurge = ( 0 != LLFile::rename( mTexturesDirName, strNewName ) );
-
-			if( bOldPurge )
-			{
-				LL_WARNS() << "Rename of " << mTexturesDirName << " to " << strNewName << " failed" << LL_ENDL;
-			}
-		}
-		if( !purge_directories || bOldPurge )
-#endif
-// </FS:ND>
-		{
 		const char* subdirs = "0123456789abcdef";
 		std::string delem = gDirUtilp->getDirDelimiter();
 		std::string mask = "*";
@@ -1584,8 +1565,7 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 		{
 			gDirUtilp->deleteFilesInDir(mTexturesDirName, mask);
 			LLFile::rmdir(mTexturesDirName);
-		}
-		}
+		}		
 	}
 	mHeaderIDMap.clear();
 	mTexturesSizeMap.clear();
