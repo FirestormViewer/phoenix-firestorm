@@ -1404,9 +1404,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e4da5eccc1b0f1d2e51d7cf3d2390b58</string>
+              <string>16c174ab9b40b237ea38a6ead83b3179</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.6.0-windows-201507161525-r30.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.6.0-windows-201508172054-r41.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
