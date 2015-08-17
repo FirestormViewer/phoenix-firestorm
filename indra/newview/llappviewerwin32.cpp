@@ -937,3 +937,5 @@ std::string LLAppViewerWin32::generateSerialNumber()
 	}
 	return serial_md5;
 }
+
+#include "fsappviewerwin32.cpp"
