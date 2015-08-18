@@ -83,6 +83,12 @@
 	<texture name="Inv_RLVOpen"			file_name="legacy/inv_folder_RLVa.tga" />
 	<texture name="Inv_RLVClosed"			file_name="legacy/inv_folder_RLVa.tga" />
 
+	<!-- Marketplace Listings folders -->
+	<texture name="Inv_StockFolderClosed"	file_name="legacy/inv_folder_stock_closed.tga" />
+	<texture name="Inv_StockFolderOpen" 	file_name="legacy/inv_folder_stock_open.tga" />
+	<texture name="Inv_VersionFolderClosed"	file_name="legacy/inv_folder_version_closed.tga" />
+	<texture name="Inv_VersionFolderOpen" 	file_name="legacy/inv_folder_version_open.tga" />
+
 	<texture name="Parcel_Build_Dark"		file_name="legacy/status_build.png" />
 	<texture name="Parcel_BuildNo_Dark"		file_name="legacy/status_no_build.tga" />
 	<texture name="Parcel_Damage_Dark"		file_name="icons/Parcel_Damage_Dark.png" />

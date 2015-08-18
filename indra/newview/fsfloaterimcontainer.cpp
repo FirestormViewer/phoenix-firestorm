@@ -264,22 +264,35 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
 void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
 {
-	// <FS:ND>  old code from FS
-	if (floaterp->getName() == "nearby_chat")
+	const std::string floater_name = floaterp->getName();
+	std::string setting_name = "";
+	bool needs_unlock = false;
+	if (floater_name == "nearby_chat")
 	{
-		// only my friends floater now locked
-		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
-		gSavedSettings.setBOOL("ChatHistoryTornOff", TRUE);
+		setting_name = "ChatHistoryTornOff";
+		needs_unlock = true;
+	}
+	else if (floater_name == "imcontacts")
+	{
+		setting_name = "ContactsTornOff";
+		needs_unlock = true;
+	}
+
+	if (needs_unlock)
+	{
+		// Calling lockTabs with 0 will lock ALL tabs - need to call unlockTabs instead!
+		S32 num_locked_tabs = mTabContainer->getNumLockedTabs();
+		if (num_locked_tabs > 1)
+		{
+			mTabContainer->lockTabs(num_locked_tabs - 1);
+		}
+		else
+		{
+			mTabContainer->unlockTabs();
+		}
+		gSavedSettings.setBOOL(setting_name, TRUE);
 		floaterp->setCanClose(TRUE);
 	}
-	else if (floaterp->getName() == "imcontacts")
-	{
-		// only chat floater now locked
-		mTabContainer->lockTabs(mTabContainer->getNumLockedTabs() - 1);
-		gSavedSettings.setBOOL("ContactsTornOff", TRUE);
-		floaterp->setCanClose(TRUE);
-	}
-	// </FS:ND>
 	LLMultiFloater::removeFloater(floaterp);
 }
 // [/SL:KB]

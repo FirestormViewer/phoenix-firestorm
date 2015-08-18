@@ -425,9 +425,9 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 	mGrid = grid;
 	mRegion = region;
 // <FS:CR> FIRE-8063 - Aurora sim var region teleports
-	//S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
-	//S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
-	//S32 z = llround( (F32)position[VZ] );
+	//S32 x = ll_round( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
+	//S32 y = ll_round( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
+	//S32 z = ll_round( (F32)position[VZ] );
 	mPosition = position;
 // </FS:CR>
 	mType = LOCATION;
@@ -436,9 +436,9 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 
 	if(!LLGridManager::getInstance()->isInOpenSim())
 	{
-		S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
-		S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
-		S32 z = llround( (F32)position[VZ] );
+		S32 x = ll_round( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
+		S32 y = ll_round( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
+		S32 z = ll_round( (F32)position[VZ] );
 		mPosition = LLVector3(x, y, z);
 	}
 // </FS:CR>
@@ -460,9 +460,9 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 	//	  region, LLVector3(global_position.mdV[VX],
 	//			    global_position.mdV[VY],
 	//			    global_position.mdV[VZ]));
-	S32 x = llround( (F32)fmod( (F32)global_position.mdV[VX], (F32)REGION_WIDTH_METERS ) );
-	S32 y = llround( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
-	S32 z = llround( (F32)global_position.mdV[VZ] );
+	S32 x = ll_round( (F32)fmod( (F32)global_position.mdV[VX], (F32)REGION_WIDTH_METERS ) );
+	S32 y = ll_round( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
+	S32 z = ll_round( (F32)global_position.mdV[VZ] );
 
 	*this = LLSLURL(grid, region, LLVector3(x, y, z));
 // </FS:CR>
@@ -525,9 +525,9 @@ std::string LLSLURL::getSLURLString() const
 	case LOCATION:
 	{
 		// lookup the grid
-		S32 x = llround( (F32)mPosition[VX] );
-		S32 y = llround( (F32)mPosition[VY] );
-		S32 z = llround( (F32)mPosition[VZ] );
+		S32 x = ll_round( (F32)mPosition[VX] );
+		S32 y = ll_round( (F32)mPosition[VY] );
+		S32 z = ll_round( (F32)mPosition[VZ] );
 		std::string ret = LLGridManager::getInstance()->getSLURLBase(mGrid);
 // 				ret.append(LLURI::escape(mRegion));
 // 				ret.append(llformat("/%d/%d/%d",x,y,z));
@@ -572,9 +572,9 @@ std::string LLSLURL::getLoginString() const
 	case LOCATION:
 		unescaped_start << "uri:"
 		                << mRegion << "&"
-		                << llround(mPosition[0]) << "&"
-		                << llround(mPosition[1]) << "&"
-		                << llround(mPosition[2]);
+		                << ll_round(mPosition[VX]) << "&"
+		                << ll_round(mPosition[VY]) << "&"
+		                << ll_round(mPosition[VZ]);
 		break;
 	case HOME_LOCATION:
 		unescaped_start << "home";
@@ -618,9 +618,9 @@ std::string LLSLURL::getLocationString() const
 {
 	return llformat("%s/%d/%d/%d",
 	                mRegion.c_str(),
-	                (int)llround(mPosition[0]),
-	                (int)llround(mPosition[1]),
-	                (int)llround(mPosition[2]));
+	                (S32)ll_round(mPosition[VX]),
+	                (S32)ll_round(mPosition[VY]),
+	                (S32)ll_round(mPosition[VZ]));
 }
 std::string LLSLURL::asString() const
 {

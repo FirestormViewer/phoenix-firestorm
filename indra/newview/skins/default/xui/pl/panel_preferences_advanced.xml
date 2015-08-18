@@ -12,6 +12,5 @@
 	<text name="BackgroundYieldTimeText">
 		Ilość czasu, w milisekundach, jaką [APP_NAME] ma odstępować innym aplikacjom, gdy nie jest na pierwszym planie (domyślnie: 40; 1 sekunda = 1000 milisekund):
 	</text>
-	<button label="Domyślne uprawnienia tworzenia" name="default_creation_permissions" />
 	<button label="Resetuj wszystkie ustawienia" label_selected="Resetuj wszystkie ustawienia..." name="clear_settings"/>
 </panel>

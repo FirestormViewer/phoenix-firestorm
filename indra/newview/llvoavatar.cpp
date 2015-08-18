@@ -695,9 +695,14 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mLastAppearanceBlendTime(0.f),
 	mAppearanceAnimating(FALSE),
     mNameIsSet(false),
+	// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
+	mNameFirstname(),
+	mNameLastname(),
+	// </FS:Ansariel>
 	mTitle(),
 	mNameAway(false),
 	mNameDoNotDisturb(false),
+	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag
 	mNameMute(false),
 	mNameAppearance(false),
 	mNameFriend(false),
@@ -2928,6 +2933,12 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
+	// <FS:Ansariel> Show auto-response in nametag
+	static LLCachedControl<bool> fsAutorespondMode(gSavedPerAccountSettings, "FSAutorespondMode");
+	static LLCachedControl<bool> fsAutorespondNonFriendsMode(gSavedPerAccountSettings, "FSAutorespondNonFriendsMode");
+	static LLCachedControl<bool> fsShowAutorespondInNametag(gSavedSettings, "FSShowAutorespondInNametag");
+	bool is_autoresponse = isSelf() && fsShowAutorespondInNametag && (fsAutorespondMode || fsAutorespondNonFriendsMode);
+	// </FS:Ansariel>
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_do_not_disturb = mSignaledAnimations.find(ANIM_AGENT_DO_NOT_DISTURB) != mSignaledAnimations.end();
 	bool is_appearance = mSignaledAnimations.find(ANIM_AGENT_CUSTOMIZE) != mSignaledAnimations.end();
@@ -3030,10 +3041,14 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// Rebuild name tag if state change detected
 	if (!mNameIsSet
 		|| new_name
+		// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
+		|| (!LLGridManager::instance().isInSecondLife() && (firstname->getString() != mNameFirstname || lastname->getString() != mNameLastname))
+		// </FS:Ansariel>
 		|| (!title && !mTitle.empty())
 		|| (title && mTitle != title->getString())
 		|| is_away != mNameAway 
 		|| is_do_not_disturb != mNameDoNotDisturb 
+		|| is_autoresponse != mNameAutoResponse
 		|| is_muted != mNameMute
 		|| is_appearance != mNameAppearance 
 		|| is_friend != mNameFriend
@@ -3061,7 +3076,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		clearNameTag();
 
-		if (is_away || is_muted || is_do_not_disturb || is_appearance)
+		// <FS:Ansariel> Show auto-response in nametag
+		//if (is_away || is_muted || is_do_not_disturb || is_appearance)
+		if (is_away || is_muted || is_do_not_disturb || is_autoresponse || is_appearance)
+		// </FS:Ansariel>
 		{
 			std::string line;
 			if (is_away)
@@ -3074,6 +3092,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				line += LLTrans::getString("AvatarDoNotDisturb");
 				line += ", ";
 			}
+			// <FS:Ansariel> Show auto-response in nametag
+			if (is_autoresponse)
+			{
+				line += LLTrans::getString("AvatarAutoResponse");
+				line += ", ";
+			}
+			// </FS:Ansariel>
 			if (is_muted)
 			{
 				line += LLTrans::getString("AvatarMuted");
@@ -3201,6 +3226,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		mNameAway = is_away;
 		mNameDoNotDisturb = is_do_not_disturb;
+		mNameAutoResponse = is_autoresponse; // <FS:Ansariel> Show auto-response in nametag
 		mNameMute = is_muted;
 		mNameAppearance = is_appearance;
 		mNameFriend = is_friend;
@@ -3208,6 +3234,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		mNameColor=name_tag_color;
 		mDistanceString = distance_string;
 		mTitle = title ? title->getString() : "";
+		// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
+		mNameFirstname = firstname->getString();
+		mNameLastname = lastname->getString();
+		// </FS:Ansariel>
 		LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
 		new_name = TRUE;
 	}

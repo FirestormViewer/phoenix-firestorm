@@ -3,18 +3,15 @@
 	<menu label="Awatar" name="Me">
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
 		<menu_item_call label="Skrzynka nadawcza kupca..." name="MerchantOutbox"/>
+		<menu_item_call label="Moje rzeczy na Marketplace" name="MarketplaceListings"/>
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
-		<menu_item_call label="Ustawienia" name="Preferences"/>
-		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
-		<menu_item_call label="Mój Profil" name="Profile"/>
-		<menu_item_call label="Miejsca" name="Picks"/>
-		<menu_item_call label="Przygody" name="Experiences"/>
-		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
-		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
-		<menu_item_call label="Zrób zdjęcie" name="Take Snapshot"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>
 		<menu_item_check label="Moja Szafa" name="ShowSidetrayInventory"/>
-		<menu_item_check label="Ustawienia ruchu" name="Movement Controls"/>
+		<menu_item_call label="Miejsca" name="Picks"/>
+		<menu_item_call label="Przygody" name="Experiences"/>
+		<menu_item_call label="Mój Profil" name="Profile"/>
+		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
+		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
 			<menu_item_check label="Zacznij latać" name="Fly"/>
@@ -24,6 +21,7 @@
 			<menu_item_check label="Unieruchom" name="Move Lock"/>
 			<menu_item_check label="Szybki skok" name="Avatar Ignore Prejump"/>
 		</menu>
+		<menu_item_check label="Ustawienia ruchu" name="Movement Controls"/>
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>
 		<menu label="Naprawa awatara" name="avhealth">
 			<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar"/>
@@ -36,20 +34,14 @@
 			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
+		<menu_item_call label="Zrób zdjęcie" name="Take Snapshot"/>
 		<menu_item_call label="Śledzenie transakcji" name="money_tracker"/>
 		<menu_item_call label="Podest do pozowania" name="pose_stand"/>
-		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
-			<menu_item_call label="Model meszowy..." name="Upload Model"/>
-			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
-			<menu_item_call label="Ustaw domyślne uprawnienia..." name="perm prefs"/>
-			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
-		</menu>
+		<menu_item_call label="Ustawienia" name="Preferences"/>
+		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
+		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Zażądaj statusu administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
-		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Komunikacja" name="Communicate">
@@ -333,7 +325,6 @@
 		<menu_item_check label="Wygładzanie ruchu myszki" name="Mouse Smoothing"/>
 		<menu_item_call label="Cofnij dodatkom zezwolenia kontroli przycisków" name="Release Keys"/>
 		<menu label="Skróty" name="Shortcuts">
-			<menu_item_call label="Załaduj teksturę ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Wyszukiwarka" name="Search"/>
 			<menu_item_check label="Pokazuj menu Zaawansowane" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleportuj po podwójnym kliknięciu" name="DoubleClick Teleport"/>

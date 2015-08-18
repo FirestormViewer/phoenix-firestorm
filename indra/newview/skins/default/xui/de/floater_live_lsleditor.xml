@@ -7,7 +7,7 @@
 		Läuft
 	</floater.string>
 	<floater.string name="Title">
-		SKRIPT: [NAME]
+		Skript: [NAME]
 	</floater.string>
 	<floater.string name="experience_enabled">
 		Markierung löschen, um aktuelles Erlebnis zu entfernen

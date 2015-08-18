@@ -425,6 +425,18 @@
      tool_tip="If enabled, the nametag will stay fixed at the avatar position and not follow the avatar head if it moves because of animations."
      top_delta="0" />
 
+  <check_box
+   enabled_control="AvatarNameTagMode"
+   control_name="FSShowAutorespondInNametag"
+   height="16"
+   label="Show autorespond mode in nametag"
+   layout="topleft"
+   left_pad="50"
+   name="FSShowAutorespondInNameTag"
+   width="100"
+   tool_tip="This will show whether you have autoresponse enabled in your own nametag."
+   top_delta="0"/>
+    
 <!--away/logout-->
 	 <text
      type="string"

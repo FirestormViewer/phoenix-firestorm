@@ -4331,6 +4331,18 @@ Go to the 'Comm' &gt; 'Online Status' menu if you wish to disable it.
      yestext="OK"/>
   </notification>
 
+    <notification
+   icon="alert.tga"
+   name="RejectAllGroupInvitesModeSet"
+   type="alert">
+Reject all incoming group invites mode is on.
+Incoming group invites from anyone will now be rejected automatically. You will not be notified because of that fact.
+    <usetemplate
+     ignoretext="I change my status to reject all group invites mode"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+
   <notification
    icon="alert.tga"
    name="JoinedTooManyGroupsMember"

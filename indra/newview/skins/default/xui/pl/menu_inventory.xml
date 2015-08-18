@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
+	<menu_item_call label="Utwórz nową rzecz" name="Marketplace Create Listing"/>
+	<menu_item_call label="Przypisz rzecz" name="Marketplace Associate Listing"/>
+	<menu_item_call label="Pobierz ponownie (odśwież)" name="Marketplace Get Listing"/>
+	<menu_item_call label="Sprawdź pod kątem błędów" name="Marketplace Check Listing"/>
+	<menu_item_call label="Edytuj rzecz" name="Marketplace Edit Listing"/>
+	<menu_item_call label="Dodaj na listę" name="Marketplace List"/>
+	<menu_item_call label="Usuń z listy" name="Marketplace Unlist"/>
+	<menu_item_call label="Aktywuj" name="Marketplace Activate"/>
+	<menu_item_call label="Dezaktywuj" name="Marketplace Deactivate"/>
 	<menu_item_call label="Udostępnij" name="Share"/>
 	<menu_item_call label="Kupuj" name="Task Buy"/>
 	<menu_item_call label="Otwórz" name="Task Open"/>
@@ -97,6 +106,7 @@
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
 	<menu_item_call label="Kopiuj do Skrzynki Kupca" name="Merchant Copy"/>
-	<menu_item_call label="Wyślij na Marketplace" name="Marketplace Send"/>
+	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
+	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>
 </menu>

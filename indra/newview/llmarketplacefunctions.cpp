@@ -43,8 +43,15 @@
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 
+//<FS:TS> FIRE-11943: Fix building STANDALONE on Linux
+#if LL_USESYSTEMLIBS
+#include "jsoncpp/reader.h" // JSON
+#include "jsoncpp/writer.h" // JSON
+#else
 #include "reader.h" // JSON
 #include "writer.h" // JSON
+#endif
+//</FS:TS> FIRE-11943
 
 //
 // Helpers

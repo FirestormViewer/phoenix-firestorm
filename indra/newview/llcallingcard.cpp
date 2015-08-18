@@ -56,7 +56,6 @@
 
 // Firestorm includes
 #include "fscommon.h"
-#include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
 #include "fskeywords.h"
 #include "lggcontactsets.h"
@@ -889,17 +888,6 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
 			at.mBuddyInfo[id] = buddy_info;
 			at.addChangedMask(LLFriendObserver::ADD, id);
 			at.notifyObservers();
-
-			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
-			// <FS:Ansariel> [FS communication UI]
-			FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
-			// </FS:Ansariel> [FS communication UI]
-			if (im_floater)
-			{
-				im_floater->setEnableAddFriendButton(FALSE);
-			}
-			// </FS:Ansariel>
 		}
 	}
 }
@@ -917,17 +905,6 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
 		at.addChangedMask(LLFriendObserver::REMOVE, id);
 		delete buddy;
 		at.notifyObservers();
-
-		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
-		// <FS:Ansariel> [FS communication UI]
-		FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
-		// </FS:Ansariel> [FS communication UI]
-		if (im_floater)
-		{
-			im_floater->setEnableAddFriendButton(TRUE);
-		}
-		// </FS:Ansariel>
 	}
 }
 

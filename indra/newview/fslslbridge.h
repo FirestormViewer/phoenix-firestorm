@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2011, The Phoenix Firestorm Project, Inc.
+ * Copyright (C) 2011-2015, The Phoenix Firestorm Project, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,10 +35,6 @@
 #include "lleventtimer.h"
 
 class FSLSLBridgeRequestResponder;
-
-//
-//-TT Client LSL Bridge File
-//
 
 const std::string LIB_ROCK_NAME = "Rock - medium, round";
 const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
@@ -118,7 +114,6 @@ protected:
 	bool isItemAttached(const LLUUID& iID);
 	void createNewBridge();
 	void create_script_inner();
-	//bool isOldBridgeVersion(LLInventoryItem* item);
 	void cleanUpBridgeFolder();
 	void cleanUpBridgeFolder(const std::string& nameToCleanUp);
 	void setupBridgePrim(LLViewerObject* object);

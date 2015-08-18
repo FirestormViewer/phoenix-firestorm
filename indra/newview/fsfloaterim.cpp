@@ -82,6 +82,7 @@ floater_showed_signal_t FSFloaterIM::sIMFloaterShowedSignal;
 
 FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
+  LLEventTimer(0.1f),
 	mControlPanel(NULL),
 	mSessionID(session_id),
 	mLastMessageIndex(-1),
@@ -184,6 +185,8 @@ void FSFloaterIM::onFocusReceived()
 // virtual
 void FSFloaterIM::onClose(bool app_quitting)
 {
+	mEventTimer.stop();
+
 	setTyping(false);
 
 	// The source of much argument and design thrashing
@@ -488,6 +491,8 @@ void FSFloaterIM::sendMsg(const std::string& msg)
 
 FSFloaterIM::~FSFloaterIM()
 {
+	mEventTimer.stop();
+
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
 	mVoiceChannelStateChangeConnection.disconnect();
 	if(LLVoiceClient::instanceExists())
@@ -681,6 +686,7 @@ void FSFloaterIM::changed(U32 mask)
 		bool is_online = LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID);
 		getChild<LLButton>("teleport_btn")->setEnabled(is_online);
 		getChild<LLButton>("call_btn")->setEnabled(is_online);
+		getChild<LLButton>("add_friend_btn")->setEnabled(FALSE);
 	}
 	else
 	{
@@ -688,6 +694,7 @@ void FSFloaterIM::changed(U32 mask)
 		// know about their online status anymore
 		getChild<LLButton>("teleport_btn")->setEnabled(TRUE);
 		getChild<LLButton>("call_btn")->setEnabled(TRUE);
+		getChild<LLButton>("add_friend_btn")->setEnabled(TRUE);
 	}
 }
 
@@ -992,13 +999,6 @@ void FSFloaterIM::draw()
 		LL_DEBUGS("TypingMsgs") << "Received: is typing cleared due to timeout" << LL_ENDL;
 		removeTypingIndicator();
 		mOtherTyping = false;
-	}
-
-	// add people who were added via dropPerson()
-	if (!mPendingParticipants.empty())
-	{
-		addSessionParticipants(mPendingParticipants);
-		mPendingParticipants.clear();
 	}
 
 	LLTransientDockableFloater::draw();
@@ -1708,6 +1708,7 @@ bool FSFloaterIM::dropCallingCard(LLInventoryItem* item, bool drop)
 			if (drop)
 			{
 				mPendingParticipants.push_back(item->getCreatorUUID());
+				mEventTimer.start();
 			}
 		}
 		else
@@ -1755,6 +1756,7 @@ bool FSFloaterIM::dropCategory(LLInventoryCategory* category, bool drop)
 				if (drop)
 				{
 					mPendingParticipants.insert(mPendingParticipants.end(), ids.begin(), ids.end());
+					mEventTimer.start();
 				}
 			}
 			else
@@ -1780,10 +1782,26 @@ bool FSFloaterIM::dropPerson(LLUUID* person_id, bool drop)
 			// these people will be added during the next draw() call
 			// (so they can be added all at once)
 			mPendingParticipants.push_back(*person_id);
+			mEventTimer.start();
 		}
 	}
 
 	return res;
+}
+
+//virtual
+BOOL FSFloaterIM::tick()
+{
+	// add people who were added via dropPerson()
+	if (!mPendingParticipants.empty())
+	{
+		addSessionParticipants(mPendingParticipants);
+		mPendingParticipants.clear();
+	}
+
+	mEventTimer.stop();
+
+	return FALSE;
 }
 
 // virtual
@@ -2090,13 +2108,6 @@ BOOL FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLS
 	return result;
 }
 // </FS:Zi>
-
-// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-void FSFloaterIM::setEnableAddFriendButton(BOOL enabled)
-{
-	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
-}
-// </FS:Ansariel>
 
 // <FS:CR> FIRE-11734
 //static

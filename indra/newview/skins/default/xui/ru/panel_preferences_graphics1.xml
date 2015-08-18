@@ -42,6 +42,15 @@
 				<combo_box.item label="Солнце / Луна" name="1"/>
 				<combo_box.item label="Солнце / Луна + Прожектора" name="2"/>
 			</combo_box>
+			<text name="avatar_shadows_label">
+				Тени аватара:
+			</text>
+			<combo_box name="AvatarShadowDetail">
+				<combo_box.item label="Нет" name="0"/>
+				<combo_box.item label="Упрощенные" name="1"/>
+				<combo_box.item label="Оптимизированные" name="2"/>
+				<combo_box.item label="Сложные" name="3"/>
+			</combo_box>
 			<text name="reflection_label">
 				Отражения в воде:
 			</text>

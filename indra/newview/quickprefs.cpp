@@ -1080,11 +1080,11 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	// if it's an integer entry, round the numbers
 	if (entry.integer)
 	{
-		entry.min_value = llround(entry.min_value);
-		entry.max_value = llround(entry.max_value);
+		entry.min_value = ll_round(entry.min_value);
+		entry.max_value = ll_round(entry.max_value);
 
 		// recalculate increment
-		entry.increment = llround(entry.increment);
+		entry.increment = ll_round(entry.increment);
 		if (entry.increment == 0.f)
 		{
 			entry.increment = 1.f;
@@ -1458,7 +1458,7 @@ void FloaterQuickPrefs::onValuesChanged()
 
 	// remember the current and possibly new control names
 	std::string old_control_name = mSelectedControl;
-	std::string new_control_name = mControlNameCombo->getValue();
+	std::string new_control_name = mControlNameCombo->getValue().asString();
 
 	// if we changed the control's variable, rebuild the user interface
 	if (!new_control_name.empty() && old_control_name != new_control_name)
@@ -1479,7 +1479,7 @@ void FloaterQuickPrefs::onValuesChanged()
 		}
 
 		// remember the old slot
-		LLView* slot =old_parameters.panel->getParent();
+		LLView* slot = old_parameters.panel->getParent();
 		// remove the old control name from the internal list but keep the slot available
 		removeControl(old_control_name, false);
 		// add new control with the old slot
@@ -1610,7 +1610,7 @@ void FloaterQuickPrefs::onAddNewClicked()
 {
 	// count a number to keep control names unique
 	static S32 sCount = 0;
-	std::string new_control_name = "NewControl" + LLSD(sCount).asString();
+	std::string new_control_name = "NewControl" + llformat("%d", sCount);
 	// add the new control to the internal list and user interface
 	addControl(new_control_name, new_control_name);
 	// put it at the bottom of the ordering stack
@@ -1785,31 +1785,31 @@ void FloaterQuickPrefs::onChangeVignetteSpinnerZ()
 
 void FloaterQuickPrefs::onClickResetVignetteX()
 {
+	LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
 	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
-	// FIXME: Don't use a hardcoded default value for resetting to default.
-	vignette.mV[VX] = 0.0f;
-	mSliderVignetteX->setValue(0);
-	mSpinnerVignetteX->setValue(0);
+	vignette.mV[VX] = vignette_default.mV[VX];
+	mSliderVignetteX->setValue(vignette.mV[VX]);
+	mSpinnerVignetteX->setValue(vignette.mV[VX]);
 	gSavedSettings.setVector3("FSRenderVignette", vignette);
 }
 
 void FloaterQuickPrefs::onClickResetVignetteY()
 {
+	LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
 	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
-	// FIXME: Don't use a hardcoded default value for resetting to default.
-	vignette.mV[VY] = 1.0f;
-	mSliderVignetteY->setValue(1);
-	mSpinnerVignetteY->setValue(1);
+	vignette.mV[VY] = vignette_default.mV[VY];
+	mSliderVignetteY->setValue(vignette.mV[VY]);
+	mSpinnerVignetteY->setValue(vignette.mV[VY]);
 	gSavedSettings.setVector3("FSRenderVignette", vignette);
 }
 
 void FloaterQuickPrefs::onClickResetVignetteZ()
 {
+	LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
 	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
-	// FIXME: Don't use a hardcoded default value for resetting to default.
-	vignette.mV[VZ] = 1.0f;
-	mSliderVignetteZ->setValue(1);
-	mSpinnerVignetteZ->setValue(1);
+	vignette.mV[VZ] = vignette_default.mV[VZ];
+	mSliderVignetteZ->setValue(vignette.mV[VZ]);
+	mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
 	gSavedSettings.setVector3("FSRenderVignette", vignette);
 }
 // </FS:CR> FIRE-9630 - Vignette UI callbacks

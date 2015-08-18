@@ -85,9 +85,9 @@ exportMutliArchDRIPath "i386"
 exportMutliArchDRIPath "amd64"
 if [ -z ${LIBGL_DRIVERS_PATH} ]
 then
-	export LIBGL_DRIVERS_PATH="/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri"
+	export LIBGL_DRIVERS_PATH="/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri:/usr/lib/i386-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri"
 else
-	export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri"
+	export LIBGL_DRIVERS_PATH="${LIBGL_DRIVERS_PATH}:/usr/lib64/dri:/usr/lib32/dri:/usr/lib/dri:/usr/lib/i386-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri"
 fi
 echo "LIBGL_DRIVERS_PATH is ${LIBGL_DRIVERS_PATH}"
 

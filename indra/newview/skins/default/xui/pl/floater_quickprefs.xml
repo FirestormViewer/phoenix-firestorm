@@ -3,6 +3,9 @@
 	<panel name="quickprefs">
 		<layout_stack name="wl_options_stack">
 			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" tool_tip="Ustaw wysokość uniesienia dla swojego awatara">
+					Uniesienie:
+				</text>
 				<text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
 					Maks. przepust.:
 				</text>

@@ -81,15 +81,26 @@
 	
 	<!-- Top Bars -->
 
-	<panel name="UI-interface-top-bars" >
+	<panel label="トップバー" name="UI-interface-top-bars" >
 
-		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
-		<check_box label="ラグメーターに１秒当り平均周期を表示（旧式の表示方法）" name="FSStatbarLegacyMeanPerSec" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示する旧式の表示方法を使用します。" />
+		<text name="statusbar_textbox">
+			ステータスバー
+		</text>
+		<check_box name="ShowNetStats" label="トラフィックインジケータを画面の右上に表示" tool_tip="ステータスオーバーレイにトラフィックインジケータを表示します。"/>
+		<check_box label="トラフィックインジケータに１秒当り平均周期を表示（旧式の表示方法）" name="FSStatbarLegacyMeanPerSec" tool_tip="ここにチェックを入れると、Firestorm は現在測定されている値でなく、１秒当りの平均周期をラグメータに表示する旧式の表示方法を使用します。" />
+		<check_box label="トラフィックインジケータをクリックするとラグメーターでなく統計情報を表示" name="FSUseStatsInsteadOfLagMeter" />
 		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
 		<check_box name="FSStatusbarShowSimulatorVersion" label="ステータスバーにシミュレータのチャンネルを表示" tool_tip="V1形式のステータスバーに現在のシミュレータのチャンネル（RC Magnum, RC Le Tigre, RC BlueSteel 等）を表示します。" />
+		<check_box label="トップメニューに現在の場所を表示" name="ShowMenuBarLocation" />
 		<check_box label="メニュー検索を表示" name="show_search_menu_check"/>
-        <check_box label="お気に入りバーを表示" name="ShowNavbarFavoritesPanel" />
-        <check_box label="ナビゲーションバーとお気に入りバーを表示" name="ShowNavbarNavigationPanel" />
+		<check_box label="リンデンドルの残高を表示" name="FSShowCurrencyBalanceInStatusbar" />
+		
+		<text name="navfav_textbox">
+			ナビゲーション＆お気に入りバー：
+		</text>
+		<check_box label="お気に入りバーを表示" name="ShowNavbarFavoritesPanel" />
+		<check_box label="ナビゲーションバーと検索バーを表示" name="ShowNavbarNavigationPanel" />
+		<check_box label="検索バーを表示" name="ShowSearchTopBar" />
 
 	</panel>
 	

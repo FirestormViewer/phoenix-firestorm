@@ -3493,6 +3493,61 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played on new Experience notifications."
+         name="textFSQuestionExperience">
+            New Experience:
+        </text>
+        <line_editor
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndQuestionExperience"
+         control_name="UISndQuestionExperience"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndQuestionExperience"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndQuestionExperience"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndQuestionExperience"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndQuestionExperience"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndQuestionExperience"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndQuestionExperience"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played on invalid operations."
          name="textFSInvalidOp">
             Invalid operation:

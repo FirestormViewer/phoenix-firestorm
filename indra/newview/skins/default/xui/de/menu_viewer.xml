@@ -7,18 +7,13 @@
 		<menu_item_call label="Händler-Outbox..." name="MerchantOutbox"/>
 		<menu_item_call label="Marktplatz-Auflistungen..." name="MarketplaceListings"/>
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
-		<menu_item_call label="Einstellungen" name="Preferences"/>
-		<menu_item_call label="Symbolleistenschaltflächen" name="Toolbar Buttons"/>
-		<menu_item_call label="Profil" name="Profile"/>
-		<menu_item_call label="Auswahlen" name="Picks"/>
-		<menu_item_call label="Erlebnisse" name="Experiences"/>
-		<menu_item_call label="Auf Facebook posten" name="PostToFacebook"/>
-		<menu_item_call label="Aussehen" name="ChangeOutfit"/>
-		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
-		<menu_item_call label="Foto machen" name="Take Snapshot"/>
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
-		<menu_item_check label="Steuerung" name="Movement Controls"/>
+		<menu_item_call label="Auswahlen" name="Picks"/>
+		<menu_item_call label="Erlebnisse" name="Experiences"/>
+		<menu_item_call label="Profil" name="Profile"/>
+		<menu_item_call label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 			<menu_item_check label="Fliegen" name="Fly"/>
@@ -26,6 +21,7 @@
 			<menu_item_check label="Sitzen erzwingen" name="Force Toggle Sitting"/>
 			<menu_item_check label="Movelock" name="Move Lock"/>
 		</menu>
+		<menu_item_check label="Steuerung" name="Movement Controls"/>
 		<menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
 		<menu label="Avatar-Befinden" name="avhealth">
 			<menu_item_call label="Avatar-Animationen stoppen" name="Stop Animating My Avatar"/>
@@ -38,20 +34,14 @@
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
 			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
+		<menu_item_call label="Foto machen" name="Take Snapshot"/>
 		<menu_item_call label="Money-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
-		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
-			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
-			<menu_item_call label="Modell..." name="Upload Model"/>
-			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
-			<menu_item_call label="Standard-Berechtigungen festlegen..." name="perm prefs"/>
-			<menu_item_call label="Linkset importieren..." name="import linkset"/>
-		</menu>
+		<menu_item_call label="Einstellungen" name="Preferences"/>
+		<menu_item_call label="Symbolleistenschaltflächen" name="Toolbar Buttons"/>
+		<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
-		<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
 		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Unterhalten" name="Communicate">
@@ -346,7 +336,6 @@
 		<menu_item_check label="Weiche Mausbewegung" name="Mouse Smoothing"/>
 		<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 		<menu label="Tastaturkürzel" name="Shortcuts">
-			<menu_item_call label="Bild hochladen ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Suchen" name="Search"/>
 			<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>
@@ -366,8 +355,8 @@
 			<menu_item_call label="Zoom-Standard" name="Zoom Default"/>
 			<menu_item_call label="Wegzoomen" name="Zoom Out"/>
 		</menu>
-        <menu_item_check label="Flugbeschränkungen aufheben" name="Fly Override"/>
-        <menu_item_check label="RestrainedLove API" name="RLV API"/>
+		<menu_item_check label="Flugbeschränkungen aufheben" name="Fly Override"/>
+		<menu_item_check label="RestrainedLove API" name="RLV API"/>
 		<menu_item_call label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
 		<menu_item_check label="Menü „Entwickler“ anzeigen" name="Debug Mode"/>
 	</menu>

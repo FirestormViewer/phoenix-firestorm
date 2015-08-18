@@ -31,6 +31,9 @@
 		<layout_panel name="im_history_btn_panel">
 			<button name="im_history_btn" tool_tip="Открыть журнал разговора"/>
 		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button tool_tip="Добавить собеседника в этот разговор" name="add_participant_btn"/>
+		</layout_panel>
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button tool_tip="Отправить системную информацию" name="send_sysinfo_btn"/>
 		</layout_panel>

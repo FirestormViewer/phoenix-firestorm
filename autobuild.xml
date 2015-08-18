@@ -648,9 +648,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4be74ad3be7ca2a80c93a148e6e07c15</string>
+              <string>10f4a24948b129e342e908609e65dd66</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44453-darwin-201505171651-r21.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44456-darwin-201508061336-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -660,9 +660,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fd13f6392cb117c4217973b4d49a89cb</string>
+              <string>2e1b76fa4f9b42679ca5e97c57d1006b</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44453-linux-201505100200-r21.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44456-linux-201508111340-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -672,9 +672,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b69af3c55b0c83a634667cbbf58f9126</string>
+              <string>5108a6a9d2f77f6bc1a0a44e7288dc97</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44453-windows-201505100141-r21.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44456-windows-201508061143-r22.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1326,9 +1326,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>93ac0c66466c263430babf773839e136</string>
+              <string>bf4bb114d861213eb946c6e8b7e35178</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201505192025-r31-darwin-201505192025-r31.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201508041108-r34-darwin-201508041108-r34.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1380,9 +1380,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>036b86aa976f14e958cc27457b6dc79b</string>
+              <string>e1668e9baf2823d2ff225d3f04d09a49</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.6.0-darwin-201507161944-r31.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.7.0-darwin-201508071405-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1392,9 +1392,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6ed5fbe7dff605a2b3271aa5896ac271</string>
+              <string>2a0b26323dec2b063f7d37974e2a4345</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.6.0-linux-201507161434-r27.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.7.0-linux-201508071358-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1404,9 +1404,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e4da5eccc1b0f1d2e51d7cf3d2390b58</string>
+              <string>fc043599d277c6ab2b0371a81eb81e81</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-7.6.0-windows-201507161525-r30.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.7.0-windows-201508071211-r36.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2312,9 +2312,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>48ed7ddcf93fa3c751d677f5eb5f9367</string>
+              <string>8bada9cac4d5367dc26fff331a2bdd69</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/slvoice_3p-update-slvoice/rev/298329/arch/Linux/installer/slvoice-3.2.0002.10426.298329-linux-298329.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20150809.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

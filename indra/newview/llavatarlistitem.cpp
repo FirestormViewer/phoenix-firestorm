@@ -48,7 +48,6 @@
 #include  <time.h>
 #include "llavatarpropertiesprocessor.h"
 #include "lldateutil.h"
-//#include "llavatarconstants.h"
 #include "indra_constants.h"
 #include "llnotificationsutil.h"
 #include "llvoiceclient.h"

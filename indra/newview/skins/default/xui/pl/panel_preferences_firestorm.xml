@@ -68,6 +68,8 @@
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Mnożnik dla zdarzeń buforowania dźwięku [domyślnie: 4]" />
         <button name="AntiSpamUnblock" label="Odblokuj wszystkie źródła spamu" />
         <check_box label="Usuń przycisk &quot;Zaakceptuj&quot; z zaproszeń do grup, które pobierają opłatę za dołączenie" name="FSAllowGroupInvitationOnlyWithoutFee" />
+        <check_box label="Potwierdź przed płaceniem. Próg:" name="FSConfirmPayments" tool_tip="Pokaż okienko z potwierdzeniem przed płaceniem sum większych, niż ustawiony tutaj próg. Aby zawsze pokazywać potwierdzenie ustaw próg na 0." />
+        <spinner name="FSPaymentConfirmationThreshold" tool_tip="Pokaż okienko z potwierdzeniem przed płaceniem sum większych, niż ustawiony tutaj próg. Aby zawsze pokazywać potwierdzenie ustaw próg na 0." />
     </panel>
     <panel label="Awatar" name="firestorm_avatar">
         <text name="HeadMovement">

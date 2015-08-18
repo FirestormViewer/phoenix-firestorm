@@ -29,7 +29,6 @@
 #include "fspanelprofile.h"
 
 // Common
-//#include "llavatarconstants.h" //AVATAR_ONLINE
 #include "llavatarnamecache.h"
 #include "llslurl.h"
 #include "lldateutil.h" //ageFromDate
@@ -369,14 +368,14 @@ void FSPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorTyp
 void FSPanelProfileSecondLife::resetData()
 {
 	resetLoading();
-    // No real need to reset user_key
+	// No real need to reset user_key
 	getChild<LLUICtrl>("complete_name")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("register_date")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("acc_status_text")->setValue(LLStringUtil::null);
 	getChild<LLUICtrl>("partner_text")->setValue(LLStringUtil::null);
 	mSecondLifePic->setValue(mSecondLifePic->getDefaultImageAssetID());
 	mDescriptionEdit->setValue(LLStringUtil::null);
-	mStatusText->setVisible(false);
+	mStatusText->setVisible(FALSE);
 	mGroups.clear();
 	mGroupList->setGroups(mGroups);
 }
@@ -498,7 +497,7 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 	S32 flags = FSData::getInstance()->getAgentFlags(avatar_data->avatar_id);
 	if (flags != -1)
 	{
-		bool seperator = false;
+		bool separator = false;
 		std::string text;
 		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA))
 		{
@@ -509,24 +508,24 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 		{
 			text = getString("FSDev");
 			args["[FSDEV]"] = text;
-			seperator = true;
+			separator = true;
 		}
 
 		if (flags & FSData::SUPPORT)
 		{
 			text = getString("FSSupp");
-			if (seperator)
+			if (separator)
 			{
 				text = " /" + text;
 			}
 			args["[FSSUPP]"] = text;
-			seperator = true;
+			separator = true;
 		}
 		
 		if (flags & FSData::QA)
 		{
 			text = getString("FSQualityAssurance");
-			if (seperator)
+			if (separator)
 			{
 				text = " /" + text;
 			}
@@ -1139,16 +1138,16 @@ void FSPanelProfileInterests::apply()
 		{
 			if (mWantChecks[i]->getValue().asBoolean())
 			{
-				interests_data.want_to_mask |= (1<<i);
+				interests_data.want_to_mask |= (1 << i);
 			}
 		}
 
 		interests_data.skills_mask = 0;
-		for (S32 i=0; i < SKILL_CHECKS; i++)
+		for (S32 i = 0; i < SKILL_CHECKS; ++i)
 		{
 			if (mSkillChecks[i]->getValue().asBoolean())
 			{
-				interests_data.skills_mask |= (1<<i);
+				interests_data.skills_mask |= (1 << i);
 			}
 		}
 
@@ -1171,14 +1170,14 @@ void FSPanelProfileInterests::enableControls()
 		mSkillsEditor->setEnabled(TRUE);
 		mLanguagesEditor->setEnabled(TRUE);
 
-		for (S32 i=0; i < WANT_CHECKS; ++i)
+		for (S32 i = 0; i < WANT_CHECKS; ++i)
 		{
-			mWantChecks[i]->setEnabled( TRUE );
+			mWantChecks[i]->setEnabled(TRUE);
 		}
 
-		for (S32 i=0; i < SKILL_CHECKS; ++i)
+		for (S32 i = 0; i < SKILL_CHECKS; ++i)
 		{
-			mSkillChecks[i]->setEnabled( TRUE );
+			mSkillChecks[i]->setEnabled(TRUE);
 		}
 	}
 }
@@ -1583,9 +1582,9 @@ std::string FSPanelPick::createLocationText(const std::string& owner_name, const
 
 	if (!pos_global.isNull())
 	{
-		S32 region_x = llround((F32)pos_global.mdV[VX]) % REGION_WIDTH_UNITS;
-		S32 region_y = llround((F32)pos_global.mdV[VY]) % REGION_WIDTH_UNITS;
-		S32 region_z = llround((F32)pos_global.mdV[VZ]);
+		S32 region_x = ll_round((F32)pos_global.mdV[VX]) % REGION_WIDTH_UNITS;
+		S32 region_y = ll_round((F32)pos_global.mdV[VY]) % REGION_WIDTH_UNITS;
+		S32 region_z = ll_round((F32)pos_global.mdV[VZ]);
 		location_text.append(llformat(" (%d, %d, %d)", region_x, region_y, region_z));
 	}
 	return location_text;
@@ -1978,8 +1977,7 @@ void FSPanelAvatarNotes::rightsConfirmationCallback(const LLSD& notification,
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(
-				getAvatarId(), rights);
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(), rights);
 	}
 	else
 	{
@@ -2008,16 +2006,14 @@ void FSPanelAvatarNotes::confirmModifyRights(bool grant, S32 rights)
 
 void FSPanelAvatarNotes::onCommitRights()
 {
-	const LLRelationship* buddy_relationship =
-		LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	const LLRelationship* buddy_relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
 
-	if (NULL == buddy_relationship)
+	if (!buddy_relationship)
 	{
 		// Lets have a warning log message instead of having a crash. EXT-4947.
 		LL_WARNS("LegacyProfile") << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
 		return;
 	}
-
 
 	S32 rights = 0;
 

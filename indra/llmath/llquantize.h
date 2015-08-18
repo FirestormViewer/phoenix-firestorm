@@ -117,7 +117,7 @@ inline U32 F32_to_U32(F32 val, F32 lower, F32 upper)
 	val -= lower;
 	val /= (upper - lower);
 
-	return (U32)(llround(val*U24MAX));
+	return (U32)(ll_round(val*U24MAX));
 }
 // </FS:Ansariel>
 

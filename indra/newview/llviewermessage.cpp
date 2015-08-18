@@ -8264,6 +8264,7 @@ void process_script_experience_details(const LLSD& experience_details, LLSD args
 	args["EXPERIENCE"] = LLSLURL("experience", experience_details[LLExperienceCache::EXPERIENCE_ID].asUUID(), "profile").getSLURLString();
 
 	LLNotificationsUtil::add("ScriptQuestionExperience", args, payload);
+	make_ui_sound("UISndQuestionExperience"); // <FS:PP> New Experience notification sound
 }
 
 void process_script_question(LLMessageSystem *msg, void **user_data)

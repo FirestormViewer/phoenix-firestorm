@@ -282,13 +282,19 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
 		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
+		//if (match_entry == mUrlEntryTrusted)
+		//{
+		//	LLUriParser up(url);
+		//	up.normalize();
+		//	url = up.normalizedUri();
+		//}
 		if (match_entry != mUrlEntryNoLink && match_entry == mUrlEntryTrustedUrl)
 		{
-		// </FS:Ansariel>
 			LLUriParser up(url);
-			up.normalize();
-			url = up.normalizedUri();
-		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
+			if (!up.normalize())
+			{
+				url = up.normalizedUri();
+			}
 		}
 		// </FS:Ansariel>
 

@@ -195,6 +195,10 @@ std::string LLUrlEntryBase::urlToLabelWithGreyQuery(const std::string &url) cons
 	// <FS:Ansariel> Unfail URI display
 	//LLUriParser up(unescapeUrl(url));
 	LLUriParser up(url);
+	if (up.getLastRes())
+	{
+		return unescapeUrl(url);
+	}
 	// </FS:Ansariel>
 	up.normalize();
 

@@ -967,151 +967,145 @@ static std::string reformat_switch_statements(std::string script)
 	{
 		try
 		{
-			// This expression, combined with regex_match rather than regex_search, matches
-			// the last instance of a switch statement. This is important for nested
-			// switches (FIRE-10517). If they are scanned in forward order, case/default/break
-			// inside nested switches are replaced as if they were part of the same switch.
 			boost::regex findswitches(rDOT_MATCHES_NEWLINE
-				"(?:" rCMNT_OR_STR
+				rCMNT_OR_STR
+				"|" rSPC "++" // optimization to skip over blocks of whitespace faster
 				"|(?<![A-Za-z0-9_])(switch" rOPT_SPC "\\()"
-				"|.)*+"
+				"|."
 				);
 
 			boost::smatch matches;
+			std::string::const_iterator bstart = buffer.begin();
 
-			S32 escape = 100;
-
-			while (boost::regex_match(std::string::const_iterator(buffer.begin()), std::string::const_iterator(buffer.end()), matches, findswitches, boost::match_default) && matches[1].matched && escape > 1)
+			while (boost::regex_search(bstart, std::string::const_iterator(buffer.end()), matches, findswitches, boost::match_default))
 			{
-				S32 res = matches.position(boost::match_results<std::string::const_iterator>::size_type(1));
-				
-				static S32 slen = const_iterator_to_pos(matches[1].first, matches[1].second);
-
-				std::string arg = scopeript2(buffer, res+slen-1,'(',')');
-
-				//arg *will have* () around it
-				if (arg == "begin out of bounds" || arg == "end out of bounds")
+				if (matches[1].matched)
 				{
-					break;
-				}
-				LL_DEBUGS("FSLSLPreprocessor") << "arg=[" << arg << "]" << LL_ENDL;;
-				std::string rstate = scopeript2(buffer, res + slen + arg.length() - 1);
+					S32 res = const_iterator_to_pos(buffer.begin(), matches[1].first);
 
-				S32 cutlen = slen;
-				cutlen -= 1;
-				cutlen += arg.length();
-				cutlen += rstate.length();
-				//slen is for switch( and arg has () so we need to - 1 ( to get the right length
-				//then add arg len and state len to get section to excise
+					// slen excludes the "("
+					S32 slen = const_iterator_to_pos(matches[1].first, matches[1].second) - 1;
 
-				//rip off the scope edges
-				S32 slicestart = rstate.find("{") + 1;
-				rstate = rstate.substr(slicestart, (rstate.rfind("}") - slicestart) - 1);
-				LL_DEBUGS("FSLSLPreprocessor") << "rstate=[" << rstate << "]" << LL_ENDL;
+					std::string arg = scopeript2(buffer, res + slen, '(', ')');
 
-				boost::regex findcases(rDOT_MATCHES_NEWLINE
-					"(?:" rCMNT_OR_STR "|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.)*+");
-
-				boost::smatch statematches;
-
-				std::map<std::string, std::string> ifs;
-
-				while (boost::regex_match(std::string::const_iterator(rstate.begin()), std::string::const_iterator(rstate.end()), statematches, findcases, boost::match_default) && statematches[1].matched && escape > 1)
-				{
-					//if(statematches[0].matched)
+					//arg *will have* () around it
+					if (arg == "begin out of bounds" || arg == "end out of bounds")
 					{
-						S32 case_start = statematches.position(boost::match_results<std::string::const_iterator>::size_type(1));
-						S32 next_curl = rstate.find("{",case_start+1);
-						S32 next_semi = rstate.find(":",case_start+1);
-						S32 case_end = (next_semi == -1) ? next_curl :
-							(next_curl < next_semi && next_curl != -1) ? next_curl : next_semi;
-						S32 caselen = const_iterator_to_pos(statematches[1].first, statematches[1].second);
-						if (case_end != -1)
+						break;
+					}
+					LL_DEBUGS("FSLSLPreprocessor") << "arg=[" << arg << "]" << LL_ENDL;;
+					std::string rstate = scopeript2(buffer, res + slen + arg.length());
+					S32 cutlen = slen + arg.length() + rstate.length();
+
+					// Call recursively to process nested switch statements (FIRE-10517)
+					rstate = reformat_switch_statements(rstate);
+
+					//rip off the scope edges
+					S32 slicestart = rstate.find("{") + 1;
+					rstate = rstate.substr(slicestart, (rstate.rfind("}") - slicestart) - 1);
+					LL_DEBUGS("FSLSLPreprocessor") << "rstate=[" << rstate << "]" << LL_ENDL;
+
+					boost::regex findcases(rDOT_MATCHES_NEWLINE
+						rCMNT_OR_STR "|" rSPC "++|(?<![A-Za-z0-9_])(case" rREQ_SPC ")|.");
+
+					boost::smatch statematches;
+
+					std::map<std::string, std::string> ifs;
+					std::string::const_iterator rstart = rstate.begin();
+
+					while (boost::regex_search(rstart, std::string::const_iterator(rstate.end()), statematches, findcases, boost::match_default))
+					{
+						if (statematches[1].matched)
 						{
-							std::string casearg = rstate.substr(case_start + caselen, case_end - (case_start + caselen));
-							LL_DEBUGS("FSLSLPreprocessor") << "casearg=[" << casearg << "]" << LL_ENDL;
-							std::string label = quicklabel();
-							ifs[casearg] = label;
-							LL_DEBUGS("FSLSLPreprocessor") << "BEFORE[" << rstate << "]" << LL_ENDL;
-							bool addcurl = (case_end == next_curl ? 1 : 0);
-							label = "@" + label + ";\n";
-							if (addcurl)
+							S32 case_start = const_iterator_to_pos(rstate.begin(), statematches[1].first);
+							S32 next_curl = rstate.find("{", case_start + 1);
+							S32 next_semi = rstate.find(":", case_start + 1);
+							S32 case_end = (next_semi == -1) ? next_curl :
+								(next_curl < next_semi && next_curl != -1) ? next_curl : next_semi;
+							S32 caselen = const_iterator_to_pos(statematches[1].first, statematches[1].second);
+							if (case_end != -1)
 							{
-								label += "{";
+								std::string casearg = rstate.substr(case_start + caselen, case_end - (case_start + caselen));
+								LL_DEBUGS("FSLSLPreprocessor") << "casearg=[" << casearg << "]" << LL_ENDL;
+								std::string label = quicklabel();
+								ifs[casearg] = label;
+								LL_DEBUGS("FSLSLPreprocessor") << "BEFORE[" << rstate << "]" << LL_ENDL;
+								bool addcurl = (case_end == next_curl ? 1 : 0);
+								label = "@" + label + ";\n";
+								if (addcurl)
+								{
+									label += "{";
+								}
+								rstate.erase(case_start, (case_end - case_start) + 1);
+								rstate.insert(case_start, label);
+								LL_DEBUGS("FSLSLPreprocessor") << "AFTER[" << rstate << "]" << LL_ENDL;
+								rstart = rstate.begin() + (case_start + label.length());
 							}
-							rstate.erase(case_start, (case_end - case_start) + 1);
-							rstate.insert(case_start, label);
-							LL_DEBUGS("FSLSLPreprocessor") << "AFTER[" << rstate << "]" << LL_ENDL;
+							else
+							{
+								LL_DEBUGS("FSLSLPreprocessor") << "error in regex case_end != -1" << LL_ENDL;
+								rstate.erase(case_start, caselen);
+								rstate.insert(case_start, "error; cannot find { or :");
+								rstart = rstate.begin() + (case_start + std::strlen("error; cannot find { or :"));
+							}
 						}
 						else
 						{
-							LL_DEBUGS("FSLSLPreprocessor") << "error in regex case_end != -1" << LL_ENDL;
-							rstate.erase(case_start, caselen);
-							rstate.insert(case_start, "error; cannot find { or :");
+							rstart = statematches[0].second;
 						}
 					}
-					escape -= 1;
+
+					std::string deflt = quicklabel();
+					bool isdflt = false;
+					std::string defstate;
+					defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
+						rCMNT_OR_STR "|" rSPC "++"
+						"|(?<![A-Za-z0-9_])(default)(?:" rOPT_SPC ":|(" rOPT_SPC "\\{))"
+						, boost::regex::perl), "?1@" + deflt + ";$2:$&", boost::format_all);
+					if (defstate != rstate)
+					{
+						isdflt = true;
+						rstate = defstate;
+					}
+					std::string argl;
+					std::string jumptable = "{";
+
+					std::map<std::string, std::string>::iterator ifs_it;
+					for (ifs_it = ifs.begin(); ifs_it != ifs.end(); ifs_it++)
+					{
+						jumptable += "if(" + arg + " == (" + ifs_it->first + "))jump " + ifs_it->second + ";\n";
+					}
+					if (isdflt)
+					{
+						jumptable += "jump " + deflt + ";\n";
+					}
+
+					rstate = jumptable + rstate + "\n";
+
+					std::string brk = quicklabel();
+					defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
+						rCMNT_OR_STR "|"
+						"(?<![A-Za-z0-9_])break(" rOPT_SPC ";)"
+						), "?1jump " + brk + "$1:$&", boost::format_all);
+					if (defstate != rstate)
+					{
+						rstate = defstate;
+						rstate += "\n@" + brk + ";\n";
+					}
+					rstate = rstate + "}";
+
+					LL_DEBUGS("FSLSLPreprocessor") << "replacing[" << buffer.substr(res, cutlen) << "] with [" << rstate << "]" << LL_ENDL;
+					buffer.erase(res, cutlen);
+					buffer.insert(res, rstate);
+
+					bstart = buffer.begin() + (res + rstate.length());
+
 				}
-
-				std::string deflt = quicklabel();
-				bool isdflt = false;
-				std::string defstate;
-				defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
-					rCMNT_OR_STR "|"
-					"(?<![A-Za-z0-9_])(default)(?:" rOPT_SPC ":|(" rOPT_SPC "\\{))"
-					,boost::regex::perl), "?1@" + deflt + ";$2:$&", boost::format_all);
-				if (defstate != rstate)
+				else /* not matches[1].matched */
 				{
-					isdflt = true;
-					rstate = defstate;
+					// Found a token that is not "switch" - skip it
+					bstart = matches[0].second;
 				}
-				std::string argl;
-				std::string jumptable = "{";
-				/*std::string type = gettype(buffer, arg, res);
-				if(type != "void" && type != "-1")
-				{
-					std::string argl = quicklabel();
-					jumptable += type+" "+argl+" = "+arg+";\n";
-					arg = argl;
-				}else
-				{
-					reportToNearbyChat("type="+type);
-				}*/
-
-				std::map<std::string, std::string>::iterator ifs_it;
-				for (ifs_it = ifs.begin(); ifs_it != ifs.end(); ifs_it++)
-				{
-					jumptable += "if(" + arg + " == (" + ifs_it->first + "))jump " + ifs_it->second + ";\n";
-				}
-				if (isdflt)
-				{
-					jumptable += "jump " + deflt + ";\n";
-				}
-
-				rstate = jumptable + rstate + "\n";
-			
-				std::string brk = quicklabel();
-				defstate = boost::regex_replace(rstate, boost::regex(rDOT_MATCHES_NEWLINE
-					rCMNT_OR_STR "|"
-					"(?<![A-Za-z0-9_])break(" rOPT_SPC ";)"
-					), "?1jump " + brk + "$1:$&", boost::format_all);
-				if (defstate != rstate)
-				{
-					rstate = defstate;
-					rstate += "\n@" + brk + ";\n";
-				}
-				rstate = rstate + "}";
-
-				LL_DEBUGS("FSLSLPreprocessor") << "replacing[" << buffer.substr(res, cutlen) << "] with [" << rstate << "]" << LL_ENDL;
-				buffer.erase(res, cutlen);
-				buffer.insert(res, rstate);
-
-				//start = buffer.begin();
-				//end = buffer.end();
-
-				escape -= 1;
-
-				//res = buffer.find(switchstr);
 			}
 			script = buffer;
 		}

@@ -507,6 +507,14 @@
 		<button name="Def_UISndGroupNotice" label="D" tool_tip="デフォルトのUUIDに戻します" />
 		<check_box label="このサウンドを再生" name="PlayModeUISndGroupNotice" />
 		
+		<text tool_tip="Sound UUID played on new Experience notifications." name="textFSQuestionExperience">
+			新しい体験：
+		</text>
+		<line_editor name="UISndQuestionExperience" />
+		<button name="Prev_UISndQuestionExperience" label="P" tool_tip="このサウンドをプレビューします" />
+		<button name="Def_UISndQuestionExperience" label="D" tool_tip="デフォルトのUUIDに戻します" />
+		<check_box label="このサウンドを再生" name="PlayModeUISndQuestionExperience" />
+		
 		<text tool_tip="無効な操作を行った時に再生するサウンドのUUIDです。" name="textFSInvalidOp">
 			無効な操作：
 		</text>
