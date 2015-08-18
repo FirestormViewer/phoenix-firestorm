@@ -55,7 +55,7 @@ typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_s
  * Individual IM window that appears at the bottom of the screen,
  * optionally "docked" to the bottom tray.
  */
-class FSFloaterIM : public LLTransientDockableFloater, LLVoiceClientStatusObserver, LLFriendObserver
+class FSFloaterIM : public LLTransientDockableFloater, LLVoiceClientStatusObserver, LLFriendObserver, LLEventTimer
 {
 	LOG_CLASS(FSFloaterIM);
 public:
@@ -74,6 +74,8 @@ public:
 	/*virtual*/ void onClose(bool app_quitting);
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
 	/*virtual*/ void onSnooze();
+
+	/*virtual*/ BOOL tick();
 
 	// Make IM conversion visible and update the message history
 	static FSFloaterIM* show(const LLUUID& session_id);
