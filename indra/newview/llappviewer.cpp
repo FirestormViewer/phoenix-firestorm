@@ -267,8 +267,6 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
-#include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
-#include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "nd/ndoctreelog.h" // <FS:ND/> Octree operation logging.
 #include "nd/ndetw.h" // <FS:ND/> Windows Event Tracing, does nothing on OSX/Linux.
 
@@ -859,8 +857,6 @@ bool LLAppViewer::init()
 
 	// </FS:ND>
 
-	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
-	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
 	nd::etw::init(); // <FS:ND/> Init event tracing.
 
@@ -1977,11 +1973,6 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
-	// <FS:ND> stop collection stats
-	nd::allocstats::tearDown();
-	nd::mallocstats::tearDown();
-	// </FS:ND>
-
 	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
 
 	//ditch LLVOAvatarSelf instance

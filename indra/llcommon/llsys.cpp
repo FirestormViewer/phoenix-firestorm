@@ -100,7 +100,6 @@ const char MEMINFO_FILE[] = "/proc/meminfo";
 extern int errno;
 #endif
 
-#include "nd/ndallocstats.h" // <FS:ND/> Allocation stats.
 LLCPUInfo gSysCPU;
 
 // Don't log memory info any more often than this. It also serves as our
@@ -906,10 +905,6 @@ void LLMemoryInfo::stream(std::ostream& s) const
 			s << value;           // just use default LLSD formatting
 		s << std::endl;
 	}
-
-	// <FS:ND> tcmalloc replacement
-	nd::allocstats::dumpStats( s );
-	// </FS:ND>
 }
 
 LLSD LLMemoryInfo::getStatsMap() const

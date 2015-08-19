@@ -70,8 +70,6 @@ void LLFontManager::cleanupClass()
 
 LLFontManager::LLFontManager()
 {
-	nd::allocstats::registerProvider( this );
-
 	int error;
 	error = FT_Init_FreeType(&gFTLibrary);
 	if (error)
@@ -86,8 +84,6 @@ LLFontManager::~LLFontManager()
 {
 	FT_Done_FreeType(gFTLibrary);
 	unloadAllFonts(); 	// <FS:ND> FIRE-7570. Only load/mmap fonts once. Release everything here.
-
-	nd::allocstats::unregisterProvider( this );
 }
 
 
@@ -687,21 +683,6 @@ U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
 	m_LoadedFonts[ aFilename ] = new nd::fonts::LoadedFont( aFilename, pBuffer, a_Size );
 	return pBuffer;
 }
-
-void LLFontManager::dumpStats( std::ostream &aOut )
-{
-	static bool sOnce(true);
-	if( !sOnce )
-		return;
-
-	sOnce = false;
-	for( std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.begin(); itr != m_LoadedFonts.end(); ++itr )
-	{
-		nd::fonts::LoadedFont *pFont = itr->second;
-		aOut << "Font: " << pFont->mName << " " << pFont->mSize << " byte at 0x" << std::hex << (ptrdiff_t)pFont->mAddress << std::dec << std::endl;
-	}
-}
-
 
 void LLFontManager::unloadFont( std::string const &aFilename )
 {

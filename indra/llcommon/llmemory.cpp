@@ -45,8 +45,6 @@
 #include "llframetimer.h"
 #include "lltrace.h"
 
-#include "nd/ndallocstats.h" // <FS:ND/> Allocation stats.
-
 //----------------------------------------------------------------------------
 
 //static
@@ -192,12 +190,6 @@ void LLMemory::logMemoryInfo(BOOL update)
 	LL_INFOS() << "--- private pool information -- " << LL_ENDL ;
 	LL_INFOS() << "Total reserved (KB): " << LLPrivateMemoryPoolManager::getInstance()->mTotalReservedSize / 1024 << LL_ENDL ;
 	LL_INFOS() << "Total allocated (KB): " << LLPrivateMemoryPoolManager::getInstance()->mTotalAllocatedSize / 1024 << LL_ENDL ;
-
-	// <FS:ND> log finer grained allocation stats
-	std::stringstream strm;
-	nd::allocstats::dumpStats( strm );
-	LL_INFOS() << strm.str() << LL_ENDL;
-	// </FS:ND>
 }
 
 //return 0: everything is normal;
