@@ -344,7 +344,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ReturnAllTopObjects">
-		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej działce do szaf ich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej działce do szaf ich właścicieli? Spowoduje to zwrot WSZYSTKICH oskryptowanych obiektów w regionie!
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="DisableAllTopObjects">
@@ -2237,10 +2237,9 @@ Nie możesz tego cofnąć.
 		[QUESTION]
 		<usetemplate ignoretext="Potwierdź, że na pewno chcesz skasować obiekty" name="okcancelignore" notext="Anuluj" />
 	</notification>
-	<notification name="HelpReportAbuseEmailLL">
-		Używaj tej opcji do zgłaszania nadużyć [http://secondlife.com/corporate/tos.php Warunków Umowy (Terms of Service)] i [http://secondlife.com/corporate/cs.php Standardów Społeczeństwa (Community Standards)].
-
-Wszystkie zgłoszone nadużycia są badane i rozwiązywane.
+	<notification name="ConfirmUnlink">
+		Na pewno chcesz rozłączyć zaznaczony obiekt?
+		<usetemplate ignoretext="Potwierdź przed rozłączeniem obiektu" name="okcancelignore" notext="Anuluj" yestext="Rozłącz"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wybierz kategorię dla tego raportu o nadużyciu.
@@ -3316,8 +3315,7 @@ Przycisk zostanie wyświetlony w przypadku dostatecznej ilości przestrzeni.
 	</notification>
 	<notification name="MeshUploadError">
 		Nie można załadować [LABEL]: [MESSAGE] [IDENTIFIER]
-
-Zobacz log, aby dowiedzieć się więcej.
+[DETAILS] Zobacz Firestorm.log, aby dowiedzieć się więcej.
 	</notification>
 	<notification name="MeshUploadPermError">
 		Wystąpił błąd podczas pobierania uprawnień ładowania meszy.
@@ -4743,10 +4741,6 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		<form name="form">
 			<button name="Cancel" text="Anuluj"/>
 		</form>
-	</notification>
-	<notification name="ConfirmUnlinkObjects">
-		Na pewno chcesz rozłączyć zaznaczony obiekt?
-		<usetemplate ignoretext="Potwierdź przed rozłączeniem obiektu" name="okcancelignore" notext="Anuluj" yestext="Rozłącz"/>
 	</notification>
 	<notification name="SnoozeDuration">
 		Okres (w sekundach) tymczasowego wyciszenia czatu grupowego:

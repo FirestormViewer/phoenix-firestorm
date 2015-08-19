@@ -173,6 +173,12 @@ Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	<string name="Quit">
 		Wyłącz
 	</string>
+	<string name="AgniGridLabel">
+		Second Life: siatka główna (Agni)
+	</string>
+	<string name="AditiGridLabel">
+		Second Life Beta: siatka testowa (Aditi)
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Przeglądarka używana przez Ciebie nie ma już dostępu do Second Life. Proszę przejść na poniższą stronę i pobrać nową:
 http://firestormviewer.org/downloads
@@ -5451,6 +5457,15 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="loading_chat_logs">
 		Wczytywanie...
+	</string>
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		Kształt fizyczny zawiera trójkąty, które są zbyt małe. Spróbuj uprościć model fizyczny.
+	</string>
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		Kształt fizyczny zawiera uszkodzone dane. Spróbuj poprawić model fizyczny.
+	</string>
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		Kształt fizyczny zawiera niepoprawną wersję. Ustaw poprawną wersję dla modelu fizycznego.
 	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Żadne ustawienie kamery nie zostało jeszcze zapisane.
