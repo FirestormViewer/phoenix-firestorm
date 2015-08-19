@@ -331,6 +331,16 @@
          top_pad="5"
          width="256" />
         <check_box
+         control_name="FSShowConvoAndRadarInML"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Show Conversations and Radar windows in Mouselook"
+         layout="topleft"
+         name="FSShowConvoAndRadarInML"
+         top_pad="5"
+         width="256" />
+        <check_box
          control_name="FSEnableRightclickMenuInMouselook"
          follows="left|top"
          enabled_control="EnableMouselook"

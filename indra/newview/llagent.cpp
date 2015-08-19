@@ -2415,8 +2415,11 @@ void LLAgent::endAnimationUpdateUI()
 			}
 			// </FS:LO>
 			// <FS:Ansariel> Skip restoring conversations and radar floater
-			skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
-			skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+			if (gSavedSettings.getBOOL("FSShowConvoAndRadarInML"))
+			{
+				skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
+				skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+			}
 			// </FS:Ansariel>
 
 			// <FS:Ansariel> [FS communication UI] Commented out so far.
@@ -2584,8 +2587,11 @@ void LLAgent::endAnimationUpdateUI()
 		}
 		// </FS:LO>
 		// <FS:Ansariel> Skip hiding conversations and radar floater
-		skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
-		skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+		if (gSavedSettings.getBOOL("FSShowConvoAndRadarInML"))
+		{
+			skip_list.insert(LLFloaterReg::findInstance("fs_radar"));
+			skip_list.insert(LLFloaterReg::findInstance("fs_im_container"));
+		}
 		// </FS:Ansariel>
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
