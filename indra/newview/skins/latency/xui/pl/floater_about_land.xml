@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="O działce">
 	<floater.string name="Minutes">
-		[MINUTES] minuty
+		[MINUTES] min.
 	</floater.string>
 	<floater.string name="Minute">
-		minuta
+		min.
 	</floater.string>
 	<floater.string name="Seconds">
-		[SECONDS] sekund
+		[SECONDS] sek.
 	</floater.string>
 	<floater.string name="Remaining">
 		pozostało
