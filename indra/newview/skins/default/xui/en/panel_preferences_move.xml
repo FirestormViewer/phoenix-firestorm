@@ -335,7 +335,7 @@
          follows="left|top"
          enabled_control="EnableMouselook"
          height="16"
-         label="Show Conversations and Radar windows in Mouselook"
+         label="Don't close Conversations and Radar windows when changing into Mouselook"
          layout="topleft"
          name="FSShowConvoAndRadarInML"
          top_pad="5"
