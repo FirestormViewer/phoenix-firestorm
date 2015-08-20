@@ -262,7 +262,10 @@ public:
 
 	// Return the ISO639 language name ("en", "ko", etc.) for the viewer UI.
 	// http://www.loc.gov/standards/iso639-2/php/code_list.php
-	static std::string getLanguage();
+	// <FS:Ansariel> FIRE-16709: Bypass FSEnabledLanguages for llGetAgentLanguage
+	//static std::string getLanguage();
+	static std::string getLanguage(bool ignore_enabled_languages = false);
+	// </FS:Ansariel>
 
 	//helper functions (should probably move free standing rendering helper functions here)
 	static LLView* getRootView() { return sRootView; }

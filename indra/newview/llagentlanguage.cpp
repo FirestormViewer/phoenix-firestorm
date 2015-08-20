@@ -66,7 +66,10 @@ bool LLAgentLanguage::update()
 
 	if (!url.empty())
 	{
-		std::string language = LLUI::getLanguage();
+		// <FS:Ansariel> FIRE-16709: Bypass FSEnabledLanguages for llGetAgentLanguage
+		//std::string language = LLUI::getLanguage();
+		std::string language = LLUI::getLanguage(true);
+		// </FS:Ansariel>
 		
 		body["language"] = language;
 		body["language_is_public"] = gSavedSettings.getBOOL("LanguageIsPublic");

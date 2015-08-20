@@ -293,7 +293,10 @@ void LLUI::getMousePositionLocal(const LLView* viewp, S32 *x, S32 *y)
 // language follows the OS language.  In all cases the user can override
 // the language manually in preferences. JC
 // static
-std::string LLUI::getLanguage()
+// <FS:Ansariel> FIRE-16709: Bypass FSEnabledLanguages for llGetAgentLanguage
+//std::string LLUI::getLanguage()
+std::string LLUI::getLanguage(bool ignore_enabled_languages /*= false*/)
+// </FS:Ansariel>
 {
 	std::string language = "en";
 	if (sSettingGroups["config"])
@@ -313,6 +316,11 @@ std::string LLUI::getLanguage()
 		}
 
 		// <FS:Ansariel> Limit available languages
+		if (ignore_enabled_languages)
+		{
+			return language;
+		}
+
 		bool language_enabled = false;
 		LLSD enabled_languages = sSettingGroups["config"]->getLLSD("FSEnabledLanguages");
 		for (LLSD::array_const_iterator it = enabled_languages.beginArray(); it != enabled_languages.endArray(); ++it)
