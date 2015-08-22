@@ -531,6 +531,24 @@ void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
 
 	switch (changed_mask)
 	{
+		case (LLFriendObserver::ADD | LLFriendObserver::ONLINE) :
+			{
+				// MAINT-5250 will cause this kind of mask being sent at login
+				LLAvatarTracker::buddy_map_t all_buddies;
+				LLAvatarTracker::buddy_map_t::const_iterator buddies_iter;
+				at.copyBuddyList(all_buddies);
+			
+				for (buddies_iter = all_buddies.begin(); buddies_iter != all_buddies.end(); ++buddies_iter)
+				{
+					addFriend(buddies_iter->first);
+					if (at.isBuddyOnline(buddies_iter->first))
+					{
+						const LLRelationship* info = at.getBuddyInfo(buddies_iter->first);
+						updateFriendItem(buddies_iter->first, info);
+					}
+				}
+			}
+			break;
 		case LLFriendObserver::ADD:
 			{
 				const std::set<LLUUID>& changed_items = at.getChangedIDs();
@@ -602,8 +620,10 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 		return;
 	}
 
+#if 0
 	bool isOnlineSIP = LLVoiceClient::getInstance()->isOnlineSIP(agent_id);
 	bool isOnline = relationInfo->isOnline();
+#endif
 
 	LLAvatarName av_name;
 	if (!LLAvatarNameCache::get(agent_id, &av_name))
@@ -638,7 +658,8 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	online_status_column["column"]		= "icon_online_status";
 	online_status_column["type"]		= "icon";
 	online_status_column["halign"]		= "center";
-	
+
+#if 0
 	if (isOnline)
 	{	
 		username_column["font"]["style"]	= "BOLD";
@@ -653,6 +674,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 		friend_column["font"]["style"]		= "BOLD";
 		online_status_column["value"]		= "slim_icon_16_viewer";
 	}
+#endif
 
 	LLSD& online_column						= element["columns"][LIST_VISIBLE_ONLINE];
 	online_column["column"]					= "icon_visible_online";
