@@ -1076,4 +1076,5 @@ void LLPreviewTexture::setObjectID(const LLUUID& object_id)
 		mAssetStatus = PREVIEW_ASSET_UNLOADED;
 		loadAsset();
 	}
+	refreshFromItem();
 }

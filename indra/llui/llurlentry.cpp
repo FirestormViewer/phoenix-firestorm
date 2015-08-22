@@ -219,10 +219,10 @@ std::string LLUrlEntryBase::urlToGreyQuery(const std::string &url) const
 	LLUriParser up(url);
 	// </FS:Ansariel>
 
-	std::string query;
+	std::string label;
 	up.extractParts();
-	up.glueSecond(query);
-
+	up.glueFirst(label);
+	std::string query = url.substr(label.size());
 	// <FS:Ansariel> Unfail URI display
 	//return query;
 	return unescapeUrl(query);
@@ -249,8 +249,8 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 	: LLUrlEntryBase()
 {
 	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
-	//mPattern = boost::regex("https?://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
-	mPattern = boost::regex("(https?|ftp)://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
+	//mPattern = boost::regex("https?://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?\\.[a-z](:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
+	mPattern = boost::regex("(https?|ftp)://([-\\w\\.]+)+(:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?\\.[a-z](:\\d+)?(:\\w+)?(@\\d+)?(@\\w+)?/?\\S*",
 	// </FS:Ansariel>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
@@ -315,51 +315,6 @@ std::string LLUrlEntryHTTPLabel::getUrl(const std::string &string) const
 	return getUrlFromWikiLink(string);
 }
 
-//
-// LLUrlEntryHTTPNoProtocol Describes generic Urls like www.google.com
-//
-LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
-	: LLUrlEntryBase()
-{
-	mPattern = boost::regex("("
-				// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
-				//"\\bwww\\.\\S+\\.\\S+" // i.e. www.FOO.BAR
-				"\\b(www|ftp)\\.\\S+\\.\\S+" // i.e. www.FOO.BAR
-				// </FS:Ansariel>
-				"|" // or
-				"(?<!@)\\b[^[:space:]:@/>]+\\.(?:com|net|edu|org)([/:][^[:space:]<]*)?\\b" // i.e. FOO.net
-				")",
-				boost::regex::perl|boost::regex::icase);
-	mMenuName = "menu_url_http.xml";
-	mTooltip = LLTrans::getString("TooltipHttpUrl");
-}
-
-std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
-{
-	return urlToLabelWithGreyQuery(url);
-}
-
-std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
-{
-	return urlToGreyQuery(url);
-}
-
-std::string LLUrlEntryHTTPNoProtocol::getUrl(const std::string &string) const
-{
-	if (string.find("://") == std::string::npos)
-	{
-		return "http://" + escapeUrl(string);
-	}
-	return escapeUrl(string);
-}
-
-std::string LLUrlEntryHTTPNoProtocol::getTooltip(const std::string &url) const
-{
-	// <FS:Ansariel> Unfail URI display
-	//return unescapeUrl(url);
-	return mTooltip;
-	// </FS:Ansariel>
-}
 
 LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
 	: LLUrlEntryBase()
@@ -531,7 +486,7 @@ std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 //
 LLUrlEntrySecondlifeURL::LLUrlEntrySecondlifeURL()
 {                              
-	mPattern = boost::regex("(https?://)?([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?\\/\\S*",
+	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(:\\d{1,5})?\\/\\S*",
 		boost::regex::perl|boost::regex::icase);
 	
 	mIcon = "Hand";
@@ -572,7 +527,7 @@ std::string LLUrlEntrySecondlifeURL::getTooltip(const std::string &url) const
 //
 LLUrlEntrySimpleSecondlifeURL::LLUrlEntrySimpleSecondlifeURL()
 {
-	mPattern = boost::regex("(https?://)?([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(?!\\S)",
+	mPattern = boost::regex("https?://([-\\w\\.]*\\.)?(secondlife|lindenlab)\\.com(?!\\S)",
 		boost::regex::perl|boost::regex::icase);
 
 	mIcon = "Hand";
@@ -1546,9 +1501,43 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 	}
 }
 
+//
+// LLUrlEntryEmail Describes a generic mailto: Urls
+//
+LLUrlEntryEmail::LLUrlEntryEmail()
+	: LLUrlEntryBase()
+{
+	mPattern = boost::regex("(mailto:)?[\\w\\.\\-]+@[\\w\\.\\-]+\\.[a-z]{2,6}",
+							boost::regex::perl | boost::regex::icase);
+	mMenuName = "menu_url_email.xml";
+	mTooltip = LLTrans::getString("TooltipEmail");
+}
+
+std::string LLUrlEntryEmail::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	int pos = url.find("mailto:");
+
+	if (pos == std::string::npos)
+	{
+		return escapeUrl(url);
+	}
+
+	std::string ret = escapeUrl(url.substr(pos + 7, url.length() - pos + 8));
+	return ret;
+}
+
+std::string LLUrlEntryEmail::getUrl(const std::string &string) const
+{
+	if (string.find("mailto:") == std::string::npos)
+	{
+		return "mailto:" + escapeUrl(string);
+	}
+	return escapeUrl(string);
+}
+
 LLUrlEntryExperienceProfile::LLUrlEntryExperienceProfile()
 {
-    mPattern = boost::regex(APP_HEADER_REGEX "/experience/[\\da-f-]+/\\w+\\S*",
+    mPattern = boost::regex(APP_HEADER_REGEX "/experience/[\\da-f-]+/profile",
         boost::regex::perl|boost::regex::icase);
     mIcon = "Generic_Experience";
 	mMenuName = "menu_url_experience.xml";

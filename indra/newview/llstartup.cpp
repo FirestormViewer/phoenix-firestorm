@@ -637,9 +637,7 @@ bool idle_startup()
 		gSavedSettings.setS32("LastFeatureVersion", LLFeatureManager::getInstance()->getVersion());
 		gSavedSettings.setString("LastGPUString", thisGPU);
 
-		// load dynamic GPU/feature tables from website (S3)
-		LLFeatureManager::getInstance()->fetchHTTPTables();
-		
+
 		std::string xml_file = LLUI::locateSkin("xui_version.xml");
 		LLXMLNodePtr root;
 		bool xml_ok = false;
@@ -4001,6 +3999,23 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 			LLStringUtil::trim(gDisplayName);
 		}
 	}
+	std::string first_name;
+	if(response.has("first_name"))
+	{
+		first_name = response["first_name"].asString();
+		LLStringUtil::replaceChar(first_name, '"', ' ');
+		LLStringUtil::trim(first_name);
+		gAgentUsername = first_name;
+	}
+
+	if(response.has("last_name") && !gAgentUsername.empty() && (gAgentUsername != "Resident"))
+	{
+		std::string last_name = response["last_name"].asString();
+		LLStringUtil::replaceChar(last_name, '"', ' ');
+		LLStringUtil::trim(last_name);
+		gAgentUsername = gAgentUsername + " " + last_name;
+	}
+
 	if(gDisplayName.empty())
 	{
 		if(response.has("first_name"))
@@ -4021,6 +4036,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 			gDisplayName += text;
 		}
 	}
+
 	if(gDisplayName.empty())
 	{
 		gDisplayName.assign(gUserCredential->asString());

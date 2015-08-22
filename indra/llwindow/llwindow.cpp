@@ -50,14 +50,14 @@ BOOL gDebugClicks = FALSE;
 BOOL gDebugWindowProc = FALSE;
 
 // <FS:Zi> Allow file: links to open folders, chat history etc. on Linux systems
+//const S32 gURLProtocolWhitelistCount = 5;
+//const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", "data:", "mailto:" };
 #if LL_LINUX
-const S32 gURLProtocolWhitelistCount = 6;
-const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", "ftp:", "data:", "file:" };
+const S32 gURLProtocolWhitelistCount = 7;
+const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", "ftp:", "data:", "mailto:", "file:" };
 #else
-// </FS:Zi>
-const S32 gURLProtocolWhitelistCount = 5;
-const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", "ftp:", "data:" };
-// <FS:Zi> Allow file: links to open folders, chat history etc. on Linux systems
+const S32 gURLProtocolWhitelistCount = 6;
+const std::string gURLProtocolWhitelist[] = { "secondlife:", "http:", "https:", "ftp:", "data:", "mailto:" };
 #endif
 // </FS:Zi>
 
