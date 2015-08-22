@@ -41,7 +41,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //	mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-	mUrlEntry.reserve(25);
+	mUrlEntry.reserve(26);
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
@@ -90,6 +90,8 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntrySL());
 	mUrlEntrySLLabel = new LLUrlEntrySLLabel();
 	registerUrl(mUrlEntrySLLabel);
+	// <FS:Ansariel> Allow URLs with no protocol again
+	registerUrl(new LLUrlEntryHTTPNoProtocol());
 	registerUrl(new LLUrlEntryEmail());
 	// parse jira issue names to links -KC
 	registerUrl(new LLUrlEntryJira());

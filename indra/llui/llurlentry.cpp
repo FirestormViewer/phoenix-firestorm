@@ -315,6 +315,43 @@ std::string LLUrlEntryHTTPLabel::getUrl(const std::string &string) const
 	return getUrlFromWikiLink(string);
 }
 
+// <FS:Ansariel> Allow URLs with no protocol again
+//
+// LLUrlEntryHTTPNoProtocol Describes generic Urls like www.google.com
+//
+LLUrlEntryHTTPNoProtocol::LLUrlEntryHTTPNoProtocol()
+	: LLUrlEntryBase()
+{
+	mPattern = boost::regex("\\b(www|ftp)\\.\\S+\\.([^\\s<]*)?\\b", // i.e. www.FOO.BAR
+				boost::regex::perl|boost::regex::icase);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	return urlToLabelWithGreyQuery(url);
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getQuery(const std::string &url) const
+{
+	return urlToGreyQuery(url);
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getUrl(const std::string &string) const
+{
+	if (string.find("://") == std::string::npos)
+	{
+		return "http://" + escapeUrl(string);
+	}
+	return escapeUrl(string);
+}
+
+std::string LLUrlEntryHTTPNoProtocol::getTooltip(const std::string &url) const
+{
+	return mTooltip;
+}
+// </FS:Ansariel>
 
 LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
 	: LLUrlEntryBase()
