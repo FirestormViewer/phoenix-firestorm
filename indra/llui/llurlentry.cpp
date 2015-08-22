@@ -1552,7 +1552,10 @@ LLUrlEntryEmail::LLUrlEntryEmail()
 
 std::string LLUrlEntryEmail::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
 {
-	int pos = url.find("mailto:");
+	// <FS:Ansariel> Fix type
+	//int pos = url.find("mailto:");
+	size_t pos = url.find("mailto:");
+	// </FS:Ansariel>
 
 	if (pos == std::string::npos)
 	{
