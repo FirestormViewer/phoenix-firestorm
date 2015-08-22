@@ -334,6 +334,14 @@ Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie 
 		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe hinauszuwerfen.
 		<usetemplate ignoretext="Hinauswerfen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Hinauswerfen"/>
 	</notification>
+	<notification name="BanGroupMemberWarning">
+		Sie sind dabei, [AVATAR_NAME] aus der Gruppe zu verbannen.
+		<usetemplate ignoretext="Verbannen eines einzelnen Gruppenmitglieds bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
+	</notification>
+	<notification name="BanGroupMembersWarning">
+		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe zu verbannen.
+		<usetemplate ignoretext="Verbannen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
+	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
 Möchten Sie fortfahren?

@@ -5,6 +5,9 @@
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] Objekte [FILTER]
+	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT] Objekte abgerufen [FILTER]
+	</panel.string>
 	</panel.string>
 	<text name="ItemcountText">
 		Objekte:
