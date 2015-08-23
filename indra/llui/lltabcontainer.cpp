@@ -39,6 +39,7 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
+#include "llwindow.h"
 
 //----------------------------------------------------------------------------
 
@@ -571,6 +572,20 @@ void LLTabContainer::draw()
 
 	mPrevArrowBtn->setFlashing(false);
 	mNextArrowBtn->setFlashing(false);
+
+	// <FS:Ansariel> Show drag mouse curser then dragging tabs
+	if (mAllowRearrange)
+	{
+		if (hasMouseCapture())
+		{
+			LLUI::getWindow()->setCursor(UI_CURSOR_ARROWDRAG);
+		}
+		else
+		{
+			LLUI::getWindow()->setCursor(UI_CURSOR_ARROW);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 
