@@ -142,7 +142,8 @@ public:
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	bool isAlive() const; // can become false if circuit disconnects
 
-	LLViewerTexture* getWorldMapTile() const;
+	typedef std::vector<LLPointer<LLViewerTexture> > tex_matrix_t;
+	const tex_matrix_t& getWorldMapTiles() const;
 // [/SL:KB]
 
 	void setWaterHeight(F32 water_level);
@@ -559,7 +560,7 @@ private:
 	// </FS:CR>
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
-	mutable LLPointer<LLViewerTexture>		mWorldMapTile;
+	mutable tex_matrix_t mWorldMapTiles;
 // [/SL:KB]
 
 	class CacheMissItem
