@@ -4330,14 +4330,9 @@ void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, BOOL all
 void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo)
 {
 	LLDirIterator dir_iter(dir, "*.xml");
-	while (1)
+	std::string file;
+	while (dir_iter.next(file))
 	{
-		std::string file;
-		if (!dir_iter.next(file))
-		{
-			break; // no more files
-		}
-			
 		//hack to deal with "fonts.xml" 
 		if (file == "fonts.xml")
 		{
@@ -4346,10 +4341,9 @@ void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLCombo
 		//hack to get "fonts_[name].xml" to "Name"
 		else
 		{
-			std::string fontpresetname = file.substr(6, file.length()-10);
+			std::string fontpresetname = file.substr(6, file.length() - 10);
 			LLStringUtil::replaceChar(fontpresetname, '_', ' ');
 			fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
-                
 			font_selection_combo->add(fontpresetname, file);
 		}
 	}
