@@ -3956,7 +3956,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFileList = globalScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFileList.size(); index++)
+	for (size_t index = 0; index < globalFileList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFileList[index];
@@ -4000,7 +4000,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 			// Pull out all data
 			std::vector<LLScrollListItem*> perAccountFileList = perAccountScrollList->getAllData();
 			// Go over each entry
-			for (S32 index = 0; index < perAccountFileList.size(); index++)
+			for (size_t index = 0; index < perAccountFileList.size(); ++index)
 			{
 				// Get the next item in the list
 				LLScrollListItem* item = perAccountFileList[index];
@@ -4024,7 +4024,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFoldersList = globalFoldersScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFoldersList.size(); index++)
+	for (size_t index = 0; index < globalFoldersList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFoldersList[index];
@@ -4137,7 +4137,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFileList = globalScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFileList.size(); index++)
+	for (size_t index = 0; index < globalFileList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFileList[index];
@@ -4182,7 +4182,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		// Pull out all data
 		std::vector<LLScrollListItem*> perAccountFileList = perAccountScrollList->getAllData();
 		// Go over each entry
-		for (S32 index = 0; index < perAccountFileList.size(); index++)
+		for (size_t index = 0; index < perAccountFileList.size(); ++index)
 		{
 			// Get the next item in the list
 			LLScrollListItem* item = perAccountFileList[index];
@@ -4224,7 +4224,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFoldersList = globalFoldersScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFoldersList.size(); index++)
+	for (size_t index = 0; index < globalFoldersList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFoldersList[index];
@@ -4308,7 +4308,7 @@ void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, BOOL all
 	// Pull out all data
 	std::vector<LLScrollListItem*> itemList = control->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < itemList.size(); index++)
+	for (size_t index = 0; index < itemList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = itemList[index];
