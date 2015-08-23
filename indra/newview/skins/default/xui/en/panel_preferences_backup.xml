@@ -225,6 +225,11 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Teleport History</column>
             <column name="value">teleport_history.txt</column>
         </row>
+        <row name="restore_per_account_row_regiontracker">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Region Tracker</column>
+            <column name="value">tracked_regions.json</column>
+        </row>
         <row name="restore_per_account_row_groupmutes" value="groupmutes">
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Disabled Group Chats</column>
