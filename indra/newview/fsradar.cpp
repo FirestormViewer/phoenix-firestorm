@@ -316,7 +316,7 @@ void FSRadar::updateRadarList()
 		}
 
 		bool is_muted = mutelist->isMuted(avId);
-		bool is_blacklisted = blacklist->isBlacklisted(avId, LLAssetType::AT_OBJECT);
+		bool is_blacklisted = blacklist->isBlacklisted(avId, LLAssetType::AT_PERSON);
 		bool should_be_ignored = is_muted || is_blacklisted;
 		ent->mIgnore = should_be_ignored;
 		if (!sFSRadarShowMutedAndDerendered && should_be_ignored)
