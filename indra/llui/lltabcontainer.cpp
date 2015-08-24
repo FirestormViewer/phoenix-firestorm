@@ -580,10 +580,6 @@ void LLTabContainer::draw()
 		{
 			LLUI::getWindow()->setCursor(UI_CURSOR_ARROWDRAG);
 		}
-		else
-		{
-			LLUI::getWindow()->setCursor(UI_CURSOR_ARROW);
-		}
 	}
 	// </FS:Ansariel>
 }
