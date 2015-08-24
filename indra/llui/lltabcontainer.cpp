@@ -572,16 +572,6 @@ void LLTabContainer::draw()
 
 	mPrevArrowBtn->setFlashing(false);
 	mNextArrowBtn->setFlashing(false);
-
-	// <FS:Ansariel> Show drag mouse curser then dragging tabs
-	if (mAllowRearrange)
-	{
-		if (hasMouseCapture())
-		{
-			LLUI::getWindow()->setCursor(UI_CURSOR_ARROWDRAG);
-		}
-	}
-	// </FS:Ansariel>
 }
 
 
