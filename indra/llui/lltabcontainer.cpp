@@ -39,7 +39,7 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
-#include "llwindow.h"
+
 
 //----------------------------------------------------------------------------
 
