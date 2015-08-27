@@ -1958,7 +1958,10 @@ void FloaterQuickPrefs::dockToToolbarButton()
 		LLView* anchor_panel = gToolBarView->findChildView("quickprefs");
 		setUseTongue(anchor_panel);
 		// Garbage collected by std::auto_ptr
-		setDockControl(new LLDockControl(anchor_panel, this, getDockTongue(doc_at), doc_at));
+		// Do the actions from setDockControl here, but call setDock with pop_on_undock = false
+		// or we will translate the floater 12px up on the y-axis
+		mDockControl.reset(new LLDockControl(anchor_panel, this, getDockTongue(doc_at), doc_at));
+		setDocked(isDocked(), false);
 	}
 	else
 	{
