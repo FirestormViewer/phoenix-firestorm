@@ -24,7 +24,7 @@
 		<combo_box.item label="BMP (verlustfrei)" name="BMP"/>
 	</combo_box>
 	<slider label="Qualität:" name="image_quality_slider"/>
-	<button label="Abbrechen" name="cancel_btn"/>
+	<button label="Ziele" name="cancel_btn"/>
 	<flyout_button label="Speichern" name="save_btn" tool_tip="Bild als Datei speichern">
 		<flyout_button.item label="Speichern" name="save_item"/>
 		<flyout_button.item label="Speichern unter..." name="saveas_item"/>
