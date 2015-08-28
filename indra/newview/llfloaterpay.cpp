@@ -118,9 +118,13 @@ protected:
 	LLGiveMoneyInfo* mQuickPayInfo[MAX_PAY_BUTTONS];
 
 	LLSafeHandle<LLObjectSelection> mObjectSelection;
+
+	// <FS:Ansariel> FIRE-16812: Remember last amount paid
+	static S32 sLastAmount;
 };
 
-
+// <FS:Ansariel> FIRE-16812: Remember last amount paid
+S32 LLFloaterPay::sLastAmount = 0;
 const S32 FASTPAY_BUTTON_WIDTH = 80;
 // <FS:Ansariel> FIRE-16092: Make payment confirmation customizable
 //const S32 PAY_AMOUNT_NOTIFICATION = 200;
@@ -197,6 +201,14 @@ BOOL LLFloaterPay::postBuild()
 
 	getChild<LLLineEditor>("amount")->setKeystrokeCallback(&LLFloaterPay::onKeystroke, this);
 	getChild<LLLineEditor>("amount")->setPrevalidate(LLTextValidate::validateNonNegativeS32);
+	// <FS:Ansariel> FIRE-16812: Remember last amount paid
+	std::string last_amount;
+	if (sLastAmount > 0)
+	{
+		last_amount = llformat("%d", sLastAmount);
+	}
+	getChild<LLUICtrl>("amount")->setValue(last_amount);
+	// </FS:Ansariel>
 
 	info = new LLGiveMoneyInfo(this, 0);
 	mCallbackData.push_back(info);
@@ -204,7 +216,10 @@ BOOL LLFloaterPay::postBuild()
 	childSetAction("pay btn",&LLFloaterPay::onGive,info);
 	setDefaultBtn("pay btn");
 	getChildView("pay btn")->setVisible(FALSE);
-	getChildView("pay btn")->setEnabled(FALSE);
+	// <FS:Ansariel> FIRE-16812: Remember last amount paid
+	//getChildView("pay btn")->setEnabled(FALSE);
+	getChildView("pay btn")->setEnabled((sLastAmount > 0));
+	// </FS:Ansariel>
 
 	childSetAction("cancel btn",&LLFloaterPay::onCancel,this);
 
@@ -549,6 +564,8 @@ void LLFloaterPay::give(S32 amount)
 		{
 			amount = atoi(getChild<LLUICtrl>("amount")->getValue().asString().c_str());
 		}
+		// <FS:Ansariel> FIRE-16812: Remember last amount paid
+		sLastAmount = amount;
 
 		// Try to pay an object.
 		if (mObjectSelection.notNull())
