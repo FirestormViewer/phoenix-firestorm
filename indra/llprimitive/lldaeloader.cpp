@@ -62,6 +62,37 @@
 #include "glh/glh_linear.h"
 #include "llmatrix4a.h"
 
+// <FS:ND> Logging for error and warning messages from colladadom
+#include "dae/daeErrorHandler.h"
+
+class FSdaeErrorHandler: public daeErrorHandler
+{
+public:
+	virtual void handleError( daeString msg )
+	{
+		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
+	}
+	virtual void handleWarning( daeString msg )
+	{
+		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
+	}
+};
+
+FSdaeErrorHandler gDaeErrorHandler;
+class FSDaeSetErrorHandler
+{
+public:
+	FSDaeSetErrorHandler()
+	{
+		daeErrorHandler::setErrorHandler( &gDaeErrorHandler );
+	}
+	~FSDaeSetErrorHandler()
+	{
+		daeErrorHandler::setErrorHandler( NULL );
+	}
+};
+// </FS:ND>
+
 std::string colladaVersion[VERSIONTYPE_COUNT+1] = 
 {
 	"1.4.0",
@@ -843,6 +874,9 @@ struct ModelSort
 
 bool LLDAELoader::OpenFile(const std::string& filename)
 {
+	// <FS:ND> Set up colladadom error handler
+	FSDaeSetErrorHandler oErrorHandlerSerror;
+
 	//no suitable slm exists, load from the .dae file
 	DAE dae;
 	domCOLLADA* dom = dae.open(filename);

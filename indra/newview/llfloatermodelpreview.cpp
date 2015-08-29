@@ -90,38 +90,6 @@
 // </AW: opensim-limits>
 #include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
 
-// <FS:ND> Logging for error and warning messages from colladadom
-#include "dae/daeErrorHandler.h"
-
-class FSdaeErrorHandler: public daeErrorHandler
-{
-public:
-	virtual void handleError( daeString msg )
-	{
-		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
-	}
-	virtual void handleWarning( daeString msg )
-	{
-		LL_WARNS( "ColladaDom" ) << msg << LL_ENDL;
-	}
-};
-
-FSdaeErrorHandler gDaeErrorHandler;
-class FSDaeSetErrorHandler
-{
-public:
-	FSDaeSetErrorHandler()
-	{
-		daeErrorHandler::setErrorHandler( &gDaeErrorHandler );
-	}
-	~FSDaeSetErrorHandler()
-	{
-		daeErrorHandler::setErrorHandler( NULL );
-	}
-};
-
-// </FS:ND>
-
 // <FS:Ansariel> Proper matrix array length for fitted mesh
 #define JOINT_COUNT 52
 
@@ -1250,8 +1218,6 @@ void LLFloaterModelPreview::onMouseCaptureLostModelPreview(LLMouseHandler* handl
 }
 
 //-----------------------------------------------------------------------------
-	FSDaeSetErrorHandler oErrorHandlerSerror; // <FS:ND/> Set up colladadom error handler.
-
 // LLModelPreview
 //-----------------------------------------------------------------------------
 
