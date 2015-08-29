@@ -58,6 +58,8 @@
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llslurl.h"
+#include "llurlaction.h"
 
 #ifdef OPENSIM
 #include "llviewernetwork.h"	// <FS:CR> Aurora Sim
@@ -1852,7 +1854,10 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 		case MAP_ITEM_LAND_FOR_SALE_ADULT:
 			{
 				LLFloaterReg::hideInstance("world_map");
-				LLFloaterReg::showInstance("search", LLSD().with("category", "destinations").with("query", id));
+				// <FS:Ansariel> FIRE-6904: Double Clicking Land Sales Price Tags in WorldMap causes Search Error
+				//LLFloaterReg::showInstance("search", LLSD().with("category", "destinations").with("query", id));
+				LLUrlAction::executeSLURL(LLSLURL("parcel", id, "about").getSLURLString());
+				// </FS:Ansariel>
 				break;
 			}
 		case MAP_ITEM_CLASSIFIED:

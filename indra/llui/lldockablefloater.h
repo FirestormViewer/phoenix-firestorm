@@ -130,8 +130,9 @@ protected:
 	// It may be useful e.g. if floater created in mouselook mode (see EXT-5609)
 	boost::function<BOOL ()> mIsDockedStateForcedCallback;
 
-private:
+//private: // <FS:Ansariel> Make mDockControl accessible from children because of FIRE-16803
 	std::auto_ptr<LLDockControl> mDockControl;
+private: // <FS:Ansariel> Make mDockControl accessible from children because of FIRE-16803
 	LLUIImagePtr mDockTongue;
 	static LLHandle<LLFloater> sInstanceHandle;
 	/**

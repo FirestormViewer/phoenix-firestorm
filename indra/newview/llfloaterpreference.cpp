@@ -3971,7 +3971,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFileList = globalScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFileList.size(); index++)
+	for (size_t index = 0; index < globalFileList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFileList[index];
@@ -4015,7 +4015,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 			// Pull out all data
 			std::vector<LLScrollListItem*> perAccountFileList = perAccountScrollList->getAllData();
 			// Go over each entry
-			for (S32 index = 0; index < perAccountFileList.size(); index++)
+			for (size_t index = 0; index < perAccountFileList.size(); ++index)
 			{
 				// Get the next item in the list
 				LLScrollListItem* item = perAccountFileList[index];
@@ -4039,7 +4039,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFoldersList = globalFoldersScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFoldersList.size(); index++)
+	for (size_t index = 0; index < globalFoldersList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFoldersList[index];
@@ -4152,7 +4152,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFileList = globalScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFileList.size(); index++)
+	for (size_t index = 0; index < globalFileList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFileList[index];
@@ -4197,7 +4197,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		// Pull out all data
 		std::vector<LLScrollListItem*> perAccountFileList = perAccountScrollList->getAllData();
 		// Go over each entry
-		for (S32 index = 0; index < perAccountFileList.size(); index++)
+		for (size_t index = 0; index < perAccountFileList.size(); ++index)
 		{
 			// Get the next item in the list
 			LLScrollListItem* item = perAccountFileList[index];
@@ -4239,7 +4239,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 	// Pull out all data
 	std::vector<LLScrollListItem*> globalFoldersList = globalFoldersScrollList->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < globalFoldersList.size(); index++)
+	for (size_t index = 0; index < globalFoldersList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = globalFoldersList[index];
@@ -4323,7 +4323,7 @@ void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, BOOL all
 	// Pull out all data
 	std::vector<LLScrollListItem*> itemList = control->getAllData();
 	// Go over each entry
-	for (S32 index = 0; index < itemList.size(); index++)
+	for (size_t index = 0; index < itemList.size(); ++index)
 	{
 		// Get the next item in the list
 		LLScrollListItem* item = itemList[index];
@@ -4345,14 +4345,9 @@ void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, BOOL all
 void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo)
 {
 	LLDirIterator dir_iter(dir, "*.xml");
-	while (1)
+	std::string file;
+	while (dir_iter.next(file))
 	{
-		std::string file;
-		if (!dir_iter.next(file))
-		{
-			break; // no more files
-		}
-			
 		//hack to deal with "fonts.xml" 
 		if (file == "fonts.xml")
 		{
@@ -4361,10 +4356,9 @@ void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLCombo
 		//hack to get "fonts_[name].xml" to "Name"
 		else
 		{
-			std::string fontpresetname = file.substr(6, file.length()-10);
+			std::string fontpresetname = file.substr(6, file.length() - 10);
 			LLStringUtil::replaceChar(fontpresetname, '_', ' ');
 			fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
-                
 			font_selection_combo->add(fontpresetname, file);
 		}
 	}

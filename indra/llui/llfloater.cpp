@@ -950,7 +950,14 @@ LLMultiFloater* LLFloater::getHost()
 
 void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
-//	if (!applyDockState()) // <FS:Zi> Don't apply dock state and forget about the undocked values
+	// <FS:Zi> Don't apply dock state and forget about the undocked values
+	// AH: Apply the dock state before applying the rect control. applyDockState
+	//     will call SetDocked with pop_on_undock = true and translate the floater
+	//     by 12px on the y-axis, so we have to apply the rect control after that
+	//     to have it in the right position.
+	//	if (!applyDockState())
+	applyDockState();
+	// </FS:Zi>
 	{
 		if (!applyRectControl())
 		{
@@ -963,7 +970,6 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 			// </FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
 		}
 	}
-	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 }
 
 bool LLFloater::applyRectControl()

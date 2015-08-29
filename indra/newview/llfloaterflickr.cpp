@@ -466,7 +466,7 @@ void LLFlickrPhotoPanel::sendPhoto()
 		params["safety_level"] = content_rating;
 		params["tags"] = tags;
 		params["description"] = description;
-		exoFlickr::uploadPhoto(params, LLFloaterSnapshot::getImageData(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
+		exoFlickr::uploadPhoto(params, previewp->getFormattedImage().get(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
 	}
 #endif
 // </FS:Ansariel>

@@ -78,7 +78,7 @@
     <button
      follows="right|bottom"
      height="23"
-     label="Cancel"
+     label="Targets"
      layout="topleft"
      name="cancel_btn"
      right="-6"
