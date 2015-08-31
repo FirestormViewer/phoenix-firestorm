@@ -2216,6 +2216,9 @@ bool FSFloaterIM::canAddSelectedToChat(const uuid_vec_t& uuids)
 		// For a conference session we need to check against the list from LLSpeakerMgr,
 		// because this list may change when participants join or leave the session.
 
+		// Ansariel: Disabled the check because the sim doesn't clear somebody off the
+		//           speaker list if they crash or relog and they can't be re-added in that case.
+		/*
 		LLSpeakerMgr::speaker_list_t speaker_list;
 		LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
 		if (speaker_mgr)
@@ -2236,6 +2239,7 @@ bool FSFloaterIM::canAddSelectedToChat(const uuid_vec_t& uuids)
 				}
 			}
 		}
+		*/
 	}
 
 	return true;
