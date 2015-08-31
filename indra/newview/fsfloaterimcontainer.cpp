@@ -172,6 +172,21 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	}
 }
 
+void FSFloaterIMContainer::onClose(bool app_quitting)
+{
+	if (app_quitting)
+	{
+		for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+		{
+			FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
+			if (floater)
+			{
+				floater->onClose(app_quitting);
+			}
+		}
+	}
+}
+
 void FSFloaterIMContainer::addFloater(LLFloater* floaterp, 
 									BOOL select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)

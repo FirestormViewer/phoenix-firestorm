@@ -49,6 +49,7 @@ public:
 	
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onClose(bool app_quitting);
 	void onCloseFloater(LLUUID& id);
 	/*virtual*/ void draw();
 	
