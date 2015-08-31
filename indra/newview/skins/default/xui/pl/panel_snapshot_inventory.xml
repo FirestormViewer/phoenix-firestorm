@@ -16,6 +16,6 @@
 	<text name="hint_lbl">
 		Zapisanie zdjęcia do Szafy kosztuje [UPLOAD_COST]L$. Aby zapisać je jako teksturę wybierz jeden z kwadratowych formatów.
 	</text>
-	<button label="Anuluj" name="cancel_btn" />
+	<button label="Tryby" name="cancel_btn" />
 	<button label="Zapisz" name="save_btn" />
 </panel>

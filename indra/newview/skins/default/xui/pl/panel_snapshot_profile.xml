@@ -13,6 +13,6 @@
 		Tytuł:
 	</text>
 	<check_box label="Dołącz lokalizację" name="add_location_cb" />
-	<button label="Anuluj" name="cancel_btn" />
-	<button label="Gotowe" name="post_btn" />
+	<button label="Tryby" name="cancel_btn" />
+	<button label="Wyślij" name="post_btn" />
 </panel>
