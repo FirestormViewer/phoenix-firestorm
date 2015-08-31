@@ -415,7 +415,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 								rCMNT_OR_STR
 								"|(?<![A-Za-z0-9_])" + funcname + rOPT_SPC "\\("
 							")." // or any other character that is not the start for a match of the above
-						")"
+						")++" // eat as many uninteresting characters/sequences as possible
 					);
 
 					std::string::const_iterator bstart = bottom.begin();
@@ -455,7 +455,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 						rCMNT_OR_STR
 						"|(?<![a-zA-Z0-9_.])" + varname + "(?![a-zA-Z0-9_\"])"
 					")." // or any other character that is not the start for a match of the above
-				")"
+				")++" // eat as many uninteresting characters/sequences as possible
 			);
 			boost::smatch vcalls;
 			std::string::const_iterator bstart = bottom.begin();
