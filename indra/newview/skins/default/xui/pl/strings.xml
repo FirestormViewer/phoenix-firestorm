@@ -4993,6 +4993,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_RegionTracker_Label">
 		Śledzenie Regionów
 	</string>
+	<string name="Command_Group_Titles_Label">
+		Tytuły grup
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -5154,6 +5157,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_RegionTracker_Tooltip">
 		Śledź statusy różnych regionów
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Zmień aktywny tag grupy
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
