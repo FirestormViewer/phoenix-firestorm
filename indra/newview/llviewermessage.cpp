@@ -749,10 +749,12 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
 		else if (fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
 		{
+			make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 			LLNotificationsUtil::add("JoinGroupProtectionNotice", args, notification_adjusted["payload"]);
 		}
 		else
 		{
+			make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 			LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
 		}
 		// </FS:PP>
