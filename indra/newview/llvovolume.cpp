@@ -4308,6 +4308,8 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		}
 	}
 
+	__m128 _mZero = _mm_set_ps1( 0.0f ); // <FS:ND/> For SSE comparison below.
+
 	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 	{
 		const LLVolumeFace& vol_face = volume->getVolumeFace(i);
@@ -4366,7 +4368,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					_mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
 					_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
 
-					if (_mScale.m128_f32[0] > 0.f)
+					if ( _mm_comigt_ss( _mScale, _mZero ) == 1 )
 					{
 						_mWeight = _mm_div_ps( _mWeight, _mScale );
 
