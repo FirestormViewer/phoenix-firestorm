@@ -217,6 +217,9 @@ protected:
 	U32				mKeyCharCode;
 	U32				mKeyScanCode;
 	U32				mKeyVirtualKey;
+	U32				mRawMsg;
+	U32				mRawWParam;
+	U32				mRawLParam;
 
 	friend class LLWindowManager;
 // <FS:ND> Allow to query for window chrome sizes.

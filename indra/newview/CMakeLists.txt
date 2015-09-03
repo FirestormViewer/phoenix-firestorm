@@ -45,7 +45,6 @@ include(OPENAL)
 include(OpenGL)
 include(OpenSSL)
 include(PNG)
-include(Prebuilt)
 include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
@@ -73,11 +72,6 @@ endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
-
-# install SLPlugin host executable and its dynamic-library plugins
-if (NOT ENABLE_MEDIA_PLUGINS)
-  use_prebuilt_binary(slplugins)
-endif (NOT ENABLE_MEDIA_PLUGINS)
 
 if(LEAPMOTION)
   add_definitions(-DUSE_LEAPMOTION=1)
@@ -2155,7 +2149,7 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
       SLPlugin
       media_plugin_quicktime
-      media_plugin_webkit
+      media_plugin_cef
       winmm_shim
       windows-crash-logger
       )
@@ -2219,10 +2213,10 @@ if (WINDOWS)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
 
-##  add_dependencies(${VIEWER_BINARY_NAME}
-##    SLPlugin
-##    windows-crash-logger
-##    )
+    add_dependencies(${VIEWER_BINARY_NAME}
+      SLPlugin
+   windows-crash-logger
+    )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
@@ -2408,9 +2402,9 @@ if (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
-##  SLPlugin
-##  media_plugin_webkit
-##  media_plugin_gstreamer010
+    SLPlugin
+    media_plugin_webkit
+    media_plugin_gstreamer010
     llcommon
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
@@ -2535,7 +2529,7 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
 
-##add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_webkit mac-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
   add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
 
   if (ENABLE_SIGNING)
@@ -2591,10 +2585,10 @@ if (PACKAGE)
   if (DARWIN)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
     # *TODO: Generate these search dirs in the cmake files related to each binary.
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
 ##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin.tar.bz2")
 ##  set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
@@ -2605,7 +2599,7 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-linux.tar.bz2")
 ##  set(VIEWER_EXE_GLOBS "do-not-directly-run-secondlife-bin SLPlugin")
-    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin")
+    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin SLPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)

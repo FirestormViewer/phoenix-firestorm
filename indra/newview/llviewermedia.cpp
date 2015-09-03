@@ -1831,7 +1831,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
 	// If a spare was already created before PluginAttachDebuggerToPlugins was set, don't use it.
     // Do not use a spare if launching with full viewer control (e.g. Facebook, Twitter and few others)
-	if ((plugin_basename == "media_plugin_webkit") &&
+	if ((plugin_basename == "media_plugin_cef") &&
         !gSavedSettings.getBOOL("PluginAttachDebuggerToPlugins") && !clean_browser)
 	{
 		media_source = LLViewerMedia::getSpareBrowserMediaSource();
@@ -1899,6 +1899,9 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 		
 			bool media_plugin_debugging_enabled = gSavedSettings.getBOOL("MediaPluginDebugging");
 			media_source->enableMediaPluginDebugging( media_plugin_debugging_enabled  || clean_browser);
+
+			// need to set agent string here before instance created
+			media_source->setBrowserUserAgent(LLViewerMedia::getCurrentUserAgent());
 
 			media_source->setTarget(target);
 			
@@ -2744,27 +2747,48 @@ void LLViewerMediaImpl::navigateStop()
 bool LLViewerMediaImpl::handleKeyHere(KEY key, MASK mask)
 {
 	bool result = false;
-	
+
 	if (mMediaSource)
 	{
 		// FIXME: THIS IS SO WRONG.
 		// Menu keys should be handled by the menu system and not passed to UI elements, but this is how LLTextEditor and LLLineEditor do it...
-		if( MASK_CONTROL & mask && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_HOME && key != KEY_END)
+		if (MASK_CONTROL & mask && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_HOME && key != KEY_END)
 		{
 			result = true;
 		}
-		
-		if(!result)
+
+		if (!result)
 		{
-			
+
 			LLSD native_key_data = gViewerWindow->getWindow()->getNativeKeyData();
-			
-			result = mMediaSource->keyEvent(LLPluginClassMedia::KEY_EVENT_DOWN ,key, mask, native_key_data);
-			// Since the viewer internal event dispatching doesn't give us key-up events, simulate one here.
-			(void)mMediaSource->keyEvent(LLPluginClassMedia::KEY_EVENT_UP ,key, mask, native_key_data);
+			result = mMediaSource->keyEvent(LLPluginClassMedia::KEY_EVENT_DOWN, key, mask, native_key_data);
 		}
 	}
-	
+
+	return result;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+bool LLViewerMediaImpl::handleKeyUpHere(KEY key, MASK mask)
+{
+	bool result = false;
+
+	if (mMediaSource)
+	{
+		// FIXME: THIS IS SO WRONG.
+		// Menu keys should be handled by the menu system and not passed to UI elements, but this is how LLTextEditor and LLLineEditor do it...
+		if (MASK_CONTROL & mask && key != KEY_LEFT && key != KEY_RIGHT && key != KEY_HOME && key != KEY_END)
+		{
+			result = true;
+		}
+
+		if (!result)
+		{
+			LLSD native_key_data = gViewerWindow->getWindow()->getNativeKeyData();
+			result = mMediaSource->keyEvent(LLPluginClassMedia::KEY_EVENT_UP, key, mask, native_key_data);
+		}
+	}
+
 	return result;
 }
 
