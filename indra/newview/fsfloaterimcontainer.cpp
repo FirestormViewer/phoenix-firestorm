@@ -356,22 +356,6 @@ FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
 	return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
 }
 
-void FSFloaterIMContainer::setMinimized(BOOL b)
-{
-	if (isMinimized() == b) return;
-	
-	LLMultiFloater::setMinimized(b);
-	// Hide minimized floater (see EXT-5315)
-	setVisible(!b);
-
-	if (isMinimized()) return;
-
-	if (getActiveFloater())
-	{
-		getActiveFloater()->setVisible(TRUE);
-	}
-}
-
 void FSFloaterIMContainer::setVisible(BOOL b)
 {
 	LLMultiFloater::setVisible(b);

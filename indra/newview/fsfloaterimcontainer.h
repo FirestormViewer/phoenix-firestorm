@@ -64,7 +64,6 @@ public:
 	static FSFloaterIMContainer* findInstance();
 	static FSFloaterIMContainer* getInstance();
 
-	virtual void setMinimized(BOOL b);
 	virtual void setVisible(BOOL b);
 	
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
