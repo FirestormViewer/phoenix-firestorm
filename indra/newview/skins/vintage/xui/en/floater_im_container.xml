@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <multi_floater
  can_close="true"
- can_minimize="false"  
+ can_minimize="false"
  can_resize="true"
  height="390"
  layout="topleft"
@@ -15,7 +15,7 @@
     <tab_container
      follows="left|right|top|bottom"
      height="390"
-	 label_pad_left="10"
+     label_pad_left="10"
      layout="topleft"
      left="1"
      name="im_box_tab_container"
@@ -29,15 +29,4 @@
      use_ellipses="true"
      top="0"
      width="394"/>
-    <icon
-     color="DefaultShadowLight"
-     enabled="false"
-     follows="left|right|bottom"
-     height="20"
-     image_name="tabarea.tga"
-     layout="bottomleft"
-     left="1"
-     name="im_box_tab_container_icon"
-     bottom="10"
-     width="394" />
 </multi_floater>
