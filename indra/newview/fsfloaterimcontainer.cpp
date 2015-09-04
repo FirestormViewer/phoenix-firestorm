@@ -30,21 +30,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloaterimcontainer.h"
-#include "llfloaterreg.h"
-#include "llimview.h"
-#include "llavatariconctrl.h"
-#include "llgroupiconctrl.h"
-#include "llagent.h"
-#include "lltransientfloatermgr.h"
-#include "fsfloaternearbychat.h"
+
 #include "fsfloatercontacts.h"
-#include "llfloater.h"
-#include "llviewercontrol.h"
 #include "fsfloaterim.h"
-#include "llvoiceclient.h"
-#include "lltoolbarview.h"
+#include "fsfloaternearbychat.h"
+#include "llfloaterreg.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
+#include "lltoolbarview.h"
+#include "llvoiceclient.h"
 
 static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
@@ -340,8 +334,10 @@ void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
 	if (floaterp && current_floater && floaterp != current_floater
 		&& (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || !data.has("from_id") || data["from_id"].asUUID().notNull()))
 	{
-		if(LLMultiFloater::isFloaterFlashing(floaterp))
+		if (LLMultiFloater::isFloaterFlashing(floaterp))
+		{
 			LLMultiFloater::setFloaterFlashing(floaterp, FALSE);
+		}
 		LLMultiFloater::setFloaterFlashing(floaterp, TRUE);
 	}
 }
