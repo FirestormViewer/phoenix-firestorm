@@ -184,9 +184,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>459cdc8d7c19a8025f98f61db95622ff</string>
+              <string>76302ef4f99f34f45ccc844481b83406</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/sdl_3p-update-sdl/rev/297546/arch/Linux/installer/SDL-1.2.15-linux-297546.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/SDL-1.2.15-linux-201509032122-r43.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1976,9 +1976,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b1245d467d5914a266efa16afeb55406</string>
+              <string>e0c6acdbab116792347a01994f229cd7</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/libndofdev_3p-update-libndofdev/rev/297553/arch/Linux/installer/open_libndofdev-0.3-linux-297553.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3-linux-201509040011-r11.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

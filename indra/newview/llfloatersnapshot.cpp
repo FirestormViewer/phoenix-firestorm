@@ -547,7 +547,11 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	  default:
 		break;
 	}
-	setAspectRatioCheckboxValue(floater, !floater->impl.mAspectRatioCheckOff && gSavedSettings.getBOOL("KeepAspectForSnapshot"));
+	// <FS:Ansariel> FIRE-16885: Aspect ratio checkbox enabled state sometimes is wrong
+	//setAspectRatioCheckboxValue(floater, !floater->impl.mAspectRatioCheckOff && gSavedSettings.getBOOL("KeepAspectForSnapshot"));
+	setAspectRatioCheckboxValue(floater, gSavedSettings.getBOOL("KeepAspectForSnapshot"));
+	enableAspectRatioCheckbox(floater, !floater->impl.mAspectRatioCheckOff);
+	// </FS:Ansariel>
 
 	if (previewp)
 	{

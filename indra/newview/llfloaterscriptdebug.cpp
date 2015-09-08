@@ -280,7 +280,7 @@ void LLFloaterScriptDebugOutput::addLine(const LLChat& chat, const std::string &
 			setTitle(user_name);
 			setShortTitle(user_name);
 
-			if (gSavedSettings.getBOOL("FSllOwnerSayToScriptDebugWindow") && getKey().asUUID().isNull())
+			if (gSavedPerAccountSettings.getBOOL("FSllOwnerSayToScriptDebugWindow") && getKey().asUUID().isNull())
 			{
 				std::string url = chat.mURL;
 				if ((url.empty()) || (std::string::npos == url.find("objectim")))

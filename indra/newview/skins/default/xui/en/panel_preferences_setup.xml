@@ -218,7 +218,6 @@
 
 	  <radio_group
 	   control_name="PreferredBrowserBehavior"
-	   draw_border="false"
 	   follows="left|top"
 	   height="50"
 	   layout="topleft"
