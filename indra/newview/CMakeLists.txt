@@ -2403,7 +2403,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
     SLPlugin
-    media_plugin_webkit
+    media_plugin_cef
     media_plugin_gstreamer010
     llcommon
     )
@@ -2412,7 +2412,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
     SLPlugin
-    media_plugin_webkit
+    media_plugin_cef
     media_plugin_gstreamer010
     llcommon
     )

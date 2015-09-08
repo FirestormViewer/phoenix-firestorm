@@ -1712,14 +1712,28 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fba9f44aa66b81d41a26df4eed116eb9</string>
+              <string>6bf729c701b31898ca57efbf524600d1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/llceflib_3p-llceflib/rev/304772/arch/CYGWIN/installer/llceflib-1.0.1.304772-windows-304772.tar.bz2</string>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201509031840-r7.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>1e06405ac0a23d6f2b429654db41f14a</string>
+              <key>hash_algorithm</key>
+              <string>md5</string>
+              <key>url</key>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201509031843-r7.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
           </map>
         </map>
         <key>version</key>

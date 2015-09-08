@@ -3,6 +3,7 @@ add_subdirectory(base)
 
 if (LINUX)
     add_subdirectory(gstreamer010)
+    add_subdirectory(cef)
 endif (LINUX)
 
 if (WINDOWS OR DARWIN)
