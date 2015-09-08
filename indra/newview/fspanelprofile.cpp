@@ -833,6 +833,7 @@ BOOL FSPanelProfileWeb::postBuild()
 
 	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
 	mWebBrowser->addObserver(this);
+	mWebBrowser->setHomePageUrl("about:blank");
 
 	mUrlEdit->setEnabled(FALSE);
 
