@@ -630,7 +630,7 @@ void LLHUDEffectLookAt::render()
 				(*mAttentions)[mTargetType].mName != "Idle" &&
 				(*mAttentions)[mTargetType].mName != "AutoListen")
 			{
-				LLVector3 dist = ((mSourceObject->getWorldPosition()) - mTargetPos) * 10;
+				LLVector3 dist = ((mSourceObject->getWorldPosition()) - mTargetPos) * 10.f;
 
 				gGL.vertex3f(0.f, 0.f, 0.f);
 				gGL.vertex3f(dist.mV[VX], dist.mV[VY], dist.mV[VZ] + 0.5f);
