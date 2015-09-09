@@ -606,7 +606,10 @@ void LLHUDEffectLookAt::render()
 		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
 		gGL.translatef(target.mV[VX], target.mV[VY], target.mV[VZ]);
-		gGL.scalef(0.3f, 0.3f, 0.3f);
+		// <FS:Ansariel> FIRE-16912: Draw lines for lookat targets; by Ayamo Nozaki
+		//gGL.scalef(0.3f, 0.3f, 0.3f);
+		gGL.scalef(0.1f, 0.1f, 0.1f);
+		// </FS:Ansariel>
 		gGL.begin(LLRender::LINES);
 		{
 			LLColor3 color = (*mAttentions)[mTargetType].mColor;
@@ -619,6 +622,20 @@ void LLHUDEffectLookAt::render()
 
 			gGL.vertex3f(0.f, 0.f, -1.f);
 			gGL.vertex3f(0.f, 0.f, 1.f);
+
+			// <FS:Ansariel> FIRE-16912: Draw lines for lookat targets; by Ayamo Nozaki
+			static LLCachedControl<bool> lookAtLines(gSavedSettings, "ExodusLookAtLines", false);
+			if (lookAtLines &&
+				(*mAttentions)[mTargetType].mName != "None" &&
+				(*mAttentions)[mTargetType].mName != "Idle" &&
+				(*mAttentions)[mTargetType].mName != "AutoListen")
+			{
+				LLVector3 dist = ((mSourceObject->getWorldPosition()) - mTargetPos) * 10;
+
+				gGL.vertex3f(0.f, 0.f, 0.f);
+				gGL.vertex3f(dist.mV[VX], dist.mV[VY], dist.mV[VZ] + 0.5f);
+			}
+			// </FS:Ansariel>
 		} gGL.end();
 		gGL.popMatrix();
 	}
