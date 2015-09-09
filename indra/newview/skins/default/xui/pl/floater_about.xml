@@ -3,7 +3,7 @@
 	<tab_container name="about_tab">
 		<panel label="Informacje" name="support_panel">
 			<text name="support_intro">
-				Najnowsze informacje o Firestorm są dostępne pod adresem 
+				Najnowsze informacje o Firestorm są dostępne pod adresem
 http://www.firestormviewer.org
 			</text>
 			<button label="Kopiuj do schowka" name="copy_btn"/>

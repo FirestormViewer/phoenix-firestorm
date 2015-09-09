@@ -135,7 +135,7 @@
 				Działka zakupiona w tym Regionie może być łączona/dzielona.
 			</panel.string>
 			<panel.string name="can_not_change">
-				Działka zakupiona w tym Regionie nie może być 
+				Działka zakupiona w tym Regionie nie może być
 łączona/dzielona.
 			</panel.string>
 			<text name="estate_section_lbl">
@@ -278,7 +278,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label1">
 				Edycję terenu:
 			</text>
-			<check_box label="Wszyscy" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
+			<check_box label="Wszyscy" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/>
 			<text name="caution_text">
 				(używaj ostrożnie!)
 			</text>
@@ -372,7 +372,7 @@ teksturę:
 			<spinner name="media_size_height" tool_tip="Rozmiar dla ładowania mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
 			<text name="pixels">
 				pikseli
-			</text>	
+			</text>
 			<text name="Options:">
 				Opcje:
 			</text>

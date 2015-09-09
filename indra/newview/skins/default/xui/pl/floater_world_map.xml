@@ -63,6 +63,6 @@
 				<button label="Pokaż wybrane" name="Show Destination" tool_tip="Wyśrodkuj mapę w wybranym miejscu"/>
 				<button label="Śledź region" name="track_region" tool_tip="Dodaj region do Śledzenia Regionów"/>
 			</panel>
-		</layout_panel> 
-	</layout_stack> 
+		</layout_panel>
+	</layout_stack>
 </floater>

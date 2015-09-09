@@ -10,7 +10,7 @@
 prerenderowane
 			</text>
 			<text name="composite_label">
-				Tekstury 
+				Tekstury
 kompozytowe
 			</text>
 			<button label="Zrzuć ID do Konsoli" label_selected="Zrzuć" name="Dump"/>

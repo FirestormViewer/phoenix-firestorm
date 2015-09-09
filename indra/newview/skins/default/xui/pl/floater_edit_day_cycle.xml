@@ -58,7 +58,7 @@
     <text name="WLCurKeyTimeText">
         Czas:
     </text>
-    <time name="time" value="6:00"/> 
+    <time name="time" value="6:00"/>
     <check_box label="Ustaw jako mój cykl dnia" name="make_default_cb"/>
     <button label="Zapisz" name="save"/>
     <button label="Anuluj" name="cancel"/>

@@ -1345,7 +1345,6 @@ Odcisk palca SHA1: [MD5_DIGEST]
 Użycie klucza: [KEYUSAGE]
 Rozszerzone użycie klucza: [EXTENDEDKEYUSAGE]
 Identyfikator klucza podmiotu: [SUBJECTKEYIDENTIFIER]
-		
 	</notification>
 	<notification name="TrustCertificateError">
 		Wydawca certyfikatu dla tego serwera nie jest znany.
@@ -1814,7 +1813,7 @@ co przekracza limit [LIMIT].
 	<notification name="TeleportViaSLAPP">
 		Na pewno chcesz się teleportować do &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
 		<usetemplate ignoretext="Potwierdź próbę teleportacji przez SLAPP" name="okcancelignore" notext="Anuluj" yestext="Teleportuj"/>
-	</notification>	
+	</notification>
 	<notification name="TeleportToPick">
 		Teleportować do [PICK]?
 		<usetemplate ignoretext="Potwierdź, że chcesz teleportować się do miejsca w Ulubionych" name="okcancelignore" notext="Anuluj" yestext="Teleportuj"/>
@@ -1905,7 +1904,7 @@ Kontynuować?
 	<notification label="Wybierz Majątek" name="EstateTrustedExperienceRemove">
 		Usunąć z listy kluczy tylko dla tego majątku czy dla [ALL_ESTATES]?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wszystkie majątki" yestext="Ten majątek"/>
-	</notification>  
+	</notification>
 	<notification label="Potwierdź Wyrzucenie" name="EstateKickUser">
 		Wyrzucić [EVIL_USER] z tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2176,7 +2175,6 @@ Wpisz hasło ponownie i kliknij na OK.
 	<notification name="SetPickLocation">
 		Uwaga:
 Lokalizacja tego miejsca została zaktualizowana, ale pozostałe szczegóły zachowają oryginalne wartości.
-		
 	</notification>
 	<notification name="MoveInventoryFromObject">
 		Wybrane obiekty Szafy nie mają praw kopiowania.
@@ -3707,12 +3705,10 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 	<notification name="NewAOCantContainNonASCII">
 		Nie można utworzyć zestawu AO o nazwie "[AO_SET_NAME]".
 Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
-		
 	</notification>
 	<notification name="RenameAOMustBeASCII">
 		Nie można zmienić nazwy zestawu AO "[AO_SET_NAME]".
 Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
-		
 	</notification>
 	<notification name="RemoveAOSet">
 		Usunąć zestaw AO "[AO_SET_NAME]" z listy?
@@ -3797,7 +3793,6 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 	<notification name="CantAddGrid">
 		Nie można dodać [GRID] do listy siatek.
 [REASON] skontaktuj się ze wsparciem [GRID].
-		
 	</notification>
 	<notification name="ParticleScriptFindFolderFailed">
 		Nie można znaleźć folderu na nowy skrypt w Twojej Szafie.
@@ -4636,7 +4631,7 @@ Nie można tego cofnąć.
 	<notification name="ExportColladaFailure">
 		Eksport [OBJECT] do [FILENAME] nie powiódł się.
 	</notification>
-	<notification name="MeshMaxConcurrentReqTooHigh">	
+	<notification name="MeshMaxConcurrentReqTooHigh">
 		Wartość ustawienia ([VALUE]) dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie (ustawienie debugowania [DEBUGNAME]) jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
 	</notification>
 	<notification name="ImportSuccess">
