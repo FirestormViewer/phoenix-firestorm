@@ -41,7 +41,7 @@
 		<button label="Wyrzuć" name="Discard"/>
 		<flyout_button label="Zapisz..." name="save_tex_btn">
 			<flyout_button.item label="Zapisz jako TGA" name="save_item_tga"/>
-			<flyout_button.item label="Zapisz jako PNG" name="save_item_png"/>	 
+			<flyout_button.item label="Zapisz jako PNG" name="save_item_png"/>
 		</flyout_button>
 	</panel>
 </floater>

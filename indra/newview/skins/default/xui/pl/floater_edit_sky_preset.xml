@@ -60,7 +60,7 @@
 			</panel>
 			<panel name="P_WL_Daycycle">
 				<icon name="SkyDayCycle" tool_tip="Pozycja Słońca/Księżyca - Wpływa na pionowe położenie Słońca i Księżyca, od wschodu (0.0) poprzez południe (0.25), zachód (0.5), północ (0.75) z powrotem do wschodu (1.0)."/>
-				<time name="WLDayTime" tool_tip="Pozycja Słońca/Księżyca - Wpływa na pionowe położenie Słońca i Księżyca, od wschodu (0.0) poprzez południe (0.25), zachód (0.5), północ (0.75) z powrotem do wschodu (1.0)."/> 
+				<time name="WLDayTime" tool_tip="Pozycja Słońca/Księżyca - Wpływa na pionowe położenie Słońca i Księżyca, od wschodu (0.0) poprzez południe (0.25), zachód (0.5), północ (0.75) z powrotem do wschodu (1.0)."/>
 				<slider label="Kąt wsch." name="WLEastAngle" tool_tip="Kąt wschodu - Zmienia azymut wschodu Słońca zgodnie z ruchem wskazówek zegara, relatywnie do kierunku wschodniego na mapie. Przy ustawieniu 0,5 Słońce wzejdzie na zachodzie i zajdzie na wschodzie, przy 0.25 wzejdzie na południu i zajdzie na północy itd."/>
 			</panel>
 		</panel>

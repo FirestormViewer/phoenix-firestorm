@@ -12,7 +12,6 @@
 	<panel.string name="group_join_free">
 		Darmowe
 	</panel.string>
-	
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
 			<panel name="group_info_top">

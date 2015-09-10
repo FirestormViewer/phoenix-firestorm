@@ -403,7 +403,7 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
 Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
 			</text>
-			
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta przedmiotu." name="textFSInventoryOffer">
 				Oferta przedmiotu:
 			</text>

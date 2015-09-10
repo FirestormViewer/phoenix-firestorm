@@ -38,7 +38,7 @@
 						<menu_button name="overflow_btn" tool_tip="Pokaż opcje dodatkowe" />
 					</layout_panel>
 				</layout_stack>
-			</layout_panel>	
+			</layout_panel>
 		</layout_stack>
 		<layout_stack name="bottom_bar_ls1">
 			<layout_panel name="lp2">
@@ -48,7 +48,7 @@
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>
-		</layout_stack>	
+		</layout_stack>
 		<layout_stack name="bottom_bar_ls2">
 			<layout_panel name="save_btn_lp">
 				<button label="Zapisz" name="save_btn" />

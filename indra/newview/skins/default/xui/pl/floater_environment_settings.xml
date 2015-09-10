@@ -33,5 +33,5 @@
 		</combo_box>
 	</panel>
 	<button label="Gotowe" name="ok_btn"/>
-	<button label="Anuluj" name="cancel_btn"/>	
+	<button label="Anuluj" name="cancel_btn"/>
 </floater>
