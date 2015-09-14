@@ -3482,6 +3482,15 @@ void LLViewerMediaTexture::addMediaToFace(LLFace* facep)
 	if(facep)
 	{
 		facep->setHasMedia(true);
+
+		// <FS:ND> Set a texture matrix to flip around the Y Axis. If we bring back QT and use it side by side by side with CEF, check if this is a CEF Media face
+		if( !facep->mTextureMatrix )
+		{
+			facep->mTextureMatrix = new LLMatrix4();
+			facep->mTextureMatrix->mMatrix[ 1 ][ 1 ] = -1.0f;
+			facep->mTextureMatrix->mMatrix[ 2 ][ 1 ] = 1.0f;
+		}
+		// </FS:ND>
 	}
 	if(!mIsPlaying)
 	{
