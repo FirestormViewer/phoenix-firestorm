@@ -849,6 +849,21 @@ void LLMediaCtrl::draw()
 			x_offset = (r.getWidth() - width) / 2;
 			y_offset = (r.getHeight() - height) / 2;		
 
+#if 0
+			// <FS:ND> Flip Y-Axis of media texture
+			U32 mode = gGL.getMatrixMode();
+			gGL.matrixMode(LLRender::MM_TEXTURE0);
+
+			F32 aMatrix[16] = {	1.0f,  0.0f, 0.0f, 0.0f,
+								0.0f, -1.0f, 0.0f, 0.0f,
+								0.0f,  0.0f, 1.0f, 0.0f,
+								0.0f,  max_v, 0.0f, 1.0f
+								};
+			gGL.pushMatrix();
+			gGL.loadMatrix( aMatrix );
+			gGL.matrixMode(mode);
+			// </FS:ND>
+#endif
 			// draw the browser
 			gGL.begin( LLRender::QUADS );
 			if (! media_plugin->getTextureCoordsOpenGL())
@@ -882,6 +897,13 @@ void LLMediaCtrl::draw()
 				gGL.vertex2i( x_offset + width, y_offset );
 			}
 			gGL.end();
+#if 0
+			// <FS:ND> Restore matrix for texture 0
+			gGL.matrixMode(LLRender::MM_TEXTURE0);
+			gGL.popMatrix();
+			gGL.matrixMode( mode );
+			// </FS:ND>
+#endif
 		}
 		gGL.popUIMatrix();
 	
