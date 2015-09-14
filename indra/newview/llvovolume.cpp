@@ -4277,10 +4277,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	}
 
 	//build matrix palette
-	// <FS:Ansariel> Proper matrix array length for fitted mesh
-	//static const size_t kMaxJoints = 64;
 	static const size_t kMaxJoints = 52;
-	// </FS:Ansariel>
 
 	LLMatrix4a mp[kMaxJoints];
 	LLMatrix4* mat = (LLMatrix4*) mp;
@@ -4300,15 +4297,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 			mat[j] = skin->mInvBindMatrix[j];
 			mat[j] *= joint->getWorldMatrix();
 		}
-		else
-		{
-            // This shouldn't be possible unless the avatar skeleton
-            // is corrupt.
-			llassert(false);
-		}
 	}
-
-	__m128 _mZero = _mm_set_ps1( 0.0f ); // <FS:ND/> For SSE comparison below.
 
 	for (S32 i = 0; i < volume->getNumVolumeFaces(); ++i)
 	{
@@ -4350,11 +4339,9 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					// 	wght[k] = w - floorf(w);
 					// 	scale += wght[k];
 					// }
-					// 
-					//if (scale > 0.f)
-					//{
-					//	wght *= 1.f / scale;
-					//}
+                    //// This is enforced  in unpackVolumeFaces()
+                    //llassert(scale>0.f);
+                    //wght *= 1.f / scale;
 
 					LL_ALIGN_16( S32 idx[4] );
 					LL_ALIGN_16( F32 wght[4] );
@@ -4368,24 +4355,9 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					_mScale = _mm_add_ss( _mScale, _mm_shuffle_ps( _mScale, _mScale, 1) );
 					_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
 
-					if ( _mm_comigt_ss( _mScale, _mZero ) == 1 )
-					{
-						_mWeight = _mm_div_ps( _mWeight, _mScale );
-
-						_mm_store_ps( wght, _mWeight );
-					}
+					_mWeight = _mm_div_ps( _mWeight, _mScale );
+					_mm_store_ps( wght, _mWeight );
 					// </FS:ND>
-                    else
-                    {
-                        // Complete weighting fail - all zeroes.  Just
-                        // pick some values that add up to 1.0 so we
-                        // don't wind up with garbage vertices
-                        // pointing off at (0,0,0)
-                        wght[0] = 1.f;
-                        wght[1] = 0.f;
-                        wght[2] = 0.f;
-                        wght[3] = 0.f;
-                    }
 					
 					for (U32 k = 0; k < 4; k++)
 					{
@@ -4394,7 +4366,8 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 						LLMatrix4a src;
 						// Insure ref'd bone is in our clamped array of mats
 						// clamp idx to maxJoints to avoid reading garbage off stack in release
-						src.setMul(mp[(idx[k]<maxJoints)?idx[k]:0], w);
+                        S32 index = llclamp((S32)idx[k],(S32)0,(S32)kMaxJoints-1);
+						src.setMul(mp[index], w);
 						final_mat.add(src);
 					}
 
