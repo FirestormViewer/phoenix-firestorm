@@ -225,37 +225,37 @@ LLInspectAvatar::LLInspectAvatar(const LLSD& sd)
 	mAvatarNameCacheConnection()
 {
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	mCommitCallbackRegistrar.add("InspectAvatar.ViewProfile",	boost::bind(&LLInspectAvatar::onClickViewProfile, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.AddFriend",	boost::bind(&LLInspectAvatar::onClickAddFriend, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.IM",
-		boost::bind(&LLInspectAvatar::onClickIM, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Call",		boost::bind(&LLInspectAvatar::onClickCall, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Teleport",	boost::bind(&LLInspectAvatar::onClickTeleport, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.InviteToGroup",	boost::bind(&LLInspectAvatar::onClickInviteToGroup, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Pay",	boost::bind(&LLInspectAvatar::onClickPay, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Share",	boost::bind(&LLInspectAvatar::onClickShare, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.ToggleMute",	boost::bind(&LLInspectAvatar::onToggleMute, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Freeze", boost::bind(&LLInspectAvatar::onClickFreeze, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Eject", boost::bind(&LLInspectAvatar::onClickEject, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Kick", boost::bind(&LLInspectAvatar::onClickKick, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.CSR", boost::bind(&LLInspectAvatar::onClickCSR, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.Report",	boost::bind(&LLInspectAvatar::onClickReport, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.FindOnMap",	boost::bind(&LLInspectAvatar::onClickFindOnMap, this));	
-	mCommitCallbackRegistrar.add("InspectAvatar.ZoomIn", boost::bind(&LLInspectAvatar::onClickZoomIn, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.DisableVoice", boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, false));
-	mCommitCallbackRegistrar.add("InspectAvatar.EnableVoice", boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, true));
+	mCommitCallbackRegistrar.add("InspectAvatar.ViewProfile",					boost::bind(&LLInspectAvatar::onClickViewProfile, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.AddFriend",						boost::bind(&LLInspectAvatar::onClickAddFriend, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.IM",							boost::bind(&LLInspectAvatar::onClickIM, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Call",							boost::bind(&LLInspectAvatar::onClickCall, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Teleport",						boost::bind(&LLInspectAvatar::onClickTeleport, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.TeleportRequest",				boost::bind(&LLInspectAvatar::onClickTeleportRequest, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.InviteToGroup",					boost::bind(&LLInspectAvatar::onClickInviteToGroup, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Pay",							boost::bind(&LLInspectAvatar::onClickPay, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Share",							boost::bind(&LLInspectAvatar::onClickShare, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.ToggleMute",					boost::bind(&LLInspectAvatar::onToggleMute, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Freeze",						boost::bind(&LLInspectAvatar::onClickFreeze, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Eject",							boost::bind(&LLInspectAvatar::onClickEject, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Kick",							boost::bind(&LLInspectAvatar::onClickKick, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.CSR",							boost::bind(&LLInspectAvatar::onClickCSR, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.Report",						boost::bind(&LLInspectAvatar::onClickReport, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.FindOnMap",						boost::bind(&LLInspectAvatar::onClickFindOnMap, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.ZoomIn",						boost::bind(&LLInspectAvatar::onClickZoomIn, this));
+	mCommitCallbackRegistrar.add("InspectAvatar.DisableVoice",					boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, false));
+	mCommitCallbackRegistrar.add("InspectAvatar.EnableVoice",					boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, true));
 
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableGod",	boost::bind(&LLInspectAvatar::godModeEnabled, this));	
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFindOnMap",	boost::bind(&LLInspectAvatar::onVisibleFindOnMap, this));	
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleEject",	boost::bind(&LLInspectAvatar::onVisibleEject, this));	
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFreeze",	boost::bind(&LLInspectAvatar::onVisibleFreeze, this));	
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleZoomIn", boost::bind(&LLInspectAvatar::onVisibleZoomIn, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.Enable", boost::bind(&LLInspectAvatar::isNotFriend, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableCall", boost::bind(&LLAvatarActions::canCall));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportOffer", boost::bind(&LLInspectAvatar::enableTeleportOffer, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportRequest", boost::bind(&LLInspectAvatar::enableTeleportRequest, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableMute", boost::bind(&LLInspectAvatar::enableMute, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute", boost::bind(&LLInspectAvatar::enableUnmute, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.EnableGod",						boost::bind(&LLInspectAvatar::godModeEnabled, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFindOnMap",				boost::bind(&LLInspectAvatar::onVisibleFindOnMap, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.VisibleEject",					boost::bind(&LLInspectAvatar::onVisibleEject, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFreeze",					boost::bind(&LLInspectAvatar::onVisibleFreeze, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.VisibleZoomIn",					boost::bind(&LLInspectAvatar::onVisibleZoomIn, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.Gear.Enable",					boost::bind(&LLInspectAvatar::isNotFriend, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableCall",				boost::bind(&LLAvatarActions::canCall));
+	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportOffer",		boost::bind(&LLInspectAvatar::enableTeleportOffer, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportRequest",	boost::bind(&LLInspectAvatar::enableTeleportRequest, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.EnableMute",					boost::bind(&LLInspectAvatar::enableMute, this));
+	mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute",					boost::bind(&LLInspectAvatar::enableUnmute, this));
 	// </FS:Ansariel>
 
 	// can't make the properties request until the widgets are constructed
