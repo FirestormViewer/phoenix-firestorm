@@ -405,7 +405,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 
 				// <FS:ND> if mFlipY is true, teh CEF plugin will flip the texture and it will be in correct opengl format. 
 				// If false, it needs to be flipped by the viewer.
-				// message.setValueBoolean("coords_opengl", false);
+				// message.setValueBoolean("coords_opengl", true);
 				message.setValueBoolean("coords_opengl", mFlipY );
 				// </FS:ND>
 
