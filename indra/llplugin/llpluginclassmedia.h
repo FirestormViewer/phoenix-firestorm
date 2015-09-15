@@ -435,6 +435,11 @@ private:
 	std::string mArtist;
 	std::string mTitle;
 	// </FS:ND>
+	//<FS:ND> Special settings for CEF
+public:
+	void enableFlash( bool );
+	void setFlipY( bool );
+	// </FS:ND>
 
 //--------------------------------------
 	//debug use only

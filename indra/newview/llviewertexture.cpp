@@ -3486,6 +3486,8 @@ void LLViewerMediaTexture::addMediaToFace(LLFace* facep)
 		facep->setHasMedia(true);
 
 		// <FS:ND> If using CEF then set a texture matrix to flip around the Y Axis.
+		static bool sFlipY = gSavedSettings.getBOOL( "FSFlipCEFY" );
+
 		LLViewerMediaImpl *pMedia = mMediaImplp;
 		if( !pMedia )
 			pMedia = LLViewerMedia::getMediaImplFromTextureID(mID);
@@ -3495,8 +3497,11 @@ void LLViewerMediaTexture::addMediaToFace(LLFace* facep)
 			 strMimeType = pMedia->getMimeType();
 
 		std::string strImpl = LLMIMETypes::implType( strMimeType );
+		bool bCoordsOpenGl = sFlipY;
+		if( pMedia && pMedia->getMediaPlugin() )
+			bCoordsOpenGl = pMedia->getMediaPlugin()->getTextureCoordsOpenGL();
 
-		if( strImpl == "media_plugin_cef" )
+		if( strImpl == "media_plugin_cef" && !bCoordsOpenGl )
 		{
 			if( !facep->mTextureMatrix )
 			{

@@ -91,6 +91,11 @@ private:
 	std::string mCachePath;
 	std::string mCookiePath;
 	LLCEFLib* mLLCEFLib;
+
+	// <FS:ND> FS specific CEF settings
+	bool mFlashEnabled;
+	bool mFlipY;
+	// </FS:ND>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,6 +122,11 @@ MediaPluginBase(host_send_func, host_user_data)
 	mCachePath = "";
 	mCookiePath = "";
 	mLLCEFLib = new LLCEFLib();
+
+	// <FS:ND> FS specific CEF settings
+	mFlashEnabled = false;
+	mFlipY = false;
+	// </FS:ND>
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -349,6 +359,11 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 		{
 			if (message_name == "init")
 			{
+				// <FS:ND> FS specific CEF settings
+				mLLCEFLib->enableFlash( mFlashEnabled );
+				mLLCEFLib->setFlipY( mFlipY );
+				// </FS:ND>
+
 				// event callbacks from LLCefLib
 				mLLCEFLib->setOnPageChangedCallback(boost::bind(&MediaPluginCEF::onPageChangedCallback, this, _1, _2, _3));
 				mLLCEFLib->setOnCustomSchemeURLCallback(boost::bind(&MediaPluginCEF::onCustomSchemeURLCallback, this, _1));
@@ -387,7 +402,13 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				message.setValueU32("internalformat", GL_RGB);
 				message.setValueU32("format", GL_BGRA);
 				message.setValueU32("type", GL_UNSIGNED_BYTE);
-				message.setValueBoolean("coords_opengl", false);
+
+				// <FS:ND> if mFlipY is true, teh CEF plugin will flip the texture and it will be in correct opengl format. 
+				// If false, it needs to be flipped by the viewer.
+				// message.setValueBoolean("coords_opengl", false);
+				message.setValueBoolean("coords_opengl", mFlipY );
+				// </FS:ND>
+
 				sendMessage(message);
 			}
 			else if (message_name == "set_user_data_path")
@@ -590,6 +611,14 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "javascript_enabled")
 			{
 				mJavascriptEnabled = message_in.getValueBoolean("enable");
+			}
+			else if( message_name == "cef_flash_enabled" )
+			{
+				mFlashEnabled = message_in.getValueBoolean("enable");
+			}
+			else if( message_name == "cef_flipy" )
+			{
+				mFlipY = message_in.getValueBoolean("enable");
 			}
 		}
 		else

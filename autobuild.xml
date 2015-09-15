@@ -1712,11 +1712,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5e3a216c00d2caae15436d8655adf01</string>
+              <string>c0d2f3fa0fb330b63d87ddb4d69ab516</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201509131846-r12.tar.bz2</string>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201509151732-r13.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

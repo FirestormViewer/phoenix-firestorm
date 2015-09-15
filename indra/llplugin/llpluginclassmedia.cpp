@@ -864,7 +864,7 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
 	{
 		std::string message_name = message.getName();
 
-		// <FS:ND> Enable gs	treamer plugin to report title/artist of current stream
+		// <FS:ND> Enable gstreamer plugin to report title/artist of current stream
 		if( message_name == "ndMediadata_change" )
 		{
 			mTitle = message.getValue( "title" );
@@ -1459,3 +1459,16 @@ void LLPluginClassMedia::initializeUrlHistory(const LLSD& url_history)
 	LL_DEBUGS("Plugin") << "Sending history" << LL_ENDL;
 }
 
+void LLPluginClassMedia::enableFlash( bool enabled )
+{
+	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "cef_flash_enabled");
+	message.setValueBoolean("enable", enabled);
+	sendMessage(message);
+}
+
+void LLPluginClassMedia::setFlipY( bool enabled )
+{
+	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "cef_flipy");
+	message.setValueBoolean("enable", enabled);
+	sendMessage(message);
+}
