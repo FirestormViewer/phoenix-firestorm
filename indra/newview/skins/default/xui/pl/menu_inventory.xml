@@ -105,7 +105,6 @@
 	<menu_item_call label="Dotknij" name="Touch Attachment"/>
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
-	<menu_item_call label="Kopiuj do Skrzynki Kupca" name="Merchant Copy"/>
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>
