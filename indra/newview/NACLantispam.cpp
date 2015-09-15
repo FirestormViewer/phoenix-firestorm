@@ -464,7 +464,11 @@ bool NACLAntiSpamRegistry::checkNewlineFlood(EAntispamQueue queue, const LLUUID&
 
 				LLUUID request_id;
 				request_id.generate();
-				mAvatarNameCallbackConnections[request_id] = LLAvatarNameCache::get(source, boost::bind(&NACLAntiSpamRegistry::onAvatarNameCallback, this, _1, _2, data, request_id));
+				LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(source,
+																					 boost::bind(&NACLAntiSpamRegistry::onAvatarNameCallback,
+																								 this, _1, _2, data, request_id));
+				mAvatarNameCallbackConnections.insert( std::make_pair( request_id, cb ) );
+				
 			}
 			return true;
 		}
