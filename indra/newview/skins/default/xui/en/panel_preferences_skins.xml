@@ -102,7 +102,7 @@
      height="16"
      initial_value="true"
      label="Reset toolbars to the skin's preferred layout when changing skins."
-	 tool_tip="When enabled, this option preserves the skin's designed toolbar button layout and will override your chosen button customisations when you change skins or change login mode."
+	 tool_tip="When enabled, this option preserves the skin's designed toolbar button layout and will override your chosen button customisations when you change skins."
      layout="topleft"
      left="30"
      top_pad="15"
