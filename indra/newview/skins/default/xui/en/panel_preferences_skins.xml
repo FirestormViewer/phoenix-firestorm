@@ -105,10 +105,23 @@
 	 tool_tip="When enabled, this option preserves the skin's designed toolbar button layout and will override your chosen button customisations when you change skins or change login mode."
      layout="topleft"
      left="30"
-     top_pad="20"
+     top_pad="15"
      name="reset_toolbar_settings"
      width="200" />
 
+    <check_box
+     control_name="FSToolbarsResetOnModeChange"
+     enabled="true"
+     follows="left|top"
+     height="16"
+     initial_value="true"
+     label="Reset toolbars to the login mode's preferred layout when changing login modes."
+	 tool_tip="When enabled, this option preserves the login mode's designed toolbar button layout and will override your chosen button customisations when you change login mode."
+     layout="topleft"
+     left="30"
+     top_pad="5"
+     name="FSToolbarsResetOnModeChange"
+     width="200" />
 
     <check_box
      control_name="FSUseLegacyCursors"
