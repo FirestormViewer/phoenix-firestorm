@@ -30,6 +30,7 @@
 		<name_list.columns
 		 name="time"
 		 label="Time"
+		 sort_column="time_sort_column"
 		 width="50"/>
 		<name_list.columns
 		 name="name"
@@ -38,6 +39,9 @@
 		 name="amount"
 		 label="Amount"
 		 width="63"/>
+		<name_list.columns
+		 name="time_sort_column"
+		 width="-1"/>
 	</name_list>
 	<check_box
 	 control_name="FSAlwaysTrackPayments"
