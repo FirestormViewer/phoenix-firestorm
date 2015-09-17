@@ -8376,6 +8376,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			
 			args["DOWNLOADURL"] = LLTrans::getString("ViewerDownloadURL");
 			LLNotificationsUtil::add("UnknownScriptQuestion",args,payload);
+			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 		
 		if (known_questions)
@@ -8436,6 +8437,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			}
 
 			LLNotificationsUtil::add(notification, args, payload);
+			make_ui_sound("UISndScriptFloaterOpen"); // <FS:PP> FIRE-16958: Incoming script permission request doesn't trigger a sound
 		}
 	}
 }
