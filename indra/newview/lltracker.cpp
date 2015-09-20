@@ -597,7 +597,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 
 	// <FS:PP> Performance improvement
 	// sCheesyBeacon = gSavedSettings.getBOOL("CheesyBeacon");
-	static LLCachedControl<bool> cheesyBeacon(gSavedSettings, "RenderTrackerBeacon");
+	static LLCachedControl<bool> cheesyBeacon(gSavedSettings, "CheesyBeacon");
 	sCheesyBeacon = cheesyBeacon;
 	// </FS:PP>
 
