@@ -637,7 +637,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	// <FS:CR> FIRE-8234 - Show distance from avatar rather than distance from camera.
 	// (Distance from camera is somewhat useless)
 	//text = llformat( "%.0f m", to_vec.magVec());
-	F32 beaconDistance = dist_vec(pos_global, pos_agent_3d);
+	F64 beaconDistance = dist_vec(pos_global, pos_agent_3d);
 	text = llformat("%.0f m", beaconDistance);
 	// </FS:CR>
 
@@ -648,7 +648,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	if (playModeUISndTrackerBeacon)
 	{
 		beaconSoundTimerIsRunning = true;
-		if (beaconSoundTimer.getElapsedTimeF32() > beaconDistance / 30.0f)
+		if (beaconSoundTimer.getElapsedTimeF64() > beaconDistance / 30.0)
 		{
 			beaconSoundTimer.reset();
 			make_ui_sound("UISndTrackerBeacon");
