@@ -460,6 +460,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy aktywny jest emiter śledzenia awatarów, obiektów lub miejsc. Odtwarzany jest z większą częstotliwością, gdy awatar jest bliżej miejsca docelowego." name="textFSTrackerBeacon">
+				Emiter śledzenia:
+			</text>
+			<button name="Prev_UISndTrackerBeacon" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndTrackerBeacon" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTrackerBeacon"/>
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRestart">
 				Restart regionu:
 			</text>

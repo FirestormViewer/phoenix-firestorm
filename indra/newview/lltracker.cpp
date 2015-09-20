@@ -594,7 +594,13 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 							 LLHUDText* hud_textp, 
 							 const std::string& label )
 {
-	sCheesyBeacon = gSavedSettings.getBOOL("CheesyBeacon");
+
+	// <FS:PP> Performance improvement
+	// sCheesyBeacon = gSavedSettings.getBOOL("CheesyBeacon");
+	static LLCachedControl<bool> cheesyBeacon(gSavedSettings, "RenderTrackerBeacon");
+	sCheesyBeacon = cheesyBeacon;
+	// </FS:PP>
+
 	LLVector3d to_vec = pos_global - gAgentCamera.getCameraPositionGlobal();
 
 	F32 dist = (F32)to_vec.magVec();
@@ -631,8 +637,29 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	// <FS:CR> FIRE-8234 - Show distance from avatar rather than distance from camera.
 	// (Distance from camera is somewhat useless)
 	//text = llformat( "%.0f m", to_vec.magVec());
-	text = llformat("%.0f m", dist_vec(pos_global, pos_agent_3d));
+	F32 beaconDistance = dist_vec(pos_global, pos_agent_3d);
+	text = llformat("%.0f m", beaconDistance);
 	// </FS:CR>
+
+	// <FS:PP> FIRE-16969: Avatar tracker sounds, beeps; closer -> more frequent, further -> less frequent
+	static LLTimer beaconSoundTimer;
+	static bool beaconSoundTimerIsRunning;
+	static LLCachedControl<bool> playModeUISndTrackerBeacon(gSavedSettings, "PlayModeUISndTrackerBeacon");
+	if (playModeUISndTrackerBeacon)
+	{
+		beaconSoundTimerIsRunning = true;
+		if (beaconSoundTimer.getElapsedTimeF32() > beaconDistance / 30.0f)
+		{
+			beaconSoundTimer.reset();
+			make_ui_sound("UISndTrackerBeacon");
+		}
+	}
+	else if (beaconSoundTimerIsRunning)
+	{
+		beaconSoundTimerIsRunning = false;
+		beaconSoundTimer.stop();
+	}
+	// </FS:PP>
 
 	std::string str;
 	str += label;
