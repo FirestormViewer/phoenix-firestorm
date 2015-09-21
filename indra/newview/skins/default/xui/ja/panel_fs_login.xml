@@ -41,6 +41,7 @@
 				ユーザー名またはパスワードをお忘れですか？
 			</text>
 			<button label="ログイン" name="connect_btn" />
+			<check_box label="ユーザーネームを記憶" name="remember_username_check" />
 			<check_box label="パスワードを記憶" name="remember_check" />
 		</layout_panel>
 		<layout_panel name="mode_selection">

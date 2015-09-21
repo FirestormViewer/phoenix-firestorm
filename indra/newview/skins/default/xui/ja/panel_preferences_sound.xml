@@ -507,7 +507,7 @@
 		<button name="Def_UISndGroupNotice" label="D" tool_tip="デフォルトのUUIDに戻します" />
 		<check_box label="このサウンドを再生" name="PlayModeUISndGroupNotice" />
 		
-		<text tool_tip="Sound UUID played on new Experience notifications." name="textFSQuestionExperience">
+		<text tool_tip="新しい体験の通知を受信した時に再生するサウンドのUUIDです。" name="textFSQuestionExperience">
 			新しい体験：
 		</text>
 		<line_editor name="UISndQuestionExperience" />
@@ -539,6 +539,14 @@
 		<button name="Def_UISndFootsteps" label="D" tool_tip="デフォルトのUUIDに戻します" />
 		<check_box label="このサウンドを再生" name="PlayModeUISndFootsteps" />
 		
+		<text tool_tip="追跡ビーコンが有効になっている時に再生されるサウンドのUUIDです。アバターが目的地に近付くほど再生周期が短くなります。" name="textFSTrackerBeacon">
+			追跡ビーコン：
+		</text>
+		<line_editor name="UISndTrackerBeacon" />
+		<button name="Prev_UISndTrackerBeacon" label="P" tool_tip="このサウンドをプレビューします" />
+		<button name="Def_UISndTrackerBeacon" label="D" tool_tip="デフォルトのUUIDに戻します" />
+		<check_box label="このサウンドを再生" name="PlayModeUISndTrackerBeacon" />
+         
 		<text tool_tip="SIM再起動の警告が表示される時に再生するサウンドのUUIDです。" name="textFSRestart">
 			SIM 再起動
 		</text>

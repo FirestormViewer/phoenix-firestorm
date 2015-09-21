@@ -90,7 +90,18 @@
 	<floater.string name="linkset_choose_use">
 		リンクセットの用途を選択...
 	</floater.string>
-	<panel>
+	<panel name="pathfinding_linksets_main">
+		<text name="linksets_filter_label">
+			フィルター：
+		</text>
+		<text name="linksets_name_label">
+			名前
+		</text>
+		<line_editor name="filter_by_name" />
+		<text name="linksets_desc_label">
+			説明
+		</text>
+		<line_editor name="filter_by_description" />
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="リンクセットの用途でフィルター..." name="filter_by_linkset_use_none"/>
 			<combo_box.item label="歩行可能" name="filter_by_linkset_use_walkable"/>
@@ -122,7 +133,13 @@
 		<button label="すべて選択" name="select_all_objects"/>
 		<button label="何も選択しない" name="select_none_objects"/>
 	</panel>
-	<panel>
+	
+	<view_border name="horiz_separator" />
+	
+	<panel name="pathfinding_linksets_actions">
+		<text name="linksets_actions_label">
+			選択したリンクセットに対する動作（リンクセットを世界から取り除くと、その属性も失われます）：
+		</text>
 		<check_box label="ビーコンを表示" name="show_beacon"/>
 		<button label="取る" name="take_objects"/>
 		<button label="コピーを取る" name="take_copy_objects"/>
@@ -130,7 +147,14 @@
 		<button label="返却" name="return_objects"/>
 		<button label="削除" name="delete_objects"/>
 	</panel>
-	<panel>
+	
+	<view_border name="horiz_separator" />
+      
+	<panel name="pathfinding_linksets_attributes">
+		<text name="linksets_attributes_label">
+			選択したリンクセットの属性を編集、適用ボタンを押して変更を確定
+		</text>
+		<combo_box name="edit_linkset_use" />
 		<text name="walkability_coefficients_label">
 			歩行可能性:
 		</text>
