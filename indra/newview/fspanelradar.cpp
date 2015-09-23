@@ -122,9 +122,7 @@ FSPanelRadar::~FSPanelRadar()
 
 BOOL FSPanelRadar::postBuild()
 {
-	// AO: radarlist takes over for nearbylist for presentation.
 	mRadarList = getChild<FSRadarListCtrl>("radar_list");
-	mRadarList->sortByColumn("range", TRUE); // sort by range
 	mRadarList->setFilterColumn(0);
 	mRadarList->setContextMenu(&FSFloaterRadarMenu::gFSRadarMenu);
 	mRadarList->setDoubleClickCallback(boost::bind(&FSPanelRadar::onRadarListDoubleClicked, this));
@@ -500,7 +498,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 		parent_floater->reshape(min_width, parent_floater->getRect().getHeight());
 	}
 
-	if (mRadarList->getColumn(current_sort_col)->getWidth() == -1)
+	if (current_sort_col.empty() || mRadarList->getColumn(current_sort_col)->getWidth() == -1)
 	{
 		current_sort_col = "range";
 		current_sort_asc = TRUE;
