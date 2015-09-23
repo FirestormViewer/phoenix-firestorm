@@ -3,10 +3,10 @@
 	<string name="message_max_lines_count" value="7"/>
 	<string name="subject_font" value="SANSSERIF_BIG"/>
 	<string name="date_font" value="SANSSERIF"/>
-	<panel label="header" name="header">
+	<panel label="ヘッダー" name="header">
 		<text name="title" value="送信者の名前 / グループ名"/>
 	</panel>
-	<text_editor name="message" value="message"/>
+	<text_editor name="message" value="メッセージ"/>
 	<text name="attachment" value="添付アイテム"/>
 	<button label="OK" name="btn_ok"/>
 </panel>
