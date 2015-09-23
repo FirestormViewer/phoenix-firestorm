@@ -114,6 +114,7 @@ public:
 		Optional<S32>	search_column,
 						sort_column;
 		Optional<bool>	sort_ascending;
+		Optional<bool>	persist_sort_order; 	// <FS:Ansariel> Persists sort order of scroll lists
 
 		// colors
 		Optional<LLUIColor>	fg_unselected_color,
@@ -454,6 +455,9 @@ private:
 	BOOL			setSort(S32 column, BOOL ascending);
 	S32				getLinesPerPage();
 
+	// <FS:Ansariel> Persists sort order of scroll lists
+	void			loadPersistedSortOrder();
+
 	static void		showProfile(std::string id, bool is_group);
 	static void		sendIM(std::string id);
 	static void		addFriend(std::string id);
@@ -530,6 +534,12 @@ private:
 
 	// <FS:Ansariel> Get list of the column init params so we can re-add them
 	std::vector<LLScrollListColumn::Params> mColumnInitParams;
+	
+	// <FS:Ansariel> Persists sort order of scroll lists
+	bool			mPersistSortOrder;
+	bool			mPersistedSortOrderLoaded;
+	std::string		mPersistedSortOrderControl;
+	// </FS:Ansariel>
 
 	mutable bool	mSorted;
 	

@@ -132,6 +132,7 @@ LLScrollListCtrl::Params::Params()
 	search_column("search_column", 0),
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
+	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
 	commit_on_keyboard_movement("commit_on_keyboard_movement", true),
 	heading_height("heading_height"),
@@ -205,7 +206,10 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	//mContextMenuType(MENU_NONE)
 	mContextMenuType(MENU_NONE),
 	mFilterColumn(-1),
-	mIsFiltered(false)
+	mIsFiltered(false),
+	mPersistSortOrder(p.persist_sort_order),
+	mPersistedSortOrderLoaded(false),
+	mPersistedSortOrderControl("")
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -347,6 +351,25 @@ bool LLScrollListCtrl::preProcessChildNode(LLXMLNodePtr child)
 
 LLScrollListCtrl::~LLScrollListCtrl()
 {
+	// <FS:Ansariel> Persists sort order of scroll lists
+	if (mPersistSortOrder && !mPersistedSortOrderControl.empty())
+	{
+		LLSD sort_order;
+		for (std::vector<sort_column_t>::iterator it = mSortColumns.begin(); it != mSortColumns.end(); ++it)
+		{
+			sort_column_t& col = *it;
+			S32 sort_val = col.first + 1;
+			if (!col.second)
+			{
+				sort_val *= -1;
+			}
+			sort_order.append(LLSD(sort_val));
+		}
+		LLControlVariable* sort_order_setting = LLUI::sSettingGroups["config"]->declareLLSD(mPersistedSortOrderControl, LLSD(), "Column sort order for control " + mPersistedSortOrderControl);
+		sort_order_setting->setValue(sort_order);
+	}
+	// </FS:Ansariel>
+
 	delete mSortCallback;
 
 	std::for_each(mItemList.begin(), mItemList.end(), DeletePointer());
@@ -1673,6 +1696,17 @@ void LLScrollListCtrl::drawItems()
 void LLScrollListCtrl::draw()
 {
 	LLLocalClipRect clip(getLocalRect());
+
+	// <FS:Ansariel> Persists sort order of scroll lists
+	// This is ugly to do it in draw(), but we don't have the parent
+	// floater in the ctor or postBuild yet (we need it to have a unique
+	// control setting name)
+	if (mPersistSortOrder && !mPersistedSortOrderLoaded)
+	{
+		loadPersistedSortOrder();
+		mPersistedSortOrderLoaded = true;
+	}
+	// </FS:Ansariel>
 
 	// if user specifies sort, make sure it is maintained
 	updateSort();
@@ -3362,3 +3396,28 @@ bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
 	return false;
 }
 // </FS:Ansariel> Fix for FS-specific people list (radar)
+
+// <FS:Ansariel> Persists sort order of scroll lists
+void LLScrollListCtrl::loadPersistedSortOrder()
+{
+	LLFloater* root_floater = getParentByType<LLFloater>();
+	if (root_floater)
+	{
+		mPersistedSortOrderControl = root_floater->getName() + "_" + getName() + "_sortorder";
+		if (LLUI::sSettingGroups["config"]->controlExists(mPersistedSortOrderControl))
+		{
+			clearSortOrder();
+
+			LLSD sort_order = LLUI::sSettingGroups["config"]->getLLSD(mPersistedSortOrderControl);
+			for (LLSD::array_iterator it = sort_order.beginArray(); it != sort_order.endArray(); ++it)
+			{
+				S32 sort_val = (*it).asInteger();
+				BOOL ascending = sort_val > 0;
+				sort_val = llabs(sort_val) - 1;
+
+				setSort(sort_val, ascending);
+			}
+		}
+	}
+}
+// </FS:Ansariel>
