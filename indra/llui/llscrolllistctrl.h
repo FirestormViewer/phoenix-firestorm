@@ -115,6 +115,7 @@ public:
 						sort_column;
 		Optional<bool>	sort_ascending;
 		Optional<bool>	persist_sort_order; 	// <FS:Ansariel> Persists sort order of scroll lists
+		Optional<bool>	primary_sort_only;		// <FS:Ansariel> Option to only sort by one column
 
 		// colors
 		Optional<LLUIColor>	fg_unselected_color,
@@ -540,6 +541,9 @@ private:
 	bool			mPersistedSortOrderLoaded;
 	std::string		mPersistedSortOrderControl;
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Option to only sort by one column
+	bool			mPrimarySortOnly;
 
 	mutable bool	mSorted;
 	

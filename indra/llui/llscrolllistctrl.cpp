@@ -133,6 +133,7 @@ LLScrollListCtrl::Params::Params()
 	sort_column("sort_column", -1),
 	sort_ascending("sort_ascending", true),
 	persist_sort_order("persist_sort_order", false),	// <FS:Ansariel> Persists sort order of scroll lists
+	primary_sort_only("primary_sort_only", false),		// <FS:Ansariel> Option to only sort by one column
 	mouse_wheel_opaque("mouse_wheel_opaque", false),
 	commit_on_keyboard_movement("commit_on_keyboard_movement", true),
 	heading_height("heading_height"),
@@ -209,7 +210,8 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mIsFiltered(false),
 	mPersistSortOrder(p.persist_sort_order),
 	mPersistedSortOrderLoaded(false),
-	mPersistedSortOrderControl("")
+	mPersistedSortOrderControl(""),
+	mPrimarySortOnly(p.primary_sort_only)
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -2649,6 +2651,13 @@ BOOL LLScrollListCtrl::setSort(S32 column_idx, BOOL ascending)
 	sort_column_t new_sort_column(column_idx, ascending);
 	
 	setNeedsSort();
+
+	// <FS:Ansariel> Option to only sort by one column
+	if (mPrimarySortOnly)
+	{
+		clearSortOrder();
+	}
+	// </FS:Ansariel>
 
 	if (mSortColumns.empty())
 	{
