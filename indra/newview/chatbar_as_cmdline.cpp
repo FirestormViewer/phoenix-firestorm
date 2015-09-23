@@ -297,34 +297,40 @@ public:
 					break;
 					
 				case ZTS_DROP:
-					mCountdown --;
-					
-					std::stack<LLViewerInventoryItem*> itemstack;
-					std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
-					for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
 					{
-						LLViewerInventoryItem* item = *it;
-						itemstack.push(item);
-					}
+						mCountdown --;
 
-					if (itemstack.size() >= mPackSize || mCountdown == 0)
-					{
-						if (itemstack.size() < mPackSize) {
-							reportToNearbyChat("Phase 1 of the packager finished, but some items mave have been missed.");
-						}
-						else
+						std::stack<LLViewerInventoryItem*> itemstack;
+						std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
+						for (std::vector<LLPointer<LLViewerInventoryItem> >::iterator it = inventory.begin(); it != inventory.end(); ++it)
 						{
-							reportToNearbyChat("Phase 1 of the packager finished.");
+							LLViewerInventoryItem* item = *it;
+							itemstack.push(item);
 						}
-						
-						reportToNearbyChat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
-						
-						LLUUID sdest = LLUUID(mPackageDest);
-						new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
-						
-						doZtCleanup();
-						mState = ZTS_DONE;
+
+						if (itemstack.size() >= mPackSize || mCountdown == 0)
+						{
+							if (itemstack.size() < mPackSize) {
+								reportToNearbyChat("Phase 1 of the packager finished, but some items mave have been missed.");
+							}
+							else
+							{
+								reportToNearbyChat("Phase 1 of the packager finished.");
+							}
+
+							reportToNearbyChat("Do not have the destination prim selected while transfer is running to reduce the chances of \"Inventory creation on in-world object failed.\"");
+
+							LLUUID sdest = LLUUID(mPackageDest);
+							new JCZdrop(itemstack, sdest, mFolderName.c_str(), mPackageDest.asString().c_str(), true);
+
+							doZtCleanup();
+							mState = ZTS_DONE;
+						}
 					}
+					break;
+
+				case ZTS_DONE:
+					/* nothing left to do */
 					break;
 			}
 		}
