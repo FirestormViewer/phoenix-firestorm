@@ -360,8 +360,10 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			if (message_name == "init")
 			{
 				// <FS:ND> FS specific CEF settings
+#if defined( LL_WINDOWS ) || defined( LL_LINUX )
 				mLLCEFLib->enableFlash( mFlashEnabled );
 				mLLCEFLib->setFlipY( mFlipY );
+#endif
 				// </FS:ND>
 
 				// event callbacks from LLCefLib
