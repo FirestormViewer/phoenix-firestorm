@@ -3713,6 +3713,61 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played, when the tracker beacon is active. It is more frequent when the avatar is closer to the destination."
+         name="textFSTrackerBeacon">
+            Tracker beacon:
+        </text>
+        <line_editor
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndTrackerBeacon"
+         control_name="UISndTrackerBeacon"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndTrackerBeacon"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndTrackerBeacon"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndTrackerBeacon"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndTrackerBeacon"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndTrackerBeacon"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndTrackerBeacon"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played, when the region restart alert appears."
          name="textFSRestart">
             Region restart:

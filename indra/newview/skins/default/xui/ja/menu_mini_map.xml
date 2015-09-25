@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu  label="ミニマップ" name="Popup">
-	<menu_item_call label="View Profile" name="View Profile" />
+	<menu_item_call label="プロフィールの表示" name="View Profile" />
 	<menu label="プロフィールの表示" name="View Profiles" />
+	<menu_item_call label="連絡先セットに追加" name="Add to Set Multiple" />
 	<menu_item_call label="カメラ" name="Cam" />
 	<menu name="MarkAvatar" label="マークする...">
 		<menu_item_call label="赤" name="MarkRed" />
-		<menu_item_call label="紫" name="MarkPurple" />
 		<menu_item_call label="緑" name="MarkGreen" />
+		<menu_item_call label="青" name="MarkBlue" />
+		<menu_item_call label="紫" name="MarkPurple" />
 		<menu_item_call label="黄" name="MarkYellow" />
 		<menu_item_separator />
-		<menu_item_call label="マーク解除" name="Clear Marks" />
+		<menu_item_call label="マーク解除" name="Clear Mark" />
+		<menu_item_separator/>
+		<menu_item_call label="マークを全て解除" name="Clear Marks" />
+	</menu>
+	
+	<menu name="More Options" label="オプション...">
+		<menu_item_call label="フレンド登録" name="Add Friend" />
+		<menu_item_call label="連絡先セットに追加" name="Add to Set" />
+		<menu_item_call label="フレンドを削除" name="Remove Friend" />
+		<menu_item_call label="IM" name="IM" />
+		<menu_item_call label="コール" name="Call" />
+		<menu_item_call label="世界地図" name="Map" />
+		<menu_item_call label="共有" name="Share" />
+		<menu_item_call label="支払う" name="Pay" />
+		<menu_item_call label="テレポートを送る" name="teleport" />
+		<menu_item_call label="テレポートを要求する" name="request_teleport" />
+		<menu_item_call label="テレポートする" name="teleport_to" />
+		<menu_item_call label="グループに招待" name="GroupInvite" />
+		<menu_item_call label="スクリプト情報取得" name="ScriptInfo" />
+
+		<menu_item_separator />
+
+		<menu_item_check label="ブロック／ブロック解除" name="Block/Unblock" />
+		<menu_item_call label="報告する" name="report" />
+		<menu_item_call label="動けなくする" name="freeze" />
+		<menu_item_call label="区画から追放" name="eject" />
+		<menu_item_call label="地域から追放" name="kick" />
+		<menu_item_call label="ホームへ強制送還" name="teleport_home" />
+		<menu_item_call label="地域への立入禁止" name="estate_ban" />
+		<menu_item_call label="非表示にする" name="derender" />
+		<menu_item_call label="非表示リストに追加" name="derender_permanent" />
 	</menu>
 	<menu_item_separator name="Profile Separator" />
 	<menu_item_call label="追跡する" name="Start Tracking" />

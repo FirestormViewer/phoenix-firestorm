@@ -12,13 +12,17 @@
     <layout_stack name="wl_options_stack" orientation="vertical">
 
 		<layout_panel name="wl_options_panel">
+		<text name="HoverHeightLabel" tool_tip="アバターの地面やオブジェクトに対する高さを調整します。">
+			ホバリングの高さ
+		</text>
+		<slider name="HoverHeightSlider" />
 			<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
 			<text name="Maximum bandwidth" tool_tip="あなたのネットワーク帯域幅をKbps（１秒あたり１キロビット）単位で設定します。">
 				最大帯域幅:
 			</text>
 			<slider name="max_bandwidth" />
 			<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-			<check_box name="UseRegionWindlight" />
+			<check_box label="地域の設定を使用" name="UseRegionWindlight" />
 			<text name="WL Sky" tool_tip="WindLightの空の事前設定です。">
 				WLの空:
 			</text>

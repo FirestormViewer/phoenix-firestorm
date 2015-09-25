@@ -2187,6 +2187,8 @@ void FSFloaterIM::onAddButtonClicked()
 	{
 		root_floater->addDependentFloater(picker);
 	}
+
+	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, picker);
 }
 
 bool FSFloaterIM::canAddSelectedToChat(const uuid_vec_t& uuids)

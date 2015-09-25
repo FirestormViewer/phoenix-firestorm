@@ -173,6 +173,8 @@
 						 draw_stripes="true"
 						 multi_select="true"
 						 content_type="Agents"
+						 persist_sort_order="true"
+						 primary_sort_only="true"
 						 width="321">
 							<radar_list.columns
 							 label="Name"
