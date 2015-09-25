@@ -37,4 +37,9 @@ elseif (DARWIN)
        )
 
 elseif (LINUX)
+    set(CEF_PLUGIN_LIBRARIES
+        cef
+        cef_dll_wrapper.a
+        llceflib
+    )
 endif (WINDOWS)
