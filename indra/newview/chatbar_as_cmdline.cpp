@@ -543,7 +543,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
 	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
 	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
-	//<FS:HG> FI;RE-6340, FIRE-6567 - Setting Bandwidth issues
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 	
 	if (sFSCmdLine)
