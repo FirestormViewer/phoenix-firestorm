@@ -178,9 +178,10 @@ void doZdCleanup()
 enum EZtakeState
 {
 	ZTS_COUNTDOWN = 0,
-	ZRS_TAKING = 1,
-	ZTS_DROP = 2,
-	ZTS_DONE = 3
+	ZTS_SELECTION = 1,
+	ZTS_TAKE = 2,
+	ZTS_DROP = 3,
+	ZTS_DONE = 4
 };
 
 void doZtCleanup();
@@ -189,7 +190,7 @@ class JCZtake : public LLEventTimer
 public:
 	BOOL mRunning;
 
-	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY) :
+	JCZtake(const LLUUID& target, bool package = false, LLUUID destination = LLUUID::null, std::string dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
 		LLEventTimer(0.66f),
 		mTarget(target),
 		mRunning(FALSE),
@@ -197,10 +198,20 @@ public:
 		mPackage(package),
 		mPackageDest(destination),
 		mDest(dest),
-		mPackSize(0),
-		mState(ZTS_COUNTDOWN)
+		mToTake(to_take),
+		mPackSize(0)
 	{
+		if (use_selection)
+		{
+			mState = ZTS_COUNTDOWN;
+		}
+		else
+		{
+			mState = ZTS_TAKE;
+		}
+		
 		mFolderName = dtarget;
+		
 		if (mPackage)
 		{
 			reportToNearbyChat("Packager started. Phase 1 (taking in-world objects into inventory) starting in: ");
@@ -225,10 +236,10 @@ public:
 			switch (mState) {
 				case ZTS_COUNTDOWN:
 					reportToNearbyChat(llformat("%i...", mCountdown--));
-					if (mCountdown == 0) mState = ZRS_TAKING;
+					if (mCountdown == 0) mState = ZTS_SELECTION;
 					break;
 					
-				case ZRS_TAKING:
+				case ZTS_SELECTION:
 					for (LLObjectSelection::root_iterator itr = LLSelectMgr::getInstance()->getSelection()->root_begin();
 						itr != LLSelectMgr::getInstance()->getSelection()->root_end(); ++itr)
 					{
@@ -241,7 +252,10 @@ public:
 							mToTake.push_back(localid);
 						}
 					}
+					if (mToTake.size() > 0) mState = ZTS_TAKE;
+					break;
 					
+				case ZTS_TAKE:
 					if (mToTake.size() > 0)
 					{
 						std::vector<LLPointer<LLViewerInventoryItem> > inventory = findInventoryInFolder(mFolderName);
@@ -272,9 +286,18 @@ public:
 							{
 								if (mPackage)
 								{
-									mPeriod = 1.0f;
-									mCountdown = 45; //reused for a basic timeout
-									mState = ZTS_DROP;
+									if (mPackageDest != LLUUID::null)
+									{
+										mPeriod = 1.0f;
+										mCountdown = 45; //reused for a basic timeout
+										mState = ZTS_DROP;
+									}
+									else
+									{
+										reportToNearbyChat("Ktake has taken all selected objects.");
+										doZtCleanup();
+										mState = ZTS_DONE;
+									}
 								}
 								else
 								{
@@ -292,6 +315,17 @@ public:
 									reportToNearbyChat(llformat("Ztake: %i objects left to take.", mToTake.size()));
 								}
 							}
+						}
+					}
+					else
+					{
+						if (mPackage)
+						{
+							reportToNearbyChat(llformat("Packager: no objects to take."));
+						}
+						else
+						{
+							reportToNearbyChat(llformat("Ztake: no objects to take."));
 						}
 					}
 					break;
@@ -509,7 +543,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings, "FSCmdLineMusic");
 	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings, "FSCmdLineCopyCam");
 	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings, "FSCmdLineRollDice");
-	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	//<FS:HG> FI;RE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings, "FSCmdLineBandWidth");
 	
 	if (sFSCmdLine)
@@ -1114,7 +1148,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			else if (command == "lpackage")
+			else if (command == "lpackage" || command == "cpackage")
 			{
 				std::string destination;
 				if (i >> destination)
@@ -1143,7 +1177,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 							if (folder.notNull())
 							{
 								reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-								ztake = new JCZtake(folder, true, LLUUID(destination), folder_name);
+								ztake = new JCZtake(folder, true, LLUUID(destination), folder_name, (command == "cpackage") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY);
 							}
 							else
 							{
@@ -1163,7 +1197,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
-			else if (command == "cpackage")
+			else if (command == "kpackage")
 			{
 				std::string destination;
 				if (i >> destination)
@@ -1180,35 +1214,132 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 					else
 					{
 						std::string folder_name;
-						std::string tmp;
-						while (i >> tmp)
+						if (i >> folder_name)
 						{
-							folder_name = folder_name + tmp + " ";
-						}
-						try
-						{
-							folder_name = folder_name.substr(0, folder_name.length() - 1);
-							LLUUID folder = gInventory.findCategoryByName(folder_name);
-							if (folder.notNull())
+							try
 							{
-								reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
-								ztake = new JCZtake(folder, true, LLUUID(destination), folder_name, DRD_ACQUIRE_TO_AGENT_INVENTORY);
+								LLUUID folder = gInventory.findCategoryByName(folder_name);
+								if (folder.notNull())
+								{
+									std::vector<U32> to_take;
+									
+									std::string take;
+									while (i >> take)
+									{
+										
+										if (!LLUUID::validate(take))
+										{
+											reportToNearbyChat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+											return false;
+										}
+										else
+										{
+											LLViewerObject* objectp = gObjectList.findObject(LLUUID(take));
+											if(!objectp)
+											{
+												reportToNearbyChat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+												return false;
+											}
+											else
+											{
+												U32 localid = objectp->getLocalID();
+												if (std::find(to_take.begin(), to_take.end(), localid) == to_take.end())
+												{
+													to_take.push_back(localid);
+												}
+											}
+										}
+									}
+									
+									if (to_take.empty())
+									{
+										reportToNearbyChat("No objects to take.");
+									}
+									else
+									{
+										reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+										ztake = new JCZtake(folder, true, LLUUID(destination), folder_name, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, to_take);
+									}
+								}
+								else
+								{
+									reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+									reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
+								}
 							}
-							else
+							catch (std::out_of_range)
 							{
-								reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
-								reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
+								reportToNearbyChat("Please specify a destination folder in your inventory.");
 							}
-						}
-						catch (std::out_of_range)
-						{
-							reportToNearbyChat("Please specify a destination folder in your inventory.");
 						}
 					}
 				}
 				else
 				{
 					reportToNearbyChat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
+				}
+				return false;
+			}
+			else if (command == "ktake" || command == "kcopy")
+			{
+				std::string folder_name;
+				if (i >> folder_name)
+				{
+					try
+					{
+						LLUUID folder = gInventory.findCategoryByName(folder_name);
+						if (folder.notNull())
+						{
+							std::vector<U32> to_take;
+							
+							std::string take;
+							while (i >> take)
+							{
+								
+								if (!LLUUID::validate(take))
+								{
+									reportToNearbyChat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+									return false;
+								}
+								else
+								{
+									LLViewerObject* objectp = gObjectList.findObject(LLUUID(take));
+									if(!objectp)
+									{
+										reportToNearbyChat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+										return false;
+									}
+									else
+									{
+										U32 localid = objectp->getLocalID();
+										if (std::find(to_take.begin(), to_take.end(), localid) == to_take.end())
+										{
+											to_take.push_back(localid);
+										}
+									}
+								}
+							}
+							
+							if (to_take.empty())
+							{
+								reportToNearbyChat("No objects to take.");
+							}
+							else
+							{
+								reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
+								ztake = new JCZtake(folder, true, LLUUID::null, folder_name, (command == "kcopy") ? DRD_ACQUIRE_TO_AGENT_INVENTORY : DRD_TAKE_INTO_AGENT_INVENTORY, false, to_take);
+							}
+						}
+						else
+						{
+							reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+							reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
+						}
+					}
+					catch (std::out_of_range)
+					{
+						reportToNearbyChat("Please specify a destination folder in your inventory.");
+					}
 				}
 				return false;
 			}
