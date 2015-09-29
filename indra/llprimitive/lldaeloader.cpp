@@ -2339,7 +2339,7 @@ bool LLDAELoader::addVolumeFacesFromDomMesh(LLModel* pModel,domMesh* mesh)
 	// Use the normals of each vertex' connected faces and sum them up.
 	// This is maybe not as good as LLModel::generateNormals, but generateNormals will optimize and change
 	// the model, which can be okay if the user triggers it knowingly.
-	LLVolume::face_list_t vol_faces = pModel->getVolumeFaces();
+	LLVolume::face_list_t& vol_faces = pModel->getVolumeFaces();
 	for(LLVolume::face_list_t::iterator itr = vol_faces.begin(); itr != vol_faces.end(); ++itr )
 	{
 		LLVolumeFace &face = *itr;
