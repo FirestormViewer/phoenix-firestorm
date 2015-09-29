@@ -61,6 +61,7 @@
 				<combo_box.item label="Nazwa konta" name="User_Name"/>
 			</combo_box>
 			<check_box label="Nie pokazuj celu mojego własnego spojrzenia" name="LookAtHideOwn" tool_tip="Nie pokazuj mi mojego własnego celowniczka"/>
+			<check_box label="Renderuj linie do celów spojrzeń" name="ExodusLookAtLines" tool_tip="Renderuj linie od awatarów do celowniczków ich celów spojrzeń" />
 			<text name="mylookat">
 				Moje cele spojrzeń:
 			</text>

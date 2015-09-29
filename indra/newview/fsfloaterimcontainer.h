@@ -30,13 +30,7 @@
 #ifndef FS_FLOATERIMCONTAINER_H
 #define FS_FLOATERIMCONTAINER_H
 
-#include <map>
-#include <vector>
-
-#include "llfloater.h"
 #include "llmultifloater.h"
-#include "llavatarpropertiesprocessor.h"
-#include "llgroupmgr.h"
 #include "llimview.h"
 
 class LLTabContainer;
@@ -49,6 +43,7 @@ public:
 	
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onClose(bool app_quitting);
 	void onCloseFloater(LLUUID& id);
 	/*virtual*/ void draw();
 	
@@ -63,7 +58,6 @@ public:
 	static FSFloaterIMContainer* findInstance();
 	static FSFloaterIMContainer* getInstance();
 
-	virtual void setMinimized(BOOL b);
 	virtual void setVisible(BOOL b);
 	
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
@@ -97,7 +91,7 @@ private:
 	eVoiceState	mCurrentVoiceState;
 	bool		mForceVoiceStateUpdate;
 
-	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
+	typedef std::map<LLUUID, LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
 	boost::signals2::connection mNewMessageConnection;
 

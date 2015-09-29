@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Otoczenie" name="panel_env_info"> 
+<panel label="Otoczenie" name="panel_env_info">
  <text name="water_settings_title">
   Wybierz ustawienia wody i nieba/dnia jakie mają widzieć goście w Twoim regionie. Więcej
  </text>
@@ -19,7 +19,7 @@
    </text>
    <radio_group name="sky_dayc_settings_radio_group">
     <radio_item label="Stałe niebo" name="my_sky_settings"/>
-    <radio_item label="Cykl dnia" name="my_dayc_settings"/>  	
+    <radio_item label="Cykl dnia" name="my_dayc_settings"/>
    </radio_group>
    <combo_box name="sky_settings_preset_combo">
     <combo_box.item label="-Wybierz ustawienie-" name="item0"/>

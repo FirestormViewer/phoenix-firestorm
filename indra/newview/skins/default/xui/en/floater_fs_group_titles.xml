@@ -19,7 +19,6 @@
 	 name="title_list"
 	 follows="all"
 	 draw_heading="true"
-	 can_resize="true"
 	 layout="topleft"
 	 width="240"
 	 left="5"

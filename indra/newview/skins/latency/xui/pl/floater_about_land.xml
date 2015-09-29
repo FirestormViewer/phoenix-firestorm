@@ -78,7 +78,7 @@
 				Grupa:
 			</text>
 			<text name="GroupText">
-				Ładowanie...  
+				Ładowanie...
 			</text>
 			<button label="Ustaw" name="Set..."/>
 			<check_box label="Udostępnij przypisywanie na Grupę" name="check deed" tool_tip="Oficer Grupy ma prawo przepisać prawo własności działki na Grupę. Działka wspierana jest przez przydziały pochodzące od członków Grupy."/>
@@ -135,7 +135,7 @@
 				Działka zakupiona w tym Regionie może być łączona/dzielona.
 			</panel.string>
 			<panel.string name="can_not_change">
-				Działka zakupiona w tym Regionie nie może być 
+				Działka zakupiona w tym Regionie nie może być
 łączona/dzielona.
 			</panel.string>
 			<text name="estate_section_lbl">
@@ -275,7 +275,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label">
 				Udostępnij innym Rezydentom:
 			</text>
-			<check_box name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
+			<check_box name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/>
 			<check_box name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej działce. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją działką."/>
 			<text name="edit_terrain_label">
 				Mod. ziemi
@@ -372,7 +372,7 @@ teksturę:
 			<spinner name="media_size_height" tool_tip="Rozmiar dla ładowania mediów internetowych. Zostaw 0 dla ustawień domyślnych."/>
 			<text name="pixels">
 				pikseli
-			</text>	
+			</text>
 			<text name="Options:">
 				Opcje:
 			</text>

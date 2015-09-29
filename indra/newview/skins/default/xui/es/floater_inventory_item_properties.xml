@@ -15,15 +15,15 @@
 	<text name="LabelAcquiredDate">May Mié 24 12:50:46 2006</text>
 	<text name="OwnerLabel">Tú:</text>
 	<check_box label="Editar" name="CheckOwnerModify"/>
-	<check_box label="Copiarlo" left_delta="88" name="CheckOwnerCopy"/>
+	<check_box label="Copiarlo" name="CheckOwnerCopy"/>
 	<check_box label="Revender" name="CheckOwnerTransfer"/>
 	<text name="AnyoneLabel">Cualquiera:</text>
 	<check_box label="Copiar" name="CheckEveryoneCopy"/>
 	<text name="GroupLabel">Grupo:</text>
 	<check_box label="Compartir" name="CheckShareWithGroup"/>
-	<text name="NextOwnerLabel" width="230">Próximo propietario:</text>
+	<text name="NextOwnerLabel" width="130">Próximo propietario:</text>
 	<check_box label="Editar" name="CheckNextOwnerModify"/>
-	<check_box label="Copiarlo" left_delta="88" name="CheckNextOwnerCopy"/>
+	<check_box label="Copiarlo" name="CheckNextOwnerCopy"/>
 	<check_box label="Revender" name="CheckNextOwnerTransfer"/>
 	<check_box label="En venta" name="CheckPurchase"/>
 	<combo_box name="ComboBoxSaleType">

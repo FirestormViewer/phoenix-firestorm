@@ -374,18 +374,30 @@
              name="User_Name"
              value="4" />
         </combo_box>
-		<check_box
-		enabled_control="DebugLookAt"
-		control_name="DebugLookAtHideOwn"
-		height="16"
-		initial_value="true"
-		label="Don't show me my own lookat target"
-		layout="topleft"
-		left="30"
-		name="LookAtHideOwn"
-		tool_tip="Don't show me my own camera crosshairs"
-		top_pad="4"
-		width="350" />
+        <check_box
+         enabled_control="DebugLookAt"
+         control_name="DebugLookAtHideOwn"
+         height="16"
+         initial_value="true"
+         label="Don't show me my own lookat target"
+         layout="topleft"
+         left="30"
+         name="LookAtHideOwn"
+         tool_tip="Don't show me my own camera crosshairs"
+         top_pad="4"
+         width="350" />
+        <check_box
+         enabled_control="DebugLookAt"
+         control_name="ExodusLookAtLines"
+         height="16"
+         initial_value="true"
+         label="Render lines to lookat target"
+         layout="topleft"
+         left="30"
+         name="ExodusLookAtLines"
+         tool_tip="Render a line from the avatar to their lookat target crosshair"
+         top_pad="4"
+         width="350" />
 
     <text
       type="string"

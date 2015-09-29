@@ -434,7 +434,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ReturnAllTopObjects">
-		全てのリストされたオブジェクトを所有者に本当に返却しますか？
+		全てのリストされたオブジェクトを所有者に本当に返却しますか？　この地域にあるスクリプトの入ったオブジェクトは全て返却されます！
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="DisableAllTopObjects">
@@ -2373,11 +2373,17 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 		[QUESTION]
 		<usetemplate ignoretext="アイテムを削除する前の確認" name="okcancelignore" notext="取り消し" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmUnlink">
+		選択したオブジェクトのリンクを本当に解除しますか？
+		<usetemplate ignoretext="リンクセットを解除する時には確認" name="okcancelignore" notext="取り消し" yestext="リンク解除"/>
+	</notification>
+	<!--
 	<notification name="HelpReportAbuseEmailLL">
 		このツールを利用して [http://secondlife.com/corporate/tos.php 利用規約] や [http://jp.secondlife.com/corporate/cs.php コミュニティスタンダード] の違反を報告してください。
 
 報告された嫌がらせはすべて調査・解決されます。
 	</notification>
+	-->
 	<notification name="HelpReportAbuseSelectCategory">
 		嫌がらせ報告のカテゴリを選択してください。
 カテゴリを選択することにより、嫌がらせ報告の処理や保管に大変役立ちます。
@@ -3481,8 +3487,7 @@ M キーを押して変更します。
 	</notification>
 	<notification name="MeshUploadError">
 		[LABEL] をアップロードできませんでした：[MESSAGE] [IDENTIFIER] 
-
-詳細についてはログをご覧ください。
+[DETAILS] 詳細については Firestorm.log をご確認ください。
 	</notification>
 	<notification name="MeshUploadPermError">
 		メッシュのアップロード許可をリクエスト中にエラーが発生しました。
@@ -4537,6 +4542,18 @@ M キーを押して変更します。
 到着した地域はこれまでいた場所とは異なるサーバのバージョンで稼働しています。
 現在のSIM: [NEWVERSION]
 前にいたSIM: [OLDVERSION]
+	</notification>
+	
+	<notification name="CannotSaveSnapshot">
+		スナップショットを保存できませんでした。
+	</notification>
+	
+	<notification name="NoHavok">
+	[FEATURE] のようないくつかの機能は、OpenSIM用の [APP_NAME] では対応しておりません。 [FEATURE] をご利用になりたい場合は、次の場所からセカンドライフ用の [APP_NAME] をダウンロードして下さい。
+[DOWNLOAD_URL]
+		<form name="form">
+			<ignore name="ignore" text="Havok 非対応の警告"/>
+		</form>
 	</notification>
 	
 	<notification name="AddNewContactSet">

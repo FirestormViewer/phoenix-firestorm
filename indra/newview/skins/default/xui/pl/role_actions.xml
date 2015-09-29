@@ -72,7 +72,7 @@
 		<action description="Moderator czatu grupowego" longdescription="Osoby w Funkcji z tym Przywilejem mogą kontrolować dostęp do czatu i głosowych rozmów grupowych." name="moderate group chat"/>
 	</action_set>
 	<action_set description="Przywileje umożliwiające modyfikowanie Przygód należących do tej grupy." name="experience_tools_experience">
-		<action description="Experience Admin" longdescription="Osoby w Funkcji z tym Przywilejem mogą modyfikować meta-dane Przygód." name="experience admin" />
-		<action description="Experience Contributor" longdescription="Osoby w Funkcji z tym Przywilejem mogą dodawać skrypty Przygód." name="experience contributor" />
+		<action description="Administrator Przygód" longdescription="Osoby w Funkcji z tym Przywilejem mogą modyfikować meta-dane Przygód." name="experience admin" />
+		<action description="Pomocnik Przygód" longdescription="Osoby w Funkcji z tym Przywilejem mogą dodawać skrypty Przygód." name="experience contributor" />
 	</action_set>
 </role_actions>

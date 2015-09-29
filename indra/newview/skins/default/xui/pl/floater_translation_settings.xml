@@ -6,7 +6,7 @@
  <string name="google_api_key_verified">Klucz Google API zweryfikowany.</string>
  <check_box label="Włącz maszynowe tłumaczenie czatu" name="translate_chat_checkbox" />
  <text name="translate_language_label">
-  Tłumacz czat na: 
+  Tłumacz czat na:
  </text>
  <combo_box name="translate_language_combo">
   <combo_box.item label="Język systemu" name="System Default Language" />
@@ -31,12 +31,12 @@
   Usługa tłumacząca:
  </text>
  <line_editor default_text="Wpisz Bing AppID i kliknij na &quot;Weryfikuj&quot;" name="bing_api_key" />
- <button label="Weryfikuj" name="verify_bing_api_key_btn" />	
+ <button label="Weryfikuj" name="verify_bing_api_key_btn" />
  <line_editor default_text="Wpisz klucz Google API i kliknij na &quot;Weryfikuj&quot;" name="google_api_key" />
- <button label="Weryfikuj" name="verify_google_api_key_btn" />	
+ <button label="Weryfikuj" name="verify_google_api_key_btn" />
  <text name="google_links_text">
   [http://code.google.com/apis/language/translate/v2/pricing.html Koszty] | [https://code.google.com/apis/console Statystyki]
  </text>
  <button label="Gotowe" name="ok_btn" />
- <button label="Anuluj" name="cancel_btn" />	
+ <button label="Anuluj" name="cancel_btn" />
 </floater>

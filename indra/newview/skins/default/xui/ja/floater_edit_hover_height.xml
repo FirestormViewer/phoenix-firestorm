@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="HoverHeight" title="ホバー高さの設定">
+<floater name="HoverHeight" title="ホバリングの高さ調整">
 	<slider label="高さ" name="HoverHeightSlider"/>
 </floater>

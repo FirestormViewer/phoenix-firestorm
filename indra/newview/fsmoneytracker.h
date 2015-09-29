@@ -45,7 +45,8 @@ public:
 
 private:
 	void clear();
-	std::string getTime();
+	std::string getTime(time_t utc_time);
+	std::string getDate(time_t utc_time);
 	LLNameListCtrl* mTransactionHistory;
 };
 

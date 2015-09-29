@@ -66,6 +66,7 @@
 				<combo_box.item label="Benutzername" name="User_Name"/>
 			</combo_box>
 			<check_box label="Eigenen Kamerafokus nicht anzeigen" name="LookAtHideOwn" tool_tip="Fadenkreuz für den eigenen Kamerafokus nicht anzeigen."/>
+			<check_box label="Linien zum Kamerafokus anzeigen" name="ExodusLookAtLines" tool_tip="Zeichnet eine Linie vom Avatar zum Fadenkreuz seines Kamerafokus."/>
 
 			<text name="mylookat">
 				Eigener Kamerafokus:

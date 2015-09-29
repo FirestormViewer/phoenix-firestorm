@@ -63,6 +63,8 @@ void FSMoneyTracker::onClose(bool app_quitting)
 
 void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming)
 {
+	time_t utc_time = time_corrected();
+
 	S32 scroll_pos = mTransactionHistory->getScrollPos();
 	bool at_end = mTransactionHistory->getScrollbar()->isAtEnd();
 
@@ -70,11 +72,12 @@ void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount
 	item_params.value = other_id;
 	item_params.name = LLTrans::getString("AvatarNameWaiting");
 	item_params.target = is_group ? LLNameListCtrl::GROUP : LLNameListCtrl::INDIVIDUAL;
-	item_params.columns.add().column("time").value(getTime());
+	item_params.columns.add().column("time").value(getTime(utc_time));
 	item_params.columns.add().column("name");
 	item_params.columns.add().column("amount")
 		.value((incoming ? amount : -amount))
 		.color(LLUIColorTable::instance().getColor((incoming ? "MoneyTrackerIncrease" : "MoneyTrackerDecrease")));
+	item_params.columns.add().column("time_sort_column").value(getDate(utc_time));
 
 	mTransactionHistory->addNameItemRow(item_params);
 
@@ -84,9 +87,8 @@ void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount
 	}
 }
 
-std::string FSMoneyTracker::getTime()
+std::string FSMoneyTracker::getTime(time_t utc_time)
 {
-	time_t utc_time = time_corrected();
 	std::string timeStr = "[" + LLTrans::getString("TimeHour") + "]:[" + LLTrans::getString("TimeMin") + "]:[" + LLTrans::getString("TimeSec") + "]";
 	
 	LLSD substitution;
@@ -94,6 +96,12 @@ std::string FSMoneyTracker::getTime()
 	LLStringUtil::format(timeStr, substitution);
 	
 	return timeStr;
+}
+
+std::string FSMoneyTracker::getDate(time_t utc_time)
+{
+	LLDate curdate = LLDate(utc_time);
+	return curdate.asString();
 }
 
 void FSMoneyTracker::clear()
