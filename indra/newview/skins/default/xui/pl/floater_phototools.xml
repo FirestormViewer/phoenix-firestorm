@@ -64,7 +64,7 @@
 					<combo_box.item label="Wszystko" name="4"/>
 				</combo_box>
 			</panel>
-			<panel name="P_R_Res">		
+			<panel name="P_R_Res">
 				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Zaawansowane oświetlenie' w karcie 'Światła'.">
 					Rozdzielczość
 				</text>
@@ -487,7 +487,7 @@
 							</text>
 							<button name="Reset_Mouse_Sens" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 							<check_box label="Pokaż awatara w trybie pierwszoosobowym" tool_tip="Pokazuj awatara i dodatki poniżej szyi podczas przebywania w widoku pierwszoosobowym. Domyślnie ta opcja jest wyłączona." name="first_person_avatar_visible"/>
-							<check_box label="Wygładź ruchy myszy w trybie pierwszoos." tool_tip="Wygładzaj ruchy myszy w trybie pierwszoosobowym." name="MouseSmooth"/>	
+							<check_box label="Wygładź ruchy myszy w trybie pierwszoos." tool_tip="Wygładzaj ruchy myszy w trybie pierwszoosobowym." name="MouseSmooth"/>
 						</panel>
 					</panel>
 					<panel name="P_Misc" label="Inne ustawienia">

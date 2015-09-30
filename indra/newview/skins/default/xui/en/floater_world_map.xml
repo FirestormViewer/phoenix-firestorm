@@ -263,7 +263,7 @@
         Land Sale
     </text>
     <icon
-     color="SL-MidBlue"
+     color="PropertyColorAuction"
      follows="top|right"
      height="16"
      image_name="legend.tga"

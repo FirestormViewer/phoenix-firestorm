@@ -2043,7 +2043,10 @@ void LLViewerObjectList::generatePickList(LLCamera &camera)
 			{
 				LLVOAvatar::attachment_map_t::iterator curiter = iter++;
 				LLViewerJointAttachment* attachment = curiter->second;
-				if (attachment->getIsHUDAttachment())
+				// <FS:Ansariel> Possible crash fix
+				//if (attachment->getIsHUDAttachment())
+				if (attachment && attachment->getIsHUDAttachment())
+				// </FS:Ansariel>
 				{
 					for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
 						 attachment_iter != attachment->mAttachedObjects.end();

@@ -146,7 +146,7 @@
     {
         if (lock)
         {
-            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.045);
+            llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
             llSetVehicleType(VEHICLE_TYPE_SLED);
             llSetVehicleFloatParam(VEHICLE_LINEAR_FRICTION_TIMESCALE, 0.05);
             llSetVehicleFloatParam(VEHICLE_ANGULAR_FRICTION_TIMESCALE, 0.05);

@@ -1341,9 +1341,12 @@ void FSPanelLogin::gridListChanged(bool success)
 void FSPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_value)
 {
 	// <FS:AO> make sure toolbar settings are reset on mode change
-	LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
-	gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
-	
+	if (gSavedSettings.getBOOL("FSToolbarsResetOnModeChange"))
+	{
+		LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
+		gSavedSettings.setBOOL("ResetToolbarSettings", TRUE);
+	}
+
 	if (original_value.asString() != new_value.asString())
 	{
 		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&FSPanelLogin::onModeChangeConfirm, this, original_value, new_value, _1, _2));

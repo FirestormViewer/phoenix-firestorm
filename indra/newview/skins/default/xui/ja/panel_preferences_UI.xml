@@ -249,7 +249,7 @@
         </text>
         <spinner name="FSFolderViewItemHeight" />
         <text name="Label_FolderItemViewHeight_Scale">
-          pixels (requires restart)
+          ピクセル（再起動が必要）
 20が２／３系のデフォルト、18が１系のデフォルトです。
         </text>
 

@@ -69,7 +69,7 @@
 			</text>
 			<text name="tab_direction_label">
 				Orientacja kart czatu:
-			</text>	
+			</text>
 			<radio_group name="chat_tab_direction" tool_tip="Zmień kierunek układania się kart pomiędzy poziomym, a pionowym w czatach/IM, gdy włączony jest tryb łączenia rozmów w karty (wymaga restartu).">
 				<radio_item label="Pozioma" name="radio_horizontal"/>
 				<radio_item label="Pionowa" name="radio_vertical"/>
@@ -300,7 +300,7 @@
 			<text name="FSCmdLineTP2_txt">
 				Teleport do awatara (użycie: cmd imię)
 			</text>
-			<line_editor tool_tip="Składnia tej komendy pozwala na imiona podawane w części i nie zwraca uwagi na wielkość liter. Lepsze wyniki będą osiągane z otwartym radarem." name="FSCmdLineTP2" />	
+			<line_editor tool_tip="Składnia tej komendy pozwala na imiona podawane w części i nie zwraca uwagi na wielkość liter. Lepsze wyniki będą osiągane z otwartym radarem." name="FSCmdLineTP2" />
 			<text name="FSCmdLineTeleportHome_txt">
 				Teleport do Miejsca Startu (użycie: cmd)
 			</text>

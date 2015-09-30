@@ -1755,6 +1755,10 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 			{
 				joint = avatar->getJoint("mPelvis");
 			}
+			if (!joint)
+			{
+				LL_DEBUGS("Avatar") << "Failed to find " << skin->mJointNames[j] << LL_ENDL;
+			}
 			if (joint)
 			{
 				mat[j] = skin->mInvBindMatrix[j];

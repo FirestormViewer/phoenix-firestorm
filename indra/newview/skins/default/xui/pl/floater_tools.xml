@@ -281,7 +281,7 @@
 			<button label="w" name="pastesizeclip" tool_tip="Wklej rozmiar ze schowka"/>
 			<text name="label rotation">
 				Obrót (stopnie)
-			</text>	
+			</text>
 			<button label="K" name="copyrot" tool_tip="Kopiuj obrót"/>
 			<button label="W" name="pasterot" tool_tip="Wklej obrót"/>
 			<button label="w" name="pasterotclip" tool_tip="Wklej obrót ze schowka"/>

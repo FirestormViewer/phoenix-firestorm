@@ -8,6 +8,7 @@ include(LLMath)
 include(LLMessage)
 include(LLXML)
 include(LLPhysicsExtensions)
+include(LLCharacter)
 include(ColladaDom)
 
 include_directories(
@@ -18,6 +19,7 @@ include_directories(
     # ${LIBS_PREBUILT_DIR}/include/collada
     # ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${COLLADA_INCLUDE_DIRS}
+    ${LLCHARACTER_INCLUDE_DIRS}
     )
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
@@ -30,11 +32,13 @@ include_directories(SYSTEM
     )
 
 set(llprimitive_SOURCE_FILES
+    lldaeloader.cpp
     llmaterialid.cpp
     llmaterial.cpp
     llmaterialtable.cpp
     llmediaentry.cpp
     llmodel.cpp
+    llmodelloader.cpp
     llprimitive.cpp
     llprimtexturelist.cpp
     lltextureanim.cpp
@@ -46,16 +50,17 @@ set(llprimitive_SOURCE_FILES
 
 set(llprimitive_HEADER_FILES
     CMakeLists.txt
-
+    lldaeloader.h
     legacy_object_types.h
-    lllslconstants.h
     llmaterial.h
     llmaterialid.h
     llmaterialtable.h
     llmediaentry.h
     llmodel.h
+    llmodelloader.h
     llprimitive.h
     llprimtexturelist.h
+    lllslconstants.h
     lltextureanim.h
     lltextureentry.h
     lltreeparams.h
@@ -78,6 +83,7 @@ target_link_libraries(llprimitive
     ${LLMESSAGE_LIBRARIES}
     ${LLXML_LIBRARIES}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
+    ${LLCHARACTER_LIBRARIES}
     )
 
 

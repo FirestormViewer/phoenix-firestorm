@@ -61,6 +61,7 @@
 
 #include "fsavatarsearchmenu.h"
 #include "fsscrolllistctrl.h"
+#include "lltransientfloatermgr.h"
 
 //put it back as a member once the legacy path is out?
 static std::map<LLUUID, LLAvatarName> sAvatarNameMap;
@@ -231,6 +232,8 @@ LLFloaterAvatarPicker::~LLFloaterAvatarPicker()
 	// </FS:Ansariel>
 
 	gFocusMgr.releaseFocusIfNeeded( this );
+
+	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
 }
 
 // <FS:Ansariel> Search by UUID

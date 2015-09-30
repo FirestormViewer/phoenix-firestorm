@@ -13,7 +13,7 @@
 		[COUNT]lat
 	</string>
 	<text name="avatar_name" value="(ładowanie)"/>
-	<icon name="payment_info" tool_tip="Dane płatnicze na koncie"/> 
+	<icon name="payment_info" tool_tip="Dane płatnicze na koncie"/>
 	<icon name="permission_edit_theirs_icon" tool_tip="Możesz edytować obiekty tego Znajomego"/>
 	<button name="permission_edit_mine_btn" tool_tip="Ten Znajomy może edytować, kasować lub wziąć Twoje obiekty"/>
 	<button name="permission_map_btn" tool_tip="Ten Znajomy może zlokalizować Cię na mapie"/>

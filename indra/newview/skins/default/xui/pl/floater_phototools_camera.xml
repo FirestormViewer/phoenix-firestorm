@@ -93,13 +93,13 @@
 					Ustawienia ruchu myszy
 				</text>
 			</panel>
-			<panel name="P_Mouse_Movement_Settings">	 
+			<panel name="P_Mouse_Movement_Settings">
 				<text name="T_Mouse_Sensitivity" tool_tip="Kontrola szybkości reakcji myszki w trybie pierwszoosobowym.">
 					Czułość myszy
 				</text>
 				<button name="Reset_Mouse_Sensitivity" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<check_box label="Pokaż awatara w trybie pierwszoosobowym" tool_tip="Pokazuj awatara i dodatki poniżej szyi podczas przebywania w widoku pierwszoosobowym. Domyślnie ta opcja jest wyłączona." name="first_person_avatar_visible"/>
-				<check_box label="Wygładź ruchy myszy w trybie pierwszoos." tool_tip="Wygładzaj ruchy myszy w trybie pierwszoosobowym." name="MouseSmooth"/>	
+				<check_box label="Wygładź ruchy myszy w trybie pierwszoos." tool_tip="Wygładzaj ruchy myszy w trybie pierwszoosobowym." name="MouseSmooth"/>
 			</panel>
 			<panel name="P_Additional_Camera_Options">
 				<text name="T_Additional_Camera_Options">

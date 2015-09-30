@@ -30,21 +30,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloaterimcontainer.h"
-#include "llfloaterreg.h"
-#include "llimview.h"
-#include "llavatariconctrl.h"
-#include "llgroupiconctrl.h"
-#include "llagent.h"
-#include "lltransientfloatermgr.h"
-#include "fsfloaternearbychat.h"
+
 #include "fsfloatercontacts.h"
-#include "llfloater.h"
-#include "llviewercontrol.h"
 #include "fsfloaterim.h"
-#include "llvoiceclient.h"
-#include "lltoolbarview.h"
+#include "fsfloaternearbychat.h"
+#include "llfloaterreg.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
+#include "lltoolbarview.h"
+#include "llvoiceclient.h"
 
 static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
@@ -169,6 +163,21 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	if (active_floater && !active_floater->hasFocus())
 	{
 		mTabContainer->setFocus(TRUE);
+	}
+}
+
+void FSFloaterIMContainer::onClose(bool app_quitting)
+{
+	if (app_quitting)
+	{
+		for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+		{
+			FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
+			if (floater)
+			{
+				floater->onClose(app_quitting);
+			}
+		}
 	}
 }
 
@@ -325,8 +334,10 @@ void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
 	if (floaterp && current_floater && floaterp != current_floater
 		&& (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || !data.has("from_id") || data["from_id"].asUUID().notNull()))
 	{
-		if(LLMultiFloater::isFloaterFlashing(floaterp))
+		if (LLMultiFloater::isFloaterFlashing(floaterp))
+		{
 			LLMultiFloater::setFloaterFlashing(floaterp, FALSE);
+		}
 		LLMultiFloater::setFloaterFlashing(floaterp, TRUE);
 	}
 }
@@ -339,22 +350,6 @@ FSFloaterIMContainer* FSFloaterIMContainer::findInstance()
 FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
 {
 	return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
-}
-
-void FSFloaterIMContainer::setMinimized(BOOL b)
-{
-	if (isMinimized() == b) return;
-	
-	LLMultiFloater::setMinimized(b);
-	// Hide minimized floater (see EXT-5315)
-	setVisible(!b);
-
-	if (isMinimized()) return;
-
-	if (getActiveFloater())
-	{
-		getActiveFloater()->setVisible(TRUE);
-	}
 }
 
 void FSFloaterIMContainer::setVisible(BOOL b)
