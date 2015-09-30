@@ -19,6 +19,7 @@
   <string name="mesh_status_too_many_vertices">Poziomy detali mają za dużo wierzchołków.</string>
   <string name="mesh_status_missing_lod">Brakuje poziomu detali.</string>
   <string name="mesh_status_invalid_material_list">Materiały LOD nie są podzbiorem modelu referencyjnego.</string>
+  <string name="phys_status_vertex_limit_exceeded">Pewne fizyczne powłoki przekroczyły ograniczenia wierzchołków.</string>
   <string name="layer_all">Wszystko</string>
   <string name="decomposing">Analizowanie...</string>
   <string name="simplifying">Upraszczanie...</string>
