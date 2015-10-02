@@ -290,7 +290,7 @@
      top_pad="4"
      width="64" />
     <text
-     name="spin_hours_ago_lbl"
+     name="label_hours"
      type="string"
      length="1"
      follows="left|top"
@@ -313,7 +313,7 @@
      left="8"
      width="64" />
     <text
-     name="spin_days_ago_lbl"
+     name="label_days"
      type="string"
      length="1"
      follows="left|top"
