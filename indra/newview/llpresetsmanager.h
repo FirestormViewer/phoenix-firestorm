@@ -56,9 +56,14 @@ public:
 	static std::string getPresetsDir(const std::string& subdirectory);
 	void setPresetNamesInComboBox(const std::string& subdirectory, LLComboBox* combo, EDefaultOptions default_option);
 	void loadPresetNamesFromDir(const std::string& dir, preset_name_list_t& presets, EDefaultOptions default_option);
-	bool savePreset(const std::string& subdirectory, const std::string & name);
-	void loadPreset(const std::string& subdirectory, const std::string & name);
-	bool deletePreset(const std::string& subdirectory, const std::string& name);
+	// <FS:Ansariel> Fix mapping to default preset when label is localized
+	//bool savePreset(const std::string& subdirectory, const std::string & name);
+	//void loadPreset(const std::string& subdirectory, const std::string & name);
+	//bool deletePreset(const std::string& subdirectory, const std::string& name);
+	bool savePreset(const std::string& subdirectory, std::string name);
+	void loadPreset(const std::string& subdirectory, std::string name);
+	bool deletePreset(const std::string& subdirectory, std::string name);
+	// </FS:Ansariel>
 
 	// Emitted when a preset gets loaded, deleted, or saved.
 	boost::signals2::connection setPresetListChangeCallback(const preset_list_signal_t::slot_type& cb);

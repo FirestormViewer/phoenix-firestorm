@@ -3912,6 +3912,12 @@ void LLPanelPreferenceGraphics::setPresetText()
 
 	if (!preset_graphic_active.empty())
 	{
+		// <FS:Ansariel> Fix mapping to default preset when label is localized
+		if (preset_graphic_active == "Default")
+		{
+			preset_graphic_active = LLTrans::getString("Default");
+		}
+		// </FS:Ansariel>
 		preset_text->setText(preset_graphic_active);
 	}
 	else
