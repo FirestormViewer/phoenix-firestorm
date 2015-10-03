@@ -1998,6 +1998,7 @@ void LLFloaterPreference::refreshEnabledState()
 	
 	// WindLight
 	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
+	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	
 	// *HACK just checks to see if we can use shaders... 
 	// maybe some cards that use shaders, but don't support windlight
@@ -2008,6 +2009,8 @@ void LLFloaterPreference::refreshEnabledState()
 	ctrl_wind_light->setEnabled(
 		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 // [/RLVa:KB]
+
+	sky->setEnabled(ctrl_wind_light->get() && shaders);
 
 	//Deferred/SSAO/Shadows
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
