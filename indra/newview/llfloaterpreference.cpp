@@ -3897,9 +3897,15 @@ void LLPanelPreferenceGraphics::onPresetsListChange()
 
 void LLPanelPreferenceGraphics::setPresetText()
 {
-	LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
+	// <FS:Ansariel> Performance improvement
+	//LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
 
-	std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+	//std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+
+	static LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
+	static LLCachedControl<std::string> presetGraphicActive(gSavedSettings, "PresetGraphicActive");
+	std::string preset_graphic_active = presetGraphicActive();
+	// </FS:Ansariel>
 
 	if (hasDirtyChilds() && !preset_graphic_active.empty())
 	{
