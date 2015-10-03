@@ -6,7 +6,7 @@
  layout="topleft"
  name="Save Pref Preset"
  save_rect="true"
- title="SAVE PREF PRESET"
+ title="Save Pref Preset"
  width="300">
 
     <string name="title_graphic">Save Graphic Preset</string>

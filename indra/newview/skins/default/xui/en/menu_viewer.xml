@@ -269,14 +269,14 @@
           </menu_item_call>
             <menu_item_separator/>
 	        <menu_item_check
-	         label="Show Render Weight For Avatars (Replacement For ARC)"
-	         name="Avatar Rendering Cost">
+	         label="Show Avatar Complexity Information"
+	         name="Avatar Draw Info">
 	            <menu_item_check.on_check
 	             function="Advanced.CheckInfoDisplay"
-	             parameter="shame" />
+	             parameter="avatardrawinfo" />
 	            <menu_item_check.on_click
 	             function="Advanced.ToggleInfoDisplay"
-	             parameter="shame" />
+	             parameter="avatardrawinfo" />
 	        </menu_item_check>
 	        <menu_item_call
              label="Lag Meter"

@@ -35,8 +35,9 @@
     height="16"
     layout="topleft"
     left="5"
+    name="preset_label"
     top="5"
-    width="100">
+    width="70">
       Preset in use:
   </text>
 
@@ -44,7 +45,7 @@
     follows="top|left|right"
     height="16"
     layout="topleft"
-    left_delta="110"
+    left_pad="10"
     name="preset_text"
     top="5"
     width="120">

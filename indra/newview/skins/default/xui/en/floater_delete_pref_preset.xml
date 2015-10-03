@@ -6,7 +6,7 @@
  layout="topleft"
  name="Delete Pref Preset"
  save_rect="true"
- title="DELETE PREF PRESET"
+ title="Delete Pref Preset"
  width="300">
 
     <string name="title_graphic">Delete Graphic Preset</string>
