@@ -3,7 +3,6 @@
 	<floater.string name="LoginToChange">
 		Zum Ändern einloggen
 	</floater.string>
-	<button label="Anwenden" label_selected="Anwenden" name="Apply"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 	<panel name="search_panel">

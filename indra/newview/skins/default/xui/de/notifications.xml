@@ -1392,6 +1392,13 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 			<ignore name="ignore" text="Das Herunterladen der Kleidung dauert lange"/>
 		</form>
 	</notification>
+	<notification name="RegionAndAgentComplexity">
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visuelle Komplexität] beträgt [AGENT_COMPLEXITY].
+[OVERLIMIT_MSG]
+	</notification>
+	<notification name="AgentComplexity">
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visuelle Komplexität] beträgt [AGENT_COMPLEXITY].
+	</notification>
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
@@ -3381,6 +3388,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="AttachmentSaved">
 		Der Anhang wurde gespeichert.
+	</notification>
+	<notification name="PresetNotSaved">
+		Fehler beim Speichern der Voreinstellung [NAME].
+	</notification>
+	<notification name="PresetNotDeleted">
+		Fehler beim Löschen der Voreinstellung [NAME].
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Hilfethema für dieses Element wurde nicht gefunden.
