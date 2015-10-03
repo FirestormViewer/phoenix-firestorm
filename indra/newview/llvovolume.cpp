@@ -3410,6 +3410,13 @@ const LLMatrix4 LLVOVolume::getRenderMatrix() const
 // children, and cost should only be increased for unique textures  -Nyx
 U32 LLVOVolume::getRenderCost(texture_cost_t &textures) const
 {
+    /*****************************************************************
+     * This calculation should not be modified by third party viewers,
+     * since it is used to limit rendering and should be uniform for
+     * everyone. If you have suggested improvements, submit them to
+     * the official viewer for consideration.
+     *****************************************************************/
+
 	// Get access to params we'll need at various points.  
 	// Skip if this is object doesn't have a volume (e.g. is an avatar).
 	BOOL has_volume = (getVolume() != NULL);
@@ -4871,10 +4878,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	if (pAvatarVO)
 	{
-		pAvatarVO->mAttachmentGeometryBytes -= group->mGeometryBytes;
-		pAvatarVO->mAttachmentGeometryBytes = llmax(pAvatarVO->mAttachmentGeometryBytes, 0);
-		pAvatarVO->mAttachmentSurfaceArea -= group->mSurfaceArea;
-		pAvatarVO->mAttachmentSurfaceArea = llmax(pAvatarVO->mAttachmentSurfaceArea, 0.f);
+		pAvatarVO->subtractAttachmentSizes( group->mGeometryBytes, group->mSurfaceArea );
 	}
 
 	group->mGeometryBytes = 0;
@@ -5472,23 +5476,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	if (pAvatarVO)
 	{
-		if (pAvatarVO->mAttachmentGeometryBytes < 0)
-		{	// First time through value is -1
-			pAvatarVO->mAttachmentGeometryBytes = group->mGeometryBytes;
-		}
-		else
-		{
-		pAvatarVO->mAttachmentGeometryBytes += group->mGeometryBytes;
-		}
-		if (pAvatarVO->mAttachmentSurfaceArea < 0.f)
-		{	// First time through value is -1
-			pAvatarVO->mAttachmentSurfaceArea = group->mSurfaceArea;
-		}
-		else
-		{
-		pAvatarVO->mAttachmentSurfaceArea += group->mSurfaceArea;
+        pAvatarVO->addAttachmentSizes( group->mGeometryBytes, group->mSurfaceArea );
 	}
-}
 }
 
 static LLTrace::BlockTimerStatHandle FTM_REBUILD_MESH_FLUSH("Flush Mesh");

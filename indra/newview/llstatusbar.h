@@ -53,6 +53,7 @@ class LLUICtrl;
 class LLUUID;
 class LLFrameTimer;
 class LLStatGraph;
+class LLPanelPresetsPulldown;
 class LLPanelVolumePulldown;
 class LLPanelNearByMedia;
 class LLIconCtrl;
@@ -156,6 +157,7 @@ private:
 	void onClickBuyCurrency();
 	void onVolumeChanged(const LLSD& newvalue);
 
+	void onMouseEnterPresets();
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
 	void onClickScreen(S32 x, S32 y);
@@ -317,6 +319,7 @@ private:
 	LLStatGraph *mSGPacketLoss;
 
 	LLView		*mBtnStats;
+	LLIconCtrl	*mIconPresets;
 	LLButton	*mBtnVolume;
 	LLTextBox	*mBoxBalance;
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
@@ -337,6 +340,7 @@ private:
 	BOOL			mShowParcelIcons;
 	LLFrameTimer*	mBalanceTimer;
 	LLFrameTimer*	mHealthTimer;
+	LLPanelPresetsPulldown* mPanelPresetsPulldown;
 	LLPanelVolumePulldown* mPanelVolumePulldown;
 	LLPanelNearByMedia*	mPanelNearByMedia;
 	

@@ -10787,23 +10787,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>RenderAvatarComplexityLimit</key>
-    <map>
-      <key>Comment</key>
-      <string>Max visual complexity of avatars in a scene</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
   <key>RenderComplexityColorMin</key>
     <map>
       <key>Comment</key>
-      <string>Max visual complexity of avatars in a scene</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10819,7 +10806,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderComplexityColorMid</key>
     <map>
       <key>Comment</key>
-      <string>Max visual complexity of avatars in a scene</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10835,7 +10822,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderComplexityColorMax</key>
     <map>
       <key>Comment</key>
-      <string>Max visual complexity of avatars in a scene</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10851,7 +10838,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderComplexityThreshold</key>
     <map>
       <key>Comment</key>
-      <string>Only color objects higher than render threshold</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10864,8 +10851,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderComplexityStaticMax</key>
     <map>
       <key>Comment</key>
-      <string>Sets a static max value for scaling of RenderComplexity 
-        display (-1 for dynamic scaling)</string>
+      <string>Unused obsolete setting</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10889,13 +10875,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderAvatarMaxVisible</key>
     <map>
       <key>Comment</key>
-      <string>Maximum number of avatars to display at any one time</string>
+      <string>OBSOLETE and UNUSED. See RenderAvatarMaxNonImpostors</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>12</integer>
+      <integer>0</integer>
     </map>
     <key>RenderAvatarPhysicsLODFactor</key>
     <map>
@@ -12605,31 +12591,30 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-    <key>RenderUseFarClip</key>
-    <map>
-      <key>Comment</key>
-      <string>If false, frustum culling will ignore far clip plane.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
+  <key>RenderUseFarClip</key>
+  <map>
+    <key>Comment</key>
+    <string>If false, frustum culling will ignore far clip plane.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>RenderUseImpostors</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether we want to use impostors for far away avatars.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-  
+  </map>
+  <key>RenderUseImpostors</key>
+  <map>
+    <key>Comment</key>
+    <string>OBSOLETE and UNUSED. See RenderAvatarMaxNonImpostors and RenderAvatarMaxComplexity.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
@@ -12639,19 +12624,57 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>10000000</integer>
   </map>
-  <key>RenderAutoMuteRenderWeightLimit</key>
+  <key>RenderAvatarMaxNonImpostors</key>
   <map>
     <key>Comment</key>
-    <string>Maximum render weight before an avatar is rendered as a simple impostor (0 to not use this limit).</string>
+    <string>Maximum number of avatars to fully render at one time;
+    over this limit uses impostor rendering (simplified rendering
+    with less frequent updates), reducing client lag.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
+    <integer>12</integer>
+  </map>
+  <key>RenderAutoMuteRenderWeightLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>OBSOLETE. This setting has been renamed RenderAvatarMaxNonImpostors.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
     <integer>0</integer>
     <key>Backup</key>
+    <integer>0</integer>
+  </map>
+  <key>ShowMyComplexityChanges</key>
+  <map>
+    <key>Comment</key>
+    <string>How long to show notices about avatar complexity (set to zero to disable those notices)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>20</integer>
+    <key>Backup</key>
+    <integer>0</integer>
+  </map>
+  <key>RenderAvatarMaxComplexity</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum Avatar Complexity; above this value, the avatar is
+    rendered as a solid color outline (0 to disable this limit).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
     <integer>0</integer>
   </map>
   <key>RenderAutoMuteSurfaceAreaLimit</key>
@@ -12663,20 +12686,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <integer>0</integer>
-    <key>Backup</key>
-    <integer>0</integer>
-  </map>
-  <key>RenderAutoMuteFunctions</key>
-  <map>
-    <key>Comment</key>
-    <string>Developing feature to render some avatars using simple impostors or colored silhouettes.  (Set to 7 for all functionality)</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>0</integer>
+    <real>1.0E6</real>
   </map>
   <key>RenderAutoMuteLogging</key>
   <map>
@@ -12698,7 +12708,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <integer>0</integer>
+    <real>1.0E6</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -13361,17 +13371,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>ShowAdvancedGraphicsSettings</key>
-    <map>
-      <key>Comment</key>
-      <string>Show advanced graphics settings</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>ShowAllObjectHoverTip</key>
@@ -20581,6 +20580,43 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <key>PresetGraphicActive</key>
+    <map>
+      <key>Comment</key>
+      <string>Name of currently selected preference</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
+    </map>
+    <key>IndirectMaxComplexity</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls RenderAvatarMaxComplexity in a non-linear fashion (do not set this value)</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>IndirectMaxNonImpostors</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls RenderAvatarMaxNonImpostors in a non-linear fashion (do not set this value)</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>FSShowServerVersionChangeNotice</key>

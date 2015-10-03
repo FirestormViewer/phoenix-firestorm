@@ -2840,7 +2840,8 @@ This is usually a temporary failure. Please customize and save the wearable agai
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
 You have been logged out of [CURRENT_GRID].
-            [MESSAGE]
+
+[MESSAGE]
     <usetemplate
      name="okcancelbuttons"
      notext="Quit"
@@ -3406,6 +3407,29 @@ You can use [APP_NAME] normally and other people will see you correctly.
       <ignore name="ignore"
        text="Clothing is taking a long time to download"/>
     </form>
+  </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "RegionAndAgentComplexity"
+   type = "notifytip"
+   log_to_chat = "false">
+   <unique combine = "cancel_old">
+     <context>AgentComplexityNotice</context>
+   </unique>
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visual complexity] is [AGENT_COMPLEXITY].
+[OVERLIMIT_MSG]
+  </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "AgentComplexity"
+   type = "notifytip"
+   log_to_chat = "false">
+   <unique combine = "cancel_old">
+     <context>AgentComplexityNotice</context>
+   </unique>
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visual complexity] is [AGENT_COMPLEXITY].
   </notification>
 
   <notification
@@ -8769,6 +8793,20 @@ Are you sure you want to close all IMs?
   <notification icon="notifytip.tga"
 		name="AttachmentSaved" type="notifytip">
 Attachment has been saved.
+  </notification>
+
+  <notification
+    icon="notifytip.tga"
+	name="PresetNotSaved"
+    type="notifytip">
+Error saving preset [NAME].
+  </notification>
+
+  <notification
+    icon="notifytip.tga"
+	name="PresetNotDeleted"
+    type="notifytip">
+Error deleting preset [NAME].
   </notification>
 
   <notification
