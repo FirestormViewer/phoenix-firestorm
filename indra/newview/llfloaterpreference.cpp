@@ -4713,15 +4713,62 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 			// Go over each entry
 			for (size_t index = 0; index < perAccountFileList.size(); ++index)
 			{
+
 				// Get the next item in the list
 				LLScrollListItem* item = perAccountFileList[index];
 				// Don't bother with the checkbox and get the path, since we back up all files
 				// and only restore selectively
+
 				std::string file = item->getColumn(2)->getValue().asString();
-				LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
-				copy_prefs_file(
-					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file),
-					gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file));
+				if (item->getValue().asString() != "presets")
+				{
+					LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
+					copy_prefs_file(
+						gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file),
+						gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file));
+				}
+				else
+				{
+					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR));
+
+					std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
+					std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
+					std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
+
+					if (LLFile::isdir(graphics_presets_folder))
+					{
+						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_GRAPHIC));
+
+						std::string file_name;
+						while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
+						{
+							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
+
+							if (LLFile::isfile(source.c_str()))
+							{
+								std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(backup_per_account_folder, PRESETS_DIR), PRESETS_GRAPHIC), file_name);
+								copy_prefs_file(source, target);
+							}
+						}
+					}
+
+					if (LLFile::isdir(camera_presets_folder))
+					{
+						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_CAMERA));
+
+						std::string file_name;
+						while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
+						{
+							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
+
+							if (LLFile::isfile(source.c_str()))
+							{
+								std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(backup_per_account_folder, PRESETS_DIR), PRESETS_CAMERA), file_name);
+								copy_prefs_file(source, target);
+							}
+						}
+					}
+				}
 			}
 		}
 		else
@@ -4904,12 +4951,57 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 			// Only restore if this item is checked on
 			if (checkbox->getCheckBox()->getValue().asBoolean())
 			{
-				// Get the path to restore for this item
-				std::string file = item->getColumn(2)->getValue().asString();
-				LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
-				copy_prefs_file(
-					gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file),
-					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file));
+				if (item->getValue().asString() != "presets")
+				{
+					// Get the path to restore for this item
+					std::string file = item->getColumn(2)->getValue().asString();
+					LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
+					copy_prefs_file(
+						gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file),
+						gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file));
+				}
+				else
+				{
+					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR));
+
+					std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
+					std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
+					std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
+
+					if (LLFile::isdir(graphics_presets_folder))
+					{
+						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC));
+
+						std::string file_name;
+						while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
+						{
+							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
+
+							if (LLFile::isfile(source.c_str()))
+							{
+								std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC), file_name);
+								copy_prefs_file(source, target);
+							}
+						}
+					}
+
+					if (LLFile::isdir(camera_presets_folder))
+					{
+						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA));
+
+						std::string file_name;
+						while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
+						{
+							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
+
+							if (LLFile::isfile(source.c_str()))
+							{
+								std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA), file_name);
+								copy_prefs_file(source, target);
+							}
+						}
+					}
+				}
 			}
 		}
 

@@ -102,7 +102,7 @@ Settings groups to be restored (backup will always save all):
     <layout_stack
      name="ls_list_view_stack"
      follows="top|left|right"
-     height="190"
+     height="200"
      orientation="horizontal"
      top_pad="4"
      left="1"
@@ -123,7 +123,7 @@ Settings groups to be restored (backup will always save all):
      left="1"
      top="0"
      right="-1"
-     height="180"
+     height="190"
      draw_heading="true"
      multi_select="false">
         <column label="" name="restore_global_files_check" width="16" />
@@ -178,7 +178,7 @@ Settings groups to be restored (backup will always save all):
      left="1"
      top="0"
      right="-1"
-     height="180"
+     height="190"
      draw_heading="true"
      enabled_control="PerAccountSettingsFile"
      multi_select="false">
@@ -235,6 +235,11 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Disabled Group Chats</column>
             <column name="value">muted_groups.xml</column>
         </row>
+        <row name="restore_per_account_row_presets" value="presets">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Presets</column>
+            <column name="value">presets</column>
+        </row>
     </scroll_list>
     <!-- since enabled_control does not work properly on scroll list items and
          enabling/disabling in code did not show any visual difference, we just use
@@ -249,7 +254,7 @@ Settings groups to be restored (backup will always save all):
      left="0"
      top="0"
      right="-1"
-     height="180"
+     height="190"
      invisibility_control="PerAccountSettingsFile" />
 
     </layout_panel>
