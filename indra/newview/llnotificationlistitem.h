@@ -54,6 +54,10 @@ public:
         std::string     title;
         std::string     subject;
         std::string     message;
+        // <FS:Ansariel> Unscrew avatar icon for transaction messages
+        std::string     payment_message;
+        bool            payment_is_group;
+        // </FS:Ansariel>
         std::string     sender;
         S32             fee;
         LLDate          time_stamp;
@@ -229,6 +233,9 @@ private:
     LLTransactionNotificationListItem & operator=(LLTransactionNotificationListItem &);
     LLAvatarIconCtrl* mAvatarIcon;
     LLAvatarIconCtrl* mAvatarIconExp;
+    // <FS:Ansariel> Unscrew avatar icon for transaction messages
+    LLGroupIconCtrl* mGroupIcon;
+    LLGroupIconCtrl* mGroupIconExp;
 };
 
 class LLSystemNotificationListItem : public LLNotificationListItem

@@ -6958,26 +6958,30 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	}
 
 	std::string source_slurl;
+	std::string source_slurl_name;
 	if (is_source_group)
 	{
 		source_slurl =
 			LLSLURL( "group", source_id, "inspect").getSLURLString();
+		source_slurl_name = source_slurl;
 	}
 	else
 	{
-		//source_slurl =LLSLURL( "agent", source_id, "completename").getSLURLString();
+		source_slurl_name =LLSLURL( "agent", source_id, "completename").getSLURLString();
 		source_slurl =LLSLURL( "agent", source_id, "inspect").getSLURLString();
 	}
 
 	std::string dest_slurl;
+	std::string dest_slurl_name;
 	if (is_dest_group)
 	{
 		dest_slurl =
 			LLSLURL( "group", dest_id, "inspect").getSLURLString();
+		dest_slurl_name = dest_slurl;
 	}
 	else
 	{
-		//dest_slurl = LLSLURL( "agent", dest_id, "completename").getSLURLString();
+		dest_slurl_name = LLSLURL( "agent", dest_id, "completename").getSLURLString();
 		dest_slurl = LLSLURL( "agent", dest_id, "inspect").getSLURLString();
 	}
 
@@ -6993,6 +6997,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	bool is_name_group = false;
 	LLUUID name_id;
 	std::string message;
+	std::string message_notification_well;
 	std::string notification;
 	LLSD final_args;
 	LLSD payload;
@@ -7046,12 +7051,13 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		
 		final_args["MESSAGE"] = message;
 		payload["dest_id"] = dest_id;
-		notification = "PaymentSent";
+		notification = success ? "PaymentSent" : "PaymentFailure";
 
 		// <FS:AO> Additionally, always add a SLURL-enabled form.
-		args["NAME"] = dest_slurl;
 		is_name_group = is_dest_group;
 		name_id = dest_id;
+
+		args["NAME"] = dest_slurl;
 		if (!reason.empty())
 		{
 			if (dest_id.notNull())
@@ -7081,7 +7087,36 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		final_args["SLURLMESSAGE"] = message;
-		notification = success ? "PaymentSent" : "PaymentFailure";
+
+		args["NAME"] = dest_slurl_name;
+		if (!reason.empty())
+		{
+			if (dest_id.notNull())
+			{
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars", args) :
+													  LLTrans::getString("you_paid_failure_ldollars", args);
+			}
+			else
+			{
+				// transaction fee to the system, eg, to create a group
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_name", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_name", args);
+			}
+		}
+		else
+		{
+			if (dest_id.notNull())
+			{
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_reason", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_reason", args);
+			}
+			else
+			{
+				// no target, no reason, you just paid money
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_info", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_info", args);
+			}
+		}
 	}
 	else 
 	{
@@ -7104,9 +7139,10 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		notification = "PaymentReceived";
 		
 		// <FS:AO> Additionally, always add a SLURL-enabled form.
-		args["NAME"] = source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;
+
+		args["NAME"] = source_slurl;
 		if (!reason.empty())
 		{
 			message = LLTrans::getString("paid_you_ldollars", args);
@@ -7116,8 +7152,21 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
 		final_args["SLURLMESSAGE"] = message;
+
+		args["NAME"] = source_slurl_name;
+		if (!reason.empty())
+		{
+			message_notification_well = LLTrans::getString("paid_you_ldollars", args);
+		}
+		else 
+		{
+			message_notification_well = LLTrans::getString("paid_you_ldollars_no_reason", args);
+		}
 		// </FS:AO>
 	}
+
+	payload["payment_is_group"] = is_name_group;
+	payload["payment_message"] = message_notification_well;
 
 	// <FS:Ansariel> TipTracker Support
 	FSMoneyTracker* tipTracker = LLFloaterReg::getTypedInstance<FSMoneyTracker>("money_tracker");

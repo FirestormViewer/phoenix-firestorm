@@ -390,6 +390,10 @@ void LLFloaterNotificationsTabbed::onStoreToast(LLPanel* info_panel, LLUUID id)
     p.fee =  payload["fee"];
     p.subject = payload["subject"].asString();
     p.message = payload["message"].asString();
+    // <FS:Ansariel> Unscrew avatar icon for transaction messages
+    p.payment_message = payload["payment_message"].asString();
+    p.payment_is_group = payload["payment_is_group"].asBoolean();
+    // </FS:Ansariel>
     p.sender = payload["sender_name"].asString();
     p.time_stamp = notify->getDate();
     p.received_time = payload["received_time"].asDate();
