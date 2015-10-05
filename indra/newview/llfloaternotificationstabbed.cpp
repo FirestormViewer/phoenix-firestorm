@@ -179,9 +179,23 @@ void LLFloaterNotificationsTabbed::setVisible(BOOL visible)
     {
         if (NULL == getDockControl() && getDockTongue().notNull())
         {
-            setDockControl(new LLDockControl(
-                LLChicletBar::getInstance()->getChild<LLView>(getAnchorViewName()), this,
-                getDockTongue(), LLDockControl::BOTTOM));
+			// <FS:Ansariel> Group notices, IMs and chiclets position
+            //setDockControl(new LLDockControl(
+            //    LLChicletBar::getInstance()->getChild<LLView>(getAnchorViewName()), this,
+            //    getDockTongue(), LLDockControl::BOTTOM));
+			if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+			{
+			setDockControl(new LLDockControl(
+				LLChicletBar::getInstance()->getChild<LLView>(getAnchorViewName()), this,
+				getDockTongue(), LLDockControl::BOTTOM));
+			}
+			else
+			{
+				setDockControl(new LLDockControl(
+					LLChicletBar::getInstance()->getChild<LLView>(getAnchorViewName()), this,
+					getDockTongue(), LLDockControl::TOP));
+			}
+			// </FS:Ansariel> Group notices, IMs and chiclets position
         }
     }
 
