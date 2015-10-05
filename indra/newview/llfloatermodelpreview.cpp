@@ -219,10 +219,7 @@ std::string stripSuffix(std::string name)
 }
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-// <FS:CR> Threaded Filepickers
-//: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
-: LLLoadFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
-// </FS:CR>
+: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
 	{
 		mMP = mp;
 		mLOD = lod;
@@ -1299,7 +1296,7 @@ LLModelPreview::~LLModelPreview()
 
 	// WS: Mark the preview avatar as dead, when the floater closes. Prevents memleak!
 	mPreviewAvatar->markDead();
-
+	//*HACK : *TODO : turn this back on when we understand why this crashes
 	//glodShutdown();
 }
 
@@ -1630,6 +1627,34 @@ void LLModelPreview::rebuildUploadData()
 			}
 			instance.mTransform = mat;
 			mUploadData.push_back(instance);
+		}
+	}
+
+	for (U32 lod = 0; lod < LLModel::NUM_LODS-1; lod++)
+	{
+		// Search for models that are not included into upload data
+		// If we found any, that means something we loaded is not a sub-model.
+		for (U32 model_ind = 0; model_ind < mModel[lod].size(); ++model_ind)
+		{
+			bool found_model = false;
+			for (LLMeshUploadThread::instance_list::iterator iter = mUploadData.begin(); iter != mUploadData.end(); ++iter)
+			{
+				LLModelInstance& instance = *iter;
+				if (instance.mLOD[lod] == mModel[lod][model_ind])
+				{
+					found_model = true;
+					break;
+				}
+			}
+			if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
+			{
+				if (importerDebug)
+				{
+					LL_INFOS() << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models." <<  LL_ENDL;
+				}
+				setLoadState( LLModelLoader::ERROR_MATERIALS );
+				mFMP->childDisable( "calculate_btn" );
+			}
 		}
 	}
 
@@ -3516,6 +3541,75 @@ U32 LLModelPreview::loadTextures(LLImportMaterial& material,void* opaque)
 	return 0;	
 }
 
+//static
+U32 LLModelPreview::countRootModels(LLModelLoader::model_list models)
+{
+	U32 root_models = 0;
+	model_list::iterator model_iter = models.begin();
+	while (model_iter != models.end())
+	{
+		LLModel* mdl = *model_iter;
+		if (mdl && mdl->mSubmodelID == 0)
+		{
+			root_models++;
+		}
+		model_iter++;
+	}
+	return root_models;
+}
+
+void LLModelPreview::loadedCallback(
+	LLModelLoader::scene& scene,
+	LLModelLoader::model_list& model_list,
+	S32 lod,
+	void* opaque)
+{
+	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
+	if (pPreview && !LLModelPreview::sIgnoreLoadedCallback)
+	{
+		pPreview->loadModelCallback(lod);
+	}	
+}
+
+void LLModelPreview::stateChangedCallback(U32 state,void* opaque)
+{
+	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
+	if (pPreview)
+	{
+	 pPreview->setLoadState(state);
+	}
+}
+
+LLJoint* LLModelPreview::lookupJointByName(const std::string& str, void* opaque)
+{
+	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
+	if (pPreview)
+	{
+		return pPreview->getPreviewAvatar()->getJoint(str);
+	}
+	return NULL;
+}
+
+U32 LLModelPreview::loadTextures(LLImportMaterial& material,void* opaque)
+{
+	(void)opaque;
+
+	if (material.mDiffuseMapFilename.size())
+	{
+		material.mOpaqueData = new LLPointer< LLViewerFetchedTexture >;
+		LLPointer< LLViewerFetchedTexture >& tex = (*reinterpret_cast< LLPointer< LLViewerFetchedTexture > * >(material.mOpaqueData));
+
+		tex = LLViewerTextureManager::getFetchedTextureFromUrl("file://" + material.mDiffuseMapFilename, FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_PREVIEW);
+		tex->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, TRUE, FALSE, opaque, NULL, FALSE);
+		tex->forceToSaveRawImage(0, F32_MAX);
+		material.setDiffuseMap(tex->getID()); // record tex ID
+		return 1;
+	}
+
+	material.mOpaqueData = NULL;
+	return 0;	
+}
+
 void LLModelPreview::addEmptyFace( LLModel* pTarget )
 {
 	U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
@@ -4177,7 +4271,6 @@ BOOL LLModelPreview::render()
 							{
 								mTextureSet.insert(tex);
 	
-							}
 							
 							} else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
 							{

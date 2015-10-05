@@ -106,7 +106,6 @@ set(cmake_SOURCE_FILES
     Variables.cmake
     ViewerMiscLibs.cmake
     VisualLeakDetector.cmake
-##  WebKitLibPlugin.cmake
     WinManifest.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
