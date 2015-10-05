@@ -23,10 +23,6 @@
      name="title_im_well_window">
         Conversations
     </string>
-    <string
-     name="title_notification_well_window">
-        Notifications
-    </string>
 
     <flat_list_view
 	    color="FloaterDefaultBackgroundColor"
