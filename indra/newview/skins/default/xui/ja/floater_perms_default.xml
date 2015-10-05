@@ -2,25 +2,25 @@
 <floater name="perms default" title="デフォルトの作成権限">
 	<panel label="デフォルト権限" name="default permissions">
 		<view_border /> 
-		<text name="txt_next_owner">
+		<text name="label_1">
 			次の所有者：
 		</text>
-		<text name="txt_copy">
+		<text name="label_2">
 			コピー
 		</text>
-		<text name="txt_modify">
+		<text name="label_3">
 			修正
 		</text>
-		<text name="txt_transfer">
+		<text name="label_4">
 			再販・プレゼント
 		</text>
-		<text name="txt_share_with_group">
+		<text name="label_5">
 			グループ共有
 		</text>
-		<text name="txt_anyone_copy">
+		<text name="label_6">
 			全員にコピー許可
 		</text>
-		<text name="txt_objects" tool_tip="オブジェクトを作成する時の権限を初期設定します">
+		<text name="label_7" tool_tip="オブジェクトを作成する時の権限を初期設定します">
 			オブジェクト
 		</text>
 		<check_box name="objects_c" />
@@ -28,7 +28,7 @@
 		<check_box name="objects_t" />
 		<check_box name="objects_s" />
 		<check_box name="objects_e" />
-		<text name="txt_uploads" tool_tip="アップロードしたアイテムの権限を初期設定します">
+		<text name="label_8" tool_tip="アップロードしたアイテムの権限を初期設定します">
 			アップロード
 		</text>
 		<check_box name="uploads_c" />
@@ -36,7 +36,7 @@
 		<check_box name="uploads_t" />
 		<check_box name="uploads_s" />
 		<check_box name="uploads_e" />
-		<text name="txt_scripts" tool_tip="スクリプトを作成する時の権限を初期設定します">
+		<text name="label_9" tool_tip="スクリプトを作成する時の権限を初期設定します">
 			スクリプト
 		</text>
 		<check_box name="scripts_c" />
@@ -44,7 +44,7 @@
 		<check_box name="scripts_t" />
 		<check_box name="scripts_s" />
 		<check_box name="scripts_e" />
-		<text name="txt_notecards" tool_tip="ノートカードを作成する時の権限を初期設定します">
+		<text name="label_10" tool_tip="ノートカードを作成する時の権限を初期設定します">
 			ノートカード
 		</text>
 		<check_box name="notecards_c" />
@@ -52,7 +52,7 @@
 		<check_box name="notecards_t" />
 		<check_box name="notecards_s" />
 		<check_box name="notecards_e" />
-		<text name="txt_gestures" tool_tip="ジェスチャーを作成する時の権限を初期設定します">
+		<text name="label_11" tool_tip="ジェスチャーを作成する時の権限を初期設定します">
 			ジェスチャー
 		</text>
 		<check_box name="gestures_c" />
@@ -60,7 +60,7 @@
 		<check_box name="gestures_t" />
 		<check_box name="gestures_s" />
 		<check_box name="gestures_a" />
-		<text name="txt_wearables" tool_tip="衣類や身体部位を作成する時の権限を初期設定します">
+		<text name="label_12" tool_tip="衣類や身体部位を作成する時の権限を初期設定します">
 			衣類・身体部位
 		</text>
 		<check_box name="wearables_c" />

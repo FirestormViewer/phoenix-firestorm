@@ -46,14 +46,15 @@
   <floater.string name="linkset_is_restricted_non_volume_state">[restricted,concave]</floater.string>
   <floater.string name="linkset_choose_use">Choose linkset use...</floater.string>
   <panel
+      name="pathfinding_linksets_main"
       border="false"
       bevel_style="none"
       follows="left|top|right|bottom"
       layout="topleft"
       height="226"
-      width="1059"
-      name="pathfinding_linksets_main">
+      width="1059">
     <text
+        name="linksets_filter_label"
         height="13"
         word_wrap="false"
         use_ellipses="false"
@@ -64,11 +65,11 @@
         layout="topleft"
         left="20"
         top_pad="14"
-        width="67"
-        name="linksets_filter_label">
+        width="67">
       Filter by:
     </text>
     <text
+        name="linksets_name_label"
         height="13"
         word_wrap="false"
         use_ellipses="false"
@@ -78,8 +79,7 @@
         follows="left|top"
         layout="topleft"
         left_pad="0"
-        width="62"
-        name="linksets_name_label">
+        width="62">
       Name
     </text>
     <line_editor
@@ -94,6 +94,7 @@
         name="filter_by_name"
         width="161" />
     <text
+        name="linksets_desc_label"
         height="13"
         word_wrap="false"
         use_ellipses="false"
@@ -104,8 +105,7 @@
         layout="topleft"
         left_pad="22"
         top_pad="-15"
-        width="88"
-        name="linksets_desc_label">
+        width="88">
       Description
     </text>
     <line_editor
@@ -283,15 +283,16 @@
       left="18"
       width="1039"/>
   <panel
+      name="pathfinding_linksets_actions"
       border="false"
       bevel_style="none"
       follows="left|right|bottom"
       layout="topleft"
       left="0"
       height="67"
-      width="1060"
-      name="pathfinding_linksets_actions">
+      width="1060">
     <text
+        name="linksets_actions_label"
         height="13"
         word_wrap="false"
         use_ellipses="false"
@@ -303,8 +304,7 @@
         follows="left|bottom|right"
         layout="topleft"
         top_pad="8"
-        width="580"
-        name="linksets_actions_label">
+        width="580">
       Actions on selected linksets (If a linkset is removed from the world, its attributes may be lost):
     </text>
     <check_box
@@ -372,15 +372,16 @@
       left="18"
       width="1039"/>
   <panel
+      name="pathfinding_linksets_attributes"
       border="false"
       bevel_style="none"
       follows="left|right|bottom"
       layout="topleft"
       left="0"
       height="75"
-      width="1010"
-      name="pathfinding_linksets_attributes">
+      width="1010">
     <text
+        name="linksets_attributes_label"
         height="13"
         word_wrap="false"
         use_ellipses="false"
@@ -391,8 +392,7 @@
         layout="topleft"
         left="18"
         top_pad="8"
-        width="972"
-        name="linksets_attributes_label">
+        width="972">
       Edit attributes of selected linksets and press the button to apply changes
     </text>
     <combo_box

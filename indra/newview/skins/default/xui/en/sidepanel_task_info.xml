@@ -457,7 +457,7 @@
         label="Price: L$"
         label_width="73"				
         width="150"
-        min_val="1"
+        min_val="0"
         height="20"
         max_val="999999999" />
       <check_box

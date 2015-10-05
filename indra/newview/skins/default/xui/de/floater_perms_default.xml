@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="perms default" title="Standard-Erstellungsberechtigungen">
 	<panel name="default permissions" label="Standardberechtigungen">
-		<text name="txt_next_owner">
+		<text name="label_1">
 			Nächster Besitzer:
 		</text>
-		<text name="txt_copy">
+		<text name="label_2">
 			Kopieren
 		</text>
-		<text name="txt_modify">
+		<text name="label_3">
 			Bearbeiten
 		</text>
-		<text name="txt_transfer">
+		<text name="label_4">
 			Transferieren
 		</text>
-		<text name="txt_share_with_group">
+		<text name="label_5">
 			Teilen mit Gruppe
 		</text>
-		<text name="txt_anyone_copy">
+		<text name="label_6">
 			Jederman Kopieren erlauben
 		</text>
-		<text name="txt_objects" tool_tip="Standardberechtigungen für Objekte, die erzeugt werden">
+		<text name="label_7" tool_tip="Standardberechtigungen für Objekte, die erzeugt werden">
 			Objekte
 		</text>
-		<text name="txt_uploads" tool_tip="Standardberechtigungen für hochgeladene Objekte">
+		<text name="label_8" tool_tip="Standardberechtigungen für hochgeladene Objekte">
 			Uploads
 		</text>
-		<text name="txt_scripts" tool_tip="Standardberechtigungen für Skripte, die erzeugt werden">
+		<text name="label_9" tool_tip="Standardberechtigungen für Skripte, die erzeugt werden">
 			Skripte
 		</text>
-		<text name="txt_notecards" tool_tip="Standardberechtigungen für Notizkarten, die erzeugt werden">
+		<text name="label_10" tool_tip="Standardberechtigungen für Notizkarten, die erzeugt werden">
 			Notizkarten
 		</text>
-		<text name="txt_gestures" tool_tip="Standardberechtigungen für Gesten, die erzeugt werden">
+		<text name="label_11" tool_tip="Standardberechtigungen für Gesten, die erzeugt werden">
 			Gesten
 		</text>
-		<text name="txt_wearables" tool_tip="Standardberechtigungen für Kleidung oder Körperteile, die erzeugt werden">
+		<text name="label_12" tool_tip="Standardberechtigungen für Kleidung oder Körperteile, die erzeugt werden">
 			Kleidung
 		</text>
 	</panel>

@@ -306,7 +306,7 @@
 		min_width="90">
 	  <line_editor 
 		  name="media_address_url"
-		  max_length="1023"
+		  max_length_chars="1023"
 		  follows="top|left|right" 
 		  height="22"
 		  top="0"
