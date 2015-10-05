@@ -6,9 +6,9 @@
  name="floater_notifications_tabbed"
  help_topic="notification_chiclet"
  save_rect="true"
- title="NOTIFICATIONS"
+ title="Notifications"
  width="350"
- min_width="435"
+ min_width="350"
  height="550"
  min_height="150"
  can_minimize="false"
@@ -39,10 +39,11 @@
 
   <string
    name="title_notification_tabbed_window">
-    NOTIFICATIONS
+    Notifications
   </string>
   <layout_stack
-    width="336"
+    left="2"
+    right="-2"
     height="533"
     enabled="true"
     orientation="vertical"
@@ -50,7 +51,6 @@
     follows="left|top|right|bottom"
     top="17">
   <layout_panel
-    width="336"
     height="530"
     enabled="true"
     name="TabButtonsLayoutPanel">
@@ -59,9 +59,9 @@
      halign="center"
      layout="topleft"
      tab_position="top"
-     left="7"
+     left="0"
      top="7"
-     width="336"
+     right="-1"
      height="491"
      mouse_opaque="true"
      name="notifications_tab_container">
@@ -80,7 +80,7 @@
           left="0"
           top="5"
           height="0"
-          width="330"/>
+          right="-1"/>
       </panel>
       <panel
        border="true"
@@ -97,7 +97,7 @@
           left="0"
           top="5"
           height="0"
-          width="328"/>
+          right="-1"/>
       </panel>
       <panel
        border="true"
@@ -114,7 +114,7 @@
           left="0"
           top="5"
           height="0"
-          width="328"/>
+          right="-1"/>
       </panel>
       <panel
        border="true"
@@ -131,20 +131,20 @@
           left="0"
           top="5"
           height="0"
-          width="328"/>
+          right="-1"/>
       </panel>
     </tab_container>
     
-    <layout_stack width="336" height="26" enabled="true" orientation="horizontal"  follows="left|right" name="ButtonsStack">
-      <layout_panel width="336" height="30" enabled="true" orientation="horizontal" name="CondenseAllButtonPanel">
+    <layout_stack left="0" right="-1" height="26" enabled="true" orientation="horizontal"  follows="left|right" name="ButtonsStack">
+      <layout_panel width="97" height="30" enabled="true" name="CondenseAllButtonPanel" auto_resize="false">
         <button width="93" height="21" left="2" label="Collapse all" name="collapse_all_button">
         </button>
       </layout_panel>
-      <layout_panel width="336" height="30" enabled="true" orientation="horizontal" name="GapLayoutPanel">
+      <layout_panel width="336" height="30" enabled="true" name="GapLayoutPanel" auto_resize="true">
         <panel width="90" height="21" left="2" label="Gap Panel" border="false" name="GapPanel">
         </panel>
       </layout_panel>
-      <layout_panel width="336" height="30" enabled="true" orientation="horizontal" name="DeleteAllButtonPanel">
+      <layout_panel width="97" height="30" enabled="true" name="DeleteAllButtonPanel" auto_resize="false">
         <button width="93" height="21" left="2" label="Delete all" name="delete_all_button">
         </button>
       </layout_panel>
