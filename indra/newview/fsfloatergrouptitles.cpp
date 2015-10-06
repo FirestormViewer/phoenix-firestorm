@@ -59,7 +59,7 @@ void FSGroupTitlesObserver::changed(LLGroupChange gc)
 /////////////////////////////////////////////////////
 // FSGroupTitles class
 //
-FSFloaterGroupTitles::FSFloaterGroupTitles(const LLSD& key) :  
+FSFloaterGroupTitles::FSFloaterGroupTitles(const LLSD& key) :
 	LLFloater(key)
 {
 	// Register observer and event listener
@@ -134,7 +134,7 @@ void FSFloaterGroupTitles::clearObservers()
 }
 
 void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
-	const std::string& group_name, bool is_active, EAddPosition position)
+	const std::string& group_name, bool is_active, bool is_group)
 {
 	std::string font_style = (is_active ? "BOLD" : "NORMAL");
 
@@ -154,8 +154,14 @@ void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& rol
 	item["columns"][3]["column"] = "group_id";
 	item["columns"][3]["type"] = "text";
 	item["columns"][3]["value"] = group_id;
+	item["columns"][4]["column"] = "title_sort_column";
+	item["columns"][4]["type"] = "text";
+	item["columns"][4]["value"] = (is_group ? title : "");
+	item["columns"][5]["column"] = "name_sort_column";
+	item["columns"][5]["type"] = "text";
+	item["columns"][5]["value"] = (is_group ? group_name : "");
 
-	mTitleList->addElement(item, position);
+	mTitleList->addElement(item);
 
 	// Need to do use the selectByValue method or there would be multiple
 	// selections on login.
@@ -220,11 +226,11 @@ void FSFloaterGroupTitles::refreshGroupTitles()
 	mTitleList->clearRows();
 
 	// Add "no group"
-	addListItem(LLUUID::null, LLUUID::null, getString("NoGroupTitle"), LLTrans::getString("GroupsNone"), gAgent.getGroupID().isNull(), ADD_TOP);
+	addListItem(LLUUID::null, LLUUID::null, getString("NoGroupTitle"), LLTrans::getString("GroupsNone"), gAgent.getGroupID().isNull(), false);
 
-	for (S32 i = 0; i < gAgent.mGroups.size(); i++)
+	for (std::vector<LLGroupData>::iterator it = gAgent.mGroups.begin(); it != gAgent.mGroups.end(); ++it)
 	{
-		LLGroupData group_data = gAgent.mGroups.at(i);
+		LLGroupData& group_data = *it;
 		FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, this);
 		mGroupTitleObserverMap[group_data.mID] = roleObserver;
 		LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
