@@ -2761,6 +2761,9 @@ LLPanelPreference::LLPanelPreference()
 	//<FS:KC> Handled centrally now
 	// mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
 	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
+
+	// <FS:Ansariel> Customizable contact list columns
+	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&LLPanelPreference::onCheckContactListColumnMode, this));
 }
 
 //virtual
@@ -2916,6 +2919,14 @@ BOOL LLPanelPreference::postBuild()
 	}
 	// </FS:Ansariel>
 
+	////////////////////// PanelUI ///////////////////
+	// <FS:Ansariel> Customizable contact list columns
+	if (hasChild("textFriendlistColumns", TRUE))
+	{
+		onCheckContactListColumnMode();
+	}
+	// </FS:Ansariel>
+
 	apply();
 	return true;
 }
@@ -3028,6 +3039,15 @@ void LLPanelPreference::updateMapPickRadiusTransparency(const LLSD& value)
 	color.mV[VW] = value.asReal();
 	color_table.setColor("MapPickRadiusColor", color);
 	color_swatch->set(color);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Customizable contact list columns
+void LLPanelPreference::onCheckContactListColumnMode()
+{
+	childSetEnabled("FSFriendListColumnShowUserName", gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowFullName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
 }
 // </FS:Ansariel>
 

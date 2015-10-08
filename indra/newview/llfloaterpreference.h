@@ -317,6 +317,9 @@ private:
 	void updateMapPickRadiusTransparency(const LLSD& value);
 	F32 mOriginalMapPickRadiusTransparency;
 
+	// <FS:Ansariel> Customizable contact list columns
+	void onCheckContactListColumnMode();
+
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
 
