@@ -83,6 +83,7 @@ protected:
 
 FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
+	LLEventTimer(300.f),
 	mTabContainer(NULL),
 	mObserver(NULL),
 	mFriendsList(NULL),
@@ -197,6 +198,12 @@ void FSFloaterContacts::draw()
 	}
 
 	LLFloater::draw();
+}
+
+BOOL FSFloaterContacts::tick()
+{
+	onDisplayNameChanged();
+	return FALSE;
 }
 
 void FSFloaterContacts::updateGroupButtons()
