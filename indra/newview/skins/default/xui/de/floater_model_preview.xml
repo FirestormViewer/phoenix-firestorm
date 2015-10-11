@@ -58,6 +58,9 @@
 	<string name="mesh_status_invalid_material_list">
 		Detailstufenmaterial ist keine Teilmenge des Referenzmodells.
 	</string>
+	<string name="phys_status_vertex_limit_exceeded">
+		Einige physikalische Hüllen überschreiten die Vertex-Beschränkungen.
+	</string>
 	<string name="layer_all">
 		Alle
 	</string>

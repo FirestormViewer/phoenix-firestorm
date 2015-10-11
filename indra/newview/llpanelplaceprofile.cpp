@@ -221,14 +221,15 @@ void LLPanelPlaceProfile::resetLocation()
 	mRegionTypeText->setValue(loading);
 	//mRegionRatingIcon->setValue(loading);
 	mRegionRatingIcon->setValue(unknown);
-// </FS:Ansariel> Fix loading icon; don't use translated string!
 	mRegionRatingText->setValue(loading);
 	mRegionOwnerText->setValue(loading);
 	mRegionGroupText->setValue(loading);
 
 	mEstateNameText->setValue(loading);
 	mEstateRatingText->setValue(loading);
-	mEstateRatingIcon->setValue(loading);
+	//mEstateRatingIcon->setValue(loading);
+	mEstateRatingIcon->setValue(unknown);
+// </FS:Ansariel> Fix loading icon; don't use translated string!
 	mEstateOwnerText->setValue(loading);
 	mCovenantText->setValue(loading);
 

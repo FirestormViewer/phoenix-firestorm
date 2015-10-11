@@ -27,13 +27,13 @@
   <floater.string name="character_owner_unknown">[Unknown]</floater.string>
   <floater.string name="character_owner_group">[group]</floater.string>
   <panel
+      name="pathfinding_chars_main"
       border="false"
       bevel_style="none"
       follows="left|top|right|bottom"
       layout="topleft"
       height="191"
-      width="635"
-      name="pathfinding_chars_main">
+      width="635">
     <scroll_list
         column_padding="0"
         draw_heading="true"
@@ -119,14 +119,14 @@
       left="18"
       width="600"/>
   <panel
+      name="pathfinding_chars_actions"
       border="false"
       bevel_style="none"
       follows="left|right|bottom"
       layout="topleft"
       left="0"
       height="67"
-      width="635"
-      name="pathfinding_chars_actions">
+      width="635">
     <text
         height="13"
         word_wrap="false"
