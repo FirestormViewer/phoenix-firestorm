@@ -2429,7 +2429,11 @@ void LLDrawPoolAvatar::removeRiggedFace(LLFace* facep)
 			}
 			else
 			{
-				LL_ERRS() << "Face reference data corrupt for rigged type " << i << LL_ENDL;
+				// <FS:Ansariel> Additional debugging code
+				//LL_ERRS() << "Face reference data corrupt for rigged type " << i << LL_ENDL;
+				std::string cause = (index >= mRiggedFace[i].size() ? "Index out of bounds" : "Index incorrect");
+				LL_ERRS() << "Face reference data corrupt for rigged type " << i << ": " << cause << LL_ENDL;
+				// </FS:Ansariel>
 			}
 		}
 	}

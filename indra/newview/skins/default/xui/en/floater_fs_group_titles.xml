@@ -25,15 +25,23 @@
 	 height="265">
 		<column
 		 name="grouptitle"
+		 sort_column="title_sort_column"
 		 label="Title"/>
 		<column
 		 name="groupname"
+		 sort_column="name_sort_column"
 		 label="Group"/>
 		<column
 		 name="role_id"
 		 width="-1"/>
 		<column
 		 name="group_id"
+		 width="-1"/>
+		<column
+		 name="title_sort_column"
+		 width="-1"/>
+		<column
+		 name="name_sort_column"
 		 width="-1"/>
 	</scroll_list>
 	

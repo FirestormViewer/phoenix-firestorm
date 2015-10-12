@@ -11,14 +11,14 @@
  name="spellcheck_import"
  title="Import Dictionary">
   <text
+   name="import_dict"
    follows="top|left"
    height="16"
    layout="topleft"
    left="25"
    top="15"
    type="string"
-   width="65"
-   name="import_dict">
+   width="65">
    Dictionary:
   </text>
   <line_editor
@@ -42,14 +42,14 @@
    top_delta="0"
    width="75" />
   <text
+   name="import_name"
    follows="top|left"
    height="16"
    layout="topleft"
    left="25"
    top_pad="8"
    type="string"
-   width="65"
-   name="import_name">
+   width="65">
    Name:
   </text>
   <line_editor
@@ -63,14 +63,14 @@
    top_delta="-5"
    width="200" />
   <text
+   name="import_lang"
    follows="top|left"
    height="16"
    layout="topleft"
    left="25"
    top_pad="8"
    type="string"
-   width="65"
-   name="import_lang">
+   width="65">
    Language:
   </text>
   <line_editor

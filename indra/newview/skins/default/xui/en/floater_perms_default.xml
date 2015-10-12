@@ -24,7 +24,7 @@
        left="0"
        width="430" /> 
       <text
-       name="txt_next_owner"
+       name="label_1"
        type="string"
        length="1"
        follows="left|top"
@@ -37,7 +37,7 @@
          Next owner:
       </text>
       <text
-       name="txt_copy"
+       name="label_2"
        type="string"
        length="1"
        follows="left|top"
@@ -50,7 +50,7 @@
           Copy
       </text>
       <text
-       name="txt_modify"
+       name="label_3"
        type="string"
        length="1"
        follows="left|top"
@@ -63,7 +63,7 @@
           Modify
       </text>
       <text
-       name="txt_transfer"
+       name="label_4"
        type="string"
        length="1"
        follows="left|top"
@@ -76,7 +76,7 @@
           Transfer
       </text>    
       <text
-       name="txt_share_with_group"
+       name="label_5"
        type="string"
        length="1"
        follows="left|top"
@@ -90,7 +90,7 @@
           Share with group
       </text>
       <text
-       name="txt_anyone_copy"
+       name="label_6"
        type="string"
        length="1"
        follows="left|top"
@@ -104,7 +104,7 @@
           Allow anyone to copy
       </text>
       <text
-       name="txt_objects"
+       name="label_7"
        type="string"
        length="1"
        follows="left|top"
@@ -169,7 +169,7 @@
        top_delta="0"
        width="100" />
       <text
-       name="txt_uploads"
+       name="label_8"
        type="string"
        length="1"
        follows="left|top"
@@ -233,7 +233,7 @@
        top_delta="0"
        width="100" />
       <text
-       name="txt_scripts"
+       name="label_9"
        type="string"
        length="1"
        follows="left|top"
@@ -297,7 +297,7 @@
        top_delta="0"
        width="100" />
       <text
-       name="txt_notecards"
+       name="label_10"
        type="string"
        length="1"
        follows="left|top"
@@ -361,7 +361,7 @@
        top_delta="0"
        width="100" />
       <text
-       name="txt_gestures"
+       name="label_11"
        type="string"
        length="1"
        follows="left|top"
@@ -425,7 +425,7 @@
        top_delta="0"
        width="100" />
       <text
-       name="txt_wearables"
+       name="label_12"
        type="string"
        length="1"
        follows="left|top"

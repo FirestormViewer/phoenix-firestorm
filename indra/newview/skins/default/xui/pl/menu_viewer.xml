@@ -281,7 +281,7 @@
 			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Podświetlanie i widoczność" name="Highlighting and Visibility">
-			<menu_item_check label="Efekt emiterów" name="Cheesy Beacon"/>
+			<menu_item_check label="Mrugający emiter śledzenia" name="Cheesy Beacon"/>
 			<menu_item_check label="Ukryj cząsteczki" name="Hide Particles"/>
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
