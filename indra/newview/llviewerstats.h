@@ -142,7 +142,12 @@ extern LLTrace::CountStatHandle<>			FPS,
 
 extern LLTrace::CountStatHandle<LLUnit<F64, LLUnits::Kilotriangles> > TRIANGLES_DRAWN;
 
-extern LLTrace::CountStatHandle<F64Kilobytes >	ACTIVE_MESSAGE_DATA_RECEIVED,
+// <FS:Ansariel> FIRE-17071: Measure UDP message data in Kilobit
+//extern LLTrace::CountStatHandle<F64Kilobytes >	ACTIVE_MESSAGE_DATA_RECEIVED,
+
+extern LLTrace::CountStatHandle<F64Kilobits >	ACTIVE_MESSAGE_DATA_RECEIVED;
+extern LLTrace::CountStatHandle<F64Kilobytes >
+// </FS:Ansariel>
 																	LAYERS_NETWORK_DATA_RECEIVED,
 																	OBJECT_NETWORK_DATA_RECEIVED,
 																	ASSET_UDP_DATA_RECEIVED,

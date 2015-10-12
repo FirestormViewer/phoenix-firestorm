@@ -56,8 +56,6 @@ private:
 	void onCommitCopy();
 	void onCommitTrans();
 
-	void onCheckContactListColumnMode();
-
 	void onDADEmbeddedItem(const LLUUID& item_id);
 
 	FSEmbeddedItemDropTarget*	mInvDropTarget;

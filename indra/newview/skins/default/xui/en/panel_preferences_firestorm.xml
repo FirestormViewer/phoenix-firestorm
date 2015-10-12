@@ -53,10 +53,7 @@
          width="270"
          height="20"
          name="checkMiscRLVa"
-         label="Allow Remote Scripted Viewer Controls  (RLVa)" >
-            <check_box.commit_callback
-             function="RLV.ToggleEnabled" />
-        </check_box>
+         label="Allow Remote Scripted Viewer Controls  (RLVa)"/>
         <text
          layout="topleft"
          follows="left|top"

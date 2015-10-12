@@ -327,7 +327,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 		// load the keyframe data locally
 		// <FS> Preview on own avatar
 		//motionp = (LLKeyframeMotion*)mAnimPreview->getDummyAvatar()->createMotion(mMotionID);
-		motionp = (LLKeyframeMotion*)mAnimPreview->getPreviewAvatar(this)->createMotion(mMotionID);
+		motionp =  dynamic_cast<LLKeyframeMotion*>(mAnimPreview->getPreviewAvatar(this)->createMotion(mMotionID));
 		// </FS>
 
 		// create data buffer for keyframe initialization
@@ -826,9 +826,10 @@ void LLFloaterBvhPreview::onCommitLoop()
 	
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -848,9 +849,10 @@ void LLFloaterBvhPreview::onCommitLoopIn()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -871,9 +873,10 @@ void LLFloaterBvhPreview::onCommitLoopOut()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -894,9 +897,10 @@ void LLFloaterBvhPreview::onCommitName()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -938,9 +942,10 @@ void LLFloaterBvhPreview::onCommitPriority()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -958,9 +963,10 @@ void LLFloaterBvhPreview::onCommitEaseIn()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -979,9 +985,10 @@ void LLFloaterBvhPreview::onCommitEaseOut()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
 	if (motionp)
 	{
@@ -1000,9 +1007,10 @@ bool LLFloaterBvhPreview::validateEaseIn(const LLSD& data)
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
 	if (motionp && !motionp->getLoop())
 	{
@@ -1023,9 +1031,10 @@ bool LLFloaterBvhPreview::validateEaseOut(const LLSD& data)
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
+	//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 	// </FS>
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
 	if (motionp && !motionp->getLoop())
 	{
@@ -1121,7 +1130,10 @@ void LLFloaterBvhPreview::refresh()
 		if (avatarp->isMotionActive(mMotionID))
 		{
 			mStopButton->setEnabled(TRUE);
-			LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
+			// <FS:Ansariel> Possible memory corruption
+			//LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
+			LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
+			// </FS:Ansariel>
 			if (!avatarp->areAnimationsPaused())
 			{
 				// animation is playing
@@ -1157,7 +1169,7 @@ void LLFloaterBvhPreview::onBtnOK(void* userdata)
 	{
 		// <FS> Preview on own avatar
 		//LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getDummyAvatar()->findMotion(floaterp->mMotionID);
-		LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getPreviewAvatar(floaterp)->findMotion(floaterp->mMotionID);
+		LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(floaterp->mAnimPreview->getPreviewAvatar(floaterp)->findMotion(floaterp->mMotionID));
 		if (!motionp)
 		{
 			LL_WARNS() << "Could not find motion data." << LL_ENDL;
