@@ -776,8 +776,8 @@ void MediaPluginCEF::unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboar
 	uint32_t native_modifiers = 0;
 	deserializeKeyboardData(native_key_data, native_scan_code, native_virtual_key, native_modifiers);
 	
-	mLLCEFLib->keyboardEvent(KE_KEY_DOWN, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
-	mLLCEFLib->keyboardEvent(KE_KEY_UP, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
+	mLLCEFLib->keyboardEvent(LLCEFLib::KE_KEY_DOWN, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
+	mLLCEFLib->keyboardEvent(LLCEFLib::KE_KEY_UP, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
 #endif
 // </FS:ND>
 };
