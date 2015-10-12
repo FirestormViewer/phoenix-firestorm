@@ -2214,9 +2214,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>78650a79bda6435e623a940ad425a593</string>
+              <string>a497b979f62eb277c8e62e140bfaa31c</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/quicktime_3p-update-quicktime/rev/300073/arch/CYGWIN/installer/quicktime-7.3-windows-300073.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/quicktime-1.0-windows-201510121456-r3.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
