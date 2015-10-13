@@ -149,6 +149,7 @@
 #include "sound_ids.h"
 #include "tea.h" // <FS:AW opensim currency support>
 #include "NACLantispam.h"
+#include "chatbar_as_cmdline.h"
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -4658,6 +4659,13 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 					}
 				}
 				// </FS:TT>
+				
+				// <FS:KC> cmdline packager
+				if (cmdline_packager(mesg, from_id, owner_id))
+				{
+					return;
+				}
+				// </FS:KC>
 
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release

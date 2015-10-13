@@ -1280,6 +1280,67 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				return false;
 			}
+			else if (command == "kpackagerstart")
+			{
+				// kpackagerstart UUID_of_object_to_put_objects Some_existing_inventory_folder
+				std::string destination;
+				if (i >> destination)
+				{
+					reportToNearbyChat("Verifying destination prim is present inworld...");
+					if (!LLUUID::validate(destination))
+					{
+						reportToNearbyChat("Entered UUID is invalid! (Hint: use the \"copy key\" button in the build menu.)");
+					}
+					else if (!gObjectList.findObject(LLUUID(destination)))
+					{
+						reportToNearbyChat("Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct.");
+					}
+					else
+					{
+						std::string folder_name;
+						if (i >> folder_name)
+						{
+							try
+							{
+								LLUUID folder = gInventory.findCategoryByName(folder_name);
+								if (folder.notNull())
+								{
+									reportToNearbyChat(llformat("kpackager started. Destination folder: \"%s\" Listening to object: \"%s\"", folder_name.c_str(), destination.c_str()));
+									
+									cmd_line_mPackagerToTake.clear();
+									cmd_line_mPackagerTargetFolderName = folder_name;
+									cmd_line_mPackagerTargetFolder = folder;
+									cmd_line_mPackagerDest = LLUUID(destination);
+								}
+								else
+								{
+									reportToNearbyChat(llformat("\"%s\" folder not found. Please check the spelling.", folder_name.c_str()));
+									reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
+								}
+							}
+							catch (std::out_of_range)
+							{
+								reportToNearbyChat("Please specify a destination folder in your inventory.");
+							}
+						}
+					}
+				}
+				else
+				{
+					reportToNearbyChat(llformat("Packager usage: \"%s destination_prim_UUID inventory folder name\"",command.c_str()));
+				}
+				return false;
+			}
+			else if (command == "kpackagerstop") {
+				if (!cmd_line_mPackagerDest.isNull()) {
+					cmd_line_mPackagerToTake.clear();
+					cmd_line_mPackagerTargetFolderName = "";
+					cmd_line_mPackagerTargetFolder.setNull();
+					cmd_line_mPackagerDest.setNull();
+					reportToNearbyChat("Packager: Stopped and cleared.");
+					return false;
+				}
+			}
 			else if (command == "ktake" || command == "kcopy")
 			{
 				std::string folder_name;
@@ -1696,4 +1757,61 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->addU8Fast(_PREHASH_State, 0);
 	msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
 	msg->sendReliable(gAgent.getRegionHost());
+}
+
+bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID) {
+	
+	if (message.empty() || cmd_line_mPackagerDest.isNull() || fromID != cmd_line_mPackagerDest)
+	{
+		return false;
+	}
+	
+	std::string cmd = message.substr(0, 12);
+	
+	if (cmd == "kpackageradd") {
+		//
+		std::string csv = message.substr(13, -1);
+		std::string::size_type start = 0;
+		std::string::size_type comma = 0;
+		do 
+		{
+			comma = csv.find(",", start);
+			if (comma == std::string::npos)
+			{
+				comma = csv.length();
+			}
+			std::string item(csv, start, comma-start);
+			LLStringUtil::trim(item);
+			LLViewerObject* objectp = gObjectList.findObject(LLUUID(item));
+			if(!objectp)
+			{
+				reportToNearbyChat(llformat("Packager: Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct: \"%s\"", item));
+				return false;
+			}
+			else
+			{
+				U32 localid = objectp->getLocalID();
+				if (std::find(cmd_line_mPackagerToTake.begin(), cmd_line_mPackagerToTake.end(), localid) == cmd_line_mPackagerToTake.end())
+				{
+					cmd_line_mPackagerToTake.push_back(localid);
+				}
+			}
+			start = comma + 1;
+
+		}
+		while(comma < csv.length());
+		
+		reportToNearbyChat(llformat("Packager: adding objects: \"%s\"", csv));
+		return true;
+	}
+	else if (cmd == "kpackagerend") {
+		
+		reportToNearbyChat("Packager: finilizing.");
+		ztake = new JCZtake(cmd_line_mPackagerTargetFolder, true, cmd_line_mPackagerDest, cmd_line_mPackagerTargetFolderName, DRD_ACQUIRE_TO_AGENT_INVENTORY, false, cmd_line_mPackagerToTake);
+		cmd_line_mPackagerToTake.clear();
+		cmd_line_mPackagerTargetFolderName = "";
+		cmd_line_mPackagerTargetFolder.setNull();
+		cmd_line_mPackagerDest.setNull();
+	}
+	return false;
 }
