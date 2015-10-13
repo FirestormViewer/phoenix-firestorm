@@ -39,6 +39,7 @@
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
 #include "llCEFLib.h"
+#include "volume_catcher.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -76,6 +77,7 @@ private:
 	void unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboardModifier modifiers, LLSD native_key_data);
 
 	void checkEditState();
+    void setVolume(F32 vol);
 
 	bool mEnableMediaPluginDebugging;
 	std::string mHostLanguage;
@@ -92,6 +94,8 @@ private:
 	std::string mCachePath;
 	std::string mCookiePath;
 	LLCEFLib* mLLCEFLib;
+
+    VolumeCatcher mVolumeCatcher;
 
 	// <FS:ND> FS specific CEF settings
 	bool mFlashEnabled;
@@ -342,6 +346,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			{
 				mLLCEFLib->update();
 
+                mVolumeCatcher.pump();
 				// this seems bad but unless the state changes (it won't until we figure out
 				// how to get CEF to tell us if copy/cut/paste is available) then this function
 				// will return immediately
@@ -407,6 +412,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mLLCEFLib->setOnTitleChangeCallback(boost::bind(&MediaPluginCEF::onTitleChangeCallback, this, _1));
 				mLLCEFLib->setOnLoadStartCallback(boost::bind(&MediaPluginCEF::onLoadStartCallback, this));
 				mLLCEFLib->setOnLoadEndCallback(boost::bind(&MediaPluginCEF::onLoadEndCallback, this, _1));
+				mLLCEFLib->setOnAddressChangeCallback(boost::bind(&MediaPluginCEF::onAddressChangeCallback, this, _1));
 				mLLCEFLib->setOnNavigateURLCallback(boost::bind(&MediaPluginCEF::onNavigateURLCallback, this, _1, _2));
 				mLLCEFLib->setOnHTTPAuthCallback(boost::bind(&MediaPluginCEF::onHTTPAuthCallback, this, _1, _2, _3, _4));
 				mLLCEFLib->setOnCursorChangedCallback(boost::bind(&MediaPluginCEF::onCursorChangedCallback, this, _1, _2));
@@ -660,7 +666,15 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mFlipY = message_in.getValueBoolean("enable");
 			}
 		}
-		else
+        else if (message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME)
+        {
+            if (message_name == "set_volume")
+            {
+                F32 volume = (F32)message_in.getValueReal("volume");
+                setVolume(volume);
+            }
+        }
+        else
 		{
 			//std::cerr << "MediaPluginWebKit::receiveMessage: unknown message class: " << message_class << std::endl;
 		};
@@ -814,6 +828,11 @@ void MediaPluginCEF::checkEditState()
 
 		sendMessage(message);
 	}
+}
+
+void MediaPluginCEF::setVolume(F32 vol)
+{
+    mVolumeCatcher.setVolume(vol);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
