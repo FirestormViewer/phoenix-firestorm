@@ -243,6 +243,12 @@ void LLFloaterPermsResponder::httpSuccess()
 	// even if it is the same as a previous one.
 	sPreviousReason = "";
 	LL_INFOS("ObjectPermissionsFloater") << "Default permissions successfully sent to simulator" << LL_ENDL;
+
+	// <FS:Ansariel> Set cap sent = true only on success to allow re-transmit on region change
+	LLFloaterPermsDefault::setCapSent(true);
+
+	// <FS:Ansariel> BUG-10466: Default creation permissions changes for objects don't work until you relog
+	LLFloaterPermsRequester::finalize();
 }
 
 std::string	LLFloaterPermsResponder::sPreviousReason;
@@ -255,7 +261,8 @@ void LLFloaterPermsDefault::sendInitialPerms()
 	// </FS:Ansariel>
 	{
 		updateCap();
-		setCapSent(true);
+		// <FS:Ansariel> Set cap sent = true only on success to allow re-transmit on region change
+		//setCapSent(true);
 	}
 }
 
