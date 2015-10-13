@@ -1789,7 +1789,7 @@ bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LL
 			LLViewerObject* objectp = gObjectList.findObject(LLUUID(item));
 			if(!objectp)
 			{
-				reportToNearbyChat(llformat("Packager: Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct: \"%s\"", item));
+				reportToNearbyChat(llformat("Packager: Unable to locate object. Please verify the object is rezzed, in view, and that the UUID is correct: \"%s\"", item.c_str()));
 				return false;
 			}
 			else
@@ -1805,7 +1805,7 @@ bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LL
 		}
 		while(comma < csv.length());
 		
-		reportToNearbyChat(llformat("Packager: adding objects: \"%s\"", csv));
+		reportToNearbyChat(llformat("Packager: adding objects: \"%s\"", csv.c_str()));
 		return true;
 	}
 	else if (cmd == "kpackagerend") {
