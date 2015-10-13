@@ -304,7 +304,7 @@ private:
 	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
 
  	//for "Show my Favorite Landmarks at Login"
-	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
+	static void handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const LLSD& value);
 
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	void onEnableGrowlChanged();
@@ -471,6 +471,7 @@ protected:
 	void saveSettings();
 	void onBtnOk();
 	void onBtnCancel();
+	void onClickCloseBtn(bool app_quitting = false);
 
 	void onChangeSocksSettings();
 

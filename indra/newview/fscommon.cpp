@@ -365,7 +365,7 @@ LLSD FSCommon::populateGroupCount()
 	LLStringUtil::format_map_t args;
 	S32 groupcount = gAgent.mGroups.size();
 	args["[COUNT]"] = llformat("%d", groupcount);
-	args["[REMAINING]"] = llformat("%d", gMaxAgentGroups - groupcount);
+	args["[REMAINING]"] = llformat("%d", gMaxAgentGroups > groupcount ? gMaxAgentGroups - groupcount : 0);
 	LLUIString groupcountstring = LLTrans::getString((gMaxAgentGroups ? "groupcountstring" : "groupcountunlimitedstring"), args);
 	return LLSD(groupcountstring);
 }

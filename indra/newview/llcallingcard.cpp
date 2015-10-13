@@ -105,7 +105,8 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 LLAvatarTracker::LLAvatarTracker() :
 	mTrackingData(NULL),
 	mTrackedAgentValid(false),
-	mModifyMask(0x0)	
+	mModifyMask(0x0),
+	mIsNotifyObservers(FALSE)
 {
 }
 
@@ -280,8 +281,8 @@ S32 LLAvatarTracker::addBuddyList(const LLAvatarTracker::buddy_map_t& buds)
 					<< "]" << LL_ENDL;
 		}
 	}
-	notifyObservers();
-	
+	// do not notify observers here - list can be large so let it be done on idle.
+
 	return new_buddy_count;
 }
 
@@ -484,8 +485,25 @@ void LLAvatarTracker::removeObserver(LLFriendObserver* observer)
 		mObservers.end());
 }
 
+void LLAvatarTracker::idleNotifyObservers()
+{
+	if (mModifyMask == LLFriendObserver::NONE && mChangedBuddyIDs.size() == 0)
+	{
+		return;
+	}
+	notifyObservers();
+}
+
 void LLAvatarTracker::notifyObservers()
 {
+	if (mIsNotifyObservers)
+	{
+		// Don't allow multiple calls.
+		// new masks and ids will be processed later from idle.
+		return;
+	}
+	mIsNotifyObservers = TRUE;
+
 	observer_list_t observers(mObservers);
 	observer_list_t::iterator it = observers.begin();
 	observer_list_t::iterator end = observers.end();
@@ -501,6 +519,7 @@ void LLAvatarTracker::notifyObservers()
 
 	mModifyMask = LLFriendObserver::NONE;
 	mChangedBuddyIDs.clear();
+	mIsNotifyObservers = FALSE;
 }
 
 void LLAvatarTracker::addParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
@@ -604,7 +623,7 @@ void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
 // store flag for change
 // and id of object change applies to
 void LLAvatarTracker::addChangedMask(U32 mask, const LLUUID& referent)
-{ 
+{
 	mModifyMask |= mask; 
 	if (referent.notNull())
 	{

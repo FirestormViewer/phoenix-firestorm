@@ -260,6 +260,14 @@ Jeśli nie chcesz, aby te przywileje były dłużej przypisane do tej roli, to w
 		Zamierzasz wyrzucić [COUNT] osób z grupy.
 		<usetemplate ignoretext="Potwierdź wyrzucenie kilku osób z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
+	<notification name="BanGroupMemberWarning">
+		Zamierzasz zbanować [AVATAR_NAME] z grupy.
+		<usetemplate ignoretext="Potwierdź przed zbanowaniem osoby z grupy" name="okcancelignore" notext="Anuluj" yestext="Banuj" />
+	</notification>
+	<notification name="BanGroupMembersWarning">
+		Zamierzasz zbanować [COUNT] osób z grupy.
+		<usetemplate ignoretext="Potwierdź przed zbanowaniem z grupy kilku osób na raz" name="okcancelignore" notext="Anuluj" yestext="Banuj" />
+	</notification>
 	<notification name="AttachmentDrop">
 		Wybrałeś/aś opcję upuszczenia swojego dodatku.
 Czy chcesz kontynuować?
@@ -1572,6 +1580,21 @@ W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
 Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
 zobacz [[INFO_URL] Więcej informacji o tej aktualizacji]
 	</notification>
+	<notification name="UpdateDownloadInProgress">
+		Aktualizacja jest dostępna!
+Pobiera się ona w tle i zostaniesz powiadomiony/a o konieczności restartu przeglądarki, gdy będzie trzeba.
+	</notification>
+	<notification name="UpdateDownloadComplete">
+		Aktualizacja została pobrana. Zostanie zainstalowana podczas restartu.
+	</notification>
+	<notification name="UpdateCheckError">
+		Wystąpił błąd podczas sprawdzania dostępności aktualizacji.
+Spróbuj ponownie później.
+	</notification>
+	<notification name="UpdateViewerUpToDate">
+		Twoja przeglądarka jest aktualna!
+Jeśli ciągle nie możesz się doczekać, aby wypróbować najnowsze funkcje i łatki, to sprawdź stronę z alternatywnymi przeglądarkami: http://wiki.secondlife.com/wiki/Linden_Lab_Official:Alternate_Viewers
+	</notification>
 	<notification name="DeedObjectToGroup">
 		Przypisanie tego obiektu spowoduje, że grupa:
 * Otrzyma L$ zapłacone temu obiektowi
@@ -1692,6 +1715,13 @@ Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie b
 	</notification>
 	<notification name="JoinedTooManyGroups">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
+	</notification>
+	<notification name="GroupLimitInfo">
+		Limit ilości grup dla kont standardowych to [MAX_BASIC], a dla [https://secondlife.com/premium/ kont premium] to [MAX_PREMIUM].
+Jeśli Twoje konto zostało pozbawione statusu premium, to musisz zejść poniżej limitu [MAX_BASIC] grup, zanim będzie można dołączyć do kolejnej.
+
+[https://secondlife.com/my/account/membership.php Przejdź na premium już teraz!]
+		<usetemplate name="okbutton" yestext="Zamknij"/>
 	</notification>
 	<notification name="KickUser">
 		Wyrzuć tego Rezydenta, wysyłając następujący komunikat.
@@ -2818,9 +2848,6 @@ Spróbuj ponownie za kilka minut.
 	</notification>
 	<notification name="NoValidCircuit">
 		Brak poprawnego obwodu kodowania.
-	</notification>
-	<notification name="NoValidTimestamp">
-		Brak poprawnego znacznika czasu.
 	</notification>
 	<notification name="NoPendingConnection">
 		Brak możliwości wykonania połączenia.

@@ -920,7 +920,7 @@ void LLPanelMainInventory::updateItemcountText()
 	}
 	else
 	{
-		text = getString("ItemcountUnknown");
+		text = getString("ItemcountUnknown", string_args);
 	}
 
     mCounterCtrl->setValue(text);

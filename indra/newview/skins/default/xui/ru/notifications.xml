@@ -3007,9 +3007,6 @@ URL: [MEDIAURL]
 	<notification name="NoValidCircuit">
 		Нет подходящего кода канала.
 	</notification>
-	<notification name="NoValidTimestamp">
-		Нет подходящей метки времени.
-	</notification>
 	<notification name="NoPendingConnection">
 		Невозможно создать отложенное соединение.
 	</notification>

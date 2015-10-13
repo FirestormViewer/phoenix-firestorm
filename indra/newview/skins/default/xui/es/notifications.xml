@@ -3032,9 +3032,6 @@ Por favor, vuelve a intentarlo en unos momentos.
 	<notification name="NoValidCircuit">
 		Código de circuito inválido.
 	</notification>
-	<notification name="NoValidTimestamp">
-		Fecha inválida.
-	</notification>
 	<notification name="NoPendingConnection">
 		No se puede crear la conexión.
 	</notification>

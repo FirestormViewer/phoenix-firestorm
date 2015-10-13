@@ -242,18 +242,13 @@ void LLUriParser::glueSecond(std::string& uri) const
 	{
 		uri += '?';
 		uri += mQuery;
-
-	// <FS:Ansariel> BUG-9154: Fragment is cut off
 	}
-	// </FS:Ansariel>
 
-		if (mFragment.size())
-		{
-			uri += '#';
-			uri += mFragment;
-		}
-	// <FS:Ansariel> BUG-9154
-	//}
+	if (mFragment.size())
+	{
+		uri += '#';
+		uri += mFragment;
+	}
 }
 
 bool LLUriParser::test() const

@@ -169,61 +169,89 @@ void LLFloaterPermsDefault::onCommitCopy(const LLSD& user_data)
 	xfer->setEnabled(copyable);
 }
 
-class LLFloaterPermsResponder : public LLHTTPClient::Responder
+const int MAX_HTTP_RETRIES = 5;
+LLFloaterPermsRequester* LLFloaterPermsRequester::sPermsRequester = NULL;
+
+LLFloaterPermsRequester::LLFloaterPermsRequester(const std::string url, const LLSD report, 
+	int maxRetries)
+	: mRetriesCount(0), mMaxRetries(maxRetries), mUrl(url), mReport(report)
+{}
+
+//static 
+void LLFloaterPermsRequester::init(const std::string url, const LLSD report, int maxRetries)
 {
-public:
-	LLFloaterPermsResponder(): LLHTTPClient::Responder() {}
-	// <FS:Ansariel> Add some retry function
-	static U32 sRetryCount;
-
-private:
-	static	std::string sPreviousReason;
-
-	void httpFailure()
+	if (sPermsRequester == NULL) {
+		sPermsRequester = new LLFloaterPermsRequester(url, report, maxRetries);
+	}
+}
+    
+//static
+void LLFloaterPermsRequester::finalize()
+{
+	if (sPermsRequester != NULL)
 	{
+		delete sPermsRequester;
+		sPermsRequester = NULL;
+	}
+}
+
+//static
+LLFloaterPermsRequester* LLFloaterPermsRequester::instance()
+{
+	return sPermsRequester;
+}
+
+void LLFloaterPermsRequester::start()
+{
+	++mRetriesCount;
+	LLHTTPClient::post(mUrl, mReport, new LLFloaterPermsResponder());
+}
+    
+bool LLFloaterPermsRequester::retry()
+{
+	if (++mRetriesCount < mMaxRetries)
+	{
+		LLHTTPClient::post(mUrl, mReport, new LLFloaterPermsResponder());
+		return true;
+	}
+	return false;
+}
+
+void LLFloaterPermsResponder::httpFailure()
+{
+	if (!LLFloaterPermsRequester::instance() || !LLFloaterPermsRequester::instance()->retry())
+	{
+		LLFloaterPermsRequester::finalize();
 		const std::string& reason = getReason();
 		// Do not display the same error more than once in a row
 		if (reason != sPreviousReason)
 		{
-			// <FS:Ansariel> Add some retry function
-			if (sRetryCount >= 5)
-			{
-			// </FS:Ansariel>
 			sPreviousReason = reason;
 			LLSD args;
 			args["REASON"] = reason;
 			LLNotificationsUtil::add("DefaultObjectPermissions", args);
-			// <FS:Ansariel> Add some retry function
-			}
-			else
-			{
-				LL_WARNS("FloaterPermsResponder") << "Sending default permissions to simulator failed. Retrying (attempt " << sRetryCount << ")" << LL_ENDL;
-				sRetryCount++;
-				LLFloaterPermsDefault::sendInitialPerms();
-			}
-			// </FS:Ansariel>
 		}
 	}
+}
 
-	void httpSuccess()
-	{
-		//const LLSD& content = getContent();
-		//dump_sequential_xml("perms_responder_result.xml", content);
+void LLFloaterPermsResponder::httpSuccess()
+{
+	//const LLSD& content = getContent();
+	//dump_sequential_xml("perms_responder_result.xml", content);
 
-		// Since we have had a successful POST call be sure to display the next error message
-		// even if it is the same as a previous one.
-		sPreviousReason = "";
-		// <FS:Ansariel> Add some retry function
-		sRetryCount = 0;
-		LLFloaterPermsDefault::setCapSent(true);
-		LL_INFOS("ObjectPermissionsFloater") << "Default permissions successfully sent to simulator" << LL_ENDL;
-	}
-};
+	// Since we have had a successful POST call be sure to display the next error message
+	// even if it is the same as a previous one.
+	sPreviousReason = "";
+	LL_INFOS("ObjectPermissionsFloater") << "Default permissions successfully sent to simulator" << LL_ENDL;
 
-// <FS:Ansariel> Add some retry function
-U32 LLFloaterPermsResponder::sRetryCount = 0;
+	// <FS:Ansariel> Set cap sent = true only on success to allow re-transmit on region change
+	LLFloaterPermsDefault::setCapSent(true);
 
-	std::string	LLFloaterPermsResponder::sPreviousReason;
+	// <FS:Ansariel> BUG-10466: Default creation permissions changes for objects don't work until you relog
+	LLFloaterPermsRequester::finalize();
+}
+
+std::string	LLFloaterPermsResponder::sPreviousReason;
 
 void LLFloaterPermsDefault::sendInitialPerms()
 {
@@ -233,6 +261,8 @@ void LLFloaterPermsDefault::sendInitialPerms()
 	// </FS:Ansariel>
 	{
 		updateCap();
+		// <FS:Ansariel> Set cap sent = true only on success to allow re-transmit on region change
+		//setCapSent(true);
 	}
 }
 
@@ -257,9 +287,8 @@ void LLFloaterPermsDefault::updateCap()
             LLSDSerialize::toPrettyXML(report, sent_perms_log);
             LL_CONT << sent_perms_log.str() << LL_ENDL;
         }
-    
-		LLFloaterPermsResponder::sRetryCount++;
-		LLHTTPClient::post(object_url, report, new LLFloaterPermsResponder());
+        LLFloaterPermsRequester::init(object_url, report, MAX_HTTP_RETRIES);
+        LLFloaterPermsRequester::instance()->start();
 	}
     else
     {
@@ -277,9 +306,6 @@ void LLFloaterPermsDefault::setCapSent(bool cap_sent)
 
 void LLFloaterPermsDefault::ok()
 {
-	// <FS:Ansariel> Add some retry function
-	LLFloaterPermsResponder::sRetryCount = 0;
-
 //	Changes were already applied automatically to saved settings.
 //	Refreshing internal values makes it official.
 	refresh();

@@ -18,9 +18,9 @@
 	<text name="text_name">
 		Erlebnisliste
 	</text>
-	<scroll_list name="experience_list">
-		<columns label="Name" name="experience_name"/>
-	</scroll_list>
+	<name_list name="experience_list">
+		<name_list.columns label="Name" name="experience_name"/>
+	</name_list>
 	<button label="Hinzufüg." name="btn_add"/>
 	<button label="Entfernen" name="btn_remove"/>
 	<button label="Profil..." name="btn_profile"/>

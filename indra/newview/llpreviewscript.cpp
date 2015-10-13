@@ -1751,6 +1751,8 @@ void LLLiveLSLEditor::buildExperienceList()
 	else
 	{
 		mExperiences->setEnabled(TRUE);
+		mExperiences->sortByName(TRUE);
+		mExperiences->setCurrentByIndex(mExperiences->getCurrentIndex());
 		getChild<LLButton>("view_profile")->setVisible(TRUE);
 	}
 }
@@ -3243,12 +3245,16 @@ void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save, bool sync)
 // </FS:Ansariel>
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
-
-	self->mCloseAfterSave = close_after_save;
-	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-	//self->saveIfNeeded();
-	self->saveIfNeeded(sync);
-	// </FS:Ansariel>
+	if(self)
+	{
+		self->mCloseAfterSave = close_after_save;
+		// <FS:Ansariel> Commented out because we fixed errors differently
+		//self->mScriptEd->mErrorList->setCommentText("");
+		// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
+		//self->saveIfNeeded();
+		self->saveIfNeeded(sync);
+		// </FS:Ansariel>
+	}
 }
 
 

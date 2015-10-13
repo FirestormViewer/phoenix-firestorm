@@ -76,7 +76,6 @@
 	<menu_item_call label="Wklej jako link" name="Paste As Link"/>
 	<menu_item_call label="Znajdź wszystkie linki" name="Find Links"/>
 	<menu_item_call label="Zastąp linki" name="Replace Links"/>
-	<menu_item_call label="Usuń ten link" name="Remove Link"/>
 	<menu_item_call label="Usuń" name="Delete"/>
 	<menu_item_call label="Wyczyść zepsute linki" name="Cleanup broken Links"/>
 	<menu_item_call label="Przenieś do domyślnego folderu" name="Move to Default Folder"/>
@@ -105,7 +104,6 @@
 	<menu_item_call label="Dotknij" name="Touch Attachment"/>
 	<menu_item_call label="Zdejmij" name="Take Off"/>
 	<menu_item_call label="Odłącz od siebie" name="Detach From Yourself"/>
-	<menu_item_call label="Kopiuj do Skrzynki Kupca" name="Merchant Copy"/>
 	<menu_item_call label="Kopiuj do rzeczy Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Przenieś do rzeczy Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--brak opcji--" name="--no options--"/>

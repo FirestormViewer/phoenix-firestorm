@@ -37,6 +37,7 @@
 #include "lltextparser.h"
 #include "lltextutil.h"
 #include "lltooltip.h"
+#include "lltrans.h"
 #include "lluictrl.h"
 #include "llurlaction.h"
 #include "llurlregistry.h"
@@ -2265,9 +2266,17 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// add icon before url if need
 			// <FS:Ansariel> Optional icon position
 			//LLTextUtil::processUrlMatch(&match, this, isContentTrusted() || match.isTrusted());
+			//if ((isContentTrusted() || match.isTrusted()) && !match.getIcon().empty() )
+			//{
+			//	setLastSegmentToolTip(LLTrans::getString("TooltipSLIcon"));
+			//}
 			if (mIconPositioning == LLTextBaseEnums::LEFT || match.isTrusted())
 			{
 				LLTextUtil::processUrlMatch(&match, this, isContentTrusted() || match.isTrusted());
+				if ((isContentTrusted() || match.isTrusted()) && !match.getIcon().empty() )
+				{
+					setLastSegmentToolTip(LLTrans::getString("TooltipSLIcon"));
+				}
 			}
 			// </FS:Ansariel> Optional icon position
 
@@ -2277,47 +2286,33 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
 									   input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
 			// </FS:CR>
+			bool tooltip_required =  !match.getTooltip().empty();
 
-			// <FS:Ansariel> Unfail URI display
-			// set the tooltip for the Url label (host part)
-			if (! match.getTooltip().empty())
+			// set the tooltip for the Url label
+			if (tooltip_required)
 			{
-				segment_set_t::iterator it = getSegIterContaining(getLength()-1);
-				if (it != mSegments.end())
-				{
-					LLTextSegmentPtr segment = *it;
-					segment->setToolTip(match.getTooltip());
-				}
+				setLastSegmentToolTip(match.getTooltip());
 			}
-			// </FS:Ansariel>
 
-			// show query part of url with gray color only for LLUrlEntryHTTP and LLUrlEntryHTTPNoProtocol url entries
+			// show query part of url with gray color only for LLUrlEntryHTTP url entries
 			std::string label = match.getQuery();
 			if (label.size())
 			{
 				// <FS:Ansariel> Custom URI query part color
 				//link_params.color = LLColor4::grey;
 				//link_params.readonly_color = LLColor4::grey;
+				//appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
 				static LLUIColor query_part_color = LLUIColorTable::getInstance()->getColor("UriQueryPartColor", LLColor4::grey);
 				link_params.color = query_part_color;
 				link_params.readonly_color = query_part_color;
-				// </FS:Ansariel>
-			// <FS:Ansariel> Unfail URI display; add tooltip for query part
-				//appendAndHighlightTextImpl(label, part, link_params, match.underlineOnHoverOnly());
 				appendAndHighlightTextImpl(label, part, link_params, input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
-			//}
-			
-			// set the tooltip for the Url label
-			if (! match.getTooltip().empty())
-			{
-				segment_set_t::iterator it = getSegIterContaining(getLength()-1);
-				if (it != mSegments.end())
+				// </FS:Ansariel>
+
+				// set the tooltip for the query part of url
+				if (tooltip_required)
 				{
-					LLTextSegmentPtr segment = *it;
-					segment->setToolTip(match.getTooltip());
+					setLastSegmentToolTip(match.getTooltip());
 				}
-			}
-			// <FS:Ansariel> Unfail URI display
 			}
 
 			// <FS:Ansariel> Optional icon position
@@ -2347,6 +2342,16 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 	else
 	{
 		appendAndHighlightText(new_text, part, style_params);
+	}
+}
+
+void LLTextBase::setLastSegmentToolTip(const std::string &tooltip)
+{
+	segment_set_t::iterator it = getSegIterContaining(getLength()-1);
+	if (it != mSegments.end())
+	{
+		LLTextSegmentPtr segment = *it;
+		segment->setToolTip(tooltip);
 	}
 }
 
@@ -3866,6 +3871,22 @@ S32	 LLImageTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 	}
 
 	return 0;
+}
+
+BOOL LLImageTextSegment::handleToolTip(S32 x, S32 y, MASK mask)
+{
+	if (!mTooltip.empty())
+	{
+		LLToolTipMgr::instance().show(mTooltip);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+void LLImageTextSegment::setToolTip(const std::string& tooltip)
+{
+	mTooltip = tooltip;
 }
 
 F32	LLImageTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect)

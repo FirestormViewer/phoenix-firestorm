@@ -374,25 +374,32 @@ void LLSidepanelTaskInfo::refresh()
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
-// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	BOOL creators_identical = FALSE;
-// [/RLVa:KB]
 	std::string creator_name;
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
+	BOOL creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
 // [/RLVa:KB]
-//	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
-
-//	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
-//	getChildView("Creator Name")->setEnabled(TRUE);
+//	LLUUID creator_id;
+//	LLSelectMgr::getInstance()->selectGetCreator(creator_id, creator_name);
+//
+//	if(creator_id != mCreatorID )
+//	{
+//		mDACreatorName->setValue(creator_name);
+//		mCreatorID = creator_id;
+//	}
+//	mDACreatorName->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
 
 	std::string owner_name;
+// <FS:Ansariel> RLVa change
+//	LLUUID owner_id;
+//	const BOOL owners_identical = LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name);
+//	if (owner_id.isNull())
 	const BOOL owners_identical = LLSelectMgr::getInstance()->selectGetOwner(mOwnerID, owner_name);
 	if (mOwnerID.isNull())
+// </FS:Ansariel>
 	{
 		if (LLSelectMgr::getInstance()->selectIsGroupOwned())
 		{
@@ -413,8 +420,12 @@ void LLSidepanelTaskInfo::refresh()
 			}
 		}
 	}
-//	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
-//	getChildView("Owner Name")->setEnabled(TRUE);
+
+//	if(owner_id.isNull() || (owner_id != mOwnerID))
+//	{
+//		mDAOwnerName->setValue(owner_name);
+//		mOwnerID = owner_id;
+//	}
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a

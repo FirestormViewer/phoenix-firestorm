@@ -105,7 +105,6 @@
 	<menu_item_call label="Коснуться" name="Touch Attachment"/>
 	<menu_item_call label="Снять" name="Take Off"/>
 	<menu_item_call label="Отделить от себя" name="Detach From Yourself"/>
-	<menu_item_call label="Копировать в 'Исходящие продавца'" name="Merchant Copy"/>
 	<menu_item_call label="Отправить на Marketplace" name="Marketplace Send"/>
 	<menu_item_call label="Копировать в списки товаров торгового центра" name="Marketplace Copy"/>
 	<menu_item_call label="Переместить в списки товаров торгового центра" name="Marketplace Move"/>

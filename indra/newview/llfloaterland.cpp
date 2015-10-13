@@ -2660,12 +2660,14 @@ void LLPanelLandAccess::refresh()
 			mListAccess->clearSortOrder();
 			mListAccess->deleteAllItems();
 			S32 count = parcel->mAccessList.size();
-			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
-			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 			// <FS:Ansariel> FIRE-9211: Add counter to parcel ban and access lists
+			//getChild<LLUICtrl>("AllowedText")->setTextArg("[COUNT]", llformat("%d",count));
 			getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
 			getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 			// </FS:Ansariel>
+
+			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
+			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 
 			for (LLAccessEntry::map::const_iterator cit = parcel->mAccessList.begin();
 				 cit != parcel->mAccessList.end(); ++cit)
@@ -2709,13 +2711,14 @@ void LLPanelLandAccess::refresh()
 			mListBanned->clearSortOrder();
 			mListBanned->deleteAllItems();
 			S32 count = parcel->mBanList.size();
-
-			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
-			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 			// <FS:Ansariel> FIRE-9211: Add counter to parcel ban and access lists
+			//getChild<LLUICtrl>("BanCheck")->setTextArg("[COUNT]", llformat("%d",count));
 			getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
 			getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 			// </FS:Ansariel>
+
+			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
+			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
 
 			for (LLAccessEntry::map::const_iterator cit = parcel->mBanList.begin();
 				 cit != parcel->mBanList.end(); ++cit)

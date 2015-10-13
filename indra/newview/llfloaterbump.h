@@ -52,6 +52,11 @@ public:
 	/*virtual*/ void draw();
 	void setDirty() { mDirty = true; }
 	
+	static LLFloaterBump* getInstance();
+
+	// <FS:Ansariel> Instant bump list floater update
+	//void populateCollisionList();
+
 	void startIM();
 	void startCall();
 	void reportAbuse();

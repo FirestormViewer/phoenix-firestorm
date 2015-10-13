@@ -368,11 +368,20 @@ S32 LLPrimTextureList::setMaterialID(const U8 index, const LLMaterialID& pMateri
 	return TEM_CHANGE_NONE;
 }
 
-S32 LLPrimTextureList::setMaterialParams(const U8 index, const LLMaterialPtr pMaterialParams)
+S32 LLPrimTextureList::setMaterialParams(const U8 index, const LLMaterialPtr pMaterialParams, bool isInitFromServer)
 {
 	if (index < mEntryList.size())
 	{
-		return mEntryList[index]->setMaterialParams(pMaterialParams);
+		// <FS:Ansariel> MAINT-5733 / BUG-10459: Scripted alpha mode changes don't show up until after relog
+		//if (!isInitFromServer && mEntryList[index]->isMatParamsInitFromServer())
+		//{
+		//	return TEM_CHANGE_NONE;
+		//}
+		//else
+		// </FS:Ansariel>
+		{
+			return mEntryList[index]->setMaterialParams(pMaterialParams);
+		}
 	}
 	return TEM_CHANGE_NONE;
 }

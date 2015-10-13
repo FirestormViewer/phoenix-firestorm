@@ -105,7 +105,6 @@
 	<menu_item_call label="触る" name="Touch Attachment" />
 	<menu_item_call label="取り外す" name="Take Off"/>
 	<menu_item_call label="自分から取り外す" name="Detach From Yourself" />
-	<menu_item_call label="マーチャントのアウトボックスにコピー" name="Merchant Copy"/>
 	<menu_item_call label="マーケットプレイスのリストにコピー" name="Marketplace Copy"/>
 	<menu_item_call label="マーケットプレイスのリストに移動" name="Marketplace Move"/>
 	<menu_item_call label="－－オプションなし－－" name="--no options--"/>
