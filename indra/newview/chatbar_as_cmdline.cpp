@@ -67,6 +67,10 @@
 #include "rlvactions.h"
 // [/RLVa:KB]
 
+std::vector<U32> cmd_line_mPackagerToTake;
+std::string cmd_line_mPackagerTargetFolderName;
+LLUUID cmd_line_mPackagerTargetFolder;
+LLUUID cmd_line_mPackagerDest;
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
 {
