@@ -222,7 +222,10 @@ std::string stripSuffix(std::string name)
 }
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// <FS:CR> Threaded Filepickers
+//: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+: LLLoadFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// </FS:CR>
 	{
 		mMP = mp;
 		mLOD = lod;
@@ -3550,75 +3553,6 @@ U32 LLModelPreview::loadTextures(LLImportMaterial& material,void* opaque)
 	return 0;	
 }
 
-//static
-U32 LLModelPreview::countRootModels(LLModelLoader::model_list models)
-{
-	U32 root_models = 0;
-	model_list::iterator model_iter = models.begin();
-	while (model_iter != models.end())
-	{
-		LLModel* mdl = *model_iter;
-		if (mdl && mdl->mSubmodelID == 0)
-		{
-			root_models++;
-		}
-		model_iter++;
-	}
-	return root_models;
-}
-
-void LLModelPreview::loadedCallback(
-	LLModelLoader::scene& scene,
-	LLModelLoader::model_list& model_list,
-	S32 lod,
-	void* opaque)
-{
-	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
-	if (pPreview && !LLModelPreview::sIgnoreLoadedCallback)
-	{
-		pPreview->loadModelCallback(lod);
-	}	
-}
-
-void LLModelPreview::stateChangedCallback(U32 state,void* opaque)
-{
-	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
-	if (pPreview)
-	{
-	 pPreview->setLoadState(state);
-	}
-}
-
-LLJoint* LLModelPreview::lookupJointByName(const std::string& str, void* opaque)
-{
-	LLModelPreview* pPreview = static_cast< LLModelPreview* >(opaque);
-	if (pPreview)
-	{
-		return pPreview->getPreviewAvatar()->getJoint(str);
-	}
-	return NULL;
-}
-
-U32 LLModelPreview::loadTextures(LLImportMaterial& material,void* opaque)
-{
-	(void)opaque;
-
-	if (material.mDiffuseMapFilename.size())
-	{
-		material.mOpaqueData = new LLPointer< LLViewerFetchedTexture >;
-		LLPointer< LLViewerFetchedTexture >& tex = (*reinterpret_cast< LLPointer< LLViewerFetchedTexture > * >(material.mOpaqueData));
-
-		tex = LLViewerTextureManager::getFetchedTextureFromUrl("file://" + material.mDiffuseMapFilename, FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_PREVIEW);
-		tex->setLoadedCallback(LLModelPreview::textureLoadedCallback, 0, TRUE, FALSE, opaque, NULL, FALSE);
-		tex->forceToSaveRawImage(0, F32_MAX);
-		material.setDiffuseMap(tex->getID()); // record tex ID
-		return 1;
-	}
-
-	material.mOpaqueData = NULL;
-	return 0;	
-}
-
 void LLModelPreview::addEmptyFace( LLModel* pTarget )
 {
 	U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
@@ -4280,6 +4214,7 @@ BOOL LLModelPreview::render()
 							{
 								mTextureSet.insert(tex);
 	
+							}
 							
 							} else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
 							{
