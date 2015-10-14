@@ -16,6 +16,11 @@ include(OpenGL)
 
 include(CEFPlugin)
 
+# <FS:ND> Linux volume catcher
+include(PulseAudio)
+include_directories( ${PULSEAUDIO_INCLUDE_DIRS} )
+# </FS:ND>
+
 include_directories(
     ${LLPLUGIN_INCLUDE_DIRS}
     ${MEDIA_PLUGIN_BASE_INCLUDE_DIRS}
@@ -59,9 +64,17 @@ set (media_plugin_cef_LINK_LIBRARIES
 
 # Select which VolumeCatcher implementation to use
 if (LINUX)
-  message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
-    "  Please create a volume_catcher implementation for this platform.")
-    
+  #message(FATAL_ERROR "CEF plugin has been enabled for a Linux compile.\n"
+  #  "  Please create a volume_catcher implementation for this platform.")
+  if (PULSEAUDIO_FOUND)
+    list(APPEND media_plugin_cef_SOURCE_FILES linux_volume_catcher.cpp)
+  else (PULSEAUDIO_FOUND)
+    list(APPEND media_plugin_cef_SOURCE_FILES dummy_volume_catcher.cpp)
+  endif (PULSEAUDIO_FOUND)
+  list(APPEND media_plugin_cef_LINK_LIBRARIES
+       ${UI_LIBRARIES}     # for glib/GTK
+       Xext #<FS:ND/> force pulling libXext in, otherwise we get undefined symbols.
+       )
 elseif (DARWIN)
   list(APPEND media_plugin_cef_SOURCE_FILES mac_volume_catcher.cpp)
   find_library(CORESERVICES_LIBRARY CoreServices)
