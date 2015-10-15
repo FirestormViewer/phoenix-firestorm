@@ -50,6 +50,7 @@
 //#include "llfirstuse.h"
 #include "llfloaterreg.h"
 #include "llfloaterabout.h"
+#include "llfavoritesbar.h"
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
@@ -3345,6 +3346,9 @@ LLPanelPreference::LLPanelPreference()
 	mCommitCallbackRegistrar.add("Pref.PrefDelete",	boost::bind(&LLPanelPreference::deletePreset, this, _2));
 	mCommitCallbackRegistrar.add("Pref.PrefSave",	boost::bind(&LLPanelPreference::savePreset, this, _2));
 	mCommitCallbackRegistrar.add("Pref.PrefLoad",	boost::bind(&LLPanelPreference::loadPreset, this, _2));
+
+	// <FS:Ansariel> Customizable contact list columns
+	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&LLPanelPreference::onCheckContactListColumnMode, this));
 }
 
 //virtual
@@ -3438,7 +3442,7 @@ BOOL LLPanelPreference::postBuild()
 	}
 	if (hasChild("favorites_on_login_check", TRUE))
 	{
-		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&showFavoritesOnLoginWarning, _1, _2));
+		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&handleFavoritesOnLoginChanged, _1, _2));
 		// <FS:Ansariel> [FS Login Panel]
 		//bool show_favorites_at_login = LLPanelLogin::getShowFavorites();
 		bool show_favorites_at_login = FSPanelLogin::getShowFavorites();
@@ -3497,6 +3501,14 @@ BOOL LLPanelPreference::postBuild()
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&LLPanelPreference::onEnableGrowlChanged, this));
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setEnabled(GrowlManager::isUsable());
 		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+	}
+	// </FS:Ansariel>
+
+	////////////////////// PanelUI ///////////////////
+	// <FS:Ansariel> Customizable contact list columns
+	if (hasChild("textFriendlistColumns", TRUE))
+	{
+		onCheckContactListColumnMode();
 	}
 	// </FS:Ansariel>
 
@@ -3577,11 +3589,15 @@ void LLPanelPreference::showCustomPortWarning(LLUICtrl* checkbox, const LLSD& va
 }
 // [/WoLf]
 
-void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value)
+void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const LLSD& value)
 {
-	if (checkbox && checkbox->getValue())
+	if (checkbox)
 	{
-		LLNotificationsUtil::add("FavoritesOnLogin");
+		LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
+		if(checkbox->getValue())
+		{
+			LLNotificationsUtil::add("FavoritesOnLogin");
+		}
 	}
 }
 
@@ -3618,6 +3634,15 @@ void LLPanelPreference::updateMapPickRadiusTransparency(const LLSD& value)
 	color.mV[VW] = value.asReal();
 	color_table.setColor("MapPickRadiusColor", color);
 	color_swatch->set(color);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Customizable contact list columns
+void LLPanelPreference::onCheckContactListColumnMode()
+{
+	childSetEnabled("FSFriendListColumnShowUserName", gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
+	childSetEnabled("FSFriendListColumnShowFullName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
 }
 // </FS:Ansariel>
 
@@ -4082,6 +4107,11 @@ void LLFloaterPreferenceProxy::onOpen(const LLSD& key)
 
 void LLFloaterPreferenceProxy::onClose(bool app_quitting)
 {
+	if(app_quitting)
+	{
+		cancel();
+	}
+
 	if (mSocksSettingsDirty)
 	{
 
@@ -4181,6 +4211,11 @@ void LLFloaterPreferenceProxy::onBtnCancel()
 	cancel();
 }
 
+void LLFloaterPreferenceProxy::onClickCloseBtn(bool app_quitting)
+{
+	cancel();
+}
+
 void LLFloaterPreferenceProxy::cancel()
 {
 
@@ -4191,7 +4226,7 @@ void LLFloaterPreferenceProxy::cancel()
 		LLSD ctrl_value = iter->second;
 		control->set(ctrl_value);
 	}
-
+	mSocksSettingsDirty = false;
 	closeFloater();
 }
 

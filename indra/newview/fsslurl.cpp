@@ -80,8 +80,15 @@ LLSLURL::LLSLURL(const std::string& slurl)
 	{
 		LLURI slurl_uri;
 		// parse the slurl as a uri
+		if (slurl.substr(0, 7) == "mailto:")
+		{
+			LL_DEBUGS("SLURL") << "mailto slurl " << slurl<< LL_ENDL;
+			return;
+		}
 		if(slurl.find("://") == std::string::npos)
 		{
+			LL_DEBUGS("SLURL") << "no scheme slurl " << slurl<< LL_ENDL;
+
 			// There may be no scheme ('secondlife:' etc.) passed in.  In that case
 			// we want to normalize the slurl by putting the appropriate scheme
 			// in front of the slurl.  So, we grab the appropriate slurl base

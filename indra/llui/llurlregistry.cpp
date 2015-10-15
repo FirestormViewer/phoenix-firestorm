@@ -41,7 +41,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //	mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-	mUrlEntry.reserve(25);
+	mUrlEntry.reserve(26);
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
@@ -90,9 +90,9 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntrySL());
 	mUrlEntrySLLabel = new LLUrlEntrySLLabel();
 	registerUrl(mUrlEntrySLLabel);
-	// most common pattern is a URL without any protocol,
-	// e.g., "secondlife.com"
-	registerUrl(new LLUrlEntryHTTPNoProtocol());	
+	// <FS:Ansariel> Allow URLs with no protocol again
+	registerUrl(new LLUrlEntryHTTPNoProtocol());
+	registerUrl(new LLUrlEntryEmail());
 	// parse jira issue names to links -KC
 	registerUrl(new LLUrlEntryJira());
 }
@@ -171,9 +171,6 @@ static bool stringHasUrl(const std::string &text)
 	return (text.find("://") != std::string::npos ||
 			// text.find("www.") != std::string::npos ||
 			// text.find(".com") != std::string::npos ||
-			// text.find(".net") != std::string::npos ||
-			// text.find(".edu") != std::string::npos ||
-			// text.find(".org") != std::string::npos ||
 			// allow ALLCAPS urls -KC
 			boost::ifind_first(text, "www.") ||
 			boost::ifind_first(text, ".com") ||
@@ -181,7 +178,8 @@ static bool stringHasUrl(const std::string &text)
 			boost::ifind_first(text, ".edu") ||
 			boost::ifind_first(text, ".org") ||
 			text.find("<nolink>") != std::string::npos ||
-			text.find("<icon") != std::string::npos);
+			text.find("<icon") != std::string::npos ||
+			text.find("@") != std::string::npos);
 }
 
 static bool stringHasJira(const std::string &text)
@@ -278,8 +276,39 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 	// did we find a match? if so, return its details in the match object
 	if (match_entry)
 	{
+
+		// Skip if link is an email with an empty username (starting with @). See MAINT-5371.
+		if (match_start > 0 && text.substr(match_start - 1, 1) == "@")
+			return false;
+
 		// fill in the LLUrlMatch object and return it
 		std::string url = text.substr(match_start, match_end - match_start + 1);
+
+		LLUrlEntryBase *stripped_entry = NULL;
+		if(LLStringUtil::containsNonprintable(url))
+		{
+			LLStringUtil::stripNonprintable(url);
+
+			std::vector<LLUrlEntryBase *>::iterator iter;
+			for (iter = mUrlEntry.begin(); iter != mUrlEntry.end(); ++iter)
+			{
+				LLUrlEntryBase *url_entry = *iter;
+				U32 start = 0, end = 0;
+				if (matchRegex(url.c_str(), url_entry->getPattern(), start, end))
+				{
+					if (mLLUrlEntryInvalidSLURL == *iter)
+					{
+						if(url_entry && url_entry->isSLURLvalid(url))
+						{
+							continue;
+						}
+					}
+					stripped_entry = url_entry;
+					break;
+				}
+			}
+		}
+
 
 		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
 		//if (match_entry == mUrlEntryTrusted)
@@ -298,10 +327,12 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		}
 		// </FS:Ansariel>
 
+		std::string url_label = stripped_entry? stripped_entry->getLabel(url, cb) : match_entry->getLabel(url, cb);
+		std::string url_query = stripped_entry? stripped_entry->getQuery(url) : match_entry->getQuery(url);
 		match.setValues(match_start, match_end,
 						match_entry->getUrl(url),
-						match_entry->getLabel(url, cb),
-						match_entry->getQuery(url),
+						url_label,
+						url_query,
 						match_entry->getTooltip(url),
 						match_entry->getIcon(url),
 						match_entry->getStyle(),

@@ -9,6 +9,9 @@
 	[ITEM_COUNT] Objekte [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT] Objekte abgerufen [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
 	Objekte:
   </panel.string>
 

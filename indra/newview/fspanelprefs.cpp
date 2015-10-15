@@ -48,7 +48,6 @@ FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 {
 	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&FSPanelPrefs::onCommitCopy, this));
 	mCommitCallbackRegistrar.add("Perms.Trans", boost::bind(&FSPanelPrefs::onCommitTrans, this));
-	mCommitCallbackRegistrar.add("FS.CheckContactListColumnMode", boost::bind(&FSPanelPrefs::onCheckContactListColumnMode, this));
 
 	mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
 }
@@ -76,8 +75,6 @@ BOOL FSPanelPrefs::postBuild()
 
 	mInvDropTarget = getChild<FSEmbeddedItemDropTarget>("embed_item");
 	mInvDropTarget->setDADCallback(boost::bind(&FSPanelPrefs::onDADEmbeddedItem, this, _1));
-
-	onCheckContactListColumnMode();
 
 	return LLPanelPreference::postBuild();
 }
@@ -290,13 +287,6 @@ void FSPanelPrefs::onCommitTrans()
 	{
 		gSavedSettings.setBOOL("NextOwnerCopy", TRUE);
 	}
-}
-
-void FSPanelPrefs::onCheckContactListColumnMode()
-{
-	childSetEnabled("FSFriendListColumnShowUserName", gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
-	childSetEnabled("FSFriendListColumnShowDisplayName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowFullName"));
-	childSetEnabled("FSFriendListColumnShowFullName", gSavedSettings.getBOOL("FSFriendListColumnShowUserName") || gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName"));
 }
 
 void FSPanelPrefs::onDADEmbeddedItem(const LLUUID& item_id)

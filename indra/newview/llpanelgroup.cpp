@@ -367,7 +367,7 @@ void LLPanelGroup::update(LLGroupChange gc)
 		// </FS:Ansariel>
 		
 		LLGroupData agent_gdatap;
-		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlike();
+		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlikeWithoutAdminMenuFakery();
 		bool join_btn_visible = !is_member && gdatap->mOpenEnrollment;
 		
 		mButtonJoin->setVisible(join_btn_visible);
@@ -499,7 +499,7 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 		}
 
 		LLGroupData agent_gdatap;
-		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlike();
+		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlikeWithoutAdminMenuFakery();
 		
 		tab_roles->setVisible(is_member);
 		tab_notices->setVisible(is_member);

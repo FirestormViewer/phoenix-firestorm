@@ -39,6 +39,7 @@
 #include <map>
 #include <set>
 #include "../newview/lggcontactsets.h"
+#include "../llxml/llcontrol.h"
 
 namespace LLAvatarNameCache
 {
@@ -762,22 +763,53 @@ void LLAvatarNameCache::insert(const LLUUID& agent_id, const LLAvatarName& av_na
 
 F64 LLAvatarNameCache::nameExpirationFromHeaders(const LLSD& headers)
 {
-	const F64 DEFAULT_EXPIRES = 60.0 * 60.0 + LLFrameTimer::getTotalSeconds();
-	
-	F64 expires = 0.0;
-	if (expirationFromCacheControl(headers, &expires))
+	// <FS:Ansariel> Optional legacy name cache expiration in case SL can't handle us... ;)
+	//F64 expires = 0.0;
+	//if (expirationFromCacheControl(headers, &expires))
+	//{
+	//	return expires;
+	//}
+	//else
+	//{
+	//	// With no expiration info, default to an hour
+	//	const F64 DEFAULT_EXPIRES = 60.0 * 60.0;
+	//	F64 now = LLFrameTimer::getTotalSeconds();
+	//	return now + DEFAULT_EXPIRES;
+	//}
+
+	static LLCachedControl<bool> use_legacy_namecache_expiration(*LLControlGroup::getInstance("Global"), "FSLegacyNameCacheExpiration");
+	if (!use_legacy_namecache_expiration)
 	{
-		//AO make sure cache expiration is at least 1HR
-		if (expires < DEFAULT_EXPIRES) {expires = DEFAULT_EXPIRES;}
-		return expires;
+		F64 expires = 0.0;
+		if (expirationFromCacheControl(headers, &expires))
+		{
+			return expires;
+		}
+		else
+		{
+			// With no expiration info, default to an hour
+			const F64 DEFAULT_EXPIRES = 60.0 * 60.0;
+			F64 now = LLFrameTimer::getTotalSeconds();
+			return now + DEFAULT_EXPIRES;
+		}
 	}
 	else
 	{
-		// With no expiration info, default to an hour
-		//F64 now = LLFrameTimer::getTotalSeconds();
-		//return now + DEFAULT_EXPIRES;
-		return DEFAULT_EXPIRES;
+		const F64 DEFAULT_EXPIRES = 60.0 * 60.0 + LLFrameTimer::getTotalSeconds();
+	
+		F64 expires = 0.0;
+		if (expirationFromCacheControl(headers, &expires))
+		{
+			//AO make sure cache expiration is at least 1HR
+			if (expires < DEFAULT_EXPIRES) {expires = DEFAULT_EXPIRES;}
+			return expires;
+		}
+		else
+		{
+			return DEFAULT_EXPIRES;
+		}
 	}
+	// </FS:Ansariel>
 }
 
 bool LLAvatarNameCache::expirationFromCacheControl(const LLSD& headers, F64 *expires)

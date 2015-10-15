@@ -1679,6 +1679,66 @@ static LLTrace::BlockTimerStatHandle FTM_GEN_FLEX("Generate Flexies");
 static LLTrace::BlockTimerStatHandle FTM_UPDATE_PRIMITIVES("Update Primitives");
 static LLTrace::BlockTimerStatHandle FTM_UPDATE_RIGGED_VOLUME("Update Rigged");
 
+bool LLVOVolume::lodOrSculptChanged(LLDrawable *drawable, BOOL &compiled)
+{
+	bool regen_faces = false;
+
+	LLVolume *old_volumep, *new_volumep;
+	F32 old_lod, new_lod;
+	S32 old_num_faces, new_num_faces;
+
+	old_volumep = getVolume();
+	old_lod = old_volumep->getDetail();
+	old_num_faces = old_volumep->getNumFaces();
+	old_volumep = NULL;
+
+	{
+		LL_RECORD_BLOCK_TIME(FTM_GEN_VOLUME);
+		const LLVolumeParams &volume_params = getVolume()->getParams();
+		setVolume(volume_params, 0);
+	}
+
+	new_volumep = getVolume();
+	new_lod = new_volumep->getDetail();
+	new_num_faces = new_volumep->getNumFaces();
+	new_volumep = NULL;
+
+	if ((new_lod != old_lod) || mSculptChanged)
+	{
+		compiled = TRUE;
+		sNumLODChanges += new_num_faces;
+
+		if ((S32)getNumTEs() != getVolume()->getNumFaces())
+		{
+			setNumTEs(getVolume()->getNumFaces()); //mesh loading may change number of faces.
+		}
+
+		drawable->setState(LLDrawable::REBUILD_VOLUME); // for face->genVolumeTriangles()
+
+		{
+			LL_RECORD_BLOCK_TIME(FTM_GEN_TRIANGLES);
+			regen_faces = new_num_faces != old_num_faces || mNumFaces != (S32)getNumTEs();
+			if (regen_faces)
+			{
+				regenFaces();
+			}
+
+			if (mSculptChanged)
+			{ //changes in sculpt maps can thrash an object bounding box without 
+				//triggering a spatial group bounding box update -- force spatial group
+				//to update bounding boxes
+				LLSpatialGroup* group = mDrawable->getSpatialGroup();
+				if (group)
+				{
+					group->unbound();
+				}
+			}
+		}
+	}
+
+	return regen_faces;
+}
+
 BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 {
 	LL_RECORD_BLOCK_TIME(FTM_UPDATE_PRIMITIVES);
@@ -1723,83 +1783,35 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		return TRUE; // No update to complete
 	}
 
-	if (mVolumeChanged || mFaceMappingChanged )
+	if (mVolumeChanged || mFaceMappingChanged)
 	{
 		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
 
-		compiled = TRUE;
+		bool was_regen_faces = false;
 
 		if (mVolumeChanged)
 		{
-			LL_RECORD_BLOCK_TIME(FTM_GEN_VOLUME);
-			LLVolumeParams volume_params = getVolume()->getParams();
-			setVolume(volume_params, 0);
+			was_regen_faces = lodOrSculptChanged(drawable, compiled);
 			drawable->setState(LLDrawable::REBUILD_VOLUME);
 		}
-
-		{
-			LL_RECORD_BLOCK_TIME(FTM_GEN_TRIANGLES);
-			regenFaces();
-			genBBoxes(FALSE);
-		}
-	}
-	else if ((mLODChanged) || (mSculptChanged))
-	{
-		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
-
-		LLVolume *old_volumep, *new_volumep;
-		F32 old_lod, new_lod;
-		S32 old_num_faces, new_num_faces ;
-
-		old_volumep = getVolume();
-		old_lod = old_volumep->getDetail();
-		old_num_faces = old_volumep->getNumFaces() ;
-		old_volumep = NULL ;
-
-		{
-			LL_RECORD_BLOCK_TIME(FTM_GEN_VOLUME);
-			LLVolumeParams volume_params = getVolume()->getParams();
-			setVolume(volume_params, 0);
-		}
-
-		new_volumep = getVolume();
-		new_lod = new_volumep->getDetail();
-		new_num_faces = new_volumep->getNumFaces() ;
-		new_volumep = NULL ;
-
-		if ((new_lod != old_lod) || mSculptChanged)
+		else if (mSculptChanged || mLODChanged)
 		{
 			compiled = TRUE;
-			sNumLODChanges += new_num_faces ;
-	
-			if((S32)getNumTEs() != getVolume()->getNumFaces())
-			{
-				setNumTEs(getVolume()->getNumFaces()); //mesh loading may change number of faces.
-			}
-
-			drawable->setState(LLDrawable::REBUILD_VOLUME); // for face->genVolumeTriangles()
-
-			{
-				LL_RECORD_BLOCK_TIME(FTM_GEN_TRIANGLES);
-				if (new_num_faces != old_num_faces || mNumFaces != (S32)getNumTEs())
-				{
-					regenFaces();
-				}
-				genBBoxes(FALSE);
-
-				if (mSculptChanged)
-				{ //changes in sculpt maps can thrash an object bounding box without 
-				  //triggering a spatial group bounding box update -- force spatial group
-				  //to update bounding boxes
-					LLSpatialGroup* group = mDrawable->getSpatialGroup();
-					if (group)
-					{
-						group->unbound();
-					}
-				}
-			}
+			was_regen_faces = lodOrSculptChanged(drawable, compiled);
 		}
 
+		if (!was_regen_faces) {
+			LL_RECORD_BLOCK_TIME(FTM_GEN_TRIANGLES);
+			regenFaces();
+		}
+
+		genBBoxes(FALSE);
+	}
+	else if (mLODChanged || mSculptChanged)
+	{
+		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
+		compiled = TRUE;
+		lodOrSculptChanged(drawable, compiled);
 		genBBoxes(FALSE);
 	}
 	// it has its own drawable (it's moved) or it has changed UVs or it has changed xforms from global<->local
@@ -2072,7 +2084,7 @@ void LLVOVolume::setTEMaterialParamsCallbackTE(const LLUUID& objectID, const LLM
 		LLTextureEntry* texture_entry = pVol->getTE(te);
 		if (texture_entry && (texture_entry->getMaterialID() == pMaterialID))
 		{
-			pVol->setTEMaterialParams(te, pMaterialParams);
+			pVol->setTEMaterialParams(te, pMaterialParams, FALSE);
 		}
 	}
 }
@@ -2143,7 +2155,7 @@ bool LLVOVolume::notifyAboutCreatingTexture(LLViewerTexture *texture)
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
 		LLMaterialMgr::getInstance()->put(getID(), it->first, *it->second);
-		LLViewerObject::setTEMaterialParams(it->first, it->second);
+		LLViewerObject::setTEMaterialParams(it->first, it->second, FALSE);
 	}
 
 	//clear wait-list
@@ -2225,7 +2237,7 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
 		LLMaterialMgr::getInstance()->put(getID(), it->first, *it->second);
-		LLViewerObject::setTEMaterialParams(it->first, it->second);
+		LLViewerObject::setTEMaterialParams(it->first, it->second, FALSE);
 	}
 
 	//clear wait-list
@@ -2234,7 +2246,7 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 	return 0 != new_material.size();
 }
 
-S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams)
+S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams, bool isInitFromServer)
 {
 	LLMaterialPtr pMaterial = const_cast<LLMaterialPtr&>(pMaterialParams);
 
@@ -2331,7 +2343,7 @@ S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialPa
 		}
 	}
 
-	S32 res = LLViewerObject::setTEMaterialParams(te, pMaterial);
+	S32 res = LLViewerObject::setTEMaterialParams(te, pMaterial, isInitFromServer);
 
 	LL_DEBUGS("MaterialTEs") << "te " << (S32)te << " material " << ((pMaterial) ? pMaterial->asLLSD() : LLSD("null")) << " res " << res
 							 << ( LLSelectMgr::getInstance()->getSelection()->contains(const_cast<LLVOVolume*>(this), te) ? " selected" : " not selected" )
@@ -4272,10 +4284,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 	}
 
 	//build matrix palette
-	// <FS:Ansariel> Proper matrix array length for fitted mesh
-	//static const size_t kMaxJoints = 64;
 	static const size_t kMaxJoints = 52;
-	// </FS:Ansariel>
 
 	LLMatrix4a mp[kMaxJoints];
 	LLMatrix4* mat = (LLMatrix4*) mp;
@@ -4286,6 +4295,8 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 		LLJoint* joint = avatar->getJoint(skin->mJointNames[j]);
         if (!joint)
         {
+            // Fall back to a point inside the avatar if mesh is
+            // rigged to an unknown joint.
             joint = avatar->getJoint("mPelvis");
         }
 		if (joint)
@@ -4335,8 +4346,9 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					// 	wght[k] = w - floorf(w);
 					// 	scale += wght[k];
 					// }
-					// 
-					// wght *= 1.f/scale;
+                    //// This is enforced  in unpackVolumeFaces()
+                    //llassert(scale>0.f);
+                    //wght *= 1.f / scale;
 
 					LL_ALIGN_16( S32 idx[4] );
 					LL_ALIGN_16( F32 wght[4] );
@@ -4351,11 +4363,8 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 					_mScale = _mm_shuffle_ps( _mScale, _mScale, 0 );
 
 					_mWeight = _mm_div_ps( _mWeight, _mScale );
-
 					_mm_store_ps( wght, _mWeight );
-
 					// </FS:ND>
-					
 					
 					for (U32 k = 0; k < 4; k++)
 					{
@@ -4363,23 +4372,9 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 						LLMatrix4a src;
 						// Insure ref'd bone is in our clamped array of mats
-						llassert(idx[k] < kMaxJoints);
-						// clamp k to kMaxJoints to avoid reading garbage off stack in release
-
-						// <FS:ND> k will always be lower than kMaxJoints, as k runs from [0,3]
-						// Second we should check against maxJoints, as this can be lower thab kMaxJoints.
-						// And third is is probably better to not cram it all into one line, as that makes
-						// errors as below slip by easily.
-						
-						// src.setMul(mp[idx[(k < kMaxJoints) ? k : 0]], w);
-
-						S32 l = idx[k];
-						if( l >= maxJoints )
-							l = 0;
-						src.setMul( mp[ l ], w );
-
-						// </FS:ND>
-						
+						// clamp idx to maxJoints to avoid reading garbage off stack in release
+                        S32 index = llclamp((S32)idx[k],(S32)0,(S32)kMaxJoints-1);
+						src.setMul(mp[index], w);
 						final_mat.add(src);
 					}
 

@@ -60,6 +60,7 @@
 #include "llfeaturemanager.h"
 #include "llviewernetwork.h"
 #include "llmeshrepository.h" //for LLMeshRepository::sBytesReceived
+#include "llsdserialize.h"
 
 namespace LLStatViewer
 {
@@ -95,8 +96,14 @@ LLTrace::CountStatHandle<LLUnit<F64, LLUnits::Kilotriangles> >
 LLTrace::EventStatHandle<LLUnit<F64, LLUnits::Kilotriangles> >
 							TRIANGLES_DRAWN_PER_FRAME("trianglesdrawnperframestat");
 
+// <FS:Ansariel> FIRE-17071: Measure UDP message data in Kilobit
+//LLTrace::CountStatHandle<F64Kilobytes >	
+//							ACTIVE_MESSAGE_DATA_RECEIVED("activemessagedatareceived", "Message system data received on all active regions"),
+LLTrace::CountStatHandle<F64Kilobits >
+							ACTIVE_MESSAGE_DATA_RECEIVED("activemessagedatareceived", "Message system data received on all active regions");
+
 LLTrace::CountStatHandle<F64Kilobytes >	
-							ACTIVE_MESSAGE_DATA_RECEIVED("activemessagedatareceived", "Message system data received on all active regions"),
+// </FS:Ansariel>
 							LAYERS_NETWORK_DATA_RECEIVED("layersdatareceived", "Network data received for layer data (terrain)"),
 							OBJECT_NETWORK_DATA_RECEIVED("objectdatareceived", "Network data received for objects"),
 							ASSET_UDP_DATA_RECEIVED("assetudpdatareceived", "Network data received for assets (animations, sounds) over UDP message system"),
@@ -616,8 +623,10 @@ void send_stats()
 	body["DisplayNamesShowUsername"] = gSavedSettings.getBOOL("NameTagShowUsernames");
 	
 	body["MinimalSkin"] = false;
-	
+
 	LLViewerStats::getInstance()->addToMessage(body);
+
+	LL_INFOS("LogViewerStatsPacket") << "Sending viewer statistics: " << body << LL_ENDL;
 	LLHTTPClient::post(url, body, new ViewerStatsResponder());
 
 	LLViewerStats::instance().getRecording().resume();

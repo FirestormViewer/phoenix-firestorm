@@ -91,7 +91,7 @@
 		<menu_item_call label="Создать закладку" name="Create Landmark Here"/>
 		<menu_item_call label="Профиль локации" name="Place Profile"/>
 		<menu_item_call label="Детали участка" name="About Land"/>
-		<menu_item_call label="Детали региона" name="Region/Estate"/>
+		<menu_item_call label="Детали региона" name="RegionEstate"/>
 		<menu_item_call label="Купить эту землю" name="Buy Land"/>
 		<menu_item_call label="Показать собственные земли" name="My Land"/>
 		<menu label="Показать больше" name="LandShow">

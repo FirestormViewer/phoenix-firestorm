@@ -319,7 +319,7 @@ private:
 	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
 
  	//for "Show my Favorite Landmarks at Login"
-	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
+	static void handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const LLSD& value);
 
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	void onEnableGrowlChanged();
@@ -331,6 +331,9 @@ private:
 	// <FS:Ansariel> Minimap pick radius transparency
 	void updateMapPickRadiusTransparency(const LLSD& value);
 	F32 mOriginalMapPickRadiusTransparency;
+
+	// <FS:Ansariel> Customizable contact list columns
+	void onCheckContactListColumnMode();
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
@@ -522,6 +525,7 @@ protected:
 	void saveSettings();
 	void onBtnOk();
 	void onBtnCancel();
+	void onClickCloseBtn(bool app_quitting = false);
 
 	void onChangeSocksSettings();
 

@@ -157,7 +157,7 @@
 		<menu_item_call label="現在地をランドマーク" name="Create Landmark Here"/>
 		<menu_item_call label="場所のプロフィール" name="Place Profile"/>
 		<menu_item_call label="土地情報" name="About Land"/>
-		<menu_item_call label="地域 / 不動産" name="Region/Estate"/>
+		<menu_item_call label="地域 / 不動産" name="RegionEstate"/>
 		<menu_item_call label="この土地を購入" name="Buy Land"/>
 		<menu_item_call label="自分の土地" name="My Land"/>
 		<menu label="表示" name="LandShow">

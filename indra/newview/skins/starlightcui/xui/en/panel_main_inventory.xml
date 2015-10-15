@@ -24,7 +24,7 @@
   </panel.string>
   <panel.string
    name="ItemcountUnknown">
-
+    Fetched [ITEM_COUNT] Items [FILTER]
   </panel.string>
   <text
 		     type="string"

@@ -192,9 +192,11 @@ LLVersionInfo::ViewerMaturity LLVersionInfo::getViewerMaturity()
     }
     else
     {
-        LL_WARNS() << "Channel '" << channel
-                   << "' does not follow naming convention, assuming Test"
-                   << LL_ENDL;
+		// <FS:Ansariel> Silence this warning
+        //LL_WARNS() << "Channel '" << channel
+        //           << "' does not follow naming convention, assuming Test"
+        //           << LL_ENDL;
+		// </FS:Ansariel>
         maturity = TEST_VIEWER;
     }
     return maturity;

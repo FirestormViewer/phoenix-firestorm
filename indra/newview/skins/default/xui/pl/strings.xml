@@ -520,6 +520,9 @@ Spróbuj zalogować się ponownie za minutę.
 		Nie możesz założyć folderu, który zawiera więcej niż [AMOUNT] przedmiotów. Możesz zmienić ten limit w Zaawansowane &gt; Pokaż ustawienia debugowania &gt; WearFolderLimit.
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT]L$: "/>
+	<string name="TooltipSLIcon">
+		Link do strony znajdującej się w oficjalnej domenie SecondLife.com lub LindenLab.com.
+	</string>
 	<string name="TooltipFlagScript">
 		Skrypt
 	</string>
@@ -659,6 +662,9 @@ Spróbuj zalogować się ponownie za minutę.
 		Kliknij aby uruchomić komendę secondlife://
 	</string>
 	<string name="CurrentURL" value=" Obecny URL: [CurrentURL]"/>
+	<string name="TooltipEmail">
+		Kliknij aby utworzyć wiadomość e-mail
+	</string>
 	<string name="SLurlLabelTeleport">
 		Teleportuj do
 	</string>

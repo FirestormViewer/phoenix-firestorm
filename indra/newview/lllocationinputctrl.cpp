@@ -934,19 +934,11 @@ void LLLocationInputCtrl::refreshParcelIcons()
 #endif // OPENSIM
 // </FS:CR>
 
-		// <FS:Ansariel> Undo MAIN-23 for now...
-		//bool is_parcel_owner = (gAgent.getID() == current_parcel->getOwnerID());
-		//bool allow_group_modify = (gAgent.isInGroup(current_parcel->getGroupID()) && current_parcel->getAllowGroupModify());
-		// </FS:Ansariel>
-
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
 		mParcelIcon[FLY_ICON]->setVisible(     !allow_fly );
 		mParcelIcon[PUSH_ICON]->setVisible(    !allow_push );
-		// <FS:Ansariel> Undo MAIN-23 for now...
-		//mParcelIcon[BUILD_ICON]->setVisible(   !allow_build && !is_parcel_owner && !allow_group_modify );
 		mParcelIcon[BUILD_ICON]->setVisible(   !allow_build );
-		// </FS:Ansariel>
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(mIsNavMeshDirty);
