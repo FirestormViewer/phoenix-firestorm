@@ -900,22 +900,28 @@ bool FSParticipantList::FSParticipantListMenu::canBanSelectedMember(const LLUUID
 		return false;
 	}
 
-	if (!gdatap->mMembers.size())
+	if (gdatap->mPendingBanRequest)
 	{
 		return false;
 	}
 
-	LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find((participant_uuid));
-	if (mi == gdatap->mMembers.end())
+	if (gdatap->isRoleMemberDataComplete())
 	{
-		return false;
-	}
+		if (!gdatap->mMembers.size())
+		{
+			return false;
+		}
 
-	LLGroupMemberData* member_data = (*mi).second;
-	// Is the member an owner?
-	if ( member_data && member_data->isInRole(gdatap->mOwnerRole) )
-	{
-		return false;
+		LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find((participant_uuid));
+		if (mi != gdatap->mMembers.end())
+		{
+			LLGroupMemberData* member_data = (*mi).second;
+			// Is the member an owner?
+			if (member_data && member_data->isInRole(gdatap->mOwnerRole))
+			{
+				return false;
+			}
+		}
 	}
 
 	if(	gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER) &&
@@ -943,20 +949,7 @@ void FSParticipantList::FSParticipantListMenu::banSelectedMember(const LLUUID& p
 		LL_WARNS("Groups") << "Unable to get group data for group " << group_uuid << LL_ENDL;
 		return;
 	}
-	std::vector<LLUUID> ids;
-	ids.push_back(participant_uuid);
-
-	LLGroupBanData ban_data;
-	gdatap->createBanEntry(participant_uuid, ban_data);
-	LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, group_uuid, LLGroupMgr::BAN_CREATE, ids);
-	LLGroupMgr::getInstance()->sendGroupMemberEjects(group_uuid, ids);
-	LLGroupMgr::getInstance()->sendGroupMembersRequest(group_uuid);
-	LLSD args;
-	std::string name;
-	gCacheName->getFullName(participant_uuid, name);
-	args["AVATAR_NAME"] = name;
-	args["GROUP_NAME"] = gdatap->mName;
-	LLNotifications::instance().add(LLNotification::Params("EjectAvatarFromGroup").substitutions(args));
+	gdatap->banMemberById(participant_uuid);
 }
 
 bool FSParticipantList::FSParticipantListMenu::isMuted(const LLUUID& avatar_id)

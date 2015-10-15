@@ -195,6 +195,8 @@ private:
 	bool mInitialized;
 	bool mIsFirstLaunch;
 
+	bool mIsFirstOpen;
+
 	LLUUID mSelectedSession;
 	std::string mGeneralTitle;
 

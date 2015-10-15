@@ -577,6 +577,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Sie können keinen Ordner tragen, der mehr als [AMOUNT] Elemente enthält.  Sie können diesen Höchstwert unter „Erweitert“ &gt; „Debug-Einstellungen anzeigen“ &gt; „WearFolderLimit“ ändern.
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] L$"/>
+	<string name="TooltipSLIcon">
+		Dieser Link verweist auf die offizielle SecondLife.com oder LindenLab.com Domäme.
+	</string>
 	<string name="TooltipOutboxDragToWorld">
 		Sie können keine Objekte aus dem Marktplatz-Auflistungsordner rezzen
 	</string>
@@ -680,6 +683,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Anklicken, um Befehl secondlife:// auszuführen
 	</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
+	<string name="TooltipEmail">
+		Klicken, um eine E-Mail zu verfassen
+	</string>
 	<string name="SLurlLabelTeleport">
 		Teleportieren nach
 	</string>

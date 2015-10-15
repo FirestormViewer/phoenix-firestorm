@@ -32,6 +32,7 @@
 
 #include "llavataractions.h"
 #include "llfloaterbump.h"
+#include "llfloaterreg.h"
 #include "llfloaterreporter.h"
 #include "llmutelist.h"
 #include "llpanelblockedlist.h"
@@ -106,8 +107,10 @@ BOOL LLFloaterBump::postBuild()
 void LLFloaterBump::onOpen(const LLSD& key)
 {
 // <FS:Ansariel> Instant bump list floater update
-	//mNames.clear();
-	//mList->deleteAllItems();
+	//if (gMeanCollisionList.empty())
+	//{
+	//	mNames.clear();
+	//	mList->deleteAllItems();
 	updateList();
 }
 
@@ -129,10 +132,10 @@ void LLFloaterBump::updateList()
 		return;
 	}
 	mList->deleteAllItems();
-// </FS:Ansariel>
 
 	if (gMeanCollisionList.empty())
 	{
+// </FS:Ansariel>
 		std::string none_detected = getString("none_detected");
 		LLSD row;
 		row["columns"][0]["value"] = none_detected;
@@ -141,13 +144,26 @@ void LLFloaterBump::updateList()
 	}
 	else
 	{
-		for (mean_collision_list_t::iterator iter = gMeanCollisionList.begin();
-			 iter != gMeanCollisionList.end(); ++iter)
-		{
-			LLMeanCollisionData *mcd = *iter;
-			add(mList, mcd);
-		}
+// <FS:Ansariel> Instant bump list floater update
+//		populateCollisionList();
+//	}
+//}
+
+//void LLFloaterBump::populateCollisionList()
+//{
+//	mNames.clear();
+//	mList->deleteAllItems();
+// </FS:Ansariel>
+
+	for (mean_collision_list_t::iterator iter = gMeanCollisionList.begin();
+				 iter != gMeanCollisionList.end(); ++iter)
+	{
+		LLMeanCollisionData *mcd = *iter;
+		add(mList, mcd);
 	}
+	// <FS:Ansariel> Instant bump list floater update
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterBump::add(LLScrollListCtrl* list, LLMeanCollisionData* mcd)
@@ -289,6 +305,11 @@ bool LLFloaterBump::enableMute()
 void LLFloaterBump::inviteToGroup()
 {
 	LLAvatarActions::inviteToGroup(mItemUUID);
+}
+
+LLFloaterBump* LLFloaterBump::getInstance()
+{
+	return LLFloaterReg::getTypedInstance<LLFloaterBump>("bumps");
 }
 #endif
 // </FS:Ansariel>

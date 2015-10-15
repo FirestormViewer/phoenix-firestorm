@@ -44,7 +44,7 @@ class LLRelationship;
 class LLPanel;
 class LLTabContainer;
 
-class FSFloaterContacts : public LLFloater
+class FSFloaterContacts : public LLFloater, LLEventTimer
 {
 public:
 	FSFloaterContacts(const LLSD& seed);
@@ -59,6 +59,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void draw();
+	/*virtual*/ BOOL tick();
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();

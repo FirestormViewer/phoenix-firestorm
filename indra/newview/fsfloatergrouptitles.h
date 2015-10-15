@@ -69,7 +69,7 @@ private:
 	void clearObservers();
 
 	void addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
-		const std::string& group_name, bool is_active, EAddPosition position = ADD_BOTTOM);
+		const std::string& group_name, bool is_active, bool is_no_group = true);
 
 	void refreshGroupTitles();
 	void activateGroupTitle();

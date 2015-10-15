@@ -4,7 +4,10 @@
 		Pobieranie [ITEM_COUNT] obiektów... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] obiekty [FILTER]
+		[ITEM_COUNT] obiektów [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		Pobrano [ITEM_COUNT] obiektów [FILTER]
 	</panel.string>
 	<text name="ItemcountText">
 		Obiekty:

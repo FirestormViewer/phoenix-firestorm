@@ -277,6 +277,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
 	<string name="TooltipTooManyWearables">You can't wear a folder containing more than [AMOUNT] items.  You can change this limit in Advanced &gt; Show Debug Settings &gt; WearFolderLimit.</string>
 	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
+	<string name="TooltipSLIcon">This links to a page on the official SecondLife.com or LindenLab.com domain.</string>
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Physics</string>
 	<string name="TooltipFlagTouch">Touch</string>
@@ -329,6 +330,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipMapUrl">Click to view this location on a map</string>
 	<string name="TooltipSLAPP">Click to run the secondlife:// command</string>
 	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]" />
+	<string name="TooltipEmail">Click to compose an email</string>
 
 	<!-- text for SLURL labels -->
 	<string name="SLurlLabelTeleport">Teleport to</string>

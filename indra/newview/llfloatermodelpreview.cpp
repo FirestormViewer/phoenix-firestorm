@@ -211,7 +211,10 @@ LLViewerFetchedTexture* bindMaterialDiffuseTexture(const LLImportMaterial& mater
 
 std::string stripSuffix(std::string name)
 {
-	if ((name.find("_LOD") != -1) || (name.find("_PHYS") != -1))
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//if ((name.find("_LOD") != -1) || (name.find("_PHYS") != -1))
+	if ((name.find("_LOD") != std::string::npos) || (name.find("_PHYS") != std::string::npos))
+	// </FS:Ansariel>
 	{
 		return name.substr(0, name.rfind('_'));
 	}
@@ -1510,7 +1513,10 @@ void LLModelPreview::rebuildUploadData()
 					case LLModel::LOD_HIGH:                      break;
 					}
 
-					if (name_to_match.find(toAdd) == -1)
+					// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+					//if (name_to_match.find(toAdd) == -1)
+					if (name_to_match.find(toAdd) == std::string::npos)
+					// </FS:Ansariel>
 					{
 						name_to_match += toAdd;
 					}
@@ -1540,7 +1546,10 @@ void LLModelPreview::rebuildUploadData()
 							case LLModel::LOD_HIGH:                      break;
 							}
 
-							if (name_to_match.find(toAdd) == -1)
+							// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+							//if (name_to_match.find(toAdd) == -1)
+							if (name_to_match.find(toAdd) == std::string::npos)
+							// </FS:Ansariel>
 							{
 								name_to_match += toAdd;
 							}

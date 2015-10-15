@@ -117,7 +117,7 @@
 		 name="text_box2"
 		 top_delta="1"
 		 width="100">
-			kbps
+			Kbps
 		</text>
 		<text
 		 type="string"

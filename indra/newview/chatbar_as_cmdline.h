@@ -41,4 +41,6 @@ void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.f);
 void cmdline_tp2name(const std::string& target);
 LLUUID cmdline_partial_name2key(std::string name);
 
+bool cmdline_packager(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
+
 #endif // CHATBAR_AS_CMDLINE_H

@@ -16,7 +16,7 @@
 			<icon name="NetworkLimitGraphicsDivet" />
 			<icon name="NetworkScaleEndGraphicsDivet" />
 			<text name="text_box2">
-				kbps
+				Kbps
 			</text>
 			<text name="NetworkPrefText1">
 				Wi-Fi

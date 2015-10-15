@@ -99,7 +99,6 @@
 	<menu_item_call label="Tocar" name="Touch Attachment"/>
 	<menu_item_call label="Quitarse" name="Take Off"/>
 	<menu_item_call label="Quitarse" name="Detach From Yourself"/>
-	<menu_item_call label="Copiar al Buzón de salida de comerciante" name="Merchant Copy"/>
 	<menu_item_call label="Copiar en artículos del Mercado" name="Marketplace Copy"/>
 	<menu_item_call label="Mover a artículos del Mercado" name="Marketplace Move"/>
 	<menu_item_call label="--sin opciones--" name="--no options--"/>

@@ -420,6 +420,10 @@ public:
 			//mFrom = LLTrans::getString("SECOND_LIFE");
 			//[FIX FIRE-2852] Changed function to find the right Gridname
 			mFrom = LLGridManager::getInstance()->getGridLabel();
+			if(!chat.mFromName.empty() && (mFrom != chat.mFromName))
+			{
+				mFrom += " (" + chat.mFromName + ")";
+			}
 			user_name->setValue(mFrom);
 			updateMinUserNameWidth();
 		}

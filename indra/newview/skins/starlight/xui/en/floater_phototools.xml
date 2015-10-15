@@ -3610,7 +3610,6 @@
 						<stat_bar
 						 name="bandwidth"
 						 label="Bandwidth"
-						 unit_label="kbps"
 						 stat="activemessagedatareceived"
 						 bar_min="0"
 						 bar_max="5000"
@@ -3618,7 +3617,7 @@
 						 decimal_digits="1"
 						 show_bar="true"
 						 show_history="false"
-						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
+						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0 Kbps, something may be wrong (you may be partially disconnected)."
 						 setting="DebugStatModePTBandwidth">
 						</stat_bar>
 						<stat_bar

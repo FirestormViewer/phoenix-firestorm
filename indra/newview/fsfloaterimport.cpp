@@ -782,7 +782,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			LL_DEBUGS("import") << "Setting materials" << LL_ENDL;
 			LLMaterial* mat = new LLMaterial();
 			mat->fromLLSD(*m_itr);
-			object->setTEMaterialParams(te, mat);
+			object->setTEMaterialParams(te, mat, false);
 			++te;
 		}
 	}
@@ -796,7 +796,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		
 		if (mAssetMap[sculpt_params.getSculptTexture()].notNull())
 		{
-			sculpt_params.setSculptTexture(mAssetMap[sculpt_params.getSculptTexture()]);
+			sculpt_params.setSculptTexture(mAssetMap[sculpt_params.getSculptTexture()], sculpt_params.getSculptType());
 			LL_DEBUGS("import") << "Replaced " << prim["sculpt"]["texture"].asUUID().asString() << " with " << sculpt_params.getSculptTexture().asString() << LL_ENDL;
 		}
 

@@ -157,6 +157,7 @@ public:
 	/*virtual*/ std::string getUrl(const std::string &string) const;
 };
 
+// <FS:Ansariel> Allow URLs with no protocol again
 ///
 /// LLUrlEntryHTTPNoProtocol Describes generic Urls like www.google.com
 ///
@@ -169,6 +170,7 @@ public:
 	/*virtual*/ std::string getUrl(const std::string &string) const;
 	/*virtual*/ std::string getTooltip(const std::string &url) const;
 };
+// </FS:Ansariel>
 
 class LLUrlEntryInvalidSLURL : public LLUrlEntryBase
 {
@@ -547,6 +549,17 @@ public:
 	/*virtual*/ std::string getUrl(const std::string &string) const;
 	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
 	/*virtual*/ std::string getIcon(const std::string &url);
+};
+
+///
+/// LLUrlEntryEmail Describes a generic mailto: Urls
+///
+class LLUrlEntryEmail : public LLUrlEntryBase
+{
+public:
+	LLUrlEntryEmail();
+	/*virtual*/ std::string getLabel(const std::string &url, const LLUrlLabelCallback &cb);
+	/*virtual*/ std::string getUrl(const std::string &string) const;
 };
 
 ///

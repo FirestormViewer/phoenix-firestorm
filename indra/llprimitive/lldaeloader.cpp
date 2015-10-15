@@ -54,6 +54,7 @@
 #endif
 
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/replace.hpp>
 
 #include "lldaeloader.h"
 #include "llsdserialize.h"
@@ -877,9 +878,18 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	// <FS:ND> Set up colladadom error handler
 	FSDaeSetErrorHandler oErrorHandlerSerror;
 
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//replace illegal # in path as collada's escapser is broke
+	std::string tmp_file = filename;
+	boost::replace_all(tmp_file, "#", "%23");
+	// </FS:Ansariel>
+
 	//no suitable slm exists, load from the .dae file
 	DAE dae;
-	domCOLLADA* dom = dae.open(filename);
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//domCOLLADA* dom = dae.open(filename);
+	domCOLLADA* dom = dae.open(tmp_file);
+	// </FS:Ansariel>
 	
 	if (!dom)
 	{
@@ -907,7 +917,10 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	
 	daeInt count = db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	
-	daeDocument* doc = dae.getDoc(mFilename);
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//daeDocument* doc = dae.getDoc(mFilename);
+	daeDocument* doc = dae.getDoc(tmp_file);
+	// </FS:Ansariel>
 	if (!doc)
 	{
 		LL_WARNS() << "can't find internal doc" << LL_ENDL;
@@ -2256,7 +2269,10 @@ std::string LLDAELoader::getElementLabel(daeElement *element)
 // static
 size_t LLDAELoader::getSuffixPosition(std::string label)
 {
-	if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//if ((label.find("_LOD") != -1) || (label.find("_PHYS") != -1))
+	if ((label.find("_LOD") != std::string::npos) || (label.find("_PHYS") != std::string::npos))
+	// </FS:Ansariel>
 	{
 		return label.rfind('_');
 	}

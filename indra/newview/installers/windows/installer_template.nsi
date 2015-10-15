@@ -197,7 +197,12 @@ lbl_configure_default_lang:
 	StrCpy $LANGUAGE $0
 
 # For silent installs, no language prompt, use default
+    # <FS:Ansariel> Disable autorun
+    #IfSilent 0 +3
+    #StrCpy $SKIP_AUTORUN "true"
+    #Goto lbl_return
     IfSilent lbl_return
+    # </FS:Ansariel>
     StrCmp $SKIP_DIALOGS "true" lbl_return
 
 # <FS:Ansariel> Commented out; Warning in build log about not being used
