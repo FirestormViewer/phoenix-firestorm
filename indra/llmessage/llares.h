@@ -555,6 +555,8 @@ public:
  */
 class LLAres::UriRewriteResponder : public LLQueryResponder
 {
+	// <FS:Ansariel> Fix member accessibility
+	friend class LLAres;
 protected:
 	LLURI mUri;
 
