@@ -187,6 +187,7 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 	if (fread(signature, sizeof(signature), 1, fp) != 1)
 	{
 		LL_WARNS() << "Premature end of file" << LL_ENDL;
+		fclose(fp); // <FS:Ansariel> Don't leak the file handle
 		return false;
 	}
 	if (memcmp(signature, jpeg_magic, JPEG_MAGIC_SIZE) != 0)
