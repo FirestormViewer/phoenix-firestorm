@@ -285,7 +285,10 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
 		LLUrlEntryBase *stripped_entry = NULL;
-		if(LLStringUtil::containsNonprintable(url))
+		// <FS:Ansariel> BUG-10491: Don't screw the NoLink SLURL match!
+		//if(LLStringUtil::containsNonprintable(url))
+		if (match_entry != mUrlEntryNoLink && LLStringUtil::containsNonprintable(url))
+		// </FS:Ansariel>
 		{
 			LLStringUtil::stripNonprintable(url);
 
