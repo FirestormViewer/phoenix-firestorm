@@ -1005,6 +1005,13 @@ public:
 void LLTaskTextureBridge::openItem()
 {
 	LL_INFOS() << "LLTaskTextureBridge::openItem()" << LL_ENDL;
+	// <FS:Ansariel> FIRE-17096 / BUG-10486 / MAINT-5753: Viewer crashes when opening a texture from object contents
+	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if(!object || object->isInventoryPending())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(mUUID), TAKE_FOCUS_YES);
 	if(preview)
 	{
@@ -1035,6 +1042,13 @@ public:
 
 void LLTaskSoundBridge::openItem()
 {
+	// <FS:Ansariel> FIRE-17096 / BUG-10486 / MAINT-5753: Viewer crashes when opening a texture from object contents
+	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if(!object || object->isInventoryPending())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 	openSoundPreview((void*)this);
 }
 
