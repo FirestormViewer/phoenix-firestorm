@@ -285,32 +285,31 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
 		LLUrlEntryBase *stripped_entry = NULL;
-		// <FS:Ansariel> BUG-10491: Don't screw the NoLink SLURL match!
+		// <FS:Ansariel> BUG-10491: This screws more than it helps
 		//if(LLStringUtil::containsNonprintable(url))
-		if (match_entry != mUrlEntryNoLink && LLStringUtil::containsNonprintable(url))
-		// </FS:Ansariel>
-		{
-			LLStringUtil::stripNonprintable(url);
+		//{
+		//	LLStringUtil::stripNonprintable(url);
 
-			std::vector<LLUrlEntryBase *>::iterator iter;
-			for (iter = mUrlEntry.begin(); iter != mUrlEntry.end(); ++iter)
-			{
-				LLUrlEntryBase *url_entry = *iter;
-				U32 start = 0, end = 0;
-				if (matchRegex(url.c_str(), url_entry->getPattern(), start, end))
-				{
-					if (mLLUrlEntryInvalidSLURL == *iter)
-					{
-						if(url_entry && url_entry->isSLURLvalid(url))
-						{
-							continue;
-						}
-					}
-					stripped_entry = url_entry;
-					break;
-				}
-			}
-		}
+		//	std::vector<LLUrlEntryBase *>::iterator iter;
+		//	for (iter = mUrlEntry.begin(); iter != mUrlEntry.end(); ++iter)
+		//	{
+		//		LLUrlEntryBase *url_entry = *iter;
+		//		U32 start = 0, end = 0;
+		//		if (matchRegex(url.c_str(), url_entry->getPattern(), start, end))
+		//		{
+		//			if (mLLUrlEntryInvalidSLURL == *iter)
+		//			{
+		//				if(url_entry && url_entry->isSLURLvalid(url))
+		//				{
+		//					continue;
+		//				}
+		//			}
+		//			stripped_entry = url_entry;
+		//			break;
+		//		}
+		//	}
+		//}
+		// </FS:Ansariel>
 
 
 		// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
