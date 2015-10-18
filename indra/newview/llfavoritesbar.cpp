@@ -1640,7 +1640,12 @@ void LLFavoritesOrderStorage::load()
 				in_file.close();
 				// <FS:Ansariel> FIRE-10122 - User@grid stored_favorites.xml
 				//user_llsd = fav_llsd[gAgentUsername];
-				user_llsd = fav_llsd[gAgentUsername + " @ " + LLGridManager::getInstance()->getGridLabel()];
+				std::string username = gAgentUsername;
+				if (username.find(" ") == std::string::npos)
+				{
+					username += " Resident";
+				}
+				user_llsd = fav_llsd[username + " @ " + LLGridManager::getInstance()->getGridLabel()];
 				// </FS:Ansariel>
 
 				S32 index = 0;
