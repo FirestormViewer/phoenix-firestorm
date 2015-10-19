@@ -40,6 +40,9 @@
 // [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
 #include "llchannelmanager.h"
 // [/SL:KB]
+// <FS:PP> Unread IMs counter in window title
+#include "llviewerwindow.h"
+// </FS:PP>
 
 // Firestorm includes
 #include "fsfloaterim.h"
@@ -52,6 +55,10 @@
 #include "llspeakers.h"
 #include "lltransientfloatermgr.h"
 #include "llvoiceclient.h"
+
+// <FS:PP> Unread IMs counter in window title
+extern std::string gWindowTitle;
+// </FS:PP>
 
 static LLDefaultChildRegistry::Register<LLChicletPanel> t1("chiclet_panel");
 static LLDefaultChildRegistry::Register<LLNotificationChiclet> t2("chiclet_notification");
@@ -273,6 +280,24 @@ void LLIMWellChiclet::messageCountChanged(const LLSD& session_data)
 		// when flashing finishes itself. Let break flashing here.
 		mFlashToLitTimer->stopFlashing();
 	}
+
+	// <FS:PP> Unread IMs counter in window title
+	std::string window_title;
+	if (counter > 99)
+	{
+		window_title = "(99+) " + gWindowTitle;
+	}
+	else if (counter > 0)
+	{
+		window_title = "(" + llformat("%d", counter) + ") " + gWindowTitle;
+	}
+	else
+	{
+		window_title = gWindowTitle;
+	}
+	LLStringUtil::truncate(window_title, 255);
+	gViewerWindow->getWindow()->setTitle(window_title);
+	// </FS:PP>
 
 	setCounter(counter);
 }
