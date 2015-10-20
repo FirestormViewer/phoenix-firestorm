@@ -986,6 +986,8 @@ protected:
 	 * @see LLIMMgr::getNumberOfUnreadParticipantMessages()
 	 */
 	void messageCountChanged(const LLSD& session_data);
+
+	void updateApplicationWindowTitle();
 };
 // </FS:Ansariel> [FS communication UI]
 

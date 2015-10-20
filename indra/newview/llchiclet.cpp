@@ -199,6 +199,8 @@ LLIMWellChiclet::LLIMWellChiclet(const Params& p)
 	LLIMMgr::getInstance()->addSessionObserver(this);
 
 	LLIMWellWindow::getInstance()->setSysWellChiclet(this);
+
+	gSavedSettings.getControl("FSShowMessageCountInWindowTitle")->getSignal()->connect(boost::bind(&LLIMWellChiclet::updateApplicationWindowTitle, this));
 }
 
 LLIMWellChiclet::~LLIMWellChiclet()
@@ -281,25 +283,22 @@ void LLIMWellChiclet::messageCountChanged(const LLSD& session_data)
 		mFlashToLitTimer->stopFlashing();
 	}
 
-	// <FS:PP> Unread IMs counter in window title
-	std::string window_title;
-	if (counter > 99)
+	setCounter(counter);
+
+	updateApplicationWindowTitle();
+}
+
+void LLIMWellChiclet::updateApplicationWindowTitle()
+{
+	std::string window_title = gWindowTitle;
+
+	if (gSavedSettings.getBOOL("FSShowMessageCountInWindowTitle") && mCounter > 0)
 	{
-		window_title = "(99+) " + gWindowTitle;
+		window_title = "(" + mButton->getLabelUnselected() + ") " + gWindowTitle;
 	}
-	else if (counter > 0)
-	{
-		window_title = "(" + llformat("%d", counter) + ") " + gWindowTitle;
-	}
-	else
-	{
-		window_title = gWindowTitle;
-	}
+
 	LLStringUtil::truncate(window_title, 255);
 	gViewerWindow->getWindow()->setTitle(window_title);
-	// </FS:PP>
-
-	setCounter(counter);
 }
 // </FS:Ansariel> [FS communication UI]
 
