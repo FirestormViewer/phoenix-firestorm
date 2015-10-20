@@ -172,6 +172,7 @@
 				Wygaszaj tekst IM w tło okna logu czatu
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Pokaż ilość nieprzeczytanych IM na belce tytułu okna Firestorma"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu lokalnego" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu lokalnego. Okno czatu lokalnego musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
