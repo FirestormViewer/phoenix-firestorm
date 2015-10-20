@@ -17,7 +17,6 @@
             name="Mute Particle" />
     </pie_menu>
     <pie_slice
-    <pie_slice
         label="会いに行く"
         name="Go to"/>
     <pie_slice

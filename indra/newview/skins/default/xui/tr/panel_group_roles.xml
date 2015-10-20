@@ -101,11 +101,12 @@ Ctrl tuşuna basıp adlarına tıklayarak birden fazla Üye seçebilirsiniz.
 			<text_editor name="action_description">
 				Bu Yetenek &apos;Bu Gruptan Üye Çıkarma&apos;dır. Bir Sahibi sadece başka bir Sahip çıkartabilir.
 			</text_editor>
-		<text name="action_roles_label">
-			Bu yeteneğe sahip Roller
-		</text>
-		<text name="action_members_label">
-			Bu yeteneğe sahip Üyeler
-		</text>
+			<text name="action_roles_label">
+				Bu yeteneğe sahip Roller
+			</text>
+			<text name="action_members_label">
+				Bu yeteneğe sahip Üyeler
+			</text>
+		</panel>
 	</panel>
 </panel>

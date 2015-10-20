@@ -103,11 +103,12 @@
 			<text_editor name="action_description">
 				這個能力可「將會員自本群組踢出」。 必須是所有人才可踢出另一位所有人。
 			</text_editor>
-		<text name="action_roles_label">
-			有此能力的角色
-		</text>
-		<text name="action_members_label">
-			有此能力的成員
-		</text>
+			<text name="action_roles_label">
+				有此能力的角色
+			</text>
+			<text name="action_members_label">
+				有此能力的成員
+			</text>
+		</panel>
 	</panel>
 </panel>
