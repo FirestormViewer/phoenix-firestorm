@@ -1565,7 +1565,8 @@ void FSLSLPreprocessor::start_process()
 		{
 			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
 		}
-		else{
+		else
+		{
 			LLTextEditor* outfield = mCore->mPostEditor;
 			if (outfield)
 			{

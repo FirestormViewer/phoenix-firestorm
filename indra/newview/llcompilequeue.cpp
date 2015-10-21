@@ -343,6 +343,7 @@ private:
 
 LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
+  , mLSLProc(NULL) // <FS:Ansariel> Script Proprocessor
 {
 	setTitle(LLTrans::getString("CompileQueueTitle"));
 	setStartString(LLTrans::getString("CompileQueueStart"));
@@ -350,7 +351,7 @@ LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
 	mUploadQueue = new LLAssetUploadQueue(new LLCompileFloaterUploadQueueSupplier(key.asUUID()));
 	
 	// <FS:KC> Script Preprocessor
-	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
+	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings, "_NACL_LSLPreprocessor");
 	if(_NACL_LSLPreprocessor)
 	{
 		mLSLProc = new FSLSLPreprocessor();
@@ -359,7 +360,9 @@ LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
 }
 
 LLFloaterCompileQueue::~LLFloaterCompileQueue()
-{ 
+{
+	// <FS:Ansariel> Script Proprocessor
+	delete mLSLProc;
 }
 
 void LLFloaterCompileQueue::experienceIdsReceived( const LLSD& content )
@@ -497,8 +500,8 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 			if(!url.empty())
 			{
 				// <FS:KC> LSL Preprocessor
-				static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-				if(queue->mLSLProc && _NACL_LSLPreprocessor)
+				static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings, "_NACL_LSLPreprocessor");
+				if (_NACL_LSLPreprocessor && queue->mLSLProc)
 				{
 					U32 script_size = file.getSize();
 					std::string script_data;
@@ -507,7 +510,9 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 					
 					script_data = queue->mLSLProc->decode(script_data);
 					
-					LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing: " + data->mItem->getName());
+					LLStringUtil::format_map_t args;
+					args["SCRIPT"] = data->mItem->getName();
+					LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessing", args));
 					queue->mLSLProc->preprocess_script(asset_id, data, type, script_data);
 					return;
 				}
@@ -567,14 +572,13 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text)
 {
 	LL_INFOS() << "LLFloaterCompileQueue::scriptPreprocComplete()" << LL_ENDL;
-	if(!data)
+	if (!data)
 	{
 		return;
 	}
 	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
 	
-	std::string buffer;
-	if(queue)
+	if (queue)
 	{
 		std::string filename;
 		std::string uuid_str;
@@ -586,14 +590,16 @@ void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScri
 		if (object)
 		{
 			std::string url = object->getRegion()->getCapability("UpdateScriptTask");
-			if(!url.empty())
+			if (!url.empty())
 			{
 				// Read script source in to buffer.
 				U32 script_size = script_text.length();
 				U8* script_data = new U8[script_text.length()+1];
 				strcpy((char *)script_data, script_text.c_str());
 
-				LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing complete of " + data->mItem->getName());
+				LLStringUtil::format_map_t args;
+				args["SCRIPT"] = data->mItem->getName();
+				LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessingComplete", args));
 				
 				queue->mUploadQueue->queue(filename, data->mTaskId, 
 										   data->mItem->getUUID(), is_running, queue->mMono, queue->getKey().asUUID(),
@@ -601,21 +607,22 @@ void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScri
 			}
 			else
 			{
-				buffer = LLTrans::getString("CompileQueueServiceUnavailable") + (": ") + data->mItem->getName();
+				LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueueServiceUnavailable") + (": ") + data->mItem->getName());
 			}
 		}
 	}
 	delete data;
 }
+
 // static
 void LLFloaterCompileQueue::scriptLogMessage(LLScriptQueueData* data, std::string message)
 {
-	if(!data)
+	if (!data)
 	{
 		return;
 	}
 	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
-	if(queue)
+	if (queue)
 	{
 		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
 	}

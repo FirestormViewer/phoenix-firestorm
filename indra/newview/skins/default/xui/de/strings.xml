@@ -2175,6 +2175,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="CompileQueueStart">
 		Rekompilieren
 	</string>
+	<string name="CompileQueuePreprocessing">
+		Präprozessieren: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Präprozessieren von Skript [SCRIPT] beendet
+	</string>
 	<string name="ResetQueueTitle">
 		Skripte zurücksetzen
 	</string>

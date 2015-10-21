@@ -455,15 +455,15 @@ LLScriptEdCore::LLScriptEdCore(
 	setBorderVisible(FALSE);
 
 	// NaCl - Script Preprocessor
-	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-	BOOL preproc = _NACL_LSLPreprocessor;
-	if(preproc)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		setXMLFilename("panel_script_ed_preproc.xml");
 		mLSLProc = new FSLSLPreprocessor(this);
 	}
 	else
+	{
 		setXMLFilename("panel_script_ed.xml");
+	}
 	// NaCl End
 	llassert_always(mContainer != NULL);
 }
@@ -491,6 +491,9 @@ LLScriptEdCore::~LLScriptEdCore()
 	{
 		mSyntaxIDConnection.disconnect();
 	}
+
+	// NaCl - Script Preprocessor
+	delete mLSLProc;
 }
 
 void LLLiveLSLEditor::experienceChanged()
@@ -849,9 +852,12 @@ void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
 	{
 		// NaCl - LSL Preprocessor
 		std::string ntext = text;
-		if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mLSLProc)
 		{
-			if(mPostEditor)mPostEditor->setText(ntext);
+			if (mPostEditor)
+			{
+				mPostEditor->setText(ntext);
+			}
 			ntext = mLSLProc->decode(ntext);
 		}
 		LLStringUtil::replaceTabsWithSpaces(ntext, mEditor->spacesPerTab());
@@ -864,7 +870,7 @@ void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
 // NaCl - LSL Preprocessor
 std::string LLScriptEdCore::getScriptText()
 {
-	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
 	{
 		//return mPostEditor->getText();
 		return mPostScript;
@@ -1345,7 +1351,7 @@ void LLScriptEdCore::doSave(BOOL close_after_save, bool sync /*= true*/)
 
 	updateIndicators(true, false); //<FS:Kadah> Compile Indicators
 
-	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mLSLProc)
 	{
 		LL_INFOS() << "passing to preproc" << LL_ENDL;
 		mLSLProc->preprocess_script(close_after_save, sync);
@@ -1448,7 +1454,7 @@ void LLScriptEdCore::onErrorList(LLUICtrl*, void* user_data)
 		//LL_INFOS() << "LLScriptEdCore::onErrorList() - " << row << ", "
 		//<< column << LL_ENDL;
 		// NaCl - LSL Preprocessor
-		if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor)
+		if (gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor)
 		{
 			LLPanel* tab = self->getChild<LLPanel>("Preprocessed");
 			LLTabContainer* tabset = self->getChild<LLTabContainer>("Tabset");
