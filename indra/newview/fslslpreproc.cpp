@@ -42,6 +42,7 @@
 #include "lltrans.h"
 #include "llvfile.h"
 #include "llviewercontrol.h"
+#include "llcompilequeue.h"
 
 #ifdef __GNUC__
 // There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
@@ -811,6 +812,42 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	start_process();
 }
 
+void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
+{
+	if(!data)
+	{
+		return;
+	}
+	
+	std::string script(script_data);
+	mScript = script;
+	mAssetID = asset_id;
+	mData = data;
+	mType = type;
+	
+	mDefinitionCaching = false;
+	caching_files.clear();
+	LLStringUtil::format_map_t args;
+	display_message(LLTrans::getString("fs_preprocessor_starting"));
+	
+	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
+	
+	if (mData->mItem)
+	{
+		mMainScriptName = mData->mItem->getName();
+	}
+	else
+	{
+		mMainScriptName = "(Unknown)";
+	}
+	
+	std::string name = mMainScriptName;
+	cached_assetids[name] = LLUUID::null;
+	cache_script(name, script);
+	//start the party
+	start_process();
+}
+
 const std::string lazy_list_set_func("\
 list lazy_list_set(list L, integer i, list v)\n\
 {\n\
@@ -1128,7 +1165,15 @@ void FSLSLPreprocessor::start_process()
 
 	mWaving = true;
 	boost::wave::util::file_position_type current_position;
-	std::string input = mCore->mEditor->getText();
+	std::string input;
+	if (mStandalone)
+	{
+		input = mScript;
+	}
+	else
+	{
+		input = mCore->mEditor->getText();
+	}
 	std::string rinput = input;
 	bool preprocessor_enabled = true;
 
@@ -1516,15 +1561,20 @@ void FSLSLPreprocessor::start_process()
 			output = rinput;
 		}
 
-
-		LLTextEditor* outfield = mCore->mPostEditor;
-		if (outfield)
+		if (mStandalone)
 		{
-			outfield->setText(LLStringExplicit(output));
+			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
 		}
-		mCore->mPostScript = output;
-		mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
-		mCore->doSaveComplete((void*)mCore, mClose, mSync);
+		else{
+			LLTextEditor* outfield = mCore->mPostEditor;
+			if (outfield)
+			{
+				outfield->setText(LLStringExplicit(output));
+			}
+			mCore->mPostScript = output;
+			mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
+			mCore->doSaveComplete((void*)mCore, mClose, mSync);
+		}
 	}
 	mWaving = false;
 }
@@ -1569,19 +1619,38 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	mCore->doSaveComplete((void*)mCore, close, sync);
 }
 
+void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
+{
+	LLFloaterCompileQueue::scriptPreprocComplete(asset_id, data, type, script_data);
+}
+
 #endif
 
 void FSLSLPreprocessor::display_message(const std::string& err)
 {
-	mCore->mErrorList->addCommentText(err);
+	if (mStandalone)
+	{
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+	}
+	else
+	{
+		mCore->mErrorList->addCommentText(err);
+	}
 }
 
 void FSLSLPreprocessor::display_error(const std::string& err)
 {
-	LLSD row;
-	row["columns"][0]["value"] = err;
-	row["columns"][0]["font"] = "SANSSERIF_SMALL";
-	mCore->mErrorList->addElement(row);
+	if (mStandalone)
+	{
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+	}
+	else
+	{
+		LLSD row;
+		row["columns"][0]["value"] = err;
+		row["columns"][0]["font"] = "SANSSERIF_SMALL";
+		mCore->mErrorList->addElement(row);
+	}
 }
 
 

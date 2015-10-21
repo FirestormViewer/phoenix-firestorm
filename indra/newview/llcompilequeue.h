@@ -37,6 +37,23 @@
 
 #include "llviewerinventory.h"
 
+// <FS:KC> LSL Preprocessor
+class FSLSLPreprocessor;
+
+struct LLScriptQueueData
+{
+	LLUUID mQueueID;
+	LLUUID mTaskId;
+	LLPointer<LLInventoryItem> mItem;
+	LLHost mHost;
+	LLUUID mExperienceId;
+	std::string mExperiencename;
+	LLScriptQueueData(const LLUUID& q_id, const LLUUID& task_id, LLInventoryItem* item) :
+		mQueueID(q_id), mTaskId(task_id), mItem(new LLInventoryItem(item)) {}
+
+};
+// </FS:KC>
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLFloaterScriptQueue
 //
@@ -138,6 +155,9 @@ public:
 	void experienceIdsReceived( const LLSD& content );
 	BOOL hasExperience(const LLUUID& id)const;
 
+	// <FS:KC> LSL Preprocessor
+	static void scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text);
+	static void scriptLogMessage(LLScriptQueueData* data, std::string message);
 protected:
 	LLFloaterCompileQueue(const LLSD& key);
 	virtual ~LLFloaterCompileQueue();
@@ -161,6 +181,9 @@ protected:
 private:
 	LLAssetUploadQueue* mUploadQueue;
 	uuid_list_t mExperienceIds;
+
+	// <FS:KC> LSL Preprocessor
+	FSLSLPreprocessor* mLSLProc;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
