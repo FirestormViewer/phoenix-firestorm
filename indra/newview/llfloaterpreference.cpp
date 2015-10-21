@@ -3003,7 +3003,8 @@ void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const 
 {
 	if (checkbox)
 	{
-		LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
+		// <FS:Ansariel> FIRE-17114 / BUG-10506 / MAINT-5760: Commented out because LLFavoritesBar files have been reverted temporarily
+		//LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
 		if(checkbox->getValue())
 		{
 			LLNotificationsUtil::add("FavoritesOnLogin");
