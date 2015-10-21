@@ -505,8 +505,9 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 					script_data.resize(script_size + 1, 0);
 					file.read((U8*)&script_data[0], script_size);
 					
-					LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing: " + data->mItem->getName());
+					script_data = queue->mLSLProc->decode(script_data);
 					
+					LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing: " + data->mItem->getName());
 					queue->mLSLProc->preprocess_script(asset_id, data, type, script_data);
 					return;
 				}
