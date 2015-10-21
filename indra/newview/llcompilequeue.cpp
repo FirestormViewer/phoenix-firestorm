@@ -343,7 +343,7 @@ private:
 
 LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
-  , mLSLProc(NULL) // <FS:Ansariel> Script Proprocessor
+  , mLSLProc(NULL) // <FS:Ansariel> Script Preprocessor
 {
 	setTitle(LLTrans::getString("CompileQueueTitle"));
 	setStartString(LLTrans::getString("CompileQueueStart"));
@@ -361,7 +361,7 @@ LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
 
 LLFloaterCompileQueue::~LLFloaterCompileQueue()
 {
-	// <FS:Ansariel> Script Proprocessor
+	// <FS:Ansariel> Script Preprocessor
 	delete mLSLProc;
 }
 

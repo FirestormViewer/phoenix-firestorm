@@ -2077,6 +2077,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="CompileQueueStart">
 		Rekompiluj
 	</string>
+	<string name="CompileQueuePreprocessing">
+		Preprocesowanie: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Preprocesowanie skryptu [SCRIPT] zakończone
+	</string>
 	<string name="ResetQueueTitle">
 		Postęp resetowania
 	</string>

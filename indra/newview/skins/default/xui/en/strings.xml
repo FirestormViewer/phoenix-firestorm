@@ -994,8 +994,8 @@ This feature is currently in Beta. Please add your name to this [http://goo.gl/f
 	<string name="CompileNoExperiencePerm">Skipping script [SCRIPT] with Experience [EXPERIENCE].</string>
 	<string name="CompileQueueTitle">Recompilation Progress</string>
 	<string name="CompileQueueStart">recompile</string>
-	<string name="CompileQueuePreprocessing">Proprocessing: [SCRIPT]</string>
-	<string name="CompileQueuePreprocessingComplete">Proprocessing of script [SCRIPT] complete</string>
+	<string name="CompileQueuePreprocessing">Preprocessing: [SCRIPT]</string>
+	<string name="CompileQueuePreprocessingComplete">Preprocessing of script [SCRIPT] completed</string>
 	<string name="ResetQueueTitle">Reset Progress</string>
 	<string name="ResetQueueStart">reset</string>
 	<string name="RunQueueTitle">Set Running Progress</string>
