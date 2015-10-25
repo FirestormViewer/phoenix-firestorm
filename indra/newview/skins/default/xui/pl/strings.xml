@@ -2382,9 +2382,6 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="RejectTeleportOffersResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania próśb oraz propozycji teleportacji i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
 	</string>
-	<string name="RejectAllGroupInvitesResponseDefault">
-		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania zaproszeń do grup i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
-	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość zablokował Cię.
 	</string>

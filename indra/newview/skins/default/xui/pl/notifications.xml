@@ -1705,7 +1705,7 @@ Jeśli chcesz go wyłączyć, to możesz to zrobić w menu 'Komunikacja' &gt; 'S
 	</notification>
 	<notification name="RejectAllGroupInvitesModeSet">
 		Tryb odrzucania wszystkich zaproszeń do grup jest włączony.
-Wszystkie nadchodzące zaproszenia do grup będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
+Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
 		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich zaproszeń do grup" name="okignore" />
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">

@@ -3382,23 +3382,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				if (is_rejecting_group_invites)
 				{
 					LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
-
-					// The group invitation packet does not have an AgentID. Obtain one from the name cache.
-					// If last name is "Resident" strip it out so the cache name lookup works.
-					size_t index = original_name.find(" Resident");
-					if (index != std::string::npos)
-					{
-						original_name = original_name.substr(0, index);
-					}
-					std::string legacy_name = gCacheName->buildLegacyName(original_name);
-					LLUUID agent_id;
-					gCacheName->getUUID(legacy_name, agent_id);
-
-					if (agent_id.notNull())
-					{
-						send_rejecting_group_invitations_message(msg, agent_id);
-					}
-
 				}
 				// </FS:PP> Option to block/reject all group invites
 				// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
@@ -4211,27 +4194,6 @@ void send_rejecting_tp_offers_message (LLMessageSystem* msg, const LLUUID& from_
 	gAgent.sendReliableMessage();
 }
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
-
-// <FS:PP> Option to block/reject all group invites
-void send_rejecting_group_invitations_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id)
-{
-	std::string my_name;
-	LLAgentUI::buildFullname(my_name);
-	std::string response = gSavedPerAccountSettings.getString("FSRejectAllGroupInvitesResponse");
-	pack_instant_message(
-		msg,
-		gAgent.getID(),
-		FALSE,
-		gAgent.getSessionID(),
-		from_id,
-		my_name,
-		response,
-		IM_ONLINE,
-		IM_DO_NOT_DISTURB_AUTO_RESPONSE,
-		session_id);
-	gAgent.sendReliableMessage();
-}
-// </FS:PP> Option to block/reject all group invites
 
 bool callingcard_offer_callback(const LLSD& notification, const LLSD& response)
 {
