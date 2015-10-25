@@ -66,6 +66,7 @@
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
 #include "llvovolume.h"
+#include "llfloaterreg.h"
 #include "llwebprofile.h"
 #include "llwindow.h"
 #include "llvieweraudio.h"
@@ -284,13 +285,16 @@ public:
 		const LLChannelDescriptors& channels,
 		const LLIOPipe::buffer_ptr_t& buffer)
 	{
+		const std::string url = getURL();
+		llinfos << "@@@ URL to set cookie on" << url << llendl;
+
 		// We don't care about the content of the response, only the Set-Cookie header.
-		LL_DEBUGS("MediaAuth") << dumpResponse() 
-				<< " [headers:" << getResponseHeaders() << "]" << LL_ENDL;
+		llinfos << dumpResponse() 
+				<< " [headers:" << getResponseHeaders() << "]" << llendl;
 		const std::string& cookie = getResponseHeader(HTTP_IN_HEADER_SET_COOKIE);
 		
 		// *TODO: What about bad status codes?  Does this destroy previous cookies?
-		LLViewerMedia::openIDCookieResponse(cookie);
+		LLViewerMedia::openIDCookieResponse(url, cookie);
 	}
 
 };
@@ -1227,7 +1231,7 @@ void LLViewerMedia::clearAllCookies()
 	}
 	
 	// If we have an OpenID cookie, re-add it to the cookie store.
-	setOpenIDCookie();
+	setOpenIDCookie(std::string());
 }
 	
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1330,7 +1334,7 @@ void LLViewerMedia::loadCookieFile()
 	}
 	
 	// If we have an OpenID cookie, re-add it to the cookie store.
-	setOpenIDCookie();
+	setOpenIDCookie(std::string());
 }
 
 
@@ -1416,9 +1420,31 @@ LLSD LLViewerMedia::getHeaders()
 	return headers;
 }
 
+ /////////////////////////////////////////////////////////////////////////////////////////
+ // static
+bool LLViewerMedia::parseRawCookie(const std::string raw_cookie, std::string& name, std::string& value, std::string& path)
+{
+	std::size_t name_pos = raw_cookie.find_first_of("=");
+	if (name_pos != std::string::npos)
+	{
+		name = raw_cookie.substr(0, name_pos);
+		std::size_t value_pos = raw_cookie.find_first_of(";", name_pos);
+		if (value_pos != std::string::npos)
+		{
+			value = raw_cookie.substr(name_pos + 1, value_pos - name_pos - 1);
+			path = "/";	// assume root path for now
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // static
-void LLViewerMedia::setOpenIDCookie()
+void LLViewerMedia::setOpenIDCookie(const std::string& url)
 {
 	if(!sOpenIDCookie.empty())
 	{
@@ -1446,6 +1472,26 @@ void LLViewerMedia::setOpenIDCookie()
 		}
 		
 		getCookieStore()->setCookiesFromHost(sOpenIDCookie, authority.substr(host_start, host_end - host_start));
+
+		if (url.length())
+		{
+			LLMediaCtrl* media_instance = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+			if (media_instance)
+			{
+				std::string cookie_host = authority.substr(host_start, host_end - host_start);
+				std::string cookie_name = "";
+				std::string cookie_value = "";
+				std::string cookie_path = "";
+				if (parseRawCookie(sOpenIDCookie, cookie_name, cookie_value, cookie_path))
+				{
+					media_instance->getMediaPlugin()->setCookie(url, cookie_name, cookie_value, cookie_host, cookie_path);
+				}
+			}
+		}
+
+		// NOTE: this is the original OpenID cookie code, so of which is no longer needed now that we
+		// are using CEF - it's very intertwined with other code so, for the moment, I'm going to 
+		// leave it alone and make a task to come back to it once we're sure the CEF cookie code is robust.
 
 		// Do a web profile get so we can store the cookie 
 		LLSD headers = LLSD::emptyMap();
@@ -1501,13 +1547,13 @@ void LLViewerMedia::openIDSetup(const std::string &openid_url, const std::string
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // static
-void LLViewerMedia::openIDCookieResponse(const std::string &cookie)
+void LLViewerMedia::openIDCookieResponse(const std::string& url, const std::string &cookie)
 {
 	LL_DEBUGS("MediaAuth") << "Cookie received: \"" << cookie << "\"" << LL_ENDL;
 	
 	sOpenIDCookie += cookie;
 
-	setOpenIDCookie();
+	setOpenIDCookie(url);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -150,7 +150,7 @@ public:
 	static void removeCookie(const std::string &name, const std::string &domain, const std::string &path = std::string("/") );
 
 	static void openIDSetup(const std::string &openid_url, const std::string &openid_token);
-	static void openIDCookieResponse(const std::string &cookie);
+	static void openIDCookieResponse(const std::string& url, const std::string &cookie);
 	
 	static void proxyWindowOpened(const std::string &target, const std::string &uuid);
 	static void proxyWindowClosed(const std::string &uuid);
@@ -163,7 +163,8 @@ public:
 	static LLSD getHeaders();
 	
 private:
-	static void setOpenIDCookie();
+	static bool parseRawCookie(const std::string raw_cookie, std::string& name, std::string& value, std::string& path);
+	static void setOpenIDCookie(const std::string& url);
 	static void onTeleportFinished();
 	
 	static LLPluginCookieStore *sCookieStore;
