@@ -32,7 +32,7 @@
 			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
-		<panel label="Dzienniki i logi rozmów" name="tab-logging">
+		<panel label="Logi rozmów" name="tab-logging">
 			<text name="logging_label">
 				Zapisywanie:
 			</text>
@@ -69,7 +69,7 @@
 			<check_box label="Nie pokazuj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
 			<check_box label="Nie pokazuj innym celów moich wskazań" name="privatepointat" tool_tip="Zapobiega wysyłaniu innym celów wskazanych myszką"/>
 		</panel>
-		<panel label="Autoodpowiedzi" name="tab-autoresponse">
+		<panel label="Autoodpowiedzi 1" name="tab-autoresponse-1">
 			<text name="text_box3">
 				Gdy jestem zajęty/a:
 			</text>
@@ -79,13 +79,19 @@
 			<text name="autorespond_nf_response_label">
 				Do nieznajomych, gdy włączony jest tryb autoodpowiedzi dla nieznajomych:
 			</text>
+			<check_box label="Wysyłaj autoodpowiedź, gdy mój awatar śpi (jest w trybie 'away'):" name="send_away_av_response" tool_tip="Wysyłaj tekst poniżej, gdy ktoś wysyła Ci wiadomość IM, a Twój awatar w tym momencie akurat śpi (jest w trybie 'away')."/>
+			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów:" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+		</panel>
+		<panel label="Autoodpowiedzi 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
 				Do wszystkich awatarów, gdy włączony jest tryb odrzucania propozycji i próśb o teleportację:
 			</text>
-			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów:" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
-			<check_box label="Wysyłaj autoodpowiedź, gdy mój awatar śpi (jest w trybie 'away'):" name="send_away_av_response" tool_tip="Wysyłaj tekst poniżej, gdy ktoś wysyła Ci wiadomość IM, a Twój awatar w tym momencie akurat śpi (jest w trybie 'away')."/>
-			<text name="autoresponse_item_label">
-				Daj przedmiot:
+			<check_box label="Nie odrzucaj próśb o teleportację (i nie wysyłaj autoodpowiedzi) od znajomych" name="FSDontRejectTeleportOffersFromFriends" />
+			<text name="autorespond_rgi_response_label">
+				Do wszystkich awatarów, gdy włączony jest tryb odrzucania zaproszeń do grup:
+			</text>
+			<text name="autoresponse_item_label" width="300">
+				Przedmiot wysyłany ze wszystkimi autoodpowiedziami:
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Przeciągnij i upuść przedmiot z Szafy w tym miejscu."/>
 			<button label="Czyść" name="clear_autoresponse_item"/>

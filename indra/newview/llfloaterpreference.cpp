@@ -666,6 +666,7 @@ BOOL LLFloaterPreference::postBuild()
 		gSavedPerAccountSettings.setString("FSAutorespondModeResponse", LLTrans::getString("AutoResponseModeDefault"));
 		gSavedPerAccountSettings.setString("FSAutorespondNonFriendsResponse", LLTrans::getString("AutoResponseModeNonFriendsDefault"));
 		gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		gSavedPerAccountSettings.setString("FSRejectAllGroupInvitesResponse", LLTrans::getString("RejectAllGroupInvitesResponseDefault"));
 		gSavedPerAccountSettings.setString("FSMutedAvatarResponse", LLTrans::getString("MutedAvatarsResponseDefault"));
 		gSavedPerAccountSettings.setString("FSAwayAvatarResponse", LLTrans::getString("AwayAvatarResponseDefault"));
 		// </FS:Ansariel>
@@ -782,6 +783,12 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 					!= getChild<LLUICtrl>("autorespond_rto_response")->getValue().asString();
 
 	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersResponseChanged", reject_teleport_offers_response_changed_flag );
+
+	bool reject_group_invites_response_changed_flag =
+			LLTrans::getString("RejectAllGroupInvitesResponseDefault")
+					!= getChild<LLUICtrl>("autorespond_rgi_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSRejectAllGroupInvitesResponseChanged", reject_group_invites_response_changed_flag );
 
 	bool muted_avatar_response_changed_flag =
 			LLTrans::getString("MutedAvatarsResponseDefault")
@@ -1013,6 +1020,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		gSavedPerAccountSettings.getControl("FSAutorespondModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAutorespondNonFriendsResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSRejectTeleportOffersResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSRejectAllGroupInvitesResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSMutedAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAwayAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		// </FS:Ansariel>
@@ -1174,6 +1182,11 @@ void LLFloaterPreference::initDoNotDisturbResponse()
 		if (!gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersResponseChanged"))
 		{
 			gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSRejectAllGroupInvitesResponse", LLTrans::getString("RejectAllGroupInvitesResponseDefault"));
 		}
 
 		if (!gSavedPerAccountSettings.getBOOL("FSMutedAvatarResponseChanged"))

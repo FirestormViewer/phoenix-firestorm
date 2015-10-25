@@ -46,7 +46,7 @@
 			<check_box label="Blocca la rotazione della testa dell'avatar" name="privateLocalLookat" tool_tip="Questa opzione blocca la testa dell'avatar in modo tale da non mostrare dove si sta guardando"/>
 			<check_box label="Non mostrare cosa sto Editando" name="privatepointat" tool_tip="Questa opzione fa in modo che nessuno veda cosa stai editando con il mio Raggio Indicatore"/>
 		</panel>
-		<panel label="Autorisposte" name="tab-autoresponse">
+		<panel label="Autorisposte 1" name="tab-autoresponse-1">
 			<text name="text_box3">
 				Risposta automatica quando sono su Occupato:
 			</text>
@@ -57,9 +57,7 @@
 				Risposta automatica per tutti i residenti che non sono tuoi amici:
 			</text>
 			<check_box label="Abilita risposta automatica agli avatar MUTATI" name="send_muted_av_response" tool_tip="Send the text below when someone you've muted sends you an IM."/>
-			<text name="muted_avatar_response_label">
-				Risposta automatica per gli avatar Mutati:
-			</text>
 		</panel>
+		<panel label="Autorisposte 2" name="tab-autoresponse-2" />
 	</tab_container>
 </panel>

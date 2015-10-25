@@ -76,8 +76,8 @@
 			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat" tool_tip="Verhindert, dass die eigene Auswahl an andere gesendet wird."/>
 		</panel>
 
-		<!--Autoresponse-->
-		<panel label="Automatische Antwort" name="tab-autoresponse">
+		<!--Autoresponse1-->
+		<panel label="Autom. Antwort 1" name="tab-autoresponse-1">
 			<text name="text_box3">
 				Automatische Antwort wenn im „Beschäftigt“-Modus:
 			</text>
@@ -87,11 +87,15 @@
 			<text name="autorespond_nf_response_label">
 				Automatische Antwort für Onlinestatus „Automatische Antwort an Nicht-Freunde“:
 			</text>
+			<check_box label="Automatische Antwort während des „Abwesend“-Modus senden:" name="send_away_av_response" tool_tip="Sendet den unten stehenden Text an jemanden, wenn sie eine Instant Message während des „Abwesend“-Modus schickt."/>
+			<check_box label="Automatische Antwort an geblockte Avatare senden:" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
+		</panel>
+
+		<!--Autoresponse2-->
+		<panel label="Autom. Antwort 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
 				Automatische Antwort für Onlinestatus „Teleport-Angebote und -Anforderungen abweisen“:
 			</text>
-			<check_box label="Automatische Antwort an geblockte Avatare senden:" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
-			<check_box label="Automatische Antwort während des „Abwesend“-Modus senden:" name="send_away_av_response" tool_tip="Sendet den unten stehenden Text an jemanden, wenn sie eine Instant Message während des „Abwesend“-Modus schickt."/>
 			<text name="autoresponse_item_label" width="150">
 				Objekt für autom. Antwort:
 			</text>
