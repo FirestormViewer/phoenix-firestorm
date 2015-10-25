@@ -4410,7 +4410,7 @@ Go to the 'Comm' &gt; 'Online Status' menu if you wish to disable it.
    name="RejectAllGroupInvitesModeSet"
    type="alert">
 Reject all incoming group invites mode is on.
-Incoming group invites from anyone will now be rejected with your configured autoresponse. You will not be notified because of that fact.
+Incoming group invites from anyone will now be rejected automatically. You will not be notified because of that fact.
     <usetemplate
      ignoretext="I change my status to reject all group invites mode"
      name="okignore"
