@@ -831,10 +831,11 @@ void LLPluginClassMedia::paste()
 	sendMessage(message);
 }
 
-void LLPluginClassMedia::setUserDataPath(const std::string &user_data_path)
+void LLPluginClassMedia::setUserDataPath(const std::string &user_data_path_cache, const std::string &user_data_path_cookies)
 {
 	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "set_user_data_path");
-	message.setValue("path", user_data_path);
+	message.setValue("cache_path", user_data_path_cache);
+	message.setValue("cookies_path", user_data_path_cookies);
 	sendMessage(message);
 }
 
@@ -1481,7 +1482,6 @@ void LLPluginClassMedia::initializeUrlHistory(const LLSD& url_history)
 
 	LL_DEBUGS("Plugin") << "Sending history" << LL_ENDL;
 }
-
 void LLPluginClassMedia::enableFlash( bool enabled )
 {
 	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "cef_flash_enabled");
