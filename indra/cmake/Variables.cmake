@@ -36,13 +36,13 @@ set(LL_TESTS OFF CACHE BOOL "Build and run unit and integration tests (disable f
 set(INCREMENTAL_LINK OFF CACHE BOOL "Use incremental linking on win32 builds (enable for faster links on some machines)")
 
 # <FS:ND> When building for Linux x64 we enable building the media plugins, in all other cases we use the prebuild 32 bit packages
-# set(ENABLE_MEDIA_PLUGINS OFF CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
+# set(ENABLE_MEDIA_PLUGINS ON CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
 
-if (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-  set( ENABLE_MEDIA_PLUGINS ON CACHE FORCE "Build with media plugins" )
-else (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-  set(ENABLE_MEDIA_PLUGINS OFF CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
-endif (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+if (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+  set( ENABLE_MEDIA_PLUGINS OFF CACHE FORCE "Build with media plugins" )
+else (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+  set(ENABLE_MEDIA_PLUGINS ON CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
+endif (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
 # </FS:ND>
 
 if(LIBS_CLOSED_DIR)
@@ -150,10 +150,10 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(DARWIN 1)
   
-  # now we only support Xcode 6.0 using 10.9 (Mavericks), minimum OS 10.7 (Lion)
-  set(XCODE_VERSION 6.0)
+  # now we only support Xcode 7.0 using 10.11 (El Capitan), minimum OS 10.7 (Lion)
+  set(XCODE_VERSION 7.0)
   set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
-  set(CMAKE_OSX_SYSROOT macosx10.9)
+  set(CMAKE_OSX_SYSROOT macosx10.11)
 
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
   set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL 3)

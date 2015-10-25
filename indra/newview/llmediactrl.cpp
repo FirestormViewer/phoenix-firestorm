@@ -428,18 +428,35 @@ void LLMediaCtrl::onOpenWebInspector()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-BOOL LLMediaCtrl::handleKeyHere( KEY key, MASK mask )
+BOOL LLMediaCtrl::handleKeyHere(KEY key, MASK mask)
 {
 	BOOL result = FALSE;
-	
+
 	if (mMediaSource)
 	{
 		result = mMediaSource->handleKeyHere(key, mask);
 	}
-	
-	if ( ! result )
+
+	if (!result)
 		result = LLPanel::handleKeyHere(key, mask);
-		
+
+	return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+BOOL LLMediaCtrl::handleKeyUpHere(KEY key, MASK mask)
+{
+	BOOL result = FALSE;
+
+	if (mMediaSource)
+	{
+		result = mMediaSource->handleKeyUpHere(key, mask);
+	}
+
+	if (!result)
+		result = LLPanel::handleKeyUpHere(key, mask);
+
 	return result;
 }
 
@@ -845,6 +862,21 @@ void LLMediaCtrl::draw()
 			x_offset = (r.getWidth() - width) / 2;
 			y_offset = (r.getHeight() - height) / 2;		
 
+#if 0
+			// <FS:ND> Flip Y-Axis of media texture
+			U32 mode = gGL.getMatrixMode();
+			gGL.matrixMode(LLRender::MM_TEXTURE0);
+
+			F32 aMatrix[16] = {	1.0f,  0.0f, 0.0f, 0.0f,
+								0.0f, -1.0f, 0.0f, 0.0f,
+								0.0f,  0.0f, 1.0f, 0.0f,
+								0.0f,  max_v, 0.0f, 1.0f
+								};
+			gGL.pushMatrix();
+			gGL.loadMatrix( aMatrix );
+			gGL.matrixMode(mode);
+			// </FS:ND>
+#endif
 			// draw the browser
 			gGL.begin( LLRender::QUADS );
 			if (! media_plugin->getTextureCoordsOpenGL())
@@ -878,6 +910,13 @@ void LLMediaCtrl::draw()
 				gGL.vertex2i( x_offset + width, y_offset );
 			}
 			gGL.end();
+#if 0
+			// <FS:ND> Restore matrix for texture 0
+			gGL.matrixMode(LLRender::MM_TEXTURE0);
+			gGL.popMatrix();
+			gGL.matrixMode( mode );
+			// </FS:ND>
+#endif
 		}
 		gGL.popUIMatrix();
 	
@@ -1008,19 +1047,23 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 			std::string uuid = self->getClickUUID();
 			LL_DEBUGS("Media") << "Media event:  MEDIA_EVENT_CLICK_LINK_HREF, target is \"" << target << "\", uri is " << url << LL_ENDL;
 
-			LLNotification::Params notify_params;
-			notify_params.name = "PopupAttempt";
-			notify_params.payload = LLSD().with("target", target).with("url", url).with("uuid", uuid).with("media_id", mMediaTextureID);
-			notify_params.functor.function = boost::bind(&LLMediaCtrl::onPopup, this, _1, _2);
+			LLWeb::loadURL(url, target, std::string());
 
-			if (mTrusted)
-			{
-				LLNotifications::instance().forceResponse(notify_params, 0);
-			}
-			else
-			{
-				LLNotifications::instance().add(notify_params);
-			}
+			// CP: removing this code because we no longer support popups so this breaks the flow.
+			//     replaced with a bare call to LLWeb::LoadURL(...)
+			//LLNotification::Params notify_params;
+			//notify_params.name = "PopupAttempt";
+			//notify_params.payload = LLSD().with("target", target).with("url", url).with("uuid", uuid).with("media_id", mMediaTextureID);
+			//notify_params.functor.function = boost::bind(&LLMediaCtrl::onPopup, this, _1, _2);
+
+			//if (mTrusted)
+			//{
+			//	LLNotifications::instance().forceResponse(notify_params, 0);
+			//}
+			//else
+			//{
+			//	LLNotifications::instance().add(notify_params);
+			//}
 			break;
 		};
 

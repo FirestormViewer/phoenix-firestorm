@@ -140,6 +140,9 @@
 #include "llleap.h"
 #include "stringize.h"
 #include "llcoros.h"
+#if !LL_LINUX
+#include "cef/llceflib.h"
+#endif
 
 // Third party library includes
 #include <boost/bind.hpp>
@@ -3992,8 +3995,11 @@ LLSD LLAppViewer::getViewerInfo() const
 		info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
 	}
 
-	// TODO: Implement media plugin version query
-	info["QT_WEBKIT_VERSION"] = "4.7.1 (version number hard-coded)";
+#if !LL_LINUX
+	info["LLCEFLIB_VERSION"] = LLCEFLIB_VERSION;
+#else
+	info["LLCEFLIB_VERSION"] = "Undefined";
+#endif
 
 	// <FS:ND> Use the total accumulated samples.
 	//S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);

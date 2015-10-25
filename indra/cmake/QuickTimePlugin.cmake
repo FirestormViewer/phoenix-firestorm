@@ -7,6 +7,11 @@ if(INSTALL_PROPRIETARY)
   endif (WINDOWS)
 endif(INSTALL_PROPRIETARY)
 
+if(HAVE_QUICKTIME_3P AND WINDOWS)
+  include(Prebuilt)
+  use_prebuilt_binary(quicktime)
+endif(HAVE_QUICKTIME_3P AND WINDOWS)
+
 if (DARWIN)
   include(CMakeFindFrameworks)
   find_library(QUICKTIME_LIBRARY QuickTime)

@@ -14,6 +14,7 @@ set(cmake_SOURCE_FILES
     Boost.cmake
     BuildVersion.cmake
     CARes.cmake
+    CEFPlugin.cmake
     CMakeCopyIfDifferent.cmake
     ConfigurePkgConfig.cmake
     CURL.cmake
@@ -84,18 +85,18 @@ set(cmake_SOURCE_FILES
     LeapMotion.cmake
     # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
-##  MediaPluginBase.cmake
+    MediaPluginBase.cmake
     NDOF.cmake
     OPENAL.cmake
     OpenGL.cmake
     OpenJPEG.cmake
     OpenSSL.cmake
     PNG.cmake
-##  PluginAPI.cmake
+    PluginAPI.cmake
     Prebuilt.cmake
     PulseAudio.cmake
     Python.cmake
-##  QuickTimePlugin.cmake
+    QuickTimePlugin.cmake
     Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
@@ -105,7 +106,6 @@ set(cmake_SOURCE_FILES
     Variables.cmake
     ViewerMiscLibs.cmake
     VisualLeakDetector.cmake
-##  WebKitLibPlugin.cmake
     WinManifest.cmake
     XmlRpcEpi.cmake
     ZLIB.cmake
