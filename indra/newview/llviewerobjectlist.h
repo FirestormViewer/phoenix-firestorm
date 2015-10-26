@@ -36,6 +36,8 @@
 
 // project includes
 #include "llviewerobject.h"
+#include "lleventcoro.h"
+#include "llcoros.h"
 
 class LLCamera;
 class LLNetMap;
@@ -211,17 +213,17 @@ protected:
 
 	vobj_list_t mMapObjects;
 
-	std::set<LLUUID> mDeadObjects;	
+    uuid_set_t   mDeadObjects;
 
 	std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
 
 	//set of objects that need to update their cost
-	std::set<LLUUID> mStaleObjectCost;
-	std::set<LLUUID> mPendingObjectCost;
+    uuid_set_t   mStaleObjectCost;
+    uuid_set_t   mPendingObjectCost;
 
 	//set of objects that need to update their physics flags
-	std::set<LLUUID> mStalePhysicsFlags;
-	std::set<LLUUID> mPendingPhysicsFlags;
+    uuid_set_t   mStalePhysicsFlags;
+    uuid_set_t   mPendingPhysicsFlags;
 
 	std::vector<LLDebugBeacon> mDebugBeacons;
 
@@ -236,6 +238,13 @@ protected:
 
 	friend class LLViewerObject;
 
+private:
+    static void reportObjectCostFailure(LLSD &objectList);
+    void fetchObjectCostsCoro(std::string url);
+
+    static void reportPhysicsFlagFailure(LLSD &obejectList);
+    void fetchPhisicsFlagsCoro(std::string url);
+
 // <FS:ND> Remember objects we did derender. We might get object updates for them that create new instances. In those cases we kill them again.
 private:
 	std::map< LLUUID, bool > mDerendered;
@@ -244,6 +253,7 @@ public:
 	void addDerenderedItem( LLUUID const &, bool );
 	void removeDerenderedItem( LLUUID const & );
 // </FS:ND>
+
 };
 
 

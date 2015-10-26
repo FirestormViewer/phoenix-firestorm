@@ -591,7 +591,7 @@ public:
 						info->item = item;
 						info->self = mProc;
 						LLPermissions perm(((LLInventoryItem*)item)->getPermissions());
-						gAssetStorage->getInvItemAsset(LLHost::invalid,
+						gAssetStorage->getInvItemAsset(LLHost(),
 														gAgent.getID(),
 														gAgent.getSessionID(),
 														perm.getOwner(),
@@ -1563,7 +1563,8 @@ void FSLSLPreprocessor::start_process()
 
 		if (mStandalone)
 		{
-			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
+			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+			// LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
 		}
 		else
 		{
@@ -1631,7 +1632,8 @@ void FSLSLPreprocessor::display_message(const std::string& err)
 {
 	if (mStandalone)
 	{
-		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+		//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+		// LLFloaterCompileQueue::scriptLogMessage(mData, err);
 	}
 	else
 	{
@@ -1643,7 +1645,8 @@ void FSLSLPreprocessor::display_error(const std::string& err)
 {
 	if (mStandalone)
 	{
-		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+		//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+		// LLFloaterCompileQueue::scriptLogMessage(mData, err);
 	}
 	else
 	{

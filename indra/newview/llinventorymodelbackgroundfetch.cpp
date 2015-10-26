@@ -676,7 +676,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
 				if (! url.empty())
 				{
-					BGFolderHttpHandler * handler(new BGFolderHttpHandler(folder_request_body, recursive_cats));
+                    LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(folder_request_body, recursive_cats));
 					gInventory.requestPost(false, url, folder_request_body, handler, "Inventory Folder");
 				}
 			}
@@ -687,7 +687,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
 				if (! url.empty())
 				{
-					BGFolderHttpHandler * handler(new BGFolderHttpHandler(folder_request_body_lib, recursive_cats));
+                    LLCore::HttpHandler::ptr_t  handler(new BGFolderHttpHandler(folder_request_body_lib, recursive_cats));
 					gInventory.requestPost(false, url, folder_request_body_lib, handler, "Library Folder");
 				}
 			}
@@ -703,7 +703,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 				{
 					LLSD body;
 					body["items"] = item_request_body;
-					BGItemHttpHandler * handler(new BGItemHttpHandler(body));
+                    LLCore::HttpHandler::ptr_t  handler(new BGItemHttpHandler(body));
 					gInventory.requestPost(false, url, body, handler, "Inventory Item");
 				}
 			}
@@ -716,7 +716,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 				{
 					LLSD body;
 					body["items"] = item_request_body_lib;
-					BGItemHttpHandler * handler(new BGItemHttpHandler(body));
+                    LLCore::HttpHandler::ptr_t handler(new BGItemHttpHandler(body));
 					gInventory.requestPost(false, url, body, handler, "Library Item");
 				}
 			}
@@ -810,9 +810,6 @@ void BGFolderHttpHandler::onCompleted(LLCore::HttpHandle handle, LLCore::HttpRes
 		processData(body_llsd, response);
 	}
 	while (false);
-
-	// Must delete on completion.
-	delete this;
 }
 
 

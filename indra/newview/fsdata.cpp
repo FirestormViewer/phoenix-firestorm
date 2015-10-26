@@ -43,7 +43,6 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llfloaterabout.h"
-#include "llhttpclient.h"
 #include "llimview.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
@@ -69,6 +68,7 @@ size_t strnlen(const char *s, size_t n)
 }
 #endif
 
+#if 0
 class FSDownloader : public LLHTTPClient::Responder
 {
 	LOG_CLASS(FSDownloader);
@@ -187,6 +187,7 @@ private:
 	std::string mFilename;
 	LLDate mLastModified;
 };
+#endif
 
 FSData::FSData() :
 	mLegacySearch(true),
@@ -317,6 +318,81 @@ bool FSData::loadFromFile(LLSD& data, std::string filename)
 	}
 }
 
+void downloadComplete( LLSD const &aData, std::string const &aURL )
+{
+	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+	LL_INFOS() << aData << LL_ENDL;
+	// completedHeader();
+
+	// check for parse failure that can happen with [200] OK result.
+	// FSData::getInstance()->processResponder(getContent(), mURL, !mDeserializeError, mLastModified);
+}
+
+void downloadCompleteScript( LLSD const &aData, std::string const &aURL, std::string const &aFilename  )
+{
+	LL_INFOS() << aData << LL_ENDL;
+	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+#if 0
+	completedHeader();
+
+	if (!isGoodStatus())
+	{
+		if (getStatus() == HTTP_NOT_MODIFIED)
+		{
+			LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
+		}
+		else
+		{
+			LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << getStatus() << "]" << LL_ENDL;
+		}
+		return;
+	}
+
+	S32 data_size = buffer->countAfter(channels.in(), NULL);
+	if (data_size <= 0)
+	{
+		LL_WARNS("fsdata") << "Received zero data for " << mURL << LL_ENDL;
+		return;
+	}
+
+	U8* data = new U8[data_size];
+	buffer->readAfter(channels.in(), NULL, data, data_size);
+
+	// basic check for valid data received
+	LLXMLNodePtr xml_root;
+	if ( (!LLXMLNode::parseBuffer(data, data_size, xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+	{
+		LL_WARNS("fsdata") << "Could not read the script library data from "<< mURL << LL_ENDL;
+		delete[] data;
+		data = NULL;
+		return;
+	}
+		
+	LLAPRFile outfile ;
+	outfile.open(mFilename, LL_APR_WB);
+	if (!outfile.getFileHandle())
+	{
+		LL_WARNS("fsdata") << "Unable to open file for writing: " << mFilename << LL_ENDL;
+	}
+	else
+	{
+		LL_INFOS("fsdata") << "Saving " << mFilename << LL_ENDL;
+		outfile.write(data, data_size);
+		outfile.close() ;
+	}
+	delete[] data;
+	data = NULL;
+#endif
+}
+
+void downloadError( LLSD const &aData, std::string const &aURL )
+{
+	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+	LL_INFOS() << aData << LL_ENDL;
+	// completedHeader();
+	// FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
+}
+
 // call this just before the login screen and after the LLProxy has been setup.
 void FSData::startDownload()
 {
@@ -332,7 +408,10 @@ void FSData::startDownload()
 		last_modified = stat_data.st_mtime;
 	}
 	LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modifed of " << last_modified << LL_ENDL;
-	LLHTTPClient::getIfModified(mFSDataURL, new FSDownloader(mFSDataURL), last_modified, mHeaders, HTTP_TIMEOUT);
+
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mFSDataURL, boost::bind( downloadComplete, _1, mFSDataURL ), boost::bind( downloadError, _1, mFSDataURL ) );
+
+	//LLHTTPClient::getIfModified(mFSDataURL, new FSDownloader(mFSDataURL), last_modified, mHeaders, HTTP_TIMEOUT);
 	
 	last_modified = 0;
 	if(!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
@@ -342,7 +421,7 @@ void FSData::startDownload()
 	std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
 	mFSdataDefaultsUrl = mBaseURL + "/" + filename;
 	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
-	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mFSdataDefaultsUrl, boost::bind( downloadComplete, _1, mFSdataDefaultsUrl ), boost::bind( downloadError, _1, mFSdataDefaultsUrl ) );
 
 #if OPENSIM
 	std::string filenames[] = {"scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
@@ -356,7 +435,7 @@ void FSData::startDownload()
 		}
 		std::string url = mBaseURL + "/" + script_name;
 		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
-		LLHTTPClient::getIfModified(url, new FSDownloaderScript(filename, url), last_modified, mHeaders, HTTP_TIMEOUT);
+		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mFSdataDefaultsUrl, boost::bind( downloadCompleteScript, _1, url, filename ), boost::bind( downloadError, _1, mFSdataDefaultsUrl ) );
 	}
 #endif
 }
@@ -401,7 +480,7 @@ void FSData::downloadAgents()
 		last_modified = stat_data.st_mtime;
 	}
 	LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
-	LLHTTPClient::getIfModified(mAgentsURL, new FSDownloader(mAgentsURL), last_modified, mHeaders, HTTP_TIMEOUT);
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mAgentsURL, boost::bind( downloadComplete, _1, mAgentsURL ), boost::bind( downloadError, _1, mAgentsURL ) );
 	
 	if (mAssetsURL.empty())
 	{
@@ -415,7 +494,7 @@ void FSData::downloadAgents()
 		last_modified = stat_data.st_mtime;
 	}
 	LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
-	LLHTTPClient::getIfModified(mAssetsURL, new FSDownloader(mAssetsURL), last_modified, mHeaders, HTTP_TIMEOUT);
+	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mAssetsURL, boost::bind( downloadComplete, _1, mAssetsURL ), boost::bind( downloadError, _1, mAssetsURL ) );
 }
 
 void FSData::processData(const LLSD& fs_data)
@@ -481,7 +560,7 @@ void FSData::processData(const LLSD& fs_data)
 			last_modified = stat_data.st_mtime;
 		}
 		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modifed of " << last_modified << LL_ENDL;
-		LLHTTPClient::getIfModified(LEGACY_CLIENT_LIST_URL, new FSDownloader(LEGACY_CLIENT_LIST_URL), last_modified, mHeaders, HTTP_TIMEOUT);
+		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( LEGACY_CLIENT_LIST_URL, boost::bind( downloadComplete, _1, LEGACY_CLIENT_LIST_URL ), boost::bind( downloadError, _1, LEGACY_CLIENT_LIST_URL ) );
 	}
 	else if(use_legacy_tags)
 	{

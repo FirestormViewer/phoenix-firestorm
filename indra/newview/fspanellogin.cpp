@@ -42,7 +42,6 @@
 #include "llcheckboxctrl.h"
 #include "llcommandhandler.h"		// for secondlife:///app/login/
 #include "llcombobox.h"
-#include "llcurl.h"
 #include "llviewercontrol.h"
 #include "llfloaterpreference.h"
 #include "llfocusmgr.h"
@@ -61,7 +60,6 @@
 #include "llviewernetwork.h"
 #include "llviewerwindow.h"			// to link into child list
 #include "lluictrlfactory.h"
-#include "llhttpclient.h"
 #include "llweb.h"
 #include "llmediactrl.h"
 #include "llrootview.h"

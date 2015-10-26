@@ -242,29 +242,20 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	
 	[glContext makeCurrentContext];
 	
-	// <FS:ND> setValues needs a real pointer, not some integer that is castet into one
-
-	// if (vsync)
-	// {
-	// 	[glContext setValues:(const GLint*)1 forParameter:NSOpenGLCPSwapInterval];
-	// } else {
-	// 	[glContext setValues:(const GLint*)0 forParameter:NSOpenGLCPSwapInterval];
-	// }
-
-	GLint glVsync = 0;
 	if (vsync)
 	{
-		glVsync = 1;
+		[glContext setValues:(const GLint*)1 forParameter:NSOpenGLCPSwapInterval];
+	} else {
+		// supress this error after move to Xcode 7:
+		// error: null passed to a callee that requires a non-null argument [-Werror,-Wnonnull]
+		// Tried using ObjC 'nonnull' keyword as per SO article but didn't build
+		GLint swapInterval=0;
+		[glContext setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
 	}
-	
-	[glContext setValues:&glVsync forParameter:NSOpenGLCPSwapInterval];
-
-	// </FS:ND>
 	
     mOldResize = false;
     
 	return self;
-
 }
 
 - (BOOL) rebuildContext

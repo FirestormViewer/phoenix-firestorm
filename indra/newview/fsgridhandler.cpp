@@ -37,7 +37,6 @@
 #include "llsdserialize.h"
 #include "llsecapi.h"
 
-#include "llhttpclient.h"
 #include "lltrans.h"
 #include "llweb.h"
 #include "llbufferstream.h"
@@ -48,6 +47,8 @@
 #endif
 #include "llstartup.h"
 
+//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+#if 0
 // <AW opensim>
 class GridInfoRequestResponder : public LLHTTPClient::Responder
 {
@@ -164,6 +165,7 @@ private:
 	LLGridManager::AddState mState;
 };
 // </AW opensim>
+#endif
 
 
 const char* DEFAULT_LOGIN_PAGE = "http://phoenixviewer.com/app/loginV3/";
@@ -719,7 +721,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 				last_modified = (time_t)saved_value.secondsSinceEpoch();
 			}
 	
-			LLHTTPClient::getIfModified(uri, new GridInfoRequestResponder(this, grid_entry, state), last_modified);
+			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+			// LLHTTPClient::getIfModified(uri, new GridInfoRequestResponder(this, grid_entry, state), last_modified);
 			return;
 		}
 	}
@@ -737,7 +740,9 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 		uri.append("cgi-bin/login.cgi");
 
 		LL_WARNS() << "No gridinfo found. Trying if legacy login page exists: " << uri << LL_ENDL;
-		LLHTTPClient::get(uri, new GridInfoRequestResponder(this, grid_entry, state));
+
+		//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+		// LLHTTPClient::get(uri, new GridInfoRequestResponder(this, grid_entry, state));
 		return;
 	}
 

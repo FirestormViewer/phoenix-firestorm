@@ -47,7 +47,6 @@
 #include "lltextutil.h"
 #include "lltransientfloatermgr.h"
 #include "llviewercontrol.h"
-#include "llviewerdisplayname.h"
 #include "llviewerwindow.h"
 #include "llvoicechannel.h"
 #include "llviewerparcelmgr.h"
@@ -122,7 +121,9 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 
 	// update the agent's name if display name setting change
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
-	LLViewerDisplayName::addNameChangedCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
+
+	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+	// LLViewerDisplayName::addNameChangedCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
 
 }
 

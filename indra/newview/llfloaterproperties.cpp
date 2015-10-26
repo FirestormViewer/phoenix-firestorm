@@ -63,7 +63,6 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llviewernetwork.h"	// <FS:CR> For OpenSim export perms
-#include "llexperienceassociationresponder.h"
 #include "llexperiencecache.h"
 #include "llslurl.h"
 
@@ -275,7 +274,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		LLTextBox* tb = getChild<LLTextBox>("LabelItemExperience");
 		tb->setText(getString("loading_experience"));
 		tb->setVisible(TRUE);
-		ExperienceAssociationResponder::fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), boost::bind(&LLFloaterProperties::setAssociatedExperience, getDerivedHandle<LLFloaterProperties>(), _1));
+		LLExperienceCache::instance().fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), boost::bind(&LLFloaterProperties::setAssociatedExperience, getDerivedHandle<LLFloaterProperties>(), _1));
 	}
 	// </FS:Ansariel>
 

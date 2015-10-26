@@ -39,9 +39,6 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 
-// <FS:Ansariel> [Legacy Bake]
-#include "llassetuploadresponders.h"
-
 static const S32 BAKE_UPLOAD_ATTEMPTS = 7;
 static const F32 BAKE_UPLOAD_RETRY_DELAY = 2.f; // actual delay grows by power of 2 each attempt
 
@@ -622,7 +619,7 @@ void LLViewerTexLayerSetBuffer::doUpload()
 				{
 					LLSD body = LLSD::emptyMap();
 					// The responder will call LLViewerTexLayerSetBuffer::onTextureUploadComplete()
-					LLHTTPClient::post(url, body, new LLSendTexLayerResponder(body, mUploadID, LLAssetType::AT_TEXTURE, baked_upload_data));
+					// LLHTTPClient::post(url, body, new LLSendTexLayerResponder(body, mUploadID, LLAssetType::AT_TEXTURE, baked_upload_data)); <FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
 					LL_INFOS() << "Baked texture upload via capability of " << mUploadID << " to " << url << LL_ENDL;
 				} 
 				else

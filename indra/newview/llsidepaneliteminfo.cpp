@@ -44,7 +44,6 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
-#include "llexperienceassociationresponder.h"
 #include "llexperiencecache.h"
 #include "lltrans.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
@@ -330,7 +329,9 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
         LLTextBox* tb = getChild<LLTextBox>("LabelItemExperience");
         tb->setText(getString("loading_experience"));
         tb->setVisible(TRUE);
-        ExperienceAssociationResponder::fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), boost::bind(&LLSidepanelItemInfo::setAssociatedExperience, getDerivedHandle<LLSidepanelItemInfo>(), _1));
+
+        LLExperienceCache::instance().fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), 
+            boost::bind(&LLSidepanelItemInfo::setAssociatedExperience, getDerivedHandle<LLSidepanelItemInfo>(), _1));
     }
     
 	//////////////////////

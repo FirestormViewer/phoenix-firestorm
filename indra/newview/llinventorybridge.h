@@ -77,7 +77,6 @@ public:
 
 	bool canShare() const;
 	bool canListOnMarketplace() const;
-	bool canListOnOutboxNow() const;
 	bool canListOnMarketplaceNow() const;
 
 	//--------------------------------------------------------------------
@@ -148,9 +147,6 @@ protected:
 	virtual void addDeleteContextMenuOptions(menuentry_vec_t &items,
 											 menuentry_vec_t &disabled_items);
 	virtual void addOpenRightClickMenuOption(menuentry_vec_t &items);
-	virtual void addOutboxContextMenuOptions(U32 flags,
-											 menuentry_vec_t &items,
-											 menuentry_vec_t &disabled_items);
 	virtual void addMarketplaceContextMenuOptions(U32 flags,
 											 menuentry_vec_t &items,
 											 menuentry_vec_t &disabled_items);
@@ -173,9 +169,7 @@ protected:
 	BOOL isProtectedFolder(bool ignore_setting = false) const;
 // </FS:TT>
 	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
-	BOOL isOutboxFolderDirectParent() const;
 	BOOL isMarketplaceListingsFolder() const;     // true if descendant of Marketplace listings folder
-	const LLUUID getOutboxFolder() const;
 
 	// <FS:Ansariel> Inventory Links Replace
 	void checkInventoryLinkReplace(menuentry_vec_t& items, menuentry_vec_t& disables_items);
@@ -197,10 +191,6 @@ protected:
     BOOL callback_cutToClipboard(const LLSD& notification, const LLSD& response);
     BOOL perform_cutToClipboard();
 
-public:
-	BOOL isOutboxFolder() const;    // true if COF or descendant of   marketplace outbox
-
-protected:
 	LLHandle<LLInventoryPanel> mInventoryPanel;
 	LLFolderView* mRoot;
 	const LLUUID mUUID;	// item id

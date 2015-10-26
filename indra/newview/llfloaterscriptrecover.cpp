@@ -17,7 +17,6 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llagent.h"
-#include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
 #include "lldiriterator.h"
 #include "llfloaterreg.h"
@@ -250,10 +249,11 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 	sdBody["target"] = "lsl2";
 
 	std::string strCapsUrl = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-	LLHTTPClient::post(strCapsUrl, sdBody, 
-	                   new LLUpdateAgentInventoryResponder(sdBody, strFileName, LLAssetType::AT_LSL_TEXT, 
-	                                                       boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3),
-	                                                       boost::bind(&LLScriptRecoverQueue::onUploadError, this, _1)));
+	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+	// LLHTTPClient::post(strCapsUrl, sdBody, 
+	//                  new LLUpdateAgentInventoryResponder(sdBody, strFileName, LLAssetType::AT_LSL_TEXT, 
+	//                                                       boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3),
+	//                                                       boost::bind(&LLScriptRecoverQueue::onUploadError, this, _1)));
 }
 
 void LLScriptRecoverQueue::onSavedScript(const LLUUID& idItem, const LLSD&, bool fSuccess)

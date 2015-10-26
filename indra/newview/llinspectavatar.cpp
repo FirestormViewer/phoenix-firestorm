@@ -156,6 +156,9 @@ private:
 
 	// Is used to determine if "Add friend" option should be enabled in gear menu
 	bool isNotFriend();
+
+    void moderationActionCoro(std::string url, LLSD action);
+
 	// </FS:Ansariel>
 
 	void onAvatarNameCache(const LLUUID& agent_id,
@@ -631,47 +634,8 @@ void LLInspectAvatar::toggleSelectedVoice(bool enabled)
 		// ctrl value represents ability to type, so invert
 		data["params"]["mute_info"]["voice"] = !enabled;
 
-		class MuteVoiceResponder : public LLHTTPClient::Responder
-		{
-		public:
-			MuteVoiceResponder(const LLUUID& session_id)
-			{
-				mSessionID = session_id;
-			}
-
-			virtual void httpFailure()
-			{
-				LL_WARNS() << "MuteVoiceResponder error [status:" << getStatus() << "]: " << getContent() << LL_ENDL;
-
-				if ( gIMMgr )
-				{
-					//HTTP_FORBIDDEN == you're not a mod
-					//should be disabled if you're not a moderator
-					if ( HTTP_FORBIDDEN == getStatus() )
-					{
-						gIMMgr->showSessionEventError(
-							"mute",
-							"not_a_moderator",
-							mSessionID);
-					}
-					else
-					{
-						gIMMgr->showSessionEventError(
-							"mute",
-							"generic",
-							mSessionID);
-					}
-				}
-			}
-
-		private:
-			LLUUID mSessionID;
-		};
-
-		LLHTTPClient::post(
-			url,
-			data,
-			new MuteVoiceResponder(speaker_mgr->getSessionID()));
+	    LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
+	        boost::bind(&LLInspectAvatar::moderationActionCoro, this, url, data));
 	}
 
 	closeFloater();
@@ -897,6 +861,49 @@ bool LLInspectAvatar::godModeEnabled()
 {
 	return gAgent.isGodlike();
 }
+
+void LLInspectAvatar::moderationActionCoro(std::string url, LLSD action)
+{
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("moderationActionCoro", httpPolicy));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+
+    httpOpts->setWantHeaders(true);
+
+    LLUUID sessionId = action["session-id"];
+
+    LLSD result = httpAdapter->postAndSuspend(httpRequest, url, action, httpOpts);
+
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+    if (!status)
+    {
+        if (gIMMgr)
+        {
+            //403 == you're not a mod
+            //should be disabled if you're not a moderator
+            if (status == LLCore::HttpStatus(HTTP_FORBIDDEN))
+            {
+                gIMMgr->showSessionEventError(
+                    "mute",
+                    "not_a_mod_error",
+                    sessionId);
+            }
+            else
+            {
+                gIMMgr->showSessionEventError(
+                    "mute",
+                    "generic_request_error",
+                    sessionId);
+            }
+        }
+        return;
+    }
+}
+
 // </FS:Ansariel>
 
 //////////////////////////////////////////////////////////////////////////////

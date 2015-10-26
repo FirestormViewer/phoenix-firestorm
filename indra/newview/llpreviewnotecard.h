@@ -107,6 +107,7 @@ protected:
 	bool handleSaveChangesDialog(const LLSD& notification, const LLSD& response);
 	bool handleConfirmDeleteDialog(const LLSD& notification, const LLSD& response);
 
+    static void finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId);
 	// <FS:Ansariel> FIRE-13969: Search button
 	void onSearchButtonClicked();
 

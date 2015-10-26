@@ -26,7 +26,6 @@
 #include "llfloater.h"
 #include "llpartdata.h"
 #include "llviewerinventory.h"
-#include "llassetuploadresponders.h"
 
 #define PARTICLE_SCRIPT_NAME "New Particle Script"
 
@@ -52,6 +51,7 @@ class ParticleEditor : public LLFloater
 		/* virtual */ BOOL postBuild();
 
 		void setObject(LLViewerObject* objectp);
+		void scriptInjectReturned( );
 
 	protected:
 		void clearParticles();
@@ -70,7 +70,6 @@ class ParticleEditor : public LLFloater
 		static void onTargetPicked(void* userdata);
 
 		void callbackReturned(const LLUUID& inv_item);
-		void scriptInjectReturned();
 
 		std::string lslVector(F32 x, F32 y, F32 z);
 		std::string lslColor(const LLColor4& color);
@@ -153,20 +152,6 @@ class ParticleScriptCreationCallback : public LLInventoryCallback
 
 	protected:
 		~ParticleScriptCreationCallback();
-
-		ParticleEditor* mEditor;
-};
-
-class ParticleScriptUploadResponder : public LLUpdateAgentInventoryResponder
-{
-	public:
-		ParticleScriptUploadResponder(const LLSD& post_data,
-									  const std::string& file_name,
-									  LLAssetType::EType asset_type,
-									  ParticleEditor* editor);
-
-	protected:
-		void uploadComplete(const LLSD& content);
 
 		ParticleEditor* mEditor;
 };

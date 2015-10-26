@@ -726,7 +726,7 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 			delete mParcelInfoObserver;
 		}
 		mParcelInfoObserver = new FSWorldMapParcelInfoObserver(pos_global);
-		LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(mParcelInfoObserver->getObserverHandle()));
+		// LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(mParcelInfoObserver->getObserverHandle())); <FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
 	}
 	else
 	{

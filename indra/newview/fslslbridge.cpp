@@ -206,7 +206,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 			mpBridge = fsBridge;
 		}
 
-		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
+		status = viewerToLSL("URL Confirmed");
 		if (!mIsFirstCallDone)
 		{
 			//on first call from bridge, confirm that we are here
@@ -214,7 +214,7 @@ bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, 
 
 			if (gSavedPerAccountSettings.getF32("UseLSLFlightAssist") > 0.f)
 			{
-				viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")), new FSLSLBridgeRequestResponder());
+				viewerToLSL(llformat("UseLSLFlightAssist|%.1f", gSavedPerAccountSettings.getF32("UseLSLFlightAssist")) );
 			}
 
 			// <FS:PP> Inform user, if movelock was enabled at login
@@ -414,7 +414,7 @@ bool FSLSLBridge::canUseBridge()
 	return (isBridgeValid() && sUseLSLBridge);
 }
 
-bool FSLSLBridge::viewerToLSL(const std::string& message, FSLSLBridgeRequestResponder* responder)
+bool FSLSLBridge::viewerToLSL(const std::string& message, tCallback aCallback )
 {
 	LL_DEBUGS("FSLSLBridge") << message << LL_ENDL;
 
@@ -423,11 +423,11 @@ bool FSLSLBridge::viewerToLSL(const std::string& message, FSLSLBridgeRequestResp
 		return false;
 	}
 
-	if (!responder)
-	{
-		responder = new FSLSLBridgeRequestResponder();
-	}
-	LLHTTPClient::post(mCurrentURL, LLSD(message), responder);
+	tCallback pCallback = aCallback;
+	if( !pCallback )
+		pCallback = FSLSLBridgeRequest_Success;
+
+    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequestResponder_Failure );
 
 	return true;
 }
@@ -441,7 +441,7 @@ bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal)
 		boolVal = "1";
 	}
 
-	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
+	return viewerToLSL(msgVal + "|" + boolVal );
 }
 
 bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool contentVal)
@@ -453,7 +453,7 @@ bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool content
 		boolVal = "1";
 	}
 
-	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
+	return viewerToLSL(msgVal + "|" + boolVal);
 }
 
 void FSLSLBridge::updateIntegrations()
@@ -462,7 +462,7 @@ void FSLSLBridge::updateIntegrations()
 		"ExternalIntegration|%d|%d",
 		gSavedPerAccountSettings.getBOOL("BridgeIntegrationOC"),
 		gSavedPerAccountSettings.getBOOL("BridgeIntegrationLM")
-	), new FSLSLBridgeRequestResponder());
+	) );
 }
 
 //
@@ -1177,7 +1177,8 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		const std::string fName = prepUploadFile();
 		if (!fName.empty())
 		{
-			LLLiveLSLEditor::uploadAssetViaCapsStatic(url, fName, obj->getID(), inv_item, isMono, true);
+			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
+			// LLLiveLSLEditor::uploadAssetViaCapsStatic(url, fName, obj->getID(), inv_item, isMono, true);
 			LL_INFOS("FSLSLBridge") << "updating script ID for bridge" << LL_ENDL;
 			FSLSLBridge::instance().mScriptItemID = inv_item;
 		}
