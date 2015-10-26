@@ -489,6 +489,16 @@ private:
 	BOOL			mIsRejectTeleportOffers;
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
+// <FS:PP> FIRE-15233: Automatic friendship request refusal
+public:
+	void			setRejectFriendshipRequests();
+	void			clearRejectFriendshipRequests();
+	void			selectRejectFriendshipRequests(BOOL);
+	BOOL			getRejectFriendshipRequests() const;
+private:
+	BOOL			mIsRejectFriendshipRequests;
+// </FS:PP> FIRE-15233: Automatic friendship request refusal
+
 // <FS:PP> Option to block/reject all group invites
 public:
 	void			setRejectAllGroupInvites();
