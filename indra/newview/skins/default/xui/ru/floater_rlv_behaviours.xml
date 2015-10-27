@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="rlv_behaviours" title="Активные ограничения RLV">
   <tab_container name="behaviour_tab">
-    <panellabel="Ограничения" name="behaviour_panel">
+    <panel label="Ограничения" name="behaviour_panel">
       <scroll_list name="behaviour_list">
         <scroll_list.columns label="Ограничения" name="behaviour" />
         <scroll_list.columns label="Имя объекта" name="issuer"/>

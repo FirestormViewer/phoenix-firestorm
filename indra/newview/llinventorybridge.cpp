@@ -7026,8 +7026,18 @@ void LLWearableBridge::performAction(LLInventoryModel* model, std::string action
 
 void LLWearableBridge::openItem()
 {
+	// <FS:Ansariel> Don't take off body parts!
+	if (get_is_item_worn(mUUID) && !canRemoveFromAvatar(this))
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	performAction(getInventoryModel(),
-			      get_is_item_worn(mUUID) ? "take_off" : "wear");
+			      // <FS:Ansariel> FIRE-17166: Add Clothes on Double Click
+			      //get_is_item_worn(mUUID) ? "take_off" : "wear");
+			      get_is_item_worn(mUUID) ? "take_off" : (mAssetType == LLAssetType::AT_BODYPART || !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing") ? "wear" : "wear_add"));
+			      // </FS:Ansariel>
 }
 
 void LLWearableBridge::buildContextMenu(LLMenuGL& menu, U32 flags)

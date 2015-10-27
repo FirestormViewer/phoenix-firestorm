@@ -666,6 +666,7 @@ BOOL LLFloaterPreference::postBuild()
 		gSavedPerAccountSettings.setString("FSAutorespondModeResponse", LLTrans::getString("AutoResponseModeDefault"));
 		gSavedPerAccountSettings.setString("FSAutorespondNonFriendsResponse", LLTrans::getString("AutoResponseModeNonFriendsDefault"));
 		gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		gSavedPerAccountSettings.setString("FSRejectFriendshipRequestsResponse", LLTrans::getString("RejectFriendshipRequestsResponseDefault"));
 		gSavedPerAccountSettings.setString("FSMutedAvatarResponse", LLTrans::getString("MutedAvatarsResponseDefault"));
 		gSavedPerAccountSettings.setString("FSAwayAvatarResponse", LLTrans::getString("AwayAvatarResponseDefault"));
 		// </FS:Ansariel>
@@ -782,6 +783,12 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 					!= getChild<LLUICtrl>("autorespond_rto_response")->getValue().asString();
 
 	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersResponseChanged", reject_teleport_offers_response_changed_flag );
+
+	bool reject_friendship_requests_response_changed_flag =
+			LLTrans::getString("RejectFriendshipRequestsResponseDefault")
+					!= getChild<LLUICtrl>("autorespond_rfr_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("FSRejectFriendshipRequestsResponseChanged", reject_friendship_requests_response_changed_flag );
 
 	bool muted_avatar_response_changed_flag =
 			LLTrans::getString("MutedAvatarsResponseDefault")
@@ -1013,6 +1020,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		gSavedPerAccountSettings.getControl("FSAutorespondModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAutorespondNonFriendsResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSRejectTeleportOffersResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
+		gSavedPerAccountSettings.getControl("FSRejectFriendshipRequestsResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSMutedAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAwayAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		// </FS:Ansariel>
@@ -1174,6 +1182,11 @@ void LLFloaterPreference::initDoNotDisturbResponse()
 		if (!gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersResponseChanged"))
 		{
 			gSavedPerAccountSettings.setString("FSRejectTeleportOffersResponse", LLTrans::getString("RejectTeleportOffersResponseDefault"));
+		}
+
+		if (!gSavedPerAccountSettings.getBOOL("FSRejectFriendshipRequestsResponseChanged"))
+		{
+			gSavedPerAccountSettings.setString("FSRejectFriendshipRequestsResponse", LLTrans::getString("RejectFriendshipRequestsResponseDefault"));
 		}
 
 		if (!gSavedPerAccountSettings.getBOOL("FSMutedAvatarResponseChanged"))
@@ -3003,7 +3016,8 @@ void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const 
 {
 	if (checkbox)
 	{
-		LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
+		// <FS:Ansariel> FIRE-17114 / BUG-10506 / MAINT-5760: Commented out because LLFavoritesBar files have been reverted temporarily
+		//LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
 		if(checkbox->getValue())
 		{
 			LLNotificationsUtil::add("FavoritesOnLogin");

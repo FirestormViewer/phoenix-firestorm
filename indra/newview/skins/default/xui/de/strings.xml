@@ -2175,6 +2175,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="CompileQueueStart">
 		Rekompilieren
 	</string>
+	<string name="CompileQueuePreprocessing">
+		Präprozessieren: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Präprozessieren von Skript [SCRIPT] beendet
+	</string>
 	<string name="ResetQueueTitle">
 		Skripte zurücksetzen
 	</string>
@@ -2484,6 +2490,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
 		Dieser Einwohner hat den Firestorm-Viewer-Modus „Teleport-Angebote und -Anforderungen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Teleport-Angeboten oder -Anforderungen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Dieser Einwohner hat den Firestorm-Viewer-Modus „Alle Freundschaftsanfragen abweisen“ aktiviert. Dies bedeutet, dass er nicht mit Freundschaftsanfragen gestört werden möchte. Sie können Ihm weiterhin eine Nachricht senden.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Dieser Einwohner hat den Empfang Ihrer Nachrichten blockiert.

@@ -68,7 +68,7 @@
 			<check_box label="Не показывать свой фокус камеры локально (для себя)" name="privateLocalLookat" tool_tip="Не показывать свой фокус камеры локально (для себя)"/>
 			<check_box label="Не посылать информацию выбора" name="privatepointat" tool_tip="Предотвращает показ моей точки выбора другим"/>
 		</panel>
-		<panel label="Автоответ" name="tab-autoresponse">
+		<panel label="Автоответ 1" name="tab-autoresponse-1">
 			<text name="text_box3">
 				Автоматический ответ, когда в режиме 'Недоступен' (т.е., занят):
 			</text>
@@ -78,11 +78,13 @@
 			<text name="autorespond_nf_response_label">
 				Автоматический ответ аватарам не из списка друзей, если включен режим 'Автоответчик не друзьям':
 			</text>
+			<check_box label="Отправить автоответ, когда в режиме 'Нет на месте':" name="send_away_av_response" tool_tip="Отправить автоответ, когда в режиме 'Нет на месте':"/>
+			<check_box label="Отправлять автоответ заблокированным аватарам:" name="send_muted_av_response" tool_tip="Отправлять автоответ аватарам, которых вы заблокировали"/>
+		</panel>
+		<panel label="Автоответ 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
 				Автоматический ответ всем аватарам, если включен режим 'Отклонять все предложения телепортации':
 			</text>
-			<check_box label="Отправлять автоответ заблокированным аватарам:" name="send_muted_av_response" tool_tip="Отправлять автоответ аватарам, которых вы заблокировали"/>
-			<check_box label="Отправить автоответ, когда в режиме 'Нет на месте':" name="send_away_av_response" tool_tip="Отправить автоответ, когда в режиме 'Нет на месте':"/>
 			<text name="autoresponse_item_label">
 				Элемент автоответа:
 			</text>

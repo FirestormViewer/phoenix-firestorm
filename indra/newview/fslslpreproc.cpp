@@ -42,6 +42,7 @@
 #include "lltrans.h"
 #include "llvfile.h"
 #include "llviewercontrol.h"
+#include "llcompilequeue.h"
 
 #ifdef __GNUC__
 // There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
@@ -811,6 +812,42 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	start_process();
 }
 
+void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
+{
+	if(!data)
+	{
+		return;
+	}
+	
+	std::string script(script_data);
+	mScript = script;
+	mAssetID = asset_id;
+	mData = data;
+	mType = type;
+	
+	mDefinitionCaching = false;
+	caching_files.clear();
+	LLStringUtil::format_map_t args;
+	display_message(LLTrans::getString("fs_preprocessor_starting"));
+	
+	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
+	
+	if (mData->mItem)
+	{
+		mMainScriptName = mData->mItem->getName();
+	}
+	else
+	{
+		mMainScriptName = "(Unknown)";
+	}
+	
+	std::string name = mMainScriptName;
+	cached_assetids[name] = LLUUID::null;
+	cache_script(name, script);
+	//start the party
+	start_process();
+}
+
 const std::string lazy_list_set_func("\
 list lazy_list_set(list L, integer i, list v)\n\
 {\n\
@@ -862,9 +899,7 @@ static void subst_lazy_references(std::string& script, std::string retype, std::
 
 static std::string reformat_lazy_lists(std::string script)
 {
-	bool add_set = false;
-	std::string nscript = script;
-	nscript = boost::regex_replace(nscript, boost::regex(rDOT_MATCHES_NEWLINE
+	script = boost::regex_replace(script, boost::regex(rDOT_MATCHES_NEWLINE
 		rCMNT_OR_STR "|"
 		// group 1: identifier
 		"([a-zA-Z_][a-zA-Z0-9_]*+)" rOPT_SPC
@@ -884,53 +919,21 @@ static std::string reformat_lazy_lists(std::string script)
 		"([;)])" // terminated only with a semicolon or a closing parenthesis
 		), "?1$1=lazy_list_set\\($1,$2,[$4]\\)$6:$&", boost::format_all);
 
-	if (nscript != script)
-	{
-		// the function is only necessary if an assignment was made and it's not already defined
-		add_set = boost::regex_search(nscript, boost::regex(
-			// Find if the function is already defined.
-			rDOT_MATCHES_NEWLINE
-			"^(?:"
-				// Skip variable or function declarations.
-				// RE for a variable declaration follows.
-				rOPT_SPC // skip spaces and comments
-				// type<space or comments>identifier[<space or comments>]
-				rTYPE_ID rREQ_SPC rIDENT rOPT_SPC
-				"(?:=" // optionally with an assignment
-					// comments or strings or characters that are not a semicolon
-					"(?:" rCMNT_OR_STR "|[^;])++"
-				")?;" // the whole assignment is optional, the semicolon isn't
-				"|"
-				// RE for function declarations follows.
-				rOPT_SPC // skip spaces and comments
-				// [type<space or comments>] identifier
-				"(?:" rTYPE_ID rREQ_SPC ")?" rIDENT rOPT_SPC
-				// open parenthesis, comments or other stuff, close parenthesis
-				// (strings can't appear in the parameter list so don't bother to skip them)
-				"\\((?:" rCMNT "|[^()])*+\\)" rOPT_SPC
-				// capturing group 1 used for nested curly braces
-				"(\\{(?:" rCMNT_OR_STR "|(?1)|[^{}])*+\\})" // recursively skip braces
-			")*?" // (zero or more variable/function declarations skipped)
-			rOPT_SPC "(?:" rTYPE_ID rREQ_SPC ")?lazy_list_set" rOPT_SPC "\\("
-		)) ? false : true;
-	}
-
 	// replace typed references followed by bracketed subindex with llList2XXXX,
 	// e.g. (rotation)mylist[3] is replaced with llList2Rot(mylist, (3))
-	subst_lazy_references(nscript, "integer", "llList2Integer");
-	subst_lazy_references(nscript, "float", "llList2Float");
-	subst_lazy_references(nscript, "string", "llList2String");
-	subst_lazy_references(nscript, "key", "llList2Key");
-	subst_lazy_references(nscript, "vector", "llList2Vector");
-	subst_lazy_references(nscript, "(?:rotation|quaternion)", "llList2Rot");
-	subst_lazy_references(nscript, "list", "llList2List");
+	subst_lazy_references(script, "integer", "llList2Integer");
+	subst_lazy_references(script, "float", "llList2Float");
+	subst_lazy_references(script, "string", "llList2String");
+	subst_lazy_references(script, "key", "llList2Key");
+	subst_lazy_references(script, "vector", "llList2Vector");
+	subst_lazy_references(script, "(?:rotation|quaternion)", "llList2Rot");
+	subst_lazy_references(script, "list", "llList2List");
 
-	if (add_set)
-	{
-		//add lazy_list_set function to top of script, as it is used
-		nscript = utf8str_removeCRLF(lazy_list_set_func) + "\n" + nscript;
-	}
-	return nscript;
+	// add lazy_list_set function to top of script
+	// (it can be overriden by a user function if the optimizer is active)
+	script = utf8str_removeCRLF(lazy_list_set_func) + "\n" + script;
+
+	return script;
 }
 
 
@@ -1128,7 +1131,15 @@ void FSLSLPreprocessor::start_process()
 
 	mWaving = true;
 	boost::wave::util::file_position_type current_position;
-	std::string input = mCore->mEditor->getText();
+	std::string input;
+	if (mStandalone)
+	{
+		input = mScript;
+	}
+	else
+	{
+		input = mCore->mEditor->getText();
+	}
 	std::string rinput = input;
 	bool preprocessor_enabled = true;
 
@@ -1516,15 +1527,21 @@ void FSLSLPreprocessor::start_process()
 			output = rinput;
 		}
 
-
-		LLTextEditor* outfield = mCore->mPostEditor;
-		if (outfield)
+		if (mStandalone)
 		{
-			outfield->setText(LLStringExplicit(output));
+			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
 		}
-		mCore->mPostScript = output;
-		mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
-		mCore->doSaveComplete((void*)mCore, mClose, mSync);
+		else
+		{
+			LLTextEditor* outfield = mCore->mPostEditor;
+			if (outfield)
+			{
+				outfield->setText(LLStringExplicit(output));
+			}
+			mCore->mPostScript = output;
+			mCore->enableSave(TRUE); // The preprocessor run forces a change. (For FIRE-10173) -Sei
+			mCore->doSaveComplete((void*)mCore, mClose, mSync);
+		}
 	}
 	mWaving = false;
 }
@@ -1569,19 +1586,38 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	mCore->doSaveComplete((void*)mCore, close, sync);
 }
 
+void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
+{
+	LLFloaterCompileQueue::scriptPreprocComplete(asset_id, data, type, script_data);
+}
+
 #endif
 
 void FSLSLPreprocessor::display_message(const std::string& err)
 {
-	mCore->mErrorList->addCommentText(err);
+	if (mStandalone)
+	{
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+	}
+	else
+	{
+		mCore->mErrorList->addCommentText(err);
+	}
 }
 
 void FSLSLPreprocessor::display_error(const std::string& err)
 {
-	LLSD row;
-	row["columns"][0]["value"] = err;
-	row["columns"][0]["font"] = "SANSSERIF_SMALL";
-	mCore->mErrorList->addElement(row);
+	if (mStandalone)
+	{
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+	}
+	else
+	{
+		LLSD row;
+		row["columns"][0]["value"] = err;
+		row["columns"][0]["font"] = "SANSSERIF_SMALL";
+		mCore->mErrorList->addElement(row);
+	}
 }
 
 

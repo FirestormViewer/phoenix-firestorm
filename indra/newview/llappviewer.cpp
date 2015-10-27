@@ -6628,6 +6628,7 @@ void LLAppViewer::handleLoginComplete()
 	if (!full_name.empty())
 	{
 		gWindowTitle += std::string("- ") + full_name;
+		LLStringUtil::truncate(gWindowTitle, 255);
 		gViewerWindow->getWindow()->setTitle(gWindowTitle);
 	}
 	// </FS:TT>

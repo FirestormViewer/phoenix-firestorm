@@ -40,13 +40,19 @@
 #define DARWINPREPROC
 //force preproc on mac
 
+struct LLScriptQueueData;
+
 class FSLSLPreprocessor
 {
 	LOG_CLASS(FSLSLPreprocessor);
 public:
 
 	FSLSLPreprocessor(LLScriptEdCore* corep)
-		: mCore(corep), mWaving(false), mClose(FALSE), mSync(false)
+		: mCore(corep), mWaving(false), mClose(FALSE), mSync(false), mStandalone(false)
+	{}
+	
+	FSLSLPreprocessor()
+		: mWaving(false), mClose(FALSE), mSync(false), mStandalone(true)
 	{}
 
 	static bool mono_directive(std::string const& text, bool agent_inv = true);
@@ -60,6 +66,7 @@ public:
 	static void FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAssetType::EType type,
 									void *userdata, S32 result, LLExtStat extstat);
 	void preprocess_script(BOOL close = FALSE, bool sync = false, bool defcache = false);
+	void preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data);
 	void start_process();
 	void display_message(const std::string& err);
 	void display_error(const std::string& err);
@@ -89,6 +96,13 @@ public:
 	BOOL mClose;
 	bool mSync;
 	std::string mMainScriptName;
+	
+	// Compile queue
+	bool mStandalone;
+	std::string mScript;
+	LLUUID mAssetID;
+	LLScriptQueueData* mData;
+	LLAssetType::EType mType;
 };
 
 #endif // FS_LSLPREPROC_H

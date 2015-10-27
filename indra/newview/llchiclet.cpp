@@ -41,6 +41,9 @@
 // [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
 #include "llchannelmanager.h"
 // [/SL:KB]
+// <FS:PP> Unread IMs counter in window title
+#include "llviewerwindow.h"
+// </FS:PP>
 
 // Firestorm includes
 #include "fsfloaterim.h"
@@ -53,6 +56,10 @@
 #include "llspeakers.h"
 #include "lltransientfloatermgr.h"
 #include "llvoiceclient.h"
+
+// <FS:PP> Unread IMs counter in window title
+extern std::string gWindowTitle;
+// </FS:PP>
 
 static LLDefaultChildRegistry::Register<LLChicletPanel> t1("chiclet_panel");
 static LLDefaultChildRegistry::Register<LLNotificationChiclet> t2("chiclet_notification");
@@ -193,6 +200,8 @@ LLIMWellChiclet::LLIMWellChiclet(const Params& p)
 	LLIMMgr::getInstance()->addSessionObserver(this);
 
 	LLIMWellWindow::getInstance()->setSysWellChiclet(this);
+
+	gSavedSettings.getControl("FSShowMessageCountInWindowTitle")->getSignal()->connect(boost::bind(&LLIMWellChiclet::updateApplicationWindowTitle, this));
 }
 
 LLIMWellChiclet::~LLIMWellChiclet()
@@ -276,6 +285,21 @@ void LLIMWellChiclet::messageCountChanged(const LLSD& session_data)
 	}
 
 	setCounter(counter);
+
+	updateApplicationWindowTitle();
+}
+
+void LLIMWellChiclet::updateApplicationWindowTitle()
+{
+	std::string window_title = gWindowTitle;
+
+	if (gSavedSettings.getBOOL("FSShowMessageCountInWindowTitle") && mCounter > 0)
+	{
+		window_title = "(" + mButton->getLabelUnselected() + ") " + gWindowTitle;
+	}
+
+	LLStringUtil::truncate(window_title, 255);
+	gViewerWindow->getWindow()->setTitle(window_title);
 }
 // </FS:Ansariel> [FS communication UI]
 
