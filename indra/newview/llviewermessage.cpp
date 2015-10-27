@@ -3795,7 +3795,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				send_do_not_disturb_message(msg, from_id);
 			}
 			// <FS:PP> FIRE-1245: Option to block/reject teleport offers
-			else if ( (is_rejecting_tp_offers && (!FSDontRejectTeleportOffersFromFriends || FSDontRejectTeleportOffersFromFriends && !is_friend)) && (!fRlvAutoAccept) )
+			else if ( (is_rejecting_tp_offers && (!FSDontRejectTeleportOffersFromFriends || (FSDontRejectTeleportOffersFromFriends && !is_friend))) && (!fRlvAutoAccept) )
 			{
 				send_rejecting_tp_offers_message(msg, from_id);
 			}
