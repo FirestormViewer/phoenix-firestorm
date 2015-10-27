@@ -263,6 +263,8 @@ private:
 	void onAvalineCallerFound(const LLUUID& participant_id);
 	void onAvalineCallerRemoved(const LLUUID& participant_id);
 
+	void onParticipantListIconToggle();
+
 	/**
 	 * Adjusts passed participant to work properly.
 	 *

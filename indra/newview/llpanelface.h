@@ -40,6 +40,7 @@ class LLColorSwatchCtrl;
 class LLComboBox;
 class LLInventoryItem;
 class LLLineEditor;
+class LLRadioGroup;
 class LLSpinCtrl;
 class LLTextBox;
 class LLTextureCtrl;
@@ -263,7 +264,7 @@ private:
 	
 	LLComboBox*		mComboTexGen;
 	LLComboBox*		mComboMatMedia;
-	LLComboBox*		mComboMatType;
+	LLRadioGroup*	mRadioMatType;
 	
 	LLCheckBoxCtrl	*mCheckFullbright;
 	

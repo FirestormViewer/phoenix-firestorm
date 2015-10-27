@@ -80,7 +80,7 @@ public:
 	void setSessionID(const LLUUID& session_id) { mSessionID = session_id; }
 	const LLUUID& getSessionID() { return mSessionID; }
 
-	void toggleIcons();
+	void setIconsVisible(bool visible);
 	void setSpeakingIndicatorsVisible(bool visible);
 	void setItemHeight(S32 height);
 	void showPermissions(bool visible);

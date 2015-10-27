@@ -248,7 +248,7 @@ FSParticipantList::FSParticipantList(LLSpeakerMgr* data_source,
 	if (use_context_menu && can_toggle_icons)
 	{
 		mAvatarList->setShowIcons("ParticipantListShowIcons");
-		mAvatarListToggleIconsConnection = gSavedSettings.getControl("ParticipantListShowIcons")->getSignal()->connect(boost::bind(&LLAvatarList::toggleIcons, mAvatarList));
+		mAvatarListToggleIconsConnection = gSavedSettings.getControl("ParticipantListShowIcons")->getSignal()->connect(boost::bind(&FSParticipantList::onParticipantListIconToggle, this));
 	}
 
 	//Lets fill avatarList with existing speakers
@@ -473,6 +473,14 @@ void FSParticipantList::onAvalineCallerRemoved(const LLUUID& participant_id)
 	LL_DEBUGS("Avaline") << "Removing avaline caller from the list: " << participant_id << LL_ENDL;
 
 	mSpeakerMgr->removeAvalineSpeaker(participant_id);
+}
+
+void FSParticipantList::onParticipantListIconToggle()
+{
+	std::string param = mAvatarList->getIconParamName();
+	gSavedSettings.setBOOL(param, !(gSavedSettings.getBOOL(param) && !gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+	gSavedSettings.setBOOL("GlobalShowIconsOverride", (!gSavedSettings.getBOOL(param) && gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+	mAvatarList->setIconsVisible(gSavedSettings.getBOOL(param));
 }
 
 void FSParticipantList::setSortOrder(EParticipantSortOrder order)

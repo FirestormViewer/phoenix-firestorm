@@ -45,11 +45,8 @@ LLUrlRegistry::LLUrlRegistry()
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
-	// <FS:Ansariel> Fix the "nolink>" fail; Fix from Alchemy viewer, courtesy of Drake Arconis
-	//registerUrl(new LLUrlEntryNoLink());
 	mUrlEntryNoLink = new LLUrlEntryNoLink();
 	registerUrl(mUrlEntryNoLink);
-	// </FS:Ansariel>
 	mUrlEntryIcon = new LLUrlEntryIcon();
 	registerUrl(mUrlEntryIcon);
 	mLLUrlEntryInvalidSLURL = new LLUrlEntryInvalidSLURL();
@@ -276,7 +273,6 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 	// did we find a match? if so, return its details in the match object
 	if (match_entry)
 	{
-
 		// Skip if link is an email with an empty username (starting with @). See MAINT-5371.
 		if (match_start > 0 && text.substr(match_start - 1, 1) == "@")
 			return false;
@@ -285,7 +281,8 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		std::string url = text.substr(match_start, match_end - match_start + 1);
 
 		LLUrlEntryBase *stripped_entry = NULL;
-		if(LLStringUtil::containsNonprintable(url))
+		if((match_entry != mUrlEntryNoLink) && (match_entry != mUrlEntryHTTPLabel) && (match_entry !=mUrlEntrySLLabel)
+		        && LLStringUtil::containsNonprintable(url))
 		{
 			LLStringUtil::stripNonprintable(url);
 

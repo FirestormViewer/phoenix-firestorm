@@ -183,9 +183,7 @@ public:
 	//get the object between start and end that's closest to start.
 	LLViewerObject* lineSegmentIntersectInWorld(const LLVector4a& start, const LLVector4a& end,
 												BOOL pick_transparent,
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 												BOOL pick_rigged,
-// [/SL:KB]
 												S32* face_hit,                          // return the face hit
 												LLVector4a* intersection = NULL,         // return the intersection point
 												LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point

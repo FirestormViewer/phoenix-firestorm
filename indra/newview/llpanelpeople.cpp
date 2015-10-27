@@ -1495,8 +1495,12 @@ void LLPanelPeople::onFriendsViewSortMenuItemClicked(const LLSD& userdata)
 	}
 	else if (chosen_item == "view_icons")
 	{
-		mAllFriendList->toggleIcons();
-		mOnlineFriendList->toggleIcons();
+		std::string param = mAllFriendList->getIconParamName();
+		gSavedSettings.setBOOL(param, !(gSavedSettings.getBOOL(param) && !gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		gSavedSettings.setBOOL("GlobalShowIconsOverride", (!gSavedSettings.getBOOL(param) && gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		gSavedSettings.setBOOL(mOnlineFriendList->getIconParamName(), gSavedSettings.getBOOL(param));
+		mAllFriendList->setIconsVisible(gSavedSettings.getBOOL(param));
+		mOnlineFriendList->setIconsVisible(gSavedSettings.getBOOL(param));
 	}
 	else if (chosen_item == "view_permissions")
 	{
@@ -1532,7 +1536,10 @@ void LLPanelPeople::onNearbyViewSortMenuItemClicked(const LLSD& userdata)
 	}
 	else if (chosen_item == "view_icons")
 	{
-		mNearbyList->toggleIcons();
+		std::string param = mNearbyList->getIconParamName();
+		gSavedSettings.setBOOL(param, !(gSavedSettings.getBOOL(param) && !gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		gSavedSettings.setBOOL("GlobalShowIconsOverride", (!gSavedSettings.getBOOL(param) && gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		mNearbyList->setIconsVisible(gSavedSettings.getBOOL(param));
 	}
 	else if (chosen_item == "sort_distance")
 	{
@@ -1551,6 +1558,8 @@ bool LLPanelPeople::onNearbyViewSortMenuItemCheck(const LLSD& userdata)
 		return sort_order == E_SORT_BY_NAME;
 	if (item == "sort_distance")
 		return sort_order == E_SORT_BY_DISTANCE;
+	if (item == "view_icons")
+		return gSavedSettings.getBOOL(mNearbyList->getIconParamName()) && !gSavedSettings.getBOOL("GlobalShowIconsOverride");
 
 	return false;
 }
@@ -1569,7 +1578,10 @@ void LLPanelPeople::onRecentViewSortMenuItemClicked(const LLSD& userdata)
 	}
 	else if (chosen_item == "view_icons")
 	{
-		mRecentList->toggleIcons();
+		std::string param = mRecentList->getIconParamName();
+		gSavedSettings.setBOOL(param, !(gSavedSettings.getBOOL(param) && !gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		gSavedSettings.setBOOL("GlobalShowIconsOverride", (!gSavedSettings.getBOOL(param) && gSavedSettings.getBOOL("GlobalShowIconsOverride")));
+		mRecentList->setIconsVisible(gSavedSettings.getBOOL(param));
 	}
 }
 
@@ -1582,6 +1594,8 @@ bool LLPanelPeople::onFriendsViewSortMenuItemCheck(const LLSD& userdata)
 		return sort_order == E_SORT_BY_NAME;
 	if (item == "sort_status")
 		return sort_order == E_SORT_BY_STATUS;
+	if (item == "view_icons")
+		return gSavedSettings.getBOOL(mAllFriendList->getIconParamName()) && !gSavedSettings.getBOOL("GlobalShowIconsOverride");
 	// <FS:Ansariel> FIRE-5283: Sort by username
 	if (item == "sort_username") 
 		return sort_order == E_SORT_BY_USERNAME;
@@ -1599,6 +1613,8 @@ bool LLPanelPeople::onRecentViewSortMenuItemCheck(const LLSD& userdata)
 		return sort_order == E_SORT_BY_MOST_RECENT;
 	if (item == "sort_name") 
 		return sort_order == E_SORT_BY_NAME;
+	if (item == "view_icons")
+		return gSavedSettings.getBOOL(mRecentList->getIconParamName()) && !gSavedSettings.getBOOL("GlobalShowIconsOverride");
 
 	return false;
 }
