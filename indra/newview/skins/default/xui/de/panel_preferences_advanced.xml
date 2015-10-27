@@ -9,6 +9,7 @@
 	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
 	<check_box label="VRAM-Ermittlung über WMI auf Windows-Systemen deaktivieren" name="FSDisableWMIProbing"/>
 	<check_box label="Zeitschritte für Animationen aktivieren (experimentell)" name="UseAnimationTimeSteps" tool_tip="Diese Einstellung kann die Render-Komplexität für entfernte Avatare verringen, aber dadurch können deren Animationen in falscher Geschwindigkeit abgespielt werden."/>
+	<check_box label="Avatar-Icons nicht anzeigen (global übersteuern)" name="global_show_icons_override"/>
 	<text name="BackgroundYieldTimeText">
 		Zeit in Millisekunden, die pro Frame an andere Anwendungen abgegeben werden, wenn [APP_NAME] nicht im Vordergrund ist [Standard: 40; 1 Sekunde = 1000 Millisekunden]
 	</text>
