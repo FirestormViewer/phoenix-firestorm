@@ -46,9 +46,6 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include  <time.h>
-#include "llavatarpropertiesprocessor.h"
-#include "lldateutil.h"
-#include "indra_constants.h"
 #include "llnotificationsutil.h"
 #include "llvoiceclient.h"
 
@@ -97,24 +94,8 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mHovered(false),
 	mAvatarNameCacheConnection(),
 	mShowVoiceVolume(false),
-	mNearbyRange(0),
 	mShowDisplayName(true),
-	mShowUsername(true),
-	mFirstSeen(time(NULL)),
-	mLastZOffsetTime(time(NULL)),
-	mZOffset(0),
-	mAvStatus(0),
-	mAvPosition(LLVector3d(0.0f,0.0f,0.0f)),
-	mShowFirstSeen(false),
-	mShowStatusFlags(false),
-	mShowAvatarAge(false),
-	mShowPaymentStatus(false),
-	mPaymentStatus(NULL),
-	mAvatarAge(0),
-	// [Ansariel: Colorful radar]
-	mUseRangeColors(false),
-	// [Ansariel: Colorful radar]
-	mDistance(99999.9f) // arbitary large number to insure new avatars are considered outside close range until we know for sure.
+	mShowUsername(true)
 {
 	if (not_from_ui_factory)
 	{
@@ -130,15 +111,11 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 
 LLAvatarListItem::~LLAvatarListItem()
 {
-	// <FS:Ansariel> Always remove, even with null UUID; LLAvatarPropertiesProcessor
-	//               might have a request running with null UUID!
-	//if (mAvatarId.notNull())
+	if (mAvatarId.notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
 		// <FS> Remove our own observers
 		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
-		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
-		// </FS>
 	}
 
 	if (mAvatarNameCacheConnection.connected())
@@ -177,30 +154,14 @@ BOOL  LLAvatarListItem::postBuild()
 	mBtnPermissionEditMine->setVisible(false);
 	mBtnPermissionEditMine->setIsChrome(TRUE);
 	mIconPermissionEditTheirs->setVisible(false);
-	
-	
-	// radar
-	mNearbyRange = getChild<LLTextBox>("radar_range");
-	mNearbyRange->setValue("N/A");
-	mNearbyRange->setVisible(false);
-	mFirstSeenDisplay = getChild<LLTextBox>("first_seen");
-	mFirstSeenDisplay->setValue("");
-	mFirstSeenDisplay->setVisible(false);
-	mAvatarAgeDisplay = getChild<LLTextBox>("avatar_age");
-	mAvatarAgeDisplay->setVisible(false);
-	mAvatarAgeDisplay->setValue("N/A");
-	mPaymentStatus = getChild<LLIconCtrl>("payment_info");
-	mPaymentStatus->setVisible(false);
-	
-	// TODO: Status flags
 
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
-	
-	mInfoBtn->setVisible(false); // <FS:AO> Enable this by calling setShowInfoButton
+
+	mInfoBtn->setVisible(false);
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
-	
+
 	mVoiceSlider = getChild<LLUICtrl>("volume_slider");
 	mVoiceSlider->setVisible(false);
 	mVoiceSlider->setCommitCallback(boost::bind(&LLAvatarListItem::onVolumeChange, this, _2));
@@ -215,7 +176,7 @@ BOOL  LLAvatarListItem::postBuild()
 		initChildrenWidths(this);
 
 		// Right padding between avatar name text box and nearest visible child.
- 		sNameRightPadding = LLUICtrlFactory::getDefaultParams<LLAvatarListItem>().name_right_pad;
+		sNameRightPadding = LLUICtrlFactory::getDefaultParams<LLAvatarListItem>().name_right_pad;
 
 		sStaticInitialized = true;
 	}
@@ -499,127 +460,6 @@ void LLAvatarListItem::showSpeakingIndicator(bool visible)
 //	updateChildren();
 }
 
-void LLAvatarListItem::showRange(bool show)
-{
-	mNearbyRange->setVisible(show);
-}
-
-void LLAvatarListItem::showFirstSeen(bool show)
-{
-	mFirstSeenDisplay->setVisible(show);
-}
-
-void LLAvatarListItem::showPaymentStatus(bool show)
-{
-	mShowPaymentStatus=show;
-	updateAvatarProperties();
-}
-
-void LLAvatarListItem::showStatusFlags(bool show)
-{
-	mShowStatusFlags=show;
-}
-
-void LLAvatarListItem::updateFirstSeen()
-{
-	S32 seentime = (S32)difftime(time(NULL), mFirstSeen);
-	S32 hours = (S32)(seentime / 3600);
-	S32 mins = (S32)((seentime - hours * 3600) / 60);
-	S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
-	mFirstSeenDisplay->setValue(llformat("%d:%02d:%02d", hours, mins, secs));
-	updateChildren();
-}
-
-std::string LLAvatarListItem::getSeen()
-{
-	return mFirstSeenDisplay->getValue();
-}
-
-void LLAvatarListItem::setRange(F32 distance)
-{
-	mDistance = distance;
-	
-	// [Ansariel: Colorful radar]
-	// Get default style params
-	LLStyle::Params rangeHighlight = LLStyle::Params();
-	
-// <FS:CR> Opensim
-	//if (mUseRangeColors && mDistance > CHAT_NORMAL_RADIUS)
-	if (mUseRangeColors && mDistance > LFSimFeatureHandler::getInstance()->sayRange())
-// </FS:CR> Opensim
-	{
-// <FS:CR> Opensim
-		//if (mDistance < CHAT_SHOUT_RADIUS)
-		if (mDistance < LFSimFeatureHandler::getInstance()->shoutRange())
-// </FS:CR> Opensim
-		{
-			rangeHighlight.color = mShoutRangeColor;
-		}
-		else
-		{
-			rangeHighlight.color = mBeyondShoutRangeColor;
-		}
-	}
-	
-	mNearbyRange->setText(llformat("%3.2f", mDistance), rangeHighlight);
-	// [Ansariel: Colorful radar]
-}
-
-F32 LLAvatarListItem::getRange()
-{
-	return mDistance;
-}
-
-void LLAvatarListItem::setPosition(LLVector3d pos)
-{
-	mAvPosition = pos;
-}
-
-LLVector3d LLAvatarListItem::getPosition()
-{
-	return mAvPosition;
-}
-
-void LLAvatarListItem::setAvStatus(S32 statusFlags)
-{
-	mAvStatus = statusFlags;
-}
-
-S32 LLAvatarListItem::getAvStatus()
-{
-	return mAvStatus;
-}
-
-time_t LLAvatarListItem::getFirstSeen()
-{
-	return mFirstSeen;
-}
-
-void LLAvatarListItem::setFirstSeen(time_t seentime)
-{
-	mFirstSeen = seentime;
-}
-
-time_t LLAvatarListItem::getLastZOffsetTime()
-{
-	return mLastZOffsetTime;
-}
-
-void LLAvatarListItem::setLastZOffsetTime(time_t oTime)
-{
-	mLastZOffsetTime = oTime;
-}
-
-F32	LLAvatarListItem::getZOffset()
-{
-	return mZOffset;
-}
-
-void LLAvatarListItem::setZOffset(F32 offset)
-{
-	mZOffset = offset;
-}
-
 void LLAvatarListItem::setAvatarIconVisible(bool visible)
 {
 	// Already done? Then do nothing.
@@ -650,23 +490,6 @@ void LLAvatarListItem::showUsername(bool show, bool updateName /* = true*/)
 		updateAvatarName();
 	}
 }
-
-// [Ansariel: Colorful radar]
-void LLAvatarListItem::setShoutRangeColor(const LLUIColor& shoutRangeColor)
-{
-	mShoutRangeColor = shoutRangeColor;
-}
-
-void LLAvatarListItem::setBeyondShoutRangeColor(const LLUIColor& beyondShoutRangeColor)
-{
-	mBeyondShoutRangeColor = beyondShoutRangeColor;
-}
-
-void LLAvatarListItem::setUseRangeColors(bool UseRangeColors)
-{
-	mUseRangeColors = UseRangeColors;
-}
-// [Ansariel: Colorful radar]
 
 void LLAvatarListItem::onInfoBtnClick()
 {
@@ -740,50 +563,7 @@ void LLAvatarListItem::updateAvatarName()
 	fetchAvatarName();
 }
 
-void LLAvatarListItem::showAvatarAge(bool display)
-{
-	mAvatarAgeDisplay->setVisible(display);
-	updateAvatarProperties();
-}
-
-std::string LLAvatarListItem::getAvatarAge()
-{
-	return mAvatarAgeDisplay->getValue();
-}
-
-void LLAvatarListItem::updateAvatarProperties()
-{
-	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
-	//This means updates to these properties won't typically be seen while target is in nearby range.
-	LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-	processor->addObserver(mAvatarId, this);
-	processor->sendAvatarPropertiesRequest(mAvatarId);
-}
-
 //== PRIVATE SECITON ==========================================================
-
-
-void LLAvatarListItem::processProperties(void* data, EAvatarProcessorType type)
-{
-	
-	// route the data to the inspector
-	if (data
-		&& type == APT_PROPERTIES)
-	{
-		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-		mAvatarAge = ((LLDate::now().secondsSinceEpoch()  - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
-		mAvatarAgeDisplay->setValue(mAvatarAge);
-
-		if (mShowPaymentStatus)
-		{
-			mPaymentStatus->setVisible(avatar_data->flags & AVATAR_IDENTIFIED);
-		}
-		
-		mAvStatus = avatar_data->flags;
-		
-	}
-}
-
 
 void LLAvatarListItem::setNameInternal(const std::string& name, const std::string& highlight)
 {
@@ -792,6 +572,7 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
 
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
+	mAvatarNameCacheConnection.disconnect();
 //	setAvatarName(av_name.getDisplayName());
 //	setAvatarToolTip(av_name.getUserName());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
@@ -1042,7 +823,6 @@ void LLAvatarListItem::updateChildren()
 		name_new_left,
 		name_view_rect.mTop,
 		name_new_width,
-		//40,
 		name_view_rect.getHeight());
 
 	name_view->setShape(name_view_rect);
@@ -1058,7 +838,6 @@ void LLAvatarListItem::setShowPermissions(bool show)
 
 bool LLAvatarListItem::showPermissions(bool visible)
 {
-	
 	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
 	if(relation && visible)
 	{

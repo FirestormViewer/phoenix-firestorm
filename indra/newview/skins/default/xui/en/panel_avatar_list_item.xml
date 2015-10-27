@@ -66,52 +66,6 @@
      use_ellipses="true"
      value="(loading)"
      width="50" />
-    <icon
-     height="16"
-     follows="right"
-     image_name="payment_info_used.tga"
-     layout="topleft"
-     right="-154"
-     name="payment_info"
-     tool_tip="Payment info on file"
-     top="0"
-     width="16" />  
-    <text
-     follows="right"
-     font="SansSerifSmall"
-     height="15"
-     top="5"
-     layout="topleft"
-     left_pad="5"
-     right="-110"
-     name="avatar_age"
-     text_color="LtGray_50"
-     value="0000"
-     width="40" />  
-    <text
-     follows="right"
-     font="SansSerifSmall"
-     height="15"
-     top="5"
-     layout="topleft"
-     left_pad="5"
-     right="-50"
-     name="first_seen"
-     text_color="LtGray_50"
-     value="0000"
-     width="60" />  
-    <text
-     follows="right"
-     font="SansSerifSmall"
-     height="15"
-     top="5"
-     layout="topleft"
-     left_pad="5"
-     right="-24"
-     name="radar_range"
-     text_color="LtGray_50"
-     value="12345678901234567890W"
-     width="30" />
     <text
      follows="right"
      font="SansSerifSmall"

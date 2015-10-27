@@ -36,14 +36,13 @@
 #include "llstyle.h"
 
 #include "llcallingcard.h" // for LLFriendObserver
-#include "llavatarpropertiesprocessor.h"
 
 class LLAvatarIconCtrl;
 class LLAvatarName;
 class LLIconCtrl;
 class LLUICtrl;
 
-class LLAvatarListItem : public LLPanel, public LLFriendObserver, public LLAvatarPropertiesObserver
+class LLAvatarListItem : public LLPanel, public LLFriendObserver
 {
 public:
 	struct Params : public LLInitParam::Block<Params, LLPanel::Params>
@@ -101,7 +100,6 @@ public:
 
 	void setOnline(bool online);
 	void updateAvatarName(); // re-query the name cache
-	void updateAvatarProperties(); // (re)query the avatar's server properties
 	void setAvatarName(const std::string& name);
 	void setAvatarToolTip(const std::string& tooltip);
 	void setHighlight(const std::string& highlight);
@@ -113,27 +111,7 @@ public:
 	void setShowInfoBtn(bool show);
 	void setShowVoiceVolume(bool show);
 	void showSpeakingIndicator(bool show);
-	void showRange(bool show);
-	void setRange(F32 distance);
-	F32  getRange();
-	void setPosition(LLVector3d globalPos);
-	LLVector3d getPosition();
-	void setAvStatus(S32 statusFlags);
-	S32  getAvStatus();
-	void setFirstSeen(time_t seenTime);
-	time_t	 getFirstSeen();
-	void setLastZOffsetTime(time_t oTime);
-	time_t	getLastZOffsetTime();
-	void setZOffset(F32 offset);
-	F32  getZOffset();
 	void showDisplayName(bool show, bool updateName = true);
-	void showFirstSeen(bool show);
-	void showStatusFlags(bool show);
-	void showAvatarAge(bool show);
-	std::string getAvatarAge();
-	std::string getSeen();
-	void showPaymentStatus(bool show);
-	void updateFirstSeen();
 	void showUsername(bool show, bool updateName = true);
 	void setShowPermissions(bool show);
 	void showLastInteractionTime(bool show);
@@ -155,20 +133,13 @@ public:
 	void onPermissionOnlineClick();
 	void onPermissionEditMineClick();
 	void onPermissionMapClick();
-	
-	//Radar state-specific
-	// [Ansariel: Colorful radar]
-	void setUseRangeColors(bool UseRangeColors);
-	void setShoutRangeColor(const LLUIColor& shoutRangeColor);
-	void setBeyondShoutRangeColor(const LLUIColor& beyondShoutRangeColor);
-	// [/Ansariel: Colorful radar]
 
 	/*virtual*/ BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
 	                                   EAcceptance *accept, std::string& tooltip_msg);
 // [/SL:KB]
- 
+
 protected:
 	/**
 	 * Contains indicator to show voice activity. 
@@ -188,18 +159,10 @@ protected:
 	void confirmModifyRights(bool grant, S32 rights);
 	void rightsConfirmationCallback(const LLSD& notification,
 									const LLSD& response, S32 rights);
-	
+
 	//radar_specific
-	LLTextBox* mNearbyRange;
 	bool mShowDisplayName;
 	bool mShowUsername;
-	bool mShowFirstSeen;
-	
-	// [Ansariel: Colorful radar]
-	bool mUseRangeColors;
-	LLUIColor mShoutRangeColor;
-	LLUIColor mBeyondShoutRangeColor;
-	// [/Ansariel: Colorful radar]
 
 	// <FS:Ansariel> Add callback for user volume change
 	boost::signals2::connection mVoiceLevelChangeCallbackConnection;
@@ -239,7 +202,6 @@ private:
 
 	void setNameInternal(const std::string& name, const std::string& highlight);
 	void onAvatarNameCache(const LLAvatarName& av_name);
-	void processProperties(void* data, EAvatarProcessorType type);
 
 
 	std::string formatSeconds(U32 secs);
@@ -276,24 +238,13 @@ private:
 
 	LLTextBox* mAvatarName;
 	LLTextBox* mLastInteractionTime;
-	LLTextBox* mFirstSeenDisplay;
-	LLTextBox* mAvatarAgeDisplay;
-	LLIconCtrl* mPaymentStatus;
 	LLStyle::Params mAvatarNameStyle;
 	
 	LLButton* mInfoBtn;
 	LLButton* mProfileBtn;
 	LLUICtrl* mVoiceSlider;
 
-	LLUUID	mAvatarId;
-	time_t	mFirstSeen;
-	time_t	mLastZOffsetTime;
-	F32	mZOffset;
-	S32	mAvStatus;
-	LLVector3d mAvPosition;
-	S32	mAvatarAge;
-	F32 	mDistance;
-	
+	LLUUID mAvatarId;
 	std::string mHighlihtSubstring; // substring to highlight
 	EOnlineStatus mOnlineStatus;
 	//Flag indicating that info/profile button shouldn't be shown at all.
@@ -308,10 +259,7 @@ private:
 
 	/// indicates whether to show icons representing permissions granted
 	bool mShowPermissions;
-	bool mShowStatusFlags;
-	bool mShowAvatarAge;
-	bool mShowPaymentStatus;
-	
+
 	/// true when the mouse pointer is hovering over this item
 	bool mHovered;
 	
