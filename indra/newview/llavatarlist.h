@@ -88,7 +88,6 @@ public:
 	void showFirstSeen(bool visible);
 	void showStatusFlags(bool visible);
 	void showPaymentStatus(bool visible);
-	void showMiniProfileIcons(bool visible);
 	void showDisplayName(bool visible);
 	void showAvatarAge(bool visible);
 	void showUsername(bool visible);
@@ -171,7 +170,6 @@ private:
 	bool mShowAge;
 	bool mShowDisplayName;
 	bool mShowUsername;
-	bool mIgnoreGlobalIcons;
 	S32  mItemHeight;
 	
 	// [Ansariel: Colorful radar]

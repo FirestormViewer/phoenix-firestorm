@@ -259,7 +259,6 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowStatusFlags(false)
 , mShowUsername((bool)gSavedSettings.getBOOL("NameTagShowUsernames"))
 , mShowDisplayName((bool)gSavedSettings.getBOOL("UseDisplayNames"))
-, mIgnoreGlobalIcons(false)
 , mShowAge(false)
 , mShowPaymentStatus(false)
 , mItemHeight(0)
@@ -322,26 +321,8 @@ LLAvatarList::~LLAvatarList()
 
 void LLAvatarList::setShowIcons(std::string param_name)
 {
-	if (!mIgnoreGlobalIcons)
-	{
-		mIconParamName= param_name;
-		mShowIcons = gSavedSettings.getBOOL(mIconParamName);
-	}
-}
-
-// AO: This can be used to disable icon display on a particular list, without affecting the global preference.
-void LLAvatarList::showMiniProfileIcons(bool visible)
-{
-	mShowIcons = visible;
-	mIgnoreGlobalIcons = true;
-	// Show/hide icons for all existing items.
-	
-	std::vector<LLPanel*> items;
-	getItems(items);
-	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
-	{
-		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
-	}
+	mIconParamName= param_name;
+	mShowIcons = gSavedSettings.getBOOL(mIconParamName);
 }
 
 // [Ansariel: Colorful radar]
