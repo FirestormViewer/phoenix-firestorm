@@ -899,9 +899,7 @@ static void subst_lazy_references(std::string& script, std::string retype, std::
 
 static std::string reformat_lazy_lists(std::string script)
 {
-	bool add_set = false;
-	std::string nscript = script;
-	nscript = boost::regex_replace(nscript, boost::regex(rDOT_MATCHES_NEWLINE
+	script = boost::regex_replace(script, boost::regex(rDOT_MATCHES_NEWLINE
 		rCMNT_OR_STR "|"
 		// group 1: identifier
 		"([a-zA-Z_][a-zA-Z0-9_]*+)" rOPT_SPC
@@ -921,53 +919,21 @@ static std::string reformat_lazy_lists(std::string script)
 		"([;)])" // terminated only with a semicolon or a closing parenthesis
 		), "?1$1=lazy_list_set\\($1,$2,[$4]\\)$6:$&", boost::format_all);
 
-	if (nscript != script)
-	{
-		// the function is only necessary if an assignment was made and it's not already defined
-		add_set = boost::regex_search(nscript, boost::regex(
-			// Find if the function is already defined.
-			rDOT_MATCHES_NEWLINE
-			"^(?:"
-				// Skip variable or function declarations.
-				// RE for a variable declaration follows.
-				rOPT_SPC // skip spaces and comments
-				// type<space or comments>identifier[<space or comments>]
-				rTYPE_ID rREQ_SPC rIDENT rOPT_SPC
-				"(?:=" // optionally with an assignment
-					// comments or strings or characters that are not a semicolon
-					"(?:" rCMNT_OR_STR "|[^;])++"
-				")?;" // the whole assignment is optional, the semicolon isn't
-				"|"
-				// RE for function declarations follows.
-				rOPT_SPC // skip spaces and comments
-				// [type<space or comments>] identifier
-				"(?:" rTYPE_ID rREQ_SPC ")?" rIDENT rOPT_SPC
-				// open parenthesis, comments or other stuff, close parenthesis
-				// (strings can't appear in the parameter list so don't bother to skip them)
-				"\\((?:" rCMNT "|[^()])*+\\)" rOPT_SPC
-				// capturing group 1 used for nested curly braces
-				"(\\{(?:" rCMNT_OR_STR "|(?1)|[^{}])*+\\})" // recursively skip braces
-			")*?" // (zero or more variable/function declarations skipped)
-			rOPT_SPC "(?:" rTYPE_ID rREQ_SPC ")?lazy_list_set" rOPT_SPC "\\("
-		)) ? false : true;
-	}
-
 	// replace typed references followed by bracketed subindex with llList2XXXX,
 	// e.g. (rotation)mylist[3] is replaced with llList2Rot(mylist, (3))
-	subst_lazy_references(nscript, "integer", "llList2Integer");
-	subst_lazy_references(nscript, "float", "llList2Float");
-	subst_lazy_references(nscript, "string", "llList2String");
-	subst_lazy_references(nscript, "key", "llList2Key");
-	subst_lazy_references(nscript, "vector", "llList2Vector");
-	subst_lazy_references(nscript, "(?:rotation|quaternion)", "llList2Rot");
-	subst_lazy_references(nscript, "list", "llList2List");
+	subst_lazy_references(script, "integer", "llList2Integer");
+	subst_lazy_references(script, "float", "llList2Float");
+	subst_lazy_references(script, "string", "llList2String");
+	subst_lazy_references(script, "key", "llList2Key");
+	subst_lazy_references(script, "vector", "llList2Vector");
+	subst_lazy_references(script, "(?:rotation|quaternion)", "llList2Rot");
+	subst_lazy_references(script, "list", "llList2List");
 
-	if (add_set)
-	{
-		//add lazy_list_set function to top of script, as it is used
-		nscript = utf8str_removeCRLF(lazy_list_set_func) + "\n" + nscript;
-	}
-	return nscript;
+	// add lazy_list_set function to top of script
+	// (it can be overriden by a user function if the optimizer is active)
+	script = utf8str_removeCRLF(lazy_list_set_func) + "\n" + script;
+
+	return script;
 }
 
 

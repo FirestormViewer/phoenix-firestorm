@@ -31,6 +31,7 @@
 #include "lllayoutstack.h"
 #include "llpaneltopinfobar.h"
 #include "llsyswellwindow.h"
+#include "llfloaternotificationstabbed.h"
 
 // Firestorm includes
 #include "fsfloaterim.h"
@@ -149,7 +150,7 @@ BOOL LLChicletBar::postBuild()
 	// <FS:Ansariel> [FS communication UI]
 	showWellButton("im_well", !LLIMWellWindow::getInstance()->isWindowEmpty());
 
-	showWellButton("notification_well", !LLNotificationWellWindow::getInstance()->isWindowEmpty());
+	showWellButton("notification_well", !LLFloaterNotificationsTabbed::getInstance()->isWindowEmpty());
 
 	LLPanelTopInfoBar::instance().setResizeCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
 	LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
