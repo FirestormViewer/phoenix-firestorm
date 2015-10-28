@@ -420,7 +420,7 @@
         </text>
 		<slider name="FSNameTagZOffsetCorrection"
 			label="Compensation en Z"
-			tool_tip="Modifie la distance entre l'avatar et le label. [Défaut&nbsp;:&nbsp;0]" />
+			tool_tip="Modifie la distance entre l'avatar et le label. [Défaut 0]" />
 	</panel>
 </tab_container>
 </panel>

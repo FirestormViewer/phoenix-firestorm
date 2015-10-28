@@ -180,6 +180,7 @@
 				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Anzahl ungelesener Instant Messages im Fenstertitel von Firestorm anzeigen"/>
 			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
 			<check_box name="FSNotifyNearbyChatFlash" label="Blinkender Chat-Toolbar-Button, wenn neuer Chat in der Nähe eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn ein neuer Chat in der Nähe eintrifft. Das Fenster vom Chat in der Nähe muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt."/>

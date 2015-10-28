@@ -1799,6 +1799,11 @@ Eingehende Teleport-Angebote und Teleport-Anforderungen werden jetzt mit der kon
 Falls Sie wünschen, können Sie diesen im Menü unter „Unterhalten“ &gt; „Online-Status“ deaktivieren.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="RejectFriendshipRequestsModeSet">
+		Abweisen aller eingehenden Freundschaftsanfragen ist eingeschaltet.
+Eingehende Freundschaftsanfragen werden jetzt mit der konfigurierten Antwort abgewiesen. Sie erhalten hierüber keine Benachrichtigung.
+		<usetemplate ignoretext="Wenn Abweisen aller Freundschaftsanfragen eingeschaltet wird." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="RejectAllGroupInvitesModeSet">
 		Abweisen aller Gruppeneinladungen ist eingeschaltet.
 Eingehende Gruppeneinladungen werden jetzt automatisch abgewiesen. Sie erhalten hierüber keine Benachrichtigung.

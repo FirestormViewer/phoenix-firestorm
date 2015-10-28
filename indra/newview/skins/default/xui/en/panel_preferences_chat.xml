@@ -1133,9 +1133,20 @@
 		 left="20"
 		 width="400"
 		 height="18"
+		 name="FSShowMessageCountInWindowTitle"
+		 control_name="FSShowMessageCountInWindowTitle"
+		 label="Show number of unread IMs in Firestorm's window title"/>
+
+		<check_box
+		 layout="topleft"
+		 follows="left|top"
+		 top_pad="-1"
+		 left="20"
+		 width="400"
+		 height="18"
 		 name="FSAnnounceIncomingIM"
 		 control_name="FSAnnounceIncomingIM"
-		 label="Announces incoming IMs as soon as the sender starts typing"/>
+		 label="Announce incoming IMs as soon as the sender starts typing"/>
 
 		<check_box
 		 layout="topleft"

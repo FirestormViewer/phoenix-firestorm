@@ -58,7 +58,7 @@
 			<check_box label="No difundir mis puntos de enfoque en absoluto, ni siquiera a mí mismo" name="privateLocalLookat" tool_tip="Evita que la cabeza de tu avatar se mueva para mirar donde enfocas en tu propia  pantalla. Este movimiento no es necesariamente visible para otros, independientemente de que actives o no esta opción."/>
 			<check_box label="No envíes pistas sobre mi selección" name="privatepointat" tool_tip="Evita mostrar a los demás los objetos que estás seleccionando"/>
 		</panel>
-		<panel label="Autorrespuesta" name="tab-autoresponse">
+		<panel label="Autorrespuesta 1" name="tab-autoresponse-1">
 			<text name="text_box3" width="425">
 				Respuesta automática para el estado de NO DISPONIBLE (p. ej. OCUPADO):
 			</text>
@@ -68,11 +68,13 @@
 			<text name="autorespond_nf_response_label">
 				Respuesta automática a no-amigos para el estado de AUTORRESPUESTA A NO-AMIGOS):
 			</text>
+			<check_box label="Enviar autorrespuesta para el estado de AUSENTE:" name="send_away_av_response" tool_tip="Responde con el siguiente texto cuando alguien te envía un MI mientras estás en modo ausente."/>
+			<check_box label="Enviar autorrespuesta a avatares bloqueados:" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
+		</panel>
+		<panel label="Autorrespuesta 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">
 				Respuesta automática para el modo RECHAZAR OFERTAS DE TELEPORTE:
 			</text>
-			<check_box label="Enviar autorrespuesta a avatares bloqueados:" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
-			<check_box label="Enviar autorrespuesta para el estado de AUSENTE:" name="send_away_av_response" tool_tip="Responde con el siguiente texto cuando alguien te envía un MI mientras estás en modo ausente."/>
 		</panel>
 	</tab_container>
 </panel>

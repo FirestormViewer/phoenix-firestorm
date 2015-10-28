@@ -381,7 +381,14 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			// at this point, head of the path array should be [ <region>, <x>, <y>, <z> ] where x, y and z
 			// are collectively optional
 			// are optional
+
 			mRegion = LLURI::unescape(path_array[0].asString());
+
+			if(LLStringUtil::containsNonprintable(mRegion))
+			{
+				LLStringUtil::stripNonprintable(mRegion);
+			}
+
 			path_array.erase(0);
 
 			LL_DEBUGS("SLURL") << "mRegion: "  << mRegion << LL_ENDL;

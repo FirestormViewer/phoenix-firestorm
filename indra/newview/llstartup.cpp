@@ -1257,8 +1257,10 @@ bool idle_startup()
 				display_id = display_id + " " + id_last;
 			}
 		}
-		gViewerWindow->setTitle(gWindowTitle+" - "+display_id);
-         
+		std::string window_title = gWindowTitle + " - " + display_id;
+		LLStringUtil::truncate(window_title, 255);
+		gViewerWindow->setTitle(window_title);
+
 		// create necessary directories
 		// *FIX: these mkdir's should error check
 // <FS:CR> Seperate user directories per grid on OS build

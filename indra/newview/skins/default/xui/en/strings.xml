@@ -1002,6 +1002,8 @@ This feature is currently in Beta. Please add your name to this [http://goo.gl/f
 	<string name="CompileNoExperiencePerm">Skipping script [SCRIPT] with Experience [EXPERIENCE].</string>
 	<string name="CompileQueueTitle">Recompilation Progress</string>
 	<string name="CompileQueueStart">recompile</string>
+	<string name="CompileQueuePreprocessing">Preprocessing: [SCRIPT]</string>
+	<string name="CompileQueuePreprocessingComplete">Preprocessing of script [SCRIPT] completed</string>
 	<string name="ResetQueueTitle">Reset Progress</string>
 	<string name="ResetQueueStart">reset</string>
 	<string name="RunQueueTitle">Set Running Progress</string>
@@ -1138,6 +1140,7 @@ This feature is currently in Beta. Please add your name to this [http://goo.gl/f
   <string name="AutoResponseModeDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
   <string name="AutoResponseModeNonFriendsDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
   <string name="RejectTeleportOffersResponseDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all teleport offers and requests mode&apos; which means they have requested not to be disturbed with teleport offers and requests. You may still send an IM message manually.</string>
+  <string name="RejectFriendshipRequestsResponseDefault">The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all friendship requests mode&apos; which means they have requested not to be disturbed with friendship requests. You may still send an IM message manually.</string>
   <string name="MutedAvatarsResponseDefault">The Resident you messaged has blocked you from sending them any messages.</string>
   <string name="AwayAvatarResponseDefault">The Resident you messaged is currently away from keyboard. Your message will still be shown in their IM panel for later viewing.</string>
 

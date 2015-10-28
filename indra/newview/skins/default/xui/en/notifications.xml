@@ -4431,6 +4431,18 @@ Go to the 'Comm' &gt; 'Online Status' menu if you wish to disable it.
 
     <notification
    icon="alert.tga"
+   name="RejectFriendshipRequestsModeSet"
+   type="alert">
+Reject all incoming friendship requests mode is on.
+Incoming friendship requests from anyone will now be rejected with your configured autoresponse. You will not be notified because of that fact.
+    <usetemplate
+     ignoretext="I change my status to reject all friendship requests mode"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+
+    <notification
+   icon="alert.tga"
    name="RejectAllGroupInvitesModeSet"
    type="alert">
 Reject all incoming group invites mode is on.

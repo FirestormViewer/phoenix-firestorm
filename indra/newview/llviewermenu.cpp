@@ -7055,6 +7055,35 @@ class LLWorldGetRejectTeleportOffers : public view_listener_t
 };
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
+// <FS:PP> FIRE-15233: Automatic friendship request refusal
+class LLWorldSetRejectFriendshipRequests : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getRejectFriendshipRequests())
+		{
+			gAgent.clearRejectFriendshipRequests();
+		}
+		else
+		{
+			gAgent.setRejectFriendshipRequests();
+			LLNotificationsUtil::add("RejectFriendshipRequestsModeSet");
+		}
+		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetRejectFriendshipRequests : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getRejectFriendshipRequests();
+		return new_value;
+	}
+};
+// </FS:PP> FIRE-15233: Automatic friendship request refusal
+
 // <FS:PP> Option to block/reject all group invites
 class LLWorldSetRejectAllGroupInvites : public view_listener_t
 {
@@ -10832,6 +10861,10 @@ void initialize_menus()
 	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
 	view_listener_t::addMenu(new LLWorldSetRejectTeleportOffers(), "World.SetRejectTeleportOffers");
 	view_listener_t::addMenu(new LLWorldGetRejectTeleportOffers(), "World.GetRejectTeleportOffers");
+	// </FS:PP>
+	// <FS:PP> FIRE-15233: Automatic friendship request refusal
+	view_listener_t::addMenu(new LLWorldSetRejectFriendshipRequests(), "World.SetRejectFriendshipRequests");
+	view_listener_t::addMenu(new LLWorldGetRejectFriendshipRequests(), "World.GetRejectFriendshipRequests");
 	// </FS:PP>
 	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
 	view_listener_t::addMenu(new LLWorldSetRejectAllGroupInvites(), "World.SetRejectAllGroupInvites");

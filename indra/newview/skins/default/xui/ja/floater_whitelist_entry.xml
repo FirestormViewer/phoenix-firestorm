@@ -5,5 +5,5 @@
 	</text>
 	<line_editor name="whitelist_entry" tool_tip="URL か URL パターンをホワイトリストに入力します"/>
 	<button label="OK" name="ok_btn"/>
-	<button label="取り消し name="cancel_btn"/>
+	<button label="取り消し" name="cancel_btn"/>
 </floater>

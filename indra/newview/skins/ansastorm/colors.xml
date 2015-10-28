@@ -1198,7 +1198,10 @@
     <color
       name="ToolbarDropZoneColor"
       value=".48 .69 1 .5" />
-  
+    <color
+      name="PanelNotificationListItem"
+      value="0.3 0.3 0.3 .3" />
+
     <!-- for legacy profiles -->
     <color
      name="StatusUserOnline"
@@ -1216,7 +1219,7 @@
 	 name="GroupHiddenInProfile"
 	 reference="EmphasisColor" />
 	 
-    <!-- Generic color names (legacy) -->
+  <!-- Generic color names (legacy) -->
   <color
     name="white"
     value="1 1 1 1"/>
