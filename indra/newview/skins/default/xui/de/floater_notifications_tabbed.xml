@@ -28,7 +28,7 @@
 					<button label="Alle einklappen" name="collapse_all_button"/>
 				</layout_panel>
 				<layout_panel name="DeleteAllButtonPanel">
-					<button label="Alle Schließen" name="delete_all_button"/>
+					<button label="Alle schließen" name="delete_all_button"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
