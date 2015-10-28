@@ -742,17 +742,10 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		args["MESSAGE"] = message;
 
 		// <FS:PP> Option to block/reject all group invites
+		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
 		if (gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode"))
 		{
 			LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
-		}
-		// </FS:PP> Option to block/reject all group invites
-		// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
-		else if (fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
-		{
-			make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
-			LLNotificationsUtil::add("JoinGroupProtectionNotice", args, notification_adjusted["payload"]);
 		}
 		else
 		{
@@ -876,8 +869,6 @@ static void highlight_inventory_objects_in_panel(const std::vector<LLUUID>& item
 static LLNotificationFunctorRegistration jgr_1("JoinGroup", join_group_response);
 static LLNotificationFunctorRegistration jgr_2("JoinedTooManyGroupsMember", join_group_response);
 static LLNotificationFunctorRegistration jgr_3("JoinGroupCanAfford", join_group_response);
-static LLNotificationFunctorRegistration jgr_4("JoinGroupProtectionNotice", join_group_response); // <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-
 
 //-----------------------------------------------------------------------------
 // Instant Message
@@ -3381,17 +3372,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 
 				// <FS:PP> Option to block/reject all group invites
+				// LLNotificationsUtil::add("JoinGroup", args, payload);
 				if (is_rejecting_group_invites)
 				{
 					LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
-				}
-				// </FS:PP> Option to block/reject all group invites
-				// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-				// LLNotificationsUtil::add("JoinGroup", args, payload);
-				else if (membership_fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
-				{
-					make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
-					LLNotificationsUtil::add("JoinGroupProtectionNotice", args, payload);
 				}
 				else
 				{

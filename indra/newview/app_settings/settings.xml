@@ -22315,17 +22315,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
     </map>
     <!-- <FS_Zi> Animated dialogs -->
-    <key>FSAllowGroupInvitationOnlyWithoutFee</key>
-    <map>
-      <key>Comment</key>
-      <string>If True, then group invitation notices that require a fee have the "Join" button removed and a little bit of information added.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>FSLegacyRadarFriendColoring</key>
     <map>
       <key>Comment</key>
