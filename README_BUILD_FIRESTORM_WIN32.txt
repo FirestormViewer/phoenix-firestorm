@@ -51,4 +51,3 @@ Logs:
 
 Output:
 	Look for output in build-vc120/newview/Release
-
