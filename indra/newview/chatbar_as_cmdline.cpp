@@ -326,6 +326,7 @@ public:
 						if (mPackage)
 						{
 							reportToNearbyChat(llformat("Packager: no objects to take."));
+							doZtCleanup();
 						}
 						else
 						{

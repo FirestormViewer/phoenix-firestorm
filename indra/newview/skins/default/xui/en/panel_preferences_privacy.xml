@@ -448,8 +448,8 @@
      left="1"
      right="-1"
      follows="all"
-     label="Autoresponse"
-     name="tab-autoresponse" >
+     label="Autoresponse 1"
+     name="tab-autoresponse-1" >
      
         <text
          type="string"
@@ -460,7 +460,7 @@
          left="15"
          mouse_opaque="false"
          name="text_box3"
-         top="3"
+         top="10"
          width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
@@ -469,10 +469,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="40"
+         height="55"
          layout="topleft"
          left="35"
-         top_pad="3"
+         top_pad="5"
          name="do_not_disturb_response"
          width="475"
          word_wrap="true">
@@ -497,10 +497,10 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="40"
+         height="55"
          layout="topleft"
          left="35"
-         top_pad="3"
+         top_pad="5"
          name="autorespond_response"
          width="475"
          word_wrap="true">
@@ -525,65 +525,11 @@
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"
-         height="40"
+         height="55"
          layout="topleft"
          left="35"
-         top_pad="3"
+         top_pad="5"
          name="autorespond_nf_response"
-         width="475"
-         word_wrap="true">
-           log_in_to_change
-        </text_editor>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="13"
-         layout="topleft"
-         left="15"
-         mouse_opaque="false"
-         name="autorespond_rto_response_label"
-         top_pad="5"
-         width="500">
-           Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
-        </text>
-        <text_editor
-         control_name="FSRejectTeleportOffersResponse"
-         use_ellipses="false"
-         commit_on_focus_lost = "true"
-         follows="left|top"
-         height="40"
-         layout="topleft"
-         left="35"
-         top_pad="3"
-         name="autorespond_rto_response"
-         width="475"
-         word_wrap="true">
-           log_in_to_change
-        </text_editor>
-
-        <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Send autoresponse to MUTED avatars:"
-         left="15"
-         name="send_muted_av_response"
-         width="270"
-         control_name="FSSendMutedAvatarResponse"
-         tool_tip="Send the text below when someone you've muted sends you an IM."/>
-        <text_editor
-         enabled_control="FSSendMutedAvatarResponse"
-         control_name="FSMutedAvatarResponse"
-         use_ellipses="false"
-         commit_on_focus_lost = "true"
-         follows="left|top"
-         height="40"
-         layout="topleft"
-         left="35"
-         top_pad="3"
-         name="muted_avatar_response"
          width="475"
          word_wrap="true">
            log_in_to_change
@@ -605,15 +551,53 @@
         use_ellipses="false"
         commit_on_focus_lost = "true"
         follows="left|top"
-        height="40"
+        height="55"
         layout="topleft"
         left="35"
-        top_pad="3"
+        top_pad="5"
         name="away_avatar_response"
         width="475"
         word_wrap="true">
         log_in_to_change
       </text_editor>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Send autoresponse to MUTED avatars:"
+         left="15"
+         name="send_muted_av_response"
+         width="270"
+         control_name="FSSendMutedAvatarResponse"
+         tool_tip="Send the text below when someone you've muted sends you an IM."/>
+        <text_editor
+         enabled_control="FSSendMutedAvatarResponse"
+         control_name="FSMutedAvatarResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="muted_avatar_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+    </panel>
+
+    <!--Autoresponse-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Autoresponse 2"
+     name="tab-autoresponse-2" >
 
         <text
          type="string"
@@ -621,12 +605,77 @@
          follows="left|top"
          height="13"
          layout="topleft"
-         left="10"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rto_response_label"
+         top="10"
+         width="500">
+           Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
+        </text>
+        <text_editor
+         control_name="FSRejectTeleportOffersResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rto_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+       <check_box
+        top_pad="5"
+        left="35"
+        follows="left|top"
+        height="16"
+        label="Don't reject teleport offers (and send response) from people on friends list"
+        name="FSDontRejectTeleportOffersFromFriends"
+        width="500"
+        control_name="FSDontRejectTeleportOffersFromFriends"/>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rfr_response_label"
+         top_pad="5"
+         width="500">
+           Automatic response to all avatars when in REJECT FRIENDSHIP REQUESTS mode:
+        </text>
+        <text_editor
+         control_name="FSRejectFriendshipRequestsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rfr_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
          mouse_opaque="false"
          name="autoresponse_item_label"
-         top_pad="12"
-         width="110">
-          Autoresponse item:
+         top_pad="25"
+         width="180">
+          Item sent with all autoresponses:
         </text>
         <fs_copytrans_inventory_drop_target
          name="autoresponse_item"
@@ -647,6 +696,7 @@
          name="clear_autoresponse_item"
          top_delta="0"
          width="40"/>
+
     </panel>
 </tab_container>
 </panel>

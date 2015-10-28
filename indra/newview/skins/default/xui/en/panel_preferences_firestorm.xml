@@ -431,15 +431,6 @@
         <check_box
          top_pad="8"
          left="10"
-         label="Remove &quot;Join&quot; button from group invitations when joining costs a fee"
-         control_name="FSAllowGroupInvitationOnlyWithoutFee"
-         follows="left|top"
-         height="16"
-         name="FSAllowGroupInvitationOnlyWithoutFee"
-         width="200" />
-        <check_box
-         top_pad="8"
-         left="10"
          label="Confirm before paying. Threshold:"
          control_name="FSConfirmPayments"
          follows="left|top"
