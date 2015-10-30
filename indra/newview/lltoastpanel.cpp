@@ -70,7 +70,10 @@ const LLUUID& LLToastPanel::getID()
 S32 LLToastPanel::computeSnappedToMessageHeight(LLTextBase* message, S32 maxLineCount)
 {
 	S32 heightDelta = 0;
-	S32 maxTextHeight = message->getFont()->getLineHeight() * maxLineCount;
+	// <FS:Ansariel> Don't forget about line spacing!
+	//S32 maxTextHeight = message->getFont()->getLineHeight() * maxLineCount;
+	S32 maxTextHeight = (message->getFont()->getLineHeight() + message->getLineSpacingPixels()) * maxLineCount;
+	// </FS:Ansariel>
 
 	LLRect messageRect = message->getRect();
 	S32 oldTextHeight = messageRect.getHeight();
