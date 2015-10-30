@@ -4,7 +4,7 @@
  help_topic="fs_tip_tracker"
  title="Money Tracker"
  width="200"
- height="200"
+ height="220"
  min_width="175"
  min_height="175"
  single_instance="true"
@@ -16,7 +16,7 @@
 	<name_list
 	 draw_heading="true"
 	 follows="all"
-	 bottom="-45"
+	 bottom="-65"
 	 layout="topleft"
 	 left="4"
 	 top="1"
@@ -43,6 +43,17 @@
 		 name="time_sort_column"
 		 width="-1"/>
 	</name_list>
+	<text
+		follows="left|right|bottom"
+		height="16"
+		layout="topleft"
+		left="4"
+		name="summary"
+		right="-4"
+		use_ellipses="true"
+		wrap="false">
+		Paid: L$ [PAID] - Received: L$ [RECEIVED]
+	</text>
 	<check_box
 	 control_name="FSAlwaysTrackPayments"
 	 follows="left|right|bottom"

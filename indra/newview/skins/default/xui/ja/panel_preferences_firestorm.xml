@@ -79,10 +79,8 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
-		<check_box label="参加費用がかかる場合はグループ招待の「参加」ボタンを表示しない" name="FSAllowGroupInvitationOnlyWithoutFee" />
 		<check_box label="支払い前に確認する。閾値：" name="FSConfirmPayments" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。" />
- 		<spinner
- name="FSPaymentConfirmationThreshold" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。" />
+ 		<spinner name="FSPaymentConfirmationThreshold" tool_tip="支払う金額の合計が閾値より大きい場合に確認ダイアログを表示します。確認ダイアログを毎回必ず表示するには、閾値を「０」に設定します。" />
 	</panel>
 
 	<!-- アバター -->

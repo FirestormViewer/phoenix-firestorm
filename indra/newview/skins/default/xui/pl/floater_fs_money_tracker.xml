@@ -5,6 +5,9 @@
 		<name_list.columns name="name" label="Imię" />
 		<name_list.columns name="amount" label="Ilość" />
 	</name_list>
+	<text name="summary">
+		Zapłacono: [PAID] L$ - Otrzymano: [RECEIVED] L$
+	</text>
 	<check_box label="Śledź gdy zamknięte" name="FSAlwaysTrackPayments" tool_tip="Zawsze śledź transakcje, nawet gdy okno jest zamknięte." />
 	<button name="Clear" label="Wyczyść"/>
 </floater>

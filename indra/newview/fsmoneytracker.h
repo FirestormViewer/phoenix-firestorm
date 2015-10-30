@@ -32,6 +32,7 @@
 #include "lllistcontextmenu.h"
 
 class LLNameListCtrl;
+class LLTextBox;
 
 class FSMoneyTracker: public LLFloater
 {
@@ -47,7 +48,12 @@ private:
 	void clear();
 	std::string getTime(time_t utc_time);
 	std::string getDate(time_t utc_time);
-	LLNameListCtrl* mTransactionHistory;
+
+	LLNameListCtrl*	mTransactionHistory;
+	LLTextBox*		mSummary;
+
+	S32 mAmountPaid;
+	S32 mAmountReceived;
 };
 
 class FSMoneyTrackerListMenu : public LLListContextMenu

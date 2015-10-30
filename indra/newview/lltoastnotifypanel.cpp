@@ -430,7 +430,19 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 	//.xml file intially makes info panel only follow left/right/top. This is so that when control buttons are added the info panel 
 	//can shift upward making room for the buttons inside mControlPanel. After the buttons are added, the info panel can then be set to follow 'all'.
 	mInfoPanel->setFollowsAll();
-    snapToMessageHeight(mTextBox, MAX_LENGTH);
+	// <FS:Ansariel> FIRE-17100: Customizable number of rows in a script dialog
+    //snapToMessageHeight(mTextBox, MAX_LENGTH);
+	if (mIsScriptDialog)
+	{
+		S32 rows = gSavedSettings.getS32("FSRowsPerScriptDialog");
+		llclamp(rows, 2, MAX_LENGTH);
+		snapToMessageHeight(mTextBox, rows);
+	}
+	else
+	{
+		snapToMessageHeight(mTextBox, MAX_LENGTH);
+	}
+	// </FS:Ansariel>
 
 	// reshape the panel to its previous size
 	if (current_rect.notEmpty())

@@ -3103,14 +3103,6 @@ Por favor, vuelve a intentarlo en unos momentos.
 			<button name="Info" text="Información"/>
 		</form>
 	</notification>
-	<notification name="JoinGroupProtectionNotice">
-		Unirte a este grupo tiene un coste y la invitación no puede ser aceptada a cause de tu configuración. Si quieres cambiarla, hazlo en Preferencias &gt; Firestorm &gt; Protección.
-
-[MESSAGE]
-		<form name="form">
-			<button name="Info" text="Información"/>
-		</form>
-	</notification>
 	<notification name="TeleportOffered">
 		[NAME_SLURL] te ofrece teleportarte a su localización:
 
