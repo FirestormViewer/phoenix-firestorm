@@ -3984,9 +3984,9 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
-		if ((pick_rigged) || ((getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
+//		if ((pick_rigged) || ((getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		if ( (pick_rigged) || ( getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools)))  )
+		if ((pick_rigged) || (getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools))))
 // [/SL:KB]
 		{
 			updateRiggedVolume(true);
