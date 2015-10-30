@@ -4346,6 +4346,10 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		{
 			LL_DEBUGS("Avatar") << "ATT removing attachment " << item->getName() << " id " << item->getUUID() << LL_ENDL;
 		}
+		if (item && item->getType() == LLAssetType::AT_BODYPART)
+		{
+		    continue;
+		}
 
 		if (!cb)
 			cb = new LLUpdateAppearanceOnDestroy();
