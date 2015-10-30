@@ -345,6 +345,24 @@
          top_delta="4"
          width="256" />
 
+        <slider
+         control_name="FSRowsPerScriptDialog"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="10"
+         label="Visible rows per script dialog:"
+         label_width="160"
+         layout="topleft"
+         max_val="50"
+         min_val="2"
+         name="FSRowsPerScriptDialog"
+         tool_tip="The maximum number of rows in a script dialog that will be visible at the same time."
+         top_pad="9"
+         left="10"
+         width="400" />
+
         <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
