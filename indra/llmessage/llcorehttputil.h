@@ -677,4 +677,14 @@ private:
 
 } // end namespace LLCoreHttpUtil
 
+namespace FSCoreHttpUtil
+{
+    typedef boost::function<void(const LLSD &)> completionCallback_t;
+
+	void callbackHttpPostRaw(const std::string &url, LLCore::BufferArray::ptr_t postData, completionCallback_t success = NULL, completionCallback_t failure = NULL);
+    void callbackHttpGetRaw(const std::string &url, completionCallback_t success = NULL, completionCallback_t failure = NULL);
+
+	void trivialGetCoroRaw(std::string url, LLCore::HttpRequest::policy_t policyId, completionCallback_t success, completionCallback_t failure);
+    void trivialPostCoroRaw(std::string url, LLCore::HttpRequest::policy_t policyId, LLCore::BufferArray::ptr_t postData, completionCallback_t success, completionCallback_t failure);
+}
 #endif // LL_LLCOREHTTPUTIL_H

@@ -1307,3 +1307,81 @@ void HttpCoroutineAdapter::trivialPostCoro(std::string url, LLCore::HttpRequest:
 
 } // end namespace LLCoreHttpUtil
 
+namespace FSCoreHttpUtil
+{
+void trivialPostCoroRaw(std::string url, LLCore::HttpRequest::policy_t policyId, LLCore::BufferArray::ptr_t postData, completionCallback_t success, completionCallback_t failure)
+{
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("genericPostCoroRaw", policyId));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+
+    httpOpts->setWantHeaders(true);
+
+    LL_INFOS("HttpCoroutineAdapter", "genericPostCoroRaw") << "Generic POST for " << url << LL_ENDL;
+
+    LLSD result = httpAdapter->postRawAndSuspend(httpRequest, url, postData, httpOpts);
+
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+    if (!status)
+    {
+        // If a failure routine is provided do it.
+        if (failure)
+        {
+            failure(httpResults);
+        }
+    }
+    else
+    {
+        // If a success routine is provided do it.
+        if (success)
+        {
+            success(result);
+        }
+    }
+}
+void callbackHttpPostRaw(const std::string &url, LLCore::BufferArray::ptr_t postData, completionCallback_t success, completionCallback_t failure)
+{
+    LLCoros::instance().launch("HttpCoroutineAdapter::genericPostCoroRaw",
+        boost::bind(trivialPostCoroRaw, url, LLCore::HttpRequest::DEFAULT_POLICY_ID, postData, success, failure));
+}
+
+void trivialGetCoroRaw(std::string url, LLCore::HttpRequest::policy_t policyId, completionCallback_t success, completionCallback_t failure)
+{
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("genericGetCoro", policyId));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+
+    httpOpts->setWantHeaders(true);
+
+    LL_INFOS("HttpCoroutineAdapter", "genericGetCoroRaw") << "Generic GET for " << url << LL_ENDL;
+
+    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts);
+
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+    if (!status)
+    {   
+        if (failure)
+        {
+            failure(httpResults);
+        }
+    }
+    else
+    {
+        if (success)
+        {
+            success(result);
+        }
+    }
+}
+
+void callbackHttpGetRaw(const std::string &url, completionCallback_t success, completionCallback_t failure)
+{
+    LLCoros::instance().launch("HttpCoroutineAdapter::genericGetCoroRaw",
+        boost::bind(trivialGetCoroRaw, url, LLCore::HttpRequest::DEFAULT_POLICY_ID, success, failure));
+}
+}
