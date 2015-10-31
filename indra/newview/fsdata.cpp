@@ -68,127 +68,6 @@ size_t strnlen(const char *s, size_t n)
 }
 #endif
 
-#if 0
-class FSDownloader : public LLHTTPClient::Responder
-{
-	LOG_CLASS(FSDownloader);
-public:
-	FSDownloader(std::string url) :
-		mURL(url)
-	{}
-
-	void httpSuccess()
-	{
-		completedHeader();
-
-		// check for parse failure that can happen with [200] OK result.
-		FSData::getInstance()->processResponder(getContent(), mURL, !mDeserializeError, mLastModified);
-	}
-	
-	void httpFailure()
-	{
-		completedHeader();
-		FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
-	}
-	
-	void completedHeader()
-	{
-		LLSD content = getResponseHeaders();
-		LL_DEBUGS("fsdata") << "Status: [" << getStatus() << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
-		if (content.has("last-modified"))
-		{
-			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
-		}
-		LL_DEBUGS("fsdata") << "Converted to: " << mLastModified.asString() << " and RFC1123: " << mLastModified.asRFC1123() << LL_ENDL;
-	}
-
-private:
-	std::string mURL;
-	LLDate mLastModified;
-};
-
-class FSDownloaderScript : public LLHTTPClient::Responder
-{
-	LOG_CLASS(FSDownloaderScript);
-public:
-	FSDownloaderScript(std::string filename, std::string url) :
-		mFilename(filename),
-		mURL(url)
-	{}
-
-	void completedRaw(
-		const LLChannelDescriptors& channels,
-		const LLIOPipe::buffer_ptr_t& buffer)
-	{
-		completedHeader();
-
-		if (!isGoodStatus())
-		{
-			if (getStatus() == HTTP_NOT_MODIFIED)
-			{
-				LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
-			}
-			else
-			{
-				LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << getStatus() << "]" << LL_ENDL;
-			}
-			return;
-		}
-
-		S32 data_size = buffer->countAfter(channels.in(), NULL);
-		if (data_size <= 0)
-		{
-			LL_WARNS("fsdata") << "Received zero data for " << mURL << LL_ENDL;
-			return;
-		}
-
-		U8* data = new U8[data_size];
-		buffer->readAfter(channels.in(), NULL, data, data_size);
-
-		// basic check for valid data received
-		LLXMLNodePtr xml_root;
-		if ( (!LLXMLNode::parseBuffer(data, data_size, xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
-		{
-			LL_WARNS("fsdata") << "Could not read the script library data from "<< mURL << LL_ENDL;
-			delete[] data;
-			data = NULL;
-			return;
-		}
-		
-		LLAPRFile outfile ;
-		outfile.open(mFilename, LL_APR_WB);
-		if (!outfile.getFileHandle())
-		{
-			LL_WARNS("fsdata") << "Unable to open file for writing: " << mFilename << LL_ENDL;
-		}
-		else
-		{
-			LL_INFOS("fsdata") << "Saving " << mFilename << LL_ENDL;
-			outfile.write(data, data_size);
-			outfile.close() ;
-		}
-		delete[] data;
-		data = NULL;
-	}
-
-	void completedHeader()
-	{
-		LLSD content = getResponseHeaders();
-		LL_DEBUGS("fsdata") << "Status: [" << getStatus() << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
-		if (content.has("last-modified"))
-		{
-			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
-		}
-		LL_DEBUGS("fsdata") << "Converted to: " << mLastModified.asString() << " and RFC1123: " << mLastModified.asRFC1123() << LL_ENDL;
-	}
-
-private:
-	std::string mURL;
-	std::string mFilename;
-	LLDate mLastModified;
-};
-#endif
-
 FSData::FSData() :
 	mLegacySearch(true),
 	mFSDataDone(false),
@@ -320,76 +199,74 @@ bool FSData::loadFromFile(LLSD& data, std::string filename)
 
 void downloadComplete( LLSD const &aData, std::string const &aURL )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	LL_INFOS() << aData << LL_ENDL;
-	// completedHeader();
+	LL_DEBUGS() << aData << LL_ENDL;
+	
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
 
-	// check for parse failure that can happen with [200] OK result.
-	// FSData::getInstance()->processResponder(getContent(), mURL, !mDeserializeError, mLastModified);
+	LLDate lastModified;
+	if (header.has("last-modified"))
+	{
+		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
+	}
+
+	LLSD data = aData;
+	data.erase( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS );
+	
+	FSData::getInstance()->processResponder( data, aURL, true, lastModified);
 }
 
 void downloadCompleteScript( LLSD const &aData, std::string const &aURL, std::string const &aFilename  )
 {
-	LL_INFOS() << aData << LL_ENDL;
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-	completedHeader();
+	LL_DEBUGS() << aData << LL_ENDL;
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
-	if (!isGoodStatus())
+	LLDate lastModified;
+	if (header.has("last-modified"))
 	{
-		if (getStatus() == HTTP_NOT_MODIFIED)
-		{
-			LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
-		}
-		else
-		{
-			LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << getStatus() << "]" << LL_ENDL;
-		}
+		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
+	}
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+
+	if ( status.getType() == HTTP_NOT_MODIFIED )
+	{
+		LL_INFOS("fsdata") << "Got [304] not modified for " << aURL << LL_ENDL;
 		return;
 	}
 
-	S32 data_size = buffer->countAfter(channels.in(), NULL);
-	if (data_size <= 0)
+	if (rawData.size() <= 0)
 	{
-		LL_WARNS("fsdata") << "Received zero data for " << mURL << LL_ENDL;
+		LL_WARNS("fsdata") << "Received zero data for " << aURL << LL_ENDL;
 		return;
 	}
-
-	U8* data = new U8[data_size];
-	buffer->readAfter(channels.in(), NULL, data, data_size);
 
 	// basic check for valid data received
 	LLXMLNodePtr xml_root;
-	if ( (!LLXMLNode::parseBuffer(data, data_size, xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+	std::string stringData;
+	stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
+	if ( (!LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
 	{
-		LL_WARNS("fsdata") << "Could not read the script library data from "<< mURL << LL_ENDL;
-		delete[] data;
-		data = NULL;
+		LL_WARNS("fsdata") << "Could not read the script library data from "<< aURL << LL_ENDL;
 		return;
 	}
 		
 	LLAPRFile outfile ;
-	outfile.open(mFilename, LL_APR_WB);
+	outfile.open(aFilename, LL_APR_WB);
 	if (!outfile.getFileHandle())
 	{
-		LL_WARNS("fsdata") << "Unable to open file for writing: " << mFilename << LL_ENDL;
+		LL_WARNS("fsdata") << "Unable to open file for writing: " << aFilename << LL_ENDL;
 	}
 	else
 	{
-		LL_INFOS("fsdata") << "Saving " << mFilename << LL_ENDL;
-		outfile.write(data, data_size);
+		LL_INFOS("fsdata") << "Saving " << aFilename << LL_ENDL;
+		outfile.write(  &rawData[0], rawData.size() );
 		outfile.close() ;
 	}
-	delete[] data;
-	data = NULL;
-#endif
 }
 
 void downloadError( LLSD const &aData, std::string const &aURL )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	LL_INFOS() << aData << LL_ENDL;
-	// completedHeader();
+	LL_WARNS() << "Failed to download " << aURL << ": " << aData << LL_ENDL;
 	// FSData::getInstance()->processResponder(getContent(), mURL, false, mLastModified);
 }
 
@@ -435,7 +312,7 @@ void FSData::startDownload()
 		}
 		std::string url = mBaseURL + "/" + script_name;
 		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
-		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( mFSdataDefaultsUrl, boost::bind( downloadCompleteScript, _1, url, filename ), boost::bind( downloadError, _1, mFSdataDefaultsUrl ) );
+		FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( downloadCompleteScript, _1, url, filename ), boost::bind( downloadError, _1, url ) );
 	}
 #endif
 }
