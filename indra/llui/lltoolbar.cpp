@@ -36,6 +36,8 @@
 #include "llinventory.h"
 #include "lliconctrl.h"
 
+#include "lllayoutstack.h"
+
 // uncomment this and remove the one in llui.cpp when there is an external reference to this translation unit
 // thanks, MSVC!
 //static LLDefaultChildRegistry::Register<LLToolBar> r1("toolbar");
@@ -115,7 +117,8 @@ LLToolBar::Params::Params()
 	button_panel("button_panel"),
 	button("button"),
 	layout_style("layout_style",LLToolBarEnums::LAYOUT_STYLE_NONE),
-	alignment("alignment",LLToolBarEnums::ALIGN_CENTER)
+	alignment("alignment",LLToolBarEnums::ALIGN_CENTER),
+	max_rows("max_rows", 0)
 	// </FS:Zi>
 {}
 
@@ -150,7 +153,8 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	//mCenterPanel(NULL)
 	mCenterPanel(NULL),
 	mLayoutStyle(p.layout_style),
-	mAlignment(p.alignment)
+	mAlignment(p.alignment),
+	mMaxRows(p.max_rows)
 	// </FS:Zi>
 {
 	mButtonParams[LLToolBarEnums::BTNTYPE_ICONS_WITH_TEXT] = p.button_icon_and_text;
@@ -779,8 +783,15 @@ void LLToolBar::updateLayoutAsNeeded()
 			S32 width = button->getInitialWidth();
 			if (width > equalized_width)
 			{
-				equalized_width=width;
+				equalized_width = width;
 			}
+		}
+
+		S32 total_button_width = mButtons.size() * equalized_width + (mButtons.size() + 1) * mPadBetween;
+		if (mMaxRows > 0 && orientation == LLLayoutStack::HORIZONTAL && total_button_width > full_screen_width)
+		{
+			S32 buttons_per_row = (S32)ceilf((F32)mButtons.size() / (F32)mMaxRows);
+			equalized_width = (full_screen_width - mPadBetween * (buttons_per_row + 1)) / buttons_per_row;
 		}
 	}
 	// </FS:Zi>
