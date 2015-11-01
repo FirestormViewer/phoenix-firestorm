@@ -4768,14 +4768,21 @@ S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMateri
 		return 0;
 	}
 
-	setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
-	setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
+	// <FS:Ansariel> FIRE-17196 (also MAINT-5733 / BUG-10459): Undo code screwing up material rendering
+	//setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
+	//setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
+	// </FS:Ansariel>
 
 	retval = LLPrimitive::setTEMaterialParams(te, pMaterialParams, isInitFromServer);
 	LL_DEBUGS("Material") << "Changing material params for te " << (S32)te
 							<< ", object " << mID
 			               << " (" << retval << ")"
 							<< LL_ENDL;
+	
+	// <FS:Ansariel> FIRE-17196 (also MAINT-5733 / BUG-10459): Undo code screwing up material rendering
+	setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
+	setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
+	// </FS:Ansariel>
 
 	refreshMaterials();
 	return retval;
