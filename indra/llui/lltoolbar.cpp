@@ -790,7 +790,7 @@ void LLToolBar::updateLayoutAsNeeded()
 		S32 total_button_width = mButtons.size() * equalized_width + (mButtons.size() + 1) * mPadBetween;
 		if (mMaxRows > 0 && orientation == LLLayoutStack::HORIZONTAL && total_button_width > full_screen_width)
 		{
-			S32 buttons_per_row = (S32)ceilf((F32)mButtons.size() / (F32)mMaxRows);
+			S32 buttons_per_row = llceil((F32)mButtons.size() / (F32)mMaxRows);
 			equalized_width = (full_screen_width - mPadBetween * (buttons_per_row + 1)) / buttons_per_row;
 		}
 	}
