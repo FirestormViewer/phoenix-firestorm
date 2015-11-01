@@ -361,124 +361,118 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
 }
 
-// <FS:PP>
-//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-class SLGridStatusResponder : public LLHTTPClient::Responder
+ void downloadGridstatusComplete( LLSD const &aData )
 {
-public:
-	virtual void completedRaw(const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+
+	if( status.getType() < 200 && status.getType() >= 300 && status.getType() != HTTP_NOT_MODIFIED)
 	{
-		S32 status = getStatus();
-		if (!isGoodStatus() && status != HTTP_NOT_MODIFIED)
+		if (status.getType() == HTTP_INTERNAL_ERROR)
 		{
-			if (status == HTTP_INTERNAL_ERROR)
-			{
-				reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
-			}
-			else
-			{
-				LLStringUtil::format_map_t args;
-				args["STATUS"] = llformat("%d", status);
-				reportToNearbyChat(LLTrans::getString("SLGridStatusOtherError", args));
-			}
-			LL_WARNS("SLGridStatusResponder") << "Error - status " << status << LL_ENDL;
-			return;
+			reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
+		}
+		else
+		{
+			LLStringUtil::format_map_t args;
+			args["STATUS"] = llformat("%d", status.getType());
+			reportToNearbyChat(LLTrans::getString("SLGridStatusOtherError", args));
+		}
+		LL_WARNS("SLGridStatusResponder") << "Error - status " << status.getType() << LL_ENDL;
+		return;
+	}
+
+	if (rawData.size() == 0)
+	{
+		reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
+		return;
+	}
+
+	std::string fetchedNews;
+	fetchedNews.assign( rawData.begin(), rawData.end() );
+
+	size_t itemStart = fetchedNews.find("<item>");
+	size_t itemEnd = fetchedNews.find("</item>");
+	if (itemEnd != std::string::npos && itemStart != std::string::npos)
+	{
+		// Isolate latest news data
+		itemStart += 6;
+		std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
+
+		// Check for and remove CDATA characters if they're present
+		size_t titleStart = theNews.find("<title><![CDATA[");
+		if (titleStart != std::string::npos)
+		{
+			theNews.replace(titleStart, 16, "<title>");
+		}
+		size_t titleEnd = theNews.find("]]></title>");
+		if (titleEnd != std::string::npos)
+		{
+			theNews.replace(titleEnd, 11, "</title>");
+		}
+		size_t descStart = theNews.find("<description><![CDATA[");
+		if (descStart != std::string::npos)
+		{
+			theNews.replace(descStart, 22, "<description>");
+		}
+		size_t descEnd = theNews.find("]]></description>");
+		if (descEnd != std::string::npos)
+		{
+			theNews.replace(descEnd, 17, "</description>");
+		}
+		size_t linkStart = theNews.find("<link><![CDATA[");
+		if (linkStart != std::string::npos)
+		{
+			theNews.replace(linkStart, 15, "<link>");
+		}
+		size_t linkEnd = theNews.find("]]></link>");
+		if (linkEnd != std::string::npos)
+		{
+			theNews.replace(linkEnd, 10, "</link>");
 		}
 
-		S32 outputSize = buffer->countAfter(channels.in(), NULL);
-		if (outputSize <= 0)
+		// Get indexes
+		titleStart = theNews.find("<title>");
+		descStart = theNews.find("<description>");
+		linkStart = theNews.find("<link>");
+		titleEnd = theNews.find("</title>");
+		descEnd = theNews.find("</description>");
+		linkEnd = theNews.find("</link>");
+
+		if (titleStart != std::string::npos &&
+			descStart != std::string::npos &&
+			linkStart != std::string::npos &&
+			titleEnd != std::string::npos &&
+			descEnd != std::string::npos &&
+			linkEnd != std::string::npos)
 		{
-			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
-			LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
-			return;
-		}
-
-		LLBufferStream istr(channels, buffer.get());
-		std::stringstream strstrm;
-		strstrm << istr.rdbuf();
-		std::string fetchedNews = strstrm.str();
-
-		size_t itemStart = fetchedNews.find("<item>");
-		size_t itemEnd = fetchedNews.find("</item>");
-		if (itemEnd != std::string::npos && itemStart != std::string::npos)
-		{
-			// Isolate latest news data
-			itemStart += 6;
-			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
-
-			// Check for and remove CDATA characters if they're present
-			size_t titleStart = theNews.find("<title><![CDATA[");
-			if (titleStart != std::string::npos)
-			{
-				theNews.replace(titleStart, 16, "<title>");
-			}
-			size_t titleEnd = theNews.find("]]></title>");
-			if (titleEnd != std::string::npos)
-			{
-				theNews.replace(titleEnd, 11, "</title>");
-			}
-			size_t descStart = theNews.find("<description><![CDATA[");
-			if (descStart != std::string::npos)
-			{
-				theNews.replace(descStart, 22, "<description>");
-			}
-			size_t descEnd = theNews.find("]]></description>");
-			if (descEnd != std::string::npos)
-			{
-				theNews.replace(descEnd, 17, "</description>");
-			}
-			size_t linkStart = theNews.find("<link><![CDATA[");
-			if (linkStart != std::string::npos)
-			{
-				theNews.replace(linkStart, 15, "<link>");
-			}
-			size_t linkEnd = theNews.find("]]></link>");
-			if (linkEnd != std::string::npos)
-			{
-				theNews.replace(linkEnd, 10, "</link>");
-			}
-
-			// Get indexes
-			titleStart = theNews.find("<title>");
-			descStart = theNews.find("<description>");
-			linkStart = theNews.find("<link>");
-			titleEnd = theNews.find("</title>");
-			descEnd = theNews.find("</description>");
-			linkEnd = theNews.find("</link>");
-
-			if (titleStart != std::string::npos &&
-				descStart != std::string::npos &&
-				linkStart != std::string::npos &&
-				titleEnd != std::string::npos &&
-				descEnd != std::string::npos &&
-				linkEnd != std::string::npos)
-			{
-				titleStart += 7;
-				descStart += 13;
-				linkStart += 6;
-				std::string newsTitle = theNews.substr(titleStart, titleEnd - titleStart);
-				std::string newsDesc = theNews.substr(descStart, descEnd - descStart);
-				std::string newsLink = theNews.substr(linkStart, linkEnd - linkStart);
-				LLStringUtil::trim(newsTitle);
-				LLStringUtil::trim(newsDesc);
-				LLStringUtil::trim(newsLink);
-				reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
-			}
-			else
-			{
-				reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
-				LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
-			}
+			titleStart += 7;
+			descStart += 13;
+			linkStart += 6;
+			std::string newsTitle = theNews.substr(titleStart, titleEnd - titleStart);
+			std::string newsDesc = theNews.substr(descStart, descEnd - descStart);
+			std::string newsLink = theNews.substr(linkStart, linkEnd - linkStart);
+			LLStringUtil::trim(newsTitle);
+			LLStringUtil::trim(newsDesc);
+			LLStringUtil::trim(newsLink);
+			reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
 		}
 		else
 		{
 			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
-			LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+			LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
 		}
 	}
-};
-#endif
+	else
+	{
+		reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+	}
+}
+
 // </FS:PP>
 
 void update_texture_fetch()
@@ -2867,8 +2861,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// <FS:PP>
 		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
 		{
-			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-			// LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
+			FSCoreHttpUtil::callbackHttpGetRaw( gSavedSettings.getString("AutoQueryGridStatusURL"),
+												downloadGridstatusComplete );
+
 		}
 		// </FS:PP>
 
