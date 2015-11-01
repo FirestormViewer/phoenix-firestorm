@@ -331,38 +331,35 @@ void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is
 
 // <AW: opensim>
 static bool sGridListRequestReady = false;
-//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-class GridListRequestResponder : public LLHTTPClient::Responder
+void downloadGridlistComplete( LLSD const &aData )
 {
-public:
-	//If we get back a normal response, handle it here
-	virtual void httpSuccess()
-	{
-		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+	LL_DEBUGS() << aData << LL_ENDL;
+	
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
 
-		llofstream out_file;
-		out_file.open(filename.c_str());
-		LLSDSerialize::toPrettyXML(getContent(), out_file);
-		out_file.close();
-		LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
-		sGridListRequestReady = true;
+	LLDate lastModified;
+	if (header.has("last-modified"))
+	{
+		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
 	}
 
-	//If we get back an error (not found, etc...), handle it here
-	virtual void httpFailure()
-	{
-		sGridListRequestReady = true;
-		if (HTTP_NOT_MODIFIED == getStatus())
-		{
-			LL_DEBUGS("GridManager") << "<- no error :P ... GridListRequest: List not modified since last session" << LL_ENDL;
-		}
-		else
-			LL_WARNS() << "GridListRequest::error("<< getStatus() << ": " << getReason() << ")" << LL_ENDL;
-	}
-};
-#endif
-// </AW: opensim>
+	LLSD data = aData;
+	data.erase( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS );
+	
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+
+	llofstream out_file;
+	out_file.open(filename.c_str());
+	LLSDSerialize::toPrettyXML( aData, out_file);
+	out_file.close();
+	LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
+	sGridListRequestReady = true;
+}
+
+void downloadGridlistError( LLSD const &aData, std::string const &aURL )
+{
+	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+}
 
 // <FS:PP>
 //<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
@@ -841,8 +838,7 @@ bool idle_startup()
 			}
 
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
-			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-			// LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
+			LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( downloadGridlistComplete, _1 ), boost::bind( downloadGridlistError, _1, url ) );
 		}
 #ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
