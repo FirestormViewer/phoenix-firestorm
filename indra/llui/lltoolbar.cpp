@@ -36,8 +36,6 @@
 #include "llinventory.h"
 #include "lliconctrl.h"
 
-#include "lllayoutstack.h"
-
 // uncomment this and remove the one in llui.cpp when there is an external reference to this translation unit
 // thanks, MSVC!
 //static LLDefaultChildRegistry::Register<LLToolBar> r1("toolbar");
