@@ -1483,9 +1483,9 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 		////////////////////////////////////////////////////////////////////////////////
 		// Highlight item
-		// <FS:Ansariel> Only show if either ShowInInventory is true OR we use legacy
-		//               accept messages and clicked on the show button and the asset is not previewable
-		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && !check_asset_previewable(asset_type));
+		// <FS:Ansariel> Only show if either ShowInInventory is true OR it is an inventory
+		//               offer from an agent and the asset is not previewable
+		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && !check_asset_previewable(asset_type));
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
 		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
