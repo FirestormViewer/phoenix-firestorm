@@ -474,7 +474,11 @@ public:
 	}
 	BOOL tick()
 	{
-		AlignThread::sInstance->shutdown();
+		if (!AlignThread::sInstance->isStopped())
+		{
+			return FALSE;
+		}
+
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
 		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
@@ -652,7 +656,3 @@ void AlignThread::run()
 	QToolAlign::getInstance()->aligndone();
 }
 
-void AlignThread::shutdown()
-{
-	
-}

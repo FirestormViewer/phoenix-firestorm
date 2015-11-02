@@ -19,9 +19,8 @@ class AlignThread : public LLThread
 {
 public:
 	AlignThread(void);
-	~AlignThread();	
+	~AlignThread();
 	/*virtual*/ void run(void);
-	/*virtual*/ void shutdown(void);
 	static AlignThread* sInstance;
 };
 
