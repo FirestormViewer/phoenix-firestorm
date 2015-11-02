@@ -7,9 +7,8 @@
 #define Q_QTOOLALIGN_H
 
 #include "lltool.h"
-#include "llbbox.h"
-
 #include "llthread.h"
+#include "llbbox.h"
 
 class LLViewerObject;
 class LLPickInfo;
@@ -34,24 +33,24 @@ public:
 	virtual void	handleSelect();
 	virtual void	handleDeselect();
 	virtual BOOL	handleMouseDown(S32 x, S32 y, MASK mask);
-	virtual BOOL    handleHover(S32 x, S32 y, MASK mask);
+	virtual BOOL	handleHover(S32 x, S32 y, MASK mask);
 	virtual void	render();
 	virtual BOOL	canAffectSelection();
 
-	static void pickCallback(const LLPickInfo& pick_info);
-	static void aligndone();
+	static void		pickCallback(const LLPickInfo& pick_info);
+	static void		aligndone();
 
-	LLBBox          mBBox;
-	F32             mManipulatorSize;
-	S32             mHighlightedAxis;
-	F32             mHighlightedDirection;
-	BOOL            mForce;
+	LLBBox			mBBox;
+	F32				mManipulatorSize;
+	S32				mHighlightedAxis;
+	F32				mHighlightedDirection;
+	BOOL			mForce;
 
 private:
-	void            align();
-	void            computeManipulatorSize();
-	void            renderManipulators();
-	BOOL            findSelectedManipulator(S32 x, S32 y);
+	void			align();
+	void			computeManipulatorSize();
+	void			renderManipulators();
+	BOOL			findSelectedManipulator(S32 x, S32 y);
 };
 
 #endif // Q_QTOOLALIGN_H
