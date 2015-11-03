@@ -132,7 +132,7 @@
     <button
      follows="right|bottom"
      height="23"
-     label="Targets"
+     label="&#x25B6; Selection"
      layout="topleft"
      name="cancel_btn"
      right="-5"

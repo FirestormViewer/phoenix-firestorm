@@ -16,6 +16,6 @@
 		Bildunterschrift:
 	</text>
 	<check_box initial_value="true" label="Ort einschließen" name="add_location_cb"/>
-	<button label="Ziele" name="cancel_btn"/>
+	<button label="&#x25B6; Auswahl" name="cancel_btn"/>
 	<button label="Posten" name="post_btn"/>
 </panel>

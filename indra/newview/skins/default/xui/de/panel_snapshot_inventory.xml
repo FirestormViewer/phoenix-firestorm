@@ -16,6 +16,6 @@
 	<text name="hint_lbl">
 		Das Speichern eines Bilds in Ihrem Inventar kostet [UPLOAD_COST] L$. Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
 	</text>
-	<button label="Ziele" name="cancel_btn"/>
+	<button label="&#x25B6; Auswahl" name="cancel_btn"/>
 	<button label="Speichern" name="save_btn"/>
 </panel>
