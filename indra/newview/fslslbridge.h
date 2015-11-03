@@ -76,7 +76,7 @@ public:
 	bool canUseBridge();
 	bool isBridgeValid() const { return NULL != mpBridge; }
 
-	void checkBridgeScriptName(const std::string& fileName);
+	void checkBridgeScriptName();
 	std::string currentFullName() { return mCurrentFullName; }
 
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
@@ -144,7 +144,7 @@ class FSLSLBridgeScriptCallback : public LLInventoryCallback
 public:
 	FSLSLBridgeScriptCallback();
 	void fire(const LLUUID& inv_item);
-	std::string prepUploadFile();
+	std::string prepUploadFile( std::string& );
 
 protected:
 	~FSLSLBridgeScriptCallback();

@@ -42,6 +42,8 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
+#include "llviewerassetupload.h"
+#include "llsdutil.h"
 
 #if OPENSIM
 #include "llviewernetwork.h"
@@ -76,6 +78,11 @@ public:
 private:
 	std::string sName;
 };
+
+void uploadDone(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response)
+{
+	FSLSLBridge::getInstance()->checkBridgeScriptName( );
+}
 
 //
 //
@@ -1127,6 +1134,22 @@ FSLSLBridgeScriptCallback::~FSLSLBridgeScriptCallback()
 {
 }
 
+class FSMonoScriptAssetUpload: public LLScriptAssetUpload
+{
+public:
+    FSMonoScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish)
+	: LLScriptAssetUpload( itemId, buffer, finish)
+	{
+	}
+
+	virtual LLSD generatePostBody()
+	{
+		LLSD body = LLScriptAssetUpload::generatePostBody();
+		body["target"] = "mono";
+		return body;
+	}
+};
+
 void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 {
 	if (inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
@@ -1171,14 +1194,15 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	}
 
 	bool cleanup = false;
-	std::string isMono = "mono";  //could also be "lsl2"
 	if (!url.empty() && obj)
 	{
-		const std::string fName = prepUploadFile();
+        std::string buffer;
+		const std::string fName = prepUploadFile(buffer);
 		if (!fName.empty())
 		{
-			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-			// LLLiveLSLEditor::uploadAssetViaCapsStatic(url, fName, obj->getID(), inv_item, isMono, true);
+            LLResourceUploadInfo::ptr_t uploadInfo(new FSMonoScriptAssetUpload(	inv_item,  buffer, uploadDone ));
+            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+
 			LL_INFOS("FSLSLBridge") << "updating script ID for bridge" << LL_ENDL;
 			FSLSLBridge::instance().mScriptItemID = inv_item;
 		}
@@ -1212,7 +1236,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	}
 }
 
-std::string FSLSLBridgeScriptCallback::prepUploadFile()
+std::string FSLSLBridgeScriptCallback::prepUploadFile( std::string &aBuffer )
 {
 	const std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
 	const std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
@@ -1236,10 +1260,10 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 
 	LLFile::close(fpIn);
 
-	std::string bridgeScript( (char const*)&vctData[0] );
+	aBuffer = ( (char const*)&vctData[0] );
 
 	const std::string bridgekey = "BRIDGEKEY";
-	bridgeScript.replace(bridgeScript.find(bridgekey), bridgekey.length(), FSLSLBridge::getInstance()->findFSCategory().asString());
+	aBuffer.replace(aBuffer.find(bridgekey), bridgekey.length(), FSLSLBridge::getInstance()->findFSCategory().asString());
 
 	LLFILE *fpOut = LLFile::fopen(fNew, "wt");
 	if (!fpOut)
@@ -1248,7 +1272,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 		return "";
 	}
 
-	if (bridgeScript.size() != fwrite(bridgeScript.c_str(), 1, bridgeScript.size(), fpOut))
+	if (aBuffer.size() != fwrite(aBuffer.c_str(), 1, aBuffer.size(), fpOut))
 	{
 		LL_WARNS("FSLSLBridge") << "Size mismatch during write" << LL_ENDL;
 	}
@@ -1257,9 +1281,9 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	return fNew;
 }
 
-void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
+void FSLSLBridge::checkBridgeScriptName()
 {
-	if ((fileName.empty()) || !mBridgeCreating)
+	if( !mBridgeCreating )
 	{
 		LL_WARNS("FSLSLBridge") << "Bridge script length was zero, or bridge was not marked as under creation. Aborting." << LL_ENDL; 
 		return;
@@ -1279,24 +1303,18 @@ void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 		return;
 	}
 
-	//need to parse out the last length of a GUID and compare to saved possible names.
-	const std::string fileOnly = fileName.substr(fileName.length() - UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
-
-	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
+	//this is our script upload
+	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
+	if (!obj)
 	{
-		//this is our script upload
-		LLViewerObject* obj = gAgentAvatarp->getWornAttachment(mpBridge->getUUID());
-		if (!obj)
-		{
-			//something happened to our object. Try to fail gracefully.
-			LL_WARNS("FSLSLBridge") << "Couldn't find worn bridge attachment" << LL_ENDL;
-			cleanUpBridge();
-			return;
-		}
-		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer(1.0f);
-		objTimer->startTimer();
+		//something happened to our object. Try to fail gracefully.
+		LL_WARNS("FSLSLBridge") << "Couldn't find worn bridge attachment" << LL_ENDL;
+		cleanUpBridge();
+		return;
 	}
+	obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
+	FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer(1.0f);
+	objTimer->startTimer();
 }
 
 BOOL FSLSLBridgeCleanupTimer::tick()

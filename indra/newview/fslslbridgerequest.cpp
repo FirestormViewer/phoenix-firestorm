@@ -29,6 +29,8 @@
 
 #include "fslslbridgerequest.h"
 #include "fsradar.h"
+#include "llsdutil.h"
+#include "llcorehttputil.h"
 
 #include <boost/tokenizer.hpp>
 
@@ -36,10 +38,7 @@
 //If we get back a normal response, handle it here
 void FSLSLBridgeRequest_Success( LLSD const &aData )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	// std::string strContent = getContent().asString();
-	// LL_DEBUGS() << "Got info: " << strContent << LL_ENDL;
-
+	LL_DEBUGS() << ll_pretty_print_sd( aData ) << LL_ENDL;
 	//do not use - infinite loop, only here for testing.
 	//FSLSLBridge::instance().viewerToLSL("Response_to_response|" + strContent);
 }
@@ -47,18 +46,16 @@ void FSLSLBridgeRequest_Success( LLSD const &aData )
 //If we get back an error (not found, etc...), handle it here
 void FSLSLBridgeRequestResponder_Failure( LLSD const &aData  )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	// LL_WARNS() << "FSLSLBridgeRequest::error(" << getStatus() << ": " << getReason() << ")" << LL_ENDL;
+	LL_WARNS() << "FSLSLBridgeRequest::error(" << ll_pretty_print_sd( aData ) << ")" << LL_ENDL;
 }
 
 void FSLSLBridgeRequestRadarPosResponder_Success( LLSD const &aData )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
 	FSRadar* radar = FSRadar::getInstance();
-	if (radar)
+	LL_DEBUGS() << ll_pretty_print_sd( aData ) << LL_ENDL;
+	if (radar && aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT ) )
 	{
-		std::string strContent = getContent().asString();
+		std::string strContent = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT ].asString();
 		//LL_INFOS() << "Got info: " << strContent << LL_ENDL;
 		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our peoplepanel radar for each one
 		
@@ -81,6 +78,5 @@ void FSLSLBridgeRequestRadarPosResponder_Success( LLSD const &aData )
 			}
 		}
 	}
-#endif
 }
 
