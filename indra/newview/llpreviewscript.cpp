@@ -2127,6 +2127,29 @@ void LLPreviewLSL::finishedLSLUpload(LLUUID itemId, LLSD response)
     }
 }
 
+// <FS:ND> Asset uploader that can be used for LSL and Mono
+class FSScriptAssetUpload: public LLScriptAssetUpload
+{
+	bool m_bMono;
+public:
+    FSScriptAssetUpload( LLUUID itemId, std::string buffer, invnUploadFinish_f finish, bool a_bMono )
+	: LLScriptAssetUpload( itemId, buffer, finish )
+	{
+		m_bMono = a_bMono;
+	}
+
+	virtual LLSD generatePostBody()
+	{
+		LLSD body = LLScriptAssetUpload::generatePostBody();
+		if( m_bMono )
+			body["target"] = "mono";
+		else
+			body["target"] = "lsl2";
+		return body;
+	}
+};
+// </FS:ND>
+
 // Save needs to compile the text in the buffer. If the compile
 // succeeds, then save both assets out to the database. If the compile
 // fails, go ahead and save the text anyway.
@@ -2180,7 +2203,8 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
             std::string buffer(mScriptEd->mEditor->getText());
             LLBufferedAssetUploadInfo::invnUploadFinish_f proc = boost::bind(&LLPreviewLSL::finishedLSLUpload, _1, _4);
 
-            LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mItemUUID, buffer, proc));
+            // LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mItemUUID, buffer, proc));
+			LLResourceUploadInfo::ptr_t uploadInfo(new FSScriptAssetUpload(mItemUUID, buffer, proc, domono ));
 
             LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo); // <FS:ND> DoMono needs to be passed/set here.
         }
