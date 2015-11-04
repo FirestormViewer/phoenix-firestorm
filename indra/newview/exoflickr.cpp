@@ -42,12 +42,12 @@
 
 void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t aCallback )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-	LLBufferStream istr(channels, buffer.get());
-	std::stringstream strstrm;
-	strstrm << istr.rdbuf();
-	std::string result = std::string(strstrm.str());
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	std::string result;
+	result.assign( rawData.begin(), rawData.end() );
 
 	LLSD output;
 	bool success;
@@ -55,15 +55,15 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 	LLXmlTree tree;
 	if(!tree.parseString(result))
 	{
-		LL_WARNS("FlickrAPI") << "Couldn't parse flickr response(" << getStatus() << "): " << result << LL_ENDL;
-		mCallback(false, LLSD());
+		LL_WARNS("FlickrAPI") << "Couldn't parse flickr response(" << status.getType() << "): " << result << LL_ENDL;
+		aCallback(false, LLSD());
 		return;
 	}
 	LLXmlTreeNode* root = tree.getRoot();
 	if(!root->hasName("rsp"))
 	{
 		LL_WARNS("FlickrAPI") << "Bad root node: " << root->getName() << LL_ENDL;
-		mCallback(false, LLSD());
+		aCallback(false, LLSD());
 		return;
 	}
 	std::string stat;
@@ -92,8 +92,7 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 			output["msg"] = msg;
 		}
 	}
-	mCallback(success, output);
-#endif
+	aCallback(success, output);
 }
 
 static void JsonToLLSD(const Json::Value &root, LLSD &output)
@@ -147,12 +146,13 @@ static void JsonToLLSD(const Json::Value &root, LLSD &output)
 
 void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallback )
 {
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-	LLBufferStream istr(channels, buffer.get());
-	std::stringstream strstrm;
-	strstrm << istr.rdbuf();
-	std::string result = strstrm.str();
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	std::string result;
+	result.assign( rawData.begin(), rawData.end() );
+
 	Json::Value root;
 	Json::Reader reader;
 
@@ -167,9 +167,8 @@ void exoFlickrResponse( LLSD const &aData, exoFlickr::response_callback_t aCallb
 		LL_INFOS("FlickrAPI") << "Got response string: " << result << LL_ENDL;
 		LLSD response;
 		JsonToLLSD(root, response);
-		aCallback(isGoodStatus(), response);
+		aCallback( (status.getType() >= 200 && status.getType() < 300 ), response);
 	}
-#endif
 }
 
 //static
@@ -251,14 +250,13 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 	llassert(address <= post_data + total_data_size /* After all that, check we didn't overrun */);
 
 	// We have a post body! Now we can go about building the actual request...
-	LLSD headers;
-	headers["Content-Type"] = "multipart/form-data; boundary=" + boundary;
 	// <FS:TS> Patch from Exodus:
 	// The default timeout (one minute) isn't enough for a large picture.
 	// 10 minutes is arbitrary, but should be long enough.
 
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	// LLHTTPClient::postRaw("https://up.flickr.com/services/upload/", (U8*)post_data, total_data_size, new exoFlickrUploadResponse(callback), headers, 600);
+	LLCore::HttpHeaders::ptr_t pHeader( new LLCore::HttpHeaders() );
+	pHeader->append( "Content-Type", "multipart/form-data; boundary=" + boundary );
+	FSCoreHttpUtil::callbackHttpPostRaw( "https://up.flickr.com/services/upload/", post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), NULL, pHeader );
 
 	// </FS:TS>
 	// The HTTP client takes ownership of our post_data array,

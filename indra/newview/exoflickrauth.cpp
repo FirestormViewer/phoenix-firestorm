@@ -32,17 +32,17 @@
 
 bool exoFlickrAuth::sAuthorisationInProgress = false;
 
-void exoFlickrAuthResponse( LLSD const &aResult, exoFlickrAuth::authorized_callback_t aCallback )
+void exoFlickrAuthResponse( LLSD const &aData, exoFlickrAuth::authorized_callback_t aCallback )
 {
-//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-	LLBufferStream istr(channels, buffer.get());
-	std::ostringstream oss;
-	oss << istr.rdbuf();
-	std::string str = oss.str();
-	LLSD result = LLURI::queryMap(str);
-	mCallback((getStatus() == HTTP_OK), result);
-#endif
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	std::string result;
+	result.assign( rawData.begin(), rawData.end() );
+
+	LLSD resultLLSD = LLURI::queryMap( result );
+	aCallback((status.getType() == HTTP_OK), resultLLSD);
 }
 
 
