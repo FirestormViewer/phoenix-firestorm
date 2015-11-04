@@ -744,17 +744,10 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		args["MESSAGE"] = message;
 
 		// <FS:PP> Option to block/reject all group invites
+		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
 		if (gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode"))
 		{
 			LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
-		}
-		// </FS:PP> Option to block/reject all group invites
-		// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-		// LLNotificationsUtil::add("JoinGroup", args, notification_adjusted["payload"]);
-		else if (fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
-		{
-			make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
-			LLNotificationsUtil::add("JoinGroupProtectionNotice", args, notification_adjusted["payload"]);
 		}
 		else
 		{
@@ -878,8 +871,6 @@ static void highlight_inventory_objects_in_panel(const std::vector<LLUUID>& item
 static LLNotificationFunctorRegistration jgr_1("JoinGroup", join_group_response);
 static LLNotificationFunctorRegistration jgr_2("JoinedTooManyGroupsMember", join_group_response);
 static LLNotificationFunctorRegistration jgr_3("JoinGroupCanAfford", join_group_response);
-static LLNotificationFunctorRegistration jgr_4("JoinGroupProtectionNotice", join_group_response); // <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-
 
 //-----------------------------------------------------------------------------
 // Instant Message
@@ -1494,9 +1485,9 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 		////////////////////////////////////////////////////////////////////////////////
 		// Highlight item
-		// <FS:Ansariel> Only show if either ShowInInventory is true OR we use legacy
-		//               accept messages and clicked on the show button and the asset is not previewable
-		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && !check_asset_previewable(asset_type));
+		// <FS:Ansariel> Only show if either ShowInInventory is true OR it is an inventory
+		//               offer from an agent and the asset is not previewable
+		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent && !check_asset_previewable(asset_type));
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
 		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
@@ -2823,6 +2814,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	static LLCachedControl<bool> FSDontRejectTeleportOffersFromFriends(gSavedPerAccountSettings, "FSDontRejectTeleportOffersFromFriends");
 	// </FS:PP>
 	BOOL is_rejecting_group_invites = gAgent.getRejectAllGroupInvites(); // <FS:PP> Option to block/reject all group invites
+	BOOL is_rejecting_friendship_requests = gAgent.getRejectFriendshipRequests(); // <FS:PP> FIRE-15233: Automatic friendship request refusal
 	BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat)
 		// object IMs contain sender object id in session_id (STORM-1209)
@@ -3304,6 +3296,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["sender_name"] = name;
 				payload["group_id"] = group_id;
 				payload["inventory_name"] = item_name;
+ 				payload["received_time"] = LLDate::now();
 				if(info && info->asLLSD())
 				{
 					payload["inventory_offer"] = info->asLLSD();
@@ -3381,17 +3374,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 
 				// <FS:PP> Option to block/reject all group invites
+				// LLNotificationsUtil::add("JoinGroup", args, payload);
 				if (is_rejecting_group_invites)
 				{
 					LL_INFOS("Messaging") << "Group invite automatically rejected because of the user setting..." << LL_ENDL;
-				}
-				// </FS:PP> Option to block/reject all group invites
-				// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
-				// LLNotificationsUtil::add("JoinGroup", args, payload);
-				else if (membership_fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
-				{
-					make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
-					LLNotificationsUtil::add("JoinGroupProtectionNotice", args, payload);
 				}
 				else
 				{
@@ -3796,7 +3782,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				send_do_not_disturb_message(msg, from_id);
 			}
 			// <FS:PP> FIRE-1245: Option to block/reject teleport offers
-			else if ( (is_rejecting_tp_offers && (!FSDontRejectTeleportOffersFromFriends || FSDontRejectTeleportOffersFromFriends && !is_friend)) && (!fRlvAutoAccept) )
+			else if ( (is_rejecting_tp_offers && (!FSDontRejectTeleportOffersFromFriends || (FSDontRejectTeleportOffersFromFriends && !is_friend))) && (!fRlvAutoAccept) )
 			{
 				send_rejecting_tp_offers_message(msg, from_id);
 			}
@@ -4063,6 +4049,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	case IM_FRIENDSHIP_OFFERED:
 		{
+
+			// <FS:PP> FIRE-15233: Automatic friendship request refusal
+			if (is_rejecting_friendship_requests)
+			{
+				send_rejecting_friendship_requests_message(msg, from_id);
+				return;
+			}
+			// </FS:PP>
+
 			LLSD payload;
 			payload["from_id"] = from_id;
 			payload["session_id"] = session_id;
@@ -4196,6 +4191,27 @@ void send_rejecting_tp_offers_message (LLMessageSystem* msg, const LLUUID& from_
 	gAgent.sendReliableMessage();
 }
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
+
+// <FS:PP> FIRE-15233: Automatic friendship request refusal
+void send_rejecting_friendship_requests_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id)
+{
+	std::string my_name;
+	LLAgentUI::buildFullname(my_name);
+	std::string response = gSavedPerAccountSettings.getString("FSRejectFriendshipRequestsResponse");
+	pack_instant_message(
+		msg,
+		gAgent.getID(),
+		FALSE,
+		gAgent.getSessionID(),
+		from_id,
+		my_name,
+		response,
+		IM_ONLINE,
+		IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+		session_id);
+	gAgent.sendReliableMessage();
+}
+// </FS:PP> FIRE-15233: Automatic friendship request refusal
 
 bool callingcard_offer_callback(const LLSD& notification, const LLSD& response)
 {
@@ -6948,26 +6964,30 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	}
 
 	std::string source_slurl;
+	std::string source_slurl_name;
 	if (is_source_group)
 	{
 		source_slurl =
 			LLSLURL( "group", source_id, "inspect").getSLURLString();
+		source_slurl_name = source_slurl;
 	}
 	else
 	{
-		//source_slurl =LLSLURL( "agent", source_id, "completename").getSLURLString();
+		source_slurl_name =LLSLURL( "agent", source_id, "completename").getSLURLString();
 		source_slurl =LLSLURL( "agent", source_id, "inspect").getSLURLString();
 	}
 
 	std::string dest_slurl;
+	std::string dest_slurl_name;
 	if (is_dest_group)
 	{
 		dest_slurl =
 			LLSLURL( "group", dest_id, "inspect").getSLURLString();
+		dest_slurl_name = dest_slurl;
 	}
 	else
 	{
-		//dest_slurl = LLSLURL( "agent", dest_id, "completename").getSLURLString();
+		dest_slurl_name = LLSLURL( "agent", dest_id, "completename").getSLURLString();
 		dest_slurl = LLSLURL( "agent", dest_id, "inspect").getSLURLString();
 	}
 
@@ -6983,6 +7003,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	bool is_name_group = false;
 	LLUUID name_id;
 	std::string message;
+	std::string message_notification_well;
 	std::string notification;
 	LLSD final_args;
 	LLSD payload;
@@ -7035,12 +7056,14 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		}
 		
 		final_args["MESSAGE"] = message;
-		notification = "PaymentSent";
+		payload["dest_id"] = dest_id;
+		notification = success ? "PaymentSent" : "PaymentFailure";
 
 		// <FS:AO> Additionally, always add a SLURL-enabled form.
-		args["NAME"] = dest_slurl;
 		is_name_group = is_dest_group;
 		name_id = dest_id;
+
+		args["NAME"] = dest_slurl;
 		if (!reason.empty())
 		{
 			if (dest_id.notNull())
@@ -7070,7 +7093,36 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		final_args["SLURLMESSAGE"] = message;
-		notification = success ? "PaymentSent" : "PaymentFailure";
+
+		args["NAME"] = dest_slurl_name;
+		if (!reason.empty())
+		{
+			if (dest_id.notNull())
+			{
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars", args) :
+													  LLTrans::getString("you_paid_failure_ldollars", args);
+			}
+			else
+			{
+				// transaction fee to the system, eg, to create a group
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_name", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_name", args);
+			}
+		}
+		else
+		{
+			if (dest_id.notNull())
+			{
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_reason", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_reason", args);
+			}
+			else
+			{
+				// no target, no reason, you just paid money
+				message_notification_well = success ? LLTrans::getString("you_paid_ldollars_no_info", args) :
+													  LLTrans::getString("you_paid_failure_ldollars_no_info", args);
+			}
+		}
 	}
 	else 
 	{
@@ -7093,9 +7145,10 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 		notification = "PaymentReceived";
 		
 		// <FS:AO> Additionally, always add a SLURL-enabled form.
-		args["NAME"] = source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;
+
+		args["NAME"] = source_slurl;
 		if (!reason.empty())
 		{
 			message = LLTrans::getString("paid_you_ldollars", args);
@@ -7105,8 +7158,21 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			message = LLTrans::getString("paid_you_ldollars_no_reason", args);
 		}
 		final_args["SLURLMESSAGE"] = message;
+
+		args["NAME"] = source_slurl_name;
+		if (!reason.empty())
+		{
+			message_notification_well = LLTrans::getString("paid_you_ldollars", args);
+		}
+		else 
+		{
+			message_notification_well = LLTrans::getString("paid_you_ldollars_no_reason", args);
+		}
 		// </FS:AO>
 	}
+
+	payload["payment_is_group"] = is_name_group;
+	payload["payment_message"] = message_notification_well;
 
 	// <FS:Ansariel> TipTracker Support
 	FSMoneyTracker* tipTracker = LLFloaterReg::getTypedInstance<FSMoneyTracker>("money_tracker");

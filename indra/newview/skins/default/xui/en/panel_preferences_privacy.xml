@@ -644,6 +644,34 @@
          layout="topleft"
          left="15"
          mouse_opaque="false"
+         name="autorespond_rfr_response_label"
+         top_pad="5"
+         width="500">
+           Automatic response to all avatars when in REJECT FRIENDSHIP REQUESTS mode:
+        </text>
+        <text_editor
+         control_name="FSRejectFriendshipRequestsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="55"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rfr_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
          name="autoresponse_item_label"
          top_pad="25"
          width="180">

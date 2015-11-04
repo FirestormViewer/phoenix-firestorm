@@ -8,8 +8,9 @@
 		<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
 		<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
 		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
-		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
-		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
+		<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Sie können sehen, wenn dieser Freund online ist."/>
+		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Sie können die Position dieses Freundes auf der Karte sehen."/>
+		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Sie können Objekte dieses Freundes editieren."/>
 	</fs_scroll_list>
 	<button
 	 label="IM/Anruf"

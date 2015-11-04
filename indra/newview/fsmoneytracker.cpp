@@ -32,16 +32,20 @@
 #include "llclipboard.h"
 #include "llfloaterreg.h"
 #include "llnamelistctrl.h"
+#include "lltextbox.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 
 FSMoneyTracker::FSMoneyTracker(const LLSD& key)
-: LLFloater(key)
+	: LLFloater(key),
+	mAmountPaid(0),
+	mAmountReceived(0)
 {
 }
 
 BOOL FSMoneyTracker::postBuild()
 {
+	mSummary = getChild<LLTextBox>("summary");
 	mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
 	mTransactionHistory->setContextMenu(&gFSMoneyTrackerListMenu);
 	mTransactionHistory->sortByColumn("time", TRUE);
@@ -85,6 +89,17 @@ void FSMoneyTracker::addPayment(const LLUUID other_id, bool is_group, S32 amount
 	{
 		mTransactionHistory->setScrollPos(scroll_pos + 1);
 	}
+
+	if (incoming)
+	{
+		mAmountReceived += amount;
+		mSummary->setTextArg("RECEIVED", llformat("%d", mAmountReceived));
+	}
+	else
+	{
+		mAmountPaid += amount;
+		mSummary->setTextArg("PAID", llformat("%d", mAmountPaid));
+	}
 }
 
 std::string FSMoneyTracker::getTime(time_t utc_time)
@@ -107,7 +122,11 @@ std::string FSMoneyTracker::getDate(time_t utc_time)
 void FSMoneyTracker::clear()
 {
 	LL_INFOS() << "Cleared." << LL_ENDL;
+	mAmountPaid = 0;
+	mAmountReceived = 0;
 	mTransactionHistory->clearRows();
+	mSummary->setTextArg("RECEIVED", llformat("%d", mAmountReceived));
+	mSummary->setTextArg("PAID", llformat("%d", mAmountPaid));
 }
 
 //////////////////////////////////////////////////////////////////////////////

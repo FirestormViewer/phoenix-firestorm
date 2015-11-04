@@ -402,6 +402,7 @@ LLAgent::LLAgent() :
 	mIsAutorespond(FALSE),
 	mIsAutorespondNonFriends(FALSE),
 	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
+	mIsRejectFriendshipRequests(FALSE), // <FS:PP> FIRE-15233: Automatic friendship request refusal
 	mIsRejectAllGroupInvites(FALSE), // <FS:PP> Option to block/reject all group invites
 	mAfkSitting(false), // <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
 
@@ -514,6 +515,7 @@ void LLAgent::init()
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
 	selectRejectTeleportOffers(gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersMode")); // <FS:PP> FIRE-1245: Option to block/reject teleport offers
+	selectRejectFriendshipRequests(gSavedPerAccountSettings.getBOOL("FSRejectFriendshipRequestsMode")); // <FS:PP> FIRE-15233: Automatic friendship request refusal
 	selectRejectAllGroupInvites(gSavedPerAccountSettings.getBOOL("FSRejectAllGroupInvitesMode")); // <FS:PP> Option to block/reject all group invites
 
 	if (!mTeleportFinishedSlot.connected())
@@ -1774,6 +1776,44 @@ BOOL LLAgent::getRejectTeleportOffers() const
 }
 
 // </FS:PP> FIRE-1245: Option to block/reject teleport offers
+
+// <FS:PP> FIRE-15233: Automatic friendship request refusal
+
+//-----------------------------------------------------------------------------
+// setRejectFriendshipRequests()
+//-----------------------------------------------------------------------------
+void LLAgent::setRejectFriendshipRequests()
+{
+	selectRejectFriendshipRequests(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// clearRejectFriendshipRequests()
+//-----------------------------------------------------------------------------
+void LLAgent::clearRejectFriendshipRequests()
+{
+	selectRejectFriendshipRequests(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectRejectFriendshipRequests()
+//-----------------------------------------------------------------------------
+void LLAgent::selectRejectFriendshipRequests(BOOL selected)
+{
+	LL_INFOS() << "Setting rejecting friendship requests mode to " << selected << LL_ENDL;
+	mIsRejectFriendshipRequests = selected;
+	gSavedPerAccountSettings.setBOOL("FSRejectFriendshipRequestsMode", selected);
+}
+
+//-----------------------------------------------------------------------------
+// getRejectFriendshipRequests()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getRejectFriendshipRequests() const
+{
+	return mIsRejectFriendshipRequests;
+}
+
+// </FS:PP> FIRE-15233: Automatic friendship request refusal
 
 // <FS:PP> Option to block/reject all group invites
 
