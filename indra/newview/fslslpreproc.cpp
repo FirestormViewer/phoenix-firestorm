@@ -1529,8 +1529,7 @@ void FSLSLPreprocessor::start_process()
 
 		if (mStandalone)
 		{
-			//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-			// LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
+			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
 		}
 		else
 		{
@@ -1598,8 +1597,7 @@ void FSLSLPreprocessor::display_message(const std::string& err)
 {
 	if (mStandalone)
 	{
-		//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-		// LLFloaterCompileQueue::scriptLogMessage(mData, err);
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
 	}
 	else
 	{
@@ -1611,8 +1609,7 @@ void FSLSLPreprocessor::display_error(const std::string& err)
 {
 	if (mStandalone)
 	{
-		//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-		// LLFloaterCompileQueue::scriptLogMessage(mData, err);
+		LLFloaterCompileQueue::scriptLogMessage(mData, err);
 	}
 	else
 	{

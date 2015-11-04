@@ -63,6 +63,7 @@
 #include "llcorehttputil.h"
 // <FS:KC> LSL Preprocessor
 #include "fslslpreproc.h"
+#include "llsdutil.h"
 // </FS:KC>
 
 // *NOTE$: A minor specialization of LLScriptAssetUpload, it does not require a buffer 
@@ -805,3 +806,84 @@ void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
 ///----------------------------------------------------------------------------
 /// Local function definitions
 ///----------------------------------------------------------------------------
+
+// <FS:KC> LSL Preprocessor
+
+void uploadDone(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, std::string aName)
+{
+	LL_INFOS() << "Upload of " << aName << " done: " << ll_pretty_print_sd( response ) << LL_ENDL;
+}
+
+class LLScriptAssetUploadWithId: public LLScriptAssetUpload
+{
+public:
+	LLScriptAssetUploadWithId(	LLUUID taskId, LLUUID itemId, TargetType_t targetType, 
+								bool isRunning, LLUUID exerienceId, std::string buffer, taskUploadFinish_f finish, LLUUID assetId )
+								:  LLScriptAssetUpload( taskId, itemId, targetType,  isRunning, exerienceId, buffer, finish)
+	{
+		LLScriptAssetUploadWithId::setAssetId( assetId );
+	}
+};
+
+// This is the callback for when each script arrives
+// static
+void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text)
+{
+	LL_INFOS() << "LLFloaterCompileQueue::scriptPreprocComplete()" << LL_ENDL;
+	if (!data)
+	{
+		return;
+	}
+	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
+	
+	if (queue)
+	{
+		std::string filename;
+		std::string uuid_str;
+		asset_id.toString(uuid_str);
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + llformat(".%s",LLAssetType::lookup(type));
+		
+		const bool is_running = true;
+		LLViewerObject* object = gObjectList.findObject(data->mTaskId);
+		if (object)
+		{
+			std::string url = object->getRegion()->getCapability("UpdateScriptTask");
+			if (!url.empty())
+			{
+				LLStringUtil::format_map_t args;
+				args["SCRIPT"] = data->mItem->getName();
+				LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessingComplete", args));
+				
+				std::string url = object->getRegion()->getCapability("UpdateScriptTask");
+				std::string scriptName = data->mItem->getName();
+
+				LLResourceUploadInfo::ptr_t uploadInfo( new LLScriptAssetUploadWithId(	data->mTaskId, data->mItem->getUUID(),
+																						(queue->mMono) ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2,
+																						is_running, data->mExperienceId, script_text,
+																						boost::bind( uploadDone, _1, _2, _3, _4, data->mItem->getName() ), asset_id ));
+
+	            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+			}
+			else
+			{
+				LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueueServiceUnavailable") + (": ") + data->mItem->getName());
+			}
+		}
+	}
+	delete data;
+}
+
+// static
+void LLFloaterCompileQueue::scriptLogMessage(LLScriptQueueData* data, std::string message)
+{
+	if (!data)
+	{
+		return;
+	}
+	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
+	if (queue)
+	{
+		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
+	}
+}
+// </FS:KC>
