@@ -31,6 +31,8 @@
 
 #include "llfloaterscriptrecover.h"
 
+#include "llviewerassetupload.h"
+
 const std::string NEW_LSL_NAME = "New Script";
 
 std::string fixNewScriptDefaultName(const std::string& scriptName)
@@ -235,34 +237,58 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 	}
 
 	std::string strFileName;
+	std::string strFilePath;
 	for (filename_queue_t::iterator itFile = m_FileQueue.begin(); itFile != m_FileQueue.end(); ++itFile)
 	{
 		if (fixNewScriptDefaultName(itFile->second["name"].asString()) != pItem->getName())
 			continue;
 		strFileName = itFile->second["path"].asString();
 		itFile->second["item"] = idItem;
+		strFilePath = itFile->first;
 		break;
 	}
 
-	LLSD sdBody;
-	sdBody["item_id"] = idItem;
-	sdBody["target"] = "lsl2";
-
 	std::string strCapsUrl = gAgent.getRegion()->getCapability("UpdateScriptAgent");
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-	// LLHTTPClient::post(strCapsUrl, sdBody, 
-	//                  new LLUpdateAgentInventoryResponder(sdBody, strFileName, LLAssetType::AT_LSL_TEXT, 
-	//                                                       boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3),
-	//                                                       boost::bind(&LLScriptRecoverQueue::onUploadError, this, _1)));
+
+
+    std::string buffer;
+	llstat stat;
+	if( 0 == LLFile::stat(strFilePath, &stat ) && stat.st_size > 0 )
+	{
+		buffer.resize( stat.st_size );
+		LLFILE *pFile = LLFile::fopen( strFileName, "wb" );
+
+		if( pFile )
+		{
+			fread( &buffer[0], 1, stat.st_size, pFile );
+			LLFile::close( pFile );
+		}
+		else
+		{
+			buffer = "";
+			LL_WARNS() << "Cannot open " << strFilePath << LL_ENDL;
+		}
+	}
+	else
+	{
+		LL_WARNS() << "No access to " << strFilePath << LL_ENDL;
+	}
+
+    LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLScriptRecoverQueue::onSavedScript, this, _1, _2, _3, _4 );
+
+    LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload( idItem, buffer, proc ) );
+
+    LLViewerAssetUpload::EnqueueInventoryUpload(strCapsUrl, uploadInfo);
 }
 
-void LLScriptRecoverQueue::onSavedScript(const LLUUID& idItem, const LLSD&, bool fSuccess)
+void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
 {
-	LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(idItem);
+	// <FS:ND> MERGE_TODO What about errors? LLScriptAssetUpload only has one callback
+	LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(itemId);
 	if (pItem.notNull())
 	{
 		filename_queue_t::iterator itFile = m_FileQueue.begin();
-		while ( (itFile != m_FileQueue.end()) && ((!itFile->second.has("item")) || (itFile->second["item"].asUUID() != idItem)) )
+		while ( (itFile != m_FileQueue.end()) && ((!itFile->second.has("item")) || (itFile->second["item"].asUUID() != itemId)) )
 			++itFile;
 		if (itFile != m_FileQueue.end())
 		{
