@@ -4323,7 +4323,7 @@ void translateSuccess(LLChat chat, LLSD toastArgs, std::string originalMsg, std:
 {
     // filter out non-interesting responses  
     if (!translation.empty()
-        && (expectLang != detected_language)
+        && ((detected_language.empty()) || (expectLang != detected_language))
         && (LLStringUtil::compareInsensitive(translation, originalMsg) != 0))
     {
         chat.mText += " (" + translation + ")";
@@ -7093,6 +7093,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		final_args["SLURLMESSAGE"] = message;
+		payload["dest_id"] = dest_id;
 
 		args["NAME"] = dest_slurl_name;
 		if (!reason.empty())
