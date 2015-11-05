@@ -33,6 +33,8 @@
 #include "llmatrix4a.h"
 #include <boost/bind.hpp>
 
+#include "../llxml/llcontrol.h"
+
 std::list<LLModelLoader*> LLModelLoader::sActiveLoaderList;
 
 void stretch_extents(LLModel* model, LLMatrix4a& mat, LLVector4a& min, LLVector4a& max, BOOL& first_transform)
@@ -206,6 +208,35 @@ LLModelLoader::LLModelLoader(
 	mJointMap["lThigh"] = "mHipLeft";
 	mJointMap["lShin"] = "mKneeLeft";
 	mJointMap["lFoot"] = "mFootLeft";
+
+	// <FS:Ansariel> FIRE-17144: Option to rig to attachment spots
+	if (LLControlGroup::getInstance("Global")->getBOOL("FSEnableRiggingToAttachmentSpots"))
+	{
+		mJointMap["Right_Ear"] = "Right Ear";
+		mJointMap["Left_Ear"] = "Left Ear";
+		mJointMap["Right_Eyeball"] = "Right Eyeball";
+		mJointMap["Left_Eyeball"] = "Left Eyeball";
+		mJointMap["Right_Shoulder"] = "Right Shoulder";
+		mJointMap["Left_Shoulder"] = "Left Shoulder";
+		mJointMap["R_Upper_Arm"] = "R Upper Arm";
+		mJointMap["L_Upper_Arm"] = "L Upper Arm";
+		mJointMap["R_Forearm"] = "R Forearm";
+		mJointMap["L_Forearm"] = "L Forearm";
+		mJointMap["Right_Hand"] = "Right Hand";
+		mJointMap["Left_Hand"] = "Left Hand";
+		mJointMap["Right_Pec"] = "Right Pec";
+		mJointMap["Left_Pec"] = "Left Pec";
+		mJointMap["Avatar_Center"] = "Avatar Center";
+		mJointMap["Right_Hip"] = "Right Hip";
+		mJointMap["Left_Hip"] = "Left Hip";
+		mJointMap["R_Upper_Leg"] = "R Upper Leg";
+		mJointMap["L_Upper_Leg"] = "L Upper Leg";
+		mJointMap["R_Lower_Leg"] = "R Lower Leg";
+		mJointMap["R_Lower_Leg"] = "R Lower Leg";
+		mJointMap["Right_Foot"] = "Right Foot";
+		mJointMap["Left_Foot"] = "Left Foot";
+	}
+	// </FS:Ansariel>
 
 	//move into joint mapper class
 	//1. joints for joint offset verification
