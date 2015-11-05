@@ -172,7 +172,8 @@ public:
     static std::set<std::string> getTypes();
     virtual BOOL postBuild();
 
-    /*virtual*/ bool showPopup() { return false; }
+	// <FS:Ansariel> Allow group notifications and invitations to open the original toast on left-click
+    /*virtual*/ //bool showPopup() { return false; }
 
 private:
     friend class LLNotificationListItem;
@@ -200,7 +201,8 @@ public:
     static std::set<std::string> getTypes();
     virtual BOOL postBuild();
 
-    /*virtual*/ bool showPopup() { return false; }
+	// <FS:Ansariel> Allow group notifications and invitations to open the original toast on left-click
+    /*virtual*/ //bool showPopup() { return false; }
 
 private:
     friend class LLNotificationListItem;
