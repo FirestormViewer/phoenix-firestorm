@@ -178,9 +178,9 @@ void exoFlickrAuth::gotVerifier(const LLSD& notification, const LLSD& response)
 	params["oauth_verifier"] = response["oauth_verifier"];
 	exoFlickr::signRequest(params, "GET", "http://www.flickr.com/services/oauth/access_token");
 
-	std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
+	std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/access_token", LLSD::emptyArray(), params ).asString();
 
-	exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2);
+	exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotAccessToken, this, _1, _2);
 	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
 
 }
