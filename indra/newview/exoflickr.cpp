@@ -181,7 +181,7 @@ void exoFlickr::request(const std::string& method, const LLSD& args, response_ca
 	signRequest(params, "GET", "https://api.flickr.com/services/rest/");
 	
 	std::string url = LLURI::buildHTTP( "https://api.flickr.com/services/rest/", LLSD::emptyArray(), params ).asString();
-	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( exoFlickrResponse, _1, callback ) );
+	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrResponse, _1, callback ) );
 }
 
 void exoFlickr::signRequest(LLSD& params, std::string method, std::string url)

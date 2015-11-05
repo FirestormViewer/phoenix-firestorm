@@ -129,7 +129,7 @@ void exoFlickrAuth::explanationCallback(const LLSD& notification, const LLSD& re
 		std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
 
 		exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2);
-		LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
+		FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
 	}
 	else
 	{
@@ -181,7 +181,7 @@ void exoFlickrAuth::gotVerifier(const LLSD& notification, const LLSD& response)
 	std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
 
 	exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2);
-	LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
+	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
 
 }
 
