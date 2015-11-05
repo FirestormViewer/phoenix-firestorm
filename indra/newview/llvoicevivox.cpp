@@ -478,6 +478,11 @@ void LLVivoxVoiceClient::requestVoiceAccountProvision(S32 retries)
 
 void LLVivoxVoiceClient::voiceAccountProvisionCoro(std::string url, S32 retries)
 {
+	// <FS:ND> CAP can return 404 on first try, repeat until num retries are reached or we get 200
+	S32 i = 0;
+	do {
+	// </FS:ND>
+
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
         httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("voiceAccountProvision", httpPolicy));
@@ -491,6 +496,13 @@ void LLVivoxVoiceClient::voiceAccountProvisionCoro(std::string url, S32 retries)
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
+	// <FS:ND> CAP can return 404 on first try, repeat until num retries are reached or we get 200
+	if( !status )
+	{
+		if( i++ < retries )
+			continue;
+	}
+	// </FS:ND>
     if (!status)
     {
         LL_WARNS("Voice") << "Unable to provision voice account." << LL_ENDL;
@@ -512,6 +524,11 @@ void LLVivoxVoiceClient::voiceAccountProvisionCoro(std::string url, S32 retries)
 
     login(result["username"].asString(), result["password"].asString(),
         voice_sip_uri_hostname, voice_account_server_uri);
+
+	// <FS:ND> CAP can return 404 on first try, repeat until num retries are reached or we get 200
+	return;
+	} while( true );
+	// </FS:ND>
 }
 
 void LLVivoxVoiceClient::login(
