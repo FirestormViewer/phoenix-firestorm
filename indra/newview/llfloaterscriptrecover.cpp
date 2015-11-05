@@ -260,7 +260,11 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 
 		if( pFile )
 		{
-			fread( &buffer[0], 1, stat.st_size, pFile );
+			if( fread( &buffer[0], 1, stat.st_size, pFile ) != stat.st_size )
+			{
+				LL_WARNS() << "Incomplete read of " << strFilePath << LL_ENDL;
+				buffer = "";
+			}
 			LLFile::close( pFile );
 		}
 		else
