@@ -238,16 +238,11 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 
 	// Now we build the postdata array, including the photo in the middle of it.
 	std::string post_str = post_stream.str();
-	size_t total_data_size = image->getDataSize() + post_str.length() + boundary.length() + 6; // + 6 = "\r\n" + "--" + "--"
-	char* post_data = new char[total_data_size + 1];
-	memcpy(post_data, post_str.data(), post_str.length());
-	char* address = post_data + post_str.length();
-	memcpy(address, image->getData(), image->getDataSize());
-	address += image->getDataSize();
 	std::string post_tail = "\r\n--" + boundary + "--";
-	memcpy(address, post_tail.data(), post_tail.length());
-	address += post_tail.length();
-	llassert(address <= post_data + total_data_size /* After all that, check we didn't overrun */);
+
+	std::string post_data = post_str;
+	post_data.append( reinterpret_cast< char const* >( image->getData() ), image->getDataSize() );
+	post_data.append( post_tail.c_str(), post_tail.size() );
 
 	// We have a post body! Now we can go about building the actual request...
 	// <FS:TS> Patch from Exodus:
