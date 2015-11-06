@@ -26,6 +26,7 @@
 #include "llviewercontrol.h"
 #include "llbase64.h"
 #include "llcorehttputil.h"
+#include "llsdutil.h"
 
 // third-party
 #if LL_USESYSTEMLIBS
@@ -45,6 +46,15 @@ void exoFlickrUploadResponse( LLSD const &aData, exoFlickr::response_callback_t 
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
+	LL_INFOS() << "Status " << status.getType() << " aData " << ll_pretty_print_sd( aData ) << LL_ENDL;
+
+	if( !aData.has( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW ) )
+	{
+		LL_WARNS() << "No content data included in response" << LL_ENDL;
+		aCallback(false, LLSD());
+		return;
+	}
+	
     const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 	std::string result;
 	result.assign( rawData.begin(), rawData.end() );
@@ -251,7 +261,7 @@ void exoFlickr::uploadPhoto(const LLSD& args, LLImageFormatted *image, response_
 
 	LLCore::HttpHeaders::ptr_t pHeader( new LLCore::HttpHeaders() );
 	pHeader->append( "Content-Type", "multipart/form-data; boundary=" + boundary );
-	FSCoreHttpUtil::callbackHttpPostRaw( "https://up.flickr.com/services/upload/", post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), NULL, pHeader );
+	FSCoreHttpUtil::callbackHttpPostRaw( "https://up.flickr.com/services/upload/", post_data, boost::bind( exoFlickrUploadResponse, _1, callback ), boost::bind( exoFlickrUploadResponse, _1, callback ), pHeader );
 
 	// </FS:TS>
 	// The HTTP client takes ownership of our post_data array,
