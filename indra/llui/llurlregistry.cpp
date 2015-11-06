@@ -335,6 +335,8 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 						match_entry->getStyle(),
 						match_entry->getMenuName(),
 						match_entry->getLocation(url),
+						// <FS:Ansariel> Store matched text
+						text.substr(match_start, match_end - match_start + 1),
 						match_entry->getID(url),
 						match_entry->underlineOnHoverOnly(url),
 						match_entry->isTrusted());
@@ -356,7 +358,12 @@ bool LLUrlRegistry::findUrl(const LLWString &text, LLUrlMatch &match, const LLUr
 		// the UTF-8 string because it is a variable-length
 		// character encoding, so we need to update the start
 		// and end values to be correct for the wide string.
-		LLWString wurl = utf8str_to_wstring(match.getUrl());
+		// <FS:Ansariel> Fix for LLUrlEntryHTTPLabel and
+		// LLUrlEntrySLLabel: Cannot simply replace the URL,
+		//need to replace the matched text!
+		//LLWString wurl = utf8str_to_wstring(match.getUrl());
+		LLWString wurl = utf8str_to_wstring(match.getMatchedText());
+		// </FS:Ansariel>
 		size_t start = text.find(wurl);
 		if (start == std::string::npos)
 		{
@@ -372,6 +379,8 @@ bool LLUrlRegistry::findUrl(const LLWString &text, LLUrlMatch &match, const LLUr
 						match.getStyle(),
 						match.getMenuName(),
 						match.getLocation(),
+						// <FS:Ansariel> Store matched text
+						match.getMatchedText(),
 						match.getID(),
 						match.underlineOnHoverOnly());
 		return true;

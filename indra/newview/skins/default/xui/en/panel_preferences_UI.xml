@@ -351,7 +351,7 @@
          follows="left|top"
          height="16"
          increment="1"
-         initial_value="10"
+         initial_value="20"
          label="Visible rows per script dialog:"
          label_width="160"
          layout="topleft"

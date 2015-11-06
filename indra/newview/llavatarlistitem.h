@@ -156,6 +156,12 @@ protected:
 	LLButton* mBtnPermissionEditMine;
 	/// Indicator for permission to edit their objects.
 	LLIconCtrl* mIconPermissionEditTheirs;
+	// <FS:Ansariel> Extended Friend Permissions
+	/// Indicator for permission to show their position on the map.
+	LLIconCtrl* mIconPermissionMapTheirs;
+	/// Indicator for permission to see their online status.
+	LLIconCtrl* mIconPermissionOnlineTheirs;
+	// </FS:Ansariel>
 	void confirmModifyRights(bool grant, S32 rights);
 	void rightsConfirmationCallback(const LLSD& notification,
 									const LLSD& response, S32 rights);
@@ -194,6 +200,10 @@ private:
 		ALIC_PERMISSION_MAP,
 		ALIC_PERMISSION_EDIT_MINE,
 		ALIC_PERMISSION_EDIT_THEIRS,
+		// <FS:Ansariel> Extended Friend Permissions
+		ALIC_PERMISSION_MAP_THEIRS,
+		ALIC_PERMISSION_ONLINE_THEIRS,
+		// </FS:Ansariel>
 		ALIC_INTERACTION_TIME,
 		ALIC_NAME,
 		ALIC_ICON,

@@ -607,7 +607,10 @@ LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_t
 				label += query;
 			}
 
-			LLWStringUtil::replaceString(mParagraphText, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(label));
+			// This works for LLUrlEntryHTTPLabel and LLUrlEntrySLLabel because
+			// there is no callback involved for which we are storing the
+			// matched Url
+			LLWStringUtil::replaceString(mParagraphText, utf8str_to_wstring(urlMatch.getMatchedText()), utf8str_to_wstring(label));
 			mUrlLabels[urlMatch.getUrl()] = label;
 
 			// Remove the URL from the work line so we don't end in a loop in case of regular URLs!

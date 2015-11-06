@@ -80,6 +80,28 @@
     <icon
      height="16"
      follows="right"
+     image_name="Permission_Visible_Online"
+     layout="topleft"
+     left_pad="3"
+     right="-167"
+     name="permission_online_theirs_icon"
+     tool_tip="You can see this friend&apos;s online status"
+     top="4"
+     width="16" />
+    <icon
+     height="16"
+     follows="right"
+     image_name="Permission_Visible_Map"
+     layout="topleft"
+     left_pad="3"
+     right="-148"
+     name="permission_map_theirs_icon"
+     tool_tip="You can locate this friend on the map"
+     top="4"
+     width="16" />
+    <icon
+     height="16"
+     follows="right"
      image_name="Permission_Edit_Objects_Theirs"
      layout="topleft"
      left_pad="3"
