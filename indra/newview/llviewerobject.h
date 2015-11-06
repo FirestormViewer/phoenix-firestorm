@@ -411,6 +411,8 @@ public:
 	void setCanSelect(BOOL canSelect);
 
 	void setDebugText(const std::string &utf8text);
+	void initHudText();
+	void restoreHudText();
 	void setIcon(LLViewerTexture* icon_image);
 	void clearIcon();
 
@@ -690,6 +692,9 @@ public:
 	//LLPointer<class LLHUDIcon> mIcon;
 	LLPointer<LLHUDIcon> mIcon;
 	// </FS:Ansariel>
+
+	std::string mHudText;
+	LLColor4 mHudTextColor;
 
 	static			BOOL		sUseSharedDrawables;
 

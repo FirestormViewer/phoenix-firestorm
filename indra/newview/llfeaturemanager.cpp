@@ -65,8 +65,6 @@
 #include <boost/filesystem.hpp>
 // </FS:Techwolf Lupindo>
 
-#define LL_EXPORT_GPU_TABLE 0
-
 #if LL_DARWIN
 const char FEATURE_TABLE_FILENAME[] = "featuretable_mac.txt";
 const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";

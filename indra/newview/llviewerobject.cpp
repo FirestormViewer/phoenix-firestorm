@@ -254,6 +254,8 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mRenderMedia(FALSE),
 	mBestUpdatePrecision(0),
 	mText(),
+	mHudText(""),
+	mHudTextColor(LLColor4::white),
 	mLastInterpUpdateSecs(0.f),
 	mLastMessageUpdateSecs(0.f),
 	mLatestRecvPacketID(0),
@@ -1447,12 +1449,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					// Setup object text
 					if (!mText)
 					{
-						mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-						mText->setFont(LLFontGL::getFontSansSerif());
-						mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-						mText->setMaxLines(-1);
-						mText->setSourceObject(this);
-						mText->setOnHUDAttachment(isHUDAttachment());
+					    initHudText();
 					}
 
 					std::string temp_string;
@@ -1472,6 +1469,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					}
 // [/RLVa:KB]
 					
+					mHudText = temp_string;
+					mHudTextColor = LLColor4(coloru);
+
 					setChanged(MOVED | SILHOUETTE);
 				}
 				else if (mText.notNull())
@@ -1834,12 +1834,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				// Setup object text
 				if (!mText && (value & 0x4))
 				{
-					mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-					mText->setFont(LLFontGL::getFontSansSerif());
-					mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-					mText->setMaxLines(-1); // Set to match current agni behavior.
-					mText->setSourceObject(this);
-					mText->setOnHUDAttachment(isHUDAttachment());
+				    initHudText();
 				}
 
 				if (value & 0x4)
@@ -1857,6 +1852,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 						mText->setObjectText(temp_string);
 					}
 // [/RLVa:KB]
+
+                    mHudText = temp_string;
+                    mHudTextColor = LLColor4(coloru);
 
 					setChanged(TEXTURE);
 				}
@@ -5074,18 +5072,32 @@ void LLViewerObject::setDebugText(const std::string &utf8text)
 
 	if (!mText)
 	{
-		mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-		mText->setFont(LLFontGL::getFontSansSerif());
-		mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-		mText->setMaxLines(-1);
-		mText->setSourceObject(this);
-		mText->setOnHUDAttachment(isHUDAttachment());
+	    initHudText();
 	}
 	mText->setColor(LLColor4::white);
 	mText->setString(utf8text);
 	mText->setZCompare(FALSE);
 	mText->setDoFade(FALSE);
 	updateText();
+}
+
+void LLViewerObject::initHudText()
+{
+    mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
+    mText->setFont(LLFontGL::getFontSansSerif());
+    mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
+    mText->setMaxLines(-1);
+    mText->setSourceObject(this);
+    mText->setOnHUDAttachment(isHUDAttachment());
+}
+
+void LLViewerObject::restoreHudText()
+{
+    if(mText)
+    {
+        mText->setColor(mHudTextColor);
+        mText->setString(mHudText);
+    }
 }
 
 void LLViewerObject::setIcon(LLViewerTexture* icon_image)
