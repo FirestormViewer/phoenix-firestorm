@@ -287,14 +287,22 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 
 void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
 {
-	// <FS:ND> MERGE_TODO What about errors? LLScriptAssetUpload only has one callback
-	LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(itemId);
-	if (pItem.notNull())
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( response[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+	filename_queue_t::iterator itFile = m_FileQueue.begin();
+	while ( (itFile != m_FileQueue.end()) && ((!itFile->second.has("item")) || (itFile->second["item"].asUUID() != itemId)) )
+		++itFile;
+
+	if (itFile == m_FileQueue.end())
 	{
-		filename_queue_t::iterator itFile = m_FileQueue.begin();
-		while ( (itFile != m_FileQueue.end()) && ((!itFile->second.has("item")) || (itFile->second["item"].asUUID() != itemId)) )
-			++itFile;
-		if (itFile != m_FileQueue.end())
+		LL_WARNS() << "Unknown file" << LL_ENDL;
+		return;
+	}
+
+	if( HTTP_OK == status.getType() )
+	{
+		LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(itemId);
+		if (pItem.notNull())
 		{
 			// Ansariel: Rename back scripts with default name
 			std::string strScriptName = itFile->second["name"].asString();
@@ -306,10 +314,17 @@ void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUI
 				gInventory.updateItem(pNewItem);
 				gInventory.notifyObservers();
 			}
-
+			
 			LLFile::remove(itFile->first);
 			m_FileQueue.erase(itFile);
 		}
+	}
+	else
+	{
+		LLViewerInventoryItem* pItem = gInventory.getItem( itemId );
+		if (pItem)
+			gInventory.changeItemParent(pItem, gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH), FALSE);
+		m_FileQueue.erase(itFile);
 	}
 	recoverNext();
 }
