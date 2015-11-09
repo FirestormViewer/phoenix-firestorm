@@ -1703,6 +1703,11 @@ Wszystkie nadchodzące propozycje i prośby o teleportację będą teraz otrzymy
 		Nie można w tej chwili poprosić o teleport, ponieważ tryb odrzucania wszystkich propozycji i próśb o teleportację jest włączony.
 Jeśli chcesz go wyłączyć, to możesz to zrobić w menu 'Komunikacja' &gt; 'Status online'.
 	</notification>
+	<notification name="RejectFriendshipRequestsModeSet">
+		Tryb odrzucania wszystkich zaproszeń do znajomych jest włączony.
+Wszystkie nadchodzące zaproszenia do znajomych będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
+		<usetemplate ignoretext="Status zmieniony na odrzucanie wszystkich zaproszeń do znajomych" name="okignore" />
+	</notification>
 	<notification name="RejectAllGroupInvitesModeSet">
 		Tryb odrzucania wszystkich zaproszeń do grup jest włączony.
 Wszystkie nadchodzące zaproszenia do grup będą automatycznie odrzucane. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
@@ -2915,11 +2920,6 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 			<button name="Join" text="Zaakceptuj"/>
 			<button name="Decline" text="Odmów"/>
 		</form>
-	</notification>
-	<notification name="JoinGroupProtectionNotice">
-		Ta grupa pobiera opłatę za dołączenie, nie można zaakceptować zaproszenia ze względu na Twoje ustawienia. Jeśli chcesz to zmienić, otwórz Preferencje -&gt; Firestorm -&gt; Ochrona.
-
-[MESSAGE]
 	</notification>
 	<notification name="TeleportOffered" label="Propozycja teleportacji od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci teleportację do siebie:

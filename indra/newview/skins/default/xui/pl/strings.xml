@@ -1461,7 +1461,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Ogłoszenia grupowe
 	</string>
 	<string name="GroupNotifySentBy">
-		Wysłane przez
+		Wysłał/a
 	</string>
 	<string name="GroupNotifyAttached">
 		Załączone:
@@ -1476,7 +1476,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Zapisz załącznik
 	</string>
 	<string name="GroupNotifySender">
-		Wysłane przez [SENDER], [GROUPNAME]
+		Wysłał/a [SENDER], [GROUPNAME]
 	</string>
 	<string name="TeleportOffer">
 		Oferta teleportacji
@@ -2381,6 +2381,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="RejectTeleportOffersResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania próśb oraz propozycji teleportacji i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Rezydent, do którego wysłałeś/aś wiadomość aktywował w Firestormie tryb odrzucania zaproszeń do znajomych i nie chce, aby mu nimi przeszkadzano. Możesz w dalszym ciągu wysłać wiadomość prywatną ręcznie.
 	</string>
 	<string name="MutedAvatarsResponseDefault">
 		Rezydent, do którego wysłałeś/aś wiadomość zablokował Cię.

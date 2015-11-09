@@ -96,6 +96,10 @@
 			<text name="autorespond_rto_response_label">
 				Automatische Antwort für Onlinestatus „Teleport-Angebote und -Anforderungen abweisen“:
 			</text>
+			<check_box label="Teleport-Angebote und -Anforderungen von Freunden nicht abweisen" name="FSDontRejectTeleportOffersFromFriends"/>
+			<text name="autorespond_rfr_response_label">
+				Automatische Antwort für Onlinestatus „Alle Freundschaftsanfragen abweisen“:
+			</text>
 			<text name="autoresponse_item_label" width="150">
 				Objekt für autom. Antwort:
 			</text>

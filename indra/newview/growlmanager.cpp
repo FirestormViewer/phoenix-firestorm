@@ -294,7 +294,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			LLWString workLine = utf8str_to_wstring(body);
 			while (LLUrlRegistry::instance().findUrl(workLine, urlMatch) && !urlMatch.getUrl().empty())
 			{
-				LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
+				LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getMatchedText()), utf8str_to_wstring(urlMatch.getLabel()));
 
 				// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
 				// findUrl will always return the very first URL in a string

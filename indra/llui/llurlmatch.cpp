@@ -46,6 +46,8 @@ void LLUrlMatch::setValues(U32 start, U32 end, const std::string &url, const std
 						   const std::string& query, const std::string &tooltip,
 						   const std::string &icon, const LLStyle::Params& style,
 						   const std::string &menu, const std::string &location,
+						   // <FS:Ansariel> Store matched text
+						   const std::string& matched_text,
 						   const LLUUID& id, bool underline_on_hover_only, bool trusted)
 {
 	mStart = start;
@@ -62,4 +64,6 @@ void LLUrlMatch::setValues(U32 start, U32 end, const std::string &url, const std
 	mID = id;
 	mUnderlineOnHoverOnly = underline_on_hover_only;
 	mTrusted = trusted;
+	// <FS:Ansariel> Store matched text
+	mMatchedText = matched_text;
 }

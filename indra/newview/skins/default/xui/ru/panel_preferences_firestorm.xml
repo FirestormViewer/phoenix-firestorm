@@ -67,10 +67,8 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Множитель запросов предзагрузки звуков [По умолчанию: 4]" />
         <button name="AntiSpamUnblock" label="Разблокировать все источники спама" />
-        <check_box label="Убрать кнопку &quot;Присоедениться&quot; для приглашения вступить в платную группу" name="FSAllowGroupInvitationOnlyWithoutFee" />
 		<check_box label="Подтверждение перед оплатой:" name="FSConfirmPayments" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0."/>
-        <spinner name="FSPaymentConfirmationThreshold" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0."
-         width="100"/>
+        <spinner name="FSPaymentConfirmationThreshold" tool_tip="Показывать диалоговое окно подтверждения платежа, прежде чем заплатить сумму, превышающую порог. Чтобы всегда показывать подтверждение, установить порог в 0." width="100"/>
     </panel>
     <panel label="Аватар" name="firestorm_avatar">
         <text name="HeadMovement">

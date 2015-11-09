@@ -80,6 +80,9 @@ public:
 	/// return the SL location that this Url describes, or "" if none.
 	std::string getLocation() const { return mLocation; }
 
+	// <FS:Ansariel> Store matched text
+	std::string getMatchedText() const { return mMatchedText; }
+
 	/// Should this link text be underlined only when mouse is hovered over it?
 	bool underlineOnHoverOnly() const { return mUnderlineOnHoverOnly; }
 
@@ -90,7 +93,10 @@ public:
 	void setValues(U32 start, U32 end, const std::string &url, const std::string &label,
 	               const std::string& query, const std::string &tooltip, const std::string &icon,
 				   const LLStyle::Params& style, const std::string &menu, 
-				   const std::string &location, const LLUUID& id,
+				   // <FS:Ansariel> Store matched text
+				   //const std::string &location, const LLUUID& id,
+				   const std::string &location, const std::string& matched_text, const LLUUID& id,
+				   // </FS:Ansariel>
 				   bool underline_on_hover_only = false, bool trusted = false);
 
 	const LLUUID& getID() const { return mID; }
@@ -104,6 +110,8 @@ private:
 	std::string mIcon;
 	std::string mMenuName;
 	std::string mLocation;
+	// <FS:Ansariel> Store matched text
+	std::string mMatchedText;
 	LLUUID		mID;
 	LLStyle::Params mStyle;
 	bool		mUnderlineOnHoverOnly;

@@ -260,6 +260,8 @@ public:
 		Optional<LLToolBarEnums::LayoutStyle>	layout_style;	// <FS:Zi> Add layout style parameter to XUI
 		Optional<LLToolBarEnums::Alignment>		alignment;		// <FS:Zi> Add alignment parameter to XUI
 
+		Optional<S32>							max_rows;		// <FS:Ansariel> FIRE-5137: Fix fixed size button layout
+
 		Params();
 	};
 
@@ -345,6 +347,8 @@ private:
 									mPadBottom,
 									mPadBetween,
 									mMinGirth;
+	// <FS:Ansariel> FIRE-5137: Fix fixed size button layout
+	const S32						mMaxRows;
 
 	// drag and drop state
 	tool_startdrag_callback_t		mStartDragItemCallback;
