@@ -1712,11 +1712,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3c4d8a70365594daf244f3ff0cbbe223</string>
+              <string>113eef73cb926338beb898f674c195a4</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201510252206-r24.tar.bz2</string>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201511091150-r26.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1726,11 +1726,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83eda3750ca3556c81a8095cee67800e</string>
+              <string>d2d509d108bf617fa4d140233a49d64c</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201510051739-r23.tar.bz2</string>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201511091143-r26.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
