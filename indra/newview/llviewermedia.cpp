@@ -1478,7 +1478,8 @@ void LLViewerMedia::setOpenIDCookie(const std::string& url)
 				std::string cookie_name = "";
 				std::string cookie_value = "";
 				std::string cookie_path = "";
-				if (parseRawCookie(sOpenIDCookie, cookie_name, cookie_value, cookie_path))
+				if (parseRawCookie(sOpenIDCookie, cookie_name, cookie_value, cookie_path) &&
+                    media_instance->getMediaPlugin())
 				{
 					media_instance->getMediaPlugin()->setCookie(url, cookie_name, cookie_value, cookie_host, cookie_path);
 				}
@@ -2808,8 +2809,7 @@ bool LLViewerMediaImpl::handleKeyHere(KEY key, MASK mask)
 
 		if (!result)
 		{
-
-			LLSD native_key_data = gViewerWindow->getWindow()->getNativeKeyData();
+            LLSD native_key_data = gViewerWindow->getWindow()->getNativeKeyData();
 			result = mMediaSource->keyEvent(LLPluginClassMedia::KEY_EVENT_DOWN, key, mask, native_key_data);
 		}
 	}

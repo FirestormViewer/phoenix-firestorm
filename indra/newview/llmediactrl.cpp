@@ -1212,3 +1212,13 @@ void LLMediaCtrl::updateContextMenuParent(LLView* pNewParent)
 {
 	mContextMenu->updateParent(pNewParent);
 }
+
+bool LLMediaCtrl::wantsKeyUpKeyDown() const
+{
+    return true;
+}
+
+bool LLMediaCtrl::wantsReturnKey() const
+{
+    return true;
+}

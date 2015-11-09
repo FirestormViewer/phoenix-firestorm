@@ -3311,7 +3311,7 @@ bool LLAppViewer::initConfiguration()
 	//
 	gWindowTitle = LLVersionInfo::getChannelAndVersion();	// <FS:CR>
 #if LL_DEBUG
-	gWindowTitle += std::string(" [DEBUG]")
+    gWindowTitle += std::string(" [DEBUG]");
 #endif
 	if (!gArgs.empty())
 	{
