@@ -1907,7 +1907,8 @@ void sync_inventory_folder(const LLUUID& folder_id, const LLInventoryModel::item
 		{
 			// Item doesn't exist in newItems => purge (if it's a link)
 			if ( (pItem->getIsLinkType()) && 
-				 (LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
+				 // <FS:Ansariel> Commented out; causes FIRE-17217
+				 //(LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
 			     (items_to_remove.end() == std::find(items_to_remove.begin(), items_to_remove.end(), pItem)) )
 			{
 				items_to_remove.push_back(pItem);

@@ -17,13 +17,11 @@ mailing list. We've created a non-KDU build target to make this easier. Everywhe
 "ReleaseFS_open" instead.  This will perform the same build, using openjpeg instead of KDU.
 
 Available premade firestorm-specific build targets:
-
 	ReleaseFS (includes KDU, FMOD)
 	ReleaseFS_open (no KDU, no FMOD)
 	RelWithDebInfoFS_open (no KDU, no FMOD)
 
 To build firestorm:
-
 	autobuild build -c ReleaseFS                        
 
 Other examples:
@@ -38,6 +36,7 @@ Other examples:
 Any of the configure options can also be used (and do the same thing) with the build options.
 Typical LL autobuild configure options should also work, as long as they don't duplicate configuration we are
 already doing.
+
 
 Logs:
         Look for logs in build-linux-i686/logs
