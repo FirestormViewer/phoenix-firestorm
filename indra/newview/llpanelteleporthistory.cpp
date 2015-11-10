@@ -58,10 +58,10 @@ static const std::string COLLAPSED_BY_USER = "collapsed_by_user";
 class LLTeleportHistoryFlatItem : public LLPanel
 {
 public:
+	LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
 	// <FS:Ansariel> Extended TP history
-	//LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
 	//									 	 LLDate date, const std::string &hl);
-	LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl);
+										 	 LLDate date, const LLVector3& local_pos, const std::string &hl);
 	// </FS:Ansariel>
 	virtual ~LLTeleportHistoryFlatItem();
 
@@ -73,17 +73,14 @@ public:
 	void setIndex(S32 index) { mIndex = index; }
 	const std::string& getRegionName() { return mRegionName;}
 	void setRegionName(const std::string& name);
-	// <FS:Ansariel> Extended TP history
-	//void setDate(LLDate date);
+	void setDate(LLDate date);
 	void setHighlightedText(const std::string& text);
 	void updateTitle();
 	void updateTimestamp();
 	std::string getTimestamp();
 
 	// <FS:Ansariel> Extended TP history
-	void setDate(const LLDate& date);
 	void setLocalPos(const LLVector3& local_pos);
-	// </FS:Ansariel>
 
 	/*virtual*/ void setValue(const LLSD& value);
 
@@ -145,10 +142,10 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
 // <FS:Ansariel> Extended TP history
-//LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name,
 //																LLDate date, const std::string &hl)
-LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl)
+																LLDate date, const LLVector3& local_pos, const std::string &hl)
 // </FS:Ansariel>
 :	LLPanel(),
 	mIndex(index),
@@ -182,8 +179,7 @@ BOOL LLTeleportHistoryFlatItem::postBuild()
 	mProfileBtn->setClickedCallback(boost::bind(&LLTeleportHistoryFlatItem::onProfileBtnClick, this));
 
 	updateTitle();
-	// <FS:Ansariel> Extended TP history
-	//updateTimestamp();
+	updateTimestamp();
 
 	return true;
 }
@@ -218,10 +214,7 @@ void LLTeleportHistoryFlatItem::setRegionName(const std::string& name)
 	mRegionName = name;
 }
 
-// <FS:Ansariel> Extended TP history
-//void LLTeleportHistoryFlatItem::setDate(LLDate date)
-void LLTeleportHistoryFlatItem::setDate(const LLDate& date)
-// </FS:Ansariel>
+void LLTeleportHistoryFlatItem::setDate(LLDate date)
 {
 	mDate = date;
 }
@@ -238,23 +231,29 @@ std::string LLTeleportHistoryFlatItem::getTimestamp()
 	const LLDate &date = mDate;
 	std::string timestamp = "";
 
-	LLDate now = LLDate::now();
-	S32 now_year, now_month, now_day, now_hour, now_min, now_sec;
-	now.split(&now_year, &now_month, &now_day, &now_hour, &now_min, &now_sec);
+	// <FS:Ansariel> Extended TP history
+	//LLDate now = LLDate::now();
+	//S32 now_year, now_month, now_day, now_hour, now_min, now_sec;
+	//now.split(&now_year, &now_month, &now_day, &now_hour, &now_min, &now_sec);
 
-	const S32 seconds_in_day = 24 * 60 * 60;
-	S32 seconds_today = now_hour * 60 * 60 + now_min * 60 + now_sec;
-	S32 time_diff = (S32) now.secondsSinceEpoch() - (S32) date.secondsSinceEpoch();
+	//const S32 seconds_in_day = 24 * 60 * 60;
+	//S32 seconds_today = now_hour * 60 * 60 + now_min * 60 + now_sec;
+	//S32 time_diff = (S32) now.secondsSinceEpoch() - (S32) date.secondsSinceEpoch();
 
-	// Only show timestamp for today and yesterday
-	if(time_diff < seconds_today + seconds_in_day)
-	{
-		timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
-						+ LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
-		LLSD substitution;
-		substitution["datetime"] = (S32) date.secondsSinceEpoch();
-		LLStringUtil::format(timestamp, substitution);
-	}
+	//// Only show timestamp for today and yesterday
+	//if(time_diff < seconds_today + seconds_in_day)
+	//{
+	//	timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
+	//					+ LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
+	//	LLSD substitution;
+	//	substitution["datetime"] = (S32) date.secondsSinceEpoch();
+	//	LLStringUtil::format(timestamp, substitution);
+	//}
+	LLSD args;
+	args["datetime"] = date.secondsSinceEpoch();
+	timestamp = getString("DateFmt");
+	LLStringUtil::format(timestamp, args);
+	// </FS:Ansariel>
 
 	return timestamp;
 
@@ -275,17 +274,6 @@ void LLTeleportHistoryFlatItem::updateTitle()
 		mLocalPosBox,
 		LLStyle::Params().color(sFgColor),
 		llformat("%.0f, %.0f, %.0f", mLocalPos.mV[VX], mLocalPos.mV[VY], mLocalPos.mV[VZ]),
-		mHighlight);
-
-	LLSD args;
-	args["datetime"] = mDate.secondsSinceEpoch();
-	std::string date = getString("DateFmt");
-	LLStringUtil::format(date, args);
-
-	LLTextUtil::textboxSetHighlightedVal(
-		mTimeTextBox,
-		LLStyle::Params().color(sFgColor),
-		date,
 		mHighlight);
 	// </FS:Ansariel>
 }
