@@ -362,7 +362,7 @@ private:
 						LLMaterialMgr::getInstance()->put(object->getID(),face,*new_material);
 					}
 
-					object->setTEMaterialParams(face, new_material, TRUE);
+					object->setTEMaterialParams(face, new_material);
 					return new_material;
 				}
 				return NULL;
