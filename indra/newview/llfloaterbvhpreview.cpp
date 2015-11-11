@@ -166,7 +166,9 @@ void LLFloaterBvhPreview::setAnimCallbacks()
 	getChild<LLUICtrl>("playback_slider")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onSliderMove, this));
 	
 	getChild<LLUICtrl>("preview_base_anim")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitBaseAnim, this));
-	getChild<LLUICtrl>("preview_base_anim")->setValue("Standing");
+	// <FS:Sei> FIRE-17251: Use the XUI values for defaults
+	//getChild<LLUICtrl>("preview_base_anim")->setValue("Standing");
+	// </FS:Sei>
 
 	getChild<LLUICtrl>("priority")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitPriority, this));
 	getChild<LLUICtrl>("loop_check")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitLoop, this));
@@ -178,7 +180,9 @@ void LLFloaterBvhPreview::setAnimCallbacks()
 	getChild<LLUICtrl>("hand_pose_combo")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitHandPose, this));
 	
 	getChild<LLUICtrl>("emote_combo")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitEmote, this));
-	getChild<LLUICtrl>("emote_combo")->setValue("[None]");
+	// <FS:Sei> FIRE-17251: Use the XUI values for defaults
+	//getChild<LLUICtrl>("emote_combo")->setValue("[None]");
+	// </FS:Sei>
 
 	getChild<LLUICtrl>("ease_in_time")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitEaseIn, this));
 	getChild<LLUICtrl>("ease_in_time")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateEaseIn, this, _1));
@@ -371,13 +375,22 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
 			getChild<LLSlider>("playback_slider")->setMaxValue(1.0);
 
-			getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
-			getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(motionp->getLoopIn() / motionp->getDuration() * 100.f));
-			getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(motionp->getLoopOut() / motionp->getDuration() * 100.f));
-			getChild<LLUICtrl>("priority")->setValue(LLSD((F32)motionp->getPriority()));
-			getChild<LLUICtrl>("hand_pose_combo")->setValue(LLHandMotion::getHandPoseName(motionp->getHandPose()));
-			getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(motionp->getEaseInDuration()));
-			getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(motionp->getEaseOutDuration()));
+			//<FS:Sei> FIRE-17251: Use defaults from XUI, not from the JointMotionList constructor
+			//getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
+			//getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(motionp->getLoopIn() / motionp->getDuration() * 100.f));
+			//getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(motionp->getLoopOut() / motionp->getDuration() * 100.f));
+			//getChild<LLUICtrl>("priority")->setValue(LLSD((F32)motionp->getPriority()));
+			//getChild<LLUICtrl>("hand_pose_combo")->setValue(LLHandMotion::getHandPoseName(motionp->getHandPose()));
+			//getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(motionp->getEaseInDuration()));
+			//getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(motionp->getEaseOutDuration()));
+			motionp->setLoop(getChild<LLUICtrl>("loop_check")->getValue().asBoolean());
+			motionp->setLoopIn((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f * motionp->getDuration());
+			motionp->setLoopOut((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() / 100.f * motionp->getDuration());
+			motionp->setPriority(getChild<LLUICtrl>("priority")->getValue().asInteger());
+			motionp->setHandPose(LLHandMotion::getHandPose(getChild<LLUICtrl>("hand_pose_combo")->getValue().asString()));
+			motionp->setEaseIn((F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal());
+			motionp->setEaseOut((F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal());
+			//</FS>
 			setEnabled(TRUE);
 			std::string seconds_string;
 			seconds_string = llformat(" - %.2f seconds", motionp->getDuration());
