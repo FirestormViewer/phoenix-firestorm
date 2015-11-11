@@ -782,7 +782,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			LL_DEBUGS("import") << "Setting materials" << LL_ENDL;
 			LLMaterial* mat = new LLMaterial();
 			mat->fromLLSD(*m_itr);
-			object->setTEMaterialParams(te, mat, false);
+			object->setTEMaterialParams(te, mat);
 			++te;
 		}
 	}
