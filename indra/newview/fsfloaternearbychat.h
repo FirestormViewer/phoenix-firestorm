@@ -103,7 +103,6 @@ public:
 	void updateShowMutedChatHistory(const LLSD &data);
 
 protected:
-	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 	void onChatBoxKeystroke();
 	void onChatBoxFocusLost();
 	void onChatBoxFocusReceived();
