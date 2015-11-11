@@ -118,7 +118,7 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 	if (FSUseNearbyChatConsole)
 	{
 		removeScreenChat();
-		gConsole->setVisible(!getVisible());
+		gConsole->setVisible(TRUE);
 	}
 	else
 	{
@@ -386,26 +386,6 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 	LLFloater::setVisible(visible);
 	
-	// <Ansariel> Support for chat console
-	static LLCachedControl<bool> chatHistoryTornOff(gSavedSettings, "ChatHistoryTornOff");
-	if (FSUseNearbyChatConsole)
-	{
-		FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
-		if (floater_container && !chatHistoryTornOff && !floater_container->getVisible())
-		{
-			// In case the nearby chat is docked into the IM floater and the
-			// IM floater is invisible, always show the console.
-			gConsole->setVisible(TRUE);
-		}
-		else
-		{
-			// In case the nearby chat is undocked OR docked and the IM floater
-			// is visible, show console only if nearby chat is not visible.
-			gConsole->setVisible(!getVisible());
-		}
-	}
-	// </Ansariel> Support for chat console
-
 	BOOL is_minimized = visible && isChatMultiTab()
 		? FSFloaterIMContainer::getInstance()->isMinimized()
 		: !visible;
@@ -422,6 +402,15 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 		{
 			mInputEditor->setFocus(TRUE);
 		}
+	}
+
+	if (visible && isInVisibleChain())
+	{
+		gConsole->addSession(LLUUID::null);
+	}
+	else
+	{
+		gConsole->removeSession(LLUUID::null);
 	}
 }
 
