@@ -47,8 +47,6 @@
 #pragma warning (disable : 4355) // 'this' used in initializer list: yes, intentionally
 #endif
 
-static const LLAvatarItemAgentOnTopComparator AGENT_ON_TOP_NAME_COMPARATOR;
-
 // helper function to update AvatarList Item's indicator in the voice participant list
 static void update_speaker_indicator(const LLAvatarList* const avatar_list, const LLUUID& avatar_uuid, bool is_muted)
 {
@@ -613,8 +611,7 @@ void FSParticipantList::sort()
 			}
 			else
 			{
-				mAvatarList->setComparator(&AGENT_ON_TOP_NAME_COMPARATOR);
-				mAvatarList->sort();
+				mAvatarList->sortByName(true);
 			}
 			break;
 		case E_SORT_BY_RECENT_SPEAKERS:

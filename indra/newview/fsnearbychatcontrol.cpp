@@ -37,44 +37,26 @@
 #include "fsfloaternearbychat.h"
 #include "llagent.h" 		// gAgent
 #include "llagentcamera.h"	// gAgentCamera
+#include "llautoreplace.h"
 #include "llfloaterimnearbychathandler.h"
 
-//AO - includes for textentry
-#include "llautoreplace.h"
-#include "llgesturemgr.h"
-#include "llkeyboard.h"
-#include "llworld.h"	// <FS:CR> FIRE-3192 - Name Prediction
-#include "rlvhandler.h"
-
-static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
-
 static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");
-
-struct LLChatTypeTrigger {
-	std::string name;
-	EChatType type;
-};
-
-static LLChatTypeTrigger sChatTypeTriggers[] = {
-	{ "/whisper"	, CHAT_TYPE_WHISPER},
-	{ "/shout"	, CHAT_TYPE_SHOUT}
-};
 
 FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 	LLLineEditor(p)
 {
 	//<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
 	setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
-	setKeystrokeCallback(onKeystroke,this);
+	setKeystrokeCallback(onKeystroke, this);
 	FSNearbyChat::instance().registerChatBar(this);
 
 	setEnableLineHistory(TRUE);
-	setIgnoreArrowKeys( FALSE );
-	setCommitOnFocusLost( FALSE );
-	setRevertOnEsc( FALSE );
-	setIgnoreTab( TRUE );
-	setReplaceNewlinesWithSpaces( FALSE );
-	setPassDelete( TRUE );
+	setIgnoreArrowKeys(FALSE);
+	setCommitOnFocusLost(FALSE);
+	setRevertOnEsc(FALSE);
+	setIgnoreTab(TRUE);
+	setReplaceNewlinesWithSpaces(FALSE);
+	setPassDelete(TRUE);
 	setFont(LLViewerChat::getChatFont());
 
 	// Register for font change notifications
@@ -85,252 +67,40 @@ FSNearbyChatControl::~FSNearbyChatControl()
 {
 }
 
-void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
+void FSNearbyChatControl::onKeystroke(LLLineEditor* caller, void* userdata)
 {
-	LLWString raw_text = caller->getWText();
-	
-	// Can't trim the end, because that will cause autocompletion
-	// to eat trailing spaces that might be part of a gesture.
-	LLWStringUtil::trimHead(raw_text);
-	S32 length = raw_text.length();
-
-	// Get the currently selected channel from the channel spinner in the nearby chat bar, if present and used.
-	// NOTE: Parts of the gAgent.startTyping() code are duplicated in 3 places:
-	// - llnearbychatbar.cpp
-	// - llchatbar.cpp
-	// - llnearbychat.cpp
-	// So be sure to look in all three places if changes are needed. This needs to be addressed at some point.
-	// -Zi
-	S32 channel=0;
-	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
-		gSavedSettings.getBOOL("FSShowChatChannel"))
-	{
-		// <FS:Ansariel> [FS communication UI]
-		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		// </FS:Ansariel> [FS communication UI]
-	}
-	// -Zi
-
-	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
-	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
-	if ( (length > 0) && (raw_text[0] != '/') && (!(gSavedSettings.getBOOL("AllowMUpose") && raw_text[0] == ':')) && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
-		// [/RLVa:KB]
-	{
-		// only start typing animation if we are chatting without / on channel 0 -Zi
-		if(channel==0)
-			gAgent.startTyping();
-	}
-	else
-	{
-		gAgent.stopTyping();
-	}
-	
-	KEY key = gKeyboard->currentKey();
-	MASK mask = gKeyboard->currentMask(FALSE);	// <FS:CR> FIRE-3192 - Predictive name completion
-	
-	// Ignore "special" keys, like backspace, arrows, etc.
-	if (length > 1 
-		&& raw_text[0] == '/'
-		// <FS:Ansariel / Holy Gavenkrantz> Optional gesture autocomplete
-		//&& key < KEY_SPECIAL)
-		&& key < KEY_SPECIAL
-		&& gSavedSettings.getBOOL("FSChatbarGestureAutoCompleteEnable"))
-		// </FS:Ansariel / Holy Gavenkrantz> Optional gesture autocomplete
-	{
-		// we're starting a gesture, attempt to autocomplete
-		
-		std::string utf8_trigger = wstring_to_utf8str(raw_text);
-		std::string utf8_out_str(utf8_trigger);
-		
-		if (LLGestureMgr::instance().matchPrefix(utf8_trigger, &utf8_out_str))
-		{
-			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
-			caller->setText(utf8_trigger + rest_of_match); // keep original capitalization for user-entered part
-			S32 outlength = caller->getLength(); // in characters
-			
-			// Select to end of line, starting from the character
-			// after the last one the user typed.
-			caller->setSelection(length, outlength);
-		}
-		else if (matchChatTypeTrigger(utf8_trigger, &utf8_out_str))
-		{
-			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
-			caller->setText(utf8_trigger + rest_of_match + " "); // keep original capitalization for user-entered part
-			caller->setCursorToEnd();
-		}
-	}
-// <FS:CR> FIRE-3192 - Predictive name completion, based on code by Satomi Ahn
-	static LLCachedControl<bool> sNameAutocomplete(gSavedSettings, "FSChatbarNamePrediction");
-	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL && mask != MASK_CONTROL)
-	{
-		S32 cur_pos = caller->getCursor();
-		if (cur_pos && (raw_text[cur_pos - 1] != ' '))
-		{
-			// Get a list of avatars within range
-			uuid_vec_t avatar_ids;
-			LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
-			
-			if (avatar_ids.empty()) return; // Nobody's in range!
-			
-			// Parse text for a pattern to search
-			std::string prefix = wstring_to_utf8str(raw_text.substr(0, cur_pos)); // Text before search string
-			std::string suffix = "";
-			if (cur_pos <= raw_text.length()) // Is there anything after the cursor?
-			{
-				suffix = wstring_to_utf8str(raw_text.substr(cur_pos)); // Text after search string
-			}
-			size_t last_space = prefix.rfind(" ");
-			std::string pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1); // Search pattern
-			
-			prefix = prefix.substr(0, last_space + 1);
-			std::string match_pattern = "";
-			
-			if (pattern.size() < NAME_PREDICTION_MINIMUM_LENGTH) return;
-
-			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
-			prefix = prefix.substr(0, last_space + 1);
-			std::string match = pattern;
-			LLStringUtil::toLower(pattern);
-			
-			std::string name;
-			bool found = false;
-			bool full_name = false;
-			uuid_vec_t::iterator iter = avatar_ids.begin();
-			
-			if (last_space != std::string::npos && !prefix.empty())
-			{
-				last_space = prefix.substr(0, prefix.length() - 2).rfind(" ");
-				match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
-				prefix = prefix.substr(0, last_space + 1);
-				
-				// prepare search pattern
-				std::string full_pattern(match_pattern + pattern);
-				LLStringUtil::toLower(full_pattern);
-				
-				// Look for a match
-				while (iter != avatar_ids.end() && !found)
-				{
-					if (gCacheName->getFullName(*iter++, name))
-					{
-						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-						{
-							name = RlvStrings::getAnonym(name);
-						}
-						LLStringUtil::toLower(name);
-						found = (name.find(full_pattern) == 0);
-					}
-				}
-			}
-			
-			if (found)
-			{
-				full_name = true; // ignore OnlyFirstName in case we want to disambiguate
-				prefix += match_pattern;
-			}
-			else if (!pattern.empty()) // if first search did not work, try matching with last word before cursor only
-			{
-				prefix += match_pattern; // first part of the pattern wasn't a pattern, so keep it in prefix
-				LLStringUtil::toLower(pattern);
-				iter = avatar_ids.begin();
-				
-				// Look for a match
-				while (iter != avatar_ids.end() && !found)
-				{
-					if (gCacheName->getFullName(*iter++, name))
-					{
-						if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-						{
-							name = RlvStrings::getAnonym(name);
-						}
-						LLStringUtil::toLower(name);
-						found = (name.find(pattern) == 0);
-					}
-				}
-			}
-			
-			// if we found something by either method, replace the pattern by the avatar name
-			if (found)
-			{
-				std::string first_name, last_name;
-				gCacheName->getFirstLastName(*(iter - 1), first_name, last_name);
-				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				{
-					prefix += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
-				}
-				else
-				{
-					std::string rest_of_match;
-					if (full_name)
-					{
-						rest_of_match = /*first_name + " " +*/ last_name.substr(pattern.size());
-					}
-					else
-					{
-						rest_of_match = first_name.substr(pattern.size());
-					}
-					prefix += match + rest_of_match + " ";
-				}
-				caller->setText(prefix + suffix);
-				caller->setSelection(utf8str_to_wstring(prefix).length(), cur_pos);
-			}
-		}
-	}
-// </FS:CR>
-}
-
-BOOL FSNearbyChatControl::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
-{
-	U32 in_len = in_str.length();
-	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
-	
-	for (S32 n = 0; n < cnt; n++)
-	{
-		if (in_len > sChatTypeTriggers[n].name.length())
-			continue;
-		
-		std::string trigger_trunc = sChatTypeTriggers[n].name;
-		LLStringUtil::truncate(trigger_trunc, in_len);
-		
-		if (!LLStringUtil::compareInsensitive(in_str, trigger_trunc))
-		{
-			*out_str = sChatTypeTriggers[n].name;
-			return TRUE;
-		}
-	}
-	
-	return FALSE;
+	FSNearbyChat::handleChatBarKeystroke(caller);
 }
 
 // send our focus status to the LLNearbyChat hub
 void FSNearbyChatControl::onFocusReceived()
 {
-	FSNearbyChat::instance().setFocusedInputEditor(this,TRUE);
+	FSNearbyChat::instance().setFocusedInputEditor(this, TRUE);
 	LLLineEditor::onFocusReceived();
 }
 
 void FSNearbyChatControl::onFocusLost()
 {
-	FSNearbyChat::instance().setFocusedInputEditor(this,FALSE);
+	FSNearbyChat::instance().setFocusedInputEditor(this, FALSE);
 	LLLineEditor::onFocusLost();
 }
 
 void FSNearbyChatControl::setFocus(BOOL focus)
 {
-	FSNearbyChat::instance().setFocusedInputEditor(this,focus);
+	FSNearbyChat::instance().setFocusedInputEditor(this, focus);
 	LLLineEditor::setFocus(focus);
 }
 
 void FSNearbyChatControl::autohide()
 {
-	if(getName()=="default_chat_bar")
+	if (getName() == "default_chat_bar")
 	{
-		if(gSavedSettings.getBOOL("CloseChatOnReturn"))
+		if (gSavedSettings.getBOOL("CloseChatOnReturn"))
 		{
 			setFocus(FALSE);
 		}
 
-		if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
+		if (gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
 		{
 			FSNearbyChat::instance().showDefaultChatBar(FALSE);
 		}
@@ -338,59 +108,58 @@ void FSNearbyChatControl::autohide()
 }
 
 // handle ESC key here
-BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
+BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	EChatType type = CHAT_TYPE_NORMAL;
 
 	// autohide the chat bar if escape key was pressed and we're the default chat bar
-	if(key==KEY_ESCAPE && mask==MASK_NONE)
+	if (key == KEY_ESCAPE && mask == MASK_NONE)
 	{
-		// we let ESC key go through to the rest of the UI code, so don't set handled=TRUE
+		// we let ESC key go through to the rest of the UI code, so don't set handled = true
 		autohide();
 		gAgent.stopTyping();
 	}
-	else if( KEY_RETURN == key )
+	else if (KEY_RETURN == key)
 	{
 		if (mask == MASK_CONTROL && gSavedSettings.getBOOL("FSUseCtrlShout"))
 		{
 			// shout
 			type = CHAT_TYPE_SHOUT;
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			type = CHAT_TYPE_WHISPER;
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			type = CHAT_TYPE_OOC;
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
 			addChar(llwchar(182));
-
 			return TRUE;
 		}
 		else
 		{
 			// say
 			type = CHAT_TYPE_NORMAL;
-			handled = TRUE;
+			handled = true;
 		}
 	}
 
-	if (handled == TRUE)
+	if (handled)
 	{
 		// save current line in the history buffer
 		LLLineEditor::onCommit();
 
 		// send chat to nearby chat hub
-		FSNearbyChat::instance().sendChat(getConvertedText(),type);
+		FSNearbyChat::instance().sendChat(getConvertedText(), type);
 
 		setText(LLStringExplicit(""));
 		autohide();
@@ -398,5 +167,5 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 	}
 
 	// let the line editor handle everything we don't handle
-	return LLLineEditor::handleKeyHere(key,mask);
+	return LLLineEditor::handleKeyHere(key, mask);
 }

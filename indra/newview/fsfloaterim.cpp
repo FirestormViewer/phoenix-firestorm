@@ -48,6 +48,7 @@
 #include "llcheckboxctrl.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
+#include "llconsole.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
@@ -1202,6 +1203,11 @@ void FSFloaterIM::setVisible(BOOL visible)
 	if (visible && isInVisibleChain())
 	{
 		sIMFloaterShowedSignal(mSessionID);
+		gConsole->addSession(mSessionID);
+	}
+	else
+	{
+		gConsole->removeSession(mSessionID);
 	}
 }
 

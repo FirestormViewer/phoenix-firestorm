@@ -85,7 +85,10 @@ public:
 	void showDisplayName(bool visible);
 	void showUsername(bool visible);
 	void showVoiceVolume(bool visible);
-	void sortByName();
+	// <FS:Ansariel> [FS Communication UI]
+	//void sortByName();
+	void sortByName(bool agent_on_top = false);
+	// </FS:Ansariel>
 	// <FS:Ansariel> FIRE-5283: Sort by username
 	void sortByUserName();
 	void setShowIcons(std::string param_name);

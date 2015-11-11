@@ -43,13 +43,11 @@ public:
 	virtual void onFocusLost();
 	virtual void setFocus(BOOL focus);
 
-	virtual BOOL handleKeyHere(KEY key,MASK mask);
-
-	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
+	virtual BOOL handleKeyHere(KEY key, MASK mask);
 
 private:
 	// Typing in progress, expand gestures etc.
-	static void onKeystroke(LLLineEditor* caller,void* userdata);
+	static void onKeystroke(LLLineEditor* caller, void* userdata);
 
 	// Unfocus and autohide chat bar accordingly if we are the default chat bar
 	void autohide();
