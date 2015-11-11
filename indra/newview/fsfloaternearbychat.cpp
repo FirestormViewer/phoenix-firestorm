@@ -753,13 +753,12 @@ BOOL FSFloaterNearbyChat::matchChatTypeTrigger(const std::string& in_str, std::s
 void FSFloaterNearbyChat::onChatBoxKeystroke()
 {
 	LLWString raw_text = mInputEditor->getWText();
-	
+
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
 	LLWStringUtil::trimHead(raw_text);
-	
 	S32 length = raw_text.length();
-	
+
 	S32 channel=0;
 	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
 		gSavedSettings.getBOOL("FSShowChatChannel"))
@@ -769,12 +768,13 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 		// </FS:Ansariel> [FS communication UI]
 	}
-	// -Zi
-	
+
 	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
-	if ( (length > 0) && (raw_text[0] != '/') && (!(gSavedSettings.getBOOL("AllowMUpose") && raw_text[0] == ':')) && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
-		// [/RLVa:KB]
+	if (length > 0 &&
+		raw_text[0] != '/' && (raw_text[0] != ':' || !gSavedSettings.getBOOL("AllowMUpose")) &&
+		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
+	// [/RLVa:KB]
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
 		if(channel==0)
@@ -784,10 +784,10 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 	{
 		gAgent.stopTyping();
 	}
-	
+
 	KEY key = gKeyboard->currentKey();
 	MASK mask = gKeyboard->currentMask(FALSE);
-	
+
 	// Ignore "special" keys, like backspace, arrows, etc.
 	if (length > 1
 		&& raw_text[0] == '/'
@@ -795,17 +795,17 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 		&& gSavedSettings.getBOOL("FSChatbarGestureAutoCompleteEnable"))
 	{
 		// we're starting a gesture, attempt to autocomplete
-		
+
 		std::string utf8_trigger = wstring_to_utf8str(raw_text);
 		std::string utf8_out_str(utf8_trigger);
-		
+
 		if (LLGestureMgr::instance().matchPrefix(utf8_trigger, &utf8_out_str))
 		{
 			std::string rest_of_match = utf8_out_str.substr(utf8_trigger.size());
 			if (!rest_of_match.empty())
 			{
 				mInputEditor->setText(utf8_trigger + rest_of_match); // keep original capitalization for user-entered part
-				
+
 				// Select to end of line, starting from the character
 				// after the last one the user typed.
 				mInputEditor->selectByCursorPosition(utf8_out_str.size()-rest_of_match.size(),utf8_out_str.size());
@@ -818,7 +818,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 			mInputEditor->endOfDoc();
 		}
 	}
-	
+
 	// <FS:CR> FIRE-3192 - Predictive name completion, based on code by Satomi Ahn
 	static LLCachedControl<bool> sNameAutocomplete(gSavedSettings, "FSChatbarNamePrediction");
 	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL && mask != MASK_CONTROL)
@@ -829,9 +829,9 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 			// Get a list of avatars within range
 			uuid_vec_t avatar_ids;
 			LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
-			
+
 			if (avatar_ids.empty()) return; // Nobody's in range!
-			
+
 			// Parse text for a pattern to search
 			std::string prefix = wstring_to_utf8str(raw_text.substr(0, cur_pos)); // Text before search string
 			std::string suffix = "";
@@ -841,32 +841,32 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 			}
 			size_t last_space = prefix.rfind(" ");
 			std::string pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1); // Search pattern
-			
+
 			prefix = prefix.substr(0, last_space + 1);
 			std::string match_pattern = "";
-			
+
 			if (pattern.size() < NAME_PREDICTION_MINIMUM_LENGTH) return;
-			
+
 			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
 			prefix = prefix.substr(0, last_space + 1);
 			std::string match = pattern;
 			LLStringUtil::toLower(pattern);
-			
+
 			std::string name;
 			bool found = false;
 			bool full_name = false;
 			uuid_vec_t::iterator iter = avatar_ids.begin();
-			
+
 			if (last_space != std::string::npos && !prefix.empty())
 			{
 				last_space = prefix.substr(0, prefix.length() - 2).rfind(" ");
 				match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
 				prefix = prefix.substr(0, last_space + 1);
-				
+
 				// prepare search pattern
 				std::string full_pattern(match_pattern + pattern);
 				LLStringUtil::toLower(full_pattern);
-				
+
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
@@ -881,7 +881,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					}
 				}
 			}
-			
+
 			if (found)
 			{
 				full_name = true; // ignore OnlyFirstName in case we want to disambiguate
@@ -892,7 +892,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				prefix += match_pattern; // first part of the pattern wasn't a pattern, so keep it in prefix
 				LLStringUtil::toLower(pattern);
 				iter = avatar_ids.begin();
-				
+
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
@@ -907,7 +907,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					}
 				}
 			}
-			
+
 			// if we found something by either method, replace the pattern by the avatar name
 			if (found)
 			{
