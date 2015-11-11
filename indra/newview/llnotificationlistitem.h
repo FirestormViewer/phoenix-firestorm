@@ -150,6 +150,9 @@ public:
 protected:
     LLGroupNotificationListItem(const Params& p);
 
+	// <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
+	virtual void setGroupName(std::string name);
+
     LLGroupIconCtrl* mGroupIcon;
     LLGroupIconCtrl* mGroupIconExp;
     LLUUID      mGroupId;
@@ -161,7 +164,8 @@ private:
     LLGroupNotificationListItem(const LLGroupNotificationListItem &);
     LLGroupNotificationListItem & operator=(LLGroupNotificationListItem &);
 
-    void setGroupName(std::string name);
+	// <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
+    //void setGroupName(std::string name);
     bool updateFromCache();
 };
 
@@ -172,7 +176,8 @@ public:
     static std::set<std::string> getTypes();
     virtual BOOL postBuild();
 
-    /*virtual*/ bool showPopup() { return false; }
+	// <FS:Ansariel> Allow group notifications and invitations to open the original toast on left-click
+    /*virtual*/ //bool showPopup() { return false; }
 
 private:
     friend class LLNotificationListItem;
@@ -200,7 +205,13 @@ public:
     static std::set<std::string> getTypes();
     virtual BOOL postBuild();
 
-    /*virtual*/ bool showPopup() { return false; }
+	// <FS:Ansariel> Allow group notifications and invitations to open the original toast on left-click
+    /*virtual*/ //bool showPopup() { return false; }
+
+// <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
+protected:
+	/*virtual*/ void setGroupName(std::string name);
+// </FS:Ansariel>
 
 private:
     friend class LLNotificationListItem;

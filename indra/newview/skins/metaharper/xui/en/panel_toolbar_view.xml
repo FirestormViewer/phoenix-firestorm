@@ -270,6 +270,7 @@
              side="bottom"
              follows="left|right|bottom"
              button_display_mode="icons_with_text"
+             max_rows="2"
              visible="true">
              <icon layout="topleft"
 	            height="28"

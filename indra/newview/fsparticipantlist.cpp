@@ -47,8 +47,6 @@
 #pragma warning (disable : 4355) // 'this' used in initializer list: yes, intentionally
 #endif
 
-static const LLAvatarItemAgentOnTopComparator AGENT_ON_TOP_NAME_COMPARATOR;
-
 // helper function to update AvatarList Item's indicator in the voice participant list
 static void update_speaker_indicator(const LLAvatarList* const avatar_list, const LLUUID& avatar_uuid, bool is_muted)
 {
@@ -605,8 +603,7 @@ void FSParticipantList::sort()
 			}
 			else
 			{
-				mAvatarList->setComparator(&AGENT_ON_TOP_NAME_COMPARATOR);
-				mAvatarList->sort();
+				mAvatarList->sortByName(true);
 			}
 			break;
 		case E_SORT_BY_RECENT_SPEAKERS:
@@ -907,19 +904,17 @@ bool FSParticipantList::FSParticipantListMenu::canBanSelectedMember(const LLUUID
 
 	if (gdatap->isRoleMemberDataComplete())
 	{
-		if (!gdatap->mMembers.size())
+		if (gdatap->mMembers.size())
 		{
-			return false;
-		}
-
-		LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find((participant_uuid));
-		if (mi != gdatap->mMembers.end())
-		{
-			LLGroupMemberData* member_data = (*mi).second;
-			// Is the member an owner?
-			if (member_data && member_data->isInRole(gdatap->mOwnerRole))
+			LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find((participant_uuid));
+			if (mi != gdatap->mMembers.end())
 			{
-				return false;
+				LLGroupMemberData* member_data = (*mi).second;
+				// Is the member an owner?
+				if (member_data && member_data->isInRole(gdatap->mOwnerRole))
+				{
+					return false;
+				}
 			}
 		}
 	}

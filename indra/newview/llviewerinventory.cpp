@@ -259,16 +259,9 @@ public:
 			uuid_vec_t items_to_open;
 			items_to_open.push_back(inventory_id);
 			//inventory_handler is just a stub, because we don't know from who this offer
-			// <FS:Ansariel> Moved check out of check_offer_throttle
+			// <FS:Ansariel> Always show item in inventory if we intentionally choose to do so
 			//open_inventory_offer(items_to_open, "inventory_handler");
-			if (gSavedSettings.getBOOL("ShowNewInventory"))
-			{
-				open_inventory_offer(items_to_open, "inventory_handler");
-			}
-			else if (!items_to_open.empty() && gSavedSettings.getBOOL("ShowInInventory"))
-			{
-				LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, items_to_open.back());
-			}
+			LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, items_to_open.back());
 			// </FS:Ansariel>
 			return true;
 		}
@@ -1936,7 +1929,8 @@ void sync_inventory_folder(const LLUUID& folder_id, const LLInventoryModel::item
 		{
 			// Item doesn't exist in newItems => purge (if it's a link)
 			if ( (pItem->getIsLinkType()) && 
-				 (LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
+				 // <FS:Ansariel> Commented out; causes FIRE-17217
+				 //(LLAssetType::AT_LINK_FOLDER != pItem->getActualType()) && 
 			     (items_to_remove.end() == std::find(items_to_remove.begin(), items_to_remove.end(), pItem)) )
 			{
 				items_to_remove.push_back(pItem);

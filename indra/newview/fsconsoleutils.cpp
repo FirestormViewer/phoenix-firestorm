@@ -103,7 +103,6 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!isNearbyChatVisible());
 	}
 	else
 	{
@@ -126,7 +125,6 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!isNearbyChatVisible());
 	}
 
 	return true;
@@ -173,7 +171,6 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 	LLColor4 chatcolor;
 	LLViewerChat::getChatColor(chat_msg, chatcolor);
 	gConsole->addConsoleLine(consoleChat, chatcolor);
-	gConsole->setVisible(!isNearbyChatVisible());
 }
 
 //static
@@ -214,13 +211,13 @@ bool FSConsoleUtils::ProcessInstantMessage(const LLUUID& session_id, const LLUUI
 		}
 	}
 
-	LLAvatarNameCache::get(from_id, boost::bind(&FSConsoleUtils::onProccessInstantMessageNameLookup, _1, _2, message, group));
+	LLAvatarNameCache::get(from_id, boost::bind(&FSConsoleUtils::onProccessInstantMessageNameLookup, _1, _2, message, group, session_id));
 
 	return true;
 }
 
 //static
-void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group)
+void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group, const LLUUID& session_id)
 {
 	const bool is_group = !group.empty();
 
@@ -254,6 +251,5 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	LLColor4 textColor;
 	LLViewerChat::getChatColor(chat, textColor, LLSD().with("is_local", false).with("for_console", true));
 
-	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
-	gConsole->setVisible(!isNearbyChatVisible());
+	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor, session_id);
 }

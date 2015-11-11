@@ -69,6 +69,8 @@ BOOL LLFloaterNotificationsTabbed::postBuild()
     mNotificationsSeparator->initTaggedList(LLNotificationListItem::getTransactionTypes(), mTransactionMessageList);
     mNotificationsSeparator->initUnTaggedList(mSystemMessageList);
     mNotificationsTabContainer = getChild<LLTabContainer>("notifications_tab_container");
+	// <FS:Ansariel> Remember last tab used
+	mNotificationsTabContainer->selectTab(gSavedPerAccountSettings.getS32("FSLastNotificationsTab"));
 
     mDeleteAllBtn = getChild<LLButton>("delete_all_button");
     mDeleteAllBtn->setClickedCallback(boost::bind(&LLFloaterNotificationsTabbed::onClickDeleteAllBtn,this));
@@ -117,6 +119,8 @@ void LLFloaterNotificationsTabbed::setSysWellChiclet(LLSysWellChiclet* chiclet)
 //---------------------------------------------------------------------------------
 LLFloaterNotificationsTabbed::~LLFloaterNotificationsTabbed()
 {
+	// <FS:Ansariel> Remember last tab used
+	gSavedPerAccountSettings.setS32("FSLastNotificationsTab", mNotificationsTabContainer->getCurrentPanelIndex());
 }
 
 //---------------------------------------------------------------------------------

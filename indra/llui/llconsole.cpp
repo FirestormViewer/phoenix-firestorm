@@ -63,7 +63,8 @@ LLConsole::LLConsole(const LLConsole::Params& p)
 	mFont(p.font),
 	mConsoleWidth(0),
 	mConsoleHeight(0),
-	mParseUrls(p.parse_urls) // <FS:Ansariel> If lines should be parsed for URLs
+	mParseUrls(p.parse_urls), // <FS:Ansariel> If lines should be parsed for URLs
+	mSessionSupport(p.session_support) // <FS:Ansariel> Session support
 {
 	if (p.font_size_index.isProvided())
 	{
@@ -174,6 +175,11 @@ void LLConsole::draw()
 		return;
 	}
 
+	// <FS:Ansariel> Session support
+	if (!mSessionSupport)
+	{
+		// This is done in update() if session support is enabled
+	// </FS:Ansariel>
 	U32 num_lines=0;
 
 	paragraph_t::reverse_iterator paragraph_it;
@@ -196,6 +202,9 @@ void LLConsole::draw()
 		paragraph_num--;
 		paragraph_it++;
 	}
+	// <FS:Ansariel> Session support
+	}
+	// </FS:Ansariel>
 
 	if (mParagraphs.empty())
 	{
@@ -267,6 +276,7 @@ void LLConsole::draw()
 	//	y_pos  += padding_vertical;
 	//}
 
+	paragraph_t::reverse_iterator paragraph_it;
 	static LLCachedControl<F32> consoleBackgroundOpacity(*LLUI::sSettingGroups["config"], "ConsoleBackgroundOpacity");
 	static LLUIColor cbcolor = LLUIColorTable::instance().getColor("ConsoleBackground");
 	LLColor4 color = cbcolor.get();
@@ -280,17 +290,49 @@ void LLConsole::draw()
 		static const F32 padding_vert = 5;
 		S32 total_width = 0;
 		S32 total_height = 0;
+		S32 lines_drawn = 0;
 
 		paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
 		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)
 		{
+			if (mSessionSupport)
+			{
+				// Skip paragraph if visible in floater and make sure we don't
+				// exceed the maximum number of lines we want to display
+				if (mCurrentSessions.find((*paragraph_it).mSessionID) != mCurrentSessions.end())
+				{
+					continue;
+				}
+				lines_drawn += (*paragraph_it).mLines.size();
+				if (lines_drawn > mMaxLines)
+				{
+					break;
+				}
+			}
+
 			total_height += llfloor( (*paragraph_it).mLines.size() * line_height + padding_vert);
 			total_width = llmax(total_width, llfloor( (*paragraph_it).mMaxWidth + padding_horizontal));
 		}
 		mBackgroundImage->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
 
+		lines_drawn = 0;
 		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)
 		{
+			if (mSessionSupport)
+			{
+				// Skip paragraph if visible in floater and make sure we don't
+				// exceed the maximum number of lines we want to display
+				if (mCurrentSessions.find((*paragraph_it).mSessionID) != mCurrentSessions.end())
+				{
+					continue;
+				}
+				lines_drawn += (*paragraph_it).mLines.size();
+				if (lines_drawn > mMaxLines)
+				{
+					break;
+				}
+			}
+
 			F32 y_off=0;
 			F32 alpha;
 			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
@@ -339,9 +381,26 @@ void LLConsole::draw()
 	}
 	else
 	{
+		S32 lines_drawn = 0;
+
 		paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
 		for(paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; paragraph_it++)
 		{
+			if (mSessionSupport)
+			{
+				// Skip paragraph if visible in floater and make sure we don't
+				// exceed the maximum number of lines we want to display
+				if (mCurrentSessions.find((*paragraph_it).mSessionID) != mCurrentSessions.end())
+				{
+					continue;
+				}
+				lines_drawn += (*paragraph_it).mLines.size();
+				if (lines_drawn > mMaxLines)
+				{
+					break;
+				}
+			}
+
 			S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + padding_vertical);
 			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
 
@@ -397,20 +456,23 @@ void LLConsole::draw()
 }
 
 // <FS:Ansariel> Chat console
-void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
+void LLConsole::addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags)
 {
 	LLWString wline = utf8str_to_wstring(utf8line);
-	addConsoleLine(wline, color, styleflags);
+	addConsoleLine(wline, color, session_id, styleflags);
 }
 
-void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LLFontGL::StyleFlags styleflags)
+void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id, LLFontGL::StyleFlags styleflags)
 {
 	if (wline.empty())
 	{
 		return;
 	}
 
-	removeExtraLines();
+	if (!mSessionSupport)
+	{
+		removeExtraLines();
+	}
 
 	mMutex.lock();
 	mLines.push_back(wline);
@@ -418,6 +480,7 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 	mAddTimes.push_back(mTimer.getElapsedTimeF32());
 	mLineColors.push_back(color);
 	mLineStyle.push_back(styleflags);
+	mSessionIDs.push_back(session_id);
 	mMutex.unlock();
 }
 
@@ -430,6 +493,7 @@ void LLConsole::clear()
 	mLineLengths.clear();
 	mLineColors.clear();
 	mLineStyle.clear();
+	mSessionIDs.clear();
 	mMutex.unlock();
 
 	mTimer.reset();
@@ -580,11 +644,12 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
 }
 
 //Pass in the string and the default color for this block of text.
-// <FS:Ansariel> Added styleflags parameter for style customization
+// <FS:Ansariel> Added styleflags parameter for style customization and session support
 //LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width) 
-LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, bool parse_urls, LLConsole* console) 
+//:	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
+LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console) 
+:	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1), mSessionID(session_id)
 // </FS:Ansariel>
-:	mParagraphText(str), mAddTime(add_time), mMaxWidth(-1)
 {
 	// <FS:Ansariel> Parse SLURLs
 	mSourceText = str;
@@ -607,7 +672,10 @@ LLConsole::Paragraph::Paragraph (LLWString str, const LLColor4 &color, F32 add_t
 				label += query;
 			}
 
-			LLWStringUtil::replaceString(mParagraphText, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(label));
+			// This works for LLUrlEntryHTTPLabel and LLUrlEntrySLLabel because
+			// there is no callback involved for which we are storing the
+			// matched Url
+			LLWStringUtil::replaceString(mParagraphText, utf8str_to_wstring(urlMatch.getMatchedText()), utf8str_to_wstring(label));
 			mUrlLabels[urlMatch.getUrl()] = label;
 
 			// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
@@ -661,6 +729,7 @@ void LLConsole::updateClass()
 	} 
 }
 
+static LLTrace::BlockTimerStatHandle FTM_CONSOLE_UPDATE_PARAGRAPHS("Update Console Paragraphs");
 void LLConsole::update()
 {
 	{
@@ -684,6 +753,7 @@ void LLConsole::update()
 							mFont, 
 							(F32)getRect().getWidth(),
 							(!mLineStyle.empty() ? mLineStyle.front() : LLFontGL::NORMAL),
+							(!mSessionIDs.empty() ? mSessionIDs.front(): LLUUID::null),
 							mParseUrls,
 							this));
 			mLines.pop_front();
@@ -691,14 +761,55 @@ void LLConsole::update()
 				mLineColors.pop_front();
 			if (!mLineStyle.empty())
 				mLineStyle.pop_front();
+			if (!mSessionIDs.empty())
+				mSessionIDs.pop_front();
 			// </FS:Ansariel>
 		}
 	}
 
 	// remove old paragraphs which can't possibly be visible any more.  ::draw() will do something similar but more conservative - we do this here because ::draw() isn't guaranteed to ever be called!  (i.e. the console isn't visible)
+	// <FS:Ansariel> Session support
+	if (!mSessionSupport)
+	{
+	// </FS:Ansariel>
 	while ((S32)mParagraphs.size() > llmax((S32)0, (S32)(mMaxLines)))
 	{
 			mParagraphs.pop_front();
 	}
+	// <FS:Ansariel> Session support
+	}
+	else
+	{
+		LL_RECORD_BLOCK_TIME(FTM_CONSOLE_UPDATE_PARAGRAPHS);
+
+		// skip lines added more than mLinePersistTime ago
+		F32 skip_time = mTimer.getElapsedTimeF32() - mLinePersistTime;
+
+		paragraph_t temp_para;
+		std::map<LLUUID, S32> session_map;
+		for (paragraph_t::reverse_iterator it = mParagraphs.rbegin(); it != mParagraphs.rend(); ++it)
+		{
+			Paragraph& para = *it;
+			session_map[para.mSessionID] += (S32)para.mLines.size();
+			if (session_map[para.mSessionID] <= mMaxLines && // max lines on a per session basis
+				!((mLinePersistTime > 0.f) && (para.mAddTime - skip_time) / (mLinePersistTime - mFadeTime) <= 0.f)) // not expired yet
+			{
+				temp_para.push_front(para);
+			}
+		}
+		mParagraphs.swap(temp_para);
+	}
+	// </FS:Ansariel>
 }
 
+// <FS:Ansariel> Session support
+void LLConsole::addSession(const LLUUID& session_id)
+{
+	mCurrentSessions.insert(session_id);
+}
+
+void LLConsole::removeSession(const LLUUID& session_id)
+{
+	mCurrentSessions.erase(session_id);
+}
+// </FS:Ansariel>

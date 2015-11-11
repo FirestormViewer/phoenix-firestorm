@@ -3006,14 +3006,6 @@ Versuchen Sie es in einigen Minuten erneut.
 			<button name="Info" text="Info"/>
 		</form>
 	</notification>
-	<notification name="JoinGroupProtectionNotice">
-		Für den Beitritt zu dieser Gruppe ist eine Gebühr fällig und die Einladung kann daher aufgrund der aktuellen Einstellungen nicht angenommen werden. Um dies zu ändern, siehe Einstellungen &gt; Firestorm &gt; Sicherheit.
-
-[MESSAGE]
-		<form name="form">
-			<button name="Info" text="Info"/>
-		</form>
-	</notification>
 	<notification name="TeleportOffered">
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 

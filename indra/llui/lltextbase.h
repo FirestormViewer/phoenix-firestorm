@@ -503,6 +503,9 @@ public:
 	void					setWordWrap(bool wrap);
 	LLScrollContainer*		getScrollContainer() const { return mScroller; }
 
+	// <FS:Ansariel> Getter for line spacing (pixels)
+	S32						getLineSpacingPixels() const { return mLineSpacingPixels; }
+
 protected:
 	// protected member variables
 	// List of offsets and segment index of the start of each line.  Always has at least one node (0).

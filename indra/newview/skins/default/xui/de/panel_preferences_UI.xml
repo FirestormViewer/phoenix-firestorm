@@ -52,6 +52,7 @@
 			<combo_box.item label="Unten rechts" name="ScriptDialogPositionOption_5"/>
 		</combo_box>
 		<check_box label="Animierte Skript-Dialoge" name="FSAnimatedScriptDialogs" tool_tip="Aktivieren, um Skript-Dialoge animiert einzublenden (Klassisches V1.x-Verhalten)."/>
+		<slider label_width="190" width="430" label="Sichtbare Zeilen pro Skriptdialog:" name="FSRowsPerScriptDialog" tool_tip="Die maximale Anzahl an Zeilen in einem Skriptdialog, die gleichzeitig sichtbar sind."/>
 		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)

@@ -226,6 +226,8 @@ static const LLAvatarItemNameComparator NAME_COMPARATOR;
 static const LLFlatListView::ItemReverseComparator REVERSE_NAME_COMPARATOR(NAME_COMPARATOR);
 // <FS:Ansariel> FIRE-5283: Sort by username
 static const LLAvatarItemUserNameComparator USERNAME_COMPARATOR;
+// <FS:Ansariel> [FS Communication UI]
+static const LLAvatarItemAgentOnTopComparator AGENT_ON_TOP_NAME_COMPARATOR;
 
 LLAvatarList::Params::Params()
 : ignore_online_status("ignore_online_status", false)
@@ -453,9 +455,21 @@ void LLAvatarList::onFocusReceived()
 	gEditMenuHandler = this;
 }
 
-void LLAvatarList::sortByName()
+// <FS:Ansariel> [FS Communication UI]
+//void LLAvatarList::sortByName()
+//{
+//	setComparator(&NAME_COMPARATOR);
+void LLAvatarList::sortByName(bool agent_on_top /* = false*/)
 {
-	setComparator(&NAME_COMPARATOR);
+	if (agent_on_top)
+	{
+		setComparator(&AGENT_ON_TOP_NAME_COMPARATOR);
+	}
+	else
+	{
+		setComparator(&NAME_COMPARATOR);
+	}
+// </FS:Ansariel>
 	sort();
 }
 
@@ -678,7 +692,15 @@ boost::signals2::connection LLAvatarList::setItemDoubleClickCallback(const mouse
 //virtual
 S32 LLAvatarList::notifyParent(const LLSD& info)
 {
-	if (info.has("sort") && &NAME_COMPARATOR == mItemComparator)
+	// <FS:Ansariel> FIRE-11344: Group IM chatter list (and probably other) not sorting properly
+	//if (info.has("sort") && &NAME_COMPARATOR == mItemComparator)
+	if (info.has("sort") &&
+		(
+			&NAME_COMPARATOR == mItemComparator ||
+			&USERNAME_COMPARATOR == mItemComparator ||
+			&AGENT_ON_TOP_NAME_COMPARATOR == mItemComparator
+		))
+	// </FS:Ansariel>
 	{
 		sort();
 		return 1;

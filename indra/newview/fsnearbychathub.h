@@ -32,6 +32,7 @@
 #include "llviewerchat.h"
 
 class FSNearbyChatControl;
+class LLUICtrl;
 
 class FSNearbyChat : public LLSingleton<FSNearbyChat>
 {
@@ -52,18 +53,20 @@ public:
 	void registerChatBar(FSNearbyChatControl* chatBar);
 
 	// set the contents of the chat bar to "text" if it was empty, otherwise just show it
-	void showDefaultChatBar(BOOL visible,const char* text=0) const;
+	void showDefaultChatBar(BOOL visible, const char* text = NULL) const;
 
-	void sendChat(LLWString text,EChatType type);
+	void sendChat(LLWString text, EChatType type);
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel, S32* last_channel, bool* is_set);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);
 
-	void setFocusedInputEditor(FSNearbyChatControl* inputEditor,BOOL focus);
+	void setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus);
 
 	BOOL defaultChatBarIsIdle() const;
 	BOOL defaultChatBarHasFocus() const;
+
+	static void handleChatBarKeystroke(LLUICtrl* source);
 
 	FSNearbyChatControl* mFocusedInputEditor;
 };

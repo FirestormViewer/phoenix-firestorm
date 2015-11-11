@@ -511,6 +511,29 @@ void LLGroupNotificationListItem::setGroupName(std::string name)
     }
 }
 
+// <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
+void LLGroupNoticeNotificationListItem::setGroupName(std::string name)
+{
+	if (!name.empty())
+	{
+		LLStringUtil::format_map_t string_args;
+		string_args["[GROUP_NAME]"] = llformat("%s", name.c_str());
+		std::string group_box_str = getString("group_name_text", string_args);
+		mSenderOrFeeBox->setValue(name);
+		mGroupNameBoxExp->setValue(group_box_str);
+		mSenderOrFeeBox->setVisible(TRUE);
+		mGroupNameBoxExp->setVisible(TRUE);
+	}
+	else
+	{
+		mSenderOrFeeBox->setValue(LLStringUtil::null);
+		mGroupNameBoxExp->setValue(LLStringUtil::null);
+		mGroupNameBoxExp->setVisible(FALSE);
+		mSenderOrFeeBox->setVisible(FALSE);
+	}
+}
+// </FS:Ansariel>
+
 void LLGroupNoticeNotificationListItem::setSender(std::string sender)
 {
     if (!sender.empty())
@@ -518,14 +541,14 @@ void LLGroupNoticeNotificationListItem::setSender(std::string sender)
         LLStringUtil::format_map_t string_args;
         string_args["[SENDER_RESIDENT]"] = llformat("%s", sender.c_str());
         std::string sender_text = getString("sender_resident_text", string_args);
-        mSenderOrFeeBox->setValue(sender_text);
+        //mSenderOrFeeBox->setValue(sender_text); // <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
         mSenderOrFeeBoxExp->setValue(sender_text);
-        mSenderOrFeeBox->setVisible(TRUE);
+        //mSenderOrFeeBox->setVisible(TRUE); // <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
         mSenderOrFeeBoxExp->setVisible(TRUE);
     } else {
-        mSenderOrFeeBox->setValue(LLStringUtil::null);
+        //mSenderOrFeeBox->setValue(LLStringUtil::null); // <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
         mSenderOrFeeBoxExp->setValue(LLStringUtil::null);
-        mSenderOrFeeBox->setVisible(FALSE);
+        //mSenderOrFeeBox->setVisible(FALSE); // <FS:Ansariel> FIRE-17213: Improve display of condensed group notices
         mSenderOrFeeBoxExp->setVisible(FALSE);
     }
 }
