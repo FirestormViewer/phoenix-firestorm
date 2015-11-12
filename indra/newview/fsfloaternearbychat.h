@@ -71,11 +71,11 @@ public:
 
 	static FSFloaterNearbyChat* findInstance();
 	static FSFloaterNearbyChat* getInstance();
-	
+
 	void removeScreenChat();
-	
+
 	static bool isChatMultiTab();
-	
+
 	BOOL getVisible();
 
 	void onHistoryButtonClicked();
@@ -92,12 +92,9 @@ public:
 	S32 getMessageArchiveLength() {return mMessageArchive.size();}
 
 	virtual BOOL handleKeyHere( KEY key, MASK mask );
-	
+
 	static void startChat(const char* line);
 	static void stopChat();
-	
-	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
-	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
 
 	void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
 	void updateShowMutedChatHistory(const LLSD &data);
@@ -108,6 +105,7 @@ protected:
 	void onChatBoxFocusReceived();
 	
 	void sendChat( EChatType type );
+	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	

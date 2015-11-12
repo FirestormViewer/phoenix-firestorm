@@ -247,6 +247,12 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	{
 		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 	}
+
+	sendChatFromViewer(wtext, out_text, type, animate, channel);
+}
+
+void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel)
+{
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
 

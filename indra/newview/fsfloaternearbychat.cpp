@@ -846,82 +846,19 @@ void FSFloaterNearbyChat::onChatTypeChanged()
 
 void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate)
 {
-	sendChatFromViewer(utf8str_to_wstring(utf8text), type, animate);
-}
-
-void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate)
-{
+	LLWString wtext = utf8string_to_wstring(utf8text);
 	S32 channel = 0;
 	bool is_set = false;
 	LLWString out_text = FSNearbyChat::stripChannelNumber(wtext, &channel, &sLastSpecialChatChannel, &is_set);
-	// If "/<number>" is not specified, see if a channel has been set in
-	//  the spinner.
+	// If "/<number>" is not specified, see if a channel has been set in the spinner.
 	if (!is_set &&
 		gSavedSettings.getBOOL("FSNearbyChatbar") &&
 		gSavedSettings.getBOOL("FSShowChatChannel"))
 	{
-		// <FS:Ansariel> [FS communication UI]
-		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		// </FS:Ansariel> [FS communication UI]
 	}
-	std::string utf8_out_text = wstring_to_utf8str(out_text);
-	std::string utf8_text = wstring_to_utf8str(wtext);
-	
-	utf8_text = utf8str_trim(utf8_text);
-	if (!utf8_text.empty())
-	{
-		utf8_text = utf8str_truncate(utf8_text, MAX_STRING - 1);
-	}
-	
-	// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
-	if ( (0 == channel) && (rlv_handler_t::isEnabled()) )
-	{
-		// Adjust the (public) chat "volume" on chat and gestures (also takes care of playing the proper animation)
-		if ( ((CHAT_TYPE_SHOUT == type) || (CHAT_TYPE_NORMAL == type)) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
-			type = CHAT_TYPE_WHISPER;
-		else if ( (CHAT_TYPE_SHOUT == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
-			type = CHAT_TYPE_NORMAL;
-		else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
-			type = CHAT_TYPE_NORMAL;
-		
-		animate &= !gRlvHandler.hasBehaviour( (!RlvUtil::isEmote(utf8_text)) ? RLV_BHVR_REDIRCHAT : RLV_BHVR_REDIREMOTE );
-	}
-	// [/RLVa:KB]
-	
-	// Don't animate for chats people can't hear (chat to scripts)
-	if (animate && (channel == 0))
-	{
-		if (type == CHAT_TYPE_WHISPER)
-		{
-			LL_DEBUGS("FSFloaterNearbyChat") << "You whisper " << utf8_text << LL_ENDL;
-			gAgent.sendAnimationRequest(ANIM_AGENT_WHISPER, ANIM_REQUEST_START);
-		}
-		else if (type == CHAT_TYPE_NORMAL)
-		{
-			LL_DEBUGS("FSFloaterNearbyChat") << "You say " << utf8_text << LL_ENDL;
-			gAgent.sendAnimationRequest(ANIM_AGENT_TALK, ANIM_REQUEST_START);
-		}
-		else if (type == CHAT_TYPE_SHOUT)
-		{
-			LL_DEBUGS("FSFloaterNearbyChat") << "You shout " << utf8_text << LL_ENDL;
-			gAgent.sendAnimationRequest(ANIM_AGENT_SHOUT, ANIM_REQUEST_START);
-		}
-		else
-		{
-			LL_INFOS("FSFloaterNearbyChat") << "send_chat_from_viewer() - invalid volume" << LL_ENDL;
-			return;
-		}
-	}
-	else
-	{
-		if (type != CHAT_TYPE_START && type != CHAT_TYPE_STOP)
-		{
-			LL_DEBUGS("FSFloaterNearbyChat") << "Channel chat: " << utf8_text << LL_ENDL;
-		}
-	}
-	
-	send_chat_from_viewer(utf8_out_text, type, channel);
+
+	FSNearbyChat::sendChatFromViewer(wtext, out_text, type, animate, channel);
 }
 
 // Exit "chat mode" and do the appropriate focus changes

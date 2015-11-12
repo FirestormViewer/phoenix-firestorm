@@ -34,8 +34,6 @@
 class FSNearbyChatControl;
 class LLUICtrl;
 
-void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
-
 class FSNearbyChat : public LLSingleton<FSNearbyChat>
 {
 	friend class LLSingleton<FSNearbyChat>;
@@ -62,6 +60,7 @@ public:
 	static EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);
+	static void sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel);
 
 	void setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus);
 
