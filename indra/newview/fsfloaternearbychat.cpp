@@ -713,7 +713,14 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 
 void FSFloaterNearbyChat::onChatBoxKeystroke()
 {
-	FSNearbyChat::handleChatBarKeystroke(mInputEditor);
+	S32 channel = 0;
+	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
+		gSavedSettings.getBOOL("FSShowChatChannel"))
+	{
+		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+	}
+
+	FSNearbyChat::handleChatBarKeystroke(mInputEditor, channel);
 }
 
 // static

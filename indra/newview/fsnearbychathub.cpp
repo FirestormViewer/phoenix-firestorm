@@ -239,15 +239,6 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	S32 channel = 0;
 	bool is_set = false;
 	LLWString out_text = stripChannelNumber(wtext, &channel, &sLastSpecialChatChannel, &is_set);
-	// If "/<number>" is not specified, see if a channel has been set in
-	//  the spinner.
-	if (!is_set &&
-		gSavedSettings.getBOOL("FSNearbyChatbar") &&
-		gSavedSettings.getBOOL("FSShowChatChannel"))
-	{
-		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-	}
-
 	sendChatFromViewer(wtext, out_text, type, animate, channel);
 }
 
@@ -443,14 +434,6 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 		S32 channel = 0;
 		bool is_set = false;
 		stripChannelNumber(text, &channel, &sLastSpecialChatChannel, &is_set);
-		// If "/<number>" is not specified, see if a channel has been set in
-		//  the spinner.
-		if (!is_set &&
-			gSavedSettings.getBOOL("FSNearbyChatbar") &&
-			gSavedSettings.getBOOL("FSShowChatChannel"))
-		{
-			channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		}
 		
 		std::string utf8text = wstring_to_utf8str(text);
 		// Try to trigger a gesture, if not chat to a script.
@@ -606,7 +589,7 @@ bool matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 }
 
 //static
-void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source)
+void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 */)
 {
 	LLChatEntry* chat_entry = dynamic_cast<LLChatEntry*>(source);
 	LLLineEditor* line_editor = dynamic_cast<LLLineEditor*>(source);
@@ -631,26 +614,15 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source)
 	LLWStringUtil::trimHead(raw_text);
 	S32 length = raw_text.length();
 
-	S32 channel=0;
-	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
-		gSavedSettings.getBOOL("FSShowChatChannel"))
-	{
-		// <FS:Ansariel> [FS communication UI]
-		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		// </FS:Ansariel> [FS communication UI]
-	}
-
-	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
-	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
 	if (length > 0 &&
 		raw_text[0] != '/' && (raw_text[0] != ':' || !gSavedSettings.getBOOL("AllowMUpose")) &&
 		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
-	// [/RLVa:KB]
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
-		if(channel==0)
+		if (channel == 0)
+		{
 			gAgent.startTyping();
+		}
 	}
 	else
 	{

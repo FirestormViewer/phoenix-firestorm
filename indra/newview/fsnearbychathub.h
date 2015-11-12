@@ -67,7 +67,7 @@ public:
 	BOOL defaultChatBarIsIdle() const;
 	BOOL defaultChatBarHasFocus() const;
 
-	static void handleChatBarKeystroke(LLUICtrl* source);
+	static void handleChatBarKeystroke(LLUICtrl* source, S32 channel = 0);
 
 	FSNearbyChatControl* mFocusedInputEditor;
 };
