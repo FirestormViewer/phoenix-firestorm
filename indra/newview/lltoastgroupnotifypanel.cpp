@@ -131,17 +131,23 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	BOOL hasInventory = payload["inventory_offer"].isDefined();
 
 	// attachment container (if any)
-	LLPanel* pAttachContainer = getChild<LLPanel>("attachment_container");
+	LLPanel* pAttachContainer = findChild<LLPanel>("attachment_container");
 	// attachment container label (if any)
-	LLTextBox* pAttachContainerLabel = getChild<LLTextBox>("attachment_label");
+	LLTextBox* pAttachContainerLabel = findChild<LLTextBox>("attachment_label");
 	//attachment text
 	LLTextBox * pAttachLink = getChild<LLTextBox>("attachment");
 	//attachment icon
 	LLIconCtrl* pAttachIcon = getChild<LLIconCtrl>("attachment_icon", TRUE);
 
 	//If attachment is empty let it be invisible and not take place at the panel
-	pAttachContainer->setVisible(hasInventory);
-	pAttachContainerLabel->setVisible(hasInventory);
+	if (pAttachContainer)
+	{
+		pAttachContainer->setVisible(hasInventory);
+	}
+	if (pAttachContainerLabel)
+	{
+		pAttachContainerLabel->setVisible(hasInventory);
+	}
 	pAttachLink->setVisible(hasInventory);
 	pAttachIcon->setVisible(hasInventory);
 	if (hasInventory) {
