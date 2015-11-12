@@ -27,14 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
-// llui
-#include "lllineeditor.h"
-#include "llspinctrl.h"
-
-// newview
 #include "fsnearbychatcontrol.h"
 #include "fsnearbychathub.h"
-#include "fsfloaternearbychat.h"
 #include "llagent.h" 		// gAgent
 #include "llagentcamera.h"	// gAgentCamera
 #include "llautoreplace.h"
@@ -43,7 +37,8 @@
 static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");
 
 FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
-	LLLineEditor(p)
+	LLLineEditor(p),
+	mDefault(p.is_default)
 {
 	//<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
 	setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -93,7 +88,7 @@ void FSNearbyChatControl::setFocus(BOOL focus)
 
 void FSNearbyChatControl::autohide()
 {
-	if (getName() == "default_chat_bar")
+	if (isDefault())
 	{
 		if (gSavedSettings.getBOOL("CloseChatOnReturn"))
 		{
@@ -142,6 +137,7 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
+			// linefeed
 			addChar(llwchar(182));
 			return TRUE;
 		}

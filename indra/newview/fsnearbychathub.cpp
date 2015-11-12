@@ -504,10 +504,9 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 // all chat bars call this function and we keep the first or one that's seen as the default
 void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
 {
-	// TODO: make this a Param option "is_default"
-	if (!mDefaultChatBar || chatBar->getName() == "default_chat_bar")
+	if (!mDefaultChatBar || chatBar->isDefault())
 	{
-		mDefaultChatBar=chatBar;
+		mDefaultChatBar = chatBar;
 	}
 }
 
@@ -520,7 +519,7 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
 	}
 
 	// change settings control to signal button state
-	gSavedSettings.setBOOL("MainChatbarVisible",visible);
+	gSavedSettings.setBOOL("MainChatbarVisible", visible);
 
 	mDefaultChatBar->getParent()->setVisible(visible);
 	mDefaultChatBar->setVisible(visible);
@@ -556,11 +555,10 @@ void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL 
 	{
 		mFocusedInputEditor = inputEditor;
 	}
-
-	// only remove focus if the request came from the previously active input editor
-	// to avoid races
 	else if (mFocusedInputEditor == inputEditor)
 	{
+		// only remove focus if the request came from the previously active input editor
+		// to avoid races
 		mFocusedInputEditor = NULL;
 	}
 }
@@ -569,7 +567,7 @@ void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL 
 // and the hide chat bar feature in mouselook in llagent.cpp
 BOOL FSNearbyChat::defaultChatBarIsIdle() const
 {
-	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
+	if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
 	{
 		return mFocusedInputEditor->getText().empty();
 	}
@@ -581,7 +579,7 @@ BOOL FSNearbyChat::defaultChatBarIsIdle() const
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
 BOOL FSNearbyChat::defaultChatBarHasFocus() const
 {
-	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
+	if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
 	{
 		return TRUE;
 	}
