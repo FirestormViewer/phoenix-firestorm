@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="NearBy Chat Menu" opaque="true" visible="false">
+	<menu_item_check
+		label="Show Radar..."
+		name="nearby_people">
+		<menu_item_check.on_click
+			function="Floater.Toggle"
+			userdata="fs_radar"/>
+		<menu_item_check.on_check
+			function="Floater.Visible"
+			userdata="fs_radar"/>
+	</menu_item_check>
+	<menu_item_check
+		label="Show Nearby Voice..."
+		name="nearby_voice">
+		<menu_item_check.on_click
+			function="Floater.Toggle"
+			userdata="fs_voice_controls"/>
+		<menu_item_check.on_check
+			function="Floater.Visible"
+			userdata="fs_voice_controls"/>
+	</menu_item_check>
+	<menu_item_check
+		label="Show Block List..."
+		name="block_list">
+		<menu_item_check.on_click
+			function="ChatOptions.Action"
+			userdata="blocklist"/>
+		<menu_item_check.on_check
+			function="ChatOptions.Check"
+			userdata="blocklist"/>
+	</menu_item_check>
+	<menu_item_separator/>
+	<menu_item_check
+		label="Use V1 style chat headers"
+		name="plain_text_chat_history">
+		<menu_item_check.on_check
+			function="CheckControl"
+			parameter="PlainTextChatHistory" />
+		<menu_item_check.on_click
+			function="ToggleControl"
+			parameter="PlainTextChatHistory" />
+	</menu_item_check>
+</toggleable_menu>

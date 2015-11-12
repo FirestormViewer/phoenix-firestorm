@@ -90,6 +90,9 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 	,mUnreadMessages(0)
 	,mUnreadMessagesMuted(0)
 {
+	//menu
+	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked, this, _2));
 }
 
 FSFloaterNearbyChat::~FSFloaterNearbyChat()
@@ -115,21 +118,6 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 BOOL FSFloaterNearbyChat::postBuild()
 {
 	setIsSingleInstance(TRUE);
-	
-	//menu
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-
-	enable_registrar.add("NearbyChat.Check", boost::bind(&FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem, this, _2));
-	registrar.add("NearbyChat.Action", boost::bind(&FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked, this, _2));
-	
-	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_nearby_chat.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if (menu)
-	{
-		mPopupMenuHandle = menu->getHandle();
-	}
-
-	gSavedSettings.declareS32("nearbychat_showicons_and_names", 2, "NearByChat header settings");
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
 	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -302,13 +290,6 @@ BOOL FSFloaterNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_fla
 	return TRUE;
 }
 
-void FSFloaterNearbyChat::onNearbySpeakers()
-{
-	LLSD param;
-	param["people_panel_tab_name"] = "nearby_panel";
-	LLFloaterSidePanelContainer::showPanel("people", "panel_people", param);
-}
-
 void FSFloaterNearbyChat::onHistoryButtonClicked()
 {
 	if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
@@ -321,17 +302,48 @@ void FSFloaterNearbyChat::onHistoryButtonClicked()
 	}
 }
 
-void FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)
+void FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked(const LLSD& userdata)
 {
+	std::string option = userdata.asString();
+
+	if (option == "blocklist")
+	{
+		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+		{
+			LLFloaterReg::toggleInstance("fs_blocklist");
+		}
+		else
+		{
+			LLPanel* panel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+			if (!panel)
+			{
+				return;
+			}
+
+			if (panel->isInVisibleChain())
+			{
+				LLFloaterReg::hideInstance("people");
+			}
+			else
+			{
+				LLFloaterSidePanelContainer::showPanel("people", "panel_people", LLSD().with("people_panel_tab_name", "blocked_panel"));
+			}
+		}
+	}
 }
 
-bool FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
+bool FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
 {
-	std::string str = userdata.asString();
-	if (str == "nearby_people")
+	std::string option = userdata.asString();
+
+	if (option == "blocklist")
 	{
-		onNearbySpeakers();
+		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+		{
+			return LLFloaterReg::instanceVisible("fs_blocklist");
+		}
 	}
+
 	return false;
 }
 

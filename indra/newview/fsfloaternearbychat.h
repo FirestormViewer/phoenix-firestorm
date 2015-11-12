@@ -49,16 +49,16 @@ public:
 	FSFloaterNearbyChat(const LLSD& key);
 	~FSFloaterNearbyChat();
 
-	BOOL	postBuild			();
+	BOOL	postBuild();
 
 	/** @param archive true - to save a message to the chat history log */
-	void	addMessage			(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
-	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
-	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
+	void	addMessage(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
+	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
 
-	/*virtual*/ void	onOpen	(const LLSD& key);
+	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void setVisible(BOOL visible);
 
-	/*virtual*/ void	setVisible(BOOL visible);
 	void	openFloater(const LLSD& key);
 
 	void clearChatHistory();
@@ -115,10 +115,6 @@ protected:
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	onNearbySpeakers();
-
-private:
-	LLHandle<LLView>	mPopupMenuHandle;
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="NearBy Chat Menu">
+	<menu_item_check label="Radar anzeigen..." name="nearby_people"/>
+	<menu_item_check label="Stimmen in der Nähe anzeigen..." name="nearby_voice"/>
+	<menu_item_check label="Blockierliste anzeigen..." name="block_list"/>
+	<menu_item_check label="V1-Stil für Chatverlauf verwenden" name="plain_text_chat_history"/>
+</toggleable_menu>
