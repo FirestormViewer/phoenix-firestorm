@@ -48,15 +48,8 @@
 
 static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 
-// <FS:KC> Fix for bad edge snapping
 // *HACK* chat bar cannot return its correct height for some reason
 static const S32 MAGIC_CHAT_BAR_PAD = 5;
-// </FS:KC> Fix for bad edge snapping
-
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
-void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
-//</FS:TS> FIRE-787
 
 struct LLChatTypeTrigger {
 	std::string name;
@@ -68,30 +61,47 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/shout"		, CHAT_TYPE_SHOUT}
 };
 
-S32 FSNearbyChat::sLastSpecialChatChannel = 0;
 
-FSNearbyChat::FSNearbyChat() :
-	mDefaultChatBar(NULL),
-	mFocusedInputEditor(NULL)
+// This function just sends the message, with no other processing. Moved out
+// of send_chat_from_viewer.
+void really_send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
 {
-	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
+	LLMessageSystem* msg = gMessageSystem;
+
+	if (!msg)
+	{
+		return;
+	}
+
+	if (channel >= 0)
+	{
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, utf8_out_text);
+		msg->addU8Fast(_PREHASH_Type, type);
+		msg->addS32("Channel", channel);
+	}
+	else
+	{
+		msg->newMessage("ScriptDialogReply");
+		msg->nextBlock("AgentData");
+		msg->addUUID("AgentID", gAgentID);
+		msg->addUUID("SessionID", gAgentSessionID);
+		msg->nextBlock("Data");
+		msg->addUUID("ObjectID", gAgentID);
+		msg->addS32("ChatChannel", channel);
+		msg->addS32("ButtonIndex", 0);
+		msg->addString("ButtonLabel", utf8_out_text);
+	}
+
+	gAgent.sendReliableMessage();
 }
 
-FSNearbyChat::~FSNearbyChat()
-{
-}
-
-void FSNearbyChat::onDefaultChatBarButtonClicked()
-{
-	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
-}
-
-//void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
-// [/RLVa:KB]
 {
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
 	// Only process chat messages (ie not CHAT_TYPE_START, CHAT_TYPE_STOP, etc)
 	if ( (rlv_handler_t::isEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
 	{
@@ -135,9 +145,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 			}
 		}
 	}
-// [/RLVa:KB]
 
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 	U32 split = MAX_MSG_BUF_SIZE - 1;
 	U32 pos = 0;
 	U32 total = utf8_out_text.length();
@@ -194,51 +202,31 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	}
 
 	// moved here so we don't bump the count for every message segment
-	add(LLStatViewer::CHAT_COUNT,1);
-//</FS:TS> FIRE-787
+	add(LLStatViewer::CHAT_COUNT, 1);
 }
 
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-// This function just sends the message, with no other processing. Moved out
-//	of send_chat_from_viewer.
-void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
+
+//////////////////////////////////////////////////////////////////////////////
+// FSNearbyChat
+//////////////////////////////////////////////////////////////////////////////
+
+S32 FSNearbyChat::sLastSpecialChatChannel = 0;
+
+FSNearbyChat::FSNearbyChat() :
+	mDefaultChatBar(NULL),
+	mFocusedInputEditor(NULL)
 {
-	LLMessageSystem* msg = gMessageSystem;
-
-	// <FS:ND> gMessageSystem can be 0, not sure how it is exactly to reproduce, maybe during viewer shutdown?
-	if (!msg)
-	{
-		return;
-	}
-	// </FS:ND>
-
-	if (channel >= 0)
-	{
-		msg->newMessageFast(_PREHASH_ChatFromViewer);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		msg->nextBlockFast(_PREHASH_ChatData);
-		msg->addStringFast(_PREHASH_Message, utf8_out_text);
-		msg->addU8Fast(_PREHASH_Type, type);
-		msg->addS32("Channel", channel);
-	}
-	else
-	{
-		msg->newMessage("ScriptDialogReply");
-		msg->nextBlock("AgentData");
-		msg->addUUID("AgentID", gAgent.getID());
-		msg->addUUID("SessionID", gAgent.getSessionID());
-		msg->nextBlock("Data");
-		msg->addUUID("ObjectID", gAgent.getID());
-		msg->addS32("ChatChannel", channel);
-		msg->addS32("ButtonIndex", 0);
-		msg->addString("ButtonLabel", utf8_out_text);
-	}
-
-	gAgent.sendReliableMessage();
+	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
 }
-//</FS:TS> FIRE-787
+
+FSNearbyChat::~FSNearbyChat()
+{
+}
+
+void FSNearbyChat::onDefaultChatBarButtonClicked()
+{
+	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
+}
 
 void FSNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
 {

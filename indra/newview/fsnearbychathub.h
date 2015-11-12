@@ -34,6 +34,8 @@
 class FSNearbyChatControl;
 class LLUICtrl;
 
+void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
+
 class FSNearbyChat : public LLSingleton<FSNearbyChat>
 {
 	friend class LLSingleton<FSNearbyChat>;

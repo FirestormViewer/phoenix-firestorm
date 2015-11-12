@@ -76,10 +76,6 @@
 
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
-void send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S32 channel);
-// [/RLVa:KB]
-void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S32 channel);
 
 FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key) 
 	: LLFloater(key)
@@ -925,7 +921,7 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 		}
 	}
 	
-	send_chat_from_nearby_floater(utf8_out_text, type, channel);
+	send_chat_from_viewer(utf8_out_text, type, channel);
 }
 
 // Exit "chat mode" and do the appropriate focus changes
@@ -936,160 +932,9 @@ void FSFloaterNearbyChat::stopChat()
 	if (nearby_chat)
 	{
 		nearby_chat->mInputEditor->setFocus(FALSE);
-	    gAgent.stopTyping();
+		gAgent.stopTyping();
 	}
 }
-
-//void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
-void send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S32 channel)
-// [/RLVa:KB]
-{
-	// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
-	// Only process chat messages (ie not CHAT_TYPE_START, CHAT_TYPE_STOP, etc)
-	if ( (rlv_handler_t::isEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
-	{
-		if (0 == channel)
-		{
-			// (We already did this before, but LLChatHandler::handle() calls this directly)
-			if ( ((CHAT_TYPE_SHOUT == type) || (CHAT_TYPE_NORMAL == type)) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATNORMAL)) )
-				type = CHAT_TYPE_WHISPER;
-			else if ( (CHAT_TYPE_SHOUT == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATSHOUT)) )
-				type = CHAT_TYPE_NORMAL;
-			else if ( (CHAT_TYPE_WHISPER == type) && (gRlvHandler.hasBehaviour(RLV_BHVR_CHATWHISPER)) )
-				type = CHAT_TYPE_NORMAL;
-			
-			// Redirect chat if needed
-			if ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT) || (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE)) ) &&
-				  (gRlvHandler.redirectChatOrEmote(utf8_out_text)) ) )
-			{
-				return;
-			}
-			
-			// Filter public chat if sendchat restricted
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHAT))
-				gRlvHandler.filterChat(utf8_out_text, true);
-		}
-		else
-		{
-			// Don't allow chat on a non-public channel if sendchannel restricted (unless the channel is an exception)
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNEL)) && (!gRlvHandler.isException(RLV_BHVR_SENDCHANNEL, channel)) )
-				return;
-			
-			// Don't allow chat on debug channel if @sendchat, @redirchat or @rediremote restricted (shows as public chat on viewers)
-			if (CHAT_CHANNEL_DEBUG == channel)
-			{
-				bool fIsEmote = RlvUtil::isEmote(utf8_out_text);
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHAT)) ||
-					((!fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))) ||
-					((fIsEmote) && (gRlvHandler.hasBehaviour(RLV_BHVR_REDIREMOTE))) )
-				{
-					return;
-				}
-			}
-		}
-	}
-	// [/RLVa:KB]
-	
-	//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-	U32 split = MAX_MSG_BUF_SIZE - 1;
-	U32 pos = 0;
-	U32 total = utf8_out_text.length();
-	
-	// Don't break null messages
-	if(total == 0)
-	{
-		really_send_chat_from_nearby_floater(utf8_out_text, type, channel);
-	}
-	
-	while(pos < total)
-	{
-		U32 next_split = split;
-		
-		if (pos + next_split > total)
-		{
-			// just send the rest of the message
-			next_split = total - pos;
-		}
-		else
-		{
-			// first, try to split at a space
-			while((U8(utf8_out_text[pos + next_split]) != ' ')
-				  && (next_split > 0))
-			{
-				--next_split;
-			}
-			
-			if (next_split == 0)
-			{
-				next_split = split;
-				// no space found, split somewhere not in the middle of UTF-8
-				while((U8(utf8_out_text[pos + next_split]) >= 0x80)
-					  && (U8(utf8_out_text[pos + next_split]) < 0xC0)
-					  && (next_split > 0))
-				{
-					--next_split;
-				}
-			}
-			
-			if(next_split == 0)
-			{
-				next_split = split;
-				LL_WARNS("Splitting") << "utf-8 couldn't be split correctly" << LL_ENDL;
-			}
-		}
-		
-		std::string send = utf8_out_text.substr(pos, next_split);
-		pos += next_split;
-		
-		// *FIXME: Queue messages and wait for server
-		really_send_chat_from_nearby_floater(send, type, channel);
-	}
-	
-	// moved here so we don't bump the count for every message segment
-	add(LLStatViewer::CHAT_COUNT,1);
-	//</FS:TS> FIRE-787
-}
-
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-// This function just sends the message, with no other processing. Moved out
-//	of send_chat_from_viewer.
-void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S32 channel)
-{
-	LLMessageSystem* msg = gMessageSystem;
-	
-	// <FS:ND> gMessageSystem can be 0, not sure how it is exactly to reproduce, maybe during viewer shutdown?
-	if( !msg )
-		return;
-	// </FS:ND>
-	
-	if(channel >= 0)
-	{
-		msg->newMessageFast(_PREHASH_ChatFromViewer);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-		msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-		msg->nextBlockFast(_PREHASH_ChatData);
-		msg->addStringFast(_PREHASH_Message, utf8_out_text);
-		msg->addU8Fast(_PREHASH_Type, type);
-		msg->addS32("Channel", channel);
-	}
-	else
-	{
-		msg->newMessage("ScriptDialogReply");
-		msg->nextBlock("AgentData");
-		msg->addUUID("AgentID", gAgentID);
-		msg->addUUID("SessionID", gAgentSessionID);
-		msg->nextBlock("Data");
-		msg->addUUID("ObjectID", gAgentID);
-		msg->addS32("ChatChannel", channel);
-		msg->addS32("ButtonIndex", 0);
-		msg->addString("ButtonLabel", utf8_out_text);
-	}
-	
-	gAgent.sendReliableMessage();
-}
-//</FS:TS> FIRE-787
 
 void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, bool muted_history)
 {
