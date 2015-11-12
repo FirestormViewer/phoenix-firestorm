@@ -65,7 +65,7 @@ struct LLChatTypeTrigger {
 
 static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/whisper"	, CHAT_TYPE_WHISPER},
-	{ "/shout"	, CHAT_TYPE_SHOUT}
+	{ "/shout"		, CHAT_TYPE_SHOUT}
 };
 
 S32 FSNearbyChat::sLastSpecialChatChannel = 0;
@@ -318,6 +318,7 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	send_chat_from_viewer(utf8_out_text, type, channel);
 }
 
+// static
 EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
 {
 	U32 length = str.length();

@@ -81,16 +81,6 @@ void send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S3
 // [/RLVa:KB]
 void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S32 channel);
 
-struct LLChatTypeTrigger {
-	std::string name;
-	EChatType type;
-};
-
-static LLChatTypeTrigger sChatTypeTriggers[] = {
-	{ "/whisper"	, CHAT_TYPE_WHISPER},
-	{ "/shout"	, CHAT_TYPE_SHOUT}
-};
-
 FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key) 
 	: LLFloater(key)
 	,mChatHistory(NULL)
@@ -693,6 +683,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
+			// linefeed
 			if (!gSavedSettings.getBOOL("FSUseSingleLineChatEntry"))
 			{
 				if ((wstring_utf8_length(mInputEditor->getWText()) + wchar_utf8_length('\n')) > mInputEditor->getMaxTextLength())
@@ -744,38 +735,6 @@ void FSFloaterNearbyChat::onChatBoxFocusReceived()
 void FSFloaterNearbyChat::reshapeChatLayoutPanel()
 {
 	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, FALSE);
-}
-
-EChatType FSFloaterNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
-{
-	U32 length = str.length();
-	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
-	
-	for (S32 n = 0; n < cnt; n++)
-	{
-		if (length >= sChatTypeTriggers[n].name.length())
-		{
-			std::string trigger = str.substr(0, sChatTypeTriggers[n].name.length());
-			
-			if (!LLStringUtil::compareInsensitive(trigger, sChatTypeTriggers[n].name))
-			{
-				U32 trigger_length = sChatTypeTriggers[n].name.length();
-				
-				// It's to remove space after trigger name
-				if (length > trigger_length && str[trigger_length] == ' ')
-					trigger_length++;
-				
-				str = str.substr(trigger_length, length);
-				
-				if (CHAT_TYPE_NORMAL == type)
-					return sChatTypeTriggers[n].type;
-				else
-					break;
-			}
-		}
-	}
-	
-	return type;
 }
 
 void FSFloaterNearbyChat::sendChat( EChatType type )
@@ -839,7 +798,7 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 				nType = type;
 			}
 			
-			type = processChatTypeTriggers(nType, utf8_revised_text);
+			type = FSNearbyChat::processChatTypeTriggers(nType, utf8_revised_text);
 			
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{

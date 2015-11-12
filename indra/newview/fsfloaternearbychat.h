@@ -111,7 +111,6 @@ protected:
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
-	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 	
