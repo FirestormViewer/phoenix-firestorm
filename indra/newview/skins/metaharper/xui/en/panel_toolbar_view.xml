@@ -226,16 +226,16 @@
           parameter="fs_nearby_chat" />
   </button>
 
-  <nearby_chat_voice_monitor layout="topleft"
-                             name="default_chat_bar"
-                             default="true"
-                             height="22"
-                             left_pad="4"
-                             top="4"
-                             right="-12"
-                             follows="left|right|bottom"
-                             spellcheck="true"
-                             visible="true" />
+  <fs_nearby_chat_voice_monitor layout="topleft"
+                                name="default_chat_bar"
+                                default="true"
+                                height="22"
+                                left_pad="4"
+                                top="4"
+                                right="-12"
+                                follows="left|right|bottom"
+                                spellcheck="true"
+                                visible="true" />
 
   <icon image_name="ChatBarHandle"
          top="2"
