@@ -266,7 +266,7 @@ F32 LLToastGroupNotifyPanel::getCurrentTransparency()
 {
 	if (gSavedSettings.getBOOL("FSGroupNotifyNoTransparency"))
 	{
-		return 1.0;
+		return 1.0f;
 	}
 	else
 	{
