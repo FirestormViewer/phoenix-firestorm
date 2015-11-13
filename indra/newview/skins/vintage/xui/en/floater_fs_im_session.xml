@@ -396,7 +396,7 @@
       width="26"
       follows="left|top">
       <menu_button
-       menu_filename="menu_fs_nearby_chat.xml"
+       menu_filename="menu_fs_chat_options.xml"
        follows="left|top"
        top="0"
        width="24"
@@ -405,7 +405,7 @@
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
-       tool_tip="Nearby Chat Options"
+       tool_tip="Chat Options"
        name="chat_options_btn"/>
     </layout_panel>
 

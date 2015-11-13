@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu name="NearBy Chat Menu" opaque="true" visible="false">
+<toggleable_menu name="Chat Options Menu" opaque="true" visible="false">
 	<menu_item_check
 		label="Show Radar..."
 		name="nearby_people">
