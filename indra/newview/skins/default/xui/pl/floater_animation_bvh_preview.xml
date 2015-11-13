@@ -104,6 +104,9 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	<floater.string name="E_ST_BAD_ROOT">
 		Nieprawidłowa nazwa dla roota, użyj "hip".
 	</floater.string>
+	<floater.string name="FS_report_frames">
+		[F] kl. [S] s. [FPS] FPS
+	</floater.string>
 	<text name="name_label">
 		Nazwa:
 	</text>
@@ -112,8 +115,13 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	</text>
 	<spinner label="Pierwszeństwo" name="priority" tool_tip="Kontroluj animacje, które mogą zostać zdominowane przez tą animację"/>
 	<check_box label="Powtarzaj" name="loop_check" tool_tip="Powtarzaj tą animację w pętli"/>
-	<spinner label="Od(%)" name="loop_in_point" tool_tip="Wybierz punkt, od którego chcesz zacząć powtarzać animację"/>
-	<spinner label="Do(%)" name="loop_out_point" tool_tip="Wybierz punkt, od którego chcesz zakończyć powtarzanie animacji"/>
+	<text name="frames_label">
+		300 kl. 30 s. 10 FPS
+	</text>
+	<spinner label="Od (%)" name="loop_in_point" tool_tip="Wybierz punkt, od którego chcesz zacząć powtarzać animację"/>
+	<spinner label="Do (%)" name="loop_out_point" tool_tip="Wybierz punkt, od którego chcesz zakończyć powtarzanie animacji"/>
+	<spinner label="Od (kl)" name="loop_in_frames" tool_tip="Wybierz punkt, od którego chcesz zacząć powtarzać animację, w klatkach" />
+	<spinner label="Do (kl)" name="loop_out_frames" tool_tip="Wybierz punkt, od którego chcesz zakończyć powtarzanie animacji, w klatkach" />
 	<text name="hand_label">
 		Poz. ręki
 	</text>
@@ -170,8 +178,7 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	<button name="pause_btn" tool_tip="Pauzuj animację"/>
 	<button name="stop_btn" tool_tip="Zakończ odtwarzanie"/>
 	<text name="bad_animation_text">
-		Nie można wczytać pliku animacji.
-Doradzamy eksport plików BVH z Poser 4.
+		Nie można wczytać pliku animacji. Doradzamy eksport plików BVH z Poser 4.
 	</text>
 	<button label="Przeładuj plik" name="reload_btn" />
 	<button label="Załaduj ([AMOUNT]L$)" name="ok_btn"/>
