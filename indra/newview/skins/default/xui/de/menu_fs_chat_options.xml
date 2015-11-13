@@ -10,4 +10,9 @@
 		<menu_item_check label="Groß" name="font_size_large"/>
 		<menu_item_check label="Riesig" name="font_size_huge"/>
 	</context_menu>
+	<menu_item_check label="Zusätzlichen Schreib-Indikator (&gt;) anzeigen" name="typing_chevron"/>
+	<menu_item_check label="Hinweis über neue Nachrichten anzeigen" name="new_message_notification"/>
+	<menu_item_check label="Eingabezeile anzeigen" name="show_chat_bar"/>
+	<menu_item_check label="Kanalauswahl anzeigen" name="show_channel_selection"/>
+	<menu_item_check label="Chat-Typ/Sende-Button anzeigen" name="show_send_button"/>
 </toggleable_menu>

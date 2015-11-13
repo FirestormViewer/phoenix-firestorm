@@ -153,6 +153,8 @@ public:
 
 	void loadInitialInvitedIDs();
 
+	bool isP2PChat() const { return mIsP2PChat; }
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);

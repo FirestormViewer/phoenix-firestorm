@@ -29,7 +29,8 @@
 
 #include "fschatoptionsmenu.h"
 
-#include "fsareasearch.h"
+#include "fsfloaterim.h"
+#include "fsfloaternearbychat.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llviewercontrol.h"
@@ -78,15 +79,61 @@ void FSChatOptionsMenu::onMenuItemClick(const LLSD& userdata, LLUICtrl* source)
 	{
 		gSavedSettings.setS32("ChatFontSize", 3);
 	}
+	else if (option == "new_message_notification")
+	{
+		if (dynamic_cast<FSFloaterNearbyChat*>(source))
+		{
+			gSavedSettings.setBOOL("FSNotifyUnreadChatMessages", !gSavedSettings.getBOOL("FSNotifyUnreadChatMessages"));
+		}
+		else if (dynamic_cast<FSFloaterIM*>(source))
+		{
+			gSavedSettings.setBOOL("FSNotifyUnreadIMMessages", !gSavedSettings.getBOOL("FSNotifyUnreadIMMessages"));
+		}
+	}
 }
 
 bool FSChatOptionsMenu::onMenuItemEnable(const LLSD& userdata, LLUICtrl* source)
 {
+	std::string option = userdata.asString();
+
+	if (option == "typing_chevron")
+	{
+		FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(source);
+		return (floater && floater->isP2PChat());
+	}
+	else if (option == "show_channel_selection")
+	{
+		return gSavedSettings.getBOOL("FSNearbyChatbar");
+	}
+	else if (option == "show_send_button")
+	{
+		return gSavedSettings.getBOOL("FSNearbyChatbar");
+	}
+
 	return false;
 }
 
 bool FSChatOptionsMenu::onMenuItemVisible(const LLSD& userdata, LLUICtrl* source)
 {
+	std::string option = userdata.asString();
+
+	if (option == "typing_chevron")
+	{
+		return (dynamic_cast<FSFloaterIM*>(source) != NULL);
+	}
+	else if (option == "show_chat_bar")
+	{
+		return (dynamic_cast<FSFloaterNearbyChat*>(source) != NULL);
+	}
+	else if (option == "show_channel_selection")
+	{
+		return (dynamic_cast<FSFloaterNearbyChat*>(source) != NULL);
+	}
+	else if (option == "show_send_button")
+	{
+		return (dynamic_cast<FSFloaterNearbyChat*>(source) != NULL);
+	}
+
 	return false;
 }
 
@@ -116,6 +163,17 @@ bool FSChatOptionsMenu::onMenuItemCheck(const LLSD& userdata, LLUICtrl* source)
 	else if (option == "font_size_huge")
 	{
 		return (gSavedSettings.getS32("ChatFontSize") == 3);
+	}
+	else if (option == "new_message_notification")
+	{
+		if (dynamic_cast<FSFloaterNearbyChat*>(source))
+		{
+			return gSavedSettings.getBOOL("FSNotifyUnreadChatMessages");
+		}
+		else if (dynamic_cast<FSFloaterIM*>(source))
+		{
+			return gSavedSettings.getBOOL("FSNotifyUnreadIMMessages");
+		}
 	}
 
 	return false;

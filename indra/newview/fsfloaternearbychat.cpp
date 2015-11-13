@@ -51,7 +51,6 @@
 #include "llconsole.h"
 #include "lldraghandle.h"
 #include "llfloaterreg.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llfocusmgr.h"
 #include "llgesturemgr.h"
 #include "lliconctrl.h"
@@ -94,8 +93,8 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 	//menu
 	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem, this, _2));
 	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked, this, _2));
-	mCommitCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterNearbyChat::onChatOptionsVisibleContextMenuItem, this, _2));
-	mCommitCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterNearbyChat::onChatOptionsEnableContextMenuItem, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterNearbyChat::onChatOptionsVisibleContextMenuItem, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterNearbyChat::onChatOptionsEnableContextMenuItem, this, _2));
 }
 
 FSFloaterNearbyChat::~FSFloaterNearbyChat()
