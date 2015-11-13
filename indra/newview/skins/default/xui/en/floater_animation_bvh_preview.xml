@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="450"
+ height="455"
  left="30"
  layout="topleft"
  name="Animation Preview"
@@ -152,7 +152,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
     </floater.string>
     <floater.string
      name="FS_report_frames">
-        [F] frm.  [S] s. [FPS] fps
+        [F] frm.  [S] s. [FPS] FPS
     </floater.string>
   <text
      type="string"
@@ -227,14 +227,14 @@ Maximum animation length is [MAX_LENGTH] seconds.
      bottom_delta="8"
      width="160"
      name="frames_label">
-       300 frm. 30 s. 10 fps
+       300 frm. 30 s. 10 FPS
     </text>
     <spinner
      follows="left|top"
      height="23"
      increment="1"
      initial_value="0"
-     label="In(%)"
+     label="In (%)"
      label_width="70"
      layout="topleft"
      top_pad="5"
@@ -249,7 +249,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      height="23"
      increment="1"
      initial_value="0"
-     label="Out(%)"
+     label="Out (%)"
      layout="topleft"
      left_pad="10"
      max_val="100"
@@ -261,7 +261,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="1"
-     label="In(frm)"
+     label="In (frm)"
      label_width="70"
      layout="topleft"
      top_pad="5"
@@ -275,7 +275,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="1"
-     label="Out(frm)"
+     label="Out (frm)"
      layout="topleft"
      left_pad="10"
      max_val="1000"
@@ -286,7 +286,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
     <text
      type="string"
      length="1"
-     top_pad="0"
+     top_pad="5"
      follows="top|left"
      height="23"
      width="110"

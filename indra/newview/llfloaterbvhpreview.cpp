@@ -937,7 +937,7 @@ void LLFloaterBvhPreview::onCommitLoopInFrames()
 
 	// Preview on own avatar
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 
 	if (motionp)
 	{
@@ -959,7 +959,7 @@ void LLFloaterBvhPreview::onCommitLoopOutFrames()
 
 	// Preview on own avatar
 	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
-	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
 
 	if (motionp)
 	{
