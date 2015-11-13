@@ -5,30 +5,30 @@
 		name="nearby_people">
 		<menu_item_check.on_click
 			function="Floater.Toggle"
-			userdata="fs_radar"/>
+			parameter="fs_radar"/>
 		<menu_item_check.on_check
 			function="Floater.Visible"
-			userdata="fs_radar"/>
+			parameter="fs_radar"/>
 	</menu_item_check>
 	<menu_item_check
 		label="Show Nearby Voice..."
 		name="nearby_voice">
 		<menu_item_check.on_click
 			function="Floater.Toggle"
-			userdata="fs_voice_controls"/>
+			parameter="fs_voice_controls"/>
 		<menu_item_check.on_check
 			function="Floater.Visible"
-			userdata="fs_voice_controls"/>
+			parameter="fs_voice_controls"/>
 	</menu_item_check>
 	<menu_item_check
 		label="Show Block List..."
 		name="block_list">
 		<menu_item_check.on_click
 			function="ChatOptions.Action"
-			userdata="blocklist"/>
+			parameter="blocklist"/>
 		<menu_item_check.on_check
 			function="ChatOptions.Check"
-			userdata="blocklist"/>
+			parameter="blocklist"/>
 	</menu_item_check>
 	<menu_item_separator/>
 	<menu_item_check
@@ -36,9 +36,53 @@
 		name="plain_text_chat_history">
 		<menu_item_check.on_check
 			function="CheckControl"
-			parameter="PlainTextChatHistory" />
+			parameter="PlainTextChatHistory"/>
 		<menu_item_check.on_click
 			function="ToggleControl"
-			parameter="PlainTextChatHistory" />
+			parameter="PlainTextChatHistory"/>
 	</menu_item_check>
+	<context_menu
+		label="Font Size..."
+		name="font_size">
+		<menu_item_check
+			label="Small"
+			name="font_size_small">
+			<menu_item_check.on_check
+				function="ChatOptions.Check"
+				parameter="font_size_small"/>
+			<menu_item_check.on_click
+				function="ChatOptions.Action"
+				parameter="font_size_small"/>
+		</menu_item_check>
+		<menu_item_check
+			label="Medium"
+			name="font_size_medium">
+			<menu_item_check.on_check
+				function="ChatOptions.Check"
+				parameter="font_size_medium"/>
+			<menu_item_check.on_click
+				function="ChatOptions.Action"
+				parameter="font_size_medium"/>
+		</menu_item_check>
+		<menu_item_check
+			label="Large"
+			name="font_size_large">
+			<menu_item_check.on_check
+				function="ChatOptions.Check"
+				parameter="font_size_large"/>
+			<menu_item_check.on_click
+				function="ChatOptions.Action"
+				parameter="font_size_large"/>
+		</menu_item_check>
+		<menu_item_check
+			label="Huge"
+			name="font_size_huge">
+			<menu_item_check.on_check
+				function="ChatOptions.Check"
+				parameter="font_size_huge"/>
+			<menu_item_check.on_click
+				function="ChatOptions.Action"
+				parameter="font_size_huge"/>
+		</menu_item_check>
+	</context_menu>
 </toggleable_menu>

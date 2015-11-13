@@ -228,6 +228,8 @@ private:
 
 	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
 	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;

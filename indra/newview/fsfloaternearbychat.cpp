@@ -94,6 +94,8 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 	//menu
 	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem, this, _2));
 	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterNearbyChat::onChatOptionsVisibleContextMenuItem, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterNearbyChat::onChatOptionsEnableContextMenuItem, this, _2));
 }
 
 FSFloaterNearbyChat::~FSFloaterNearbyChat()
@@ -311,6 +313,16 @@ void FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked(const LLSD& userda
 bool FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
 {
 	return FSChatOptionsMenu::onMenuItemCheck(userdata, this);
+}
+
+bool FSFloaterNearbyChat::onChatOptionsVisibleContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemVisible(userdata, this);
+}
+
+bool FSFloaterNearbyChat::onChatOptionsEnableContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemEnable(userdata, this);
 }
 
 void FSFloaterNearbyChat::openFloater(const LLSD& key)

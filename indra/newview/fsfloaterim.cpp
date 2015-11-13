@@ -143,6 +143,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterIM::onChatOptionsCheckContextMenuItem, this, _2));
 	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterIM::onChatOptionsContextMenuItemClicked, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterIM::onChatOptionsVisibleContextMenuItem, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterIM::onChatOptionsEnableContextMenuItem, this, _2));
 
 	setOverlapsScreenChannel(true);
 
@@ -608,6 +610,16 @@ void FSFloaterIM::onChatOptionsContextMenuItemClicked(const LLSD& userdata)
 bool FSFloaterIM::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
 {
 	return FSChatOptionsMenu::onMenuItemCheck(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsVisibleContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemVisible(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsEnableContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemEnable(userdata, this);
 }
 
 // support sysinfo button -Zi

@@ -62,6 +62,22 @@ void FSChatOptionsMenu::onMenuItemClick(const LLSD& userdata, LLUICtrl* source)
 			}
 		}
 	}
+	else if (option == "font_size_small")
+	{
+		gSavedSettings.setS32("ChatFontSize", 0);
+	}
+	else if (option == "font_size_medium")
+	{
+		gSavedSettings.setS32("ChatFontSize", 1);
+	}
+	else if (option == "font_size_large")
+	{
+		gSavedSettings.setS32("ChatFontSize", 2);
+	}
+	else if (option == "font_size_huge")
+	{
+		gSavedSettings.setS32("ChatFontSize", 3);
+	}
 }
 
 bool FSChatOptionsMenu::onMenuItemEnable(const LLSD& userdata, LLUICtrl* source)
@@ -84,6 +100,22 @@ bool FSChatOptionsMenu::onMenuItemCheck(const LLSD& userdata, LLUICtrl* source)
 		{
 			return LLFloaterReg::instanceVisible("fs_blocklist");
 		}
+	}
+	else if (option == "font_size_small")
+	{
+		return (gSavedSettings.getS32("ChatFontSize") == 0);
+	}
+	else if (option == "font_size_medium")
+	{
+		return (gSavedSettings.getS32("ChatFontSize") == 1);
+	}
+	else if (option == "font_size_large")
+	{
+		return (gSavedSettings.getS32("ChatFontSize") == 2);
+	}
+	else if (option == "font_size_huge")
+	{
+		return (gSavedSettings.getS32("ChatFontSize") == 3);
 	}
 
 	return false;

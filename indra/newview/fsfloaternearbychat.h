@@ -53,8 +53,6 @@ public:
 
 	/** @param archive true - to save a message to the chat history log */
 	void	addMessage(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
-	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
-	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
 
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void setVisible(BOOL visible);
@@ -115,6 +113,11 @@ protected:
 	static S32 sLastSpecialChatChannel;
 
 private:
+	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;
