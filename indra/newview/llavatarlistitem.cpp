@@ -252,21 +252,26 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-//  <FS:AO> don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
-//  process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
-//  goes through, appearing to mysteriously erase the user's choice.
-//	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
-	updateChildren();
+	//<FS:AO> don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
+	//process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
+	//goes through, appearing to mysteriously erase the user's choice.
+	//showPermissions(mShowPermissions);
+	//updateChildren();
 }
 
 void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
+	// <FS:Wolf> commented out to have the info button always shown
+	mInfoBtn->setVisible(false);
+	mProfileBtn->setVisible(false);
+	// </FS:Wolf>
 
-//	mInfoBtn->setVisible(false); // commented out to have the info button always shown	-WoLf
 	mHovered = false;
 	LLPanel::onMouseLeave(x, y, mask);
-	updateChildren();
+	// <FS:Wolf> commented out to have the info button always shown
+	//showPermissions(false);
+	//updateChildren();
 }
 
 // virtual, called by LLAvatarTracker
@@ -378,7 +383,7 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 		fetchAvatarName();
 	}
 	
-	// AO: Always show permissions icons, like in V1.
+	// <FS:AO> Always show permissions icons, like in V1.
 	// we put this here so because it's the nearest update point where we have good av data.
 	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
 	updateChildren();
@@ -706,54 +711,42 @@ LLAvatarListItem::icon_color_map_t& LLAvatarListItem::getItemIconColorMap()
 // static
 void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 {
-
 	//speaking indicator width + padding
-	//S32 speaking_indicator_width = avatar_item->getRect().getWidth() - avatar_item->mSpeakingIndicator->getRect().mLeft;
-	S32 speaking_indicator_width = 20;
+	S32 speaking_indicator_width = avatar_item->getRect().getWidth() - avatar_item->mSpeakingIndicator->getRect().mLeft;
 
 	//profile btn width + padding
-	//S32 profile_btn_width = avatar_item->mSpeakingIndicator->getRect().mLeft - avatar_item->mProfileBtn->getRect().mLeft;
-	S32 profile_btn_width = 18;
-	
+	S32 profile_btn_width = avatar_item->mSpeakingIndicator->getRect().mLeft - avatar_item->mProfileBtn->getRect().mLeft;
+
 	//info btn width + padding
-	S32 info_btn_width = 20;
-	//if (avatar_item->mInfoBtn->getVisible()) info_btn_width = 20;
-	
+	S32 info_btn_width = avatar_item->mProfileBtn->getRect().mLeft - avatar_item->mInfoBtn->getRect().mLeft;
+
 	//volume slider width + padding
-	S32 volume_slider_width = 90;
-	//if (avatar_item->mVoiceSlider->getVisible()) volume_slider_width = 90;
-	
+	S32 volume_slider_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mVoiceSlider->getRect().mLeft;
+
 	// online permission icon width + padding
-	//S32 permission_online_width = avatar_item->mInfoBtn->getRect().mLeft - avatar_item->mIconPermissionOnline->getRect().mLeft;
-	S32 permission_online_width = 18;
-	
+	S32 permission_online_width = avatar_item->mVoiceSlider->getRect().mLeft - avatar_item->mBtnPermissionOnline->getRect().mLeft;
+
 	// map permission icon width + padding
-	//S32 permission_map_width = avatar_item->mIconPermissionOnline->getRect().mLeft - avatar_item->mIconPermissionMap->getRect().mLeft;
-	S32 permission_map_width = 18;
-	
+	S32 permission_map_width = avatar_item->mBtnPermissionOnline->getRect().mLeft - avatar_item->mBtnPermissionMap->getRect().mLeft;
+
 	// edit my objects permission icon width + padding
-	//S32 permission_edit_mine_width = avatar_item->mIconPermissionMap->getRect().mLeft - avatar_item->mIconPermissionEditMine->getRect().mLeft;
-	S32 permission_edit_mine_width = 18;
-	
+	S32 permission_edit_mine_width = avatar_item->mBtnPermissionMap->getRect().mLeft - avatar_item->mBtnPermissionEditMine->getRect().mLeft;
+
 	// edit their objects permission icon width + padding
-	//S32 permission_edit_theirs_width = avatar_item->mIconPermissionEditMine->getRect().mLeft - avatar_item->mIconPermissionEditTheirs->getRect().mLeft;
-	S32 permission_edit_theirs_width = 18;
+	S32 permission_edit_theirs_width = avatar_item->mBtnPermissionEditMine->getRect().mLeft - avatar_item->mIconPermissionEditTheirs->getRect().mLeft;
 	
 	// <FS:Ansariel> Extended Friend Permissions
-	S32 permission_online_theirs_width = 18;
-	S32 permission_map_theirs_width = 18;
+	S32 permission_map_theirs_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mIconPermissionMapTheirs->getRect().mLeft;
+	S32 permission_online_theirs_width = avatar_item->mIconPermissionMapTheirs->getRect().mLeft - avatar_item->mIconPermissionOnlineTheirs->getRect().mLeft;
 	// </FS:Ansariel>
 	
 	// last interaction time textbox width + padding
-	//S32 last_interaction_time_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
-	S32 last_interaction_time_width = 37;
+	S32 last_interaction_time_width = avatar_item->mIconPermissionOnlineTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
 	
 	// avatar icon width + padding
 	S32 icon_width = avatar_item->mAvatarName->getRect().mLeft - avatar_item->mAvatarIcon->getRect().mLeft;
 
 	sLeftPadding = avatar_item->mAvatarIcon->getRect().mLeft;
-	//sNameRightPadding = avatar_item->mLastInteractionTime->getRect().mLeft - avatar_item->mAvatarName->getRect().mRight;
-	sNameRightPadding = 0;
 
 	S32 index = ALIC_COUNT;
 	sChildrenWidths[--index] = icon_width;
@@ -771,8 +764,7 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = info_btn_width;
 	sChildrenWidths[--index] = profile_btn_width;
 	sChildrenWidths[--index] = speaking_indicator_width;
-	//llassert(index == 0);
-	
+	llassert(index == 0);
 }
 
 void LLAvatarListItem::updateChildren()
