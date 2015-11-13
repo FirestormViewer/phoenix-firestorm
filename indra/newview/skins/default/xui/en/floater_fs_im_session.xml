@@ -398,7 +398,31 @@
      name="send_sysinfo_btn"
      top="0"
      width="24" />
-  </layout_panel>
+    </layout_panel>
+
+    <layout_panel
+      name="lp_options_btn"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="20"
+      width="26"
+      follows="left|top">
+      <menu_button
+       menu_filename="menu_fs_nearby_chat.xml"
+       follows="left|top"
+       top="0"
+       width="24"
+       height="20"
+       left_delta="2"
+       image_overlay="Conv_toolbar_sort"
+       image_hover_unselected="Toolbar_Middle_Over"
+       image_selected="Toolbar_Middle_Selected"
+       image_unselected="Toolbar_Middle_Off"
+       tool_tip="Nearby Chat Options"
+       name="chat_options_btn"/>
+    </layout_panel>
 
   <!-- Checkbox for FS prefix on support groups -->
     <layout_panel

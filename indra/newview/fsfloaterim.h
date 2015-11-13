@@ -226,6 +226,9 @@ private:
 	void addSessionParticipants(const uuid_vec_t& uuids);
 	void addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids);
 
+	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
 	S32 mLastMessageIndex;

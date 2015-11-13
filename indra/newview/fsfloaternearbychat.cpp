@@ -34,6 +34,7 @@
 
 #include "chatbar_as_cmdline.h"
 #include "fschathistory.h"
+#include "fschatoptionsmenu.h"
 #include "fscommon.h"
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
@@ -304,47 +305,12 @@ void FSFloaterNearbyChat::onHistoryButtonClicked()
 
 void FSFloaterNearbyChat::onChatOptionsContextMenuItemClicked(const LLSD& userdata)
 {
-	std::string option = userdata.asString();
-
-	if (option == "blocklist")
-	{
-		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-		{
-			LLFloaterReg::toggleInstance("fs_blocklist");
-		}
-		else
-		{
-			LLPanel* panel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-			if (!panel)
-			{
-				return;
-			}
-
-			if (panel->isInVisibleChain())
-			{
-				LLFloaterReg::hideInstance("people");
-			}
-			else
-			{
-				LLFloaterSidePanelContainer::showPanel("people", "panel_people", LLSD().with("people_panel_tab_name", "blocked_panel"));
-			}
-		}
-	}
+	FSChatOptionsMenu::onMenuItemClick(userdata, this);
 }
 
 bool FSFloaterNearbyChat::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
 {
-	std::string option = userdata.asString();
-
-	if (option == "blocklist")
-	{
-		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-		{
-			return LLFloaterReg::instanceVisible("fs_blocklist");
-		}
-	}
-
-	return false;
+	return FSChatOptionsMenu::onMenuItemCheck(userdata, this);
 }
 
 void FSFloaterNearbyChat::openFloater(const LLSD& key)
