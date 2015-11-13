@@ -40,6 +40,7 @@ void reportToNearbyChat(const std::string& message);
 std::string applyAutoCloseOoc(const std::string& message);
 std::string applyMuPose(const std::string& message);
 std::string formatString(std::string text, const LLStringUtil::format_map_t& args);
+bool is_irc_me_prefix(const std::string& text);
 
 namespace FSCommon
 {

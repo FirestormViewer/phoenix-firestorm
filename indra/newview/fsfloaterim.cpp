@@ -383,7 +383,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #else
 					std::string strFSTag = "(FS64 ";
 #endif
-					if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
+					if (is_irc_me_prefix(utf8_text))
 					{
 						utf8_text.insert(4,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef OPENSIM

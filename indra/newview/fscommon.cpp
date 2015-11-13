@@ -141,6 +141,12 @@ std::string formatString(std::string text, const LLStringUtil::format_map_t& arg
 	return text;
 }
 
+bool is_irc_me_prefix(const std::string& text)
+{
+	const std::string prefix = text.substr(0, 4);
+	return (prefix == "/me " || prefix == "/me'");
+}
+
 S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::string& str)
 {
 	// LLDateUtil::secondsSinceEpochFromString does not handle time, only the date.

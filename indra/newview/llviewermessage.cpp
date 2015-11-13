@@ -3611,8 +3611,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["slurl"] = location;
 
 				// Look for IRC-style emotes here so object name formatting is correct
-				std::string prefix = message.substr(0, 4);
-				if (prefix == "/me " || prefix == "/me'")
+				// <FS:Ansariel> Consolidate IRC /me prefix checks
+				//std::string prefix = message.substr(0, 4);
+				//if (prefix == "/me " || prefix == "/me'")
+				if (is_irc_me_prefix(message))
+				// </FS:Ansariel>
 				{
 					chat.mChatStyle = CHAT_STYLE_IRC;
 				}
@@ -4623,8 +4626,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		BOOL ircstyle = FALSE;
 
 		// Look for IRC-style emotes here so chatbubbles work
-		std::string prefix = mesg.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		// <FS:Ansariel> Consolidate IRC /me prefix checks
+		//std::string prefix = mesg.substr(0, 4);
+		//if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(mesg))
+		// </FS:Ansariel>
 		{
 			ircstyle = TRUE;
 		}

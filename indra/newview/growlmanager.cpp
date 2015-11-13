@@ -327,8 +327,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 		}
 
 		std::string message = im["message"].asString();
-		std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
@@ -380,9 +379,7 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 	if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
 	{
 		std::string message = chat["message"].asString();
-
-		const std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
