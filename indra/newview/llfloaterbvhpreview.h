@@ -116,6 +116,12 @@ public:
 									   LLAssetType::EType type,
 									   void* user_data,
 									   S32 status, LLExtStat ext_status);
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	void onCommitLoopInFrames();
+	void onCommitLoopOutFrames();
+	bool validateLoopInFrames(const LLSD& data);
+	bool validateLoopOutFrames(const LLSD& data);
+	// </FS:Sei>
 private:
 	void setAnimCallbacks() ;
 	// <FS> Reload animation from disk
@@ -146,6 +152,9 @@ protected:
 
 	// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
 	LLFrameTimer		mTimer;
+
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	S32					mNumFrames;
 };
 
 #endif  // LL_LLFLOATERBVHPREVIEW_H

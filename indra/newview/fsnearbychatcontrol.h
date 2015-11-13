@@ -28,13 +28,20 @@
 #ifndef FS_NEARBYCHATCONTROL_H
 #define FS_NEARBYCHATCONTROL_H
 
-#include "llchat.h"
 #include "lllineeditor.h"
 
 class FSNearbyChatControl : public LLLineEditor
 {
 public:
-	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params> {};
+	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
+	{
+		Optional<bool>	is_default;
+
+		Params()
+			: is_default("default", false)
+		{
+		}
+	};
 
 	FSNearbyChatControl(const Params& p);
 	~FSNearbyChatControl();
@@ -45,12 +52,16 @@ public:
 
 	virtual BOOL handleKeyHere(KEY key, MASK mask);
 
+	bool	isDefault() const { return mDefault; }
+
 private:
 	// Typing in progress, expand gestures etc.
 	static void onKeystroke(LLLineEditor* caller, void* userdata);
 
 	// Unfocus and autohide chat bar accordingly if we are the default chat bar
-	void autohide();
+	void	autohide();
+
+	bool	mDefault;
 };
 
 #endif // FS_NEARBYCHATCONTROL_H

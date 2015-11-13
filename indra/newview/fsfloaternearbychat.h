@@ -49,16 +49,14 @@ public:
 	FSFloaterNearbyChat(const LLSD& key);
 	~FSFloaterNearbyChat();
 
-	BOOL	postBuild			();
+	BOOL	postBuild();
 
 	/** @param archive true - to save a message to the chat history log */
-	void	addMessage			(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
-	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
-	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
+	void	addMessage(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
 
-	/*virtual*/ void	onOpen	(const LLSD& key);
+	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void setVisible(BOOL visible);
 
-	/*virtual*/ void	setVisible(BOOL visible);
 	void	openFloater(const LLSD& key);
 
 	void clearChatHistory();
@@ -71,11 +69,11 @@ public:
 
 	static FSFloaterNearbyChat* findInstance();
 	static FSFloaterNearbyChat* getInstance();
-	
+
 	void removeScreenChat();
-	
+
 	static bool isChatMultiTab();
-	
+
 	BOOL getVisible();
 
 	void onHistoryButtonClicked();
@@ -92,12 +90,9 @@ public:
 	S32 getMessageArchiveLength() {return mMessageArchive.size();}
 
 	virtual BOOL handleKeyHere( KEY key, MASK mask );
-	
+
 	static void startChat(const char* line);
 	static void stopChat();
-	
-	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
-	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
 
 	void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
 	void updateShowMutedChatHistory(const LLSD &data);
@@ -108,20 +103,21 @@ protected:
 	void onChatBoxFocusReceived();
 	
 	void sendChat( EChatType type );
+	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
-	EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 	
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	onNearbySpeakers();
+	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
-private:
-	LLHandle<LLView>	mPopupMenuHandle;
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;

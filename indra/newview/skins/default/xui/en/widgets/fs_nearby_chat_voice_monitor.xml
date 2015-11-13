@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nearby_chat_voice_monitor
+<fs_nearby_chat_voice_monitor
  voice_monitor_padding="5">
 	<nearby_voice_monitor
 	 name="nearby_voice_output_monitor"
@@ -12,4 +12,4 @@
 	 auto_update="true"
 	 auto_hide="true"
 	 width="35" />
-</nearby_chat_voice_monitor>
+</fs_nearby_chat_voice_monitor>

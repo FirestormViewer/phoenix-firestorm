@@ -34,6 +34,7 @@
 
 #include "growlmanager.h"
 
+#include "fscommon.h"
 #include "growlnotifier.h"
 #include "llagentdata.h"
 #include "llappviewer.h"
@@ -319,7 +320,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 	if (session->isP2PSessionType() && (!im["keyword_alert_performed"].asBoolean() || !gSavedSettings.getBOOL("FSFilterGrowlKeywordDuplicateIMs")))
 	{
 		// Don't show messages from ourselves or the system.
-		LLUUID from_id = im["from_id"].asUUID();
+		const LLUUID from_id = im["from_id"].asUUID();
 		if (from_id.isNull() || from_id == gAgentID)
 		{
 			return;
@@ -331,7 +332,7 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 		{
 			message = message.substr(3);
 		}
-		gGrowlManager->performNotification(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		LLAvatarNameCache::get(from_id, boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
 	}
 }
 
@@ -386,8 +387,15 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 			message = message.substr(3);
 		}
 
-		gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		LLAvatarNameCache::get(chat["from_id"].asUUID(), boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
 	}
+}
+
+//static
+void GrowlManager::onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type)
+{
+	const std::string sender = FSCommon::getAvatarNameByDisplaySettings(av_name);
+	notify(sender, message, type);
 }
 
 bool GrowlManager::shouldNotify()

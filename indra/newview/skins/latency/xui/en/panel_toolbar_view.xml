@@ -260,6 +260,7 @@
 							</button>
 							<fs_nearby_chat_control
 							 name="default_chat_bar"
+							 default="true"
 							 label="To nearby chat"
 							 left_pad="8"
 							 right="-4"

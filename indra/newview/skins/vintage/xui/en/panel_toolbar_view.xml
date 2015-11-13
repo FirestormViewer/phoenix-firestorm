@@ -223,6 +223,7 @@
 
     <fs_nearby_chat_control layout="topleft"
                          name="default_chat_bar"
+                         default="true"
                          label="To nearby chat"
                          left_pad="8"
                          height="20"

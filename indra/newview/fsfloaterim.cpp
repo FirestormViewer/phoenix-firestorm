@@ -32,6 +32,7 @@
 #include "fsfloaterim.h"
 
 #include "fschathistory.h"
+#include "fschatoptionsmenu.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
@@ -139,7 +140,12 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	mCommitCallbackRegistrar.add("IMSession.Menu.Action", boost::bind(&FSFloaterIM::doToSelected, this, _2));
 	mEnableCallbackRegistrar.add("IMSession.Menu.Enable", boost::bind(&FSFloaterIM::checkEnabled, this, _2));
-	
+
+	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterIM::onChatOptionsCheckContextMenuItem, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterIM::onChatOptionsContextMenuItemClicked, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterIM::onChatOptionsVisibleContextMenuItem, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterIM::onChatOptionsEnableContextMenuItem, this, _2));
+
 	setOverlapsScreenChannel(true);
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -594,6 +600,26 @@ bool FSFloaterIM::checkEnabled(const LLSD& userdata)
 		return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
 	}
 	return false;
+}
+
+void FSFloaterIM::onChatOptionsContextMenuItemClicked(const LLSD& userdata)
+{
+	FSChatOptionsMenu::onMenuItemClick(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemCheck(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsVisibleContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemVisible(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsEnableContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemEnable(userdata, this);
 }
 
 // support sysinfo button -Zi
