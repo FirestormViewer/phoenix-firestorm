@@ -296,6 +296,10 @@ public:
 
 	ELoadStatus getStatus() { return mStatus; }
 
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	S32 getNumFrames() { return mNumFrames; }
+	// </FS:Sei>
+
 protected:
 	// Consumes one line of input from file.
 
