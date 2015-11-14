@@ -248,7 +248,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="1"
-     initial_value="0"
+     initial_value="100"
      label="Out (%)"
      layout="topleft"
      left_pad="10"
