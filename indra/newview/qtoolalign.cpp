@@ -429,11 +429,11 @@ void QToolAlign::align()
 {
 	if(AlignThread::sInstance)
 	{
-		reportToNearbyChat(LLTrans::getString("qtool_still_busy"));
+		report_to_nearby_chat(LLTrans::getString("qtool_still_busy"));
 	}
 	else
 	{
-		reportToNearbyChat(LLTrans::getString("qtool_busy"));
+		report_to_nearby_chat(LLTrans::getString("qtool_busy"));
 		AlignThread::sInstance = new AlignThread();
 		AlignThread::sInstance->start();
 	}
@@ -458,7 +458,7 @@ public:
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
 		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-		reportToNearbyChat(LLTrans::getString("qtool_done"));
+		report_to_nearby_chat(LLTrans::getString("qtool_done"));
 		return TRUE;
 	}
 };

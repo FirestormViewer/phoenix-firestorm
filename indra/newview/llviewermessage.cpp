@@ -6299,11 +6299,11 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 
 						if (change_count > 0)
 						{
-							reportToNearbyChat(formatString(increase_message, args));
+							report_to_nearby_chat(format_string(increase_message, args));
 						}
 						else if (change_count < 0)
 						{
-							reportToNearbyChat(formatString(decrease_message, args));
+							report_to_nearby_chat(format_string(decrease_message, args));
 						}
 					}
 				}
@@ -7574,7 +7574,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			// </FS:Ansariel>
 
 			make_ui_sound("UISndRestart");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7799,7 +7799,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			}
 
 			make_ui_sound("UISndRestartOpenSim");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 			return;
 		}
 		// </FS:Ansariel>
@@ -7964,7 +7964,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 					action = LLTrans::getString("Collision_UnknownType", args);
 					return;
 			}
-			reportToNearbyChat(action);
+			report_to_nearby_chat(action);
 		}
 		// </FS:Ansariel> Nearby Chat Collision Messages
 		// <FS:Ansariel> Report Collision Messages to scripts

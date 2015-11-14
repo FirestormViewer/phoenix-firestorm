@@ -388,13 +388,13 @@ public:
 		{
 			if (status == HTTP_INTERNAL_ERROR)
 			{
-				reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
+				report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
 			}
 			else
 			{
 				LLStringUtil::format_map_t args;
 				args["STATUS"] = llformat("%d", status);
-				reportToNearbyChat(LLTrans::getString("SLGridStatusOtherError", args));
+				report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
 			}
 			LL_WARNS("SLGridStatusResponder") << "Error - status " << status << LL_ENDL;
 			return;
@@ -403,7 +403,7 @@ public:
 		S32 outputSize = buffer->countAfter(channels.in(), NULL);
 		if (outputSize <= 0)
 		{
-			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 			LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
 			return;
 		}
@@ -477,17 +477,17 @@ public:
 				LLStringUtil::trim(newsTitle);
 				LLStringUtil::trim(newsDesc);
 				LLStringUtil::trim(newsLink);
-				reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+				report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
 			}
 			else
 			{
-				reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+				report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 				LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
 			}
 		}
 		else
 		{
-			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 			LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
 		}
 	}
@@ -2898,7 +2898,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
 		{
-			reportToNearbyChat(gAgent.mMOTD);
+			report_to_nearby_chat(gAgent.mMOTD);
 		}
 		// </FS:Techwolf Lupindo>
 		// <FS:PP>

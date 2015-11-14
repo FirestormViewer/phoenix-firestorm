@@ -356,8 +356,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				std::string utf8_text = wstring_to_utf8str(text);
 				
 				// Convert OOC and MU* style poses
-				utf8_text = applyAutoCloseOoc(utf8_text);
-				utf8_text = applyMuPose(utf8_text);
+				utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
+				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
 				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");

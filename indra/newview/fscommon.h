@@ -36,14 +36,15 @@ class LLViewerObject;
 const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;
 
-void reportToNearbyChat(const std::string& message);
-std::string applyAutoCloseOoc(const std::string& message);
-std::string applyMuPose(const std::string& message);
-std::string formatString(std::string text, const LLStringUtil::format_map_t& args);
+void report_to_nearby_chat(const std::string& message);
+std::string format_string(std::string text, const LLStringUtil::format_map_t& args);
 bool is_irc_me_prefix(const std::string& text);
 
 namespace FSCommon
 {
+	std::string applyAutoCloseOoc(std::string message);
+	std::string applyMuPose(std::string message);
+
 	/**
 	* Convert a string of a specified date format into seconds since the Epoch.
 	*

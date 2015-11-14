@@ -830,16 +830,16 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		}
 		else if ("badge" == info_type)
 		{
-			reportToNearbyChat("Hippos!");
+			report_to_nearby_chat("Hippos!");
 		}
 		else if ("cookies" == info_type)
 		{
-			reportToNearbyChat("Cookies!");
+			report_to_nearby_chat("Cookies!");
 		}
 		// <FS:PP>
 		else if ("motd" == info_type)
 		{
-			reportToNearbyChat(gAgent.mMOTD);
+			report_to_nearby_chat(gAgent.mMOTD);
 		}
 		// </FS:PP>
 		return true;
@@ -4450,11 +4450,11 @@ class FSSelfToggleMoveLock : public view_listener_t
 			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 			if (new_value)
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
+				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
 			}
 			else
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
+				report_to_nearby_chat(LLTrans::getString("MovelockDisabling"));
 			}
 		}
 #ifdef OPENSIM
@@ -8750,7 +8750,7 @@ void handle_selected_texture_info(void*)
    		//LLSD args;
    		//args["MESSAGE"] = msg;
    		//LLNotificationsUtil::add("SystemMessage", args);
-		reportToNearbyChat(msg);
+		report_to_nearby_chat(msg);
 		// </FS:Ansariel>
 	}
 }
@@ -8966,13 +8966,13 @@ class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
 		if (checked)
 		{
 			gSavedSettings.setBOOL("DoubleClickTeleport", FALSE);
-			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportDisabled"));
+			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportDisabled"));
 		}
 		else
 		{
 			gSavedSettings.setBOOL("DoubleClickTeleport", TRUE);
 			gSavedSettings.setBOOL("DoubleClickAutoPilot", FALSE);
-			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportEnabled"));
+			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportEnabled"));
 		}
 		return true;
 	}
@@ -9367,7 +9367,7 @@ class FSDumpSimulatorFeaturesToChat : public view_listener_t
 			std::stringstream out_str;
 			region->getSimulatorFeatures(sim_features);
 			LLSDSerialize::toPrettyXML(sim_features, out_str);
-			reportToNearbyChat(out_str.str());
+			report_to_nearby_chat(out_str.str());
 		}
 		return true;
 	}

@@ -269,8 +269,8 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 		if (0 == channel)
 		{
 			// Convert OOC and MU* style poses
-			utf8text = applyAutoCloseOoc(utf8text);
-			utf8text = applyMuPose(utf8text);
+			utf8text = FSCommon::applyAutoCloseOoc(utf8text);
+			utf8text = FSCommon::applyMuPose(utf8text);
 
 			// discard returned "found" boolean
 			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
