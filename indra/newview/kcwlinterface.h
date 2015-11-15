@@ -36,6 +36,8 @@ class LLEnvironmentSettings;
 
 class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTimer
 {
+	LOG_CLASS(KCWindlightInterface);
+
 public:
 	KCWindlightInterface();
 	void ParcelChange();
