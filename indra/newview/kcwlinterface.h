@@ -45,7 +45,7 @@ public:
 	void ParcelChange();
 	virtual BOOL tick();
 	void ApplySettings(const LLSD& settings);
-	void ApplySkySettings(const LLSD& settings);
+	bool ApplySkySettings(const LLSD& settings);
 	void ApplyWindLightPreset(const std::string& preset);
 	void ResetToRegion(bool force = false);
 	//bool ChatCommand(std::string message, std::string from_name, LLUUID source_id, LLUUID owner_id);

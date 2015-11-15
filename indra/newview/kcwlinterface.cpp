@@ -44,7 +44,7 @@
 
 const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
-
+const std::string PARCEL_WL_DEFAULT = "Default";
 
 class KCWindlightInterface::LLParcelChangeObserver : public LLParcelObserver
 {
@@ -121,7 +121,7 @@ void KCWindlightInterface::ParcelChange()
 
 	if ( (this_parcel_id != mLastParcelID) || (mLastParcelDesc != desc) ) //parcel changed
 	{
-		// LL_DEBUGS() << "Agent in new parcel: " << this_parcel_id << LL_ENDL;
+		LL_DEBUGS() << "Agent in new parcel: " << this_parcel_id << LL_ENDL;
 
 		mLastParcelID = this_parcel_id;
 		mLastParcelDesc = desc;
@@ -198,18 +198,29 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 		
 		mRegionOverride = settings.has("region_override");
 
-		ApplySkySettings(settings);
+		bool non_region_default_applied = ApplySkySettings(settings);
 
-		if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
+		// We can only apply a water preset if we didn't set region WL default previously
+		// or there will be unpredictable behavior where the region WL defaults will be
+		// disabled again and sky/day cycle presets will be reverted to whatever the user
+		// has set before.
+		if (non_region_default_applied)
 		{
-			LL_DEBUGS() << "Applying WL water set: " << settings["water"].asString() << LL_ENDL;
-			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
-			setWL_Status(true);
+			if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
+			{
+				LL_DEBUGS() << "Applying WL water set: " << settings["water"].asString() << LL_ENDL;
+				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+				setWL_Status(true);
+			}
+		}
+		else
+		{
+			LL_WARNS() << "Cannot apply Parcel WL water preset because region WL default has been set due to invalid sky preset" << LL_ENDL;
 		}
 	}
 }
 
-void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
+bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 {
 	if (settings.has("sky"))
 	{
@@ -232,7 +243,7 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 					LL_DEBUGS() << "Applying WL sky set: " << (*space_it)["preset"].asString() << LL_ENDL;
 					ApplyWindLightPreset((*space_it)["preset"].asString());
 				}
-				return;
+				return true;
 			}
 		}
 	}
@@ -248,10 +259,13 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 		}
 		else //reset to default
 		{
-			LL_DEBUGS() << "Applying WL sky set: Default" << LL_ENDL;
-			ApplyWindLightPreset("Default");
+			LL_DEBUGS() << "Applying WL sky set: Region Default" << LL_ENDL;
+			ApplyWindLightPreset(PARCEL_WL_DEFAULT);
+			return false;
 		}
 	}
+
+	return true;
 }
 
 void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
@@ -261,7 +275,7 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
-	if ( (preset != "Default") && (wlprammgr->hasParamSet(key)) )
+	if ( (preset != PARCEL_WL_DEFAULT) && (wlprammgr->hasParamSet(key)) )
 	{
 		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 		setWL_Status(true);
@@ -286,7 +300,7 @@ void KCWindlightInterface::ResetToRegion(bool force)
 	//TODO: clear per parcel
 	if (mWeChangedIt || force) //dont reset anything if we didnt do it
 	{
-		ApplyWindLightPreset("Default");
+		ApplyWindLightPreset(PARCEL_WL_DEFAULT);
 	}
 }
 
@@ -444,7 +458,7 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 						}
 						else
 						{
-							LL_INFOS() << "Sky Default = " << preset << LL_ENDL;
+							LL_DEBUGS() << "Sky Default = " << preset << LL_ENDL;
 							settings["sky_default"] = preset;
 							found_settings = true;
 						}
