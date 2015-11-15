@@ -33,6 +33,7 @@
 class LLParcel;
 class LLViewerRegion;
 class LLEnvironmentSettings;
+class LLParcelChangeObserver;
 
 class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTimer
 {
@@ -40,6 +41,7 @@ class KCWindlightInterface : public LLSingleton<KCWindlightInterface>, LLEventTi
 
 public:
 	KCWindlightInterface();
+	~KCWindlightInterface();
 	void ParcelChange();
 	virtual BOOL tick();
 	void ApplySettings(const LLSD& settings);
@@ -56,6 +58,11 @@ public:
 	bool getWLset() { return mWLset; }
 	
 private:
+	class LLParcelChangeObserver;
+	friend class LLParcelChangeObserver;
+	boost::signals2::connection	mParcelMgrConnection;
+	void onAgentParcelChange();
+	
 	bool callbackParcelWL(const LLSD& notification, const LLSD& response);
 	bool callbackParcelWLClear(const LLSD& notification, const LLSD& response);
 	bool AllowedLandOwners(const LLUUID& agent_id);

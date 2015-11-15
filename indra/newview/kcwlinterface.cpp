@@ -45,6 +45,24 @@
 const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
 
+
+class KCWindlightInterface::LLParcelChangeObserver : public LLParcelObserver
+{
+public:
+	LLParcelChangeObserver(KCWindlightInterface* windlightInterface) : mKCWindlightInterface(windlightInterface) {}
+
+private:
+	/*virtual*/ void changed()
+	{
+		if (mKCWindlightInterface)
+		{
+			mKCWindlightInterface->ParcelChange();
+		}
+	}
+
+	KCWindlightInterface* mKCWindlightInterface;
+};
+
 KCWindlightInterface::KCWindlightInterface() :
 	LLEventTimer(PARCEL_WL_CHECK_TIME),
 	mWLset(false),
@@ -60,6 +78,17 @@ KCWindlightInterface::KCWindlightInterface() :
 	{
 		mEventTimer.stop();
 		mDisabled = true;
+	}
+	
+	mParcelMgrConnection = gAgent.addParcelChangedCallback(
+			boost::bind(&KCWindlightInterface::onAgentParcelChange, this));
+}
+
+KCWindlightInterface::~KCWindlightInterface()
+{
+	if (mParcelMgrConnection.connected())
+	{
+		mParcelMgrConnection.disconnect();
 	}
 }
 
@@ -92,7 +121,7 @@ void KCWindlightInterface::ParcelChange()
 
 	if ( (this_parcel_id != mLastParcelID) || (mLastParcelDesc != desc) ) //parcel changed
 	{
-		//LL_INFOS() << "agent in new parcel: "<< this_parcel_id << " : "  << parcel->getName() << LL_ENDL;
+		// LL_DEBUGS() << "Agent in new parcel: " << this_parcel_id << LL_ENDL;
 
 		mLastParcelID = this_parcel_id;
 		mLastParcelDesc = desc;
@@ -121,6 +150,12 @@ void KCWindlightInterface::ParcelChange()
 		}
 	}
 }
+
+void KCWindlightInterface::onAgentParcelChange()
+{
+	ParcelChange();
+}
+
 
 BOOL KCWindlightInterface::tick()
 {

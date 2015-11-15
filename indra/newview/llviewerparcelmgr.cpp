@@ -1661,9 +1661,6 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 					instance->mTeleportFinishedSignal(instance->mTeleportInProgressPosition, false);
 				}
 			}
-
-			//KC: check for parcel changes for WL settings
-			KCWindlightInterface::instance().ParcelChange();
 		}
 		else if (local_id == parcel_mgr.mAgentParcel->getLocalID())
 		{
