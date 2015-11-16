@@ -122,7 +122,7 @@
             height="50"
             layout="topleft"
             left_pad="20"
-            top_delta="-10"
+            top_delta="-17"
             width="150"
             visible = "false"
             name="radio_material_type">
@@ -159,7 +159,7 @@
              left="10"
              name="texture control"
              tool_tip="Click to choose a picture"
-             top_pad="7"
+             top_pad="5"
              width="64" />
             <text
              type="string"
@@ -208,7 +208,7 @@
              name="label maskcutoff"
              text_readonly_color="LabelDisabledColor"
              top_pad="4"
-             width="90">
+             width="150">
                 Mask cutoff
             </text>
             <spinner
@@ -257,7 +257,7 @@
              left_delta="0"
              name="combobox bumpiness"
              top_pad="4"
-             width="90">
+             width="150">
                 <combo_box.item
                  label="None"
                  name="None"
@@ -531,7 +531,7 @@
              left="10"
              name="tex gen"
              text_readonly_color="LabelDisabledColor"
-             top_pad="40"
+             top_pad="49"
              width="140">
                 Mapping
             </text>
