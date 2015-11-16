@@ -100,4 +100,13 @@
      right="-10"
      name="btn_ok"
      width="70" />
+    <button
+     top_delta="0"
+     follows="bottom"
+     height="20"
+     label="Group Notices"
+     layout="topleft"
+     right="-90"
+     name="btn_notices"
+     width="100" />
 </panel>
