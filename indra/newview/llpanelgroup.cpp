@@ -123,7 +123,10 @@ void LLPanelGroup::onOpen(const LLSD& key)
 		//getChild<LLAccordionCtrl>("groups_accordion")->expandDefaultTab();
 		if (mIsUsingTabContainer)
 		{
-			getChild<LLTabContainer>("groups_accordion")->selectTabByName(key["open_tab_name"].asString());
+			if (key.has("open_tab_name"))
+			{
+				getChild<LLTabContainer>("groups_accordion")->selectTabByName(key["open_tab_name"].asString());
+			}
 		}
 		else
 		{
