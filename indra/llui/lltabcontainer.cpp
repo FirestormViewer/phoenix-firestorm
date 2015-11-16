@@ -432,7 +432,13 @@ void LLTabContainer::draw()
 				{
 					break;
 				}
-				target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				//target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				// <FS:Ansariel> Only show button if tab is visible
+				if ((*iter)->mVisible)
+				{
+					target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				}
+				// </FS:Ansariel>
 				cur_scroll_pos--;
 			}
 
@@ -2318,7 +2324,10 @@ void LLTabContainer::updateMaxScrollPos()
 			setMaxScrollPos(getTabCount());
 			for(tuple_list_t::reverse_iterator tab_it = mTabList.rbegin(); tab_it != mTabList.rend(); ++tab_it)
 			{
-				running_tab_width += (*tab_it)->mButton->getRect().getWidth();
+				// <FS:Ansariel> Only show button if tab is visible
+				//running_tab_width += (*tab_it)->mButton->getRect().getWidth();
+				running_tab_width += (*tab_it)->mVisible ? (*tab_it)->mButton->getRect().getWidth() : 0;
+				// </FS:Ansariel>
 				if (running_tab_width > available_width_with_arrows)
 				{
 					break;
@@ -2327,7 +2336,9 @@ void LLTabContainer::updateMaxScrollPos()
 			}
 			// in case last tab doesn't actually fit on screen, make it the last scrolling position
 			setMaxScrollPos(llmin(getMaxScrollPos(), getTabCount() - 1));
-			no_scroll = FALSE;
+			// <FS:Ansariel> Only show button if tab is visible
+			//no_scroll = FALSE;
+			no_scroll = (running_tab_width <= available_width_with_arrows);
 		}
 	}
 	if (no_scroll)
@@ -2445,5 +2456,7 @@ void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
 		this->setVisible( TRUE );
 	else
 		this->setVisible( FALSE );
+
+	updateMaxScrollPos();
 }
 // </FS:ND>
