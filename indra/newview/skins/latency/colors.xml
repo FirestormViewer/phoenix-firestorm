@@ -188,7 +188,7 @@
 	<!-- The currently hovered over scroll list item -->
 	<color
 		name="ScrollHoveredColor"
-		reference="UIControlBGLightHover" />
+		reference="EmphasisColor_13" />
 	<!-- Unknown use, some kind of debug border color used in llview.cpp -->
 	<color
 		name="ScrollHighlightedColor"
