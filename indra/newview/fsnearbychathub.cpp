@@ -253,9 +253,7 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 	{
 		if (type == CHAT_TYPE_OOC)
 		{
-			std::string tempText = wstring_to_utf8str( text );
-			tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
-			text = utf8str_to_wstring(tempText);
+			text = utf8string_to_wstring(gSavedSettings.getString("FSOOCPrefix") + " ") + text + utf8string_to_wstring(" " + gSavedSettings.getString("FSOOCPostfix"));
 		}
 
 		// Check if this is destined for another channel
@@ -285,16 +283,7 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 
 		utf8_revised_text = utf8str_trim(utf8_revised_text);
 
-		EChatType nType;
-		if (type == CHAT_TYPE_OOC)
-		{
-			nType = CHAT_TYPE_NORMAL;
-		}
-		else
-		{
-			nType = type;
-		}
-
+		EChatType nType = (type == CHAT_TYPE_OOC ? CHAT_TYPE_NORMAL : type);
 		type = processChatTypeTriggers(nType, utf8_revised_text);
 
 		if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
