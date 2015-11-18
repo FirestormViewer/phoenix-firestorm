@@ -1044,7 +1044,7 @@
   <key>AutoCloseOOC</key>
     <map>
       <key>Comment</key>
-      <string>Auto-close OOC chat (i.e. add \"))\" if not found and \"((\" was used)</string>
+      <string>Auto-close OOC chat (i.e. add &quot;))&quot; if not found and &quot;((&quot; was used)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
