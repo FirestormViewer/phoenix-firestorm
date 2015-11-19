@@ -30,21 +30,13 @@
 #include "fsconsoleutils.h"
 
 #include "fscommon.h"
-#include "fsfloaternearbychat.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llconsole.h"
-#include "llfloaterreg.h"
 #include "llimview.h"
 #include "lltrans.h"
+#include "llviewerchat.h"
 #include "llviewercontrol.h"
-
-// static
-BOOL FSConsoleUtils::isNearbyChatVisible()
-{
-	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-	return nearby_chat->getVisible();
-}
 
 // static
 bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args)
@@ -220,11 +212,9 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	std::string senderName;
 	std::string message(message_str);
 	std::string delimiter = ": ";
-	std::string prefix = message.substr(0, 4);
-	LLStringUtil::toLower(prefix);
 
 	// irc styled messages
-	if (prefix == "/me " || prefix == "/me'")
+	if (is_irc_me_prefix(message))
 	{
 		delimiter = LLStringUtil::null;
 		message = message.substr(3);
