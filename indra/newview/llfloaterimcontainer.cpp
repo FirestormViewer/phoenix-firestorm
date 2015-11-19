@@ -925,11 +925,6 @@ void LLFloaterIMContainer::onCustomAction(const LLSD& userdata)
 	{
 		setSortOrderParticipants(LLConversationFilter::SO_DISTANCE);
 	}
-	if ("view_icons" == command)
-	{
-		gSavedSettings.setBOOL("ChatShowIcons", !(gSavedSettings.getBOOL("ChatShowIcons") && !gSavedSettings.getBOOL("GlobalShowIconsOverride")));
-		gSavedSettings.setBOOL("GlobalShowIconsOverride", (!gSavedSettings.getBOOL("ChatShowIcons") && gSavedSettings.getBOOL("GlobalShowIconsOverride")));
-	}
 	if ("chat_preferences" == command)
 	{
 		LLFloaterPreference * floater_prefp = LLFloaterReg::showTypedInstance<LLFloaterPreference>("preferences");
@@ -979,10 +974,6 @@ BOOL LLFloaterIMContainer::isActionChecked(const LLSD& userdata)
 	if ("sort_participants_by_distance" == command)
 	{
 		return (order.getSortOrderParticipants() == LLConversationFilter::SO_DISTANCE);
-	}
-	if ("view_icons" == command)
-	{
-		return gSavedSettings.getBOOL("ChatShowIcons") && !gSavedSettings.getBOOL("GlobalShowIconsOverride");
 	}
 	if ("Translating.Enabled" == command)
 	{

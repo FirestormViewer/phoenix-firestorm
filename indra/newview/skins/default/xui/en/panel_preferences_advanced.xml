@@ -79,17 +79,6 @@
      name="UseAnimationTimeSteps"
      top_pad="5"
      width="237"/>
-    <check_box
-     top_pad="5"
-     enabled="true"
-     follows="top|left"
-     height="15"
-     initial_value="false"
-     control_name="GlobalShowIconsOverride"
-     label="Hide people icons (global override)"
-     left="30"
-     name="global_show_icons_override"
-     width="400"/>
     <text
      name="BackgroundYieldTimeText"
      follows="top|left"
