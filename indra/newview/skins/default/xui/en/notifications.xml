@@ -12690,4 +12690,14 @@ the region &quot;[REGION]&quot;?
      name="okbutton"
      yestext="OK"/>
   </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="GlobalOnlineStatusToggle"
+   type="alertmodal">
+Due to server load, mass toggling online status visibility can take a while to become effective. Please be patient.
+    <usetemplate
+     ignoretext="Inform me that toggling online status visibility may take a while"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
 </notifications>

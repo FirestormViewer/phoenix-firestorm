@@ -11,9 +11,6 @@
  top="0"
  width="333">
     <string
-     name="high_server_load"
-     value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
-    <string
      name="no_recent_people"
      value="No recent people. Looking for people to hang out with? Try [secondlife:///app/search/people Search] or the [secondlife:///app/worldmap World Map]." />
     <string
@@ -345,7 +342,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  layout="topleft"
                  left_pad="2"
                  name="GlobalOnlineStatusToggle"
-                 tool_tip="Toggle Global Visibility"
+                 tool_tip="Toggle global online status visibility"
                  width="31" />
                 <dnd_button
                  follows="right"

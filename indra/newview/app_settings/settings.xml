@@ -1074,19 +1074,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
-  <key>GlobalOnlineStatusToggle</key>
-    <map>
-      <key>Comment</key>
-      <string>Saves the state of global online status permission for friends</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-
   <key>RenderVolumeSAProtection</key>
     <map>
       <key>Comment</key>
@@ -1098,7 +1085,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
   <key>RenderVolumeSAThreshold</key>
     <map>
       <key>Comment</key>

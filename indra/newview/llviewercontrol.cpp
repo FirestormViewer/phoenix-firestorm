@@ -829,6 +829,44 @@ void handleKeyboardLayoutChanged(const LLSD& newvalue)
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Global online status toggle
+void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
+{
+	bool visible = newvalue.asBoolean();
+
+	LLAvatarTracker::buddy_map_t all_buddies;
+	LLAvatarTracker::instance().copyBuddyList(all_buddies);
+
+	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
+	for (; buddy_it != all_buddies.end(); ++buddy_it)
+	{
+		LLUUID buddy_id = buddy_it->first;
+		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
+		if (relation == NULL)
+		{
+			// Lets have a warning log message instead of having a crash. EXT-4947.
+			LL_WARNS() << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
+			return;
+		}
+		
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (visible)
+		{
+			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+		}
+		else
+		{
+			new_rights = (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+		}
+
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id, new_rights);
+	}
+
+	LLNotificationsUtil::add("GlobalOnlineStatusToggle");
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1035,6 +1073,8 @@ void settings_setup_listeners()
 	// </FS:Ansariel> [FS communication UI]
 
 	gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
+
+	gSavedPerAccountSettings.getControl("GlobalOnlineStatusToggle")->getSignal()->connect(boost::bind(&handleGlobalOnlineStatusChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
