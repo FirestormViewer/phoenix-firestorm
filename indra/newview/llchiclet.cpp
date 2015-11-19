@@ -313,7 +313,16 @@ LLNotificationChiclet::LLNotificationChiclet(const Params& p)
 	mNotificationChannel.reset(new ChicletNotificationChannel(this));
 	// ensure that notification well window exists, to synchronously
 	// handle toast add/delete events.
-	LLFloaterNotificationsTabbed::getInstance()->setSysWellChiclet(this);
+	// <FS:Ansariel> Optional legacy notification well
+	//LLFloaterNotificationsTabbed::getInstance()->setSysWellChiclet(this);
+	if (!gSavedSettings.getBOOL("FSInternalLegacyNotificationWell"))
+	{
+		LLFloaterNotificationsTabbed::getInstance()->setSysWellChiclet(this);
+	}
+	else
+	{
+		LLNotificationWellWindow::getInstance()->setSysWellChiclet(this);
+	}
 }
 
 void LLNotificationChiclet::onMenuItemClicked(const LLSD& user_data)
@@ -321,7 +330,16 @@ void LLNotificationChiclet::onMenuItemClicked(const LLSD& user_data)
 	std::string action = user_data.asString();
 	if("close all" == action)
 	{
-		LLFloaterNotificationsTabbed::getInstance()->closeAll();
+		// <FS:Ansariel> Optional legacy notification well
+		//LLFloaterNotificationsTabbed::getInstance()->closeAll();
+		if (!gSavedSettings.getBOOL("FSInternalLegacyNotificationWell"))
+		{
+			LLFloaterNotificationsTabbed::getInstance()->closeAll();
+		}
+		else
+		{
+			LLNotificationWellWindow::getInstance()->closeAll();
+		}
 		// <FS:Ansariel> [FS communication UI] - We have our own IM well button again
 		//LLIMWellWindow::getInstance()->closeAll();
 	}
@@ -374,7 +392,11 @@ bool LLNotificationChiclet::ChicletNotificationChannel::filterNotification( LLNo
 	if (   (notification->getName() == "ScriptDialog") // special case for scripts
 		// if there is no toast window for the notification, filter it
 		//|| (!LLNotificationWellWindow::getInstance()->findItemByID(notification->getID()))
-        || (!LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
+		// <FS:Ansariel> Optional legacy notification well
+        //|| (!LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
+		|| ((!gSavedSettings.getBOOL("FSInternalLegacyNotificationWell") && !LLFloaterNotificationsTabbed::getInstance()->findItemByID(notification->getID(), notification->getName()))
+		|| (gSavedSettings.getBOOL("FSInternalLegacyNotificationWell") && !LLNotificationWellWindow::getInstance()->findItemByID(notification->getID())))
+		// </FS:Ansariel>
 		)
 	{
 		displayNotification = false;

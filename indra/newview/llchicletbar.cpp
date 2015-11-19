@@ -150,7 +150,17 @@ BOOL LLChicletBar::postBuild()
 	// <FS:Ansariel> [FS communication UI]
 	showWellButton("im_well", !LLIMWellWindow::getInstance()->isWindowEmpty());
 
-	showWellButton("notification_well", !LLFloaterNotificationsTabbed::getInstance()->isWindowEmpty());
+	// <FS:Ansariel> Optional legacy notification well
+	//showWellButton("notification_well", !LLFloaterNotificationsTabbed::getInstance()->isWindowEmpty());
+	if (!gSavedSettings.getBOOL("FSInternalLegacyNotificationWell"))
+	{
+		showWellButton("notification_well", !LLFloaterNotificationsTabbed::getInstance()->isWindowEmpty());
+	}
+	else
+	{
+		showWellButton("notification_well", !LLNotificationWellWindow::getInstance()->isWindowEmpty());
+	}
+	// </FS:Ansariel>
 
 	LLPanelTopInfoBar::instance().setResizeCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
 	LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));

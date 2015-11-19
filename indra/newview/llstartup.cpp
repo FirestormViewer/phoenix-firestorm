@@ -604,7 +604,7 @@ bool idle_startup()
 		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("FSSkinCurrentReadableName"));
 		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("FSSkinCurrentThemeReadableName"));
 		// </FS:Ansariel>
-		
+
 		if (LLFeatureManager::getInstance()->isSafe())
 		{
 			LLNotificationsUtil::add("DisplaySetToSafe");
