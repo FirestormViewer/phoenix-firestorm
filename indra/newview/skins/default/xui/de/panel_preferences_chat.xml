@@ -138,6 +138,7 @@
 			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
 			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
 			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
+			<check_box label="Tippanimation auch bei Emotes abspielen" name="play_typing_animation_emote"/>
 			<check_box label="Tipp-Klang abspielen, wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>

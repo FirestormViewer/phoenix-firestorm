@@ -604,10 +604,20 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
 	LLWStringUtil::trimHead(raw_text);
-	S32 length = raw_text.length();
+	size_t length = raw_text.length();
 
+	LLWString prefix;
+	if (length > 3)
+	{
+		prefix = raw_text.substr(0, 3);
+		LLWStringUtil::toLower(prefix);
+	}
+
+	static LLCachedControl<bool> type_during_emote(gSavedSettings, "FSTypeDuringEmote");
+	static LLCachedControl<bool> allow_mu_pose(gSavedSettings, "AllowMUpose");
 	if (length > 0 &&
-		raw_text[0] != '/' && (raw_text[0] != ':' || !gSavedSettings.getBOOL("AllowMUpose")) &&
+		((raw_text[0] != '/' || (type_during_emote && length > 3 && prefix == utf8string_to_wstring("/me") && (raw_text[3] == ' ' || raw_text[3] == '\'')))
+		&& (raw_text[0] != ':' || !allow_mu_pose || type_during_emote)) &&
 		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
