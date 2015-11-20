@@ -140,6 +140,7 @@
 #include "fswsassetblacklist.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
+#include "llfriendcard.h"
 #include "llgiveinventory.h"
 #include "lltexturefetch.h"
 #include "rlvactions.h"
@@ -1129,6 +1130,17 @@ protected:
 						LL_DEBUGS("Inventory_Move") << "Found asset UUID: " << asset_uuid << LL_ENDL;
 						was_moved = true;
 					}
+					// <FS:Ansariel> We might end up here if LLFriendCardsManager tries to sync the friend cards at login
+					//               and that might pop up the inventory window for extra annoyance -> silence this!
+					else if (added_item->getActualType() == LLAssetType::AT_CALLINGCARD)
+					{
+						if (LLFriendCardsManager::instance().isAvatarDataStored(added_item->getCreatorUUID()))
+						{
+							LL_DEBUGS("FriendCard") << "Skipping added calling card from friend cards sync: " added_item->getCreatorUUID().asString() << LL_ENDL;
+							was_moved = true;
+						}
+					}
+					// </FS:Ansariel>
 				}
 			}
 
