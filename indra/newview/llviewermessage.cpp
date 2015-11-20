@@ -1136,7 +1136,7 @@ protected:
 					{
 						if (LLFriendCardsManager::instance().isAvatarDataStored(added_item->getCreatorUUID()))
 						{
-							LL_DEBUGS("FriendCard") << "Skipping added calling card from friend cards sync: " added_item->getCreatorUUID().asString() << LL_ENDL;
+							LL_DEBUGS("FriendCard") << "Skipping added calling card from friend cards sync: " << added_item->getCreatorUUID().asString() << LL_ENDL;
 							was_moved = true;
 						}
 					}
