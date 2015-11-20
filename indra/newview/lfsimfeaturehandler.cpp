@@ -20,12 +20,18 @@
 #include "lfsimfeaturehandler.h"
 
 #include "llagent.h"
+#include "lllogininstance.h"
+#include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-#include "llviewercontrol.h"
-#include "lllogininstance.h"
 
 LFSimFeatureHandler::LFSimFeatureHandler()
+	: mSupportsExport(false),
+	mSayRange(20),
+	mShoutRange(100),
+	mWhisperRange(10),
+	mHasAvatarPicker(false),
+	mHasDestinationGuide(false)
 {
 	LL_INFOS() << "Initializing Sim Feature Handler" << LL_ENDL;
 
@@ -169,6 +175,9 @@ void LFSimFeatureHandler::setSupportedFeatures()
 				mAvatarPickerURL = LLStringUtil::null;
 			}
 		}
+
+		mHasAvatarPicker = !avatarPickerURL().empty();
+		mHasDestinationGuide = !destinationGuideURL().empty();
 	}
 }
 

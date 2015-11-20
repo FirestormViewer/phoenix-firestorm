@@ -85,8 +85,8 @@ public:
 	std::string avatarPickerURL() const { return mAvatarPickerURL; }
 	std::string destinationGuideURL() const { return mDestinationGuideURL; }
 
-	bool hasAvatarPicker() const { return !avatarPickerURL().empty(); }
-	bool hasDestinationGuide() const { return !destinationGuideURL().empty(); }
+	bool hasAvatarPicker() const { return mHasAvatarPicker; }
+	bool hasDestinationGuide() const { return mHasDestinationGuide; }
 
 private:
 	// SignaledTypes
@@ -98,6 +98,9 @@ private:
 	SignaledType<U32> mWhisperRange;
 	SignaledType<std::string> mAvatarPickerURL;
 	SignaledType<std::string> mDestinationGuideURL;
+
+	bool mHasAvatarPicker;
+	bool mHasDestinationGuide;
 };
 
 #endif //LFSIMFEATUREHANDLER_H
