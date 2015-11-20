@@ -177,8 +177,8 @@ void FSRadar::updateRadarList()
 	LLMuteList* mutelist = LLMuteList::getInstance();
 	FSWSAssetBlacklist* blacklist = FSWSAssetBlacklist::getInstance();
 
-	static const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
-	static const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
+	const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
+	const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
 
 	static const std::string str_chat_entering =			LLTrans::getString("entering_chat_range");
 	static const std::string str_chat_leaving =				LLTrans::getString("leaving_chat_range");
