@@ -224,6 +224,7 @@
 #include "fsregistrarutils.h"
 #include "fsscriptlibrary.h"
 #include "fswsassetblacklist.h"
+#include "lfsimfeaturehandler.h"
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
@@ -1787,7 +1788,7 @@ bool idle_startup()
 
 // <FS:CR> Aurora Sim
 		//LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim);
-LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, first_sim_size_y);
+		LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, first_sim_size_y);
 // </FS:CR> Aurora Sim
 		display_startup();
 
@@ -1923,6 +1924,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// so that we can construct voice UI that relies on the name cache
 		LLVoiceClient::getInstance()->updateSettings();
 		display_startup();
+
+		// <FS:Ansariel> OpenSim support: Init with defaults - we get the OpenSimExtras later during login
+		LFSimFeatureHandler::instance();
 
 		// create a container's instance for start a controlling conversation windows
 		// by the voice's events

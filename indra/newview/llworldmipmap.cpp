@@ -189,19 +189,10 @@ LLPointer<LLViewerFetchedTexture> LLWorldMipmap::getObjectsTile(U32 grid_x, U32 
 LLPointer<LLViewerFetchedTexture> LLWorldMipmap::loadObjectsTile(U32 grid_x, U32 grid_y, S32 level)
 {
 	// Get the grid coordinates
-// <FS:CR> HG Maps
-#ifdef OPENSIM
-	std::string hg_map;
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		hg_map = LFSimFeatureHandler::instance().mapServerURL();
-	}
-	std::string imageurl = hg_map.empty() ? gSavedSettings.getString("CurrentMapServerURL") : hg_map;
-	imageurl.append(llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y));
-#else // !OPENSIM
-	std::string imageurl = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y);
-#endif // OPENSIM
-// </FS:CR>
+	// <FS:CR> HG Maps
+	//std::string imageurl = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y);
+	std::string imageurl = LFSimFeatureHandler::instance().mapServerURL() + llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y);
+	// </FS:CR>
 
 	// DO NOT COMMIT!! DEBUG ONLY!!!
 	// Use a local jpeg for every tile to test map speed without S3 access

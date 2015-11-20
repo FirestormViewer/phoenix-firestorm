@@ -55,6 +55,8 @@ typedef enum e_export_support
 
 class LFSimFeatureHandler : public LLSingleton<LFSimFeatureHandler>
 {
+	LOG_CLASS(LFSimFeatureHandler);
+
 protected:
 	friend class LLSingleton<LFSimFeatureHandler>;
 	LFSimFeatureHandler();
@@ -69,6 +71,8 @@ public:
 	boost::signals2::connection setSayRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
 	boost::signals2::connection setShoutRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
 	boost::signals2::connection setWhisperRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
+	boost::signals2::connection setAvatarPickerCallback(const boost::signals2::signal<void()>::slot_type& slot);
+	boost::signals2::connection setDestinationGuideCallback(const boost::signals2::signal<void()>::slot_type& slot);
 
 	// Accessors
 	bool simSupportsExport() const { return mSupportsExport; }
@@ -78,6 +82,8 @@ public:
 	U32 shoutRange() const { return mShoutRange; }
 	U32 whisperRange() const { return mWhisperRange; }
 	ExportSupport exportPolicy() const;
+	std::string avatarPickerURL() const { return mAvatarPickerURL; }
+	std::string destinationGuideURL() const { return mDestinationGuideURL; }
 
 private:
 	// SignaledTypes
@@ -87,6 +93,8 @@ private:
 	SignaledType<U32> mSayRange;
 	SignaledType<U32> mShoutRange;
 	SignaledType<U32> mWhisperRange;
+	SignaledType<std::string> mAvatarPickerURL;
+	SignaledType<std::string> mDestinationGuideURL;
 };
 
 #endif //LFSIMFEATUREHANDLER_H

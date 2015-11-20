@@ -125,6 +125,7 @@
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
+#include "lfsimfeaturehandler.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -363,22 +364,29 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 	if ( option == 0 ) // YES
 	{
 		std::string url;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-		if(LLGridManager::getInstance()->isInOpenSim())
+
+		if (LFSimFeatureHandler::instanceExists())
 		{
-			url = LLLoginInstance::getInstance()->hasResponse("search")
-				? LLLoginInstance::getInstance()->getResponse("search").asString()
-				: gSavedSettings.getString("SearchURLOpenSim");
+			url = LFSimFeatureHandler::instance().searchURL();
 		}
-		else // we are in SL or SL beta
-#endif // OPENSIM // <FS:AW optional opensim support>
+		else
 		{
-			//not in OpenSim means we are in SL or SL beta
-			url = gSavedSettings.getString("SearchURL");
+#ifdef OPENSIM // <FS:AW optional opensim support>
+			if (LLGridManager::getInstance()->isInOpenSim())
+			{
+				url = LLLoginInstance::getInstance()->hasResponse("search")
+					? LLLoginInstance::getInstance()->getResponse("search").asString()
+					: gSavedSettings.getString("SearchURLOpenSim");
+			}
+			else // we are in SL or SL beta
+#endif // OPENSIM // <FS:AW optional opensim support>
+			{
+				//not in OpenSim means we are in SL or SL beta
+				url = gSavedSettings.getString("SearchURL");
+			}
 		}
 
 		gSavedSettings.setString("SearchURLDebug", url);
-
 	}
 
 	return false;
