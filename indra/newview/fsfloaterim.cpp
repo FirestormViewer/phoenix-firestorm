@@ -868,6 +868,8 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
+	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+
 	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
 	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);
 

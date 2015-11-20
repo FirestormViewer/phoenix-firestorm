@@ -37,7 +37,7 @@
 
 void FSChatOptionsMenu::onMenuItemClick(const LLSD& userdata, LLUICtrl* source)
 {
-	std::string option = userdata.asString();
+	const std::string option = userdata.asString();
 
 	if (option == "blocklist")
 	{
@@ -94,7 +94,7 @@ void FSChatOptionsMenu::onMenuItemClick(const LLSD& userdata, LLUICtrl* source)
 
 bool FSChatOptionsMenu::onMenuItemEnable(const LLSD& userdata, LLUICtrl* source)
 {
-	std::string option = userdata.asString();
+	const std::string option = userdata.asString();
 
 	if (option == "typing_chevron")
 	{
@@ -115,7 +115,7 @@ bool FSChatOptionsMenu::onMenuItemEnable(const LLSD& userdata, LLUICtrl* source)
 
 bool FSChatOptionsMenu::onMenuItemVisible(const LLSD& userdata, LLUICtrl* source)
 {
-	std::string option = userdata.asString();
+	const std::string option = userdata.asString();
 
 	if (option == "typing_chevron")
 	{
@@ -133,13 +133,17 @@ bool FSChatOptionsMenu::onMenuItemVisible(const LLSD& userdata, LLUICtrl* source
 	{
 		return (dynamic_cast<FSFloaterNearbyChat*>(source) != NULL);
 	}
+	else if (option == "show_im_send_button")
+	{
+		return (dynamic_cast<FSFloaterIM*>(source) != NULL);
+	}
 
 	return false;
 }
 
 bool FSChatOptionsMenu::onMenuItemCheck(const LLSD& userdata, LLUICtrl* source)
 {
-	std::string option = userdata.asString();
+	const std::string option = userdata.asString();
 
 	if (option == "blocklist")
 	{

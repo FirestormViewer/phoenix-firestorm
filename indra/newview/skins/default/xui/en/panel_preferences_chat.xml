@@ -887,6 +887,14 @@
 		 top_pad="1"
 		 height="16"
 		 width="400"
+		 control_name="FSShowIMSendButton"
+		 name="FSShowIMSendButton"
+		 label="Show send chat button in chat bar for IM sessions"/>
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
 		 control_name="FSNearbyChatbar"
 		 name="FSNearbyChatbar"
 		 label="Add a chat bar in the Nearby Chat window"/>
