@@ -148,6 +148,7 @@
 #include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
+#include "lfsimfeaturehandler.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
 #include "llsdserialize.h"
 #include "lltexturecache.h"	// ## Zi: Texture Refresh
@@ -9446,6 +9447,28 @@ class LLGridCheck : public view_listener_t
 		return true;
 	}
 };
+
+class FSGridFeatureCheck : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (LFSimFeatureHandler::instanceExists())
+		{
+			const std::string feature = userdata.asString();
+
+			if (feature == "avatar_picker")
+			{
+				return LFSimFeatureHandler::instance().hasAvatarPicker();
+			}
+			else if (feature == "destination_guide")
+			{
+				return LFSimFeatureHandler::instance().hasDestinationGuide();
+			}
+		}
+
+		return false;
+	}
+};
 // </FS:CR>
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
@@ -10797,6 +10820,7 @@ void initialize_menus()
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 	
 	view_listener_t::addEnable(new LLGridCheck(), "GridCheck");	// <FS:CR> Opensim menu item visibility control
+	view_listener_t::addEnable(new FSGridFeatureCheck(), "GridFeatureCheck");
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));

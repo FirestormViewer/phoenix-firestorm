@@ -85,6 +85,9 @@ public:
 	std::string avatarPickerURL() const { return mAvatarPickerURL; }
 	std::string destinationGuideURL() const { return mDestinationGuideURL; }
 
+	bool hasAvatarPicker() const { return !avatarPickerURL().empty(); }
+	bool hasDestinationGuide() const { return !destinationGuideURL().empty(); }
+
 private:
 	// SignaledTypes
 	SignaledType<bool> mSupportsExport;
