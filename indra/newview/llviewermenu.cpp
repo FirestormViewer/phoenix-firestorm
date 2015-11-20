@@ -9415,60 +9415,58 @@ class FSAddToContactSet : public view_listener_t
 // </FS:CR> Add to contact set
 
 // <FS:CR> Opensim menu item visibility control
-class LLGridCheck : public view_listener_t
+bool checkIsGrid(const LLSD& userdata)
 {
-	bool handleEvent(const LLSD& userdata)
+	std::string grid_type = userdata.asString();
+	if ("secondlife" == grid_type)
 	{
-		std::string grid_type = userdata.asString();
-		if ("secondlife" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInSecondLife();
-		}
-#ifdef OPENSIM
-		else if ("opensim" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInOpenSim();
-		}
-		else if ("aurorasim" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInAuroraSim();
-		}
-#else // !OPENSIM
-		else if ("opensim" == grid_type || "aurorasim" == grid_type)
-		{
-			LL_DEBUGS("ViewerMenu") << grid_type << "is not a supported platform on Havok builds. Disabling item." << LL_ENDL;
-			return false;
-		}
-#endif // OPENSIM
-		else
-		{
-			LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter! (" << grid_type << ")" << LL_ENDL;
-		}
-		return true;
+		return LLGridManager::getInstance()->isInSecondLife();
 	}
-};
-
-class FSGridFeatureCheck : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
+#ifdef OPENSIM
+	else if ("opensim" == grid_type)
 	{
-		if (LFSimFeatureHandler::instanceExists())
-		{
-			const std::string feature = userdata.asString();
-
-			if (feature == "avatar_picker")
-			{
-				return LFSimFeatureHandler::instance().hasAvatarPicker();
-			}
-			else if (feature == "destination_guide")
-			{
-				return LFSimFeatureHandler::instance().hasDestinationGuide();
-			}
-		}
-
+		return LLGridManager::getInstance()->isInOpenSim();
+	}
+	else if ("aurorasim" == grid_type)
+	{
+		return LLGridManager::getInstance()->isInAuroraSim();
+	}
+#else // !OPENSIM
+	else if ("opensim" == grid_type || "aurorasim" == grid_type)
+	{
+		LL_DEBUGS("ViewerMenu") << grid_type << "is not a supported platform on Havok builds. Disabling item." << LL_ENDL;
 		return false;
 	}
-};
+#endif // OPENSIM
+	else
+	{
+		LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter! (" << grid_type << ")" << LL_ENDL;
+	}
+	return true;
+}
+
+bool isGridFeatureEnabled(const LLSD& userdata)
+{
+	if (LFSimFeatureHandler::instanceExists())
+	{
+		const std::string feature = userdata.asString();
+
+		if (feature == "avatar_picker")
+		{
+			return LFSimFeatureHandler::instance().hasAvatarPicker();
+		}
+		else if (feature == "destination_guide")
+		{
+			return LFSimFeatureHandler::instance().hasDestinationGuide();
+		}
+		else
+		{
+			LL_WARNS("ViewerMenu") << "Unhandled or bad grid feature check parameter! (" << feature << ")" << LL_ENDL;
+		}
+	}
+
+	return false;
+}
 // </FS:CR>
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
@@ -10819,8 +10817,8 @@ void initialize_menus()
 	// <FS:Ansariel> [FS communication UI]
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 	
-	view_listener_t::addEnable(new LLGridCheck(), "GridCheck");	// <FS:CR> Opensim menu item visibility control
-	view_listener_t::addEnable(new FSGridFeatureCheck(), "GridFeatureCheck");
+	enable.add("GridCheck", boost::bind(&checkIsGrid, _2)); // <FS:CR> Opensim menu item visibility control
+	enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
