@@ -480,6 +480,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
+	mCommitCallbackRegistrar.add("Pref.VoiceSetClearKey",		boost::bind(&LLFloaterPreference::onClickClearKey, this)); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
@@ -2205,6 +2206,13 @@ void LLFloaterPreference::onClickSetKey()
 		dialog->setParent(this);
 	}
 }
+
+// <FS:Ansariel> FIRE-3803: Clear voice toggle button
+void LLFloaterPreference::onClickClearKey()
+{
+	gSavedSettings.setString("PushToTalkButton", "");
+}
+// </FS:Ansariel>
 
 void LLFloaterPreference::setKey(KEY key)
 {
