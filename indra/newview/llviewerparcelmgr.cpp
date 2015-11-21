@@ -68,7 +68,6 @@
 #include "llweb.h"
 #include "llvieweraudio.h"
 #include "kcwlinterface.h"
-#include "llviewernetwork.h"
 
 const F32 PARCEL_COLLISION_DRAW_SECS = 1.f;
 
@@ -942,6 +941,13 @@ void LLViewerParcelMgr::sendParcelAccessListRequest(U32 flags)
 	LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosGlobal( mWestSouth );
 	if (!region) return;
 
+	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
+	if (!region->isCapabilityAvailable("RegionExperiences"))
+	{
+		flags &= ~(AL_ALLOW_EXPERIENCE | AL_BLOCK_EXPERIENCE);
+	}
+	// </FS:Ansariel>
+
 	LLMessageSystem *msg = gMessageSystem;
 
 
@@ -1742,21 +1748,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 			}
 
 			// Request access list information for this land
-			// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
-			//parcel_mgr.sendParcelAccessListRequest(AL_ACCESS | AL_BAN | AL_ALLOW_EXPERIENCE | AL_BLOCK_EXPERIENCE);
-#if OPENSIM
-			if (LLGridManager::instance().isInSecondLife())
-			{
-				parcel_mgr.sendParcelAccessListRequest(AL_ACCESS | AL_BAN | AL_ALLOW_EXPERIENCE | AL_BLOCK_EXPERIENCE);
-			}
-			else
-			{
-				parcel_mgr.sendParcelAccessListRequest(AL_ACCESS | AL_BAN);
-			}
-#else
 			parcel_mgr.sendParcelAccessListRequest(AL_ACCESS | AL_BAN | AL_ALLOW_EXPERIENCE | AL_BLOCK_EXPERIENCE);
-#endif
-			// </FS:Ansariel
 
 			// Request dwell for this land, if it's not public land.
 			parcel_mgr.mSelectedDwell = DWELL_NAN;

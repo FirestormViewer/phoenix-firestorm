@@ -255,6 +255,13 @@ void LLFloaterLand::onOpen(const LLSD& key)
 	// LLViewerParcelMgr::getInstance()->sendParcelAccessListRequest(AL_ACCESS | AL_BAN | AL_RENTER);
 
 	mParcel = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
+
+	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
+	if (!LLViewerParcelMgr::getInstance()->getSelectionRegion()->isCapabilityAvailable("RegionExperiences"))
+	{
+		mTabLand->removeTabPanel(mTabLand->getPanelByName("land_experiences_panel"));
+	}
+	// </FS:Ansariel>
 	
 	// Refresh even if not over a region so we don't get an
 	// uninitialized dialog. The dialog is 0-region aware.
@@ -302,15 +309,6 @@ BOOL LLFloaterLand::postBuild()
 	{
 		tab->selectTab(sLastTab);
 	}
-
-	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
-#if OPENSIM
-	if (!LLGridManager::instance().isInSecondLife())
-	{
-		mTabLand->removeTabPanel(mTabLand->getPanelByName("land_experiences_panel"));
-	}
-#endif
-	// </FS:Ansariel>
 
 	return TRUE;
 }
