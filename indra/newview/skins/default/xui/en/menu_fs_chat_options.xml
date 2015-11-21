@@ -158,7 +158,7 @@
 			parameter="show_send_button"/>
 	</menu_item_check>
 	<menu_item_check
-		label="Show send button"
+		label="Show send button in IM sessions"
 		name="show_im_send_button">
 		<menu_item_check.on_check
 			function="CheckControl"
