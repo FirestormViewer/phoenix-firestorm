@@ -303,6 +303,15 @@ BOOL LLFloaterLand::postBuild()
 		tab->selectTab(sLastTab);
 	}
 
+	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
+#if OPENSIM
+	if (!LLGridManager::instance().isInSecondLife())
+	{
+		mTabLand->removeTabPanel(mTabLand->getPanelByName("land_experiences_panel"));
+	}
+#endif
+	// </FS:Ansariel>
+
 	return TRUE;
 }
 

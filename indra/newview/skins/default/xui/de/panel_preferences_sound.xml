@@ -92,9 +92,10 @@
 		<check_box label="Sprachfunktion beim Drücken folgender Taste(n) ein-/ausschalten:" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 		<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
 		<button label="Taste festlegen" name="set_voice_hotkey_button"/>
+		<button name="clear_voice_hotkey_button" tool_tip="Taste löschen"/>
 		<button name="set_voice_middlemouse_button" tool_tip="Auf mittlere Maustaste zurücksetzen"/>
-        <button label="Geräte-Einstellungen" name="device_settings_btn"/>
-        <panel name="device_settings_panel">
+		<button label="Geräte-Einstellungen" name="device_settings_btn"/>
+		<panel name="device_settings_panel">
 			<panel.string name="default_text">
 				Standard
 			</panel.string>
@@ -113,11 +114,11 @@
 			<text name="Volume label" width="100">
 				Meine Lautstärke:
 			</text>
-			<slider_bar initial_value="1,0" name="mic_volume_slider" tool_tip="Lautstärke mit diesem Regler ändern"/>
+			<slider_bar name="mic_volume_slider" tool_tip="Lautstärke mit diesem Regler ändern"/>
 			<text name="wait_text">
 				Bitte warten
 			</text>
-        </panel>
+		</panel>
 	</panel>
 	
 	<!-- UI Sounds 1 -->

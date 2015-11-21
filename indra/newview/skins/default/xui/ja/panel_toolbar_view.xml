@@ -46,7 +46,6 @@
 						<!-- The chat bar itself -->
 						<layout_panel name="chat_bar_layout_panel">
 							<button name="local_chat_button" tool_tip="周辺チャットウィンドウを表示または非表示にします。 (CTRL+H)" label="周辺チャット" />
-							<nearby_chat_voice_monitor name="default_chat_bar" />
 						</layout_panel>
 						<!-- The chat bar itself -->
 					</layout_stack>

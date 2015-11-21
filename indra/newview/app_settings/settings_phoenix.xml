@@ -531,6 +531,18 @@
     <integer>0</integer>
   </map>
 
+  <key>FSLegacyNotificationWell</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables the legacy notifications and system messages well</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
   <!-- <FS_Zi> Animated dialogs -->
   <key>FSAnimatedScriptDialogs</key>
   <map>

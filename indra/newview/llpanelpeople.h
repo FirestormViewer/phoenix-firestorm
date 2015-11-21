@@ -147,10 +147,6 @@ private:
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
 
-	// <FS:Ansariel> Firestorm callback handler
-	void					onGlobalVisToggleButtonClicked();
-	// </FS:Ansariel> Firestorm callback handler
-
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;

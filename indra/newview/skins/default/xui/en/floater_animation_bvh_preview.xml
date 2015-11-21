@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="415"
+ height="455"
  left="30"
  layout="topleft"
  name="Animation Preview"
@@ -150,6 +150,10 @@ Maximum animation length is [MAX_LENGTH] seconds.
      name="E_ST_BAD_ROOT">
         Incorrect root joint name, use "hip".
     </floater.string>
+    <floater.string
+     name="FS_report_frames">
+        [F] frm.  [S] s. [FPS] FPS
+    </floater.string>
   <text
      type="string"
      length="1"
@@ -204,7 +208,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      width="160" />
     <check_box
      top_pad="0"
-     height="14"
+     height="23"
      label="Loop"
      layout="topleft"
      left="10"
@@ -212,12 +216,25 @@ Maximum animation length is [MAX_LENGTH] seconds.
      initial_value="false"
      name="loop_check"
      tool_tip="Makes this animation loop" />
+    <text
+     type="string"
+     length="1"
+     top_pad="5"
+     follows="top|left"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     bottom_delta="8"
+     width="160"
+     name="frames_label">
+       300 frm. 30 s. 10 FPS
+    </text>
     <spinner
      follows="left|top"
      height="23"
      increment="1"
      initial_value="0"
-     label="In(%)"
+     label="In (%)"
      label_width="70"
      layout="topleft"
      top_pad="5"
@@ -231,8 +248,8 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="1"
-     initial_value="0"
-     label="Out(%)"
+     initial_value="100"
+     label="Out (%)"
      layout="topleft"
      left_pad="10"
      max_val="100"
@@ -240,10 +257,36 @@ Maximum animation length is [MAX_LENGTH] seconds.
      tool_tip="Sets point in animation that ends a loop"
      label_width="60"
      width="120" />
+    <spinner
+     follows="left|top"
+     height="23"
+     increment="1"
+     label="In (frm)"
+     label_width="70"
+     layout="topleft"
+     top_pad="5"
+     left="15"
+     max_val="1000"
+     name="loop_in_frames"
+     tool_tip="Sets point in animation that looping returns to, in frames"
+     width="130" />
+    <spinner
+     bottom_delta="0"
+     follows="left|top"
+     height="23"
+     increment="1"
+     label="Out (frm)"
+     layout="topleft"
+     left_pad="10"
+     max_val="1000"
+     name="loop_out_frames"
+     tool_tip="Sets point in animation that ends a loop, in frames"
+     label_width="60"
+     width="120" />
     <text
      type="string"
      length="1"
-     top_pad="0"
+     top_pad="5"
      follows="top|left"
      height="23"
      width="110"
@@ -461,7 +504,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="0.01"
-     initial_value="0"
+     initial_value="0.3"
      label="Ease In (sec)"
      label_width="140"
      layout="topleft"
@@ -475,7 +518,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="left|top"
      height="23"
      increment="0.01"
-     initial_value="0"
+     initial_value="0.3"
      label="Ease Out (sec)"
      label_width="140"
      layout="topleft"
@@ -553,6 +596,7 @@ Maximum animation length is [MAX_LENGTH] seconds.
      follows="top|left"
      layout="topleft"
      left="70"
+     width="200"
      name="bad_animation_text">
         Unable to read animation file.
 We recommend BVH files exported from Poser 4.

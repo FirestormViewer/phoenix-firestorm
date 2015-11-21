@@ -34,6 +34,7 @@
 
 #include "growlmanager.h"
 
+#include "fscommon.h"
 #include "growlnotifier.h"
 #include "llagentdata.h"
 #include "llappviewer.h"
@@ -319,19 +320,18 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 	if (session->isP2PSessionType() && (!im["keyword_alert_performed"].asBoolean() || !gSavedSettings.getBOOL("FSFilterGrowlKeywordDuplicateIMs")))
 	{
 		// Don't show messages from ourselves or the system.
-		LLUUID from_id = im["from_id"].asUUID();
+		const LLUUID from_id = im["from_id"].asUUID();
 		if (from_id.isNull() || from_id == gAgentID)
 		{
 			return;
 		}
 
 		std::string message = im["message"].asString();
-		std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
-		gGrowlManager->performNotification(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		LLAvatarNameCache::get(from_id, boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
 	}
 }
 
@@ -379,15 +379,20 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 	if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
 	{
 		std::string message = chat["message"].asString();
-
-		const std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
 
-		gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		LLAvatarNameCache::get(chat["from_id"].asUUID(), boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
 	}
+}
+
+//static
+void GrowlManager::onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type)
+{
+	const std::string sender = FSCommon::getAvatarNameByDisplaySettings(av_name);
+	notify(sender, message, type);
 }
 
 bool GrowlManager::shouldNotify()

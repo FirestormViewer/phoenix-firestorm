@@ -396,6 +396,29 @@
          tool_tip="If checked, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."
          top_pad="6"
          width="256" />
+        <check_box
+         control_name="FSLegacyNotificationWell"
+         height="16"
+         initial_value="true"
+         label="Use legacy list layout for Notifications window"
+         layout="topleft"
+         left="5"
+         name="FSLegacyNotificationWell"
+         tool_tip="If checked, Firestorm will use the legacy list view to display stored notifications."
+         top_pad="3"
+         width="265" />
+        <text
+         type="string"
+         left_pad="10"
+         top_pad="-15"
+         width="128"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         text_color="White_50"
+         name="FSLegacyNotificationWellRequiresRestart">
+            (requires restart)
+        </text>
 
         <slider
          control_name="FlashCount"

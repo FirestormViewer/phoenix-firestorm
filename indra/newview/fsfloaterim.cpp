@@ -32,6 +32,7 @@
 #include "fsfloaterim.h"
 
 #include "fschathistory.h"
+#include "fschatoptionsmenu.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
@@ -139,7 +140,12 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	mCommitCallbackRegistrar.add("IMSession.Menu.Action", boost::bind(&FSFloaterIM::doToSelected, this, _2));
 	mEnableCallbackRegistrar.add("IMSession.Menu.Enable", boost::bind(&FSFloaterIM::checkEnabled, this, _2));
-	
+
+	mEnableCallbackRegistrar.add("ChatOptions.Check", boost::bind(&FSFloaterIM::onChatOptionsCheckContextMenuItem, this, _2));
+	mCommitCallbackRegistrar.add("ChatOptions.Action", boost::bind(&FSFloaterIM::onChatOptionsContextMenuItemClicked, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Visible", boost::bind(&FSFloaterIM::onChatOptionsVisibleContextMenuItem, this, _2));
+	mEnableCallbackRegistrar.add("ChatOptions.Enable", boost::bind(&FSFloaterIM::onChatOptionsEnableContextMenuItem, this, _2));
+
 	setOverlapsScreenChannel(true);
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -350,8 +356,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				std::string utf8_text = wstring_to_utf8str(text);
 				
 				// Convert OOC and MU* style poses
-				utf8_text = applyAutoCloseOoc(utf8_text);
-				utf8_text = applyMuPose(utf8_text);
+				utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
+				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
 				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
@@ -377,7 +383,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #else
 					std::string strFSTag = "(FS64 ";
 #endif
-					if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
+					if (is_irc_me_prefix(utf8_text))
 					{
 						utf8_text.insert(4,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef OPENSIM
@@ -594,6 +600,26 @@ bool FSFloaterIM::checkEnabled(const LLSD& userdata)
 		return LLAvatarActions::canOfferTeleport(mOtherParticipantUUID);
 	}
 	return false;
+}
+
+void FSFloaterIM::onChatOptionsContextMenuItemClicked(const LLSD& userdata)
+{
+	FSChatOptionsMenu::onMenuItemClick(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsCheckContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemCheck(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsVisibleContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemVisible(userdata, this);
+}
+
+bool FSFloaterIM::onChatOptionsEnableContextMenuItem(const LLSD& userdata)
+{
+	return FSChatOptionsMenu::onMenuItemEnable(userdata, this);
 }
 
 // support sysinfo button -Zi
@@ -841,6 +867,8 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+
+	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
 	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);

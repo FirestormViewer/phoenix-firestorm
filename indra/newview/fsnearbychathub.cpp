@@ -48,15 +48,8 @@
 
 static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 
-// <FS:KC> Fix for bad edge snapping
 // *HACK* chat bar cannot return its correct height for some reason
 static const S32 MAGIC_CHAT_BAR_PAD = 5;
-// </FS:KC> Fix for bad edge snapping
-
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
-void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
-//</FS:TS> FIRE-787
 
 struct LLChatTypeTrigger {
 	std::string name;
@@ -65,33 +58,50 @@ struct LLChatTypeTrigger {
 
 static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/whisper"	, CHAT_TYPE_WHISPER},
-	{ "/shout"	, CHAT_TYPE_SHOUT}
+	{ "/shout"		, CHAT_TYPE_SHOUT}
 };
 
-S32 FSNearbyChat::sLastSpecialChatChannel = 0;
 
-FSNearbyChat::FSNearbyChat() :
-	mDefaultChatBar(NULL),
-	mFocusedInputEditor(NULL)
+// This function just sends the message, with no other processing. Moved out
+// of send_chat_from_viewer.
+void really_send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
 {
-	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
+	LLMessageSystem* msg = gMessageSystem;
+
+	if (!msg)
+	{
+		return;
+	}
+
+	if (channel >= 0)
+	{
+		msg->newMessageFast(_PREHASH_ChatFromViewer);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+		msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+		msg->nextBlockFast(_PREHASH_ChatData);
+		msg->addStringFast(_PREHASH_Message, utf8_out_text);
+		msg->addU8Fast(_PREHASH_Type, type);
+		msg->addS32("Channel", channel);
+	}
+	else
+	{
+		msg->newMessage("ScriptDialogReply");
+		msg->nextBlock("AgentData");
+		msg->addUUID("AgentID", gAgentID);
+		msg->addUUID("SessionID", gAgentSessionID);
+		msg->nextBlock("Data");
+		msg->addUUID("ObjectID", gAgentID);
+		msg->addS32("ChatChannel", channel);
+		msg->addS32("ButtonIndex", 0);
+		msg->addString("ButtonLabel", utf8_out_text);
+	}
+
+	gAgent.sendReliableMessage();
 }
 
-FSNearbyChat::~FSNearbyChat()
-{
-}
-
-void FSNearbyChat::onDefaultChatBarButtonClicked()
-{
-	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
-}
-
-//void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
-// [/RLVa:KB]
 {
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0a
 	// Only process chat messages (ie not CHAT_TYPE_START, CHAT_TYPE_STOP, etc)
 	if ( (rlv_handler_t::isEnabled()) && ( (CHAT_TYPE_WHISPER == type) || (CHAT_TYPE_NORMAL == type) || (CHAT_TYPE_SHOUT == type) ) )
 	{
@@ -135,9 +145,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 			}
 		}
 	}
-// [/RLVa:KB]
 
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 	U32 split = MAX_MSG_BUF_SIZE - 1;
 	U32 pos = 0;
 	U32 total = utf8_out_text.length();
@@ -178,11 +186,10 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 				}
 			}
 
-			if(next_split == 0)
+			if (next_split == 0)
 			{
 				next_split = split;
-				LL_WARNS("Splitting") <<
-					"utf-8 couldn't be split correctly" << LL_ENDL;
+				LL_WARNS("Splitting") << "utf-8 couldn't be split correctly" << LL_ENDL;
 			}
 		}
 
@@ -194,51 +201,100 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	}
 
 	// moved here so we don't bump the count for every message segment
-	add(LLStatViewer::CHAT_COUNT,1);
-//</FS:TS> FIRE-787
+	add(LLStatViewer::CHAT_COUNT, 1);
 }
 
-//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-// This function just sends the message, with no other processing. Moved out
-//	of send_chat_from_viewer.
-void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
+bool matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 {
-	LLMessageSystem* msg = gMessageSystem;
-
-	// <FS:ND> gMessageSystem can be 0, not sure how it is exactly to reproduce, maybe during viewer shutdown?
-	if (!msg)
+	U32 in_len = in_str.length();
+	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
+	
+	for (S32 n = 0; n < cnt; n++)
 	{
-		return;
+		if (in_len > sChatTypeTriggers[n].name.length())
+			continue;
+		
+		std::string trigger_trunc = sChatTypeTriggers[n].name;
+		LLStringUtil::truncate(trigger_trunc, in_len);
+		
+		if (!LLStringUtil::compareInsensitive(in_str, trigger_trunc))
+		{
+			*out_str = sChatTypeTriggers[n].name;
+			return true;
+		}
 	}
-	// </FS:ND>
-
-	if (channel >= 0)
-	{
-		msg->newMessageFast(_PREHASH_ChatFromViewer);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		msg->nextBlockFast(_PREHASH_ChatData);
-		msg->addStringFast(_PREHASH_Message, utf8_out_text);
-		msg->addU8Fast(_PREHASH_Type, type);
-		msg->addS32("Channel", channel);
-	}
-	else
-	{
-		msg->newMessage("ScriptDialogReply");
-		msg->nextBlock("AgentData");
-		msg->addUUID("AgentID", gAgent.getID());
-		msg->addUUID("SessionID", gAgent.getSessionID());
-		msg->nextBlock("Data");
-		msg->addUUID("ObjectID", gAgent.getID());
-		msg->addS32("ChatChannel", channel);
-		msg->addS32("ButtonIndex", 0);
-		msg->addString("ButtonLabel", utf8_out_text);
-	}
-
-	gAgent.sendReliableMessage();
+	
+	return false;
 }
-//</FS:TS> FIRE-787
+
+
+//////////////////////////////////////////////////////////////////////////////
+// FSNearbyChat
+//////////////////////////////////////////////////////////////////////////////
+
+S32 FSNearbyChat::sLastSpecialChatChannel = 0;
+
+FSNearbyChat::FSNearbyChat() :
+	mDefaultChatBar(NULL),
+	mFocusedInputEditor(NULL)
+{
+	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
+}
+
+FSNearbyChat::~FSNearbyChat()
+{
+}
+
+void FSNearbyChat::sendChat(LLWString text, EChatType type)
+{
+	LLWStringUtil::trim(text);
+
+	if (!text.empty())
+	{
+		if (type == CHAT_TYPE_OOC)
+		{
+			text = utf8string_to_wstring(gSavedSettings.getString("FSOOCPrefix") + " ") + text + utf8string_to_wstring(" " + gSavedSettings.getString("FSOOCPostfix"));
+		}
+
+		// Check if this is destined for another channel
+		S32 channel = 0;
+		bool is_set = false;
+		stripChannelNumber(text, &channel, &sLastSpecialChatChannel, &is_set);
+		
+		std::string utf8text = wstring_to_utf8str(text);
+		// Try to trigger a gesture, if not chat to a script.
+		std::string utf8_revised_text;
+		if (0 == channel)
+		{
+			// Convert OOC and MU* style poses
+			utf8text = FSCommon::applyAutoCloseOoc(utf8text);
+			utf8text = FSCommon::applyMuPose(utf8text);
+
+			// discard returned "found" boolean
+			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
+			{
+				utf8_revised_text = utf8text;
+			}
+		}
+		else
+		{
+			utf8_revised_text = utf8text;
+		}
+
+		utf8_revised_text = utf8str_trim(utf8_revised_text);
+
+		EChatType nType = (type == CHAT_TYPE_OOC ? CHAT_TYPE_NORMAL : type);
+		type = processChatTypeTriggers(nType, utf8_revised_text);
+
+		if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
+		{
+			// Chat with animation
+			sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
+		}
+	}
+
+	gAgent.stopTyping();
+}
 
 void FSNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
 {
@@ -251,14 +307,106 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	S32 channel = 0;
 	bool is_set = false;
 	LLWString out_text = stripChannelNumber(wtext, &channel, &sLastSpecialChatChannel, &is_set);
-	// If "/<number>" is not specified, see if a channel has been set in
-	//  the spinner.
-	if (!is_set &&
-		gSavedSettings.getBOOL("FSNearbyChatbar") &&
-		gSavedSettings.getBOOL("FSShowChatChannel"))
+	sendChatFromViewer(wtext, out_text, type, animate, channel);
+}
+
+// all chat bars call this function and we keep the first or one that's seen as the default
+void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
+{
+	if (!mDefaultChatBar || chatBar->isDefault())
 	{
-		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		mDefaultChatBar = chatBar;
 	}
+}
+
+// unhide the default nearby chat bar on request (pressing Enter or a letter key)
+void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
+{
+	if (!mDefaultChatBar)
+	{
+		return;
+	}
+
+	// change settings control to signal button state
+	gSavedSettings.setBOOL("MainChatbarVisible", visible);
+
+	mDefaultChatBar->getParent()->setVisible(visible);
+	mDefaultChatBar->setVisible(visible);
+	mDefaultChatBar->setFocus(visible);
+
+	// <FS:KC> Fix for bad edge snapping
+	if (visible)
+	{
+		gFloaterView->setSnapOffsetChatBar(mDefaultChatBar->getRect().getHeight() + MAGIC_CHAT_BAR_PAD);
+	}
+	else
+	{
+		gFloaterView->setSnapOffsetChatBar(0);
+	}
+
+	if (!text)
+	{
+		return;
+	}
+
+	if (mDefaultChatBar->getText().empty())
+	{
+		mDefaultChatBar->setText(LLStringExplicit(text));
+		mDefaultChatBar->setCursorToEnd();
+	}
+	// </FS:KC> Fix for bad edge snapping
+}
+
+// We want to know which nearby chat editor (if any) currently has focus
+void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus)
+{
+	if (focus)
+	{
+		mFocusedInputEditor = inputEditor;
+	}
+	else if (mFocusedInputEditor == inputEditor)
+	{
+		// only remove focus if the request came from the previously active input editor
+		// to avoid races
+		mFocusedInputEditor = NULL;
+	}
+}
+
+// for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
+// and the hide chat bar feature in mouselook in llagent.cpp
+BOOL FSNearbyChat::defaultChatBarIsIdle() const
+{
+	if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
+	{
+		return mFocusedInputEditor->getText().empty();
+	}
+
+	// if any other chat bar has focus, report "idle", because they're not the default
+	return TRUE;
+}
+
+// for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
+BOOL FSNearbyChat::defaultChatBarHasFocus() const
+{
+	if (mFocusedInputEditor && mFocusedInputEditor->isDefault())
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+void FSNearbyChat::onDefaultChatBarButtonClicked()
+{
+	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// General chat handling methods
+
+void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel)
+{
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
 
@@ -318,6 +466,7 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	send_chat_from_viewer(utf8_out_text, type, channel);
 }
 
+// static
 EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
 {
 	U32 length = str.length();
@@ -431,189 +580,8 @@ LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel, 
 	}
 }
 
-void FSNearbyChat::sendChat(LLWString text, EChatType type)
-{
-	LLWStringUtil::trim(text);
-
-	if (!text.empty())
-	{
-		if (type == CHAT_TYPE_OOC)
-		{
-			std::string tempText = wstring_to_utf8str( text );
-			tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
-			text = utf8str_to_wstring(tempText);
-		}
-
-		// Check if this is destined for another channel
-		S32 channel = 0;
-		bool is_set = false;
-		stripChannelNumber(text, &channel, &sLastSpecialChatChannel, &is_set);
-		// If "/<number>" is not specified, see if a channel has been set in
-		//  the spinner.
-		if (!is_set &&
-			gSavedSettings.getBOOL("FSNearbyChatbar") &&
-			gSavedSettings.getBOOL("FSShowChatChannel"))
-		{
-			channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		}
-		
-		std::string utf8text = wstring_to_utf8str(text);
-		// Try to trigger a gesture, if not chat to a script.
-		std::string utf8_revised_text;
-		if (0 == channel)
-		{
-			// Convert OOC and MU* style poses
-			utf8text = applyAutoCloseOoc(utf8text);
-			utf8text = applyMuPose(utf8text);
-
-			// discard returned "found" boolean
-			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
-			{
-				utf8_revised_text = utf8text;
-			}
-		}
-		else
-		{
-			utf8_revised_text = utf8text;
-		}
-
-		utf8_revised_text = utf8str_trim(utf8_revised_text);
-
-		EChatType nType;
-		if (type == CHAT_TYPE_OOC)
-		{
-			nType = CHAT_TYPE_NORMAL;
-		}
-		else
-		{
-			nType = type;
-		}
-
-		type = processChatTypeTriggers(nType, utf8_revised_text);
-
-		if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
-		{
-			// Chat with animation
-			sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
-		}
-	}
-
-	gAgent.stopTyping();
-}
-
-// all chat bars call this function and we keep the first or one that's seen as the default
-void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
-{
-	// TODO: make this a Param option "is_default"
-	if (!mDefaultChatBar || chatBar->getName() == "default_chat_bar")
-	{
-		mDefaultChatBar=chatBar;
-	}
-}
-
-// unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
-{
-	if (!mDefaultChatBar)
-	{
-		return;
-	}
-
-	// change settings control to signal button state
-	gSavedSettings.setBOOL("MainChatbarVisible",visible);
-
-	mDefaultChatBar->getParent()->setVisible(visible);
-	mDefaultChatBar->setVisible(visible);
-	mDefaultChatBar->setFocus(visible);
-
-	// <FS:KC> Fix for bad edge snapping
-	if (visible)
-	{
-		gFloaterView->setSnapOffsetChatBar(mDefaultChatBar->getRect().getHeight() + MAGIC_CHAT_BAR_PAD);
-	}
-	else
-	{
-		gFloaterView->setSnapOffsetChatBar(0);
-	}
-
-	if (!text)
-	{
-		return;
-	}
-
-	if (mDefaultChatBar->getText().empty())
-	{
-		mDefaultChatBar->setText(LLStringExplicit(text));
-		mDefaultChatBar->setCursorToEnd();
-	}
-	// </FS:KC> Fix for bad edge snapping
-}
-
-// We want to know which nearby chat editor (if any) currently has focus
-void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus)
-{
-	if (focus)
-	{
-		mFocusedInputEditor = inputEditor;
-	}
-
-	// only remove focus if the request came from the previously active input editor
-	// to avoid races
-	else if (mFocusedInputEditor == inputEditor)
-	{
-		mFocusedInputEditor = NULL;
-	}
-}
-
-// for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
-// and the hide chat bar feature in mouselook in llagent.cpp
-BOOL FSNearbyChat::defaultChatBarIsIdle() const
-{
-	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
-	{
-		return mFocusedInputEditor->getText().empty();
-	}
-
-	// if any other chat bar has focus, report "idle", because they're not the default
-	return TRUE;
-}
-
-// for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
-BOOL FSNearbyChat::defaultChatBarHasFocus() const
-{
-	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
-	{
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-bool matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
-{
-	U32 in_len = in_str.length();
-	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
-	
-	for (S32 n = 0; n < cnt; n++)
-	{
-		if (in_len > sChatTypeTriggers[n].name.length())
-			continue;
-		
-		std::string trigger_trunc = sChatTypeTriggers[n].name;
-		LLStringUtil::truncate(trigger_trunc, in_len);
-		
-		if (!LLStringUtil::compareInsensitive(in_str, trigger_trunc))
-		{
-			*out_str = sChatTypeTriggers[n].name;
-			return true;
-		}
-	}
-	
-	return false;
-}
-
 //static
-void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source)
+void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 */)
 {
 	LLChatEntry* chat_entry = dynamic_cast<LLChatEntry*>(source);
 	LLLineEditor* line_editor = dynamic_cast<LLLineEditor*>(source);
@@ -636,28 +604,27 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source)
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
 	LLWStringUtil::trimHead(raw_text);
-	S32 length = raw_text.length();
+	size_t length = raw_text.length();
 
-	S32 channel=0;
-	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
-		gSavedSettings.getBOOL("FSShowChatChannel"))
+	LLWString prefix;
+	if (length > 3)
 	{
-		// <FS:Ansariel> [FS communication UI]
-		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		// </FS:Ansariel> [FS communication UI]
+		prefix = raw_text.substr(0, 3);
+		LLWStringUtil::toLower(prefix);
 	}
 
-	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
-	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
+	static LLCachedControl<bool> type_during_emote(gSavedSettings, "FSTypeDuringEmote");
+	static LLCachedControl<bool> allow_mu_pose(gSavedSettings, "AllowMUpose");
 	if (length > 0 &&
-		raw_text[0] != '/' && (raw_text[0] != ':' || !gSavedSettings.getBOOL("AllowMUpose")) &&
+		((raw_text[0] != '/' || (type_during_emote && length > 3 && prefix == utf8string_to_wstring("/me") && (raw_text[3] == ' ' || raw_text[3] == '\'')))
+		&& (raw_text[0] != ':' || !allow_mu_pose || type_during_emote)) &&
 		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
-	// [/RLVa:KB]
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
-		if(channel==0)
+		if (channel == 0)
+		{
 			gAgent.startTyping();
+		}
 	}
 	else
 	{

@@ -86,6 +86,7 @@
 #endif
 // </FS:CR>
 #include "llviewermenu.h"
+#include "lfsimfeaturehandler.h"
 
 #ifdef LL_WINDOWS
 	#pragma warning(disable:4355)
@@ -1977,7 +1978,7 @@ const LLViewerRegion::tex_matrix_t& LLViewerRegion::getWorldMapTiles() const
 		for (U32 x = 0; x != totalX; ++x)
 			for (U32 y = 0; y != totalY; ++y)
 			{
-				const std::string map_url = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-1-%d-%d-objects.jpg", gridX + x, gridY + y);
+				const std::string map_url = LFSimFeatureHandler::instance().mapServerURL() + llformat("map-1-%d-%d-objects.jpg", gridX + x, gridY + y);
 				LLPointer<LLViewerTexture> tex(LLViewerTextureManager::getFetchedTextureFromUrl(map_url, FTT_MAP_TILE, TRUE,
 																			LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
 				mWorldMapTiles.push_back(tex);

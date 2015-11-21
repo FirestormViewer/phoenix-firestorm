@@ -1035,6 +1035,9 @@ bool LLAppViewer::init()
 	settings_map["floater"] = &gSavedSettings; // *TODO: New settings file
 	settings_map["account"] = &gSavedPerAccountSettings;
 
+	// <FS:Ansariel> Optional legacy notification well
+	gSavedSettings.setBOOL("FSInternalLegacyNotificationWell", gSavedSettings.getBOOL("FSLegacyNotificationWell"));
+
 	LLUI::initClass(settings_map,
 		LLUIImageList::getInstance(),
 		ui_audio_callback,

@@ -57,16 +57,17 @@ public:
 
 	void sendChat(LLWString text, EChatType type);
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel, S32* last_channel, bool* is_set);
-	EChatType processChatTypeTriggers(EChatType type, std::string &str);
+	static EChatType processChatTypeTriggers(EChatType type, std::string &str);
 	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);
+	static void sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel);
 
 	void setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus);
 
 	BOOL defaultChatBarIsIdle() const;
 	BOOL defaultChatBarHasFocus() const;
 
-	static void handleChatBarKeystroke(LLUICtrl* source);
+	static void handleChatBarKeystroke(LLUICtrl* source, S32 channel = 0);
 
 	FSNearbyChatControl* mFocusedInputEditor;
 };

@@ -44,12 +44,30 @@
 
 const F32 PARCEL_WL_CHECK_TIME  = 5.f;
 const S32 PARCEL_WL_MIN_ALT_CHANGE = 3;
+const std::string PARCEL_WL_DEFAULT = "Default";
+
+class KCWindlightInterface::LLParcelChangeObserver : public LLParcelObserver
+{
+public:
+	LLParcelChangeObserver(KCWindlightInterface* windlightInterface) : mKCWindlightInterface(windlightInterface) {}
+
+private:
+	/*virtual*/ void changed()
+	{
+		if (mKCWindlightInterface)
+		{
+			mKCWindlightInterface->ParcelChange();
+		}
+	}
+
+	KCWindlightInterface* mKCWindlightInterface;
+};
 
 KCWindlightInterface::KCWindlightInterface() :
 	LLEventTimer(PARCEL_WL_CHECK_TIME),
 	mWLset(false),
 	mWeChangedIt(false),
-	mCurrentSpace(-2.f),
+	mCurrentSpace(-2),
 	mLastParcelID(-1),
 	mLastRegion(NULL),
 	mRegionOverride(false),
@@ -60,6 +78,17 @@ KCWindlightInterface::KCWindlightInterface() :
 	{
 		mEventTimer.stop();
 		mDisabled = true;
+	}
+	
+	mParcelMgrConnection = gAgent.addParcelChangedCallback(
+			boost::bind(&KCWindlightInterface::onAgentParcelChange, this));
+}
+
+KCWindlightInterface::~KCWindlightInterface()
+{
+	if (mParcelMgrConnection.connected())
+	{
+		mParcelMgrConnection.disconnect();
 	}
 }
 
@@ -92,11 +121,11 @@ void KCWindlightInterface::ParcelChange()
 
 	if ( (this_parcel_id != mLastParcelID) || (mLastParcelDesc != desc) ) //parcel changed
 	{
-		//LL_INFOS() << "agent in new parcel: "<< this_parcel_id << " : "  << parcel->getName() << LL_ENDL;
+		LL_DEBUGS() << "Agent in new parcel: " << this_parcel_id << LL_ENDL;
 
 		mLastParcelID = this_parcel_id;
 		mLastParcelDesc = desc;
-		mCurrentSpace = -2.f;
+		mCurrentSpace = -2;
 		mCurrentSettings.clear();
 		setWL_Status(false); //clear the status bar icon
 		const LLVector3& agent_pos_region = gAgent.getPositionAgent();
@@ -121,6 +150,12 @@ void KCWindlightInterface::ParcelChange()
 		}
 	}
 }
+
+void KCWindlightInterface::onAgentParcelChange()
+{
+	ParcelChange();
+}
+
 
 BOOL KCWindlightInterface::tick()
 {
@@ -163,17 +198,29 @@ void KCWindlightInterface::ApplySettings(const LLSD& settings)
 		
 		mRegionOverride = settings.has("region_override");
 
-		ApplySkySettings(settings);
+		bool non_region_default_applied = ApplySkySettings(settings);
 
-		if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
+		// We can only apply a water preset if we didn't set region WL default previously
+		// or there will be unpredictable behavior where the region WL defaults will be
+		// disabled again and sky/day cycle presets will be reverted to whatever the user
+		// has set before.
+		if (non_region_default_applied)
 		{
-			LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
-			setWL_Status(true);
+			if (settings.has("water") && (!mHaveRegionSettings || mRegionOverride))
+			{
+				LL_DEBUGS() << "Applying WL water set: " << settings["water"].asString() << LL_ENDL;
+				LLEnvManagerNew::instance().setUseWaterPreset(settings["water"].asString(), gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+				setWL_Status(true);
+			}
+		}
+		else
+		{
+			LL_WARNS() << "Cannot apply Parcel WL water preset because region WL default has been set due to invalid sky preset" << LL_ENDL;
 		}
 	}
 }
 
-void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
+bool KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 {
 	if (settings.has("sky"))
 	{
@@ -193,28 +240,32 @@ void KCWindlightInterface::ApplySkySettings(const LLSD& settings)
 				if (lower != mCurrentSpace) //workaround: only apply once
 				{
 					mCurrentSpace = lower; //use lower as an id
+					LL_DEBUGS() << "Applying WL sky set: " << (*space_it)["preset"].asString() << LL_ENDL;
 					ApplyWindLightPreset((*space_it)["preset"].asString());
 				}
-				return;
+				return true;
 			}
 		}
 	}
 
-	if (mCurrentSpace != -1.f)
+	if (mCurrentSpace != -1)
 	{
-		mCurrentSpace = -1.f;
+		mCurrentSpace = -1;
 		// set notes on KCWindlightInterface::haveParcelOverride
 		if (settings.has("sky_default") && (!mHaveRegionSettings || mRegionOverride))
 		{
-			//LL_INFOS() << "WL set : " << settings["sky_default"] << LL_ENDL;
+			LL_DEBUGS() << "Applying WL sky set: " << settings["sky_default"] << " (Parcel WL Default)" << LL_ENDL;
 			ApplyWindLightPreset(settings["sky_default"].asString());
 		}
 		else //reset to default
 		{
-			//LL_INFOS() << "WL set : Default" << LL_ENDL;
-			ApplyWindLightPreset("Default");
+			LL_DEBUGS() << "Applying WL sky set: Region Default" << LL_ENDL;
+			ApplyWindLightPreset(PARCEL_WL_DEFAULT);
+			return false;
 		}
 	}
+
+	return true;
 }
 
 void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
@@ -224,7 +275,7 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 
 	LLWLParamManager* wlprammgr = LLWLParamManager::getInstance();
 	LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
-	if ( (preset != "Default") && (wlprammgr->hasParamSet(key)) )
+	if ( (preset != PARCEL_WL_DEFAULT) && (wlprammgr->hasParamSet(key)) )
 	{
 		LLEnvManagerNew::instance().setUseSkyPreset(preset, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
 		setWL_Status(true);
@@ -233,7 +284,9 @@ void KCWindlightInterface::ApplyWindLightPreset(const std::string& preset)
 	else
 	{
 		if (!LLEnvManagerNew::instance().getUseRegionSettings())
+		{
 			LLEnvManagerNew::instance().setUseRegionSettings(true, gSavedSettings.getBOOL("FSInterpolateParcelWL"));
+		}
 		setWL_Status(false);
 		mWeChangedIt = false;
 	}
@@ -247,7 +300,7 @@ void KCWindlightInterface::ResetToRegion(bool force)
 	//TODO: clear per parcel
 	if (mWeChangedIt || force) //dont reset anything if we didnt do it
 	{
-		ApplyWindLightPreset("Default");
+		ApplyWindLightPreset(PARCEL_WL_DEFAULT);
 	}
 }
 
@@ -379,11 +432,11 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 			{
 				if (match[1].matched)
 				{
-					//LL_INFOS() << "sky flag: " << match[1] << " : " << match[2] << " : " << match[3] << " : " << match[5] << LL_ENDL;
+					LL_DEBUGS() << "Sky Flags: type = " << match[1] << " from = " << match[2] << " to = " << match[3] << " preset = " << match[5] << LL_ENDL;
 
 					std::string preset(match[5]);
 					LLWLParamKey key(preset, LLEnvKey::SCOPE_LOCAL);
-					if(wlprammgr->hasParamSet(key))
+					if (wlprammgr->hasParamSet(key))
 					{
 						if (match[2].matched && match[3].matched)
 						{
@@ -396,22 +449,29 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 								space["upper"] = upper;
 								space["preset"] = preset;
 								if (!settings.has("sky"))
+								{
 									settings["sky"] = LLSD();
+								}
 								settings["sky"][sky_index++] = space;
 								found_settings = true;
 							}
 						}
 						else
 						{
+							LL_DEBUGS() << "Sky Default = " << preset << LL_ENDL;
 							settings["sky_default"] = preset;
 							found_settings = true;
 						}
+					}
+					else
+					{
+						LL_WARNS() << "Parcel Windlight contains unknown sky: " << preset << LL_ENDL;
 					}
 				}
 				else if (match[4].matched)
 				{
 					std::string preset(match[5]);
-					//LL_INFOS() << "got water: " << preset << LL_ENDL;
+					LL_DEBUGS() << "Got Water Preset: " << preset << LL_ENDL;
 					if(wwprammgr->hasParamSet(preset))
 					{
 						settings["water"] = preset;
@@ -420,8 +480,7 @@ bool KCWindlightInterface::ParseParcelForWLSettings(const std::string& desc, LLS
 				}
 				else if (match[6].matched)
 				{
-					//std::string preset(match[5]);
-					LL_INFOS() << "got region override flag" << LL_ENDL;
+					LL_DEBUGS() << "Got Region Override Flag" << LL_ENDL;
 					settings["region_override"] = true;
 				}
 				
@@ -569,7 +628,7 @@ bool KCWindlightInterface::haveParcelOverride(const LLEnvironmentSettings& new_s
 	//*ASSUMPTION: if region day cycle is empty, its set to default
 	mHaveRegionSettings = new_settings.getWLDayCycle().size() > 0;
 	
-	return  mRegionOverride || mCurrentSpace != -1.f;
+	return  mRegionOverride || mCurrentSpace != -1;
 }
 
 void KCWindlightInterface::setWL_Status(bool pwl_status)
@@ -590,7 +649,7 @@ bool KCWindlightInterface::checkSettings()
 		{
 			mCurrentSettings.clear();
 			mWeChangedIt = false;
-			mCurrentSpace = -2.f;
+			mCurrentSpace = -2;
 			mLastParcelID = -1;
 			mRegionOverride = false;
 			mHaveRegionSettings = false;
