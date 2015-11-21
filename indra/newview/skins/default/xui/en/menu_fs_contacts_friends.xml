@@ -211,4 +211,15 @@
              parameter="FSFriendListFullNameFormat"/>
         </menu_item_check>
     </menu>
+    <menu_item_separator/>
+    <menu_item_check
+     label="Online status for friends visible"
+     name="GlobalOnlineStatusToggle">
+        <menu_item_check.on_click
+         function="TogglePerAccountControl"
+         parameter="GlobalOnlineStatusToggle"/>
+        <menu_item_check.on_check
+         function="CheckPerAccountControl"
+         parameter="GlobalOnlineStatusToggle"/>
+    </menu_item_check>
 </context_menu>

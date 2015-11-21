@@ -58,6 +58,10 @@
 			(Erfordert Neustart)
 		</text>
 		<check_box label="Chiclets für IMs und Gruppenchats deaktivieren" name="FSDisableIMChiclets" tool_tip="Falls aktiviert, wird Firestorm keine Chiclets für IMs und Gruppenchats anzeigen (Icons für Gruppenmitteilungen und Anzahl an ungelesenen IMs werden weiterhin angezeigt)."/>
+		<check_box label="Alte Listendarstellung für Benachrichtigungsfenster verwenden" name="FSLegacyNotificationWell" tool_tip="Falls aktiviert, verwendet Firestorm die ursprüngliche Listendarstellung, um gespeicherte Benachrichtigungen anzuzeigen." width="355"/>
+		<text name="FSLegacyNotificationWellRequiresRestart">
+			(Erfordert Neustart)
+		</text>
 		<slider label_width="230" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
 		<slider label_width="230" label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">

@@ -29,6 +29,8 @@
            tooltip_ref="Command_Avatar_Tooltip"
            execute_function="Floater.Toggle"
            execute_parameters="avatar"
+           is_enabled_function="GridFeatureCheck"
+           is_enabled_parameters="avatar_picker"
            is_running_function="Floater.IsOpen"
            is_running_parameters="avatar"
            />
@@ -72,6 +74,8 @@
            tooltip_ref="Command_Destinations_Tooltip"
            execute_function="Floater.Toggle"
            execute_parameters="destinations"
+           is_enabled_function="GridFeatureCheck"
+           is_enabled_parameters="destination_guide"
            is_running_function="Floater.IsOpen"
            is_running_parameters="destinations"
            />

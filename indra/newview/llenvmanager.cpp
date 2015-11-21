@@ -503,7 +503,7 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	// Load region sky presets.
 	LLWLParamManager::instance().refreshRegionPresets();
 
-	// Use the region settings if parcel settings didnt override it already -KC
+	//<FS:KC> Use the region settings if parcel settings didnt override it already
 	if (KCWindlightInterface::instance().haveParcelOverride(new_settings))
 	{
 		// If using server settings, update managers.
@@ -523,6 +523,7 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 			setUserPrefs(getWaterPresetName(), getSkyPresetName(), getDayCycleName(), false, true, mInterpNextChangeMessage);
 		}
 	}
+	//</FS:KC>
 
 	// Let interested parties know about the region settings update.
 	mRegionSettingsChangeSignal();

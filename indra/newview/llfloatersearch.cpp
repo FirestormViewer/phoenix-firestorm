@@ -223,20 +223,10 @@ void LLFloaterSearch::search(const SearchQuery &p)
 	{
 		url = debug_url;
 	}
-	else if(LLGridManager::getInstance()->isInOpenSim())
-	{
-		std::string os_search_url = LFSimFeatureHandler::instance().searchURL();
-		if (!os_search_url.empty())
-			url = os_search_url;
-		else if (LLLoginInstance::getInstance()->hasResponse("search"))
-			url = LLLoginInstance::getInstance()->getResponse("search").asString();
-		else
-			url = gSavedSettings.getString("SearchURLOpenSim");
-	}
 	else // we are in SL or SL beta
 #endif // OPENSIM // <FS:AW optional opensim support>
 	{
-		url = gSavedSettings.getString("SearchURL");
+		url = LFSimFeatureHandler::instance().searchURL();
 	}
 // </FS:AW  opensim search support>
 

@@ -120,6 +120,9 @@ protected:
 
 	LLButton*		mButtonJoin;
 	LLUICtrl*		mJoinText;
+
+	// <FS:Ansariel> TabContainer switch
+	bool	mIsUsingTabContainer;
 };
 
 class LLPanelGroupTab : public LLPanel

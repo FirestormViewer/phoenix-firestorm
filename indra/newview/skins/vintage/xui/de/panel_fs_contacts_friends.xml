@@ -5,11 +5,12 @@
 		<fs_scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
 		<fs_scroll_list.column label="Anzeigename" name="display_name" tool_tip="Der Anzeigename dieses Freundes."/>
 		<fs_scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
-		<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
-		<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
-		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
-		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
-		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
+		<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen, ob Sie online sind."/>
+		<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann Ihre Position auf der Karte sehen."/>
+		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann Ihre Objekte editieren, löschen oder nehmen."/>
+		<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Sie können sehen, wenn dieser Freund online ist."/>
+		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Sie können die Position dieses Freundes auf der Karte sehen."/>
+		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Sie können Objekte dieses Freundes editieren."/>
 	</fs_scroll_list>
 	<button
 	 label="IM/Anruf"
@@ -20,12 +21,12 @@
 	<button
 	 label="Profil"
 	 name="profile_btn"
-	 tool_tip="Zeigt dir Bilder, Gruppen und andere Informationen"
+	 tool_tip="Zeigt Bilder, Gruppen und andere Informationen"
 	 width="85" />
 	<button
 	 label="Teleport..."
 	 name="offer_teleport_btn"
-	 tool_tip="Diesem Freund einen Teleport zu deiner jetzigen Position anbieten"
+	 tool_tip="Diesem Freund einen Teleport zu Ihrer jetzigen Position anbieten"
 	 width="85" />
 	<button
 	 label="Karte..."
@@ -40,12 +41,12 @@
 	<button
 	 label="Entfernen..."
 	 name="remove_btn"
-	 tool_tip="Entfernt diese Person aus deiner Freundesliste"
+	 tool_tip="Entfernt diese Person aus Ihrer Freundesliste"
 	 width="85" />
 	<button
 	 label="Hinzufügen..."
 	 name="add_btn"
-	 tool_tip="Biete diesem Einwohner deine Freundschaft an"
+	 tool_tip="Diesem Einwohner Ihre Freundschaft anbieten"
 	 width="85" />
 	<button
 	 label="Kontakt-Sets"

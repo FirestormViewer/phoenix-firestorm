@@ -189,6 +189,7 @@ public:
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
 	void onClickSetKey();
+	void onClickClearKey(); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
 	// void onClickSetSounds();	//<FS:KC> Handled centrally now

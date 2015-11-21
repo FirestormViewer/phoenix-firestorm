@@ -140,6 +140,7 @@
 #include "fswsassetblacklist.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
+#include "llfriendcard.h"
 #include "llgiveinventory.h"
 #include "lltexturefetch.h"
 #include "rlvactions.h"
@@ -1129,6 +1130,17 @@ protected:
 						LL_DEBUGS("Inventory_Move") << "Found asset UUID: " << asset_uuid << LL_ENDL;
 						was_moved = true;
 					}
+					// <FS:Ansariel> We might end up here if LLFriendCardsManager tries to sync the friend cards at login
+					//               and that might pop up the inventory window for extra annoyance -> silence this!
+					else if (added_item->getActualType() == LLAssetType::AT_CALLINGCARD)
+					{
+						if (LLFriendCardsManager::instance().isAvatarDataStored(added_item->getCreatorUUID()))
+						{
+							LL_DEBUGS("FriendCard") << "Skipping added calling card from friend cards sync: " << added_item->getCreatorUUID().asString() << LL_ENDL;
+							was_moved = true;
+						}
+					}
+					// </FS:Ansariel>
 				}
 			}
 
@@ -3611,8 +3623,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["slurl"] = location;
 
 				// Look for IRC-style emotes here so object name formatting is correct
-				std::string prefix = message.substr(0, 4);
-				if (prefix == "/me " || prefix == "/me'")
+				// <FS:Ansariel> Consolidate IRC /me prefix checks
+				//std::string prefix = message.substr(0, 4);
+				//if (prefix == "/me " || prefix == "/me'")
+				if (is_irc_me_prefix(message))
+				// </FS:Ansariel>
 				{
 					chat.mChatStyle = CHAT_STYLE_IRC;
 				}
@@ -4623,8 +4638,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		BOOL ircstyle = FALSE;
 
 		// Look for IRC-style emotes here so chatbubbles work
-		std::string prefix = mesg.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		// <FS:Ansariel> Consolidate IRC /me prefix checks
+		//std::string prefix = mesg.substr(0, 4);
+		//if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(mesg))
+		// </FS:Ansariel>
 		{
 			ircstyle = TRUE;
 		}
@@ -6293,11 +6311,11 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 
 						if (change_count > 0)
 						{
-							reportToNearbyChat(formatString(increase_message, args));
+							report_to_nearby_chat(format_string(increase_message, args));
 						}
 						else if (change_count < 0)
 						{
-							reportToNearbyChat(formatString(decrease_message, args));
+							report_to_nearby_chat(format_string(decrease_message, args));
 						}
 					}
 				}
@@ -7568,7 +7586,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			// </FS:Ansariel>
 
 			make_ui_sound("UISndRestart");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7793,7 +7811,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			}
 
 			make_ui_sound("UISndRestartOpenSim");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 			return;
 		}
 		// </FS:Ansariel>
@@ -7958,7 +7976,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 					action = LLTrans::getString("Collision_UnknownType", args);
 					return;
 			}
-			reportToNearbyChat(action);
+			report_to_nearby_chat(action);
 		}
 		// </FS:Ansariel> Nearby Chat Collision Messages
 		// <FS:Ansariel> Report Collision Messages to scripts

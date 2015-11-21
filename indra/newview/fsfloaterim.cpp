@@ -356,8 +356,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 				std::string utf8_text = wstring_to_utf8str(text);
 				
 				// Convert OOC and MU* style poses
-				utf8_text = applyAutoCloseOoc(utf8_text);
-				utf8_text = applyMuPose(utf8_text);
+				utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
+				utf8_text = FSCommon::applyMuPose(utf8_text);
 				
 				// <FS:Techwolf Lupindo> Support group chat prefix
 				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
@@ -383,7 +383,7 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 #else
 					std::string strFSTag = "(FS64 ";
 #endif
-					if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
+					if (is_irc_me_prefix(utf8_text))
 					{
 						utf8_text.insert(4,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef OPENSIM
@@ -867,6 +867,8 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+
+	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
 	getChild<LLUICtrl>("support_panel")->setVisible(isFSSupportGroup);

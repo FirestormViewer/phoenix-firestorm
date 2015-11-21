@@ -38,6 +38,13 @@ private:
 	LLFloaterAvatar(const LLSD& key);
 	/*virtual*/	~LLFloaterAvatar();
 	/*virtual*/	BOOL postBuild();
+
+	// <FS:Ansariel> Avatar chooser does not change between OpenSim grids
+	/*virtual*/ void onOpen(const LLSD& key);
+	void handleUrlChanged();
+
+	boost::signals2::connection mAvatarPickerUrlChangedSignal;
+	// </FS:Ansariel>
 };
 
 #endif

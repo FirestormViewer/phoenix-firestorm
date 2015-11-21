@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<toggleable_menu name="NearBy Chat Menu">
+<toggleable_menu name="Chat Options Menu">
 	<menu_item_check label="Pokaż Radar" name="nearby_people" />
 	<menu_item_check label="Pokaż głos w pobliżu" name="nearby_voice" />
 	<menu_item_check label="Pokaż listę zablokowanych" name="block_list" />
@@ -10,4 +10,10 @@
 		<menu_item_check label="Duża" name="font_size_large" />
 		<menu_item_check label="Ogromna" name="font_size_huge" />
 	</context_menu>
+	<menu_item_check label="Znak (&gt;) przed imionami osób, które piszą" name="typing_chevron" />
+	<menu_item_check label="Informuj o nowych wiadomościach" name="new_message_notification" />
+	<menu_item_check label="Pokaż pasek czatu" name="show_chat_bar" />
+	<menu_item_check label="Pokaż wybrany kanał" name="show_channel_selection" />
+	<menu_item_check label="Pokaż typ czatu / przycisk wysyłania" name="show_send_button" />
+	<menu_item_check label="Pokaż przycisk wysyłania w sesjach IM" name="show_im_send_button" />
 </toggleable_menu>

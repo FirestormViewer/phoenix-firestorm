@@ -253,9 +253,7 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 	{
 		if (type == CHAT_TYPE_OOC)
 		{
-			std::string tempText = wstring_to_utf8str( text );
-			tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
-			text = utf8str_to_wstring(tempText);
+			text = utf8string_to_wstring(gSavedSettings.getString("FSOOCPrefix") + " ") + text + utf8string_to_wstring(" " + gSavedSettings.getString("FSOOCPostfix"));
 		}
 
 		// Check if this is destined for another channel
@@ -269,8 +267,8 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 		if (0 == channel)
 		{
 			// Convert OOC and MU* style poses
-			utf8text = applyAutoCloseOoc(utf8text);
-			utf8text = applyMuPose(utf8text);
+			utf8text = FSCommon::applyAutoCloseOoc(utf8text);
+			utf8text = FSCommon::applyMuPose(utf8text);
 
 			// discard returned "found" boolean
 			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
@@ -285,16 +283,7 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 
 		utf8_revised_text = utf8str_trim(utf8_revised_text);
 
-		EChatType nType;
-		if (type == CHAT_TYPE_OOC)
-		{
-			nType = CHAT_TYPE_NORMAL;
-		}
-		else
-		{
-			nType = type;
-		}
-
+		EChatType nType = (type == CHAT_TYPE_OOC ? CHAT_TYPE_NORMAL : type);
 		type = processChatTypeTriggers(nType, utf8_revised_text);
 
 		if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
@@ -615,10 +604,20 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 	// Can't trim the end, because that will cause autocompletion
 	// to eat trailing spaces that might be part of a gesture.
 	LLWStringUtil::trimHead(raw_text);
-	S32 length = raw_text.length();
+	size_t length = raw_text.length();
 
+	LLWString prefix;
+	if (length > 3)
+	{
+		prefix = raw_text.substr(0, 3);
+		LLWStringUtil::toLower(prefix);
+	}
+
+	static LLCachedControl<bool> type_during_emote(gSavedSettings, "FSTypeDuringEmote");
+	static LLCachedControl<bool> allow_mu_pose(gSavedSettings, "AllowMUpose");
 	if (length > 0 &&
-		raw_text[0] != '/' && (raw_text[0] != ':' || !gSavedSettings.getBOOL("AllowMUpose")) &&
+		((raw_text[0] != '/' || (type_during_emote && length > 3 && prefix == utf8string_to_wstring("/me") && (raw_text[3] == ' ' || raw_text[3] == '\'')))
+		&& (raw_text[0] != ':' || !allow_mu_pose || type_during_emote)) &&
 		!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT))
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi

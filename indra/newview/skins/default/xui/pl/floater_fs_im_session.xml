@@ -54,6 +54,13 @@
 						Nieprzeczytanych: [NUM]
 					</text>
 				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Wyślij" tool_tip="Wyślij wiadomość IM" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>

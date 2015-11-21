@@ -973,6 +973,21 @@
           follows="top|left"
           halign="center"
           height="23"
+          image_overlay="StopReload_Off"
+          layout="topleft"
+          tool_tip="Clears the toggle button"
+          mouse_opaque="true"
+          name="clear_voice_hotkey_button"
+          left_pad="5"
+          width="25">
+            <button.commit_callback
+             function="Pref.VoiceSetClearKey" />
+        </button>
+        <button
+          enabled_control="EnableVoiceChat"
+          follows="top|left"
+          halign="center"
+          height="23"
           image_overlay="Refresh_Off"
           layout="topleft"
           tool_tip="Reset to Middle Mouse Button"

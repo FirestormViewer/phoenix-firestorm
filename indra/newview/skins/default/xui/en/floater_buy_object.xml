@@ -59,6 +59,7 @@
      left="10"
      name="contents_text"
      top_pad="5"
+     use_ellipses="true"
      width="260">
      Contains:
     </text>

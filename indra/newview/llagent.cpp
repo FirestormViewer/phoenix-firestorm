@@ -4484,7 +4484,7 @@ bool LLAgent::teleportCore(bool is_local)
 		}
 		// </FS:Ansariel>
 
-		// bit of a hack -KC
+		//<FS:KC> bit of a hack
 		KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");

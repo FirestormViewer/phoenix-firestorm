@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Gente" name="people_panel">
-	<string name="high_server_load" value="Debido a la carga del servidor, la conmutación de tu visibilidad puede tardar en ser efectiva. Por favor sé paciente."/>
 	<string name="no_recent_people" value="No hay nadie reciente. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>
 	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar]."/>
 	<string name="no_one_near" value="No hay nadie cerca. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>

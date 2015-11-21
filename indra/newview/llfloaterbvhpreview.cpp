@@ -408,8 +408,18 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			motionp->setLoopOut((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() / 100.f * motionp->getDuration());
 			motionp->setPriority(getChild<LLUICtrl>("priority")->getValue().asInteger());
 			motionp->setHandPose(LLHandMotion::getHandPose(getChild<LLUICtrl>("hand_pose_combo")->getValue().asString()));
-			motionp->setEaseIn((F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal());
-			motionp->setEaseOut((F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal());
+			F32 ease_in = (F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal();
+			F32 ease_out = (F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal();
+			if (motionp->getDuration() != 0.f && ease_in + ease_out > motionp->getDuration() && !getChild<LLUICtrl>("loop_check")->getValue().asBoolean())
+			{
+				F32 factor = motionp->getDuration() / (ease_in + ease_out);
+				ease_in *= factor;
+				ease_out *= factor;
+				getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(ease_in));
+				getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(ease_out));
+			}
+			motionp->setEaseIn(ease_in);
+			motionp->setEaseOut(ease_out);
 			//</FS>
 			setEnabled(TRUE);
 			std::string seconds_string;

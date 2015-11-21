@@ -33,7 +33,8 @@
      left="10"
      layout="topleft"
      name="contains_text"
-     width="276">
+     use_ellipses="true"
+     width="260">
         &lt;nolink&gt;[NAME]&lt;/nolink&gt; contains:
     </text>
     <scroll_list

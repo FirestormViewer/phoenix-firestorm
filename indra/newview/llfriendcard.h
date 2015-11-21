@@ -96,10 +96,12 @@ private:
 	 */
 	const LLUUID extractAvatarID(const LLUUID& avatarID);
 
+public: // <FS:Ansariel> Needed to check in LLOpenTaskOffer
 	bool isAvatarDataStored(const LLUUID& avatarID) const
 	{
 		return (mBuddyIDSet.end() != mBuddyIDSet.find(avatarID));
 	}
+private: // <FS:Ansariel> Needed to check in LLOpenTaskOffer
 
 	const LLUUID& findChildFolderUUID(const LLUUID& parentFolderUUID, const std::string& nonLocalizedName) const;
 	const LLUUID& findFriendFolderUUIDImpl() const;

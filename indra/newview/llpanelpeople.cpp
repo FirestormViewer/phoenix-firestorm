@@ -657,7 +657,6 @@ BOOL LLPanelPeople::postBuild()
 	// <FS:Ansariel> FIRE-4740: Friend counter in people panel
 	mFriendsTabContainer = friends_tab->findChild<LLTabContainer>("friends_accordion");
 	// <FS:Ansariel> Firestorm radar
-	friends_tab->childSetAction("GlobalOnlineStatusToggle", boost::bind(&LLPanelPeople::onGlobalVisToggleButtonClicked, this));
 	mOnlineFriendList = friends_tab->getChild<LLAvatarList>("avatars_online");
 	mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
 	mSuggestedFriends = friends_tab->getChild<LLAvatarList>("suggested_friends");
@@ -1753,47 +1752,6 @@ bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 {
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
 }
-
-// <FS:Ansariel> Firestorm radar
-void LLPanelPeople::onGlobalVisToggleButtonClicked()
-// Iterate through friends lists, toggling status permission on or off 
-{	
-	bool vis = getChild<LLUICtrl>("GlobalOnlineStatusToggle")->getValue().asBoolean();
-	gSavedSettings.setBOOL("GlobalOnlineStatusToggle", vis);
-	
-	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-	LLAvatarTracker::buddy_map_t all_buddies;
-	av_tracker.copyBuddyList(all_buddies);
-	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
-	for (; buddy_it != all_buddies.end(); ++buddy_it)
-	{
-		LLUUID buddy_id = buddy_it->first;
-		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
-		if (relation == NULL)
-		{
-			// Lets have a warning log message instead of having a crash. EXT-4947.
-			LL_WARNS() << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
-			return;
-		}
-		
-		S32 cur_rights = relation->getRightsGrantedTo();
-		S32 new_rights = 0;
-		if (vis)
-			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-		else
-			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-
-		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id,new_rights);
-	}		
-	
-	mAllFriendList->showPermissions(true);
-	mOnlineFriendList->showPermissions(true);
-	
-	LLSD args;
-	args["MESSAGE"] = getString("high_server_load");
-	LLNotificationsUtil::add("GenericAlert", args);
-}
-// </FS:Ansariel> Firestorm radar
 
 // [FS:CR] Contact sets
 void LLPanelPeople::updateContactSets(LGGContactSets::EContactSetUpdate type)

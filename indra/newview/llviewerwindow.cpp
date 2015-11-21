@@ -4737,7 +4737,7 @@ BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image, bool force_picke
 	{
 		LLStringUtil::format_map_t args;
 		args["FILENAME"] = filepath;
-		reportToNearbyChat(LLTrans::getString("SnapshotSavedToDisk", args));
+		report_to_nearby_chat(LLTrans::getString("SnapshotSavedToDisk", args));
 	}
 	//</FS:Kadah>
 	return image->save(filepath);

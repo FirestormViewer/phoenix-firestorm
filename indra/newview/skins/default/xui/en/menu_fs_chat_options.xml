@@ -157,4 +157,17 @@
 			function="ChatOptions.Enable"
 			parameter="show_send_button"/>
 	</menu_item_check>
+	<menu_item_check
+		label="Show send button in IM sessions"
+		name="show_im_send_button">
+		<menu_item_check.on_check
+			function="CheckControl"
+			parameter="FSShowIMSendButton"/>
+		<menu_item_check.on_click
+			function="ToggleControl"
+			parameter="FSShowIMSendButton"/>
+		<menu_item_check.on_visible
+			function="ChatOptions.Visible"
+			parameter="show_im_send_button"/>
+	</menu_item_check>
 </toggleable_menu>

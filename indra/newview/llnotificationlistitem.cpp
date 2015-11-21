@@ -401,14 +401,24 @@ BOOL LLGroupNoticeNotificationListItem::postBuild()
     mTitleBoxExp->setValue(mParams.subject);
     mNoticeTextExp->setValue(mParams.message);
 
-    mTimeBox->setValue(buildNotificationDate(mParams.time_stamp, UTC));
-    mTimeBoxExp->setValue(buildNotificationDate(mParams.time_stamp, UTC));
+	// <FS:Ansariel> FIRE-17313: Display group notices in SLT
+    //mTimeBox->setValue(buildNotificationDate(mParams.time_stamp, UTC));
+    //mTimeBoxExp->setValue(buildNotificationDate(mParams.time_stamp, UTC));
+    ////Workaround: in case server timestamp is 0 - we use the time when notification was actually received
+    //if (mParams.time_stamp.isNull())
+    //{
+    //    mTimeBox->setValue(buildNotificationDate(mParams.received_time, UTC));
+    //    mTimeBoxExp->setValue(buildNotificationDate(mParams.received_time, UTC));
+    //}
+    mTimeBox->setValue(buildNotificationDate(mParams.time_stamp, SLT));
+    mTimeBoxExp->setValue(buildNotificationDate(mParams.time_stamp, SLT));
     //Workaround: in case server timestamp is 0 - we use the time when notification was actually received
     if (mParams.time_stamp.isNull())
     {
-        mTimeBox->setValue(buildNotificationDate(mParams.received_time, UTC));
-        mTimeBoxExp->setValue(buildNotificationDate(mParams.received_time, UTC));
+        mTimeBox->setValue(buildNotificationDate(mParams.received_time, SLT));
+        mTimeBoxExp->setValue(buildNotificationDate(mParams.received_time, SLT));
     }
+	// </FS:Ansariel>
     setSender(mParams.sender);
 
     if (mInventoryOffer != NULL)

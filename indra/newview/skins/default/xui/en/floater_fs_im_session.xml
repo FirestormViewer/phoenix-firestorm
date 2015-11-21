@@ -600,28 +600,25 @@
               right="-3"
               wrap="true" />
             </layout_panel>
-            <!-- Not added yet, if ever [FS:CR]
             <layout_panel
+              visibility_control="FSShowIMSendButton"
               auto_resize="false"
               user_resize="false"
               name="input_button_layout_panel"
-              width="30"
+              width="85"
               top="0"
               bottom="-1">
               <button
               layout="topleft"
               left="1"
               right="-1"
-              top="1"
+              top="3"
               height="22"
               follows="left|right|top"
-              image_hover_unselected="Toolbar_Middle_Over"
-              image_overlay="Conv_expand_one_line"
-              image_selected="Toolbar_Middle_Selected"
-              image_unselected="Toolbar_Middle_Off"
-              name="minz_btn"
-              tool_tip="Shows/hides message panel" />
-            </layout_panel>-->
+              name="send_chat"
+              label="Send"
+              tool_tip="Sends the IM" />
+            </layout_panel>
           </layout_stack>
         </layout_panel>
       </layout_stack>

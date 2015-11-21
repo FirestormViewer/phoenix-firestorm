@@ -966,8 +966,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	name_params.color(name_color);
 	name_params.readonly_color(name_color);
 
-	std::string prefix = chat.mText.substr(0, 4);
-
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
 
@@ -979,7 +977,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
 	//IRC styled /me messages.
-	bool irc_me = (prefix == "/me " || prefix == "/me'");
+	bool irc_me = is_irc_me_prefix(chat.mText);
 
 	// Delimiter after a name in header copy/past and in plain text mode
 	std::string delimiter = ": ";
