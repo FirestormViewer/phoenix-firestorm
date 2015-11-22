@@ -113,7 +113,7 @@ GrowlManager::GrowlManager()
 	mNotificationConnection = LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
 
 	// Also hook into IM notifications.
-	mInstantMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
+	mInstantMessageConnection = LLIMModel::instance().addNewMsgCallback(&GrowlManager::onInstantMessage);
 	
 	// Hook into script dialogs
 	mScriptDialogConnection = LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
@@ -286,8 +286,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			body = growl_notification->growlBody;
 			LLStringUtil::format(body, substitutions);
 		}
-		//TM:FS no need to log whats sent to growl
-		//LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
+
 		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
 		{
 			LLUrlMatch urlMatch;
@@ -340,10 +339,8 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 {
 	LLNotificationPtr notification = LLNotifications::instance().find(data["notification_id"].asUUID());
 	const std::string name = notification->getName();
-	//LLSD payload = notification->getPayload();
 	LLSD substitutions = notification->getSubstitutions();
 
-	//LL_INFOS("GrowlLLNotification") << "Script dialog: name=" << name << " - payload=" << payload << " subs=" << substitutions << LL_ENDL;
 	if (gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
 	{
 		GrowlNotification* growl_notification = &gGrowlManager->mNotifications[name];
@@ -384,7 +381,14 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 			message = message.substr(3);
 		}
 
-		LLAvatarNameCache::get(chat["from_id"].asUUID(), boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
+		if ((EChatSourceType)chat["source"].asInteger() == CHAT_SOURCE_AGENT)
+		{
+			LLAvatarNameCache::get(chat["from_id"].asUUID(), boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
+		}
+		else
+		{
+			gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		}
 	}
 }
 
