@@ -164,6 +164,15 @@
              top_pad="1"
              name="bubble_text_typing"
              width="150" />
+            <check_box
+             control_name="FSShowTypingStateInNameTag"
+             follows="left|top"
+             height="16"
+             label="Show typing indicator in nametag above avatars"
+             layout="topleft"
+             top_pad="1"
+             name="FSShowTypingStateInNameTag"
+             width="150" />
 
             <check_box
              control_name="FSSecondsinChatTimestamps"

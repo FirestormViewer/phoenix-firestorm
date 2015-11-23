@@ -904,6 +904,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AvatarAutoResponse">
 		Automatische Antwort
 	</string>
+	<string name="AvatarTyping">
+		Tippt
+	</string>
 	<string name="anim_express_afraid">
 		Ängstlich
 	</string>
