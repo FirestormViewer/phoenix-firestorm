@@ -3493,8 +3493,6 @@ void LLVOAvatar::idleUpdateNameTagAlpha(BOOL new_name, F32 alpha)
 LLColor4 LLVOAvatar::getNameTagColor()
 // </FS:CR>
 {
-	static LLUICachedControl<bool> use_old_color("FSUseV1TagColor", false);
-	
 	// ...not using display names
 	LLColor4 color = LLUIColorTable::getInstance()->getColor("NameTagLegacy");
 	if (LLAvatarName::useDisplayNames())
