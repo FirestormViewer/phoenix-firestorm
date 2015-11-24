@@ -14,4 +14,5 @@
 		<menu_item_check label="Pełne imię jako: Nazwa konta (Wyświetlane)" name="format_username_displayname" />
 		<menu_item_check label="Pełne imię jako: Wyświetlane (Nazwa konta)" name="format_displayname_username" />
 	</menu>
+	<menu_item_check label="Status online widoczny dla znajomych" name="GlobalOnlineStatusToggle" />
 </context_menu>

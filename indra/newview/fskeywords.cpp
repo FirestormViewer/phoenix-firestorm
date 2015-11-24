@@ -26,6 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "fscommon.h"
 #include "fskeywords.h"
 #include "growlmanager.h"
 #include "llagent.h"
@@ -155,8 +156,7 @@ void FSKeywords::notify(const LLChat& chat)
 			if (FSEnableGrowl)
 			{
 				std::string msg = chat.mFromName;
-				std::string prefix = chat.mText.substr(0, 4);
-				if (prefix == "/me " || prefix == "/me'")
+				if (is_irc_me_prefix(chat.mText))
 				{
 					msg = msg + chat.mText.substr(3);
 				}

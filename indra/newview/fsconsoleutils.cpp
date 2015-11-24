@@ -30,21 +30,13 @@
 #include "fsconsoleutils.h"
 
 #include "fscommon.h"
-#include "fsfloaternearbychat.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llconsole.h"
-#include "llfloaterreg.h"
 #include "llimview.h"
 #include "lltrans.h"
+#include "llviewerchat.h"
 #include "llviewercontrol.h"
-
-// static
-BOOL FSConsoleUtils::isNearbyChatVisible()
-{
-	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-	return nearby_chat->getVisible();
-}
 
 // static
 bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args)
@@ -74,11 +66,9 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	else if (chat_msg.mSourceType == CHAT_SOURCE_OBJECT)
 	{
 		std::string senderName(chat_msg.mFromName);
-		std::string prefix = chat_msg.mText.substr(0, 4);
-		LLStringUtil::toLower(prefix);
 
 		//IRC styled /me messages.
-		bool irc_me = prefix == "/me " || prefix == "/me'";
+		bool irc_me = is_irc_me_prefix(chat_msg.mText);
 
 		// Delimiter after a name in header copy/past and in plain text mode
 		std::string delimiter = ": ";
@@ -103,7 +93,6 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!isNearbyChatVisible());
 	}
 	else
 	{
@@ -126,7 +115,6 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!isNearbyChatVisible());
 	}
 
 	return true;
@@ -137,11 +125,9 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 {
 	std::string consoleChat;
 	std::string senderName(chat_msg.mFromName);
-	std::string prefix = chat_msg.mText.substr(0, 4);
-	LLStringUtil::toLower(prefix);
 
 	//IRC styled /me messages.
-	bool irc_me = prefix == "/me " || prefix == "/me'";
+	bool irc_me = is_irc_me_prefix(chat_msg.mText);
 
 	// Delimiter after a name in header copy/past and in plain text mode
 	std::string delimiter = ": ";
@@ -173,7 +159,6 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 	LLColor4 chatcolor;
 	LLViewerChat::getChatColor(chat_msg, chatcolor);
 	gConsole->addConsoleLine(consoleChat, chatcolor);
-	gConsole->setVisible(!isNearbyChatVisible());
 }
 
 //static
@@ -214,24 +199,22 @@ bool FSConsoleUtils::ProcessInstantMessage(const LLUUID& session_id, const LLUUI
 		}
 	}
 
-	LLAvatarNameCache::get(from_id, boost::bind(&FSConsoleUtils::onProccessInstantMessageNameLookup, _1, _2, message, group));
+	LLAvatarNameCache::get(from_id, boost::bind(&FSConsoleUtils::onProccessInstantMessageNameLookup, _1, _2, message, group, session_id));
 
 	return true;
 }
 
 //static
-void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group)
+void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group, const LLUUID& session_id)
 {
 	const bool is_group = !group.empty();
 
 	std::string senderName;
 	std::string message(message_str);
 	std::string delimiter = ": ";
-	std::string prefix = message.substr(0, 4);
-	LLStringUtil::toLower(prefix);
 
 	// irc styled messages
-	if (prefix == "/me " || prefix == "/me'")
+	if (is_irc_me_prefix(message))
 	{
 		delimiter = LLStringUtil::null;
 		message = message.substr(3);
@@ -254,6 +237,5 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	LLColor4 textColor;
 	LLViewerChat::getChatColor(chat, textColor, LLSD().with("is_local", false).with("for_console", true));
 
-	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
-	gConsole->setVisible(!isNearbyChatVisible());
+	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor, session_id);
 }

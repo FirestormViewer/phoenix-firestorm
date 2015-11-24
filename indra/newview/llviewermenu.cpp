@@ -148,6 +148,7 @@
 #include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
+#include "lfsimfeaturehandler.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
 #include "llsdserialize.h"
 #include "lltexturecache.h"	// ## Zi: Texture Refresh
@@ -830,16 +831,16 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		}
 		else if ("badge" == info_type)
 		{
-			reportToNearbyChat("Hippos!");
+			report_to_nearby_chat("Hippos!");
 		}
 		else if ("cookies" == info_type)
 		{
-			reportToNearbyChat("Cookies!");
+			report_to_nearby_chat("Cookies!");
 		}
 		// <FS:PP>
 		else if ("motd" == info_type)
 		{
-			reportToNearbyChat(gAgent.mMOTD);
+			report_to_nearby_chat(gAgent.mMOTD);
 		}
 		// </FS:PP>
 		return true;
@@ -4450,11 +4451,11 @@ class FSSelfToggleMoveLock : public view_listener_t
 			gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 			if (new_value)
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockEnabling"));
+				report_to_nearby_chat(LLTrans::getString("MovelockEnabling"));
 			}
 			else
 			{
-				reportToNearbyChat(LLTrans::getString("MovelockDisabling"));
+				report_to_nearby_chat(LLTrans::getString("MovelockDisabling"));
 			}
 		}
 #ifdef OPENSIM
@@ -8750,7 +8751,7 @@ void handle_selected_texture_info(void*)
    		//LLSD args;
    		//args["MESSAGE"] = msg;
    		//LLNotificationsUtil::add("SystemMessage", args);
-		reportToNearbyChat(msg);
+		report_to_nearby_chat(msg);
 		// </FS:Ansariel>
 	}
 }
@@ -8879,7 +8880,28 @@ class LLCheckControl : public view_listener_t
 	}
 };
 
-// <FS:Ansariel> Reset to default control
+// <FS:Ansariel> Control enhancements
+class LLTogglePerAccountControl : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string control_name = userdata.asString();
+		BOOL checked = gSavedPerAccountSettings.getBOOL( control_name );
+		gSavedPerAccountSettings.setBOOL( control_name, !checked );
+		return true;
+	}
+};
+
+class LLCheckPerAccountControl : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		std::string callback_data = userdata.asString();
+		bool new_value = gSavedPerAccountSettings.getBOOL(callback_data);
+		return new_value;
+	}
+};
+
 class FSResetControl : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
@@ -8898,7 +8920,7 @@ class FSResetPerAccountControl : public view_listener_t
 		return true;
 	}
 };
-// </FS:Ansariel> Reset to default control
+// </FS:Ansariel> Control enhancements
 
 // not so generic
 
@@ -8966,13 +8988,13 @@ class LLAdvancedToggleDoubleClickTeleport: public view_listener_t
 		if (checked)
 		{
 			gSavedSettings.setBOOL("DoubleClickTeleport", FALSE);
-			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportDisabled"));
+			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportDisabled"));
 		}
 		else
 		{
 			gSavedSettings.setBOOL("DoubleClickTeleport", TRUE);
 			gSavedSettings.setBOOL("DoubleClickAutoPilot", FALSE);
-			reportToNearbyChat(LLTrans::getString("DoubleClickTeleportEnabled"));
+			report_to_nearby_chat(LLTrans::getString("DoubleClickTeleportEnabled"));
 		}
 		return true;
 	}
@@ -9367,7 +9389,7 @@ class FSDumpSimulatorFeaturesToChat : public view_listener_t
 			std::stringstream out_str;
 			region->getSimulatorFeatures(sim_features);
 			LLSDSerialize::toPrettyXML(sim_features, out_str);
-			reportToNearbyChat(out_str.str());
+			report_to_nearby_chat(out_str.str());
 		}
 		return true;
 	}
@@ -9393,38 +9415,58 @@ class FSAddToContactSet : public view_listener_t
 // </FS:CR> Add to contact set
 
 // <FS:CR> Opensim menu item visibility control
-class LLGridCheck : public view_listener_t
+bool checkIsGrid(const LLSD& userdata)
 {
-	bool handleEvent(const LLSD& userdata)
+	std::string grid_type = userdata.asString();
+	if ("secondlife" == grid_type)
 	{
-		std::string grid_type = userdata.asString();
-		if ("secondlife" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInSecondLife();
-		}
+		return LLGridManager::getInstance()->isInSecondLife();
+	}
 #ifdef OPENSIM
-		else if ("opensim" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInOpenSim();
-		}
-		else if ("aurorasim" == grid_type)
-		{
-			return LLGridManager::getInstance()->isInAuroraSim();
-		}
+	else if ("opensim" == grid_type)
+	{
+		return LLGridManager::getInstance()->isInOpenSim();
+	}
+	else if ("aurorasim" == grid_type)
+	{
+		return LLGridManager::getInstance()->isInAuroraSim();
+	}
 #else // !OPENSIM
-		else if ("opensim" == grid_type || "aurorasim" == grid_type)
-		{
-			LL_DEBUGS("ViewerMenu") << grid_type << "is not a supported platform on Havok builds. Disabling item." << LL_ENDL;
-			return false;
-		}
+	else if ("opensim" == grid_type || "aurorasim" == grid_type)
+	{
+		LL_DEBUGS("ViewerMenu") << grid_type << "is not a supported platform on Havok builds. Disabling item." << LL_ENDL;
+		return false;
+	}
 #endif // OPENSIM
+	else
+	{
+		LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter! (" << grid_type << ")" << LL_ENDL;
+	}
+	return true;
+}
+
+bool isGridFeatureEnabled(const LLSD& userdata)
+{
+	if (LFSimFeatureHandler::instanceExists())
+	{
+		const std::string feature = userdata.asString();
+
+		if (feature == "avatar_picker")
+		{
+			return LFSimFeatureHandler::instance().hasAvatarPicker();
+		}
+		else if (feature == "destination_guide")
+		{
+			return LFSimFeatureHandler::instance().hasDestinationGuide();
+		}
 		else
 		{
-			LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter! (" << grid_type << ")" << LL_ENDL;
+			LL_WARNS("ViewerMenu") << "Unhandled or bad grid feature check parameter! (" << feature << ")" << LL_ENDL;
 		}
-		return true;
 	}
-};
+
+	return false;
+}
 // </FS:CR>
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
@@ -10775,7 +10817,8 @@ void initialize_menus()
 	// <FS:Ansariel> [FS communication UI]
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 	
-	view_listener_t::addEnable(new LLGridCheck(), "GridCheck");	// <FS:CR> Opensim menu item visibility control
+	enable.add("GridCheck", boost::bind(&checkIsGrid, _2)); // <FS:CR> Opensim menu item visibility control
+	enable.add("GridFeatureCheck", boost::bind(&isGridFeatureEnabled, _2));
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
@@ -11264,10 +11307,12 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLGoToObject(), "GoToObject");
 	commit.add("PayObject", boost::bind(&handle_give_money_dialog));
 
-	// <FS:Ansariel> Reset to default control
+	// <FS:Ansariel> Control enhancements
+	view_listener_t::addMenu(new LLTogglePerAccountControl(), "TogglePerAccountControl");
+	view_listener_t::addMenu(new LLCheckPerAccountControl(), "CheckPerAccountControl");
 	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
-	// </FS:Ansariel> Reset to default control
+	// </FS:Ansariel> Control enhancements
 
 	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 

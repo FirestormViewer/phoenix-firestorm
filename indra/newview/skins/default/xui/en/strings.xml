@@ -437,6 +437,7 @@ Please try logging in again in a minute.</string>
 	<string name="AvatarDoNotDisturb">Unavailable</string>
 	<string name="AvatarMuted">Blocked</string>
 	<string name="AvatarAutoResponse">Auto-Response</string>
+	<string name="AvatarTyping">Typing</string>
 
 	<!-- animations -->
 	<string name="anim_express_afraid">Afraid</string>

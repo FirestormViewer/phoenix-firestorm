@@ -4,7 +4,7 @@
 		Der Anzeigename ist der Name, den Sie Ihrem Avatar geben. Sie können ihn einmal pro Woche ändern.
 	</text>
 	<text name="lockout_text">
-		Sie können Ihren Anzeigenamen erst wieder zu diesem Zeitpunkt ändern: [TIME].
+		Früheste Änderung möglich ab: [TIME].
 	</text>
 	<text name="set_name_label">
 		Neuer Anzeigename:

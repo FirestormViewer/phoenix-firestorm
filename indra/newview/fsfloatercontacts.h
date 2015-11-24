@@ -30,6 +30,7 @@
 #define FS_FLOATERCONTACTS_H
 
 #include "llavatarnamecache.h"
+#include "llcallingcard.h"
 #include "llfloater.h"
 #include "llscrolllistcolumn.h"
 #include "rlvhandler.h"
@@ -37,29 +38,25 @@
 class FSScrollListCtrl;
 class LLAvatarList;
 class LLAvatarTracker;
-class LLFriendObserver;
 class LLScrollListCtrl;
 class LLGroupList;
 class LLRelationship;
 class LLPanel;
 class LLTabContainer;
 
-class FSFloaterContacts : public LLFloater, LLEventTimer
+class FSFloaterContacts : public LLFloater, LLFriendObserver, LLEventTimer
 {
 public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
 
-	/** 
-	 * @brief This method is called in response to the LLAvatarTracker
-	 * sending out a changed() message.
-	 */
-	void onFriendListUpdate(U32 changed_mask);
-
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void draw();
 	/*virtual*/ BOOL tick();
+
+	// LLFriendObserver implementation
+	/*virtual*/ void changed(U32 changed_mask);
 
 	static FSFloaterContacts* getInstance();
 	static FSFloaterContacts* findInstance();
@@ -151,7 +148,6 @@ private:
 
 	LLTabContainer*			mTabContainer;
 
-	LLFriendObserver*		mObserver;
 	bool					mAllowRightsChange;
 	S32						mNumRightsChanged;
 	bool					mRightsChangeNotificationTriggered;

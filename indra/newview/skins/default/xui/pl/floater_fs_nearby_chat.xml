@@ -13,6 +13,9 @@
 		<layout_panel name="lp_chat_history_muted_btn">
 			<button tool_tip="Pokazuj wyciszone wiadomości w oknie logu czatu lokalnego." name="chat_history_muted_btn"/>
 		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<menu_button tool_tip="Opcje czatu" name="chat_options_btn"/>
+		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ls_chat">
 		<layout_panel name="panel_im_control_lp">

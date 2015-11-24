@@ -3019,7 +3019,7 @@ void LLIMMgr::addMessage(
 			{
 				LLStringUtil::format_map_t args;
 				args["NAME"] = LLSLURL("group", new_session_id, "about").getSLURLString();
-				reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+				report_to_nearby_chat(LLTrans::getString("GroupChatMuteNotice", args));
 			}
 			clearPendingInvitation(new_session_id);
 			clearPendingAgentListUpdates(new_session_id);
@@ -3103,7 +3103,7 @@ void LLIMMgr::addMessage(
 				}
 				else if (reportIgnoredAdHocSession)
 				{
-					reportToNearbyChat(LLTrans::getString("IgnoredAdHocSession"));
+					report_to_nearby_chat(LLTrans::getString("IgnoredAdHocSession"));
 				}
 				return;
 			}
@@ -4339,7 +4339,7 @@ public:
 					{
 						LLStringUtil::format_map_t args;
 						args["NAME"] = LLSLURL("group", session_id, "about").getSLURLString();
-						reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+						report_to_nearby_chat(LLTrans::getString("GroupChatMuteNotice", args));
 					}
 					
 					//KC: make sure we leave the group chat at the server end as well

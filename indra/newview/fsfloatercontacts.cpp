@@ -35,7 +35,6 @@
 #include "fsscrolllistctrl.h"
 #include "llagent.h"
 #include "llavataractions.h"
-#include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
 #include "llfloatergroupinvite.h"
 #include "llfloaterreg.h"
@@ -60,23 +59,6 @@ static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
 
 
-// simple class to observe the calling cards.
-class LLLocalFriendsObserver : public LLFriendObserver
-{
-public: 
-	LLLocalFriendsObserver(FSFloaterContacts* floater) : mFloater(floater) {}
-	virtual ~LLLocalFriendsObserver()
-	{
-		mFloater = NULL;
-	}
-	virtual void changed(U32 mask)
-	{
-		mFloater->onFriendListUpdate(mask);
-	}
-protected:
-	FSFloaterContacts* mFloater;
-};
-
 //
 // FSFloaterContacts
 //
@@ -85,7 +67,6 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
 	LLEventTimer(300.f),
 	mTabContainer(NULL),
-	mObserver(NULL),
 	mFriendsList(NULL),
 	mGroupList(NULL),
 	mAllowRightsChange(true),
@@ -95,18 +76,16 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mResetLastColumnDisplayModeChanged(false),
 	mDirtyNames(true)
 {
-	mObserver = new LLLocalFriendsObserver(this);
-	LLAvatarTracker::instance().addObserver(mObserver);
+	LLAvatarTracker::instance().addObserver(this);
 	// For notification when SIP online status changes.
-	LLVoiceClient::getInstance()->addObserver(mObserver);
+	LLVoiceClient::getInstance()->addObserver(this);
 }
 
 FSFloaterContacts::~FSFloaterContacts()
 {
 	// For notification when SIP online status changes.
-	LLVoiceClient::getInstance()->removeObserver(mObserver);
-	LLAvatarTracker::instance().removeObserver(mObserver);
-	delete mObserver;
+	LLVoiceClient::getInstance()->removeObserver(this);
+	LLAvatarTracker::instance().removeObserver(this);
 
 	if (mRlvBehaviorCallbackConnection.connected())
 	{
@@ -532,7 +511,7 @@ void FSFloaterContacts::sortFriendList()
 // Friends list
 //
 
-void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
+void FSFloaterContacts::changed(U32 changed_mask)
 {
 	LLAvatarTracker& at = LLAvatarTracker::instance();
 

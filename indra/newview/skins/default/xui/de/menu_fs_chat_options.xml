@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Radar anzeigen..." name="nearby_people"/>
+	<menu_item_check label="Stimmen in der Nähe anzeigen..." name="nearby_voice"/>
+	<menu_item_check label="Blockierliste anzeigen..." name="block_list"/>
+	<menu_item_check label="V1-Stil für Chatverlauf verwenden" name="plain_text_chat_history"/>
+	<context_menu label="Schriftgröße..." name="font_size">
+		<menu_item_check label="Klein" name="font_size_small"/>
+		<menu_item_check label="Mittel" name="font_size_medium"/>
+		<menu_item_check label="Groß" name="font_size_large"/>
+		<menu_item_check label="Riesig" name="font_size_huge"/>
+	</context_menu>
+	<menu_item_check label="Zusätzlichen Schreib-Indikator (&gt;) anzeigen" name="typing_chevron"/>
+	<menu_item_check label="Hinweis über neue Nachrichten anzeigen" name="new_message_notification"/>
+	<menu_item_check label="Eingabezeile anzeigen" name="show_chat_bar"/>
+	<menu_item_check label="Kanalauswahl anzeigen" name="show_channel_selection"/>
+	<menu_item_check label="Chat-Typ/Senden-Button anzeigen" name="show_send_button"/>
+	<menu_item_check label="Senden-Button in IM-Sitzungen anzeigen" name="show_im_send_button"/>
+</toggleable_menu>

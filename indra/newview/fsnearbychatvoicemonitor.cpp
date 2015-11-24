@@ -29,7 +29,7 @@
 #include "fsnearbychatvoicemonitor.h"
 #include "llvoiceclient.h"
 
-static LLDefaultChildRegistry::Register<FSNearbyChatVoiceControl> r("nearby_chat_voice_monitor");
+static LLDefaultChildRegistry::Register<FSNearbyChatVoiceControl> r("fs_nearby_chat_voice_monitor");
 
 FSNearbyChatVoiceControl::Params::Params() :
 	voice_monitor_padding("voice_monitor_padding"),

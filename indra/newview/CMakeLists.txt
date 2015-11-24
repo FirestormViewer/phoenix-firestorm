@@ -141,6 +141,7 @@ set(viewer_SOURCE_FILES
     fsavatarsearchmenu.cpp
     fsblocklistmenu.cpp
     fschathistory.cpp
+    fschatoptionsmenu.cpp
     fscommon.cpp
     fsconsoleutils.cpp
     fscontactsfriendsmenu.cpp
@@ -881,6 +882,7 @@ set(viewer_HEADER_FILES
     fsavatarsearchmenu.h
     fsblocklistmenu.h
     fschathistory.h
+    fschatoptionsmenu.h
     fscommon.h
     fsconsoleutils.h
     fscontactsfriendsmenu.h

@@ -1167,7 +1167,11 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 		}
 		else
 		{
-			button->setCommitCallback(executeParam);
+			// <FS:Ansariel> Check enabled state of button before executing!
+			//button->setCommitCallback(executeParam);
+			LLUICtrl::commit_callback_t execute_func = initCommitCallback(executeParam);
+			button->setCommitCallback(boost::bind(&LLToolBarButton::callIfEnabled, button, execute_func, _1, _2));
+			// </FS:Ansariel>
 		}
 
 		// Set up "is running" query callback

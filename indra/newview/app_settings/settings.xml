@@ -255,17 +255,6 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>FSUseV1TagColor</key>
-  <map>
-    <key>Comment</key>
-    <string>If Client tags should be colored</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
   <key>FSNameTagShowLegacyUsernames</key>
   <map>
     <key>Comment</key>
@@ -1044,7 +1033,7 @@
   <key>AutoCloseOOC</key>
     <map>
       <key>Comment</key>
-      <string>Auto-close OOC chat (i.e. add \"))\" if not found and \"((\" was used)</string>
+      <string>Auto-close OOC chat (i.e. add &quot;))&quot; if not found and &quot;((&quot; was used)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1074,19 +1063,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
-  <key>GlobalOnlineStatusToggle</key>
-    <map>
-      <key>Comment</key>
-      <string>Saves the state of global online status permission for friends</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-
   <key>RenderVolumeSAProtection</key>
     <map>
       <key>Comment</key>
@@ -1098,7 +1074,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
   <key>RenderVolumeSAThreshold</key>
     <map>
       <key>Comment</key>
@@ -7573,17 +7548,6 @@
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>LegacyMultiAttachmentSupport</key>
-    <map>
-      <key>Comment</key>
-      <string>Converts legacy "secondary attachment points" to multi-attachments for other avatars</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>LimitDragDistance</key>
@@ -23704,10 +23668,78 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSFlipCEFY</key>
+    <key>FSEnableMovingFolderLinks</key>
     <map>
       <key>Comment</key>
-      <string>Let CEF internally flip the generated image rather than do it on the GPU. More memory and CPU intensive if enabled. Requires restart.</string>
+      <string>Enable moving of folder links via drag and drop</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>ForceInitialCOFDelay</key>
+    <map>
+      <key>Comment</key>
+      <string>Number of seconds to delay initial processing of COF contents</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>FSTypeDuringEmote</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables the typing animation even while emoting</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSLegacyNotificationWell</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables the legacy notifications and system messages well</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSInternalLegacyNotificationWell</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal state of FSLegacyNotificationWell</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSShowIMSendButton</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows the send chat button in IM session windows</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSShowTypingStateInNameTag</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows in the nametag of an avatar if they are typing</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

@@ -109,6 +109,9 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 	<floater.string name="E_ST_BAD_ROOT">
 		Falscher Root-Joint-Name, &quot;hip&quot; verwenden.
 	</floater.string>
+	<floater.string name="FS_report_frames">
+		[F] frm.  [S] s. [FPS] FPS
+	</floater.string>
 	<text name="name_label">
 		Name:
 	</text>
@@ -117,8 +120,13 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 	</text>
 	<spinner label="Priorität" name="priority" tool_tip="Steuert, welche Animationen von dieser Animation überschrieben werden können"/>
 	<check_box label="Schleife" name="loop_check" tool_tip="Erzeugt eine Animationsschleife"/>
+	<text name="frames_label">
+		300 frm. 30 s. 10 FPS
+	</text>
 	<spinner label="Ein (%)" name="loop_in_point" tool_tip="Anfang einer Animationsschleife festlegen"/>
 	<spinner label="Aus (%)" name="loop_out_point" tool_tip="Ende einer Animationsschleife festlegen"/>
+	<spinner label="Ein (frm)" name="loop_in_frames" tool_tip="Anfang einer Animationsschleife festlegen (in Frames)"/>
+	<spinner label="Aus (frm)" name="loop_out_frames" tool_tip="Ende einer Animationsschleife festlegen (in Frames)"/>
 	<text name="hand_label">
 		Handhaltung
 	</text>
@@ -141,35 +149,35 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 		Ausdruck
 	</text>
 	<combo_box name="emote_combo" tool_tip="Steuert Gesichtsregungen während der Animation">
-		<item label="(Keine)" name="[None]" value=""/>
-		<item label="Aaaaah" name="Aaaaah" value="Aaaaah"/>
-		<item label="Ängstlich" name="Afraid" value="Ängstlich"/>
-		<item label="Verärgert" name="Angry" value="Verärgert"/>
-		<item label="Grinst" name="BigSmile" value="Grinst"/>
-		<item label="Gelangweilt" name="Bored" value="Gelangweilt"/>
-		<item label="Weinen" name="Cry" value="Weinen"/>
-		<item label="Verachtung" name="Disdain" value="Verachtung"/>
-		<item label="Verlegen" name="Embarrassed" value="Verlegen"/>
-		<item label="Stirnrunzeln" name="Frown" value="Stirnrunzeln"/>
-		<item label="Küssen" name="Kiss" value="Küssen"/>
-		<item label="Lachen" name="Laugh" value="Lachen"/>
-		<item label="Bäääh" name="Plllppt" value="Bäääh"/>
-		<item label="Angewidert" name="Repulsed" value="Angewidert"/>
-		<item label="Traurig" name="Sad" value="Traurig"/>
-		<item label="Achselzucken" name="Shrug" value="Achselzucken"/>
-		<item label="Lächeln" name="Smile" value="Lächeln"/>
-		<item label="Überraschung" name="Surprise" value="Überraschung"/>
-		<item label="Zwinkern" name="Wink" value="Zwinkern"/>
-		<item label="Sorgenvoll" name="Worry" value="Sorgenvoll"/>
+		<item label="(Keine)" name="[None]"/>
+		<item label="Aaaaah" name="Aaaaah"/>
+		<item label="Ängstlich" name="Afraid"/>
+		<item label="Verärgert" name="Angry"/>
+		<item label="Grinst" name="BigSmile"/>
+		<item label="Gelangweilt" name="Bored"/>
+		<item label="Weinen" name="Cry"/>
+		<item label="Verachtung" name="Disdain"/>
+		<item label="Verlegen" name="Embarrassed"/>
+		<item label="Stirnrunzeln" name="Frown"/>
+		<item label="Küssen" name="Kiss"/>
+		<item label="Lachen" name="Laugh"/>
+		<item label="Bäääh" name="Plllppt"/>
+		<item label="Angewidert" name="Repulsed"/>
+		<item label="Traurig" name="Sad"/>
+		<item label="Achselzucken" name="Shrug"/>
+		<item label="Lächeln" name="Smile"/>
+		<item label="Überraschung" name="Surprise"/>
+		<item label="Zwinkern" name="Wink"/>
+		<item label="Sorgenvoll" name="Worry"/>
 	</combo_box>
 	<text name="preview_label">
 		Vorschau während:
 	</text>
 	<combo_box name="preview_base_anim" tool_tip="Hiermit können Sie das Verhalten Ihres Avatars testen, während Ihr Avatar normale Bewegungen ausführt.">
-		<item label="Stehen" name="Standing" value="Stehen"/>
-		<item label="Gehen" name="Walking" value="Gehen"/>
-		<item label="Sitzen" name="Sitting" value="Sitzen"/>
-		<item label="Fliegen" name="Flying" value="Fliegen"/>
+		<item label="Stehen" name="Standing"/>
+		<item label="Gehen" name="Walking"/>
+		<item label="Sitzen" name="Sitting"/>
+		<item label="Fliegen" name="Flying"/>
 	</combo_box>
 	<spinner label="Einblenden (s)" name="ease_in_time" tool_tip="Einblendungszeit für Animationen (in Sekunden)"/>
 	<spinner label="Ausblenden (s)" name="ease_out_time" tool_tip="Ausblendungszeit für Animationen (in Sekunden)"/>
@@ -177,9 +185,7 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 	<button name="pause_btn" tool_tip="Animation unterbrechen"/>
 	<button name="stop_btn" tool_tip="Animation anhalten"/>
 	<text name="bad_animation_text">
-		Animationsdatei kann nicht gelesen werden.
-
-Wir empfehlen exportierte BVH-Dateien aus Poser 4.
+		Animationsdatei kann nicht gelesen werden. Wir empfehlen exportierte BVH-Dateien aus Poser 4.
 	</text>
     <button label="Datei neu laden" name="reload_btn"/>
 	<button label="Hochladen (L$ [AMOUNT])" name="ok_btn"/>

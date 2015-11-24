@@ -4484,7 +4484,10 @@ BOOL LLFolderBridge::dragOrDrop(MASK mask, BOOL drop,
 			// DAD_LINK type might mean one of two asset types: AT_LINK or AT_LINK_FOLDER.
 			// If we have an item of AT_LINK_FOLDER type we should process the linked
 			// category being dragged or dropped into folder.
-			if (inv_item && LLAssetType::AT_LINK_FOLDER == inv_item->getActualType())
+			// <FS:Ansariel> FIRE-13863: Allow moving folder links
+			//if (inv_item && LLAssetType::AT_LINK_FOLDER == inv_item->getActualType())
+			if (inv_item && LLAssetType::AT_LINK_FOLDER == inv_item->getActualType() && !gSavedSettings.getBOOL("FSEnableMovingFolderLinks"))
+			// </FS:Ansariel>
 			{
 				LLInventoryCategory* linked_category = gInventory.getCategory(inv_item->getLinkedUUID());
 				if (linked_category)

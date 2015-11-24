@@ -61,7 +61,7 @@ extern S32 gMaxAgentGroups;
 
 S32 FSCommon::sObjectAddMsg = 0;
 
-void reportToNearbyChat(const std::string& message)
+void report_to_nearby_chat(const std::string& message)
 {
 	LLChat chat;
 	chat.mText = message;
@@ -69,76 +69,78 @@ void reportToNearbyChat(const std::string& message)
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, LLSD());
 }
 
-std::string applyAutoCloseOoc(const std::string& message)
+std::string format_string(std::string text, const LLStringUtil::format_map_t& args)
+{
+	LLStringUtil::format(text, args);
+	return text;
+}
+
+bool is_irc_me_prefix(const std::string& text)
+{
+	const std::string prefix = text.substr(0, 4);
+	return (prefix == "/me " || prefix == "/me'");
+}
+
+std::string FSCommon::applyAutoCloseOoc(std::string message)
 {
 	if (!gSavedSettings.getBOOL("AutoCloseOOC"))
 	{
 		return message;
 	}
 
-	std::string utf8_text(message);
-
 	// Try to find any unclosed OOC chat (i.e. an opening
 	// double parenthesis without a matching closing double
 	// parenthesis.
-	if (utf8_text.find("(( ") != -1 && utf8_text.find("))") == -1)
+	if (message.find("(( ") != std::string::npos && message.find("))") == std::string::npos)
 	{
 		// add the missing closing double parenthesis.
-		utf8_text += " ))";
+		message += " ))";
 	}
-	else if (utf8_text.find("((") != -1 && utf8_text.find("))") == -1)
+	else if (message.find("((") != std::string::npos && message.find("))") == std::string::npos)
 	{
-		if (utf8_text.at(utf8_text.length() - 1) == ')')
+		if (message.at(message.length() - 1) == ')')
 		{
 			// cosmetic: add a space first to avoid a closing triple parenthesis
-			utf8_text += " ";
+			message += " ";
 		}
 		// add the missing closing double parenthesis.
-		utf8_text += "))";
+		message += "))";
 	}
-	else if (utf8_text.find("[[ ") != -1 && utf8_text.find("]]") == -1)
+	else if (message.find("[[ ") != std::string::npos && message.find("]]") == std::string::npos)
 	{
 		// add the missing closing double parenthesis.
-		utf8_text += " ]]";
+		message += " ]]";
 	}
-	else if (utf8_text.find("[[") != -1 && utf8_text.find("]]") == -1)
+	else if (message.find("[[") != std::string::npos && message.find("]]") == std::string::npos)
 	{
-		if (utf8_text.at(utf8_text.length() - 1) == ']')
+		if (message.at(message.length() - 1) == ']')
 		{
 			// cosmetic: add a space first to avoid a closing triple parenthesis
-			utf8_text += " ";
+			message += " ";
 		}
 			// add the missing closing double parenthesis.
-		utf8_text += "]]";
+		message += "]]";
 	}
 
-	return utf8_text;
+	return message;
 }
 
-std::string applyMuPose(const std::string& message)
+std::string FSCommon::applyMuPose(std::string message)
 {
-	std::string utf8_text(message);
-
 	// Convert MU*s style poses into IRC emotes here.
-	if (gSavedSettings.getBOOL("AllowMUpose") && utf8_text.find(":") == 0 && utf8_text.length() > 3)
+	if (gSavedSettings.getBOOL("AllowMUpose") && message.find(":") == 0 && message.length() > 3)
 	{
-		if (utf8_text.find(":'") == 0)
+		if (message.find(":'") == 0)
 		{
-			utf8_text.replace(0, 1, "/me");
+			message.replace(0, 1, "/me");
  		}
-		else if (!isdigit(utf8_text.at(1)) && !ispunct(utf8_text.at(1)) && !isspace(utf8_text.at(1)))	// Do not prevent smileys and such.
+		else if (!isdigit(message.at(1)) && !ispunct(message.at(1)) && !isspace(message.at(1)))	// Do not prevent smileys and such.
 		{
-			utf8_text.replace(0, 1, "/me ");
+			message.replace(0, 1, "/me ");
 		}
 	}
 
-	return utf8_text;
-}
-
-std::string formatString(std::string text, const LLStringUtil::format_map_t& args)
-{
-	LLStringUtil::format(text, args);
-	return text;
+	return message;
 }
 
 S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::string& str)

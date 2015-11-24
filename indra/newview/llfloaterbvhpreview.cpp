@@ -166,7 +166,9 @@ void LLFloaterBvhPreview::setAnimCallbacks()
 	getChild<LLUICtrl>("playback_slider")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onSliderMove, this));
 	
 	getChild<LLUICtrl>("preview_base_anim")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitBaseAnim, this));
-	getChild<LLUICtrl>("preview_base_anim")->setValue("Standing");
+	// <FS:Sei> FIRE-17251: Use the XUI values for defaults
+	//getChild<LLUICtrl>("preview_base_anim")->setValue("Standing");
+	// </FS:Sei>
 
 	getChild<LLUICtrl>("priority")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitPriority, this));
 	getChild<LLUICtrl>("loop_check")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitLoop, this));
@@ -174,11 +176,19 @@ void LLFloaterBvhPreview::setAnimCallbacks()
 	getChild<LLUICtrl>("loop_in_point")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateLoopIn, this, _1));
 	getChild<LLUICtrl>("loop_out_point")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitLoopOut, this));
 	getChild<LLUICtrl>("loop_out_point")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateLoopOut, this, _1));
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	getChild<LLUICtrl>("loop_in_frames")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitLoopInFrames, this));
+	getChild<LLUICtrl>("loop_in_frames")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateLoopInFrames, this, _1));
+	getChild<LLUICtrl>("loop_out_frames")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitLoopOutFrames, this));
+	getChild<LLUICtrl>("loop_out_frames")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateLoopOutFrames, this, _1));
+	// </FS:Sei>
 
 	getChild<LLUICtrl>("hand_pose_combo")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitHandPose, this));
 	
 	getChild<LLUICtrl>("emote_combo")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitEmote, this));
-	getChild<LLUICtrl>("emote_combo")->setValue("[None]");
+	// <FS:Sei> FIRE-17251: Use the XUI values for defaults
+	//getChild<LLUICtrl>("emote_combo")->setValue("[None]");
+	// </FS:Sei>
 
 	getChild<LLUICtrl>("ease_in_time")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitEaseIn, this));
 	getChild<LLUICtrl>("ease_in_time")->setValidateBeforeCommit( boost::bind(&LLFloaterBvhPreview::validateEaseIn, this, _1));
@@ -325,6 +335,20 @@ BOOL LLFloaterBvhPreview::loadBVH()
 		// motion will be returned, but it will be in a load-pending state, as this is a new motion
 		// this motion will not request an asset transfer until next update, so we have a chance to 
 		// load the keyframe data locally
+		// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+		mNumFrames = loaderp->getNumFrames();
+		getChild<LLSpinCtrl>("loop_in_frames")->setMaxValue(LLSD((F32)mNumFrames));
+		getChild<LLSpinCtrl>("loop_out_frames")->setMaxValue(LLSD((F32)mNumFrames));
+		// (Re)assign loop frames spinners from loop percentages.
+		getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f * (F32)mNumFrames));
+		getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() / 100.f * (F32)mNumFrames));
+
+		LLUIString out_str = getString("FS_report_frames");
+		out_str.setArg("[F]", llformat("%d", mNumFrames));
+		out_str.setArg("[S]", llformat("%.1f", loaderp->getDuration()));
+		out_str.setArg("[FPS]", llformat("%.1f", (F32)mNumFrames / loaderp->getDuration()));
+		getChild<LLUICtrl>("frames_label")->setValue(LLSD(out_str));
+		// </FS:Sei>
 		// <FS> Preview on own avatar
 		//motionp = (LLKeyframeMotion*)mAnimPreview->getDummyAvatar()->createMotion(mMotionID);
 		motionp =  dynamic_cast<LLKeyframeMotion*>(mAnimPreview->getPreviewAvatar(this)->createMotion(mMotionID));
@@ -371,13 +395,32 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
 			getChild<LLSlider>("playback_slider")->setMaxValue(1.0);
 
-			getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
-			getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(motionp->getLoopIn() / motionp->getDuration() * 100.f));
-			getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(motionp->getLoopOut() / motionp->getDuration() * 100.f));
-			getChild<LLUICtrl>("priority")->setValue(LLSD((F32)motionp->getPriority()));
-			getChild<LLUICtrl>("hand_pose_combo")->setValue(LLHandMotion::getHandPoseName(motionp->getHandPose()));
-			getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(motionp->getEaseInDuration()));
-			getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(motionp->getEaseOutDuration()));
+			//<FS:Sei> FIRE-17251: Use defaults from XUI, not from the JointMotionList constructor
+			//getChild<LLUICtrl>("loop_check")->setValue(LLSD(motionp->getLoop()));
+			//getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(motionp->getLoopIn() / motionp->getDuration() * 100.f));
+			//getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(motionp->getLoopOut() / motionp->getDuration() * 100.f));
+			//getChild<LLUICtrl>("priority")->setValue(LLSD((F32)motionp->getPriority()));
+			//getChild<LLUICtrl>("hand_pose_combo")->setValue(LLHandMotion::getHandPoseName(motionp->getHandPose()));
+			//getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(motionp->getEaseInDuration()));
+			//getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(motionp->getEaseOutDuration()));
+			motionp->setLoop(getChild<LLUICtrl>("loop_check")->getValue().asBoolean());
+			motionp->setLoopIn((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f * motionp->getDuration());
+			motionp->setLoopOut((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() / 100.f * motionp->getDuration());
+			motionp->setPriority(getChild<LLUICtrl>("priority")->getValue().asInteger());
+			motionp->setHandPose(LLHandMotion::getHandPose(getChild<LLUICtrl>("hand_pose_combo")->getValue().asString()));
+			F32 ease_in = (F32)getChild<LLUICtrl>("ease_in_time")->getValue().asReal();
+			F32 ease_out = (F32)getChild<LLUICtrl>("ease_out_time")->getValue().asReal();
+			if (motionp->getDuration() != 0.f && ease_in + ease_out > motionp->getDuration() && !getChild<LLUICtrl>("loop_check")->getValue().asBoolean())
+			{
+				F32 factor = motionp->getDuration() / (ease_in + ease_out);
+				ease_in *= factor;
+				ease_out *= factor;
+				getChild<LLUICtrl>("ease_in_time")->setValue(LLSD(ease_in));
+				getChild<LLUICtrl>("ease_out_time")->setValue(LLSD(ease_out));
+			}
+			motionp->setEaseIn(ease_in);
+			motionp->setEaseOut(ease_out);
+			//</FS>
 			setEnabled(TRUE);
 			std::string seconds_string;
 			seconds_string = llformat(" - %.2f seconds", motionp->getDuration());
@@ -856,7 +899,10 @@ void LLFloaterBvhPreview::onCommitLoopIn()
 
 	if (motionp)
 	{
-		motionp->setLoopIn((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f);
+		// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+		//motionp->setLoopIn((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f);
+		getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD((F32)getChild<LLUICtrl>("loop_in_point")->getValue().asReal() / 100.f * (F32)mNumFrames));
+		// </FS:Sei>
 		resetMotion();
 		getChild<LLUICtrl>("loop_check")->setValue(LLSD(TRUE));
 		onCommitLoop();
@@ -880,12 +926,60 @@ void LLFloaterBvhPreview::onCommitLoopOut()
 
 	if (motionp)
 	{
-		motionp->setLoopOut((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() * 0.01f * motionp->getDuration());
+		// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+		//motionp->setLoopOut((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() * 0.01f * motionp->getDuration());
+		getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD((F32)getChild<LLUICtrl>("loop_out_point")->getValue().asReal() / 100.f * (F32)mNumFrames));
+		// </FS:Sei>
 		resetMotion();
 		getChild<LLUICtrl>("loop_check")->setValue(LLSD(TRUE));
 		onCommitLoop();
 	}
 }
+
+// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+//-----------------------------------------------------------------------------
+// onCommitLoopInFrames()
+//-----------------------------------------------------------------------------
+void LLFloaterBvhPreview::onCommitLoopInFrames()
+{
+	if (!getEnabled() || !mAnimPreview)
+		return;
+
+	// Preview on own avatar
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
+
+	if (motionp)
+	{
+		getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(mNumFrames == 0 ? 0.f : 100.f * (F32)getChild<LLUICtrl>("loop_in_frames")->getValue().asReal() / (F32)mNumFrames));
+		resetMotion();
+		getChild<LLUICtrl>("loop_check")->setValue(LLSD(TRUE));
+		// The values are actually set here:
+		onCommitLoop();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// onCommitLoopOutFrames()
+//-----------------------------------------------------------------------------
+void LLFloaterBvhPreview::onCommitLoopOutFrames()
+{
+	if (!getEnabled() || !mAnimPreview)
+		return;
+
+	// Preview on own avatar
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
+	LLKeyframeMotion* motionp = dynamic_cast<LLKeyframeMotion*>(avatarp->findMotion(mMotionID));
+
+	if (motionp)
+	{
+		getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(mNumFrames == 0 ? 100.f : 100.f * (F32)getChild<LLUICtrl>("loop_out_frames")->getValue().asReal() / (F32)mNumFrames));
+		resetMotion();
+		getChild<LLUICtrl>("loop_check")->setValue(LLSD(TRUE));
+		onCommitLoop();
+	}
+}
+// </FS:Sei>
 
 //-----------------------------------------------------------------------------
 // onCommitName()
@@ -1070,6 +1164,9 @@ bool LLFloaterBvhPreview::validateLoopIn(const LLSD& data)
 	}
 
 	getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(loop_in_value));
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(loop_in_value / 100.f * (F32)mNumFrames));
+	// </FS:Sei>
 	return true;
 }
 
@@ -1098,8 +1195,72 @@ bool LLFloaterBvhPreview::validateLoopOut(const LLSD& data)
 	}
 
 	getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(loop_out_value));
+	// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(loop_out_value / 100.f * (F32)mNumFrames));
+	// </FS:Sei>
 	return true;
 }
+
+
+// <FS:Sei> FIRE-17277: Allow entering Loop In/Loop Out as frames
+//-----------------------------------------------------------------------------
+// validateLoopInFrames()
+//-----------------------------------------------------------------------------
+bool LLFloaterBvhPreview::validateLoopInFrames(const LLSD& data)
+{
+	if (!getEnabled())
+		return false;
+
+	F32 loop_in_value = (F32)getChild<LLUICtrl>("loop_in_frames")->getValue().asReal();
+	F32 loop_out_value = (F32)getChild<LLUICtrl>("loop_out_frames")->getValue().asReal();
+
+	if (loop_in_value < 0.f)
+	{
+		loop_in_value = 0.f;
+	}
+	else if (loop_in_value > 100.f)
+	{
+		loop_in_value = 100.f;
+	}
+	else if (loop_in_value > loop_out_value)
+	{
+		loop_in_value = loop_out_value;
+	}
+
+	getChild<LLUICtrl>("loop_in_frames")->setValue(LLSD(loop_in_value));
+	getChild<LLUICtrl>("loop_in_point")->setValue(LLSD(mNumFrames == 0 ? 0.f : 100.f * loop_in_value / (F32)mNumFrames));
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+// validateLoopOutFrames()
+//-----------------------------------------------------------------------------
+bool LLFloaterBvhPreview::validateLoopOutFrames(const LLSD& data)
+{
+	if (!getEnabled())
+		return false;
+
+	F32 loop_out_value = (F32)getChild<LLUICtrl>("loop_out_frames")->getValue().asReal();
+	F32 loop_in_value = (F32)getChild<LLUICtrl>("loop_in_frames")->getValue().asReal();
+
+	if (loop_out_value < 0.f)
+	{
+		loop_out_value = 0.f;
+	}
+	else if (loop_out_value > 100.f)
+	{
+		loop_out_value = 100.f;
+	}
+	else if (loop_out_value < loop_in_value)
+	{
+		loop_out_value = loop_in_value;
+	}
+
+	getChild<LLUICtrl>("loop_out_frames")->setValue(LLSD(loop_out_value));
+	getChild<LLUICtrl>("loop_out_point")->setValue(LLSD(mNumFrames == 0 ? 100.f : 100.f * loop_out_value / (F32)mNumFrames));
+	return true;
+}
+// </FS:Sei>
 
 
 //-----------------------------------------------------------------------------

@@ -2934,13 +2934,13 @@ void LLAgentCamera::loadCameraPosition()
 
 	if (stored_camera_pos.isNull())
 	{
-		reportToNearbyChat(LLTrans::getString("LoadCameraPositionNoneSaved"));
+		report_to_nearby_chat(LLTrans::getString("LoadCameraPositionNoneSaved"));
 		return;
 	}
 
 	if (dist_vec_squared(gAgent.getPositionGlobal(), stored_camera_pos) > far_clip_squared)
 	{
-		reportToNearbyChat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
+		report_to_nearby_chat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
 		return;
 	}
 

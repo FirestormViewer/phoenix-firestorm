@@ -4472,7 +4472,7 @@ bool LLAgent::teleportCore(bool is_local)
 		}
 		// </FS:Ansariel>
 
-		// bit of a hack -KC
+		//<FS:KC> bit of a hack
 		KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");
@@ -4783,7 +4783,8 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		msg->addUUIDFast(_PREHASH_SessionID, getSessionID());
 
 		msg->nextBlockFast(_PREHASH_Info);
-		F32 width = regionp->getWidth();
+		// <FS:Ansariel> FIRE-17262: Wrong local teleports on a large opensim region (apparently need to divide by grid unit size)
+		F32 width = REGION_WIDTH_METERS;// regionp->getWidth();
 		LLVector3 pos(fmod((F32)pos_global.mdV[VX], width),
 					  fmod((F32)pos_global.mdV[VY], width),
 					  (F32)pos_global.mdV[VZ]);

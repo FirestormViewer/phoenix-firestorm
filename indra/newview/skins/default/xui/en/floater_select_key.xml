@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ title="Select Key"
+ positioning="centered"
  legacy_header_height="18"
  border="false"
  can_close="false"
@@ -15,11 +17,11 @@
      follows="left|top"
      height="30"
      layout="topleft"
-     left="30"
+     left="10"
      name="Save item as:"
      top="25"
      word_wrap="true"
-     width="180">
+     width="220">
         Press a key to set your Speak button trigger.
     </text>
     <button

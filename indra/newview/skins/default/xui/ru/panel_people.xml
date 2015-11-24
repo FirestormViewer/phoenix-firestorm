@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Люди" name="people_panel">
-	<string name="high_server_load" value="В связи с массовыми нагрузками на сервер, может занять некоторое время. Пожалуйста, будьте терпеливы." />
 	<string name="no_recent_people" value="Нет людей, говоривших недавно. Ищете, с кем пообщаться? Воспользуйтесь [secondlife:///app/search/people поиском] или [secondlife:///app/worldmap картой мира]." />
 	<string name="no_filtered_recent_people" value="Не нашли того, что вам нужно? Воспользуйтесь [secondlife:///app/search/people/[SEARCH_TERM] поиском]." />
 	<string name="no_one_near" value="Никого нет рядом. Ищете, с кем пообщаться? Воспользуйтесь [secondlife:///app/search/people поиском] или [secondlife:///app/worldmap картой мира]." />

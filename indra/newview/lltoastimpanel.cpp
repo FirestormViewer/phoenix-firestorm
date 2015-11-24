@@ -40,6 +40,8 @@
 #include "llviewerchat.h"
 #include "llviewercontrol.h"
 
+#include "fscommon.h"
+
 const S32 LLToastIMPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 6;
 
 //--------------------------------------------------------------------------
@@ -75,8 +77,11 @@ LLToastIMPanel::LLToastIMPanel(LLToastIMPanel::Params &p) :	LLToastPanel(p.notif
 	}
 	
 	//Handle IRC styled /me messages.
-	std::string prefix = p.message.substr(0, 4);
-	if (prefix == "/me " || prefix == "/me'")
+	// <FS:Ansariel> Consolidate IRC /me prefix checks
+	//std::string prefix = p.message.substr(0, 4);
+	//if (prefix == "/me " || prefix == "/me'")
+	if (is_irc_me_prefix(p.message))
+	// </FS:Ansariel>
 	{
 		//style_params.font.style = "UNDERLINE";
 		mMessage->clear();

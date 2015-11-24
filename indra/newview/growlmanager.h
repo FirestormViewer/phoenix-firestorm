@@ -36,6 +36,7 @@
 #include "llnotifications.h"
 #include "growlnotifier.h"
 #include "lleventtimer.h"
+#include "llavatarnamecache.h"
 
 struct GrowlNotification
 {
@@ -80,6 +81,7 @@ private:
 	static void onScriptDialog(const LLSD& data);
 	static void onNearbyChatMessage(const LLSD& chat);
 	static inline bool shouldNotify();
+	static void onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type);
 
 	LLBoundListener				mNotificationConnection;
 	boost::signals2::connection	mInstantMessageConnection;

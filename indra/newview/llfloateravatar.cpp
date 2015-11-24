@@ -36,9 +36,13 @@
 #include "lluictrlfactory.h"
 #include "llmediactrl.h"
 
+#include "lfsimfeaturehandler.h"
+#include "llhttpconstants.h"
+#include "llweb.h"
 
 LLFloaterAvatar::LLFloaterAvatar(const LLSD& key)
-	:	LLFloater(key)
+	:	LLFloater(key),
+	mAvatarPickerUrlChangedSignal() // <FS:Ansariel> Avatar chooser does not change between OpenSim grids
 {
 }
 
@@ -51,6 +55,13 @@ LLFloaterAvatar::~LLFloaterAvatar()
 		avatar_picker->clearCache();          //images are reloading each time already
 		avatar_picker->unloadMediaSource();
 	}
+
+	// <FS:Ansariel> Avatar chooser does not change between OpenSim grids
+	if (mAvatarPickerUrlChangedSignal.connected())
+	{
+		mAvatarPickerUrlChangedSignal.disconnect();
+	}
+	// </FS:Ansariel>
 }
 
 BOOL LLFloaterAvatar::postBuild()
@@ -59,4 +70,23 @@ BOOL LLFloaterAvatar::postBuild()
 	return TRUE;
 }
 
+// <FS:Ansariel> Avatar chooser does not change between OpenSim grids
+void LLFloaterAvatar::onOpen(const LLSD& key)
+{
+	// Connect during onOpen instead of ctor because LLFloaterAvatar instance
+	// gets created before we can safely create a LFSimFeatureHandler instance!
+	// Assuming we receive the avatar picker URL via login response and it
+	// is the same URL being sent by region caps so we will be good for the initial
+	// region the avatar logs into as well.
+	if (!mAvatarPickerUrlChangedSignal.connected())
+	{
+		mAvatarPickerUrlChangedSignal = LFSimFeatureHandler::instance().setAvatarPickerCallback(boost::bind(&LLFloaterAvatar::handleUrlChanged, this));
+	}
+}
+
+void LLFloaterAvatar::handleUrlChanged()
+{
+	getChild<LLMediaCtrl>("avatar_picker_contents")->navigateTo(LLWeb::expandURLSubstitutions(LFSimFeatureHandler::instance().avatarPickerURL(), LLSD()), HTTP_CONTENT_TEXT_HTML);
+}
+// </FS:Ansariel>
 
