@@ -98,7 +98,6 @@ private:
     VolumeCatcher mVolumeCatcher;
 
 	// <FS:ND> FS specific CEF settings
-	bool mFlashEnabled;
 	bool mFlipY;
 	// </FS:ND>
 };
@@ -129,7 +128,6 @@ MediaPluginBase(host_send_func, host_user_data)
 	mLLCEFLib = new LLCEFLib();
 
 	// <FS:ND> FS specific CEF settings
-	mFlashEnabled = false;
 	mFlipY = false;
 	// </FS:ND>
 }
@@ -399,7 +397,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			{
 				// <FS:ND> FS specific CEF settings
 #if defined( LL_WINDOWS ) || defined( LL_LINUX )
-				mLLCEFLib->enableFlash( mFlashEnabled );
 				mLLCEFLib->setFlipY( mFlipY );
 #endif
 				// </FS:ND>
@@ -684,10 +681,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "javascript_enabled")
 			{
 				mJavascriptEnabled = message_in.getValueBoolean("enable");
-			}
-			else if( message_name == "cef_flash_enabled" )
-			{
-				mFlashEnabled = message_in.getValueBoolean("enable");
 			}
 			else if( message_name == "cef_flipy" )
 			{

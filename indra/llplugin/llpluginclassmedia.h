@@ -448,7 +448,6 @@ private:
 	// </FS:ND>
 	//<FS:ND> Special settings for CEF
 public:
-	void enableFlash( bool );
 	void setFlipY( bool );
 	// </FS:ND>
 

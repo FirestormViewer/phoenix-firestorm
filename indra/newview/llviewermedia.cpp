@@ -1947,7 +1947,6 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 			bool media_plugin_debugging_enabled = gSavedSettings.getBOOL("MediaPluginDebugging");
 			media_source->enableMediaPluginDebugging( media_plugin_debugging_enabled  || clean_browser);
 
-			media_source->enableFlash( gSavedSettings.getBOOL( "FSEnableCEFFlash" ) );
 			media_source->setFlipY( gSavedSettings.getBOOL( "FSFlipCEFY" ) );
 
 			// need to set agent string here before instance created
