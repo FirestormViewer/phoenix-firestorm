@@ -28,6 +28,11 @@
 #include "llwindowmacosx-objc.h"
 #import "llappdelegate-objc.h"
 
+
+
+
+//---------------------------
+
 @implementation NSScreen (PointConversion)
 
 + (NSScreen *)currentScreenForMouseLocation
@@ -60,19 +65,16 @@
 
 void extractKeyDataFromEvent (NSEvent *theEvent, NativeKeyEventData * eventData)
 {
-    if ([theEvent characters].length)
-    {
-        eventData->mCharacter = (wchar_t)[[theEvent characters] characterAtIndex:0];
-    }
-    else
-    {
-        eventData->mCharacter = [theEvent keyCode];
-    }
     eventData->mKeyEvent = NativeKeyEventData::KEYUNKNOWN;
-    eventData->mKeyCode = [theEvent keyCode];
-    eventData->mKeyModifiers = [theEvent modifierFlags];
-    eventData->mScanCode = [theEvent keyCode ];
-    eventData->mKeyboardType = 0;
+    eventData->mEventType = [theEvent type];
+    eventData->mEventModifiers = [theEvent modifierFlags];
+    eventData->mEventKeyCode = [theEvent keyCode];
+    NSString *strEventChars = [theEvent characters];
+    eventData->mEventChars = (strEventChars.length) ? [strEventChars characterAtIndex:0] : 0;
+    NSString *strEventUChars = [theEvent charactersIgnoringModifiers];
+    eventData->mEventUnmodChars = (strEventUChars.length) ? [strEventUChars characterAtIndex:0] : 0;
+    eventData->mEventRepeat = [theEvent isARepeat];
+
 }
 
 

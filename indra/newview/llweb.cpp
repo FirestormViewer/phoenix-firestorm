@@ -238,6 +238,9 @@ std::string LLWeb::expandURLSubstitutions(const std::string &url,
 //static
 bool LLWeb::useExternalBrowser(const std::string &url)
 {
+#ifdef EXTERNAL_TOS
+	return true;
+#else
 	if (gSavedSettings.getU32("PreferredBrowserBehavior") == BROWSER_EXTERNAL_ONLY)
 	{
 		return true;
@@ -254,4 +257,5 @@ bool LLWeb::useExternalBrowser(const std::string &url)
 		return !(boost::regex_search(uri_string, matches, pattern));
 	}
 	return false;
+#endif
 }

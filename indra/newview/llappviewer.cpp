@@ -2033,6 +2033,9 @@ bool LLAppViewer::cleanup()
 	// to ensure shutdown order
 	LLMortician::setZealous(TRUE);
 
+    // Give any remaining SLPlugin instances a chance to exit cleanly.
+    LLPluginProcessParent::shutdown();
+
 	LLVoiceClient::getInstance()->terminate();
 	
 	disconnectViewer();
