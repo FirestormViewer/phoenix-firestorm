@@ -104,7 +104,7 @@ void ALFloaterRegionTracker::updateHeader()
 	S32 num_selected(mRegionScrollList->getNumSelected());
 	mRefreshRegionListBtn->setEnabled(mRegionMap.size() != 0);
 	mRemoveRegionBtn->setEnabled(!!num_selected);
-	mOpenMapBtn->setEnabled(num_selected == 1);
+	mOpenMapBtn->setEnabled(num_selected <= 1);
 }
 
 void ALFloaterRegionTracker::refresh()
@@ -291,11 +291,18 @@ void ALFloaterRegionTracker::onRegionAddedCallback(const LLSD& notification, con
 
 void ALFloaterRegionTracker::openMap()
 {
-	const std::string& region = mRegionScrollList->getFirstSelected()->getValue().asString();
-	LLFloaterWorldMap* worldmap_floaterp = LLFloaterWorldMap::getInstance();
-	if (!region.empty() && worldmap_floaterp)
+	if (mRegionScrollList->getNumSelected() == 0)
 	{
-		worldmap_floaterp->trackURL(region, 128, 128, 0);
 		LLFloaterReg::showInstance("world_map", "center");
+	}
+	else
+	{
+		const std::string& region = mRegionScrollList->getFirstSelected()->getValue().asString();
+		LLFloaterWorldMap* worldmap_floaterp = LLFloaterWorldMap::getInstance();
+		if (!region.empty() && worldmap_floaterp)
+		{
+			worldmap_floaterp->trackURL(region, 128, 128, 0);
+			LLFloaterReg::showInstance("world_map", "center");
+		}
 	}
 }
