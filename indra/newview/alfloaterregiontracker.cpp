@@ -47,6 +47,7 @@
 #include "llworldmapmessage.h"
 
 const std::string TRACKER_FILE = "tracked_regions.json";
+const F64 REGION_UPDATE_TIMER = 60.0;
 
 ALFloaterRegionTracker::ALFloaterRegionTracker(const LLSD& key)
 	: LLFloater(key),
@@ -54,7 +55,8 @@ ALFloaterRegionTracker::ALFloaterRegionTracker(const LLSD& key)
 	  mRefreshRegionListBtn(NULL),
 	  mRemoveRegionBtn(NULL),
 	  mOpenMapBtn(NULL),
-	  mRegionScrollList(NULL)
+	  mRegionScrollList(NULL),
+	  mLastRegionUpdate(0.0)
 {
 	loadFromJSON();
 }
@@ -118,6 +120,13 @@ void ALFloaterRegionTracker::refresh()
 
 	const std::string& cur_region_name = gAgent.getRegion()->getName();
 
+	F64 time_now = LLTimer::getElapsedSeconds();
+	bool request_region_update = (time_now - mLastRegionUpdate > REGION_UPDATE_TIMER);
+	if (request_region_update)
+	{
+		mLastRegionUpdate = time_now;
+	}
+
 	for (LLSD::map_const_iterator it = mRegionMap.beginMap(); it != mRegionMap.endMap(); it++)
 	{
 		const std::string& sim_name = it->first;
@@ -147,7 +156,14 @@ void ALFloaterRegionTracker::refresh()
 					count.value(0);
 				}
 				else
+				{
 					count.value((sim_name == cur_region_name) ? agent_count + 1 : agent_count);
+				}
+
+				if (request_region_update)
+				{
+					LLWorldMapMessage::getInstance()->sendNamedRegionRequest(sim_name);
+				}
 			}
 			else
 			{
