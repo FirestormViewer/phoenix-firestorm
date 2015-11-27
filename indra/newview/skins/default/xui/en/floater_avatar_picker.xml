@@ -119,7 +119,7 @@
              layout="topleft"
              left="10"
              name="InstructSelectFriend"
-             top="5"
+             top="8"
              width="200">
                 Select a person:
             </text>
@@ -136,6 +136,7 @@
               function="Refresh.FriendList"/>
             </button>
             <fs_scroll_list
+             draw_heading="true"
              follows="all"
              height="120"
              layout="topleft"
@@ -143,7 +144,16 @@
              name="Friends"
              sort_column="0"
              top_pad="5"
-             width="132" />
+             width="132">
+            <columns
+              label="Name"
+              name="name"
+              width="150" />
+            <columns
+              label="Username"
+              name="username"
+              width="150" />
+            </fs_scroll_list>
         </panel>
 
         <panel
