@@ -214,8 +214,15 @@ BOOL LLPanelGroup::postBuild()
 	button = getChild<LLButton>("btn_chat");
 	button->setClickedCallback(onBtnGroupChatClicked, this);
 
-	button = getChild<LLButton>("btn_cancel");
-	button->setVisible(false);	button->setEnabled(true);
+	// <FS:Ansariel> Might not exist
+	//button = getChild<LLButton>("btn_cancel");
+	//button->setVisible(false);	button->setEnabled(true);
+	button = findChild<LLButton>("btn_cancel");
+	if (button)
+	{
+		button->setVisible(false);	button->setEnabled(true);
+	}
+	// </FS:Ansariel>
 
 	button = getChild<LLButton>("btn_refresh");
 	button->setClickedCallback(onBtnRefresh, this);
