@@ -1528,9 +1528,16 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 	else if (parameter == "in_dd")
 	{
 		// return true if the object is within the draw distance.
-		LLUUID object_id = mResultList->getFirstSelected()->getUUID();
-		LLViewerObject* objectp = gObjectList.findObject(object_id);
-		return (objectp && dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance);
+		if (mResultList->getNumSelected() == 1)
+		{
+			LLUUID object_id = mResultList->getFirstSelected()->getUUID();
+			LLViewerObject* objectp = gObjectList.findObject(object_id);
+			return (objectp && dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	else if (parameter == "script")
 	{
@@ -1676,132 +1683,135 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	case 'p': // p_teleport
 	case 'q': // q_zoom
 	{
-		LLUUID object_id = mResultList->getFirstSelected()->getUUID();
-		LLViewerObject* objectp = gObjectList.findObject(object_id);
-		if (objectp)
+		if (mResultList->getNumSelected() == 1)
 		{
-			switch (c)
+			LLUUID object_id = mResultList->getFirstSelected()->getUUID();
+			LLViewerObject* objectp = gObjectList.findObject(object_id);
+			if (objectp)
 			{
-			case 'b': // buy
-				buyObject(mFSAreaSearch->mObjectDetails[object_id], objectp);
+				switch (c)
+				{
+				case 'b': // buy
+					buyObject(mFSAreaSearch->mObjectDetails[object_id], objectp);
+					break;
+				case 'p': // p_teleport
+					gAgent.teleportViaLocation(objectp->getPositionGlobal());
+					break;
+				case 'q': // q_zoom
+				{
+					// Disable flycam if active.  Without this, the requested look-at doesn't happen because the flycam code overrides all other camera motion.
+					bool fly_cam_status(LLViewerJoystick::getInstance()->getOverrideCamera());
+					if (fly_cam_status)
+					{
+						LLViewerJoystick::getInstance()->setOverrideCamera(false);
+						LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
+						// *NOTE: Above may not be the proper way to disable flycam.  What I really want to do is just be able to move the camera and then leave the flycam in the the same state it was in, just moved to the new location. ~Cron
+					}
+
+					LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
+
+					gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+
+					gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
+
+					// Place the camera looking at the object, along the line from the camera to the object,
+					//  and sufficiently far enough away for the object to fill 3/4 of the screen,
+					//  but not so close that the bbox's nearest possible vertex goes inside the near clip.
+					// Logic C&P'd from LLViewerMediaFocus::setCameraZoom() and then edited as needed
+
+					LLBBox bbox = objectp->getBoundingBoxAgent();
+					LLVector3d center(gAgent.getPosGlobalFromAgent(bbox.getCenterAgent()));
+					F32 height;
+					F32 width;
+					F32 depth;
+					F32 angle_of_view;
+					F32 distance;
+
+					LLVector3d target_pos(center);
+					LLVector3d camera_dir(gAgentCamera.getCameraPositionGlobal() - target_pos);
+					camera_dir.normalize();
+
+					// We need the aspect ratio, and the 3 components of the bbox as height, width, and depth.
+					F32 aspect_ratio(getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
+					F32 camera_aspect(LLViewerCamera::getInstance()->getAspect());
+
+					// We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for 
+					// a screen in a landscape aspect ratio), however there is an edge case where the aspect ratio of the object is 
+					// more extreme than the screen.  In this case we invert the logic, using the longer component of both the object
+					// and the screen.  
+					bool invert((camera_aspect > 1.0f && aspect_ratio > camera_aspect) || (camera_aspect < 1.0f && aspect_ratio < camera_aspect));
+
+					// To calculate the optimum viewing distance we will need the angle of the shorter side of the view rectangle.
+					// In portrait mode this is the width, and in landscape it is the height.
+					// We then calculate the distance based on the corresponding side of the object bbox (width for portrait, height for landscape)
+					// We will add half the depth of the bounding box, as the distance projection uses the center point of the bbox.
+					if (camera_aspect < 1.0f || invert)
+					{
+						angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect());
+						distance = width * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+					}
+					else
+					{
+						angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView());
+						distance = height * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
+					}
+
+					distance += depth * 0.5;
+
+
+					// Verify that the bounding box isn't inside the near clip.  Using OBB-plane intersection to check if the
+					// near-clip plane intersects with the bounding box, and if it does, adjust the distance such that the
+					// object doesn't clip.
+					LLVector3d bbox_extents(bbox.getExtentLocal());
+					LLVector3d axis_x = LLVector3d(1, 0, 0) * bbox.getRotation();
+					LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
+					LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
+					//Normal of nearclip plane is camera_dir.
+					F32 min_near_clip_dist = bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
+					F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
+					F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
+					if (distance < min_camera_dist)
+					{
+						// Camera is too close to object, some parts MIGHT clip.  Move camera away to the position where clipping barely doesn't happen.
+						distance = min_camera_dist;
+					}
+
+
+					LLVector3d camera_pos(target_pos + camera_dir * distance);
+
+					if (camera_dir == LLVector3d::z_axis || camera_dir == LLVector3d::z_axis_neg)
+					{
+						// If the direction points directly up, the camera will "flip" around.
+						// We try to avoid this by adjusting the target camera position a 
+						// smidge towards current camera position
+						// *NOTE: this solution is not perfect.  All it attempts to solve is the
+						// "looking down" problem where the camera flips around when it animates
+						// to that position.  You still are not guaranteed to be looking at the
+						// object in the correct orientation.  What this solution does is it will
+						// put the camera into position keeping as best it can the current 
+						// orientation with respect to the direction wanted.  In other words, if
+						// before zoom the object appears "upside down" from the camera, after
+						/// zooming it will still be upside down, but at least it will not flip.
+						LLVector3d cur_camera_pos = LLVector3d(gAgentCamera.getCameraPositionGlobal());
+						LLVector3d delta = (cur_camera_pos - camera_pos);
+						F64 len = delta.length();
+						delta.normalize();
+						// Move 1% of the distance towards original camera location
+						camera_pos += 0.01 * len * delta;
+					}
+
+					gAgentCamera.setCameraPosAndFocusGlobal(camera_pos, target_pos, objectp->getID());
+
+					// *TODO: Re-enable joystick flycam if we disabled it earlier...  Have to find some form of callback as re-enabling at this point causes the camera motion to not happen. ~Cron
+					//if (fly_cam_status)
+					//{
+					//	LLViewerJoystick::getInstance()->toggleFlycam();
+					//}
+				}
 				break;
-			case 'p': // p_teleport
-				gAgent.teleportViaLocation(objectp->getPositionGlobal());
-				break;
-			case 'q': // q_zoom
-			{
-				// Disable flycam if active.  Without this, the requested look-at doesn't happen because the flycam code overrides all other camera motion.
-				bool fly_cam_status(LLViewerJoystick::getInstance()->getOverrideCamera());
-				if (fly_cam_status)
-				{
-					LLViewerJoystick::getInstance()->setOverrideCamera(false);
-					LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
-					// *NOTE: Above may not be the proper way to disable flycam.  What I really want to do is just be able to move the camera and then leave the flycam in the the same state it was in, just moved to the new location. ~Cron
+				default:
+					break;
 				}
-				
-				LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
-				
-				gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
-				
-				gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
-				
-				// Place the camera looking at the object, along the line from the camera to the object,
-				//  and sufficiently far enough away for the object to fill 3/4 of the screen,
-				//  but not so close that the bbox's nearest possible vertex goes inside the near clip.
-				// Logic C&P'd from LLViewerMediaFocus::setCameraZoom() and then edited as needed
-				
-				LLBBox bbox = objectp->getBoundingBoxAgent();
-				LLVector3d center(gAgent.getPosGlobalFromAgent(bbox.getCenterAgent()));
-				F32 height;
-				F32 width;
-				F32 depth;
-				F32 angle_of_view;
-				F32 distance;
-				
-				LLVector3d target_pos(center);
-				LLVector3d camera_dir(gAgentCamera.getCameraPositionGlobal() - target_pos);
-				camera_dir.normalize();
-				
-				// We need the aspect ratio, and the 3 components of the bbox as height, width, and depth.
-				F32 aspect_ratio(getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
-				F32 camera_aspect(LLViewerCamera::getInstance()->getAspect());
-				
-				// We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for 
-				// a screen in a landscape aspect ratio), however there is an edge case where the aspect ratio of the object is 
-				// more extreme than the screen.  In this case we invert the logic, using the longer component of both the object
-				// and the screen.  
-				bool invert((camera_aspect > 1.0f && aspect_ratio > camera_aspect) || (camera_aspect < 1.0f && aspect_ratio < camera_aspect));
-				
-				// To calculate the optimum viewing distance we will need the angle of the shorter side of the view rectangle.
-				// In portrait mode this is the width, and in landscape it is the height.
-				// We then calculate the distance based on the corresponding side of the object bbox (width for portrait, height for landscape)
-				// We will add half the depth of the bounding box, as the distance projection uses the center point of the bbox.
-				if(camera_aspect < 1.0f || invert)
-				{
-					angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect());
-					distance = width * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
-				}
-				else
-				{
-					angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getView());
-					distance = height * 0.5 * 1.1 / tanf(angle_of_view * 0.5f);
-				}
-				
-				distance += depth * 0.5;
-				
-				
-				// Verify that the bounding box isn't inside the near clip.  Using OBB-plane intersection to check if the
-				// near-clip plane intersects with the bounding box, and if it does, adjust the distance such that the
-				// object doesn't clip.
-				LLVector3d bbox_extents(bbox.getExtentLocal());
-				LLVector3d axis_x = LLVector3d(1, 0, 0) * bbox.getRotation();
-				LLVector3d axis_y = LLVector3d(0, 1, 0) * bbox.getRotation();
-				LLVector3d axis_z = LLVector3d(0, 0, 1) * bbox.getRotation();
-				//Normal of nearclip plane is camera_dir.
-				F32 min_near_clip_dist = bbox_extents.mdV[0] * (camera_dir * axis_x) + bbox_extents.mdV[1] * (camera_dir * axis_y) + bbox_extents.mdV[2] * (camera_dir * axis_z); // http://www.gamasutra.com/view/feature/131790/simple_intersection_tests_for_games.php?page=7
-				F32 camera_to_near_clip_dist(LLViewerCamera::getInstance()->getNear());
-				F32 min_camera_dist(min_near_clip_dist + camera_to_near_clip_dist);
-				if (distance < min_camera_dist)
-				{
-					// Camera is too close to object, some parts MIGHT clip.  Move camera away to the position where clipping barely doesn't happen.
-					distance = min_camera_dist;
-				}
-				
-				
-				LLVector3d camera_pos(target_pos + camera_dir * distance);
-				
-				if (camera_dir == LLVector3d::z_axis || camera_dir == LLVector3d::z_axis_neg)
-				{
-					// If the direction points directly up, the camera will "flip" around.
-					// We try to avoid this by adjusting the target camera position a 
-					// smidge towards current camera position
-					// *NOTE: this solution is not perfect.  All it attempts to solve is the
-					// "looking down" problem where the camera flips around when it animates
-					// to that position.  You still are not guaranteed to be looking at the
-					// object in the correct orientation.  What this solution does is it will
-					// put the camera into position keeping as best it can the current 
-					// orientation with respect to the direction wanted.  In other words, if
-					// before zoom the object appears "upside down" from the camera, after
-					/// zooming it will still be upside down, but at least it will not flip.
-					LLVector3d cur_camera_pos = LLVector3d(gAgentCamera.getCameraPositionGlobal());
-					LLVector3d delta = (cur_camera_pos - camera_pos);
-					F64 len = delta.length();
-					delta.normalize();
-					// Move 1% of the distance towards original camera location
-					camera_pos += 0.01 * len * delta;
-				}
-				
-				gAgentCamera.setCameraPosAndFocusGlobal(camera_pos, target_pos, objectp->getID());
-				
-				// *TODO: Re-enable joystick flycam if we disabled it earlier...  Have to find some form of callback as re-enabling at this point causes the camera motion to not happen. ~Cron
-				//if (fly_cam_status)
-				//{
-				//	LLViewerJoystick::getInstance()->toggleFlycam();
-				//}
-			}
-				break;
-			default:
-				break;
 			}
 		}
 	}
