@@ -475,7 +475,7 @@
          layout="topleft"
          left="10"
          min_val="0"
-         max_val="256"
+         max_val="64"
          name="FSHudTextFadeDistance"
          top_pad="8"
          width="481" />
