@@ -184,7 +184,7 @@ void LLWorld::refreshLimits()
 		mMaxPrimZPos = OS_MAX_OBJECT_Z;
 		mMinPrimXPos = 0.f;
 		mMinPrimYPos = 0.f;
-		mMinPrimZPos = 0.f;
+		mMinPrimZPos = OS_MIN_OBJECT_Z;
 		mMaxDragDistance = 10000.f;
 		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = TRUE;
@@ -224,7 +224,7 @@ void LLWorld::refreshLimits()
 		mMaxPrimZPos = SL_MAX_OBJECT_Z;
 		mMinPrimXPos = 0.f;
 		mMinPrimYPos = 0.f;
-		mMinPrimZPos = 0.f;
+		mMinPrimZPos = SL_MIN_OBJECT_Z;
 		mMaxDragDistance = 10000.f;
 		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = FALSE;
@@ -377,8 +377,19 @@ void LLWorld::setMinPrimYPos(F32 val)
 
 void LLWorld::setMinPrimZPos(F32 val)
 {
-	if(val < 0.0f)
-		mMinPrimZPos = 0.0f;
+	// <FS:Ansariel> OpenSim limits
+	//if(val < 0.0f)
+	//	mMinPrimZPos = 0.0f;
+	F32 min_limit = SL_MIN_OBJECT_Z;
+#if OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		min_limit = OS_MIN_OBJECT_Z;
+	}
+#endif
+	if(val < min_limit)
+		mMinPrimZPos = min_limit;
+	// <FS:Ansariel>
 	else
 		mMinPrimZPos = val;
 }
