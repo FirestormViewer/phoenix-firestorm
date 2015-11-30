@@ -31,7 +31,11 @@ LFSimFeatureHandler::LFSimFeatureHandler()
 	mShoutRange(100),
 	mWhisperRange(10),
 	mHasAvatarPicker(false),
-	mHasDestinationGuide(false)
+	mHasDestinationGuide(false),
+	mSimulatorFPS(45.f),
+	mSimulatorFPSFactor(1.f),
+	mSimulatorFPSWarn(30.f),
+	mSimulatorFPSCrit(20.f)
 {
 	LL_INFOS() << "Initializing Sim Feature Handler" << LL_ENDL;
 
@@ -83,6 +87,22 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSayRange = extras.has("say-range") ? extras["say-range"].asInteger() : 20;
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
+
+			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
+				extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
+			{
+				mSimulatorFPS = extras["SimulatorFPS"].asReal();
+				mSimulatorFPSFactor = extras["SimulatorFPSFactor"].asReal();
+				mSimulatorFPSWarn = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSWarnPercent"].asReal() / 100.f);
+				mSimulatorFPSCrit = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSCritPercent"].asReal() / 100.f);
+			}
+			else
+			{
+				mSimulatorFPS = 45.f;
+				mSimulatorFPSFactor = 1.f;
+				mSimulatorFPSWarn = 30.f;
+				mSimulatorFPSCrit = 20.f;
+			}
 
 			if (extras.has("search-server-url"))
 			{
@@ -139,6 +159,10 @@ void LFSimFeatureHandler::setSupportedFeatures()
 			mSayRange = 20;
 			mShoutRange = 100;
 			mWhisperRange = 10;
+			mSimulatorFPS = 45.f;
+			mSimulatorFPSFactor = 1.f;
+			mSimulatorFPSWarn = 30.f;
+			mSimulatorFPSCrit = 20.f;
 
 			if (LLLoginInstance::getInstance()->hasResponse("search"))
 			{
