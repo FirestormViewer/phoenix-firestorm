@@ -36,6 +36,7 @@
 
 #include "fscommon.h"
 #include "growlnotifier.h"
+#include "llagent.h"
 #include "llagentdata.h"
 #include "llappviewer.h"
 #include "llfloaterimnearbychathandler.h"
@@ -404,6 +405,10 @@ bool GrowlManager::shouldNotify()
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
 	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
 	if (LLStartUp::getStartupState() < STATE_STARTED)
+	{
+		return false;
+	}
+	if (gAgent.isDoNotDisturb())
 	{
 		return false;
 	}
