@@ -136,10 +136,7 @@ BOOL LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	gViewerWindow->hideCursor();
 
-	// <FS:Ansariel> Viewer-Bear merge (MAINT-5416: select rigged attachments): Since LL swapped parameter order, we need to take account of that or we produce fail like LL did :)
-	//gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, TRUE);
-	gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, FALSE, TRUE);
-	// <FS:Ansariel>
+	gViewerWindow->pickAsync(x, y, mask, pickCallback, /*BOOL pick_transparent*/ FALSE, /*BOOL pick_rigged*/ FALSE, /*BOOL pick_unselectable*/ TRUE);
 
 	return TRUE;
 }
