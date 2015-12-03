@@ -7800,15 +7800,12 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				{ //focus on point under mouselook crosshairs
 					LLVector4a result;
 					result.clear();
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+
 					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE,
 													NULL,
 													&result);
-// [/SL:KB]
-//					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE,
-//													NULL,
-//													&result);
-				focus_point.set(result.getF32ptr());
+
+					focus_point.set(result.getF32ptr());
 				}
 				else
 				{

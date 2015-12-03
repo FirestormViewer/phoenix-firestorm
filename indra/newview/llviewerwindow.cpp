@@ -41,7 +41,6 @@
 #include "llcommunicationchannel.h"
 #include "llfloaterreg.h"
 #include "llhudicon.h"
-#include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llmeshrepository.h"
 #include "llnotificationhandler.h"
 #include "llpanellogin.h"
@@ -1206,8 +1205,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 					{
 						if (drop)
 						{
-							LLURLDispatcher::dispatch( dropped_slurl.getSLURLString
-(), "clicked", NULL, true );
+							LLURLDispatcher::dispatch( dropped_slurl.getSLURLString(), "clicked", NULL, true );
 							return LLWindowCallbacks::DND_MOVE;
 						}
 						return LLWindowCallbacks::DND_COPY;
@@ -1216,10 +1214,7 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 
 				if (prim_media_dnd_enabled)
 				{
-//					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/, FALSE );
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/, FALSE, FALSE);
-// [/SL:KB]
+					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/, FALSE );
 
 					LLUUID object_id = pick_info.getObjectID();
 					S32 object_face = pick_info.mObjectFace;

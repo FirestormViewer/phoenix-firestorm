@@ -869,18 +869,12 @@ void LLToolDragAndDrop::dragOrDrop3D( S32 x, S32 y, MASK mask, BOOL drop, EAccep
 	if (mDrop)
 	{
 		// don't allow drag and drop onto transparent objects
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		pick(gViewerWindow->pickImmediate(x, y, FALSE, FALSE, FALSE));
-// [/SL:KB]
-//		pick(gViewerWindow->pickImmediate(x, y, FALSE, FALSE));
+		pick(gViewerWindow->pickImmediate(x, y, FALSE, FALSE));
 	}
 	else
 	{
 		// don't allow drag and drop onto transparent objects
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, FALSE, FALSE);
-// [/SL:KB]
-//		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, FALSE);
+		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, FALSE);
 	}
 
 	*acceptance = mLastAccept;
