@@ -585,6 +585,6 @@ F32 PieMenu::getScaleFactor()
 //		setRect(r);  // obsolete?
 	}
 
-	return factor;
 #endif
+	return factor;
 }
