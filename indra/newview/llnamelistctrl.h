@@ -182,7 +182,10 @@ public:
 	/*virtual*/ void mouseOverHighlightNthItem( S32 index );
 private:
 	void showInspector(const LLUUID& avatar_id, bool is_group, bool is_experience = false);
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, std::string suffix, LLHandle<LLNameListItem> item);
+	// <FS:Ansariel> FIRE-17408: Prefix is not passed to name cache callback
+	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, std::string suffix, LLHandle<LLNameListItem> item);
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, std::string prefix, std::string suffix, LLHandle<LLNameListItem> item);
+	// </FS:Ansariel>
 
 private:
 	S32    			mNameColumnIndex;

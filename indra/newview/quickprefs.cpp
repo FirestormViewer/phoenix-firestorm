@@ -83,6 +83,7 @@ FloaterQuickPrefs::QuickPrefsXML::QuickPrefsXML()
 FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 :	control_name("control_name"),
 	label("label"),
+	translation_id("translation_id"),
 	control_type("control_type"),
 	integer("integer"),
 	min_value("min"),		// "min" is frowned upon by a braindead windows include
@@ -509,15 +510,17 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 			{
 				// get the label
 				std::string label = xml_entry.label;
-				// get the same as translated label
-				std::string translated_label = xml_entry.label;
-				// replace translated label with translated version, if available
-				LLTrans::findString(translated_label, "QP " + label);
-				
+
+				if (xml_entry.translation_id.isProvided())
+				{
+					// replace label with translated version, if available
+					LLTrans::findString(label, xml_entry.translation_id);
+				}
+
 				U32 type = xml_entry.control_type;
 				addControl(
 						   xml_entry.control_name,
-						   translated_label,
+						   label,
 						   NULL,
 						   (ControlType) type,
 						   xml_entry.integer,

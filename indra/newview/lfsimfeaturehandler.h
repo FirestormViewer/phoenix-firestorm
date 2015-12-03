@@ -85,6 +85,11 @@ public:
 	std::string avatarPickerURL() const { return mAvatarPickerURL; }
 	std::string destinationGuideURL() const { return mDestinationGuideURL; }
 
+	F32 simulatorFPS() const { return mSimulatorFPS; }
+	F32 simulatorFPSFactor() const { return mSimulatorFPSFactor; }
+	F32 simulatorFPSWarn() const { return mSimulatorFPSWarn; }
+	F32 simulatorFPSCrit() const { return mSimulatorFPSCrit; }
+
 	bool hasAvatarPicker() const { return mHasAvatarPicker; }
 	bool hasDestinationGuide() const { return mHasDestinationGuide; }
 
@@ -98,6 +103,11 @@ private:
 	SignaledType<U32> mWhisperRange;
 	SignaledType<std::string> mAvatarPickerURL;
 	SignaledType<std::string> mDestinationGuideURL;
+
+	F32 mSimulatorFPS;
+	F32 mSimulatorFPSFactor;
+	F32 mSimulatorFPSWarn;
+	F32 mSimulatorFPSCrit;
 
 	bool mHasAvatarPicker;
 	bool mHasDestinationGuide;

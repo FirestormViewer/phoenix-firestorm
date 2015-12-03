@@ -607,4 +607,37 @@ void LLFriendCardsManager::onFriendListUpdate(U32 changed_mask)
 	}
 }
 
+// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
+void create_agent_calling_card_name_cb(const LLAvatarName& av_name, const LLUUID& calling_cards_folder_id)
+{
+	create_inventory_item(gAgentID,
+		gAgent.getSessionID(),
+		calling_cards_folder_id,
+		LLTransactionID::tnull,
+		av_name.getUserName(),
+		gAgentID.asString(),
+		LLAssetType::AT_CALLINGCARD,
+		LLInventoryType::IT_CALLINGCARD,
+		NOT_WEARABLE,
+		PERM_MOVE | PERM_TRANSFER,
+		NULL);
+}
+
+// static
+void LLFriendCardsManager::createAgentCallingCard()
+{
+	const LLUUID calling_cards_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD);
+
+	LLInventoryModel::cat_array_t cats;
+	LLInventoryModel::item_array_t items;
+	LLFindAgentCallingCard collector;
+	gInventory.collectDescendentsIf(calling_cards_folder_id, cats, items, LLInventoryModel::EXCLUDE_TRASH, collector);
+
+	// Create own calling card if it was not found in Friends/All folder
+	if (!collector.isAgentCallingCardFound())
+	{
+		LLAvatarNameCache::get(gAgentID, boost::bind(&create_agent_calling_card_name_cb, _2, calling_cards_folder_id));
+	}
+}
+// </FS:Ansariel>
 // EOF

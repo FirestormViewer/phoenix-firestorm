@@ -739,6 +739,9 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 						LLNotifications::instance().add("RevokedModifyRights",args, payload);
 					}
 				}
+				// <FS:Ansariel> Online status right apparently only provided as part of login response in idle_startup (response["buddy-list"]),
+				// so we can only keep current grant
+				new_rights = new_rights | (mBuddyInfo[agent_id]->getRightsGrantedFrom() & LLRelationship::GRANT_ONLINE_STATUS);
 				(mBuddyInfo[agent_id])->setRightsFrom(new_rights);
 			}
 		}

@@ -3007,7 +3007,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
@@ -3017,7 +3017,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
@@ -3029,7 +3029,7 @@ Diese Region enthält [REGION_CONTENT_MATURITY]-Inhalte, doch aufgrund Ihrer akt
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]

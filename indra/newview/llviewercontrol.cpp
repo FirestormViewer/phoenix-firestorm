@@ -89,6 +89,7 @@
 #include "fsradar.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
+#include "llhudtext.h"
 #include "llnetmap.h"
 #include "llnotificationsutil.h"
 #include "llpanelplaces.h"
@@ -1055,6 +1056,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 
 	gSavedPerAccountSettings.getControl("GlobalOnlineStatusToggle")->getSignal()->connect(boost::bind(&handleGlobalOnlineStatusChanged, _2));
+
+	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+	gSavedSettings.getControl("FSHudTextFadeDistance")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
+	gSavedSettings.getControl("FSHudTextFadeRange")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
 }
 
 #if TEST_CACHED_CONTROL

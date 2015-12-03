@@ -22,6 +22,7 @@
 			<check_box label="llOwnerSay durch Skript-Debug-Fenster routen" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
 			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
 			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/> 
+			<check_box label="Eingabe-Indikator in Avatarnamen oberhalb eines Avatars anzeigen" name="FSShowTypingStateInNameTag"/> 
 			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 			<text name="show_timestamps_label" width="75">
 				Anzeigen in:

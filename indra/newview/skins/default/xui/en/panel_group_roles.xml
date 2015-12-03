@@ -362,6 +362,7 @@ things in this group. There&apos;s a broad variety of Abilities.
            multi_select="true"
            name="ban_list"
            short_names="false"
+           sort_column="0"
            name_column="name"
            top_pad="5">
         <name_list.columns

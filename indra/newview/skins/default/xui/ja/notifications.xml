@@ -3080,7 +3080,7 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] はテレポートであなたを呼んでいます。
+		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3090,7 +3090,7 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] はテレポートであなたを呼んでいます。
+		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3102,7 +3102,7 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] はテレポートであなたを呼んでいます。
+		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

@@ -232,7 +232,9 @@ public:
 	void getAvatars(
 		uuid_vec_t* avatar_ids = NULL,
 		std::vector<LLVector3d>* positions = NULL, 
-		const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX) const;
+		// <FS:Ansariel> Make radar more exact and prevent false region crossing notifications
+		//const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX) const;
+		const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX, std::map<LLUUID, LLUUID>* region_assignments = NULL) const;
 
 	// Returns 'true' if the region is in mRegionList,
 	// 'false' if the region has been removed due to region change

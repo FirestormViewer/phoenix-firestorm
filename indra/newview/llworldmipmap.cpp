@@ -33,8 +33,8 @@
 #include "math.h"	// log()
 
 // <FS:CR> HG maps
-#ifdef OPENSIM
 #include "lfsimfeaturehandler.h"
+#ifdef OPENSIM
 #include "llviewernetwork.h"
 #include "llagent.h"
 #endif // OPENSIM

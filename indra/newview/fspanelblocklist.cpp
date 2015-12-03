@@ -89,7 +89,6 @@ BOOL FSPanelBlockList::postBuild()
 	mBlockedList->setCommitOnSelectionChange(TRUE);
 	mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
 	mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
-	mBlockedList->sortByColumn("item_name", TRUE);
 	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
 	mBlockedList->setContextMenu(&gFSBlockListMenu);
 	mBlockedList->setFilterColumn(0);

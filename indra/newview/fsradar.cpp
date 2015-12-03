@@ -228,13 +228,14 @@ void FSRadar::updateRadarList()
 	//STEP 1: Update our basic data model: detect Avatars & Positions in our defined range
 	std::vector<LLVector3d> positions;
 	uuid_vec_t avatar_ids;
+	std::map<LLUUID, LLUUID> region_assignments;
 	if (sLimitRange)
 	{
-		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange);
+		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange, &region_assignments);
 	}
 	else
 	{
-		world->getAvatars(&avatar_ids, &positions);
+		world->getAvatars(&avatar_ids, &positions, LLVector3d(), FLT_MAX, &region_assignments);
 	}
 
 	// Determine lists of new added and removed avatars
@@ -297,7 +298,13 @@ void FSRadar::updateRadarList()
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
-		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
+		LLViewerRegion* reg = world->getRegionFromID(region_assignments[avId]);
+		if (!reg)
+		{
+			// Fallback in case we somehow didn't get the region via ID
+			LL_WARNS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
+			reg = world->getRegionFromPosGlobal(avPos);
+		}
 		if (!ent) // don't update this radar listing if data is inaccessible
 		{
 			continue;

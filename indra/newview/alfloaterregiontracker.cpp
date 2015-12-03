@@ -47,6 +47,7 @@
 #include "llworldmapmessage.h"
 
 const std::string TRACKER_FILE = "tracked_regions.json";
+const F64 REGION_UPDATE_TIMER = 60.0;
 
 ALFloaterRegionTracker::ALFloaterRegionTracker(const LLSD& key)
 	: LLFloater(key),
@@ -54,7 +55,8 @@ ALFloaterRegionTracker::ALFloaterRegionTracker(const LLSD& key)
 	  mRefreshRegionListBtn(NULL),
 	  mRemoveRegionBtn(NULL),
 	  mOpenMapBtn(NULL),
-	  mRegionScrollList(NULL)
+	  mRegionScrollList(NULL),
+	  mLastRegionUpdate(0.0)
 {
 	loadFromJSON();
 }
@@ -102,7 +104,7 @@ void ALFloaterRegionTracker::updateHeader()
 	S32 num_selected(mRegionScrollList->getNumSelected());
 	mRefreshRegionListBtn->setEnabled(mRegionMap.size() != 0);
 	mRemoveRegionBtn->setEnabled(!!num_selected);
-	mOpenMapBtn->setEnabled(num_selected == 1);
+	mOpenMapBtn->setEnabled(num_selected <= 1);
 }
 
 void ALFloaterRegionTracker::refresh()
@@ -117,6 +119,13 @@ void ALFloaterRegionTracker::refresh()
 	mRegionScrollList->deleteAllItems();
 
 	const std::string& cur_region_name = gAgent.getRegion()->getName();
+
+	F64 time_now = LLTimer::getElapsedSeconds();
+	bool request_region_update = (time_now - mLastRegionUpdate > REGION_UPDATE_TIMER);
+	if (request_region_update)
+	{
+		mLastRegionUpdate = time_now;
+	}
 
 	for (LLSD::map_const_iterator it = mRegionMap.beginMap(); it != mRegionMap.endMap(); it++)
 	{
@@ -147,7 +156,14 @@ void ALFloaterRegionTracker::refresh()
 					count.value(0);
 				}
 				else
+				{
 					count.value((sim_name == cur_region_name) ? agent_count + 1 : agent_count);
+				}
+
+				if (request_region_update)
+				{
+					LLWorldMapMessage::getInstance()->sendNamedRegionRequest(sim_name);
+				}
 			}
 			else
 			{
@@ -275,11 +291,18 @@ void ALFloaterRegionTracker::onRegionAddedCallback(const LLSD& notification, con
 
 void ALFloaterRegionTracker::openMap()
 {
-	const std::string& region = mRegionScrollList->getFirstSelected()->getValue().asString();
-	LLFloaterWorldMap* worldmap_floaterp = LLFloaterWorldMap::getInstance();
-	if (!region.empty() && worldmap_floaterp)
+	if (mRegionScrollList->getNumSelected() == 0)
 	{
-		worldmap_floaterp->trackURL(region, 128, 128, 0);
 		LLFloaterReg::showInstance("world_map", "center");
+	}
+	else
+	{
+		const std::string& region = mRegionScrollList->getFirstSelected()->getValue().asString();
+		LLFloaterWorldMap* worldmap_floaterp = LLFloaterWorldMap::getInstance();
+		if (!region.empty() && worldmap_floaterp)
+		{
+			worldmap_floaterp->trackURL(region, 128, 128, 0);
+			LLFloaterReg::showInstance("world_map", "center");
+		}
 	}
 }
