@@ -791,15 +791,7 @@ void FSRadar::updateRadarList()
 		RadarFields rf;
 		rf.lastDistance = ent->mRange;
 		rf.lastIgnore = ent->mIgnore;
-		rf.lastRegion = LLUUID::null;
-		if (ent->mGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
-		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
-			if (lastRegion)
-			{
-				rf.lastRegion = lastRegion->getRegionID();
-			}
-		}
+		rf.lastRegion = ent->getRegion();
 		
 		mLastRadarSweep[ent->mID] = rf;
 	}
