@@ -3104,7 +3104,7 @@ Por favor, vuelve a intentarlo en unos momentos.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] te ofrece teleportarte a su localización:
+		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3114,7 +3114,7 @@ Por favor, vuelve a intentarlo en unos momentos.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] te ofrece teleportarte a su localización:
+		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3126,7 +3126,7 @@ Esta región tiene un contenido [REGION_CONTENT_MATURITY, pero tus preferencias 
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] te ofrece teleportarte a su localización:
+		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

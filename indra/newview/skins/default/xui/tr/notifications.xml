@@ -2861,7 +2861,7 @@ Lütfen biraz sonra tekrar deneyin.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2871,7 +2871,7 @@ Lütfen biraz sonra tekrar deneyin.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2883,7 +2883,7 @@ Bu bölgede [REGION_CONTENT_MATURITY] içeriği mevcut, ama mevcut tercihleriniz
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

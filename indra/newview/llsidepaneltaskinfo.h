@@ -125,30 +125,30 @@ private:
 private:
 	// Pointers cached here to speed up the "disableAll" function which gets called on idle
 	LLUICtrl*	mDAPermModify;
-	LLView*		mDACreator;
+	//LLView*		mDACreator; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLUICtrl*	mDACreatorName;
 	LLView*		mDAOwner;
 	LLUICtrl*	mDAOwnerName;
-	LLView*		mDAGroup;
-	LLUICtrl*	mDAGroupName;
+	//LLView*		mDAGroup; // <FS:Ansariel> Doesn't exist as of 2015-11-26
+	//LLUICtrl*	mDAGroupName; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLView*		mDAButtonSetGroup;
 	LLUICtrl*	mDAObjectName;
 	LLView*		mDAName;
 	LLView*		mDADescription;
 	LLUICtrl*	mDAObjectDescription;
-	LLView*		mDAPermissions;
+	//LLView*		mDAPermissions; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLUICtrl*	mDACheckboxShareWithGroup;
 	LLView*		mDAButtonDeed;
 	LLUICtrl*	mDACheckboxAllowEveryoneMove;
 	LLUICtrl*	mDACheckboxAllowEveryoneCopy;
-	LLView*		mDANextOwnerCan;
+	//LLView*		mDANextOwnerCan; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLUICtrl*	mDACheckboxNextOwnerCanModify;
 	LLUICtrl*	mDACheckboxNextOwnerCanCopy;
 	LLUICtrl*	mDACheckboxNextOwnerCanTransfer;
 	LLUICtrl*	mDACheckboxForSale;
 	LLUICtrl*	mDASearchCheck;
 	LLComboBox*	mDAComboSaleType;
-	LLUICtrl*	mDACost;
+	//LLUICtrl*	mDACost; // <FS:Ansariel> Doesn't exist as of 2015-11-26
 	LLUICtrl*	mDAEditCost;
 	LLView*		mDALabelClickAction;
 	LLComboBox*	mDAComboClickAction;

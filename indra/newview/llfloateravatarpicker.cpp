@@ -478,19 +478,41 @@ void LLFloaterAvatarPicker::populateFriend()
 {
 	LLScrollListCtrl* friends_scroller = getChild<LLScrollListCtrl>("Friends");
 	friends_scroller->deleteAllItems();
-	LLCollectAllBuddies collector;
-	LLAvatarTracker::instance().applyFunctor(collector);
-	LLCollectAllBuddies::buddy_map_t::iterator it;
-	
-	for(it = collector.mOnline.begin(); it!=collector.mOnline.end(); it++)
+	// <FS:Ansariel> FIRE-16846: Make friend list sortable
+	//LLCollectAllBuddies collector;
+	//LLAvatarTracker::instance().applyFunctor(collector);
+	//LLCollectAllBuddies::buddy_map_t::iterator it;
+	//
+	//for(it = collector.mOnline.begin(); it!=collector.mOnline.end(); it++)
+	//{
+	//	friends_scroller->addStringUUIDItem(it->second, it->first);
+	//}
+	//for(it = collector.mOffline.begin(); it!=collector.mOffline.end(); it++)
+	//{
+	//	friends_scroller->addStringUUIDItem(it->second, it->first);
+	//}
+	//friends_scroller->sortByColumnIndex(0, TRUE);
+
+	LLAvatarTracker::buddy_map_t friend_list;
+	LLAvatarTracker::instance().copyBuddyList(friend_list);
+	for (LLAvatarTracker::buddy_map_t::iterator it = friend_list.begin(); it != friend_list.end(); ++it)
 	{
-		friends_scroller->addStringUUIDItem(it->second, it->first);
-	}
-	for(it = collector.mOffline.begin(); it!=collector.mOffline.end(); it++)
-	{
-		friends_scroller->addStringUUIDItem(it->second, it->first);
+		const LLUUID& av_id = it->first;
+
+		LLSD element;
+		element["id"] = av_id;
+
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(av_id, &av_name); // Should have the name in the cache already
+		element["columns"][0]["column"] = "name";
+		element["columns"][0]["value"] = av_name.getDisplayName();
+		element["columns"][1]["column"] = "username";
+		element["columns"][1]["value"] = av_name.getUserName();
+
+		friends_scroller->addElement(element);
 	}
 	friends_scroller->sortByColumnIndex(0, TRUE);
+	// </FS:Ansariel>
 }
 
 void LLFloaterAvatarPicker::drawFrustum()

@@ -33,6 +33,10 @@
 			<text name="InstructSelectFriend">
 				選擇一個人：
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="名稱" name="name"/>
+				<columns label="使用者名稱" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="接近我" name="NearMePanel">
 			<text name="InstructSelectResident">

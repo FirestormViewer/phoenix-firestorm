@@ -48,7 +48,6 @@ BOOL FSMoneyTracker::postBuild()
 	mSummary = getChild<LLTextBox>("summary");
 	mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
 	mTransactionHistory->setContextMenu(&gFSMoneyTrackerListMenu);
-	mTransactionHistory->sortByColumn("time", TRUE);
 	clear();
 	
 	// Button Actions

@@ -1899,6 +1899,17 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 	return true;
 }
 
+// <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
+void LLScriptEdContainer::updateStyle()
+{
+	if (mScriptEd && mScriptEd->mEditor)
+	{
+		mScriptEd->mEditor->initKeywords();
+		mScriptEd->mEditor->loadKeywords();
+	}
+}
+// </FS:Ansariel>
+
 /// ---------------------------------------------------------------------------
 /// LLPreviewLSL
 /// ---------------------------------------------------------------------------

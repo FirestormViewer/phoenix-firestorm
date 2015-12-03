@@ -9,10 +9,10 @@
 
 	<fs_scroll_list
 	 draw_heading="true"
-		height="70"
-		left="0"
-		top="0"
-		width="304"
+	 height="70"
+	 left="0"
+	 top="0"
+	 width="304"
 	 follows="all"
 	 layout="topleft"
 	 sort_column="0"

@@ -228,6 +228,7 @@
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
+#include "llfriendcard.h"
 #include "llnotificationmanager.h"
 #include "llprogressview.h"
 #include "lltoolbarview.h"
@@ -2809,6 +2810,9 @@ bool idle_startup()
 			FSLSLBridge::instance().initBridge();
 		}
 		// </FS:TT>
+
+		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
+		LLFriendCardsManager::createAgentCallingCard();
 
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();

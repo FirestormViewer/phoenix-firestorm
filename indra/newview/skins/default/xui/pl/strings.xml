@@ -872,6 +872,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="AvatarAutoResponse">
 		Autoodpowiedź
 	</string>
+	<string name="AvatarTyping">
+		Pisze
+	</string>
 	<string name="anim_express_afraid">
 		Strach
 	</string>

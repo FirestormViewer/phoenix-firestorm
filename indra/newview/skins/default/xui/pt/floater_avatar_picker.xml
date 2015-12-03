@@ -33,17 +33,20 @@
 			<text name="InstructSelectFriend">
 				Selecione alguém:
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="Nome" name="name"/>
+				<columns label="Nome de usuário" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="Próximo a Mim" name="NearMePanel">
 			<text name="InstructSelectResident">
 				Selecione alguém por perto:
 			</text>
-			<slider bottom_delta="-36" label="Faixa" name="near_me_range"/>
+			<slider label="Faixa" name="near_me_range"/>
 			<text name="meters">
 				Metros
 			</text>
-			<button font="SansSerifSmall" label="Atualizar Lista" label_selected="Atualizar Lista" left_delta="1" name="Refresh" width="115"/>
-			<fs_scroll_list bottom_delta="-169" height="159" name="NearMe">
+			<fs_scroll_list name="NearMe">
 				<columns label="Nome" name="name"/>
 				<columns label="Nome de usuário" name="username"/>
 			</fs_scroll_list>

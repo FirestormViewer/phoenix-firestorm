@@ -705,7 +705,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mTitle(),
 	mNameAway(false),
 	mNameDoNotDisturb(false),
-	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag
+	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag,
+	mNameIsTyping(false), // <FS:Ansariel> FIRE-3475: Show typing in nametag
 	mNameMute(false),
 	mNameAppearance(false),
 	mNameFriend(false),
@@ -2935,6 +2936,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	static LLCachedControl<bool> fsShowAutorespondInNametag(gSavedSettings, "FSShowAutorespondInNametag");
 	bool is_autoresponse = isSelf() && fsShowAutorespondInNametag && (fsAutorespondMode || fsAutorespondNonFriendsMode);
 	// </FS:Ansariel>
+	// <FS:Ansariel> FIRE-3475: Show typing in nametag
+	static LLCachedControl<bool> fsShowTypingStateInNameTag(gSavedSettings, "FSShowTypingStateInNameTag");
+	bool is_typing = !isSelf() && mTyping && fsShowTypingStateInNameTag;
+	// </FS:Ansariel>
 	bool is_away = mSignaledAnimations.find(ANIM_AGENT_AWAY)  != mSignaledAnimations.end();
 	bool is_do_not_disturb = mSignaledAnimations.find(ANIM_AGENT_DO_NOT_DISTURB) != mSignaledAnimations.end();
 	bool is_appearance = mSignaledAnimations.find(ANIM_AGENT_CUSTOMIZE) != mSignaledAnimations.end();
@@ -3050,6 +3055,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_friend != mNameFriend
 		|| is_cloud != mNameCloud
 		|| name_tag_color != mNameColor
+		|| is_typing != mNameIsTyping
 		|| distance_string != mDistanceString)
 	{
 
@@ -3074,7 +3080,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		// <FS:Ansariel> Show auto-response in nametag
 		//if (is_away || is_muted || is_do_not_disturb || is_appearance)
-		if (is_away || is_muted || is_do_not_disturb || is_autoresponse || is_appearance)
+		if (is_away || is_muted || is_do_not_disturb || is_autoresponse || is_appearance || is_typing)
 		// </FS:Ansariel>
 		{
 			std::string line;
@@ -3110,6 +3116,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				line += LLTrans::getString("LoadingData");
 				line += ", ";
 			}
+			// <FS:Ansariel> FIRE-3475: Show typing in nametag
+			if (is_typing)
+			{
+				line += LLTrans::getString("AvatarTyping");
+				line += ", ";
+			}
+			// </FS:Ansariel>
 			// trim last ", "
 			line.resize( line.length() - 2 );
 			addNameTagLine(line, name_tag_color, LLFontGL::NORMAL,
@@ -3230,6 +3243,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		mNameColor=name_tag_color;
 		mDistanceString = distance_string;
 		mTitle = title ? title->getString() : "";
+		mNameIsTyping = is_typing;
 		// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
 		mNameFirstname = firstname->getString();
 		mNameLastname = lastname->getString();
@@ -3472,8 +3486,6 @@ void LLVOAvatar::idleUpdateNameTagAlpha(BOOL new_name, F32 alpha)
 LLColor4 LLVOAvatar::getNameTagColor()
 // </FS:CR>
 {
-	static LLUICachedControl<bool> use_old_color("FSUseV1TagColor", false);
-	
 	// ...not using display names
 	LLColor4 color = LLUIColorTable::getInstance()->getColor("NameTagLegacy");
 	if (LLAvatarName::useDisplayNames())

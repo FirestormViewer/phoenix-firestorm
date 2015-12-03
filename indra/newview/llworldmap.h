@@ -293,6 +293,10 @@ private:
 	// cases where a block is never retrieved and, because of this boolean being set, never re-requested
 	bool *			mMapBlockLoaded;		// Telling us if the block of regions has been requested or not
 
+	// <FS:Ansariel> Periodically update sim info
+	F64				mMapBlockLastUpdate;
+	std::set<S32>	mMapBlockLastUpdateOffsets;
+
 	// Track location data : used while there's nothing tracked yet by LLTracker
 	bool			mIsTrackingLocation;	// True when we're tracking a point
 	bool			mIsTrackingFound;		// True when the tracking position has been found, valid or not

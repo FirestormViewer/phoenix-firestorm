@@ -63,4 +63,6 @@ private:
 	LLButton* mRemoveRegionBtn;
 	LLButton* mOpenMapBtn;
 	LLScrollListCtrl* mRegionScrollList;
+
+	F64 mLastRegionUpdate;
 };

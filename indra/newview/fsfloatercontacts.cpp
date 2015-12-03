@@ -35,7 +35,6 @@
 #include "fsscrolllistctrl.h"
 #include "llagent.h"
 #include "llavataractions.h"
-#include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
 #include "llfloatergroupinvite.h"
 #include "llfloaterreg.h"
@@ -52,30 +51,11 @@
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
-const F32 DEFAULT_PERIOD = 5.f;
 const F32 RIGHTS_CHANGE_TIMEOUT = 5.f;
-const F32 OBSERVER_TIMEOUT = 0.5f;
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
 
-
-// simple class to observe the calling cards.
-class LLLocalFriendsObserver : public LLFriendObserver
-{
-public: 
-	LLLocalFriendsObserver(FSFloaterContacts* floater) : mFloater(floater) {}
-	virtual ~LLLocalFriendsObserver()
-	{
-		mFloater = NULL;
-	}
-	virtual void changed(U32 mask)
-	{
-		mFloater->onFriendListUpdate(mask);
-	}
-protected:
-	FSFloaterContacts* mFloater;
-};
 
 //
 // FSFloaterContacts
@@ -85,7 +65,6 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	: LLFloater(seed),
 	LLEventTimer(300.f),
 	mTabContainer(NULL),
-	mObserver(NULL),
 	mFriendsList(NULL),
 	mGroupList(NULL),
 	mAllowRightsChange(true),
@@ -95,18 +74,16 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mResetLastColumnDisplayModeChanged(false),
 	mDirtyNames(true)
 {
-	mObserver = new LLLocalFriendsObserver(this);
-	LLAvatarTracker::instance().addObserver(mObserver);
+	LLAvatarTracker::instance().addObserver(this);
 	// For notification when SIP online status changes.
-	LLVoiceClient::getInstance()->addObserver(mObserver);
+	LLVoiceClient::getInstance()->addObserver(this);
 }
 
 FSFloaterContacts::~FSFloaterContacts()
 {
 	// For notification when SIP online status changes.
-	LLVoiceClient::getInstance()->removeObserver(mObserver);
-	LLAvatarTracker::instance().removeObserver(mObserver);
-	delete mObserver;
+	LLVoiceClient::getInstance()->removeObserver(this);
+	LLAvatarTracker::instance().removeObserver(this);
 
 	if (mRlvBehaviorCallbackConnection.connected())
 	{
@@ -532,7 +509,7 @@ void FSFloaterContacts::sortFriendList()
 // Friends list
 //
 
-void FSFloaterContacts::onFriendListUpdate(U32 changed_mask)
+void FSFloaterContacts::changed(U32 changed_mask)
 {
 	LLAvatarTracker& at = LLAvatarTracker::instance();
 
@@ -627,15 +604,10 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 		return;
 	}
 
-#if 0
-	bool isOnlineSIP = LLVoiceClient::getInstance()->isOnlineSIP(agent_id);
-	bool isOnline = relationInfo->isOnline();
-#endif
-
 	LLAvatarName av_name;
 	if (!LLAvatarNameCache::get(agent_id, &av_name))
 	{
-		const LLRelationship* info = LLAvatarTracker::instance().getBuddyInfo(agent_id);
+		const LLRelationship* info = at.getBuddyInfo(agent_id);
 		LLUUID request_id = LLUUID::generateNewID();
 		LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
 		mAvatarNameCacheConnections[request_id] = conn;
@@ -665,23 +637,6 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	online_status_column["column"]		= "icon_online_status";
 	online_status_column["type"]		= "icon";
 	online_status_column["halign"]		= "center";
-
-#if 0
-	if (isOnline)
-	{	
-		username_column["font"]["style"]	= "BOLD";
-		display_name_column["font"]["style"]= "BOLD";
-		friend_column["font"]["style"]		= "BOLD";
-		online_status_column["value"]		= "icon_avatar_online";
-	}
-	else if (isOnlineSIP)
-	{	
-		username_column["font"]["style"]	= "BOLD";
-		display_name_column["font"]["style"]= "BOLD";
-		friend_column["font"]["style"]		= "BOLD";
-		online_status_column["value"]		= "slim_icon_16_viewer";
-	}
-#endif
 
 	LLSD& online_column						= element["columns"][LIST_VISIBLE_ONLINE];
 	online_column["column"]					= "icon_visible_online";

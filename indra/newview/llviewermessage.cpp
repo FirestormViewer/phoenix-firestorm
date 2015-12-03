@@ -142,6 +142,7 @@
 #include "llfloaterreg.h"
 #include "llfriendcard.h"
 #include "llgiveinventory.h"
+#include "lllandmarkactions.h"
 #include "lltexturefetch.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -2753,6 +2754,49 @@ static void notification_group_name_cb(const std::string& group_name,
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
+static void teleport_region_info_cb(const std::string& slurl, LLSD args, const LLSD& payload, const LLUUID& from_id, const LLUUID& session_id, bool can_user_access_dst_region, bool does_user_require_maturity_increase)
+{
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		args["POS_SLURL"] = RlvStrings::getString(RLV_STRING_HIDDEN);
+	}
+	else
+	{
+		args["POS_SLURL"] = slurl;
+	}
+
+	LLNotification::Params params;
+
+	if (!can_user_access_dst_region)
+	{
+		params.name = "TeleportOffered_MaturityBlocked";
+		send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
+		send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+	}
+	else if (does_user_require_maturity_increase)
+	{
+		params.name = "TeleportOffered_MaturityExceeded";
+	}
+	else
+	{
+		params.name = "TeleportOffered";
+		params.functor.name = "TeleportOffered";
+	}
+
+	params.substitutions = args;
+	params.payload = payload;
+	LLPostponedNotification::add<LLPostponedOfferNotification>(params, from_id, false);
+
+	LLWindow* viewer_window = gViewerWindow->getWindow();
+	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
+	if (viewer_window && sFlashIcon)
+	{
+		viewer_window->flashIcon(5.f);
+	}
+}
+// </FS:Ansariel>
+
 void process_improved_im(LLMessageSystem *msg, void **user_data)
 {
 	LLUUID from_id;
@@ -3890,6 +3934,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["lure_id"] = session_id;
 				payload["godlike"] = FALSE;
 				payload["region_maturity"] = region_access;
+
+				// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
+				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept))
+				{
+					LLVector3d pos_global = from_region_handle(region_handle);
+					pos_global += LLVector3d(pos);
+					LLLandmarkActions::getSLURLfromPosGlobal(pos_global, boost::bind(&teleport_region_info_cb, _1, args, payload, from_id, session_id, canUserAccessDstRegion, doesUserRequireMaturityIncrease));
+					return;
+				}
+				// </FS:Ansariel>
 
 				if (!canUserAccessDstRegion)
 				{

@@ -280,11 +280,12 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	addChild(LLUICtrlFactory::create<LLTextBox>(text_p));
 	// </FS:Ansariel>
 
-	if (p.sort_column >= 0)
-	{
-		sortByColumnIndex(p.sort_column, p.sort_ascending);
-	}
-
+	// <FS:Ansariel> Can only set sort column after we created the actual columns
+	//if (p.sort_column >= 0)
+	//{
+	//	sortByColumnIndex(p.sort_column, p.sort_ascending);
+	//}
+	// </FS:Ansariel>
 	
 	for (LLInitParam::ParamIterator<LLScrollListColumn::Params>::const_iterator row_it = p.contents.columns.begin();
 		row_it != p.contents.columns.end();
@@ -295,6 +296,13 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 		// <FS:Ansariel> Get list of the column init params so we can re-add them
 		mColumnInitParams.push_back(*row_it);
 	}
+
+	// <FS:Ansariel> Can only set sort column after we created the actual columns
+	if (p.sort_column >= 0)
+	{
+		sortByColumnIndex(p.sort_column, p.sort_ascending);
+	}
+	// </FS:Ansariel>
 
 	for (LLInitParam::ParamIterator<LLScrollListItem::Params>::const_iterator row_it = p.contents.rows.begin();
 		row_it != p.contents.rows.end();

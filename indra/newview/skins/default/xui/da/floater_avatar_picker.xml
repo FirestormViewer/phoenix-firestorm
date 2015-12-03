@@ -33,6 +33,10 @@
 			<text name="InstructSelectFriend">
 				Vælg en person:
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="Navn" name="name"/>
+				<columns label="Brugernavn" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="Nær ved mig" name="NearMePanel">
 			<text name="InstructSelectResident">
@@ -42,7 +46,6 @@
 			<text name="meters">
 				meter
 			</text>
-			<button label="Gentegn liste" label_selected="Gentegn liste" name="Refresh"/>
 			<fs_scroll_list name="NearMe">
 				<columns label="Navn" name="name"/>
 				<columns label="Brugernavn" name="username"/>

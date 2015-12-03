@@ -85,8 +85,12 @@ LLHUDText::LLHUDText(const U8 type) :
 {
 	mColor = LLColor4(1.f, 1.f, 1.f, 1.f);
 	mDoFade = TRUE;
-	mFadeDistance = 8.f;
-	mFadeRange = 4.f;
+	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+	//mFadeDistance = 8.f;
+	//mFadeRange = 4.f;
+	mFadeDistance = gSavedSettings.getF32("FSHudTextFadeDistance");
+	mFadeRange = gSavedSettings.getF32("FSHudTextFadeRange");
+	// </FS:Ansariel>
 	mZCompare = TRUE;
 	mOffscreen = FALSE;
 	mRadius = 0.1f;
@@ -124,7 +128,10 @@ void LLHUDText::renderText()
 	LLColor4 text_color = mColor;
 	if (mDoFade)
 	{
-		if (mLastDistance > mFadeDistance)
+		// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+		//if (mLastDistance > mFadeDistance)
+		if (mLastDistance > mFadeDistance && mFadeRange > 0.f)
+		// </FS:Ansariel>
 		{
 			alpha_factor = llmax(0.f, 1.f - (mLastDistance - mFadeDistance)/mFadeRange);
 			text_color.mV[3] = text_color.mV[3]*alpha_factor;
@@ -664,3 +671,19 @@ void LLHUDText::refreshAllObjectText()
 	}
 }
 // [/RLVa:KB]
+
+// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+// static
+void LLHUDText::onFadeSettingsChanged()
+{
+	for (TextObjectIterator it = sTextObjects.begin(); it != sTextObjects.end(); ++it)
+	{
+		LLHUDText* text = *it;
+		if (text)
+		{
+			text->mFadeDistance = gSavedSettings.getF32("FSHudTextFadeDistance");
+			text->mFadeRange = gSavedSettings.getF32("FSHudTextFadeRange");
+		}
+	}
+}
+// </FS:Ansariel>

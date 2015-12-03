@@ -331,7 +331,8 @@ public:
 
 		// For notification when SIP online status changes.
 		LLVoiceClient::getInstance()->addObserver(this);
-		mInvObserver = new LLInventoryFriendCardObserver(this);
+		// <FS:Ansariel> Disconnect LLFriendCardsManager
+		//mInvObserver = new LLInventoryFriendCardObserver(this);
 	}
 
 	~LLFriendListUpdater()

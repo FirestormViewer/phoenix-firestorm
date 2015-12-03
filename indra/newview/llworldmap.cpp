@@ -44,6 +44,7 @@
 // Timers to temporise database requests
 const F32 AGENTS_UPDATE_TIMER = 60.0;			// Seconds between 2 agent requests for a region
 const F32 REQUEST_ITEMS_TIMER = 10.f * 60.f;	// Seconds before we consider re-requesting item data for the grid
+const F64 BLOCK_UPDATE_TIMER = 60.0;			// <FS:Ansariel> Periodically update sim info
 
 //---------------------------------------------------------------------------
 // LLItemInfo
@@ -235,7 +236,13 @@ void LLSimInfo::insertAgentLocation(const LLItemInfo& item)
 	}
 
 	// Now append the new location
-	mAgentLocations.push_back(item); 
+	// <FS:Ansariel> Map fails to clear agent from a map position if it's the last one
+	//mAgentLocations.push_back(item); 
+	if (item.getCount() > 0)
+	{
+		mAgentLocations.push_back(item);
+	}
+	// </FS:Ansariel>
 }
 
 //---------------------------------------------------------------------------
@@ -249,7 +256,8 @@ LLWorldMap::LLWorldMap() :
 	mIsTrackingDoubleClick( false ),
 	mIsTrackingCommit( false ),
 	mTrackingLocation( 0, 0, 0 ),
-	mFirstRequest(true)
+	mFirstRequest(true),
+	mMapBlockLastUpdate(0.0) // <FS:Ansariel> Periodically update sim info
 {
 	//LL_INFOS("World Map") << "Creating the World Map -> LLWorldMap::LLWorldMap()" << LL_ENDL;
 	mMapBlockLoaded = new bool[MAP_BLOCK_RES*MAP_BLOCK_RES];
@@ -323,6 +331,10 @@ void LLWorldMap::clearSimFlags()
 	for (S32 idx=0; idx<MAP_BLOCK_RES*MAP_BLOCK_RES; ++idx)
 	{
 		mMapBlockLoaded[idx] = false;
+		// <FS:Ansariel> Periodically update sim info
+		mMapBlockLastUpdate = 0.0;
+		mMapBlockLastUpdateOffsets.clear();
+		// </FS:Ansariel>
 	}
 }
 
@@ -605,7 +617,9 @@ bool LLWorldMap::insertItem(U32 x_world, U32 y_world, std::string& name, LLUUID&
 		case MAP_ITEM_AGENT_LOCATIONS: // agent locations
 		{
 // 				LL_INFOS("World Map") << "New Location " << new_item.mName << LL_ENDL;
-			if (extra > 0)
+			// <FS:Ansariel> Map fails to clear agent from a map position if it's the last one
+			//if (extra > 0)
+			// </FS:Ansariel>
 			{
 				new_item.setCount(extra);
 				siminfo->insertAgentLocation(new_item);
@@ -647,20 +661,41 @@ void LLWorldMap::updateRegions(S32 x0, S32 y0, S32 x1, S32 y1)
 	y0 = y0 / MAP_BLOCK_SIZE;
 	y1 = y1 / MAP_BLOCK_SIZE;
 
+	// <FS:Ansariel> Periodically update sim info
+	std::set<S32> new_offsets;
+	bool did_update = false;
+	F64 time_now = LLTimer::getElapsedSeconds();
+	// </FS:Ansariel>
+
 	// Load the region info those blocks
 	for (S32 block_x = llmax(x0, 0); block_x <= llmin(x1, MAP_BLOCK_RES-1); ++block_x)
 	{
 		for (S32 block_y = llmax(y0, 0); block_y <= llmin(y1, MAP_BLOCK_RES-1); ++block_y)
 		{
 			S32 offset = block_x | (block_y * MAP_BLOCK_RES);
-			if (!mMapBlockLoaded[offset])
+			// <FS:Ansariel> Periodically update sim info
+			//if (!mMapBlockLoaded[offset])
+			if (!mMapBlockLoaded[offset] || (time_now - mMapBlockLastUpdate) > BLOCK_UPDATE_TIMER || mMapBlockLastUpdateOffsets.find(offset) == mMapBlockLastUpdateOffsets.end())
+			// </FS:Ansariel>
 			{
  				//LL_INFOS("World Map") << "Loading Block (" << block_x << "," << block_y << ")" << LL_ENDL;
 				LLWorldMapMessage::getInstance()->sendMapBlockRequest(block_x * MAP_BLOCK_SIZE, block_y * MAP_BLOCK_SIZE, (block_x * MAP_BLOCK_SIZE) + MAP_BLOCK_SIZE - 1, (block_y * MAP_BLOCK_SIZE) + MAP_BLOCK_SIZE - 1);
 				mMapBlockLoaded[offset] = true;
+				// <FS:Ansariel> Periodically update sim info
+				new_offsets.insert(offset);
+				did_update = true;
+				// </FS:Ansariel>
 			}
 		}
 	}
+
+	// <FS:Ansariel> Periodically update sim info
+	if (did_update)
+	{
+		mMapBlockLastUpdate = time_now;
+		mMapBlockLastUpdateOffsets.swap(new_offsets);
+	}
+	// </FS:Ansariel>
 }
 
 void LLWorldMap::dump()
