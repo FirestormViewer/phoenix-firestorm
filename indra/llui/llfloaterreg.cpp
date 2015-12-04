@@ -338,7 +338,11 @@ void LLFloaterReg::showInitialVisibleInstances()
 			BOOL isvis = LLFloater::getControlGroup()->getBOOL(controlname);
 			if (isvis)
 			{
-				showInstance(name, LLSD()); // keyed floaters shouldn't set save_vis to true
+				// <FS:Ansariel> Set correct window transparency at login
+				//showInstance(name, LLSD()); // keyed floaters shouldn't set save_vis to true
+				LLFloater* floater = showInstance(name, LLSD());
+				floater->updateTransparency(LLUICtrl::TT_INACTIVE);
+				// </FS:Ansariel>
 			}
 		}
 	}
