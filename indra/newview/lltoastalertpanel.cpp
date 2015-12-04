@@ -73,7 +73,10 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
     LLView* current_selection = dynamic_cast<LLView*>(gFocusMgr.getKeyboardFocus());
     while(current_selection)
     {
-        if (current_selection->isFocusRoot())
+        // <FS:Ansariel> FIRE-6651: Modal alert toasts don't restore focus properly
+        //if (current_selection->isFocusRoot())
+        if (current_selection->isFocusRoot() && (!dynamic_cast<LLFloater*>(current_selection) || !dynamic_cast<LLFloater*>(current_selection)->getHost()))
+        // </FS:Ansariel>
         {
             mPreviouslyFocusedView = current_selection->getHandle();
             break;
@@ -450,7 +453,10 @@ LLToastAlertPanel::~LLToastAlertPanel()
         LLView* current_selection = dynamic_cast<LLView*>(gFocusMgr.getKeyboardFocus());
         while(current_selection)
         {
-            if (current_selection->isFocusRoot())
+            // <FS:Ansariel> FIRE-6651: Modal alert toasts don't restore focus properly
+            //if (current_selection->isFocusRoot())
+            if (current_selection->isFocusRoot() && (!dynamic_cast<LLFloater*>(current_selection) || !dynamic_cast<LLFloater*>(current_selection)->getHost()))
+            // </FS:Ansariel>
             {
                 break;
             }
