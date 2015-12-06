@@ -10,7 +10,7 @@
 		Generating Meshes...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Error: Vertex number is more than 65534, aborted!
+		Error: Vertex number is more than 65535, aborted!
 	</string>
 	<string name="high">
 		High

@@ -14,7 +14,7 @@
 		Generazione reticoli...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Errore: numero di vertici maggiore di 65534, annullato.
+		Errore: numero di vertici maggiore di 65535, annullato.
 	</string>
 	<string name="bad_element">
 		Errore: elemento non valido
