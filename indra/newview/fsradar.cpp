@@ -302,7 +302,7 @@ void FSRadar::updateRadarList()
 		if (!reg)
 		{
 			// Fallback in case we somehow didn't get the region via ID
-			LL_WARNS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
+			LL_DEBUGS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
 			reg = world->getRegionFromPosGlobal(avPos);
 		}
 		if (!ent) // don't update this radar listing if data is inaccessible
