@@ -79,7 +79,7 @@ protected:
 	virtual void	wearableUpdated(LLWearable *wearable, BOOL removed);
 	void 			eraseWearable(LLWearable *wearable);
 	void			eraseWearable(const LLWearableType::EType type, U32 index);
-	void			clearWearableType(const LLWearableType::EType type);
+//	void			clearWearableType(const LLWearableType::EType type);
 	bool			swapWearables(const LLWearableType::EType type, U32 index_a, U32 index_b);
 
 private:
