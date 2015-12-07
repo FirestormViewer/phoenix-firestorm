@@ -355,9 +355,7 @@ LLScrollListItem* LLNameListCtrl::addNameItemRow(
 					}
 					mAvatarNameCacheConnections.erase(it);
 				}
-				// <FS:Ansariel> FIRE-17408: Prefix is not passed to name cache callback
-				//mAvatarNameCacheConnections[id] = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, suffix, item->getHandle()));
-				mAvatarNameCacheConnections[id] = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, prefix, suffix, item->getHandle()));
+				mAvatarNameCacheConnections[id] = LLAvatarNameCache::get(id,boost::bind(&LLNameListCtrl::onAvatarNameCache,this, _1, _2, suffix, item->getHandle()));
 
 				// <FS:Ansariel> Fix Baker's NameListCtrl un-fix
 				//if(mPendingLookupsRemaining <= 0)
@@ -432,7 +430,6 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 
 void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 									   const LLAvatarName& av_name,
-									   std::string prefix, // <FS:Ansariel> FIRE-17408: Prefix is not passed to name cache callback
 									   std::string suffix,
 									   LLHandle<LLNameListItem> item)
 {
@@ -457,13 +454,6 @@ void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 	{
 		name.append(suffix);
 	}
-
-	// <FS:Ansariel> FIRE-17408: Prefix is not passed to name cache callback
-	if (!prefix.empty())
-	{
-		name = prefix + name;
-	}
-	// </FS:Ansariel>
 
 	LLNameListItem* list_item = item.get();
 	if (list_item && list_item->getUUID() == agent_id)
