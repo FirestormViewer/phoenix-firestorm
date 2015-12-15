@@ -869,4 +869,7 @@
   <color
       name="ScriptSelectedColor"
       reference="simpleeditor_bg_selected" />
+  <color
+      name="UploadDialogBackground"
+      reference="floater_bg_color_a" />
 </colors>
