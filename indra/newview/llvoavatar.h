@@ -68,12 +68,10 @@ class LLVoiceVisualizer;
 class LLHUDNameTag;
 class LLHUDEffectSpiral;
 class LLTexGlobalColor;
-struct LLVOAvatarBoneInfo;
-struct LLVOAvatarChildJoint;
-//class LLViewerJoint;
+
 struct LLAppearanceMessageContents;
-struct LLVOAvatarSkeletonInfo;
 class LLViewerJointMesh;
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LLVOAvatar
@@ -419,6 +417,7 @@ public:
 	F32			getLastSkinTime() { return mLastSkinTime; }
 	U32 		renderTransparent(BOOL first_pass);
 	void 		renderCollisionVolumes();
+	void		renderBones();
 	void		renderJoints();
 	static void	deleteCachedImages(bool clearAll=true);
 	static void	destroyGL();

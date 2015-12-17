@@ -67,6 +67,7 @@
 #include "llvowlsky.h"
 #include "llrender.h"
 #include "llnavigationbar.h"
+#include "llnotificationsutil.h"
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
 // <FS:Ansariel> [FS Login Panel]
@@ -163,6 +164,12 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 	return true;
 }
 
+
+static bool handleDeferredDebugSettingChanged(const LLSD& newvalue)
+{
+    LLNotificationsUtil::add("ChangeDeferredDebugSetting");
+    return true;
+}
 
 // <FS:Ansariel> Expose handleSetShaderChanged()
 //static bool handleSetShaderChanged(const LLSD& newvalue)
@@ -1031,6 +1038,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
+	gSavedSettings.getControl("IncludeEnhancedSkeleton")->getCommitSignal()->connect(boost::bind(&handleDeferredDebugSettingChanged, _2));
 	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // <FS:Zi> Moved Avatar Z offset from RLVa to here
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));

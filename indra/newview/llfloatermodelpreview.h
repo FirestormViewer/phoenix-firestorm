@@ -262,6 +262,7 @@ public:
 	virtual BOOL needsRender() { return mNeedsUpdate; }
 	void setPreviewLOD(S32 lod);
 	void clearModel(S32 lod);
+    void getJointAliases(JointMap& joint_map);
 	void loadModel(std::string filename, S32 lod, bool force_disable_slm = false);
 	void loadModelCallback(S32 lod);
 	void genLODs(S32 which_lod = -1, U32 decimation = 3, bool enforce_tri_limit = false);
@@ -299,11 +300,7 @@ public:
 	
 	void setLoadState( U32 state ) { mLoadState = state; }
 	U32 getLoadState() { return mLoadState; }
-	void setRigWithSceneParity( bool state ) { mRigParityWithScene = state; }
-	const bool getRigWithSceneParity( void ) const { return mRigParityWithScene; }
 	
-	LLVector3 getTranslationForJointOffset( std::string joint );
-
 	static bool 		sIgnoreLoadedCallback;
 
 protected:
@@ -350,7 +347,6 @@ private:
 	bool		mLoading;
 	U32			mLoadState;
 	bool		mResetJoints;
-	bool		mRigParityWithScene;
 	bool		mModelNoErrors;
 
 	std::map<std::string, bool> mViewOption;
@@ -408,7 +404,7 @@ private:
 
 	bool		mLastJointUpdate;
 
-	JointSet				mJointsFromNode;
+	JointNameSet		mJointsFromNode;
 	JointTransformMap	mJointTransformMap;
 
 	LLPointer<LLVOAvatar>	mPreviewAvatar;

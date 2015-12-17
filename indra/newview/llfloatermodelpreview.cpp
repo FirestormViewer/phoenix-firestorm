@@ -42,7 +42,6 @@
 #include "llcombobox.h"
 #include "lldatapacker.h"
 #include "lldrawable.h"
-#include "lldrawpoolavatar.h"
 #include "llrender.h"
 #include "llface.h"
 #include "lleconomy.h"
@@ -54,6 +53,7 @@
 #include "llmeshrepository.h"
 #include "llnotificationsutil.h"
 #include "llsdutil_math.h"
+#include "llskinningutil.h"
 #include "lltextbox.h"
 #include "lltoolmgr.h"
 #include "llui.h"
@@ -89,9 +89,6 @@
 #include "llworld.h"
 // </AW: opensim-limits>
 #include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
-
-// <FS:Ansariel> Proper matrix array length for fitted mesh
-#define JOINT_COUNT 52
 
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
@@ -273,6 +270,7 @@ mCalculateBtn(NULL)
 	mLastMouseY = 0;
 	mStatusLock = new LLMutex(NULL);
 	mModelPreview = NULL;
+
 	mLODMode[LLModel::LOD_HIGH] = 0;
 	for (U32 i = 0; i < LLModel::LOD_HIGH; i++)
 	{
@@ -1241,7 +1239,6 @@ LLModelPreview::LLModelPreview(S32 width, S32 height, LLFloater* fmp)
 , mPhysicsSearchLOD( LLModel::LOD_PHYSICS )
 , mResetJoints( false )
 , mModelNoErrors( true )
-, mRigParityWithScene( false )
 , mLastJointUpdate( false )
 {
 	mNeedsUpdate = TRUE;
@@ -1779,6 +1776,20 @@ void LLModelPreview::clearModel(S32 lod)
 	mScene[lod].clear();
 }
 
+void LLModelPreview::getJointAliases( JointMap& joint_map)
+{
+    // Get all standard skeleton joints from the preview avatar.
+    LLVOAvatar *av = getPreviewAvatar();
+    
+    //Joint names and aliases come from avatar_skeleton.xml
+    
+    joint_map = av->getJointAliases();
+    for (S32 i = 0; i < av->mNumCollisionVolumes; i++)
+    {
+        joint_map[av->mCollisionVolumes[i].getName()] = av->mCollisionVolumes[i].getName();
+    }
+}
+
 void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable_slm)
 {
 	assert_main_thread();
@@ -1821,6 +1832,9 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		clearGLODGroup();
 	}
 
+    std::map<std::string, std::string> joint_alias_map;
+    getJointAliases(joint_alias_map);
+    
 	mModelLoader = new LLDAELoader(
 		filename,
 		lod, 
@@ -1831,6 +1845,8 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		this,
 		mJointTransformMap,
 		mJointsFromNode,
+        joint_alias_map,
+		LLSkinningUtil::getMaxJointCount(),
 		gSavedSettings.getU32("ImporterModelLimit"));
 
 	if (force_disable_slm)
@@ -3420,19 +3436,6 @@ void LLModelPreview::update()
 }
 
 //-----------------------------------------------------------------------------
-// getTranslationForJointOffset()
-//-----------------------------------------------------------------------------
-LLVector3 LLModelPreview::getTranslationForJointOffset( std::string joint )
-{
-	LLMatrix4 jointTransform;
-	if ( mJointTransformMap.find( joint ) != mJointTransformMap.end() )
-	{
-		jointTransform = mJointTransformMap[joint];
-		return jointTransform.getTranslation();
-	}
-	return LLVector3(0.0f,0.0f,0.0f);								
-}
-//-----------------------------------------------------------------------------
 // createPreviewAvatar
 //-----------------------------------------------------------------------------
 void LLModelPreview::createPreviewAvatar( void )
@@ -3569,6 +3572,7 @@ void LLModelPreview::addEmptyFace( LLModel* pTarget )
 	pTarget->setVolumeFaceData( faceCnt+1, pos, norm, tc, index, buff->getNumVerts(), buff->getNumIndices() );
 	
 }	
+
 //-----------------------------------------------------------------------------
 // render()
 //-----------------------------------------------------------------------------
@@ -4062,20 +4066,6 @@ BOOL LLModelPreview::render()
 															  LLVector3::z_axis,																	// up
 															  target_pos);											// point of interest
 
-			if (joint_positions)
-			{
-				LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
-				if (shader)
-				{
-					gDebugProgram.bind();
-				}
-				getPreviewAvatar()->renderCollisionVolumes();
-				if (shader)
-				{
-					shader->bind();
-				}
-			}
-
 			for (LLModelLoader::scene::iterator iter = mScene[mPreviewLOD].begin(); iter != mScene[mPreviewLOD].end(); ++iter)
 			{
 				for (LLModelLoader::model_instance_list::iterator model_iter = iter->second.begin(); model_iter != iter->second.end(); ++model_iter)
@@ -4100,70 +4090,32 @@ BOOL LLModelPreview::render()
 							//quick 'n dirty software vertex skinning
 
 							//build matrix palette
-							
-							// <FS:Ansariel> Proper matrix array length for fitted mesh
-							//LLMatrix4 mat[64];
-							//for (U32 j = 0; j < model->mSkinInfo.mJointNames.size(); ++j)
-							LLMatrix4 mat[JOINT_COUNT];
-							U32 count = llmin((U32) model->mSkinInfo.mJointNames.size(), (U32) JOINT_COUNT);
-							for (U32 j = 0; j < count; ++j)
-							// </FS:Ansariel>
-							{
-								LLJoint* joint = getPreviewAvatar()->getJoint(model->mSkinInfo.mJointNames[j]);
-								if (joint)
-								{
-									mat[j] = model->mSkinInfo.mInvBindMatrix[j];
-									mat[j] *= joint->getWorldMatrix();
-								}
-							}
 
+							LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
+                            const LLMeshSkinInfo *skin = &model->mSkinInfo;
+							U32 count = LLSkinningUtil::getMeshJointCount(skin);
+                            LLSkinningUtil::initSkinningMatrixPalette((LLMatrix4*)mat, count,
+                                                                        skin, getPreviewAvatar());
+                            LLMatrix4a bind_shape_matrix;
+                            bind_shape_matrix.loadu(skin->mBindShapeMatrix);
+                            U32 max_joints = LLSkinningUtil::getMaxJointCount();
 							for (U32 j = 0; j < buffer->getNumVerts(); ++j)
 							{
-								LLMatrix4 final_mat;
-								final_mat.mMatrix[0][0] = final_mat.mMatrix[1][1] = final_mat.mMatrix[2][2] = final_mat.mMatrix[3][3] = 0.f;
-
-								LLVector4 wght;
-								S32 idx[4];
-
-								F32 scale = 0.f;
-								for (U32 k = 0; k < 4; k++)
-								{
-									F32 w = weight[j].mV[k];
-
-									idx[k] = (S32) floorf(w);
-									wght.mV[k] = w - floorf(w);
-									scale += wght.mV[k];
-								}
-
-								wght *= 1.f/scale;
-
-								for (U32 k = 0; k < 4; k++)
-								{
-									// <FS:Ansariel> Proper matrix array length for fitted mesh
-									//F32* src = (F32*) mat[idx[k]].mMatrix;
-									S32 l = idx[k];
-									if( l >= JOINT_COUNT )
-										l = 0;
-									F32* src = (F32*) mat[l].mMatrix;
-									// </FS:Ansariel>
-
-									F32* dst = (F32*) final_mat.mMatrix;
-
-									F32 w = wght.mV[k];
-
-									for (U32 l = 0; l < 16; l++)
-									{
-										dst[l] += src[l]*w;
-									}
-								}
+                                LLMatrix4a final_mat;
+                                F32 *wptr = weight[j].mV;
+                                LLSkinningUtil::getPerVertexSkinMatrix(wptr, mat, true, final_mat, max_joints);
 
 								//VECTORIZE THIS
-								LLVector3 v(face.mPositions[j].getF32ptr());
+                                LLVector4a& v = face.mPositions[j];
 
-								v = v * model->mSkinInfo.mBindShapeMatrix;
-								v = v * final_mat;
+                                LLVector4a t;
+                                LLVector4a dst;
+                                bind_shape_matrix.affineTransform(v, t);
+                                final_mat.affineTransform(t, dst);
 
-								position[j] = v;
+								position[j][0] = dst[0];
+								position[j][1] = dst[1];
+								position[j][2] = dst[2];
 							}
 							
 							// <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it
@@ -4186,7 +4138,6 @@ BOOL LLModelPreview::render()
 							if (tex)
 							{
 								mTextureSet.insert(tex);
-	
 							}
 							
 							} else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
@@ -4210,6 +4161,22 @@ BOOL LLModelPreview::render()
 					}
 				}
 			}
+
+			if (joint_positions)
+			{
+				LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+				if (shader)
+				{
+					gDebugProgram.bind();
+				}
+				getPreviewAvatar()->renderCollisionVolumes();
+				getPreviewAvatar()->renderBones();
+				if (shader)
+				{
+					shader->bind();
+				}
+			}
+
 		}
 	}
 
@@ -4346,7 +4313,14 @@ void LLFloaterModelPreview::refresh()
 }
 
 //static
-void LLModelPreview::textureLoadedCallback( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* src_aux, S32 discard_level, BOOL final, void* userdata )
+void LLModelPreview::textureLoadedCallback(
+    BOOL success,
+    LLViewerFetchedTexture *src_vi,
+    LLImageRaw* src,
+    LLImageRaw* src_aux,
+    S32 discard_level,
+    BOOL final,
+    void* userdata )
 {
 	LLModelPreview* preview = (LLModelPreview*) userdata;
 	preview->refresh();

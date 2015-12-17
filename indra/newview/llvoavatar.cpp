@@ -224,24 +224,6 @@ struct LLTextureMaskData
  **
  **/
 
-//------------------------------------------------------------------------
-// LLVOAvatarBoneInfo
-// Trans/Scale/Rot etc. info about each avatar bone.  Used by LLVOAvatarSkeleton.
-//------------------------------------------------------------------------
-struct LLVOAvatarCollisionVolumeInfo : public LLInitParam::Block<LLVOAvatarCollisionVolumeInfo>
-{
-	LLVOAvatarCollisionVolumeInfo() 
-	:	name("name"),
-		pos("pos"),
-		rot("rot"),
-		scale("scale")
-	{}
-
-	Mandatory<std::string>	name;
-	Mandatory<LLVector3>	pos,
-							rot,
-							scale;
-};
 
 struct LLAppearanceMessageContents
 {
@@ -262,49 +244,6 @@ struct LLAppearanceMessageContents
 	LLVector3 mHoverOffset;
 	bool mHoverOffsetWasSet;
 };
-
-struct LLVOAvatarChildJoint : public LLInitParam::ChoiceBlock<LLVOAvatarChildJoint>
-	{
-	Alternative<Lazy<struct LLVOAvatarBoneInfo, IS_A_BLOCK> >	bone;
-	Alternative<LLVOAvatarCollisionVolumeInfo>		collision_volume;
-	
-	LLVOAvatarChildJoint()
-	:	bone("bone"),
-		collision_volume("collision_volume")
-	{}
-};
-
-	
-
-struct LLVOAvatarBoneInfo : public LLInitParam::Block<LLVOAvatarBoneInfo, LLVOAvatarCollisionVolumeInfo>
-{
-	LLVOAvatarBoneInfo() 
-	:	pivot("pivot")
-	{}
-	
-	Mandatory<LLVector3>					pivot;
-	Multiple<LLVOAvatarChildJoint>			children;
-};
-
-//------------------------------------------------------------------------
-// LLVOAvatarSkeletonInfo
-// Overall avatar skeleton
-//------------------------------------------------------------------------
-struct LLVOAvatarSkeletonInfo : public LLInitParam::Block<LLVOAvatarSkeletonInfo>
-{
-	LLVOAvatarSkeletonInfo()
-	:	skeleton_root(""),
-		num_bones("num_bones"),
-		num_collision_volumes("num_collision_volumes"),
-		version("version")
-	{}
-	
-	Mandatory<std::string>			version;
-	Mandatory<S32>					num_bones,
-									num_collision_volumes;
-	Mandatory<LLVOAvatarChildJoint>	skeleton_root;
-};
-
 
 
 //-----------------------------------------------------------------------------
@@ -1499,6 +1438,84 @@ void LLVOAvatar::renderCollisionVolumes()
 	addDebugText(ostr.str());
 }
 
+void LLVOAvatar::renderBones()
+{
+    
+    LLGLEnable blend(GL_BLEND);
+
+	std::ostringstream ostr;
+	std::ostringstream nullstr;
+
+	avatar_joint_list_t::iterator iter = mSkeleton.begin();
+	avatar_joint_list_t::iterator end  = mSkeleton.end();
+
+	for (; iter != end; ++iter)
+	{
+		LLJoint* jointp = *iter;
+		if (!jointp)
+		{
+			continue;
+		}
+
+		ostr << jointp->getName() << ", ";
+
+		jointp->updateWorldMatrix();
+        LLJoint::SupportCategory sc = jointp->getSupport();
+
+		gGL.pushMatrix();
+		gGL.multMatrix( &jointp->getXform()->getWorldMatrix().mMatrix[0][0] );
+
+		gGL.begin(LLRender::LINES);
+	
+		LLVector3 v[] = 
+		{
+			LLVector3(0,0,0),
+			LLVector3(0,0,0),
+        };
+        v[1] = jointp->getEnd();
+
+        LLGLDepthTest normal_depth(GL_TRUE);
+
+        // Unoccluded bone portions
+        if (sc == LLJoint::SUPPORT_BASE)
+        {
+            gGL.diffuseColor3f( 1.0f, 0.5f, 0.5f );
+        }
+        else
+        {
+            gGL.diffuseColor3f( 0.5f, 1.0f, 0.5f );
+        }
+        
+	
+		gGL.vertex3fv(v[0].mV); 
+		gGL.vertex3fv(v[1].mV);
+
+        LLGLDepthTest depth_under(GL_TRUE, GL_FALSE, GL_GREATER);
+
+        // Unoccluded bone portions
+		if (sc == LLJoint::SUPPORT_BASE)
+        {
+            gGL.diffuseColor3f( 1.0f, 0.0f, 0.0f );
+        }
+        else
+        {
+            gGL.diffuseColor3f( 0.0f, 1.0f, 0.0f );
+        }
+
+		gGL.vertex3fv(v[0].mV); 
+		gGL.vertex3fv(v[1].mV);
+
+		gGL.end();
+
+		gGL.popMatrix();
+	}
+
+	mDebugText.clear();
+	addDebugText(ostr.str());
+	addDebugText(nullstr.str());
+}
+
+
 void LLVOAvatar::renderJoints()
 {
 	std::ostringstream ostr;
@@ -1608,7 +1625,7 @@ BOOL LLVOAvatar::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 		for (S32 i = 0; i < mNumCollisionVolumes; ++i)
 		{
 			mCollisionVolumes[i].updateWorldMatrix();
-
+            
 			glh::matrix4f mat((F32*) mCollisionVolumes[i].getXform()->getWorldMatrix().mMatrix);
 			glh::matrix4f inverse = mat.inverse();
 			glh::matrix4f norm_mat = inverse.transpose();
@@ -5746,7 +5763,10 @@ void LLVOAvatar::clearAttachmentPosOverrides()
 	for (; iter != end; ++iter)
 	{
 		LLJoint* pJoint = (*iter);
-		pJoint->clearAttachmentPosOverrides();
+		if (pJoint)
+		{
+			pJoint->clearAttachmentPosOverrides();
+		}
 	}
 }
 
@@ -6028,8 +6048,14 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			LLViewerJointAttachment* attachment = new LLViewerJointAttachment();
 
 			attachment->setName(info->mName);
-			LLJoint *parentJoint = getJoint(info->mJointName);
-			if (!parentJoint)
+			LLJoint *parent_joint = getJoint(info->mJointName);
+            if (!parent_joint)
+            {
+                // If the intended location for attachment point is unavailable, stick it in a default location.
+                LL_INFOS() << "attachment pt " << info->mName << " using mPelvis as default parent" << LL_ENDL;
+                parent_joint = getJoint("mPelvis");
+            }
+			if (!parent_joint)
 			{
 				LL_WARNS() << "No parent joint by name " << info->mJointName << " found for attachment point " << info->mName << LL_ENDL;
 				delete attachment;
@@ -6084,7 +6110,7 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			mAttachmentPoints[attachmentID] = attachment;
 
 			// now add attachment joint
-			parentJoint->addChild(attachment);
+			parent_joint->addChild(attachment);
 		}
 	}
 

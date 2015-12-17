@@ -1757,7 +1757,7 @@ bool idle_startup()
 		LLPostProcess::initClass();
 		display_startup();
 
-		LLAvatarAppearance::initClass();
+        LLAvatarAppearance::initClass("avatar_lad.xml","avatar_skeleton.xml");
 		display_startup();
 
 		LLViewerObject::initVOClasses();

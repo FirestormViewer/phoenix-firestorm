@@ -40,9 +40,14 @@
 #include "xform.h"
 
 const S32 LL_CHARACTER_MAX_JOINTS_PER_MESH = 15;
-const U32 LL_CHARACTER_MAX_JOINTS = 32; // must be divisible by 4!
-const U32 LL_HAND_JOINT_NUM = 31;
-const U32 LL_FACE_JOINT_NUM = 30;
+// BENTO JOINT COUNT LIMIT - need to set this to final skeleton size + 2
+const U32 LL_CHARACTER_MAX_JOINTS = 144; // must be divisible by 4!
+const U32 LL_MAX_JOINTS_PER_MESH_OBJECT = 110;
+
+// These should be higher than the joint_num of any
+// other joint, to avoid conflicts in updateMotionsByType()
+const U32 LL_HAND_JOINT_NUM = (LL_CHARACTER_MAX_JOINTS-1);
+const U32 LL_FACE_JOINT_NUM = (LL_CHARACTER_MAX_JOINTS-2);
 const S32 LL_CHARACTER_MAX_PRIORITY = 7;
 const F32 LL_MAX_PELVIS_OFFSET = 5.f;
 
@@ -86,8 +91,16 @@ public:
 		POSITION_DIRTY = 0x1 << 2,
 		ALL_DIRTY = 0x7
 	};
+public:
+    enum SupportCategory
+    {
+        SUPPORT_BASE,
+        SUPPORT_EXTENDED
+    };
 protected:
 	std::string	mName;
+
+	SupportCategory mSupport;
 
 	// parent joint
 	LLJoint	*mParent;
@@ -103,6 +116,10 @@ public:
 
 	// describes the skin binding pose
 	LLVector3		mSkinOffset;
+
+    // Endpoint of the bone, if applicable. This is only relevant for
+    // external programs like Blender, and for diagnostic display.
+    LLVector3		mEnd;
 
 	S32				mJointNum;
 
@@ -139,6 +156,15 @@ public:
 	const std::string& getName() const { return mName; }
 	void setName( const std::string &name ) { mName = name; }
 
+    // get/set support
+    SupportCategory getSupport() const { return mSupport; }
+    void setSupport( const SupportCategory& support) { mSupport = support; }
+    void setSupport( const std::string& support_string);
+
+    // get/set end point
+    void setEnd( const LLVector3& end) { mEnd = end; }
+    const LLVector3& getEnd() const { return mEnd; }
+    
 	// getParent
 	LLJoint *getParent() { return mParent; }
 

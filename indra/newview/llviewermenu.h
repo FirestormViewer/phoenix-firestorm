@@ -213,8 +213,8 @@ extern LLContextMenu* gAttachScreenPieMenu;
 extern LLContextMenu* gDetachScreenPieMenu;
 extern LLContextMenu* gAttachPieMenu;
 extern LLContextMenu* gDetachPieMenu;
-extern LLContextMenu* gAttachBodyPartPieMenus[8];
-extern LLContextMenu* gDetachBodyPartPieMenus[8];
+extern LLContextMenu* gAttachBodyPartPieMenus[9];
+extern LLContextMenu* gDetachBodyPartPieMenus[9];
 
 // ## Zi: Pie Menu
 // Pie menus in 3D scene
@@ -231,8 +231,8 @@ extern PieMenu* gPieAttachScreenMenu;
 extern PieMenu* gPieDetachScreenMenu;
 extern PieMenu* gPieAttachMenu;
 extern PieMenu* gPieDetachMenu;
-extern PieMenu* gPieAttachBodyPartMenus[8];
-extern PieMenu* gPieDetachBodyPartMenus[8];
+extern PieMenu* gPieAttachBodyPartMenus[9];
+extern PieMenu* gPieDetachBodyPartMenus[9];
 // ## Zi: Pie Menu
 
 extern LLMenuItemCallGL* gAutorespondMenu;
