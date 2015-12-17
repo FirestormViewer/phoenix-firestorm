@@ -3356,44 +3356,6 @@ U32  LLVOAvatarSelf::processUpdateMessage(LLMessageSystem *mesgsys,
 {
 	U32 retval = LLVOAvatar::processUpdateMessage(mesgsys,user_data,block_num,update_type,dp);
 
-#if 0
-	// DRANO - it's not clear this does anything useful. If we wait
-	// until an appearance message has been received, we already have
-	// the texture ids. If we don't wait, we don't yet know where to
-	// look for baked textures, because we haven't received the
-	// appearance version data from the appearance message. This looks
-	// like an old optimization that's incompatible with server-side
-	// texture baking.
-	
-	// FIXME DRANO - skipping in the case of !mFirstAppearanceMessageReceived prevents us from trying to
-	// load textures before we know where they come from (ie, from baking service or not);
-	// unknown impact on performance.
-	if (mInitialBakesLoaded == false && retval == 0x0 && mFirstAppearanceMessageReceived)
-	{
-		// call update textures to force the images to be created
-		updateMeshTextures();
-
-		// unpack the texture UUIDs to the texture slots
-		if(mesgsys != NULL)
-		{
-		retval = unpackTEMessage(mesgsys, _PREHASH_ObjectData, (S32) block_num);
-		}
-
-		// need to trigger a few operations to get the avatar to use the new bakes
-		for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
-		{
-			const LLAvatarAppearanceDefines::ETextureIndex te = mBakedTextureDatas[i].mTextureIndex;
-			LLUUID texture_id = getTEImage(te)->getID();
-			setNewBakedTexture(te, texture_id);
-			mInitialBakeIDs[i] = texture_id;
-		}
-
-		onFirstTEMessageReceived();
-
-		mInitialBakesLoaded = true;
-	}
-#endif
-
 	return retval;
 }
 
@@ -3591,18 +3553,6 @@ void LLVOAvatarSelf::setCachedBakedTexture( ETextureIndex te, const LLUUID& uuid
 		LLViewerTexLayerSet *layerset = getTexLayerSet(i);
 		if ( mBakedTextureDatas[i].mTextureIndex == te && layerset)
 		{
-			//if (mInitialBakeIDs[i] != LLUUID::null)
-			//{
-			//	if (mInitialBakeIDs[i] == uuid)
-			//	{
-			//		LL_INFOS() << "baked texture correctly loaded at login! " << i << LL_ENDL;
-			//	}
-			//	else
-			//	{
-			//		LL_WARNS() << "baked texture does not match id loaded at login!" << i << LL_ENDL;
-			//	}
-			//	mInitialBakeIDs[i] = LLUUID::null;
-			//}
 			layerset->cancelUpload();
 		}
 	}
