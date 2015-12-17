@@ -33,6 +33,10 @@
 			<text name="InstructSelectFriend">
 				Выберите жителя:
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="Имя" name="name"/>
+				<columns label="Имя пользователя" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="Рядом со мной" name="NearMePanel">
 			<text name="InstructSelectResident">

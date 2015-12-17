@@ -16,7 +16,7 @@
 		Generando mallas...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Error: El número de intersección es superior a 65534. Cancelado.
+		Error: El número de intersección es superior a 65535. Cancelado.
 	</string>
 	<string name="bad_element">
 		Error: el elemento no es válido

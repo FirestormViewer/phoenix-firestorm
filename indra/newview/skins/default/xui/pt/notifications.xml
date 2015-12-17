@@ -2851,7 +2851,7 @@ Por favor, tente novamente em alguns instantes.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] quer teletransportar você para a região deles:
+		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2861,7 +2861,7 @@ Por favor, tente novamente em alguns instantes.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] quer teletransportar você para a região deles:
+		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2873,7 +2873,7 @@ A região tem conteúdo [REGION_CONTENT_MATURITY], mas suas preferências atuais
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] quer teletransportar você para a região deles:
+		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

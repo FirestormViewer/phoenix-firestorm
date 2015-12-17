@@ -51,9 +51,7 @@
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
-const F32 DEFAULT_PERIOD = 5.f;
 const F32 RIGHTS_CHANGE_TIMEOUT = 5.f;
-const F32 OBSERVER_TIMEOUT = 0.5f;
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -606,15 +604,10 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 		return;
 	}
 
-#if 0
-	bool isOnlineSIP = LLVoiceClient::getInstance()->isOnlineSIP(agent_id);
-	bool isOnline = relationInfo->isOnline();
-#endif
-
 	LLAvatarName av_name;
 	if (!LLAvatarNameCache::get(agent_id, &av_name))
 	{
-		const LLRelationship* info = LLAvatarTracker::instance().getBuddyInfo(agent_id);
+		const LLRelationship* info = at.getBuddyInfo(agent_id);
 		LLUUID request_id = LLUUID::generateNewID();
 		LLAvatarNameCache::callback_connection_t conn = LLAvatarNameCache::get(agent_id, boost::bind(&FSFloaterContacts::updateFriendItem, this, agent_id, info, request_id));
 		mAvatarNameCacheConnections[request_id] = conn;
@@ -644,23 +637,6 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	online_status_column["column"]		= "icon_online_status";
 	online_status_column["type"]		= "icon";
 	online_status_column["halign"]		= "center";
-
-#if 0
-	if (isOnline)
-	{	
-		username_column["font"]["style"]	= "BOLD";
-		display_name_column["font"]["style"]= "BOLD";
-		friend_column["font"]["style"]		= "BOLD";
-		online_status_column["value"]		= "icon_avatar_online";
-	}
-	else if (isOnlineSIP)
-	{	
-		username_column["font"]["style"]	= "BOLD";
-		display_name_column["font"]["style"]= "BOLD";
-		friend_column["font"]["style"]		= "BOLD";
-		online_status_column["value"]		= "slim_icon_16_viewer";
-	}
-#endif
 
 	LLSD& online_column						= element["columns"][LIST_VISIBLE_ONLINE];
 	online_column["column"]					= "icon_visible_online";

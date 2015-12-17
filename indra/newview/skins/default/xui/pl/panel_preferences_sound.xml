@@ -84,6 +84,7 @@
 			<check_box label="Włącz/wyłącz mikrofon kiedy naciskam:" name="push_to_talk_toggle_check" tool_tip="Kiedy aktywny jest tryb przełączania wciśnij i zwolnij przełącznik RAZ, aby włączyć lub wyłączyć mikrofon. Kiedy tryb przełączania nie jest aktywny mikrofon nadaje głos tylko wtedy, gdy przełącznik jest wciśnięty."/>
 			<line_editor label="Przełącznik naciśnij-by-mówić" name="modifier_combo"/>
 			<button label="Ustaw klawisz" name="set_voice_hotkey_button"/>
+			<button tool_tip="Wyczyść skrót klawiszowy dla przełącznika" name="clear_voice_hotkey_button" />
 			<button name="set_voice_middlemouse_button" tool_tip="Zresetuj do środkowego przycisku myszy"/>
 			<button label="Ustawienia sprzętowe audio" name="device_settings_btn"/>
 			<panel label="Ustawienia sprzętowe" name="device_settings_panel">

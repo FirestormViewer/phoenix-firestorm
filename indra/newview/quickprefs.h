@@ -230,6 +230,7 @@ protected:
 	{
 		Mandatory<std::string>	control_name;
 		Mandatory<std::string>	label;
+		Optional<std::string>	translation_id;
 		Mandatory<U32>			control_type;
 		Mandatory<BOOL>			integer;
 		Mandatory<F32>			min_value;	// "min" is frowned upon by a braindead windows include

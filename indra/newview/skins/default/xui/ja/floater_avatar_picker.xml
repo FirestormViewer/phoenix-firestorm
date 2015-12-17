@@ -33,6 +33,10 @@
 			<text name="InstructSelectFriend">
 				アバターを選択：
 			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="名前" name="name"/>
+				<columns label="ユーザー名" name="username"/>
+			</fs_scroll_list>
 		</panel>
 		<panel label="自分の近く" name="NearMePanel" width="145">
 			<text name="InstructSelectResident">
@@ -42,7 +46,6 @@
 			<text name="meters" width="50">
 				メートル
 			</text>
-			<button label="リスト更新" label_selected="リスト更新" name="Refresh"/>
 			<fs_scroll_list name="NearMe">
 				<columns label="名前" name="name"/>
 				<columns label="ユーザー名" name="username"/>

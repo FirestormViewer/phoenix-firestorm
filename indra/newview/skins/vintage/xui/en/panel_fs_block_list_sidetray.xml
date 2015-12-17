@@ -9,10 +9,10 @@
 
 	<fs_scroll_list
 	 draw_heading="true"
-		height="70"
-		left="0"
-		top="0"
-		width="304"
+	 height="70"
+	 left="0"
+	 top="0"
+	 width="304"
 	 follows="all"
 	 layout="topleft"
 	 sort_column="0"
@@ -29,6 +29,9 @@
 		 width="96"/>
 		<fs_scroll_list.columns
 		 name="item_mute_type"
+		 width="-1" />
+		<fs_scroll_list.columns
+		 name="item_mute_uuid"
 		 width="-1" />
 	</fs_scroll_list>
 

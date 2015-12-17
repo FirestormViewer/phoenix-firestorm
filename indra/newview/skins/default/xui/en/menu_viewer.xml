@@ -178,7 +178,7 @@
                  function="Self.EnableForceSit" />
            </menu_item_check>
 		   <menu_item_check
-			 label="Move Lock"
+			 label="Movelock"
              shortcut="control|alt|P"
 			 name="Move Lock">
                 <menu_item_check.on_check

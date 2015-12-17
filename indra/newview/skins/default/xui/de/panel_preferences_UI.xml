@@ -67,6 +67,8 @@
 		<text name="ButtonFlashRateText">
 			Sek.
 		</text>
+		<slider label_width="230" label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
+		<slider label_width="230" label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
 	</panel>
 
 	<!--Top Bars-->

@@ -14,7 +14,7 @@
 		正在生成網面…
 	</string>
 	<string name="status_vertex_number_overflow">
-		錯誤：頂點數目超過 65534，程序已中止！
+		錯誤：頂點數目超過 65535，程序已中止！
 	</string>
 	<string name="bad_element">
 		錯誤：無效的元件

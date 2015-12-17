@@ -104,8 +104,9 @@ private:
 	LLPanel				*mPanelCreateNotice;
 	LLPanel				*mPanelViewNotice;
 
-	LLIconCtrl		 *mCreateInventoryIcon;
-	LLIconCtrl		 *mViewInventoryIcon;
+	// <FS:Ansariel> Doesn't exist as of 2015-11-27
+	//LLIconCtrl		 *mCreateInventoryIcon;
+	//LLIconCtrl		 *mViewInventoryIcon;
 	
 	LLScrollListCtrl *mNoticesList;
 

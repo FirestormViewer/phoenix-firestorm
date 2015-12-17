@@ -591,7 +591,7 @@ void LLStatusBar::refresh()
 void LLStatusBar::setVisibleForMouselook(bool visible)
 {
 	mTextTime->setVisible(visible);
-	mBalancePanel->setVisible(visible);
+	mBalancePanel->setVisible(visible && gSavedSettings.getBOOL("FSShowCurrencyBalanceInStatusbar"));
 	mBoxBalance->setVisible(visible);
 	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 	// mBtnVolume->setVisible(visible);

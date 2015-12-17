@@ -800,7 +800,14 @@ void LLToolBar::updateLayoutAsNeeded()
 		// button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
 		if (equalized_width)
 		{
-			button->mWidthRange.setRange(button->mWidthRange.getMin(), equalized_width);
+			if (button->mWidthRange.getMin() > equalized_width)
+			{
+				button->mWidthRange.setRange(equalized_width, equalized_width);
+			}
+			else
+			{
+				button->mWidthRange.setRange(button->mWidthRange.getMin(), equalized_width);
+			}
 			button->reshape(equalized_width, button->mDesiredHeight);
 		}
 		else

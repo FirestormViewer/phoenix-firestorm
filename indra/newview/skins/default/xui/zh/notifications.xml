@@ -2851,7 +2851,7 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] 想要瞬間傳送你到他的地點：
+		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2861,7 +2861,7 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] 想要瞬間傳送你到他的地點：
+		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2873,7 +2873,7 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] 想要瞬間傳送你到他的地點：
+		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

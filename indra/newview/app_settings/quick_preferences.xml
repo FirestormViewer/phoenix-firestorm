@@ -7,7 +7,8 @@
      integer="1"
      label="Draw Distance"
      max="1024"
-     min="32" />
+     min="32"
+     translation_id="QP Draw Distance" />
     <entries
      control_name="RenderMaxPartCount"
      control_type="3"
@@ -15,7 +16,8 @@
      integer="1"
      label="Max Particles"
      max="8192"
-     min="0" />
+     min="0"
+     translation_id="QP Max Particles" />
     <entries
      control_name="RenderAvatarPhysicsLODFactor"
      control_type="3"
@@ -23,7 +25,8 @@
      integer="0"
      label="Avatar Physics LOD"
      max="1"
-     min="0" />
+     min="0"
+     translation_id="QP Avatar Physics LOD" />
     <entries
      control_name="RenderVolumeLODFactor"
      control_type="3"
@@ -31,7 +34,8 @@
      integer="0"
      label="LOD Factor"
      max="4"
-     min="0" />
+     min="0"
+     translation_id="QP LOD Factor" />
     <entries
      control_name="RenderAvatarMaxVisible"
      control_type="3"
@@ -39,7 +43,8 @@
      integer="1"
      label="Max Avatars"
      max="65"
-     min="0" />
+     min="0"
+     translation_id="QP Max Avatars" />
     <entries
      control_name="FSNameTagZOffsetCorrection"
      control_type="3"
@@ -47,7 +52,8 @@
      integer="1"
      label="Tags Offset"
      max="5"
-     min="-5" />
+     min="-5"
+     translation_id="QP Tags Offset" />
     <entries
      control_name="AvatarNameTagMode"
      control_type="4"
@@ -55,7 +61,8 @@
      integer="0"
      label="Name Tags"
      max="2"
-     min="0" />
+     min="0"
+     translation_id="QP Name Tags" />
     <entries
      control_name="DebugLookAt"
      control_type="4"
@@ -63,7 +70,8 @@
      integer="0"
      label="LookAt Target"
      max="1"
-     min="0" />
+     min="0"
+     translation_id="QP LookAt Target" />
     <entries
      control_name="DebugShowColor"
      control_type="4"
@@ -71,5 +79,6 @@
      integer="0"
      label="Color Under Cursor"
      max="1"
-     min="0" />
+     min="0"
+     translation_id="QP Color Under Cursor" />
 </quickprefs>
