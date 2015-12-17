@@ -568,6 +568,9 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	<notification name="ChangeConnectionPort">
 		Die Port-Einstellungen werden nach einem Neustart von [APP_NAME] wirksam.
 	</notification>
+	<notification name="ChangeDeferredDebugSetting">
+		Diese Änderung der Einstellungen wird nach einem Neustart von [APP_NAME] wirksam.
+	</notification>
 	<notification name="ChangeSkin">
 		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
 		<usetemplate name="okcancelbuttons" notext="OK" yestext="Neustart"/>
@@ -4210,6 +4213,9 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantAttachObjectBeingRemoved">
 		Objekten kann nicht hinzugefügt werden, da es bereits entfernt wird.
+	</notification>
+	<notification name="IllegalAttachment">
+		Der Anhang hat einen nicht-existierenden Punkt am Avatar angefordert. Es wurde stattdessen zur Brust hinzugefügt.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		Ablegen von Objekten hier nicht möglich; versuchen Sie es mit dem kostenlosen Testbereich.

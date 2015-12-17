@@ -1574,6 +1574,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="BodyPartsRightLeg">
 		Rechtes Bein
 	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Erweitertes Skelett
+	</string>
 	<string name="GraphicsQualityLow">
 		Niedrig
 	</string>
@@ -2024,6 +2027,45 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="Avatar Center">
 		Avatar-Mitte
+	</string>
+	<string name="Left Ring Finger">
+		Linker Ring-Finger
+	</string>
+	<string name="Right Ring Finger">
+		Rechter Ring-Finger
+	</string>
+	<string name="Tail Base">
+		Schwanz-Basis
+	</string>
+	<string name="Tail Tip">
+		Schwanz-Spitze
+	</string>
+	<string name="Left Wing">
+		Linker Flügel
+	</string>
+    <string name="Right Wing">
+		Rechter Flügel
+	</string>
+    <string name="Jaw">
+		Kiefer
+	</string>
+	<string name="Alt Left Ear">
+		Alt. Linkes Ohr
+	</string>
+	<string name="Alt Right Ear">
+		Alt. Rechtes Ohr
+	</string>
+	<string name="Alt Left Eye">
+		Alt. Linkes Auge
+	</string>
+	<string name="Alt Right Eye">
+		Alt. Rechtes Auge
+	</string>
+	<string name="Tongue">
+		Zunge
+	</string>
+	<string name="Groin">
+		Leiste
 	</string>
 	<string name="Invalid Attachment">
 		Ungültige Stelle für Anhang
