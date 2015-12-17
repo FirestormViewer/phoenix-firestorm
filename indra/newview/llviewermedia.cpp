@@ -2471,6 +2471,17 @@ void LLViewerMediaImpl::mouseMove(const LLVector2& texture_coords, MASK mask)
 	}
 }
 
+void LLViewerMediaImpl::mouseDoubleClick(const LLVector2& texture_coords, MASK mask)
+{
+    if (mMediaSource)
+    {
+        S32 x, y;
+        scaleTextureCoords(texture_coords, &x, &y);
+
+        mouseDoubleClick(x, y, mask);
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 void LLViewerMediaImpl::mouseDoubleClick(S32 x, S32 y, MASK mask, S32 button)
 {
@@ -3334,6 +3345,13 @@ void LLViewerMediaImpl::handleMediaEvent(LLPluginClassMedia* plugin, LLPluginCla
 				mLastSetCursor = UI_CURSOR_HAND;
 			else // for anything else, default to the arrow
 				mLastSetCursor = UI_CURSOR_ARROW;
+		}
+		break;
+
+		case LLViewerMediaObserver::MEDIA_EVENT_FILE_DOWNLOAD:
+		{
+			//llinfos << "Media event - file download requested - filename is " << self->getFileDownloadFilename() << llendl;
+			LLNotificationsUtil::add("MediaFileDownloadUnsupported");
 		}
 		break;
 
