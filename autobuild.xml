@@ -4,6 +4,26 @@
     <key>installables</key>
     <map>
 
+      <key>slplugin_x86</key>
+      <map>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/slplugin.txt</string>
+        <key>name</key>
+        <string>slplugin_x86</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
       <key>wix</key>
       <map>
         <key>license</key>

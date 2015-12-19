@@ -655,6 +655,17 @@ class Windows_i686_Manifest(ViewerManifest):
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
+        if self.fs_is_64bit_build():
+            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin'), dst=""):
+               self.path( "slplugin.exe" )
+               self.end_prefix()
+            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin'), dst="llplugin"):
+               self.path( "*.*" )
+               self.end_prefix()
+            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin', 'locales'), dst=os.path.join( "llplugin", "locales" ) ):
+               self.path( "*.*" )
+               self.end_prefix()
+
     def nsi_file_commands(self, install=True):
         def wpath(path):
             if path.endswith('/') or path.endswith(os.path.sep):

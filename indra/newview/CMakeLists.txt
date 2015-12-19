@@ -2186,11 +2186,15 @@ if (WINDOWS)
     if (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
-
+	
+    if( NOT ND_BUILD64BIT_ARCH )
     add_dependencies(${VIEWER_BINARY_NAME}
       SLPlugin
    windows-crash-logger
     )
+	else()
+       add_dependencies(${VIEWER_BINARY_NAME} windows-crash-logger )
+    endif( NOT ND_BUILD64BIT_ARCH )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
