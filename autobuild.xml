@@ -1726,11 +1726,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2fab0a7b1c5ca3132e1bea9416e647ba</string>
+              <string>1acc6f9f72e9fb46b4d7f8365f10aeda</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201511241435-r28.tar.bz2</string>
+              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201512181022-r31.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
