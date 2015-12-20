@@ -20,7 +20,7 @@
 	 layout="topleft"
 	 left="4"
 	 top="1"
-	 sort_column="0"
+	 sort_column="3"
 	 sort_ascending="true"
 	 name="payment_list"
 	 draw_stripes="true"

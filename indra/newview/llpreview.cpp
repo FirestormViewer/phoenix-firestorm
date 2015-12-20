@@ -245,9 +245,17 @@ void LLPreview::refreshFromItem()
 		LLUIString title = getString("Title", args);
 		setTitle(title.getString());
 	}
-	getChild<LLUICtrl>("desc")->setValue(item->getDescription());
+	// <FS:Ansariel> Is called from ctor when controls aren't created yet
+	//getChild<LLUICtrl>("desc")->setValue(item->getDescription());
 
-	getChildView("desc")->setEnabled(canModify(mObjectUUID, item));
+	//getChildView("desc")->setEnabled(canModify(mObjectUUID, item));
+	LLUICtrl* desc_control = findChild<LLUICtrl>("desc");
+	if (desc_control)
+	{
+		desc_control->setValue(item->getDescription());
+		desc_control->setEnabled(canModify(mObjectUUID, item));
+	}
+	// </FS:Ansariel>
 }
 
 // static

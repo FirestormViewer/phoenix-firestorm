@@ -111,5 +111,8 @@
 		<fs_scroll_list.columns
 		 name="item_mute_type"
 		 width="-1" />
+		<fs_scroll_list.columns
+		 name="item_mute_uuid"
+		 width="-1" />
 	</fs_scroll_list>
 </panel>

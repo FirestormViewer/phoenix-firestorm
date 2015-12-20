@@ -62,6 +62,8 @@
 #include "lltexturecache.h"
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "llmimetypes.h"
+
 // extern
 const S32Megabytes gMinVideoRam(32);
 // <FS:Ansariel> Texture memory management
@@ -3482,6 +3484,37 @@ void LLViewerMediaTexture::addMediaToFace(LLFace* facep)
 	if(facep)
 	{
 		facep->setHasMedia(true);
+
+		// <FS:ND> If using CEF then set a texture matrix to flip around the Y Axis.
+		static bool sFlipY = gSavedSettings.getBOOL( "FSFlipCEFY" );
+
+		LLViewerMediaImpl *pMedia = mMediaImplp;
+		if( !pMedia )
+			pMedia = LLViewerMedia::getMediaImplFromTextureID(mID);
+
+		std::string strMimeType;
+		if( pMedia )
+			 strMimeType = pMedia->getMimeType();
+
+		std::string strImpl = LLMIMETypes::implType( strMimeType );
+		bool bCoordsOpenGl = sFlipY;
+		if( pMedia && pMedia->getMediaPlugin() )
+			bCoordsOpenGl = pMedia->getMediaPlugin()->getTextureCoordsOpenGL();
+
+		if( strImpl == "media_plugin_cef" && !bCoordsOpenGl )
+		{
+			if( !facep->mTextureMatrix )
+			{
+				facep->mTextureMatrix = new LLMatrix4();
+				facep->mTextureMatrix->mMatrix[ 1 ][ 1 ] = -1.0f;
+				facep->mTextureMatrix->mMatrix[ 2 ][ 1 ] = 1.0f;
+			}
+			else
+			{
+				LL_WARNS() << "Matrix for media face is already set." << LL_ENDL;
+			}
+		}
+		// </FS:ND>
 	}
 	if(!mIsPlaying)
 	{

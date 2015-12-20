@@ -115,6 +115,7 @@
 #include "llpluginclassmedia.h"
 #include "llteleporthistorystorage.h"
 #include "llproxy.h"
+#include "llweb.h"
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
@@ -3514,6 +3515,16 @@ BOOL LLPanelPreference::postBuild()
 	//}
 	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
 	
+#ifdef EXTERNAL_TOS
+	LLRadioGroup* ext_browser_settings = getChild<LLRadioGroup>("preferred_browser_behavior");
+	if (ext_browser_settings)
+	{
+		// turn off ability to set external/internal browser
+		ext_browser_settings->setSelectedByValue(LLWeb::BROWSER_EXTERNAL_ONLY, true);
+		ext_browser_settings->setEnabled(false);
+	}
+#endif
+
 	////////////////////// PanelAlerts ///////////////////
 	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
 	{

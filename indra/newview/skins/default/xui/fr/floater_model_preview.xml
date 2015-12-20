@@ -14,7 +14,7 @@
 		Génération des maillages...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Erreur : valeur de sommet supérieure à 65534. Opération abandonnée.
+		Erreur : valeur de sommet supérieure à 65535. Opération abandonnée.
 	</string>
 	<string name="bad_element">
 		Erreur : élément non valide
