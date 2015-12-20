@@ -1900,9 +1900,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b35adcf74d22c128045aa87aade74736</string>
+              <string>39784b5b65a67fcbae5b9d64d04f34a6</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/CYGWIN/installer/openjpeg-1.4.297018-windows-297018.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.4.201512201525-windows.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
