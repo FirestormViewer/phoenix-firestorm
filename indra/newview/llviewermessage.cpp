@@ -7189,6 +7189,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		final_args["SLURLMESSAGE"] = message;
+		payload["dest_id"] = dest_id;
 
 		args["NAME"] = dest_slurl_name;
 		if (!reason.empty())

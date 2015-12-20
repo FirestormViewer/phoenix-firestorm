@@ -1299,7 +1299,7 @@ LLModelPreview::~LLModelPreview()
 
 	// WS: Mark the preview avatar as dead, when the floater closes. Prevents memleak!
 	mPreviewAvatar->markDead();
-
+	//*HACK : *TODO : turn this back on when we understand why this crashes
 	//glodShutdown();
 }
 
@@ -1636,6 +1636,34 @@ void LLModelPreview::rebuildUploadData()
 			}
 			instance.mTransform = mat;
 			mUploadData.push_back(instance);
+		}
+	}
+
+	for (U32 lod = 0; lod < LLModel::NUM_LODS-1; lod++)
+	{
+		// Search for models that are not included into upload data
+		// If we found any, that means something we loaded is not a sub-model.
+		for (U32 model_ind = 0; model_ind < mModel[lod].size(); ++model_ind)
+		{
+			bool found_model = false;
+			for (LLMeshUploadThread::instance_list::iterator iter = mUploadData.begin(); iter != mUploadData.end(); ++iter)
+			{
+				LLModelInstance& instance = *iter;
+				if (instance.mLOD[lod] == mModel[lod][model_ind])
+				{
+					found_model = true;
+					break;
+				}
+			}
+			if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
+			{
+				if (importerDebug)
+				{
+					LL_INFOS() << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models." <<  LL_ENDL;
+				}
+				setLoadState( LLModelLoader::ERROR_MATERIALS );
+				mFMP->childDisable( "calculate_btn" );
+			}
 		}
 	}
 

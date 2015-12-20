@@ -28,6 +28,11 @@
 #include "llwindowmacosx-objc.h"
 #import "llappdelegate-objc.h"
 
+
+
+
+//---------------------------
+
 @implementation NSScreen (PointConversion)
 
 + (NSScreen *)currentScreenForMouseLocation
@@ -41,6 +46,7 @@
     
     return screen;
 }
+
 
 - (NSPoint)convertPointToScreenCoordinates:(NSPoint)aPoint
 {
@@ -56,6 +62,21 @@
 }
 
 @end
+
+void extractKeyDataFromEvent (NSEvent *theEvent, NativeKeyEventData * eventData)
+{
+    eventData->mKeyEvent = NativeKeyEventData::KEYUNKNOWN;
+    eventData->mEventType = [theEvent type];
+    eventData->mEventModifiers = [theEvent modifierFlags];
+    eventData->mEventKeyCode = [theEvent keyCode];
+    NSString *strEventChars = [theEvent characters];
+    eventData->mEventChars = (strEventChars.length) ? [strEventChars characterAtIndex:0] : 0;
+    NSString *strEventUChars = [theEvent charactersIgnoringModifiers];
+    eventData->mEventUnmodChars = (strEventUChars.length) ? [strEventUChars characterAtIndex:0] : 0;
+    eventData->mEventRepeat = [theEvent isARepeat];
+
+}
+
 
 attributedStringInfo getSegments(NSAttributedString *str)
 {
@@ -242,28 +263,16 @@ attributedStringInfo getSegments(NSAttributedString *str)
 	
 	[glContext makeCurrentContext];
 	
-	// <FS:ND> setValues needs a real pointer, not some integer that is castet into one
-
-	// if (vsync)
-	// {
-	// 	[glContext setValues:(const GLint*)1 forParameter:NSOpenGLCPSwapInterval];
-	// } else {
-	//	// supress this error after move to Xcode 7:
-	//	// error: null passed to a callee that requires a non-null argument [-Werror,-Wnonnull]
-	//	// Tried using ObjC 'nonnull' keyword as per SO article but didn't build
-	//	GLint swapInterval=0;
-	//	[glContext setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
-	// }
-
-	GLint glVsync = 0;
 	if (vsync)
 	{
-		glVsync = 1;
+		[glContext setValues:(const GLint*)1 forParameter:NSOpenGLCPSwapInterval];
+	} else {
+		// supress this error after move to Xcode 7:
+		// error: null passed to a callee that requires a non-null argument [-Werror,-Wnonnull]
+		// Tried using ObjC 'nonnull' keyword as per SO article but didn't build
+		GLint swapInterval=0;
+		[glContext setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
 	}
-	
-	[glContext setValues:&glVsync forParameter:NSOpenGLCPSwapInterval];
-
-	// </FS:ND>
 	
     mOldResize = false;
     
@@ -425,11 +434,20 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) keyUp:(NSEvent *)theEvent
 {
-	callKeyUp([theEvent keyCode], [theEvent modifierFlags]);
+    NativeKeyEventData eventData;
+ 
+    extractKeyDataFromEvent( theEvent, &eventData );
+    eventData.mKeyEvent = NativeKeyEventData::KEYUP;
+	callKeyUp(&eventData, [theEvent keyCode], [theEvent modifierFlags]);
 }
 
 - (void) keyDown:(NSEvent *)theEvent
 {
+    NativeKeyEventData eventData;
+    
+    extractKeyDataFromEvent( theEvent, &eventData );
+    eventData.mKeyEvent = NativeKeyEventData::KEYDOWN;
+   
     uint keycode = [theEvent keyCode];
     // We must not depend on flagsChange event to detect modifier flags changed,
     // must depend on the modifire flags in the event parameter.
@@ -437,7 +455,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
     // e.g. OS Window for upload something or Input Window...
     // mModifiers instance variable is for insertText: or insertText:replacementRange:  (by Pell Smit)
 	mModifiers = [theEvent modifierFlags];
-    bool acceptsText = mHasMarkedText ? false : callKeyDown(keycode, mModifiers);
+    bool acceptsText = mHasMarkedText ? false : callKeyDown(&eventData, keycode, mModifiers);
     unichar ch;
     if (acceptsText &&
         !mMarkedTextAllowed &&
@@ -459,6 +477,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
     // <FS:Ansariel> Cinder Roxley's fix for FIRE-11648
     //if (mModifiers & NSCommandKeyMask && !mHasMarkedText)
     //{
+    //    eventData.mKeyEvent = NativeKeyEventData::KEYUP;
     //    callKeyUp([theEvent keyCode], mModifiers);
     //}
     // </FS:Ansariel>
@@ -466,6 +485,10 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
+    NativeKeyEventData eventData;
+    
+    extractKeyDataFromEvent( theEvent, &eventData );
+ 
 	mModifiers = [theEvent modifierFlags];
 	callModifier([theEvent modifierFlags]);
      
@@ -487,11 +510,13 @@ attributedStringInfo getSegments(NSAttributedString *str)
     
     if (mModifiers & mask)
     {
-        callKeyDown([theEvent keyCode], 0);
+        eventData.mKeyEvent = NativeKeyEventData::KEYDOWN;
+        callKeyDown(&eventData, [theEvent keyCode], 0);
     }
     else
     {
-        callKeyUp([theEvent keyCode], 0);
+        eventData.mKeyEvent = NativeKeyEventData::KEYUP;
+        callKeyUp(&eventData, [theEvent keyCode], 0);
     }  
 }
 
