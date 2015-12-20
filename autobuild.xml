@@ -1134,9 +1134,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>98d3dc8d107d04b572fe47bd43a56e74</string>
+              <string>150ed9ecd913045551a287bd67ae1f8d</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jpeglib_3p-update-jpeglib/rev/296854/arch/CYGWIN/installer/jpeglib-8c.296854-windows-296854.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/jpeglib-8c.201512201541-windows.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
