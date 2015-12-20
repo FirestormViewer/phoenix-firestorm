@@ -1736,7 +1736,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-windows-201512171013-r31.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201512171013-r31.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1750,7 +1750,7 @@
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://192.168.1.115/dev/pkg/llceflib-1.0-linux-201512181022-r31.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201512181022-r31.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
