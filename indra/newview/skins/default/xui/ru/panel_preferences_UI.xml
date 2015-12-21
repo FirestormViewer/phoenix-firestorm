@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Настройки интерфейса" name="Display panel">
 <tab_container label="Настройки Firestorm" name="tabs">
-    <panel label="Общее" name="UI Prefs Panel">
-        <text name="UI Size:">
-            Масштабирование интерфейса:
-        </text>
+    <panel label="3D мир" name="UI Prefs Panel">
         <text name="HoverTipText" width="150">
             Всплывающие подсказки:
         </text>
@@ -28,11 +25,12 @@
         <text name="ObjectInspectorTooltipDelay_text">
             секунд.
         </text>
+    </panel>
+    <panel label="2D наложение" name="ui-2d-overlay">
+        <text name="UI Size:">
+            Масштабирование интерфейса:
+        </text>
         <check_box label="Использовать круглое меню" name="UsePieMenu" tool_tip="Использовать стиль V1 для отображения круглого меню при нажатии правой кнопкой мыши на объекты, аватары и землю" />
-        
-        <check_box label="Использовать старое отображение значений для измерителя лагов" name="FSStatbarLegacyMeanPerSec" tool_tip="Если опция включена, Firestorm будет использовать традиционный способ отображения данных" />
-        <check_box label="Показывать управление медиа в верхнем меню" name="FSEnableVolumeControls" tool_tip="Отображает справа наверху возможность управления включением и отключением потокового аудию, медиа." />
-		<check_box label="Показать канал симулятора в верхней панели" name="FSStatusbarShowSimulatorVersion" tool_tip="Показать канал симулятора (RC Magnum, RC Le Tigre, RC BlueSteel etc.) в верхней панели "/>
         <text name="ScriptDialogsPerObjectLabel" width="185">
             Диалогов скрипта на объект:
         </text>
@@ -55,7 +53,7 @@
         </combo_box>
         <check_box label="Анимация диалогов" name="FSAnimatedScriptDialogs" tool_tip="Показывает анимацио диалогового окна при его открытии (Разворачивается сверху вниз)" />
         <check_box label="Уведомления групп и ЛС справа наверху" width="250" name="ShowGroupNoticesTopRight" tool_tip="Отображение иконок ЛС и уведомлений групп справа наверху вашего экрана ." />
-        <text name="GroupTopRightRequiresRestart">
+        <text name="GroupTopRightRequiresRestart" left_delta="270" width="150">
             (Необходим перезапуск)
         </text>
         <check_box label="Скрыть иконки чатов групп и ЛС" name="FSDisableIMChiclets" tool_tip="Будут убраны иконки личных сообщений и чатов групп (Уведомления по прежнему будут отображаться)." />
