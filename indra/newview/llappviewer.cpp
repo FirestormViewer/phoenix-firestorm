@@ -3274,7 +3274,7 @@ bool LLAppViewer::initConfiguration()
 #endif
 	if (!gArgs.empty())
 	{
-		gWindowTitle += std::string(" ") + gArgs;
+	gWindowTitle += std::string(" ") + gArgs;
 	}
 	LLStringUtil::truncate(gWindowTitle, 255);
 

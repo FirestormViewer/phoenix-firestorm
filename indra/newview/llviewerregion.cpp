@@ -319,7 +319,7 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
                 << "Capability '" << iter->first << "' is '" << iter->second << "'" << LL_ENDL;
         }
 
-#if 0
+#if 1
         log_capabilities(mCapabilities);
 #endif
 

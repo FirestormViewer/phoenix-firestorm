@@ -32,6 +32,7 @@
 #include <boost/optional.hpp>
 #include <string>
 #include <stdexcept>
+#include <utility>                  // std::pair
 #include "llevents.h"
 #include "llerror.h"
 
@@ -75,6 +76,8 @@ private:
 namespace llcoro
 {
 
+typedef std::pair<LLSD, bool*> LLSD_consumed;
+
 /// This is an adapter for a signature like void LISTENER(const LLSD&), which
 /// isn't a valid LLEventPump listener: such listeners should return bool.
 template <typename LISTENER>
@@ -84,11 +87,13 @@ public:
     VoidListener(const LISTENER& listener):
         mListener(listener)
     {}
+
     bool operator()(const LLSD& event)
     {
-        mListener(event);
-        // don't swallow the event, let other listeners see it
-        return false;
+        bool consumed = false;
+        mListener(LLSD_consumed(event, &consumed));
+        // tell upstream LLEventPump whether listener consumed
+        return consumed;
     }
 private:
     LISTENER mListener;
@@ -107,6 +112,11 @@ VoidListener<LISTENER> voidlistener(const LISTENER& listener)
  * function to avoid stalling the rest of the viewer processing.
  */
 void suspend();
+
+/**
+ * Yield control from a coroutine for at least the specified number of seconds
+ */
+void suspendUntilTimeout(float seconds);
 
 /**
  * Post specified LLSD event on the specified LLEventPump, then suspend for a

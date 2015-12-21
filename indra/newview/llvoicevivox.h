@@ -93,6 +93,7 @@ public:
 	// This returns true when it's safe to bring up the "device settings" dialog in the prefs.
 	// i.e. when the daemon is running and connected, and the device lists are populated.
 	virtual bool deviceSettingsAvailable();
+	virtual bool deviceSettingsUpdated();  //return if the list has been updated and never fetched,  only to be called from the voicepanel.
 	
 	// Requery the vivox daemon for the current list of input/output devices.
 	// If you pass true for clearCurrentList, deviceSettingsAvailable() will be false until the query has completed
@@ -111,7 +112,7 @@ public:
 	virtual bool isParticipant(const LLUUID& speaker_id);
 
 	// Send a text message to the specified user, initiating the session if necessary.
-	virtual BOOL sendTextMessage(const LLUUID& participant_id, const std::string& message);
+	// virtual BOOL sendTextMessage(const LLUUID& participant_id, const std::string& message) const {return false;};
 	
 	// close any existing text IM session with the specified user
 	virtual void endUserIMSession(const LLUUID &uuid);
@@ -137,7 +138,7 @@ public:
 	virtual void setNonSpatialChannel(const std::string &uri,
 									  const std::string &credentials);
 	
-	virtual void setSpatialChannel(const std::string &uri,
+	virtual bool setSpatialChannel(const std::string &uri,
 								   const std::string &credentials);
 	
 	virtual void leaveNonSpatialChannel();
@@ -272,6 +273,8 @@ protected:
 		streamStateIdle = 1,
 		streamStateConnected = 2,
 		streamStateRinging = 3,
+		streamStateConnecting = 6,  // same as Vivox session_media_connecting enum
+		streamStateDisconnecting = 7,  //Same as Vivox session_media_disconnecting enum
 	};	
 	struct participantState
 	{
@@ -336,7 +339,6 @@ protected:
 		LLUUID		mCallerID;
 		int			mErrorStatusCode;
 		int			mMediaStreamState;
-		int			mTextStreamState;
 		bool		mCreateInProgress;	// True if a Session.Create has been sent for this session and no response has been received yet.
 		bool		mMediaConnectInProgress;	// True if a Session.MediaConnect has been sent for this session and no response has been received yet.
 		bool		mVoiceInvitePending;	// True if a voice invite is pending for this session (usually waiting on a name lookup)
@@ -441,8 +443,8 @@ protected:
 	void connectorShutdown();	
 	void closeSocket(void);	
 	
-	void requestVoiceAccountProvision(S32 retries = 3);
-	void login(
+//	void requestVoiceAccountProvision(S32 retries = 3);
+	void setLoginInfo(
 			   const std::string& account_name,
 			   const std::string& password,
 			   const std::string& voice_sip_uri_hostname,
@@ -468,14 +470,15 @@ protected:
 	void clearCaptureDevices();
 	void addCaptureDevice(const std::string& name);
 	void clearRenderDevices();
+	void setDevicesListUpdated(bool state);
 	void addRenderDevice(const std::string& name);	
 	void buildSetAudioDevices(std::ostringstream &stream);
 	
 	void getCaptureDevicesSendMessage();
 	void getRenderDevicesSendMessage();
 	
-	// local audio updates
-	void buildLocalAudioUpdates(std::ostringstream &stream);		
+	// local audio updates, mic mute, speaker mute, mic volume and speaker volumes
+	void sendLocalAudioUpdates();
 
 
 	/////////////////////////////
@@ -491,7 +494,6 @@ protected:
 	void accountLoginStateChangeEvent(std::string &accountHandle, int statusCode, std::string &statusString, int state);
 	void mediaCompletionEvent(std::string &sessionGroupHandle, std::string &mediaCompletionType);
 	void mediaStreamUpdatedEvent(std::string &sessionHandle, std::string &sessionGroupHandle, int statusCode, std::string &statusString, int state, bool incoming);
-	void textStreamUpdatedEvent(std::string &sessionHandle, std::string &sessionGroupHandle, bool enabled, int state, bool incoming);
 	void sessionAddedEvent(std::string &uriString, std::string &alias, std::string &sessionHandle, std::string &sessionGroupHandle, bool isChannel, bool incoming, std::string &nameString, std::string &applicationString);
 	void sessionGroupAddedEvent(std::string &sessionGroupHandle);
 	void sessionRemovedEvent(std::string &sessionHandle, std::string &sessionGroupHandle);
@@ -607,7 +609,7 @@ protected:
 	void sessionTerminateSendMessage(sessionState *session);
 	void sessionGroupTerminateSendMessage(sessionState *session);
 	void sessionMediaDisconnectSendMessage(sessionState *session);
-	void sessionTextDisconnectSendMessage(sessionState *session);
+	// void sessionTextDisconnectSendMessage(sessionState *session);
 
 	
 	
@@ -619,9 +621,6 @@ protected:
 	
 	// Does the actual work to get out of the audio session
 	void leaveAudioSession();
-	
-	// notifies the voice client that we've received parcel voice info
-	bool parcelVoiceInfoReceived(state requesting_state);
 	
 	friend class LLVivoxVoiceClientCapResponder;
 	
@@ -647,10 +646,36 @@ protected:
 
 private:
     
-    void voiceAccountProvisionCoro(std::string url, S32 retries);
-    void parcelVoiceInfoRequestCoro(std::string url);
+//  void voiceAccountProvisionCoro(std::string url, S32 retries);
+//  void parcelVoiceInfoRequestCoro(std::string url);
 
 	LLVoiceVersionInfo mVoiceVersion;
+
+    // Coroutine support methods
+    void voiceControlCoro();
+
+    bool startAndConnectSession();
+
+    bool startAndLaunchDaemon();
+    bool provisionVoiceAccount();
+    bool establishVoiceConnection();
+    bool loginToVivox();
+    bool retrieveVoiceFonts();
+
+    bool requestParcelVoiceInfo();
+
+    bool addAndJoinSession(sessionState *nextSession);
+    bool terminateAudioSession(bool wait);
+
+
+    bool waitForChannel();
+    bool runSession(sessionState *session);
+
+    void recordingAndPlaybackMode();
+    int voiceRecordBuffer();
+    int voicePlaybackBuffer();
+
+    bool performMicTuning(state exitState);
 
 	/// Clean up objects created during a voice session.
 	void cleanUp();
@@ -691,7 +716,9 @@ private:
 	bool mTuningMicVolumeDirty;
 	int mTuningSpeakerVolume;
 	bool mTuningSpeakerVolumeDirty;
-	state mTuningExitState;					// state to return to when we leave tuning mode.
+	state mTuningExitState;			    // state to return to when we leave tuning mode.
+	bool mDevicesListUpdated;			// set to true when the device list has been updated
+										// and false when the panelvoicedevicesettings has queried for an update status.
 	
 	std::string mSpatialSessionURI;
 	std::string mSpatialSessionCredentials;
@@ -744,9 +771,11 @@ private:
 	bool checkParcelChanged(bool update = false);
 	// This should be called when the code detects we have changed parcels.
 	// It initiates the call to the server that gets the parcel channel.
+#if 0
 	bool requestParcelVoiceInfo();
-	
-	void switchChannel(std::string uri = std::string(), bool spatial = true, bool no_reconnect = false, bool is_p2p = false, std::string hash = "");
+#endif
+
+	bool switchChannel(std::string uri = std::string(), bool spatial = true, bool no_reconnect = false, bool is_p2p = false, std::string hash = "");
 	void joinSession(sessionState *session);
 	
 	std::string nameFromAvatar(LLVOAvatar *avatar);
@@ -775,7 +804,6 @@ private:
 	// start a text IM session with the specified user
 	// This will be asynchronous, the session may be established at a future time.
 	sessionState* startUserIMSession(const LLUUID& uuid);
-	void sendQueuedTextMessages(sessionState *session);
 	
 	void enforceTether(void);
 	
@@ -820,8 +848,6 @@ private:
 	bool		mWriteInProgress;
 	std::string mWriteString;
 	size_t		mWriteOffset;
-	
-	LLTimer		mUpdateTimer;
 	
 	BOOL		mLipSyncEnabled;
 
@@ -920,10 +946,15 @@ private:
 	bool mCaptureBufferRecorded;	// A voice sample is captured in the buffer ready to play.
 	bool mCaptureBufferPlaying;		// A voice sample is being played.
 
-	LLTimer	mCaptureTimer;
-	LLUUID mPreviewVoiceFont;
-	LLUUID mPreviewVoiceFontLast;
-	S32 mPlayRequestCount;
+	LLTimer mCaptureTimer;
+	LLUUID  mPreviewVoiceFont;
+	LLUUID  mPreviewVoiceFontLast;
+	S32     mPlayRequestCount;
+    bool    mIsInTuningMode;
+    bool    mIsInChannel;
+    bool    mIsJoiningSession;
+
+    LLEventMailDrop mVivoxPump;
 };
 
 /** 
@@ -1034,6 +1065,7 @@ protected:
 	void			EndTag(const char *tag);
 	void			CharData(const char *buffer, int length);
 	LLDate			expiryTimeStampToLLDate(const std::string& vivox_ts);
+
 };
 
 

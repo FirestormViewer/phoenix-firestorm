@@ -238,7 +238,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 	// Try to find media with the same media ID
 	viewer_media_t media_impl = getMediaImplFromTextureID(media_entry->getMediaID());
 
-	LL_INFOS() << "called, current URL is \"" << media_entry->getCurrentURL() 
+	LL_DEBUGS() << "called, current URL is \"" << media_entry->getCurrentURL()
 			<< "\", previous URL is \"" << previous_url
 			<< "\", update_from_self is " << (update_from_self?"true":"false")
 			<< LL_ENDL;
@@ -287,7 +287,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				needs_navigate = url_changed;
 			}
 
-			LL_INFOS() << "was_loaded is " << (was_loaded?"true":"false") 
+			LL_DEBUGS() << "was_loaded is " << (was_loaded?"true":"false")
 					<< ", auto_play is " << (auto_play?"true":"false")
 					<< ", needs_navigate is " << (needs_navigate?"true":"false") << LL_ENDL;
 		}
@@ -1234,6 +1234,30 @@ LLSD LLViewerMedia::getHeaders()
 	return headers;
 }
 
+ /////////////////////////////////////////////////////////////////////////////////////////
+ // static
+bool LLViewerMedia::parseRawCookie(const std::string raw_cookie, std::string& name, std::string& value, std::string& path, bool& httponly, bool& secure)
+{
+	std::size_t name_pos = raw_cookie.find_first_of("=");
+	if (name_pos != std::string::npos)
+	{
+		name = raw_cookie.substr(0, name_pos);
+		std::size_t value_pos = raw_cookie.find_first_of(";", name_pos);
+		if (value_pos != std::string::npos)
+		{
+			value = raw_cookie.substr(name_pos + 1, value_pos - name_pos - 1);
+			path = "/";	// assume root path for now
+
+			httponly = true;	// hard coded for now
+			secure = true;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 LLCore::HttpHeaders::ptr_t LLViewerMedia::getHttpHeaders()
 {
     LLCore::HttpHeaders::ptr_t headers(new LLCore::HttpHeaders);
@@ -1245,6 +1269,7 @@ LLCore::HttpHeaders::ptr_t LLViewerMedia::getHttpHeaders()
 
     return headers;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // static
@@ -1289,6 +1314,7 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
     }
     else
     {   // Hostname starts after the @. 
+			// Hostname starts after the @. 
         // (If the hostname part is empty, this may put host_start at the end of the string.  In that case, it will end up passing through an empty hostname, which is correct.)
         ++hostStart;
     }
@@ -1300,7 +1326,30 @@ void LLViewerMedia::getOpenIDCookieCoro(std::string url)
 
     getCookieStore()->setCookiesFromHost(sOpenIDCookie, authority.substr(hostStart, hostEnd - hostStart));
 
-    // Do a web profile get so we can store the cookie 
+	if (url.length())
+	{
+		LLMediaCtrl* media_instance = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+		if (media_instance)
+		{
+			std::string cookie_host = authority.substr(hostStart, hostEnd - hostStart);
+			std::string cookie_name = "";
+			std::string cookie_value = "";
+			std::string cookie_path = "";
+			bool httponly = true;
+			bool secure = true;
+			if (parseRawCookie(sOpenIDCookie, cookie_name, cookie_value, cookie_path, httponly, secure) &&
+                media_instance->getMediaPlugin())
+			{
+				media_instance->getMediaPlugin()->setCookie(url, cookie_name, cookie_value, cookie_host, cookie_path, httponly, secure);
+			}
+		}
+	}
+
+	// NOTE: this is the original OpenID cookie code, so of which is no longer needed now that we
+	// are using CEF - it's very intertwined with other code so, for the moment, I'm going to
+	// leave it alone and make a task to come back to it once we're sure the CEF cookie code is robust.
+
+	// Do a web profile get so we can store the cookie 
     httpHeaders->append(HTTP_OUT_HEADER_ACCEPT, "*/*");
     httpHeaders->append(HTTP_OUT_HEADER_COOKIE, sOpenIDCookie);
     httpHeaders->append(HTTP_OUT_HEADER_USER_AGENT, getCurrentUserAgent());
@@ -1361,10 +1410,11 @@ void LLViewerMedia::openIDSetupCoro(std::string openidUrl, std::string openidTok
 
     httpOpts->setWantHeaders(true);
 
-    // post the token to the url 
+	// post the token to the url 
     // the responder will need to extract the cookie(s).
     // Save the OpenID URL for later -- we may need the host when adding the cookie.
     sOpenIDURL.init(openidUrl.c_str());
+	
     // We shouldn't ever do this twice, but just in case this code gets repurposed later, clear existing cookies.
     sOpenIDCookie.clear();
 
@@ -1395,11 +1445,12 @@ void LLViewerMedia::openIDSetupCoro(std::string openidUrl, std::string openidTok
     }
 
     // We don't care about the content of the response, only the Set-Cookie header.
-    const std::string &cookie = resultHeaders[HTTP_IN_HEADER_SET_COOKIE];
+    const std::string& cookie = resultHeaders[HTTP_IN_HEADER_SET_COOKIE].asString();
 
-    // *TODO: What about bad status codes?  Does this destroy previous cookies?
+	// *TODO: What about bad status codes?  Does this destroy previous cookies?
     LLViewerMedia::openIDCookieResponse(openidUrl, cookie);
     LL_DEBUGS("MediaAuth") << "OpenID cookie set." << LL_ENDL;
+			
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -2586,7 +2637,7 @@ void LLViewerMediaImpl::navigateInternal()
 		LL_WARNS() << "MIME type probe already in progress -- bailing out." << LL_ENDL;
 		return;
 	}
-	
+
 	if(mNavigateServerRequest)
 	{
 		setNavState(MEDIANAVSTATE_SERVER_SENT);
@@ -2595,12 +2646,12 @@ void LLViewerMediaImpl::navigateInternal()
 	{
 		setNavState(MEDIANAVSTATE_NONE);
 	}
-			
+
 	// If the caller has specified a non-empty MIME type, look that up in our MIME types list.
 	// If we have a plugin for that MIME type, use that instead of attempting auto-discovery.
 	// This helps in supporting legacy media content where the server the media resides on returns a bogus MIME type
 	// but the parcel owner has correctly set the MIME type in the parcel media settings.
-	
+
 	if(!mMimeType.empty() && (mMimeType != LLMIMETypes::getDefaultMimeType()))
 	{
 		std::string plugin_basename = LLMIMETypes::implType(mMimeType);
