@@ -56,11 +56,17 @@
             (wymaga restartu)
         </text>
         <check_box label="Ukryj ikony czatów IM oraz grup" name="FSDisableIMChiclets" tool_tip="Zaznacz, aby Firestorm ukrył ikony czatów IM oraz grup (koperta z powiadomieniami i suma wszystkich IM pozostaną na ekranie)" />
+        <check_box label="Stary sposób wyświetlania listy powiadomień" name="FSLegacyNotificationWell" tool_tip="Gdy zaznaczysz tą opcję, to Firestorm będzie używać starego sposobu wyświetlania listy powiadomień po prawej." />
+        <text name="FSLegacyNotificationWellRequiresRestart">
+            (wymaga restartu)
+        </text>
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />
         <slider label="Czas mrugnięcia karty IM:" tool_tip="Czas w sekundach, jaki jest potrzebny karcie wiadomości IM na mrugnięcie - używane przy powiadomieniach IM" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">
             sek
         </text>
+        <slider label_width="330" label="Tekst unoszący się nad primami ma zacząć zanikać od (m):" tool_tip="Odległość, po jakiej tekst unoszący się nad primami ma zacząć zanikać" name="FSHudTextFadeDistance" />
+        <slider label_width="330" label="Tekst unoszący się nad primami ma całkiem zniknąć po (m):" tool_tip="Odległość, podczas której tekst unoszący się nad primami stanie się całkiem niewidzialny po tym, jak zacznie zanikać" name="FSHudTextFadeRange" />
     </panel>
     <panel label="Górne paski" name="UI-interface-top-bars">
         <text name="statusbar_textbox">

@@ -92,7 +92,8 @@ LLPanelGroup::LLPanelGroup()
 :	LLPanel(),
 	LLGroupMgrObserver( LLUUID() ),
 	mSkipRefresh(FALSE),
-	mButtonJoin(NULL)
+	mButtonJoin(NULL),
+	mIsUsingTabContainer(false) // <FS:Ansariel> TabContainer switch
 {
 	// Set up the factory callbacks.
 	// Roles sub tabs
@@ -114,19 +115,60 @@ void LLPanelGroup::onOpen(const LLSD& key)
 	if(!key.has("group_id"))
 		return;
 
-	// open the desired panel
-	if (key.has("open_tab_name"))
-	{
-		// onOpen from selected panel will be called from onTabSelected callback
-		LLTabContainer* tab_ctrl = getChild<LLTabContainer>("groups_accordion");
-		tab_ctrl->selectTabByName(key["open_tab_name"]);
-	}
-
 	LLUUID group_id = key["group_id"];
 	if(!key.has("action"))
 	{
 		setGroupID(group_id);
-		getChild<LLAccordionCtrl>("groups_accordion")->expandDefaultTab();
+		// <FS:Ansariel> TabContainer switch
+		//getChild<LLAccordionCtrl>("groups_accordion")->expandDefaultTab();
+		if (mIsUsingTabContainer)
+		{
+			if (key.has("open_tab_name"))
+			{
+				getChild<LLTabContainer>("groups_accordion")->selectTabByName(key["open_tab_name"].asString());
+			}
+		}
+		else
+		{
+			if (key.has("open_tab_name"))
+			{
+				LLAccordionCtrlTab* tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
+				LLAccordionCtrlTab* tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
+				LLAccordionCtrlTab* tab_notices = getChild<LLAccordionCtrlTab>("group_notices_tab");
+				LLAccordionCtrlTab* tab_land = getChild<LLAccordionCtrlTab>("group_land_tab");
+				LLAccordionCtrlTab* tab_experiences = getChild<LLAccordionCtrlTab>("group_experiences_tab");
+
+				if(tab_general->getDisplayChildren())
+					tab_general->changeOpenClose(tab_general->getDisplayChildren());
+				if(tab_roles->getDisplayChildren())
+					tab_roles->changeOpenClose(tab_roles->getDisplayChildren());
+				if(tab_notices->getDisplayChildren())
+					tab_notices->changeOpenClose(tab_notices->getDisplayChildren());
+				if(tab_land->getDisplayChildren())
+					tab_land->changeOpenClose(tab_land->getDisplayChildren());
+				if(tab_experiences->getDisplayChildren())
+					tab_experiences->changeOpenClose(tab_land->getDisplayChildren());
+
+				tab_general->setSelected(false);
+				tab_roles->setSelected(false);
+				tab_notices->setSelected(false);
+				tab_land->setSelected(false);
+				tab_experiences->setSelected(false);
+
+				LLAccordionCtrlTab* target_tab = getChild<LLPanel>(key["open_tab_name"].asString())->getParentByType<LLAccordionCtrlTab>();
+				if (target_tab)
+				{
+					target_tab->changeOpenClose(false);
+					target_tab->setFocus(TRUE);
+					target_tab->notifyParent(LLSD().with("action", "select_current"));
+				}
+			}
+			else
+			{
+				getChild<LLAccordionCtrl>("groups_accordion")->expandDefaultTab();
+			}
+		}
+		// </FS:Ansariel>
 		return;
 	}
 
@@ -172,8 +214,15 @@ BOOL LLPanelGroup::postBuild()
 	button = getChild<LLButton>("btn_chat");
 	button->setClickedCallback(onBtnGroupChatClicked, this);
 
-	button = getChild<LLButton>("btn_cancel");
-	button->setVisible(false);	button->setEnabled(true);
+	// <FS:Ansariel> Might not exist
+	//button = getChild<LLButton>("btn_cancel");
+	//button->setVisible(false);	button->setEnabled(true);
+	button = findChild<LLButton>("btn_cancel");
+	if (button)
+	{
+		button->setVisible(false);	button->setEnabled(true);
+	}
+	// </FS:Ansariel>
 
 	button = getChild<LLButton>("btn_refresh");
 	button->setClickedCallback(onBtnRefresh, this);
@@ -213,6 +262,9 @@ BOOL LLPanelGroup::postBuild()
 
 	LLVoiceClient::getInstance()->addObserver(this);
 	
+	// <FS:Ansariel> TabContainer switch
+	mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != NULL);
+
 	return TRUE;
 }
 
@@ -442,14 +494,39 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 
 	getChild<LLUICtrl>("prepend_founded_by")->setVisible(!is_null_group_id);
 
-	LLAccordionCtrl* tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
-	tab_ctrl->reset();
+	// <FS:Ansariel> TabContainer switch
+	//LLAccordionCtrl* tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
+	//tab_ctrl->reset();
 
-	LLAccordionCtrlTab* tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
-	LLAccordionCtrlTab* tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
-	LLAccordionCtrlTab* tab_notices = getChild<LLAccordionCtrlTab>("group_notices_tab");
-	LLAccordionCtrlTab* tab_land = getChild<LLAccordionCtrlTab>("group_land_tab");
-	LLAccordionCtrlTab* tab_experiences = getChild<LLAccordionCtrlTab>("group_experiences_tab");
+	//LLAccordionCtrlTab* tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
+	//LLAccordionCtrlTab* tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
+	//LLAccordionCtrlTab* tab_notices = getChild<LLAccordionCtrlTab>("group_notices_tab");
+	//LLAccordionCtrlTab* tab_land = getChild<LLAccordionCtrlTab>("group_land_tab");
+	//LLAccordionCtrlTab* tab_experiences = getChild<LLAccordionCtrlTab>("group_experiences_tab");
+	LLAccordionCtrl* tab_ctrl = NULL;
+	LLAccordionCtrlTab* tab_general = NULL;
+	LLAccordionCtrlTab* tab_roles = NULL;
+	LLAccordionCtrlTab* tab_notices = NULL;
+	LLAccordionCtrlTab* tab_land = NULL;
+	LLAccordionCtrlTab* tab_experiences = NULL;
+	LLTabContainer* tabcont_ctrl = NULL;
+
+	if (mIsUsingTabContainer)
+	{
+		tabcont_ctrl = getChild<LLTabContainer>("groups_accordion");
+	}
+	else
+	{
+		tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
+		tab_ctrl->reset();
+
+		tab_general = getChild<LLAccordionCtrlTab>("group_general_tab");
+		tab_roles = getChild<LLAccordionCtrlTab>("group_roles_tab");
+		tab_notices = getChild<LLAccordionCtrlTab>("group_notices_tab");
+		tab_land = getChild<LLAccordionCtrlTab>("group_land_tab");
+		tab_experiences = getChild<LLAccordionCtrlTab>("group_experiences_tab");
+	}
+	// </FS:Ansariel>
 
 	if(mButtonJoin)
 		mButtonJoin->setVisible(false);
@@ -457,9 +534,20 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 
 	if(is_null_group_id)//creating new group
 	{
+		// <FS:Ansariel> TabContainer switch
+		if (mIsUsingTabContainer)
+		{
+			for (S32 i = 1; i <= 4; ++i)
+			{
+				tabcont_ctrl->setTabVisibility(tabcont_ctrl->getPanelByIndex(i), false);
+			}
+		}
+		else
+		{
+		// </FS:Ansariel>
 		if(!tab_general->getDisplayChildren())
 			tab_general->changeOpenClose(tab_general->getDisplayChildren());
-		
+
 		if(tab_roles->getDisplayChildren())
 			tab_roles->changeOpenClose(tab_roles->getDisplayChildren());
 		if(tab_notices->getDisplayChildren())
@@ -473,6 +561,9 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 		tab_notices->setVisible(false);
 		tab_land->setVisible(false);
 		tab_experiences->setVisible(false);
+		// <FS:Ansariel> TabContainer switch
+		}
+		// </FS:Ansariel>
 
 		getChild<LLUICtrl>("group_name")->setVisible(false);
 		getChild<LLUICtrl>("group_name_editor")->setVisible(true);
@@ -486,6 +577,14 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 	{
 		if(!is_same_id)
 		{
+			// <FS:Ansariel> TabContainer switch
+			if (mIsUsingTabContainer)
+			{
+				tabcont_ctrl->selectFirstTab();
+			}
+			else
+			{
+			// </FS:Ansariel>
 			if(!tab_general->getDisplayChildren())
 				tab_general->changeOpenClose(tab_general->getDisplayChildren());
 			if(tab_roles->getDisplayChildren())
@@ -496,15 +595,32 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 				tab_land->changeOpenClose(tab_land->getDisplayChildren());
 			if(tab_experiences->getDisplayChildren())
 				tab_experiences->changeOpenClose(tab_land->getDisplayChildren());
+			// <FS:Ansariel> TabContainer switch
+			}
+			// </FS:Ansariel>
 		}
 
 		LLGroupData agent_gdatap;
 		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlikeWithoutAdminMenuFakery();
 		
+		// <FS:Ansariel> TabContainer switch
+		if (mIsUsingTabContainer)
+		{
+			for (S32 i = 1; i <= 4; ++i)
+			{
+				tabcont_ctrl->setTabVisibility(tabcont_ctrl->getPanelByIndex(i), is_member);
+			}
+		}
+		else
+		{
+		// </FS:Ansariel>
 		tab_roles->setVisible(is_member);
 		tab_notices->setVisible(is_member);
 		tab_land->setVisible(is_member);
 		tab_experiences->setVisible(is_member);
+		// <FS:Ansariel> TabContainer switch
+		}
+		// </FS:Ansariel>
 
 		getChild<LLUICtrl>("group_name")->setVisible(true);
 		getChild<LLUICtrl>("group_name_editor")->setVisible(false);
@@ -517,7 +633,13 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
 			button_chat->setVisible(is_member);
 	}
 
-	tab_ctrl->arrange();
+	// <FS:Ansariel> TabContainer switch
+	//tab_ctrl->arrange();
+	if (!mIsUsingTabContainer)
+	{
+		tab_ctrl->arrange();
+	}
+	// </FS:Ansariel>
 
 	reposButtons();
 	update(GC_ALL);//show/hide "join" button if data is already ready

@@ -4,7 +4,6 @@
 	<string name="FlagsColumnValue_0" />
 	<string name="FlagsColumnValue_1" />
 	<string name="FlagsColumnValue_2" />
-	<string name="high_server_load" value="現在サーバに負荷がかかっており、見え方が変わるものがたくさんある場合は有効になるまで暫く時間がかかることがあります。そのままお待ち下さい。" />
 	<string name="no_recent_people" value="最近交流した人はいません。一緒に何かする仲間をお探しですか？　検索ボックスを使って興味のありそうな話題やコンテンツを探して、同じような興味を持った人がいる場所を訪れてみましょう。" />
 	<string name="no_filtered_recent_people" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。" />
 	<string name="no_one_near" value="近くに誰もいません。一緒に何かする仲間をお探しですか？　検索ボックスを使って興味のありそうな話題やコンテンツを探して、同じような興味を持った人がいる場所を訪れてみましょう。" />

@@ -129,6 +129,10 @@ public:
 	void               setObjectText(const std::string &utf8string)	{ mObjText = utf8string; }
 	static void        refreshAllObjectText();
 // [/RLVa:KB]
+
+	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+	static void onFadeSettingsChanged();
+
 protected:
 	LLHUDText(const U8 type);
 

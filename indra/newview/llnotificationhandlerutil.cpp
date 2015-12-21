@@ -269,7 +269,6 @@ void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChat
 			LLColor4 chatcolor;
 			LLViewerChat::getChatColor(chat_msg, chatcolor);
 			gConsole->addConsoleLine(chat_msg.mText, chatcolor);
-			gConsole->setVisible(!nearby_chat->getVisible());
 		}
 	}
 }

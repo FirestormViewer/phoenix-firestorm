@@ -20,17 +20,31 @@
 #include "lfsimfeaturehandler.h"
 
 #include "llagent.h"
+#include "lllogininstance.h"
+#include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 
 LFSimFeatureHandler::LFSimFeatureHandler()
-: mSupportsExport(false)
-, mSayRange(20)
-, mShoutRange(100)
-, mWhisperRange(10)
+	: mSupportsExport(false),
+	mSayRange(20),
+	mShoutRange(100),
+	mWhisperRange(10),
+	mHasAvatarPicker(false),
+	mHasDestinationGuide(false),
+	mSimulatorFPS(45.f),
+	mSimulatorFPSFactor(1.f),
+	mSimulatorFPSWarn(30.f),
+	mSimulatorFPSCrit(20.f)
 {
-	if (!LLGridManager::getInstance()->isInSecondLife()) // Remove this line if we ever handle SecondLife sim features
-		gAgent.addRegionChangedCallback(boost::bind(&LFSimFeatureHandler::handleRegionChange, this));
+	LL_INFOS() << "Initializing Sim Feature Handler" << LL_ENDL;
+
+	gAgent.addRegionChangedCallback(boost::bind(&LFSimFeatureHandler::handleRegionChange, this));
+
+	// Call setSupportedFeatures -> This will work because we construct
+	// our singleton instance during STATE_SEED_CAP_GRANTED startup state
+	// after we received the initial region caps
+	setSupportedFeatures();
 }
 
 ExportSupport LFSimFeatureHandler::exportPolicy() const
@@ -59,27 +73,135 @@ void LFSimFeatureHandler::setSupportedFeatures()
 	{
 		LLSD info;
 		region->getSimulatorFeatures(info);
-		if (info.has("OpenSimExtras")) // OpenSim specific sim features
+		if (!LLGridManager::getInstance()->isInSecondLife() && info.has("OpenSimExtras")) // OpenSim specific sim features
 		{
+			LL_INFOS() << "Setting OpenSimExtras..." << LL_ENDL;
+
 			// For definition of OpenSimExtras please see
 			// http://opensimulator.org/wiki/SimulatorFeatures_Extras
 			const LLSD& extras(info["OpenSimExtras"]);
+			LL_DEBUGS() << "OpenSimExtras received: " << extras << LL_ENDL;
+
 			mSupportsExport = extras.has("ExportSupported") ? extras["ExportSupported"].asBoolean() : false;
-			mMapServerURL = extras.has("map-server-url") ? extras["map-server-url"].asString() : "";
-			mSearchURL = extras.has("search-server-url") ? extras["search-server-url"].asString() : "";
+			mMapServerURL = extras.has("map-server-url") ? extras["map-server-url"].asString() : gSavedSettings.getString("CurrentMapServerURL");
 			mSayRange = extras.has("say-range") ? extras["say-range"].asInteger() : 20;
 			mShoutRange = extras.has("shout-range") ? extras["shout-range"].asInteger() : 100;
 			mWhisperRange = extras.has("whisper-range") ? extras["whisper-range"].asInteger() : 10;
+
+			if (extras.has("SimulatorFPS") && extras.has("SimulatorFPSFactor") &&
+				extras.has("SimulatorFPSWarnPercent") && extras.has("SimulatorFPSCritPercent"))
+			{
+				mSimulatorFPS = extras["SimulatorFPS"].asReal();
+				mSimulatorFPSFactor = extras["SimulatorFPSFactor"].asReal();
+				mSimulatorFPSWarn = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSWarnPercent"].asReal() / 100.f);
+				mSimulatorFPSCrit = (mSimulatorFPS * mSimulatorFPSFactor) * (extras["SimulatorFPSCritPercent"].asReal() / 100.f);
+			}
+			else
+			{
+				mSimulatorFPS = 45.f;
+				mSimulatorFPSFactor = 1.f;
+				mSimulatorFPSWarn = 30.f;
+				mSimulatorFPSCrit = 20.f;
+			}
+
+			if (extras.has("search-server-url"))
+			{
+				mSearchURL = extras["search-server-url"].asString();
+			}
+			else if (LLLoginInstance::getInstance()->hasResponse("search"))
+			{
+				mSearchURL = LLLoginInstance::getInstance()->getResponse("search").asString();
+			}
+			else
+			{
+				mSearchURL = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+			}
+
+			if (extras.has("destination-guide-url"))
+			{
+				mDestinationGuideURL = extras["destination-guide-url"].asString();
+			}
+			else if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+			{
+				mDestinationGuideURL = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			}
+			else if (LLGridManager::instance().isInSecondLife())
+			{
+				mDestinationGuideURL = gSavedSettings.getString("DestinationGuideURL");
+			}
+			else
+			{
+				mDestinationGuideURL = LLStringUtil::null;
+			}
+
+			if (extras.has("avatar-picker-url"))
+			{
+				mAvatarPickerURL = extras["avatar-picker-url"].asString();
+			}
+			else if (LLLoginInstance::getInstance()->hasResponse("avatar-picker-url"))
+			{
+				mAvatarPickerURL = LLLoginInstance::getInstance()->getResponse("avatar-picker-url").asString();
+			}
+			else if (LLGridManager::instance().isInSecondLife())
+			{
+				mAvatarPickerURL = gSavedSettings.getString("AvatarPickerURL");
+			}
+			else
+			{
+				mAvatarPickerURL = LLStringUtil::null;
+			}
 		}
 		else // OpenSim specifics are unsupported reset all to default
 		{
+			LL_INFOS() << "Setting defaults..." << LL_ENDL;
 			mSupportsExport = false;
-			mMapServerURL = "";
-			mSearchURL = "";
+			mMapServerURL = gSavedSettings.getString("CurrentMapServerURL");
 			mSayRange = 20;
 			mShoutRange = 100;
 			mWhisperRange = 10;
+			mSimulatorFPS = 45.f;
+			mSimulatorFPSFactor = 1.f;
+			mSimulatorFPSWarn = 30.f;
+			mSimulatorFPSCrit = 20.f;
+
+			if (LLLoginInstance::getInstance()->hasResponse("search"))
+			{
+				mSearchURL = LLLoginInstance::getInstance()->getResponse("search").asString();
+			}
+			else
+			{
+				mSearchURL = LLGridManager::getInstance()->isInSecondLife() ? gSavedSettings.getString("SearchURL") : gSavedSettings.getString("SearchURLOpenSim");
+			}
+
+			if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+			{
+				mDestinationGuideURL = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+			}
+			else if (LLGridManager::instance().isInSecondLife())
+			{
+				mDestinationGuideURL = gSavedSettings.getString("DestinationGuideURL");
+			}
+			else
+			{
+				mDestinationGuideURL = LLStringUtil::null;
+			}
+
+			if (LLLoginInstance::getInstance()->hasResponse("avatar-picker-url"))
+			{
+				mAvatarPickerURL = LLLoginInstance::getInstance()->getResponse("avatar-picker-url").asString();
+			}
+			else if (LLGridManager::instance().isInSecondLife())
+			{
+				mAvatarPickerURL = gSavedSettings.getString("AvatarPickerURL");
+			}
+			else
+			{
+				mAvatarPickerURL = LLStringUtil::null;
+			}
 		}
+
+		mHasAvatarPicker = !avatarPickerURL().empty();
+		mHasDestinationGuide = !destinationGuideURL().empty();
 	}
 }
 
@@ -106,4 +228,14 @@ boost::signals2::connection LFSimFeatureHandler::setShoutRangeCallback(const boo
 boost::signals2::connection LFSimFeatureHandler::setWhisperRangeCallback(const boost::signals2::signal<void()>::slot_type& slot)
 {
 	return mWhisperRange.connect(slot);
+}
+
+boost::signals2::connection LFSimFeatureHandler::setAvatarPickerCallback(const boost::signals2::signal<void()>::slot_type& slot)
+{
+	return mAvatarPickerURL.connect(slot);
+}
+
+boost::signals2::connection LFSimFeatureHandler::setDestinationGuideCallback(const boost::signals2::signal<void()>::slot_type& slot)
+{
+	return mDestinationGuideURL.connect(slot);
 }

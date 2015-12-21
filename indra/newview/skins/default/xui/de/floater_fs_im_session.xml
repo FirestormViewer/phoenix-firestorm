@@ -42,6 +42,9 @@
 		<layout_panel name="send_sysinfo_btn_panel">
 			<button name="send_sysinfo_btn" tool_tip="System-Informationen übermitteln"/>
 		</layout_panel>
+		<layout_panel name="lp_options_btn">
+			<button name="chat_options_btn" tool_tip="Chat-Optionen"/>
+		</layout_panel>
 		<layout_panel name="support_panel">
 			<check_box label="Version senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version und Oberfläche am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf deine Fragen zu verbessern."/>
 		</layout_panel>
@@ -53,6 +56,13 @@
 					<text name="unread_messages_text">
 						Ungelesene Nachrichten: [NUM]
 					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Senden"/>
+						</layout_panel>
+					</layout_stack>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

@@ -942,6 +942,13 @@ void LLViewerParcelMgr::sendParcelAccessListRequest(U32 flags)
 	LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosGlobal( mWestSouth );
 	if (!region) return;
 
+	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
+	if (!region->isCapabilityAvailable("RegionExperiences"))
+	{
+		flags &= ~(AL_ALLOW_EXPERIENCE | AL_BLOCK_EXPERIENCE);
+	}
+	// </FS:Ansariel>
+
 	LLMessageSystem *msg = gMessageSystem;
 
 
@@ -1667,9 +1674,6 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 					instance->mTeleportFinishedSignal(instance->mTeleportInProgressPosition, false);
 				}
 			}
-
-			//KC: check for parcel changes for WL settings
-			KCWindlightInterface::instance().ParcelChange();
 		}
 		else if (local_id == parcel_mgr.mAgentParcel->getLocalID())
 		{

@@ -116,8 +116,7 @@
 
    <ComponentRef Id="llplugin_exe" />
    <ComponentRef Id="llplugin_libs" />
-   <ComponentRef Id="llplugin_dir_codec_libs" />
-   <ComponentRef Id="llplugin_dir_imageformat_libs" />
+   <ComponentRef Id="llplugin_dir_locales" />
 
    <?if $(var.PACKAGE_LEAP)=1?>
     <ComponentRef Id="leap_dll" />

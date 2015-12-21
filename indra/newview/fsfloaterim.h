@@ -153,6 +153,8 @@ public:
 
 	void loadInitialInvitedIDs();
 
+	bool isP2PChat() const { return mIsP2PChat; }
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -225,6 +227,11 @@ private:
 	bool canAddSelectedToChat(const uuid_vec_t& uuids);
 	void addSessionParticipants(const uuid_vec_t& uuids);
 	void addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids);
+
+	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;

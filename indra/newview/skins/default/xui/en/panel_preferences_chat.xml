@@ -164,6 +164,15 @@
              top_pad="1"
              name="bubble_text_typing"
              width="150" />
+            <check_box
+             control_name="FSShowTypingStateInNameTag"
+             follows="left|top"
+             height="16"
+             label="Show typing indicator in nametag above avatars"
+             layout="topleft"
+             top_pad="1"
+             name="FSShowTypingStateInNameTag"
+             width="150" />
 
             <check_box
              control_name="FSSecondsinChatTimestamps"
@@ -821,11 +830,23 @@
 		 name="play_typing_animation"
 		 width="400" />
 		<check_box
+		 enabled_control="PlayTypingAnim"
+		 control_name="FSTypeDuringEmote"
+		 height="16"
+		 initial_value="true"
+		 label="Play typing animation also when emoting"
+		 layout="topleft"
+		 top_pad="1"
+		 left="30"
+		 name="play_typing_animation_emote"
+		 width="400" />
+		<check_box
 		 control_name="PlayModeUISndTyping"
 		 follows="left|top"
 		 height="16"
 		 label="Hear typing sound when people type in nearby chat"
 		 layout="topleft"
+		 left="20"
 		 top_pad="1"
 		 name="play_typing_sound"
 		 width="400" />
@@ -870,6 +891,14 @@
 		 top_pad="1"
 		 height="16"
 		 width="400" />
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
+		 control_name="FSShowIMSendButton"
+		 name="FSShowIMSendButton"
+		 label="Show send chat button in chat bar for IM sessions"/>
 		<check_box
 		 layout="topleft"
 		 top_pad="1"

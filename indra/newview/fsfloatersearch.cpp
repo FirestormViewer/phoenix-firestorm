@@ -970,6 +970,8 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setFocus(TRUE);
 		self->onSelectItem();
 	}
+
+	self->mQueryID.setNull();
 }
 
 ////////////////////////////////////////
@@ -1260,6 +1262,8 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
+
+	self->mQueryID.setNull();
 }
 
 ////////////////////////////////////////
@@ -2746,20 +2750,10 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	{
 		url = debug_url;
 	}
-	else if(LLGridManager::getInstance()->isInOpenSim())
-	{		
-		std::string os_search_url = LFSimFeatureHandler::instance().searchURL();
-		if (!os_search_url.empty())
-			url = os_search_url;
-		else if (LLLoginInstance::getInstance()->hasResponse("search"))
-			url = LLLoginInstance::getInstance()->getResponse("search").asString();
-		else
-			url = gSavedSettings.getString("SearchURLOpenSim");
-	}
 	else
 #endif // OPENSIM
 	{
-		url = gSavedSettings.getString("SearchURL");
+		url = LFSimFeatureHandler::instance().searchURL();
 	}
 	
 	url = LLWeb::expandURLSubstitutions(url, subs);

@@ -87,7 +87,7 @@ void StreamTitleDisplay::checkMetadata()
 			if (ShowStreamMetadata > 1)
 			{
 				chat = LLTrans::getString("StreamtitleNowPlaying") + " " + chat;
-				reportToNearbyChat(chat);
+				report_to_nearby_chat(chat);
 			}
 			else if (ShowStreamMetadata == 1
 					 && (mMetadata.has("TITLE") || mMetadata.has("ARTIST")))

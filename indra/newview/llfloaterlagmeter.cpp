@@ -40,6 +40,8 @@
 #include "llfocusmgr.h"
 #include "lltextbox.h"
 
+#include "lfsimfeaturehandler.h"
+
 // <FS:Ansariel> Nicer icons
 //const std::string LAG_CRITICAL_IMAGE_NAME = "lag_status_critical.tga";
 //const std::string LAG_WARNING_IMAGE_NAME  = "lag_status_warning.tga";
@@ -261,6 +263,11 @@ void LLFloaterLagMeter::determineNetwork()
 
 void LLFloaterLagMeter::determineServer()
 {
+	// <FS:Ansariel> FIRE-16857: Lag-meter special adjustments for OpenSim
+	mServerFrameTimeWarning = F32Seconds(1.0f / LFSimFeatureHandler::instance().simulatorFPSWarn());
+	mServerFrameTimeCritical = F32Seconds(1.0f / LFSimFeatureHandler::instance().simulatorFPSCrit());
+	// </FS:Ansariel>
+
 	F32Milliseconds sim_frame_time = LLTrace::get_frame_recording().getLastRecording().getLastValue(LLStatViewer::SIM_FRAME_TIME);
 	bool find_cause = false;
 

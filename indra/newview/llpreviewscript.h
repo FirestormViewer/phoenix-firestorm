@@ -239,6 +239,9 @@ public:
 	/*virtual*/ void refreshFromItem();
 // [/SL:KB]
 
+	// <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
+	void updateStyle();
+
 protected:
 	std::string		getTmpFileName();
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0) | Added: Catznip-3.2.0

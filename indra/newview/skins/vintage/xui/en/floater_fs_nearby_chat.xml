@@ -102,8 +102,29 @@
        image_selected="PushButton_Selected_Press"
        tool_tip="Shows the muted chat in nearby chat transcript."
        name="chat_history_muted_btn">
-		  </button>
-
+      </button>
+    </layout_panel>
+     <layout_panel
+      name="lp_options_btn"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="26"
+      width="26"
+      follows="left|top">
+      <menu_button
+       menu_filename="menu_fs_chat_options.xml"
+       follows="left|top"
+       top="2"
+       width="24"
+       height="24"
+       image_overlay="Conv_toolbar_sort"
+       image_pressed="PushButton_Press"
+       image_pressed_selected="PushButton_Selected_Press"
+       image_selected="PushButton_Selected_Press"
+       tool_tip="Chat Options"
+       name="chat_options_btn"/>
     </layout_panel>
     
   </layout_stack>

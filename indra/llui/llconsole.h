@@ -52,13 +52,15 @@ public:
 		Optional<S32>	font_size_index;
 		Optional<bool>	parse_urls; // <FS:Ansariel> If lines should be parsed for URLs
 		Optional<std::string> background_image; // <FS:Ansariel> Configurable background for different console types
+		Optional<bool>	session_support; // <FS:Ansariel> Session support
 
 		Params()
 		:	max_lines("max_lines", LLUI::sSettingGroups["config"]->getS32("ConsoleMaxLines")),
 			persist_time("persist_time", 0.f), // forever
 			font_size_index("font_size_index"),
 			parse_urls("parse_urls", false), // <FS:Ansariel> If lines should be parsed for URLs
-			background_image("background_image", "Console_Background") // <FS:Ansariel> Configurable background for different console types
+			background_image("background_image", "Console_Background"), // <FS:Ansariel> Configurable background for different console types
+			session_support("session_support", false) // <FS:Ansariel> Session support
 		{
 			changeDefault(mouse_opaque, false);
 		}
@@ -120,7 +122,7 @@ public:
 		public:
 			// <FS:Ansariel> Added styleflags parameter for style customization
 			//Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width);
-			Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, bool parse_urls, LLConsole* console);
+			Paragraph (LLWString str, const LLColor4 &color, F32 add_time, const LLFontGL* font, F32 screen_width, LLFontGL::StyleFlags styleflags, const LLUUID& session_id, bool parse_urls, LLConsole* console);
 			// </FS:Ansariel>
 			void makeParagraphColorSegments ( const LLColor4 &color);
 			// <FS:Ansariel> Added styleflags parameter for style customization
@@ -133,6 +135,7 @@ public:
 			F32 mAddTime;				//Time this paragraph was added to the display.
 			F32 mMaxWidth;				//Width of the widest line of text in this paragraph.
 			lines_t	mLines;
+			LLUUID mSessionID;			// <FS:Ansariel> Session support
 
 			// <FS:Ansariel> Parse SLURLs
 			LLUUID								mID;
@@ -160,12 +163,15 @@ public:
 	/*virtual*/ void	draw();
 
 // <FS:Ansariel> Chat console
-	void addConsoleLine(const std::string& utf8line, const LLColor4 &color, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
-	void addConsoleLine(const LLWString& wline, const LLColor4 &color, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
+	void addConsoleLine(const std::string& utf8line, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
+	void addConsoleLine(const LLWString& wline, const LLColor4 &color, const LLUUID& session_id = LLUUID::null, LLFontGL::StyleFlags styleflags = LLFontGL::NORMAL);
 	void clear();
-	
+	void addSession(const LLUUID& session_id);
+	void removeSession(const LLUUID& session_id);
+
 	std::deque<LLColor4> mLineColors;
 	std::deque<LLFontGL::StyleFlags> mLineStyle;
+	std::deque<LLUUID> mSessionIDs;
 
 protected:
 	/*virtual*/ void removeExtraLines();
@@ -183,6 +189,10 @@ private:
 	S32			mConsoleHeight;
 	bool		mParseUrls; // <FS:Ansariel> If lines should be parsed for URLs
 	LLUIImagePtr	mBackgroundImage; // <FS:Ansariel> Configurable background for different console types
+	// <FS:Ansariel> Session support
+	std::set<LLUUID>	mCurrentSessions;
+	bool		mSessionSupport;
+	// </FS:Ansariel>
 };
 
 extern LLConsole* gConsole;

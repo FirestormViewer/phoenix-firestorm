@@ -56,6 +56,8 @@
 
 #include "llspinctrl.h"
 
+#include "lfsimfeaturehandler.h"
+
 static LLPanelInjector<LLFacebookStatusPanel> t_panel_status("llfacebookstatuspanel");
 static LLPanelInjector<LLFacebookPhotoPanel> t_panel_photo("llfacebookphotopanel");
 static LLPanelInjector<LLFacebookCheckinPanel> t_panel_checkin("llfacebookcheckinpanel");
@@ -80,7 +82,10 @@ std::string get_map_url()
     }
     int x_pos = center_agent[0] / 256.0;
     int y_pos = center_agent[1] / 256.0;
-    std::string map_url = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-1-%d-%d-objects.jpg", x_pos, y_pos);
+	// <FS:Ansariel> OpenSim support
+    //std::string map_url = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-1-%d-%d-objects.jpg", x_pos, y_pos);
+	std::string map_url = LFSimFeatureHandler::instance().mapServerURL() + llformat("map-1-%d-%d-objects.jpg", x_pos, y_pos);
+	// </FS:Ansariel>
     return map_url;
 }
 

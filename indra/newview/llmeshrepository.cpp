@@ -3505,7 +3505,6 @@ void LLMeshRepository::notifyLoadedMeshes()
 													 REQUEST2_LOW_WATER_MAX);
 	}
 	
-
 	//clean up completed upload threads
 	for (std::vector<LLMeshUploadThread*>::iterator iter = mUploads.begin(); iter != mUploads.end(); )
 	{

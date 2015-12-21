@@ -55,6 +55,8 @@ typedef enum e_export_support
 
 class LFSimFeatureHandler : public LLSingleton<LFSimFeatureHandler>
 {
+	LOG_CLASS(LFSimFeatureHandler);
+
 protected:
 	friend class LLSingleton<LFSimFeatureHandler>;
 	LFSimFeatureHandler();
@@ -69,6 +71,8 @@ public:
 	boost::signals2::connection setSayRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
 	boost::signals2::connection setShoutRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
 	boost::signals2::connection setWhisperRangeCallback(const boost::signals2::signal<void()>::slot_type& slot);
+	boost::signals2::connection setAvatarPickerCallback(const boost::signals2::signal<void()>::slot_type& slot);
+	boost::signals2::connection setDestinationGuideCallback(const boost::signals2::signal<void()>::slot_type& slot);
 
 	// Accessors
 	bool simSupportsExport() const { return mSupportsExport; }
@@ -78,6 +82,16 @@ public:
 	U32 shoutRange() const { return mShoutRange; }
 	U32 whisperRange() const { return mWhisperRange; }
 	ExportSupport exportPolicy() const;
+	std::string avatarPickerURL() const { return mAvatarPickerURL; }
+	std::string destinationGuideURL() const { return mDestinationGuideURL; }
+
+	F32 simulatorFPS() const { return mSimulatorFPS; }
+	F32 simulatorFPSFactor() const { return mSimulatorFPSFactor; }
+	F32 simulatorFPSWarn() const { return mSimulatorFPSWarn; }
+	F32 simulatorFPSCrit() const { return mSimulatorFPSCrit; }
+
+	bool hasAvatarPicker() const { return mHasAvatarPicker; }
+	bool hasDestinationGuide() const { return mHasDestinationGuide; }
 
 private:
 	// SignaledTypes
@@ -87,6 +101,16 @@ private:
 	SignaledType<U32> mSayRange;
 	SignaledType<U32> mShoutRange;
 	SignaledType<U32> mWhisperRange;
+	SignaledType<std::string> mAvatarPickerURL;
+	SignaledType<std::string> mDestinationGuideURL;
+
+	F32 mSimulatorFPS;
+	F32 mSimulatorFPSFactor;
+	F32 mSimulatorFPSWarn;
+	F32 mSimulatorFPSCrit;
+
+	bool mHasAvatarPicker;
+	bool mHasDestinationGuide;
 };
 
 #endif //LFSIMFEATUREHANDLER_H

@@ -1115,5 +1115,8 @@
   <color
       name="ScriptSelectedColor"
       reference="SL-EmphasisColor" />
+  <color
+      name="UploadDialogBackground"
+      reference="SL-CustomBackground" />
 </colors>
 

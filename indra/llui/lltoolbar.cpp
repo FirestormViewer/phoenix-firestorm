@@ -800,7 +800,14 @@ void LLToolBar::updateLayoutAsNeeded()
 		// button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
 		if (equalized_width)
 		{
-			button->mWidthRange.setRange(button->mWidthRange.getMin(), equalized_width);
+			if (button->mWidthRange.getMin() > equalized_width)
+			{
+				button->mWidthRange.setRange(equalized_width, equalized_width);
+			}
+			else
+			{
+				button->mWidthRange.setRange(button->mWidthRange.getMin(), equalized_width);
+			}
 			button->reshape(equalized_width, button->mDesiredHeight);
 		}
 		else
@@ -1167,7 +1174,11 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 		}
 		else
 		{
-			button->setCommitCallback(executeParam);
+			// <FS:Ansariel> Check enabled state of button before executing!
+			//button->setCommitCallback(executeParam);
+			LLUICtrl::commit_callback_t execute_func = initCommitCallback(executeParam);
+			button->setCommitCallback(boost::bind(&LLToolBarButton::callIfEnabled, button, execute_func, _1, _2));
+			// </FS:Ansariel>
 		}
 
 		// Set up "is running" query callback

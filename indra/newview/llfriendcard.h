@@ -79,6 +79,9 @@ public:
 	 */
 	void syncFriendCardsFolders();
 
+	// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
+	static void createAgentCallingCard();
+
 private:
 	typedef boost::function<void()> callback_t;
 
@@ -96,10 +99,12 @@ private:
 	 */
 	const LLUUID extractAvatarID(const LLUUID& avatarID);
 
+public: // <FS:Ansariel> Needed to check in LLOpenTaskOffer
 	bool isAvatarDataStored(const LLUUID& avatarID) const
 	{
 		return (mBuddyIDSet.end() != mBuddyIDSet.find(avatarID));
 	}
+private: // <FS:Ansariel> Needed to check in LLOpenTaskOffer
 
 	const LLUUID& findChildFolderUUID(const LLUUID& parentFolderUUID, const std::string& nonLocalizedName) const;
 	const LLUUID& findFriendFolderUUIDImpl() const;

@@ -34,7 +34,9 @@
 
 #include "growlmanager.h"
 
+#include "fscommon.h"
 #include "growlnotifier.h"
+#include "llagent.h"
 #include "llagentdata.h"
 #include "llappviewer.h"
 #include "llfloaterimnearbychathandler.h"
@@ -112,7 +114,7 @@ GrowlManager::GrowlManager()
 	mNotificationConnection = LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
 
 	// Also hook into IM notifications.
-	mInstantMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
+	mInstantMessageConnection = LLIMModel::instance().addNewMsgCallback(&GrowlManager::onInstantMessage);
 	
 	// Hook into script dialogs
 	mScriptDialogConnection = LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
@@ -285,8 +287,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			body = growl_notification->growlBody;
 			LLStringUtil::format(body, substitutions);
 		}
-		//TM:FS no need to log whats sent to growl
-		//LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
+
 		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
 		{
 			LLUrlMatch urlMatch;
@@ -319,19 +320,18 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 	if (session->isP2PSessionType() && (!im["keyword_alert_performed"].asBoolean() || !gSavedSettings.getBOOL("FSFilterGrowlKeywordDuplicateIMs")))
 	{
 		// Don't show messages from ourselves or the system.
-		LLUUID from_id = im["from_id"].asUUID();
+		const LLUUID from_id = im["from_id"].asUUID();
 		if (from_id.isNull() || from_id == gAgentID)
 		{
 			return;
 		}
 
 		std::string message = im["message"].asString();
-		std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
-		gGrowlManager->performNotification(im["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		LLAvatarNameCache::get(from_id, boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
 	}
 }
 
@@ -340,10 +340,8 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 {
 	LLNotificationPtr notification = LLNotifications::instance().find(data["notification_id"].asUUID());
 	const std::string name = notification->getName();
-	//LLSD payload = notification->getPayload();
 	LLSD substitutions = notification->getSubstitutions();
 
-	//LL_INFOS("GrowlLLNotification") << "Script dialog: name=" << name << " - payload=" << payload << " subs=" << substitutions << LL_ENDL;
 	if (gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
 	{
 		GrowlNotification* growl_notification = &gGrowlManager->mNotifications[name];
@@ -379,15 +377,27 @@ void GrowlManager::onNearbyChatMessage(const LLSD& chat)
 	if ((EChatType)chat["chat_type"].asInteger() == CHAT_TYPE_IM)
 	{
 		std::string message = chat["message"].asString();
-
-		const std::string prefix = message.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(message))
 		{
 			message = message.substr(3);
 		}
 
-		gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		if ((EChatSourceType)chat["source"].asInteger() == CHAT_SOURCE_AGENT)
+		{
+			LLAvatarNameCache::get(chat["from_id"].asUUID(), boost::bind(&GrowlManager::onAvatarNameCache, _2, message, GROWL_IM_MESSAGE_TYPE));
+		}
+		else
+		{
+			gGrowlManager->performNotification(chat["from"].asString(), message, GROWL_IM_MESSAGE_TYPE);
+		}
 	}
+}
+
+//static
+void GrowlManager::onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type)
+{
+	const std::string sender = FSCommon::getAvatarNameByDisplaySettings(av_name);
+	notify(sender, message, type);
 }
 
 bool GrowlManager::shouldNotify()
@@ -395,6 +405,10 @@ bool GrowlManager::shouldNotify()
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
 	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
 	if (LLStartUp::getStartupState() < STATE_STARTED)
+	{
+		return false;
+	}
+	if (gAgent.isDoNotDisturb())
 	{
 		return false;
 	}

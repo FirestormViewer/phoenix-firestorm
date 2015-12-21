@@ -222,9 +222,11 @@
 #include "fsregistrarutils.h"
 #include "fsscriptlibrary.h"
 #include "fswsassetblacklist.h"
+#include "lfsimfeaturehandler.h"
 #include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
+#include "llfriendcard.h"
 #include "llnotificationmanager.h"
 #include "llprogressview.h"
 #include "lltoolbarview.h"
@@ -372,13 +374,13 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 	{
 		if (status.getType() == HTTP_INTERNAL_ERROR)
 		{
-			reportToNearbyChat(LLTrans::getString("SLGridStatusTimedOut"));
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
 		}
 		else
 		{
 			LLStringUtil::format_map_t args;
 			args["STATUS"] = llformat("%d", status.getType());
-			reportToNearbyChat(LLTrans::getString("SLGridStatusOtherError", args));
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
 		}
 		LL_WARNS("SLGridStatusResponder") << "Error - status " << status.getType() << LL_ENDL;
 		return;
@@ -386,7 +388,7 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 
 	if (rawData.size() == 0)
 	{
-		reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 		LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
 		return;
 	}
@@ -458,17 +460,17 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
 			LLStringUtil::trim(newsTitle);
 			LLStringUtil::trim(newsDesc);
 			LLStringUtil::trim(newsLink);
-			reportToNearbyChat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
+			report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
 		}
 		else
 		{
-			reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 			LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
 		}
 	}
 	else
 	{
-		reportToNearbyChat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
 		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
 	}
 }
@@ -585,7 +587,7 @@ bool idle_startup()
 		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("FSSkinCurrentReadableName"));
 		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("FSSkinCurrentThemeReadableName"));
 		// </FS:Ansariel>
-		
+
 		if (LLFeatureManager::getInstance()->isSafe())
 		{
 			LLNotificationsUtil::add("DisplaySetToSafe");
@@ -1744,7 +1746,7 @@ bool idle_startup()
 
 // <FS:CR> Aurora Sim
 		//LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim);
-LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, first_sim_size_y);
+		LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, first_sim_size_y);
 // </FS:CR> Aurora Sim
 		display_startup();
 
@@ -1880,6 +1882,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// so that we can construct voice UI that relies on the name cache
 		LLVoiceClient::getInstance()->updateSettings();
 		display_startup();
+
+		// <FS:Ansariel> OpenSim support: Init with defaults - we get the OpenSimExtras later during login
+		LFSimFeatureHandler::instance();
 
 		// create a container's instance for start a controlling conversation windows
 		// by the voice's events
@@ -2218,16 +2223,25 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
  		if(buddy_list.isDefined())
  		{
 			LLAvatarTracker::buddy_map_t list;
-			LLUUID agent_id;
-			S32 has_rights = 0, given_rights = 0;
+			// <FS:Ansariel> Reset on each iteration
+			//LLUUID agent_id;
+			//S32 has_rights = 0, given_rights = 0;
+			// </FS:Ansariel>
 			for(LLSD::array_const_iterator it = buddy_list.beginArray(),
 				end = buddy_list.endArray(); it != end; ++it)
 			{
+				// <FS:Ansariel> Reset on each iteration
+				LLUUID agent_id;
+				S32 has_rights = 0, given_rights = 0;
+				// </FS:Ansariel>
+
 				LLSD buddy_id = (*it)["buddy_id"];
 				if(buddy_id.isDefined())
 				{
 					agent_id = buddy_id.asUUID();
 				}
+				// <FS:Ansariel> Can't add "friends" that have no ID
+				else continue;
 
 				LLSD buddy_rights_has = (*it)["buddy_rights_has"];
 				if(buddy_rights_has.isDefined())
@@ -2763,6 +2777,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		}
 		// </FS:TT>
 
+		// <FS:Ansariel> Bypass the calling card sync-crap to create the agent's calling card
+		LLFriendCardsManager::createAgentCallingCard();
+
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();
 		if(floater_world_map)
@@ -2855,7 +2872,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
 		{
-			reportToNearbyChat(gAgent.mMOTD);
+			report_to_nearby_chat(gAgent.mMOTD);
 		}
 		// </FS:Techwolf Lupindo>
 		// <FS:PP>

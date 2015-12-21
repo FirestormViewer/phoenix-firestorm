@@ -114,8 +114,8 @@
          function="Floater.Toggle"
          parameter="avatar" />
         <menu_item_call.on_visible
-         function="GridCheck"
-         parameter="secondlife"/>
+         function="GridFeatureCheck"
+         parameter="avatar_picker"/>
       </menu_item_call>
 		
         <menu_item_separator/>
@@ -178,7 +178,7 @@
                  function="Self.EnableForceSit" />
            </menu_item_check>
 		   <menu_item_check
-			 label="Move Lock"
+			 label="Movelock"
              shortcut="control|alt|P"
 			 name="Move Lock">
                 <menu_item_check.on_check
@@ -721,8 +721,8 @@
              function="Floater.Toggle"
              parameter="destinations" />
             <menu_item_call.on_visible
-             function="GridCheck"
-             parameter="secondlife"/>
+             function="GridFeatureCheck"
+             parameter="destination_guide"/>
         </menu_item_call>
             
         <menu_item_check
@@ -4198,7 +4198,7 @@
            shortcut="control|shift|Z">
             <menu_item_call.on_click
              function="Advanced.WebContentTest"
-             parameter="http://google.com"/>
+             parameter="https://callum-linden.s3.amazonaws.com/ceftests.html"/>
           </menu_item_call>
           <menu_item_call
            label="FB Connect Test"

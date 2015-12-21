@@ -36,7 +36,6 @@
 #include "lllineeditor.h"
 #include "llnotificationsutil.h"
 #include "llpermissions.h"
-#include "llsd.h"
 #include "llspinctrl.h"
 #include "lltexturectrl.h"
 #include "lltoolmgr.h"
@@ -46,7 +45,6 @@
 #include "llviewerpartsource.h"
 #include "llviewerregion.h"
 #include "llwindow.h"
-#include "v4math.h"
 #include "llviewerassetupload.h"
 
 ParticleEditor::ParticleEditor(const LLSD& key)
@@ -98,68 +96,66 @@ ParticleEditor::~ParticleEditor()
 
 BOOL ParticleEditor::postBuild()
 {
-	LLPanel* panel = getChild<LLPanel>("particle_editor_panel");
+	mMainPanel = getChild<LLPanel>("particle_editor_panel");
 
-	mMainPanel = panel;
+	mPatternTypeCombo = mMainPanel->getChild<LLComboBox>("pattern_type_combo");
+	mTexturePicker = mMainPanel->getChild<LLTextureCtrl>("texture_picker");
 
-	mPatternTypeCombo = panel->getChild<LLComboBox>("pattern_type_combo");
-	mTexturePicker = panel->getChild<LLTextureCtrl>("texture_picker");
+	mBurstRateSpinner = mMainPanel->getChild<LLSpinCtrl>("burst_rate_spinner");
+	mBurstCountSpinner = mMainPanel->getChild<LLSpinCtrl>("burst_count_spinner");
+	mBurstRadiusSpinner = mMainPanel->getChild<LLSpinCtrl>("burst_radius_spinner");
+	mAngleBeginSpinner = mMainPanel->getChild<LLSpinCtrl>("angle_begin_spinner");
+	mAngleEndSpinner = mMainPanel->getChild<LLSpinCtrl>("angle_end_spinner");
+	mBurstSpeedMinSpinner = mMainPanel->getChild<LLSpinCtrl>("burst_speed_min_spinner");
+	mBurstSpeedMaxSpinner = mMainPanel->getChild<LLSpinCtrl>("burst_speed_max_spinner");
+	mStartAlphaSpinner = mMainPanel->getChild<LLSpinCtrl>("start_alpha_spinner");
+	mEndAlphaSpinner = mMainPanel->getChild<LLSpinCtrl>("end_alpha_spinner");
+	mScaleStartXSpinner = mMainPanel->getChild<LLSpinCtrl>("scale_start_x_spinner");
+	mScaleStartYSpinner = mMainPanel->getChild<LLSpinCtrl>("scale_start_y_spinner");
+	mScaleEndXSpinner = mMainPanel->getChild<LLSpinCtrl>("scale_end_x_spinner");
+	mScaleEndYSpinner = mMainPanel->getChild<LLSpinCtrl>("scale_end_y_spinner");
+	mSourceMaxAgeSpinner = mMainPanel->getChild<LLSpinCtrl>("source_max_age_spinner");
+	mParticlesMaxAgeSpinner = mMainPanel->getChild<LLSpinCtrl>("particles_max_age_spinner");
+	mStartGlowSpinner = mMainPanel->getChild<LLSpinCtrl>("start_glow_spinner");
+	mEndGlowSpinner = mMainPanel->getChild<LLSpinCtrl>("end_glow_spinner");
 
-	mBurstRateSpinner = panel->getChild<LLSpinCtrl>("burst_rate_spinner");
-	mBurstCountSpinner = panel->getChild<LLSpinCtrl>("burst_count_spinner");
-	mBurstRadiusSpinner = panel->getChild<LLSpinCtrl>("burst_radius_spinner");
-	mAngleBeginSpinner = panel->getChild<LLSpinCtrl>("angle_begin_spinner");
-	mAngleEndSpinner = panel->getChild<LLSpinCtrl>("angle_end_spinner");
-	mBurstSpeedMinSpinner = panel->getChild<LLSpinCtrl>("burst_speed_min_spinner");
-	mBurstSpeedMaxSpinner = panel->getChild<LLSpinCtrl>("burst_speed_max_spinner");
-	mStartAlphaSpinner = panel->getChild<LLSpinCtrl>("start_alpha_spinner");
-	mEndAlphaSpinner = panel->getChild<LLSpinCtrl>("end_alpha_spinner");
-	mScaleStartXSpinner = panel->getChild<LLSpinCtrl>("scale_start_x_spinner");
-	mScaleStartYSpinner = panel->getChild<LLSpinCtrl>("scale_start_y_spinner");
-	mScaleEndXSpinner = panel->getChild<LLSpinCtrl>("scale_end_x_spinner");
-	mScaleEndYSpinner = panel->getChild<LLSpinCtrl>("scale_end_y_spinner");
-	mSourceMaxAgeSpinner = panel->getChild<LLSpinCtrl>("source_max_age_spinner");
-	mParticlesMaxAgeSpinner = panel->getChild<LLSpinCtrl>("particles_max_age_spinner");
-	mStartGlowSpinner = panel->getChild<LLSpinCtrl>("start_glow_spinner");
-	mEndGlowSpinner = panel->getChild<LLSpinCtrl>("end_glow_spinner");
+	mBlendFuncSrcCombo = mMainPanel->getChild<LLComboBox>("blend_func_src_combo");
+	mBlendFuncDestCombo = mMainPanel->getChild<LLComboBox>("blend_func_dest_combo");
 
-	mBlendFuncSrcCombo = panel->getChild<LLComboBox>("blend_func_src_combo");
-	mBlendFuncDestCombo = panel->getChild<LLComboBox>("blend_func_dest_combo");
+	mBounceCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("bounce_checkbox");
+	mEmissiveCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("emissive_checkbox");
+	mFollowSourceCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("follow_source_checkbox");
+	mFollowVelocityCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("follow_velocity_checkbox");
+	mInterpolateColorCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("interpolate_color_checkbox");
+	mInterpolateScaleCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("interpolate_scale_checkbox");
+	mTargetPositionCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("target_position_checkbox");
+	mTargetLinearCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("target_linear_checkbox");
+	mWindCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("wind_checkbox");
+	mRibbonCheckBox = mMainPanel->getChild<LLCheckBoxCtrl>("ribbon_checkbox");
 
-	mBounceCheckBox = panel->getChild<LLCheckBoxCtrl>("bounce_checkbox");
-	mEmissiveCheckBox = panel->getChild<LLCheckBoxCtrl>("emissive_checkbox");
-	mFollowSourceCheckBox = panel->getChild<LLCheckBoxCtrl>("follow_source_checkbox");
-	mFollowVelocityCheckBox = panel->getChild<LLCheckBoxCtrl>("follow_velocity_checkbox");
-	mInterpolateColorCheckBox = panel->getChild<LLCheckBoxCtrl>("interpolate_color_checkbox");
-	mInterpolateScaleCheckBox = panel->getChild<LLCheckBoxCtrl>("interpolate_scale_checkbox");
-	mTargetPositionCheckBox = panel->getChild<LLCheckBoxCtrl>("target_position_checkbox");
-	mTargetLinearCheckBox = panel->getChild<LLCheckBoxCtrl>("target_linear_checkbox");
-	mWindCheckBox = panel->getChild<LLCheckBoxCtrl>("wind_checkbox");
-	mRibbonCheckBox = panel->getChild<LLCheckBoxCtrl>("ribbon_checkbox");
+	mTargetKeyInput = mMainPanel->getChild<LLLineEditor>("target_key_input");
 
-	mTargetKeyInput = panel->getChild<LLLineEditor>("target_key_input");
+	mAcellerationXSpinner = mMainPanel->getChild<LLSpinCtrl>("acceleration_x_spinner");
+	mAcellerationYSpinner = mMainPanel->getChild<LLSpinCtrl>("acceleration_y_spinner");
+	mAcellerationZSpinner = mMainPanel->getChild<LLSpinCtrl>("acceleration_z_spinner");
 
-	mAcellerationXSpinner = panel->getChild<LLSpinCtrl>("acceleration_x_spinner");
-	mAcellerationYSpinner = panel->getChild<LLSpinCtrl>("acceleration_y_spinner");
-	mAcellerationZSpinner = panel->getChild<LLSpinCtrl>("acceleration_z_spinner");
+	mOmegaXSpinner = mMainPanel->getChild<LLSpinCtrl>("omega_x_spinner");
+	mOmegaYSpinner = mMainPanel->getChild<LLSpinCtrl>("omega_y_spinner");
+	mOmegaZSpinner = mMainPanel->getChild<LLSpinCtrl>("omega_z_spinner");
 
-	mOmegaXSpinner = panel->getChild<LLSpinCtrl>("omega_x_spinner");
-	mOmegaYSpinner = panel->getChild<LLSpinCtrl>("omega_y_spinner");
-	mOmegaZSpinner = panel->getChild<LLSpinCtrl>("omega_z_spinner");
+	mStartColorSelector = mMainPanel->getChild<LLColorSwatchCtrl>("start_color_selector");
+	mEndColorSelector = mMainPanel->getChild<LLColorSwatchCtrl>("end_color_selector");
 
-	mStartColorSelector = panel->getChild<LLColorSwatchCtrl>("start_color_selector");
-	mEndColorSelector = panel->getChild<LLColorSwatchCtrl>("end_color_selector");
-
-	mCopyToLSLButton = panel->getChild<LLButton>("copy_button");
+	mCopyToLSLButton = mMainPanel->getChild<LLButton>("copy_button");
 	mCopyToLSLButton->setCommitCallback(boost::bind(&ParticleEditor::onCopyButtonClicked, this));
 
-	mInjectScriptButton = panel->getChild<LLButton>("inject_button");
+	mInjectScriptButton = mMainPanel->getChild<LLButton>("inject_button");
 	mInjectScriptButton->setCommitCallback(boost::bind(&ParticleEditor::onInjectButtonClicked, this));
 
-	mClearTargetButton = panel->getChild<LLButton>("clear_target_button");
+	mClearTargetButton = mMainPanel->getChild<LLButton>("clear_target_button");
 	mClearTargetButton->setCommitCallback(boost::bind(&ParticleEditor::onClearTargetButtonClicked, this));
 
-	mPickTargetButton = panel->getChild<LLButton>("pick_target_button");
+	mPickTargetButton = mMainPanel->getChild<LLButton>("pick_target_button");
 	mPickTargetButton->setCommitCallback(boost::bind(&ParticleEditor::onTargetPickerButtonClicked, this));
 
 	mPatternTypeCombo->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange, this));
@@ -535,11 +531,8 @@ void ParticleEditor::onCopyButtonClicked()
 
 void ParticleEditor::onInjectButtonClicked()
 {
-	// TODO: move searching and creating the #Firestorm folder into a helper class for all to use
-	LLUUID categoryID;
-
 	// first try to find the #Firestorm folder
-	categoryID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
+	LLUUID categoryID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
 
 	// if no #Firestorm folder was found, create one
 	if (categoryID.isNull())

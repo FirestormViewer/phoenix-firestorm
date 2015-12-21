@@ -1098,5 +1098,8 @@
     <color
      name="CurrencyColor"
      reference="LabelTextColor" />
+  <color
+      name="UploadDialogBackground"
+      reference="FloaterDefaultBackgroundColor" />
 </colors>
 

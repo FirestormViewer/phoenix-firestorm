@@ -192,41 +192,25 @@ bool LLUrlEntryBase::isWikiLinkCorrect(std::string url)
 
 std::string LLUrlEntryBase::urlToLabelWithGreyQuery(const std::string &url) const
 {
-	// <FS:Ansariel> Unfail URI display
-	//LLUriParser up(unescapeUrl(url));
-	LLUriParser up(url);
-	if (up.getLastRes())
-	{
-		return unescapeUrl(url);
-	}
-	// </FS:Ansariel>
+	LLUriParser up(unescapeUrl(url));
 	up.normalize();
 
 	std::string label;
 	up.extractParts();
 	up.glueFirst(label);
 
-	// <FS:Ansariel> Unfail URI display
-	//return label;
-	return unescapeUrl(label);
-	// </FS:Ansariel>
+	return label;
 }
 
 std::string LLUrlEntryBase::urlToGreyQuery(const std::string &url) const
 {
-	// <FS:Ansariel> Unfail URI display
-	//LLUriParser up(unescapeUrl(url));
-	LLUriParser up(url);
-	// </FS:Ansariel>
+	LLUriParser up(unescapeUrl(url));
 
 	std::string label;
 	up.extractParts();
 	up.glueFirst(label);
 	std::string query = url.substr(label.size());
-	// <FS:Ansariel> Unfail URI display
-	//return query;
-	return unescapeUrl(query);
-	// </FS:Ansariel>
+	return query;
 }
 
 

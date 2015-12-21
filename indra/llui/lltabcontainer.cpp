@@ -432,7 +432,13 @@ void LLTabContainer::draw()
 				{
 					break;
 				}
-				target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				//target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				// <FS:Ansariel> Only show button if tab is visible
+				if ((*iter)->mVisible)
+				{
+					target_pixel_scroll += (*iter)->mButton->getRect().getWidth();
+				}
+				// </FS:Ansariel>
 				cur_scroll_pos--;
 			}
 
@@ -852,12 +858,40 @@ BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 	}
 // [/SL:KB]
 	BOOL handled = FALSE;
-	if (key == KEY_LEFT && mask == MASK_ALT)
+	// <FS:Ansariel> Use SHIFT-ALT mask to control parent container
+	if ((mask == (MASK_ALT | MASK_SHIFT)) && (key == KEY_LEFT || key == KEY_RIGHT))
+	{
+		LLTabContainer* parent_tab_container = getParentByType<LLTabContainer>();
+		if (parent_tab_container)
+		{
+			if (key == KEY_LEFT)
+			{
+				parent_tab_container->selectPrevTab();
+			}
+			else
+			{
+				parent_tab_container->selectNextTab();
+			}
+
+			if (parent_tab_container->getCurrentPanel())
+			{
+				parent_tab_container->getCurrentPanel()->setFocus(TRUE);
+			}
+
+			return TRUE;
+		}
+	}
+	if (key == KEY_LEFT && (mask == MASK_ALT || mask == (MASK_ALT | MASK_SHIFT)))
+	//if (key == KEY_LEFT && mask == MASK_ALT)
+	// </FS:Ansariel>
 	{
 		selectPrevTab();
 		handled = TRUE;
 	}
-	else if (key == KEY_RIGHT && mask == MASK_ALT)
+	// <FS:Ansariel> Use SHIFT-ALT mask to control parent container
+	//else if (key == KEY_RIGHT && mask == MASK_ALT)
+	else if (key == KEY_RIGHT && (mask == MASK_ALT || mask == (MASK_ALT | MASK_SHIFT)))
+	// </FS:Ansariel>
 	{
 		selectNextTab();
 		handled = TRUE;
@@ -2318,7 +2352,10 @@ void LLTabContainer::updateMaxScrollPos()
 			setMaxScrollPos(getTabCount());
 			for(tuple_list_t::reverse_iterator tab_it = mTabList.rbegin(); tab_it != mTabList.rend(); ++tab_it)
 			{
-				running_tab_width += (*tab_it)->mButton->getRect().getWidth();
+				// <FS:Ansariel> Only show button if tab is visible
+				//running_tab_width += (*tab_it)->mButton->getRect().getWidth();
+				running_tab_width += (*tab_it)->mVisible ? (*tab_it)->mButton->getRect().getWidth() : 0;
+				// </FS:Ansariel>
 				if (running_tab_width > available_width_with_arrows)
 				{
 					break;
@@ -2327,7 +2364,9 @@ void LLTabContainer::updateMaxScrollPos()
 			}
 			// in case last tab doesn't actually fit on screen, make it the last scrolling position
 			setMaxScrollPos(llmin(getMaxScrollPos(), getTabCount() - 1));
-			no_scroll = FALSE;
+			// <FS:Ansariel> Only show button if tab is visible
+			//no_scroll = FALSE;
+			no_scroll = (running_tab_width <= available_width_with_arrows);
 		}
 	}
 	if (no_scroll)
@@ -2445,5 +2484,7 @@ void LLTabContainer::setTabVisibility( LLPanel const *aPanel, bool aVisible )
 		this->setVisible( TRUE );
 	else
 		this->setVisible( FALSE );
+
+	updateMaxScrollPos();
 }
 // </FS:ND>

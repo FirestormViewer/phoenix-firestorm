@@ -142,7 +142,9 @@
 #include "fswsassetblacklist.h"
 #include "llfloaterbump.h"
 #include "llfloaterreg.h"
+#include "llfriendcard.h"
 #include "llgiveinventory.h"
+#include "lllandmarkactions.h"
 #include "lltexturefetch.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -1131,6 +1133,17 @@ protected:
 						LL_DEBUGS("Inventory_Move") << "Found asset UUID: " << asset_uuid << LL_ENDL;
 						was_moved = true;
 					}
+					// <FS:Ansariel> We might end up here if LLFriendCardsManager tries to sync the friend cards at login
+					//               and that might pop up the inventory window for extra annoyance -> silence this!
+					else if (added_item->getActualType() == LLAssetType::AT_CALLINGCARD)
+					{
+						if (LLFriendCardsManager::instance().isAvatarDataStored(added_item->getCreatorUUID()))
+						{
+							LL_DEBUGS("FriendCard") << "Skipping added calling card from friend cards sync: " << added_item->getCreatorUUID().asString() << LL_ENDL;
+							was_moved = true;
+						}
+					}
+					// </FS:Ansariel>
 				}
 			}
 
@@ -2743,6 +2756,49 @@ static void notification_group_name_cb(const std::string& group_name,
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
+static void teleport_region_info_cb(const std::string& slurl, LLSD args, const LLSD& payload, const LLUUID& from_id, const LLUUID& session_id, bool can_user_access_dst_region, bool does_user_require_maturity_increase)
+{
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		args["POS_SLURL"] = RlvStrings::getString(RLV_STRING_HIDDEN);
+	}
+	else
+	{
+		args["POS_SLURL"] = slurl;
+	}
+
+	LLNotification::Params params;
+
+	if (!can_user_access_dst_region)
+	{
+		params.name = "TeleportOffered_MaturityBlocked";
+		send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
+		send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+	}
+	else if (does_user_require_maturity_increase)
+	{
+		params.name = "TeleportOffered_MaturityExceeded";
+	}
+	else
+	{
+		params.name = "TeleportOffered";
+		params.functor.name = "TeleportOffered";
+	}
+
+	params.substitutions = args;
+	params.payload = payload;
+	LLPostponedNotification::add<LLPostponedOfferNotification>(params, from_id, false);
+
+	LLWindow* viewer_window = gViewerWindow->getWindow();
+	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
+	if (viewer_window && sFlashIcon)
+	{
+		viewer_window->flashIcon(5.f);
+	}
+}
+// </FS:Ansariel>
+
 void process_improved_im(LLMessageSystem *msg, void **user_data)
 {
 	LLUUID from_id;
@@ -2843,7 +2899,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Newline flood protection
 	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
-	if (useAntiSpam)
+	if (useAntiSpam && dialog != IM_GROUP_INVITATION)
 	{
 		bool doCheck = true;
 		if (from_id.isNull() || gAgentID == from_id)
@@ -3613,8 +3669,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["slurl"] = location;
 
 				// Look for IRC-style emotes here so object name formatting is correct
-				std::string prefix = message.substr(0, 4);
-				if (prefix == "/me " || prefix == "/me'")
+				// <FS:Ansariel> Consolidate IRC /me prefix checks
+				//std::string prefix = message.substr(0, 4);
+				//if (prefix == "/me " || prefix == "/me'")
+				if (is_irc_me_prefix(message))
+				// </FS:Ansariel>
 				{
 					chat.mChatStyle = CHAT_STYLE_IRC;
 				}
@@ -3877,6 +3936,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["lure_id"] = session_id;
 				payload["godlike"] = FALSE;
 				payload["region_maturity"] = region_access;
+
+				// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
+				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept))
+				{
+					LLVector3d pos_global = from_region_handle(region_handle);
+					pos_global += LLVector3d(pos);
+					LLLandmarkActions::getSLURLfromPosGlobal(pos_global, boost::bind(&teleport_region_info_cb, _1, args, payload, from_id, session_id, canUserAccessDstRegion, doesUserRequireMaturityIncrease));
+					return;
+				}
+				// </FS:Ansariel>
 
 				if (!canUserAccessDstRegion)
 				{
@@ -4597,8 +4666,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		BOOL ircstyle = FALSE;
 
 		// Look for IRC-style emotes here so chatbubbles work
-		std::string prefix = mesg.substr(0, 4);
-		if (prefix == "/me " || prefix == "/me'")
+		// <FS:Ansariel> Consolidate IRC /me prefix checks
+		//std::string prefix = mesg.substr(0, 4);
+		//if (prefix == "/me " || prefix == "/me'")
+		if (is_irc_me_prefix(mesg))
+		// </FS:Ansariel>
 		{
 			ircstyle = TRUE;
 		}
@@ -6269,11 +6341,11 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 
 						if (change_count > 0)
 						{
-							reportToNearbyChat(formatString(increase_message, args));
+							report_to_nearby_chat(format_string(increase_message, args));
 						}
 						else if (change_count < 0)
 						{
-							reportToNearbyChat(formatString(decrease_message, args));
+							report_to_nearby_chat(format_string(decrease_message, args));
 						}
 					}
 				}
@@ -7545,7 +7617,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			// </FS:Ansariel>
 
 			make_ui_sound("UISndRestart");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7770,7 +7842,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			}
 
 			make_ui_sound("UISndRestartOpenSim");
-			reportToNearbyChat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
+			report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
 			return;
 		}
 		// </FS:Ansariel>
@@ -7935,7 +8007,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 					action = LLTrans::getString("Collision_UnknownType", args);
 					return;
 			}
-			reportToNearbyChat(action);
+			report_to_nearby_chat(action);
 		}
 		// </FS:Ansariel> Nearby Chat Collision Messages
 		// <FS:Ansariel> Report Collision Messages to scripts

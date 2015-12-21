@@ -368,7 +368,7 @@ F32 LLScriptFloater::getCurrentTransparency()
 {
 	if (mNoTransparency)
 	{
-		return 1.0;
+		return 1.0f;
 	}
 	else
 	{

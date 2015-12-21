@@ -46,7 +46,6 @@
 #include "llviewernetwork.h"        // FIX FIRE 3143 SJ
 #include "llcorehttputil.h"
 #include "llfloaterreg.h"
-
 LLFloaterTOS::LLFloaterTOS(const LLSD& data)
 :	LLModalDialog( data["message"].asString() ),
 	mMessage(data["message"].asString()),
@@ -108,6 +107,20 @@ BOOL LLFloaterTOS::postBuild()
 	if (web_browser && use_web_browser)
 // </FS:CR>
 	{
+// if we are forced to send users to an external site in their system browser
+// (e.g.) Linux users because of lack of media support for HTML ToS page
+// remove exisiting UI and replace with a link to external page where users can accept ToS
+#ifdef EXTERNAL_TOS
+		LLTextBox* header = getChild<LLTextBox>("tos_heading");
+		if (header)
+			header->setVisible(false);
+
+		LLTextBox* external_prompt = getChild<LLTextBox>("external_tos_required");
+		if (external_prompt)
+			external_prompt->setVisible(true);
+
+		web_browser->setVisible(false);
+#else
 		web_browser->addObserver(this);
 
 // <FS:CR> FIRE-8063 - Aurora and OpenSim TOS
@@ -133,6 +146,7 @@ BOOL LLFloaterTOS::postBuild()
 				media_plugin->setOverrideClickTarget("_external");
 			}
 		}
+#endif
 	}
 #ifdef OPENSIM
 	else if (LLGridManager::getInstance()->isInOpenSim())
@@ -161,6 +175,13 @@ BOOL LLFloaterTOS::postBuild()
 
 void LLFloaterTOS::setSiteIsAlive( bool alive )
 {
+// if we are forced to send users to an external site in their system browser
+// (e.g.) Linux users because of lack of media support for HTML ToS page
+// force the regular HTML UI to deactivate so alternative is rendered instead.
+#ifdef EXTERNAL_TOS
+	mSiteAlive = false;
+#else
+
 	mSiteAlive = alive;
 	
 	// only do this for TOS pages
@@ -189,6 +210,7 @@ void LLFloaterTOS::setSiteIsAlive( bool alive )
 			tos_agreement->setEnabled( true );
 		}
 	}
+#endif
 }
 
 LLFloaterTOS::~LLFloaterTOS()

@@ -10,7 +10,7 @@
  save_rect="true"
  single_instance="true"
  title="Preferences"
- width="658">
+ width="662">
 	
 	<floater.string name="LoginToChange">
 		Login to change
@@ -100,12 +100,12 @@
      name="pref core"
      tab_group="1"
      tab_position="left"
-     tab_width="115"
-     tab_padding_right="0"
+     tab_width="114"
+     tab_padding_right="4"
      top="42"
-     width="658">
+     width="662">
         <panel
-          class="panel_preference"
+         class="panel_preference"
          filename="panel_preferences_general.xml"
          label="General"
          layout="topleft"

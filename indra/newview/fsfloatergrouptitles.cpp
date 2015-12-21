@@ -92,7 +92,7 @@ BOOL FSFloaterGroupTitles::postBuild()
 	mTitleList->setDoubleClickCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
 	mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
 
-	mTitleList->sortByColumn("grouptitle", TRUE);
+	mTitleList->sortByColumn("title_sort_column", TRUE);
 
 	refreshGroupTitles();
 
@@ -156,10 +156,10 @@ void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& rol
 	item["columns"][3]["value"] = group_id;
 	item["columns"][4]["column"] = "title_sort_column";
 	item["columns"][4]["type"] = "text";
-	item["columns"][4]["value"] = (is_group ? title : "");
+	item["columns"][4]["value"] = (is_group ? ("1_" + title) : "0");
 	item["columns"][5]["column"] = "name_sort_column";
 	item["columns"][5]["type"] = "text";
-	item["columns"][5]["value"] = (is_group ? group_name : "");
+	item["columns"][5]["value"] = (is_group ? ("1_" + group_name) : "0");
 
 	mTitleList->addElement(item);
 

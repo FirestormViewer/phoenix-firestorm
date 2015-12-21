@@ -62,7 +62,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl-Version: [LIBCURL_VERSION]
 J2C-Decoderversion: [J2C_VERSION]
 Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
-Qt Webkit-Version: [QT_WEBKIT_VERSION]
+LLCEFLib/CEF-Version: [LLCEFLIB_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</string>
 	<string name="AboutSettings">
@@ -903,6 +903,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="AvatarAutoResponse">
 		Automatische Antwort
+	</string>
+	<string name="AvatarTyping">
+		Tippt
 	</string>
 	<string name="anim_express_afraid">
 		Ängstlich

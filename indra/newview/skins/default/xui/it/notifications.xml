@@ -2867,7 +2867,7 @@ Riprova tra qualche istante.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione:
+		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione: ([POS_SLURL])
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2877,7 +2877,7 @@ Riprova tra qualche istante.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione:
+		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2889,7 +2889,7 @@ Questa regione include contenuti [REGION_CONTENT_MATURITY], ma le tue preferenze
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
-		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione:
+		[NAME_SLURL] ti ha offerto il teleport alla sua ubicazione ([POS_SLURL]):
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]

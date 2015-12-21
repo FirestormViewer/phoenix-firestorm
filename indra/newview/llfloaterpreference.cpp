@@ -116,6 +116,7 @@
 #include "llpluginclassmedia.h"
 #include "llteleporthistorystorage.h"
 #include "llproxy.h"
+#include "llweb.h"
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
@@ -125,6 +126,7 @@
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
+#include "lfsimfeaturehandler.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lleventtimer.h"
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -363,22 +365,29 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 	if ( option == 0 ) // YES
 	{
 		std::string url;
-#ifdef OPENSIM // <FS:AW optional opensim support>
-		if(LLGridManager::getInstance()->isInOpenSim())
+
+		if (LFSimFeatureHandler::instanceExists())
 		{
-			url = LLLoginInstance::getInstance()->hasResponse("search")
-				? LLLoginInstance::getInstance()->getResponse("search").asString()
-				: gSavedSettings.getString("SearchURLOpenSim");
+			url = LFSimFeatureHandler::instance().searchURL();
 		}
-		else // we are in SL or SL beta
-#endif // OPENSIM // <FS:AW optional opensim support>
+		else
 		{
-			//not in OpenSim means we are in SL or SL beta
-			url = gSavedSettings.getString("SearchURL");
+#ifdef OPENSIM // <FS:AW optional opensim support>
+			if (LLGridManager::getInstance()->isInOpenSim())
+			{
+				url = LLLoginInstance::getInstance()->hasResponse("search")
+					? LLLoginInstance::getInstance()->getResponse("search").asString()
+					: gSavedSettings.getString("SearchURLOpenSim");
+			}
+			else // we are in SL or SL beta
+#endif // OPENSIM // <FS:AW optional opensim support>
+			{
+				//not in OpenSim means we are in SL or SL beta
+				url = gSavedSettings.getString("SearchURL");
+			}
 		}
 
 		gSavedSettings.setString("SearchURLDebug", url);
-
 	}
 
 	return false;
@@ -472,6 +481,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
+	mCommitCallbackRegistrar.add("Pref.VoiceSetClearKey",		boost::bind(&LLFloaterPreference::onClickClearKey, this)); // <FS:Ansariel> FIRE-3803: Clear voice toggle button
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
 	//<FS:KC> Handled centrally now
 //	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
@@ -613,13 +623,9 @@ BOOL LLFloaterPreference::postBuild()
 {
 	// <FS:Ansariel> [FS communication UI]
 	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false));
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-	// </FS:Ansariel> [FS communication UI]
 
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
+	// </FS:Ansariel> [FS communication UI]
 
 	gSavedSettings.getControl("ChatBubbleOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onNameTagOpacityChange, this, _2));
 	gSavedSettings.getControl("ConsoleBackgroundOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onConsoleOpacityChange, this, _2));	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
@@ -2202,6 +2208,13 @@ void LLFloaterPreference::onClickSetKey()
 	}
 }
 
+// <FS:Ansariel> FIRE-3803: Clear voice toggle button
+void LLFloaterPreference::onClickClearKey()
+{
+	gSavedSettings.setString("PushToTalkButton", "");
+}
+// </FS:Ansariel>
+
 void LLFloaterPreference::setKey(KEY key)
 {
 	getChild<LLUICtrl>("modifier_combo")->setValue(LLKeyboard::stringFromKey(key));
@@ -2918,6 +2931,16 @@ BOOL LLPanelPreference::postBuild()
 	//}
 	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
 	
+#ifdef EXTERNAL_TOS
+	LLRadioGroup* ext_browser_settings = getChild<LLRadioGroup>("preferred_browser_behavior");
+	if (ext_browser_settings)
+	{
+		// turn off ability to set external/internal browser
+		ext_browser_settings->setSelectedByValue(LLWeb::BROWSER_EXTERNAL_ONLY, true);
+		ext_browser_settings->setEnabled(false);
+	}
+#endif
+
 	////////////////////// PanelAlerts ///////////////////
 	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
 	{

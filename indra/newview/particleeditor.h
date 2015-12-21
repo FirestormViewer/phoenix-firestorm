@@ -22,7 +22,6 @@
 #ifndef PARTICLEEDITOR_H
 #define PARTICLEEDITOR_H
 
-#include "v4color.h"
 #include "llfloater.h"
 #include "llpartdata.h"
 #include "llviewerinventory.h"

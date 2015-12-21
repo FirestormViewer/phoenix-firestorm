@@ -182,8 +182,10 @@ BOOL LLSidepanelInventory::postBuild()
 		mTeleportBtn = mInventoryPanel->getChild<LLButton>("teleport_btn");
 		mTeleportBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onTeleportButtonClicked, this));
 		
-		mOverflowBtn = mInventoryPanel->getChild<LLButton>("overflow_btn");
-		mOverflowBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onOverflowButtonClicked, this));
+		// <FS:Ansariel> Doesn't exist as of 2015-11-26
+		//mOverflowBtn = mInventoryPanel->getChild<LLButton>("overflow_btn");
+		//mOverflowBtn->setClickedCallback(boost::bind(&LLSidepanelInventory::onOverflowButtonClicked, this));
+		// </FS:Ansariel>
 		
 		mPanelMainInventory = mInventoryPanel->getChild<LLPanelMainInventory>("panel_main_inventory");
 		mPanelMainInventory->setSelectCallback(boost::bind(&LLSidepanelInventory::onSelectionChange, this, _1, _2));
@@ -544,9 +546,11 @@ void LLSidepanelInventory::onTeleportButtonClicked()
 	performActionOnSelection("teleport");
 }
 
-void LLSidepanelInventory::onOverflowButtonClicked()
-{
-}
+// <FS:Ansariel> Doesn't exist as of 2015-11-26
+//void LLSidepanelInventory::onOverflowButtonClicked()
+//{
+//}
+// </FS:Ansariel>
 
 void LLSidepanelInventory::onBackButtonClicked()
 {

@@ -249,6 +249,10 @@ if (LINUX)
   add_definitions(-std=gnu++11)
   # </FS:ND>
 
+  # force this platform to accept TOS via external browser <FS:ND> No, do not.
+  # add_definitions(-DEXTERNAL_TOS)
+
+
   add_definitions(-DAPPID=secondlife)
   add_definitions(-fvisibility=hidden)
   # don't catch SIGCHLD in our base application class for the viewer - some of our 3rd party libs may need their *own* SIGCHLD handler to work.  Sigh!  The viewer doesn't need to catch SIGCHLD anyway.

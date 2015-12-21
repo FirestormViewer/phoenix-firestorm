@@ -1461,7 +1461,7 @@ Port settings take effect after restarting [APP_NAME].
 The new skin will appear after restarting [APP_NAME].
     <usetemplate
      name="okcancelbuttons"
-     notext="Ok"
+     notext="OK"
      yestext="Restart"/>
   </notification>
 
@@ -1510,7 +1510,7 @@ Are you sure you want to delete this notecard?
      ignoretext="Confirm notecard deletion"
      name="okcancelignore"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
 
   <notification
@@ -1629,10 +1629,23 @@ The object may be out of range or may have been deleted.
    icon="alertmodal.tga"
    name="CannotDownloadFile"
    type="alertmodal">
-Unable to download file
-  <tag>fail</tag>
+    Unable to download file
+    <tag>fail</tag>
   </notification>
 
+  <notification
+  name="MediaFileDownloadUnsupported"
+  label=""
+  type="alert">
+    <unique/>
+    <tag>confirm</tag>
+    You have requested a file download, which is not supported within [SECOND_LIFE].
+    <usetemplate
+     ignoretext="Warn about unsupported file downloads"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+  
   <notification
    icon="alertmodal.tga"
    name="CannotWriteFile"
@@ -5994,7 +6007,7 @@ When you add a person to an existing conversation, a new conversation will be cr
      ignoretext="Confirm adding chat paticipants"
      name="okcancelignore"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
  
   <notification
@@ -7837,7 +7850,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    log_to_chat="false"
    type="offer"
    sound="UISndTeleportOffer">
-[NAME_SLURL] has offered to teleport you to their location:
+[NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -7860,7 +7873,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    log_to_im="true"
    log_to_chat="false"
    type="offer">
-[NAME_SLURL] has offered to teleport you to their location:
+[NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -7885,7 +7898,7 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
    log_to_im="true"
    log_to_chat="false"
    type="notifytip">
-[NAME_SLURL] has offered to teleport you to their location:
+[NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -8359,7 +8372,7 @@ To grant this permission please update your viewer to the latest version from [D
 			 default="true"
 			 index="1"
 			 name="Deny"
-			 text="Ok"/>
+			 text="OK"/>
 			<button
 			 index="2"
 			 name="Mute"
@@ -8983,7 +8996,7 @@ With the following Residents:
 	<usetemplate
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
   
   <notification
@@ -12433,7 +12446,7 @@ Are you sure you want to remove [SET_NAME]? You won&apos;t be able to restore it
      ignoretext="Confirm before removing a contact set"
      name="okcancelignore"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
 
   <notification
@@ -12447,7 +12460,7 @@ Are you sure you want to remove [TARGET] from [SET_NAME]?
      ignoretext="Confirm before removing someone from a contact set"
      name="okcancelignore"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
 
   <notification
@@ -12461,7 +12474,7 @@ Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
      ignoretext="Confirm before removing multiple avatars from a contact set"
      name="okcancelignore"
      notext="Cancel"
-     yestext="Ok"/>
+     yestext="OK"/>
   </notification>
 
   <notification
@@ -12688,6 +12701,16 @@ the region &quot;[REGION]&quot;?
     Can't create another pick because the maximum number of picks have been created already.
     <usetemplate
      name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="GlobalOnlineStatusToggle"
+   type="alertmodal">
+Due to server load, mass toggling online status visibility can take a while to become effective. Please be patient.
+    <usetemplate
+     ignoretext="Inform me that toggling online status visibility may take a while"
+     name="okignore"
      yestext="OK"/>
   </notification>
 </notifications>

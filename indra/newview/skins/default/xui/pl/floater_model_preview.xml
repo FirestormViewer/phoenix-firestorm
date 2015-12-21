@@ -5,7 +5,7 @@
   <string name="status_material_mismatch">Błąd: Materiał nie jest podzbiorem modelu referencyjnego.</string>
   <string name="status_reading_file">Wczytywanie...</string>
   <string name="status_generating_meshes">Generowanie meszy...</string>
-  <string name="status_vertex_number_overflow">Błąd: Ilość wierzchołków większa niż 65534, przerwano!</string>
+  <string name="status_vertex_number_overflow">Błąd: Ilość wierzchołków większa niż 65535, przerwano!</string>
   <string name="bad_element">Błąd: element nieprawidłowy</string>
   <string name="high">Wysokie</string>
   <string name="medium">Średnie</string>

@@ -177,8 +177,8 @@ void FSRadar::updateRadarList()
 	LLMuteList* mutelist = LLMuteList::getInstance();
 	FSWSAssetBlacklist* blacklist = FSWSAssetBlacklist::getInstance();
 
-	static const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
-	static const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
+	const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
+	const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
 
 	static const std::string str_chat_entering =			LLTrans::getString("entering_chat_range");
 	static const std::string str_chat_leaving =				LLTrans::getString("leaving_chat_range");
@@ -228,13 +228,14 @@ void FSRadar::updateRadarList()
 	//STEP 1: Update our basic data model: detect Avatars & Positions in our defined range
 	std::vector<LLVector3d> positions;
 	uuid_vec_t avatar_ids;
+	std::map<LLUUID, LLUUID> region_assignments;
 	if (sLimitRange)
 	{
-		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange);
+		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange, &region_assignments);
 	}
 	else
 	{
-		world->getAvatars(&avatar_ids, &positions);
+		world->getAvatars(&avatar_ids, &positions, LLVector3d(), FLT_MAX, &region_assignments);
 	}
 
 	// Determine lists of new added and removed avatars
@@ -297,7 +298,13 @@ void FSRadar::updateRadarList()
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
-		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
+		LLViewerRegion* reg = world->getRegionFromID(region_assignments[avId]);
+		if (!reg)
+		{
+			// Fallback in case we somehow didn't get the region via ID
+			LL_DEBUGS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
+			reg = world->getRegionFromPosGlobal(avPos);
+		}
 		if (!ent) // don't update this radar listing if data is inaccessible
 		{
 			continue;
@@ -380,7 +387,7 @@ void FSRadar::updateRadarList()
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
-				std::string message = formatString(str_chat_entering, args);
+				std::string message = format_string(str_chat_entering, args);
 				make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 			}
@@ -388,7 +395,7 @@ void FSRadar::updateRadarList()
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
-				std::string message = formatString(str_draw_distance_entering, args);
+				std::string message = format_string(str_draw_distance_entering, args);
 				make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 			}
@@ -399,7 +406,7 @@ void FSRadar::updateRadarList()
 				{
 					LLStringUtil::format_map_t args;
 					args["DISTANCE"] = llformat("%3.2f", avRange);
-					std::string message = formatString(str_region_entering_distance, args);
+					std::string message = format_string(str_region_entering_distance, args);
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
 				else
@@ -437,7 +444,7 @@ void FSRadar::updateRadarList()
 				{
 					LLStringUtil::format_map_t args;
 					args["DISTANCE"] = llformat("%3.2f", avRange);
-					std::string message = formatString(str_chat_entering, args);
+					std::string message = format_string(str_chat_entering, args);
 					make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
@@ -453,7 +460,7 @@ void FSRadar::updateRadarList()
 				{
 					LLStringUtil::format_map_t args;
 					args["DISTANCE"] = llformat("%3.2f", avRange);
-					std::string message = formatString(str_draw_distance_entering, args);
+					std::string message = format_string(str_draw_distance_entering, args);
 					make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
@@ -472,7 +479,7 @@ void FSRadar::updateRadarList()
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = formatString(str_region_entering_distance, args);
+						std::string message = format_string(str_region_entering_distance, args);
 						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 					}
 					else
@@ -526,7 +533,7 @@ void FSRadar::updateRadarList()
 					make_ui_sound("UISndRadarAgeAlert");
 					LLStringUtil::format_map_t args;
 					args["AGE"] = llformat("%d", avAge);
-					std::string message = formatString(str_avatar_age_alert, args);
+					std::string message = format_string(str_avatar_age_alert, args);
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
 				ent->mAgeAlertPerformed = true;
@@ -782,15 +789,7 @@ void FSRadar::updateRadarList()
 		RadarFields rf;
 		rf.lastDistance = ent->mRange;
 		rf.lastIgnore = ent->mIgnore;
-		rf.lastRegion = LLUUID::null;
-		if (ent->mGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
-		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
-			if (lastRegion)
-			{
-				rf.lastRegion = lastRegion->getRegionID();
-			}
-		}
+		rf.lastRegion = ent->getRegion();
 		
 		mLastRadarSweep[ent->mID] = rf;
 	}
@@ -978,7 +977,7 @@ void FSRadar::zoomAvatar(const LLUUID& avatar_id, const std::string& name)
 	{
 		LLStringUtil::format_map_t args;
 		args["AVATARNAME"] = name.c_str();
-		reportToNearbyChat(LLTrans::getString("camera_no_focus", args));
+		report_to_nearby_chat(LLTrans::getString("camera_no_focus", args));
 	}
 }
 

@@ -17,7 +17,7 @@
 		Netze werden generiert...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Fehler: Anzahl von Vertices überschreitet 65534. Operation abgebrochen.
+		Fehler: Anzahl von Vertices überschreitet 65535. Operation abgebrochen.
 	</string>
 	<string name="bad_element">
 		Fehler: ungültiges Element.

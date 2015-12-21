@@ -1375,7 +1375,7 @@ Prøv igen om lidt.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] har tilbudt en teleport til deres lokation:
+		[NAME_SLURL] har tilbudt en teleport til deres lokation ([POS_SLURL]):
 
 [MESSAGE] - [MATURITY_STR] &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;
 		<form name="form">
