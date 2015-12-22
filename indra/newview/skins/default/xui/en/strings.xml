@@ -54,7 +54,7 @@ RestrainedLove API: [RLV_VERSION]
 libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
-Qt Webkit Version: [QT_WEBKIT_VERSION]
+LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
   <string name="AboutSettings">
@@ -2528,7 +2528,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Snapshot_To_Disk_Label">Snapshot to Disk</string>
   <string name="Command_Radar_Label">Radar</string>
   <string name="Command_Conversation_Log_Label">Conversation Log</string>
-  <string name="Command_Move_Lock_Label">Move Lock</string>
+  <string name="Command_Move_Lock_Label">Movelock</string>
   <string name="Command_Blocklist_Label">Block List</string>
   <string name="Command_ResyncAnimations_Label">Resync animations</string>
   <string name="Command_RegionTracker_Label">Region Tracker</string>

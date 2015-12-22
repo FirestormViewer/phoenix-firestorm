@@ -45,7 +45,6 @@ include(OPENAL)
 include(OpenGL)
 include(OpenSSL)
 include(PNG)
-include(Prebuilt)
 include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
@@ -73,11 +72,6 @@ endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
-
-# install SLPlugin host executable and its dynamic-library plugins
-if (NOT ENABLE_MEDIA_PLUGINS)
-  use_prebuilt_binary(slplugins)
-endif (NOT ENABLE_MEDIA_PLUGINS)
 
 if(LEAPMOTION)
   add_definitions(-DUSE_LEAPMOTION=1)
@@ -2122,45 +2116,13 @@ if (WINDOWS)
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable_xp.txt
       ${ARCH_PREBUILT_DIRS_RELEASE}/libeay32.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtcore4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtgui4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtnetwork4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtopengl4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtwebkit4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/qtxmlpatterns4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/ssleay32.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qgif4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qico4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qjpeg4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qmng4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qsvg4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/imageformats/qtiff4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qcncodecs4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qjpcodecs4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qkrcodecs4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qtwcodecs4.dll
       ${ARCH_PREBUILT_DIRS_DEBUG}/libeay32.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtcored4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtguid4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtnetworkd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtopengld4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtwebkitd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/qtxmlpatternsd4.dll
       ${ARCH_PREBUILT_DIRS_DEBUG}/ssleay32.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qgifd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qicod4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qjpegd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qmngd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qsvgd4.dll
-      ${ARCH_PREBUILT_DIRS_DEBUG}/imageformats/qtiffd4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qcncodecsd4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qjpcodecsd4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qkrcodecsd4.dll
-      ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qtwcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
       SLPlugin
       media_plugin_quicktime
-      media_plugin_webkit
+      media_plugin_cef
       winmm_shim
       windows-crash-logger
       )
@@ -2223,11 +2185,15 @@ if (WINDOWS)
     if (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
-
-##  add_dependencies(${VIEWER_BINARY_NAME}
-##    SLPlugin
-##    windows-crash-logger
-##    )
+	
+    if( NOT ND_BUILD64BIT_ARCH )
+    add_dependencies(${VIEWER_BINARY_NAME}
+      SLPlugin
+   windows-crash-logger
+    )
+	else()
+       add_dependencies(${VIEWER_BINARY_NAME} windows-crash-logger )
+    endif( NOT ND_BUILD64BIT_ARCH )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
@@ -2413,9 +2379,9 @@ if (NOT ENABLE_MEDIA_PLUGINS)
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
-##  SLPlugin
-##  media_plugin_webkit
-##  media_plugin_gstreamer010
+    SLPlugin
+    media_plugin_cef
+    media_plugin_gstreamer010
     llcommon
     )
 else (NOT ENABLE_MEDIA_PLUGINS)
@@ -2423,7 +2389,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
     SLPlugin
-    media_plugin_webkit
+    media_plugin_cef
     media_plugin_gstreamer010
     llcommon
     )
@@ -2540,7 +2506,7 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
 
-##add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_webkit mac-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
   add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
 
   if (ENABLE_SIGNING)
@@ -2596,11 +2562,10 @@ if (PACKAGE)
   if (DARWIN)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
     # *TODO: Generate these search dirs in the cmake files related to each binary.
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
-##  list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin.tar.bz2")
 ##  set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
     set(VIEWER_EXE_GLOBS "'Firestorm' mac-crash-logger")
@@ -2610,7 +2575,7 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-linux.tar.bz2")
 ##  set(VIEWER_EXE_GLOBS "do-not-directly-run-secondlife-bin SLPlugin")
-    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin")
+    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin SLPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)

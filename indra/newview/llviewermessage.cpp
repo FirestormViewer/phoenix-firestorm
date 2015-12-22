@@ -2897,7 +2897,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Newline flood protection
 	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
-	if (useAntiSpam)
+	if (useAntiSpam && dialog != IM_GROUP_INVITATION)
 	{
 		bool doCheck = true;
 		if (from_id.isNull() || gAgentID == from_id)
@@ -7189,6 +7189,7 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 			}
 		}
 		final_args["SLURLMESSAGE"] = message;
+		payload["dest_id"] = dest_id;
 
 		args["NAME"] = dest_slurl_name;
 		if (!reason.empty())

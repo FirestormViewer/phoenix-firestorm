@@ -14,7 +14,7 @@
 		Gerando meshes...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Erro: Número de Vertex acima de 65534. Abortado.
+		Erro: Número de Vertex acima de 65535. Abortado.
 	</string>
 	<string name="bad_element">
 		Erro: elemento inválido

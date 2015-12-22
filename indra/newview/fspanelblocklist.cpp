@@ -118,7 +118,17 @@ void FSPanelBlockList::onOpen(const LLSD& key)
 
 void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 {
-	mBlockedList->selectByID(mute_id);
+	mBlockedList->deselectAllItems();
+	std::vector<LLScrollListItem*> items = mBlockedList->getAllData();
+	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); it++)
+	{
+		if ((*it)->getColumn(3)->getValue().asUUID() == mute_id)
+		{
+			(*it)->setSelected(TRUE);
+			break;
+		}
+	}
+
 	mBlockedList->scrollToShowSelected();
 }
 
@@ -154,10 +164,11 @@ void FSPanelBlockList::refreshBlockedList()
 	{
 		LLScrollListItem::Params item_p;
 		item_p.enabled(TRUE);
-		item_p.value(it->mID); // link UUID of blocked item with ScrollListItem
+		item_p.value(LLUUID::generateNewID()); // can't link UUID of blocked item directly because of mutes by name
 		item_p.columns.add().column("item_name").value(it->mName);
 		item_p.columns.add().column("item_type").value(it->getDisplayType());
 		item_p.columns.add().column("item_mute_type").value(it->mType);
+		item_p.columns.add().column("item_mute_uuid").value(it->mID);
 
 		mBlockedList->addRow(item_p, ADD_BOTTOM);
 	}
@@ -184,7 +195,7 @@ void FSPanelBlockList::removeMutes()
 	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); it++)
 	{
 		std::string name = (*it)->getColumn(0)->getValue().asString();
-		LLUUID id = (*it)->getUUID();
+		LLUUID id = (*it)->getColumn(3)->getValue().asUUID();
 		LLMute mute(id, name);
 		LLMuteList::getInstance()->remove(mute);
 	}
@@ -325,7 +336,7 @@ void FSPanelBlockList::showProfile()
 	if (mBlockedList->getNumSelected() == 1 &&
 		(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(2)->getValue().asInteger() == LLMute::AGENT)
 	{
-		LLAvatarActions::showProfile(mBlockedList->getValue());
+		LLAvatarActions::showProfile(mBlockedList->getFirstSelected()->getColumn(3)->getValue().asUUID());
 	}
 }
 

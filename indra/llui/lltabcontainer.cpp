@@ -858,12 +858,40 @@ BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 	}
 // [/SL:KB]
 	BOOL handled = FALSE;
-	if (key == KEY_LEFT && mask == MASK_ALT)
+	// <FS:Ansariel> Use SHIFT-ALT mask to control parent container
+	if ((mask == (MASK_ALT | MASK_SHIFT)) && (key == KEY_LEFT || key == KEY_RIGHT))
+	{
+		LLTabContainer* parent_tab_container = getParentByType<LLTabContainer>();
+		if (parent_tab_container)
+		{
+			if (key == KEY_LEFT)
+			{
+				parent_tab_container->selectPrevTab();
+			}
+			else
+			{
+				parent_tab_container->selectNextTab();
+			}
+
+			if (parent_tab_container->getCurrentPanel())
+			{
+				parent_tab_container->getCurrentPanel()->setFocus(TRUE);
+			}
+
+			return TRUE;
+		}
+	}
+	if (key == KEY_LEFT && (mask == MASK_ALT || mask == (MASK_ALT | MASK_SHIFT)))
+	//if (key == KEY_LEFT && mask == MASK_ALT)
+	// </FS:Ansariel>
 	{
 		selectPrevTab();
 		handled = TRUE;
 	}
-	else if (key == KEY_RIGHT && mask == MASK_ALT)
+	// <FS:Ansariel> Use SHIFT-ALT mask to control parent container
+	//else if (key == KEY_RIGHT && mask == MASK_ALT)
+	else if (key == KEY_RIGHT && (mask == MASK_ALT || mask == (MASK_ALT | MASK_SHIFT)))
+	// </FS:Ansariel>
 	{
 		selectNextTab();
 		handled = TRUE;

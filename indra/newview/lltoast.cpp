@@ -393,6 +393,12 @@ void LLToast::setVisible(BOOL show)
 		if (!getVisible())
 		{
 			LLModalDialog::setFrontmost(FALSE);
+			// <FS:Ansariel> Properly push the modal toast on the modal dialog stack
+			if (isModal() && std::find(sModalStack.begin(), sModalStack.end(), this) == sModalStack.end())
+			{
+				onOpen(LLSD());
+			}
+			// </FS:Ansariel>
 		}
 	}
 	else

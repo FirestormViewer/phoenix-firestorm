@@ -14,7 +14,7 @@
 		Örgüler Oluşturuluyor...
 	</string>
 	<string name="status_vertex_number_overflow">
-		Hata: Köşe numarası 65534&apos;ten fazla, işlem durduruldu!
+		Hata: Köşe numarası 65535&apos;ten fazla, işlem durduruldu!
 	</string>
 	<string name="bad_element">
 		Hata: Öğe geçersiz

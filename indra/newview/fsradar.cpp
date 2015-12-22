@@ -302,7 +302,7 @@ void FSRadar::updateRadarList()
 		if (!reg)
 		{
 			// Fallback in case we somehow didn't get the region via ID
-			LL_WARNS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
+			LL_DEBUGS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
 			reg = world->getRegionFromPosGlobal(avPos);
 		}
 		if (!ent) // don't update this radar listing if data is inaccessible
@@ -791,15 +791,7 @@ void FSRadar::updateRadarList()
 		RadarFields rf;
 		rf.lastDistance = ent->mRange;
 		rf.lastIgnore = ent->mIgnore;
-		rf.lastRegion = LLUUID::null;
-		if (ent->mGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
-		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
-			if (lastRegion)
-			{
-				rf.lastRegion = lastRegion->getRegionID();
-			}
-		}
+		rf.lastRegion = ent->getRegion();
 		
 		mLastRadarSweep[ent->mID] = rf;
 	}

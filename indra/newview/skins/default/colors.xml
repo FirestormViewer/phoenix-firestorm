@@ -1306,4 +1306,7 @@
   <color
       name="UriQueryPartColor"
       value="0.780 0.850 0.674 1.0" />
+  <color
+      name="UploadDialogBackground"
+      reference="DkGray" />
 </colors>

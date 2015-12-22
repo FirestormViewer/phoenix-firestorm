@@ -1355,4 +1355,7 @@
   <color
       name="UriQueryPartColor"
       reference="AnsaStorm_HtmlLink_QueryPart" />
+  <color
+      name="UploadDialogBackground"
+      reference="SL-Background_66" />
 </colors>

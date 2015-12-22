@@ -55,7 +55,7 @@ Scheda grafica: [GRAPHICS_CARD]
 Versione libcurl: [LIBCURL_VERSION]
 Versione J2C Decoder: [J2C_VERSION]
 Versione Driver audio: [AUDIO_DRIVER_VERSION]
-Versione Qt Webkit: [QT_WEBKIT_VERSION]
+Versione LLCEFLib/CEF: [LLCEFLIB_VERSION]
 Versione Server voice: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">

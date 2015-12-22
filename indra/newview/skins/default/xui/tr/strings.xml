@@ -67,7 +67,7 @@ Grafik Kartı: [GRAPHICS_CARD]
 libcurl Sürümü: [LIBCURL_VERSION]
 J2C Kod Çözücü Sürümü: [J2C_VERSION]
 Ses Sürücüsü Sürümü: [AUDIO_DRIVER_VERSION]
-Qt Web Kit Sürümü: [QT_WEBKIT_VERSION]
+LLCEFLib/CEF Sürümü: [LLCEFLIB_VERSION]
 Ses Sunucusu Sürümü: [VOICE_VERSION]
 	</string>
 	<string name="AboutTraffic">

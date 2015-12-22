@@ -2204,7 +2204,7 @@
       <string>F32</string>
       <key>Value</key>
       <integer>60</integer>
-    </map>  
+    </map>
     <key>AvatarRotateThresholdFast</key>
     <map>
       <key>Comment</key>
@@ -2215,7 +2215,7 @@
       <string>F32</string>
       <key>Value</key>
       <integer>2</integer>
-    </map>  
+    </map>
     <key>AvatarBakedTextureUploadTimeout</key>
     <map>
       <key>Comment</key>
@@ -2810,7 +2810,7 @@
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>		
+    </map>
     <key>CacheNumberOfRegionsForObjects</key>
     <map>
       <key>Comment</key>
@@ -5778,7 +5778,7 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>	
+    </map>
 	<key>FirstSelectedEnabledPopups</key>
     <map>
       <key>Comment</key>
@@ -5911,7 +5911,7 @@
       <key>Value</key>
       <string>SW</string>
     </map>
-  
+
     <key>FloaterStatisticsRect</key>
     <map>
       <key>Comment</key>
@@ -6642,7 +6642,7 @@
       <string>This setting can lead to strange things happening in your conversations floater, personal IMs and group chats.</string>
       <key>Backup</key>
       <integer>0</integer>
-    </map>  
+    </map>
     <key>IgnorePixelDepth</key>
     <map>
       <key>Comment</key>
@@ -6699,7 +6699,7 @@
       <string>F32</string>
       <key>Value</key>
       <real>0.5</real>
-    </map> 
+    </map>
 	<key>InspectorShowTime</key>
     <map>
       <key>Comment</key>
@@ -6710,7 +6710,7 @@
       <string>F32</string>
       <key>Value</key>
       <real>3.0</real>
-    </map> 
+    </map>
     <key>InstallLanguage</key>
     <map>
       <key>Comment</key>
@@ -7371,7 +7371,7 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
-  
+
     <key>LastSnapshotToProfileHeight</key>
     <map>
       <key>Comment</key>
@@ -8584,7 +8584,7 @@
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>  
+    </map>
     <key>MenuAccessKeyTime</key>
     <map>
       <key>Comment</key>
@@ -8836,7 +8836,7 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map> 
+    </map>
     <key>MouseSun</key>
     <map>
       <key>Comment</key>
@@ -8990,7 +8990,7 @@
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>	
+    </map>
     <key>NextLoginLocation</key>
     <map>
       <key>Comment</key>
@@ -9131,7 +9131,7 @@
       <string>String</string>
       <key>Value</key>
       <string>toast</string>
-    </map>  
+    </map>
     <key>NotificationFriendIMOptions</key>
     <map>
       <key>Comment</key>
@@ -9187,7 +9187,7 @@
       <string>String</string>
       <key>Value</key>
       <string>toast</string>
-    </map>  
+    </map>
     <key>NotificationObjectIMOptions</key>
     <map>
       <key>Comment</key>
@@ -9201,7 +9201,7 @@
       <string>String</string>
       <key>Value</key>
       <string>toast</string>
-    </map>  
+    </map>
     <key>NotificationToastLifeTime</key>
     <map>
       <key>Comment</key>
@@ -9874,7 +9874,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>0.9</real>
     </map>
-    
+
    <key>PlainTextChatHistory</key>
     <map>
       <key>Comment</key>
@@ -9886,7 +9886,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    
+
     <key>PluginInstancesLow</key>
     <map>
       <key>Comment</key>
@@ -10146,7 +10146,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <real>0.4</real>
     </array>
   </map>
-  
+
   <key>PreviewDirection2</key>
   <map>
     <key>Comment</key>
@@ -10498,7 +10498,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>5.0</real>
+    <real>10.0</real>
   </map>
   <key>MediaRollOffMax</key>
   <map>
@@ -10812,7 +10812,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderComplexityStaticMax</key>
     <map>
       <key>Comment</key>
-      <string>Sets a static max value for scaling of RenderComplexity 
+      <string>Sets a static max value for scaling of RenderComplexity
         display (-1 for dynamic scaling)</string>
       <key>Persist</key>
       <integer>1</integer>
@@ -10892,7 +10892,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-   
+
   <key>RenderLocalLights</key>
   <map>
     <key>Comment</key>
@@ -11151,7 +11151,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
-      <string>Boolean</string> 
+      <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
       <key>Backup</key>
@@ -11194,7 +11194,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
- 
+
   <key>RenderAnimateRes</key>
   <map>
     <key>Comment</key>
@@ -11395,7 +11395,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-  
+
   <key>RenderDepthOfField</key>
   <map>
     <key>Comment</key>
@@ -11550,7 +11550,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.1</real>
   </map>
-  
+
   <key>RenderHighlightBrightness</key>
   <map>
     <key>Comment</key>
@@ -11574,7 +11574,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.6</real>
   </map>
-  
+
   <key>RenderHighlightColor</key>
   <map>
     <key>Comment</key>
@@ -11603,7 +11603,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  
+
   <key>RenderSpecularResX</key>
   <map>
     <key>Comment</key>
@@ -12577,7 +12577,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  
+
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
@@ -12636,7 +12636,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
-  </map>    
+  </map>
   <key>RenderAutoHideSurfaceAreaLimit</key>
   <map>
     <key>Comment</key>
@@ -13198,7 +13198,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>	
+    </map>
     <key>SelectMovableOnly</key>
     <map>
       <key>Comment</key>
@@ -13424,7 +13424,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>	
+    </map>
     <key>ShowCrosshairs</key>
     <map>
       <key>Comment</key>
@@ -13492,7 +13492,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>    
+    </map>
   <key>ShowProfileFloaters</key>
     <map>
       <key>Comment</key>
@@ -13537,7 +13537,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>ShowObjectRenderingCost</key>                
+    <key>ShowObjectRenderingCost</key>
     <map>
       <key>Comment</key>
       <string>Show the object rendering cost in build tools</string>
@@ -13546,9 +13546,9 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>   
-    </map>        
-    <key>ShowNavbarFavoritesPanel</key>    
+      <integer>1</integer>
+    </map>
+    <key>ShowNavbarFavoritesPanel</key>
     <map>
       <key>Comment</key>
       <string>Show/hide navigation bar favorites panel</string>
@@ -13557,9 +13557,9 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>   
+      <integer>1</integer>
     </map>
-    <key>ShowNavbarNavigationPanel</key>        
+    <key>ShowNavbarNavigationPanel</key>
     <map>
       <key>Comment</key>
       <string>Show/hide navigation bar navigation panel</string>
@@ -13702,7 +13702,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>ShowPGSearchAll</key>    
+    <key>ShowPGSearchAll</key>
     <map>
       <key>Comment</key>
       <string>Display results of search All that are flagged as general</string>
@@ -14217,7 +14217,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>  
+    </map>
     <key>SnapshotQuality</key>
     <map>
       <key>Comment</key>
@@ -15184,7 +15184,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>B56AF90D-6684-48E4-B1E4-722D3DEB2CB6</string>
-    </map>  
+    </map>
     <key>NearByChatChannelUUID</key>
     <map>
       <key>Comment</key>
@@ -15195,7 +15195,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>E1158BD6-661C-4981-9DAD-4DCBFF062502</string>
-    </map>  
+    </map>
     <key>NotificationChannelUUID</key>
     <map>
       <key>Comment</key>
@@ -15206,7 +15206,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>AEED3193-8709-4693-8558-7452CCA97AE5</string>
-    </map>  
+    </map>
     <key>AlertChannelUUID</key>
     <map>
       <key>Comment</key>
@@ -15217,7 +15217,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>F3E07BC8-A973-476D-8C7F-F3B7293975D1</string>
-    </map>  
+    </map>
     <key>UIImgWhiteUUID</key>
     <map>
       <key>Comment</key>
@@ -15261,7 +15261,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>2</integer>
-    </map> 
+    </map>
     <key>UIMaxComboWidth</key>
     <map>
       <key>Comment</key>
@@ -19431,7 +19431,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  
+
   <key>PathfindingLineWidth</key>
   <map>
     <key>Comment</key>
@@ -19472,7 +19472,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <real>1.0</real>
       </array>
     </map>
-    
+
     <key>HideUIControls</key>
     <map>
       <key>Comment</key>

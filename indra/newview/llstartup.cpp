@@ -2266,16 +2266,25 @@ bool idle_startup()
  		if(buddy_list.isDefined())
  		{
 			LLAvatarTracker::buddy_map_t list;
-			LLUUID agent_id;
-			S32 has_rights = 0, given_rights = 0;
+			// <FS:Ansariel> Reset on each iteration
+			//LLUUID agent_id;
+			//S32 has_rights = 0, given_rights = 0;
+			// </FS:Ansariel>
 			for(LLSD::array_const_iterator it = buddy_list.beginArray(),
 				end = buddy_list.endArray(); it != end; ++it)
 			{
+				// <FS:Ansariel> Reset on each iteration
+				LLUUID agent_id;
+				S32 has_rights = 0, given_rights = 0;
+				// </FS:Ansariel>
+
 				LLSD buddy_id = (*it)["buddy_id"];
 				if(buddy_id.isDefined())
 				{
 					agent_id = buddy_id.asUUID();
 				}
+				// <FS:Ansariel> Can't add "friends" that have no ID
+				else continue;
 
 				LLSD buddy_rights_has = (*it)["buddy_rights_has"];
 				if(buddy_rights_has.isDefined())
