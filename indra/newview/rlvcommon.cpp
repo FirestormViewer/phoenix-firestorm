@@ -21,6 +21,7 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
@@ -78,8 +79,6 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
-
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
@@ -148,9 +147,9 @@ void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
 	{
 		LLNotificationsUtil::add(
 			"GenericAlert",
-			LLSD().with("MESSAGE", llformat(RlvStrings::getString("message_toggle_restart").c_str(), 
-				(sdValue.asBoolean()) ? RlvStrings::getString("message_toggle_restart_enabled").c_str()
-				                      : RlvStrings::getString("message_toggle_restart_disabled").c_str())));
+			LLSD().with("MESSAGE", llformat(LLTrans::getString("RLVaToggleMessage").c_str(), 
+				(sdValue.asBoolean()) ? LLTrans::getString("RLVaToggleEnabled").c_str()
+				                      : LLTrans::getString("RLVaToggleDisabled").c_str())));
 	}
 }
 
@@ -548,7 +547,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
-			pMenuItem->setLabel(strLabel + RlvStrings::getString("message_toggle_restart_pending"));
+			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));
 	}
 	return true;
 }

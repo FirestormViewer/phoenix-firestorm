@@ -110,28 +110,6 @@
 			<key>customizable</key>
 			<boolean>1</boolean>
 		</map>
-
-		<!-- System messages -->
-		<key>message_toggle_restart</key>
-		<map>
-			<key>value</key>
-			<string>RestrainedLove Support will be %s after you restart</string>
-		</map>
-		<key>message_toggle_restart_pending</key>
-		<map>
-			<key>value</key>
-			<string> (pending restart)</string>
-		</map>
-		<key>message_toggle_restart_enabled</key>
-		<map>
-			<key>value</key>
-			<string>enabled</string>
-		</map>
-		<key>message_toggle_restart_disabled</key>
-		<map>
-			<key>value</key>
-			<string>disabled</string>
-		</map>
 	</map>
 
 	<!-- Generic names used to replace resident names when @shownames restricted -->
