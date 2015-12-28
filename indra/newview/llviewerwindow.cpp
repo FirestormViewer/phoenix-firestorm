@@ -2312,20 +2312,13 @@ void LLViewerWindow::shutdownViews()
 	}
 	LL_INFOS() << "Global views cleaned." << LL_ENDL ;
 
-	// <FS:Ansariel> FIRE-17513: Need to shutdown modals first because toasts are derived from LLModalDialog
-	//LLNotificationsUI::LLToast::cleanupToasts();
-	//LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
-	// </FS:Ansariel>
+	LLNotificationsUI::LLToast::cleanupToasts();
+	LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
 
 	// DEV-40930: Clear sModalStack. Otherwise, any LLModalDialog left open
 	// will crump with LL_ERRS.
 	LLModalDialog::shutdownModals();
 	LL_INFOS() << "LLModalDialog shut down." << LL_ENDL; 
-	
-	// <FS:Ansariel> FIRE-17513: Need to shutdown modals first because toasts are derived from LLModalDialog
-	LLNotificationsUI::LLToast::cleanupToasts();
-	LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
-	// </FS:Ansariel>
 
 	// destroy the nav bar, not currently part of gViewerWindow
 	// *TODO: Make LLNavigationBar part of gViewerWindow
