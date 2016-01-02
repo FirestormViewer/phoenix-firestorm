@@ -1718,11 +1718,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5a0f74f8e736d91d2c2c6cbc71db90bd</string>
+              <string>dfe9f826fd4a25878d7c002076a0c85e</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-llceflib_3p-llceflib/rev/309177/arch/Darwin/installer/llceflib-1.5.1.309177-darwin-309177.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.5.1.309177-darwin-309177-fs.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
