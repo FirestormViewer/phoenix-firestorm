@@ -146,9 +146,9 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 		}
 	}
 
-	U32 split = MAX_MSG_BUF_SIZE - 1;
-	U32 pos = 0;
-	U32 total = utf8_out_text.length();
+	size_t split = MAX_MSG_BUF_SIZE - 1;
+	size_t pos = 0;
+	size_t total = utf8_out_text.length();
 
 	// Don't break null messages
 	if (total == 0)
@@ -158,7 +158,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 
 	while (pos < total)
 	{
-		U32 next_split = split;
+		size_t next_split = split;
 
 		if (pos + next_split > total)
 		{
@@ -206,7 +206,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 
 bool matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 {
-	U32 in_len = in_str.length();
+	size_t in_len = in_str.length();
 	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
 	
 	for (S32 n = 0; n < cnt; n++)
@@ -271,7 +271,7 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 			utf8text = FSCommon::applyMuPose(utf8text);
 
 			// discard returned "found" boolean
-			if(!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
+			if (!LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text))
 			{
 				utf8_revised_text = utf8text;
 			}
@@ -469,7 +469,7 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, const LLWString& o
 // static
 EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
 {
-	U32 length = str.length();
+	size_t length = str.length();
 	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
 	
 	for (S32 n = 0; n < cnt; n++)
@@ -480,7 +480,7 @@ EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str
 
 			if (!LLStringUtil::compareInsensitive(trigger, sChatTypeTriggers[n].name))
 			{
-				U32 trigger_length = sChatTypeTriggers[n].name.length();
+				size_t trigger_length = sChatTypeTriggers[n].name.length();
 
 				// It's to remove space after trigger name
 				if (length > trigger_length && str[trigger_length] == ' ')
@@ -656,7 +656,7 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 
 					// Select to end of line, starting from the character
 					// after the last one the user typed.
-					chat_entry->selectByCursorPosition(utf8_out_str.size()-rest_of_match.size(),utf8_out_str.size());
+					chat_entry->selectByCursorPosition(utf8_out_str.size() - rest_of_match.size(), utf8_out_str.size());
 				}
 				else
 				{
@@ -705,7 +705,10 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 			uuid_vec_t avatar_ids;
 			LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
 
-			if (avatar_ids.empty()) return; // Nobody's in range!
+			if (avatar_ids.empty())
+			{
+				return; // Nobody's in range!
+			}
 
 			// Parse text for a pattern to search
 			std::string prefix = wstring_to_utf8str(raw_text.substr(0, cur_pos)); // Text before search string
@@ -720,7 +723,10 @@ void FSNearbyChat::handleChatBarKeystroke(LLUICtrl* source, S32 channel /* = 0 *
 			prefix = prefix.substr(0, last_space + 1);
 			std::string match_pattern = "";
 
-			if (pattern.size() < NAME_PREDICTION_MINIMUM_LENGTH) return;
+			if (pattern.size() < NAME_PREDICTION_MINIMUM_LENGTH)
+			{
+				return;
+			}
 
 			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
 			prefix = prefix.substr(0, last_space + 1);
