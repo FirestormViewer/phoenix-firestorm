@@ -2463,10 +2463,12 @@ http://secondlife.com/download.
 		Вы действительно хотите очистить кэш инвентаря?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
+	<!--
 	<notification name="ConfirmClearWebBrowserCache">
 		Вы действительно хотите очистить кэш браузера?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
+	-->
 	<notification name="ConfirmClearCookies">
 		Вы действительно хотите удалить файлы cookie?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>

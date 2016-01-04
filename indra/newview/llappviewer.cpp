@@ -5137,6 +5137,18 @@ bool LLAppViewer::initCache()
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Purge web browser cache
+	if (gSavedSettings.getBOOL("FSStartupClearBrowserCache"))
+	{
+		std::string browser_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+		if (LLFile::isdir(browser_cache))
+		{
+			gDirUtilp->deleteDirAndContents(browser_cache);
+		}
+		gSavedSettings.setBOOL("FSStartupClearBrowserCache", FALSE);
+	}
+	// </FS:Ansariel>
+
 	// <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
 	startCachePurge();
 	// </FS:ND>
