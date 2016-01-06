@@ -136,54 +136,6 @@
           </map>
         </map>
       </map>
-      <key>leap-motion</key>
-      <map>
-        <key>license</key>
-        <string>leap-motion</string>
-        <key>license_file</key>
-        <string>LICENSES/leap-motion.txt</string>
-        <key>name</key>
-        <string>leap-motion</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>94fa8329ff292e43a5f5527ed4a05291</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/leap_motion-1.0.9+8391-darwin-20131127.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>darwin</string>
-          </map>
-          <key>linux</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>c71a6149cda34b32103c17ed460cce66</string>
-              <key>url</key>
-              <string>file:///opt/firestorm/leap_motion-1.0.9+8391-linux-x64-20131128.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux</string>
-          </map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>12f025c0b3d76dd3f83d963615b7964b</string>
-              <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/leap_motion-1.0.9+8391-windows-20131128.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
-        </map>
-      </map>
 
       <key>SDL</key>
       <map>

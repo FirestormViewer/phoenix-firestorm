@@ -250,7 +250,6 @@
 
 #include "llviewereventrecorder.h"
 
-#include "llleapmotioncontroller.h"
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
@@ -1531,10 +1530,6 @@ bool LLAppViewer::mainLoop()
 		joystick = LLViewerJoystick::getInstance();
 		joystick->setNeedsReset(true);
 		
-// [FS:CR]
-		gestureController = LLLeapMotionController::getInstance();
-// [/FS:CR]
-		
 #ifdef LL_DARWIN
 		// Ensure that this section of code never gets called again on OS X.
 		mMainLoopInitialized = true;
@@ -1729,10 +1724,6 @@ bool LLAppViewer::mainLoop()
 				}
 			}
 			
-// [FS:CR] Run any LeapMotion devices
-			if (gestureController)
-				gestureController->stepFrame();
-
 			pingMainloopTimeout("Main:Sleep");
 			
 			pauseMainloopTimeout();
@@ -1979,8 +1970,6 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
-	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
-
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -5976,14 +5965,6 @@ void LLAppViewer::idle()
 	{
 		gAgentPilot.moveCamera();
 	}
-// <FS:Zi> Leap Motion flycam
-#ifdef USE_LEAPMOTION
-	else if(gestureController && gestureController->getOverrideCamera())
-	{
-		gestureController->moveFlycam();
-	}
-#endif //USE_LEAPMOTION
-// </FS:Zi>
 	else if (LLViewerJoystick::getInstance()->getOverrideCamera())
 	{ 
 		LLViewerJoystick::getInstance()->moveFlycam();
