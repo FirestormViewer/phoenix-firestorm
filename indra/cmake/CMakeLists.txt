@@ -97,7 +97,6 @@ set(cmake_SOURCE_FILES
     PulseAudio.cmake
     Python.cmake
     QuickTimePlugin.cmake
-    Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
     UI.cmake

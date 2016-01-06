@@ -45,7 +45,6 @@ include(OPENAL)
 include(OpenGL)
 include(OpenSSL)
 include(PNG)
-include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
 include(UnixInstall)
@@ -108,7 +107,6 @@ include_directories(
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
-    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     ${COLLADA_INCLUDE_DIRS}
     ${LLAPPEARANCE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
