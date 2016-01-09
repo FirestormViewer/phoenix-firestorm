@@ -64,7 +64,6 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
-#include "fscommon.h"
 
 static LLPanelInjector<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
@@ -134,10 +133,11 @@ LLSidepanelInventory::LLSidepanelInventory()
 LLSidepanelInventory::~LLSidepanelInventory()
 {
 	// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
-	if (!FSCommon::isLegacySkin())
+	//LLLayoutPanel* inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
+	LLLayoutPanel* inbox_layout_panel = findChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
+	if (inbox_layout_panel)
 	{
 	// </FS:Ansariel>
-	LLLayoutPanel* inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
 
 	// Save the InventoryMainPanelHeight in settings per account
 	gSavedPerAccountSettings.setS32("InventoryInboxHeight", inbox_layout_panel->getTargetDim());
@@ -233,10 +233,11 @@ BOOL LLSidepanelInventory::postBuild()
 	// Received items inbox setup
 	{
 		// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
-		if (!FSCommon::isLegacySkin())
+		//LLLayoutStack* inv_stack = getChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
+		LLLayoutStack* inv_stack = findChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
+		if (inv_stack)
 		{
 		// </FS:Ansariel>
-		LLLayoutStack* inv_stack = getChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
 
 		// Set up button states and callbacks
 		LLButton * inbox_button = getChild<LLButton>(INBOX_BUTTON_NAME);
