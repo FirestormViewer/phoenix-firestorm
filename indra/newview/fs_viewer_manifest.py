@@ -147,3 +147,28 @@ class FSViewerManifest:
         symbolTar.add( "%s/Firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
         symbolTar.add( "%s/%s" % (self.args['configuration'].lower(),pdbName), pdbName )
         symbolTar.close()
+
+    def fs_strip_windows_manifest(self, aFile ):
+        try:
+            from win32api import BeginUpdateResource, UpdateResource, EndUpdateResource
+
+            data = None
+            handle = BeginUpdateResource( aFile, 0 )
+            UpdateResource( handle, 24, 1, data, 1033 )
+            EndUpdateResource( handle, 0 )
+        except:
+            pass
+
+    def fs_copy_windows_manifest(self):
+        from shutil import copyfile
+        self.fs_strip_windows_manifest( "%s/slplugin.exe" % self.args['configuration'].lower() )
+        self.fs_strip_windows_manifest( "%s/firestorm-bin.exe" % self.args['configuration'].lower() )
+        # self.fs_strip_windows_manifest( "%s/llplugin/llceflib_host.exe" % self.args['configuration'].lower() )
+        if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst=""):
+            self.path( "compatibility.manifest", "slplugin.exe.manifest" )
+            # self.path( "compatibility.manifest", "firestorm-bin.exe.manifest" )
+            self.end_prefix()
+        if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst="llplugin"):
+            self.path( "compatibility.manifest", "llceflib_host.exe.manifest" )
+            self.end_prefix()
+

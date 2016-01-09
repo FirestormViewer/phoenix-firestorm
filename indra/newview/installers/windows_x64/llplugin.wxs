@@ -4,6 +4,7 @@
     <DirectoryRef Id="INSTALLDIR">
       <Component Id="llplugin_exe" Guid="{ECD05498-BD41-4825-B44F-73F23C72B893}" >
 		<File Id="slplugin_exe" Source="$(var.PLUGIN_SOURCEDIR)\slplugin.exe" />
+		<File Id="slplugin_manifest" Source="$(var.PLUGIN_SOURCEDIR)\slplugin.exe.manifest" />
        </Component>
        <Directory Id="llplugin_dir" Name="llplugin">
          <Component Id="llplugin_libs" Guid="{EAA97644-8CAC-43B5-A4C3-2FCBF35C58F4}" >
@@ -19,6 +20,7 @@
 		   <File Id="llplugin_libEGL_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\libEGL.dll" />
 		   <File Id="llplugin_libGLESv2_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\libGLESv2.dll" />
 		   <File Id="llplugin_llceflib_host_exe" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\llceflib_host.exe" />
+		   <File Id="llplugin_llceflib_host_manifest" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\llceflib_host.exe.manifest" />
 		   <File Id="llplugin_media_plugin_cef_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_cef.dll" />
 		   <File Id="llplugin_media_plugin_quicktime_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_quicktime.dll" />
 		   <File Id="llplugin_msvcp120_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\msvcp120.dll" />

@@ -666,6 +666,8 @@ class Windows_i686_Manifest(ViewerManifest):
                self.path( "*.*" )
                self.end_prefix()
 
+        self.fs_copy_windows_manifest( )
+
     def nsi_file_commands(self, install=True):
         def wpath(path):
             if path.endswith('/') or path.endswith(os.path.sep):
