@@ -64,6 +64,7 @@
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
+#include "fscommon.h"
 
 static LLPanelInjector<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
@@ -132,10 +133,17 @@ LLSidepanelInventory::LLSidepanelInventory()
 
 LLSidepanelInventory::~LLSidepanelInventory()
 {
+	// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
+	if (!FSCommon::isLegacySkin())
+	{
+	// </FS:Ansariel>
 	LLLayoutPanel* inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
 
 	// Save the InventoryMainPanelHeight in settings per account
 	gSavedPerAccountSettings.setS32("InventoryInboxHeight", inbox_layout_panel->getTargetDim());
+	// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
+	}
+	// </FS:Ansariel>
 
 	if (mCategoriesObserver && gInventory.containsObserver(mCategoriesObserver))
 	{
@@ -224,6 +232,10 @@ BOOL LLSidepanelInventory::postBuild()
 	
 	// Received items inbox setup
 	{
+		// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
+		if (!FSCommon::isLegacySkin())
+		{
+		// </FS:Ansariel>
 		LLLayoutStack* inv_stack = getChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
 
 		// Set up button states and callbacks
@@ -244,6 +256,9 @@ BOOL LLSidepanelInventory::postBuild()
 
 		// Set the inbox visible based on debug settings (final setting comes from http request below)
 		enableInbox(gSavedSettings.getBOOL("InventoryDisplayInbox"));
+		// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
+		}
+		// </FS:Ansariel>
 
 		// Trigger callback for after login so we can setup to track inbox changes after initial inventory load
 		LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLSidepanelInventory::updateInbox, this));
