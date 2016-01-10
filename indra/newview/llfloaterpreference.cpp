@@ -1029,6 +1029,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		gSavedPerAccountSettings.getControl("FSMutedAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAwayAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> FIRE-17630: Properly disable per-account settings backup list
+		getChildView("restore_per_account_disable_cover")->setVisible(FALSE);
 	}
 	gAgent.sendAgentUserInfoRequest();
 
