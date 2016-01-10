@@ -41,6 +41,13 @@
 #include "llCEFLib.h"
 #include "volume_catcher.h"
 
+// <FS:ND> This comes from llCEFLib.h, but older version do not have this define.
+// In that case do a hardcoded fallback to 2 until packages have been updated.
+#ifndef FS_CEFLIB_VERSION
+  #define FS_CEFLIB_VERSION 2
+#endif
+// <FS:ND>
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 class MediaPluginCEF :
@@ -102,6 +109,14 @@ private:
 	// <FS:ND> FS specific CEF settings
 	bool mFlipY;
 	// </FS:ND>
+
+	// <FS:ND> Buffer for a popup image to be rendered as an overlay
+	U8 *mPopupBuffer;
+	U32 mPopupW;
+	U32 mPopupH;
+	U32 mPopupX;
+	U32 mPopupY;
+	// </FS:ND>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -132,12 +147,22 @@ MediaPluginBase(host_send_func, host_user_data)
 	// <FS:ND> FS specific CEF settings
 	mFlipY = false;
 	// </FS:ND>
+
+	// <FS:ND> Buffer for a popup image to be rendered as an overlay
+	mPopupBuffer = NULL;
+	mPopupW = 0;
+	mPopupH = 0;
+	mPopupX = 0;
+	mPopupY = 0;
+	// </FS:ND>
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 MediaPluginCEF::~MediaPluginCEF()
 {
+	delete [] mPopupBuffer; // <FS:ND> Buffer for a popup image to be rendered as an overlay
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,21 +185,55 @@ void MediaPluginCEF::postDebugMessage(const std::string& msg)
 //
 void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, int width, int height, bool is_popup)
 {
+	// <FS:ND> in case this is a popup, delete our old popup buffer and create a new one if needed.
+	// Put this here as the media_plugin_cef will send a message with all but is_popup set to 0 in case the popup gets destroyed.
+#if FS_CEFLIB_VERSION >= 3
+	if (is_popup)
+	{
+		delete mPopupBuffer;
+		mPopupBuffer = NULL;
+		mPopupH = 0;
+		mPopupW = 0;
+		mPopupX = 0;
+		mPopupY = 0;
+	}
+#endif
+	// </FS:ND>
+	
 	if (mPixels && pixels)
 	{
 		if (is_popup)
 		{
+			// <FS:ND> This is a valid popup, copy the texture into our overlay buffer.
+			// Can a texture ever have an alpha other than 255/1.0 to make an alpha blended popup/dropdown?
+			// (According to Mobius not w/o hacks, so we assume opague)
+#if FS_CEFLIB_VERSION >= 3
+			if( width > 0 && height> 0 )
+			{
+				mPopupBuffer = new U8[ width * height * mDepth ];
+				memcpy( mPopupBuffer, pixels, width * height * mDepth );
+				mPopupH = height;
+				mPopupW = width;
+				mPopupX = x;
+				mPopupY = y;
+			}
+#endif
+			// </FS:ND>
+			
+#if FS_CEFLIB_VERSION < 3
+			// <FS:ND/> You are outdated and will be buggy
 			for (int line = 0; line < height; ++line)
 			{
-				int inverted_y = mHeight - y - height;
-				int src = line * width * mDepth;
-				int dst = (inverted_y + line) * mWidth * mDepth + x * mDepth;
-
-				if (dst + width * mDepth < mWidth * mHeight * mDepth)
-				{
-					memcpy(mPixels + dst, pixels + src, width * mDepth);
-				}
+			 	int inverted_y = mHeight - y - height;
+			 	int src = line * width * mDepth;
+			 	int dst = (inverted_y + line) * mWidth * mDepth + x * mDepth;
+			 
+			 	if (dst + width * mDepth < mWidth * mHeight * mDepth)
+			 	{
+			 		memcpy(mPixels + dst, pixels + src, width * mDepth);
+			 	}
 			}
+#endif
 		}
 		else
 		{
@@ -182,8 +241,30 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 			{
 				memcpy(mPixels, pixels, mWidth * mHeight * mDepth);
 			}
-			
+
+			// <FS:ND> If we have a popup, draw on top. Note: No alpha blending, this needs to be added it a popup can be transparent
+			if( mPopupBuffer && mPopupH && mPopupW  )
+			{
+				U32 bufferSize = mWidth * mHeight * mDepth;
+				U32 popupStride = mPopupW * mDepth;
+				U32 bufferStride = mWidth * mDepth;
+				int dstY = mHeight - mPopupY - mPopupH;
+				if( !mFlipY )
+					dstY = mPopupY;
+
+				int src = 0;
+				int dst = dstY  * mWidth * mDepth + mPopupX * mDepth;
+
+				for (int line = 0; dst + popupStride < bufferSize && line < mPopupH; ++line)
+				{
+					memcpy( mPixels + dst, mPopupBuffer + src, popupStride );
+					src += popupStride;
+					dst += bufferStride;
+				}
+			}
+			// </FS:ND>
 		}
+	
 		setDirty(0, 0, mWidth, mHeight);
 	}
 }
