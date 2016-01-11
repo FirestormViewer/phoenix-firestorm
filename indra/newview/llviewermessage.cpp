@@ -6493,9 +6493,9 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 					{
 						avatarp->mAnimationSources.insert(LLVOAvatar::AnimationSourceMap::value_type(object_id, animation_id));
 						// <FS:Zi> Animation Explorer
-						if(avatarp==gAgentAvatarp)
+						if (avatarp == gAgentAvatarp)
 						{
-							RecentAnimationList::instance().addAnimation(animation_id,object_id);
+							RecentAnimationList::instance().addAnimation(animation_id, object_id);
 						}
 						// </FS:Zi>
 					}

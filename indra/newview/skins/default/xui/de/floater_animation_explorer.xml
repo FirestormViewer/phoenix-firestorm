@@ -3,6 +3,7 @@
 	<scroll_list name="animation_list">
 		<scroll_list.column label="Abgespielt von" name="played_by" />
 		<scroll_list.column label="Abgespielt" name="played" />
+		<scroll_list.column label="Priorität" name="priority" />
 		<scroll_list.column label="Zeit" name="timestamp" />
 		<scroll_list.column label="Animation-ID" name="animation_id" />
 		<scroll_list.column label="Oktjekt-ID" name="object_id" />
