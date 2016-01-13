@@ -405,7 +405,7 @@ void LLGridManager::setGridChoice(const std::string& grid)
 		LL_INFOS("GridManager")<<"setting "<<grid_name<<LL_ENDL;
 		mGrid = grid_name;
 		gSavedSettings.setString("CurrentGrid", grid_name);
-		
+		LLTrans::setDefaultArg("CURRENT_GRID", getGridLabel()); // <FS:Ansariel> Make CURRENT_GRID a default substitution
 		updateIsInProductionGrid();
 	}
 	else
