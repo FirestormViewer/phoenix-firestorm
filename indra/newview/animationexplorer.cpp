@@ -255,9 +255,9 @@ void AnimationExplorer::draw()
 	}
 
 	// update tiems and "Still playing" status in the list once every few seconds
-	static F64 last_update = 0.0f;
+	static F64 last_update = 0.0;
 	F64 time = LLTimer::getElapsedSeconds();
-	if (time-last_update > 5.0f)
+	if (time - last_update > 5.0)
 	{
 		last_update = time;
 		updateList(time);
@@ -277,6 +277,7 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 {
 	S32 played_column = mAnimationScrollList->getColumn("played")->mIndex;
 	S32 timestamp_column = mAnimationScrollList->getColumn("timestamp")->mIndex;
+	S32 priority_column = mAnimationScrollList->getColumn("priority")->mIndex;
 	S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
 	S32 anim_id_column = mAnimationScrollList->getColumn("animation_id")->mIndex;
 
@@ -287,10 +288,12 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 		LLScrollListItem* item = *list_iter;
 
 		// get a pointer to the "Played" column text
-		LLScrollListText* played_text = (LLScrollListText*)item->getColumn(played_column);
+		LLScrollListText* played_text = dynamic_cast<LLScrollListText*>(item->getColumn(played_column));
 
 		// get the object ID from the list
 		LLUUID object_id = item->getColumn(object_id_column)->getValue().asUUID();
+
+		LLUUID anim_id = item->getColumn(anim_id_column)->getValue().asUUID();
 
 		// assume this animation is not running first
 		bool is_running = false;
@@ -300,19 +303,13 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 		for (LLVOAvatar::AnimSourceIterator anim_iter = gAgentAvatarp->mAnimationSources.begin();
 			anim_iter != gAgentAvatarp->mAnimationSources.end(); ++anim_iter)
 		{
-			// object found
-			if (anim_iter->first == object_id)
+			// object and animation found
+			if (anim_iter->first == object_id && anim_iter->second == anim_id)
 			{
-				LLUUID anim_id = item->getColumn(anim_id_column)->getValue().asUUID();
-
-				// animation found
-				if (anim_iter->second == anim_id)
-				{
-					// set text to "Still playing" and break out of this loop
-					played_text->setText(LLTrans::getString("animation_explorer_still_playing"));
-					is_running = true;
-					break;
-				}
+				// set text to "Still playing" and break out of this loop
+				played_text->setText(LLTrans::getString("animation_explorer_still_playing"));
+				is_running = true;
+				break;
 			}
 		}
 
@@ -328,6 +325,14 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 
 			played_text->setText(LLTrans::getString("animation_explorer_seconds_ago", args));
 		}
+
+		std::string prio_text = LLTrans::getString("animation_explorer_unknown_priority");
+		LLKeyframeMotion* motion = dynamic_cast<LLKeyframeMotion*>(gAgentAvatarp->findMotion(anim_id));
+		if (motion)
+		{
+			prio_text = llformat("%d", (S32)motion->getPriority());
+		}
+		dynamic_cast<LLScrollListText*>(item->getColumn(priority_column))->setText(prio_text);
 	}
 }
 
@@ -402,12 +407,14 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 	item["columns"][0]["value"] = playedByName;
 	item["columns"][1]["column"] = "played";
 	item["columns"][1]["value"] = LLTrans::getString("animation_explorer_still_playing");
-	item["columns"][2]["column"] = "timestamp";
-	item["columns"][2]["value"] = time;
-	item["columns"][3]["column"] = "animation_id";
-	item["columns"][3]["value"] = id;
-	item["columns"][4]["column"] = "object_id";
-	item["columns"][4]["value"] = played_by;
+	item["columns"][2]["column"] = "priority";
+	item["columns"][2]["value"] = LLTrans::getString("animation_explorer_unknown_priority");
+	item["columns"][3]["column"] = "timestamp";
+	item["columns"][3]["value"] = time;
+	item["columns"][4]["column"] = "animation_id";
+	item["columns"][4]["value"] = id;
+	item["columns"][5]["column"] = "object_id";
+	item["columns"][5]["value"] = played_by;
 
 	mAnimationScrollList->addElement(item, ADD_TOP);
 }

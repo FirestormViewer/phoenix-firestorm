@@ -12,7 +12,7 @@
  name="animation_explorer"
  save_rect="true"
  title="Animation Explorer"
- width="524">
+ width="574">
 
 	<scroll_list
 	 bottom="-4"
@@ -22,13 +22,17 @@
 	 left="4"
 	 name="animation_list"
 	 top="4"
-	 width="256">
+	 width="306">
 		<scroll_list.column
 		 label="Played by"
 		 name="played_by" />
 		<scroll_list.column
 		 label="Played"
 		 name="played" />
+		<scroll_list.column
+		 label="Priority"
+		 name="priority"
+		 width="60"/>
 		<scroll_list.column
 		 label="Timestamp"
 		 name="timestamp"

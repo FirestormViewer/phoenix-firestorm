@@ -18,6 +18,12 @@ set(EXCLUDE_SYSTEM 1)
 set(RECURSE 1)
 get_filename_component(EXE_PATH ${BIN_NAME} PATH)
 
+# <FS:ND> DST_PATH is empty (at least when running the post build steps in MSVC, set it to the correct path)
+if(WIN32)
+  get_filename_component(DST_PATH ${BIN_NAME} PATH)
+endif(WIN32)
+# </FS:ND>
+
 get_prerequisites( ${BIN_NAME} RESULTS ${EXCLUDE_SYSTEM} ${RECURSE} "${EXE_PATH}" "${SEARCH_DIRS}" )
 
 foreach(DEP ${RESULTS})

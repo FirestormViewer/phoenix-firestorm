@@ -85,10 +85,6 @@ if (ENABLE_MEDIA_PLUGINS)
 # viewer media plugins
 add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
 endif (ENABLE_MEDIA_PLUGINS)
-# <FS:AW opensim currency support>
-#teapot helper library
-add_subdirectory(${LIBS_OPEN_PREFIX}teapot)
-# </FS:AW opensim currency support>
 
 if (LINUX)
   add_subdirectory(${VIEWER_PREFIX}linux_crash_logger)

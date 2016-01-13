@@ -2,11 +2,8 @@
 <panel label="UI-Pref" name="Display panel">
 <tab_container label="Firestorm Prefs" name="tabs">
 
-	<!--General-->
-	<panel label="Allgemein" name="UI Prefs Panel">
-		<text name="UI Size:" width="220">
-			UI-Skalierung (Nebeneffekte möglich):
-		</text>
+	<!--3D World-->
+	<panel label="3D-Welt" name="UI Prefs Panel">
 		<text name="HoverTipText">
 			Schwebe-Tipps:
 		</text>
@@ -30,7 +27,15 @@
 		<text name="ObjectInspectorTooltipDelay_text">
 			Sekunden
 		</text>
-		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
+		<slider label_width="230" label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
+		<slider label_width="230" label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
+	</panel>
+
+	<!--2D Overlay-->
+	<panel label="2D-Overlay" name="ui-2d-overlay">
+		<text name="UI Size:" width="220">
+			UI-Skalierung (Nebeneffekte möglich):
+		</text>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>
@@ -53,6 +58,7 @@
 		</combo_box>
 		<check_box label="Animierte Skript-Dialoge" name="FSAnimatedScriptDialogs" tool_tip="Aktivieren, um Skript-Dialoge animiert einzublenden (Klassisches V1.x-Verhalten)."/>
 		<slider label_width="190" width="430" label="Sichtbare Zeilen pro Skriptdialog:" name="FSRowsPerScriptDialog" tool_tip="Die maximale Anzahl an Zeilen in einem Skriptdialog, die gleichzeitig sichtbar sind."/>
+		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)
@@ -67,8 +73,6 @@
 		<text name="ButtonFlashRateText">
 			Sek.
 		</text>
-		<slider label_width="230" label="Schwebetext-Ausblendentfernung (in m):" tool_tip="Legt die Entfernung fest, ab der Schwebetext ausgeblendet wird." name="FSHudTextFadeDistance"/>
-		<slider label_width="230" label="Schwebetext-Ausblendbereich (in m):" tool_tip="Legt die Entfernung fest, auf der ein Schwebetext von vollständig sichtbar bis komplett unsichtbar ausgeblendet wird." name="FSHudTextFadeRange"/>
 	</panel>
 
 	<!--Top Bars-->
