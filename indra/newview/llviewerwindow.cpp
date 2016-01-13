@@ -231,7 +231,6 @@
 #include "llnetmap.h"
 #include "lggcontactsets.h"
 
-#include "llleapmotioncontroller.h"
 #include "lltracerecording.h"
 
 //
@@ -920,12 +919,6 @@ public:
 		// <FS:ND> Report amount of failed texture buffer allocations if any.
 		if( LLImageBase::getAllocationErrors() )
 			addText( xpos, ypos, llformat( "# textures discarded due to insufficient memory %ld", LLImageBase::getAllocationErrors() ) );
-		// </FS:ND>
-
-		// <FS:ND> Add some fancy leap debug text
-		std::string strLeapDebug( LLLeapMotionController::getInstance()->getDebugString() );
-		if( strLeapDebug.size() )
-			addText( xpos, ypos, strLeapDebug );
 		// </FS:ND>
 	}
 
@@ -2307,20 +2300,13 @@ void LLViewerWindow::shutdownViews()
 	}
 	LL_INFOS() << "Global views cleaned." << LL_ENDL ;
 
-	// <FS:Ansariel> FIRE-17513: Need to shutdown modals first because toasts are derived from LLModalDialog
-	//LLNotificationsUI::LLToast::cleanupToasts();
-	//LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
-	// </FS:Ansariel>
+	LLNotificationsUI::LLToast::cleanupToasts();
+	LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
 
 	// DEV-40930: Clear sModalStack. Otherwise, any LLModalDialog left open
 	// will crump with LL_ERRS.
 	LLModalDialog::shutdownModals();
 	LL_INFOS() << "LLModalDialog shut down." << LL_ENDL; 
-	
-	// <FS:Ansariel> FIRE-17513: Need to shutdown modals first because toasts are derived from LLModalDialog
-	LLNotificationsUI::LLToast::cleanupToasts();
-	LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
-	// </FS:Ansariel>
 
 	// destroy the nav bar, not currently part of gViewerWindow
 	// *TODO: Make LLNavigationBar part of gViewerWindow

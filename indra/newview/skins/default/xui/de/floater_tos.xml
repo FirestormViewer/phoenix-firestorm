@@ -12,4 +12,7 @@
 	<text name="tos_heading">
 		Lesen Sie die folgenden Servicebedingungen und Datenbestimmungen sorgfältig durch. Sie müssen den Servicebedingungen zustimmen, um sich bei [CURRENT_GRID] anmelden zu können.
 	</text>
+	<text name="external_tos_required">
+		Sie müssen auf my.secondlife.com gehen und sich einloggen, um den Servicebedingungen zuzustimmen, bevor Sie fortfahren können. Vielen Dank! 
+	</text>
 </floater>
