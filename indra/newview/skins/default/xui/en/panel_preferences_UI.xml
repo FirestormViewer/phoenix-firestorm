@@ -21,42 +21,15 @@
  tab_min_width="50"
  tab_position="top" >
 
-    <!--General-->
+    <!--3D World-->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="General"
+     label="3D World"
      name="UI Prefs Panel" >
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left="10"
-         name="UI Size:"
-         top_pad="8"
-         width="200">
-            UI Scaling (may cause side effects):
-        </text>
-        <slider
-         control_name="UIScaleFactor"
-         decimal_digits="2"
-         follows="left|top"
-         height="17"
-         increment="0.025"
-         initial_value="1"
-         layout="topleft"
-         left_pad="0"
-         max_val="1.4"
-         min_val="0.75"
-         name="ui_scale_slider"
-         top_pad="-14"
-         width="250" />
 
         <text
          type="string"
@@ -132,7 +105,7 @@
          layout="topleft"
          left="265"
          name="tooltip_textbox"
-         top="31"
+         top="8"
          width="200">
            Hovertip Trigger Delays:
         </text>
@@ -229,23 +202,81 @@
          width="80">
             seconds
         </text>
+        <slider
+         control_name="FSHudTextFadeDistance"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.25"
+         label="Floating text fade distance (in m):"
+         tool_tip="Sets the distance where floating text starts to fade"
+         label_width="200"
+         layout="topleft"
+         left="10"
+         min_val="0"
+         max_val="64"
+         name="FSHudTextFadeDistance"
+         top="130"
+         width="481" />
+        <slider
+         control_name="FSHudTextFadeRange"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.25"
+         label="Floating text fade range (in m):"
+         tool_tip="Sets the range it takes for a floating text to fade from fully visible to completely invisible"
+         label_width="200"
+         layout="topleft"
+         left="10"
+         min_val="0.25"
+         max_val="32"
+         name="FSHudTextFadeRange"
+         top_pad="2"
+         width="474" />
+    </panel>
 
-      <check_box
-       control_name="UsePieMenu"
-       height="16"
-       initial_value="true"
-       label="Use Pie Menu"
-       layout="topleft"
-       left="10"
-       name="UsePieMenu"
-       tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top="150"
-       width="256" />
+    <!--2D Overlay-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="2D Overlay"
+     name="ui-2d-overlay" >
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="UI Size:"
+         top_pad="8"
+         width="200">
+            UI Scaling (may cause side effects):
+        </text>
+        <slider
+         control_name="UIScaleFactor"
+         decimal_digits="2"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="1"
+         layout="topleft"
+         left_pad="0"
+         max_val="1.4"
+         min_val="0.75"
+         name="ui_scale_slider"
+         top_pad="-14"
+         width="250" />
 
       <text
        type="string"
        left="10"
-       top_pad="12"
+       top_pad="20"
        width="140"
        follows="left|top"
        height="16"
@@ -363,16 +394,26 @@
          left="10"
          width="400" />
 
+      <check_box
+       control_name="UsePieMenu"
+       height="16"
+       initial_value="true"
+       label="Use Pie Menu"
+       layout="topleft"
+       left="5"
+       name="UsePieMenu"
+       tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
+       top_pad="12"
+       width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
          initial_value="true"
          label="Group Notices and chiclets in Top Right"
          layout="topleft"
-         left="5"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="16"
+         top_pad="3"
          width="256" />
         <text
          type="string"
@@ -433,7 +474,7 @@
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="12"
+         top_pad="14"
          width="471" />
         <slider
          control_name="FlashPeriod"
@@ -463,39 +504,8 @@
          width="50">
             sec
         </text>
-        <slider
-         control_name="FSHudTextFadeDistance"
-         decimal_digits="2"
-         follows="left|top"
-         height="16"
-         increment="0.25"
-         label="Floating text fade distance (in m):"
-         tool_tip="Sets the distance where floating text starts to fade"
-         label_width="200"
-         layout="topleft"
-         left="10"
-         min_val="0"
-         max_val="64"
-         name="FSHudTextFadeDistance"
-         top_pad="8"
-         width="481" />
-        <slider
-         control_name="FSHudTextFadeRange"
-         decimal_digits="2"
-         follows="left|top"
-         height="16"
-         increment="0.25"
-         label="Floating text fade range (in m):"
-         tool_tip="Sets the range it takes for a floating text to fade from fully visible to completely invisible"
-         label_width="200"
-         layout="topleft"
-         left="10"
-         min_val="0.25"
-         max_val="32"
-         name="FSHudTextFadeRange"
-         top_pad="2"
-         width="474" />
-    </panel>
+
+    </panel>	
 
     <!--Top Bars-->
     <panel

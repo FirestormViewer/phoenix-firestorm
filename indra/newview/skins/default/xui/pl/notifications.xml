@@ -559,6 +559,10 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 	<notification name="CannotDownloadFile">
 		Nie można pobrać pliku
 	</notification>
+	<notification name="MediaFileDownloadUnsupported">
+		Zażądano pobrania pliku, jaki nie jest obsługiwany w [SECOND_LIFE].
+		<usetemplate ignoretext="Ostrzegaj o pobieraniu nieobsługiwanych typów plików" name="okignore" />
+	</notification>
 	<notification name="CannotWriteFile">
 		Nie można zapisać pliku [[FILE]]
 	</notification>

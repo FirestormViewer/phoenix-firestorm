@@ -251,7 +251,6 @@
 
 #include "llviewereventrecorder.h"
 
-#include "llleapmotioncontroller.h"
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
@@ -1535,10 +1534,6 @@ bool LLAppViewer::mainLoop()
 		joystick = LLViewerJoystick::getInstance();
 		joystick->setNeedsReset(true);
 		
-// [FS:CR]
-		gestureController = LLLeapMotionController::getInstance();
-// [/FS:CR]
-		
 #ifdef LL_DARWIN
 		// Ensure that this section of code never gets called again on OS X.
 		mMainLoopInitialized = true;
@@ -1733,10 +1728,6 @@ bool LLAppViewer::mainLoop()
 				}
 			}
 			
-// [FS:CR] Run any LeapMotion devices
-			if (gestureController)
-				gestureController->stepFrame();
-
 			pingMainloopTimeout("Main:Sleep");
 			
 			pauseMainloopTimeout();
@@ -1983,8 +1974,6 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
-	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
-
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -5141,6 +5130,18 @@ bool LLAppViewer::initCache()
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Purge web browser cache
+	if (gSavedSettings.getBOOL("FSStartupClearBrowserCache"))
+	{
+		std::string browser_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+		if (LLFile::isdir(browser_cache))
+		{
+			gDirUtilp->deleteDirAndContents(browser_cache);
+		}
+		gSavedSettings.setBOOL("FSStartupClearBrowserCache", FALSE);
+	}
+	// </FS:Ansariel>
+
 	// <FS:ND> For Windows, purging the cache can take an extraordinary amount of time. Rename the cache dir and purge it using another thread.
 	startCachePurge();
 	// </FS:ND>
@@ -5337,7 +5338,13 @@ void LLAppViewer::purgeCache()
 	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << LL_ENDL;
 	LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
 	LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
-	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), "*.*");
+	std::string browser_cache = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "cef_cache");
+	if (LLFile::isdir(browser_cache))
+	{
+		// cef does not support clear_cache and clear_cookies, so clear what we can manually.
+		gDirUtilp->deleteDirAndContents(browser_cache);
+	}
+	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), "*");
 }
 
 //purge cache immediately, do not wait until the next login.
@@ -5962,14 +5969,6 @@ void LLAppViewer::idle()
 	{
 		gAgentPilot.moveCamera();
 	}
-// <FS:Zi> Leap Motion flycam
-#ifdef USE_LEAPMOTION
-	else if(gestureController && gestureController->getOverrideCamera())
-	{
-		gestureController->moveFlycam();
-	}
-#endif //USE_LEAPMOTION
-// </FS:Zi>
 	else if (LLViewerJoystick::getInstance()->getOverrideCamera())
 	{ 
 		LLViewerJoystick::getInstance()->moveFlycam();

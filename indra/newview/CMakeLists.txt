@@ -36,7 +36,6 @@ include(LLUI)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
-include(LeapMotion)
 # <FS:CR> Nope -> include(LScript)
 include(Linking)
 include(NDOF)
@@ -45,7 +44,6 @@ include(OPENAL)
 include(OpenGL)
 include(OpenSSL)
 include(PNG)
-include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
 include(UnixInstall)
@@ -72,11 +70,6 @@ endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
-
-if(LEAPMOTION)
-  add_definitions(-DUSE_LEAPMOTION=1)
-  include_directories(${LEAP_MOTION_INCLUDE_DIR})
-endif(LEAPMOTION)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -108,7 +101,6 @@ include_directories(
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
-    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     ${COLLADA_INCLUDE_DIRS}
     ${LLAPPEARANCE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -1627,14 +1619,6 @@ set_source_files_properties(
 #   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
    )
 
-LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
-LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
-
-if (LEAPMOTION)
-  LIST(APPEND viewer_SOURCE_FILES fsleaptool.cpp fsleapexampletool.cpp fsleapmaniptool.cpp )
-  LIST(APPEND viewer_HEADER_FILES fsleaptool.h fsleapexampletool.h fsleapmaniptool.h )
-endif (LEAPMOTION)
-
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx-objc.mm)
@@ -2148,14 +2132,7 @@ if (WINDOWS)
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodexL.dll
           )
     endif (FMODEX)
-	
-    if (LEAPMOTION)
-      list(APPEND COPY_INPUT_DEPENDENCIES
-           ${SHARED_LIB_STAGING_DIR}/Release/Leap.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/Leapd.dll
-          )
-    endif (LEAPMOTION)
-    
+
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
       COMMAND ${PYTHON_EXECUTABLE}
@@ -2355,12 +2332,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${GROWL_LIBRARY}
     )
 	
-if (LEAPMOTION)
-    target_link_libraries(${VIEWER_BINARY_NAME}
-	${LEAP_MOTION_LIBRARY}
-	)
-endif (LEAPMOTION)
-	
 if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME}
     ${GROWL_LIBRARY}
@@ -2465,7 +2436,7 @@ if (DARWIN)
   set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2014 The Phoenix Firestorm Project, Inc.")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2016 The Phoenix Firestorm Project, Inc.")
   set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
 

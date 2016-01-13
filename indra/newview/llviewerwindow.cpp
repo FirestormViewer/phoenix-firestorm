@@ -232,7 +232,6 @@
 #include "llnetmap.h"
 #include "lggcontactsets.h"
 
-#include "llleapmotioncontroller.h"
 #include "lltracerecording.h"
 
 //
@@ -921,12 +920,6 @@ public:
 		// <FS:ND> Report amount of failed texture buffer allocations if any.
 		if( LLImageBase::getAllocationErrors() )
 			addText( xpos, ypos, llformat( "# textures discarded due to insufficient memory %ld", LLImageBase::getAllocationErrors() ) );
-		// </FS:ND>
-
-		// <FS:ND> Add some fancy leap debug text
-		std::string strLeapDebug( LLLeapMotionController::getInstance()->getDebugString() );
-		if( strLeapDebug.size() )
-			addText( xpos, ypos, strLeapDebug );
 		// </FS:ND>
 	}
 
@@ -2311,7 +2304,7 @@ void LLViewerWindow::shutdownViews()
 		gMorphView->setVisible(FALSE);
 	}
 	LL_INFOS() << "Global views cleaned." << LL_ENDL ;
-	
+
 	LLNotificationsUI::LLToast::cleanupToasts();
 	LL_INFOS() << "Leftover toast cleaned up." << LL_ENDL;
 

@@ -261,6 +261,12 @@ list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
 
 # </FS:ND>
 
+# <FS:ND> Add files from teapot (AW OpenSim currency support )
+list(APPEND llcommon_SOURCE_FILES  "tea.cpp" )
+list(APPEND llcommon_HEADER_FILES "tea.h" )
+# </FS:ND>
+
+
 set_source_files_properties(${llcommon_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 

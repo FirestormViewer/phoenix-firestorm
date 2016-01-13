@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="UI-Pref" name="Display panel">
 	<tab_container label="Prefs Firestorm" name="tabs">
-		<panel label="General" name="UI Prefs Panel">
-			<text name="UI Size:" left="5" width="290">
-				Escalado de la IU (puede tener efectos inesperados):
-			</text>
-			<slider name="ui_scale_slider" width="230"/>
+		<panel label="3D mundo" name="UI Prefs Panel">
 			<text name="HoverTipText">
 				Bulas:
 			</text>
@@ -29,7 +25,12 @@
 			</text>
 			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
-			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+		</panel>
+		<panel label="2D cubrir" name="ui-2d-overlay">
+			<text name="UI Size:" left="5" width="290">
+				Escalado de la IU (puede tener efectos inesperados):
+			</text>
+			<slider name="ui_scale_slider" width="230"/>
 			<text name="ScriptDialogsPerObjectLabel" width="180">
 				Diálogos de script por objeto:
 			</text>
@@ -51,8 +52,9 @@
 				<combo_box.item label="Abajo a la derecha" name="ScriptDialogPositionOption_5"/>
 			</combo_box>
 			<check_box label="Animados" name="FSAnimatedScriptDialogs" tool_tip="Actívalo para que los diálogos de script se abran con animación (comportamiento clásico de v1.x). Sólo funciona si los diálogos se abren desde arriba hacia abajo." width="256"/>
+			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<check_box label="Avisos de grupo en esquina superior derecha" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)" width="256"/>
-			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
+			<text name="GroupTopRightRequiresRestart" left_delta="267">
 				(requiere reiniciar)
 			</text>
 			<check_box label="Ocultar los iconos de notificación de chat de grupo y MI" name="FSDisableIMChiclets" tool_tip="Si se activa, Firestorm no mostrará ningún icono de notificación de chat de grupo / MI (el sobre de los avisos de grupo y la suma de MIs permanecerán en pantalla)."/>

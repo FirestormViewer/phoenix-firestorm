@@ -273,8 +273,7 @@ bool callback_clear_web_browser_cache(const LLSD& notification, const LLSD& resp
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if ( option == 0 ) // YES
 	{
-		LLViewerMedia::clearAllCaches();
-		LLViewerMedia::clearAllCookies();
+		gSavedSettings.setBOOL("FSStartupClearBrowserCache", TRUE);
 	}
 
 	return false;
@@ -1031,6 +1030,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		gSavedPerAccountSettings.getControl("FSMutedAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		gSavedPerAccountSettings.getControl("FSAwayAvatarResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> FIRE-17630: Properly disable per-account settings backup list
+		getChildView("restore_per_account_disable_cover")->setVisible(FALSE);
 	}
 	gAgent.sendAgentUserInfoRequest();
 
@@ -2508,9 +2510,6 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> Clear inventory cache button
 	getChildView("ClearInventoryCache")->setEnabled(TRUE);
-
-	// <FS:Ansariel> Clear web browser cache button
-	getChildView("ClearWebBrowserCache")->setEnabled(TRUE);
 }
 
 
