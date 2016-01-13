@@ -2,7 +2,7 @@
 # target_exe: the cmake target of the executable for which the shared libs will be deployed.
 macro(ll_deploy_sharedlibs_command target_exe) 
   set(TARGET_LOCATION $<TARGET_FILE:${target_exe}>)
-  get_filename_component(OUTPUT_PATH ${TARGET_LOCATION} PATH)
+  get_filename_component(OUTPUT_PATH ${TARGET_LOCATION} PATH) #<FS:ND> TARGET_LOCATION is a generator expression and will not expand during configure, thus OUTPUT_PATH will always be empty, for Windows (where this a a problem) DeploySharedLibs.cmake will take care of this.
   
   if(DARWIN)
     SET_TEST_PATH(SEARCH_DIRS)

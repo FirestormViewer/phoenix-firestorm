@@ -77,7 +77,6 @@ private:
 	LLFrameTimer 	mVisibleTime;
 	const BOOL		mModal;
 
-protected: // <FS:Ansariel> FIRE-17439: Need access to stack in derived classes
 	static std::list<LLModalDialog*> sModalStack;  // Top of stack is currently being displayed
 };
 

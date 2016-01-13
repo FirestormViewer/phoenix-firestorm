@@ -6485,6 +6485,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="animation_explorer_still_playing">
 		Wird abgespielt
 	</string>
+	<string name="animation_explorer_unknown_priority">
+		unbekannt
+	</string>
 
 	<string name="FriendOnlineNotification">
 		ist online.

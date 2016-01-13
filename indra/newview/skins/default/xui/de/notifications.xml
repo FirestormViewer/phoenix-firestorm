@@ -640,6 +640,10 @@ Das Objekt ist möglicherweise außer Reichweite oder wurde gelöscht.
 	<notification name="CannotDownloadFile">
 		Dateidownload nicht möglich
 	</notification>
+	<notification name="MediaFileDownloadUnsupported">
+		Sie haben einen Dateidownload angefordert, der innerhalb von [SECOND_LIFE] nicht unterstützt wird.
+		<usetemplate ignoretext="Warnen bei Dateidownloads, die nicht unterstützt werden" name="okignore" />
+	</notification>
 	<notification name="CannotWriteFile">
 		Datei [[FILE]] kann nicht geschrieben werden
 	</notification>
@@ -2486,7 +2490,7 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmClearWebBrowserCache">
-		Möchten Sie Ihren Webbrowser-Cache wirklich leeren?
+		Möchten Sie Ihren Webbrowser-Cache wirklich leeren (Benötigt Neustart)?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmClearCookies">

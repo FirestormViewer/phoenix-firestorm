@@ -7,7 +7,7 @@
 		  UpgradeCode="$(var.UPGRADECODE)"
 		  HelpUrl="http://www.firestormviewer.org/support" 
 		  AboutUrl="http://www.firestormviewer.org" 
-		  Copyright="Copyright© 2015, The Phoenix Firestorm Project, Inc." 
+		  Copyright="Copyright© 2016, The Phoenix Firestorm Project, Inc." 
 		  Condition="(VersionNT = v6.0 AND ServicePackLevel = 2) OR (VersionNT >= v6.1)"
 		  IconSourceFile="$(var.WIX_SOURCEDIR)\..\windows\firestorm_icon.ico"
 		  >

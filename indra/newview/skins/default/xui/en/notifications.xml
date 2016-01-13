@@ -6281,7 +6281,7 @@ Are you sure you want to clear your inventory cache?
    icon="alertmodal.tga"
    name="ConfirmClearWebBrowserCache"
    type="alertmodal">
-Are you sure you want to clear your web browser cache?
+Are you sure you want to clear your web browser cache (Requires Restart)?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"

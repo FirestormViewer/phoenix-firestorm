@@ -72,16 +72,6 @@ if(WINDOWS)
       endif( NOT ND_BUILD64BIT_ARCH )
     endif (FMODEX)
 
-    if (LEAPMOTION)
-      if( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} x86/Leapd.dll)
-        set(release_files ${release_files} x86/Leap.dll)
-      else( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} x64/Leapd.dll)
-        set(release_files ${release_files} x64/Leap.dll)
-      endif( NOT ND_BUILD64BIT_ARCH )
-    endif (LEAPMOTION)
-
     #*******************************
     # Copy MS C runtime dlls, required for packaging.
     # *TODO - Adapt this to support VC9
@@ -207,10 +197,6 @@ elseif(DARWIN)
       set(release_files ${release_files} libfmodex.dylib)
     endif (FMODEX)
 
-    if (LEAPMOTION)
-      set(release_files ${release_files} libLeap.dylib)
-    endif (LEAPMOTION)
-
 elseif(LINUX)
     # linux is weird, multiple side by side configurations aren't supported
     # and we don't seem to have any debug shared libs built yet anyways...
@@ -276,14 +262,6 @@ elseif(LINUX)
       set(debug_files ${debug_files} "libfmodexL.so")
       set(release_files ${release_files} "libfmodex.so")
     endif (FMODEX)
-
-    if (LEAPMOTION)
-      if( NOT ND_BUILD64BIT_ARCH )
-        set(release_files ${release_files} x86/libLeap.so)
-      else( NOT ND_BUILD64BIT_ARCH )
-        set(release_files ${release_files} x64/libLeap.so)
-      endif( NOT ND_BUILD64BIT_ARCH )
-    endif (LEAPMOTION)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")

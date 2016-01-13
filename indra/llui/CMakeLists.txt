@@ -14,7 +14,6 @@ include(LLWindow)
 include(LLCoreHttp)
 include(LLVFS)
 include(LLXML)
-include(Teapot)# <FS:AW opensim currency support>
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -28,7 +27,6 @@ include_directories(
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
     ${LIBS_PREBUILD_DIR}/include/hunspell
-    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
@@ -289,8 +287,6 @@ target_link_libraries(llui
     ${LLXML_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${HUNSPELL_LIBRARY}
-    ${LLMESSAGE_LIBRARIES}
-    ${TEAPOT_LIBRARIES}# <FS:AW opensim currency support>
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 

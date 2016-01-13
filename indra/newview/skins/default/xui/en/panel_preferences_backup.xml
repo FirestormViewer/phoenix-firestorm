@@ -180,7 +180,6 @@ Settings groups to be restored (backup will always save all):
      right="-1"
      height="180"
      draw_heading="true"
-     enabled_control="PerAccountSettingsFile"
      multi_select="false">
         <column label="" name="restore_per_account_files_check" width="16" />
         <column label="Per Account Files:" name="restore_per_account_files_label" />
@@ -249,8 +248,7 @@ Settings groups to be restored (backup will always save all):
      left="0"
      top="0"
      right="-1"
-     height="180"
-     invisibility_control="PerAccountSettingsFile" />
+     height="180"/>
 
     </layout_panel>
 

@@ -79,7 +79,6 @@ set(cmake_SOURCE_FILES
     LLVFS.cmake
     LLWindow.cmake
     LLXML.cmake
-    LeapMotion.cmake
     # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
     MediaPluginBase.cmake
@@ -94,7 +93,6 @@ set(cmake_SOURCE_FILES
     PulseAudio.cmake
     Python.cmake
     QuickTimePlugin.cmake
-    Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
     UI.cmake

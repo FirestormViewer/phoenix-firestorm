@@ -663,6 +663,8 @@ class Windows_i686_Manifest(ViewerManifest):
                self.path( "*.*" )
                self.end_prefix()
 
+        self.fs_copy_windows_manifest( )
+
     def nsi_file_commands(self, install=True):
         def wpath(path):
             if path.endswith('/') or path.endswith(os.path.sep):
@@ -1026,7 +1028,7 @@ class DarwinManifest(ViewerManifest):
             self.end_prefix("Contents")
 
         # fix up media_plugin.dylib so it knows where to look for CEF files it needs
-        self.run_command('install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%(config)s/Second Life.app/Contents/Resources/llplugin/media_plugin_cef.dylib"' %
+        self.run_command('install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "%(config)s/Firestorm.app/Contents/Resources/llplugin/media_plugin_cef.dylib"' %
                         { 'config' : self.args['configuration'] })
 
         # NOTE: the -S argument to strip causes it to keep enough info for

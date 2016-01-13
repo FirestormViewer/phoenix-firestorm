@@ -1783,6 +1783,23 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 	std::string plugin_basename = LLMIMETypes::implType(media_type);
 	LLPluginClassMedia* media_source = NULL;
 
+#ifdef LL_LINUX
+	if( plugin_basename == "media_plugin_cef" )
+	{
+		std::string strSandbox = gDirUtilp->getExecutableDir() + gDirUtilp->getDirDelimiter() + "chrome-sandbox";
+		llstat st;
+		if( LLFile::stat( strSandbox, &st ) )
+		{
+			LL_WARNS() << strSandbox << " not found, CEF will run without using the sandbox" << LL_ENDL;
+		}
+		else if( st.st_gid != 0 || st.st_gid != 0 || (st.st_mode & S_ISUID ) != S_ISUID )
+		{
+			LL_WARNS() << strSandbox << " is either not owned by root:root or does not have the suid bit set, CEF will run without using the sandbox" << LL_ENDL;
+		}
+	}
+#endif
+
+	
 	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
 	// If a spare was already created before PluginAttachDebuggerToPlugins was set, don't use it.
     // Do not use a spare if launching with full viewer control (e.g. Facebook, Twitter and few others)
