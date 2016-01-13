@@ -437,8 +437,6 @@ void LLFloaterAuction::onClickSellToAnyone(void* data)
 		args["LAND_SIZE"] = llformat("%d", area);
 		args["SALE_PRICE"] = llformat("%d", sale_price);
 		args["NAME"] = LLTrans::getString("Anyone");
-		// <FS:Ansariel> Fill [CURRENT_GRID] placeholder (FIRE-6777)
-		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 
 		LLNotification::Params params("ConfirmLandSaleChange");	// Re-use existing dialog
 		params.substitutions(args)
