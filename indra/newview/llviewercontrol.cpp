@@ -118,7 +118,45 @@ std::string gLastRunVersion;
 extern BOOL gResizeScreenTexture;
 extern BOOL gDebugGL;
 
-LLTimer throttle_timer;//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+// <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
+class BandwidthUpdater : public LLEventTimer
+{
+public:
+	BandwidthUpdater()
+		:LLEventTimer(0.5f)
+	{
+		mEventTimer.stop();
+	}
+
+	virtual ~BandwidthUpdater(){}
+
+	void update(const LLSD& new_value)
+	{
+		mNewValue = new_value.asReal();
+		mEventTimer.start();
+	}
+
+protected:
+	BOOL tick()
+	{
+		gViewerThrottle.setMaxBandwidth(mNewValue);
+		mEventTimer.stop();
+	
+		static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings, "FSBandwidthTooHigh");
+		if (!alreadyComplainedAboutBW && mNewValue > 1500.f)
+		{
+			LLNotificationsUtil::add("FSBWTooHigh");
+			gWarningSettings.setBOOL("FSBandwidthTooHigh", TRUE);
+		}
+
+		return FALSE;
+	}
+
+private:
+	F32 mNewValue;
+};
+BandwidthUpdater sBandwidthUpdater;
+// </FS:Ansariel>
 
 ////////////////////////////////////////////////////////////////////////////
 // Listeners
@@ -136,26 +174,7 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 	LLWorld::getInstance()->setLandFarClip(draw_distance);
 	return true;
 }
-//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-static bool handleBandWidthChanged(const LLSD& newvalue)
-{
-	//<FS:TS> FIRE-6795: Only complain about bandwidth setting once
-	static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings,"FSBandwidthTooHigh");
-	F32 throttletimer = throttle_timer.getElapsedTimeF32();
-	if (throttletimer > 0.25f)
-	{
-		F32 bandwidth = (F32) newvalue.asReal();
-		gViewerThrottle.setMaxBandwidth((F32) bandwidth);
-		throttle_timer.reset();
-		if (!alreadyComplainedAboutBW && (bandwidth > 1500.0))
-		{
-			LLNotificationsUtil::add("FSBWTooHigh");
-			gWarningSettings.setBOOL("FSBandwidthTooHigh",TRUE);
-		}
-	//</FS:TS> FIRE-6795
-	}
-	return true;
-}
+
 //</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 static bool handleTerrainDetailChanged(const LLSD& newvalue)
 {
@@ -874,8 +893,6 @@ void settings_setup_listeners()
 {
 	gSavedSettings.getControl("FirstPersonAvatarVisible")->getSignal()->connect(boost::bind(&handleRenderAvatarMouselookChanged, _2));
 	gSavedSettings.getControl("RenderFarClip")->getSignal()->connect(boost::bind(&handleRenderFarClipChanged, _2));
-	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&handleBandWidthChanged, _2));
 	gSavedSettings.getControl("RenderTerrainDetail")->getSignal()->connect(boost::bind(&handleTerrainDetailChanged, _2));
 	gSavedSettings.getControl("OctreeStaticObjectSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
 	gSavedSettings.getControl("OctreeDistanceFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
@@ -1080,6 +1097,9 @@ void settings_setup_listeners()
 	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
 	gSavedSettings.getControl("FSHudTextFadeDistance")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
 	gSavedSettings.getControl("FSHudTextFadeRange")->getSignal()->connect(boost::bind(&LLHUDText::onFadeSettingsChanged));
+
+	//<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
+	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&BandwidthUpdater::update, sBandwidthUpdater, _2));
 }
 
 #if TEST_CACHED_CONTROL

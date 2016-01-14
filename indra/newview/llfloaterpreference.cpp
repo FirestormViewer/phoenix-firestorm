@@ -2720,21 +2720,10 @@ void LLFloaterPreference::changed()
 
 //------------------------------Updater---------------------------------------
 
-//<FS:TS> FIRE-6795: Remove repetitive warning at every login
-// <FS:Zi> Add warning on high bandwidth setting
-//static void updateBandwidthWarning()
-//{
-//	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
-//	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);
-//}
-// </FS:Zi>
-//</FS:TS> FIRE-6795
-
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //static bool handleBandwidthChanged(const LLSD& newvalue)
 //{
 //	gViewerThrottle.setMaxBandwidth((F32) newvalue.asReal());
-//	updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
 //	return true;
 //}
 
@@ -2780,8 +2769,8 @@ void LLFloaterPreference::changed()
 
 static LLPanelInjector<LLPanelPreference> t_places("panel_preference");
 LLPanelPreference::LLPanelPreference()
-//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-//: LLPanel(),
+: LLPanel()
+  //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
   //mBandWidthUpdater(NULL)
 {
 	//<FS:KC> Handled centrally now
@@ -2908,20 +2897,13 @@ BOOL LLPanelPreference::postBuild()
 	// [/WoLf]
 
 	//////////////////////PanelSetup ///////////////////
-	// <FS:Zi> Add warning on high bandwidth settings
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	//if (hasChild("max_bandwidth"), TRUE)
-	// Look for the layout widget on top level of this panel
-	if (hasChild("max_bandwidth_layout"))
-	// </FS:Zi>
-	{
-		//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-		//mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
-		//gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
-		//<FS:TS> FIRE-6795: Remove warning on every login
-		//updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
-		//</FS:TS> FIRE-6795
-		//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	}
+	//{
+	//	mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
+	//	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
+	//}
+	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
 	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
 	//if (hasChild("use_external_browser", TRUE))
