@@ -2361,7 +2361,7 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmClearWebBrowserCache">
-		Na pewno chcesz wyczyścić bufor wbudowanej przeglądarki internetowej?
+		Na pewno chcesz wyczyścić bufor wbudowanej przeglądarki internetowej (wymaga restartu)?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmClearCookies">
