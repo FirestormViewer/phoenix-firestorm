@@ -1639,7 +1639,7 @@ The object may be out of range or may have been deleted.
   type="alert">
     <unique/>
     <tag>confirm</tag>
-    You have requested a file download, which is not supported within [SECOND_LIFE].
+    You have requested a file download, which is not supported within [APP_NAME].
     <usetemplate
      ignoretext="Warn about unsupported file downloads"
      name="okignore"

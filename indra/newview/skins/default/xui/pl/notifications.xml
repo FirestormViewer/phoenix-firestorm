@@ -560,7 +560,7 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 		Nie można pobrać pliku
 	</notification>
 	<notification name="MediaFileDownloadUnsupported">
-		Zażądano pobrania pliku, jaki nie jest obsługiwany w [SECOND_LIFE].
+		Zażądano pobrania pliku, jaki nie jest obsługiwany w [APP_NAME].
 		<usetemplate ignoretext="Ostrzegaj o pobieraniu nieobsługiwanych typów plików" name="okignore" />
 	</notification>
 	<notification name="CannotWriteFile">
