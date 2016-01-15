@@ -880,7 +880,7 @@ void LLFloaterPreference::apply()
 		refreshSkin(this);
 	}
 */
- // Call apply() on all panels that derive from LLPanelPreference
+	// Call apply() on all panels that derive from LLPanelPreference
 	for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
 		 iter != tabcontainer->getChildList()->end(); ++iter)
 	{
@@ -1006,6 +1006,7 @@ void LLFloaterPreference::cancel()
 
 void LLFloaterPreference::onOpen(const LLSD& key)
 {
+	
 	// this variable and if that follows it are used to properly handle do not disturb mode response message
 	static bool initialized = FALSE;
 	// if user is logged in and we haven't initialized do not disturb mode response yet, do it
@@ -1952,7 +1953,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	ctrl_deferred->setEnabled(enabled);
 	//ctrl_deferred2->setEnabled(enabled); <FS:Ansariel> We don't have that
-	
+
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
@@ -2022,7 +2023,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
@@ -2075,7 +2076,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
@@ -2132,12 +2133,12 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		// <FS:Ansariel> Options for Chalice Yao's simple avatar shadows via Marine Kelley
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
 		// </FS:Ansariel>
-		
+
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -2184,7 +2185,7 @@ void LLFloaterPreference::refresh()
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
 	//updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
 	// </FS:Ansariel>
-		
+	
 	refreshEnabledState();
 }
 
@@ -2905,13 +2906,6 @@ BOOL LLPanelPreference::postBuild()
 	//}
 	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
-	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	//if (hasChild("use_external_browser", TRUE))
-	//{
-	//	getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
-	//}
-	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	
 #ifdef EXTERNAL_TOS
 	LLRadioGroup* ext_browser_settings = getChild<LLRadioGroup>("preferred_browser_behavior");
 	if (ext_browser_settings)
