@@ -887,6 +887,21 @@ void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> FIRE-14083: Search filter for contact list
+void handleContactListShowSearchChanged(const LLSD& newvalue)
+{
+	bool visible = newvalue.asBoolean();
+	if (!visible)
+	{
+		FSFloaterContacts* instance = FSFloaterContacts::findInstance();
+		if (instance)
+		{
+			instance->resetFriendFilter();
+		}
+	}
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1100,6 +1115,7 @@ void settings_setup_listeners()
 
 	//<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
 	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&BandwidthUpdater::update, sBandwidthUpdater, _2));
+	gSavedSettings.getControl("FSContactListShowSearch")->getSignal()->connect(boost::bind(&handleContactListShowSearchChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
