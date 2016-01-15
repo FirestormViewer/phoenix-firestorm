@@ -918,6 +918,17 @@
 		 control_name="FSFriendListColumnShowPermissions"
 		 tool_tip="The contact list will show the columns with the permissions you granted this avatar and vice versa.">
 		</check_box>
+		<check_box
+		 top_pad="2"
+		 left="20"
+		 follows="left|top"
+		 height="16"
+		 label="Show search filter"
+		 name="FSContactListShowSearch"
+		 width="270"
+		 control_name="FSContactListShowSearch"
+		 tool_tip="The contact list will show a search textbox to filter the list.">
+		</check_box>
 
 		<text
 		 top_pad="10"

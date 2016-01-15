@@ -239,7 +239,7 @@ elseif(LINUX)
         libgobject-2.0.so
         libhunspell-1.3.so.0.0.0
         libopenal.so
-        libopenjpeg.so
+        #libopenjpeg.so
         libuuid.so.16
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
@@ -254,6 +254,9 @@ elseif(LINUX)
           libfreetype.so.6
 		 )
     endif( NOT ND_BUILD64BIT_ARCH )
+    if( NOT ND_USE_OPENJPEG2 )
+      set(release_files ${release_files} libopenjpeg.so )
+    endif( NOT ND_USE_OPENJPEG2 ) 
 
 
     if (USE_TCMALLOC)

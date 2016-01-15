@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<fs_scroll_list name="friend_list">
-		<fs_scroll_list.column name="icon_online_status" tool_tip="Estado de conexión"/>
-		<fs_scroll_list.column label="Usuario" name="user_name" tool_tip="Nombre de usuario de este contacto"/>
-		<fs_scroll_list.column label="Nombre" name="full_name" tool_tip="Nombre por el que desea ser conocido este contacto"/>
-		<fs_scroll_list.column name="icon_visible_online" tool_tip="Este contacto puede ver si estás conectado"/>
-		<fs_scroll_list.column name="icon_visible_map" tool_tip="Este  contacto puede localizarte en el mapa"/>
-		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Este contacto puede editar, eliminar o tomar tus objetos"/>
-		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Puedes localizar a este contacto en el mapa"/>
-		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Puedes editar los objetos de este contacto"/>
-	</fs_scroll_list>
+	<layout_stack name="ls_friend_list">
+		<layout_panel name="lp_search">
+			<filter_editor label="Filter Friends" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Estado de conexión"/>
+				<fs_scroll_list.column label="Usuario" name="user_name" tool_tip="Nombre de usuario de este contacto"/>
+				<fs_scroll_list.column label="Nombre" name="full_name" tool_tip="Nombre por el que desea ser conocido este contacto"/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="Este contacto puede ver si estás conectado"/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="Este  contacto puede localizarte en el mapa"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Este contacto puede editar, eliminar o tomar tus objetos"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Puedes localizar a este contacto en el mapa"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Puedes editar los objetos de este contacto"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
 	<button label="MI/Llamar" name="im_btn" tool_tip="Abre una sesión de mensajería instantánea con un contacto o conferencia si hay seleccionado más de uno"/>
 	<button label="Perfil" tool_tip="Mostrar imagen, grupos y otra información del contacto seleccionado" name="profile_btn"/>
 	<button label="Teleporte..." name="offer_teleport_btn" tool_tip="Ofrecer al contacto seleccionado teleporte a tu posición actual"/>

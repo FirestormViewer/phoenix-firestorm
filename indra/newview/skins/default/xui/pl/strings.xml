@@ -5863,6 +5863,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="animation_explorer_still_playing">
 		Ciągle odtwarzane
 	</string>
+	<string name="animation_explorer_unknown_priority">
+		nieznany
+	</string>
 	<string name="FriendOnlineNotification">
 		jest online.
 	</string>

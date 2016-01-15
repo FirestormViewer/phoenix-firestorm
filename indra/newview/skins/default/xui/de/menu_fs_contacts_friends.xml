@@ -22,6 +22,7 @@
 		<menu_item_check label="Sortieren nach Anzeigename" name="sort_by_displayname"/>
 		<menu_item_check label="Format vollstänger Name: Benutzername (Anzeigename)" name="format_username_displayname"/>
 		<menu_item_check label="Format vollstänger Name: Anzeigename (Benutzername)" name="format_displayname_username"/>
+		<menu_item_check label="Suchfilter anzeigen" name="friend_filter"/>
 	</menu>
 	<menu_item_check label="Online-Status für Freunde sichtbar" name="GlobalOnlineStatusToggle"/>
 </context_menu>
