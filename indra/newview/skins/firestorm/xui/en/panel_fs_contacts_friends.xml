@@ -7,6 +7,7 @@
  width="355">
 	<panel.string name="FontName" value="SANSSERIF"/>
 	<layout_stack
+	 default_tab_group="2"
 	 border_size="0"
 	 animate="true"
 	 follows="all"
@@ -40,6 +41,7 @@
 		</layout_panel>
 		<layout_panel
 		 name="lp_friend_list"
+		 tab_group="2"
 		 auto_resize="true"
 		 user_resize="false"
 		 top="0"
