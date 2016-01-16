@@ -2,6 +2,7 @@
 <floater name="animation_explorer" title="Eksplorator animacji">
 	<scroll_list name="animation_list">
 		<scroll_list.column label="Przez" name="played_by" />
+		<scroll_list.column label="Priorytet" name="priority" />
 		<scroll_list.column label="Kiedy" name="played" />
 		<scroll_list.column label="Czas" name="timestamp" />
 		<scroll_list.column label="ID animacji" name="animation_id" />

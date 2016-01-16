@@ -79,7 +79,6 @@
      name="UseAnimationTimeSteps"
      top_pad="5"
      width="237"/>
-
     <text
      name="BackgroundYieldTimeText"
      follows="top|left"

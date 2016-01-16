@@ -272,7 +272,6 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 	{
 		LLSD args;
 		args["SLURL"] = slurl.getLocationString();
-		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 		args["GRID"] = LLGridManager::getInstance()->getGridLabel(slurl.getGrid());
 		LLNotificationsUtil::add("CantTeleportToGrid", args);
 		return;

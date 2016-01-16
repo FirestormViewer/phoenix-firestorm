@@ -40,6 +40,7 @@ class LLColorSwatchCtrl;
 class LLComboBox;
 class LLInventoryItem;
 class LLLineEditor;
+class LLRadioGroup;
 class LLSpinCtrl;
 class LLTextBox;
 class LLTextureCtrl;
@@ -263,7 +264,7 @@ private:
 	
 	LLComboBox*		mComboTexGen;
 	LLComboBox*		mComboMatMedia;
-	LLComboBox*		mComboMatType;
+	LLRadioGroup*	mRadioMatType;
 	
 	LLCheckBoxCtrl	*mCheckFullbright;
 	
@@ -361,7 +362,7 @@ private:
 						LLMaterialMgr::getInstance()->put(object->getID(),face,*new_material);
 					}
 
-					object->setTEMaterialParams(face, new_material, TRUE);
+					object->setTEMaterialParams(face, new_material);
 					return new_material;
 				}
 				return NULL;

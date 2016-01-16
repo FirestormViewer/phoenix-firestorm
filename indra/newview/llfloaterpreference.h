@@ -307,7 +307,8 @@ public:
 	void savePreset(const LLSD& user_data);
 	void loadPreset(const LLSD& user_data);
 
-	class Updater;
+	// <FS:Ansariel> Handled in llviewercontrol.cpp
+	//class Updater;
 
 protected:
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;

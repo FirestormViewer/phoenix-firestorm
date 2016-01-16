@@ -901,7 +901,7 @@ void LLFloaterPreference::apply()
 		refreshSkin(this);
 	}
 */
- // Call apply() on all panels that derive from LLPanelPreference
+	// Call apply() on all panels that derive from LLPanelPreference
 	for (child_list_t::const_iterator iter = tabcontainer->getChildList()->begin();
 		 iter != tabcontainer->getChildList()->end(); ++iter)
 	{
@@ -2045,7 +2045,7 @@ void LLFloaterPreference::refreshEnabledState()
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	ctrl_deferred->setEnabled(enabled);
-	
+
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
@@ -2293,7 +2293,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
 
@@ -2338,7 +2338,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	{
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
 
@@ -2388,10 +2388,10 @@ void LLFloaterPreference::disableUnavailableSettings()
 		//deferred needs AvatarVP, disable deferred
 		ctrl_shadows->setEnabled(FALSE);
 		ctrl_shadows->setValue(0);
-
+		
 		ctrl_avatar_shadow->setEnabled(FALSE);
 		ctrl_avatar_shadow->setValue(0);
-		
+
 		ctrl_ssao->setEnabled(FALSE);
 		ctrl_ssao->setValue(FALSE);
 
@@ -3301,21 +3301,10 @@ void LLFloaterPreference::changed()
 
 //------------------------------Updater---------------------------------------
 
-//<FS:TS> FIRE-6795: Remove repetitive warning at every login
-// <FS:Zi> Add warning on high bandwidth setting
-//static void updateBandwidthWarning()
-//{
-//	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
-//	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);
-//}
-// </FS:Zi>
-//</FS:TS> FIRE-6795
-
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //static bool handleBandwidthChanged(const LLSD& newvalue)
 //{
 //	gViewerThrottle.setMaxBandwidth((F32) newvalue.asReal());
-//	updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
 //	return true;
 //}
 
@@ -3361,8 +3350,8 @@ void LLFloaterPreference::changed()
 
 static LLPanelInjector<LLPanelPreference> t_places("panel_preference");
 LLPanelPreference::LLPanelPreference()
-//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-//: LLPanel(),
+: LLPanel()
+  //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
   //mBandWidthUpdater(NULL)
 {
 	//<FS:KC> Handled centrally now
@@ -3492,28 +3481,14 @@ BOOL LLPanelPreference::postBuild()
 	// [/WoLf]
 
 	//////////////////////PanelSetup ///////////////////
-	// <FS:Zi> Add warning on high bandwidth settings
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	//if (hasChild("max_bandwidth"), TRUE)
-	// Look for the layout widget on top level of this panel
-	if (hasChild("max_bandwidth_layout"))
-	// </FS:Zi>
-	{
-		//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-		//mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
-		//gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
-		//<FS:TS> FIRE-6795: Remove warning on every login
-		//updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
-		//</FS:TS> FIRE-6795
-		//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	}
-
-	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	//if (hasChild("use_external_browser", TRUE))
 	//{
-	//	getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
+	//	mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
+	//	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
 	//}
-	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
-	
+	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+
 #ifdef EXTERNAL_TOS
 	LLRadioGroup* ext_browser_settings = getChild<LLRadioGroup>("preferred_browser_behavior");
 	if (ext_browser_settings)
@@ -3628,8 +3603,7 @@ void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const 
 {
 	if (checkbox)
 	{
-		// <FS:Ansariel> FIRE-17114 / BUG-10506 / MAINT-5760: Commented out because LLFavoritesBar files have been reverted temporarily
-		//LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
+		LLFavoritesOrderStorage::instance().showFavoritesOnLoginChanged(checkbox->getValue().asBoolean());
 		if(checkbox->getValue())
 		{
 			LLNotificationsUtil::add("FavoritesOnLogin");

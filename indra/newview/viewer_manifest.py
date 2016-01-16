@@ -470,6 +470,7 @@ class Windows_i686_Manifest(ViewerManifest):
                 self.path("openjpegd.dll")
             else:
                 self.path("openjpeg.dll")
+            self.path("openjp2.dll") # <FS:ND/> OpenJPEG2 if used
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx

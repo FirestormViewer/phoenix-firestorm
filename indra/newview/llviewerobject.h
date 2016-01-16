@@ -271,9 +271,7 @@ public:
 	virtual BOOL lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 									  S32 face = -1,                          // which face to check, -1 = ALL_SIDES
 									  BOOL pick_transparent = FALSE,
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 									  BOOL pick_rigged = FALSE,
-// [/SL:KB]
 									  S32* face_hit = NULL,                   // which face was hit
 									  LLVector4a* intersection = NULL,         // return the intersection point
 									  LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -337,7 +335,7 @@ public:
 	/*virtual*/	S32		setTEMediaFlags(const U8 te, const U8 media_flags );
 	/*virtual*/ S32     setTEGlow(const U8 te, const F32 glow);
 	/*virtual*/ S32     setTEMaterialID(const U8 te, const LLMaterialID& pMaterialID);
-	/*virtual*/ S32		setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams, bool isInitFromServer);
+	/*virtual*/ S32		setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams);
 
 	// Used by Materials update functions to properly kick off rebuilds
 	// of VBs etc when materials updates require changes.
@@ -414,6 +412,8 @@ public:
 
 	void initDebugTextHud();
 	void setDebugText(const std::string &utf8text);
+	void initHudText();
+	void restoreHudText();
 	void setIcon(LLViewerTexture* icon_image);
 	void clearIcon();
 
@@ -693,6 +693,9 @@ public:
 	//LLPointer<class LLHUDIcon> mIcon;
 	LLPointer<LLHUDIcon> mIcon;
 	// </FS:Ansariel>
+
+	std::string mHudText;
+	LLColor4 mHudTextColor;
 
 	static			BOOL		sUseSharedDrawables;
 

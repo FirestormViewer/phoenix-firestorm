@@ -35,6 +35,7 @@
 #include "fsscrolllistctrl.h"
 #include "llagent.h"
 #include "llavataractions.h"
+#include "llfiltereditor.h"
 #include "llfloateravatarpicker.h"
 #include "llfloatergroupinvite.h"
 #include "llfloaterreg.h"
@@ -67,6 +68,9 @@ FSFloaterContacts::FSFloaterContacts(const LLSD& seed)
 	mTabContainer(NULL),
 	mFriendsList(NULL),
 	mGroupList(NULL),
+	mFriendFilter(NULL),
+	mFriendFilterSubString(LLStringUtil::null),
+	mFriendFilterSubStringOrig(LLStringUtil::null),
 	mAllowRightsChange(true),
 	mRightsChangeNotificationTriggered(false),
 	mNumRightsChanged(0),
@@ -113,6 +117,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	mFriendsList->setHandleDaDCallback(boost::bind(&FSFloaterContacts::handleFriendsListDragAndDrop, this, _1, _2, _3, _4, _5, _6, _7, _8));
 	mFriendsList->setContextMenu(&gFSContactsFriendsMenu);
+	mFriendsList->setFilterColumn(mFriendsList->getColumn("full_name")->mIndex);
 	
 	mFriendsTab->childSetAction("im_btn",				boost::bind(&FSFloaterContacts::onImButtonClicked,				this));
 	mFriendsTab->childSetAction("profile_btn",			boost::bind(&FSFloaterContacts::onViewProfileButtonClicked,		this));
@@ -124,6 +129,8 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->setDefaultBtn("im_btn");
 
 	mFriendsTab->getChild<LLTextBox>("friend_count")->setTextArg("COUNT", llformat("%d", mFriendsList->getItemCount()));
+	mFriendFilter = mFriendsTab->getChild<LLFilterEditor>("friend_filter_input");
+	mFriendFilter->setCommitCallback(boost::bind(&FSFloaterContacts::onFriendFilterEdit, this, _2));
 
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
@@ -1311,4 +1318,28 @@ BOOL FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BO
 	return TRUE;
 }
 
+void FSFloaterContacts::onFriendFilterEdit(const std::string& search_string)
+{
+	mFriendFilterSubStringOrig = search_string;
+	LLStringUtil::trimHead(mFriendFilterSubStringOrig);
+	// Searches are case-insensitive
+	std::string search_upper = mFriendFilterSubStringOrig;
+	LLStringUtil::toUpper(search_upper);
+
+	if (mFriendFilterSubString == search_upper)
+	{
+		return;
+	}
+
+	mFriendFilterSubString = search_upper;
+
+	// Apply new filter.
+	mFriendsList->setFilterString(mFriendFilterSubStringOrig);
+}
+
+void FSFloaterContacts::resetFriendFilter()
+{
+	mFriendFilter->setText(LLStringUtil::null);
+	onFriendFilterEdit("");
+}
 // EOF

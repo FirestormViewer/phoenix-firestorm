@@ -138,6 +138,7 @@
 			<radio_item label="Anzeigen. (Benutzern.)" name="displayname_username" width="140"/>
 		</radio_group>
 		<check_box label="Berechtigungsspalte anzeigen" name="FSFriendListColumnShowPermissions" tool_tip="Die Kontaktliste zeigt eine Spalte mit Berechtigungen an, die diesem Avatar gegeben wurden - und umgekehrt."/>
+		<check_box label="Suchfilter anzeigen" name="FSContactListShowSearch" tool_tip="Die Kontaktliste zeigt eine Textbox an, mit der die Liste gefiltert werden kann.."/>
 		<text name="textInventoryOptions">
 			Inventar-Optionen:
 		</text>
