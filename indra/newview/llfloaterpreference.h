@@ -294,7 +294,8 @@ public:
 	// cancel() can restore them.
 	virtual void saveSettings();
 	
-	class Updater;
+	// <FS:Ansariel> Handled in llviewercontrol.cpp
+	//class Updater;
 
 protected:
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;

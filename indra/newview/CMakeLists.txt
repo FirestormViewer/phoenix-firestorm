@@ -1658,7 +1658,6 @@ if (DARWIN)
   set(viewer_RESOURCE_FILES
     firestorm_icon.icns
     macview.r
-    gpu_table.txt
     Info-Firestorm.plist
     Firestorm.xib/
     # CMake doesn't seem to support Xcode language variants well just yet

@@ -115,10 +115,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	mMouseDownY = y;
 
 	//left mouse down always picks transparent (but see handleMouseUp)
-//	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE, FALSE);
-// [/SL:KB]
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
@@ -133,10 +130,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	// don't pick transparent so users can't "pay" transparent objects
-//	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE, TRUE);
-// [/SL:KB]
+	mPick = gViewerWindow->pickImmediate(x, y, /*BOOL pick_transparent*/ FALSE, /*BOOL pick_rigged*/ TRUE, /*BOOL pick_particle*/ TRUE);
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
@@ -593,10 +587,7 @@ void LLToolPie::selectionPropertiesReceived()
 
 BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-//	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE, FALSE);
-// [/SL:KB]
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
@@ -612,7 +603,6 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	}
 // [/RLVa:KB]
 	LLSelectMgr::getInstance()->setHoverObject(object, mHoverPick.mObjectFace);
-
 	if (object)
 	{
 		parent = object->getRootEdit();
@@ -662,10 +652,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	else
 	{
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
-//		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE, FALSE);
-// [/SL:KB]
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
 
@@ -1111,18 +1098,21 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			// Try to get display name + username
 			std::string final_name;
 
-			// Build group prefix -Zi
+			// <FS:Zi> Build group prefix
 			std::string group_title;
 			if (gSavedSettings.getBOOL("FSShowGroupTitleInTooltip"))
 			{
-				LLNameValue* group=hover_object->getNVPair("Title");
-				if(group)
+				LLNameValue* group = hover_object->getNVPair("Title");
+				if (group)
 				{
-					group_title=group->getString();
-					if(!group_title.empty())
-						group_title+="\n";
+					group_title = group->getString();
+					if (!group_title.empty())
+					{
+						group_title += "\n";
+					}
 				}
 			}
+			// </FS:Zi>
 
 			LLAvatarName av_name;
 			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
@@ -1133,9 +1123,9 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 // [/RLVa:KB]
 				// <FS:Zi> Make sure group title gets added to the tool tip. This is done separately to
 				//         the RLVa code to prevent this change from getting lost in future RLVa merges
-				if(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
-					final_name=group_title+final_name;
+					final_name = group_title + final_name;
 				}
 				// </FS:Zi>
 			}
@@ -1248,15 +1238,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 							// us again after it received the name.
 							std::string l;
 							std::string m;
-
-							// <FS:ND> FIRE-10276; handleTooltipObject can be called during name resolution (LLAvatarNameCache), then hover_object can lon gbe destroyed and the pointer invalid.
-
-							// mNamecacheConnections.push_back( LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObject, this, hover_object, l, m)) );
-
 							LLUUID id( hover_object->getID() );
 							mNamecacheConnections.push_back( LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObjectById, this, id, l, m)) );
-
-							// <FS:ND>
 						}
 
 						// Owner name
@@ -2022,10 +2005,12 @@ BOOL LLToolPie::handleRightClickPick()
 	{
 		LLParcelSelectionHandle selection = LLViewerParcelMgr::getInstance()->selectParcelAt( mPick.mPosGlobal );
 		gMenuHolder->setParcelSelection(selection);
-		// ## Zi: Pie menu
-		if(gSavedSettings.getBOOL("UsePieMenu"))
+		// <FS:Zi> Pie menu
+		if (gSavedSettings.getBOOL("UsePieMenu"))
+		{
 			gPieMenuLand->show(x, y);
-		// ## Zi: Pie menu
+		}
+		// </FS:Zi> Pie menu
 		else
 		gMenuLand->show(x, y);
 
@@ -2034,19 +2019,19 @@ BOOL LLToolPie::handleRightClickPick()
 	}
 	else if (mPick.mObjectID == gAgent.getID() )
 	{
-		// ## Zi: Pie menu
-		if(gSavedSettings.getBOOL("UsePieMenu"))
+		// <FS:Zi> Pie menu
+		if (gSavedSettings.getBOOL("UsePieMenu"))
 		{
-			if(!gPieMenuAvatarSelf)
+			if (!gPieMenuAvatarSelf)
 			{
 				//either at very early startup stage or at late quitting stage,
 				//this event is ignored.
-				return TRUE ;
+				return TRUE;
 			}
 
 			gPieMenuAvatarSelf->show(x, y);
 		}
-		// ## Zi: Pie menu
+		// </FS:Zi> Pie menu
 		else
 		{
 			if(!gMenuAvatarSelf)
@@ -2144,10 +2129,12 @@ BOOL LLToolPie::handleRightClickPick()
 		}
 		else if (object->isAttachment())
 		{
-			// ## Zi: Pie menu
-			if(gSavedSettings.getBOOL("UsePieMenu"))
+			// <FS:Zi> Pie menu
+			if (gSavedSettings.getBOOL("UsePieMenu"))
+			{
 				gPieMenuAttachmentSelf->show(x, y);
-			// ## Zi: Pie menu
+			}
+			// </FS:Zi> Pie menu
 			else
 			gMenuAttachmentSelf->show(x, y);
 		}
@@ -2171,7 +2158,7 @@ BOOL LLToolPie::handleRightClickPick()
 				// <FS:Zi> Pie menu
 				// gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 				// gMenuObject->show(x, y);
-				if(gSavedSettings.getBOOL("UsePieMenu"))
+				if (gSavedSettings.getBOOL("UsePieMenu"))
 				{
 					std::string mute_msg;
 					if (LLMuteList::getInstance()->isMuted(object->getID(), name))
@@ -2208,7 +2195,7 @@ BOOL LLToolPie::handleRightClickPick()
 		{
 			if (gPieMenuMuteParticle && mPick.mParticleOwnerID != gAgent.getID())
 			{
-				gPieMenuMuteParticle->show(x,y);
+				gPieMenuMuteParticle->show(x, y);
 			}
 		}
 		else

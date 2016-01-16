@@ -47,12 +47,15 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
     <string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
-    <string
-     name="MiniMapToolTipMsg"
-     value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
-    <string
-     name="AltMiniMapToolTipMsg"
-     value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+	<string
+	 name="MiniMapToolTipMsg"
+	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
+	<string
+	 name="AltMiniMapToolTipMsg"
+	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+	<string
+	 name="GroupCountWithInfo"
+	 value="You belong to [COUNT] groups, and can join [REMAINING] more.  [secondlife:/// Want more?]"/>
     <panel.string
      name="empty_list">
     This contact set is empty.

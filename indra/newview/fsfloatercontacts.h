@@ -36,9 +36,7 @@
 #include "rlvhandler.h"
 
 class FSScrollListCtrl;
-class LLAvatarList;
-class LLAvatarTracker;
-class LLScrollListCtrl;
+class LLFilterEditor;
 class LLGroupList;
 class LLRelationship;
 class LLPanel;
@@ -66,11 +64,7 @@ public:
 
 	void					sortFriendList();
 	void					onDisplayNameChanged();
-
-	LLPanel*				mFriendsTab;
-	FSScrollListCtrl*		mFriendsList;
-	LLPanel*				mGroupsTab;
-	LLGroupList*			mGroupList;
+	void					resetFriendFilter();
 
 private:
 	typedef std::vector<LLScrollListItem*> listitem_vec_t;
@@ -124,6 +118,7 @@ private:
 															void* cargo_data,
 															EAcceptance* accept,
 															std::string& tooltip_msg);
+	void					onFriendFilterEdit(const std::string& search_string);
 
 	// friend buttons
 	void					onViewProfileButtonClicked();
@@ -147,6 +142,11 @@ private:
 	void					updateGroupButtons();
 
 	LLTabContainer*			mTabContainer;
+	LLFilterEditor*			mFriendFilter;
+	LLPanel*				mFriendsTab;
+	FSScrollListCtrl*		mFriendsList;
+	LLPanel*				mGroupsTab;
+	LLGroupList*			mGroupList;
 
 	bool					mAllowRightsChange;
 	S32						mNumRightsChanged;
@@ -157,6 +157,9 @@ private:
 	std::string				mLastColumnDisplayModeChanged;
 	bool					mResetLastColumnDisplayModeChanged;
 	bool					mDirtyNames;
+
+	std::string				mFriendFilterSubString;
+	std::string				mFriendFilterSubStringOrig;
 
 	void childShowTab(const std::string& id, const std::string& tabname);
 
