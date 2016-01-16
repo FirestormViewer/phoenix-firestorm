@@ -410,7 +410,7 @@ public:
 
 	void setCanSelect(BOOL canSelect);
 
-	void initDebugTextHud();
+	//void initDebugTextHud(); <FS:Ansariel> Merge error
 	void setDebugText(const std::string &utf8text);
 	void initHudText();
 	void restoreHudText();
