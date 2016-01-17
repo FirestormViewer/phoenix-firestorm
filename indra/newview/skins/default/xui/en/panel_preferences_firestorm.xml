@@ -1567,7 +1567,7 @@
          height="16"
          name="MinObjectsForUnlinkConfirmText2"
          width="270">
-          links
+          objects
         </text>
         <check_box
          left="3"
