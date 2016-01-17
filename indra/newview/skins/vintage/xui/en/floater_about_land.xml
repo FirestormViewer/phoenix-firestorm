@@ -167,7 +167,7 @@
                 Description:
             </text>
             <text_editor
-             follows="left|top|right"
+             follows="left|top"
              height="52"
              layout="topleft"
              left_pad="3"
@@ -271,7 +271,7 @@
              label="Set"
              layout="topleft"
              left_pad="4"
-             right="-10"
+             right="-154"
              name="Set..."
              width="90"
              top_delta="0"/>
@@ -291,7 +291,7 @@
              label="Deed"
              layout="topleft"
              left_pad="2"
-             right="-10"
+             right="-154"
              name="Deed..."
              tool_tip="You may only deed land if you are an officer in the selected group."
              top_delta="0"
@@ -400,7 +400,7 @@
              label="Cancel Land Sale"
              label_selected="Cancel Land Sale"
              layout="topleft"
-             right="-10"
+             right="-154"
              name="Cancel Land Sale"
              left_pad="5"
              top_pad="5"
@@ -922,7 +922,7 @@
              label="Return"
              layout="topleft"
              name="ReturnOwner..."
-             right="-10"
+             right="-154"
              tool_tip="Return objects to their owners."
              width="119"
              top_delta="0"/>
@@ -967,7 +967,7 @@
              label="Return"
              layout="topleft"
              name="ReturnGroup..."
-             right="-10"
+             right="-154"
              tool_tip="Return objects to their owners."
              width="119"
              top_delta="0"/>
@@ -1013,7 +1013,7 @@
              label="Return"
              layout="topleft"
              name="ReturnOther..."
-             right="-10"
+             right="-154"
              tool_tip="Return objects to their owners."
              width="119"
              top_delta="0"/>
@@ -1094,7 +1094,7 @@
              layout="topleft"
              name="Return objects..."
              top_delta="0"
-             right="-10"
+             right="-154"
              width="164" />
             <name_list
              column_padding="0"
@@ -1557,6 +1557,7 @@ Only large parcels can be listed in search.
              follows="left|bottom"
              name="landing type"
              top_pad="0"
+             left="399"
              tool_tip="Teleport Routing -- select how to handle teleports onto your land"
              width="120">
                 <combo_box.item
@@ -1639,7 +1640,7 @@ Only large parcels can be listed in search.
              height="20"
              label="Set"
              layout="topleft"
-             left_pad="5"
+             left_pad="149"
              name="set_media_url"
              width="70"
              top_delta="0"/>
