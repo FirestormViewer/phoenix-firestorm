@@ -254,6 +254,8 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mRenderMedia(FALSE),
 	mBestUpdatePrecision(0),
 	mText(),
+	mHudText(""),
+	mHudTextColor(LLColor4::white),
 	mLastInterpUpdateSecs(0.f),
 	mLastMessageUpdateSecs(0.f),
 	mLatestRecvPacketID(0),
@@ -1447,12 +1449,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					// Setup object text
 					if (!mText)
 					{
-						mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-						mText->setFont(LLFontGL::getFontSansSerif());
-						mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-						mText->setMaxLines(-1);
-						mText->setSourceObject(this);
-						mText->setOnHUDAttachment(isHUDAttachment());
+					    initHudText();
 					}
 
 					std::string temp_string;
@@ -1472,6 +1469,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					}
 // [/RLVa:KB]
 					
+					mHudText = temp_string;
+					mHudTextColor = LLColor4(coloru);
+
 					setChanged(MOVED | SILHOUETTE);
 				}
 				else if (mText.notNull())
@@ -1834,12 +1834,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				// Setup object text
 				if (!mText && (value & 0x4))
 				{
-					mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-					mText->setFont(LLFontGL::getFontSansSerif());
-					mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-					mText->setMaxLines(-1); // Set to match current agni behavior.
-					mText->setSourceObject(this);
-					mText->setOnHUDAttachment(isHUDAttachment());
+				    initHudText();
 				}
 
 				if (value & 0x4)
@@ -1857,6 +1852,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 						mText->setObjectText(temp_string);
 					}
 // [/RLVa:KB]
+
+                    mHudText = temp_string;
+                    mHudTextColor = LLColor4(coloru);
 
 					setChanged(TEXTURE);
 				}
@@ -4192,9 +4190,7 @@ LLViewerObject* LLViewerObject::getRootEdit() const
 BOOL LLViewerObject::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 										  S32 face,
 										  BOOL pick_transparent,
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 										  BOOL pick_rigged,
-// [/SL:KB]
 										  S32* face_hit,
 										  LLVector4a* intersection,
 										  LLVector2* tex_coord,
@@ -4758,7 +4754,7 @@ S32 LLViewerObject::setTEMaterialID(const U8 te, const LLMaterialID& pMaterialID
 	return retval;
 }
 
-S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams, bool isInitFromServer)
+S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams)
 {
 	S32 retval = 0;
 	const LLTextureEntry *tep = getTE(te);
@@ -4768,21 +4764,13 @@ S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMateri
 		return 0;
 	}
 
-	// <FS:Ansariel> FIRE-17196 (also MAINT-5733 / BUG-10459): Undo code screwing up material rendering
-	//setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
-	//setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
-	// </FS:Ansariel>
-
-	retval = LLPrimitive::setTEMaterialParams(te, pMaterialParams, isInitFromServer);
+	retval = LLPrimitive::setTEMaterialParams(te, pMaterialParams);
 	LL_DEBUGS("Material") << "Changing material params for te " << (S32)te
 							<< ", object " << mID
 			               << " (" << retval << ")"
 							<< LL_ENDL;
-	
-	// <FS:Ansariel> FIRE-17196 (also MAINT-5733 / BUG-10459): Undo code screwing up material rendering
 	setTENormalMap(te, (pMaterialParams) ? pMaterialParams->getNormalID() : LLUUID::null);
 	setTESpecularMap(te, (pMaterialParams) ? pMaterialParams->getSpecularID() : LLUUID::null);
-	// </FS:Ansariel>
 
 	refreshMaterials();
 	return retval;
@@ -5076,18 +5064,32 @@ void LLViewerObject::setDebugText(const std::string &utf8text)
 
 	if (!mText)
 	{
-		mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
-		mText->setFont(LLFontGL::getFontSansSerif());
-		mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
-		mText->setMaxLines(-1);
-		mText->setSourceObject(this);
-		mText->setOnHUDAttachment(isHUDAttachment());
+	    initHudText();
 	}
 	mText->setColor(LLColor4::white);
 	mText->setString(utf8text);
 	mText->setZCompare(FALSE);
 	mText->setDoFade(FALSE);
 	updateText();
+}
+
+void LLViewerObject::initHudText()
+{
+    mText = (LLHUDText *)LLHUDObject::addHUDObject(LLHUDObject::LL_HUD_TEXT);
+    mText->setFont(LLFontGL::getFontSansSerif());
+    mText->setVertAlignment(LLHUDText::ALIGN_VERT_TOP);
+    mText->setMaxLines(-1);
+    mText->setSourceObject(this);
+    mText->setOnHUDAttachment(isHUDAttachment());
+}
+
+void LLViewerObject::restoreHudText()
+{
+    if(mText)
+    {
+        mText->setColor(mHudTextColor);
+        mText->setString(mHudText);
+    }
 }
 
 void LLViewerObject::setIcon(LLViewerTexture* icon_image)
@@ -5136,7 +5138,13 @@ void LLViewerObject::updateText()
 	{
 		if (mText.notNull())
 		{		
-			LLVector3 up_offset(0,0,0);
+		    LLVOAvatar* avatar = getAvatar();
+		    if (avatar)
+		    {
+		        mText->setHidden(avatar->isInMuteList());
+		    }
+
+		    LLVector3 up_offset(0,0,0);
 			up_offset.mV[2] = getScale().mV[VZ]*0.6f;
 			
 			if (mDrawable.notNull())

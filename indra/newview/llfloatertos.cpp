@@ -253,8 +253,6 @@ void LLFloaterTOS::onCancel( void* userdata )
 	LLSD args;
 	LLFloaterTOS* self = (LLFloaterTOS*) userdata;
 	LL_INFOS("TOS") << "User disagrees with TOS." << LL_ENDL;
-	//[FIX FIRE-3143 SJ] Making sure Current_grid has the right value
-	args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 	LLNotificationsUtil::add("MustAgreeToLogIn", args, LLSD(), login_alert_done);
 
 	if(self->mReplyPumpName != "")

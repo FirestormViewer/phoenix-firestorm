@@ -131,6 +131,16 @@
              function="Contacts.Friends.EnableItem"
              parameter="FSFriendListFullNameFormat"/>
         </menu_item_check>
+        <menu_item_separator/>
+        <menu_item_check
+         label="Show search filter"
+         name="friend_filter">
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSContactListShowSearch"/>
+            <menu_item_check.on_check
+             control="FSContactListShowSearch"/>
+        </menu_item_check>
     </menu>
     <menu_item_separator/>
     <menu_item_check

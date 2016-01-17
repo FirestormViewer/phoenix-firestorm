@@ -3855,16 +3855,10 @@ public:
 	LLVector4a *mTangent;
 	LLDrawable* mHit;
 	BOOL mPickTransparent;
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	BOOL mPickRigged;
-// [/SL:KB]
 
-//	LLOctreeIntersect(const LLVector4a& start, const LLVector4a& end, BOOL pick_transparent,
-//					  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	LLOctreeIntersect(const LLVector4a& start, const LLVector4a& end, BOOL pick_transparent, BOOL pick_rigged,
-				  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-// [/SL:KB]
+					  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
 		: mStart(start),
 		  mEnd(end),
 		  mFaceHit(face_hit),
@@ -3873,11 +3867,8 @@ public:
 		  mNormal(normal),
 		  mTangent(tangent),
 		  mHit(NULL),
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 		  mPickTransparent(pick_transparent),
 		  mPickRigged(pick_rigged)
-// [/SL:KB]
-//		  mPickTransparent(pick_transparent)
 	{
 	}
 	
@@ -4015,15 +4006,9 @@ public:
 				if (vobj->isAvatar())
 				{
 					LLVOAvatar* avatar = (LLVOAvatar*) vobj;
-//					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-					if ( (mPickRigged) || ((avatar->isSelf()) && (LLFloater::isVisible(gFloaterTools))) )
-// [/SL:KB]
+					if ((mPickRigged) || ((avatar->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 					{
-//						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mTangent);
-// [/SL:KB]
 						if (hit)
 						{
 							mEnd = intersection;
@@ -4039,10 +4024,7 @@ public:
 					}
 				}
 
-//				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent))
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mTangent))
-// [/SL:KB]
 				{
 					mEnd = intersection;  // shorten ray so we only find CLOSER hits
 					if (mIntersection)
@@ -4060,10 +4042,8 @@ public:
 } LL_ALIGN_POSTFIX(16);
 
 LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
-													 BOOL pick_transparent,													
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+													 BOOL pick_transparent,
 													 BOOL pick_rigged,
-// [/SL:KB]
 													 S32* face_hit,                   // return the face hit
 													 LLVector4a* intersection,         // return the intersection point
 													 LLVector2* tex_coord,            // return the texture coordinates of the intersection point
@@ -4072,10 +4052,7 @@ LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, co
 	)
 
 {
-//	LLOctreeIntersect intersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, tangent);
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	LLOctreeIntersect intersect(start, end, pick_transparent, pick_rigged, face_hit, intersection, tex_coord, normal, tangent);
-// [/SL:KB]
 	LLDrawable* drawable = intersect.check(mOctree);
 
 	return drawable;

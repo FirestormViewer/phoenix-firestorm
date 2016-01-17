@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
-	<fs_scroll_list name="friend_list" right="-90">
-		<fs_scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
-		<fs_scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
-		<fs_scroll_list.column label="Anzeigename" name="display_name" tool_tip="Der Anzeigename dieses Freundes."/>
-		<fs_scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
-		<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen, ob Sie online sind."/>
-		<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann Ihre Position auf der Karte sehen."/>
-		<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann Ihre Objekte editieren, löschen oder nehmen."/>
-		<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Sie können sehen, wenn dieser Freund online ist."/>
-		<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Sie können die Position dieses Freundes auf der Karte sehen."/>
-		<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Sie können Objekte dieses Freundes editieren."/>
-	</fs_scroll_list>
+	<layout_stack name="ls_friend_list" right="-90">
+		<layout_panel name="lp_search">
+			<filter_editor label="Freunde filtern" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
+				<fs_scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
+				<fs_scroll_list.column label="Anzeigename" name="display_name" tool_tip="Der Anzeigename dieses Freundes."/>
+				<fs_scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen, ob Sie online sind."/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann Ihre Position auf der Karte sehen."/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann Ihre Objekte editieren, löschen oder nehmen."/>
+				<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Sie können sehen, wenn dieser Freund online ist."/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Sie können die Position dieses Freundes auf der Karte sehen."/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Sie können Objekte dieses Freundes editieren."/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
 	<button
 	 label="IM/Anruf"
 	 name="im_btn"

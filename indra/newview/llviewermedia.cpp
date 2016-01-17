@@ -1792,7 +1792,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 		{
 			LL_WARNS() << strSandbox << " not found, CEF will run without using the sandbox" << LL_ENDL;
 		}
-		else if( st.st_gid != 0 || st.st_gid != 0 || (st.st_mode & S_ISUID ) != S_ISUID )
+		else if( st.st_uid != 0 || st.st_gid != 0 || (st.st_mode & S_ISUID ) != S_ISUID )
 		{
 			LL_WARNS() << strSandbox << " is either not owned by root:root or does not have the suid bit set, CEF will run without using the sandbox" << LL_ENDL;
 		}

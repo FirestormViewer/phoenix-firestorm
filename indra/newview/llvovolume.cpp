@@ -2084,7 +2084,7 @@ void LLVOVolume::setTEMaterialParamsCallbackTE(const LLUUID& objectID, const LLM
 		LLTextureEntry* texture_entry = pVol->getTE(te);
 		if (texture_entry && (texture_entry->getMaterialID() == pMaterialID))
 		{
-			pVol->setTEMaterialParams(te, pMaterialParams, FALSE);
+			pVol->setTEMaterialParams(te, pMaterialParams);
 		}
 	}
 }
@@ -2155,7 +2155,7 @@ bool LLVOVolume::notifyAboutCreatingTexture(LLViewerTexture *texture)
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
 		LLMaterialMgr::getInstance()->put(getID(), it->first, *it->second);
-		LLViewerObject::setTEMaterialParams(it->first, it->second, FALSE);
+		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
 	//clear wait-list
@@ -2237,7 +2237,7 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 	for(map_te_material::const_iterator it = new_material.begin(), end = new_material.end(); it != end; ++it)
 	{
 		LLMaterialMgr::getInstance()->put(getID(), it->first, *it->second);
-		LLViewerObject::setTEMaterialParams(it->first, it->second, FALSE);
+		LLViewerObject::setTEMaterialParams(it->first, it->second);
 	}
 
 	//clear wait-list
@@ -2246,7 +2246,7 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 	return 0 != new_material.size();
 }
 
-S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams, bool isInitFromServer)
+S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialParams)
 {
 	LLMaterialPtr pMaterial = const_cast<LLMaterialPtr&>(pMaterialParams);
 
@@ -2343,7 +2343,7 @@ S32 LLVOVolume::setTEMaterialParams(const U8 te, const LLMaterialPtr pMaterialPa
 		}
 	}
 
-	S32 res = LLViewerObject::setTEMaterialParams(te, pMaterial, isInitFromServer);
+	S32 res = LLViewerObject::setTEMaterialParams(te, pMaterial);
 
 	LL_DEBUGS("MaterialTEs") << "te " << (S32)te << " material " << ((pMaterial) ? pMaterial->asLLSD() : LLSD("null")) << " res " << res
 							 << ( LLSelectMgr::getInstance()->getSelection()->contains(const_cast<LLVOVolume*>(this), te) ? " selected" : " not selected" )
@@ -3966,13 +3966,8 @@ LLVector3 LLVOVolume::volumeDirectionToAgent(const LLVector3& dir) const
 }
 
 
-//BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
-//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
 									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-									  
-// [/SL:KB]
 {
 	if (!mbCanSelect 
 		|| mDrawable->isDead() 
@@ -3989,15 +3984,12 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
-//		if (LLFloater::isVisible(gFloaterTools) && getAvatar()->isSelf())
+//		if ((pick_rigged) || ((getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		if ( (pick_rigged) || ( getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools)))  )
+		if ((pick_rigged) || (getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools))))
 // [/SL:KB]
 		{
-//			updateRiggedVolume();
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 			updateRiggedVolume(true);
-// [/SL:KB]
 			volume = mRiggedVolume;
 			transform = false;
 		}
@@ -4176,13 +4168,8 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 bool LLVOVolume::treatAsRigged()
 {
-//	return LLFloater::isVisible(gFloaterTools) && 
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	return isSelected() &&
-// [/SL:KB]
-			isAttachment() && 
-//			getAvatar() &&
-//			getAvatar()->isSelf() &&
+			isAttachment() &&
 			mDrawable.notNull() &&
 			mDrawable->isState(LLDrawable::RIGGED);
 }
@@ -4201,18 +4188,12 @@ void LLVOVolume::clearRiggedVolume()
 	}
 }
 
-//void LLVOVolume::updateRiggedVolume()
-// [SL:KB]
 void LLVOVolume::updateRiggedVolume(bool force_update)
-// [/SL:KB]
 {
 	//Update mRiggedVolume to match current animation frame of avatar. 
 	//Also update position/size in octree.  
 
-//	if (!treatAsRigged())
-// [SL:KB]
-	if ( (!force_update) && (!treatAsRigged()) )
-// [/SL:KB]
+	if ((!force_update) && (!treatAsRigged()))
 	{
 		clearRiggedVolume();
 		

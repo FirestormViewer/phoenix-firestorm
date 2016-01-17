@@ -90,10 +90,8 @@ public:
 	LLPickInfo(const LLCoordGL& mouse_pos, 
 		MASK keyboard_mask, 
 		BOOL pick_transparent,
-		BOOL pick_particle,
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 		BOOL pick_rigged,
-// [/SL:KB]
+		BOOL pick_particle,
 		BOOL pick_surface_info,
 		BOOL pick_unselectable,
 		void (*pick_callback)(const LLPickInfo& pick_info));
@@ -127,11 +125,9 @@ public:
 	LLVector4		mTangent;
 	LLVector3		mBinormal;
 	BOOL			mPickTransparent;
+	BOOL			mPickRigged;
 	BOOL			mPickParticle;
 	BOOL			mPickUnselectable;
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	BOOL			mPickRigged;
-// [/SL:KB]
 	void		    getSurfaceInfo();
 
 private:
@@ -372,23 +368,14 @@ public:
 	void			performPick();
 	void			returnEmptyPicks();
 
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	void			pickAsync(	S32 x,
 								S32 y_from_bot,
 								MASK mask,
 								void (*callback)(const LLPickInfo& pick_info),
 								BOOL pick_transparent = FALSE,
-								BOOL pick_unselectable = FALSE,
-								BOOL pick_rigged = FALSE);
-	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_particle = FALSE, BOOL pick_rigged = FALSE);
-// [/SL:KB]
-//	void			pickAsync(	S32 x,
-//								S32 y_from_bot,
-//								MASK mask,
-//								void (*callback)(const LLPickInfo& pick_info),
-//								BOOL pick_transparent = FALSE,
-//								BOOL pick_unselectable = FALSE);
-//	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_particle = FALSE);
+								BOOL pick_rigged = FALSE,
+								BOOL pick_unselectable = FALSE);
+	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_rigged = FALSE, BOOL pick_particle = FALSE);
 	LLHUDIcon* cursorIntersectIcon(S32 mouse_x, S32 mouse_y, F32 depth,
 										   LLVector4a* intersection);
 
@@ -396,9 +383,7 @@ public:
 									LLViewerObject *this_object = NULL,
 									S32 this_face = -1,
 									BOOL pick_transparent = FALSE,
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 									BOOL pick_rigged = FALSE,
-// [/SL:KB]
 									S32* face_hit = NULL,
 									LLVector4a *intersection = NULL,
 									LLVector2 *uv = NULL,

@@ -417,9 +417,7 @@ public:
 			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
 			|| mAvatarID.isNull())
 		{
-			//mFrom = LLTrans::getString("SECOND_LIFE");
-			//[FIX FIRE-2852] Changed function to find the right Gridname
-			mFrom = LLGridManager::getInstance()->getGridLabel();
+			mFrom = LLTrans::getString("CURRENT_GRID");
 			if(!chat.mFromName.empty() && (mFrom != chat.mFromName))
 			{
 				mFrom += " (" + chat.mFromName + ")";

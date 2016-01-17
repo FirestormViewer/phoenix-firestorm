@@ -869,7 +869,6 @@ void FSPanelLogin::onClickConnect(void *)
 			{
 				// user must type in something into the username field
 				LLSD args;
-				args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 				LLNotificationsUtil::add("MustHaveAccountToLogIn", args);
 			}
 			else

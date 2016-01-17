@@ -1433,7 +1433,7 @@ bool idle_startup()
 
 // <AW: crash report grid correctness>
 		eLastExecEvent last_exec_event = gLastExecEvent;
-		const std::string current_grid =LLGridManager::getInstance()->getGrid();
+		const std::string current_grid = LLGridManager::getInstance()->getGrid();
 		const std::string last_grid = gSavedSettings.getString("LastConnectedGrid");
 		if (!last_grid.empty() && last_grid != current_grid)
 		{
@@ -1441,6 +1441,7 @@ bool idle_startup()
 			// since a bad OpenSim setup can crash the viewer a lot
 			last_exec_event = LAST_EXEC_NORMAL;
 		}
+		LLTrans::setDefaultArg("CURRENT_GRID", LLGridManager::getInstance()->getGridLabel());
 // </AW: crash report grid correctness>
 
 		// Setting initial values...
@@ -2708,14 +2709,8 @@ bool idle_startup()
 			// initial outfit, but if the load hasn't started
 			// already then something is wrong so fall back
 			// to generic outfits. JC
-			// <FS:Ansariel> Set CURRENT_GRID parameter
-			//LLNotificationsUtil::add("WelcomeChooseSex", LLSD(), LLSD(),
-			//	callback_choose_gender);
-			LLSD args;
-			args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
-			LLNotificationsUtil::add("WelcomeChooseSex", args, LLSD(),
+			LLNotificationsUtil::add("WelcomeChooseSex", LLSD(), LLSD(),
 				callback_choose_gender);
-			// </FS:Ansariel> Set CURRENT_GRID parameter
 			LLStartUp::setStartupState( STATE_CLEANUP );
 		}
 		
@@ -3987,12 +3982,15 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		gAgentUsername = first_name;
 	}
 
-	if(response.has("last_name") && !gAgentUsername.empty() && (gAgentUsername != "Resident"))
+	if(response.has("last_name") && !gAgentUsername.empty())
 	{
 		std::string last_name = response["last_name"].asString();
-		LLStringUtil::replaceChar(last_name, '"', ' ');
-		LLStringUtil::trim(last_name);
-		gAgentUsername = gAgentUsername + " " + last_name;
+		if (last_name != "Resident")
+		{
+		    LLStringUtil::replaceChar(last_name, '"', ' ');
+		    LLStringUtil::trim(last_name);
+		    gAgentUsername = gAgentUsername + " " + last_name;
+		}
 	}
 
 	if(gDisplayName.empty())

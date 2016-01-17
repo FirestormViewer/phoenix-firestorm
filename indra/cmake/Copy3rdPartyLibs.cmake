@@ -32,7 +32,7 @@ if(WINDOWS)
 
     set(debug_src_dir "${ARCH_PREBUILT_DIRS_DEBUG}")
     set(debug_files
-        openjpegd.dll
+        #openjpegd.dll
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
@@ -44,7 +44,7 @@ if(WINDOWS)
 
     set(release_src_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
     set(release_files
-        openjpeg.dll
+        #openjpeg.dll
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
@@ -53,6 +53,14 @@ if(WINDOWS)
         glod.dll
         libhunspell.dll
         )
+
+    if( NOT ND_USE_OPENJPEG2 )
+      set(debug_files ${debug_files} openjpegd.dll )
+      set(release_files ${release_files} openjpeg.dll )
+	else()
+      set(debug_files ${debug_files} openjp2.dll )
+      set(release_files ${release_files} openjp2.dll )
+    endif( NOT ND_USE_OPENJPEG2 ) 
     
     set(debug_files ${debug_files} growl++.dll growl.dll )
     set(release_files ${release_files} growl++.dll growl.dll )
@@ -237,7 +245,7 @@ elseif(LINUX)
         libgobject-2.0.so
         libhunspell-1.3.so.0.0.0
         libopenal.so
-        libopenjpeg.so
+        #libopenjpeg.so
         libuuid.so.16
         libuuid.so.16.0.22
         libfontconfig.so.1.8.0
@@ -252,6 +260,9 @@ elseif(LINUX)
           libfreetype.so.6
 		 )
     endif( NOT ND_BUILD64BIT_ARCH )
+    if( NOT ND_USE_OPENJPEG2 )
+      set(release_files ${release_files} libopenjpeg.so )
+    endif( NOT ND_USE_OPENJPEG2 ) 
 
 
     if (USE_TCMALLOC)
