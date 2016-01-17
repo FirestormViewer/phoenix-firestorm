@@ -224,6 +224,12 @@
 		<text name="RotationStepText2" width="290">
 			Grad beschränken, falls „An Raster ausrichten“ deakt.
 		</text>
+		<text name="MinObjectsForUnlinkConfirmText1" width="275">
+			Trennen von Objekten bestehend aus mindestens
+		</text>
+		<text name="MinObjectsForUnlinkConfirmText2">
+			Einzelobjekten bestätigen
+		</text>
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
 		<check_box label="Altes Verhalten für „Zum Verkauf:“ akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>

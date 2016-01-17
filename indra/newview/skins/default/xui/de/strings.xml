@@ -6551,4 +6551,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Reqsysinfo_Reason">
 		Der übermittelte Grund lautet: [REASON]
 	</string>
+	<string name="All Items">
+		Alle Objekte
+	</string>
+	<string name="Recent Items">
+		Aktuelle Objekte
+	</string>
+	<string name="Worn Items">
+		Angezogene Objekte
+	</string>
 </strings>
