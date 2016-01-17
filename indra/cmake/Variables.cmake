@@ -10,6 +10,7 @@
 #   WINDOWS - Windows
 
 set(NDTARGET_ARCH "x86" CACHE STRING "Build 64 or 32 bit viewer. Defaults to 32 bit.")
+set(ND_USE_OPENJPEG2 OFF CACHE BOOL "Use OpenJPEG 2.1 instead of 1.4. Default off.")
 
 if( ${NDTARGET_ARCH} STREQUAL "x64" )
   set( ND_BUILD64BIT_ARCH ON )
