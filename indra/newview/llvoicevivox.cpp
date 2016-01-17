@@ -672,6 +672,22 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
                 params.args.add("-st");
                 params.args.add(shutdown_timeout);
             }
+
+			// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
+			if (gSavedSettings.getBOOL("VoiceMultiInstance"))
+			{
+				S32 port_nr = 30000 + ll_rand(20000);
+				LLControlVariable* voice_port = gSavedSettings.getControl("VivoxVoicePort");
+				if (voice_port)
+				{
+					voice_port->setValue(LLSD(port_nr), false);
+					params.args.add("-i");
+					params.args.add(llformat("127.0.0.1:%u",  gSavedSettings.getU32("VivoxVoicePort")));
+				}
+			}
+			// </FS:Ansariel>
+
+
             params.cwd = gDirUtilp->getAppRODataDir();
             sGatewayPtr = LLProcess::create(params);
 
