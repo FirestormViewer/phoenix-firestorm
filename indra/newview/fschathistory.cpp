@@ -629,7 +629,7 @@ protected:
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
 			showAvatarContextMenu(x,y);
-		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT && SYSTEM_FROM != mFrom)
+		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT)
 			showObjectContextMenu(x,y);
 	}
 
