@@ -1539,16 +1539,17 @@
          width="270">
           degrees, when not using 'snap to grid'
         </text>
-        <text
+        <check_box
          left="3"
          top_pad="8"
          follows="left|top"
          height="16"
-         name="MinObjectsForUnlinkConfirmText1"
-         width="310">
-          Show unlink confirmation dialog if linkset has minimum
-        </text>
+         label="Show unlink confirmation dialog if linkset has minimum"
+         name="FSUnlinkConfirmEnabled"
+         control_name="FSUnlinkConfirmEnabled"
+         width="325"/>
         <spinner
+         enabled_control="FSUnlinkConfirmEnabled"
          control_name="MinObjectsForUnlinkConfirm"
          decimal_digits="0"
          top_delta="-5"

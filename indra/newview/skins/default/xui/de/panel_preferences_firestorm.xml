@@ -224,9 +224,7 @@
 		<text name="RotationStepText2" width="290">
 			Grad beschränken, falls „An Raster ausrichten“ deakt.
 		</text>
-		<text name="MinObjectsForUnlinkConfirmText1" width="275">
-			Trennen von Objekten bestehend aus mindestens
-		</text>
+		<check_box label="Trennen von Objekten bestehend aus mindestens" name="FSUnlinkConfirmEnabled" width="295"/>
 		<text name="MinObjectsForUnlinkConfirmText2">
 			Einzelobjekten bestätigen
 		</text>

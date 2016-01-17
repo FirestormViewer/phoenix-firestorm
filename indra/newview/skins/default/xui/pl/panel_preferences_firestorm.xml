@@ -201,9 +201,7 @@
         <text name="RotationStepText2">
           stopni, gdy 'przyciągaj do siatki' nie jest używane
         </text>
-        <text name="MinObjectsForUnlinkConfirmText1" width="365">
-          Pytaj o potwierdzenie przy rozłączaniu jeśli zbiór ma przynajmniej
-        </text>
+        <check_box label="Pytaj o potwierdzenie przy rozłączaniu jeśli zbiór ma przynajmniej" name="FSUnlinkConfirmEnabled" width="380"/>
         <text name="MinObjectsForUnlinkConfirmText2">
           części
         </text>

@@ -2406,7 +2406,7 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Vor dem Löschen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmUnlink">Soll das ausgewählte Objekt wirklich getrennt werden?
-		<usetemplate ignoretext="Vor dem Trennen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.

@@ -2276,7 +2276,7 @@ Nie możesz tego cofnąć.
 	</notification>
 	<notification name="ConfirmUnlink">
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
-		<usetemplate ignoretext="Potwierdź przed rozłączeniem obiektu" name="okcancelignore" notext="Anuluj" yestext="Rozłącz"/>
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Rozłącz"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wybierz kategorię dla tego raportu o nadużyciu.
