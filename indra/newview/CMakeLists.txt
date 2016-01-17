@@ -1,4 +1,3 @@
-
 # -*- cmake -*-
 
 project(viewer)
