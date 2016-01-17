@@ -201,6 +201,12 @@
         <text name="RotationStepText2">
           stopni, gdy 'przyciągaj do siatki' nie jest używane
         </text>
+        <text name="MinObjectsForUnlinkConfirmText1" width="365">
+          Pytaj o potwierdzenie przy rozłączaniu jeśli zbiór ma przynajmniej
+        </text>
+        <text name="MinObjectsForUnlinkConfirmText2">
+          części
+        </text>
         <check_box label="Stare zachowanie &quot;ustaw obiekt na sprzedaż&quot; (zmiana ceny od razu, bez kliku na 'Zastosuj')" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
