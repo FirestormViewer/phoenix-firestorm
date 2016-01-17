@@ -5923,4 +5923,13 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Reqsysinfo_Reason">
 		Podany powód: [REASON]
 	</string>
+	<string name="All Items">
+		Wszystkie
+	</string>
+	<string name="Recent Items">
+		Ostatnie
+	</string>
+	<string name="Worn Items">
+		Założone
+	</string>
 </strings>
