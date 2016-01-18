@@ -664,6 +664,12 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
                 log_folder = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
             }
 
+			// <FS:Ansariel> Strip trailing directory delimiter
+			if (LLStringUtil::endsWith(log_folder, gDirUtilp->getDirDelimiter()))
+			{
+				log_folder = log_folder.substr(0, log_folder.size() - gDirUtilp->getDirDelimiter().size());
+			}
+			// </FS:Ansariel>
             params.args.add("-lf");
             params.args.add(log_folder);
 
