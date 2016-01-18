@@ -56,7 +56,6 @@
 #include "llfloaterconversationpreview.h"
 #include "llfloaterdeleteenvpreset.h"
 #include "llfloaterdestinations.h"
-#include "llfloaterdisplayname.h"
 #include "llfloatereditdaycycle.h"
 #include "llfloatereditsky.h"
 #include "llfloatereditwater.h"
@@ -192,6 +191,7 @@
 #include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
+#include "llfloaterdisplayname.h"
 #include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
 #include "llpanelgroup.h"
@@ -299,7 +299,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLInspectRemoteObjectUtil::registerFloater();
 	LLFloaterVoiceVolumeUtil::registerFloater();
 	LLNotificationsUI::registerFloater();
-	LLFloaterDisplayNameUtil::registerFloater();
+	LLFloaterDisplayNameUtil::registerFloater(); // <FS:Ansariel> Bring back display name floater
 	
 	LLFloaterReg::add("lagmeter", "floater_lagmeter.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLagMeter>);
 	LLFloaterReg::add("land_holdings", "floater_land_holdings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLandHoldings>);
