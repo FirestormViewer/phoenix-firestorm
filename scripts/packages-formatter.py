@@ -30,7 +30,7 @@ import errno
 import re
 import subprocess
 
-_autobuild=os.getenv('AUTOBUILD', 'autobuild.cmd')
+_autobuild=os.getenv('AUTOBUILD', 'autobuild')
 
 pkg_line=re.compile('^([\w-]+):\s+(.*)$')
 
