@@ -9063,10 +9063,7 @@ void LLVOAvatar::idleUpdateRenderComplexity()
 		
 		if ( !mText )
 		{
-			// <FS:Ansariel> Merge error
-			//initDebugTextHud();
 			initHudText();
-			// </FS:Ansariel>
 			mText->setFadeDistance(20.0, 5.0); // limit clutter in large crowds
 		}
 		else
