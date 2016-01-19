@@ -1648,6 +1648,11 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 Chcesz ją opuścić?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
 	</notification>
+	<notification name="GroupLeaveConfirmMemberWithFee">
+		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Ponowne dołączenie będzie kosztować [AMOUNT] L$.
+Chcesz ją opuścić?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
 	</notification>
