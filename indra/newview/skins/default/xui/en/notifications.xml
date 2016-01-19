@@ -4246,6 +4246,20 @@ Leave Group?
   </notification>
 
   <notification
+   icon="alert.tga"
+   name="GroupLeaveConfirmMemberWithFee"
+   type="alert">
+You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Joining again will cost L$[AMOUNT].
+Leave Group?
+    <tag>group</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
    icon="alertmodal.tga"
    name="OwnerCannotLeaveGroup"
    type="alertmodal">

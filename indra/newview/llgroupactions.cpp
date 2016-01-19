@@ -49,6 +49,7 @@
 #include "fsfloatergroup.h"
 #include "fsfloaterim.h"
 #include "llpanelgroup.h"
+#include "llresmgr.h"
 #include "llslurl.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -370,6 +371,14 @@ void LLGroupActions::processLeaveGroupDataResponse(const LLUUID group_id)
 	args["GROUP"] = gdatap->mName;
 	LLSD payload;
 	payload["group_id"] = group_id;
+	// <FS:Ansariel> FIRE-17676: Add special group leave notification in case of join fees
+	if (gdatap->mMembershipFee > 0)
+	{
+		args["AMOUNT"] = LLResMgr::getInstance()->getMonetaryString(gdatap->mMembershipFee);
+		LLNotificationsUtil::add("GroupLeaveConfirmMemberWithFee", args, payload, onLeaveGroup);
+		return;
+	}
+	// </FS:Ansariel>
 	LLNotificationsUtil::add("GroupLeaveConfirmMember", args, payload, onLeaveGroup);
 }
 
