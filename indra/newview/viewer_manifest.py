@@ -1017,6 +1017,11 @@ class DarwinManifest(ViewerManifest):
 
                 self.end_prefix("Resources")
 
+                #<FS:TS> Copy in prebuilt framework if it's there
+                if self.prefix(src="../packages/bin_x86/Frameworks", dst="Frameworks"):
+                    self.path("Chromium Embedded Framework.framework")
+                    self.end_prefix()
+
                 # CEF framework goes inside Second Life.app/Contents/Frameworks
                 if self.prefix(src="", dst="Frameworks"):
                     frameworkfile="Chromium Embedded Framework.framework"
