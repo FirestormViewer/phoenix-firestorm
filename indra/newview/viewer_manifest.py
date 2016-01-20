@@ -985,6 +985,18 @@ class DarwinManifest(ViewerManifest):
                         except OSError as err:
                             print "Can't symlink %s -> %s: %s" % (src, dst, err)
 
+                #<FS:TS> Moved from the x86_64 specific version because code
+                # below that does symlinking and path fixup depends on it.
+                if(self.prefix(src="../packages/bin_x86", dst="")):
+                    self.path("SLPlugin.app", "SLPlugin.app")
+	
+                    if self.prefix(src = "llplugin", dst="llplugin"):
+                        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+                        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+                        self.end_prefix("llplugin")
+
+                    self.end_prefix();
+
                 # LLCefLib helper apps go inside SLPlugin.app
                 if self.prefix(src="", dst="SLPlugin.app/Contents/Frameworks"):
                     for helperappfile in ('LLCefLib Helper.app',
@@ -1240,12 +1252,11 @@ class Darwin_universal_Manifest(DarwinManifest):
         super(Darwin_universal_Manifest, self).construct()
 
         if(self.prefix(src="../packages/bin_x86", dst="Contents/Resources/")):
-            self.path("slplugin.app")
+            self.path("SLPlugin.app")
 			
             if self.prefix(src = "llplugin", dst="llplugin"):
                 self.path("media_plugin_quicktime.dylib")
-                self.path("media_plugin_webkit.dylib")
-                self.path("libllqtwebkit.dylib")
+                self.path("media_plugin_cef.dylib")
             self.end_prefix("llplugin")
 
         self.end_prefix("../packages/bin_x86");
@@ -1255,16 +1266,18 @@ class Darwin_x86_64_Manifest(DarwinManifest):
     def construct(self):
         super(Darwin_x86_64_Manifest, self).construct()
 
-        if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
-            self.path("slplugin.app", "slplugin.app")
-	
-            if self.prefix(src = "llplugin", dst="llplugin"):
-                self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                self.path("media_plugin_webkit.dylib", "media_plugin_webkit.dylib")
-                self.path("libllqtwebkit.dylib", "libllqtwebkit.dylib")
-            self.end_prefix("llplugin")
+        #<FS:TS> This had to be moved to the main manifest routine because
+        # there's too much that depends on having these files in there before
+        # this point is ever reached.
+        #if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
+        #    self.path("SLPlugin.app", "SLPlugin.app")
+        #
+        #    if self.prefix(src = "llplugin", dst="llplugin"):
+        #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+        #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+        #    self.end_prefix("llplugin")
 
-        self.end_prefix("../packages/bin_x86");
+        #self.end_prefix("../packages/bin_x86");
 
 
 class LinuxManifest(ViewerManifest):
