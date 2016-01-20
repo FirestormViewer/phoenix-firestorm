@@ -50,7 +50,7 @@
      visible="false" />
 
     <flyout_button
-     top_delta="0"
+     top_delta="5"
      right="-10"
      height="18"
      width="80"
