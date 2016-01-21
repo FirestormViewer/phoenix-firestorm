@@ -399,16 +399,35 @@ public:
 		mSessionID = chat.mSessionID;
 		mSourceType = chat.mSourceType;
 		mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+		mNameStyleParams = style_params;
 
 		//*TODO overly defensive thing, source type should be maintained out there
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
 		{
 			mSourceType = CHAT_SOURCE_SYSTEM;
-		}  
+		}
 
-		mUserNameFont = style_params.font();
-		mUserNameTextBox->setReadOnlyColor(style_params.readonly_color());
-		mUserNameTextBox->setColor(style_params.color());
+		// Use the original font defined in panel_chat_header.xml
+		mNameStyleParams.font.name = "SansSerifSmall";
+
+		// To be able to use the group chat moderator options, we use the
+		// original font style "BOLD" for everything except group chats.
+		// Group chats have the option to show moderators in bold, so
+		// we display both display and username in "NORMAL" for now.
+		static LLCachedControl<bool> fsHighlightGroupMods(gSavedSettings, "FSHighlightGroupMods");
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+		if (!fsHighlightGroupMods || !session || !session->isGroupSessionType())
+		{
+			mNameStyleParams.font.style = "BOLD";
+		}
+
+		mUserNameFont = mNameStyleParams.font();
+		mUserNameTextBox->setReadOnlyColor(mNameStyleParams.readonly_color());
+		mUserNameTextBox->setColor(mNameStyleParams.color());
+		mUserNameTextBox->setFont(mUserNameFont);
+
+		// Make sure we use the correct font style for everything after the display name
+		mNameStyleParams.font.style = style_params.font.style;
 
 		if (chat.mFromName.empty()
 			//|| mSourceType == CHAT_SOURCE_SYSTEM
@@ -763,7 +782,7 @@ private:
 			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
 			style_params_name.color(userNameColor);
 			style_params_name.font.name("SansSerifSmall");
-			style_params_name.font.style("NORMAL");
+			style_params_name.font.style(mNameStyleParams.font.style);
 			style_params_name.readonly_color(userNameColor);
 			mUserNameTextBox->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
 		}
@@ -778,7 +797,7 @@ protected:
 
 	LLUICtrl*			mInfoCtrl;
 
-	LLUUID			    mAvatarID;
+	LLUUID				mAvatarID;
 	LLSD				mObjectData;
 	EChatSourceType		mSourceType;
 	EChatType			mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
@@ -792,7 +811,9 @@ protected:
 	S32					mMinUserNameWidth;
 	const LLFontGL*		mUserNameFont;
 	LLTextBox*			mUserNameTextBox;
-	LLTextBox*			mTimeBoxTextBox; 
+	LLTextBox*			mTimeBoxTextBox;
+
+	LLStyle::Params		mNameStyleParams;
 
 private:
 	boost::signals2::connection mAvatarNameCacheConnection;
