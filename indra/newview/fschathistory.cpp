@@ -407,9 +407,8 @@ public:
 		}  
 
 		mUserNameFont = style_params.font();
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setReadOnlyColor(style_params.readonly_color());
-		user_name->setColor(style_params.color());
+		mUserNameTextBox->setReadOnlyColor(style_params.readonly_color());
+		mUserNameTextBox->setColor(style_params.color());
 
 		if (chat.mFromName.empty()
 			//|| mSourceType == CHAT_SOURCE_SYSTEM
@@ -422,7 +421,7 @@ public:
 			{
 				mFrom += " (" + chat.mFromName + ")";
 			}
-			user_name->setValue(mFrom);
+			mUserNameTextBox->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
 		else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
@@ -440,15 +439,15 @@ public:
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 			if (!chat.mRlvNamesFiltered)
 			{
-				user_name->setValue( LLSD() );
+				mUserNameTextBox->setValue( LLSD() );
 				fetchAvatarName();
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				user_name->setValue(mFrom);
-				user_name->setToolTip(mFrom);
+				mUserNameTextBox->setValue(mFrom);
+				mUserNameTextBox->setToolTip(mFrom);
 				setToolTip(mFrom);
 				updateMinUserNameWidth();
 			}
@@ -465,13 +464,13 @@ public:
 				username_end == (chat.mFromName.length() - 1))
 			{
 				mFrom = chat.mFromName.substr(0, username_start);
-				user_name->setValue(mFrom);
+				mUserNameTextBox->setValue(mFrom);
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				user_name->setValue(mFrom);
+				mUserNameTextBox->setValue(mFrom);
 				updateMinUserNameWidth();
 			}
 // [/RLVa:KB]
@@ -480,7 +479,7 @@ public:
 		{
 			// ...from an object, just use name as given
 			mFrom = chat.mFromName;
-			user_name->setValue(mFrom);
+			mUserNameTextBox->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
 
@@ -574,20 +573,17 @@ public:
 
 	/*virtual*/ void draw()
 	{
-		LLTextBox* user_name = mUserNameTextBox; //getChild<LLTextBox>("user_name");
-		LLTextBox* time_box = mTimeBoxTextBox; //getChild<LLTextBox>("time_box");
-
-		LLRect user_name_rect = user_name->getRect();
+		LLRect user_name_rect = mUserNameTextBox->getRect();
 		S32 user_name_width = user_name_rect.getWidth();
-		S32 time_box_width = time_box->getRect().getWidth();
+		S32 time_box_width = mTimeBoxTextBox->getRect().getWidth();
 
-		if (!time_box->getVisible() && user_name_width > mMinUserNameWidth)
+		if (!mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
 		{
 			user_name_rect.mRight -= time_box_width;
-			user_name->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
-			user_name->setRect(user_name_rect);
+			mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
+			mUserNameTextBox->setRect(user_name_rect);
 
-			time_box->setVisible(TRUE);
+			mTimeBoxTextBox->setVisible(TRUE);
 		}
 
 		LLPanel::draw();
@@ -597,8 +593,7 @@ public:
 	{
 		if (mUserNameFont)
 		{
-			LLTextBox* user_name = getChild<LLTextBox>("user_name");
-			const LLWString& text = user_name->getWText();
+			const LLWString& text = mUserNameTextBox->getWText();
 			mMinUserNameWidth = mUserNameFont->getWidth(text.c_str()) + PADDING;
 		}
 	}
@@ -720,25 +715,22 @@ protected:
 private:
 	void setTimeField(const LLChat& chat)
 	{
-		LLTextBox* time_box = getChild<LLTextBox>("time_box");
+		LLRect rect_before = mTimeBoxTextBox->getRect();
 
-		LLRect rect_before = time_box->getRect();
-
-		time_box->setValue(chat.mTimeStr);
+		mTimeBoxTextBox->setValue(chat.mTimeStr);
 
 		// set necessary textbox width to fit all text
-		time_box->reshapeToFitText();
-		LLRect rect_after = time_box->getRect();
+		mTimeBoxTextBox->reshapeToFitText();
+		LLRect rect_after = mTimeBoxTextBox->getRect();
 
 		// move rect to the left to correct position...
 		S32 delta_pos_x = rect_before.getWidth() - rect_after.getWidth();
 		S32 delta_pos_y = rect_before.getHeight() - rect_after.getHeight();
-		time_box->translate(delta_pos_x, delta_pos_y);
+		mTimeBoxTextBox->translate(delta_pos_x, delta_pos_y);
 
 		//... & change width of the name control
-		LLView* user_name = getChild<LLView>("user_name");
-		const LLRect& user_rect = user_name->getRect();
-		user_name->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
+		const LLRect& user_rect = mUserNameTextBox->getRect();
+		mUserNameTextBox->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
 	}
 
 	void fetchAvatarName()
@@ -760,9 +752,8 @@ private:
 
 		mFrom = av_name.getDisplayName();
 
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setValue( LLSD(mFrom) );
-		user_name->setToolTip( av_name.getUserName() );
+		mUserNameTextBox->setValue( LLSD(mFrom) );
+		mUserNameTextBox->setToolTip( av_name.getUserName() );
 
 		if (gSavedSettings.getBOOL("NameTagShowUsernames") &&
 			av_name.useDisplayNames() &&
@@ -774,7 +765,7 @@ private:
 			style_params_name.font.name("SansSerifSmall");
 			style_params_name.font.style("NORMAL");
 			style_params_name.readonly_color(userNameColor);
-			user_name->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
+			mUserNameTextBox->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
 		}
 		setToolTip( av_name.getUserName() );
 		// name might have changed, update width
