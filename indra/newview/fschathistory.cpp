@@ -376,7 +376,7 @@ public:
 		}
 		else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		{
-			LLUrlAction::executeSLURL(LLSLURL("agent", mAvatarID, "inspect").getSLURLString());
+			LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", mAvatarID));
 		}
 		//if chat source is system, you may add "else" here to define behaviour.
 	}
@@ -436,7 +436,7 @@ public:
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
 //			user_name->setValue( LLSD() );
-//			fetchAvatarName(chat);
+//			fetchAvatarName();
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 			if (!chat.mRlvNamesFiltered)
 			{
@@ -650,7 +650,7 @@ protected:
 
 		if(menu)
 		{
-			bool is_friend = LLAvatarTracker::instance().getBuddyInfo(mAvatarID) != NULL;
+			bool is_friend = LLAvatarActions::isFriend(mAvatarID);
 			
 			menu->setItemEnabled("Add Friend", !is_friend);
 			menu->setItemEnabled("Remove Friend", is_friend);
@@ -919,7 +919,7 @@ std::string applyModeratorStyle(U32 moderator_style)
 	return style;
 }
 
-static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
+static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
