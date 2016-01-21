@@ -7137,6 +7137,12 @@ BOOL LLSelectMgr::canSelectObject(LLViewerObject* object, BOOL ignore_select_own
 		return FALSE;
 	}
 	// </FS:Ansariel>
+	// <FS:Ansariel> FIRE-17696: Option to select only locked objects
+	if (gSavedSettings.getBOOL("FSSelectLockedOnly") && object->permMove() && !object->isPermanentEnforced())
+	{
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	// Can't select orphans
 	if (object->isOrphaned()) return FALSE;
