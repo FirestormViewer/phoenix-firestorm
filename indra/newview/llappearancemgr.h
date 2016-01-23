@@ -278,7 +278,6 @@ private:
 
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
-
 	bool mAttachmentInvLinkEnabled;
 	bool mOutfitIsDirty;
 	bool mIsInUpdateAppearanceFromCOF; // to detect recursive calls.
