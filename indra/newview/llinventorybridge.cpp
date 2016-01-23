@@ -119,9 +119,6 @@ struct LLMoveInv
 using namespace LLOldEvents;
 
 // Function declarations
-// <FS:TT> Patch: ReplaceWornItemsOnly
-void wear_inventory_category_on_avatar(LLInventoryCategory* category);
-// </FS:TT>
 bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, boost::shared_ptr<LLMoveInv>);
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
