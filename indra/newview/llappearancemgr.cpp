@@ -2256,10 +2256,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	const LLUUID& base_id = (append) ? getBaseOutfitUUID() : idOutfit;
 	LLViewerInventoryCategory* base_cat = (base_id.notNull()) ? gInventory.getCategory(base_id) : NULL;
 // [/RLVa:KB]
-//	if (base_cat)
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
-	if ((base_cat) && (base_cat->getPreferredType() == LLFolderType::FT_OUTFIT))
-// [/SL:KB]
+	if (base_cat)
 	{
 		LLSD base_contents;
 		base_contents["name"] = base_cat->getName();
