@@ -3941,8 +3941,7 @@ void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category)
 		return;
 	}
 
-	LL_INFOS() << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " 
-			 << category->getName() << " )" << LL_ENDL;
+	LL_INFOS() << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " << category->getName() << " )" << LL_ENDL;
 
 	LLUUID category_id = category->getUUID();
 

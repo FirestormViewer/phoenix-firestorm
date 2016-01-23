@@ -2812,12 +2812,6 @@ void LLAppearanceMgr::getUserDescendents(const LLUUID& category,
 }
 
 void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append)
-// <FS:TT> ReplaceWornItemsOnly
-{
-	wearInventoryCategory(category, copy, append, false);
-}
-void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool replace)
-// </FS:TT>
 {
 	if(!category) return;
 
@@ -2853,19 +2847,8 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 		callAfterCategoryFetch(category->getUUID(),boost::bind(&LLAppearanceMgr::wearCategoryFinal,
 															   &LLAppearanceMgr::instance(),
 															   category->getUUID(), copy, append));
-// <FS:TT> ReplaceWornItemsOnly
-														   //category->getUUID(), copy, append, replace));
-// <FS:TT>
 	}
 }
-
-// <FS:TT> ReplaceWornItemsOnly
-void LLAppearanceMgr::replaceCategoryInCurrentOutfit(const LLUUID& cat_id)
-{
-	LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
-	wearInventoryCategory(cat, false, true);
-}
-// </FS:TT>
 
 S32 LLAppearanceMgr::getActiveCopyOperations() const
 {
@@ -2873,13 +2856,6 @@ S32 LLAppearanceMgr::getActiveCopyOperations() const
 }
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append)
-// <FS:TT> ReplaceWornItemsOnly
-{
-	wearCategoryFinal(cat_id, copy_items, append, false);
-}
-
-void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool replace)
-// </FS:TT>
 {
 	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 

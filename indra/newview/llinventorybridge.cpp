@@ -3463,7 +3463,6 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		if(!cat) return;
 
 		gInventory.wearItemsOnAvatar(cat);
-		//		modifyOutfit(TRUE, TRUE);
 		return;
 	}
 // </FS:TT>
@@ -4677,13 +4676,6 @@ void LLFolderBridge::createWearable(LLFolderBridge* bridge, LLWearableType::ETyp
 }
 
 void LLFolderBridge::modifyOutfit(BOOL append)
-// <FS:TT> Patch: ReplaceWornItemsOnly
-{
-	modifyOutfit(append, false);
-}
-
-void LLFolderBridge::modifyOutfit(BOOL append, BOOL replace)
-// </FS:TT>
 {
 	LLInventoryModel* model = getInventoryModel();
 	if(!model) return;
@@ -4709,7 +4701,7 @@ void LLFolderBridge::modifyOutfit(BOOL append, BOOL replace)
 		return;
 	}
 
-	LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, append, replace );
+	LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, append );
 }
 
 // +=================================================+
