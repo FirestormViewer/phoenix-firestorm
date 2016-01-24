@@ -129,6 +129,7 @@ private:
 	LLSafeHandle<LLObjectSelection> mLeftClickSelection;
 	BOOL				mClickActionBuyEnabled;
 	BOOL				mClickActionPayEnabled;
+	LLFrameTimer mDoubleClickTimer;
 
 	// <FS:ND> Keep track of name resolutions we made and delete them if needed to avoid crashing if this instance dies.
 private:

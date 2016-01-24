@@ -386,6 +386,10 @@ void LLSidepanelTaskInfo::refresh()
 //		mDACreatorName->setValue(creator_name);
 //		mCreatorID = creator_id;
 //	}
+//	if(mDACreatorName->getValue().asString() == LLStringUtil::null)
+//	{
+//		mDACreatorName->setValue(creator_name);
+//	}
 //	mDACreatorName->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
@@ -425,6 +429,10 @@ void LLSidepanelTaskInfo::refresh()
 //	{
 //		mDAOwnerName->setValue(owner_name);
 //		mOwnerID = owner_id;
+//	}
+//	if(mDAOwnerName->getValue().asString() == LLStringUtil::null)
+//	{
+//		mDAOwnerName->setValue(owner_name);
 //	}
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 

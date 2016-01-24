@@ -1513,6 +1513,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	BOOL	region_deny_identified_override = false; // Deprecated
 	BOOL	region_deny_transacted_override = false; // Deprecated
 	BOOL	region_deny_age_unverified_override = false;
+    BOOL	changed_parcel = false;
 
 	S32		other_clean_time = 0;
 
@@ -1640,6 +1641,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 		if (parcel == parcel_mgr.mAgentParcel)
 		{
 			// new agent parcel
+			changed_parcel = true;
 			S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
 								* parcel_mgr.mParcelsPerEdge
 								/ 8;
@@ -1841,7 +1843,8 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 				LLStringUtil::trim(music_url);
 
 				// If there is a new music URL and it's valid, play it.
-				if (music_url.size() > 12)
+				const std::string& stream_url = gAudiop->getInternetStreamURL();
+				if (music_url.size() > 12 && (music_url != stream_url || changed_parcel))
 				{
 					if (music_url.substr(0,7) == "http://")
 					{
@@ -1855,7 +1858,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 						LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLStringUtil::null);
 					}
 				}
-				else if (!gAudiop->getInternetStreamURL().empty())
+				else if (!stream_url.empty())
 				{
 					LL_INFOS() << "Stopping parcel music (parcel stream URL is empty)" << LL_ENDL;
 					// null value causes fade out

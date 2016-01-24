@@ -328,14 +328,20 @@ LLGLSLShader::~LLGLSLShader()
 
 void LLGLSLShader::unload()
 {
+    mShaderFiles.clear();
+    mDefines.clear();
+
+    unloadInternal();
+}
+
+void LLGLSLShader::unloadInternal()
+{
     sInstances.erase(this);
 
     stop_glerror();
     mAttribute.clear();
     mTexture.clear();
     mUniform.clear();
-    mShaderFiles.clear();
-    mDefines.clear();
 
     if (mProgramObject)
     {
@@ -357,13 +363,13 @@ void LLGLSLShader::unload()
 
         mProgramObject = 0;
     }
-    
+
     if (mTimerQuery)
     {
         glDeleteQueriesARB(1, &mTimerQuery);
         mTimerQuery = 0;
     }
-    
+
     if (mSamplesQuery)
     {
         glDeleteQueriesARB(1, &mSamplesQuery);
@@ -372,7 +378,7 @@ void LLGLSLShader::unload()
 
     //hack to make apple not complain
     glGetError();
-    
+
     stop_glerror();
 }
 
@@ -381,6 +387,8 @@ BOOL LLGLSLShader::createShader(std::vector<LLStaticHashedString> * attributes,
                                 U32 varying_count,
                                 const char** varyings)
 {
+    unloadInternal();
+
     sInstances.insert(this);
 
     //reloading, reset matrix hash values

@@ -1011,6 +1011,7 @@ BOOL LLFavoritesBarCtrl::collectFavoriteItems(LLInventoryModel::item_array_t &it
 		{
 			LLFavoritesOrderStorage::instance().setSortIndex((*i), ++sortField);
 		}
+		LLFavoritesOrderStorage::instance().mSaveOnExit = true;
 	}
 
 	return TRUE;
@@ -1590,10 +1591,10 @@ void LLFavoritesOrderStorage::destroyClass()
 	{
 		file.close();
 		LLFile::remove(filename);
-		if(mSaveOnExit)
-		{
-			LLFavoritesOrderStorage::instance().saveFavoritesRecord(true);
-		}
+	}
+	if(mSaveOnExit)
+	{
+	    LLFavoritesOrderStorage::instance().saveFavoritesRecord(true);
 	}
 }
 

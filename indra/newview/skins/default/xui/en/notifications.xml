@@ -1223,6 +1223,14 @@ You cannot wear this item because it has not yet loaded. Please try again in a m
   <tag>fail</tag>
   </notification>
 
+    <notification
+   icon="alertmodal.tga"
+   name="MustEnterPasswordToLogIn"
+   type="alertmodal">
+   <tag>fail</tag>
+Please enter your Password to log in.
+  </notification>
+  
   <notification
    icon="alertmodal.tga"
    name="MustHaveAccountToLogIn"
