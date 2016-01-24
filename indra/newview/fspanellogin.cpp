@@ -862,7 +862,8 @@ void FSPanelLogin::onClickConnect(void *)
 		// The start location SLURL has already been sent to LLStartUp::setStartSLURL
 
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
-		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
+		std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
+		gSavedSettings.setString("UserLoginInfo", credentialName());
 
 		LLSD blocked = FSData::instance().allowedLogin();
 		if (!blocked.isMap()) //hack for testing for an empty LLSD
@@ -870,8 +871,11 @@ void FSPanelLogin::onClickConnect(void *)
 			if(username.empty())
 			{
 				// user must type in something into the username field
-				LLSD args;
-				LLNotificationsUtil::add("MustHaveAccountToLogIn", args);
+				LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			}
+			else if(password.empty())
+			{
+				LLNotificationsUtil::add("MustEnterPasswordToLogIn");
 			}
 			else
 			{
