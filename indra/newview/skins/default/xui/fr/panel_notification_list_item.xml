@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="main_panel" title="panel_notification_list_item">
+	<panel.string name="sender_resident_text">Envoyé par [SENDER_RESIDENT]</panel.string>
+	<panel.string name="group_name_text">Groupe : [GROUP_NAME]</panel.string>
+	<panel.string name="group_fee_text">Coût : [GROUP_FEE]</panel.string>
+	<panel.string name="item_condensed_height">50</panel.string>
+	<panel.string name="item_expanded_height">87</panel.string>
+	<panel.string name="expanded_height_resize_for_attachment">27</panel.string>
+	<panel name="panel_total_view">
+		<layout_stack name="item_vertical_stack">
+			<layout_panel name="layout_panel_condensed_view">
+				<panel name="panel_condensed_view">
+					<layout_stack name="horizontal_stack">
+						<layout_panel name="layout_panel_right">
+							<group_icon name="group_icon" tool_tip="Groupe"/>
+							<avatar_icon name="avatar_icon" tool_tip="Avatar"/>
+							<icon name="system_notification_icon" tool_tip="Icône"/>
+						</layout_panel>
+						<layout_panel name="layout_panel_middle">
+							<panel name="main_info_panel">
+								<panel name="notification_title_panel">
+									<text name="notification_title">Group Name:Notice Title N o t i c e T i t l e N o t i c e T i t l e N o t i c e T i t l e N oticeTitle</text>
+									<icon name="attachment_icon" tool_tip="Pièce jointe"/>
+								</panel>
+								<panel name="sender_time_panel">
+									<text name="sender_or_fee_box">Sender: "Resident R e s i d e n t R e s i d e n t"</text>
+								</panel>
+							</panel>
+						</layout_panel>
+					</layout_stack>
+				</panel>
+			</layout_panel>
+			<layout_panel name="layout_panel_expanded_view">
+				<panel name="panel_expanded_view">
+					<layout_stack name="horizontal_stack">
+						<layout_panel name="layout_panel_right_exp">
+							<group_icon name="group_icon_exp" tool_tip="Groupe"/>
+							<avatar_icon name="avatar_icon_exp" tool_tip="Avatar"/>
+							<icon name="system_notification_icon_exp" tool_tip="Icône"/>
+							<icon name="attachment_icon_exp" tool_tip="Pièce jointe"/>
+						</layout_panel>
+						<layout_panel name="layout_panel_middle_exp">
+							<panel name="main_info_panel_expanded">
+								<panel name="notification_title_panel_exp">
+									<text name="notification_title_exp">Notice Title Notice Title N o t i c e T i t l e N o t i c e T i t l e</text>
+									<text name="group_name_exp">Group Name Group Name Group Na m e e</text>
+								</panel>
+								<panel name="sender_time_panel_exp">
+									<text name="sender_or_fee_box_exp">Sender: "Resident R e s i d e n t R e s i d e n t"</text>
+								</panel>
+								<panel name="notification_text_panel_exp">
+									<chat_editor name="notification_text_exp">Notice text goes here b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla. bla bla bla bla bla bla bla bla bla bla bla bla bla .</chat_editor>
+								</panel>
+								<panel name="attachment_panel">
+									<text name="attachment_text">Attachment goes here b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a b l a bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla. bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla .</text>
+								</panel>
+								<panel name="button_panel">
+									<button name="join_btn" label="Rejoindre"/>
+									<button name="decline_btn" label="Refuser"/>
+									<button name="info_btn" label="Info"/>
+								</panel>
+							</panel>
+						</layout_panel>
+					</layout_stack>
+				</panel>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

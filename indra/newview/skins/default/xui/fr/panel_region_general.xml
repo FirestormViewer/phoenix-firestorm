@@ -1,44 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Région" name="General">
-	<text name="region_text_lbl">
-		Région :
-	</text>
-	<text name="region_text">
-		(inconnue)
-	</text>
-	<text name="version_channel_text_lbl">
-		Version :
-	</text>
-	<text name="version_channel_text">
-		(inconnu)
-	</text>
-	<text name="region_type_lbl">
-		Type :
-	</text>
-	<text name="region_type">
-		(inconnu)
-	</text>
-	<check_box label="Interdire le terraformage" name="block_terraform_check"/>
+	<text name="region_text_lbl">Région :</text>
+	<text name="region_text">inconnue</text>
+	<text name="estate_id_lbl" width="95">ID du domaine :</text>
+	<text name="version_channel_text_lbl">Version :</text>
+	<text name="version_channel_text">inconnue</text>
+	<text name="grid_position_lbl" width="140">Position dans l'univers :</text>
+	<text name="region_type_lbl">Type :</text>
+	<text name="region_type">inconnue</text>
+	<check_box label="Interdire la terraformation" name="block_terraform_check"/>
 	<check_box label="Interdire le vol" name="block_fly_check"/>
-	<check_box label="Bloquer le survol des parcelles" name="block_fly_over_check" tool_tip="Étendre les vérifications d&apos;accès vers le haut pour empêcher le survol d&apos;une parcelle"/>
+	<check_box label="Interdire le survol" name="block_fly_over_check" tool_tip="Empêche le survol des terrains"/>
 	<check_box label="Autoriser les dégâts" name="allow_damage_check"/>
-	<check_box label="Interdire les bousculades" name="restrict_pushobject"/>
+	<check_box label="Restreindre les collisions" name="restrict_pushobject"/>
 	<check_box label="Autoriser la revente de terrain" name="allow_land_resell_check"/>
-	<check_box label="Autoriser la fusion/division" name="allow_parcel_changes_check"/>
-	<check_box label="Ne pas afficher dans la recherche" name="block_parcel_search_check" tool_tip="Afficher cette région et ses parcelles dans les résultats de recherche"/>
-	<spinner label="Nombre maximum d&apos;avatars" label_width="160" name="agent_limit_spin" width="240"/>
-	<spinner label="Bonus objet" label_width="160" name="object_bonus_spin" width="240"/>
-	<text label="Maturité" name="access_text">
-		Catégorie :
+	<check_box label="Autoriser la fusion/subdivision de terrain" name="allow_parcel_changes_check"/>
+	<check_box label="Interdire la possibilité d'afficher dans la recherche" name="block_parcel_search_check" tool_tip="Activer cette option bloquera la possibilité des propriétaires de terrain d'afficher celui-ci dans la recherche"/>
+	<spinner label="Limite de personnes" name="agent_limit_spin" label_width="125" width="190"/>
+	<spinner label="Objets bonus" name="object_bonus_spin" label_width="125" width="190"/>
+	<text label="Classification" name="access_text">
+         Classification :
 	</text>
-	<icons_combo_box label="Modéré" name="access_combo">
-		<icons_combo_box.item label="Adult" name="Adult" value="42"/>
-		<icons_combo_box.item label="Modéré" name="Mature" value="21"/>
-		<icons_combo_box.item label="Général" name="PG" value="13"/>
+	<icons_combo_box label="Modérée" name="access_combo">
+		<icons_combo_box.item label="Adulte" name="Adult"/>
+		<icons_combo_box.item label="Modérée" name="Mature"/>
+		<icons_combo_box.item label="Générale" name="PG"/>
 	</icons_combo_box>
 	<button label="Appliquer" name="apply_btn"/>
-	<button label="Téléporter un résident chez lui…" name="kick_btn"/>
-	<button label="Téléporter tous les résidents chez eux…" name="kick_all_btn"/>
+	<button label="Téléporter un résident chez lui..." name="kick_btn"/>
+	<button label="Téléporter chez eux tous les résidents..." name="kick_all_btn"/>
 	<button label="Envoyer un message à la région..." name="im_btn"/>
-	<button label="Gérer le téléhub..." name="manage_telehub_btn"/>
+	<button label="Gérer le Téléhub..." name="manage_telehub_btn"/>
 </panel>

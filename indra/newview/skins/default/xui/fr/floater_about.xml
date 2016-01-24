@@ -1,100 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_about" title="À propos de [APP_NAME]">
-	<floater.string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	</floater.string>
-	<floater.string name="AboutCompiler">
-		Compilé avec [COMPILER] version [COMPILER_VERSION]
-	</floater.string>
-	<floater.string name="AboutPosition">
-		Vous êtes à [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] dans [REGION], se trouvant à &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
-SLURL : &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
-(coordonnées globales [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
-[SERVER_VERSION]
-[SERVER_RELEASE_NOTES_URL]
-	</floater.string>
-	<floater.string name="AboutSystem">
-		CPU : [CPU]
-Mémoire : [MEMORY_MB] Mo
-Version OS : [OS_VERSION]
-Distributeur de cartes graphiques : [GRAPHICS_CARD_VENDOR]
-Cartes graphiques : [GRAPHICS_CARD]
-	</floater.string>
-	<floater.string name="AboutDriver">
-		Version Windows Graphics Driver : [GRAPHICS_DRIVER_VERSION]
-	</floater.string>
-	<floater.string name="AboutLibs">
-		Version OpenGL : [OPENGL_VERSION]
-
-RestrainedLove API: [RLV_VERSION]
-Version libcurl : [LIBCURL_VERSION]
-Version J2C Decoder : [J2C_VERSION]
-Version Audio Driver : [AUDIO_DRIVER_VERSION]
-Version Qt Webkit : [QT_WEBKIT_VERSION]
-Version serveur vocal : [VOICE_VERSION]
-	</floater.string>
-	<floater.string name="none">
-		(aucun)
-	</floater.string>
-	<floater.string name="AboutTraffic">
-		Paquets perdus : [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
-	</floater.string>
-	<floater.string name="ErrorFetchingServerReleaseNotesURL">
-		Erreur lors de la récupération de l&apos;URL des notes de version du serveur.
-	</floater.string>
 	<tab_container name="about_tab">
-		<panel label="Infos" name="support_panel">
-    <text name="support_intro">    
-For the latest information about Firestorm, visit    
-http://www.firestormviewer.org
-    </text>
-			<button label="Copier dans le presse-papiers" name="copy_btn"/>
-		</panel>
-		<panel label="Remerciements" name="credits_panel">
-			<text name="linden_intro">
-			Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
-			
-Second Life vous est proposé par les Linden,
-avec contributions Open Source:
+		<panel label="Informations" name="support_panel">
+			<text name="support_intro">
+ Pour les dernières informations à propos de Firestorm, visitez
+ http://www.firestormviewer.org
 			</text>
-			<text_editor name="contrib_names">
-				Dummy Name remplacé au moment de l&apos;exécution
-			</text_editor>
+			<button label="Copier" name="copy_btn"/>
 		</panel>
-		<panel label="Licences" name="licenses_panel">
-			<text_editor name="licenses_editor">
-				3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
-APR Copyright (C) 2011 The Apache Software Foundation
-Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
-cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
-DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
-expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-FMOD Sound System Copyright (C) Firelight Technologies Pty, Ltd., 1994-2013
-FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm et Werner Lemberg.
-GL Copyright (C) 1999-2004 Brian Paul.
-GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University, et David Luebke, Brenden Schubert, University of Virginia.
-google-perftools Copyright (c) 2005, Google Inc.
-Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
-HACD Copyright (C) 2011, Khaled Mamou (kmamou@gmail.com)
-jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
-jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
-ogg/vorbis Copyright (C) 2002, Xiphophorus
-OpenSSL Copyright (C) 1998-2008 The OpenSSL Project.
-PCRE Copyright (c) 1997-2012 University of Cambridge
-SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
-zlib Copyright (C) 1995-2012 Jean-Loup Gailly et Mark Adler.
-
-Le client Second Life utilise Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (et ses concédants de licence). Tous droits réservés. Pour plus de détails, consultez le site Web www.havok.com.
-
-Ce logiciel contient du code source fourni par NVIDIA Corporation.
-
-Tous droits réservés.  Voir licenses.txt pour plus d&apos;informations.
-
-Codage audio du chat vocal : Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
-			</text_editor>
+		<panel label="Auteurs Linden Lab" name="credits_panel">
+			<text name="linden_intro">
+ Firestorm n'existerait pas sans la décision de Linden Lab de rendre son code source disponible.
+ Second Life est conçu par les Linden, 
+ avec les contributions open source provenant de :
+			</text>
+			<text_editor name="contrib_names">Dummy Name replaced at run time</text_editor>
+		</panel>
+		<panel label="Contributeurs Firestorm" name="fs_credits_panel">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro">
+ Firestorm est un projet destiné à améliorer l'immersion dans SecondLife(tm). Nous avons mis en commun les contributions d'une communauté de plusieurs développeurs qui travaillent autour du code fourni par Linden Lab ainsi que du nôtre afin de vous apporter une interface riche en possibilités et soutenue par de nombreux volontaires. Firestorm vous est fourni par The Phoenix Firestorm Project, Inc., une organisation à but non lucratif.
+ L'équipe de développement Firestorm :
+					</text>
+					<text name="fs_contrib_intro">Code additionnel pour Firestorm généreusement fourni par :</text>
+					<text name="fs_support_intro">Remerciements particuliers à notre équipe d'aide Firestorm, aux contributeurs wiki, éducateurs et traducteurs :</text>
+					<text name="fs_art_intro" height="70">
+ Firestorm intègre Starlight modifié pour Firestorm, développé par des résidents pour les résidents, dans le but d'offrir une interface alternative, plus claire et avec de la chance, plus simple à utiliser. Pour plus de détails, consulter &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;
+ Création de l'interface :
+					</text>
+				</panel>
+			</scroll_container>
 		</panel>
 	</tab_container>
 </floater>

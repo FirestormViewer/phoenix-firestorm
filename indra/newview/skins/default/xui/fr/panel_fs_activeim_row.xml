@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_activeim_row">
+	<text name="contact_name">Chaîne de tests Veuillez ignorer</text>
+	<button name="hide_btn" label=""/>
+</panel>

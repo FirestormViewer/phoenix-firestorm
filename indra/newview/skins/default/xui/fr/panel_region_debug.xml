@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Débogage" name="Debug">
-	<text name="region_text_lbl">
-		Région :
-	</text>
-	<text name="region_text">
-		(inconnue)
-	</text>
-	<check_box label="Désactiver les scripts" name="disable_scripts_check" tool_tip="Désactiver tous les scripts dans cette région"/>
-	<check_box label="Désactiver les collisions" name="disable_collisions_check" tool_tip="Désactiver les collisions entre non-avatars dans cette région"/>
-	<check_box label="Désactiver la physique" name="disable_physics_check" tool_tip="Désactiver tous les effets liés à la physique dans cette région"/>
-	<button bottom_delta="-38" label="Appliquer" name="apply_btn"/>
-	<text bottom_delta="-42" name="objret_text_lbl" width="260">
-		Renvoi de l&apos;objet
-	</text>
-	<text name="resident_text_lbl">
-		Résident :
-	</text>
-	<line_editor name="target_avatar_name">
-		(aucun)
-	</line_editor>
-	<button label="Choisir" name="choose_avatar_btn"/>
-	<text name="options_text_lbl">
-		Options :
-	</text>
-	<check_box label="Avec scripts" name="return_scripts" tool_tip="Renvoyer les objets avec scripts uniquement"/>
-	<check_box label="Sur le terrain d&apos;un autre résident" name="return_other_land" tool_tip="Ne renvoyer que les objets se trouvant sur le terrain de quelqu&apos;un d&apos;autre"/>
-	<check_box label="Dans toutes les régions de ce domaine" name="return_estate_wide" tool_tip="Renvoyer les objets dans toutes les régions qui constituent ce domaine"/>
+	<text name="region_text_lbl">Région :</text>
+	<text name="region_text">inconnue</text>
+	<check_box label="Désactiver les scripts" name="disable_scripts_check" tool_tip="Désactive tous les scripts dans cette région"/>
+	<check_box label="Désactiver les collisions" name="disable_collisions_check" tool_tip="Désactive les collisions provoquées par d'autres sources que les avatars dans cette région"/>
+	<check_box label="Désactiver les effets physiques" name="disable_physics_check" tool_tip="Désactive tous les effets physiques dans cette région"/>
+	<button label="Appliquer" name="apply_btn"/>
+	<text name="objret_text_lbl">Renvoi d'objet</text>
+	<text name="resident_text_lbl" width="100">Propriétaire :</text>
+	<line_editor name="target_avatar_name" width="200" left_delta="100">(aucun)</line_editor>
+	<button label="Sélectionner" name="choose_avatar_btn" width="80"/>
+	<text name="options_text_lbl">Options :</text>
+	<check_box label="Avec des scripts" name="return_scripts" tool_tip="Renvoyer seulement les objets possédant des scripts" left_delta="100"/>
+	<check_box label="Sur le terrain de quelqu'un d'autre" name="return_other_land" tool_tip="Renvoyer seulement les objets de ce résident qui sont sur le terrain d'un tiers"/>
+	<check_box label="Dans toutes les régions du domaine" name="return_estate_wide" tool_tip="Renvoyer les objets de toutes les régions de ce domaine"/>
 	<button label="Renvoyer" name="return_btn"/>
-	<button label="Collisions les plus consommatrices" name="top_colliders_btn" tool_tip="Liste des objets avec le plus de collisions potentielles" width="240"/>
-	<button label="Redémarrer la région" name="restart_btn" tool_tip="Redémarrer la région au bout de 2 minutes" left_pad="90" width="160"/>
-	<button label="Scripts les plus consommateurs" name="top_scripts_btn" tool_tip="Liste des objets passant le plus de temps à exécuter des scripts" width="240"/>
-	<button label="Annuler le redémarrage" name="cancel_restart_btn" tool_tip="Annuler le redémarrage de la région." left_pad="90" width="160"/>
-	<button label="Console de débogage de région" name="region_debug_console_btn" tool_tip="Ouvrir la console de débogage de région" width="240"/>
+	<button label="Top Collisions..." name="top_colliders_btn" width="200" tool_tip="Liste des objets générant le plus de collisions potentielles"/>
+	<button label="Top Scripts..." name="top_scripts_btn" width="200" tool_tip="Liste des objets consommant le plus de ressources"/>
+	<button label="Redémarrer la région" name="restart_btn" width="200" tool_tip="Indiquez le compte à rebours en secondes et redémarrez la région"/>
+	<text name="label_restart_delay" width="110" left_delta="220">Secondes :</text>
+	<spinner left_delta="65" name="restart_delay" width="50"/>
+	<button label="Annuler le redémarrage" width="200" name="cancel_restart_btn" tool_tip="Annuler le redémarrage de la région"/>
+	<button label="Console de débogage de la région" width="200" name="region_debug_console_btn" tool_tip="Ouvrir la console de débogage de la région"/>
 </panel>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_button">
+	<button label="Bouton standard" name="generic_button"/>
+	<button label="Bottom delta" name="bottom_delta_button"/>
+	<button label="Police SansSerifSmall" name="sans_serif_small_button"/>
+	<button label="Redimensionnement automatique" name="auto_resize_button"/>
+	<button label="Cliquez pour changer le libellé" label_selected="Nouveau libellé" name="label_selected_button"/>
+	<button label="Libellé sans ombrage" name="label_shadow_button"/>
+	<button label="Libellé colorisé" name="label_color_button"/>
+	<button label="Activable" label_selected="Activé" name="label_color_selected_button"/>
+	<button label="Désactivé" label_selected="Sélectionné" name="label_color_disabled_button"/>
+	<button label="Surbrillance" name="highlight_color_button"/>
+	<button label="Pas de surbrillance" name="hover_glow_amount_button"/>
+</floater>

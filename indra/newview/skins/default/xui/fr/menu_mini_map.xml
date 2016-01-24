@@ -1,11 +1,63 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Popup">
-	<menu_item_call label="Zoom rapproché" name="Zoom Close"/>
-	<menu_item_call label="Zoom moyen" name="Zoom Medium"/>
-	<menu_item_call label="Zoom éloigné" name="Zoom Far"/>
-	<menu_item_call label="Zoom par défaut" name="Zoom Default"/>
-	<menu_item_check label="Faire pivoter la carte" name="Rotate Map"/>
-	<menu_item_check label="Centrage auto" name="Auto Center"/>
+<menu label="Mini-Carte" name="Popup">
+	<menu_item_call label="Voir le Profil" name="View Profile"/>
+	<menu label="Voir le Profil" name="View Profiles"/>
+	<menu_item_call label="Ajouter au cercle" name="Add to Set Multiple"/>
+	<menu_item_call label="Zoomer" name="Cam"/>
+	<menu name="MarkAvatar" label="Marques...">
+		<menu_item_call label="Rouge" name="MarkRed"/>
+		<menu_item_call label="Vert" name="MarkGreen"/>
+		<menu_item_call label="Bleu" name="MarkBlue"/>
+		<menu_item_call label="Mauve" name="MarkPurple"/>
+		<menu_item_call label="Jaune" name="MarkYellow"/>
+		<menu_item_call label="Effacer la Marque" name="Clear Mark"/>
+		<menu_item_call label="Effacer toutes les Marques" name="Clear Marks"/>
+	</menu>
+	<menu name="More Options" label="Plus...">
+		<menu_item_call label="Devenir amis" name="Add Friend"/>
+		<menu_item_call label="Ajouter au cercle" name="Add to Set"/>
+		<menu_item_call label="Supprimer cet ami" name="Remove Friend"/>
+		<menu_item_call label="IM" name="IM"/>
+		<menu_item_call label="Appel vocal" name="Call"/>
+		<menu_item_call label="Carte" name="Map"/>
+		<menu_item_call label="Partager" name="Share"/>
+		<menu_item_call label="Payer" name="Pay"/>
+		<menu_item_call label="Téléporter" name="teleport"/>
+		<menu_item_call label="Demander une téléportation" name="request_teleport"/>
+		<menu_item_call label="Se téléporter" name="teleport_to"/>
+		<menu_item_call label="Inviter dans un Groupe" name="GroupInvite"/>
+		<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
+		<menu_item_check label="Ignorer / Cesser d'ignorer" name="Block/Unblock"/>
+		<menu_item_call label="Signaler" name="report"/>
+		<menu_item_call label="Figer" name="freeze"/>
+		<menu_item_call label="Éjecter du terrain" name="eject"/>
+		<menu_item_call label="Éjecter du domaine" name="kick"/>
+		<menu_item_call label="Éjecter et renvoyer au domicile" name="teleport_home"/>
+		<menu_item_call label="Bannir du Domaine" name="estate_ban"/>
+		<menu_item_call label="Faire disparaitre" name="derender"/>
+		<menu_item_call label="Faire disparaitre &amp; Indésirable" name="derender_permanent"/>
+	</menu>
+	<menu_item_call label="Suivre" name="Start Tracking"/>
 	<menu_item_call label="Arrêter de suivre" name="Stop Tracking"/>
-	<menu_item_call label="Carte du monde" name="World Map"/>
+	<menu label="Zoom" name="Minimap Zoom">
+		<menu_item_call label="Proche" name="Zoom Close"/>
+		<menu_item_call label="Moyen" name="Zoom Medium"/>
+		<menu_item_call label="Distant" name="Zoom Far"/>
+		<menu_item_call label="Par défaut" name="Zoom Default"/>
+	</menu>
+	<menu label="Afficher" name="Minimap Show">
+		<menu_item_check label="Objets" name="Objects"/>
+		<menu_item_check label="Objets Physiques" name="Physical Objects"/>
+		<menu_item_check label="Objets Scriptés" name="Scripted Objects"/>
+		<menu_item_check label="État temporaire des objets" name="Temp On Rez Objects"/>
+		<menu_item_check label="Limites de terrain" name="Property Lines"/>
+		<menu_item_check label="Terrains à Vendre" name="Parcels for Sale"/>
+		<menu_item_check label="Textures du terrain" name="Terrain Textures"/>
+		<menu_item_check label="Textures de la carte" name="World Map Textures"/>
+	</menu>
+	<menu_item_check label="Rotation automatique" name="Rotate Map"/>
+	<menu_item_check label="Centrage automatique" name="Auto Center"/>
+	<menu_item_check label="Portée du Chat" name="Chat Distance Ring"/>
+	<menu_item_call label="Profil du lieu" name="Place Profile"/>
+	<menu_item_call label="Carte du Monde" name="World Map"/>
 </menu>

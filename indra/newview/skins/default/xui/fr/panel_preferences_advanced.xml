@@ -1,32 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<panel label="Avancées" name="advanced">
-	<panel.string name="aspect_ratio_text">
-		[NUM]:[DEN]
-	</panel.string>
-	<text name="Cache:">
-		Cache :
-	</text>
-	<spinner label="Taille du cache (64 - 9984 Mo)" name="cachesizespinner"/>
-	<text name="text_box5">
-		Mo
-	</text>
-	<button label="Vider le cache" label_selected="Vider le cache" name="clear_cache"/>
-	<text name="Cache location">
-		Emplacement du cache :
-	</text>
-	<button label="Parcourir" label_selected="Parcourir" name="set_cache"/>
-	<button label="Par défaut" label_selected="Par défaut" name="default_cache_location"/>
-	<text name="UI Size:">
-		Taille d&apos;interface :
-	</text>
-	<check_box label="Afficher les erreurs de script dans :" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="Chat près de moi" name="0"/>
-		<radio_item label="Autre fenêtre" name="1"/>
-	</radio_group>
-	<check_box label="Clients multiples autorisés" name="allow_multiple_viewer_check"/>
-	<check_box label="Liste de sélection de grille affichée à la connexion" name="show_grid_selection_check"/>
-	<check_box label="Menu Avancé affiché" name="show_advanced_menu_check"/>
-	<check_box label="Menu Développeurs affiché" name="show_develop_menu_check"/>
-	<button label="Permissions de création par défaut" name="default_creation_permissions"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<panel label="Avancés" name="advanced">
+	<panel.string name="aspect_ratio_text">[NUM] : [DEN]</panel.string>
+	<panel.string name="middle_mouse">Clic molette</panel.string>
+	<check_box label="Autoriser les clients multiples (Peut réduire la stabilité et les performances)" name="allow_multiple_viewer_check"/>
+	<check_box label="Autoriser la connexion à d'autres univers (Les univers ne supportent pas tous Firestorm)" name="show_grid_selection_check"/>
+	<check_box label="Afficher le menu Avancé (Utilisez le à vos propres risques !)" name="show_advanced_menu_check"/>
+	<check_box label="Afficher le menu Développeur" name="show_develop_menu_check"/>
+	<check_box label="Désactiver la détection de VRAM par l'analyse WMI sur les systèmes Windows" name="FSDisableWMIProbing"/>
+	<check_box tool_tip="Ce paramètre réduira le chargement dû au rendu des avatars distants mais peut aussi provoquer des animations incorrectes pour ces mêmes avatars" label="Activer la temporisation d'animations (expérimental)" name="UseAnimationTimeSteps"/>
+	<text name="BackgroundYieldTimeText">Durée en millisecondes de temporisation des trames quand [APP_NAME] n'est pas au premier plan (40 par défaut) :</text>
+	<button label="Réinitialiser tous les paramètres" label_selected="Réinitialiser tous les paramètres..." name="clear_settings"/>
 </panel>

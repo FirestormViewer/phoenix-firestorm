@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_marketplace_listings" title="ANNONCES DE LA PLACE DU MARCHÉ">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater title="Produits du Marketplace" name="floater_marketplace_listings">
 	<panel name="marketplace_listings_panel">
 		<panel name="background_panel">
 			<panel name="marketplace_listings_inventory_placeholder_panel">
-				<text name="marketplace_listings_inventory_placeholder_title">Chargement…</text>
+				<text name="marketplace_listings_inventory_placeholder_title">Chargement...</text>
 			</panel>
 		</panel>
 	</panel>

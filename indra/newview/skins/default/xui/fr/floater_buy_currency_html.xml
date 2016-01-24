@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_buy_currency_html" title="ACHETER DEVISE"/>
+<floater name="floater_buy_currency_html" title="Acheter des devises">
+	<floater.string name="buy_currency_url">https://quick-buy.secondlife.com/[LANGUAGE]/display/?sa=[SPECIFIC_AMOUNT]&amp;sum=[SUM]&amp;msg=[MSG]&amp;bal=[BAL]</floater.string>
+</floater>

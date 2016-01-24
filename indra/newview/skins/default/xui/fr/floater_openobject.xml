@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="objectcontents" title="CONTENU DES OBJETS">
-	<text name="object_name">
-		[DESC]:
-	</text>
-	<text name="border_note">
-		Copier dans l&apos;inventaire et porter
-	</text>
-	<button label="Ajouter à la tenue" label_selected="Ajouter à la tenue" left="152" name="copy_and_wear_button"/>
-	<button label="Remplacer la tenue" label_selected="Remplacer la tenue" name="copy_and_replace_button"/>
-	<button label="Copier uniquement dans l&apos;inventaire" label_selected="Copier uniquement dans l&apos;inventaire" name="copy_to_inventory_button" width="132"/>
-	<button label="Annuler" label_selected="Annuler" name="cancel_button"/>
+<floater name="objectcontents" title="Contenu de l'objet">
+	<text name="object_name">[DESC]:</text>
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp" width="150">
+			<flyout_button label="Copier dans l'inventaire" name="copy_flyout" width="140">
+				<flyout_button.item label="Remplacer la tenue portée par le contenu" name="replace"/>
+				<flyout_button.item label="Ajouter le contenu à la tenue portée" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Annuler" label_selected="Annuler" name="cancel_button" width="60" left="30"/>
+		</layout_panel>
+	</layout_stack>
 </floater>

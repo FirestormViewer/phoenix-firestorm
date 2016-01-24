@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="inspect" title="INSPECTER LES OBJETS">
-	<floater.string name="timeStamp">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
-	</floater.string>
-	<scroll_list name="object_list" tool_tip="Sélectionner un objet de la liste pour le mettre en surbrillance dans le Monde.">
-		<scroll_list.columns label="Nom" name="object_name"/>
+<floater name="inspect" title="Inspecter les objets">
+	<floater.string name="timeStamp">[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], </floater.string>
+	<floater.string name="Group">(Groupe)</floater.string>
+	<scroll_list name="object_list" tool_tip="Sélectionner un objet de la liste pour le mettre en surbrillance dans le monde">
+		<scroll_list.columns label="Nom de l'objet" name="object_name"/>
 		<scroll_list.columns label="Propriétaire" name="owner_name"/>
 		<scroll_list.columns label="Créateur" name="creator_name"/>
-		<scroll_list.columns label="Date de création" name="creation_date" width="114"/>
+		<scroll_list.columns label="Date de création" name="creation_date"/>
+		<scroll_list.columns label="Description" name="description"/>
+		<scroll_list.columns label="" name="creation_date_sort"/>
 	</scroll_list>
-	<button label="Voir le profil du propriétaire..." name="button owner" tool_tip="Voir le profil du propriétaire de l&apos;objet en surbrillance" width="172"/>
-	<button label="Voir le profil du créateur..." left="192" name="button creator" tool_tip="Voir le profil du créateur de l&apos;objet en surbrillance" width="172"/>
+	<button label="Profil du propriétaire..." name="button owner" tool_tip="Voir le profil du propriétaire de l'objet en surbrillance"/>
+	<button label="Profil du créateur..." name="button creator" tool_tip="Voir le profil du créateur de l'objet en surbrillance"/>
 </floater>

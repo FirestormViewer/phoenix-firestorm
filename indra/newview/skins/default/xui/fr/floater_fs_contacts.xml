@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="imcontacts" title="Contacts">
+	<tab_container name="friends_and_groups">
+		<panel label="Amis" name="friends_panel"/>
+		<panel label="Groupes" name="groups_panel"/>
+		<panel label="Cercles" name="contact_sets_panel"/>
+	</tab_container>
+</floater>

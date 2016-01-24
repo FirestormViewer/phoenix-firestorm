@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fast_timers">
-	<string name="pause">
-		Pauser
-	</string>
-	<string name="run">
-		Courir
-	</string>
-	<button label="Pauser" name="pause_btn"/>
+	<string name="pause">Pause</string>
+	<string name="run">Lancer</string>
+	<combo_box name="time_scale_combo">
+		<item name="2x Average" label="2x moyenne"/>
+		<item name="Max" label="Max"/>
+		<item name="Recent Max" label="Max Récent"/>
+		<item name="100ms" label="100ms"/>
+	</combo_box>
+	<combo_box name="metric_combo">
+		<item name="Time" label="Temps"/>
+		<item name="Number of Calls" label="Nombre d'appels"/>
+		<item name="Hz" label="Hz"/>
+	</combo_box>
+	<button name="pause_btn" label="Pause"/>
 </floater>

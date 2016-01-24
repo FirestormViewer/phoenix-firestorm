@@ -3,17 +3,25 @@
 	<menu_item_call label="Toucher" name="Attachment Object Touch"/>
 	<menu_item_call label="Modifier" name="Edit..."/>
 	<menu_item_call label="Détacher" name="Detach"/>
-	<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
-	<menu_item_call label="Me lever" name="Stand Up"/>
-	<menu_item_call label="Mon apparence" name="Change Outfit"/>
-	<menu_item_call label="Modifier ma tenue" name="Edit Outfit"/>
-	<menu_item_call label="Modifier ma silhouette" name="Edit My Shape"/>
-	<menu_item_call label="Hauteur de sustentation" name="Hover Height"/>
-	<menu_item_call label="Mes amis" name="Friends..."/>
-	<menu_item_call label="Mes groupes" name="Groups..."/>
-	<menu_item_call label="Mon profil" name="Profile..."/>
-	<menu_item_call label="Déboguer les textures" name="Debug..."/>
+	<context_menu label="Enregistrer sous" name="Export Menu">
+		<menu_item_call label="Sauvegarde" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
+	<menu_item_call label="S'asseoir" name="Sit Down Here"/>
+	<menu_item_call label="Se lever" name="Stand Up"/>
+	<menu_item_call label="Changer de tenue" name="Change Outfit"/>
+	<menu_item_call label="Modifier la tenue" name="Edit Outfit"/>
+	<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
+	<menu_item_call label="Voltigement" name="Hover Height"/>
+	<menu_item_call label="Amis" name="Friends..."/>
+	<menu_item_call label="Groupes" name="Groups..."/>
+	<menu_item_call label="Profil" name="Profile..."/>
 	<menu_item_call label="Dump XML" name="Dump XML"/>
-	<menu_item_call label="Lâcher" name="Drop"/>
-	<menu_item_call label="Ignorer le propriétaire des particules" name="Mute Particle"/>
+	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
+	<menu_item_call label="Faire disparaitre temporairement" name="Derender"/>
+	<menu_item_call label="Faire disparaitre &amp; Indésirable" name="DerenderPermanent"/>
+	<menu_item_call label="Afficher les textures" name="Debug..."/>
+	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
+	<menu_item_call label="Supprimer" name="Drop"/>
+	<menu_item_call label="Bloquer le propriétaire des particules" name="Mute Particle"/>
 </context_menu>

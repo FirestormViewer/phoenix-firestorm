@@ -6,10 +6,10 @@
 	<menu_item_call label="(inconnu)" name="Suggestion 4"/>
 	<menu_item_call label="(inconnu)" name="Suggestion 5"/>
 	<menu_item_call label="Ajouter au dictionnaire" name="Add to Dictionary"/>
-	<menu_item_call label="Ajouter aux éléments à ignorer" name="Add to Ignore"/>
+	<menu_item_call label="Ignorer" name="Add to Ignore"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
 	<menu_item_call label="Coller" name="Paste"/>
 	<menu_item_call label="Supprimer" name="Delete"/>
-	<menu_item_call label="Tout sélectionner" name="Select All"/>
+	<menu_item_call label="Sélectionner tout" name="Select All"/>
 </context_menu>

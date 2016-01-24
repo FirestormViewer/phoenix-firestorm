@@ -2,13 +2,25 @@
 <floater name="floater_web_content" title="">
 	<layout_stack name="stack1">
 		<layout_panel name="nav_controls">
-			<button name="back" tool_tip="Précédente"/>
-			<button name="forward" tool_tip="Suivante"/>
-			<button name="stop" tool_tip="Arrêt de la navigation"/>
-			<button name="reload" tool_tip="Recharger la page"/>
-			<combo_box name="address" tool_tip="Entrer une URL ici"/>
+			<button tool_tip="Précédent" name="back"/>
+			<button tool_tip="Suivant" name="forward"/>
+			<button tool_tip="Arrêter" name="stop"/>
+			<button tool_tip="Actualiser" name="reload"/>
+			<combo_box name="address" tool_tip="Saisissez l'URL ici"/>
 			<icon name="media_secure_lock_flag" tool_tip="Navigation sécurisée"/>
-			<button name="popexternal" tool_tip="Ouvrir l&apos;URL actuelle dans votre navigateur de bureau"/>
+			<button tool_tip="Ouvrir l'URL actuelle dans votre navigateur par défaut" name="popexternal"/>
+		</layout_panel>
+		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Le plugin du navigateur semble mettre du temps à répondre
+
+Si le plugin ne se charge pas, veuillez consulter :
+http://wiki.phoenixviewer.com/fs_search_issues
+
+et/ou http://wiki.phoenixviewer.com/fs_media
+
+pour plus d'informations concernant ce problème.
+			</text>
 		</layout_panel>
 	</layout_stack>
 </floater>

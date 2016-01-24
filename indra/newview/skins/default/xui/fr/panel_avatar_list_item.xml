@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="avatar_list_item">
-	<string name="FormatSeconds">
-		[COUNT] s
-	</string>
-	<string name="FormatMinutes">
-		[COUNT] mn
-	</string>
-	<string name="FormatHours">
-		[COUNT] h
-	</string>
-	<string name="FormatDays">
-		[COUNT] j
-	</string>
-	<string name="FormatWeeks">
-		[COUNT] s
-	</string>
-	<string name="FormatMonths">
-		[COUNT] m
-	</string>
-	<string name="FormatYears">
-		[COUNT] a
-	</string>
-	<text name="avatar_name" value="(chargement)"/>
-	<text name="last_interaction" value="0s"/>
-	<icon name="permission_edit_theirs_icon" tool_tip="Vous pouvez modifier les objets de cet(te) ami(e)."/>
-	<icon name="permission_edit_mine_icon" tool_tip="Cet(te) ami(e) peut modifier, supprimer ou prendre vos objets."/>
-	<icon name="permission_map_icon" tool_tip="Cet(te) ami(e) peut vous localiser sur la carte."/>
-	<icon name="permission_online_icon" tool_tip="Cet(te) ami(e) peut voir lorsque vous êtes en ligne."/>
-	<button name="info_btn" tool_tip="En savoir plus"/>
+	<string name="FormatSeconds">[COUNT]s</string>
+	<string name="FormatMinutes">[COUNT]m</string>
+	<string name="FormatHours">[COUNT]h</string>
+	<string name="FormatDays">[COUNT]j</string>
+	<string name="FormatWeeks">[COUNT]s</string>
+	<string name="FormatMonths">[COUNT]mois</string>
+	<string name="FormatYears">[COUNT]ans</string>
+	<text name="avatar_name" width="90">(Chargement)</text>
+	<icon name="payment_info" tool_tip="Informations bancaires saisies"/>
+	<icon name="permission_online_theirs_icon" tool_tip="Vous pouvez savoir quand cette personne est connectée"/>
+	<icon name="permission_map_theirs_icon" tool_tip="Vous pouvez localiser cette personne"/>
+	<icon name="permission_edit_theirs_icon" tool_tip="Vous pouvez éditer les objets de cette personne"/>
+	<button name="permission_edit_mine_btn" tool_tip="Vous pouvez modifier, supprimer ou vous approprier les objets de cette personne"/>
+	<button tool_tip="La personne peut vous localiser" name="permission_map_btn"/>
+	<button name="permission_online_btn" tool_tip="La personne peut savoir quand vous êtes connecté"/>
+	<slider name="volume_slider" tool_tip="Volume de la voix"/>
+	<button name="info_btn" tool_tip="Plus d'informations"/>
 	<button name="profile_btn" tool_tip="Voir le profil"/>
+	<output_monitor name="speaking_indicator" tool_tip="Indique que l'avatar est à portée de voix ainsi que son volume sonore s'il parle"/>
 </panel>

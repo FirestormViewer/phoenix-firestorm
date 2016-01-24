@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Trier par nom" name="sort_name"/>
+	<menu_item_check label="Trier par nom d'utilisateur" name="sort_username"/>
 	<menu_item_check label="Trier par statut" name="sort_status"/>
-	<menu_item_check label="Afficher les icônes des résidents" name="view_icons"/>
-	<menu_item_check label="Afficher les droits octroyés" name="view_permissions"/>
-	<menu_item_check label="Afficher le journal des conversations..." name="view_conversation"/>
+	<menu_item_check name="view_icons" label="Afficher les icônes des résidents"/>
+	<menu_item_check name="view_permissions" label="Afficher les droits octroyés"/>
+	<menu_item_check name="view_conversation" label="Afficher l'historique de conversation..."/>
 </toggleable_menu>

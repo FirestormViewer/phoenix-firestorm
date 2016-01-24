@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Configuration" name="Input panel">
-	<tab_container name="max_bandwidth_layout">
+<panel label="Initialisation" name="Input panel">
+	<tab_container name="max_bandwidth_layout" label="Initialisation">
 		<panel label="Connexion" name="tab-conn">
-			<text name="Maximum bandwidth">
-				Bande passante maximale ([http://wiki.phoenixviewer.com/fs_speedtest avez-vous besoin d'une suggestion?]):
-			</text>
-			<check_box label="Port de connexion" name="connection_port_enabled"/>
-			<spinner label="Numéro:" name="connection_port"/>
+			<text name="Maximum bandwidth">Bande passante maximale ([http://wiki.phoenixviewer.com/fs_speedtest Besoin d'aide ?]):</text>
+			<text name="text_box2">Kbps</text>
+			<text name="NetworkPrefText1">Wi-Fi</text>
+			<text name="NetworkPrefText2">DSL</text>
+			<text name="NetworkPrefText3">Câble</text>
+			<text name="NetworkPrefText4">Peut poser problème</text>
+			<check_box label="Port personnalisé" name="connection_port_enabled"/>
+			<spinner label="Numéro :" name="connection_port"/>
+			<text name="Web:">Navigateur Web :</text>
+			<radio_group name="preferred_browser_behavior">
+				<radio_item label="Utiliser mon navigateur (Chrome, Firefox, Edge) pour tous les liens" name="new_external" tool_tip="Utiliser le navigateur par défaut du système pour tous les liens et l'aide. Non-recommandé si vous êtes en plein écran."/>
+				<radio_item label="Utiliser le navigateur intégré pour les liens Second Life uniquement" name="new_internal" tool_tip="Utiliser le navigateur par défaut pour l'aide et les liens Web. Le navigateur intégré ne sera utilisé que pour les liens LindenLab/SecondLife."/>
+				<radio_item label="Utiliser le navigateur intégré pour tous les liens" name="new_internal_all"/>
+			</radio_group>
+			<text name="numberwebfloaters_label">Nombre maximum de fenêtre de navigation :</text>
+			<combo_box tool_tip="Nombre maximum de fenêtres de navigation qui peuvent être ouvertes simultanément dans le navigateur intégré" name="web_number_combobox">
+				<combo_box.item label="Pas de limite" name="web_unlimited"/>
+				<combo_box.item label="Une fenêtre" name="web_1"/>
+				<combo_box.item label="Cinq fenêtres" name="web_5"/>
+				<combo_box.item label="Dix fenêtres" name="web_10"/>
+			</combo_box>
+			<button label="Vider le cache" name="ClearWebBrowserCache"/>
 			<check_box label="Activer les plugins" name="browser_plugins_enabled"/>
 			<check_box label="Accepter les cookies" name="cookies_enabled"/>
-			<check_box label="Activer Javascript" name="browser_javascript_enabled"/>
-			<check_box label="Activer les fenêtres popup de navigateur de médias" name="media_popup_enabled"/>
-			<button label="Paramètres de proxy" label_selected="Paramètres de proxy" name="set_proxy"/>
+			<check_box label="Activer JavaScript" name="browser_javascript_enabled"/>
+			<check_box label="Activer les pop-up dans le navigateur" name="media_popup_enabled"/>
+			<button label="Configurer les paramètres proxy" label_selected="Configurer les paramètres proxy" name="set_proxy"/>
 		</panel>
-		<panel label="Emplacements" name="tab-dir" />
+		<panel label="Dossiers" name="tab-dir">
+			<text name="cache_size_label_l">Taille du cache ([http://wiki.phoenixviewer.com/cache Besoin d'aide ?]) :</text>
+			<text name="text_box5">Mo</text>
+			<button label="Vider le cache de l'inventaire" name="ClearInventoryCache" left="350" width="180"/>
+			<text name="Cache location">Emplacement du cache :</text>
+			<button label="Ouvrir" label_selected="Ouvrir" name="open_cache"/>
+			<button label="Définir" width="55" label_selected="Définir" name="set_cache"/>
+			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_cache"/>
+			<button label="Vider" width="45" label_selected="Vider" name="clear_cache"/>
+			<text name="Sound Cache location">Emplacement du cache audio :</text>
+			<button label="Ouvrir" label_selected="Ouvrir" name="open_sound_cache"/>
+			<button label="Définir" width="55" label_selected="Définir" name="set_sound_cache"/>
+			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_sound_cache"/>
+			<check_box label="Ne pas supprimer le cache DSF (audio) décompressé à la déconnexion" tool_tip="Si activé, le viewer ne supprimera pas les sons décompressés du cache à la déconnexion, ce qui se traduira par une lecture plus rapide. Veuillez noter : Activer cette option remplira votre cache très rapidement, et est exclus du quota défini. Cela résultera donc en un potentiel usage excessif du disque. Désactivé par défaut." name="keep_unpacked_cache"/>
+			<text name="log_path_desc">Emplacement des historiques de conversation :</text>
+			<button label="Ouvrir" label_selected="Ouvrir" name="open_log_path_button-panelsetup"/>
+			<button label="Définir" width="55" label_selected="Définir" name="log_path_button-panelsetup"/>
+			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_logpath"/>
+			<button label="Historiques de plantage" width="150" label_selected="Historiques de plantage" name="browse_crashlogs"/>
+			<button label="Dossier de paramétrages" width="150" label_selected="Dossier de paramétrages" name="browse_settingsdir"/>
+		</panel>
 	</tab_container>
 </panel>

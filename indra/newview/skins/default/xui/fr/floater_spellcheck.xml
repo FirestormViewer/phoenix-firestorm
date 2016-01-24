@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="spellcheck_floater" title="Paramètres du vérificateur orthographique">
-	<check_box label="Activer le vérificateur orthographique" name="spellcheck_enable"/>
-	<text name="spellcheck_main">
-		Diction. principal :
+<floater name="spellcheck_floater" title="Paramètres du correcteur orthographique">
+	<check_box label="Activer le correcteur orthographique" name="spellcheck_enable"/>
+	<text name="spellcheck_main" width="140">Dictionnaire principal :</text>
+	<text label="Journaux :" name="spellcheck_additional">
+     Dictionnaires supplémentaires :
 	</text>
-	<text label="Journaux :" name="spellcheck_additional">
-		Dictionnaires supplémentaires :
-	</text>
-	<text name="spellcheck_available">
-		Disponibles
-	</text>
-	<text name="spellcheck_active">
-		Actifs
-	</text>
+	<text name="spellcheck_available">Disponibles</text>
+	<text name="spellcheck_active">Actifs</text>
 	<button label="Supprimer" name="spellcheck_remove_btn"/>
 	<button label="Importer..." name="spellcheck_import_btn"/>
 </floater>

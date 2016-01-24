@@ -1,68 +1,39 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!--alba-->
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Self Pie">
-    <pie_slice name="Gestures"
-        label="Gestes"/>
-    <pie_slice name="Sit Down Here"
-        label="S'asseoir ici"/>
-    <pie_slice name="Stand Up"
-        label="Se lever"/>
-    <pie_slice name="Groups..."
-        label="Groupes"/>
-    <pie_slice name="Profile..."
-        label="Profil"/>
-    <pie_slice name="Debug..."
-        label="Debog. textures"/>
-		
-    <pie_menu name="Appearance &gt;"
-        label="Apparence &gt;">
-        <pie_slice name="Edit My Shape"
-			label="&gt; Corps"/>
-        <pie_slice name="Edit My Outfit"
-			label="&gt; Tenue"/>
-    </pie_menu>
-		
-    <pie_menu name="Take Off &gt;"
-		label="Enlever &gt;">
-        <pie_slice name="Detach All"
-            label="Tout détacher"/>
-        <pie_menu name="Pie Object Detach"
-            label="Attachements &gt;"/>
-        <pie_menu name="Pie Object Detach HUD"
-            label="HUD &gt;"/>
-			
-        <pie_menu name="Clothes &gt;"
-            label="Habits &gt;">
-            <pie_slice name="Gloves"
-                label="Gants"/>
-            <pie_slice name="Jacket"
-                label="Veste"/>
-            <pie_slice name="Socks"
-                label="Chaussettes"/>
-            <pie_slice name="Shoes"
-                label="Chaussures"/>
-            <pie_slice name="Pants"
-                label="Pantalon"/>
-            <pie_slice name="Shirt"
-                label="Chemise"/>
-            <pie_slice name="Skirt"
-                label="Jupe"/>
-				
-            <pie_menu name="Clothes More"
-                label="Plus &gt;">
-                <pie_slice name="Self Undershirt"
-                    label="Débardeur"/>
-                <pie_slice name="All Clothes"
-                    label="Tous les habits"/>
-                <pie_slice name="Self Underpants"
-                    label="Caleçon"/>
-                <pie_slice name="Self Tattoo"
-                    label="Tatouage"/>
-                <pie_slice name="Self Physics"
-					label="Physique"/>
-                <pie_slice name="Self Alpha"
-                    label="Alpha"/>
-            </pie_menu>
-        </pie_menu>
-    </pie_menu>
+	<pie_slice label="Profil" name="Profile..."/>
+	<pie_slice label="Groupes" name="Groups..."/>
+	<pie_menu label="Enlever &gt;" name="Take Off &gt;">
+		<pie_menu label="Vêtements &gt;" name="Clothes &gt;">
+			<pie_slice label="Chemise" name="Shirt"/>
+			<pie_slice label="Pantalon" name="Pants"/>
+			<pie_slice label="Chaussures" name="Shoes"/>
+			<pie_slice label="Chaussettes" name="Socks"/>
+			<pie_slice label="Veste" name="Jacket"/>
+			<pie_slice label="Gants" name="Gloves"/>
+			<pie_menu label="Plus &gt;" name="Clothes More">
+				<pie_slice label="Débardeur" name="Self Undershirt"/>
+				<pie_slice label="Tous les habits" name="All Clothes"/>
+				<pie_slice label="Caleçon" name="Self Underpants"/>
+				<pie_slice label="Tatouage" name="Self Tattoo"/>
+				<pie_slice label="Physique" name="Self Physics"/>
+				<pie_slice label="Alpha" name="Self Alpha"/>
+			</pie_menu>
+			<pie_slice label="Jupe" name="Skirt"/>
+		</pie_menu>
+		<pie_menu label="HUD &gt;" name="Pie Object Detach HUD"/>
+		<pie_menu label="Enlever &gt;" name="Pie Object Detach"/>
+		<pie_slice label="Tout détacher" name="Detach All"/>
+	</pie_menu>
+	<pie_slice label="S'asseoir ici" name="Sit Down Here"/>
+	<pie_slice label="Se lever" name="Stand Up"/>
+	<pie_slice label="Infos sur les scripts" name="ScriptInfo"/>
+	<pie_slice label="Gestes..." name="Gestures"/>
+	<pie_menu label="Apparence &gt;" name="Appearance &gt;">
+		<pie_slice label="Modifier la silhouette" name="Edit My Shape"/>
+		<pie_slice label="MàJ Textures" name="Texture Refresh"/>
+		<pie_slice label="Modifier la tenue" name="Edit My Outfit"/>
+		<pie_slice label="Dump XML" name="Dump XML"/>
+		<pie_slice label="Voltigement" name="Hover Height"/>
+	</pie_menu>
+	<pie_slice label="Textures" name="Debug..."/>
 </pie_menu>

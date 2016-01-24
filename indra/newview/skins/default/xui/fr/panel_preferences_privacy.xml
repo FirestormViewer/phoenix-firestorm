@@ -1,27 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Communication" name="im">
-	<panel.string name="log_in_to_change">
-		se connecter pour changer
-	</panel.string>
-	<button label="Vider l&apos;historique" name="clear_cache" tool_tip="Effacer le cache de l&apos;image de connexion, du dernier lieu, de l&apos;historique des téléportations, Web et de texture."/>
-	<text name="cache_size_label_l">
-		(endroits, images, web, historique des recherches)
-	</text>
-	<check_box label="Afficher mon profil dans les résultats de recherche" name="online_searchresults"/>
-	<check_box label="Seuls mes amis et groupes voient quand je suis en ligne" name="online_visibility"/>
-	<check_box label="Seuls mes amis et groupes peuvent m&apos;appeler ou m&apos;envoyer un IM" name="voice_call_friends_only_check"/>
-	<check_box label="Fermer le micro à la fin d&apos;un appel" name="auto_disengage_mic_check"/>
-	<check_box label="Afficher mes repères favoris à la connexion (liste déroulante Lieu de départ)" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		Journaux de chat :
-	</text>
-	<check_box label="Sauvegarder le chat local sur mon ordinateur" name="log_nearby_chat"/>
-	<check_box label="Sauvegarder les IM sur mon ordinateur" name="log_instant_messages"/>
-	<check_box label="Inclure la date et l&apos;heure pour chaque ligne du journal de chat" name="show_timestamps_check_im"/>
-	<check_box label="Inclure la date dans le nom du fichier journal" name="logfile_name_datestamp"/>
-	<button label="Parcourir" label_selected="Parcourir" name="log_path_button" width="150"/>
-	<button label="Liste des ignorés" name="block_list"/>
-	<text name="block_list_label">
-		(personnes et/ou objets que vous avez ignorés)
-	</text>
+<panel label="Confidentialité" name="im">
+	<string name="AutoresponseItemNotSet">Aucun objet défini</string>
+	<string name="AutoresponseItemNotAvailable">Objet non disponible</string>
+	<string name="AutoresponseItemNotLoggedIn">Non connecté</string>
+	<tab_container label="Confidentialité" name="tabs">
+		<panel label="Général" name="tab-general">
+			<panel.string name="log_in_to_change">Se connecter pour modifier</panel.string>
+			<button label="Effacer l'historique" tool_tip="Efface l'image de connexion, la dernière position, l'historique de téléportations, le cache du navigateur et des textures" name="clear_cache"/>
+			<text name="cache_size_label">(Emplacements, images, internet, recherches)</text>
+			<check_box label="Afficher mes informations de profil dans les résultats de recherche" name="online_searchresults"/>
+			<check_box label="Seuls mes amis et groupes savent que je suis connecté" name="online_visibility"/>
+			<check_box label="Seuls mes amis et groupes peuvent m'appeler ou m'envoyer des messages instantanés" name="voice_call_friends_only_check"/>
+			<check_box label="Couper le micro à la fin d'un appel vocal" name="auto_disengage_mic_check"/>
+			<check_box label="Permettre aux objets de connaître mes informations de langue actuelles" name="LanguageIsPublic"/>
+			<check_box label="Afficher mes repères favoris à la connexion (dans le menu déroulant 'Démarrer :')" name="favorites_on_login_check"/>
+			<check_box label="Accepter automatiquement les nouveaux objets" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Utiliser les messages originaux d'acceptation et de refus de transfert d'objet" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si activé, le Viewer n'acceptera ou déclinera les messages qu'après avoir pressé le bouton concerné. Si désactivé, le message d'acceptation sera envoyé automatiquement dès que l'offre de transfert aura été reçue. Cette option est sans effet si les offres de transfert sont acceptées automatiquement."/>
+			<check_box label="Afficher automatiquement les nouveaux objets récemment acceptés dans l'inventaire" name="Show_In_Inventory"/>
+			<check_box label="Afficher automatiquement les notes, textures, repères, après acceptation" name="Show_New_Inventory"/>
+			<check_box label="Afficher automatiquement les photos dans l'inventaire après mise en ligne" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Créer un effet de particules lors du transfert d'objets d'inventaire à d'autres avatars" name="FSCreateGiveInventoryParticleEffect"/>
+			<button label="Gérer les Éléments Ignorés" name="block_list"/>
+		</panel>
+		<panel label="Journaux &amp; Transcriptions" name="tab-logging">
+			<text name="logging_label">Sauvegarder :</text>
+			<combo_box tool_tip="Journal (Historique de conversations): La liste des conversations entre vous et une autre personne. Transcriptions : Le texte actuel tel qu'il apparait à l'écran." name="conversation_log_combo">
+				<item name="log_and_transcripts" label="Journaux et transcriptions"/>
+				<item name="log_only" label="Journaux uniquement"/>
+				<item name="no_log_or_transcript" label="Pas de journaux ni transcriptions"/>
+			</combo_box>
+			<button label="Supprimer les journaux" width="140" name="clear_log"/>
+			<button label="Supprimer les transcriptions" width="170" name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Sauvegarder les transcriptions du Chat local" tool_tip="Enregistrer les transcriptions de chat local sur votre disque dur"/>
+			<check_box label="Utiliser le format de nom de fichier original pour les transcriptions" name="UseLegacyIMLogNames" tool_tip="Si activé, le format de nom de fichier originel pour les transcriptions (Nom Utilisateur) sera utilisé au lieu du nouveau format (nom_utilisateur)."/>
+			<check_box label="Ajouter la date aux noms de fichiers de transcriptions" name="LogFileNamewithDate" tool_tip="Ajoute la date aux logs de chat et messagerie au format chat-AAAA-MM-JJ et 'IM file name'-AAAA-MM."/>
+			<check_box label="Utiliser la visionneuse de transcriptions intégrée" name="FSUseBuiltInHistory" tool_tip="Utilise la visionneuse de transcriptions intégrée pour lire les transcriptions. Si désactivé, les transcriptions seront ouvertes par l'éditeur de texte défini par le système d'exploitation."/>
+		</panel>
+		<panel label="LookAt" name="tab-lookat">
+			<check_box label="Afficher qui regarde qui :" name="showlookat" tool_tip="Le point de mire permet à votre Viewer de connaître dans quel sens tourner au besoin vos yeux, tête et avatar. Il peut aussi être utilisé pour déterminer le point d'ancrage de la caméra d'un avatar."/>
+			<text name="lookatshownames" tool_tip="Format du nom affiché lors de l'affichage du point de mire">Nom affiché :</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Aucun" name="None"/>
+				<combo_box.item label="Nom complet" name="Complete_Name"/>
+				<combo_box.item label="Nom d'affichage" name="Display_Name"/>
+				<combo_box.item label="Nom originel" name="Legacy_Name"/>
+				<combo_box.item label="Nom d'utilisateur" name="User_Name"/>
+			</combo_box>
+			<check_box label="Ne pas afficher mon propre point de mire" name="LookAtHideOwn" tool_tip="Ne pas afficher mon point de mire"/>
+			<check_box label="Dessiner une droite jusqu'au point de mire" name="ExodusLookAtLines" tool_tip="Affiche une ligne depuis l'avatar jusqu'à son point de mire"/>
+			<text name="mylookat">Mon point de mire :</text>
+			<check_box label="Ne pas dévoiler mon point de mire aux autres" name="privatelookat" tool_tip="Empêche les autres personnes de savoir où vous regardez"/>
+			<check_box label="Ne communiquer aucun point de mire, y compris à soi" name="privateLocalLookat" tool_tip="Empêche la tête de votre avatar de bouger pour faire face à l'endroit que vous regardez. Ce mouvement de la tête n'est pas forcément visible des autres, que cette option soit activée ou non"/>
+			<check_box label="Ne pas communiquer mes indications de sélection de cible" name="privatepointat" tool_tip="Empêche le point de sélection d'être visible par les autres"/>
+		</panel>
+		<panel label="Réponses auto. 1" name="tab-autoresponse-1">
+			<text name="text_box3">Réponse automatique en mode Ne pas déranger :</text>
+			<text_editor name="do_not_disturb_response">log_in_to_change</text_editor>
+			<text name="autorespond_response_label">Réponse lorsque je suis en mode Réponse automatique :</text>
+			<text_editor name="autorespond_response">log_in_to_change</text_editor>
+			<text name="autorespond_nf_response_label">Réponse lorsque je suis en mode Réponse automatique aux inconnus :</text>
+			<text_editor name="autorespond_nf_response">log_in_to_change</text_editor>
+			<check_box label="Envoyer une réponse automatique lorsque je suis Absent :" name="send_away_av_response" tool_tip="Envoie le texte ci-dessous lorsque quelqu'un démarre une conversation privée quand vous êtes absent."/>
+			<text_editor name="away_avatar_response">log_in_to_change</text_editor>
+			<check_box label="Envoyer une réponse automatique aux personnes ignorées :" name="send_muted_av_response" tool_tip="Envoie le texte ci-dessous lorsqu'une personne ignorée vous envoie un message privé."/>
+			<text_editor name="muted_avatar_response">log_in_to_change</text_editor>
+		</panel>
+		<panel label="Réponses auto. 2" name="tab-autoresponse-2">
+			<text name="autorespond_rto_response_label">Réponse lorsque je suis en mode Refuser toute téléportation :</text>
+			<text_editor name="autorespond_rto_response">log_in_to_change</text_editor>
+			<check_box label="Ne pas refuser les offres de téléportation ni envoyer de réponse à mes amis" name="FSDontRejectTeleportOffersFromFriends"/>
+			<text name="autorespond_rfr_response_label">Réponse lorsque je suis en mode Refuser toute proposition d'amitié :</text>
+			<text_editor name="autorespond_rfr_response">log_in_to_change</text_editor>
+			<text name="autoresponse_item_label" width="295">Objet envoyé avec toutes les réponses automatiques :</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="480" tool_tip="Glisser et déposer l'objet d'inventaire ici."/>
+			<button label="Effacer" name="clear_autoresponse_item" width="50"/>
+		</panel>
+	</tab_container>
 </panel>

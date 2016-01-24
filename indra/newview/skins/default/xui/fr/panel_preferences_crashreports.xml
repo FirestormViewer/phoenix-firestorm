@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Rapports d'erreur" name="crash_reports">
+	<check_box label="Envoyer les rapports d'erreur à firestormviewer.org" name="checkSendCrashReports"/>
+	<text label="Journaux :" name="textSaveMiniDumpType">
+         Type de rapport :
+	</text>
+	<combo_box name="comboSaveMiniDumpType">
+		<combo_box.item name="Minimal" label="Minimal"/>
+		<combo_box.item name="Default" label="Par défaut"/>
+		<combo_box.item name="Extended" label="Étendu"/>
+	</combo_box>
+	<check_box label="Toujours demander avant l'envoi" name="checkSendCrashReportsAlwaysAsk"/>
+	<check_box label="Inclure le fichier settings.xml" name="checkSendSettings"/>
+	<text name="textSendSettings">(contient le nom d'utilisateur Second Life)</text>
+	<check_box label="Inclure mon nom d'utilisateur Second Life" name="checkSendName"/>
+	<text name="textSendName" width="400">(utilisé pour demander des informations complémentaires si nécessaire)</text>
+	<text name="textInformation1" width="505">Sauf si précisé, les rapports ne contiennent que des informations nécessaires au plantage</text>
+	<text name="textInformation2" width="505">Les logs du Viewer ne seront pas envoyés, veuillez les envoyer par mail si vous</text>
+	<text name="textInformation3">pensez qu'ils peuvent contenir des informations supplémentaires.</text>
+	<text name="textInformation4">Politique de confidentialité : http://www.firestormviewer.org/privacy-policy</text>
+</panel>

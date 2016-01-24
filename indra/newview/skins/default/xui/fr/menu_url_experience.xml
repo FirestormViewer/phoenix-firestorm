@@ -1,4 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Url Popup">
-	<menu_item_call label="Copier la SLurl dans le presse-papier" name="url_copy"/>
-</context_menu>
+<context_menu name="Url Popup"><menu_item_call label="Copier la  SLurl" name="url_copy"/></context_menu>

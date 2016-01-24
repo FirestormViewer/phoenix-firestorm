@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Item Properties" title="PROPRIÉTÉS DE L&apos;ARTICLE"/>
+<floater name="Item Properties" title="Propriétés de l'objet">
+	<panel name="item_panel" label=""/>
+</floater>

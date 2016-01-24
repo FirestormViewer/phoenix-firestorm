@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="window_size" title="TAILLE DE LA FENÊTRE">
-	<string name="resolution_format">
-		[RES_X] x [RES_Y]
-	</string>
-	<text name="windowsize_text">
-		Définir la taille de la fenêtre :
-	</text>
+<floater name="window_size" title="Taille de la fenêtre">
+	<string name="resolution_format">[RES_X] x [RES_Y]</string>
+	<text name="windowsize_text">Définir la taille de la fenêtre :</text>
 	<combo_box name="window_size_combo" tool_tip="largeur x hauteur">
 		<combo_box.item label="1000 x 700 (par défaut)" name="item1"/>
 		<combo_box.item label="1024 x 768 (4:3 XGA)" name="item2"/>
@@ -21,6 +17,6 @@
 		<combo_box.item label="1920 x 1200 (16:10 WUXGA)" name="item13"/>
 		<combo_box.item label="2560 x 1440 (16:9 QHD)" name="item14"/>
 	</combo_box>
-	<button label="Choisir" name="set_btn"/>
+	<button label="Définir" name="set_btn"/>
 	<button label="Annuler" name="cancel_btn"/>
 </floater>
