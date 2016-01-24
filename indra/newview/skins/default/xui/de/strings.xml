@@ -6560,4 +6560,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Worn Items">
 		Angezogene Objekte
 	</string>
+	<string name="InvOfferGroupNoticeName">
+		Ein Gruppenmitglied namens [NAME]
+	</string>
 </strings>
