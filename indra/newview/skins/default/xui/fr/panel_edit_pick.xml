@@ -4,7 +4,7 @@
 	<text name="title">Modifier le favori</text>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
-			<icon name="edit_icon" label="" tool_tip="Cliquez pour sélectionner une image"/>
+			<icon name="edit_icon" tool_tip="Cliquez pour sélectionner une image"/>
 			<text name="Name:">Titre :</text>
 			<text name="description_label">Description :</text>
 			<text name="location_label">Emplacement :</text>

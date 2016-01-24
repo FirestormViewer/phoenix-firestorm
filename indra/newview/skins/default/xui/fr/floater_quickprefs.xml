@@ -7,17 +7,11 @@
 				<text name="Maximum bandwidth" tool_tip="Règle la bande passante en Kbps (kilobits par seconde)">Bande passante</text>
 				<check_box label="Params. Environnementaux de la région" name="UseRegionWindlight"/>
 				<text name="WL Sky" tool_tip="Paramètres atmosphériques">Env. ciel</text>
-				<button name="WLPrevPreset" label="" label_selected=""/>
-				<button name="WLNextPreset" label="" label_selected=""/>
 				<text name="WL Water" tool_tip="Paramètres aquatiques">Env. eau</text>
-				<button name="WWPrevPreset" label="" label_selected=""/>
-				<button name="WWNextPreset" label="" label_selected=""/>
 				<text name="Day Cycle" tool_tip="Paramètres du cycle journalier">Jour/Nuit</text>
-				<button name="DCPrevPreset" label="" label_selected=""/>
-				<button name="DCNextPreset" label="" label_selected=""/>
 				<icon name="SkyDayCycle" tool_tip="Modifie l'heure du jour"/>
-				<button name="ResetToRegionDefault" label="" label_selected="" tool_tip="Applique les paramètres environnementaux par défaut de la région"/>
-				<button name="button_edit" tool_tip="Cliquez ici pour configurer le panneau des préférences rapides" label="" toggle="true"/>
+				<button name="ResetToRegionDefault" tool_tip="Applique les paramètres environnementaux par défaut de la région"/>
+				<button name="button_edit" tool_tip="Cliquez ici pour configurer le panneau des préférences rapides"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>
@@ -42,6 +36,6 @@
 		<spinner name="control_max_edit" tool_tip="La plus grande valeur sélectionnable" label="Max :"/>
 		<spinner name="control_increment_edit" tool_tip="La valeur d'incrémentation pour les boutons fléchés ou curseurs" label="Incr :"/>
 		<button name="Restore_Btn" tool_tip="Restaure les paramètres par défaut" label="Réinitialiser"/>
-		<button name="button_close" tool_tip="Ferme l'édition du panneau de préférences rapides" toggle="true"/>
+		<button name="button_close" tool_tip="Ferme l'édition du panneau de préférences rapides"/>
 	</panel>
 </floater>

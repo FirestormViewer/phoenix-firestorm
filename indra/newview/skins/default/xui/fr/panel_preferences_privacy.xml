@@ -55,22 +55,15 @@
 		</panel>
 		<panel label="Réponses auto. 1" name="tab-autoresponse-1">
 			<text name="text_box3">Réponse automatique en mode Ne pas déranger :</text>
-			<text_editor name="do_not_disturb_response">log_in_to_change</text_editor>
 			<text name="autorespond_response_label">Réponse lorsque je suis en mode Réponse automatique :</text>
-			<text_editor name="autorespond_response">log_in_to_change</text_editor>
 			<text name="autorespond_nf_response_label">Réponse lorsque je suis en mode Réponse automatique aux inconnus :</text>
-			<text_editor name="autorespond_nf_response">log_in_to_change</text_editor>
 			<check_box label="Envoyer une réponse automatique lorsque je suis Absent :" name="send_away_av_response" tool_tip="Envoie le texte ci-dessous lorsque quelqu'un démarre une conversation privée quand vous êtes absent."/>
-			<text_editor name="away_avatar_response">log_in_to_change</text_editor>
 			<check_box label="Envoyer une réponse automatique aux personnes ignorées :" name="send_muted_av_response" tool_tip="Envoie le texte ci-dessous lorsqu'une personne ignorée vous envoie un message privé."/>
-			<text_editor name="muted_avatar_response">log_in_to_change</text_editor>
 		</panel>
 		<panel label="Réponses auto. 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">Réponse lorsque je suis en mode Refuser toute téléportation :</text>
-			<text_editor name="autorespond_rto_response">log_in_to_change</text_editor>
 			<check_box label="Ne pas refuser les offres de téléportation ni envoyer de réponse à mes amis" name="FSDontRejectTeleportOffersFromFriends"/>
 			<text name="autorespond_rfr_response_label">Réponse lorsque je suis en mode Refuser toute proposition d'amitié :</text>
-			<text_editor name="autorespond_rfr_response">log_in_to_change</text_editor>
 			<text name="autoresponse_item_label" width="295">Objet envoyé avec toutes les réponses automatiques :</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="480" tool_tip="Glisser et déposer l'objet d'inventaire ici."/>
 			<button label="Effacer" name="clear_autoresponse_item" width="50"/>

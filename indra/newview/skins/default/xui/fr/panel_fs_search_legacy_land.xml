@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Vente de terrains" name="panel_ls_land">
 	<panel name="panel_ls_input">
-		<check_box label="" name="pg_all"/>
-		<check_box label="" name="mature_all"/>
-		<check_box label="" name="adult_all"/>
 		<text name="search_text">Critères de recherche :</text>
 		<combo_box name="land_category">
 			<combo_box.item label="Tout" name="All"/>
@@ -25,7 +22,6 @@
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_land">
-			<columns label="" name="icon"/>
 			<columns label="Nom" name="land_name"/>
 			<columns label="Prix" name="price"/>
 			<columns label="Taille" name="area"/>

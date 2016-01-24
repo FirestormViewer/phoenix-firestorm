@@ -111,11 +111,8 @@
 			<text name="Name:">Nom :</text>
 			<text name="Description:">Description :</text>
 			<text name="Creator:">Créateur :</text>
-			<text name="Creator Name">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)</text>
 			<text name="Owner:">Propriétaire :</text>
-			<text name="Owner Name">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)</text>
 			<text name="Last Owner:">Précédent :</text>
-			<text name="Last Owner Name">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect TestString PleaseIgnore (please.ignore)</text>
 			<text name="Group:">Groupe :</text>
 			<text name="Group Name">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect Chargement...</text>
 			<button name="button set group" tool_tip="Sélectionnez un groupe avec lequel partager les permissions de l'objet"/>
@@ -286,7 +283,7 @@
 			<spinner label="Force Z" name="FlexForceZ"/>
 			<check_box label="Lumière" name="Light Checkbox Ctrl" tool_tip="Transforme cet objet en source de lumière"/>
 			<color_swatch name="colorswatch" tool_tip="Cliquez pour ouvrir le nuancier"/>
-			<texture_picker label="" name="light texture control" tool_tip="Cliquez pour choisir une image de projection (n'a d'effet que si le rendu différé est activé)"/>
+			<texture_picker name="light texture control" tool_tip="Cliquez pour choisir une image de projection (n'a d'effet que si le rendu différé est activé)"/>
 			<spinner label="Intensité" name="Light Intensity"/>
 			<spinner label="Angle de champ" name="Light FOV"/>
 			<spinner label="Portée" name="Light Radius"/>

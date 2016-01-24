@@ -12,7 +12,7 @@
 		<button name="copy_uri" label="Copier l'URI"/>
 		<text name="prepend_founded_by">Créé par :</text>
 		<button name="copy_name" label="Copier nom"/>
-		<texture_picker name="insignia" tool_tip="Cliquer pour choisir une image" label=""/>
+		<texture_picker name="insignia" tool_tip="Cliquer pour choisir une image"/>
 		<text_editor name="charter">Charte du groupe</text_editor>
 		<text name="join_cost_text">Rejoindre (00000L$)</text>
 		<button name="btn_join" label="Rejoindre"/>

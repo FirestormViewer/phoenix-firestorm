@@ -15,8 +15,6 @@
 		<layout_panel name="button_panel">
 			<check_box label="Notifier tous les évènements de la journée" name="notify_all"/>
 			<button name="btn_clear" label="Effacer"/>
-			<button name="btn_prev" label="&lt;"/>
-			<button name="btn_next" label="&gt;"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

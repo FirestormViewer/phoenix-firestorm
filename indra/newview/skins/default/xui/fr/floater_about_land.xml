@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="À propos du terrain">
-	<floater.string name="maturity_icon_general">"Parcel_PG_Dark"</floater.string>
-	<floater.string name="maturity_icon_moderate">"Parcel_M_Dark"</floater.string>
-	<floater.string name="maturity_icon_adult">"Parcel_R_Dark"</floater.string>
 	<floater.string name="Minutes">[MINUTES] min.</floater.string>
 	<floater.string name="Minute">min.</floater.string>
 	<floater.string name="Seconds">[SECONDS] sec.</floater.string>

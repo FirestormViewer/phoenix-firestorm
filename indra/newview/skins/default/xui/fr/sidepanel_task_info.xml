@@ -16,7 +16,7 @@
 	<panel.string name="Sale Mixed">Mixed Sale</panel.string>
 	<text name="title" value="Profil de l'objet"/>
 	<scroll_container name="item_profile_scroll">
-		<panel label="" name="properties_panel">
+		<panel name="properties_panel">
 			<text name="Name:">Nom :</text>
 			<text name="Description:">Description :</text>
 			<text name="CreatorNameLabel">Créateur :</text>
@@ -56,12 +56,6 @@
 			<spinner name="Edit Cost" label="Prix : L$"/>
 			<check_box label="Afficher dans la recherche" name="search_check" tool_tip="Laissez la possibilité aux personnes de voir cet objet dans les résultats de recherche"/>
 			<text name="pathfinding_attributes_label" width="180">Attributs de recherche de chemin :</text>
-			<text name="B:">B:</text>
-			<text name="O:">O:</text>
-			<text name="G:">G:</text>
-			<text name="E:">E:</text>
-			<text name="N:">N:</text>
-			<text name="F:">F:</text>
 		</panel>
 	</scroll_container>
 	<layout_stack name="buttons_ls">

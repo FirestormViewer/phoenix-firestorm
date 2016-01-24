@@ -5,7 +5,6 @@
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<fs_scroll_list name="search_results_people">
-			<columns label="" name="icon"/>
 			<columns label="Nom" name="username"/>
 		</fs_scroll_list>
 		<button label="Précédent" name="people_back"/>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel label="Avancés" name="advanced">
-	<panel.string name="aspect_ratio_text">[NUM] : [DEN]</panel.string>
 	<panel.string name="middle_mouse">Clic molette</panel.string>
 	<check_box label="Autoriser les clients multiples (Peut réduire la stabilité et les performances)" name="allow_multiple_viewer_check"/>
 	<check_box label="Autoriser la connexion à d'autres univers (Les univers ne supportent pas tous Firestorm)" name="show_grid_selection_check"/>

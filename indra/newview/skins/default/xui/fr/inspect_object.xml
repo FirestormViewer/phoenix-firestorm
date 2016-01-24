@@ -15,7 +15,6 @@
 	</text>
 	<text name="price_text">L$30,000</text>
 	<icon name="secure_browsing" tool_tip="Navigation sécurisée"/>
-	<text name="object_media_url">http://www.superdupertest.com</text>
 	<button label="Acheter" name="buy_btn"/>
 	<button label="Payer" name="pay_btn"/>
 	<button label="Prendre une copie" name="take_free_copy_btn"/>

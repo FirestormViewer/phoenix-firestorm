@@ -3,7 +3,7 @@
 	<panel.string name="string repeats per meter">Répétitions par mètres</panel.string>
 	<panel.string name="string repeats per face">Répétitions par faces</panel.string>
 	<text name="color label">Couleur</text>
-	<color_swatch label="" name="colorswatch" tool_tip="Cliquer pour ouvrir le nuancier"/>
+	<color_swatch name="colorswatch" tool_tip="Cliquer pour ouvrir le nuancier"/>
 	<text name="color trans">Transparence %</text>
 	<text name="glow label">Brillance</text>
 	<check_box label="Lumière maximale" name="checkbox fullbright"/>
@@ -58,7 +58,7 @@
 	<text name="label glossiness">Éclat</text>
 	<text name="label environment">Environnement</text>
 	<text name="label shinycolor">Couleur</text>
-	<color_swatch label="" name="shinycolorswatch" tool_tip="Cliquer pour ouvrir le nuancier"/>
+	<color_swatch name="shinycolorswatch" tool_tip="Cliquer pour ouvrir le nuancier"/>
 	<text name="media_info">L'URL du média, si sélectionné, va ici</text>
 	<button name="add_media" tool_tip="Ajouter un média" label="Choisir..."/>
 	<button name="delete_media" tool_tip="Effacer cette texture de média" label="Enlever"/>
@@ -69,9 +69,9 @@
 		<combo_box.item label="Planaire" name="Planar"/>
 	</combo_box>
 	<spinner label="Échelle horizontale" name="TexScaleU"/>
-	<button name="flipTextureScaleU" label="" tool_tip="Retourner"/>
+	<button name="flipTextureScaleU" tool_tip="Retourner"/>
 	<spinner label="Échelle verticale" name="TexScaleV"/>
-	<button name="flipTextureScaleV" label="" tool_tip="Retourner"/>
+	<button name="flipTextureScaleV" tool_tip="Retourner"/>
 	<spinner label="Répétition par mètres" name="rptctrl"/>
 	<spinner label="Rotation (degrés)" name="TexRot"/>
 	<spinner label="Décalage horizontal" name="TexOffsetU"/>

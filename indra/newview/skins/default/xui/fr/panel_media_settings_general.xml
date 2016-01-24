@@ -14,7 +14,4 @@
 	<text name="media_setting_note">Note : Les résidents peuvent ignorer ce paramètre</text>
 	<check_box label="Redimensionnement automatique du média à la taille de la face de l'objet" name="auto_scale"/>
 	<text name="size_label">Taille :</text>
-	<spinner label="" name="width_pixels"/>
-	<text name="X_label">X</text>
-	<spinner label="" name="height_pixels"/>
 </panel>

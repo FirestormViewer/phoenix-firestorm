@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="objectcontents" title="Contenu de l'objet">
-	<text name="object_name">[DESC]:</text>
 	<layout_stack name="button_bar_ls">
 		<layout_panel name="copy_btn_lp" width="150">
 			<flyout_button label="Copier dans l'inventaire" name="copy_flyout" width="140">

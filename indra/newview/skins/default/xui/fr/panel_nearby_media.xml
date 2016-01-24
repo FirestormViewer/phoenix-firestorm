@@ -21,7 +21,6 @@
 			<combo_box.item label="Portés" name="OnOthers"/>
 		</combo_box>
 		<scroll_list bg_stripe_color="SL-Titanium_25" name="media_list">
-			<scroll_list.columns label="" name="media_checkbox_ctrl"/>
 			<scroll_list.columns label="Proximité" name="media_proximity"/>
 			<scroll_list.columns label="Visible" name="media_visibility"/>
 			<scroll_list.columns label="Classe" name="media_class"/>

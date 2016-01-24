@@ -7,6 +7,5 @@
 	<scroll_list name="region_list" tool_tip="Double-cliquez sur une entrée pour la visualiser sur la carte du monde.">
 		<scroll_list.columns name="region_label" label="Libellé"/>
 		<scroll_list.columns name="region_name" label="Région"/>
-		<scroll_list.columns name="region_agent_count" label="#"/>
 	</scroll_list>
 </floater>

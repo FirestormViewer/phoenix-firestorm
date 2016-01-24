@@ -27,7 +27,7 @@
 			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>
 			<check_box label="Permettre aux scripts d'afficher la carte (llMapDestination)" name="ScriptsCanShowUI"/>
 			<text name="revokepermissions_txt">Révoquer les permissions :</text>
-			<radio_group name="FSRevokePerms" tool_tip="">
+			<radio_group name="FSRevokePerms">
 				<radio_item label="Jamais (Comportement par défaut)" name="never_radio"/>
 				<radio_item label="Révoquer s'asseoir" name="sit_radio"/>
 				<radio_item label="Révoquer se lever" name="stand_radio"/>
@@ -60,7 +60,6 @@
 			<combo_box name="BeamColor_combo" tool_tip="Sélectionnez la couleur du rayon de sélection" left_delta="80" width="160" />
 			<button name="BeamColor_new" label="Nouveau.." tool_tip="Créer un nouveau préréglage de couleurs"/>
 			<button name="BeamColor_refresh" label="Actualiser" tool_tip="Actualiser la liste des préréglages"/>
-			<button name="PhoenixBeamPrev_rainbow" label=""/>
 			<slider name="FSMaxBeamsPerSecond" label="Fréquence :" tool_tip="Fréquence d'actualisation du rayon par seconde. 40 par défaut"/>
 			<check_box label="Activer le rayon de sélection" name="SLPartBeam"/>
 			<check_box label="Communiquer la sélection au chat" name="FSParticleChat" tool_tip="Communique les données sur la sélection (l'heure de début et de fin, et les coordonnées globales) au canal de discussion 9000."/>
@@ -68,7 +67,6 @@
 			<button name="delete_beam" label="Supprimer" width="75" tool_tip="Supprimer cette forme"/>
 			<button name="custom_beam_btn" label="Nouvelle.." tool_tip="Créer une nouvelle forme de rayon"/>
 			<button name="refresh_beams" label="Actualiser" tool_tip="Actualiser la liste des formes"/>
-			<button name="PhoenixBeamPrev_Phoenix" label=""/>
 			<slider name="FSBeamShapeScale" label="Echelle :" tool_tip="Modifier l'échelle de la forme utilisée" label_width="50" width="200"/>
 			<text name="BridgeProtocols">Intégration de protocoles externes au Bridge LSL :</text>
 			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO" name="BridgeIntegrationOC"/>
@@ -99,7 +97,7 @@
 			<check_box label="Fantôme" name="FSBuildPrefs_PhantomToggle"/>
 			<check_box label="Physique" name="FSBuildPrefs_PhysicalToggle"/>
 			<check_box label="Temporaire" name="FSBuildPrefs_TemporaryToggle"/>
-			<combo_box name="material" tool_tip="">
+			<combo_box name="material">
 				<combo_item name="Stone" label="Pierre"/>
 				<combo_item name="Metal" label="Métal"/>
 				<combo_item name="Glass" label="Verre"/>
@@ -121,7 +119,7 @@
 			</combo_box>
 			<check_box name="FSBuildPrefs_EmbedItem" label="Intégrer un objet dans le nouveau prim"/>
 			<fs_embedded_item_drop_target name="embed_item" tool_tip="Glissez un objet ici.">Glissez un objet ici.</fs_embedded_item_drop_target>
-			<text name="build_item_add_disp_rect_txt" tool_tip="">Actuellement : [ITEM]</text>
+			<text name="build_item_add_disp_rect_txt">Actuellement : [ITEM]</text>
 			<text name="text_box_pivotpoint">Point de pivot</text>
 			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
 			<spinner label="Pos. X" name="X pos"/>

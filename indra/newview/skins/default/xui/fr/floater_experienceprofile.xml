@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <floater name="experience_profile" title="Expérience">
 	<floater.string name="empty_slurl">(aucun)</floater.string>
-	<floater.string name="maturity_icon_general">"Parcel_PG_Light"</floater.string>
-	<floater.string name="maturity_icon_moderate">"Parcel_M_Light"</floater.string>
-	<floater.string name="maturity_icon_adult">"Parcel_R_Light"</floater.string>
 	<text name="edit_title">Expérience</text>
 	<tab_container hide_tabs="true" name="tab_container">
 		<panel name="panel_experience_info">
@@ -54,7 +51,7 @@
 					<button name="location_btn" label="Défini sur actuel"/>
 					<button name="clear_btn" label="Effacer le Lieu"/>
 					<text name="edit_marketplace">Magasin Marketplace :</text>
-					<check_box tool_tip="" label="Activer l'expérience" name="edit_enable_btn"/>
+					<check_box label="Activer l'expérience" name="edit_enable_btn"/>
 					<check_box label="Cacher la recherche" name="edit_private_btn"/>
 					<button label="Retour" name="cancel_btn"/>
 					<button label="Sauvegarder" name="save_btn"/>

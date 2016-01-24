@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="incoming call">
-	<floater.string name="lifetime">5</floater.string>
 	<floater.string name="localchat">Chat vocal à proximité</floater.string>
 	<floater.string name="anonymous">Anonyme</floater.string>
 	<floater.string name="VoiceInviteP2P">vous appelle.</floater.string>

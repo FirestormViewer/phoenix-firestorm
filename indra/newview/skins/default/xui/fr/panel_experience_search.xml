@@ -17,14 +17,10 @@
 			<icons_combo_box.item label="Générale" name="PG"/>
 		</icons_combo_box>
 		<scroll_list name="search_results">
-			<columns name="maturity" label=""/>
 			<columns name="experience_name" label="Nom"/>
 			<columns name="owner" label="Propriétaire"/>
 		</scroll_list>
-		<button label="OK" label_selected="OK" name="ok_btn"/>
 		<button label="Annuler" name="cancel_btn"/>
 		<button label="Voir le profil" name="profile_btn"/>
-		<button label="&lt;" name="left_btn"/>
-		<button label="&gt;" name="right_btn"/>
 	</panel>
 </panel>

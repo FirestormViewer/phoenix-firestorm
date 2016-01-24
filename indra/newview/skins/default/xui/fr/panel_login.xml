@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <panel name="panel_login">
-	<panel.string name="forgot_password_url">http://secondlife.com/account/request.php</panel.string>
 	<layout_stack name="ui_stack">
 		<layout_panel name="ui_container">
 			<combo_box label="Nom d'utilisateur" tool_tip="Le nom d'utilisateur avec lequel vous vous êtes enregistré, comme bobsmith12 ou Steller Sunshine" name="username_combo"/>

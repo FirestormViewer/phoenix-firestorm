@@ -2,5 +2,4 @@
 <panel name="LLScrollingPanelParam">
 	<text name="Loading...">Chargement...</text>
 	<text name="Loading...2">Chargement...</text>
-	<slider label="[DESC]" name="param slider"/>
 </panel>

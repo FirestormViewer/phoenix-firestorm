@@ -8,6 +8,6 @@
 		<panel label="Message" name="panel_postcard_message"/>
 		<panel label="Paramètres" name="panel_postcard_settings"/>
 	</tab_container>
-	<button label="▶ Sélection" name="cancel_btn"/>
+	<button label="&#x25B6; Sélection" name="cancel_btn"/>
 	<button label="Envoyer" name="send_btn"/>
 </panel>

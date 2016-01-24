@@ -2,21 +2,8 @@
 <panel name="panel_profile" label="Profil">
 	<string name="status_online">Connecté</string>
 	<string name="status_offline">Déconnecté</string>
-	<string name="CaptionTextAcctInfo">
- [ACCTTYPE]
- [PAYMENTINFO]
- [FIRESTORM][FSDEV][FSSUPP][FSQA]
-	</string>
-	<string name="payment_update_link_url">http://www.secondlife.com/account/billing.php?lang=en</string>
-	<string name="partner_edit_link_url">http://www.secondlife.com/account/partners.php?lang=en</string>
 	<string name="no_partner_text">Aucun</string>
 	<string name="no_group_text">Aucun</string>
-	<string name="RegisterDateFormat">
- [REG_DATE]
- ([AGE])
-	</string>
-	<string name="name_text_args">[NAME]</string>
-	<string name="display_name_text_args">[DISPLAY_NAME]</string>
 	<text name="Name:">Nom :</text>
 	<button name="set_name" tool_tip="Définir le nom d'affichage"/>
 	<text name="Key:">ID :</text>

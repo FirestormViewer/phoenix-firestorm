@@ -9,10 +9,8 @@
 	<text name="LabelItemNameTitle">Nom :</text>
 	<text name="LabelItemDescTitle">Description :</text>
 	<text name="LabelCreatorTitle">Créateur :</text>
-	<text name="LabelCreatorName">TestString PleaseIgnore</text>
 	<button label="Profil..." name="BtnCreator"/>
 	<text name="LabelOwnerTitle">Propriétaire :</text>
-	<text name="LabelOwnerName">TestString PleaseIgnore</text>
 	<button label="Profil..." name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">Acquis le :</text>
 	<text name="LabelAcquiredDate">Wed May 24 12:50:46 2006</text>
@@ -37,10 +35,4 @@
 		<combo_box.item name="Original" label="Original"/>
 	</combo_box>
 	<spinner name="Edit Cost" label="Prix :"/>
-	<text name="CurrencySymbol">L$</text>
-	<text name="BaseMaskDebug">B :</text>
-	<text name="OwnerMaskDebug">O :</text>
-	<text name="GroupMaskDebug">G :</text>
-	<text name="EveryoneMaskDebug">E :</text>
-	<text name="NextMaskDebug">N :</text>
 </floater>

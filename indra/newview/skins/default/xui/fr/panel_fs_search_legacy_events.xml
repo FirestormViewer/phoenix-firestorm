@@ -6,14 +6,11 @@
 			<radio_item label="En cours et à venir" name="current"/>
 			<radio_item label="Par date" name="date"/>
 		</radio_group>
-		<text name="events_date">4/20</text>
 		<combo_box name="events_category">
 			<combo_box.item label="Toutes catégories" name="any"/>
-			<combo_box.item label=""/>
 			<combo_box.item label="Discussions" name="discussion"/>
 			<combo_box.item label="Sports" name="sports"/>
 			<combo_box.item label="Musique" name="music"/>
- 			\
 			<combo_box.item label="Commercial" name="commercial"/>
 			<combo_box.item label="Clubbing/Divertissement" name="nightlife"/>
 			<combo_box.item label="Jeux/Concours" name="games"/>
@@ -23,13 +20,9 @@
 			<combo_box.item label="Charité/Entraide" name="charity"/>
 			<combo_box.item label="Divers" name="misc"/>
 		</combo_box>
-		<check_box label="" name="pg_all"/>
-		<check_box label="" name="mature_all"/>
-		<check_box label="" name="adult_all"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_events">
-			<columns label="" name="icon"/>
 			<columns label="Nom de l'évènement" name="name"/>
 			<columns label="Date/Heure" name="date"/>
 			<columns label="Heure" name="time"/>

@@ -22,7 +22,6 @@
 	<button label="Uploader" label_selected="Uploader" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
 		<column name="unit_name" label="Nom"/>
-		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
 	<button label="OK" label_selected="OK" name="Select"/>
 	<button label="Annuler" label_selected="Annuler" name="Cancel"/>

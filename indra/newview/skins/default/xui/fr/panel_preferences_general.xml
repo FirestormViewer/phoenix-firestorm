@@ -24,7 +24,7 @@
 		<combo_box.item label="Dernier emplacement" name="MyLastLocation"/>
 		<combo_box.item label="Domicile" name="MyHome"/>
 	</combo_box>
-	<check_box label="Afficher à la connexion" name="show_location_checkbox" tool_tip=""/>
+	<check_box label="Afficher à la connexion" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">Afficher le nom d'affichage :</text>
 	<radio_group name="Name_Tag_Preference">
 		<radio_item label="Non" name="radio"/>
@@ -33,7 +33,7 @@
 	</radio_group>
 	<text name="RenderNameShowTime_LabelPrefix">(</text>
 	<text name="RenderNameShowTime_LabelSuffix">secondes)</text>
-	<check_box label="Mon nom" name="show_my_name_checkbox1" tool_tip=""/>
+	<check_box label="Mon nom" name="show_my_name_checkbox1"/>
 	<check_box label="Noms d'utilisateur" name="show_slids" tool_tip="Afficher le nom d'utilisateur, comme bobsmith123"/>
 	<check_box label="Titres de groupe" name="show_all_title_checkbox1" tool_tip="Afficher le titre de groupe, comme Officier ou Membre"/>
 	<check_box label="Masquer mon titre de groupe" name="RenderHideGroupTitle" tool_tip="Masque ou affiche votre titre de groupe à vous-même et à autrui."/>
@@ -45,7 +45,7 @@
 	<check_box label="Mode de réponse automatique près du nom" name="FSShowAutorespondInNameTag" tool_tip="Affichera si vous avez un message automatique de réponse dans votre propre nom."/>
 	<text name="title_afk_text">Absent après :</text>
 	<text name="title_afk_quit_text">Déconnecter après avoir été absent :</text>
-	<combo_box label="Délai d'inactivité :" name="afk" tool_tip="">
+	<combo_box label="Délai d'inactivité :" name="afk">
 		<combo_box.item label="2 minutes" name="item0"/>
 		<combo_box.item label="5 minutes" name="item1"/>
 		<combo_box.item label="10 minutes" name="item2"/>
@@ -53,8 +53,8 @@
 		<combo_box.item label="60 minutes" name="item4"/>
 		<combo_box.item label="Jamais" name="item5"/>
 	</combo_box>
-	<check_box name="AvatarSitOnAway" label="S'asseoir si absent" tool_tip=""/>
-	<combo_box name="quitafk" tool_tip="">
+	<check_box name="AvatarSitOnAway" label="S'asseoir si absent"/>
+	<combo_box name="quitafk">
 		<combo_box.item label="2 minutes" name="item0"/>
 		<combo_box.item label="5 minutes" name="item1"/>
 		<combo_box.item label="10 minutes" name="item2"/>

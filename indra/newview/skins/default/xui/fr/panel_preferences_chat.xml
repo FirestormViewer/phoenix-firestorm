@@ -203,15 +203,10 @@
 		<panel label="Commandes" name="tab-CmdLine">
 			<check_box label="Activer l'utilisation de la barre de conversation pour les lignes de commandes" name="chat_cmd_toggle"/>.
 			<text name="FSCmdLineCalc_txt">Calc. expressions (ex: cmd SIN(2+2))</text>
-			<line_editor name="FSCmdLineCalc" tool_tip=""/>
 			<text name="FSCmdLineDrawDistance_txt">Changer Dist Affichage (ex: cmd meters)</text>
-			<line_editor name="FSCmdLineDrawDistance" tool_tip=""/>
 			<text name="FSCmdLineBandWidth_txt">Bande passante max. (ex: cmd kbps)</text>
-			<line_editor name="FSCmdLineBandWidth" tool_tip=""/>
 			<text name="FSCmdLineCopyCam_txt">Copier la position de la caméra</text>
-			<line_editor name="FSCmdLineCopyCam" tool_tip=""/>
 			<text name="FSCmdLineAO_txt">Activer/désactiver l'AO (ex: cmd on/off)</text>
-			<line_editor name="FSCmdLineAO" tool_tip=""/>
 			<text name="FSCmdLineClearChat_txt">Effacer les transcriptions (ex: cmd)</text>
 			<line_editor tool_tip="Effacer les transcriptions de conversation pour limiter les effets de spams." name="FSCmdLineClearChat"/>
 			<text name="FSCmdLineMedia_txt">Définir l'url du média (ex: cmd url type)</text>
@@ -219,28 +214,19 @@
 			<text name="FSCmdLineMusic_txt">Défini l'url du flux musical (ex: cmd url)</text>
 			<line_editor tool_tip="Défini et joue la musique en streaming correspondant à l'url entrée" name="FSCmdLineMusic"/>
 			<text name="FSCmdLineRezPlatform_txt">Bâtir une plateforme (ex: cmd 0 - 64)</text>
-			<line_editor name="FSCmdLineRezPlatform" tool_tip=""/>
 			<slider name="FSCmdLinePlatformSize" label="Largeur" tool_tip="De quelle taille voulez-vous que la plateforme soit ?"/>
 			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un avatar via son ID (ex: cmd key)</text>
-			<line_editor name="FSCmdLineKeyToName" tool_tip=""/>
 			<text name="FSCmdLineRollDice_txt">Lancer de dés (ex: cmd dice faces mt mv)</text>
 			<line_editor tool_tip="Lancer de dés - cmd [nombre de dés] [nombre de faces] [type de modificateur (optionnel)] [valeur du modificateur (optionnel)]. Exemple: cmd 1 20, cmd 2 40 + 5. L'absence de paramètres correspond à cmd 1 6 (dé standard)." name="FSCmdLineRollDice"/>
 			<text name="FSCmdLinePos_txt">Se téléporter dans la sim (ex: cmd x y z)</text>
-			<line_editor name="FSCmdLinePos" tool_tip=""/>
 			<text name="FSCmdLineGround_txt">Se téléporter au sol (ex: cmd)</text>
-			<line_editor name="FSCmdLineGround" tool_tip=""/>
 			<text name="FSCmdLineHeight_txt">Se téléporter à l'altitude.. (ex: cmd z)</text>
-			<line_editor name="FSCmdLineHeight" tool_tip=""/>
 			<text name="FSCmdTeleportToCam_txt">Se téléporter à la position de la caméra (ex: cmd)</text>
-			<line_editor name="FSCmdTeleportToCam" tool_tip=""/>
 			<text name="FSCmdLineOfferTp_txt">Téléporter un avatar (ex: cmd key)</text>
-			<line_editor name="FSCmdLineOfferTp" tool_tip=""/>
 			<text name="FSCmdLineTP2_txt">Se téléporter vers un avatar (ex: cmd name)</text>
 			<line_editor tool_tip="La syntaxe de cette commande permet des noms partiels et n'est pas sensible à la casse. Les résultats sont plus pertinents avec le radar ouvert." name="FSCmdLineTP2"/>
 			<text name="FSCmdLineTeleportHome_txt">Se téléporter à domicile (ex: cmd)</text>
-			<line_editor name="FSCmdLineTeleportHome" tool_tip=""/>
 			<text name="FSCmdLineMapTo_txt">Se téléporter dans une sim (ex: cmd simname)</text>
-			<line_editor name="FSCmdLineMapTo" tool_tip=""/>
 			<check_box label="Utilise la même position d'une sim à l'autre" name="toggle"/>
 		</panel>
 	</tab_container>

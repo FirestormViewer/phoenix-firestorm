@@ -17,10 +17,10 @@
 			<text name="title">Profil du lieu</text>
 		</layout_panel>
 		<layout_panel name="place_info_content">
-			<text name="region_title" value="SampleRegion"/>
 			<text name="maturity_value" value="inconnue"/>
-			<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
-			<panel name="description_panel"><expandable_text name="description" value="(Chargement ...)"/></panel>
+			<panel name="description_panel">
+				<expandable_text name="description" value="(Chargement ...)"/>
+			</panel>
 			<panel name="landmark_info_panel">
 				<text name="owner_label" value="Propriétaire :" width="70"/>
 				<text name="creator_label" value="Créateur :" width="70"/>

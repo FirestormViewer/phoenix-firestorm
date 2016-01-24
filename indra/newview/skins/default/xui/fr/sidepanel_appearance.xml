@@ -9,7 +9,7 @@
 		<button label="O" name="openoutfit_btn"/>
 		<text name="currentlook_status">(Statut)</text>
 		<text name="currentlook_name">(Chargement)</text>
-		<button label="" name="edit_outfit_btn" tool_tip="Modifier cette tenue"/>
+		<button name="edit_outfit_btn" tool_tip="Modifier cette tenue"/>
 	</panel>
 	<filter_editor label="Filtrer les tenues" name="Filter"/>
 </panel>

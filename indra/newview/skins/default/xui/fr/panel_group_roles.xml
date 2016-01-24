@@ -10,9 +10,6 @@
  cliquant sur leurs noms).
 			</panel.string>
 			<panel.string name="donation_area">[AREA] m²</panel.string>
-			<panel.string name="power_folder_icon">Inv_FolderClosed</panel.string>
-			<panel.string name="power_all_have_icon">Checkbox_On</panel.string>
-			<panel.string name="power_partial_icon">Checkbox_Off</panel.string>
 			<filter_editor label="Filtrer des membres" name="filter_input"/>
 			<name_list name="member_list" short_names="false">
 				<name_list.columns label="Membre" name="name"/>
@@ -33,14 +30,10 @@
  comprenant les rôles Tous et Propriétaire.
 			</panel.string>
 			<panel.string name="cant_delete_role">Les rôles 'Tous' et 'Propriétaire' sont spéciaux et ne peuvent être supprimés.</panel.string>
-			<panel.string name="power_folder_icon">Inv_FolderClosed</panel.string>
-			<panel.string name="power_all_have_icon">Checkbox_On</panel.string>
-			<panel.string name="power_partial_icon">Checkbox_Off</panel.string>
 			<filter_editor label="Filtrer les rôles" name="filter_input"/>
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Rôle" name="name"/>
 				<scroll_list.columns label="Titre" name="title"/>
-				<scroll_list.columns label="#" name="members"/>
 			</scroll_list>
 			<button name="role_create" label="Nouveau rôle"/>
 			<button name="role_delete" label="Supprimer"/>
@@ -50,15 +43,8 @@
                  Les droits offrent aux membres de faire des actions
  spécifiques dans ce groupe. Il existe une large liste de droits.
 			</panel.string>
-			<panel.string name="power_folder_icon">Inv_FolderClosed</panel.string>
-			<panel.string name="power_all_have_icon">Checkbox_On</panel.string>
-			<panel.string name="power_partial_icon">Checkbox_Off</panel.string>
 			<filter_editor label="Filtrer les actions" name="filter_input"/>
-			<scroll_list name="action_list" tool_tip="Sélectionner un droit pour afficher plus de détails">
-				<scroll_list.columns label="" name="icon"/>
-				<scroll_list.columns label="" name="checkbox"/>
-				<scroll_list.columns label="" name="action"/>
-			</scroll_list>
+			<scroll_list name="action_list" tool_tip="Sélectionner un droit pour afficher plus de détails"/>
 		</panel>
 		<panel label="Résidents bannis" name="banlist_sub_tab" tool_tip="Afficher les résidents bannis de ce groupe.">
 			<panel.string name="help_text">Les résidents bannis ne seront pas autorisés à rejoindre ce groupe.</panel.string>
@@ -74,16 +60,8 @@
 	</tab_container>
 	<panel name="members_footer">
 		<text name="assigned_roles_label">Rôles assignés</text>
-		<scroll_list name="member_assigned_roles">
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="role"/>
-		</scroll_list>
 		<text name="static2">Droits accordés</text>
-		<scroll_list tool_tip="Consultez l'onglet des droits pour les détails des droits accordés" name="member_allowed_actions">
-			<scroll_list.columns label="" name="icon"/>
-			<scroll_list.columns label="" name="checkbox"/>
-			<scroll_list.columns label="" name="action"/>
-		</scroll_list>
+		<scroll_list tool_tip="Consultez l'onglet des droits pour les détails des droits accordés" name="member_allowed_actions"/>
 	</panel>
 	<panel name="roles_footer">
 		<text name="role_name_label">Nom du rôle</text>
@@ -95,11 +73,7 @@
 		</panel>
 		<panel name="group_roles_layout_panel2">
 			<text name="allowed_abilities_label">Droits accordés</text>
-			<scroll_list name="role_allowed_actions" tool_tip="Consulter l'onglet des droits pour les détails de chaque droit accordé">
-				<scroll_list.columns label="" name="icon"/>
-				<scroll_list.columns label="" name="checkbox"/>
-				<scroll_list.columns label="" name="action"/>
-			</scroll_list>
+			<scroll_list name="role_allowed_actions" tool_tip="Consulter l'onglet des droits pour les détails de chaque droit accordé"/>
 		</panel>
 	</panel>
 	<panel name="actions_footer">

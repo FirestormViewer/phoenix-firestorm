@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect_avatar">
-	<string name="Subtitle">[AGE]</string>
-	<string name="Details">[SL_PROFILE]</string>
-	<text name="user_details">This is my second life description and I really think it is great. But for some reason my description is super extra long because I like to talk a whole lot
-	</text>
 	<slider name="volume_slider" tool_tip="Volume de la voix"/>
 	<button label="Devenir amis" name="add_friend_btn"/>
 	<button label="IM" name="im_btn"/>

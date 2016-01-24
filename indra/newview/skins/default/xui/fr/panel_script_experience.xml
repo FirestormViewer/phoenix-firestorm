@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <panel name="script_experience" title="Expérience">
 	<button name="Expand Experience" label="Expérience"/>
 	<check_box label="Utilise de l'expérience" name="enable_xp"/>
@@ -18,15 +18,6 @@
 			</text>
 		</layout_panel>
 		<layout_panel>
-			<text>
-         EasySit Animator 1.2.4
-			</text>
-			<text>
-         Kyle's Superhero RPG
-			</text>
-			<text>
-         Oui
-			</text>
 			<combo_box label="Sélectionne une expérience..." name="Experiences..."/>
 		</layout_panel>
 	</layout_stack>

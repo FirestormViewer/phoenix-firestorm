@@ -82,12 +82,12 @@
 			<check_box label="Nom d'affichage" width="120" name="FSFriendListColumnShowDisplayName" tool_tip="La liste de contacts affichera une colonne avec le nom d'affichage."/>
 			<check_box label="Nom complet" name="FSFriendListColumnShowFullName" tool_tip="La liste de contacts affichera une colonne avec le nom complet."/>
 			<text name="textFriendListSortOrder" width="110">Trier par :</text>
-			<radio_group name="FSFriendListSortOrder" tool_tip="">
+			<radio_group name="FSFriendListSortOrder">
 				<radio_item label="Nom d'utilisateur" width="120" name="username"/>
 				<radio_item label="Nom d'affichage" name="displayname"/>
 			</radio_group>
 			<text name="textFriendListFullNameFormat" width="90">Format du nom :</text>
-			<radio_group name="FSFriendListFullNameFormat" tool_tip="">
+			<radio_group name="FSFriendListFullNameFormat">
 				<radio_item label="Nom d'utilisat. (Nom d'affichage)" width="190" name="username_displayname"/>
 				<radio_item label="Nom d'affichage (Nom d'utilisat.)" name="displayname_username"/>
 			</radio_group>

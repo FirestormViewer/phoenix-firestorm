@@ -33,17 +33,17 @@
 	</menu_bar>
 	<layout_stack name="script_editor_button_bar">
 		<layout_panel name="script_editor_buttons_panel">
-			<button tool_tip="Enregistrer le script" label="" name="save_btn"/>
-			<button tool_tip="Éditeur de script externe" label="" name="Edit_btn"/>
-			<button tool_tip="Charger un script à partir du disque" label="" name="load_disk_btn"/>
-			<button tool_tip="Enregistrer un script sur le disque" label="" name="save_disk_btn"/>
-			<button tool_tip="Couper" label="" name="cut_btn"/>
-			<button tool_tip="Copier" label="" name="copy_btn"/>
-			<button tool_tip="Coller" label="" name="paste_btn"/>
-			<button tool_tip="Annuler" label="" name="undo_btn"/>
-			<button tool_tip="Refaire" label="" name="redo_btn"/>
-			<button tool_tip="Rechercher / Remplacer" label="" name="search_btn"/>
-			<button tool_tip="Préférences de l'éditeur" label="" name="prefs_btn"/>
+			<button tool_tip="Enregistrer le script" name="save_btn"/>
+			<button tool_tip="Éditeur de script externe" name="Edit_btn"/>
+			<button tool_tip="Charger un script à partir du disque" name="load_disk_btn"/>
+			<button tool_tip="Enregistrer un script sur le disque" name="save_disk_btn"/>
+			<button tool_tip="Couper" name="cut_btn"/>
+			<button tool_tip="Copier" name="copy_btn"/>
+			<button tool_tip="Coller" name="paste_btn"/>
+			<button tool_tip="Annuler" name="undo_btn"/>
+			<button tool_tip="Refaire" name="redo_btn"/>
+			<button tool_tip="Rechercher / Remplacer" name="search_btn"/>
+			<button tool_tip="Préférences de l'éditeur" name="prefs_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<script_editor name="Script Editor">

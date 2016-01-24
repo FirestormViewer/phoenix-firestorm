@@ -24,21 +24,6 @@
 	<floater.string name="linkset_terrain_name">
 		[Terrain]
 	</floater.string>
-	<floater.string name="linkset_terrain_description">
-		--
-	</floater.string>
-	<floater.string name="linkset_terrain_owner">
-		--
-	</floater.string>
-	<floater.string name="linkset_terrain_scripted">
-		--
-	</floater.string>
-	<floater.string name="linkset_terrain_land_impact">
-		--
-	</floater.string>
-	<floater.string name="linkset_terrain_dist_from_you">
-		--
-	</floater.string>
 	<floater.string name="linkset_owner_loading">
 		[Chargement]
 	</floater.string>
@@ -134,21 +119,9 @@
 		<text name="walkability_coefficients_label">
 			Marche possible :
 		</text>
-		<text name="edit_a_label">
-			A
-		</text>
 		<line_editor name="edit_a_value" tool_tip="Marche possible pour les personnages de type A. Exemple de type de personnage : humanoïde."/>
-		<text name="edit_b_label">
-			B
-		</text>
 		<line_editor name="edit_b_value" tool_tip="Marche possible pour les personnages de type B. Exemple de type de personnage : créature."/>
-		<text name="edit_c_label">
-			C
-		</text>
 		<line_editor name="edit_c_value" tool_tip="Marche possible pour les personnages de type C. Exemple de type de personnage : mécanique."/>
-		<text name="edit_d_label">
-			D
-		</text>
 		<line_editor name="edit_d_value" tool_tip="Marche possible pour les personnages de type D. Exemple de type de personnage : autre."/>
 		<button label="Appliquer les changements" name="apply_edit_values"/>
 		<text name="suggested_use_a_label">

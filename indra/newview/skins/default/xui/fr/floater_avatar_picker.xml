@@ -40,6 +40,5 @@
 			</fs_scroll_list>
 		</panel>
 	</tab_container>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Annuler" label_selected="Annuler" name="cancel_btn"/>
 </floater>

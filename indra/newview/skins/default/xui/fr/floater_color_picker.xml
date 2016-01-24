@@ -13,7 +13,6 @@
 		</panel>
 		<panel name="Hex" label="Hexa">
 			<text name="hex_text">Code Hexa (#rrvvbb):</text>
-			<text name="hex_hash_prefix">#</text>
 		</panel>
 	</tab_container>
 	<text name="h_val_text">Teinte :</text>
@@ -21,7 +20,6 @@
 	<text name="l_val_text">Lumière :</text>
 	<check_box label="Appliquer" name="apply_immediate"/>
 	<button label="Copier LSL" tool_tip="Copie la valeur de couleur dans un format LSL (&lt;r, g, b&gt;)." name="copy_lsl_btn"/>
-	<button label="OK" label_selected="OK" name="select_btn"/>
 	<button label="Annuler" label_selected="Annuler" name="cancel_btn"/>
 	<text name="Current color:">^ Couleur actuelle ^</text>
 	<text name="(Drag below to save.)">Glissez pour enregistrer</text>

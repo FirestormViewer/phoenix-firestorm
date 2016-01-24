@@ -443,7 +443,7 @@ Could not start or stop the script because the object it is on could not be foun
 The object may be out of range or may have been deleted.
 	</notification>
 	<notification name="CannotDownloadFile">Unable to download file</notification>
-	<notification name="MediaFileDownloadUnsupported" label="">
+	<notification name="MediaFileDownloadUnsupported">
     You have requested a file download, which is not supported within [APP_NAME].
 		<usetemplate ignoretext="Warn about unsupported file downloads" name="okignore" yestext="OK"/>
 	</notification>
@@ -2794,7 +2794,7 @@ Hiding the Speak button will disable the voice feature.
 	<notification name="HintDestinationGuide" label="Explore the World">The Destination Guide contains thousands of new places to discover. Select a location and choose Teleport to start exploring.</notification>
 	<notification name="HintSidePanel" label="Side Panel">Get quick access to your inventory, outfits, profiles and more in the side panel.</notification>
 	<notification name="HintMove" label="Move">To walk or run, open the Move Panel and use the directional arrows to navigate. You can also use the directional keys on your keyboard.</notification>
-	<notification name="HintMoveClick" label="">
+	<notification name="HintMoveClick">
 1. Click to Walk
 Click anywhere on the ground to walk to that spot.
 2. Click and Drag to Rotate View
@@ -2834,55 +2834,55 @@ The site at '&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;' in realm '[REALM]' requir
 			<button name="cancel" text="Annuler"/>
 		</form>
 	</notification>
-	<notification name="ModeChange" label="">
+	<notification name="ModeChange">
 Changing modes requires you to quit and restart.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoClassifieds" label="">
+	<notification name="NoClassifieds">
     Creation and editing of Classifieds is only available in Advanced mode. Would you like to quit and change modes? The mode selector can be found on the login screen.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoGroupInfo" label="">
+	<notification name="NoGroupInfo">
     Creation and editing of Groups is only available in Advanced mode. Would you like to quit and change modes? The mode selector can be found on the login screen.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoPlaceInfo" label="">
+	<notification name="NoPlaceInfo">
     Viewing place profile is only available in Advanced mode. Would you like to quit and change modes? The mode selector can be found on the login screen.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoPicks" label="">
+	<notification name="NoPicks">
     Creation and editing of Picks is only available in Advanced mode. Would you like to quit and change modes? The mode selector can be found on the login screen.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoWorldMap" label="">
+	<notification name="NoWorldMap">
     Viewing of the world map is only available in Advanced mode. Would you like to quit and change modes? The mode selector can be found on the login screen.
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoVoiceCall" label="">
+	<notification name="NoVoiceCall">
     Voice calls are only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoAvatarShare" label="">
+	<notification name="NoAvatarShare">
     Sharing is only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoAvatarPay" label="">
+	<notification name="NoAvatarPay">
 	  Paying other residents is only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoInventory" label="">
+	<notification name="NoInventory">
     Viewing inventory is only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoAppearance" label="">
+	<notification name="NoAppearance">
     The appearance editor is only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="NoSearch" label="">
+	<notification name="NoSearch">
     Search is only available in Advanced mode. Would you like to logout and change modes?
 		<usetemplate name="okcancelbuttons" yestext="Quitter" notext="Ne pas quitter"/>
 	</notification>
-	<notification name="ConfirmHideUI" label="">
+	<notification name="ConfirmHideUI">
     This action will hide all menu items and buttons. To get them back, click [SHORTCUT] again.
 		<usetemplate name="okcancelignore" yestext="OK" notext="Annuler" ignoretext="Confirm before hiding UI"/>
 	</notification>
@@ -3511,7 +3511,7 @@ la région "[REGION]" ?
 		</form>
 	</notification>
 	<notification name="SnoozeDurationInvalidInput">Veuillez saisir une durée valide de mise en sourdine !</notification>
-	<notification name="PickLimitReached" label="">Impossible de créer de nouveau favori car la limite a été atteinte.</notification>
+	<notification name="PickLimitReached">Impossible de créer de nouveau favori car la limite a été atteinte.</notification>
 	<notification name="GlobalOnlineStatusToggle">
 En raison de la charge serveur, la mise à jour de la visibilité de l'état de connexion des résidents peut prendre quelques instants pour être effective, merci de patienter.
 		<usetemplate ignoretext="M'informer que mettre à jour la visibilité de l'état des connexions peut prendre quelques instants" name="okignore" yestext="OK"/>

@@ -8,7 +8,7 @@
  Le clic-gauche change celle de départ.
  Le clic-droit change celle de fin.
 	</text>
-	<color_swatch label="" name="BeamColor_Preview" tool_tip="Cliquez pour ouvrir le sélecteur de couleur"/>
+	<color_swatch name="BeamColor_Preview" tool_tip="Cliquez pour ouvrir le sélecteur de couleur"/>
 	<text name="beamcolor_text2">Aperçu</text>
 	<slider name="BeamColor_Speed" label="Vitesse de rotation :" tool_tip="Contrôle la vitesse du cycle de couleurs"/>
 	<button label="Sauvegarder" name="BeamColor_Save"/>

@@ -6,7 +6,6 @@
 	<scroll_list name="gesture_list">
 		<scroll_list.columns label="Nom" name="name"/>
 		<scroll_list.columns label="Déclencheur" name="trigger"/>
-		<scroll_list.columns label="" name="key"/>
 		<scroll_list.columns label="Touche" name="shortcut"/>
 	</scroll_list>
 	<panel label="bottom_panel" name="bottom_panel">

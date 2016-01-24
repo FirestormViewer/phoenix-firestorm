@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater title="Auditer les produits du Marketplace" name="floater_marketplace_validation">
-	<button name="OK" label="OK" label_selected="OK"/>
-	<text_editor name="validation_text">MARKETPLACE_VALIDATION_TEXT</text_editor>
-</floater>
+<floater title="Auditer les produits du Marketplace" name="floater_marketplace_validation" />

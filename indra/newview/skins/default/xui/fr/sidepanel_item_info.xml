@@ -12,7 +12,7 @@
 	<text name="title" value="Profil de l'objet"/>
 	<text name="origin" value="(Inventaire)"/>
 	<scroll_container name="item_profile_scroll">
-		<panel label="" name="item_profile">
+		<panel name="item_profile">
 			<text name="LabelItemNameTitle">Nom :</text>
 			<text name="LabelItemDescTitle">Description :</text>
 			<text name="LabelCreatorTitle">Créateur :</text>

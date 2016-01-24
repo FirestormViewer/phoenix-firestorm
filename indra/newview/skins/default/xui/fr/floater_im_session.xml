@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-	<floater.string name="call_btn_start">Conv_toolbar_open_call</floater.string>
-	<floater.string name="call_btn_stop">Conv_toolbar_hang_up</floater.string>
 	<view name="contents_view">
 		<layout_stack name="main_stack">
 			<layout_panel name="toolbar_panel">

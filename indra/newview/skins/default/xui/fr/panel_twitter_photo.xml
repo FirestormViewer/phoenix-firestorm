@@ -1,22 +1,15 @@
 <?xml version="1.0"?>
 <panel name="panel_twitter_photo">
 	<text name="status_label">Quoi de neuf ?</text>
-	<text name="status_counter_label">140</text>
 	<check_box label="Inclure l'emplacement sur SL" name="add_location_cb"/>
 	<check_box label="Joindre une photo" name="add_photo_cb"/>
 	<combo_box name="resolution_combobox" tool_tip="Résolution de l'image">
 		<combo_box.item label="Fenêtre actuelle" name="CurrentWindow"/>
-		<combo_box.item label="320x240" name="320x240"/>
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="1280x1024" name="1280x1024"/>
-		<combo_box.item label="1600x1200" name="1600x1200"/>
 		<combo_box.item label="Personnalisée" name="Custom"/>
 	</combo_box>
-	<combo_box name="filters_combobox" tool_tip="Filtre de l'image"><combo_box.item label="Pas de filtre" name="NoFilter"/></combo_box>
-	<text name="spinner_x_lbl">x</text>
-	<spinner label="" name="custom_snapshot_height"/>
+	<combo_box name="filters_combobox" tool_tip="Filtre de l'image">
+		<combo_box.item label="Pas de filtre" name="NoFilter"/>
+	</combo_box>
 	<check_box label="Ratio conservé" name="keep_aspect_ratio"/>
 	<text name="working_lbl">Actualisation...</text>
 	<button label="Actualiser" name="new_snapshot_btn" tool_tip="Cliquez pour actualiser"/>

@@ -1,4 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_list_item" label="Expériences">
-	<text name="experience_name">Dummy Name</text>
-</panel>
+<panel name="panel_experience_list_item" label="Expériences" />

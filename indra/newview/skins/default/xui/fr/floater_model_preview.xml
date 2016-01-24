@@ -124,7 +124,6 @@
 			<panel label="Options d'upload" name="modifiers_panel">
 				<text name="scale_label">Échelle (1=tel quel):</text>
 				<text name="dimensions_label">Dimensions :</text>
-				<text name="import_dimensions">[X] X [Y] X [Z]</text>
 				<check_box name="upload_textures" label="Inclure les textures"/>
 				<text name="include_label" width="250">Pour les modèles d'avatar seulement :</text>
 				<check_box label="Inclure le poids de la peau" name="upload_skin"/>
@@ -144,7 +143,6 @@
 			<text name="server_weight">Serveur : [SIM]</text>
 			<text name="warning_title">NOTE :</text>
 			<text name="warning_message" width="700">Vous n'avez pas les droits pour télécharger les modèles en maille. [[VURL] Découvrez comment] pour obtenir une certification.</text>
-			<text name="status">[STATUS]</text>
 		</panel>
 	</panel>
 	<text name="lod_label">Aperçu :</text>

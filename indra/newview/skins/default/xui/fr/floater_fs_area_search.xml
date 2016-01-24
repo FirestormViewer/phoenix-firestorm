@@ -43,7 +43,6 @@
 			<text name="and">et</text>
 			<text name="mouse_text" width="120">Action du clic :</text>
 			<combo_box name="click_action" tool_tip="Action effectuée lorsque vous cliquez sur l'objet">
-				<combo_box.item label=" " name="click_blank"/>
 				<combo_box.item label="Tout" name="click_any"/>
 				<combo_box.item label="Toucher" name="click_touch"/>
 				<combo_box.item label="S'asseoir" name="click_sit"/>

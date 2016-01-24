@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Choses" name="objects panel">
-	<panel name="sidepanel_inventory_panel" label="">
+	<panel name="sidepanel_inventory_panel">
 		<layout_stack name="inventory_layout_stack">
-			<layout_panel name="main_inventory_layout_panel"><panel name="panel_main_inventory" label=""/></layout_panel>
 			<layout_panel name="inbox_layout_panel">
-				<panel name="marketplace_inbox" label="">
+				<panel name="marketplace_inbox">
 					<string name="InboxLabelWithArg">Objets reçus ([NUM])</string>
 					<string name="InboxLabelNoArg">Objets reçus</string>
 					<button label="Objets reçus" name="inbox_btn"/>
@@ -26,6 +25,4 @@
 			</layout_stack>
 		</panel>
 	</panel>
-	<panel name="sidepanel__item_panel" label=""/>
-	<panel name="sidepanel__task_panel" label=""/>
 </panel>

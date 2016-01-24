@@ -5,7 +5,6 @@
 Si vous souhaitez récupérer ces scripts, ils seront placés dans le dossier 'Objets trouvés' de votre inventaire.
 	</text>
 	<scroll_list name="script_list">
-		<scroll_list.columns label="" name="script_check"/>
 		<scroll_list.columns label="Nom du script" name="script_name"/>
 	</scroll_list>
 	<button label="Récupérer" name="recover_btn"/>

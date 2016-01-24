@@ -6,7 +6,6 @@
 		<scroll_list.columns label="Région" name="location"/>
 		<scroll_list.columns label="Type" name="type"/>
 		<scroll_list.columns label="Surface" name="area"/>
-		<scroll_list.columns label="" name="hidden"/>
 	</scroll_list>
 	<button label="Téléporter" label_selected="Téléporter" name="Teleport" tool_tip="Se téléporter au centre de cette parcelle."/>
 	<button label="Carte" label_selected="Carte" name="Show on Map" tool_tip="Afficher ce terrain sur la carte"/>

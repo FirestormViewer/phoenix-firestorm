@@ -21,7 +21,7 @@
 			<text name="object_name_header_label">Objets</text>
 			<slider label="Facteur de diminution de couleur selon la distance de l'émetteur :" label_width="360" width="500" name="FSBeyondNearbyChatColorDiminishFactor" tool_tip="Le facteur de diminution de couleur du message si son émetteur n'est pas à proximité."/>
 			<check_box name="FSColorIMsDistinctly" label="Coloriser les IM et le chat de groupe distinctivement dans la console :"/>
-			<panel label="" name="im_color_panel">
+			<panel name="im_color_panel">
 				<text name="console_im_label">IMs/Groupes</text>
 			</panel>
 		</panel>
@@ -42,7 +42,7 @@
 			<slider label="Alignement vertical " name="FSNameTagZOffsetCorrection" tool_tip="Modifiez l'alignement vertical des noms flottants des résidents. 0 par défaut"/>
 			<check_box name="FSTagShowDistance" label="Afficher la distance à côté du nom flottant" tool_tip="Afficher la distance de l'avatar à côté du nom flottant"/>
 			<check_box name="FSTagShowDistanceColors" label="Coloriser les noms flottants selon la distance :"/>
-			<panel label="" name="distance_panel">
+			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">À proximité</text>
 				<text name="whisper_distance_tag_label">À portée de chuchotement</text>
 				<text name="shout_tag_label">À distance de cri</text>
@@ -99,7 +99,7 @@
 			<check_box name="FSScriptDialogNoTransparency" label="Toujours afficher les fenêtres de menu avec un arrière-plan opaque"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Toujours afficher les notices de groupe avec un arrière-plan opaque"/>
 			<check_box name="override_pie_color_checkbox" label="Définir la couleur d'arrière-plan et la transparence des menus circulaires :"/>
-			<panel label="" name="tab-colorize">
+			<panel name="tab-colorize">
 				<color_swatch name="pie_bg_color_override" tool_tip="Sélectionnez la couleur d'arrière-plan des menus circulaires"/>
 				<color_swatch name="pie_selected_color_override" tool_tip="Sélectionnez la couleur d'arrière-plan des menus circulaires"/>
 				<slider label="Transparence :" label_width="80" name="pie_menu_opacity" tool_tip="Sélectionnez la transparence des menus circulaires"/>

@@ -101,7 +101,6 @@
 			<text name="character_width_label">
 				Largeur du personnage
 			</text>
-			<slider name="character_width" value="1"/>
 			<text name="character_width_unit_label">
 				m
 			</text>

@@ -9,7 +9,6 @@
 	<text name="filter_label" value="Filtrer :"/>
 	<combo_box name="filter_combo_box">
 		<combo_box.item value="filter_type_all" label="Tout"/>
-		<combo_box.item value="filter_separator" label="------------"/>
 		<combo_box.item value="filter_type_animations" label="Animations"/>
 		<combo_box.item value="filter_type_calling_cards" label="Cartes de visite"/>
 		<combo_box.item value="filter_type_clothing" label="Vêtements / Éléments du corps"/>
@@ -22,7 +21,6 @@
 		<combo_box.item value="filter_type_textures" label="Textures"/>
 		<combo_box.item value="filter_type_snapshots" label="Photos"/>
 		<combo_box.item value="filter_type_meshes" label="Meshs"/>
-		<combo_box.item value="filter_separator" label="------------"/>
 		<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
 	</combo_box>	
 	<tab_container name="inventory filter tabs">

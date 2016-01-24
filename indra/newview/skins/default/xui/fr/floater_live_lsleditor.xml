@@ -12,6 +12,4 @@
 	<check_box label="Exécution" name="running"/>
 	<check_box label="Mono" name="mono"/>
 	<check_box label="Utiliser l'expérience :" name="enable_xp"/>
-	<combo_box label="" name="Experiences..."/>
-	<button label="&gt;" name="view_profile"/>
 </floater>

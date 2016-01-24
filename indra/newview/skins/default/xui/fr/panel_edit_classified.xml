@@ -6,14 +6,15 @@
 	<text name="title">Modifier l'annonce</text>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">
-			<panel name="snapshot_panel"><icon name="edit_icon" label="" tool_tip="Cliquez pour sélectionner une image"/></panel>
+			<panel name="snapshot_panel">
+				<icon name="edit_icon" tool_tip="Cliquez pour sélectionner une image"/>
+			</panel>
 			<text name="Name:">Titre :</text>
 			<text name="description_label">Description :</text>
 			<text name="location_label">Emplacement :</text>
 			<text name="classified_location">Chargement...</text>
 			<button label="Définir à l'emplacement actuel" name="set_to_curr_location_btn"/>
 			<text name="category_label" value="Catégorie :"/>
-			<combo_box label="" name="category" />
 			<text name="content_type_label" value="Classification :" />
 			<icons_combo_box label="Contenu général" name="content_type">
 				<icons_combo_box.item label="Contenu modéré" name="mature_ci"/>

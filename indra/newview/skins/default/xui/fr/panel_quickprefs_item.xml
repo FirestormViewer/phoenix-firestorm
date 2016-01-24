@@ -2,21 +2,17 @@
 <layout_panel name="option_layout_panel">
 	<panel name="option_ordering_panel">
 		<layout_stack name="option_inner_stack">
-			<layout_panel name="option_panel_updown"><button name="remove_button" tool_tip="Supprimer ce paramétrage" label=""/></layout_panel>
+			<layout_panel name="option_panel_updown">
+				<button name="remove_button" tool_tip="Supprimer ce paramétrage"/>
+			</layout_panel>
 			<layout_panel name="text_panel">
 				<text name="option_label">Libellé du paramétrage :</text>
 			</layout_panel>
 			<layout_panel name="option_panel">
-				<check_box name="option_checkbox_control" label=""/>
-				<spinner name="option_spinner_control" label=""/>
-				<slider name="option_slider_control" label=""/>
-				<radio_group name="option_radio_control" label="">
+				<radio_group name="option_radio_control">
 					<radio_item name="on" label="Oui"/>
 					<radio_item name="off" label="Non"/>
 				</radio_group>
-				<color_swatch name="option_color3_control" label=""/>
-				<color_swatch name="option_color4_control" label=""/>
-				<spinner name="option_color_alpha_control" label=""/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

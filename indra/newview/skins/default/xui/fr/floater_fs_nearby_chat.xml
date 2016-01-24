@@ -15,7 +15,7 @@
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
-						<layout_panel name="input_button_layout_panel"><spinner label="" name="ChatChannel" tool_tip="Canal dans lequel parler. Modifiable dans les Préférences -&gt; Conversations -&gt; Saisie -&gt; Afficher la sélection du canal de discussion."/></layout_panel>
+						<layout_panel name="input_button_layout_panel"><spinner name="ChatChannel" tool_tip="Canal dans lequel parler. Modifiable dans les Préférences -&gt; Conversations -&gt; Saisie -&gt; Afficher la sélection du canal de discussion."/></layout_panel>
 						<layout_panel name="chat_type_layout_panel" width="90">
 							<combo_box name="chat_type" tool_tip="Chuchoter = 10m, Parler = 20m, Crier = 100m">
 								<combo_box.item name="chat_type_whisper" label="Chuchoter"/>
