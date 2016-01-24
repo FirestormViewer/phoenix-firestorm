@@ -5932,4 +5932,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Worn Items">
 		Założone
 	</string>
+	<string name="InvOfferGroupNoticeName">
+		Osoba z grupy o imieniu [NAME]
+	</string>
 </strings>
