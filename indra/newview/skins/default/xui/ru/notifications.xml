@@ -4973,9 +4973,9 @@ URL: [MEDIAURL]
 			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
-	<notification name="ConfirmUnlinkObjects">
+	<notification name="ConfirmUnlink">
 		Вы действительно хотите разъеденить выбранные объекты?
-		<usetemplate ignoretext="Подтвердить разъеденение выбранные объекты выбранных объектов" name="okcancelignore" notext="Отмена" yestext="Разъеденить"/>
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Разъеденить"/>
 	</notification>
 	<notification name="SnoozeDuration">
 		Время в секундах, чтобы отключить чат группы:

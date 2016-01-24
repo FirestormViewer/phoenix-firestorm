@@ -422,8 +422,19 @@ void LLFloaterCompileQueue::handleInventory(LLViewerObject *viewer_object,
 			LLScriptQueueData* datap = new LLScriptQueueData(getKey().asUUID(),
 				viewer_object->getID(), itemp);
 
-			ExperienceAssociationResponder::fetchAssociatedExperience(itemp->getParentUUID(), itemp->getUUID(), 
-				boost::bind(LLFloaterCompileQueue::requestAsset, datap, _1));
+			// <FS:Ansariel> FIRE-17688: Recompile scripts not working on OpenSim
+			//ExperienceAssociationResponder::fetchAssociatedExperience(itemp->getParentUUID(), itemp->getUUID(), 
+			//	boost::bind(LLFloaterCompileQueue::requestAsset, datap, _1));
+			if (viewer_object->getRegion()->isCapabilityAvailable("GetMetadata"))
+			{
+				ExperienceAssociationResponder::fetchAssociatedExperience(itemp->getParentUUID(), itemp->getUUID(), 
+					boost::bind(LLFloaterCompileQueue::requestAsset, datap, _1));
+			}
+			else
+			{
+				requestAsset(datap, LLSD());
+			}
+			// </FS:Ansariel>
 		}
 	}
 }

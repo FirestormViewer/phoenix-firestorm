@@ -2477,8 +2477,12 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
-  add_dependencies(${VIEWER_BINARY_NAME} mac-crash-logger)
+  # <FS:TS> Allow disabling media plugins for 64-bit building
+  if (ENABLE_MEDIA_PLUGINS)
+      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
+  else (ENABLE_MEDIA_PLUGINS)
+      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
+  endif (ENABLE_MEDIA_PLUGINS)
 
   if (ENABLE_SIGNING)
       set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")

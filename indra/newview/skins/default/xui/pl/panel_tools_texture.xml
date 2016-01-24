@@ -21,11 +21,11 @@
 		<combo_box.item label="Materiały" name="Materials" />
 		<combo_box.item label="Media" name="Media" />
 	</combo_box>
-	<combo_box name="combobox mattype">
-		<combo_box.item label="Tekstura (rozproszenie)" name="Texture (diffuse)" />
-		<combo_box.item label="Powierzchnia (normalny)" name="Bumpiness (normal)" />
-		<combo_box.item label="Lśnienie (odbicie)" name="Shininess (specular)" />
-	</combo_box>
+	<radio_group name="radio_material_type">
+		<radio_item label="Tekstura (rozproszenie)" name="Texture (diffuse)" />
+		<radio_item label="Powierzchnia (normalne)" name="Bumpiness (normal)" />
+		<radio_item label="Lśnienie (odbicie)" name="Shininess (specular)" />
+	</radio_group>
 	<texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label alphamode">
 		Tryb alphy

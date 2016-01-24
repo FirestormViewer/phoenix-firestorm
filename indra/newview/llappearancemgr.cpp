@@ -1597,9 +1597,6 @@ void LLAppearanceMgr::onOutfitRename(const LLSD& notification, const LLSD& respo
 	LLStringUtil::trim(outfit_name);
 	if (!outfit_name.empty())
 	{
-		// <FS:Ansariel> Debug code for FIRE-15571
-		LL_INFOS() << "OUTFIT RENAME: Invoking rename_category()" << LL_ENDL;
-
 		LLUUID cat_id = notification["payload"]["cat_id"].asUUID();
 		rename_category(&gInventory, cat_id, outfit_name);
 	}
@@ -2119,9 +2116,8 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	
 	// Collect and filter descendents to determine new COF contents.
 
-	//
-	// - Body parts: always include COF contents as a fallback in case any required parts are missing.
-	//
+	// - Body parts: always include COF contents as a fallback in case any
+	// required parts are missing.
 	// Preserve body parts from COF if appending.
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART);
@@ -2139,9 +2135,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1, 0);
 
-	//
 	// - Wearables: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
@@ -2167,9 +2161,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/SL:KB]
 	filterWearableItems(wear_items, 0, LLAgentWearables::MAX_CLOTHING_LAYERS);
 
-	//
 	// - Attachments: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
@@ -2203,9 +2195,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 
 	removeDuplicateItems(obj_items);
 
-	//
 	// - Gestures: include COF contents only if appending.
-	//
 	LLInventoryModel::item_array_t gest_items;
 	if (append)
 		getDescendentsOfAssetType(cof, gest_items, LLAssetType::AT_GESTURE);
@@ -2266,10 +2256,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	const LLUUID& base_id = (append) ? getBaseOutfitUUID() : idOutfit;
 	LLViewerInventoryCategory* base_cat = (base_id.notNull()) ? gInventory.getCategory(base_id) : NULL;
 // [/RLVa:KB]
-//	if (base_cat)
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
-	if ((base_cat) && (base_cat->getPreferredType() == LLFolderType::FT_OUTFIT))
-// [/SL:KB]
+	if (base_cat)
 	{
 		LLSD base_contents;
 		base_contents["name"] = base_cat->getName();
@@ -2812,12 +2799,6 @@ void LLAppearanceMgr::getUserDescendents(const LLUUID& category,
 }
 
 void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append)
-// <FS:TT> ReplaceWornItemsOnly
-{
-	wearInventoryCategory(category, copy, append, false);
-}
-void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool replace)
-// </FS:TT>
 {
 	if(!category) return;
 
@@ -2853,19 +2834,8 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 		callAfterCategoryFetch(category->getUUID(),boost::bind(&LLAppearanceMgr::wearCategoryFinal,
 															   &LLAppearanceMgr::instance(),
 															   category->getUUID(), copy, append));
-// <FS:TT> ReplaceWornItemsOnly
-														   //category->getUUID(), copy, append, replace));
-// <FS:TT>
 	}
 }
-
-// <FS:TT> ReplaceWornItemsOnly
-void LLAppearanceMgr::replaceCategoryInCurrentOutfit(const LLUUID& cat_id)
-{
-	LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
-	wearInventoryCategory(cat, false, true);
-}
-// </FS:TT>
 
 S32 LLAppearanceMgr::getActiveCopyOperations() const
 {
@@ -2873,13 +2843,6 @@ S32 LLAppearanceMgr::getActiveCopyOperations() const
 }
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append)
-// <FS:TT> ReplaceWornItemsOnly
-{
-	wearCategoryFinal(cat_id, copy_items, append, false);
-}
-
-void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool replace)
-// </FS:TT>
 {
 	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
@@ -3370,23 +3333,17 @@ void LLAppearanceMgr::updateIsDirty()
 			{
 				if (item1->getLinkedUUID() != item2->getLinkedUUID())
 				{
-					// <FS:Ansariel> Change log tag for easier debugging
-					//LL_DEBUGS("Avatar") << "link id different " << LL_ENDL;
-					LL_DEBUGS("Outfit") << "link id different for " << item1->getName() << " " << item2->getName() << LL_ENDL;
+					LL_DEBUGS("Avatar") << "link id different " << LL_ENDL;
 				}
 				else
 				{
 					if (item1->getName() != item2->getName())
 					{
-						// <FS:Ansariel> Change log tag for easier debugging
-						//LL_DEBUGS("Avatar") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
-						LL_DEBUGS("Outfit") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
+						LL_DEBUGS("Avatar") << "name different " << item1->getName() << " " << item2->getName() << LL_ENDL;
 					}
 					if (item1->getActualDescription() != item2->getActualDescription())
 					{
-						// <FS:Ansariel> Change log tag for easier debugging
-						//LL_DEBUGS("Avatar") << "desc different " << item1->getActualDescription()
-						LL_DEBUGS("Outfit") << "desc different " << item1->getActualDescription()
+						LL_DEBUGS("Avatar") << "desc different " << item1->getActualDescription()
 											<< " " << item2->getActualDescription() 
 											<< " names " << item1->getName() << " " << item2->getName() << LL_ENDL;
 					}
@@ -3397,9 +3354,7 @@ void LLAppearanceMgr::updateIsDirty()
 		}
 	}
 	llassert(!mOutfitIsDirty);
-	// <FS:Ansariel> Change log tag for easier debugging
-	//LL_DEBUGS("Avatar") << "clean" << LL_ENDL;
-	LL_DEBUGS("Outfit") << "clean" << LL_ENDL;
+	LL_DEBUGS("Avatar") << "clean" << LL_ENDL;
 }
 
 // *HACK: Must match name in Library or agent inventory
@@ -4466,10 +4421,7 @@ bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_b
 
 	//to cause appearance of the agent to be updated
 	bool result = false;
-	// <FS> Compiler appeasement by Cinder Roxley
-	//if (result = gAgentWearables.moveWearable(item, closer_to_body))
 	if ((result = gAgentWearables.moveWearable(item, closer_to_body)))
-	// </FS>
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//gAgentAvatarp->wearableUpdated(item->getWearableType());
@@ -4836,4 +4788,3 @@ public:
 };
 
 LLWearFolderHandler gWearFolderHandler;
-
