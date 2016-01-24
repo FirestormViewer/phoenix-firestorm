@@ -1753,11 +1753,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>03fd572a7536d96fe34272fd30b34bac</string>
+              <string>bad6ccf190e217d50543d208c573ef85</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201601151414-r42.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201601241921-r44.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
