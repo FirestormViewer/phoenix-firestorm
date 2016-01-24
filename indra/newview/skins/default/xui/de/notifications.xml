@@ -493,6 +493,9 @@ Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
 	<notification name="CannotWearInfoNotComplete">
 		Sie können das Objekt nicht anziehen, weil es noch nicht geladen wurde. Warten Sie kurz und versuchen Sie es dann noch einmal.
 	</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		Sie müssen Ihr Passwort eingeben, um sich anmelden zu können.
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		Sie haben ein Feld leer gelassen.
 Sie müssen den Benutzernamen Ihres Avatars eingeben.
