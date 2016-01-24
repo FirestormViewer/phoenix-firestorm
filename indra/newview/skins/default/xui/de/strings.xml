@@ -6563,4 +6563,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="InvOfferGroupNoticeName">
 		Ein Gruppenmitglied namens [NAME]
 	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(online)
+	</string>
 </strings>

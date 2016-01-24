@@ -6026,7 +6026,10 @@ std::string LLCallingCardBridge::getLabelSuffix() const
 	LLViewerInventoryItem* item = getItem();
 	if( item && LLAvatarTracker::instance().isBuddyOnline(item->getCreatorUUID()) )
 	{
-		return LLItemBridge::getLabelSuffix() + " (online)";
+		// <FS:Ansariel> FIRE-17715: Make "online" suffix in calling card folder localizable
+		//return LLItemBridge::getLabelSuffix() + " (online)";
+		return LLItemBridge::getLabelSuffix() + " " + LLTrans::getString("CallingCardOnlineLabelSuffix");
+		// </FS:Ansariel>
 	}
 	else
 	{

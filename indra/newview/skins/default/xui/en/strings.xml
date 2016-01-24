@@ -2938,4 +2938,5 @@ Try enclosing path to the editor with double quotes.
   <string name="Worn Items">Worn Items</string>
 
   <string name="InvOfferGroupNoticeName">A group member named [NAME]</string>
+  <string name="CallingCardOnlineLabelSuffix">(online)</string>
 </strings>
