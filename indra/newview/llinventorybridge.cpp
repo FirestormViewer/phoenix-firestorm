@@ -4413,10 +4413,14 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 		// Only enable add/replace outfit for non-system folders.
 		if (!is_system_folder)
 		{
+			// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
+			items.push_back(std::string("Add To Outfit"));
+
 			// Adding an outfit onto another (versus replacing) doesn't make sense.
 			if (type != LLFolderType::FT_OUTFIT)
 			{
-				items.push_back(std::string("Add To Outfit"));
+				// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
+				//items.push_back(std::string("Add To Outfit"));
 				// <FS:TT> Patch: ReplaceWornItemsOnly
 				items.push_back(std::string("Wear Items"));
 				// </FS:TT>
