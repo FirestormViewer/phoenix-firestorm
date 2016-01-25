@@ -375,9 +375,6 @@ protected:
 	BOOL checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& typeToCheck);
 
 	void modifyOutfit(BOOL append);
-// <FS:TT> ReplaceWornItemsOnly
-	void modifyOutfit(BOOL append, BOOL replace);
-// </FS:TT>
 	void determineFolderType();
 
 	void dropToFavorites(LLInventoryItem* inv_item);

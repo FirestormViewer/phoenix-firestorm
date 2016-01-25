@@ -3323,8 +3323,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				info->mFolderID = gInventory.findCategoryUUIDForType(LLFolderType::assetTypeToFolderType(info->mType));
 				std::string from_name;
 
-				from_name += "A group member named ";
-				from_name += name;
+				// <FS:Ansariel> FIRE-17714: Make group notice attachment confirmation localizable
+				//from_name += "A group member named ";
+				//from_name += name;
+				LLStringUtil::format_map_t args;
+				args["NAME"] = name;
+				from_name += LLTrans::getString("InvOfferGroupNoticeName", args);
+				// </FS:Ansariel>
 
 				info->mFromName = from_name;
 				info->mDesc = item_name;

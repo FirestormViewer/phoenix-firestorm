@@ -59,13 +59,8 @@ public:
 								LLInventoryModel::item_array_t& gest_items_new,
 								bool append=false, const LLUUID& idOutfit=LLUUID::null, LLPointer<LLInventoryCallback> link_waiter = NULL);
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
-	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool replace);
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
-// <FS:TT> ReplaceWornItemsOnly
-	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool items);
-	void replaceCategoryInCurrentOutfit(const LLUUID& cat_id);
-// </FS:TT>
 	void wearOutfitByName(const std::string& name);
 	void changeOutfit(bool proceed, const LLUUID& category, bool append);
 	void replaceCurrentOutfit(const LLUUID& new_outfit);
@@ -273,7 +268,6 @@ private:
 								   LLInventoryModel::item_array_t& gest_items);
 
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
-
 
 	bool mAttachmentInvLinkEnabled;
 	bool mOutfitIsDirty;

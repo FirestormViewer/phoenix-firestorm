@@ -117,6 +117,8 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	BOOL select_movable = gSavedSettings.getBOOL("SelectMovableOnly");
 	// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
 	BOOL select_copyable = gSavedSettings.getBOOL("FSSelectCopyableOnly");
+	// <FS:Ansariel> FIRE-17696: Option to select only locked objects
+	BOOL select_locked = gSavedSettings.getBOOL("FSSelectLockedOnly");
 	
 	// *NOTE: These settings must be cleaned up at bottom of function.
 	if (temp_select || LLSelectMgr::getInstance()->mAllowSelectAvatar)
@@ -125,6 +127,8 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 		gSavedSettings.setBOOL("SelectMovableOnly", FALSE);
 		// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
 		gSavedSettings.setBOOL("FSSelectCopyableOnly", FALSE);
+		// <FS:Ansariel> FIRE-17696: Option to select only locked objects
+		gSavedSettings.setBOOL("FSSelectLockedOnly", FALSE);
 		LLSelectMgr::getInstance()->setForceSelection(TRUE);
 	}
 
@@ -276,6 +280,8 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 		gSavedSettings.setBOOL("SelectMovableOnly", select_movable);
 		// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
 		gSavedSettings.setBOOL("FSSelectCopyableOnly", select_copyable);
+		// <FS:Ansariel> FIRE-17696: Option to select only locked objects
+		gSavedSettings.setBOOL("FSSelectLockedOnly", select_locked);
 		LLSelectMgr::getInstance()->setForceSelection(FALSE);
 	}
 

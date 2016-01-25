@@ -2375,7 +2375,7 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	</notification>
 	<notification name="ConfirmUnlink">
 		選択したオブジェクトのリンクを本当に解除しますか？
-		<usetemplate ignoretext="リンクセットを解除する時には確認" name="okcancelignore" notext="取り消し" yestext="リンク解除"/>
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="リンク解除"/>
 	</notification>
 	<!--
 	<notification name="HelpReportAbuseEmailLL">

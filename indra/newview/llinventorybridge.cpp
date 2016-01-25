@@ -119,9 +119,6 @@ struct LLMoveInv
 using namespace LLOldEvents;
 
 // Function declarations
-// <FS:TT> Patch: ReplaceWornItemsOnly
-void wear_inventory_category_on_avatar(LLInventoryCategory* category);
-// </FS:TT>
 bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, boost::shared_ptr<LLMoveInv>);
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
@@ -3347,7 +3344,6 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		if(!cat) return;
 
 		gInventory.wearItemsOnAvatar(cat);
-		//		modifyOutfit(TRUE, TRUE);
 		return;
 	}
 // </FS:TT>
@@ -4289,10 +4285,14 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 		// Only enable add/replace outfit for non-system folders.
 		if (!is_system_folder)
 		{
+			// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
+			items.push_back(std::string("Add To Outfit"));
+
 			// Adding an outfit onto another (versus replacing) doesn't make sense.
 			if (type != LLFolderType::FT_OUTFIT)
 			{
-				items.push_back(std::string("Add To Outfit"));
+				// <FS:Ansariel> FIRE-3302: "Add to Current Outfit" missing for inventory outfit folder
+				//items.push_back(std::string("Add To Outfit"));
 				// <FS:TT> Patch: ReplaceWornItemsOnly
 				items.push_back(std::string("Wear Items"));
 				// </FS:TT>
@@ -4552,13 +4552,6 @@ void LLFolderBridge::createWearable(LLFolderBridge* bridge, LLWearableType::ETyp
 }
 
 void LLFolderBridge::modifyOutfit(BOOL append)
-// <FS:TT> Patch: ReplaceWornItemsOnly
-{
-	modifyOutfit(append, false);
-}
-
-void LLFolderBridge::modifyOutfit(BOOL append, BOOL replace)
-// </FS:TT>
 {
 	LLInventoryModel* model = getInventoryModel();
 	if(!model) return;
@@ -4584,7 +4577,7 @@ void LLFolderBridge::modifyOutfit(BOOL append, BOOL replace)
 		return;
 	}
 
-	LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, append, replace );
+	LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, append );
 }
 
 // +=================================================+
@@ -5881,7 +5874,10 @@ std::string LLCallingCardBridge::getLabelSuffix() const
 	LLViewerInventoryItem* item = getItem();
 	if( item && LLAvatarTracker::instance().isBuddyOnline(item->getCreatorUUID()) )
 	{
-		return LLItemBridge::getLabelSuffix() + " (online)";
+		// <FS:Ansariel> FIRE-17715: Make "online" suffix in calling card folder localizable
+		//return LLItemBridge::getLabelSuffix() + " (online)";
+		return LLItemBridge::getLabelSuffix() + " " + LLTrans::getString("CallingCardOnlineLabelSuffix");
+		// </FS:Ansariel>
 	}
 	else
 	{
