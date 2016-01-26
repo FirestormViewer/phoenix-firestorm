@@ -204,8 +204,6 @@ typedef LLAtomic32<S32> LLAtomicS32;
 #define LL_APR_RPB (APR_READ|APR_WRITE|APR_BINARY) // "r+b"
 #define LL_APR_WPB (APR_CREATE|APR_TRUNCATE|APR_READ|APR_WRITE|APR_BINARY) // "w+b"
 
-namespace ll { namespace apr {
-
 //
 //apr_file manager
 //which: 1)only keeps one file open;
@@ -279,10 +277,11 @@ public:
 //*******************************************************************************************************************************
 };
 
-} }
-
-#include "nd/ndfile.h"
-//typedef ll::apr::LLAPRFile LLAPRFile;
-typedef nd::apr::ndFile LLAPRFile;
-
+namespace nd
+{
+	namespace aprhelper
+	{
+		std::string LL_COMMON_API ndConvertFilename( std::string const &aFilename );
+	}
+}
 #endif // LL_LLAPR_H
