@@ -95,15 +95,18 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	//message body
 	const std::string& message = payload["message"].asString();
 
-	std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
-							+LLTrans::getString("TimeMth")+"] ["
-							+LLTrans::getString("TimeDay")+"] ["
-							+LLTrans::getString("TimeYear")+"] ["
-							+LLTrans::getString("TimeHour12")+"]:["
-							+LLTrans::getString("TimeMin")+"]:["
-							+LLTrans::getString("TimeSec")+"] ["
-							+LLTrans::getString("TimeAMPM")+"] ["
-							+LLTrans::getString("TimeTimezone")+"]";
+	// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+	//std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
+	//						+LLTrans::getString("TimeMth")+"] ["
+	//						+LLTrans::getString("TimeDay")+"] ["
+	//						+LLTrans::getString("TimeYear")+"] ["
+	//						+LLTrans::getString("TimeHour12")+"]:["
+	//						+LLTrans::getString("TimeMin")+"]:["
+	//						+LLTrans::getString("TimeSec")+"] ["
+	//						+LLTrans::getString("TimeAMPM")+"] ["
+	//						+LLTrans::getString("TimeTimezone")+"]";
+	std::string timeStr = LLTrans::getString("GroupNoticesToastDateString");
+	// </FS:Ansariel>
 	const LLDate timeStamp = notification->getDate();
 	LLDate notice_date = timeStamp.notNull() ? timeStamp : payload["received_time"].asDate();
 	LLSD substitution;
