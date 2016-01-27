@@ -2600,10 +2600,7 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 						}
 					}
                     F32 wsum = wght.mV[VX] + wght.mV[VY] + wght.mV[VZ] + wght.mV[VW];
-					
-                    // <FS:ND/> FIRE-17341 / BUG-10747 do allow weights of zero, or some rigged mesh will display broken.
-                    // if (wsum <= 0.f)
-                    if (wsum < 0.f)
+                    if (wsum <= 0.f)
                     {
                         wght = LLVector4(0.99999f,0.f,0.f,0.f);
                     }

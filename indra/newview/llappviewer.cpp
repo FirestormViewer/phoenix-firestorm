@@ -141,7 +141,9 @@
 #include "llleap.h"
 #include "stringize.h"
 #include "llcoros.h"
-#if !LL_LINUX
+//<FS:TS> Turn off library for 64-bit OS X too
+//#if !LL_LINUX
+#if !LL_LINUX && !(LL_DARWIN && defined(ND_BUILD64BIT_ARCH))
 #include "cef/llceflib.h"
 #endif
 
@@ -3992,8 +3994,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	{
 		info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
 	}
-
-#if !LL_LINUX
+//<FS:TS> Check for the symbol being defined, not for an OS
+//#if !LL_LINUX
+#if defined(LLCEFLIB_VERSION)
 	info["LLCEFLIB_VERSION"] = LLCEFLIB_VERSION;
 #else
 	info["LLCEFLIB_VERSION"] = "Undefined";

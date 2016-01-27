@@ -123,9 +123,6 @@ public:
 		registrar.add("Gear.Expand", boost::bind(&LLOutfitsList::expand_all_folders, mOutfitList));
 
 		registrar.add("Gear.WearAdd", boost::bind(&LLOutfitListGearMenu::onAdd, this));
-//-TT Patch: ReplaceWornItemsOnly
-		registrar.add("Gear.WearReplaceItems",boost::bind(&LLOutfitListGearMenu::onReplaceItems, this));
-//-TT 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLOutfitListGearMenu::onEnable, this, _2));
 		enable_registrar.add("Gear.OnVisible", boost::bind(&LLOutfitListGearMenu::onVisible, this, _2));
 
@@ -184,17 +181,6 @@ private:
 		}
 	}
 
-//-TT Patch: ReplaceWornItemsOnly
-	void onReplaceItems()
-	{
-		const LLUUID& selected_id = getSelectedOutfitID();
-
-		if (selected_id.notNull())
-		{
-			//LLAppearanceMgr::getInstance()->replaceCategoryInCurrentOutfit(selected_id);
-		}
-	}
-//-TT
 	void onTakeOff()
 	{
 		// Take off selected outfit.
@@ -285,10 +271,6 @@ protected:
 			boost::bind(&LLAppearanceMgr::replaceCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.WearAdd",
 			boost::bind(&LLAppearanceMgr::addCategoryToCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
-//-TT Patch: ReplaceWornItemsOnly
-		registrar.add("Outfit.WearReplaceItems",
-			boost::bind(&LLAppearanceMgr::replaceCategoryInCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
-//-TT 
 		registrar.add("Outfit.TakeOff",
 				boost::bind(&LLAppearanceMgr::takeOffOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.Edit", boost::bind(editOutfit));

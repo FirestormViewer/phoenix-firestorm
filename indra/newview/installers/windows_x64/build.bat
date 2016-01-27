@@ -37,13 +37,6 @@ set UPGRADECODE=%1
 set UPGRADECODE2=%2
 set CHANSUFFIX=%3
 
-if exist %VIEWER_BUILDDIR%\Leap.dll (
-  set PACKAGE_LEAP=PACKAGE_LEAP=1
-  echo Packaging Leap.dll
-) else (
-  set PACKAGE_LEAP=PACKAGE_LEAP=0
-  echo Not Packaging Leap.dll
-)
 
 heat dir %VIEWER_BUILDDIR%\character -gg -cg fs_character -var var.BUILDDIR -dr INSTALLDIR -out character.wxs
 heat dir %VIEWER_BUILDDIR%\fonts -gg -cg fs_fonts -var var.BUILDDIR -dr INSTALLDIR -out fonts.wxs
@@ -57,7 +50,7 @@ candle -dBUILDDIR=%VIEWER_BUILDDIR%\fonts fonts.wxs
 candle -dBUILDDIR=%VIEWER_BUILDDIR%\fs_resources fs_resources.wxs
 
 candle -dPLUGIN_SOURCEDIR=%PLUGIN_SOURCEDIR% %WIX_SOURCE_DIR%\llplugin.wxs
-candle -dPROGRAM_FILE=%PROGRAM_FILE% -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dBUILDDIR=%VIEWER_BUILDDIR%\ -dWIX_SOURCEDIR=%WIX_SOURCE_DIR% -d%PACKAGE_LEAP% -dUPGRADECODE=%UPGRADECODE% -dCHANNEL_SUFFIX=%CHANSUFFIX% %WIX_SOURCE_DIR%\firestorm.wxs
+candle -dPROGRAM_FILE=%PROGRAM_FILE% -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dBUILDDIR=%VIEWER_BUILDDIR%\ -dWIX_SOURCEDIR=%WIX_SOURCE_DIR% -dUPGRADECODE=%UPGRADECODE% -dCHANNEL_SUFFIX=%CHANSUFFIX% %WIX_SOURCE_DIR%\firestorm.wxs
 candle -dPROGRAM_FILE=%PROGRAM_FILE% -dPROGRAM_VERSION=%PROGRAM_VERSION% -dCHANNEL_NAME=%CHANNEL_NAME% -dSETTINGS_FILE=%SETTINGS_FILE% -dPROGRAM_NAME=%PROGRAM_NAME% -dBUILDDIR=%VIEWER_BUILDDIR%\ -dCHANNEL_SUFFIX=%CHANSUFFIX% %WIX_SOURCE_DIR%\registry.wxs
 
 light -sval -ext WixUIExtension -cultures:en-us -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi firestorm.wixobj character.wixobj fonts.wixobj fs_resources.wixobj llplugin.wixobj registry.wixobj

@@ -263,8 +263,8 @@ void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
 	// <FS:Wolf> commented out to have the info button always shown
-	mInfoBtn->setVisible(false);
-	mProfileBtn->setVisible(false);
+	//mInfoBtn->setVisible(false);
+	//mProfileBtn->setVisible(false);
 	// </FS:Wolf>
 
 	mHovered = false;

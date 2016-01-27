@@ -81,13 +81,6 @@
       <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
      </Component>
 
-     <?if $(var.PACKAGE_LEAP)=1?>
-      <Component Id="leap_dll" Guid="*">
-         <File Source="$(var.BUILDDIR)/Leap.dll" />
-      </Component>
-     <?endif?>
-
-
     </Directory>
    </Directory>
   </Directory>
@@ -117,10 +110,6 @@
    <ComponentRef Id="llplugin_exe" />
    <ComponentRef Id="llplugin_libs" />
    <ComponentRef Id="llplugin_dir_locales" />
-
-   <?if $(var.PACKAGE_LEAP)=1?>
-    <ComponentRef Id="leap_dll" />
-   <?endif?>
 
    <ComponentGroupRef Id="fs_character" />
    <ComponentGroupRef Id="fs_fonts" />

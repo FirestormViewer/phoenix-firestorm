@@ -2692,18 +2692,17 @@ bool idle_startup()
 		}
 		// If not first login, we need to fetch COF contents and
 		// compute appearance from that.
-// <FS:Ansariel> [Legacy Bake]
-		//if (isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
-#ifdef OPENSIM
-		if (LLGridManager::getInstance()->isInSecondLife() && isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
-#else
 		if (isAgentAvatarValid() && !gAgent.isFirstLogin() && !gAgent.isOutfitChosen())
-#endif
-// </FS:Ansariel> [Legacy Bake]
 		{
 			gAgentWearables.notifyLoadingStarted();
 			gAgent.setOutfitChosen(TRUE);
-			gAgentWearables.sendDummyAgentWearablesUpdate();
+// <FS:Ansariel> [Legacy Bake]
+			//gAgentWearables.sendDummyAgentWearablesUpdate();
+			if (LLGridManager::getInstance()->isInSecondLife())
+			{
+				gAgentWearables.sendDummyAgentWearablesUpdate();
+			}
+// </FS:Ansariel> [Legacy Bake]
 			callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(), set_flags_and_update_appearance);
 		}
 
@@ -2762,15 +2761,7 @@ bool idle_startup()
 		
 		display_startup();
 
-// <FS:Ansariel> [Legacy Bake]
-		//if (gAgent.isOutfitChosen() && (wearables_time > max_wearables_time))
-#ifdef OPENSIM
-		if ((LLGridManager::getInstance()->isInSecondLife() && gAgent.isOutfitChosen() && (wearables_time > max_wearables_time)) ||
-			(!LLGridManager::getInstance()->isInSecondLife() && (wearables_time > max_wearables_time)))
-#else
 		if (gAgent.isOutfitChosen() && (wearables_time > max_wearables_time))
-#endif
-// </FS:Ansariel> [Legacy Bake]
 		{
 			LLNotificationsUtil::add("ClothingLoading");
 			record(LLStatViewer::LOADING_WEARABLES_LONG_DELAY, wearables_time);
@@ -4222,14 +4213,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 			// requested and available, etc.
 
 			//gAgent.setGenderChosen(TRUE);
-			// <FS:Ansariel> [Legacy Bake]
-#ifdef OPENSIM
-			if (!LLGridManager::getInstance()->isInSecondLife())
-			{
-				gAgent.setOutfitChosen(TRUE);
-			}
-#endif
-			// </FS:Ansariel> [Legacy Bake]
 		}
 		
 		bool pacific_daylight_time = false;

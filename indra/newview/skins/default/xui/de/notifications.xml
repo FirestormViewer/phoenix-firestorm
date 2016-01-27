@@ -1732,6 +1732,11 @@ weitere Infos zu diesem Update finden Sie [[INFO_URL] hier].
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="GroupLeaveConfirmMemberWithFee">
+		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Erneutes Beitreten kostet [AMOUNT] L$.
+Diese Gruppe verlassen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
 		<usetemplate name="okbutton" yestext="OK"/>
@@ -2409,7 +2414,7 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Vor dem Löschen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmUnlink">Soll das ausgewählte Objekt wirklich getrennt werden?
-		<usetemplate ignoretext="Vor dem Trennen von Objekten bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Trennen"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
 	</notification>
 	<notification name="HelpReportAbuseSelectCategory">
 		Wählen Sie eine Missbrauchskategorie aus.

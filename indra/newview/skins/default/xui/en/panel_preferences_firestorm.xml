@@ -1544,6 +1544,37 @@
          top_pad="8"
          follows="left|top"
          height="16"
+         label="Show unlink confirmation dialog if linkset has minimum"
+         name="FSUnlinkConfirmEnabled"
+         control_name="FSUnlinkConfirmEnabled"
+         width="325"/>
+        <spinner
+         enabled_control="FSUnlinkConfirmEnabled"
+         control_name="MinObjectsForUnlinkConfirm"
+         decimal_digits="0"
+         top_delta="-5"
+         left_pad="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         max_val="256"
+         min_val="0"
+         name="MinObjectsForUnlinkConfirm"
+         width="65"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="MinObjectsForUnlinkConfirmText2"
+         width="270">
+          objects
+        </text>
+        <check_box
+         left="3"
+         top_pad="8"
+         follows="left|top"
+         height="16"
          label="Use old &quot;Set Object For Sale&quot; behavior"
          tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
          name="FSCommitForSaleOnChange_toggle"

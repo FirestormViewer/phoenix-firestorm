@@ -130,6 +130,7 @@
             <radio_item label="Wyświetlane (Nazwa konta)" name="displayname_username" />
         </radio_group>
         <check_box label="Pokaż kolumny zezwoleń" name="FSFriendListColumnShowPermissions" tool_tip="Lista kontaktów będzie pokazywać kolumny z zezwoleniami, jakie zostały udzielone temu awatarowi, a także przez tego awatara - innym." />
+        <check_box label="Pokaż filtr znajomych" name="FSContactListShowSearch" tool_tip="Lista kontaktów będzie pokazywać pole wyszukiwarki do filtrowania znajomych." />
         <text name="textInventoryOptions">
             Opcje Szafy:
         </text>
