@@ -5935,4 +5935,19 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="InvOfferGroupNoticeName">
 		Osoba z grupy o imieniu [NAME]
 	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt]., [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc], [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]
+	</string>
 </strings>
