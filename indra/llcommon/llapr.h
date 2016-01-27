@@ -216,6 +216,7 @@ typedef LLAtomic32<S32> LLAtomicS32;
 //      1, a temporary pool passed to an APRFile function, which is used within this function and only once.
 //      2, a global pool.
 //
+
 class LL_COMMON_API LLAPRFile : boost::noncopyable
 {
 	// make this non copyable since a copy closes the file

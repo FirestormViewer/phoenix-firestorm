@@ -32,9 +32,7 @@
 #include "llthreadlocalstorage.h"
 
 apr_pool_t *gAPRPoolp = NULL; // Global APR memory pool
-
 LLVolatileAPRPool *LLAPRFile::sAPRFilePoolp = NULL ; //global volatile APR memory pool.
-
 apr_thread_mutex_t *gLogMutexp = NULL;
 apr_thread_mutex_t *gCallStacksLogMutexp = NULL;
 
@@ -308,7 +306,7 @@ bool ll_apr_warn_status(apr_status_t status)
 	if(APR_SUCCESS == status) return false;
 	char buf[MAX_STRING];	/* Flawfinder: ignore */
 	apr_strerror(status, buf, sizeof(buf));
-	LL_WARNS("APR") << "APR status " << status << ": " << buf << LL_ENDL;
+	LL_WARNS("APR") << "APR: " << buf << LL_ENDL;
 	return true;
 }
 
@@ -320,7 +318,7 @@ bool ll_apr_warn_status(apr_status_t status, apr_dso_handle_t *handle)
     // stores the output in a fixed 255-character internal buffer. (*sigh*)
     char buf[MAX_STRING];           /* Flawfinder: ignore */
     apr_dso_error(handle, buf, sizeof(buf));
-    LL_WARNS("APR") << "APR status " << status << ": " << buf << LL_ENDL;
+    LL_WARNS("APR") << "APR: " << buf << LL_ENDL;
     return result;
 }
 
@@ -383,7 +381,6 @@ apr_status_t LLAPRFile::open(const std::string& filename, apr_int32_t flags, LLV
 	llassert_always(!mCurrentFilePoolp) ;
 	
 	apr_pool_t* apr_pool = pool ? pool->getVolatileAPRPool() : NULL ;
-
 	s = apr_file_open(&mFile, filename.c_str(), flags, APR_OS_DEFAULT, getAPRFilePool(apr_pool));
 
 	if (s != APR_SUCCESS || !mFile)
@@ -685,13 +682,8 @@ bool LLAPRFile::remove(const std::string& filename, LLVolatileAPRPool* pool)
 
 	if (s != APR_SUCCESS)
 	{
-		if (!APR_STATUS_IS_ENOENT(s))
-		{
-			// We only care about the error if it's not because
-			//  the file doesn't exist.
-			ll_apr_warn_status(s);
-			LL_WARNS("APR") << " Attempting to remove filename: " << filename << LL_ENDL;
-		}
+		ll_apr_warn_status(s);
+		LL_WARNS("APR") << " Attempting to remove filename: " << filename << LL_ENDL;
 		return false;
 	}
 	return true;
