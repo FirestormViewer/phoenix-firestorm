@@ -77,6 +77,7 @@
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llsdserialize.h"
+#include "llcallstack.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -239,6 +240,7 @@ bool update_avatar_rez_metrics()
 		return true;
 	
 	gAgentAvatarp->updateAvatarRezMetrics(false);
+
 	return false;
 }
 

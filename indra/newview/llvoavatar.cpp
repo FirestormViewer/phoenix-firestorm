@@ -1113,6 +1113,9 @@ void LLVOAvatar::initClass()
 	gAnimLibrary.animStateSetString(ANIM_AGENT_TARGET,"target");
 	gAnimLibrary.animStateSetString(ANIM_AGENT_WALK_ADJUST,"walk_adjust");
 
+    // Where should this be set initially?
+    LLJoint::setDebugJointNames(gSavedSettings.getString("DebugAvatarJoints"));
+
 	initCloud();
 }
 

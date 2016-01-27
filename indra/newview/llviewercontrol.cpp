@@ -184,6 +184,13 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 }
 
 
+static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
+{
+    std::string new_string = newvalue.asString();
+    LLJoint::setDebugJointNames(new_string);
+    return true;
+}
+
 static bool handleDeferredDebugSettingChanged(const LLSD& newvalue)
 {
     LLNotificationsUtil::add("ChangeDeferredDebugSetting");
@@ -1071,6 +1078,8 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
 	gSavedSettings.getControl("IncludeEnhancedSkeleton")->getCommitSignal()->connect(boost::bind(&handleDeferredDebugSettingChanged, _2));
+    gSavedSettings.getControl("DebugAvatarJoints")->getCommitSignal()->connect(boost::bind(&handleDebugAvatarJointsChanged, _2));
+
 	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // <FS:Zi> Moved Avatar Z offset from RLVa to here
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
