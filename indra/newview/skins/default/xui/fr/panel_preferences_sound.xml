@@ -5,27 +5,27 @@
 		<panel label="Général" name="Media Sounds Panel">
 			<slider label="Volume principal" name="System Volume"/>
 			<check_box label="Muet lorsque minimisé" name="mute_when_minimized"/>
-			<slider label="Bouton" name="UI Volume"/>
+			<slider label="Interface" name="UI Volume"/>
 			<slider label="Ambiant" name="Wind Volume"/>
 			<check_box name="collisions_audio_play_btn" tool_tip="Activer cette option pour entendre les sons produits par les collisions" label="Activer les sons des collisions"/>
-			<slider label="Sons" name="SFX Volume"/>
+			<slider label="Effets sonores" name="SFX Volume"/>
 			<check_box name="gesture_audio_play_btn" tool_tip="Activer cette option pour entendre les sons produits par les gestes des résidents" label="Activer les sons des gestes"/>
-			<slider label="Flux musical" name="Music Volume"/>
+			<slider label="Musique" name="Music Volume"/>
 			<check_box label="Actif" name="enable_music"/>
-			<slider label="Médias" name="Media Volume"/>
+			<slider label="Média" name="Media Volume"/>
 			<check_box label="Actif" name="enable_media"/>
 			<slider label="Chat vocal" name="Voice Volume"/>
 			<check_box label="Actif" name="enable_voice_check_volume"/>
 			<text name="friends_logon_sounds_label">Jouer un son quand mes amis :</text>
 			<check_box name="friends_notify_online_sound" label="Se connectent" width="110"/>
 			<check_box name="friends_notify_offline_sound" label="Se déconnectent"/>
-			<text name="money_change_threshold_label" tool_tip="Jouer un son lorsqu'une transaction est supérieure au montant défini ici." width="300">Seuil de l'avertissement sonore pour les transactions :</text>
+			<text name="money_change_threshold_label" tool_tip="Jouer un son lorsqu'une transaction est supérieure au montant défini ici." width="330">Seuil en L$ de l'avertissement sonore pour les transactions :</text>
 		</panel>
-		<panel label="Médias" name="Media Media Panel">
-			<check_box name="media_auto_play_btn" tool_tip="Activer cette option pour jouer les médias automatiquement." label="Jouer les médias automatiquement"/>
-			<check_box name="media_allowscript_btn" tool_tip="Activer cette option autorise les objets à contrôler vos connexions multimédia" label="Autoriser les scripts à jouer un contenu multimédia"/>
-			<check_box name="media_show_on_others_btn" tool_tip="Autoriser les contenus multimédias portés par les résidents à proximité" label="Jouer les contenus multimédias portés par les résidents"/>
-			<check_box name="media_filter" tool_tip="Activer cette option pour mettre en place une restriction sur le domaine des médias autorisés ou non" label="Activer la restriction de contenu multimédia par domaine"/>
+		<panel label="Média" name="Media Media Panel">
+			<check_box name="media_auto_play_btn" tool_tip="Activer cette option pour jouer le média automatiquement." label="Jouer le média automatiquement"/>
+			<check_box name="media_allowscript_btn" tool_tip="Activer cette option autorise les objets à contrôler vos connexions multimédia" label="Autoriser les scripts à jouer un média"/>
+			<check_box name="media_show_on_others_btn" tool_tip="Autoriser le média porté par les résidents à proximité à être joué" label="Jouer le média porté par les résidents"/>
+			<check_box name="media_filter" tool_tip="Activer cette option pour mettre en place une restriction sur le domaine du média autorisé ou non" label="Activer un filtre média par domaine"/>
 			<button label="Gérer les domaines autorisés" name="edit_media_lists_button"/>
 			<text name="Media Rolloff">Distance d'activation du fondu sonore :</text>
 			<slider label="Commence à s'adoucir à :" name="MediaRollOffMin" tool_tip="Distance à partir de laquelle les contenus audio deviennent moins élevés."/>
@@ -33,17 +33,17 @@
 			<slider label="Silencieux à :" name="MediaRollOffMax" tool_tip="Distance à laquelle le contenu ne sera plus entendu."/>
 			<text name="MaxMeters">mètres</text>
 		</panel>
-		<panel label="Flux musical" name="Media Music Panel">
-			<check_box name="audio_auto_play_btn" tool_tip="Activer cette option pour jouer le flux musical automatiquement." label="Autoriser le flux musical à débuter automatiquement"/>
-			<check_box name="FSFadeAudioStream" tool_tip="Activer cette option pour créer une transition musicale entre deux flux" label="Activer les transitions entre les terrains :"/>
-			<slider label="Nouveau :" label_width="55" name="FSAudioMusicFadeIn" tool_tip="Période de montée en puissance du nouveau flux musical."/>
+		<panel label="Musique" name="Media Music Panel">
+			<check_box name="audio_auto_play_btn" tool_tip="Activer cette option pour jouer la musique automatiquement." label="Autoriser la musique à débuter automatiquement"/>
+			<check_box name="FSFadeAudioStream" tool_tip="Activer cette option pour créer une transition entre deux musiques" label="Activer le fondu audio entre les terrains :"/>
+			<slider label="Nouveau :" label_width="55" name="FSAudioMusicFadeIn" tool_tip="Période de montée en puissance de la nouvelle musique."/>
 			<text name="FSAudioMusicFadeInSeconds">secondes</text>
-			<slider label="Ancien :" label_width="55" name="FSAudioMusicFadeOut" tool_tip="Période de disparition de l'ancien flux musical."/>
+			<slider label="Ancien :" label_width="55" name="FSAudioMusicFadeOut" tool_tip="Période de disparition de l'ancienne musique."/>
 			<text name="FSAudioMusicFadeOutSeconds">secondes</text>
-			<text name="show_stream_metadata_text">Afficher une notification du flux musical joué :</text>
+			<text name="show_stream_metadata_text">Afficher le titre de la musique jouée :</text>
 			<radio_group name="show_stream_metadata">
 				<radio_item label="Aucune" name="radio_off" width="80"/>
-				<radio_item label="Notification" name="radio_toasts" width="90"/>
+				<radio_item label="Toast" name="radio_toasts" width="80"/>
 				<radio_item label="Chat local" name="radio_chat"/>
 			</radio_group>
 			<check_box name="StreamMetadataAnnounceToChat" label="Communiquer le nom du titre au canal :" width="250"/>
@@ -53,23 +53,23 @@
 			<button tool_tip="Réinitialiser les paramètres" name="reset_voice_button"/>
 			<check_box label="Autoriser le chat vocal lorsque plusieurs instances de [APP_NAME] sont exécutées" name="VoiceMultiInstance"/>
 			<radio_group name="ear_location">
-				<radio_item label="Position de la caméra" name="0"/>
-				<radio_item label="Position de l'avatar" name="1"/>
-				<radio_item label="Sans ajustement" name="2"/>
+				<radio_item label="Entendre à partir de la position de la caméra" name="0"/>
+				<radio_item label="Entendre à partir de la position de l'avatar" name="1"/>
+				<radio_item label="Entendre avec un volume égal pour tout le monde" name="2"/>
 			</radio_group>
 			<check_box label="Bouger les lèvres de l'avatar lorsque je parle" name="enable_lip_sync"/>
-			<check_box label="Indicateur flottant au-dessus des avatars" tool_tip="Afficher un indicateur signifiant un chat vocal actif au-dessus des avatars" name="FSShowVoiceVisualizer"/>
-			<check_box label="Indicateur de conversation privée" tool_tip="Afficher un indicateur et bouger les lèvres de l'avatar lorsque je discute en vocal dans une conversation privée ou de groupe" name="Show_Voice_Visualizers_In_Calls"/>
-			<check_box label="Indicateur d'activité dans les conversations" tool_tip="Afficher un indicateur indiquant si je suis en train de parler dans les onglets des conversations" name="FSShowConversationVoiceStateIndicator"/>
-			<check_box label="Refuser automatiquement tout conférence de groupe" name="VoiceCallsRejectGroup"/>
-			<check_box label="Refuser automatiquement toute conférence à plusieurs" name="VoiceCallsRejectAdHoc"/>
-			<check_box label="Refuser automatiquement toute discussion vocale" name="VoiceCallsRejectP2P"/>
+			<check_box label="Afficher les indicateurs de voix au-dessus des avatars" tool_tip="Afficher un indicateur signifiant un chat vocal actif au-dessus des avatars" name="FSShowVoiceVisualizer"/>
+			<check_box label="Afficher les indicateurs de chat vocal privé" tool_tip="Afficher un indicateur et bouger les lèvres de l'avatar lorsque je discute en vocal dans une conversation privée ou de groupe" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Afficher si le chat vocal est activé dans les onglets de conversations" tool_tip="Afficher un indicateur indiquant si le chat vocal de la personne est activé dans les onglets des conversations" name="FSShowConversationVoiceStateIndicator"/>
+			<check_box label="Refuser automatiquement tout chat vocal de groupe" name="VoiceCallsRejectGroup"/>
+			<check_box label="Refuser automatiquement toute conférence vocale" name="VoiceCallsRejectAdHoc"/>
+			<check_box label="Refuser automatiquement tout appel vocal d'avatar à avatar" name="VoiceCallsRejectP2P"/>
 			<check_box label="Parler en appuyant sur la touche :" name="push_to_talk_toggle_check" tool_tip="Activer cette option activera le micro uniquement après avoir appuyé sur la touche correspondante. Pour redevenir silencieux, il suffit d'appuyer à nouveau sur la touche. Si l'option est désactivée, "/>
 			<line_editor name="modifier_combo" label="Activer le Push-to-talk"/>
 			<button label="Définir la touche" name="set_voice_hotkey_button"/>
 			<button tool_tip="Effacer la touche" name="clear_voice_hotkey_button"/>
 			<button tool_tip="Réinitialiser au clic molette" name="set_voice_middlemouse_button"/>
-			<button label="Paramètres matériels" name="device_settings_btn"/>
+			<button label="Paramètres Matériel audio" name="device_settings_btn"/>
 			<panel label="Device Settings" name="device_settings_panel">
 				<panel.string name="default_text">Par défaut</panel.string>
 				<panel.string name="default system device">Valeur par défaut du système</panel.string>
@@ -84,7 +84,8 @@
 			</panel>
 		</panel>
 		<panel label="Sons 1" name="UI Sounds tab 1">
-			<text name="textFSExplanation_tab1">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
+			<text name="textFSExplanation_tab1">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer ou non
+Saisissez son UUID ou passez votre souris sur le champ pour voir sa valeur par défaut.</text>
 			<text tool_tip="UUID du son joué par défaut pour les alertes Firestorm." name="textFSSndAlert">Alerte par défaut :</text>
 			<button name="Prev_UISndAlert" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndAlert" label="↻" tool_tip="Réinitialiser."/>
@@ -117,22 +118,22 @@
 			<button name="Prev_UISndMoneyChangeUp" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndMoneyChangeUp" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndMoneyChangeUp"/>
-			<text tool_tip="UUID du son joué lors de l'arrivée d'un nouveau message de conversation. Ce réglage est commun avec Conversations &gt; Notifications &gt; 'Annonces lors de la réception d'un nouveau message : IMs'." name="textFSNewIncomingIMSession">Réception d'un message :</text>
+			<text tool_tip="UUID du son joué lors de l'arrivée d'un nouvel IM. Ce réglage est commun avec Conversations &gt; Notifications &gt; 'Annonces lors de la réception d'un nouveau message : IMs'." name="textFSNewIncomingIMSession">IM entrant :</text>
 			<button name="Prev_UISndNewIncomingIMSession" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndNewIncomingIMSession" label="↻" tool_tip="Réinitialiser."/>
 			<combo_box name="PlayModeUISndNewIncomingIMSession">
 				<combo_box.item label="Nouvelle session" name="1"/>
 				<combo_box.item label="À chaque message" name="2"/>
-				<combo_box.item label="Seulement si non actif" name="3"/>
+				<combo_box.item label="Si en arrière-plan" name="3"/>
 				<combo_box.item label="Désactiver" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID du son joué lors de l'arrivée d'un nouveau message de groupe. Ce réglage est commun avec Conversations &gt; Notifications &gt; 'Annonces lors de la réception d'un nouveau message : Conversations de groupes'." name="textFSNewGroupIncomingIMSession">Messages de groupe :</text>
+			<text tool_tip="UUID du son joué lors de l'arrivée d'un nouveau message de groupe. Ce réglage est commun avec Conversations &gt; Notifications &gt; 'Annonces lors de la réception d'un nouveau message : Conversations de groupes'." name="textFSNewGroupIncomingIMSession">IM de groupe entrant :</text>
 			<button name="Prev_UISndNewIncomingGroupIMSession" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndNewIncomingGroupIMSession" label="↻" tool_tip="Réinitialiser."/>
 			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 				<combo_box.item label="Nouvelle session" name="1"/>
 				<combo_box.item label="À chaque message" name="2"/>
-				<combo_box.item label="Seulement si non actif" name="3"/>
+				<combo_box.item label="Si en arrière-plan" name="3"/>
 				<combo_box.item label="Désactiver" name="0"/>
 			</combo_box>
 			<text tool_tip="UUID du son joué lors de l'arrivée d'un nouveau message de conférence." name="textFSNewConferenceIncomingIMSession">Conférences :</text>
@@ -141,10 +142,10 @@
 			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
 				<combo_box.item label="Nouvelle session" name="1"/>
 				<combo_box.item label="À chaque message" name="2"/>
-				<combo_box.item label="Seulement si non actif" name="3"/>
+				<combo_box.item label="Si en arrière-plan" name="3"/>
 				<combo_box.item label="Désactiver" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID du son joué au début d'une nouvelle conversation." name="textFSStartIM">Début de conversation :</text>
+			<text tool_tip="UUID du son joué au début d'un nouvel IM." name="textFSStartIM">Ouverture d'IM :</text>
 			<button name="Prev_UISndStartIM" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndStartIM" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndStartIM"/>
@@ -156,7 +157,7 @@
 			<button name="Prev_UISndObjectDelete" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndObjectDelete" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndObjectDelete"/>
-			<text tool_tip="UUID du son joué lorsqu'un objet est posé au sol." name="textFSObjectRezIn">Pose d'objet au sol :</text>
+			<text tool_tip="UUID du son joué lorsqu'un objet est rezzé." name="textFSObjectRezIn">Rez d'un objet :</text>
 			<button name="Prev_UISndObjectRezIn" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndObjectRezIn" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndObjectRezIn"/>
@@ -164,7 +165,7 @@
 			<button name="Prev_UISndObjectRezOut" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndObjectRezOut" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndObjectRezOut"/>
-			<text tool_tip="UUID du son joué lorsqu'on prends une photo. Ce réglage est commun avec 'Photos silencieuses' du menu 'Avancé'." name="textFSSnapshot">Photo :</text>
+			<text tool_tip="UUID du son joué lorsqu'on prends une photo. Ce réglage est commun avec 'Photos silencieuses' du menu 'Avancé'." name="textFSSnapshot">Prendre une photo :</text>
 			<button name="Prev_UISndSnapshot" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndSnapshot" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Désactiver" name="QuietSnapshotsToDiskCheckBox"/>
@@ -227,30 +228,30 @@
 			<button name="Prev_UISndWindowOpen" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndWindowOpen" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndWindowOpen"/>
-			<text tool_tip="UUID du son joué quand un script ouvre une fenêtre de dialogue." width="180" name="textFSScriptFloaterOpen">Interaction de script :</text>
+			<text tool_tip="UUID du son joué quand un script ouvre une fenêtre de dialogue de script." width="180" name="textFSScriptFloaterOpen">Dialogue de script :</text>
 			<button name="Prev_UISndScriptFloaterOpen" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndScriptFloaterOpen" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndScriptFloaterOpen"/>
-			<text tool_tip="UUID du son joué quand un ami se connecte." width="180" name="textFSFriendOnline">Ami connecté :</text>
+			<text tool_tip="UUID du son joué quand un ami se connecte." width="180" name="textFSFriendOnline">Un ami se connecte :</text>
 			<button name="Prev_UISndFriendOnline" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndFriendOnline" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndFriendOnline"/>
-			<text tool_tip="UUID du son joué quand un ami se déconnecte." width="180" name="textFSFriendOffline">Ami déconnecté :</text>
+			<text tool_tip="UUID du son joué quand un ami se déconnecte." width="180" name="textFSFriendOffline">Un ami se déconnecte :</text>
 			<button name="Prev_UISndFriendOffline" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndFriendOffline" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndFriendOffline"/>
-			<text tool_tip="UUID du son joué lors d'une demande d'amitié." width="180" name="textFSFriendshipOffer">Devenir amis :</text>
+			<text tool_tip="UUID du son joué lors d'une demande d'amitié." width="180" name="textFSFriendshipOffer">Proposition d’amitié :</text>
 			<button name="Prev_UISndFriendshipOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndFriendshipOffer" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndFriendshipOffer"/>
-			<text tool_tip="UUID du son joué quand on propose de téléporter." width="180" name="textFSTeleportOffer">Téléporter :</text>
+			<text tool_tip="UUID du son joué quand on propose de téléporter." width="180" name="textFSTeleportOffer">Proposition de TP :</text>
 			<button name="Prev_UISndTeleportOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndTeleportOffer" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 		<panel label="Sons 3" name="UI Sounds tab 3">
 			<text name="textFSExplanation_tab3">Vous pouvez modifier ici chaque son produit par l'interface ainsi que décider de l'activer.</text>
-			<text tool_tip="UUID du son joué quand on propose un objet d'inventaire." width="180" name="textFSInventoryOffer">Échange d'objet :</text>
+			<text tool_tip="UUID du son joué quand on propose un objet d'inventaire." width="180" name="textFSInventoryOffer">Offre d'inventaire :</text>
 			<button name="Prev_UISndInventoryOffer" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndInventoryOffer" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndInventoryOffer"/>
@@ -262,7 +263,7 @@
 			<button name="Prev_UISndGroupInvitation" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndGroupInvitation" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndGroupInvitation"/>
-			<text tool_tip="UUID du son joué lors d'une notification de groupe." width="180" name="textFSGroupNotice">Notification de groupe :</text>
+			<text tool_tip="UUID du son joué lors d'une notice de groupe." width="180" name="textFSGroupNotice">Notices de groupe :</text>
 			<button name="Prev_UISndGroupNotice" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndGroupNotice" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndGroupNotice"/>

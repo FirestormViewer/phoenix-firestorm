@@ -6,13 +6,13 @@
 	<string name="EmbeddedItemNotLoggedIn">Non connecté</string>
 	<tab_container label="Préférences de Firestorm" name="tabs">
 		<panel label="Extras" name="tab-extras">
-			<check_box name="checkMiscRLVa" label="Autoriser le contrôle à distance RLVa"/>
+			<check_box name="checkMiscRLVa" label="Autoriser les contrôles de viewer scripté à distance (RLVa)"/>
 			<text name="textMiscRLVaRestart">(Redémarrage requis)</text>
-			<check_box label="Assigner les objets posés au sol au groupe du terrain" name="grouplandrez" tool_tip="Assigne les objets posés au sol au groupe propriétaire du terrain si vous appartenez à celui-ci même s'il n'est pas actif."/>
-			<check_box label="Afficher un petit nuage lorsque les scripts communiquent" name="EffectScriptChatParticles" tool_tip="Activer cette option affichera un petit nuage tournoyant autour de l'objet qui communique"/>
-			<check_box label="Désactiver l'indicateur visuel de suivi lorsque vous vous approchez de la personne concernée" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Activer cette option désactivera automatiquement l'indicateur visuel de suivi automatiquement lorsque vous vous approcherez de la personne (&lt;= 3m par défaut)"/>
+			<check_box label="Toujours assigner les objets rezzés au groupe du terrain, si possible" name="grouplandrez" tool_tip="Assigne les objets posés au sol au groupe propriétaire du terrain si vous appartenez à celui-ci, même s'il n'est pas actif."/>
+			<check_box label="Créer un effet de particules lorsque les scripts communiquent" name="EffectScriptChatParticles" tool_tip="Activer cette option affichera un petit nuage tournoyant autour de l'objet qui communique"/>
+			<check_box label="Désactiver la balise de suivi lorsque vous vous approchez de la personne concernée (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Activer cette option désactivera automatiquement la balise de suivi automatiquement lorsque vous vous approcherez de la personne (&lt;= 3m par défaut)"/>
 			<check_box label="Désactiver l'écran de chargement à la connexion" name="login_screen_toggle" tool_tip="Désactive l'écran de chargement à la connexion"/>
-			<check_box label="Désactiver l'écran de déconnexion" name="logout_screen_toggle" tool_tip="Désactive l'écran de déconnexion"/>
+			<check_box label="Désactiver l'écran de chargement à la déconnexion" name="logout_screen_toggle" tool_tip="Désactive l'écran de chargement à la déconnexion"/>
 			<check_box label="Activer la distance d'affichage par paliers" name="FSRenderFarClipStepping" tool_tip="Si activé, Firestorm utilisera une distance d'affichage progressive par paliers après une téléportation"/>
 			<slider name="progressive_draw_distance_interval" tool_tip="Intervalle entre chaque incrémentation de la distance d'affichage (en secondes)"/>
 			<check_box name="UseLSLBridge" label="Activer le Bridge LSL" tool_tip="Porter un objet scripté afin d'activer certaines fonctionnalités avancées"/>
@@ -45,44 +45,44 @@
 			<text name="AntiSpamText4">Pour le préchargement audio :</text>
 			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicateur d'évènements autorisés pour les requêtes de préchargement audio (6 par défaut)"/>
 			<button name="AntiSpamUnblock" label="Vider la liste de spammeurs"/>
-			<check_box label="Seuil avant d'afficher une confirmation pour payer un résident" width="360" name="FSConfirmPayments" tool_tip="Afficher une fenêtre de confirmation avant de verser une somme à un résident supérieure au seuil indiqué. Pour toujours avoir une confirmation, réglez le seuil à 0."/>
+			<check_box label="Seuil de confirmation avant paiement :" width="240" name="FSConfirmPayments" tool_tip="Afficher une fenêtre de confirmation avant de verser une somme à un résident supérieure au seuil indiqué. Pour toujours avoir une confirmation, réglez le seuil à 0."/>
 			<spinner name="FSPaymentConfirmationThreshold" tool_tip="Afficher une fenêtre de confirmation avant de verser une somme à un résident supérieure au seuil indiqué. Pour toujours avoir une confirmation, réglez le seuil à 0."/>
 		</panel>
 		<panel label="Avatar" name="firestorm_avatar">
-			<text name="HeadMovement">Inclinaison maximum de la tête de mon avatar :</text>
+			<text name="HeadMovement">Inclinaison maximum de la tête de mon avatar qui suit ma souris (0 = aucun mouvement) :</text>
 			<slider label="Inclinaison verticale :" tool_tip="Inclinaison verticale maximum de la tête de mon avatar en degrés" name="PitchFromMousePositionSlider"/>
 			<text name="PitchFromMousePositionText">degrés</text>
 			<slider label="Inclinaison horizontale :" tool_tip="Inclinaison horizontale maximum de la tête de mon avatar en degrés" name="YawFromMousePositionSlider"/>
 			<text name="YawFromMousePositionText">degrés</text>
-			<text name="note_lookat">Les préférences pour savoir qui regarde qui sont dans la section Confidentialité</text>
-			<text name="BeamPrefs">Aspect du rayon de sélection</text>
+			<text name="note_lookat">Les paramètres de LookAt sont dans l’onglet Confdentialité </text>
+			<text name="BeamPrefs">Aspect du faisceau de sélection</text>
 			<button name="BeamColor_delete" label="Supprimer" width="75" tool_tip="Supprimer ce préréglage"/>
-			<combo_box name="BeamColor_combo" tool_tip="Sélectionnez la couleur du rayon de sélection" left_delta="80" width="160" />
+			<combo_box name="BeamColor_combo" tool_tip="Sélectionnez la couleur du faisceau de sélection" left_delta="80" width="160" />
 			<button name="BeamColor_new" label="Nouveau.." tool_tip="Créer un nouveau préréglage de couleurs"/>
 			<button name="BeamColor_refresh" label="Actualiser" tool_tip="Actualiser la liste des préréglages"/>
-			<slider name="FSMaxBeamsPerSecond" label="Fréquence :" tool_tip="Fréquence d'actualisation du rayon par seconde. 40 par défaut"/>
-			<check_box label="Activer le rayon de sélection" name="SLPartBeam"/>
+			<slider name="FSMaxBeamsPerSecond" label="Fréquence :" tool_tip="Fréquence d'actualisation du faisceau par seconde. 40 par défaut"/>
+			<check_box label="Activer le faisceau de sélection" name="SLPartBeam"/>
 			<check_box label="Communiquer la sélection au chat" name="FSParticleChat" tool_tip="Communique les données sur la sélection (l'heure de début et de fin, et les coordonnées globales) au canal de discussion 9000."/>
-			<combo_box name="FSBeamShape_combo" tool_tip="Sélectionnez la forme du rayon de sélection"/>
+			<combo_box name="FSBeamShape_combo" tool_tip="Sélectionnez la forme du faisceau de sélection"/>
 			<button name="delete_beam" label="Supprimer" width="75" tool_tip="Supprimer cette forme"/>
-			<button name="custom_beam_btn" label="Nouvelle.." tool_tip="Créer une nouvelle forme de rayon"/>
+			<button name="custom_beam_btn" label="Nouvelle.." tool_tip="Créer une nouvelle forme de faisceau"/>
 			<button name="refresh_beams" label="Actualiser" tool_tip="Actualiser la liste des formes"/>
 			<slider name="FSBeamShapeScale" label="Echelle :" tool_tip="Modifier l'échelle de la forme utilisée" label_width="50" width="200"/>
 			<text name="BridgeProtocols">Intégration de protocoles externes au Bridge LSL :</text>
-			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO" name="BridgeIntegrationOC"/>
-			<check_box label="Autoriser LockMeister à activer ou désactiver l'AO" name="BridgeIntegrationLM"/>
+			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO intégré" name="BridgeIntegrationOC"/>
+			<check_box label="Autoriser LockMeister à activer ou désactiver l'AO intégré" name="BridgeIntegrationLM"/>
 		</panel>
 		<panel label="Windlight" name="WindlightTab">
-			<check_box label="Toujours suivre l'environnement de la région ou du terrain." name="UseEnvironmentFromRegionAlways"/>
-			<check_box label="Transitions lors des changements d'environnements avec les préférences rapides" name="FSInterpolateSky" tool_tip="Contrôle l'effet spécial lors des changements d'environnements. Peut occasionner une chute de FPS sur les ordinateurs moins performants pendant quelques secondes. Désactiver les deux options pour passer la transition et appliquer directement."/>
-			<check_box label="Transitions lors des changements d'environnements d'eau avec les préférences rapides" name="FSInterpolateWater" tool_tip="Comme ci-dessus, mais pour l'eau."/>
-			<text name="FSWLshare_txt">Paramètres environnementaux Firestorm</text>
-			<check_box label="Utiliser les paramètres environnementaux de Firestorm" name="FSWLParcelEnabled"/>
-			<check_box label="Appliquer automatiquement sur les terrains de mes amis" name="FSWLWhitelistFriends"/>
-			<check_box label="Appliquer automatiquement sur les terrains de mes groupes" name="FSWLWhitelistGroups"/>
-			<check_box label="Appliquer automatiquement tous les paramètres environnementaux" name="FSWLWhitelistAll"/>
-			<check_box label="Effectuer une transition entre les paramètres environnementaux de la région et du terrain" name="FSInterpolateParcelWL" tool_tip="Comme ci-desssus, mais pour les paramètres environnementaux du terrain."/>
-			<text name="wl_crossfade_label">Durée des transitions :</text>
+			<check_box label="Toujours utiliser l'environnement de la région ou du terrain." name="UseEnvironmentFromRegionAlways"/>
+			<check_box label="Transition des changements atmosphériques WL de la région avec les préférences rapides" name="FSInterpolateSky" tool_tip="Contrôle l'effet spécial lors des changements d'environnements. Peut occasionner une chute de FPS sur les ordinateurs moins performants pendant quelques secondes. Désactiver les deux options pour passer la transition et appliquer directement."/>
+			<check_box label="Transition des changements aquatiques WL de la région avec les préférences rapides" name="FSInterpolateWater" tool_tip="Comme ci-dessus, mais pour l'eau."/>
+			<text name="FSWLshare_txt">Partage des Windlights Firestorm</text>
+			<check_box label="Activer le partage Windlight par terrain de Firestorm " name="FSWLParcelEnabled"/>
+			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
+			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
+			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
+			<check_box label="Transition des WL lors d'un changement de région &amp; de terrain" name="FSInterpolateParcelWL" tool_tip="Comme ci-desssus, mais pour les paramètres environnementaux du terrain."/>
+			<text name="wl_crossfade_label" width="245">Durée des transitions (secondes) :</text>
 			<spinner name="FSWindlightInterpolateTime" tool_tip="La durée en secondes d'une transition entre deux préréglages (3 par défaut)"/>
 			<text name="could_texture_text" width="240">Texture des nuages (Redémarrage requis) :</text>
 			<combo_box name="cloud_combo" tool_tip="Sélectionnez la texture des nuages que vous souhaitez utiliser."/>
@@ -136,21 +136,21 @@
 			<button label="Parcourir" label_selected="Parcourir" name="SetPreprocInclude"/>
 		</panel>
 		<panel label="Construction 2" name="BuildTab2">
-			<check_box label="Activer le surlignement des prims sélectionnés" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Contour lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
 			<check_box label="Limiter la distance de sélection (mètres) :" width="280" name="LimitSelectDistance"/>
 			<spinner name="MaxSelectDistance" tool_tip="Distance maximale autorisée de sélection (en mètres depuis l'avatar [Par défaut : 128.000]"/>
 			<check_box label="Limiter la distance de déplacement (mètres) :" width="280" name="LimitDragDistance"/>
 			<spinner name="MaxDragDistance" tool_tip="Distance maximale autorisée pour un déplacement unique (mètres depuis le point de départ) [Par défaut : 48.000]"/>
 			<text name="RotationStepText1" left="23" width="260">Contraindre les rotations à des multiples de :</text>
-			<spinner name="RotationStep" width="75" tool_tip="Toutes les rotations via l'outil de rotation sont contraintes à des multiples du nombre indiqué (1.0 par défaut)"/>
-			<text name="RotationStepText2">degrés</text>
+			<spinner name="RotationStep" width="45" tool_tip="Toutes les rotations via l'outil de rotation sont contraintes à des multiples du nombre indiqué (1.0 par défaut)"/>
+			<text name="RotationStepText2">degrés si 'Fixer sur la grille' est inactif</text>
 			<check_box name="FSUnlinkConfirmEnabled" width="400" label="Confirmation de suppression de lien si l'ensemble possède au moins"/>
 			<text name="MinObjectsForUnlinkConfirmText2">objets</text>
 			<check_box label="Utiliser l'ancien fonctionnement de 'Mettre cet objet en vente'" tool_tip="Activer cette option sauvegardera directement les informations de vente de l'objet au lieu de nécessiter une confirmation." name="FSCommitForSaleOnChange_toggle"/>
 			<check_box label="Sauvegarder les scripts édités depuis l'inventaire en Mono" tool_tip="Activer cette option sauvegardera directement les scripts situés dans l'inventaire en Mono au lieu de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Sauvegarder les textures sur le disque dur au format PNG au lieu de TGA" tool_tip="Utilisé dans l'aperçu de texture et dans le menu contextuel de l'inventaire." name="FSTextureDefaultSaveAsFormat"/>
 			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
-			<check_box label="Faire glisser la texture sur l'objet par simple clic en mode de construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
+			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
 			<check_box label="Prévisualiser les animations sur son avatar pendant l'upload" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le processus d'upload" name="FSUploadAnimationOnOwnAvatar"/>
 		</panel>
 	</tab_container>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="Outfits" label="Choses">
+<panel name="Outfits" label="Tenues">
 	<panel.string name="wear_outfit_tooltip">Porter la tenue sélectionnée</panel.string>
 	<panel.string name="wear_items_tooltip">Porter les objets sélectionnés</panel.string>
 	<tab_container name="appearance_tabs">

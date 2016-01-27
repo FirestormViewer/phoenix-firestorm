@@ -34,7 +34,7 @@
 			<menu_item_check name="Error" label="Erreur"/>
 			<menu_item_check name="None" label="Aucun"/>
 		</menu>
-		<menu_item_check label="Afficher le sélecteur d'univers" name="Show Grid Picker"/>
+		<menu_item_check label="Afficher le sélecteur de Grille" name="Show Grid Picker"/>
 		<menu_item_call label="Afficher la console de notifications" name="Show Notifications Console"/>
 	</menu>
 </menu_bar>

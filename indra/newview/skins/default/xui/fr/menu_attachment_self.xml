@@ -19,7 +19,7 @@
 	<menu_item_call label="Dump XML" name="Dump XML"/>
 	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
 	<menu_item_call label="Faire disparaitre temporairement" name="Derender"/>
-	<menu_item_call label="Faire disparaitre &amp; Indésirable" name="DerenderPermanent"/>
+	<menu_item_call label="Faire disparaitre &amp; Blacklister" name="DerenderPermanent"/>
 	<menu_item_call label="Afficher les textures" name="Debug..."/>
 	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
 	<menu_item_call label="Supprimer" name="Drop"/>

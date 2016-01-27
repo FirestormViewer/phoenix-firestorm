@@ -7,11 +7,11 @@
 	<panel.string name="group_info_unchanged">Les informations générales du groupe ont changé</panel.string>
 	<panel.string name="incomplete_member_data_str">Récupération des données des membres</panel.string>
 	<panel name="group_general_panel">
-		<text name="group_key_label">ID. groupe :</text>
-		<text_editor name="group_key" label="ID. groupe :"/>
+		<text name="group_key_label">UUID :</text>
+		<text_editor name="group_key" label="UUID du groupe"/>
 		<button name="copy_uri" label="Copier l'URI"/>
 		<text name="prepend_founded_by">Créé par :</text>
-		<button name="copy_name" label="Copier nom"/>
+		<button name="copy_name" label="Copier le nom"/>
 		<texture_picker name="insignia" tool_tip="Cliquer pour choisir une image"/>
 		<text_editor name="charter">Charte du groupe</text_editor>
 		<text name="join_cost_text">Rejoindre (00000L$)</text>

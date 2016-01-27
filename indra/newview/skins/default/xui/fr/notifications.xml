@@ -88,7 +88,7 @@ Initialization with the Marketplace failed because of a system or network error.
 		<usetemplate ignoretext="Confirm before I change an active listing on the marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmMerchantMoveInventory">
-        Les objets glissés dans la liste des produits du Marketplace sont déplacés de leur emplacement original et non copiés. Poursuivre ?
+        Les objets glissés dans la liste des listings du Marketplace sont déplacés de leur emplacement original et non copiés. Poursuivre ?
 		<usetemplate ignoretext="Confirmer avant de de déplacer un objet de l'inventaire vers le Marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmListingCutOrDelete">
@@ -108,11 +108,11 @@ Initialization with the Marketplace failed because of a system or network error.
 		<usetemplate ignoretext="Confirm before I deactivate the version folder of a listing on the marketplace" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="AlertMerchantListingNotUpdated">
-Ce produit ne peut pas être mis à jour.
-[[URL] Cliquez-ici here] pour le modifier depuis le Marketplace.
+Ce listing ne peut pas être mis à jour.
+[[URL] Cliquez ici] pour le modifier depuis le Marketplace.
 	</notification>
 	<notification name="AlertMerchantListingCannotWear">Vous ne pouvez pas porter de vêtements ou d'éléments du corps qui sont dans le Marketplace.</notification>
-	<notification name="AlertMerchantListingInvalidID">ID produit invalide.</notification>
+	<notification name="AlertMerchantListingInvalidID">ID listing invalide.</notification>
 	<notification name="AlertMerchantListingActivateRequired">
         There are several or no version folders in this listing. You will need to select and activate one independently later.
 		<usetemplate ignoretext="Alert about version folder activation when I create a listing with several version folders" name="okignore" yestext="OK"/>
@@ -175,7 +175,7 @@ Impossible de créer le groupe.
 Vous êtes sur le point d'ajouter un membre au rôle de [ROLE_NAME].
 Il ne pourra être supprimé de ce rôle.
 Le membre devra lui-même quitter ce rôle.
-Êtes vous sur de vouloir poursuivre ?
+Êtes-vous sur de vouloir poursuivre ?
 		<usetemplate ignoretext="Confirmer avant d'ajouter un nouveau propriétaire de groupe" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
 	<notification name="AssignDangerousActionWarning">
@@ -336,7 +336,7 @@ Elle ne contient aucun objet valide.
 	<notification name="CannotWearTrash">Vous ne pouvez pas porter d'objets qui sont dans la corbeille.</notification>
 	<notification name="MaxAttachmentsOnOutfit">
 Impossible de porter l'objet.
-Vous avez atteint le nombre ([MAX_ATTACHMENTS]) maximum d'objets attachés. Veuillez en retirer quelques uns au préalable.
+Vous avez atteint le nombre ([MAX_ATTACHMENTS]) maximum d'objets attachés. Veuillez en retirer quelques-uns au préalable.
 	</notification>
 	<notification name="CannotWearInfoNotComplete">You cannot wear this item because it has not yet loaded. Please try again in a minute.</notification>
 	<notification name="MustHaveAccountToLogIn">
@@ -490,7 +490,7 @@ Vous perdrez définitivement les objets si vous les offrez. Poursuivre ?
 	</notification>
 	<notification name="CannotGiveItem">Impossible de donner cet objet.</notification>
 	<notification name="TransactionCancelled">Transaction annulée.</notification>
-	<notification name="TooManyItems">Impossible d'offrir plus de 42 objets simultannément.</notification>
+	<notification name="TooManyItems">Impossible d'offrir plus de 42 objets simultanément.</notification>
 	<notification name="NoItems">Vous n'avez pas la permission de transférer les objets sélectionnés.</notification>
 	<notification name="CannotCopyCountItems">
 You do not have permission to copy [COUNT] of the selected items. You will lose these items from your inventory.
@@ -499,20 +499,20 @@ Do you really want to give these items?
 	</notification>
 	<notification name="CannotGiveCategory">Vous n'avez pas la permission de transférer le dossier sélectionné.</notification>
 	<notification name="FreezeAvatar">
-Figer cet avatar ?
-Il ne pourra temporairement plus se déplacer, communiquer ni interagir avec l'univers qui l'entoure.
-		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Unfreeze" yestext="Figer"/>
+Geler cet avatar ?
+Il ne pourra temporairement plus se déplacer, communiquer ni interagir avec le monde qui l'entoure.
+		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Dégeler" yestext="Geler"/>
 	</notification>
 	<notification name="FreezeAvatarFullname">
-Figer [AVATAR_NAME] ?
-Il ne pourra temporairement plus se déplacer, communiquer ni interagir avec l'univers qui l'entoure.
-		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Unfreeze" yestext="Figer"/>
+Geler [AVATAR_NAME] ?
+Il ne pourra temporairement plus se déplacer, communiquer ni interagir avec le monde qui l'entoure.
+		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Dégeler" yestext="Geler"/>
 	</notification>
 	<notification name="FreezeAvatarMultiple">
- Figer les résidents suivants ?
+ Geler les résidents suivants ?
  [RESIDENTS]
- Ils ne pourront temporairement plus se déplacer, communiquer ni interagir avec l'univers qui l'entoure.
-		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Unfreeze" yestext="Figer"/>
+ Ils ne pourront temporairement plus se déplacer, communiquer ni interagir avec le monde qui l'entoure.
+		<usetemplate canceltext="Annuler" name="yesnocancelbuttons" notext="Dégeler" yestext="Geler"/>
 	</notification>
 	<notification name="EjectAvatarFullname">
 Éjecter [AVATAR_NAME] de votre terrain ?
@@ -647,7 +647,7 @@ Select objects with scripts.
 Not able to perform 'reset'.
 Select objects with scripts that you have permission to modify.
 	</notification>
-	<notification name="CannotOpenScriptObjectNoMod">Unable to open script in object without modify permissions.</notification>
+	<notification name="CannotOpenScriptObjectNoMod">Impossible d'ouvrir un script contenu dans un objet sans les droits de modification.</notification>
 	<notification name="CannotSetRunningSelectObjectsNoScripts">
 Not able to set any scripts to 'running'.
 Select objects with scripts.
@@ -1055,7 +1055,7 @@ Vous pouvez utiliser [APP_NAME] normalement, les autres personnes vous verront c
 	</notification>
 	<notification name="FirstRun">
 L'installation de [APP_NAME] est terminée.
-Si c'et votre première connexion à [CURRENT_GRID], vous aurez besoin d'un compte avant de vous connecter.
+Si c'est votre première connexion à [CURRENT_GRID], vous aurez besoin d'un compte avant de vous connecter.
 		<usetemplate name="okcancelbuttons" notext="Continuer" yestext="Créer un compte..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1340,8 +1340,8 @@ Are you sure you want to return the selected objects to their owners? Transferab
 		<usetemplate ignoretext="Confirm before I return objects to their owners" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Leave Group?
+Vous êtes actuellement membre du groupe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
+Poursuivre ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
@@ -1349,16 +1349,16 @@ Vous êtes actuellement membre du groupe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. L
 Quitter le groupe ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
-	<notification name="OwnerCannotLeaveGroup">Impossible de quitter le groupe. Vous ne pouvez quitter le groupe étant donné que vous êtes le dernier propriétaire de celui-ci. Veuillez asigner un membre au rôle Propriétaire en premier lieu.</notification>
+	<notification name="OwnerCannotLeaveGroup">Impossible de quitter le groupe. Vous ne pouvez quitter le groupe étant donné que vous êtes le dernier propriétaire de celui-ci. Veuillez assigner un membre au rôle Propriétaire en premier lieu.</notification>
 	<notification name="GroupDepartError">
 Impossible de quitter le groupe : [reason].
 	</notification>
-	<notification name="GroupDepart">You have left the group [group_name].</notification>
+	<notification name="GroupDepart">Vous avez quitté le groupe [group_name].</notification>
 	<notification name="ConfirmKick">
 Do you REALLY want to kick all residents off the grid?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Kick All Residents"/>
 	</notification>
-	<notification name="MuteLinden">Sorry, you cannot block a Linden.</notification>
+	<notification name="MuteLinden">Désolé, vous ne pouvez pas ignorer un employé Linden.</notification>
 	<notification name="CannotStartAuctionAlreadyForSale">You cannot start an auction on a parcel which is already set for sale.  Disable the land sale if you are sure you want to start an auction.</notification>
 	<notification label="Block object by name failed" name="MuteByNameFailed">You already have blocked/muted this name.</notification>
 	<notification name="RemoveItemWarn">
@@ -1433,48 +1433,48 @@ Kick everyone currently on the grid with what message?
 		</form>
 	</notification>
 	<notification name="FreezeUser">
-Freeze this Resident with what message?
+Geler ce résident avec le message suivant ?
 		<form name="form">
-			<input name="message">You have been frozen. You cannot move or chat. An administrator will contact you via instant message (IM).</input>
+			<input name="message">Vous avez été gelé. Vous ne pouvez pas bouger ou parler. Un administrateur vous contactera par IM.</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
 	<notification name="UnFreezeUser">
-Unfreeze this Resident with what message?
+Dégeler ce résident avec le message suivant ?
 		<form name="form">
-			<input name="message">You are no longer frozen.</input>
+			<input name="message">Vous êtes dégelé.</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
 	<notification name="SetDisplayNameSuccess">
-Hi [DISPLAY_NAME]!
-Just like in real life, it takes a while for everyone to learn about a new name.  Please allow several days for [http://wiki.secondlife.com/wiki/Setting_your_display_name your name to update] in objects, scripts, search, etc.
+Salut [DISPLAY_NAME] !
+Comme dans la vraie vie, il faut un certain temps pour refaire ses papiers. Il est possible qu'il faille plusieurs jours pour voir apparaitre votre [http://wiki.secondlife.com/wiki/Setting_your_display_name nom d'affichage] dans les objets, scripts, la recherche, etc.
 	</notification>
-	<notification name="SetDisplayNameBlocked">Sorry, you cannot change your display name. If you feel this is in error, please contact Linden Lab support.</notification>
+	<notification name="SetDisplayNameBlocked">Désolé, mais vous ne pouvez pas modifier votre nom d'affichage. Si vous pensez que c'est une erreur, veuillez contacter le support Second Life à l'adresse https://support.secondlife.com</notification>
 	<notification name="SetDisplayNameFailedLength">
-Sorry, that name is too long.  Display names can have a maximum of [LENGTH] characters.
-Please try a shorter name.
+Désolé, mais ce nom est trop long. Les noms d'affichage peuvent contenir au maximum [LENGTH] caractères.
+Essayez un nom plus court.
 	</notification>
-	<notification name="SetDisplayNameFailedGeneric">Sorry, we could not set your display name.  Please try again later.</notification>
-	<notification name="SetDisplayNameMismatch">The display names you entered do not match. Please re-enter.</notification>
+	<notification name="SetDisplayNameFailedGeneric">Désolé, mais nous n'avons pas pu enregistrer votre nom d'affichage. Veuillez réessayer ultérieurement.</notification>
+	<notification name="SetDisplayNameMismatch">Les noms ne correspondent pas, veuillez revérifier ce que vous avez saisi.</notification>
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
-Sorry, you have to wait longer before you can change your display name.
-See http://wiki.secondlife.com/wiki/Setting_your_display_name
-Please try again later.
+Désolé, mais vous devez patienter avant de pouvoir modifier votre nom d'affichage.
+Veuillez consulter http://wiki.secondlife.com/wiki/Setting_your_display_name pour plus d'informations
+Veuillez réessayer ultérieurement.
 	</notification>
 	<notification name="AgentDisplayNameSetBlocked">
- Sorry, we could not set your requested name because it contains a banned word.
- Please try a different name.
+Désolé, mais le nom sélectionné contient un terme proscrit.
+Veuillez essayer un autre nom.
 	</notification>
-	<notification name="AgentDisplayNameSetInvalidUnicode">The display name you wish to set contains invalid characters.</notification>
+	<notification name="AgentDisplayNameSetInvalidUnicode">Le nom d'affichage sélectionné contient des caractères invalides.</notification>
 	<notification name="AgentDisplayNameSetOnlyPunctuation">Your display name must contain letters other than punctuation.</notification>
-	<notification name="DisplayNameUpdate">[OLD_NAME] ([SLID]) is now known as [NEW_NAME].</notification>
+	<notification name="DisplayNameUpdate">[OLD_NAME] ([SLID]) est maintenant connu sous le nom [NEW_NAME].</notification>
 	<notification name="DisplayNameUpdateRemoveAlias" type="notify">
-    [OLD_NAME] ([SLID]) is now known as [NEW_NAME].
-    This agent has a set alias that will replace [NEW_NAME]
-    Would you like to remove it?
+    [OLD_NAME] ([SLID]) est maintenant connu sous le nom [NEW_NAME].
+    Vous aviez défini un surnom pour cette personne
+    Souhaitez-vous le supprimer ?
 		<form name="form">
 			<button name="Yes" text="Oui"/>
 			<button name="No"  text="Non"/>
@@ -1483,7 +1483,7 @@ Please try again later.
 	<notification name="OfferTeleport">
 Proposer une téléportation en incluant le message suivant ?
 		<form name="form">
-			<input name="message">On se me rejoint à [REGION] ?</input>
+			<input name="message">On se rejoint à [REGION] ?</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
@@ -1502,7 +1502,7 @@ which exceeds the limit of [LIMIT].
 	<notification name="OfferTeleportFromGod">
 Téléporter ce résident en incluant le message suivant ?
 		<form name="form">
-			<input name="message">Rejoins moi à [REGION]</input>
+			<input name="message">Rejoins-moi à [REGION]</input>
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
@@ -1520,7 +1520,7 @@ Téléporter ce résident en incluant le message suivant ?
 		<usetemplate ignoretext="Confirmer avant de se téléporter vers un favori" name="okcancelignore" notext="Annuler" yestext="Se téléporter"/>
 	</notification>
 	<notification name="TeleportToClassified">
-    Se téléporter ào [CLASSIFIED]?
+    Se téléporter à [CLASSIFIED]?
 		<usetemplate ignoretext="Confirmer avant de se téléporter sur le lieu d'une annonce" name="okcancelignore" notext="Annuler" yestext="Se téléporter"/>
 	</notification>
 	<notification name="TeleportToHistoryEntry">
@@ -2027,7 +2027,7 @@ Would you like to automatically wear the clothing you are about to create?
 	</notification>
 	<notification name="NotAgeVerified_Notify">Ce lieu est limité aux personnes majeures.</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-Vous devez saisir vos coordonnées bancaires pour entrer sur ce terrain. Se rendre sur la page de gestion de votre compte [CURRENT_GRID] et renseigner ces informations ?
+Vous devez saisir vos informations de paiement pour entrer sur ce terrain. Se rendre sur la page de gestion de votre compte [CURRENT_GRID] et renseigner ces informations ?
 [_URL]
 		<usetemplate ignoretext="I lack payment information on file" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
@@ -2042,68 +2042,68 @@ Enable the media filter?
 		</form>
 	</notification>
 	<notification name="MediaAlert"> 
-This parcel provides media from:
-Domain: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Ce terrain propose un média depuis :
+Domaine : [MEDIADOMAIN]
+URL : [MEDIAURL]
 		<form name="form">
 			<button name="Allow" text="Autoriser"/>
 			<button name="Deny" text="Interdire"/>
 		</form>
 	</notification>
 	<notification name="MediaAlert2"> 
-Do you want to remember your choice and [LCONDITION] allow media from this source?
-Domain: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Voulez-vous enregistrer votre choix et [LCONDITION] autoriser le media depuis cette adresse ?
+Domaine : [MEDIADOMAIN]
+URL : [MEDIAURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Now"/>
-			<button name="RememberDomain" text="[CONDITION] Allow This Domain"/>
-			<button name="RememberURL" text="[CONDITION] Allow This URL"/>
+			<button name="Do Now" text="[ACTION] maintenant"/>
+			<button name="RememberDomain" text="[CONDITION] autoriser ce domaine"/>
+			<button name="RememberURL" text="[CONDITION] autoriser cette URL"/>
 		</form>
 	</notification>
 	<notification name="MediaAlertSingle"> 
-This parcel provides media from:
-Domain: [MEDIADOMAIN]
-URL: [MEDIAURL]
+Ce terrain propose un média depuis :
+Domaine : [MEDIADOMAIN]
+URL : [MEDIAURL]
 		<form name="form">
 			<button name="Allow" text="Autoriser"/>
 			<button name="Deny" text="Interdire"/>
-			<button name="BlacklistDomain" text="Blacklist"/>
-			<button name="WhitelistDomain" text="Whitelist"/>
+			<button name="BlacklistDomain" text="Blacklister"/>
+			<button name="WhitelistDomain" text="Whitelister"/>
 		</form>
 	</notification>
 	<notification name="AudioAlert"> 
-This parcel provides music from:
-Domain: [AUDIODOMAIN]
-URL: [AUDIOURL]
+Ce terrain propose de la musique depuis :
+Domaine : [AUDIODOMAIN]
+URL : [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Autoriser"/>
 			<button name="Deny" text="Interdire"/>
 		</form>
 	</notification>
 	<notification name="AudioAlert2"> 
-Do you want to remember your choice and [LCONDITION] allow music from this source?
-Domain: [AUDIODOMAIN]
-URL: [AUDIOURL]
+Voulez-vous enregistrer votre choix et [LCONDITION] autoriser la musique depuis cette adresse ?
+Domaine : [AUDIODOMAIN]
+URL : [AUDIOURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Now"/>
-			<button name="RememberDomain" text="[CONDITION] Allow This Domain"/>
-			<button name="RememberURL" text="[CONDITION] Allow This URL"/>
+			<button name="Do Now" text="[ACTION] maintenant"/>
+			<button name="RememberDomain" text="[CONDITION] autoriser ce domaine"/>
+			<button name="RememberURL" text="[CONDITION] autoriser cette URL"/>
 		</form>
 	</notification>
 	<notification name="AudioAlertSingle"> 
-Do you want to remember your choice and [LCONDITION] allow music from this source?
-Domain: [AUDIODOMAIN]
+Voulez-vous enregistrer votre choix et [LCONDITION] autoriser la musique depuis cette adresse ?
+Domaine : [AUDIODOMAIN]
 URL: [AUDIOURL]
 		<form name="form">
 			<button name="Allow" text="Autoriser"/>
 			<button name="Deny" text="Interdire"/>
-			<button name="BlacklistDomain" text="Blacklist"/>
-			<button name="WhitelistDomain" text="Whitelist"/>
+			<button name="BlacklistDomain" text="Blacklister"/>
+			<button name="WhitelistDomain" text="Whitelister"/>
 		</form>
 	</notification>
 	<notification name="MOAPAlert"> 
-An object provides shared media from:
-Domain: [MOAPDOMAIN]
+Un objet propose un média partagé depuis :
+Domaine : [MOAPDOMAIN]
 URL: [MOAPURL]
 		<form name="form">
 			<button name="Allow" text="Autoriser"/>
@@ -2111,13 +2111,13 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="MOAPAlert2"> 
-Do you want to remember your choice and [LCONDITION] allow shared media from this source?
-Domain: [MOAPDOMAIN]
+Voulez-vous enregistrer votre choix et [LCONDITION] autoriser le media partagé depuis cette adresse ?
+Domaine : [MOAPDOMAIN]
 URL: [MOAPURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Now"/>
-			<button name="RememberDomain" text="[CONDITION] Allow This Domain"/>
-			<button name="RememberURL" text="[CONDITION] Allow This URL"/>
+			<button name="Do Now" text="[ACTION] maintenant"/>
+			<button name="RememberDomain" text="[CONDITION] autoriser ce domaine"/>
+			<button name="RememberURL" text="[CONDITION] autoriser cette URL"/>
 		</form>
 	</notification>
 	<notification name="SystemMessageTip">[MESSAGE]</notification>
@@ -2151,7 +2151,7 @@ N'oubliez pas que votre mot de passe est sensible à la casse.
 	</notification>
 	<notification name="NotecardMissing">La note est introuvable dans la base de données.</notification>
 	<notification name="NotecardNoPermissions">Vous n'avez pas la permission de consulter cette note.</notification>
-	<notification name="RezItemNoPermissions">Permissions insufisantes pour rezzer l'objet.</notification>
+	<notification name="RezItemNoPermissions">Permissions insuffisantes pour rezzer l'objet.</notification>
 	<notification name="IMAcrossParentEstates">Unable to send IM across parent estates.</notification>
 	<notification name="TransferInventoryAcrossParentEstates">Unable to transfer inventory across parent estates.</notification>
 	<notification name="UnableToLoadNotecard">
@@ -2279,7 +2279,7 @@ No scripts will work here except those belonging to the land owner.
 	<notification name="RegionAboutToShutdown">La région que vous souhaitez visiter est sur le point de redémarrer.</notification>
 	<notification name="URBannedFromRegion">Vous êtes banni de cette région.</notification>
 	<notification name="NoTeenGridAccess">Your account cannot connect to this teen grid region.</notification>
-	<notification name="ImproperPaymentStatus">Vos coordonnées bancaires sont invalides pour visiter cette région.</notification>
+	<notification name="ImproperPaymentStatus">Vos informations de paiement sont invalides pour visiter cette région.</notification>
 	<notification name="MustGetAgeRegion">Vous devez être majeur pour visiter cette région.</notification>
 	<notification name="MustGetAgeParcel">Vous devez être majeur pour visiter cette terrain.</notification>
 	<notification name="NoDestRegion">No destination region found.</notification>
@@ -2398,8 +2398,8 @@ Offer a teleport?
 [MESSAGE]
 [URL]
 		<form name="form">
-			<button name="Later" text="Later"/>
-			<button name="GoNow..." text="Go Now..."/>
+			<button name="Later" text="Plus tard"/>
+			<button name="GoNow..." text="Aller maintenant..."/>
 		</form>
 	</notification>
 	<notification name="OfferFriendship" label="Demande d'amitié de [NAME_LABEL]">
@@ -2674,7 +2674,7 @@ Cet upload vous coutera [PRICE] L$, poursuivre ?
 Selected button cannot be shown right now.
 The button will be shown when there is enough space for it.
 	</notification>
-	<notification name="ShareNotification">Select residents to share with.</notification>
+	<notification name="ShareNotification">Sélectionnez les résidents avec lesquels partager vos objets.</notification>
 	<notification name="MeshUploadError">
       [LABEL] failed to upload: [MESSAGE] [IDENTIFIER]
 [DETAILS] See Firestorm.log for details
@@ -2697,15 +2697,15 @@ With the following Residents:
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">Objets partagés avec succès.</notification>
-	<notification name="DeedToGroupFail">Deed to group failed.</notification>
-	<notification name="ReleaseLandThrottled">The parcel [PARCEL_NAME] can not be abandoned at this time.</notification>
+	<notification name="DeedToGroupFail">Cession au groupe échouée.</notification>
+	<notification name="ReleaseLandThrottled">Le terrain [PARCEL_NAME] ne peut être abandonné pour l'instant.</notification>
 	<notification name="ReleasedLandWithReclaim">
-The [AREA] m&#xB2; parcel '[PARCEL_NAME]' has been released.
-You will have [RECLAIM_PERIOD] hours to reclaim for L$0 before it is set for sale to anyone.
+[AREA] m² du terrain '[PARCEL_NAME]' ont été libérés.
+Vous avez [RECLAIM_PERIOD] heures pour revendiquer cette surface de terrain gratuitement, auquel cas, elle sera mise en vente à n'importe qui.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
-The [AREA] m&#xB2; parcel '[PARCEL_NAME]' has been released.
-It is now available for purchase by anyone.
+[AREA] m² du terrain '[PARCEL_NAME]' ont été libérés.
+Cette surface est maintenant disponible à l'achat par n'importe qui.
 	</notification>
 	<notification name="AvatarRezNotification">
 ( [EXISTENCE] seconds alive )
@@ -2768,8 +2768,8 @@ Unable to upload texture.
 [REASON]   
 	</notification>
 	<notification name="LivePreviewUnavailable">
-We cannot display a preview of this texture because it is no-copy and/or no-transfer.
-		<usetemplate ignoretext="Warn me that Live Preview mode is not available for no-copy and/or no-transfer textures" name="okignore" yestext="OK"/>
+Impossible d'afficher cette texture, car elle est Non-modifiable et/ou Non-transférable.
+		<usetemplate ignoretext="M'avertir que la prévisualisation des textures n'est pas possible quand elles sont non transférables et/ou non modifiables" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLeaveCall">
 Êtes-vous sur de vouloir quitter cet appel ?
@@ -2952,7 +2952,7 @@ Are you sure you want to pick the current search url as debug search url?
 		<usetemplate ignoretext="Confirm picking debug search url" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmRemoveGrid">
-Êtes-vous sur de vouloir supprimer [REMOVE_GRID] de la liste des univers ?
+Êtes-vous sur de vouloir supprimer [REMOVE_GRID] de la liste des Grilles ?
 		<usetemplate ignoretext="Confirm removing grids" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="CanNotRemoveConnectedGrid">
@@ -3094,22 +3094,22 @@ Attempted to add an invalid or unreadable image file [FNAME] which could not be 
 Attempt canceled.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
-    You are returning [NUM_ITEMS] items.  Are you sure you want to continue?
-		<usetemplate ignoretext="Are you sure you want to return multiple items?" name="okcancelignore" notext="Non" yestext="Oui"/>
+    Vous allez renvoyer [NUM_ITEMS] objets. Êtes-vous sur de vouloir poursuivre ?
+		<usetemplate ignoretext="Êtes-vous sur de vouloir renvoyer plusieurs objets ?" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
 	<notification name="PathfindingDeleteMultipleItems">
-    You are deleting [NUM_ITEMS] items.  Are you sure you want to continue?
-		<usetemplate ignoretext="Are you sure you want to delete multiple items?" name="okcancelignore" notext="Non" yestext="Oui"/>
+    Vous allez supprimer [NUM_ITEMS] objets. Êtes-vous sur de vouloir poursuivre ?
+		<usetemplate ignoretext="Êtes-vous sur de vouloir supprimer plusieurs objets ?" name="okcancelignore" notext="Non" yestext="Oui"/>
 	</notification>
-	<notification name="AvatarFrozen">[AV_FREEZER] has frozen you. You cannot move or interact with the world.</notification>
-	<notification name="AvatarFrozenDuration">[AV_FREEZER] has frozen you for [AV_FREEZE_TIME] seconds. You cannot move or interact with the world.</notification>
-	<notification name="YouFrozeAvatar">Avatar frozen.</notification>
-	<notification name="AvatarHasUnFrozenYou">[AV_FREEZER] has unfrozen you.</notification>
-	<notification name="AvatarUnFrozen">Avatar unfrozen.</notification>
+	<notification name="AvatarFrozen">[AV_FREEZER] vous a gelé. Vous ne pouvez plus bouger ou interagir avec le monde.</notification>
+	<notification name="AvatarFrozenDuration">[AV_FREEZER] vous a gelé pour [AV_FREEZE_TIME] secondes. Vous ne pourrez bouger ou interagir avec le monde pendant ce laps de temps.</notification>
+	<notification name="YouFrozeAvatar">Avatar gelé.</notification>
+	<notification name="AvatarHasUnFrozenYou">[AV_FREEZER] vous a dégelé.</notification>
+	<notification name="AvatarUnFrozen">Avatar dégelé.</notification>
 	<notification name="AvatarFreezeFailure">Freeze failed because you don't have admin permission for that parcel.</notification>
 	<notification name="AvatarFreezeThaw">Your freeze expired, go about your business.</notification>
 	<notification name="AvatarCantFreeze">Sorry, can't freeze that user.</notification>
-	<notification name="NowOwnObject">You are now the owner of object [OBJECT_NAME]</notification>
+	<notification name="NowOwnObject">Vous êtes maintenant le propriétaire de l'objet [OBJECT_NAME]</notification>
 	<notification name="CantRezOnLand">Can't rez object at [OBJECT_POS] because the owner of this land does not allow it.  Use the land tool to see land ownership.</notification>
 	<notification name="RezFailTooManyRequests">Object can not be rezzed because there are too many requests.</notification>
 	<notification name="SitFailCantMove">You cannot sit because you cannot move at this time.</notification>
@@ -3436,7 +3436,7 @@ You cannot undo this action.
 Créer un nouveau cercle avec le nom suivant :
 		<form name="form">
 			<input name="message">Nouveau cercle</input>
-			<button name="Create" text="Create"/>
+			<button name="Create" text="Créer"/>
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>

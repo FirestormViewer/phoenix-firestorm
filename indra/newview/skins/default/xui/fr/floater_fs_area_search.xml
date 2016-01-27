@@ -39,6 +39,9 @@
 			<check_box name="filter_temporary" label="Temporaires"/>
 			<check_box name="filter_attachment" label="Portés"/>
 			<check_box name="filter_moap" label="Media partagé"/>
+			<check_box name="filter_perm_copy" label="Copiables"/>
+			<check_box name="filter_perm_modify" label="Modifiables"/>
+			<check_box name="filter_perm_transfer" label="Transférables"/>
 			<check_box name="filter_for_sale" label="Prix de vente entre" width="130"/>
 			<text name="and">et</text>
 			<text name="mouse_text" width="120">Action du clic :</text>
@@ -55,6 +58,7 @@
 			</combo_box>
 			<check_box name="filter_distance" label="Distance entre" width="130"/>
 			<text name="and2">et</text>
+			<check_box name="filter_agent_parcel_only" label="Uniquement sur ce terrain" width="140"/>
 			<text name="only_list">Exclure les objets qui sont :</text>
 			<check_box name="exclude_attachment" label="Portés"/>
 			<check_box name="exclude_physical" label="Physiques"/>

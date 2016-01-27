@@ -12,11 +12,11 @@
 			<check_box label="Seuls mes amis et groupes savent que je suis connecté" name="online_visibility"/>
 			<check_box label="Seuls mes amis et groupes peuvent m'appeler ou m'envoyer des messages instantanés" name="voice_call_friends_only_check"/>
 			<check_box label="Couper le micro à la fin d'un appel vocal" name="auto_disengage_mic_check"/>
-			<check_box label="Permettre aux objets de connaître mes informations de langue actuelles" name="LanguageIsPublic"/>
+			<check_box label="Permettre aux objets scriptés de connaitre la langue de l’interface" name="LanguageIsPublic"/>
 			<check_box label="Afficher mes repères favoris à la connexion (dans le menu déroulant 'Démarrer :')" name="favorites_on_login_check"/>
 			<check_box label="Accepter automatiquement les nouveaux objets" name="Auto_Accept_New_Inventory"/>
 			<check_box label="Utiliser les messages originaux d'acceptation et de refus de transfert d'objet" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si activé, le Viewer n'acceptera ou déclinera les messages qu'après avoir pressé le bouton concerné. Si désactivé, le message d'acceptation sera envoyé automatiquement dès que l'offre de transfert aura été reçue. Cette option est sans effet si les offres de transfert sont acceptées automatiquement."/>
-			<check_box label="Afficher automatiquement les nouveaux objets récemment acceptés dans l'inventaire" name="Show_In_Inventory"/>
+			<check_box label="Afficher automatiquement les nouveaux objets acceptés dans l'inventaire" name="Show_In_Inventory"/>
 			<check_box label="Afficher automatiquement les notes, textures, repères, après acceptation" name="Show_New_Inventory"/>
 			<check_box label="Afficher automatiquement les photos dans l'inventaire après mise en ligne" name="FSOpenInventoryAfterSnapshot"/>
 			<check_box label="Créer un effet de particules lors du transfert d'objets d'inventaire à d'autres avatars" name="FSCreateGiveInventoryParticleEffect"/>
@@ -43,7 +43,7 @@
 				<combo_box.item label="Aucun" name="None"/>
 				<combo_box.item label="Nom complet" name="Complete_Name"/>
 				<combo_box.item label="Nom d'affichage" name="Display_Name"/>
-				<combo_box.item label="Nom originel" name="Legacy_Name"/>
+				<combo_box.item label="Nom hérité" name="Legacy_Name"/>
 				<combo_box.item label="Nom d'utilisateur" name="User_Name"/>
 			</combo_box>
 			<check_box label="Ne pas afficher mon propre point de mire" name="LookAtHideOwn" tool_tip="Ne pas afficher mon point de mire"/>
@@ -54,16 +54,16 @@
 			<check_box label="Ne pas communiquer mes indications de sélection de cible" name="privatepointat" tool_tip="Empêche le point de sélection d'être visible par les autres"/>
 		</panel>
 		<panel label="Réponses auto. 1" name="tab-autoresponse-1">
-			<text name="text_box3">Réponse automatique en mode Ne pas déranger :</text>
-			<text name="autorespond_response_label">Réponse lorsque je suis en mode Réponse automatique :</text>
-			<text name="autorespond_nf_response_label">Réponse lorsque je suis en mode Réponse automatique aux inconnus :</text>
+			<text name="text_box3">Réponse auto. en mode 'Ne pas déranger' :</text>
+			<text name="autorespond_response_label">Réponse auto. à tous les résidents lorsque je suis en mode 'Réponse automatique' :</text>
+			<text name="autorespond_nf_response_label">Réponse auto. lorsque je suis en mode 'Réponse automatique aux inconnus' :</text>
 			<check_box label="Envoyer une réponse automatique lorsque je suis Absent :" name="send_away_av_response" tool_tip="Envoie le texte ci-dessous lorsque quelqu'un démarre une conversation privée quand vous êtes absent."/>
 			<check_box label="Envoyer une réponse automatique aux personnes ignorées :" name="send_muted_av_response" tool_tip="Envoie le texte ci-dessous lorsqu'une personne ignorée vous envoie un message privé."/>
 		</panel>
 		<panel label="Réponses auto. 2" name="tab-autoresponse-2">
-			<text name="autorespond_rto_response_label">Réponse lorsque je suis en mode Refuser toute téléportation :</text>
+			<text name="autorespond_rto_response_label">Réponse auto. à tous les résidents lorsque je suis en mode 'Refuser toute téléportation' :</text>
 			<check_box label="Ne pas refuser les offres de téléportation ni envoyer de réponse à mes amis" name="FSDontRejectTeleportOffersFromFriends"/>
-			<text name="autorespond_rfr_response_label">Réponse lorsque je suis en mode Refuser toute proposition d'amitié :</text>
+			<text name="autorespond_rfr_response_label" width="520">Réponse auto. à tous les résidents lorsque je suis en mode 'Refuser toute proposition d’amitié' :</text>
 			<text name="autoresponse_item_label" width="295">Objet envoyé avec toutes les réponses automatiques :</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item" right="480" tool_tip="Glisser et déposer l'objet d'inventaire ici."/>
 			<button label="Effacer" name="clear_autoresponse_item" width="50"/>

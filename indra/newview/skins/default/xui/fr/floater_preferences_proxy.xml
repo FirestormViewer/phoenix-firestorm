@@ -10,7 +10,7 @@
 	<spinner label="Numéro de port :" name="socks_proxy_port" tool_tip="Le port du proxy SOCKS 5 que vous souhaitez utiliser."/>
 	<text name="socks_auth_label">Authentification SOCKS :</text>
 	<radio_group name="socks5_auth_type">
-		<radio_item label="Pas d'd'authentification" name="Socks5NoAuth" tool_tip="Le proxy SOCKS 5 ne requiert aucune authentification."/>
+		<radio_item label="Pas d'authentification" name="Socks5NoAuth" tool_tip="Le proxy SOCKS 5 ne requiert aucune authentification."/>
 		<radio_item label="Nom d'utilisateur / Mot de passe" name="Socks5UserPass" tool_tip="Le proxy SOCKS 5 requiert une authentification."/>
 	</radio_group>
 	<text name="socks5_username_label">Nom d'utilisateur :</text>

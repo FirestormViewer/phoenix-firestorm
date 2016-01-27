@@ -16,14 +16,14 @@
 				<radio_item label="Utiliser le navigateur intégré pour les liens Second Life uniquement" name="new_internal" tool_tip="Utiliser le navigateur par défaut pour l'aide et les liens Web. Le navigateur intégré ne sera utilisé que pour les liens LindenLab/SecondLife."/>
 				<radio_item label="Utiliser le navigateur intégré pour tous les liens" name="new_internal_all"/>
 			</radio_group>
-			<text name="numberwebfloaters_label">Nombre maximum de fenêtre de navigation :</text>
+			<text name="numberwebfloaters_label">Nombre maximum de fenêtres de navigation :</text>
 			<combo_box tool_tip="Nombre maximum de fenêtres de navigation qui peuvent être ouvertes simultanément dans le navigateur intégré" name="web_number_combobox">
 				<combo_box.item label="Pas de limite" name="web_unlimited"/>
 				<combo_box.item label="Une fenêtre" name="web_1"/>
 				<combo_box.item label="Cinq fenêtres" name="web_5"/>
 				<combo_box.item label="Dix fenêtres" name="web_10"/>
 			</combo_box>
-			<button label="Vider le cache" name="ClearWebBrowserCache"/>
+			<button label="Vider le cache du navigateur" width="190" name="ClearWebBrowserCache"/>
 			<check_box label="Activer les plugins" name="browser_plugins_enabled"/>
 			<check_box label="Accepter les cookies" name="cookies_enabled"/>
 			<check_box label="Activer JavaScript" name="browser_javascript_enabled"/>
@@ -44,7 +44,7 @@
 			<button label="Définir" width="55" label_selected="Définir" name="set_sound_cache"/>
 			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_sound_cache"/>
 			<check_box label="Ne pas supprimer le cache DSF (audio) décompressé à la déconnexion" tool_tip="Si activé, le viewer ne supprimera pas les sons décompressés du cache à la déconnexion, ce qui se traduira par une lecture plus rapide. Veuillez noter : Activer cette option remplira votre cache très rapidement, et est exclus du quota défini. Cela résultera donc en un potentiel usage excessif du disque. Désactivé par défaut." name="keep_unpacked_cache"/>
-			<text name="log_path_desc">Emplacement des historiques de conversation :</text>
+			<text name="log_path_desc">Emplacement des journaux et transcriptions de chats :</text>
 			<button label="Ouvrir" label_selected="Ouvrir" name="open_log_path_button-panelsetup"/>
 			<button label="Définir" width="55" label_selected="Définir" name="log_path_button-panelsetup"/>
 			<button label="Réinitialiser" width="75" label_selected="Réinitialiser" name="reset_logpath"/>

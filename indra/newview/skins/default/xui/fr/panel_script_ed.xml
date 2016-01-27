@@ -14,7 +14,7 @@
 			<menu_item_call label="Enregistrer sous..." name="SaveToFile"/>
 			<menu_item_call label="Préférences de l'éditeur..." name="ScriptPrefs"/>
 		</menu>
-		<menu label="Éditer" name="Edit">
+		<menu label="Édition" name="Edit">
 			<menu_item_call label="Annuler" name="Undo"/>
 			<menu_item_call label="Refaire" name="Redo"/>
 			<menu_item_call label="Couper" name="Cut"/>

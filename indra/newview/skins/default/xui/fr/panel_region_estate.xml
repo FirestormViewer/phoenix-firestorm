@@ -10,7 +10,7 @@
 	<check_box label="Autoriser la téléportation directe" name="allow_direct_teleport"/>
 	<button label="Appliquer" name="apply_btn"/>
 	<text name="Only Allow">N'autoriser l'accès aux résidents qui :</text>
-	<check_box label="Ont saisi leurs informations bancaires" name="limit_payment" tool_tip="Les résidents doivent avoir enregistré leurs coordonnées bancaires pour accéder à ce terrain. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
+	<check_box label="Ont saisi leurs informations de paiement" name="limit_payment" tool_tip="Les résidents doivent avoir enregistré leurs informations de paiement pour accéder à ce terrain. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
 	<check_box label="Sont majeurs" name="limit_age_verified" tool_tip="Les résidents doivent être majeurs pour accéder à ce terrain. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
 	<text name="estate_manager_label">Gérants du domaine :</text>
 	<text name="allow_resident_label">Résidents autorisés :</text>

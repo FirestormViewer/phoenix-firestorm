@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Object Icon Menu">
-	<menu_item_call label="Propriétés de l'objet..." name="Object Profile"/>
-	<menu_item_call label="Bloquer..." name="Block"/>
-	<menu_item_call label="Afficher sur la carte" name="show_on_map"/>
+	<menu_item_call label="Propriétés de l'objet" name="Object Profile"/>
+	<menu_item_call label="Ignorer" name="Block"/>
+	<menu_item_call label="Voir sur la carte" name="show_on_map"/>
 	<menu_item_call label="Se téléporter à l'emplacement de l'objet" name="teleport_to_object"/>
 </menu>

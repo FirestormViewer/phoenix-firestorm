@@ -14,7 +14,7 @@
 	</context_menu>
 	<menu_item_check label="Ajouter des objets au double-clic" name="add_inv_toggle"/>
 	<menu_item_check label="Ajouter des vêtements au double-clic" name="add_invclothing_toggle"/>
-	<menu_item_call label="Afficher les filtres..." name="show_filters"/>
+	<menu_item_call label="Afficher les filtres" name="show_filters"/>
 	<menu_item_call label="Réinitialiser les filtres" name="reset_filters"/>
 	<menu_item_call label="Réduire tous les dossiers" name="close_folders"/>
 	<menu_item_call label="Vider le dossier Objets trouvés" name="empty_lostnfound"/>

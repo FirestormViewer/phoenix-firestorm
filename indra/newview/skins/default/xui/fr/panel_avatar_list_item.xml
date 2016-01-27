@@ -8,7 +8,7 @@
 	<string name="FormatMonths">[COUNT]mois</string>
 	<string name="FormatYears">[COUNT]ans</string>
 	<text name="avatar_name" width="90">(Chargement)</text>
-	<icon name="payment_info" tool_tip="Informations bancaires saisies"/>
+	<icon name="payment_info" tool_tip="Informations de paiement saisies"/>
 	<icon name="permission_online_theirs_icon" tool_tip="Vous pouvez savoir quand cette personne est connectée"/>
 	<icon name="permission_map_theirs_icon" tool_tip="Vous pouvez localiser cette personne"/>
 	<icon name="permission_edit_theirs_icon" tool_tip="Vous pouvez éditer les objets de cette personne"/>

@@ -22,9 +22,9 @@
 		<context_menu label="Détacher" name="Object Detach"/>
 		<menu_item_call label="Tout détacher" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Modifier la tenue" name="Chenge Outfit"/>
-	<menu_item_call label="Éditer la tenue" name="Edit Outfit"/>
-	<menu_item_call label="Éditer la silhouette" name="Edit My Shape"/>
+	<menu_item_call label="Changer de tenue" name="Chenge Outfit"/>
+	<menu_item_call label="Modifier la tenue" name="Edit Outfit"/>
+	<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
 	<menu_item_call label="Voltigement" name="Hover Height"/>
 	<menu_item_call label="Amis" name="Friends..."/>
 	<menu_item_call label="Groupes" name="Groups..."/>

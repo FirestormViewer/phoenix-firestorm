@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<floater title="Produits du Marketplace" name="floater_marketplace_listings">
+<floater title="Listings Marketplace" name="floater_marketplace_listings">
 	<panel name="marketplace_listings_panel">
 		<panel name="background_panel">
 			<panel name="marketplace_listings_inventory_placeholder_panel">

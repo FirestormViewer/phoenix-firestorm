@@ -3,7 +3,7 @@
 	<tab_container label="Notifications" name="tabs">
 		<panel label="Monde" name="tab-world">
 			<check_box label="Me notifier quand je dépense ou reçois des L$" name="notify_money_change_checkbox"/>
-			<check_box name="FSPaymentInfoInChat" label="Signaler les transactions de L$ dans le chat local plutôt que dans les notifications"/>
+			<check_box name="FSPaymentInfoInChat" label="Signaler les transactions de L$ dans le chat local plutôt que dans les toasts"/>
 			<check_box label="Me notifier si la version du simulateur varie lorsque je change de région" name="FSShowServerVersionChangeNotice" tool_tip="Affiche une notification si la version du simulateur varie lors d'une téléportation ou lorsque vous entrez dans une région."/>
 			<check_box label="Interroger status.secondlifegrid.net pour les dernières nouvelles à la connexion" name="AutoQueryGridStatus"/>
 			<check_box label="Activer les notifications Growl" name="notify_growl_checkbox"/>
@@ -15,12 +15,12 @@
 			<check_box label="Me notifier lorsque quelqu'un change son nom d'affichage" name="FSShowDisplayNameUpdateNotification"/>
 			<check_box label="Me notifier lorsque j'ignore ou cesse d'ignorer quelqu'un" name="FSReportBlockToNearbyChat"/>
 			<text name="friends_logon_label">Me notifier lorsque mes amis se connectent et se déconnectent dans :</text>
-			<check_box label="Les notifications" name="friends_online_notify_checkbox" width="150"/>
+			<check_box label="Les toasts" name="friends_online_notify_checkbox" width="150"/>
 			<check_box name="OnlineOfflinetoNearbyChat" label="Le chat local et la console"/>
 			<check_box label="Le chat local seulement" name="OnlineOfflinetoNearbyChatHistory"/>
 		</panel>
 		<panel label="Objets &amp; Scripts" name="tab-objects">
-			<check_box label="Flasher l'icône de l'appli. à l'ouverture d'un menu de script lorsque celle-ci est à l'arrière-plan" name="FSFlashOnScriptDialog"/>
+			<check_box label="Flasher l'icône de l'appli. à l'ouverture d'un dialogue de script lorsqu'elle est à l'arrière-plan" name="FSFlashOnScriptDialog"/>
 			<check_box label="Signaler les notifications de collision dans le chat local" name="FSCollisionMessagesInChat"/>
 			<check_box label="Signaler les erreurs de script dans :" name="show_script_errors"/>
 			<radio_group name="show_script_errors_location">
@@ -36,8 +36,8 @@
 			<check_box name="FSShowUploadPaymentToast" label="Me notifier lorsque je suis facturé pour un objet uploadé"/>
 			<check_box label="Me notifier lorsqu'un repère est créé" name="landmark_created_checkbox"/>
 			<check_box label="Désactiver la notification 'L'objet a été renvoyé dans votre inventaire'" name="FSDisableReturnObjectNotification"/>
-			<check_box label="Journaliser le nom des captures d'écran dans le Chat local" name="FSLogSnapshotsToLocal"/>
-			<check_box label="Me notifier lorsque les objets arrivent trop rapidement" name="FSNotifyIncomingObjectSpam"/>
+			<check_box label="Journaliser le nom des photos dans le chat local" name="FSLogSnapshotsToLocal"/>
+			<check_box label="Me notifier lorsque les articles provenant d'objets arrivent trop rapidement" name="FSNotifyIncomingObjectSpam"/>
 			<check_box label="Me notifier lorsque je reçois trop rapidement des objets d'autres résidents" name="FSNotifyIncomingObjectSpamFrom"/>
 			<slider name="FSOfferThrottleMaxCount" label="Seuil d'objets reçus avant qu'ils soient ignorés :" label_width="260" width="400" tool_tip="Définit le seuil d'objets reçus dans les 10 secondes avant qu'ils ne soient ignorés. 5 par défaut"/>
 		</panel>

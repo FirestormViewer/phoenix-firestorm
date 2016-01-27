@@ -5,7 +5,7 @@
 		<text name="label_2" left_pad="0">Copier</text>
 		<text name="label_3">Modifier</text>
 		<text name="label_4">Transférer</text>
-		<text name="label_5">Partager avec un groupe</text>
+		<text name="label_5">Partager avec le groupe</text>
 		<text name="label_6">Autoriser n'importe qui à copier</text>
 		<text name="label_7" tool_tip="Définir les permissions par défaut pour les objets créés">Objets</text>
 		<text name="label_8" tool_tip="Définir les permissions par défaut pour les objets uploadés">Uploads</text>

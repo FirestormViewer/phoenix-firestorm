@@ -5,7 +5,7 @@
 		<menu_button name="blocked_gear_btn" tool_tip="Actions sur la personne ou l'objet sélectionné"/>
 		<menu_button name="view_btn" tool_tip="Options de tri"/>
 		<menu_button name="plus_btn" tool_tip="Sélectionnez un résident ou un objet à ignorer"/>
-		<button name="unblock_btn" tool_tip="Supprimer le résident ou l'objet de la liste des ignorés"/>
+		<button name="unblock_btn" tool_tip="Supprimer le résident ou l'objet des éléments ignorés"/>
 	</panel>
 	<fs_scroll_list name="block_list">
 		<fs_scroll_list.columns name="item_name" label="Nom"/>

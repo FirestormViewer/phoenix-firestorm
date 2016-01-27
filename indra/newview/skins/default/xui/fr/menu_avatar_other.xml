@@ -4,26 +4,26 @@
 	<menu_item_call label="Devenir amis" name="Add Friend"/>
 	<menu_item_call label="Donner ma carte de visite" name="Give Calling Card"/>
 	<menu_item_call label="Ajouter à un cercle" name="Add to Set"/>
-	<menu_item_call label="IM" name="Send IM..."/>
+	<menu_item_call label="Envoyer un IM" name="Send IM..."/>
 	<menu_item_call label="Appel vocal" name="Call"/>
 	<menu_item_call label="Inviter dans un groupe" name="Invite..."/>
 	<context_menu label="Dérangement" name="Remove">
 		<menu_item_call label="Ignorer" name="Avatar Mute"/>
 		<menu_item_call label="Cesser d'ignorer" name="Avatar Unmute"/>
 		<menu_item_call label="Signaler" name="abuse"/>
-		<menu_item_call label="Figer" name="Freeze..."/>
+		<menu_item_call label="Geler" name="Freeze..."/>
 		<menu_item_call label="Expulser" name="Eject..."/>
 	</context_menu>
 	<menu_item_call label="Dump XML" name="Dump XML"/>
 	<menu_item_call label="Zoomer" name="Zoom In"/>
 	<menu_item_call label="Payer" name="Pay..."/>
 	<menu_item_call label="Faire disparaître temporairement" name="Derender"/>
-	<menu_item_call label="Faire disparaître &amp; Indésirable" name="DerenderPermanent"/>
+	<menu_item_call label="Faire disparaître &amp; Blacklister" name="DerenderPermanent"/>
 	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
 	<menu_item_call label="Afficher les textures" name="Debug..."/>
 	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
 	<menu_item_check name="Normal" label="Rendu normal"/>
-	<menu_item_check name="Always use impostor" label="Always use impostor"/>
-	<menu_item_check name="Never use impostor" label="Never use impostor"/>
+	<menu_item_check name="Toujours utiliser un avatar 2D" label="Always use impostor"/>
+	<menu_item_check name="Ne jamais utiliser un avatar 2D" label="Never use impostor"/>
 	<menu_item_call label="Bloquer les particules" name="Mute Particle"/>
 </context_menu>

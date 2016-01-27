@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Attachment Pie">
-	<pie_slice label="Profil..." name="Profile..."/>
+	<pie_slice label="Profil" name="Profile..."/>
 	<pie_slice label="Poser au sol" name="Drop"/>
 	<pie_menu name="Attachment Pie More" label="Plus &gt;">
 		<pie_slice label="MàJ Textures" name="Texture Refresh"/>
 		<pie_slice label="Infos. Scripts" name="ScriptInfo"/>
 		<pie_slice label="Toucher" name="Attachment Object Touch"/>
 		<pie_menu name="DerenderMenu" label="Faire disparaître &gt;">
-			<pie_slice label="Temporaire" name="Derender"/>
-			<pie_slice label="Indésirable" name="DerenderPermanent"/>
+			<pie_slice label="Temporairement" name="Derender"/>
+			<pie_slice label="Blacklister" name="DerenderPermanent"/>
 		</pie_menu>
 		<pie_menu name="ExportMenu" label="Enregistrer sous &gt;">
 			<pie_slice label="Sauvegarde" name="Backup"/>
@@ -19,12 +19,12 @@
 	<pie_slice label="S'asseoir ici" name="Sit Down Here"/>
 	<pie_slice label="Se lever" name="Stand Up"/>
 	<pie_slice label="Détacher" name="Detach"/>
-	<pie_slice label="Gestes..." name="Gestures"/>
+	<pie_slice label="Gestes" name="Gestures"/>
 	<pie_menu label="Apparence &gt;" name="Appearance &gt;">
 		<pie_slice label="Modifier la silhouette" name="Edit My Shape"/>
 		<pie_slice label="Modifier la tenue" name="Edit My Outfit"/>
 		<pie_slice label="Dump XML" name="Dump XML"/>
 		<pie_slice label="Voltigement" name="Hover Height"/>
 	</pie_menu>
-	<pie_slice label="Éditer" name="Edit..."/>
+	<pie_slice label="Modifier" name="Edit..."/>
 </pie_menu>

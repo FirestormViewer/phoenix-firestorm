@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect_remote_object">
 	<text name="object_owner_label">Propriétaire :</text>
-	<button label="Carte" name="map_btn"/>
-	<button label="Bloquer" name="block_btn"/>
+	<button label="Voir sur la carte" name="map_btn"/>
+	<button label="Ignorer" name="block_btn"/>
 	<button label="Fermer" name="close_btn"/>
 </floater>

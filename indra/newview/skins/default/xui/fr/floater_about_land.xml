@@ -180,7 +180,7 @@
 				<combo_box.item label="N'importe où" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="Médias" name="land_media_panel">
+		<panel label="Média" name="land_media_panel">
 			<text name="with media:">Type :</text>
 			<combo_box name="media type" tool_tip="Indiquez si l'adresse est une vidéo, une page Web ou un autre média"/>
 			<text name="at URL:">Page d'accueil :</text>
@@ -199,10 +199,10 @@
 			<check_box label="Boucle" name="media_loop" tool_tip="Jouer cette musique en boucle. Quand le média aura fini sa liste de lecture, il reprendra du début."/>
 		</panel>
 		<panel label="Audio" name="land_audio_panel">
-			<text name="MusicURL:">Flux musical :</text>
-			<button name="stream_add_btn" tool_tip="Ajouter l'adresse du flux musical à la liste de lecture"/>
-			<button name="stream_delete_btn" tool_tip="Supprimer l'adresse du flux musical de la liste de lecture"/>
-			<button name="stream_copy_btn" tool_tip="Copier l'adresse du flux musical"/>
+			<text name="MusicURL:">Musique :</text>
+			<button name="stream_add_btn" tool_tip="Ajouter l'adresse de la musique à la liste de lecture"/>
+			<button name="stream_delete_btn" tool_tip="Supprimer l'adresse de la musique de la liste de lecture"/>
+			<button name="stream_copy_btn" tool_tip="Copier l'adresse de la musique"/>
 			<text name="Sound:">Son :</text>
 			<check_box label="Restreindre les animations et les sons des objets à ce terrain" name="check sound local"/>
 			<text name="Avatar Sounds:">Son des résidents :</text>
@@ -218,7 +218,7 @@
 			<panel.string name="estate_override">Une ou plusieurs options définies ici le sont au niveau du domaine</panel.string>
 			<check_box name="public_access" label="Autoriser l'accès public (Décocher cette option créera une barrière)"/>
 			<text name="Only Allow">Autoriser l'accès aux résidents qui :</text>
-			<check_box label="Ont saisi leurs informations bancaires [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Les résidents doivent avoir saisi leurs informations bancaires pour accéder à ce terrain. Consultez [SUPPORT_SITE] pour plus d'informations."/>
+			<check_box label="Ont saisi leurs informations de paiement [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Les résidents doivent avoir saisi leurs informations de paiement pour accéder à ce terrain. Consultez [SUPPORT_SITE] pour plus d'informations."/>
 			<check_box label="Sont majeurs [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Les résidents doivent être majeurs pour accéder à ce terrain. Consultez [SUPPORT_SITE] pour plus d'informations."/>
 			<check_box label="Autoriser l'accès au groupe : [GROUP]" name="GroupCheck" tool_tip="Définissez le groupe dans l'onglet Général."/>
 			<check_box label="Vendre un droit d'accès à :" name="PassCheck" tool_tip="Autorise l'accès temporaire à ce terrain" width="150"/>

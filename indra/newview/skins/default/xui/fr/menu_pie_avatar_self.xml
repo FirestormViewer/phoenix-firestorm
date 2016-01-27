@@ -26,8 +26,8 @@
 	</pie_menu>
 	<pie_slice label="S'asseoir ici" name="Sit Down Here"/>
 	<pie_slice label="Se lever" name="Stand Up"/>
-	<pie_slice label="Infos sur les scripts" name="ScriptInfo"/>
-	<pie_slice label="Gestes..." name="Gestures"/>
+	<pie_slice label="Infos. Scripts" name="ScriptInfo"/>
+	<pie_slice label="Gestes" name="Gestures"/>
 	<pie_menu label="Apparence &gt;" name="Appearance &gt;">
 		<pie_slice label="Modifier la silhouette" name="Edit My Shape"/>
 		<pie_slice label="MàJ Textures" name="Texture Refresh"/>

@@ -14,7 +14,7 @@
 	<button label="IM..." name="start_im_btn" tool_tip="Ouvrir une fenêtre de conversation privée"/>
 	<button label="Téléporter..." name="offer_teleport_btn" tool_tip="Proposer une téléportation à votre emplacement actuel"/>
 	<button label="Surnommer..." name="set_pseudonym_btn" tool_tip="Donner un surnom à ce résident"/>
-	<button label="Suppr. le surnom" name="remove_pseudonym_btn" tool_tip="Supprimer le surnom de ce résident"/>
-	<button label="Suppr. le nom d'affichage" name="remove_displayname_btn" tool_tip="Supprime le nom d'affichage de ce résident"/>
+	<button label="Suppr. Surnom" name="remove_pseudonym_btn" tool_tip="Supprimer le surnom de ce résident"/>
+	<button label="Suppr. DN" name="remove_displayname_btn" tool_tip="Supprime le nom d'affichage de ce résident"/>
 	<text name="member_count">Membres : [COUNT]</text>
 </panel>

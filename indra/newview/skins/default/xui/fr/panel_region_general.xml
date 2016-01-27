@@ -5,7 +5,7 @@
 	<text name="estate_id_lbl" width="95">ID du domaine :</text>
 	<text name="version_channel_text_lbl">Version :</text>
 	<text name="version_channel_text">inconnue</text>
-	<text name="grid_position_lbl" width="140">Position dans l'univers :</text>
+	<text name="grid_position_lbl" width="115">Pos. dans la Grille :</text>
 	<text name="region_type_lbl">Type :</text>
 	<text name="region_type">inconnue</text>
 	<check_box label="Interdire la terraformation" name="block_terraform_check"/>

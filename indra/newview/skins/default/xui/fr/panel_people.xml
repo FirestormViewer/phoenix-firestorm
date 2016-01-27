@@ -23,7 +23,7 @@
 	<panel.string name="AllFriendsTitle">Tous ([ALL])</panel.string>
 	<panel.string name="OnlineFriendsTitle">En ligne ([ONLINE])</panel.string>
 	<tab_container name="tabs">
-		<panel label="Près de vous" name="nearby_panel"/>
+		<panel label="À proximité" name="nearby_panel"/>
 		<panel label="Amis" name="friends_panel">
 			<panel label="bottom_panel" name="friends_buttons_panel">
 				<filter_editor label="Filtrer les personnes" name="friends_filter_input"/>

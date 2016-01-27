@@ -9,18 +9,18 @@
 		<panel label="Général" name="general"/>
 		<panel label="Conversations" name="chat"/>
 		<panel label="Couleurs" name="colors"/>
-		<panel label="Affichage" name="display"/>
+		<panel label="Graphismes" name="display"/>
 		<panel label="Audio &amp; Médias" name="audio"/>
 		<panel label="Réseau &amp; Dossiers" name="input"/>
-		<panel label="Mouvement &amp; Caméra" name="move"/>
+		<panel label="Affichage/Déplact." name="move"/>
 		<panel label="Notifications" name="msgs"/>
 		<panel label="Confidentialité" name="im"/>
 		<panel label="Avancés" name="advanced1"/>
 		<panel label="Interface" name="starlightUI1"/>
 		<panel label="Thèmes" name="skins"/>
-		<panel label="Rapports d'erreur" name="crashreports"/>
+		<panel label="Rapports d'erreurs" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
-		<panel label="Univers" name="opensim"/>
+		<panel label="Grilles" name="opensim"/>
 		<panel label="Sauvegarde" name="backup"/>
 	</tab_container>
 </floater>

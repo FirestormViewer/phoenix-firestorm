@@ -36,7 +36,7 @@
 	</context_menu>
 	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
 	<menu_item_call label="Faire disparaître" name="Derender"/>
-	<menu_item_call label="Faire disparaître &amp; Indésirable" name="DerenderPermanent"/>
+	<menu_item_call label="Faire disparaître &amp; Blacklister" name="DerenderPermanent"/>
 	<menu_item_call label="Renvoyer" name="Return..."/>
 	<menu_item_call label="Prendre" name="Pie Object Take"/>
 	<menu_item_call label="Prendre une copie" name="Take Copy"/>

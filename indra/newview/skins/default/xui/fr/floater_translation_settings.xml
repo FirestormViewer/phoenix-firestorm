@@ -5,7 +5,7 @@
 	<string name="bing_api_key_verified">Bing appID vérifié.</string>
 	<string name="google_api_key_verified">Google API key vérifiée.</string>
 	<check_box label="Activer la traduction automatique pendant que je discute" name="translate_chat_checkbox"/>
-	<text name="translate_language_label" width="170">Traduire les conversations en : </text>
+	<text name="translate_language_label">Traduire le chat en :</text>
 	<combo_box name="translate_language_combo">
 		<combo_box.item label="Identique au système" name="System Default Language"/>
 		<combo_box.item label="English (Anglais)" name="English"/>

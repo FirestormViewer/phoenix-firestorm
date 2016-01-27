@@ -5,5 +5,5 @@
 	<menu_item_check label="Trier par statut" name="sort_status"/>
 	<menu_item_check name="view_icons" label="Afficher les icônes des résidents"/>
 	<menu_item_check name="view_permissions" label="Afficher les droits octroyés"/>
-	<menu_item_check name="view_conversation" label="Afficher l'historique de conversation..."/>
+	<menu_item_check name="view_conversation" label="Afficher l'historique de conversation"/>
 </toggleable_menu>

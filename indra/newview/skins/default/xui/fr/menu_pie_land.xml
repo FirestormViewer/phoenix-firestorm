@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Land Pie">
-	<pie_slice label="À propos du terrain..." name="Place Information..."/>
+	<pie_slice label="À propos du terrain" name="Place Information..."/>
 	<pie_slice label="Créer" name="Create"/>
 	<pie_slice label="Aller à cet endroit" name="Go Here"/>
 	<pie_slice label="S'asseoir ici" name="Sit Here"/>

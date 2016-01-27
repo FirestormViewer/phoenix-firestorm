@@ -61,7 +61,7 @@
 	<string name="LoginAuthenticating">Authentification</string>
 	<string name="LoginMaintenance">Exécution de la maintenance du compte en cours...</string>
 	<string name="LoginAttempt">La précédente tentative de connexion a échoué. Connexion, tentative [NUMBER]</string>
-	<string name="LoginPrecaching">Chargement de l'univers...</string>
+	<string name="LoginPrecaching">Chargement...</string>
 	<string name="LoginInitializingBrowser">Initialisation du navigateur Web intégré...</string>
 	<string name="LoginInitializingMultimedia">Initialisation multimédia...</string>
 	<string name="LoginInitializingFonts">Chargement des polices...</string>
@@ -87,8 +87,8 @@
 	<string name="LoginFailed">Échec de la connexion.</string>
 	<string name="Quit">Quitter</string>
 	<string name="create_account_url">http://join.secondlife.com/?sourceid=[sourceid]</string>
-	<string name="AgniGridLabel">Univers principal de Second Life (Agni)</string>
-	<string name="AditiGridLabel">Univers de test de Second Life (Aditi)</string>
+	<string name="AgniGridLabel">Grille principale de Second Life (Agni)</string>
+	<string name="AditiGridLabel">Grille de test de Second Life (Aditi)</string>
 	<string name="ViewerDownloadURL">http://www.firestormviewer.org/downloads/</string>
 	<string name="LoginFailedViewerNotPermitted">
 Le viewer que vous utilisez ne peut plus accéder à Second Life. Veuillez consulter la page suivante pour télécharger une nouvelle version :
@@ -268,7 +268,7 @@ http://secondlife.com/viewer-access-faq
 	<string name="TooltipForSaleL$">À vendre : [AMOUNT] L$</string>
 	<string name="TooltipFlagGroupBuild">Construction au groupe</string>
 	<string name="TooltipFlagNoBuild">Pas de construction</string>
-	<string name="TooltipFlagNoEdit">Pas de modification Edit</string>
+	<string name="TooltipFlagNoEdit">Pas de modification</string>
 	<string name="TooltipFlagNotSafe">Non-sûr</string>
 	<string name="TooltipFlagNoFly">Pas de vol</string>
 	<string name="TooltipFlagGroupScripts">Scripts du groupe</string>
@@ -291,19 +291,19 @@ http://secondlife.com/viewer-access-faq
 	<string name="TooltipPrimEquivalentUnavailable">, impact sur le terrain indisponible</string>
 	<string name="TooltipDistance">Distance : [DISTANCE] m</string>
 	<string name="TooltipPosition">Position : [POSITION]</string>
-	<string name="TooltipOutboxDragToWorld">Vous ne pouvez pas déposer des objets dans l'univers depuis la liste des produits du Marketplace</string>
-	<string name="TooltipOutboxWorn">Vous ne pouvez pas déplacer un objet actuellement porté dans la liste des produits du Marketplace</string>
+	<string name="TooltipOutboxDragToWorld">Vous ne pouvez pas déposer des objets dans l'univers depuis les listings du Marketplace</string>
+	<string name="TooltipOutboxWorn">Vous ne pouvez pas déplacer un objet actuellement porté dans les listings du Marketplace</string>
 	<string name="TooltipOutboxFolderLevels">Trop grande profondeur de sous-dossiers ([AMOUNT]). Veuillez simplifier votre arborescence.</string>
 	<string name="TooltipOutboxTooManyFolders">Nombre de sous-dossiers trop élevé ([AMOUNT]). Veuillez limiter le nombre de sous-dossier dans la liste de vos produits.</string>
-	<string name="TooltipOutboxTooManyObjects">Vous avez atteint la limite de nombre d'objets pour un produit ([AMOUNT]). Si vous souhaitez vendre plus que [AMOUNT] objets par produit, veuillez les empaqueter dans un objet conteneur au préalable.</string>
+	<string name="TooltipOutboxTooManyObjects">Vous avez atteint la limite de nombre d'objets pour un listing ([AMOUNT]). Si vous souhaitez vendre plus que [AMOUNT] objets par listing, veuillez les empaqueter dans un objet conteneur au préalable.</string>
 	<string name="TooltipOutboxTooManyStockItems">Il y a trop d'objets en stock ([AMOUNT]).</string>
 	<string name="TooltipOutboxCannotDropOnRoot">Vous ne pouvez déposer de nouveaux objets que dans les onglets 'Tout' ou 'Non-associé'. Veuillez sélectionner un de ces deux onglets et déplacer à nouveaux vos objets ou dossiers.</string>
 	<string name="TooltipOutboxNoTransfer">Un ou plusieurs objets de votre sélection ne peuvent être vendus ou transférés</string>
 	<string name="TooltipOutboxNotInInventory">Vous ne pouvez placer que des objets de votre inventaire dans le Marketplace</string>
 	<string name="TooltipOutboxLinked">Vous ne pouvez placer de raccourci sur le Marketplace</string>
 	<string name="TooltipOutboxCallingCard">Vous ne pouvez placer de Carte de Visite sur le Marketplace</string>
-	<string name="TooltipOutboxDragActive">Vous ne pouvez déplacer un produit publié</string>
-	<string name="TooltipOutboxCannotMoveRoot">Vous ne pouvez déplacer le dossier racine de la liste des produits</string>
+	<string name="TooltipOutboxDragActive">Vous ne pouvez déplacer un listing publié</string>
+	<string name="TooltipOutboxCannotMoveRoot">Vous ne pouvez déplacer le dossier racine des listing</string>
 	<string name="TooltipOutboxMixedStock">Tous les objets dans un dossier avec un stock défini doivent être du même type et posséder les mêmes permissions</string>
 	<string name="TooltipDragOntoOwnChild">Vous ne pouvez déplacer un dossier dans l'un de ses sous-dossiers</string>
 	<string name="TooltipDragOntoSelf">You can't move a folder into itself</string>
@@ -808,9 +808,9 @@ http://secondlife.com/viewer-access-faq
 	<string name="AcctTypeTrial">Compte d'essai</string>
 	<string name="AcctTypeCharterMember">Membre Charter</string>
 	<string name="AcctTypeEmployee">Employé Linden Lab</string>
-	<string name="PaymentInfoUsed">Infos. Bancaires utilisées</string>
-	<string name="PaymentInfoOnFile">Infos. Bancaires saisies</string>
-	<string name="NoPaymentInfoOnFile">Aucune Info. Bancaire saisie</string>
+	<string name="PaymentInfoUsed">Infos. de paiement utilisées</string>
+	<string name="PaymentInfoOnFile">Infos. de paiement saisies</string>
+	<string name="NoPaymentInfoOnFile">Aucune Info. de paiement saisie</string>
 	<string name="AgeVerified">Âge vérifié</string>
 	<string name="NotAgeVerified">Âge non vérifié</string>
 	<string name="Center 2">Centre 2</string>
@@ -935,10 +935,10 @@ http://secondlife.com/viewer-access-faq
 	<string name="PanelContentsTooltip">Contenu de l'objet</string>
 	<string name="PanelContentsNewScript">Nouveau script</string>
 	<string name="DoNotDisturbModeResponseDefault">Ce résident souhaite ne pas être dérangé pour l'instant et verra votre message plus tard.</string>
-	<string name="AutoResponseModeDefault">Le résident que vous souahitez contacter a activé le mode 'Réponse automatique' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Votre message sera affiché dans la liste de ses IM pour une consultation ultérieure.</string>
-	<string name="AutoResponseModeNonFriendsDefault">Le résident que vous souahitez contacter a activé le mode 'Réponse automatique' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Votre message sera affiché dans la liste de ses IM pour une consultation ultérieure..</string>
-	<string name="RejectTeleportOffersResponseDefault">Le résident que vous souahitez contacter a activé le mode 'Refuser toute téléportation' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Vous pouvez toujours lui envoyer un message privé.</string>
-	<string name="RejectFriendshipRequestsResponseDefault">Le résident que vous souahitez contacter a activé le mode 'Refuser toute proposition d'amitié' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Vous pouvez toujours lui envoyer un message privé.</string>
+	<string name="AutoResponseModeDefault">Le résident que vous souhaitez contacter a activé le mode 'Réponse automatique' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Votre message sera affiché dans la liste de ses IM pour une consultation ultérieure.</string>
+	<string name="AutoResponseModeNonFriendsDefault">Le résident que vous souhaitez contacter a activé le mode 'Réponse automatique' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Votre message sera affiché dans la liste de ses IM pour une consultation ultérieure.</string>
+	<string name="RejectTeleportOffersResponseDefault">Le résident que vous souhaitez contacter a activé le mode 'Refuser toute téléportation' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Vous pouvez toujours lui envoyer un message privé.</string>
+	<string name="RejectFriendshipRequestsResponseDefault">Le résident que vous souhaitez contacter a activé le mode 'Refuser toute proposition d'amitié' de son Viewer ce qui signifie qu'il ne souhaite pas être dérangé pour l'instant. Vous pouvez toujours lui envoyer un message privé.</string>
 	<string name="MutedAvatarsResponseDefault">Le résident que vous souhaitez contacter vous a ignoré.</string>
 	<string name="AwayAvatarResponseDefault">Le résident que vous souhaitez contacter est actuellement absent. Votre message sera affiché dans la liste de ses IM pour une consultation ultérieure.</string>
 	<string name="MuteByName">(Par nom)</string>
@@ -1091,7 +1091,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="MBAlert">Notification</string>
 	<string name="MBNoDirectX">
  		[APP_NAME] ne peut détecter DirectX 9.0b ou supérieur.
- [APP_NAME] utilise DirectX pour détecter le matériel et/ou le logiciel obsolète causant des problèmes de stabilité, de faible performances et de plantages. Bien que vous puissiez utiliser [APP_NAME] sans, nous vous recommandons fortement de mettre à jour DirectX.
+ [APP_NAME] utilise DirectX pour détecter le matériel et/ou le logiciel obsolète causant des problèmes de stabilité, de faibles performances et de plantages. Bien que vous puissiez utiliser [APP_NAME] sans, nous vous recommandons fortement de mettre à jour DirectX.
  Voulez-vous continuer?
 	</string>
 	<string name="MBWarning">Attention</string>
@@ -1460,7 +1460,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Open Right">Ouvert à droite</string>
 	<string name="Orange">Orange</string>
 	<string name="Out">Sorti</string>
-	<string name="Out Shdw Color">Couleur de l&apos;ombre externe</string>
+	<string name="Out Shdw Color">Couleur de l'ombre externe</string>
 	<string name="Out Shdw Opacity">Opacité de l'ombre externe</string>
 	<string name="Outer Eye Corner">Coin de l'œil externe</string>
 	<string name="Outer Eye Shadow">Ombre de l'œil externe</string>
@@ -1659,7 +1659,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="conference-title-incoming">Conférence avec [AGENT_NAME]</string>
 	<string name="inventory_item_offered-im">Objet offert</string>
 	<string name="inventory_item_offered_rlv">Objet offert à [NAME]</string>
-	<string name="share_alert">Drag items from inventory here</string>
+	<string name="share_alert">Faites glisser ici des objets depuis l'inventaire pour les partager</string>
 	<string name="facebook_post_success">Publication réussie sur Facebook.</string>
 	<string name="flickr_post_success">Envoi réussi sur Flickr.</string>
 	<string name="twitter_post_success">Tweet envoyé.</string>
@@ -1897,7 +1897,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Command_Twitter_Label">Twitter</string>
 	<string name="Command_View_Label">Caméra</string>
 	<string name="Command_Voice_Label">Vocal à proximité</string>
-	<string name="Command_Quickprefs_Label">Préfs. rapides</string>
+	<string name="Command_Quickprefs_Label">Préfs. Rapides</string>
 	<string name="Command_AO_Label">Animation overrider</string>
 	<string name="Command_Webbrowser_Label">Navigateur</string>
 	<string name="Command_Default_Chat_Bar_Label">Chat</string>
@@ -1907,8 +1907,8 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Command_Region_Label">Région / Domaine</string>
 	<string name="Command_Fly_Label">Voler</string>
 	<string name="Command_Groundsit_Label">S'asseoir</string>
-	<string name="Command_Sound_Explorer_Label">Explorateur Audio</string>
-	<string name="Command_Asset_Blacklist_Label">Indésirables</string>
+	<string name="Command_Sound_Explorer_Label">Explorateur de sons</string>
+	<string name="Command_Asset_Blacklist_Label">Blacklistés</string>
 	<string name="Command_Phototools_Label">Outils Photo</string>
 	<string name="Command_Phototools_View_Label">Caméra</string>
 	<string name="Command_Contact_Sets_Label">Cercles</string>
@@ -1939,7 +1939,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Command_Inventory_Tooltip">Mes ptites affaires (CTRL+I)</string>
 	<string name="Command_Map_Tooltip">Carte du monde (CTRL+M)</string>
 	<string name="Command_Marketplace_Tooltip">Faire les boutiques</string>
-	<string name="Command_MarketplaceListings_Tooltip">Vendre vos produits</string>
+	<string name="Command_MarketplaceListings_Tooltip">Vendre vos créations</string>
 	<string name="Command_MiniMap_Tooltip">Afficher les personnes à proximité (CTRL+SHIFT+M)</string>
 	<string name="Command_Move_Tooltip">Déplacer votre avatar</string>
 	<string name="Command_Outbox_Tooltip">Transférer vos objets dans votre boutique Marketplace</string>
@@ -1953,7 +1953,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Command_Speak_Tooltip">Discuter en audio avec les personnes à proximité</string>
 	<string name="Command_Twitter_Tooltip">Twitter</string>
 	<string name="Command_View_Tooltip">Modifier l'angle de la caméra</string>
-	<string name="Command_Voice_Tooltip">Les personnes qui discutent en vocal près de vous</string>
+	<string name="Command_Voice_Tooltip">Les personnes qui discutent en vocal à proximité</string>
 	<string name="Command_Quickprefs_Tooltip">Modifier les préférences souvent utilisées</string>
 	<string name="Command_AO_Tooltip">Animations par défaut pour mon avatar</string>
 	<string name="Command_Webbrowser_Tooltip">Ouvrir le navigateur intégré (CTRL+SHIFT+Z)</string>
@@ -1963,8 +1963,8 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Command_Statistics_Tooltip">Affiche les statistiques du Viewer (CTRL+SHIFT+1)</string>
 	<string name="Command_Region_Tooltip">Gérer le domaine et la région (ALT+R)</string>
 	<string name="Command_Groundsit_Tooltip">S'asseoir ou se lever (CTRL+ALT+S)</string>
-	<string name="Command_Sound_Explorer_Tooltip">Ouvrir l'explorateur audio</string>
-	<string name="Command_Asset_Blacklist_Tooltip">Affiche les éléments indésirables</string>
+	<string name="Command_Sound_Explorer_Tooltip">Ouvrir l'explorateur de sons</string>
+	<string name="Command_Asset_Blacklist_Tooltip">Affiche les éléments blacklistés</string>
 	<string name="Command_Phototools_Tooltip">Paramétrages avancés pour réaliser vos plus belles photos (ATL+P).</string>
 	<string name="Command_Phototools_View_Tooltip">Gestion de la caméra (CTRL+SHIFT+C)</string>
 	<string name="Command_Contact_Sets_Tooltip">Afficher les cercles (CTRL+ALT+SHIFT+C)</string>
@@ -2015,8 +2015,8 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="MediaFilterActionDeny">Interdire</string>
 	<string name="MediaFilterConditionAlways">Toujours</string>
 	<string name="MediaFilterConditionAlwaysLower">toujours</string>
-	<string name="MediaFilterConditionNever">Jamais</string>
-	<string name="MediaFilterConditionNeverLower">jamais</string>
+	<string name="MediaFilterConditionNever">Ne jamais</string>
+	<string name="MediaFilterConditionNeverLower">ne jamais</string>
 	<string name="MediaFilterMediaContentBlocked">Media from the domain [DOMAIN] has been blocked.</string>
 	<string name="MediaFilterMediaContentDomainAlwaysAllowed">Media from the domain [DOMAIN] will always be played.</string>
 	<string name="MediaFilterMediaContentDomainAlwaysBlocked">Media from the domain [DOMAIN] will never be played.</string>
@@ -2035,7 +2035,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="MediaFilterBlacklist">liste noire</string>
 	<string name="MediaFilterWhitelist">liste blanche</string>
 	<string name="UnknownRegion">(région inconnue)</string>
-	<string name="UnknownPosition">(position inconue)</string>
+	<string name="UnknownPosition">(position inconnue)</string>
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Double-click to open Map, shift-drag to pan)</string>
 	<string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Double-click to teleport, shift-drag to pan)</string>
 	<string name="NetMapDoubleClickNoActionToolTipMsg">[REGION]</string>
@@ -2225,7 +2225,7 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="SLGridStatusOtherError">SL Grid Status error: [STATUS] ( https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP ).</string>
 	<string name="DoubleClickTeleportEnabled">Téléportation au double-clic activée.</string>
 	<string name="DoubleClickTeleportDisabled">Téléportation au double-clic désactivée.</string>
-	<string name="FSRegionRestartInLocalChat">La région dans laquelle vous vous situez est sur le point de redémarrer. Si vous restez ici, vous serrez déconnecté.</string>
+	<string name="FSRegionRestartInLocalChat">La région dans laquelle vous vous situez est sur le point de redémarrer. Si vous restez ici, vous serez déconnecté.</string>
 	<string name="Mute_Add">'[NAME]' a été ajouté aux éléments ignorés.</string>
 	<string name="Mute_Remove">'[NAME]' a été retiré des éléments ignorés.</string>
 	<string name="Reqsysinfo_Chat_NoReason">I am requesting information about your system setup.</string>
@@ -2236,4 +2236,11 @@ Extensions autorisées : .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="All Items">Inventaire</string>
 	<string name="Recent Items">Récent</string>
 	<string name="Worn Items">Porté</string>
+	<string name="InvOfferGroupNoticeName">Un membre du groupe nommé [NAME]</string>
+	<string name="CallingCardOnlineLabelSuffix">(connecté)</string>
+	<string name="GroupNoticesPanelDateString">[day,datetime,local]/[mthnum,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</string>
+	<string name="GroupNoticesToastDateString">[wkday,datetime,slt] [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]</string>
+	<string name="NotificationItemDateStringLocal">[day,datetime,local]/[mthnum,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]</string>
+	<string name="NotificationItemDateStringUTC">[day,datetime,utc]/[mth,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]</string>
+	<string name="NotificationItemDateStringSLT">[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]</string>
 </strings>

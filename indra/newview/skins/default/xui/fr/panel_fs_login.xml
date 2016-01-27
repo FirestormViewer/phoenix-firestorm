@@ -17,7 +17,7 @@
 			</combo_box>
 		</layout_panel>
 		<layout_panel name="grid_panel">
-			<text name="grid_login_text">Connexion à l'univers :</text>
+			<text name="grid_login_text">Connexion à la Grille :</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">S'enregistrer</text>

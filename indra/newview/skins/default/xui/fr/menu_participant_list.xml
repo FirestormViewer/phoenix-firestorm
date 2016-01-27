@@ -3,7 +3,7 @@
 	<menu_item_call label="Voir le profil" name="View Profile"/>
 	<menu_item_call label="Devenir amis" name="Add Friend"/>
 	<menu_item_call label="Ajouter à un cercle" name="Add to Set"/>
-	<menu_item_call label="IM" name="IM"/>
+	<menu_item_call label="Envoyer un IM" name="IM"/>
 	<menu_item_call label="Appel vocal" name="Call"/>
 	<menu_item_call label="Partager" name="Share"/>
 	<menu_item_call label="Payer" name="Pay"/>
@@ -11,7 +11,7 @@
 	<menu_item_check label="Trier par nom" name="SortByName"/>
 	<menu_item_check label="Trier par dernière activité" name="SortByRecentSpeakers"/>
 	<menu_item_check label="Afficher les icônes des personnes" name="View Icons"/>
-	<menu_item_check label="Muter" name="Block/Unblock"/>
+	<menu_item_check label="Ignorer" name="Block/Unblock"/>
 	<menu_item_check label="Ignorer" name="MuteText"/>
 	<context_menu label="Options du modérateur" name="Moderator Options">
 		<menu_item_call label="Éjecter du groupe" name="EjectSelected"/>

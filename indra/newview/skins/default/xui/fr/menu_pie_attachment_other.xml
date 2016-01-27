@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Avatar Pie">
-	<pie_slice label="Profil..." name="Profile..."/>
-	<pie_menu name="mute_menu" label="Muter &gt;">
-		<pie_slice label="Muter" name="Avatar Mute"/>
+	<pie_slice label="Profil" name="Profile..."/>
+	<pie_menu name="mute_menu" label="Ignorer &gt;">
+		<pie_slice label="Ignorer" name="Avatar Mute"/>
 		<pie_slice label="Propriétaire des particules" name="Mute Particle"/>
 	</pie_menu>
 	<pie_slice label="Aller vers" name="Go to"/>
-	<pie_slice label="Signaler..." name="abuse"/>
+	<pie_slice label="Signaler" name="abuse"/>
 	<pie_menu label="Ajouter &gt;" name="add_avatar">
-		<pie_slice label="En ami..." name="Add Friend"/>
-		<pie_slice label="À un cercle..." name="Add to set"/>
+		<pie_slice label="En ami" name="Add Friend"/>
+		<pie_slice label="À un cercle" name="Add to set"/>
 	</pie_menu>
-	<pie_slice label="Payer..." name="Pay..."/>
+	<pie_slice label="Payer" name="Pay..."/>
 	<pie_menu name="Avatar Pie More 1" label="Plus &gt;">
-		<pie_slice label="Figer" name="Freeze..."/>
+		<pie_slice label="Geler" name="Freeze..."/>
 		<pie_slice label="Donner ma carte de visite" name="Give Calling Card"/>
 		<pie_slice label="Inviter dans un groupe" name="Group Invite..."/>
-		<pie_slice label="Éjecter..." name="Eject..."/>
+		<pie_slice label="Éjecter" name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="Plus &gt;">
 			<pie_slice label="Textures" name="Debug..."/>
-			<pie_slice label="Infos sur les scripts" name="ScriptInfo"/>
+			<pie_slice label="Infos. Scripts" name="ScriptInfo"/>
 			<pie_slice label="Appel audio" name="Call"/>
 			<pie_slice label="Zoomer" name="Zoom In"/>
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
@@ -31,9 +31,9 @@
 		</pie_menu>
 		<pie_slice label="Inspecter" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
-			<pie_slice label="Liste Noire" name="DerenderPermanent"/>
+			<pie_slice label="Blacklister" name="DerenderPermanent"/>
 			<pie_slice label="Temporairement" name="Derender"/>
 		</pie_menu>
 	</pie_menu>
-	<pie_slice label="IM" name="Send IM..."/>
+	<pie_slice label="Envoyer un IM" name="Send IM..."/>
 </pie_menu>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Créer un produit" name="Marketplace Create Listing"/>
-	<menu_item_call label="Associer à un produit" name="Marketplace Associate Listing"/>
-	<menu_item_call label="Obtenir (Rafraichir) un produit" name="Marketplace Get Listing"/>
+	<menu_item_call label="Créer un listing" name="Marketplace Create Listing"/>
+	<menu_item_call label="Associer à un listing" name="Marketplace Associate Listing"/>
+	<menu_item_call label="Obtenir (Rafraichir) un listing" name="Marketplace Get Listing"/>
 	<menu_item_call label="Vérifier les erreurs" name="Marketplace Check Listing"/>
-	<menu_item_call label="Modifier le produit" name="Marketplace Edit Listing"/>
+	<menu_item_call label="Modifier le listing" name="Marketplace Edit Listing"/>
 	<menu_item_call label="Lister" name="Marketplace List"/>
-	<menu_item_call label="Supprimer le produit" name="Marketplace Unlist"/>
+	<menu_item_call label="Supprimer le listing" name="Marketplace Unlist"/>
 	<menu_item_call label="Activer" name="Marketplace Activate"/>
 	<menu_item_call label="Désactiver" name="Marketplace Deactivate"/>
 	<menu_item_call label="Partager" name="Share"/>
@@ -81,17 +81,17 @@
 	<menu_item_call label="Déplacer dans le dossier par défaut" name="Move to Default Folder"/>
 	<menu_item_call label="Déplacer dans les Objets trouvés" name="Move to Lost And Found"/>
 	<menu_item_call label="Supprimer le dossier système" name="Delete System Folder"/>
-	<menu_item_call label="Démarrer une conférence" name="Conference Chat Folder"/>
+	<menu_item_call label="Conférence à plusieurs" name="Conference Chat Folder"/>
 	<menu_item_call label="Jouer" name="Sound Play"/>
 	<menu_item_call label="Copier la SLurl" name="url_copy"/>
 	<menu_item_call label="À propos du repère" name="About Landmark"/>
-	<menu_item_call label="Afficher sur la carte" name="show_on_map"/>
+	<menu_item_call label="Voir sur la carte" name="show_on_map"/>
 	<menu_item_call label="Jouer dans Second Life" name="Animation Play"/>
 	<menu_item_call label="Jouer pour vous uniquement" name="Animation Audition"/>
-	<menu_item_call label="Envoyer un message instantané" name="Send Instant Message"/>
+	<menu_item_call label="Envoyer un IM" name="Send Instant Message"/>
 	<menu_item_call label="Téléporter" name="Offer Teleport..."/>
-	<menu_item_call label="Demander une téléportation..." name="Request Teleport..."/>
-	<menu_item_call label="Démarrer une conférence" name="Conference Chat"/>
+	<menu_item_call label="Demander une téléportation" name="Request Teleport..."/>
+	<menu_item_call label="Conférence à plusieurs" name="Conference Chat"/>
 	<menu_item_call label="Activer" name="Activate"/>
 	<menu_item_call label="Désactiver" name="Deactivate"/>
 	<menu_item_call label="Enregistrer sous" name="Save As"/>

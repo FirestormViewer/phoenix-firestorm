@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <panel label="Avancés" name="advanced">
 	<panel.string name="middle_mouse">Clic molette</panel.string>
-	<check_box label="Autoriser les clients multiples (Peut réduire la stabilité et les performances)" name="allow_multiple_viewer_check"/>
-	<check_box label="Autoriser la connexion à d'autres univers (Les univers ne supportent pas tous Firestorm)" name="show_grid_selection_check"/>
+	<check_box label="Autoriser les clients multiples (Peut réduire la stabilité et la performance)" name="allow_multiple_viewer_check"/>
+	<check_box label="Autoriser la connexion à d'autres grilles (Elles ne supportent pas toutes Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Afficher le menu Avancé (Utilisez le à vos propres risques !)" name="show_advanced_menu_check"/>
 	<check_box label="Afficher le menu Développeur" name="show_develop_menu_check"/>
 	<check_box label="Désactiver la détection de VRAM par l'analyse WMI sur les systèmes Windows" name="FSDisableWMIProbing"/>

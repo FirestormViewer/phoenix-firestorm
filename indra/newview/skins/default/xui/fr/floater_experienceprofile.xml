@@ -53,8 +53,8 @@
 					<text name="edit_marketplace">Magasin Marketplace :</text>
 					<check_box label="Activer l'expérience" name="edit_enable_btn"/>
 					<check_box label="Cacher la recherche" name="edit_private_btn"/>
-					<button label="Retour" name="cancel_btn"/>
-					<button label="Sauvegarder" name="save_btn"/>
+					<button label="Annuler" name="cancel_btn"/>
+					<button label="Enregistrer" name="save_btn"/>
 				</panel>
 			</scroll_container>
 		</panel>

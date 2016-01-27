@@ -22,7 +22,7 @@
 				<columns label="Nom d'utilisateur" name="username"/>
 			</fs_scroll_list>
 		</panel>
-		<panel label="Près de moi" name="NearMePanel">
+		<panel label="À proximité" name="NearMePanel">
 			<text name="InstructSelectResident">Sélectionnez une personne à proximité :</text>
 			<slider label="Distance" name="near_me_range"/>
 			<text name="meters">Mètres</text>

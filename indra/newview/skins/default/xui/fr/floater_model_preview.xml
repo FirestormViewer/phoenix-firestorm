@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="Ajouter un modèle">
+<floater name="Model Preview" title="Ajouter un Mesh">
 	<string name="no_havok">Uploader un mesh avec propriétés physiques</string>
 	<string name="status_parse_error">Erreur : Problème d'analyse DAE - consultez le journal pour plus de détails.</string>
-	<string name="status_material_mismatch">Erreur : Le matériau du modèle n'est pas un sous-ensemble du modèle de référence.</string>
+	<string name="status_material_mismatch">Erreur : Le matériau du mesh n'est pas un sous-ensemble du mesh de référence.</string>
 	<string name="status_reading_file">Chargement...</string>
 	<string name="status_generating_meshes">Génération des Meshs...</string>
 	<string name="status_vertex_number_overflow">Erreur : Nombre de sommets supérieur à 65535, annulé !</string>
@@ -18,7 +18,7 @@
 	<string name="mesh_status_mesh_mismatch">Le niveau de détail à un nombre incorrect de meshs.</string>
 	<string name="mesh_status_too_many_vertices">Le niveau de détail a trop de sommets.</string>
 	<string name="mesh_status_missing_lod">Niveau de détail non défini.</string>
-	<string name="mesh_status_invalid_material_list">Le niveau de détail matériel n'est pas un sous-ensemble du modèle de référence.</string>
+	<string name="mesh_status_invalid_material_list">Le niveau de détail matériel n'est pas un sous-ensemble du mesh de référence.</string>
 	<string name="phys_status_vertex_limit_exceeded">Certaines coques physiques dépassent les limites des vertex.</string>
 	<string name="layer_all">Tout</string>
 	<string name="decomposing">Analyse en cours...</string>
@@ -26,8 +26,8 @@
 	<string name="tbd">TBD</string>
 	<panel name="left_panel">
 		<panel name="model_name_representation_panel">
-			<text name="name_label">Nom du Modèle :</text>
-			<text name="model_category_label">Ce Modèle représente...</text>
+			<text name="name_label">Nom du mesh :</text>
+			<text name="model_category_label">Ce mesh représente...</text>
 			<combo_box name="model_category_combo">
 				<combo_item name="Choose one" label="Sélectionnez une valeur..."/>
 				<combo_item name="Avatar shape" label="La silhouette d'un avatar"/>
@@ -125,7 +125,7 @@
 				<text name="scale_label">Échelle (1=tel quel):</text>
 				<text name="dimensions_label">Dimensions :</text>
 				<check_box name="upload_textures" label="Inclure les textures"/>
-				<text name="include_label" width="250">Pour les modèles d'avatar seulement :</text>
+				<text name="include_label" width="250">Pour les meshs d'avatar seulement :</text>
 				<check_box label="Inclure le poids de la peau" name="upload_skin"/>
 				<check_box label="Inclure les positions de jointure" name="upload_joints"/>
 				<text name="pelvis_offset_label">Z offsets (Elève ou abaisse l'avatar) :</text>
@@ -142,7 +142,7 @@
 			<text name="physics_weight" width="100">Physiques : [PH]</text>
 			<text name="server_weight">Serveur : [SIM]</text>
 			<text name="warning_title">NOTE :</text>
-			<text name="warning_message" width="700">Vous n'avez pas les droits pour télécharger les modèles en maille. [[VURL] Découvrez comment] pour obtenir une certification.</text>
+			<text name="warning_message" width="700">Vous n'avez pas les droits pour uploader les mesh en maillage. [[VURL] Découvrez comment] obtenir une certification.</text>
 		</panel>
 	</panel>
 	<text name="lod_label">Aperçu :</text>

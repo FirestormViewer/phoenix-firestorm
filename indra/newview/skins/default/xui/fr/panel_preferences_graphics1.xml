@@ -2,8 +2,8 @@
 <panel label="Affichage" name="Display panel">
 	<tab_container label="Paramètres d'affichage" name="tabs">
 		<panel label="Général" name="General">
-			<text name="QualitySpeed">Qualité et performances :</text>
-			<text name="FasterText">Performances</text>
+			<text name="QualitySpeed">Qualité et performance :</text>
+			<text name="FasterText">Performance</text>
 			<text name="BetterText">Qualité</text>
 			<text name="ShadersPrefText">Faible</text>
 			<text name="ShadersPrefText2">Moyen</text>
@@ -48,21 +48,21 @@
 			<slider label="Distance d'affichage" name="DrawDistance"/>
 			<text name="DrawDistanceMeterText2">m</text>
 			<slider label="Nombre max. de particules" name="MaxParticleCount"/>
-			<slider label="Max. d'avatars proches affichés" name="MaxNumberAvatarDrawn"/>
+			<slider label="Maximum d'avatars 3D" name="MaxNumberAvatarDrawn"/>
 			<slider label="Qualité post-traitement" name="RenderPostProcess"/>
 			<text name="PostProcessText">Basse</text>
-			<slider label="Gravité des avatars" name="AvatarPhysicsDetail"/>
-			<text name="MeshDetailText">Facteur de distance du niveau de détail :</text>
-			<slider label="  Objets &amp; Sculptures" name="ObjectMeshDetail"/>
+			<slider label="Propriétés physiques des avatars" name="AvatarPhysicsDetail"/>
+			<text name="MeshDetailText">Facteurs de détails liés à la distance :</text>
+			<slider label="  Objets et Sculpts" name="ObjectMeshDetail"/>
 			<slider label="  Prims flexibles" name="FlexibleMeshDetail"/>
 			<slider label="  Arbres" name="TreeMeshDetail"/>
 			<slider label="  Avatars" name="AvatarMeshDetail"/>
 			<slider label="  Terrain" name="TerrainMeshDetail"/>
 			<slider label="  Ciel" name="SkyMeshDetail"/>
 			<text name="AvatarRenderingText">Rendu des avatars :</text>
-			<check_box label="Avatars distants" name="AvatarImpostors"/>
-			<check_box label="Textures matérielles" name="AvatarVertexProgram"/>
-			<check_box label="Vêtements des avatars" name="AvatarCloth"/>
+			<check_box label="Avatars 2D" name="AvatarImpostors"/>
+			<check_box label="Accél. GPU des avatars" name="AvatarVertexProgram"/>
+			<check_box label="Flexibilité des vêtements" name="AvatarCloth"/>
 			<text name="TerrainDetailText">Détails du terrain :</text>
 			<radio_group name="TerrainDetailRadio">
 				<radio_item label="Bas" name="0"/>
@@ -72,9 +72,9 @@
 		</panel>
 		<panel label="Paramètres matériels" name="Hardware Settings">
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
-			<check_box label="Activer les Vertex Buffer Objects" name="vbo" tool_tip="Activer cette fonction offre un gain un gain de performance. Toutefois, le matériel très ancien peut ne pas implémenter cette technologie et provoquera une instabilité du Viewer s'il est actif."/>
+			<check_box label="Activer les Vertex Buffer Objects OpenGL" name="vbo" tool_tip="Activer cette fonction offre un gain un gain de performance. Toutefois, le matériel très ancien peut ne pas implémenter cette technologie et provoquera une instabilité du Viewer s'il est actif."/>
 			<check_box label="Activer les Streamed VBOs" name="vbo_stream" tool_tip="Désactiver cette option peut améliorer les performances lorsque les VBO sont activés. La désactivation de ce paramètre améliore grandement les performances sur certaines cartes graphiques Intel et AMD."/>
-			<check_box label="Activer la compression de textures sans pertes (nécessite un redémarrage)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
+			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
 			<text name="Antialiasing:">Anticrénelage :</text>
 			<combo_box label="Anticrénelage" name="fsaa">
 				<combo_box.item label="Désactivé" name="FSAADisabled"/>
@@ -85,7 +85,7 @@
 			</combo_box>
 			<spinner label="Gamma :" name="gamma"/>
 			<text name="brightness text">Baisser la valeur pour augmenter la brillance</text>
-			<slider label="Mémoire vidéo (Mo) :" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
+			<slider label="Mémoire vidéo utilisée par le viewer (Mo) :" label_width="235" width="450" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
@@ -93,7 +93,7 @@
 			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
 			<text name="Texture Rendering">Rendu des textures :</text>
 			<check_box label="Utiliser HTTP pour récupérer les textures" tool_tip="Cochez cette option pour charger les textures en utilisant le protocole HTTP - désactivez cette option si vous avez des problèmes d'affichage et souhaitez utiliser le protocole UDP à la place." name="TexturesHTTP"/>
-			<text name="TextureDetailLabel">Qualité des textures :</text>
+			<text name="TextureDetailLabel">Qualité max. des textures :</text>
 			<combo_box name="TextureDetail">
 				<combo_box.item label="Normale" name="0"/>
 				<combo_box.item label="Moyenne" name="3"/>
@@ -109,17 +109,17 @@
 			<check_box label="Afficher les avatars qui n'ont pas fini de charger" name="RenderUnloadedAvatars"/>
 			<check_box label="Limiter les images par secondes" name="FSLimitFramerate"/>
 			<slider label="IPS :" name="MaxFPS"/>
-			<check_box label="Voir le monde dans sa maquette fonctionnelle" name="Wireframe"/>
-			<check_box label="Activer les sources lumineuses portables (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars peuvent porter, comme les 'Face Lights'." name="Render Attached Lights"/>
+			<check_box label="Voir en mode fil de fer" name="Wireframe"/>
+			<check_box label="Activer les sources lumineuses portées (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars portent, comme les 'Face Lights'." name="Render Attached Lights"/>
 			<check_box label="Rendu des particules portées" name="Render Attached Particles"/>
-			<slider label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
-			<text name="PrecachingDelayText" width="60">secondes</text>
-			<slider label="Qualité de l'ombrage" tool_tip="Qualité de l'ombrage (1 par défaut)" name="ShadowResolution"/>
-			<slider label="Échelle de rendu des textures du terrain" name="RenderTerrainScale" tool_tip="Détermine l'échelle de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
+			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
+			<text name="PrecachingDelayText" left_delta="480">sec.</text>
+			<slider width="480" label_width="340" label="Qualité des ombres" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
+			<slider width="480" label_width="340" label="Échelle de rendu des textures du terrain (Redémarrage requis)" name="RenderTerrainScale" tool_tip="Détermine l'échelle de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
 		</panel>
 		<panel label="Profondeur de champ" name="DOF panel">
-			<check_box label="Activer la profondeur de champ (Floutera votre vision excepté là où votre camera regarde)" name="UseDoF"/>
-			<check_box label="Activer pendant l'édition d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
+			<check_box label="Activer pendant la modification d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
 			<check_box label="Activer sous l'eau" name="FSRenderDoFUnderwater"/>
 			<slider label="Indice d'ouverture :" name="CameraFNum" tool_tip="Indice d'ouverture de la caméra pour les effets de profondeur"/>
 			<slider label="Distance focale :" name="CameraFocal" tool_tip="Distance focale de la caméra pour les effets de profondeur (en millimètres)"/>

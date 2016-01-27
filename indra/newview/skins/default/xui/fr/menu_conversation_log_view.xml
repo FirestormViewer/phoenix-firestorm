@@ -3,5 +3,5 @@
 	<menu_item_check label="Trier par nom" name="sort_by_name"/>
 	<menu_item_check label="Trier par date" name="sort_by_date"/>
 	<menu_item_check label="Trier et placer les amis en premier" name="sort_by_friends"/>
-	<menu_item_call label="Afficher l'historique du Chat local..." name="view_nearby_chat_history"/>
+	<menu_item_call label="Afficher l'historique du Chat local" name="view_nearby_chat_history"/>
 </toggleable_menu>

@@ -38,10 +38,10 @@
 	<check_box label="Titres de groupe" name="show_all_title_checkbox1" tool_tip="Afficher le titre de groupe, comme Officier ou Membre"/>
 	<check_box label="Masquer mon titre de groupe" name="RenderHideGroupTitle" tool_tip="Masque ou affiche votre titre de groupe à vous-même et à autrui."/>
 	<check_box label="Noms d'affichage" name="display_names_check" tool_tip="Voir le nom d'affichage dans les chats, les IM, les libellés, etc."/>
-	<check_box label="Noms d'affichage plutôt que noms d'utilisateur" name="FSshow_legacyun" tool_tip="Afficher le nom d'affichage (Prénom Nom) plutôt que le nom d'utilisateur (prénom.nom)"/>
+	<check_box label="Noms hérités plutôt que noms d'utilisateur" name="FSshow_legacyun" tool_tip="Afficher le nom hérité (Prénom Nom) plutôt que le nom d'utilisateur (prénom.nom)"/>
 	<check_box label="Surligner les amis" name="show_friends" tool_tip="Afficher en surbrillance les noms de vos amis."/>
 	<check_box label="Supprimer 'Resident' du nom" name="legacy_trim_check" tool_tip="Supprimer 'Resident' du nom"/>
-	<check_box label="Position fixe des noms flottants" name="FSLegacyNametagPosition" tool_tip="Si activé, le nom affiché restera fixe à l'emplacement de l'avatar et ne suivra pas les mouvements de tête de celui-ci."/>
+	<check_box label="Position fixe des tags" name="FSLegacyNametagPosition" tool_tip="Si activé, le tag restera fixe à l'emplacement de l'avatar et ne suivra pas les mouvements de tête de celui-ci."/>
 	<check_box label="Mode de réponse automatique près du nom" name="FSShowAutorespondInNameTag" tool_tip="Affichera si vous avez un message automatique de réponse dans votre propre nom."/>
 	<text name="title_afk_text">Absent après :</text>
 	<text name="title_afk_quit_text">Déconnecter après avoir été absent :</text>

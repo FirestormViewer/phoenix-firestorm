@@ -3,7 +3,7 @@
 	<menu label="Avatar" name="Me">
 		<menu_item_call label="Compte" name="Manage Account"/>
 		<menu_item_call label="Boite d'envoi du Marketplace..." name="MerchantOutbox"/>
-		<menu_item_call label="Produits du Marketplace..." name="MarketplaceListings"/>
+		<menu_item_call label="Listings Marketplace..." name="MarketplaceListings"/>
 		<menu_item_call label="Acheter des L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Inventaire" name="Inventory"/>
 		<menu_item_check label="Inventaire" name="ShowSidetrayInventory"/>
@@ -26,7 +26,7 @@
 		<menu label="Centre de remise en forme de l'avatar" name="avhealth">
 			<menu_item_call label="Stopper les animations de mon avatar" name="Stop Animating My Avatar"/>
 			<menu_item_call label="Stopper les animations de mon avatar &amp; révoquer les permissions" name="Stop Animating My Avatar With Revoke"/>
-			<menu_item_call label="Reformer la silhouette" name="undeform_avatar"/>
+			<menu_item_call label="Rétablir la silhouette" name="undeform_avatar"/>
 			<menu_item_call label="Forcer l'actualisation de mon avatar (Rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Me transformer en avatar test masculin" name="ResetDefaultAvM"/>
 			<menu_item_call label="Me transformer en avatar test féminin" name="ResetDefaultAvF"/>
@@ -36,7 +36,7 @@
 		</menu>
 		<menu_item_call label="Photo" name="Take Snapshot"/>
 		<menu_item_call label="Suivi des transactions" name="money_tracker"/>
-		<menu_item_call label="Pose debout..." name="pose_stand"/>
+		<menu_item_call label="Poser debout..." name="pose_stand"/>
 		<menu_item_call label="Préférences" name="Preferences"/>
 		<menu_item_call label="Boutons de la barre d'outils" name="Toolbar Buttons"/>
 		<menu_item_check label="Afficher les HUD" name="Show HUD Attachments"/>
@@ -76,7 +76,7 @@
 	</menu>
 	<menu label="Monde" name="World">
 		<menu_item_call label="Resynchroniser les animations" name="Resync Animations"/>
-		<menu_item_call label="Personnes près de vous" name="Active Speakers"/>
+		<menu_item_call label="Personnes à proximité" name="Active Speakers"/>
 		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historique de téléportation" name="Teleport History"/>
 		<menu_item_check label="Lieux" name="Places"/>
@@ -89,9 +89,9 @@
 		<menu_item_call label="À propos du terrain" name="About Land"/>
 		<menu_item_call label="Gestion Région &amp; Domaine" name="RegionEstate"/>
 		<menu_item_call label="Acheter ce terrain" name="Buy Land"/>
-		<menu_item_call label="Afficher les terrains possédés" name="My Land"/>
+		<menu_item_call label="Afficher les propriétés" name="My Land"/>
 		<menu label="Afficher également" name="LandShow">
-			<menu_item_check label="Clôtures d'interdiction de terrain" name="Ban Lines"/>
+			<menu_item_check label="Lignes d'interdiction de terrain" name="Ban Lines"/>
 			<menu_item_check label="Balises" name="beacons"/>
 			<menu_item_check label="Limites de terrain" name="Property Lines"/>
 			<menu_item_check label="Propriétaires des terrains" name="Land Owners"/>
@@ -100,7 +100,7 @@
 			<menu_item_check label="Menu Avancé" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Se téléporter chez soi" name="Teleport Home"/>
-		<menu_item_call label="Définir la maison ici" name="Set Home to Here"/>
+		<menu_item_call label="Définir le domicile ici" name="Set Home to Here"/>
 		<menu label="Heure du jour" name="Environment Settings">
 			<menu_item_check label="Aube" name="Sunrise"/>
 			<menu_item_check label="Midi" name="Noon"/>
@@ -131,23 +131,23 @@
 			<menu_item_call label="Gestion de la caméra" name="cameratools_item_call"/>
 		</menu>
 		<menu_item_call label="Recherche dans la région" name="area_search"/>
-		<menu_item_call label="Explorateur audio" name="Sound Explorer"/>
+		<menu_item_call label="Explorateur de sons" name="Sound Explorer"/>
 		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>
-		<menu_item_call label="Indésirables" name="asset_blacklist"/>
+		<menu_item_call label="Éléments Blacklistés" name="asset_blacklist"/>
 	</menu>
 	<menu label="Construire" name="BuildTools">
 		<menu_item_check label="Construire" name="Show Build Tools"/>
 		<menu label="Sélectionner l'outil de construction" name="Select Tool">
-			<menu_item_call label="Caméra" name="Focus"/>
-			<menu_item_call label="Déplacement" name="Move"/>
-			<menu_item_call label="Modification" name="Edit"/>
-			<menu_item_call label="Création" name="Create"/>
-			<menu_item_call label="Terraformation" name="Land"/>
+			<menu_item_call label="Outil de mise au point" name="Focus"/>
+			<menu_item_call label="Outil de déplacement" name="Move"/>
+			<menu_item_call label="Outil de modification" name="Edit"/>
+			<menu_item_call label="Outil de création" name="Create"/>
+			<menu_item_call label="Outil terrain" name="Land"/>
 		</menu>
 		<menu_item_call label="Lier" name="Link"/>
-		<menu_item_call label="Supprimer le lien" name="Unlink"/>
+		<menu_item_call label="Annuler le lien" name="Unlink"/>
 		<menu_item_check label="Editer les parties liées" name="Edit Linked Parts"/>
-		<menu label="Sélectionner l'élément lié" name="Select Linked Parts">
+		<menu label="Sélectionner les parties liées" name="Select Linked Parts">
 			<menu_item_call label="Sélectionner la partie suivante" name="Select Next Part"/>
 			<menu_item_call label="Sélectionner la partie précédente" name="Select Previous Part"/>
 			<menu_item_call label="Inclure la partie suivante" name="Include Next Part"/>
@@ -170,19 +170,19 @@
 		</menu>
 		<menu label="Scripts" name="Scripts">
 			<menu_item_call label="Afficher les erreurs et avertissements de script" name="Script Debug"/>
-			<menu_item_call label="Afficher l'impact des scripts" name="Script Info"/>
+			<menu_item_call label="Afficher les infos des scripts (compteur)" name="Script Info"/>
 			<menu_item_call label="Recompiler les scripts (Mono)" name="Mono"/>
 			<menu_item_call label="Recompiler les scripts (LSL)" name="LSL"/>
-			<menu_item_call label="Redémarrer les Scripts" name="Reset Scripts"/>
+			<menu_item_call label="Réinitialiser les Scripts" name="Reset Scripts"/>
 			<menu_item_call label="Exécuter les scripts" name="Set Scripts to Running"/>
 			<menu_item_call label="Arrêter les scripts" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Supprimer les scripts de la sélection" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Recherche de chemin" name="Pathfinding">
-			<menu_item_call label="Ensembles définis..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Ensembles liés..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Personnes..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="Prévisualiser / Tester..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Reformer le terrain" name="pathfinding_rebake_navmesh_item"/>
+			<menu_item_call label="Vue / Test..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Réactualiser la région" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Options" name="Options">
 			<menu_item_check label="Afficher les permissions avancées" name="DebugPermissions"/>
@@ -194,11 +194,11 @@
 			<menu_item_check label="Inclure les objets appartenant au groupe" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Afficher les contours de la sélection" name="Show Selection Outlines"/>
 			<menu_item_check label="Afficher la sélection masquée" name="Show Hidden Selection"/>
-			<menu_item_check label="Afficher la zone éclairée par la sélection" name="Show Light Radius for Selection"/>
-			<menu_item_check label="Afficher le rayon de sélection" name="Show Selection Beam"/>
-			<menu_item_check label="Magnétiser les objets à la règle" name="Snap to Grid"/>
-			<menu_item_call label="Magnétiser uniquement l'axe X et Y à la règle" name="Snap Object XY to Grid"/>
-			<menu_item_call label="Utiliser l'objet sélectionne comme base pour la règle" name="Use Selection for Grid"/>
+			<menu_item_check label="Afficher la zone éclairée pour la sélection" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Afficher le faisceau de sélection" name="Show Selection Beam"/>
+			<menu_item_check label="Fixer sur la grille" name="Snap to Grid"/>
+			<menu_item_call label="Fixer les coordonnées XY de l'objet sur la grille" name="Snap Object XY to Grid"/>
+			<menu_item_call label="Utiliser l'objet sélectionné comme base pour la règle" name="Use Selection for Grid"/>
 			<menu_item_call label="Options de la règle..." name="Grid Options"/>
 			<menu_item_call label="Définir les permissions par défaut..." name="Set default permissions"/>
 		</menu>
@@ -206,7 +206,7 @@
 			<menu_item_call label="Image ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Son ([COST])..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
-			<menu_item_call label="Modèle..." name="Upload Model"/>
+			<menu_item_call label="Mesh..." name="Upload Model"/>
 			<menu_item_call label="En bloc ([COST] par fichier)..." name="Bulk Upload"/>
 			<menu_item_call label="Importer un ensemble lié..." name="import linkset"/>
 		</menu>
@@ -216,7 +216,7 @@
 	<menu label="Contenu" name="Content">
 		<menu_item_check label="Recherche" name="Search"/>
 		<menu_item_call label="MarketPlace" name="SL Marketplace"/>
-		<menu_item_call label="LindeX™ Exchange: Market Data " name="LindenXchange"/>
+		<menu_item_call label="LindeX™ Exchange: Données du marché" name="LindenXchange"/>
 		<menu_item_call label="Librairie LSL" name="Script Library"/>
 		<menu_item_call label="Blog Firestorm" name="Firestorm Blog"/>
 		<menu_item_call label="Flickr Firestorm" name="Firestorm Flickr"/>
@@ -233,7 +233,7 @@
 		<menu_item_call label="Planning de formation à Firestorm" name="Firestorm Classes Schedule"/>
 		<menu_item_call label="Aide [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="À propos de [CURRENT_GRID]" name="current_grid_about"/>
-		<menu_item_call label="Statut de l'univers" name="Grid Status"/>
+		<menu_item_call label="Statut de la Grille" name="Grid Status"/>
 		<menu_item_call label="Signaler un abus" name="Report Abuse"/>
 		<menu_item_call label="Signaler un bug" name="Report Bug"/>
 		<menu_item_call label="Collisions, Coups &amp; Bousculades" name="Bumps, Pushes &amp;amp; Hits"/>
@@ -275,11 +275,11 @@
 			<menu_item_check label="Statistiques de charge pour la scène" name="Scene Load Statistics"/>
 			<menu_item_check label="Afficher l'impact de rendu des avatars" name="Avatar Rendering Cost"/>
 		</menu>
-		<menu label="Mise en évidence et visibilité" name="Highlighting and Visibility">
+		<menu label="Surbrillance et visibilité" name="Highlighting and Visibility">
 			<menu_item_check label="Balise animée" name="Cheesy Beacon"/>
-			<menu_item_check label="Cacher les particules" name="Hide Particles"/>
-			<menu_item_check label="Cacher les sélections" name="Hide Selected"/>
-			<menu_item_check label="Surligner les transparences" name="Highlight Transparent"/>
+			<menu_item_check label="Masquer les particules" name="Hide Particles"/>
+			<menu_item_check label="Masquer les sélections" name="Hide Selected"/>
+			<menu_item_check label="Afficher les transparences" name="Highlight Transparent"/>
 			<menu_item_check label="Afficher la mire en vue subjective" name="ShowCrosshairs"/>
 			<menu label="Infobulles" name="Hover Tips">
 				<menu_item_check label="Afficher les infobulles" name="Show Tips"/>
@@ -292,7 +292,7 @@
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Arbres" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatars" name="Rendering Type Character"/>
-			<menu_item_check label="Correctif de surface" name="Rendering Type Surface Patch"/>
+			<menu_item_check label="Texture du terrain" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Ciel" name="Rendering Type Sky"/>
 			<menu_item_check label="Eau" name="Rendering Type Water"/>
 			<menu_item_check label="Sol" name="Rendering Type Ground"/>
@@ -305,7 +305,7 @@
 		<menu label="Rendu des éléments" name="Rendering Features">
 			<menu_item_check label="Interface" name="ToggleUI"/>
 			<menu_item_check label="Sélections" name="Selected"/>
-			<menu_item_check label="Surlignements" name="Highlighted"/>
+			<menu_item_check label="Surbrillance" name="Highlighted"/>
 			<menu_item_check label="Textures dynamiques" name="Dynamic Textures"/>
 			<menu_item_check label="Ombres au sol" name="Foot Shadows"/>
 			<menu_item_check label="Brouillard" name="Fog"/>
@@ -339,7 +339,7 @@
 			<menu_item_call label="Zoom par défaut" name="Zoom Default"/>
 			<menu_item_call label="Dézoomer" name="Zoom Out"/>
 		</menu>
-		<menu_item_check label="Outrepasser les limitations de vol" name="Fly Override"/>
+		<menu_item_check label="Outrepasser l'interdiction de vol" name="Fly Override"/>
 		<menu_item_check label="RestrainedLove API (RLVa)" name="RLV API"/>
 		<menu_item_call label="Afficher les options de débogage" name="Debug Settings"/>
 		<menu_item_check label="Afficher le menu Développeur" name="Debug Mode"/>

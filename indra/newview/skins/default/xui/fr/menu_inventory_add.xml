@@ -4,7 +4,7 @@
 		<menu_item_call label="Image ([COST])..." name="Upload Image"/>
 		<menu_item_call label="Son ([COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
-		<menu_item_call label="Modèle..." name="Upload Model"/>
+		<menu_item_call label="Mesh..." name="Upload Model"/>
 		<menu_item_call label="En Bloc ([COST] par fichier)..." name="Bulk Upload"/>
 		<menu_item_call label="Importer un ensemble lié..." name="import linkset"/>
 	</menu>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="sound_explorer" title="Explorateur audio">
+<floater name="sound_explorer" title="Explorateur de sons">
 	<floater.string name="Playing">Joué</floater.string>
 	<floater.string name="NotPlaying">il y a [TIME] min</floater.string>
 	<floater.string name="Type_UI">UI</floater.string>
@@ -21,5 +21,5 @@
 	<button label="Écouter" name="play_locally_btn"/>
 	<button label="Zoomer" name="look_at_btn"/>
 	<button label="Stop" name="stop_btn"/>
-	<button label="Indésirable" name="bl_btn"/>
+	<button label="Blacklister" name="bl_btn"/>
 </floater>

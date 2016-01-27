@@ -12,8 +12,8 @@
 	<spinner label="Nombre maximal de liens physiques" label_width="220" width="280" name="max_link_count_phys" tool_tip="Nombre maximal d'objets physiques pouvant être liés entre eux pour cette région"/>
 	<spinner label="Nombre maximal de transferts d'objet" label_width="220" width="280" name="max_inventory_items_transfer" tool_tip="Nombre d'objets pouvant être transférés en une seule fois. Entrer -1 pour un nombre illimité d'objets. (Par défaut : -1)"/>
 	<spinner label="Échelle de détails du terrain" label_width="220" width="280" name="terrain_detail_scale" tool_tip="Échelle de détails du terrain"/>
-	<spinner label="Affichage des noms flottants" label_width="220" width="280" name="show_tags" tool_tip="Mode de noms flottants pour cette région. (Afficher = 2, Afficher brièvement = 1, Bloquer = 0)"/>
-	<spinner label="Nombre maximal de groupes" label_width="220" width="280" name="max_groups" tool_tip="Nombre de groupes qu'une personne peut rejoindre. Entrer -1 pour un nombre illimité de groupes. (Par défaut : -1)"/>
+	<spinner label="Affichage des tags" label_width="220" width="280" name="show_tags" tool_tip="Mode d'affichage des tags pour cette région. (Afficher = 2, Afficher brièvement = 1, Bloquer = 0)"/>
+	<spinner label="Nombre maximum de groupes" label_width="220" width="280" name="max_groups" tool_tip="Nombre de groupes qu'une personne peut rejoindre. Entrer -1 pour un nombre illimité de groupes. (Par défaut : -1)"/>
 	<check_box label="Rendu de l'eau" name="render_water" tool_tip="Active le rendu de l'eau pour cette région. (Par défaut : activé)"/>
 	<check_box label="Autoriser la minicarte" name="allow_minimap" tool_tip="Autoriser la minicarte pour cette région. (Par défaut : oui)"/>
 	<check_box label="Autoriser les prims physiques" name="allow_physical_prims" tool_tip="Autoriser la création de prims physiques dans cette région. (Par défaut : oui)"/>

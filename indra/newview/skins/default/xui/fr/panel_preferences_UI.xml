@@ -19,44 +19,45 @@
 			<slider label="Distance de disparition des textes flottants (en mètres) :" label_width="305" tool_tip="Définit la distance à partir de laquelle les textes flottants ne s'affichent plus" name="FSHudTextFadeRange"/>
 		</panel>
 		<panel label="Interface 2D" name="ui-2d-overlay">
-			<text name="UI Size:">Échelle de l'interface :</text>
-			<text name="ScriptDialogsPerObjectLabel" width="175">Fenêtres de menus par objet :</text>
+			<text name="UI Size:" width="240">Échelle de l'UI (peut poser problème) :</text>
+			<slider name="ui_scale_slider" width="200"/>
+			<text name="ScriptDialogsPerObjectLabel" width="180">Dialogues de script par objet :</text>
 			<combo_box name="ScriptDialogPerObjectDropdown" width="150">
-				<combo_box.item label="Une par objet" name="ScriptDialogOption_0"/>
-				<combo_box.item label="Une par objet &amp; canal" name="ScriptDialogOption_1"/>
-				<combo_box.item label="Illimitées" name="ScriptDialogOption_2"/>
+				<combo_box.item label="Un par objet" name="ScriptDialogOption_0"/>
+				<combo_box.item label="Un par objet &amp; canal" name="ScriptDialogOption_1"/>
+				<combo_box.item label="Illimités" name="ScriptDialogOption_2"/>
 			</combo_box>
 			<check_box label="Supprimer le bouton 'Ignorer'" name="FSRemoveScriptBlockButton"/>
-			<text name="ScriptDialogsPositionLabel" width="175">Position des fenêtres de menus :</text>
-			<combo_box name="ScriptDialogsPositionDropdown" width="150" tool_tip="Sélectionnez où les fenêtres de menu s'affichent à l'écran.">
+			<text name="ScriptDialogsPositionLabel" width="180">Position des dialogues de scripts :</text>
+			<combo_box name="ScriptDialogsPositionDropdown" width="150" tool_tip="Sélectionnez où les dialogues de scripts s'affichent à l'écran.">
 				<combo_box.item label="Ancienne configuration" name="ScriptDialogPositionOption_0"/>
-				<combo_box.item label="Liées aux notifications" name="ScriptDialogPositionOption_1"/>
+				<combo_box.item label="Liés aux Chiclets" name="ScriptDialogPositionOption_1"/>
 				<combo_box.item label="En haut à gauche" name="ScriptDialogPositionOption_2"/>
 				<combo_box.item label="En haut à droite" name="ScriptDialogPositionOption_3"/>
 				<combo_box.item label="En bas à gauche" name="ScriptDialogPositionOption_4"/>
 				<combo_box.item label="En bas à droite" name="ScriptDialogPositionOption_5"/>
 			</combo_box>
 			<check_box label="Jouer une animation" name="FSAnimatedScriptDialogs" tool_tip="Activer cette option pour que les menus soient affichés de façon animée lorsqu'ils s'ouvrent. Ne fonctionne que si le menu est réglé pour s'afficher 'En haut'"/>
-			<slider label="Nombre de lignes par menu :" label_width="175" name="FSRowsPerScriptDialog" tool_tip="Le nombre maximum de lignes visibles par menu."/>
+			<slider label="Nombre de lignes par dialogue de script :" label_width="225" name="FSRowsPerScriptDialog" tool_tip="Le nombre maximum de lignes d'entête visibles par dialogue de script."/>
 			<check_box label="Utiliser le menu circulaire" name="UsePieMenu" tool_tip="Utiliser le menu circulaire classique en camembert plutôt que le menu contextuel lorsque j'effectue un clic droit sur un élément du monde."/>
-			<check_box label="Notices de groupe et mini-portraits de notification dans l'angle supérieur droit" name="ShowGroupNoticesTopRight" tool_tip="Activer cette option pour afficher les notices de groupe et les mini-portraits d'avatar et de groupe dans l'angle supérieur droit (Redémarrage requis)."/>
-			<text name="GroupTopRightRequiresRestart"></text>
-			<check_box label="Masquer les mini-portraits de groupe et de conversation privée" name="FSDisableIMChiclets" tool_tip="Activer cette option masquera tous les mini-portraits de groupe et de conversation privée (l'enveloppe de notification et la bulle cumulative de messages non lus restera affichée à l'écran)."/>
+			<check_box label="Notices de groupes et Chiclets dans l'angle supérieur droit" name="ShowGroupNoticesTopRight" tool_tip="Activer cette option pour afficher les notices de groupes et les Chiclets dans l'angle supérieur droit."/>
+			<text name="GroupTopRightRequiresRestart" left_delta="340">(Redémarrage requis)</text>
+			<check_box label="Masquer les chiclets de groupes et d'IM" name="FSDisableIMChiclets" tool_tip="Activer cette option masquera tous les mini-portraits de groupe et de conversation privée (l'enveloppe de notification et la bulle cumulative de messages non lus restera affichée à l'écran)."/>
 			<check_box label="Utiliser la liste originelle pour la fenêtre de notifications" name="FSLegacyNotificationWell" tool_tip="Activer cette option pour utiliser la disposition de liste originale pour afficher les notifications enregistrées."/>
 			<text name="FSLegacyNotificationWellRequiresRestart" left_pad="70">(Redémarrage requis)</text>
-			<slider label="Avertissements visuels de message manqué :" name="ButtonsFlashCount"/>
-			<slider label="Durée de flash de l'avertissement :" tool_tip="Durée en secondes d'un flash utilisé pour notifier les notifications de message manqué" name="ButtonFlashRate"/>
+			<slider label="Nombre de flashs sur les onglets d'IM :" label_width="210" name="ButtonsFlashCount"/>
+			<slider label="Durée de flash de l'avertissement :" label_width="210" tool_tip="Durée en secondes d'un flash utilisé pour notifier les notifications de message manqué" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">sec</text>
 		</panel>
 		<panel label="Barres supérieures" name="UI-interface-top-bars">
 			<text name="statusbar_textbox">Barre de menus :</text>
-			<check_box tool_tip="Afficher l'indicateur de bande passante dans la barre supérieure" label="Afficher l'indicateur de bande passante utilisée à droite dans la barre supérieure" name="ShowNetStats"/>
-			<check_box label="Faire la moyenne par seconde pour l'indicateur de bande passante" name="FSStatbarLegacyMeanPerSec" tool_tip="Activer cette option ajustera à chaque seconde et non plus en temps réel la bande passante utilisée"/>
-			<check_box label="Afficher la fenêtre de statistiques réseau à la place de l'indicateur de latence" name="FSUseStatsInsteadOfLagMeter"/>
-			<check_box label="Afficher les contrôles multimédia dans la barre supérieure" name="FSEnableVolumeControls" tool_tip="Activer cette option affichera les contrôles multimédia (flux musical, médias et volume) dans l'angle supérieur droit de la barre supérieure"/>
+			<check_box tool_tip="Afficher l'indicateur de trafic en haut à droite de l'écran" label="Afficher l'indicateur de trafic utilisé en haut à droite de l'écran" name="ShowNetStats"/>
+			<check_box label="Afficher la moyenne pour les mises à jour de l'indicateur de trafic" name="FSStatbarLegacyMeanPerSec" tool_tip="Activer cette option ajustera à chaque seconde et non plus en temps réel la bande passante utilisée"/>
+			<check_box label="Cliquer sur l'indicateur de trafic ouvre la barre de statistiques au lieu de l'indicateur de lag" name="FSUseStatsInsteadOfLagMeter"/>
+			<check_box label="Afficher les contrôles média dans la barre supérieure" name="FSEnableVolumeControls" tool_tip="Activer cette option affichera les contrôles multimédia (Musique, médias et volume) dans l'angle supérieur droit de la barre supérieure"/>
 			<check_box label="Afficher la version du simulateur dans la barre supérieure" name="FSStatusbarShowSimulatorVersion" tool_tip="Activer cette option affichera la version du simulateur actuellement utilisée dans la région."/>
 			<check_box label="Afficher l'emplacement dans la barre de menu" name="ShowMenuBarLocation"/>
-			<check_box label="Afficher la recherche dans les menus" name="show_search_menu_check"/>
+			<check_box label="Afficher la recherche des menus" name="show_search_menu_check"/>
 			<check_box label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
 			<text name="navfav_textbox">Barres de Navigation &amp; de Favoris :</text>
 			<check_box label="Afficher la barre des favoris" name="ShowNavbarFavoritesPanel"/>
@@ -67,12 +68,12 @@
 			<check_box label="Ouvrir la fenêtre de profil directement lors d'un clic sur le nom d'un résident" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Activer cette option affichera la fenêtre de profil complète du résident directement lors d'un clic sur son nom"/>
 			<check_box label="Utiliser les profils Web" name="FSUseWebProfiles" tool_tip="Affiche la page web du profil à la place du panneau par défaut."/>
 			<check_box label="Ne pas afficher les éléments ignorés lorsque j'ajoute une entrée" name="FSDisableBlockListAutoOpen" tool_tip="Désactive l'affichage de la liste des éléments ignorés lors de l'ajout d'un élément à celle-ci."/>
-			<check_box label="Les onglets 'Amis' et 'Groupes' dans la fenêtre 'Personnes' sont affichés avec le style V3" name="FSUseV2Friends" tool_tip="Activer cette option listera les amis et les groupes dans la fenêtre 'Personnes' avec le style V3."/>
+			<check_box label="'Amis' et 'Groupes' dans le menu Communiquer ouvrent la fenêtre de style V3" name="FSUseV2Friends" tool_tip="Cliquer sur 'Amis' et 'Groupes' dans le menu Communiquer ouvrira les onglets associés avec le style V3 dans la fenêtre 'Personnes' au lieu de les afficher via la fenêtre 'Conversations'."/>
 			<text name="standalone_textbox">Utiliser des fenêtres distinctes pour :</text>
-			<check_box name="FSUseStandaloneGroupFloater" label="Les groupes" tool_tip="Si activé, les profils de groupes s'ouvriront dans une fenêtre séparée."/>
+			<check_box name="FSUseStandaloneGroupFloater" width="150" label="Les profils de groupe" tool_tip="Si activé, les profils de groupes s'ouvriront dans une fenêtre séparée."/>
 			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="L'historique de téléportation" tool_tip="Si activé, utiliser le raccourci d'historique de téléportation ouvrira l'historique dans une fenêtre séparée."/>
-			<check_box name="FSUseStandaloneBlocklistFloater" label="Les éléments ignorés" tool_tip="Si activé, la liste des résidents et objets ignorés/muets s'ouvrira dans une fenêtre séparée."/>
-			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Les repères, l'historique de téléportation &amp; le profil du lieu" tool_tip="Si activé, les repères, détails de lieux et détails d'historique de téléportation s'ouvriront dans une fenêtre séparée."/>
+			<check_box name="FSUseStandaloneBlocklistFloater" width="150" label="Les éléments ignorés" tool_tip="Si activé, la liste des résidents et objets ignorés/muets s'ouvrira dans une fenêtre séparée."/>
+			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Les repères, les détails de l'historique de TP &amp; le profil du lieu" tool_tip="Si activé, les repères, détails de lieux et détails d'historique de téléportation s'ouvriront dans une fenêtre séparée."/>
 			<text name="ExtendedTeleportHistoryLabel">Afficher également dans l'historique de téléportation :</text>
 			<check_box name="FSTeleportHistoryShowPosition" label="Position" tool_tip="Activer cette option affichera les coordonnées locales du repère."/>
 			<check_box name="FSTeleportHistoryShowDate" label="Date" tool_tip="Activer cette option affichera la date et l'heure de la téléportation dans l'historique."/>
@@ -91,40 +92,40 @@
 				<radio_item label="Nom d'utilisat. (Nom d'affichage)" width="190" name="username_displayname"/>
 				<radio_item label="Nom d'affichage (Nom d'utilisat.)" name="displayname_username"/>
 			</radio_group>
-			<check_box label="Afficher les colonnes de permission" name="FSFriendListColumnShowPermissions" tool_tip="La liste de contacts affichera les colonnes de permissions que vous avez accordées et vice versa."/>
+			<check_box label="Afficher les colonnes de permissions" name="FSFriendListColumnShowPermissions" tool_tip="La liste de contacts affichera les colonnes de permissions que vous avez accordées et vice versa."/>
 			<check_box label="Afficher la recherche dans la fenêtre de contacts" name="FSContactListShowSearch" tool_tip="Afficher une zone de recherche dans la fenêtre de contacts."/>
 			<text name="textInventoryOptions">Options de l'inventaire :</text>
 			<check_box label="Masquer les dossiers système vides" name="DebugHideEmptySystemFolders" tool_tip="Si activé, la fenêtre d'inventaire masquera tous les dossiers système vides, comme les favoris, repères... etc."/>
-			<check_box label="Afficher le dossier Objets reçus dans l'inventaire" name="FSShowInboxFolder" tool_tip="Si activé, la fenêtre d'inventaire affichera le dossier Objets reçus."/>
-			<check_box label="Toujours afficher le bouton Objets reçus en bas de l'inventaire" name="FSAlwaysShowInboxButton" tool_tip="Si activé, le bouton Objets reçus s'affichera toujours au bas de la fenêtre d'inventaire, même si le dossier est affiché."/>
+			<check_box label="Afficher le dossier Objets reçus dans la liste des dossiers de l’inventaire" name="FSShowInboxFolder" tool_tip="Activer cette option ajoutera le dossier système Objets reçus à la liste des dossiers des fenêtres d'inventaire."/>
+			<check_box label="Toujours afficher le bouton Objets reçus en bas de l'inventaire" name="FSAlwaysShowInboxButton" tool_tip="Si activé, le bouton Objets reçus s'affichera toujours au bas de la fenêtre d'inventaire, même s'il est affiché dans la liste des dossiers."/>
 			<check_box label="Autoriser une recherche distincte par onglet" name="FSSplitInventorySearchOverTabs" tool_tip="Si activé, il sera possible d'entrer un terme de recherche différent pour chaque onglet de l'inventaire."/>
 		</panel>
-		<panel label="Notifications" name="UI-toasts-tab">
-			<text name="ToastSettings">Paramètres de notifications :</text>
-			<slider label="Espace entre la notification la plus basse et le pied de page :" label_width="330" width="470" tool_tip="Espace en pixels entre le bas de l'interface et la notification du bas" name="ToastSpace"/>
+		<panel label="Toasts" name="UI-toasts-tab">
+			<text name="ToastSettings">Paramètres d'affichage des Toasts :</text>
+			<slider label="Espace entre le toast le plus bas et le pied de page :" label_width="330" width="470" tool_tip="Espace en pixels entre le bas de l'interface et le dernier Toast" name="ToastSpace"/>
 			<text name="ToastSpaceText" left_delta="470">pixels</text>
-			<slider label="Durée d'une notification :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'une notification avant sa disparition" name="ToastLifetime"/>
+			<slider label="Durée de vie d'un Toast :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'un Toast avant sa disparition" name="ToastLifetime"/>
 			<text name="ToastLifetimeText" left_delta="470">secondes</text>
-			<slider label="Durée d'une astuce :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'une astuce avant sa disparition" name="TipToastLifetime"/>
+			<slider label="Durée de vie d’une astuce :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'une astuce avant sa disparition" name="TipToastLifetime"/>
 			<text name="TipToastLifetimeText" left_delta="470">secondes</text>
-			<slider label="Durée d'une notification de chat local :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'une notification de chat local avant sa disparition" name="NearbyToastLifetime"/>
+			<slider label="Durée de vie d’un Toast de chat local :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage d'un Toast de chat local avant sa disparition" name="NearbyToastLifetime"/>
 			<text name="NearbyToastLifetimeText" left_delta="470">secondes</text>
-			<slider label="Position relative Z des notifications de chat local :" label_width="330" width="470" tool_tip="Contrôle la position relative Z des notifications de chat local" name="FSNearbyChatToastsOffset"/>
+			<slider label="Position relative Z d'un toast de chat local :" label_width="330" width="470" tool_tip="Contrôle la position relative Z d'un Toast de chat local" name="FSNearbyChatToastsOffset"/>
 			<text name="FSNearbyChatToastsOffsetText" left_delta="470">pixels</text>
-			<slider label="Transition pour la disparition des notifications de chat local :" label_width="330" width="470" tool_tip="Nombre de secondes que mettra une notification de chat local avant de disparaître complètement" name="NearbyToastFadingTime"/>
+			<slider label="Durée de fondu d'un Toast de chat local :" label_width="330" width="470" tool_tip="Nombre de secondes que mettra un Toast de chat local avant de disparaître complètement" name="NearbyToastFadingTime"/>
 			<text name="NearbyToastFadingTimeText" left_delta="470">secondes</text>
-			<slider label="Durée de vie de notifications de démarrage :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage des notifications au démarrage" name="StartupToastLifetime"/>
+			<slider label="Durée de vie du 1er Toast au démarrage :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage du Toast 'De nouvelles notifications sont arrivées pendant que vous étiez absent' au démarrage" name="StartupToastLifetime"/>
 			<text name="StartupToastLifetimeText" left_delta="470">secondes</text>
-			<slider label="Durée d'affichage de notification normale :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage des notifications normales avant de commencer à disparaître" name="ToastFadingTime"/>
+			<slider label="Durée normale de fondu d'un toast :" label_width="330" width="470" tool_tip="Nombre de secondes d'affichage des notifications normales avant de commencer à disparaître" name="ToastFadingTime"/>
 			<text name="ToastFadingTimeText" left_delta="470">secondes</text>
-			<slider label="Espacement entre les notifs. :" label_width="330" width="470" tool_tip="Espacement entre les notifications adjacentes en pixels" name="ToastGap"/>
+			<slider label="Espacement des toasts :" label_width="330" width="470" tool_tip="Espacement entre les notifications adjacentes en pixels" name="ToastGap"/>
 			<text name="ToastGapText" left_delta="470">pixels</text>
-			<slider label="Hauteur des notifications supplémentaires :" label_width="330" width="470" tool_tip="Hauteur des notifications supplémentaires en pixels" name="OverflowToastHeight"/>
+			<slider label="Hauteur de l'overflow des toasts :" label_width="330" width="470" tool_tip="Hauteur des notifications supplémentaires en pixels" name="OverflowToastHeight"/>
 			<text name="OverflowToastHeightText" left_delta="470">pixels</text>
-			<slider label="Largeur d'une notification de chat local :" label_width="330" width="470" tool_tip="Largeur d'une notification de chat local en pourcentage de la largeur d'écran" name="NearbyToastWidth"/>
+			<slider label="Largeur d'un toast de chat local :" label_width="330" width="470" tool_tip="Largeur d'une notification de chat local en pourcentage de la largeur d'écran" name="NearbyToastWidth"/>
 			<text name="NearbyToastWidthText" left_delta="470">%</text>
-			<check_box label="Afficher les notifications au premier plan" name="FSShowToastsInFront"/>
-			<check_box label="Utiliser les nouvelles notifications de redémarrage de région" name="FSUseNewRegionRestartNotification"/>
+			<check_box label="Afficher les toasts au premier plan" name="FSShowToastsInFront"/>
+			<check_box label="Utiliser la nouvelle notification de redémarrage de région" name="FSUseNewRegionRestartNotification"/>
 			<check_box label="Ne pas secouer l'écran lorsqu'une notification de redémarrage de région est affichée" name="FSNoScreenShakeOnRegionRestart"/>
 		</panel>
 		<panel label="Police" name="UI-font-tab">

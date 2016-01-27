@@ -20,7 +20,7 @@
 							<radar_list.columns name="in_region" tool_tip="Est dans la même région"/>
 							<radar_list.columns name="typing_status" tool_tip="Écrit"/>
 							<radar_list.columns name="sitting_status" tool_tip="Est assis"/>
-							<radar_list.columns name="flags" tool_tip="Infos. Bancaires"/>
+							<radar_list.columns name="flags" tool_tip="Infos. de paiement"/>
 							<radar_list.columns name="has_notes" tool_tip="Notes"/>
 							<radar_list.columns label="Âge" name="age"/>
 							<radar_list.columns label="Vu le" name="seen"/>

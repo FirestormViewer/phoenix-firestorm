@@ -18,7 +18,7 @@
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">24:00 AM PST</text>
-		<button name="stream_toggle_btn" tool_tip="Jouer/Arrêter le flux musical du terrain"/>
+		<button name="stream_toggle_btn" tool_tip="Jouer/Arrêter la musique du terrain"/>
 		<button name="media_toggle_btn" tool_tip="Jouer/Arrêter tous les médias (Musique, Vidéos, Pages Web)"/>
 	</panel>
 </panel>

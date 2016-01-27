@@ -4,12 +4,12 @@
 	<menu_item_call label="Devenir amis" name="Add Friend"/>
 	<menu_item_call label="Supprimer cet ami" name="remove_friend"/>
 	<menu_item_call label="Téléporter" name="offer_teleport"/>
-	<menu_item_call label="Inviter dans un groupe..." name="invite_to_group"/>
-	<menu_item_call label="Historique de conversations..." name="chat_history"/>
+	<menu_item_call label="Inviter dans un groupe" name="invite_to_group"/>
+	<menu_item_call label="Historique de conversations" name="chat_history"/>
 	<menu_item_call label="Zoomer" name="zoom_in"/>
 	<menu_item_call label="Carte" name="map"/>
 	<menu_item_call label="Partager" name="Share"/>
 	<menu_item_call label="Payer" name="Pay"/>
-	<menu_item_check label="Rendre muet" name="Block/Unblock"/>
+	<menu_item_check label="Ignorer / Cesser d'ignorer" name="Block/Unblock"/>
 	<menu_item_check label="Ignorer les messages" name="MuteText"/>
 </toggleable_menu>

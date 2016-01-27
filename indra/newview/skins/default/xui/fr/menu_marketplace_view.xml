@@ -2,6 +2,6 @@
 <toggleable_menu name="menu_marketplace_sort">
 	<menu_item_check label="Trier par nom" name="sort_by_name"/>
 	<menu_item_check label="Trier par date" name="sort_by_recent"/>
-	<menu_item_check label="Trier par volume de ventes (du plus faible au plus élevé)" name="sort_by_stock_amount"/>
-	<menu_item_check label="N'afficher que les produits" name="show_only_listing_folders"/>
+	<menu_item_check label="Trier par quantité en stock (de la plus faible à la plus élevée)" name="sort_by_stock_amount"/>
+	<menu_item_check label="N'afficher que les listings" name="show_only_listing_folders"/>
 </toggleable_menu>

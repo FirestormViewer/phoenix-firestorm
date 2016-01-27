@@ -19,7 +19,7 @@ Seules les expériences définies par terrain sont autorisées.
 Les expériences autorisées ont la permission de s'exécuter sur ce terrain sauf si elles ne sont pas bloquées par le domaine.
 	</panel.string>
 	<panel.string name="blocked_parcel_text">
-Toutes les expériences sont bloquées.
+N'importe quelle expériencede résident peut être bloquée.
 Les expériences bloquées ne peuvent pas s'exécuter sur ce terrain.
 	</panel.string>
 </panel>

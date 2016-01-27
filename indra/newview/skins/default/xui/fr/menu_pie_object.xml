@@ -18,7 +18,7 @@
 		<pie_menu label="Plus &gt;" name="Object Pie More 2">
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
-				<pie_slice label="Indésirable" name="DerenderPermanent"/>
+				<pie_slice label="Blacklister" name="DerenderPermanent"/>
 				<pie_slice label="Temporairement" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Signaler..." name="Report Abuse..."/>
@@ -26,13 +26,13 @@
 				<pie_slice label="Sauvegarde" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
 			</pie_menu>
-			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
-				<pie_slice label="Show in linksets" name="show_in_linksets"/>
-				<pie_slice label="Show in characters" name="show_in_characters"/>
+			<pie_menu label="Rech. de chemin &gt;" name="Pathfinding">
+				<pie_slice label="Ensembles liés" name="show_in_linksets"/>
+				<pie_slice label="Personnes" name="show_in_characters"/>
 			</pie_menu>
-			<pie_menu name="mute_menu" label="Muter &gt;">
-				<pie_slice label="Muter" name="Object Mute"/>
-				<pie_slice label="Part. Owner" name="Mute Particle"/>
+			<pie_menu name="mute_menu" label="Ignorer &gt;">
+				<pie_slice label="Ignorer" name="Object Mute"/>
+				<pie_slice label="Prop. des Particules" name="Mute Particle"/>
 			</pie_menu>
 			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
 				<pie_slice label="Compiler (Mono)" name="CompileMono"/>

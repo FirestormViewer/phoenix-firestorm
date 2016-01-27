@@ -28,7 +28,7 @@
 		<button label="Joindre la conversation" name="group_message_btn"/>
 		<button label="Rejoindre le groupe" name="group_join_btn"/>
 		<button label="Téléporter" name="teleport_btn"/>
-		<button label="Afficher sur la carte" name="map_btn"/>
+		<button label="Voir sur la carte" name="map_btn"/>
 		<button label="Me rappeler" name="event_reminder_btn"/>
 	</panel>
 </floater>

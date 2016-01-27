@@ -6,7 +6,7 @@
 	<string name="no_group_text">Aucun</string>
 	<text name="Name:">Nom :</text>
 	<button name="set_name" tool_tip="Définir le nom d'affichage"/>
-	<text name="Key:">ID :</text>
+	<text name="Key:">UUID :</text>
 	<text name="label">Né le :</text>
 	<text name="label2">Compte :</text>
 	<text name="partner_label">Partenaire :</text>
@@ -23,7 +23,7 @@
 		</layout_panel>
 		<layout_panel name="middle_buttonstack">
 			<button name="teleport" label="Téléporter" label_selected="Téléporter" tool_tip="Proposer de téléporter cette personne"/>
-			<button name="im" label="Message instantané" label_selected="Conversation privée" tool_tip="Ouvrir une session de conversation privée avec cette personne"/>
+			<button name="im" label="Message instantané" label_selected="Message instantané" tool_tip="Ouvrir une session de conversation privée avec cette personne"/>
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button name="add_friend" label="Devenir amis" label_selected="Devenir amis" tool_tip="Devenir ami avec cette personne"/>

@@ -125,10 +125,10 @@
 			<check_box name="FSUseAltOOC" label="Alt+Entrée ((OOC))" tool_tip="Utiliser le raccourci Alt+Entrée pour parler 'hors personnage' (OOC) dans le Chat local."/>
 		</panel>
 		<panel label="Notifications" name="ChatNotices">
-			<text name="disable_toast_label">Annonces lors de la réception d'un nouveau message :</text>
+			<text name="disable_toast_label">Activer les toasts de chat lors de la réception d'un nouveau message pour :</text>
 			<check_box name="EnableGroupChatPopups" label="Chats de groupe" tool_tip="Cocher pour voir les annonces lors de la réception d'un nouveau message de groupe."/>
 			<check_box name="EnableIMChatPopups" label="IMs" tool_tip="Cocher pour voir les annonces lors de la réception d'un nouvel IM."/>
-			<check_box name="FSUseNearbyChatConsole" label="Utiliser la console pour les notifications de Chat au lieu de fenêtres flottantes"/>
+			<check_box name="FSUseNearbyChatConsole" label="Utiliser la console pour les notifications de chat au lieu de fenêtres flottantes"/>
 			<check_box name="FSLogImToChatConsole" label="Afficher les IMs dans la console de conversation"/>
 			<check_box name="FSLogGroupImToChatConsole" label="Afficher le Chat de groupe dans la console de conversation"/>
 			<text name="FSShowGroupNameLength_label" width="340">Longueur de nom de groupe à afficher dans les transcriptions</text>
@@ -146,14 +146,14 @@
 			<check_box name="FSNotifyIMFlash" label="Flasher le bouton de la fenêtre de conversation quand je reçoit un IM" tool_tip="Clignotement du bouton de conversation quand on reçoit un IM. La fenêtre d'IM doit être combinée à la fenêtre de conversations, et la fenêtre de conversations doit être fermée pour que le bouton clignote. Cette option est disponible uniquement si les IMs sont affichés dans des onglets au lieu de fenêtres séparées (voir l'onglet 'Fenêtres de conversation')."/>
 			<check_box name="FSReportMutedGroupChat" label="Signaler le Chat de groupe ignoré dans le Chat local"/>
 			<check_box name="FSGroupNoticesToIMLog" label="Afficher les notices de groupe dans le Chat du groupe"/>
-			<check_box name="FSBetterGroupNoticesToIMLog" label="Afficher également leur sujet et leur auteur"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Afficher également leurs sujets et leurs auteurs"/>
 		</panel>
 		<panel label="Radar" name="ChatRadar">
-			<check_box name="reportChatRangeEnter" label="Le radar signale quand un avatar entre à portée de discussion"/>
+			<check_box name="reportChatRangeEnter" label="Le radar signale quand un avatar est à portée de chat"/>
 			<check_box name="PlayModeUISndRadarChatEnter" label="Son à jouer :"/>
 			<button name="Prev_UISndRadarChatEnter" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndRadarChatEnter" label="↻" tool_tip="Réinitialiser."/>
-			<check_box name="reportChatRangeLeave" label="Le radar signale quand un avatar sort de portée de discussion"/>
+			<check_box name="reportChatRangeLeave" label="Le radar signale quand un avatar est hors de portée de chat"/>
 			<check_box name="PlayModeUISndRadarChatLeave" label="Son à jouer :"/>
 			<button name="Prev_UISndRadarChatLeave" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndRadarChatLeave" label="↻" tool_tip="Réinitialiser."/>
@@ -180,16 +180,16 @@
 			<text name="RadarAvatarAgeAlertValueLabel">Seuil :</text>
 			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Colore la colonne d'âge dans le radar. Définir à -1 pour désactiver."/>
 			<text name="RadarAvatarAgeAlertValueLabelSuffix">Jours</text>
-			<check_box name="RadarAvatarAgeAlert" label="Signaler les résidents plus jeunes que l'âge spécifié dans le radar"/>
+			<check_box name="RadarAvatarAgeAlert" label="Signaler les résidents plus jeunes que l'âge spécifié"/>
 			<check_box name="PlayModeUISndRadarAgeAlert" label="Son à jouer :"/>
 			<button name="Prev_UISndRadarAgeAlert" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndRadarAgeAlert" label="↻" tool_tip="Réinitialiser."/>
 		</panel>
 		<panel label="Alerte par mot-clé" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Activer les alertes par mots-clés"/>
-			<check_box name="FSKeywordInChat" label="Analyser le Chat local"/>
-			<check_box name="FSKeywordInIM" label="Analyser les IMs et conversations de groupe"/>
-			<check_box name="FSKeywordSpeakersName" label="Vérifier le nom de l'expéditeur pour les mots-clés"/>
+			<check_box name="FSKeywordInChat" label="Détecter les mots-clés dans le chat local"/>
+			<check_box name="FSKeywordInIM" label="Détecter les mots-clés dans les IMs et chats de groupes"/>
+			<check_box name="FSKeywordSpeakersName" label="Détecter le nom de l'expéditeur parmi les mots-clés"/>
 			<check_box name="FSKeywordCaseSensitive" label="Tous les mots clés sont sensibles à la casse"/>
 			<check_box name="FSKeywordMatchWholeWords" label="Ne faire correspondre que les mots entiers"/>
 			<text name="textFSKeywords">Mots-clés (séparés par des virgules) :</text>
@@ -201,7 +201,7 @@
 			<button name="Def_UISndFSKeywordSound" label="↻" tool_tip="Réinitialiser."/>
 		</panel>
 		<panel label="Commandes" name="tab-CmdLine">
-			<check_box label="Activer l'utilisation de la barre de conversation pour les lignes de commandes" name="chat_cmd_toggle"/>.
+			<check_box label="Utiliser la barre de chat pour les lignes de commandes" name="chat_cmd_toggle"/>.
 			<text name="FSCmdLineCalc_txt">Calc. expressions (ex: cmd SIN(2+2))</text>
 			<text name="FSCmdLineDrawDistance_txt">Changer Dist Affichage (ex: cmd meters)</text>
 			<text name="FSCmdLineBandWidth_txt">Bande passante max. (ex: cmd kbps)</text>
@@ -211,11 +211,11 @@
 			<line_editor tool_tip="Effacer les transcriptions de conversation pour limiter les effets de spams." name="FSCmdLineClearChat"/>
 			<text name="FSCmdLineMedia_txt">Définir l'url du média (ex: cmd url type)</text>
 			<line_editor tool_tip="Défini et joue le streaming correspondant à l'url entrée" name="FSCmdLineMedia"/>
-			<text name="FSCmdLineMusic_txt">Défini l'url du flux musical (ex: cmd url)</text>
+			<text name="FSCmdLineMusic_txt">Défini l'url de la musique (ex: cmd url)</text>
 			<line_editor tool_tip="Défini et joue la musique en streaming correspondant à l'url entrée" name="FSCmdLineMusic"/>
 			<text name="FSCmdLineRezPlatform_txt">Bâtir une plateforme (ex: cmd 0 - 64)</text>
 			<slider name="FSCmdLinePlatformSize" label="Largeur" tool_tip="De quelle taille voulez-vous que la plateforme soit ?"/>
-			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un avatar via son ID (ex: cmd key)</text>
+			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un av. via son UUID (ex: cmd key)</text>
 			<text name="FSCmdLineRollDice_txt">Lancer de dés (ex: cmd dice faces mt mv)</text>
 			<line_editor tool_tip="Lancer de dés - cmd [nombre de dés] [nombre de faces] [type de modificateur (optionnel)] [valeur du modificateur (optionnel)]. Exemple: cmd 1 20, cmd 2 40 + 5. L'absence de paramètres correspond à cmd 1 6 (dé standard)." name="FSCmdLineRollDice"/>
 			<text name="FSCmdLinePos_txt">Se téléporter dans la sim (ex: cmd x y z)</text>
@@ -225,7 +225,7 @@
 			<text name="FSCmdLineOfferTp_txt">Téléporter un avatar (ex: cmd key)</text>
 			<text name="FSCmdLineTP2_txt">Se téléporter vers un avatar (ex: cmd name)</text>
 			<line_editor tool_tip="La syntaxe de cette commande permet des noms partiels et n'est pas sensible à la casse. Les résultats sont plus pertinents avec le radar ouvert." name="FSCmdLineTP2"/>
-			<text name="FSCmdLineTeleportHome_txt">Se téléporter à domicile (ex: cmd)</text>
+			<text name="FSCmdLineTeleportHome_txt">Se téléporter à son domicile (ex: cmd)</text>
 			<text name="FSCmdLineMapTo_txt">Se téléporter dans une sim (ex: cmd simname)</text>
 			<check_box label="Utilise la même position d'une sim à l'autre" name="toggle"/>
 		</panel>
