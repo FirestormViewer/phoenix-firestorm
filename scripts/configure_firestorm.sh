@@ -272,19 +272,19 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.py" > $LOG
-echo -e "    PLATFORM: '$PLATFORM'"          | tee -a $LOG
-echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
-echo -e "      FMODEX: `b2a $WANTS_FMODEX`"  | tee -a $LOG
-echo -e "   Quicktime: `b2a $WANTS_QUICKTIME`" | tee -a $LOG
-echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`" | tee -a $LOG
-echo -e "         AVX: `b2a $WANTS_AVX` "    | tee -a $LOG
-echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
-echo -e "       CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
-echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
-echo -e "      CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
-echo -e "       NINJA: `b2a $WANTS_NINJA`"   | tee -a $LOG
-echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
-echo -e "       BTYPE: $BTYPE"               | tee -a $LOG
+echo -e "    PLATFORM: '$PLATFORM'"            | tee -a $LOG
+echo -e "         KDU: `b2a $WANTS_KDU`"       | tee -a $LOG
+echo -e "      FMODEX: `b2a $WANTS_FMODEX`"    | tee -a $LOG
+echo -e "   QUICKTIME: `b2a $WANTS_QUICKTIME`" | tee -a $LOG
+echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`"   | tee -a $LOG
+echo -e "         AVX: `b2a $WANTS_AVX` "      | tee -a $LOG
+echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`"   | tee -a $LOG
+echo -e "       CLEAN: `b2a $WANTS_CLEAN`"     | tee -a $LOG
+echo -e "       BUILD: `b2a $WANTS_BUILD`"     | tee -a $LOG
+echo -e "      CONFIG: `b2a $WANTS_CONFIG`"    | tee -a $LOG
+echo -e "       NINJA: `b2a $WANTS_NINJA`"     | tee -a $LOG
+echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"      | tee -a $LOG
+echo -e "       BTYPE: $BTYPE"                 | tee -a $LOG
 if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" -o $PLATFORM == "darwin" ] ; then
     echo -e "        JOBS: $JOBS"                | tee -a $LOG
 fi
