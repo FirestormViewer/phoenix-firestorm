@@ -61,10 +61,20 @@ LLPanelOutfitsInventory::LLPanelOutfitsInventory() :
 	observer.addBOFChangedCallback(boost::bind(&LLPanelOutfitsInventory::updateVerbs, this));
 	observer.addCOFChangedCallback(boost::bind(&LLPanelOutfitsInventory::updateVerbs, this));
 	observer.addOutfitLockChangedCallback(boost::bind(&LLPanelOutfitsInventory::updateVerbs, this));
+
+	// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+	mCategoriesObserver = new LLInventoryCategoriesObserver();
 }
 
 LLPanelOutfitsInventory::~LLPanelOutfitsInventory()
 {
+	// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+	if (gInventory.containsObserver(mCategoriesObserver))
+	{
+		gInventory.removeObserver(mCategoriesObserver);
+	}
+	delete mCategoriesObserver;
+	// </FS:Ansariel>
 }
 
 // virtual
@@ -100,6 +110,13 @@ void LLPanelOutfitsInventory::onOpen(const LLSD& key)
 			panel_appearance->fetchInventory();
 			panel_appearance->refreshCurrentOutfitName();
 		}
+
+		// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+		gInventory.addObserver(mCategoriesObserver);
+		mCategoriesObserver->addCategory(LLAppearanceMgr::instance().getCOF(), boost::bind(&LLPanelOutfitsInventory::onCOFChanged, this));
+		onCOFChanged();
+		// </FS:Ansariel>
+
 		mInitialized = true;
 	}
 
@@ -219,6 +236,18 @@ void LLPanelOutfitsInventory::onSave()
 	
 	LLNotificationsUtil::add("SaveOutfitAs", args, payload, boost::bind(&LLPanelOutfitsInventory::onSaveCommit, this, _1, _2));
 }
+
+// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
+void LLPanelOutfitsInventory::onCOFChanged()
+{
+	U32 attachments = LLAppearanceMgr::instance().getNumAttachmentsInCOF();
+	LLStringUtil::format_map_t args;
+	args["COUNT"] = llformat("%d", attachments);
+	args["MAX"] = llformat("%d", MAX_AGENT_ATTACHMENTS);
+	std::string title = getString("cof_tab_label", args);
+	mAppearanceTabs->setPanelTitle(mAppearanceTabs->getIndexForPanel(mCurrentOutfitPanel), title);
+}
+// </FS:Ansariel>
 
 //static
 LLPanelOutfitsInventory* LLPanelOutfitsInventory::findInstance()

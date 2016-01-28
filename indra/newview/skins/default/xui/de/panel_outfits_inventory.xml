@@ -6,6 +6,9 @@
 	<panel.string name="wear_items_tooltip">
 		Ausgewählte Objekte tragen
 	</panel.string>
+	<panel.string name="cof_tab_label">
+		Aktuelles Outfit ([COUNT]/[MAX] Anh.)
+	</panel.string>
 	<tab_container name="appearance_tabs">
 		<panel label="Outfits" name="outfitslist_tab"/>
 		<panel label="Aktuelles Outfit" name="cof_tab"/>
