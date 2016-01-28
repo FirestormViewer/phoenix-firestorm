@@ -93,7 +93,12 @@ const static std::string MULTI_LINE_PREFIX(" ");
  */
 const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
 const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}\\]).*");
-const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
+// <FS:Ansariel> Timestamps in chat
+// Note: In contrast to the TIMESTAMP_AND_STUFF regex, for the TIMESTAMP_AND_STUFF_SEC regex the match
+// on the timestamp is NOT optional. We need this to decide during parsing if we have timestamps or not.
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)(.*)$");
+const static boost::regex TIMESTAMP_AND_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}:\\d{2}\\]).*");
+// </FS:Ansariel>
 
 /**
  *  Regular expression suitable to match names like
@@ -117,8 +122,10 @@ const static std::string NAME_TEXT_DIVIDER(": ");
 // is used for timestamps adjusting
 const static char* DATE_FORMAT("%Y/%m/%d %H:%M");
 const static char* TIME_FORMAT("%H:%M");
+// <FS:Ansariel> Seconds in timestamps
 const static char* DATE_FORMAT_SEC("%Y/%m/%d %H:%M:%S");
 const static char* TIME_FORMAT_SEC("%H:%M:%S");
+// </FS:Ansariel>
 
 const static int IDX_TIMESTAMP = 1;
 const static int IDX_STUFF = 2;
@@ -143,18 +150,15 @@ public:
 	LLLogChatTimeScanner()
 	{
 		// Note, date/time facets will be destroyed by string streams
-		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
-		{
-			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT_SEC)));
-			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT_SEC)));
-			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT_SEC)));
-		}
-		else
-		{
-			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
-			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
-			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
-		}
+		mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
+		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
+		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+
+		// <FS:Ansariel> Seconds in timestamps
+		mDateSecStream.imbue(std::locale(mDateSecStream.getloc(), new date_input_facet(DATE_FORMAT_SEC)));
+		mTimeSecStream.imbue(std::locale(mTimeSecStream.getloc(), new time_facet(TIME_FORMAT_SEC)));
+		mTimeSecStream.imbue(std::locale(mTimeSecStream.getloc(), new time_input_facet(DATE_FORMAT_SEC)));
+		// </FS:Ansariel>
 	}
 
 	date getTodayPacificDate()
@@ -215,10 +219,61 @@ public:
 			<< LL_ENDL;
 	}
 
+	// <FS:Ansariel> Seconds in timestamps
+	void checkAndCutOffDateWithSec(std::string& time_str)
+	{
+		// Cuts off the "%Y/%m/%d" from string for todays timestamps.
+		// Assume that passed string has at least "%H:%M:%S" time format.
+		date log_date(not_a_date_time);
+		date today(getTodayPacificDate());
+
+		// Parse the passed date
+		mDateSecStream.str(LLStringUtil::null);
+		mDateSecStream << time_str;
+		mDateSecStream >> log_date;
+		mDateSecStream.clear();
+
+		days zero_days(0);
+		days days_alive = today - log_date;
+
+		if ( days_alive == zero_days )
+		{
+			// Yep, today's so strip "%Y/%m/%d" info
+			ptime stripped_time(not_a_date_time);
+
+			mTimeSecStream.str(LLStringUtil::null);
+			mTimeSecStream << time_str;
+			mTimeSecStream >> stripped_time;
+			mTimeSecStream.clear();
+
+			time_str.clear();
+
+			mTimeSecStream.str(LLStringUtil::null);
+			mTimeSecStream << stripped_time;
+			mTimeSecStream >> time_str;
+			mTimeSecStream.clear();
+		}
+
+		LL_DEBUGS("LLChatLogParser")
+			<< " log_date: "
+			<< log_date
+			<< " today: "
+			<< today
+			<< " days alive: "
+			<< days_alive
+			<< " new time: "
+			<< time_str
+			<< LL_ENDL;
+	}
+	// </FS:Ansariel>
 
 private:
 	std::stringstream mDateStream;
 	std::stringstream mTimeStream;
+	// <FS:Ansariel> Seconds in timestamps
+	std::stringstream mDateSecStream;
+	std::stringstream mTimeSecStream;
+	// </FS:Ansariel>
 };
 
 LLLogChat::save_history_signal_t * LLLogChat::sSaveHistorySignal = NULL;
@@ -287,21 +342,23 @@ std::string LLLogChat::timestamp(bool withdate)
 				  + LLTrans::getString ("TimeDay") + "] ["
 				  + LLTrans::getString ("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin") + "]";
+		// <FS> Seconds in timestamps
 		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
 		{
-			timeStr += ":["
-				  +LLTrans::getString ("TimeSec")+"]";
+			timeStr += ":[" + LLTrans::getString ("TimeSec") + "]";
 		}
+		// </FS>
 	}
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin")+"]";
+		// <FS> Seconds in timestamps
 		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
 		{
-			timeStr += ":["
-				  +LLTrans::getString ("TimeSec")+"]";
+			timeStr += ":[" + LLTrans::getString ("TimeSec") + "]";
 		}
+		// </FS>
 	}
 
 	LLSD substitution;
@@ -623,7 +680,10 @@ void LLLogChat::findTranscriptFiles(std::string pattern, std::vector<std::string
 			{
 				//matching a timestamp
 				boost::match_results<std::string::const_iterator> matches;
-				if (boost::regex_match(std::string(buffer), matches, TIMESTAMP))
+				// <FS:Ansariel> Seconds in timestamp
+				//if (boost::regex_match(std::string(buffer), matches, TIMESTAMP))
+				if (boost::regex_match(std::string(buffer), matches, TIMESTAMP) || boost::regex_match(std::string(buffer), matches, TIMESTAMP_AND_SEC))
+				// </FS:Ansariel>
 				{
 					list_of_transcriptions.push_back(gDirUtilp->add(dirname, filename));
 				}
@@ -952,14 +1012,26 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 
 	//matching a timestamp
 	boost::match_results<std::string::const_iterator> matches;
-	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	// <FS:Ansariel> Seconds in timestamps
+	// Logic here: First try to get a full match for timestamps with seconds. If we fail,
+	// this means we either have a timestamp without seconds or no timestamp at all.
+	// So we use the original regex for timestamps without seconds to find out what
+	// case it is. For this to work, the timestamp part in the TIMESTAMP_AND_STUFF_SEC
+	// regex is NOT optional!
+	//if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	bool has_sec = false;
+	if (boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF_SEC))
 	{
-		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF_SEC)) return false;
+		has_sec = true;
 	}
 	else
 	{
-		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF))
+		{
+			return false;
+		}
 	}
+	// </FS:Ansariel>
 	
 	bool has_timestamp = matches[IDX_TIMESTAMP].matched;
 	if (has_timestamp)
@@ -972,7 +1044,17 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 
 		if (cut_off_todays_date)
 		{
-			LLLogChatTimeScanner::instance().checkAndCutOffDate(timestamp);
+			// <FS:Ansariel> Seconds in timestamps
+			//LLLogChatTimeScanner::instance().checkAndCutOffDate(timestamp);
+			if (has_sec)
+			{
+				LLLogChatTimeScanner::instance().checkAndCutOffDateWithSec(timestamp);
+			}
+			else
+			{
+				LLLogChatTimeScanner::instance().checkAndCutOffDate(timestamp);
+			}
+			// </FS:Ansariel>
 		}
 
 		im[LL_IM_TIME] = timestamp;
@@ -997,7 +1079,7 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	bool has_name = name_and_text[IDX_NAME].matched;
 	std::string name = name_and_text[IDX_NAME];
 
-	// Ansariel: Handle the case an IM was stored in nearby chat history
+	// <FS:Ansariel> Handle the case an IM was stored in nearby chat history
 	if (name == "IM:")
 	{
 		size_t divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
@@ -1008,6 +1090,7 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 			return true;
 		}
 	}
+	// </FS:Ansariel>
 
 	//we don't need a name/text separator
 	if (has_name && name.length() && name[name.length()-1] == ':')
