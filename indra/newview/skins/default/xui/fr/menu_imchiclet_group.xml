@@ -2,5 +2,5 @@
 <menu name="IMChiclet Group Menu">
 	<menu_item_call label="Profil du groupe" name="Show Profile"/>
 	<menu_item_call label="Afficher la session" name="Chat"/>
-	<menu_item_call label="Mettre fin à la session" name="End Session"/>
+	<menu_item_call label="Fermer la session" name="End Session"/>
 </menu>

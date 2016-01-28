@@ -1,40 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="land holdings floater" title="MES TERRAINS">
+<floater name="land holdings floater" title="Terrains possédés">
+	<floater.string name="area_string">[AREA] m²</floater.string>
 	<scroll_list name="parcel list">
-		<column label="Parcelle" name="name"/>
-		<column label="Région" name="location"/>
-		<column label="Type" name="type"/>
-		<column label="Surface" name="area"/>
-		<column label="" name="hidden"/>
+		<scroll_list.columns label="Terrain" name="name"/>
+		<scroll_list.columns label="Région" name="location"/>
+		<scroll_list.columns label="Type" name="type"/>
+		<scroll_list.columns label="Surface" name="area"/>
 	</scroll_list>
-	<button label="Téléportation" label_selected="Téléportation" name="Teleport" tool_tip="Téléportez-vous au milieu de ce terrain."/>
-	<button label="Carte" label_selected="Carte" name="Show on Map" tool_tip="Afficher ce terrain sur la carte du monde"/>
-	<text name="contrib_label">
-		Vos contributions :
-	</text>
+	<button label="Téléporter" label_selected="Téléporter" name="Teleport" tool_tip="Se téléporter au centre de cette parcelle."/>
+	<button label="Carte" label_selected="Carte" name="Show on Map" tool_tip="Afficher ce terrain sur la carte"/>
+	<text name="contrib_label">Contributions à vos groupes :</text>
 	<scroll_list name="grant list">
-		<column label="Groupe" name="group"/>
-		<column label="Surface" name="area"/>
+		<scroll_list.columns label="Groupe" name="group"/>
+		<scroll_list.columns label="Surface" name="area"/>
 	</scroll_list>
-	<text name="allowed_label">
-		Surface de terrain autorisée avec votre compte :
-	</text>
-	<text name="allowed_text">
-		[AREA] m²
-	</text>
-	<text name="current_label">
-		Surface occupée actuellement :
-	</text>
-	<text name="current_text">
-		[AREA] m²
-	</text>
-	<text name="available_label">
-		Disponible à l&apos;achat :
-	</text>
-	<text name="available_text">
-		[AREA] m²
-	</text>
-	<string name="area_string">
-		[AREA] m²
-	</string>
+	<text name="allowed_label">Avoirs fonciers disponibles avec l'abonnement actuel :</text>
+	<text name="allowed_text">[AREA] m²</text>
+	<text name="current_label">Possédés :</text>
+	<text name="current_text">[AREA] m²</text>
+	<text name="available_label">Disponibles à l'achat :</text>
+	<text name="available_text">[AREA] m²</text>
 </floater>

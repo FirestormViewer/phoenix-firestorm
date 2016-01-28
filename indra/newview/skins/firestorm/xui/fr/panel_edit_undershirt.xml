@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_undershirt_panel">
+	<panel name="avatar_undershirt_color_panel">
+		<texture_picker label="Texture" name="Fabric" tool_tip="Cliquez pour sélectionner une image"/>
+		<color_swatch label="Couleur" name="Color/Tint" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
+	</panel>
+	<panel name="undershirt_main_tab_holder">
+		<accordion name="undershirt_main_accordion">
+			<accordion_tab name="undershirt_main_tab" title="Maillot de corps"/>
+		</accordion>
+	</panel>
+</panel>

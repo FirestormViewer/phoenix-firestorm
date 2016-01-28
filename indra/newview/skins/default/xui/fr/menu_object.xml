@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Object Pie">
-	<menu_item_call label="Toucher" name="Object Touch">
-		<menu_item_call.on_enable name="EnableTouch" parameter="Toucher"/>
-	</menu_item_call>
+	<menu_item_call label="Toucher" name="Object Touch"/>
 	<menu_item_call label="Modifier" name="Edit..."/>
 	<menu_item_call label="Construire" name="Build"/>
 	<menu_item_call label="Ouvrir" name="Open"/>
-	<menu_item_call label="M&apos;asseoir ici" name="Object Sit"/>
-	<menu_item_call label="Me lever" name="Object Stand Up"/>
-	<menu_item_call label="Profil de l&apos;objet" name="Object Inspect"/>
-	<menu_item_call label="Zoomer en avant" name="Zoom In"/>
-	<menu_item_call label="Voir parmi les groupes de liens" name="show_in_linksets"/>
-	<menu_item_call label="Voir parmi les personnages" name="show_in_characters"/>
-	<context_menu label="Porter" name="Put On">
+	<menu_item_call label="S'asseoir ici" name="Object Sit"/>
+	<menu_item_call label="Se lever" name="Object Stand Up"/>
+	<context_menu label="Objet" name="Object Features">
+		<menu_item_call label="Profil" name="Object Inspect"/>
+		<menu_item_call label="Inspecter" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
+		<menu_item_call label="Lier" name="Object Link"/>
+		<menu_item_call label="Délier" name="Object Unlink"/>
+		<menu_item_check label="Modifier les parties liées" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Compiler (Mono)" name="Mono"/>
+		<menu_item_call label="Compiler (LSL)" name="LSL"/>
+		<menu_item_call label="Réinitialiser les scripts" name="Object Reset Scripts"/>
+		<menu_item_call label="Exécuter les scripts" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Arrêter les scripts" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Supprimer les scripts" name="Remove Scripts From Selection"/>
+	</context_menu>
+	<menu_item_call label="Zoomer" name="Zoom In"/>
+	<menu_item_call label="Afficher dans les ensembles définis" name="show_in_linksets"/>
+	<menu_item_call label="Show in characters" name="show_in_characters"/>
+	<context_menu label="Mettre" name="Put On">
 		<menu_item_call label="Porter" name="Wear"/>
 		<menu_item_call label="Ajouter" name="Add"/>
-		<context_menu label="Attacher" name="Object Attach"/>
-		<context_menu label="Attacher HUD" name="Object Attach HUD"/>
+		<context_menu label="Attacher à" name="Object Attach"/>
+		<context_menu label="Attacher au HUD" name="Object Attach HUD"/>
 	</context_menu>
-	<context_menu label="Gérer" name="Remove">
-		<menu_item_call label="Signaler une infraction" name="Report Abuse..."/>
+	<context_menu label="Dérangement" name="Remove">
+		<menu_item_call label="Signaler" name="Report Abuse..."/>
 		<menu_item_call label="Ignorer" name="Object Mute"/>
-		<menu_item_call label="Ne plus ignorer" name="Object Unmute"/>
-		<menu_item_call label="Retour" name="Return..."/>
+		<menu_item_call label="Cesser d'ignorer" name="Object Unmute"/>
 	</context_menu>
+	<menu_item_call label="Actualiser les textures" name="Texture Refresh"/>
+	<menu_item_call label="Faire disparaître" name="Derender"/>
+	<menu_item_call label="Faire disparaître &amp; Blacklister" name="DerenderPermanent"/>
+	<menu_item_call label="Renvoyer" name="Return..."/>
 	<menu_item_call label="Prendre" name="Pie Object Take"/>
 	<menu_item_call label="Prendre une copie" name="Take Copy"/>
 	<menu_item_call label="Payer" name="Pay..."/>
 	<menu_item_call label="Acheter" name="Buy..."/>
+	<context_menu label="Enregistrer sous" name="Export Menu">
+		<menu_item_call label="Sauvegarde" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Supprimer" name="Delete"/>
 	<menu_item_call label="Ignorer le propriétaire des particules" name="Mute Particle"/>
 </context_menu>

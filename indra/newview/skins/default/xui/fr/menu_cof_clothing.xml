@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="COF Clothing">
-	<menu_item_call label="Enlever" name="take_off"/>
-	<menu_item_call label="Modifier" name="edit"/>
+	<menu_item_call label="Retirer" name="take_off"/>
+	<menu_item_call label="Editer" name="edit"/>
 	<menu_item_call label="Remplacer" name="replace"/>
+	<menu_item_call label="Créer un nouveau" name="create_new"/>
 </context_menu>

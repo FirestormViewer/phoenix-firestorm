@@ -1,51 +1,39 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!--alba-->
-<!-- *NOTE: See also menu_pie_avatar_other.xml -->
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Avatar Pie">
-    <pie_slice name="Profile..."
-        label="Profil"/>
-    <pie_slice name="Avatar Mute"
-        label="Ignorer"/>
-    <pie_slice name="Go to"
-        label="Aller là"/>
-    <pie_slice name="abuse"
-        label="Signaler"/>
-    <pie_menu name="add_avatar"
-         label="Add &gt;">
-        <pie_slice name="Add Friend"
-            label="Prendre en ami"/>
-        <pie_slice name="Add to set"
-            label="To Set"/>
-    </pie_menu>
-    <pie_slice name="Pay..."
-        label="Payer"/>
-    <pie_slice name="Send IM..."
-        label="Envoyer MI"/>
-
-    <pie_menu name="Avatar Pie More 1"
-        label="Plus &gt;">
-        <pie_slice name="Freeze..."
-            label="Figer"/>
-        <pie_slice name="Add Calling Card"
-            label="Carte de visite"/>
-        <pie_slice name="Group Invite..."
-            label="Inviter &gt; Groupe"/>
-        <pie_slice name="Eject..."
-            label="Ejecter"/>
-        <pie_slice name="Avatar Inspect"
-            label="Inspecter"/>
-        <pie_slice name="Derender"
-            label="'Derender'"/>
-			
-        <pie_menu name="Avatar Pie More 2"
-            label="Plus &gt;">
-            <!-- ## Zi: Is this the right thing to use for avatar textures? -->
-            <pie_slice name="Debug..."
-                label="Debog. textures"/>
-            <pie_slice name="Call"
-                label="Appeler"/>
-            <pie_slice name="Zoom In"
-                label="Zoom Av"/>
-        </pie_menu>
-    </pie_menu>
+	<pie_slice label="Profil" name="Profile..."/>
+	<pie_menu name="mute_menu" label="Ignorer &gt;">
+		<pie_slice label="Ignorer" name="Avatar Mute"/>
+		<pie_slice label="Propriétaire des particules" name="Mute Particle"/>
+	</pie_menu>
+	<pie_slice label="Aller vers" name="Go to"/>
+	<pie_slice label="Signaler" name="abuse"/>
+	<pie_menu label="Ajouter &gt;" name="add_avatar">
+		<pie_slice label="En ami" name="Add Friend"/>
+		<pie_slice label="À un cercle" name="Add to set"/>
+	</pie_menu>
+	<pie_slice label="Payer" name="Pay..."/>
+	<pie_menu name="Avatar Pie More 1" label="Plus &gt;">
+		<pie_slice label="Geler" name="Freeze..."/>
+		<pie_slice label="Donner ma carte de visite" name="Give Calling Card"/>
+		<pie_slice label="Inviter dans un groupe" name="Group Invite..."/>
+		<pie_slice label="Éjecter" name="Eject..."/>
+		<pie_menu name="Avatar Pie More 2" label="Plus &gt;">
+			<pie_slice label="Textures" name="Debug..."/>
+			<pie_slice label="Infos. Scripts" name="ScriptInfo"/>
+			<pie_slice label="Appel audio" name="Call"/>
+			<pie_slice label="Zoomer" name="Zoom In"/>
+			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
+			<pie_menu name="ExportMenu" label="Enregistrer sous &gt;">
+				<pie_slice label="Sauvegarde" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
+			<pie_slice label="Dump XML" name="Dump XML"/>
+		</pie_menu>
+		<pie_slice label="Inspecter" name="Avatar Inspect"/>
+		<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">
+			<pie_slice label="Blacklister" name="DerenderPermanent"/>
+			<pie_slice label="Temporairement" name="Derender"/>
+		</pie_menu>
+	</pie_menu>
+	<pie_slice label="Envoyer un IM" name="Send IM..."/>
 </pie_menu>

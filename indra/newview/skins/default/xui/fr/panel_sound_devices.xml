@@ -1,25 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <panel label="Paramètres du périphérique" name="device_settings_panel">
-	<panel.string name="default_text">
-		Valeur par défaut
-	</panel.string>
-	<string name="name_no_device">
-		Aucun périphérique
-	</string>
-	<string name="name_default_system_device">
-		Périphérique système par défaut
-	</string>
-	<text name="Input">
-		Entrée
-	</text>
-	<text name="Output">
-		Sortie
-	</text>
-	<text name="My volume label">
-		Mon volume :
-	</text>
-	<slider_bar initial_value="1.0" name="mic_volume_slider" tool_tip="Régler le volume avec le curseur."/>
-	<text name="wait_text">
-		Veuillez patienter
-	</text>
+	<panel.string name="default_text">Par défaut</panel.string>
+	<string name="name_no_device">Aucun périphérique</string>
+	<string name="name_no_device">Aucun périphérique</string>
+	<string name="name_default_system_device">Périphérique du système par défaut</string>
+	<text name="Input">Entrée</text>
+	<text name="Output">Sortie</text>
+	<text name="My volume label">Mon volume :</text>
+	<slider_bar name="mic_volume_slider" tool_tip="Régler le volume avec le curseur"/>
+	<text name="wait_text">Veuillez patienter</text>
 </panel>

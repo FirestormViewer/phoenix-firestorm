@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview_anim">
-	<floater.string name="Title">
-		Animation : [NAME]
-	</floater.string>
-	<text name="desc txt">
-		Description :
-	</text>
-	<button label="Exécuter dans SL" label_selected="Arrêter" name="Inworld" tool_tip="Lire cette animation de façon à ce que les autres la voient dans Second Life."/>
-	<button label="Exécuter localement" label_selected="Arrêter" name="Locally" tool_tip="Lire cette animation de façon à ce que vous soyez la seule personne à la voir."/>
+<floater name="preview_anim" width="350">
+	<floater.string name="Title">Animation : [NAME]</floater.string>
+	<text name="desc txt">Description :</text>
+	<line_editor name="desc" width="230" />
+	<button label="Jouer devant tout le monde" width="160" label_selected="Arrêter" name="Inworld" tool_tip="Jouer cette animation de façon à ce que les autres la voient"/>
+	<button label="Jouer localement" width="160" label_selected="Arrêter" name="Locally" tool_tip="Jouer cette animation de façon à ce que vous soyez la seule personne à la voir"/>
 </floater>

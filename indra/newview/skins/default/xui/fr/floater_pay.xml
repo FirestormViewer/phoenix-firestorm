@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Give Money" title="">
+<floater name="Give Money">
 	<string name="payee_group">Payer le groupe</string>
 	<string name="payee_resident">Payer le résident</string>
-	<text name="paying_text">Vous payez :</text>
-	<text name="payee_name">Test Name That Is Extremely Long To Check Clipping</text>
-	<panel label="Rechercher" name="PatternsPanel">
-		<button label="Payer 1 L$" label_selected="Payer 1 L$" name="fastpay 1"/>
-		<button label="Payer 5 L$" label_selected="Payer 5 L$" name="fastpay 5"/>
-		<button label="Payer 10 L$" label_selected="Payer 10 L$" name="fastpay 10"/>
-		<button label="Payer 20 L$" label_selected="Payer 20 L$" name="fastpay 20"/>
-	</panel>
-	<panel label="Rechercher" name="InputPanel">
-		<text name="amount text">Autre montant :</text>
-		<button label="Payer" label_selected="Payer" name="pay btn"/>
-		<button label="Annuler" label_selected="Annuler" name="cancel btn"/>
-	</panel>
+	<text name="payee_name">Nom de test qui est extrêmement long pour vérifier la taille</text>
+	<button label="1 L$" label_selected="1 L$" name="fastpay 1"/>
+	<button label="5 L$" label_selected="5 L$" name="fastpay 5"/>
+	<button label="10 L$" label_selected="10 L$" name="fastpay 10"/>
+	<button label="20 L$" label_selected="20 L$" name="fastpay 20"/>
+	<text name="amount text">Ou choisissez le montant :</text>
+	<text name="payment_message_label">Message associé (optionnel) :</text>
+	<button label="Payer" label_selected="Payer" name="pay btn"/>
+	<button label="Annuler" label_selected="Annuler" name="cancel btn"/>
 </floater>

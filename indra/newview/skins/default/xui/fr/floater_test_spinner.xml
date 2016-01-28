@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_spinner">
+	<spinner label="Generic Spinner" name="generic_spinner"/>
+	<spinner label="Callback Spinner" name="callback_spinner"/>
+	<spinner label="Colorful Spinner" name="colorful_spinner"/>
+	<spinner label="Value Spinner" name="value_spinner"/>
+	<spinner label="Mini Spinner 1" name="mini_spinner_1"/>
+	<spinner label="Mini Spinner 2" name="mini_spinner_2"/>
+	<spinner label="Control Spinner" name="control_spinner"/>
+	<spinner label="Follows Left" name="follows_left"/>
+	<spinner label="Follows Right" name="follows_right"/>
+</floater>

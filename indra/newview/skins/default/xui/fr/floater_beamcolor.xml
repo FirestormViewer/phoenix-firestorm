@@ -1,23 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="BeamColor">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="BeamColor" title="Rotation du faisceau de couleur">
+	<floater.string name="start_hue">Teinte de départ</floater.string>
+	<floater.string name="end_hue">Teinte de fin</floater.string>
 	<text name="beamcolor_text">
-Utiliser le clic-g pour positionner le 
-point de départ du cycle et le clic-dr 
-pour positionner son point de bouclage.
+ Utilisez la souris pour choisir les teintes
+ primaires et secondaires de votre faisceau de couleur
+ Le clic-gauche change celle de départ.
+ Le clic-droit change celle de fin.
 	</text>
-	<color_swatch name="BeamColor_Preview"
-		label=""
-		tool_tip="Cliquer pour ouvrir le sélecteur de couleur"/>
-	<text name="beamcolor_text2">
-		Prévisual.
-	</text>
-	<slider name="BeamColor_Speed"
-		label="Vit. de rotation"
-		tool_tip="Contrôle du cycle de couleurs"/>
-	<button name="BeamColor_Save"
-		label="Enregistrer"/>
-	<button name="BeamColor_Load"
-		label="Charger"/>
-	<button name="BeamColor_Cancel"
-		label="Annuler"/>
-</floater> 
+	<color_swatch name="BeamColor_Preview" tool_tip="Cliquez pour ouvrir le sélecteur de couleur"/>
+	<text name="beamcolor_text2">Aperçu</text>
+	<slider name="BeamColor_Speed" label="Vitesse de rotation :" tool_tip="Contrôle la vitesse du cycle de couleurs"/>
+	<button label="Sauvegarder" name="BeamColor_Save"/>
+	<button label="Charger" name="BeamColor_Load"/>
+	<button label="Annuler" name="BeamColor_Cancel"/>
+</floater>

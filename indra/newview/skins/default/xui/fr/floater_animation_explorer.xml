@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Explorateur d'animations">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="Jouée par" name="played_by"/>
+		<scroll_list.column label="Jouée" name="played"/>
+		<scroll_list.column label="Priorité" name="priority" />
+		<scroll_list.column label="Timestamp" name="timestamp"/>
+		<scroll_list.column label="ID de l'animation" name="animation_id"/>
+		<scroll_list.column label="ID de l'objet" name="object_id"/>
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Stop" name="stop_btn"/>
+		<button label="Stop &amp; révoquer" name="stop_and_revoke_btn"/>
+		<button label="Révoquer" name="revoke_btn" width="100"/>
+		<check_box label="Non possédées" name="no_owned_animations_check" tool_tip="Activer l'option filtrera les animations que possède votre avatar (AO et animations du système)."/>
+	</panel>
+</floater>

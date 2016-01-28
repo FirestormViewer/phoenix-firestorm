@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Namelist Popup">
+	<menu_item_call label="Conférence à plusieurs" name="send_im"/>
+	<menu_item_call label="Ajouter à un cercle" name="Add to Set"/>
+	<menu_item_call label="Téléporter" name="offer_teleport"/>
+	<menu_item_call label="Supprimer ces amis" name="remove_friend"/>
+</context_menu>

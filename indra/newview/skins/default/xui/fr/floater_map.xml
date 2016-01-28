@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Map" title="Mini-carte">
-	<floater.string name="ToolTipMsg">
-		[REGION](Carte : double-clic ; Panoramique : Maj + faire glisser)
-	</floater.string>
-	<floater.string name="AltToolTipMsg">
-		[REGION](Téléportation : double-clic ; Panoramique : Maj + faire glisser)
-	</floater.string>
-	<floater.string name="mini_map_caption">
-		Mini-carte
-	</floater.string>
-	<text label="N" name="floater_map_north" text="N">
-		N
+<floater name="Map">
+	<floater.string name="ToolTipMsg">[AGENT][REGION](Double-clic pour ouvrir la carte, maintenez shift pour une vue panoramique)</floater.string>
+	<floater.string name="AltToolTipMsg">[REGION](Double -clic pour vous téléporter, maintenez shift pour une vue panoramique)</floater.string>
+	<floater.string name="mini_map_caption">Mini-carte</floater.string>
+	<text label="N" name="floater_map_north">
+         N
 	</text>
-	<text label="E" name="floater_map_east" text="E">
-		E
+	<text label="E" name="floater_map_east">
+         E
 	</text>
-	<text label="O" name="floater_map_west" text="O">
-		O
+	<text label="O" name="floater_map_west">
+         O
 	</text>
-	<text label="S" name="floater_map_south" text="S">
-		S
+	<text label="S" name="floater_map_south">
+         S
 	</text>
-	<text label="SE" name="floater_map_southeast" text="SE">
-		SE
+	<text label="SE" name="floater_map_southeast">
+         SE
 	</text>
-	<text label="NE" name="floater_map_northeast" text="NE">
-		NE
+	<text label="NE" name="floater_map_northeast">
+         NE
 	</text>
-	<text label="SO" name="floater_map_southwest" text="SO">
-		SO
+	<text label="SO" name="floater_map_southwest">
+         SO
 	</text>
-	<text label="NO" name="floater_map_northwest" text="NO">
-		NO
+	<text label="NO" name="floater_map_northwest">
+         NO
 	</text>
 </floater>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_titles" title="Titres du groupe">
+	<floater.string name="NoGroupTitle" value="&lt;Aucun titre&gt;"/>
+	<scroll_list name="title_list">
+		<column name="grouptitle" label="Titre"/>
+		<column name="groupname" label="Groupe"/>
+	</scroll_list>
+	<button tool_tip="Actualiser la liste des titres de groupe disponibles" name="btnRefresh"/>
+	<button name="btnInfo" label="Infos" tool_tip="Afficher les informations sur le groupe du titre sélectionné"/>
+	<button name="btnActivate" label="Activer" tool_tip="Activer le titre du groupe sélectionné"/>
+</floater>

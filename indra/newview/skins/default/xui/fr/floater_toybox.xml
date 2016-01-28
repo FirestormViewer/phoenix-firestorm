@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="BOUTONS DES BARRES D&apos;OUTILS">
-	<text name="toybox label 1">
-		Ajouter ou supprimer des boutons : les faire glisser vers ou depuis les barres d&apos;outils.
-	</text>
-	<text name="toybox label 2">
-		Ils s&apos;afficheront comme indiqué ou comme des icônes, selon les paramètres de barre d&apos;outils.
-	</text>
-	<button label="Effacer tout" label_selected="Effacer tout" name="btn_clear_all"/>
+<floater name="Toybox" title="Boutons de la barre d'outils">
+	<text name="toybox label 1">Ajoutez ou supprimez des boutons en les faisant glisser de ou vers les barres d'outils.</text>
+	<text name="toybox label 2">Les boutons apparaitront tels quels ou sous forme d'icône selon les paramètres de chaque barre d'outils.</text>
+	<button label="Tout effacer" label_selected="Tout effacer" name="btn_clear_all"/>
 	<button label="Valeurs par défaut" label_selected="Valeurs par défaut" name="btn_restore_defaults"/>
+	<check_box label="Verrouiller" name="check_toolbars_locked" tool_tip="Cochez cette case pour verrouiller les barres d'outils de telle façon qu'un bouton ne puisse être déplacé ou supprimé par erreur."/>
 </floater>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Mute Particle Pie">
+	<pie_slice label="Ignorer le propriétaire des particules" name="Mute Particle"/>
+</pie_menu>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script goto" title="ALLER À LA LIGNE">
+<floater name="script goto" title="Aller à la ligne">
 	<button label="OK" label_selected="OK" name="goto_btn"/>
-	<text name="txt">
-		Aller à la ligne
-	</text>
+	<text name="txt" width="80">Aller à la ligne</text>
 </floater>

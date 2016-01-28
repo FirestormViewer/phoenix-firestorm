@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_export_collada" title="Enregistrer au format Collada...">
+	<floater.string name="texture_progress">Enregistrer [OBJECT] au format Collada : Enregistrement des textures ([COUNT] restantes)</floater.string>
+	<floater.string name="floater_title">Enregistrement de [OBJECT] au format Collada...</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">Informations de l'objet</text>
+			<text name="NameText">Nom : [NAME]</text>
+			<text name="exportable_prims">Prims exportables : [COUNT]/[TOTAL]</text>
+			<text name="exportable_textures">Textures exportables : [COUNT]/[TOTAL]</text>
+			<text name="OptionsText">Options :</text>
+			<check_box label="Enregistrer les textures" name="export_textures_check"/>
+			<check_box label="Consolider les textures" name="consolidate_check"/>
+			<check_box label="Ignorer les transparentes" name="skip_transparent_check"/>
+			<check_box label="Appliquer les paramètres de texture" name="texture_params_check"/>
+			<text name="TextureFormatText">Format des textures :</text>
+			<combo_box name="texture_type_combo">
+				<combo_box.item label="TARGA" name="tga"/>
+				<combo_box.item label="PNG" name="png"/>
+				<combo_box.item label="JPEG2000" name="j2c"/>
+			</combo_box>
+			<button label="Enregistrer sous..." name="export_btn"/>
+		</layout_panel>
+	</layout_stack>
+</floater>
