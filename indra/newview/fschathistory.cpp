@@ -435,10 +435,18 @@ public:
 			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
 			|| mAvatarID.isNull())
 		{
-			mFrom = LLTrans::getString("CURRENT_GRID");
-			if(!chat.mFromName.empty() && (mFrom != chat.mFromName))
+			if (mSourceType == CHAT_SOURCE_UNKNOWN)
 			{
-				mFrom += " (" + chat.mFromName + ")";
+				// Avatar names may come up as CHAT_SOURCE_UNKNOWN - don't append the grid name in that case
+				mFrom = chat.mFromName;
+			}
+			else
+			{
+				mFrom = LLTrans::getString("SECOND_LIFE"); // Will automatically be substituted!
+				if (!chat.mFromName.empty() && (mFrom != chat.mFromName))
+				{
+					mFrom += " (" + chat.mFromName + ")";
+				}
 			}
 			mUserNameTextBox->setValue(mFrom);
 			updateMinUserNameWidth();
@@ -492,7 +500,6 @@ public:
 				mUserNameTextBox->setValue(mFrom);
 				updateMinUserNameWidth();
 			}
-// [/RLVa:KB]
 		}
 		else
 		{
@@ -714,7 +721,7 @@ protected:
 
 	void showInfoCtrl()
 	{
-		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType;
+		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR);
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if (isVisible && mShowInfoCtrl)
 // [/RLVa:KB]
