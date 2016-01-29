@@ -97,11 +97,6 @@
 				 tool_tip="Friend can edit, delete or take objects"
 				 width="16" />
 				<fs_scroll_list.column
-				 image="Permission_Visible_Online_h"
-				 name="icon_visible_online_theirs"
-				 tool_tip="You can see this friend&apos;s online status"
-				 width="16" />
-				<fs_scroll_list.column
 				 image="Permission_Visible_Map_h"
 				 name="icon_visible_map_theirs"
 				 tool_tip="You can locate them on the map"
