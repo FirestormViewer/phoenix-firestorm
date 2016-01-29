@@ -25,6 +25,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include <algorithm>
 #include "llvoicevivox.h"
 
 #include "llsdutil.h"
@@ -867,7 +868,7 @@ bool LLVivoxVoiceClient::establishVoiceConnection()
     do
     {
         result = llcoro::suspendUntilEventOn(voiceConnectPump);
-        LL_WARNS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
+        LL_DEBUGS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
     } 
     while (!result.has("connector"));
 
@@ -1016,6 +1017,9 @@ void LLVivoxVoiceClient::logoutOfVivox(bool wait)
 {
     LLEventPump &voicePump = LLEventPumps::instance().obtain("vivoxClientPump");
 
+    if (!mIsLoggedIn)
+        return;
+
     // Ensure that we'll re-request provisioning before logging in again
     mAccountPassword.clear();
     mVoiceAccountServerURI.clear();
@@ -1033,6 +1037,7 @@ void LLVivoxVoiceClient::logoutOfVivox(bool wait)
         }
     }
 
+    mIsLoggedIn = false;
 }
 
 
@@ -1230,7 +1235,7 @@ bool LLVivoxVoiceClient::addAndJoinSession(const sessionStatePtr_t &nextSession)
     {
         result = llcoro::suspendUntilEventOn(voicePump);
 
-        LL_WARNS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
+        LL_DEBUGS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
         if (result.has("session"))
         {
             if (result.has("handle"))
@@ -1307,57 +1312,64 @@ bool LLVivoxVoiceClient::terminateAudioSession(bool wait)
     {
         LL_INFOS("Voice") << "Terminating current voice session " << mAudioSession->mHandle << LL_ENDL;
 
-        if (!mAudioSession->mHandle.empty())
+        if (mIsLoggedIn)
         {
+            if (!mAudioSession->mHandle.empty())
+            {
 
 #if RECORD_EVERYTHING
-            // HACK: for testing only
-            // Save looped recording
-            std::string savepath("/tmp/vivoxrecording");
-            {
-                time_t now = time(NULL);
-                const size_t BUF_SIZE = 64;
-                char time_str[BUF_SIZE];	/* Flawfinder: ignore */
+                // HACK: for testing only
+                // Save looped recording
+                std::string savepath("/tmp/vivoxrecording");
+                {
+                    time_t now = time(NULL);
+                    const size_t BUF_SIZE = 64;
+                    char time_str[BUF_SIZE];	/* Flawfinder: ignore */
 
-                strftime(time_str, BUF_SIZE, "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
-                savepath += time_str;
-            }
-            recordingLoopSave(savepath);
+                    strftime(time_str, BUF_SIZE, "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
+                    savepath += time_str;
+                }
+                recordingLoopSave(savepath);
 #endif
 
-            sessionMediaDisconnectSendMessage(mAudioSession);
+                sessionMediaDisconnectSendMessage(mAudioSession);
 
-            if (wait)
-            {
-                LLEventPump &voicePump = LLEventPumps::instance().obtain("vivoxClientPump");
-                LLSD result;
-                do
+                if (wait)
                 {
-                     result = llcoro::suspendUntilEventOn(voicePump);
-
-                    LL_DEBUGS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
-                    if (result.has("session"))
+                    LLEventPump &voicePump = LLEventPumps::instance().obtain("vivoxClientPump");
+                    LLSD result;
+                    do
                     {
-                        if (result.has("handle"))
+                        result = llcoro::suspendUntilEventOn(voicePump);
+
+                        LL_DEBUGS("Voice") << "event=" << ll_pretty_print_sd(result) << LL_ENDL;
+                        if (result.has("session"))
                         {
-                            if (result["handle"] != mAudioSession->mHandle)
+                            if (result.has("handle"))
                             {
-                                LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while waiting for \"" << mAudioSession->mHandle << "\"." << LL_ENDL;
-                                continue;
+                                if (result["handle"] != mAudioSession->mHandle)
+                                {
+                                    LL_WARNS("Voice") << "Message for session handle \"" << result["handle"] << "\" while waiting for \"" << mAudioSession->mHandle << "\"." << LL_ENDL;
+                                    continue;
+                                }
                             }
+
+                            std::string message = result["session"].asString();
+                            if (message == "removed")
+                                break;
                         }
+                    } while (true);
 
-                        std::string message = result["session"].asString();
-                        if (message == "removed")
-                            break;
-                    }
-                } while (true);
-
+                }
+            }
+            else
+            {
+                LL_WARNS("Voice") << "called with no session handle" << LL_ENDL;
             }
         }
         else
         {
-            LL_WARNS("Voice") << "called with no session handle" << LL_ENDL;
+            LL_WARNS("Voice") << "Session " << mAudioSession->mHandle << " already terminated by logout." << LL_ENDL;
         }
 
         sessionStatePtr_t oldSession = mAudioSession;
@@ -1568,6 +1580,16 @@ bool LLVivoxVoiceClient::runSession(const sessionStatePtr_t &session)
             if (message == "removed")
             {
                 notifyStatusObservers(LLVoiceClientStatusObserver::STATUS_LEFT_CHANNEL);
+                break;
+            }
+        }
+        else if (result.has("login"))
+        {
+            std::string message = result["login"];
+            if (message == "account_logout")
+            {
+                mIsLoggedIn = false;
+                mRelogRequested = true;
                 break;
             }
         }
@@ -3187,7 +3209,7 @@ void LLVivoxVoiceClient::sessionRemovedEvent(
 		leftAudioSession(session);
 
 		// This message invalidates the session's handle.  Set it to empty.
-		setSessionHandle(session);
+        clearSessionHandle(session);
 		
 		// This also means that the session's session group is now empty.
 		// Terminate the session group so it doesn't leak.
@@ -3942,15 +3964,15 @@ void LLVivoxVoiceClient::sessionState::removeParticipant(const LLVivoxVoiceClien
 		
 		if(iter == mParticipantsByURI.end())
 		{
-			LL_ERRS("Voice") << "Internal error: participant " << participant->mURI << " not in URI map" << LL_ENDL;
+			LL_WARNS("Voice") << "Internal error: participant " << participant->mURI << " not in URI map" << LL_ENDL;
 		}
 		else if(iter2 == mParticipantsByUUID.end())
 		{
-			LL_ERRS("Voice") << "Internal error: participant ID " << participant->mAvatarID << " not in UUID map" << LL_ENDL;
+			LL_WARNS("Voice") << "Internal error: participant ID " << participant->mAvatarID << " not in UUID map" << LL_ENDL;
 		}
 		else if(iter->second != iter2->second)
 		{
-			LL_ERRS("Voice") << "Internal error: participant mismatch!" << LL_ENDL;
+			LL_WARNS("Voice") << "Internal error: participant mismatch!" << LL_ENDL;
 		}
 		else
 		{
@@ -3973,9 +3995,26 @@ void LLVivoxVoiceClient::sessionState::removeAllParticipants()
 	
 	if(!mParticipantsByUUID.empty())
 	{
-		LL_ERRS("Voice") << "Internal error: empty URI map, non-empty UUID map" << LL_ENDL;
+		LL_WARNS("Voice") << "Internal error: empty URI map, non-empty UUID map" << LL_ENDL;
 	}
 }
+
+/*static*/
+void LLVivoxVoiceClient::sessionState::VerifySessions()
+{
+    std::set<wptr_t>::iterator it = mSession.begin();
+    while (it != mSession.end())
+    {
+        if ((*it).expired())
+        {
+            LL_WARNS("Voice") << "Expired session found! removing" << LL_ENDL;
+            mSession.erase(it++);
+        }
+        else
+            ++it;
+    }
+}
+
 
 void LLVivoxVoiceClient::getParticipantList(std::set<LLUUID> &participants)
 {
@@ -4222,6 +4261,8 @@ void LLVivoxVoiceClient::callUser(const LLUUID &uuid)
 	switchChannel(userURI, false, true, true);
 }
 
+#if 0
+// Vivox text IMs are not in use.
 LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::startUserIMSession(const LLUUID &uuid)
 {
 	// Figure out if a session with the user already exists
@@ -4255,11 +4296,14 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::startUserIMSession(con
 	
 	return session;
 }
-
+#endif
 
 void LLVivoxVoiceClient::endUserIMSession(const LLUUID &uuid)
 {
-	// Figure out if a session with the user exists
+#if 0
+    // Vivox text IMs are not in use.
+    
+    // Figure out if a session with the user exists
     sessionStatePtr_t session(findSession(uuid));
 	if(session)
 	{
@@ -4273,6 +4317,7 @@ void LLVivoxVoiceClient::endUserIMSession(const LLUUID &uuid)
 	{
 		LL_DEBUGS("Voice") << "Session not found for participant ID " << uuid << LL_ENDL;
 	}
+#endif
 }
 bool LLVivoxVoiceClient::isValidChannel(std::string &sessionHandle)
 {
@@ -4314,7 +4359,7 @@ BOOL LLVivoxVoiceClient::isParticipantAvatar(const LLUUID &id)
 	BOOL result = TRUE; 
     sessionStatePtr_t session(findSession(id));
 	
-	if(session != NULL)
+	if(session)
 	{
 		// this is a p2p session with the indicated caller, or the session with the specified UUID.
 		if(session->mSynthesizedCallerID)
@@ -4323,10 +4368,10 @@ BOOL LLVivoxVoiceClient::isParticipantAvatar(const LLUUID &id)
 	else
 	{
 		// Didn't find a matching session -- check the current audio session for a matching participant
-		if(mAudioSession != NULL)
+		if(mAudioSession)
 		{
             participantStatePtr_t participant(findParticipantByID(id));
-			if(participant != NULL)
+			if(participant)
 			{
 				result = participant->isAvatar();
 			}
@@ -5099,29 +5144,49 @@ void LLVivoxVoiceClient::filePlaybackSetMode(bool vox, float speed)
 	// TODO: Implement once Vivox gives me a sample
 }
 
+//------------------------------------------------------------------------
+std::set<LLVivoxVoiceClient::sessionState::wptr_t> LLVivoxVoiceClient::sessionState::mSession;
+
+
 LLVivoxVoiceClient::sessionState::sessionState() :
-        mErrorStatusCode(0),
-	mMediaStreamState(streamStateUnknown),
-	//mTextStreamState(streamStateUnknown),
-	mCreateInProgress(false),
-	mMediaConnectInProgress(false),
-	mVoiceInvitePending(false),
-	mTextInvitePending(false),
-	mSynthesizedCallerID(false),
-	mIsChannel(false),
-	mIsSpatial(false),
-	mIsP2P(false),
-	mIncoming(false),
-	mVoiceEnabled(false),
-	mReconnect(false),
-	mVolumeDirty(false),
-	mMuteDirty(false),
-	mParticipantsChanged(false)
+    mErrorStatusCode(0),
+    mMediaStreamState(streamStateUnknown),
+    mCreateInProgress(false),
+    mMediaConnectInProgress(false),
+    mVoiceInvitePending(false),
+    mTextInvitePending(false),
+    mSynthesizedCallerID(false),
+    mIsChannel(false),
+    mIsSpatial(false),
+    mIsP2P(false),
+    mIncoming(false),
+    mVoiceEnabled(false),
+    mReconnect(false),
+    mVolumeDirty(false),
+    mMuteDirty(false),
+    mParticipantsChanged(false)
 {
+}
+
+/*static*/
+LLVivoxVoiceClient::sessionState::ptr_t LLVivoxVoiceClient::sessionState::createSession()
+{
+    sessionState::ptr_t ptr(new sessionState());
+
+    std::pair<std::set<wptr_t>::iterator, bool>  result = mSession.insert(ptr);
+
+    if (result.second)
+        ptr->mMyIterator = result.first;
+
+    return ptr;
 }
 
 LLVivoxVoiceClient::sessionState::~sessionState()
 {
+    LL_INFOS("Voice") << "Destroying session handle=" << mHandle << " SIP=" << mSIPURI << LL_ENDL;
+    if (mMyIterator != mSession.end())
+        mSession.erase(mMyIterator);
+
 	removeAllParticipants();
 }
 
@@ -5140,15 +5205,111 @@ bool LLVivoxVoiceClient::sessionState::isTextIMPossible()
 }
 
 
-LLVivoxVoiceClient::sessionIterator LLVivoxVoiceClient::sessionsBegin(void)
+/*static*/ 
+LLVivoxVoiceClient::sessionState::ptr_t LLVivoxVoiceClient::sessionState::matchSessionByHandle(const std::string &handle)
 {
-	return mSessions.begin();
+    sessionStatePtr_t result;
+
+    // *TODO: My kingdom for a lambda!
+    std::set<wptr_t>::iterator it = std::find_if(mSession.begin(), mSession.end(), boost::bind(testByHandle, _1, handle));
+
+    if (it != mSession.end())
+        result = (*it).lock();
+
+    return result;
 }
 
-LLVivoxVoiceClient::sessionIterator LLVivoxVoiceClient::sessionsEnd(void)
+/*static*/ 
+LLVivoxVoiceClient::sessionState::ptr_t LLVivoxVoiceClient::sessionState::matchCreatingSessionByURI(const std::string &uri)
 {
-	return mSessions.end();
+    sessionStatePtr_t result;
+
+    // *TODO: My kingdom for a lambda!
+    std::set<wptr_t>::iterator it = std::find_if(mSession.begin(), mSession.end(), boost::bind(testByCreatingURI, _1, uri));
+
+    if (it != mSession.end())
+        result = (*it).lock();
+
+    return result;
 }
+
+/*static*/
+LLVivoxVoiceClient::sessionState::ptr_t LLVivoxVoiceClient::sessionState::matchSessionByURI(const std::string &uri)
+{
+    sessionStatePtr_t result;
+
+    // *TODO: My kingdom for a lambda!
+    std::set<wptr_t>::iterator it = std::find_if(mSession.begin(), mSession.end(), boost::bind(testBySIPOrAlterateURI, _1, uri));
+
+    if (it != mSession.end())
+        result = (*it).lock();
+
+    return result;
+}
+
+/*static*/
+LLVivoxVoiceClient::sessionState::ptr_t LLVivoxVoiceClient::sessionState::matchSessionByParticipant(const LLUUID &participant_id)
+{
+    sessionStatePtr_t result;
+
+    // *TODO: My kingdom for a lambda!
+    std::set<wptr_t>::iterator it = std::find_if(mSession.begin(), mSession.end(), boost::bind(testByCallerId, _1, participant_id));
+
+    if (it != mSession.end())
+        result = (*it).lock();
+
+    return result;
+}
+
+void LLVivoxVoiceClient::sessionState::for_each(sessionFunc_t func)
+{
+    std::for_each(mSession.begin(), mSession.end(), boost::bind(for_eachPredicate, _1, func));
+}
+
+// simple test predicates.  
+// *TODO: These should be made into lambdas when we can pull the trigger on newer C++ features.
+bool LLVivoxVoiceClient::sessionState::testByHandle(const LLVivoxVoiceClient::sessionState::wptr_t &a, std::string handle)
+{
+    ptr_t aLock(a.lock());
+
+    return aLock ? aLock->mHandle == handle : false;
+}
+
+bool LLVivoxVoiceClient::sessionState::testByCreatingURI(const LLVivoxVoiceClient::sessionState::wptr_t &a, std::string uri)
+{
+    ptr_t aLock(a.lock());
+
+    return aLock ? (aLock->mCreateInProgress && (aLock->mSIPURI == uri)) : false;
+}
+
+bool LLVivoxVoiceClient::sessionState::testBySIPOrAlterateURI(const LLVivoxVoiceClient::sessionState::wptr_t &a, std::string uri)
+{
+    ptr_t aLock(a.lock());
+
+    return aLock ? ((aLock->mSIPURI == uri) || (aLock->mAlternateSIPURI == uri)) : false;
+}
+
+
+bool LLVivoxVoiceClient::sessionState::testByCallerId(const LLVivoxVoiceClient::sessionState::wptr_t &a, LLUUID participantId)
+{
+    ptr_t aLock(a.lock());
+
+    return aLock ? ((aLock->mCallerID == participantId) || (aLock->mIMSessionID == participantId)) : false;
+}
+
+/*static*/
+void LLVivoxVoiceClient::sessionState::for_eachPredicate(const LLVivoxVoiceClient::sessionState::wptr_t &a, sessionFunc_t func)
+{
+    ptr_t aLock(a.lock());
+
+    if (aLock)
+        func(aLock);
+    else
+    {
+        LL_WARNS("Voice") << "Stale handle in session map!" << LL_ENDL;
+    }
+}
+
 
 
 LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::findSession(const std::string &handle)
@@ -5165,33 +5326,14 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::findSession(const std:
 
 LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::findSessionBeingCreatedByURI(const std::string &uri)
 {	
-    sessionStatePtr_t result;
-	for(sessionIterator iter = sessionsBegin(); iter != sessionsEnd(); iter++)
-	{
-        sessionStatePtr_t session = *iter;
-		if(session->mCreateInProgress && (session->mSIPURI == uri))
-		{
-			result = session;
-			break;
-		}
-	}
+    sessionStatePtr_t result = sessionState::matchCreatingSessionByURI(uri);
 	
 	return result;
 }
 
 LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::findSession(const LLUUID &participant_id)
 {
-    sessionStatePtr_t result;
-	
-	for(sessionIterator iter = sessionsBegin(); iter != sessionsEnd(); iter++)
-	{
-        sessionStatePtr_t session = *iter;
-		if((session->mCallerID == participant_id) || (session->mIMSessionID == participant_id))
-		{
-			result = session;
-			break;
-		}
-	}
+    sessionStatePtr_t result = sessionState::matchSessionByParticipant(participant_id);
 	
 	return result;
 }
@@ -5202,18 +5344,9 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::addSession(const std::
 	
 	if(handle.empty())
 	{
-		// No handle supplied.
-		// Check whether there's already a session with this URI
-		for(sessionIterator iter = sessionsBegin(); iter != sessionsEnd(); iter++)
-		{
-            sessionStatePtr_t s(*iter);
-			if((s->mSIPURI == uri) || (s->mAlternateSIPURI == uri))
-			{
-				// TODO: I need to think about this logic... it's possible that this case should raise an internal error.
-				result = s;
-				break;
-			}
-		}
+        // No handle supplied.
+        // Check whether there's already a session with this URI
+        result = sessionState::matchSessionByURI(uri);
 	}
 	else // (!handle.empty())
 	{
@@ -5230,8 +5363,8 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::addSession(const std::
 	{
 		// No existing session found.
 		
-		LL_DEBUGS("Voice") << "adding new session: handle " << handle << " URI " << uri << LL_ENDL;
-        result.reset(new sessionState());
+		LL_DEBUGS("Voice") << "adding new session: handle \"" << handle << "\" URI " << uri << LL_ENDL;
+        result = sessionState::createSession();
 		result->mSIPURI = uri;
 		result->mHandle = handle;
 
@@ -5240,10 +5373,11 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::addSession(const std::
 			result->mVoiceFontID = LLVoiceClient::instance().getVoiceEffectDefault();
 		}
 
-		mSessions.insert(result);
-
 		if(!result->mHandle.empty())
 		{
+            // *TODO: Rider: This concerns me.  There is a path (via switchChannel) where 
+            // we do not track the session.  In theory this means that we could end up with 
+            // a mAuidoSession that does not match the session tracked in mSessionsByHandle
 			mSessionsByHandle.insert(sessionMap::value_type(result->mHandle, result));
 		}
 	}
@@ -5281,6 +5415,30 @@ LLVivoxVoiceClient::sessionStatePtr_t LLVivoxVoiceClient::addSession(const std::
 	return result;
 }
 
+void LLVivoxVoiceClient::clearSessionHandle(const sessionStatePtr_t &session)
+{
+    if (session)
+    {
+        if (session->mHandle.empty())
+        {
+            sessionMap::iterator iter = mSessionsByHandle.find(session->mHandle);
+            if (iter != mSessionsByHandle.end())
+            {
+                mSessionsByHandle.erase(iter);
+            }
+        }
+        else
+        {
+            LL_WARNS("Voice") << "Session has empty handle!" << LL_ENDL;
+        }
+    }
+    else
+    {
+        LL_WARNS("Voice") << "Attempt to clear NULL session!" << LL_ENDL;
+    }
+
+}
+
 void LLVivoxVoiceClient::setSessionHandle(const sessionStatePtr_t &session, const std::string &handle)
 {
 	// Have to remove the session from the handle-indexed map before changing the handle, or things will break badly.
@@ -5293,14 +5451,14 @@ void LLVivoxVoiceClient::setSessionHandle(const sessionStatePtr_t &session, cons
 		{
 			if(iter->second != session)
 			{
-				LL_ERRS("Voice") << "Internal error: session mismatch!" << LL_ENDL;
+				LL_WARNS("Voice") << "Internal error: session mismatch! Session may have been duplicated. Removing version in map." << LL_ENDL;
 			}
 
 			mSessionsByHandle.erase(iter);
 		}
 		else
 		{
-			LL_ERRS("Voice") << "Internal error: session handle not found in map!" << LL_ENDL;
+            LL_WARNS("Voice") << "Attempt to remove session with handle " << session->mHandle << " not found in map!" << LL_ENDL;
 		}
 	}
 			
@@ -5332,15 +5490,12 @@ void LLVivoxVoiceClient::deleteSession(const sessionStatePtr_t &session)
 		{
 			if(iter->second != session)
 			{
-				LL_ERRS("Voice") << "Internal error: session mismatch" << LL_ENDL;
+				LL_WARNS("Voice") << "Internal error: session mismatch, removing session in map." << LL_ENDL;
 			}
 			mSessionsByHandle.erase(iter);
 		}
 	}
 
-	// Remove the session from the URI map
-	mSessions.erase(session);
-	
 	// At this point, the session should be unhooked from all lists and all state should be consistent.
 	verifySessionState();
 
@@ -5357,71 +5512,23 @@ void LLVivoxVoiceClient::deleteSession(const sessionStatePtr_t &session)
 		mNextAudioSession.reset();
 	}
 
-	// delete the session
-	//delete session;
 }
 
 void LLVivoxVoiceClient::deleteAllSessions()
 {
 	LL_DEBUGS("Voice") << "called" << LL_ENDL;
 
-	while(!mSessions.empty())
+    while (!mSessionsByHandle.empty())
 	{
-		deleteSession(*(sessionsBegin()));
+        deleteSession(mSessionsByHandle.begin()->second);
 	}
 	
-	if(!mSessionsByHandle.empty())
-	{
-		LL_ERRS("Voice") << "Internal error: empty session map, non-empty handle map" << LL_ENDL;
-	}
 }
 
 void LLVivoxVoiceClient::verifySessionState(void)
 {
-	// This is mostly intended for debugging problems with session state management.
-	LL_DEBUGS("Voice") << "Total session count: " << mSessions.size() << " , session handle map size: " << mSessionsByHandle.size() << LL_ENDL;
-
-	for(sessionIterator iter = sessionsBegin(); iter != sessionsEnd(); iter++)
-	{
-        sessionStatePtr_t session(*iter);
-
-		LL_DEBUGS("Voice") << "session " << session << ": handle " << session->mHandle << ", URI " << session->mSIPURI << LL_ENDL;
-		
-		if(!session->mHandle.empty())
-		{
-			// every session with a non-empty handle needs to be in the handle map
-			sessionMap::iterator i2 = mSessionsByHandle.find(session->mHandle);
-			if(i2 == mSessionsByHandle.end())
-			{
-				LL_ERRS("Voice") << "internal error (handle " << session->mHandle << " not found in session map)" << LL_ENDL;
-			}
-			else
-			{
-				if(i2->second != session)
-				{
-					LL_ERRS("Voice") << "internal error (handle " << session->mHandle << " in session map points to another session)" << LL_ENDL;
-				}
-			}
-		}
-	}
-		
-	// check that every entry in the handle map points to a valid session in the session set
-	for(sessionMap::iterator iter = mSessionsByHandle.begin(); iter != mSessionsByHandle.end(); iter++)
-	{
-        sessionStatePtr_t session(iter->second);
-		sessionIterator i2 = mSessions.find(session);
-		if(i2 == mSessions.end())
-		{
-			LL_ERRS("Voice") << "internal error (session for handle " << session->mHandle << " not found in session map)" << LL_ENDL;
-		}
-		else
-		{
-			if(session->mHandle != (*i2)->mHandle)
-			{
-				LL_ERRS("Voice") << "internal error (session for handle " << session->mHandle << " points to session with different handle " << (*i2)->mHandle << ")" << LL_ENDL;
-			}
-		}
-	}
+    LL_DEBUGS("Voice") << "Sessions in handle map=" << mSessionsByHandle.size() << LL_ENDL;
+    sessionState::VerifySessions();
 }
 
 void LLVivoxVoiceClient::addObserver(LLVoiceClientParticipantObserver* observer)
@@ -5575,8 +5682,51 @@ void LLVivoxVoiceClient::onAvatarNameCache(const LLUUID& agent_id,
 	avatarNameResolved(agent_id, display_name);
 }
 
+void LLVivoxVoiceClient::predAvatarNameResolution(const LLVivoxVoiceClient::sessionStatePtr_t &session, LLUUID id, std::string name)
+{
+    participantStatePtr_t participant(session->findParticipantByID(id));
+    if (participant)
+    {
+        // Found -- fill in the name
+        participant->mAccountName = name;
+        // and post a "participants updated" message to listeners later.
+        session->mParticipantsChanged = true;
+    }
+
+    // Check whether this is a p2p session whose caller name just resolved
+    if (session->mCallerID == id)
+    {
+        // this session's "caller ID" just resolved.  Fill in the name.
+        session->mName = name;
+        if (session->mTextInvitePending)
+        {
+            session->mTextInvitePending = false;
+
+            // We don't need to call LLIMMgr::getInstance()->addP2PSession() here.  The first incoming message will create the panel.				
+        }
+        if (session->mVoiceInvitePending)
+        {
+            session->mVoiceInvitePending = false;
+
+            LLIMMgr::getInstance()->inviteToSession(
+                session->mIMSessionID,
+                session->mName,
+                session->mCallerID,
+                session->mName,
+                IM_SESSION_P2P_INVITE,
+                LLIMMgr::INVITATION_TYPE_VOICE,
+                session->mHandle,
+                session->mSIPURI);
+        }
+
+    }
+}
+
 void LLVivoxVoiceClient::avatarNameResolved(const LLUUID &id, const std::string &name)
 {
+#if 1
+    sessionState::for_each(boost::bind(predAvatarNameResolution, _1, id, name));
+#else
 	// Iterate over all sessions.
 	for(sessionIterator iter = sessionsBegin(); iter != sessionsEnd(); iter++)
 	{
@@ -5619,6 +5769,7 @@ void LLVivoxVoiceClient::avatarNameResolved(const LLUUID &id, const std::string 
 			
 		}
 	}
+#endif
 }
 
 bool LLVivoxVoiceClient::setVoiceEffect(const LLUUID& id)
