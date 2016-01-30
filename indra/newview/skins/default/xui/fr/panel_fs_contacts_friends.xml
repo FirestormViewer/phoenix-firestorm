@@ -13,7 +13,6 @@
 				<fs_scroll_list.column name="icon_visible_online" tool_tip="La personne peut savoir lorsque vous êtes connecté"/>
 				<fs_scroll_list.column name="icon_visible_map" tool_tip="La personne peut vous localiser"/>
 				<fs_scroll_list.column name="icon_edit_mine" tool_tip="La personne peut modifier, supprimer ou s'approprier vos objets"/>
-				<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Vous êtes informé des connexions de cette personne"/>
 				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Vous pouvez localiser cette personne"/>
 				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Vous pouvez modifier, supprimer ou vous approprier les objets de cette personne"/>
 			</fs_scroll_list>
