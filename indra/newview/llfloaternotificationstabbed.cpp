@@ -126,6 +126,13 @@ LLFloaterNotificationsTabbed::~LLFloaterNotificationsTabbed()
 //---------------------------------------------------------------------------------
 void LLFloaterNotificationsTabbed::removeItemByID(const LLUUID& id, std::string type)
 {
+	// <FS:Ansariel> Ignore for script dialogs that are not listed in the notifications list
+	if (type == "ScriptDialog" || type == "ScriptDialogGroup")
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
     if(mNotificationsSeparator->removeItemByID(type, id))
     {
         if (NULL != mSysWellChiclet)
