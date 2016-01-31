@@ -40,6 +40,8 @@
 #include "llsdparam.h"
 #include "lltooltip.h"
 #include "lltrans.h"
+#include "llslurl.h"
+#include "llurlaction.h"
 
 static LLDefaultChildRegistry::Register<LLNameListCtrl> r("name_list");
 
@@ -145,7 +147,10 @@ void LLNameListCtrl::showInspector(const LLUUID& avatar_id, bool is_group, bool 
 	if (is_group)
 		LLFloaterReg::showInstance("inspect_group", LLSD().with("group_id", avatar_id));
 	else
-		LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", avatar_id));
+		// <FS:Ansariel> FIRE-9045: Remove avatar inspector
+		//LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", avatar_id));
+		LLUrlAction::executeSLURL(LLSLURL("agent", avatar_id, "inspect").getSLURLString());
+		// </FS:Ansariel>
 }
 
 void	LLNameListCtrl::mouseOverHighlightNthItem( S32 target_index )
