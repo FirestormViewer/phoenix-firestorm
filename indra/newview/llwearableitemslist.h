@@ -421,7 +421,10 @@ public:
 			MASK_BODYPART		= 0x02,
 			MASK_ATTACHMENT		= 0x04,
 			MASK_GESTURE		= 0x08,
-			MASK_UNKNOWN		= 0x16,
+			// <FS:Ansariel> Fix hexadecimal arithmetics brain fart
+			//MASK_UNKNOWN		= 0x16,
+			MASK_UNKNOWN		= 0x10
+			// </FS:Ansariel>
 		};
 
 		/* virtual */ LLContextMenu* createMenu();
