@@ -1,46 +1,90 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Déplacement" name="move_panel">
-	<tab_container name="tabs">
-		<!--View-->
-		<panel name="tab-view">
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Déplacement &amp; caméra" name="move_panel">
+	<tab_container label="Déplacement &amp; caméra" name="tabs">
+		<panel label="Caméra" name="tab-view">
 			<slider label="Angle de vue" name="camera_fov"/>
 			<slider label="Distance" name="camera_offset_scale"/>
-			<text name="heading2">
-				Positionnement automatique pour :
-			</text>
-			<check_box label="Construire/Modifier" name="edit_camera_movement" tool_tip="Utiliser le positionnement automatique de la caméra lorsque vous entrez en mode de modification et le quittez."/>
-			<check_box label="Apparence" name="appearance_camera_movement" tool_tip="Utiliser le positionnement automatique de la caméra en mode de modification."/>
-			<check_box label="Panneau latéral" name="appearance_sidebar_positioning" tool_tip="Utiliser le positionnement automatique de la caméra pour le panneau latéral."/>
-			<check_box name="ShowMutedAvatarsAsCloud" label="Afficher un nuage de particules pour les avatars bloqués" tool_tip="Afficher les avatars bloqués (mutés) en nuages de particules de couleur particuliere."/>
+			<slider label="Transition" name="camera_transition_time"/>
+			<slider label="Fluidité" name="camera_position_smoothing"/>
+			<check_box label="Désactiver les contraintes de limitation de dézoom" name="DisableCameraConstraints" tool_tip="Activer cette option pour autoriser la caméra à dézoomer au-delà de ses limitations"/>
+			<check_box label="Désactiver la molette de la souris pour régler le niveau du zoom" name="FSDisableMouseWheelCameraZoom"/>
+			<text name="heading2">Positionnement automatique pour :</text>
+			<check_box label="Construire / Modifier" name="edit_camera_movement" tool_tip="Positionner automatiquement la caméra lorsque j'entre et je sors du mode construction"/>
+			<check_box label="Modifier l'apparence" width="150" name="appearance_camera_movement" tool_tip="Tourner ma caméra de face lorsque je modifie ma silhouette"/>
+			<check_box label="Lumière supplémentaire" name="EditAppearanceLighting" tool_tip="Activer cette option pour que votre avatar soit plus lumineux lorsque vous modifiez votre silhouette."/>
+			<check_box label="Cliquer sur votre avatar ne touche pas à la caméra" name="clickonavatarkeepscamera" tool_tip="Activer cette option empêche la caméra de se réinitialiser lorsque vous cliquez sur votre avatar."/>
+			<check_box label="Réinitialise la caméra après une téléportation dans la région" name="FSResetCameraOnTP" tool_tip="Activer cette option réinitialisera le niveau de zoom de la caméra après une téléportation au sein d'une même région."/>
+			<check_box label="Repositionner la caméra lors des déplacements de l'avatar" name="FSResetCameraOnMovement"/>
+			<check_box label="Désactiver les contraintes de limitation de zoom" name="disableminzoomdist" tool_tip="Désactive la limitation de distance pour zoomer."/>
+			<check_box label="Tourner l'avatar lorsque je réinitialise la caméra" name="resetviewturnsavatar" tool_tip="Activer cette option ne déplacera pas la caméra mais tournera votre avatar dans sa direction lorsque vous réinitialisez la caméra via le bouton ESC."/>
+			<check_box label="Permettre à la caméra de traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore les déplacements de caméra que le simulateur effectue lorsque celle-ci s'approche trop près des objets."/>
+			<text name="ignorecameraconstraints_requires_restart">(Redémarrage requis)</text>
+			<check_box label="Toujours afficher la fenêtre de contrôles de la caméra de façon opaque" name="FSAlwaysOpaqueCameraControls"/>
+			<check_box label="Afficher les avatars ignorés en tant que nuage" name="ShowMutedAvatarsAsCloud" tool_tip="Les avatars ignorés seront affichés en tant que petit nuage vert."/>
 		</panel>
-		<!--Mouselook-->
-		<panel name="tab-mouselook">
-			<check_box label="Afficher en vue subjective" name="first_person_avatar_visible"/>
-			<text name="Mouse Sensitivity">
-				Sensibilité de la souris en vue subjective :
-			</text>
-			<check_box label="Inverser" name="invert_mouse"/>
+		<panel label="Vue subjective" name="tab-mouselook">
+			<check_box label="Activer la vue subjective" name="EnableMouselook" tool_tip="Permettre une vue à la première personne et un contrôle de la caméra à la souris"/>
+			<check_box label="Afficher mon avatar en vue subjective" name="first_person_avatar_visible"/>
+			<check_box label="Afficher l'interface utilisateur en vue subjective" name="first_person_ui_visible"/>
+			<check_box label="Ne pas masquer les fenêtres de conversations et du radar en vue subjective" name="FSShowConvoAndRadarInML"/>
+			<check_box label="Activer les menus contextuels en vue subjective" name="FSEnableRightclickMenuInMouselook" tool_tip="Affiche les menus contextuels en vue subjective via la combinaison de touches ALT + clic-droit"/>
+			<check_box label="Quitter la vue subjective avec la molette de la souris" name="FSScrollWheelExitsMouselook" tool_tip="Activer cette option vous permettra de quitter la vue subjective en faisant rouler la molette vers le bas"/>
+			<check_box label="Afficher les astuces de la vue subjective" name="mouselook_instructions_visible" tool_tip="Afficher les astuces de la vue subjective"/>
+			<check_box label="Afficher le curseur en vue objective" name="ShowCrosshairs" tool_tip="Affiche le curseur au milieu de l'écran en vue subjective"/>
+			<check_box label="Activer les fonctionnalités de combat" name="FSMouselookCombatFeatures"/>
+			<check_box label="Activer le suivi de cible" name="ExodusMouselookIFF"/>
+			<slider label="Distance (m) :" name="ExodusMouselookIFFRange"/>
+			<text name="Mouse Sensitivity">Sensibilité de la souris :</text>
+			<check_box label="Inverser l'axe vertical" name="invert_mouse"/>
 		</panel>
-		<!--Movement-->
-		<panel name="tab-movement">
-			<check_box label="Les touches de direction me font toujours me déplacer" name="arrow_keys_move_avatar_check"/>
-			<check_box label="Presser une touche du clavier affecte le déplacement (WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
-			<check_box label="Appuyer deux fois et maintenir enfoncé pour courir" name="tap_tap_hold_to_run"/>
-			<check_box label="Double-cliquer pour :" name="double_click_chkbox"/>
-			<radio_group name="double_click_action">
-				<radio_item label="Téléportation" name="radio_teleport"/>
-				<radio_item label="Pilotage auto" name="radio_autopilot"/>
-			</radio_group>
-			<button label="Autres accessoires" name="joystick_setup_button"/>
+		<panel label="Mouvement" name="tab-movement">
+			<check_box label="Les flèches directionnelles déplacent toujours mon avatar" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Appuyer sur les touches alphabétiques de déplacement (WASD) déplace mon avatar" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Utiliser les touches de déplacement pour clavier AZERTY" name="FSUseAzertyKeyboardLayout"/>
+			<check_box label="Double-pression sur une touche directionnelle pour courir" name="tap_tap_hold_to_run"/>
+			<check_box label="Décoller / Atterrir en maintenant les touches Saut / Accroupi" name="automatic_fly"/>
+			<check_box label="Rester accroupi jusqu'à ce que je me relève" name="crouch_toggle_mode"/>
+			<check_box label="Désactiver la temporisation de l'animation avant le saut et à l'atterrissage" name="FSIgnoreFinishAnimation"/>
+			<check_box label="Ne pas me retourner lorsque je marche à reculons" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Empêche votre avatar de se retourner pour faire face à la caméra lorsque vous marchez à reculons. Cette option n'affecte que votre vision et n'est pas compatible avec les AOs."/>
+			<check_box label="Tourner l'avatar vers l'objet qu'il sélectionne" name="FSTurnAvatarToSelectedObject" tool_tip="Tourne votre avatar face à l'objet que vous sélectionnez actuellement."/>
+			<text name="movelock_lbl">Si l'ancrage du Bridge LSL est actif...</text>
+			<check_box label="Réactiver l'ancrage après une téléportation" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Désactiver/Réactiver l'ancrage lorsque je me déplace" name="RelockMoveLockAfterMovement"/>
+			<text name="single_click_action_lbl">Clic simple sur le terrain :</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Pas d'action" name="0"/>
+				<combo_box.item label="Se déplacer à l'endroit" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">Double-clic sur le terrain :</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Pas d'action" name="0"/>
+				<combo_box.item label="Se déplacer à l'endroit" name="1"/>
+				<combo_box.item label="Se téléporter à l'endroit" name="2"/>
+			</combo_box>
+			<button label="Config. de la manette" name="joystick_setup_button"/>
 		</panel>
-		<!--Teleports-->
-		<panel name="tab-teleports">
-			<check_box name="tp_beam_toggle" label="Désactiver les balises de destination après la téléportation"/>
-			<check_box name="tp_screen_toggle" label="Désactiver l'écran de téléportation" tool_tip="Lors de la téléportation, remplacer l'écran et la barre de progression par une image fixe."/>
+		<panel label="Téléportations" name="tab-teleports">
+			<check_box label="Jouer un effet sonore lors des téléportations" name="PlayTeleportSound"/>
+			<check_box label="Toujours voler après une téléportation" name="FSFlyAfterTeleport"/>
+			<check_box label="Toujours afficher le bouton Annuler sur les écrans de téléportation" name="FSAlwaysShowTPCancel" tool_tip="Toujours afficher le bouton Annuler lors des téléportations même si la région indique qu'elle ne peut pas l'être. Ce paramètre peut être ignoré par les options RLVa."/>
+			<check_box label="Désactiver les balises de téléportation" name="tp_beam_toggle" tool_tip="Désactive le repère visuel après une téléportation vers celui-ci."/>
+			<check_box label="Désactiver les écrans de téléportation" name="tp_screen_toggle" tool_tip="Désactiver l'écran de téléportation noir pendant les téléportations."/>
 		</panel>
-		<!--Maps-->
-		<panel name="tab-maps">
-			<check_box name="FSWorldMapDoubleclickTeleport" label="Activer la téléportation au double clic sur la carte du monde" tool_tip="Téléportation directe a la destination lorsque vous faites un double clic sur la carte du monde."/>
+		<panel label="Carte &amp; Minicarte" name="tab-maps">
+			<text name="minimap_options_label">Options de la Minicarte :</text>
+			<check_box label="Activer la rotation de la minicarte" name="minimaprotate" tool_tip="Tourner la minicarte dans la direction où l'avatar est tourné."/>
+			<text name="netmap_double_click_action_lbl" width="155">Double-clic sur la Minicarte :</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Pas d'action" name="0"/>
+				<combo_box.item label="Ouvrir la carte" name="1"/>
+				<combo_box.item label="Se téléporter à l'endroit" name="2"/>
+			</combo_box>
+			<slider label="Taille du point :" label_width="155" name="FSMinimapPickScale" tool_tip="Définit le rayon du point dessiné par le curseur de la souris sur la minicarte"/>
+			<text name="world_map_options_label">Options de la carte du monde :</text>
+			<check_box label="Supprimer les repères en doublon sur la carte du monde" name="WorldmapFilterDuplicateLandmarks" tool_tip="Traite les doublons de la liste des repères avant de les afficher sur la carte."/>
+			<check_box label="Afficher des informations complémentaires sur la région dans la carte du monde" name="FSAdvancedWorldmapRegionInfo" tool_tip="Affiche le nombre de résidents présents dans la région ainsi que sa classification."/>
+			<check_box label="Afficher les coordonnées globales sur la carte du monde" name="FSShowRegionGridCoordinates" tool_tip="Affiche les coordonnées des régions sur la carte."/>
+			<check_box label="Activer la téléportation par double-clic sur la carte du monde" name="FSWorldMapDoubleclickTeleport" tool_tip="Active la téléportation lors d'un double-clic sur la carte."/>
 		</panel>
 	</tab_container>
 </panel>

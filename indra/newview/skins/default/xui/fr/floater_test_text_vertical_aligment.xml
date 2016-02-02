@@ -1,2 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Test Floater" title="FLOATER TEST"/>
+<floater name="Test Floater" title="Fenêtre de test">
+	<text>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ en haut</text>
+	<text>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ au milieu</text>
+	<text>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ en bas</text>
+	<text_editor>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ en haut
+	</text_editor>
+	<text_editor>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ au center
+	</text_editor>
+	<text_editor>
+ ceci
+ est
+ du
+ texte
+ qui
+ est
+ aligné
+ en bas
+	</text_editor>
+</floater>

@@ -4,7 +4,7 @@
  help_topic="fs_area_search"
  title="Area Search for Objects"
  min_width="430"
- min_height="355"
+ min_height="395"
  width="610"
  height="435"
  save_rect="true"
@@ -355,6 +355,28 @@
 			 width="100"/>
 			<check_box
 			 follows="top|left"
+			 top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="filter_perm_copy"
+			 label="Copy"
+			 width="100"/>
+			<check_box
+			 follows="top|left"
+			 layout="topleft"
+			 left_pad="0"
+			 name="filter_perm_modify"
+			 label="Modify"
+			 width="100"/>
+			<check_box
+			 follows="top|left"
+			 layout="topleft"
+			 left_pad="0"
+			 name="filter_perm_transfer"
+			 label="Transfer"
+			 width="100"/>
+			<check_box
+			 follows="top|left"
 			 height="20"
 			 layout="topleft"
 			 left="10"
@@ -504,10 +526,18 @@
 			 name="max_distance"
 			 top_delta="-4"
 			 width="80"/>
+			<check_box
+			 follows="top|left"
+			 top_pad="22"
+			 layout="topleft"
+			 left="10"
+			 name="filter_agent_parcel_only"
+			 label="Current Parcel only"
+			 width="80"/>
 			<text
 			 name="only_list"
 			 height="15"
-			 top_pad="20"
+			 top_pad="5"
 			 follows="top|left"
 			 left="5">
 				Exclude objects that are:
@@ -552,7 +582,7 @@
 			 name="exclude_neighbor_region"
 			 label="Neighboring Regions"
 			 width="80"/>
-			<button
+			 <button
 			 name="apply"
 			 label="Apply"
 			 mouse_opaque="true"

@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_experience_log">
-	<string name="no_events" value="Aucun événement."/>
-	<string name="loading" value="en cours de chargement..."/>
+<panel name="panel_experience_log" label="Évènements">
 	<layout_stack name="ls1">
 		<layout_panel name="list panel">
 			<scroll_list name="experience_log_list">
-				<columns label="Durée" name="time"/>
-				<columns label="Événement" name="event"/>
-				<columns label="Expérience" name="experience_name"/>
-				<columns label="Objet" name="object_name"/>
+				<columns name="time" label="Heure"/>
+				<columns name="event" label="Évènement"/>
+				<columns name="experience_name" label="Expérience"/>
+				<columns name="object_name" label="Objet"/>
 			</scroll_list>
-			<button label="Prévenir" name="btn_notify"/>
-			<button label="Profil" name="btn_profile_xp"/>
-			<button label="Signaler" name="btn_report_xp"/>
+			<button name="btn_notify" label="Notifier"/>
+			<button name="btn_profile_xp" label="Profil"/>
+			<button name="btn_report_xp" label="Signaler"/>
 		</layout_panel>
 		<layout_panel name="button_panel">
-			<check_box label="Prévenir de tous les événements   jours" name="notify_all"/>
-			<button label="Effacer" name="btn_clear"/>
-			<button label="&lt;" name="btn_prev"/>
-			<button label="&gt;" name="btn_next"/>
+			<check_box label="Notifier tous les évènements de la journée" name="notify_all"/>
+			<button name="btn_clear" label="Effacer"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

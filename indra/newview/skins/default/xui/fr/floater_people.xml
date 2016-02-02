@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_people" title="PERSONNES">
-	<panel_container name="main_panel">
-		<panel label="Profil du groupe" name="panel_group_info_sidetray"/>
-		<panel label="Résidents et objets ignorés" name="panel_block_list_sidetray"/>
-	</panel_container>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="floater_people" title="Personnes">
+	<panel_container name="main_panel"><panel name="panel_group_info_sidetray" label="Informations sur le groupe"/></panel_container>
 </floater>

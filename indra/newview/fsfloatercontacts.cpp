@@ -660,12 +660,6 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	edit_my_object_column["type"]			= "checkbox";
 	edit_my_object_column["value"]			= relationInfo->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS);
 
-	LLSD& online_their_column				= element["columns"][LIST_ONLINE_THEIRS];
-	online_their_column["column"]			= "icon_visible_online_theirs";
-	online_their_column["type"]				= "checkbox";
-	online_their_column["enabled"]			= "";
-	online_their_column["value"]			= relationInfo->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
-
 	LLSD& visible_their_map_column			= element["columns"][LIST_VISIBLE_MAP_THEIRS];
 	visible_their_map_column["column"]		= "icon_visible_map_theirs";
 	visible_their_map_column["type"]		= "checkbox";
@@ -746,7 +740,6 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 	itemp->getColumn(LIST_VISIBLE_ONLINE)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS));
 	itemp->getColumn(LIST_VISIBLE_MAP)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION));
 	itemp->getColumn(LIST_EDIT_MINE)->setValue(info->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS));
-	itemp->getColumn(LIST_ONLINE_THEIRS)->setValue(info->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS));
 	itemp->getColumn(LIST_VISIBLE_MAP_THEIRS)->setValue(info->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION));
 	itemp->getColumn(LIST_EDIT_THEIRS)->setValue(info->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS));
 	S32 change_generation = info->getChangeSerialNum();
@@ -1170,7 +1163,6 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 		else if (p.name.getValue() == "icon_visible_online" ||
 			p.name.getValue() == "icon_visible_map" ||
 			p.name.getValue() == "icon_edit_mine" ||
-			p.name.getValue() == "icon_visible_online_theirs" ||
 			p.name.getValue() == "icon_visible_map_theirs" ||
 			p.name.getValue() == "icon_edit_theirs")
 		{

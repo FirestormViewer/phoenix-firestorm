@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_combobox">
+	<text>
+         Real world usage (login location):
+	</text>
+	<combo_box name="start_location_combo">
+		<combo_box.item label="My Last Location" name="MyLastLocation"/>
+		<combo_box.item label="My Home" name="MyHome"/>
+		<combo_box.item label="&lt;Type region name&gt;" name="Typeregionname"/>
+	</combo_box>
+	<text>
+         Minimal combobox:
+	</text>
+	<combo_box name="minimal_combo">
+		<combo_box.item label="First Item" name="item1"/>
+		<combo_box.item label="Second Item" name="item2"/>
+	</combo_box>
+	<text>
+         Allow text input:
+	</text>
+	<combo_box name="text_entry_combo">
+		<combo_box.item label="First Item" name="item1"/>
+		<combo_box.item label="Second Item" name="item2"/>
+	</combo_box>
+	<text>
+         Allow text input, default to second item:
+	</text>
+	<combo_box name="text_entry_combo2">
+		<combo_box.item label="First Item" name="item1"/>
+		<combo_box.item label="Second Item" name="item2"/>
+	</combo_box>
+	<text>
+         Two character max input:
+	</text>
+	<combo_box name="state_combo">
+		<combo_box.item label="CA" name="item1"/>
+		<combo_box.item label="NY" name="item2"/>
+		<combo_box.item label="TX" name="item3"/>
+	</combo_box>
+</floater>

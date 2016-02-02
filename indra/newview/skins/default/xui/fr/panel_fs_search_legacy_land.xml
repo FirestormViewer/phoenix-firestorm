@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Vente de terrains" name="panel_ls_land">
+	<panel name="panel_ls_input">
+		<text name="search_text">Critères de recherche :</text>
+		<combo_box name="land_category">
+			<combo_box.item label="Tout" name="All"/>
+			<combo_box.item label="Aux enchères" name="Auction"/>
+			<combo_box.item label="Sur le continent" name="Mainland"/>
+			<combo_box.item label="De domaines" name="Estate"/>
+		</combo_box>
+		<check_box label="Prix &lt;" name="price_check"/>
+		<check_box label="Taille &gt;" name="area_check"/>
+		<text name="sort_text">Trier les résultats par :</text>
+		<check_box label="Ordre croissant" name="ascending_check"/>
+		<combo_box name="land_sort_combo">
+			<combo_box.item label="Nom" name="Name_item"/>
+			<combo_box.item label="Prix" name="Price_item"/>
+			<combo_box.item label="Prix par m²" name="PPM_item"/>
+			<combo_box.item label="Surface" name="Area_item"/>
+		</combo_box>
+		<button label="Recherche" name="land_find"/>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_land">
+			<columns label="Nom" name="land_name"/>
+			<columns label="Prix" name="price"/>
+			<columns label="Taille" name="area"/>
+			<columns label="L$/m²" name="ppm"/>
+			<columns label="Type" name="land_type"/>
+		</scroll_list>
+		<button label="Précédent" name="land_back"/>
+		<button label="Suivant" name="land_next"/>
+	</panel>
+</panel>

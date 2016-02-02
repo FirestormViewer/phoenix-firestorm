@@ -673,7 +673,7 @@ U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
 	a_Size = oStat.st_size;
 	U8 *pBuffer = new U8[ a_Size ];
 
-	if( a_Size != nd::apr::ndFile::readEx( aFilename, pBuffer, 0, a_Size ) )
+	if( a_Size != LLAPRFile::readEx( aFilename, pBuffer, 0, a_Size ) )
 	{
 		a_Size = 0;
 		delete []pBuffer;

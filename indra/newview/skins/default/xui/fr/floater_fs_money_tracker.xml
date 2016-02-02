@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="Suivi des transactions">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Heure"/>
+		<name_list.columns name="name" label="Nom"/>
+		<name_list.columns name="amount" label="Montant"/>
+	</name_list>
+	<text name="summary">Payé : [PAID] L$ - Reçu : [RECEIVED] L$</text>
+	<check_box label="Suivre lorsque fermé" name="FSAlwaysTrackPayments" tool_tip="Toujours suivre les transactions, même lorsque le suivi est fermé."/>
+	<button name="Clear" label="Effacer"/>
+</floater>

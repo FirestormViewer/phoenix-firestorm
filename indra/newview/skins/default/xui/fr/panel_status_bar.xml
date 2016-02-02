@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
-	<panel.string name="packet_loss_tooltip">Perte de paquets</panel.string>
-	<panel.string name="bandwidth_tooltip">Bande passante</panel.string>
-	<panel.string name="time">[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]</panel.string>
-	<panel.string name="timeTooltip">[weekday, datetime, slt] [sday, datetime, slt] [month, datetime, slt] [year, datetime, slt]</panel.string>
-	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
-	<panel name="balance_bg">
-		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="?? L$"/>
-		<button label="ACHETER L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$"/>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Le terrain est à vendre"/>
+		<button name="status_wl_btn" tool_tip="Le terrain possède des réglages WL"/>
+		<button name="status_lightshare_btn" tool_tip="Paramètres Lightshare"/>
+		<text tool_tip="Nom du terrain dans lequel vous vous situez. Cliquez pour plus d'informations." name="parcel_info_text"/>
 	</panel>
-	<combo_box name="mode_combo" tool_tip="Sélectionnez un mode. Pour une exploration facile et rapide avec chat, choisissez Basique. Pour accéder à plus de fonctionnalités, choisissez Avancé.">
-		<combo_box.item label="Mode basique" name="Basic"/>
-		<combo_box.item label="Mode avancé" name="Advanced"/>
-	</combo_box>
-	<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">00h00 PST</text>
+	<panel.string name="packet_loss_tooltip">Paquet perdu</panel.string>
+	<panel.string name="bandwidth_tooltip">Bande passante</panel.string>
+	<panel.string name="time">[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]</panel.string>
+	<panel.string name="timeTooltip">[weekday, datetime, slt] [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]</panel.string>
+	<panel.string name="buycurrencylabel">[AMT] L$</panel.string>
+	<panel name="menu_search_panel" width="160"><search_editor label="Rech. dans les menus" name="search_menu_edit" tool_tip="Saisissez vos critères de recherche ici."/></panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Cliquez pour actualiser votre solde de L$"/>
+		<button label="PLUS DE L$" name="buyL" tool_tip="Cliquez pour acheter plus de L$"/>
+	</panel>
 	<panel name="time_and_media_bg">
-		<button name="media_toggle_btn" tool_tip="Arrêter tous les médias (musique, vidéo, pages web)"/>
-		<button name="volume_btn" tool_tip="Contrôle du volume global"/>
+		<text name="TimeText" tool_tip="Heure actuelle (Pacifique)">24:00 AM PST</text>
+		<button name="stream_toggle_btn" tool_tip="Jouer/Arrêter la musique du terrain"/>
+		<button name="media_toggle_btn" tool_tip="Jouer/Arrêter tous les médias (Musique, Vidéos, Pages Web)"/>
 	</panel>
 </panel>

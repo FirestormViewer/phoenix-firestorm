@@ -114,29 +114,41 @@ std::string LLNotificationListItem::buildNotificationDate(const LLDate& time_sta
     std::string timeStr;
 	switch(time_type)
 	{
+		// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+		//case Local:
+		//	timeStr = "[" + LLTrans::getString("LTimeMthNum") + "]/["
+        //		+LLTrans::getString("LTimeDay")+"]/["
+		//		+LLTrans::getString("LTimeYear")+"] ["
+		//		+LLTrans::getString("LTimeHour")+"]:["
+		//		+LLTrans::getString("LTimeMin")+ "]";
+		//	break;
+		//case UTC:
+		//	timeStr = "[" + LLTrans::getString("UTCTimeMth") + "]/["
+		//      	+LLTrans::getString("UTCTimeDay")+"]/["
+		//		+LLTrans::getString("UTCTimeYr")+"] ["
+		//		+LLTrans::getString("UTCTimeHr")+"]:["
+		//		+LLTrans::getString("UTCTimeMin")+"] ["
+		//		+LLTrans::getString("UTCTimeTimezone")+"]";
+		//	break;
+		//case SLT:
+		//default:
+		//	timeStr = "[" + LLTrans::getString("TimeMonth") + "]/["
+		//	   	+LLTrans::getString("TimeDay")+"]/["
+		//		+LLTrans::getString("TimeYear")+"] ["
+		//		+LLTrans::getString("TimeHour")+"]:["
+		//		+LLTrans::getString("TimeMin")+"]";
+		//	break;
 		case Local:
-			timeStr = "[" + LLTrans::getString("LTimeMthNum") + "]/["
-        		+LLTrans::getString("LTimeDay")+"]/["
-				+LLTrans::getString("LTimeYear")+"] ["
-				+LLTrans::getString("LTimeHour")+"]:["
-				+LLTrans::getString("LTimeMin")+ "]";
+			timeStr = LLTrans::getString("NotificationItemDateStringLocal");
 			break;
 		case UTC:
-			timeStr = "[" + LLTrans::getString("UTCTimeMth") + "]/["
-		      	+LLTrans::getString("UTCTimeDay")+"]/["
-				+LLTrans::getString("UTCTimeYr")+"] ["
-				+LLTrans::getString("UTCTimeHr")+"]:["
-				+LLTrans::getString("UTCTimeMin")+"] ["
-				+LLTrans::getString("UTCTimeTimezone")+"]";
+			timeStr = LLTrans::getString("NotificationItemDateStringUTC");
 			break;
 		case SLT:
 		default:
-			timeStr = "[" + LLTrans::getString("TimeMonth") + "]/["
-			   	+LLTrans::getString("TimeDay")+"]/["
-				+LLTrans::getString("TimeYear")+"] ["
-				+LLTrans::getString("TimeHour")+"]:["
-				+LLTrans::getString("TimeMin")+"]";
+			timeStr = LLTrans::getString("NotificationItemDateStringSLT");
 			break;
+		// </FS:Ansariel>
 	}
     LLSD substitution;
     substitution["datetime"] = time_stamp;

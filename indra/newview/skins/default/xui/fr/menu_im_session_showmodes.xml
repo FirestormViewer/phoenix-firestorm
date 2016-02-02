@@ -2,6 +2,6 @@
 <toggleable_menu name="menu_modes">
 	<menu_item_check label="Vue compacte" name="compact_view"/>
 	<menu_item_check label="Vue développée" name="expanded_view"/>
-	<menu_item_check label="Afficher l’heure" name="IMShowTime"/>
-	<menu_item_check label="Afficher les noms dans les conversations privées" name="IMShowNamesForP2PConv"/>
+	<menu_item_check name="IMShowTime" label="Afficher l'heure"/>
+	<menu_item_check name="IMShowNamesForP2PConv" label="Afficher les noms dans les conversations privées"/>
 </toggleable_menu>

@@ -158,6 +158,12 @@ public:
 	void setFilterDistanceMin(S32 s) { mFilterDistanceMin = s; }
 	void setFilterDistanceMax(S32 s) { mFilterDistanceMax = s; }
 	
+	void setFilterPermCopy(bool b) { mFilterPermCopy = b; }
+	void setFilterPermModify(bool b) { mFilterPermModify = b; }
+	void setFilterPermTransfer(bool b) { mFilterPermTransfer = b; }
+
+	void setFilterAgentParcelOnly(bool b) { mFilterAgentParcelOnly = b; }
+
 	bool isActive() { return mActive; }
 
 private:
@@ -242,6 +248,12 @@ private:
 
 	bool mFilterClickAction;
 	U8 mFilterClickActionType;
+
+	bool mFilterPermCopy;
+	bool mFilterPermModify;
+	bool mFilterPermTransfer;
+
+	bool mFilterAgentParcelOnly;
 
 protected:
 	static void* createPanelList(void* data);
@@ -380,6 +392,10 @@ private:
 	LLCheckBoxCtrl* mCheckboxExcludetemporary;
 	LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
 	LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions;
+	LLCheckBoxCtrl* mCheckboxPermCopy;
+	LLCheckBoxCtrl* mCheckboxPermModify;
+	LLCheckBoxCtrl* mCheckboxPermTransfer;
+	LLCheckBoxCtrl* mCheckboxAgentParcelOnly;
 };
 
 

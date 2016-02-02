@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_add_contact" title="Ajouter à un cercle...">
+	<floater.string name="no_sets">Aucun cercle défini</floater.string>
+	<floater.string name="text_add_single">Veuillez sélectionner le cercle dans lequel ajouter [NAME] :</floater.string>
+	<floater.string name="text_add_multiple">Veuillez sélectionner le cercle lequel ajouter les [COUNT] résidents :</floater.string>
+	<button label="Ajouter au cercle" name="add_btn"/>
+	<button label="Annuler" name="cancel_btn"/>
+</floater>

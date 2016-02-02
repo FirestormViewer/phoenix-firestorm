@@ -415,8 +415,8 @@ void NACLFloaterExploreSounds::blacklistSound()
 			}
 			mBlacklistAvatarNameCacheConnections.erase(it);
 		}
-		mBlacklistAvatarNameCacheConnections[item.mOwnerID] =
-			LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name));
+		LLAvatarNameCache::callback_connection_t cb = LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name));
+		mBlacklistAvatarNameCacheConnections.insert(std::make_pair(item.mOwnerID, cb));
 	}
 }
 

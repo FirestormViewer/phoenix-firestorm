@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Friends Popup">
+	<menu_item_call label="Conférence à plusieurs" name="send_im"/>
+	<menu_item_call label="Ajouter à un cercle" name="Add to Set"/>
+	<menu_item_call label="Proposer une téléportation" name="offer_teleport"/>
+	<menu_item_call label="Supprimer ces amis" name="remove_friend"/>
+	<menu name="options" label="Options...">
+		<menu_item_check label="Afficher la colonne Nom d'utilisateur" name="show_username"/>
+		<menu_item_check label="Afficher la colonne Nom d'affichage" name="show_displayname"/>
+		<menu_item_check label="Afficher la colonne Nom Complet" name="show_fullname"/>
+		<menu_item_check label="Afficher les informations de permissions" name="show_permissions"/>
+		<menu_item_check label="Trier par nom d'utilisateur" name="sort_by_username"/>
+		<menu_item_check label="Trier par nom d'affichage" name="sort_by_displayname"/>
+		<menu_item_check label="Format du nom complet : Nom d'utilisateur (Nom d'affichage)" name="format_username_displayname"/>
+		<menu_item_check label="Format du nom complet : Nom d'affichage (Nom d'utilisateur)" name="format_displayname_username"/>
+		<menu_item_check label="Afficher la recherche" name="friend_filter" />
+	</menu>
+	<menu_item_check label="Statut En Ligne visible pour ces amis" name="GlobalOnlineStatusToggle"/>
+</context_menu>

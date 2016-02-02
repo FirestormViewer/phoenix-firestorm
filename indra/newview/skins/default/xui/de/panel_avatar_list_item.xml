@@ -22,8 +22,6 @@
 		[COUNT]J
 	</string>
 	<text name="avatar_name" value="(laden)"/>
-	<icon name="permission_online_theirs_icon" tool_tip="Sie können sehen, wenn dieser Freund online ist"/>
-	<icon name="permission_map_theirs_icon" tool_tip="Sie können die Position dieses Freundes auf der Karte sehen"/>
 	<icon name="permission_edit_theirs_icon" tool_tip="Sie können die Objekte dieses Freundes bearbeiten"/>
 	<icon name="permission_edit_mine_btn" tool_tip="Dieser Freund kann Ihre Objekte bearbeiten, löschen und an sich nehmen"/>
 	<icon name="permission_map_btn" tool_tip="Dieser Freund kann Sie auf der Karte finden"/>

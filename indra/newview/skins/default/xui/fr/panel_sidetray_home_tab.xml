@@ -6,7 +6,7 @@
 			<panel name="sidebar_people">
 				<text name="tab_name" value="Résidents"/>
 				<text name="tab_description">
-					Trouvez vos amis, vos groupes, vos contacts et les personnes se trouvant près de vous.
+					Trouvez vos amis, vos groupes, vos contacts et les personnes se trouvant à proximité.
 				</text>
 			</panel>
 			<panel name="sidebar_places">
