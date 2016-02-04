@@ -4038,7 +4038,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			LLAgentUI::buildFullname(my_name);
 			if (is_busy)
 			{
-				response = gSavedPerAccountSettings.getString("BusyModeResponse");
+				response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
 			}
 			else if (is_autorespond_nonfriends && !is_friend)
 			{
