@@ -3176,7 +3176,7 @@ URL: [MOAPURL]
 
 [MESSAGE]
 
-送信元のオブジェクト：&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;、所有者：[NAME]?
+送信元のオブジェクト：&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;、所有者：[NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="ページに移動"/>
 			<button name="Cancel" text="取り消し"/>

@@ -2451,7 +2451,7 @@ Si vous restez dans cette région, vous serrez déconnecté.
 	<notification name="LoadWebPage">
 Afficher la page Web [URL] ?
 [MESSAGE]
-De l'objet : &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propriétaire : [NAME]
+De l'objet : &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propriétaire : [NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="Afficher"/>
 			<button name="Cancel" text="Annuler"/>

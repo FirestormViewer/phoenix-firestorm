@@ -31,6 +31,7 @@
 // #include "llpanel.h"
 // </FS:Zi>
 #include "llbutton.h"
+#include "lllayoutstack.h"
 
 class LLLocationInputCtrl;
 class LLMenuGL;
@@ -120,6 +121,7 @@ private:
 	void rebuildTeleportHistoryMenu();
 	void showTeleportHistoryMenu(LLUICtrl* btn_ctrl);
 	void invokeSearch(std::string search_text);
+	void resizeLayoutPanel();
 	// callbacks
 	void onTeleportHistoryMenuItemClicked(const LLSD& userdata);
 	void onTeleportHistoryChanged();
@@ -138,6 +140,7 @@ private:
 	void onSearchCommit();
 	void onTeleportFinished(const LLVector3d& global_agent_pos);
 	void onTeleportFailed();
+	void onNavbarResized();
 	void onRegionNameResponse(
 			std::string typed_location,
 			std::string region_name,
@@ -159,6 +162,7 @@ private:
 	// }
 	// </FS:Zi>
 
+	S32							mNavPanWidth;
 	LLMenuGL*					mTeleportHistoryMenu;
 	LLPullButton*				mBtnBack;
 	LLPullButton*				mBtnForward;
@@ -169,6 +173,8 @@ private:
 	//LLRect						mDefaultNbRect;
 	//LLRect						mDefaultFpRect;
 	// </FS:Zi>
+	LLLayoutPanel* 				mNavigationPanel;
+	LLLayoutPanel* 				mFavoritePanel;
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
 	boost::signals2::connection	mHistoryMenuConnection;

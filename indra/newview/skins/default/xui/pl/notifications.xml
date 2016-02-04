@@ -3045,7 +3045,7 @@ Jeśli w nim zostaniesz, to symulator Cię wyloguje.
 
 [MESSAGE]
 
-Od obiektu: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, właściciela: [NAME]?
+Od obiektu: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, właściciela: [NAME_SLURL]?
 		<form name="form">
 			<button name="Gotopage" text="Załaduj"/>
 			<button name="Cancel" text="Anuluj"/>

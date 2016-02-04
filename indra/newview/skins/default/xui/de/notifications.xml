@@ -3126,7 +3126,7 @@ In Ihrem Inventar wird ein Lesezeichen erstellt, damit Sie diesem Einwohner schn
 
 [MESSAGE]
 
-Von Objekt: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, Eigentümer: [NAME]
+Von Objekt: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, Eigentümer: [NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="Zur Seite"/>
 			<button name="Cancel" text="Abbrechen"/>

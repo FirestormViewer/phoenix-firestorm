@@ -44,6 +44,7 @@
 #include "lllocationinputctrl.h"
 #include "llpaneltopinfobar.h"
 #include "llteleporthistory.h"
+#include "llresizebar.h"
 #include "llsearchcombobox.h"
 #include "llslurl.h"
 #include "llurlregistry.h"
@@ -274,8 +275,11 @@ LLNavigationBar::LLNavigationBar()
 	mBtnForward(NULL),
 	mBtnHome(NULL),
 	mCmbLocation(NULL),
-	mSearchComboBox(NULL),
-	mSaveToLocationHistory(false)
+	mSaveToLocationHistory(false),
+	mNavigationPanel(NULL),
+	mFavoritePanel(NULL),
+	mNavPanWidth(0),
+	mSearchComboBox(NULL)
 {
 	// buildFromFile( "panel_navigation_bar.xml");	// <FS:Zi> Make navigation bar part of the UI
 
@@ -358,6 +362,12 @@ void LLNavigationBar::setupPanel()
 
 	// <FS:Zi> Make navigation bar part of the UI
 	// LLHints::registerHintTarget("nav_bar", getHandle());
+
+	//mNavigationPanel = getChild<LLLayoutPanel>("navigation_layout_panel");
+	//mFavoritePanel = getChild<LLLayoutPanel>("favorites_layout_panel");
+	//mNavigationPanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
+	//mFavoritePanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
+
 	// return TRUE;
 	LLHints::registerHintTarget("nav_bar",mView->getHandle());
 	// </FS:Zi>
@@ -432,6 +442,18 @@ void LLNavigationBar::onBackButtonClicked(LLUICtrl* ctrl)
 {
 	LLTeleportHistory::getInstance()->goBack();
 	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
+}
+
+void LLNavigationBar::onNavbarResized()
+{
+	S32 new_nav_pan_width = mNavigationPanel->getRect().getWidth();
+	if(mNavPanWidth != new_nav_pan_width)
+	{
+		S32 new_stack_width = new_nav_pan_width + mFavoritePanel->getRect().getWidth();
+		F32 ratio = (F32)new_nav_pan_width / (F32)new_stack_width;
+		gSavedPerAccountSettings.setF32("NavigationBarRatio", ratio);
+		mNavPanWidth = new_nav_pan_width;
+	}
 }
 
 void LLNavigationBar::onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& param)
@@ -792,6 +814,8 @@ void LLNavigationBar::handleLoginComplete()
 	LLPanelTopInfoBar::instance().handleLoginComplete();
 	gStatusBar->handleLoginComplete();
 	mCmbLocation->handleLoginComplete();
+	// <FS:Ansariel> Commented out because we don't have the LL viewer layout
+	//resizeLayoutPanel();
 }
 
 // [RLVa:KB] - Checked: 2014-03-23 (RLVa-1.4.10)
@@ -802,6 +826,15 @@ void LLNavigationBar::refreshLocationCtrl()
 }
 // [/RLVa:KB]
 
+void LLNavigationBar::resizeLayoutPanel()
+{
+	LLRect nav_bar_rect = mNavigationPanel->getRect();
+
+	S32 nav_panel_width = (nav_bar_rect.getWidth() + mFavoritePanel->getRect().getWidth()) * gSavedPerAccountSettings.getF32("NavigationBarRatio");
+
+	nav_bar_rect.setLeftTopAndSize(nav_bar_rect.mLeft, nav_bar_rect.mTop, nav_panel_width, nav_bar_rect.getHeight());
+	mNavigationPanel->handleReshape(nav_bar_rect,true);
+}
 void LLNavigationBar::invokeSearch(std::string search_text)
 {
 	LLFloaterReg::showInstance("search", LLSD().with("category", "all").with("query", LLSD(search_text)));
