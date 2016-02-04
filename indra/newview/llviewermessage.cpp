@@ -132,6 +132,7 @@
 #include "fsareasearch.h"
 #include "fscommon.h"
 #include "fsdata.h"
+#include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
@@ -1415,14 +1416,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 						{
 							// <FS:Ansariel> FIRE-817: Separate place details floater
 							//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-							{
-								LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							}
-							else
-							{
-								LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							}
+							FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "landmark").with("id", item->getUUID()));
 							// </FS:Ansariel>
 						}
 						else if("group_offer" == from_name)
@@ -1435,14 +1429,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 							// <FS:Ansariel> FIRE-817: Separate place details floater
 							//LLFloaterSidePanelContainer::showPanel("places", args);
-							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-							{
-								LLFloaterReg::showInstance("fs_placedetails", args);
-							}
-							else
-							{
-								LLFloaterSidePanelContainer::showPanel("places", args);
-							}
+							FSFloaterPlaceDetails::showPlaceDetails(args);
 							// </FS:Ansariel>
 
 							continue;

@@ -79,6 +79,7 @@
 // [/RLVa:KB]
 #include "llmutelist.h"
 #include "lfsimfeaturehandler.h"
+#include "fsfloaterplacedetails.h"
 
 // Ansariel: For accessing the radar data
 #include "fsradar.h"
@@ -1530,14 +1531,7 @@ void LLNetMap::handleShowProfile(const LLSD& sdParam) const
 		sdParams["y"] = mPosGlobalRightClick.mdV[VY];
 		sdParams["z"] = mPosGlobalRightClick.mdV[VZ];
 
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", sdParams);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", sdParams);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(sdParams);
 	}
 }
 

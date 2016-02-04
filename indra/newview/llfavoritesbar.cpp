@@ -55,6 +55,7 @@
 #include "llsdserialize.h"
 
 #include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
+#include "fsfloaterplacedetails.h"
 
 static LLDefaultChildRegistry::Register<LLFavoritesBarCtrl> r("favorites_bar");
 
@@ -1263,14 +1264,7 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 	else if (action == "copy_slurl")
