@@ -9342,6 +9342,17 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	payload["chat_channel"] = chat_channel;
 	payload["object_name"] = object_name;
 
+	// <FS:Ansariel> FIRE-17158: Remove "block" button for script dialog of own objects
+	bool own_object = false;
+	std::string self_name;
+	LLAgentUI::buildFullname(self_name);
+	if (LLCacheName::buildFullName(first_name, last_name) == self_name)
+	{
+		own_object = true;
+	}
+	payload["own_object"] = own_object;
+	// </FS:Ansariel>
+
 	// build up custom form
 	S32 button_count = msg->getNumberOfBlocks("Buttons");
 	if (button_count > SCRIPT_DIALOG_MAX_BUTTONS)
