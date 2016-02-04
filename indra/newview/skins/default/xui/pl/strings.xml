@@ -4331,7 +4331,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Nadchodzi wiadomość od [NAME]
 	</string>
 	<string name="IM_autoresponse_sent">
-		Autoodpowiedź wysłana
+		Autoodpowiedź wysłana: [MESSAGE]
 	</string>
 	<string name="IM_autoresponse_item_sent">
 		Wysłano przedmiot: [ITEM_NAME]

@@ -4323,7 +4323,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Mensaje entrante de  [NAME]
 	</string>
 	<string name="IM_autoresponse_sent">
-		Autorrespuesta enviada
+		Autorrespuesta enviada: [MESSAGE]
 	</string>
 	<string name="answered_call">
 		Han respondido a tu llamada

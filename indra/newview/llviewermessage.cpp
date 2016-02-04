@@ -2960,6 +2960,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
 			// Session id will be null if avatar answers from offline IM via email
+			std::string response;
 			if (!gIMMgr->hasSession(session_id) && session_id.notNull())
 			{
 			// </FS:Ansariel>
@@ -2967,7 +2968,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				has_session = false;
 				// <FS:Ansariel> FS autoresponse feature
 				std::string my_name;
-				std::string response;
 				LLAgentUI::buildFullname(my_name);
 				if (is_do_not_disturb)
 				{
@@ -2987,6 +2987,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
 				}
 				// </FS:PP>
+				else
+				{
+					LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
+				}
 				pack_instant_message(
 					gMessageSystem,
 					gAgent.getID(),
@@ -3056,11 +3060,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			if (!has_session)
 			{
 				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+				LLStringUtil::format_map_t args;
+				args["MESSAGE"] = response;
+
 				gIMMgr->addMessage(
 					session_id,
 					gAgentID,
 					LLStringUtil::null, // Pass null value so no name gets prepended
-					LLTrans::getString("IM_autoresponse_sent"),
+					LLTrans::getString("IM_autoresponse_sent", args),
 					false,
 					name,
 					IM_NOTHING_SPECIAL,
