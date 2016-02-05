@@ -144,6 +144,18 @@ std::string FSLSLPreprocessor::encode(const std::string& script)
 	//otext += "\n//^ = determine what featureset is supported";
 	otext += llformat("\n//program_version %s", LLAppViewer::instance()->getWindowTitle().c_str());
 	
+	time_t utc_time = time_corrected();
+	std::string timeStr ="["+LLTrans::getString ("TimeMonth")+"]/["
+				 +LLTrans::getString ("TimeDay")+"]/["
+				 +LLTrans::getString ("TimeYear")+"] ["
+				 +LLTrans::getString ("TimeHour")+"]:["
+				 +LLTrans::getString ("TimeMin")+"]:["
+				 +LLTrans::getString("TimeSec")+"]";
+	LLSD substitution;
+	substitution["datetime"] = (S32) utc_time;
+	LLStringUtil::format (timeStr, substitution);
+	otext += "\n//last_compiled " + timeStr;
+	
 	otext += "\n";
 	
 	if (mono)
