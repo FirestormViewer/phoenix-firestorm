@@ -345,6 +345,12 @@ void LLLandmarkActions::onRegionResponseSLURL(slurl_callback_t cb,
 	bool gotSimName = LLWorldMap::getInstance()->simNameFromPosGlobal(global_pos, sim_name);
 	if (gotSimName)
 	{
+		// <FS:Ansariel> Debug...
+		if (sim_name.empty())
+		{
+			LL_WARNS() << "Requested sim name is empty!" << LL_ENDL;
+		}
+		// </FS:Ansariel>
 	  slurl = LLSLURL(sim_name, global_pos).getSLURLString();
 	}
 	else

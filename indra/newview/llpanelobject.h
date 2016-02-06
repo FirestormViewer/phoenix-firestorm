@@ -113,9 +113,9 @@ protected:
 	BOOL			mHasSizeClipboard;
 	BOOL			mHasRotClipboard;
 
-	LLSD			mPramsClipboard;
+	LLSD			mParamsClipboard;
 	LLVolumeParams	mClipboardVolumeParams;
-	BOOL			mHasParamClipboard;
+	BOOL			mHasParamsClipboard;
 	BOOL			mHasFlexiParam;
 	BOOL			mHasSculptParam;
 	BOOL			mHasLightParam;

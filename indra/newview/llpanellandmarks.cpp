@@ -56,6 +56,7 @@
 #include "lltoggleablemenu.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
+#include "fsfloaterplacedetails.h"
 // [RLVa:KB]
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -379,14 +380,7 @@ void LLLandmarksPanel::onSelectorButtonClicked()
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 }
@@ -814,14 +808,7 @@ void LLLandmarksPanel::onAddAction(const LLSD& userdata) const
 			{
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
 				// </FS:Ansariel>
 			}
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5

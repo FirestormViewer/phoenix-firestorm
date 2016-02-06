@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_contact_set_configure" title="Paramètres du cercle">
+	<floater.string name="title">Paramètres de [NAME]</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">Paramètres du cercle :</text>
+		<button name="rename_btn" label="Renommer"/>
+		<color_swatch label="Couleur" name="set_swatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
+		<check_box label="Afficher les notifications" name="show_set_notifications"/>
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">Paramètres généraux :</text>
+		<color_swatch label="Couleur par défaut" name="global_swatch" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs" width="105"/>
+		<text name="label_online">Notifications :</text>
+		<check_box label="Notification de tous mes cercles dans les notifications" name="ChatOnlineNotification"/>
+		<check_box label="Notification de tous les cercles dans le chat local" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="Notification des cercles paramétrés dans les notifications" name="FSContactSetsNotificationToast"/>
+		<check_box label="Notification des cercles paramétrés dans le chat local" name="FSContactSetsNotificationNearbyChat"/>
+		<text name="label_colors">Couleurs personnalisées :</text>
+		<check_box label="Coloriser les icônes de la minicarte en se basant sur le cercle" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="Couleur du nom flottant basée sur le cercle" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="Couleur des noms dans le radar &amp; contacts basée sur le cercle" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Couleur des messages basée sur le cercle" name="FSContactSetsColorizeChat"/>
+	</panel>
+</floater>

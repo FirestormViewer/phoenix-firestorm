@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_voice_controls" title="CONTROLES DE LA VOIX">
-	<string name="title_nearby">
-		PARAMÈTRES VOCAUX
-	</string>
-	<string name="title_group">
-		APPEL DE GROUPE AVEC [GROUP]
-	</string>
-	<string name="title_adhoc">
-		CONFÉRENCE
-	</string>
-	<string name="title_peer_2_peer">
-		APPEL AVEC [NAME]
-	</string>
-	<string name="no_one_near">
-		Il n&apos;y a personne près de vous avec le chat vocal activé
-	</string>
+<floater name="floater_voice_controls" title="Contrôles de la voix">
+	<string name="title_nearby">Chat vocal à proximité</string>
+	<string name="title_group">Conférence audio avec [GROUP]</string>
+	<string name="title_adhoc">Conférence audio</string>
+	<string name="title_peer_2_peer">Appel audio avec [NAME]</string>
+	<string name="no_one_near">Personne à proximité n'a le Chat vocal activé</string>
 	<layout_stack name="my_call_stack">
-		<layout_panel name="my_panel">
-			<text name="user_text" value="Mon avatar :"/>
-		</layout_panel>
 		<layout_panel name="leave_call_panel">
 			<layout_stack name="voice_effect_and_leave_call_stack">
-				<layout_panel name="leave_call_btn_panel">
-					<button label="Quitter l&apos;appel" name="leave_call_btn"/>
-				</layout_panel>
+				<layout_panel name="leave_call_btn_panel"><button label="Mettre fin à l'appel" name="leave_call_btn"/></layout_panel>
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>

@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!--alba: removed all 'new...' used for clothes (redundant)
-+ added physics + changed 'pluriel' to 'singulier' (grammatical mistake)-->
 <menu name="menu_inventory_add">
-	<menu label="Importer" name="upload">
+	<menu label="Uploader" name="upload">
 		<menu_item_call label="Image ([COST])..." name="Upload Image"/>
 		<menu_item_call label="Son ([COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
-		<menu_item_call label="Modèle..." name="Upload Model"/>
-		<menu_item_call label="Assistant Modèle..." name="Upload Model Wizard"/>
-		<menu_item_call label="Lot ([COST] par fichier)..." name="Bulk Upload"/>
+		<menu_item_call label="Mesh..." name="Upload Model"/>
+		<menu_item_call label="En Bloc ([COST] par fichier)..." name="Bulk Upload"/>
+		<menu_item_call label="Importer un ensemble lié..." name="import linkset"/>
 	</menu>
-	<menu_item_call label="Nouveau dossier" name="New Folder"/>
-	<menu_item_call label="Nouveau script" name="New Script"/>
-	<menu_item_call label="Nouvelle note" name="New Note"/>
-	<menu_item_call label="Nouveau geste" name="New Gesture"/>
-	<menu label="Nouvel habit" name="New Clothes">
-		<menu_item_call label="Chemise" name="New Shirt"/>
-		<menu_item_call label="Pantalon" name="New Pants"/>
-		<menu_item_call label="Chaussures" name="New Shoes"/>
-		<menu_item_call label="Chaussettes" name="New Socks"/>
-		<menu_item_call label="Veste" name="New Jacket"/>
-		<menu_item_call label="Jupe" name="New Skirt"/>
-		<menu_item_call label="Gants" name="New Gloves"/>
-		<menu_item_call label="Débardeur" name="New Undershirt"/>
-		<menu_item_call label="Caleçon" name="New Underpants"/>
-		<menu_item_call label="Alpha" name="New Alpha"/>
-		<menu_item_call label="Tatouage" name="New Tattoo"/>
-		<menu_item_call label="Physique" name="New Physics"/>
+	<menu_item_call label="Nouveau Dossier" name="New Folder"/>
+	<menu_item_call label="Nouveau Script" name="New Script"/>
+	<menu_item_call label="Nouvelle Note" name="New Note"/>
+	<menu_item_call label="Nouveau Geste" name="New Gesture"/>
+	<menu label="Nouveau Vêtement" name="New Clothes">
+		<menu_item_call label="Nouvelle Chemise" name="New Shirt"/>
+		<menu_item_call label="Nouveau Pantalon" name="New Pants"/>
+		<menu_item_call label="Nouvelles Chaussures" name="New Shoes"/>
+		<menu_item_call label="Nouvelles Chaussettes" name="New Socks"/>
+		<menu_item_call label="Nouvelle Veste" name="New Jacket"/>
+		<menu_item_call label="Nouvelle Jupe" name="New Skirt"/>
+		<menu_item_call label="Nouveaux Gants" name="New Gloves"/>
+		<menu_item_call label="Nouveau Maillot de corps" name="New Undershirt"/>
+		<menu_item_call label="Nouveau Caleçon" name="New Underpants"/>
+		<menu_item_call label="Nouveau Masque Alpha" name="New Alpha"/>
+		<menu_item_call label="Nouveau Tatouage" name="New Tattoo"/>
+		<menu_item_call label="Nouveau Physique" name="New Physics"/>
 	</menu>
-	<menu label="Nouvelle partie du corps" name="New Body Parts">
-		<menu_item_call label="Silhouette" name="New Shape"/>
-		<menu_item_call label="Peau" name="New Skin"/>
-		<menu_item_call label="Cheveux" name="New Hair"/>
-		<menu_item_call label="Yeux" name="New Eyes"/>
+	<menu label="Nouvel Élément du corps" name="New Body Parts">
+		<menu_item_call label="Nouvelle Silhouette" name="New Shape"/>
+		<menu_item_call label="Nouvelle Peau" name="New Skin"/>
+		<menu_item_call label="Nouveaux Cheveux" name="New Hair"/>
+		<menu_item_call label="Nouveaux Yeux" name="New Eyes"/>
 	</menu>
 </menu>

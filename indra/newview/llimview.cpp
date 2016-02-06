@@ -4002,7 +4002,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			LLAgentUI::buildFullname(my_name);
 			if (is_busy)
 			{
-				response = gSavedPerAccountSettings.getString("BusyModeResponse");
+				response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
 			}
 			else if (is_autorespond_nonfriends && !is_friend)
 			{
@@ -4015,6 +4015,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			else if (is_afk && FSSendAwayAvatarResponse)
 			{
 				response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+			}
+			else
+			{
+				LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
 			}
 			pack_instant_message(
 				gMessageSystem,
@@ -4029,11 +4033,14 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				session_id);
 			gAgent.sendReliableMessage();
 
+			LLStringUtil::format_map_t args;
+			args["MESSAGE"] = response;
+
 			gIMMgr->addMessage(
 				session_id,
 				gAgentID,
 				LLStringUtil::null, // Pass null value so no name gets prepended
-				LLTrans::getString("IM_autoresponse_sent"),
+				LLTrans::getString("IM_autoresponse_sent", args),
 				false,
 				im_info->mName,
 				IM_NOTHING_SPECIAL,

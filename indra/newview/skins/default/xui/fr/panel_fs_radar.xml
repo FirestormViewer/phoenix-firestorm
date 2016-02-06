@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_radar">
+	<string name="MiniMapToolTipMsg" value="[REGION] (Double-clic pour ouvrir la carte, maintenez shift et faites glisser pour voir aux alentours)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Double-clic pour ouvrir la carte, maintenez shift et faites glisser pour voir aux alentours)"/>
+	<string name="avatar_name_count" value="Nom [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel label="bottom_panel" name="nearby_buttons_panel">
+			<filter_editor label="Filtrer" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Actions sur la personne sélectionnée"/>
+			<menu_button name="options_btn" tool_tip="Options du radar"/>
+			<button name="add_friend_btn" tool_tip="Devenir amis"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Nom" name="name" tool_tip="[TOTAL] avatars, [IN_REGION] dans la même région, [IN_CHAT_RANGE] à proximité"/>
+							<radar_list.columns name="voice_level" tool_tip="Converse en audio"/>
+							<radar_list.columns name="in_region" tool_tip="Est dans la même région"/>
+							<radar_list.columns name="typing_status" tool_tip="Écrit"/>
+							<radar_list.columns name="sitting_status" tool_tip="Est assis"/>
+							<radar_list.columns name="flags" tool_tip="Infos. de paiement"/>
+							<radar_list.columns name="has_notes" tool_tip="Notes"/>
+							<radar_list.columns label="Âge" name="age"/>
+							<radar_list.columns label="Vu le" name="seen"/>
+							<radar_list.columns label="Distance" name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout"><slider label="Distance (m):" name="NearMeRange"/></layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

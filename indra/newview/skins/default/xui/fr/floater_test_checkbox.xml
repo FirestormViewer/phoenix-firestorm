@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_checkbox">
+	<check_box label="Oh look it's a checkbox!" name="show_location_checkbox"/>
+	<check_box label="Minimal Checkbox" name="minimal_checkbox"/>
+	<check_box label="Disabled Checkbox" name="disabled_checkbox"/>
+	<check_box label="Text Enabled Color" name="text_enabled_color_checkbox"/>
+	<check_box label="Text Disabled Color" name="text_disabled_color_checkbox"/>
+	<check_box label="Initial Value Checked" name="initial_value_checkbox"/>
+	<check_box label="Font Monospace" name="font_checkbox"/>
+</floater>

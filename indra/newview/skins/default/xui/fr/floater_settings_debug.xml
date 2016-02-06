@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings_debug" title="PARAMÈTRES DE DÉBOGAGE">
-	<combo_box name="boolean_combo">
-		<combo_box.item label="VRAI" name="TRUE"/>
-		<combo_box.item label="FAUX" name="FALSE"/>
-	</combo_box>
-	<color_swatch label="Couleur" name="val_color_swatch" width="50"/>
-	<spinner label="x" name="val_spinner_1"/>
-	<spinner label="x" name="val_spinner_2"/>
-	<spinner label="x" name="val_spinner_3"/>
-	<spinner label="x" name="val_spinner_4"/>
-	<button label="Paramètres par défaut" name="default_btn"/>
+<floater name="settings_debug" title="Paramètres de débogage">
+	<panel name="debug_settings_search_panel"><search_editor label="Chercher ici" name="search_settings_input" tool_tip="Saisissez ici les termes de votre recherche. Les résultats affichés contiendront votre recherche dans le nom du paramètre ou son commentaire."/></panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Commentaire des paramètres de débogage. Donne des informations utiles sur le réglage que vous avez sélectionné."/>
+		<radio_group name="boolean_combo">
+			<radio_item label="TRUE" name="TRUE"/>
+			<radio_item label="FALSE" name="FALSE"/>
+		</radio_group>
+		<color_swatch name="val_color_swatch" label="Couleur"/>
+		<spinner label="Spin 1" name="val_spinner_1"/>
+		<spinner label="Spin 2" name="val_spinner_2"/>
+		<spinner label="Spin 3" name="val_spinner_3"/>
+		<spinner label="Spin 4" name="val_spinner_4"/>
+		<button label="Copier" name="copy_btn" tool_tip="Copier le nom du paramètre."/>
+		<button label="Réinitialiser" name="default_btn" tool_tip="Réinitialiser ce paramètre de débogage à sa valeur par défaut."/>
+	</panel>
 </floater>

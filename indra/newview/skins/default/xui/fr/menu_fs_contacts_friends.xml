@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Friends Popup">
+	<menu_item_call label="Voir le profil" name="show_agent"/>
+	<menu_item_call label="Envoyer un IM..." name="send_im"/>
+	<menu_item_call label="Voir l'historique de conversations" name="chat_history"/>
+	<menu_item_call label="Ajouter au cercle" name="Add to Set"/>
+	<menu_item_call label="Zoomer" name="zoom_agent"/>
+	<menu_item_call label="Se téléporter vers" name="teleportto_agent"/>
+	<menu_item_call label="Proposer une téléportation" name="offer_teleport"/>
+	<menu_item_call label="Demander une téléportation" name="request_teleport"/>
+	<menu_item_call label="Payer" name="pay"/>
+	<menu_item_call label="Suivre" name="track_agent"/>
+	<menu_item_call label="Supprimer cet ami" name="remove_friend"/>
+	<menu_item_call label="Copier le nom" name="url_copy_label"/>
+	<menu_item_call label="Copier l'adresse" name="url_copy"/>
+	<menu name="options" label="Options...">
+		<menu_item_check label="Afficher la colonne Nom d'utilisateur" name="show_username"/>
+		<menu_item_check label="Afficher la colonne Nom d'affichage" name="show_displayname"/>
+		<menu_item_check label="Afficher la colonne Nom complet" name="show_fullname"/>
+		<menu_item_check label="Afficher les colonnes de permissions" name="show_permissions"/>
+		<menu_item_check label="Trier par nom d'utilisateur" name="sort_by_username"/>
+		<menu_item_check label="Trier par nom d'affichage" name="sort_by_displayname"/>
+		<menu_item_check label="Format du nom complet : Nom d'utilisateur (Nom d'affichage)" name="format_username_displayname"/>
+		<menu_item_check label="Format du nom complet : Nom d'affichage (Nom d'utilisateur)" name="format_displayname_username"/>
+		<menu_item_check label="Afficher la recherche" name="friend_filter"/>
+	</menu>
+	<menu_item_check label="Statut connecté visible pour cet ami" name="GlobalOnlineStatusToggle"/>
+</context_menu>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Explorateur de sons">
+	<floater.string name="Playing">Joué</floater.string>
+	<floater.string name="NotPlaying">il y a [TIME] min</floater.string>
+	<floater.string name="Type_UI">UI</floater.string>
+	<floater.string name="Type_Avatar">Avatar</floater.string>
+	<floater.string name="Type_llTriggerSound">llTriggerSound</floater.string>
+	<floater.string name="Type_llLoopSound">llLoopSound</floater.string>
+	<floater.string name="Type_llPlaySound">llPlaySound</floater.string>
+	<check_box name="avatars_chk" label="Avatars"/>
+	<check_box name="objects_chk" label="Objets"/>
+	<check_box name="collision_chk" label="Sons de collisions par défaut" />
+	<check_box name="repeated_asset_chk" label="Répétitions" left_delta="180" />
+	<check_box name="pause_chk" label="Pause"/>
+	<scroll_list name="sound_list">
+		<columns label="Joué" name="playing" />
+		<columns label="Type" name="type" />
+		<columns label="Propriétaire" name="owner" />
+		<columns label="Son" name="sound" />
+	</scroll_list>
+	<button label="Écouter" name="play_locally_btn"/>
+	<button label="Zoomer" name="look_at_btn"/>
+	<button label="Stop" name="stop_btn"/>
+	<button label="Blacklister" name="bl_btn"/>
+</floater>

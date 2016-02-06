@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="MÉMOIRE DE LA RÉGION" name="script_limits_region_memory_panel">
-	<text name="script_memory">
-		Mémoire des scripts de parcelles
-	</text>
-	<text name="parcels_listed"/>
-	<text name="memory_used"/>
-	<text name="loading_text">
-		Chargement...
-	</text>
+<panel label="Ressources de la région" name="script_limits_region_memory_panel">
+	<text name="script_memory">Ressources des scripts sur le terrain</text>
+	<text name="loading_text">Chargement...</text>
 	<scroll_list name="scripts_list">
-		<scroll_list.columns label="Taille (Ko)" name="size" width="80"/>
+		<scroll_list.columns label="Taille (Ko)" name="size"/>
 		<scroll_list.columns label="URL" name="urls"/>
-		<scroll_list.columns label="Nom de l&apos;objet" name="name"/>
-		<scroll_list.columns label="Propriétaire d&apos;objet" name="owner" width="140"/>
-		<scroll_list.columns label="Parcelle" name="parcel"/>
-		<scroll_list.columns label="Endroit" name="location"/>
+		<scroll_list.columns label="Nom de l'objet" name="name"/>
+		<scroll_list.columns label="Propriétaire" name="owner"/>
+		<scroll_list.columns label="Terrain" name="parcel"/>
+		<scroll_list.columns label="Coordonnées" name="location"/>
 	</scroll_list>
-	<button label="Rafraîchir la liste" name="refresh_list_btn"/>
-	<button label="Surbrillance" name="highlight_btn"/>
-	<button label="Retour" name="return_btn"/>
+	<button label="Actualiser" name="refresh_list_btn"/>
+	<button label="Mettre en surbrillance" left="320" width="140" name="highlight_btn"/>
+	<button label="Renvoyer" name="return_btn"/>
 </panel>

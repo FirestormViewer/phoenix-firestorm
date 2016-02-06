@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<toggleable_menu name="Gear Menu">
-	<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
-	<menu_item_call label="Me lever" name="Stand Up"/>
-	<context_menu label="Enlever" name="Take Off &gt;">
-		<context_menu label="Habits" name="Clothes &gt;">
+<toggleable_menu name="Self Pie">
+	<menu_item_call label="S'asseoir" name="Sit Down Here"/>
+	<menu_item_call label="Se lever" name="Stand Up"/>
+	<context_menu label="Retirer" name="Take Off &gt;">
+		<context_menu label="Vêtements" name="Clothes &gt;">
 			<menu_item_call label="Chemise" name="Shirt"/>
 			<menu_item_call label="Pantalon" name="Pants"/>
 			<menu_item_call label="Jupe" name="Skirt"/>
@@ -15,17 +15,18 @@
 			<menu_item_call label="Caleçon" name="Self Underpants"/>
 			<menu_item_call label="Tatouage" name="Self Tattoo"/>
 			<menu_item_call label="Alpha" name="Self Alpha"/>
-			<menu_item_call label="Tous les habits" name="All Clothes"/>
+			<menu_item_call label="Tous les vêtements" name="All Clothes"/>
 		</context_menu>
 		<context_menu label="HUD" name="Object Detach HUD"/>
 		<context_menu label="Détacher" name="Object Detach"/>
 		<menu_item_call label="Tout détacher" name="Detach All"/>
 	</context_menu>
 	<menu_item_call label="Changer de tenue" name="Chenge Outfit"/>
-	<menu_item_call label="Modifier ma tenue" name="Edit Outfit"/>
-	<menu_item_call label="Modifier ma silhouette" name="Edit My Shape"/>
-	<menu_item_call label="Mes amis" name="Friends..."/>
-	<menu_item_call label="Mes groupes" name="Groups..."/>
-	<menu_item_call label="Mon profil" name="Profile..."/>
+	<menu_item_call label="Modifier la tenue" name="Edit Outfit"/>
+	<menu_item_call label="Modifier la silhouette" name="Edit My Shape"/>
+	<menu_item_call label="Amis" name="Friends..."/>
+	<menu_item_call label="Groupes" name="Groups..."/>
+	<menu_item_call label="Profil" name="Profile..."/>
 	<menu_item_call label="Déboguer les textures" name="Debug..."/>
+	<menu_item_call label="Dump XML" name="Dump XML"/>
 </toggleable_menu>

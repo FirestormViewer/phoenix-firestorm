@@ -1,114 +1,233 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Chat écrit" name="chat">
-	<tab_container name="tabs">
-		<panel name="ChatVisuals">
-			<radio_group name="chat_console_font_size">
+<panel label="Conversations" name="chat">
+	<tab_container label="Conversations" name="tabs">
+		<panel label="Apparence" name="ChatVisuals">
+			<text name="console_font_size" width="170">Police de la console à l'écran :</text>
+			<radio_group name="chat_console_font_size" left_delta="230" width="250">
 				<radio_item label="Petite" name="consradio"/>
 				<radio_item label="Moyenne" name="consradio2"/>
-				<radio_item label="Grande" name="consradio3"/>
+				<radio_item label="Large" name="consradio3"/>
+				<radio_item label="Énorme" name="consradio4"/>
 			</radio_group>
-			<check_box label="Bulles de chat" name="bubble_text_chat"/>
+			<check_box label="Jouer les animations de l'avatar (comme le cri)" name="play_avatar_animations"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Entourer les messages systèmes de crochets"/>
+			<check_box name="FSChatHistoryShowYou" label="Afficher 'Vous' dans les transcriptions à la place de votre nom"/>
+			<check_box name="EmotesUseItalic" label="Afficher les émotes en italique"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Mettre en gras les cris et les murmures en italique"/>
+			<check_box name="FSMarkObjects" label="Renommer les objets sans nom qui parlent avec '(aucun nom)' pour éviter les confusions"/>
+			<check_box label="Rediriger les messages émis avec llOwnerSay dans la fenêtre de débogage de script" name="FSllOwnerSayToScriptDebugWindow_checkbox"/>
+			<check_box label="Afficher des bulles de discussion" name="bubble_text_chat"/>
+			<check_box label="Afficher l'indicateur de saisie de texte dans les bulles de discussion" name="bubble_text_typing"/>
+			<check_box label="Afficher l'indicateur de saisie de texte dans le nom flottant au-dessus des avatars" name="FSShowTypingStateInNameTag"/>
+			<check_box name="FSSecondsinChatTimestamps" label="Afficher les secondes dans les timestamps [HH:MM:SS]"/>
+			<text name="show_timestamps_label" width="250">Afficher les secondes dans les timestamps de :</text>
+			<check_box label="Chat local" name="show_timestamps_nearby_chat" width="80"/>
+			<check_box label="IMs" name="show_timestamps_im" width="50"/>
+			<check_box label="Transcriptions" name="show_timestamps_transcripts"/>
+			<check_box name="FSConsoleClassicDrawMode" label="Utiliser le mode classique pour la console" tool_tip="L'affichage classique de la console affiche son arrière-plan d'un bloc pour toutes les lignes, avec comme longueur celle de la plus longue ligne."/>
+			<check_box name="ChatFullWidth" label="Utiliser la largeur totale de l'écran pour la console"/>
+			<spinner label="Faire disparaitre les messages après :" name="fade_chat_time" label_width="200" width="260"/>
+			<text name="text_box4">(secondes)</text>
+			<text name="text_box5">(# lignes)</text>
 		</panel>
-		<panel name="ChatWindows">
-			<text name="font_size">
-				Taille de la police:
-			</text>
-			<radio_group name="chat_font_size">
+		<panel label="Fenêtres" name="ChatWindows">
+			<text name="font_size" width="230">Taille de la police dans les conversations :</text>
+			<radio_group name="chat_font_size" left_delta="230" width="250">
 				<radio_item label="Petite" name="radio"/>
 				<radio_item label="Moyenne" name="radio2"/>
-				<radio_item label="Grande" name="radio3"/>
+				<radio_item label="Large" name="radio3"/>
+				<radio_item label="Énorme" name="radio4"/>
 			</radio_group>
-			<check_box label="Désactiver les en-tetes dans le chat et les MI (Style v1)" name="plain_text_chat_history"/>
-			<check_box label="Afficher les miniatures lorsque les en-tetes sont activés" name="ShowChatMiniIcons"/>
-			<text name="show_ims_in_label">
-				Afficher les IM dans :
-			</text>
-			<radio_group name="chat_window" tool_tip="Afficher vos messages instantanés dans plusieurs fenetres ou dans une seule fenetre avec plusieurs onglets (redémarrage requis)">
-				<radio_item label="Plusieurs fenetres" name="radio"/>
+			<check_box name="IMShowNamesForP2PConv" label="Afficher les noms dans les conversations privées"/>
+			<check_box label="Utiliser le style V1 des entêtes de chat" name="plain_text_chat_history"/>
+			<check_box label="Lorsque le style V3 des conversations est utilisé, afficher une icône devant le nom des gens" name="ShowChatMiniIcons"/>
+			<check_box label="Afficher la fin de la dernière conversation" name="LogShowHistory"/>
+			<check_box name="FSTypingChevronPrefix" label="Chevron (&gt;) additionnel comme indicateur de saisie dans les conversations privées"/>
+			<text name="show_unread_messages_label" width="225">Notification de nouveau message pour :</text>
+			<check_box name="FSNotifyUnreadChatMessages" label="Chat local" width="75" tool_tip="Affiche une notification avec le nombre de messages non-lus dans le Chat local si la barre de défilement n'est pas descendue au maximum."/>
+			<check_box name="FSNotifyUnreadIMMessages" label="Messages privés et de groupe" tool_tip="Affiche une notification avec le nombre de messages non-lus dans la conversation privée ou les messages du groupe si la barre de défilement n'est pas descendue au maximum."/>
+			<text name="show_ims_in_label" width="150">Afficher les IMs dans :</text>
+			<radio_group name="chat_window" tool_tip="Affiche vos conversations privées dans des fenêtre séparées, ou dans une fenêtre avec plusieurs onglets (Redémarrage requis)">
+				<radio_item label="Fenêtres séparées" name="radio"/>
 				<radio_item label="Onglets" name="radio2"/>
 			</radio_group>
-			<text name="req_restart_ims" width="150">
-				(redémarrage requis)
+			<text name="req_restart_ims" width="140">(Redémarrage requis)</text>
+			<text name="tab_direction_label">Orientation des onglets :</text>
+			<radio_group width="190" name="chat_tab_direction" tool_tip="Modifiez la disposition des onglets de conversation entre le mode horizontal et vertical lorsque la consolidation des conversations par onglet est active. (Redémarrage requis)">
+				<radio_item label="Horizontale" name="radio_horizontal" width="130"/>
+				<radio_item label="Verticale" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs" width="140">(Redémarrage requis)</text>
+			<text name="FSIMTabNameFormat_label" width="180">Format du nom sur les onglets :</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Nom d'affichage" name="display_name"/>
+				<combo_box.item label="Nom d'utilisateur" name="user_name"/>
+				<combo_box.item label="Nom d'affichage (Nom d'utilisateur)" name="display_user_name"/>
+				<combo_box.item label="Nom d'utilisateur (Nom d'affichage)" name="user_display_name"/>
+			</combo_box>
+			<check_box name="FSHighlightGroupMods" label="Accentuer les messages des modérateurs de groupe"/>
+			<text name="Moderator Name Style">Noms :</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Gras" name="BOLD"/>
+				<combo_box.item label="Italique" name="ITALIC"/>
+				<combo_box.item label="Gras &amp; Italique" name="BOLDITALIC"/>
+				<combo_box.item label="Souligné" name="UNDERLINE"/>
+				<combo_box.item label="Gras &amp; Souligné" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Italique &amp; Souligné" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Gras, Italique &amp; Souligné" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">Text :</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Gras" name="BOLD"/>
+				<combo_box.item label="Italique" name="ITALIC"/>
+				<combo_box.item label="Gras &amp; Italique" name="BOLDITALIC"/>
+				<combo_box.item label="Souligné" name="UNDERLINE"/>
+				<combo_box.item label="Gras &amp; Souligné" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Italique &amp; Souligné" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Gras, Italique &amp; Souligné" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="Désactiver tous les chats de groupe"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Désactiver le Chat du groupe lorsque les notices de celui-ci sont désactivées"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Ignorer automatiquement toute proposition de conférence écrite"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Les signaler dans le Chat local"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Ne pas ignorer les conférences de mes amis"/>
+			<text name="group_snooze_time_label" width="180" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0.">
+               Durée de la mise en sourdine :
 			</text>
-			<text name="req_restart_chattabs" width="150">
-				(redémarrage requis)
-			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0."/>
+			<text name="group_snooze_time_seconds_label" tool_tip="Durée pour laquelle le Chat de groupe sera ignoré en appuyant sur le bouton 'Ignorer temporairement'. La fenêtre se fermera jusqu'au prochain message reçu si la valeur est fixée à 0.">secondes</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="Définir la mise en sourdine groupe par groupe"/>
 		</panel>
-		<panel name="ChatTyping">
-			<button name="autoreplace_showgui" label="Rechercher/Remplacer"/>
-			<button name="spellcheck_showgui" label="Orthographe"/>
-			<button label="Traduction..." name="translation_settings_btn"/>
-			<check_box label="Exécuter l&apos;animation clavier quand vous écrivez" name="play_typing_animation"/>
+		<panel label="Saisie" name="ChatTyping">
+			<button name="autoreplace_showgui" label="Substitution automatique..."/>
+			<button name="spellcheck_showgui" label="Correcteur orthographique..."/>
+			<button name="translation_settings_btn" label="Traduction automatique..."/>
+			<check_box label="Jouer les animations de saisie lorsque je discute" name="play_typing_animation"/>
+			<check_box label="Jouer également les animations de saisie lorsque j'utilise '/me'" name="play_typing_animation_emote"/>
+			<check_box label="Jouer les sons du clavier lorsque les personnes à proximité écrivent" name="play_typing_sound"/>
+			<check_box label="Indiquer à mon correspondant que je suis en train d'écrire dans les conversations privées" name="FSSendTypingState"/>
+			<check_box name="FSChatbarGestureAutoCompleteEnable" label="Activer l'autocomplétion des gestes dans la barre de conversation du Chat local"/>
+			<check_box name="FSChatbarNamePrediction" label="Activer l'autocomplétion des noms dans le Chat local"/>
+			<check_box name="AllowMUpose" label="':' est un synonyme pour '/me'"/>
+			<check_box name="AutoCloseOOC" label="Fermer automatiquement les doubles parenthèses ((OOC))"/>
+			<check_box name="FSShowIMSendButton" label="Afficher le bouton envoyer dans les conversations privées"/>
+			<check_box name="FSNearbyChatbar" label="Afficher une zone de saisie dans la fenêtre du Chat local"/>
+			<check_box name="FSShowChatChannel" label="Afficher la sélection du numéro canal dans la fenêtre du Chat local"/>
+			<check_box name="FSShowChatType" label="Afficher un bouton Parler / Chuchoter / Crier dans la fenêtre du Chat local"/>
+			<check_box label="Masquer la barre de conversation principale" name="AutohideChatBar" tool_tip="Masque la barre de conversation en bas à gauche de l'écran et l'affiche lorsque votre souris passe au-dessus de la zone."/>
+			<check_box label="Désélectionner la zone de saisie après l'envoi d'un message" name="CloseChatOnReturn"/>
+			<check_box label="Désélectionner l'historique du Chat également" name="FSUnfocusChatHistoryOnReturn"/>
+			<text name="textUseKeyboardShortcuts">Utiliser les raccourcis clavier :</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl+Entrée (Crier)" tool_tip="Utiliser le raccourci Ctrl+Entrée pour crier dans le Chat local."/>
+			<check_box name="FSUseShiftWhisper" label="Maj+Entrée (Chuchoter)" tool_tip="Utiliser le raccourci Shift+Entrée pour chuchoter dans le Chat local."/>
+			<check_box name="FSUseAltOOC" label="Alt+Entrée ((OOC))" tool_tip="Utiliser le raccourci Alt+Entrée pour parler 'hors personnage' (OOC) dans le Chat local."/>
 		</panel>
-		<panel name="ChatNotices">
-			<text name="disable_toast_label">
-				Activer les popups de chat entrant:
-			</text>
-			<check_box width="125" label="Chats de groupe" name="EnableGroupChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche a réception d&apos;un message de chat de groupe."/>
-			<check_box label="Chats IM" name="EnableIMChatPopups" tool_tip="Cocher cette case pour qu&apos;un popup s&apos;affiche a réception d&apos;un message instantané."/>
-			<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté ([EMAIL])" name="send_im_to_email"/>
+		<panel label="Notifications" name="ChatNotices">
+			<text name="disable_toast_label">Activer les toasts de chat lors de la réception d'un nouveau message pour :</text>
+			<check_box name="EnableGroupChatPopups" label="Chats de groupe" tool_tip="Cocher pour voir les annonces lors de la réception d'un nouveau message de groupe."/>
+			<check_box name="EnableIMChatPopups" label="IMs" tool_tip="Cocher pour voir les annonces lors de la réception d'un nouvel IM."/>
+			<check_box name="FSUseNearbyChatConsole" label="Utiliser la console pour les notifications de chat au lieu de fenêtres flottantes"/>
+			<check_box name="FSLogImToChatConsole" label="Afficher les IMs dans la console de conversation"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Afficher le Chat de groupe dans la console de conversation"/>
+			<text name="FSShowGroupNameLength_label" width="340">Longueur de nom de groupe à afficher dans les transcriptions</text>
+			<spinner tool_tip="-1 pour le nom complet, 0 pour désactiver" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Afficher les messages reçus hors-ligne à la connexion"/>
+			<check_box label="Envoyer les IMs par email si je suis déconnecté ([EMAIL])" name="send_im_to_email"/>
+			<check_box name="FSShowIMInChatHistory" label="Afficher les IMs dans le Chat local"/>
+			<check_box name="FSLogIMInChatHistory" label="Sauvegarder les IMs dans le Chat local"/>
+			<text name="FSIMChatHistoryFade_label">Fondu du texte des IM dans le fond de la fenêtre de Chat</text>
+			<spinner tool_tip="0.25-1.0, 0.25 pour un fondu important, 1 pour aucun fondu" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Afficher le nombre d'IMs non lus dans la barre de titre de Firestorm"/>
+			<check_box name="FSAnnounceIncomingIM" label="Annonce de réception d'IMs dès que l'expéditeur commence à écrire"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Flasher l'onglet d'IM quand l'ami se connecte ou se déconnecte"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Flasher le bouton de la fenêtre de conversation quand on parle sur le Chat local" tool_tip="Clignotement du bouton de conversation quand on parle en chat local. La fenêtre de chat local doit être combinée à la fenêtre de conversations, et la fenêtre de conversations doit être fermée pour que le bouton clignote."/>
+			<check_box name="FSNotifyIMFlash" label="Flasher le bouton de la fenêtre de conversation quand je reçoit un IM" tool_tip="Clignotement du bouton de conversation quand on reçoit un IM. La fenêtre d'IM doit être combinée à la fenêtre de conversations, et la fenêtre de conversations doit être fermée pour que le bouton clignote. Cette option est disponible uniquement si les IMs sont affichés dans des onglets au lieu de fenêtres séparées (voir l'onglet 'Fenêtres de conversation')."/>
+			<check_box name="FSReportMutedGroupChat" label="Signaler le Chat de groupe ignoré dans le Chat local"/>
+			<check_box name="FSGroupNoticesToIMLog" label="Afficher les notices de groupe dans le Chat du groupe"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Afficher également leurs sujets et leurs auteurs"/>
 		</panel>
-		<panel name="tab-CmdLine" label="LigneCmd">
-			<check_box name="chat_cmd_toggle" label="Utiliser la ligne de chat comme ligne de commande"/>
-			<text name="FSCmdLineCalc_txt">
-				Express. math. (Taper cmd SIN(2+2))
-			</text>
-			<text name="FSCmdLineDrawDistance_txt">
-				Distance d'affichage (Taper cmd dist.)
-			</text>
-			<text name="FSCmdLineBandWidth_txt">
-				Bande Pass. max (Taper cmd kbps)
-			</text>
-			<text name="FSCmdLineAO_txt">
-				AO dés / activé (Taper cmd off / on)
-			</text>
-			<text name="FSCmdLineClearChat_txt">
-				Purger l'historique de chat (Taper cmd)
-			</text>
-			<line_editor name="FSCmdLineClearChat" tool_tip="Purge l'historique de chat pour vous prémunir du lag du aux spammers de chat."/>
-			<text name="FSCmdLineMedia_txt">
-				Changer l'URL média (Taper cmd url)
-			</text>
-			<line_editor name="FSCmdLineMedia" tool_tip="Entre et joue un URL dans le stream média de la parcelle. Identique a menu Monde › A propos du terrain › Média"/>
-			<text name="FSCmdLineMusic_txt">
-				Changer l'URL musique (Taper cmd url)
-			</text>
-			<line_editor name="FSCmdLineMusic" tool_tip="Entre et joue un URL dans le stream audio de la parcelle. Identique a menu Monde › A propos du terrain › Son"/>
-			<text name="FSCmdLineRezPlatform_txt">
-				Créer plateforme (Taper cmd 1 a 64)
-			</text>
-			<line_editor name="FSCmdLineRezPlatform" tool_tip="Créé une plateforme au diametre voulu juste sous vos pieds, peu importe l'altitude a laquelle vous vous trouvez."/>
-			<slider name="FSCmdLinePlatformSize" label="Dia." tool_tip="Diametre de la plateforme a créer."/>
-			<text name="FSCmdLineKeyToName_txt">
-				Nom depuis la clé UUID (Taper cmd clé)
-			</text>
-			<text name="FSCmdLinePos_txt">
-				TP interne au sim (taper cmd x y z)
-			</text>
-			<text name="FSCmdLineGround_txt">
-				TP au sol (taper cmd)
-			</text>
-			<text name="FSCmdLineHeight_txt">
-				TP en altitude (Taper cmd Z)
-			</text>
-			<text name="FSCmdTeleportToCam_txt">
-				TP a la pos. de la cam. (Taper cmd)
-			</text>
-			<text name="FSCmdLineOfferTp_txt">
-				Envoyer un TP a... (Taper cmd clé UUID)
-			</text>
-			<text name="FSCmdLineTP2_txt">
-				Vous TP vers... (Taper cmd nom)
-			</text>
-			<line_editor name="FSCmdLineTP2" tool_tip="Vous téléporter vers quelqu'un. Cette commande accepte les noms partiels et est insensible a la casse (majuscule/minuscule). Un meilleur résultat s'obtient avec le radar ouvert (Ctl-Maj-A)."/>
-			<text name="FSCmdLineTeleportHome_txt">
-				TP au domicile (Taper cmd)
-			</text>
-			<text name="FSCmdLineMapTo_txt">
-				TP vers le sim x (Taper cmd NomDuSim)
-			</text>
-			<check_box name="toggle" label="Conserver la pos. entre les régions"/>
+		<panel label="Radar" name="ChatRadar">
+			<check_box name="reportChatRangeEnter" label="Le radar signale quand un avatar est à portée de chat"/>
+			<check_box name="PlayModeUISndRadarChatEnter" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarChatEnter" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarChatEnter" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="reportChatRangeLeave" label="Le radar signale quand un avatar est hors de portée de chat"/>
+			<check_box name="PlayModeUISndRadarChatLeave" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarChatLeave" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarChatLeave" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="reportDrawRangeEnter" label="Le radar signale quand un avatar entre dans la distance d'affichage"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarDrawEnter" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarDrawEnter" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="reportDrawRangeLeaave" label="Le radar signale quand un avatar quitte la distance d'affichage"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarDrawLeave" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarDrawLeave" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="RadarReportSimRangeEnter" label="Le radar signale quand un avatar entre dans la région"/>
+			<check_box name="PlayModeUISndRadarSimEnter" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarSimEnter" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarSimEnter" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="RadarReportSimRangeLeave" label="Le radar signale quand un avatar quitte la région"/>
+			<check_box name="PlayModeUISndRadarSimLeave" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarSimLeave" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarSimLeave" label="↻" tool_tip="Réinitialiser."/>
+			<check_box name="RadarEnterChannelAlert" label="Communiquer les arrivées aux scripts"/>
+			<check_box name="RadarLeaveChannelAlert" label="Communiquer les départs aux scripts"/>
+			<check_box name="FSRadarEnhanceByBridge" label="Améliorer le radar avec le Bridge LSL" tool_tip="Activer cette option améliorera la détermination des positions des avatars à haute altitude dans le radar notamment si ceux-ci sont hors de distance d'affichage."/>
+			<text name="AgeAlertLabel">Alerte d'âge :</text>
+			<text name="RadarAvatarAgeAlertValueLabel">Seuil :</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Colore la colonne d'âge dans le radar. Définir à -1 pour désactiver."/>
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">Jours</text>
+			<check_box name="RadarAvatarAgeAlert" label="Signaler les résidents plus jeunes que l'âge spécifié"/>
+			<check_box name="PlayModeUISndRadarAgeAlert" label="Son à jouer :"/>
+			<button name="Prev_UISndRadarAgeAlert" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndRadarAgeAlert" label="↻" tool_tip="Réinitialiser."/>
 		</panel>
-		
+		<panel label="Alerte par mot-clé" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Activer les alertes par mots-clés"/>
+			<check_box name="FSKeywordInChat" label="Détecter les mots-clés dans le chat local"/>
+			<check_box name="FSKeywordInIM" label="Détecter les mots-clés dans les IMs et chats de groupes"/>
+			<check_box name="FSKeywordSpeakersName" label="Détecter le nom de l'expéditeur parmi les mots-clés"/>
+			<check_box name="FSKeywordCaseSensitive" label="Tous les mots clés sont sensibles à la casse"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Ne faire correspondre que les mots entiers"/>
+			<text name="textFSKeywords">Mots-clés (séparés par des virgules) :</text>
+			<check_box name="FSKeywordChangeColor" label="Couleur d'alerte"/>
+			<color_swatch name="colorswatch" tool_tip="Cliquer pour ouvrir le nuancier"/>
+			<check_box name="FSKeywordPlaySound" label="Jouer le son d'alerte"/>
+			<text name="textFSKeywordSound">Son à jouer :</text>
+			<button name="Prev_UISndFSKeywordSound" label="▶" tool_tip="Jouer ce son."/>
+			<button name="Def_UISndFSKeywordSound" label="↻" tool_tip="Réinitialiser."/>
+		</panel>
+		<panel label="Commandes" name="tab-CmdLine">
+			<check_box label="Utiliser la barre de chat pour les lignes de commandes" name="chat_cmd_toggle"/>.
+			<text name="FSCmdLineCalc_txt">Calc. expressions (ex: cmd SIN(2+2))</text>
+			<text name="FSCmdLineDrawDistance_txt">Changer Dist Affichage (ex: cmd meters)</text>
+			<text name="FSCmdLineBandWidth_txt">Bande passante max. (ex: cmd kbps)</text>
+			<text name="FSCmdLineCopyCam_txt">Copier la position de la caméra</text>
+			<text name="FSCmdLineAO_txt">Activer/désactiver l'AO (ex: cmd on/off)</text>
+			<text name="FSCmdLineClearChat_txt">Effacer les transcriptions (ex: cmd)</text>
+			<line_editor tool_tip="Effacer les transcriptions de conversation pour limiter les effets de spams." name="FSCmdLineClearChat"/>
+			<text name="FSCmdLineMedia_txt">Définir l'url du média (ex: cmd url type)</text>
+			<line_editor tool_tip="Défini et joue le streaming correspondant à l'url entrée" name="FSCmdLineMedia"/>
+			<text name="FSCmdLineMusic_txt">Défini l'url de la musique (ex: cmd url)</text>
+			<line_editor tool_tip="Défini et joue la musique en streaming correspondant à l'url entrée" name="FSCmdLineMusic"/>
+			<text name="FSCmdLineRezPlatform_txt">Bâtir une plateforme (ex: cmd 0 - 64)</text>
+			<slider name="FSCmdLinePlatformSize" label="Largeur" tool_tip="De quelle taille voulez-vous que la plateforme soit ?"/>
+			<text name="FSCmdLineKeyToName_txt">Obtenir le nom d'un av. via son UUID (ex: cmd key)</text>
+			<text name="FSCmdLineRollDice_txt">Lancer de dés (ex: cmd dice faces mt mv)</text>
+			<line_editor tool_tip="Lancer de dés - cmd [nombre de dés] [nombre de faces] [type de modificateur (optionnel)] [valeur du modificateur (optionnel)]. Exemple: cmd 1 20, cmd 2 40 + 5. L'absence de paramètres correspond à cmd 1 6 (dé standard)." name="FSCmdLineRollDice"/>
+			<text name="FSCmdLinePos_txt">Se téléporter dans la sim (ex: cmd x y z)</text>
+			<text name="FSCmdLineGround_txt">Se téléporter au sol (ex: cmd)</text>
+			<text name="FSCmdLineHeight_txt">Se téléporter à l'altitude.. (ex: cmd z)</text>
+			<text name="FSCmdTeleportToCam_txt">Se téléporter à la position de la caméra (ex: cmd)</text>
+			<text name="FSCmdLineOfferTp_txt">Téléporter un avatar (ex: cmd key)</text>
+			<text name="FSCmdLineTP2_txt">Se téléporter vers un avatar (ex: cmd name)</text>
+			<line_editor tool_tip="La syntaxe de cette commande permet des noms partiels et n'est pas sensible à la casse. Les résultats sont plus pertinents avec le radar ouvert." name="FSCmdLineTP2"/>
+			<text name="FSCmdLineTeleportHome_txt">Se téléporter à son domicile (ex: cmd)</text>
+			<text name="FSCmdLineMapTo_txt">Se téléporter dans une sim (ex: cmd simname)</text>
+			<check_box label="Utilise la même position d'une sim à l'autre" name="toggle"/>
+		</panel>
 	</tab_container>
 </panel>

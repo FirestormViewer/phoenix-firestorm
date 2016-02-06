@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="groups">
+	<button label="IM/Appel" name="chat_btn" tool_tip="Ouvrir une fenêtre de conversation"/>
+	<button label="Informations" name="info_btn"/>
+	<button label="Titres" name="titles_btn"/>
+	<button label="Activer" name="activate_btn"/>
+	<button label="Quitter" name="leave_btn"/>
+	<button label="Créer..." name="create_btn"/>
+	<button label="Rechercher..." name="search_btn"/>
+	<button label="Inviter..." name="invite_btn"/>
+</panel>

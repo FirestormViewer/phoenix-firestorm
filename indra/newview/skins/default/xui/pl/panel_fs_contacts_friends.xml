@@ -13,7 +13,6 @@
 				<fs_scroll_list.column name="icon_visible_online" tool_tip="Znajomy może widzieć, że jesteś dostępny/a online w świecie"/>
 				<fs_scroll_list.column name="icon_visible_map" tool_tip="Znajomy może znaleźć Cię na mapie"/>
 				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Znajomy może edytować, usuwać lub zabierać Twoje obiekty"/>
-				<fs_scroll_list.column name="icon_visible_online_theirs" tool_tip="Możesz widzieć, czy ten znajomy jest dostępny online w świecie"/>
 				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Możesz znajdować na mapie tego znajomego"/>
 				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Możesz edytować obiekty tego znajomego"/>
 			</fs_scroll_list>

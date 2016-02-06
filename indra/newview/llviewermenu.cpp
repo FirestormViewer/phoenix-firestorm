@@ -159,6 +159,7 @@
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
 #include "llscenemonitor.h"
+#include "fsfloaterplacedetails.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -7109,14 +7110,7 @@ class LLWorldCreateLandmark : public view_listener_t
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
 		// </FS:Ansariel>
 
 		return true;
@@ -7134,14 +7128,7 @@ class LLWorldPlaceProfile : public view_listener_t
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "agent"));
 		// </FS:Ansariel>
 
 		return true;

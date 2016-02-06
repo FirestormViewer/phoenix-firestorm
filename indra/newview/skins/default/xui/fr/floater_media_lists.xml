@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floatermedialists" title="Adresses Multimédia">
+	<floater.string name="EnterUrlAllow">Saisissez un domaine ou une adresse à toujours autoriser :</floater.string>
+	<floater.string name="EnterUrlDeny">Saisissez un domaine ou une adresse à toujours bloquer :</floater.string>
+	<layout_stack name="lists_layout_stack">
+		<layout_panel name="whitelist_layout_panel">
+			<text name="whitelist_text">Domaines autorisés :</text>
+			<scroll_list name="whitelist"><column label="Liste blanche" name="list"/></scroll_list>
+			<layout_stack name="whitelist_buttons_layout_stack">
+				<layout_panel name="whitelist_buttons_panel_add"><button label="Ajouter..." label_selected="Ajouter..." name="add_whitelist"/></layout_panel>
+				<layout_panel name="whitelist_buttons_panel_remove"><button label="Supprimer" label_selected="Supprimer" name="remove_whitelist"/></layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="blacklist_layout_panel">
+			<text name="blacklist_text">Domaines bloqués :</text>
+			<scroll_list name="blacklist"><column label="Liste noire" name="list"/></scroll_list>
+			<layout_stack name="blacklist_buttons_layout_stack">
+				<layout_panel name="blacklist_buttons_panel_add"><button label="Ajouter..." label_selected="Ajouter..." name="add_blacklist"/></layout_panel>
+				<layout_panel name="blacklist_buttons_panel_remove"><button label="Supprimer" label_selected="Supprimer" name="remove_blacklist"/></layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -1,43 +1,41 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!--alba-->
-<floater name="quickprefs"
-    title="Préférences Rapides">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="quickprefs" title="Préférences rapides">
 	<panel name="quickprefs">
-        <text name="Draw Distance"
-			tool_tip="Distance d'affichage. Si Préférences → FS → CmdLine est activé, taper dd [nb m] en chat (Ex : dd 128 = distance d'affichage à 128m)">
-            Dist. d'affichage
-        </text>
-        <text name="Maximum bandwidth"
-			tool_tip="Bande passante allouée à ce viewer. Défaut 1000">
-            Bande passante
-        </text>
-        <text name="Particles"
-			tool_tip="Nombre de particules maximum affichées. Dépasser 4096 peut provoquer du lag">
-            Particules
-        </text>
-        <text name="Max Node"
-			tool_tip="Taille maximum (en kb) d'un noeud unique de vertex (vertex = sommet en infographie). Défaut : 8192">
-            Vertex/objet
-        </text>
-        <text name="LOD Factor"
-			tool_tip="(LOD : Niveau de Détail) Plus il est élevé, plus un petit objets s'affiche correctement de loin. Défaut : 2">
-            LOD
-        </text>
-        <text name="Max Avatars"
-			tool_tip="Nombre maximum d'avatars à afficher en 3D. Défaut 12">
-            Avatars en 3D
-        </text>
-        <text name="Height Offset"
-			tool_tip="Décalage vertical de l'avatar (axe Z). Effet immédiat. Défaut : 0">
-            Décal. Vert. Av.
-        </text>
-        <text name="WL Sky"
-			tool_tip="Paramètres WindLight prédéfinis pour le ciel.">
-            WL Ciel
-        </text>
-        <text name="WL Water"
-			tool_tip="Paramètres WindLight prédéfinis pour l'eau.">
-            WL Eau
-        </text>
+		<layout_stack name="wl_options_stack">
+			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" tool_tip="Règle la hauteur de votre avatar">Voltigement</text>
+				<text name="Maximum bandwidth" tool_tip="Règle la bande passante en Kbps (kilobits par seconde)">Bande passante</text>
+				<check_box label="Params. Environnementaux de la région" name="UseRegionWindlight"/>
+				<text name="WL Sky" tool_tip="Paramètres atmosphériques">Env. ciel</text>
+				<text name="WL Water" tool_tip="Paramètres aquatiques">Env. eau</text>
+				<text name="Day Cycle" tool_tip="Paramètres du cycle journalier">Jour/Nuit</text>
+				<icon name="SkyDayCycle" tool_tip="Modifie l'heure du jour"/>
+				<button name="ResetToRegionDefault" tool_tip="Applique les paramètres environnementaux par défaut de la région"/>
+				<button name="button_edit" tool_tip="Cliquez ici pour configurer le panneau des préférences rapides"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Déplacer l'option sélectionnée vers le haut"/>
+		<button name="add_new_button" tool_tip="Ajouter une nouvelle option de préférence rapide"/>
+		<line_editor name="label_edit" tool_tip="Saisir le nom de l'option ici" label="Nom de l'option :"/>
+		<button name="move_down_button" tool_tip="Déplacer l'option sélectionnée vers le bas"/>
+		<combo_box name="control_name_combo" tool_tip="Sélectionner l'option parmi la liste des paramètres de débogage"><combo_box.item label="=== Sélectionner ===" name="control_name_list_header"/></combo_box>
+		<text name="control_type_label">Type :</text>
+		<combo_box name="control_type_combo_box" tool_tip="Sélectionner le type de contrôle que vous souhaitez utiliser pour ce paramètre">
+			<combo_box.item label="Case à cocher" name="Checkbox"/>
+			<combo_box.item label="Texte" name="Text"/>
+			<combo_box.item label="Bouton fléché" name="Spinner"/>
+			<combo_box.item label="Curseur" name="Slider"/>
+			<combo_box.item label="Bouton radio" name="Radio"/>
+			<combo_box.item label="Couleur" name="Color 3"/>
+			<combo_box.item label="Couleur + Alpha" name="Color 4"/>
+		</combo_box>
+		<check_box name="control_integer_checkbox" tool_tip="Activer cette option si votre paramètre n'accepte pas les décimales" label="Entier"/>
+		<spinner name="control_min_edit" tool_tip="La plus petite valeur sélectionnable" label="Min :"/>
+		<spinner name="control_max_edit" tool_tip="La plus grande valeur sélectionnable" label="Max :"/>
+		<spinner name="control_increment_edit" tool_tip="La valeur d'incrémentation pour les boutons fléchés ou curseurs" label="Incr :"/>
+		<button name="Restore_Btn" tool_tip="Restaure les paramètres par défaut" label="Réinitialiser"/>
+		<button name="button_close" tool_tip="Ferme l'édition du panneau de préférences rapides"/>
 	</panel>
 </floater>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Sauvegarde des objets...">
+	<floater.string name="title_floater">Sauvegarde de [OBJECT] sur le disque dur...</floater.string>
+	<floater.string name="title_working">Sauvegarde de [OBJECT] en cours - Récupération des informations...</floater.string>
+	<floater.string name="title_inventory">Sauvegarde de [OBJECT] en cours - Récupération des données de l'inventaire...</floater.string>
+	<floater.string name="title_assets">Sauvegarde de [OBJECT] en cours - Récupération des actifs...</floater.string>
+	<floater.string name="title_textures">Sauvegarde de [OBJECT] en cours - Récupération des textures...</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">Informations sur la sélection</text>
+			<text name="exportable_prims">Prims exportables : [COUNT]/[TOTAL]</text>
+			<text name="exportable_textures">Textures exportables : [COUNT]/[TOTAL]</text>
+			<text name="OptionsText">Options :</text>
+			<check_box label="Sauvegarder le contenu de l'objet" name="contents_check"/>
+			<button label="Enregistrer sous..." name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Objets" name="prims_panel"/>
+				<panel label="Textures" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

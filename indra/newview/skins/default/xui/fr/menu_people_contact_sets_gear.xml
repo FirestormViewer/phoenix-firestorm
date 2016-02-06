@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_people_contact_sets_gear">
+	<menu_item_call label="Voir le profil" name="profile"/>
+	<menu_item_call label="Envoyer un IM" name="im"/>
+	<menu_item_call label="Téléporter" name="teleport"/>
+	<menu_item_call label="Définir un surnom" name="set_pseudonym"/>
+	<menu_item_call label="Supprimer le surnom" name="remove_pseudonym"/>
+	<menu_item_call label="Supprimer le nom d'affichage" name="remove_displayname"/>
+	<menu_item_call label="Configurer le cercle" name="set_config"/>
+</toggleable_menu>

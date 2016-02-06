@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="HoverHeight" title="DÉFINIR LA HAUTEUR DE SUSTENTATION">
+<floater name="HoverHeight" title="Définir la hauteur du voltigement">
 	<slider label="Hauteur" name="HoverHeightSlider"/>
 </floater>

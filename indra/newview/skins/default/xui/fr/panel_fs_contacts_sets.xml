@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">Ce cercle est vide.</panel.string>
+	<panel.string name="no_sets">Sans cercle</panel.string>
+	<panel.string name="all_sets">Tous</panel.string>
+	<panel.string name="pseudonyms">Avec un surnom</panel.string>
+	<panel.string name="non_friends">Non-amis</panel.string>
+	<button name="config_btn" tool_tip="Configurer le cercle sélectionné"/>
+	<button name="add_set_btn" tool_tip="Ajouter un nouveau cercle"/>
+	<button name="remove_set_btn" tool_tip="Supprimer le cercle sélectionné"/>
+	<button label="Ajouter..." name="add_btn" tool_tip="Ajouter un résident au cercle actuellement sélectionné"/>
+	<button label="Supprimer..." name="remove_btn" tool_tip="Supprimer ce résident du cercle actuellement sélectionné"/>
+	<button label="Profil..." name="profile_btn" tool_tip="Afficher le profil du résident"/>
+	<button label="IM..." name="start_im_btn" tool_tip="Ouvrir une fenêtre de conversation privée"/>
+	<button label="Téléporter..." name="offer_teleport_btn" tool_tip="Proposer une téléportation à votre emplacement actuel"/>
+	<button label="Surnommer..." name="set_pseudonym_btn" tool_tip="Donner un surnom à ce résident"/>
+	<button label="Suppr. Surnom" name="remove_pseudonym_btn" tool_tip="Supprimer le surnom de ce résident"/>
+	<button label="Suppr. DN" name="remove_displayname_btn" tool_tip="Supprime le nom d'affichage de ce résident"/>
+	<text name="member_count">Membres : [COUNT]</text>
+</panel>

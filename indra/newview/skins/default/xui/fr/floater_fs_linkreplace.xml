@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_linkreplace" title="Modifier les liens dans l'inventaire">
+	<string name="Ready">Prêt...</string>
+	<string name="TargetNotFound">Objet cible non trouvé.</string>
+	<string name="ItemsIdentical">L'original et son remplaçant sont identiques.</string>
+	<string name="ItemsFound">[NUM] liens d'inventaire trouvés.</string>
+	<string name="ItemsRemaining">Liens restants : [NUM]</string>
+	<string name="ReplaceFinished">Modification des liens de l'inventaire terminée.</string>
+	<text name="source_label">Original :</text>
+	<fs_inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Faites glisser l'objet original ici."/>
+	<text name="target_label">Remplaçant :</text>
+	<fs_inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Faites glisser l'objet remplaçant ici."/>
+	<text name="status_text">Prêt...</text>
+	<button name="btn_refresh" label="Actualiser"/>
+	<button name="btn_start" label="Démarrer"/>
+</floater>

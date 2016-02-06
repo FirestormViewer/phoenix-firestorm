@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_slider">
+	<slider label="Generic Slider" name="generic_slider"/>
+	<slider label="Callback Slider" name="callback_slider"/>
+	<slider label="Value Slider" name="value_slider"/>
+	<slider label="Mini Slider 1" name="mini_slider_1"/>
+	<slider label="Mini Slider 2" name="mini_slider_2"/>
+	<slider_bar label="Slider Bar" name="slider_bar"/>
+	<slider label="Red Slider" name="red_slider"/>
+	<slider label="Red Slider Vertical" name="red_slider_vertical"/>
+</floater>

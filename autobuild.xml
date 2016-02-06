@@ -621,9 +621,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>10f4a24948b129e342e908609e65dd66</string>
+              <string>cba1feed7f6bb671d791a517fddf205a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44456-darwin-201508061336-r22.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44461-darwin-201601300040-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -633,9 +633,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2e1b76fa4f9b42679ca5e97c57d1006b</string>
+              <string>9b090869508fabee82dc53cae977fb99</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-44456-linux-201508111340-r22.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-44461-linux-201601282301-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -645,9 +645,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5108a6a9d2f77f6bc1a0a44e7288dc97</string>
+              <string>5b1b5ce866afd2a74e445af1fffe6a8b</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-44456-windows-201508061143-r22.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-44461-windows-201601282252-r23.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1685,11 +1685,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5b2385bd260946c58404ee21a750f504</string>
+              <string>1244ca9bb1b0d6cef93f8267d0265fbb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201601241617-r43.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201602032144-r49.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3432,6 +3432,7 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
+                  <string>--quicktime</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
@@ -3468,6 +3469,7 @@
                 <array>
                   <string>--fmodex</string>
                   <string>--kdu</string>
+                  <string>--quicktime</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>

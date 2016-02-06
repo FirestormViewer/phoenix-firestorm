@@ -112,6 +112,10 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mFilterDistance(false),
 	mFilterDistanceMin(0),
 	mFilterDistanceMax(999999),
+	mFilterPermCopy(false),
+	mFilterPermModify(false),
+	mFilterPermTransfer(false),
+	mFilterAgentParcelOnly(false),
 	mBeaconColor(),
 	mBeaconTextColor(),
 	mBeacons(false),
@@ -834,6 +838,26 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		{
 			return;
 		}
+	}
+
+	if (mFilterAgentParcelOnly && !LLViewerParcelMgr::instance().inAgentParcel(objectp->getPositionGlobal()))
+	{
+		return;
+	}
+
+	if (mFilterPermCopy && !(details.owner_mask & PERM_COPY))
+	{
+		return;
+	}
+
+	if (mFilterPermModify && !(details.owner_mask & PERM_MODIFY))
+	{
+		return;
+	}
+
+	if (mFilterPermTransfer && !(details.owner_mask & PERM_TRANSFER))
+	{
+		return;
 	}
 
 	//-----------------------------------------------------------------------
@@ -2064,6 +2088,18 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mCheckboxMoaP = getChild<LLCheckBoxCtrl>("filter_moap");
 	mCheckboxMoaP->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
+	mCheckboxPermCopy = getChild<LLCheckBoxCtrl>("filter_perm_copy");
+	mCheckboxPermCopy->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
+	mCheckboxPermModify = getChild<LLCheckBoxCtrl>("filter_perm_modify");
+	mCheckboxPermModify->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
+	mCheckboxPermTransfer = getChild<LLCheckBoxCtrl>("filter_perm_transfer");
+	mCheckboxPermTransfer->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
+	mCheckboxAgentParcelOnly = getChild<LLCheckBoxCtrl>("filter_agent_parcel_only");
+	mCheckboxAgentParcelOnly->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+
 	return LLPanel::postBuild();
 }
 
@@ -2124,6 +2160,12 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	mFSAreaSearch->setExcludeChildPrims(mCheckboxExcludeChildPrim->get());
 
 	mFSAreaSearch->setExcludeNeighborRegions(mCheckboxExcludeNeighborRegions->get());
+
+	mFSAreaSearch->setFilterPermCopy(mCheckboxPermCopy->get());
+	mFSAreaSearch->setFilterPermModify(mCheckboxPermModify->get());
+	mFSAreaSearch->setFilterPermTransfer(mCheckboxPermTransfer->get());
+
+	mFSAreaSearch->setFilterAgentParcelOnly(mCheckboxAgentParcelOnly->get());
 }
 
 void FSPanelAreaSearchFilter::onCommitSpin()

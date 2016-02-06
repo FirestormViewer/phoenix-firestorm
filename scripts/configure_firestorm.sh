@@ -33,6 +33,7 @@ WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODEX=$FALSE
+WANTS_QUICKTIME=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_AVX=$FALSE
 WANTS_BUILD=$FALSE
@@ -63,7 +64,7 @@ showUsage()
     echo "  --package    : Build installer"
     echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodex     : Build with FMOD Ex"
-    echo "  --leapmotion : Build with Leap Motion Controller support"
+    echo "  --quicktime  : Build with Quicktime (Windows)"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
     echo "  --avx        : Build with Advanced Vector Extensions"
@@ -78,7 +79,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodex ninja jobs: platform: kdu leapmotion opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -97,6 +98,7 @@ getArgs()
                       ;;
           kdu)        WANTS_KDU=$TRUE;;
           fmodex)     WANTS_FMODEX=$TRUE;;
+          quicktime)  WANTS_QUICKTIME=$TRUE;;
           opensim)    WANTS_OPENSIM=$TRUE;;
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
@@ -270,18 +272,19 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.py" > $LOG
-echo -e "    PLATFORM: '$PLATFORM'"          | tee -a $LOG
-echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
-echo -e "      FMODEX: `b2a $WANTS_FMODEX`"  | tee -a $LOG
-echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`" | tee -a $LOG
-echo -e "         AVX: `b2a $WANTS_AVX` "    | tee -a $LOG
-echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
-echo -e "       CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
-echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
-echo -e "      CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
-echo -e "       NINJA: `b2a $WANTS_NINJA`"   | tee -a $LOG
-echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
-echo -e "       BTYPE: $BTYPE"               | tee -a $LOG
+echo -e "    PLATFORM: '$PLATFORM'"            | tee -a $LOG
+echo -e "         KDU: `b2a $WANTS_KDU`"       | tee -a $LOG
+echo -e "      FMODEX: `b2a $WANTS_FMODEX`"    | tee -a $LOG
+echo -e "   QUICKTIME: `b2a $WANTS_QUICKTIME`" | tee -a $LOG
+echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`"   | tee -a $LOG
+echo -e "         AVX: `b2a $WANTS_AVX` "      | tee -a $LOG
+echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`"   | tee -a $LOG
+echo -e "       CLEAN: `b2a $WANTS_CLEAN`"     | tee -a $LOG
+echo -e "       BUILD: `b2a $WANTS_BUILD`"     | tee -a $LOG
+echo -e "      CONFIG: `b2a $WANTS_CONFIG`"    | tee -a $LOG
+echo -e "       NINJA: `b2a $WANTS_NINJA`"     | tee -a $LOG
+echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"      | tee -a $LOG
+echo -e "       BTYPE: $BTYPE"                 | tee -a $LOG
 if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" -o $PLATFORM == "darwin" ] ; then
     echo -e "        JOBS: $JOBS"                | tee -a $LOG
 fi
@@ -370,6 +373,17 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
+	
+    if [ $PLATFORM == "win32" ] ; then
+      if [ $WANTS_QUICKTIME -eq $TRUE ] ; then
+          QUICKTIME="-DHAVE_QUICKTIME_3P:BOOL=ON"
+      else
+          QUICKTIME="-DHAVE_QUICKTIME_3P:BOOL=OFF"
+      fi
+	else
+		QUICKTIME=""
+	fi
+	
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
     else
@@ -435,7 +449,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $QUICKTIME $KDU $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then

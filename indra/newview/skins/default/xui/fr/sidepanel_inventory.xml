@@ -1,40 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Choses" name="objects panel">
-	<panel label="" name="sidepanel_inventory_panel">
+<panel label="Objets reçus" name="objects panel">
+	<panel name="sidepanel_inventory_panel">
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_layout_panel">
-				<panel label="" name="marketplace_inbox">
-					<string name="InboxLabelWithArg">
-						Articles reçus ([NUM])
-					</string>
-					<string name="InboxLabelNoArg">
-						Articles reçus
-					</string>
-					<button label="Articles reçus" name="inbox_btn"/>
-					<text name="inbox_fresh_new_count">
-						[NUM] nouv.
-					</text>
-					<panel name="inbox_inventory_placeholder_panel" tool_tip="Glisser-déposer des articles dans votre inventaire pour les utiliser.">
-						<text name="inbox_inventory_placeholder">
-							Ici seront livrés les achats effectués sur la Place du marché.
-						</text>
-					</panel>
+				<panel name="marketplace_inbox">
+					<string name="InboxLabelWithArg">Objets reçus ([NUM])</string>
+					<string name="InboxLabelNoArg">Objets reçus</string>
+					<button label="Objets reçus" name="inbox_btn"/>
+					<text name="inbox_fresh_new_count">[NUM] nouveaux</text>
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="Glissez les objets dans votre inventaire pour les utiliser"><text name="inbox_inventory_placeholder">Les achats du Marketplace seront livrés ici.</text></panel>
 				</panel>
 			</layout_panel>
 		</layout_stack>
 		<panel name="button_panel">
 			<layout_stack name="button_panel_ls">
-				<layout_panel name="info_btn_lp">
-					<button label="Profil" name="info_btn" tool_tip="Afficher le profil de l&apos;article"/>
-				</layout_panel>
-				<layout_panel name="share_btn_lp">
-					<button label="Partager" name="share_btn" tool_tip="Partager un article de l&apos;inventaire"/>
-				</layout_panel>
+				<layout_panel name="info_btn_lp"><button label="Profil" name="info_btn" tool_tip="Afficher les informations de l'objet"/></layout_panel>
+				<layout_panel name="share_btn_lp"><button label="Partager" name="share_btn" tool_tip="Partager un objet de l'inventaire"/></layout_panel>
 				<layout_panel name="shop_btn_lp">
-					<button label="Faire des achats" name="shop_btn" tool_tip="Accéder à la Place du marché sur le Web"/>
+					<button label="Marketplace" name="shop_btn" tool_tip="Ouvrir le site du Marketplace"/>
 					<button label="Porter" name="wear_btn" tool_tip="Porter la tenue sélectionnée"/>
 					<button label="Jouer" name="play_btn"/>
-					<button label="Téléporter" name="teleport_btn" tool_tip="Me téléporter jusqu&apos;à la zone sélectionnée"/>
+					<button label="Téléporter" name="teleport_btn" tool_tip="Se téléporter à l'emplacement sélectionné"/>
 				</layout_panel>
 			</layout_stack>
 		</panel>
