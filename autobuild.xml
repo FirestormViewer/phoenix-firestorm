@@ -1739,11 +1739,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7e6e8cf0ad6a16d7da56e524d6a33a4</string>
+              <string>1244ca9bb1b0d6cef93f8267d0265fbb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201601151441-r42.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201602032144-r49.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
