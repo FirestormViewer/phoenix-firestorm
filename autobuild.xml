@@ -1900,9 +1900,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>39784b5b65a67fcbae5b9d64d04f34a6</string>
+              <string>fa394ec294b1ec7fefdd7e87a9f09bd0</string>
               <key>url</key>
-              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.4.201512201525-windows.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.5.2.201602060245-windows.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
