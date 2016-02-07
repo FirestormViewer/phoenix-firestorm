@@ -35,9 +35,12 @@
 
 const char* fallbackEngineInfoLLImageJ2CImpl()
 {
-	static std::string version_string =
-		std::string("OpenJPEG: " OPENJPEG_VERSION ", Runtime: ")
-		+ opj_version();
+//	static std::string version_string =
+//		std::string("OpenJPEG: " OPENJPEG_VERSION ", Runtime: ")
+//		+ opj_version();
+// [SL:KB] - Patch: Viewer-Build | Checked: 2016-02-07 (Catznip-4.0)
+	static std::string version_string = llformat("OpenJPEG: %s", opj_version());
+// [/SL:KB]
 	return version_string.c_str();
 }
 
