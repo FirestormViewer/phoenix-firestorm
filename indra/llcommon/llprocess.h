@@ -227,6 +227,15 @@ public:
 		 * executable name.
 		 */
 		Optional<std::string> desc;
+
+		/**
+		   <FS:ND> HACK! libcef.so bleeds that intrusive tcmalloc hacks all over the process.
+		   This then causes awesome effects like crashes and memory corruption when the so is loaded dynamically.
+		   We uses this argument to force libcef.so be preloaded, which fixes this.
+		   The other solution would be to recompile CEF twice (x86/x64) for each CEF update. Which I really would like to avoid.
+		*/
+		Optional<std::string> preload;
+
 	};
 	typedef LLSDParamAdapter<Params> LLSDOrParams;
 
