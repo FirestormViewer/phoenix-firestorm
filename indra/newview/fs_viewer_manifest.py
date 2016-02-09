@@ -172,3 +172,9 @@ class FSViewerManifest:
             self.path( "compatibility.manifest", "llceflib_host.exe.manifest" )
             self.end_prefix()
 
+    def fs_setuid_chromesandbox( self ):
+        filename = os.path.join( self.get_dst_prefix(), "bin", "chrome-sandbox" )
+        self.run_command( "chmod 755 %s" % ( filename) ) # Strip sticky bit that might be set (in case the following two commands fail)
+        self.run_command( "sudo -n chown root:root %s || exit 0" % ( filename) )
+        self.run_command( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
+
