@@ -109,6 +109,7 @@
 					<radar_list.columns
 					 label="Time"
 					 name="seen"
+					 sort_column="seen_sort"
 					 width="50"/>
 					<radar_list.columns
 					 label="Age"
@@ -139,6 +140,9 @@
 					 name="has_notes"
 					 tool_tip="Avatar has notes"
 					 width="15"/>
+					<radar_list.columns
+					 name="seen_sort"
+					 width="-1"/>
 				</radar_list>
 			</layout_panel>
 		</layout_stack>
