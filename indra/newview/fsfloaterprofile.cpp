@@ -26,48 +26,42 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fsfloaterprofile.h"
 
-// Newview
 #include "fspanelprofile.h"
 #include "llagent.h" //gAgent
-#include "llavatarnamecache.h"
-#include "fspanelprofileclassifieds.h"
 
 static const std::string PANEL_PROFILE_VIEW = "panel_profile_view";
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
- : LLFloater(key)
- , mAvatarId(LLUUID::null)
+ : LLFloater(key),
+ mAvatarId(key["id"].asUUID()),
+ mNameCallbackConnection()
 {
 }
 
 FSFloaterProfile::~FSFloaterProfile()
 {
+	if (mNameCallbackConnection.connected())
+	{
+		mNameCallbackConnection.disconnect();
+	}
 }
 
 void FSFloaterProfile::onOpen(const LLSD& key)
 {
-	LLUUID id;
-	if(key.has("id"))
+	FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
+	panel_profile->onOpen(mAvatarId);
+
+	if (mAvatarId == gAgentID)
 	{
-		id = key["id"];
-	}
-	if(!id.notNull()) return;
-
-	setAvatarId(id);
-
-	FSPanelProfile* panel_profile		= findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
-	panel_profile->onOpen(getAvatarId());
-
-	if (getAvatarId() == gAgent.getID())
-	{
-		getChild<LLUICtrl>("ok_btn")->setVisible( true );
-		getChild<LLUICtrl>("cancel_btn")->setVisible( true );
+		getChild<LLUICtrl>("ok_btn")->setVisible(TRUE);
+		getChild<LLUICtrl>("cancel_btn")->setVisible(TRUE);
 	}
 
 	// Update the avatar name.
-	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
+	mNameCallbackConnection = LLAvatarNameCache::get(mAvatarId, boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
 }
 
 BOOL FSFloaterProfile::postBuild()
@@ -80,9 +74,9 @@ BOOL FSFloaterProfile::postBuild()
 
 void FSFloaterProfile::onOKBtn()
 {
-	if (getAvatarId() == gAgent.getID())
+	if (mAvatarId == gAgentID)
 	{
-		FSPanelProfile* panel_profile		= findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
+		FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
 		panel_profile->apply();
 	}
 
@@ -96,6 +90,7 @@ void FSFloaterProfile::onCancelBtn()
 
 void FSFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
+	mNameCallbackConnection.disconnect();
 	setTitle(av_name.getCompleteName());
 }
 

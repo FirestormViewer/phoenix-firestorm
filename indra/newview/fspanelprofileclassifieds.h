@@ -55,8 +55,6 @@ public:
 	FSPanelClassifieds();
 	~FSPanelClassifieds();
 
-	static void* create(void* data);
-
 	/*virtual*/ BOOL postBuild(void);
 
 	/*virtual*/ void onOpen(const LLSD& key);

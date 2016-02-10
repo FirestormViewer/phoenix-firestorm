@@ -91,11 +91,6 @@ FSPanelClassifieds::~FSPanelClassifieds()
 	gGenericDispatcher.addHandler("classifiedclickthrough", NULL);
 }
 
-void* FSPanelClassifieds::create(void* data /* = NULL */)
-{
-	return new FSPanelClassifieds();
-}
-
 void FSPanelClassifieds::updateData()
 {
 	// Send Picks request only when we need to, not on every onOpen(during tab switch).
@@ -394,7 +389,6 @@ void FSPanelClassifieds::createNewClassified()
 	FSPanelClassifiedEdit* panel = NULL;
 	createClassifiedEditPanel(&panel);
 
-	// getProfilePanel()->openPanel(panel, LLSD());
 	openPanel(panel, LLSD());
 }
 

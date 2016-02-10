@@ -202,7 +202,6 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 	LL_INFOS("FSPanelClassifiedInfo") << "Opening classified [" << getClassifiedName() << "] (" << getClassifiedId() << ")" << LL_ENDL;
 
 	LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
-	// LLAvatarPropertiesProcessor::getInstance()->sendClassifiedInfoRequest(getClassifiedId());
 	updateData();
 	gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 
