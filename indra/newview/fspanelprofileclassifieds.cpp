@@ -36,9 +36,11 @@
 #include "lltrans.h"
 #include "llmenugl.h"
 #include "llviewermenu.h"
+#include "llviewergenericmessage.h"
 #include "llregistry.h"
 
 #include "llavatarpropertiesprocessor.h"
+#include "fsdispatchclassifiedclickthrough.h"
 #include "fspanelprofile.h"
 #include "fspanelclassified.h"
 
@@ -55,6 +57,7 @@ static const std::string PICK_NAME("pick_name");
 static const std::string CLASSIFIED_ID("classified_id");
 static const std::string CLASSIFIED_NAME("classified_name");
 
+static FSDispatchClassifiedClickThrough sClassifiedClickThrough;
 
 static LLPanelInjector<FSPanelClassifieds> t_panel_classifieds("panel_profile_classified");
 
@@ -84,6 +87,8 @@ FSPanelClassifieds::~FSPanelClassifieds()
 	{
 		mRlvBehaviorCallbackConnection.disconnect();
 	}
+
+	gGenericDispatcher.addHandler("classifiedclickthrough", NULL);
 }
 
 void* FSPanelClassifieds::create(void* data /* = NULL */)
@@ -247,8 +252,9 @@ void FSPanelClassifieds::onOpen(const LLSD& key)
 
 	FSPanelProfileTab::onOpen(key);
 
+	gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 	updateData();
-	updateButtons();  
+	updateButtons();
 }
 
 void FSPanelClassifieds::onClosePanel()
