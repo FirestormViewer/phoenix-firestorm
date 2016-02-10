@@ -288,6 +288,7 @@ bool FSPanelClassifieds::callbackDeleteClassified(const LLSD& notification, cons
 		LLAvatarPropertiesProcessor::instance().sendClassifiedDelete(value[CLASSIFIED_ID]);
 		mClassifiedsList->removeItemByValue(value);
 	}
+	mNoItemsLabel->setVisible(!mClassifiedsList->size());
 	updateButtons();
 	return false;
 }
@@ -461,6 +462,8 @@ void FSPanelClassifieds::onPanelClassifiedSave(FSPanelClassifiedEdit* panel)
 		c_item->setRightMouseUpCallback(boost::bind(&FSPanelClassifieds::onRightMouseUpItem, this, _1, _2, _3, _4));
 		c_item->setMouseUpCallback(boost::bind(&FSPanelClassifieds::updateButtons, this));
 		c_item->childSetAction("info_chevron", boost::bind(&FSPanelClassifieds::onClickInfo, this));
+
+		mNoItemsLabel->setVisible(FALSE);
 	}
 	else if (panel->isNewWithErrors())
 	{
