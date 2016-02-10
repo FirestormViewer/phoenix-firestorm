@@ -35,7 +35,6 @@ bg_opaque_color="SL-Background_66"
      width="308" />
     <texture_picker
      allow_no_texture="true"
-     border_enabled="true"
      fallback_image="default_land_picture.j2c"
      enabled="false"
      follows="left|top"
@@ -72,7 +71,7 @@ bg_opaque_color="SL-Background_66"
      textbox.show_context_menu="false" 
      top_pad="0"
      width="178"
-     word_wrap="true" />
+     textbox.word_wrap="true" />
          <button
      follows="right"
      height="20"
