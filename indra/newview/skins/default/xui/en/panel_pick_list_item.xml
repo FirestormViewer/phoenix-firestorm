@@ -13,26 +13,26 @@ bg_opaque_color="SL-Background_66"
  width="313">
     <icon
      follows="all"
-     height="85"
+     height="84"
      image_name="ListItem_Over"
+     left="0"
      right="-2"
      mouse_opaque="false"
      name="hovered_icon"
      top="1"
      scale_image="true"
-     visible="false"
-     width="308" />
+     visible="false"/>
     <icon
      follows="all"
-     height="85"
+     height="84"
      image_name="ListItem_Select"
+     left="0"
      right="-2"
      mouse_opaque="false"
      name="selected_icon"
      top="1"
      scale_image="true"
-     visible="false"
-     width="308" />
+     visible="false"/>
     <texture_picker
      allow_no_texture="true"
      fallback_image="default_land_picture.j2c"

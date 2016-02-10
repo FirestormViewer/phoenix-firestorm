@@ -36,11 +36,11 @@ background_opaque="false"
          color="SL-Background_66"
          follows="all"
          layout="topleft"
-         left="0"
+         left="2"
+         right="-2"
          name="picks_list"
          opaque="true"
-         top="0"
-         width="313" />
+         top="0"/>
     </panel>
     <panel
      layout="topleft"
@@ -52,11 +52,11 @@ background_opaque="false"
              color="SL-Background_66"
              follows="all"
              layout="topleft"
-             left="0"
+             left="2"
+             right="-2"
              name="classifieds_list"
              opaque="true"
-             top="0"
-             width="313" />
+             top="0"/>
     </panel>
  </tab_container>
 
