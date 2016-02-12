@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Thèmes" name="skin_panel">
+	<text name="skin_textbox">Thème :</text>
+	<text name="skin_textbox1">(Redémarrage requis)</text>
+	<text name="theme_textbox">Jeu de couleurs :</text>
+	<text name="theme_textbox2">(Redémarrage requis)</text>
+	<check_box label="Réinitialise les barres d'outils au changement du thème" tool_tip="Lorsqu'activée, cette option forcera la configuration des barres d'outils à celle du thème sélectionné et écrasera votre personnalisation lorsque vous changerez celui-ci." name="reset_toolbar_settings"/>
+	<check_box label="Réinitialise les barres d'outils au changement du mode de connexion" tool_tip="Lorsqu'activée, cette option forcera la configuration des barres d'outils à celle du mode de connexion sélectionné et écrasera votre personnalisation lorsque vous changerez celui-ci." name="FSToolbarsResetOnModeChange"/>
+	<check_box label="Utiliser les pointeurs du Viewer 1" name="use_legacy_cursors"/>
+	<text name="theme_textbox3">(Redémarrage requis)</text>
+</panel>

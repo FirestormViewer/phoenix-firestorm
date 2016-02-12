@@ -367,6 +367,9 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][9]["column"] = "range";
 		row_data["columns"][9]["value"] = entry["range"];
 
+		row_data["columns"][10]["column"] = "seen_sort";
+		row_data["columns"][10]["value"] = entry["seen"].asString() + "_" + entry["name"].asString();
+
 		LLScrollListItem* row = mRadarList->addElement(row_data);
 
 		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
@@ -498,7 +501,9 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 		parent_floater->reshape(min_width, parent_floater->getRect().getHeight());
 	}
 
-	if (current_sort_col.empty() || mRadarList->getColumn(current_sort_col)->getWidth() == -1)
+	if (current_sort_col.empty() ||
+		(current_sort_col != "seen_sort" && mRadarList->getColumn(current_sort_col)->getWidth() == -1) ||
+		(current_sort_col == "seen_sort" && mRadarList->getColumn("seen")->getWidth() == -1))
 	{
 		current_sort_col = "range";
 		current_sort_asc = TRUE;

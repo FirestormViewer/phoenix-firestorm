@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_flickr" title="CHARGER DANS FLICKR">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="floater_flickr" title="Envoyer sur Flickr">
 	<panel name="background">
 		<tab_container name="tabs">
-			<panel label="PHOTO" name="panel_flickr_photo"/>
-			<panel label="COMPTE" name="panel_flickr_account"/>
+			<panel label="Photo" name="panel_flickr_photo"/>
+			<panel label="Compte" name="panel_flickr_account"/>
 		</tab_container>
 		<panel name="connection_status_panel">
-			<text name="connection_error_text">
-				Erreur
-			</text>
-			<text name="connection_loading_text">
-				Chargement...
-			</text>
+			<text name="connection_error_text">Erreur</text>
+			<text name="connection_loading_text">Chargement...</text>
 		</panel>
 	</panel>
 </floater>

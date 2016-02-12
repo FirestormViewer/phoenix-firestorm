@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_inspectors" title="Test Inspectors">
+	<text name="test_inspectors">Click to spawn an inspector:</text>
+	<button name="avatar_2d_btn1" label="Avatar 2D"/>
+	<button name="avatar_2d_btn5" label="Avatar 2D"/>
+	<button name="avatar_2d_btn2" label="Avatar 2D"/>
+	<button name="avatar_2d_btn3" label="Avatar 2D"/>
+	<button name="avatar_2d_btn4" label="Avatar 2D"/>
+	<button name="avatar_3d_btn" label="Avatar 3D"/>
+	<button name="object_2d_btn" label="Object 2D"/>
+	<button name="object_3d_btn" label="Object 3D"/>
+	<button name="group_btn" label="Group"/>
+	<button name="place_btn" label="Place"/>
+	<button name="event_btn" label="Event"/>
+	<text name="slurl">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect</text>
+	<text name="slurl_group">secondlife:///app/group/00000000-0000-0000-0000-000000000000/inspect</text>
+</floater>

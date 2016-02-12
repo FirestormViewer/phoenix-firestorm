@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Import d'objets">
+	<floater.string name="floater_title">Import de [FILENAME]</floater.string>
+	<floater.string name="file_status">
+         [LINKSETS] liens. [PRIMS] prims. [TEXTURES] textures.
+         [SOUNDS] sons. [ANIMATIONS] animations.
+	</floater.string>
+	<floater.string name="file_status_error">Erreur lors de la lecture du fichier. Veuillez sélectionner un autre fichier.</floater.string>
+	<floater.string name="file_version_error">Erreur lors de l'analyse du fichier, mauvais format ou version incorrecte.</floater.string>
+	<floater.string name="file_status_running">Lien [LINKSET] sur [LINKSETS], prim [PRIM] sur [PRIMS]</floater.string>
+	<floater.string name="file_status_done">Importation terminée.</floater.string>
+	<floater.string name="texture_uploading">Upload de la texture [TEXTURE] sur [TEXTURETOTAL].</floater.string>
+	<floater.string name="sound_uploading">Upload du son [SOUND] sur [SOUNDTOTAL].</floater.string>
+	<floater.string name="animation_uploading">Upload de l'animation [ANIMATION] sur [ANIMATIONTOTAL].</floater.string>
+	<floater.string name="asset_uploading">Upload de l'objet [ASSET] sur [ASSETTOTAL].</floater.string>
+	<floater.string name="upload_cost">Cout total de l'upload : [COST] $L.</floater.string>
+	<floater.string name="object">objet</floater.string>
+	<floater.string name="objects">objets</floater.string>
+	<text name="filename_text">[FILENAME]</text>
+	<text name="creation_date_text">Créé le [DATE_STRING]</text>
+	<text name="author_text">par [AUTHOR] [GRID]</text>
+	<text name="client_text">Client : [CLIENT] v[VERSION]</text>
+	<text name="file_status_text">Sélectionnez un fichier.</text>
+	<check_box name="do_not_attach" label="Ne pas attacher d'objet"/>
+	<check_box name="region_position" label="Restaurer la position de la région"/>
+	<check_box name="upload_asset" label="Uploader"/>
+	<check_box name="temp_asset" label="Temporairement"/>
+	<button name="import_btn" label="Importer"/>
+</floater>

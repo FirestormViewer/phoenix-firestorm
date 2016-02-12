@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="region_restarting" title="REDÉMARRAGE DE LA RÉGION">
+<floater name="region_restarting" title="Redémarrage de la région">
 	<string name="RegionName">
-		La région dans laquelle vous vous trouvez actuellement ([NAME]) est sur le point de redémarrer.
-
-Si vous restez dans cette région, vous serez déconnecté(e).
+     La région dans laquelle vous vous trouvez actuellement ([NAME]) est sur le point de redémarrer.
+ Si vous restez dans cette région, vous serez déconnecté(e).
 	</string>
 	<string name="RestartSeconds">
-		Secondes avant le redémarrage
-[SECONDS]
+      Secondes avant le redémarrage
+ [SECONDS]
 	</string>
 	<panel name="layout_panel_1">
 		<text name="region_name">
-			La région dans laquelle vous vous trouvez actuellement (-le nom de région le plus long-) est sur le point de redémarrer.
-
+     La région dans laquelle vous vous trouvez actuellement (-le nom de région le plus long-) est sur le point de redémarrer.
 Si vous restez dans cette région, vous serez déconnecté(e).
 		</text>
 		<text name="restart_seconds">
-			Secondes avant le redémarrage
-     32767
+      Secondes avant le redémarrage
+      32767
 		</text>
+		<combo_box label="Mes Repères" name="landmark combo">
+			<combo_box.item label="Mes Repères" name="item1"/>
+		</combo_box>
+		<button tool_tip="Se téléporter au repère" name="teleport_btn"/>
 	</panel>
 </floater>

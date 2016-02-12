@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="friends">
+	<layout_stack name="ls_friend_list">
+		<layout_panel name="lp_search">
+			<filter_editor label="Filtrer les amis" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Statut"/>
+				<fs_scroll_list.column label="Nom d'utilisateur" name="user_name" tool_tip="Le nom d'utilisateur du contact."/>
+				<fs_scroll_list.column label="Nom d'affichage" name="display_name" tool_tip="Le nom d'affichage du contact."/>
+				<fs_scroll_list.column label="Nom" name="full_name" tool_tip="Le nom choisi pour cette personne."/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="La personne peut savoir lorsque vous êtes connecté"/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="La personne peut vous localiser"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="La personne peut modifier, supprimer ou s'approprier vos objets"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Vous pouvez localiser cette personne"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Vous pouvez modifier, supprimer ou vous approprier les objets de cette personne"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button label="IM/Appel" name="im_btn" tool_tip="Ouvrir une fenêtre de conversation privée"/>
+	<button label="Profil" name="profile_btn" tool_tip="Affiche sa photo, ses groupes et d'autres informations utiles"/>
+	<button label="Téléporter..." name="offer_teleport_btn" tool_tip="Proposer à cet ami de se téléporter à votre emplacement actuel"/>
+	<button label="Carte..." name="map_btn" tool_tip="Afficher l'emplacement actuel de cet ami sur la carte"/>
+	<button label="Payer..." name="pay_btn" tool_tip="Verser des Linden dollars (L$) à cet ami"/>
+	<button label="Supprimer..." name="remove_btn" tool_tip="Supprimer cette personne de vos amis"/>
+	<button label="Ajouter..." name="add_btn" tool_tip="Proposer à une personne de devenir ami"/>
+	<text name="friend_count">Amis : [COUNT]</text>
+</panel>

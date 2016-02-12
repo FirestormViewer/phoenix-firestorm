@@ -132,6 +132,7 @@
 #include "fsareasearch.h"
 #include "fscommon.h"
 #include "fsdata.h"
+#include "fsfloaterplacedetails.h"
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
@@ -1415,14 +1416,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 						{
 							// <FS:Ansariel> FIRE-817: Separate place details floater
 							//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-							{
-								LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							}
-							else
-							{
-								LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
-							}
+							FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "landmark").with("id", item->getUUID()));
 							// </FS:Ansariel>
 						}
 						else if("group_offer" == from_name)
@@ -1435,14 +1429,7 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 
 							// <FS:Ansariel> FIRE-817: Separate place details floater
 							//LLFloaterSidePanelContainer::showPanel("places", args);
-							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-							{
-								LLFloaterReg::showInstance("fs_placedetails", args);
-							}
-							else
-							{
-								LLFloaterSidePanelContainer::showPanel("places", args);
-							}
+							FSFloaterPlaceDetails::showPlaceDetails(args);
 							// </FS:Ansariel>
 
 							continue;
@@ -2973,6 +2960,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
 			// Session id will be null if avatar answers from offline IM via email
+			std::string response;
 			if (!gIMMgr->hasSession(session_id) && session_id.notNull())
 			{
 			// </FS:Ansariel>
@@ -2980,7 +2968,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				has_session = false;
 				// <FS:Ansariel> FS autoresponse feature
 				std::string my_name;
-				std::string response;
 				LLAgentUI::buildFullname(my_name);
 				if (is_do_not_disturb)
 				{
@@ -3000,6 +2987,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
 				}
 				// </FS:PP>
+				else
+				{
+					LL_WARNS() << "Unknown auto-response mode" << LL_ENDL;
+				}
 				pack_instant_message(
 					gMessageSystem,
 					gAgent.getID(),
@@ -3069,11 +3060,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			if (!has_session)
 			{
 				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+				LLStringUtil::format_map_t args;
+				args["MESSAGE"] = response;
+
 				gIMMgr->addMessage(
 					session_id,
 					gAgentID,
 					LLStringUtil::null, // Pass null value so no name gets prepended
-					LLTrans::getString("IM_autoresponse_sent"),
+					LLTrans::getString("IM_autoresponse_sent", args),
 					false,
 					name,
 					IM_NOTHING_SPECIAL,
@@ -9341,6 +9335,17 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	payload["object_id"] = object_id;
 	payload["chat_channel"] = chat_channel;
 	payload["object_name"] = object_name;
+
+	// <FS:Ansariel> FIRE-17158: Remove "block" button for script dialog of own objects
+	bool own_object = false;
+	std::string self_name;
+	LLAgentUI::buildFullname(self_name);
+	if (LLCacheName::buildFullName(first_name, last_name) == self_name)
+	{
+		own_object = true;
+	}
+	payload["own_object"] = own_object;
+	// </FS:Ansariel>
 
 	// build up custom form
 	S32 button_count = msg->getNumberOfBlocks("Buttons");

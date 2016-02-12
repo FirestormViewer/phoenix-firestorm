@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="script_recover" title="Récupération de script">
+	<text name="txt2">
+       [APP_NAME] a détecté des scripts récupérables qui ont été laissés tels quels suite à un plantage récent du viewer.
+Si vous souhaitez récupérer ces scripts, ils seront placés dans le dossier 'Objets trouvés' de votre inventaire.
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="Nom du script" name="script_name"/>
+	</scroll_list>
+	<button label="Récupérer" name="recover_btn"/>
+	<button label="Annuler" name="cancel_btn"/>
+</floater>

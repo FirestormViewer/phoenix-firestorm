@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_search" title="Recherche Firestorm">
+	<floater.string name="string.location">Emplacement : [LOCATION]</floater.string>
+	<floater.string name="string.traffic">Trafic : [DWELL]</floater.string>
+	<floater.string name="string.area">Surface : [AREA]</floater.string>
+	<floater.string name="string.members">Nombre de membres : [MEMBER_COUNT]</floater.string>
+	<floater.string name="string.founder">Fondateur : [FOUNDER]</floater.string>
+	<floater.string name="string.age">Âge : [AGE]</floater.string>
+	<floater.string name="string.partner">Partenaire : [PARTNER]</floater.string>
+	<floater.string name="string.listing_price">Prix de l'annonce : [LISTING_PRICE]</floater.string>
+	<floater.string name="string.slurl">[SLURL]</floater.string>
+	<floater.string name="string.duration">Durée : [DURATION]</floater.string>
+	<floater.string name="string.covercharge">Cover : [COVERCHARGE]</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="Recherche web" name="panel_ls_web"/>
+		<panel label="Personnes" name="panel_ls_people"/>
+		<panel label="Groupes" name="panel_ls_groups"/>
+		<panel label="Lieux" name="panel_ls_places"/>
+		<panel label="Ventes de terrain" name="panel_ls_land"/>
+		<panel label="Evènements" name="panel_ls_events"/>
+		<panel label="Petites annonces" name="panel_ls_classifieds"/>
+	</tab_container>
+	<panel name="panel_ls_details">
+		<button label="Ouvrir le profil" name="people_profile_btn"/>
+		<button label="Envoyer un message" name="people_message_btn"/>
+		<button label="Ajouter en ami" name="people_friend_btn"/>
+		<button label="Ouvrir le profil" name="group_profile_btn"/>
+		<button label="Joindre la conversation" name="group_message_btn"/>
+		<button label="Rejoindre le groupe" name="group_join_btn"/>
+		<button label="Téléporter" name="teleport_btn"/>
+		<button label="Voir sur la carte" name="map_btn"/>
+		<button label="Me rappeler" name="event_reminder_btn"/>
+	</panel>
+</floater>

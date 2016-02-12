@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
-	<menu_item_check label="Afficher la barre de navigation &amp; favoris" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Afficher la barre de navigation et de recherche" name="ShowNavbarNavigationPanel"/>
 	<menu_item_check label="Afficher la barre des favoris" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Afficher la mini-barre d&apos;emplacement" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Afficher la barre de recherche" name="ShowSearchTopBar"/>
+	<menu_item_check label="Afficher l'emplacement dans la barre supérieure" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Afficher la version du simulateur dans la barre supérieure" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Afficher la recherche dans les menus" name="FSMenuSearch"/>
+	<menu_item_check label="Afficher le solde de devises" name="FSShowCurrencyBalanceInStatusbar"/>
 </menu>

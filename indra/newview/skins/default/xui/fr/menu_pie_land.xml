@@ -1,18 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!--alba-->
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Land Pie">
-	<pie_slice name="Place Information..."
-        label="A propos du terrain"/>
-    <pie_slice name="Create"
-        label="Créer"/>
-    <pie_slice name="Go Here"
-        label="Aller là"/>
-    <pie_slice name="Sit Here"
-        label="S'asseoir ici"/>
-    <pie_slice name="Land Buy Pass Pie"
-        label="Payer l'entrée"/>
-    <pie_slice name="Edit Terrain"
-        label="Modifier le Terrain"/>
-    <pie_slice name="Land Buy Pie"
-        label="Acheter le terrain"/>
+	<pie_slice label="À propos du terrain" name="Place Information..."/>
+	<pie_slice label="Créer" name="Create"/>
+	<pie_slice label="Aller à cet endroit" name="Go Here"/>
+	<pie_slice label="S'asseoir ici" name="Sit Here"/>
+	<pie_slice label="Ignorer le propriétaire des particules" name="Mute Particle"/>
+	<pie_slice label="Acheter un droit d'entrée" name="Land Buy Pass Pie"/>
+	<pie_slice label="Modifier le Terrain" name="Edit Terrain"/>
+	<pie_slice label="Acheter le terrain" name="Land Buy Pie"/>
 </pie_menu>

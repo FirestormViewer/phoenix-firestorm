@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="search replace" title="Rechercher / Remplacer">
+	<check_box label="Insensible à la casse" width="140" name="case_text"/>
+	<check_box label="Remonter" name="find_previous"/>
+	<button label="Rechercher" width="90" label_selected="Rechercher" name="search_btn"/>
+	<button label="Remplacer" width="90" label_selected="Remplacer" name="replace_btn"/>
+	<button label="Tout remplacer" width="95" label_selected="Tout remplacer" name="replace_all_btn"/>
+	<text name="txt" width="100">Rechercher</text>
+	<text name="txt2" width="100">Remplacer</text>
+	<line_editor left="75" name="search_text" width="220" />
+	<line_editor name="replace_text" width="220" />
+</floater>

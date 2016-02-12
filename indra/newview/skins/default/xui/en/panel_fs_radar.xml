@@ -218,11 +218,15 @@
 							<radar_list.columns
 							 label="Seen"
 							 name="seen"
+							 sort_column="seen_sort"
 							 width="50"/>
 							<radar_list.columns
 							 label="Range"
 							 name="range"
 							 width="61"/>
+							<radar_list.columns
+							 name="seen_sort"
+							 width="-1"/>
 						</radar_list>
 					</layout_panel>
 				</layout_stack>

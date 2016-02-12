@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Groupes" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">Critères de recherche :</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="Nom du groupe" name="group_name"/>
+			<columns label="Membres" name="members"/>
+			<columns label="Score" name="score"/>
+		</scroll_list>
+		<button label="Précédent" name="groups_back"/>
+		<button label="Suivant" name="groups_next"/>
+	</panel>
+</panel>

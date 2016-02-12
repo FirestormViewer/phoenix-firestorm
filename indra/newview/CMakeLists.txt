@@ -876,6 +876,7 @@ set(viewer_HEADER_FILES
     fsblocklistmenu.h
     fschathistory.h
     fschatoptionsmenu.h
+    fsdispatchclassifiedclickthrough.h
     fscommon.h
     fsconsoleutils.h
     fscontactsfriendsmenu.h

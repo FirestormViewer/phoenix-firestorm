@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="nearby_chat" title="Chat local">
+	<floater.string name="chatbox_label">Au chat local</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_translate_btn"><button tool_tip="Utiliser le service de traduction sélectionné" name="translate_btn"/></layout_panel>
+		<layout_panel name="lp_chat_history_btn"><button tool_tip="Ouvrir l'historique de conversation." name="chat_history_btn"/></layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn"><button tool_tip="Affiche le texte ignoré dans l'historique de conversation." name="chat_history_muted_btn"/></layout_panel>
+		<layout_panel name="lp_options_btn"><menu_button tool_tip="Options du Chat" name="chat_options_btn"/></layout_panel>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">Messages non lus : [NUM]</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel"><spinner name="ChatChannel" tool_tip="Canal dans lequel parler. Modifiable dans les Préférences -&gt; Conversations -&gt; Saisie -&gt; Afficher la sélection du canal de discussion."/></layout_panel>
+						<layout_panel name="chat_type_layout_panel" width="90">
+							<combo_box name="chat_type" tool_tip="Chuchoter = 10m, Parler = 20m, Crier = 100m">
+								<combo_box.item name="chat_type_whisper" label="Chuchoter"/>
+								<combo_box.item name="chat_type_say" label="Parler"/>
+								<combo_box.item name="chat_type_shout" label="Crier"/>
+							</combo_box>
+							<button label="Parler" name="send_chat" tool_tip="Chuchoter = 10m, Parler = 20m, Crier = 100m"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

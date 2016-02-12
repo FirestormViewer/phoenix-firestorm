@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="Tête" name="Head" tool_tip="Cliquez pour sélectionner une image"/>
+		<texture_picker label="Haut du corps" name="Upper Body" tool_tip="Cliquez pour sélectionner une image"/>
+		<texture_picker label="Bas du corps" name="Lower Body" tool_tip="Cliquez pour sélectionner une image"/>
+	</panel>
+	<tab_container name="wearable_accordion">
+		<panel name="skin_color_tab_holder" title="Teint">
+			<accordion name="skin_color_accordion">
+				<accordion_tab name="skin_color_tab" title="Teint"/>
+			</accordion>
+		</panel>
+		<panel name="skin_face_tab_holder" title="Détails du visage">
+			<accordion name="skin_face_accordion">
+				<accordion_tab name="skin_face_tab" title="Détails du visage"/>
+			</accordion>
+		</panel>
+		<panel name="skin_makeup_holder" title="Maquillage">
+			<accordion name="skin_makeup_accordion">
+				<accordion_tab name="skin_makeup_tab" title="Maquillage"/>
+			</accordion>
+		</panel>
+		<panel name="skin_body_holder" title="Détails du corps">
+			<accordion name="skin_body_accordion">
+				<accordion_tab name="skin_body_tab" title="Détails du corps"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu label="Barre d'outils" name="Toolbars Popup">
+	<menu_item_call label="Supprimer ce bouton" name="Remove button"/>
+	<menu_item_call label="Boutons de la barre d'outils..." name="Choose Buttons"/>
+	<menu_item_check label="Alignés à gauche" name="left_aligned"/>
+	<menu_item_check label="Centrés" name="center_aligned"/>
+	<menu_item_check label="Alignés à droite" name="right_aligned"/>
+	<menu_item_check label="Icônes et libellés" name="icons_with_text"/>
+	<menu_item_check label="Icônes seulement" name="icons_only"/>
+	<menu_item_check label="Libellés uniquement" name="text_only"/>
+	<menu_item_check label="Taille automatique" name="layout_style_none"/>
+	<menu_item_check label="Taille fixe" name="layout_style_equalize"/>
+	<menu_item_check label="Ajuster à la longueur de la barre" name="layout_style_fill"/>
+	<menu_item_check label="Verrouiller" name="toolbars_locked"/>
+</context_menu>

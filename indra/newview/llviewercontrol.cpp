@@ -176,7 +176,6 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 	return true;
 }
 
-//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 static bool handleTerrainDetailChanged(const LLSD& newvalue)
 {
 	LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();

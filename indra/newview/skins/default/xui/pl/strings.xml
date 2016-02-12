@@ -4331,7 +4331,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Nadchodzi wiadomość od [NAME]
 	</string>
 	<string name="IM_autoresponse_sent">
-		Autoodpowiedź wysłana
+		Autoodpowiedź wysłana: [MESSAGE]
 	</string>
 	<string name="IM_autoresponse_item_sent">
 		Wysłano przedmiot: [ITEM_NAME]
@@ -5934,5 +5934,20 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="InvOfferGroupNoticeName">
 		Osoba z grupy o imieniu [NAME]
+	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt]., [day,datetime,slt].[mth,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc], [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]
 	</string>
 </strings>

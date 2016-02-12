@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_pick_info">
+	<panel.string name="location_notice">(se mettra à jour après l'enregistrement)</panel.string>
+	<line_editor name="pick_location">Chargement...</line_editor>
+	<button label="Téléporter" name="teleport_btn"/>
+	<button label="Voir sur la carte" name="show_on_map_btn"/>
+	<button label="Définir le lieu" tool_tip="Définir à l'emplacement actuel" name="set_to_curr_location_btn"/>
+	<button label="Enregistrer" name="save_changes_btn"/>
+</panel>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlva_strings" title="Réponses RLVa">
+	<panel name="bottom_panel"><button label="Paramètres par défaut" name="default_btn"/></panel>
+</floater>

@@ -97,6 +97,7 @@
 #include "fsgridhandler.h"
 #endif
 // </FS:Zi>
+#include "fsfloaterplacedetails.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -5827,14 +5828,7 @@ void LLLandmarkBridge::performAction(LLInventoryModel* model, std::string action
 
 			// <FS:Ansariel> FIRE-817: Separate place details floater
 			//LLFloaterSidePanelContainer::showPanel("places", key);
-			if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-			{
-				LLFloaterReg::showInstance("fs_placedetails", key);
-			}
-			else
-			{
-				LLFloaterSidePanelContainer::showPanel("places", key);
-			}
+			FSFloaterPlaceDetails::showPlaceDetails(key);
 			// </FS:Ansariel>
 		}
 	}

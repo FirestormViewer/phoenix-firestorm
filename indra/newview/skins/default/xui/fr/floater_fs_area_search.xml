@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="area_search" title="Recherche d'objets sur la région">
+	<tab_container name="area_searchtab">
+		<panel label="Liste" name="area_search_list_panel">
+			<panel.string name="ListedPendingTotalBlank">Listés | En attente | Total</panel.string>
+			<panel.string name="ListedPendingTotalFilled">[LISTED] Listés | [PENDING] En attente | [TOTAL] Total</panel.string>
+			<fs_scroll_list name="result_list">
+				<fs_scroll_list.columns name="distance" label="Dist" tool_tip="Distance entre votre avatar et l'objet."/>
+				<fs_scroll_list.columns name="name" label="Nom"/>
+				<fs_scroll_list.columns name="description" label="Description"/>
+				<fs_scroll_list.columns name="price" label="Prix" tool_tip="Si l'objet est à vendre, ce que vous payerez pour l'acheter."/>
+				<fs_scroll_list.columns name="land_impact" label="LI" tool_tip="L'impact imputé à l'objet sur le compte du terrain."/>
+				<fs_scroll_list.columns name="prim_count" label="Prims" tool_tip="Nombre de prims qui composent chaque objet."/>
+				<fs_scroll_list.columns name="owner" label="Propriétaire"/>
+				<fs_scroll_list.columns name="group" label="Groupe" tool_tip="Le groupe propriétaire de l'objet."/>
+				<fs_scroll_list.columns name="creator" label="Créateur"/>
+				<fs_scroll_list.columns name="last_owner" label="Propriétaire précédent" tool_tip="Le propriétaire précédent de cet objet."/>
+			</fs_scroll_list>
+			<button name="Refresh" label="Actualiser"/>
+			<text name="counter">Listés | En attente | Total</text>
+			<check_box name="beacons" label="Afficher les balises" left_pad="160"/>
+		</panel>
+		<panel label="Recherche" name="area_search_find_panel">
+			<text name="name_label">Nom :</text>
+			<text name="desc_label">Description :</text>
+			<text name="owner_label">Propriétaire :</text>
+			<text name="group_label">Groupe :</text>
+			<text name="creator_label">Créateur :</text>
+			<text name="last_owner_label">Propriétaire précédent :</text>
+			<check_box name="regular_expression" label="Expression régulière"/>
+			<button name="search" label="Recherche"/>
+			<button name="clear" label="Effacer"/>
+		</panel>
+		<panel label="Filtrer" name="area_search_filter_panel">
+			<text name="only_list">Uniquement les objets :</text>
+			<check_box name="filter_locked" label="Verrouillés"/>
+			<check_box name="filter_physical" label="Physiques"/>
+			<check_box name="filter_phantom" label="Fantômes"/>
+			<check_box name="filter_temporary" label="Temporaires"/>
+			<check_box name="filter_attachment" label="Portés"/>
+			<check_box name="filter_moap" label="Media partagé"/>
+			<check_box name="filter_perm_copy" label="Copiables"/>
+			<check_box name="filter_perm_modify" label="Modifiables"/>
+			<check_box name="filter_perm_transfer" label="Transférables"/>
+			<check_box name="filter_for_sale" label="Prix de vente entre" width="130"/>
+			<text name="and">et</text>
+			<text name="mouse_text" width="120">Action du clic :</text>
+			<combo_box name="click_action" tool_tip="Action effectuée lorsque vous cliquez sur l'objet">
+				<combo_box.item label="Tout" name="click_any"/>
+				<combo_box.item label="Toucher" name="click_touch"/>
+				<combo_box.item label="S'asseoir" name="click_sit"/>
+				<combo_box.item label="Acheter l'objet" name="click_buy"/>
+				<combo_box.item label="Payer l'objet" name="click_pay"/>
+				<combo_box.item label="Ouvrir" name="click_open"/>
+				<combo_box.item label="Jouer" name="click_play"/>
+				<combo_box.item label="Jouer le média" name="click_open_media"/>
+				<combo_box.item label="Zoomer" name="click_zoom"/>
+			</combo_box>
+			<check_box name="filter_distance" label="Distance entre" width="130"/>
+			<text name="and2">et</text>
+			<check_box name="filter_agent_parcel_only" label="Uniquement sur ce terrain" width="140"/>
+			<text name="only_list">Exclure les objets qui sont :</text>
+			<check_box name="exclude_attachment" label="Portés"/>
+			<check_box name="exclude_physical" label="Physiques"/>
+			<check_box name="exclude_temporary" label="Temporaires"/>
+			<check_box name="exclude_childprim" label="Prims enfant"/>
+			<check_box name="exclude_neighbor_region" label="Régions voisines"/>
+			<button name="apply" label="Appliquer"/>
+		</panel>
+		<panel label="Options" name="area_search_options_panel">
+			<text name="display_column">Afficher les colonnes :</text>
+			<check_box name="show_distance" label="Distance"/>
+			<check_box name="show_name" label="Nom"/>
+			<check_box name="show_description" label="Description"/>
+			<check_box name="show_price" label="Prix"/>
+			<check_box name="show_land_impact" label="Impact"/>
+			<check_box name="show_prim_count" label="Prims"/>
+			<check_box name="show_owner" label="Propriétaire"/>
+			<check_box name="show_group" label="Groupe"/>
+			<check_box name="show_creator" label="Créateur"/>
+			<check_box name="show_last_owner" label="Propriétaire précédent"/>
+		</panel>
+		<panel label="Avancé" name="area_search_advanced_panel">
+			<check_box name="double_click_touch" label="Double clic pour toucher l'objet"/>
+			<check_box name="double_click_buy" label="Double clic pour acheter l'objet"/>
+		</panel>
+	</tab_container>
+</floater>

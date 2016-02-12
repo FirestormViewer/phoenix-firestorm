@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!--alba-->
-<floater name="Inventory Finder" title="INVENTORY_RECENT_ITEMS">
+<floater name="Inventory Finder" title="Objets récents">
 	<check_box label="Animations" name="check_animation"/>
 	<check_box label="Cartes de visite" name="check_calling_card"/>
-	<check_box label="Habits" name="check_clothing"/>
+	<check_box label="Vêtements" name="check_clothing"/>
 	<check_box label="Gestes" name="check_gesture"/>
 	<check_box label="Repères" name="check_landmark"/>
 	<check_box label="Notes" name="check_notecard"/>
-	<check_box label="Maillages" name="check_mesh"/>
+	<check_box label="Meshs" name="check_mesh"/>
 	<check_box label="Objets" name="check_object"/>
 	<check_box label="Scripts" name="check_script"/>
 	<check_box label="Sons" name="check_sound"/>
 	<check_box label="Textures" name="check_texture"/>
 	<check_box label="Photos" name="check_snapshot"/>
-	<button label="Tout" label_selected="Tout" name="All"/>
-	<button bottom_delta="0" label="Aucun" label_selected="Aucun" name="None"/>
-	<check_box label="Tjs voir les dossiers" name="check_show_empty"/>
-	<check_box label="Depuis la déconnexion" name="check_since_logoff"/>
-	<text name="- OR -">
-		Ou il y a...
-	</text>
+	<button label="Tous" label_selected="Tous" name="All"/>
+	<button label="Aucun" label_selected="Aucun" name="None"/>
+	<check_box label="Lister tous les dossiers" name="check_show_empty"/>
+	<check_box label="Depuis la connexion" name="check_since_logoff"/>
+	<text name="- OR -">- OU -</text>
 	<radio_group name="date_search_direction">
-		<radio_item label="Ultérieure à" name="newer"/>
-		<radio_item label="Antérieure à" name="older"/>
+		<radio_item label="Plus récent que" name="newer"/>
+		<radio_item label="Plus ancien que" name="older"/>
 	</radio_group>
-	<spinner label="Heures" name="spin_hours_ago"/>
-	<spinner label="Jours" name="spin_days_ago"/>
+	<text name="label_hours">Heures</text>
+	<text name="label_days">Jours</text>
+	<button label="Réinitialiser" label_selected="Réinitialiser" name="btnReset"/>
 	<button label="Fermer" label_selected="Fermer" name="Close"/>
 </floater>

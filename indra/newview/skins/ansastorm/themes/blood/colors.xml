@@ -165,13 +165,13 @@
 	 value="0.035 0.035 0.035 1" />
 	<color
 	 name="SL-Background"
-	 value="0.25 0.25 0.25 1" />
+	 value="0.035 0.035 0.035 1" />
 	<color
 	 name="SL-Background_50"
-	 value="0.25 0.25 0.25 0.50" />
+	 value="0.035 0.035 0.035 0.50" />
 	<color
 	 name="SL-Background_66"
-	 value="0.25 0.25 0.25 0.66" />
+	 value="0.035 0.035 0.035 0.66" />
 	<color
 	 name="SL-Foreground"
 	 value="0.175 0.020 0.200 1" />

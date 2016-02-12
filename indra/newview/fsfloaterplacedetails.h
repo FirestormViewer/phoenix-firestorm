@@ -63,6 +63,8 @@ public:
 	void processParcelDetails(const LLParcelData& parcel_details);
 	void togglePickPanel(BOOL visible);
 
+	static void showPlaceDetails(const LLSD& key);
+
 private:
 	enum ePlaceDisplayInfo
 	{
