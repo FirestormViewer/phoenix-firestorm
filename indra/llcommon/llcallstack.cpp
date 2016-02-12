@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#include "linden_common.h"
+
 #include "llcommon.h"
 #include "llcallstack.h"
 #include "StackWalker.h"
@@ -39,10 +41,10 @@ public:
     ~LLCallStackImpl()
     {
     }
-    void getStack(std::vector<std::string>& stack, S32 skip_count=0)
+    void getStack(std::vector<std::string>& stack, S32 skip_count=0, bool verbose=false)
     {
         m_stack.clear();
-        ShowCallstack();
+        ShowCallstack(verbose);
         // Skip the first few lines because they're just bookkeeping for LLCallStack,
         // plus any additional lines requested to skip.
         S32 first_line = skip_count + 3;
@@ -65,7 +67,7 @@ class LLCallStackImpl
 public:
     LLCallStackImpl() {}
     ~LLCallStackImpl() {}
-    void getStack(std::vector<std::string>& stack, S32 skip_count=0)
+    void getStack(std::vector<std::string>& stack, S32 skip_count=0, bool verbose=false)
     {
         stack.clear();
     }
@@ -74,15 +76,16 @@ public:
 
 LLCallStackImpl *LLCallStack::s_impl = NULL;
 
-LLCallStack::LLCallStack(S32 skip_count):
-    m_skipCount(skip_count)
+LLCallStack::LLCallStack(S32 skip_count, bool verbose):
+    m_skipCount(skip_count),
+    m_verbose(verbose)
 {
     if (!s_impl)
     {
         s_impl = new LLCallStackImpl;
     }
     LLTimer t;
-    s_impl->getStack(m_strings, m_skipCount);
+    s_impl->getStack(m_strings, m_skipCount, m_verbose);
 }
 
 std::ostream& operator<<(std::ostream& s, const LLCallStack& call_stack)
@@ -92,5 +95,58 @@ std::ostream& operator<<(std::ostream& s, const LLCallStack& call_stack)
     {
         s << *it;
     }
+    return s;
+}
+
+#include "llthreadlocalstorage.h"
+
+LLContextStrings::LLContextStrings()
+{
+}
+
+// static
+LLContextStrings* LLContextStrings::getThreadLocalInstance()
+{
+	LLContextStrings *cons = LLThreadLocalSingletonPointer<LLContextStrings>::getInstance();
+    if (!cons)
+    {
+        LLThreadLocalSingletonPointer<LLContextStrings>::setInstance(new LLContextStrings);
+    }
+	return LLThreadLocalSingletonPointer<LLContextStrings>::getInstance();
+}
+
+// static
+void LLContextStrings::addContextString(const std::string& str)
+{
+	LLContextStrings *cons = getThreadLocalInstance();
+    //LL_INFOS() << "CTX " << (S32)cons << " ADD " << str << " CNT " << cons->m_contextStrings[str] << LL_ENDL;
+	cons->m_contextStrings[str]++;
+}
+
+// static
+void LLContextStrings::removeContextString(const std::string& str)
+{
+	LLContextStrings *cons = getThreadLocalInstance();
+	cons->m_contextStrings[str]--;
+    //LL_INFOS() << "CTX " << (S32)cons << " REMOVE " << str << " CNT " << cons->m_contextStrings[str] << LL_ENDL;
+    if (cons->m_contextStrings[str] == 0)
+    {
+        cons->m_contextStrings.erase(str);
+    }
+}
+
+// static
+void LLContextStrings::output(std::ostream& os)
+{
+    const std::map<std::string,S32>& strings = LLThreadLocalSingletonPointer<LLContextStrings>::getInstance()->m_contextStrings;
+    for (std::map<std::string,S32>::const_iterator it = strings.begin(); it!=strings.end(); ++it)
+    {
+        os << it->first << "[" << it->second << "]" << "\n";
+    }
+}
+
+std::ostream& operator<<(std::ostream& s, const LLContextStatus& context_status)
+{
+    LLThreadLocalSingletonPointer<LLContextStrings>::getInstance()->output(s);
     return s;
 }

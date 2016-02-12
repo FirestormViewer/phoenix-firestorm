@@ -121,20 +121,12 @@ LLJoint::LLJoint() :
 	touch();
 }
 
-LLJoint::LLJoint(S32 joint_num) :
-	mJointNum(joint_num)
-{
-	init();
-	touch();
-}
-
-
 //-----------------------------------------------------------------------------
 // LLJoint()
 // Class Constructor
 //-----------------------------------------------------------------------------
 LLJoint::LLJoint(const std::string &name, LLJoint *parent) :
-	mJointNum(0)
+	mJointNum(-2)
 {
 	init();
 	mUpdateXform = FALSE;
@@ -219,6 +211,18 @@ void LLJoint::touch(U32 flags)
 	}
 }
 
+//-----------------------------------------------------------------------------
+// setJointNum()
+//-----------------------------------------------------------------------------
+void LLJoint::setJointNum(S32 joint_num)
+{
+    mJointNum = joint_num;
+    if (mJointNum + 2 >= LL_CHARACTER_MAX_ANIMATED_JOINTS)
+    {
+        LL_INFOS() << "Does LL_CHARACTER_MAX_ANIMATED_JOINTS need to be increased?" << LL_ENDL;
+        LL_ERRS() << "joint_num " << joint_num << " too large for " << LL_CHARACTER_MAX_ANIMATED_JOINTS << LL_ENDL;
+    }
+}
 //-----------------------------------------------------------------------------
 // getRoot()
 //-----------------------------------------------------------------------------
@@ -327,12 +331,15 @@ bool do_debug_joint(const std::string& name)
 //--------------------------------------------------------------------
 void LLJoint::setPosition( const LLVector3& pos )
 {
+    LLScopedContextString str("setPosition");
 	if (pos != getPosition())
 	{
 		if (do_debug_joint(getName()))
 		{
             LLCallStack cs;
+			LLContextStatus con_status;
 			LL_DEBUGS("Avatar") << " joint " << getName() << " set pos " << pos << LL_ENDL;
+			LL_DEBUGS("Avatar") << "CONTEXT:\n" << "====================\n" << con_status << "====================" << LL_ENDL;
 			LL_DEBUGS("Avatar") << "STACK:\n" << "====================\n" << cs << "====================" << LL_ENDL;
 		}
 	}
@@ -424,12 +431,18 @@ void LLJoint::updatePos(const std::string& av_info)
 	LLUUID mesh_id;
 	if (m_attachmentOverrides.findActiveOverride(mesh_id,found_pos))
 	{
-		LL_DEBUGS("Avatar") << "av " << av_info << " joint " << getName() << " updatePos, winner of " << m_attachmentOverrides.count() << " is mesh " << mesh_id << " pos " << found_pos << LL_ENDL;
+        if (do_debug_joint(getName()))
+        {
+            LL_DEBUGS("Avatar") << "av " << av_info << " joint " << getName() << " updatePos, winner of " << m_attachmentOverrides.count() << " is mesh " << mesh_id << " pos " << found_pos << LL_ENDL;
+        }
 		pos = found_pos;
 	}
 	else
 	{
-		LL_DEBUGS("Avatar") << "av " << av_info << " joint " << getName() << " updatePos, winner is posBeforeOverrides " << m_posBeforeOverrides << LL_ENDL;
+        if (do_debug_joint(getName()))
+        {
+            LL_DEBUGS("Avatar") << "av " << av_info << " joint " << getName() << " updatePos, winner is posBeforeOverrides " << m_posBeforeOverrides << LL_ENDL;
+        }
 		pos = m_posBeforeOverrides;
 	}
 	setPosition(pos);

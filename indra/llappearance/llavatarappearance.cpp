@@ -627,6 +627,7 @@ BOOL LLAvatarAppearance::setupBone(const LLAvatarBoneInfo* info, LLJoint* parent
 		parent->addChild( joint );
 	}
 
+	// SL-315
 	joint->setPosition(info->mPos);
 	joint->setRotation(mayaQ(info->mRot.mV[VX], info->mRot.mV[VY],
 							 info->mRot.mV[VZ], LLQuaternion::XYZ));
@@ -868,6 +869,7 @@ void LLAvatarAppearance::buildCharacter()
 	//-------------------------------------------------------------------------
 	// initialize the pelvis
 	//-------------------------------------------------------------------------
+	// SL-315
 	mPelvisp->setPosition( LLVector3(0.0f, 0.0f, 0.0f) );
 
 	mIsBuilt = TRUE;
@@ -1290,7 +1292,8 @@ LLJoint *LLAvatarAppearance::getCharacterJoint( U32 num )
 	}
     if (!mSkeleton[num])
     {
-        mSkeleton[num] = createAvatarJoint(num);
+        mSkeleton[num] = createAvatarJoint();
+		mSkeleton[num]->setJointNum(num);
     }
 	return mSkeleton[num];
 }
