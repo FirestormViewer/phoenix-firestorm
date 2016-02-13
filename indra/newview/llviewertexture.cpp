@@ -1266,7 +1266,10 @@ void LLViewerFetchedTexture::setDeletionCandidate()
 //set the texture inactive
 void LLViewerFetchedTexture::setInactive()
 {
-	if(mTextureState == ACTIVE && mGLTexturep.notNull() && mGLTexturep->getTexName() && !mGLTexturep->getBoundRecently())
+	// <FS:Ansariel> Try to plug the profile icon memory hole
+	//if(mTextureState == ACTIVE && mGLTexturep.notNull() && mGLTexturep->getTexName() && !mGLTexturep->getBoundRecently())
+	if((mTextureState == ACTIVE || (mTextureState == NO_DELETE && mBoostLevel == BOOST_ICON)) && mGLTexturep.notNull() && mGLTexturep->getTexName() && !mGLTexturep->getBoundRecently())
+	// </FS:Ansariel>
 	{
 		mTextureState = INACTIVE; 
 	}
