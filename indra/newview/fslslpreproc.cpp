@@ -144,6 +144,18 @@ std::string FSLSLPreprocessor::encode(const std::string& script)
 	//otext += "\n//^ = determine what featureset is supported";
 	otext += llformat("\n//program_version %s", LLAppViewer::instance()->getWindowTitle().c_str());
 	
+	time_t utc_time = time_corrected();
+	std::string timeStr ="["+LLTrans::getString ("TimeMonth")+"]/["
+				 +LLTrans::getString ("TimeDay")+"]/["
+				 +LLTrans::getString ("TimeYear")+"] ["
+				 +LLTrans::getString ("TimeHour")+"]:["
+				 +LLTrans::getString ("TimeMin")+"]:["
+				 +LLTrans::getString("TimeSec")+"]";
+	LLSD substitution;
+	substitution["datetime"] = (S32) utc_time;
+	LLStringUtil::format (timeStr, substitution);
+	otext += "\n//last_compiled " + timeStr;
+	
 	otext += "\n";
 	
 	if (mono)
@@ -1379,7 +1391,19 @@ void FSLSLPreprocessor::start_process()
 			errored = true;
 			// some preprocessing error
 			LLStringUtil::format_map_t args;
-			args["[NAME]"] = name;
+			args["[ERR_NAME]"] = e.file_name();
+			args["[LINENUMBER]"] = llformat("%d",e.line_no()-1);
+			args["[ERR_DESC]"] = e.description();
+			std::string err = LLTrans::getString("fs_preprocessor_wave_exception", args);
+			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;
+			display_error(err);
+		}
+		catch(boost::wave::cpplexer::lexing_exception const& e)
+		{
+			errored = true;
+			// lexing preprocessing error
+			LLStringUtil::format_map_t args;
+			args["[ERR_NAME]"] = e.file_name();
 			args["[LINENUMBER]"] = llformat("%d",e.line_no()-1);
 			args["[ERR_DESC]"] = e.description();
 			std::string err = LLTrans::getString("fs_preprocessor_wave_exception", args);
@@ -1391,7 +1415,7 @@ void FSLSLPreprocessor::start_process()
 			FAILDEBUG
 			errored = true;
 			LLStringUtil::format_map_t args;
-			args["[NAME]"] = std::string(current_position.get_file().c_str());
+			args["[ERR_NAME]"] = std::string(current_position.get_file().c_str());
 			args["[LINENUMBER]"] = llformat("%d", current_position.get_line());
 			args["[ERR_DESC]"] = e.what();
 			display_error(LLTrans::getString("fs_preprocessor_exception", args));
@@ -1401,7 +1425,7 @@ void FSLSLPreprocessor::start_process()
 			FAILDEBUG
 			errored = true;
 			LLStringUtil::format_map_t args;
-			args["[NAME]"] = std::string(current_position.get_file().c_str());
+			args["[ERR_NAME]"] = std::string(current_position.get_file().c_str());
 			args["[LINENUMBER]"] = llformat("%d", current_position.get_line());
 			std::string err = LLTrans::getString("fs_preprocessor_error", args);
 			LL_WARNS("FSLSLPreprocessor") << err << LL_ENDL;

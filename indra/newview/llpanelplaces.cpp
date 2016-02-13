@@ -73,6 +73,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
+#include "fsfloaterplacedetails.h"
 
 // Constants
 static const F32 PLACE_INFO_UPDATE_INTERVAL = 3.0;
@@ -120,14 +121,7 @@ public:
 				
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", key);
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", key);
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", key);
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(key);
 				// </FS:Ansariel>
 				return true;
 			}

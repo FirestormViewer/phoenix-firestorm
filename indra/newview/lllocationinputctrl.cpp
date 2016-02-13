@@ -74,6 +74,7 @@
 #include "llviewernetwork.h"
 #endif // OPENSIM
 // </FS:CR>
+#include "fsfloaterplacedetails.h"
 
 //============================================================================
 /*
@@ -654,14 +655,7 @@ void LLLocationInputCtrl::onInfoButtonClicked()
 
 	// <FS:Ansariel> FIRE-817: Separate place details floater
 	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-	if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-	{
-		LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-	}
+	FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "agent"));
 	// </FS:Ansariel>
 }
 
@@ -692,28 +686,14 @@ void LLLocationInputCtrl::onAddLandmarkButtonClicked()
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 	else
 	{
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
 		// </FS:Ansariel>
 	}
 }
@@ -1232,28 +1212,14 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
 			{
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
 				// </FS:Ansariel>
 			}
 			else
 			{
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 				// </FS:Ansariel>
 			}
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d

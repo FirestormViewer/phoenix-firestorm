@@ -4444,6 +4444,7 @@ bool LLAgent::teleportCore(bool is_local)
 
 	// close the map panel so we can see our destination.
 	// we don't close search floater, see EXT-5840.
+	if (!gSavedSettings.getBOOL("FSDoNotHideMapOnTeleport")) // <FS:Ansariel> FIRE-17779: Option to not close world map on teleport
 	LLFloaterReg::hideInstance("world_map");
 
 	// hide land floater too - it'll be out of date
