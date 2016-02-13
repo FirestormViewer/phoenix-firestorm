@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Namelist Popup">
+	<menu_item_call label="Voir le profil" name="show_agent"/>
+	<menu_item_call label="Envoyer un IM" name="send_im"/>
+	<menu_item_call label="Voir l'historique de conversations..." name="chat_history"/>
+	<menu_item_call label="Devenir amis" name="add_friend"/>
+	<menu_item_call label="Ajouter à un cercle" name="Add to Set"/>
+	<menu_item_call label="Zoomer sur le résident" name="zoom_agent"/>
+	<menu_item_call label="Se téléporter vers" name="teleportto_agent"/>
+	<menu_item_call label="Proposer téléportation" name="offer_teleport"/>
+	<menu_item_call label="Demander une téléportation" name="request_teleport"/>
+	<menu_item_call label="Suivre le résident" name="track_agent"/>
+	<menu_item_call label="Supprimer cet ami" name="remove_friend"/>
+	<menu_item_check label="Ignorer" name="Block"/>
+	<menu_item_call label="Copier le nom" name="url_copy_label"/>
+	<menu_item_call label="Copier l'adresse" name="url_copy"/>
+</context_menu>

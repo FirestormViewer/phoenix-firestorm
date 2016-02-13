@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_overrider" title="AO">
+	<floater.string name="ao_no_sets_loaded">Aucun groupe chargé</floater.string>
+	<floater.string name="ao_no_animations_loaded">Aucune animation chargée</floater.string>
+	<floater.string name="ao_dnd_only_on_full_interface">Vous pouvez seulement glisser une animation vers l'interface complète. Cliquez sur l'icône de l'outil pour l'ouvrir.</floater.string>
+</floater>

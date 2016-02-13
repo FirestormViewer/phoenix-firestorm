@@ -3,12 +3,14 @@
 	<menu_item_call label="Remplacer" name="wear_replace"/>
 	<menu_item_call label="Porter" name="wear_wear"/>
 	<menu_item_call label="Ajouter" name="wear_add"/>
-	<menu_item_call label="Enlever / Détacher" name="take_off_or_detach"/>
-	<menu_item_call label="Détacher" name="detach"/>
 	<context_menu label="Attacher à" name="wearable_attach_to"/>
 	<context_menu label="Attacher au HUD" name="wearable_attach_to_hud"/>
-	<menu_item_call label="Enlever" name="take_off"/>
 	<menu_item_call label="Modifier" name="edit"/>
-	<menu_item_call label="Profil de l&apos;article" name="object_profile"/>
-	<menu_item_call label="Afficher l&apos;original" name="show_original"/>
+	<menu_item_call label="Retirer / Détacher" name="take_off_or_detach"/>
+	<menu_item_call label="Détacher" name="detach"/>
+	<menu_item_call label="Retirer" name="take_off"/>
+	<menu_item_call label="Profil de l'objet" name="object_profile"/>
+	<menu_item_call label="Afficher l'original" name="show_original"/>
+	<menu_item_call label="Créer un nouveau" name="create_new"/>
+	<menu_item_call label="--pas d'options--" name="--no options--"/>
 </context_menu>

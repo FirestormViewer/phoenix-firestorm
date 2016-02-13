@@ -28,9 +28,8 @@
 #ifndef FS_FLOATERPROFILE_H
 #define FS_FLOATERPROFILE_H
 
+#include "llavatarnamecache.h"
 #include "llfloater.h"
-
-class LLAvatarName;
 
 class FSFloaterProfile : public LLFloater
 {
@@ -40,24 +39,14 @@ public:
 	virtual ~FSFloaterProfile();
 
 	/*virtual*/ void onOpen(const LLSD& key);
-
 	/*virtual*/ BOOL postBuild();
 
-	/**
-	 * Returns avatar ID.
-	 */
-	const LLUUID& getAvatarId() const { return mAvatarId; }
-
 protected:
-	/**
-	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
-	 */
-	void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
-
 	void onOKBtn();
 	void onCancelBtn();
 
 private:
+	LLAvatarNameCache::callback_connection_t mNameCallbackConnection;
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
 	LLUUID mAvatarId;

@@ -985,6 +985,18 @@ class DarwinManifest(ViewerManifest):
                         except OSError as err:
                             print "Can't symlink %s -> %s: %s" % (src, dst, err)
 
+                #<FS:TS> Moved from the x86_64 specific version because code
+                # below that does symlinking and path fixup depends on it.
+                if(self.prefix(src="../packages/bin_x86", dst="")):
+                    self.path("SLPlugin.app", "SLPlugin.app")
+	
+                    if self.prefix(src = "llplugin", dst="llplugin"):
+                        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+                        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+                        self.end_prefix("llplugin")
+
+                    self.end_prefix();
+
                 # LLCefLib helper apps go inside SLPlugin.app
                 if self.prefix(src="", dst="SLPlugin.app/Contents/Frameworks"):
                     for helperappfile in ('LLCefLib Helper.app',
@@ -1004,6 +1016,11 @@ class DarwinManifest(ViewerManifest):
                     self.end_prefix("llplugin")
 
                 self.end_prefix("Resources")
+
+                #<FS:TS> Copy in prebuilt framework if it's there
+                if self.prefix(src="../packages/bin_x86/Frameworks", dst="Frameworks"):
+                    self.path("Chromium Embedded Framework.framework")
+                    self.end_prefix()
 
                 # CEF framework goes inside Second Life.app/Contents/Frameworks
                 if self.prefix(src="", dst="Frameworks"):
@@ -1240,12 +1257,11 @@ class Darwin_universal_Manifest(DarwinManifest):
         super(Darwin_universal_Manifest, self).construct()
 
         if(self.prefix(src="../packages/bin_x86", dst="Contents/Resources/")):
-            self.path("slplugin.app")
+            self.path("SLPlugin.app")
 			
             if self.prefix(src = "llplugin", dst="llplugin"):
                 self.path("media_plugin_quicktime.dylib")
-                self.path("media_plugin_webkit.dylib")
-                self.path("libllqtwebkit.dylib")
+                self.path("media_plugin_cef.dylib")
             self.end_prefix("llplugin")
 
         self.end_prefix("../packages/bin_x86");
@@ -1255,16 +1271,18 @@ class Darwin_x86_64_Manifest(DarwinManifest):
     def construct(self):
         super(Darwin_x86_64_Manifest, self).construct()
 
-        if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
-            self.path("slplugin.app", "slplugin.app")
-	
-            if self.prefix(src = "llplugin", dst="llplugin"):
-                self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
-                self.path("media_plugin_webkit.dylib", "media_plugin_webkit.dylib")
-                self.path("libllqtwebkit.dylib", "libllqtwebkit.dylib")
-            self.end_prefix("llplugin")
+        #<FS:TS> This had to be moved to the main manifest routine because
+        # there's too much that depends on having these files in there before
+        # this point is ever reached.
+        #if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
+        #    self.path("SLPlugin.app", "SLPlugin.app")
+        #
+        #    if self.prefix(src = "llplugin", dst="llplugin"):
+        #        self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+        #        self.path("media_plugin_cef.dylib", "media_plugin_cef.dylib")
+        #    self.end_prefix("llplugin")
 
-        self.end_prefix("../packages/bin_x86");
+        #self.end_prefix("../packages/bin_x86");
 
 
 class LinuxManifest(ViewerManifest):
@@ -1500,6 +1518,7 @@ class LinuxManifest(ViewerManifest):
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
         self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
+        self.fs_setuid_chromesandbox() # <FS:ND/> Chown chrome-sandbox to root:root and set the setuid bit
 
         # Fix access permissions
         self.run_command("""
@@ -1539,7 +1558,7 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
 class Linux_i686_Manifest(LinuxManifest):
     def construct(self):

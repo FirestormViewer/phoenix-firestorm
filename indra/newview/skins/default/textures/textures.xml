@@ -992,8 +992,6 @@ with the same filename but different name
 <texture name="ff_edit_theirs_button"			file_name="legacy/ff_edit_theirs_button.tga"		preload="false" />
 <texture name="icon_avatar_online"			file_name="legacy/icon_avatar_online.tga"		preload="false" />
 <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
-<texture name="ff_visible_online_button_theirs"	file_name="legacy/ff_visible_online_button_theirs.tga"		preload="false" />
-<texture name="ff_visible_online_theirs"		file_name="legacy/ff_visible_online_theirs.tga"		preload="false" />
 
 <texture name="Console_Background" file_name="Console_Background.png"/>
 <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />

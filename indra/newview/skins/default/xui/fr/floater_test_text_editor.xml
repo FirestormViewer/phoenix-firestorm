@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_text_editor">
+	<text_editor name="test_text_editor" tool_tip="text editor">Text Editor</text_editor>
+	<text_editor name="test_text_editor" tool_tip="text editor">This contains long text and should scroll horizontally to the right</text_editor>
+	<text_editor name="numeric_text_editor" tool_tip="text editor for numeric text entry only">This is text that is NOT a number, so shouldn't appear</text_editor>
+</floater>

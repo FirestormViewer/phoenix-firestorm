@@ -399,17 +399,35 @@ public:
 		mSessionID = chat.mSessionID;
 		mSourceType = chat.mSourceType;
 		mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+		mNameStyleParams = style_params;
 
 		//*TODO overly defensive thing, source type should be maintained out there
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
 		{
 			mSourceType = CHAT_SOURCE_SYSTEM;
-		}  
+		}
 
-		mUserNameFont = style_params.font();
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setReadOnlyColor(style_params.readonly_color());
-		user_name->setColor(style_params.color());
+		// Use the original font defined in panel_chat_header.xml
+		mNameStyleParams.font.name = "SansSerifSmall";
+
+		// To be able to use the group chat moderator options, we use the
+		// original font style "BOLD" for everything except group chats.
+		// Group chats have the option to show moderators in bold, so
+		// we display both display and username in "NORMAL" for now.
+		static LLCachedControl<bool> fsHighlightGroupMods(gSavedSettings, "FSHighlightGroupMods");
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+		if (!fsHighlightGroupMods || !session || !session->isGroupSessionType())
+		{
+			mNameStyleParams.font.style = "BOLD";
+		}
+
+		mUserNameFont = mNameStyleParams.font();
+		mUserNameTextBox->setReadOnlyColor(mNameStyleParams.readonly_color());
+		mUserNameTextBox->setColor(mNameStyleParams.color());
+		mUserNameTextBox->setFont(mUserNameFont);
+
+		// Make sure we use the correct font style for everything after the display name
+		mNameStyleParams.font.style = style_params.font.style;
 
 		if (chat.mFromName.empty()
 			//|| mSourceType == CHAT_SOURCE_SYSTEM
@@ -417,12 +435,20 @@ public:
 			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
 			|| mAvatarID.isNull())
 		{
-			mFrom = LLTrans::getString("CURRENT_GRID");
-			if(!chat.mFromName.empty() && (mFrom != chat.mFromName))
+			if (mSourceType == CHAT_SOURCE_UNKNOWN)
 			{
-				mFrom += " (" + chat.mFromName + ")";
+				// Avatar names may come up as CHAT_SOURCE_UNKNOWN - don't append the grid name in that case
+				mFrom = chat.mFromName;
 			}
-			user_name->setValue(mFrom);
+			else
+			{
+				mFrom = LLTrans::getString("SECOND_LIFE"); // Will automatically be substituted!
+				if (!chat.mFromName.empty() && (mFrom != chat.mFromName))
+				{
+					mFrom += " (" + chat.mFromName + ")";
+				}
+			}
+			mUserNameTextBox->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
 		else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
@@ -436,19 +462,19 @@ public:
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
 //			user_name->setValue( LLSD() );
-//			fetchAvatarName(chat);
+//			fetchAvatarName();
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 			if (!chat.mRlvNamesFiltered)
 			{
-				user_name->setValue( LLSD() );
+				mUserNameTextBox->setValue( LLSD() );
 				fetchAvatarName();
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				user_name->setValue(mFrom);
-				user_name->setToolTip(mFrom);
+				mUserNameTextBox->setValue(mFrom);
+				mUserNameTextBox->setToolTip(mFrom);
 				setToolTip(mFrom);
 				updateMinUserNameWidth();
 			}
@@ -465,22 +491,21 @@ public:
 				username_end == (chat.mFromName.length() - 1))
 			{
 				mFrom = chat.mFromName.substr(0, username_start);
-				user_name->setValue(mFrom);
+				mUserNameTextBox->setValue(mFrom);
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				user_name->setValue(mFrom);
+				mUserNameTextBox->setValue(mFrom);
 				updateMinUserNameWidth();
 			}
-// [/RLVa:KB]
 		}
 		else
 		{
 			// ...from an object, just use name as given
 			mFrom = chat.mFromName;
-			user_name->setValue(mFrom);
+			mUserNameTextBox->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
 
@@ -574,20 +599,17 @@ public:
 
 	/*virtual*/ void draw()
 	{
-		LLTextBox* user_name = mUserNameTextBox; //getChild<LLTextBox>("user_name");
-		LLTextBox* time_box = mTimeBoxTextBox; //getChild<LLTextBox>("time_box");
-
-		LLRect user_name_rect = user_name->getRect();
+		LLRect user_name_rect = mUserNameTextBox->getRect();
 		S32 user_name_width = user_name_rect.getWidth();
-		S32 time_box_width = time_box->getRect().getWidth();
+		S32 time_box_width = mTimeBoxTextBox->getRect().getWidth();
 
-		if (!time_box->getVisible() && user_name_width > mMinUserNameWidth)
+		if (!mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
 		{
 			user_name_rect.mRight -= time_box_width;
-			user_name->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
-			user_name->setRect(user_name_rect);
+			mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
+			mUserNameTextBox->setRect(user_name_rect);
 
-			time_box->setVisible(TRUE);
+			mTimeBoxTextBox->setVisible(TRUE);
 		}
 
 		LLPanel::draw();
@@ -597,8 +619,7 @@ public:
 	{
 		if (mUserNameFont)
 		{
-			LLTextBox* user_name = getChild<LLTextBox>("user_name");
-			const LLWString& text = user_name->getWText();
+			const LLWString& text = mUserNameTextBox->getWText();
 			mMinUserNameWidth = mUserNameFont->getWidth(text.c_str()) + PADDING;
 		}
 	}
@@ -629,7 +650,7 @@ protected:
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
 			showAvatarContextMenu(x,y);
-		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT && SYSTEM_FROM != mFrom)
+		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT)
 			showObjectContextMenu(x,y);
 	}
 
@@ -650,7 +671,7 @@ protected:
 
 		if(menu)
 		{
-			bool is_friend = LLAvatarTracker::instance().getBuddyInfo(mAvatarID) != NULL;
+			bool is_friend = LLAvatarActions::isFriend(mAvatarID);
 			
 			menu->setItemEnabled("Add Friend", !is_friend);
 			menu->setItemEnabled("Remove Friend", is_friend);
@@ -700,7 +721,7 @@ protected:
 
 	void showInfoCtrl()
 	{
-		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && CHAT_SOURCE_SYSTEM != mSourceType;
+		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR);
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		if (isVisible && mShowInfoCtrl)
 // [/RLVa:KB]
@@ -720,25 +741,22 @@ protected:
 private:
 	void setTimeField(const LLChat& chat)
 	{
-		LLTextBox* time_box = getChild<LLTextBox>("time_box");
+		LLRect rect_before = mTimeBoxTextBox->getRect();
 
-		LLRect rect_before = time_box->getRect();
-
-		time_box->setValue(chat.mTimeStr);
+		mTimeBoxTextBox->setValue(chat.mTimeStr);
 
 		// set necessary textbox width to fit all text
-		time_box->reshapeToFitText();
-		LLRect rect_after = time_box->getRect();
+		mTimeBoxTextBox->reshapeToFitText();
+		LLRect rect_after = mTimeBoxTextBox->getRect();
 
 		// move rect to the left to correct position...
 		S32 delta_pos_x = rect_before.getWidth() - rect_after.getWidth();
 		S32 delta_pos_y = rect_before.getHeight() - rect_after.getHeight();
-		time_box->translate(delta_pos_x, delta_pos_y);
+		mTimeBoxTextBox->translate(delta_pos_x, delta_pos_y);
 
 		//... & change width of the name control
-		LLView* user_name = getChild<LLView>("user_name");
-		const LLRect& user_rect = user_name->getRect();
-		user_name->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
+		const LLRect& user_rect = mUserNameTextBox->getRect();
+		mUserNameTextBox->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
 	}
 
 	void fetchAvatarName()
@@ -760,9 +778,8 @@ private:
 
 		mFrom = av_name.getDisplayName();
 
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setValue( LLSD(mFrom) );
-		user_name->setToolTip( av_name.getUserName() );
+		mUserNameTextBox->setValue( LLSD(mFrom) );
+		mUserNameTextBox->setToolTip( av_name.getUserName() );
 
 		if (gSavedSettings.getBOOL("NameTagShowUsernames") &&
 			av_name.useDisplayNames() &&
@@ -772,9 +789,9 @@ private:
 			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
 			style_params_name.color(userNameColor);
 			style_params_name.font.name("SansSerifSmall");
-			style_params_name.font.style("NORMAL");
+			style_params_name.font.style(mNameStyleParams.font.style);
 			style_params_name.readonly_color(userNameColor);
-			user_name->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
+			mUserNameTextBox->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
 		}
 		setToolTip( av_name.getUserName() );
 		// name might have changed, update width
@@ -787,7 +804,7 @@ protected:
 
 	LLUICtrl*			mInfoCtrl;
 
-	LLUUID			    mAvatarID;
+	LLUUID				mAvatarID;
 	LLSD				mObjectData;
 	EChatSourceType		mSourceType;
 	EChatType			mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
@@ -801,7 +818,9 @@ protected:
 	S32					mMinUserNameWidth;
 	const LLFontGL*		mUserNameFont;
 	LLTextBox*			mUserNameTextBox;
-	LLTextBox*			mTimeBoxTextBox; 
+	LLTextBox*			mTimeBoxTextBox;
+
+	LLStyle::Params		mNameStyleParams;
 
 private:
 	boost::signals2::connection mAvatarNameCacheConnection;
@@ -919,7 +938,7 @@ std::string applyModeratorStyle(U32 moderator_style)
 	return style;
 }
 
-static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
+static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {

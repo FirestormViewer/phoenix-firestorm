@@ -1098,7 +1098,10 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	U32 date_search_direction = mFilter->getDateSearchDirection();
 
 	// update the ui elements
-	setTitle(mFilter->getName());
+	// <FS:PP> Make floater title translatable
+	// setTitle(mFilter->getName());
+	setTitle(LLTrans::getString(mFilter->getName()));
+	// </FS:PP>
 
 	getChild<LLUICtrl>("check_animation")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
 

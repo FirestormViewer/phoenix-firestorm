@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="contact_sets_panel">
+	<panel label="bottom_panel" name="contact_sets_buttons_panel">
+		<menu_button name="contact_sets_gear_btn" tool_tip="Actions sur la personne ou le groupe sélectionné"/>
+		<menu_button name="contact_sets_plus_btn" tool_tip="Ajouter un groupe ou une personne"/>
+		<menu_button name="contact_sets_remove_btn" tool_tip="Supprimer un groupe ou une personne"/>
+	</panel>
+</panel>

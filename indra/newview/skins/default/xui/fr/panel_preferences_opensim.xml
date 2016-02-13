@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Opensim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel label="Gestionnaire de Grille" name="grid_management_panel">
+			<text name="add_grid_text">Ajouter une nouvelle Grille</text>
+			<line_editor name="add_grid" label="Saisissez l'URI de connexion"/>
+			<button label="Effacer" label_selected="Effacer" name="clear_grid"/>
+			<button label="Ajouter" name="apply_new_grid"/>
+			<text name="add_grid_text">Gérer les Grilles</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Nom de la Grille" name="grid_label"/>
+				<scroll_list.columns label="Adresse de connexion" name="login_uri"/>
+			</scroll_list>
+			<button label="Actualiser" name="refresh_grid"/>
+			<button label="Supprimer" name="remove_grid"/>
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text">Nom de la Grille :</text>
+				<text name="grid_uri_text">Adresse :</text>
+				<text name="login_page_text">Adresse de connexion :</text>
+				<button label="Enregistrer" name="save_grid"/>
+				<text name="helper_uri_text">Assistance :</text>
+				<text name="website_text">Site Web :</text>
+				<text name="support_text">Support :</text>
+				<text name="register_text">Enregistrement :</text>
+				<text name="password_text">Mot de passe oublié :</text>
+				<text name="search_text">Recherche :</text>
+				<text name="message_text">Message du jour :</text>
+			</panel>
+		</panel>
+		<panel label="Divers" name="opensim_misc_panel">
+			<check_box label="Activer les paramètres d'éclairage partagé par région" name="Lightshare"/>
+			<check_box label="Recherche de débogage" name="DebugSearch"/>
+			<text name="search_url_debug_text">Écrase la page actuelle de recherche : (Inactif si vide)</text>
+			<button label="Effacer" label_selected="Effacer" name="clear_search_url_debug"/>
+			<button label="Définir" name="pick_current_search_url"/>
+		</panel>
+	</tab_container>
+</panel>

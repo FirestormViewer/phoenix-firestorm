@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Mon profil" name="panel_me">
-	<panel label="MES FAVORIS" name="panel_picks"/>
+<panel label="Profil" name="panel_me">
+	<panel label="Favoris" name="panel_picks"/>
 </panel>

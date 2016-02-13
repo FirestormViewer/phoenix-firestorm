@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_line_editor">
+	<line_editor name="enabled_line_editor" tool_tip="enabled line editor">Enabled line editor</line_editor>
+	<line_editor name="ascii_line_editor" tool_tip="ascii line editor">ASCII only line editor</line_editor>
+	<line_editor name="disabled_line_editor" tool_tip="disabled line editor">Disabled line editor</line_editor>
+	<line_editor name="enabled_colored_line_editor" tool_tip="enabled colored line editor">Enabled red-text line editor</line_editor>
+	<line_editor name="disabled_colored_line_editor" tool_tip="disabled colored line editor">Disabled red-text line editor</line_editor>
+	<line_editor name="left_pad_editor">25 px left text padding</line_editor>
+	<line_editor name="left_pad_editor">75 px right text padding</line_editor>
+	<line_editor name="left_pad_editor">25 px left 75 px right text padding</line_editor>
+	<search_editor label="Type here to search" name="search editor" tool_tip="search editor"/>
+</floater>

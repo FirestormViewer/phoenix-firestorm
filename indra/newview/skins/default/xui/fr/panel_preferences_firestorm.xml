@@ -1,426 +1,157 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!--alba20130521-->
-<panel name="firestorm">
-<tab_container name="tabs">
-
-<!--Extras-->
-	<panel name="tab-extras"
-		label="Extras">
-		<check_box name="checkMiscRLVa"
-			label="Autoriser le contrôle à distance du viewer (RLVa)">
-		</check_box>
-		<text name="textMiscRLVaRestart"
-			left_pad="20">
-			(Reconnexion)
-		</text>
-		<check_box name="grouplandrez"
-			label="Toujours attribuer aux objets le groupe propriétaire du terrain"
-			tool_tip="Sous condition que vôtre rôle le permette, attribuer à l'objet créé ou posé le groupe propriétaire du terrain, sans tenir compte de celui que vous portez. (Cela ne transfère pas l'objet au groupe)"/>
-		<check_box name="EffectScriptChatParticles"
-			label="Emettre des particules lorsqu'un script communique"
-			tool_tip="Activer l'émission d'un tourbillon de particules lorsqu'un objet scripté communique."/>
-        <check_box name="FSDisableAvatarTrackerAtCloseIn"
-			label="Désactiver la balise à l'approche de l'avatar tracé (-3m)"
-			tool_tip="Lorsque l'on trace un avatar depuis le radar (Ctl-Maj-A), une balise rouge indique la direction à suivre, à la manière d'une boussole. Il faut cliquer dessus pour l'effacer. Avec cette option, elle s'éteindra automatiquement lorsque vous arriverez à moins de 3m de l'avatar ciblé. (par défaut)."/>
-		<check_box name="login_screen_toggle"
-			label="Désactiver l'écran de connexion"
-			tool_tip="Lors de la connexion, remplacer l'écran et la barre de progression par une image fixe."/>
-		<check_box name="logout_screen_toggle"
-			label="Désactiver l'écran de déconnexion"
-			tool_tip="Lors de la déconnexion, remplacer l'écran et la barre de progression par une image fixe."/>
-		<check_box name="FSRenderFarClipStepping"
-			label="Activer la distance progressive d'affichage"
-			tool_tip="Firestorm réduira la distance d'affichage avant le TP et la restaurera à l'identique après, mais par palliers successifs. Plus rapide et moins coûteux en ressource."/>
-		<slider name="progressive_draw_distance_interval"
-			tool_tip="Intervale, en secondes, entre chaque incrémentation de la distance d'affichage (défaut : 20 sec.)."/>
-		<check_box name="UseLSLBridge"
-			label="Activer le 'LSL-Client Bridge'"
-			tool_tip="Autoriser le viewer à créer et utiliser un attachement scripté améliorant notablement ses performances. Le brige ne peut pas être créé lorsque la Bibliothèque est désactivée."/>
-		<!-- <check_box name="UseLSLFlightAssist"
-			label="Activer l'assistant de vol du Bridge"
-			tool_tip="Activer le script d'assistance au vol à haute altitude."/> -->
-	</panel>
-
-<!--Protection-->
-	<panel name="ProtectionTab"
-		label="Protection">
-		<check_box name="FSBlockClickSit"
-			label="Bloquer l'action automatique du clic gauche pour s'asseoir"/>
-		<check_box name="ScriptsCanShowUI"
-			label="Autoriser les scripts à ouvrir la Carte (llMapDestination)"/>
-	<!--revoke permissions-->
-		<text name="revokepermissions_txt">
-			Révocation des permissions
-		</text>
-		<radio_group name="FSRevokePerms"
-			tool_tip="Revoquer les permissions accordées aux 'pose balls', 'dance balls', etc... d'animer votre avatar. Cocher une option défini à quel moment procéder à la révocation.">
-			<radio_item name="never_radio"
-				label="Jamais (Par défaut)"/>
-			<radio_item name="sit_radio"
-				label="Lorsque l'avatar s'assoit"/>
-			<radio_item name="stand_radio"
-				label="Lorsque l'avatar se lève"/>
-			<radio_item name="sitnstand_radio"
-				label="Lorsque l'avatar s'assoit et se lève"/>
-		</radio_group>
-	<!--texture crasher-->
-		<text name="SurfaceAreaThreshholdLabel">
-			Lag dû aux textures (peut casser l'affichage de certains objets)
-		</text>
-		<check_box name="RenderVolumeSAProtection"
-			label="Masquer les immenses objets à lourd texturage.        Seuil, en m2 :"
-			tool_tip="Protège votre viewer des plantages graphiques liés aux très grands objets à très lourd texturage (crasher graphique). Par défaut réglé à 5000 m2, si vous trouvez que certains objets ne sont plus affichés, mais voulez toutefois conserver cette option activée, vous devrez peut-être l'augmenter."/>
-	<!--spam-->
-		<check_box name="UseAntiSpam"
-			label="Activer la protection anti-spam.     Maximum admis :"/>
-        <text name="AntiSpamText1">
-			Lignes par message :
-        </text>
-        <spinner name="_NACL_AntiSpamNewlines"
-			tool_tip="Nombre maximum de lignes successives acceptées dans un seul message [Défaut : 70]"/>
-        <text name="AntiSpamText2">
-			Evénements par source :
-        </text>
-        <spinner name="_NACL_AntiSpamAmount"
-			tool_tip="Nombre maximum d'événements similaires acceptés de la même source en moins de 2 secondes. [Par défaut : 10]"/>
-        <text name="AntiSpamText3">
-			Demandes à jouer un son :
-        </text>
-        <spinner name="_NACL_AntiSpamSoundMulti"
-			tool_tip="Nombre maximum de demandes successives à jouer un son. [Défaut : 10]"/>
-        <text name="AntiSpamText4">
-			Demandes à précharger un son :
-        </text>
-        <spinner name="_NACL_AntiSpamSoundPreloadMulti"
-			tool_tip="Nombre maximum de demandes successives à précharger un son. [Défaut : 4]"/>
-        <button name="AntiSpamUnblock"
-			label="Débloquer toutes les sources"/>
-	</panel>
-
-<!--Avatar-->
-	<panel name="firestorm_avatar"
-		label="Avatar">
-		<text name="HeadMovement">
-			Liberté de la tête de l'avatar à suivre le curseur (0 = pas de mouvement)
-		</text>
-		<slider name="PitchFromMousePositionSlider"
-			label="Mouvement vertical :"
-			tool_tip="Portée verticale (tanguage), en degrés, sur laquelle la tête de l'avatar suit le curseur."/>
-        <text name="PitchFromMousePositionText">
-            degrés
-        </text>
-        <slider name="YawFromMousePositionSlider"
-			label="Mouvement horizontal :"
-			tool_tip="Portée horizontale (rouli), en degrés, sur laquelle la tête de l'avatar suit le curseur."/>
-        <text name="YawFromMousePositionText">
-            degrés
-        </text>
-        <text name="note_lookat">
-             (Le partage du pointeur (look at) est dans l'onglet Confidentialité)
-        </text>
-	<!-- LGG Color Beams -->
-        <text name="BeamPrefs">
-			Effets du faisceau de sélection
-		</text>
-		<button name="BeamColor_delete"
-			label="Suppr."
-			tool_tip="Supprimer la présélection de couleurs active."/>
-        <combo_box name="BeamColor_combo"
-			tool_tip="Sélectionner une présélection de couleurs."/>
-		<button name="BeamColor_new"
-			label="Créer"
-			tool_tip="Créer une présélection de couleurs."/>
-		<button name="BeamColor_refresh"
-			label="Rafraîchir"
-			tool_tip="Rafraîchir la liste des présélections de couleurs."/>
-		<button name="PhoenixBeamPrev_rainbow"
-			label=""/>
-        <slider name="FSMaxBeamsPerSecond"
-			label="Emissions / sec"
-			tool_tip="Fréquence d'émission des particules du faisceau. (Défaut 40)" />
-        <check_box name="SLPartBeam"
-			label="Activer le faisceau de sélection"/>
-        <check_box name="FSParticleChat"
-			label="Envoyer les données dans le chat"
-			tool_tip="Envoie les données de la sélection (départ/arrêt et position globale) au canal de chat 9000."/>
-		<combo_box
-			name="FSBeamShape_combo"
-			tool_tip="Sélectionner une forme pour les particules du faisceau." />
-		<button name="delete_beam"
-			label="Suppr."
-			tool_tip="Supprimer la forme de faisceau active."/>
-		<button name="custom_beam_btn"
-			label="Créer"
-			tool_tip="Créer une forme de faisceau."/>
-        <button name="refresh_beams"
-			label="Rafraîchir"
-			tool_tip="Rafraîchir la liste de formes du faisceau."/>
-         <button name="PhoenixBeamPrev_Phoenix"
-			label=""/>
-        <slider name="FSBeamShapeScale"
-			label="Taille"
-			tool_tip="Changer la taille du faisceau." />
-	</panel>
-
-<!--Windlight-->
-	<panel name="WindlightTab"
-		label="WindLight">
-		<check_box name="UseEnvironmentFromRegionAlways"
-			label="Changer automatiquement l'environnement pour utiliser les paramètres de la région"/>
-        <check_box name="FSInterpolateSky"
-			label="Fondu-enchaînés lors des changements de ciels à partir des Préférences Rapides"
-			tool_tip="Insère un fondu-enchaîné entre les changements de ciels pré-sélectionnés dans les préférences rapides. Cet effet peut provoquer sur les ordinateurs plus lents une chute du taux d'image/seconde durant quelques secondes. Désactiver cette option pour sauter l'effet et appliquer instantanément le changement. "/>
-        <check_box name="FSInterpolateWater"
-			label="Fondu-enchaînés lors des changements d'océan à partir des Préférences Rapides"
-			tool_tip="Insère un fondu-enchaîné entre les changements d'océan pré-sélectionnés dans les préférences rapides. Cet effet peut provoquer sur les ordinateurs plus lents une chute du taux d'image/seconde durant quelques secondes. Désactiver cette option pour sauter l'effet et appliquer instantanément le changement. "/>
-	<!--parcel WL-->
-		<text name="FSWLshare_txt">
-			Partage parcellaire Windlight Firestorm
-		</text>
-		<check_box name="FSWLParcelEnabled"
-			label="Activer le partage parcellaire WindLight Firestorm"/>
-		<check_box name="FSWLWhitelistFriends"
-			label="Pour les terrains de vos amis"/>
-		<check_box name="FSWLWhitelistGroups"
-			label="Pour les terrains de vos groupes"/>
-		<check_box name="FSWLWhitelistAll"
-			label="Pour tous les terrains"/>
-		<check_box name="FSInterpolateParcelWL"
-			label="Fondu-enchaîné lors d'un changement de parcelle / terrain"
-			tool_tip="Insère un fondu-enchaîné lors d'un changements de parcelles/terrainss où le partage parcellaire WL FS a été paramétré. Cet effet peut provoquer sur les ordinateurs plus lents une chute du taux d'image/seconde durant quelques secondes. Désactiver cette option pour sauter l'effet et appliquer instantanément le changement. "/>
-        <text name="wl_crossfade_label">
-			Durée du fondu-enchaîné :
-        </text>
-        <spinner name="FSWindlightInterpolateTime"
-			tool_tip="Durée du fondu-enchaîné lors du passage d'un lieu à un autre [Défaut : 3]"/>
-        <text name="could_texture_text">
-           Nuages (reco. recommandée) :
-        </text>
-        <combo_box name="cloud_combo"
-			tool_tip="Choix de textures de nuages."/>
-	</panel>
-
-<!--Build-->
-	<panel name="BuildTab"
-		label="Bâtir 1">
-		<text name="text_box_objprams">
-			Taille
-		</text>
-		<text name="text_box_objprams2">
-			Paramètres
-        </text>
-        <text ame="text_box_objprams3">
-			Texture
-        </text>
-	<!--size-->
-		<spinner name="X size"
-			label="X"/>
-		<spinner name="Y size"
-			label="Y"/>
-		<spinner name="Z size"
-			label="Z"/>
-	<!--param-->
-		<check_box name="FSBuildPrefs_PhantomToggle"
-			label="Fantôme"/>
-        <check_box name="FSBuildPrefs_PhysicalToggle"
-			label="Physique"/>
-        <check_box name="FSBuildPrefs_TemporaryToggle"
-			label="Temporaire"/>
-		<combo_box name="material"
-			tool_tip="Le choix de matière détermine quel son émettra l'objet lors d'une collision avec un avatar. N'a aucune incidence sur la consistance de l'objet.">
-			<combo_item name="Stone" label="Pierre"/>
-			<combo_item name="Metal" label="Métal"/>
-			<combo_item name="Glass" label="Verre"/>
-			<combo_item name="Wood" label="Bois"/>
-			<combo_item name="Flesh" label="Chair"/>
-			<combo_item name="Plastic" label="Plastique"/>
-			<combo_item name="Rubber" label="Caoutchouc"/>
-		</combo_box>
-	<!--texture-->
-		<texture_picker name="texture control"
-			label="Texture"
-			tool_tip="Sélectionner une texture."/>
-        <color_swatch name="colorswatch"
-			label="Couleur"
-			tool_tip="Sélectionner une couleur."/>
-        <spinner name="alpha"
-			label="Alpha"/>
-        <spinner name="glow"
-			label="Eclat"/>
-        <check_box name="EmFBToggle"
-			label="Lumineux"/>
-        <combo_box name="combobox shininess"
-			tool_tip="Selecteur de brillance. (N'est pas lié à 'Eclat' ou 'Lumineux' ci-dessus.)">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Firestorm" name="firestorm">
+	<panel.string name="BeamsOffLabel">=== OFF ===</panel.string>
+	<string name="EmbeddedItemNotSet">Non défini</string>
+	<string name="EmbeddedItemNotAvailable">Non disponible</string>
+	<string name="EmbeddedItemNotLoggedIn">Non connecté</string>
+	<tab_container label="Préférences de Firestorm" name="tabs">
+		<panel label="Extras" name="tab-extras">
+			<check_box name="checkMiscRLVa" label="Autoriser les contrôles de viewer scripté à distance (RLVa)"/>
+			<text name="textMiscRLVaRestart">(Redémarrage requis)</text>
+			<check_box label="Toujours assigner les objets rezzés au groupe du terrain, si possible" name="grouplandrez" tool_tip="Assigne les objets posés au sol au groupe propriétaire du terrain si vous appartenez à celui-ci, même s'il n'est pas actif."/>
+			<check_box label="Créer un effet de particules lorsque les scripts communiquent" name="EffectScriptChatParticles" tool_tip="Activer cette option affichera un petit nuage tournoyant autour de l'objet qui communique"/>
+			<check_box label="Désactiver la balise de suivi lorsque vous vous approchez de la personne concernée (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Activer cette option désactivera automatiquement la balise de suivi automatiquement lorsque vous vous approcherez de la personne (&lt;= 3m par défaut)"/>
+			<check_box label="Désactiver l'écran de chargement à la connexion" name="login_screen_toggle" tool_tip="Désactive l'écran de chargement à la connexion"/>
+			<check_box label="Désactiver l'écran de chargement à la déconnexion" name="logout_screen_toggle" tool_tip="Désactive l'écran de chargement à la déconnexion"/>
+			<check_box label="Activer la distance d'affichage par paliers" name="FSRenderFarClipStepping" tool_tip="Si activé, Firestorm utilisera une distance d'affichage progressive par paliers après une téléportation"/>
+			<slider name="progressive_draw_distance_interval" tool_tip="Intervalle entre chaque incrémentation de la distance d'affichage (en secondes)"/>
+			<check_box name="UseLSLBridge" label="Activer le Bridge LSL" tool_tip="Porter un objet scripté afin d'activer certaines fonctionnalités avancées"/>
+			<combo_box name="UseLSLFlightAssist" tool_tip="Active les fonctionnalités d'aide au vol et de lévitation à haute altitude">
+				<combo_box.item label="Aide au vol : Désactivée" name="flight_disabled"/>
+				<combo_box.item label="Aide au vol : Boost actif" name="flight_mild"/>
+				<combo_box.item label="Aide au vol : Boost amplifié" name="flight_moderate"/>
+				<combo_box.item label="Aide au vol : Pleine puissance" name="flight_strong"/>
+			</combo_box>
+		</panel>
+		<panel label="Protection" name="ProtectionTab">
+			<check_box label="Empêcher de s'asseoir sur les objets par clic simple" name="FSBlockClickSit"/>
+			<check_box label="Permettre aux scripts d'afficher la carte (llMapDestination)" name="ScriptsCanShowUI"/>
+			<text name="revokepermissions_txt">Révoquer les permissions :</text>
+			<radio_group name="FSRevokePerms">
+				<radio_item label="Jamais (Comportement par défaut)" name="never_radio"/>
+				<radio_item label="Révoquer s'asseoir" name="sit_radio"/>
+				<radio_item label="Révoquer se lever" name="stand_radio"/>
+				<radio_item label="Révoquer s'asseoir et se lever" name="sitnstand_radio"/>
+			</radio_group>
+			<text name="SurfaceAreaThreshholdLabel">Protection contre les textures énormes :</text>
+			<check_box label="Seuil avant de masquer les objets possédant une texture trop grande :" width="400" name="RenderVolumeSAProtection" tool_tip="Activer cette option masquera automatiquement les objets possédant une texture et possédant une trop grande surface. (5000m² par défaut)"/>
+			<check_box label="Activer l'antispam" name="UseAntiSpam"/>
+			<text name="AntiSpamText1">Lignes max. dans un message :</text>
+			<spinner name="_NACL_AntiSpamNewlines" tool_tip="Nombre de lignes maximum autorisées dans un message (70 par défaut)"/>
+			<text name="AntiSpamText2">Evènements max. par émetteur :</text>
+			<spinner name="_NACL_AntiSpamAmount" tool_tip="Nombre maximum d'évènement similaires à accepter provenant du même émetteur (10 par défaut)"/>
+			<text name="AntiSpamText3">Multiplicateur pour l'audio :</text>
+			<spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Multiplicateur du précédent réglage pour les requêtes audio (6 par défaut)"/>
+			<text name="AntiSpamText4">Pour le préchargement audio :</text>
+			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicateur d'évènements autorisés pour les requêtes de préchargement audio (6 par défaut)"/>
+			<button name="AntiSpamUnblock" label="Vider la liste de spammeurs"/>
+			<check_box label="Seuil de confirmation avant paiement :" width="240" name="FSConfirmPayments" tool_tip="Afficher une fenêtre de confirmation avant de verser une somme à un résident supérieure au seuil indiqué. Pour toujours avoir une confirmation, réglez le seuil à 0."/>
+			<spinner name="FSPaymentConfirmationThreshold" tool_tip="Afficher une fenêtre de confirmation avant de verser une somme à un résident supérieure au seuil indiqué. Pour toujours avoir une confirmation, réglez le seuil à 0."/>
+		</panel>
+		<panel label="Avatar" name="firestorm_avatar">
+			<text name="HeadMovement">Inclinaison maximum de la tête de mon avatar qui suit ma souris (0 = aucun mouvement) :</text>
+			<slider label="Inclinaison verticale :" tool_tip="Inclinaison verticale maximum de la tête de mon avatar en degrés" name="PitchFromMousePositionSlider"/>
+			<text name="PitchFromMousePositionText">degrés</text>
+			<slider label="Inclinaison horizontale :" tool_tip="Inclinaison horizontale maximum de la tête de mon avatar en degrés" name="YawFromMousePositionSlider"/>
+			<text name="YawFromMousePositionText">degrés</text>
+			<text name="note_lookat">Les paramètres de LookAt sont dans l’onglet Confdentialité </text>
+			<text name="BeamPrefs">Aspect du faisceau de sélection</text>
+			<button name="BeamColor_delete" label="Supprimer" width="75" tool_tip="Supprimer ce préréglage"/>
+			<combo_box name="BeamColor_combo" tool_tip="Sélectionnez la couleur du faisceau de sélection" left_delta="80" width="160" />
+			<button name="BeamColor_new" label="Nouveau.." tool_tip="Créer un nouveau préréglage de couleurs"/>
+			<button name="BeamColor_refresh" label="Actualiser" tool_tip="Actualiser la liste des préréglages"/>
+			<slider name="FSMaxBeamsPerSecond" label="Fréquence :" tool_tip="Fréquence d'actualisation du faisceau par seconde. 40 par défaut"/>
+			<check_box label="Activer le faisceau de sélection" name="SLPartBeam"/>
+			<check_box label="Communiquer la sélection au chat" name="FSParticleChat" tool_tip="Communique les données sur la sélection (l'heure de début et de fin, et les coordonnées globales) au canal de discussion 9000."/>
+			<combo_box name="FSBeamShape_combo" tool_tip="Sélectionnez la forme du faisceau de sélection"/>
+			<button name="delete_beam" label="Supprimer" width="75" tool_tip="Supprimer cette forme"/>
+			<button name="custom_beam_btn" label="Nouvelle.." tool_tip="Créer une nouvelle forme de faisceau"/>
+			<button name="refresh_beams" label="Actualiser" tool_tip="Actualiser la liste des formes"/>
+			<slider name="FSBeamShapeScale" label="Echelle :" tool_tip="Modifier l'échelle de la forme utilisée" label_width="50" width="200"/>
+			<text name="BridgeProtocols">Intégration de protocoles externes au Bridge LSL :</text>
+			<check_box label="Autoriser OpenCollar à activer ou désactiver l'AO intégré" name="BridgeIntegrationOC"/>
+			<check_box label="Autoriser LockMeister à activer ou désactiver l'AO intégré" name="BridgeIntegrationLM"/>
+		</panel>
+		<panel label="Windlight" name="WindlightTab">
+			<check_box label="Toujours utiliser l'environnement de la région ou du terrain." name="UseEnvironmentFromRegionAlways"/>
+			<check_box label="Transition des changements atmosphériques WL de la région avec les préférences rapides" name="FSInterpolateSky" tool_tip="Contrôle l'effet spécial lors des changements d'environnements. Peut occasionner une chute de FPS sur les ordinateurs moins performants pendant quelques secondes. Désactiver les deux options pour passer la transition et appliquer directement."/>
+			<check_box label="Transition des changements aquatiques WL de la région avec les préférences rapides" name="FSInterpolateWater" tool_tip="Comme ci-dessus, mais pour l'eau."/>
+			<text name="FSWLshare_txt">Partage des Windlights Firestorm</text>
+			<check_box label="Activer le partage Windlight par terrain de Firestorm " name="FSWLParcelEnabled"/>
+			<check_box label="Appliquer automatiquement les paramètres WL des terrains de mes amis" name="FSWLWhitelistFriends"/>
+			<check_box label="Appliquer automatiquement les paramètres WL des terrains de de mes groupes" name="FSWLWhitelistGroups"/>
+			<check_box label="Appliquer automatiquement les paramètres WL de tous les terrains" name="FSWLWhitelistAll"/>
+			<check_box label="Transition des WL lors d'un changement de région &amp; de terrain" name="FSInterpolateParcelWL" tool_tip="Comme ci-desssus, mais pour les paramètres environnementaux du terrain."/>
+			<text name="wl_crossfade_label" width="245">Durée des transitions (secondes) :</text>
+			<spinner name="FSWindlightInterpolateTime" tool_tip="La durée en secondes d'une transition entre deux préréglages (3 par défaut)"/>
+			<text name="could_texture_text" width="240">Texture des nuages (Redémarrage requis) :</text>
+			<combo_box name="cloud_combo" tool_tip="Sélectionnez la texture des nuages que vous souhaitez utiliser."/>
+		</panel>
+		<panel label="Construction 1" name="BuildTab">
+			<text name="text_box_objprams">Dimensions par défaut</text>
+			<text name="text_box_objprams2">Paramètres</text>
+			<text name="text_box_objprams3">Texture</text>
+			<spinner label="X" name="X size"/>
+			<spinner label="Y" name="Y size"/>
+			<spinner label="Z" name="Z size"/>
+			<check_box label="Fantôme" name="FSBuildPrefs_PhantomToggle"/>
+			<check_box label="Physique" name="FSBuildPrefs_PhysicalToggle"/>
+			<check_box label="Temporaire" name="FSBuildPrefs_TemporaryToggle"/>
+			<combo_box name="material">
+				<combo_item name="Stone" label="Pierre"/>
+				<combo_item name="Metal" label="Métal"/>
+				<combo_item name="Glass" label="Verre"/>
+				<combo_item name="Wood" label="Bois"/>
+				<combo_item name="Flesh" label="Chair"/>
+				<combo_item name="Plastic" label="Plastique"/>
+				<combo_item name="Rubber" label="Caoutchouc"/>
+			</combo_box>
+			<texture_picker label="Texture" name="texture control" tool_tip="Cliquer pour sélectionner une image"/>
+			<color_swatch label="Couleur" name="colorswatch" tool_tip="Cliquer pour ouvrir le sélecteur de couleurs"/>
+			<spinner label="Alpha" name="alpha"/>
+			<spinner label="Lueur" name="glow"/>
+			<check_box label="Lumière max." name="EmFBToggle"/>
+			<combo_box name="combobox shininess" tool_tip="Définir à quel niveau faire reluire l'objet">
 				<combo_item name="None" label="Aucune"/>
-				<combo_item name="Low" label="Basse"/>
-				<combo_item name="Medium" label="Moyenne"/>
-				<combo_item name="High" label="Haute"/>
-        </combo_box>
-	<!--for future drop zone-->
-		<check_box name="FSBuildPrefs_EmbedItem"
-			label="Intégrer un item aux prim."/>
-		<fs_embedded_item_drop_target name="embed_item"
-			tool_tip="Depuis l'inventaire, glisser / déposer un item dans cette zone.">
-			Déposer un item ici
-        </fs_embedded_item_drop_target>
-		<text name="build_item_add_disp_rect_txt"
-			tool_tip="Item actuellement intégré.">
-			Item actuel : [ITEM]
-        </text>
-	<!--pivot point-->
-		<text name="text_box_pivotpoint">
-			Pivot
-		</text>
-		<check_box name="FSBuildPrefsActualRoot_toggle"
-			label="Axes s/prim racine"
-			tool_tip="Par défaut, les axes sont au centre mathématique d'un objet lié. Activer cette option fixe les axes sur le prim racine."/>
-		<spinner name="X pos"
-			label="X"/>
-		<spinner name="Y pos"
-			label="Y"/>
-		<spinner name="Z pos"
-			label="Z"/>
-		<check_box name="FSPivotPercToggle"
-			label="Exprimé en %"
-			tool_tip="Par défaut, ces valeur sont définies à 50%, soit au centre mathématique d'un prim/objet lié."/>
-	<!--lsl preprocessor-->
-	<!--do not translate
-		<check_box name="preproc_checkbox"
-			label="Enable LSL preprocessor"
-			tool_tip="When checked, the LSL preprocessor is enabled."/>
-        <check_box name="preprocoptimizer_checkbox"
-			label="Script optimizer"
-			tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."/>
-        <check_box name="preprocswitch_checkbox"
-			label="switch() statement"
-			tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."/>
-        <check_boxn ame="preproclazy_checkbox"
-			label="Lazy lists"
-			tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."/>
-        <check_box name="preprocinclude_checkbox"
-			label="#includes from local disk"
-			tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."/>
-        <text name="lslpreprocinclude_textbox">
-			Preprocessor include path:
-        </text>
-		<button name="SetPreprocInclude"
-			label="Browse"
-			label_selected="Browse">
-        </button>
-	-->
-	</panel>
-	<panel name="BuildTab2"
-		label="Bâtir 2">
-		<check_box name="FSBuildPrefsRenderHighlight_toggle"
-			label="Contour lumineux de la sélection"
-			tool_tip="Masque les contours lumineux bleu et jaune, améliorant la vision lors de l'édition de nombreux prim rapprochés, comme les cheveux, par ex."/>
-		<check_box name="LimitSelectDistance"
-			label="Limiter la distance de sélection"
-			width="195" />
-		<check_box name="FSCommitForSaleOnChange_toggle"
-			label="Mise en vente d'obj. anc. style"
-			tool_tip="Cette option sauvegarde immédiatement les changements lors de la mise en vente d'un objet au lieu d'en demander confirmation."/>
-		<check_box name="FSSaveInventoryScriptsAsMono_toggle"
-			label="Enregistrer les scripts en Mono"
-			tool_tip="Editer et enregistrer un script directement depuis l'inventaire se fait en Mono plutôt qu'en LSL."/>
-		<check_box name="FSTextureDefaultSaveAsFormat"
-			label="Enregistrer par défaut les textures en PNG plutôt qu'en TGA"
-			tool_tip="Utilisé dans la fenêtre de prévisualisation et dans le menu contextuel de l'inventaire lors de l'enregistrement d'une texture sur le disque dur."/>
-		<check_boxn name="FSEnableGrab"
-			label="Ctrl+souris pour saisir / manip. les objets"
-			tool_tip="Saisir et manipuler les objets en utilisant la combinaison souris + touche Ctrl. "/>
-        <check_box name="FSExperimentalDragTexture"
-			label="Clic-déplac. / -éch. (av Verr. Maj.) sur une surface de texture en mode bâtir"
-			tool_tip="Cette option permet de cliquer-déplacer ou cliquer-échelonner (avec le verrouillage des majuscules) une surface de texture en mode d'édition. (Encore expérimental, à utiliser avec prudence). "/>
-	</panel>
-	
-<!--Tags-->
-	<panel name="TagTab"
-		label="Label">
-		<text name="SL-Tags-Notice">
-			Remarque : suite aux changements fait par LL, le label du viewer n'est plus affichable sur SL.
-		</text>
-		<text name="whattagstoshow">
-			Quel Label afficher ?
-		</text>
-		<combo_box name="ClientTagsVisibility">
-			<combo_item name="No Viewertags" value="0">Pas de label de viewer</combo_item>
-			<combo_item name="TPVD Viewer" value="1">Viewers du TPVD (utilise une liste)</combo_item>
-			<combo_item name="All known Viewers" value="2">Tout viewer connu (utilise une liste)</combo_item>
-			<combo_item name="All Viewers" value="3">Tous les viewers</combo_item>
-		</combo_box>   
-		<text name="colorbasedonviewer">
-			Couleur d'après le viewer ?
-		</text>
-		<combo_box name="ColorClienttags">
-			<combo_item name="Color not based on Viewer" value="0">Non basée sur le viewer</combo_item>
-			<combo_item name="Single color per Viewer" value="1">Unique par viewer</combo_item>
-			<combo_item name="Multiple colors per Viewer" value="2">Multiple par viewer</combo_item>
-			<combo_item name="Userdefined color" value="3">Définie par l'utilisateur</combo_item>
-		</combo_box>
-		<text name="listtodisplayviewertags_txt">
-			Utiliser une liste de labels ?
-		</text>
-		<combo_box name="UseLegacyClienttags">
-			<combo_item name="Don't use a list" value="0">Pas de liste de viewer</combo_item>
-			<combo_item name="Local Clienttags" value="1">Liste de viewer locale</combo_item>
-			<combo_item name="Download Clienttags" value="2">Télécharger au lancement</combo_item>
-		</combo_box>
-		<text name="chooseyourcolor_txt">
-			Choissez votre couleur
-		</text>
-		<combo_box name="ClientTagColor">
-			<combo_item name="red" label="Rouge"/>
-			<combo_item name="blue" label="Bleu"/>
-			<combo_item name="yellow" label="Jaune"/>
-			<combo_item name="purple" label="Violet"/>
-			<combo_item name="pink" label="Rose"/>
-			<combo_item name="white" label="Blanc"/>
-			<combo_item name="orange" label="Orange"/>
-			<combo_item name="green" label="Vert"/>
-		</combo_box>
-		<check_box name="FSShowOwnTagColor_toggle"
-			label="Afficher votre couleur"
-			tool_tip="Colorer votre label selon votre choix."/>
-		<check_box name="FSColorUsername_toggle"
-			label="Colorer le nom d'utilisateur"
-			tool_tip="Surclasse la couleur du viewer pour le nom d'utilisateur."/>
-		<color_swatch name="usernamecolorswatch"
-			tool_tip="Sélectionner une couleur."/>
-	<!--distance tag-->
-		<check_box name="FSTagShowDistanceColors"
-			label="Couleur basée sur la distance"
-			tool_tip="Colore le label en fonction de la distance vous séparant d'un avatar, indiquant s'il est à portée de chuchotement, de chat, de cri ou hors de portée. Cela remplace les couleurs du label des viewers, mais pas celle d'un ami ou celle définie dans un set de contacts."/>
-		<check_box name="FSTagShowDistance"
-			label="Afficher la distance sur le label"
-			tool_tip="Affiche sur le label à quelle distance de vous se trouve un avatar." />
-		<color_swatch name="NameTagWhisperDistanceColor_Color_Swatch"
-            tool_tip="Sélectionner une couleur.">
-        </color_swatch>
-        <text name="NameTagWhisperDistanceColor_Label">
-			A portée de chuchotement (10m)
-        </text>
-        <color_swatch name="NameTagChatDistanceColor_Color_Swatch"
-			tool_tip="Sélectionner une couleur.">
-        </color_swatch>
-        <text name="NameTagChatDistanceColor_Label">
-            A portée de chat (20m)
-        </text>
-        <color_swatch name="NameTagShoutDistanceColor_Color_Swatch"
-			tool_tip="Sélectionner une couleur.">
-        </color_swatch>
-        <text name="NameTagShoutDistanceColor_Label">
-            A portée de cri (100m)
-        </text>
-        <color_swatch name="NameTagBeyondShoutDistanceColor_Color_Swatch"
-			tool_tip="Sélectionner une couleur.">
-        </color_swatch>
-        <text name="NameTagBeyondShoutDistanceColor_Label">
-            Hors de portée (+100m)
-        </text>
-		<slider name="FSNameTagZOffsetCorrection"
-			label="Compensation en Z"
-			tool_tip="Modifie la distance entre l'avatar et le label. [Défaut 0]" />
-	</panel>
-</tab_container>
+				<combo_item name="Low" label="Faible"/>
+				<combo_item name="Medium" label="Moyen"/>
+				<combo_item name="High" label="Haut"/>
+			</combo_box>
+			<check_box name="FSBuildPrefs_EmbedItem" label="Intégrer un objet dans le nouveau prim"/>
+			<fs_embedded_item_drop_target name="embed_item" tool_tip="Glissez un objet ici.">Glissez un objet ici.</fs_embedded_item_drop_target>
+			<text name="build_item_add_disp_rect_txt">Actuellement : [ITEM]</text>
+			<text name="text_box_pivotpoint">Point de pivot</text>
+			<check_box label="Axe sur prim racine" tool_tip="Par défaut l'axe est centré sur le centre de gravité d'un ensemble lié. Si activé, l'axe sera affiché sur le prim racine de l'ensemble lié." name="FSBuildPrefsActualRoot_toggle"/>
+			<spinner label="Pos. X" name="X pos"/>
+			<spinner label="Pos. Y" name="Y pos"/>
+			<spinner label="Pos. Z" name="Z pos"/>
+			<check_box label="Valeurs en %" tool_tip="Par défaut, tout est en pourcentages et chaque axe est fixé à 50" name="FSPivotPercToggle"/>
+			<button label="Permissions de création par défaut" name="fs_default_creation_permissions"/>
+			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
+			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>
+			<check_box label="Condition switch()" left_delta="80" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation de la condition switch() pour le contrôle de flux de scripts." name="preprocswitch_checkbox"/>
+			<check_box label="Simplifications de listes" left_delta="120" tool_tip="Quand coché, le préprocesseur LSL permettra l'utilisation d'extensions de syntaxe pour la manipulation de listes." name="preproclazy_checkbox"/>
+			<check_box label="#includes depuis le disque" left_delta="150" tool_tip="Quand coché, le préprocesseur LSL permettra à la commande #include de pointer vers des fichiers de votre disque dur." name="preprocinclude_checkbox"/>
+			<text name="lslpreprocinclude_textbox">Chemin d'inclusion du préprocesseur :</text>
+			<button label="Parcourir" label_selected="Parcourir" name="SetPreprocInclude"/>
+		</panel>
+		<panel label="Construction 2" name="BuildTab2">
+			<check_box label="Contour lumineux des prims sélectionnées" tool_tip="Quand décoché, les contours jaunes/bleus ne seront pas affichés, améliorant les performances quand un grand nombre de prims est sélectionné." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Limiter la distance de sélection (mètres) :" width="280" name="LimitSelectDistance"/>
+			<spinner name="MaxSelectDistance" tool_tip="Distance maximale autorisée de sélection (en mètres depuis l'avatar [Par défaut : 128.000]"/>
+			<check_box label="Limiter la distance de déplacement (mètres) :" width="280" name="LimitDragDistance"/>
+			<spinner name="MaxDragDistance" tool_tip="Distance maximale autorisée pour un déplacement unique (mètres depuis le point de départ) [Par défaut : 48.000]"/>
+			<text name="RotationStepText1" left="23" width="260">Contraindre les rotations à des multiples de :</text>
+			<spinner name="RotationStep" width="45" tool_tip="Toutes les rotations via l'outil de rotation sont contraintes à des multiples du nombre indiqué (1.0 par défaut)"/>
+			<text name="RotationStepText2">degrés si 'Fixer sur la grille' est inactif</text>
+			<check_box name="FSUnlinkConfirmEnabled" width="400" label="Confirmation de suppression de lien si l'ensemble possède au moins"/>
+			<text name="MinObjectsForUnlinkConfirmText2">objets</text>
+			<check_box label="Utiliser l'ancien fonctionnement de 'Mettre cet objet en vente'" tool_tip="Activer cette option sauvegardera directement les informations de vente de l'objet au lieu de nécessiter une confirmation." name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="Sauvegarder les scripts édités depuis l'inventaire en Mono" tool_tip="Activer cette option sauvegardera directement les scripts situés dans l'inventaire en Mono au lieu de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="Sauvegarder les textures sur le disque dur au format PNG au lieu de TGA" tool_tip="Utilisé dans l'aperçu de texture et dans le menu contextuel de l'inventaire." name="FSTextureDefaultSaveAsFormat"/>
+			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
+			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
+			<check_box label="Prévisualiser les animations sur son avatar pendant l'upload" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le processus d'upload" name="FSUploadAnimationOnOwnAvatar"/>
+		</panel>
+	</tab_container>
 </panel>

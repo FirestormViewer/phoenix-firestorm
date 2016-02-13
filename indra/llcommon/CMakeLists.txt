@@ -237,7 +237,6 @@ set(llcommon_HEADER_FILES
 
 SET( llcommon_ND_SOURCE_FILES
 	 nd/ndexceptions.cpp
-	 nd/ndfile.cpp
 	 nd/ndintrin.cpp
 	 nd/ndlogthrottle.cpp
 	 nd/ndetw.cpp
@@ -245,7 +244,6 @@ SET( llcommon_ND_SOURCE_FILES
 SET(  llcommon_ND_HEADER_FILES 
 	  nd/ndboolswitch.h
 	  nd/ndexceptions.h
-	  nd/ndfile.h
 	  nd/ndintrin.h
 	  nd/ndlocks.h
 	  nd/ndlogthrottle.h

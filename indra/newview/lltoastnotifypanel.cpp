@@ -190,10 +190,11 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 		mControlPanel->addChild(ignore_btn, -1);
 		mute_btn_pad = 4 * HPAD; //only use a 4 * HPAD padding if an ignore button exists
 	}
-	// FIRE-3948: Commenting all out as mute button is disabled (FS:MS)
-	// <FS:Ansariel> Undo the removal and make it optional after I was looking for the mute button on spammy dialogs!
+	// <FS:Ansariel> FIRE-3948: Option to remove the mute button; FIRE-17158: Remove "block" button for script dialog of own objects
 	//if (mIsScriptDialog && mute_btn != NULL)
-	if (mIsScriptDialog && mute_btn != NULL && !gSavedSettings.getBOOL("FSRemoveScriptBlockButton"))
+	if (mIsScriptDialog && mute_btn != NULL && !gSavedSettings.getBOOL("FSRemoveScriptBlockButton") &&
+		(!mNotification->getPayload().has("own_object") || !mNotification->getPayload()["own_object"].asBoolean()))
+	// </FS:Ansariel>
 	{
 		LLRect mute_btn_rect(mute_btn->getRect());
 		// Place mute (Block) button to the left of the ignore button.
@@ -338,11 +339,11 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 	// </FS:Ansariel>
 	// <FS:Zi> Dialog Stacking browser
 	// hide the stacking button for things that are not scripting dialogs etc.
-	else if(mNotification->getName()!="LoadWebPage")
+	else if (notif_name != "LoadWebPage")
 	{
 		// setting size to 0,0 becuase button visibility is dictated by a control variable,
 		// so we need a different way to hide this button.
-		getChild<LLButton>("DialogStackButton")->reshape(0,0,FALSE);
+		getChild<LLButton>("DialogStackButton")->reshape(0, 0, FALSE);
 	}
 	// </FS:Zi>
 

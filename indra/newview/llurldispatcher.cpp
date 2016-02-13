@@ -52,6 +52,8 @@
 #include "llnotificationsutil.h"
 #include "llsd.h"
 
+#include "fsfloaterplacedetails.h"
+
 static LLURLDispatcherListener sURLDispatcherListener;
 
 class LLURLDispatcherImpl
@@ -302,14 +304,7 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 }

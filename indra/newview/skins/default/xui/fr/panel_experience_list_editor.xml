@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="experince_list_editor">
-	<panel.string name="loading">
-		en cours de chargement...
-	</panel.string>
-	<panel.string name="panel_allowed">
-		Expériences autorisées :
-	</panel.string>
-	<panel.string name="panel_blocked">
-		Expériences bloquées :
-	</panel.string>
-	<panel.string name="panel_trusted">
-		Expériences avec clé :
-	</panel.string>
-	<panel.string name="no_results">
-		(vide)
-	</panel.string>
-	<text name="text_name">
-		Liste des expériences
-	</text>
-	<name_list name="experience_list">
-		<name_list.columns label="Nom" name="experience_name"/>
-	</name_list>
-	<button label="Ajouter..." name="btn_add"/>
-	<button label="Supprimer" name="btn_remove"/>
-	<button label="Profil..." name="btn_profile"/>
+	<panel.string name="loading">Chargement...</panel.string>
+	<panel.string name="panel_allowed">Exp. autorisées :</panel.string>
+	<panel.string name="panel_blocked">Exp. bloquées :</panel.string>
+	<panel.string name="panel_trusted">Exp. de premier plan :</panel.string>
+	<panel.string name="no_results">(vide)</panel.string>
+	<text name="text_name">Liste des expériences</text>
+	<text name="text_count" left="175"/>
+	<name_list name="experience_list"><name_list.columns name="experience_name" label="Nom"/></name_list>
+	<button name="btn_add" label="Ajouter..." width="70"/>
+	<button name="btn_remove" label="Supprimer" width="70"/>
+	<button name="btn_profile" label="Profil..." width="70"/>
 </panel>

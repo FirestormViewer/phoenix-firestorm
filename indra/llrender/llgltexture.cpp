@@ -130,6 +130,13 @@ void LLGLTexture::setActive()
 	{
 		mTextureState = ACTIVE ; 
 	}
+
+	// <FS:Ansariel> Try to plug the profile icon memory hole
+	if (mBoostLevel == BOOST_ICON)
+	{
+		setNoDelete();
+	}
+	// </FS:Ansariel>
 }
 
 //set the texture to stay in memory

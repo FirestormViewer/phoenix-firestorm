@@ -227,10 +227,9 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	LLRect panel_rect = mScriptForm->getRect();
 	// <FS:Zi> Animated dialogs
 	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
+	eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 	mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
-	if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
-		((eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") == POS_TOP_LEFT ||
-		(eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") == POS_TOP_RIGHT))
+	if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && (dialog_position == POS_TOP_LEFT || dialog_position == POS_TOP_RIGHT))
 	{
 		mCurrentHeight = 0;
 		mStartTime = LLFrameTimer::getElapsedSeconds();
@@ -246,7 +245,7 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	// <FS:Zi> Dialog Stacking browser
 	mScriptForm->getChild<LLButton>("DialogStackButton")->setCommitCallback(boost::bind(&LLScriptFloater::onStackClicked, this));
 
-	if ((eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition") != POS_DOCKED)
+	if (dialog_position != POS_DOCKED)
 	{
 		DialogStack::instance().push(notification_id);
 	}
@@ -890,24 +889,24 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT || floaterType == LLScriptFloaterManager::OBJ_UNKNOWN || floaterType == LLScriptFloaterManager::OBJ_GIVE_INVENTORY)
 	// </FS:PP>
 	{
-		eDialogPosition dialogPos = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
+		eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
-		if (dialogPos == POS_LEGACY)
+		if (dialog_position == POS_LEGACY)
 		{
-			dialogPos = POS_TOP_RIGHT;
+			dialog_position = POS_TOP_RIGHT;
 			if (!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
 			{
-				dialogPos = POS_DOCKED;
+				dialog_position = POS_DOCKED;
 			}
-			gSavedSettings.setS32("ScriptDialogsPosition", (S32)dialogPos);
+			gSavedSettings.setS32("ScriptDialogsPosition", (S32)dialog_position);
 		}
 
-		if (dialogPos == POS_DOCKED && chicletsDisabled)
+		if (dialog_position == POS_DOCKED && chicletsDisabled)
 		{
-			dialogPos = POS_TOP_RIGHT;
+			dialog_position = POS_TOP_RIGHT;
 		}
 
-		if (dialogPos != POS_DOCKED)
+		if (dialog_position != POS_DOCKED)
 		{
 			// undock the dialog
 			floater->setDocked(false, true);
@@ -938,7 +937,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 		floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
 
-		switch (dialogPos)
+		switch (dialog_position)
 		{
 			case POS_DOCKED:
 			{
@@ -975,7 +974,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			}
 			default:
 			{
-				LL_WARNS() << "dialogPos value " << dialogPos << " not handled in switch() statement." << LL_ENDL;
+				LL_WARNS() << "dialog_position value " << dialog_position << " not handled in switch() statement." << LL_ENDL;
 			}
 		}
 	}

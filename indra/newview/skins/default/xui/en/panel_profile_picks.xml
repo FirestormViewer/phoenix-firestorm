@@ -82,7 +82,7 @@
 
     <tab_container
      top="50"
-     bottom="-5"
+     bottom="-25"
      left="4"
      right="-4"
      layout="topleft"

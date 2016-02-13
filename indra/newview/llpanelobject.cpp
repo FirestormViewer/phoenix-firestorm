@@ -355,7 +355,7 @@ LLPanelObject::LLPanelObject()
 	mHasPosClipboard(FALSE),
 	mHasSizeClipboard(FALSE),
 	mHasRotClipboard(FALSE),
-	mHasParamClipboard(FALSE),
+	mHasParamsClipboard(FALSE),
 	mHasFlexiParam(FALSE),
 	mHasSculptParam(FALSE),
 	mHasLightParam(FALSE)
@@ -2606,7 +2606,7 @@ void LLPanelObject::onPasteRotClip(const LLSD& data)
 void LLPanelObject::onCopyParams(const LLSD& data)
 {
 	getVolumeParams(mClipboardVolumeParams);
-	mHasParamClipboard = TRUE;
+	mHasParamsClipboard = TRUE;
 	
 	LLViewerObject* objectp = mObject;
 	if (!objectp)
@@ -2622,15 +2622,15 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 		LLFlexibleObjectData *attributes = (LLFlexibleObjectData *)objectp->getParameterEntry(LLNetworkData::PARAMS_FLEXIBLE);
 		if (attributes)
 		{
-			mPramsClipboard["lod"] = attributes->getSimulateLOD();
-			mPramsClipboard["gav"] = attributes->getGravity();
-			mPramsClipboard["ten"] = attributes->getTension();
-			mPramsClipboard["fri"] = attributes->getAirFriction();
-			mPramsClipboard["sen"] = attributes->getWindSensitivity();
+			mParamsClipboard["lod"] = attributes->getSimulateLOD();
+			mParamsClipboard["gav"] = attributes->getGravity();
+			mParamsClipboard["ten"] = attributes->getTension();
+			mParamsClipboard["fri"] = attributes->getAirFriction();
+			mParamsClipboard["sen"] = attributes->getWindSensitivity();
 			LLVector3 force = attributes->getUserForce();
-			mPramsClipboard["forx"] = force.mV[0];
-			mPramsClipboard["fory"] = force.mV[1];
-			mPramsClipboard["forz"] = force.mV[2];
+			mParamsClipboard["forx"] = force.mV[0];
+			mParamsClipboard["fory"] = force.mV[1];
+			mParamsClipboard["forz"] = force.mV[2];
 			mHasFlexiParam = TRUE;
 		}
 	}
@@ -2686,11 +2686,11 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 			}
 		}
 		if (allow_texture)
-			mPramsClipboard["sculptid"] = image_id;
+			mParamsClipboard["sculptid"] = image_id;
 		else
-			mPramsClipboard["sculptid"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
+			mParamsClipboard["sculptid"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
 
-		mPramsClipboard["sculpt_type"] = sculpt_params->getSculptType();
+		mParamsClipboard["sculpt_type"] = sculpt_params->getSculptType();
 		mHasSculptParam = TRUE;
 	}
 	else
@@ -2700,13 +2700,13 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 
 	if (volobjp && volobjp->getIsLight())
 	{
-		mPramsClipboard["Light Intensity"] = volobjp->getLightIntensity();
-		mPramsClipboard["Light Radius"] = volobjp->getLightRadius();
-		mPramsClipboard["Light Falloff"] = volobjp->getLightFalloff();
+		mParamsClipboard["Light Intensity"] = volobjp->getLightIntensity();
+		mParamsClipboard["Light Radius"] = volobjp->getLightRadius();
+		mParamsClipboard["Light Falloff"] = volobjp->getLightFalloff();
 		LLColor3 color = volobjp->getLightColor();
-		mPramsClipboard["r"] = color.mV[0];
-		mPramsClipboard["g"] = color.mV[1];
-		mPramsClipboard["b"] = color.mV[2];
+		mParamsClipboard["r"] = color.mV[0];
+		mParamsClipboard["g"] = color.mV[1];
+		mParamsClipboard["b"] = color.mV[2];
 		mHasLightParam = TRUE;
 	}
 	else
@@ -2714,6 +2714,7 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 		mHasLightParam = FALSE;
 	}
 
+	mParamsClipboard["physics_shape"] = objectp->getPhysicsShapeType();
 }
 
 void LLPanelObject::onPasteParams(const LLSD& data)
@@ -2730,14 +2731,14 @@ void LLPanelObject::onPasteParams(const LLSD& data)
 			LLFlexibleObjectData new_attributes;
 			new_attributes = *attributes;
 
-			new_attributes.setSimulateLOD(mPramsClipboard["lod"].asInteger());
-			new_attributes.setGravity(mPramsClipboard["gav"].asReal());
-			new_attributes.setTension(mPramsClipboard["ten"].asReal());
-			new_attributes.setAirFriction(mPramsClipboard["fri"].asReal());
-			new_attributes.setWindSensitivity(mPramsClipboard["sen"].asReal());
-			F32 fx = (F32)mPramsClipboard["forx"].asReal();
-			F32 fy = (F32)mPramsClipboard["fory"].asReal();
-			F32 fz = (F32)mPramsClipboard["forz"].asReal();
+			new_attributes.setSimulateLOD(mParamsClipboard["lod"].asInteger());
+			new_attributes.setGravity(mParamsClipboard["gav"].asReal());
+			new_attributes.setTension(mParamsClipboard["ten"].asReal());
+			new_attributes.setAirFriction(mParamsClipboard["fri"].asReal());
+			new_attributes.setWindSensitivity(mParamsClipboard["sen"].asReal());
+			F32 fx = (F32)mParamsClipboard["forx"].asReal();
+			F32 fy = (F32)mParamsClipboard["fory"].asReal();
+			F32 fz = (F32)mParamsClipboard["forz"].asReal();
 			LLVector3 force(fx,fy,fz);
 			new_attributes.setUserForce(force);
 			objectp->setParameterEntry(LLNetworkData::PARAMS_FLEXIBLE, new_attributes, true);
@@ -2748,8 +2749,8 @@ void LLPanelObject::onPasteParams(const LLSD& data)
 	{
 		LLSculptParams sculpt_params;
 
-		if (mPramsClipboard.has("sculptid"))
-			sculpt_params.setSculptTexture(mPramsClipboard["sculptid"].asUUID(), (U8)mPramsClipboard["sculpt_type"].asInteger());
+		if (mParamsClipboard.has("sculptid"))
+			sculpt_params.setSculptTexture(mParamsClipboard["sculptid"].asUUID(), (U8)mParamsClipboard["sculpt_type"].asInteger());
 
 		objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
 	}
@@ -2767,15 +2768,20 @@ void LLPanelObject::onPasteParams(const LLSD& data)
 	if (volobjp && mHasLightParam)
 	{
 		volobjp->setIsLight(TRUE);
-		volobjp->setLightIntensity((F32)mPramsClipboard["Light Intensity"].asReal());
-		volobjp->setLightRadius((F32)mPramsClipboard["Light Radius"].asReal());
-		volobjp->setLightFalloff((F32)mPramsClipboard["Light Falloff"].asReal());
-		F32 r = (F32)mPramsClipboard["r"].asReal();
-		F32 g = (F32)mPramsClipboard["g"].asReal();
-		F32 b = (F32)mPramsClipboard["b"].asReal();
+		volobjp->setLightIntensity((F32)mParamsClipboard["Light Intensity"].asReal());
+		volobjp->setLightRadius((F32)mParamsClipboard["Light Radius"].asReal());
+		volobjp->setLightFalloff((F32)mParamsClipboard["Light Falloff"].asReal());
+		F32 r = (F32)mParamsClipboard["r"].asReal();
+		F32 g = (F32)mParamsClipboard["g"].asReal();
+		F32 b = (F32)mParamsClipboard["b"].asReal();
 		volobjp->setLightColor(LLColor3(r,g,b));
 	}
+
+	if (mParamsClipboard.has("physics_shape"))
+	{
+		objectp->setPhysicsShapeType((U8)mParamsClipboard["physics_shape"].asInteger());
+	}
 	
-	if(mHasParamClipboard)
+	if(mHasParamsClipboard)
 		objectp->updateVolume(mClipboardVolumeParams);
 }

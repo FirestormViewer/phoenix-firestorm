@@ -2,5 +2,5 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Trier en commençant par le plus récent" name="sort_most"/>
 	<menu_item_check label="Trier par nom" name="sort_name"/>
-	<menu_item_check label="Afficher les icônes des résidents" name="view_icons"/>
+	<menu_item_check name="view_icons" label="Afficher les icônes des résidents"/>
 </toggleable_menu>

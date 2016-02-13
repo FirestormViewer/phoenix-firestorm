@@ -40,6 +40,7 @@
 #include "llagent.h"
 #include "llagentpicksinfo.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
 #include "llfloaterworldmap.h"
 #include "llinventoryobserver.h"
 #include "lllandmarkactions.h"
@@ -50,6 +51,7 @@
 #include "llpanellandmarkinfo.h"
 #include "llparcel.h"
 #include "llteleporthistorystorage.h"
+#include "llviewercontrol.h"
 #include "llviewermessage.h"
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
@@ -557,6 +559,19 @@ void FSFloaterPlaceDetails::togglePickPanel(BOOL visible)
 	if (mPickPanel)
 	{
 		mPickPanel->setVisible(visible);
+	}
+}
+
+// static
+void FSFloaterPlaceDetails::showPlaceDetails(const LLSD& key)
+{
+	if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+	{
+		LLFloaterReg::showInstance("fs_placedetails", key);
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("places", key);
 	}
 }
 

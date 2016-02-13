@@ -4510,7 +4510,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Ankommende Instant Message von [NAME]
 	</string>
 	<string name="IM_autoresponse_sent">
-		Automatische Antwort gesendet.
+		Automatische Antwort gesendet: [MESSAGE]
 	</string>
 	<string name="IM_autoresponse_item_sent">
 		Objekt für automatische Antwort gesendet: [ITEM_NAME]
@@ -6577,5 +6577,35 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Reqsysinfo_Reason">
 		Der übermittelte Grund lautet: [REASON]
+	</string>
+	<string name="All Items">
+		Alle Objekte
+	</string>
+	<string name="Recent Items">
+		Aktuelle Objekte
+	</string>
+	<string name="Worn Items">
+		Angezogene Objekte
+	</string>
+	<string name="InvOfferGroupNoticeName">
+		Ein Gruppenmitglied namens [NAME]
+	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(online)
+	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt]., [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc].[mth,datetime,utc].[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]
 	</string>
 </strings>

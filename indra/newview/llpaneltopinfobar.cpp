@@ -47,6 +47,7 @@
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fsfloaterplacedetails.h"
 
 #include "llfloaterreg.h"
 
@@ -477,28 +478,14 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 			{
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "create_landmark"));
 				// </FS:Ansariel>
 			}
 			else
 			{
 				// <FS:Ansariel> FIRE-817: Separate place details floater
 				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-				{
-					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				}
-				else
-				{
-					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-				}
+				FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 				// </FS:Ansariel>
 			}
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
@@ -531,14 +518,7 @@ void LLPanelTopInfoBar::onInfoButtonClicked()
 
 	// <FS:Ansariel> FIRE-817: Separate place details floater
 	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-	//if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-	//{
-	//	LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
-	//}
-	//else
-	//{
-	//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
-	//}
+	//FSFloaterPlaceDetails::showPlaceDetails(LLSD().with("type", "agent"));
 	// </FS:Ansariel>
 	LLFloaterReg::showInstance("about_land");
 }

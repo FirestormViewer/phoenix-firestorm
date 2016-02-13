@@ -81,10 +81,6 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mBtnPermissionMap(NULL),
 	mBtnPermissionEditMine(NULL),
 	mIconPermissionEditTheirs(NULL),
-	// <FS:Ansariel> Extended Friend Permissions
-	mIconPermissionMapTheirs(NULL),
-	mIconPermissionOnlineTheirs(NULL),
-	// </FS:Ansariel>
 	mSpeakingIndicator(NULL),
 	mInfoBtn(NULL),
 	mProfileBtn(NULL),
@@ -146,10 +142,6 @@ BOOL  LLAvatarListItem::postBuild()
 	mBtnPermissionMap = getChild<LLButton>("permission_map_btn");
 	mBtnPermissionEditMine = getChild<LLButton>("permission_edit_mine_btn");
 	mIconPermissionEditTheirs = getChild<LLIconCtrl>("permission_edit_theirs_icon");
-	// <FS:Ansariel> Extended Friend Permissions
-	mIconPermissionMapTheirs = getChild<LLIconCtrl>("permission_map_theirs_icon");
-	mIconPermissionOnlineTheirs = getChild<LLIconCtrl>("permission_online_theirs_icon");
-	// </FS:Ansariel>
 	
 	mBtnPermissionOnline->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionOnlineClick, this));
 	mBtnPermissionMap->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionMapClick, this));
@@ -162,10 +154,6 @@ BOOL  LLAvatarListItem::postBuild()
 	mBtnPermissionEditMine->setVisible(false);
 	mBtnPermissionEditMine->setIsChrome(TRUE);
 	mIconPermissionEditTheirs->setVisible(false);
-	// <FS:Ansariel> Extended Friend Permissions
-	mIconPermissionMapTheirs->setVisible(false);
-	mIconPermissionOnlineTheirs->setVisible(false);
-	// </FS:Ansariel>
 
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
 	mInfoBtn = getChild<LLButton>("info_btn");
@@ -263,8 +251,8 @@ void LLAvatarListItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( false);
 	// <FS:Wolf> commented out to have the info button always shown
-	mInfoBtn->setVisible(false);
-	mProfileBtn->setVisible(false);
+	//mInfoBtn->setVisible(false);
+	//mProfileBtn->setVisible(false);
 	// </FS:Wolf>
 
 	mHovered = false;
@@ -735,13 +723,8 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	// edit their objects permission icon width + padding
 	S32 permission_edit_theirs_width = avatar_item->mBtnPermissionEditMine->getRect().mLeft - avatar_item->mIconPermissionEditTheirs->getRect().mLeft;
 	
-	// <FS:Ansariel> Extended Friend Permissions
-	S32 permission_map_theirs_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mIconPermissionMapTheirs->getRect().mLeft;
-	S32 permission_online_theirs_width = avatar_item->mIconPermissionMapTheirs->getRect().mLeft - avatar_item->mIconPermissionOnlineTheirs->getRect().mLeft;
-	// </FS:Ansariel>
-	
 	// last interaction time textbox width + padding
-	S32 last_interaction_time_width = avatar_item->mIconPermissionOnlineTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
+	S32 last_interaction_time_width = avatar_item->mIconPermissionEditTheirs->getRect().mLeft - avatar_item->mLastInteractionTime->getRect().mLeft;
 	
 	// avatar icon width + padding
 	S32 icon_width = avatar_item->mAvatarName->getRect().mLeft - avatar_item->mAvatarIcon->getRect().mLeft;
@@ -752,10 +735,6 @@ void LLAvatarListItem::initChildrenWidths(LLAvatarListItem* avatar_item)
 	sChildrenWidths[--index] = icon_width;
 	sChildrenWidths[--index] = 0; // for avatar name we don't need its width, it will be calculated as "left available space"
 	sChildrenWidths[--index] = last_interaction_time_width;
-	// <FS:Ansariel> Extended Friend Permissions
-	sChildrenWidths[--index] = permission_online_theirs_width;
-	sChildrenWidths[--index] = permission_map_theirs_width;
-	// </FS:Ansariel>
 	sChildrenWidths[--index] = permission_edit_theirs_width;
 	sChildrenWidths[--index] = permission_edit_mine_width;
 	sChildrenWidths[--index] = permission_map_width;
@@ -886,25 +865,11 @@ bool LLAvatarListItem::showPermissions(bool visible)
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
 		else
 			mIconPermissionEditTheirs->setColor(LLUIColorTable::instance().getColor("White"));
-		// <FS:Ansariel> Extended Friend Permissions
-		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
-			mIconPermissionMapTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
-		else
-			mIconPermissionMapTheirs->setColor(LLUIColorTable::instance().getColor("White"));
-		if (!relation->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS))
-			mIconPermissionOnlineTheirs->setColor(LLUIColorTable::instance().getColor("White_10"));
-		else
-			mIconPermissionOnlineTheirs->setColor(LLUIColorTable::instance().getColor("White"));
-		// </FS:Ansariel>
 		
 		mBtnPermissionOnline->setVisible(true);
 		mBtnPermissionMap->setVisible(true);
 		mBtnPermissionEditMine->setVisible(true);
 		mIconPermissionEditTheirs->setVisible(true);
-		// <FS:Ansariel> Extended Friend Permissions
-		mIconPermissionMapTheirs->setVisible(true);
-		mIconPermissionOnlineTheirs->setVisible(true);
-		// </FS:Ansariel>
 			
 	}
 	else
@@ -913,10 +878,6 @@ bool LLAvatarListItem::showPermissions(bool visible)
 		mBtnPermissionMap->setVisible(false);
 		mBtnPermissionEditMine->setVisible(false);
 		mIconPermissionEditTheirs->setVisible(false);
-		// <FS:Ansariel> Extended Friend Permissions
-		mIconPermissionMapTheirs->setVisible(false);
-		mIconPermissionOnlineTheirs->setVisible(false);
-		// </FS:Ansariel>
 	}
 	
 	updateChildren();
@@ -1053,14 +1014,6 @@ LLView* LLAvatarListItem::getItemChildView(EAvatarListItemChildIndex child_view_
 	case ALIC_PERMISSION_EDIT_THEIRS:
 		child_view = mIconPermissionEditTheirs;
 		break;
-	// <FS:Ansariel> Extended Friend Permissions
-	case ALIC_PERMISSION_MAP_THEIRS:
-		child_view = mIconPermissionMapTheirs;
-		break;
-	case ALIC_PERMISSION_ONLINE_THEIRS:
-		child_view = mIconPermissionOnlineTheirs;
-		break;
-	// </FS:Ansariel>
 	case ALIC_INFO_BUTTON:
 		child_view = mInfoBtn;
 		break;

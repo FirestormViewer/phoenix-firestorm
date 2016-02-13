@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Afficher la Minicarte au-dessus de la liste" name="ShowRadarMinimap"/>
+	<menu_item_check label="Limiter les résultats au rayon spécifié" name="LimitRadarByRange"/>
+	<menu_item_check label="Afficher les résidents ignorés et Blacklistés" name="FSRadarShowMutedAndDerendered"/>
+	<context_menu label="Format des noms du radar" name="radarNameFormat">
+		<menu_item_check label="Nom d'affichage" name="radarFmtDN"/>
+		<menu_item_check label="Nom d'utilisateur" name="radarFmtUN"/>
+		<menu_item_check label="Nom d'affichage (Nom d'utilisateur)" name="radarFmtDNUN"/>
+		<menu_item_check label="Nom d'utilisateur (Nom d'affichage)" name="radarFmtUNDN"/>
+	</context_menu>
+	<context_menu label="Colonnes affichées" name="visible_columns">
+		<menu_item_check label="Voix" name="voice_level"/>
+		<menu_item_check label="Même région" name="in_region"/>
+		<menu_item_check label="Statut d'écriture" name="typing_status"/>
+		<menu_item_check label="Statut assis" name="sitting_status"/>
+		<menu_item_check label="Infos. de paiement" name="flags"/>
+		<menu_item_check label="Notes" name="has_notes"/>
+		<menu_item_check label="Âge" name="age"/>
+		<menu_item_check label="Vu le" name="seen"/>
+	</context_menu>
+	<menu_item_check label="Couleurs des noms basés sur la distance" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Signaler dans" name="report_to_menu">
+		<menu_item_check label="Chat local" name="radar_nearby_chat"/>
+		<menu_item_check label="Toasts" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Portée du chat local sur la Minicarte" name="MiniMapChatRing"/>
+	<menu_item_check label="Signaler les entrées dans le périmètre d'affichage" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Signaler les sorties de distance d'affichage" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Signaler les entrées à distance de chat" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Signaler les sorties de distance de chat" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Signaler les entrées dans votre région" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Signaler les sorties de votre région" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Signaler les alertes d'âge d'avatars" name="RadarReportAgeAlert"/>
+	<menu_item_check label="Communiquer les alertes d'entrées aux scripts" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Communiquer les alertes de sorties aux scripts" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="Améliorer le radar avec le Bridge LSL" name="FSRadarEnhanceByBridge"/>
+	<menu_item_call name="show_blocked_list" label="Afficher les Éléments ignorés"/>
+</toggleable_menu>

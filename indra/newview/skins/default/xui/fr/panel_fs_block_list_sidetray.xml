@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+	<panel label="bottom_panel" name="blocked_buttons_panel">
+		<filter_editor label="Filtrer" name="blocked_filter_input"/>
+		<menu_button name="blocked_gear_btn" tool_tip="Actions sur la personne ou l'objet sélectionné"/>
+		<menu_button name="view_btn" tool_tip="Options de tri"/>
+		<menu_button name="plus_btn" tool_tip="Sélectionnez un résident ou un objet à ignorer"/>
+		<button name="unblock_btn" tool_tip="Supprimer le résident ou l'objet des éléments ignorés"/>
+	</panel>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="Nom"/>
+		<fs_scroll_list.columns name="item_type" label="Type"/>
+	</fs_scroll_list>
+</panel>

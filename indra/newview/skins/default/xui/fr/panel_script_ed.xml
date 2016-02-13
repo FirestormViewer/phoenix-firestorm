@@ -1,51 +1,56 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="script panel">
-	<panel.string name="loading">
-		Chargement...
-	</panel.string>
-	<panel.string name="can_not_view">
-		Ce script ne peut pas être copié, visualisé ou modifié. Pour visualiser ou modifier un script à l&apos;intérieur d&apos;un objet, vous devez avoir les permissions requises.
-	</panel.string>
-	<panel.string name="public_objects_can_not_run">
-		Les objets publics ne peuvent pas exécuter de scripts
-	</panel.string>
-	<panel.string name="script_running">
-		Exécution en cours
-	</panel.string>
-	<panel.string name="Title">
-		Script : [NAME]
-	</panel.string>
-	<panel.string name="external_editor_not_set">
-		Sélectionnez un éditeur en définissant la variable d&apos;environnement LL_SCRIPT_EDITOR ou le paramètre ExternalEditor.
-	</panel.string>
+	<panel.string name="loading">Chargement...</panel.string>
+	<panel.string name="can_not_view">Vous ne pouvez pas afficher ou modifier ce script, car il a été créé avec des autorisations restreintes. Vous avez besoin des autorisations complètes pour afficher ou modifier un script à l'intérieur d'un objet.</panel.string>
+	<panel.string name="public_objects_can_not_run">Les objets publics ne peuvent pas exécuter de scripts</panel.string>
+	<panel.string name="script_running">En cours</panel.string>
+	<panel.string name="Title">Script : [NAME]</panel.string>
+	<panel.string name="external_editor_not_set">Sélectionnez un éditeur en renseignant la variable d'environnement LL_SCRIPT_EDITOR ou le paramètre ExternalEditor.</panel.string>
 	<menu_bar name="script_menu">
 		<menu label="Fichier" name="File">
 			<menu_item_call label="Enregistrer" name="Save"/>
-			<menu_item_call label="Annuler tous les changements" name="Revert All Changes"/>
-			<menu_item_call label="Charger depuis un fichier..." name="LoadFromFile"/>
+			<menu_item_call label="Annuler toutes les modifications" name="Revert All Changes"/>
+			<menu_item_call label="Ouvrir..." name="LoadFromFile"/>
 			<menu_item_call label="Enregistrer sous..." name="SaveToFile"/>
-			<menu_item_call label="Couleurs..." name="Colors"/>
+			<menu_item_call label="Préférences de l'éditeur..." name="ScriptPrefs"/>
 		</menu>
-		<menu label="Modifier" name="Edit">
+		<menu label="Édition" name="Edit">
 			<menu_item_call label="Annuler" name="Undo"/>
 			<menu_item_call label="Refaire" name="Redo"/>
 			<menu_item_call label="Couper" name="Cut"/>
 			<menu_item_call label="Copier" name="Copy"/>
 			<menu_item_call label="Coller" name="Paste"/>
-			<menu_item_call label="Tout sélectionner" name="Select All"/>
+			<menu_item_call label="Sélectionner tout" name="Select All"/>
 			<menu_item_call label="Désélectionner" name="Deselect"/>
 			<menu_item_call label="Rechercher / Remplacer..." name="Search / Replace..."/>
 			<menu_item_call label="Aller à la ligne..." name="Go to line..."/>
 		</menu>
 		<menu label="Aide" name="Help">
 			<menu_item_call label="Aide..." name="Help..."/>
-			<menu_item_call label="Aide par mots-clés..." name="Keyword Help..."/>
+			<menu_item_call label="Aide par mot-clé..." name="Keyword Help..."/>
+			<menu_item_call label="Librairie LSL..." name="Script Library"/>
 		</menu>
 	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Enregistrer le script" name="save_btn"/>
+			<button tool_tip="Éditeur de script externe" name="Edit_btn"/>
+			<button tool_tip="Charger un script à partir du disque" name="load_disk_btn"/>
+			<button tool_tip="Enregistrer un script sur le disque" name="save_disk_btn"/>
+			<button tool_tip="Couper" name="cut_btn"/>
+			<button tool_tip="Copier" name="copy_btn"/>
+			<button tool_tip="Coller" name="paste_btn"/>
+			<button tool_tip="Annuler" name="undo_btn"/>
+			<button tool_tip="Refaire" name="redo_btn"/>
+			<button tool_tip="Rechercher / Remplacer" name="search_btn"/>
+			<button tool_tip="Préférences de l'éditeur" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
 	<script_editor name="Script Editor">
-		Chargement...
+     Chargement...
 	</script_editor>
 	<combo_box label="Insérer..." name="Insert..."/>
-	<button label="Enregistrer" label_selected="Enregistrer" name="Save_btn"/>
-	<button label="Modifier..." name="Edit_btn"/>
+	<text name="line_col" value="Ligne 0, Colonne 0"/>
+	<button label="Éditer..." name="edit_btn_2"/>
+	<button label="Enregistrer" label_selected="Enregistrer" name="save_btn_2"/>
 </panel>

@@ -2019,7 +2019,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">Incoming message from [NAME]</string>
-	<string name="IM_autoresponse_sent">Autoresponse sent</string>
+	<string name="IM_autoresponse_sent">Autoresponse sent: [MESSAGE]</string>
 	<string name="IM_autoresponse_item_sent">Sent auto-response item: [ITEM_NAME]</string>
 
 	<!-- voice calls -->
@@ -2943,4 +2943,18 @@ Try enclosing path to the editor with double quotes.
   <string name="Reqsysinfo_Chat_Information_sent">Information Sent: [DATA]</string>
   <string name="Reqsysinfo_Chat_Request_Denied">Request denied.</string>
   <string name="Reqsysinfo_Reason">The reason provided was: [REASON]</string>
+
+  <!-- Titles for inventory finder floater -->
+  <string name="All Items">All Items</string>
+  <string name="Recent Items">Recent Items</string>
+  <string name="Worn Items">Worn Items</string>
+
+  <string name="InvOfferGroupNoticeName">A group member named [NAME]</string>
+  <string name="CallingCardOnlineLabelSuffix">(online)</string>
+  
+  <string name="GroupNoticesPanelDateString">[year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</string>
+  <string name="GroupNoticesToastDateString">[wkday,datetime,slt], [mth,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]</string>
+  <string name="NotificationItemDateStringLocal">[mthnum,datetime,local]/[day,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]</string>
+  <string name="NotificationItemDateStringUTC">[mth,datetime,utc]/[day,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]</string>
+  <string name="NotificationItemDateStringSLT">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]</string>
 </strings>

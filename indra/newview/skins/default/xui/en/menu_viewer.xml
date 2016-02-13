@@ -1614,6 +1614,15 @@
                      parameter="movable" />
                 </menu_item_check>
                 <menu_item_check
+                 label="Select Only Locked Objects"
+                 name="Select Only Locked Objects">
+                    <menu_item_check.on_check
+                     control="FSSelectLockedOnly" />
+                    <menu_item_check.on_click
+                     function="ToggleControl"
+                     parameter="FSSelectLockedOnly" />
+                </menu_item_check>
+                <menu_item_check
                  label="Select Only Copyable Objects"
                  name="Select Only Copyable Objects">
                     <menu_item_check.on_check

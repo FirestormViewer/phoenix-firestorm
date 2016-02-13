@@ -59,6 +59,9 @@
 			<check_box name="filter_temporary" label="Tymczasowe"/>
 			<check_box name="filter_attachment" label="Dodatkami"/>
 			<check_box name="filter_moap" label="Z Shared Media"/>
+			<check_box name="filter_perm_copy" label="Kopiowalne"/>
+			<check_box name="filter_perm_modify" label="Modyfikowalne"/>
+			<check_box name="filter_perm_transfer" label="Transferowalne"/>
 			<check_box name="filter_for_sale" label="Do kupienia między" width="135"/>
 			<text name="and" width="30">
 				oraz
@@ -81,6 +84,7 @@
 			<text name="and2" width="30">
 				oraz
 			</text>
+			<check_box name="filter_agent_parcel_only" label="Tylko na obecnej działce"/>
 			<text name="only_list">
 				Wyklucz obiekty, które są:
 			</text>

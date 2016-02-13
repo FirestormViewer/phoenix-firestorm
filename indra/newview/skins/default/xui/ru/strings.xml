@@ -4506,7 +4506,7 @@ support@secondlife.com.
 		Входящее сообщение от [NAME]
 	</string>
 	<string name="IM_autoresponse_sent">
-		Автоответ отправлен
+		Автоответ отправлен: [MESSAGE]
 	</string>
 	<string name="IM_autoresponse_item_sent">
 		Элемент [ITEM_NAME] отправлен автоответом

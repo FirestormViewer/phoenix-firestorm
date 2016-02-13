@@ -61,6 +61,8 @@
 #include "llviewertexturelist.h"
 #include "llviewerwindow.h"
 
+#include "fsfloaterplacedetails.h"
+
 static LLDefaultChildRegistry::Register<LLViewerTextEditor> r("text_editor");
 
 ///-----------------------------------------------------------------------
@@ -83,14 +85,7 @@ public:
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 
@@ -105,14 +100,7 @@ public:
 
 		// <FS:Ansariel> FIRE-817: Separate place details floater
 		//LLFloaterSidePanelContainer::showPanel("places", key);
-		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
-		{
-			LLFloaterReg::showInstance("fs_placedetails", key);
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", key);
-		}
+		FSFloaterPlaceDetails::showPlaceDetails(key);
 		// </FS:Ansariel>
 	}
 // [/SL:KB]

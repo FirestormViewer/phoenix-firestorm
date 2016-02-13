@@ -10,6 +10,7 @@
 #   WINDOWS - Windows
 
 set(NDTARGET_ARCH "x86" CACHE STRING "Build 64 or 32 bit viewer. Defaults to 32 bit.")
+set(ND_USE_OPENJPEG2 OFF CACHE BOOL "Use OpenJPEG 2.1 instead of 1.4. Default off.")
 
 if( ${NDTARGET_ARCH} STREQUAL "x64" )
   set( ND_BUILD64BIT_ARCH ON )
@@ -38,11 +39,11 @@ set(INCREMENTAL_LINK OFF CACHE BOOL "Use incremental linking on win32 builds (en
 # <FS:ND> When building for Linux x64 we enable building the media plugins, in all other cases we use the prebuild 32 bit packages
 # set(ENABLE_MEDIA_PLUGINS ON CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
 
-if (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+if (ND_BUILD64BIT_ARCH AND (${CMAKE_SYSTEM_NAME} MATCHES "Windows" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin") )
   set( ENABLE_MEDIA_PLUGINS OFF CACHE FORCE "Build with media plugins" )
-else (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+else (ND_BUILD64BIT_ARCH AND (${CMAKE_SYSTEM_NAME} MATCHES "Windows" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin") )
   set(ENABLE_MEDIA_PLUGINS ON CACHE BOOL "Turn off building media plugins if they are imported by third-party library mechanism")
-endif (ND_BUILD64BIT_ARCH AND ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+endif (ND_BUILD64BIT_ARCH AND (${CMAKE_SYSTEM_NAME} MATCHES "Windows" OR ${CMAKE_SYSTEM_NAME} MATCHES "Darwin") )
 # </FS:ND>
 
 if(LIBS_CLOSED_DIR)

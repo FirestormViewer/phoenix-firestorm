@@ -6,6 +6,9 @@
 	<panel.string name="wear_items_tooltip">
 		Załóż zaznaczone obiekty
 	</panel.string>
+	<panel.string name="cof_tab_label">
+		Założone (dodatki: [COUNT]/[MAX])
+	</panel.string>
 	<tab_container name="appearance_tabs">
 		<panel label="Moje stroje" name="outfitslist_tab"/>
 		<panel label="Założone" name="cof_tab"/>

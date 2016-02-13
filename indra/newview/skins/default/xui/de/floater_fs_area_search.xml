@@ -59,6 +59,9 @@
 			<check_box name="filter_temporary" label="Temporär"/>
 			<check_box name="filter_attachment" label="Anhang"/>
 			<check_box name="filter_moap" label="Shared Media"/>
+			<check_box name="filter_perm_copy" label="Kopieren"/>
+			<check_box name="filter_perm_modify" label="Bearbeiten"/>
+			<check_box name="filter_perm_transfer" label="Transferieren"/>
 			<check_box name="filter_for_sale" label="Zum Verkauf zwischen" width="150"/>
 			<text name="and">
 				und
@@ -82,6 +85,7 @@
            <text name="and2">
 				und
 			</text>
+			<check_box name="filter_agent_parcel_only" label="Nur aktuelle Parzelle" width="140"/>
 			<text name="only_list">
 				Objekte mit diesen Eigenschaften ausschließen:
 			</text>

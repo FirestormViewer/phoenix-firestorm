@@ -1,114 +1,132 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Graphiques" name="Display panel">
-	<text name="QualitySpeed">
-		Qualité et vitesse :
-	</text>
-	<text name="FasterText">
-		Plus rapide
-	</text>
-	<text name="BetterText">
-		Meilleure
-	</text>
-	<text name="ShadersPrefText">
-		Faible
-	</text>
-	<text name="ShadersPrefText2">
-		Moyenne
-	</text>
-	<text name="ShadersPrefText3">
-		Élevée
-	</text>
-	<text name="ShadersPrefText4">
-		Ultra
-	</text>
-	<panel label="Graphiques personnalisés" name="CustomGraphics Panel">
-		<text name="ShadersText">
-			Effets :
-		</text>
-		<check_box initial_value="true" label="Eau transparente" name="TransparentWater"/>
-		<check_box initial_value="true" label="Placage de relief et brillance" name="BumpShiny"/>
-		<check_box initial_value="true" label="Lumières locales" name="LocalLights"/>
-		<check_box initial_value="true" label="Effets de base" name="BasicShaders" tool_tip="La désactivation de cette option peut éviter le plantage de certains pilotes de cartes graphiques"/>
-		<check_box initial_value="true" label="Effets atmosphériques" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Modèle d&apos;éclairage avancé" name="UseLightShaders"/>
-		<check_box initial_value="true" label="Occlusion ambiante" name="UseSSAO"/>
-		<check_box initial_value="true" label="Profondeur de champ" name="UseDoF"/>
-		<text name="shadows_label">
-			Ombres :
-		</text>
-		<combo_box name="ShadowDetail">
-			<combo_box.item label="Aucune" name="0"/>
-			<combo_box.item label="Soleil/Lune" name="1"/>
-			<combo_box.item label="Soleil/Lune + Projecteurs" name="2"/>
-		</combo_box>
-		<text name="reflection_label">
-			Reflets dans l&apos;eau :
-		</text>
-		<combo_box initial_value="true" label="Reflets dans l&apos;eau" name="Reflections">
-			<combo_box.item label="Minimes" name="0"/>
-			<combo_box.item label="Terrain et arbres" name="1"/>
-			<combo_box.item label="Tous les objets statiques" name="2"/>
-			<combo_box.item label="Tous les objets et avatars" name="3"/>
-			<combo_box.item label="Tout" name="4"/>
-		</combo_box>
-		<slider label="Prop. physiques avatar :" name="AvatarPhysicsDetail"/>
-		<text name="AvatarPhysicsDetailText">
-			Faible
-		</text>
-		<slider label="Limite d&apos;affichage :" name="DrawDistance"/>
-		<text name="DrawDistanceMeterText2">
-			m
-		</text>
-		<slider label="Nb max. de particules :" label_width="147" name="MaxParticleCount"/>
-		<slider label="Avatars max. non éloignés en 2D :" name="MaxNumberAvatarDrawn"/>
-		<slider label="Qualité post-traitement :" name="RenderPostProcess"/>
-		<text name="MeshDetailText">
-			Détails des rendus :
-		</text>
-		<slider label="  Objets :" name="ObjectMeshDetail"/>
-		<slider label="  Flexiprims :" name="FlexibleMeshDetail"/>
-		<slider label="  Arbres :" name="TreeMeshDetail"/>
-		<slider label="  Avatars :" name="AvatarMeshDetail"/>
-		<slider label="  Relief :" name="TerrainMeshDetail"/>
-		<slider label="  Ciel :" name="SkyMeshDetail"/>
-		<text name="PostProcessText">
-			Faible
-		</text>
-		<text name="ObjectMeshDetailText">
-			Faible
-		</text>
-		<text name="FlexibleMeshDetailText">
-			Faible
-		</text>
-		<text name="TreeMeshDetailText">
-			Faible
-		</text>
-		<text name="AvatarMeshDetailText">
-			Faible
-		</text>
-		<text name="TerrainMeshDetailText">
-			Faible
-		</text>
-		<text name="SkyMeshDetailText">
-			Faible
-		</text>
-		<text name="AvatarRenderingText">
-			Rendu de l&apos;avatar :
-		</text>
-		<check_box initial_value="true" label="Avatars éloignés en 2D" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Accélération du rendu" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Mouvement des habits" name="AvatarCloth"/>
-		<text left="380" name="TerrainDetailText">
-			Rendu du terrain :
-		</text>
-		<radio_group name="TerrainDetailRadio">
-			<radio_item label="Faible" name="0"/>
-			<radio_item label="Élevé" name="2"/>
-		</radio_group>
-		--&gt;
-	</panel>
-	<button label="Appliquer" label_selected="Appliquer" name="Apply"/>
-	<button label="Réinitialiser" name="Defaults"/>
-	<button label="Avancé" name="Advanced"/>
-	<button label="Matériel" label_selected="Matériel" name="GraphicsHardwareButton"/>
+<panel label="Affichage" name="Display panel">
+	<tab_container label="Paramètres d'affichage" name="tabs">
+		<panel label="Général" name="General">
+			<text name="QualitySpeed">Qualité et performance :</text>
+			<text name="FasterText">Performance</text>
+			<text name="BetterText">Qualité</text>
+			<text name="ShadersPrefText">Faible</text>
+			<text name="ShadersPrefText2">Moyen</text>
+			<text name="ShadersPrefText3">Élevé</text>
+			<text name="ShadersPrefText4">Ultra</text>
+			<check_box label="Mode plein écran" name="Fullscreen Mode" tool_tip="Exécuter Firestorm en mode plein écran. Un redémarrage est nécessaire pour changer de mode."/>
+			<text name="ShadersText">Shaders :</text>
+			<check_box label="Transparence de l'eau" name="TransparentWater"/>
+			<check_box label="Relief &amp; Brillance" name="BumpShiny"/>
+			<check_box label="Éclairage local" name="LocalLights"/>
+			<check_box label="Shaders basiques" name="BasicShaders" tool_tip="Désactiver cette option peut empêcher certains pilotes de cartes graphiques de planter"/>
+			<check_box label="Shaders atmosphériques" name="WindLightUseAtmosShaders"/>
+			<check_box label="Éclairage avancé" tool_tip="Permet un rendu de lumière avancé" name="UseLightShaders"/>
+			<check_box label="Occlusion ambiante" name="UseSSAO"/>
+			<text name="shadows_label">Ombres :</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="Aucune" name="0"/>
+				<combo_box.item label="Soleil / Lune" name="1"/>
+				<combo_box.item label="Soleil / Lune &amp; Projecteurs" name="2"/>
+			</combo_box>
+			<text name="avatar_shadows_label">Ombre de l'avatar :</text>
+			<combo_box name="AvatarShadowDetail">
+				<combo_box.item label="Aucune" name="0"/>
+				<combo_box.item label="Simplifiée" name="1"/>
+				<combo_box.item label="Optimisée" name="2"/>
+				<combo_box.item label="Complexe" name="3"/>
+			</combo_box>
+			<text name="reflection_label">Reflets aquatiques :</text>
+			<combo_box name="Reflections">
+				<combo_box.item label="Minimaux" name="0"/>
+				<combo_box.item label="Terrain et arbres" name="1"/>
+				<combo_box.item label="Tous les objets statiques" name="2"/>
+				<combo_box.item label="Avatars et objets" name="3"/>
+				<combo_box.item label="Tout" name="4"/>
+			</combo_box>
+			<text name="local lights_label" tool_tip="Affecte le nombre de sources de lumière lorsque l'éclairage avancé est désactivé. Un redémarrage est requis pour changer de mode.">Sources de lumière</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="Toutes (par défaut)" name="3"/>
+				<combo_box.item label="Réduites" name="2"/>
+				<combo_box.item label="Soleil / Lune uniquement" name="1"/>
+			</combo_box>
+			<slider label="Distance d'affichage" name="DrawDistance"/>
+			<text name="DrawDistanceMeterText2">m</text>
+			<slider label="Nombre max. de particules" name="MaxParticleCount"/>
+			<slider label="Maximum d'avatars 3D" name="MaxNumberAvatarDrawn"/>
+			<slider label="Qualité post-traitement" name="RenderPostProcess"/>
+			<text name="PostProcessText">Basse</text>
+			<slider label="Propriétés physiques des avatars" name="AvatarPhysicsDetail"/>
+			<text name="MeshDetailText">Facteurs de détails liés à la distance :</text>
+			<slider label="  Objets et Sculpts" name="ObjectMeshDetail"/>
+			<slider label="  Prims flexibles" name="FlexibleMeshDetail"/>
+			<slider label="  Arbres" name="TreeMeshDetail"/>
+			<slider label="  Avatars" name="AvatarMeshDetail"/>
+			<slider label="  Terrain" name="TerrainMeshDetail"/>
+			<slider label="  Ciel" name="SkyMeshDetail"/>
+			<text name="AvatarRenderingText">Rendu des avatars :</text>
+			<check_box label="Avatars 2D" name="AvatarImpostors"/>
+			<check_box label="Accél. GPU des avatars" name="AvatarVertexProgram"/>
+			<check_box label="Flexibilité des vêtements" name="AvatarCloth"/>
+			<text name="TerrainDetailText">Détails du terrain :</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="Bas" name="0"/>
+				<radio_item label="Haut" name="2"/>
+			</radio_group>
+			<button tool_tip="Valeurs par défaut." name="Defaults"/>
+		</panel>
+		<panel label="Paramètres matériels" name="Hardware Settings">
+			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
+			<check_box label="Activer les Vertex Buffer Objects OpenGL" name="vbo" tool_tip="Activer cette fonction offre un gain un gain de performance. Toutefois, le matériel très ancien peut ne pas implémenter cette technologie et provoquera une instabilité du Viewer s'il est actif."/>
+			<check_box label="Activer les Streamed VBOs" name="vbo_stream" tool_tip="Désactiver cette option peut améliorer les performances lorsque les VBO sont activés. La désactivation de ce paramètre améliore grandement les performances sur certaines cartes graphiques Intel et AMD."/>
+			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
+			<text name="Antialiasing:">Anticrénelage :</text>
+			<combo_box label="Anticrénelage" name="fsaa">
+				<combo_box.item label="Désactivé" name="FSAADisabled"/>
+				<combo_box.item label="2x" name="2x"/>
+				<combo_box.item label="4x" name="4x"/>
+				<combo_box.item label="8x" name="8x"/>
+				<combo_box.item label="16x" name="16x"/>
+			</combo_box>
+			<spinner label="Gamma :" name="gamma"/>
+			<text name="brightness text">Baisser la valeur pour augmenter la brillance</text>
+			<slider label="Mémoire vidéo utilisée par le viewer (Mo) :" label_width="235" width="450" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
+			<spinner label="Ratio de distance du brouillard :" name="fog"/>
+		</panel>
+		<panel label="Rendu" name="Rendering">
+			<text name="World Updating">Actualisation de l'univers :</text>
+			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
+			<text name="Texture Rendering">Rendu des textures :</text>
+			<check_box label="Utiliser HTTP pour récupérer les textures" tool_tip="Cochez cette option pour charger les textures en utilisant le protocole HTTP - désactivez cette option si vous avez des problèmes d'affichage et souhaitez utiliser le protocole UDP à la place." name="TexturesHTTP"/>
+			<text name="TextureDetailLabel">Qualité max. des textures :</text>
+			<combo_box name="TextureDetail">
+				<combo_box.item label="Normale" name="0"/>
+				<combo_box.item label="Moyenne" name="3"/>
+				<combo_box.item label="Basse" name="4"/>
+				<combo_box.item label="Pas de textures" name="5"/>
+			</combo_box>
+			<text name="Alpha Mask Rendering">Rendu des masques alphas :</text>
+			<check_box label="Activer les masques alpha lorsque 'Éclairage avancé' n'est pas activé" tool_tip="Lorsqu'activé, les masques alpha seront pris en compte lorsque l'éclairage avancé est désactivé" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="Activer les masques alpha lorsque 'Éclairage avancé' est activé" tool_tip="Lorsqu'activé, les masques alpha seront pris en compte lorsque l'éclairage avancé est activé" name="RenderAutoMaskAlphaDeferred"/>
+			<text name="Miscellaneous Rendering">Divers :</text>
+			<check_box label="Éclat lumineux" tool_tip="Activer l'éclat lumineux. Noter que la force doit être définie sur 0 pour désactiver l'éclat lumineux lorsque les ombres sont activées." name="RenderGlow"/>
+			<slider label="Force :" tool_tip="Force de l'éclat lumineux. Une valeur plus élevée le rends plus diffus et plus doux (2 par défaut)" name="glow_strength"/>
+			<check_box label="Afficher les avatars qui n'ont pas fini de charger" name="RenderUnloadedAvatars"/>
+			<check_box label="Limiter les images par secondes" name="FSLimitFramerate"/>
+			<slider label="IPS :" name="MaxFPS"/>
+			<check_box label="Voir en mode fil de fer" name="Wireframe"/>
+			<check_box label="Activer les sources lumineuses portées (Face Lights)" tool_tip="Ce paramètre activera toutes les sources de lumière que les avatars portent, comme les 'Face Lights'." name="Render Attached Lights"/>
+			<check_box label="Rendu des particules portées" name="Render Attached Particles"/>
+			<slider width="480" label_width="340" label="Temporisation de mise en cache de l'univers" tool_tip="Délai en secondes de temporisation nécessaire à la mise en cache de l'univers avant de vous connecter (6 secondes par défaut)" name="PrecachingDelay"/>
+			<text name="PrecachingDelayText" left_delta="480">sec.</text>
+			<slider width="480" label_width="340" label="Qualité des ombres" tool_tip="Qualité des ombres (1 par défaut)" name="ShadowResolution"/>
+			<slider width="480" label_width="340" label="Échelle de rendu des textures du terrain (Redémarrage requis)" name="RenderTerrainScale" tool_tip="Détermine l'échelle de rendu des textures du terrain - une valeur plus basse est plus compressée (nécessite un redémarrage)"/>
+		</panel>
+		<panel label="Profondeur de champ" name="DOF panel">
+			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
+			<check_box label="Activer pendant la modification d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Activer sous l'eau" name="FSRenderDoFUnderwater"/>
+			<slider label="Indice d'ouverture :" name="CameraFNum" tool_tip="Indice d'ouverture de la caméra pour les effets de profondeur"/>
+			<slider label="Distance focale :" name="CameraFocal" tool_tip="Distance focale de la caméra pour les effets de profondeur (en millimètres)"/>
+			<slider label="Angle de champ :" name="Camera FOV" tool_tip="Angle de champ vertical de la caméra pour les effets de profondeur (en degrés)"/>
+			<slider label="Format d'image :" name="CameraAspectRatio" tool_tip="Rapport de format de l'écran pour les effets de profondeur"/>
+			<slider label="Dynamisme des transitions :" name="CameraFocusTrans" tool_tip="Temps nécessaire pour modifier l'effet de profondeur lors d'un mouvement de caméra"/>
+			<slider label="Qualité du rendu du floutage :" name="CameraDoFResScale" tool_tip="Définit la qualité du floutage et les performances de rendu. (Le plus élevé la meilleure qualité, le plus bas les meilleures performances)"/>
+		</panel>
+	</tab_container>
 </panel>
