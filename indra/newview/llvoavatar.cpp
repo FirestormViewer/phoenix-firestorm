@@ -1133,6 +1133,7 @@ void LLVOAvatar::resetImpostors()
 	{
 		LLVOAvatar* avatar = (LLVOAvatar*) *iter;
 		avatar->mImpostor.release();
+		avatar->mNeedsImpostorUpdate = TRUE;
 	}
 }
 
@@ -8912,7 +8913,7 @@ void LLVOAvatar::updateFreezeCounter(S32 counter)
 
 BOOL LLVOAvatar::updateLOD()
 {
-	if (isImpostor())
+	if (isImpostor() && 0 != mDrawable->getNumFaces() && mDrawable->getFace(0)->hasGeometry())
 	{
 		return TRUE;
 	}
@@ -9194,6 +9195,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 				}
 			}
 		}
+        LL_DEBUGS("ARCdetail") << "Avatar body parts complexity: " << cost << LL_ENDL;
 
 
 		for (attachment_map_t::const_iterator attachment_point = mAttachmentPoints.begin(); 
@@ -9223,7 +9225,12 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 						const LLVOVolume* volume = drawable->getVOVolume();
 						if (volume)
 						{
-							cost += volume->getRenderCost(textures);
+                            U32 attachment_total_cost = 0;
+                            U32 attachment_volume_cost = 0;
+                            U32 attachment_texture_cost = 0;
+                            U32 attachment_children_cost = 0;
+
+							attachment_volume_cost += volume->getRenderCost(textures);
 
 							const_child_list_t children = volume->getChildren();
 							for (const_child_list_t::const_iterator child_iter = children.begin();
@@ -9234,7 +9241,7 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 								LLVOVolume *child = dynamic_cast<LLVOVolume*>( child_obj );
 								if (child)
 								{
-									cost += child->getRenderCost(textures);
+									attachment_children_cost += child->getRenderCost(textures);
 								}
 							}
 
@@ -9243,8 +9250,18 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 								 ++volume_texture)
 							{
 								// add the cost of each individual texture in the linkset
-								cost += volume_texture->second;
+								attachment_texture_cost += volume_texture->second;
 							}
+
+                            attachment_total_cost = attachment_volume_cost + attachment_texture_cost + attachment_children_cost;
+                            LL_DEBUGS("ARCdetail") << "Attachment costs " << attached_object->getAttachmentItemID()
+                                                   << " total: " << attachment_total_cost
+                                                   << ", volume: " << attachment_volume_cost
+                                                   << ", textures: " << attachment_texture_cost
+                                                   << ", " << volume->numChildren()
+                                                   << " children: " << attachment_children_cost
+                                                   << LL_ENDL;
+                            cost += attachment_total_cost;
 						}
 					}
 				}
