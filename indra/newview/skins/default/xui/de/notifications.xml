@@ -3400,6 +3400,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	<notification name="AttachmentSaved">
 		Der Anhang wurde gespeichert.
 	</notification>
+	<notification name="AppearanceToXMLSaved">
+		Aussehen erfolgreich als XML nach [PATH] exportiert.
+	</notification>
+	<notification name="AppearanceToXMLFailed">
+		Aussehen konnte nicht gespeichert werden.
+	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Hilfethema für dieses Element wurde nicht gefunden.
 	</notification>
@@ -4914,10 +4920,6 @@ Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enth
 		<form name="form">
 			<ignore name="ignore" text="Kein-Havok-Warnung"/>
 		</form>
-	</notification>
-
-	<notification name="DumpArchetypeSuccess">
-Aussehen erfolgreich als XML nach [FILENAME] exportiert.
 	</notification>
 
 	<notification name="StreamListExportSuccess">

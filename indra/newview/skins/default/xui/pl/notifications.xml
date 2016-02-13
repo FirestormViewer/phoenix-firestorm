@@ -4611,9 +4611,6 @@ Poprzedni symulator: [OLDVERSION]
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
 		</form>
 	</notification>
-	<notification name="DumpArchetypeSuccess">
-		Pomyślnie zapisano wygląd w formacie XML do pliku [FILENAME].
-	</notification>
 	<notification name="StreamListExportSuccess">
 		Pomyślnie wyeksportowano listę strumieni w formacie XML do pliku [FILENAME].
 	</notification>

@@ -4800,9 +4800,6 @@ URL: [MEDIAURL]
 					<ignore name="ignore" text="Havok Предупреждение"/>
 			</form>
 	</notification>
-	<notification name="DumpArchetypeSuccess">
-		Внешний вид успешно сохранены в XML файл [FILENAME].
-	</notification>
 	<notification name="StreamListExportSuccess">
 		Список потока успешно экспортирован в XML файл [FILENAME].
 	</notification>
