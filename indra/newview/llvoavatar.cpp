@@ -8655,7 +8655,6 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
 	{
-		LL_INFOS("DumpArchetypeXML") << "User closed the filepicker" << LL_ENDL;
 		return;
 	}
 // </FS:CR>
@@ -8672,10 +8671,7 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 		LLAPRFile::tFiletype* file = outfile.getFileHandle();
 		// </FS:ND>
 
-		// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
-		//LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
-		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
-		// </FS:CR>
+		LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
 
 		apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
 		apr_file_printf( file, "<linden_genepool version=\"1.0\">\n" );
