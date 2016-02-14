@@ -2481,11 +2481,15 @@ void LLFloaterView::restoreAll()
 	// make sure all subwindows aren't minimized
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
-		LLFloater* floaterp = (LLFloater*)*child_it;
-		if (floaterp) //<FS:KC> Possible fix for crash on disconnect
+		// <FS:Ansariel> Possible fix for crash on disconnect
+		//LLFloater* floaterp = (LLFloater*)*child_it;
+		//floaterp->setMinimized(FALSE);
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
+		if (floaterp)
 		{
 			floaterp->setMinimized(FALSE);
 		}
+		// </FS:Ansariel>
 	}
 
 	// *FIX: make sure dependents are restored
