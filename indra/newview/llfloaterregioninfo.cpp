@@ -225,7 +225,7 @@ BOOL LLFloaterRegionInfo::postBuild()
 
 // <FS:CR> Aurora Sim - Region Settings Console
 	// We only use this panel on Aurora-based sims
-	std::string url = gAgent.getRegion()->getCapability("DispatchOpenRegionSettings");
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : "";
 	if (!url.empty())
 	{
 		panel = new LLPanelRegionOpenSettingsInfo;
@@ -250,7 +250,10 @@ BOOL LLFloaterRegionInfo::postBuild()
 	panel->buildFromFile("panel_region_debug.xml");
 	mTab->addTabPanel(panel);
 
-	if(!gAgent.getRegion()->getCapability("RegionExperiences").empty())
+	// <FS:Ansariel> Crash fix
+	//if(!gAgent.getRegion()->getCapability("RegionExperiences").empty())
+	if (gAgent.getRegion() && !gAgent.getRegion()->getCapability("RegionExperiences").empty())
+	// </FS:Ansariel>
 	{
 		panel = new LLPanelRegionExperiences;
 		mInfoPanels.push_back(panel);
@@ -876,7 +879,10 @@ protected:
 
 void LLFloaterRegionInfo::requestMeshRezInfo()
 {
-	std::string sim_console_url = gAgent.getRegion()->getCapability("SimConsoleAsync");
+	// <FS:Ansariel> Crash fix
+	//std::string sim_console_url = gAgent.getRegion()->getCapability("SimConsoleAsync");
+	std::string sim_console_url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("SimConsoleAsync") : "";
+	// </FS:Ansariel>
 
 	if (!sim_console_url.empty())
 	{
@@ -903,6 +909,13 @@ void LLFloaterRegionInfo::requestMeshRezInfo()
 BOOL LLPanelRegionGeneralInfo::sendUpdate()
 {
 	LL_INFOS() << "LLPanelRegionGeneralInfo::sendUpdate()" << LL_ENDL;
+
+	// <FS:Ansariel> Crash fix
+	if (!gAgent.getRegion())
+	{
+		return FALSE;
+	}
+	// </FS:Ansariel>
 
 	// First try using a Cap.  If that fails use the old method.
 	LLSD body;
@@ -1052,7 +1065,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 	LL_INFOS() << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << LL_ENDL;
 
 	LLSD body;
-	std::string url = gAgent.getRegion()->getCapability("DispatchOpenRegionSettings");
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : "";
 	if (!url.empty())
 	{
 		body["draw_distance"] = (LLSD::Integer)self->childGetValue("draw_distance");
