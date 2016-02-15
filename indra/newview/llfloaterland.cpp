@@ -502,7 +502,7 @@ BOOL LLPanelLandGeneral::postBuild()
 	// to enabled the floater will just throw an error when trying to get it's cap
 	// <FS:Ansariel> Crash fix
 	//std::string url = gAgent.getRegion()->getCapability("LandResources");
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("LandResources") : "";
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("LandResources") : LLStringUtil::null;
 	// </FS:Ansariel>
 	if (!url.empty())
 	{
