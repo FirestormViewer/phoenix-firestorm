@@ -160,11 +160,12 @@ BOOL AnimationExplorer::postBuild()
 	mPreviewCtrl = findChild<LLView>("animation_preview");
 	if (mPreviewCtrl)
 	{
-		mAnimationPreview = new LLPreviewAnimation(
-			mPreviewCtrl->getRect().getWidth(),mPreviewCtrl->getRect().getHeight()
-		);
-		mAnimationPreview->setZoom(2.0f);
-		startMotion(LLUUID::null);
+		if (isAgentAvatarValid())
+		{
+			mAnimationPreview = new LLPreviewAnimation(mPreviewCtrl->getRect().getWidth(), mPreviewCtrl->getRect().getHeight());
+			mAnimationPreview->setZoom(2.0f);
+			startMotion(LLUUID::null);
+		}
 	}
 	else
 	{

@@ -140,6 +140,7 @@ class LLGroupNotificationListItem
     : public LLNotificationListItem, public LLGroupMgrObserver
 {
 public:
+	virtual ~LLGroupNotificationListItem(); // <FS:Ansariel> Crash fix in LLGroupMgr::notifyObservers()
     virtual BOOL postBuild();
 
     void setGroupId(const LLUUID& value);
@@ -201,7 +202,7 @@ class LLGroupNoticeNotificationListItem
     : public LLGroupNotificationListItem
 {
 public:
-	~LLGroupNoticeNotificationListItem();
+	//~LLGroupNoticeNotificationListItem(); // <FS:Ansariel> Crash fix in LLGroupMgr::notifyObservers()
     static std::set<std::string> getTypes();
     virtual BOOL postBuild();
 
