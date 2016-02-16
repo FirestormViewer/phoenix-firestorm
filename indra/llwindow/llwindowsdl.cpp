@@ -1819,7 +1819,8 @@ void LLWindowSDL::gatherInput()
 		    mKeyScanCode = event.key.keysym.scancode;
 		    mKeyVirtualKey = event.key.keysym.unicode;
 		    mKeyModifiers = event.key.keysym.mod;
-
+			mSDLSym = event.key.keysym.sym;  // <FS:ND/> Store the SDL Keysym too.
+			
 		    gKeyboard->handleKeyDown(event.key.keysym.sym, event.key.keysym.mod);
 		    // part of the fix for SL-13243
 		    if (SDLCheckGrabbyKeys(event.key.keysym.sym, TRUE) != 0)
@@ -1836,6 +1837,7 @@ void LLWindowSDL::gatherInput()
 		    mKeyScanCode = event.key.keysym.scancode;
 		    mKeyVirtualKey = event.key.keysym.unicode;
 		    mKeyModifiers = event.key.keysym.mod;
+			mSDLSym = event.key.keysym.sym;  // <FS:ND/> Store the SDL Keysym too.
 
 		    if (SDLCheckGrabbyKeys(event.key.keysym.sym, FALSE) == 0)
 			    SDLReallyCaptureInput(FALSE); // part of the fix for SL-13243
@@ -2456,7 +2458,7 @@ LLSD LLWindowSDL::getNativeKeyData()
         result["scan_code"] = (S32)mKeyScanCode;
         result["virtual_key"] = (S32)mKeyVirtualKey;
 	result["modifiers"] = (S32)modifiers;
-
+	result[ "sdl_sym" ] = (S32)mSDLSym;  // <FS:ND/> Store the SDL Keysym too.
         return result;
 }
 
