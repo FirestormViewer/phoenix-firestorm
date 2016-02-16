@@ -2877,7 +2877,10 @@ void LLFloaterView::closeAllChildren(bool app_quitting)
 			continue;
 		}
 
-		LLFloater* floaterp = (LLFloater*)viewp;
+		// <FS:Ansariel> FIRE-14349: Crash in LLPanelEditWearable::isDirty() due to memory corruption?
+		//LLFloater* floaterp = (LLFloater*)viewp;
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(viewp);
+		// </FS:Ansariel>
 
 		// Attempt to close floater.  This will cause the "do you want to save"
 		// dialogs to appear.
@@ -3250,7 +3253,10 @@ LLFloater*	LLFloaterView::getParentFloater(LLView* viewp) const
 
 	if (parentp == this)
 	{
-		return (LLFloater*)viewp;
+		// <FS:Ansariel> FIRE-14349: Crash in LLPanelEditWearable::isDirty() due to memory corruption?
+		//return (LLFloater*)viewp;
+		return dynamic_cast<LLFloater*>(viewp);
+		// </FS:Ansariel>
 	}
 
 	return NULL;
