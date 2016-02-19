@@ -217,6 +217,7 @@ private:
 	U32 mKeyScanCode;
         U32 mKeyVirtualKey;
 	SDLMod mKeyModifiers;
+	U32 mSDLSym; // <FS:ND/> Store the SDL Keysym too.
 
 	BOOL mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
 };

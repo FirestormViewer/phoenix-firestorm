@@ -70,6 +70,11 @@ class FSViewerManifest:
         if os.path.exists( debugDir ):
             from shutil import rmtree
             rmtree( debugDir )
+
+        debugFile = os.path.join( self.get_dst_prefix(), "bin", "debug.log" )
+
+        if os.path.isfile( debugFile ):
+            os.unlink( debugFile )
             
     def fs_save_linux_symbols( self ):
         #AO: Try to package up symbols

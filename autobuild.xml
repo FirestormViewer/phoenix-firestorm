@@ -2003,9 +2003,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e0c6acdbab116792347a01994f229cd7</string>
+              <string>7dce8b60c9e22b941e62029ee487462d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3-linux-201509040011-r11.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8-linux-201602151218-r12.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

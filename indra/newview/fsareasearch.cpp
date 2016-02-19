@@ -61,6 +61,7 @@
 #include "rlvhandler.h"
 #include "fsareasearchmenu.h"
 #include "fsscrolllistctrl.h"
+#include "llviewermediafocus.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 const S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1574,79 +1575,6 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 	}
 }
 
-// This function calculates the aspect ratio and the world aligned components of a selection bounding box. Direct C&P from LLViewerMediaFocus::getBBoxAspectRatio()
-F32 FSPanelAreaSearchList::getBBoxAspectRatio(const LLBBox& bbox, const LLVector3& normal, F32* height, F32* width, F32* depth)
-{
-	// Convert the selection normal and an up vector to local coordinate space of the bbox
-	LLVector3 local_normal = bbox.agentToLocalBasis(normal);
-	LLVector3 z_vec = bbox.agentToLocalBasis(LLVector3(0.0f, 0.0f, 1.0f));
-	
-	LLVector3 comp1(0.f,0.f,0.f);
-	LLVector3 comp2(0.f,0.f,0.f);
-	LLVector3 bbox_max = bbox.getExtentLocal();
-	F32 dot1 = 0.f;
-	F32 dot2 = 0.f;
-	
-	LL_DEBUGS("FSAreaSearch") << "bounding box local size = " << bbox_max << ", local_normal = " << local_normal << LL_ENDL;
-
-	// The largest component of the localized normal vector is the depth component
-	// meaning that the other two are the legs of the rectangle.
-	local_normal.abs();
-	
-	// Using temporary variables for these makes the logic a bit more readable.
-	bool XgtY = (local_normal.mV[VX] > local_normal.mV[VY]);
-	bool XgtZ = (local_normal.mV[VX] > local_normal.mV[VZ]);
-	bool YgtZ = (local_normal.mV[VY] > local_normal.mV[VZ]);
-	
-	if(XgtY && XgtZ)
-	{
-		LL_DEBUGS("FSAreaSearch") << "x component of normal is longest, using y and z" << LL_ENDL;
-		comp1.mV[VY] = bbox_max.mV[VY];
-		comp2.mV[VZ] = bbox_max.mV[VZ];
-		*depth = bbox_max.mV[VX];
-	}
-	else if(!XgtY && YgtZ)
-	{
-		LL_DEBUGS("FSAreaSearch") << "y component of normal is longest, using x and z" << LL_ENDL;
-		comp1.mV[VX] = bbox_max.mV[VX];
-		comp2.mV[VZ] = bbox_max.mV[VZ];
-		*depth = bbox_max.mV[VY];
-	}
-	else
-	{
-		LL_DEBUGS("FSAreaSearch") << "z component of normal is longest, using x and y" << LL_ENDL;
-		comp1.mV[VX] = bbox_max.mV[VX];
-		comp2.mV[VY] = bbox_max.mV[VY];
-		*depth = bbox_max.mV[VZ];
-	}
-	
-	// The height is the vector closest to vertical in the bbox coordinate space (highest dot product value)
-	dot1 = comp1 * z_vec;
-	dot2 = comp2 * z_vec;
-	if(fabs(dot1) > fabs(dot2))
-	{
-		*height = comp1.length();
-		*width = comp2.length();
-
-		LL_DEBUGS("FSAreaSearch") << "comp1 = " << comp1 << ", height = " << *height << LL_ENDL;
-		LL_DEBUGS("FSAreaSearch") << "comp2 = " << comp2 << ", width = " << *width << LL_ENDL;
-	}
-	else
-	{
-		*height = comp2.length();
-		*width = comp1.length();
-
-		LL_DEBUGS("FSAreaSearch") << "comp2 = " << comp2 << ", height = " << *height << LL_ENDL;
-		LL_DEBUGS("FSAreaSearch") << "comp1 = " << comp1 << ", width = " << *width << LL_ENDL;
-	}
-	
-	LL_DEBUGS("FSAreaSearch") << "returning " << (*width / *height) << LL_ENDL;
-
-	// Return the aspect ratio.
-	return *width / *height;
-}
-
-
 bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 {
 	std::string action = userdata.asString();
@@ -1756,7 +1684,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 					camera_dir.normalize();
 
 					// We need the aspect ratio, and the 3 components of the bbox as height, width, and depth.
-					F32 aspect_ratio(getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
+					F32 aspect_ratio(LLViewerMediaFocus::getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
 					F32 camera_aspect(LLViewerCamera::getInstance()->getAspect());
 
 					// We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for 

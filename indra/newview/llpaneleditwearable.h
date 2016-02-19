@@ -33,6 +33,7 @@
 #include "llavatarappearancedefines.h"
 #include "llwearabletype.h"
 
+#include "llwearable.h" // <FS:ND/> for LLWearable::LLWearableObserver
 class LLAccordionCtrl;
 class LLCheckBoxCtrl;
 class LLViewerWearable;
@@ -45,8 +46,12 @@ class LLAccordionCtrlTab;
 class LLJoint;
 class LLLineEditor;
 
-class LLPanelEditWearable : public LLPanel
+class LLPanelEditWearable : public LLPanel, public LLWearable::LLWearableObserver
 {
+	// <FS:ND> Try to see if this fixes the crash in LLPanelEditWearable::isDirty, that is the wearable dets destroyed before the panel
+	virtual void onDestroyed(LLWearable const *) { mWearablePtr = NULL; }
+	// </FS:ND>
+
 public:
 	LLPanelEditWearable( );
 	virtual ~LLPanelEditWearable();

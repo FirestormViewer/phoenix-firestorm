@@ -60,6 +60,9 @@ LLWearable::LLWearable()
 // virtual
 LLWearable::~LLWearable()
 {
+	for (std::set< LLWearableObserver* >::iterator itr = mObservers.begin(); itr != mObservers.end(); ++itr )
+		(*itr)->onDestroyed( this );
+
 	for (visual_param_index_map_t::iterator vpIter = mVisualParamIndexMap.begin(); vpIter != mVisualParamIndexMap.end(); ++vpIter)
 	{
 		LLVisualParam* vp = vpIter->second;

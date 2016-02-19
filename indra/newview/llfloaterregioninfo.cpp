@@ -225,7 +225,7 @@ BOOL LLFloaterRegionInfo::postBuild()
 
 // <FS:CR> Aurora Sim - Region Settings Console
 	// We only use this panel on Aurora-based sims
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : "";
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
 	if (!url.empty())
 	{
 		panel = new LLPanelRegionOpenSettingsInfo;
@@ -881,7 +881,7 @@ void LLFloaterRegionInfo::requestMeshRezInfo()
 {
 	// <FS:Ansariel> Crash fix
 	//std::string sim_console_url = gAgent.getRegion()->getCapability("SimConsoleAsync");
-	std::string sim_console_url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("SimConsoleAsync") : "";
+	std::string sim_console_url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("SimConsoleAsync") : LLStringUtil::null;
 	// </FS:Ansariel>
 
 	if (!sim_console_url.empty())
@@ -1065,7 +1065,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 	LL_INFOS() << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << LL_ENDL;
 
 	LLSD body;
-	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : "";
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("DispatchOpenRegionSettings") : LLStringUtil::null;
 	if (!url.empty())
 	{
 		body["draw_distance"] = (LLSD::Integer)self->childGetValue("draw_distance");
@@ -1992,7 +1992,7 @@ bool LLPanelEstateInfo::accessAddCore2(const LLSD& notification, const LLSD& res
     //Get parent floater name
     LLPanelEstateInfo* panel = LLFloaterRegionInfo::getPanelEstate();
     LLFloater* parent_floater = panel ? gFloaterView->getParentFloater(panel) : NULL;
-    const std::string& parent_floater_name = parent_floater ? parent_floater->getName() : "";
+    const std::string& parent_floater_name = parent_floater ? parent_floater->getName() : LLStringUtil::null;
     
     //Determine the button that triggered opening of the avatar picker 
     //(so that a shadow frustum from the button to the avatar picker can be created)
