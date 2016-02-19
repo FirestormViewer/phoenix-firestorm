@@ -899,7 +899,7 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	{
 		// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
 		//dom = dae.openFromMemory(filename, preprocessDAE(filename).c_str());
-		dom = dae.openFromMemory(filename, preprocessDAE(tmp_file).c_str());
+		dom = dae.openFromMemory(tmp_file, preprocessDAE(filename).c_str());
 	}
 	else
 	{
@@ -935,7 +935,9 @@ bool LLDAELoader::OpenFile(const std::string& filename)
 	
 	daeInt count = db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	
-	daeDocument* doc = dae.getDoc(filename);
+	// <FS:Ansariel> Bug fixes in mesh importer by Drake Arconis
+	//daeDocument* doc = dae.getDoc(filename);
+	daeDocument* doc = dae.getDoc(tmp_file);
 	if (!doc)
 	{
 		LL_WARNS() << "can't find internal doc" << LL_ENDL;
