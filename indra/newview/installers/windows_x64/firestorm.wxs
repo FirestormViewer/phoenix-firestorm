@@ -14,6 +14,7 @@
   <Property Id="ARPURLUPDATEINFO" Value="http://www.firestormviewer.org/downloads"/>
   <Property Id="ARPHELPLINK" Value="http://www.firestormviewer.org/support"/>
   <Property Id="ARPPRODUCTICON" Value="firestorm.ico"/>
+  <Property Id="CheckProcess" Value="firestorm-bin.exe"/>
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
   <!-- VersionNT64 is undefined if the operating system is not 64-bit: http://msdn.microsoft.com/en-us/library/aa372497%28v=vs.85%29.aspx -->
@@ -115,8 +116,11 @@
    <ComponentGroupRef Id="fs_fonts" />
    <ComponentGroupRef Id="fs_fsres" />
   </Feature>
+  
   <Binary Id="ExtractCab" SourceFile="$(var.WIX_SOURCEDIR)\ExtractCab.dll" />
+  <Binary Id="CheckProcess" SourceFile="$(var.WIX_SOURCEDIR)\CheckProcess.dll" />
 
+  <CustomAction Id="CheckProcess" BinaryKey="CheckProcess" DllEntry="doCheckProcess" Execute="immediate" Return="check" Impersonate="no" HideTarget="no"/>
   <CustomAction Id="ExtractSkins_pre" Property="ExtractSkins"
 				Value="InstallDir=[INSTALLDIR]\skins\;CabFile=[INSTALLDIR]\skins.cab;CabDirFile=[INSTALLDIR]\skins.cabdir"/>
   <CustomAction Id="ExtractSkins" BinaryKey="ExtractCab" DllEntry="ExtractCab" Execute="deferred" Return="check" Impersonate="no" HideTarget="no"/>
@@ -135,6 +139,7 @@
 
 
   <InstallExecuteSequence>
+    <Custom Action="CheckProcess" After="LaunchConditions"></Custom>
     <Custom Action="ExtractSkins_pre" After="InstallInitialize">Not Installed</Custom>
     <Custom Action="ExtractSkins" Before="InstallFinalize">Not Installed</Custom>
     <Custom Action="DeleteSkins_pre" After="InstallInitialize">REMOVE</Custom>
