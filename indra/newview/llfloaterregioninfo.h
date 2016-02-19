@@ -116,6 +116,7 @@ private:
 	
 protected:
 	void onTabSelected(const LLSD& param);
+	void disableTabCtrls();
 	void refreshFromRegion(LLViewerRegion* region);
 
 	// member data

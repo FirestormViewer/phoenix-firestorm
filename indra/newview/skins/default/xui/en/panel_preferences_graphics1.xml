@@ -640,6 +640,7 @@
          height="15"
          increment="0.125"
          initial_value="160"
+         min_val="0.125"
          label="  Trees"
          label_width="140"
          layout="topleft"

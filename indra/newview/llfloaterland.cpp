@@ -39,6 +39,7 @@
 
 #include "llagent.h"
 #include "llagentaccess.h"
+#include "llappviewer.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
@@ -497,6 +498,30 @@ BOOL LLPanelLandGeneral::postBuild()
 	mBtnBuyLand = getChild<LLButton>("Buy Land...");
 	mBtnBuyLand->setClickedCallback(onClickBuyLand, (void*)&BUY_PERSONAL_LAND);
 	
+
+	mBtnBuyGroupLand = getChild<LLButton>("Buy For Group...");
+	mBtnBuyGroupLand->setClickedCallback(onClickBuyLand, (void*)&BUY_GROUP_LAND);
+
+
+	mBtnBuyPass = getChild<LLButton>("Buy Pass...");
+	mBtnBuyPass->setClickedCallback(onClickBuyPass, this);
+
+	mBtnReleaseLand = getChild<LLButton>("Abandon Land...");
+	mBtnReleaseLand->setClickedCallback(onClickRelease, NULL);
+
+	mBtnReclaimLand = getChild<LLButton>("Reclaim Land...");
+	mBtnReclaimLand->setClickedCallback(onClickReclaim, NULL);
+
+	mBtnStartAuction = getChild<LLButton>("Linden Sale...");
+	mBtnStartAuction->setClickedCallback(onClickStartAuction, this);
+
+	mBtnScriptLimits = getChild<LLButton>("Scripts...");
+
+	if(gDisconnected)
+	{
+		return TRUE;
+	}
+
 	// note: on region change this will not be re checked, should not matter on Agni as
 	// 99% of the time all regions will return the same caps. In case of an erroneous setting
 	// to enabled the floater will just throw an error when trying to get it's cap
@@ -506,7 +531,6 @@ BOOL LLPanelLandGeneral::postBuild()
 	// </FS:Ansariel>
 	if (!url.empty())
 	{
-		mBtnScriptLimits = getChild<LLButton>("Scripts...");
 		if(mBtnScriptLimits)
 		{
 			mBtnScriptLimits->setClickedCallback(onClickScriptLimits, this);
@@ -514,28 +538,11 @@ BOOL LLPanelLandGeneral::postBuild()
 	}
 	else
 	{
-		mBtnScriptLimits = getChild<LLButton>("Scripts...");
 		if(mBtnScriptLimits)
 		{
 			mBtnScriptLimits->setVisible(false);
 		}
 	}
-	
-	mBtnBuyGroupLand = getChild<LLButton>("Buy For Group...");
-	mBtnBuyGroupLand->setClickedCallback(onClickBuyLand, (void*)&BUY_GROUP_LAND);
-	
-	
-	mBtnBuyPass = getChild<LLButton>("Buy Pass...");
-	mBtnBuyPass->setClickedCallback(onClickBuyPass, this);
-
-	mBtnReleaseLand = getChild<LLButton>("Abandon Land...");
-	mBtnReleaseLand->setClickedCallback(onClickRelease, NULL);
-
-	mBtnReclaimLand = getChild<LLButton>("Reclaim Land...");
-	mBtnReclaimLand->setClickedCallback(onClickReclaim, NULL);
-	
-	mBtnStartAuction = getChild<LLButton>("Linden Sale...");
-	mBtnStartAuction->setClickedCallback(onClickStartAuction, this);
 
 	return TRUE;
 }
@@ -549,9 +556,61 @@ LLPanelLandGeneral::~LLPanelLandGeneral()
 // public
 void LLPanelLandGeneral::refresh()
 {
-	mBtnStartAuction->setVisible(gAgent.isGodlike());
+	mEditName->setEnabled(FALSE);
+	mEditName->setText(LLStringUtil::null);
 
-	LLParcel *parcel = mParcel->getParcel();
+	mEditUUID->setText(LLStringUtil::null);
+
+	mEditDesc->setEnabled(FALSE);
+	mEditDesc->setText(getString("no_selection_text"));
+
+	mTextSalePending->setText(LLStringUtil::null);
+	mTextSalePending->setEnabled(FALSE);
+
+	mBtnDeedToGroup->setEnabled(FALSE);
+	mBtnSetGroup->setEnabled(FALSE);
+	mBtnStartAuction->setEnabled(FALSE);
+
+	mCheckDeedToGroup	->set(FALSE);
+	mCheckDeedToGroup	->setEnabled(FALSE);
+	mCheckContributeWithDeed->set(FALSE);
+	mCheckContributeWithDeed->setEnabled(FALSE);
+
+	mTextOwner->setText(LLStringUtil::null);
+	mContentRating->setText(LLStringUtil::null);
+	mLandType->setText(LLStringUtil::null);
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//mBtnProfile->setLabel(getString("profile_text"));
+	//mBtnProfile->setEnabled(FALSE);
+
+	mTextClaimDate->setText(LLStringUtil::null);
+	mTextGroup->setText(LLStringUtil::null);
+	mTextPrice->setText(LLStringUtil::null);
+
+	mSaleInfoForSale1->setVisible(FALSE);
+	mSaleInfoForSale2->setVisible(FALSE);
+	mSaleInfoForSaleObjects->setVisible(FALSE);
+	mSaleInfoForSaleNoObjects->setVisible(FALSE);
+	mSaleInfoNotForSale->setVisible(FALSE);
+	mBtnSellLand->setVisible(FALSE);
+	mBtnStopSellLand->setVisible(FALSE);
+
+	mTextPriceLabel->setText(LLStringUtil::null);
+	mTextDwell->setText(LLStringUtil::null);
+
+	mBtnBuyLand->setEnabled(FALSE);
+	mBtnScriptLimits->setEnabled(FALSE);
+	mBtnBuyGroupLand->setEnabled(FALSE);
+	mBtnReleaseLand->setEnabled(FALSE);
+	mBtnReclaimLand->setEnabled(FALSE);
+	mBtnBuyPass->setEnabled(FALSE);
+
+	if(gDisconnected)
+	{
+		return;
+	}
+
+	mBtnStartAuction->setVisible(gAgent.isGodlike());
 	bool region_owner = false;
 	LLViewerRegion* regionp = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	if(regionp && (regionp->getOwner() == gAgent.getID()))
@@ -565,59 +624,8 @@ void LLPanelLandGeneral::refresh()
 		mBtnReleaseLand->setVisible(TRUE);
 		mBtnReclaimLand->setVisible(FALSE);
 	}
-	if (!parcel)
-	{
-		// nothing selected, disable panel
-		mEditName->setEnabled(FALSE);
-		mEditName->setText(LLStringUtil::null);
-
-		mEditUUID->setText(LLStringUtil::null);
-
-		mEditDesc->setEnabled(FALSE);
-		mEditDesc->setText(getString("no_selection_text"));
-
-		mTextSalePending->setText(LLStringUtil::null);
-		mTextSalePending->setEnabled(FALSE);
-
-		mBtnDeedToGroup->setEnabled(FALSE);
-		mBtnSetGroup->setEnabled(FALSE);
-		mBtnStartAuction->setEnabled(FALSE);
-
-		mCheckDeedToGroup	->set(FALSE);
-		mCheckDeedToGroup	->setEnabled(FALSE);
-		mCheckContributeWithDeed->set(FALSE);
-		mCheckContributeWithDeed->setEnabled(FALSE);
-
-		mTextOwner->setText(LLStringUtil::null);
-		mContentRating->setText(LLStringUtil::null);
-		mLandType->setText(LLStringUtil::null);
-		// <FS:Ansariel> Doesn't exists as of 2014-04-14
-		//mBtnProfile->setLabel(getString("profile_text"));
-		//mBtnProfile->setEnabled(FALSE);
-
-		mTextClaimDate->setText(LLStringUtil::null);
-		mTextGroup->setText(LLStringUtil::null);
-		mTextPrice->setText(LLStringUtil::null);
-
-		mSaleInfoForSale1->setVisible(FALSE);
-		mSaleInfoForSale2->setVisible(FALSE);
-		mSaleInfoForSaleObjects->setVisible(FALSE);
-		mSaleInfoForSaleNoObjects->setVisible(FALSE);
-		mSaleInfoNotForSale->setVisible(FALSE);
-		mBtnSellLand->setVisible(FALSE);
-		mBtnStopSellLand->setVisible(FALSE);
-
-		mTextPriceLabel->setText(LLStringUtil::null);
-		mTextDwell->setText(LLStringUtil::null);
-
-		mBtnBuyLand->setEnabled(FALSE);
-		mBtnScriptLimits->setEnabled(FALSE);
-		mBtnBuyGroupLand->setEnabled(FALSE);
-		mBtnReleaseLand->setEnabled(FALSE);
-		mBtnReclaimLand->setEnabled(FALSE);
-		mBtnBuyPass->setEnabled(FALSE);
-	}
-	else
+	LLParcel *parcel = mParcel->getParcel();
+	if (parcel)
 	{
 		// something selected, hooray!
 		BOOL is_leased = (LLParcel::OS_LEASED == parcel->getOwnershipStatus());
@@ -1342,7 +1350,7 @@ void LLPanelLandObjects::refresh()
 	mOwnerList->deleteAllItems();
 	mOwnerList->setEnabled(FALSE);
 
-	if (!parcel)
+	if (!parcel || gDisconnected)
 	{
 		mSWTotalObjects->setTextArg("[COUNT]", llformat("%d", 0));
 		mSWTotalObjects->setTextArg("[TOTAL]", llformat("%d", 0));
@@ -2124,7 +2132,7 @@ void LLPanelLandOptions::refresh()
 	refreshSearch();
 
 	LLParcel *parcel = mParcel->getParcel();
-	if (!parcel)
+	if (!parcel || gDisconnected)
 	{
 		mCheckEditObjects	->set(FALSE);
 		mCheckEditObjects	->setEnabled(FALSE);
@@ -2365,7 +2373,7 @@ void LLPanelLandOptions::draw()
 void LLPanelLandOptions::refreshSearch()
 {
 	LLParcel *parcel = mParcel->getParcel();
-	if (!parcel)
+	if (!parcel || gDisconnected)
 	{
 		mCheckShowDirectory->set(FALSE);
 		mCheckShowDirectory->setEnabled(FALSE);
@@ -2651,7 +2659,7 @@ void LLPanelLandAccess::refresh()
 	LLParcel *parcel = mParcel->getParcel();
 		
 	// Display options
-	if (parcel)
+	if (parcel && !gDisconnected)
 	{
 		BOOL use_access_list = parcel->getParcelFlag(PF_USE_ACCESS_LIST);
 		BOOL use_group = parcel->getParcelFlag(PF_USE_ACCESS_GROUP);
@@ -2845,7 +2853,7 @@ void LLPanelLandAccess::refresh_ui()
 	getChildView("remove_banned")->setEnabled(FALSE);
 	
 	LLParcel *parcel = mParcel->getParcel();
-	if (parcel)
+	if (parcel && !gDisconnected)
 	{
 		BOOL can_manage_allowed = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_MANAGE_ALLOWED);
 		BOOL can_manage_banned = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_MANAGE_BANNED);
@@ -3204,7 +3212,7 @@ BOOL LLPanelLandCovenant::postBuild()
 void LLPanelLandCovenant::refresh()
 {
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
-	if(!region) return;
+	if(!region || gDisconnected) return;
 		
 	LLTextBox* region_name = getChild<LLTextBox>("region_name_text");
 	if (region_name)
@@ -3429,7 +3437,7 @@ void LLPanelLandExperiences::refreshPanel(LLPanelExperienceListEditor* panel, U3
 	{
 		return;
 	}
-	if (parcel == NULL)
+	if (!parcel || gDisconnected)
 	{
 		// disable the panel
 		panel->setEnabled(FALSE);

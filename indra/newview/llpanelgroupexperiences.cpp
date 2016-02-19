@@ -30,7 +30,7 @@
 
 #include "lluictrlfactory.h"
 #include "roles_constants.h"
-
+#include "llappviewer.h"
 #include "llhttpclient.h"
 #include "llagent.h"
 #include "llviewerregion.h"
@@ -98,7 +98,7 @@ BOOL LLPanelGroupExperiences::postBuild()
 
 void LLPanelGroupExperiences::activate()
 {
-	if (getGroupID() == LLUUID::null)
+	if ((getGroupID() == LLUUID::null) || gDisconnected)
 	{
 		return;
 	}
@@ -111,7 +111,7 @@ void LLPanelGroupExperiences::activate()
 	// </FS:Ansariel>
 
 	// search for experiences owned by the current group
-	std::string url = gAgent.getRegion()->getCapability("GroupExperiences"); 
+	std::string url = (gAgent.getRegion()) ? gAgent.getRegion()->getCapability("GroupExperiences") : LLStringUtil::null;
 	if (!url.empty())
 	{
 		url += "?" + getGroupID().asString();
