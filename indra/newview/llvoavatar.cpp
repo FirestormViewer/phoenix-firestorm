@@ -9374,7 +9374,7 @@ void LLVOAvatar::bakedTextureOriginCounts(S32 &sb_count, // server-bake, has ori
 	collectBakedTextureUUIDs(baked_ids);
 	for (std::set<LLUUID>::const_iterator it = baked_ids.begin(); it != baked_ids.end(); ++it)
 	{
-		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
+		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it, TEX_LIST_DISCARD);
 		bool has_url = false, has_host = false;
 		if (!imagep->getUrl().empty())
 		{
