@@ -44,6 +44,7 @@
 
      <Component Id="firestorm" Guid="{2CDF0673-595F-4fb4-B38A-C338BF9D4DF1}">
       <File Id="firestorm" Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE)" KeyPath="yes"/>
+      <File Id="firestorm_manifest" Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE).manifest" CompanionFile="firestorm"/>
 
       <File Source="$(var.BUILDDIR)/win_crash_logger.exe" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/fmodex64.dll" CompanionFile="firestorm" />
