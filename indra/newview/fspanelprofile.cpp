@@ -535,7 +535,7 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 		if (flags & FSData::GATEWAY)
 		{
 			text = getString("FSGW");
-			if (seperator)
+			if (separator)
 			{
 				text = " /" + text;
 			}
