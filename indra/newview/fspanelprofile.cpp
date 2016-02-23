@@ -494,6 +494,7 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 	args["[FSSUPP]"] = "";
 	args["[FSDEV]"] = "";
 	args["[FSQA]"] = "";
+	args["[FSGW]"] = "";
 	S32 flags = FSData::getInstance()->getAgentFlags(avatar_data->avatar_id);
 	if (flags != -1)
 	{
@@ -530,6 +531,15 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 				text = " /" + text;
 			}
 			args["[FSQA]"] = text;
+		}
+		if (flags & FSData::GATEWAY)
+		{
+			text = getString("FSGW");
+			if (seperator)
+			{
+				text = " /" + text;
+			}
+			args["[FSGW]"] = text;
 		}
 	}
 
