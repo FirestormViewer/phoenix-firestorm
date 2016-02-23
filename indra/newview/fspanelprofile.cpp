@@ -531,7 +531,9 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 				text = " /" + text;
 			}
 			args["[FSQA]"] = text;
+			separator = true;
 		}
+
 		if (flags & FSData::GATEWAY)
 		{
 			text = getString("FSGW");
