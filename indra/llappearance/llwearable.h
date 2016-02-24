@@ -42,6 +42,21 @@ class LLAvatarAppearance;
 // Abstract class.
 class LLWearable
 {
+	// <FS:ND> Try to see if this fixes the crash in LLPanelEditWearable::isDirty, that is the wearable dets destroyed before the panel
+public:
+	class LLWearableObserver
+	{
+	public:
+		virtual void onDestroyed(LLWearable const * ) = 0;
+	};
+
+public:
+	void registerObserver(LLWearableObserver *aObserver){ mObservers.insert(aObserver); }
+	void unregisterObserver(LLWearableObserver *aObserver){ mObservers.erase(aObserver); }
+private:
+	std::set< LLWearableObserver* > mObservers;
+	// </FS:ND>
+
 	//--------------------------------------------------------------------
 	// Constructors and destructors
 	//--------------------------------------------------------------------

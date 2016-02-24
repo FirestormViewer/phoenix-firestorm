@@ -47,13 +47,14 @@ public:
 	
 	enum flags_t
 	{
-		SUPPORT		= (1 << 0), //0x01
-		DEVELOPER	= (1 << 1), //0x02
-		QA			= (1 << 2), //0x04
-		CHAT_COLOR	= (1 << 3), //0x08
-		NO_SUPPORT	= (1 << 4), //0x16
-		NO_USE		= (1 << 5), //0x32
-		NO_SPAM		= (1 << 6)  //0x64
+		SUPPORT		= (1 << 0), //0x01 1
+		DEVELOPER	= (1 << 1), //0x02 2
+		QA		= (1 << 2), //0x04 4
+		CHAT_COLOR	= (1 << 3), //0x08 8
+		NO_SUPPORT	= (1 << 4), //0x10 16
+		NO_USE		= (1 << 5), //0x20 32
+		NO_SPAM		= (1 << 6),  //0x40 64
+		GATEWAY		= (1 << 7),	//0x80 128 <FS:JL>
 	};
 
 	std::set<LLUUID> mSupportGroup;

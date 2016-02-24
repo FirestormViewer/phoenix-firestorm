@@ -653,7 +653,8 @@ LLPanelEditWearable::LLPanelEditWearable()
 //virtual
 LLPanelEditWearable::~LLPanelEditWearable()
 {
-
+       if (mWearablePtr)
+       	    mWearablePtr->unregisterObserver(this);
 }
 
 bool LLPanelEditWearable::changeHeightUnits(const LLSD& new_value)
@@ -883,7 +884,11 @@ void LLPanelEditWearable::setVisible(BOOL visible)
 void LLPanelEditWearable::setWearable(LLViewerWearable *wearable, BOOL disable_camera_switch)
 {
         showWearable(mWearablePtr, FALSE, disable_camera_switch);
-        mWearablePtr = wearable;
+        if (mWearablePtr)
+       	    mWearablePtr->unregisterObserver(this);
+		mWearablePtr = wearable;
+        if( mWearablePtr )
+            mWearablePtr->registerObserver( this );
         showWearable(mWearablePtr, TRUE, disable_camera_switch);
 }
 

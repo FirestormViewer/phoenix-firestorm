@@ -4,6 +4,7 @@
   <font name="default" comment="default font files (global fallbacks)">
     <file>DejaVuSans.ttf</file>
     <os name="Windows">
+      <file>YuGothR.ttc</file>
       <file>MSGOTHIC.TTC</file>
       <file>gulim.ttc</file>
       <file>simhei.ttf</file>
@@ -15,6 +16,9 @@
       <file>ヒラギノ角ゴ Pro W3.otf</file>
       <file>ヒラギノ角ゴ ProN W3.otf</file>
       <file>AppleSDGothicNeo-Regular.otf</file>
+      <!-- <FS:TS> FIRE-17481: Add El Capitan Korean font -->
+      <file>AppleSDGothicNeo.ttc</file>
+      <!-- </FS:TS> FIRE-17481 -->
       <file>AppleGothic.dfont</file>
       <file>AppleGothic.ttf</file>
       <file>华文细黑.ttf</file>

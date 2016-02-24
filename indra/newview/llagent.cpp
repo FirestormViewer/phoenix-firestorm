@@ -744,7 +744,7 @@ void LLAgent::moveUp(S32 direction)
 	{
 		setControlFlags(AGENT_CONTROL_UP_NEG | AGENT_CONTROL_FAST_UP);
 		// <FS:Ansariel> Chalice Yao's crouch toggle
-		if (!gSavedSettings.getBOOL("FSCrouchToggleStatus") || !gSavedSettings.getBOOL("FSCrouchToggle"))
+		if (!gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus") || !gSavedPerAccountSettings.getBOOL("FSCrouchToggle"))
 		{
 			gAgentCamera.resetView(TRUE, FALSE, TRUE);
 		}
@@ -907,9 +907,9 @@ void LLAgent::toggleFlying()
 	}
 
 	// <FS:Ansariel> Chalice Yao's crouch toggle
-	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+	if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
 	{
-		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+		gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 	}
 	// </FS:Ansariel>
 

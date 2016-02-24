@@ -257,7 +257,8 @@ void LLFloaterLand::onOpen(const LLSD& key)
 	mParcel = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
 
 	// <FS:Ansariel> FIRE-17280: Requesting Experience access allow & block list breaks OpenSim
-	if (!LLViewerParcelMgr::getInstance()->getSelectionRegion()->isCapabilityAvailable("RegionExperiences"))
+	LLViewerRegion* selected_region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
+	if (!selected_region || !selected_region->isCapabilityAvailable("RegionExperiences"))
 	{
 		mTabLand->removeTabPanel(mTabLand->getPanelByName("land_experiences_panel"));
 	}
@@ -499,7 +500,10 @@ BOOL LLPanelLandGeneral::postBuild()
 	// note: on region change this will not be re checked, should not matter on Agni as
 	// 99% of the time all regions will return the same caps. In case of an erroneous setting
 	// to enabled the floater will just throw an error when trying to get it's cap
-	std::string url = gAgent.getRegion()->getCapability("LandResources");
+	// <FS:Ansariel> Crash fix
+	//std::string url = gAgent.getRegion()->getCapability("LandResources");
+	std::string url = gAgent.getRegion() ? gAgent.getRegion()->getCapability("LandResources") : LLStringUtil::null;
+	// </FS:Ansariel>
 	if (!url.empty())
 	{
 		mBtnScriptLimits = getChild<LLButton>("Scripts...");

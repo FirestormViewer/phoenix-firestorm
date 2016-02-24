@@ -2424,7 +2424,10 @@ void LLFloaterView::reshape(S32 width, S32 height, BOOL called_from_parent)
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
 		LLView* viewp = *child_it;
-		LLFloater* floaterp = (LLFloater*)viewp;
+		// <FS:Ansariel> Prefer dynamic_cast over c-style cast
+		//LLFloater* floaterp = (LLFloater*)viewp;
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(viewp);
+		// </FS:Ansariel>
 		if (floaterp->isDependent())
 		{
 			// dependents are moved with their "dependee"
@@ -2481,11 +2484,15 @@ void LLFloaterView::restoreAll()
 	// make sure all subwindows aren't minimized
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
-		LLFloater* floaterp = (LLFloater*)*child_it;
-		if (floaterp) //<FS:KC> Possible fix for crash on disconnect
+		// <FS:Ansariel> Possible fix for crash on disconnect
+		//LLFloater* floaterp = (LLFloater*)*child_it;
+		//floaterp->setMinimized(FALSE);
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
+		if (floaterp)
 		{
 			floaterp->setMinimized(FALSE);
 		}
+		// </FS:Ansariel>
 	}
 
 	// *FIX: make sure dependents are restored
@@ -2762,7 +2769,10 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 					++child_it) //loop floaters
 				{
 					// Examine minimized children.
-					LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+					// <FS:Ansariel> Prefer dynamic_cast over c-style cast
+					//LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+					LLFloater* floater = dynamic_cast<LLFloater*>(*child_it);
+					// </FS:Ansariel>
 					if(floater->isMinimized()) 
 					{
 						LLRect r = floater->getRect();
@@ -2818,7 +2828,10 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 				++child_it) //loop floaters
 			{
 				// Examine minimized children.
-				LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+				// <FS:Ansariel> Prefer dynamic_cast over c-style cast
+				//LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+				LLFloater* floater = dynamic_cast<LLFloater*>(*child_it);
+				// </FS:Ansariel>
 				if(floater->isMinimized()) 
 				{
 					LLRect r = floater->getRect();
@@ -2873,7 +2886,10 @@ void LLFloaterView::closeAllChildren(bool app_quitting)
 			continue;
 		}
 
-		LLFloater* floaterp = (LLFloater*)viewp;
+		// <FS:Ansariel> FIRE-14349: Crash in LLPanelEditWearable::isDirty() due to memory corruption?
+		//LLFloater* floaterp = (LLFloater*)viewp;
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(viewp);
+		// </FS:Ansariel>
 
 		// Attempt to close floater.  This will cause the "do you want to save"
 		// dialogs to appear.
@@ -2939,8 +2955,11 @@ BOOL LLFloaterView::allChildrenClosed()
 	// by setting themselves invisible)
 	for (child_list_const_iter_t it = getChildList()->begin(); it != getChildList()->end(); ++it)
 	{
-		LLView* viewp = *it;
-		LLFloater* floaterp = (LLFloater*)viewp;
+		// <FS:Ansariel> Prefer dynamic_cast over c-style cast
+		//LLView* viewp = *it;
+		//LLFloater* floaterp = (LLFloater*)viewp;
+		LLFloater* floaterp = dynamic_cast<LLFloater*>(*it);
+		// </FS:Ansariel>
 
 		if (floaterp->getVisible() && !floaterp->isDead() && floaterp->isCloseable())
 		{
@@ -3224,7 +3243,10 @@ void LLFloaterView::syncFloaterTabOrder()
 		// otherwise, make sure the focused floater is in the front of the child list
 		for ( child_list_const_reverse_iter_t child_it = getChildList()->rbegin(); child_it != getChildList()->rend(); ++child_it)
 		{
-			LLFloater* floaterp = (LLFloater*)*child_it;
+			// <FS:Ansariel> Prefer dynamic_cast over c-style cast
+			//LLFloater* floaterp = (LLFloater*)*child_it;
+			LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
+			// </FS:Ansariel>
 			if (gFocusMgr.childHasKeyboardFocus(floaterp))
 			{
 				bringToFront(floaterp, FALSE);
@@ -3246,7 +3268,10 @@ LLFloater*	LLFloaterView::getParentFloater(LLView* viewp) const
 
 	if (parentp == this)
 	{
-		return (LLFloater*)viewp;
+		// <FS:Ansariel> FIRE-14349: Crash in LLPanelEditWearable::isDirty() due to memory corruption?
+		//return (LLFloater*)viewp;
+		return dynamic_cast<LLFloater*>(viewp);
+		// </FS:Ansariel>
 	}
 
 	return NULL;

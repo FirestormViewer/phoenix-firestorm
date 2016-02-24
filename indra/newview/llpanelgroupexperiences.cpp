@@ -38,6 +38,8 @@
 #include "llpanelexperiences.h"
 #include "llsd.h"
 
+#include "llvoavatarself.h"
+
 
 static LLPanelInjector<LLPanelGroupExperiences> t_panel_group_experiences("panel_group_experiences");
 
@@ -100,6 +102,13 @@ void LLPanelGroupExperiences::activate()
 	{
 		return;
 	}
+
+	// <FS:Ansariel> Crash fix
+	if (!isAgentAvatarValid())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	// search for experiences owned by the current group
 	std::string url = gAgent.getRegion()->getCapability("GroupExperiences"); 
