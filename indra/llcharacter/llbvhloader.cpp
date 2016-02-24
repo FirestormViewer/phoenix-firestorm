@@ -492,7 +492,7 @@ void LLBVHLoader::makeTranslation(std::string alias_name, std::string joint_name
     
     newTrans.mFrameMatrix = fm;
     
-    if (joint_name == "mPelvis")
+if (joint_name == "mPelvis")
     {
         newTrans.mRelativePositionKey = TRUE;
         newTrans.mRelativeRotationKey = TRUE;
@@ -965,7 +965,7 @@ void LLBVHLoader::applyTranslations()
 		//----------------------------------------------------------------
 		if ( trans.mIgnore )
 		{
-			//LL_INFOS() << "NOTE: Ignoring " << joint->mName.c_str() << LL_ENDL;
+            //LL_INFOS() << "NOTE: Ignoring " << joint->mName.c_str() << LL_ENDL;
 			joint->mIgnore = TRUE;
 			continue;
 		}
@@ -979,13 +979,8 @@ void LLBVHLoader::applyTranslations()
 			joint->mOutName = trans.mOutName;
 		}
 
-		//----------------------------------------------------------------
-		// Set the ignorepos flag if necessary
-		//----------------------------------------------------------------
-		if ( joint->mOutName == std::string("mPelvis") )
-		{
-			joint->mIgnorePositions = FALSE;
-		}
+        //Allow joint position changes as of SL-318
+        joint->mIgnorePositions = FALSE;
 
 		//----------------------------------------------------------------
 		// Set the relativepos flags if necessary
@@ -1435,8 +1430,8 @@ BOOL LLBVHLoader::serialize(LLDataPacker& dp)
 			frame++;
 		}
 		
-		// output position keys (only for 1st joint)
-		if ( ji == mJoints.begin() && !joint->mIgnorePositions )
+		// output position keys if joint has motion.
+        if ( !joint->mIgnorePositions )
 		{
 			dp.packS32(joint->mNumPosKeys, "num_pos_keys");
 
@@ -1466,6 +1461,7 @@ BOOL LLBVHLoader::serialize(LLDataPacker& dp)
 
 				outPos *= INCHES_TO_METERS;
 
+                //SL-318  Pelvis position can only move 5m.  Limiting all joint position offsets to this dist.
 				outPos -= relPos;
 				outPos.clamp(-LL_MAX_PELVIS_OFFSET, LL_MAX_PELVIS_OFFSET);
 
