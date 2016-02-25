@@ -6,6 +6,7 @@
 	<string name="FSDev" value="Desarrollador "/>
 	<string name="FSSupp" value="Soporte " />
 	<string name="FSQualityAssurance" value="Bug Hunter " />
+	<string name="FSGW" value="Gateway "/>
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>
