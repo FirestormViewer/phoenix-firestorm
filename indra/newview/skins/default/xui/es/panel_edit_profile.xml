@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Editar mi perfil" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE] [PAYMENTINFO] [FSDEV][FSSUPP][FSQA][FIRESTORM]
+		[ACCTTYPE] [PAYMENTINFO] [FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
 	</string>
 	<string name="FSDev" value="Desarrollador "/>
 	<string name="FSSupp" value="Soporte " />
