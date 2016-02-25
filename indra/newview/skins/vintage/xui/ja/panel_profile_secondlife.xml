@@ -9,7 +9,7 @@
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
 		[PAYMENTINFO]
-		[FIRESTORM][FSDEV][FSSUPP][FSQA]
+		[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
 	</string>
 	<!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
 	LLPanelAvatarProfile::fillAccountStatus() ...TS -->
