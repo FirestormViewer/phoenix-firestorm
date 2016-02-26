@@ -393,7 +393,10 @@ LLGroupNoticeNotificationListItem::LLGroupNoticeNotificationListItem(const Param
     buildFromFile("panel_notification_list_item.xml");
 }
 
-LLGroupNoticeNotificationListItem::~LLGroupNoticeNotificationListItem()
+// <FS:Ansariel> Crash fix in LLGroupMgr::notifyObservers()
+//LLGroupNoticeNotificationListItem::~LLGroupNoticeNotificationListItem()
+LLGroupNotificationListItem::~LLGroupNotificationListItem()
+// </FS:Ansariel>
 {
 	LLGroupMgr::getInstance()->removeObserver(this);
 }
@@ -584,7 +587,8 @@ void LLGroupNoticeNotificationListItem::close()
         mInventoryOffer->forceResponse(IOR_DECLINE);
         mInventoryOffer = NULL;
     }
-    LLGroupMgr::getInstance()->removeObserver(this);
+    // <FS:Ansariel> Crash fix in LLGroupMgr::notifyObservers()
+    //LLGroupMgr::getInstance()->removeObserver(this);
 }
 
 void LLGroupNoticeNotificationListItem::onClickAttachment()

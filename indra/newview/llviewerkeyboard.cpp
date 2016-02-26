@@ -76,9 +76,9 @@ void agent_jump( EKeystate s )
 	S32 frame_count = ll_round(gKeyboard->getCurKeyElapsedFrameCount());
 
 	// <FS:Ansariel> Chalice Yao's crouch toggle
-	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+	if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
 	{
-		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+		gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 	}
 	// </FS:Ansariel>
 
@@ -101,15 +101,15 @@ void agent_push_down( EKeystate s )
 	if( KEYSTATE_UP == s  ) return;
 	// <FS:Ansariel> Chalice Yao's crouch toggle
 	//gAgent.moveUp(-1);
-	else if (KEYSTATE_DOWN == s && !gAgent.getFlying() && !gAgentAvatarp->isSitting() && gSavedSettings.getBOOL("FSCrouchToggle"))
+	else if (KEYSTATE_DOWN == s && !gAgent.getFlying() && !gAgentAvatarp->isSitting() && gSavedPerAccountSettings.getBOOL("FSCrouchToggle"))
 	{
-		if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+		if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
 		{
-			gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+			gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 		}
 		else
 		{
-			gSavedSettings.setBOOL("FSCrouchToggleStatus", TRUE);
+			gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", TRUE);
 			gAgent.moveUp(-1);
 		}
 	}

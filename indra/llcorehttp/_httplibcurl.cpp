@@ -358,6 +358,60 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
 		}
 	}
 
+	// <FS:NS> See if the requested URL matches a X-LL-URL header (if present) and the requested range.
+	// If not, we assume http pipelining havng gone out of sync. If yes, yield a 503 status and switch
+	// pipelining off.
+	bool bFailed = false;
+	if( op->mXLLURL.size() )
+	{
+		std::string strURI = op->mReqURL;
+		int i = strURI.find( "://" );
+		if( i > 0 )
+			i = strURI.find( "/", i+3 );
+
+		if( i > 0 )
+			strURI = strURI.substr( i );
+
+		if( strURI != op->mXLLURL )
+		{
+			LL_WARNS() << "HTTP pipelining out of sync! Asked for: " << strURI << " got " << op->mXLLURL << LL_ENDL;
+			op->mStatus = HttpStatus(HTTP_SERVICE_UNAVAILABLE);
+			bFailed = true;
+		}
+	}
+	if ( !bFailed && (op->mReqOffset || op->mReqLength) )
+	{
+		if( op->mReqOffset != op->mReplyOffset || ( op->mReqLength && op->mReqLength < op->mReplyLength ) )
+		{
+			std::stringstream strm;
+			strm << "HTTP pipelining possibly out of sync, request wanted: " << op->mReqOffset << "-";
+			if( op->mReqLength )
+				strm << op->mReqLength + op->mReqLength -1;
+			strm << " got: " << op->mReplyOffset << "-" << op->mReplyOffset+op->mReplyLength-1;
+			strm << " url: " << op->mReqURL;
+			LL_WARNS() << strm.str() << LL_ENDL;
+			op->mStatus = HttpStatus(HTTP_SERVICE_UNAVAILABLE);
+			bFailed = true;
+		}
+	}
+	if( bFailed )
+	{
+		HttpPolicy & policy(mService->getPolicy());
+		for( int i = 0; i < mPolicyCount; ++ i )
+		{
+			HttpPolicyClass & options(policy.getClassOptions(i));
+			long lVal;
+			
+			if( options.get(  LLCore::HttpRequest::PO_PIPELINING_DEPTH, &lVal ) && lVal )
+			{
+				options.set( LLCore::HttpRequest::PO_PIPELINING_DEPTH, 0 );
+				mDirtyPolicy[ i ] = true;
+				policyUpdated( i );
+			}
+		}
+	}
+	// /</FS:ND>
+
 	// Detach from multi and recycle handle
 	curl_multi_remove_handle(multi_handle, handle);
 	mHandleCache.freeHandle(op->mCurlHandle);

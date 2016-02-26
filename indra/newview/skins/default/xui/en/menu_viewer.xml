@@ -3058,10 +3058,12 @@
              function="Advanced.ShowDebugSettings"
              parameter="all" />
         </menu_item_call>
+     <!-- <FS:TS> FIRE-17589: Use control-alt-Q on OS X too -->
      <menu_item_check
          label="Show Developer Menu"
          name="Debug Mode"
-         shortcut="control|alt|Q">
+         shortcut="control|alt|Q"
+         use_mac_ctrl="true">
             <menu_item_check.on_check
              function="CheckControl"
              parameter="QAMode" />
@@ -3069,6 +3071,7 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
+     <!-- </FS:TS> FIRE-17589 -->
     </menu>
 
     <menu
