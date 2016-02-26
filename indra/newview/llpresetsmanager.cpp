@@ -134,19 +134,14 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& dir, preset_nam
 	presets = mPresetNames;
 }
 
-// <FS:Ansariel> Fix mapping to default preset when label is localized
-//bool LLPresetsManager::savePreset(const std::string& subdirectory, const std::string& name)
 bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string name)
-// </FS:Ansariel>
 {
-	// <FS:Ansariel> Fix mapping to default preset when label is localized
 	if (LLTrans::getString(PRESETS_DEFAULT) == name)
 	{
 		name = PRESETS_DEFAULT;
 	}
-	// </FS:Ansariel>
 
-    bool saved = false;
+	bool saved = false;
 	std::vector<std::string> name_list;
 
 	if(PRESETS_GRAPHIC == subdirectory)
@@ -254,17 +249,13 @@ void LLPresetsManager::setPresetNamesInComboBox(const std::string& subdirectory,
 	}
 }
 
-// <FS:Ansariel> Fix mapping to default preset when label is localized
-//void LLPresetsManager::loadPreset(const std::string& subdirectory, const std::string& name)
 void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string name)
-// </FS:Ansariel>
 {
-	// <FS:Ansariel> Fix mapping to default preset when label is localized
 	if (LLTrans::getString(PRESETS_DEFAULT) == name)
 	{
 		name = PRESETS_DEFAULT;
 	}
-	// </FS:Ansariel>
+
 
 	std::string full_path(getPresetsDir(subdirectory) + gDirUtilp->getDirDelimiter() + LLURI::escape(name) + ".xml");
 
@@ -290,17 +281,12 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
     }
 }
 
-// <FS:Ansariel> Fix mapping to default preset when label is localized
-//bool LLPresetsManager::deletePreset(const std::string& subdirectory, const std::string& name)
 bool LLPresetsManager::deletePreset(const std::string& subdirectory, std::string name)
-// </FS:Ansariel>
 {
-	// <FS:Ansariel> Fix mapping to default preset when label is localized
 	if (LLTrans::getString(PRESETS_DEFAULT) == name)
 	{
 		name = PRESETS_DEFAULT;
 	}
-	// </FS:Ansariel>
 
 	bool sts = true;
 

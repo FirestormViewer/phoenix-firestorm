@@ -399,11 +399,8 @@ public:
 
 public:
 	U32 		renderImpostor(LLColor4U color = LLColor4U(255,255,255,255), S32 diffuse_channel = 0);
-	// <FS:Ansariel> Re-add mute list caching
-	//bool		isVisuallyMuted() const;
 	bool		isVisuallyMuted();
 	bool 		isInMuteList();
-	// </FS:Ansariel>
 	void		forceUpdateVisualMuteSettings();
 
 	enum VisualMuteSettings
@@ -442,10 +439,8 @@ public:
 	mutable bool mVisualComplexityStale;
 	U32          mReportedVisualComplexity; // from other viewers through the simulator
 
-	// <FS:Ansariel> Re-add mute list caching
 	bool		mCachedInMuteList;
 	F64			mCachedMuteListUpdateTime;
-	// </FS:Ansariel>
 
 	VisualMuteSettings		mVisuallyMuteSetting;			// Always or never visually mute this AV
 

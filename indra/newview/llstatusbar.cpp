@@ -618,6 +618,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("FSMenuSearch"));
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
+	mIconPresets->setVisible(visible);
 }
 
 void LLStatusBar::debitBalance(S32 debit)

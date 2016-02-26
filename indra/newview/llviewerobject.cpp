@@ -5141,10 +5141,7 @@ void LLViewerObject::updateText()
 		    LLVOAvatar* avatar = getAvatar();
 		    if (avatar)
 		    {
-				// <FS:Ansariel> Use cached mutelist check
-		        //mText->setHidden(LLMuteList::getInstance()->isMuted(avatar->getID()));
 		        mText->setHidden(avatar->isInMuteList());
-				// </FS:Ansariel>
 		    }
                
 		    LLVector3 up_offset(0,0,0);

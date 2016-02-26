@@ -739,10 +739,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	// </FS:Ansariel> [Legacy Bake]
 	mLastUpdateRequestCOFVersion(-1),
 	mLastUpdateReceivedCOFVersion(-1),
-	// <FS:Ansariel> Re-add mute list caching
 	mCachedMuteListUpdateTime(0),
 	mCachedInMuteList(false)
-	// </FS:Ansariel>
 {
 	LL_DEBUGS("AvatarRender") << "LLVOAvatar Constructor (0x" << this << ") id:" << mID << LL_ENDL;
 
@@ -2953,10 +2951,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 	else
 	{
-		// <FS:Ansariel> Performance tweak
-		//is_muted = LLMuteList::getInstance()->isMuted(getID());
 		is_muted = isInMuteList();
-		// </FS:Ansariel>
 	}
 //	bool is_friend = LLAvatarTracker::instance().isBuddy(getID());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
@@ -3546,10 +3541,7 @@ void LLVOAvatar::slamPosition()
 	mRoot->updateWorldMatrixChildren();
 }
 
-// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
-//bool LLVOAvatar::isVisuallyMuted() const
 bool LLVOAvatar::isVisuallyMuted()
-// </FS:Ansariel>
 {
 	bool muted = false;
 
@@ -3576,7 +3568,7 @@ bool LLVOAvatar::isVisuallyMuted()
 			muted = true;
 		}
 		// <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
-        //else if (LLMuteList::getInstance()->isMuted(getID()))
+        //else if (isInMuteList())
         //{
         //    muted = true;
         //}
@@ -3587,6 +3579,25 @@ bool LLVOAvatar::isVisuallyMuted()
 		}
 	}
 
+	return muted;
+}
+
+bool LLVOAvatar::isInMuteList()
+{
+	bool muted = false;
+	F64 now = LLFrameTimer::getTotalSeconds();
+	if (now < mCachedMuteListUpdateTime)
+	{
+		muted = mCachedInMuteList;
+	}
+	else
+	{
+		muted = LLMuteList::getInstance()->isMuted(getID());
+
+		const F64 SECONDS_BETWEEN_MUTE_UPDATES = 1;
+		mCachedMuteListUpdateTime = now + SECONDS_BETWEEN_MUTE_UPDATES;
+		mCachedInMuteList = muted;
+	}
 	return muted;
 }
 
