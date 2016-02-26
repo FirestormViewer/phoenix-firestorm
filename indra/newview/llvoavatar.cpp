@@ -3601,27 +3601,6 @@ bool LLVOAvatar::isInMuteList()
 	return muted;
 }
 
-// <FS:Ansariel> Re-add mute list caching
-bool LLVOAvatar::isInMuteList()
-{
-	bool muted = false;
-	F64 now = LLFrameTimer::getTotalSeconds();
-	if (now < mCachedMuteListUpdateTime)
-	{
-		muted = mCachedInMuteList;
-	}
-	else
-	{
-		muted = LLMuteList::getInstance()->isMuted(getID());
-
-		const F64 SECONDS_BETWEEN_MUTE_UPDATES = 1;
-		mCachedMuteListUpdateTime = now + SECONDS_BETWEEN_MUTE_UPDATES;
-		mCachedInMuteList = muted;
-	}
-	return muted;
-}
-// </FS:Ansariel>
-
 void LLVOAvatar::updateDebugText()
 {
 	// clear debug text
