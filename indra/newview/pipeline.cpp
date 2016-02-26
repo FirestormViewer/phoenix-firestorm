@@ -8753,6 +8753,11 @@ void LLPipeline::renderDeferredLighting()
 						}
 					}
 
+					const LLViewerObject *vobj = drawablep->getVObj();
+					if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList())
+					{
+						continue;
+					}
 
 					LLVector4a center;
 					center.load3(drawablep->getPositionAgent().mV);
