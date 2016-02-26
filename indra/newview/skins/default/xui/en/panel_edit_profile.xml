@@ -20,7 +20,7 @@
    <string
     name="CaptionTextAcctInfo">
        [ACCTTYPE]
-[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->
@@ -33,6 +33,9 @@
     <string
       name="FSQualityAssurance"
       value=" Bug Hunter" />
+    <string
+     name="FSGW"
+     value=" Gateway" />
    <string
     name="RegisterDateFormat">
 	[REG_DATE] ([AGE])

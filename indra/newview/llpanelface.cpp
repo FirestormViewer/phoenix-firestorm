@@ -2683,13 +2683,13 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 	LLPanelFace* self = dynamic_cast<LLPanelFace*>(ctrl->getParent());
 	llassert_always(self);
 	
-	LLComboBox* combo_mattype = self->getChild<LLComboBox>("combobox mattype");
-	if (!combo_mattype) return;
+	LLRadioGroup* radio_mattype = self->findChild<LLRadioGroup>("radio_material_type");
+	if (!radio_mattype) return;
 	
 	std::string user_data_string = user_data.asString();
 	if (user_data_string.empty()) return;
 	std::string control_name = "";
-	U32 mattype = combo_mattype->getCurrentIndex();
+	U32 mattype = radio_mattype->getSelectedIndex();
 	switch (mattype)
 	{
 		case MATTYPE_DIFFUSE:
@@ -2706,13 +2706,13 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 			return;
 	}
 	
-	LLUICtrl* spinner = self->getChild<LLUICtrl>(control_name);
+	LLUICtrl* spinner = self->findChild<LLUICtrl>(control_name);
 	if (spinner)
 	{
 		F32 value = -(spinner->getValue().asReal());
 		spinner->setValue(value);
 		
-		switch (combo_mattype->getCurrentIndex())
+		switch (radio_mattype->getSelectedIndex())
 		{
 			case MATTYPE_DIFFUSE:
 				self->sendTextureInfo();

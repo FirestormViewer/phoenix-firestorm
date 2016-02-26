@@ -894,6 +894,9 @@ void MediaPluginCEF::deserializeKeyboardData(LLSD native_key_data, uint32_t& nat
 		native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
 		native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
 		native_modifiers = (uint32_t)(native_key_data["cef_modifiers"].asInteger());
+
+		if( native_scan_code == '\n' )
+			native_scan_code = '\r';
 #endif
 	};
 };

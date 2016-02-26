@@ -265,9 +265,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8f865b509bb5011caf3dd95a22a4589d</string>
+              <string>ffcb753473c91c9b58c9115a4de231cc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/apr_3p-update-apr/rev/297252/arch/CYGWIN/installer/apr_suite-1.4.5.297252-windows-297252.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201602231237-r100-windows-201602231237-r100.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
