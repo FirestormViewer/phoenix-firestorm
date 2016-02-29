@@ -138,11 +138,9 @@
 #include "llleap.h"
 #include "stringize.h"
 #include "llcoros.h"
-//<FS:TS> Turn off library for 64-bit OS X too
 //#if !LL_LINUX
-#if !LL_LINUX && !(LL_DARWIN && defined(ND_BUILD64BIT_ARCH))
 #include "cef/llceflib.h"
-#endif
+//#endif
 
 // Third party library includes
 #include <boost/bind.hpp>
@@ -1656,8 +1654,8 @@ bool LLAppViewer::mainLoop()
 					joystick->scanJoystick();
 					gKeyboard->scanKeyboard();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
-					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
-					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
+					static LLCachedControl<bool> fsCrouchToggle(gSavedPerAccountSettings, "FSCrouchToggle");
+					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedPerAccountSettings, "FSCrouchToggleStatus");
 					if (fsCrouchToggle && fsCrouchToggleStatus)
 					{
 						gAgent.moveUp(-1);
@@ -3943,14 +3941,20 @@ LLSD LLAppViewer::getViewerInfo() const
 	{
 		info["VOICE_VERSION"] = LLTrans::getString("NotConnected");
 	}
-//<FS:TS> Check for the symbol being defined, not for an OS
 //#if !LL_LINUX
-#if defined(LLCEFLIB_VERSION)
 	info["LLCEFLIB_VERSION"] = LLCEFLIB_VERSION;
-#else
-	info["LLCEFLIB_VERSION"] = "Undefined";
-#endif
+//#else
+//	info["LLCEFLIB_VERSION"] = "Undefined";
+//#endif
 
+#if defined( FS_CEFLIB_VERSION ) && FS_CEFLIB_VERSION >= 6
+	{
+		std::stringstream strm;
+		strm << LLCEFLIB_BASE_VERSION << ".FS" << FS_CEFLIB_VERSION << "-" << FS_CEF_VERSION << " (Chrome " << FS_CEF_CHROME_VERSION << ")";
+		info[ "LLCEFLIB_VERSION" ] = strm.str();
+	}
+#endif
+	
 	// <FS:ND> Use the total accumulated samples.
 	//S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
 	//if (packets_in > 0)

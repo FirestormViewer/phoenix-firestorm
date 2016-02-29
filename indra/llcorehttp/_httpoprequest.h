@@ -226,7 +226,7 @@ public:
 	HttpHeaders::ptr_t	mReplyHeaders;
 	std::string			mReplyConType;
 	int					mReplyRetryAfter;
-
+	std::string mXLLURL; // <FS:ND/> If we get a x-ll-url header, save it here, even if mReplyHeaders is not filled.
 	// Policy data
 	int					mPolicyRetries;
 	int					mPolicy503Retries;

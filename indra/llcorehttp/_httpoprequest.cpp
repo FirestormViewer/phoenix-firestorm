@@ -945,7 +945,14 @@ size_t HttpOpRequest::headerCallback(void * data, size_t size, size_t nmemb, voi
 		// No use continuing
 		return hdr_size;
 	}
-	
+
+	// <FS:ND> To detect pipelining going out of sync, save a x-ll-url header and later compare it with the requested URL.
+	// We do not bail here already, but rather postpone it until the request is finised, then yield a 503 status
+	// (request will be retried) and turn pipelining off.
+	if( value && std::string( "x-ll-url" ) == name )
+		op->mXLLURL = value;
+	// </FS:ND>
+
 	// Save header if caller wants them in the response
 	if (is_header && op->mProcFlags & PF_SAVE_HEADERS)
 	{

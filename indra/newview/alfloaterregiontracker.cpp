@@ -118,7 +118,7 @@ void ALFloaterRegionTracker::refresh()
 	const std::string& saved_selected_value = mRegionScrollList->getSelectedValue().asString();
 	mRegionScrollList->deleteAllItems();
 
-	const std::string& cur_region_name = gAgent.getRegion()->getName();
+	const std::string& cur_region_name = gAgent.getRegion() ? gAgent.getRegion()->getName() : LLStringUtil::null;
 
 	F64 time_now = LLTimer::getElapsedSeconds();
 	bool request_region_update = (time_now - mLastRegionUpdate > REGION_UPDATE_TIMER);

@@ -747,7 +747,7 @@ void LLAgent::moveUp(S32 direction)
 	{
 		setControlFlags(AGENT_CONTROL_UP_NEG | AGENT_CONTROL_FAST_UP);
 		// <FS:Ansariel> Chalice Yao's crouch toggle
-		if (!gSavedSettings.getBOOL("FSCrouchToggleStatus") || !gSavedSettings.getBOOL("FSCrouchToggle"))
+		if (!gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus") || !gSavedPerAccountSettings.getBOOL("FSCrouchToggle"))
 		{
 			gAgentCamera.resetView(TRUE, FALSE, TRUE);
 		}
@@ -910,9 +910,9 @@ void LLAgent::toggleFlying()
 	}
 
 	// <FS:Ansariel> Chalice Yao's crouch toggle
-	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+	if (gSavedPerAccountSettings.getBOOL("FSCrouchToggleStatus"))
 	{
-		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+		gSavedPerAccountSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 	}
 	// </FS:Ansariel>
 
@@ -4417,6 +4417,7 @@ bool LLAgent::teleportCore(bool is_local)
 
 	// close the map panel so we can see our destination.
 	// we don't close search floater, see EXT-5840.
+	if (!gSavedSettings.getBOOL("FSDoNotHideMapOnTeleport")) // <FS:Ansariel> FIRE-17779: Option to not close world map on teleport
 	LLFloaterReg::hideInstance("world_map");
 
 	// hide land floater too - it'll be out of date

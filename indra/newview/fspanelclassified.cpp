@@ -32,12 +32,12 @@
 
 #include "fspanelclassified.h"
 
-#include "lldispatcher.h"
 #include "llfloaterreg.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llparcel.h"
 
+#include "fsdispatchclassifiedclickthrough.h"
 #include "llagent.h"
 #include "llclassifiedflags.h"
 #include "lliconctrl.h"
@@ -64,32 +64,6 @@ const S32 MINIMUM_PRICE_FOR_LISTING = 50;	// L$
 //static
 FSPanelClassifiedInfo::panel_list_t FSPanelClassifiedInfo::sAllPanels;
 
-// "classifiedclickthrough"
-// strings[0] = classified_id
-// strings[1] = teleport_clicks
-// strings[2] = map_clicks
-// strings[3] = profile_clicks
-class FSDispatchClassifiedClickThrough : public LLDispatchHandler
-{
-public:
-	virtual bool operator()(
-		const LLDispatcher* dispatcher,
-		const std::string& key,
-		const LLUUID& invoice,
-		const sparam_t& strings)
-	{
-		if (strings.size() != 4) return false;
-		LLUUID classified_id(strings[0]);
-		S32 teleport_clicks = atoi(strings[1].c_str());
-		S32 map_clicks = atoi(strings[2].c_str());
-		S32 profile_clicks = atoi(strings[3].c_str());
-
-		FSPanelClassifiedInfo::setClickThrough(
-			classified_id, teleport_clicks, map_clicks, profile_clicks, false);
-
-		return true;
-	}
-};
 static FSDispatchClassifiedClickThrough sClassifiedClickThrough;
 
 //////////////////////////////////////////////////////////////////////////
@@ -213,7 +187,6 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 	LL_INFOS("FSPanelClassifiedInfo") << "Opening classified [" << getClassifiedName() << "] (" << getClassifiedId() << ")" << LL_ENDL;
 
 	LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
-	// LLAvatarPropertiesProcessor::getInstance()->sendClassifiedInfoRequest(getClassifiedId());
 	updateData();
 	gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 

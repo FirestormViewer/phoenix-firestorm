@@ -51,7 +51,6 @@
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llnotificationsutil.h"
-#include "lldispatcher.h"
 #include "lltrans.h"
 #include "message.h"
 
@@ -66,6 +65,7 @@
 #include "fspanelclassified.h"
 #include "fspanelprofile.h"
 #include "llpanelclassified.h"
+#include "fsdispatchclassifiedclickthrough.h"
 
 #include <string>
 #include <boost/tokenizer.hpp>
@@ -221,25 +221,6 @@ private:
 };
 
 ///// Silly Classified Clickthrough Class /////
-
-class FSDispatchClassifiedClickThrough : public LLDispatchHandler
-{
-public:
-	virtual bool operator()(const LLDispatcher* dispatcher,
-							const std::string& key,
-							const LLUUID& invoice,
-							const sparam_t& strings)
-	{
-		if (strings.size() != 4) return false;
-		LLUUID classified_id(strings[0]);
-		S32 teleport_clicks = atoi(strings[1].c_str());
-		S32 map_clicks = atoi(strings[2].c_str());
-		S32 profile_clicks = atoi(strings[3].c_str());
-		
-		FSPanelClassifiedInfo::setClickThrough(classified_id, teleport_clicks, map_clicks, profile_clicks, false);
-		return true;
-	}
-};
 static FSDispatchClassifiedClickThrough sClassifiedClickThrough;
 
 SearchQuery::SearchQuery()

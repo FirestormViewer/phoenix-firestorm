@@ -494,12 +494,13 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 	args["[FSSUPP]"] = "";
 	args["[FSDEV]"] = "";
 	args["[FSQA]"] = "";
+	args["[FSGW]"] = "";
 	S32 flags = FSData::getInstance()->getAgentFlags(avatar_data->avatar_id);
 	if (flags != -1)
 	{
 		bool separator = false;
 		std::string text;
-		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA))
+		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA | FSData::GATEWAY))
 		{
 			args["[FIRESTORM]"] = "Firestorm";
 		}
@@ -530,6 +531,17 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 				text = " /" + text;
 			}
 			args["[FSQA]"] = text;
+			separator = true;
+		}
+
+		if (flags & FSData::GATEWAY)
+		{
+			text = getString("FSGW");
+			if (separator)
+			{
+				text = " /" + text;
+			}
+			args["[FSGW]"] = text;
 		}
 	}
 

@@ -68,7 +68,7 @@
 			<button label="Öffnen" label_selected="Öffnen" name="open_log_path_button-panelsetup"/>
 			<button label="Setzen" label_selected="Setzen" name="log_path_button-panelsetup" width="45"/>
 			<button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="82"/>
-			<button label="Öffne Crash-Protokolle" label_selected="Öffne Crash-Protokolle" name="browse_crashlogs" width="140"/>
+			<button label="Öffne Viewer-Protokolle" label_selected="Öffne Viewer-Protokolle" name="browse_crashlogs" width="140"/>
 			<button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
 		</panel>
 	</tab_container>

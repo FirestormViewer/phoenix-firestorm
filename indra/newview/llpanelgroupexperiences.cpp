@@ -37,6 +37,8 @@
 #include "llpanelexperiences.h"
 #include "llsd.h"
 #include "llexperiencecache.h"
+#include "llvoavatarself.h"
+
 
 static LLPanelInjector<LLPanelGroupExperiences> t_panel_group_experiences("panel_group_experiences");
 
@@ -71,6 +73,13 @@ void LLPanelGroupExperiences::activate()
 	{
 		return;
 	}
+
+	// <FS:Ansariel> Crash fix
+	if (!isAgentAvatarValid())
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
     LLExperienceCache::instance().getGroupExperiences(getGroupID(),
         boost::bind(&LLPanelGroupExperiences::groupExperiencesResults, getDerivedHandle<LLPanelGroupExperiences>(), _1));

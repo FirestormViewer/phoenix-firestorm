@@ -112,7 +112,7 @@ void LLVOTree::initClass()
 
 	if (!tree_def_tree.parseFile(xml_filename))
 	{
-		LL_ERRS() << "Failed to parse tree file." << LL_ENDL;
+		LL_ERRS() << "Failed to parse tree file. Please re-install the viewer!" << LL_ENDL;
 	}
 
 	LLXmlTreeNode* rootp = tree_def_tree.getRoot();

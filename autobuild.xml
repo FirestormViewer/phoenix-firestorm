@@ -27,9 +27,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>11f68fef2c94128237baf110bf6e4ee6</string>
+              <string>ff2b6c4678ec520b4dd95431fc7d6191</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.6.48584-darwin-201601201757-r2.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.6.48693-darwin-201602191441-r3.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -265,9 +265,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8f865b509bb5011caf3dd95a22a4589d</string>
+              <string>ffcb753473c91c9b58c9115a4de231cc</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/apr_3p-update-apr/rev/297252/arch/CYGWIN/installer/apr_suite-1.4.5.297252-windows-297252.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5.201602231237-r100-windows-201602231237-r100.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1685,11 +1685,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1244ca9bb1b0d6cef93f8267d0265fbb</string>
+              <string>7d12fe9dff388d237615f7158315d1cb</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201602032144-r49.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201602081454-r54.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1699,11 +1699,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bad6ccf190e217d50543d208c573ef85</string>
+              <string>d9a86fe36bada5011c25919715ed83ae</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201601241921-r44.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201602180356-r57.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1949,9 +1949,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e0c6acdbab116792347a01994f229cd7</string>
+              <string>7dce8b60c9e22b941e62029ee487462d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.3-linux-201509040011-r11.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/open_libndofdev-0.8-linux-201602151218-r12.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

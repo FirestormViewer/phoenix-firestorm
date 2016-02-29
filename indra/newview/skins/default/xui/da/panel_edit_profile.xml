@@ -2,7 +2,7 @@
 <panel label="Redigér profil" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
-[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->

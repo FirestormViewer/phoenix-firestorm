@@ -742,7 +742,8 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
                 keyEvent(key_event, key, LLCEFLib::KM_MODIFIER_NONE, native_key_data);
 
 #endif
-#elif LL_WINDOWS
+//#elif LL_WINDOWS // <FS:ND/> Windows & Linux
+#else
 				std::string event = message_in.getValue("event");
 				S32 key = message_in.getValueS32("key");
 				std::string modifiers = message_in.getValue("modifiers");
@@ -890,9 +891,12 @@ void MediaPluginCEF::deserializeKeyboardData(LLSD native_key_data, uint32_t& nat
 #endif
 
 #if LL_LINUX
-	native_scan_code = (uint32_t)(native_key_data["scan_code"].asInteger());
-	native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
-	native_modifiers = (uint32_t)(native_key_data["cef_modifiers"].asInteger());
+		native_scan_code = (uint32_t)(native_key_data["sdl_sym"].asInteger());
+		native_virtual_key = (uint32_t)(native_key_data["virtual_key"].asInteger());
+		native_modifiers = (uint32_t)(native_key_data["cef_modifiers"].asInteger());
+
+		if( native_scan_code == '\n' )
+			native_scan_code = '\r';
 #endif
 	};
 };
@@ -901,8 +905,7 @@ void MediaPluginCEF::deserializeKeyboardData(LLSD native_key_data, uint32_t& nat
 //
 void MediaPluginCEF::keyEvent(LLCEFLib::EKeyEvent key_event, int key, LLCEFLib::EKeyboardModifier modifiers_x, LLSD native_key_data = LLSD::emptyMap())
 {
-#if LL_DARWIN || LL_LINUX
-
+#if LL_DARWIN
     if (!native_key_data.has("event_type") ||
             !native_key_data.has("event_modifiers") ||
             !native_key_data.has("event_keycode") ||
@@ -928,7 +931,18 @@ void MediaPluginCEF::keyEvent(LLCEFLib::EKeyEvent key_event, int key, LLCEFLib::
 
 	mLLCEFLib->nativeKeyboardEvent(msg, wparam, lparam);
 #endif
-};
+
+// <FS:ND> Keyboard handling for Linux.
+#if LL_LINUX
+	uint32_t native_scan_code = 0;
+	uint32_t native_virtual_key = 0;
+	uint32_t native_modifiers = 0;
+	deserializeKeyboardData(native_key_data, native_scan_code, native_virtual_key, native_modifiers);
+
+	mLLCEFLib->nativeKeyboardEvent(key_event, native_scan_code, native_virtual_key, native_modifiers);
+#endif
+// </FS:ND>
+}
 
 void MediaPluginCEF::unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboardModifier modifiers, LLSD native_key_data = LLSD::emptyMap())
 {
@@ -952,20 +966,15 @@ void MediaPluginCEF::unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboar
 	mLLCEFLib->nativeKeyboardEvent(msg, wparam, lparam);
 #endif
 
-// <FS:ND> Keyboard handling for Linux, code written by Henri Beauchamp
+// <FS:ND> Keyboard handling for Linux.
 #if LL_LINUX
-	uint32_t key = KEY_NONE;
-
-	if (utf8str.size() == 1)
-		key = utf8str[0];
-
 	uint32_t native_scan_code = 0;
 	uint32_t native_virtual_key = 0;
 	uint32_t native_modifiers = 0;
 	deserializeKeyboardData(native_key_data, native_scan_code, native_virtual_key, native_modifiers);
 	
-	mLLCEFLib->keyboardEvent(LLCEFLib::KE_KEY_DOWN, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
-	mLLCEFLib->keyboardEvent(LLCEFLib::KE_KEY_UP, (uint32_t)key, utf8str.c_str(), modifiers, 0, native_virtual_key, native_modifiers);
+	mLLCEFLib->nativeKeyboardEvent(LLCEFLib::KE_KEY_DOWN, native_scan_code, native_virtual_key, native_modifiers);
+	mLLCEFLib->nativeKeyboardEvent(LLCEFLib::KE_KEY_UP, native_scan_code, native_virtual_key, native_modifiers);
 #endif
 // </FS:ND>
 };

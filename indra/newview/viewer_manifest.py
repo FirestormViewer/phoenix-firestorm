@@ -1515,6 +1515,7 @@ class LinuxManifest(ViewerManifest):
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
         self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
+        self.fs_setuid_chromesandbox() # <FS:ND/> Chown chrome-sandbox to root:root and set the setuid bit
 
         # Fix access permissions
         self.run_command("""
@@ -1554,7 +1555,7 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
 class Linux_i686_Manifest(LinuxManifest):
     def construct(self):

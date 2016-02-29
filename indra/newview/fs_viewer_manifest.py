@@ -70,6 +70,11 @@ class FSViewerManifest:
         if os.path.exists( debugDir ):
             from shutil import rmtree
             rmtree( debugDir )
+
+        debugFile = os.path.join( self.get_dst_prefix(), "bin", "debug.log" )
+
+        if os.path.isfile( debugFile ):
+            os.unlink( debugFile )
             
     def fs_save_linux_symbols( self ):
         #AO: Try to package up symbols
@@ -162,13 +167,19 @@ class FSViewerManifest:
     def fs_copy_windows_manifest(self):
         from shutil import copyfile
         self.fs_strip_windows_manifest( "%s/slplugin.exe" % self.args['configuration'].lower() )
-        # self.fs_strip_windows_manifest( "%s/firestorm-bin.exe" % self.args['configuration'].lower() )
+        self.fs_strip_windows_manifest( "%s/firestorm-bin.exe" % self.args['configuration'].lower() )
         self.fs_strip_windows_manifest( "%s/llplugin/llceflib_host.exe" % self.args['configuration'].lower() )
         if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst=""):
             self.path( "compatibility.manifest", "slplugin.exe.manifest" )
-            # self.path( "compatibility.manifest", "firestorm-bin.exe.manifest" )
+            self.path( "compatibility.manifest", "firestorm-bin.exe.manifest" )
             self.end_prefix()
         if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'tools', 'manifests'), dst="llplugin"):
             self.path( "compatibility.manifest", "llceflib_host.exe.manifest" )
             self.end_prefix()
+
+    def fs_setuid_chromesandbox( self ):
+        filename = os.path.join( self.get_dst_prefix(), "bin", "chrome-sandbox" )
+        self.run_command( "chmod 755 %s" % ( filename) ) # Strip sticky bit that might be set (in case the following two commands fail)
+        self.run_command( "sudo -n chown root:root %s || exit 0" % ( filename) )
+        self.run_command( "sudo -n chmod 4755 %s || exit 0" % ( filename) )
 

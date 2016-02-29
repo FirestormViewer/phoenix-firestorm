@@ -62,7 +62,7 @@
 			<button label="Pokaż" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
 			<button label="Ustaw" label_selected="Ustaw" name="log_path_button-panelsetup"/>
 			<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
-			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
+			<button label="Logi przeglądarki" label_selected="Logi przeglądarki" name="browse_crashlogs"/>
 			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
 		</panel>
 	</tab_container>
