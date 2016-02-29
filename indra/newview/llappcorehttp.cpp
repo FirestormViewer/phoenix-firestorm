@@ -104,7 +104,7 @@ static const struct
 		"material manager requests"
 	},
 	{ // AP_AGENT
-		2,		1,		32,		0,		true,
+		2,		1,		32,		0,		false,
 		"Agent",
 		"Agent requests"
 	}
@@ -366,6 +366,7 @@ void LLAppCoreHttp::refreshSettings(bool initial)
 			mPipelined = pipelined;
 			pipeline_changed = true;
 		}
+        LL_INFOS("Init") << "HTTP Pipelining " << (mPipelined ? "enabled" : "disabled") << "!" << LL_ENDL;
 	}
 	
 	for (int i(0); i < LL_ARRAY_SIZE(init_data); ++i)
