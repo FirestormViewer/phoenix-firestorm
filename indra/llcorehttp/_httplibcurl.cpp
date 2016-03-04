@@ -358,7 +358,7 @@ bool HttpLibcurl::completeRequest(CURLM * multi_handle, CURL * handle, CURLcode 
 		}
 	}
 
-	// <FS:NS> See if the requested URL matches a X-LL-URL header (if present) and the requested range.
+	// <FS:ND> See if the requested URL matches a X-LL-URL header (if present) and the requested range.
 	// If not, we assume http pipelining havng gone out of sync. If yes, yield a 503 status and switch
 	// pipelining off.
 	bool bFailed = false;
