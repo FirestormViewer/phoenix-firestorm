@@ -3754,6 +3754,9 @@ class LLObjectMute : public view_listener_t
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				return true;
 // [/RLVa:KB]
+
+			avatar->mNeedsImpostorUpdate = TRUE;
+
 			id = avatar->getID();
 
 			LLNameValue *firstname = avatar->getNVPair("FirstName");

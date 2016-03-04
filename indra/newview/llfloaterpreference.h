@@ -253,6 +253,7 @@ public:
 	void buildPopupLists();
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
+	void saveGraphicsPreset(std::string& preset);
 
 private:
 
@@ -273,6 +274,7 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
+	std::string mSavedGraphicsPreset;
 	LOG_CLASS(LLFloaterPreference);
 
 	LLSearchEditor *mFilterEdit;
@@ -373,6 +375,7 @@ public:
 	LLFloaterPreferenceGraphicsAdvanced(const LLSD& key);
 	~LLFloaterPreferenceGraphicsAdvanced();
 	void onOpen(const LLSD& key);
+	void onClickCloseBtn(bool app_quitting);
 	void disableUnavailableSettings();
 	void refreshEnabledGraphics();
 	void refreshEnabledState();

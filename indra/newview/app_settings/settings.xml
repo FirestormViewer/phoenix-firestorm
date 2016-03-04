@@ -12566,13 +12566,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
-    <string>Maximum bytes of attachments before an avatar is rendered as a simple impostor (0 for no limit).</string>
+    <string>OBSOLETE and UNUSED.</string>
     <key>Persist</key>
-    <integer>1</integer>
+    <integer>0</integer>
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>10000000</integer>
+    <integer>0</integer>
   </map>
   <key>RenderAvatarMaxNonImpostors</key>
   <map>
@@ -12628,13 +12628,15 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAutoMuteSurfaceAreaLimit</key>
   <map>
     <key>Comment</key>
-    <string>Maximum surface area of attachments before an avatar is rendered as a simple impostor (0 to not use this limit).</string>
+    <string>Maximum surface area of attachments before an avatar is
+    rendered as a simple impostor (to not use this limit, set to zero
+    or set RenderAvatarMaxComplexity to zero).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>10.0E6</real>
+    <real>1000.0</real>
   </map>
   <key>RenderAutoMuteLogging</key>
   <map>
