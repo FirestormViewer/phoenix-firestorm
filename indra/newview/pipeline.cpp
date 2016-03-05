@@ -3185,7 +3185,7 @@ void LLPipeline::markVisible(LLDrawable *drawablep, LLCamera& camera)
 					{
 						LLVOAvatar* av = vobj->asAvatar();
 						if (av && (av->isImpostor() 
-							|| av->isInMuteList() 
+							//|| av->isInMuteList() // <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
 							|| (LLVOAvatar::AV_DO_NOT_RENDER == av->getVisualMuteSettings() && !av->needsImpostorUpdate()) ))
 						{
 							return;
