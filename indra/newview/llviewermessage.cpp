@@ -1845,8 +1845,20 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 			opener = new LLOpenTaskGroupOffer;
 			send_auto_receive_response();
 		}
-		else
+		else if (mIM == IM_INVENTORY_OFFERED)
 		{
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+			if ( (rlv_handler_t::isEnabled()) && (!RlvSettings::getForbidGiveToRLV()) && (LLAssetType::AT_CATEGORY == mType) && (mDesc.find(RLV_PUTINV_PREFIX) == 0) )
+			{
+				RlvGiveToRLVAgentOffer* pOfferObserver = new RlvGiveToRLVAgentOffer(mObjectID);
+				pOfferObserver->startFetch();
+				if (pOfferObserver->isFinished())
+					pOfferObserver->done();
+				else
+					gInventory.addObserver(pOfferObserver);
+			}
+// [/RLVa:KB]
+
 			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages") && button == IOR_ACCEPT)
 			{
 				send_auto_receive_response();
