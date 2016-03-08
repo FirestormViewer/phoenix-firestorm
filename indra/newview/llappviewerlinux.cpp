@@ -83,6 +83,8 @@ void exportFlashVars()
 		"/usr/lib64/chromium-browser/PepperFlash/", // Gentoo
 		"/usr/lib32/chromium-browser/PepperFlash/", // Gentoo
 		"/opt/google/chrome/PepperFlash/", // Mint 17.3 / XBuntu 14.04, probably works with all Ubuntu flavors of that version.
+		"/usr/lib/chromium/PepperFlash/", // Slackware
+		"/usr/lib64/chromium/PepperFlash/", // Slackware
 		"/opt/firestorm/PepperFlash/", // In case someone likes to extract pepperflash from a chrome installer on their own, give them a choice with a predef. directory
 		NULL
 	};

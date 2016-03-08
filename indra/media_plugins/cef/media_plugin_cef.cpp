@@ -967,7 +967,7 @@ void MediaPluginCEF::unicodeInput(const std::string &utf8str, LLCEFLib::EKeyboar
 #endif
 
 // <FS:ND> Keyboard handling for Linux.
-#if LL_LINUX
+#if LL_LINUX && FS_CEFLIB_VERSION <= 7
 	uint32_t native_scan_code = 0;
 	uint32_t native_virtual_key = 0;
 	uint32_t native_modifiers = 0;

@@ -500,7 +500,7 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 	{
 		bool separator = false;
 		std::string text;
-		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA))
+		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA | FSData::GATEWAY))
 		{
 			args["[FIRESTORM]"] = "Firestorm";
 		}

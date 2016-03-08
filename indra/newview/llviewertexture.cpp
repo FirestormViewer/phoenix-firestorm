@@ -1688,7 +1688,7 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 			LL_WARNS() << "Detected NaN for decode priority" << LL_ENDL;
 			mDecodePriority = 0; // What to put here? Something low? high? zero?
 		}
-		// </FS:NS>
+		// </FS:ND>
 
 		return mDecodePriority; // no change while waiting to create
 	}

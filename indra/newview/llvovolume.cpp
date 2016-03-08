@@ -5251,7 +5251,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						}
 						else
 						{
-							// <FS:NS> Even more crash avoidance ...
+							// <FS:ND> Even more crash avoidance ...
 							// if (te->getColor().mV[3] > 0.f)
 							if (te && te->getColor().mV[3] > 0.f)
 							// </FS:ND>
