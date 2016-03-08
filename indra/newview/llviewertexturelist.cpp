@@ -1773,15 +1773,8 @@ LLUIImagePtr LLUIImageList::loadUIImage(LLViewerFetchedTexture* imagep, const st
 	LLUIImagePtr new_imagep = new LLUIImage(name, imagep);
 	new_imagep->setScaleStyle(scale_style);
 
-	// <FS:Ansariel> Memory leak plugging: Don't add icon textures to the UI lists
-	//mUIImages.insert(std::make_pair(name, new_imagep));
-	//mUITextureList.push_back(imagep);
-	if (imagep->getBoostLevel() != LLGLTexture::BOOST_ICON)
-	{
-		mUIImages.insert(std::make_pair(name, new_imagep));
-		mUITextureList.push_back(imagep);
-	}
-	// </FS:Ansariel>
+	mUIImages.insert(std::make_pair(name, new_imagep));
+	mUITextureList.push_back(imagep);
 
 	//Note:
 	//Some other textures such as ICON also through this flow to be fetched.
