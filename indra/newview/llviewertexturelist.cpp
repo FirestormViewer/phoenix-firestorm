@@ -1764,17 +1764,18 @@ LLUIImagePtr LLUIImageList::loadUIImage(LLViewerFetchedTexture* imagep, const st
 	//don't compress UI images
 	imagep->getGLTexture()->setAllowCompression(false);
 
-	//all UI images are non-deletable, except downloadable icons
-	if (imagep->getBoostLevel() != LLGLTexture::BOOST_ICON)
-	{
-		imagep->setNoDelete();
-	}
-
 	LLUIImagePtr new_imagep = new LLUIImage(name, imagep);
 	new_imagep->setScaleStyle(scale_style);
 
-	mUIImages.insert(std::make_pair(name, new_imagep));
-	mUITextureList.push_back(imagep);
+	if (imagep->getBoostLevel() != LLGLTexture::BOOST_ICON &&
+		imagep->getBoostLevel() != LLGLTexture::BOOST_PREVIEW)
+	{
+		// Don't add downloadable content into this list
+		// all UI images are non-deletable and list does not support deletion
+		imagep->setNoDelete();
+		mUIImages.insert(std::make_pair(name, new_imagep));
+		mUITextureList.push_back(imagep);
+	}
 
 	//Note:
 	//Some other textures such as ICON also through this flow to be fetched.
