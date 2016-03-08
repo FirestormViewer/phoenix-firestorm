@@ -238,3 +238,8 @@ const std::string& LLVersionInfo::getBuildPlatform()
 // [/SL:KB]
 
     
+const std::string &LLVersionInfo::getBuildConfig()
+{
+    static const std::string build_configuration(LLBUILD_CONFIG); // set in indra/cmake/BuildVersion.cmake
+    return build_configuration;
+}

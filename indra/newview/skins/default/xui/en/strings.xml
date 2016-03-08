@@ -29,6 +29,8 @@
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
+    <string name="BuildConfig">Build Configuration [BUILD_CONFIG]</string>
+
 	<string name="AboutPosition">
 You are at [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] located at &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
@@ -73,7 +75,8 @@ VFS (cache) creation time (UTC): [VFS_DATE]
   </string>
   <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
-	
+	<string name="BuildConfiguration">Build Configuration</string>
+
 	<!--  progress -->
 	<string name="ProgressRestoring">Restoring...</string>
 	<string name="ProgressChangingResolution">Changing resolution...</string>

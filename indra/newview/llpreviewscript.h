@@ -285,9 +285,6 @@ protected:
 							const LLUUID& item_id,
 							bool mono);
 	// NaCl End
-	void uploadAssetLegacy(const std::string& filename,
-							const LLUUID& item_id,
-							const LLTransactionID& tid);
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
@@ -370,10 +367,6 @@ private:
 							const LLUUID& item_id,
 							BOOL is_running,
 							const LLUUID& experience_public_id);
-	void uploadAssetLegacy(const std::string& filename,
-						   LLViewerObject* object,
-						   const LLTransactionID& tid,
-						   BOOL is_running);
 	BOOL monoChecked() const;
 
 

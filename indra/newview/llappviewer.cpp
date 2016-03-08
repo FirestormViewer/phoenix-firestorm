@@ -3868,6 +3868,11 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
+    //std::string build_config = LLVersionInfo::getBuildConfig();
+    //if (build_config != "Release")
+    //{
+    //    info["BUILD_CONFIG"] = build_config;
+    //}
 
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
 #ifdef OPENSIM
@@ -4144,6 +4149,10 @@ std::string LLAppViewer::getViewerInfoString() const
 
 	// Now build the various pieces
 	support << LLTrans::getString("AboutHeader", args);
+	//if (info.has("BUILD_CONFIG"))
+	//{
+	//	support << "\n" << LLTrans::getString("BuildConfig", args);
+	//}
 	if (info.has("REGION"))
 	{
 // [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)

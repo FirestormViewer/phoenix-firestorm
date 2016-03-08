@@ -82,7 +82,6 @@ set(cmake_SOURCE_FILES
     LLVFS.cmake
     LLWindow.cmake
     LLXML.cmake
-    # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
     MediaPluginBase.cmake
     NDOF.cmake
