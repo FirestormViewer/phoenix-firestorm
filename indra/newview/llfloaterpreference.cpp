@@ -963,6 +963,9 @@ void LLFloaterPreference::apply()
 		updateClickActionSettings();
 		mClickActionDirty = false;
 	}
+
+	// <FS:Ansariel> Fix resetting graphics preset on cancel; Save preset here because cancel() gets called in either way!
+	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
 }
 
 void LLFloaterPreference::cancel()
@@ -1014,7 +1017,10 @@ void LLFloaterPreference::cancel()
 		pPathfindingConsole->onRegionBoundaryCross();
 	}
 
-	if (!mSavedGraphicsPreset.empty())
+	// <FS:Ansariel> Fix resetting graphics preset on cancel
+	//if (!mSavedGraphicsPreset.empty())
+	if (mSavedGraphicsPreset != gSavedSettings.getString("PresetGraphicActive"))
+	// </FS:Ansariel>
 	{
 		gSavedSettings.setString("PresetGraphicActive", mSavedGraphicsPreset);
 		LLPresetsManager::getInstance()->triggerChangeSignal();
@@ -1159,6 +1165,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// Make sure there is a default preference file
 	LLPresetsManager::getInstance()->createMissingDefault();
 
+	// <FS:Ansariel> Fix resetting graphics preset on cancel
+	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
+
 	bool started = (LLStartUp::getStartupState() == STATE_STARTED);
 
 	LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
@@ -1273,12 +1282,14 @@ void LLFloaterPreference::updateShowFavoritesCheckbox(bool val)
 
 void LLFloaterPreference::setHardwareDefaults()
 {
-	std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
-	if (!preset_graphic_active.empty())
-	{
-		saveGraphicsPreset(preset_graphic_active);
-		saveSettings(); // save here to be able to return to the previous preset by Cancel
-	}
+	// <FS:Ansariel> Fix resetting graphics preset on cancel
+	//std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+	//if (!preset_graphic_active.empty())
+	//{
+	//	saveGraphicsPreset(preset_graphic_active);
+	//	saveSettings(); // save here to be able to return to the previous preset by Cancel
+	//}
+	// </FS:Ansariel>
 
 	LLFeatureManager::getInstance()->applyRecommendedSettings();
 
@@ -3959,33 +3970,32 @@ void LLPanelPreferenceGraphics::onPresetsListChange()
 	resetDirtyChilds();
 	setPresetText();
 
-	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-	if (instance && !gSavedSettings.getString("PresetGraphicActive").empty())
-	{
-		instance->saveSettings(); //make cancel work correctly after changing the preset
-	}
+	//LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	//if (instance && !gSavedSettings.getString("PresetGraphicActive").empty())
+	//{
+	//	instance->saveSettings(); //make cancel work correctly after changing the preset
+	//}
 }
 
 void LLPanelPreferenceGraphics::setPresetText()
 {
 	// <FS:Ansariel> Performance improvement
 	//LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
-
-	//std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
-
 	static LLTextBox* preset_text = getChild<LLTextBox>("preset_text");
-	static LLCachedControl<std::string> presetGraphicActive(gSavedSettings, "PresetGraphicActive");
-	std::string preset_graphic_active = presetGraphicActive();
 	// </FS:Ansariel>
 
-	if (!preset_graphic_active.empty() && preset_graphic_active != preset_text->getText())
-	{
-		LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-		if (instance)
-		{
-			instance->saveGraphicsPreset(preset_graphic_active);
-		}
-	}
+	std::string preset_graphic_active = gSavedSettings.getString("PresetGraphicActive");
+
+	// <FS:Ansariel> Fix resetting graphics preset on cancel
+	//if (!preset_graphic_active.empty() && preset_graphic_active != preset_text->getText())
+	//{
+	//	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	//	if (instance)
+	//	{
+	//		instance->saveGraphicsPreset(preset_graphic_active);
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	if (hasDirtyChilds() && !preset_graphic_active.empty())
 	{
