@@ -6608,4 +6608,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="NotificationItemDateStringSLT">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]
 	</string>
+	<string name="Pie_av_render_normally">
+		Normal
+	</string>
+	<string name="Pie_av_render_never">
+		Niemals
+	</string>
+	<string name="Pie_av_render_fully">
+		Vollständig
+	</string>
 </strings>

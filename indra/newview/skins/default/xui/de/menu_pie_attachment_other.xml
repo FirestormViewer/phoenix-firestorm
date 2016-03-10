@@ -30,6 +30,11 @@
 				<pie_slice label="Collada" name="Collada"/>
 			</pie_menu>
 			<pie_slice label="XML ausg." name="Dump XML"/>
+			<pie_menu name="RenderMenu" label="Anzeigen &gt;">
+				<pie_slice name="RenderNormally" label="Normal"/>
+				<pie_slice name="DoNotRender" label="Niemals"/>
+				<pie_slice name="AlwaysRenderFully" label="Vollständig"/>
+			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Untersuchen" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">

@@ -3677,30 +3677,55 @@ bool enable_object_unmute()
 	}
 }
 
+// <FS:Ansariel> Avatar render more check for pie menu
+bool check_avatar_render_mode(U32 mode)
+{
+	LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+	if (!object) return false;
+
+	LLVOAvatar* avatar = find_avatar_from_object(object); 
+	if (!avatar) return false;
+		
+	switch (mode) 
+	{
+		case 0:
+			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
+		case 1:
+			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
+		case 2:
+			return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
+		default:
+			return false;
+	}
+}
+// </FS:Ansariel>
 
 // 0 = normal, 1 = always, 2 = never
 class LLAvatarCheckImpostorMode : public view_listener_t
 {	
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-		if (!object) return false;
+		// <FS:Ansariel> Avatar render more check for pie menu
+		//LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		//if (!object) return false;
 
-		LLVOAvatar* avatar = find_avatar_from_object(object); 
-		if (!avatar) return false;
-		
-		U32 mode = userdata.asInteger();
-		switch (mode) 
-		{
-			case 0:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
-			case 1:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
-			case 2:
-				return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
-			default:
-				return false;
-		}
+		//LLVOAvatar* avatar = find_avatar_from_object(object); 
+		//if (!avatar) return false;
+		//
+		//U32 mode = userdata.asInteger();
+		//switch (mode) 
+		//{
+		//	case 0:
+		//		return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_RENDER_NORMALLY);
+		//	case 1:
+		//		return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_DO_NOT_RENDER);
+		//	case 2:
+		//		return (avatar->getVisualMuteSettings() == LLVOAvatar::AV_ALWAYS_RENDER);
+		//	default:
+		//		return false;
+		//}
+		return check_avatar_render_mode(userdata.asInteger());
+		// </FS:Ansariel>
 	}	// handleEvent()
 };
 

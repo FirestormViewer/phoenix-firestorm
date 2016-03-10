@@ -2091,6 +2091,12 @@ BOOL LLToolPie::handleRightClickPick()
 					if(gSavedSettings.getBOOL("UsePieMenu"))
 					{
 						gPieMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+
+						static std::string checkmark("\xE2\x9C\x94");
+						gPieMenuAttachmentOther->getChild<LLUICtrl>("RenderNormally")->setValue((check_avatar_render_mode(0) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_normally"));
+						gPieMenuAttachmentOther->getChild<LLUICtrl>("DoNotRender")->setValue((check_avatar_render_mode(1) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_never"));
+						gPieMenuAttachmentOther->getChild<LLUICtrl>("AlwaysRenderFully")->setValue((check_avatar_render_mode(2) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_fully"));
+
 						gPieMenuAttachmentOther->show(x, y);
 					}
 					else
@@ -2109,6 +2115,12 @@ BOOL LLToolPie::handleRightClickPick()
 					if(gSavedSettings.getBOOL("UsePieMenu"))
 					{
 						gPieMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+
+						static std::string checkmark("\xE2\x9C\x94");
+						gPieMenuAvatarOther->getChild<LLUICtrl>("RenderNormally")->setValue((check_avatar_render_mode(0) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_normally"));
+						gPieMenuAvatarOther->getChild<LLUICtrl>("DoNotRender")->setValue((check_avatar_render_mode(1) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_never"));
+						gPieMenuAvatarOther->getChild<LLUICtrl>("AlwaysRenderFully")->setValue((check_avatar_render_mode(2) ? (checkmark + " ") : "") + LLTrans::getString("Pie_av_render_fully"));
+
 						gPieMenuAvatarOther->show(x, y);
 					}
 					else

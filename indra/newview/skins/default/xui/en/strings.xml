@@ -2960,4 +2960,8 @@ Try enclosing path to the editor with double quotes.
   <string name="NotificationItemDateStringLocal">[mthnum,datetime,local]/[day,datetime,local]/[year,datetime,local] [hour,datetime,local]:[min,datetime,local]</string>
   <string name="NotificationItemDateStringUTC">[mth,datetime,utc]/[day,datetime,utc]/[year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]</string>
   <string name="NotificationItemDateStringSLT">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]</string>
+
+  <string name="Pie_av_render_normally">Normally</string>
+  <string name="Pie_av_render_never">Never</string>
+  <string name="Pie_av_render_fully">Fully</string>
 </strings>
