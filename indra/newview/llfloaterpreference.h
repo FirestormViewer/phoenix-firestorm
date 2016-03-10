@@ -161,11 +161,10 @@ protected:
 	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
 	//</FS:Kadah>
 
+public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();
-
-public:
 
 	void setCacheLocation(const LLStringExplicit& location);
 	// <FS:Ansariel> Sound cache

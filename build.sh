@@ -206,6 +206,13 @@ fi
 # load autobuild provided shell functions and variables
 eval "$("$autobuild" source_environment)"
 
+if [ "$arch" = "Linux" ]
+then
+    ## something about the additional_packages mechanism messes up buildscripts results.py
+    ## since we don't care about those packages on Linux, just zero it out, yes - a HACK
+    export additional_packages=""
+fi
+
 # dump environment variables for debugging
 begin_section "Environment"
 env|sort
@@ -410,12 +417,6 @@ then
         do
           upload_item symbolfile "$build_dir/$symbolfile" binary/octet-stream
         done
-
-        # Upload the actual dependencies used
-        if [ -r "$build_dir/packages/installed-packages.xml" ]
-        then
-            upload_item installer "$build_dir/packages/installed-packages.xml" text/xml
-        fi
 
         # Upload the llphysicsextensions_tpv package, if one was produced
         # *TODO: Make this an upload-extension

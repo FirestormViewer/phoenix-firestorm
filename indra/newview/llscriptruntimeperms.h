@@ -27,7 +27,7 @@
 #ifndef LL_LLSCRIPTRUNTIME_PERMS_H
 #define LL_LLSCRIPTRUNTIME_PERMS_H
 
-#include <boost/array.hpp> // <FS:Ansariel> Build fix
+#include <boost/array.hpp>
 
 typedef struct _script_perm {
 	std::string question;
@@ -39,6 +39,8 @@ typedef struct _script_perm {
 
 const U32 NUM_SCRIPT_PERMISSIONS = 16;
 const S32 SCRIPT_PERMISSION_DEBIT = 0;
+const S32 SCRIPT_PERMISSION_TRIGGER_ANIMATION = 3;
+const S32 SCRIPT_PERMISSION_OVERRIDE_ANIMATIONS = 14;
 // <FS:Ansariel> Also required indexes
 const S32 SCRIPT_PERMISSION_TAKE_CONTROLS = 1;
 const S32 SCRIPT_PERMISSION_ATTACH = 4;
