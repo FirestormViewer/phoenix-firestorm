@@ -418,6 +418,7 @@ LLNotificationTemplate::LLNotificationTemplate(const LLNotificationTemplate::Par
 	mExpireOption(p.expire_option),
 	mURLOption(p.url.option),
 	mURLTarget(p.url.target),
+	mForceUrlsExternal(p.force_urls_external),
 	mUnique(p.unique.isProvided()),
 	mCombineBehavior(p.unique.combine),
 	mPriority(p.priority),
@@ -747,6 +748,11 @@ S32 LLNotification::getURLOption() const
 S32 LLNotification::getURLOpenExternally() const
 {
 	return(mTemplatep? mTemplatep->mURLTarget == "_external": -1);
+}
+
+bool LLNotification::getForceUrlsExternal() const
+{
+    return (mTemplatep ? mTemplatep->mForceUrlsExternal : false);
 }
 
 bool LLNotification::hasUniquenessConstraints() const 
