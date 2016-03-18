@@ -376,6 +376,7 @@ public:
 
 	/*virtual*/ BOOL	loadSkeletonNode();
 	/*virtual*/ void	buildCharacter();
+    void				resetSkeleton();
 
 	LLVector3			mCurRootToHeadOffset;
 	LLVector3			mTargetRootToHeadOffset;

@@ -1893,6 +1893,34 @@ void LLVOAvatar::buildCharacter()
 	mMeshValid = TRUE;
 }
 
+//-----------------------------------------------------------------------------
+// resetSkeleton()
+//-----------------------------------------------------------------------------
+void LLVOAvatar::resetSkeleton()
+{
+    LL_DEBUGS("Avatar") << avString() << LL_ENDL;
+
+    // Reset params
+	for (LLVisualParam *param = getFirstVisualParam(); 
+		param;
+		param = getNextVisualParam())
+	{
+		if (param->isAnimating())
+		{
+			continue;
+		}
+        param->setLastWeight(param->getDefaultWeight());
+	}
+
+    // Reset all bones and collision volumes to their initial skeleton state.
+	if( !buildSkeleton(sAvatarSkeletonInfo) )
+    {
+        LL_ERRS() << "Error resetting skeleton" << LL_ENDL;
+	}
+
+    // Apply params
+    updateVisualParams();
+}
 
 //-----------------------------------------------------------------------------
 // releaseMeshData()
@@ -6095,17 +6123,14 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			LLJoint *parent_joint = getJoint(info->mJointName);
             if (!parent_joint)
             {
-                // If the intended location for attachment point is unavailable, stick it in a default location.
-                LL_INFOS() << "attachment pt " << info->mName << " using mPelvis as default parent" << LL_ENDL;
-                parent_joint = getJoint("mPelvis");
-            }
-			if (!parent_joint)
-			{
+                // If the intended parent for attachment point is unavailable, avatar_lad.xml is corrupt.
 				LL_WARNS() << "No parent joint by name " << info->mJointName << " found for attachment point " << info->mName << LL_ENDL;
-				delete attachment;
-				continue;
-			}
-
+				LL_ERRS() << "Invalid avatar_lad.xml file" << LL_ENDL;
+                // If we wanted to continue from this case, we could do:
+				//delete attachment;
+                //continue;
+                // but there's no point.
+            }
 			if (info->mHasPosition)
 			{
 				attachment->setOriginalPosition(info->mPosition);
@@ -8814,6 +8839,7 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 			}
 		}
 
+        // Bones
 		avatar_joint_list_t::iterator iter = mSkeleton.begin();
 		avatar_joint_list_t::iterator end  = mSkeleton.end();
 		for (; iter != end; ++iter)
@@ -8821,10 +8847,33 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 			LLJoint* pJoint = (*iter);
 			const LLVector3& pos = pJoint->getPosition();
 			const LLVector3& scale = pJoint->getScale();
-			apr_file_printf( file, "\t\t<joint name=\"%s\" position=\"%f %f %f\" scale=\"%f %f %f\"/>\n", 
+			apr_file_printf( file, "\t\t<bone name=\"%s\" position=\"%f %f %f\" scale=\"%f %f %f\"/>\n", 
 							 pJoint->getName().c_str(), pos[0], pos[1], pos[2], scale[0], scale[1], scale[2]);
 		}
 
+        // Collision volumes
+        for (S32 i = 0; i < mNumCollisionVolumes; i++)
+        {
+            LLAvatarJointCollisionVolume* pJoint = &mCollisionVolumes[i];
+			const LLVector3& pos = pJoint->getPosition();
+			const LLVector3& scale = pJoint->getScale();
+			apr_file_printf( file, "\t\t<collision_volume name=\"%s\" position=\"%f %f %f\" scale=\"%f %f %f\"/>\n", 
+							 pJoint->getName().c_str(), pos[0], pos[1], pos[2], scale[0], scale[1], scale[2]);
+        }
+
+        // Attachment joints
+		for (LLVOAvatar::attachment_map_t::const_iterator iter = mAttachmentPoints.begin(); 
+			 iter != mAttachmentPoints.end(); ++iter)
+		{
+			LLViewerJointAttachment* pJoint = iter->second;
+			if (!pJoint) continue;
+			const LLVector3& pos = pJoint->getPosition();
+			const LLVector3& scale = pJoint->getScale();
+			apr_file_printf( file, "\t\t<attachment_point name=\"%s\" position=\"%f %f %f\" scale=\"%f %f %f\"/>\n", 
+							 pJoint->getName().c_str(), pos[0], pos[1], pos[2], scale[0], scale[1], scale[2]);
+        }
+        
+        // Joint pos overrides
 		for (iter = mSkeleton.begin(); iter != end; ++iter)
 		{
 			LLJoint* pJoint = (*iter);
