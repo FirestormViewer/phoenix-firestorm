@@ -418,6 +418,9 @@ Limit [MAX_ATTACHMENTS] dodatków został przekroczony. Proszę najpierw odłąc
 	<notification name="CannotWearInfoNotComplete">
 		Nie możesz założyć tego przedmiotu, ponieważ jeszcze się nie załadował do końca. Spróbuj ponownie za kilka minut.
 	</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		Należy wprowadzić hasło.
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		Należy wprowadzić nazwę użytkownika.
 
@@ -1427,6 +1430,10 @@ Zamień teksturę [TEXTURE_NUM] na 24-bitową teksturę o wymiarze 1024x1024 lub
 	</notification>
 	<notification name="MaxAllowedAgentOnRegion">
 		Maksymalna liczba Rezydentów wynosi [MAX_AGENTS].
+	</notification>
+	<notification name="ConfirmTextureHeights">
+		Zamierzasz użyć wartości 'niższych' większych niż 'wyższe' dla zakresów elewacji. Chcesz kontynuować?
+		<usetemplate name="yesnocancelbuttons" notext="Anuluj" canceltext="Nie pytaj" />
 	</notification>
 	<notification name="MaxBannedAgentsOnRegion">
 		Maksymalna liczba niepożądanych Rezydentów (banów) wynosi [MAX_BANNED].
@@ -3318,6 +3325,12 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="AttachmentSaved">
 		Załącznik został zapisany.
+	</notification>
+	<notification name="AppearanceToXMLSaved">
+		Wygląd został zapisany do XML, w [PATH]
+	</notification>
+	<notification name="AppearanceToXMLFailed">
+		Nie udało się zapisać wyglądu do XML.
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Nie można znaleźć tematu pomocy dla tego elementu.
