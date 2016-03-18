@@ -4521,6 +4521,12 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="OfflineStatus">
 		offline
 	</string>
+	<string name="not_online_msg">
+		Anwender nicht online - Nachricht wird gespeichert und später zugestellt.
+	</string>
+	<string name="not_online_inventory">
+		Anwender nicht online - Inventarangebot wurde gespeichert.
+	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen
 	</string>

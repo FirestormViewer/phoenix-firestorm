@@ -3045,7 +3045,7 @@ Jeśli w nim zostaniesz, to symulator Cię wyloguje.
 
 [MESSAGE]
 
-Od obiektu: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, właściciela: [NAME]?
+Od obiektu: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, właściciela: [NAME_SLURL]?
 		<form name="form">
 			<button name="Gotopage" text="Załaduj"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -4610,9 +4610,6 @@ Poprzedni symulator: [OLDVERSION]
 		<form name="form">
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
 		</form>
-	</notification>
-	<notification name="DumpArchetypeSuccess">
-		Pomyślnie zapisano wygląd w formacie XML do pliku [FILENAME].
 	</notification>
 	<notification name="StreamListExportSuccess">
 		Pomyślnie wyeksportowano listę strumieni w formacie XML do pliku [FILENAME].

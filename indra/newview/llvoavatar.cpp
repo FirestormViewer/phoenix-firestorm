@@ -2084,7 +2084,7 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
 		uuid == IMG_INVISIBLE)
 	{
 		// Should already exist, don't need to find it on sim or baked-texture host.
-		result = gTextureList.findImage(uuid);
+		result = gTextureList.findImage(uuid, TEX_LIST_DISCARD);
 	}
 	if (!result)
 	{
@@ -4767,7 +4767,7 @@ bool LLVOAvatar::allTexturesCompletelyDownloaded(std::set<LLUUID>& ids) const
 {
 	for (std::set<LLUUID>::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
+		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it, TEX_LIST_DISCARD);
 		if (imagep && imagep->getDiscardLevel()!=0)
 		{
 			return false;
@@ -4839,7 +4839,7 @@ S32Bytes LLVOAvatar::totalTextureMemForUUIDS(std::set<LLUUID>& ids)
 	S32Bytes result(0);
 	for (std::set<LLUUID>::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
+		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it, TEX_LIST_DISCARD);
 		if (imagep)
 		{
 			result += imagep->getTextureMemory();
@@ -4927,7 +4927,7 @@ void LLVOAvatar::releaseOldTextures()
 	{
 		if (new_texture_ids.find(*it) == new_texture_ids.end())
 		{
-			LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
+			LLViewerFetchedTexture *imagep = gTextureList.findImage(*it, TEX_LIST_DISCARD);
 			if (imagep)
 			{
 				current_texture_mem += imagep->getTextureMemory();
@@ -8605,7 +8605,6 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
 	{
-		LL_INFOS("DumpArchetypeXML") << "User closed the filepicker" << LL_ENDL;
 		return;
 	}
 // </FS:CR>
@@ -8622,10 +8621,7 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 		LLAPRFile::tFiletype* file = outfile.getFileHandle();
 		// </FS:ND>
 
-		// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
-		//LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
-		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
-		// </FS:CR>
+		LL_INFOS() << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
 
 		apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
 		apr_file_printf( file, "<linden_genepool version=\"1.0\">\n" );
@@ -8727,13 +8723,13 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 			// show the cloned params inside the wearables as well.
 			gAgentAvatarp->dumpWearableInfo(outfile);
 		}
-
-		// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
-		LL_INFOS("DumpArchetypeXML") << "Archetype xml written successfully!" << LL_ENDL;
 		LLSD args;
-		args["FILENAME"] = fullpath;
-		LLNotificationsUtil::add("DumpArchetypeSuccess", args);
-		// </FS:CR>
+		args["PATH"] = fullpath;
+		LLNotificationsUtil::add("AppearanceToXMLSaved", args);
+	}
+	else
+	{
+		LLNotificationsUtil::add("AppearanceToXMLFailed");
 	}
 	// File will close when handle goes out of scope
 }
@@ -9498,7 +9494,7 @@ void LLVOAvatar::bakedTextureOriginCounts(S32 &sb_count, // server-bake, has ori
 	collectBakedTextureUUIDs(baked_ids);
 	for (std::set<LLUUID>::const_iterator it = baked_ids.begin(); it != baked_ids.end(); ++it)
 	{
-		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
+		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it, TEX_LIST_DISCARD);
 		bool has_url = false, has_host = false;
 		if (!imagep->getUrl().empty())
 		{

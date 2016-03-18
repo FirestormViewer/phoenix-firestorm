@@ -30,15 +30,13 @@
 
 #include "lluictrlfactory.h"
 #include "roles_constants.h"
-
+#include "llappviewer.h"
 #include "llhttpclient.h"
 #include "llagent.h"
 #include "llviewerregion.h"
 #include "llflatlistview.h"
 #include "llpanelexperiences.h"
 #include "llsd.h"
-
-#include "llvoavatarself.h"
 
 
 static LLPanelInjector<LLPanelGroupExperiences> t_panel_group_experiences("panel_group_experiences");
@@ -98,20 +96,13 @@ BOOL LLPanelGroupExperiences::postBuild()
 
 void LLPanelGroupExperiences::activate()
 {
-	if (getGroupID() == LLUUID::null)
+	if ((getGroupID() == LLUUID::null) || gDisconnected)
 	{
 		return;
 	}
-
-	// <FS:Ansariel> Crash fix
-	if (!isAgentAvatarValid())
-	{
-		return;
-	}
-	// </FS:Ansariel>
 
 	// search for experiences owned by the current group
-	std::string url = gAgent.getRegion()->getCapability("GroupExperiences"); 
+	std::string url = (gAgent.getRegion()) ? gAgent.getRegion()->getCapability("GroupExperiences") : LLStringUtil::null;
 	if (!url.empty())
 	{
 		url += "?" + getGroupID().asString();

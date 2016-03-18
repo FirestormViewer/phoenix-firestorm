@@ -6201,7 +6201,9 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 			const Light* light = &(*iter);
 			LLDrawable* drawable = light->drawable;
             const LLViewerObject *vobj = light->drawable->getVObj();
-            if(vobj && vobj->getAvatar() && vobj->getAvatar()->isTooComplex())
+            if(vobj && vobj->getAvatar()
+               && (vobj->getAvatar()->isTooComplex() || vobj->getAvatar()->isInMuteList())
+               )
             {
                 drawable->clearState(LLDrawable::NEARBY_LIGHT);
                 continue;
@@ -8756,6 +8758,11 @@ void LLPipeline::renderDeferredLighting()
 						}
 					}
 
+					const LLViewerObject *vobj = drawablep->getVObj();
+					if(vobj && vobj->getAvatar() && vobj->getAvatar()->isInMuteList())
+					{
+						continue;
+					}
 
 					LLVector4a center;
 					center.load3(drawablep->getPositionAgent().mV);

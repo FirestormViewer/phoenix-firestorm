@@ -419,11 +419,9 @@ void LLToolMgr::clearTransientTool()
 
 void LLToolMgr::onAppFocusLost()
 {
-	// <FS:ND> During shutdown the viewer might be in a state that leads to crashes.
-	if( LLApp::isQuitting() )
+	if (LLApp::isQuitting())
 		return;
-	// </FS:ND>
-	
+
 	if (mSelectedTool)
 	{
 		mSelectedTool->handleDeselect();

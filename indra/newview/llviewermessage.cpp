@@ -2691,6 +2691,20 @@ static void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::s
 	}
 }
 
+const std::string NOT_ONLINE_MSG("User not online - message will be stored and delivered later.");
+const std::string NOT_ONLINE_INVENTORY("User not online - inventory has been saved.");
+void translate_if_needed(std::string& message)
+{
+	if (message == NOT_ONLINE_MSG)
+	{
+		message = LLTrans::getString("not_online_msg");
+	}
+	else if (message == NOT_ONLINE_INVENTORY)
+	{
+		message = LLTrans::getString("not_online_inventory");
+	}
+}
+
 // <FS:Ansariel> FIRE-505: Group name not shown in notification well
 static void notification_group_name_cb(const std::string& group_name,
 										const std::string& sender,
@@ -2846,6 +2860,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	chat.mFromID = from_id;
 	chat.mFromName = name;
 	chat.mSourceType = (from_id.isNull() || (name == std::string(SYSTEM_FROM))) ? CHAT_SOURCE_SYSTEM : CHAT_SOURCE_AGENT;
+	
+	if (chat.mSourceType == CHAT_SOURCE_SYSTEM)
+	{ // Translate server message if required (MAINT-6109)
+		translate_if_needed(message);
+	}
 
 	LLViewerObject *source = gObjectList.findObject(session_id); //Session ID is probably the wrong thing.
 	if (source)
@@ -3809,6 +3828,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				send_do_not_disturb_message(msg, from_id);
 			}
 			// <FS:PP> FIRE-1245: Option to block/reject teleport offers
+			//else if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL))
+			//{
+			//	return;
+			//}
 			else if ( (is_rejecting_tp_offers && (!FSDontRejectTeleportOffersFromFriends || (FSDontRejectTeleportOffersFromFriends && !is_friend))) && (!fRlvAutoAccept) )
 			{
 				send_rejecting_tp_offers_message(msg, from_id);
@@ -5134,6 +5157,13 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 		LL_WARNS("Messaging") << "Got teleport notification for wrong agent!" << LL_ENDL;
 		return;
 	}
+
+    if (gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
+    {
+        // Server either ignored teleport cancel message or did not receive it in time.
+        // This message can't be ignored since teleport is complete at server side
+        gAgent.restoreCanceledTeleportRequest();
+    }
 	
 	// Teleport is finished; it can't be cancelled now.
 	gViewerWindow->setProgressCancelButtonVisible(FALSE);
@@ -9403,7 +9433,7 @@ void callback_load_url_name(const LLUUID& id, const std::string& full_name, bool
 			args["URL"] = load_url_info["url"].asString();
 			args["MESSAGE"] = load_url_info["message"].asString();
 			args["OBJECTNAME"] = load_url_info["object_name"].asString();
-			args["NAME"] = owner_name;
+			args["NAME_SLURL"] = LLSLURL(is_group ? "group" : "agent", id, "about").getSLURLString();
 
 			LLNotificationsUtil::add("LoadWebPage", args, load_url_info);
 		}

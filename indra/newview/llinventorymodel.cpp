@@ -1191,7 +1191,7 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 	else
 	{
 		// add this category
-		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(cat->getParentUUID());
+		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(cat->getOwnerID());
 		new_cat->copyViewerCategory(cat);
 		addCategory(new_cat);
 
@@ -3593,6 +3593,11 @@ void LLInventoryModel::removeCategory(const LLUUID& category_id)
 
 void LLInventoryModel::removeObject(const LLUUID& object_id)
 {
+	if(object_id.isNull())
+	{
+		return;
+	}
+
 	LLInventoryObject* obj = getObject(object_id);
 	if (dynamic_cast<LLViewerInventoryItem*>(obj))
 	{
