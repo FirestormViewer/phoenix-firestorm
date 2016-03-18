@@ -1974,7 +1974,10 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
 			{
 				//order is important here LLRender::DIFFUSE_MAP should be last, becouse it change 
 				//(gGL).mCurrTextureUnitIndex
-				gGL.getTexUnit(specular_channel)->bind(LLPipeline::sImpostorRender ? LLViewerTextureManager::findTexture(IMG_BLACK_SQUARE_MALEVICH) : face->getTexture(LLRender::SPECULAR_MAP));
+				// <FS:Ansariel> Don't assume a certain default texture exists on the server
+				//gGL.getTexUnit(specular_channel)->bind(LLPipeline::sImpostorRender ? LLViewerTextureManager::findTexture(IMG_BLACK_SQUARE_MALEVICH) : face->getTexture(LLRender::SPECULAR_MAP));
+				gGL.getTexUnit(specular_channel)->bind(LLPipeline::sImpostorRender ? LLViewerTextureManager::getFetchedTextureFromFile("black_square.png") : face->getTexture(LLRender::SPECULAR_MAP));
+				// </FS:Ansariel>
 				gGL.getTexUnit(normal_channel)->bind(face->getTexture(LLRender::NORMAL_MAP));
 				gGL.getTexUnit(sDiffuseChannel)->bind(face->getTexture(LLRender::DIFFUSE_MAP), false, true);
 
