@@ -235,6 +235,11 @@ LLSelectMgr::LLSelectMgr()
 
 	mForceSelection = FALSE;
 	mShowSelection = FALSE;
+	
+	// <FS:KC> show/hide build highlight
+	mFSShowHideHighlight = FS_SHOW_HIDE_HIGHLIGHT_NORMAL;
+	// </FS:KC>
+
 }
 
 
@@ -5933,7 +5938,10 @@ void LLSelectMgr::updateSelectionSilhouette(LLObjectSelectionHandle object_handl
 }
 void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 {
-	if (!mRenderSilhouettes || !mRenderHighlightSelections)
+	// <FS:KC> show/hide build highlight
+	// if (!mRenderSilhouettes || !mRenderHighlightSelections)
+	if (((mFSShowHideHighlight == FS_SHOW_HIDE_HIGHLIGHT_NORMAL) && (!mRenderSilhouettes || !mRenderHighlightSelections)) || (mFSShowHideHighlight == FS_SHOW_HIDE_HIGHLIGHT_HIDE))
+	// </FS:KC>
 	{
 		return;
 	}

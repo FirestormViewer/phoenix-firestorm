@@ -224,7 +224,6 @@ public:
 private:
 	BOOL					mDirty;
 	BOOL                    mHasSelection;
-	BOOL					mOrginalShowHighlight; //Phoenix:KC
 	BOOL					mOpen; //Phoenix:KC
 
 	//Phoenix:KC
