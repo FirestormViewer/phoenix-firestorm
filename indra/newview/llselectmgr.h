@@ -70,7 +70,7 @@ const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
 // </FS:Ansariel>
 
 // <FS:KC> show/hide build highlight
-enum EFSShowHideHighlilght
+enum EFSShowHideHighlight
 {
 	FS_SHOW_HIDE_HIGHLIGHT_NORMAL = 0,
 	FS_SHOW_HIDE_HIGHLIGHT_SHOW = 1,
@@ -618,7 +618,7 @@ public:
 	void enableSilhouette(BOOL enable) { mRenderSilhouettes = enable; }
 	
 	// <FS:KC> show/hide build highlight
-	void setFSShowHideHighlight(EFSShowHideHighlilght state) { mFSShowHideHighlight = state; }
+	void setFSShowHideHighlight(EFSShowHideHighlight state) { mFSShowHideHighlight = state; }
 	// </FS:KC>
 	
 	////////////////////////////////////////////////////////////////
@@ -920,7 +920,7 @@ private:
 	LLAnimPauseRequest		mPauseRequest;
 
 // <FS:KC> show/hide build highlight
-	EFSShowHideHighlilght	mFSShowHideHighlight;
+	EFSShowHideHighlight	mFSShowHideHighlight;
 // </FS:KC>
 
 // <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
