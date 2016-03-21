@@ -1012,6 +1012,7 @@ BOOL LLFavoritesBarCtrl::collectFavoriteItems(LLInventoryModel::item_array_t &it
 		{
 			LLFavoritesOrderStorage::instance().setSortIndex((*i), ++sortField);
 		}
+		LLFavoritesOrderStorage::instance().mSaveOnExit = true;
 	}
 
 	return TRUE;
@@ -1584,10 +1585,10 @@ void LLFavoritesOrderStorage::destroyClass()
 	{
 		file.close();
 		LLFile::remove(filename);
-		if(mSaveOnExit)
-		{
-			LLFavoritesOrderStorage::instance().saveFavoritesRecord(true);
-		}
+	}
+	if(mSaveOnExit)
+	{
+	    LLFavoritesOrderStorage::instance().saveFavoritesRecord(true);
 	}
 }
 
@@ -1870,6 +1871,16 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 	    }
 	}
 
+	for (std::set<LLUUID>::iterator it = mMissingSLURLs.begin(); it != mMissingSLURLs.end(); it++)
+	{
+		slurls_map_t::iterator slurl_iter = mSLURLs.find(*it);
+		if (slurl_iter != mSLURLs.end())
+		{
+			pref_changed = true;
+			break;
+		}
+	}
+
 	if((items != mPrevFavorites) || name_changed || pref_changed)
 	{
 	    std::string filename = getStoredFavoritesFilename();
@@ -1890,6 +1901,7 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 
 			LLSD user_llsd;
 			S32 fav_iter = 0;
+			mMissingSLURLs.clear();
 			for (LLInventoryModel::item_array_t::iterator it = items.begin(); it != items.end(); it++)
 			{
 				LLSD value;
@@ -1907,8 +1919,10 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 					else
 					{
 						getSLURL((*it)->getAssetUUID());
+						value["slurl"] = "";
+						user_llsd[fav_iter] = value;
 						mUpdateRequired = true;
-						return FALSE;
+						mMissingSLURLs.insert((*it)->getAssetUUID());
 					}
 				}
 				else
@@ -1944,7 +1958,6 @@ BOOL LLFavoritesOrderStorage::saveFavoritesRecord(bool pref_changed)
 												<< "' at '" << filename << "' " << LL_ENDL;
 			}
 		}
-
 		mPrevFavorites = items;
 	}
 

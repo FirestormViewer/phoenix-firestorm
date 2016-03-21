@@ -2178,12 +2178,9 @@ bool LLVOVolume::notifyAboutMissingAsset(LLViewerTexture *texture)
 	for(mmap_UUID_MAP_t::iterator range_it = range.first; range_it != range.second; ++range_it)
 	{
 		LLMaterialPtr cur_material = getTEMaterialParams(range_it->second.te);
-		//<FS:Ansariel> Possible crash fix by Drake Arconis
 		if (cur_material.isNull())
-		{
 			continue;
-		}
-		// </FS:Ansariel>
+
 		switch(range_it->second.map)
 		{
 		case LLRender::DIFFUSE_MAP:
@@ -3985,10 +3982,7 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
-//		if ((pick_rigged) || ((getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-		if ((pick_rigged) || (getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools))))
-// [/SL:KB]
+		if ((pick_rigged) || (getAvatar() && (getAvatar()->isSelf()) && (LLFloater::isVisible(gFloaterTools))))
 		{
 			updateRiggedVolume(true);
 			volume = mRiggedVolume;

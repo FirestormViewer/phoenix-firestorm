@@ -951,8 +951,6 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setFocus(TRUE);
 		self->onSelectItem();
 	}
-
-	self->mQueryID.setNull();
 }
 
 ////////////////////////////////////////
@@ -1243,8 +1241,6 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-
-	self->mQueryID.setNull();
 }
 
 ////////////////////////////////////////

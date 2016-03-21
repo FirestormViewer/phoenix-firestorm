@@ -1223,6 +1223,14 @@ You cannot wear this item because it has not yet loaded. Please try again in a m
   <tag>fail</tag>
   </notification>
 
+    <notification
+   icon="alertmodal.tga"
+   name="MustEnterPasswordToLogIn"
+   type="alertmodal">
+   <tag>fail</tag>
+Please enter your Password to log in.
+  </notification>
+  
   <notification
    icon="alertmodal.tga"
    name="MustHaveAccountToLogIn"
@@ -3691,6 +3699,19 @@ Do you really want to bake the current terrain, make it the center for terrain r
      name="okcancelbuttons"
      notext="Cancel"
      yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmTextureHeights"
+   type="alertmodal">
+You're about to use low values greater than high ones for Elevation Ranges. Proceed?
+   <tag>confirm</tag>
+   <usetemplate
+    name="yesnocancelbuttons"
+    yestext="Ok"
+    notext="Cancel"
+    canceltext="Don't ask"/>
   </notification>
 
   <notification
@@ -8137,8 +8158,8 @@ Load web page [URL] ?
 
 [MESSAGE]
 
-From object: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, owner: [NAME]
-    <tag>confirm</tag>
+From object: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, owner: [NAME_SLURL]
+	<tag>confirm</tag>
     <form name="form">
       <button
        index="0"
@@ -8876,6 +8897,16 @@ Are you sure you want to close all IMs?
   <notification icon="notifytip.tga"
 		name="AttachmentSaved" type="notifytip">
 Attachment has been saved.
+  </notification>
+  
+  <notification icon="notify.tga" persist="true"
+		name="AppearanceToXMLSaved" type="notify">
+Appearance has been saved to XML to [PATH]
+  </notification>
+  
+    <notification icon="notifytip.tga"
+		name="AppearanceToXMLFailed" type="notifytip">
+Failed to save appearance to XML.
   </notification>
 
   <notification
@@ -12238,13 +12269,6 @@ Error in the regular expression:
 	</form>
 	</notification>
 
-	<notification
-		icon="notify.tga"
-		name="DumpArchetypeSuccess"
-		type="notify">
-		Successfully saved appearance to XML to [FILENAME].
-	</notification>
-	
 	<notification
 		icon="notify.tga"
 		name="StreamListExportSuccess"

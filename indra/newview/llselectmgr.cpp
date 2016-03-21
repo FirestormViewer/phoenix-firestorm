@@ -235,6 +235,11 @@ LLSelectMgr::LLSelectMgr()
 
 	mForceSelection = FALSE;
 	mShowSelection = FALSE;
+	
+	// <FS:KC> show/hide build highlight
+	mFSShowHideHighlight = FS_SHOW_HIDE_HIGHLIGHT_NORMAL;
+	// </FS:KC>
+
 }
 
 
@@ -1715,7 +1720,11 @@ void LLSelectMgr::selectionSetImage(const LLUUID& imageid)
 		f(LLViewerInventoryItem* item, const LLUUID& id) : mItem(item), mImageID(id) {}
 		bool apply(LLViewerObject* objectp, S32 te)
 		{
-			if (mItem)
+		    if(objectp && !objectp->permModify())
+		    {
+		        return false;
+		    }
+		    if (mItem)
 			{
 				if (te == -1) // all faces
 				{
@@ -5929,7 +5938,10 @@ void LLSelectMgr::updateSelectionSilhouette(LLObjectSelectionHandle object_handl
 }
 void LLSelectMgr::renderSilhouettes(BOOL for_hud)
 {
-	if (!mRenderSilhouettes || !mRenderHighlightSelections)
+	// <FS:KC> show/hide build highlight
+	// if (!mRenderSilhouettes || !mRenderHighlightSelections)
+	if (((mFSShowHideHighlight == FS_SHOW_HIDE_HIGHLIGHT_NORMAL) && (!mRenderSilhouettes || !mRenderHighlightSelections)) || (mFSShowHideHighlight == FS_SHOW_HIDE_HIGHLIGHT_HIDE))
+	// </FS:KC>
 	{
 		return;
 	}
@@ -6972,7 +6984,8 @@ LLBBox LLSelectMgr::getBBoxOfSelection() const
 //-----------------------------------------------------------------------------
 BOOL LLSelectMgr::canUndo() const
 {
-	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstEditableObject() != NULL; // HACK: casting away constness - MG
+	// Can edit or can move
+	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstUndoEnabledObject() != NULL; // HACK: casting away constness - MG;
 }
 
 //-----------------------------------------------------------------------------
@@ -7965,6 +7978,22 @@ LLViewerObject* LLObjectSelection::getFirstMoveableObject(BOOL get_parent)
 		}
 	} func;
 	return getFirstSelectedObject(&func, get_parent);
+}
+
+//-----------------------------------------------------------------------------
+// getFirstUndoEnabledObject()
+//-----------------------------------------------------------------------------
+LLViewerObject* LLObjectSelection::getFirstUndoEnabledObject(BOOL get_parent)
+{
+    struct f : public LLSelectedNodeFunctor
+    {
+        bool apply(LLSelectNode* node)
+        {
+            LLViewerObject* obj = node->getObject();
+            return obj && (obj->permModify() || (obj->permMove() && !obj->isPermanentEnforced()));
+        }
+    } func;
+    return getFirstSelectedObject(&func, get_parent);
 }
 
 //-----------------------------------------------------------------------------

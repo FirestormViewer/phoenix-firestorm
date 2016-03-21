@@ -76,6 +76,7 @@ private:
 	bool onHTTPAuthCallback(const std::string host, const std::string realm, std::string& username, std::string& password);
 	void onCursorChangedCallback(LLCEFLib::ECursorType type, unsigned int handle);
 	void onFileDownloadCallback(std::string filename);
+	const std::string onFileDialogCallback();
 
 	void postDebugMessage(const std::string& msg);
 	void authResponse(LLPluginMessage &message);
@@ -102,6 +103,7 @@ private:
 	bool mCanPaste;
 	std::string mCachePath;
 	std::string mCookiePath;
+	std::string mPickedFile;
 	LLCEFLib* mLLCEFLib;
 
     VolumeCatcher mVolumeCatcher;
@@ -142,6 +144,7 @@ MediaPluginBase(host_send_func, host_user_data)
 	mCanPaste = false;
 	mCachePath = "";
 	mCookiePath = "";
+	mPickedFile = "";
 	mLLCEFLib = new LLCEFLib();
 
 	// <FS:ND> FS specific CEF settings
@@ -393,6 +396,20 @@ void MediaPluginCEF::onFileDownloadCallback(const std::string filename)
 	sendMessage(message);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//
+const std::string MediaPluginCEF::onFileDialogCallback()
+{
+	mPickedFile.clear();
+
+	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "pick_file");
+	message.setValueBoolean("blocking_request", true);
+
+	sendMessage(message);
+
+	return mPickedFile;
+}
+
 void MediaPluginCEF::onCursorChangedCallback(LLCEFLib::ECursorType type, unsigned int handle)
 {
 	std::string name = "";
@@ -533,6 +550,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				mLLCEFLib->setOnNavigateURLCallback(boost::bind(&MediaPluginCEF::onNavigateURLCallback, this, _1, _2));
 				mLLCEFLib->setOnHTTPAuthCallback(boost::bind(&MediaPluginCEF::onHTTPAuthCallback, this, _1, _2, _3, _4));
 				mLLCEFLib->setOnFileDownloadCallback(boost::bind(&MediaPluginCEF::onFileDownloadCallback, this, _1));
+				mLLCEFLib->setOnFileDialogCallback(boost::bind(&MediaPluginCEF::onFileDialogCallback, this));
 				mLLCEFLib->setOnCursorChangedCallback(boost::bind(&MediaPluginCEF::onCursorChangedCallback, this, _1, _2));
 				mLLCEFLib->setOnRequestExitCallback(boost::bind(&MediaPluginCEF::onRequestExitCallback, this));
 
@@ -748,6 +766,10 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "enable_media_plugin_debugging")
 			{
 				mEnableMediaPluginDebugging = message_in.getValueBoolean("enable");
+			}
+			if (message_name == "pick_file_response")
+			{
+				mPickedFile = message_in.getValue("file");
 			}
 			if (message_name == "auth_response")
 			{

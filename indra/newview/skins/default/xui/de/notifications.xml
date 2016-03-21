@@ -493,6 +493,9 @@ Der Outfit-Ordner enthält keine Kleidung, Körperteile oder Anhänge.
 	<notification name="CannotWearInfoNotComplete">
 		Sie können das Objekt nicht anziehen, weil es noch nicht geladen wurde. Warten Sie kurz und versuchen Sie es dann noch einmal.
 	</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		Sie müssen Ihr Passwort eingeben, um sich anmelden zu können.
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		Sie haben ein Feld leer gelassen.
 Sie müssen den Benutzernamen Ihres Avatars eingeben.
@@ -1520,6 +1523,10 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 	<notification name="ConfirmBakeTerrain">
 		Möchten Sie das aktuelle Terrain formen, es zum Mittelpunkt der oberen und unteren Terraingrenzen und zum Standard des „Zurücksetzen“-Tools machen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ConfirmTextureHeights">
+		Sie sind dabei, Werte für den tiefsten Punkt des Geländes zu verwenden, die größer sind als die Werte für den höchsten Punkt. Möchten Sie fortfahren?
+		<usetemplate name="yesnocancelbuttons" yestext="OK" notext="Abbrechen" canceltext="Nicht mehr fragen"/>
 	</notification>
 	<notification name="MaxAllowedAgentOnRegion">
 		Es sind maximal [MAX_AGENTS] zulässige Einwohner erlaubt.
@@ -3126,7 +3133,7 @@ In Ihrem Inventar wird ein Lesezeichen erstellt, damit Sie diesem Einwohner schn
 
 [MESSAGE]
 
-Von Objekt: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, Eigentümer: [NAME]
+Von Objekt: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, Eigentümer: [NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="Zur Seite"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -3395,6 +3402,12 @@ Diese werden für ein paar Sekunden sicherheitshalber gesperrt.
 	</notification>
 	<notification name="AttachmentSaved">
 		Der Anhang wurde gespeichert.
+	</notification>
+	<notification name="AppearanceToXMLSaved">
+		Aussehen erfolgreich als XML nach [PATH] exportiert.
+	</notification>
+	<notification name="AppearanceToXMLFailed">
+		Aussehen konnte nicht gespeichert werden.
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Hilfethema für dieses Element wurde nicht gefunden.
@@ -4913,10 +4926,6 @@ Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enth
 		<form name="form">
 			<ignore name="ignore" text="Kein-Havok-Warnung"/>
 		</form>
-	</notification>
-
-	<notification name="DumpArchetypeSuccess">
-Aussehen erfolgreich als XML nach [FILENAME] exportiert.
 	</notification>
 
 	<notification name="StreamListExportSuccess">
