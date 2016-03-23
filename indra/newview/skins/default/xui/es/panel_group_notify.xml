@@ -3,7 +3,6 @@
 	<panel label="cabecera" name="header">
 		<text name="title" value="Enviado por Remitente, Grupo"/>
 	</panel>
-	<text_editor name="message" value="mensaje"/>
 	<text name="attachment" value="Adjunción"/>
 	<button label="Aceptar" name="btn_ok"/>
 </panel>

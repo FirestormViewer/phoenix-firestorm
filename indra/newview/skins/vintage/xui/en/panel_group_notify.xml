@@ -56,7 +56,7 @@
 		name="group_icon"
 		top_pad="2"
 		width="64" />
-	<text_editor
+	<simple_text_editor
 		bg_readonly_color="GroupNotifyTextBG"
 		border_visible="true"
 		parse_urls="true"
