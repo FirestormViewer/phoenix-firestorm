@@ -2381,5 +2381,6 @@ void FSFloaterIM::handleMinimized(bool minimized)
 	else
 	{
 		gConsole->addSession(mSessionID);
+		updateMessages();
 	}
 }
