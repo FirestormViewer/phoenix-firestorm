@@ -41,6 +41,9 @@
 #include "llworld.h"
 #include "lltoolmgr.h"
 #include "llviewerjoystick.h"
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden library includes
 #include "lldrawable.h"
@@ -353,7 +356,10 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
 		if (limit_select_distance)
 		{
 			// ...select distance from control
-			z_far = gSavedSettings.getF32("MaxSelectDistance");
+//			z_far = gSavedSettings.getF32("MaxSelectDistance");
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+			z_far = (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ? gSavedSettings.getF32("MaxSelectDistance") : 1.5;
+// [/RLVa:KB]
 		}
 		else
 		{

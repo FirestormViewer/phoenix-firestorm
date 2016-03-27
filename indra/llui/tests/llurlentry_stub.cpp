@@ -34,6 +34,15 @@
 
 #include <string>
 
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+// Stub for rlvGetAnonym
+const std::string& rlvGetAnonym(const LLAvatarName& avName)
+{
+	static std::string strAnonym = "A resident";
+	return strAnonym;
+}
+// [/RLVa:KB]
+
 // Stub for LLAvatarNameCache
 bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 {

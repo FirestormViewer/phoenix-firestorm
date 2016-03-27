@@ -41,6 +41,9 @@
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
 #include "lltooldraganddrop.h"
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -76,6 +79,9 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
 	mShowProfileBtn(true),
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	mRlvCheckShowNames(false),
+// [/RLVa:KB]
 	mShowPermissions(false),
 	mHovered(false),
 	mAvatarNameCacheConnection()
@@ -177,8 +183,12 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-	mInfoBtn->setVisible(mShowInfoBtn);
-	mProfileBtn->setVisible(mShowProfileBtn);
+//	mInfoBtn->setVisible(mShowInfoBtn);
+//	mProfileBtn->setVisible(mShowProfileBtn);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+// [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
@@ -355,12 +365,18 @@ void LLAvatarListItem::onProfileBtnClick()
 
 BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-	if(mInfoBtn->getRect().pointInRect(x, y))
+//	if(mInfoBtn->getRect().pointInRect(x, y))
+// [SL:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	if ( (mInfoBtn->getVisible()) && (mInfoBtn->getEnabled()) && (mInfoBtn->getRect().pointInRect(x, y)) )
+// [/SL:KB]
 	{
 		onInfoBtnClick();
 		return TRUE;
 	}
-	if(mProfileBtn->getRect().pointInRect(x, y))
+//	if(mProfileBtn->getRect().pointInRect(x, y))
+// [SL:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	if ( (mProfileBtn->getVisible()) && (mProfileBtn->getEnabled()) && (mProfileBtn->getRect().pointInRect(x, y)) )
+// [/SL:KB]
 	{
 		onProfileBtnClick();
 		return TRUE;
@@ -406,8 +422,15 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
 	mAvatarNameCacheConnection.disconnect();
 
-	setAvatarName(av_name.getDisplayName());
-	setAvatarToolTip(av_name.getUserName());
+//	setAvatarName(av_name.getDisplayName());
+//	setAvatarToolTip(av_name.getUserName());
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	setAvatarName( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+	setAvatarToolTip( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
+	mAvatarIcon->setDrawTooltip(!fRlvFilter);
+// [/RLVa:KB]
 
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));

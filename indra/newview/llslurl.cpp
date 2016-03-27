@@ -34,6 +34,9 @@
 #include "llviewernetwork.h"
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 const char* LLSLURL::SLURL_HTTP_SCHEME		 = "http";
 const char* LLSLURL::SLURL_HTTPS_SCHEME		 = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME	 = "secondlife";
@@ -389,8 +392,13 @@ std::string LLSLURL::getSLURLString() const
 				S32 x = ll_round( (F32)mPosition[VX] );
 				S32 y = ll_round( (F32)mPosition[VY] );
 				S32 z = ll_round( (F32)mPosition[VZ] );	
-				return LLGridManager::getInstance()->getSLURLBase(mGrid) + 
-				LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z); 
+//				return LLGridManager::getInstance()->getSLURLBase(mGrid) + 
+//				LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z); 
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+				return LLGridManager::getInstance()->getSLURLBase(mGrid) +
+					( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
+						? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z)) : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) );
+// [/RLVa:KB]
 			}
 		case APP:
 		{

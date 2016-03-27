@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ can_minimize="false"
+ height="215"
+ layout="topleft"
+ legacy_header_height="18"
+ name="rlva_strings"
+ title="RLVa Strings"
+ width="340">
+    <combo_box
+     allow_text_entry="false"
+     follows="top|left"
+     height="22"
+     layout="topleft"
+     left="12"
+     max_chars="255"
+     name="string_list"
+     top="25"
+     width="316" />
+    <text_editor
+     enabled="false"
+     height="60"
+     layout="topleft"
+     left_delta="0"
+     name="string_descr"
+     top_pad="5"
+     width="317"
+     word_wrap="true" />
+    <text_editor
+     enabled="true"
+     height="60"
+     layout="topleft"
+     left_delta="0"
+     name="string_value"
+     top_pad="5"
+     width="316"
+     word_wrap="true" />
+    <panel
+      follows="top|left"
+      height="25"
+      layout="topleft"
+      left="10"
+      name="bottom_panel"
+      top="180"
+      right="-8">
+      <button
+	follows="top|left"
+	image_hover_unselected="Toolbar_Left_Over"
+	image_overlay="Refresh_Off"
+	image_overlay_alignment="left"
+	image_selected="Toolbar_Left_Selected"
+	image_unselected="Toolbar_Left_Off"
+	label="Reset to default"
+	layout="topleft"
+	left="0"
+	name="default_btn"
+	top="1"
+	width="140" >
+	<button.commit_callback
+	  function="ClickDefault" />
+      </button>
+      <icon
+	follows="left|right"
+	image_name="Toolbar_Right_Off"
+	left_pad="1"
+	name="dummy_icon"
+	top="1"
+	right="-1" />
+    </panel>
+</floater>

@@ -64,6 +64,10 @@
 #include "lltextbase.h"
 #include "llstring.h"
 #include "lltrans.h"
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
+#include "llslurl.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 ///----------------------------------------------------------------------------
 /// Class llsidepaneltaskinfo
@@ -370,21 +374,28 @@ void LLSidepanelTaskInfo::refresh()
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	BOOL creators_identical = FALSE;
+// [/RLVa:KB]
 
 	std::string creator_name;
 	LLUUID creator_id;
-	LLSelectMgr::getInstance()->selectGetCreator(creator_id, creator_name);
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(creator_id, creator_name);
+// [/RLVa:KB]
+//	LLSelectMgr::getInstance()->selectGetCreator(creator_id, creator_name);
 
-	if(creator_id != mCreatorID )
-	{
-		mDACreatorName->setValue(creator_name);
-		mCreatorID = creator_id;
-	}
-	if(mDACreatorName->getValue().asString() == LLStringUtil::null)
-	{
-	    mDACreatorName->setValue(creator_name);
-	}
-	mDACreatorName->setEnabled(TRUE);
+//	if(creator_id != mCreatorID )
+//	{
+//		mDACreatorName->setValue(creator_name);
+//		mCreatorID = creator_id;
+//	}
+//	if(mDACreatorName->getValue().asString() == LLStringUtil::null)
+//	{
+//	    mDACreatorName->setValue(creator_name);
+//	}
+//	mDACreatorName->setEnabled(TRUE);
+// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
@@ -414,17 +425,41 @@ void LLSidepanelTaskInfo::refresh()
 		}
 	}
 
-	if(owner_id.isNull() || (owner_id != mOwnerID))
+//	if(owner_id.isNull() || (owner_id != mOwnerID))
+//	{
+//		mDAOwnerName->setValue(owner_name);
+//		mOwnerID = owner_id;
+//	}
+//	if(mDAOwnerName->getValue().asString() == LLStringUtil::null)
+//	{
+//	    mDAOwnerName->setValue(owner_name);
+//	}
+//	getChildView("Owner Name")->setEnabled(TRUE);
+
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
-		mDAOwnerName->setValue(owner_name);
-		mOwnerID = owner_id;
-	}
-	if(mDAOwnerName->getValue().asString() == LLStringUtil::null)
-	{
-	    mDAOwnerName->setValue(owner_name);
+		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
+		if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
+			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
+
+		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
+		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )
+			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
 	}
 
-	getChildView("Owner Name")->setEnabled(TRUE);
+	if(mDACreatorName->getValue().asString() == LLStringUtil::null)
+	{
+		mDACreatorName->setValue(creator_name);
+	}
+	mDACreatorName->setEnabled(TRUE);
+
+	if(mDAOwnerName->getValue().asString() == LLStringUtil::null)
+	{
+		mDAOwnerName->setValue(owner_name);
+	}
+	mDAOwnerName->setEnabled(TRUE);
+// [/RLVa:KB]
 
 	// update group text field
 	getChildView("Group:")->setEnabled(TRUE);

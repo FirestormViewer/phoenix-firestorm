@@ -74,6 +74,10 @@
 
 #include "llagentui.h"
 #include "llslurl.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -622,6 +626,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setNoItemsMsg(getString("no_one_near"));
 	mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	mNearbyList->setShowIcons("NearbyListShowIcons");
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	mNearbyList->setRlvCheckShowNames(true);
+// [/RLVa:KB]
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
 		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
@@ -891,6 +898,9 @@ void LLPanelPeople::updateFacebookList(bool visible)
 void LLPanelPeople::updateButtons()
 {
 	std::string cur_tab		= getActiveTabName();
+// [RLVa:KB] - Checked: 2013-05-06 (RLVa-1.4.9)
+	bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
+// [/RLVa:KB]
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
 	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
@@ -931,8 +941,12 @@ void LLPanelPeople::updateButtons()
 		LLPanel* cur_panel = mTabContainer->getCurrentPanel();
 		if (cur_panel)
 		{
+// [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0h
 			if (cur_panel->hasChild("add_friend_btn", TRUE))
-				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
+				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
+// [/RLBa:KB]
+//			if (cur_panel->hasChild("add_friend_btn", TRUE))
+//				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
 
 			if (friends_tab_active)
 			{
@@ -945,6 +959,13 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
+
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
+	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+	{
+		item_selected = multiple_selected = false;
+	}
+// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const
@@ -1143,6 +1164,13 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 
 void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 {
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
 	if(!item)
 	{
@@ -1268,6 +1296,13 @@ void LLPanelPeople::onGearButtonClicked(LLUICtrl* btn)
 
 void LLPanelPeople::onImButtonClicked()
 {
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
 	if ( selected_uuids.size() == 1 )
