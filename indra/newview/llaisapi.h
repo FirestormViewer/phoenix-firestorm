@@ -57,15 +57,35 @@ public:
 	/* virtual */ void httpSuccess();
 	/* virtual */ void httpFailure();
 
-	static bool isAPIAvailable();
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	// The debug setting is an OR of these values
+	enum EAISCommand
+	{
+		CMD_UNKNOWN       = 0x0000,	// New or command we're not filtering for
+		CMD_CAT_UPDATE    = 0x0001,	// update_inventory_category
+		CMD_CAT_REMOVE    = 0x0002,	// remove_inventory_category
+		CMD_CAT_SLAM      = 0x0004,	// slam_inventory_folder
+		CMD_CAT_PURGE     = 0x0008,	// purge_descendents_of
+		CMD_ITEM_REMOVE   = 0x0010,	// remove_inventory_item
+		CMD_ITEM_UPDATE   = 0x0020,	// update_inventory_item
+		CMD_OBJ_LINK      = 0x0100,	// link_inventory_array
+		CMD_OBJ_LINKBATCH = 0x0200,	// link_inventory_array
+	};
+	static bool isAPIAvailable(EAISCommand cmd = CMD_UNKNOWN);
+// [/SL:KB]
+
+//	static bool isAPIAvailable();
 	static bool getInvCap(std::string& cap);
 	static bool getLibCap(std::string& cap);
 	static void getCapabilityNames(LLSD& capabilityNames);
 
 protected:
-	virtual bool getResponseUUID(const LLSD& content, LLUUID& id);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	virtual bool getResponseUUIDs(const LLSD& content, uuid_list_t& ids);
+// [/SL:KB]
+//	virtual bool getResponseUUID(const LLSD& content, LLUUID& id);
 
-private:
+//private:
 	command_func_type mCommandFunc;
 	LLPointer<LLHTTPRetryPolicy> mRetryPolicy;
 	LLPointer<LLInventoryCallback> mCallback;
@@ -76,6 +96,10 @@ class RemoveItemCommand: public AISCommand
 public:
 	RemoveItemCommand(const LLUUID& item_id,
 					  LLPointer<LLInventoryCallback> callback);
+
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-06-27 (Catznip-3.7)
+	/*virtual*/ void httpFailure();
+// [/SL:KB]
 };
 
 class RemoveCategoryCommand: public AISCommand
@@ -127,13 +151,21 @@ public:
 	CopyLibraryCategoryCommand(const LLUUID& source_id, const LLUUID& dest_id, LLPointer<LLInventoryCallback> callback, bool copy_subfolders = true);
 
 protected:
-	/* virtual */ bool getResponseUUID(const LLSD& content, LLUUID& id);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	/*virtual*/ bool getResponseUUIDs(const LLSD& content, uuid_list_t& ids);
+// [/SL:KB]
+//	/* virtual */ bool getResponseUUID(const LLSD& content, LLUUID& id);
 };
 
 class CreateInventoryCommand: public AISCommand
 {
 public:
 	CreateInventoryCommand(const LLUUID& parent_id, const LLSD& new_inventory, LLPointer<LLInventoryCallback> callback);
+
+protected:
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	/*virtual*/ bool getResponseUUIDs(const LLSD& content, uuid_list_t& ids);
+// [/SL:KB]
 
 private:
 	LLSD mNewInventory;
@@ -146,7 +178,11 @@ public:
 	void parseUpdate(const LLSD& update);
 	void parseMeta(const LLSD& update);
 	void parseContent(const LLSD& update);
-	void parseUUIDArray(const LLSD& content, const std::string& name, uuid_list_t& ids);
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2015-06-24 (Catznip-3.7)
+	// Ideally this would go into a helper class but this changes the least LL code
+	static void parseUUIDArray(const LLSD& content, const std::string& name, uuid_list_t& ids);
+// [/SL:KB]
+//	void parseUUIDArray(const LLSD& content, const std::string& name, uuid_list_t& ids);
 	void parseLink(const LLSD& link_map);
 	void parseItem(const LLSD& link_map);
 	void parseCategory(const LLSD& link_map);
