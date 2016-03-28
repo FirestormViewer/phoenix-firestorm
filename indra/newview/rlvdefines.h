@@ -117,7 +117,6 @@ const S32 RLVa_VERSION_BUILD = 0;
 // NOTE: any changes to this enumeration should be reflected in the RlvBehaviourDictionary constructor
 enum ERlvBehaviour {
 	RLV_BHVR_DETACH = 0,			// "detach"
-	RLV_BHVR_ATTACH,				// "attach"
 	RLV_BHVR_ADDATTACH,				// "addattach"
 	RLV_BHVR_REMATTACH,				// "remattach"
 	RLV_BHVR_ADDOUTFIT,				// "addoutfit"
@@ -190,20 +189,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALWAYSRUN,				// "alwaysrun"
 	RLV_BHVR_TEMPRUN,				// "temprun"
 	RLV_BHVR_DETACHME,				// "detachme"
-	RLV_BHVR_ATTACHOVER,			// "attachover"
 	RLV_BHVR_ATTACHTHIS,			// "attachthis"
-	RLV_BHVR_ATTACHTHISOVER,		// "attachthisover"
 	RLV_BHVR_ATTACHTHISEXCEPT,		// "attachthis_except"
 	RLV_BHVR_DETACHTHIS,			// "detachthis"
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
-	RLV_BHVR_ATTACHALL,				// "attachall"
-	RLV_BHVR_ATTACHALLOVER,			// "attachallover"
-	RLV_BHVR_DETACHALL,				// "detachall"
-	RLV_BHVR_ATTACHALLTHIS,			// "attachallthis"
-	RLV_BHVR_ATTACHALLTHISEXCEPT,	// "attachallthis_except"
-	RLV_BHVR_ATTACHALLTHISOVER,		// "attachallthisover"
-	RLV_BHVR_DETACHALLTHIS,			// "detachallthis"
-	RLV_BHVR_DETACHALLTHISEXCEPT,	// "detachallthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
@@ -228,6 +217,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETCOMMAND,			// "getcommand"
 	RLV_BHVR_GETSTATUS,				// "getstatus"
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
+	RLV_CMD_FORCEWEAR,				// Internal representation of all force wear commands
 
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN

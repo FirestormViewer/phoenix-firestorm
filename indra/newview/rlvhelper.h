@@ -31,26 +31,38 @@
 
 struct RlvBehaviourInfo
 {
-	enum EBehaviourOptionMask
+	enum EBehaviourFlags
 	{
-		BHVR_STRICT       = 0x1,
-		BHVR_SYNONYM      = 0x2,
-		BHVR_EXTENDED     = 0x4,
-		BHVR_EXPERIMENTAL = 0x8,
+		// General behaviour flags
+		BHVR_STRICT       = 0x0001,
+		BHVR_SYNONYM      = 0x0002,
+		BHVR_EXTENDED     = 0x0004,
+		BHVR_EXPERIMENTAL = 0x0008,
+		BHVR_GENERAL_MASK = 0xFFFF,
+
+		// Force-wear specific flags
+		FORCEWEAR_WEAR_REPLACE   = 0x0001 << 16,
+		FORCEWEAR_WEAR_ADD       = 0x0002 << 16,
+		FORCEWEAR_WEAR_REMOVE    = 0x0004 << 16,
+		FORCEWEAR_NODE           = 0x0010 << 16,
+		FORCEWEAR_SUBTREE        = 0x0020 << 16,
+		FORCEWEAR_CONTEXT_NONE   = 0x0100 << 16,
+		FORCEWEAR_CONTEXT_OBJECT = 0x0200 << 16,
+		FORCEWEAR_MASK           = 0xFFFF << 16
 	};
 
 	std::string   strBhvr;
 	ERlvBehaviour eBhvr;
+	U32           nBhvrFlags;
 	U32           maskParamType;
-	U32           maskBhvrOptions;
 
-	bool hasStrict() const      { return maskBhvrOptions & BHVR_STRICT; }
-	bool isExperimental() const { return maskBhvrOptions & BHVR_EXPERIMENTAL; }
-	bool isExtended() const     { return maskBhvrOptions & BHVR_EXTENDED; }
-	bool isSynonym() const      { return maskBhvrOptions & BHVR_SYNONYM; } 
+	bool hasStrict() const      { return nBhvrFlags & BHVR_STRICT; }
+	bool isExperimental() const { return nBhvrFlags & BHVR_EXPERIMENTAL; }
+	bool isExtended() const     { return nBhvrFlags & BHVR_EXTENDED; }
+	bool isSynonym() const      { return nBhvrFlags & BHVR_SYNONYM; } 
 
-	RlvBehaviourInfo(std::string bhvr_str, ERlvBehaviour bhvr, U32 paramtype_mask, U32 bhvroption_mask = 0)
-		: strBhvr(bhvr_str), eBhvr(bhvr), maskParamType(paramtype_mask), maskBhvrOptions(bhvroption_mask) {}
+	RlvBehaviourInfo(std::string bhvr_str, ERlvBehaviour bhvr, U32 paramtype_mask, U32 bhvr_flags = 0)
+		: strBhvr(bhvr_str), eBhvr(bhvr), maskParamType(paramtype_mask), nBhvrFlags(bhvr_flags) {}
 };
 
 class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
@@ -101,6 +113,7 @@ public:
 	std::string        asString() const;
 	const std::string& getBehaviour() const		{ return m_strBehaviour; }
 	ERlvBehaviour      getBehaviourType() const	{ return m_eBehaviour; }
+	U32                getBehaviourFlags() const{ return m_nBehaviourFlags; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
@@ -129,6 +142,7 @@ protected:
 	LLUUID        m_idObj;
 	std::string   m_strBehaviour;
 	ERlvBehaviour m_eBehaviour;
+	U32           m_nBehaviourFlags;
 	bool          m_fStrict;
 	std::string   m_strOption;
 	std::string   m_strParam;

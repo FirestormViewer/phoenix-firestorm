@@ -1155,14 +1155,10 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 			break;
 		case RLV_BHVR_ATTACHTHIS:			// @attachthis[:<option>]=n|y
 		case RLV_BHVR_DETACHTHIS:			// @detachthis[:<option>]=n|y
-		case RLV_BHVR_ATTACHALLTHIS:		// @attachtallhis[:<option>]=n|y
-		case RLV_BHVR_DETACHALLTHIS:		// @detachallthis[:<option>]=n|y
 			eRet = onAddRemFolderLock(rlvCmd, fRefCount);
 			break;
 		case RLV_BHVR_ATTACHTHISEXCEPT:		// @attachthisexcept[:<option>]=n|y
 		case RLV_BHVR_DETACHTHISEXCEPT:		// @detachthisexcept[:<option>]=n|y
-		case RLV_BHVR_ATTACHALLTHISEXCEPT:	// @attachallthisexcept[:<option>]=n|y
-		case RLV_BHVR_DETACHALLTHISEXCEPT:	// @detachallthisexcept[:<option>]=n|y
 			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
 			break;
 		case RLV_BHVR_SETENV:				// @setenv=n|y						- Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
@@ -1530,15 +1526,12 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 		return RLV_RET_FAILED_OPTION;
 	}
 
-	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
-
 	// Determine the lock type
- 	ERlvLockMask eLockType = ((RLV_BHVR_ATTACHTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHIS == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+ 	ERlvLockMask eLockType = (RLV_BHVR_ATTACHTHIS == rlvCmd.getBehaviourType()) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
 
 	// Determine the folder lock options from the issued behaviour
 	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_DENY;
-	RlvFolderLocks::ELockScope eLockScope = 
-		((RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+	RlvFolderLocks::ELockScope eLockScope = (RlvBehaviourInfo::FORCEWEAR_SUBTREE & rlvCmd.getBehaviourFlags()) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
 		RlvFolderLocks::instance().addFolderLock(lockSource, eLockPermission, eLockScope, rlvCmd.getObjectID(), eLockType);
@@ -1560,13 +1553,11 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
 
 	// Determine the lock type
- 	ERlvLockMask eLockType = 
-		((RLV_BHVR_ATTACHTHISEXCEPT == eBhvr) || (RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr)) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
+ 	ERlvLockMask eLockType = (RLV_BHVR_ATTACHTHISEXCEPT == eBhvr) ? RLV_LOCK_ADD : RLV_LOCK_REMOVE;
 
 	// Determine the folder lock options from the issued behaviour
 	RlvFolderLocks::ELockPermission eLockPermission = RlvFolderLocks::PERM_ALLOW;
-	RlvFolderLocks::ELockScope eLockScope = 
-		((RLV_BHVR_ATTACHALLTHISEXCEPT == eBhvr) || (RLV_BHVR_DETACHALLTHISEXCEPT == eBhvr)) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
+	RlvFolderLocks::ELockScope eLockScope = (RlvBehaviourInfo::FORCEWEAR_SUBTREE & rlvCmd.getBehaviourFlags()) ? RlvFolderLocks::SCOPE_SUBTREE : RlvFolderLocks::SCOPE_NODE;
 
 	RlvFolderLocks::folderlock_source_t lockSource(RlvFolderLocks::ST_SHAREDPATH, rlvCmd.getOption());
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1595,7 +1586,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 				if (rlvCmdOption.isSharedFolder())
-					eRet = onForceWear(rlvCmdOption.getSharedFolder(), RLV_BHVR_DETACH);
+					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				else
 					eRet = onForceRemAttach(rlvCmd);
 			}
@@ -1604,7 +1595,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 				if (rlvCmdOption.isSharedFolder())
-					eRet = onForceWear(rlvCmdOption.getSharedFolder(), RLV_BHVR_DETACH);
+					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				else
 					eRet = onForceRemOutfit(rlvCmd);
 			}
@@ -1653,30 +1644,6 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				gAgent.teleportViaLocation(rlvCmdOption.m_posGlobal);
 			}
 			break;
-		case RLV_BHVR_ATTACH:
-		case RLV_BHVR_ATTACHOVER:
-		case RLV_BHVR_ATTACHALL:
-		case RLV_BHVR_ATTACHALLOVER:
-		case RLV_BHVR_DETACHALL:
-			{
-				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
-				VERIFY_OPTION(rlvCmdOption.isSharedFolder());
-
-				eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourType());
-			}
-			break;
-		case RLV_BHVR_ATTACHTHIS:
-		case RLV_BHVR_ATTACHTHISOVER:
-		case RLV_BHVR_DETACHTHIS:
-		case RLV_BHVR_ATTACHALLTHIS:
-		case RLV_BHVR_ATTACHALLTHISOVER:
-		case RLV_BHVR_DETACHALLTHIS:
-			{
-				RlvCommandOptionGetPath rlvGetPathOption(rlvCmd, boost::bind(&RlvHandler::onForceWearCallback, this, _1, rlvCmd.getBehaviourType()));
-				VERIFY_OPTION(rlvGetPathOption.isValid());
-				eRet = (!rlvGetPathOption.isCallback()) ? RLV_RET_SUCCESS : RLV_RET_SUCCESS_DELAYED;
-			}
-			break;
 		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-09-04 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
@@ -1685,6 +1652,22 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				if ( (pAttachObj) && (pAttachObj->isAttachment()) )
 				{
 					LLVOAvatarSelf::detachAttachmentIntoInventory(pAttachObj->getAttachmentItemID());
+				}
+			}
+			break;
+		case RLV_CMD_FORCEWEAR:		// @forcewear[:<options>]=force			- Checked: 2011-09-12 (RLVa-1.5.0)
+			{
+				if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE & rlvCmd.getBehaviourFlags())
+				{
+					RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+					VERIFY_OPTION(rlvCmdOption.isSharedFolder());
+					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
+				}
+				else if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT & rlvCmd.getBehaviourFlags())
+				{
+					RlvCommandOptionGetPath rlvGetPathOption(rlvCmd, boost::bind(&RlvHandler::onForceWearCallback, this, _1, rlvCmd.getBehaviourFlags()));
+					VERIFY_OPTION(rlvGetPathOption.isValid());
+					eRet = (!rlvGetPathOption.isCallback()) ? RLV_RET_SUCCESS : RLV_RET_SUCCESS_DELAYED;
 				}
 			}
 			break;
@@ -1812,41 +1795,27 @@ ERlvCmdRet RlvHandler::onForceSit(const RlvCommand& rlvCmd) const
 }
 
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, ERlvBehaviour eBhvr) const
+ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const
 {
-	if ( (pFolder) && (!RlvInventory::instance().isSharedFolder(pFolder->getUUID())) )
+	if ( (!pFolder) || (!RlvInventory::instance().isSharedFolder(pFolder->getUUID())) )
 		return RLV_RET_FAILED_OPTION;
 
-	RlvForceWear::EWearAction eAction = RlvForceWear::ACTION_WEAR_REPLACE;
-	if ( (RLV_BHVR_ATTACHOVER == eBhvr) || (RLV_BHVR_ATTACHTHISOVER == eBhvr) || 
-		 (RLV_BHVR_ATTACHALLOVER == eBhvr) || (RLV_BHVR_ATTACHALLTHISOVER == eBhvr) )
-	{
-		eAction = RlvForceWear::ACTION_WEAR_ADD;
-	}
-	else if ( (RLV_BHVR_DETACH == eBhvr) || (RLV_BHVR_DETACHTHIS == eBhvr) || 
-		      (RLV_BHVR_DETACHALL == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr) )
-	{
-		eAction = RlvForceWear::ACTION_REMOVE;
-	}
-
-	RlvForceWear::EWearFlags eFlags = RlvForceWear::FLAG_DEFAULT;
-	if ( (RLV_BHVR_ATTACHALL == eBhvr) || (RLV_BHVR_ATTACHALLOVER == eBhvr) || (RLV_BHVR_DETACHALL == eBhvr) ||
-		 (RLV_BHVR_ATTACHALLTHIS == eBhvr) || (RLV_BHVR_ATTACHALLTHISOVER == eBhvr) || (RLV_BHVR_DETACHALLTHIS == eBhvr) )
-	{
-		eFlags = (RlvForceWear::EWearFlags)(eFlags | RlvForceWear::FLAG_MATCHALL);
-	}
+	RlvForceWear::EWearAction eAction = (RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE & nFlags) ? RlvForceWear::ACTION_REMOVE
+	                                                                                       : ((RlvBehaviourInfo::FORCEWEAR_WEAR_ADD & nFlags) ? RlvForceWear::ACTION_WEAR_ADD
+	                                                                                                                                          : RlvForceWear::ACTION_WEAR_REPLACE);
+	RlvForceWear::EWearFlags eFlags = (RlvBehaviourInfo::FORCEWEAR_SUBTREE & nFlags) ? RlvForceWear::FLAG_MATCHALL : RlvForceWear::FLAG_DEFAULT;
 
 	RlvForceWear::instance().forceFolder(pFolder, eAction, eFlags);
 	return RLV_RET_SUCCESS;
 }
 
-void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, ERlvBehaviour eBhvr) const
+void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const
 {
 	LLInventoryModel::cat_array_t folders;
 	if (RlvInventory::instance().getPath(idItems, folders))
 	{
 		for (S32 idxFolder = 0, cntFolder = folders.size(); idxFolder < cntFolder; idxFolder++)
-			onForceWear(folders.at(idxFolder), eBhvr);
+			onForceWear(folders.at(idxFolder), nFlags);
 
 		// If we're not executing a command then we're a delayed callback and need to manually call done()
 		if ( (!getCurrentCommand()) && (RlvForceWear::instanceExists()) )
