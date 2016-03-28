@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -62,9 +62,9 @@ const S32 RLV_VERSION_PATCH = 0;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
-const S32 RLVa_VERSION_MAJOR = 1;
-const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 10;
+const S32 RLVa_VERSION_MAJOR = 2;
+const S32 RLVa_VERSION_MINOR = 0;
+const S32 RLVa_VERSION_PATCH = 0;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
