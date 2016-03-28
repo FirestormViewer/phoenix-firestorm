@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -24,6 +24,66 @@
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
+
+// ============================================================================
+// RlvBehaviourDictionary
+//
+
+struct RlvBehaviourInfo
+{
+	enum EBehaviourOptionMask
+	{
+		BHVR_STRICT       = 0x1,
+		BHVR_SYNONYM      = 0x2,
+		BHVR_EXTENDED     = 0x4,
+		BHVR_EXPERIMENTAL = 0x8,
+	};
+
+	std::string   strBhvr;
+	ERlvBehaviour eBhvr;
+	U32           maskParamType;
+	U32           maskBhvrOptions;
+
+	bool hasStrict() const      { return maskBhvrOptions & BHVR_STRICT; }
+	bool isExperimental() const { return maskBhvrOptions & BHVR_EXPERIMENTAL; }
+	bool isExtended() const     { return maskBhvrOptions & BHVR_EXTENDED; }
+	bool isSynonym() const      { return maskBhvrOptions & BHVR_SYNONYM; } 
+
+	RlvBehaviourInfo(std::string bhvr_str, ERlvBehaviour bhvr, U32 paramtype_mask, U32 bhvroption_mask = 0)
+		: strBhvr(bhvr_str), eBhvr(bhvr), maskParamType(paramtype_mask), maskBhvrOptions(bhvroption_mask) {}
+};
+
+class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
+{
+	friend class LLSingleton<RlvBehaviourDictionary>;
+protected:
+	RlvBehaviourDictionary();
+	~RlvBehaviourDictionary();
+public:
+	void addEntry(const RlvBehaviourInfo* pEntry);
+
+	/*
+	 * General helper functions
+	 */
+public:
+	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
+	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
+	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
+	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
+	const std::string&      getStringFromBehaviour(ERlvBehaviour eBhvr, ERlvParamType eParamType, bool fStrict = false) const;
+
+	/*
+	 * Member variables
+	 */
+protected:
+	typedef std::list<const RlvBehaviourInfo*> rlv_bhvrinfo_list_t;
+	typedef std::multimap<std::string, const RlvBehaviourInfo*> rlv_string2info_map_t;
+	typedef std::map<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
+
+	rlv_bhvrinfo_list_t   m_BhvrInfoList;
+	rlv_string2info_map_t m_String2InfoMap;
+	rlv_bhvr2info_map_t	  m_Bhvr2InfoMap;
+};
 
 // ============================================================================
 // RlvCommand
@@ -51,12 +111,7 @@ public:
 	bool               isValid() const			{ return m_fValid; }
 
 	typedef std::map<std::string, ERlvBehaviour> bhvr_map_t;
-	static ERlvBehaviour		getBehaviourFromString(const std::string& strBhvr, bool* pfStrict = NULL);
-	static bool					getCommands(bhvr_map_t& cmdList, const std::string& strMatch);
-	static const std::string&	getStringFromBehaviour(ERlvBehaviour eBhvr);
-	static bool					hasStrictVariant(ERlvBehaviour eBhvr);
 
-	static void initLookupTable();
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);
 
@@ -79,8 +134,6 @@ protected:
 	std::string   m_strParam;
 	ERlvParamType m_eParamType;
 	ERlvCmdRet    m_eRet;
-
-	static bhvr_map_t m_BhvrMap;
 
 	friend class RlvHandler;
 	friend class RlvObject;
@@ -445,23 +498,6 @@ inline bool RlvCommand::operator ==(const RlvCommand& rhs) const
 	// The specification notes that "@detach=n" is semantically identical to "@detach=add" (same for "y" and "rem"
 	return (m_strBehaviour == rhs.m_strBehaviour) && (m_strOption == rhs.m_strOption) &&
 		( (RLV_TYPE_UNKNOWN != m_eParamType) ? (m_eParamType == rhs.m_eParamType) : (m_strParam == rhs.m_strParam) );
-}
-
-inline bool RlvCommand::hasStrictVariant(ERlvBehaviour eBhvr)
-{
-	switch (eBhvr)
-	{
-		case RLV_BHVR_RECVCHAT:
-		case RLV_BHVR_RECVEMOTE:
-		case RLV_BHVR_RECVIM:
-		case RLV_BHVR_SENDIM:
-		case RLV_BHVR_TPLURE:
-		case RLV_BHVR_TPREQUEST:
-		case RLV_BHVR_SENDCHANNEL:
-			return true;
-		default:
-			return false;
-	}
 }
 
 // Checked: 2010-04-05 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d

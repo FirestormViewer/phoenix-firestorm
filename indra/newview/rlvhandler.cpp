@@ -187,7 +187,7 @@ bool RlvHandler::isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varO
 // Checked: 2009-10-04 (RLVa-1.0.4a) | Modified: RLVa-1.0.4a
 bool RlvHandler::isPermissive(ERlvBehaviour eBhvr) const
 {
-	return (RlvCommand::hasStrictVariant(eBhvr)) 
+	return (RlvBehaviourDictionary::instance().getHasStrict(eBhvr)) 
 		? !((hasBehaviour(RLV_BHVR_PERMISSIVE)) || (isException(RLV_BHVR_PERMISSIVE, eBhvr, RLV_CHECK_PERMISSIVE)))
 		: true;
 }
@@ -1058,9 +1058,6 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 	{
 		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersion() << RLV_ENDL;
 		m_fEnabled = TRUE;
-
-		// Initialize the command lookup table
-		RlvCommand::initLookupTable();
 
 		// Initialize static classes
 		RlvSettings::initClass();
@@ -1938,10 +1935,10 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 #ifdef RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 			{
-				RlvCommand::bhvr_map_t cmdList;
-				if (RlvCommand::getCommands(cmdList, rlvCmd.getOption()))
-					for (RlvCommand::bhvr_map_t::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
-						strReply.append("/").append(itCmd->first);
+				std::list<std::string> cmdList;
+				if (RlvBehaviourDictionary::instance().getCommands(rlvCmd.getOption(), RLV_TYPE_UNKNOWN, cmdList))
+					for (std::list<std::string>::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
+						strReply.append("/").append(*itCmd);
 			}
 			break;
 #endif // RLV_EXTENSION_CMD_GETCOMMAND

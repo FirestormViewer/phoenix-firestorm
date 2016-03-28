@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -29,10 +29,224 @@
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
-// RlvCommmand
+// RlvBehaviourDictionary
 //
 
-RlvCommand::bhvr_map_t RlvCommand::m_BhvrMap;
+RlvBehaviourDictionary::RlvBehaviourDictionary()
+{
+	//
+	// "Restrictions"
+	//
+	addEntry(new RlvBehaviourInfo("acceptpermission",		RLV_BHVR_ACCEPTPERMISSION,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("accepttp",				RLV_BHVR_ACCEPTTP,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("accepttprequest",		RLV_BHVR_ACCEPTTPREQUEST,		RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED | RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("allowidle",				RLV_BHVR_ALLOWIDLE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("alwaysrun",				RLV_BHVR_ALWAYSRUN,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("attachallthis_except",	RLV_BHVR_ATTACHALLTHISEXCEPT,	RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("attachthis_except",		RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("chatwhisper",			RLV_BHVR_CHATWHISPER,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("chatnormal",				RLV_BHVR_CHATNORMAL,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("chatshout",				RLV_BHVR_CHATSHOUT,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHALLTHISEXCEPT,	RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("edit",					RLV_BHVR_EDIT,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("editobj",				RLV_BHVR_EDITOBJ,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("emote",					RLV_BHVR_EMOTE,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("fartouch",				RLV_BHVR_FARTOUCH,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("fly",					RLV_BHVR_FLY,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("interact",				RLV_BHVR_INTERACT,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("permissive",				RLV_BHVR_PERMISSIVE,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("recvchat",				RLV_BHVR_RECVCHAT,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("recvchatfrom",			RLV_BHVR_RECVCHATFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("recvemote",				RLV_BHVR_RECVEMOTE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("recvemotefrom",			RLV_BHVR_RECVEMOTEFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("recvim",					RLV_BHVR_RECVIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("recvimfrom",				RLV_BHVR_RECVIMFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("redirchat",				RLV_BHVR_REDIRCHAT,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("rediremote",				RLV_BHVR_REDIREMOTE,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("rez",					RLV_BHVR_REZ,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("sendchannel",			RLV_BHVR_SENDCHANNEL,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("sendchat",				RLV_BHVR_SENDCHAT,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("sendim",					RLV_BHVR_SENDIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("sendimto",				RLV_BHVR_SENDIMTO,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("setdebug",				RLV_BHVR_SETDEBUG,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("setenv",					RLV_BHVR_SETENV,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("sittp",					RLV_BHVR_SITTP,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourInfo("showhovertext",			RLV_BHVR_SHOWHOVERTEXT,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showhovertextall",		RLV_BHVR_SHOWHOVERTEXTALL,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showhovertexthud",		RLV_BHVR_SHOWHOVERTEXTHUD,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showhovertextworld",		RLV_BHVR_SHOWHOVERTEXTWORLD,	RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showinv",				RLV_BHVR_SHOWINV,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showloc",				RLV_BHVR_SHOWLOC,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showminimap",			RLV_BHVR_SHOWMINIMAP,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("shownames",				RLV_BHVR_SHOWNAMES,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("showworldmap",			RLV_BHVR_SHOWWORLDMAP,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("standtp",				RLV_BHVR_STANDTP,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("startim",				RLV_BHVR_STARTIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("startimto",				RLV_BHVR_STARTIMTO,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("temprun",				RLV_BHVR_TEMPRUN,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchall",				RLV_BHVR_TOUCHALL,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchattach",			RLV_BHVR_TOUCHATTACH,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchattachother",		RLV_BHVR_TOUCHATTACHOTHER,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchattachself",		RLV_BHVR_TOUCHATTACHSELF,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchfar",				RLV_BHVR_FARTOUCH,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("touchhud",				RLV_BHVR_TOUCHHUD,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourInfo("touchme",				RLV_BHVR_TOUCHME,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchthis",				RLV_BHVR_TOUCHTHIS,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("touchworld",				RLV_BHVR_TOUCHWORLD,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("tplm",					RLV_BHVR_TPLM,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("tploc",					RLV_BHVR_TPLOC,					RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("tplure",					RLV_BHVR_TPLURE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("tprequest",				RLV_BHVR_TPLURE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED | RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourInfo("unsharedunwear",			RLV_BHVR_UNSHAREDUNWEAR,		RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("unsharedwear",			RLV_BHVR_UNSHAREDWEAR,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("viewnote",				RLV_BHVR_VIEWNOTE,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("viewscript",				RLV_BHVR_VIEWSCRIPT,			RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("viewtexture",			RLV_BHVR_VIEWTEXTURE,			RLV_TYPE_ADDREM));
+
+	//
+	// Force-only
+	//
+	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachall",				RLV_BHVR_ATTACHALL,				RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachallover",			RLV_BHVR_ATTACHALLOVER,			RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachallthisover",		RLV_BHVR_ATTACHALLTHISOVER,		RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachover",				RLV_BHVR_ATTACHOVER,			RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachthisover",			RLV_BHVR_ATTACHTHISOVER,		RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("detachall",				RLV_BHVR_DETACHALL,				RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
+	// Synonyms (addoutfit* -> attach*)
+	addEntry(new RlvBehaviourInfo("addoutfitall",			RLV_BHVR_ATTACHALL,				RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitallthis",		RLV_BHVR_ATTACHALLTHIS,			RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitallover",		RLV_BHVR_ATTACHALLOVER,			RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitallthisover",	RLV_BHVR_ATTACHALLTHISOVER,		RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitover",			RLV_BHVR_ATTACHOVER,			RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitthis",			RLV_BHVR_ATTACHTHIS,			RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourInfo("addoutfitthisover",		RLV_BHVR_ATTACHTHISOVER,		RLV_TYPE_FORCE, RlvBehaviourInfo::BHVR_SYNONYM));
+
+	//
+	// Mixed
+	//
+	addEntry(new RlvBehaviourInfo("addattach",				RLV_BHVR_ADDATTACH,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("addoutfit",				RLV_BHVR_ADDOUTFIT,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourInfo("attach",					RLV_BHVR_ATTACH,				RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_BHVR_ATTACHALLTHIS,			RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("attachthis",				RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("detach",					RLV_BHVR_DETACH,				RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHALLTHIS,			RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("detachthis",				RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("remattach",				RLV_BHVR_REMATTACH,				RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("remoutfit",				RLV_BHVR_REMOUTFIT,				RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("setgroup",				RLV_BHVR_SETGROUP,				RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("sit",					RLV_BHVR_SIT,					RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+
+	//
+	// Reply-only
+	//
+	addEntry(new RlvBehaviourInfo("findfolder",				RLV_BHVR_FINDFOLDER,			RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("findfolders",			RLV_BHVR_FINDFOLDERS,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourInfo("getaddattachnames",		RLV_BHVR_GETADDATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getaddoutfitnames",		RLV_BHVR_GETADDOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getattach",				RLV_BHVR_GETATTACH,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getattachnames",			RLV_BHVR_GETATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getcommand",				RLV_BHVR_GETCOMMAND,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getinvworn",				RLV_BHVR_GETINVWORN,			RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getoutfit",				RLV_BHVR_GETOUTFIT,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getoutfitnames",			RLV_BHVR_GETOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getpath",				RLV_BHVR_GETPATH,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getpathnew",				RLV_BHVR_GETPATHNEW,			RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getremattachnames",		RLV_BHVR_GETREMATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getremoutfitnames",		RLV_BHVR_GETREMOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getsitid",				RLV_BHVR_GETSITID,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getstatus",				RLV_BHVR_GETSTATUS,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("getstatusall",			RLV_BHVR_GETSTATUSALL,			RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("version",				RLV_BHVR_VERSION,				RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("versionnew",				RLV_BHVR_VERSIONNEW,			RLV_TYPE_REPLY));
+	addEntry(new RlvBehaviourInfo("versionnum",				RLV_BHVR_VERSIONNUM,			RLV_TYPE_REPLY));
+
+	// Populate m_String2InfoMap
+	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
+	{
+		m_String2InfoMap.insert(std::make_pair(pBhvrInfo->strBhvr, pBhvrInfo));
+	}
+
+	// Populate m_Bhvr2InfoMap (but skip synonyms)
+	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
+	{
+		RLV_ASSERT_DBG( (pBhvrInfo->isSynonym()) || (m_Bhvr2InfoMap.end() == m_Bhvr2InfoMap.find(pBhvrInfo->eBhvr)) );
+
+		if (!pBhvrInfo->isSynonym())
+			m_Bhvr2InfoMap.insert(std::make_pair(pBhvrInfo->eBhvr, pBhvrInfo));
+	}
+}
+
+RlvBehaviourDictionary::~RlvBehaviourDictionary()
+{
+	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
+		delete pBhvrInfo;
+	m_BhvrInfoList.clear();
+}
+
+void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
+{
+	m_BhvrInfoList.push_back(pEntry);
+}
+
+const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
+{
+	bool fStrict = boost::algorithm::ends_with(strBhvr, "_sec");
+	if (pfStrict)
+		*pfStrict = fStrict;
+
+	rlv_string2info_map_t::const_iterator itBhvr = std::find_if(m_String2InfoMap.lower_bound(strBhvr), m_String2InfoMap.upper_bound(strBhvr), 
+																[&eParamType, &fStrict](const rlv_string2info_map_t::value_type& bhvrInfo) {
+																	return (bhvrInfo.second->maskParamType & eParamType) && ((!fStrict) || (bhvrInfo.second->hasStrict()));
+																});
+	return (itBhvr != m_String2InfoMap.end()) ? itBhvr->second : NULL;
+}
+
+ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
+{
+	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict);
+	return (pBhvrInfo) ? pBhvrInfo->eBhvr : RLV_BHVR_UNKNOWN;
+}
+
+bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
+{
+	cmdList.clear();
+	if (strMatch.empty())
+		return false;
+
+	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
+	{
+		if ( (pBhvrInfo->maskParamType & eParamType) || (RLV_TYPE_UNKNOWN == eParamType) )
+		{
+			std::string strCmd = pBhvrInfo->strBhvr;
+			if (std::string::npos != strCmd.find(strMatch))
+				cmdList.push_back(strCmd);
+			if ( (pBhvrInfo->hasStrict()) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
+				cmdList.push_back(strCmd);
+		}
+	}
+	return !cmdList.empty();
+}
+
+bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
+{
+	rlv_bhvr2info_map_t::const_iterator itBhvrInfo = m_Bhvr2InfoMap.find(eBhvr);
+	return (itBhvrInfo != m_Bhvr2InfoMap.cend()) && (itBhvrInfo->second->hasStrict());
+}
+
+// ============================================================================
+// RlvCommmand
+//
 
 // Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
@@ -65,19 +279,27 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 	}
 
 	// HACK: all those @*overorreplace synonyms are rather tedious (and error-prone) to deal with so replace them their equivalent
-	if ( (RLV_TYPE_FORCE == m_eParamType) && 
-		 (m_strBehaviour.length() > 13) && (m_strBehaviour.length() - 13 == m_strBehaviour.rfind("overorreplace")) )
+	if ( (RLV_TYPE_FORCE == m_eParamType) && (boost::algorithm::ends_with(m_strBehaviour, "overorreplace")) )
 	{
 		m_strBehaviour.erase(m_strBehaviour.length() - 13, 13);
 	}
-	// HACK: all those @addoutfit* synonyms are rather tedious (and error-prone) to deal with so replace them their @attach* equivalent
-	if ( (RLV_TYPE_FORCE == m_eParamType) && (0 == m_strBehaviour.find("addoutfit")) )
-	{
-		m_strBehaviour.replace(0, 9, "attach");
-	}
-	m_eBehaviour = getBehaviourFromString(m_strBehaviour, &m_fStrict);
-}
 
+	const RlvBehaviourInfo* pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict);
+	if (pBhvrInfo)
+	{
+		m_eBehaviour = pBhvrInfo->eBhvr;
+
+		// Filter experimental commands (if disabled)
+		static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
+		if ( (!sEnableExperimental) && (pBhvrInfo->isExperimental()) )
+			m_eBehaviour = RLV_BHVR_UNKNOWN;
+
+		// Filter extended commands (if disabled)
+		static LLCachedControl<bool> sEnableExtended(gSavedSettings, "RLVaExtendedCommands");
+		if ( (!sEnableExtended) && (pBhvrInfo->isExtended()) )
+			m_eBehaviour = RLV_BHVR_UNKNOWN;
+	}
+}
 
 bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption, std::string& strParam)
 {
@@ -111,72 +333,6 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
 	strParam = strCommand.substr(idxParam + 1);
 
 	return true;
-}
-
-// Checked: 2009-12-05 (RLVa-1.1.0h) | Added: RLVa-1.1.0h
-ERlvBehaviour RlvCommand::getBehaviourFromString(const std::string& strBhvr, bool* pfStrict /*=NULL*/)
-{
-	std::string::size_type idxStrict = strBhvr.find("_sec");
-	bool fStrict = (std::string::npos != idxStrict) && (idxStrict + 4 == strBhvr.length());
-	if (pfStrict)
-		*pfStrict = fStrict;
-
-	RLV_ASSERT(m_BhvrMap.size() > 0);
-	bhvr_map_t::const_iterator itBhvr = m_BhvrMap.find( (!fStrict) ? strBhvr : strBhvr.substr(0, idxStrict));
-	if ( (itBhvr != m_BhvrMap.end()) && ((!fStrict) || (hasStrictVariant(itBhvr->second))) )
-		return itBhvr->second;
-	return RLV_BHVR_UNKNOWN;
-}
-
-// Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-bool RlvCommand::getCommands(bhvr_map_t& cmdList, const std::string &strMatch)
-{
-	if (strMatch.empty())
-		return false;
-	cmdList.clear();
-
-	RLV_ASSERT(m_BhvrMap.size() > 0);
-	for (bhvr_map_t::const_iterator itBhvr = m_BhvrMap.begin(); itBhvr != m_BhvrMap.end(); ++itBhvr)
-	{
-		std::string strCmd = itBhvr->first; ERlvBehaviour eBhvr = itBhvr->second;
-		if (std::string::npos != strCmd.find(strMatch))
-			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
-		if ( (hasStrictVariant(eBhvr)) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
-			cmdList.insert(std::pair<std::string, ERlvBehaviour>(strCmd, eBhvr));
-	}
-	return (0 != cmdList.size());
-}
-
-// Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0h
-void RlvCommand::initLookupTable()
-{
-	static bool fInitialized = false;
-	if (!fInitialized)
-	{
-		// NOTE: keep this matched with the enumeration at all times
-		std::string arBehaviours[RLV_BHVR_COUNT] =
-			{
-				"detach", "attach", "addattach", "remattach", "addoutfit", "remoutfit", "sharedwear", "sharedunwear", 
-				"unsharedwear", "unsharedunwear", "emote", "sendchat", "recvchat", "recvchatfrom", "recvemote", "recvemotefrom", 
-				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "sendimto", 
-				"recvim", "recvimfrom", "startim", "startimto", "permissive", "notify", "showinv", "showminimap", "showworldmap", "showloc", 
-				"shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "tprequest",
-				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "accepttprequest", "allowidle", "edit", "editobj", "rez", 
-				"fartouch", "interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", "touchall", 
-				"touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "alwaysrun", "temprun", "detachme", 
-				"attachover", "attachthis", "attachthisover", "attachthis_except", "detachthis", "detachthis_except", "attachall", 
-				"attachallover", "detachall", "attachallthis", "attachallthis_except", "attachallthisover", "detachallthis", 
-				"detachallthis_except", "adjustheight", "tpto", "version", "versionnew", "versionnum", "getattach", "getattachnames", 
-				"getaddattachnames", "getremattachnames", "getoutfit", "getoutfitnames", "getaddoutfitnames", "getremoutfitnames", 
-				"findfolder", "findfolders", "getpath", "getpathnew", "getinv", "getinvworn", "getgroup", "getsitid", "getcommand", 
-				"getstatus", "getstatusall"
-			};
-
-		for (int idxBvhr = 0; idxBvhr < RLV_BHVR_COUNT; idxBvhr++)
-			m_BhvrMap.insert(std::pair<std::string, ERlvBehaviour>(arBehaviours[idxBvhr], (ERlvBehaviour)idxBvhr));
-
-		fInitialized = true;
-	}
 }
 
 // ============================================================================

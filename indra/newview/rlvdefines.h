@@ -114,7 +114,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 // Enumeration declarations
 //
 
-// NOTE: any changes to this enumeration should be reflected in RlvCommand::initLookupTable()
+// NOTE: any changes to this enumeration should be reflected in the RlvBehaviourDictionary constructor
 enum ERlvBehaviour {
 	RLV_BHVR_DETACH = 0,			// "detach"
 	RLV_BHVR_ATTACH,				// "attach"
@@ -234,12 +234,13 @@ enum ERlvBehaviour {
 };
 
 enum ERlvParamType {
-	RLV_TYPE_UNKNOWN,
-	RLV_TYPE_ADD,					// <param> == "n"|"add"
-	RLV_TYPE_REMOVE,				// <param> == "y"|"rem"
-	RLV_TYPE_FORCE,					// <param> == "force"
-	RLV_TYPE_REPLY,					// <param> == <number>
-	RLV_TYPE_CLEAR
+	RLV_TYPE_UNKNOWN = 0x00,
+	RLV_TYPE_ADD     = 0x01,		// <param> == "n"|"add"
+	RLV_TYPE_REMOVE  = 0x02,		// <param> == "y"|"rem"
+	RLV_TYPE_FORCE   = 0x04,		// <param> == "force"
+	RLV_TYPE_REPLY   = 0x08,		// <param> == <number>
+	RLV_TYPE_CLEAR   = 0x10,
+	RLV_TYPE_ADDREM  = RLV_TYPE_ADD | RLV_TYPE_REMOVE
 };
 
 enum ERlvCmdRet {
