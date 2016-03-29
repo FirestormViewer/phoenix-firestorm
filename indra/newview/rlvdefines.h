@@ -223,6 +223,13 @@ enum ERlvBehaviour {
 	RLV_BHVR_UNKNOWN
 };
 
+enum RlvCommandOptionType
+{
+	RLV_OPTION_NONE,
+	RLV_OPTION_EXCEPTION,
+	RLV_OPTION_NONE_OR_EXCEPTION
+};
+
 enum ERlvParamType {
 	RLV_TYPE_UNKNOWN = 0x00,
 	RLV_TYPE_ADD     = 0x01,		// <param> == "n"|"add"

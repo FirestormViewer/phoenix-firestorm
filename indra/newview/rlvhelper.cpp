@@ -29,6 +29,19 @@
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
+// Command processing template specialization definitions
+//
+
+template<> struct RlvCommandOptionParser<LLUUID> { static bool parseOption(const std::string& strOption, LLUUID& idOption); };
+
+template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE>              { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>         { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION> { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+
+template<> struct RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>   { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<> struct RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT> { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+
+// ============================================================================
 // RlvBehaviourDictionary
 //
 
@@ -37,84 +50,87 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	// Restrictions
 	//
-	addEntry(new RlvBehaviourInfo("acceptpermission",		RLV_BHVR_ACCEPTPERMISSION,		RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("accepttp",				RLV_BHVR_ACCEPTTP,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("accepttprequest",		RLV_BHVR_ACCEPTTPREQUEST,		RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED | RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("acceptpermission", RLV_BHVR_ACCEPTPERMISSION));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("accepttp", RLV_BHVR_ACCEPTTP, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("accepttprequest", RLV_BHVR_ACCEPTTPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("addattach",				RLV_BHVR_ADDATTACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("addoutfit",				RLV_BHVR_ADDOUTFIT,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("allowidle",				RLV_BHVR_ALLOWIDLE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourInfo("alwaysrun",				RLV_BHVR_ALWAYSRUN,				RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("allowidle", RLV_BHVR_ALLOWIDLE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("alwaysrun", RLV_BHVR_ALWAYSRUN));
 	addEntry(new RlvBehaviourInfo("attachthis",				RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("attachthis_except",		RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis_except",	RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvBehaviourInfo("chatwhisper",			RLV_BHVR_CHATWHISPER,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("chatnormal",				RLV_BHVR_CHATNORMAL,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("chatshout",				RLV_BHVR_CHATSHOUT,				RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
 	addEntry(new RlvBehaviourInfo("detach",					RLV_BHVR_DETACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("detachthis",				RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvBehaviourInfo("edit",					RLV_BHVR_EDIT,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("editobj",				RLV_BHVR_EDITOBJ,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("emote",					RLV_BHVR_EMOTE,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("fartouch",				RLV_BHVR_FARTOUCH,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("fly",					RLV_BHVR_FLY,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("interact",				RLV_BHVR_INTERACT,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("edit", RLV_BHVR_EDIT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("fartouch", RLV_BHVR_FARTOUCH));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("fly", RLV_BHVR_FLY));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("permissive",				RLV_BHVR_PERMISSIVE,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("recvchat",				RLV_BHVR_RECVCHAT,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("recvchatfrom",			RLV_BHVR_RECVCHATFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("recvemote",				RLV_BHVR_RECVEMOTE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("recvemotefrom",			RLV_BHVR_RECVEMOTEFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("recvim",					RLV_BHVR_RECVIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("recvimfrom",				RLV_BHVR_RECVIMFROM,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvchatfrom", RLV_BHVR_RECVCHATFROM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvemote", RLV_BHVR_RECVEMOTE, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvemotefrom", RLV_BHVR_RECVEMOTEFROM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvim", RLV_BHVR_RECVIM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvimfrom", RLV_BHVR_RECVIMFROM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourInfo("redirchat",				RLV_BHVR_REDIRCHAT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("rediremote",				RLV_BHVR_REDIREMOTE,			RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("remattach",				RLV_BHVR_REMATTACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("remoutfit",				RLV_BHVR_REMOUTFIT,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("rez",					RLV_BHVR_REZ,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("sendchannel",			RLV_BHVR_SENDCHANNEL,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("sendchat",				RLV_BHVR_SENDCHAT,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("sendim",					RLV_BHVR_SENDIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("sendimto",				RLV_BHVR_SENDIMTO,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("setdebug",				RLV_BHVR_SETDEBUG,				RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("rez", RLV_BHVR_REZ));
+	addEntry(new RlvCommandDefinition<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>("sendchannel", RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RLV_BHVR_SENDIM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
 	addEntry(new RlvBehaviourInfo("setenv",					RLV_BHVR_SETENV,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("sittp",					RLV_BHVR_SITTP,					RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
-	addEntry(new RlvBehaviourInfo("showhovertext",			RLV_BHVR_SHOWHOVERTEXT,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showhovertextall",		RLV_BHVR_SHOWHOVERTEXTALL,		RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showhovertexthud",		RLV_BHVR_SHOWHOVERTEXTHUD,		RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showhovertextworld",		RLV_BHVR_SHOWHOVERTEXTWORLD,	RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showinv",				RLV_BHVR_SHOWINV,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showloc",				RLV_BHVR_SHOWLOC,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showminimap",			RLV_BHVR_SHOWMINIMAP,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("shownames",				RLV_BHVR_SHOWNAMES,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("showworldmap",			RLV_BHVR_SHOWWORLDMAP,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("standtp",				RLV_BHVR_STANDTP,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("startim",				RLV_BHVR_STARTIM,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("startimto",				RLV_BHVR_STARTIMTO,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("temprun",				RLV_BHVR_TEMPRUN,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchall",				RLV_BHVR_TOUCHALL,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchattach",			RLV_BHVR_TOUCHATTACH,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchattachother",		RLV_BHVR_TOUCHATTACHOTHER,		RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchattachself",		RLV_BHVR_TOUCHATTACHSELF,		RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchfar",				RLV_BHVR_FARTOUCH,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_SYNONYM));
-	addEntry(new RlvBehaviourInfo("touchhud",				RLV_BHVR_TOUCHHUD,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
-	addEntry(new RlvBehaviourInfo("touchme",				RLV_BHVR_TOUCHME,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchthis",				RLV_BHVR_TOUCHTHIS,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("touchworld",				RLV_BHVR_TOUCHWORLD,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("tplm",					RLV_BHVR_TPLM,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("tploc",					RLV_BHVR_TPLOC,					RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("tplure",					RLV_BHVR_TPLURE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvBehaviourInfo("tprequest",				RLV_BHVR_TPLURE,				RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED | RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandDefinition<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT>("showhovertext"));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertextall", RLV_BHVR_SHOWHOVERTEXTALL));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertexthud", RLV_BHVR_SHOWHOVERTEXTHUD));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertextworld", RLV_BHVR_SHOWHOVERTEXTWORLD));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showinv", RLV_BHVR_SHOWINV));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showloc", RLV_BHVR_SHOWLOC));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showminimap", RLV_BHVR_SHOWMINIMAP));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("shownames", RLV_BHVR_SHOWNAMES));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showworldmap", RLV_BHVR_SHOWWORLDMAP));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sit", RLV_BHVR_SIT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sittp", RLV_BHVR_SITTP));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("standtp", RLV_BHVR_STANDTP));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("startim", RLV_BHVR_STARTIM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("startimto", RLV_BHVR_STARTIMTO, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("temprun", RLV_BHVR_TEMPRUN));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchall", RLV_BHVR_TOUCHALL));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchattach", RLV_BHVR_TOUCHATTACH));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchattachother", RLV_BHVR_TOUCHATTACHOTHER));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchattachself", RLV_BHVR_TOUCHATTACHSELF));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchfar", RLV_BHVR_FARTOUCH, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchhud", RLV_BHVR_TOUCHHUD, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchme", RLV_BHVR_TOUCHME));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("touchthis", RLV_BHVR_TOUCHTHIS));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchworld", RLV_BHVR_TOUCHWORLD));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("tplm", RLV_BHVR_TPLM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("tploc", RLV_BHVR_TPLOC));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("tplure", RLV_BHVR_TPLURE, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("tprequest", RLV_BHVR_TPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("unsharedunwear",			RLV_BHVR_UNSHAREDUNWEAR,		RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("unsharedwear",			RLV_BHVR_UNSHAREDWEAR,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("viewnote",				RLV_BHVR_VIEWNOTE,				RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("viewscript",				RLV_BHVR_VIEWSCRIPT,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("viewtexture",			RLV_BHVR_VIEWTEXTURE,			RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("unsit", RLV_BHVR_UNSIT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
 
 	//
 	// Force-wear
@@ -153,14 +169,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
+	addEntry(new RlvCommandDefinition<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>("setgroup"));
+	addEntry(new RlvCommandDefinition<RLV_TYPE_FORCE, RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
-
-	//
-	// Mixed
-	//
-	addEntry(new RlvBehaviourInfo("setgroup",				RLV_BHVR_SETGROUP,				RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
-	addEntry(new RlvBehaviourInfo("sit",					RLV_BHVR_SIT,					RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
-	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_ADDREM | RLV_TYPE_FORCE));
+	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 
 	//
 	// Reply-only
@@ -191,16 +203,16 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Populate m_String2InfoMap
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
-		m_String2InfoMap.insert(std::make_pair(pBhvrInfo->strBhvr, pBhvrInfo));
+		m_String2InfoMap.insert(std::make_pair(pBhvrInfo->getBehaviour(), pBhvrInfo));
 	}
 
 	// Populate m_Bhvr2InfoMap (but only with non-synonym *restrictions*)
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
-		if ( (pBhvrInfo->maskParamType & RLV_TYPE_ADDREM) && (!pBhvrInfo->isSynonym()) )
+		if ( (pBhvrInfo->getParamTypeMask() & RLV_TYPE_ADDREM) && (!pBhvrInfo->isSynonym()) )
 		{
-			RLV_ASSERT_DBG(m_Bhvr2InfoMap.end() == m_Bhvr2InfoMap.find(pBhvrInfo->eBhvr));
- 			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->eBhvr, pBhvrInfo));
+			RLV_ASSERT_DBG(m_Bhvr2InfoMap.end() == m_Bhvr2InfoMap.find(pBhvrInfo->getBehaviourType()));
+ 			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
 		}
 	}
 }
@@ -214,6 +226,14 @@ RlvBehaviourDictionary::~RlvBehaviourDictionary()
 
 void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
 {
+	// Sanity check for duplicate entries
+#ifndef LL_RELEASE_FOR_DOWNLOAD
+	std::for_each(m_BhvrInfoList.begin(), m_BhvrInfoList.end(), 
+	              [&pEntry](const RlvBehaviourInfo* pBhvrInfo) { 
+					RLV_ASSERT_DBG( ((pBhvrInfo->getBehaviour()) != (pEntry->getBehaviour())) || ((pBhvrInfo->getParamTypeMask() & pEntry->getParamTypeMask()) == 0) );
+	              });
+#endif // LL_RELEASE_FOR_DOWNLOAD
+
 	m_BhvrInfoList.push_back(pEntry);
 }
 
@@ -225,7 +245,7 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 
 	rlv_string2info_map_t::const_iterator itBhvr = std::find_if(m_String2InfoMap.lower_bound(strBhvr), m_String2InfoMap.upper_bound(strBhvr), 
 																[&eParamType, &fStrict](const rlv_string2info_map_t::value_type& bhvrInfo) {
-																	return (bhvrInfo.second->maskParamType & eParamType) && ((!fStrict) || (bhvrInfo.second->hasStrict()));
+																	return (bhvrInfo.second->getParamTypeMask() & eParamType) && ((!fStrict) || (bhvrInfo.second->hasStrict()));
 																});
 	return (itBhvr != m_String2InfoMap.end()) ? itBhvr->second : NULL;
 }
@@ -233,7 +253,7 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
 {
 	const RlvBehaviourInfo* pBhvrInfo = getBehaviourInfo(strBhvr, eParamType, pfStrict);
-	return (pBhvrInfo) ? pBhvrInfo->eBhvr : RLV_BHVR_UNKNOWN;
+	return (pBhvrInfo) ? pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN;
 }
 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
@@ -244,9 +264,9 @@ bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamT
 
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
-		if ( (pBhvrInfo->maskParamType & eParamType) || (RLV_TYPE_UNKNOWN == eParamType) )
+		if ( (pBhvrInfo->getParamTypeMask() & eParamType) || (RLV_TYPE_UNKNOWN == eParamType) )
 		{
-			std::string strCmd = pBhvrInfo->strBhvr;
+			std::string strCmd = pBhvrInfo->getBehaviour();
 			if (std::string::npos != strCmd.find(strMatch))
 				cmdList.push_back(strCmd);
 			if ( (pBhvrInfo->hasStrict()) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
@@ -266,18 +286,18 @@ bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
 // RlvCommmand
 //
 
-// Checked: 2009-12-27 (RLVa-1.1.0k) | Modified: RLVa-1.1.0k
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
-	: m_fValid(false), m_idObj(idObj), m_eBehaviour(RLV_BHVR_UNKNOWN), m_nBehaviourFlags(0), m_fStrict(false), m_eParamType(RLV_TYPE_UNKNOWN), m_eRet(RLV_RET_UNKNOWN)
+	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_eRet(RLV_RET_UNKNOWN)
 {
-	if ((m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam)))
+	std::string strBehaviour;
+	if (m_fValid = parseCommand(strCommand, strBehaviour, m_strOption, m_strParam))
 	{
 		S32 nTemp = 0;
 		if ( ("n" == m_strParam) || ("add" == m_strParam) )
 			m_eParamType = RLV_TYPE_ADD;
 		else if ( ("y" == m_strParam) || ("rem" == m_strParam) )
 			m_eParamType = RLV_TYPE_REMOVE;
-		else if (m_strBehaviour == "clear")						// clear is the odd one out so just make it its own type
+		else if (strBehaviour == "clear")						// clear is the odd one out so just make it its own type
 			m_eParamType = RLV_TYPE_CLEAR;
 		else if ("force" == m_strParam)
 			m_eParamType = RLV_TYPE_FORCE;
@@ -292,20 +312,18 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 
 	if (!m_fValid)
 	{
-		m_strBehaviour = m_strOption = m_strParam = "";
+		m_strOption = m_strParam = "";
 		return;
 	}
 
-	const RlvBehaviourInfo* pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict);
-	if (pBhvrInfo)
+	if (m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict))
 	{
 		// Filter experimental and/or extended commands (if disabled)
 		static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
 		static LLCachedControl<bool> sEnableExtended(gSavedSettings, "RLVaExtendedCommands");
-		if ( ((sEnableExperimental) || (!pBhvrInfo->isExperimental())) && ((sEnableExtended) || (!pBhvrInfo->isExtended())) )
+		if ( ((!sEnableExperimental) && (m_pBhvrInfo->isExperimental())) || ((!sEnableExtended) && (m_pBhvrInfo->isExtended())) )
 		{
-			m_eBehaviour = pBhvrInfo->eBhvr;
-			m_nBehaviourFlags = pBhvrInfo->nBhvrFlags;
+			m_pBhvrInfo = NULL;
 		}
 	}
 }

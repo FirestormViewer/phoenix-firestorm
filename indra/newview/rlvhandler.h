@@ -166,8 +166,6 @@ protected:
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceGroup(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const;
 	void       onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const;
 	// Command handlers (RLV_TYPE_REPLY)
@@ -213,6 +211,8 @@ protected:
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
+	template <ERlvParamType, RlvCommandOptionType> friend struct RlvCommandGenericProcessor;
+	template <ERlvParamType, ERlvBehaviour> friend struct RlvCommandProcessor;
 
 	// --------------------------------
 

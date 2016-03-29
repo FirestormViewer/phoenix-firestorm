@@ -26,19 +26,20 @@
 #include "rlvcommon.h"
 
 // ============================================================================
-// RlvBehaviourDictionary
+// RlvCommandDefinition and related classes
 //
 
-struct RlvBehaviourInfo
+class RlvBehaviourInfo
 {
+public:
 	enum EBehaviourFlags
 	{
 		// General behaviour flags
-		BHVR_STRICT       = 0x0001,
-		BHVR_SYNONYM      = 0x0002,
-		BHVR_EXTENDED     = 0x0004,
-		BHVR_EXPERIMENTAL = 0x0008,
-		BHVR_GENERAL_MASK = 0xFFFF,
+		BHVR_STRICT       = 0x0001,				// Behaviour has a "_sec" version
+		BHVR_SYNONYM      = 0x0002,				// Behaviour is a synonym of another
+		BHVR_EXTENDED     = 0x0004,				// Behaviour is part of the RLVa extended command set
+		BHVR_EXPERIMENTAL = 0x0008,				// Behaviour is part of the RLVa experimental command set
+		BHVR_GENERAL_MASK = 0x0FFF,
 
 		// Force-wear specific flags
 		FORCEWEAR_WEAR_REPLACE   = 0x0001 << 16,
@@ -51,19 +52,68 @@ struct RlvBehaviourInfo
 		FORCEWEAR_MASK           = 0xFFFF << 16
 	};
 
-	std::string   strBhvr;
-	ERlvBehaviour eBhvr;
-	U32           nBhvrFlags;
-	U32           maskParamType;
+	RlvBehaviourInfo(std::string strBhvr, ERlvBehaviour eBhvr, U32 maskParamType, U32 nBhvrFlags = 0)
+		: m_strBhvr(strBhvr), m_eBhvr(eBhvr), m_maskParamType(maskParamType), m_nBhvrFlags(nBhvrFlags) {}
+	virtual ~RlvBehaviourInfo() {}
 
-	bool hasStrict() const      { return nBhvrFlags & BHVR_STRICT; }
-	bool isExperimental() const { return nBhvrFlags & BHVR_EXPERIMENTAL; }
-	bool isExtended() const     { return nBhvrFlags & BHVR_EXTENDED; }
-	bool isSynonym() const      { return nBhvrFlags & BHVR_SYNONYM; } 
+	const std::string&	getBehaviour() const      { return m_strBhvr; }
+	ERlvBehaviour		getBehaviourType() const  { return m_eBhvr; }
+	U32					getBehaviourFlags() const { return m_nBhvrFlags; }
+	U32					getParamTypeMask() const  { return m_maskParamType; }
+	bool                hasStrict() const         { return m_nBhvrFlags & BHVR_STRICT; }
+	bool                isExperimental() const    { return m_nBhvrFlags & BHVR_EXPERIMENTAL; }
+	bool                isExtended() const        { return m_nBhvrFlags & BHVR_EXTENDED; }
+	bool                isSynonym() const         { return m_nBhvrFlags & BHVR_SYNONYM; } 
 
-	RlvBehaviourInfo(std::string bhvr_str, ERlvBehaviour bhvr, U32 paramtype_mask, U32 bhvr_flags = 0)
-		: strBhvr(bhvr_str), eBhvr(bhvr), maskParamType(paramtype_mask), nBhvrFlags(bhvr_flags) {}
+	virtual bool       hasProcessor() const { return false; }
+	virtual ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RLV_RET_UNKNOWN; }
+
+protected:
+	std::string   m_strBhvr;
+	ERlvBehaviour m_eBhvr;
+	U32           m_nBhvrFlags;
+	U32           m_maskParamType;
 };
+
+template <class optionType> 
+struct RlvCommandOptionParser
+{
+	static bool parseOption(const std::string& strOption, optionType& valueOption);
+};
+
+template <ERlvParamType paramType, RlvCommandOptionType optionType> 
+struct RlvCommandGenericProcessor
+{
+	static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount);
+};
+
+template <ERlvParamType paramType, RlvCommandOptionType optionType>
+class RlvCommandGenericDefinition : public RlvBehaviourInfo
+{
+public:
+	RlvCommandGenericDefinition(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+	/*virtual*/ bool       hasProcessor() const { return true; }
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RlvCommandGenericProcessor<paramType, optionType>::processCommand(rlvCmd, fRefCount); }
+};
+
+template <ERlvParamType paramType, ERlvBehaviour eBhvr> 
+struct RlvCommandProcessor
+{
+	static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount);
+};
+
+template <ERlvParamType paramType, ERlvBehaviour eBhvr>
+class RlvCommandDefinition : public RlvBehaviourInfo
+{
+public:
+	RlvCommandDefinition(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+	/*virtual*/ bool       hasProcessor() const { return true; }
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RlvCommandProcessor<paramType, eBhvr>::processCommand(rlvCmd, fRefCount); }
+};
+
+// ============================================================================
+// RlvBehaviourDictionary and related classes
+//
 
 class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
 {
@@ -111,9 +161,9 @@ public:
 	 */
 public:
 	std::string        asString() const;
-	const std::string& getBehaviour() const		{ return m_strBehaviour; }
-	ERlvBehaviour      getBehaviourType() const	{ return m_eBehaviour; }
-	U32                getBehaviourFlags() const{ return m_nBehaviourFlags; }
+	const std::string& getBehaviour() const		{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviour() : LLStringUtil::null; }
+	ERlvBehaviour      getBehaviourType() const	{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN; }
+	U32                getBehaviourFlags() const{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourFlags() : 0; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
@@ -122,8 +172,8 @@ public:
 	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
-
-	typedef std::map<std::string, ERlvBehaviour> bhvr_map_t;
+	bool               hasProcessor() const     { return (m_pBhvrInfo) ? m_pBhvrInfo->hasProcessor() : false; }
+	ERlvCmdRet         processCommand(bool& fRefCount) const { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this, fRefCount) : RLV_RET_UNKNOWN; }
 
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);
@@ -138,16 +188,14 @@ public:
 	 * Member variables
 	 */
 protected:
-	bool          m_fValid;
-	LLUUID        m_idObj;
-	std::string   m_strBehaviour;
-	ERlvBehaviour m_eBehaviour;
-	U32           m_nBehaviourFlags;
-	bool          m_fStrict;
-	std::string   m_strOption;
-	std::string   m_strParam;
-	ERlvParamType m_eParamType;
-	ERlvCmdRet    m_eRet;
+	bool                    m_fValid;
+	LLUUID                  m_idObj;
+	const RlvBehaviourInfo* m_pBhvrInfo;
+	ERlvParamType           m_eParamType;
+	bool                    m_fStrict;
+	std::string             m_strOption;
+	std::string             m_strParam;
+	ERlvCmdRet              m_eRet;
 
 	friend class RlvHandler;
 	friend class RlvObject;
@@ -503,14 +551,14 @@ inline std::string RlvCommand::asString() const
 {
 	// NOTE: @clear=<param> should be represented as clear:<param>
 	return (m_eParamType != RLV_TYPE_CLEAR)
-		? (!m_strOption.empty()) ? (std::string(m_strBehaviour)).append(":").append(m_strOption) : (std::string(m_strBehaviour))
-	    : (!m_strParam.empty())  ? (std::string(m_strBehaviour)).append(":").append(m_strParam)  : (std::string(m_strBehaviour));
+		? (!m_strOption.empty()) ? (std::string(getBehaviour())).append(":").append(m_strOption) : (std::string(getBehaviour()))
+	    : (!m_strParam.empty())  ? (std::string(getBehaviour())).append(":").append(m_strParam)  : (std::string(getBehaviour()));
 }
 
 inline bool RlvCommand::operator ==(const RlvCommand& rhs) const
 {
 	// The specification notes that "@detach=n" is semantically identical to "@detach=add" (same for "y" and "rem"
-	return (m_strBehaviour == rhs.m_strBehaviour) && (m_strOption == rhs.m_strOption) &&
+	return (getBehaviour() == rhs.getBehaviour()) && (m_strOption == rhs.m_strOption) &&
 		( (RLV_TYPE_UNKNOWN != m_eParamType) ? (m_eParamType == rhs.m_eParamType) : (m_strParam == rhs.m_strParam) );
 }
 
