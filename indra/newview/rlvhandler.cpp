@@ -420,16 +420,17 @@ bool RlvHandler::notifyCommandHandlers(rlvCommandHandler f, const RlvCommand& rl
 // Checked: 2009-11-25 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 {
-	#ifdef RLV_DEBUG
-		RLV_INFOS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
-	#endif // RLV_DEBUG
+	RLV_DEBUGS << "[" << rlvCmd.getObjectID() << "]: " << rlvCmd.asString() << RLV_ENDL;
 
 	if (!rlvCmd.isValid())
 	{
-		#ifdef RLV_DEBUG
-			RLV_INFOS << "\t-> invalid syntax" << RLV_ENDL;
-		#endif // RLV_DEBUG
+		RLV_DEBUGS << "\t-> invalid syntax" << RLV_ENDL;
 		return RLV_RET_FAILED_SYNTAX;
+	}
+	if (rlvCmd.isBlocked())
+	{
+		RLV_DEBUGS << "\t-> blocked command" << RLV_ENDL;
+		return RLV_RET_FAILED_DISABLED;
 	}
 
 	// Using a stack for executing commands solves a few problems:
@@ -447,9 +448,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 					 ( (RLV_BHVR_SETDEBUG == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETENV == rlvCmd.getBehaviourType()) ) )
 				{
 					// Some restrictions can only be held by one single object to avoid deadlocks
-					#ifdef RLV_DEBUG
-						RLV_INFOS << "\t- " << rlvCmd.getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
-					#endif // RLV_DEBUG
+					RLV_DEBUGS << "\t- " << rlvCmd.getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
 					eRet = RLV_RET_FAILED_LOCK;
 					break;
 				}
@@ -467,9 +466,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 					m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, rlvObj));
 				}
 
-				#ifdef RLV_DEBUG
-					RLV_INFOS << "\t- " << ( (fAdded) ? "adding behaviour" : "skipping duplicate" ) << RLV_ENDL;
-				#endif // RLV_DEBUG
+				RLV_DEBUGS << "\t- " << ( (fAdded) ? "adding behaviour" : "skipping duplicate" ) << RLV_ENDL;
 
 				if (fAdded) {	// If FALSE then this was a duplicate, there's no need to handle those
 					if (!m_pGCTimer)
@@ -490,10 +487,8 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 				if (itObj != m_Objects.end())
 					fRemoved = itObj->second.removeCommand(rlvCmd);
 
-				#ifdef RLV_DEBUG
-					RLV_INFOS << "\t- " << ( (fRemoved)	? "removing behaviour"
-														: "skipping remove (unset behaviour or unknown object)") << RLV_ENDL;
-				#endif // RLV_DEBUG
+				RLV_DEBUGS << "\t- " << ( (fRemoved) ? "removing behaviour"
+													 : "skipping remove (unset behaviour or unknown object)") << RLV_ENDL;
 
 				if (fRemoved) {	// Don't handle non-sensical removes
 					eRet = processAddRemCommand(rlvCmd);
@@ -501,9 +496,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 
 					if (0 == itObj->second.m_Commands.size())
 					{
-						#ifdef RLV_DEBUG
-							RLV_INFOS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
-						#endif // RLV_DEBUG
+						RLV_DEBUGS << "\t- command list empty => removing " << idCurObj << RLV_ENDL;
 						m_Objects.erase(itObj);
 					}
 				}
@@ -531,9 +524,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 
 	m_OnCommand(rlvCmd, eRet, !fFromObj);
 
-	#ifdef RLV_DEBUG
-		RLV_INFOS << "\t--> command " << ((eRet & RLV_RET_SUCCESS) ? "succeeded" : "failed") << RLV_ENDL;
-	#endif // RLV_DEBUG
+	RLV_DEBUGS << "\t--> command " << ((eRet & RLV_RET_SUCCESS) ? "succeeded" : "failed") << RLV_ENDL;
 
 	m_CurCommandStack.pop(); m_CurObjectStack.pop();
 	return eRet;
@@ -1326,16 +1317,6 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_ATTACHTHISEXCEPT:		// @attachthisexcept[:<option>]=n|y
 		case RLV_BHVR_DETACHTHISEXCEPT:		// @detachthisexcept[:<option>]=n|y
 			eRet = onAddRemFolderLockException(rlvCmd, fRefCount);
-			break;
-		case RLV_BHVR_SETENV:				// @setenv=n|y						- Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
-			{
-				if (RlvSettings::getNoSetEnv())
-				{
-					eRet = RLV_RET_FAILED_DISABLED;
-					break;
-				}
-				VERIFY_OPTION_REF(strOption.empty());
-			}
 			break;
 		case RLV_BHVR_ADDOUTFIT:			// @addoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c

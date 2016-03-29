@@ -39,6 +39,7 @@ public:
 		BHVR_SYNONYM      = 0x0002,				// Behaviour is a synonym of another
 		BHVR_EXTENDED     = 0x0004,				// Behaviour is part of the RLVa extended command set
 		BHVR_EXPERIMENTAL = 0x0008,				// Behaviour is part of the RLVa experimental command set
+		BHVR_BLOCKED      = 0x0010,				// Behaviour is blocked
 		BHVR_GENERAL_MASK = 0x0FFF,
 
 		// Force-wear specific flags
@@ -61,12 +62,14 @@ public:
 	U32					getBehaviourFlags() const { return m_nBhvrFlags; }
 	U32					getParamTypeMask() const  { return m_maskParamType; }
 	bool                hasStrict() const         { return m_nBhvrFlags & BHVR_STRICT; }
+	bool                isBlocked() const         { return m_nBhvrFlags & BHVR_BLOCKED; }
 	bool                isExperimental() const    { return m_nBhvrFlags & BHVR_EXPERIMENTAL; }
 	bool                isExtended() const        { return m_nBhvrFlags & BHVR_EXTENDED; }
 	bool                isSynonym() const         { return m_nBhvrFlags & BHVR_SYNONYM; } 
+	void                toggleBehaviourFlag(EBehaviourFlags eBhvrFlag, bool fEnable);
 
-	virtual bool       hasProcessor() const { return false; }
-	virtual ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RLV_RET_UNKNOWN; }
+	virtual bool        hasProcessor() const      { return false; }
+	virtual ERlvCmdRet  processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RLV_RET_UNKNOWN; }
 
 protected:
 	std::string   m_strBhvr;
@@ -133,6 +136,7 @@ public:
 	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
 	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
 	const std::string&      getStringFromBehaviour(ERlvBehaviour eBhvr, ERlvParamType eParamType, bool fStrict = false) const;
+	void                    toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBvhrFlag, bool fEnable);
 
 	/*
 	 * Member variables
@@ -170,6 +174,7 @@ public:
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
 	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
+	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 	bool               hasProcessor() const     { return (m_pBhvrInfo) ? m_pBhvrInfo->hasProcessor() : false; }
@@ -545,6 +550,14 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
 // ============================================================================
 // Inlined class member functions
 //
+
+inline void RlvBehaviourInfo::toggleBehaviourFlag(EBehaviourFlags eBhvrFlag, bool fEnable)
+{
+	if (fEnable)
+		m_nBhvrFlags |= eBhvrFlag;
+	else
+		m_nBhvrFlags &= ~eBhvrFlag;
+}
 
 // Checked: 2009-09-19 (RLVa-1.0.3d)
 inline std::string RlvCommand::asString() const

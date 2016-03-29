@@ -93,7 +93,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RLV_BHVR_SENDIM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
-	addEntry(new RlvBehaviourInfo("setenv",					RLV_BHVR_SETENV,				RLV_TYPE_ADDREM));
+	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setenv", RLV_BHVR_SETENV));
 	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
@@ -215,6 +215,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
  			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
 		}
 	}
+
+	// Process blocked commands
+	if (RlvSettings::getNoSetEnv())
+		toggleBehaviourFlag("setenv", RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_BLOCKED, true);
 }
 
 RlvBehaviourDictionary::~RlvBehaviourDictionary()
@@ -280,6 +284,21 @@ bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
 {
 	rlv_bhvr2info_map_t::const_iterator itBhvrInfo = m_Bhvr2InfoMap.find(eBhvr);
 	return (itBhvrInfo != m_Bhvr2InfoMap.cend()) && (itBhvrInfo->second->hasStrict());
+}
+
+void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBhvrFlag, bool fEnable)
+{
+	for (const rlv_string2info_map_t::value_type& bhvrInfo : boost::make_iterator_range(m_String2InfoMap.lower_bound(strBhvr), m_String2InfoMap.upper_bound(strBhvr)))
+	{
+		if (bhvrInfo.second->getParamTypeMask() & eParamType)
+		{
+			if (RlvBehaviourInfo* pBhvrInfo = const_cast<RlvBehaviourInfo*>(bhvrInfo.second))
+			{
+				pBhvrInfo->toggleBehaviourFlag(eBhvrFlag, fEnable);
+			}
+			break;
+		}
+	}
 }
 
 // ============================================================================
