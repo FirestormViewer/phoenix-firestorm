@@ -37,9 +37,13 @@ endif (OPENSIM)
 
 # <FS:Ansariel> [AVX Optimization]
 option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
+option(USE_AVX2_OPTIMIZATION "AVX2 optimization support" OFF)
 if (USE_AVX_OPTIMIZATION)
   add_definitions(-DUSE_AVX_OPTIMIZATION=1)
   message("compiling with AVX optimizations")
+elseif (USE_AVX2_OPTIMIZATION)
+  add_definitions(-DUSE_AVX2_OPTIMIZATION=1)
+  message("compiling with AVX2 optimizations")
 else (USE_AVX_OPTIMIZATION)
   message("compiling without AVX optimizations")
 endif (USE_AVX_OPTIMIZATION)

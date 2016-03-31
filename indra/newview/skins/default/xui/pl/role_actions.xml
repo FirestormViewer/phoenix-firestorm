@@ -38,7 +38,6 @@
 		<action description="Pozwól na edycję terenu" longdescription="Osoby w Funkcji z tym Przywilejem mogą zawsze edytować teren na działkach Grupy." name="land allow edit land"/>
 		<action description="Pozwól na latanie" longdescription="Osoby w Funkcji z tym Przywilejem mogą zawsze latać na działkach Grupy." name="land allow fly"/>
 		<action description="Pozwól na tworzenie obiektów" longdescription="Osoby w Funkcji z tym Przywilejem mogą zawsze tworzyć obiekty na działkach Grupy." name="land allow create"/>
-		<action description="Pozwól na zapamiętywanie miejsc (LM)" longdescription="Osoby w Funkcji z tym Przywilejem mogą zawsze zapamiętywać miejsca (LM) na działkach Grupy." name="land allow landmark"/>
 		<action description="Pozwól na wybór Miejsca Startu na działkach grupy" longdescription="Osoby w Funkcji z tym Przywilejem mogą używać opcji Świat &gt; Ustaw Miejsce Startu tu, gdzie stoję - na działce przypisanej Grupie." name="land allow set home"/>
 		<action description="Pozwól na &quot;Wydarzenie&quot; na działce grupy." longdescription="Osoby w Funkcji z tym przywilejem mogą wskazać działkę grupy jako miejsce wydarzenia (hosting event)." name="land allow host event"/>
 	</action_set>

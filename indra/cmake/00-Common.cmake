@@ -99,6 +99,24 @@ if (WINDOWS)
         /arch:AVX
 #        /fp:fast
         )
+  elseif (USE_AVX2_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+      /DNOMINMAX
+#      /DDOM_DYNAMIC            # For shared library colladadom
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:AVX2
+#        /fp:fast
+        )
   else (USE_AVX_OPTIMIZATION)
     add_definitions(
         /DLL_WINDOWS=1

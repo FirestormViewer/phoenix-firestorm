@@ -2,7 +2,6 @@
 <panel name="panel_group_notify">
 	<text name="group_notice" value="Aviso de grupo"/>
 	<text name="title" value="Enviado por Remitente / Nombre de grupo"/>
-	<text_editor name="message" value="Mensaje"/>
 	<text name="attachment_label" value="Adjunto:"/>
 	<panel name="attachment_container">
 		<text name="attachment" value="Adjunción"/>

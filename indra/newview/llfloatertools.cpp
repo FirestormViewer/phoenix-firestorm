@@ -126,6 +126,9 @@ void commit_radio_group_land(LLUICtrl* ctrl);
 void commit_grid_mode(LLUICtrl *);
 void commit_slider_zoom(LLUICtrl *ctrl);
 
+// <FS:KC> show/hide build highlight
+void commit_show_highlight(void *ctrl);
+
 /**
  * Class LLLandImpactsObserver
  *
@@ -267,10 +270,9 @@ BOOL	LLFloaterTools::postBuild()
 	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
 
 	// <FS:KC> show highlight
-	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
 	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
-	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
-	mCheckShowHighlight->setValue(mOrginalShowHighlight);
+	mCheckShowHighlight->setValue(gSavedSettings.getBOOL("RenderHighlightSelections"));
+	LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
 
 	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
 	// </FS:KC>
@@ -394,7 +396,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
 	// <FS:KC>
-	//mCheckStretchUniformLabel(NULL),
 	mCheckShowHighlight(NULL),
 	mCheckActualRoot(NULL),
 	// </FS:KC>
@@ -481,6 +482,9 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	mCommitCallbackRegistrar.add("BuildTool.TreeGrass",			boost::bind(&LLFloaterTools::onSelectTreeGrassCombo, this));
+
+	// <FS:KC> show/hide build highlight
+	mCommitCallbackRegistrar.add("BuildTool.commitShowHighlight",	boost::bind(&commit_show_highlight, this));
 
 	mLandImpactsObserver = new LLLandImpactsObserver();
 	LLViewerParcelMgr::getInstance()->addObserver(mLandImpactsObserver);
@@ -928,7 +932,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
 	// <FS:KC>
-	//if (mCheckStretchUniformLabel) mCheckStretchUniformLabel->setVisible( edit_visible );
 	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible );
 	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible );
 	// </FS:KC>
@@ -1067,8 +1070,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
 	if (!mOpen)
 	{
 		mOpen = TRUE;
-		mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
-		mCheckShowHighlight->setValue(mOrginalShowHighlight);
+		mCheckShowHighlight->setValue(gSavedSettings.getBOOL("RenderHighlightSelections"));
 	}
 	// </FS:KC>
 
@@ -1101,7 +1103,8 @@ void LLFloaterTools::onClose(bool app_quitting)
 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
 
 	// <FS:KC>
-	gSavedSettings.setBOOL("RenderHighlightSelections", mOrginalShowHighlight);
+	LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
+
 	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
 	// </FS:KC>
 
@@ -1277,7 +1280,6 @@ void commit_radio_group_land(LLUICtrl* ctrl)
 		gSavedSettings.setS32("RadioLandBrushAction", dozer_mode);
 	}
 }
-
 void commit_select_component(void *data)
 {
 	LLFloaterTools* floaterp = (LLFloaterTools*)data;
@@ -1301,6 +1303,23 @@ void commit_select_component(void *data)
 		LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	}
 }
+
+// <FS:KC> show/hide build highlight
+void commit_show_highlight(void *data)
+{
+	LLFloaterTools* floaterp = (LLFloaterTools*)data;
+	BOOL show_highlight = floaterp->mCheckShowHighlight->get();
+	if (show_highlight)
+	{
+		LLSelectMgr::getInstance()->setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_SHOW);
+	}
+	else
+	{
+		LLSelectMgr::getInstance()->setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_HIDE);
+	}
+}
+// </FS:KC>
+
 
 // static 
 void LLFloaterTools::setObjectType( LLPCode pcode )

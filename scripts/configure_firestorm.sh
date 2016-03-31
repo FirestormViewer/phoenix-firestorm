@@ -19,6 +19,7 @@ FALSE=1
 #                  <string>-DFMODEX:BOOL=ON</string>
 #                  <string>-DOPENSIM:BOOL=ON</string>
 #                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=OFF</string>
+#                  <string>-DUSE_AVX2_OPTIMIZATION:BOOL=OFF</string>
 #                  <string>-DLL_TESTS:BOOL=OFF</string>
 #                  <string>-DPACKAGE:BOOL=OFF></string>
 
@@ -36,6 +37,7 @@ WANTS_FMODEX=$FALSE
 WANTS_QUICKTIME=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_AVX=$FALSE
+WANTS_AVX2=$FALSE
 WANTS_BUILD=$FALSE
 PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
@@ -68,6 +70,7 @@ showUsage()
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
     echo "  --avx        : Build with Advanced Vector Extensions"
+    echo "  --avx2       : Build with Advanced Vector Extensions 2"
     echo "  --platform   : darwin | win32 | win64 | linux32 | linux64"
     echo "  --jobs <num> : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
@@ -79,7 +82,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex ninja jobs: platform: kdu quicktime opensim no-opensim avx avx2 help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -102,6 +105,7 @@ getArgs()
           opensim)    WANTS_OPENSIM=$TRUE;;
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
+          avx2)       WANTS_AVX2=$TRUE;;
           package)    WANTS_PACKAGE=$TRUE;;
           no-package) WANTS_PACKAGE=$FALSE;;
           build)      WANTS_BUILD=$TRUE;;
@@ -278,6 +282,7 @@ echo -e "      FMODEX: `b2a $WANTS_FMODEX`"    | tee -a $LOG
 echo -e "   QUICKTIME: `b2a $WANTS_QUICKTIME`" | tee -a $LOG
 echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`"   | tee -a $LOG
 echo -e "         AVX: `b2a $WANTS_AVX` "      | tee -a $LOG
+echo -e "        AVX2: `b2a $WANTS_AVX2` "     | tee -a $LOG
 echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`"   | tee -a $LOG
 echo -e "       CLEAN: `b2a $WANTS_CLEAN`"     | tee -a $LOG
 echo -e "       BUILD: `b2a $WANTS_BUILD`"     | tee -a $LOG
@@ -394,6 +399,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         AVX_OPTIMIZATION="-DUSE_AVX_OPTIMIZATION:BOOL=OFF"
     fi
+    if [ $WANTS_AVX2 -eq $TRUE ] ; then
+        AVX2_OPTIMIZATION="-DUSE_AVX2_OPTIMIZATION:BOOL=ON"
+    else
+        AVX2_OPTIMIZATION="-DUSE_AVX2_OPTIMIZATION:BOOL=OFF"
+    fi
     if [ $WANTS_PACKAGE -eq $TRUE ] ; then
         PACKAGE="-DPACKAGE:BOOL=ON"
         # Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
@@ -449,7 +459,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $QUICKTIME $KDU $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $QUICKTIME $KDU $OPENSIM $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=$WORD_SIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH:STRING="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then

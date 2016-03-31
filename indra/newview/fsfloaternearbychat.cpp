@@ -388,6 +388,13 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 }
 
+void FSFloaterNearbyChat::setMinimized(BOOL b)
+{
+	handleMinimized(b);
+
+	LLFloater::setMinimized(b);
+}
+
 void FSFloaterNearbyChat::onOpen(const LLSD& key )
 {
 	FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
@@ -905,4 +912,16 @@ void FSFloaterNearbyChat::updateShowMutedChatHistory(const LLSD &data)
 {
 	bool show_muted = data.asBoolean();
 	updateUnreadMessageNotification((show_muted ? mUnreadMessagesMuted : mUnreadMessages), show_muted);
+}
+
+void FSFloaterNearbyChat::handleMinimized(bool minimized)
+{
+	if (minimized)
+	{
+		gConsole->removeSession(LLUUID::null);
+	}
+	else
+	{
+		gConsole->addSession(LLUUID::null);
+	}
 }
