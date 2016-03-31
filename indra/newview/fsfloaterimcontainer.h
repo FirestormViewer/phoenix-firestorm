@@ -59,7 +59,8 @@ public:
 	static FSFloaterIMContainer* getInstance();
 
 	virtual void setVisible(BOOL b);
-	
+	/*virtual*/ void setMinimized(BOOL b);
+
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
 	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg);

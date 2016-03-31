@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="即時訊息" name="panel_group_notify">
-	<string name="message_max_lines_count" value="7"/>
-	<string name="subject_font" value="SANSSERIF_BIG"/>
-	<string name="date_font" value="SANSSERIF"/>
 	<panel label="表頭" name="header">
 		<text name="title" value="發件者名/群組名"/>
 	</panel>

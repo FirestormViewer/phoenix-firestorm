@@ -362,6 +362,26 @@ void FSFloaterIMContainer::setVisible(BOOL b)
 	}
 }
 
+void FSFloaterIMContainer::setMinimized(BOOL b)
+{
+	if (mTabContainer)
+	{
+		FSFloaterNearbyChat* nearby_floater = dynamic_cast<FSFloaterNearbyChat*>(mTabContainer->getCurrentPanel());
+		if (nearby_floater)
+		{
+			nearby_floater->handleMinimized(b);
+		}
+
+		FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getCurrentPanel());
+		if (im_floater)
+		{
+			im_floater->handleMinimized(b);
+		}
+	}
+
+	LLMultiFloater::setMinimized(b);
+}
+
 //virtual
 void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
 {

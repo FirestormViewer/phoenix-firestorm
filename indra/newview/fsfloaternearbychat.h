@@ -56,6 +56,7 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void setVisible(BOOL visible);
+	/*virtual*/ void setMinimized(BOOL b);
 
 	void	openFloater(const LLSD& key);
 
@@ -96,6 +97,8 @@ public:
 
 	void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
 	void updateShowMutedChatHistory(const LLSD &data);
+
+	void handleMinimized(bool minimized);
 
 protected:
 	void onChatBoxKeystroke();
