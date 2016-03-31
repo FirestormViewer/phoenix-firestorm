@@ -1239,6 +1239,13 @@ void FSFloaterIM::setVisible(BOOL visible)
 	}
 }
 
+void FSFloaterIM::setMinimized(BOOL b)
+{
+	handleMinimized(b);
+
+	LLTransientDockableFloater::setMinimized(b);
+}
+
 BOOL FSFloaterIM::getVisible()
 {
 	if(isChatMultiTab())
@@ -2362,5 +2369,18 @@ void FSFloaterIM::loadInitialInvitedIDs()
 	{
 		mInvitedParticipants = session->mInitialInvitedIDs;
 		session->mInitialInvitedIDs.clear();
+	}
+}
+
+void FSFloaterIM::handleMinimized(bool minimized)
+{
+	if (minimized)
+	{
+		gConsole->removeSession(mSessionID);
+	}
+	else
+	{
+		gConsole->addSession(mSessionID);
+		updateMessages();
 	}
 }

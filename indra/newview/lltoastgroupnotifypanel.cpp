@@ -113,7 +113,10 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	substitution["datetime"] = (S32) notice_date.secondsSinceEpoch();
 	LLStringUtil::format(timeStr, substitution);
 
-	LLViewerTextEditor* pMessageText = getChild<LLViewerTextEditor>("message");
+	// <FS:Ansariel> FIRE-17995: Urls without protocol randomly get broken
+	//LLViewerTextEditor* pMessageText = getChild<LLViewerTextEditor>("message");
+	LLTextEditor* pMessageText = getChild<LLTextEditor>("message");
+	// </FS:Ansariel>
 	pMessageText->setContentTrusted(false);
 	pMessageText->clear();
 
