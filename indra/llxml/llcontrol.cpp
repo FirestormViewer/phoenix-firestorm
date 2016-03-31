@@ -419,19 +419,20 @@ const std::string LLControlGroup::mTypeString[TYPE_COUNT] = { "U32"
                                                              ,"LLSD"
                                                              };
 
+const std::string LLControlGroup::mSanityTypeString[SANITY_TYPE_COUNT] = { "None"
+																		  ,"Equals"
+																		  ,"NotEquals"
+																		  ,"LessThan"
+																		  ,"GreaterThan"
+																		  ,"LessThanEquals"
+																		  ,"GreaterThanEquals"
+																		  ,"Between"
+																		  ,"NotBetween"
+																		  };
+
 LLControlGroup::LLControlGroup(const std::string& name)
 :	LLInstanceTracker<LLControlGroup, std::string>(name)
 {
-
-	mSanityTypeString[SANITY_TYPE_NONE] = "None";
-	mSanityTypeString[SANITY_TYPE_EQUALS] = "Equals";
-	mSanityTypeString[SANITY_TYPE_NOT_EQUALS] = "NotEquals";
-	mSanityTypeString[SANITY_TYPE_LESS_THAN] = "LessThan";
-	mSanityTypeString[SANITY_TYPE_GREATER_THAN] = "GreaterThan";
-	mSanityTypeString[SANITY_TYPE_LESS_THAN_EQUALS] = "LessThanEquals";
-	mSanityTypeString[SANITY_TYPE_GREATER_THAN_EQUALS] = "GreaterThanEquals";
-	mSanityTypeString[SANITY_TYPE_BETWEEN] = "Between";
-	mSanityTypeString[SANITY_TYPE_NOT_BETWEEN] = "NotBetween";
 }
 
 LLControlGroup::~LLControlGroup()

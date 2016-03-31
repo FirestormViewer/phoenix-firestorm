@@ -226,13 +226,13 @@ protected:
 	typedef std::map<std::string, LLControlVariablePtr > ctrl_name_table_t;
 	ctrl_name_table_t mNameTable;
 	static const std::string mTypeString[TYPE_COUNT];
-	std::string mSanityTypeString[SANITY_TYPE_COUNT];
+	static const std::string mSanityTypeString[SANITY_TYPE_COUNT];
 
 public:
 	static eControlType typeStringToEnum(const std::string& typestr);
-	eSanityType sanityTypeStringToEnum(const std::string& sanitystr);
+	static eSanityType sanityTypeStringToEnum(const std::string& sanitystr);
 	static std::string typeEnumToString(eControlType typeenum);	
-	std::string sanityTypeEnumToString(eSanityType sanitytypeenum);	
+	static std::string sanityTypeEnumToString(eSanityType sanitytypeenum);	
 
 	LLControlGroup(const std::string& name);
 	~LLControlGroup();
