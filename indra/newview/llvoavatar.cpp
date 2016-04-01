@@ -8198,7 +8198,7 @@ bool resolve_appearance_version(const LLAppearanceMessageContents& contents, S32
 //-----------------------------------------------------------------------------
 void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 {
-    static S32 largestSelfCOFSeen(LLViewerInventoryCategory::VERSION_UNKNOWN);
+    static S32 largest_self_cof_seen(LLViewerInventoryCategory::VERSION_UNKNOWN);
 	// <FS:CR> Use LLCachedControl
 	//bool enable_verbose_dumps = gSavedSettings.getBOOL("DebugAvatarAppearanceMessage");
 	static LLCachedControl<bool> enable_verbose_dumps(gSavedSettings, "DebugAvatarAppearanceMessage");
@@ -8243,13 +8243,13 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 				<< " last_update_request_cof_version " << last_update_request_cof_version
 				<<  " my_cof_version " << LLAppearanceMgr::instance().getCOFVersion() << LL_ENDL;
 
-        if (largestSelfCOFSeen > this_update_cof_version)
+        if (largest_self_cof_seen > this_update_cof_version)
         {
             LL_WARNS("Avatar") << "Already processed appearance for COF version " <<
-                largestSelfCOFSeen << ", discarding appearance with COF " << this_update_cof_version << LL_ENDL;
+                largest_self_cof_seen << ", discarding appearance with COF " << this_update_cof_version << LL_ENDL;
             return;
         }
-        largestSelfCOFSeen = this_update_cof_version;
+        largest_self_cof_seen = this_update_cof_version;
 		
 		// <FS:Ansariel> [Legacy Bake]
 		if (getRegion() && (getRegion()->getCentralBakeVersion()==0))

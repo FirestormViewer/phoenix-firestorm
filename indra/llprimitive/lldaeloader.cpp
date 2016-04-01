@@ -853,7 +853,7 @@ LLDAELoader::LLDAELoader(
     std::map<std::string, std::string>&		jointAliasMap,
     U32					maxJointsPerMesh,
 	U32					modelLimit,
-	bool					preprocess)
+    bool				preprocess)
 : LLModelLoader(
 		filename,
 		lod,
@@ -866,8 +866,8 @@ LLDAELoader::LLDAELoader(
 		jointsFromNodes,
         jointAliasMap,
         maxJointsPerMesh),
-mGeneratedModelLimit(modelLimit),
-mPreprocessDAE(preprocess)
+  mGeneratedModelLimit(modelLimit),
+  mPreprocessDAE(preprocess)
 {
 }
 
