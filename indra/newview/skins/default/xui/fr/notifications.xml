@@ -2451,7 +2451,7 @@ Si vous restez dans cette région, vous serrez déconnecté.
 	<notification name="LoadWebPage">
 Afficher la page Web [URL] ?
 [MESSAGE]
-De l'objet : &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propriétaire : [NAME]
+De l'objet : &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propriétaire : [NAME_SLURL]
 		<form name="form">
 			<button name="Gotopage" text="Afficher"/>
 			<button name="Cancel" text="Annuler"/>
@@ -3389,7 +3389,6 @@ Erreur dans l'expression régulière :
 [DOWNLOAD_URL]
 		<form name="form"><ignore name="ignore" text="Havok non présent"/></form>
 	</notification>
-	<notification name="DumpArchetypeSuccess">Export XML de l'apparence vers [FILENAME] réussi.</notification>
 	<notification name="StreamListExportSuccess">Export XML de la liste des flux musicaux vers [FILENAME] réussi.</notification>
 	<notification name="StreamListImportSuccess">Import de la liste des flux musicaux réussi.</notification>
 	<notification name="StreamMetadata">

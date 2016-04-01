@@ -2088,11 +2088,7 @@ LLVector3 LLManipScale::nearestAxis( const LLVector3& v ) const
 
 // <FS:Ansariel> [AVX Optimization]
 	//return LLVector3( coords[greatest_index] );
-#ifdef USE_AVX_OPTIMIZATION
 	return LLVector3(coords[greatest_index][0], coords[greatest_index][1], coords[greatest_index][2]);
-#else
-	return LLVector3( coords[greatest_index] );
-#endif
 // </FS:Ansariel> [AVX Optimization]
 }
 
@@ -2110,7 +2106,7 @@ BOOL LLManipScale::canAffectSelection()
 			{
 				LLViewerObject *root_object = (objectp == NULL) ? NULL : objectp->getRootEdit();
 				return objectp->permModify() && objectp->permMove() && !objectp->isPermanentEnforced() &&
-					((root_object == NULL) || !root_object->isPermanentEnforced()) &&
+					(root_object == NULL || (!root_object->isPermanentEnforced() && !root_object->isSeat())) &&
 					!objectp->isSeat();
 			}
 		} func;

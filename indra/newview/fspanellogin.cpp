@@ -89,20 +89,86 @@ std::string FSPanelLogin::sPassword = "";
 // For new accounts without a last name "Resident" is added as a last name.
 static std::string canonicalize_username(const std::string& name);
 
-class LLLoginRefreshHandler : public LLCommandHandler
+class LLLoginLocationAutoHandler : public LLCommandHandler
 {
 public:
 	// don't allow from external browsers
-	LLLoginRefreshHandler() : LLCommandHandler("login_refresh", UNTRUSTED_BLOCK) { }
+	LLLoginLocationAutoHandler() : LLCommandHandler("location_login", UNTRUSTED_BLOCK) { }
 	bool handle(const LLSD& tokens, const LLSD& query_map, LLMediaCtrl* web)
 	{	
 		if (LLStartUp::getStartupState() < STATE_LOGIN_CLEANUP)
 		{
-			FSPanelLogin::loadLoginPage();
+			if ( tokens.size() == 0 || tokens.size() > 4 ) 
+				return false;
+
+			// unescape is important - uris with spaces are escaped in this code path
+			// (e.g. space -> %20) and the code to log into a region doesn't support that.
+			const std::string region = LLURI::unescape( tokens[0].asString() );
+
+			// just region name as payload 
+			if ( tokens.size() == 1 )
+			{
+				// region name only - slurl will end up as center of region
+				LLSLURL slurl(region);
+				FSPanelLogin::autologinToLocation(slurl);
+			}
+			else
+			// region name and x coord as payload 
+			if ( tokens.size() == 2 )
+			{
+				// invalid to only specify region and x coordinate
+				// slurl code will revert to same as region only, so do this anyway
+				LLSLURL slurl(region);
+				FSPanelLogin::autologinToLocation(slurl);
+			}
+			else
+			// region name and x/y coord as payload 
+			if ( tokens.size() == 3 )
+			{
+				// region and x/y specified - default z to 0
+				F32 xpos;
+				std::istringstream codec(tokens[1].asString());
+				codec >> xpos;
+
+				F32 ypos;
+				codec.clear();
+				codec.str(tokens[2].asString());
+				codec >> ypos;
+
+				const LLVector3 location(xpos, ypos, 0.0f);
+				LLSLURL slurl(region, location);
+
+				FSPanelLogin::autologinToLocation(slurl);
+			}
+			else
+			// region name and x/y/z coord as payload 
+			if ( tokens.size() == 4 )
+			{
+				// region and x/y/z specified - ok
+				F32 xpos;
+				std::istringstream codec(tokens[1].asString());
+				codec >> xpos;
+
+				F32 ypos;
+				codec.clear();
+				codec.str(tokens[2].asString());
+				codec >> ypos;
+
+				F32 zpos;
+				codec.clear();
+				codec.str(tokens[3].asString());
+				codec >> zpos;
+
+				const LLVector3 location(xpos, ypos, zpos);
+				LLSLURL slurl(region, location);
+
+				FSPanelLogin::autologinToLocation(slurl);
+			};
 		}	
 		return true;
 	}
 };
+LLLoginLocationAutoHandler gLoginLocationAutoHandler;
 
 //---------------------------------------------------------------------------
 // Public methods
@@ -750,6 +816,18 @@ void FSPanelLogin::setLocation(const LLSLURL& slurl)
 	LLStartUp::setStartSLURL(slurl); // calls onUpdateStartSLURL, above
 }
 
+void FSPanelLogin::autologinToLocation(const LLSLURL& slurl)
+{
+	LL_DEBUGS("AppInit")<<"automatically logging into Location "<<slurl.asString()<<LL_ENDL;
+	LLStartUp::setStartSLURL(slurl); // calls onUpdateStartSLURL, above
+
+	if ( FSPanelLogin::sInstance != NULL )
+	{
+		void* unused_parameter = 0;
+		FSPanelLogin::sInstance->onClickConnect(unused_parameter);
+	}
+}
+
 // static
 void FSPanelLogin::closePanel()
 {
@@ -860,7 +938,8 @@ void FSPanelLogin::onClickConnect(void *)
 		// The start location SLURL has already been sent to LLStartUp::setStartSLURL
 
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
-		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
+		std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
+		gSavedSettings.setString("UserLoginInfo", credentialName());
 
 		LLSD blocked = FSData::instance().allowedLogin();
 		if (!blocked.isMap()) //hack for testing for an empty LLSD
@@ -868,8 +947,11 @@ void FSPanelLogin::onClickConnect(void *)
 			if(username.empty())
 			{
 				// user must type in something into the username field
-				LLSD args;
-				LLNotificationsUtil::add("MustHaveAccountToLogIn", args);
+				LLNotificationsUtil::add("MustHaveAccountToLogIn");
+			}
+			else if(password.empty())
+			{
+				LLNotificationsUtil::add("MustEnterPasswordToLogIn");
 			}
 			else
 			{

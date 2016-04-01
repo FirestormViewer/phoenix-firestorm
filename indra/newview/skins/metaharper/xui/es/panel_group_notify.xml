@@ -2,7 +2,6 @@
 <panel name="panel_group_notify">
 	<text name="group_notice" value="Aviso de grupo"/>
 	<text name="title" value="Enviado por Remitente, Grupo"/>
-	<text_editor name="message" value="Mensaje"/>
 	<text name="attachment" value="Adjunción"/>
 	<button label="Aceptar" name="btn_ok"/>
 	<button label="Avisos del grupo" name="btn_notices"/>

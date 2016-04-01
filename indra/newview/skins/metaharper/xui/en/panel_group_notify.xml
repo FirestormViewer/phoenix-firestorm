@@ -52,7 +52,7 @@
      name="group_icon"
      top="50"
      width="64" />
-    <text_editor
+    <simple_text_editor
      parse_urls="true"
      enabled="true"
      follows="all"
@@ -70,7 +70,7 @@
      use_ellipses="true"
      value="message"
      word_wrap="true" >
-    </text_editor>
+    </simple_text_editor>
     <icon
      bottom="-36"
      follows="left|bottom|right"

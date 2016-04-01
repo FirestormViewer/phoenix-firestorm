@@ -4327,6 +4327,12 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="OfflineStatus">
 		niedostępny/a
 	</string>
+	<string name="not_online_msg">
+		Ta osoba jest niedostępna - wiadomość zostanie zapisana i dostarczona później.
+	</string>
+	<string name="not_online_inventory">
+		Ta osoba jest niedostępna - przedmiot został zapisany.
+	</string>
 	<string name="IM_announce_incoming">
 		Nadchodzi wiadomość od [NAME]
 	</string>

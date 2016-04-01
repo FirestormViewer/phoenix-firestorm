@@ -137,15 +137,11 @@ LLPreviewTexture::~LLPreviewTexture()
 		getWindow()->decBusyCount();
 	}
 
-	// <FS:ND> mImage can be 0.
-	// mImage->setBoostLevel(mImageOldBoostLevel);
-
-	if( mImage )
+	if (mImage.notNull())
+	{
 		mImage->setBoostLevel(mImageOldBoostLevel);
-
-	// <FS:ND>
-
-	mImage = NULL;
+		mImage = NULL;
+	}
 }
 
 // virtual

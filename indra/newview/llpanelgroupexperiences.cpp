@@ -30,14 +30,13 @@
 
 #include "lluictrlfactory.h"
 #include "roles_constants.h"
-
+#include "llappviewer.h"
 #include "llagent.h"
 #include "llviewerregion.h"
 #include "llflatlistview.h"
 #include "llpanelexperiences.h"
 #include "llsd.h"
 #include "llexperiencecache.h"
-#include "llvoavatarself.h"
 
 
 static LLPanelInjector<LLPanelGroupExperiences> t_panel_group_experiences("panel_group_experiences");
@@ -69,7 +68,7 @@ BOOL LLPanelGroupExperiences::postBuild()
 
 void LLPanelGroupExperiences::activate()
 {
-	if (getGroupID() == LLUUID::null)
+	if ((getGroupID() == LLUUID::null) || gDisconnected)
 	{
 		return;
 	}

@@ -49,7 +49,7 @@
          value="Sender Name / Group Name"
          width="230" />
     </panel>
-    <text_editor
+    <simple_text_editor
      parse_urls="true"
      enabled="true"
      follows="all"
@@ -67,7 +67,7 @@
      value="message"
      width="270"
 	 word_wrap="true" >
-    </text_editor>
+    </simple_text_editor>
     <icon
      bottom="60"
      follows="left|bottom|right"

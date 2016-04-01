@@ -112,7 +112,8 @@ void LLGLTexture::setBoostLevel(S32 level)
 	if(mBoostLevel != level)
 	{
 		mBoostLevel = level ;
-		if(mBoostLevel != LLGLTexture::BOOST_NONE)
+		if(mBoostLevel != LLGLTexture::BOOST_NONE
+		   && mBoostLevel != LLGLTexture::BOOST_ICON)
 		{
 			setNoDelete() ;		
 		}
@@ -130,13 +131,6 @@ void LLGLTexture::setActive()
 	{
 		mTextureState = ACTIVE ; 
 	}
-
-	// <FS:Ansariel> Try to plug the profile icon memory hole
-	if (mBoostLevel == BOOST_ICON)
-	{
-		setNoDelete();
-	}
-	// </FS:Ansariel>
 }
 
 //set the texture to stay in memory

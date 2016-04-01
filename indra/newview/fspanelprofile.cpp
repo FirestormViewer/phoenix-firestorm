@@ -502,7 +502,7 @@ void FSPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
 		std::string text;
 		if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA | FSData::GATEWAY))
 		{
-			args["[FIRESTORM]"] = "Firestorm";
+			args["[FIRESTORM]"] = LLTrans::getString("APP_NAME");
 		}
 
 		if (flags & FSData::DEVELOPER)

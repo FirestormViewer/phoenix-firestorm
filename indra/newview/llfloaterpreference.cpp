@@ -682,6 +682,10 @@ BOOL LLFloaterPreference::postBuild()
 
 	LLLogChat::setSaveHistorySignal(boost::bind(&LLFloaterPreference::onLogChatHistorySaved, this));
 
+	LLSliderCtrl* fov_slider = getChild<LLSliderCtrl>("camera_fov");
+	fov_slider->setMinValue(LLViewerCamera::getInstance()->getMinView());
+	fov_slider->setMaxValue(LLViewerCamera::getInstance()->getMaxView());
+
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-06-11 (Catznip-2.6.c) | Added: Catznip-2.6.0c
 #ifndef LL_SEND_CRASH_REPORTS
 	// Hide the crash report tab if crash reporting isn't enabled

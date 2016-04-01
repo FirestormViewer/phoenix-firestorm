@@ -83,6 +83,7 @@
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
+#include "llviewertexturelist.h"
 #include "llvovolume.h"
 #include "fsexportperms.h"
 
@@ -485,7 +486,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
 	}
 
 	LLUUID id = me->mTexturesToSave.begin()->first;
-	LLViewerTexture* imagep = LLViewerTextureManager::findTexture(id);
+	LLViewerTexture* imagep = LLViewerTextureManager::findFetchedTexture(id, TEX_LIST_DISCARD);
 	if (!imagep)
 	{
 		me->mTexturesToSave.erase(id);

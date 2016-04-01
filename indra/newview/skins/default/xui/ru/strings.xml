@@ -4511,6 +4511,12 @@ support@secondlife.com.
 	<string name="IM_autoresponse_item_sent">
 		Элемент [ITEM_NAME] отправлен автоответом
 	</string>
+	<string name="not_online_msg">
+		Пользователь оффлайн - сообщение будет сохранено и доставлено позже.
+	</string>
+	<string name="not_online_inventory">
+		Пользователь оффлайн - инвентарь сохранен.
+	</string>
 	<string name="answered_call">
 		На ваш звонок ответили
 	</string>

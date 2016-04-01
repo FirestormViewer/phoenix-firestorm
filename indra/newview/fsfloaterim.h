@@ -69,6 +69,7 @@ public:
 	/*virtual*/ BOOL getVisible();
 	// Check typing timeout timer.
 	/*virtual*/ void draw();
+	/*virtual*/ void setMinimized(BOOL b);
 
 	// LLFloater overrides
 	/*virtual*/ void onClose(bool app_quitting);
@@ -154,6 +155,8 @@ public:
 	void loadInitialInvitedIDs();
 
 	bool isP2PChat() const { return mIsP2PChat; }
+
+	void handleMinimized(bool minimized);
 
 protected:
 	/* virtual */
