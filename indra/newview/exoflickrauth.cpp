@@ -23,25 +23,28 @@
 #include "llviewerwindow.h"
 #include "llbufferstream.h"
 #include "lluri.h"
-#include "llhttpclient.h"
 #include "llviewercontrol.h"
 #include "llnotificationsutil.h"
 #include "exoflickr.h"
+#include "llcorehttputil.h"
 
 #include "exoflickrauth.h"
 
-class exoFlickrAuthResponse : public LLHTTPClient::Responder
-{
-public:
-	exoFlickrAuthResponse(exoFlickrAuth::authorized_callback_t callback);
-	/* virtual */ void completedRaw(
-									const LLChannelDescriptors& channels,
-									const LLIOPipe::buffer_ptr_t& buffer);
-private:
-	exoFlickrAuth::authorized_callback_t mCallback;
-};
-
 bool exoFlickrAuth::sAuthorisationInProgress = false;
+
+void exoFlickrAuthResponse( LLSD const &aData, exoFlickrAuth::authorized_callback_t aCallback )
+{
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	std::string result;
+	result.assign( rawData.begin(), rawData.end() );
+
+	LLSD resultLLSD = LLURI::queryMap( result );
+	aCallback((status.getType() == HTTP_OK), resultLLSD);
+}
+
 
 exoFlickrAuth::exoFlickrAuth(authorized_callback_t callback)
 : mCallback(callback)
@@ -122,7 +125,11 @@ void exoFlickrAuth::explanationCallback(const LLSD& notification, const LLSD& re
 		params["oauth_callback"] = "oob";
 		LL_INFOS("Flickr") << "Initialising OAuth authorisation process." << LL_ENDL;
 		exoFlickr::signRequest(params, "GET", "http://www.flickr.com/services/oauth/request_token");
-		LLHTTPClient::get("http://www.flickr.com/services/oauth/request_token", params, new exoFlickrAuthResponse(boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2)));
+
+		std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/request_token", LLSD::emptyArray(), params ).asString();
+
+		exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotRequestToken, this, _1, _2);
+		FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
 	}
 	else
 	{
@@ -170,7 +177,12 @@ void exoFlickrAuth::gotVerifier(const LLSD& notification, const LLSD& response)
 	LLSD params;
 	params["oauth_verifier"] = response["oauth_verifier"];
 	exoFlickr::signRequest(params, "GET", "http://www.flickr.com/services/oauth/access_token");
-	LLHTTPClient::get("http://www.flickr.com/services/oauth/access_token", params, new exoFlickrAuthResponse(boost::bind(&exoFlickrAuth::gotAccessToken, this, _1, _2)));
+
+	std::string url = LLURI::buildHTTP( "http://www.flickr.com/services/oauth/access_token", LLSD::emptyArray(), params ).asString();
+
+	exoFlickrAuth::authorized_callback_t callback = boost::bind(&exoFlickrAuth::gotAccessToken, this, _1, _2);
+	FSCoreHttpUtil::callbackHttpGetRaw( url, boost::bind( exoFlickrAuthResponse, _1, callback ) );
+
 }
 
 void exoFlickrAuth::gotAccessToken(bool success, const LLSD& params)
@@ -192,19 +204,4 @@ void exoFlickrAuth::gotAccessToken(bool success, const LLSD& params)
 	}
 
 	delete this;
-}
-
-exoFlickrAuthResponse::exoFlickrAuthResponse(exoFlickrAuth::authorized_callback_t callback)
-: mCallback(callback)
-{
-}
-
-void exoFlickrAuthResponse::completedRaw(const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
-{
-	LLBufferStream istr(channels, buffer.get());
-	std::ostringstream oss;
-	oss << istr.rdbuf();
-	std::string str = oss.str();
-	LLSD result = LLURI::queryMap(str);
-	mCallback((getStatus() == HTTP_OK), result);
 }

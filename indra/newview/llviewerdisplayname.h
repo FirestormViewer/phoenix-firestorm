@@ -47,6 +47,8 @@ namespace LLViewerDisplayName
 	// unavailable or name not available.
 	void set(const std::string& display_name, const set_name_slot_t& slot); 
 	
+	void setDisplayNameCoro(const std::string& cap_url, const LLSD& body);
+
 	void addNameChangedCallback(const name_changed_signal_t::slot_type& cb);
 }
 

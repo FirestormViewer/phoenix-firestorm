@@ -277,7 +277,6 @@ attributedStringInfo getSegments(NSAttributedString *str)
     mOldResize = false;
     
 	return self;
-
 }
 
 - (BOOL) rebuildContext

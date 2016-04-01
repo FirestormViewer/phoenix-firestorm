@@ -124,6 +124,8 @@ private:
 	// <FS:Ansariel> FIRE-15368: Don't include floater in screenshot update
 	void onUpdateScreenshot();
 
+    static void finishedARPost(const LLSD &);
+
 private:
 	EReportType		mReportType;
 	LLUUID 			mObjectID;

@@ -603,7 +603,7 @@ public:
 						info->item = item;
 						info->self = mProc;
 						LLPermissions perm(((LLInventoryItem*)item)->getPermissions());
-						gAssetStorage->getInvItemAsset(LLHost::invalid,
+						gAssetStorage->getInvItemAsset(LLHost(),
 														gAgent.getID(),
 														gAgent.getSessionID(),
 														perm.getOwner(),

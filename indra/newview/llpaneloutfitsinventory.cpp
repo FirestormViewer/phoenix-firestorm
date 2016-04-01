@@ -240,7 +240,13 @@ void LLPanelOutfitsInventory::onSave()
 // <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 void LLPanelOutfitsInventory::onCOFChanged()
 {
-	U32 attachments = LLAppearanceMgr::instance().getNumAttachmentsInCOF();
+	const LLUUID cof = LLAppearanceMgr::instance().getCOF();
+	LLInventoryModel::item_array_t obj_items;
+	LLInventoryModel::cat_array_t cats;
+	LLIsType is_of_type(LLAssetType::AT_OBJECT);
+	gInventory.collectDescendentsIf(cof, cats, obj_items, LLInventoryModel::EXCLUDE_TRASH, is_of_type);
+	U32 attachments = obj_items.size();
+
 	LLStringUtil::format_map_t args;
 	args["COUNT"] = llformat("%d", attachments);
 	args["MAX"] = llformat("%d", MAX_AGENT_ATTACHMENTS);

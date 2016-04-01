@@ -40,7 +40,6 @@
 
 #include "llappviewer.h"
 #include "llbufferstream.h"
-#include "llhttpclient.h"
 #include "llnotificationsutil.h"
 #include "llviewercontrol.h"
 #include "llworld.h"
@@ -55,6 +54,7 @@
 #include "llviewershadermgr.h"
 #include "llstring.h"
 #include "stringize.h"
+#include "llcorehttputil.h"
 
 #if LL_WINDOWS
 #include "lldxhardware.h"
@@ -495,131 +495,69 @@ bool LLFeatureManager::loadGPUClass()
 	return true; // indicates that a gpu value was established
 }
 
-	
-// responder saves table into file
-class LLHTTPFeatureTableResponder : public LLHTTPClient::Responder
+void LLFeatureManager::fetchFeatureTableCoro(std::string tableName)
 {
-	LOG_CLASS(LLHTTPFeatureTableResponder);
-public:
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("FeatureManagerHTTPTable", httpPolicy));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
 
-	LLHTTPFeatureTableResponder(std::string filename) :
-		mFilename(filename)
-	{
-	}
+    const std::string base = gSavedSettings.getString("FeatureManagerHTTPTable");
 
-	
-	virtual void completedRaw(const LLChannelDescriptors& channels,
-							  const LLIOPipe::buffer_ptr_t& buffer)
-	{
-		// <FS:Techwolf Lupindo> downloadable gpu table support
-		completedHeader();
-		// </FS:Techwolf Lupindo>
-
-		if (isGoodStatus())
-		{
-			// write to file
-
-			LL_INFOS() << "writing feature table to " << mFilename << LL_ENDL;
-			
-			S32 file_size = buffer->countAfter(channels.in(), NULL);
-			if (file_size > 0)
-			{
-				// read from buffer
-				U8* copy_buffer = new U8[file_size];
-				buffer->readAfter(channels.in(), NULL, copy_buffer, file_size);
-
-				// write to file
-				LLAPRFile out(mFilename, LL_APR_WB);
-				out.write(copy_buffer, file_size);
-				out.close();
-				// <FS:Techwolf Lupindo> downloadable gpu table support
-				const std::time_t new_time = mLastModified.secondsSinceEpoch();
-#ifdef LL_WINDOWS
-				boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str(mFilename) ), new_time);
-#else
-				boost::filesystem::last_write_time(boost::filesystem::path(mFilename), new_time);
-#endif
-				// </FS:Techwolf Lupindo>
-			}
-		}
-		else
-		{
-			char body[1025]; 
-			body[1024] = '\0';
-			LLBufferStream istr(channels, buffer.get());
-			istr.get(body,1024);
-			if (strlen(body) > 0)
-			{
-				mContent["body"] = body;
-			}
-			LL_WARNS() << dumpResponse() << LL_ENDL;
-		}
-	}
-
-	// <FS:Techwolf Lupindo> downloadable gpu table support
-	void completedHeader()
-	{
-		LLSD content = getResponseHeaders();
-		if (content.has("last-modified"))
-		{
-			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
-		}
-	}
-	// </FS:Techwolf Lupindo>
-
-private:
-	std::string mFilename;
-	// <FS:Techwolf Lupindo> downloadable gpu table support
-	LLDate mLastModified;
-	// </FS:Techwolf Lupindo>
-};
-
-void fetch_feature_table(std::string table)
-{
-	const std::string base       = gSavedSettings.getString("FeatureManagerHTTPTable");
 
 #if LL_WINDOWS
-	std::string os_string = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
-	std::string filename;
-	if (os_string.find("Microsoft Windows XP") == 0)
-	{
-		filename = llformat(table.c_str(), "_xp", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
-	}
-	else
-	{
-		filename = llformat(table.c_str(), "", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
-	}
+    std::string os_string = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
+    std::string filename;
+
+    if (os_string.find("Microsoft Windows XP") == 0)
+    {
+        filename = llformat(tableName.c_str(), "_xp", LLVersionInfo::getVersion().c_str());
+    }
+    else
+    {
+        filename = llformat(tableName.c_str(), "", LLVersionInfo::getVersion().c_str());
+    }
 #else
-	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
+    const std::string filename   = llformat(tableName.c_str(), LLVersionInfo::getVersion().c_str());
 #endif
 
-	const std::string url        = base + "/" + filename;
+    std::string url        = base + "/" + filename;
+    // testing url below
+    //url = "http://viewer-settings.secondlife.com/featuretable.2.1.1.208406.txt";
+    const std::string path       = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename);
 
-	const std::string path       = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename);
 
-	LL_INFOS() << "LLFeatureManager fetching " << url << " into " << path << LL_ENDL;
-	
-	// <FS:Techwolf Lupindo> downloadable gpu table support
-	LLSD headers;
-	headers.insert("User-Agent",  LLVersionInfo::getBuildPlatform() + " " + LLVersionInfo::getVersion());
-	time_t last_modified = 0;
-	llstat stat_data;
-	if(!LLFile::stat(path, &stat_data))
-	{
-		last_modified = stat_data.st_mtime;
-	}
-	//LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
-	LLHTTPClient::getIfModified(url, new LLHTTPFeatureTableResponder(path), last_modified, headers);
-	// </FS:Techwolf Lupindo>
+    LL_INFOS() << "LLFeatureManager fetching " << url << " into " << path << LL_ENDL;
+
+    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url);
+
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+    if (status)
+    {   // There was a newer feature table on the server. We've grabbed it and now should write it.
+        // write to file
+        const LLSD::Binary &raw = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+
+        LL_INFOS() << "writing feature table to " << path << LL_ENDL;
+
+        S32 size = raw.size();
+        if (size > 0)
+        {
+            // write to file
+            LLAPRFile out(path, LL_APR_WB);
+            out.write(raw.data(), size);
+            out.close();
+        }
+    }
 }
-
 
 // fetch table(s) from a website (S3)
 void LLFeatureManager::fetchHTTPTables()
 {
-	fetch_feature_table(FEATURE_TABLE_VER_FILENAME);
+    LLCoros::instance().launch("LLFeatureManager::fetchFeatureTableCoro",
+        boost::bind(&LLFeatureManager::fetchFeatureTableCoro, this, FEATURE_TABLE_VER_FILENAME));
 }
-
 
 void LLFeatureManager::cleanupFeatureTables()
 {

@@ -62,7 +62,7 @@ protected:
 	bool recoverNext();
 
 	void onCreateScript(const LLUUID& idItem);
-	void onSavedScript(const LLUUID& idItem, const LLSD& sdContent, bool fSuccess);
+	void onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response);
 	bool onUploadError(const std::string& strFilename);
 
 protected:
