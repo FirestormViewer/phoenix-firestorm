@@ -3060,6 +3060,7 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 
 	mScriptEd->writeToFile(filename,false);
 
+	mIsSaving = TRUE;
         uploadAssetLegacy(filename, object, tid, isRunning);
     }
 

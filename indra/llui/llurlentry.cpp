@@ -234,7 +234,7 @@ LLUrlEntryHTTP::LLUrlEntryHTTP()
 {
 	// <FS:Ansariel> FIRE-1715: Links using FTP protocol are not recognized
 	//mPattern = boost::regex("https?://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
-	mPattern = boost::regex("(https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
+  	mPattern = boost::regex("(https?|ftp)://([^\\s/?\\.#]+\\.?)+\\.\\w+(:\\d+)?(/\\S*)?",
 	// </FS:Ansariel>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
