@@ -73,13 +73,6 @@ void LLPanelGroupExperiences::activate()
 		return;
 	}
 
-	// <FS:Ansariel> Crash fix
-	if (!isAgentAvatarValid())
-	{
-		return;
-	}
-	// </FS:Ansariel>
-
     LLExperienceCache::instance().getGroupExperiences(getGroupID(),
         boost::bind(&LLPanelGroupExperiences::groupExperiencesResults, getDerivedHandle<LLPanelGroupExperiences>(), _1));
 }
