@@ -32,9 +32,6 @@
 #include "llcallbacklist.h"
 #include "llinventorymodel.h"
 #include "llsdutil.h"
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-#include "llviewercontrol.h"
-// [/SL:KB]
 #include "llviewerregion.h"
 #include "llinventoryobserver.h"
 #include "llviewercontrol.h"
