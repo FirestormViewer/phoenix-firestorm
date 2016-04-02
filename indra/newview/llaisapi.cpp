@@ -46,14 +46,25 @@ const std::string AISAPI::LIBRARY_CAP_NAME("LibraryAPIv3");
 
 //-------------------------------------------------------------------------
 /*static*/
-bool AISAPI::isAvailable()
+//bool AISAPI::isAvailable()
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+bool AISAPI::isAvailable(EAISCommand cmd)
+// [/SL:KB]
 {
     // <FS:Ansariel> Add AIS3 debug setting
     //if (gAgent.getRegion())
     if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
     // </FS:Ansariel>
     {
-        return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		static LLCachedControl<U32> COMMAND_FILTER_MASK(gSavedSettings, "AISCommandFilterMask", U32_MAX);
+
+		bool aisAvailable = gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+		return 
+			(aisAvailable) && 
+			( (CMD_UNKNOWN == cmd) || ((U32)cmd & COMMAND_FILTER_MASK) );
+// [/SL:KB]
+        //return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
     }
     return false;
 }
