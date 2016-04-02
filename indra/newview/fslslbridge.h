@@ -54,7 +54,7 @@ public:
 	FSLSLBridge();
 	~FSLSLBridge();
 
-	typedef void (*tCallback)( LLSD const& );
+	typedef boost::function<void(const LLSD &)> tCallback;
 
 	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
 	bool viewerToLSL(const std::string& message, tCallback = NULL );
