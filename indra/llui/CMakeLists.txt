@@ -287,6 +287,7 @@ target_link_libraries(llui
     ${LLXML_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${HUNSPELL_LIBRARY}
+    ${LLMESSAGE_LIBRARIES}
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 
