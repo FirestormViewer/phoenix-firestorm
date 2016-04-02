@@ -46,7 +46,7 @@
 		use_ellipses="true"
 		value="Sent by Sender Name, Group Name" 
 		width="380" />
-	<icon
+	<group_icon
 		follows="left|top"
 		height="64"
 		image_name="Generic_Group"
