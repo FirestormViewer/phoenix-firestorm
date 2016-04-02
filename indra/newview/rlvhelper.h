@@ -143,8 +143,8 @@ public:
 	 */
 protected:
 	typedef std::list<const RlvBehaviourInfo*> rlv_bhvrinfo_list_t;
-	typedef std::multimap<std::string, const RlvBehaviourInfo*> rlv_string2info_map_t;
-	typedef std::map<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
+	typedef std::map<std::pair<std::string, ERlvParamType>, const RlvBehaviourInfo*> rlv_string2info_map_t;
+	typedef std::multimap<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
 
 	rlv_bhvrinfo_list_t   m_BhvrInfoList;
 	rlv_string2info_map_t m_String2InfoMap;

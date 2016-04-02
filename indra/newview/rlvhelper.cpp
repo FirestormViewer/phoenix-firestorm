@@ -200,18 +200,23 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("versionnew",				RLV_BHVR_VERSIONNEW,			RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("versionnum",				RLV_BHVR_VERSIONNUM,			RLV_TYPE_REPLY));
 
-	// Populate m_String2InfoMap
+	// Populate m_String2InfoMap (the tuple <behaviour, type> should be unique)
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
-		m_String2InfoMap.insert(std::make_pair(pBhvrInfo->getBehaviour(), pBhvrInfo));
+		RLV_ASSERT(m_String2InfoMap.insert(std::make_pair(std::make_pair(pBhvrInfo->getBehaviour(), (ERlvParamType)pBhvrInfo->getParamTypeMask()), pBhvrInfo)).second == true);
 	}
 
-	// Populate m_Bhvr2InfoMap (but only with non-synonym *restrictions*)
+	// Populate m_Bhvr2InfoMap (there can be multiple entries per ERlvBehaviour)
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
 		if ( (pBhvrInfo->getParamTypeMask() & RLV_TYPE_ADDREM) && (!pBhvrInfo->isSynonym()) )
 		{
-			RLV_ASSERT_DBG(m_Bhvr2InfoMap.end() == m_Bhvr2InfoMap.find(pBhvrInfo->getBehaviourType()));
+#ifdef RLV_DEBUG
+			for (const rlv_bhvr2info_map_t::value_type& itBhvr : boost::make_iterator_range(m_Bhvr2InfoMap.lower_bound(pBhvrInfo->getBehaviourType()), m_Bhvr2InfoMap.upper_bound(pBhvrInfo->getBehaviourType())))
+			{
+				RLV_ASSERT( (itBhvr.first != pBhvrInfo->getBehaviourType()) || (itBhvr.second->getBehaviourFlags() != pBhvrInfo->getBehaviourFlags()) );
+			}
+#endif // RLV_DEBUG
  			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
 		}
 	}
@@ -247,11 +252,8 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 	if (pfStrict)
 		*pfStrict = fStrict;
 
-	rlv_string2info_map_t::const_iterator itBhvr = std::find_if(m_String2InfoMap.lower_bound(strBhvr), m_String2InfoMap.upper_bound(strBhvr), 
-																[&eParamType, &fStrict](const rlv_string2info_map_t::value_type& bhvrInfo) {
-																	return (bhvrInfo.second->getParamTypeMask() & eParamType) && ((!fStrict) || (bhvrInfo.second->hasStrict()));
-																});
-	return (itBhvr != m_String2InfoMap.end()) ? itBhvr->second : NULL;
+	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair(strBhvr, (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
+	return ( (itBhvr != m_String2InfoMap.end()) && ((!fStrict) || (itBhvr->second->hasStrict())) ) ? itBhvr->second : NULL;
 }
 
 ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
@@ -282,22 +284,23 @@ bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamT
 
 bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
 {
-	rlv_bhvr2info_map_t::const_iterator itBhvrInfo = m_Bhvr2InfoMap.find(eBhvr);
-	return (itBhvrInfo != m_Bhvr2InfoMap.cend()) && (itBhvrInfo->second->hasStrict());
+	for (const rlv_bhvr2info_map_t::value_type& itBhvr : boost::make_iterator_range(m_Bhvr2InfoMap.lower_bound(eBhvr), m_Bhvr2InfoMap.upper_bound(eBhvr)))
+	{
+		// Only restrictions can be strict
+		if (RLV_TYPE_ADDREM != itBhvr.second->getParamTypeMask())
+			continue;
+		return itBhvr.second->hasStrict();
+	}
+	RLV_ASSERT(false);
+	return false;
 }
 
 void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBhvrFlag, bool fEnable)
 {
-	for (const rlv_string2info_map_t::value_type& bhvrInfo : boost::make_iterator_range(m_String2InfoMap.lower_bound(strBhvr), m_String2InfoMap.upper_bound(strBhvr)))
+	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair(strBhvr, (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
+	if (m_String2InfoMap.end() != itBhvr)
 	{
-		if (bhvrInfo.second->getParamTypeMask() & eParamType)
-		{
-			if (RlvBehaviourInfo* pBhvrInfo = const_cast<RlvBehaviourInfo*>(bhvrInfo.second))
-			{
-				pBhvrInfo->toggleBehaviourFlag(eBhvrFlag, fEnable);
-			}
-			break;
-		}
+		const_cast<RlvBehaviourInfo*>(itBhvr->second)->toggleBehaviourFlag(eBhvrFlag, fEnable);
 	}
 }
 
