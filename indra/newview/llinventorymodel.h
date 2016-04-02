@@ -287,6 +287,9 @@ public:
 	item_array_t collectLinkedItems(const LLUUID& item_id,
 									const LLUUID& start_folder_id = LLUUID::null);
 	// </FS:Ansariel>
+
+private:
+	U32 getDescendentsCountRecursive(const LLUUID& id, U32 max_item_limit);
 	
 	//--------------------------------------------------------------------
 	// Find
@@ -437,6 +440,8 @@ public:
 	void removeCategory(const LLUUID& category_id);
 	/// removeItem() or removeCategory(), whichever is appropriate
 	void removeObject(const LLUUID& object_id);
+
+	void checkTrashOverflow();
 
 protected:
 	void updateLinkedObjectsFromPurge(const LLUUID& baseobj_id);

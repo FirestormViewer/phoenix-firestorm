@@ -1107,7 +1107,16 @@ BOOL LLViewerWindow::handleAnyMouseClick(LLWindow *window,  LLCoordGL pos, MASK 
 
 BOOL LLViewerWindow::handleMouseDown(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
-	BOOL down = TRUE;
+    mAllowMouseDragging = FALSE;
+    if (!mMouseDownTimer.getStarted())
+    {
+        mMouseDownTimer.start();
+    }
+    else
+    {
+        mMouseDownTimer.reset();
+    }    
+    BOOL down = TRUE;
 	return handleAnyMouseClick(window,pos,mask,LLMouseHandler::CLICK_LEFT,down);
 }
 
@@ -1126,7 +1135,11 @@ BOOL LLViewerWindow::handleDoubleClick(LLWindow *window,  LLCoordGL pos, MASK ma
 
 BOOL LLViewerWindow::handleMouseUp(LLWindow *window,  LLCoordGL pos, MASK mask)
 {
-	BOOL down = FALSE;
+    if (mMouseDownTimer.getStarted())
+    {
+        mMouseDownTimer.stop();
+    }
+    BOOL down = FALSE;
 	return handleAnyMouseClick(window,pos,mask,LLMouseHandler::CLICK_LEFT,down);
 }
 
@@ -1356,6 +1369,22 @@ void LLViewerWindow::handleMouseMove(LLWindow *window,  LLCoordGL pos, MASK mask
 	{
 		gAgent.clearAFK();
 	}
+}
+
+void LLViewerWindow::handleMouseDragged(LLWindow *window,  LLCoordGL pos, MASK mask)
+{
+    if (mMouseDownTimer.getStarted())
+    {
+        if (mMouseDownTimer.getElapsedTimeF32() > 0.1)
+        {
+            mAllowMouseDragging = TRUE;
+            mMouseDownTimer.stop();
+        }
+    }
+    if(mAllowMouseDragging || !LLToolCamera::getInstance()->hasMouseCapture())
+    {
+        handleMouseMove(window, pos, mask);
+    }
 }
 
 void LLViewerWindow::handleMouseLeave(LLWindow *window)
@@ -1687,6 +1716,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	mMiddleMouseDown(FALSE),
 	mRightMouseDown(FALSE),
 	mMouseInWindow( FALSE ),
+    mAllowMouseDragging(TRUE),
+    mMouseDownTimer(),
 	mLastMask( MASK_NONE ),
 	mToolStored( NULL ),
 	mHideCursorPermanent( FALSE ),
