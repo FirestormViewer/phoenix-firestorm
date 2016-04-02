@@ -51,7 +51,10 @@ const std::string AISAPI::LIBRARY_CAP_NAME("LibraryAPIv3");
 /*static*/
 bool AISAPI::isAvailable()
 {
-    if (gAgent.getRegion())
+    // <FS:Ansariel> Add AIS3 debug setting
+    //if (gAgent.getRegion())
+    if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+    // </FS:Ansariel>
     {
         return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
     }
