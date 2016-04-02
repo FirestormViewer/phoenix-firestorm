@@ -491,8 +491,6 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("vivoxsdk.dll")
             self.path("ortp.dll")
             self.path("libsndfile-1.dll")
-            self.path("zlib1.dll")
-            self.path("vivoxplatform.dll")
             self.path("vivoxoal.dll")
             self.path("ca-bundle.crt")
             
@@ -590,7 +588,6 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("cef_extensions.pak")
             self.path("devtools_resources.pak")
             self.path("icudtl.dat")
-            self.path("cef_extensions.pak")
             self.end_prefix()
 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'resources', 'locales'), dst=os.path.join('llplugin', 'locales')):

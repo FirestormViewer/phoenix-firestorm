@@ -714,19 +714,18 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	std::string url = region->getCapability("RemoteParcelRequest");
 	if (!url.empty())
 	{
-		body["location"] = ll_sd_from_vector3(pos_region);
-		if (!pos_global.isExactlyZero())
-		{
-			U64 region_handle = to_region_handle(pos_global);
-			body["region_handle"] = ll_sd_from_U64(region_handle);
-		}
 		mRequestedGlobalPos = pos_global;
 		if (mParcelInfoObserver)
 		{
 			delete mParcelInfoObserver;
 		}
 		mParcelInfoObserver = new FSWorldMapParcelInfoObserver(pos_global);
-		LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(mParcelInfoObserver->getObserverHandle()));
+
+		LLRemoteParcelInfoProcessor::instance().requestRegionParcelInfo(url,
+																		region->getRegionID(), pos_region, pos_global,
+																		mParcelInfoObserver->getObserverHandle() );
+
+
 	}
 	else
 	{

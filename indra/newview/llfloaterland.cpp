@@ -877,22 +877,9 @@ void LLPanelLandGeneral::refresh()
 			std::string url = regionp->getCapability("RemoteParcelRequest");
 			if (!url.empty())
 			{
-				LLSD body;
-				body["location"] = ll_sd_from_vector3(parcel->getCenterpoint());
-
 				LLUUID region_id = regionp->getRegionID();
-				if (!region_id.isNull())
-				{
-					body["region_id"] = region_id;
-				}
-
 				LLVector3d pos_global = regionp->getCenterGlobal();
-				if (!pos_global.isExactlyZero())
-				{
-					U64 region_handle = to_region_handle(pos_global);
-					body["region_handle"] = ll_sd_from_U64(region_handle);
-				}
-				LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(getObserverHandle()));
+				LLRemoteParcelInfoProcessor::instance().requestRegionParcelInfo( url, region_id, parcel->getCenterpoint(), pos_global, getObserverHandle() );
 			}
 			else
 			{

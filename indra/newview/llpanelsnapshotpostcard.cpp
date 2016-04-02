@@ -40,6 +40,7 @@
 #include "llpostcard.h"
 #include "llviewercontrol.h" // gSavedSettings
 #include "llviewerwindow.h"
+#include "llviewerregion.h"
 
 #include <boost/regex.hpp>
 
@@ -68,7 +69,8 @@ private:
 	/*virtual*/ void updateControls(const LLSD& info);
 
 	bool missingSubjMsgAlertCallback(const LLSD& notification, const LLSD& response);
-	void sendPostcard();
+    static void sendPostcardFinished(LLSD result);
+    void sendPostcard();
 
 	void onMsgFormFocusRecieved();
 	void onFormatComboCommit(LLUICtrl* ctrl);
@@ -173,28 +175,44 @@ bool LLPanelSnapshotPostcard::missingSubjMsgAlertCallback(const LLSD& notificati
 }
 
 
+void LLPanelSnapshotPostcard::sendPostcardFinished(LLSD result)
+{
+    LL_WARNS() << result << LL_ENDL;
+
+    std::string state = result["state"].asString();
+
+    LLPostCard::reportPostResult((state == "complete"));
+}
+
+
 void LLPanelSnapshotPostcard::sendPostcard()
 {
-	std::string to(getChild<LLUICtrl>("to_form")->getValue().asString());
-	std::string subject(getChild<LLUICtrl>("subject_form")->getValue().asString());
+    // upload the image
+    std::string url = gAgent.getRegion()->getCapability("SendPostcard");
+    if (!url.empty())
+    {
+        LLResourceUploadInfo::ptr_t uploadInfo(new LLPostcardUploadInfo(
+            mAgentEmail,
+            getChild<LLUICtrl>("name_form")->getValue().asString(),
+            getChild<LLUICtrl>("to_form")->getValue().asString(),
+            getChild<LLUICtrl>("subject_form")->getValue().asString(),
+            getChild<LLUICtrl>("msg_form")->getValue().asString(),
+            LLFloaterSnapshot::getPosTakenGlobal(),
+            LLFloaterSnapshot::getImageData(),
+            boost::bind(&LLPanelSnapshotPostcard::sendPostcardFinished, _4)));
 
-	LLSD postcard = LLSD::emptyMap();
-	postcard["pos-global"] = LLFloaterSnapshot::getPosTakenGlobal().getValue();
-	postcard["to"] = to;
-	postcard["from"] = mAgentEmail;
-	postcard["name"] = getChild<LLUICtrl>("name_form")->getValue().asString();
-	postcard["subject"] = subject;
-	postcard["msg"] = getChild<LLUICtrl>("msg_form")->getValue().asString();
-	// <FS:Ansariel> FIRE-16201: Snapshot floater might get stuck if snapshot to email fails
-	//LLPostCard::send(LLFloaterSnapshot::getImageData(), postcard);
+        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+    }
+    else
+    {
+        LL_WARNS() << "Postcards unavailable in this region." << LL_ENDL;
+    }
 
-	// Give user feedback of the event.
-	gViewerWindow->playSnapshotAnimAndSound();
 
-	LLFloaterSnapshot::postSave();
+    // Give user feedback of the event.
+    gViewerWindow->playSnapshotAnimAndSound();
 
-	// <FS:Ansariel> FIRE-16201: Snapshot floater might get stuck if snapshot to email fails
-	LLPostCard::send(LLFloaterSnapshot::getImageData(), postcard);
+    LLFloaterSnapshot::postSave();
 }
 
 void LLPanelSnapshotPostcard::onMsgFormFocusRecieved()

@@ -1,3 +1,4 @@
+
 /** 
  * @file llfloaterpreference.cpp
  * @brief Global preferences with and without persistence.
@@ -25,6 +26,7 @@
  */
 
 /*
+
  * App-wide preferences.  Note that these are not per-user,
  * because we need to load many preferences before we have
  * a login name.

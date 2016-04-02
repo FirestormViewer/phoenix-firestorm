@@ -26,13 +26,11 @@
 
 #include "llagent.h"
 #include "llappviewer.h"
-#include "llassetuploadresponders.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "lldir.h"
 #include "llfoldertype.h"
-#include "llhttpclient.h"
 #include "llinventoryfunctions.h"	// for ROOT_FIRESTORM_FOLDER
 #include "llinventorytype.h"
 #include "lllineeditor.h"
@@ -47,6 +45,7 @@
 #include "llviewerpartsource.h"
 #include "llviewerregion.h"
 #include "llwindow.h"
+#include "llviewerassetupload.h"
 
 ParticleEditor::ParticleEditor(const LLSD& key)
 :	LLFloater(key),
@@ -578,6 +577,11 @@ void ParticleEditor::onInjectButtonClicked()
 	setCanClose(FALSE);
 }
 
+void scriptUploadDone( LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, ParticleEditor *aEditor )
+{
+	aEditor->scriptInjectReturned();
+}
+
 void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 {
 	setCanClose(TRUE);
@@ -604,28 +608,11 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	{
 		std::string script = createScript();
 
-		std::string tempFileName = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "particle_script.lsltxt");
+        LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(scriptUploadDone, _1, _2, _3, _4, this );
 
-		std::ofstream tempFile;
+        LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script, proc));
 
-		tempFile.open(tempFileName.c_str());
-		if (!tempFile.is_open())
-		{
-			LLNotificationsUtil::add("ParticleScriptCreateTempFileFailed");
-			return;
-		}
-
-		tempFile << script.c_str();
-		tempFile.close();
-
-		LLSD body;
-		body["task_id"] = mObject->getID();	// probably has no effect
-		body["item_id"] = inventoryItemID;
-		body["target"] = "mono";
-		body["is_script_running"] = true;
-
-		// responder will alert us when the job is done
-		LLHTTPClient::post(url, body, new ParticleScriptUploadResponder(body, tempFileName, LLAssetType::AT_LSL_TEXT, this));
+        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 		mMainPanel->setEnabled(FALSE);
 		setCanClose(FALSE);
@@ -637,7 +624,7 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 	}
 }
 
-void ParticleEditor::scriptInjectReturned()
+void ParticleEditor::scriptInjectReturned( )
 {
 	setCanClose(TRUE);
 
@@ -675,23 +662,3 @@ void ParticleScriptCreationCallback::fire(const LLUUID& inventoryItem)
 	}
 }
 
-// ---------------------------------- Responders ----------------------------------
-
-ParticleScriptUploadResponder::ParticleScriptUploadResponder(const LLSD& post_data,
-															 const std::string& file_name,
-															 LLAssetType::EType asset_type,
-															 ParticleEditor* editor
-															) :
-	LLUpdateAgentInventoryResponder(post_data, file_name, asset_type)
-{
-	mEditor = editor;
-}
-
-void ParticleScriptUploadResponder::uploadComplete(const LLSD& content)
-{
-	LLUpdateAgentInventoryResponder::uploadComplete(content);
-	if (!gDisconnected && !LLAppViewer::instance()->quitRequested() && mEditor)
-	{
-		mEditor->scriptInjectReturned();
-	}
-}

@@ -54,7 +54,6 @@
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
 #include "llgroupactions.h"
-#include "llhttpclient.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
 #include "lllayoutstack.h"
@@ -1897,25 +1896,6 @@ BOOL FSFloaterIM::isInviteAllowed() const
 			 || mIsP2PChat);
 }
 
-class FSSessionInviteResponder : public LLHTTPClient::Responder
-{
-public:
-	FSSessionInviteResponder(const LLUUID& session_id)
-	{
-		mSessionID = session_id;
-	}
-
-	void httpFailure()
-	{
-		LL_WARNS("FSFloaterIM") << "Error inviting all agents to session [status:"
-								<< getStatus() << "]: " << getContent() << LL_ENDL;
-		//TODO: throw something back to the viewer here?
-	}
-
-private:
-	LLUUID mSessionID;
-};
-
 BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 {
 	LLViewerRegion* region = gAgent.getRegion();
@@ -1939,7 +1919,8 @@ BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 			}
 			data["method"] = "invite";
 			data["session-id"] = mSessionID;
-			LLHTTPClient::post(url, data, new FSSessionInviteResponder(mSessionID));
+
+			LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost( url, data );
 		}
 		else
 		{

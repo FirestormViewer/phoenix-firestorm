@@ -39,8 +39,8 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 
-// <FS:Ansariel> [Legacy Bake]
-#include "llassetuploadresponders.h"
+#include "llviewerassetupload.h"
+#include "llsdutil.h"
 
 static const S32 BAKE_UPLOAD_ATTEMPTS = 7;
 static const F32 BAKE_UPLOAD_RETRY_DELAY = 2.f; // actual delay grows by power of 2 each attempt
@@ -532,6 +532,67 @@ BOOL LLViewerTexLayerSetBuffer::isReadyToUpload() const
 	return ready;
 }
 
+class FSTexlayerUpload: public LLBufferedAssetUploadInfo
+{
+	LLBakedUploadData *mBakdedUploadData;
+public:
+	FSTexlayerUpload( LLUUID aAssetId, LLBakedUploadData *aBakdedUploadData, std::string aTexture )
+		: LLBufferedAssetUploadInfo( LLUUID::null, LLAssetType::AT_TEXTURE, aTexture, NULL )
+		, mBakdedUploadData( aBakdedUploadData )
+	{
+		setAssetId( aAssetId );
+	}
+
+	~FSTexlayerUpload()
+	{
+		delete mBakdedUploadData;
+	}
+
+	LLSD prepareUpload()
+	{
+		return LLSD().with("success", LLSD::Boolean(true));
+	}
+
+	LLSD generatePostBody()
+	{
+		return LLBufferedAssetUploadInfo::generatePostBody();;
+	}
+
+	LLUUID finishUpload(LLSD &aResult)
+	{
+		LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aResult[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+		LLUUID newAssetId = aResult["new_asset"].asUUID();
+
+		if( HTTP_OK == status.getType() )
+		{
+			std::string result = aResult["state"];
+
+			LL_INFOS() << "result: " << ll_pretty_print_sd( aResult ) << " new_id: " << newAssetId << LL_ENDL;
+			if (result == "complete"
+				&& mBakdedUploadData != NULL)
+			{// Invoke 
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LL_EXSTAT_NONE);
+				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+			}
+			else
+			{// Invoke the original callback with an error result
+				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+			}
+		}
+		else
+		{
+			LL_WARNS() << "Uploading baked texture resulted in http " << status.getType() << ll_pretty_print_sd( aResult ) << LL_ENDL;
+			// Invoke the original callback with an error result
+			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LL_EXSTAT_NONE);
+			mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+		}
+
+		return newAssetId;
+	}
+};
+
 // Create the baked texture, send it out to the server, then wait for it to come
 // back so we can switch to using it.
 void LLViewerTexLayerSetBuffer::doUpload()
@@ -593,9 +654,12 @@ void LLViewerTexLayerSetBuffer::doUpload()
 			LLVFile file(gVFS, asset_id, LLAssetType::AT_TEXTURE);
 			file_size = file.getSize();
 			U8* data = integrity_test->allocateData(file_size);
-			file.read(data, file_size);
+			std::string strAssetData;
+
 			if (data)
 			{
+				file.read(data, file_size);
+				strAssetData.append( reinterpret_cast< char const*> ( data ), file_size );
 				valid = integrity_test->validate(data, file_size); // integrity_test will delete 'data'
 			}
 			else
@@ -622,7 +686,9 @@ void LLViewerTexLayerSetBuffer::doUpload()
 				{
 					LLSD body = LLSD::emptyMap();
 					// The responder will call LLViewerTexLayerSetBuffer::onTextureUploadComplete()
-					LLHTTPClient::post(url, body, new LLSendTexLayerResponder(body, mUploadID, LLAssetType::AT_TEXTURE, baked_upload_data));
+					LLResourceUploadInfo::ptr_t uploadInfo(new FSTexlayerUpload( mUploadID, baked_upload_data, strAssetData ) );
+					LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+					
 					LL_INFOS() << "Baked texture upload via capability of " << mUploadID << " to " << url << LL_ENDL;
 				} 
 				else

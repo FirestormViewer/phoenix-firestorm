@@ -658,8 +658,7 @@ void FSRadar::updateRadarList()
 			if (++updatesPerRequest > FSRADAR_MAX_OFFSET_REQUESTS)
 			{
 				msg = msg.substr(0, msg.size() - 1);
-				FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
-				FSLSLBridge::instance().viewerToLSL(prefix + msg, responder);
+				FSLSLBridge::instance().viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPosResponder_Success);
 				//LL_INFOS() << " OFFSET REQUEST SEGMENT"<< prefix << msg << LL_ENDL;
 				msg = "";
 				updatesPerRequest = 0;
@@ -668,8 +667,7 @@ void FSRadar::updateRadarList()
 		if (updatesPerRequest > 0)
 		{
 			msg = msg.substr(0, msg.size() - 1);
-			FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
-			FSLSLBridge::instance().viewerToLSL(prefix + msg, responder);
+			FSLSLBridge::instance().viewerToLSL(prefix + msg, FSLSLBridgeRequestRadarPosResponder_Success);
 			//LL_INFOS() << " OFFSET REQUEST FINAL " << prefix << msg << LL_ENDL;
 		}
 		
