@@ -411,7 +411,18 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 	    {
 		    id = result["category_id"];
 	    }
-
+		// <FS:Ansariel> - Patch: Appearance-SyncAttach
+		else if (type == COPYINVENTORY)
+		{
+			uuid_list_t ids;
+			AISUpdate::parseUUIDArray(result, "_created_items", ids);
+			AISUpdate::parseUUIDArray(result, "_created_categories", ids);
+			if (!ids.empty())
+			{
+				id = *ids.begin();
+			}
+		}
+		// </FS:Ansariel>
         callback(id);
     }
 
