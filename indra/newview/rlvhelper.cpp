@@ -40,7 +40,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("acceptpermission", RLV_BHVR_ACCEPTPERMISSION));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("accepttp", RLV_BHVR_ACCEPTTP, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("accepttprequest", RLV_BHVR_ACCEPTTPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
-	addEntry(new RlvBehaviourInfo("addattach",				RLV_BHVR_ADDATTACH,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_ADDATTACH, RlvBehaviourAddRemAttachHandler>("addattach"));
 	addEntry(new RlvBehaviourInfo("addoutfit",				RLV_BHVR_ADDOUTFIT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("allowidle", RLV_BHVR_ALLOWIDLE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("alwaysrun", RLV_BHVR_ALWAYSRUN));
@@ -51,7 +51,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
-	addEntry(new RlvBehaviourInfo("detach",					RLV_BHVR_DETACH,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_DETACH>("detach"));
 	addEntry(new RlvBehaviourInfo("detachthis",				RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
@@ -72,7 +72,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvimfrom", RLV_BHVR_RECVIMFROM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourInfo("redirchat",				RLV_BHVR_REDIRCHAT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("rediremote",				RLV_BHVR_REDIREMOTE,			RLV_TYPE_ADDREM));
-	addEntry(new RlvBehaviourInfo("remattach",				RLV_BHVR_REMATTACH,				RLV_TYPE_ADDREM));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_REMATTACH, RlvBehaviourAddRemAttachHandler>("remattach"));
 	addEntry(new RlvBehaviourInfo("remoutfit",				RLV_BHVR_REMOUTFIT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("rez", RLV_BHVR_REZ));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SENDCHANNEL>("sendchannel", RlvBehaviourInfo::BHVR_STRICT));

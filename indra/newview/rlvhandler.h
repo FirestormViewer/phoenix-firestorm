@@ -158,8 +158,6 @@ protected:
 
 	// Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
 	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
-	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)

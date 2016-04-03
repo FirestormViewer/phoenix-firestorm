@@ -85,7 +85,8 @@ class RlvBehaviourProcessorHelper
 {
 public:
 	typedef ERlvCmdRet(RlvBhvrHandler)(const RlvCommand& rlvCmd, bool& fRefCount);
-	static ERlvCmdRet processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc);
+	typedef void(RlvBhvrToggleHandler)(ERlvBehaviour eBhvr, bool fHasBhvr);
+	static ERlvCmdRet processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc, RlvBhvrToggleHandler* pToggleHandlerFunc = nullptr);
 };
 
 template <RlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
@@ -109,16 +110,10 @@ template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename bhvrT
 {
 public:
 	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const
-	{
-		bool fHasBhvr = gRlvHandler.hasBehaviour(eBhvr);
-
-		ERlvCmdRet eRet = RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand);
-		if (fHasBhvr != gRlvHandler.hasBehaviour(eBhvr))
-			bhvrToggleHandler::onCommandToggle(eBhvr, !fHasBhvr);
-		return eRet;
-	}
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &bhvrToggleHandler::onCommandToggle); }
 };
+
+typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
 
 // ============================================================================
 // RlvCommandHandler and related classes - Handles force/reply commands
@@ -327,10 +322,16 @@ public:
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption, bool fStrictOnly) const;
 
-	const rlv_command_list_t* getCommandList() const { return &m_Commands; }
 
-	const LLUUID&		getObjectID() const	{ return m_idObj; }
-	const LLUUID&		getRootID() const	{ return m_idRoot; }
+	/*
+	 * Accessors
+	 */
+public:
+	S32           getAttachPt() const	{ return m_idxAttachPt; }
+	const LLUUID& getObjectID() const	{ return m_idObj; }
+	const LLUUID& getRootID() const		{ return m_idRoot; }
+	bool          hasLookup() const     { return m_fLookup; }
+	const rlv_command_list_t* getCommandList() const { return &m_Commands; }
 
 	/*
 	 * Member variables
