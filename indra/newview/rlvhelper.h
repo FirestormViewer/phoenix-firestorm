@@ -26,7 +26,7 @@
 #include "rlvcommon.h"
 
 // ============================================================================
-// RlvCommandDefinition and related classes
+// RlvBehaviourInfo class - Generic behaviour descriptor (used by restrictions, reply and force commands)
 //
 
 class RlvBehaviourInfo
@@ -68,8 +68,7 @@ public:
 	bool                isSynonym() const         { return m_nBhvrFlags & BHVR_SYNONYM; } 
 	void                toggleBehaviourFlag(EBehaviourFlags eBhvrFlag, bool fEnable);
 
-	virtual bool        hasProcessor() const      { return false; }
-	virtual ERlvCmdRet  processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RLV_RET_UNKNOWN; }
+	virtual ERlvCmdRet  processCommand(const RlvCommand& rlvCmd) const { return RLV_RET_NO_PROCESSOR; }
 
 protected:
 	std::string   m_strBhvr;
@@ -78,40 +77,60 @@ protected:
 	U32           m_maskParamType;
 };
 
-template <class optionType> 
-struct RlvCommandOptionParser
-{
-	static bool parseOption(const std::string& strOption, optionType& valueOption);
-};
+// ============================================================================
+// RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
+//
 
-template <ERlvParamType paramType, RlvCommandOptionType optionType> 
-struct RlvCommandGenericProcessor
-{
-	static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount);
-};
-
-template <ERlvParamType paramType, RlvCommandOptionType optionType>
-class RlvCommandGenericDefinition : public RlvBehaviourInfo
+class RlvBehaviourProcessorHelper
 {
 public:
-	RlvCommandGenericDefinition(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
-	/*virtual*/ bool       hasProcessor() const { return true; }
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RlvCommandGenericProcessor<paramType, optionType>::processCommand(rlvCmd, fRefCount); }
+	typedef ERlvCmdRet(RlvBhvrHandler)(const RlvCommand& rlvCmd, bool& fRefCount);
+	static ERlvCmdRet processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc);
 };
 
-template <ERlvParamType paramType, ERlvBehaviour eBhvr> 
-struct RlvCommandProcessor
-{
-	static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount);
-};
-
-template <ERlvParamType paramType, ERlvBehaviour eBhvr>
-class RlvCommandDefinition : public RlvBehaviourInfo
+template <RlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template <RlvBehaviourOptionType optionType> class RlvBehaviourGenericProcessor : public RlvBehaviourInfo
 {
 public:
-	RlvCommandDefinition(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
-	/*virtual*/ bool       hasProcessor() const { return true; }
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount) const { return RlvCommandProcessor<paramType, eBhvr>::processCommand(rlvCmd, fRefCount); }
+	RlvBehaviourGenericProcessor(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand); }
+};
+
+template <ERlvBehaviour eBhvr> struct RlvBehaviourHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template <ERlvBehaviour eBhvr, typename bhvrHandler = RlvBehaviourHandler<eBhvr>> class RlvBehaviourProcessor : public RlvBehaviourInfo
+{
+public:
+	RlvBehaviourProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &bhvrHandler::onCommand); }
+};
+
+template <ERlvBehaviour> struct RlvBehaviourToggleHandler { static void onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr); };
+template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename bhvrToggleHandler = RlvBehaviourToggleHandler<eBhvr>> class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
+{
+public:
+	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const
+	{
+		bool fHasBhvr = gRlvHandler.hasBehaviour(eBhvr);
+
+		ERlvCmdRet eRet = RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand);
+		if (fHasBhvr != gRlvHandler.hasBehaviour(eBhvr))
+			bhvrToggleHandler::onCommandToggle(eBhvr, !fHasBhvr);
+		return eRet;
+	}
+};
+
+// ============================================================================
+// RlvCommandHandler and related classes - Handles force/reply commands
+//
+
+template <ERlvParamType paramType, ERlvBehaviour eBhvr> struct RlvCommandHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd); };
+template <ERlvParamType paramType, ERlvBehaviour eBhvr> class RlvCommandProcessor : public RlvBehaviourInfo
+{
+public:
+	RlvCommandProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+public:
+	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvCommandHandler<paramType, eBhvr>::onCommand(rlvCmd); }
 };
 
 // ============================================================================
@@ -177,8 +196,7 @@ public:
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
-	bool               hasProcessor() const     { return (m_pBhvrInfo) ? m_pBhvrInfo->hasProcessor() : false; }
-	ERlvCmdRet         processCommand(bool& fRefCount) const { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this, fRefCount) : RLV_RET_UNKNOWN; }
+	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_UNKNOWN; }
 
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);

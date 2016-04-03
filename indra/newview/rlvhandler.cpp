@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -20,6 +20,7 @@
 #include "llappviewer.h"
 #include "llgroupactions.h"
 #include "llhudtext.h"
+#include "llmoveview.h"
 #include "llstartup.h"
 #include "llviewermessage.h"
 #include "llviewerobjectlist.h"
@@ -47,6 +48,12 @@ rlv_handler_t gRlvHandler;
 // Option parsing template specialization implmentation
 //
 
+template <class optionType> 
+struct RlvCommandOptionParser
+{
+	static bool parseOption(const std::string& strOption, optionType& valueOption);
+};
+
 bool RlvCommandOptionParser<LLUUID>::parseOption(const std::string& strOption, LLUUID& idOption)
 {
 	idOption.set(strOption);
@@ -62,8 +69,35 @@ bool RlvCommandOptionParser<int>::parseOption(const std::string& strOption, int&
 // Command processing template specialization implmentation
 //
 
+ERlvCmdRet RlvBehaviourProcessorHelper::processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc)
+{
+	bool fRefCount = false;
+	ERlvCmdRet eRet = (*pHandlerFunc)(rlvCmd, fRefCount);
+
+	// If this command represents a restriction that's been added/removed then we need to do some additional processing
+	if ( (RLV_RET_SUCCESS == eRet) && (fRefCount) )
+	{
+		ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
+		S16& refBhvr = gRlvHandler.m_Behaviours[eBhvr];
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			if (rlvCmd.isStrict())
+				gRlvHandler.addException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
+			refBhvr++;
+		}
+		else
+		{
+			if (rlvCmd.isStrict())
+				gRlvHandler.removeException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
+			refBhvr--;
+		}
+	}
+
+	return eRet;
+}
+
 // Handles: @bhvr=n|y
-ERlvCmdRet RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE>::processCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be no option
 	if (rlvCmd.hasOption())
@@ -74,7 +108,7 @@ ERlvCmdRet RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE>::process
 }
 
 // Handles: @bhvr:<uuid>=n|y
-ERlvCmdRet RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>::processCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
@@ -91,20 +125,27 @@ ERlvCmdRet RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>::pr
 }
 
 // Handles: @bhvr[:<uuid>]=n|y
-ERlvCmdRet RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>::processCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there is an option then it should specify a valid UUID (but don't reference count)
 	if (rlvCmd.hasOption())
 	{
-		ERlvCmdRet eRet = RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>::processCommand(rlvCmd, fRefCount);
+		ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(rlvCmd, fRefCount);
 		fRefCount = false;
 		return eRet;
 	}
-	return RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE>::processCommand(rlvCmd, fRefCount);
+	return RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(rlvCmd, fRefCount);
 }
 
+// Handles: @sendim=n|y toggles
+void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
+}
+
+
 // Handles: @sendchannel[:<channel>]=n|y
-ERlvCmdRet RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>::processCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there's an option then it should be a valid (= positive and non-zero) chat channel
 	if (rlvCmd.hasOption())
@@ -126,7 +167,7 @@ ERlvCmdRet RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>::processCo
 }
 
 // Handles: @showhovertext:<uuid>=n|y
-ERlvCmdRet RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT>::processCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
@@ -148,7 +189,7 @@ ERlvCmdRet RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT>::process
 }
 
 // Handles: @setgroup:<uuid>=force
-ERlvCmdRet RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::processCommand(const RlvCommand& rlvCmd, bool&)
+ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
 	{
@@ -178,7 +219,7 @@ ERlvCmdRet RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::processComman
 }
 
 // Handles: @sit:<uuid>=force
-ERlvCmdRet RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SIT>::processCommand(const RlvCommand& rlvCmd, bool&)
+ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
 	// Sanity checking - we need to know about the object and it should identify a prim/linkset
@@ -377,14 +418,14 @@ void RlvHandler::removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const
 //
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-void RlvHandler::addCommandHandler(RlvCommandHandler* pCmdHandler)
+void RlvHandler::addCommandHandler(RlvExtCommandHandler* pCmdHandler)
 {
 	if ( (pCmdHandler) && (std::find(m_CommandHandlers.begin(), m_CommandHandlers.end(), pCmdHandler) == m_CommandHandlers.end()) )
 		m_CommandHandlers.push_back(pCmdHandler);
 }
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-void RlvHandler::removeCommandHandler(RlvCommandHandler* pCmdHandler)
+void RlvHandler::removeCommandHandler(RlvExtCommandHandler* pCmdHandler)
 {
 	if (pCmdHandler)
 		m_CommandHandlers.remove(pCmdHandler);
@@ -393,7 +434,7 @@ void RlvHandler::removeCommandHandler(RlvCommandHandler* pCmdHandler)
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0a
 void RlvHandler::clearCommandHandlers()
 {
-	std::list<RlvCommandHandler*>::const_iterator itHandler = m_CommandHandlers.begin();
+	std::list<RlvExtCommandHandler*>::const_iterator itHandler = m_CommandHandlers.begin();
 	while (itHandler != m_CommandHandlers.end())
 	{
 		delete *itHandler;
@@ -403,9 +444,9 @@ void RlvHandler::clearCommandHandlers()
 }
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
-bool RlvHandler::notifyCommandHandlers(rlvCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const
+bool RlvHandler::notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const
 {
-	std::list<RlvCommandHandler*>::const_iterator itHandler = m_CommandHandlers.begin(); bool fContinue = true; eRet = RLV_RET_UNKNOWN;
+	std::list<RlvExtCommandHandler*>::const_iterator itHandler = m_CommandHandlers.begin(); bool fContinue = true; eRet = RLV_RET_UNKNOWN;
 	while ( (itHandler != m_CommandHandlers.end()) && ((fContinue) || (fNotifyAll)) )
 	{
 		ERlvCmdRet eCmdRet = RLV_RET_UNKNOWN;
@@ -583,7 +624,7 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 
 	// Let our observers know about clear commands
 	ERlvCmdRet eRet = RLV_RET_SUCCESS;
-	notifyCommandHandlers(&RlvCommandHandler::onClearCommand, rlvCmd, eRet, true);
+	notifyCommandHandlers(&RlvExtCommandHandler::onClearCommand, rlvCmd, eRet, true);
 
 	return RLV_RET_SUCCESS; // Don't fail clear commands even if the object didn't exist since it confuses people
 }
@@ -1298,9 +1339,18 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 	//            * added to the RlvObject
 	//            * removed from the RlvObject (which still exists at this point even if this is the last restriction)
 	//       - the object's UUID may or may not exist in gObjectList (see handling of @detach=n|y)
+
+	// Try a command processor first
+	ERlvCmdRet eRet = rlvCmd.processCommand();
+	if (RLV_RET_NO_PROCESSOR != eRet)
+	{
+		return eRet;
+	}
+
+	// Process the command the legacy way
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType(); ERlvParamType eType = rlvCmd.getParamType();
 	
-	ERlvCmdRet eRet = RLV_RET_SUCCESS; bool fRefCount = false; const std::string& strOption = rlvCmd.getOption();
+	eRet = RLV_RET_SUCCESS; bool fRefCount = false; const std::string& strOption = rlvCmd.getOption();
 	switch (eBhvr)
 	{
 		case RLV_BHVR_DETACH:				// @detach[:<option>]=n|y
@@ -1410,23 +1460,10 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		//
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onAddRemCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
-		//
-		// Catch all fall-through
-		//
+			return (notifyCommandHandlers(&RlvExtCommandHandler::onAddRemCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
-			{
-				// Check for a registered command processor
-				if (rlvCmd.hasProcessor())
-				{
-					eRet = rlvCmd.processCommand(fRefCount);
-				}
-				else
-				{
-					// Fail with "Invalid param" if none of the above handled it
-					eRet = RLV_RET_FAILED_PARAM;
-				}
-			}
+			// Fail with "Invalid param" if none of the above handled it
+			eRet = RLV_RET_FAILED_PARAM;
 			break;
 	}
 
@@ -1612,7 +1649,15 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_FORCE == rlvCmd.getParamType());
 
-	ERlvCmdRet eRet = RLV_RET_SUCCESS;
+	// Try a command processor first
+	ERlvCmdRet eRet = rlvCmd.processCommand();
+	if (RLV_RET_NO_PROCESSOR != eRet)
+	{
+		return eRet;
+	}
+
+	// Process the command the legacy way
+	eRet = RLV_RET_SUCCESS;
 	switch (rlvCmd.getBehaviourType())
 	{
 		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -1701,21 +1746,10 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onForceCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
+			return (notifyCommandHandlers(&RlvExtCommandHandler::onForceCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
-			{
-				// Check for a registered command processor
-				if (rlvCmd.hasProcessor())
-				{
-					bool fTemp;
-					eRet = rlvCmd.processCommand(fTemp);
-				}
-				else
-				{
-					// Fail with "Invalid param" if none of the above handled it
-					eRet = RLV_RET_FAILED_PARAM;
-				}
-			}
+			// Fail with "Invalid param" if none of the above handled it
+			eRet = RLV_RET_FAILED_PARAM;
 			break;
 	}
 	return eRet;
@@ -1913,7 +1947,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_UNKNOWN:
 			// Pass unknown commands on to registered command handlers
-			return (notifyCommandHandlers(&RlvCommandHandler::onReplyCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
+			return (notifyCommandHandlers(&RlvExtCommandHandler::onReplyCommand, rlvCmd, eRet, false)) ? eRet : RLV_RET_FAILED_UNKNOWN;
 		default:
 			// Fail with "Invalid param" if none of the above handled it
 			return RLV_RET_FAILED_PARAM;

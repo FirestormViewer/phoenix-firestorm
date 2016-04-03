@@ -27,7 +27,7 @@
  *
  */
 
-class RlvExtGetSet : public RlvCommandHandler
+class RlvExtGetSet : public RlvExtCommandHandler
 {
 public:
 	RlvExtGetSet();

@@ -223,7 +223,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_UNKNOWN
 };
 
-enum RlvCommandOptionType
+enum RlvBehaviourOptionType
 {
 	RLV_OPTION_NONE,
 	RLV_OPTION_EXCEPTION,
@@ -255,7 +255,8 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DISABLED,		// Command failed (command disabled by user)
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
-	RLV_RET_DEPRECATED				// Command has been deprecated
+	RLV_RET_DEPRECATED,				// Command has been deprecated
+	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 
 enum ERlvExceptionCheck

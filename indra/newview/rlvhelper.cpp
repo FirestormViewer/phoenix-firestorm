@@ -29,19 +29,6 @@
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
-// Command processing template specialization definitions
-//
-
-template<> struct RlvCommandOptionParser<LLUUID> { static bool parseOption(const std::string& strOption, LLUUID& idOption); };
-
-template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE>              { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>         { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template<> struct RlvCommandGenericProcessor<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION> { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-
-template<> struct RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>   { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template<> struct RlvCommandProcessor<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT> { static ERlvCmdRet processCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-
-// ============================================================================
 // RlvBehaviourDictionary
 //
 
@@ -50,87 +37,87 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	// Restrictions
 	//
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("acceptpermission", RLV_BHVR_ACCEPTPERMISSION));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("accepttp", RLV_BHVR_ACCEPTTP, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("accepttprequest", RLV_BHVR_ACCEPTTPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("acceptpermission", RLV_BHVR_ACCEPTPERMISSION));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("accepttp", RLV_BHVR_ACCEPTTP, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("accepttprequest", RLV_BHVR_ACCEPTTPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("addattach",				RLV_BHVR_ADDATTACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("addoutfit",				RLV_BHVR_ADDOUTFIT,				RLV_TYPE_ADDREM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("allowidle", RLV_BHVR_ALLOWIDLE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("alwaysrun", RLV_BHVR_ALWAYSRUN));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("allowidle", RLV_BHVR_ALLOWIDLE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("alwaysrun", RLV_BHVR_ALWAYSRUN));
 	addEntry(new RlvBehaviourInfo("attachthis",				RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("attachthis_except",		RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis_except",	RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
 	addEntry(new RlvBehaviourInfo("detach",					RLV_BHVR_DETACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("detachthis",				RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("edit", RLV_BHVR_EDIT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("fartouch", RLV_BHVR_FARTOUCH));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("fly", RLV_BHVR_FLY));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("edit", RLV_BHVR_EDIT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("fartouch", RLV_BHVR_FARTOUCH));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("fly", RLV_BHVR_FLY));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("interact", RLV_BHVR_INTERACT, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("notify",					RLV_BHVR_NOTIFY,				RLV_TYPE_ADDREM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvchatfrom", RLV_BHVR_RECVCHATFROM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvemote", RLV_BHVR_RECVEMOTE, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvemotefrom", RLV_BHVR_RECVEMOTEFROM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("recvim", RLV_BHVR_RECVIM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("recvimfrom", RLV_BHVR_RECVIMFROM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("permissive", RLV_BHVR_PERMISSIVE));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvchat", RLV_BHVR_RECVCHAT, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvchatfrom", RLV_BHVR_RECVCHATFROM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvemote", RLV_BHVR_RECVEMOTE, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvemotefrom", RLV_BHVR_RECVEMOTEFROM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("recvim", RLV_BHVR_RECVIM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("recvimfrom", RLV_BHVR_RECVIMFROM, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourInfo("redirchat",				RLV_BHVR_REDIRCHAT,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("rediremote",				RLV_BHVR_REDIREMOTE,			RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("remattach",				RLV_BHVR_REMATTACH,				RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("remoutfit",				RLV_BHVR_REMOUTFIT,				RLV_TYPE_ADDREM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("rez", RLV_BHVR_REZ));
-	addEntry(new RlvCommandDefinition<RLV_TYPE_ADDREM, RLV_BHVR_SENDCHANNEL>("sendchannel", RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RLV_BHVR_SENDIM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setenv", RLV_BHVR_SETENV));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("rez", RLV_BHVR_REZ));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SENDCHANNEL>("sendchannel", RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SENDIM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setenv", RLV_BHVR_SETENV));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
-	addEntry(new RlvCommandDefinition<RLV_TYPE_ADDREM, RLV_BHVR_SHOWHOVERTEXT>("showhovertext"));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertextall", RLV_BHVR_SHOWHOVERTEXTALL));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertexthud", RLV_BHVR_SHOWHOVERTEXTHUD));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showhovertextworld", RLV_BHVR_SHOWHOVERTEXTWORLD));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showinv", RLV_BHVR_SHOWINV));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showloc", RLV_BHVR_SHOWLOC));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showminimap", RLV_BHVR_SHOWMINIMAP));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("shownames", RLV_BHVR_SHOWNAMES));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("showworldmap", RLV_BHVR_SHOWWORLDMAP));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sit", RLV_BHVR_SIT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("sittp", RLV_BHVR_SITTP));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("standtp", RLV_BHVR_STANDTP));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("startim", RLV_BHVR_STARTIM, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("startimto", RLV_BHVR_STARTIMTO, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("temprun", RLV_BHVR_TEMPRUN));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchall", RLV_BHVR_TOUCHALL));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchattach", RLV_BHVR_TOUCHATTACH));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchattachother", RLV_BHVR_TOUCHATTACHOTHER));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchattachself", RLV_BHVR_TOUCHATTACHSELF));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchfar", RLV_BHVR_FARTOUCH, RlvBehaviourInfo::BHVR_SYNONYM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchhud", RLV_BHVR_TOUCHHUD, RlvBehaviourInfo::BHVR_EXTENDED));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("touchme", RLV_BHVR_TOUCHME));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_EXCEPTION>("touchthis", RLV_BHVR_TOUCHTHIS));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("touchworld", RLV_BHVR_TOUCHWORLD));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("tplm", RLV_BHVR_TPLM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("tploc", RLV_BHVR_TPLOC));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("tplure", RLV_BHVR_TPLURE, RlvBehaviourInfo::BHVR_STRICT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE_OR_EXCEPTION>("tprequest", RLV_BHVR_TPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SHOWHOVERTEXT>("showhovertext"));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextall", RLV_BHVR_SHOWHOVERTEXTALL));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertexthud", RLV_BHVR_SHOWHOVERTEXTHUD));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextworld", RLV_BHVR_SHOWHOVERTEXTWORLD));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showinv", RLV_BHVR_SHOWINV));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showloc", RLV_BHVR_SHOWLOC));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showminimap", RLV_BHVR_SHOWMINIMAP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("shownames", RLV_BHVR_SHOWNAMES));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showworldmap", RLV_BHVR_SHOWWORLDMAP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sit", RLV_BHVR_SIT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sittp", RLV_BHVR_SITTP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("standtp", RLV_BHVR_STANDTP));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("startim", RLV_BHVR_STARTIM, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("startimto", RLV_BHVR_STARTIMTO, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("temprun", RLV_BHVR_TEMPRUN));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchall", RLV_BHVR_TOUCHALL));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("touchattach", RLV_BHVR_TOUCHATTACH));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchattachother", RLV_BHVR_TOUCHATTACHOTHER));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchattachself", RLV_BHVR_TOUCHATTACHSELF));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchfar", RLV_BHVR_FARTOUCH, RlvBehaviourInfo::BHVR_SYNONYM));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("touchhud", RLV_BHVR_TOUCHHUD, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("touchme", RLV_BHVR_TOUCHME));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("touchthis", RLV_BHVR_TOUCHTHIS));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("touchworld", RLV_BHVR_TOUCHWORLD));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tplm", RLV_BHVR_TPLM));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tploc", RLV_BHVR_TPLOC));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tplure", RLV_BHVR_TPLURE, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tprequest", RLV_BHVR_TPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("unsharedunwear",			RLV_BHVR_UNSHAREDUNWEAR,		RLV_TYPE_ADDREM));
 	addEntry(new RlvBehaviourInfo("unsharedwear",			RLV_BHVR_UNSHAREDWEAR,			RLV_TYPE_ADDREM));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("unsit", RLV_BHVR_UNSIT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
-	addEntry(new RlvCommandGenericDefinition<RLV_TYPE_ADDREM, RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("unsit", RLV_BHVR_UNSIT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
 
 	//
 	// Force-wear
@@ -169,8 +156,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
-	addEntry(new RlvCommandDefinition<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>("setgroup"));
-	addEntry(new RlvCommandDefinition<RLV_TYPE_FORCE, RLV_BHVR_SIT>("sit"));
+	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>("setgroup"));
+	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 

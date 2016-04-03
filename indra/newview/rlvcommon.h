@@ -183,16 +183,16 @@ protected:
 // Extensibility classes
 //
 
-class RlvCommandHandler
+class RlvExtCommandHandler
 {
 public:
-	virtual ~RlvCommandHandler() {}
+	virtual ~RlvExtCommandHandler() {}
 	virtual bool onAddRemCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) { return false; }
 	virtual bool onClearCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 	virtual bool onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 	virtual bool onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 };
-typedef bool (RlvCommandHandler::*rlvCommandHandler)(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
+typedef bool (RlvExtCommandHandler::*rlvExtCommandHandler)(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
 
 // ============================================================================
 // Generic menu enablers

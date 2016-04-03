@@ -46,7 +46,6 @@ protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
 	void onToggleEdit();												// edit
 	void onToggleMovement();											// fly, alwaysrun and temprun
-	void onToggleSendIM();												// sendim
 	void onToggleSetDebug();											// setdebug
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv(bool fQuitting);								// showinv
