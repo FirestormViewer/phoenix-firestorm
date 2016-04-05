@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <floater name="Load Pref Preset" title="Voreinstellung laden">
-	<string name="title_graphic">Grafik-Voreinstellung laden</string>
-	<string name="title_camera">Kamera-Voreinstellung laden</string>
+	<string name="title_graphic">
+		Grafikvoreinstellung laden
+	</string>
+	<string name="title_camera">
+		Kameravoreinstellung laden
+	</string>
 	<text name="Preset">
 		Voreinstellung auswählen:
 	</text>

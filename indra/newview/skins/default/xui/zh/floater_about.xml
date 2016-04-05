@@ -46,6 +46,7 @@ For the latest information about Firestorm, visit
 http://www.firestormviewer.org
     		</text>
 			<button label="覆製到剪貼簿" name="copy_btn"/>
+			<button label="查詢是否有更新版" name="update_btn"/>
 		</panel>
 		<panel label="貸記" name="credits_panel">
 		</panel>

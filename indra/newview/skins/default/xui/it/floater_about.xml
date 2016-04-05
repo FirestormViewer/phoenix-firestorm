@@ -50,6 +50,7 @@ For the latest information about Firestorm, visit
 http://www.firestormviewer.org
     </text>
 			<button label="Copia negli appunti" name="copy_btn"/>
+			<button label="Cerca aggiornamenti" name="update_btn"/>
 		</panel>
 		<panel label="Ringraziamenti" name="credits_panel">
 			<text name="linden_intro">

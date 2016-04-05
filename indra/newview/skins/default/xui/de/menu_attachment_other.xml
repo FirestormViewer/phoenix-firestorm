@@ -19,9 +19,9 @@
 	<menu_item_call label="Hineinzoomen" name="Zoom In"/>
 	<menu_item_call label="Bezahlen" name="Pay..."/>
 	<menu_item_call label="Objektprofil" name="Object Inspect"/>
-	<menu_item_check label="Normal anzeigen" name="RenderNormally"/>
-	<menu_item_check label="Nicht anzeigen" name="DoNotRender"/>
-	<menu_item_check label="Vollständig anzeigen" name="AlwaysRenderFully"/>
+	<menu_item_check label="Normal darstellen" name="RenderNormally"/>
+	<menu_item_check label="Nicht darstellen" name="DoNotRender"/>
+	<menu_item_check label="Komplett darstellen" name="AlwaysRenderFully"/>
 	<menu_item_call label="Partikeleigentümer blockieren" name="Mute Particle"/>
 	<menu_item_call label="Untersuchen" name="Object_Inspect_Floater"/>
 	<menu_item_call label="Skript-Info" name="ScriptInfo"/>

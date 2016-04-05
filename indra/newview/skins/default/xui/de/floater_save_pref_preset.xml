@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <floater name="Save Pref Preset" title="Voreinstellung speichern">
-	<string name="title_graphic">Grafik-Voreinstellung speichern</string>
-	<string name="title_camera">Kamera-Voreinstellung speichern</string>
+	<string name="title_graphic">
+		Grafikvoreinstellung speichern
+	</string>
+	<string name="title_camera">
+		Kameravoreinstellung speichern
+	</string>
 	<text name="Preset">
-		Name für Voreinstellung eingeben oder Voreinstellung auswählen.
+		Geben Sie einen Namen für die Voreinstellung ein oder wählen Sie eine vorhandene Voreinstellung aus.
 	</text>
 	<button label="Speichern" name="save"/>
 	<button label="Abbrechen" name="cancel"/>

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="presets_pulldown">
 	<text name="Graphic Presets">
-		Grafik-Voreinstellungen
+		Grafikvoreinstellungen
 	</text>
-	<button name="open_prefs_btn" label="Grafik-Einstellungen öffnen" tool_tip="Öffnet das Einstellungfenster für Grafik-Einstellungen"/>
+	<button label="Grafikeinstellungen öffnen" name="open_prefs_btn" tool_tip="Grafikeinstellungen anzeigen"/>
 </panel>

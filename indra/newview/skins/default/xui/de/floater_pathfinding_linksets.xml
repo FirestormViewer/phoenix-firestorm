@@ -129,11 +129,11 @@
 		</text>
 		<button label="Liste aktualisieren" name="refresh_objects_list"/>
 		<button label="Alle auswählen" name="select_all_objects"/>
-		<button label="Keine auswählen" name="select_none_objects"/>
+		<button label="Nichts auswählen" name="select_none_objects"/>
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
-			Aktionen auf ausgewählten Linksets (Falls ein Linkset entfernt wird, können seine Attribute verloren gehen);
+			Aktionen für ausgewählte Linksets (wenn ein Linkset aus der Welt entfernt wird, gehen seine Attribute u. U. verloren):
 		</text>
 		<check_box label="Beacon anzeigen" name="show_beacon"/>
 		<button label="Nehmen" name="take_objects"/>
@@ -144,7 +144,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_attributes">
 		<text name="linksets_attributes_label">
-			Attribute ausgewählter Linksets bearbeiten. Den Übernehmen-Button drücken, um Änderungen anzuwenden
+			Bearbeiten Sie die Attribute ausgewählter Linksets und klicken Sie auf die Schaltfläche, um die änderungen zu übernehmen
 		</text>
 		<text name="walkability_coefficients_label">
 			Begehbarkeit:
