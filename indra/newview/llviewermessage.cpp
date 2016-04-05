@@ -127,6 +127,8 @@
 #include "llnotificationmanager.h" //
 #include "llexperiencecache.h"
 
+#include "llexperiencecache.h"
+
 // Firestorm inclues
 #include "animationexplorer.h"		// <FS:Zi> Animation Explorer
 #include "fsareasearch.h"
@@ -4379,57 +4381,29 @@ void process_decline_callingcard(LLMessageSystem* msg, void**)
 	LLNotificationsUtil::add("CallingCardDeclined");
 }
 
-class ChatTranslationReceiver : public LLTranslate::TranslationReceiver
+void translateSuccess(LLChat chat, LLSD toastArgs, std::string originalMsg, std::string expectLang, std::string translation, const std::string detected_language)
 {
-public :
-	ChatTranslationReceiver(const std::string &from_lang, const std::string &to_lang, const std::string &mesg,
-							const LLChat &chat, const LLSD &toast_args)
-		: LLTranslate::TranslationReceiver(from_lang, to_lang),
-		m_chat(chat),
-		m_toastArgs(toast_args),
-		m_origMesg(mesg)
-	{
-	}
+    // filter out non-interesting responses  
+    if (!translation.empty()
+        && ((detected_language.empty()) || (expectLang != detected_language))
+        && (LLStringUtil::compareInsensitive(translation, originalMsg) != 0))
+    {
+        chat.mText += " (" + translation + ")";
+    }
 
-	static ChatTranslationReceiver* build(const std::string &from_lang, const std::string &to_lang, const std::string &mesg, const LLChat &chat, const LLSD &toast_args)
-	{
-		return new ChatTranslationReceiver(from_lang, to_lang, mesg, chat, toast_args);
-	}
+    LLNotificationsUI::LLNotificationManager::instance().onChat(chat, toastArgs);
+}
 
-protected:
-	void handleResponse(const std::string &translation, const std::string &detected_language)
-	{
-		// filter out non-interesting responeses
-		if ( !translation.empty()
-			&& (mToLang != detected_language)
-			&& (LLStringUtil::compareInsensitive(translation, m_origMesg) != 0) )
-		{
-			m_chat.mText += " (" + translation + ")";
-		}
+void translateFailure(LLChat chat, LLSD toastArgs, int status, const std::string err_msg)
+{
+    std::string msg = LLTrans::getString("TranslationFailed", LLSD().with("[REASON]", err_msg));
+    LLStringUtil::replaceString(msg, "\n", " "); // we want one-line error messages
+    chat.mText += " (" + msg + ")";
 
-		LLNotificationsUI::LLNotificationManager::instance().onChat(m_chat, m_toastArgs);
-	}
+    LLNotificationsUI::LLNotificationManager::instance().onChat(chat, toastArgs);
+}
 
-	void handleFailure(int status, const std::string& err_msg)
-	{
-		// <FS:Ansariel> Don't include message text in the log (FIRE-6683)
-		//LL_WARNS() << "Translation failed for mesg " << m_origMesg << " toLang " << mToLang << " fromLang " << mFromLang << LL_ENDL;
-		LL_WARNS() << "Message translation toLang " << mToLang << " fromLang " << mFromLang << "failed" << LL_ENDL;
 
-		//<FS:LO> Removing (useless?) annoying translation failed messages from local chat
-		//std::string msg = LLTrans::getString("TranslationFailed", LLSD().with("[REASON]", err_msg));
-		//LLStringUtil::replaceString(msg, "\n", " "); // we want one-line error messages
-		//m_chat.mText += " (" + msg + ")";
-		//</FS:LO>
-
-		LLNotificationsUI::LLNotificationManager::instance().onChat(m_chat, m_toastArgs);
-	}
-
-private:
-	LLChat m_chat;
-	std::string m_origMesg;
-	LLSD m_toastArgs;		
-};
 void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 {
 	LLChat	chat;
@@ -4924,8 +4898,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			const std::string from_lang = ""; // leave empty to trigger autodetect
 			const std::string to_lang = LLTranslate::getTranslateLanguage();
 
-			LLTranslate::TranslationReceiverPtr result = ChatTranslationReceiver::build(from_lang, to_lang, mesg, chat, args);
-			LLTranslate::translateMessage(result, from_lang, to_lang, mesg);
+            LLTranslate::translateMessage(from_lang, to_lang, mesg,
+                boost::bind(&translateSuccess, chat, args, mesg, from_lang, _1, _2),
+                boost::bind(&translateFailure, chat, args, _1, _2));
+
 		}
 		else
 		{
@@ -8367,17 +8343,14 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 			if (!region)
 			    return false;
 
-			std::string lookup_url=region->getCapability("ExperiencePreferences"); 
-			if(lookup_url.empty())
-				return false;
-			LLSD permission;
-			LLSD data;
-			permission["permission"]="Block";
+            LLExperienceCache::instance().setExperiencePermission(experience, std::string("Block"), LLExperienceCache::ExperienceGetFn_t());
 
-			data[experience.asString()]=permission;
-			LLHTTPClient::put(lookup_url, data, NULL);
-			data["experience"]=experience;
-			LLEventPumps::instance().obtain("experience_permission").post(data);
+            LLSD permission;
+            LLSD data;
+            permission["permission"] = "Block";
+            data[experience.asString()] = permission;
+            data["experience"] = experience;
+            LLEventPumps::instance().obtain("experience_permission").post(data);
 		}
 }
 	return false;
@@ -8594,7 +8567,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			else if(experienceid.notNull())
 			{
 				payload["experience"]=experienceid;
-				LLExperienceCache::get(experienceid, boost::bind(process_script_experience_details, _1, args, payload));
+                LLExperienceCache::instance().get(experienceid, boost::bind(process_script_experience_details, _1, args, payload));
 				return;
 			}
 

@@ -45,6 +45,8 @@
 //#include "llfirstuse.h"
 #include "llpluginclassmedia.h"
 #include "llviewertexture.h"
+#include "llcorehttputil.h"
+
 #include "llsdserialize.h"
 
 #include "lltrans.h"
@@ -595,6 +597,7 @@ void LLViewerParcelMedia::processParcelMediaUpdate( LLMessageSystem *msg, void *
 }
 // Static
 /////////////////////////////////////////////////////////////////////////////////////////
+// *TODO: I can not find any active code where this method is called...
 void LLViewerParcelMedia::sendMediaNavigateMessage(const std::string& url)
 {
 	std::string region_url = gAgent.getRegion()->getCapability("ParcelNavigateMedia");
@@ -605,7 +608,9 @@ void LLViewerParcelMedia::sendMediaNavigateMessage(const std::string& url)
 		body["agent-id"] = gAgent.getID();
 		body["local-id"] = LLViewerParcelMgr::getInstance()->getAgentParcel()->getLocalID();
 		body["url"] = url;
-		LLHTTPClient::post(region_url, body, new LLHTTPClient::Responder);
+
+        LLCoreHttpUtil::HttpCoroutineAdapter::messageHttpPost(region_url, body,
+            "Media Navigation sent to sim.", "Media Navigation failed to send to sim.");
 	}
 	else
 	{

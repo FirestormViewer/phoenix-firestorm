@@ -279,12 +279,7 @@ protected:
 
 	virtual void loadAsset();
 	/*virtual*/ void saveIfNeeded(bool sync = true);
-	// NaCl - LSL Preprocessor
-	void uploadAssetViaCaps(const std::string& url,
-							const std::string& filename, 
-							const LLUUID& item_id,
-							bool mono);
-	// NaCl End
+
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
@@ -302,7 +297,7 @@ protected:
 protected:
 	static void* createScriptEdPanel(void* userdata);
 
-
+    static void finishedLSLUpload(LLUUID itemId, LLSD response);
 protected:
 
 	// Can safely close only after both text and bytecode are uploaded
@@ -329,14 +324,6 @@ public:
 	/*virtual*/ BOOL postBuild();
 	
     void setIsNew() { mIsNew = TRUE; }
-// <FS:TT> Client LSL Bridge
-	static void uploadAssetViaCapsStatic(const std::string& url,
-							const std::string& filename, 
-							const LLUUID& task_id,
-							const LLUUID& item_id,
-							const std::string& is_mono,
-							BOOL is_running);
-// </FS:TT>
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
@@ -361,12 +348,6 @@ private:
 	virtual void loadAsset();
 	void loadAsset(BOOL is_new);
 	/*virtual*/ void saveIfNeeded(bool sync = true);
-	void uploadAssetViaCaps(const std::string& url,
-							const std::string& filename,
-							const LLUUID& task_id,
-							const LLUUID& item_id,
-							BOOL is_running,
-							const LLUUID& experience_public_id);
 	BOOL monoChecked() const;
 
 
@@ -392,6 +373,9 @@ private:
 	static void* createScriptEdPanel(void* userdata);
 
 	static void	onMonoCheckboxClicked(LLUICtrl*, void* userdata);
+
+    static void finishLSLUpload(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, bool isRunning);
+    static void receiveExperienceIds(LLSD result, LLHandle<LLLiveLSLEditor> parent);
 
 private:
 	bool				mIsNew;

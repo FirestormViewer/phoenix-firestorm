@@ -35,7 +35,6 @@
 #include "lltexturefetch.h"
 
 #include "lldir.h"
-#include "llhttpclient.h"
 #include "llhttpconstants.h"
 #include "llimage.h"
 #include "llimagej2c.h"
@@ -258,6 +257,20 @@ static const S32 HTTP_NONPIPE_REQUESTS_LOW_WATER = 20;
 static const S32 HTTP_REQUESTS_RANGE_END_MAX = 20000000;
 
 //////////////////////////////////////////////////////////////////////////////
+namespace
+{
+    // The NoOpDeletor is used when passing certain objects (the LLTextureFetchWorker and
+    // the LLTextureFetchDebugger) in a smart pointer below for passage into 
+    // the LLCore::Http libararies. When the smart pointer is destroyed,  no 
+    // action will be taken since we do not in these cases want the object to 
+    // be destroyed at the end of the call.
+    // 
+    // *NOTE$: Yes! It is "Deletor" 
+    // http://english.stackexchange.com/questions/4733/what-s-the-rule-for-adding-er-vs-or-when-nouning-a-verb
+    // "delete" derives from Latin "deletus"
+    void NoOpDeletor(LLCore::HttpHandler *)
+    { /*NoOp*/ }
+}
 
 static const char* e_state_name[] =
 {
@@ -811,16 +824,10 @@ public:
 	 *							ownership of the copy and disposes of it
 	 *							when done.
 	 */
-	TFReqSendMetrics(const std::string & caps_url,
-					 const LLUUID & session_id,
-					 const LLUUID & agent_id,
-					 LLViewerAssetStats * main_stats)
-		: LLTextureFetch::TFRequest(),
-		  mCapsURL(caps_url),
-		  mSessionID(session_id),
-		  mAgentID(agent_id),
-		  mMainStats(main_stats)
-		{}
+    TFReqSendMetrics(const std::string & caps_url,
+        const LLUUID & session_id,
+        const LLUUID & agent_id,
+        LLViewerAssetStats * main_stats);
 	TFReqSendMetrics & operator=(const TFReqSendMetrics &);	// Not defined
 
 	virtual ~TFReqSendMetrics();
@@ -832,6 +839,9 @@ public:
 	const LLUUID mSessionID;
 	const LLUUID mAgentID;
 	LLViewerAssetStats * mMainStats;
+
+private:
+    LLCore::HttpHandler::ptr_t  mHandler;
 };
 
 /*
@@ -970,7 +980,7 @@ LLTextureFetchWorker::~LLTextureFetchWorker()
 	if (mHttpActive)
 	{
 		// Issue a cancel on a live request...
-		mFetcher->getHttpRequest().requestCancel(mHttpHandle, NULL);
+        mFetcher->getHttpRequest().requestCancel(mHttpHandle, LLCore::HttpHandler::ptr_t());
 	}
 	if (mCacheReadHandle != LLTextureCache::nullHandle() && mFetcher->mTextureCache)
 	{
@@ -1343,13 +1353,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		// <FS:Ansariel> Force HTTP features on SL
 		//static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTP", true);
 
-//// 		if (mHost != LLHost::invalid) get_url = false;
+// 		if (mHost != LLHost::invalid) get_url = false;
 		//if ( use_http && mCanUseHTTP && mUrl.empty())//get http url.
 		if ( use_http_textures() && mCanUseHTTP && mUrl.empty())//get http url.
 		// </FS:Ansariel>
 		{
 			LLViewerRegion* region = NULL;
-			if (mHost == LLHost::invalid)
+			if (mHost.isInvalid())
 				region = gAgent.getRegion();
 			else
 				region = LLWorld::getInstance()->getRegion(mHost);
@@ -1574,7 +1584,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 		// Will call callbackHttpGet when curl request completes
 		// Only server bake images use the returned headers currently, for getting retry-after field.
-		LLCore::HttpOptions *options = (mFTType == FTT_SERVER_BAKE) ? mFetcher->mHttpOptionsWithHeaders: mFetcher->mHttpOptions;
+		LLCore::HttpOptions::ptr_t options = (mFTType == FTT_SERVER_BAKE) ? mFetcher->mHttpOptionsWithHeaders: mFetcher->mHttpOptions;
 		if (disable_range_req)
 		{
 			// 'Range:' requests may be disabled in which case all HTTP
@@ -1586,7 +1596,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 															 mUrl,
 															 options,
 															 mFetcher->mHttpHeaders,
-															 this);
+                                                             LLCore::HttpHandler::ptr_t(this, &NoOpDeletor));
 		}
 		else
 		{
@@ -1599,7 +1609,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 																	  : mRequestedSize,
 																	  options,
 																	  mFetcher->mHttpHeaders,
-																	  this);
+                                                                      LLCore::HttpHandler::ptr_t(this, &NoOpDeletor));
 		}
 		if (LLCORE_HTTP_HANDLE_INVALID == mHttpHandle)
 		{
@@ -2533,11 +2543,11 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 	  mTotalHTTPRequests(0),
 	  mQAMode(qa_mode),
 	  mHttpRequest(NULL),
-	  mHttpOptions(NULL),
-	  mHttpOptionsWithHeaders(NULL),
-	  mHttpHeaders(NULL),
+	  mHttpOptions(),
+	  mHttpOptionsWithHeaders(),
+	  mHttpHeaders(),
 	  mHttpPolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID),
-	  mHttpMetricsHeaders(NULL),
+	  mHttpMetricsHeaders(),
 	  mHttpMetricsPolicyClass(LLCore::HttpRequest::DEFAULT_POLICY_ID),
 	  mTotalCacheReadCount(0U),
 	  mTotalCacheWriteCount(0U),
@@ -2553,13 +2563,13 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 
 	LLAppCoreHttp & app_core_http(LLAppViewer::instance()->getAppCoreHttp());
 	mHttpRequest = new LLCore::HttpRequest;
-	mHttpOptions = new LLCore::HttpOptions;
-	mHttpOptionsWithHeaders = new LLCore::HttpOptions;
+	mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+	mHttpOptionsWithHeaders = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
 	mHttpOptionsWithHeaders->setWantHeaders(true);
-	mHttpHeaders = new LLCore::HttpHeaders;
+    mHttpHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders);
 	mHttpHeaders->append(HTTP_OUT_HEADER_ACCEPT, HTTP_CONTENT_IMAGE_X_J2C);
 	mHttpPolicyClass = app_core_http.getPolicy(LLAppCoreHttp::AP_TEXTURE);
-	mHttpMetricsHeaders = new LLCore::HttpHeaders;
+    mHttpMetricsHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders);
 	mHttpMetricsHeaders->append(HTTP_OUT_HEADER_CONTENT_TYPE, HTTP_CONTENT_LLSD_XML);
 	mHttpMetricsPolicyClass = app_core_http.getPolicy(LLAppCoreHttp::AP_REPORTING);
 	mHttpHighWater = HTTP_NONPIPE_REQUESTS_HIGH_WATER;
@@ -2591,30 +2601,6 @@ LLTextureFetch::~LLTextureFetch()
 		TFRequest * req(mCommands.front());
 		mCommands.erase(mCommands.begin());
 		delete req;
-	}
-
-	if (mHttpOptions)
-	{
-		mHttpOptions->release();
-		mHttpOptions = NULL;
-	}
-
-	if (mHttpOptionsWithHeaders)
-	{
-		mHttpOptionsWithHeaders->release();
-		mHttpOptionsWithHeaders = NULL;
-	}
-
-	if (mHttpHeaders)
-	{
-		mHttpHeaders->release();
-		mHttpHeaders = NULL;
-	}
-
-	if (mHttpMetricsHeaders)
-	{
-		mHttpMetricsHeaders->release();
-		mHttpMetricsHeaders = NULL;
 	}
 
 	mHttpWaitResource.clear();
@@ -3276,7 +3262,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 	{
 		LLHost host = iter1->first;
 		// invalid host = use agent host
-		if (host == LLHost::invalid)
+		if (host.isInvalid())
 		{
 			host = gAgent.getRegionHost();
 		}
@@ -3356,7 +3342,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 				 iter1 != mCancelQueue.end(); ++iter1)
 			{
 				LLHost host = iter1->first;
-				if (host == LLHost::invalid)
+				if (host.isInvalid())
 				{
 					host = gAgent.getRegionHost();
 				}
@@ -3989,9 +3975,6 @@ public:
 	}
 }; // end class AssetReportHandler
 
-AssetReportHandler stats_handler;
-
-
 /**
  * Implements the 'Set Region' command.
  *
@@ -4004,6 +3987,18 @@ TFReqSetRegion::doWork(LLTextureFetch *)
 
 	return true;
 }
+
+TFReqSendMetrics::TFReqSendMetrics(const std::string & caps_url,
+        const LLUUID & session_id,
+        const LLUUID & agent_id,
+        LLViewerAssetStats * main_stats): 
+    LLTextureFetch::TFRequest(),
+    mCapsURL(caps_url),
+    mSessionID(session_id),
+    mAgentID(agent_id),
+    mMainStats(main_stats),
+    mHandler(new AssetReportHandler)
+{}
 
 
 TFReqSendMetrics::~TFReqSendMetrics()
@@ -4023,7 +4018,6 @@ bool
 TFReqSendMetrics::doWork(LLTextureFetch * fetcher)
 {
 	static const U32 report_priority(1);
-	static LLCore::HttpHandler * const handler(fetcher->isQAMode() || true ? &stats_handler : NULL);
 	
 	//if (! gViewerAssetStatsThread1)
 	//	return true;
@@ -4071,9 +4065,9 @@ TFReqSendMetrics::doWork(LLTextureFetch * fetcher)
 											report_priority,
 											mCapsURL,
 											sd,
-											NULL,
+											LLCore::HttpOptions::ptr_t(),
 											fetcher->getMetricsHeaders(),
-											handler);
+											mHandler);
 		LLTextureFetch::svMetricsDataBreak = false;
 	}
 	else
@@ -4190,7 +4184,7 @@ LLTextureFetchDebugger::LLTextureFetchDebugger(LLTextureFetch* fetcher, LLTextur
 	mFetcher(fetcher),
 	mTextureCache(cache),
 	mImageDecodeThread(imagedecodethread),
-	mHttpHeaders(NULL),
+	mHttpHeaders(),
 	mHttpPolicyClass(fetcher->getPolicyClass()),
 	mNbCurlCompleted(0),
 	mTempIndex(0),
@@ -4204,11 +4198,6 @@ LLTextureFetchDebugger::~LLTextureFetchDebugger()
 	mFetchingHistory.clear();
 	mStopDebug = TRUE;
 	tryToStopDebug();
-	if (mHttpHeaders)
-	{
-		mHttpHeaders->release();
-		mHttpHeaders = NULL;
-	}
 }
 
 void LLTextureFetchDebugger::init()
@@ -4253,7 +4242,7 @@ void LLTextureFetchDebugger::init()
 
 	if (! mHttpHeaders)
 	{
-		mHttpHeaders = new LLCore::HttpHeaders;
+        mHttpHeaders = LLCore::HttpHeaders::ptr_t(new LLCore::HttpHeaders);
 		mHttpHeaders->append(HTTP_OUT_HEADER_ACCEPT, HTTP_CONTENT_IMAGE_X_J2C);
 	}
 }
@@ -4661,9 +4650,9 @@ S32 LLTextureFetchDebugger::fillCurlQueue()
 																				   texture_url,
 																				   0,
 																				   requestedSize,
-																				   NULL,
+																				   LLCore::HttpOptions::ptr_t(),
 																				   mHttpHeaders,
-																				   this);
+                                                                                   LLCore::HttpHandler::ptr_t(this, &NoOpDeletor));
 		if (LLCORE_HTTP_HANDLE_INVALID != handle)
 		{
 			mHandleToFetchIndex[handle] = i;

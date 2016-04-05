@@ -34,12 +34,11 @@
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
 #include "llviewerinventory.h"
-#include "llhttpclient.h"
+#include "llcorehttputil.h"
 
 class LLWearableHoldingPattern;
 class LLInventoryCallback;
 class LLOutfitUnLockTimer;
-class RequestAgentUpdateAppearanceResponder;
 
 class LLAppearanceMgr: public LLSingleton<LLAppearanceMgr>
 {
@@ -54,13 +53,12 @@ public:
 	void updateAppearanceFromCOF(bool enforce_item_restrictions = true,
 								 bool enforce_ordering = true,
 								 nullary_func_t post_update_func = no_op);
-	bool needToSaveCOF();
 	void updateCOF(const LLUUID& category, bool append = false);
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-	void updateCOF(LLInventoryModel::item_array_t& body_items_new, LLInventoryModel::item_array_t& wear_items_new,
-				   LLInventoryModel::item_array_t& obj_items_new, LLInventoryModel::item_array_t& gest_items_new,
-				   bool append = false, const LLUUID& idOutfit = LLUUID::null, LLPointer<LLInventoryCallback> link_waiter = NULL);
-// [/RLVa:KB]
+	void updateCOF(LLInventoryModel::item_array_t& body_items_new, 
+								LLInventoryModel::item_array_t& wear_items_new, 
+								LLInventoryModel::item_array_t& obj_items_new,
+								LLInventoryModel::item_array_t& gest_items_new,
+								bool append=false, const LLUUID& idOutfit=LLUUID::null, LLPointer<LLInventoryCallback> link_waiter = NULL);
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
@@ -242,23 +240,17 @@ public:
 
 	void requestServerAppearanceUpdate();
 
-	void incrementCofVersion(LLHTTPClient::ResponderPtr responder_ptr = NULL);
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
-	void syncCofVersionAndRefresh();
-// [/SL:KB]
-
-	U32 getNumAttachmentsInCOF();
-
-	// *HACK Remove this after server side texture baking is deployed on all sims.
-	void incrementCofVersionLegacy();
-
 	void setAppearanceServiceURL(const std::string& url) { mAppearanceServiceURL = url; }
 	std::string getAppearanceServiceURL() const;
 
+
+
 private:
+    void serverAppearanceUpdateCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &httpAdapter);
+    static void debugAppearanceUpdateCOF(const LLSD& content);
+
 	std::string		mAppearanceServiceURL;
 	
-
 protected:
 	LLAppearanceMgr();
 	~LLAppearanceMgr();
@@ -282,13 +274,14 @@ private:
 	bool mOutfitIsDirty;
 	bool mIsInUpdateAppearanceFromCOF; // to detect recursive calls.
 
-	LLPointer<RequestAgentUpdateAppearanceResponder> mAppearanceResponder;
-
 	/**
 	 * Lock for blocking operations on outfit until server reply or timeout exceed
 	 * to avoid unsynchronized outfit state or performing duplicate operations.
 	 */
 	bool mOutfitLocked;
+	S32  mInFlightCounter;
+	LLTimer mInFlightTimer;
+	static bool mActive;
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 

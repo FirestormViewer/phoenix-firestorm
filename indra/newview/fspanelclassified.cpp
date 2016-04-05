@@ -33,7 +33,6 @@
 #include "fspanelclassified.h"
 
 #include "llfloaterreg.h"
-#include "llhttpclient.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llparcel.h"
@@ -41,7 +40,6 @@
 #include "fsdispatchclassifiedclickthrough.h"
 #include "llagent.h"
 #include "llclassifiedflags.h"
-#include "llclassifiedstatsresponder.h"
 #include "lliconctrl.h"
 #include "lllineeditor.h"
 #include "llcombobox.h"
@@ -55,6 +53,7 @@
 #include "llscrollcontainer.h"
 #include "llstatusbar.h"
 #include "llviewertexture.h"
+#include "llpanelclassified.h"
 
 #ifdef OPENSIM
 #include "llviewernetwork.h"
@@ -66,20 +65,6 @@ const S32 MINIMUM_PRICE_FOR_LISTING = 50;	// L$
 FSPanelClassifiedInfo::panel_list_t FSPanelClassifiedInfo::sAllPanels;
 
 static FSDispatchClassifiedClickThrough sClassifiedClickThrough;
-
-// Just to debug errors. Can be thrown away later.
-class FSClassifiedClickMessageResponder : public LLHTTPClient::Responder
-{
-	LOG_CLASS(FSClassifiedClickMessageResponder);
-
-public:
-	// If we get back an error (not found, etc...), handle it here
-	virtual void httpFailure()
-	{
-		LL_WARNS("FSClassifiedClickMessageResponder") << "Sending click message failed (" << getStatus() << "): [" << getReason() << "]" << LL_ENDL;
-		LL_WARNS("FSClassifiedClickMessageResponder") << "Content: [" << getContent() << "]" << LL_ENDL;
-	}
-};
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -213,7 +198,7 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 		LL_INFOS("FSPanelClassifiedInfo") << "Classified stat request via capability" << LL_ENDL;
 		LLSD body;
 		body["classified_id"] = getClassifiedId();
-		LLHTTPClient::post(url, body, new LLClassifiedStatsResponder(getClassifiedId()));
+        LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, getClassifiedId(), _1));
 	}
 
 	// Update classified click stats.
@@ -536,7 +521,7 @@ void FSPanelClassifiedInfo::sendClickMessage(
 	std::string url = gAgent.getRegion()->getCapability("SearchStatTracking");
 	LL_INFOS("FSPanelClassifiedInfo") << "Sending click msg via capability (url=" << url << ")" << LL_ENDL;
 	LL_INFOS("FSPanelClassifiedInfo") << "body: [" << body << "]" << LL_ENDL;
-	LLHTTPClient::post(url, body, new FSClassifiedClickMessageResponder());
+    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body );
 }
 
 void FSPanelClassifiedInfo::sendClickMessage(const std::string& type)

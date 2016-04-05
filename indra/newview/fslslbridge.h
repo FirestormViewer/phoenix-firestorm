@@ -28,7 +28,6 @@
 #ifndef FS_LSLBRIDGE_H
 #define FS_LSLBRIDGE_H
 
-#include "llhttpclient.h"
 #include "llinventorymodel.h"
 #include "llviewerinventory.h"
 #include "llinventoryobserver.h"
@@ -41,7 +40,7 @@ const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
 const U8 FS_BRIDGE_POINT = 31;
 const std::string FS_BRIDGE_ATTACHMENT_POINT_NAME = "Center 2";
 
-class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
+class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLVOInventoryListener
 {
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
@@ -55,8 +54,10 @@ public:
 	FSLSLBridge();
 	~FSLSLBridge();
 
+	typedef boost::function<void(const LLSD &)> tCallback;
+
 	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
-	bool viewerToLSL(const std::string& message, FSLSLBridgeRequestResponder* responder = NULL);
+	bool viewerToLSL(const std::string& message, tCallback = NULL );
 
 	bool updateBoolSettingValue(const std::string& msgVal);
 	bool updateBoolSettingValue(const std::string& msgVal, bool contentVal);
@@ -75,7 +76,7 @@ public:
 	bool canUseBridge();
 	bool isBridgeValid() const { return NULL != mpBridge; }
 
-	void checkBridgeScriptName(const std::string& fileName);
+	void checkBridgeScriptName();
 	std::string currentFullName() { return mCurrentFullName; }
 
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
@@ -143,7 +144,7 @@ class FSLSLBridgeScriptCallback : public LLInventoryCallback
 public:
 	FSLSLBridgeScriptCallback();
 	void fire(const LLUUID& inv_item);
-	std::string prepUploadFile();
+	std::string prepUploadFile( std::string& );
 
 protected:
 	~FSLSLBridgeScriptCallback();

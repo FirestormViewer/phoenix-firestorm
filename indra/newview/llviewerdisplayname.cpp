@@ -35,14 +35,9 @@
 
 // library includes
 #include "llavatarnamecache.h"
-#include "llhttpclient.h"
 #include "llhttpnode.h"
 #include "llnotificationsutil.h"
 #include "llui.h"					// getLanguage()
-
-#include "fsradar.h"
-#include "lggcontactsets.h"
-#include "llviewercontrol.h"
 
 namespace LLViewerDisplayName
 {
@@ -60,18 +55,29 @@ namespace LLViewerDisplayName
 	void doNothing() { }
 }
 
-class LLSetDisplayNameResponder : public LLHTTPClient::Responder
+void LLViewerDisplayName::setDisplayNameCoro(const std::string& cap_url, const LLSD& body)
 {
-	LOG_CLASS(LLSetDisplayNameResponder);
-private:
-	// only care about errors
-	/*virtual*/ void httpFailure()
+	LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("SetDisplayNameCoro", httpPolicy));
+	LLCore::HttpHeaders::ptr_t httpHeaders(new LLCore::HttpHeaders);
+	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+
+	// People API can return localized error messages.  Indicate our
+	// language preference via header.
+	httpHeaders->append(HTTP_OUT_HEADER_ACCEPT_LANGUAGE, LLUI::getLanguage());
+
+	LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, body, httpHeaders);
+
+	LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+	if (!status)
 	{
-		LL_WARNS() << dumpResponse() << LL_ENDL;
+		LL_WARNS() << status.toString() << LL_ENDL;
 		LLViewerDisplayName::sSetDisplayNameSignal(false, "", LLSD());
 		LLViewerDisplayName::sSetDisplayNameSignal.disconnect_all_slots();
 	}
-};
+}
 
 void LLViewerDisplayName::set(const std::string& display_name, const set_name_slot_t& slot)
 {
@@ -87,11 +93,6 @@ void LLViewerDisplayName::set(const std::string& display_name, const set_name_sl
 		return;
 	}
 
-	// People API can return localized error messages.  Indicate our
-	// language preference via header.
-	LLSD headers;
-	headers[HTTP_OUT_HEADER_ACCEPT_LANGUAGE] = LLUI::getLanguage();
-
 	// People API requires both the old and new value to change a variable.
 	// Our display name will be in cache before the viewer's UI is available
 	// to request a change, so we can use direct lookup without callback.
@@ -106,7 +107,7 @@ void LLViewerDisplayName::set(const std::string& display_name, const set_name_sl
 	LLSD change_array = LLSD::emptyArray();
 	change_array.append(av_name.getDisplayName());
 	change_array.append(display_name);
-	
+
 	LL_INFOS() << "Set name POST to " << cap_url << LL_ENDL;
 
 	// Record our caller for when the server sends back a reply
@@ -117,7 +118,8 @@ void LLViewerDisplayName::set(const std::string& display_name, const set_name_sl
 	// communicates with the back-end.
 	LLSD body;
 	body["display_name"] = change_array;
-	LLHTTPClient::post(cap_url, body, new LLSetDisplayNameResponder, headers);
+
+	LLCoros::instance().launch("SetDisplayNameCoro", boost::bind(&LLViewerDisplayName::setDisplayNameCoro, cap_url, body));
 }
 
 class LLSetDisplayNameReply : public LLHTTPNode
@@ -198,36 +200,11 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		args["OLD_NAME"] = old_display_name;
 		args["SLID"] = av_name.getUserName();
 		args["NEW_NAME"] = av_name.getDisplayName();
-		if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
-		{
-			LLSD payload;
-			payload["agent_id"] = agent_id;
-			LLNotificationsUtil::add("DisplayNameUpdateRemoveAlias", args, payload,
-				boost::bind(&LGGContactSets::callbackAliasReset, LGGContactSets::getInstance(), _1, _2));
-		}
-		else
-		{
-			// <FS:Ansariel> Optional hiding of display name update notification
-			if (gSavedSettings.getBOOL("FSShowDisplayNameUpdateNotification"))
-			{
-				LLNotificationsUtil::add("DisplayNameUpdate", args);
-			}
-			// </FS:Ansariel> Optional hiding of display name update notification
-		}
+		LLNotificationsUtil::add("DisplayNameUpdate", args);
 		if (agent_id == gAgent.getID())
 		{
 			LLViewerDisplayName::sNameChangedSignal();
 		}
-		// <FS:Ansariel> Update name in radar
-		else
-		{
-			FSRadar* radar = FSRadar::getInstance();
-			if (radar)
-			{
-				radar->updateName(agent_id);
-			}
-		}
-		// </FS:Ansariel>
 	}
 };
 

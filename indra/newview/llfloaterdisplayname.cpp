@@ -80,10 +80,8 @@ void LLFloaterDisplayName::onOpen(const LLSD& key)
 			av_name.mNextUpdate - LLStringOps::getLocalTimeOffset();
 		LLDate next_update_local(next_update_local_secs);
 		// display as "July 18 12:17 PM"
-		//<FS:TS> FIRE-17293: Abbreviate month to make sure it fits
 		std::string next_update_string =
-		//next_update_local.toHTTPDateString("%B %d %I:%M %p");
-		next_update_local.toHTTPDateString("%b %d %I:%M %p");
+		next_update_local.toHTTPDateString("%B %d %I:%M %p");
 		getChild<LLUICtrl>("lockout_text")->setTextArg("[TIME]", next_update_string);
 		getChild<LLUICtrl>("lockout_text")->setVisible(true);
 		getChild<LLUICtrl>("save_btn")->setEnabled(false);

@@ -35,7 +35,6 @@
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
 #include "llclassifiedflags.h"
-#include "llclassifiedstatsresponder.h"
 #include "lldateutil.h"
 #include "llqueryflags.h"
 #include "lleventflags.h"
@@ -65,6 +64,7 @@
 #include "llfloaterworldmap.h"
 #include "fspanelclassified.h"
 #include "fspanelprofile.h"
+#include "llpanelclassified.h"
 #include "fsdispatchclassifiedclickthrough.h"
 
 #include <string>
@@ -173,7 +173,7 @@ public:
 					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
-					LLHTTPClient::post(url, body, new LLClassifiedStatsResponder(c_info->classified_id));
+			        LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(url, body, boost::bind(&LLPanelClassifiedInfo::handleSearchStatResponse, c_info->classified_id, _1));
 				}
 			}
 		}

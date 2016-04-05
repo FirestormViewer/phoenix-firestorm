@@ -139,3 +139,9 @@ else (USESYSTEMLIBS)
         debug boost_wave-mt-d)
   endif (WINDOWS)
 endif (USESYSTEMLIBS)
+
+if (LINUX)
+    set(BOOST_SYSTEM_LIBRARY ${BOOST_SYSTEM_LIBRARY} rt)
+    set(BOOST_THREAD_LIBRARY ${BOOST_THREAD_LIBRARY} rt)
+endif (LINUX)
+

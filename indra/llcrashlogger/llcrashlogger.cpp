@@ -40,19 +40,24 @@
 #include "lldir.h"
 #include "llfile.h"
 #include "llsdserialize.h"
-#include "lliopipe.h"
-#include "llpumpio.h"
-#include "llhttpclient.h"
 #include "llsdserialize.h"
 #include "llproxy.h"
- 
+#include "llcorehttputil.h"
+#include "llhttpsdhandler.h"
+#include "httpcommon.h"
+#include "httpresponse.h"
+
+#include <curl/curl.h>
+#include <openssl/crypto.h>
+
+
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 #ifdef LL_WINDOWS
 	#include <shellapi.h>
 #endif // LL_WINDOWS
 // [/SL:KB]
 
-LLPumpIO* gServicePump = NULL;
+
 BOOL gBreak = false;
 BOOL gSent = false;
 
@@ -62,27 +67,31 @@ std::string getFormDataField(const std::string& strFieldName, const std::string&
 std::string getStartupStateFromLog(std::string& sllog);
 // </FS:CR>
 
-class LLCrashLoggerResponder : public LLHTTPClient::Responder
+int LLCrashLogger::ssl_mutex_count = 0;
+LLCoreInt::HttpMutex ** LLCrashLogger::ssl_mutex_list = NULL;
+
+class LLCrashLoggerHandler : public LLHttpSDHandler
 {
-	LOG_CLASS(LLCrashLoggerResponder);
+    LOG_CLASS(LLCrashLoggerHandler);
 public:
-	LLCrashLoggerResponder() 
-	{
-	}
+    LLCrashLoggerHandler() {}
 
 protected:
-	virtual void httpFailure()
-	{
-		LL_WARNS() << dumpResponse() << LL_ENDL;
-		gBreak = true;
-	}
+    virtual void onSuccess(LLCore::HttpResponse * response, const LLSD &content);
+    virtual void onFailure(LLCore::HttpResponse * response, LLCore::HttpStatus status);
 
-	virtual void httpSuccess()
-	{
-		gBreak = true;
-		gSent = true;
-	}
 };
+
+void LLCrashLoggerHandler::onSuccess(LLCore::HttpResponse * response, const LLSD &content)
+{
+    gBreak = true;
+    gSent = true;
+}
+
+void LLCrashLoggerHandler::onFailure(LLCore::HttpResponse * response, LLCore::HttpStatus status)
+{
+    gBreak = true;
+}
 
 LLCrashLogger::LLCrashLogger() :
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
@@ -233,11 +242,13 @@ void LLCrashLogger::gatherFiles()
 		mFileMap["SettingsXml"] = mDebugLog["SettingsFilename"].asString();
 		if(mDebugLog.has("CAFilename"))
 		{
-			LLCurl::setCAFile(mDebugLog["CAFilename"].asString());
+            LLCore::HttpRequest::setStaticPolicyOption(LLCore::HttpRequest::PO_CA_FILE,
+                LLCore::HttpRequest::GLOBAL_POLICY_ID, mDebugLog["CAFilename"].asString(), NULL);
 		}
 		else
 		{
-			LLCurl::setCAFile(gDirUtilp->getCAFile());
+            LLCore::HttpRequest::setStaticPolicyOption(LLCore::HttpRequest::PO_CA_FILE,
+                LLCore::HttpRequest::GLOBAL_POLICY_ID, gDirUtilp->getCAFile(), NULL);
 		}
 
 		LL_INFOS() << "Using log file from debug log " << mFileMap["SecondLifeLog"] << LL_ENDL;
@@ -246,10 +257,11 @@ void LLCrashLogger::gatherFiles()
 	// else
 	// {
 	//	// Figure out the filename of the second life log
-	//	LLCurl::setCAFile(gDirUtilp->getCAFile());
+    //    LLCore::HttpRequest::setStaticPolicyOption(LLCore::HttpRequest::PO_CA_FILE,
+    //        LLCore::HttpRequest::GLOBAL_POLICY_ID, gDirUtilp->getCAFile(), NULL);
     //    
 	//	mFileMap["SecondLifeLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
-    //    mFileMap["SettingsXml"] = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"settings.xml");
+    //  mFileMap["SettingsXml"] = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"settings.xml");
 	// }
 
     // if (!gDirUtilp->fileExists(mFileMap["SecondLifeLog"]) ) //We would prefer to get this from the per-run but here's our fallback.
@@ -465,107 +477,38 @@ std::string getFormDataField(const std::string& strFieldName, const std::string&
 
 bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg, int retries, int timeout)
 {
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+
 	gBreak = false;
+    httpOpts->setTimeout(timeout);
+
 	for(int i = 0; i < retries; ++i)
 	{
-		//status_message = llformat("%s, try %d...", msg.c_str(), i+1);
-//		LLHTTPClient::post(host, data, new LLCrashLoggerResponder(), timeout);
-// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-03-24 (Catznip-2.6.0a) | Modified: Catznip-2.6.0a
-		static const std::string BOUNDARY("------------abcdef012345xyZ");
+		updateApplication(llformat("%s, try %d...", msg.c_str(), i+1));
 
-		LLSD headers = LLSD::emptyMap();
+        LLCore::HttpHandle handle = LLCoreHttpUtil::requestPostWithLLSD(httpRequest.get(), LLCore::HttpRequest::DEFAULT_POLICY_ID, 0,
+            host, data, httpOpts, LLCore::HttpHeaders::ptr_t(), LLCore::HttpHandler::ptr_t(new LLCrashLoggerHandler));
 
-		headers["Accept"] = "*/*";
-		headers["Content-Type"] = "multipart/form-data; boundary=" + BOUNDARY;
+        if (handle == LLCORE_HTTP_HANDLE_INVALID)
+        {
+            LLCore::HttpStatus status = httpRequest->getStatus();
+            LL_WARNS("CRASHREPORT") << "Request POST failed to " << host << " with status of [" <<
+                status.getType() << "]\"" << status.toString() << "\"" << LL_ENDL;
+            return false;
+        }
 
-		std::ostringstream body;
-
-		/*
-		 * Send viewer information for the upload handler's benefit
-		 */
-		if (mDebugLog.has("ClientInfo"))
-		{
-			body << getFormDataField("viewer_channel", mDebugLog["ClientInfo"]["Name"], BOUNDARY);
-			body << getFormDataField("viewer_version", mDebugLog["ClientInfo"]["Version"], BOUNDARY);
-			body << getFormDataField("viewer_platform", mDebugLog["ClientInfo"]["Platform"], BOUNDARY);
-
-// <FS:ND> Add which flavor of FS generated an error
-			body << getFormDataField("viewer_flavor", mDebugLog["ClientInfo"]["Flavor"], BOUNDARY );
-// </FS:ND>
-		}
-
-		/*
-		 * Include crash analysis pony
-		 */
-		if (mCrashLookup)
-		{
-			body << getFormDataField("crash_module_name", mCrashLookup->getModuleName(), BOUNDARY);
-			body << getFormDataField("crash_module_version", llformat("%I64d", mCrashLookup->getModuleVersion()), BOUNDARY);
-			body << getFormDataField("crash_module_versionstring", mCrashLookup->getModuleVersionString(), BOUNDARY);
-			body << getFormDataField("crash_module_displacement", llformat("%I64d", mCrashLookup->getModuleDisplacement()), BOUNDARY);
-		}
-
-		/*
-		 * Add the actual crash logs
-		 */
-		for (std::map<std::string, std::string>::const_iterator itFile = mFileMap.begin(), endFile = mFileMap.end();
-				itFile != endFile; ++itFile)
-		{
-			if (itFile->second.empty())
-				continue;
-
-			body << "--" << BOUNDARY << "\r\n"
-				 <<	"Content-Disposition: form-data; name=\"crash_report[]\"; "
-				 << "filename=\"" << gDirUtilp->getBaseFileName(itFile->second) << "\"\r\n"
-				 << "Content-Type: application/octet-stream"
-				 << "\r\n\r\n";
-
-			// <FS:ND> Linux wants a char const * here
-			// llifstream fstream(itFile->second, std::iostream::binary | std::iostream::out);
-			llifstream fstream(itFile->second.c_str(), std::iostream::binary | std::iostream::out);
-			// </FS:ND>
-
-			if (fstream.is_open())
-			{
-				fstream.seekg(0, std::ios::end);
-
-				U32 fileSize = fstream.tellg();
-				fstream.seekg(0, std::ios::beg);
-				std::vector<char> fileBuffer(fileSize);
-
-				fstream.read(&fileBuffer[0], fileSize);
-				body.write(&fileBuffer[0], fileSize);
-
-				fstream.close();
-			}
-
-			body <<	"\r\n";
-		}
-
-		/*
-		 * Close the post
-		 */
-		body << "--" << BOUNDARY << "--\r\n";
-
-		// postRaw() takes ownership of the buffer and releases it later.
-		size_t size = body.str().size();
-		U8 *data = new U8[size];
-		memcpy(data, body.str().data(), size);
-
-		// Send request
-		LLHTTPClient::postRaw(host, data, size, new LLCrashLoggerResponder(), headers);
-// [/SL:KB]
-		//updateApplication(llformat("%s, try %d...", msg.c_str(), i+1));
-		//LLHTTPClient::post(host, data, new LLCrashLoggerResponder(), timeout);
-
-		while(!gBreak)
+        while(!gBreak)
 		{
 			updateApplication(); // No new message, just pump the IO
+            httpRequest->update(0L);
 		}
 		if(gSent)
 		{
 			return gSent;
 		}
+
+        LL_WARNS("CRASHREPORT") << "Failed to send crash report to \"" << host << "\"" << LL_ENDL;
 	}
 	return gSent;
 }
@@ -692,14 +635,12 @@ bool LLCrashLogger::sendCrashLogs()
 
 void LLCrashLogger::updateApplication(const std::string& message)
 {
-	gServicePump->pump();
-    gServicePump->callback();
 	if (!message.empty()) LL_INFOS() << message << LL_ENDL;
 }
 
 bool LLCrashLogger::init()
 {
-	LLCurl::initClass(false);
+    LLCore::LLHttp::initialize();
 
 	// We assume that all the logs we're looking for reside on the current drive
 #ifdef ND_BUILD64BIT_ARCH
@@ -766,16 +707,74 @@ bool LLCrashLogger::init()
 		return false;
 	}
     
-	gServicePump = new LLPumpIO(gAPRPoolp);
-	gServicePump->prime(gAPRPoolp);
-	LLHTTPClient::setPump(*gServicePump);
- 	
+    init_curl();
+    LLCore::HttpRequest::createService();
+    LLCore::HttpRequest::startThread();
+
 	return true;
 }
 
 // For cleanup code common to all platforms.
 void LLCrashLogger::commonCleanup()
 {
+    term_curl();
 	LLError::logToFile("");   //close crashreport.log
 	LLProxy::cleanupClass();
 }
+
+void LLCrashLogger::init_curl()
+{
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    ssl_mutex_count = CRYPTO_num_locks();
+    if (ssl_mutex_count > 0)
+    {
+        ssl_mutex_list = new LLCoreInt::HttpMutex *[ssl_mutex_count];
+
+        for (int i(0); i < ssl_mutex_count; ++i)
+        {
+            ssl_mutex_list[i] = new LLCoreInt::HttpMutex;
+        }
+
+        CRYPTO_set_locking_callback(ssl_locking_callback);
+        CRYPTO_set_id_callback(ssl_thread_id_callback);
+    }
+}
+
+
+void LLCrashLogger::term_curl()
+{
+    CRYPTO_set_locking_callback(NULL);
+    for (int i(0); i < ssl_mutex_count; ++i)
+    {
+        delete ssl_mutex_list[i];
+    }
+    delete[] ssl_mutex_list;
+}
+
+
+unsigned long LLCrashLogger::ssl_thread_id_callback(void)
+{
+#if LL_WINDOWS
+    return (unsigned long)GetCurrentThread();
+#else
+    return (unsigned long)pthread_self();
+#endif
+}
+
+
+void LLCrashLogger::ssl_locking_callback(int mode, int type, const char * /* file */, int /* line */)
+{
+    if (type >= 0 && type < ssl_mutex_count)
+    {
+        if (mode & CRYPTO_LOCK)
+        {
+            ssl_mutex_list[type]->lock();
+        }
+        else
+        {
+            ssl_mutex_list[type]->unlock();
+        }
+    }
+}
+

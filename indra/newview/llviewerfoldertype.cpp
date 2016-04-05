@@ -138,7 +138,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	//
 	//bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
 	//addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
-	//addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
+	//addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     true));
 
 	addEntry(LLFolderType::FT_TEXTURE, 				new ViewerFolderEntry("Textures",				"Inv_TexturesOpen",		"Inv_TexturesClosed",	FALSE,     true));
 	addEntry(LLFolderType::FT_SOUND, 				new ViewerFolderEntry("Sounds",					"Inv_SoundOpen",		"Inv_SoundClosed",		FALSE,     true));
@@ -164,7 +164,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	
 	bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
 	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Received Items",			"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
-	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     boxes_invisible));
+	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     true));
 	// </FS:Ansariel> Use individual icons for different folder types
 
 	addEntry(LLFolderType::FT_BASIC_ROOT, 			new ViewerFolderEntry("Basic Root",				"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     true));

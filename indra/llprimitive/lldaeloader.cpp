@@ -63,6 +63,7 @@
 #include "glh/glh_linear.h"
 #include "llmatrix4a.h"
 
+
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
@@ -96,6 +97,7 @@ public:
 	}
 };
 // </FS:ND>
+
 
 std::string colladaVersion[VERSIONTYPE_COUNT+1] = 
 {

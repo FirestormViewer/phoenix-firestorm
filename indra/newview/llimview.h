@@ -34,6 +34,9 @@
 #include "lllogchat.h"
 #include "llvoicechannel.h"
 
+#include "llcoros.h"
+#include "lleventcoro.h"
+
 class LLAvatarName;
 class LLFriendObserver;
 class LLCallDialogManager;	

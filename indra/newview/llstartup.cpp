@@ -46,7 +46,6 @@
 #include "llaudioengine_openal.h"
 #endif
 
-#include "llares.h"
 #include "llavatarnamecache.h"
 #include "llexperiencecache.h"
 #include "lllandmark.h"
@@ -56,11 +55,7 @@
 #include "llerrorcontrol.h"
 #include "llfloaterreg.h"
 #include "llfocusmgr.h"
-#include "llhttpsender.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h"
-#include "fsfloaterim.h"
-// </FS:Ansariel> [FS communication UI]
+#include "llfloaterimsession.h"
 #include "lllocationhistory.h"
 #include "llimageworker.h"
 
@@ -117,7 +112,6 @@
 #include "llhudeffecttrail.h"
 #include "llhudmanager.h"
 #include "llbufferstream.h" // <FS:PP> For SL Grid Status
-#include "llhttpclient.h"
 #include "llimagebmp.h"
 #include "llinventorybridge.h"
 #include "llinventorymodel.h"
@@ -209,6 +203,10 @@
 #endif
 
 // Firestorm includes
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimsession.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
@@ -333,167 +331,150 @@ void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is
 // local classes
 //
 
-namespace
-{
-	class LLNullHTTPSender : public LLHTTPSender
-	{
-		virtual void send(const LLHost& host, 
-						  const std::string& message, const LLSD& body, 
-						  LLHTTPClient::ResponderPtr response) const
-		{
-			LL_WARNS("AppInit") << " attemped to send " << message << " to " << host
-					<< " with null sender" << LL_ENDL;
-		}
-	};
-}
-
 // <AW: opensim>
 static bool sGridListRequestReady = false;
-class GridListRequestResponder : public LLHTTPClient::Responder
+void downloadGridlistComplete( LLSD const &aData )
 {
-public:
-	//If we get back a normal response, handle it here
-	virtual void httpSuccess()
-	{
-		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+	LL_DEBUGS() << aData << LL_ENDL;
+	
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
 
-		llofstream out_file;
-		out_file.open(filename.c_str());
-		LLSDSerialize::toPrettyXML(getContent(), out_file);
-		out_file.close();
-		LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
-		sGridListRequestReady = true;
+	LLDate lastModified;
+	if (header.has("last-modified"))
+	{
+		lastModified.secondsSinceEpoch( FSCommon::secondsSinceEpochFromString( "%a, %d %b %Y %H:%M:%S %ZP", header["last-modified"].asString() ) );
 	}
 
-	//If we get back an error (not found, etc...), handle it here
-	virtual void httpFailure()
+	LLSD data = aData;
+	data.erase( LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS );
+	
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.remote.xml");
+
+	llofstream out_file;
+	out_file.open(filename.c_str());
+	LLSDSerialize::toPrettyXML( aData, out_file);
+	out_file.close();
+	LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
+	sGridListRequestReady = true;
+}
+
+void downloadGridlistError( LLSD const &aData, std::string const &aURL )
+{
+	LL_WARNS() << "Failed to download grid list from " << aURL << LL_ENDL;
+}
+
+ void downloadGridstatusComplete( LLSD const &aData )
+{
+	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+
+	if( status.getType() < 200 && status.getType() >= 300 && status.getType() != HTTP_NOT_MODIFIED)
 	{
-		sGridListRequestReady = true;
-		if (HTTP_NOT_MODIFIED == getStatus())
+		if (status.getType() == HTTP_INTERNAL_ERROR)
 		{
-			LL_DEBUGS("GridManager") << "<- no error :P ... GridListRequest: List not modified since last session" << LL_ENDL;
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
 		}
 		else
-			LL_WARNS() << "GridListRequest::error("<< getStatus() << ": " << getReason() << ")" << LL_ENDL;
+		{
+			LLStringUtil::format_map_t args;
+			args["STATUS"] = llformat("%d", status.getType());
+			report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
+		}
+		LL_WARNS("SLGridStatusResponder") << "Error - status " << status.getType() << LL_ENDL;
+		return;
 	}
-};
-// </AW: opensim>
 
-// <FS:PP>
-class SLGridStatusResponder : public LLHTTPClient::Responder
-{
-public:
-	virtual void completedRaw(const LLChannelDescriptors& channels, const LLIOPipe::buffer_ptr_t& buffer)
+	if (rawData.size() == 0)
 	{
-		S32 status = getStatus();
-		if (!isGoodStatus() && status != HTTP_NOT_MODIFIED)
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
+		return;
+	}
+
+	std::string fetchedNews;
+	fetchedNews.assign( rawData.begin(), rawData.end() );
+
+	size_t itemStart = fetchedNews.find("<item>");
+	size_t itemEnd = fetchedNews.find("</item>");
+	if (itemEnd != std::string::npos && itemStart != std::string::npos)
+	{
+		// Isolate latest news data
+		itemStart += 6;
+		std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
+
+		// Check for and remove CDATA characters if they're present
+		size_t titleStart = theNews.find("<title><![CDATA[");
+		if (titleStart != std::string::npos)
 		{
-			if (status == HTTP_INTERNAL_ERROR)
-			{
-				report_to_nearby_chat(LLTrans::getString("SLGridStatusTimedOut"));
-			}
-			else
-			{
-				LLStringUtil::format_map_t args;
-				args["STATUS"] = llformat("%d", status);
-				report_to_nearby_chat(LLTrans::getString("SLGridStatusOtherError", args));
-			}
-			LL_WARNS("SLGridStatusResponder") << "Error - status " << status << LL_ENDL;
-			return;
+			theNews.replace(titleStart, 16, "<title>");
+		}
+		size_t titleEnd = theNews.find("]]></title>");
+		if (titleEnd != std::string::npos)
+		{
+			theNews.replace(titleEnd, 11, "</title>");
+		}
+		size_t descStart = theNews.find("<description><![CDATA[");
+		if (descStart != std::string::npos)
+		{
+			theNews.replace(descStart, 22, "<description>");
+		}
+		size_t descEnd = theNews.find("]]></description>");
+		if (descEnd != std::string::npos)
+		{
+			theNews.replace(descEnd, 17, "</description>");
+		}
+		size_t linkStart = theNews.find("<link><![CDATA[");
+		if (linkStart != std::string::npos)
+		{
+			theNews.replace(linkStart, 15, "<link>");
+		}
+		size_t linkEnd = theNews.find("]]></link>");
+		if (linkEnd != std::string::npos)
+		{
+			theNews.replace(linkEnd, 10, "</link>");
 		}
 
-		S32 outputSize = buffer->countAfter(channels.in(), NULL);
-		if (outputSize <= 0)
+		// Get indexes
+		titleStart = theNews.find("<title>");
+		descStart = theNews.find("<description>");
+		linkStart = theNews.find("<link>");
+		titleEnd = theNews.find("</title>");
+		descEnd = theNews.find("</description>");
+		linkEnd = theNews.find("</link>");
+
+		if (titleStart != std::string::npos &&
+			descStart != std::string::npos &&
+			linkStart != std::string::npos &&
+			titleEnd != std::string::npos &&
+			descEnd != std::string::npos &&
+			linkEnd != std::string::npos)
 		{
-			report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
-			LL_WARNS("SLGridStatusResponder") << "Error - empty output" << LL_ENDL;
-			return;
-		}
-
-		LLBufferStream istr(channels, buffer.get());
-		std::stringstream strstrm;
-		strstrm << istr.rdbuf();
-		std::string fetchedNews = strstrm.str();
-
-		size_t itemStart = fetchedNews.find("<item>");
-		size_t itemEnd = fetchedNews.find("</item>");
-		if (itemEnd != std::string::npos && itemStart != std::string::npos)
-		{
-			// Isolate latest news data
-			itemStart += 6;
-			std::string theNews = fetchedNews.substr(itemStart, itemEnd - itemStart);
-
-			// Check for and remove CDATA characters if they're present
-			size_t titleStart = theNews.find("<title><![CDATA[");
-			if (titleStart != std::string::npos)
-			{
-				theNews.replace(titleStart, 16, "<title>");
-			}
-			size_t titleEnd = theNews.find("]]></title>");
-			if (titleEnd != std::string::npos)
-			{
-				theNews.replace(titleEnd, 11, "</title>");
-			}
-			size_t descStart = theNews.find("<description><![CDATA[");
-			if (descStart != std::string::npos)
-			{
-				theNews.replace(descStart, 22, "<description>");
-			}
-			size_t descEnd = theNews.find("]]></description>");
-			if (descEnd != std::string::npos)
-			{
-				theNews.replace(descEnd, 17, "</description>");
-			}
-			size_t linkStart = theNews.find("<link><![CDATA[");
-			if (linkStart != std::string::npos)
-			{
-				theNews.replace(linkStart, 15, "<link>");
-			}
-			size_t linkEnd = theNews.find("]]></link>");
-			if (linkEnd != std::string::npos)
-			{
-				theNews.replace(linkEnd, 10, "</link>");
-			}
-
-			// Get indexes
-			titleStart = theNews.find("<title>");
-			descStart = theNews.find("<description>");
-			linkStart = theNews.find("<link>");
-			titleEnd = theNews.find("</title>");
-			descEnd = theNews.find("</description>");
-			linkEnd = theNews.find("</link>");
-
-			if (titleStart != std::string::npos &&
-				descStart != std::string::npos &&
-				linkStart != std::string::npos &&
-				titleEnd != std::string::npos &&
-				descEnd != std::string::npos &&
-				linkEnd != std::string::npos)
-			{
-				titleStart += 7;
-				descStart += 13;
-				linkStart += 6;
-				std::string newsTitle = theNews.substr(titleStart, titleEnd - titleStart);
-				std::string newsDesc = theNews.substr(descStart, descEnd - descStart);
-				std::string newsLink = theNews.substr(linkStart, linkEnd - linkStart);
-				LLStringUtil::trim(newsTitle);
-				LLStringUtil::trim(newsDesc);
-				LLStringUtil::trim(newsLink);
-				report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
-			}
-			else
-			{
-				report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
-				LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
-			}
+			titleStart += 7;
+			descStart += 13;
+			linkStart += 6;
+			std::string newsTitle = theNews.substr(titleStart, titleEnd - titleStart);
+			std::string newsDesc = theNews.substr(descStart, descEnd - descStart);
+			std::string newsLink = theNews.substr(linkStart, linkEnd - linkStart);
+			LLStringUtil::trim(newsTitle);
+			LLStringUtil::trim(newsDesc);
+			LLStringUtil::trim(newsLink);
+			report_to_nearby_chat("[ " + newsTitle + " ] " + newsDesc + " [ " + newsLink + " ]");
 		}
 		else
 		{
 			report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
-			LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+			LL_WARNS("SLGridStatusResponder") << "Error - inner tag(s) missing" << LL_ENDL;
 		}
 	}
-};
+	else
+	{
+		report_to_nearby_chat(LLTrans::getString("SLGridStatusInvalidMsg"));
+		LL_WARNS("SLGridStatusResponder") << "Error - output without </item>" << LL_ENDL;
+	}
+}
+
 // </FS:PP>
 
 void update_texture_fetch()
@@ -676,13 +657,6 @@ bool idle_startup()
 		// Load the throttle settings
 		gViewerThrottle.load();
 
-		if (ll_init_ares() == NULL || !gAres->isInitialized())
-		{
-			std::string diagnostic = "Could not start address resolution system";
-			LL_WARNS("AppInit") << diagnostic << LL_ENDL;
-			LLAppViewer::instance()->earlyExit("LoginFailedNoNetwork", LLSD().with("DIAGNOSTIC", diagnostic));
-		}
-		
 		//
 		// Initialize messaging system
 		//
@@ -726,8 +700,6 @@ bool idle_startup()
 			  {
 			    port = gSavedSettings.getU32("ConnectionPort");
 			  }
-
-			LLHTTPSender::setDefaultSender(new LLNullHTTPSender());
 
 			// TODO parameterize 
 			const F32 circuit_heartbeat_interval = 5;
@@ -862,7 +834,7 @@ bool idle_startup()
 			}
 
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
-			LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
+			LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet( url, boost::bind( downloadGridlistComplete, _1 ), boost::bind( downloadGridlistError, _1, url ) );
 		}
 #ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
@@ -1069,9 +1041,7 @@ bool idle_startup()
 			// initialize_spellcheck_menu();
 			// initialize_edit_menu();
 			// </FS:Zi>
-			display_startup();
 			init_menus();
-			display_startup();
 		}
 
 		if (show_connect_box)
@@ -1083,17 +1053,12 @@ bool idle_startup()
 			if (gUserCredential.isNull())                                                                          
 			{                                                  
 				LL_DEBUGS("AppInit") << "loading credentials from gLoginHandler" << LL_ENDL;
-				display_startup();
-				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));
-				display_startup();
+				gUserCredential = gLoginHandler.initializeLoginInfo();                 
 			}     
 			// Make sure the process dialog doesn't hide things
-			display_startup();
-			gViewerWindow->setShowProgress(FALSE, FALSE);
-			display_startup();
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 			// Show the login dialog
 			login_show();
-			display_startup();
 			// connect dialog is already shown, so fill in the names
 			if (gUserCredential.notNull())
 			{
@@ -1102,7 +1067,6 @@ bool idle_startup()
 				FSPanelLogin::setFields(gUserCredential, true);
 // </FS:CR>
 			}
-			display_startup();
 			// <FS:Ansariel> [FS Login Panel]
 			//LLPanelLogin::giveFocus();
 			FSPanelLogin::giveFocus();
@@ -1132,13 +1096,9 @@ bool idle_startup()
 			LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
 		}
 
-		display_startup();
 		gViewerWindow->setNormalControlsVisible( FALSE );	
-		display_startup();
 		gLoginMenuBarView->setVisible( TRUE );
-		display_startup();
 		gLoginMenuBarView->setEnabled( TRUE );
-		display_startup();
 		
 		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
 		if(chat_channel)
@@ -1147,14 +1107,11 @@ bool idle_startup()
 		}
 
 		show_debug_menus();
-		display_startup();
 
 		// Hide the splash screen
 		LLSplashScreen::hide();
-		display_startup();
 		// Push our window frontmost
 		gViewerWindow->getWindow()->show();
-		display_startup();
 
 		// DEV-16927.  The following code removes errant keystrokes that happen while the window is being 
 		// first made visible.
@@ -1162,9 +1119,9 @@ bool idle_startup()
 		MSG msg;
 		while( PeekMessage( &msg, /*All hWnds owned by this thread */ NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE ) )
 		{ }
-		display_startup();
 #endif
-		timeout.reset();
+        display_startup();
+        timeout.reset();
 		return FALSE;
 	}
 
@@ -2907,7 +2864,9 @@ bool idle_startup()
 		// <FS:PP>
 		if (gSavedSettings.getBOOL("AutoQueryGridStatus"))
 		{
-			LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
+			FSCoreHttpUtil::callbackHttpGetRaw( gSavedSettings.getString("AutoQueryGridStatusURL"),
+												downloadGridstatusComplete );
+
 		}
 		// </FS:PP>
 
@@ -3510,8 +3469,6 @@ void reset_login()
 	gAgent.cleanup();
 	LLWorld::getInstance()->destroyClass();
 
-	LLStartUp::setStartupState( STATE_LOGIN_SHOW );
-
 	if ( gViewerWindow )
 	{	// Hide menus and normal buttons
 		gViewerWindow->setNormalControlsVisible( FALSE );
@@ -3526,6 +3483,7 @@ void reset_login()
 		chat_channel->removeToastsFromChannel();
 	}
 	LLFloaterReg::hideVisibleInstances();
+    LLStartUp::setStartupState( STATE_BROWSER_INIT );
 }
 
 //---------------------------------------------------------------------------
@@ -3583,9 +3541,11 @@ void LLStartUp::initNameCache()
 
 
 void LLStartUp::initExperiences()
-{
-	LLAppViewer::instance()->loadExperienceCache();
-	LLExperienceCache::initClass();
+{   
+    // Should trigger loading the cache.
+    LLExperienceCache::instance().setCapabilityQuery(
+        boost::bind(&LLAgent::getRegionCapability, &gAgent, _1));
+
 	LLExperienceLog::instance().initialize();
 }
 

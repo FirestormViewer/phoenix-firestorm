@@ -28,35 +28,13 @@
 #ifndef FS_LSLBRIDGEREQUEST_H
 #define FS_LSLBRIDGEREQUEST_H
 
-#include "llhttpclient.h"
 
 //
 //-TT Client LSL Bridge File
 //
 
-class FSLSLBridgeRequestResponder : public LLHTTPClient::Responder
-{
-public:
-	FSLSLBridgeRequestResponder();
-	virtual ~FSLSLBridgeRequestResponder();
-	//If we get back a normal response, handle it here
-	virtual void httpSuccess();
-	//If we get back an error (not found, etc...), handle it here
-	virtual void httpFailure();
-};
-
-
-//
-// Responder used by radar for position lookups
-//
-
-class FSLSLBridgeRequestRadarPosResponder : public FSLSLBridgeRequestResponder
-{
-public:
-	FSLSLBridgeRequestRadarPosResponder();
-	virtual ~FSLSLBridgeRequestRadarPosResponder();
-	//If we get back a normal response, handle it here
-	void httpSuccess();
-};
+void FSLSLBridgeRequest_Success( LLSD const &aData );
+void FSLSLBridgeRequestResponder_Failure( LLSD const &aData );
+void FSLSLBridgeRequestRadarPosResponder_Success( LLSD const &aData );
 
 #endif // FS_LSLBRIDGEREQUEST_H
