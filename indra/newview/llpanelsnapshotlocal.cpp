@@ -61,6 +61,9 @@ private:
 	/*virtual*/ LLFloaterSnapshot::ESnapshotFormat getImageFormat() const;
 	/*virtual*/ void updateControls(const LLSD& info);
 
+	// <FS:Ansariel> Threaded filepickers
+	void saveLocalCallback(bool success);
+
 	S32 mLocalFormat;
 
 	void onFormatComboCommit(LLUICtrl* ctrl);
@@ -180,22 +183,19 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	LLFloaterSnapshot* floater = LLFloaterSnapshot::getInstance();
 
 	floater->notify(LLSD().with("set-working", true));
-	BOOL saved = LLFloaterSnapshot::saveLocal();
-	if (saved)
-	{
-		LLFloaterSnapshot::postSave();
-		// <FS:Ansariel> Don't return to target selection after taking a snapshot
-		//goBack();
-		floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
-	}
-	else
-	{
-		// <FS:Ansariel> Notify user if we could not save file
-		LLNotificationsUtil::add("CannotSaveSnapshot");
-		floater->notify(LLSD().with("set-ready", true));
-		// <FS:Ansariel> Don't return to target selection after taking a snapshot
-		//cancel();
-	}
+	// <FS:Ansariel> Threaded filepickers
+	//BOOL saved = LLFloaterSnapshot::saveLocal();
+	//if (saved)
+	//{
+	//	LLFloaterSnapshot::postSave();
+	//	floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
+	//}
+	//else
+	//{
+	//	cancel();
+	//}
+	LLFloaterSnapshot::saveLocal(boost::bind(&LLPanelSnapshotLocal::saveLocalCallback, this, _1));
+	// </FS:Ansariel>
 }
 
 // <FS:Ansariel> Store settings at logout
@@ -204,5 +204,23 @@ LLPanelSnapshotLocal::~LLPanelSnapshotLocal()
 	gSavedSettings.setS32("LastSnapshotToDiskResolution", getImageSizeComboBox()->getCurrentIndex());
 	gSavedSettings.setS32("LastSnapshotToDiskWidth", getTypedPreviewWidth());
 	gSavedSettings.setS32("LastSnapshotToDiskHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Threaded filepickers
+void LLPanelSnapshotLocal::saveLocalCallback(bool success)
+{
+	LLFloaterSnapshot* floater = LLFloaterSnapshot::getInstance();
+
+	if (success)
+	{
+		LLFloaterSnapshot::postSave();
+		floater->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "local")));
+	}
+	else
+	{
+		LLNotificationsUtil::add("CannotSaveSnapshot");
+		floater->notify(LLSD().with("set-ready", true));
+	}
 }
 // </FS:Ansariel>
