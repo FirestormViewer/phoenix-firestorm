@@ -1271,14 +1271,17 @@ BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 {
 	if (!LLUI::sSettingGroups["config"]->getBOOL("ShowHoverTips")) return TRUE;
 	if (!mHoverPick.isValid()) return TRUE;
-// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-#ifdef RLV_EXTENSION_CMD_INTERACT
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) return TRUE;
-#endif // RLV_EXTENSION_CMD_INTERACT
-// [/RLVa:KB]
 
 	LLViewerObject* hover_object = mHoverPick.getObject();
-	
+
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	// NOTE: handleTooltipObject() will block HUD tooltips anyway but technically interact should only interfere with world interaction
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (hover_object) && (!hover_object->isHUDAttachment()) )
+	{
+		return TRUE;
+	}
+// [/RLVa:KB]
+
 	// update hover object and hover parcel
 	LLSelectMgr::getInstance()->setHoverObject(hover_object, mHoverPick.mObjectFace);
 	

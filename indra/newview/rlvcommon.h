@@ -98,10 +98,8 @@ public:
 	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
 	static bool getShowNameTags()				{ return fShowNameTags; }
 
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	static void initClass();
 	static void onChangedSettingMain(const LLSD& sdValue);

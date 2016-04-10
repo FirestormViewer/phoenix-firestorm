@@ -170,7 +170,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("getaddoutfitnames",		RLV_BHVR_GETADDOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourInfo("getattach",				RLV_BHVR_GETATTACH,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getattachnames",			RLV_BHVR_GETATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourInfo("getcommand",				RLV_BHVR_GETCOMMAND,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvBehaviourInfo("getcommand",				RLV_BHVR_GETCOMMAND,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinvworn",				RLV_BHVR_GETINVWORN,			RLV_TYPE_REPLY));
@@ -778,7 +778,6 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 				}
 				break;
 
-			#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 			case LLAssetType::AT_GESTURE:
 				if (isWearAction(eAction))
 				{
@@ -791,7 +790,6 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 						m_remGestures.push_back(pRlvItem);
 				}
 				break;
-			#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
 
 			default:
 				break;

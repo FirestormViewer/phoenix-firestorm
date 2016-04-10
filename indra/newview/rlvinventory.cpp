@@ -809,12 +809,9 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				     (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) ) &&
 				   ( (!fAttach) || (RlvAttachPtLookup::hasAttachPointName(pItem)) || (RlvSettings::getEnableSharedWear()) );
 			break;
-		#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 		case LLAssetType::AT_GESTURE:
 			fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
-		#ifdef RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		case LLAssetType::AT_CATEGORY:
 			if (LLAssetType::AT_LINK_FOLDER == pItem->getActualType())
 			{
@@ -831,7 +828,6 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				}
 			}
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		default:
 			break;
 	}

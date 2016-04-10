@@ -50,41 +50,38 @@ bool RlvActions::canSendIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
-// Checked: 2011-04-12 (RLVa-1.3.0)
 bool RlvActions::canStartIM(const LLUUID& idRecipient)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
 	//   - not generally restricted from starting IM sessions (or the recipient is an exception)
 	//   - not specifically restricted from starting an IM session with the recipient
+	//   - the session already exists
 	return 
 		(!rlv_handler_t::isEnabled()) ||
 		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIM)) || (gRlvHandler.isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
-		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) );
+		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) ) ||
+		( (hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient)) );
 }
 
 // ============================================================================
 // Movement
 // 
 
-// Checked: 2010-12-11 (RLVa-1.2.2)
 bool RlvActions::canAcceptTpOffer(const LLUUID& idSender)
 {
 	return ((!gRlvHandler.hasBehaviour(RLV_BHVR_TPLURE)) || (gRlvHandler.isException(RLV_BHVR_TPLURE, idSender))) && (canStand());
 }
 
-// Checked: 2013-11-08 (RLVa-1.4.9)
 bool RlvActions::autoAcceptTeleportOffer(const LLUUID& idSender)
 {
 	return ((idSender.notNull()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTP, idSender))) || (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTP));
 }
 
-// Checked: 2013-11-08 (RLVa-1.4.9)
 bool RlvActions::canAcceptTpRequest(const LLUUID& idSender)
 {
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_TPREQUEST)) || (gRlvHandler.isException(RLV_BHVR_TPREQUEST, idSender));
 }
 
-// Checked: 2013-11-08 (RLVa-1.4.9)
 bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 {
 	return ((idRequester.notNull()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTPREQUEST, idRequester))) || (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTPREQUEST));

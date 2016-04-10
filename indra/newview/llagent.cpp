@@ -2455,15 +2455,11 @@ void LLAgent::onAnimStop(const LLUUID& id)
 	}
 	else if (id == ANIM_AGENT_AWAY)
 	{
-//		clearAFK();
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Added: RLVa-1.1.0g
-#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
 		if (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE))
 			clearAFK();
-#else
-		clearAFK();
-#endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
+//		clearAFK();
 	}
 	else if (id == ANIM_AGENT_STANDUP)
 	{

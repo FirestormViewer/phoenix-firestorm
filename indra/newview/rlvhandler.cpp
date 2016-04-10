@@ -474,12 +474,10 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvHandler::onSitOrStand(bool fSitting)
 {
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	if (rlv_handler_t::isEnabled())
 	{
 		RlvSettings::updateLoginLastLocation();
 	}
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (!fSitting) && (!m_posSitSource.isExactlyZero()) )
 	{
@@ -668,10 +666,7 @@ void RlvHandler::onLoginComplete()
 {
 	RlvInventory::instance().fetchWornItems();
 	RlvInventory::instance().fetchSharedInventory();
-
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	RlvSettings::updateLoginLastLocation();
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	LLViewerParcelMgr::getInstance()->setTeleportFailedCallback(boost::bind(&RlvHandler::onTeleportFailed, this));
 	LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(boost::bind(&RlvHandler::onTeleportFinished, this, _1));
@@ -739,13 +734,11 @@ bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 				((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
 				((!hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
 		}
-#ifdef RLV_EXTENSION_CMD_TOUCHXXX
 		else
 		{
 			// HUD attachment
 			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
 		}
-#endif // RLV_EXTENSION_CMD_TOUCHXXX
 	}
 	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
 		fCanTouch = hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
@@ -1849,27 +1842,21 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);
 			break;
-#ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETATTACHNAMES:	// @getattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETADDATTACHNAMES:// @getaddattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETREMATTACHNAMES:// @getremattachnames[:<grp>]=<channel>
 			eRet = onGetAttachNames(rlvCmd, strReply);
 			break;
-#endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFIT:		// @getoutfit[:<layer>]=<channel>
 			eRet = onGetOutfit(rlvCmd, strReply);
 			break;
-#ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFITNAMES:	// @getoutfitnames=<channel>
 		case RLV_BHVR_GETADDOUTFITNAMES:// @getaddoutfitnames=<channel>
 		case RLV_BHVR_GETREMOUTFITNAMES:// @getremoutfitnames=<channel>
 			eRet = onGetOutfitNames(rlvCmd, strReply);
 			break;
-#endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_FINDFOLDER:		// @findfolder:<criteria>=<channel>
-#ifdef RLV_EXTENSION_CMD_FINDFOLDERS
 		case RLV_BHVR_FINDFOLDERS:		// @findfolders:<criteria>=<channel>
-#endif // RLV_EXTENSION_CMD_FINDFOLDERS
 			eRet = onFindFolder(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETPATH:			// @getpath[:<option>]=<channel>
@@ -1898,7 +1885,6 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 				strReply = idSitObj.asString();
 			}
 			break;
-#ifdef RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
 			{
 				std::list<std::string> cmdList;
@@ -1907,7 +1893,6 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 						strReply.append("/").append(*itCmd);
 			}
 			break;
-#endif // RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETSTATUS:		// @getstatus                           - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				std::string strFilter, strSeparator;

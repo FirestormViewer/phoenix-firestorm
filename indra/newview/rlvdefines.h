@@ -18,40 +18,6 @@
 #define RLV_DEFINES_H
 
 // ============================================================================
-// Extensions
-//
-
-// Extensions
-#define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
-#define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
-#define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
-#define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
-#define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
-#define RLV_EXPERIMENTAL_CMDS				// Enables/disables experimental commands en masse
-
-// Experimental features
-#ifdef RLV_EXPERIMENTAL
-	// Stable (will mature to RLV_EXTENSION_XXX in next release if no bugs are found)
-
-	// Under testing (stable, but requires further testing - safe for public release but may be quirky)
-	#define RLV_EXTENSION_FORCEWEAR_FOLDERLINKS	// @attach*/detach* commands will collect from folder links as well
-
-	// Under development (don't include in public release)
-	#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-//		#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-#endif // RLV_EXPERIMENTAL
-
-// Experimental commands (not part of the RLV API spec, disabled on public releases)
-#ifdef RLV_EXPERIMENTAL_CMDS
-	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
-	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
-	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
-	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
-	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
-#endif // RLV_EXPERIMENTAL_CMDS
-
-// ============================================================================
 // Defines
 //
 
