@@ -2081,8 +2081,6 @@ void LLAppearanceMgr::filterWearableItems(
     }
 }
 
-//void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0)
 void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 {
 	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
@@ -3330,9 +3328,7 @@ void LLAppearanceMgr::updateIsDirty()
 
 		if(outfit_items.size() != cof_items.size())
 		{
-			// <FS:Ansariel> Change log tag for easier debugging
-			//LL_DEBUGS("Avatar") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
-			LL_DEBUGS("Outfit") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
+			LL_DEBUGS("Avatar") << "item count different - base " << outfit_items.size() << " cof " << cof_items.size() << LL_ENDL;
 			// Current outfit folder should have one more item than the outfit folder.
 			// this one item is the link back to the outfit folder itself.
 			mOutfitIsDirty = true;
@@ -4122,7 +4118,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		return;
 	}
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-//	LLPointer<LLInventoryCallback> cb = NULL;
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLUUID& id_to_remove = *it;
