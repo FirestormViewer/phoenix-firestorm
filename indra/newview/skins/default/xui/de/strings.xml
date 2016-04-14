@@ -2067,6 +2067,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Groin">
 		Leiste
 	</string>
+	<string name="Left Hind Foot">
+		Linker Hinterfuß
+	</string>
+	<string name="Right Hind Foot">
+		Rechter Hinterfuß
+	</string>
 	<string name="Invalid Attachment">
 		Ungültige Stelle für Anhang
 	</string>
