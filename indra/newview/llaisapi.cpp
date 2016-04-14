@@ -32,9 +32,6 @@
 #include "llcallbacklist.h"
 #include "llinventorymodel.h"
 #include "llsdutil.h"
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-#include "llviewercontrol.h"
-// [/SL:KB]
 #include "llviewerregion.h"
 #include "llinventoryobserver.h"
 #include "llviewercontrol.h"
@@ -49,11 +46,25 @@ const std::string AISAPI::LIBRARY_CAP_NAME("LibraryAPIv3");
 
 //-------------------------------------------------------------------------
 /*static*/
-bool AISAPI::isAvailable()
+//bool AISAPI::isAvailable()
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+bool AISAPI::isAvailable(EAISCommand cmd)
+// [/SL:KB]
 {
-    if (gAgent.getRegion())
+    // <FS:Ansariel> Add AIS3 debug setting
+    //if (gAgent.getRegion())
+    if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+    // </FS:Ansariel>
     {
-        return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+		static LLCachedControl<U32> COMMAND_FILTER_MASK(gSavedSettings, "AISCommandFilterMask", U32_MAX);
+
+		bool aisAvailable = gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+		return 
+			(aisAvailable) && 
+			( (CMD_UNKNOWN == cmd) || ((U32)cmd & COMMAND_FILTER_MASK) );
+// [/SL:KB]
+        //return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
     }
     return false;
 }
@@ -411,7 +422,18 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 	    {
 		    id = result["category_id"];
 	    }
-
+		// <FS:Ansariel> - Patch: Appearance-SyncAttach
+		else if (type == COPYINVENTORY)
+		{
+			uuid_list_t ids;
+			AISUpdate::parseUUIDArray(result, "_created_items", ids);
+			AISUpdate::parseUUIDArray(result, "_created_categories", ids);
+			if (!ids.empty())
+			{
+				id = *ids.begin();
+			}
+		}
+		// </FS:Ansariel>
         callback(id);
     }
 
