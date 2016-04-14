@@ -1092,18 +1092,41 @@ void LLSnapshotLivePreview::saveTexture()
 	mDataSize = 0;
 }
 
-BOOL LLSnapshotLivePreview::saveLocal()
-{
-    // Update mFormattedImage if necessary
-    getFormattedImage();
-    
-    // Save the formatted image
-	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage);
+// <FS:Ansariel> Threaded filepickers
+//BOOL LLSnapshotLivePreview::saveLocal()
+//{
+//    // Update mFormattedImage if necessary
+//    getFormattedImage();
+//    
+//    // Save the formatted image
+//	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage);
+//
+//	if(success)
+//	{
+//		gViewerWindow->playSnapshotAnimAndSound();
+//	}
+//	return success;
+//}
 
+void LLSnapshotLivePreview::saveLocal(boost::function<void(bool)> callback)
+{
+	// Update mFormattedImage if necessary
+	getFormattedImage();
+
+	// Save the formatted image
+	gViewerWindow->saveImageNumbered(mFormattedImage, false, boost::bind(&LLSnapshotLivePreview::saveLocalCallback, this, _1, callback));
+}
+
+void LLSnapshotLivePreview::saveLocalCallback(bool success, boost::function<void(bool)> callback)
+{
 	if(success)
 	{
 		gViewerWindow->playSnapshotAnimAndSound();
 	}
-	return success;
-}
 
+	if (callback)
+	{
+		callback(success);
+	}
+}
+// </FS:Ansariel>
