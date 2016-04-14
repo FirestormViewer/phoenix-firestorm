@@ -58,7 +58,10 @@ public:
 	static LLFloaterSnapshot* getInstance();
 	static LLFloaterSnapshot* findInstance();
 	static void saveTexture();
-	static BOOL saveLocal();
+	// <FS:Ansariel> Threaded filepickers
+	//static BOOL saveLocal();
+	static void saveLocal(boost::function<void(bool)> callback);
+	// </FS:Ansariel>
 	static void postSave();
 	static void postPanelSwitch();
 	static LLPointer<LLImageFormatted> getImageData();

@@ -41,7 +41,23 @@ class AISAPI
 public:
     typedef boost::function<void(const LLUUID &invItem)>    completion_t;
 
-    static bool isAvailable();
+// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
+	// The debug setting is an OR of these values
+	enum EAISCommand
+	{
+		CMD_UNKNOWN       = 0x0000,	// New or command we're not filtering for
+		CMD_CAT_UPDATE    = 0x0001,	// update_inventory_category
+		CMD_CAT_REMOVE    = 0x0002,	// remove_inventory_category
+		CMD_CAT_SLAM      = 0x0004,	// slam_inventory_folder
+		CMD_CAT_PURGE     = 0x0008,	// purge_descendents_of
+		CMD_ITEM_REMOVE   = 0x0010,	// remove_inventory_item
+		CMD_ITEM_UPDATE   = 0x0020,	// update_inventory_item
+		CMD_OBJ_LINK      = 0x0100,	// link_inventory_array
+		CMD_OBJ_LINKBATCH = 0x0200,	// link_inventory_array
+	};
+	static bool isAvailable(EAISCommand cmd = CMD_UNKNOWN);
+// [/SL:KB]
+    //static bool isAvailable();
     static void getCapNames(LLSD& capNames);
 
     static void CreateInventory(const LLUUID& parentId, const LLSD& newInventory, completion_t callback = completion_t());

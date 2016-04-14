@@ -422,6 +422,16 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         assetType = LLAssetType::AT_ANIMATION;
         filename = getFileName();
     }
+	else if (exten == "ogg")
+	{
+		assetType = LLAssetType::AT_SOUND;
+		filename = getFileName();
+	}
+	else if (exten == "j2k")
+	{
+		assetType = LLAssetType::AT_TEXTURE;
+		filename = getFileName();
+	}
     else
     {
         // Unknown extension

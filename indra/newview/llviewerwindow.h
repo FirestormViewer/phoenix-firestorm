@@ -356,7 +356,11 @@ public:
 	BOOL			thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 preview_height, BOOL show_ui, BOOL do_rebuild, ESnapshotType type) ;
 	BOOL			isSnapshotLocSet() const { return ! sSnapshotDir.empty(); }
 	void			resetSnapshotLoc() const { sSnapshotDir.clear(); }
-	BOOL		    saveImageNumbered(LLImageFormatted *image, bool force_picker = false);
+	// <FS:Ansariel> Threaded filepickers
+	//BOOL		    saveImageNumbered(LLImageFormatted *image, bool force_picker = false);
+	void			saveImageNumbered(LLImageFormatted *image, bool force_picker = false, boost::function<void(bool)> callback = NULL);
+	void			saveImageCallback(const std::string& filename, LLImageFormatted* image, const std::string& extension, boost::function<void(bool)> callback);
+	// </FS:Ansariel>
 
 	// Reset the directory where snapshots are saved.
 	// Client will open directory picker on next snapshot save.
