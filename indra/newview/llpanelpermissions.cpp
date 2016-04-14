@@ -1295,29 +1295,25 @@ void LLPanelPermissions::setAllSaleInfo()
 	LLSaleInfo new_sale_info(sale_type, price);
 	LLSelectMgr::getInstance()->selectionSetObjectSaleInfo(new_sale_info);
 
-    bool selection_set_for_sale = new_sale_info.isForSale();
-    bool selection_was_for_sale = old_sale_info.isForSale();
-    if (selection_was_for_sale != selection_set_for_sale)
+    struct f : public LLSelectedObjectFunctor
     {
-        // sale state changed, switch click-actions
-        // but don't touch user changed actions
-        U8 old_action = selection_set_for_sale ? CLICK_ACTION_TOUCH : CLICK_ACTION_BUY;
-        U8 new_action = selection_set_for_sale ? CLICK_ACTION_BUY : CLICK_ACTION_TOUCH;
-        struct f : public LLSelectedObjectFunctor
+        virtual bool apply(LLViewerObject* object)
         {
-            U8 mActionOld, mActionNew;
-            f(const U8& t_old, const U8& t_new) : mActionOld(t_old), mActionNew(t_new) {}
-            virtual bool apply(LLViewerObject* object)
-            {
-                if (object->getClickAction() == mActionOld)
-                {
-                    object->setClickAction(mActionNew);
-                }
-                return true;
-            }
-        } func(old_action, new_action);
-        LLSelectMgr::getInstance()->getSelection()->applyToObjects(&func);
+            return object->getClickAction() == CLICK_ACTION_BUY
+                || object->getClickAction() == CLICK_ACTION_TOUCH;
+        }
+    } check_actions;
+
+    // Selection should only contain objects that are of target
+    // action already or of action we are aiming to remove.
+    bool default_actions = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&check_actions);
+
+    if (default_actions && old_sale_info.isForSale() != new_sale_info.isForSale())
+    {
+        U8 new_click_action = new_sale_info.isForSale() ? CLICK_ACTION_BUY : CLICK_ACTION_TOUCH;
+        LLSelectMgr::getInstance()->selectionSetClickAction(new_click_action);
     }
+
 	showMarkForSale(FALSE);
 }
 
