@@ -68,6 +68,11 @@ public:
 	bool runCrashLogPost(std::string host, LLSD data, std::string msg, int retries, int timeout);
 	bool readMinidump(std::string minidump_path);
 
+	// <FS:Ansariel> Restore crash report user settings
+	S32 loadCrashBehaviorSetting();
+	bool saveCrashBehaviorSetting(S32 crash_behavior);
+	// </FS:Ansariel>
+
 protected:
     static void init_curl();
     static void term_curl();

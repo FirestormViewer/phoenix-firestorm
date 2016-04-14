@@ -72,6 +72,14 @@ bool LLCrashLoggerMac::mainLoop()
 		gSendReport = true;
 	}
 	
+	// <FS:Ansariel> Restore crash report user settings
+	if(gRememberChoice)
+	{
+		if(gSendReport) saveCrashBehaviorSetting(CRASH_BEHAVIOR_ALWAYS_SEND);
+		else saveCrashBehaviorSetting(CRASH_BEHAVIOR_NEVER_SEND);
+	}
+	// </FS:Ansariel>
+	
 	if(gSendReport)
 	{
 		setUserText(gUserNotes);
