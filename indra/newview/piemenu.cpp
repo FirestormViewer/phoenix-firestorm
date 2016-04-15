@@ -33,11 +33,10 @@
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 
-// copied from LLMenuGL - Remove these lines over there when finished
-const S32 PIE_INNER_SIZE = 20;		// radius of the inner pie circle
+const S32 PIE_INNER_SIZE = 20;			// radius of the inner pie circle
 const F32 PIE_POPUP_FACTOR = 1.7f;		// pie menu size factor on popup
 const F32 PIE_POPUP_TIME = 0.25f;		// time to shrink from popup size to regular size
-const S32 PIE_OUTER_SIZE = 96;		// radius of the outer pie circle
+const S32 PIE_OUTER_SIZE = 96;			// radius of the outer pie circle
 
 // register the pie menu globally as child widget
 static LLDefaultChildRegistry::Register<PieMenu> r1("pie_menu");
@@ -58,18 +57,22 @@ PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LLMenuGL(p),
 	mCurrentSegment(-1)
 {
-	LL_DEBUGS() << "PieMenu::PieMenu()" << LL_ENDL;
+	LL_DEBUGS("Pie") << "PieMenu::PieMenu()" << LL_ENDL;
+
 	// radius, so we need this *2
 	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	
 	// set up the font for the menu
 	mFont = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Pie", LLFontGL::NORMAL));
 	if (!mFont)
 	{
-		LL_WARNS() << "Could not find font size for Pie menu, falling back to Small font." << LL_ENDL;
+		LL_WARNS("Pie") << "Could not find font size for Pie menu, falling back to Small font." << LL_ENDL;
 		mFont = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::NORMAL));
 	}
+	
 	// set slices pointer to our own slices
 	mSlices = &mMySlices;
+	
 	// this will be the first click on the menu
 	mFirstClick = true;
 
@@ -129,12 +132,12 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 		// get the angle of the mouse pointer from the center in radians
 		F32 angle = acos(mouseVector.mV[VX] / distance);
 		// if the mouse is below the middle of the pie, reverse the angle
-		if (mouseVector.mV[VY] < 0)
+		if (mouseVector.mV[VY] < 0.f)
 		{
-			angle = F_PI * 2 - angle;
+			angle = F_PI * 2.f - angle;
 		}
 		// rotate the angle slightly so the slices' centers are aligned correctly
-		angle += F_PI / 8;
+		angle += F_PI / 8.f;
 
 		// calculate slice number from the angle
 		mCurrentSegment = (S32) (8.f * angle / (F_PI * 2.f)) % 8;
@@ -156,7 +159,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	// play a sound
 	make_ui_sound("UISndPieMenuAppear");
 
-	LL_DEBUGS() << "PieMenu::show(): " << x << " " << y << LL_ENDL;
+	LL_DEBUGS("Pie") << "PieMenu::show(): " << x << " " << y << LL_ENDL;
 
 	// make sure the menu is always the correct size
 	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
@@ -185,6 +188,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 
 	// move the mouse pointer into the center of the menu
 	LLUI::setMousePositionLocal(getParent(), x, y);
+
 	// set our drawing origin to the center of the menu
 	setOrigin(x - PIE_OUTER_SIZE, y - PIE_OUTER_SIZE);
 
@@ -193,6 +197,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 
 	// this was the first click for the menu
 	mFirstClick = true;
+
 	// set up the slices pointer to the menu's own slices
 	mSlices = &mMySlices;
 
@@ -226,7 +231,7 @@ void PieMenu::hide()
 	// make a sound when hiding
 	make_ui_sound("UISndPieMenuHide");
 
-	LL_DEBUGS() << "Clearing selections" << LL_ENDL;
+	LL_DEBUGS("Pie") << "Clearing selections" << LL_ENDL;
 
 	mCurrentSegment = -1;
 	mSlices = &mMySlices;
@@ -292,7 +297,7 @@ void PieMenu::draw()
 	LLVector2 scale = gViewerWindow->getDisplayScale();
 
 	// move origin point to the center of our rectangle
-	gGL.translatef(r.getWidth() / 2 * scale.mV[VX], r.getHeight() / 2 * scale.mV[VY], 0);
+	gGL.translatef(r.getWidth() / 2.f * scale.mV[VX], r.getHeight() / 2.f * scale.mV[VY], 0.f);
 
 	// draw the general pie background
 	gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, 32, bgColor, borderColor);
@@ -303,6 +308,7 @@ void PieMenu::draw()
 
 	// clear current slice pointer
 	mSlice = NULL;
+
 	// current slice number is 0
 	S32 num = 0;
 	bool wasAutohide = false;
@@ -338,7 +344,7 @@ void PieMenu::draw()
 				currentSlice->setEnabled(slice_visible);
 				if (!slice_visible)
 				{
-				//	LL_DEBUGS() << label << " is not visible" << LL_ENDL;
+				//	LL_DEBUGS("Pie") << label << " is not visible" << LL_ENDL;
 					label = "";
 				}
 
@@ -391,7 +397,7 @@ void PieMenu::draw()
 				currentSlice->updateEnabled();
 				if (!currentSlice->getEnabled())
 				{
-					LL_DEBUGS() << label << " is disabled" << LL_ENDL;
+					LL_DEBUGS("Pie") << label << " is disabled" << LL_ENDL;
 					// fade the item color alpha to mark the item as disabled
 					itemColor %= 0.3f;
 				}
@@ -458,13 +464,13 @@ void PieMenu::draw()
 
 BOOL PieMenu::appendContextSubMenu(PieMenu* menu)
 {
-	LL_DEBUGS() << "PieMenu::appendContextSubMenu()" << LL_ENDL;
+	LL_DEBUGS("Pie") << "PieMenu::appendContextSubMenu()" << LL_ENDL;
 	if (!menu)
 	{
 		return FALSE;
 	}
 
-	LL_DEBUGS() << "PieMenu::appendContextSubMenu() appending " << menu->getLabel() << " to " << getLabel() << LL_ENDL;
+	LL_DEBUGS("Pie") << "PieMenu::appendContextSubMenu() appending " << menu->getLabel() << " to " << getLabel() << LL_ENDL;
 
 	// add the submenu to the list of items
 	mSlices->push_back(menu);
@@ -579,7 +585,6 @@ F32 PieMenu::getScaleFactor()
 		{
 			factor = PIE_POPUP_FACTOR - (PIE_POPUP_FACTOR - 1.f) * elapsedTime / PIE_POPUP_TIME;
 		}
-//		setRect(r);  // obsolete?
 	}
 
 #endif

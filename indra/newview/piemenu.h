@@ -37,76 +37,76 @@ struct PieChildRegistry : public LLChildRegistry<PieChildRegistry>
 
 class PieMenu : public LLMenuGL
 {
-	public:
-		// parameter block for the XUI factory
-		struct Params : public LLInitParam::Block<Params, LLMenuGL::Params>
+public:
+	// parameter block for the XUI factory
+	struct Params : public LLInitParam::Block<Params, LLMenuGL::Params>
+	{
+		Optional<std::string> name;
+
+		Params()
 		{
-			Optional<std::string> name;
+			visible = false;
+		}
+	};
 
-			Params()
-			{
-				visible = false;
-			}
-		};
+	// PieChildRegistry contains a list of allowed child types for the XUI definition
+	typedef PieChildRegistry child_registry_t;
 
-		// PieChildRegistry contains a list of allowed child types for the XUI definition
-		typedef PieChildRegistry child_registry_t;
+	PieMenu(const LLMenuGL::Params& p);
 
-		PieMenu(const LLMenuGL::Params& p);
+	/*virtual*/ void setVisible(BOOL visible);
 
-		/*virtual*/ void setVisible(BOOL visible);
+	// adding and removing "child" slices to the pie
+	/*virtual*/ bool addChild(LLView* child, S32 tab_group = 0);
+	/*virtual*/ void removeChild(LLView* child);
 
-		// adding and removing "child" slices to the pie
-		/*virtual*/ bool addChild(LLView* child, S32 tab_group = 0);
-		/*virtual*/ void removeChild(LLView* child);
+	/*virtual*/ BOOL handleHover(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
+	/*virtual*/ BOOL handleRightMouseUp(S32 x, S32 y, MASK mask);
 
-		/*virtual*/ BOOL handleHover(S32 x,S32 y,MASK mask);
-		/*virtual*/ BOOL handleMouseUp(S32 x,S32 y,MASK mask);
-		/*virtual*/ BOOL handleRightMouseUp(S32 x,S32 y,MASK mask);
+	// does all the hard work of bringing the menu on the screen
+	void draw();
 
-		// does all the hard work of bringing the menu on the screen
-		void draw();
+	// showing/hiding the menu
+	void show(S32 x, S32 y, LLView* spawning_view = NULL);
+	void hide();
 
-		// showing/hiding the menu
-		void show(S32 x, S32 y, LLView* spawning_view = NULL);
-		void hide();
+	// our item list type definition
+	typedef std::list<LLView*> slice_list_t;
+	// the actual item list
+	slice_list_t mMySlices;
+	// pointer to the currently used list
+	slice_list_t* mSlices;
 
-		// our item list type definition
-		typedef std::list<LLView*> slice_list_t;
-		// the actual item list
-		slice_list_t mMySlices;
-		// pointer to the currently used list
-		slice_list_t* mSlices;
+	// appends a sub pie menu to the current pie
+	BOOL appendContextSubMenu(PieMenu* menu);
 
-		// appends a sub pie menu to the current pie
-		BOOL appendContextSubMenu(PieMenu* menu);
+	// we never rearrange our menu
+	void needsArrange() {};
+	// arranging does nothing
+	virtual void arrange( void ) {};
+	// arranging does nothing
+	void arrangeAndClear( void ) {};
 
-		// we never rearrange our menu
-		void needsArrange() {};
-		// arranging does nothing
-		virtual void arrange( void ) {};
-		// arranging does nothing
-		void arrangeAndClear( void ) {};
+protected:
+	// general mouse button handling
+	BOOL handleMouseButtonUp(S32 x, S32 y, MASK mask);
+	// font used for the menu
+	const LLFontGL* mFont;
+	// currently highlighted item, must be tested if it's a slice or submenu
+	LLView* mSlice;
+	// used to play UI sounds only once on hover slice change, do not dereference!
+	LLView* mOldSlice;
 
-	protected:
-		// general mouse button handling
-		BOOL handleMouseButtonUp(S32 x, S32 y, MASK mask);
-		// font used for the menu
-		const LLFontGL* mFont;
-		// currently highlighted item, must be tested if it's a slice or submenu
-		LLView* mSlice;
-		// used to play UI sounds only once on hover slice change, do not dereference!
-		LLView* mOldSlice;
+	// timer for visual popup effect
+	LLFrameTimer mPopupTimer;
 
-		// timer for visual popup effect
-		LLFrameTimer mPopupTimer;
+	// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
+	bool mFirstClick;
 
-		// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
-		bool mFirstClick;
+	F32 getScaleFactor();
 
-		F32 getScaleFactor();
-
-		S32 mCurrentSegment;
+	S32 mCurrentSegment;
 };
 
 #endif // PIEMENU_H
