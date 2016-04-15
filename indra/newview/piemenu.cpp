@@ -286,6 +286,7 @@ void PieMenu::draw()
 		borderColor = bgColor % (1.f - sPieMenuFade);
 		selectedColor = LLUIColorTable::instance().getColor("PieMenuSelectedColorOverride");
 	}
+	static LLCachedControl<bool> sPieMenuPopupFontEffect(gSavedSettings, "PieMenuPopupFontEffect");
 
 	// on first click, make the menu fade out to indicate "borderless" operation
 	if (mFirstClick)
@@ -438,8 +439,8 @@ void PieMenu::draw()
 		// draw the slice labels around the center
 		mFont->renderUTF8(label,
 							0,
-							PIE_X[num],
-							PIE_Y[num],
+							PIE_X[num] * (sPieMenuPopupFontEffect() ? factor : 1.f),
+							PIE_Y[num] * (sPieMenuPopupFontEffect() ? factor : 1.f),
 							itemColor,
 							LLFontGL::HCENTER,
 							LLFontGL::VCENTER,
