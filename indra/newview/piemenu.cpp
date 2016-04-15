@@ -293,6 +293,8 @@ void PieMenu::draw()
 		borderColor %= 0.f;
 	}
 
+	S32 steps = 100;
+
 	// remember to take the UI scaling into account
 	LLVector2 scale = gViewerWindow->getDisplayScale();
 
@@ -300,7 +302,7 @@ void PieMenu::draw()
 	gGL.translatef(r.getWidth() / 2.f * scale.mV[VX], r.getHeight() / 2.f * scale.mV[VY], 0.f);
 
 	// draw the general pie background
-	gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, 32, bgColor, borderColor);
+	gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, steps, bgColor, borderColor);
 
 	// set up an item list iterator to point at the beginning of the item list
 	slice_list_t::iterator cur_item_iter;
@@ -427,11 +429,11 @@ void PieMenu::draw()
 				}
 
 				// draw the currently highlighted pie slice
-				gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, 4, selectedColor, borderColor);
+				gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, steps / 8, selectedColor, borderColor);
 			}
 		}
 		// draw the divider line for this slice
-		gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart - 0.02f, segmentStart + 0.02f, 4, lineColor, borderColor);
+		gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart - 0.02f, segmentStart + 0.02f, steps / 8, lineColor, borderColor);
 
 		// draw the slice labels around the center
 		mFont->renderUTF8(label,
@@ -451,9 +453,9 @@ void PieMenu::draw()
 	// draw inner and outer circle, outer only if it was not the first click
 	if (!mFirstClick)
 	{
-		gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_OUTER_SIZE * factor - 2.f, 32, lineColor, borderColor);
+		gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_OUTER_SIZE * factor - 2.f, steps, lineColor, borderColor);
 	}
-	gl_washer_2d(PIE_INNER_SIZE + 1, PIE_INNER_SIZE - 1, 16, borderColor, lineColor);
+	gl_washer_2d(PIE_INNER_SIZE + 1, PIE_INNER_SIZE - 1, steps, borderColor, lineColor);
 
 	// restore OpenGL drawing matrix
 	gGL.popMatrix();
