@@ -1431,6 +1431,9 @@ bool idle_startup()
 		progress += 0.02f;
 		display_startup();
 
+		// <FS:Ansariel> FIRE-17287: Force HttpPipelining off on OpenSim
+		LLAppViewer::instance()->getAppCoreHttp().refreshSettings(false);
+
 // <AW: crash report grid correctness>
 		eLastExecEvent last_exec_event = gLastExecEvent;
 		const std::string current_grid = LLGridManager::getInstance()->getGrid();
