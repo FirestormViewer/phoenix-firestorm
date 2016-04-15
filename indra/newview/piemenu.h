@@ -35,11 +35,11 @@
 struct PieChildRegistry : public LLChildRegistry<PieChildRegistry>
 {};
 
-class PieMenu : public LLContextMenu
+class PieMenu : public LLMenuGL
 {
 	public:
 		// parameter block for the XUI factory
-		struct Params : public LLInitParam::Block<Params, LLContextMenu::Params>
+		struct Params : public LLInitParam::Block<Params, LLMenuGL::Params>
 		{
 			Optional<std::string> name;
 
@@ -52,7 +52,7 @@ class PieMenu : public LLContextMenu
 		// PieChildRegistry contains a list of allowed child types for the XUI definition
 		typedef PieChildRegistry child_registry_t;
 
-		PieMenu(const LLContextMenu::Params& p);
+		PieMenu(const LLMenuGL::Params& p);
 
 		/*virtual*/ void setVisible(BOOL visible);
 
@@ -100,9 +100,7 @@ class PieMenu : public LLContextMenu
 
 		// timer for visual popup effect
 		LLFrameTimer mPopupTimer;
-		// center position, used for popup effect
-		S32 mCenterX;
-		S32 mCenterY;
+
 		// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
 		bool mFirstClick;
 

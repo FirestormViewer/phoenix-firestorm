@@ -54,8 +54,8 @@ static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 const S32 PIE_X[] = {64, 45,  0, -45, -63, -45,   0,  45};
 const S32 PIE_Y[] = { 0, 44, 73,  44,   0, -44, -73, -44};
 
-PieMenu::PieMenu(const LLContextMenu::Params& p) :
-	LLContextMenu(p),
+PieMenu::PieMenu(const LLMenuGL::Params& p) :
+	LLMenuGL(p),
 	mCurrentSegment(-1)
 {
 	LL_DEBUGS() << "PieMenu::PieMenu()" << LL_ENDL;
@@ -162,10 +162,6 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 
 	// make sure the menu is always the correct size
 	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
-
-	// remember our center point
-	mCenterX = x;
-	mCenterY = y;
 
 	// get the 3D view rectangle
 	LLRect screen = LLMenuGL::sMenuContainer->getMenuRect();
