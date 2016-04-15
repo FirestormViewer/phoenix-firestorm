@@ -3192,6 +3192,25 @@ void LLIMMgr::addMessage(
     }
 }
 
+// <FS:Ansariel> FIRE-15138: Sharing inventory item sometimes doesn't obey UseLegacyIMLogNames setting
+void add_system_message_name_cb(LLAvatarName avatar_name, const std::string& message)
+{
+	std::string session_name = avatar_name.getLegacyName();
+
+	// <FS:Ansariel> [Legacy IM logfile names]
+	if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+	{
+		session_name = session_name.substr(0, session_name.find(" Resident"));;
+	}
+	else
+	{
+		session_name = LLCacheName::buildUsername(session_name);
+	}
+	// </FS:Ansariel> [Legacy IM logfile names]
+	LLIMModel::instance().logToFile(session_name, SYSTEM_FROM, LLUUID::null, message);
+}
+// </FS:Ansariel>
+
 void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args)
 {
 	LLUIString message;
@@ -3226,21 +3245,14 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 
 		else
 		{
-			std::string session_name;
-			// since we select user to share item with - his name is already in cache
-			gCacheName->getFullName(args["user_id"], session_name);
-			// <FS:Ansariel> [Legacy IM logfile names]
+			// <FS:Ansariel> FIRE-15138: Sharing inventory item sometimes doesn't obey UseLegacyIMLogNames setting
+			//std::string session_name;
+			//// since we select user to share item with - his name is already in cache
+			//gCacheName->getFullName(args["user_id"], session_name);
 			//session_name = LLCacheName::buildUsername(session_name);
-			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
-			{
-				session_name = session_name.substr(0, session_name.find(" Resident"));;
-			}
-			else
-			{
-				session_name = LLCacheName::buildUsername(session_name);
-			}
-			// </FS:Ansariel> [Legacy IM logfile names]
-			LLIMModel::instance().logToFile(session_name, SYSTEM_FROM, LLUUID::null, message.getString());
+			//LLIMModel::instance().logToFile(session_name, SYSTEM_FROM, LLUUID::null, message.getString());
+			LLAvatarNameCache::get(args["user_id"].asUUID(), boost::bind(&add_system_message_name_cb, _2, message.getString()));
+			// </FS:Ansariel>
 		}
 	}
 }
