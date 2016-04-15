@@ -117,10 +117,8 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 	// initially, the current segment is marked as invalid
 	mCurrentSegment = -1;
 
-	// remember to take the UI scaling into account
-	LLVector2 scale = gViewerWindow->getDisplayScale();
 	// move mouse coordinates to be relative to the pie center
-	LLVector2 mouseVector(x - PIE_OUTER_SIZE / scale.mV[VX], y - PIE_OUTER_SIZE / scale.mV[VY]);
+	LLVector2 mouseVector(x - PIE_OUTER_SIZE, y - PIE_OUTER_SIZE);
 
 	// get the distance from the center point
 	F32 distance = mouseVector.length();
@@ -187,9 +185,9 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 
 	// move the mouse pointer into the center of the menu
 	LLUI::setMousePositionLocal(getParent(), x, y);
-	// set our drawing origin to the center of the menu, taking UI scale into account
-	LLVector2 scale = gViewerWindow->getDisplayScale();
-	setOrigin(x - PIE_OUTER_SIZE / scale.mV[VX], y - PIE_OUTER_SIZE / scale.mV[VY]);
+	// set our drawing origin to the center of the menu
+	setOrigin(x - PIE_OUTER_SIZE, y - PIE_OUTER_SIZE);
+
 	// grab mouse control
 	gFocusMgr.setMouseCapture(this);
 
@@ -290,8 +288,11 @@ void PieMenu::draw()
 		borderColor %= 0.f;
 	}
 
+	// remember to take the UI scaling into account
+	LLVector2 scale = gViewerWindow->getDisplayScale();
+
 	// move origin point to the center of our rectangle
-	gGL.translatef(r.getWidth() / 2, r.getHeight() / 2, 0);
+	gGL.translatef(r.getWidth() / 2 * scale.mV[VX], r.getHeight() / 2 * scale.mV[VY], 0);
 
 	// draw the general pie background
 	gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, 32, bgColor, borderColor);
