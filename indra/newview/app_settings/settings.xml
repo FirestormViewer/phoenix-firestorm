@@ -109,6 +109,17 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>PieMenuPopupFontEffect</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the labels in the pie menu slices are affected by the popup effect (they move into position).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>AutohideChatBar</key>
   <map>
     <key>Comment</key>
