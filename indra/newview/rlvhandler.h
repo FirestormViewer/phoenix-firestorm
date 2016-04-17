@@ -209,11 +209,8 @@ protected:
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
-	friend class RlvBehaviourProcessorHelper;
-	template <RlvBehaviourOptionType> friend struct RlvBehaviourGenericHandler;
-	template <ERlvBehaviour> friend struct RlvBehaviourHandler;
-	template <ERlvBehaviour> friend struct RlvBehaviourToggleHandler;
-	template <ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
+	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
+	template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
 
 	// --------------------------------
 

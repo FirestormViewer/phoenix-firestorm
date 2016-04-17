@@ -48,19 +48,21 @@ rlv_handler_t gRlvHandler;
 // Option parsing template specialization implmentation
 //
 
-template <class optionType> 
-struct RlvCommandOptionParser
+struct RlvCommandOptionHelper
 {
+	template <typename optionType> 
 	static bool parseOption(const std::string& strOption, optionType& valueOption);
 };
 
-bool RlvCommandOptionParser<LLUUID>::parseOption(const std::string& strOption, LLUUID& idOption)
+template<>
+bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
 {
 	idOption.set(strOption);
 	return idOption.notNull();
 }
 
-bool RlvCommandOptionParser<int>::parseOption(const std::string& strOption, int& nOption)
+template<>
+bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int& nOption)
 {
 	return LLStringUtil::convertToS32(strOption, nOption);
 }
@@ -1293,7 +1295,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 }
 
 // Handles reference counting of behaviours and tracks strict exceptions for @permissive (all restriction handlers should call this function)
-ERlvCmdRet RlvBehaviourProcessorHelper::processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc, RlvBhvrToggleHandler* pToggleHandlerFunc)
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvCommand& rlvCmd, RlvBhvrHandlerFunc* pHandlerFunc, RlvBhvrToggleHandlerFunc* pToggleHandlerFunc)
 {
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
 	bool fRefCount = false, fHasBhvr = gRlvHandler.hasBehaviour(eBhvr);
@@ -1343,7 +1345,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const Rlv
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
-	if (!RlvCommandOptionParser<LLUUID>::parseOption(rlvCmd.getOption(), idException))
+	if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idException))
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1368,6 +1370,8 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(c
 	return RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(rlvCmd, fRefCount);
 }
 
+// Handles: @addattach[:<attachpt>]=n|y and @remattach[:<attachpt>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - if there's an option it should specify a valid attachment point name
@@ -1399,6 +1403,8 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @detach[:<attachpt>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// We need to flush any queued force-wear commands before changing the restrictions
@@ -1510,13 +1516,14 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 }
 
 // Handles: @sendchannel[:<channel>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there's an option then it should be a valid (= positive and non-zero) chat channel
 	if (rlvCmd.hasOption())
 	{
 		S32 nChannel = 0;
-		if ( (!RlvCommandOptionParser<int>::parseOption(rlvCmd.getOption(), nChannel)) || (nChannel <= 0) )
+		if ( (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nChannel)) || (nChannel <= 0) )
 			return RLV_RET_FAILED_OPTION;
 
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1532,17 +1539,19 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand
 }
 
 // Handles: @sendim=n|y toggles
-void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+template<> template<>
+void RlvBehaviourHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
 }
 
 // Handles: @showhovertext:<uuid>=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
-	if (!RlvCommandOptionParser<LLUUID>::parseOption(rlvCmd.getOption(), idException))
+	if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idException))
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1562,6 +1571,11 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 // ============================================================================
 // Command handlers (RLV_TYPE_FORCE)
 //
+
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_FORCE>::processCommand(const RlvCommand& rlvCmd, RlvForceHandlerFunc* pHandler)
+{
+	return (*pHandler)(rlvCmd);
+}
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0j
 ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
@@ -1754,7 +1768,8 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 }
 
 // Handles: @setgroup:<uuid|name>=force
-ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
 	{
@@ -1784,7 +1799,8 @@ ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::onCommand(const
 }
 
 // Handles: @sit:<uuid>=force
-ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
 	// Sanity checking - we need to know about the object and it should identify a prim/linkset
@@ -1817,17 +1833,43 @@ ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SIT>::onCommand(const RlvC
 // Command handlers (RLV_TYPE_REPLY)
 //
 
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>::processCommand(const RlvCommand& rlvCmd, RlvReplyHandlerFunc* pHandler)
+{
+	// Sanity check - <param> should specify a - valid - reply channel
+	S32 nChannel;
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
+		return RLV_RET_FAILED_PARAM;
+
+	std::string strReply;
+	ERlvCmdRet eRet = (*pHandler)(rlvCmd, strReply);
+
+	// If we made it this far then:
+	//   - the command was handled successfully so we send off the response
+	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
+	RlvUtil::sendChatReply(nChannel, strReply);
+
+	return eRet;
+}
+
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
+
+	// Try a command processor first
+	ERlvCmdRet eRet = rlvCmd.processCommand();
+	if (RLV_RET_NO_PROCESSOR != eRet)
+	{
+		return eRet;
+	}
 
 	// Sanity check - <param> should specify a - valid - reply channel
 	S32 nChannel;
 	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
 		return RLV_RET_FAILED_PARAM;
 
-	ERlvCmdRet eRet = RLV_RET_SUCCESS; std::string strReply;
+	// Process the command the legacy way
+	eRet = RLV_RET_SUCCESS; std::string strReply;
 	switch (rlvCmd.getBehaviourType())
 	{
 		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.4.0a)

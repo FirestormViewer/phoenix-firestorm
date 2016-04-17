@@ -78,54 +78,80 @@ protected:
 };
 
 // ============================================================================
+// RlvCommandHandler and related classes
+//
+
+typedef ERlvCmdRet(RlvBhvrHandlerFunc)(const RlvCommand&, bool&);
+typedef void(RlvBhvrToggleHandlerFunc)(ERlvBehaviour, bool);
+typedef ERlvCmdRet(RlvForceHandlerFunc)(const RlvCommand&);
+typedef ERlvCmdRet(RlvReplyHandlerFunc)(const RlvCommand&, std::string&);
+
+//
+// RlvCommandHandlerBaseImpl - Base implementation for each command type (the old process(AddRem|Force|Reply)Command functions)
+//
+template<ERlvParamType paramType> struct RlvCommandHandlerBaseImpl;
+template<> struct RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM> { static ERlvCmdRet processCommand(const RlvCommand&, RlvBhvrHandlerFunc*, RlvBhvrToggleHandlerFunc* = nullptr); };
+template<> struct RlvCommandHandlerBaseImpl<RLV_TYPE_FORCE>  { static ERlvCmdRet processCommand(const RlvCommand&, RlvForceHandlerFunc*); };
+template<> struct RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>  { static ERlvCmdRet processCommand(const RlvCommand&, RlvReplyHandlerFunc*);
+};
+
+//
+// RlvCommandHandler - The actual command handler (Note that a handler is more general than a processor; a handler can - for instance - be used by multiple processors)
+//
+template <ERlvParamType paramType, ERlvBehaviour eBhvr>
+struct RlvCommandHandler
+{
+	template<typename = typename std::enable_if<paramType == RLV_TYPE_ADDREM>::type> static ERlvCmdRet onCommand(const RlvCommand&, bool&);
+	template<typename = typename std::enable_if<paramType == RLV_TYPE_ADDREM>::type> static void onCommandToggle(ERlvBehaviour, bool);
+	template<typename = typename std::enable_if<paramType == RLV_TYPE_FORCE>::type>  static ERlvCmdRet onCommand(const RlvCommand&);
+	template<typename = typename std::enable_if<paramType == RLV_TYPE_REPLY>::type>  static ERlvCmdRet onCommand(const RlvCommand&, std::string&);
+};
+
+// Aliases to improve readability in definitions
+template<ERlvBehaviour eBhvr> using RlvBehaviourHandler = RlvCommandHandler<RLV_TYPE_ADDREM, eBhvr>;
+template<ERlvBehaviour eBhvr> using RlvForceHandler = RlvCommandHandler<RLV_TYPE_FORCE, eBhvr>;
+template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>;
+
+// List of shared handlers
+typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
+
+//
+// RlvCommandProcessor - Templated glue class that brings RlvBehaviourInfo, RlvCommandHandlerBaseImpl and RlvCommandHandler together
+//
+template <ERlvParamType paramType, ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<paramType, eBhvr>, typename baseImpl = RlvCommandHandlerBaseImpl<paramType>>
+class RlvCommandProcessor : public RlvBehaviourInfo
+{
+public:
+	// Default constructor used by behaviour specializations
+	template<typename = typename std::enable_if<eBhvr != RLV_BHVR_UNKNOWN>::type>
+	RlvCommandProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+
+	// Constructor used when we don't want to specialize on behaviour (see RlvBehaviourGenericProcessor)
+	template<typename = typename std::enable_if<eBhvr == RLV_BHVR_UNKNOWN>::type>
+	RlvCommandProcessor(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+
+	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return baseImpl::processCommand(rlvCmd, &handlerImpl::onCommand); }
+};
+
+// Aliases to improve readability in definitions
+template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_ADDREM, eBhvr>> using RlvBehaviourProcessor = RlvCommandProcessor<RLV_TYPE_ADDREM, eBhvr, handlerImpl>;
+template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_FORCE, eBhvr>> using RlvForceProcessor = RlvCommandProcessor<RLV_TYPE_FORCE, eBhvr, handlerImpl>;
+template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>> using RlvReplyProcessor = RlvCommandProcessor<RLV_TYPE_REPLY, eBhvr, handlerImpl>;
+
+// Provides pre-defined generic implementations of basic behaviours (template voodoo - see original commit for something that still made sense)
+template<RlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<RlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<optionType>>;
+
+// ============================================================================
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
 //
 
-class RlvBehaviourProcessorHelper
-{
-public:
-	typedef ERlvCmdRet(RlvBhvrHandler)(const RlvCommand& rlvCmd, bool& fRefCount);
-	typedef void(RlvBhvrToggleHandler)(ERlvBehaviour eBhvr, bool fHasBhvr);
-	static ERlvCmdRet processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc, RlvBhvrToggleHandler* pToggleHandlerFunc = nullptr);
-};
-
-template <RlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template <RlvBehaviourOptionType optionType> class RlvBehaviourGenericProcessor : public RlvBehaviourInfo
-{
-public:
-	RlvBehaviourGenericProcessor(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand); }
-};
-
-template <ERlvBehaviour eBhvr> struct RlvBehaviourHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template <ERlvBehaviour eBhvr, typename bhvrHandler = RlvBehaviourHandler<eBhvr>> class RlvBehaviourProcessor : public RlvBehaviourInfo
-{
-public:
-	RlvBehaviourProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &bhvrHandler::onCommand); }
-};
-
-template <ERlvBehaviour> struct RlvBehaviourToggleHandler { static void onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr); };
-template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename bhvrToggleHandler = RlvBehaviourToggleHandler<eBhvr>> class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
+template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourHandler<eBhvr>>
+class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
 {
 public:
 	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvBehaviourProcessorHelper::processBehaviourImpl(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &bhvrToggleHandler::onCommandToggle); }
-};
-
-typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
-
-// ============================================================================
-// RlvCommandHandler and related classes - Handles force/reply commands
-//
-
-template <ERlvParamType paramType, ERlvBehaviour eBhvr> struct RlvCommandHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd); };
-template <ERlvParamType paramType, ERlvBehaviour eBhvr> class RlvCommandProcessor : public RlvBehaviourInfo
-{
-public:
-	RlvCommandProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
-public:
-	/*virtual*/ ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const { return RlvCommandHandler<paramType, eBhvr>::onCommand(rlvCmd); }
+	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &toggleHandlerImpl::onCommandToggle); }
 };
 
 // ============================================================================

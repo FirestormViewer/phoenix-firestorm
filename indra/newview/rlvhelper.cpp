@@ -156,8 +156,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
-	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>("setgroup"));
-	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SIT>("sit"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 
@@ -170,7 +170,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("getaddoutfitnames",		RLV_BHVR_GETADDOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourInfo("getattach",				RLV_BHVR_GETATTACH,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getattachnames",			RLV_BHVR_GETATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourInfo("getcommand",				RLV_BHVR_GETCOMMAND,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXTENDED));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCOMMAND>("getcommand", RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinvworn",				RLV_BHVR_GETINVWORN,			RLV_TYPE_REPLY));
