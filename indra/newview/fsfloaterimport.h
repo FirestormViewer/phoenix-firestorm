@@ -29,23 +29,14 @@
 #define FS_FSFLOATERIMPORT_H
 
 #include "llfloater.h"
+#include "llhttpsdhandler.h"
 #include "llinventorymodel.h"
 #include "llresourcedata.h"
 #include "llselectmgr.h"
 #include "llviewerinventory.h"
 #include "llviewerobject.h"
 
-struct FSResourceData
-{
-	LLUUID uuid;
-	void* user_data;
-	bool temporary;
-	LLAssetType::EType asset_type;
-	LLUUID inventory_item;
-	LLWearableType::EType wearable_type;
-	bool post_asset_upload;
-	LLUUID post_asset_upload_id;
-};
+struct FSResourceData;
 
 class FSFloaterImport : public LLFloater
 {
@@ -62,12 +53,32 @@ public:
 	void onClickCheckBoxTempAsset();
 	bool processPrimCreated(LLViewerObject* object);
 	static void onAssetUploadComplete(const LLUUID& uuid, void* userdata, S32 result, LLExtStat ext_status);
-	void nextAsset(LLUUID new_uuid, LLUUID asset_id, LLAssetType::EType asset_type);
+
 	void uploadAsset(LLUUID assid_id, LLUUID inventory_item = LLUUID::null);
 	
 	std::map<LLUUID,LLUUID> mAssetItemMap;
 
+	struct NextAsset
+	{
+		LLUUID new_uuid;
+		LLUUID asset_id;
+		LLAssetType::EType asset_type;
+	};
+
+	void pushNextAsset( LLUUID new_uuid, LLUUID asset_id, LLAssetType::EType asset_type );
+	void popNextAsset();
+
+	void uploadDone()
+	{ --m_AssetsUploading; }
+	void startUpload()
+	{ ++m_AssetsUploading; }
+	U32 getUploads() const
+	{ return m_AssetsUploading; }
+
 private:
+	U32 m_AssetsUploading;
+	std::deque< NextAsset > m_NextAssets;
+
 	typedef enum
 	{
 	  IDLE,
@@ -127,26 +138,6 @@ private:
 	LLFrameTimer mWaitTimer;
 	F32 mThrottleTime;
 };
-
-//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
-#if 0
-class FSAssetResponder : public LLAssetUploadResponder
-{
-	LOG_CLASS(FSAssetResponder);
-public:
-	FSAssetResponder(const LLSD& post_data,
-			    const LLUUID& vfile_id,
-			    LLAssetType::EType asset_type,
-			    LLResourceData* data);
-
-	~FSAssetResponder();
-
-	virtual void uploadComplete(const LLSD& content);
-	virtual void httpFailure();
-
-	LLResourceData* mData;
-};
-#endif
 
 class FSCreateItemCallback : public LLInventoryCallback
 {
