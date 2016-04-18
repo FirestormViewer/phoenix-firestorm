@@ -661,13 +661,72 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 }
 
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-17 (Catznip-3.3)
+static void snooze_group_im(const LLUUID& group_id, S32 duration = -1)
+{
+	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
+	if (session_id.notNull())
+	{
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+
+		if (!session)
+		{
+			LL_WARNS() << "Empty session." << LL_ENDL;
+			return;
+		}
+
+		session->mSnoozeTime = duration;
+		session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
+
+		gIMMgr->leaveSession(session_id);
+	}
+}
+
+static void snooze_group_im_duration_callback(const LLSD& notification, const LLSD& response, const LLUUID& group_id)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (0 == option)
+	{
+		std::istringstream duration_str(response["duration"].asString());
+		S32 duration(-1);
+		if (duration_str >> duration && duration >= 0)
+		{
+			snooze_group_im(group_id, duration);
+		}
+		else
+		{
+			LLNotificationsUtil::add("SnoozeDurationInvalidInput");
+		}
+	}
+}
+
+static void confirm_group_im_snooze(const LLUUID& group_id)
+{
+	if (group_id.isNull())
+	{
+		return;
+	}
+
+	if (gSavedSettings.getBOOL("FSEnablePerGroupSnoozeDuration"))
+	{
+		LLSD args;
+		args["DURATION"] = gSavedSettings.getS32("GroupSnoozeTime");
+
+		LLNotificationsUtil::add("SnoozeDuration", args, LLSD(), boost::bind(&snooze_group_im_duration_callback, _1, _2, group_id));
+		return;
+	}
+
+	snooze_group_im(group_id);
+}
+
 static void close_group_im(const LLUUID& group_id, LLIMModel::LLIMSession::SCloseAction close_action)
 {
 	if (group_id.isNull())
+	{
 		return;
+	}
 	
 	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
-	if (session_id != LLUUID::null)
+	if (session_id.notNull())
 	{
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::getInstance()->findIMSession(session_id);
 		if (pIMSession)
@@ -685,7 +744,7 @@ void LLGroupActions::leaveIM(const LLUUID& group_id)
 
 void LLGroupActions::snoozeIM(const LLUUID& group_id)
 {
-	close_group_im(group_id, LLIMModel::LLIMSession::CLOSE_SNOOZE);
+	confirm_group_im_snooze(group_id);
 }
 
 void LLGroupActions::endIM(const LLUUID& group_id)
