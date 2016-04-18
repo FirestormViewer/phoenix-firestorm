@@ -44,6 +44,7 @@
 
 // Firestorm includes
 #include "exogroupmutelist.h"
+#include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatergroup.h"
@@ -98,7 +99,7 @@ public:
 				//LLSD params;
 				//params["people_panel_tab_name"] = "groups_panel";
 				//LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
-				if (gSavedSettings.getBOOL("FSUseV2Friends") && gSavedSettings.getString("FSInternalSkinCurrent") != "Vintage")
+				if (gSavedSettings.getBOOL("FSUseV2Friends") && !FSCommon::isLegacySkin())
 				{
 					LLSD params;
 					params["people_panel_tab_name"] = "groups_panel";
@@ -621,15 +622,6 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	}
 // [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
-	if ( (!RlvActions::canStartIM(group_id)) && (!RlvActions::hasOpenGroupSession(group_id)) )
-	{
-		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
-		return LLUUID::null;
-	}
-// [/RLVa:KB]
-
 	LLGroupData group_data;
 	if (gAgent.getGroupData(group_id, group_data))
 	{
@@ -838,13 +830,6 @@ bool LLGroupActions::canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAg
 
 void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent)
 {
-	// <FS:CR> FIRE-8499 - Eject from group confirmation 
-	//if (!canEjectFromGroup(idGroup, idAgent))
-	//	return;
-
-	//uuid_vec_t idAgents;
-	//idAgents.push_back(idAgent);
-	//LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
 	LLSD args;
 	LLSD payload;
 	payload["avatar_id"] = idAgent;
@@ -877,7 +862,6 @@ bool LLGroupActions::callbackEject(const LLSD& notification, const LLSD& respons
 		LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
 	}
 	return false;
-	// </FS:CR>
 }
 // [/SL:KB]
 
