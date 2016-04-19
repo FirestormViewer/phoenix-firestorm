@@ -472,7 +472,6 @@ void check_merchant_status()
 	// <FS:Ansariel> Don't show merchant outbox or SL Marketplace stuff outside SL
 	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
-		gMenuHolder->getChild<LLView>("MerchantOutbox")->setVisible(FALSE);
 		gMenuHolder->getChild<LLView>("MarketplaceListings")->setVisible(FALSE);
 		return;
 	}

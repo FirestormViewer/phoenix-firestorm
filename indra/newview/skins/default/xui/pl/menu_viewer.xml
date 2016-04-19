@@ -2,7 +2,6 @@
 <menu_bar name="Main Menu">
 	<menu label="Awatar" name="Me">
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
-		<menu_item_call label="Skrzynka nadawcza kupca..." name="MerchantOutbox"/>
 		<menu_item_call label="Moje rzeczy na Marketplace" name="MarketplaceListings"/>
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>

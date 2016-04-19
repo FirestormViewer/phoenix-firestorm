@@ -22,7 +22,6 @@
 			<menu_item_check label="請勿打擾" name="Do Not Disturb"/>
 		</menu>
 		<menu_item_call label="購買 L$…" name="Buy and Sell L$"/>
-		<menu_item_call label="商家發件匣…" name="MerchantOutbox"/>
 		<menu_item_call label="Marketplace 刊登…" name="MarketplaceListings"/>
 		<menu_item_call label="帳戶主控臺…" name="Manage My Account"/>
 		<menu_item_call label="偏好設定…" name="Preferences"/>
