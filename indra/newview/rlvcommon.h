@@ -169,7 +169,7 @@ public:
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
-	static bool isValidReplyChannel(S32 nChannel);
+	static bool isValidReplyChannel(S32 nChannel, bool fLoopback = false);
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 
@@ -299,9 +299,9 @@ inline bool RlvUtil::isEmote(const std::string& strUTF8Text)
 }
 
 // Checked: 2010-03-09 (RLVa-1.2.0b) | Added: RLVa-1.0.2a
-inline bool RlvUtil::isValidReplyChannel(S32 nChannel)
+inline bool RlvUtil::isValidReplyChannel(S32 nChannel, bool fLoopback /*=false*/)
 {
-	return (nChannel > 0) && (CHAT_CHANNEL_DEBUG != nChannel);
+	return (nChannel > ((!fLoopback) ? 0 : -1)) && (CHAT_CHANNEL_DEBUG != nChannel);
 }
 
 // Checked: 2009-08-05 (RLVa-1.0.1e) | Added: RLVa-1.0.0e

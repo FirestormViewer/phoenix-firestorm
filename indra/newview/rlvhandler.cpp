@@ -27,6 +27,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 
+#include "rlvfloaters.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
@@ -1837,7 +1838,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>::processCommand(const RlvCo
 {
 	// Sanity check - <param> should specify a - valid - reply channel
 	S32 nChannel;
-	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel, rlvCmd.getObjectID() == gAgent.getID())) )
 		return RLV_RET_FAILED_PARAM;
 
 	std::string strReply;
@@ -1846,7 +1847,13 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>::processCommand(const RlvCo
 	// If we made it this far then:
 	//   - the command was handled successfully so we send off the response
 	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
-	RlvUtil::sendChatReply(nChannel, strReply);
+	if (nChannel != 0)
+		RlvUtil::sendChatReply(nChannel, strReply);
+	else
+	{
+		if (RlvFloaterConsole* pConsole = LLFloaterReg::findTypedInstance<RlvFloaterConsole>("rlv_console"))
+			pConsole->addCommandReply(rlvCmd.getBehaviour(), strReply);
+	}
 
 	return eRet;
 }
@@ -1865,7 +1872,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 
 	// Sanity check - <param> should specify a - valid - reply channel
 	S32 nChannel;
-	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel, rlvCmd.getObjectID() == gAgent.getID())) )
 		return RLV_RET_FAILED_PARAM;
 
 	// Process the command the legacy way
@@ -1969,7 +1976,13 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 	// If we made it this far then:
 	//   - the command was handled successfully so we send off the response
 	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
-	RlvUtil::sendChatReply(nChannel, strReply);
+	if (nChannel > 0)
+		RlvUtil::sendChatReply(nChannel, strReply);
+	else
+	{
+		if (RlvFloaterConsole* pConsole = LLFloaterReg::findTypedInstance<RlvFloaterConsole>("rlv_console"))
+			pConsole->addCommandReply(rlvCmd.getBehaviour(), strReply);
+	}
 
 	return eRet;
 }

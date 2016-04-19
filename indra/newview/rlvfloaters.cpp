@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llagent.h"
 #include "llappearancemgr.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
@@ -669,6 +670,102 @@ void RlvFloaterStrings::refresh()
 	}
 
 	findChild<LLUICtrl>("default_btn")->setEnabled(!m_strStringCurrent.empty());
+}
+
+// ============================================================================
+// RlvFloaterConsole
+//
+
+static const char s_strRlvConsolePrompt[] = "> ";
+static const char s_strRlvConsoleDisabled[] = "RLVa is disabled";
+static const char s_strRlvConsoleInvalid[] = "Invalid command";
+
+RlvFloaterConsole::RlvFloaterConsole(const LLSD& sdKey)
+	: LLFloater(sdKey), m_pOutputText(nullptr)
+{
+}
+
+RlvFloaterConsole::~RlvFloaterConsole()
+{
+}
+
+BOOL RlvFloaterConsole::postBuild()
+{
+	LLLineEditor* pInputEdit = getChild<LLLineEditor>("console_input");
+	pInputEdit->setEnableLineHistory(true);
+	pInputEdit->setCommitCallback(boost::bind(&RlvFloaterConsole::onInput, this, _1, _2));
+	pInputEdit->setFocus(true);
+	pInputEdit->setCommitOnFocusLost(false);
+
+	m_pOutputText = getChild<LLTextEditor>("console_output");
+	m_pOutputText->appendText(s_strRlvConsolePrompt, false);
+
+	return TRUE;
+}
+
+void RlvFloaterConsole::addCommandReply(const std::string& strCommand, const std::string& strReply)
+{
+	m_pOutputText->appendText(llformat("%s: %s", strCommand.c_str(), strReply.c_str()), true);
+}
+
+void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
+{
+	LLLineEditor* pInputEdit = static_cast<LLLineEditor*>(pCtrl);
+	std::string strInput = pInputEdit->getText();
+
+	m_pOutputText->appendText(strInput, false);
+	pInputEdit->clear();
+
+	if (!rlv_handler_t::isEnabled())
+	{
+		m_pOutputText->appendText(s_strRlvConsoleDisabled, true);
+	}
+	else if ( (strInput.length() <= 3) || (RLV_CMD_PREFIX != strInput[0]) )
+	{
+		m_pOutputText->appendText(s_strRlvConsoleInvalid, true);
+	}
+	else
+	{
+		strInput.erase(0, 1);
+		LLStringUtil::toLower(strInput);
+
+		std::string strExecuted, strFailed, strRetained, *pstr;
+
+		boost_tokenizer tokens(strInput, boost::char_separator<char>(",", "", boost::drop_empty_tokens));
+		for (std::string strCmd : tokens)
+		{
+			ERlvCmdRet eRet = gRlvHandler.processCommand(gAgent.getID(), strCmd, true);
+			if ( RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS) )	
+				pstr = &strExecuted;
+			else if ( RLV_RET_FAILED == (eRet & RLV_RET_FAILED) )
+				pstr = &strFailed;
+			else if (RLV_RET_RETAINED == eRet)
+				pstr = &strRetained;
+			else
+			{
+				RLV_ASSERT(false);
+				pstr = &strFailed;
+			}
+
+			if (const char* pstrSuffix = RlvStrings::getStringFromReturnCode(eRet))
+				strCmd.append(" (").append(pstrSuffix).append(")");
+			else if (RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS))
+				strCmd.clear(); // Only show feedback on successful commands when there's an informational notice
+
+			if (!pstr->empty())
+				pstr->push_back(',');
+			pstr->append(strCmd);
+		}
+
+		if (!strExecuted.empty())
+			m_pOutputText->appendText("INFO: @" + strExecuted, true);
+		if (!strFailed.empty())
+			m_pOutputText->appendText("ERR: @" + strFailed, true);
+		if (!strRetained.empty())
+			m_pOutputText->appendText("RET: @" + strRetained, true);
+	}
+
+	m_pOutputText->appendText(s_strRlvConsolePrompt, true);
 }
 
 // ============================================================================

@@ -1665,6 +1665,16 @@
       </menu_item_check>
       <menu_item_separator />
       <menu_item_check
+       label="Console..."
+       name="Console">
+        <menu_item_check.on_check
+      	 function="Floater.Visible"
+      	 parameter="rlv_console" />
+        <menu_item_check.on_click
+      	 function="Floater.Toggle"
+      	 parameter="rlv_console" />
+      </menu_item_check>
+      <menu_item_check
        label="Restrictions..."
        name="Restrictions">
       	<menu_item_check.on_check

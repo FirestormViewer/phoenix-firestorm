@@ -217,7 +217,7 @@ public:
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
-	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_UNKNOWN; }
+	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_FAILED_UNKNOWN; }
 
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);
