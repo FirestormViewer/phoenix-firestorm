@@ -1892,9 +1892,16 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
 
 	std::string uploader = postResult[ "uploader" ].asString();
 
-	if( uploader.empty() || aAssetId.isNull() )
+	if( uploader.empty() )
 	{
 		LL_WARNS( "import" ) << "No upload url provided. Nothing uploaded." << LL_ENDL;
+		self->pushNextAsset( LLUUID::null, fs_data->uuid, aResourceData->mAssetInfo.mType );
+		return;
+	}
+
+	if (!gVFS->getExists(aAssetId, aAssetType))
+	{
+		LL_WARNS() << "Asset doesn't exist in VFS anymore. Nothing uploaded." << LL_ENDL;
 		self->pushNextAsset( LLUUID::null, fs_data->uuid, aResourceData->mAssetInfo.mType );
 		return;
 	}
@@ -1923,6 +1930,9 @@ void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter
 	LLUUID new_id = postContentResult[ "new_asset" ];
 
 	LL_DEBUGS( "import" ) << "result: " << responseResult << " new_id: " << new_id << LL_ENDL;
+
+	// rename the file in the VFS to the actual asset id
+	gVFS->renameFile(aAssetId, aAssetType, new_id, aAssetType);
 
 	if( item_id.isNull() )
 	{
