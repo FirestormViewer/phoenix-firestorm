@@ -204,7 +204,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 				RLV_ASSERT( (itBhvr.first != pBhvrInfo->getBehaviourType()) || (itBhvr.second->getBehaviourFlags() != pBhvrInfo->getBehaviourFlags()) );
 			}
 #endif // RLV_DEBUG
- 			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
+			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
 		}
 	}
 
@@ -222,6 +222,13 @@ RlvBehaviourDictionary::~RlvBehaviourDictionary()
 
 void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
 {
+	// Filter experimental commands (if disabled)
+	static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
+	if ( (!pEntry) || ((!sEnableExperimental) && (pEntry->isExperimental())) )
+	{
+		return;
+	}
+
 	// Sanity check for duplicate entries
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 	std::for_each(m_BhvrInfoList.begin(), m_BhvrInfoList.end(), 
@@ -252,17 +259,14 @@ ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
 {
 	cmdList.clear();
-	if (strMatch.empty())
-		return false;
-
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
 		if ( (pBhvrInfo->getParamTypeMask() & eParamType) || (RLV_TYPE_UNKNOWN == eParamType) )
 		{
 			std::string strCmd = pBhvrInfo->getBehaviour();
-			if (std::string::npos != strCmd.find(strMatch))
+			if ( (std::string::npos != strCmd.find(strMatch)) || (strMatch.empty()) )
 				cmdList.push_back(strCmd);
-			if ( (pBhvrInfo->hasStrict()) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
+			if ( (pBhvrInfo->hasStrict()) && ((std::string::npos != strCmd.append("_sec").find(strMatch)) || (strMatch.empty())) )
 				cmdList.push_back(strCmd);
 		}
 	}
@@ -325,16 +329,7 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
-	if (m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict))
-	{
-		// Filter experimental and/or extended commands (if disabled)
-		static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
-		static LLCachedControl<bool> sEnableExtended(gSavedSettings, "RLVaExtendedCommands");
-		if ( ((!sEnableExperimental) && (m_pBhvrInfo->isExperimental())) || ((!sEnableExtended) && (m_pBhvrInfo->isExtended())) )
-		{
-			m_pBhvrInfo = NULL;
-		}
-	}
+	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict);
 }
 
 bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption, std::string& strParam)
@@ -809,13 +804,13 @@ bool RlvForceWear::isForceDetachable(const LLViewerObject* pAttachObj, bool fChe
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	return 
 	  (
-	    (pAttachObj) && (pAttachObj->isAttachment())
+		(pAttachObj) && (pAttachObj->isAttachment())
 		&& ( (idExcept.isNull()) ? (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
-								 : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
+		                         : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
 		&& (isStrippable(pAttachObj->getAttachmentItemID()))
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		&& ( (!fCheckComposite) || (!RlvSettings::getEnableComposites()) || 
-		     (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
+	         (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	  );
 }

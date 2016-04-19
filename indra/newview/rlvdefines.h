@@ -66,6 +66,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_OPTION_SEPARATOR			";"				// Default separator used in command options
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4

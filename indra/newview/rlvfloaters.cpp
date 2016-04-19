@@ -705,7 +705,8 @@ BOOL RlvFloaterConsole::postBuild()
 
 void RlvFloaterConsole::addCommandReply(const std::string& strCommand, const std::string& strReply)
 {
-	m_pOutputText->appendText(llformat("%s: %s", strCommand.c_str(), strReply.c_str()), true);
+	m_pOutputText->appendText(llformat("%s: ", strCommand.c_str()), true);
+	m_pOutputText->appendText(strReply, false);
 }
 
 void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)

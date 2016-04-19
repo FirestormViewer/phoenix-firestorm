@@ -53,6 +53,7 @@ struct RlvCommandOptionHelper
 {
 	template <typename optionType> 
 	static bool parseOption(const std::string& strOption, optionType& valueOption);
+	static bool parseStringList(const std::string& strOption, std::vector<std::string>& optionList);
 };
 
 template<>
@@ -66,6 +67,13 @@ template<>
 bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int& nOption)
 {
 	return LLStringUtil::convertToS32(strOption, nOption);
+}
+
+bool RlvCommandOptionHelper::parseStringList(const std::string& strOption, std::vector<std::string>& optionList)
+{
+	if (!strOption.empty())
+		boost::split(optionList, strOption, boost::is_any_of(std::string(RLV_OPTION_SEPARATOR)));
+	return !optionList.empty();
 }
 
 // ============================================================================
@@ -1934,14 +1942,6 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 				strReply = idSitObj.asString();
 			}
 			break;
-		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			{
-				std::list<std::string> cmdList;
-				if (RlvBehaviourDictionary::instance().getCommands(rlvCmd.getOption(), RLV_TYPE_UNKNOWN, cmdList))
-					for (std::list<std::string>::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
-						strReply.append("/").append(*itCmd);
-			}
-			break;
 		case RLV_BHVR_GETSTATUS:		// @getstatus                           - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				std::string strFilter, strSeparator;
@@ -2103,6 +2103,35 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			}
 		}
 	}
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcommand[:<behaviour>[;<type>[;<separator>]]]=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	std::vector<std::string> optionList;
+	RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList);
+
+	// If a second parameter is present it'll specify the command type
+	ERlvParamType eType = RLV_TYPE_UNKNOWN;
+	if (optionList.size() >= 2)
+	{
+		if ( (optionList[1] == "any") || (optionList[1].empty()) )
+			eType = RLV_TYPE_UNKNOWN;
+		else if (optionList[1] == "add")
+			eType = RLV_TYPE_ADDREM;
+		else if (optionList[1] == "force")
+			eType = RLV_TYPE_FORCE;
+		else if (optionList[1] == "reply")
+			eType = RLV_TYPE_REPLY;
+		else
+			return RLV_RET_FAILED_OPTION;
+	}
+
+	std::list<std::string> cmdList;
+	if (RlvBehaviourDictionary::instance().getCommands((optionList.size() >= 1) ? optionList[0] : LLStringUtil::null, eType, cmdList))
+		strReply = boost::algorithm::join(cmdList, (optionList.size() >= 3) ? optionList[2] : std::string(RLV_OPTION_SEPARATOR) );
 	return RLV_RET_SUCCESS;
 }
 
