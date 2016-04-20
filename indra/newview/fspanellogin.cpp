@@ -429,17 +429,10 @@ void FSPanelLogin::show(const LLRect &rect,
 						void (*callback)(S32 option, void* user_data),
 						void* callback_data)
 {
-	// instance management
-	if (FSPanelLogin::sInstance)
-	{
-		LL_WARNS("AppInit") << "Duplicate instance of login view deleted" << LL_ENDL;
-		// Don't leave bad pointer in gFocusMgr
-		gFocusMgr.setDefaultKeyboardFocus(NULL);
-
-		delete FSPanelLogin::sInstance;
-	}
-
-	new FSPanelLogin(rect, callback, callback_data);
+    if (!FSPanelLogin::sInstance)
+    {
+        new FSPanelLogin(rect, callback, callback_data);
+    }
 
 	if( !gFocusMgr.getKeyboardFocus() )
 	{
@@ -823,6 +816,9 @@ void FSPanelLogin::loadLoginPage()
 	// sourceid
 	params["sourceid"] = gSavedSettings.getString("sourceid");
 
+	// login page (web) content version
+	params["login_content_version"] = gSavedSettings.getString("LoginContentVersion");
+
 	// Make an LLURI with this augmented info
 	LLURI login_uri(LLURI::buildHTTP(login_page.authority(),
 									 login_page.path(),
@@ -971,8 +967,8 @@ void FSPanelLogin::onClickHelp(void*)
 // static
 void FSPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 {
-	FSPanelLogin *This = (FSPanelLogin *) user_data;
-	This->mPasswordModified = TRUE;
+	FSPanelLogin *self = (FSPanelLogin *)user_data;
+	self->mPasswordModified = TRUE;
 	if (gKeyboard->getKeyDown(KEY_CAPSLOCK) && sCapslockDidNotification == FALSE)
 	{
 		// *TODO: use another way to notify user about enabled caps lock, see EXT-6858
