@@ -51,8 +51,6 @@ public:
 				void *callback_data);
 	~FSPanelLogin();
 
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
-	virtual void draw();
 	virtual void setFocus( BOOL b );
 
 	// Show the XUI first name, last name, and password widgets.  They are
@@ -96,7 +94,6 @@ public:
 
 private:
 	friend class LLPanelLoginListener;
-	void reshapeBrowser();
 	void addFavoritesToStartLocation();
 	void addUsersToCombo(BOOL show_server);
 	void onSelectUser();
@@ -119,8 +116,6 @@ private:
 	static std::string credentialName();
 
 private:
-	LLPointer<LLUIImage> mLogoImage;
-
 	void			(*mCallback)(S32 option, void *userdata);
 	void*			mCallbackData;
 
