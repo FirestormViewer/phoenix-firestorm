@@ -79,7 +79,6 @@
 
 #include "llsdserialize.h"
 
-const S32 BLACK_BORDER_HEIGHT = 160;
 const S32 MAX_PASSWORD_SL = 16;
 const S32 MAX_PASSWORD_OPENSIM = 255;
 
@@ -179,7 +178,6 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 						 void (*callback)(S32 option, void* user_data),
 						 void *cb_data)
 :	LLPanel(),
-	mLogoImage(),
 	mCallback(callback),
 	mCallbackData(cb_data),
 	mShowFavorites(false)
@@ -195,9 +193,6 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	{
 		login_holder->addChild(this);
 	}
-
-	// Logo
-	mLogoImage = LLUI::getUIImage("startup_logo");
 
 	buildFromFile( "panel_fs_login.xml");
 
@@ -250,8 +245,6 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	// get the web browser control
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	web_browser->addObserver(this);
-
-	reshapeBrowser();
 
 	// Show last logged in user favorites in "Start at" combo.
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
@@ -351,21 +344,6 @@ void FSPanelLogin::addFavoritesToStartLocation()
 	LLFloaterPreference::updateShowFavoritesCheckbox(mShowFavorites);
 }
 
-// force the size to be correct (XML doesn't seem to be sufficient to do this)
-// (with some padding so the other login screen doesn't show through)
-void FSPanelLogin::reshapeBrowser()
-{
-	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
-	LLRect rect = gViewerWindow->getWindowRectScaled();
-	LLRect html_rect;
-	html_rect.setCenterAndSize(
-		rect.getCenterX() - 2, rect.getCenterY() + 40,
-		rect.getWidth() + 6, rect.getHeight() - 78 );
-	web_browser->setRect( html_rect );
-	web_browser->reshape( html_rect.getWidth(), html_rect.getHeight(), TRUE );
-	reshape( rect.getWidth(), rect.getHeight(), 1 );
-}
-
 FSPanelLogin::~FSPanelLogin()
 {
 	FSPanelLogin::sInstance = NULL;
@@ -373,50 +351,6 @@ FSPanelLogin::~FSPanelLogin()
 	// Controls having keyboard focus by default
 	// must reset it on destroy. (EXT-2748)
 	gFocusMgr.setDefaultKeyboardFocus(NULL);
-}
-
-// virtual
-void FSPanelLogin::draw()
-{
-	gGL.pushMatrix();
-	{
-		F32 image_aspect = 1.333333f;
-		F32 view_aspect = (F32)getRect().getWidth() / (F32)getRect().getHeight();
-		// stretch image to maintain aspect ratio
-		if (image_aspect > view_aspect)
-		{
-			gGL.translatef(-0.5f * (image_aspect / view_aspect - 1.f) * getRect().getWidth(), 0.f, 0.f);
-			gGL.scalef(image_aspect / view_aspect, 1.f, 1.f);
-		}
-
-		S32 width = getRect().getWidth();
-		S32 height = getRect().getHeight();
-
-		if (getChild<LLView>("login_widgets")->getVisible())
-		{
-			// draw a background box in black
-			gl_rect_2d( 0, height - 264, width, 264, LLColor4::black );
-			// draw the bottom part of the background image
-			// just the blue background to the native client UI
-			mLogoImage->draw(0, -264, width + 8, mLogoImage->getHeight());
-		};
-	}
-	gGL.popMatrix();
-
-	LLPanel::draw();
-}
-
-// virtual
-BOOL FSPanelLogin::handleKeyHere(KEY key, MASK mask)
-{
-	if ( KEY_F1 == key )
-	{
-		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
-		vhelp->showTopic(vhelp->f1HelpTopic());
-		return TRUE;
-	}
-
-	return LLPanel::handleKeyHere(key, mask);
 }
 
 // virtual 
@@ -483,7 +417,7 @@ void FSPanelLogin::showLoginWidgets()
 		// It seems to be part of the defunct? reg-in-client project.
 		sInstance->getChildView("login_widgets")->setVisible( true);
 		LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-		sInstance->reshapeBrowser();
+
 		// *TODO: Append all the usual login parameters, like first_login=Y etc.
 		std::string splash_screen_url = LLGridManager::getInstance()->getLoginPage();
 		web_browser->navigateTo( splash_screen_url, HTTP_CONTENT_TEXT_HTML );
