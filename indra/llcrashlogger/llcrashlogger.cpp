@@ -629,6 +629,12 @@ bool LLCrashLogger::sendCrashLogs()
         rec["dumpdir"]=opts["dumpdir"];
         rec["procname"]=opts["procname"];
     }
+
+	// <FS:ND> Try to send the current crash right away, if that fails queue it for next time.
+	if( rec && rec.has("dumpdir") )
+		if( !sendCrashLog( rec["dumpdir"].asString() ) )
+			newlocks.append(rec);
+	// </FS:ND>
 	
     if (locks.isArray())
     {
@@ -667,10 +673,12 @@ bool LLCrashLogger::sendCrashLogs()
         }
     }
 
-    if (rec)
-    {
-        newlocks.append(rec);
-    }
+	// <FS:ND> We want this appended right away, or this crash only gets send the next time the crashreporter runs.
+    //if (rec)
+    //{
+    //    newlocks.append(rec);
+    //}
+	// </FS:ND>
     
     mKeyMaster.putProcessList(newlocks);
     return true;
