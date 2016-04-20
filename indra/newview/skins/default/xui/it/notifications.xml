@@ -796,7 +796,7 @@ Attese [VALIDS]
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		Il file audio è troppo lungo (deve essere al massimo 10 secondi):
+		Il file audio è troppo lungo (deve essere al massimo [MAX_LENGTH] secondi):
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">

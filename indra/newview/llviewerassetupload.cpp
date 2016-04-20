@@ -51,6 +51,8 @@
 #include "llpreviewgesture.h"
 #include "llcoproceduremanager.h"
 
+#include "llviewernetwork.h"
+
 void dialog_refresh_all();
 
 LLResourceUploadInfo::LLResourceUploadInfo(LLTransactionID transactId,
@@ -392,7 +394,10 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
 
         LL_INFOS() << "Attempting to encode wav as an ogg file" << LL_ENDL;
 
-        encodeResult = encode_vorbis_file(getFileName(), filename);
+		// <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
+        //encodeResult = encode_vorbis_file(getFileName(), filename);
+		encodeResult = encode_vorbis_file(getFileName(), filename, LLGridManager::instance().isInSecondLife());
+		// </FS:Ansariel>
 
         if (LLVORBISENC_NOERR != encodeResult)
         {

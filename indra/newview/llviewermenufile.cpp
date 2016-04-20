@@ -80,6 +80,8 @@
 
 #include "llinventorydefines.h"
 
+#include "llviewernetwork.h"
+
 class LLFileEnableUpload : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -465,11 +467,12 @@ static void show_floater_callback(const std::string& floater, const std::string&
 		{
 			// pre-qualify wavs to make sure the format is acceptable
 			std::string error_msg;
-			if (check_for_invalid_wav_formats(filename,error_msg))
+			if (check_for_invalid_wav_formats(filename, error_msg, LLGridManager::instance().isInSecondLife()))
 			{
 				LL_INFOS() << error_msg << ": " << filename << LL_ENDL;
 				LLSD args;
 				args["FILE"] = filename;
+				args["MAX_LENGTH"] = llformat("%.0f", (LLGridManager::instance().isInSecondLife() ? LLVORBIS_CLIP_MAX_TIME : LLVORBIS_CLIP_MAX_TIME_OPENSIM));
 				LLNotificationsUtil::add( error_msg, args );
 				return;
 			}

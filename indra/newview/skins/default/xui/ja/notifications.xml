@@ -834,7 +834,7 @@ L$ が不足しているのでこのグループに参加することができ�
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		オーディオファイルが長すぎます。（最大 10 秒）：
+		オーディオファイルが長すぎます。（最大 [MAX_LENGTH] 秒）：
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">
