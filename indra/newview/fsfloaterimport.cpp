@@ -26,7 +26,6 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-
 #include "fsfloaterimport.h"
 
 #include "llagent.h"
@@ -87,7 +86,7 @@ void resourceDeleter( LLResourceData *aData )
 	delete aData;
 }
 
-void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL,  LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, std::shared_ptr< LLResourceData > aResourceData );
+void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL,  LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, boost::shared_ptr< LLResourceData > aResourceData );
 
 FSFloaterImport::FSFloaterImport(const LLSD& filename) :
 	LLFloater(filename),
@@ -1502,7 +1501,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		}
 		
 
-		std::shared_ptr< LLResourceData> pData( data, resourceDeleter );
+		boost::shared_ptr< LLResourceData> pData( data, resourceDeleter );
 
 		LLCoprocedureManager::instance().enqueueCoprocedure( "FSImporter", "Upload asset", boost::bind( uploadCoroutine, _1, url, body, new_asset_id, asset_type, pData ) );
 
@@ -1864,7 +1863,7 @@ public:
 	}
 };
 
-void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL, LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, std::shared_ptr< LLResourceData > aResourceData )
+void uploadCoroutine( LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t &a_httpAdapter, std::string aURL, LLSD aBody, LLAssetID aAssetId, LLAssetType::EType aAssetType, boost::shared_ptr< LLResourceData > aResourceData )
 {
 	FSResourceData* fs_data = (FSResourceData*)aResourceData->mUserData;
 	FSFloaterImport* self = fs_data->mFloater;
