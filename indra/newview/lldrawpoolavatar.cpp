@@ -1977,15 +1977,12 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
                 LLViewerTexture* specular = NULL;
                 if (LLPipeline::sImpostorRender)
                 {
-					// <FS:Ansariel> Don't assume a certain default texture exists on the server
-                    //std::vector<LLViewerFetchedTexture*> found;
-                    //LLViewerTextureManager::findFetchedTextures(IMG_BLACK_SQUARE, found);
-                    //if (1 <= found.size())
-                    //{
-                    //    specular = found[0];
-                    //}
-					specular = LLViewerTextureManager::getFetchedTextureFromFile("black_square.png");
-					// </FS:Ansariel>
+                    std::vector<LLViewerFetchedTexture*> found;
+                    LLViewerTextureManager::findFetchedTextures(IMG_BLACK_SQUARE, found);
+                    if (1 <= found.size())
+                    {
+                        specular = found[0];
+                    }
                 }
                 else
                 {
