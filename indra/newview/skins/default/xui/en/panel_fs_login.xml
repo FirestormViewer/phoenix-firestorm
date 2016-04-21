@@ -116,7 +116,7 @@
           width="128">
         Password:
       </text>
-      <!-- The max length might be changed in LLPanelLogin.cpp for Opensim! -->
+      <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
       <line_editor
           follows="left|bottom"
           height="22"

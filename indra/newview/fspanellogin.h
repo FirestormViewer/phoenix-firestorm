@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-// Original file: llpanellogin.cpp
+// Original file: llpanellogin.h
 
 #ifndef FS_PANELLOGIN_H
 #define FS_PANELLOGIN_H
@@ -32,11 +32,8 @@
 #include "llpanel.h"
 #include "llpointer.h"			// LLPointer<>
 #include "llmediactrl.h"	// LLMediaCtrlObserver
-#include <boost/scoped_ptr.hpp>
 
 class LLLineEditor;
-class LLUIImage;
-class LLPanelLoginListener;
 class LLSLURL;
 class LLCredential;
 
@@ -52,10 +49,6 @@ public:
 	~FSPanelLogin();
 
 	virtual void setFocus( BOOL b );
-
-	// Show the XUI first name, last name, and password widgets.  They are
-	// hidden on startup for reg-in-client
-	static void showLoginWidgets();
 
 	static void show(const LLRect &rect,
 		void (*callback)(S32 option, void* user_data), 
@@ -76,6 +69,8 @@ public:
 
 	void setSiteIsAlive( bool alive );
 
+	void showLoginWidgets();
+
 	static void loadLoginPage();	
 	static void giveFocus();
 	static void setAlwaysRefresh(bool refresh); 
@@ -87,13 +82,12 @@ public:
 	/// to be called from LLStartUp::setStartSLURL
 	static void onUpdateStartSLURL(const LLSLURL& new_start_slurl);
 
-	// called from prefs when initializing pane
+	// called from prefs when initializing panel
 	static bool getShowFavorites();
 
 	static void clearPassword() { sPassword.clear(); }
 
 private:
-	friend class LLPanelLoginListener;
 	void addFavoritesToStartLocation();
 	void addUsersToCombo(BOOL show_server);
 	void onSelectUser();
@@ -101,6 +95,7 @@ private:
 	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
 	void onSelectServer();
 	void onLocationSLURL();
+	void onUsernameTextChanged();
 
 	static void onClickConnect(void*);
 	static void onClickNewAccount(void*);
@@ -116,17 +111,22 @@ private:
 	static std::string credentialName();
 
 private:
+	void updateLoginButtons();
+
 	void			(*mCallback)(S32 option, void *userdata);
 	void*			mCallbackData;
 
-	BOOL			mPasswordModified;
+	BOOL            mPasswordModified;
 	bool			mShowFavorites;
 
 	static FSPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
 
-	std::string		mPreviousUsername;
+	unsigned int mUsernameLength;
+	unsigned int mPasswordLength;
+	unsigned int mLocationLength;
 
+	std::string		mPreviousUsername;
 	static std::string	sPassword;
 };
 
