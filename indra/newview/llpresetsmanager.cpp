@@ -163,7 +163,7 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
     else if(PRESETS_CAMERA == subdirectory)
 	{
 		name_list = boost::assign::list_of
-			("Placeholder");
+			("Placeholder").to_container(name_list); // <FS:Ansariel> Assign operation is ambigious
 	}
     else
     {
