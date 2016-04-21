@@ -266,10 +266,6 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
 	forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
 	
-	// get the web browser control
-	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
-	web_browser->addObserver(this);
-
 	loadLoginPage();
 
 	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
@@ -1316,9 +1312,6 @@ void FSPanelLogin::updateServerCombo()
 {
 	if (!sInstance) return;
 	
-#ifdef OPENSIM
-	LLGridManager::getInstance()->addGridListChangedCallback(&FSPanelLogin::gridListChanged);
-#endif // OPENSIM
 	// We add all of the possible values, sorted, and then add a bar and the current value at the top
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 	server_choice_combo->removeall();
