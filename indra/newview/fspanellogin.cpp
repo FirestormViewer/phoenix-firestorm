@@ -178,6 +178,9 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 :	LLPanel(),
 	mCallback(callback),
 	mCallbackData(cb_data),
+	mUsernameLength(0),
+	mPasswordLength(0),
+	mLocationLength(0),
 	mShowFavorites(false)
 {
 	setBackgroundVisible(FALSE);
@@ -206,13 +209,13 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 	// change z sort of clickable text to be behind buttons
 	sendChildToBack(getChildView("forgot_password_text"));
 
-	LLComboBox* location_combo = getChild<LLComboBox>("start_location_combo");
+	LLComboBox* favorites_combo = getChild<LLComboBox>("start_location_combo");
 	updateLocationSelectorsVisibility(); // separate so that it can be called from preferences
-	location_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onLocationSLURL, this));
+	favorites_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onLocationSLURL, this));
 	
 	LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectServer, this));
-
+	
 	updateServer();
 	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
 	{
@@ -220,42 +223,18 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 		LLStartUp::setStartSLURL(slurl);
 	}
 
-	childSetAction("remove_user_btn", onClickRemove, this);
-	childSetAction("connect_btn", onClickConnect, this);
-	
-	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn"));
-	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn"));
-
-	std::string channel = LLVersionInfo::getChannel();
-	std::string version = llformat("%s (%d)",
-								   LLVersionInfo::getShortVersion().c_str(),
-								   LLVersionInfo::getBuild());
-	
-	LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
-	forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
-
 	LLTextBox* create_new_account_text = getChild<LLTextBox>("create_new_account_text");
 	create_new_account_text->setClickedCallback(onClickNewAccount, NULL);
 
 	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_login_text");
 	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
-	
-	// get the web browser control
-	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
-	web_browser->addObserver(this);
-
-	// Show last logged in user favorites in "Start at" combo.
-	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
-	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
-	username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
-	mPreviousUsername = username_combo->getValue().asString();
 
 	LLSLURL start_slurl(LLStartUp::getStartSLURL());
-	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
+	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ? 
 	{
-	// no, so get the preference setting
+		// no, so get the preference setting
 		std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
-		LL_INFOS("AppInit") << "default LoginLocation '" << defaultStartLocation << "'" << LL_ENDL;
+		LL_INFOS("AppInit")<<"default LoginLocation '"<<defaultStartLocation<<"'"<<LL_ENDL;
 		LLSLURL defaultStart(defaultStartLocation);
 		if ( defaultStart.isSpatial() )
 		{
@@ -273,7 +252,31 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 		FSPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	}
 	
+	childSetAction("remove_user_btn", onClickRemove, this);
+	childSetAction("connect_btn", onClickConnect, this);
+
+	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn"));
+	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn"));
+
+	std::string channel = LLVersionInfo::getChannel();
+	std::string version = llformat("%s (%d)",
+								   LLVersionInfo::getShortVersion().c_str(),
+								   LLVersionInfo::getBuild());
+	
+	LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
+	forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
+	
+	// get the web browser control
+	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
+	web_browser->addObserver(this);
+
 	loadLoginPage();
+
+	LLComboBox* username_combo(getChild<LLComboBox>("username_combo"));
+	username_combo->setTextChangedCallback(boost::bind(&FSPanelLogin::onUsernameTextChanged, this));
+	username_combo->setCommitCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
+	username_combo->setFocusLostCallback(boost::bind(&FSPanelLogin::onSelectUser, this));
+	mPreviousUsername = username_combo->getValue().asString();
 }
 
 void FSPanelLogin::addFavoritesToStartLocation()
@@ -300,6 +303,8 @@ void FSPanelLogin::addFavoritesToStartLocation()
 	std::string current_user = canonical_user_name + " @ " + current_grid;
 	LL_DEBUGS("Favorites") << "Current user: \"" << current_user << "\"" << LL_ENDL;
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
+	mUsernameLength = current_user.length();
+	updateLoginButtons();
 
 	LLSD fav_llsd;
 	llifstream file;
@@ -309,6 +314,7 @@ void FSPanelLogin::addFavoritesToStartLocation()
 		return;
 	}
 	LLSDSerialize::fromXML(fav_llsd, file);
+
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
 		iter != fav_llsd.endMap(); ++iter)
 	{
@@ -351,7 +357,7 @@ FSPanelLogin::~FSPanelLogin()
 	gFocusMgr.setDefaultKeyboardFocus(NULL);
 }
 
-// virtual 
+// virtual
 void FSPanelLogin::setFocus(BOOL b)
 {
 	if(b != hasFocus())
@@ -484,17 +490,19 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 	LLSD authenticator = credential->getAuthenticator();
 	LL_INFOS("Credentials") << "Setting authenticator field " << authenticator["type"].asString() << LL_ENDL;
 	bool remember;
-	if (authenticator.isMap() &&
-	   authenticator.has("secret") &&
+	if(authenticator.isMap() && 
+	   authenticator.has("secret") && 
 	   (authenticator["secret"].asString().size() > 0))
 	{
 		
 		// This is a MD5 hex digest of a password.
 		// We don't actually use the password input field, 
 		// fill it with MAX_PASSWORD_SL characters so we get a 
-		// nice row of asterixes.
+		// nice row of asterisks.
 		const std::string filler("123456789!123456");
 		sInstance->getChild<LLLineEditor>("password_edit")->setText(filler);
+		sInstance->mPasswordLength = filler.length();
+		sInstance->updateLoginButtons();
 		remember = true;
 
 		// We run into this case, if a user tries to login with a newly entered password
@@ -511,6 +519,8 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 				(stored_credential->getAuthenticator().has("secret") && stored_credential->getAuthenticator()["secret"].asString() != authenticator["secret"].asString()))
 			{
 				sInstance->getChild<LLLineEditor>("password_edit")->setText(sPassword);
+				sInstance->mPasswordLength = sPassword.length();
+				sInstance->updateLoginButtons();
 				sInstance->mPasswordModified = TRUE;
 			}
 		}
@@ -518,6 +528,8 @@ void FSPanelLogin::setFields(LLPointer<LLCredential> credential, bool from_start
 	else
 	{
 		sInstance->getChild<LLLineEditor>("password_edit")->clear();
+		sInstance->mPasswordLength = 0;
+		sInstance->updateLoginButtons();
 		remember = false;
 	}
 	if (from_startup)
@@ -599,7 +611,7 @@ void FSPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		std::string last;
 		if (separator_index != username.npos)
 		{
-			last = username.substr(separator_index + 1, username.npos);
+			last = username.substr(separator_index+1, username.npos);
 		LLStringUtil::trim(last);
 		}
 		else
@@ -655,7 +667,7 @@ BOOL FSPanelLogin::areCredentialFieldsDirty()
 			return true;
 		}
 	}
-	return false;
+	return false;	
 }
 
 
@@ -711,6 +723,8 @@ void FSPanelLogin::onUpdateStartSLURL(const LLSLURL& new_start_slurl)
 				updateServer(); // to change the links and splash screen
 			}
 			location_combo->setTextEntry(new_start_slurl.getLocationString());
+			sInstance->mLocationLength = new_start_slurl.getLocationString().length();
+			sInstance->updateLoginButtons();
 		}
 		else
 		{
@@ -791,6 +805,13 @@ void FSPanelLogin::loadLoginPage()
 	LLSD params(login_page.queryMap());
 
 	LL_DEBUGS("AppInit") << "login_page: " << login_page << LL_ENDL;
+
+	// allow users (testers really) to specify a different login content URL
+	std::string force_login_url = gSavedSettings.getString("ForceLoginURL");
+	if ( force_login_url.length() > 0 )
+	{
+		login_page = LLURI(force_login_url);
+	}
 
 	// Language
 	params["lang"] = LLUI::getLanguage();
@@ -878,7 +899,7 @@ void FSPanelLogin::onClickConnect(void *)
 		}
 		else if(password.empty())
 		{
-			LLNotificationsUtil::add("MustEnterPasswordToLogIn");
+		    LLNotificationsUtil::add("MustEnterPasswordToLogIn");
 		}
 		else
 		{
@@ -908,7 +929,7 @@ void FSPanelLogin::onClickConnect(void *)
 			// credential format, as it doesn't yet allow account (single username)
 			// format creds.  - Rox.  James, we wanna fix the message when we change
 			// this.
-			LLNotificationsUtil::add("InvalidCredentialFormat");
+			LLNotificationsUtil::add("InvalidCredentialFormat");			
 		}
 	}
 }
@@ -974,41 +995,51 @@ void FSPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 		// *TODO: use another way to notify user about enabled caps lock, see EXT-6858
 		sCapslockDidNotification = TRUE;
 	}
+
+	LLLineEditor* password_edit(self->getChild<LLLineEditor>("password_edit"));
+	self->mPasswordLength = password_edit->getText().length();
+	self->updateLoginButtons();
 }
 
 
 void FSPanelLogin::updateServer()
 {
-	if (!sInstance)
+	if (sInstance)
 	{
-		return;
-	}
-	try
-	{
-		// if they've selected another grid, we should load the credentials
-		// for that grid and set them to the UI.
-		if(!sInstance->areCredentialFieldsDirty())
+		try 
 		{
-			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
-			sInstance->setFields(credential);
-		}
+			// if they've selected another grid, we should load the credentials
+			// for that grid and set them to the UI.
+			if(!sInstance->areCredentialFieldsDirty())
+			{
+				LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
+				sInstance->setFields(credential);
+			}
 
-		// grid changed so show new splash screen (possibly)
-		updateServerCombo();
-		loadLoginPage();
+			// grid changed so show new splash screen (possibly)
+			updateServerCombo();
+			loadLoginPage();
 
 #ifdef OPENSIM
-		sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? MAX_PASSWORD_SL : MAX_PASSWORD_OPENSIM);
+			sInstance->getChild<LLLineEditor>("password_edit")->setMaxTextLength(LLGridManager::getInstance()->isInSecondLife() ? MAX_PASSWORD_SL : MAX_PASSWORD_OPENSIM);
 #endif
+		}
+		catch (LLInvalidGridName ex)
+		{
+			LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
+			LLSD args;
+			args["GRID"] = ex.name();
+			LLNotificationsUtil::add("InvalidGrid", args);	
+			return;
+		}
 	}
-	catch (LLInvalidGridName ex)
-	{
-		LL_WARNS("AppInit") << "server '" << ex.name() << "' selection failed"<<LL_ENDL;
-		LLSD args;
-		args["GRID"] = ex.name();
-		LLNotificationsUtil::add("InvalidGrid", args);
-		return;
-	}
+}
+
+void FSPanelLogin::updateLoginButtons()
+{
+	LLButton* login_btn = getChild<LLButton>("connect_btn");
+
+	login_btn->setEnabled(mUsernameLength != 0 && mPasswordLength != 0);
 }
 
 void FSPanelLogin::onSelectServer()
@@ -1053,9 +1084,10 @@ void FSPanelLogin::onSelectServer()
 				location_combo->setCurrentByIndex(0); // last location on the new grid
 				location_combo->setTextEntry(LLStringUtil::null);
 			}
-		}
+		}			
 		break;
 	}
+
 	updateServer();
 }
 
@@ -1063,7 +1095,7 @@ void FSPanelLogin::onLocationSLURL()
 {
 	LLComboBox* location_combo = getChild<LLComboBox>("start_location_combo");
 	std::string location = location_combo->getValue().asString();
-	LL_DEBUGS("AppInit") << location << LL_ENDL;
+	LL_DEBUGS("AppInit")<<location<<LL_ENDL;
 
 	LLStartUp::setStartSLURL(location); // calls onUpdateStartSLURL, above 
 }
@@ -1242,6 +1274,8 @@ void FSPanelLogin::onSelectUser()
 		}
 		sInstance->addFavoritesToStartLocation();
 		sInstance->mPreviousUsername = combo->getValue().asString();
+		sInstance->mUsernameLength = combo->getValue().asString().length();
+		sInstance->updateLoginButtons();
 		sInstance->getChild<LLButton>("remove_user_btn")->setEnabled(FALSE);
 		return;
 	}
@@ -1335,6 +1369,25 @@ void FSPanelLogin::gridListChanged(bool success)
 	updateServer();
 }
 
+// static
+bool FSPanelLogin::getShowFavorites()
+{
+	if (sInstance)
+	{
+		return sInstance->mShowFavorites;
+	}
+	else
+	{
+		return gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
+	}
+}
+
+void FSPanelLogin::onUsernameTextChanged()
+{
+	mUsernameLength = getChild<LLUICtrl>("username_combo")->getValue().asString().length();
+	updateLoginButtons();
+}
+
 /////////////////////////
 //    Mode selector    //
 /////////////////////////
@@ -1369,18 +1422,5 @@ void FSPanelLogin::onModeChangeConfirm(const LLSD& original_value, const LLSD& n
 			break;
 		default:
 			break;
-	}
-}
-
-// static
-bool FSPanelLogin::getShowFavorites()
-{
-	if (sInstance)
-	{
-		return sInstance->mShowFavorites;
-	}
-	else
-	{
-		return gSavedPerAccountSettings.getBOOL("ShowFavoritesOnLogin");
 	}
 }
