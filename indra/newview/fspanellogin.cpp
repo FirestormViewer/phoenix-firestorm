@@ -195,7 +195,14 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 		login_holder->addChild(this);
 	}
 
-	buildFromFile( "panel_fs_login.xml");
+	if (!gSavedSettings.getBOOL("FSUseLegacyLoginPanel"))
+	{
+		buildFromFile( "panel_fs_nui_login.xml");
+	}
+	else
+	{
+		buildFromFile( "panel_fs_login.xml");
+	}
 
 	reshape(rect.getWidth(), rect.getHeight());
 	
@@ -205,6 +212,8 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
 
 	LLLineEditor* password_edit(getChild<LLLineEditor>("password_edit"));
 	password_edit->setKeystrokeCallback(onPassKey, this);
+	// STEAM-14: When user presses Enter with this field in focus, initiate login
+	password_edit->setCommitCallback(boost::bind(&FSPanelLogin::onClickConnect, this));
 
 	// change z sort of clickable text to be behind buttons
 	sendChildToBack(getChildView("forgot_password_text"));
