@@ -15,7 +15,7 @@
 				Benutzername:
 			</text>
 			<combo_box name="username_combo" tool_tip="Bei der Registrierung gewählter Benutzername wie „berndschmidt12“ oder „Liebe Sonne“"/>
-			<icon tool_tip="Diesen Benutzernamen löschen" name="remove_user_btn"/>
+			<button tool_tip="Diesen Benutzernamen löschen" name="remove_user_btn"/>
 			<text name="password_text">
 				Kennwort:
 			</text>
@@ -25,8 +25,8 @@
 				Hier starten:
 			</text>
 			<combo_box name="start_location_combo">
-				<combo_box.item label="Mein letzter Standort" name="MyLastLocation"/>
-				<combo_box.item label="Mein Zuhause" name="MyHome"/>
+				<combo_box.item label="Letzter Standort" name="MyLastLocation"/>
+				<combo_box.item label="Zuhause" name="MyHome"/>
 				<combo_box.item label="&lt;Region eingeben&gt;" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
@@ -50,7 +50,7 @@
 			<text name="mode_selection_text">
 				MODUS-WAHL
 			</text>
-			<combo_box name="mode_combo" tool_tip="Wählen Sie welcher Viewer Style ihnen am meisten vertraut ist, um die Standards ihren bedürfnissen anzupassen.">
+			<combo_box name="mode_combo" tool_tip="Wählen Sie, welcher Viewer-Style Ihnen am meisten vertraut ist, um die Standards Ihren Bedürfnissen anzupassen.">
 				<combo_box.item label="Hybrid" name="Hybrid"/>
 				<combo_box.item label="Text" name="Text"/>
 			</combo_box>
