@@ -2736,7 +2736,7 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	url = LLWeb::expandURLSubstitutions(url, subs);
 	
 	// Finally, load the URL in the webpanel
-	mWebBrowser->navigateTo(url, "text/html");
+	mWebBrowser->navigateTo(url, HTTP_CONTENT_TEXT_HTML);
 }
 
 ////////////////////////////////////////

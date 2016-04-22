@@ -890,7 +890,7 @@ void FSPanelProfileWeb::updateData()
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
-			mWebBrowser->navigateTo(mURLWebProfile, "text/html");
+			mWebBrowser->navigateTo(mURLWebProfile, HTTP_CONTENT_TEXT_HTML);
 		}
 	}
 }
@@ -942,7 +942,7 @@ void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
-			mWebBrowser->navigateTo( mURLHome, "text/html" );
+			mWebBrowser->navigateTo( mURLHome, HTTP_CONTENT_TEXT_HTML );
 		}
 		else if (valstr == "popout")
 		{
@@ -966,7 +966,7 @@ void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
 		{
 			mWebBrowser->setVisible(TRUE);
 			mPerformanceTimer.start();
-			mWebBrowser->navigateTo( mURLWebProfile, "text/html" );
+			mWebBrowser->navigateTo( mURLWebProfile, HTTP_CONTENT_TEXT_HTML );
 		}
 		else if (valstr == "popout")
 		{
