@@ -2675,10 +2675,6 @@ void LLLiveLSLEditor::draw()
 			// incorrect after a release/claim cycle, but will be
 			// correct after clicking on it.
 			runningCheckbox->set(FALSE);
-			// <FS:Ansariel> Rev 496 LL merge error
-			//mMonoCheckbox->setEnabled(FALSE);
-			// object may have fallen out of range.
-			//mHaveRunningInfo = FALSE;
 			mMonoCheckbox->set(FALSE);
 		}
 	}
@@ -2688,7 +2684,6 @@ void LLLiveLSLEditor::draw()
 		// Really ought to put in main window.
 		setTitle(LLTrans::getString("ObjectOutOfRange"));
 		runningCheckbox->setEnabled(FALSE);
-		// <FS:Ansariel> Rev 496 LL merge error
 		mMonoCheckbox->setEnabled(FALSE);
 		// object may have fallen out of range.
 		mHaveRunningInfo = FALSE;

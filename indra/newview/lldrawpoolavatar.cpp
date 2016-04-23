@@ -50,6 +50,7 @@
 #include "llrendersphere.h"
 #include "llviewerpartsim.h"
 #include "llviewercontrol.h" // for gSavedSettings
+#include "llviewertexturelist.h"
 
 // <FS:Zi> Add avatar hitbox debug
 #include "llviewercontrol.h"
@@ -69,6 +70,7 @@ BOOL	LLDrawPoolAvatar::sSkipTransparent = FALSE;
 S32 LLDrawPoolAvatar::sDiffuseChannel = 0;
 F32 LLDrawPoolAvatar::sMinimumAlpha = 0.2f;
 
+LLUUID gBlackSquareID;
 
 static bool is_deferred_render = false;
 static bool is_post_deferred_render = false;
@@ -1399,7 +1401,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 					avatarp->mImpostor.bindTexture(1, specular_channel);
 				}
 			}
-			avatarp->renderImpostor(LLColor4U(255,255,255,255), sDiffuseChannel);
+			avatarp->renderImpostor(avatarp->getMutedAVColor(), sDiffuseChannel);
 		}
 		return;
 	}
@@ -1977,12 +1979,8 @@ void LLDrawPoolAvatar::renderRigged(LLVOAvatar* avatar, U32 type, bool glow)
                 LLViewerTexture* specular = NULL;
                 if (LLPipeline::sImpostorRender)
                 {
-                    std::vector<LLViewerFetchedTexture*> found;
-                    LLViewerTextureManager::findFetchedTextures(IMG_BLACK_SQUARE, found);
-                    if (1 <= found.size())
-                    {
-                        specular = found[0];
-                    }
+                    specular = LLViewerTextureManager::findFetchedTexture(gBlackSquareID, TEX_LIST_DISCARD);
+                    llassert(NULL != specular);
                 }
                 else
                 {
