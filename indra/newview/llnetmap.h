@@ -108,6 +108,7 @@ public:
 	static void		clearAvatarMarkColor(const LLUUID& avatar_id);
 	static void		clearAvatarMarkColors(const uuid_vec_t& avatar_ids);
 	static void		clearAvatarMarkColors();
+	static LLColor4	getAvatarColor(const LLUUID& avatar_id);
 	// </FS:Ansariel>
 
 private:
