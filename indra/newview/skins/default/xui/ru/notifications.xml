@@ -840,7 +840,7 @@
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		Аудиофайл слишком длинный (максимум 10 секунд):
+		Аудиофайл слишком длинный (максимум [MAX_LENGTH] секунд):
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">

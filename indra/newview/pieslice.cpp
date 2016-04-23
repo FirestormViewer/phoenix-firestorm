@@ -26,8 +26,19 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "pieslice.h"
 
+// pick up parameters from the XUI definition
+PieSlice::Params::Params() :
+	on_click("on_click"),
+	on_visible("on_visible"),
+	on_enable("on_enable"),
+	start_autohide("start_autohide", false),
+	autohide("autohide", false),
+	check_enable_once("check_enable_once", false)
+{
+}
 
 // create a new slice and memorize the XUI parameters
 PieSlice::PieSlice(const PieSlice::Params& p) :
@@ -36,21 +47,9 @@ PieSlice::PieSlice(const PieSlice::Params& p) :
 	mStartAutohide(p.start_autohide),
 	mAutohide(p.autohide),
 	mCheckEnableOnce(p.check_enable_once),
-	mDoUpdateEnabled(TRUE)
+	mDoUpdateEnabled(true)
 {
-
-	LL_DEBUGS() << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << LL_ENDL;
-}
-
-// pick up parameters from the XUI definition
-PieSlice::Params::Params() :
-	on_click("on_click"),
-	on_visible("on_visible"),
-	on_enable("on_enable"),
-	start_autohide("start_autohide", FALSE),
-	autohide("autohide", FALSE),
-	check_enable_once("check_enable_once", FALSE)
-{
+	LL_DEBUGS("Pie") << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << LL_ENDL;
 }
 
 // initialize parameters
@@ -142,18 +141,18 @@ void PieSlice::setLabel(const std::string newLabel)
 }
 
 // accessor
-BOOL PieSlice::getStartAutohide()
+bool PieSlice::getStartAutohide()
 {
 	return mStartAutohide;
 }
 
 // accessor
-BOOL PieSlice::getAutohide()
+bool PieSlice::getAutohide()
 {
 	return mStartAutohide | mAutohide;
 }
 
 void PieSlice::resetUpdateEnabledCheck()
 {
-	mDoUpdateEnabled = TRUE;
+	mDoUpdateEnabled = true;
 }

@@ -440,15 +440,15 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 	if (id.notNull())
 	{
 //<FS:KC legacy profiles>
-        if (gSavedSettings.getBOOL("FSUseWebProfiles"))
+//		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
+		if (gSavedSettings.getBOOL("FSUseWebProfiles"))
 		{
-            showProfileWeb(id);
-        }
-        else
-        {
+			showProfileWeb(id);
+		}
+		else
+		{
 			showProfileLegacy(id);
 		}
-//		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
 //</FS:KC legacy profiles>
 	}
 }
@@ -466,12 +466,11 @@ bool LLAvatarActions::profileVisible(const LLUUID& id)
 LLFloater* LLAvatarActions::getProfileFloater(const LLUUID& id)
 {
 //<FS:KC legacy profiles>
-    if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
-    {
-        FSFloaterProfile *browser = dynamic_cast<FSFloaterProfile*>
-            (LLFloaterReg::findInstance("floater_profile", LLSD().with("id", id)));
-        return browser;
-    }
+	if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
+	{
+		FSFloaterProfile* browser = LLFloaterReg::findTypedInstance<FSFloaterProfile>("floater_profile", LLSD().with("id", id));
+		return browser;
+	}
 //</FS:KC legacy profiles>
 	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*>
 		(LLFloaterReg::findInstance(get_profile_floater_name(id), LLSD().with("id", id)));
@@ -493,7 +492,7 @@ void LLAvatarActions::showProfileLegacy(const LLUUID& id)
 {
 	if (id.notNull())
 	{
-        LLFloaterReg::showInstance("floater_profile", LLSD().with("id", id));
+		LLFloaterReg::showInstance("floater_profile", LLSD().with("id", id));
 	}
 }
 //</FS:KC legacy profiles>
@@ -758,49 +757,42 @@ namespace action_give_inventory
 	 * Checks My Inventory visibility.
 	 */
 
-//      static bool is_give_inventory_acceptable()
+//	static bool is_give_inventory_acceptable()
 // [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-        static bool is_give_inventory_acceptable(const uuid_set_t inventory_selected_uuids)
+	static bool is_give_inventory_acceptable(const uuid_set_t inventory_selected_uuids)
 // [/SL:KB]
-        {
-//              LLInventoryPanel* active_panel = get_active_inventory_panel();
-//              if (!active_panel) return false;
-
-//              // check selection in the panel
+	{
+//		// check selection in the panel
 //		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs();
-//
-                if (inventory_selected_uuids.empty()) return false; // nothing selected
+		if (inventory_selected_uuids.empty()) return false; // nothing selected
 
-                bool acceptable = false;
-//                std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
-//                const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
+		bool acceptable = false;
+		std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+		const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
+		for (; it != it_end; ++it)
+		{
+				LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+				// any category can be offered.
+				if (inv_cat)
+				{
+					acceptable = true;
+					continue;
+				}
 
-                uuid_set_t::const_iterator it = inventory_selected_uuids.begin();
-                const uuid_set_t::const_iterator it_end = inventory_selected_uuids.end();
-                for (; it != it_end; ++it)
-                {
-                        LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
-                        // any category can be offered.
-                        if (inv_cat)
-                        {
-                                acceptable = true;
-                                continue;
-                        }
+				LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
+				// check if inventory item can be given
+				if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
+				{
+					acceptable = true;
+					continue;
+				}
 
-                        LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
-                        // check if inventory item can be given
-                        if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
-                        {
-                                acceptable = true;
-                                continue;
-                        }
-
-                        // there are neither item nor category in inventory
-                        acceptable = false;
-                        break;
-                }
-                return acceptable;
-        }
+				// there are neither item nor category in inventory
+				acceptable = false;
+				break;
+		}
+		return acceptable;
+	}
 
 
 	static void build_items_string(const std::set<LLUUID>& inventory_selected_uuids , std::string& items_string)

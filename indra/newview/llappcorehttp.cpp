@@ -36,6 +36,10 @@
 #include "llsecapi.h"
 #include <curl/curl.h>
 
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif
+
 // Here is where we begin to get our connection usage under control.
 // This establishes llcorehttp policy classes that, among other
 // things, limit the maximum number of connections to outside
@@ -357,6 +361,20 @@ void LLAppCoreHttp::refreshSettings(bool initial)
 	// Global pipelining setting
 	bool pipeline_changed(false);
 	static const std::string http_pipelining("HttpPipelining");
+// <FS:Ansariel> FIRE-17287: Force HttpPipelining off on OpenSim
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		if (mPipelined)
+		{
+			mPipelined = false;
+			pipeline_changed = true;
+		}
+		LL_INFOS() << "HTTP Pipelining is not supported on OpenSim - setting to disabled." << LL_ENDL;
+	}
+	else
+#endif
+// </FS:Ansariel>
 	if (gSavedSettings.controlExists(http_pipelining))
 	{
 		// Default to true (in ctor) if absent.
