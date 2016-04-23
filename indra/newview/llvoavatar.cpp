@@ -1504,11 +1504,7 @@ void LLVOAvatar::renderCollisionVolumes()
 
 void LLVOAvatar::renderBones()
 {
-    
     LLGLEnable blend(GL_BLEND);
-
-	std::ostringstream ostr;
-	std::ostringstream nullstr;
 
 	avatar_joint_list_t::iterator iter = mSkeleton.begin();
 	avatar_joint_list_t::iterator end  = mSkeleton.end();
@@ -1517,6 +1513,8 @@ void LLVOAvatar::renderBones()
     static LLVector3 BASE_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
     static LLVector3 EXTENDED_COLOR_OCCLUDED(0.0f, 1.0f, 0.0f);
     static LLVector3 EXTENDED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
+    static LLVector3 RIGGED_COLOR_OCCLUDED(0.0f, 1.0f, 1.0f);
+    static LLVector3 RIGGED_COLOR_VISIBLE(0.5f, 0.5f, 0.5f);
     
     static F32 SPHERE_SCALEF = 0.001f;
 
@@ -1528,21 +1526,27 @@ void LLVOAvatar::renderBones()
 			continue;
 		}
 
-		ostr << jointp->getName() << ", ";
-
 		jointp->updateWorldMatrix();
         LLJoint::SupportCategory sc = jointp->getSupport();
         LLVector3 occ_color, visible_color;
 
-        if (sc == LLJoint::SUPPORT_BASE)
+        if (jointIsRiggedTo(jointp->getName()))
         {
-            occ_color = BASE_COLOR_OCCLUDED;
-            visible_color = BASE_COLOR_VISIBLE;
+            occ_color = RIGGED_COLOR_OCCLUDED;
+            visible_color = RIGGED_COLOR_VISIBLE;
         }
         else
         {
-            occ_color = EXTENDED_COLOR_OCCLUDED;
-            visible_color = EXTENDED_COLOR_VISIBLE;
+            if (sc == LLJoint::SUPPORT_BASE)
+            {
+                occ_color = BASE_COLOR_OCCLUDED;
+                visible_color = BASE_COLOR_VISIBLE;
+            }
+            else
+            {
+                occ_color = EXTENDED_COLOR_OCCLUDED;
+                visible_color = EXTENDED_COLOR_VISIBLE;
+            }
         }
         LLVector3 begin_pos(0,0,0);
         LLVector3 end_pos(jointp->getEnd());
@@ -1556,10 +1560,6 @@ void LLVOAvatar::renderBones()
         
 		gGL.popMatrix();
 	}
-
-	mDebugText.clear();
-	addDebugText(ostr.str());
-	addDebugText(nullstr.str());
 }
 
 
@@ -5822,6 +5822,62 @@ bool LLVOAvatar::getRiggedMeshID(LLViewerObject* pVO, LLUUID& mesh_id)
 	return false;
 }
 
+bool LLVOAvatar::jointIsRiggedTo(const std::string& joint_name)
+{
+	for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
+		 iter != mAttachmentPoints.end();
+		 ++iter)
+	{
+		LLViewerJointAttachment* attachment = iter->second;
+        for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+             attachment_iter != attachment->mAttachedObjects.end();
+             ++attachment_iter)
+        {
+            const LLViewerObject* attached_object = (*attachment_iter);
+            if (attached_object && jointIsRiggedTo(joint_name, attached_object))
+            {
+                return true;
+            }
+        }
+	}
+    return false;
+}
+
+bool LLVOAvatar::jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo)
+{
+	// Process all children
+	LLViewerObject::const_child_list_t& children = vo->getChildren();
+	for (LLViewerObject::const_child_list_t::const_iterator it = children.begin();
+		 it != children.end(); ++it)
+	{
+		LLViewerObject *childp = *it;
+        if (jointIsRiggedTo(joint_name,childp))
+        {
+            return true;
+        }
+	}
+
+	const LLVOVolume *vobj = dynamic_cast<const LLVOVolume*>(vo);
+	if (!vobj)
+	{
+		return false;
+	}
+
+	LLUUID currentId = vobj->getVolume()->getParams().getSculptID();						
+	const LLMeshSkinInfo*  pSkinData = gMeshRepo.getSkinInfo( currentId, vobj );
+
+	if ( vobj && vobj->isAttachment() && vobj->isMesh() && pSkinData )
+	{
+        if (std::find(pSkinData->mJointNames.begin(), pSkinData->mJointNames.end(), joint_name) !=
+            pSkinData->mJointNames.end())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void LLVOAvatar::clearAttachmentPosOverrides()
 {
     LLScopedContextString str("clearAttachmentPosOverrides " + getFullname());
@@ -5880,9 +5936,13 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 	if ( vobj && vobj->isAttachment() && vobj->isMesh() && pSkinData )
 	{
 		const int bindCnt = pSkinData->mAlternateBindMatrix.size();								
-		if ( bindCnt > 0 )
+        const int jointCnt = pSkinData->mJointNames.size();
+        if ((bindCnt > 0) && (bindCnt != jointCnt))
+        {
+            LL_WARNS_ONCE() << "invalid mesh, bindCnt " << bindCnt << "!= jointCnt " << jointCnt << ", joint overrides will be ignored." << LL_ENDL;
+        }
+		if ((bindCnt > 0) && (bindCnt == jointCnt))
 		{					
-			const int jointCnt = pSkinData->mJointNames.size();
 			const F32 pelvisZOffset = pSkinData->mPelvisOffset;
 			const LLUUID& mesh_id = pSkinData->mMeshID;
 			bool fullRig = (jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG) ? true : false;								
@@ -5896,14 +5956,17 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 					{   									
 						pJoint->setId( currentId );
 						const LLVector3& jointPos = pSkinData->mAlternateBindMatrix[i].getTranslation();									
-						//Set the joint position
-						pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
-									
-						//If joint is a pelvis then handle old/new pelvis to foot values
-						if ( lookingForJoint == "mPelvis" )
-						{	
-							pelvisGotSet = true;											
-						}										
+                        //if (!jointPos.isNull())
+                        {
+                            //Set the joint position
+                            pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
+                            
+                            //If joint is a pelvis then handle old/new pelvis to foot values
+                            if ( lookingForJoint == "mPelvis" )
+                            {	
+                                pelvisGotSet = true;											
+                            }										
+                        }
 					}										
 				}																
 				if (pelvisZOffset != 0.0F)
@@ -5920,6 +5983,49 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 	{
 		postPelvisSetRecalc();
 	}		
+
+    showAttachmentPosOverrides();
+}
+
+//-----------------------------------------------------------------------------
+// showAttachmentPosOverrides
+//-----------------------------------------------------------------------------
+void LLVOAvatar::showAttachmentPosOverrides() const
+{
+    LLVector3 pos;
+    LLUUID mesh_id;
+    S32 count = 0;
+    
+    // Bones
+	for (avatar_joint_list_t::const_iterator iter = mSkeleton.begin();
+         iter != mSkeleton.end(); ++iter)
+	{
+		const LLJoint* pJoint = (*iter);
+		if (pJoint && pJoint->hasAttachmentPosOverride(pos,mesh_id))
+		{
+			pJoint->showAttachmentPosOverrides(getFullname());
+            count++;
+		}
+	}
+
+    // Attachment points
+	for (attachment_map_t::const_iterator iter = mAttachmentPoints.begin();
+		 iter != mAttachmentPoints.end();
+		 ++iter)
+	{
+		const LLViewerJointAttachment *attachment_pt = (*iter).second;
+        if (attachment_pt && attachment_pt->hasAttachmentPosOverride(pos,mesh_id))
+        {
+            attachment_pt->showAttachmentPosOverrides(getFullname());
+            count++;
+        }
+    }
+
+    if (count)
+    {
+        LL_DEBUGS("Avatar") << avString() << " end of pos overrides" << LL_ENDL;
+        LL_DEBUGS("Avatar") << "=================================" << LL_ENDL;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -6134,6 +6240,7 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 			if (info->mHasPosition)
 			{
 				attachment->setOriginalPosition(info->mPosition);
+                attachment->setDefaultPosition(info->mPosition);
 			}
 			
 			if (info->mHasRotation)
