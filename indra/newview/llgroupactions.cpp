@@ -44,6 +44,7 @@
 
 // Firestorm includes
 #include "exogroupmutelist.h"
+#include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
 #include "fsfloatergroup.h"
@@ -98,7 +99,7 @@ public:
 				//LLSD params;
 				//params["people_panel_tab_name"] = "groups_panel";
 				//LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
-				if (gSavedSettings.getBOOL("FSUseV2Friends") && gSavedSettings.getString("FSInternalSkinCurrent") != "Vintage")
+				if (gSavedSettings.getBOOL("FSUseV2Friends") && !FSCommon::isLegacySkin())
 				{
 					LLSD params;
 					params["people_panel_tab_name"] = "groups_panel";
@@ -621,15 +622,6 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	}
 // [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
-	if ( (!RlvActions::canStartIM(group_id)) && (!RlvActions::hasOpenGroupSession(group_id)) )
-	{
-		make_ui_sound("UISndInvalidOp");
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
-		return LLUUID::null;
-	}
-// [/RLVa:KB]
-
 	LLGroupData group_data;
 	if (gAgent.getGroupData(group_id, group_data))
 	{
@@ -661,13 +653,72 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 }
 
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-17 (Catznip-3.3)
+static void snooze_group_im(const LLUUID& group_id, S32 duration = -1)
+{
+	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
+	if (session_id.notNull())
+	{
+		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+
+		if (!session)
+		{
+			LL_WARNS() << "Empty session." << LL_ENDL;
+			return;
+		}
+
+		session->mSnoozeTime = duration;
+		session->mCloseAction = LLIMModel::LLIMSession::CLOSE_SNOOZE;
+
+		gIMMgr->leaveSession(session_id);
+	}
+}
+
+static void snooze_group_im_duration_callback(const LLSD& notification, const LLSD& response, const LLUUID& group_id)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (0 == option)
+	{
+		std::istringstream duration_str(response["duration"].asString());
+		S32 duration(-1);
+		if (duration_str >> duration && duration >= 0)
+		{
+			snooze_group_im(group_id, duration);
+		}
+		else
+		{
+			LLNotificationsUtil::add("SnoozeDurationInvalidInput");
+		}
+	}
+}
+
+static void confirm_group_im_snooze(const LLUUID& group_id)
+{
+	if (group_id.isNull())
+	{
+		return;
+	}
+
+	if (gSavedSettings.getBOOL("FSEnablePerGroupSnoozeDuration"))
+	{
+		LLSD args;
+		args["DURATION"] = gSavedSettings.getS32("GroupSnoozeTime");
+
+		LLNotificationsUtil::add("SnoozeDuration", args, LLSD(), boost::bind(&snooze_group_im_duration_callback, _1, _2, group_id));
+		return;
+	}
+
+	snooze_group_im(group_id);
+}
+
 static void close_group_im(const LLUUID& group_id, LLIMModel::LLIMSession::SCloseAction close_action)
 {
 	if (group_id.isNull())
+	{
 		return;
+	}
 	
 	LLUUID session_id = gIMMgr->computeSessionID(IM_SESSION_GROUP_START, group_id);
-	if (session_id != LLUUID::null)
+	if (session_id.notNull())
 	{
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::getInstance()->findIMSession(session_id);
 		if (pIMSession)
@@ -685,7 +736,7 @@ void LLGroupActions::leaveIM(const LLUUID& group_id)
 
 void LLGroupActions::snoozeIM(const LLUUID& group_id)
 {
-	close_group_im(group_id, LLIMModel::LLIMSession::CLOSE_SNOOZE);
+	confirm_group_im_snooze(group_id);
 }
 
 void LLGroupActions::endIM(const LLUUID& group_id)
@@ -779,13 +830,6 @@ bool LLGroupActions::canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAg
 
 void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent)
 {
-	// <FS:CR> FIRE-8499 - Eject from group confirmation 
-	//if (!canEjectFromGroup(idGroup, idAgent))
-	//	return;
-
-	//uuid_vec_t idAgents;
-	//idAgents.push_back(idAgent);
-	//LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
 	LLSD args;
 	LLSD payload;
 	payload["avatar_id"] = idAgent;
@@ -818,7 +862,6 @@ bool LLGroupActions::callbackEject(const LLSD& notification, const LLSD& respons
 		LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
 	}
 	return false;
-	// </FS:CR>
 }
 // [/SL:KB]
 

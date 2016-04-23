@@ -790,7 +790,7 @@
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		音頻檔太長（最大值 10 秒）：
+		音頻檔太長（最大值 [MAX_LENGTH] 秒）：
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">

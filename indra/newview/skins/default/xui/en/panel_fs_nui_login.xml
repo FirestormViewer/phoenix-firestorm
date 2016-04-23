@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+  follows="all"
+  height="768"
+  layout="topleft"
+  name="panel_login"
+  focus_root="true"
+  background_visible="true"
+  bg_opaque_color="0.16 0.16 0.16 1"
+  background_opaque="true"
+  width="1024">
+  <panel.string
+    name="forgot_password_url">
+    http://secondlife.com/account/request.php
+  </panel.string>
+  <web_browser
+    tab_stop="false"
+    trusted_content="true"
+    bg_opaque_color="Black"
+    border_visible="false"
+    follows="all"
+    left="0"
+    name="login_html"
+    start_url=""
+    top="18"
+    height="598"
+    width="1024" />
+  <layout_stack
+  follows="left|right|bottom"
+  height="152"
+  left="0"
+  name="ui_stack"
+  orientation="horizontal"
+  bottom="-1"
+  width="1024">
+    <layout_panel
+      height="152"
+      auto_resize="true"
+      name="ui_elastic_pad_left"
+      width="27" />
+    <layout_panel
+      auto_resize="false"
+      follows="left|right|top"
+      name="ui_container"
+      layout="topleft"
+      width="970"
+      min_width="970"
+      height="152">
+  <icon
+    height="125"
+    width="125"
+    image_name="login_fs_logo"
+    left="0"
+    top="10"
+    name="sl_logo_small" />
+
+    <layout_stack
+      animate="false"
+      clip="false"
+      follows="all"
+      name="vert_stack_left"
+      layout="topleft"
+      orientation="vertical"
+      top="0"
+      left_pad="10"
+      width="685"
+      height="152">
+    <layout_panel
+      auto_resize="false"
+      follows="all"
+      name="1st_row"
+      layout="topleft"
+      height="86"
+      width="685">
+    <layout_stack
+      animate="false"
+      clip="false"
+      follows="left|top|right"
+      name="1st_row_stack"
+      layout="topleft"
+      orientation="horizontal"
+      top="0"
+      left="0"
+      width="685"
+      height="86">
+    <layout_panel
+        auto_resize="true"
+        follows="left|top|right"
+        name="login"
+        layout="topleft"
+        width="206"
+        height="86">
+
+  <combo_box
+    left="5"
+    top_pad="25"
+    allow_text_entry="true"
+    follows="left|top|right"
+    height="32"
+    label="Username"
+    combo_editor.font="SansSerifLarge"
+    max_chars="128"
+    force_disable_fulltext_search="true"
+    combo_editor.commit_on_focus_lost="false"
+    combo_editor.prevalidate_callback="ascii"
+    tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
+    name="username_combo"
+    width="201">
+    <combo_box.combo_editor
+      text_pad_left="8" 
+      bg_image_always_focused="true"/>
+    </combo_box>
+    <check_box
+      tab_stop="false"
+      control_name="FSRememberUsername"
+      follows="left|top|right"
+      font="SansSerifLarge"
+      left="2"
+      top_pad="10"
+      height="18"
+      label="Remember username"
+      name="remember_username_check"
+      width="204" />
+    </layout_panel> <!-- login -->
+    <layout_panel
+      tab_stop="false"
+      auto_resize="false"
+      follows="left|top|right"
+      name="delete_container"
+      layout="topleft"
+      width="32"
+      height="86">
+    <button
+      follows="right|top"
+      height="32"
+      image_unselected="TrashItem_Off"
+      image_selected="TrashItem_Press"
+      image_pressed="TrashItem_Press"
+      tool_tip="Remove this username"
+      label=""
+      layout="topleft"
+      name="remove_user_btn"
+      left="0"
+      top_pad="25"
+      width="32" />
+    </layout_panel> <!-- delete_container -->
+    <layout_panel
+        auto_resize="true"
+        follows="left|top|right"
+        name="password_container"
+        layout="topleft"
+        width="206"
+        height="86">
+    <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
+  <line_editor
+    follows="left|top|right"
+    height="32"
+    left="5"
+    max_length_bytes="16"
+    text_pad_left="8"
+    name="password_edit"
+    label="Password"
+    bg_image_always_focused="true"
+    font="SansSerifLarge"
+    is_password="true" 
+    select_on_focus="true"
+    commit_on_focus_lost="false"
+    top_pad="25"
+    width="201" />
+    <check_box
+      tab_stop="false"
+      control_name="RememberPassword"
+      enabled_control="FSRememberUsername"
+      follows="left|top|right"
+      font="SansSerifLarge"
+      left="2"
+      height="18"
+      label="Remember password"
+      top_pad="10"
+      name="remember_check"
+      width="204" />
+    </layout_panel> <!-- password_container -->
+    <layout_panel
+      auto_resize="false"
+      follows="left|top|right"
+      name="start_location_panel"
+      layout="topleft"
+      width="211"
+      height="86">
+  <combo_box
+    allow_text_entry="true"
+    control_name="NextLoginLocation"
+    follows="left|top|right"
+    label="Start location"
+    height="32"
+    max_chars="128"
+    combo_editor.font="SansSerifLarge"
+    left="5"
+    top_pad="25"
+    name="start_location_combo"
+    width="201"
+    combo_button.scale_image="true">
+    <combo_box.combo_editor
+      bg_image_always_focused="true"
+      text_pad_left="8"/>
+    <combo_box.item
+      label="Last location"
+      name="MyLastLocation"
+      value="last" />
+    <combo_box.item
+      label="Home"
+      name="MyHome"
+      value="home" />
+    <combo_box.item
+      label="&lt;Type region name&gt;"
+      name="Typeregionname" value="" />
+    </combo_box>
+    </layout_panel> <!-- start_location_panel -->
+    </layout_stack> <!-- 1st_row_stack -->
+    </layout_panel> <!-- 1st_row -->
+
+    <layout_panel
+      auto_resize="false"
+      follows="left|top|right"
+      name="2nd_row"
+      layout="topleft"
+      top_pad="0"
+      height="66"
+      width="685">
+    <layout_stack
+      animate="false"
+      clip="false"
+      follows="left|top|right"
+      name="2nd_row_stack"
+      layout="topleft"
+      orientation="horizontal"
+      top_pad="0"
+      left="0"
+      width="685"
+      height="66">
+    <layout_panel
+      auto_resize="false"
+      follows="left|top|right"
+      name="grid_panel"
+      layout="topleft"
+      width="342"
+      height="66"
+      visible="true">
+    <text
+      follows="left|bottom"
+      font="SansSerifLarge"
+      height="32"
+      name="grid_login_text"
+      valign="center"
+      top_pad="5"
+      left="5"
+      width="35">
+        Grid:
+    </text>
+    <combo_box
+      allow_text_entry="false"
+      follows="left|top"
+      height="32"
+      max_chars="256"
+      combo_editor.font="SansSerifLarge"
+      left_pad="5"
+      top_delta="0"
+      layout="topleft"
+      name="server_combo"
+      width="250"
+      combo_button.scale_image="true">
+      <combo_box.drop_down_button
+        font="SansSerifLarge"/>
+      </combo_box>
+    </layout_panel>
+
+    <layout_panel
+      follows="left|top|right"
+      name="mode_selection"
+      width="342"
+      height="66">
+    <text
+      follows="right|top"
+      font="SansSerifLarge"
+      halign="right"
+      valign="center"
+      height="32"
+      name="mode_selection_text"
+      top_pad="5"
+      right="-130"
+      width="75">
+        Mode:
+    </text>
+    <combo_box
+      follows="right|bottom"
+      top_delta="0"
+      left_pad="10"
+      right="-5"
+      height="32"
+      max_chars="128"
+      tool_tip="Select which style of viewer you are most familiar with to set your defaults to appropriately."
+      name="mode_combo"
+      width="120"
+      combo_button.scale_image="true">
+      <combo_box.drop_down_button
+        font="SansSerifLarge"/>
+      <combo_box.item
+        label="Firestorm"
+        name="Firestorm"
+        value="settings_firestorm.xml" />
+      <combo_box.item
+        label="Phoenix"
+        name="Phoenix"
+        value="settings_phoenix.xml" />
+      <combo_box.item
+        label="Viewer 3"
+        name="V3"
+        value="settings_v3.xml" />
+      <combo_box.item
+        label="Hybrid"
+        name="Hybrid"
+        value="settings_hybrid.xml" />
+      <combo_box.item
+        label="Latency"
+        name="Latency"
+        value="settings_latency.xml" />
+      <combo_box.item
+        label="Text"
+        name="Text"
+        value="settings_text.xml" />
+      </combo_box>
+    </layout_panel>
+
+    </layout_stack> <!-- 2nd_row_stack -->
+    </layout_panel>  <!-- 2nd_row -->
+    </layout_stack> <!-- vert_stack -->
+  <button
+    follows="left|top|right"
+    image_unselected="PushButton_Login"
+    image_pressed="PushButton_Login_Pressed"
+    image_hover_unselected="PushButton_Login_Over"
+    label="Log In"
+    label_color="White"
+    font="SansSerifLarge"
+    name="connect_btn"
+    width="140"
+    height="54"
+    left_pad="10"
+    top="25"/>
+    <text
+      follows="left|top|right"
+      font="SansSerifMedium"
+      text_color="EmphasisColor"
+      left_delta="0"
+      height="16"
+      name="create_new_account_text"
+      top_pad="14"
+      width="140">
+        Create an account
+    </text>
+    <text
+      follows="left|top|right"
+      font="SansSerifMedium"
+      text_color="EmphasisColor"
+      left_delta="0"
+      height="16"
+      name="forgot_password_text"
+      top_pad="5"
+      width="140">
+        Forgot password?
+    </text>
+  </layout_panel>
+  <layout_panel
+      height="152"
+      auto_resize="true"
+      name="ui_elastic_pad_right"
+      width="27" />
+  </layout_stack>
+</panel>

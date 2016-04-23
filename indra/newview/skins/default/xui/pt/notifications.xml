@@ -784,7 +784,7 @@ Esperada [VALIDS]
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		Arquivo de áudio é muito longo (no máximo 10 segundos):
+		Arquivo de áudio é muito longo (no máximo [MAX_LENGTH] segundos):
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">

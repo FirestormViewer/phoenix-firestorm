@@ -5338,6 +5338,7 @@ void LLPanelPreferenceOpensim::onSelectGrid()
 void LLPanelPreferenceOpensim::apply()
 {
 	LLGridManager::getInstance()->saveGridList();
+	FSPanelLogin::updateServer();
 }
 
 void LLPanelPreferenceOpensim::cancel()
@@ -5439,6 +5440,8 @@ bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD
 
 void LLPanelPreferenceOpensim::refreshGridList(bool success)
 {
+	FSPanelLogin::updateServer();
+
 	getChild<LLUICtrl>("grid_management_panel")->setEnabled(TRUE);
 
 	if (!mGridListControl)

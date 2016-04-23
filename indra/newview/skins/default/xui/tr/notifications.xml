@@ -806,7 +806,7 @@ Beklenen [VALIDS]
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		Ses dosyası çok uzun (En fazla 10 saniye olmalı):
+		Ses dosyası çok uzun (En fazla [MAX_LENGTH] saniye olmalı):
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">
