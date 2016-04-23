@@ -238,7 +238,7 @@ void GrowlManager::performNotification(const std::string& title, const std::stri
 		{
 			if (mTitleTimers[title] > now - GROWL_THROTTLE_TIME)
 			{
-				LL_WARNS("GrowlNotify") << "Discarded notification with title '" << title << "' - spam ._." << LL_ENDL;
+				LL_WARNS("GrowlNotify") << "Discarded notification with title '" << title << "' due to throttle" << LL_ENDL;
 				mTitleTimers[title] = now;
 				return;
 			}
@@ -317,7 +317,9 @@ bool GrowlManager::filterOldNotifications(LLNotificationPtr pNotification)
 void GrowlManager::onInstantMessage(const LLSD& im)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"].asUUID());
-	if (session->isP2PSessionType() && (!im["keyword_alert_performed"].asBoolean() || !gSavedSettings.getBOOL("FSFilterGrowlKeywordDuplicateIMs")))
+	if (session->isP2PSessionType() && // Must be P2P
+		!im["is_announcement"].asBoolean() && // Not an announcement (incoming IM, autoresponse sent info...)
+		(!im["keyword_alert_performed"].asBoolean() || !gSavedSettings.getBOOL("FSFilterGrowlKeywordDuplicateIMs"))) // Not keyword or show duplicate IMs due to keywords
 	{
 		// Don't show messages from ourselves or the system.
 		const LLUUID from_id = im["from_id"].asUUID();
