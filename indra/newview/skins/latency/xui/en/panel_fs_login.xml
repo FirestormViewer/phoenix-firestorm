@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  name="panel_login"
- top="600"
  left="0"
- height="600"
- width="1130"
+ height="768"
+ width="1024"
  follows="all"
  layout="topleft"
  focus_root="true"
+ background_visible="true"
+ bg_opaque_color="0.16 0.16 0.16 1"
+ background_opaque="true"
 >
     <panel.string
      name="real_url"
@@ -29,10 +31,10 @@
     <!-- *NOTE: Custom resize logic for login_html in llpanellogin.cpp -->
     <web_browser
      name="login_html"
-     top="0"
+     top="18"
      left="0"
-     height="520"
-     width="1130"
+     height="670"
+     width="1024"
      follows="all"
      bg_opaque_color="Black"
      border_visible="false"
@@ -42,9 +44,9 @@
     />
     <layout_stack
      name="login_widgets"
-     top="519"
+     top="688"
      height="80"
-     width="1130"
+     width="1024"
      follows="left|bottom|right"
      layout="topleft"
      animate="false"

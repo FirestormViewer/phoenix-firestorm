@@ -1305,8 +1305,8 @@ void LLNetMap::renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const
 	//
 	// Render parcel lines
 	//
-	static const F32 GRID_STEP = PARCEL_GRID_STEP_METERS;
-	static const S32 GRIDS_PER_EDGE = real_width / GRID_STEP;
+	const F32 GRID_STEP = PARCEL_GRID_STEP_METERS;
+	const S32 GRIDS_PER_EDGE = real_width / GRID_STEP;
 
 	const U8* pOwnership = pRegion->getParcelOverlay()->getOwnership();
 	const U8* pCollision = (pRegion->getHandle() == LLViewerParcelMgr::instance().getCollisionRegionHandle()) ? LLViewerParcelMgr::instance().getCollisionBitmap() : NULL;

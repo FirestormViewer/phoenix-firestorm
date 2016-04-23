@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
     follows="all"
-    height="600"
+    height="768"
     layout="topleft"
     left="0"
     name="panel_login"
-    focus_root="true"
+    focus_root="true" 
     background_visible="true"
-    top="600"
-    width="1130">
+    bg_opaque_color="0.16 0.16 0.16 1"
+    background_opaque="true"
+    width="1024">
   <panel.string
      name="real_url" translate="false">
      http://phoenixviewer.com/app/loginV3/
@@ -20,20 +21,18 @@
       name="forgot_password_url">
     http://secondlife.com/account/request.php
   </panel.string>
-  <!-- *NOTE: Custom resize logic for login_html in llpanellogin.cpp -->
   <web_browser
-      tab_stop="false" 
-      trusted_content="true" 
+      tab_stop="false"
+      trusted_content="true"
       bg_opaque_color="Black"
       border_visible="false"
-      bottom="600"
       follows="all"
       left="0"
       name="login_html"
       start_url=""
-      top="0"
-      height="600"
-      width="996"/>
+      top="18"
+      height="670"
+      width="1024" />
   <layout_stack
       animate="false"
       clip="false"
@@ -41,8 +40,8 @@
       name="login_widgets"
       layout="topleft"
       orientation="horizontal"
-      top="519"
-      width="1130"
+      top="688"
+      width="1024"
       height="80">
     <layout_panel
         auto_resize="false"
@@ -116,6 +115,7 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
           width="128">
         Password:
       </text>
+      <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
       <line_editor
           follows="left|bottom"
           height="22"
@@ -155,16 +155,16 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
           name="start_location_combo"
           width="165">
         <combo_box.item
-label="Last location"
+            label="Last location"
             name="MyLastLocation"
             value="last" />
         <combo_box.item
-label="Home"
+            label="Home"
             name="MyHome"
             value="home" />
         <combo_box.item
             label="&lt;Type region name&gt;"
-            name="Typeregionname"   value="" />
+            name="Typeregionname" value="" />
       </combo_box>
     </layout_panel>
     <layout_panel

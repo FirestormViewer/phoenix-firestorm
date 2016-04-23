@@ -66,7 +66,10 @@
 
 #endif
 
-S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg)
+// <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
+//S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg)
+S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& error_msg, bool is_in_secondlife)
+// </FS:Ansariel>
 {
 	U16 num_channels = 0;
 	U32 sample_rate = 0;
@@ -189,7 +192,10 @@ S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& erro
 
 	F32 clip_length = (F32)raw_data_length/(F32)bytes_per_sec;
 		
-	if (clip_length > LLVORBIS_CLIP_MAX_TIME)
+	// <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
+	//if (clip_length > LLVORBIS_CLIP_MAX_TIME)
+	if (clip_length > (is_in_secondlife ? LLVORBIS_CLIP_MAX_TIME : LLVORBIS_CLIP_MAX_TIME_OPENSIM))
+	// </FS:Ansariel>
 	{
 		error_msg = "SoundFileInvalidTooLong";
 		return(LLVORBISENC_CLIP_TOO_LONG);		 
@@ -198,7 +204,10 @@ S32 check_for_invalid_wav_formats(const std::string& in_fname, std::string& erro
     return(LLVORBISENC_NOERR);
 }
 
-S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname)
+// <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
+//S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname)
+S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname, bool is_in_secondlife)
+// </FS:Ansariel>
 {
 #define READ_BUFFER 1024
 	unsigned char readbuffer[READ_BUFFER*4+44];   /* out of the data segment, not the stack */	/*Flawfinder: ignore*/
@@ -222,7 +231,10 @@ S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname
 
 	S32 format_error = 0;
 	std::string error_msg;
-	if ((format_error = check_for_invalid_wav_formats(in_fname, error_msg)))
+	// <FS:Ansariel> FIRE-17812: Increase sounds length to 60s on OpenSim
+	//if ((format_error = check_for_invalid_wav_formats(in_fname, error_msg)))
+	if ((format_error = check_for_invalid_wav_formats(in_fname, error_msg, is_in_secondlife)))
+	// </FS:Ansariel>
 	{
 		LL_WARNS() << error_msg << ": " << in_fname << LL_ENDL;
 		return(format_error);

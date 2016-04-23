@@ -1142,6 +1142,17 @@ bool idle_startup()
 
 	if (STATE_LOGIN_CLEANUP == LLStartUp::getStartupState())
 	{
+		// <FS:Ansariel> Login block
+		LLSD blocked = FSData::instance().allowedLogin();
+		if (blocked.isMap()) //hack for testing for an empty LLSD
+		{
+			LLNotificationsUtil::add("BlockLoginInfo", blocked, LLSD(), login_alert_done);
+			LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
+			show_connect_box = true;
+			return FALSE;
+		}
+		// </FS:Ansariel>
+
 		// Post login screen, we should see if any settings have changed that may
 		// require us to either start/stop or change the socks proxy. As various communications
 		// past this point may require the proxy to be up.
@@ -1430,6 +1441,9 @@ bool idle_startup()
 		set_startup_status(progress, auth_desc, auth_message);
 		progress += 0.02f;
 		display_startup();
+
+		// <FS:Ansariel> FIRE-17287: Force HttpPipelining off on OpenSim
+		LLAppViewer::instance()->getAppCoreHttp().refreshSettings(false);
 
 // <AW: crash report grid correctness>
 		eLastExecEvent last_exec_event = gLastExecEvent;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<panel.string name="forgot_password_url">
+		http://secondlife.com/account/request.php?lang=de
+	</panel.string>
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<layout_stack name="vert_stack_left">
+				<layout_panel name="1st_row">
+					<layout_stack name="1st_row_stack">
+						<layout_panel name="login">
+							<combo_box name="username_combo" label="Benutzername" tool_tip="Bei der Registrierung gewählter Benutzername wie „berndschmidt12“ oder „Liebe Sonne“"/>
+							<check_box label="Benutzername speichern" name="remember_username_check"/>
+						</layout_panel>
+						<layout_panel name="delete_container">
+							<button tool_tip="Diesen Benutzernamen löschen" name="remove_user_btn"/>
+						</layout_panel>
+						<layout_panel name="password_container">
+							<line_editor name="password_edit" label="Kennwort"/>
+							<check_box label="Kennwort speichern" name="remember_check"/>
+						</layout_panel>
+						<layout_panel name="start_location_panel">
+							<combo_box name="start_location_combo" label="Hier starten:">
+								<combo_box.item label="Letzter Standort" name="MyLastLocation"/>
+								<combo_box.item label="Zuhause" name="MyHome"/>
+								<combo_box.item label="&lt;Region eingeben&gt;" name="Typeregionname"/>
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="2nd_row">
+					<layout_stack name="2nd_row_stack">
+						<layout_panel name="grid_panel">
+							<text name="grid_login_text">
+								Grid:
+							</text>
+						</layout_panel>
+						<layout_panel name="mode_selection">
+							<text name="mode_selection_text">
+								Modus:
+							</text>
+							<combo_box name="mode_combo" tool_tip="Wählen Sie, welcher Viewer-Style Ihnen am meisten vertraut ist, um die Standards Ihren Bedürfnissen anzupassen.">
+								<combo_box.item label="Hybrid" name="Hybrid"/>
+								<combo_box.item label="Text" name="Text"/>
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+			<button label="Anmelden" name="connect_btn"/>
+			<text name="create_new_account_text">
+				Registrieren
+			</text>
+			<text name="forgot_password_text">
+				Kennwort vergessen?
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>
