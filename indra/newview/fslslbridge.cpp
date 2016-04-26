@@ -768,7 +768,7 @@ void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttac
 			LL_WARNS("FSLSLBridge") << "Bridge container isn't in the correct inventory location. Detaching it and aborting." << LL_ENDL;
 			if (mBridgeCreating)
 			{
-				report_to_nearby_chat(LLTrans::getString("fs_bridge_failure_attach_wrong_location"));
+				report_to_nearby_chat(LLTrans::getString("fsbridge_failure_attach_wrong_location"));
 				setBridgeCreating(false); //in case we interrupted the creation
 			}
 			return;
