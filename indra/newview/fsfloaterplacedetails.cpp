@@ -846,6 +846,11 @@ void FSFloaterPlaceDetails::onSLURLBuilt(std::string& slurl)
 
 void FSFloaterPlaceDetails::onLandmarkLoaded(LLLandmark* landmark)
 {
+	if (!mPanelLandmarkInfo)
+	{
+		return;
+	}
+
 	LLUUID region_id;
 	landmark->getRegionID(region_id);
 	landmark->getGlobalPos(mGlobalPos);
