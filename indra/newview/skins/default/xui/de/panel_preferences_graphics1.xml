@@ -77,7 +77,7 @@
 			m
 		</text>
 		<slider label="Max. Partikelanzahl:" name="MaxParticleCount"/>
-		<slider label="Max. Komplexität:" name="IndirectMaxComplexity"/>
+		<slider label="Max. Komplexität:" name="IndirectMaxComplexity" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als Jelly Doll dargestellt wird."/>
 		<slider label="Max. voll dargestellte Avatare:" name="IndirectMaxNonImpostors"/>
 		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
 		<text name="PostProcessText">

@@ -1396,12 +1396,13 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 			<ignore name="ignore" text="Das Herunterladen der Kleidung dauert lange"/>
 		</form>
 	</notification>
-	<notification name="RegionAndAgentComplexity">
-		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visuelle Komplexität] ist [AGENT_COMPLEXITY].
+	<notification name="AgentComplexityWithVisibility">
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatar-Komplexität] ist [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
+		<usetemplate ignoretext="Warnen, falls meine Avatar-Komplexität für andere zu hoch sein könnte" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
-		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visuelle Komplexität] ist [AGENT_COMPLEXITY].
+		Ihre [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 Avatar-Komplexität] ist [AGENT_COMPLEXITY].
 	</notification>
 	<notification name="FirstRun">
 		Installation von [APP_NAME] vollständig abgeschlossen.
