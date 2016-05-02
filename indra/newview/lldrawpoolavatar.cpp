@@ -57,6 +57,7 @@
 // (See *NOTE: in renderAvatars why this forward declatation is commented out)
 // void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
 // </FS:Zi>
+#include "llnetmap.h"
 
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
 static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
@@ -1271,7 +1272,8 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
 
-		gGL.diffuseColor4f(0.7f,1.0f,0.0f,0.3f);
+		LLColor4 avatar_color = LLNetMap::getAvatarColor(avatarp->getID());
+		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
 		glLineWidth(2.0);
 
 		LLQuaternion rot=avatarp->getRotationRegion();
