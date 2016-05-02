@@ -41,7 +41,6 @@
 
 #include <fcntl.h>		//_O_APPEND
 #include <io.h>			//_open_osfhandle()
-#include <errorrep.h>	// for AddERExcludedApplicationA()
 #include <WERAPI.H>
 #include <process.h>	// _spawnl()
 #include <tchar.h>		// For TCHAR support
@@ -480,32 +479,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 void LLAppViewerWin32::disableWinErrorReporting()
 {
 	// <FS:Ansariel> Disable windows error reporting on Windows Vista and later
-	HINSTANCE fault_rep_dll_handle = LoadLibrary(L"wer.dll");		/* Flawfinder: ignore */
-	if( fault_rep_dll_handle )
+	std::string executable_name = gDirUtilp->getExecutableFilename();
+
+	if( S_OK == WerAddExcludedApplication( utf8str_to_utf16str(executable_name).c_str(), FALSE ) )
 	{
-		typedef HRESULT (APIENTRY *pfn_WERADDEXCLUDEAPPLICATION)(__in PCWSTR pwzExeName, __in BOOL bAllUsers);
-
-		pfn_WERADDEXCLUDEAPPLICATION pAddERExcludedApplicationW = (pfn_WERADDEXCLUDEAPPLICATION) GetProcAddress(fault_rep_dll_handle, "WerAddExcludedApplication");
-		if( pAddERExcludedApplicationW )
-		{
-			// Strip the path off the name
-			std::string executable_name = gDirUtilp->getExecutableFilename();
-			llutf16string wstr = utf8str_to_utf16str(executable_name);
-
-			if( S_OK == pAddERExcludedApplicationW( wstr.c_str(), FALSE ) )
-			{
-				LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
-			}
-			else
-			{
-				LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
-			}
-		}
-		FreeLibrary( fault_rep_dll_handle );
+		LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
 	}
 	else
 	{
-		LL_WARNS() << "Could not load wer.dll" << LL_ENDL;
+		LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
 	}
 	// </FS:Ansariel>
 }
