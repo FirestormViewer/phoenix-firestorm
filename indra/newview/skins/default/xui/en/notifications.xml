@@ -3427,14 +3427,17 @@ You can use [APP_NAME] normally and other people will see you correctly.
 
   <notification
    icon = "notifytip.tga"
-   name = "RegionAndAgentComplexity"
+   name = "AgentComplexityWithVisibility"
    type = "notifytip"
    log_to_chat = "false">
    <unique combine = "cancel_old">
      <context>AgentComplexityNotice</context>
    </unique>
-Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visual complexity] is [AGENT_COMPLEXITY].
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
+   <usetemplate
+    ignoretext="Warn me if my avatar complexity may be too high"
+    name="notifyignore"/>
   </notification>
 
   <notification
@@ -3445,7 +3448,7 @@ Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Renderin
    <unique combine = "cancel_old">
      <context>AgentComplexityNotice</context>
    </unique>
-Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 visual complexity] is [AGENT_COMPLEXITY].
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
   </notification>
 
   <notification

@@ -105,12 +105,6 @@ std::string LLAvatarRenderNotifier::overLimitMessage()
 
 void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 {
-	if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK)
-	{
-		LL_WARNS("AvatarRenderInfo") << "Suppressing a notification while in mouselook" << LL_ENDL;
-		return;
-	}
-
     mAgentComplexity = mLatestAgentComplexity;
     mShowOverLimitAgents = show_over_limit;
 	static LLCachedControl<U32> expire_delay(gSavedSettings, "ShowMyComplexityChanges", 20);
@@ -121,17 +115,18 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 	std::string notification_name;
     if (mShowOverLimitAgents)
     {
+        notification_name = "AgentComplexityWithVisibility";
+        args["OVERLIMIT_MSG"] = overLimitMessage();
+
+        // remember what the situation was so that we only notify when it has changed
         mAgentsCount = mLatestAgentsCount;
         mOverLimitAgents = mLatestOverLimitAgents;
         mOverLimitPct = mLatestOverLimitPct;
-
-        std::string notification_message = overLimitMessage();
-        notification_name = "RegionAndAgentComplexity";
-        args["OVERLIMIT_MSG"] = notification_message;
 	}
 	else
 	{
-		notification_name = "AgentComplexity";
+        // no change in visibility, just update complexity
+        notification_name = "AgentComplexity";
 	}
 
 	if (mNotificationPtr != NULL && mNotificationPtr->getName() != notification_name)
@@ -141,12 +136,18 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 		LLNotifications::instance().cancel(mNotificationPtr);
 	}
 
-    LL_INFOS("AvatarRenderInfo") << notification_name << " " << args << LL_ENDL;
+    // log unconditionally
+    LL_WARNS("AvatarRenderInfo") << notification_name << " " << args << LL_ENDL;
 
-	mNotificationPtr = LLNotifications::instance().add(LLNotification::Params()
-		.name(notification_name)
-		.expiry(expire_date)
-		.substitutions(args));
+    if (   expire_delay // expiration of zero means do not show the notices
+        && gAgentCamera.getLastCameraMode() != CAMERA_MODE_MOUSELOOK // don't display notices in Mouselook
+        )
+    {
+        mNotificationPtr = LLNotifications::instance().add(LLNotification::Params()
+                                                           .name(notification_name)
+                                                           .expiry(expire_date)
+                                                           .substitutions(args));
+    }
 }
 
 bool LLAvatarRenderNotifier::isNotificationVisible()
