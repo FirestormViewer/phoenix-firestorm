@@ -479,91 +479,33 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 void LLAppViewerWin32::disableWinErrorReporting()
 {
-	// <FS:Ansariel> Disable windows error reporting on Windows XP and later
-	//const char win_xp_string[] = "Microsoft Windows XP";
-	//BOOL is_win_xp = ( getOSInfo().getOSString().substr(0, strlen(win_xp_string) ) == win_xp_string );		/* Flawfinder: ignore*/
-	//if( is_win_xp )
-	//{
-	LLOSInfo info = getOSInfo();
-	if (info.mMajorVer == 5 && info.mMinorVer >= 1)
+	// <FS:Ansariel> Disable windows error reporting on Windows Vista and later
+	HINSTANCE fault_rep_dll_handle = LoadLibrary(L"wer.dll");		/* Flawfinder: ignore */
+	if( fault_rep_dll_handle )
 	{
-		LL_INFOS() << "Windows version >= 5.1 - using FaultRep API" << LL_ENDL;
-	// </FS:Ansariel>
+		typedef HRESULT (APIENTRY *pfn_WERADDEXCLUDEAPPLICATION)(__in PCWSTR pwzExeName, __in BOOL bAllUsers);
 
-		// Note: we need to use run-time dynamic linking, because load-time dynamic linking will fail
-		// on systems that don't have the library installed (all non-Windows XP systems)
-		HINSTANCE fault_rep_dll_handle = LoadLibrary(L"faultrep.dll");		/* Flawfinder: ignore */
-		if( fault_rep_dll_handle )
+		pfn_WERADDEXCLUDEAPPLICATION pAddERExcludedApplicationW = (pfn_WERADDEXCLUDEAPPLICATION) GetProcAddress(fault_rep_dll_handle, "WerAddExcludedApplication");
+		if( pAddERExcludedApplicationW )
 		{
-			// <FS:Ansariel> Use unicode version
-			//pfn_ADDEREXCLUDEDAPPLICATIONA pAddERExcludedApplicationA  = (pfn_ADDEREXCLUDEDAPPLICATIONA) GetProcAddress(fault_rep_dll_handle, "AddERExcludedApplicationA");
-			//if( pAddERExcludedApplicationA )
-			//{
+			// Strip the path off the name
+			std::string executable_name = gDirUtilp->getExecutableFilename();
+			llutf16string wstr = utf8str_to_utf16str(executable_name);
 
-			//	// Strip the path off the name
-			//	const char* executable_name = gDirUtilp->getExecutableFilename().c_str();
-
-			//	if( 0 == pAddERExcludedApplicationA( executable_name ) )
-			pfn_ADDEREXCLUDEDAPPLICATIONW pAddERExcludedApplicationW  = (pfn_ADDEREXCLUDEDAPPLICATIONW) GetProcAddress(fault_rep_dll_handle, "AddERExcludedApplicationW");
-			if( pAddERExcludedApplicationW )
+			if( S_OK == pAddERExcludedApplicationW( wstr.c_str(), FALSE ) )
 			{
-
-				// Strip the path off the name
-				std::string executable_name = gDirUtilp->getExecutableFilename();
-				llutf16string wstr = utf8str_to_utf16str(executable_name);
-
-				if( 0 == pAddERExcludedApplicationW( wstr.c_str() ) )
-			// </FS:Ansariel>
-				{
-					U32 error_code = GetLastError();
-					LL_INFOS() << "AddERExcludedApplication() failed with error code " << error_code << LL_ENDL;
-				}
-				else
-				{
-					LL_INFOS() << "AddERExcludedApplication() success for " << executable_name << LL_ENDL;
-				}
+				LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
 			}
-			FreeLibrary( fault_rep_dll_handle );
+			else
+			{
+				LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
+			}
 		}
-		// <FS:Ansariel> Disable error reporting on Windows XP and later
-		else
-		{
-			LL_WARNS() << "Could not load faultrep.dll" << LL_ENDL;
-		}
-		// </FS:Ansariel>
+		FreeLibrary( fault_rep_dll_handle );
 	}
-	// <FS:Ansariel> Disable windows error reporting on Windows XP and later
-	else if (info.mMajorVer >= 6)
+	else
 	{
-		LL_INFOS() << "Windows version >= 6 - using WER API" << LL_ENDL;
-
-		HINSTANCE fault_rep_dll_handle = LoadLibrary(L"wer.dll");		/* Flawfinder: ignore */
-		if( fault_rep_dll_handle )
-		{
-			typedef HRESULT (APIENTRY *pfn_WERADDEXCLUDEAPPLICATION)(__in PCWSTR pwzExeName, __in BOOL bAllUsers);
-
-			pfn_WERADDEXCLUDEAPPLICATION pAddERExcludedApplicationW  = (pfn_WERADDEXCLUDEAPPLICATION) GetProcAddress(fault_rep_dll_handle, "WerAddExcludedApplication");
-			if( pAddERExcludedApplicationW )
-			{
-				// Strip the path off the name
-				std::string executable_name = gDirUtilp->getExecutableFilename();
-				llutf16string wstr = utf8str_to_utf16str(executable_name);
-
-				if( S_OK == pAddERExcludedApplicationW( wstr.c_str(), FALSE ) )
-				{
-					LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
-				}
-				else
-				{
-					LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
-				}
-			}
-			FreeLibrary( fault_rep_dll_handle );
-		}
-		else
-		{
-			LL_WARNS() << "Could not load wer.dll" << LL_ENDL;
-		}
+		LL_WARNS() << "Could not load wer.dll" << LL_ENDL;
 	}
 	// </FS:Ansariel>
 }
