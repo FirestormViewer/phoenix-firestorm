@@ -533,7 +533,7 @@
          width="301" />
         <slider
          control_name="IndirectMaxComplexity"
-         tool_tip="Controls at what point a visually complex avatar is drawn as a jellybaby"
+         tool_tip="Controls at what point a visually complex avatar is drawn as a jelly doll"
          decimal_digits="0"
          follows="left|top"
          height="15"
