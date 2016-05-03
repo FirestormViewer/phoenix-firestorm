@@ -25,14 +25,14 @@
 		<text name="ShadersText">
 			Gölgelendiriciler:
 		</text>
-		<check_box initial_value="true" label="Saydam Su" name="TransparentWater"/>
-		<check_box initial_value="true" label="Tümsek eşleme ve parlaklık" name="BumpShiny"/>
-		<check_box initial_value="true" label="Yerel Işıklar" name="LocalLights"/>
-		<check_box initial_value="true" label="Temel gölgeleyiciler" name="BasicShaders" tool_tip="Bu seçeneğin devre dışı bırakılması bazı grafik kartlarının sürücülerinin kilitlenmesini önleyebilir"/>
-		<check_box initial_value="true" label="Atmosferik gölgeleyiciler" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Gelişmiş Aydınlatma Modeli" name="UseLightShaders"/>
-		<check_box initial_value="true" label="Ortam Gölgeleme" name="UseSSAO"/>
-		<check_box initial_value="true" label="Alan Derinliği" name="UseDoF"/>
+		<check_box label="Saydam Su" name="TransparentWater"/>
+		<check_box label="Tümsek eşleme ve parlaklık" name="BumpShiny"/>
+		<check_box label="Yerel Işıklar" name="LocalLights"/>
+		<check_box label="Temel gölgeleyiciler" name="BasicShaders" tool_tip="Bu seçeneğin devre dışı bırakılması bazı grafik kartlarının sürücülerinin kilitlenmesini önleyebilir"/>
+		<check_box label="Atmosferik gölgeleyiciler" name="WindLightUseAtmosShaders"/>
+		<check_box label="Gelişmiş Aydınlatma Modeli" name="UseLightShaders"/>
+		<check_box label="Ortam Gölgeleme" name="UseSSAO"/>
+		<check_box label="Alan Derinliği" name="UseDoF"/>
 		<text name="shadows_label">
 			Gölgeler:
 		</text>
@@ -95,9 +95,9 @@
 		<text name="AvatarRenderingText">
 			Avatar İşleme:
 		</text>
-		<check_box initial_value="true" label="Düşük grafik özellikli avatarlar" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Donanım ile kaplama" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Avatar giysisi" name="AvatarCloth"/>
+		<check_box label="Düşük grafik özellikli avatarlar" name="AvatarImpostors"/>
+		<check_box label="Donanım ile kaplama" name="AvatarVertexProgram"/>
+		<check_box label="Avatar giysisi" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Yüzey detayı:
 		</text>

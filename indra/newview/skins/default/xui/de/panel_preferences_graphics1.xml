@@ -27,13 +27,13 @@
 		<text name="ShadersText">
 			Shader:
 		</text>
-		<check_box initial_value="true" label="Transparentes Wasser" name="TransparentWater"/>
-		<check_box initial_value="true" label="Bumpmapping und Glanz" name="BumpShiny"/>
-		<check_box initial_value="true" label="Lokale Lichtquellen" name="LocalLights"/>
-		<check_box initial_value="true" label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
-		<check_box initial_value="true" label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
-		<check_box initial_value="true" label="Ambient Occlusion" name="UseSSAO"/>
+		<check_box label="Transparentes Wasser" name="TransparentWater"/>
+		<check_box label="Bumpmapping und Glanz" name="BumpShiny"/>
+		<check_box label="Lokale Lichtquellen" name="LocalLights"/>
+		<check_box label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
+		<check_box label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
+		<check_box label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
+		<check_box label="Ambient Occlusion" name="UseSSAO"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>
@@ -92,9 +92,9 @@
 		<text name="AvatarRenderingText">
 			Avatar-Darstellung:
 		</text>
-		<check_box initial_value="true" label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Avatar-Kleidung" name="AvatarCloth"/>
+		<check_box label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
+		<check_box label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
+		<check_box label="Avatar-Kleidung" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terraindetails:
 		</text>

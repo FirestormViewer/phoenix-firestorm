@@ -26,14 +26,14 @@ rápido
 		<text name="ShadersText">
 			Sombreadores:
 		</text>
-		<check_box initial_value="true" label="Água transparente" name="TransparentWater"/>
-		<check_box initial_value="true" label="Bump de Mapeamento e Brilho" name="BumpShiny"/>
-		<check_box initial_value="true" label="Luzes locais" name="LocalLights"/>
-		<check_box initial_value="true" label="Sombreadores básicos" name="BasicShaders" tool_tip="Desabilitar esta opção poderá impedir que alguns drivers de placa de vídeo a travem."/>
-		<check_box initial_value="true" label="Sombreadores Atmosféricos" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Modelo avançado de luzes" name="UseLightShaders"/>
-		<check_box initial_value="true" label="Oclusão ambiental" name="UseSSAO"/>
-		<check_box initial_value="true" label="Profundidade" name="UseDoF"/>
+		<check_box label="Água transparente" name="TransparentWater"/>
+		<check_box label="Bump de Mapeamento e Brilho" name="BumpShiny"/>
+		<check_box label="Luzes locais" name="LocalLights"/>
+		<check_box label="Sombreadores básicos" name="BasicShaders" tool_tip="Desabilitar esta opção poderá impedir que alguns drivers de placa de vídeo a travem."/>
+		<check_box label="Sombreadores Atmosféricos" name="WindLightUseAtmosShaders"/>
+		<check_box label="Modelo avançado de luzes" name="UseLightShaders"/>
+		<check_box label="Oclusão ambiental" name="UseSSAO"/>
+		<check_box label="Profundidade" name="UseDoF"/>
 		<text name="shadows_label">
 			Sombras:
 		</text>
@@ -96,9 +96,9 @@ rápido
 		<text name="AvatarRenderingText">
 			Renderização do avatar:
 		</text>
-		<check_box initial_value="true" label="Atributos do Avatar" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Melhoria de Hardware" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Vestimenta do Avatar" name="AvatarCloth"/>
+		<check_box label="Atributos do Avatar" name="AvatarImpostors"/>
+		<check_box label="Melhoria de Hardware" name="AvatarVertexProgram"/>
+		<check_box label="Vestimenta do Avatar" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Detalhe do Terreno:
 		</text>

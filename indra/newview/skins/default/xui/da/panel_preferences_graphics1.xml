@@ -26,14 +26,14 @@
 		<text name="ShadersText">
 			Overflader:
 		</text>
-		<check_box initial_value="true" label="Gennemsigtig vand" name="TransparentWater"/>
-		<check_box initial_value="true" label="Glatte flader og skin" name="BumpShiny"/>
-		<check_box initial_value="true" label="Lokale lys" name="LocalLights"/>
-		<check_box initial_value="true" label="Basale flader" name="BasicShaders" tool_tip="Ved at slå dette valg fra, kan det forhindres at visse grafikkort drivere crasher."/>
-		<check_box initial_value="true" label="Atmosfæriske flader" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Lys og skygger" name="UseLightShaders"/>
-		<check_box initial_value="true" label="&quot;Ambient Occlusion&quot;" name="UseSSAO"/>
-		<check_box initial_value="true" label="Skarphedsdybde" name="UseDoF"/>
+		<check_box label="Gennemsigtig vand" name="TransparentWater"/>
+		<check_box label="Glatte flader og skin" name="BumpShiny"/>
+		<check_box label="Lokale lys" name="LocalLights"/>
+		<check_box label="Basale flader" name="BasicShaders" tool_tip="Ved at slå dette valg fra, kan det forhindres at visse grafikkort drivere crasher."/>
+		<check_box label="Atmosfæriske flader" name="WindLightUseAtmosShaders"/>
+		<check_box label="Lys og skygger" name="UseLightShaders"/>
+		<check_box label="&quot;Ambient Occlusion&quot;" name="UseSSAO"/>
+		<check_box label="Skarphedsdybde" name="UseDoF"/>
 		<text name="shadows_label">
 			Skygger:
 		</text>
@@ -96,9 +96,9 @@
 		<text name="AvatarRenderingText">
 			Avatar rendering:
 		</text>
-		<check_box initial_value="true" label="Mini-figurer på lang afstand" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Hardware Skinning" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Avatar tøj" name="AvatarCloth"/>
+		<check_box label="Mini-figurer på lang afstand" name="AvatarImpostors"/>
+		<check_box label="Hardware Skinning" name="AvatarVertexProgram"/>
+		<check_box label="Avatar tøj" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terræn detaljer:
 		</text>
