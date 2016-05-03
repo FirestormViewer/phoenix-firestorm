@@ -14,7 +14,10 @@
     <layout_panel name="lp_chat_history_muted_btn">
 		<button tool_tip="周辺チャット履歴に無視した会話を表示します。" name="chat_history_muted_btn" />
 	</layout_panel>
-    
+	<layout_panel name="lp_options_btn">
+		<menu_button tool_tip="Chat Options" name="chat_options_btn"/>
+	</layout_panel>
+	
 </layout_stack>
   
 <layout_stack name="ls_chat">

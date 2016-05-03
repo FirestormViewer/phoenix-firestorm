@@ -111,7 +111,17 @@
 						<row name="restore_per_account_row_tphistory">
 							<column type="checkbox" name="restore_per_account_files_check"/>
 							<column name="restore_per_account_files_label">テレポート履歴</column>
-							<column name="value">teleport_history.xml</column>
+							<column name="value">teleport_history.txt</column>
+						</row>
+						<row name="restore_per_account_row_regiontracker">
+							<column type="checkbox" name="restore_per_account_files_check" />
+							<column name="restore_per_account_files_label">地域別アバター数</column>
+							<column name="value">tracked_regions.json</column>
+						</row>
+						<row name="restore_per_account_row_groupmutes">
+							<column type="checkbox" name="restore_per_account_files_check" />
+							<column name="restore_per_account_files_label">抑止したグループチャット</column>
+							<column name="value">muted_groups.xml</column>
 						</row>
 					</scroll_list>
 

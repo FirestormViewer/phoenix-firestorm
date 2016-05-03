@@ -67,6 +67,8 @@
 	<check_box label="ビューワの UI ヒントを有効にする" name="viewer_hints_check"/>
 	-->
 	
+	<check_box label="名前タグに自動応答モードを表示" name="FSShowAutorespondInNameTag" tool_tip="ここにチェックを入れると、自分の名前タグに自動応答モードをオンにしているかどうかが表示されます。" />
+	
 	<text name="title_afk_text">
 		一時退席までの時間：
 	</text>

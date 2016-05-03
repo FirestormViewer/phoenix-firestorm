@@ -59,7 +59,7 @@
 		
 		<panel label="ディレクトリ" name="tab-dir">
 			<text name="cache_size_label_l">
-				キャッシュサイズ ([http://wiki.phoenixviewer.com/cache need a suggestion?]):
+				キャッシュサイズ ([http://wiki.phoenixviewer.com/cache 推奨設定を確認しますか？]):
 			</text>
 			<text name="text_box5">
 				MB
@@ -86,7 +86,7 @@
 			<button label="開く" name="open_log_path_button-panelsetup"/>
 			<button label="設定" name="log_path_button-panelsetup"/>
 			<button label="初期化" name="reset_logpath"/>
-			<button label="クラッシュログを開く" name="browse_crashlogs"/>
+			<button label="ビューワログを開く" name="browse_crashlogs"/>
 			<button label="設定フォルダを開く" name="browse_settingsdir"/>
 		</panel>
 	</tab_container>
