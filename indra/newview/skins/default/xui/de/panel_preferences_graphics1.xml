@@ -94,7 +94,6 @@
 		</text>
 		<check_box initial_value="true" label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
 		<check_box initial_value="true" label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Erweitertes Skelett" name="AvatarEnhancedSkeleton"/>
 		<check_box initial_value="true" label="Avatar-Kleidung" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
 			Terraindetails:
