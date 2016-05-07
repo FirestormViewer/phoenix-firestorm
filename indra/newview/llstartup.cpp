@@ -2917,6 +2917,15 @@ bool idle_startup()
 			LLHTTPClient::get(gSavedSettings.getString("AutoQueryGridStatusURL"), new SLGridStatusResponder());
 		}
 		// </FS:PP>
+		
+		// <FS:KC> FIRE-18250: Option to disable default eye movement
+		if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+		{
+			LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+			gAgentAvatarp->startMotion(anim_id);
+			gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+		}
+		// </FS:KC>
 
 		return TRUE;
 	}

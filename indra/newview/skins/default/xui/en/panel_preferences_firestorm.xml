@@ -546,6 +546,21 @@
          width="500">
              (Avatar look at target settings are on the Privacy tab.)
         </text>
+		
+        <check_box
+         top_pad="10"
+         enabled="true"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="Disable random avatar eye moments"
+         left="15"
+         name="FSStaticEyes"
+         width="250"
+         control_name="FSStaticEyes">
+			<check_box.commit_callback
+			 function="Pref.StaticEyes" />
+		</check_box>
 
         <!-- LGG Color Beams -->
         <text
@@ -769,7 +784,7 @@
         <text
          type="string"
          left="5"
-         top_pad="90"
+         top_pad="65"
          length="1"
          follows="left|top"
          height="12"

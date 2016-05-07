@@ -550,6 +550,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
+	
+	// <FS: KC> FIRE-18250: Option to disable default eye movement
+	mCommitCallbackRegistrar.add("Pref.StaticEyes",						boost::bind(&LLFloaterPreference::onClickStaticEyes, this));
 	// </Firestorm callbacks>
 
 	mCommitCallbackRegistrar.add("UpdateFilter", boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false)); // <FS:ND/> Hook up for filtering
@@ -4415,6 +4418,23 @@ void LLFloaterPreference::populateFontSelectionCombo()
 	}
 }
 // </FS:Kadah>
+
+// <FS:KC> FIRE-18250: Option to disable default eye movement
+void LLFloaterPreference::onClickStaticEyes()
+{
+	LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+	{
+		gAgentAvatarp->startMotion(anim_id);
+		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+	}
+	else
+	{
+		gAgentAvatarp->stopMotion(anim_id);
+		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_STOP);
+	}
+}
+// </FS:KC>
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM
