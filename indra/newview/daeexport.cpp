@@ -486,7 +486,7 @@ void ColladaExportFloater::CacheReadResponder::saveTexturesWorker(void* data)
 	}
 
 	LLUUID id = me->mTexturesToSave.begin()->first;
-	LLViewerTexture* imagep = LLViewerTextureManager::findFetchedTexture(id, TEX_LIST_DISCARD);
+	LLViewerTexture* imagep = LLViewerTextureManager::findFetchedTexture(id, TEX_LIST_STANDARD);
 	if (!imagep)
 	{
 		me->mTexturesToSave.erase(id);

@@ -667,25 +667,7 @@ void LLNetMap::draw()
 			}
 			// </FS:Ansariel>	
 			
-			LLColor4 color = map_avatar_color;	// <FS:CR>
-			
-			// <FS:CR> Color "special" avatars with special colors (Friends, muted, Lindens, etc)
-			color = LGGContactSets::getInstance()->colorize(uuid, color, LGG_CS_MINIMAP);
-			// </FS:CR>
-			
-			//color based on contact sets prefs
-			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid, LGG_CS_MINIMAP))
-			{
-				color = LGGContactSets::getInstance()->getFriendColor(uuid);
-			}
-			
-			// <FS:Ansariel> Mark Avatars with special colors
-			avatar_marks_map_t::iterator found = sAvatarMarksMap.find(uuid);
-			if (found != sAvatarMarksMap.end())
-			{
-				color = found->second;
-			}
-			// </FS:Ansariel> Mark Avatars with special colors
+			LLColor4 color = getAvatarColor(uuid);	// <FS:CR>
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f | FS-Specific
 			LLWorldMapView::drawAvatar(
@@ -1834,6 +1816,31 @@ void LLNetMap::clearAvatarMarkColors(const uuid_vec_t& avatar_ids)
 void LLNetMap::clearAvatarMarkColors()
 {
 	sAvatarMarksMap.clear();
+}
+
+// static
+LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
+{
+	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
+	LLColor4 color = map_avatar_color;
+			
+	// Color "special" avatars with special colors (Friends, muted, Lindens, etc)
+	color = LGGContactSets::getInstance()->colorize(avatar_id, color, LGG_CS_MINIMAP);
+
+	// Color based on contact sets prefs
+	if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP))
+	{
+		color = LGGContactSets::getInstance()->getFriendColor(avatar_id);
+	}
+			
+	// Mark Avatars with special colors
+	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
+	if (found != sAvatarMarksMap.end())
+	{
+		color = found->second;
+	}
+
+	return color;
 }
 //</FS:Ansariel>
 

@@ -6946,6 +6946,17 @@
       <key>Value</key>
       <integer>7</integer>
     </map>
+    <key>InventoryTrashMaxCapacity</key>
+    <map>
+        <key>Comment</key>
+        <string>Maximum capacity of the Trash folder. User will ve offered to clean it up when exceeded.</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <integer>5000</integer>
+    </map>
     <key>MarketplaceListingsSortOrder</key>
     <map>
       <key>Comment</key>
@@ -9415,6 +9426,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Pop up notifications for all L$ transactions</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>NotifyMoneySpend</key>
+    <map>
+      <key>Comment</key>
+      <string>Pop up notifications when spending L$</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>NotifyMoneyReceived</key>
+    <map>
+      <key>Comment</key>
+      <string>Pop up notifications when receiving L$</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -17731,7 +17764,7 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Type</key>
             <string>U32</string>
         <key>Value</key>
-            <integer>25</integer>
+            <integer>1</integer>
         </map>
     <key>PoolSizeUpload</key>
         <map>
@@ -23902,6 +23935,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSStaticEyesUUID</key>
+    <map>
+      <key>Comment</key>
+      <string>Animation UUID to used to stop idle eye moment (Default uses priority 2)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>eff31dd2-1b65-5a03-5e37-15aca8e53ab7</string>
     </map>
   </map>
 </llsd>

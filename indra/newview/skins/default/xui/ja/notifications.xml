@@ -340,6 +340,14 @@
 		[COUNT] 名のメンバーをグループから追放しようとしています。
 		<usetemplate ignoretext="グループからの複数のメンバーの追放を確認します" name="okcancelignore" notext="取り消し" yestext="追放"/>
 	</notification>
+	<notification name="BanGroupMemberWarning">
+		[AVATAR_NAME] をグループ出入禁止にしようとしています。
+		<usetemplate ignoretext="参加者をグループ出入り禁止にするか確認します" name="okcancelignore" notext="取り消し" yestext="出入禁止"/>
+	</notification>
+	<notification name="BanGroupMembersWarning">
+		[COUNT] 名のメンバーをグループ出入禁止にしようとしています。
+		<usetemplate ignoretext="複数のメンバーのグループ出入禁止を確認します" name="okcancelignore" notext="取り消し" yestext="出入禁止"/>
+  </notification>
 	<notification name="AttachmentDrop">
 		アタッチメントを下に置こうとしています。
 続けますか？
@@ -501,6 +509,9 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="CannotWearInfoNotComplete">
 		まだ読み込まれていないため、そのアイテムを装着できません。後でやり直してください。
 	</notification>
+	<notification name="MustEnterPasswordToLogIn">
+		ログインするにはパスワードを入力して下さい。
+	</notification>
 	<notification name="MustHaveAccountToLogIn">
 		注意：記入漏れの箇所があります。
 アバターのユーザー名を入力してください。
@@ -644,6 +655,10 @@ L$ が不足しているのでこのグループに参加することができ�
 	<notification name="CannotDownloadFile">
 		ファイルをダウンロードできません。
 	</notification>
+	<notification name="MediaFileDownloadUnsupported">
+		ファイルのダウンロードが要求されましたが、このファイルは [APP_NAME] で扱うことができません。
+		<usetemplate ignoretext="未対応のファイルダウンロードに対する警告です" name="okignore" yestext="OK"/>
+  </notification>
 	<notification name="CannotWriteFile">
 		ファイル [[FILE]] を書き込めません。
 	</notification>
@@ -742,7 +757,7 @@ L$ が不足しているのでこのグループに参加することができ�
 		あなたの土地から [AVATAR_NAME] を追放しますか？
 		<usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="追放と禁止" yestext="追放"/>
 	</notification>
-	<notification name="EjectAvatarNoBan">
+	<notification name="EjectAvatarNo">
 		このアバターをあなたの土地から追放しますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="追放"/>
 	</notification>
@@ -1533,6 +1548,10 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 操作を続行しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmTextureHeights">
+		仰角範囲に対して、高い方の値よりも大きな数値を低い方の値に適用しようとしています。このまま進めてよろしいですか？
+		<usetemplate name="yesnocancelbuttons" yestext="OK" notext="取り消し" canceltext="確認しない"/>
+  </notification>
 	<notification name="MaxAllowedAgentOnRegion">
 		許可住人は [MAX_AGENTS] 人までです。
 	</notification>
@@ -1695,6 +1714,28 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 [[INFO_URL] このアップデートに関する情報] を参照
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="UpdateDownloadInProgress">
+新しいアップデートがあります。
+現在バックグラウンドでダウンロード中で、準備が出来次第、インストールを完了させるためにビューワを再起動するようメッセージが表示されます。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="UpdateDownloadComplete">
+新しいアップデートのダウンロードが完了しました。インストールするには再起動して下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="UpdateCheckError">
+アップデートの確認中にエラーが発生しました。
+後ほどやり直してみて下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="UpdateViewerUpToDate">
+ご利用のビューワは最新バージョンです！
+最新の機能や改修を今すぐ試してみたいという方は、代替ビューワのページをチェックしてみて下さい。 http://wiki.secondlife.com/wiki/Linden_Lab_Official:Alternate_Viewers.
+		<usetemplate name="okbutton" yestext="OK"/>
+  </notification>
 	<notification name="DeedObjectToGroup">
 		このオブジェクトを譲渡するとグループは以下のことが可能です：
 * オブジェクトに支払われた L$ を受領します。
@@ -1742,6 +1783,11 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
 		現在、あなたは &lt;nolink&gt;[GROUP]&lt;/nolink&gt; グループのメンバーです。
+グループから脱退しますか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
+	<notification name="GroupLeaveConfirmMemberWithFee">
+現在、あなたは &lt;nolink&gt;[GROUP]&lt;/nolink&gt; グループのメンバーです。再度入会する場合は L$[AMOUNT] の費用がかかります。
 グループから脱退しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
@@ -1808,6 +1854,11 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		現在「テレポートのオファーや依頼を拒否する」モードになっているためテレポートの要求ができません。
 		変更したい場合は「コミュニケーション」メニューの「ログイン状態」から行って下さい。
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RejectFriendshipRequestsModeSet">
+全てのフレンド申請を拒否するモードが有効になっています。
+誰が発信するものでもフレンド申請は全て拒否され、あなたが設定した自動応答メッセージが送信されます。このため、申請があっても通知はされません。
+		<usetemplate ignoretext="「フレンド申請をすべて拒否」モードにログイン状態を変更する" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="RejectAllGroupInvitesModeSet">
 「グループ招待をすべて拒否」モードになっています。
@@ -2463,6 +2514,15 @@ Linden Lab
 	</notification>
 	<notification name="ConfirmClearCache">
 		ビューワのキャッシュをクリアしますか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
+	<notification name="ConfirmClearInventoryCache">
+		本当にインベントリのキャッシュをクリアしてもよろしいですか？
+		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
+	</notification>
+	
+	<notification name="ConfirmClearWebBrowserCache">
+		本当にWebブラウザのキャッシュをクリアしてもよろしいですか？（再起動が必要）
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmClearCookies">
@@ -3450,6 +3510,13 @@ M キーを押して変更します。
 	</notification>
 	<notification name="AttachmentSaved">
 		アタッチメントが保存されました。
+	</notification>
+	<notification name="AppearanceToXMLSaved">
+		容姿はXMLファイルとして [PATH] に保存されました
+	</notification>
+
+	<notification name="AppearanceToXMLFailed">
+		容姿のXMLファイルへの保存が失敗しました
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		ヘルプトピックが見つかりませんでした。
@@ -4600,6 +4667,69 @@ M キーを押して変更します。
 		「[SET]」を「[NEW_NAME]」に変更できませんでした。既に同じ名前が存在しているか、無効な名前を指定しようとしています。
 	</notification>
 	
+	<notification name="ShapeImportGenericFail">
+		[FILENAME] のインポートで問題が発生しました。詳細はログで確認して下さい。
+	</notification>
+	<notification name="ShapeImportVersionFail">
+		シェイプのインポートに失敗しました。[FILENAME] が本当にアバターのファイルか確認して下さい。
+	</notification>
+
+	<notification name="AddToMediaList">
+		[LIST] に追加するドメインネームを入力して下さい
+		<form name="form">
+			<button name="Add" text="追加"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+
+	<!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+	<notification name="CantRestoreToWorldNoCopy">
+		最後の場所にリストアの機能はコピー不可アイテムには使用できません。コンテンツが失われるのを防ぐためです。
+	</notification>
+	<!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+
+	<notification name="ConfirmRemoveCredential">
+		保存された &lt;nolink&gt;[NAME]&lt;/nolink&gt; のログインを削除しますか？
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+
+	<!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+	<notification name="ExodusFlickrVerificationExplanation">
+Flickr アップロードの機能を使用するには、 [APP_NAME] があなたのFlickrアカウントにアクセスするのを許可しなければなりません。このまま先に進むと、WebブラウザーがFlickrのWebサイトを開き、ログインして [APP_NAME] を許可するよう促されます。次に表示されたコードをコピーして [APP_NAME] に貼り付けます。
+
+あなたのFlickrアカウントに投稿するのに [APP_NAME] を許可しますか？
+		<usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい"/>
+		</notification>
+
+		<notification name="ExodusFlickrVerificationPrompt">
+WebブラウザーであなたのFlickrアカウントに投稿する許可を [APP_NAME] に与えて下さい。次にWebサイトで表示されたコードを以下に入力して下さい。
+			<form name="form">
+				<button name="OK" text="OK"/>
+				<button name="Cancel" text="取り消し"/>
+			</form>
+	</notification>
+
+	<notification name="ExodusFlickrVerificationFailed">
+Flickrの認証に失敗しました。もう一度試してみて下さい。その際、認証コードに誤りがないか、よく確認して下さい。
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="ExodusFlickrUploadComplete">
+あなたのスナップショットは次のURLでみることができるようになりました。 [http://www.flickr.com/photos/upload/edit/?ids=[ID] here]
+	</notification>
+	<!-- </FS:TS> FIRE-5453 -->
+
+	<notification name="RegionTrackerAdd">
+次の地域にどのようなラベルをつけますか？
+&quot;[REGION]&quot;
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="取り消し"/>
+    </form>
+  </notification>
 	<notification name="SnoozeDuration">
 		<unique/>
     グループチャットを居眠りさせておく時間（秒）
@@ -4627,4 +4757,8 @@ M キーを押して変更します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	
+	<notification name="GlobalOnlineStatusToggle">
+サーバ負荷のため、多数のオンラインステータス切替が有効になるまでにはしばらく時間がかかります。このままお待ち下さい。
+		<usetemplate ignoretext="オンラインステータスの切り替えに時間がかかる時は通知する" name="okignore" yestext="OK"/>
+	</notification>
 </notifications>

@@ -55,6 +55,10 @@
        <layout_panel name="send_sysinfo_btn_panel">             
 			<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />
         </layout_panel>
+
+	<layout_panel name="lp_options_btn">
+		<menu_button tool_tip="チャット・オプション" name="chat_options_btn" />
+	</layout_panel>
       
        <layout_panel name="support_panel" width="130">             
 			<icon name="dummy_icon_support_group" width="128"/>
@@ -81,6 +85,9 @@
 					<layout_stack orientation="horizontal" name="input_panels">
 						<layout_panel name="input_editor_layout_panel">
 							<chat_editor name="chat_editor" />
+						</layout_panel>
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="送信" tool_tip="IMを送信します" />
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>

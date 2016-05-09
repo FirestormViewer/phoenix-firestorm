@@ -26,5 +26,9 @@
 		<menu_item_separator/>
 		<menu_item_check label="フルネームはユーザ名 (表示名)" name="format_username_displayname" />
 		<menu_item_check label="フルネームは表示名 (ユーザ名)" name="format_displayname_username" />
+		<menu_item_separator/>
+		<menu_item_check label="検索フィルターを表示" name="friend_filter" />
 	</menu>
+	<menu_item_separator/>
+	<menu_item_check label="フレンドのログイン状態" name="GlobalOnlineStatusToggle" />
 </context_menu>
