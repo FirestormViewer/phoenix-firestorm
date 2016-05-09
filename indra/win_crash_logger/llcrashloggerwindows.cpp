@@ -174,6 +174,7 @@ bool handle_button_click(WORD button_id)
 		return false;
 	}
 
+	// <FS:Ansariel> Restore crash report user settings
 	// See if "do this next time" is checked and save state
 	S32 crash_behavior = CRASH_BEHAVIOR_ASK;
 	LRESULT result = SendDlgItemMessage(gHwndReport, IDC_CHECK_AUTO, BM_GETCHECK, 0, 0);
@@ -189,7 +190,8 @@ bool handle_button_click(WORD button_id)
 		}
 		((LLCrashLoggerWindows*)LLCrashLogger::instance())->saveCrashBehaviorSetting(crash_behavior);
 	}
-	
+	// </FS:Ansariel>
+
 	// We're done with this dialog.
 	gFirstDialog = FALSE;
 

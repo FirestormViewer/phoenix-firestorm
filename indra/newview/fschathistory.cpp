@@ -184,6 +184,16 @@ public:
 		}
 	}
 
+	bool onObjectIconContextMenuItemEnabled(const LLSD& userdata)
+	{
+		std::string level = userdata.asString();
+		if (level == "is_blocked")
+		{
+			return !LLMuteList::getInstance()->isMuted(getAvatarId(), mFrom, LLMute::flagTextChat);
+		}
+		return false;
+	}
+
 	void onAvatarIconContextMenuItemClicked(const LLSD& userdata)
 	{
 		std::string level = userdata.asString();
@@ -310,6 +320,7 @@ public:
 		registrar.add("AvatarIcon.Action", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemClicked, this, _2));
 		registrar_enable.add("AvatarIcon.Check", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemChecked, this, _2));
 		registrar.add("ObjectIcon.Action", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemClicked, this, _2));
+		registrar_enable.add("ObjectIcon.Enable", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemEnabled, this, _2));
 
 		LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 		mPopupMenuHandleAvatar = menu->getHandle();

@@ -667,12 +667,14 @@ BOOL LLPanelPeople::postBuild()
 	//mOnlineFriendList->showPermissions("FriendsListShowPermissions");
 	mOnlineFriendList->showPermissions(true);
 	// </FS:Ansariel> Firestorm radar
+	mOnlineFriendList->setShowCompleteName(!gSavedSettings.getBOOL("FriendsListHideUsernames"));
 	mAllFriendList->setNoItemsCommentText(getString("no_friends"));
 	mAllFriendList->setShowIcons("FriendsListShowIcons");
 	// <FS:Ansariel> Firestorm radar
 	//mAllFriendList->showPermissions("FriendsListShowPermissions");
 	mAllFriendList->showPermissions(true);
 	// </FS:Ansariel> Firestorm radar
+	mAllFriendList->setShowCompleteName(!gSavedSettings.getBOOL("FriendsListHideUsernames"));
 
 	LLPanel* nearby_tab = getChild<LLPanel>(NEARBY_TAB_NAME);
 	// <FS:Ansariel> Firestorm radar
@@ -689,6 +691,7 @@ BOOL LLPanelPeople::postBuild()
 	//mNearbyList->setNoItemsMsg(getString("no_one_near"));
 	//mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	//mNearbyList->setShowIcons("NearbyListShowIcons");
+	//mNearbyList->setShowCompleteName(!gSavedSettings.getBOOL("NearbyListHideUsernames"));
 	// </FS:Ansariel> Firestorm radar
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	// Externalized to FSRadar
@@ -1513,6 +1516,16 @@ void LLPanelPeople::onFriendsViewSortMenuItemClicked(const LLSD& userdata)
 		mAllFriendList->showPermissions(show_permissions);
 		mOnlineFriendList->showPermissions(show_permissions);
 	}
+	else if (chosen_item == "view_usernames")
+	{
+		bool hide_usernames = !gSavedSettings.getBOOL("FriendsListHideUsernames");
+		gSavedSettings.setBOOL("FriendsListHideUsernames", hide_usernames);
+
+		mAllFriendList->setShowCompleteName(!hide_usernames);
+		mAllFriendList->handleDisplayNamesOptionChanged();
+		mOnlineFriendList->setShowCompleteName(!hide_usernames);
+		mOnlineFriendList->handleDisplayNamesOptionChanged();
+	}
 	}
 
 void LLPanelPeople::onGroupsViewSortMenuItemClicked(const LLSD& userdata)
@@ -1544,6 +1557,14 @@ void LLPanelPeople::onNearbyViewSortMenuItemClicked(const LLSD& userdata)
 	else if (chosen_item == "sort_distance")
 	{
 		setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
+	}
+	else if (chosen_item == "view_usernames")
+	{
+	    bool hide_usernames = !gSavedSettings.getBOOL("NearbyListHideUsernames");
+	    gSavedSettings.setBOOL("NearbyListHideUsernames", hide_usernames);
+
+	    mNearbyList->setShowCompleteName(!hide_usernames);
+	    mNearbyList->handleDisplayNamesOptionChanged();
 	}
 }
 

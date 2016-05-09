@@ -49,13 +49,12 @@ class LLCrashLogger : public LLApp
 public:
 	LLCrashLogger();
 	virtual ~LLCrashLogger();
-	S32 loadCrashBehaviorSetting();
-    bool readDebugFromXML(LLSD& dest, const std::string& filename );
+	std::string loadCrashURLSetting();
+    bool readFromXML(LLSD& dest, const std::string& filename );
 	void gatherFiles();
     void mergeLogs( LLSD src_sd );
 
 	virtual void gatherPlatformSpecificFiles() {}
-	bool saveCrashBehaviorSetting(S32 crash_behavior);
     bool sendCrashLog(std::string dump_dir);
 	bool sendCrashLogs();
 	LLSD constructPostData();
@@ -68,6 +67,11 @@ public:
 	S32 getCrashBehavior() { return mCrashBehavior; }
 	bool runCrashLogPost(std::string host, LLSD data, std::string msg, int retries, int timeout);
 	bool readMinidump(std::string minidump_path);
+
+	// <FS:Ansariel> Restore crash report user settings
+	S32 loadCrashBehaviorSetting();
+	bool saveCrashBehaviorSetting(S32 crash_behavior);
+	// </FS:Ansariel>
 
 protected:
     static void init_curl();

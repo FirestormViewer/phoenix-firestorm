@@ -34,6 +34,8 @@
 #include "llfloatersnapshot.h" // FIXME: replace with a snapshot storage model
 #include "llpanelsnapshot.h"
 #include "llviewercontrol.h" // gSavedSettings
+#include "llstatusbar.h"	// can_afford_transaction()
+#include "llnotificationsutil.h"
 
 // <FS:CR> FIRE-10537 - Temp texture uploads aren't functional on SSB regions
 #include "llagent.h"
@@ -125,8 +127,19 @@ void LLPanelSnapshotInventory::onResolutionCommit(LLUICtrl* ctrl)
 
 void LLPanelSnapshotInventory::onSend()
 {
-	LLFloaterSnapshot::saveTexture();
-	LLFloaterSnapshot::postSave();
+    S32 expected_upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+    if (can_afford_transaction(expected_upload_cost))
+    {
+        LLFloaterSnapshot::saveTexture();
+        LLFloaterSnapshot::postSave();
+    }
+    else
+    {
+        LLSD args;
+        args["COST"] = llformat("%d", expected_upload_cost);
+        LLNotificationsUtil::add("ErrorPhotoCannotAfford", args);
+        LLFloaterSnapshot::inventorySaveFailed();
+    }
 }
 
 // <FS:Ansariel> Store settings at logout

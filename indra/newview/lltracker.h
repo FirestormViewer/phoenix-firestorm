@@ -121,7 +121,7 @@ protected:
 
 	void stopTrackingAll(BOOL clear_ui = FALSE);
 	void stopTrackingAvatar(BOOL clear_ui = FALSE);
-	void stopTrackingLocation(BOOL clear_ui = FALSE);
+	void stopTrackingLocation(BOOL clear_ui = FALSE, BOOL dest_reached = FALSE);
 	void stopTrackingLandmark(BOOL clear_ui = FALSE);
 
 	//void drawMarker(const LLVector3d& pos_global, const LLColor4& color); <FS:Ansariel> Exodus' mouselook combat feature

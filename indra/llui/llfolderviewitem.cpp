@@ -1081,6 +1081,11 @@ void LLFolderViewFolder::addToFolder(LLFolderViewFolder* folder)
 	mIndentation = (getParentFolder())
 		? getParentFolder()->getIndentation() + mLocalIndentation
 		: 0; 
+
+	if(isOpen() && folder->isOpen())
+	{
+		requestArrange();
+	}
 }
 
 static LLTrace::BlockTimerStatHandle FTM_ARRANGE("Arrange");
