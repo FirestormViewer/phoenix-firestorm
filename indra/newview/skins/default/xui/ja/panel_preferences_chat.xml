@@ -23,6 +23,7 @@
 		<check_box label="llOwnerSay をスクリプトのデバッグウィンドウに送る" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
 		<check_box label="吹き出しチャット" name="bubble_text_chat"/>
 		<check_box label="入力中に吹き出しを表示する" name="bubble_text_typing"/>
+		<check_box label="アバター頭上の名前タグに入力中の印を表示" name="FSShowTypingStateInNameTag" />
 		<check_box name="FSSecondsinChatTimestamps" label="タイムスタンプに秒を表示 [HH:MM:SS]" />
 		<text name="show_timestamps_label">
              タイムスタンプの表示:
@@ -145,12 +146,14 @@
 		<button name="spellcheck_showgui" label="スペルチェック..." />
 		<button name="translation_settings_btn" label="翻訳..." />
 		<check_box label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
+		<check_box label="感情表現を使用している場合もタイピング動作のアニメーションを再生" name="play_typing_animation_emote" />
 		<check_box label="人が会話している時にタイピング音が聞こえるようにする" name="play_typing_sound"/>
 		<check_box label="IM中に入力中であることを相手に通知する" name="FSSendTypingState"/>
 		<check_box name="FSChatbarGestureAutoCompleteEnable" label="チャットバーでジェスチャーのオートコンプリートを使う" />
 		<check_box name="FSChatbarNamePrediction" label="周辺チャットで周りにいる人の名前にオートコンプリートを使う" />
 		<check_box label="&quot;:&quot;を&quot;/me&quot;の代わりに使う" name="AllowMUpose"/>
 		<check_box label="((OOC))のかっこを自動的に閉じる" name="AutoCloseOOC"/>
+		<check_box name="FSShowIMSendButton" label="IMのチャットバーに「送信」ボタンを表示する"/>
 		<check_box label="周辺チャットウインドウにチャットバーを表示する" name="FSNearbyChatbar"/>
 		<check_box label="チャットバーにチャンネル選択を表示" name="FSShowChatChannel"/>
 		<check_box name="FSShowChatType" label="チャットバーにチャットの種類と送信ボタンを表示"/>
@@ -187,7 +190,8 @@
 		<check_box name="FSLogIMInChatHistory" label="IMをチャットログに保存"/>
 		<text name="FSIMChatHistoryFade_label">
 			チャット履歴ウィンドウでIMを薄く表示
-        </text>
+		</text>
+		<check_box name="FSShowMessageCountInWindowTitle" label="未読IMの数をFirestormのウィンドウタイトルに表示" />
 		<check_box label="相手が入力を始めたら、IMが来ることを事前に通知" name="FSAnnounceIncomingIM"/>
 		<check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドのオンラインステータスが変わったらIMタブを点滅"/>
 		<check_box name="FSNotifyNearbyChatFlash" label="新しい周辺チャットを受信したらチャットツールバーのボタンを点滅" tool_tip="新しい周辺チャットを受信したらチャットツールバーのボタンが点滅します。この時、周辺チャットは会話ウィンドウにドッキングしている必要があり、また、ボタンを点滅させるには会話ウィンドウが閉じている必要があります。"/>
@@ -287,6 +291,7 @@
 		<check_box label="キーワード通知を有効にする" name="FSKeywordOn"/>
 		<check_box label="周辺チャットでキーワードを強調" name="FSKeywordInChat"/>
 		<check_box label="IMとグループチャットでキーワードを強調" name="FSKeywordInIM"/>
+		<check_box name="FSKeywordSpeakersName" label="送信者の名前にキーワードが含まれているかチェックする"/>
 		<check_box name="FSKeywordCaseSensitive" label="全てのキーワードで大文字と小文字を区別する"/>
 		<check_box name="FSKeywordMatchWholeWords" label="全てのキーワードが一致した時のみ"/>
 		<text name="textFSKeywords">

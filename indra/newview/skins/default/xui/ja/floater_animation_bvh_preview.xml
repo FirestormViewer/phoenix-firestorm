@@ -109,6 +109,9 @@
 	<floater.string name="E_ST_BAD_ROOT">
 		ルートジョイント名が不正です。「hip」を使用してください。
 	</floater.string>
+	<floater.string name="FS_report_frames">
+		[F] フレーム  [S] 秒 [FPS] FPS
+	</floater.string>
 	<text name="name_label">
 		名前：
 	</text>
@@ -117,8 +120,13 @@
 	</text>
 	<spinner label="優先度" name="priority" tool_tip="このアニメーションでどのアニメーションを上書きできるかを決めます"/>
 	<check_box label="ループ" name="loop_check" tool_tip="このアニメーションをループ再生にします"/>
+	<text name="frames_label">
+		300 フレーム 30 秒 10 FPS
+	</text>
 	<spinner label="イン（％）" name="loop_in_point" tool_tip="アニメーションのループ復帰点を設定します"/>
 	<spinner label="アウト（％）" name="loop_out_point" tool_tip="アニメーションのループ終了点を設定します"/>
+	<spinner label="イン (frm)" name="loop_in_frames" tool_tip="アニメーションがループして戻る、開始フレームを設定します" />
+	<spinner label="アウト (frm)" name="loop_out_frames" tool_tip="アニメーションのループが終了する、終点フレームを設定します" />
 	<text name="hand_label">
 		手のポーズ
 	</text>

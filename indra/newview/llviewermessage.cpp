@@ -7083,6 +7083,10 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	bool you_paid_someone = (source_id == gAgentID);
 	if (you_paid_someone)
 	{
+		if(!gSavedSettings.getBOOL("NotifyMoneySpend"))
+		{
+			return;
+		}
 		args["NAME"] = balance_change_in_chat ? "%s" : dest_slurl;
 		is_name_group = is_dest_group;
 		name_id = dest_id;
@@ -7200,6 +7204,10 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	else 
 	{
 		// ...someone paid you
+		if(!gSavedSettings.getBOOL("NotifyMoneyReceived"))
+		{
+			return;
+		}
 		args["NAME"] = balance_change_in_chat ? "%s" : source_slurl;
 		is_name_group = is_source_group;
 		name_id = source_id;

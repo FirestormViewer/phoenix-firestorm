@@ -281,6 +281,10 @@
 		<text name="RotationStepText2">
 			度の倍数に回転できる範囲を制限
 		</text>
+		<check_box label="リンク解除の際に警告メッセージを出すリンクセットのオブジェクト数：" name="FSUnlinkConfirmEnabled"/>
+		<text name="MinObjectsForUnlinkConfirmText2"	>
+			 個以上
+		</text>
 		<check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
         <check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>

@@ -2514,6 +2514,10 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Sind Sie sicher, dass Sie den Inhalt Ihres Papierkorbs löschen möchten?
 		<usetemplate ignoretext="Bestätigen, bevor der Ordner Papierkorb im Inventar geleert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="TrashIsFull">
+		Ihr Papierkorb läuft über. Dies kann zu Problemen beim Login führen.
+		<usetemplate name="okcancelbuttons" notext="Ich leere den Papierkorb später" yestext="Papierkorb jetzt leeren"/>
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>

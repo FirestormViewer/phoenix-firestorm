@@ -3981,9 +3981,10 @@ We have downloaded an update to your [APP_NAME] installation.
   </notification>
   
   <notification
- icon="alertmodal.tga"
- name="RequiredUpdateDownloadedVerboseDialog"
- type="alertmodal">
+   icon="alertmodal.tga"
+   name="RequiredUpdateDownloadedVerboseDialog"
+   type="alertmodal"
+   force_urls_external="true">
 We have downloaded a required software update.
 Version [VERSION] [[INFO_URL] Information about this update]
 
@@ -3995,9 +3996,10 @@ We must restart [APP_NAME] to install the update.
   </notification>
   
   <notification
- icon="alertmodal.tga"
- name="RequiredUpdateDownloadedDialog"
- type="alertmodal">
+   icon="alertmodal.tga"
+   name="RequiredUpdateDownloadedDialog"
+   type="alertmodal"
+   force_urls_external="true">
 We must restart [APP_NAME] to install the update.
 [[INFO_URL] Information about this update]
     <tag>confirm</tag>
@@ -4037,9 +4039,10 @@ see [[INFO_URL] Information about this update]
   </notification>
   
   <notification
- icon="alertmodal.tga"
- name="OtherChannelRequiredUpdateDownloadedVerboseDialog"
- type="alertmodal">
+   icon="alertmodal.tga"
+   name="OtherChannelRequiredUpdateDownloadedVerboseDialog"
+   type="alertmodal"
+   force_urls_external="true">
 We have downloaded a required software update.
 Version [VERSION]
 This experimental viewer has been replaced by a [NEW_CHANNEL] viewer;
@@ -4053,9 +4056,10 @@ We must restart [APP_NAME] to install the update.
   </notification>
   
   <notification
- icon="alertmodal.tga"
- name="OtherChannelRequiredUpdateDownloadedDialog"
- type="alertmodal">
+   icon="alertmodal.tga"
+   name="OtherChannelRequiredUpdateDownloadedDialog"
+   type="alertmodal"
+   force_urls_external="true">
 We must restart [APP_NAME] to install the update.
 This experimental viewer has been replaced by a [NEW_CHANNEL] viewer;
 see [[INFO_URL] Information about this update]
@@ -6246,6 +6250,18 @@ Are you sure you want to permanently delete the contents of your Trash?
      name="okcancelignore"
      notext="Cancel"
      yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="TrashIsFull"
+   type="alertmodal">
+Your trash is overflowing. This may cause problems logging in.
+      <tag>confirm</tag>
+        <usetemplate
+         name="okcancelbuttons"
+         notext="I will empty trash later"
+         yestext="Empty trash now"/>
   </notification>
 
   <notification

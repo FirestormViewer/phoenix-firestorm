@@ -1292,6 +1292,13 @@ bool idle_startup()
 		{
 			gDirUtilp->setChatLogsDir(gSavedPerAccountSettings.getString("InstantMessageLogPath"));		
 		}
+		// <FS:KC> FIRE-18247: Handle non-existent chat log location
+		if (!gDirUtilp->fileExists(gSavedPerAccountSettings.getString("InstantMessageLogPath")))
+		{
+			gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
+			gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
+		}
+		// </FS:KC>
 // <FS:CR> Seperate user directories per grid on OS build
 #ifdef OPENSIM
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
@@ -2883,6 +2890,15 @@ bool idle_startup()
 
 		}
 		// </FS:PP>
+		
+		// <FS:KC> FIRE-18250: Option to disable default eye movement
+		if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+		{
+			LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+			gAgentAvatarp->startMotion(anim_id);
+			gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+		}
+		// </FS:KC>
 
 		return TRUE;
 	}

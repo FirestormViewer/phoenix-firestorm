@@ -36,6 +36,8 @@
 #include "llsecapi.h"
 #include <curl/curl.h>
 
+#include "llcorehttputil.h"
+
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif
@@ -142,6 +144,9 @@ LLAppCoreHttp::~LLAppCoreHttp()
 
 void LLAppCoreHttp::init()
 {
+    LLCoreHttpUtil::setPropertyMethods(
+        boost::bind(&LLControlGroup::getBOOL, boost::ref(gSavedSettings), _1),
+        boost::bind(&LLControlGroup::declareBOOL, boost::ref(gSavedSettings), _1, _2, _3, LLControlVariable::PERSIST_NONDFT));
 
     LLCore::LLHttp::initialize();
 

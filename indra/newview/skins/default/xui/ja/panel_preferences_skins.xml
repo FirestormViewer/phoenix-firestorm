@@ -15,6 +15,7 @@
     </text>
 	
 	<check_box label="ツールバーの配置をスキンの初期設定に戻す" name="reset_toolbar_settings" />
+	<check_box label="ログインモード変更時にログインモードに最適化された設定にツールバーをリセット" tool_tip="ここにチェックを入れると、ログインモードを変更した時に、それぞれのモードに最適化されたツールバーボタンのレイアウトが選択され、あなたがカスタマイズしたボタンの設定は全て上書きされます" name="FSToolbarsResetOnModeChange" />
 
 	<check_box label="V1スタイルのカーソルを使用" name="use_legacy_cursors"/>
     <text name="theme_textbox3">

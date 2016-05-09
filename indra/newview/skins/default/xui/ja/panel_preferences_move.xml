@@ -38,6 +38,7 @@
 			<check_box label="マウスルック機能を有効にする" name="EnableMouselook" tool_tip="一人称視点を可能にし、マウスでカメラをコントロールできるようにします。" />
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
 			<check_box label="マウスルックにユーザーインターフェイスを表示" name="first_person_ui_visible" />
+			<check_box label="マウスルックにした時に会話とレーダーのウィンドウが閉じないようにする" name="FSShowConvoAndRadarInML" />
 			<check_box label="マウスルックでコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="ALT-右クリックでパイメニュー／コンテキストメニューを開けるようにします。" />
 			<check_box label="マウスのホイールでマウスルックから抜ける" name="FSScrollWheelExitsMouselook" tool_tip="チェックを入れると、マウスのホイールを回転させることでマウスルックから抜けることができるようになります" />
 			<check_box label="マウスルックのガイドを表示" name="mouselook_instructions_visible" />
@@ -101,6 +102,7 @@
 			<check_box label="テレポートキャンセルボタンを常に表示" name="FSAlwaysShowTPCancel" tool_tip="シミュレータからキャンセルできない通知がある場合でも、常にテレポートキャンセルのボタンを表示します。結局のところ、シミュレータは例えばゴッド・テレポートのような強制テレポートの要求があった場合、それがキャンセルできるかどうかをわかっていて、できない場合はキャンセル指示を無視します。この設定はRLVaでは無効です（つまり、RLVの制約により、この機能は停止されています）。"/>
 			<check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
 			<check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
+			<check_box label="テレポートした時に世界地図を閉じない" name="FSDoNotHideMapOnTeleport" tool_tip="テレポートした時に世界地図が自動的に閉じる機能をオフにします。"/>
 		</panel>
 		
 		<!-- Map & Minimap -->
