@@ -2503,6 +2503,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> Clear inventory cache button
 	getChildView("ClearInventoryCache")->setEnabled(TRUE);
+
+	// <FS:Ansariel> FIRE-18250: Option to disable default eye movement
+	getChildView("FSStaticEyes")->setEnabled(TRUE);
 }
 
 
