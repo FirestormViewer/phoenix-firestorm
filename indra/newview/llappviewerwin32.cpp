@@ -41,7 +41,7 @@
 
 #include <fcntl.h>		//_O_APPEND
 #include <io.h>			//_open_osfhandle()
-#include <WERAPI.H>
+#include <WERAPI.H>		// for WerAddExcludedApplication()
 #include <process.h>	// _spawnl()
 #include <tchar.h>		// For TCHAR support
 
@@ -478,18 +478,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 void LLAppViewerWin32::disableWinErrorReporting()
 {
-	// <FS:Ansariel> Disable windows error reporting on Windows Vista and later
 	std::string executable_name = gDirUtilp->getExecutableFilename();
 
 	if( S_OK == WerAddExcludedApplication( utf8str_to_utf16str(executable_name).c_str(), FALSE ) )
 	{
-		LL_INFOS() << "WerAddExcludedApplication() success for " << executable_name << LL_ENDL;
+		LL_INFOS() << "WerAddExcludedApplication() succeeded for " << executable_name << LL_ENDL;
 	}
 	else
 	{
 		LL_INFOS() << "WerAddExcludedApplication() failed for " << executable_name << LL_ENDL;
 	}
-	// </FS:Ansariel>
 }
 
 const S32 MAX_CONSOLE_LINES = 500;
@@ -569,7 +567,7 @@ bool LLAppViewerWin32::init()
 {
 	// Platform specific initialization.
 	
-	// Turn off Windows XP Error Reporting
+	// Turn off Windows Error Reporting
 	// (Don't send our data to Microsoft--at least until we are Logo approved and have a way
 	// of getting the data back from them.)
 	//

@@ -506,6 +506,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.AvatarImpostorsEnable",	boost::bind(&LLFloaterPreference::onAvatarImpostorsEnable, this));
+	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",	boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
 	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
 	mCommitCallbackRegistrar.add("Pref.LocalLightsEnable",		boost::bind(&LLFloaterPreference::onLocalLightsEnable, this));
 	mCommitCallbackRegistrar.add("Pref.WindowedMod",			boost::bind(&LLFloaterPreference::onCommitWindowedMode, this));
@@ -524,7 +525,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> Improved graphics preferences
 	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxNonImpostors", boost::bind(&LLFloaterPreference::updateMaxNonImpostors, this));
-	mCommitCallbackRegistrar.add("Pref.UpdateIndirectMaxComplexity",   boost::bind(&LLFloaterPreference::updateMaxComplexity, this));
 	// </FS:Ansariel>
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
@@ -1300,7 +1300,7 @@ void LLFloaterPreference::setHardwareDefaults()
 	LLFeatureManager::getInstance()->applyRecommendedSettings();
 
 	// reset indirects before refresh because we may have changed what they control
-	LLFloaterPreferenceGraphicsAdvanced::setIndirectControls(); 
+	LLAvatarComplexityControls::setIndirectControls(); 
 
 	refreshEnabledGraphics();
 	gSavedSettings.setString("PresetGraphicActive", "");
@@ -2246,7 +2246,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
 
 // static
-void LLFloaterPreferenceGraphicsAdvanced::setIndirectControls()
+void LLAvatarComplexityControls::setIndirectControls()
 {
 	/*
 	 * We have controls that have an indirect relationship between the control
@@ -2262,7 +2262,7 @@ void LLFloaterPreferenceGraphicsAdvanced::setIndirectControls()
 }
 
 // static
-void LLFloaterPreferenceGraphicsAdvanced::setIndirectMaxNonImpostors()
+void LLAvatarComplexityControls::setIndirectMaxNonImpostors()
 {
 	U32 max_non_impostors = gSavedSettings.getU32("RenderAvatarMaxNonImpostors");
 	// for this one, we just need to make zero, which means off, the max value of the slider
@@ -2270,7 +2270,7 @@ void LLFloaterPreferenceGraphicsAdvanced::setIndirectMaxNonImpostors()
 	gSavedSettings.setU32("IndirectMaxNonImpostors", indirect_max_non_impostors);
 }
 
-void LLFloaterPreferenceGraphicsAdvanced::setIndirectMaxArc()
+void LLAvatarComplexityControls::setIndirectMaxArc()
 {
 	U32 max_arc = gSavedSettings.getU32("RenderAvatarMaxComplexity");
 	U32 indirect_max_arc;
@@ -2596,10 +2596,13 @@ void LLFloaterPreference::refresh()
 	// <FS:Ansariel> Improved graphics preferences
 	getChild<LLUICtrl>("fsaa")->setValue((LLSD::Integer)  gSavedSettings.getU32("RenderFSAASamples"));
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
-	LLFloaterPreferenceGraphicsAdvanced::setIndirectControls();
+	LLAvatarComplexityControls::setIndirectControls();
 	setMaxNonImpostorsText(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"),getChild<LLTextBox>("IndirectMaxNonImpostorsText", true));
-	setMaxComplexityText(gSavedSettings.getU32("RenderAvatarMaxComplexity"),getChild<LLTextBox>("IndirectMaxComplexityText", true));
 	// </FS:Ansariel>
+
+    LLAvatarComplexityControls::setText(
+        gSavedSettings.getU32("RenderAvatarMaxComplexity"),
+        getChild<LLTextBox>("IndirectMaxComplexityText", true));
 
 	refreshEnabledState();
 	LLFloater* advanced = LLFloaterReg::findTypedInstance<LLFloater>("prefs_graphics_advanced");
@@ -2625,9 +2628,13 @@ void LLFloaterPreferenceGraphicsAdvanced::refresh()
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
 	updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
 	updateSliderText(getChild<LLSliderCtrl>("TerrainDetail",		true), getChild<LLTextBox>("TerrainDetailText",			true));	
-	setIndirectControls();
-	setMaxNonImpostorsText(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"),getChild<LLTextBox>("IndirectMaxNonImpostorsText", true));
-	setMaxComplexityText(gSavedSettings.getU32("RenderAvatarMaxComplexity"),getChild<LLTextBox>("IndirectMaxComplexityText", true));
+    LLAvatarComplexityControls::setIndirectControls();
+	setMaxNonImpostorsText(
+        gSavedSettings.getU32("RenderAvatarMaxNonImpostors"),
+        getChild<LLTextBox>("IndirectMaxNonImpostorsText", true));
+    LLAvatarComplexityControls::setText(
+        gSavedSettings.getU32("RenderAvatarMaxComplexity"),
+        getChild<LLTextBox>("IndirectMaxComplexityText", true));
 	refreshEnabledState();
 }
 
@@ -3003,44 +3010,6 @@ void LLFloaterPreference::setMaxNonImpostorsText(U32 value, LLTextBox* text_box)
 		text_box->setText(llformat("%d", value));
 	}
 }
-
-void LLFloaterPreference::updateMaxComplexity()
-{
-	// Called when the IndirectMaxComplexity control changes
-	// Responsible for fixing the slider label (IndirectMaxComplexityText) and setting RenderAvatarMaxComplexity
-	LLSliderCtrl* ctrl = getChild<LLSliderCtrl>("IndirectMaxComplexity");
-	U32 indirect_value = ctrl->getValue().asInteger();
-	U32 max_arc;
-	
-	if (INDIRECT_MAX_ARC_OFF == indirect_value)
-	{
-		// The 'off' position is when the slider is all the way to the right, 
-		// which is a value of INDIRECT_MAX_ARC_OFF,
-		// so it is necessary to set max_arc to 0 disable muted avatars.
-		max_arc = 0;
-	}
-	else
-	{
-		// if this is changed, the inverse calculation in setIndirectMaxArc
-		// must be changed to match
-		max_arc = (U32)exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT)));
-	}
-
-	gSavedSettings.setU32("RenderAvatarMaxComplexity", (U32)max_arc);
-	setMaxComplexityText(max_arc, getChild<LLTextBox>("IndirectMaxComplexityText"));
-}
-
-void LLFloaterPreference::setMaxComplexityText(U32 value, LLTextBox* text_box)
-{
-	if (0 == value)
-	{
-		text_box->setText(LLTrans::getString("no_limit"));
-	}
-	else
-	{
-		text_box->setText(llformat("%d", value));
-	}
-}
 // </FS:Ansariel>
 
 void LLFloaterPreferenceGraphicsAdvanced::updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box)
@@ -3100,12 +3069,11 @@ void LLFloaterPreferenceGraphicsAdvanced::setMaxNonImpostorsText(U32 value, LLTe
 	}
 }
 
-void LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity()
+void LLAvatarComplexityControls::updateMax(LLSliderCtrl* slider, LLTextBox* value_label)
 {
 	// Called when the IndirectMaxComplexity control changes
 	// Responsible for fixing the slider label (IndirectMaxComplexityText) and setting RenderAvatarMaxComplexity
-	LLSliderCtrl* ctrl = getChild<LLSliderCtrl>("IndirectMaxComplexity");
-	U32 indirect_value = ctrl->getValue().asInteger();
+	U32 indirect_value = slider->getValue().asInteger();
 	U32 max_arc;
 	
 	if (INDIRECT_MAX_ARC_OFF == indirect_value)
@@ -3123,10 +3091,10 @@ void LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity()
 	}
 
 	gSavedSettings.setU32("RenderAvatarMaxComplexity", (U32)max_arc);
-	setMaxComplexityText(max_arc, getChild<LLTextBox>("IndirectMaxComplexityText"));
+	setText(max_arc, value_label);
 }
 
-void LLFloaterPreferenceGraphicsAdvanced::setMaxComplexityText(U32 value, LLTextBox* text_box)
+void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box)
 {
 	if (0 == value)
 	{
@@ -3136,6 +3104,22 @@ void LLFloaterPreferenceGraphicsAdvanced::setMaxComplexityText(U32 value, LLText
 	{
 		text_box->setText(llformat("%d", value));
 	}
+}
+
+void LLFloaterPreference::updateMaxComplexity()
+{
+	// Called when the IndirectMaxComplexity control changes
+    LLAvatarComplexityControls::updateMax(
+        getChild<LLSliderCtrl>("IndirectMaxComplexity"),
+        getChild<LLTextBox>("IndirectMaxComplexityText"));
+}
+
+void LLFloaterPreferenceGraphicsAdvanced::updateMaxComplexity()
+{
+	// Called when the IndirectMaxComplexity control changes
+    LLAvatarComplexityControls::updateMax(
+        getChild<LLSliderCtrl>("IndirectMaxComplexity"),
+        getChild<LLTextBox>("IndirectMaxComplexityText"));
 }
 
 void LLFloaterPreference::onChangeMaturity()
