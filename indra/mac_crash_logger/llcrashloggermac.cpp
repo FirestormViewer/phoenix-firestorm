@@ -66,22 +66,27 @@ void LLCrashLoggerMac::gatherPlatformSpecificFiles()
 
 bool LLCrashLoggerMac::mainLoop()
 {
+
     if (mCrashBehavior == CRASH_BEHAVIOR_ALWAYS_SEND)
 	{
 		gSendReport = true;
 	}
 	
+	// <FS:Ansariel> Restore crash report user settings
 	if(gRememberChoice)
 	{
 		if(gSendReport) saveCrashBehaviorSetting(CRASH_BEHAVIOR_ALWAYS_SEND);
 		else saveCrashBehaviorSetting(CRASH_BEHAVIOR_NEVER_SEND);
 	}
+	// </FS:Ansariel>
 	
 	if(gSendReport)
 	{
 		setUserText(gUserNotes);
 		sendCrashLogs();
 	}	
+
+	LL_INFOS() << "Sending of logs complete" << LL_ENDL;
 		
 	return true;
 }
