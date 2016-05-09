@@ -48,7 +48,6 @@
 
 #include <curl/curl.h>
 #include <openssl/crypto.h>
-#include <boost/regex.hpp>
 
 
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
@@ -217,6 +216,7 @@ bool LLCrashLogger::readMinidump(std::string minidump_path)
 	{
 		minidump_stream.seekg(0, std::ios::end);
 		length = (size_t)minidump_stream.tellg();
+        LL_WARNS("CRASHREPORT") << "minidump length "<< length <<LL_ENDL;
 		minidump_stream.seekg(0, std::ios::beg);
 		
 		LLSD::Binary data;
