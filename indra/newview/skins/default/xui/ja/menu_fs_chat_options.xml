@@ -17,5 +17,5 @@
 	<menu_item_check label="チャットバーを表示" name="show_chat_bar" />
 	<menu_item_check label="チャンネル選択を表示" name="show_channel_selection" />
 	<menu_item_check label="チャットの入力／送信ボタンを表示" name="show_send_button" />
-	<menu_item_check label="IMに送信ボタンを表示" name="show_im_send_button" "/>
+	<menu_item_check label="IMに送信ボタンを表示" name="show_im_send_button" />
 </toggleable_menu>

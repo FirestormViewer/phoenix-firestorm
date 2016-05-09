@@ -105,6 +105,7 @@
 		<check_box label="ボイスのオン・オフ切り替えに使用するトリガーキー：" name="push_to_talk_toggle_check" tool_tip="トグルモードの時にトリガーキーを一回押すごとにマイクのオン・オフ設定が切り替えられます。トグルモードではないときは、トリガーキーを押した状態の時のみあなたの声が相手に聞こえます。"/>
 		<line_editor label="プッシュ・トゥ・スピークのトリガー" name="modifier_combo"/>
 		<button label="キー設定" name="set_voice_hotkey_button"/>
+		<button tool_tip="キー設定の内容をクリアします" name="clear_voice_hotkey_button" />
 		<button name="set_voice_middlemouse_button" tool_tip="マウスの中央ボタンにリセット"/>
 		<button label="入力・出力機器" name="device_settings_btn"/>
 		<panel label="機器の設定" name="device_settings_panel">
