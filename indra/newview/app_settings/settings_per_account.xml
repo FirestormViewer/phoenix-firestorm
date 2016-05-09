@@ -1059,5 +1059,16 @@
         <key>Backup</key>
             <integer>0</integer>
         </map>
+    <key>FSStaticEyes</key>
+        <map>
+        <key>Comment</key>
+            <string>Disables built in random eye moment on own avatar via animation defined at FSStaticEyesUUID.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
     </map>
 </llsd>

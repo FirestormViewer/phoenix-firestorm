@@ -2888,7 +2888,7 @@ BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-	if (getMinimized()) // <FS:CR> Moved this here from llviewermessage.cpp
+	if (mWindowHandle && GetFocus() != mWindowHandle) // <FS:CR> Moved this here from llviewermessage.cpp
 	{
 		FLASHWINFO flash_info;
 

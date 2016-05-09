@@ -3,6 +3,7 @@
 
 	<scroll_list name="animation_list">
 		<scroll_list.column label="再生した人" name="played_by" />
+		<scroll_list.column label="優先度" name="priority" />
 		<scroll_list.column label="再生時間" name="played" />
 		<scroll_list.column label="時刻" name="timestamp" />
 		<scroll_list.column label="アニメーションID" name="animation_id" />

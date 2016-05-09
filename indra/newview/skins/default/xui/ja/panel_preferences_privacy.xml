@@ -78,6 +78,7 @@
 				自分の視線
 			</text>
 			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="カメラの焦点を表す十字を表示しない" />
+			<check_box label="焦点までの視線を表示する" name="ExodusLookAtLines" tool_tip="アバターから十字で示されるその人のカメラの焦点までの視線を表示します。" />
 			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。" />
 			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。" />
 			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。" />
@@ -113,9 +114,13 @@
 			<text name="autorespond_rto_response_label">
 				テレポート拒否モードの時に行う全てのアバターへの自動応答メッセージ:
 			</text>
+			<check_box label="フレンドリストに載っている人からのテレポートは拒否しない（返事もする）" name="FSDontRejectTeleportOffersFromFriends" />
+			<text name="autorespond_rfr_response_label">
+				フレンド申請拒否モードの時に行う全てのアバターへの自動応答メッセージ:
+			</text>
 
 			<text name="autoresponse_item_label">
-				自動応答アイテム:
+				自動応答と一緒に送られるアイテム:
 			</text>
 			<fs_copytrans_inventory_drop_target name="autoresponse_item"
  tool_tip="持ち物をここにドラッグ＆ドロップします。" />

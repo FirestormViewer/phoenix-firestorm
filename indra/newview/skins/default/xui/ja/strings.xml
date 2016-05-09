@@ -508,6 +508,9 @@ support@secondlife.com にお問い合わせください。
 		クリックして secondlife:// コマンドを出します
 	</string>
 	<string name="CurrentURL" value=" 現在の URL： [CurrentURL]"/>
+	<string name="TooltipEmail">
+		クリックしてメールを作成します
+	</string>
 	<string name="SLurlLabelTeleport">
 		テレポート
 	</string>
@@ -717,6 +720,12 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="AvatarMuted">
 		ブロック中
+	</string>
+	<string name="AvatarAutoResponse">
+		自動応答中
+	</string>
+	<string name="AvatarTyping">
+		入力中
 	</string>
 	<string name="anim_express_afraid">
 		怖れ
@@ -4237,6 +4246,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="OfflineStatus">
 		オフライン
 	</string>
+	<string name="not_online_msg">
+		相手ユーザーはオンラインではありません。メッセージは保存され、後ほど配達されます。
+	</string>
+	<string name="not_online_inventory">
+		相手ユーザーはオンラインではありません。インベントリは保存されました。</string>
 	<string name="answered_call">
 		相手がコールを受けました
 	</string>
@@ -5261,7 +5275,11 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<!-- Added Jun.30, 2013 -->
 	
 	<string name="Command_Conversation_Log_Label">会話ログ</string>
+	<string name="Command_Move_Lock_Label">ムーブメントロック</string>
+  <string name="Command_Blocklist_Label">ブロックリスト</string>
+  <string name="Command_ResyncAnimations_Label">アニメーションの再同期</string>
 	<string name="Command_RegionTracker_Label">地域別アバター数</string>
+	<string name="Command_Group_Titles_Label">グループ肩書き</string>
 	
 	<string name="Command_AboutLand_Tooltip">
 		訪問先に関する情報
@@ -5420,7 +5438,21 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Conversation_Log_Tooltip">
 		会話ログを開いて過去に交わしたチャットをテキストで確認します。
 	</string>
-	<string name="Command_RegionTracker_Tooltip">複数の地域のステータス（アバター数）を確認します</string>
+	<string name="Command_Move_Lock_Tooltip">
+		アバターを今いる場所に固定します (CTRL+ALT+P)
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		ブロック／無視リストを開きます
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		アバターのアニメーションを再同期します
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		複数の地域のステータス（アバター数）を確認します
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		アクティブなグループタグを変更します
+	</string>
 
  	<string name="Toolbar_Bottom_Tooltip">
 		現在、下のツールバーにあります
@@ -5543,6 +5575,17 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="loading_chat_logs">
 		ロード中...
+	</string>
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		この物理シェイプに含まれる三角形は小さすぎます。物理モデルを簡略化して下さい。
+	</string>
+	
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		この物理シェイプにはよくない確認データが含まれています。物理モデルを修正して下さい。
+	</string>
+
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		この物理シェイプは正しいバージョンではありません。物理モデルに正しいバージョンを設定して下さい。
 	</string>
 	<string name="experience_tools_experience">
 		体験
@@ -5761,6 +5804,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<!-- Animation Explorer -->
 	<string name="animation_explorer_seconds_ago">[SECONDS] 秒前</string>
 	<string name="animation_explorer_still_playing">実行中のアニメーション：</string>
+	<string name="animation_explorer_unknown_priority">不明</string>
 	
 	<string name="FriendOnlineNotification">はオンラインです。</string>
 	<string name="FriendOfflineNotification">はオフラインです。</string>
@@ -5788,4 +5832,10 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Reqsysinfo_Chat_Information_sent">情報が送信されました。：[DATA]</string>
 	<string name="Reqsysinfo_Chat_Request_Denied">要求は拒否されました。</string>
 	<string name="Reqsysinfo_Reason">理由：[REASON]</string>
+	<string name="All Items">すべて</string>
+	<string name="Recent Items">最新</string>
+	<string name="Worn Items">装着中</string>
+
+	<string name="InvOfferGroupNoticeName">グループメンバー [NAME]</string>
+	<string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
 </strings>
