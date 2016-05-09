@@ -5969,7 +5969,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		(Keine)
 	</string>
 	<string name="no_limit">
-		Kein Begrenzung
+		Kein Limit
 	</string>
 	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
 		Die Physikform enthält Dreiecke, die zu klein sind. Versuchen Sie, das Physikmodell zu vereinfachen.
