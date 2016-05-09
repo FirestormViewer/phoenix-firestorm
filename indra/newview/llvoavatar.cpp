@@ -1900,16 +1900,24 @@ void LLVOAvatar::resetSkeleton()
 {
     LL_DEBUGS("Avatar") << avString() << LL_ENDL;
 
-    // Reset params
+    // Stop all animations
+
+    // Clear all attachment pos overrides
+
+    // Preserve state of tweakable params
+    
+    // Reset all params to default state, without propagating changes downstream.
 	for (LLVisualParam *param = getFirstVisualParam(); 
 		param;
 		param = getNextVisualParam())
 	{
+#if 0
 		if (param->isAnimating())
 		{
 			continue;
 		}
         param->setLastWeight(param->getDefaultWeight());
+#endif
 	}
 
     // Reset all bones and collision volumes to their initial skeleton state.
@@ -1918,8 +1926,15 @@ void LLVOAvatar::resetSkeleton()
         LL_ERRS() << "Error resetting skeleton" << LL_ENDL;
 	}
 
+    // Reset tweakable params to preserved state
     // Apply params
+#if 0
     updateVisualParams();
+#endif
+
+    // Restore attachment pos overrides
+
+    // Restart animations
 }
 
 //-----------------------------------------------------------------------------
@@ -5956,17 +5971,14 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 					{   									
 						pJoint->setId( currentId );
 						const LLVector3& jointPos = pSkinData->mAlternateBindMatrix[i].getTranslation();									
-                        //if (!jointPos.isNull())
-                        {
-                            //Set the joint position
-                            pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
+                        //Set the joint position
+                        pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
                             
-                            //If joint is a pelvis then handle old/new pelvis to foot values
-                            if ( lookingForJoint == "mPelvis" )
-                            {	
-                                pelvisGotSet = true;											
-                            }										
-                        }
+                        //If joint is a pelvis then handle old/new pelvis to foot values
+                        if ( lookingForJoint == "mPelvis" )
+                        {	
+                            pelvisGotSet = true;											
+                        }										
 					}										
 				}																
 				if (pelvisZOffset != 0.0F)
@@ -5983,19 +5995,68 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 	{
 		postPelvisSetRecalc();
 	}		
+}
 
-    showAttachmentPosOverrides();
+//-----------------------------------------------------------------------------
+// getAttachmentOverrideNames
+//-----------------------------------------------------------------------------
+void LLVOAvatar::getAttachmentOverrideNames(std::set<std::string>& names) const
+{
+    LLVector3 pos;
+    LLUUID mesh_id;
+
+    // Bones
+	for (avatar_joint_list_t::const_iterator iter = mSkeleton.begin();
+         iter != mSkeleton.end(); ++iter)
+	{
+		const LLJoint* pJoint = (*iter);
+		if (pJoint && pJoint->hasAttachmentPosOverride(pos,mesh_id))
+		{
+            names.insert(pJoint->getName());
+		}
+	}
+
+    // Attachment points
+	for (attachment_map_t::const_iterator iter = mAttachmentPoints.begin();
+		 iter != mAttachmentPoints.end();
+		 ++iter)
+	{
+		const LLViewerJointAttachment *attachment_pt = (*iter).second;
+        if (attachment_pt && attachment_pt->hasAttachmentPosOverride(pos,mesh_id))
+        {
+            names.insert(attachment_pt->getName());
+        }
+    }
+
 }
 
 //-----------------------------------------------------------------------------
 // showAttachmentPosOverrides
 //-----------------------------------------------------------------------------
-void LLVOAvatar::showAttachmentPosOverrides() const
+void LLVOAvatar::showAttachmentPosOverrides(bool verbose) const
 {
+    std::set<std::string> joint_names;
+    getAttachmentOverrideNames(joint_names);
+    if (joint_names.size())
+    {
+        std::stringstream ss;
+        std::copy(joint_names.begin(), joint_names.end(), std::ostream_iterator<std::string>(ss, ","));
+        LL_INFOS() << getFullname() << " attachment positions defined for joints: " << ss.str() << "\n" << LL_ENDL;
+    }
+    else
+    {
+        LL_INFOS() << getFullname() << " no attachment positions defined for any joints" << "\n" << LL_ENDL;
+    }
+
+    if (!verbose)
+    {
+        return;
+    }
+
     LLVector3 pos;
     LLUUID mesh_id;
     S32 count = 0;
-    
+
     // Bones
 	for (avatar_joint_list_t::const_iterator iter = mSkeleton.begin();
          iter != mSkeleton.end(); ++iter)
@@ -8094,9 +8155,10 @@ void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, 
 		wtype = vparam->getWearableType();
 	}
 	S32 u8_value = F32_to_U8(value,viewer_param->getMinWeight(),viewer_param->getMaxWeight());
-	apr_file_printf(file, "\t\t<param id=\"%d\" name=\"%s\" value=\"%.3f\" u8=\"%d\" type=\"%s\" wearable=\"%s\"/>\n",
+	apr_file_printf(file, "\t\t<param id=\"%d\" name=\"%s\" value=\"%.3f\" u8=\"%d\" type=\"%s\" wearable=\"%s\" group=\"%d\"/>\n",
 					viewer_param->getID(), viewer_param->getName().c_str(), value, u8_value, type_string.c_str(),
-					LLWearableType::getTypeName(LLWearableType::EType(wtype)).c_str()
+					LLWearableType::getTypeName(LLWearableType::EType(wtype)).c_str(),
+					viewer_param->getGroup()
 //					param_location_name(vparam->getParamLocation()).c_str()
 		);
 	}
