@@ -12,4 +12,7 @@
 	<text name="tos_heading">
 		次の利用規約とプライバシーポリシーをよくお読みください。 [CURRENT_GRID] へのログインを続けるには、規約に同意する必要があります。
 	</text>
+	<text name="external_tos_required">
+		この先に進むには、my.secondlife.com にログインして利用規約（Terms of Service）に同意する必要があります。ご了承下さい。
+	</text>
 </floater>

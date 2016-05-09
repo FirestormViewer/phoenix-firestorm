@@ -20,14 +20,27 @@
 	-->
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。"/>
-	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
-	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
-	<string name="AllFriendsTitle">
-		全員（[ALL]）
-	</string>
-	<string name="OnlineFriendsTitle">
+		<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
+		<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
+		<string name="GroupCountWithInfo" value="あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。 [secondlife:/// もっと必要ですか？]"/>
+	<panel.string name="empty_list">
+		連絡先セットに何も登録がありません。
+	</panel.string>
+	<panel.string name="no_sets">
+		セット未登録
+	</panel.string>
+	<panel.string name="all_sets">
+		全てのセット
+	</panel.string>
+	<panel.string name="pseudonyms">
+		ニックネーム
+	</panel.string>
+	<panel.string name="AllFriendsTitle">
+		全員 ([ALL])
+	</panel.string>
+ 	<panel.string name="OnlineFriendsTitle">
 		オンライン（[ONLINE]）
-	</string>
+	</panel.string>
 
 	<tab_container name="tabs">
 	
@@ -63,7 +76,7 @@
                 <button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
                 <menu_button name="friends_view_btn" tool_tip="表示／並べ替えのオプションです。" />
                 <button name="friends_add_btn" tool_tip="住人にフレンド登録を申し出ます。" />
-                <button name="GlobalOnlineStatusToggle" tool_tip="オンラインステータスを表示させるかを切り替えます。" />
+                <button name="GlobalOnlineStatusToggle" tool_tip="ログイン状態がわかるようにするかを切り替えます。" />
                 <dnd_button name="friends_del_btn" tool_tip="選択した人をフレンドリストから削除します。" />
             </panel>
 			<tab_container name="friends_accordion">

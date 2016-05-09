@@ -23903,6 +23903,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSStaticEyesUUID</key>
+    <map>
+      <key>Comment</key>
+      <string>Animation UUID to used to stop idle eye moment (Default uses priority 2)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>eff31dd2-1b65-5a03-5e37-15aca8e53ab7</string>
+    </map>
   </map>
 </llsd>
 

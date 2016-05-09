@@ -79,6 +79,7 @@
 			<menu_item_separator/>
 			<menu_item_check label="テレポートのオファーや依頼を拒否する" name="Automatically reject teleport offers" />
 			<menu_item_check label="グループ招待を全て拒否" name="Reject all group invites" />
+			<menu_item_check label="フレンド申請を全て拒否" name="Reject all friendship requests" />
 		</menu>
 		<menu_item_call label="フレンド" name="My Friends"/>
 		<menu_item_check label="連絡先" name="Contacts"/>
@@ -268,8 +269,10 @@
 			<menu_item_check label="権限の詳細を表示する" name="DebugPermissions"/>
 			<menu_item_check label="私のオブジェクトだけを選択する" name="Select Only My Objects"/>
 			<menu_item_check label="動的オブジェクトだけを選択する" name="Select Only Movable Objects"/>
+			<menu_item_check label="ロックされたオブジェクトだけを選択する" name="Select Only Locked Objects" />
 			<menu_item_check label="コピー可のオブジェクトだけを選択する" name="Select Only Copyable Objects" />
 			<menu_item_check label="範囲内を選択する" name="Select By Surrounding"/>
+			<menu_item_check label="グループ所有のオブジェクトを含める" name="Include Group-Owned Objects" />
 			<menu_item_check label="選択外形を表示" name="Show Selection Outlines"/>
 			<menu_item_check label="隠れた位置の選択も表示する" name="Show Hidden Selection"/>
 			<menu_item_check label="選択した光の半径範囲を表示する" name="Show Light Radius for Selection"/>
@@ -407,7 +410,6 @@
 		<menu_item_check label="マウスの平滑化" name="Mouse Smoothing"/>
 		<menu_item_call label="キーをリリース" name="Release Keys"/>
 		<menu label="ショートカット" name="Shortcuts">
-			<menu_item_call label="画像 （[COST] ）..." name="Upload Image"/>
 			<menu_item_check label="検索" name="Search"/>
 			
 			<!-- This second, alternative shortcut for Show Advanced Menu is for backward compatibility.  The main shortcut has been changed so it's Linux-friendly, where the old shortcut is typically eaten by the window manager. -->
@@ -575,6 +577,7 @@
 			<menu_item_call label="メディアブラウザのテスト" name="Web Browser Test"/>
 			<menu_item_check label="地域再起動のテスト..." name="Region Restart Test" />
 			<menu_item_call label="Web コンテンツブラウザ" name="Web Content Browser"/>
+			<menu_item_call label="FB 接続テスト" name="FB Connect Test" />
 			<menu_item_call label="SelectMgr をダンプ" name="Dump SelectMgr"/>
 			<menu_item_call label="持ち物の出力" name="Dump Inventory"/>
 			<menu_item_call label="タイマーをダンプ" name="Dump Timers"/>

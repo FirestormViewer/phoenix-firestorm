@@ -65,6 +65,9 @@
 			<check_box name="filter_temporary" label="臨時" />
 			<check_box name="filter_attachment" label="アタッチメント" />
 			<check_box name="filter_moap" label="共有メディア" />
+			<check_box name="filter_perm_copy" label="コピー" />
+			<check_box name="filter_perm_modify" label="修正" />
+			<check_box name="filter_perm_transfer" label="再販・プレゼント" />
 			<check_box name="filter_for_sale" label="次の価格帯で販売" />
 			<spinner name="min_price" />
 			<text name="and">
@@ -92,6 +95,7 @@
 				〜
 			</text>
 			<spinner name="max_distance" />
+			<check_box name="filter_agent_parcel_only" label="今いる区画のみ" />
 			<text name="only_list">
 				次の条件のオブジェクトを除外:
 			</text>

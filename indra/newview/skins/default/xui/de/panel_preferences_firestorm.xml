@@ -95,6 +95,7 @@
 		<text name="note_lookat">
 			(Einstellungen für Avatar-Kamerafokus befinden sich auf dem Reiter &quot;Privatsphäre&quot;.)
 		</text>
+		<check_box label="Zufällige Augenbewegungen deaktivieren" name="FSStaticEyes"/>
 
 		<!-- LGG Color Beams -->
 		<text name="BeamPrefs">

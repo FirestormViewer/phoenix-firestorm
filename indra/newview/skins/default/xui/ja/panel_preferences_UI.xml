@@ -32,9 +32,10 @@
         <text name="ObjectInspectorTooltipDelay_text">
             秒
         </text>
-		
         <check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示（Phoenixスタイル）" />
-        <check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />		
+        <check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />
+        <slider label="フローティングテキストのフェード開始距離 (m):" tool_tip="フローティングテキストが薄く消え始める距離をメートル単位で設定します" name="FSHudTextFadeDistance" />
+        <slider label="フローティングテキストのフェード範囲 (m):" tool_tip="フローティングテキストがはっきりと見える状態から完全に見えなくなるまでの距離をメートル単位で設定します" name="FSHudTextFadeRange" />
 
 	</panel>
 
@@ -68,6 +69,7 @@
 			<combo_box.item label="右下" name="ScriptDialogPositionOption_5"/>
 		</combo_box>
 		<check_box label="スクリプトダイアログのアニメーションを再生" name="FSAnimatedScriptDialogs" tool_tip="ここにチェックを入れると、スクリプトダイアログが開く時にアニメーションが再生されます。（旧式の１系スタイル）ダイアログが上から下に開く時のみ有効になります。" />
+		<slider label="スクリプトダイアログ当たりの表示行数：" name="FSRowsPerScriptDialog" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数" />
 
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
         <check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />
@@ -75,6 +77,10 @@
             （再起動が必要）
         </text>
 		<check_box label="グループチャットとIMのミニアイコンを表示しない" name="FSDisableIMChiclets" tool_tip="チェックを入れるとファイアーストームは全てのグループチャットやIMのミニアイコンを表示しないようになります。（通知の封筒アイコンとIM数の合計は画面上に残ります。" />
+		<check_box label="通知ウィンドウに旧式のリスト表示レイアウトを使用" name="FSLegacyNotificationWell" tool_tip="ここにチェックを入れるとFirestormは保存された通知の表示に旧式のリスト表示形式を使用するようになります" />
+		<text name="FSLegacyNotificationWellRequiresRestart">
+			（再起動が必要）
+		</text>
 		<slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
 		<slider label="IMタブの点滅周期:" tool_tip="IMタブが１回点滅する時間を秒で設定します。IM通知に使用します。" name="ButtonFlashRate" />
 		<text name="ButtonFlashRateText">
@@ -151,6 +157,8 @@
 			<radio_item label="表示名 (ユーザ名)" name="displayname_username"/>
 		</radio_group>
 		<check_box label="権限を表示" name="FSFriendListColumnShowPermissions" tool_tip="連絡先リストにあなたがこのアバターに与えた、またはこのアバターから与えられた権限を表示します。" />
+		<check_box label="検索フィルターを表示" name="FSContactListShowSearch" tool_tip="連絡先リストに検索テキストボックスを表示し、リストをフィルターすることができるようになります">
+		</check_box>
 		<text name="textInventoryOptions">
 			インベントリ（持ち物）のオプション:
 		</text>
