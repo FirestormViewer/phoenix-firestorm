@@ -3967,7 +3967,6 @@ void LLAppearanceMgr::syncCofVersionAndRefreshCoro()
 			std::string message = (result.has("error")) ? result["error"].asString() : status.toString();
 			LL_WARNS("Avatar") << "Appearance Failure. server responded with \"" << message << "\"" << LL_ENDL;
 
-			bRetry = true;
 			// Wait for a 1/2 second before trying again.  Just to keep from asking too quickly.
 			if (++retryCount > BAKE_RETRY_MAX_COUNT)
 			{
