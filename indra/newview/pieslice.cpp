@@ -135,7 +135,7 @@ std::string PieSlice::getLabel() const
 }
 
 // accessor
-void PieSlice::setLabel(const std::string newLabel)
+void PieSlice::setLabel(const std::string& newLabel)
 {
 	mLabel = newLabel;
 }

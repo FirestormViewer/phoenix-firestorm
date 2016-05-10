@@ -66,7 +66,7 @@ public:
 
 	// accessor to expose the label to the outside (value is the same as label)
 	std::string getLabel() const;
-	void setLabel(const std::string newLabel);
+	void setLabel(const std::string& newLabel);
 	LLSD getValue() const;
 	void setValue(const LLSD& value);
 
