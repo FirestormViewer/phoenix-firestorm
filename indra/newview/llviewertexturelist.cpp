@@ -1373,7 +1373,10 @@ S32Megabytes LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended, fl
 		LL_WARNS() << "VRAM amount not detected, defaulting to " << max_texmem << " MB" << LL_ENDL;
 	}
 
-	S32Megabytes system_ram = gSysMemory.getPhysicalMemoryClamped(); // In MB
+	// <FS:Ansariel> Texture memory management
+	//S32Megabytes system_ram = gSysMemory.getPhysicalMemoryClamped(); // In MB
+	S32Megabytes system_ram = gSysMemory.getPhysicalMemoryKB(); // In MB
+	// </FS:Ansariel>
 	//LL_INFOS() << "*** DETECTED " << system_ram << " MB of system memory." << LL_ENDL;
 	if (get_recommended)
 		max_texmem = llmin(max_texmem, system_ram/2);
@@ -1479,7 +1482,10 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 // </FS:Ansariel>
 
 	//system mem
-	S32Megabytes system_ram = gSysMemory.getPhysicalMemoryClamped();
+	// <FS:Ansariel> Texture memory management
+	//S32Megabytes system_ram = gSysMemory.getPhysicalMemoryClamped();
+	S32Megabytes system_ram = gSysMemory.getPhysicalMemoryKB();
+	// </FS:Ansariel>
 
 	//minimum memory reserved for non-texture use.
 	//if system_raw >= 1GB, reserve at least 512MB for non-texture use;
