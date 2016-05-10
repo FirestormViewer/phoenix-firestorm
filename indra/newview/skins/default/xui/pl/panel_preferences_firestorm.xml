@@ -85,6 +85,7 @@
         <text name="note_lookat">
              (Śledzenie spojrzeń Awatara w zakładce Prywatność)
         </text>
+        <check_box label="Wyłącz losowe ruchy gałek ocznych awatara" name="FSStaticEyes" />
         <text name="BeamPrefs">
             Efekty wiązki wyboru
         </text>
