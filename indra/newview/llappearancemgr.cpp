@@ -3917,6 +3917,105 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro()
     }
 }
 
+// [SL:KB] - Patch: Appearance-Misc
+// Bad hack but if the viewer and server COF versions get out of sync all appearance requests will start to fail from that point on and require a relog to fix
+void LLAppearanceMgr::syncCofVersionAndRefresh()
+{
+	LLCoros::instance().launch("syncCofVersionAndRefreshCoro", 
+		boost::bind(&LLAppearanceMgr::syncCofVersionAndRefreshCoro, this));
+}
+
+void LLAppearanceMgr::syncCofVersionAndRefreshCoro()
+{
+	// If we don't have a region, report it as an error
+	if (gAgent.getRegion() == NULL)
+	{
+		LL_WARNS("Avatar") << "Region not set, cannot request cof_version increment" << LL_ENDL;
+		return;
+	}
+
+	std::string url = gAgent.getRegion()->getCapability("IncrementCOFVersion");
+	if (url.empty())
+	{
+		LL_WARNS("Avatar") << "No cap for IncrementCofVersion." << LL_ENDL;
+		return;
+	}
+
+	LL_INFOS("Avatar") << "Requesting cof_version be incremented via capability to: " << url << LL_ENDL;
+
+	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(
+		new LLCoreHttpUtil::HttpCoroutineAdapter("syncCofVersionAndRefreshCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID));
+
+	llcoro::suspend();
+	S32 retryCount(0);
+	bool bRetry;
+	do
+	{
+		// Actually send the request.
+		LL_DEBUGS("Avatar") << "Will send request COF sync" << LL_ENDL;
+
+		bRetry = false;
+		LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
+
+		LLSD result = httpAdapter->getAndSuspend(httpRequest, url);
+
+		LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+		LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+		if (!status)
+		{
+			std::string message = (result.has("error")) ? result["error"].asString() : status.toString();
+			LL_WARNS("Avatar") << "Appearance Failure. server responded with \"" << message << "\"" << LL_ENDL;
+
+			bRetry = true;
+			// Wait for a 1/2 second before trying again.  Just to keep from asking too quickly.
+			if (++retryCount > BAKE_RETRY_MAX_COUNT)
+			{
+				LL_WARNS("Avatar") << "COF increment retry count exceeded!" << LL_ENDL;
+				break;
+			}
+			F32 timeout = pow(BAKE_RETRY_TIMEOUT, static_cast<float>(retryCount)) - 1.0f;
+
+			LL_WARNS("Avatar") << "COF increment retry #" << retryCount << " in " << timeout << " seconds." << LL_ENDL;
+
+			llcoro::suspendUntilTimeout(timeout); 
+			bRetry = true;
+		}
+		else
+		{
+			LL_INFOS("Avatar") << "Successfully incremented agent's COF." << LL_ENDL;
+
+			result.erase(LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS);
+
+			if (!result.isMap())
+			{
+				LL_WARNS("Avatar") << "Malformed response contents" << LL_ENDL;
+				bRetry = true;
+				continue;
+			}
+
+			// Slam the server version onto the local version
+			LLViewerInventoryCategory* pCOF = gInventory.getCategory(LLAppearanceMgr::instance().getCOF());
+			if (pCOF)
+			{
+				S32 cofVersion = result["version"].asInteger();
+				LL_INFOS("Avatar") << "Slamming server COF version: was " << pCOF->getVersion() << " now " << cofVersion << LL_ENDL;
+				pCOF->setVersion(cofVersion);
+				llassert(gAgentAvatarp->mLastUpdateReceivedCOFVersion < cofVersion);
+			}
+
+			// The viewer version tends to be ahead of the server version so make sure our new request doesn't appear to be stale
+			gAgentAvatarp->mLastUpdateRequestCOFVersion = gAgentAvatarp->mLastUpdateReceivedCOFVersion;
+
+		}
+
+	} while (bRetry);
+
+	// Try and request an update even if we fail
+	LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+}
+// [/SL:KB]
+
 /*static*/
 void LLAppearanceMgr::debugAppearanceUpdateCOF(const LLSD& content)
 {
