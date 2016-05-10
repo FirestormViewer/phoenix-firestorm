@@ -470,6 +470,12 @@ Um Medien nur auf einer Fläche einzufügen, wählen Sie „Oberfläche auswähl
 	<notification name="ErrorEncodingSnapshot">
 		Fehler beim Erstellen des Fotos!
 	</notification>
+	<notification name="ErrorPhotoCannotAfford">
+		Sie benötigten [COST] L$ um ein Foto in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+	</notification>
+	<notification name="ErrorTextureCannotAfford">
+		Sie benötigten [COST] L$ um eine Textur in Ihrem Inventar zu speichern. Sie können entweder L$ kaufen oder das Foto auf Ihrem Computer speichern.
+	</notification>
 	<notification name="ErrorUploadingPostcard">
 		Ein Foto konnte aus folgendem Grund nicht gesendet werden: [REASON]
 	</notification>
@@ -2865,6 +2871,12 @@ Fliegen ist hier nicht möglich.
 			name="okcancelbuttons"
 			yestext="Region neu formen"
 			notext="Schließen"/>
+	</notification>
+	<notification name="PathfindingDirtyRebake">
+		Diese Region weist ausstehende Pathfinding-Änderungen auf. Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
+		<usetemplate
+			name="okbutton"
+			yestext="Region neu formen"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Geskriptete Objekte, die Pathfinding-LSL-Aufrufe verwenden, funktionieren in dieser Region u. U. nicht wie erwartet.
