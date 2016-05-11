@@ -3880,6 +3880,16 @@ void LLAppearanceMgr::serverAppearanceUpdateCoro()
                 S32 expectedCofVersion = result["expected"].asInteger();
                 LL_WARNS("Avatar") << "Server expected " << expectedCofVersion << " as COF version" << LL_ENDL;
 
+				// <FS:Ansariel> Correct local COF version to match the expected version
+				LLViewerInventoryCategory* cof_cat = gInventory.getCategory(LLAppearanceMgr::instance().getCOF());
+				if (cof_cat)
+				{
+					cof_cat->setVersion(expectedCofVersion);
+					gAgentAvatarp->mLastUpdateRequestCOFVersion = expectedCofVersion;
+					gAgentAvatarp->mLastUpdateReceivedCOFVersion = expectedCofVersion;
+				}
+				// </FS:Ansariel>
+
                 bRetry = true;
                 // Wait for a 1/2 second before trying again.  Just to keep from asking too quickly.
                 if (++retryCount > BAKE_RETRY_MAX_COUNT)
