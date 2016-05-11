@@ -57,6 +57,38 @@ F32 LLDrawPoolTerrain::sDetailScale = DETAIL_SCALE;
 static LLGLSLShader* sShader = NULL;
 static LLTrace::BlockTimerStatHandle FTM_SHADOW_TERRAIN("Terrain Shadow");
 
+// <FS:ND> Hack to preload the invisiprim textures and make them fall into the right texturelist bucket
+
+LLPointer<LLViewerTexture> mAlphaRampImagep2;
+LLPointer<LLViewerTexture> m2DAlphaRampImagep2;
+
+void preloadForInvisiprims()
+{
+	U32 format = GL_ALPHA8;
+	U32 int_format = GL_ALPHA;
+	mAlphaRampImagep2 = LLViewerTextureManager::getFetchedTextureFromFile( "alpha_gradient.tga",
+                                                                           FTT_LOCAL_FILE,
+                                                                           TRUE, LLGLTexture::BOOST_NONE,
+                                                                           LLViewerTexture::FETCHED_TEXTURE,
+                                                                           format, int_format,
+                                                                           LLUUID( "e97cf410-8e61-7005-ec06-629eba4cd1fb" ) );
+
+	//gGL.getTexUnit(0)->bind(mAlphaRampImagep.get());
+	mAlphaRampImagep2->setAddressMode( LLTexUnit::TAM_CLAMP );
+
+	m2DAlphaRampImagep2 = LLViewerTextureManager::getFetchedTextureFromFile( "alpha_gradient_2d.j2c",
+                                                                             FTT_LOCAL_FILE,
+                                                                             TRUE, LLGLTexture::BOOST_NONE,
+                                                                             LLViewerTexture::FETCHED_TEXTURE,
+                                                                             format, int_format,
+                                                                             LLUUID( "38b86f85-2575-52a9-a531-23108d8da837" ) );
+
+	//gGL.getTexUnit(0)->bind(m2DAlphaRampImagep.get());
+	m2DAlphaRampImagep2->setAddressMode( LLTexUnit::TAM_CLAMP );
+
+}
+// </FS:ND>
+
 
 LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
 	LLFacePool(POOL_TERRAIN),
@@ -99,6 +131,8 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
 	mTexturep->setBoostLevel(LLGLTexture::BOOST_TERRAIN);
 	
 	//gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+	preloadForInvisiprims(); // <FS:ND/> load textures for invisiprims (same UUID as above, but put them into the texturelist for normal textures rather than UI).
 }
 
 LLDrawPoolTerrain::~LLDrawPoolTerrain()
