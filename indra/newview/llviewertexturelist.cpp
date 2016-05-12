@@ -228,7 +228,7 @@ void LLViewerTextureList::doPrefetchImages()
 		S32 pixel_area = imagesd["area"];
 		S32 texture_type = imagesd["type"];
 
-		if(LLViewerTexture::FETCHED_TEXTURE == texture_type || LLViewerTexture::LOD_TEXTURE == texture_type)
+		if((LLViewerTexture::FETCHED_TEXTURE == texture_type || LLViewerTexture::LOD_TEXTURE == texture_type) && !LLViewerTexture::isInvisiprim(uuid))
 		{
 			LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(uuid, FTT_DEFAULT, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, texture_type);
 			if (image)
@@ -263,7 +263,8 @@ void LLViewerTextureList::shutdown()
 			!image->getUseDiscard() ||
 			image->needsAux() ||
 			image->getTargetHost() != LLHost::invalid ||
-			!image->getUrl().empty()
+			!image->getUrl().empty() ||
+			image->isInvisiprim()
 			)
 		{
 			continue; // avoid UI, baked, and other special images
