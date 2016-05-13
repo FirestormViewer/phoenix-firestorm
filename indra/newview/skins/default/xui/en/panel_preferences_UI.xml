@@ -397,7 +397,6 @@
       <check_box
        control_name="UsePieMenu"
        height="16"
-       initial_value="true"
        label="Use Pie Menu"
        layout="topleft"
        left="5"
@@ -405,12 +404,24 @@
        tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
        top_pad="12"
        width="256" />
+      <check_box
+       control_name="PieMenuPopupFontEffect"
+       enabled_control="UsePieMenu"
+       height="16"
+       label="Enable text animation"
+       layout="topleft"
+       left="15"
+       name="PieMenuPopupFontEffect"
+       tool_tip="Enables the text within the pie menu being part of the animation when the pie menu opens."
+       top_pad="3"
+       width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
          initial_value="true"
          label="Group Notices and chiclets in Top Right"
          layout="topleft"
+         left="5"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="3"
