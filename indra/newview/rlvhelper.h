@@ -109,6 +109,7 @@ struct RlvCommandHandler
 
 // Aliases to improve readability in definitions
 template<ERlvBehaviour eBhvr> using RlvBehaviourHandler = RlvCommandHandler<RLV_TYPE_ADDREM, eBhvr>;
+template<ERlvBehaviour eBhvr> using RlvBehaviourToggleHandler = RlvBehaviourHandler<eBhvr>;
 template<ERlvBehaviour eBhvr> using RlvForceHandler = RlvCommandHandler<RLV_TYPE_FORCE, eBhvr>;
 template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>;
 
@@ -146,7 +147,7 @@ template<RlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor =
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
 //
 
-template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourHandler<eBhvr>>
+template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
 class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
 {
 public:

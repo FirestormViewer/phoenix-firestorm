@@ -14,6 +14,7 @@
  * 
  */
 
+// Generic includes
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llappearancemgr.h"
@@ -27,6 +28,16 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 
+// Command specific includes
+#include "llenvmanager.h"				// @setenv
+#include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
+#include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
+#include "llpanelwearing.h"				// @showinv - "Appearance / Current Outfit" panel
+#include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
+#include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
+#include "lltoolmgr.h"					// @edit
+
+// RLVa includes
 #include "rlvfloaters.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
@@ -35,6 +46,7 @@
 #include "rlvui.h"
 #include "rlvextensions.h"
 
+// Boost includes
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
@@ -1524,6 +1536,31 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		// Turn off "View / Highlight Transparent"
+		LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
+
+		// Hide the beacons floater if it's currently visible
+		if (LLFloaterReg::instanceVisible("beacons"))
+			LLFloaterReg::hideInstance("beacons");
+
+		// Hide the build floater if it's currently visible
+		if (LLFloaterReg::instanceVisible("build"))
+			LLToolMgr::instance().toggleBuildMode();
+	}
+
+	// Start or stop filtering opening the beacons floater
+	if (fHasBhvr)
+		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
+	else
+		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+}
+
 // Handles: @sendchannel[:<channel>]=n|y
 template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
@@ -1539,7 +1576,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand
 			gRlvHandler.addException(rlvCmd.getObjectID(),  rlvCmd.getBehaviourType(), nChannel);
 		else
 			gRlvHandler.removeException(rlvCmd.getObjectID(),  rlvCmd.getBehaviourType(), nChannel);
-	} 
+	}
 	else
 	{
 		fRefCount = true;
@@ -1549,9 +1586,50 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand
 
 // Handles: @sendim=n|y toggles
 template<> template<>
-void RlvBehaviourHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
+}
+
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	for (const auto& dbgSetting : RlvExtGetSet::m_DbgAllowed)
+	{
+		if (dbgSetting.second & RlvExtGetSet::DBG_WRITE)
+			gSavedSettings.getControl(dbgSetting.first)->setHiddenFromSettingsEditor(fHasBhvr);
+	}
+}
+
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
+	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
+	{
+		if (fHasBhvr)
+		{
+			// Hide the floater if it's currently visible
+			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
+			for (LLFloater* pFloater : envFloaters)
+				pFloater->closeFloater();
+			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+		else
+		{
+			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+	}
+
+	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
+
+	// Restore the user's WindLight preferences when releasing
+	if (!fHasBhvr)
+		LLEnvManagerNew::instance().usePrefs();
 }
 
 // Handles: @showhovertext:<uuid>=n|y
@@ -1575,6 +1653,61 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
+}
+
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	//
+	// When disabling, close any inventory floaters that may be open
+	//
+	if (fHasBhvr)
+	{
+		LLFloaterReg::const_instance_list_t invFloaters = LLFloaterReg::getFloaterList("inventory");
+		for (LLFloater* pFloater : invFloaters)
+			pFloater->closeFloater();
+	}
+
+	//
+	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
+	//
+	LLPanelOutfitsInventory* pAppearancePanel = LLPanelOutfitsInventory::findInstance();
+	RLV_ASSERT(pAppearancePanel);
+	if (pAppearancePanel)
+	{
+		LLTabContainer* pAppearanceTabs = pAppearancePanel->getAppearanceTabs();
+		LLOutfitsList* pMyOutfitsPanel = pAppearancePanel->getMyOutfitsPanel();
+		if ( (pAppearanceTabs) && (pMyOutfitsPanel) )
+		{
+			S32 idxTab = pAppearanceTabs->getIndexForPanel(pMyOutfitsPanel);
+			RLV_ASSERT(-1 != idxTab);
+			pAppearanceTabs->enableTabButton(idxTab, !fHasBhvr);
+
+			// When disabling, switch to the COF tab if "My Outfits" is currently active
+			if ( (fHasBhvr) && (pAppearanceTabs->getCurrentPanelIndex() == idxTab) )
+				pAppearanceTabs->selectTabPanel(pAppearancePanel->getCurrentOutfitPanel());
+		}
+
+		LLSidepanelAppearance* pCOFPanel = pAppearancePanel->getAppearanceSP();
+		RLV_ASSERT(pCOFPanel);
+		if ( (fHasBhvr) && (pCOFPanel) && (pCOFPanel->isOutfitEditPanelVisible()) )
+		{
+			// TODO-RLVa: we should really just be collapsing the "Add more..." inventory panel (and disable the button)
+			pCOFPanel->showOutfitsInventoryPanel();
+		}
+	}
+
+	//
+	// Filter (or stop filtering) opening new inventory floaters
+	//
+	if (fHasBhvr)
+		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
+	else
+		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
 }
 
 // ============================================================================
