@@ -55,6 +55,7 @@
         <check_box label="Animuj komunikaty" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x). Działa tylko wtedy, gdy komunikaty skryptów otwierają się z góry na dół." />
         <slider label_width="220" width="460" label="Wiersze tekstu widoczne w komunikacie:" name="FSRowsPerScriptDialog" tool_tip="Maksymalna ilość wierszy widoczna jednocześnie w pojedynczym komunikacie skryptów." />
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
+        <check_box label="Animuj również tekst" name="PieMenuPopupFontEffect" tool_tip="Sprawia, że tekst w menu kołowym staje się częścią animacji, gdy jest ono otwierane." />
         <check_box label="Ikony i ogł. grup w prawym górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
