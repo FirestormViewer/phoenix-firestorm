@@ -141,19 +141,120 @@ template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_
 template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>> using RlvReplyProcessor = RlvCommandProcessor<RLV_TYPE_REPLY, eBhvr, handlerImpl>;
 
 // Provides pre-defined generic implementations of basic behaviours (template voodoo - see original commit for something that still made sense)
-template<RlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template<RlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<optionType>>;
+template<ERlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<ERlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<optionType>>;
 
 // ============================================================================
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
 //
 
-template <ERlvBehaviour eBhvr, RlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
+template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
 class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
 {
 public:
 	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
 	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &toggleHandlerImpl::onCommandToggle); }
+};
+
+// ============================================================================
+// RlvBehaviourModifier - stores behaviour modifiers in an - optionally - sorted list and returns the first element (or default value if there are no modifiers)
+//
+
+struct RlvBehaviourModifier_Comp { virtual bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) = 0; };
+struct RlvBehaviourModifier_CompMin : public RlvBehaviourModifier_Comp { bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) override { return lhs < rhs; } };
+struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp { bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) override { return rhs < lhs; } };
+
+class RlvBehaviourModifier
+{
+public:
+	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
+
+	/*
+	 * Member functions
+	 */
+public:
+	bool addValue(const RlvBehaviourModifierValue& modValue);
+	bool convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
+	bool getAddDefault() const { return m_fAddDefaultOnEmpty; }
+	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
+	const RlvBehaviourModifierValue& getValue() const { return (!m_Values.empty()) ? m_Values.front() : m_DefaultValue; }
+	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
+	void removeValue(const RlvBehaviourModifierValue& modValue);
+
+	typedef boost::signals2::signal<void(const RlvBehaviourModifierValue& newValue)> change_signal_t;
+	change_signal_t& getSignal() { return m_ChangeSignal; }
+
+	/*
+	 * Member variables
+	 */
+protected:
+	RlvBehaviourModifierValue            m_DefaultValue;
+	bool                                 m_fAddDefaultOnEmpty;
+	std::list<RlvBehaviourModifierValue> m_Values;
+	change_signal_t                      m_ChangeSignal;
+	RlvBehaviourModifier_Comp*           m_pValueComparator;
+};
+
+// Inspired by LLControlCache<T>
+template<typename T>
+class RlvBehaviourModifierCache : public LLRefCount, public LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>
+{
+public:
+	RlvBehaviourModifierCache(ERlvBehaviourModifier eModifier)
+		: LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>(eModifier)
+	{
+		RlvBehaviourModifier* pBhvrModifier = (eModifier < RLV_MODIFIER_COUNT) ? RlvBehaviourDictionary::instance().getModifier(eModifier) : nullptr;
+		if (pBhvrModifier)
+		{
+			mConnection = pBhvrModifier->getSignal().connect(boost::bind(&RlvBehaviourModifierCache<T>::handleValueChange, this, _1));
+			mCachedValue = pBhvrModifier->getValue<T>();
+		}
+		else
+		{
+			mCachedValue = {};
+		}
+	}
+	~RlvBehaviourModifierCache() {}
+
+	/*
+	 * Member functions
+	 */
+public:
+	const T& getValue() const { return mCachedValue; }
+protected:
+	void handleValueChange(const RlvBehaviourModifierValue& newValue) { mCachedValue = boost::get<T>(newValue); }
+
+	/*
+	 * Member variables
+	 */
+protected:
+	T mCachedValue;
+	boost::signals2::scoped_connection mConnection;
+};
+
+// Inspired by LLCachedControl<T>
+template <typename T>
+class RlvCachedBehaviourModifier
+{
+public:
+	RlvCachedBehaviourModifier(ERlvBehaviourModifier eModifier)
+	{
+		if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier)) == nullptr)
+			mCachedModifierPtr = new RlvBehaviourModifierCache<T>(eModifier);
+	}
+
+	/*
+	 * Operators
+	 */
+public:
+	operator const T&() const { return mCachedModifierPtr->getValue(); }
+	const T& operator()() { return mCachedModifierPtr->getValue(); }
+
+	/*
+	 * Member variables
+	 */
+protected:
+	LLPointer<RlvBehaviourModifierCache<T>> mCachedModifierPtr;
 };
 
 // ============================================================================
@@ -168,6 +269,7 @@ protected:
 	~RlvBehaviourDictionary();
 public:
 	void addEntry(const RlvBehaviourInfo* pEntry);
+	void addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry);
 
 	/*
 	 * General helper functions
@@ -177,7 +279,8 @@ public:
 	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
 	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
 	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
-	const std::string&      getStringFromBehaviour(ERlvBehaviour eBhvr, ERlvParamType eParamType, bool fStrict = false) const;
+	RlvBehaviourModifier*   getModifier(ERlvBehaviourModifier eBhvrMod) const { return (eBhvrMod < RLV_MODIFIER_COUNT) ? m_BehaviourModifiers[eBhvrMod] : nullptr; }
+	RlvBehaviourModifier*   getModifierFromBehaviour(ERlvBehaviour eBhvr) const;
 	void                    toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBvhrFlag, bool fEnable);
 
 	/*
@@ -187,10 +290,13 @@ protected:
 	typedef std::list<const RlvBehaviourInfo*> rlv_bhvrinfo_list_t;
 	typedef std::map<std::pair<std::string, ERlvParamType>, const RlvBehaviourInfo*> rlv_string2info_map_t;
 	typedef std::multimap<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
+	typedef std::map<ERlvBehaviour, ERlvBehaviourModifier> rlv_bhvr2mod_map_t;
 
 	rlv_bhvrinfo_list_t   m_BhvrInfoList;
 	rlv_string2info_map_t m_String2InfoMap;
 	rlv_bhvr2info_map_t	  m_Bhvr2InfoMap;
+	rlv_bhvr2mod_map_t    m_Bhvr2ModifierMap;
+	RlvBehaviourModifier* m_BehaviourModifiers[RLV_MODIFIER_COUNT];
 };
 
 // ============================================================================

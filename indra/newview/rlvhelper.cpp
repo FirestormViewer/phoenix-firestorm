@@ -32,8 +32,14 @@
 // RlvBehaviourDictionary
 //
 
+static RlvBehaviourModifier_CompMin s_RlvBehaviourModifier_CompMin;
+static RlvBehaviourModifier_CompMax s_RlvBehaviourModifier_CompMax;
+
 RlvBehaviourDictionary::RlvBehaviourDictionary()
 {
+	// Array auto-initialization to 0 is still not supported in VS2013
+	memset(m_BehaviourModifiers, 0, sizeof(RlvBehaviourModifier*) * RLV_MODIFIER_COUNT);
+
 	//
 	// Restrictions
 	//
@@ -219,6 +225,12 @@ RlvBehaviourDictionary::~RlvBehaviourDictionary()
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 		delete pBhvrInfo;
 	m_BhvrInfoList.clear();
+
+	for (int idxBhvrMod = 0; idxBhvrMod < RLV_MODIFIER_COUNT; idxBhvrMod++)
+	{
+		delete m_BehaviourModifiers[idxBhvrMod];
+		m_BehaviourModifiers[idxBhvrMod] = nullptr;
+	}
 }
 
 void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
@@ -239,6 +251,15 @@ void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
 #endif // LL_RELEASE_FOR_DOWNLOAD
 
 	m_BhvrInfoList.push_back(pEntry);
+}
+
+void RlvBehaviourDictionary::addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry)
+{
+	if (eModifier < RLV_MODIFIER_COUNT)
+	{
+		m_BehaviourModifiers[eModifier] = pModifierEntry;
+		m_Bhvr2ModifierMap.insert(std::make_pair(eBhvr, eModifier));
+	}
 }
 
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
@@ -287,12 +308,74 @@ bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
 	return false;
 }
 
+RlvBehaviourModifier* RlvBehaviourDictionary::getModifierFromBehaviour(ERlvBehaviour eBhvr) const
+{
+	rlv_bhvr2mod_map_t::const_iterator itMod = m_Bhvr2ModifierMap.find(eBhvr);
+	ERlvBehaviourModifier eBhvrMod = (m_Bhvr2ModifierMap.end() != itMod) ? itMod->second : RLV_MODIFIER_UNKNOWN;
+	return (eBhvrMod < RLV_MODIFIER_UNKNOWN) ? m_BehaviourModifiers[eBhvrMod] : nullptr;
+}
+
 void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBhvrFlag, bool fEnable)
 {
 	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair(strBhvr, (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
 	if (m_String2InfoMap.end() != itBhvr)
 	{
 		const_cast<RlvBehaviourInfo*>(itBhvr->second)->toggleBehaviourFlag(eBhvrFlag, fEnable);
+	}
+}
+
+// ============================================================================
+// RlvBehaviourModifier
+//
+
+RlvBehaviourModifier::RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
+	: m_DefaultValue(defaultValue), m_fAddDefaultOnEmpty(fAddDefaultOnEmpty), m_pValueComparator(pValueComparator)
+{
+}
+
+bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue)
+{
+	if (modValue.which() == m_DefaultValue.which())
+	{
+		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), modValue, boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), modValue);
+		m_ChangeSignal(getValue());
+		return true;
+	}
+	return false;
+}
+
+void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue)
+{
+	if ( (modValue.which() == m_DefaultValue.which()) )
+	{
+		auto itValue = std::find(m_Values.begin(), m_Values.end(), modValue);
+		if (m_Values.end() != itValue)
+		{
+			m_Values.erase(itValue);
+			m_ChangeSignal(getValue());
+		}
+	}
+}
+
+bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const
+{
+	try
+	{
+		if (typeid(float) == m_DefaultValue.type())
+		{
+			modValue = std::stof(optionValue.c_str());
+			return true;
+		}
+		else if (typeid(int) == m_DefaultValue.type())
+		{
+			modValue = std::stoi(optionValue.c_str());
+			return true;
+		}
+		return false;
+	}
+	catch (const std::invalid_argument&)
+	{
+		return false;
 	}
 }
 

@@ -192,11 +192,19 @@ enum ERlvBehaviour {
 	RLV_BHVR_UNKNOWN
 };
 
-enum RlvBehaviourOptionType
+enum ERlvBehaviourModifier
+{
+	RLV_MODIFIER_COUNT,
+	RLV_MODIFIER_UNKNOWN
+};
+
+enum ERlvBehaviourOptionType
 {
 	RLV_OPTION_NONE,
 	RLV_OPTION_EXCEPTION,
-	RLV_OPTION_NONE_OR_EXCEPTION
+	RLV_OPTION_NONE_OR_EXCEPTION,
+	RLV_OPTION_MODIFIER,
+	RLV_OPTION_NONE_OR_MODIFIER
 };
 
 enum ERlvParamType {
