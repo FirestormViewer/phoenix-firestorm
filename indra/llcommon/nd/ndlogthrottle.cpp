@@ -38,6 +38,8 @@ namespace nd
 		const U64 initialThrottle = 5*1000*1000; // 5 seconds
 		const U64 resetAfter = 30*1000*1000;
 
+		bool logThrottleEnabled = true;
+
 		struct CallSiteCall
 		{
 			char const *mFile;
@@ -74,6 +76,11 @@ namespace nd
 		{
 			// Only called from Log::flush and protected by LogLock
 			
+			if (!logThrottleEnabled)
+			{
+				return false;
+			}
+
 			static std::set< CallSiteCall > stCalls;
 
 			CallSiteCall oCall( aFile, aLine );
@@ -128,6 +135,11 @@ namespace nd
 			itr->mThrottledCalls = 0;
 			
 			return false;
+		}
+
+		void setThrottleEnabled(bool enabled)
+		{
+			logThrottleEnabled = enabled;
 		}
 	}
 }

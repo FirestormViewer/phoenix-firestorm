@@ -97,6 +97,7 @@
 #include "NACLantispam.h"
 #include "llviewerkeyboard.h"
 #include "llviewerregion.h"
+#include "nd/ndlogthrottle.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -901,6 +902,13 @@ void handleContactListShowSearchChanged(const LLSD& newvalue)
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Debug setting to disable log throttle
+void handleLogThrottleChanged(const LLSD& newvalue)
+{
+	nd::logging::setThrottleEnabled(newvalue.asBoolean());
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -1115,6 +1123,9 @@ void settings_setup_listeners()
 	//<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
 	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&BandwidthUpdater::update, sBandwidthUpdater, _2));
 	gSavedSettings.getControl("FSContactListShowSearch")->getSignal()->connect(boost::bind(&handleContactListShowSearchChanged, _2));
+
+	// <FS:Ansariel> Debug setting to disable log throttle
+	gSavedSettings.getControl("FSEnableLogThrottle")->getSignal()->connect(boost::bind(&handleLogThrottleChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
