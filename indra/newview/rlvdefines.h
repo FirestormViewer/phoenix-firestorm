@@ -143,6 +143,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_RECVIMFROM,			// "recvimfrom"
 	RLV_BHVR_STARTIM,				// "startim"
 	RLV_BHVR_STARTIMTO,				// "startimto"
+	RLV_BHVR_SENDGESTURE,
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
 	RLV_BHVR_SHOWINV,				// "showinv"

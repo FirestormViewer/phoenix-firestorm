@@ -79,6 +79,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SENDIM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendgesture", RLV_BHVR_SENDGESTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setenv", RLV_BHVR_SETENV));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));

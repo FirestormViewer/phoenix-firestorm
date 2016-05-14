@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2013, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -36,6 +36,11 @@ bool RlvActions::canReceiveIM(const LLUUID& idSender)
 		(!rlv_handler_t::isEnabled()) ||
 		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.isException(RLV_BHVR_RECVIM, idSender)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) || (!gRlvHandler.isException(RLV_BHVR_RECVIMFROM, idSender)) ) );
+}
+
+bool RlvActions::canPlayGestures()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDGESTURE));
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0)

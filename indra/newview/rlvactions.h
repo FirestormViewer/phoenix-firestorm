@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2013, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -33,6 +33,11 @@ public:
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
 	 */
 	static bool canReceiveIM(const LLUUID& idSender);
+
+	/*
+	 * Returns true if the user is allowed to send/play gestures (whether active ones from the chat bar or using the gesture preview floater)
+	 */
+	static bool canPlayGestures();
 
 	/*
 	 * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
