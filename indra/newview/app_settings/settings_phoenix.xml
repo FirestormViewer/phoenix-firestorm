@@ -507,6 +507,18 @@
     <integer>1</integer>
   </map>
 
+  <key>FSUseLegacyLoginPanel</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the legacy layout version of the login panel will be used</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
   <key>FSStatbarLegacyMeanPerSec</key>
   <map>
     <key>Comment</key>
