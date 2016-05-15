@@ -1249,13 +1249,22 @@ class LLAdvancedToggleWireframe : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
+// [RLVa:KB] - Checked: RLVa-2.0.0
 		bool fRlvBlockWireframe = gRlvAttachmentLocks.hasLockedHUD();
 		if ( (!gUseWireframe) && (fRlvBlockWireframe) )
-		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_WIREFRAME);
-		}
-		gUseWireframe = (!gUseWireframe) && (!fRlvBlockWireframe);
+		set_use_wireframe( (!gUseWireframe) && (!fRlvBlockWireframe) );
+		return true;
+	}
+};
+
+// Called from rlvhandler.cpp
+void set_use_wireframe(BOOL useWireframe)
+	{
+		if (gUseWireframe == useWireframe)
+			return;
+
+		gUseWireframe = useWireframe;
 // [/RLVa:KB]
 //		gUseWireframe = !(gUseWireframe);
 
@@ -1276,9 +1285,9 @@ class LLAdvancedToggleWireframe : public view_listener_t
 			LLViewerShaderMgr::instance()->setShaders();
 		}
 
-		return true;
+//		return true;
 	}
-};
+//};
 
 class LLAdvancedCheckWireframe : public view_listener_t
 {
