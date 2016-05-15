@@ -24,11 +24,13 @@
 #include "llmoveview.h"
 #include "llstartup.h"
 #include "llviewermessage.h"
+#include "llviewermenu.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 
 // Command specific includes
+#include "llagentcamera.h"				// @camfocus
 #include "llenvmanager.h"				// @setenv
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
@@ -1495,6 +1497,16 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 
 	fRefCount = rlvCmd.getOption().empty();	// Only reference count global locks
 	return RLV_RET_SUCCESS;
+}
+
+// Handles: @sendim=n|y toggles
+template<> template<>
+void RlvBehaviourHandler<RLV_BHVR_CAMUNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		handle_reset_view();
+	}
 }
 
 // Handles: @detach[:<attachpt>]=n|y

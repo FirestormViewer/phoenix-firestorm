@@ -1145,6 +1145,14 @@ void LLAgentCamera::updateCamera()
 	mCameraUpVector = LLVector3::z_axis;
 	//LLVector3	camera_skyward(0.f, 0.f, 1.f);
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	// Set focus back on our avie if something changed it
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_CAMUNLOCK)) && (cameraThirdPerson()) && (!getFocusOnAvatar()) )
+	{
+		setFocusOnAvatar(TRUE, FALSE);
+	}
+// [/RLVa:KB]
+
 	U32 camera_mode = mCameraAnimating ? mLastCameraMode : mCameraMode;
 
 	validateFocusObject();
