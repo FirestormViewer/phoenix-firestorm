@@ -30,7 +30,7 @@
 #include "llviewerregion.h"
 
 // Command specific includes
-#include "llagentcamera.h"				// @camfocus
+#include "llagentcamera.h"				// @setcam and related
 #include "llenvmanager.h"				// @setenv
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
@@ -38,9 +38,10 @@
 #include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
-#include "llviewercamera.h"				// @camfocus
+#include "llviewercamera.h"				// @setcam and related
 
 // RLVa includes
+#include "rlvactions.h"
 #include "rlvfloaters.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
@@ -137,6 +138,23 @@ RlvHandler::~RlvHandler()
 // ============================================================================
 // Behaviour related functions
 //
+
+bool RlvHandler::findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const
+{
+	lObjects.clear();
+	for (const auto& objEntry : m_Objects)
+		if (objEntry.second.hasBehaviour(eBhvr, false))
+			lObjects.push_back(&objEntry.second);
+	return !lObjects.empty();
+}
+
+bool RlvHandler::hasBehaviour(const LLUUID& idRlvObj, ERlvBehaviour eBhvr, const std::string& strOption) const
+{
+	rlv_object_map_t::const_iterator itObj = m_Objects.find(idRlvObj);
+	if (m_Objects.end() != itObj)
+		return itObj->second.hasBehaviour(eBhvr, strOption, false);
+	return false;
+}
 
 bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const
 {
@@ -296,7 +314,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 		case RLV_TYPE_ADD:		// Checked: 2009-11-26 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 			{
 				if ( (m_Behaviours[rlvCmd.getBehaviourType()]) && 
-					 ( (RLV_BHVR_SETDEBUG == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETENV == rlvCmd.getBehaviourType()) ) )
+					 ( (RLV_BHVR_SETCAM == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETDEBUG == rlvCmd.getBehaviourType()) || (RLV_BHVR_SETENV == rlvCmd.getBehaviourType()) ) )
 				{
 					// Some restrictions can only be held by one single object to avoid deadlocks
 					RLV_DEBUGS << "\t- " << rlvCmd.getBehaviour() << " is already set by another object => discarding" << RLV_ENDL;
@@ -464,70 +482,6 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 		m_idAgentGroup = gAgent.getGroupID();
 	}
 	return false;
-}
-
-// Handles: @camfocus:<uuid>[;<dist>[;<direction>]]=force
-template<> template<>
-ERlvCmdRet RlvForceHandler<RLV_BHVR_CAMFOCUS>::onCommand(const RlvCommand& rlvCmd)
-{
-	std::vector<std::string> optionList;
-	if (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList))
-		return RLV_RET_FAILED_OPTION;
-
-	LLVector3 posAgent;
-	LLVector3d posGlobal;
-	F32 camDistance;
-
-	// Get the focus position/object (and verify it is known)
-	LLUUID idObject; LLVector3 posRegion;
-	if (RlvCommandOptionHelper::parseOption(optionList[0], idObject))
-	{
-		const LLViewerObject* pObj = gObjectList.findObject(idObject);
-		if (!pObj)
-			return RLV_RET_FAILED_OPTION;
-		posAgent = pObj->getPositionAgent();
-		posGlobal = pObj->getPositionGlobal();
-		camDistance = pObj->getScale().magVec();
-	}
-	else if (RlvCommandOptionHelper::parseOption(optionList[0], posRegion))
-	{
-		const LLViewerRegion* pRegion = gAgent.getRegion();
-		if (!pRegion)
-			return RLV_RET_FAILED_UNKNOWN;
-		posAgent = pRegion->getPosAgentFromRegion(posRegion);
-		posGlobal = pRegion->getPosGlobalFromRegion(posRegion);
-		camDistance = 0.0f;
-	}
-	else
-	{
-		return RLV_RET_FAILED_OPTION;
-	}
-
-	// Get the camera distance
-	if ( (optionList.size() > 1) && (!optionList[1].empty()) )
-	{
-		if (!RlvCommandOptionHelper::parseOption(optionList[1], camDistance))
-			return RLV_RET_FAILED_OPTION;
-	}
-
-	// Get the directional vector (or calculate it from the current camera position)
-	LLVector3 camDirection;
-	if ( (optionList.size() > 2) && (!optionList[2].empty()) )
-	{
-		if (!RlvCommandOptionHelper::parseOption(optionList[2], camDirection))
-			return RLV_RET_FAILED_OPTION;
-	}
-	else
-	{
-		camDirection = LLViewerCamera::getInstance()->getOrigin() - posAgent;
-	}
-	camDirection.normVec();
-
-	// Move the camera in place
-	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
-	gAgentCamera.setCameraPosAndFocusGlobal(posGlobal + LLVector3d(camDirection * llmax(F_APPROXIMATELY_ZERO, camDistance)), posGlobal, idObject);
-
-	return RLV_RET_SUCCESS;
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -1436,10 +1390,19 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
 		return RLV_RET_FAILED_OPTION;
 
+	// HACK-RLVa: reference counting doesn't happen until control returns to our caller but the modifier callbacks will happen now so we need to adjust the reference counts here
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
+	{
+		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
 		pBhvrModifier->addValue(modValue, rlvCmd.getObjectID());
+		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
+	}
 	else
+	{
+		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
 		pBhvrModifier->removeValue(modValue, rlvCmd.getObjectID());
+		gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
+	}
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
@@ -1497,16 +1460,6 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 
 	fRefCount = rlvCmd.getOption().empty();	// Only reference count global locks
 	return RLV_RET_SUCCESS;
-}
-
-// Handles: @sendim=n|y toggles
-template<> template<>
-void RlvBehaviourHandler<RLV_BHVR_CAMUNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
-{
-	if (fHasBhvr)
-	{
-		handle_reset_view();
-	}
 }
 
 // Handles: @detach[:<attachpt>]=n|y
@@ -1676,7 +1629,114 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour e
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
 }
 
-// Handles: @edit=n|y toggles
+// Handles: @setcam_unlock=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+		handle_reset_view();
+}
+
+// Handles: @setcam_eyeoffset:<vector3>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
+template<> template<>
+void RlvBehaviourCamEyeFocusOffsetHandler::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+	}
+	else
+	{
+		const RlvBehaviourModifier* pBhvrEyeModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
+		const RlvBehaviourModifier* pBhvrOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
+		if ( (!pBhvrEyeModifier->hasValue()) && (!pBhvrOffsetModifier->hasValue()) )
+			gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+	}
+}
+
+// Handles: @setcam_eyeoffset:<vector3>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("CameraOffsetRLVaView");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_focusoffset:<vector3>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("FocusOffsetRLVaView");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_fovmin:<angle>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>::onValueChange() const
+{
+	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
+}
+
+// Handles: @setcam_fovmax:<angle>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>::onValueChange() const
+{
+	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
+}
+
+// Handles: @setcam=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Once an object has exclusive control over the camera only its behaviours should be active. This affects:
+	//   - RLV_BHVR_SETCAM_EYEOFFSET   => behaviour modifiers handle this for us
+	//   - RLV_BHVR_SETCAM_FOCUSOFFSET => behaviour modifiers handle this for us
+	//   - RLV_BHVR_SETCAM_FOVMIN      => behaviour modifiers handle this for us
+	//   - RLV_BHVR_SETCAM_FOVMAX      => behaviour modifiers handle this for us
+	//   - RLV_BHVR_SETCAM_UNLOCK      => manually (re)set the reference count (and possibly invoke the toggle handler)
+
+	LLUUID idRlvObject; bool fHasCamUnlock = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK);
+	if (fHasBhvr)
+	{
+		// Get the UUID of the primary object
+		std::list<const RlvObject*> lObjects;
+		gRlvHandler.findBehaviour(RLV_BHVR_SETCAM, lObjects);
+		idRlvObject = lObjects.front()->getObjectID();
+		// Reset the @setcam_unlock reference count
+		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = (lObjects.front()->hasBehaviour(RLV_BHVR_SETCAM_UNLOCK, false)) ? 1 : 0;
+	}
+	else
+	{
+		std::list<const RlvObject*> lObjects;
+		// Restore the @setcam_unlock reference count
+		gRlvHandler.findBehaviour(RLV_BHVR_SETCAM_UNLOCK, lObjects);
+		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = lObjects.size();
+	}
+
+	// Manually invoke the @setcam_unlock toggle handler if we toggled it on/off
+	if (fHasCamUnlock != gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK))
+		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
+
+	gAgentCamera.switchCameraPreset( (fHasBhvr) ? CAMERA_RLV_SETCAM_VIEW : CAMERA_PRESET_REAR_VIEW );
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMAX)->setPrimaryObject(idRlvObject);
+}
+
+// Handles: @setdebug=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
@@ -1951,6 +2011,124 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvC
 		if ( (rlvCmdOption.isEmpty()) || ((LLWearableType::EType)idxType == rlvCmdOption.getWearableType()))
 			RlvForceWear::instance().forceRemove((LLWearableType::EType)idxType);
 	}
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @setcam_eyeoffset[:<vector3>]=force and @setcam_focusoffset[:<vector3>]=force
+template<> template<>
+ERlvCmdRet RlvForceCamEyeFocusOffsetHandler::onCommand(const RlvCommand& rlvCmd)
+{
+	// Enforce exclusive camera locks
+	if (!RlvActions::canChangeCameraPreset(rlvCmd.getObjectID()))
+		return RLV_RET_FAILED_LOCK;
+
+	LLControlVariable* pOffsetControl = gSavedSettings.getControl("CameraOffsetRLVaView");
+	LLControlVariable* pFocusControl = gSavedSettings.getControl("FocusOffsetRLVaView");
+	LLControlVariable* pControl = (rlvCmd.getBehaviourType() == RLV_BHVR_SETCAM_EYEOFFSET) ? pOffsetControl : pFocusControl;
+	if (rlvCmd.hasOption())
+	{
+		LLVector3 vecOffset;
+		if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), vecOffset))
+			return RLV_RET_FAILED_OPTION;
+		pControl->setValue(vecOffset.getValue());
+	}
+	else
+	{
+		pControl->resetToDefault();
+	}
+
+	gAgentCamera.switchCameraPreset( ((pOffsetControl->isDefault()) && (pFocusControl->isDefault())) ? CAMERA_PRESET_REAR_VIEW : CAMERA_RLV_SETCAM_VIEW);
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @setcam_focus:<uuid>[;<dist>[;<direction>]]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_FOCUS>::onCommand(const RlvCommand& rlvCmd)
+{
+	std::vector<std::string> optionList;
+	if (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList))
+		return RLV_RET_FAILED_OPTION;
+
+	LLVector3 posAgent;
+	LLVector3d posGlobal;
+	F32 camDistance;
+
+	// Get the focus position/object (and verify it is known)
+	LLUUID idObject; LLVector3 posRegion;
+	if (RlvCommandOptionHelper::parseOption(optionList[0], idObject))
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(idObject);
+		if (!pObj)
+			return RLV_RET_FAILED_OPTION;
+		if (!pObj->isAvatar())
+		{
+			posAgent = pObj->getPositionAgent();
+			posGlobal = pObj->getPositionGlobal();
+		}
+		else
+		{
+			/*const*/ LLVOAvatar* pAvatar = (/*const*/ LLVOAvatar*)pObj;
+			if (pAvatar->mHeadp)
+			{
+				posAgent = pAvatar->mHeadp->getWorldPosition();
+				posGlobal = pAvatar->getPosGlobalFromAgent(posAgent);
+			}
+		}
+		camDistance = pObj->getScale().magVec();
+	}
+	else if (RlvCommandOptionHelper::parseOption(optionList[0], posRegion))
+	{
+		const LLViewerRegion* pRegion = gAgent.getRegion();
+		if (!pRegion)
+			return RLV_RET_FAILED_UNKNOWN;
+		posAgent = pRegion->getPosAgentFromRegion(posRegion);
+		posGlobal = pRegion->getPosGlobalFromRegion(posRegion);
+		camDistance = 0.0f;
+	}
+	else
+	{
+		return RLV_RET_FAILED_OPTION;
+	}
+
+	// Get the camera distance
+	if ( (optionList.size() > 1) && (!optionList[1].empty()) )
+	{
+		if (!RlvCommandOptionHelper::parseOption(optionList[1], camDistance))
+			return RLV_RET_FAILED_OPTION;
+	}
+
+	// Get the directional vector (or calculate it from the current camera position)
+	LLVector3 camDirection;
+	if ( (optionList.size() > 2) && (!optionList[2].empty()) )
+	{
+		if (!RlvCommandOptionHelper::parseOption(optionList[2], camDirection))
+			return RLV_RET_FAILED_OPTION;
+	}
+	else
+	{
+		camDirection = LLViewerCamera::getInstance()->getOrigin() - posAgent;
+	}
+	camDirection.normVec();
+
+	// Move the camera in place
+	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+	gAgentCamera.setCameraPosAndFocusGlobal(posGlobal + LLVector3d(camDirection * llmax(F_APPROXIMATELY_ZERO, camDistance)), posGlobal, idObject);
+
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @setcam_fov[:<angle>]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_FOV>::onCommand(const RlvCommand& rlvCmd)
+{
+	if (!RlvActions::canChangeCameraFOV(rlvCmd.getObjectID()))
+		return RLV_RET_FAILED_LOCK;
+
+	F32 nFOV = DEFAULT_FIELD_OF_VIEW;
+	if ( (rlvCmd.hasOption()) && (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nFOV)) )
+		return RLV_RET_FAILED_OPTION;
+
+	LLViewerCamera::getInstance()->setDefaultFOV(nFOV);
 	return RLV_RET_SUCCESS;
 }
 

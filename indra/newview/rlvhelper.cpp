@@ -32,9 +32,6 @@
 // RlvBehaviourDictionary
 //
 
-static RlvBehaviourModifier_CompMin s_RlvBehaviourModifier_CompMin;
-static RlvBehaviourModifier_CompMax s_RlvBehaviourModifier_CompMax;
-
 /*
  * Processing of RLVa commands used to be a big switch/case loop with one function for each command type(addrem, reply
  * and force). This is slowly being replaced with templated command handling which might be more confusing intially
@@ -91,7 +88,6 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_BHVR_ATTACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("attachthis_except",		RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("attachallthis_except",	RLV_BHVR_ATTACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_CAMUNLOCK, RLV_OPTION_NONE>("camunlock"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatwhisper", RLV_BHVR_CHATWHISPER));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatnormal", RLV_BHVR_CHATNORMAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("chatshout", RLV_BHVR_CHATSHOUT));
@@ -163,6 +159,17 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewnote", RLV_BHVR_VIEWNOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewscript", RLV_BHVR_VIEWSCRIPT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
+	// Camera
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM, RLV_OPTION_NONE>("setcam"));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addModifier(RLV_BHVR_SETCAM_EYEOFFSET, RLV_MODIFIER_SETCAM_EYEOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>(LLVector3::zero, true, nullptr));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addModifier(RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_MODIFIER_SETCAM_FOCUSOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>(LLVector3::zero, true, nullptr));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmin", RLV_BHVR_SETCAM_FOVMIN));
+	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMax()));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmax", RLV_BHVR_SETCAM_FOVMAX));
+	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMin()));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("setcam_unlock"));
 
 	//
 	// Force-wear
@@ -200,8 +207,11 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Force-only
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
-	addEntry(new RlvForceProcessor<RLV_BHVR_CAMFOCUS>("camfocus", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_DETACHME>("detachme"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUS>("setcam_focus", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOV>("setcam_fov", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_TPTO>("tpto"));
@@ -368,8 +378,18 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 //
 
 RlvBehaviourModifier::RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
-	: m_DefaultValue(defaultValue), m_fAddDefaultOnEmpty(fAddDefaultOnEmpty), m_pValueComparator(pValueComparator)
+	: m_DefaultValue(defaultValue), m_fAddDefaultOnEmpty(fAddDefaultOnEmpty)
 {
+	m_pValueComparator = (pValueComparator) ? pValueComparator : new RlvBehaviourModifier_Comp();
+}
+
+RlvBehaviourModifier::~RlvBehaviourModifier()
+{
+	if (m_pValueComparator)
+	{
+		delete m_pValueComparator;
+		m_pValueComparator = NULL;
+	}
 }
 
 bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
@@ -377,11 +397,19 @@ bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, c
 	if (modValue.which() == m_DefaultValue.which())
 	{
 		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject), boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_pair(modValue, idObject));
-		onValueChange();
+		// NOTE: change signal needs to trigger before modifier handlers so cached values have a chance to update properly
 		m_ChangeSignal(getValue());
+		onValueChange();
 		return true;
 	}
 	return false;
+}
+
+bool RlvBehaviourModifier::hasValue() const {
+	// If no primary object is set this returns "any value set"; otherwise it returns "any value set by the primary object"
+	if ( (!m_pValueComparator) || (m_pValueComparator->m_idPrimaryObject.isNull()) )
+		return !m_Values.empty();
+	return (!m_Values.empty()) ? m_Values.front().second == m_pValueComparator->m_idPrimaryObject : false;
 }
 
 void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
@@ -422,6 +450,15 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 		{
 			modValue = std::stoi(optionValue);
 			return true;
+		}
+		else if (typeid(LLVector3) == m_DefaultValue.type())
+		{
+			LLVector3 vecOption;
+			if (3 == sscanf(optionValue.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2))
+			{
+				modValue = vecOption;
+				return true;
+			}
 		}
 		return false;
 	}

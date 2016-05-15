@@ -56,7 +56,12 @@ enum ECameraPreset
 	CAMERA_PRESET_FRONT_VIEW, 
 
 	/** "Above and to the left, over the shoulder, pulled back a little on the zoom" */
-	CAMERA_PRESET_GROUP_VIEW
+	CAMERA_PRESET_GROUP_VIEW,
+
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	/* Used by RLVa */
+	CAMERA_RLV_SETCAM_VIEW
+// [/RLVa:KB]
 };
 
 //------------------------------------------------------------------------

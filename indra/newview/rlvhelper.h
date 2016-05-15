@@ -114,8 +114,10 @@ template<ERlvBehaviour eBhvr> using RlvForceHandler = RlvCommandHandler<RLV_TYPE
 template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>;
 
 // List of shared handlers
-typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
-typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;				// Shared between @remattach and @detach
+typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeFocusOffsetHandler;	// Shared between @setcam_eyeoffset and @setcam_focusoffset
+typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;					// Shared between @addattach and @remattach
+typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;								// Shared between @remattach and @detach
+typedef RlvForceHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvForceCamEyeFocusOffsetHandler;				// Shared between @setcam_eyeoffset and @setcam_focusoffset
 
 //
 // RlvCommandProcessor - Templated glue class that brings RlvBehaviourInfo, RlvCommandHandlerBaseImpl and RlvCommandHandler together
@@ -197,8 +199,8 @@ struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
 class RlvBehaviourModifier
 {
 public:
-	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
-	virtual ~RlvBehaviourModifier() {}
+	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator = nullptr);
+	virtual ~RlvBehaviourModifier();
 
 	/*
 	 * Member functions
@@ -206,14 +208,15 @@ public:
 protected:
 	virtual void onValueChange() const {}
 public:
-	bool addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
-	bool convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
-	bool getAddDefault() const { return m_fAddDefaultOnEmpty; }
+	bool                             addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	bool                             convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
+	bool                             getAddDefault() const { return m_fAddDefaultOnEmpty; }
 	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
-	const RlvBehaviourModifierValue& getValue() const { return (!m_Values.empty()) ? m_Values.front().first : m_DefaultValue; }
+	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? m_Values.front().first : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
-	void removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
-	void setPrimaryObject(const LLUUID& idPrimaryObject);
+	bool                             hasValue() const;
+	void                             removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	void                             setPrimaryObject(const LLUUID& idPrimaryObject);
 
 	typedef boost::signals2::signal<void(const RlvBehaviourModifierValue& newValue)> change_signal_t;
 	change_signal_t& getSignal() { return m_ChangeSignal; }

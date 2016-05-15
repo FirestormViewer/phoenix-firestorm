@@ -157,7 +157,6 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETENV,				// "setenv"
 	RLV_BHVR_ALWAYSRUN,				// "alwaysrun"
 	RLV_BHVR_TEMPRUN,				// "temprun"
-	RLV_BHVR_CAMUNLOCK,
 	RLV_BHVR_DETACHME,				// "detachme"
 	RLV_BHVR_ATTACHTHIS,			// "attachthis"
 	RLV_BHVR_ATTACHTHISEXCEPT,		// "attachthis_except"
@@ -165,7 +164,6 @@ enum ERlvBehaviour {
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
-	RLV_BHVR_CAMFOCUS,
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"
 	RLV_BHVR_VERSIONNUM,			// "versionnum"
@@ -190,12 +188,27 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
 	RLV_CMD_FORCEWEAR,				// Internal representation of all force wear commands
 
+	// Camera
+	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
+	RLV_BHVR_SETCAM_EYEOFFSET,      // Changes the default camera offset
+	RLV_BHVR_SETCAM_FOCUSOFFSET,    // Changes the default camera focus offset
+	RLV_BHVR_SETCAM_FOCUS,			// Forces the camera focus and/or position to a specific object, avatar or position
+	RLV_BHVR_SETCAM_FOV,			// Changes the current (vertical) field of view
+	RLV_BHVR_SETCAM_FOVMIN,			// Enforces a minimum (vertical) FOV
+	RLV_BHVR_SETCAM_FOVMAX,			// Enforces a maximum (vertical) FOV
+	RLV_BHVR_SETCAM_UNLOCK,			// Forces the camera focus to the user's avatar
+
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN
 };
 
 enum ERlvBehaviourModifier
 {
+	RLV_MODIFIER_SETCAM_EYEOFFSET,
+	RLV_MODIFIER_SETCAM_FOCUSOFFSET,
+	RLV_MODIFIER_SETCAM_FOVMIN,
+	RLV_MODIFIER_SETCAM_FOVMAX,
+
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
 };

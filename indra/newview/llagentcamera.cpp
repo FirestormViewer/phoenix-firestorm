@@ -212,10 +212,18 @@ void LLAgentCamera::init()
 	mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW] = gSavedSettings.getControl("CameraOffsetRearView");
 	mCameraOffsetInitial[CAMERA_PRESET_FRONT_VIEW] = gSavedSettings.getControl("CameraOffsetFrontView");
 	mCameraOffsetInitial[CAMERA_PRESET_GROUP_VIEW] = gSavedSettings.getControl("CameraOffsetGroupView");
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("CameraOffsetRLVaView", LLVector3(mCameraOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
+	mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
+// [/RLVa:KB]
 
 	mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW] = gSavedSettings.getControl("FocusOffsetRearView");
 	mFocusOffsetInitial[CAMERA_PRESET_FRONT_VIEW] = gSavedSettings.getControl("FocusOffsetFrontView");
 	mFocusOffsetInitial[CAMERA_PRESET_GROUP_VIEW] = gSavedSettings.getControl("FocusOffsetGroupView");
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW] = gSavedSettings.declareVec3("FocusOffsetRLVaView", LLVector3(mFocusOffsetInitial[CAMERA_PRESET_REAR_VIEW]->getDefault()), "Declared in code", LLControlVariable::PERSIST_NO);
+	mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->setHiddenFromSettingsEditor(true);
+// [/RLVa:KB]
 
 	mCameraCollidePlane.clearVec();
 	mCurrentCameraDistance = getCameraOffsetInitial().magVec() * gSavedSettings.getF32("CameraOffsetScale");
@@ -1147,7 +1155,7 @@ void LLAgentCamera::updateCamera()
 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 	// Set focus back on our avie if something changed it
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_CAMUNLOCK)) && (cameraThirdPerson()) && (!getFocusOnAvatar()) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK)) && (cameraThirdPerson()) && (!getFocusOnAvatar()) )
 	{
 		setFocusOnAvatar(TRUE, FALSE);
 	}
@@ -2333,6 +2341,26 @@ void LLAgentCamera::changeCameraToCustomizeAvatar()
 
 void LLAgentCamera::switchCameraPreset(ECameraPreset preset)
 {
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	if (RlvActions::isRlvEnabled())
+	{
+		// Don't allow changing away from the our view if an object is restricting it
+		if (RlvActions::isCameraPresetLocked())
+			preset = CAMERA_RLV_SETCAM_VIEW;
+
+		// Don't reset anything if our view is already current
+		if ( (CAMERA_RLV_SETCAM_VIEW == preset) && (CAMERA_RLV_SETCAM_VIEW == mCameraPreset) )
+			return;
+
+		// Reset our view when switching away
+		if (CAMERA_RLV_SETCAM_VIEW != preset)
+		{
+			mCameraOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
+			mFocusOffsetInitial[CAMERA_RLV_SETCAM_VIEW]->resetToDefault();
+		}
+	}
+// [/RLVa:KB]
+
 	//zoom is supposed to be reset for the front and group views
 	mCameraZoomFraction = 1.f;
 

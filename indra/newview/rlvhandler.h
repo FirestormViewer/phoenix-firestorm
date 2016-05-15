@@ -44,9 +44,13 @@ public:
 	//       - to check @remoutfit=n -> (see RlvWearableLocks)
 	//       - to check exceptions   -> isException()
 public:
+	// Returns a list of all objects containing the specified behaviour
+	bool findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const;
 	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
 	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
 	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
+	// Returns TRUE if the specified object contains the specified behaviour (and optional option)
+	bool hasBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
 	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
 	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
 	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
@@ -207,6 +211,7 @@ protected:
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
+	template<ERlvBehaviourOptionType optionType> friend struct RlvBehaviourGenericHandler;
 	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
 	template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
 

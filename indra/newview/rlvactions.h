@@ -25,6 +25,35 @@
 
 class RlvActions
 {
+	// ======
+	// Camera
+	// ======
+public:
+	/*
+	 * Returns true if the specified object can manipulate the camera offset and/or focus offset values
+	 */
+	static bool canChangeCameraPreset(const LLUUID& idRlvObject);
+
+	/*
+	 * Returns true if the specified object cannot manipulate the camera FOV
+	 */
+	static bool canChangeCameraFOV(const LLUUID& idRlvObject);
+
+	/*
+	 * Returns true if the camera offset and focus offset are locked (prevents changing the current camera preset)
+	 */
+	static bool isCameraPresetLocked();
+
+	/*
+	 * Returns true if the camera's FOV is currently restricted/clamped
+	 */
+	static bool isCameraFOVClamped();
+
+	/*
+	 * Retrieves the current camera FOV limits - returns isCameraFOVClamped()
+	 */
+	static bool getCameraFOVLimits(F32& nFOVMin, F32& nFOVMax);
+
 	// ================================
 	// Communication/Avatar interaction
 	// ================================
@@ -122,13 +151,13 @@ public:
 	// ================
 public:
 	/*
-	 * Convenience function to check for a behaviour without having to include rlvhandler.h. 
+	 * Convenience function to check for a behaviour without having to include rlvhandler.h
 	 * Do NOT call this function if speed is important (i.e. per-frame)
 	 */
 	static bool hasBehaviour(ERlvBehaviour eBhvr);
 
 	/*
-	 * Returns true if a - P2P or group - IM session is open with the specified UUID.
+	 * Returns true if a - P2P or group - IM session is open with the specified UUID
 	 */
 	static bool hasOpenP2PSession(const LLUUID& idAgent);
 	static bool hasOpenGroupSession(const LLUUID& idGroup);

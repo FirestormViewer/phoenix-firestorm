@@ -1,26 +1,69 @@
-/** 
+/**
  *
- * Copyright (c) 2009-2013, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ * Copyright (c) 2009-2016, Kitty Barnett
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llimview.h"
+#include "llviewercamera.h"
 #include "llvoavatarself.h"
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
+
+// ============================================================================
+// Camera
+//
+
+bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
+{
+	// NOTE: if an object has exclusive camera controls then all other objects are locked out
+	return
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM)) ) &&
+		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+}
+
+bool RlvActions::canChangeCameraFOV(const LLUUID& idRlvObject)
+{
+	// NOTE: if an object has exclusive camera controls then all other objects are locked out
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM));
+}
+
+bool RlvActions::isCameraPresetLocked()
+{
+	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+}
+
+bool RlvActions::isCameraFOVClamped()
+{
+	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX));
+}
+
+bool RlvActions::getCameraFOVLimits(F32& nFOVMin, F32& nFOVMax)
+{
+	static RlvCachedBehaviourModifier<float> sCamFovMin(RLV_MODIFIER_SETCAM_FOVMIN);
+	static RlvCachedBehaviourModifier<float> sCamFovMax(RLV_MODIFIER_SETCAM_FOVMAX);
+
+	bool fClampMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX);
+	nFOVMax = (fClampMax) ? sCamFovMax : LLViewerCamera::getInstance()->getMaxView();
+
+	bool fClampMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN);
+	nFOVMin = (fClampMin) ? sCamFovMin : LLViewerCamera::getInstance()->getMinView();
+
+	return (fClampMin) || (fClampMax);
+}
 
 // ============================================================================
 // Communication/Avatar interaction

@@ -42,6 +42,7 @@
 #include "lltoolmgr.h"
 #include "llviewerjoystick.h"
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -882,6 +883,12 @@ BOOL LLViewerCamera::areVertsVisible(LLViewerObject* volumep, BOOL all_verts)
 
 void LLViewerCamera::setDefaultFOV(F32 vertical_fov_rads) 
 {
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	F32 nCamFOVMin, nCamFOVMax;
+	if ( (RlvActions::isRlvEnabled()) && (RlvActions::getCameraFOVLimits(nCamFOVMin, nCamFOVMax)) )
+		vertical_fov_rads = llclamp(vertical_fov_rads, nCamFOVMin, nCamFOVMax);
+// [/RLVa:KB]
+
 	vertical_fov_rads = llclamp(vertical_fov_rads, getMinView(), getMaxView());
 	setView(vertical_fov_rads);
 	mCameraFOVDefault = vertical_fov_rads; 
