@@ -164,6 +164,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
+	RLV_BHVR_CAMFOCUS,
 	RLV_BHVR_VERSION,				// "version"
 	RLV_BHVR_VERSIONNEW,			// "versionnew"
 	RLV_BHVR_VERSIONNUM,			// "versionnum"

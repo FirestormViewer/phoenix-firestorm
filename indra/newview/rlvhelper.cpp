@@ -199,6 +199,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Force-only
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_CAMFOCUS>("camfocus", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_DETACHME>("detachme"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
@@ -413,12 +414,12 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 	{
 		if (typeid(float) == m_DefaultValue.type())
 		{
-			modValue = std::stof(optionValue.c_str());
+			modValue = std::stof(optionValue);
 			return true;
 		}
 		else if (typeid(int) == m_DefaultValue.type())
 		{
-			modValue = std::stoi(optionValue.c_str());
+			modValue = std::stoi(optionValue);
 			return true;
 		}
 		return false;

@@ -36,6 +36,7 @@
 #include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
+#include "llviewercamera.h"				// @camfocus
 
 // RLVa includes
 #include "rlvfloaters.h"
@@ -461,6 +462,70 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 		m_idAgentGroup = gAgent.getGroupID();
 	}
 	return false;
+}
+
+// Handles: @camfocus:<uuid>[;<dist>[;<direction>]]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_CAMFOCUS>::onCommand(const RlvCommand& rlvCmd)
+{
+	std::vector<std::string> optionList;
+	if (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList))
+		return RLV_RET_FAILED_OPTION;
+
+	LLVector3 posAgent;
+	LLVector3d posGlobal;
+	F32 camDistance;
+
+	// Get the focus position/object (and verify it is known)
+	LLUUID idObject; LLVector3 posRegion;
+	if (RlvCommandOptionHelper::parseOption(optionList[0], idObject))
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(idObject);
+		if (!pObj)
+			return RLV_RET_FAILED_OPTION;
+		posAgent = pObj->getPositionAgent();
+		posGlobal = pObj->getPositionGlobal();
+		camDistance = pObj->getScale().magVec();
+	}
+	else if (RlvCommandOptionHelper::parseOption(optionList[0], posRegion))
+	{
+		const LLViewerRegion* pRegion = gAgent.getRegion();
+		if (!pRegion)
+			return RLV_RET_FAILED_UNKNOWN;
+		posAgent = pRegion->getPosAgentFromRegion(posRegion);
+		posGlobal = pRegion->getPosGlobalFromRegion(posRegion);
+		camDistance = 0.0f;
+	}
+	else
+	{
+		return RLV_RET_FAILED_OPTION;
+	}
+
+	// Get the camera distance
+	if ( (optionList.size() > 1) && (!optionList[1].empty()) )
+	{
+		if (!RlvCommandOptionHelper::parseOption(optionList[1], camDistance))
+			return RLV_RET_FAILED_OPTION;
+	}
+
+	// Get the directional vector (or calculate it from the current camera position)
+	LLVector3 camDirection;
+	if ( (optionList.size() > 2) && (!optionList[2].empty()) )
+	{
+		if (!RlvCommandOptionHelper::parseOption(optionList[2], camDirection))
+			return RLV_RET_FAILED_OPTION;
+	}
+	else
+	{
+		camDirection = LLViewerCamera::getInstance()->getOrigin() - posAgent;
+	}
+	camDirection.normVec();
+
+	// Move the camera in place
+	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+	gAgentCamera.setCameraPosAndFocusGlobal(posGlobal + LLVector3d(camDirection * llmax(F_APPROXIMATELY_ZERO, camDistance)), posGlobal, idObject);
+
+	return RLV_RET_SUCCESS;
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
