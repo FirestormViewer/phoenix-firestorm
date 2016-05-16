@@ -200,11 +200,11 @@ enum ERlvBehaviourModifier
 
 enum ERlvBehaviourOptionType
 {
-	RLV_OPTION_NONE,
-	RLV_OPTION_EXCEPTION,
-	RLV_OPTION_NONE_OR_EXCEPTION,
-	RLV_OPTION_MODIFIER,
-	RLV_OPTION_NONE_OR_MODIFIER
+	RLV_OPTION_NONE,				// Behaviour takes no parameters
+	RLV_OPTION_EXCEPTION,			// Behaviour requires an exception as a parameter
+	RLV_OPTION_NONE_OR_EXCEPTION,	// Behaviour takes either no parameters or an exception
+	RLV_OPTION_MODIFIER,			// Behaviour requires a modifier as a parameter
+	RLV_OPTION_NONE_OR_MODIFIER		// Behaviour takes either no parameters or a modifier
 };
 
 enum ERlvParamType {

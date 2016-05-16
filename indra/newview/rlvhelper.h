@@ -160,26 +160,60 @@ public:
 // RlvBehaviourModifier - stores behaviour modifiers in an - optionally - sorted list and returns the first element (or default value if there are no modifiers)
 //
 
-struct RlvBehaviourModifier_Comp { virtual bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) = 0; };
-struct RlvBehaviourModifier_CompMin : public RlvBehaviourModifier_Comp { bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) override { return lhs < rhs; } };
-struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp { bool operator()(const RlvBehaviourModifierValue& lhs, const RlvBehaviourModifierValue& rhs) override { return rhs < lhs; } };
+typedef std::pair<RlvBehaviourModifierValue, LLUUID> RlvBehaviourModifierValueTuple;
+
+struct RlvBehaviourModifier_Comp
+{
+	virtual ~RlvBehaviourModifier_Comp() {}
+	virtual bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs)
+	{
+		// Values that match the primary object take precedence (otherwise maintain relative ordering)
+		if ( (rhs.second == m_idPrimaryObject) && (lhs.second != m_idPrimaryObject) )
+			return false;
+		return true;
+	}
+
+	LLUUID m_idPrimaryObject;
+};
+struct RlvBehaviourModifier_CompMin : public RlvBehaviourModifier_Comp
+{
+	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
+	{
+		if ( (m_idPrimaryObject.isNull()) || ((lhs.second == m_idPrimaryObject) && (rhs.second == m_idPrimaryObject)) )
+			return lhs.first < rhs.first;
+		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
+	}
+};
+struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
+{
+	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
+	{
+		if ( (m_idPrimaryObject.isNull()) || ((lhs.second == m_idPrimaryObject) && (rhs.second == m_idPrimaryObject)) )
+			return rhs.first < lhs.first;
+		return RlvBehaviourModifier_Comp::operator()(lhs, rhs);
+	}
+};
 
 class RlvBehaviourModifier
 {
 public:
 	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
+	virtual ~RlvBehaviourModifier() {}
 
 	/*
 	 * Member functions
 	 */
+protected:
+	virtual void onValueChange() const {}
 public:
-	bool addValue(const RlvBehaviourModifierValue& modValue);
+	bool addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
 	bool convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
 	bool getAddDefault() const { return m_fAddDefaultOnEmpty; }
 	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
-	const RlvBehaviourModifierValue& getValue() const { return (!m_Values.empty()) ? m_Values.front() : m_DefaultValue; }
+	const RlvBehaviourModifierValue& getValue() const { return (!m_Values.empty()) ? m_Values.front().first : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
-	void removeValue(const RlvBehaviourModifierValue& modValue);
+	void removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	void setPrimaryObject(const LLUUID& idPrimaryObject);
 
 	typedef boost::signals2::signal<void(const RlvBehaviourModifierValue& newValue)> change_signal_t;
 	change_signal_t& getSignal() { return m_ChangeSignal; }
@@ -190,9 +224,20 @@ public:
 protected:
 	RlvBehaviourModifierValue            m_DefaultValue;
 	bool                                 m_fAddDefaultOnEmpty;
-	std::list<RlvBehaviourModifierValue> m_Values;
+	std::list<RlvBehaviourModifierValueTuple> m_Values;
 	change_signal_t                      m_ChangeSignal;
 	RlvBehaviourModifier_Comp*           m_pValueComparator;
+};
+
+template<ERlvBehaviourModifier eBhvrMod>
+class RlvBehaviourModifierHandler : public RlvBehaviourModifier
+{
+public:
+	//using RlvBehaviourModifier::RlvBehaviourModifier; // Needs VS2015 and up
+	RlvBehaviourModifierHandler(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
+		: RlvBehaviourModifier(defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
+protected:
+	void onValueChange() const override;
 };
 
 // Inspired by LLControlCache<T>

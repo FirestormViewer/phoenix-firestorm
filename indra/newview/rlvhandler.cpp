@@ -1370,9 +1370,9 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
-		pBhvrModifier->addValue(modValue);
+		pBhvrModifier->addValue(modValue, rlvCmd.getObjectID());
 	else
-		pBhvrModifier->removeValue(modValue);
+		pBhvrModifier->removeValue(modValue, rlvCmd.getObjectID());
 
 	fRefCount = true;
 	return RLV_RET_SUCCESS;
@@ -1390,9 +1390,9 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(co
 	if ( (pBhvrModifier) && (pBhvrModifier->getAddDefault()) )
 	{
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
-			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue());
+			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
 		else
-			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue());
+			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
 	}
 
 	fRefCount = true;
