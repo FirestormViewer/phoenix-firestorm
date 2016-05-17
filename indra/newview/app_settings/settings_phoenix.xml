@@ -555,7 +555,6 @@
     <integer>1</integer>
   </map>
 
-  <!-- <FS_Zi> Animated dialogs -->
   <key>FSAnimatedScriptDialogs</key>
   <map>
     <key>Comment</key>
@@ -567,6 +566,30 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <!-- <FS_Zi> Animated dialogs -->
-</map>
+
+  <key>PieMenuPopupFontEffect</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the labels in the pie menu slices are affected by the popup effect (they move into position).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>PieMenuOuterRingShade</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, a shade around the outside of the pie menu will be drawn, adding a further visualization of sub menus.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  </map>
 </llsd>
