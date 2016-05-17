@@ -517,7 +517,7 @@ std::string installPreloadHack( std::string const &preload )
 		std::string strPreload = preload;
 		if( getenv( "LD_PRELOAD" ) )
 		{
-			strOldPreload = getenv( "PRELOAD" );
+			strOldPreload = getenv( "LD_PRELOAD" );
 			strPreload = ":" + strOldPreload;
 		}
 

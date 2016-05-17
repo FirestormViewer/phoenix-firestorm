@@ -120,6 +120,17 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>PieMenuOuterRingShade</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, a shade around the outside of the pie menu will be drawn, adding a further visualization of sub menus.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>AutohideChatBar</key>
   <map>
     <key>Comment</key>
@@ -23913,6 +23924,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string>eff31dd2-1b65-5a03-5e37-15aca8e53ab7</string>
+    </map>
+    <key>FSEnableLogThrottle</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables throttling for writing to the log file to prevent spam</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+      <key>Backup</key>
+      <integer>0</integer>
     </map>
   </map>
 </llsd>

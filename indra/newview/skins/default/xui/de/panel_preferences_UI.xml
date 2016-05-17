@@ -60,6 +60,7 @@
 		<slider label_width="190" width="430" label="Sichtbare Zeilen pro Skriptdialog:" name="FSRowsPerScriptDialog" tool_tip="Die maximale Anzahl an Zeilen in einem Skriptdialog, die gleichzeitig sichtbar sind."/>
 		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box label="Text-Animation aktivieren" name="PieMenuPopupFontEffect" tool_tip="Aktiviert die Animation der Texte innerhalb des klassischen V1-Kontextmenü in Kuchenform, wenn sich dieses öffnet."/>
+		<check_box label="Außenring-Schatten aktivieren" name="PieMenuOuterRingShade" tool_tip="Aktiviert einen zusätzlichen Schatten um den äußeren Ring des klassischen V1-Kontextmenü in Kuchenform, der bei der Visualisierung von Untermenüs unterstützt."/>
 		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)

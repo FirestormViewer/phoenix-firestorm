@@ -415,6 +415,17 @@
        tool_tip="Enables the text within the pie menu being part of the animation when the pie menu opens."
        top_pad="3"
        width="256" />
+      <check_box
+       control_name="PieMenuOuterRingShade"
+       enabled_control="UsePieMenu"
+       height="16"
+       label="Enable outer ring shade"
+       layout="topleft"
+       left="15"
+       name="PieMenuOuterRingShade"
+       tool_tip="Enables an additional outer ring shade that helps visualizing sub menus."
+       top_pad="3"
+       width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
