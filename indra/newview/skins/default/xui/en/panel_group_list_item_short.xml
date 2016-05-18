@@ -27,7 +27,7 @@
      top="0"
      visible="false"
      width="320" />
-    <icon
+    <group_icon
      height="16"
      image_name="Generic_Group"
      name="group_icon"

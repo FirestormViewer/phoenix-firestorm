@@ -243,6 +243,9 @@ public:
 	void setAppearanceServiceURL(const std::string& url) { mAppearanceServiceURL = url; }
 	std::string getAppearanceServiceURL() const;
 
+// [SL:KB] - Patch: Appearance-Misc
+	void syncCofVersionAndRefresh();
+// [/SL:KB]
 
 
 private:
@@ -251,6 +254,10 @@ private:
 #else
     void serverAppearanceUpdateCoro();
 #endif
+
+// [SL:KB] - Patch: Appearance-Misc
+	void syncCofVersionAndRefreshCoro();
+// [/SL:KB]
 
     static void debugAppearanceUpdateCOF(const LLSD& content);
 
