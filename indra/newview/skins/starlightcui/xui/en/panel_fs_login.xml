@@ -119,7 +119,7 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
       <line_editor
           follows="left|bottom"
           height="22"
-          max_length_bytes="16"
+          max_length_bytes="64"
           name="password_edit"
           is_password="true" 
           select_on_focus="true"
