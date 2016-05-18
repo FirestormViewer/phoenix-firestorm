@@ -207,6 +207,7 @@ public:
     bool					jointIsRiggedTo(const std::string& joint_name);
     bool					jointIsRiggedTo(const std::string& joint_name, const LLViewerObject *vo);
 	void					clearAttachmentPosOverrides();
+	void					rebuildAttachmentPosOverrides();
     void                    showAttachmentPosOverrides(bool verbose = false) const;
     void                    getAttachmentOverrideNames(std::set<std::string>& names) const;
 	
@@ -379,7 +380,9 @@ public:
 	void				postPelvisSetRecalc( void );
 
 	/*virtual*/ BOOL	loadSkeletonNode();
+    void                initAttachmentPoints(bool ignore_hud_joints = false);
 	/*virtual*/ void	buildCharacter();
+    void                resetVisualParams();
     void				resetSkeleton();
 
 	LLVector3			mCurRootToHeadOffset;
@@ -689,9 +692,12 @@ protected:
  **                    APPEARANCE
  **/
 
+    LLPointer<LLAppearanceMessageContents> 	mLastProcessedAppearance;
+    
 public:
 	void 			parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMessageContents& msg);
 	void 			processAvatarAppearance(LLMessageSystem* mesgsys);
+    void            applyParsedAppearanceMessage(LLAppearanceMessageContents& contents, bool slam_params);
 	void 			hideSkirt();
 	void			startAppearanceAnimation();
 	// <FS:Ansariel> [Legacy Bake]

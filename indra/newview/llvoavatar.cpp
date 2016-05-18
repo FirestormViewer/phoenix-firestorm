@@ -227,7 +227,7 @@ struct LLTextureMaskData
  **/
 
 
-struct LLAppearanceMessageContents
+struct LLAppearanceMessageContents: public LLRefCount
 {
 	LLAppearanceMessageContents():
 		mAppearanceVersion(-1),
@@ -1894,47 +1894,103 @@ void LLVOAvatar::buildCharacter()
 }
 
 //-----------------------------------------------------------------------------
+// resetVisualParams()
+//-----------------------------------------------------------------------------
+void LLVOAvatar::resetVisualParams()
+{
+	// Skeletal params
+	{
+		LLAvatarXmlInfo::skeletal_distortion_info_list_t::iterator iter;
+		for (iter = sAvatarXmlInfo->mSkeletalDistortionInfoList.begin();
+			 iter != sAvatarXmlInfo->mSkeletalDistortionInfoList.end(); 
+			 ++iter)
+		{
+			LLPolySkeletalDistortionInfo *info = (LLPolySkeletalDistortionInfo*)*iter;
+			LLPolySkeletalDistortion *param = dynamic_cast<LLPolySkeletalDistortion*>(getVisualParam(info->getID()));
+            *param = LLPolySkeletalDistortion(this);
+            llassert(param);
+			if (!param->setInfo(info))
+			{
+				llassert(false);
+			}			
+		}
+	}
+
+	// Driver parameters
+	for (LLAvatarXmlInfo::driver_info_list_t::iterator iter = sAvatarXmlInfo->mDriverInfoList.begin();
+		 iter != sAvatarXmlInfo->mDriverInfoList.end(); 
+		 ++iter)
+	{
+		LLDriverParamInfo *info = *iter;
+        LLDriverParam *param = dynamic_cast<LLDriverParam*>(getVisualParam(info->getID()));
+        LLDriverParam::entry_list_t driven_list = param->getDrivenList();
+        *param = LLDriverParam(this);
+        llassert(param);
+        if (!param->setInfo(info))
+        {
+            llassert(false);
+        }			
+        param->setDrivenList(driven_list);
+	}
+}
+
+//-----------------------------------------------------------------------------
 // resetSkeleton()
 //-----------------------------------------------------------------------------
 void LLVOAvatar::resetSkeleton()
 {
-    LL_DEBUGS("Avatar") << avString() << LL_ENDL;
+    LL_DEBUGS("Avatar") << avString() << " reset starts" << LL_ENDL;
+    if (!mLastProcessedAppearance)
+    {
+        LL_WARNS() << "Can't reset avatar; no appearance message has been received yet." << LL_ENDL;
+        return;
+    }
 
     // Stop all animations
 
     // Clear all attachment pos overrides
+    clearAttachmentPosOverrides();
 
-    // Preserve state of tweakable params
-    
-    // Reset all params to default state, without propagating changes downstream.
-	for (LLVisualParam *param = getFirstVisualParam(); 
-		param;
-		param = getNextVisualParam())
-	{
-#if 0
-		if (param->isAnimating())
-		{
-			continue;
-		}
-        param->setLastWeight(param->getDefaultWeight());
-#endif
-	}
+    // Reset some params to default state, without propagating changes downstream.
+    resetVisualParams();
 
     // Reset all bones and collision volumes to their initial skeleton state.
 	if( !buildSkeleton(sAvatarSkeletonInfo) )
     {
         LL_ERRS() << "Error resetting skeleton" << LL_ENDL;
 	}
+    // Reset attachment points
+    bool ignore_hud_joints = true;
+    initAttachmentPoints(ignore_hud_joints);
+
+    // Fix up collision volumes
+    for (LLVisualParam *param = getFirstVisualParam(); 
+         param;
+         param = getNextVisualParam())
+    {
+        LLPolyMorphTarget *poly_morph = dynamic_cast<LLPolyMorphTarget*>(param);
+        if (poly_morph)
+        {
+            // This is a kludgy way to correct for the fact that the
+            // collision volumes have been reset out from under the
+            // poly morph sliders.
+            F32 delta_weight = poly_morph->getLastWeight() - poly_morph->getDefaultWeight();
+            poly_morph->applyVolumeChanges(delta_weight);
+        }
+    }
 
     // Reset tweakable params to preserved state
-    // Apply params
-#if 0
+    bool slam_params = true;
+    applyParsedAppearanceMessage(*mLastProcessedAppearance, slam_params);
+
     updateVisualParams();
-#endif
 
     // Restore attachment pos overrides
+    rebuildAttachmentPosOverrides();
 
     // Restart animations
+
+    LL_DEBUGS("Avatar") << avString() << " reset ends" << LL_ENDL;
 }
 
 //-----------------------------------------------------------------------------
@@ -5909,8 +5965,43 @@ void LLVOAvatar::clearAttachmentPosOverrides()
 			pJoint->clearAttachmentPosOverrides();
 		}
 	}
+
+    // Attachment points
+	for (attachment_map_t::const_iterator iter = mAttachmentPoints.begin();
+		 iter != mAttachmentPoints.end();
+		 ++iter)
+	{
+		LLViewerJointAttachment *attachment_pt = (*iter).second;
+        if (attachment_pt)
+        {
+            attachment_pt->clearAttachmentPosOverrides();
+        }
+    }
 }
 
+//-----------------------------------------------------------------------------
+// rebuildAttachmentPosOverrides
+//-----------------------------------------------------------------------------
+void LLVOAvatar::rebuildAttachmentPosOverrides()
+{
+    LLScopedContextString str("rebuildAttachmentPosOverrides " + getFullname());
+
+    // Attachment points
+	for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+		 iter != mAttachmentPoints.end();
+		 ++iter)
+	{
+		LLViewerJointAttachment *attachment_pt = (*iter).second;
+        if (attachment_pt)
+        {
+            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator at_it = attachment_pt->mAttachedObjects.begin();
+				 at_it != attachment_pt->mAttachedObjects.end(); ++at_it)
+            {
+                addAttachmentPosOverridesForObject(*at_it);
+            }
+        }
+    }
+}
 //-----------------------------------------------------------------------------
 // addAttachmentPosOverridesForObject
 //-----------------------------------------------------------------------------
@@ -6272,87 +6363,99 @@ BOOL LLVOAvatar::loadSkeletonNode ()
 		return FALSE;
 	}
 	
-	// ATTACHMENTS
-	{
-		LLAvatarXmlInfo::attachment_info_list_t::iterator iter;
-		for (iter = sAvatarXmlInfo->mAttachmentInfoList.begin();
-			 iter != sAvatarXmlInfo->mAttachmentInfoList.end(); 
-			 ++iter)
-		{
-			LLAvatarXmlInfo::LLAvatarAttachmentInfo *info = *iter;
-			if (!isSelf() && info->mJointName == "mScreen")
-			{ //don't process screen joint for other avatars
-				continue;
-			}
-
-			LLViewerJointAttachment* attachment = new LLViewerJointAttachment();
-			attachment->setName(info->mName);
-			LLJoint *parent_joint = getJoint(info->mJointName);
-            if (!parent_joint)
-            {
-                // If the intended parent for attachment point is unavailable, avatar_lad.xml is corrupt.
-				LL_WARNS() << "No parent joint by name " << info->mJointName << " found for attachment point " << info->mName << LL_ENDL;
-				LL_ERRS() << "Invalid avatar_lad.xml file" << LL_ENDL;
-                // If we wanted to continue from this case, we could do:
-				//delete attachment;
-                //continue;
-                // but there's no point.
-            }
-			if (info->mHasPosition)
-			{
-				attachment->setOriginalPosition(info->mPosition);
-                attachment->setDefaultPosition(info->mPosition);
-			}
-			
-			if (info->mHasRotation)
-			{
-				LLQuaternion rotation;
-				rotation.setQuat(info->mRotationEuler.mV[VX] * DEG_TO_RAD,
-								 info->mRotationEuler.mV[VY] * DEG_TO_RAD,
-								 info->mRotationEuler.mV[VZ] * DEG_TO_RAD);
-				attachment->setRotation(rotation);
-			}
-
-			int group = info->mGroup;
-			if (group >= 0)
-			{
-				if (group < 0 || group > 9)
-				{
-					LL_WARNS() << "Invalid group number (" << group << ") for attachment point " << info->mName << LL_ENDL;
-				}
-				else
-				{
-					attachment->setGroup(group);
-				}
-			}
-
-			S32 attachmentID = info->mAttachmentID;
-			if (attachmentID < 1 || attachmentID > 255)
-			{
-				LL_WARNS() << "Attachment point out of range [1-255]: " << attachmentID << " on attachment point " << info->mName << LL_ENDL;
-				delete attachment;
-				continue;
-			}
-			if (mAttachmentPoints.find(attachmentID) != mAttachmentPoints.end())
-			{
-				LL_WARNS() << "Attachment point redefined with id " << attachmentID << " on attachment point " << info->mName << LL_ENDL;
-				delete attachment;
-				continue;
-			}
-
-			attachment->setPieSlice(info->mPieMenuSlice);
-			attachment->setVisibleInFirstPerson(info->mVisibleFirstPerson);
-			attachment->setIsHUDAttachment(info->mIsHUDAttachment);
-			// attachment can potentially be animated, needs a number.
-            attachment->setJointNum(mSkeleton.size() + attachmentID -1);
-			mAttachmentPoints[attachmentID] = attachment;
-
-			// now add attachment joint
-			parent_joint->addChild(attachment);
-		}
-	}
+    bool ignore_hud_joints = false;
+    initAttachmentPoints(ignore_hud_joints);
 
 	return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// initAttachmentPoints(): creates attachment points if needed, sets state based on avatar_lad.xml. 
+//-----------------------------------------------------------------------------
+void LLVOAvatar::initAttachmentPoints(bool ignore_hud_joints)
+{
+    LLAvatarXmlInfo::attachment_info_list_t::iterator iter;
+    for (iter = sAvatarXmlInfo->mAttachmentInfoList.begin();
+         iter != sAvatarXmlInfo->mAttachmentInfoList.end(); 
+         ++iter)
+    {
+        LLAvatarXmlInfo::LLAvatarAttachmentInfo *info = *iter;
+        if (info->mIsHUDAttachment && (!isSelf() || ignore_hud_joints))
+        {
+		    //don't process hud joint for other avatars, or when doing a skeleton reset.
+            continue;
+        }
+
+        S32 attachmentID = info->mAttachmentID;
+        if (attachmentID < 1 || attachmentID > 255)
+        {
+            LL_WARNS() << "Attachment point out of range [1-255]: " << attachmentID << " on attachment point " << info->mName << LL_ENDL;
+            continue;
+        }
+
+        LLViewerJointAttachment* attachment = NULL;
+        bool newly_created = false;
+        if (mAttachmentPoints.find(attachmentID) == mAttachmentPoints.end())
+        {
+            attachment = new LLViewerJointAttachment();
+            newly_created = true;
+        }
+        else
+        {
+            attachment = mAttachmentPoints[attachmentID];
+        }
+
+        attachment->setName(info->mName);
+        LLJoint *parent_joint = getJoint(info->mJointName);
+        if (!parent_joint)
+        {
+            // If the intended parent for attachment point is unavailable, avatar_lad.xml is corrupt.
+            LL_WARNS() << "No parent joint by name " << info->mJointName << " found for attachment point " << info->mName << LL_ENDL;
+            LL_ERRS() << "Invalid avatar_lad.xml file" << LL_ENDL;
+        }
+
+        if (info->mHasPosition)
+        {
+            attachment->setOriginalPosition(info->mPosition);
+            attachment->setDefaultPosition(info->mPosition);
+        }
+			
+        if (info->mHasRotation)
+        {
+            LLQuaternion rotation;
+            rotation.setQuat(info->mRotationEuler.mV[VX] * DEG_TO_RAD,
+                             info->mRotationEuler.mV[VY] * DEG_TO_RAD,
+                             info->mRotationEuler.mV[VZ] * DEG_TO_RAD);
+            attachment->setRotation(rotation);
+        }
+
+        int group = info->mGroup;
+        if (group >= 0)
+        {
+            if (group < 0 || group > 9)
+            {
+                LL_WARNS() << "Invalid group number (" << group << ") for attachment point " << info->mName << LL_ENDL;
+            }
+            else
+            {
+                attachment->setGroup(group);
+            }
+        }
+
+        attachment->setPieSlice(info->mPieMenuSlice);
+        attachment->setVisibleInFirstPerson(info->mVisibleFirstPerson);
+        attachment->setIsHUDAttachment(info->mIsHUDAttachment);
+        // attachment can potentially be animated, needs a number.
+        attachment->setJointNum(mSkeleton.size() + attachmentID - 1);
+
+        if (newly_created)
+        {
+            mAttachmentPoints[attachmentID] = attachment;
+            
+            // now add attachment joint
+            parent_joint->addChild(attachment);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -8381,17 +8484,15 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 
 	mLastAppearanceMessageTimer.reset();
 
-	ESex old_sex = getSex();
-
-	LLAppearanceMessageContents contents;
-	parseAppearanceMessage(mesgsys, contents);
+	LLPointer<LLAppearanceMessageContents> contents(new LLAppearanceMessageContents);
+	parseAppearanceMessage(mesgsys, *contents);
 	if (enable_verbose_dumps)
 	{
-		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", contents);
+		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", *contents);
 	}
 
 	S32 appearance_version;
-	if (!resolve_appearance_version(contents, appearance_version))
+	if (!resolve_appearance_version(*contents, appearance_version))
 	{
 		LL_WARNS() << "bad appearance version info, discarding" << LL_ENDL;
 		return;
@@ -8403,7 +8504,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		return;
 	}
 
-	S32 this_update_cof_version = contents.mCOFVersion;
+	S32 this_update_cof_version = contents->mCOFVersion;
 	S32 last_update_request_cof_version = mLastUpdateRequestCOFVersion;
 
 	if( isSelf() )
@@ -8455,7 +8556,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	}
 
 	// SUNSHINE CLEANUP - is this case OK now?
-	S32 num_params = contents.mParamWeights.size();
+	S32 num_params = contents->mParamWeights.size();
 	if (num_params <= 1)
 	{
 		// In this case, we have no reliable basis for knowing
@@ -8483,7 +8584,17 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 
 	setIsUsingServerBakes(appearance_version > 0);
 	// </FS:Ansariel> [Legacy Bake]
-		
+    mLastProcessedAppearance = contents;
+
+    bool slam_params = false;
+    applyParsedAppearanceMessage(*contents, slam_params);
+}
+
+void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& contents, bool slam_params)
+{
+	S32 num_params = contents.mParamWeights.size();
+	ESex old_sex = getSex();
+
 	applyParsedTEMessage(contents.mTEContents);
 
 	// <FS:clientTags>
@@ -8561,7 +8672,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 				params_changed = TRUE;
 				params_changed_count++;
 
-				if(is_first_appearance_message)
+				if(is_first_appearance_message || slam_params)
 				{
 					//LL_DEBUGS("Avatar") << "param slam " << i << " " << newWeight << LL_ENDL;
 					// <FS:Ansariel> [Legacy Bake]
@@ -8652,7 +8763,6 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	}
 
 	updateMeshTextures();
-	//if (enable_verbose_dumps) dumpArchetypeXML(dump_prefix + "process_end");
 }
 
 // static

@@ -622,7 +622,7 @@ BOOL LLAvatarAppearance::setupBone(const LLAvatarBoneInfo* info, LLJoint* parent
 	}
 
 	// add to parent
-	if (parent)
+	if (parent && (joint->getParent()!=parent))
 	{
 		parent->addChild( joint );
 	}
