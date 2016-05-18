@@ -294,8 +294,8 @@ private:
 	bool *			mMapBlockLoaded;		// Telling us if the block of regions has been requested or not
 
 	// <FS:Ansariel> Periodically update sim info
-	F64				mMapBlockLastUpdate;
-	std::set<S32>	mMapBlockLastUpdateOffsets;
+	typedef std::map<S32, F64> block_last_update_map_t;
+	block_last_update_map_t	mMapBlockLastUpdateOffsets;
 
 	// Track location data : used while there's nothing tracked yet by LLTracker
 	bool			mIsTrackingLocation;	// True when we're tracking a point

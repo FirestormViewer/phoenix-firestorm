@@ -9885,11 +9885,10 @@ void handle_rebake_textures(void*)
 	gAgentAvatarp->forceBakeAllTextures(slam_for_debug);
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
-	//<FS:ND> MERGE_TODO Needs an implementation post coroutine merge.
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-06-27 (Catznip-3.7)
-		// LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+		LLAppearanceMgr::instance().syncCofVersionAndRefresh();
 // [/SL:KB]
-		LLAppearanceMgr::instance().requestServerAppearanceUpdate(); // Comment out again once syncCofVersionAndRefresh() is back!
+//		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
 		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
 	}
 }

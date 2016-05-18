@@ -33,10 +33,8 @@
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 
-const S32 PIE_INNER_SIZE = 20;			// radius of the inner pie circle
-const F32 PIE_POPUP_FACTOR = 1.7f;		// pie menu size factor on popup
-const F32 PIE_POPUP_TIME = 0.25f;		// time to shrink from popup size to regular size
-const S32 PIE_OUTER_SIZE = 96;			// radius of the outer pie circle
+#define PIE_POPUP_EFFECT 1			// debug
+#define PIE_DRAW_BOUNDING_BOX 0		// debug
 
 // register the pie menu globally as child widget
 static LLDefaultChildRegistry::Register<PieMenu> r1("pie_menu");
@@ -46,12 +44,15 @@ static PieChildRegistry::Register<PieMenu> pie_r1("pie_menu");
 static PieChildRegistry::Register<PieSlice> pie_r2("pie_slice");
 static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 
-#define PIE_POPUP_EFFECT 1			// debug
-#define PIE_DRAW_BOUNDING_BOX 0		// debug
-
 // pie slice label text positioning
 const S32 PIE_X[] = {64, 45,  0, -45, -63, -45,   0,  45};
 const S32 PIE_Y[] = { 0, 44, 73,  44,   0, -44, -73, -44};
+
+const S32 PIE_INNER_SIZE = 20;				// radius of the inner pie circle
+const F32 PIE_POPUP_FACTOR = 1.7f;			// pie menu size factor on popup
+const F32 PIE_POPUP_TIME = 0.25f;			// time to shrink from popup size to regular size
+const S32 PIE_OUTER_SIZE = 96;				// radius of the outer pie circle
+const F32 PIE_OUTER_SHADE_FACTOR = 1.09f;	// size factor of the outer shading ring
 
 PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LLMenuGL(p),
@@ -287,6 +288,7 @@ void PieMenu::draw()
 		selectedColor = LLUIColorTable::instance().getColor("PieMenuSelectedColorOverride");
 	}
 	static LLCachedControl<bool> sPieMenuPopupFontEffect(gSavedSettings, "PieMenuPopupFontEffect");
+	static LLCachedControl<bool> sPieMenuOuterRingShade(gSavedSettings, "PieMenuOuterRingShade");
 
 	// on first click, make the menu fade out to indicate "borderless" operation
 	if (mFirstClick)
@@ -347,7 +349,7 @@ void PieMenu::draw()
 				currentSlice->setEnabled(slice_visible);
 				if (!slice_visible)
 				{
-				//	LL_DEBUGS("Pie") << label << " is not visible" << LL_ENDL;
+					//LL_DEBUGS("Pie") << label << " is not visible" << LL_ENDL;
 					label = "";
 				}
 
@@ -400,7 +402,7 @@ void PieMenu::draw()
 				currentSlice->updateEnabled();
 				if (!currentSlice->getEnabled())
 				{
-					LL_DEBUGS("Pie") << label << " is disabled" << LL_ENDL;
+					//LL_DEBUGS("Pie") << label << " is disabled" << LL_ENDL;
 					// fade the item color alpha to mark the item as disabled
 					itemColor %= 0.3f;
 				}
@@ -409,6 +411,10 @@ void PieMenu::draw()
 			else if (currentSubmenu)
 			{
 				label = currentSubmenu->getLabel();
+				if (sPieMenuOuterRingShade)
+				{
+					gl_washer_segment_2d(PIE_OUTER_SIZE * PIE_OUTER_SHADE_FACTOR * factor, PIE_OUTER_SIZE * factor, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, steps / 8, selectedColor, selectedColor);
+				}
 			}
 
 			// if it's a slice or submenu, the mouse pointer is over the same segment as our counter and the item is enabled
@@ -455,6 +461,10 @@ void PieMenu::draw()
 	if (!mFirstClick)
 	{
 		gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_OUTER_SIZE * factor - 2.f, steps, lineColor, borderColor);
+		if (sPieMenuOuterRingShade)
+		{
+			gl_washer_2d(PIE_OUTER_SIZE * PIE_OUTER_SHADE_FACTOR * factor, PIE_OUTER_SIZE * factor - 2.f, steps, lineColor, borderColor);
+		}
 	}
 	gl_washer_2d(PIE_INNER_SIZE + 1, PIE_INNER_SIZE - 1, steps, borderColor, lineColor);
 
@@ -589,7 +599,7 @@ F32 PieMenu::getScaleFactor()
 			factor = PIE_POPUP_FACTOR - (PIE_POPUP_FACTOR - 1.f) * elapsedTime / PIE_POPUP_TIME;
 		}
 	}
-
 #endif
+
 	return factor;
 }

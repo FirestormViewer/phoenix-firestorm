@@ -2844,7 +2844,7 @@ Try enclosing path to the editor with double quotes.
 
   <!-- <FS:Ansariel> Posestand animation names -->
   <string name="PS_T_Pose">T-Pose</string>
-  <string name="PS_Arms_Down_Legs_together">Arms Down, Legs together</string>
+  <string name="PS_Arms_Down_Legs_together">Arms down, Legs together</string>
   <string name="PS_Arms_down_sitting">Arms down, sitting</string>
   <string name="PS_Arms_downward_Legs_together">Arms downward, Legs together</string>
   <string name="PS_Arms_downward_Legs_apart">Arms downward, Legs apart</string>
