@@ -126,6 +126,11 @@ const F32 desired_discard_bias_min = -2.0f; // -max number of levels to improve 
 const F32 desired_discard_bias_max = (F32)MAX_DISCARD_LEVEL; // max number of levels to reduce image quality by
 const F64 log_2 = log(2.0);
 
+LLUUID LLViewerTexture::sInvisiprimTexture1 = LLUUID::null;
+LLUUID LLViewerTexture::sInvisiprimTexture2 = LLUUID::null;
+#define TEX_INVISIPRIM1 "e97cf410-8e61-7005-ec06-629eba4cd1fb"
+#define TEX_INVISIPRIM2 "38b86f85-2575-52a9-a531-23108d8da837"
+
 //----------------------------------------------------------------------------------------------
 //namespace: LLViewerTextureAccess
 //----------------------------------------------------------------------------------------------
@@ -478,6 +483,15 @@ void LLViewerTexture::initClass()
 	if(gSavedSettings.getBOOL("TextureFetchDebuggerEnabled"))
 	{
 		sTexelPixelRatio = gSavedSettings.getF32("TexelPixelRatio");
+	}
+
+	if (sInvisiprimTexture1.isNull())
+	{
+		sInvisiprimTexture1 = LLUUID(TEX_INVISIPRIM1);
+	}
+	if (sInvisiprimTexture2.isNull())
+	{
+		sInvisiprimTexture2 = LLUUID(TEX_INVISIPRIM2);
 	}
 }
 
@@ -1028,6 +1042,17 @@ void LLViewerTexture::setCachedRawImage(S32 discard_level, LLImageRaw* imageraw)
 BOOL LLViewerTexture::isLargeImage()
 {
 	return  (S32)mTexelsPerImage > LLViewerTexture::sMinLargeImageSize;
+}
+
+bool LLViewerTexture::isInvisiprim()
+{
+	return isInvisiprim(mID);
+}
+
+//static
+bool LLViewerTexture::isInvisiprim(LLUUID id)
+{
+	return (id == sInvisiprimTexture1) || (id == sInvisiprimTexture2);
 }
 
 //virtual 

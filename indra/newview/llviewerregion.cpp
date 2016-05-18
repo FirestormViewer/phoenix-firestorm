@@ -273,16 +273,22 @@ void LLViewerRegionImpl::requestBaseCapabilitiesCoro(U64 regionHandle)
         }
 
         S32 id = ++mHttpResponderID;
-        ++mSeedCapAttempts;
+		// <FS:Ansariel> Increment after posting (progress showing wrong attempt otherwise)
+        //++mSeedCapAttempts;
 
         LLSD capabilityNames = LLSD::emptyArray();
         buildCapabilityNames(capabilityNames);
 
         LL_INFOS("AppInit", "Capabilities") << "Requesting seed from " << url 
-            << " (attempt #" << mSeedCapAttempts << ")" << LL_ENDL;
+		// <FS:Ansariel> Increment after posting (progress showing wrong attempt otherwise)
+        //    << " (attempt #" << mSeedCapAttempts << ")" << LL_ENDL;
+            << " (attempt #" << mSeedCapAttempts + 1 << ")" << LL_ENDL;
 
         regionp = NULL;
         result = httpAdapter->postAndSuspend(httpRequest, url, capabilityNames);
+
+		// <FS:Ansariel> Increment after posting (progress showing wrong attempt otherwise)
+        ++mSeedCapAttempts;
 
         regionp = LLWorld::getInstance()->getRegionFromHandle(regionHandle);
         if (!regionp) //region was removed

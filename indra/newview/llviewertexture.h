@@ -164,6 +164,8 @@ public:
 	
 	virtual void setCachedRawImage(S32 discard_level, LLImageRaw* imageraw) ;
 	BOOL isLargeImage() ;	
+	bool isInvisiprim() ;
+	static bool isInvisiprim(LLUUID id) ;
 	
 	void setParcelMedia(LLViewerMediaTexture* media) {mParcelMedia = media;}
 	BOOL hasParcelMedia() const { return mParcelMedia != NULL;}
@@ -236,6 +238,8 @@ public:
 	static S32 sMaxSmallImageSize ;
 	static BOOL sFreezeImageScalingDown ;//do not scale down image res if set.
 	static F32  sCurrentTime ;
+	static LLUUID sInvisiprimTexture1 ;
+	static LLUUID sInvisiprimTexture2 ;
 
 	enum EDebugTexels
 	{

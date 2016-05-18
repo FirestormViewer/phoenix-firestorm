@@ -1307,10 +1307,7 @@ void link_inventory_array(const LLUUID& category,
 #endif
 	}
 
-//    if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-	if (AISAPI::isAvailable( (baseobj_array.size() > 1) ? AISAPI::CMD_OBJ_LINKBATCH : AISAPI::CMD_OBJ_LINK ))
-// [/SL:KB]
+    if (AISAPI::isAvailable())
 	{
 		LLSD new_inventory = LLSD::emptyMap();
 		new_inventory["links"] = links;
@@ -1374,10 +1371,7 @@ void update_inventory_item(
 	LLPointer<LLInventoryCallback> cb)
 {
 	const LLUUID& item_id = update_item->getUUID();
-//    if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-	if (AISAPI::isAvailable(AISAPI::CMD_ITEM_UPDATE))
-// [/SL:KB]
+    if (AISAPI::isAvailable())
 	{
 		LLSD updates = update_item->asLLSD();
 		// Replace asset_id and/or shadow_id with transaction_id (hash_id)
@@ -1446,10 +1440,7 @@ void update_inventory_item(
 	}
 // [/SL:KB]
 
-//    if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-	if (AISAPI::isAvailable(AISAPI::CMD_ITEM_UPDATE))
-// [/SL:KB]
+    if (AISAPI::isAvailable())
 	{
         AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
         AISAPI::UpdateItem(item_id, updates, cr);
@@ -1508,10 +1499,7 @@ void update_inventory_category(
 		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(obj);
 		new_cat->fromLLSD(updates);
 		// FIXME - restore this once the back-end work has been done.
-//        if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-		if (AISAPI::isAvailable(AISAPI::CMD_CAT_UPDATE))
-// [/SL:KB]
+        if (AISAPI::isAvailable())
 		{
 			LLSD new_llsd = new_cat->asLLSD();
             AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
@@ -1577,10 +1565,7 @@ void remove_inventory_item(
 	{
 		const LLUUID item_id(obj->getUUID());
 		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << obj->getName() << LL_ENDL;
-//        if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-		if (AISAPI::isAvailable(AISAPI::CMD_ITEM_REMOVE))
-// [/SL:KB]
+        if (AISAPI::isAvailable())
 		{
             AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
             AISAPI::RemoveItem(item_id, cr);
@@ -1656,10 +1641,7 @@ void remove_inventory_category(
 			LLNotificationsUtil::add("CannotRemoveProtectedCategories");
 			return;
 		}
-//        if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-		if (AISAPI::isAvailable(AISAPI::CMD_CAT_REMOVE))
-// [/SL:KB]
+        if (AISAPI::isAvailable())
 		{
             AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
             AISAPI::RemoveCategory(cat_id, cr);
@@ -1762,10 +1744,7 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 		}
 		else
 		{
-//            if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-			if (AISAPI::isAvailable(AISAPI::CMD_CAT_PURGE))
-// [/SL:KB]
+            if (AISAPI::isAvailable())
 			{
                 AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
                 AISAPI::PurgeDescendents(id, cr);
@@ -1975,10 +1954,7 @@ void slam_inventory_folder(const LLUUID& folder_id,
 						   const LLSD& contents,
 						   LLPointer<LLInventoryCallback> cb)
 {
-//    if (AISAPI::isAvailable())
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-	if (AISAPI::isAvailable(AISAPI::CMD_CAT_SLAM))
-// [/SL:KB]
+    if (AISAPI::isAvailable())
 	{
 		LL_DEBUGS(LOG_INV) << "using AISv3 to slam folder, id " << folder_id
 						   << " new contents: " << ll_pretty_print_sd(contents) << LL_ENDL;

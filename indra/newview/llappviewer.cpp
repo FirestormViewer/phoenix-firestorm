@@ -252,7 +252,6 @@
 #include "growlmanager.h"
 #endif
 
-
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
 // this app, or another 'component' of the viewer. App globals should be 
@@ -269,6 +268,7 @@
 
 #include "nd/ndoctreelog.h" // <FS:ND/> Octree operation logging.
 #include "nd/ndetw.h" // <FS:ND/> Windows Event Tracing, does nothing on OSX/Linux.
+#include "nd/ndlogthrottle.h"
 
 #include "fsradar.h"
 
@@ -2824,6 +2824,9 @@ bool LLAppViewer::initConfiguration()
 		LL_INFOS() << "Loaded settings file " << fsdata_defaults << LL_ENDL;
 	}
 	//</FS:Techwolf Lupindo>
+
+	// <FS:Ansariel> Debug setting to disable log throttle
+	nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
 
 	initStrings(); // setup paths for LLTrans based on settings files only
 	// - set procedural settings

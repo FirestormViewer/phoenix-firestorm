@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_login">
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<layout_stack name="vert_stack_left">
+				<layout_panel name="1st_row">
+					<layout_stack name="1st_row_stack">
+						<layout_panel name="login">
+							<combo_box label="Użytkownik" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine" name="username_combo" />
+							<check_box label="Zapamiętaj login" name="remember_username_check" />
+						</layout_panel>
+						<layout_panel name="delete_container">
+							<button tool_tip="Usuń tą nazwę użytkownika" name="remove_user_btn" />
+						</layout_panel>
+						<layout_panel name="password_container">
+							<line_editor name="password_edit" label="Hasło" />
+							<check_box label="Zapamiętaj hasło" name="remember_check" />
+						</layout_panel>
+						<layout_panel name="start_location_panel">
+							<combo_box label="Rozpocznij w" name="start_location_combo">
+								<combo_box.item label="Ostatnia lokalizacja" name="MyLastLocation" />
+								<combo_box.item label="Moje Miejsce Startu" name="MyHome" />
+								<combo_box.item label="&lt;Wpisz nazwę regionu&gt;" name="Typeregionname" />
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="2nd_row">
+					<layout_stack name="2nd_row_stack">
+						<layout_panel name="grid_panel">
+							<text name="grid_login_text" width="55">
+								Siatka:
+							</text>
+						</layout_panel>
+						<layout_panel name="mode_selection">
+							<text name="mode_selection_text">
+								Tryb:
+							</text>
+							<combo_box tool_tip="Wybierz ten tryb ustawień, z którym jesteś najbardziej obeznany/a, aby Firestorm mógł dobrać odpowiednie ustawienia domyślne." name="mode_combo">
+								<combo_box.item label="Hybrydowy" name="Hybrid" />
+								<combo_box.item label="Tekstowy" name="Text" />
+							</combo_box>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+			<button label="Zaloguj" name="connect_btn" />
+			<text name="create_new_account_text">
+				Utwórz nowe konto
+			</text>
+			<text name="forgot_password_text">
+				Zapomniałeś/aś hasła?
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>
