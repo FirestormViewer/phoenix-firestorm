@@ -1504,6 +1504,10 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		Alle Einwohner in dieser Region nach Hause teleportieren?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="ChangeObjectBonusFactor">
+		Das Verringern des Objekt-Bonus nachdem bereits in einer Region gebaut wurde kann zur Folge haben, dass Objekte zurückgeschickt oder gelöscht werden. Sind Sie sicher, dass Sie den Onjekt-Bonus ändern möchten?
+		<usetemplate ignoretext="Bestätigen, wenn der Okjekt-Bonus geändert wird" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="EstateObjectReturn">
 		Möchten Sie wirklich alle Objekte zurückgeben, die [USER_NAME] gehören?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
