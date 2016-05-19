@@ -9,6 +9,7 @@
 	<text name="Preset">
 		Geben Sie einen Namen für die Voreinstellung ein oder wählen Sie eine vorhandene Voreinstellung aus.
 	</text>
-	<button label="Speichern" name="save"/>
+	<combo_box name="preset_combo" top_delta="45"/>
+	<button label="Speichern" name="save" top_delta="35"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>
