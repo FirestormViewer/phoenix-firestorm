@@ -3331,7 +3331,10 @@ void LLFloaterPreference::changed()
 
 }
 
-void LLFloaterPreference::saveGraphicsPreset(std::string& preset)
+// <FS:Ansariel> Build fix
+//void LLFloaterPreference::saveGraphicsPreset(std::string& preset)
+void LLFloaterPreference::saveGraphicsPreset(const std::string& preset)
+// </FS:Ansariel>
 {
 	mSavedGraphicsPreset = preset;
 }

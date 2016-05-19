@@ -253,7 +253,10 @@ public:
 	void buildPopupLists();
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
-	void saveGraphicsPreset(std::string& preset);
+	// <FS:Ansariel> Build fix
+	//void saveGraphicsPreset(std::string& preset);
+	void saveGraphicsPreset(const std::string& preset);
+	// </FS:Ansariel>
 
 private:
 
