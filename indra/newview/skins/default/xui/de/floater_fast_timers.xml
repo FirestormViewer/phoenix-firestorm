@@ -7,15 +7,15 @@
 		Start
 	</string>
 	<combo_box name="time_scale_combo">
-		<item name="2x Average" label="2x Durchschnitt"/>
-		<item name="Max" label="Maximum"/>
-		<item name="Recent Max" label="Letztes Maximum"/>
-		<item name="100ms" label="100ms"/>
-	  </combo_box>
-	  <combo_box name="metric_combo">
-		<item name="Time" label="Zeit"/>
-		<item name="Number of Calls" label="Anzahl Aufrufe"/>
-		<item name="Hz" label="Hz"/>
-	  </combo_box>
+		<item label="2x Durchschnitt" name="2x Average"/>
+		<item label="Höchstwert" name="Max"/>
+		<item label="Jüngster Höchstwert" name="Recent Max"/>
+		<item label="100 ms" name="100ms"/>
+	</combo_box>
+	<combo_box name="metric_combo">
+		<item label="Zeit" name="Time"/>
+		<item label="Anzahl von Aufrufen" name="Number of Calls"/>
+		<item label="Hz" name="Hz"/>
+	</combo_box>
 	<button label="Pause" name="pause_btn"/>
 </floater>

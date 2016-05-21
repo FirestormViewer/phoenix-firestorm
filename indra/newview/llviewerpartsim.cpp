@@ -39,6 +39,7 @@
 #include "llworld.h"
 #include "pipeline.h"
 #include "llspatialpartition.h"
+#include "llvoavatarself.h"
 #include "llvovolume.h"
 
 const F32 PART_SIM_BOX_SIDE = 16.f;
@@ -706,16 +707,26 @@ void LLViewerPartSim::updateSimulation()
 		if (!mViewerPartSources[i]->isDead())
 		{
 			BOOL upd = TRUE;
-			if (!LLPipeline::sRenderAttachedParticles)
+			LLViewerObject* vobj = mViewerPartSources[i]->mSourceObjectp;
+
+			// <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
+			//if (vobj && vobj->isAvatar() && ((LLVOAvatar*)vobj)->isInMuteList())
+			//{
+			//	upd = FALSE;
+			//}
+			// </FS:Ansariel>
+
+			if (upd && vobj && (vobj->getPCode() == LL_PCODE_VOLUME))
 			{
-				LLViewerObject* vobj = mViewerPartSources[i]->mSourceObjectp;
-				if (vobj && (vobj->getPCode() == LL_PCODE_VOLUME))
+				if(vobj->getAvatar() && vobj->getAvatar()->isTooComplex())
 				{
-					LLVOVolume* vvo = (LLVOVolume *)vobj;
-					if (vvo && vvo->isAttachment())
-					{
-						upd = FALSE;
-					}
+					upd = FALSE;
+				}
+
+				LLVOVolume* vvo = (LLVOVolume *)vobj;
+				if (!LLPipeline::sRenderAttachedParticles && vvo && vvo->isAttachment())
+				{
+					upd = FALSE;
 				}
 			}
 

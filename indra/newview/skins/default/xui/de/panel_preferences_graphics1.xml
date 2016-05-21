@@ -2,6 +2,9 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
+		<text name="preset_label" width="130">
+			Aktuelle Voreinstellung:
+		</text>
 		<text name="QualitySpeed">
 			Qualität und Geschwindigkeit:
 		</text>
@@ -73,8 +76,9 @@
 		<text name="DrawDistanceMeterText2">
 			m
 		</text>
-		<slider label="Max. Partikelzahl:" name="MaxParticleCount"/>
-		<slider label="Max. voll dargestellte Avatare:" name="MaxNumberAvatarDrawn"/>
+		<slider label="Max. Partikelanzahl:" name="MaxParticleCount"/>
+		<slider label="Max. Komplexität:" name="IndirectMaxComplexity" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als Jelly Doll dargestellt wird."/>
+		<slider label="Max. voll dargestellte Avatare:" name="IndirectMaxNonImpostors"/>
 		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
 		<text name="PostProcessText">
 			Niedrig
@@ -102,6 +106,12 @@
 			<radio_item label="Niedrig" name="0"/>
 			<radio_item label="Hoch" name="2"/>
 		</radio_group>
+		<text name="Presets_Label" width="200">
+			Voreinstellungen:
+		</text>
+		<button label="Speichern" left="300" name="PrefSaveButton" width="72"/>
+		<button label="Laden" left_pad="5" name="PrefLoadButton" width="72"/>
+		<button label="Löschen" left_pad="5" name="PrefDeleteButton" width="72"/>
 		<button tool_tip="Standardeinstellungen neu laden" name="Defaults"/>
 	</panel>
 

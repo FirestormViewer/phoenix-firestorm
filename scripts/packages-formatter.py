@@ -97,3 +97,4 @@ for pkg in sorted(version):
         print copyright[pkg]
     else:
         sys.exit("No copyright for %s" % pkg)
+    print ''

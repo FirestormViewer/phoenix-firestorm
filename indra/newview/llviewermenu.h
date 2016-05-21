@@ -169,6 +169,9 @@ bool use_http_inventory();
 bool use_http_textures();
 // <FS:Ansariel>
 
+// <FS:Ansariel> Avatar render more check for pie menu
+bool check_avatar_render_mode(U32 mode);
+
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {
 public:

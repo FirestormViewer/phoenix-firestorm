@@ -129,10 +129,12 @@ Ce listing ne peut pas être mis à jour.
         We have unlisted your listing because the version folder is empty. You need to add items to the version folder to list the listing again.
 		<usetemplate ignoretext="Alert when a listing is unlisted because version folder is empty" name="okignore" yestext="OK"/>
 	</notification>
-	<notification name="CompileQueueSaveText">There was a problem uploading the text for a script due to the following reason: [REASON]. Please try again later.</notification>
-	<notification name="CompileQueueSaveBytecode">There was a problem uploading the compiled script due to the following reason: [REASON]. Please try again later.</notification>
-	<notification name="WriteAnimationFail">There was a problem writing animation data.  Please try again later.</notification>
-	<notification name="UploadAuctionSnapshotFail">There was a problem uploading the auction snapshot due to the following reason: [REASON]</notification>
+	<notification name="WriteAnimationFail">
+		Une erreur est survenue lors de l&apos;écriture des données d&apos;animation. Veuillez réessayer ultérieurement.
+	</notification>
+	<notification name="UploadAuctionSnapshotFail">
+		Un problème est survenu lors du chargement du script compilé, suite au problème suivant : [REASON]
+	</notification>
 	<notification name="UnableToViewContentsMoreThanOne">
 Unable to view the contents of more than one item at a time.
 Please select only one object and try again.
@@ -428,7 +430,6 @@ Would you like to load the server's last saved version?
 (**Warning** This operation cannot be undone.)
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
 	</notification>
-	<notification name="SaveScriptFailReason">There was a problem saving a script due to the following reason: [REASON].  Please try re-saving the script later.</notification>
 	<notification name="SaveScriptFailObjectNotFound">
 Could not save the script because the object it is in could not be found.
 The object may be out of range or may have been deleted.

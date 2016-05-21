@@ -405,30 +405,34 @@ LLPointer<LLControlVariable> LLControlGroup::getControl(const std::string& name)
 
 ////////////////////////////////////////////////////////////////////////////
 
+// Must match the type definition in llcontrol.h
+const std::string LLControlGroup::mTypeString[TYPE_COUNT] = { "U32"
+                                                             ,"S32"
+                                                             ,"F32"
+                                                             ,"Boolean"
+                                                             ,"String"
+                                                             ,"Vector3"
+                                                             ,"Vector3D"
+                                                             ,"Rect"
+                                                             ,"Color4"
+                                                             ,"Color3"
+                                                             ,"LLSD"
+                                                             };
+
+const std::string LLControlGroup::mSanityTypeString[SANITY_TYPE_COUNT] = { "None"
+																		  ,"Equals"
+																		  ,"NotEquals"
+																		  ,"LessThan"
+																		  ,"GreaterThan"
+																		  ,"LessThanEquals"
+																		  ,"GreaterThanEquals"
+																		  ,"Between"
+																		  ,"NotBetween"
+																		  };
+
 LLControlGroup::LLControlGroup(const std::string& name)
 :	LLInstanceTracker<LLControlGroup, std::string>(name)
 {
-	mTypeString[TYPE_U32] = "U32";
-	mTypeString[TYPE_S32] = "S32";
-	mTypeString[TYPE_F32] = "F32";
-	mTypeString[TYPE_BOOLEAN] = "Boolean";
-	mTypeString[TYPE_STRING] = "String";
-	mTypeString[TYPE_VEC3] = "Vector3";
-    mTypeString[TYPE_VEC3D] = "Vector3D";
-	mTypeString[TYPE_RECT] = "Rect";
-	mTypeString[TYPE_COL4] = "Color4";
-	mTypeString[TYPE_COL3] = "Color3";
-	mTypeString[TYPE_LLSD] = "LLSD";
-
-	mSanityTypeString[SANITY_TYPE_NONE] = "None";
-	mSanityTypeString[SANITY_TYPE_EQUALS] = "Equals";
-	mSanityTypeString[SANITY_TYPE_NOT_EQUALS] = "NotEquals";
-	mSanityTypeString[SANITY_TYPE_LESS_THAN] = "LessThan";
-	mSanityTypeString[SANITY_TYPE_GREATER_THAN] = "GreaterThan";
-	mSanityTypeString[SANITY_TYPE_LESS_THAN_EQUALS] = "LessThanEquals";
-	mSanityTypeString[SANITY_TYPE_GREATER_THAN_EQUALS] = "GreaterThanEquals";
-	mSanityTypeString[SANITY_TYPE_BETWEEN] = "Between";
-	mSanityTypeString[SANITY_TYPE_NOT_BETWEEN] = "NotBetween";
 }
 
 LLControlGroup::~LLControlGroup()
@@ -1285,7 +1289,7 @@ bool convert_from_llsd<bool>(const LLSD& sd, eControlType type, const std::strin
 		return sd.asBoolean();
 	else
 	{
-		CONTROL_ERRS << "Invalid BOOL value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid BOOL value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return FALSE;
 	}
 }
@@ -1297,7 +1301,7 @@ S32 convert_from_llsd<S32>(const LLSD& sd, eControlType type, const std::string&
 		return sd.asInteger();
 	else
 	{
-		CONTROL_ERRS << "Invalid S32 value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid S32 value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return 0;
 	}
 }
@@ -1309,7 +1313,7 @@ U32 convert_from_llsd<U32>(const LLSD& sd, eControlType type, const std::string&
 		return sd.asInteger();
 	else
 	{
-		CONTROL_ERRS << "Invalid U32 value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid U32 value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return 0;
 	}
 }
@@ -1321,7 +1325,7 @@ F32 convert_from_llsd<F32>(const LLSD& sd, eControlType type, const std::string&
 		return (F32) sd.asReal();
 	else
 	{
-		CONTROL_ERRS << "Invalid F32 value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid F32 value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return 0.0f;
 	}
 }
@@ -1333,7 +1337,7 @@ std::string convert_from_llsd<std::string>(const LLSD& sd, eControlType type, co
 		return sd.asString();
 	else
 	{
-		CONTROL_ERRS << "Invalid string value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid string value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return LLStringUtil::null;
 	}
 }
@@ -1351,7 +1355,7 @@ LLVector3 convert_from_llsd<LLVector3>(const LLSD& sd, eControlType type, const 
 		return (LLVector3)sd;
 	else
 	{
-		CONTROL_ERRS << "Invalid LLVector3 value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid LLVector3 value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return LLVector3::zero;
 	}
 }
@@ -1363,7 +1367,7 @@ LLVector3d convert_from_llsd<LLVector3d>(const LLSD& sd, eControlType type, cons
 		return (LLVector3d)sd;
 	else
 	{
-		CONTROL_ERRS << "Invalid LLVector3d value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid LLVector3d value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return LLVector3d::zero;
 	}
 }
@@ -1375,7 +1379,7 @@ LLRect convert_from_llsd<LLRect>(const LLSD& sd, eControlType type, const std::s
 		return LLRect(sd);
 	else
 	{
-		CONTROL_ERRS << "Invalid rect value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid rect value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return LLRect::null;
 	}
 }
@@ -1420,7 +1424,7 @@ LLColor3 convert_from_llsd<LLColor3>(const LLSD& sd, eControlType type, const st
 		return sd;
 	else
 	{
-		CONTROL_ERRS << "Invalid LLColor3 value for " << control_name << ": " << sd << LL_ENDL;
+		CONTROL_ERRS << "Invalid LLColor3 value for " << control_name << ": " << LLControlGroup::typeEnumToString(type) << " " << sd << LL_ENDL;
 		return LLColor3::white;
 	}
 }

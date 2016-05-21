@@ -791,6 +791,17 @@ void FloaterQuickPrefs::refreshSettings()
 	mCtrlWindLight->setEnabled(
 		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 
+	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
+	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
+	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
+	LLButton* sky_default_button = getChild<LLButton>("Reset_Sky_Detail");
+
+	BOOL sky_enabled = mCtrlWindLight->get() && shaders;
+	sky_label->setEnabled(sky_enabled);
+	sky_slider->setEnabled(sky_enabled);
+	sky_spinner->setEnabled(sky_enabled);
+	sky_default_button->setEnabled(sky_enabled);
+
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
 						shaders && 
 						gGLManager.mHasFramebufferObject &&
@@ -818,6 +829,11 @@ void FloaterQuickPrefs::refreshSettings()
 		
 		mCtrlWindLight->setEnabled(FALSE);
 		mCtrlWindLight->setValue(FALSE);
+
+		sky_label->setEnabled(FALSE);
+		sky_slider->setEnabled(FALSE);
+		sky_spinner->setEnabled(FALSE);
+		sky_default_button->setEnabled(FALSE);
 		
 		mCtrlReflectionDetail->setEnabled(FALSE);
 		mCtrlReflectionDetail->setValue(0);
@@ -843,6 +859,11 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlWindLight->setEnabled(FALSE);
 		mCtrlWindLight->setValue(FALSE);
+
+		sky_label->setEnabled(FALSE);
+		sky_slider->setEnabled(FALSE);
+		sky_spinner->setEnabled(FALSE);
+		sky_default_button->setEnabled(FALSE);
 
 		//deferred needs windlight, disable deferred
 		mCtrlShadowDetail->setEnabled(FALSE);

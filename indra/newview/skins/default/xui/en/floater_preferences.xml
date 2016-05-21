@@ -19,25 +19,13 @@
     <button
      follows="right|bottom"
      height="23"
-     label="Apply"
-     label_selected="Apply"
-     layout="topleft"
-     right="-200"
-     name="Apply"
-     top="488"
-     width="90">
-        <button.commit_callback
-         function="Pref.Apply" />
-    </button>
-    <button
-     follows="right|bottom"
-     height="23"
      label="OK"
      label_selected="OK"
      layout="topleft"
      left_pad="5"
      right="-105"
      name="OK"
+     top="488"
      width="90">
         <button.commit_callback
          function="Pref.OK" />

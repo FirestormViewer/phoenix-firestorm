@@ -26,6 +26,11 @@
 			<pie_slice label="Hineinzoomen" name="Zoom In"/>
 			<pie_slice label="Tex Refresh" name="Texture Refresh"/>
 			<pie_slice label="XML ausg." name="Dump XML"/>
+			<pie_menu name="RenderMenu" label="Anzeigen &gt;">
+				<pie_slice name="RenderNormally" label="Normal"/>
+				<pie_slice name="DoNotRender" label="Niemals"/>
+				<pie_slice name="AlwaysRenderFully" label="Vollständig"/>
+			</pie_menu>
 		</pie_menu>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>

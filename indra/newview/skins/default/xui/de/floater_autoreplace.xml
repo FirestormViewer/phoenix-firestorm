@@ -11,14 +11,14 @@
 		<scroll_list.columns label="Schlüsselwort" name="keyword"/>
 		<scroll_list.columns label="Ersetzung" name="replacement"/>
 	</scroll_list>
+	<button label="Hinzufügen..." name="autoreplace_add_entry"/>
+	<button label="Entfernen" name="autoreplace_delete_entry"/>
 	<text name="autoreplace_keyword_txt">
 		Schlüsselwort:
 	</text>
 	<text name="autoreplace_replacement_txt">
 		Ersetzung:
 	</text>
-	<button label="Hinzufügen..." name="autoreplace_add_entry"/>
-	<button label="Entfernen" name="autoreplace_delete_entry"/>
 	<button label="Eintrag speich." name="autoreplace_save_entry" tool_tip="Diesen Eintrag speichern."/>
 	<button label="Änderungen speichern" name="autoreplace_save_changes" tool_tip="Alle Änderungen speichern." width="140"/>
 	<button label="Abbrechen" name="autoreplace_cancel" tool_tip="Alle Änderungen löschen."/>

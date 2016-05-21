@@ -18,9 +18,9 @@
 	<menu_item_call label="Przybliż" name="Zoom In"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
 	<menu_item_call label="Profil obiektu" name="Object Inspect"/>
-	<menu_item_check label="Renderuj normalnie" name="Normal"/>
-	<menu_item_check label="Zawsze upraszczaj" name="Always use impostor"/>
-	<menu_item_check label="Nigdy nie upraszczaj" name="Never use impostor"/>
+	<menu_item_check label="Renderuj normalnie" name="RenderNormally"/>
+	<menu_item_check label="Nigdy nie renderuj" name="DoNotRender"/>
+	<menu_item_check label="Zawsze renderuj w pełni" name="AlwaysRenderFully"/>
 	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
 	<menu_item_call label="Inspekcja" name="Object_Inspect_Floater"/>
 	<menu_item_call label="Info o skryptach" name="ScriptInfo"/>

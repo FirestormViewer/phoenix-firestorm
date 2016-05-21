@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="panel_im">
 	<floater.string name="participant_added" value="[NAME] został/a zaproszony/a do rozmowy." />
 	<floater.string name="multiple_participants_added" value="[NAME] zostali zaproszeni do rozmowy." />

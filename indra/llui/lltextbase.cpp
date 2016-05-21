@@ -1434,8 +1434,6 @@ void LLTextBase::replaceWithSuggestion(U32 index)
 
 
 			setCursorPos(it->first + (S32)suggestion.length());
-
-			// <FS:Ansariel> FIRE-11045: Spell checking changes not identified as such
 			onSpellCheckPerformed();
 
 			break;

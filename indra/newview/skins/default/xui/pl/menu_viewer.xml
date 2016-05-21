@@ -2,7 +2,6 @@
 <menu_bar name="Main Menu">
 	<menu label="Awatar" name="Me">
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
-		<menu_item_call label="Skrzynka nadawcza kupca..." name="MerchantOutbox"/>
 		<menu_item_call label="Moje rzeczy na Marketplace" name="MarketplaceListings"/>
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>
@@ -30,7 +29,7 @@
 			<menu_item_call label="Wymuś aktualizację wyglądu (rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
-			<menu_item_check label="Pokaż obciążenia renderowania dla awatarów (zamiennik ARC)" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Stopień skomplikowania awatarów" name="Avatar Draw Info"/>
 			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
@@ -280,7 +279,7 @@
 			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
 			<menu_item_check label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
-			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Stopień skomplikowania awatarów" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Podświetlanie i widoczność" name="Highlighting and Visibility">
 			<menu_item_check label="Mrugający emiter śledzenia" name="Cheesy Beacon"/>
@@ -422,8 +421,6 @@
 			<menu_item_check label="Stawy" name="Joints"/>
 			<menu_item_check label="Promienie" name="Raycast"/>
 			<menu_item_check label="Wektory wiatru" name="Wind Vectors"/>
-			<menu_item_check label="Złożoność renderowania" name="rendercomplexity"/>
-			<menu_item_check label="Bajty dodatków" name="attachment bytes"/>
 			<menu_item_check label="Skulpty" name="Sculpt"/>
 			<menu_item_check label="Rozmiar tekstury" name="Texture Size"/>
 			<menu label="Gęstość tekstur" name="Texture Density">

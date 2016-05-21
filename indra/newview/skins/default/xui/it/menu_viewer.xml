@@ -6,7 +6,6 @@
 		<menu_item_call label="Il mio Dashboard" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
 		</menu_item_call>
-		<!--<menu_item_call label="??" name="MerchantOutbox"/>-->
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Il mio profilo" name="Profile"/>
 		<menu_item_call label="Il mio aspetto" name="ChangeOutfit"/>

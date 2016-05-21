@@ -164,6 +164,10 @@ L&apos;inizializzazione con il Marketplace non ha avuto successo a causa di un e
         &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="MerchantForceValidateListing">
+		Per creare l&apos;annuncio, abbiamo corretto la gerarchia dei contenuti dell&apos;annuncio.
+		<usetemplate ignoretext="Avvisami se la gerarchia del contenuto viene corretta per creare un annuncio" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Questa azione cambierà il contenuto attivo di questo annuncio. Vuoi continuare?
 		<usetemplate ignoretext="Conferma prima di modificare un annuncio attivo su Marketplace" name="okcancelignore" notext="Annulla" yestext="OK"/>
@@ -210,12 +214,6 @@ L&apos;inizializzazione con il Marketplace non ha avuto successo a causa di un e
 	<notification name="AlertMerchantStockFolderEmpty">
 		L&apos;annuncio è stato rimosso perché il magazzino è esaurito. Aggiungi altre unità alla cartella di magazzino prima di pubblicare nuovamente l&apos;annuncio.
 		<usetemplate ignoretext="Avverti quando un annuncio viene rimosso perché la cartella di magazzino è vuota" name="okignore" yestext="OK"/>
-	</notification>
-	<notification name="CompileQueueSaveText">
-		C&apos;è stato un problema importando il testo di uno script per la seguente ragione: [REASON]. Riprova più tardi.
-	</notification>
-	<notification name="CompileQueueSaveBytecode">
-		C&apos;è stato un problema importando lo script compilato per la seguente ragione: [REASON]. Riprova più tardi.
 	</notification>
 	<notification name="WriteAnimationFail">
 		C&apos;è stato un problema di scrittura dati dell&apos;animazione.  Riprova più tardi.
@@ -584,15 +582,9 @@ Vuoi ripristinare l&apos;ultima versione salvata sul server?
 (**Attenzione** Questa operazione non è reversibile)
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
-	<notification name="SaveScriptFailReason">
-		C&apos;è stato un problema salvando lo script a causa del seguente motivo : [REASON].  Riprova a salvare lo script più tardi.
-	</notification>
 	<notification name="SaveScriptFailObjectNotFound">
 		Non è stato possibile salvare lo script perchè l&apos;oggetto che lo contiene non è stato trovato.
 L&apos;oggetto potrebbe essere troppo lontano oppure essere stato cancellato.
-	</notification>
-	<notification name="SaveBytecodeFailReason">
-		C&apos;è stato un problema salvando lo script compilato a causa del seguente motivo: [REASON].  Riprova a salvare lo script più tardi.
 	</notification>
 	<notification name="StartRegionEmpty">
 		La tua Regione di inizio non è stata definita.

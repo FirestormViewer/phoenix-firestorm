@@ -30,6 +30,28 @@
      follows="all"
      label="General"
      name="General" >
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left="5"
+    name="preset_label"
+    top="5"
+    width="70">
+      Preset in use:
+  </text>
+
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left_pad="10"
+    name="preset_text"
+    top="5"
+    width="120">
+      (None)
+  </text>
+
       <text
        type="string"
        length="1"
@@ -38,7 +60,7 @@
        layout="topleft"
        left="30"
        name="QualitySpeed"
-       top="15"
+       top="25"
        width="400">
         Quality and speed:
       </text>
@@ -208,7 +230,7 @@
          left="4"
          name="Fullscreen Mode"
          tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
-         top="75"
+         top="80"
          width="280" />
         <text
          type="string"
@@ -480,7 +502,7 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
-         top="75"
+         top="80"
          width="301" />
         <text
          type="string"
@@ -510,7 +532,42 @@
          top_pad="6"
          width="301" />
         <slider
-         control_name="RenderAvatarMaxVisible"
+         control_name="IndirectMaxComplexity"
+         tool_tip="Controls at what point a visually complex avatar is drawn as a jelly doll"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="1"
+         initial_value="101"
+         label="Maximum complexity"
+         label_width="185"
+         layout="topleft"
+         left_delta="0"
+         max_val="101"
+         min_val="1"
+         show_text="false"
+         name="IndirectMaxComplexity"
+         top_pad="3"
+         width="261">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxComplexity"
+          parameter="IndirectMaxComlexityText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="465"
+         name="IndirectMaxComplexityText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
+        <slider
+         control_name="IndirectMaxNonImpostors"
          decimal_digits="0"
          follows="left|top"
          height="15"
@@ -519,12 +576,30 @@
          label="Max. # of non-impostor avatars"
          label_width="185"
          layout="topleft"
-         left_delta="0"
-         max_val="65"
+         left="200"
+         max_val="66"
          min_val="1"
-         name="MaxNumberAvatarDrawn"
-         top_pad="3"
-         width="287" />
+         show_text="false"
+         name="IndirectMaxNonImpostors"
+         top_pad="5"
+         width="261">
+         <slider.commit_callback
+          function="Pref.UpdateIndirectMaxNonImpostors"
+          parameter="IndirectNonImpostorsText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="465"
+         name="IndirectMaxNonImpostorsText"
+         text_readonly_color="LabelDisabledColor"
+         top_delta="0"
+         width="128">
+          0
+        </text>
         <slider
          control_name="RenderGlowResolutionPow"
          decimal_digits="0"
@@ -535,12 +610,12 @@
          label="Post process quality"
          label_width="185"
          layout="topleft"
-         left_delta="0"
+         left="200"
          max_val="9"
          min_val="8"
          name="RenderPostProcess"
          show_text="false"
-         top_pad="3"
+         top_pad="5"
          width="261">
           <slider.commit_callback
            function="Pref.UpdateSliderText"
@@ -573,13 +648,7 @@
          name="AvatarPhysicsDetail"
          show_text="true"
          top_pad="5"
-         width="297">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="AvatarPhysicsDetailText" />
--->
-        </slider>
+         width="297"/>
 
         <text
          type="string"
@@ -608,13 +677,7 @@
          name="ObjectMeshDetail"
          show_text="true"
          top_pad="6"
-         width="304">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="ObjectMeshDetailText" />
--->
-        </slider>
+         width="304"/>
         <slider
         control_name="RenderFlexTimeFactor"
         follows="left|top"
@@ -627,13 +690,7 @@
         name="FlexibleMeshDetail"
         show_text="true"
         top_pad="3"
-        width="304">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-          function="Pref.UpdateSliderText"
-          parameter="FlexibleMeshDetailText" />
--->
-        </slider>
+        width="304"/>
         <slider
          control_name="RenderTreeLODFactor"
          follows="left|top"
@@ -648,13 +705,7 @@
          name="TreeMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="TreeMeshDetailText" />
--->
-        </slider>
+         width="304"/>
         <slider
          control_name="RenderAvatarLODFactor"
          follows="left|top"
@@ -668,13 +719,7 @@
          name="AvatarMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="AvatarMeshDetailText" />
--->
-        </slider>
+         width="304"/>
         <slider
          control_name="RenderTerrainLODFactor"
          follows="left|top"
@@ -690,13 +735,7 @@
          name="TerrainMeshDetail"
          show_text="true"
          top_pad="3"
-         width="304">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="TerrainMeshDetailText" />
--->
-        </slider>
+         width="304"/>
         <slider
          control_name="WLSkyDetail"
          enabled_control="WindLightUseAtmosShaders"
@@ -714,13 +753,7 @@
          name="SkyMeshDetail"
          show_text="true"
          top_pad="3"
-         width="315">
-<!-- FS:Ansariel: We show the numeric value
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="SkyMeshDetailText" />
--->
-        </slider>
+         width="315"/>
         <text
          type="string"
          length="1"
@@ -747,16 +780,6 @@
           Avatar Rendering:
         </text>
         <check_box
-         control_name="RenderUseImpostors"
-         height="16"
-         initial_value="true"
-         label="Avatar impostors"
-         layout="topleft"
-         left_delta="5"
-         name="AvatarImpostors"
-         top_pad="5"
-         width="256" />
-        <check_box
          control_name="RenderAvatarVP"
          height="16"
          initial_value="true"
@@ -764,7 +787,7 @@
          layout="topleft"
          left_delta="0"
          name="AvatarVertexProgram"
-         top_pad="1"
+         top_pad="5"
          width="256">
           <check_box.commit_callback
            function="Pref.VertexShaderEnable" />
@@ -785,10 +808,9 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left="407"
          left_delta="200"
          name="TerrainDetailText"
-         top_pad="-67"
+         top_pad="-50"
          width="155">
           Terrain detail:
         </text>
@@ -815,7 +837,59 @@
            top_delta="16"
            width="50" />
         </radio_group>
-      
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="200"
+         name="Presets_Label"
+         top_pad="7"
+         width="155">
+          Presets:
+        </text>
+        <button
+         follows="left|top"
+         height="23"
+         label="Save"
+         layout="topleft"
+         left="260"
+         name="PrefSaveButton"
+         top_delta="-5"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefSave"
+          parameter="graphic" />
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Load"
+         layout="topleft"
+         left_pad="10"
+         name="PrefLoadButton"
+         top_delta="0"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefLoad"
+          parameter="graphic" />
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Delete"
+         layout="topleft"
+         left_pad="10"
+         name="PrefDeleteButton"
+         top_delta="0"
+         width="75">
+         <button.commit_callback
+          function="Pref.PrefDelete"
+          parameter="graphic" />
+        </button>
+
       <!--Reset Button-->
       <button
        follows="left|top"
@@ -825,7 +899,7 @@
        layout="topleft"
        left="460"
        name="Defaults"
-       top="25"
+       top="35"
        width="23">
         <button.commit_callback
          function="Pref.HardwareDefaults" />

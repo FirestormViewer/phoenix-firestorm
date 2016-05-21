@@ -2,7 +2,7 @@
 <floater name="perms default" title="Standard-Erstellungsberechtigungen">
 	<panel name="default permissions" label="Standardberechtigungen">
 		<text name="label_1">
-			Nächster Besitzer:
+			Nächster Eigentümer:
 		</text>
 		<text name="label_2">
 			Kopieren
@@ -14,12 +14,12 @@
 			Transferieren
 		</text>
 		<text name="label_5">
-			Teilen mit Gruppe
+			Mit Gruppe teilen
 		</text>
 		<text name="label_6">
-			Jederman Kopieren erlauben
+			Kopieren allen erlauben
 		</text>
-		<text name="label_7" tool_tip="Standardberechtigungen für Objekte, die erzeugt werden">
+		<text name="label_7" tool_tip="Standardberechtigungen für die Erstellung von Objekten festlegen">
 			Objekte
 		</text>
 		<text name="label_8" tool_tip="Standardberechtigungen für hochgeladene Objekte">
@@ -28,14 +28,14 @@
 		<text name="label_9" tool_tip="Standardberechtigungen für Skripte, die erzeugt werden">
 			Skripte
 		</text>
-		<text name="label_10" tool_tip="Standardberechtigungen für Notizkarten, die erzeugt werden">
+		<text name="label_10" tool_tip="Standardberechtigungen für die Erstellung von Notizkarten festlegen">
 			Notizkarten
 		</text>
-		<text name="label_11" tool_tip="Standardberechtigungen für Gesten, die erzeugt werden">
+		<text name="label_11" tool_tip="Standardberechtigungen für die Erstellung von Gesten festlegen">
 			Gesten
 		</text>
-		<text name="label_12" tool_tip="Standardberechtigungen für Kleidung oder Körperteile, die erzeugt werden">
-			Kleidung
+		<text name="label_12" tool_tip="Standardberechtigungen für die Erstellung von Kleidungsstücken und Körperteilen festlegen">
+			Tragbare Objekte
 		</text>
 	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>

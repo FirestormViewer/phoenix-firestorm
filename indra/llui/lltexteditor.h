@@ -167,8 +167,7 @@ public:
 	autoreplace_callback_t mAutoreplaceCallback;
 	void			setAutoreplaceCallback(autoreplace_callback_t cb) { mAutoreplaceCallback = cb; }
 
-	// <FS:Ansariel> FIRE-11045: Spell checking changes not identified as such
-	/*virtual*/ void onSpellCheckPerformed();
+	/*virtual*/ void	onSpellCheckPerformed();
 
 	//
 	// Text manipulation

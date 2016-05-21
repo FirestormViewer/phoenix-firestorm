@@ -141,8 +141,12 @@ LLNetMap::LLNetMap (const Params & p)
 	//mToolTipMsg(),
 	mPopupMenu(NULL)
 {
-	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
+	// <FS:Ansariel> Fixing borked minimap zoom level persistance
+	//mScale = gSavedSettings.getF32("MiniMapScale");
+	//mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
+	//mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
 	setScale(gSavedSettings.getF32("MiniMapScale"));
+	// </FS:Ansariel>
 }
 
 LLNetMap::~LLNetMap()
@@ -159,9 +163,7 @@ LLNetMap::~LLNetMap()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
-	//gSavedSettings.setF32("MiniMapScale", mScale);
 	gSavedSettings.setF32("MiniMapScale", sScale);
-	// </FS:Ansariel> Fixing borked minimap zoom level persistance
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	if (mParcelMgrConn.connected())
@@ -269,6 +271,9 @@ void LLNetMap::setScale( F32 scale )
 
 	mPixelsPerMeter = mScale / REGION_WIDTH_METERS;
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
+
+	// <FS:Ansariel> Fixing borked minimap zoom level persistance
+	//gSavedSettings.setF32("MiniMapScale", mScale);
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	mUpdateObjectImage = true;

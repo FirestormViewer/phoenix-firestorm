@@ -2,7 +2,6 @@
 <menu_bar name="Main Menu">
 	<menu label="Avatar" name="Me">
 		<menu_item_call label="Compte" name="Manage Account"/>
-		<menu_item_call label="Boite d'envoi du Marketplace..." name="MerchantOutbox"/>
 		<menu_item_call label="Listings Marketplace..." name="MarketplaceListings"/>
 		<menu_item_call label="Acheter des L$" name="Buy and Sell L$"/>
 		<menu_item_check label="Inventaire" name="Inventory"/>

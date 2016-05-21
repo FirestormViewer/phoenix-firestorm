@@ -65,6 +65,7 @@
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
 #include "llrendersphere.h"
+#include "llscriptruntimeperms.h"
 #include "llsdutil.h"
 #include "llsky.h"
 #include "llslurl.h"
@@ -94,14 +95,12 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-//#include "lscript_byteformat.h" // <FS:CR> We don't have the bytecode compiler in fs
 #include "stringize.h"
 #include "boost/foreach.hpp"
 #include "llcorehttputil.h"
 
 // Firestorm includes
 #include "fslslbridge.h"
-#include "fsscriptlibrary.h"
 #include "kcwlinterface.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -4983,7 +4982,7 @@ void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
 			// </FS:Ansariel>
 			gSavedSettings.getBOOL("RevokePermsOnStopAnimation"))
 		{
-			U32 permissions = LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRIGGER_ANIMATION] | LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_OVERRIDE_ANIMATIONS];
+			U32 permissions = SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TRIGGER_ANIMATION].permbit | SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_OVERRIDE_ANIMATIONS].permbit;
 			sendRevokePermissions(mRegionp->getRegionID(), permissions);
 			if (gAgentAvatarp->isSitting())
 			{	// Also stand up, since auto-granted sit animation permission has been revoked
