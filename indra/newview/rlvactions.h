@@ -45,9 +45,9 @@ public:
 	static bool canSendIM(const LLUUID& idRecipient);
 
 	/*
-	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID.
+	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists)
 	 */
-	static bool canStartIM(const LLUUID& idRecipient);								// @startim and @startimto
+	static bool canStartIM(const LLUUID& idRecipient);
 
 	/*
 	 * Returns true if an avatar's name should be hidden for the requested operation/context

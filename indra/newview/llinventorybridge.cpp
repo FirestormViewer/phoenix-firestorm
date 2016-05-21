@@ -5548,7 +5548,7 @@ void LLCallingCardBridge::performAction(LLInventoryModel* model, std::string act
 			}
 
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
-			if ( (!RlvActions::canStartIM(item->getCreatorUUID())) && (!RlvActions::hasOpenP2PSession(item->getCreatorUUID())) )
+			if (!RlvActions::canStartIM(item->getCreatorUUID()))
 			{
 				make_ui_sound("UISndInvalidOp");
 				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));

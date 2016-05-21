@@ -14,6 +14,7 @@
  * 
  */
 
+// Generic includes
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llappearancemgr.h"
@@ -27,6 +28,17 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 
+// Command specific includes
+#include "llenvmanager.h"				// @setenv
+#include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
+#include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
+#include "llpanelwearing.h"				// @showinv - "Appearance / Current Outfit" panel
+#include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
+#include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
+#include "lltoolmgr.h"					// @edit
+
+// RLVa includes
+#include "rlvfloaters.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
@@ -34,6 +46,7 @@
 #include "rlvui.h"
 #include "rlvextensions.h"
 
+// Boost includes
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
@@ -48,21 +61,31 @@ rlv_handler_t gRlvHandler;
 // Option parsing template specialization implmentation
 //
 
-template <class optionType> 
-struct RlvCommandOptionParser
+struct RlvCommandOptionHelper
 {
+	template <typename optionType> 
 	static bool parseOption(const std::string& strOption, optionType& valueOption);
+	static bool parseStringList(const std::string& strOption, std::vector<std::string>& optionList);
 };
 
-bool RlvCommandOptionParser<LLUUID>::parseOption(const std::string& strOption, LLUUID& idOption)
+template<>
+bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
 {
 	idOption.set(strOption);
 	return idOption.notNull();
 }
 
-bool RlvCommandOptionParser<int>::parseOption(const std::string& strOption, int& nOption)
+template<>
+bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int& nOption)
 {
 	return LLStringUtil::convertToS32(strOption, nOption);
+}
+
+bool RlvCommandOptionHelper::parseStringList(const std::string& strOption, std::vector<std::string>& optionList)
+{
+	if (!strOption.empty())
+		boost::split(optionList, strOption, boost::is_any_of(std::string(RLV_OPTION_SEPARATOR)));
+	return !optionList.empty();
 }
 
 // ============================================================================
@@ -474,12 +497,10 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 void RlvHandler::onSitOrStand(bool fSitting)
 {
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	if (rlv_handler_t::isEnabled())
 	{
 		RlvSettings::updateLoginLastLocation();
 	}
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (!fSitting) && (!m_posSitSource.isExactlyZero()) )
 	{
@@ -668,10 +689,7 @@ void RlvHandler::onLoginComplete()
 {
 	RlvInventory::instance().fetchWornItems();
 	RlvInventory::instance().fetchSharedInventory();
-
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	RlvSettings::updateLoginLastLocation();
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	LLViewerParcelMgr::getInstance()->setTeleportFailedCallback(boost::bind(&RlvHandler::onTeleportFailed, this));
 	LLViewerParcelMgr::getInstance()->setTeleportFinishedCallback(boost::bind(&RlvHandler::onTeleportFinished, this, _1));
@@ -739,13 +757,11 @@ bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 				((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE))) &&
 				((!hasBehaviour(RLV_BHVR_TOUCHATTACHSELF)) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)));
 		}
-#ifdef RLV_EXTENSION_CMD_TOUCHXXX
 		else
 		{
 			// HUD attachment
 			fCanTouch = (!hasBehaviour(RLV_BHVR_TOUCHHUD)) || (isException(RLV_BHVR_TOUCHHUD, idRoot, RLV_CHECK_PERMISSIVE));
 		}
-#endif // RLV_EXTENSION_CMD_TOUCHXXX
 	}
 	if ( (!fCanTouch) && (hasBehaviour(RLV_BHVR_TOUCHME)) )
 		fCanTouch = hasBehaviourRoot(idRoot, RLV_BHVR_TOUCHME);
@@ -1300,7 +1316,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 }
 
 // Handles reference counting of behaviours and tracks strict exceptions for @permissive (all restriction handlers should call this function)
-ERlvCmdRet RlvBehaviourProcessorHelper::processBehaviourImpl(const RlvCommand& rlvCmd, RlvBhvrHandler* pHandlerFunc, RlvBhvrToggleHandler* pToggleHandlerFunc)
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvCommand& rlvCmd, RlvBhvrHandlerFunc* pHandlerFunc, RlvBhvrToggleHandlerFunc* pToggleHandlerFunc)
 {
 	ERlvBehaviour eBhvr = rlvCmd.getBehaviourType();
 	bool fRefCount = false, fHasBhvr = gRlvHandler.hasBehaviour(eBhvr);
@@ -1350,7 +1366,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const Rlv
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
-	if (!RlvCommandOptionParser<LLUUID>::parseOption(rlvCmd.getOption(), idException))
+	if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idException))
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1375,6 +1391,8 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(c
 	return RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(rlvCmd, fRefCount);
 }
 
+// Handles: @addattach[:<attachpt>]=n|y and @remattach[:<attachpt>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - if there's an option it should specify a valid attachment point name
@@ -1406,6 +1424,8 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @detach[:<attachpt>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// We need to flush any queued force-wear commands before changing the restrictions
@@ -1516,21 +1536,47 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		// Turn off "View / Highlight Transparent"
+		LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
+
+		// Hide the beacons floater if it's currently visible
+		if (LLFloaterReg::instanceVisible("beacons"))
+			LLFloaterReg::hideInstance("beacons");
+
+		// Hide the build floater if it's currently visible
+		if (LLFloaterReg::instanceVisible("build"))
+			LLToolMgr::instance().toggleBuildMode();
+	}
+
+	// Start or stop filtering opening the beacons floater
+	if (fHasBhvr)
+		RlvUIEnabler::instance().addGenericFloaterFilter("beacons");
+	else
+		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
+}
+
 // Handles: @sendchannel[:<channel>]=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there's an option then it should be a valid (= positive and non-zero) chat channel
 	if (rlvCmd.hasOption())
 	{
 		S32 nChannel = 0;
-		if ( (!RlvCommandOptionParser<int>::parseOption(rlvCmd.getOption(), nChannel)) || (nChannel <= 0) )
+		if ( (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nChannel)) || (nChannel <= 0) )
 			return RLV_RET_FAILED_OPTION;
 
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
 			gRlvHandler.addException(rlvCmd.getObjectID(),  rlvCmd.getBehaviourType(), nChannel);
 		else
 			gRlvHandler.removeException(rlvCmd.getObjectID(),  rlvCmd.getBehaviourType(), nChannel);
-	} 
+	}
 	else
 	{
 		fRefCount = true;
@@ -1539,17 +1585,60 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand
 }
 
 // Handles: @sendim=n|y toggles
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
 }
 
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	for (const auto& dbgSetting : RlvExtGetSet::m_DbgAllowed)
+	{
+		if (dbgSetting.second & RlvExtGetSet::DBG_WRITE)
+			gSavedSettings.getControl(dbgSetting.first)->setHiddenFromSettingsEditor(fHasBhvr);
+	}
+}
+
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
+	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
+	{
+		if (fHasBhvr)
+		{
+			// Hide the floater if it's currently visible
+			LLFloaterReg::const_instance_list_t envFloaters = LLFloaterReg::getFloaterList(strEnvFloaters[idxFloater]);
+			for (LLFloater* pFloater : envFloaters)
+				pFloater->closeFloater();
+			RlvUIEnabler::instance().addGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+		else
+		{
+			RlvUIEnabler::instance().removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
+		}
+	}
+
+	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
+	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(fHasBhvr);
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(fHasBhvr);
+
+	// Restore the user's WindLight preferences when releasing
+	if (!fHasBhvr)
+		LLEnvManagerNew::instance().usePrefs();
+}
+
 // Handles: @showhovertext:<uuid>=n|y
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
 	LLUUID idException;
-	if (!RlvCommandOptionParser<LLUUID>::parseOption(rlvCmd.getOption(), idException))
+	if (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), idException))
 		return RLV_RET_FAILED_OPTION;
 
 	if (RLV_TYPE_ADD == rlvCmd.getParamType())
@@ -1566,9 +1655,69 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @edit=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	//
+	// When disabling, close any inventory floaters that may be open
+	//
+	if (fHasBhvr)
+	{
+		LLFloaterReg::const_instance_list_t invFloaters = LLFloaterReg::getFloaterList("inventory");
+		for (LLFloater* pFloater : invFloaters)
+			pFloater->closeFloater();
+	}
+
+	//
+	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
+	//
+	LLPanelOutfitsInventory* pAppearancePanel = LLPanelOutfitsInventory::findInstance();
+	RLV_ASSERT(pAppearancePanel);
+	if (pAppearancePanel)
+	{
+		LLTabContainer* pAppearanceTabs = pAppearancePanel->getAppearanceTabs();
+		LLOutfitsList* pMyOutfitsPanel = pAppearancePanel->getMyOutfitsPanel();
+		if ( (pAppearanceTabs) && (pMyOutfitsPanel) )
+		{
+			S32 idxTab = pAppearanceTabs->getIndexForPanel(pMyOutfitsPanel);
+			RLV_ASSERT(-1 != idxTab);
+			pAppearanceTabs->enableTabButton(idxTab, !fHasBhvr);
+
+			// When disabling, switch to the COF tab if "My Outfits" is currently active
+			if ( (fHasBhvr) && (pAppearanceTabs->getCurrentPanelIndex() == idxTab) )
+				pAppearanceTabs->selectTabPanel(pAppearancePanel->getCurrentOutfitPanel());
+		}
+
+		LLSidepanelAppearance* pCOFPanel = pAppearancePanel->getAppearanceSP();
+		RLV_ASSERT(pCOFPanel);
+		if ( (fHasBhvr) && (pCOFPanel) && (pCOFPanel->isOutfitEditPanelVisible()) )
+		{
+			// TODO-RLVa: we should really just be collapsing the "Add more..." inventory panel (and disable the button)
+			pCOFPanel->showOutfitsInventoryPanel();
+		}
+	}
+
+	//
+	// Filter (or stop filtering) opening new inventory floaters
+	//
+	if (fHasBhvr)
+		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
+	else
+		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
+}
+
 // ============================================================================
 // Command handlers (RLV_TYPE_FORCE)
 //
+
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_FORCE>::processCommand(const RlvCommand& rlvCmd, RlvForceHandlerFunc* pHandler)
+{
+	return (*pHandler)(rlvCmd);
+}
 
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0j
 ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
@@ -1761,7 +1910,8 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 }
 
 // Handles: @setgroup:<uuid|name>=force
-ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
 	{
@@ -1791,7 +1941,8 @@ ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>::onCommand(const
 }
 
 // Handles: @sit:<uuid>=force
-ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
 	// Sanity checking - we need to know about the object and it should identify a prim/linkset
@@ -1824,17 +1975,49 @@ ERlvCmdRet RlvCommandHandler<RLV_TYPE_FORCE, RLV_BHVR_SIT>::onCommand(const RlvC
 // Command handlers (RLV_TYPE_REPLY)
 //
 
+ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>::processCommand(const RlvCommand& rlvCmd, RlvReplyHandlerFunc* pHandler)
+{
+	// Sanity check - <param> should specify a - valid - reply channel
+	S32 nChannel;
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel, rlvCmd.getObjectID() == gAgent.getID())) )
+		return RLV_RET_FAILED_PARAM;
+
+	std::string strReply;
+	ERlvCmdRet eRet = (*pHandler)(rlvCmd, strReply);
+
+	// If we made it this far then:
+	//   - the command was handled successfully so we send off the response
+	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
+	if (nChannel != 0)
+		RlvUtil::sendChatReply(nChannel, strReply);
+	else
+	{
+		if (RlvFloaterConsole* pConsole = LLFloaterReg::findTypedInstance<RlvFloaterConsole>("rlv_console"))
+			pConsole->addCommandReply(rlvCmd.getBehaviour(), strReply);
+	}
+
+	return eRet;
+}
+
 // Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 {
 	RLV_ASSERT(RLV_TYPE_REPLY == rlvCmd.getParamType());
 
+	// Try a command processor first
+	ERlvCmdRet eRet = rlvCmd.processCommand();
+	if (RLV_RET_NO_PROCESSOR != eRet)
+	{
+		return eRet;
+	}
+
 	// Sanity check - <param> should specify a - valid - reply channel
 	S32 nChannel;
-	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel)) )
+	if ( (!LLStringUtil::convertToS32(rlvCmd.getParam(), nChannel)) || (!RlvUtil::isValidReplyChannel(nChannel, rlvCmd.getObjectID() == gAgent.getID())) )
 		return RLV_RET_FAILED_PARAM;
 
-	ERlvCmdRet eRet = RLV_RET_SUCCESS; std::string strReply;
+	// Process the command the legacy way
+	eRet = RLV_RET_SUCCESS; std::string strReply;
 	switch (rlvCmd.getBehaviourType())
 	{
 		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.4.0a)
@@ -1849,27 +2032,21 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);
 			break;
-#ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETATTACHNAMES:	// @getattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETADDATTACHNAMES:// @getaddattachnames[:<grp>]=<channel>
 		case RLV_BHVR_GETREMATTACHNAMES:// @getremattachnames[:<grp>]=<channel>
 			eRet = onGetAttachNames(rlvCmd, strReply);
 			break;
-#endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFIT:		// @getoutfit[:<layer>]=<channel>
 			eRet = onGetOutfit(rlvCmd, strReply);
 			break;
-#ifdef RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_GETOUTFITNAMES:	// @getoutfitnames=<channel>
 		case RLV_BHVR_GETADDOUTFITNAMES:// @getaddoutfitnames=<channel>
 		case RLV_BHVR_GETREMOUTFITNAMES:// @getremoutfitnames=<channel>
 			eRet = onGetOutfitNames(rlvCmd, strReply);
 			break;
-#endif // RLV_EXTENSION_CMD_GETXXXNAMES
 		case RLV_BHVR_FINDFOLDER:		// @findfolder:<criteria>=<channel>
-#ifdef RLV_EXTENSION_CMD_FINDFOLDERS
 		case RLV_BHVR_FINDFOLDERS:		// @findfolders:<criteria>=<channel>
-#endif // RLV_EXTENSION_CMD_FINDFOLDERS
 			eRet = onFindFolder(rlvCmd, strReply);
 			break;
 		case RLV_BHVR_GETPATH:			// @getpath[:<option>]=<channel>
@@ -1898,16 +2075,6 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 				strReply = idSitObj.asString();
 			}
 			break;
-#ifdef RLV_EXTENSION_CMD_GETCOMMAND
-		case RLV_BHVR_GETCOMMAND:		// @getcommand:<option>=<channel>		- Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			{
-				std::list<std::string> cmdList;
-				if (RlvBehaviourDictionary::instance().getCommands(rlvCmd.getOption(), RLV_TYPE_UNKNOWN, cmdList))
-					for (std::list<std::string>::const_iterator itCmd = cmdList.begin(); itCmd != cmdList.end(); ++itCmd)
-						strReply.append("/").append(*itCmd);
-			}
-			break;
-#endif // RLV_EXTENSION_CMD_GETCOMMAND
 		case RLV_BHVR_GETSTATUS:		// @getstatus                           - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
 				std::string strFilter, strSeparator;
@@ -1942,7 +2109,13 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 	// If we made it this far then:
 	//   - the command was handled successfully so we send off the response
 	//   - the command failed but we still send off an - empty - response to keep the issuing script from blocking
-	RlvUtil::sendChatReply(nChannel, strReply);
+	if (nChannel > 0)
+		RlvUtil::sendChatReply(nChannel, strReply);
+	else
+	{
+		if (RlvFloaterConsole* pConsole = LLFloaterReg::findTypedInstance<RlvFloaterConsole>("rlv_console"))
+			pConsole->addCommandReply(rlvCmd.getBehaviour(), strReply);
+	}
 
 	return eRet;
 }
@@ -2063,6 +2236,35 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			}
 		}
 	}
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcommand[:<behaviour>[;<type>[;<separator>]]]=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	std::vector<std::string> optionList;
+	RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList);
+
+	// If a second parameter is present it'll specify the command type
+	ERlvParamType eType = RLV_TYPE_UNKNOWN;
+	if (optionList.size() >= 2)
+	{
+		if ( (optionList[1] == "any") || (optionList[1].empty()) )
+			eType = RLV_TYPE_UNKNOWN;
+		else if (optionList[1] == "add")
+			eType = RLV_TYPE_ADDREM;
+		else if (optionList[1] == "force")
+			eType = RLV_TYPE_FORCE;
+		else if (optionList[1] == "reply")
+			eType = RLV_TYPE_REPLY;
+		else
+			return RLV_RET_FAILED_OPTION;
+	}
+
+	std::list<std::string> cmdList;
+	if (RlvBehaviourDictionary::instance().getCommands((optionList.size() >= 1) ? optionList[0] : LLStringUtil::null, eType, cmdList))
+		strReply = boost::algorithm::join(cmdList, (optionList.size() >= 3) ? optionList[2] : std::string(RLV_OPTION_SEPARATOR) );
 	return RLV_RET_SUCCESS;
 }
 

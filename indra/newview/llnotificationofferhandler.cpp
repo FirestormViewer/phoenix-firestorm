@@ -113,7 +113,7 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
 			// Don't spawn an IM session for non-chat related events
-			if ( (RlvActions::hasOpenP2PSession(from_id)) || (RlvActions::canStartIM(from_id)) )
+			if (RlvActions::canStartIM(from_id))
 			{
 // [/RLVa:KB]
 				LLHandlerUtil::spawnIMSession(name, from_id);

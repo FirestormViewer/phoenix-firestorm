@@ -56,7 +56,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("edit", RLV_BHVR_EDIT));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_EDIT, RLV_OPTION_NONE_OR_EXCEPTION>("edit"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("fartouch", RLV_BHVR_FARTOUCH));
@@ -80,8 +80,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SENDIM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendgesture", RLV_BHVR_SENDGESTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setdebug", RLV_BHVR_SETDEBUG));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setenv", RLV_BHVR_SETENV));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
@@ -89,7 +89,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextall", RLV_BHVR_SHOWHOVERTEXTALL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertexthud", RLV_BHVR_SHOWHOVERTEXTHUD));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextworld", RLV_BHVR_SHOWHOVERTEXTWORLD));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showinv", RLV_BHVR_SHOWINV));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SHOWINV, RLV_OPTION_NONE>("showinv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showloc", RLV_BHVR_SHOWLOC));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showminimap", RLV_BHVR_SHOWMINIMAP));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("shownames", RLV_BHVR_SHOWNAMES));
@@ -157,8 +157,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
-	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SETGROUP>("setgroup"));
-	addEntry(new RlvCommandProcessor<RLV_TYPE_FORCE, RLV_BHVR_SIT>("sit"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
 	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 
@@ -171,7 +171,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("getaddoutfitnames",		RLV_BHVR_GETADDOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourInfo("getattach",				RLV_BHVR_GETATTACH,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getattachnames",			RLV_BHVR_GETATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourInfo("getcommand",				RLV_BHVR_GETCOMMAND,			RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCOMMAND>("getcommand", RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinvworn",				RLV_BHVR_GETINVWORN,			RLV_TYPE_REPLY));
@@ -205,7 +205,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 				RLV_ASSERT( (itBhvr.first != pBhvrInfo->getBehaviourType()) || (itBhvr.second->getBehaviourFlags() != pBhvrInfo->getBehaviourFlags()) );
 			}
 #endif // RLV_DEBUG
- 			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
+			m_Bhvr2InfoMap.insert(std::pair<ERlvBehaviour, const RlvBehaviourInfo*>(pBhvrInfo->getBehaviourType(), pBhvrInfo));
 		}
 	}
 
@@ -223,6 +223,13 @@ RlvBehaviourDictionary::~RlvBehaviourDictionary()
 
 void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
 {
+	// Filter experimental commands (if disabled)
+	static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
+	if ( (!pEntry) || ((!sEnableExperimental) && (pEntry->isExperimental())) )
+	{
+		return;
+	}
+
 	// Sanity check for duplicate entries
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 	std::for_each(m_BhvrInfoList.begin(), m_BhvrInfoList.end(), 
@@ -253,17 +260,14 @@ ERlvBehaviour RlvBehaviourDictionary::getBehaviourFromString(const std::string& 
 bool RlvBehaviourDictionary::getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const
 {
 	cmdList.clear();
-	if (strMatch.empty())
-		return false;
-
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
 		if ( (pBhvrInfo->getParamTypeMask() & eParamType) || (RLV_TYPE_UNKNOWN == eParamType) )
 		{
 			std::string strCmd = pBhvrInfo->getBehaviour();
-			if (std::string::npos != strCmd.find(strMatch))
+			if ( (std::string::npos != strCmd.find(strMatch)) || (strMatch.empty()) )
 				cmdList.push_back(strCmd);
-			if ( (pBhvrInfo->hasStrict()) && (std::string::npos != strCmd.append("_sec").find(strMatch)) )
+			if ( (pBhvrInfo->hasStrict()) && ((std::string::npos != strCmd.append("_sec").find(strMatch)) || (strMatch.empty())) )
 				cmdList.push_back(strCmd);
 		}
 	}
@@ -326,16 +330,7 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
-	if (m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict))
-	{
-		// Filter experimental and/or extended commands (if disabled)
-		static LLCachedControl<bool> sEnableExperimental(gSavedSettings, "RLVaExperimentalCommands");
-		static LLCachedControl<bool> sEnableExtended(gSavedSettings, "RLVaExtendedCommands");
-		if ( ((!sEnableExperimental) && (m_pBhvrInfo->isExperimental())) || ((!sEnableExtended) && (m_pBhvrInfo->isExtended())) )
-		{
-			m_pBhvrInfo = NULL;
-		}
-	}
+	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict);
 }
 
 bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption, std::string& strParam)
@@ -779,7 +774,6 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 				}
 				break;
 
-			#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 			case LLAssetType::AT_GESTURE:
 				if (isWearAction(eAction))
 				{
@@ -792,7 +786,6 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 						m_remGestures.push_back(pRlvItem);
 				}
 				break;
-			#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
 
 			default:
 				break;
@@ -812,13 +805,13 @@ bool RlvForceWear::isForceDetachable(const LLViewerObject* pAttachObj, bool fChe
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	return 
 	  (
-	    (pAttachObj) && (pAttachObj->isAttachment())
+		(pAttachObj) && (pAttachObj->isAttachment())
 		&& ( (idExcept.isNull()) ? (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
-								 : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
+		                         : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
 		&& (isStrippable(pAttachObj->getAttachmentItemID()))
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		&& ( (!fCheckComposite) || (!RlvSettings::getEnableComposites()) || 
-		     (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
+	         (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	  );
 }

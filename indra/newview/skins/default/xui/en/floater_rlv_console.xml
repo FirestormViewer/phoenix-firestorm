@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  can_resize="true"
+  height="400"
+  layout="topleft"
+  min_height="300"
+  min_width="300"
+  name="rlv_console"
+  title="RLVa console"
+  width="600"
+  >
+    <text_editor
+     follows="all"
+     left="10"
+     length="1"
+     font="Monospace"
+     height="366"
+     ignore_tab="false"
+     layout="topleft"
+     max_length="65536"
+     name="console_output"
+     read_only="true"
+     track_end="true"
+     type="string"
+     width="576"
+     word_wrap="true"
+     >
+    </text_editor>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     bottom_delta="20"
+     follows="left|right|bottom"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     max_length="127"
+     name="console_input"
+     top_delta="0"
+     width="576"
+     >
+    </line_editor>
+</floater>
