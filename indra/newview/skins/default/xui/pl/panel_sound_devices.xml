@@ -16,9 +16,9 @@
         Wyjście
     </text>
     <text name="My volume label">
-        Moja głośność:
+        Mikrofon:
     </text>
-    <slider_bar name="mic_volume_slider" tool_tip="Zmień głośność używając tego suwaka"/>
+    <slider_bar name="mic_volume_slider" tool_tip="Zmień głośność mikrofonu używając tego suwaka"/>
     <text name="wait_text">
         Proszę czekać
     </text>

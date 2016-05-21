@@ -27,6 +27,9 @@
 	<string name="AboutCompiler">
 		Zbudowane za pomocą [COMPILER] w wersji [COMPILER_VERSION]
 	</string>
+	<string name="BuildConfig">
+		Konfiguracja budowania: [BUILD_CONFIG]
+	</string>
 	<string name="AboutPosition">
 Położenie [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] w [REGION] zlokalizowanym w &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
@@ -73,6 +76,9 @@ Czas utworzenia VFS (cache) w UTC: [VFS_DATE]
 	</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">
 		Błąd podczas pobierania informacji o wydaniu.
+	</string>
+	<string name="BuildConfiguration">
+		Konfiguracja budowania
 	</string>
 	<string name="ProgressRestoring">
 		Przywracanie...
@@ -1953,6 +1959,21 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="TodayOld">
 		Dołączył dzisiaj
+	</string>
+	<string name="av_render_everyone_now">
+		Wszyscy mogą Cię obecnie widzieć.
+	</string>
+	<string name="av_render_not_everyone">
+		Możesz nie być widziany/a przez niektóre osoby wokół Ciebie.
+	</string>
+	<string name="av_render_over_half">
+		Możesz nie być widziany/a przez ponad połowę osób wokół Ciebie.
+	</string>
+	<string name="av_render_most_of">
+		Możesz nie być widziany/a przez większość osób wokół Ciebie.
+	</string>
+	<string name="av_render_anyone">
+		Wszystkie osoby znajdujące się wokół Ciebie nie mogą Cię widzieć.
 	</string>
 	<string name="AgeYearsA">
 		[COUNT] rok
@@ -5488,6 +5509,18 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="loading_chat_logs">
 		Wczytywanie...
 	</string>
+	<string name="preset_combo_label">
+		-Lista jest pusta-
+	</string>
+	<string name="Default">
+		Domyślne
+	</string>
+	<string name="none_paren_cap">
+		(Brak)
+	</string>
+	<string name="no_limit">
+		Bez limitu
+	</string>
 	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
 		Kształt fizyczny zawiera trójkąty, które są zbyt małe. Spróbuj uprościć model fizyczny.
 	</string>
@@ -5955,5 +5988,14 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="NotificationItemDateStringSLT">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]
+	</string>
+	<string name="Pie_av_render_normally">
+		Normalnie
+	</string>
+	<string name="Pie_av_render_never">
+		Nigdy
+	</string>
+	<string name="Pie_av_render_fully">
+		Zawsze w pełni
 	</string>
 </strings>
