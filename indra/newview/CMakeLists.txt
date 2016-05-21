@@ -2085,7 +2085,6 @@ if (WINDOWS)
       ${GOOGLE_PERF_TOOLS_SOURCE}
       ${CMAKE_CURRENT_SOURCE_DIR}/licenses-win32.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt
-      ${CMAKE_CURRENT_SOURCE_DIR}/featuretable_xp.txt
       ${ARCH_PREBUILT_DIRS_RELEASE}/libeay32.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/ssleay32.dll
       ${ARCH_PREBUILT_DIRS_DEBUG}/libeay32.dll
