@@ -43,6 +43,7 @@
 #include "llenvmanager.h"
 #include "llf32uictrl.h"
 #include "llfeaturemanager.h"
+#include "llfloaterpreference.h" // for LLAvatarComplexityControls
 #include "llfloaterreg.h"
 #include "lllayoutstack.h"
 #include "llmultisliderctrl.h"
@@ -127,7 +128,8 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
-	// <FS:Zi> Dynamic Quickprefs
+	// Make sure IndirectMaxNonImpostors gets set properly
+	LLAvatarComplexityControls::setIndirectMaxNonImpostors();
 
 	// bail out here if this is a reused Phototools floater
 	if (getIsPhototools())
@@ -157,7 +159,6 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 			current_widget->setValue(var->getValue());
 		}
 	}
-	// </FS:Zi>
 
 	dockToToolbarButton();
 }
@@ -245,6 +246,7 @@ void FloaterQuickPrefs::initCallbacks()
 	}
 
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
+	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::updateMaxNonImpostors, this, _2));
 }
 
 void FloaterQuickPrefs::loadPresets()
@@ -2060,4 +2062,18 @@ void FloaterQuickPrefs::syncAvatarZOffsetFromPreferenceSetting()
 {
 	F32 value = gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ");
 	mAvatarZOffsetSlider->setValue(value, FALSE);
+}
+
+void FloaterQuickPrefs::updateMaxNonImpostors(const LLSD& newvalue)
+{
+	// Called when the IndirectMaxNonImpostors control changes
+	// Responsible for fixing the setting RenderAvatarMaxNonImpostors
+	U32 value = newvalue.asInteger();
+
+	if (0 == value || LLVOAvatar::IMPOSTORS_OFF <= value)
+	{
+		value=0;
+	}
+	gSavedSettings.setU32("RenderAvatarMaxNonImpostors", value);
+	LLVOAvatar::updateImpostorRendering(value); // make it effective immediately
 }

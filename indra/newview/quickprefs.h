@@ -192,6 +192,7 @@ private:
 	void onRegionChanged();
 	void onSimulatorFeaturesReceived(const LLUUID &region_id);
 	void syncAvatarZOffsetFromPreferenceSetting();
+	void updateMaxNonImpostors(const LLSD& newvalue);
 
 	boost::signals2::connection mRegionChangedSlot;
 

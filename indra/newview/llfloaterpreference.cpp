@@ -756,6 +756,10 @@ BOOL LLFloaterPreference::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>("search_prefs_edit");
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
 	// </FS:ND>
+
+	// <FS:Ansariel> Update label for max. non imposters
+	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
+
 	return TRUE;
 }
 
@@ -3015,6 +3019,17 @@ void LLFloaterPreference::setMaxNonImpostorsText(U32 value, LLTextBox* text_box)
 	{
 		text_box->setText(llformat("%d", value));
 	}
+}
+
+void LLFloaterPreference::updateMaxNonImpostorsLabel(const LLSD& newvalue)
+{
+	U32 value = newvalue.asInteger();
+
+	if (0 == value || LLVOAvatar::IMPOSTORS_OFF <= value)
+	{
+		value=0;
+	}
+	setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
 }
 // </FS:Ansariel>
 

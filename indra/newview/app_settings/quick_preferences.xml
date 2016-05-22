@@ -37,13 +37,13 @@
      min="0"
      translation_id="QP LOD Factor" />
     <entries
-     control_name="RenderAvatarMaxVisible"
+     control_name="IndirectMaxNonImpostors"
      control_type="3"
      increment="1"
      integer="1"
      label="Max Avatars"
-     max="65"
-     min="0"
+     max="66"
+     min="1"
      translation_id="QP Max Avatars" />
     <entries
      control_name="FSNameTagZOffsetCorrection"
