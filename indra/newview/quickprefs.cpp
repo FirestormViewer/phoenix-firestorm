@@ -507,6 +507,8 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 		}
 		else
 		{
+			bool save_settings = false;
+
 			// add the elements from the XML file to the internal list of controls
 			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry, xml.entries)
 			{
@@ -519,19 +521,49 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 					LLTrans::findString(label, xml_entry.translation_id);
 				}
 
-				U32 type = xml_entry.control_type;
-				addControl(
-						   xml_entry.control_name,
-						   label,
-						   NULL,
-						   (ControlType) type,
-						   xml_entry.integer,
-						   xml_entry.min_value,
-						   xml_entry.max_value,
-						   xml_entry.increment
-						   );
-				// put it at the bottom of the ordering stack
-				mControlsOrder.push_back(xml_entry.control_name);
+				// Convert old RenderAvatarMaxVisible setting to IndirectMaxNonImpostors
+				if (xml_entry.control_name.getValue() != "RenderAvatarMaxVisible")
+				{
+					U32 type = xml_entry.control_type;
+					addControl(
+						xml_entry.control_name,
+						label,
+						NULL,
+						(ControlType)type,
+						xml_entry.integer,
+						xml_entry.min_value,
+						xml_entry.max_value,
+						xml_entry.increment
+						);
+
+					// put it at the bottom of the ordering stack
+					mControlsOrder.push_back(xml_entry.control_name);
+				}
+				else
+				{
+					U32 type = xml_entry.control_type;
+					addControl(
+						"IndirectMaxNonImpostors",
+						label,
+						NULL,
+						(ControlType)type,
+						xml_entry.integer,
+						1,
+						66,
+						1
+						);
+
+					// put it at the bottom of the ordering stack
+					mControlsOrder.push_back("IndirectMaxNonImpostors");
+
+					save_settings = true;
+				}
+			}
+
+			if (save_settings)
+			{
+				// Saves settings
+				onEditModeChanged();
 			}
 		}
 	}
