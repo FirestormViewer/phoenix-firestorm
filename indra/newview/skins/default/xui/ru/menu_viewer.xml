@@ -2,7 +2,6 @@
 <menu_bar name="Main Menu">
 	<menu label="Аватар" name="Me">
 		<menu_item_call label="Ваш аккаунт" name="Manage Account"/>
-		<menu_item_call label="Исходящие продавца..." name="MerchantOutbox"/>
 		<menu_item_call label="Торговый списки..." name="MarketplaceListings"/>
 		<menu_item_call label="Купить L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Настройки" name="Preferences"/>

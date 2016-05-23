@@ -228,10 +228,7 @@ void LLUrlAction::blockObject(std::string url)
 	std::string object_name = getObjectName(url);
 	if (LLUUID::validate(object_id))
 	{
-		// <FS:Ansariel> FIRE-14987: Cannot mute objects with slashes in their name via V1 chat history
-		//executeSLURL("secondlife:///app/agent/" + object_id + "/block/" + object_name);
 		executeSLURL("secondlife:///app/agent/" + object_id + "/block/" + LLURI::escape(object_name));
-		// </FS:Ansariel>
 	}
 }
 

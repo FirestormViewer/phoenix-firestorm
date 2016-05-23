@@ -611,8 +611,7 @@ void LLViewerRegion::initPartitions()
 	mImpl->mObjectPartition.push_back(NULL);					//PARTITION_NONE
 	mImpl->mVOCachePartition = getVOCachePartition();
 
-	mRenderInfoRequestTimer.resetWithExpiry(0.f);		// Set timer to be expired
-	setCapabilitiesReceivedCallback(boost::bind(&LLAvatarRenderInfoAccountant::expireRenderInfoReportTimer, _1));
+	setCapabilitiesReceivedCallback(boost::bind(&LLAvatarRenderInfoAccountant::scanNewRegion, _1));
 }
 
 // <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa

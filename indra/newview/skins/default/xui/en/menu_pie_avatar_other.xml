@@ -176,7 +176,31 @@
 				<pie_slice.on_visible
 					function="Advanced.EnableAppearanceToXML"/>
 			</pie_slice>
-
+			<pie_menu
+				name="RenderMenu"
+				label="Render &gt;">
+				<pie_slice
+					name="RenderNormally"
+					label="Normally">
+					<pie_slice.on_click
+						function="Avatar.SetImpostorMode"
+						parameter="0" />
+				</pie_slice>
+				<pie_slice
+					name="DoNotRender"
+					label="Never">
+					<pie_slice.on_click
+						function="Avatar.SetImpostorMode"
+						parameter="1" />
+				</pie_slice>
+				<pie_slice
+					name="AlwaysRenderFully"
+					label="Fully">
+					<pie_slice.on_click
+						function="Avatar.SetImpostorMode"
+						parameter="2" />
+				</pie_slice>
+			</pie_menu>
         </pie_menu>
 
         <pie_separator />

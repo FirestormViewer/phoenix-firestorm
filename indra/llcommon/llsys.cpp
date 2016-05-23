@@ -154,7 +154,14 @@ LLOSInfo::LLOSInfo() :
 	{
 		mMajorVer = 10;
 		mMinorVer = 0;
-		mOSStringSimple = "Microsoft Windows 10 ";
+		if (IsWindowsServer())
+		{
+			mOSStringSimple = "Windows Server 2016 ";
+		}
+		else
+		{
+			mOSStringSimple = "Microsoft Windows 10 ";
+		}
 	}
 	else if (IsWindows8Point1OrGreater())
 	{

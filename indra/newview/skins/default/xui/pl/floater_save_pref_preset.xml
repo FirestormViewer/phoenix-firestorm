@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="Save Pref Preset" title="Zapisz ustawienie">
+	<string name="title_graphic">
+		Zapisz ustawienie graficzne
+	</string>
+	<string name="title_camera">
+		Zapisz ustawienie kamery
+	</string>
+	<text name="Preset">
+		Wpisz nazwę ustawienia lub wybierz już istniejące.
+	</text>
+	<button label="Zapisz" name="save" />
+	<button label="Anuluj" name="cancel" />
+</floater>

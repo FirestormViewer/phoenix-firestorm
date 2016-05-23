@@ -26,7 +26,6 @@
 			<menu_item_check label="Não perturbe" name="Do Not Disturb"/>
 		</menu>
 		<menu_item_call label="Comprar L$..." name="Buy and Sell L$"/>
-		<menu_item_call label="Caixa de saída do lojista..." name="MerchantOutbox"/>
 		<menu_item_call label="Listagens do Marketplace..." name="MarketplaceListings"/>
 		<menu_item_call label="Painel da conta..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=pt"/>

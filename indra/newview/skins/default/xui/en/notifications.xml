@@ -555,22 +555,6 @@ This listing could not be updated.
 
   <notification
    icon="alertmodal.tga"
-   name="CompileQueueSaveText"
-   type="alertmodal">
-There was a problem uploading the text for a script due to the following reason: [REASON]. Please try again later.
-    <tag>fail</tag>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="CompileQueueSaveBytecode"
-   type="alertmodal">
-There was a problem uploading the compiled script due to the following reason: [REASON]. Please try again later.
-    <tag>fail</tag>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="WriteAnimationFail"
    type="alertmodal">
 There was a problem writing animation data.  Please try again later.
@@ -1605,26 +1589,10 @@ Would you like to load the server&apos;s last saved version?
 
   <notification
    icon="alertmodal.tga"
-   name="SaveScriptFailReason"
-   type="alertmodal">
-There was a problem saving a script due to the following reason: [REASON].  Please try re-saving the script later.
-<tag>fail</tag>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="SaveScriptFailObjectNotFound"
    type="alertmodal">
 Could not save the script because the object it is in could not be found.
 The object may be out of range or may have been deleted.
-<tag>fail</tag>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="SaveBytecodeFailReason"
-   type="alertmodal">
-There was a problem saving a compiled script due to the following reason: [REASON].  Please try re-saving the script later.
 <tag>fail</tag>
   </notification>
 
@@ -2904,7 +2872,8 @@ This is usually a temporary failure. Please customize and save the wearable agai
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
 You have been logged out of [CURRENT_GRID].
-            [MESSAGE]
+
+[MESSAGE]
     <usetemplate
      name="okcancelbuttons"
      notext="Quit"
@@ -3470,6 +3439,32 @@ You can use [APP_NAME] normally and other people will see you correctly.
       <ignore name="ignore"
        text="Clothing is taking a long time to download"/>
     </form>
+  </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "AgentComplexityWithVisibility"
+   type = "notifytip"
+   log_to_chat = "false">
+   <unique combine = "cancel_old">
+     <context>AgentComplexityNotice</context>
+   </unique>
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
+[OVERLIMIT_MSG]
+   <usetemplate
+    ignoretext="Warn me if my avatar complexity may be too high"
+    name="notifyignore"/>
+  </notification>
+
+  <notification
+   icon = "notifytip.tga"
+   name = "AgentComplexity"
+   type = "notifytip"
+   log_to_chat = "false">
+   <unique combine = "cancel_old">
+     <context>AgentComplexityNotice</context>
+   </unique>
+Your [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 avatar complexity] is [AGENT_COMPLEXITY].
   </notification>
 
   <notification
@@ -8936,6 +8931,20 @@ Appearance has been saved to XML to [PATH]
     <notification icon="notifytip.tga"
 		name="AppearanceToXMLFailed" type="notifytip">
 Failed to save appearance to XML.
+  </notification>
+
+  <notification
+    icon="notifytip.tga"
+	name="PresetNotSaved"
+    type="notifytip">
+Error saving preset [NAME].
+  </notification>
+
+  <notification
+    icon="notifytip.tga"
+	name="PresetNotDeleted"
+    type="notifytip">
+Error deleting preset [NAME].
   </notification>
 
   <notification

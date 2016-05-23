@@ -45,9 +45,9 @@ Backup Path:
     <layout_stack
      name="ls_account_specific_label"
      follows="all"
-     height="390"
+     height="400"
      orientation="vertical"
-     top_pad="10"
+     top_pad="5"
      left="30"
      right="-30"
      layout="topleft">
@@ -102,7 +102,7 @@ Settings groups to be restored (backup will always save all):
     <layout_stack
      name="ls_list_view_stack"
      follows="top|left|right"
-     height="200"
+     height="215"
      orientation="horizontal"
      top_pad="4"
      left="1"
@@ -238,6 +238,11 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Disabled Group Chats</column>
             <column name="value">muted_groups.xml</column>
         </row>
+        <row name="restore_per_account_row_presets" value="presets">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Presets</column>
+            <column name="value">presets</column>
+        </row>
     </scroll_list>
     <!-- since enabled_control does not work properly on scroll list items and
          enabling/disabling in code did not show any visual difference, we just use
@@ -351,7 +356,7 @@ Settings groups to be restored (backup will always save all):
      label="Restore global settings"
      layout="topleft"
      follows="top|left"
-     top_pad="10"
+     top_pad="5"
      left="30"
      width="200"
      height="16"
@@ -372,7 +377,7 @@ Settings groups to be restored (backup will always save all):
     <button
      enabled_control="SettingsBackupPath"
      layout="topleft"
-     top_pad="10"
+     top_pad="5"
      follows="left|top"
      height="20"
      label="Backup Settings"

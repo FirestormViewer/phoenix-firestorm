@@ -64,7 +64,6 @@
       <File Source="$(var.BUILDDIR)/ssleay32.dll" CompanionFile="firestorm" />
 
       <File Source="$(var.BUILDDIR)/featuretable.txt" />
-      <File Source="$(var.BUILDDIR)/featuretable_xp.txt" />
       <File Source="$(var.BUILDDIR)/licenses.txt" />
       <File Source="$(var.BUILDDIR)/VivoxAUP.txt" />
 
@@ -77,9 +76,7 @@
       <File Source="$(var.BUILDDIR)/libsndfile-1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/ortp.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/vivoxoal.dll" CompanionFile="firestorm" />
-      <File Source="$(var.BUILDDIR)/vivoxplatform.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/vivoxsdk.dll" CompanionFile="firestorm" />
-      <File Source="$(var.BUILDDIR)/zlib1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
      </Component>
 

@@ -259,7 +259,7 @@
 
   <panel
     height="18"
-    left="-385"
+    left="-405"
     width="90"
     top="0"
     follows="right|top"
@@ -307,7 +307,7 @@
   <panel
     height="18"
     left_pad="7"
-    width="258"
+    width="278"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
@@ -360,6 +360,14 @@
      width="50">
         24:00 AM PST
     </text>
+    <icon
+     follows="right|top"
+     height="16"
+     image_name="Presets_Icon"
+     left_delta="55"
+     top="2"
+     name="presets_icon"
+     width="18" />
     <button
      follows="right|top"
      height="16"
@@ -368,7 +376,7 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Music_Press"
      is_toggle="true"
-     left_delta="55"
+     left_pad="2"
      top="1"
      name="stream_toggle_btn"
      tool_tip="Start/Stop Parcel Audio Stream"
@@ -382,7 +390,6 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
-	 left_delta="60"
      left_pad="2"
      top="1"
      name="media_toggle_btn"

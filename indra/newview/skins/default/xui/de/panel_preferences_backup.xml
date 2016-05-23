@@ -76,6 +76,9 @@
 						<row name="restore_per_account_row_groupmutes">
 							<column name="restore_per_account_files_label">Deakt. Gruppenchats</column>
 						</row>
+						<row name="restore_per_account_row_presets">
+							<column name="restore_per_account_files_label">Voreinstellungen</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_folders">

@@ -43,6 +43,7 @@
 #include "llenvmanager.h"
 #include "llf32uictrl.h"
 #include "llfeaturemanager.h"
+#include "llfloaterpreference.h" // for LLAvatarComplexityControls
 #include "llfloaterreg.h"
 #include "lllayoutstack.h"
 #include "llmultisliderctrl.h"
@@ -127,7 +128,8 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
-	// <FS:Zi> Dynamic Quickprefs
+	// Make sure IndirectMaxNonImpostors gets set properly
+	LLAvatarComplexityControls::setIndirectMaxNonImpostors();
 
 	// bail out here if this is a reused Phototools floater
 	if (getIsPhototools())
@@ -157,7 +159,6 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 			current_widget->setValue(var->getValue());
 		}
 	}
-	// </FS:Zi>
 
 	dockToToolbarButton();
 }
@@ -245,6 +246,7 @@ void FloaterQuickPrefs::initCallbacks()
 	}
 
 	mRlvBehaviorCallbackConnection = gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
+	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::updateMaxNonImpostors, this, _2));
 }
 
 void FloaterQuickPrefs::loadPresets()
@@ -505,6 +507,8 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 		}
 		else
 		{
+			bool save_settings = false;
+
 			// add the elements from the XML file to the internal list of controls
 			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry, xml.entries)
 			{
@@ -517,19 +521,49 @@ void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_pa
 					LLTrans::findString(label, xml_entry.translation_id);
 				}
 
-				U32 type = xml_entry.control_type;
-				addControl(
-						   xml_entry.control_name,
-						   label,
-						   NULL,
-						   (ControlType) type,
-						   xml_entry.integer,
-						   xml_entry.min_value,
-						   xml_entry.max_value,
-						   xml_entry.increment
-						   );
-				// put it at the bottom of the ordering stack
-				mControlsOrder.push_back(xml_entry.control_name);
+				// Convert old RenderAvatarMaxVisible setting to IndirectMaxNonImpostors
+				if (xml_entry.control_name.getValue() != "RenderAvatarMaxVisible")
+				{
+					U32 type = xml_entry.control_type;
+					addControl(
+						xml_entry.control_name,
+						label,
+						NULL,
+						(ControlType)type,
+						xml_entry.integer,
+						xml_entry.min_value,
+						xml_entry.max_value,
+						xml_entry.increment
+						);
+
+					// put it at the bottom of the ordering stack
+					mControlsOrder.push_back(xml_entry.control_name);
+				}
+				else
+				{
+					U32 type = xml_entry.control_type;
+					addControl(
+						"IndirectMaxNonImpostors",
+						label,
+						NULL,
+						(ControlType)type,
+						xml_entry.integer,
+						1,
+						66,
+						1
+						);
+
+					// put it at the bottom of the ordering stack
+					mControlsOrder.push_back("IndirectMaxNonImpostors");
+
+					save_settings = true;
+				}
+			}
+
+			if (save_settings)
+			{
+				// Saves settings
+				onEditModeChanged();
 			}
 		}
 	}
@@ -791,6 +825,17 @@ void FloaterQuickPrefs::refreshSettings()
 	mCtrlWindLight->setEnabled(
 		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
 
+	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
+	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
+	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
+	LLButton* sky_default_button = getChild<LLButton>("Reset_Sky_Detail");
+
+	BOOL sky_enabled = mCtrlWindLight->get() && shaders;
+	sky_label->setEnabled(sky_enabled);
+	sky_slider->setEnabled(sky_enabled);
+	sky_spinner->setEnabled(sky_enabled);
+	sky_default_button->setEnabled(sky_enabled);
+
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
 						shaders && 
 						gGLManager.mHasFramebufferObject &&
@@ -818,6 +863,11 @@ void FloaterQuickPrefs::refreshSettings()
 		
 		mCtrlWindLight->setEnabled(FALSE);
 		mCtrlWindLight->setValue(FALSE);
+
+		sky_label->setEnabled(FALSE);
+		sky_slider->setEnabled(FALSE);
+		sky_spinner->setEnabled(FALSE);
+		sky_default_button->setEnabled(FALSE);
 		
 		mCtrlReflectionDetail->setEnabled(FALSE);
 		mCtrlReflectionDetail->setValue(0);
@@ -843,6 +893,11 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlWindLight->setEnabled(FALSE);
 		mCtrlWindLight->setValue(FALSE);
+
+		sky_label->setEnabled(FALSE);
+		sky_slider->setEnabled(FALSE);
+		sky_spinner->setEnabled(FALSE);
+		sky_default_button->setEnabled(FALSE);
 
 		//deferred needs windlight, disable deferred
 		mCtrlShadowDetail->setEnabled(FALSE);
@@ -2039,4 +2094,18 @@ void FloaterQuickPrefs::syncAvatarZOffsetFromPreferenceSetting()
 {
 	F32 value = gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ");
 	mAvatarZOffsetSlider->setValue(value, FALSE);
+}
+
+void FloaterQuickPrefs::updateMaxNonImpostors(const LLSD& newvalue)
+{
+	// Called when the IndirectMaxNonImpostors control changes
+	// Responsible for fixing the setting RenderAvatarMaxNonImpostors
+	U32 value = newvalue.asInteger();
+
+	if (0 == value || LLVOAvatar::IMPOSTORS_OFF <= value)
+	{
+		value=0;
+	}
+	gSavedSettings.setU32("RenderAvatarMaxNonImpostors", value);
+	LLVOAvatar::updateImpostorRendering(value); // make it effective immediately
 }

@@ -69,7 +69,7 @@ void SanityCheck::onSanity(LLControlVariable* controlp)
 
 	lastControl = controlp;
 
-	std::string checkType = "SanityCheck" + gSavedSettings.sanityTypeEnumToString(controlp->getSanityType());
+	std::string checkType = "SanityCheck" + LLControlGroup::sanityTypeEnumToString(controlp->getSanityType());
 	std::vector<LLSD> sanityValues = controlp->getSanityValues();
 
 	LLSD args;

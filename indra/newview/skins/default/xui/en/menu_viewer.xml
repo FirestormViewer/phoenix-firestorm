@@ -21,14 +21,6 @@
                  function="GridCheck"
                  parameter="secondlife"/>
         </menu_item_call>
-        
-        <menu_item_call
-         label="Merchant Outbox..."
-         name="MerchantOutbox">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="outbox" />
-        </menu_item_call>
         <menu_item_call
             label="Marketplace listings..."
             name="MarketplaceListings">
@@ -269,14 +261,14 @@
           </menu_item_call>
             <menu_item_separator/>
 	        <menu_item_check
-	         label="Show Render Weight For Avatars (Replacement For ARC)"
-	         name="Avatar Rendering Cost">
+	         label="Show Avatar Complexity Information"
+	         name="Avatar Draw Info">
 	            <menu_item_check.on_check
 	             function="Advanced.CheckInfoDisplay"
-	             parameter="shame" />
+	             parameter="avatardrawinfo" />
 	            <menu_item_check.on_click
 	             function="Advanced.ToggleInfoDisplay"
-	             parameter="shame" />
+	             parameter="avatardrawinfo" />
 	        </menu_item_check>
 	        <menu_item_call
              label="Lag Meter"
@@ -2439,14 +2431,14 @@
                  parameter="scene_load_stats" />
             </menu_item_check>
       <menu_item_check
-        label="Show Render Weight for Avatars"
-        name="Avatar Rendering Cost">
+        label="Show avatar complexity information"
+        name="Avatar Draw Info">
            <menu_item_check.on_check
             function="Advanced.CheckInfoDisplay"
-            parameter="shame" />
+            parameter="avatardrawinfo" />
            <menu_item_check.on_click
             function="Advanced.ToggleInfoDisplay"
-            parameter="shame" />
+            parameter="avatardrawinfo" />
        </menu_item_check>
         </menu>
         <menu
@@ -3710,26 +3702,6 @@
            function="Advanced.ToggleInfoDisplay"
            parameter="wind vectors" />
         </menu_item_check>
-        <menu_item_check
-         label="Render Complexity"
-         name="rendercomplexity">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="rendercomplexity" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="rendercomplexity" />
-        </menu_item_check>
-        <menu_item_check
-         label="Attachment Bytes"
-         name="attachment bytes">
-          <menu_item_check.on_check
-           function="Advanced.CheckInfoDisplay"
-           parameter="attachment bytes" />
-          <menu_item_check.on_click
-           function="Advanced.ToggleInfoDisplay"
-           parameter="attachment bytes" />
-        </menu_item_check>
 		<menu_item_check
          label="Sculpt"
          name="Sculpt">
@@ -4632,7 +4604,7 @@
                  function="Advanced.ToggleInfoDisplay"
                  parameter="agent target" />
             </menu_item_check>
-<!-- Appears not to exist anymore
+            <!-- Appears not to exist anymore
             <menu_item_check
              label="Debug Rotation"
              name="Debug Rotation">

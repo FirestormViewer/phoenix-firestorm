@@ -401,8 +401,7 @@ public:
 	std::string				getMisspelledWord(U32 pos) const;
 	bool					isMisspelledWord(U32 pos) const;
 	void					onSpellCheckSettingsChange();
-	// <FS:Ansariel> FIRE-11045: Spell checking changes not identified as such
-	virtual void			onSpellCheckPerformed() {}
+	virtual void			onSpellCheckPerformed(){}
 
 	// used by LLTextSegment layout code
 	bool					getWordWrap() { return mWordWrap; }

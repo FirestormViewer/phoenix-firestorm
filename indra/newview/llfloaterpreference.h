@@ -69,7 +69,6 @@ typedef enum
 		
 	} EGraphicsSettings;
 
-
 // Floater to control preferences (display, audio, bandwidth, general.
 class LLFloaterPreference : public LLFloater, public LLAvatarPropertiesObserver, public LLConversationLogObserver
 {
@@ -106,14 +105,14 @@ public:
 	void saveAvatarProperties( void );
 	void selectPrivacyPanel();
 	void selectChatPanel();
+	void getControlNames(std::vector<std::string>& names);
 
 // <FS:CR> Make onBtnOk() public for settings backup panel
 //protected:
-	void		onBtnOK();
+	void		onBtnOK(const LLSD& userdata);
 protected:
 // </FS:CR>
-	void		onBtnCancel();
-	void		onBtnApply();
+	void		onBtnCancel(const LLSD& userdata);
 
 	//void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup // AO: was protected, moved to public
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
@@ -133,11 +132,13 @@ protected:
 	// if the custom settings box is clicked
 	void onChangeCustom();
 	void updateMeterText(LLUICtrl* ctrl);
-	void onOpenHardwareSettings();
 	// callback for defaults
 	void setHardwareDefaults();
+	void setRecommended();
 	// callback for when client turns on shaders
 	void onVertexShaderEnable();
+	// callback for when client turns on impostors
+	void onAvatarImpostorsEnable();
 	// <FS:AO> callback for local lights toggle
 	void onLocalLightsEnable();
 
@@ -159,12 +160,11 @@ protected:
 	void populateFontSelectionCombo();
 	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
 	//</FS:Kadah>
-    
+
+public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();
-
-public:
 
 	void setCacheLocation(const LLStringExplicit& location);
 	// <FS:Ansariel> Sound cache
@@ -212,6 +212,7 @@ public:
 	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
+	// <FS:Ansariel> Improved graphics preferences
 	void disableUnavailableSettings();
 	void onCommitWindowedMode();
 	void refresh();	// Refresh enable/disable
@@ -226,7 +227,13 @@ public:
 	// <FS:Ansariel> Clear web browser cache button
 	void onClickWebBrowserClearCache();
 	
+	// <FS:Ansariel> Improved graphics preferences
 	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
+	void updateMaxNonImpostors();
+	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
+	void updateMaxNonImpostorsLabel(const LLSD& newvalue);
+	// </FS:Ansariel>
+
 	void refreshUI();
 
 	void onCommitParcelMediaAutoPlayEnable();
@@ -240,18 +247,24 @@ public:
 	void onClickPermsDefault();
 	void onClickAutoReplace();
 	void onClickSpellChecker();
+	void onClickAdvanced();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void onLogChatHistorySaved();	
 	void buildPopupLists();
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
+	// <FS:Ansariel> Build fix
+	//void saveGraphicsPreset(std::string& preset);
+	void saveGraphicsPreset(const std::string& preset);
+	// </FS:Ansariel>
 
 private:
 
 	void onDeleteTranscripts();
 	void onDeleteTranscriptsResponse(const LLSD& notification, const LLSD& response);
 	void updateDeleteTranscriptsButton();
+	void updateMaxComplexity();
 
 	static std::string sSkin;
 	notifications_map mNotificationOptions;
@@ -266,6 +279,8 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
+	std::string mSavedGraphicsPreset;
+	LOG_CLASS(LLFloaterPreference);
 
 	LLSearchEditor *mFilterEdit;
 	void onUpdateFilterTerm(bool force = false);
@@ -285,7 +300,7 @@ public:
 	virtual void apply();
 	virtual void cancel();
 	// void setControlFalse(const LLSD& user_data);	//<FS:KC> Handled centrally now
-	virtual void setHardwareDefaults(){};
+	virtual void setHardwareDefaults();
 
 	// Disables "Allow Media to auto play" check box only when both
 	// "Streaming Music" and "Media" are unchecked. Otherwise enables it.
@@ -294,7 +309,11 @@ public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.
 	virtual void saveSettings();
-	
+
+	void deletePreset(const LLSD& user_data);
+	void savePreset(const LLSD& user_data);
+	void loadPreset(const LLSD& user_data);
+
 	// <FS:Ansariel> Handled in llviewercontrol.cpp
 	//class Updater;
 
@@ -330,6 +349,7 @@ private:
 
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	//Updater* mBandWidthUpdater;
+	LOG_CLASS(LLPanelPreference);
 };
 
 class LLPanelPreferenceGraphics : public LLPanelPreference
@@ -337,16 +357,56 @@ class LLPanelPreferenceGraphics : public LLPanelPreference
 public:
 	BOOL postBuild();
 	void draw();
-	void apply();
 	void cancel();
 	void saveSettings();
+	void resetDirtyChilds();
 	void setHardwareDefaults();
+	void setPresetText();
+
+	static const std::string getPresetsPath();
+
 protected:
 	bool hasDirtyChilds();
-	void resetDirtyChilds();
-	
 
-	LLButton*	mButtonApply;
+private:
+
+	void onPresetsListChange();
+	LOG_CLASS(LLPanelPreferenceGraphics);
+};
+
+class LLFloaterPreferenceGraphicsAdvanced : public LLFloater
+{
+  public: 
+	LLFloaterPreferenceGraphicsAdvanced(const LLSD& key);
+	~LLFloaterPreferenceGraphicsAdvanced();
+	void onOpen(const LLSD& key);
+	void onClickCloseBtn(bool app_quitting);
+	void disableUnavailableSettings();
+	void refreshEnabledGraphics();
+	void refreshEnabledState();
+	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
+	void updateMaxNonImpostors();
+	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
+	void updateMaxComplexity();
+	void setMaxComplexityText(U32 value, LLTextBox* text_box);
+	static void setIndirectControls();
+	static void setIndirectMaxNonImpostors();
+	static void setIndirectMaxArc();
+	void refresh();
+	// callback for when client turns on shaders
+	void onVertexShaderEnable();
+	LOG_CLASS(LLFloaterPreferenceGraphicsAdvanced);
+};
+
+class LLAvatarComplexityControls
+{
+  public: 
+	static void updateMax(LLSliderCtrl* slider, LLTextBox* value_label);
+	static void setText(U32 value, LLTextBox* text_box);
+	static void setIndirectControls();
+	static void setIndirectMaxNonImpostors();
+	static void setIndirectMaxArc();
+	LOG_CLASS(LLAvatarComplexityControls);
 };
 
 // [SL:KB] - Catznip Viewer-Skins
@@ -376,6 +436,8 @@ protected:
 	LLSD        m_SkinsInfo;
 	std::string	m_SkinName;
 	std::string	m_SkinThemeName;
+
+	LOG_CLASS(LLPanelPreferenceSkins);
 };
 // [/SL:KB]
 
@@ -390,6 +452,9 @@ public:
 	/*virtual*/ void cancel();
 
 	void refresh();
+
+private:
+	LOG_CLASS(LLPanelPreferenceCrashReports);
 };
 // [/SL:KB]
 
@@ -413,6 +478,9 @@ protected:
 	void doRestoreSettings(const LLSD& notification, const LLSD& response);	// callback for restore dialog
 	void onQuitConfirmed(const LLSD& notification, const LLSD& response);	// callback for finished restore dialog
 	// </FS:Zi>
+
+private:
+	LOG_CLASS(FSPanelPreferenceBackup);
 };
 
 #ifdef OPENSIM // <FS:AW optional opensim support>
@@ -455,6 +523,8 @@ private:
 	LLLineEditor* mEditorPassword;
 	LLLineEditor* mEditorSearch;
 	LLLineEditor* mEditorGridMessage;
+
+	LOG_CLASS(LLPanelPreferenceOpensim);
 };
 // </FS:AW  opensim preferences>
 #endif // OPENSIM // <FS:AW optional opensim support>
@@ -485,6 +555,7 @@ private:
 	bool mSocksSettingsDirty;
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
 	control_values_map_t mSavedValues;
+	LOG_CLASS(LLFloaterPreferenceProxy);
 };
 
 
