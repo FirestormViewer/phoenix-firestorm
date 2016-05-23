@@ -998,6 +998,11 @@ bool idle_startup()
 			gRememberPassword = gSavedSettings.getBOOL("RememberPassword");
 			show_connect_box = TRUE;
 		}
+
+		//setup map of datetime strings to codes and slt & local time offset from utc
+		// *TODO: Does this need to be here?
+		LLStringOps::setupDatetimeInfo(false);
+
 		// Go to the next startup state
 		LLStartUp::setStartupState( STATE_BROWSER_INIT );
 		return FALSE;
@@ -1618,9 +1623,6 @@ bool idle_startup()
 						LLNotificationsUtil::add("ErrorMessage", args, LLSD(), login_alert_done);
 					}
 				}
-				//setup map of datetime strings to codes and slt & local time offset from utc
-				// *TODO: Does this need to be here?
-				LLStringOps::setupDatetimeInfo (false);
 				// <FS:Ansariel> Wait for notification confirmation
 				//transition_back_to_login_panel(emsg.str());
 				LLStartUp::setStartupState(STATE_LOGIN_CONFIRM_NOTIFICATON);
@@ -4124,6 +4126,13 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		{
 			time_t now = time(NULL);
 			gUTCOffset = (server_utc_time - now);
+
+			// Print server timestamp
+			LLSD substitution;
+			substitution["datetime"] = (S32)server_utc_time;
+			std::string timeStr = "[month, datetime, slt] [day, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt]";
+			LLStringUtil::format(timeStr, substitution);
+			LL_INFOS("AppInit") << "Server SLT timestamp: " << timeStr << ". Server-viewer time offset before correction: " << gUTCOffset << "s" << LL_ENDL;
 		}
 	}
 
