@@ -44,8 +44,8 @@
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
+#include "llmutelist.h"
 // </FS:Ansariel> [FS communication UI]
-#include "llavataractions.h"
 
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
@@ -332,6 +332,7 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
     mTextBox->setContentTrusted(is_content_trusted);
     mTextBox->setValue(mNotification->getMessage());
 	mTextBox->setIsFriendCallback(LLAvatarActions::isFriend);
+    mTextBox->setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
 
 	// <FS:Ansariel> Script dialog colors
 	if (mIsScriptDialog)
