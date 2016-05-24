@@ -8930,6 +8930,7 @@ U32 LLVOAvatar::getPartitionType() const
 //static
 void LLVOAvatar::updateImpostors()
 {
+	LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 	LLCharacter::sAllowInstancesChange = FALSE;
 
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
