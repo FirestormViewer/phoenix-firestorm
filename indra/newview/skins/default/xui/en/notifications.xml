@@ -8935,14 +8935,14 @@ Failed to save appearance to XML.
 
   <notification
     icon="notifytip.tga"
-	name="PresetNotSaved"
+    name="PresetNotSaved"
     type="notifytip">
 Error saving preset [NAME].
   </notification>
 
   <notification
     icon="notifytip.tga"
-	name="PresetNotDeleted"
+    name="PresetNotDeleted"
     type="notifytip">
 Error deleting preset [NAME].
   </notification>
