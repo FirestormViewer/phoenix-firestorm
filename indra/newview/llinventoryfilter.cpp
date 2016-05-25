@@ -403,6 +403,19 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
 		}
 	}
 
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	////////////////////////////////////////////////////////////////////////////////
+	// FILTERTYPE_TRANSFERABLE
+	// Pass if this item is transferable
+	if (filterTypes & FILTERTYPE_TRANSFERABLE)
+	{
+		if ((listener->getPermissionMask() & PERM_TRANSFER) == 0)
+		{
+			return FALSE;
+		}
+	}
+	// </FS:Ansariel>
+
 	// <FS>
 	////////////////////////////////////////////////////////////////////////////////
 	// FILTERTYPE_WORN
@@ -1055,12 +1068,34 @@ void LLInventoryFilter::setFindAllLinksMode(const std::string &search_name, cons
 }
 
 // <FS>
-void LLInventoryFilter::setFilterWorn(BOOL sl)
+void LLInventoryFilter::setFilterWorn(BOOL worn)
 {
 	setModified();
-	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
+	if (worn)
+	{
+		mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
+	}
+	else
+	{
+		mFilterOps.mFilterTypes &= ~FILTERTYPE_WORN;
+	}
 }
 // </FS>
+
+// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+void LLInventoryFilter::setFilterTransferable(BOOL transferable)
+{
+	setModified();
+	if (transferable)
+	{
+		mFilterOps.mFilterTypes |= FILTERTYPE_TRANSFERABLE;
+	}
+	else
+	{
+		mFilterOps.mFilterTypes &= ~FILTERTYPE_TRANSFERABLE;
+	}
+}
+// </FS:Ansariel>
 
 void LLInventoryFilter::markDefault()
 {
@@ -1278,6 +1313,13 @@ const std::string& LLInventoryFilter::getFilterText()
 		mFilterText.erase(mFilterText.size() - 1, 1);
 	}
 
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	if (getFilterTransferable())
+	{
+		mFilterText += LLTrans::getString("Transfer Only");
+	}
+	// </FS:Ansariel>
+
 	if (isSinceLogoff())
 	{
 		mFilterText += LLTrans::getString("Since Logoff");
@@ -1297,6 +1339,8 @@ LLInventoryFilter& LLInventoryFilter::operator=( const  LLInventoryFilter&  othe
 	setFilterSubString(other.getFilterSubString());
 	setDateRangeLastLogoff(other.isSinceLogoff());
 	setFilterWorn(other.getFilterWorn());
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	setFilterTransferable(other.getFilterTransferable());
 	return *this;
 }
 
@@ -1315,6 +1359,8 @@ void LLInventoryFilter::toParams(Params& params) const
 	params.filter_ops.date_search_direction = getDateSearchDirection();
 	params.filter_ops.show_folder_state = getShowFolderState();
 	params.filter_ops.permissions = getFilterPermissions();
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	params.filter_ops.transferable = getFilterTransferable();
 	params.substring = getFilterSubString();
 	params.since_logoff = isSinceLogoff();
 }
@@ -1369,6 +1415,12 @@ void LLInventoryFilter::fromParams(const Params& params)
 	{
 		setFilterPermissions(params.filter_ops.permissions);
 	}
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	if (params.filter_ops.transferable.isProvided())
+	{
+		setFilterTransferable(params.filter_ops.transferable);
+	}
+	// </FS:Ansariel>
 	// <FS:Ansariel> FIRE-8947: Don't restore filter string on relog
 	//if (params.substring.isProvided())
 	//{

@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="470"
+ height="486"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
@@ -231,11 +231,19 @@
      width="100" />
     <check_box
      height="16"
+     label="Transfer only"
+     layout="topleft"
+     left="8"
+     name="check_transferable"
+     top_pad="6"
+     width="144" />
+    <check_box
+     height="16"
      label="Always show folders"
      layout="topleft"
      left="8"
      name="check_show_empty"
-     top_pad="6"
+     top_pad="0"
      width="144" />
     <check_box
      height="16"
