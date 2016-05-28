@@ -4072,6 +4072,10 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="NoPermModifyObject">
 		Ihnen fehlt die Berechtigung zum Modifizieren dieses Objekts.
 	</notification>
+	<notification name="TooMuchObjectInventorySelected">
+		Es sind zu viele Objekte mit großem Inhalt ausgewählt. Bitte wählen Sie weniger Objekte aus und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CantEnablePhysObjContributesToNav">
 		Physik kann nicht für ein Objekt aktiviert werden, das zum Navmesh beiträgt.
 	</notification>
