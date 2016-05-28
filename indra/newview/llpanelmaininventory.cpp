@@ -1061,11 +1061,8 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 void LLFloaterInventoryFinder::onResetBtn()
 {
 	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
-	if (panel->getName() == "Recent Items" || panel->getName() == "Worn Items")
-	{
-		panel->getFilter().resetDefault();
-	}
-	else
+	panel->getFilter().resetDefault();
+	if (panel->getName() == "All Items")
 	{
 		panel->setFilterTypes(0xffffffffffffffffULL);
 	}
