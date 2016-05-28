@@ -331,8 +331,7 @@ BOOL LLInvFVBridge::perform_cutToClipboard()
 	{
 		LLClipboard::instance().setCutMode(true);
 		BOOL added_to_clipboard = LLClipboard::instance().addToClipboard(mUUID);
-		// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
-        //removeObject(&gInventory, mUUID);   // Always perform the remove even if the object couldn't make it to the clipboard
+        removeObject(&gInventory, mUUID);   // Always perform the remove even if the object couldn't make it to the clipboard
         return added_to_clipboard;
 	}
 	return FALSE;
