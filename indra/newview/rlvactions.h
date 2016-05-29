@@ -88,6 +88,25 @@ public:
 	 */
 	static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
 
+	// ===========
+	// Teleporting
+	// ===========
+public:
+	/*
+	 * Returns true if the user can teleport locally (short distances)
+	 */
+	static bool canTeleportToLocal();
+
+	/*
+	 * Returns true if the user can teleport to a (remote) location
+	 */
+	static bool canTeleportToLocation();
+
+	/*
+	 * Returns true if the teleport is considered local (e.g. double-click tp)
+	 */
+	static bool isLocalTp(const LLVector3d& posGlobal);
+
 	// =================
 	// World interaction
 	// =================
@@ -96,6 +115,7 @@ public:
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();
+	static bool canStand(const LLUUID& idRlvObjExcept);
 
 	/*
 	 * Returns true if the user can see their in-world location

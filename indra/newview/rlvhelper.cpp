@@ -111,6 +111,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("touchworld", RLV_BHVR_TOUCHWORLD));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tplm", RLV_BHVR_TPLM));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tploc", RLV_BHVR_TPLOC));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("tplocal", RLV_BHVR_TPLOCAL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tplure", RLV_BHVR_TPLURE, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_EXCEPTION>("tprequest", RLV_BHVR_TPREQUEST, RlvBehaviourInfo::BHVR_STRICT | RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("unsharedunwear",			RLV_BHVR_UNSHAREDUNWEAR,		RLV_TYPE_ADDREM));
@@ -131,12 +132,12 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("attachallthis",			RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REPLACE | RlvBehaviourInfo::FORCEWEAR_SUBTREE | RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT));
 	addEntry(new RlvBehaviourInfo("attachthisover",			RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_ADD     | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT));
 	addEntry(new RlvBehaviourInfo("attachallthisover",		RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_ADD     | RlvBehaviourInfo::FORCEWEAR_SUBTREE | RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT));
-	addEntry(new RlvBehaviourInfo("detach",					RLV_BHVR_DETACH,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_DETACH, RlvForceRemAttachHandler>("detach",			RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
 	addEntry(new RlvBehaviourInfo("detachall",				RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_SUBTREE | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
 	addEntry(new RlvBehaviourInfo("detachthis",				RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT));
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_SUBTREE | RlvBehaviourInfo::FORCEWEAR_CONTEXT_OBJECT));
-	addEntry(new RlvBehaviourInfo("remattach",				RLV_BHVR_REMATTACH,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
-	addEntry(new RlvBehaviourInfo("remoutfit",				RLV_BHVR_REMOUTFIT,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_REMATTACH, RlvForceRemAttachHandler>("remattach",	RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_REMOUTFIT>("remoutfit",                             RlvBehaviourInfo::FORCEWEAR_WEAR_REMOVE  | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE));
 	// Synonyms (addoutfit* -> attach*)														   
 	addEntry(new RlvBehaviourInfo("addoutfit",				RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REPLACE | RlvBehaviourInfo::FORCEWEAR_NODE    | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE   | RlvBehaviourInfo::BHVR_SYNONYM));
 	addEntry(new RlvBehaviourInfo("addoutfitall",			RLV_CMD_FORCEWEAR,	RLV_TYPE_FORCE, RlvBehaviourInfo::FORCEWEAR_WEAR_REPLACE | RlvBehaviourInfo::FORCEWEAR_SUBTREE | RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE   | RlvBehaviourInfo::BHVR_SYNONYM));
@@ -156,10 +157,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Force-only
 	//
 	addEntry(new RlvBehaviourInfo("adjustheight",			RLV_BHVR_ADJUSTHEIGHT,			RLV_TYPE_FORCE));
-	addEntry(new RlvBehaviourInfo("detachme",				RLV_BHVR_DETACHME,				RLV_TYPE_FORCE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_DETACHME>("detachme"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
-	addEntry(new RlvBehaviourInfo("tpto",					RLV_BHVR_TPTO,					RLV_TYPE_FORCE));
+	addEntry(new RlvForceProcessor<RLV_BHVR_TPTO>("tpto"));
 	addEntry(new RlvBehaviourInfo("unsit",					RLV_BHVR_UNSIT,					RLV_TYPE_FORCE));
 
 	//
@@ -368,32 +369,140 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
 }
 
 // ============================================================================
-// RlvCommandOption structures
+// Command option parsing utility classes
 //
 
-// Checked: 2010-09-28 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
-RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
+template<>
+bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
+{
+	idOption.set(strOption);
+	return idOption.notNull();
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int& nOption)
+{
+	try
+	{
+		nOption = std::stoi(strOption);
+	}
+	catch (const std::invalid_argument&)
+	{
+		return false;
+	}
+	return true;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<float>(const std::string& strOption, float& nOption)
+{
+	try
+	{
+		nOption = std::stof(strOption);
+	}
+	catch (const std::invalid_argument&)
+	{
+		return false;
+	}
+	return true;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLWearableType::EType>(const std::string& strOption, LLWearableType::EType& wtOption)
+{
+	wtOption = LLWearableType::typeNameToType(strOption);
+	return (LLWearableType::WT_INVALID != wtOption) && (LLWearableType::WT_NONE != wtOption);
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLViewerJointAttachment*>(const std::string& strOption, LLViewerJointAttachment*& pAttachPt)
+{
+	pAttachPt = RlvAttachPtLookup::getAttachPoint(strOption);
+	return pAttachPt != NULL;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<ERlvAttachGroupType>(const std::string& strOption, ERlvAttachGroupType& eAttachGroup)
+{
+	eAttachGroup = rlvAttachGroupFromString(strOption);
+	return eAttachGroup != RLV_ATTACHGROUP_INVALID;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLViewerInventoryCategory*>(const std::string& strOption, LLViewerInventoryCategory*& pFolder)
+{
+	pFolder = RlvInventory::instance().getSharedFolder(strOption);
+	return pFolder != NULL;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLVector3>(const std::string& strOption, LLVector3& vecOption)
+ {
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2);
+		return (3 == cntToken);
+	}
+	return false;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<LLVector3d>(const std::string& strOption, LLVector3d& vecOption)
+ {
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%lf/%lf/%lf", vecOption.mdV + 0, vecOption.mdV + 1, vecOption.mdV + 2);
+		return (3 == cntToken);
+	}
+	return false;
+}
+
+template<>
+bool RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(const std::string& strOption, RlvCommandOptionGeneric& genericOption)
 {
 	LLWearableType::EType wtType(LLWearableType::WT_INVALID); LLUUID idOption; ERlvAttachGroupType eAttachGroup(RLV_ATTACHGROUP_INVALID);
-	LLViewerJointAttachment* pAttachPt = NULL; LLViewerInventoryCategory* pFolder = NULL;
+	LLViewerJointAttachment* pAttachPt = NULL; LLViewerInventoryCategory* pFolder = NULL; LLVector3d posOption; float nOption;
 
-	if (!(m_fEmpty = strOption.empty()))														// <option> could be an empty string
+	if (!strOption.empty())																		// <option> could be an empty string
 	{
-		if ( ((wtType = LLWearableType::typeNameToType(strOption)) != LLWearableType::WT_INVALID) && (wtType != LLWearableType::WT_NONE) )
-			m_varOption = wtType;																// ... or specify a (valid) clothing layer
-		else if ((pAttachPt = RlvAttachPtLookup::getAttachPoint(strOption)) != NULL)
-			m_varOption = pAttachPt;															// ... or specify an attachment point
-		else if ( ((UUID_STR_LENGTH - 1) == strOption.length()) && (idOption.set(strOption)) )
-			m_varOption = idOption;																// ... or specify an UUID
-		else if ((pFolder = RlvInventory::instance().getSharedFolder(strOption)) != NULL)
-			m_varOption = pFolder;																// ... or specify a shared folder path
-		else if ((eAttachGroup = rlvAttachGroupFromString(strOption)) != RLV_ATTACHGROUP_INVALID)
-			m_varOption = eAttachGroup;															// ... or specify an attachment point group
+		if (RlvCommandOptionHelper::parseOption(strOption, wtType))
+			genericOption = wtType;																// ... or specify a (valid) clothing layer
+		else if (RlvCommandOptionHelper::parseOption(strOption, pAttachPt))
+			genericOption = pAttachPt;															// ... or specify an attachment point
+		else if (RlvCommandOptionHelper::parseOption(strOption, idOption))
+			genericOption = idOption;															// ... or specify an UUID
+		else if (RlvCommandOptionHelper::parseOption(strOption, pFolder))
+			genericOption = pFolder;															// ... or specify a shared folder path
+		else if (RlvCommandOptionHelper::parseOption(strOption, eAttachGroup))
+			genericOption = eAttachGroup;														// ... or specify an attachment point group
+		else if (RlvCommandOptionHelper::parseOption(strOption, posOption))
+			genericOption = posOption;															// ... or specify a vector (region or global coordinates)
+		else if (RlvCommandOptionHelper::parseOption(strOption, nOption))
+			genericOption = nOption;															// ... or specify a number
 		else
-			m_varOption = strOption;															// ... or it might just be a string
+			genericOption = strOption;															// ... or it might just be a string
 	}
-	m_fValid = true;
+	return true;
 }
+
+template<typename T>
+T RlvCommandOptionHelper::parseOption(const std::string& strOption)
+{
+	T value;
+	parseOption<T>(strOption, value);
+	return value;
+}
+
+bool RlvCommandOptionHelper::parseStringList(const std::string& strOption, std::vector<std::string>& optionList, const std::string& strSeparator)
+{
+	if (!strOption.empty())
+		boost::split(optionList, strOption, boost::is_any_of(strSeparator));
+	return !optionList.empty();
+}
+
+// ============================================================================
+// RlvCommandOption structures
+//
 
 // Checked: 2012-07-28 (RLVa-1.4.7)
 class RlvCommandOptionGetPathCallback
@@ -445,7 +554,7 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
 	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
 		getItemIDs(rlvCmdOption.getWearableType(), m_idItems);
@@ -453,6 +562,14 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	else if (rlvCmdOption.isAttachmentPoint())	// ... or it can specify an attachment point
 	{
 		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems);
+	}
+	else if (rlvCmdOption.isUUID())				// ... or it can specify a specific attachment
+	{
+		const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmdOption.getUUID());
+		if ( (pAttachObj) && (pAttachObj->isAttachment()) && (pAttachObj->permYouOwner()) )
+			m_idItems.push_back(pAttachObj->getAttachmentItemID());
+		else
+			m_fValid = false;
 	}
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
@@ -534,17 +651,6 @@ RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlv
 			 (LLStringUtil::convertToF32(cmdTokens[1], m_nPelvisToFootDeltaMult)) && 
 			 ( (2 == cmdTokens.size()) || (LLStringUtil::convertToF32(cmdTokens[2], m_nPelvisToFootOffset)) );
 	}
-}
-
-// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-RlvCommandOptionTpTo::RlvCommandOptionTpTo(const RlvCommand &rlvCmd)
-{
-	std::vector<std::string> cmdTokens;
-	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string("/")));
-
-	m_fValid = (3 == cmdTokens.size());
-	for (int idxAxis = 0; (idxAxis < 3) && (m_fValid); idxAxis++)
-		m_fValid &= (bool)LLStringUtil::convertToF64(cmdTokens[idxAxis], m_posGlobal[idxAxis]);
 }
 
 // =========================================================================

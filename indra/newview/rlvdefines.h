@@ -72,6 +72,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_PUTINV_MAXDEPTH				4
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
+#define RLV_TELEPORT_LOCAL_RADIUS		256				// Any teleport that's more than a region away is non-local
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
@@ -124,6 +125,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWHOVERTEXTALL,		// "showhovertextall"
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
+	RLV_BHVR_TPLOCAL,
 	RLV_BHVR_TPLURE,				// "tplure"
 	RLV_BHVR_TPREQUEST,				// "tprequest"
 	RLV_BHVR_VIEWNOTE,				// "viewnote"

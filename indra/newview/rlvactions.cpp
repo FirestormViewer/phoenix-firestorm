@@ -15,9 +15,11 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llagent.h"
 #include "llimview.h"
 #include "llvoavatarself.h"
 #include "rlvactions.h"
+#include "rlvhelper.h"
 #include "rlvhandler.h"
 
 // ============================================================================
@@ -93,14 +95,41 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 }
 
 // ============================================================================
-// World interaction
-// 
+// Teleporting
+//
 
-// Checked: 2010-03-07 (RLVa-1.2.0)
+bool RlvActions::canTeleportToLocal()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_TPLOCAL)) && (RlvActions::canStand());
+}
+
+bool RlvActions::canTeleportToLocation()
+{
+	// NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
+	const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
+	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, idRlvObjExcept)) && (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept)) && (RlvActions::canStand(idRlvObjExcept));
+}
+
+bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
+{
+	F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+	return nDistSq < RLV_TELEPORT_LOCAL_RADIUS * RLV_TELEPORT_LOCAL_RADIUS;
+}
+
+// ============================================================================
+// World interaction
+//
+
 bool RlvActions::canStand()
 {
 	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
+}
+
+bool RlvActions::canStand(const LLUUID& idRlvObjExcept)
+{
+	// NOTE: must match generic function above
+	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, idRlvObjExcept)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
 }
 
 // Checked: 2014-02-24 (RLVa-1.4.10)
