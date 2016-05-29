@@ -162,8 +162,6 @@ protected:
 	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const;
 	void       onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const;
 	// Command handlers (RLV_TYPE_REPLY)

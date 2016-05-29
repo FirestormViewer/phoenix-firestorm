@@ -29,7 +29,6 @@
 #include "llviewerregion.h"
 
 // Command specific includes
-#include "llagentcamera.h"				// @tpto
 #include "llenvmanager.h"				// @setenv
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
@@ -1705,25 +1704,6 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 	eRet = RLV_RET_SUCCESS;
 	switch (rlvCmd.getBehaviourType())
 	{
-		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-		case RLV_BHVR_REMATTACH:	// @remattach[:<option>]=force
-			{
-				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
-				if (rlvCmdOption.isSharedFolder())
-					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
-				else
-					eRet = onForceRemAttach(rlvCmd);
-			}
-			break;
-		case RLV_BHVR_REMOUTFIT:	// @remoutfit[:<option>]=force
-			{
-				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
-				if (rlvCmdOption.isSharedFolder())
-					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
-				else
-					eRet = onForceRemOutfit(rlvCmd);
-			}
-			break;
 		case RLV_BHVR_UNSIT:		// @unsit=force							- Checked: 2010-03-18 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
@@ -1755,17 +1735,6 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				}
 			}
 			break;
-		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-09-04 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-			{
-				VERIFY_OPTION(rlvCmd.getOption().empty());
-				// NOTE: @detachme should respect locks but shouldn't respect things like nostrip
-				const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmd.getObjectID());
-				if ( (pAttachObj) && (pAttachObj->isAttachment()) )
-				{
-					LLVOAvatarSelf::detachAttachmentIntoInventory(pAttachObj->getAttachmentItemID());
-				}
-			}
-			break;
 		case RLV_CMD_FORCEWEAR:		// @forcewear[:<options>]=force			- Checked: 2011-09-12 (RLVa-1.5.0)
 			{
 				if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE & rlvCmd.getBehaviourFlags())
@@ -1793,16 +1762,32 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 	return eRet;
 }
 
-// Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onForceRemAttach(const RlvCommand& rlvCmd) const
+// Handles: @detachme=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCmd)
 {
-	RLV_ASSERT(RLV_TYPE_FORCE == rlvCmd.getParamType());
-	RLV_ASSERT( (RLV_BHVR_REMATTACH == rlvCmd.getBehaviourType()) || (RLV_BHVR_DETACH == rlvCmd.getBehaviourType()) );
+	if (rlvCmd.hasOption())
+		return RLV_RET_FAILED_OPTION;
 
+	// NOTE: @detachme should respect locks but shouldn't respect things like nostrip
+	const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmd.getObjectID());
+	if ( (pAttachObj) && (pAttachObj->isAttachment()) )
+		LLVOAvatarSelf::detachAttachmentIntoInventory(pAttachObj->getAttachmentItemID());
+
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @remattach[:<folder|attachpt|attachgroup>]=force
+template<> template<>
+ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
+{
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
 	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	if (rlvCmdOption.isSharedFolder())
+		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
+
 	// @remattach:<attachpt>=force - force detach single attachment point
 	if (rlvCmdOption.isAttachmentPoint())
 	{
@@ -1813,25 +1798,35 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const RlvCommand& rlvCmd) const
 	// @remattach=force         - force detach all attachments points
 	else if ( (rlvCmdOption.isAttachmentPointGroup()) || (rlvCmdOption.isEmpty()) )
 	{
-		for (LLVOAvatar::attachment_map_t::const_iterator itAttach = gAgentAvatarp->mAttachmentPoints.begin(); 
-				itAttach != gAgentAvatarp->mAttachmentPoints.end(); ++itAttach)
+		for (const auto& entryAttachPt : gAgentAvatarp->mAttachmentPoints)
 		{
-			const LLViewerJointAttachment* pAttachPt = itAttach->second;
-			if ( (pAttachPt) && (pAttachPt->getNumObjects()) &&
-				 ((rlvCmdOption.isEmpty()) || (rlvAttachGroupFromIndex(pAttachPt->getGroup()) == rlvCmdOption.getAttachmentPointGroup())) )
+			const LLViewerJointAttachment* pAttachPt = entryAttachPt.second;
+			if ( (pAttachPt) && (pAttachPt->getNumObjects()) && ((rlvCmdOption.isEmpty()) || (rlvAttachGroupFromIndex(pAttachPt->getGroup()) == rlvCmdOption.getAttachmentPointGroup())) )
 			{
 				RlvForceWear::instance().forceDetach(pAttachPt);
 			}
 		}
 		return RLV_RET_SUCCESS;
 	}
+	// @remattach:<uuid>=force - force detach a specific attachment
+	else if (rlvCmdOption.isUUID())
+	{
+		const LLViewerObject* pAttachObj = gObjectList.findObject(rlvCmdOption.getUUID());
+		if ( (pAttachObj) && (pAttachObj->isAttachment()) && (pAttachObj->permYouOwner()) )
+			RlvForceWear::instance().forceDetach(pAttachObj);
+		return RLV_RET_SUCCESS;
+	}
 	return RLV_RET_FAILED_OPTION;
 }
 
-// Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
-ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
+// Handles: @remoutfit[:<folder|layer>]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	if (rlvCmdOption.isSharedFolder())
+		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
+
 	if ( (!rlvCmdOption.isWearableType()) && (!rlvCmdOption.isEmpty()) )
 		return RLV_RET_FAILED_OPTION;
 

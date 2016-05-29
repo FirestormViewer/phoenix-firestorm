@@ -115,6 +115,7 @@ template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE
 
 // List of shared handlers
 typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
+typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;				// Shared between @remattach and @detach
 
 //
 // RlvCommandProcessor - Templated glue class that brings RlvBehaviourInfo, RlvCommandHandlerBaseImpl and RlvCommandHandler together
