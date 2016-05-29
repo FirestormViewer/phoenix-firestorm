@@ -435,6 +435,17 @@ bool RlvCommandOptionHelper::parseOption<LLViewerInventoryCategory*>(const std::
 }
 
 template<>
+bool RlvCommandOptionHelper::parseOption<LLVector3>(const std::string& strOption, LLVector3& vecOption)
+ {
+	if (!strOption.empty())
+	{
+		S32 cntToken = sscanf(strOption.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2);
+		return (3 == cntToken);
+	}
+	return false;
+}
+
+template<>
 bool RlvCommandOptionHelper::parseOption<LLVector3d>(const std::string& strOption, LLVector3d& vecOption)
  {
 	if (!strOption.empty())

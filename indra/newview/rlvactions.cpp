@@ -95,7 +95,7 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 
 bool RlvActions::canTeleportToLocal()
 {
-	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_TPLOCAL) && (RlvActions::canStand());
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_TPLOCAL)) && (RlvActions::canStand());
 }
 
 bool RlvActions::canTeleportToLocation()
