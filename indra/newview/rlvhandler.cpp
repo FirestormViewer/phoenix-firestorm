@@ -58,37 +58,6 @@ BOOL RlvHandler::m_fEnabled = FALSE;
 rlv_handler_t gRlvHandler;
 
 // ============================================================================
-// Option parsing template specialization implmentation
-//
-
-struct RlvCommandOptionHelper
-{
-	template <typename optionType> 
-	static bool parseOption(const std::string& strOption, optionType& valueOption);
-	static bool parseStringList(const std::string& strOption, std::vector<std::string>& optionList);
-};
-
-template<>
-bool RlvCommandOptionHelper::parseOption<LLUUID>(const std::string& strOption, LLUUID& idOption)
-{
-	idOption.set(strOption);
-	return idOption.notNull();
-}
-
-template<>
-bool RlvCommandOptionHelper::parseOption<int>(const std::string& strOption, int& nOption)
-{
-	return LLStringUtil::convertToS32(strOption, nOption);
-}
-
-bool RlvCommandOptionHelper::parseStringList(const std::string& strOption, std::vector<std::string>& optionList)
-{
-	if (!strOption.empty())
-		boost::split(optionList, strOption, boost::is_any_of(std::string(RLV_OPTION_SEPARATOR)));
-	return !optionList.empty();
-}
-
-// ============================================================================
 // Command specific helper functions
 //
 
@@ -1196,7 +1165,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				// If there's an option it should specify a wearable type name (reference count on no option *and* a valid option)
-				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 				VERIFY_OPTION_REF( (rlvCmdOption.isEmpty()) || (rlvCmdOption.isWearableType()) );
 
 				// We need to flush any queued force-wear commands before changing the restrictions
@@ -1468,7 +1437,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlv
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 
 	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
@@ -1513,7 +1482,7 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - the option should specify a shared folder path
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 	if (!rlvCmdOption.isSharedFolder())
 		return RLV_RET_FAILED_OPTION;
 
@@ -1738,7 +1707,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_DETACH:		// @detach[:<option>]=force				- Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 		case RLV_BHVR_REMATTACH:	// @remattach[:<option>]=force
 			{
-				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 				if (rlvCmdOption.isSharedFolder())
 					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				else
@@ -1747,7 +1716,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			break;
 		case RLV_BHVR_REMOUTFIT:	// @remoutfit[:<option>]=force
 			{
-				RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 				if (rlvCmdOption.isSharedFolder())
 					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				else
@@ -1785,13 +1754,6 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				}
 			}
 			break;
-		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2011-03-28 (RLVa-1.3.0f) | Modified: RLVa-1.3.0f
-			{
-				RlvCommandOptionTpTo rlvCmdOption(rlvCmd);
-				VERIFY_OPTION( (rlvCmdOption.isValid()) && (!rlvCmdOption.m_posGlobal.isNull()) );
-				gAgent.teleportViaLocation(rlvCmdOption.m_posGlobal);
-			}
-			break;
 		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-09-04 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
@@ -1807,7 +1769,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE & rlvCmd.getBehaviourFlags())
 				{
-					RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+					RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 					VERIFY_OPTION(rlvCmdOption.isSharedFolder());
 					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				}
@@ -1839,7 +1801,7 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const RlvCommand& rlvCmd) const
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 	// @remattach:<attachpt>=force - force detach single attachment point
 	if (rlvCmdOption.isAttachmentPoint())
 	{
@@ -1868,7 +1830,7 @@ ERlvCmdRet RlvHandler::onForceRemAttach(const RlvCommand& rlvCmd) const
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 {
-	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
 	if ( (!rlvCmdOption.isWearableType()) && (!rlvCmdOption.isEmpty()) )
 		return RLV_RET_FAILED_OPTION;
 
@@ -1969,6 +1931,19 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 	pObj->getRegion()->sendReliableMessage();
 
 	return RLV_RET_SUCCESS;
+}
+
+// Handles: @tpto:<vector>=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_TPTO>::onCommand(const RlvCommand& rlvCmd)
+{
+	LLVector3d posGlobal;
+	if (RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), posGlobal))
+	{
+		gAgent.teleportViaLocation(posGlobal);
+		return RLV_RET_SUCCESS;
+	}
+	return RLV_RET_FAILED_OPTION;
 }
 
 // ============================================================================
