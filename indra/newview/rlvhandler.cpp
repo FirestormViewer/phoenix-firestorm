@@ -36,6 +36,7 @@
 #include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
+#include "llworldmapmessage.h"			// @tpto
 
 // RLVa includes
 #include "rlvfloaters.h"
@@ -1929,35 +1930,49 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @tpto:<vector>[;<angle>]=force
+// Handles: @tpto:<vector>[;<angle>]=force and @tpto:<region>;<vector>[;<angle>]=force
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_TPTO>::onCommand(const RlvCommand& rlvCmd)
 {
 	std::vector<std::string> optionList;
 	if (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList))
-		return RLV_RET_FAILED;
-
-	// First option specifies the destination
-	LLVector3d posGlobal;
-	if (!RlvCommandOptionHelper::parseOption(optionList[0], posGlobal))
 		return RLV_RET_FAILED_OPTION;
 
-	if (optionList.size() == 1)
+	// We need the look-at first
+	LLVector3 vecLookAt = LLVector3::zero;
+	if (optionList.size() > 1)
 	{
-		gAgent.teleportViaLocation(posGlobal);
-	}
-	else
-	{
-		// Second option specifies the angle
 		float nAngle = 0.0f;
 		if (!RlvCommandOptionHelper::parseOption(optionList[1], nAngle))
 			return RLV_RET_FAILED_OPTION;
 
-		LLVector3 vecLookAt(LLVector3::x_axis);
+		vecLookAt = LLVector3::x_axis;
 		vecLookAt.rotVec(nAngle, LLVector3::z_axis);
 		vecLookAt.normalize();
+	}
+
+	// Next figure out the destination
+	LLVector3d posGlobal;
+	if (RlvCommandOptionHelper::parseOption(optionList[0], posGlobal))
+	{
+		if (optionList.size() == 1)
+			gAgent.teleportViaLocation(posGlobal);
+		else
 		gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
 	}
+	else
+	{
+		std::vector<std::string> posList; LLVector3 posRegion;
+		if ( (!RlvCommandOptionHelper::parseStringList(optionList[0], posList, std::string("/"))) || (4 != posList.size()) ||
+		     (!RlvCommandOptionHelper::parseOption(optionList[0].substr(posList[0].size() + 1), posRegion)) )
+		{
+			return RLV_RET_FAILED_OPTION;
+		}
+
+		LLWorldMapMessage::url_callback_t cb = boost::bind(&RlvUtil::teleportCallback, _1, posRegion, vecLookAt);
+		LLWorldMapMessage::getInstance()->sendNamedRegionRequest(posList[0], cb, std::string(""), true);
+	}
+
 	return RLV_RET_SUCCESS;
 }
 

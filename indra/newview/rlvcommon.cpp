@@ -20,6 +20,7 @@
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
+#include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
 #include "llviewerparcelmgr.h"
@@ -527,6 +528,18 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	add(LLStatViewer::CHAT_COUNT, 1);
 
 	return true;
+}
+
+void RlvUtil::teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt)
+{
+	if (hRegion)
+	{
+		const LLVector3d posGlobal = from_region_handle(hRegion) + (LLVector3d)posRegion;
+		if (vecLookAt.isExactlyZero())
+			gAgent.teleportViaLocation(posGlobal);
+		else
+			gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
+	}
 }
 
 // ============================================================================

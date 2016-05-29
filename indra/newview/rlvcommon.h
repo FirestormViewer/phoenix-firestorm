@@ -173,6 +173,7 @@ public:
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 
+	static void teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt);
 protected:
 	static bool m_fForceTp;															// @standtp
 };
