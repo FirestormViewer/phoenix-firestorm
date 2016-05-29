@@ -837,9 +837,7 @@ void MediaPluginQuickTime::receiveMessage(const char *message_string)
 			else if(message_name == "cleanup")
 			{
 				// TODO: clean up here
-                LLPluginMessage message("base", "goodbye");
-                sendMessage(message);
-            }
+			}
 			else if(message_name == "shm_added")
 			{
 				SharedSegmentInfo info;

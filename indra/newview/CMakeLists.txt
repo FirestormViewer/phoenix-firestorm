@@ -2093,6 +2093,7 @@ if (WINDOWS)
       SLPlugin
       media_plugin_quicktime
       media_plugin_cef
+      media_plugin_libvlc
       winmm_shim
       windows-crash-logger
       )
@@ -2460,7 +2461,7 @@ if (DARWIN)
 
   # <FS:TS> Allow disabling media plugins for 64-bit building
   if (ENABLE_MEDIA_PLUGINS)
-      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_cef mac-crash-logger)
+      add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_libvlc media_plugin_cef mac-crash-logger)
   else (ENABLE_MEDIA_PLUGINS)
       add_dependencies(${VIEWER_BINARY_NAME} SLPlugin mac-crash-logger)
   endif (ENABLE_MEDIA_PLUGINS)

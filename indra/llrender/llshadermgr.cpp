@@ -526,7 +526,7 @@ void LLShaderMgr::dumpObjectLog(GLhandleARB ret, BOOL warns, const std::string& 
 		if (!filename.empty())
 		{
             LL_CONT << "From " << filename << ":\n";
-        }
+		}
         LL_CONT << log << LL_ENDL;
 	}
  }
@@ -1201,6 +1201,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 
 	mReservedUniforms.push_back("origin");
 	mReservedUniforms.push_back("display_gamma");
+	mReservedUniforms.push_back("invert_tex_y");
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 
 	std::set<std::string> dupe_check;
