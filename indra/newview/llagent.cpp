@@ -4143,13 +4143,10 @@ void LLAgent::restoreCanceledTeleportRequest()
 
 void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 {
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
-	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) )
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
-		// If we're getting teleported due to @tpto we should disregard any @tploc=n or @unsit=n restrictions from the same object
-		if ( (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, gRlvHandler.getCurrentObject())) ||
-		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
-			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
+		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal() : !RlvActions::canTeleportToLocation() )
 		{
 			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
 			return;
@@ -4216,13 +4213,19 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 // Teleport to global position, but keep facing in the same direction 
 void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 {
-// [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
-	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
-		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!RlvActions::canStand())) )
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	if ( (RlvActions::isRlvEnabled()) && (!RlvUtil::isForceTp()) )
 	{
-		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
-		return;
+		if ( (RlvActions::isLocalTp(pos_global)) ? !RlvActions::canTeleportToLocal() : !RlvActions::canTeleportToLocation() )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+			return;
+		}
+
+		if ( (gRlvHandler.getCurrentCommand()) && (RLV_BHVR_TPTO == gRlvHandler.getCurrentCommand()->getBehaviourType()) )
+		{
+			gRlvHandler.setCanCancelTp(false);
+		}
 	}
 // [/RLVa:KB]
 
