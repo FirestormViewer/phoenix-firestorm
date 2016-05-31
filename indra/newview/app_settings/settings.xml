@@ -23420,7 +23420,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSUseAis3Api</key>
     <map>
       <key>Comment</key>
-      <string>Option to disable the use of the new AISv3 inventory API</string>
+      <string>Option to disable the use of the AISv3 inventory API. NOTE: This setting has NO EFFECT in Second Life!</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

@@ -36,6 +36,8 @@
 #include "llinventoryobserver.h"
 #include "llviewercontrol.h"
 
+#include "llviewernetwork.h"
+
 ///----------------------------------------------------------------------------
 /// Classes for AISv3 support.
 ///----------------------------------------------------------------------------
@@ -50,10 +52,10 @@ bool AISAPI::isAvailable()
 {
     // <FS:Ansariel> Add AIS3 debug setting
     //if (gAgent.getRegion())
-    if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
+    if (gAgent.getRegion() && (gSavedSettings.getBOOL("FSUseAis3Api") || LLGridManager::instance().isInSecondLife()))
     // </FS:Ansariel>
     {
-        //return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+        return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
     }
     return false;
 }
