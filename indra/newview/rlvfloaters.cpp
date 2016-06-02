@@ -709,6 +709,11 @@ BOOL RlvFloaterConsole::postBuild()
 	return TRUE;
 }
 
+void RlvFloaterConsole::onClose(bool fQuitting)
+{
+	gRlvHandler.processCommand(gAgent.getID(), "clear", true);
+}
+
 void RlvFloaterConsole::addCommandReply(const std::string& strCommand, const std::string& strReply)
 {
 	m_pOutputText->appendText(llformat("%s: ", strCommand.c_str()), true);

@@ -142,6 +142,7 @@ private:
 	 */
 public:
 	BOOL postBuild() override;
+	void onClose(bool fQuitting) override;
 	
 	/*
 	 * Member functions
