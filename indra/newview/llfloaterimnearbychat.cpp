@@ -69,6 +69,7 @@
 #include "llautoreplace.h"
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b)
 #include "rlvhandler.h"
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
@@ -874,7 +875,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 		else
 		{
 			// Don't allow chat on a non-public channel if sendchannel restricted (unless the channel is an exception)
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNEL)) && (!gRlvHandler.isException(RLV_BHVR_SENDCHANNEL, channel)) )
+			if (!RlvActions::canSendChannel(channel))
 				return;
 
 			// Don't allow chat on debug channel if @sendchat, @redirchat or @rediremote restricted (shows as public chat on viewers)

@@ -104,7 +104,8 @@ enum ERlvBehaviour {
 	RLV_BHVR_CHATWHISPER,			// "chatwhisper"
 	RLV_BHVR_CHATNORMAL,			// "chatnormal"
 	RLV_BHVR_CHATSHOUT,				// "chatshout"
-	RLV_BHVR_SENDCHANNEL,			// "sendchannel"
+	RLV_BHVR_SENDCHANNEL,
+	RLV_BHVR_SENDCHANNELEXCEPT,
 	RLV_BHVR_SENDIM,				// "sendim"
 	RLV_BHVR_SENDIMTO,				// "sendimto"
 	RLV_BHVR_RECVIM,				// "recvim"

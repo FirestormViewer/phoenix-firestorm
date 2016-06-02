@@ -40,6 +40,11 @@ public:
 	static bool canPlayGestures();
 
 	/*
+	 * Returns true if the user is allowed to chat on the specified channel
+	 */
+	static bool canSendChannel(int nChannel);
+
+	/*
 	 * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
 	 */
 	static bool canSendIM(const LLUUID& idRecipient);

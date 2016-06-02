@@ -40,6 +40,7 @@
 
 // RLVa includes
 #include "rlvfloaters.h"
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
@@ -833,7 +834,7 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 			endRedir = m_Exceptions.upper_bound(eBhvr); itRedir != endRedir; ++itRedir)
 	{
 		S32 nChannel = boost::get<S32>(itRedir->second.varOption);
-		if ( (!hasBehaviour(RLV_BHVR_SENDCHANNEL)) || (isException(RLV_BHVR_SENDCHANNEL, nChannel)) )
+		if (RlvActions::canSendChannel(nChannel))
 			RlvUtil::sendChatReply(nChannel, strUTF8Text);
 	}
 
@@ -1531,9 +1532,9 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 		RlvUIEnabler::instance().removeGenericFloaterFilter("beacons");
 }
 
-// Handles: @sendchannel[:<channel>]=n|y
+// Handles: @sendchannel[:<channel>]=n|y and @sendchannel_except[:<channel>]=n|y
 template<> template<>
-ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ERlvCmdRet RlvBehaviourSendChannelHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there's an option then it should be a valid (= positive and non-zero) chat channel
 	if (rlvCmd.hasOption())
@@ -1930,7 +1931,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 	return RLV_RET_SUCCESS;
 }
 
-// Handles: @tpto:<vector>[;<angle>]=force and @tpto:<region>;<vector>[;<angle>]=force
+// Handles: @tpto:<vector>[;<angle>]=force and @tpto:<region>/<vector>[;<angle>]=force
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_TPTO>::onCommand(const RlvCommand& rlvCmd)
 {

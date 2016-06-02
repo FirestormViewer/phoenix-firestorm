@@ -45,6 +45,13 @@ bool RlvActions::canPlayGestures()
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDGESTURE));
 }
 
+bool RlvActions::canSendChannel(int nChannel)
+{
+	return
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNEL)) || (gRlvHandler.isException(RLV_BHVR_SENDCHANNEL, nChannel)) ) &&
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNELEXCEPT)) || (!gRlvHandler.isException(RLV_BHVR_SENDCHANNELEXCEPT, nChannel)) );
+}
+
 // Checked: 2010-11-30 (RLVa-1.3.0)
 bool RlvActions::canSendIM(const LLUUID& idRecipient)
 {
