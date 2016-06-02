@@ -434,7 +434,7 @@ bool FSLSLBridge::viewerToLSL(const std::string& message, tCallback aCallback )
 	if( !pCallback )
 		pCallback = FSLSLBridgeRequest_Success;
 
-    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequestResponder_Failure );
+    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpPost(mCurrentURL, LLSD(message), pCallback, FSLSLBridgeRequest_Failure );
 
 	return true;
 }
