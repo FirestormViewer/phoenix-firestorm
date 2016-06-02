@@ -214,6 +214,8 @@
 	<!--Build 2-->
 	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
+		<check_box label="Grenze der aktuell selektierten Parzelle hervorheben" name="RenderParcelSelection"/>
+		<check_box label="Hervorherbung bis zur maximalen Bauhöhe anzeigen" name="FSRenderParcelSelectionToMaxBuildHeight"/>
 		<check_box label="Auswahldistanz einschränken (Meter):" name="LimitSelectDistance" width="230"/>
 		<spinner name="MaxSelectDistance" tool_tip="Maximale Distanz, innerhalb dessen ein Objekt ausgewählt werden kann (in Meter vom Avatar) [Standard: 128.000]"/>
 		<check_box label="Ziehdistanz einschränken (Meter):" name="LimitDragDistance" width="230"/>
