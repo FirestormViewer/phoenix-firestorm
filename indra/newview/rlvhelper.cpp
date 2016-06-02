@@ -305,15 +305,14 @@ void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERl
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_eRet(RLV_RET_UNKNOWN)
 {
-	std::string strBehaviour;
-	if (m_fValid = parseCommand(strCommand, strBehaviour, m_strOption, m_strParam))
+	if (m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam))
 	{
 		S32 nTemp = 0;
 		if ( ("n" == m_strParam) || ("add" == m_strParam) )
 			m_eParamType = RLV_TYPE_ADD;
 		else if ( ("y" == m_strParam) || ("rem" == m_strParam) )
 			m_eParamType = RLV_TYPE_REMOVE;
-		else if (strBehaviour == "clear")						// clear is the odd one out so just make it its own type
+		else if (m_strBehaviour == "clear")						// clear is the odd one out so just make it its own type
 			m_eParamType = RLV_TYPE_CLEAR;
 		else if ("force" == m_strParam)
 			m_eParamType = RLV_TYPE_FORCE;
@@ -332,7 +331,7 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 		return;
 	}
 
-	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(strBehaviour, m_eParamType, &m_fStrict);
+	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict);
 }
 
 bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption, std::string& strParam)
