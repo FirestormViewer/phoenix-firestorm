@@ -50,7 +50,7 @@ static U32 sShakeState;
 
 LLFloaterRegionRestarting::LLFloaterRegionRestarting(const LLSD& key) :
 	LLFloater(key),
-	LLEventTimer(1)
+	LLEventTimer(1.f)
 {
 	mName = (std::string)key["NAME"];
 	sSeconds = (LLSD::Integer)key["SECONDS"];
@@ -108,10 +108,10 @@ void LLFloaterRegionRestarting::refresh()
 	args["[SECONDS]"] = llformat("%d", sSeconds);
 	getChild<LLTextBox>("restart_seconds")->setValue(getString("RestartSeconds", args));
 
-	sSeconds = sSeconds - 1;
-	if(sSeconds < 0.0)
+	sSeconds = sSeconds - 1.f;
+	if(sSeconds < 0.0f)
 	{
-		sSeconds = 0;
+		sSeconds = 0.f;
 	}
 }
 
@@ -177,7 +177,8 @@ void LLFloaterRegionRestarting::draw()
 	LLFloater::draw();
 
 	// <FS:PP> FIRE-12900, FIRE-12901: Make screen shaking optional
-	if (gSavedSettings.getBOOL("FSNoScreenShakeOnRegionRestart"))
+	static LLCachedControl<bool> fsNoScreenShakeOnRegionRestart(gSavedSettings, "FSNoScreenShakeOnRegionRestart");
+	if (fsNoScreenShakeOnRegionRestart)
 	{
 		return;
 	}
@@ -185,8 +186,8 @@ void LLFloaterRegionRestarting::draw()
 
 	double SHAKE_INTERVAL = 0.025;
 	double SHAKE_TOTAL_DURATION = 1.8; // the length of the default alert tone for this
-	const F32 SHAKE_INITIAL_MAGNITUDE = 1.5;
-	const F32 SHAKE_HORIZONTAL_BIAS = 0.25;
+	const F32 SHAKE_INITIAL_MAGNITUDE = 1.5f;
+	const F32 SHAKE_HORIZONTAL_BIAS = 0.25f;
 	F32 time_shaking;
 	
 	if(SHAKE_START == sShakeState)
@@ -225,7 +226,7 @@ void LLFloaterRegionRestarting::draw()
 				if(SHAKE_TOTAL_DURATION <= time_shaking)
 				{
 					sShakeState = SHAKE_DONE;
-					mShakeMagnitude = 0.0;
+					mShakeMagnitude = 0.0f;
 				}
 				else
 				{
