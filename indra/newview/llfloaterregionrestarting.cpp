@@ -108,10 +108,10 @@ void LLFloaterRegionRestarting::refresh()
 	args["[SECONDS]"] = llformat("%d", sSeconds);
 	getChild<LLTextBox>("restart_seconds")->setValue(getString("RestartSeconds", args));
 
-	sSeconds = sSeconds - 1.f;
-	if(sSeconds < 0.0f)
+	sSeconds = sSeconds - 1;
+	if(sSeconds < 0)
 	{
-		sSeconds = 0.f;
+		sSeconds = 0;
 	}
 }
 
