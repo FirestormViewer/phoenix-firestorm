@@ -74,20 +74,26 @@ std::string rlvGetItemType(const LLViewerInventoryItem* pItem)
 	return "Unknown";
 }
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0g
 std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt = true)
 {
 	const LLViewerObject* pObj = gObjectList.findObject(idObj);
+	if ( (pObj) && (pObj->isAvatar()) )
+	{
+		LLAvatarName avName;
+		if (LLAvatarNameCache::get(pObj->getID(), &avName))
+			return avName.getCompleteName();
+		return ((LLVOAvatar*)pObj)->getFullname();
+	}
+
 	const LLViewerObject* pObjRoot = (pObj) ? pObj->getRootEdit() : NULL;
 	const LLViewerInventoryItem* pItem = ((pObjRoot) && (pObjRoot->isAttachment())) ? gInventory.getItem(pObjRoot->getAttachmentItemID()) : NULL;
 
-	std::string strItemName = (pItem) ? pItem->getName() : idObj.asString();
+	const std::string strItemName = (pItem) ? pItem->getName() : idObj.asString();
 	if ( (!fIncludeAttachPt) || (!pObj) || (!pObj->isAttachment()) || (!isAgentAvatarValid()) )
 		return strItemName;
 
-	const LLViewerJointAttachment* pAttachPt = 
-		get_if_there(gAgentAvatarp->mAttachmentPoints, RlvAttachPtLookup::getAttachPointIndex(pObjRoot), (LLViewerJointAttachment*)NULL);
-	std::string strAttachPtName = (pAttachPt) ? pAttachPt->getName() : std::string("Unknown");
+	const LLViewerJointAttachment* pAttachPt = get_if_there(gAgentAvatarp->mAttachmentPoints, RlvAttachPtLookup::getAttachPointIndex(pObjRoot), (LLViewerJointAttachment*)NULL);
+	const std::string strAttachPtName = (pAttachPt) ? pAttachPt->getName() : std::string("Unknown");
 	return llformat("%s (%s%s)", strItemName.c_str(), strAttachPtName.c_str(), (pObj == pObjRoot) ? "" : ", child");
 }
 
