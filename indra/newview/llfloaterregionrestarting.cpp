@@ -43,6 +43,7 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 // [/SL:KB]
+#include "llwindow.h"
 
 static S32 sSeconds;
 static U32 sShakeState;
@@ -120,6 +121,12 @@ void LLFloaterRegionRestarting::onOpen(const LLSD& key)
 	LLFloater::onOpen(key);
 
 	refreshLandmarkList();
+
+	LLWindow* viewer_window = gViewerWindow->getWindow();
+	if (viewer_window)
+	{
+		viewer_window->flashIcon(5.f);
+	}
 }
 
 void LLFloaterRegionRestarting::onTeleportClicked()
