@@ -191,6 +191,8 @@
     </panel>
     <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Podświetlanie granic wybranej w danej chwili działki" name="RenderParcelSelection" />
+        <check_box label="Pokazuj granice do maksymalnej wysokości, na jakiej można budować" name="FSRenderParcelSelectionToMaxBuildHeight" />
         <check_box label="Ogranicz dystans selekcji prim (metry):" name="LimitSelectDistance" width="237" />
         <spinner name="MaxSelectDistance" tool_tip="Maksymalna dozwolona odległość zaznaczania obiektów (metry od awatara) [Domyślnie: 128.000]" />
         <check_box label="Ogranicz dystans przeciągania (metry):" name="LimitDragDistance" width="237" />

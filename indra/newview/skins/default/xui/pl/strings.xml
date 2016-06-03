@@ -1705,6 +1705,7 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="Snapshots" value=" Zdjęcia,"/>
 	<string name="No Filters" value="Nie "/>
 	<string name="Since Logoff" value=" - od wylogowania"/>
+	<string name="Transfer Only" value=" - tylko transferowalne" />
 	<string name="InvFolder My Inventory">
 		Moja Szafa
 	</string>

@@ -14,6 +14,7 @@
 	<check_box label="Fotos" name="check_snapshot"/>
 	<button label="Alle" label_selected="Alle" name="All"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
+	<check_box label="Nur Transferierbar" name="check_transferable"/>
 	<check_box label="Ordner immer anz." name="check_show_empty"/>
 	<check_box label="Seit Abmeldung" name="check_since_logoff"/>
 	<text name="- OR -">

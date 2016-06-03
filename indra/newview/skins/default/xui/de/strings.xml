@@ -1794,6 +1794,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Snapshots" value=" Fotos,"/>
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
+	<string name="Transfer Only" value=" - Nur Transfer"/>
 	<string name="InvFolder My Inventory">
 		Inventar
 	</string>

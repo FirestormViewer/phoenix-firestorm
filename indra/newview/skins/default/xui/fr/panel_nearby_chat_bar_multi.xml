@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel>
-	<layout_stack name="nearby_chat_bar_panels">
-		<layout_panel name="panel_nearby_chat_bar"><text_editor label="Appuyer sur Entrée pour parler, Ctrl+Entrée pour crier" name="chat_editor"/></layout_panel>
-		<layout_panel name="panel_nearby_chat_toggle"><button name="show_nearby_chat" tool_tip="Affiche/masque le chat local"/></layout_panel>
-	</layout_stack>
-</panel>

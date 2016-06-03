@@ -85,11 +85,6 @@ public:
 	static  const char * tmpdir();
 };
 
-// <FS:CR> Clang support
-#if LL_CLANG
-	using llstdio_filebuf::xsputn;
-#endif
-// </FS:CR>
 #if LL_WINDOWS
 /**
  *  @brief  Controlling input for files.

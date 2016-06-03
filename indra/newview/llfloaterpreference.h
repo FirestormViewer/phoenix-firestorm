@@ -233,6 +233,7 @@ public:
 	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
 	void updateMaxNonImpostors();
 	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
+	void updateMaxNonImpostorsLabel(const LLSD& newvalue);
 	// </FS:Ansariel>
 
 	void refreshUI();

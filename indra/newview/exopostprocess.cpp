@@ -130,7 +130,7 @@ void exoPostProcess::ExodusRenderPost(LLRenderTarget* src, LLRenderTarget* dst, 
 void exoPostProcess::ExodusRenderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
 	dst->bindTarget();
-	LLGLSLShader *shader = &gVignettePost;
+	LLGLSLShader *shader = &gPostVignetteProgram;
 	shader->bind();
 
 	mExoPostBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX);

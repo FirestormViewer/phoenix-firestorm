@@ -59,6 +59,7 @@ public:
         FILTERTYPE_MARKETPLACE_LISTING_FOLDER = 0x1 << 9,	// pass iff folder is a listing folder
         FILTERTYPE_NO_MARKETPLACE_ITEMS = 0x1 << 10,         // pass iff folder is not under the marketplace
 		FILTERTYPE_WORN = 0x1 << 11,		// <FS> search by wearable type
+		FILTERTYPE_TRANSFERABLE = 0x1 << 12 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	};
 
 	enum EFilterDateDirection
@@ -122,6 +123,7 @@ public:
 			Optional<U32>				date_search_direction;
 			Optional<EFolderShow>		show_folder_state;
 			Optional<PermissionMask>	permissions;
+			Optional<bool>				transferable; // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 			Params()
 			:	types("filter_types", FILTERTYPE_OBJECT),
@@ -134,7 +136,8 @@ public:
 				hours_ago("hours_ago", 0),
 				date_search_direction("date_search_direction", FILTERDATEDIRECTION_NEWER),
 				show_folder_state("show_folder_state", SHOW_NON_EMPTY_FOLDERS),
-				permissions("permissions", PERM_NONE)
+				permissions("permissions", PERM_NONE),
+				transferable("transferable", false) // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 			{}
 		};
 
@@ -227,8 +230,15 @@ public:
 	// sets params for Link-only search and backs up search settings for future restoration
 	void				setFindAllLinksMode(const std::string &search_name, const LLUUID& search_id);
 
-	void 				setFilterWorn(BOOL sl);
+	// <FS>
+	void 				setFilterWorn(BOOL worn);
 	BOOL 				getFilterWorn() const { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
+	// </FS>
+
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	void 				setFilterTransferable(BOOL transferable);
+	BOOL 				getFilterTransferable() const { return mFilterOps.mFilterTypes & FILTERTYPE_TRANSFERABLE; }
+	// </FS:Ansariel>
 
 	// +-------------------------------------------------------------------+
 	// + Execution And Results
