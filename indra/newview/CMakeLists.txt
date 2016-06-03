@@ -2339,6 +2339,7 @@ if (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
+    media_plugin_libvlc
     llcommon
     )
 else (NOT ENABLE_MEDIA_PLUGINS)

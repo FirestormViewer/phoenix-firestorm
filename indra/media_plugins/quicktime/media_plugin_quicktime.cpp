@@ -311,7 +311,9 @@ private:
 			MatrixRecord transform;
 			SetIdentityMatrix( &transform );	// transforms are additive so start from identify matrix
 			double scaleX = (double) mWidth / mNaturalWidth;
-			double scaleY = -1.0 * (double) mHeight / mNaturalHeight;
+
+            // 2016-05-31 CP remove local flip (via -1.0) since texture coods for media on a prim are now flipped for VLC/CEF
+			double scaleY = 1.0 * (double) mHeight / mNaturalHeight;
 			double centerX = mWidth / 2.0;
 			double centerY = mHeight / 2.0;
 			ScaleMatrix( &transform, X2Fix( scaleX ), X2Fix( scaleY ), X2Fix( centerX ), X2Fix( centerY ) );
@@ -919,7 +921,10 @@ void MediaPluginQuickTime::receiveMessage(const char *message_string)
 				#endif
 				message.setValueS32("depth", mDepth);
 				message.setValueU32("internalformat", GL_RGB);
-				message.setValueBoolean("coords_opengl", true);	// true == use OpenGL-style coordinates, false == (0,0) is upper left.
+
+                // note this apparently only has an effect when media is opened in 2D browser. 
+                // see https://jira.secondlife.com/browse/BUG-18252 - media flipped in 2D so flipping it back.
+				message.setValueBoolean("coords_opengl", false);	// true == use OpenGL-style coordinates, false == (0,0) is upper left.
 				message.setValueBoolean("allow_downsample", true);
 				sendMessage(message);
 			}

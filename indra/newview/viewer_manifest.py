@@ -1344,7 +1344,17 @@ class LinuxManifest(ViewerManifest):
         if self.prefix(src="", dst="bin/llplugin"):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path( "../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+            self.path("../media_plugins/libvlc/libmedia_plugin_libvlc.so", "libmedia_plugin_libvlc.so")
             self.end_prefix("bin/llplugin")
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
+            self.end_prefix()
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
+            self.end_prefix()
 
         # CEF files 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
