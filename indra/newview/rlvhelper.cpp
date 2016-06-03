@@ -62,7 +62,7 @@ static RlvBehaviourModifier_CompMax s_RlvBehaviourModifier_CompMax;
  *   Definition: RlvBehaviourGenericProcessor<RLV_OPTION_TYPE>("commandname", RLV_BHVR_COMMANDNAME)
  *   Implement : nothing! (it automagically works)
  * For simple behaviours that only require recordkeeping and only run code when they toggle:
- *   Definition: RlvBehaviourToggleProcessor<RLV_BHVR_COMMANDNAME, RLV_OPTION_TYPE>("commandname"))
+ *   Definition: RlvBehaviourGenericToggleProcessor<RLV_BHVR_COMMANDNAME, RLV_OPTION_TYPE>("commandname"))
  *   Implement : void RlvBehaviourToggleHandler<RLV_BHVR_COMMANDNAME>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
  * For behaviours that require manual processing:
  *   Definition: RlvBehaviourProcessor<RLV_BHVR_COMMANDNAME>("commandname"))
@@ -99,7 +99,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("detachallthis",			RLV_BHVR_DETACHTHIS,			RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
 	addEntry(new RlvBehaviourInfo("detachthis_except",		RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_NODE));
 	addEntry(new RlvBehaviourInfo("detachallthis_except",	RLV_BHVR_DETACHTHISEXCEPT,		RLV_TYPE_ADDREM, RlvBehaviourInfo::FORCEWEAR_SUBTREE));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_EDIT, RLV_OPTION_NONE_OR_EXCEPTION>("edit"));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_EDIT, RLV_OPTION_NONE_OR_EXCEPTION>("edit"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("editobj", RLV_BHVR_EDITOBJ));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("emote", RLV_BHVR_EMOTE));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("fartouch", RLV_BHVR_FARTOUCH));
@@ -122,11 +122,11 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SENDCHANNEL, RlvBehaviourSendChannelHandler>("sendchannel", RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SENDCHANNELEXCEPT, RlvBehaviourSendChannelHandler>("sendchannel_except", RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendchat", RLV_BHVR_SENDCHAT));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SENDIM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RlvBehaviourInfo::BHVR_STRICT));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SENDIM, RLV_OPTION_NONE_OR_EXCEPTION>("sendim", RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_EXCEPTION>("sendimto", RLV_BHVR_SENDIMTO, RlvBehaviourInfo::BHVR_STRICT));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("sendgesture", RLV_BHVR_SENDGESTURE, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETDEBUG, RLV_OPTION_NONE>("setdebug"));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETENV, RLV_OPTION_NONE>("setenv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("setgroup", RLV_BHVR_SETGROUP));
 	addEntry(new RlvBehaviourInfo("sharedunwear",			RLV_BHVR_SHAREDUNWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("sharedwear",				RLV_BHVR_SHAREDWEAR,			RLV_TYPE_ADDREM, RlvBehaviourInfo::BHVR_EXTENDED));
@@ -134,7 +134,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextall", RLV_BHVR_SHOWHOVERTEXTALL));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertexthud", RLV_BHVR_SHOWHOVERTEXTHUD));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showhovertextworld", RLV_BHVR_SHOWHOVERTEXTWORLD));
-	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SHOWINV, RLV_OPTION_NONE>("showinv"));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SHOWINV, RLV_OPTION_NONE>("showinv"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showloc", RLV_BHVR_SHOWLOC));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("showminimap", RLV_BHVR_SHOWMINIMAP));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("shownames", RLV_BHVR_SHOWNAMES));
@@ -619,14 +619,6 @@ bool RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(const std::str
 			genericOption = strOption;															// ... or it might just be a string
 	}
 	return true;
-}
-
-template<typename T>
-T RlvCommandOptionHelper::parseOption(const std::string& strOption)
-{
-	T value;
-	parseOption<T>(strOption, value);
-	return value;
 }
 
 bool RlvCommandOptionHelper::parseStringList(const std::string& strOption, std::vector<std::string>& optionList, const std::string& strSeparator)

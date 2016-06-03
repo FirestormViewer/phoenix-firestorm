@@ -149,13 +149,14 @@ template<ERlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor 
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
 //
 
-template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
+template <ERlvBehaviour eBhvr, typename handlerImpl = RlvBehaviourHandler<eBhvr>, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
 class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
 {
 public:
 	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &toggleHandlerImpl::onCommandToggle); }
+	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &handlerImpl::onCommand, &toggleHandlerImpl::onCommandToggle); }
 };
+template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>> using RlvBehaviourGenericToggleProcessor = RlvBehaviourToggleProcessor<eBhvr, RlvBehaviourGenericHandler<optionType>, toggleHandlerImpl>;
 
 // ============================================================================
 // RlvBehaviourModifier - stores behaviour modifiers in an - optionally - sorted list and returns the first element (or default value if there are no modifiers)
@@ -413,7 +414,12 @@ class RlvCommandOptionHelper
 public:
 	// NOTE: this function is destructive (reference value may still change on parsing failure)
 	template<typename T> static bool parseOption(const std::string& strOption, T& valueOption);
-	template<typename T> static T parseOption(const std::string& strOption);
+	template<typename T> static T parseOption(const std::string& strOption)
+	{
+		T value;
+		parseOption<T>(strOption, value);
+		return value;
+	}
 	static bool parseStringList(const std::string& strOption, std::vector<std::string>& optionList, const std::string& strSeparator = std::string(RLV_OPTION_SEPARATOR));
 };
 
