@@ -25,6 +25,7 @@
 			<pie_slice label="Anrufen" name="Call"/>
 			<pie_slice label="Hineinzoomen" name="Zoom In"/>
 			<pie_slice label="Tex Refresh" name="Texture Refresh"/>
+			<pie_slice label="Skelett zurücks." name="Reset Skeleton"/>
 			<pie_slice label="XML ausg." name="Dump XML"/>
 			<pie_menu name="RenderMenu" label="Anzeigen &gt;">
 				<pie_slice name="RenderNormally" label="Normal"/>

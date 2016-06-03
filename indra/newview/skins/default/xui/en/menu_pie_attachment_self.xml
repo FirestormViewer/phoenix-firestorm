@@ -154,8 +154,12 @@
            <pie_slice.on_enable
                function="Edit.EnableEditShape" />
         </pie_slice>
-
-        <pie_separator />
+		<pie_slice
+			label="Reset Skeleton"
+			name="Reset Skeleton">
+			<pie_slice.on_click
+				function="Avatar.ResetSkeleton" />
+		</pie_slice>
         <pie_separator />
         <pie_separator />
 

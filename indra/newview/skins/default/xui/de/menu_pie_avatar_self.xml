@@ -30,6 +30,7 @@
 	<pie_slice label="Gesten..." name="Gestures"/>
 	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
 		<pie_slice label="Form bearb." name="Edit My Shape"/>
+		<pie_slice label="Skelett zurücks." name="Reset Skeleton"/>
 		<pie_slice label="Tex Refresh" name="Texture Refresh"/>
 		<pie_slice label="Outfit bearb." name="Edit My Outfit"/>
 		<pie_slice label="XML ausg." name="Dump XML"/>

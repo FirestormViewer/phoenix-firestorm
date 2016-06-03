@@ -167,7 +167,12 @@
                 <pie_slice.on_click
                     function="Avatar.TexRefresh" />
             </pie_slice>
-			<pie_separator/>
+			<pie_slice
+				label="Reset Skeleton"
+				name="Reset Skeleton">
+				<pie_slice.on_click
+					function="Avatar.ResetSkeleton" />
+			</pie_slice>
 			<pie_slice
 				label="Dump XML"
 				name="Dump XML">
