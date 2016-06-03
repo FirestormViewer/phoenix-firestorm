@@ -23,10 +23,6 @@
         label="報告..."
         name="abuse"/>
     <pie_menu label="追加 &gt;" name="add_avatar">
-        <pie_separator/>
-        <pie_separator/>
-        <pie_separator/>
-        <pie_separator/>
         <pie_slice label="フレンドに追加..." name="Add Friend"/>
         <pie_slice label="セットに追加" name="Add to set"/>
     </pie_menu>
@@ -76,10 +72,10 @@
 				<pie_slice
 					label="メッシュ"
 					name="Collada" />
+				<pie_slice
+					label="XMLをダンプ"
+					name="Dump XML" />
 			</pie_menu>
-			<pie_slice
-				label="XMLをダンプ"
-				name="Dump XML" />
         </pie_menu>
         <pie_slice
             label="検査"
@@ -87,12 +83,6 @@
         <pie_menu
             label="表示しない &gt;"
             name="DerenderMenu">
-            			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
-			<pie_separator />
 			<pie_slice
 				label="ブラックリスト"
 				name="DerenderPermanent" />

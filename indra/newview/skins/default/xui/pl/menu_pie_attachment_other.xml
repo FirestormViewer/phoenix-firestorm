@@ -26,8 +26,8 @@
             <pie_menu name="ExportMenu" label="Zapisz jako &gt;">
                 <pie_slice label="Kopia zapasowa" name="Backup"/>
                 <pie_slice label="Collada" name="Collada"/>
+                <pie_slice label="Zrzuć XML" name="Dump XML"/>
             </pie_menu>
-            <pie_slice label="Zrzuć XML" name="Dump XML"/>
             <pie_menu name="RenderMenu" label="Renderuj &gt;">
                 <pie_slice name="RenderNormally" label="Normalnie" />
                 <pie_slice name="DoNotRender" label="Nigdy" />
