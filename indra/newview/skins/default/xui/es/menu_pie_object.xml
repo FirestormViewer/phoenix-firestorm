@@ -12,7 +12,7 @@
 		<pie_slice label="Eliminar" name="Delete"/>
 		<pie_slice label="Vestir" name="Wear"/>
 		<pie_slice label="Tomar una copia" name="Take Copy"/>
-		<pie_menu label="Anexar HUD >" name="Pie Object Attach HUD"/>
+		<pie_menu label="Anexar HUD &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Anexar &gt;" name="Pie Object Attach"/>
 		<pie_slice label="Devolver" name="Return..."/>
 		<pie_menu label="Más &gt;" name="Object Pie More 2">

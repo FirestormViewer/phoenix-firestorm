@@ -53,7 +53,7 @@ bool AISAPI::isAvailable()
     if (gAgent.getRegion() && gSavedSettings.getBOOL("FSUseAis3Api"))
     // </FS:Ansariel>
     {
-        //return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
+        return gAgent.getRegion()->isCapabilityAvailable(INVENTORY_CAP_NAME);
     }
     return false;
 }

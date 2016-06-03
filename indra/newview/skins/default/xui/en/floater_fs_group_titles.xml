@@ -44,39 +44,30 @@
 		 name="name_sort_column"
 		 width="-1"/>
 	</scroll_list>
-	
 	<button
-		image_overlay="Refresh_Off"
-		tool_tip="Refresh list of available group titles"
-      	name="btnRefresh"
-      	font="SansSerif"
-      	mouse_opaque="true"
-      	height="22"
-      	width="25"
-      	left="5"
-      	follows="left|bottom"/>
-	
+	 image_overlay="Refresh_Off"
+	 tool_tip="Refresh list of available group titles"
+	 name="btnRefresh"
+	 height="22"
+	 width="25"
+	 left="5"
+	 follows="left|bottom"/>
 	<button
-      	name="btnInfo"
-      	label="Info"
-		tool_tip="Show info about group of selected title"
-      	font="SansSerif"
-      	mouse_opaque="true"
-      	height="22"
-      	width="100"
-      	right="-110"
-		top_delta="0"
-      	follows="right|bottom"/>
-
+	 name="btnInfo"
+	 label="Info"
+	 tool_tip="Show info about group of selected title"
+	 height="22"
+	 width="100"
+	 right="-110"
+	 top_delta="0"
+	 follows="right|bottom"/>
 	<button
-      	name="btnActivate"
-      	label="Activate"
-		tool_tip="Activate selected group title"
-      	font="SansSerif"
-      	mouse_opaque="true"
-      	height="22"
-      	width="100"
-      	right="-4"
-		top_delta="0"
-      	follows="right|bottom"/>
+	 name="btnActivate"
+	 label="Activate"
+	 tool_tip="Activate selected group title"
+	 height="22"
+	 width="100"
+	 right="-4"
+	 top_delta="0"
+	 follows="right|bottom"/>
 </floater>

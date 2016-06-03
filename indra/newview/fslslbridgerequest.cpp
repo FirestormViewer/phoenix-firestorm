@@ -44,12 +44,12 @@ void FSLSLBridgeRequest_Success( LLSD const &aData )
 }
 
 //If we get back an error (not found, etc...), handle it here
-void FSLSLBridgeRequestResponder_Failure( LLSD const &aData  )
+void FSLSLBridgeRequest_Failure( LLSD const &aData  )
 {
 	LL_WARNS() << "FSLSLBridgeRequest::error(" << ll_pretty_print_sd( aData ) << ")" << LL_ENDL;
 }
 
-void FSLSLBridgeRequestRadarPosResponder_Success( LLSD const &aData )
+void FSLSLBridgeRequestRadarPos_Success( LLSD const &aData )
 {
 	FSRadar* radar = FSRadar::getInstance();
 	LL_DEBUGS() << ll_pretty_print_sd( aData ) << LL_ENDL;

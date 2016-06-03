@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu
-    layout="topleft"
     name="Self Pie">
     <pie_slice
         label="Profile"
-        layout="topleft"
         name="Profile...">
         <pie_slice.on_click
             function="ShowAgentProfile"
@@ -12,24 +10,20 @@
     </pie_slice>
     <pie_slice
         label="Groups"
-        layout="topleft"
         name="Groups...">
         <pie_slice.on_click
             function="SideTray.PanelPeopleTab"
             parameter="groups_panel" />
     </pie_slice>
     <pie_menu
-        label="Take Off >"
-        layout="topleft"
+        label="Take Off &gt;"
         name="Take Off &gt;">
         <pie_menu
-            label="Clothes >"
-            layout="topleft"
+            label="Clothes &gt;"
             name="Clothes &gt;">
             <pie_slice
                 enabled="false"
                 label="Shirt"
-                layout="topleft"
                 name="Shirt">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -41,7 +35,6 @@
             <pie_slice
                 enabled="false"
                 label="Pants"
-                layout="topleft"
                 name="Pants">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -53,7 +46,6 @@
             <pie_slice
                 enabled="false"
                 label="Shoes"
-                layout="topleft"
                 name="Shoes">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -65,7 +57,6 @@
             <pie_slice
                 enabled="false"
                 label="Socks"
-                layout="topleft"
                 name="Socks">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -77,7 +68,6 @@
             <pie_slice
                 enabled="false"
                 label="Jacket"
-                layout="topleft"
                 name="Jacket">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -89,7 +79,6 @@
             <pie_slice
                 enabled="false"
                 label="Gloves"
-                layout="topleft"
                 name="Gloves">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -99,12 +88,11 @@
                     parameter="gloves" />
             </pie_slice>
             <pie_menu
-                label="More >"
+                label="More &gt;"
                 name="Clothes More">
                 <pie_slice
                     enabled="false"
                     label="Undershirt"
-                    layout="topleft"
                     name="Self Undershirt">
                     <pie_slice.on_click
                         function="Edit.TakeOff"
@@ -118,7 +106,6 @@
 
                 <pie_slice
                     label="All Clothes"
-                    layout="topleft"
                     name="All Clothes">
                     <pie_slice.on_click
                         function="Edit.TakeOff"
@@ -130,7 +117,6 @@
                 <pie_slice
                     enabled="false"
                     label="Underpants"
-                    layout="topleft"
                     name="Self Underpants">
                     <pie_slice.on_click
                         function="Edit.TakeOff"
@@ -143,7 +129,6 @@
                 <pie_slice
                     enabled="false"
                     label="Tattoo"
-                    layout="topleft"
                     name="Self Tattoo">
                     <pie_slice.on_click
                         function="Edit.TakeOff"
@@ -156,7 +141,6 @@
                 <pie_slice
 					enabled="false"
 					label="Physics"
-					layout="topleft"
 					name="Self Physics">
                     <pie_slice.on_click
 						function="Edit.TakeOff"
@@ -169,7 +153,6 @@
                 <pie_slice
                     enabled="false"
                     label="Alpha"
-                    layout="topleft"
                     name="Self Alpha">
                     <pie_slice.on_click
                         function="Edit.TakeOff"
@@ -183,7 +166,6 @@
             <pie_slice
                 enabled="false"
                 label="Skirt"
-                layout="topleft"
                 name="Skirt">
                 <pie_slice.on_click
                     function="Edit.TakeOff"
@@ -195,22 +177,19 @@
         </pie_menu>
 
         <pie_menu
-            label="HUD >"
-            layout="topleft"
+            label="HUD &gt;"
             name="Pie Object Detach HUD" />
 
         <pie_separator />
 
         <pie_menu
-            label="Detach >"
-            layout="topleft"
+            label="Detach &gt;"
             name="Pie Object Detach" />
 
         <pie_separator />
 
         <pie_slice
             label="Detach All"
-            layout="topleft"
             name="Detach All">
             <pie_slice.on_click
                 function="Self.RemoveAllAttachments"
@@ -257,11 +236,9 @@
 
     <pie_menu
         label="Appearance &gt;"
-        layout="topleft"
         name="Appearance &gt;">
 
         <pie_slice label="Edit Shape"
-           layout="topleft"
            name="Edit My Shape">
            <pie_slice.on_click
                function="EditShape" />
@@ -282,7 +259,6 @@
         <pie_separator />
 
         <pie_slice label="Edit Outfit"
-           layout="topleft"
            name="Edit My Outfit">
            <pie_slice.on_click
                function="EditOutfit" />

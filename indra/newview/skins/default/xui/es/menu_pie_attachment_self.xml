@@ -20,7 +20,7 @@
 	<pie_slice label="Levantarme" name="Stand Up"/>
 	<pie_slice label="Quitar" name="Detach"/>
 	<pie_slice label="Gestos..." name="Gestures"/>
-	<pie_menu label="Apariencia >" name="Appearance &gt;">
+	<pie_menu label="Apariencia &gt;" name="Appearance &gt;">
 		<pie_slice label="Anatomía" name="Edit My Shape"/>
 		<pie_slice label="Vestuario" name="Edit My Outfit"/>
 	</pie_menu>

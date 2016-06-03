@@ -281,6 +281,7 @@ extern LLGLSLShader			gWLCloudProgram;
 // Post Process Shaders
 extern LLGLSLShader			gPostColorFilterProgram;
 extern LLGLSLShader			gPostNightVisionProgram;
+extern LLGLSLShader			gPostVignetteProgram;	// <FS:CR> Import Vignette from Exodus
 
 
 // Deferred rendering shaders
@@ -336,7 +337,6 @@ extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
-extern LLGLSLShader         gVignettePost;	// <FS:CR> Import Vignette from Exodus
 
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
