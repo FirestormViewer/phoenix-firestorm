@@ -26,7 +26,7 @@
         label="支払い" 
 		name="Pay..."/>
     <pie_menu
-        label="詳細 >"
+        label="詳細 &gt;"
         name="Object Pie More 1">
     <pie_slice
         label="削除"
@@ -38,16 +38,16 @@
         label="コピーを取る"
         name="Take Copy"/>
     <pie_menu
-        label="HUD装着先 >"
+        label="HUD装着先 &gt;"
         name="Pie Object Attach HUD" />
     <pie_menu
-        label="装着先 >"
+        label="装着先 &gt;"
         name="Pie Object Attach" />
     <pie_slice
         label="返却" 
 		name="Return..."/>
     <pie_menu
-        label="詳細 >"
+        label="詳細 &gt;"
         name="Object Pie More 2">
         <pie_slice
             label="テクスチャ更新"
@@ -75,7 +75,7 @@
                 label="メッシュ"
                 name="Collada" />
         </pie_menu>
-        <pie_menu label="パスファインディング >" name="Pathfinding">
+        <pie_menu label="パスファインディング &gt;" name="Pathfinding">
             <pie_slice label="リンクセットで表示" name="show_in_linksets" />
             <pie_slice label="キャラクターで表示" name="show_in_characters" />
             <pie_separator name="autohide_end_crash_protection" />

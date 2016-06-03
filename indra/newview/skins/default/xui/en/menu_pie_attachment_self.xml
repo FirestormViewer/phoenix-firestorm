@@ -143,11 +143,9 @@
 
     <pie_menu
         label="Appearance &gt;"
-        layout="topleft"
         name="Appearance &gt;">
 
         <pie_slice label="Edit Shape"
-           layout="topleft"
            name="Edit My Shape">
            <pie_slice.on_click
                function="EditShape" />
@@ -160,7 +158,6 @@
         <pie_separator />
 
         <pie_slice label="Edit Outfit"
-           layout="topleft"
            name="Edit My Outfit">
            <pie_slice.on_click
                function="EditOutfit" />

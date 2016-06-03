@@ -31,7 +31,7 @@
         name="Pay..."/>
     <pie_menu
         name="Avatar Pie More 1"
-        label="詳細 >">
+        label="詳細 &gt;">
         <pie_slice
             label="動けなくする..."
             name="Freeze..."/>
@@ -46,7 +46,7 @@
             name="Eject..."/>
         <pie_menu
             name="Avatar Pie More 2"
-            label="詳細 >">
+            label="詳細 &gt;">
             <!-- ## Zi: Is this the right thing to use for avatar textures? -->
             <pie_slice
                 label="テクスチャ"
