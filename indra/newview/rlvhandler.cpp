@@ -121,7 +121,7 @@ RlvHandler::RlvHandler() : m_fCanCancelTp(true), m_posSitSource(), m_pGCTimer(NU
 {
 	gAgent.addListener(this, "new group");
 
-	// Array auto-initialization to 0 is non-standard? (Compiler warning in VC-8.0)
+	// Array auto-initialization to 0 is still not supported in VS2013
 	memset(m_Behaviours, 0, sizeof(S16) * RLV_BHVR_COUNT);
 }
 
@@ -1360,6 +1360,45 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(c
 		return eRet;
 	}
 	return RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(rlvCmd, fRefCount);
+}
+
+// Handles: @bhvr:<modifier>=n|y
+ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
+	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
+	RlvBehaviourModifierValue modValue;
+	if ( (!rlvCmd.hasOption()) || (!pBhvrModifier) || (!pBhvrModifier->convertOptionValue(rlvCmd.getOption(), modValue)) )
+		return RLV_RET_FAILED_OPTION;
+
+	if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		pBhvrModifier->addValue(modValue, rlvCmd.getObjectID());
+	else
+		pBhvrModifier->removeValue(modValue, rlvCmd.getObjectID());
+
+	fRefCount = true;
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @bhvr[:<modifier>]=n|y
+ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	// If there is an option then it should specify a valid modifier (and reference count)
+	if (rlvCmd.hasOption())
+		return RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(rlvCmd, fRefCount);
+
+	// Add the default option on an empty modifier if needed
+	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
+	if ( (pBhvrModifier) && (pBhvrModifier->getAddDefault()) )
+	{
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+		else
+			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+	}
+
+	fRefCount = true;
+	return RLV_RET_SUCCESS;
 }
 
 // Handles: @addattach[:<attachpt>]=n|y and @remattach[:<attachpt>]=n|y

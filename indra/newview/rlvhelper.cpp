@@ -32,8 +32,51 @@
 // RlvBehaviourDictionary
 //
 
+static RlvBehaviourModifier_CompMin s_RlvBehaviourModifier_CompMin;
+static RlvBehaviourModifier_CompMax s_RlvBehaviourModifier_CompMax;
+
+/*
+ * Processing of RLVa commands used to be a big switch/case loop with one function for each command type(addrem, reply
+ * and force). This is slowly being replaced with templated command handling which might be more confusing intially
+ * (also due to my poor naming schemes) but is actually far simpler and less error-prone than the old way.
+ *
+ * In the general case you just add a definition for the command below and then write the function body in rlvhandler.cpp
+ * and you're done! Told you this was easy.
+ *
+ * Reply command
+ * =============
+ * Definition: RlvReplyProcessor<RLV_BHVR_COMMANDNAME>("commandname"[, <options>]));
+ * Implement : ERlvCmdRet RlvReplyHandler<RLV_BHVR_COMMANDNAME>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+ *
+ * Force command
+ * =============
+ * Definition: new RlvForceProcessor<RLV_BHVR_COMMANDNAME>("commandname"[, <options>]));
+ * Implement : ERlvCmdRet RlvForceProcessor<RLV_BHVR_COMMANDNAME>::onCommand(const RlvCommand& rlvCmd)
+ *
+ * Behaviours
+ * ==========
+ * Behaviours come in many forms but the added complexity is only in the variety of choices. The implementation is as
+ * easy as reply or force commands.
+ *
+ * For simple behaviours that only require recordkeeping and don't run code when set/unset (see ERlvBehaviourOptionType):
+ *   Definition: RlvBehaviourGenericProcessor<RLV_OPTION_TYPE>("commandname", RLV_BHVR_COMMANDNAME)
+ *   Implement : nothing! (it automagically works)
+ * For simple behaviours that only require recordkeeping and only run code when they toggle:
+ *   Definition: RlvBehaviourToggleProcessor<RLV_BHVR_COMMANDNAME, RLV_OPTION_TYPE>("commandname"))
+ *   Implement : void RlvBehaviourToggleHandler<RLV_BHVR_COMMANDNAME>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+ * For behaviours that require manual processing:
+ *   Definition: RlvBehaviourProcessor<RLV_BHVR_COMMANDNAME>("commandname"))
+ *   Implement : ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_COMMANDNAME>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+ * For behaviours that run code when their modifier changes:
+ *   Definition: addModifier(RLV_BHVR_COMMANDNAME, RLV_MODIFIER_COMMANDNAME, new RlvBehaviourModifierHandler<RLV_MODIFIER_COMMANDNAME>(<default>, <auto-add>, <comparator>));
+ *   Implement : void RlvBehaviourModifierHandler::onValueChanged()
+ *
+ */
 RlvBehaviourDictionary::RlvBehaviourDictionary()
 {
+	// Array auto-initialization to 0 is still not supported in VS2013
+	memset(m_BehaviourModifiers, 0, sizeof(RlvBehaviourModifier*) * RLV_MODIFIER_COUNT);
+
 	//
 	// Restrictions
 	//
@@ -221,6 +264,12 @@ RlvBehaviourDictionary::~RlvBehaviourDictionary()
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 		delete pBhvrInfo;
 	m_BhvrInfoList.clear();
+
+	for (int idxBhvrMod = 0; idxBhvrMod < RLV_MODIFIER_COUNT; idxBhvrMod++)
+	{
+		delete m_BehaviourModifiers[idxBhvrMod];
+		m_BehaviourModifiers[idxBhvrMod] = nullptr;
+	}
 }
 
 void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
@@ -241,6 +290,15 @@ void RlvBehaviourDictionary::addEntry(const RlvBehaviourInfo* pEntry)
 #endif // LL_RELEASE_FOR_DOWNLOAD
 
 	m_BhvrInfoList.push_back(pEntry);
+}
+
+void RlvBehaviourDictionary::addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry)
+{
+	if (eModifier < RLV_MODIFIER_COUNT)
+	{
+		m_BehaviourModifiers[eModifier] = pModifierEntry;
+		m_Bhvr2ModifierMap.insert(std::make_pair(eBhvr, eModifier));
+	}
 }
 
 const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict) const
@@ -289,12 +347,87 @@ bool RlvBehaviourDictionary::getHasStrict(ERlvBehaviour eBhvr) const
 	return false;
 }
 
+RlvBehaviourModifier* RlvBehaviourDictionary::getModifierFromBehaviour(ERlvBehaviour eBhvr) const
+{
+	rlv_bhvr2mod_map_t::const_iterator itMod = m_Bhvr2ModifierMap.find(eBhvr);
+	ERlvBehaviourModifier eBhvrMod = (m_Bhvr2ModifierMap.end() != itMod) ? itMod->second : RLV_MODIFIER_UNKNOWN;
+	return (eBhvrMod < RLV_MODIFIER_UNKNOWN) ? m_BehaviourModifiers[eBhvrMod] : nullptr;
+}
+
 void RlvBehaviourDictionary::toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBhvrFlag, bool fEnable)
 {
 	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair(strBhvr, (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
 	if (m_String2InfoMap.end() != itBhvr)
 	{
 		const_cast<RlvBehaviourInfo*>(itBhvr->second)->toggleBehaviourFlag(eBhvrFlag, fEnable);
+	}
+}
+
+// ============================================================================
+// RlvBehaviourModifier
+//
+
+RlvBehaviourModifier::RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
+	: m_DefaultValue(defaultValue), m_fAddDefaultOnEmpty(fAddDefaultOnEmpty), m_pValueComparator(pValueComparator)
+{
+}
+
+bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+{
+	if (modValue.which() == m_DefaultValue.which())
+	{
+		m_Values.insert((m_pValueComparator) ? std::lower_bound(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject), boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2)) : m_Values.end(), std::make_pair(modValue, idObject));
+		onValueChange();
+		m_ChangeSignal(getValue());
+		return true;
+	}
+	return false;
+}
+
+void RlvBehaviourModifier::removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject)
+{
+	if ( (modValue.which() == m_DefaultValue.which()) )
+	{
+		auto itValue = std::find(m_Values.begin(), m_Values.end(), std::make_pair(modValue, idObject));
+		if (m_Values.end() != itValue)
+		{
+			m_Values.erase(itValue);
+			onValueChange();
+			m_ChangeSignal(getValue());
+		}
+	}
+}
+
+void RlvBehaviourModifier::setPrimaryObject(const LLUUID& idPrimaryObject)
+{
+	if (m_pValueComparator)
+	{
+		m_pValueComparator->m_idPrimaryObject = idPrimaryObject;
+		m_Values.sort(boost::bind(&RlvBehaviourModifier_Comp::operator(), m_pValueComparator, _1, _2));
+		onValueChange();
+		m_ChangeSignal(getValue());
+	}
+}
+
+bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const
+{
+	try
+	{
+		if (typeid(float) == m_DefaultValue.type())
+		{
+			modValue = std::stof(optionValue.c_str());
+			return true;
+		}
+		else if (typeid(int) == m_DefaultValue.type())
+		{
+			modValue = std::stoi(optionValue.c_str());
+			return true;
+		}
+		return false;
+	}
+	catch (const std::invalid_argument&)
+	{
+		return false;
 	}
 }
 
