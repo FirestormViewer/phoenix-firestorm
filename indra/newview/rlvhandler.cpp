@@ -1251,6 +1251,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 			if (rlvCmd.isStrict())
 				addException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
 			m_Behaviours[eBhvr]++;
+			rlvCmd.markRefCounted();
 		}
 		else
 		{
@@ -1283,6 +1284,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 			if (rlvCmd.isStrict())
 				gRlvHandler.addException(rlvCmd.getObjectID(), RLV_BHVR_PERMISSIVE, eBhvr);
 			gRlvHandler.m_Behaviours[eBhvr]++;
+			rlvCmd.markRefCounted();
 		}
 		else
 		{

@@ -860,9 +860,19 @@ bool RlvObject::hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const
 
 bool RlvObject::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption, bool fStrictOnly) const
 {
-	for (rlv_command_list_t::const_iterator itCmd = m_Commands.begin(); itCmd != m_Commands.end(); ++itCmd)
-		if ( (itCmd->getBehaviourType() == eBehaviour) && (itCmd->getOption() == strOption) && ((!fStrictOnly) || (itCmd->isStrict())) )
+	for (const RlvCommand& rlvCmd : m_Commands)
+	{
+		// The specified behaviour is contained within the current object if:
+		//   - the (parsed) behaviour matches
+		//   - the option matches (or we're checking for an empty option and the command was reference counted)
+		//   - we're not matching on strict (or it is a strict command)
+		if ( (rlvCmd.getBehaviourType() == eBehaviour) &&
+			 ( (rlvCmd.getOption() == strOption) || ((strOption.empty()) && (rlvCmd.isRefCounted())) ) &&
+			 ( (!fStrictOnly) ||(rlvCmd.isStrict()) ) )
+		{
 			return true;
+		}
+	}
 	return false;
 }
 

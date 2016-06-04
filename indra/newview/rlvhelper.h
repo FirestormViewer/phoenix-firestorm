@@ -369,12 +369,14 @@ public:
 	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
+	bool               isRefCounted() const     { return m_fRefCounted; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
 	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_NO_PROCESSOR; }
 
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);
+	bool               markRefCounted() const   { return m_fRefCounted = true; }
 
 	/*
 	 * Operators
@@ -395,9 +397,11 @@ protected:
 	std::string             m_strOption;
 	std::string             m_strParam;
 	ERlvCmdRet              m_eRet;
+	mutable bool            m_fRefCounted;
 
 	friend class RlvHandler;
 	friend class RlvObject;
+	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
 };
 
 // ============================================================================
