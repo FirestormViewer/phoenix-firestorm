@@ -71,6 +71,7 @@
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -461,7 +462,7 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 //			if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // not already sitting?
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.2.0g
 			if ( (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) && 
-				 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, LLToolPie::getInstance()->getHoverPick().mObjectOffset))) )
+				 ((!rlv_handler_t::isEnabled()) || (RlvActions::canSit(object, LLToolPie::getInstance()->getHoverPick().mObjectOffset))) )
 // [/RLVa:KB]
 			{
 				cursor = UI_CURSOR_TOOLSIT;

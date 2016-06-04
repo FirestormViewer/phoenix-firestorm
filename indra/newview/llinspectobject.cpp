@@ -39,6 +39,7 @@
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "lltoolpie.h"
 // [/RLVa:KB]
@@ -401,7 +402,7 @@ void LLInspectObject::updateSitLabel(LLSelectNode* nodep)
 	if (rlv_handler_t::isEnabled())
 	{
 		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
-		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset)) );
+		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (RlvActions::canSit(pick.getObject(), pick.mObjectOffset)) );
 	}
 // [/RLVa:KB]
 }

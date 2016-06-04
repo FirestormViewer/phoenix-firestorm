@@ -100,7 +100,7 @@ public:
 	/*
 	 * Returns true if the user can teleport locally (short distances)
 	 */
-	static bool canTeleportToLocal();
+	static bool canTeleportToLocal(const LLVector3d& posGlobal);
 
 	/*
 	 * Returns true if the user can teleport to a (remote) location
@@ -116,6 +116,11 @@ public:
 	// World interaction
 	// =================
 public:
+	/*
+	 * Returns true if the user can sit up on the specified object
+	 */
+	static bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
 	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */

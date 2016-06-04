@@ -96,7 +96,6 @@ public:
 	// Command specific helper functions
 	bool canEdit(const LLViewerObject* pObj) const;												// @edit and @editobj
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
-	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
 	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote

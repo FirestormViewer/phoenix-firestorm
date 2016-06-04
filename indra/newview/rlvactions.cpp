@@ -105,27 +105,62 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 // Teleporting
 //
 
-bool RlvActions::canTeleportToLocal()
+bool RlvActions::canTeleportToLocal(const LLVector3d& posGlobal)
 {
-	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_TPLOCAL)) && (RlvActions::canStand());
+	// User can initiate a local teleport if:
+	//   - not restricted from "sit teleporting" (or the destination is within the allowed xy-radius)
+	//   - not restricted from teleporting locally (or the destination is within the allowed xy-radius)
+	//   - can stand up (or isn't sitting)
+	// NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
+	const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
+	bool fCanStand = RlvActions::canStand(idRlvObjExcept);
+	if ( (fCanStand) && ((gRlvHandler.hasBehaviourExcept(RLV_BHVR_SITTP, gRlvHandler.getCurrentObject())) || (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, gRlvHandler.getCurrentObject()))) )
+	{
+		// User can stand up but is either @sittp or @tplocal restricted so we need to distance check
+		const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+		F32 nMaxDist = llmin(RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_TPLOCALDIST)->getValue<float>(), RLV_MODIFIER_TPLOCAL_DEFAULT);
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))
+			nMaxDist = llmin(nMaxDist, RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SITTPDIST)->getValue<F32>());
+		return (nDistSq < nMaxDist * nMaxDist);
+	}
+	return fCanStand;
 }
 
 bool RlvActions::canTeleportToLocation()
 {
 	// NOTE: if we're teleporting due to an active command we should disregard any restrictions from the same object
 	const LLUUID& idRlvObjExcept = gRlvHandler.getCurrentObject();
-	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, idRlvObjExcept)) && (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOCAL, idRlvObjExcept)) && (RlvActions::canStand(idRlvObjExcept));
+	return (!gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, idRlvObjExcept)) && (RlvActions::canStand(idRlvObjExcept));
 }
 
 bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 {
-	F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
-	return nDistSq < RLV_TELEPORT_LOCAL_RADIUS * RLV_TELEPORT_LOCAL_RADIUS;
+	const F32 nDistSq = (LLVector2(posGlobal.mdV[0], posGlobal.mdV[1]) - LLVector2(gAgent.getPositionGlobal().mdV[0], gAgent.getPositionGlobal().mdV[1])).lengthSquared();
+	return nDistSq < RLV_MODIFIER_TPLOCAL_DEFAULT * RLV_MODIFIER_TPLOCAL_DEFAULT;
 }
 
 // ============================================================================
 // World interaction
 //
+
+bool RlvActions::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
+{
+	// The user can sit on the specified object if:
+	//   - not prevented from sitting
+	//   - not prevented from standing up or not currently sitting
+	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
+	//   - not a regular sit (i.e. due to @sit:<uuid>=force)
+	//   - not @sittp=n or @fartouch=n restricted or if they clicked on a point within the allowed radius
+	static RlvCachedBehaviourModifier<float> s_nSitTpDist(RLV_MODIFIER_SITTPDIST);
+	return
+		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
+		(!hasBehaviour(RLV_BHVR_SIT)) &&
+		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) ||
+		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
+		( ( (NULL != gRlvHandler.getCurrentCommand()) && (RLV_BHVR_SIT == gRlvHandler.getCurrentCommand()->getBehaviourType()) ) ||
+		  ( ((!hasBehaviour(RLV_BHVR_SITTP)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < s_nSitTpDist * s_nSitTpDist)) &&
+		    ((!hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < RLV_MODIFIER_FARTOUCH_DEFAULT * RLV_MODIFIER_FARTOUCH_DEFAULT)) ) );
+}
 
 bool RlvActions::canStand()
 {

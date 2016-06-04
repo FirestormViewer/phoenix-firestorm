@@ -4093,7 +4093,7 @@ bool is_object_sittable()
 	if (rlv_handler_t::isEnabled())
 	{
 		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
-		if ( (pick.mObjectID.notNull()) && (!gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset)) )
+		if ( (pick.mObjectID.notNull()) && (!RlvActions::canSit(pick.getObject(), pick.mObjectOffset)) )
 			return false;
 	}
 // [/RLVa:KB]
@@ -4132,7 +4132,7 @@ void handle_object_sit_or_stand()
 //	if (object && object->getPCode() == LL_PCODE_VOLUME)
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.2.0c
 	if ( (object && object->getPCode() == LL_PCODE_VOLUME) && 
-		 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, pick.mObjectOffset))) )
+		 ((!rlv_handler_t::isEnabled()) || (RlvActions::canSit(object, pick.mObjectOffset))) )
 // [/RLVa:KB]
 	{
 // [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
@@ -6338,7 +6338,7 @@ bool enable_object_sit(LLUICtrl* ctrl)
 		{
 			const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
 			if (pick.mObjectID.notNull())
-				sitting_on_sel = !gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset);
+				sitting_on_sel = !RlvActions::canSit(pick.getObject(), pick.mObjectOffset);
 		}
 // [/RLVa:KB]
 
