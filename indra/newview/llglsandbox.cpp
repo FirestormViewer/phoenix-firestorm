@@ -66,6 +66,7 @@
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 
 // Height of the yellow selection highlight posts for land
@@ -153,13 +154,15 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.0.0g
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))
 	{
+		static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+
 		// We'll allow drag selection under fartouch, but only within the fartouch range
 		// (just copy/paste the code above us to make that work, thank you Lindens!)
 		LLVector3 relative_av_pos = av_pos;
 		relative_av_pos -= LLViewerCamera::getInstance()->getOrigin();
 
-		F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + 1.5f;
-		F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - 1.5f;
+		F32 new_far = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() + s_nFartouchDist;
+		F32 new_near = relative_av_pos * LLViewerCamera::getInstance()->getAtAxis() - s_nFartouchDist;
 
 		new_near = llmax(new_near, 0.1f);
 
@@ -168,7 +171,7 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 
 		// Usurp these two
 		limit_select_distance = TRUE;
-		select_dist_squared = 1.5f * 1.5f;
+		select_dist_squared = s_nFartouchDist * s_nFartouchDist;
 	}
 // [/RLVa:KB]
 	LLViewerCamera::getInstance()->setPerspective(FOR_SELECTION, 

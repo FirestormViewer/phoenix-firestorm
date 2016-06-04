@@ -142,7 +142,12 @@ public:
 	// ================
 public:
 	/*
-	 * Convenience function to check for a behaviour without having to include rlvhandler.h. 
+	 * Convenience function to get the current/active value of a behaviour modifier
+	 */
+	template<typename T> static const T& getModifierValue(ERlvBehaviourModifier eBhvrMod);
+
+	/*
+	 * Convenience function to check for a behaviour without having to include rlvhandler.h.
 	 * Do NOT call this function if speed is important (i.e. per-frame)
 	 */
 	static bool hasBehaviour(ERlvBehaviour eBhvr);

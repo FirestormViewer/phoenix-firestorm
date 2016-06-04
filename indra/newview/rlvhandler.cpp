@@ -691,16 +691,17 @@ bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	bool fCanTouch = (idRoot.notNull()) && ((pObj->isHUDAttachment()) || (!hasBehaviour(RLV_BHVR_TOUCHALL))) &&
 		((!hasBehaviour(RLV_BHVR_TOUCHTHIS)) || (!isException(RLV_BHVR_TOUCHTHIS, idRoot, RLV_CHECK_PERMISSIVE)));
 
+	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
 	if (fCanTouch)
 	{
 		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
 		{
 			// Rezzed prim or attachment worn by another avie
-			fCanTouch = 
+			fCanTouch =
 				( (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
 				( (!pObj->isAttachment()) || (!hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || 
-				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= 1.5f * 1.5f) );
+				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) ||
+				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
 		}
 		else if (!pObj->isHUDAttachment())
 		{
