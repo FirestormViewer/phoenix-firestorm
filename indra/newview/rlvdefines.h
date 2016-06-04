@@ -314,6 +314,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
 #define RLV_STRING_HIDDEN_REGION			"hidden_region"
 
+#define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"

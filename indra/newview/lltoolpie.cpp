@@ -730,10 +730,24 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
                                              FALSE /* ignore transparent */,
                                              FALSE /* ignore particles */);
 
-        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
-            && (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
-                || mPick.mObjectID.notNull()))				// or on an object
+//        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
+//            && (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
+//                || mPick.mObjectID.notNull()))				// or on an object
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		bool fValidPick = (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
+			&& (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
+				|| mPick.mObjectID.notNull()));				// or on an object
+
+		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			fValidPick = false;
+		}
+
+		if (fValidPick)
+// [/RLVa:KB]
         {
+
             // handle special cases of steering picks
             LLViewerObject* avatar_object = mPick.getObject();
 
@@ -828,8 +842,20 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
             }
         }
 
-		if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
-			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()))
+//		if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+//			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()))
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		bool fValidPick = ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()));
+
+		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			fValidPick = false;
+		}
+
+		if (fValidPick)
+// [/RLVa:KB]
 		{
 			walkToClickedLocation();
 			return TRUE;

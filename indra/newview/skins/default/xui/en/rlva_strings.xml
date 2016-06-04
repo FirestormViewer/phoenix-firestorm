@@ -46,6 +46,11 @@
 		</map>
 
 		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Unable to use the autopilot due to RLV restrictions</string>
+		</map>
 		<key>blocked_generic</key>
 		<map>
 			<key>value</key>
