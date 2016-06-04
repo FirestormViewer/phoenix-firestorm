@@ -300,7 +300,6 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
 #define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
-#define RLV_SETTING_SHOWNAMETAGS		"RLVaShowNameTags"
 #define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
 #define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
 

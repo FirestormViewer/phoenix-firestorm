@@ -72,7 +72,6 @@ bool RlvSettings::fCompositeFolders = false;
 bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
-bool RlvSettings::fShowNameTags = false;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()
@@ -92,10 +91,6 @@ void RlvSettings::initClass()
 
 		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
-
-		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
-		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
-			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
 		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
