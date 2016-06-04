@@ -40,6 +40,8 @@
 #include "llcorehttputil.h"
 #include "lleventfilter.h"
 
+#include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
+
 namespace LLEventPolling
 {
 namespace Details
@@ -103,7 +105,15 @@ namespace Details
         std::string	msg_name = content["message"];
         LLSD message;
         message["sender"] = mSenderIp;
-        message["body"] = content["body"];
+        // <FS:ND> Guard against messages with no "body"
+        
+        // message["body"] = content["body"];
+
+        if( content.has( "body" ) )
+            message["body"] = content["body"];
+        else
+            LL_WARNS() << "Malformed content? " << ll_pretty_print_sd( content ) << LL_ENDL;
+        // <FS:ND>
         LLMessageSystem::dispatch(msg_name, message);
     }
 
