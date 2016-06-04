@@ -117,9 +117,14 @@ public:
 	// =================
 public:
 	/*
+	 * Returns true if the user can edit the specified object
+	 */
+	static bool canEdit(const LLViewerObject* pObj);
+
+	/*
 	 * Returns true if the user can sit up on the specified object
 	 */
-	static bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
 	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)

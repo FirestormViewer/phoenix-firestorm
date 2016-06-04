@@ -143,9 +143,21 @@ bool RlvActions::isLocalTp(const LLVector3d& posGlobal)
 // World interaction
 //
 
-bool RlvActions::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
+bool RlvActions::canEdit(const LLViewerObject* pObj)
 {
-	// The user can sit on the specified object if:
+	// User can edit the specified object if:
+	//   - not generally restricted from editing (or the object's root is an exception)
+	//   - not specifically restricted from editing this object's root
+	return
+		(pObj) &&
+		((!hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
+		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!gRlvHandler.isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
+}
+
+
+bool RlvActions::canSit(const LLViewerObject* pObj, const LLVector3& posOffset /*= LLVector3::zero*/)
+{
+	// User can sit on the specified object if:
 	//   - not prevented from sitting
 	//   - not prevented from standing up or not currently sitting
 	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)

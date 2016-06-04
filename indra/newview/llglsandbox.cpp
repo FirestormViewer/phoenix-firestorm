@@ -64,6 +64,7 @@
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -245,7 +246,7 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			}
 
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-			if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canEdit(vobjp)) )
+			if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canEdit(vobjp)) )
 			{
 				continue;
 			}

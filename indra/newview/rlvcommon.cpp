@@ -638,7 +638,7 @@ bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 {
 	const LLViewerObject* pObj = pNode->getObject();
-	return (pObj) && (!gRlvHandler.canEdit(pObj));
+	return (pObj) && (!RlvActions::canEdit(pObj));
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a

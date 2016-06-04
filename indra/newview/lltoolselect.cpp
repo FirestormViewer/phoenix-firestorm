@@ -47,8 +47,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
+#include "rlvhelper.h"
 #include "llfloaterreg.h"
 // [/RLVa:KB]
 
@@ -86,9 +87,9 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	}
 
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-	if ( (object) && (rlv_handler_t::isEnabled()) )
+	if ( (object) && (RlvActions::isRlvEnabled()) )
 	{
-		if (!gRlvHandler.canEdit(object))
+		if (!RlvActions::canEdit(object))
 		{
 			if (!temp_select)
 				return LLSelectMgr::getInstance()->getSelection();

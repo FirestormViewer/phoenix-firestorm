@@ -4313,7 +4313,7 @@ void LLSelectMgr::deselectAllIfTooFar()
 			bool apply(LLSelectNode* pNode)
 			{
 				const LLViewerObject* pObj = pNode->getObject();
-				return (!pNode->isTransient()) && (pObj) && (!gRlvHandler.canEdit(pObj)) && (pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
+				return (!pNode->isTransient()) && (pObj) && (!RlvActions::canEdit(pObj)) && (pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
 			}
 		} f;
 		if (mSelectedObjects->getFirstRootNode(&f, TRUE))
