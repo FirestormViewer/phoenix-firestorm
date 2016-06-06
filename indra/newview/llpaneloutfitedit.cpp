@@ -406,7 +406,10 @@ LLPanelOutfitEdit::LLPanelOutfitEdit()
 	mWearableListManager(NULL),
 	mPlusBtn(NULL),
 	mWearablesGearMenuBtn(NULL),
-	mGearMenuBtn(NULL)
+	mGearMenuBtn(NULL),
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	mAvatarComplexityLabel(NULL),
+	mAvatarComplexityAddingLabel(NULL)
 {
 	mSavedFolderState = new LLSaveFolderState();
 	mSavedFolderState->setApply(FALSE);
@@ -569,6 +572,10 @@ BOOL LLPanelOutfitEdit::postBuild()
 
 	mGearMenu = LLPanelOutfitEditGearMenu::create();
 	mGearMenuBtn->setMenu(mGearMenu);
+
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
+	mAvatarComplexityAddingLabel = getChild<LLTextBox>("avatar_complexity_adding_label");
 
 	mSaveComboBtn.reset(new LLSaveOutfitComboBtn(this));
 	return TRUE;
@@ -1426,5 +1433,13 @@ void LLPanelOutfitEdit::saveListSelection()
 		mInventoryItemsPanel->getRootFolder()->scrollToShowSelection();
 	}
 }
+
+// <FS:Ansariel> Show avatar complexity in appearance floater
+void LLPanelOutfitEdit::updateAvatarComplexity(U32 complexity)
+{
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+	mAvatarComplexityAddingLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+}
+// </FS:Ansariel>
 
 // EOF

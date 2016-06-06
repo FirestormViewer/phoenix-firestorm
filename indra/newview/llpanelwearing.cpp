@@ -44,6 +44,7 @@
 #include "rlvcommon.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "lltextbox.h"
 
 // Context menu and Gear menu helper.
 static void edit_outfit()
@@ -213,6 +214,7 @@ static LLPanelInjector<LLPanelWearing> t_panel_wearing("panel_wearing");
 LLPanelWearing::LLPanelWearing()
 	:	LLPanelAppearanceTab()
 	,	mCOFItemsList(NULL)
+	,	mAvatarComplexityLabel(NULL) // <FS:Ansariel> Show avatar complexity in appearance floater
 	,	mIsInitialized(false)
 {
 	mCategoriesObserver = new LLInventoryCategoriesObserver();
@@ -237,6 +239,9 @@ BOOL LLPanelWearing::postBuild()
 {
 	mCOFItemsList = getChild<LLWearableItemsList>("cof_items_list");
 	mCOFItemsList->setRightMouseDownCallback(boost::bind(&LLPanelWearing::onWearableItemsListRightClick, this, _1, _2, _3));
+
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
 
 	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
 
@@ -356,4 +361,11 @@ void LLPanelWearing::copyToClipboard()
 
 	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(text),0,text.size());
 }
+
+// <FS:Ansariel> Show avatar complexity in appearance floater
+void LLPanelWearing::updateAvatarComplexity(U32 complexity)
+{
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+}
+// </FS:Ansariel>
 // EOF
