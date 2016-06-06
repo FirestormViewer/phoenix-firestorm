@@ -107,7 +107,8 @@
     name="username_combo"
     width="201">
     <combo_box.combo_editor
-      text_pad_left="8" 
+      text_pad_left="8"
+      text_pad_right="8"
       bg_image_always_focused="true"/>
     </combo_box>
     <check_box
@@ -158,6 +159,7 @@
     left="5"
     max_length_bytes="16"
     text_pad_left="8"
+    text_pad_right="8"
     name="password_edit"
     label="Password"
     bg_image_always_focused="true"
@@ -202,7 +204,8 @@
     combo_button.scale_image="true">
     <combo_box.combo_editor
       bg_image_always_focused="true"
-      text_pad_left="8"/>
+      text_pad_left="8"
+      text_pad_right="8"/>
     <combo_box.item
       label="Last location"
       name="MyLastLocation"
