@@ -74,7 +74,7 @@
 			</combo_box>
 			<slider label="Pole widzenia" name="DrawDistance"/>
 			<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
-			<slider label="Maks. szczegółowość awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie skomplikowany zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. Jelly Doll)" />
+			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. Jelly Doll)" />
 			<slider label="Maks. il. wyświetlanych awatarów" name="IndirectMaxNonImpostors"/>
 			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
 			<text name="PostProcessText">

@@ -29,7 +29,7 @@
 			<menu_item_call label="Wymuś aktualizację wyglądu (rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
-			<menu_item_check label="Stopień skomplikowania awatarów" name="Avatar Draw Info"/>
+			<menu_item_check label="Stopień złożoności awatarów" name="Avatar Draw Info"/>
 			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
@@ -279,7 +279,7 @@
 			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
 			<menu_item_check label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
-			<menu_item_check label="Stopień skomplikowania awatarów" name="Avatar Draw Info"/>
+			<menu_item_check label="Stopień złożoności awatarów" name="Avatar Draw Info"/>
 		</menu>
 		<menu label="Podświetlanie i widoczność" name="Highlighting and Visibility">
 			<menu_item_check label="Mrugający emiter śledzenia" name="Cheesy Beacon"/>
