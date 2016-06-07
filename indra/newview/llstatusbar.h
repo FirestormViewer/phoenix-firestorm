@@ -319,7 +319,7 @@ private:
 	LLStatGraph *mSGPacketLoss;
 
 	LLView		*mBtnStats;
-	LLIconCtrl	*mIconPresets;
+	LLButton	*mIconPresets;
 	LLButton	*mBtnVolume;
 	LLTextBox	*mBoxBalance;
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
