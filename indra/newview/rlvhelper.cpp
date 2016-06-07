@@ -161,6 +161,14 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE>("viewtexture", RLV_BHVR_VIEWTEXTURE));
 	// Camera
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM, RLV_OPTION_NONE>("setcam"));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmin", RLV_BHVR_SETCAM_AVDISTMIN));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifier(0.0f, true, new RlvBehaviourModifier_CompMax()));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmax", RLV_BHVR_SETCAM_AVDISTMAX));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier(F32_MAX, true, new RlvBehaviourModifier_CompMin()));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmin", RLV_BHVR_SETCAM_FOCUSDISTMIN));
+	addModifier(RLV_BHVR_SETCAM_FOCUSDISTMIN, RLV_MODIFIER_SETCAM_FOCUSDISTMIN, new RlvBehaviourModifier(0.0f, true, new RlvBehaviourModifier_CompMax()));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmax", RLV_BHVR_SETCAM_FOCUSDISTMAX));
+	addModifier(RLV_BHVR_SETCAM_FOCUSDISTMAX, RLV_MODIFIER_SETCAM_FOCUSDISTMAX, new RlvBehaviourModifier(F32_MAX, true, new RlvBehaviourModifier_CompMin()));
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addModifier(RLV_BHVR_SETCAM_EYEOFFSET, RLV_MODIFIER_SETCAM_EYEOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>(LLVector3::zero, true, nullptr));
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));

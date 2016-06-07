@@ -30,19 +30,19 @@ class RlvActions
 	// ======
 public:
 	/*
-	 * Returns true if the specified object can manipulate the camera offset and/or focus offset values
-	 */
-	static bool canChangeCameraPreset(const LLUUID& idRlvObject);
-
-	/*
 	 * Returns true if the specified object cannot manipulate the camera FOV
 	 */
 	static bool canChangeCameraFOV(const LLUUID& idRlvObject);
 
 	/*
-	 * Returns true if the camera offset and focus offset are locked (prevents changing the current camera preset)
+	 * Returns true if the specified object can manipulate the camera offset and/or focus offset values
 	 */
-	static bool isCameraPresetLocked();
+	static bool canChangeCameraPreset(const LLUUID& idRlvObject);
+
+	/*
+	 * Returns true if the camera's distance (from either the avatar of the focus) is currently restricted/clamped
+	 */
+	static bool isCameraDistanceClamped();
 
 	/*
 	 * Returns true if the camera's FOV is currently restricted/clamped
@@ -50,9 +50,20 @@ public:
 	static bool isCameraFOVClamped();
 
 	/*
+	 * Returns true if the camera offset and focus offset are locked (prevents changing the current camera preset)
+	 */
+	static bool isCameraPresetLocked();
+
+	/*
+	 * Retrieves the current (avatar or focus) camera distance limits
+	 */
+	static bool getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax);
+	static bool getCameraFocusDistanceLimits(float& nDistMin, float& nDistMax);
+
+	/*
 	 * Retrieves the current camera FOV limits - returns isCameraFOVClamped()
 	 */
-	static bool getCameraFOVLimits(F32& nFOVMin, F32& nFOVMax);
+	static bool getCameraFOVLimits(float& nFOVMin, float& nFOVMax);
 
 	// ================================
 	// Communication/Avatar interaction

@@ -27,6 +27,12 @@
 // Camera
 //
 
+bool RlvActions::canChangeCameraFOV(const LLUUID& idRlvObject)
+{
+	// NOTE: if an object has exclusive camera controls then all other objects are locked out
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM));
+}
+
 bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 {
 	// NOTE: if an object has exclusive camera controls then all other objects are locked out
@@ -35,15 +41,11 @@ bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
-bool RlvActions::canChangeCameraFOV(const LLUUID& idRlvObject)
+bool RlvActions::isCameraDistanceClamped()
 {
-	// NOTE: if an object has exclusive camera controls then all other objects are locked out
-	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM));
-}
-
-bool RlvActions::isCameraPresetLocked()
-{
-	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+	return
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMAX)) ||
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMAX));
 }
 
 bool RlvActions::isCameraFOVClamped()
@@ -51,18 +53,54 @@ bool RlvActions::isCameraFOVClamped()
 	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX));
 }
 
+bool RlvActions::isCameraPresetLocked()
+{
+	return (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
+}
+
+bool RlvActions::getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax)
+{
+	bool fDistMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMIN), fDistMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMAX);
+	if ( (fDistMin) || (fDistMax) )
+	{
+		static RlvCachedBehaviourModifier<float> sCamDistMin(RLV_MODIFIER_SETCAM_AVDISTMIN);
+		static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_AVDISTMAX);
+
+		nDistMax = (fDistMax) ? sCamDistMax : F32_MAX;
+		nDistMin = (fDistMin) ? sCamDistMin : 0.0;
+		return true;
+	}
+	return false;
+}
+
+bool RlvActions::getCameraFocusDistanceLimits(float& nDistMin, float& nDistMax)
+{
+	bool fDistMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMIN), fDistMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMAX);
+	if ( (fDistMin) || (fDistMax) )
+	{
+		static RlvCachedBehaviourModifier<float> sCamDistMin(RLV_MODIFIER_SETCAM_FOCUSDISTMIN);
+		static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_FOCUSDISTMAX);
+
+		nDistMax = (fDistMax) ? sCamDistMax : F32_MAX;
+		nDistMin = (fDistMin) ? sCamDistMin : 0.0;
+		return true;
+	}
+	return false;
+}
+
 bool RlvActions::getCameraFOVLimits(F32& nFOVMin, F32& nFOVMax)
 {
-	static RlvCachedBehaviourModifier<float> sCamFovMin(RLV_MODIFIER_SETCAM_FOVMIN);
-	static RlvCachedBehaviourModifier<float> sCamFovMax(RLV_MODIFIER_SETCAM_FOVMAX);
+	bool fClampMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN), fClampMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX);
+	if ( (fClampMin) || (fClampMax) )
+	{
+		static RlvCachedBehaviourModifier<float> sCamFovMin(RLV_MODIFIER_SETCAM_FOVMIN);
+		static RlvCachedBehaviourModifier<float> sCamFovMax(RLV_MODIFIER_SETCAM_FOVMAX);
 
-	bool fClampMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX);
-	nFOVMax = (fClampMax) ? sCamFovMax : LLViewerCamera::getInstance()->getMaxView();
-
-	bool fClampMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN);
-	nFOVMin = (fClampMin) ? sCamFovMin : LLViewerCamera::getInstance()->getMinView();
-
-	return (fClampMin) || (fClampMax);
+		nFOVMin = (fClampMin) ? sCamFovMin : LLViewerCamera::getInstance()->getMinView();
+		nFOVMax = (fClampMax) ? sCamFovMax : LLViewerCamera::getInstance()->getMaxView();
+		return true;
+	}
+	return false;
 }
 
 // ============================================================================

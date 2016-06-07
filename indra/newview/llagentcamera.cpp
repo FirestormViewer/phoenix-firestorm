@@ -821,7 +821,13 @@ void LLAgentCamera::setCameraZoomFraction(F32 fraction)
 
 		LLVector3d camera_offset_dir = mCameraFocusOffsetTarget;
 		camera_offset_dir.normalize();
-		mCameraFocusOffsetTarget = camera_offset_dir * rescale(fraction, 0.f, 1.f, max_zoom, min_zoom);
+// [RLVa:KB] - Checked: 2.0.0
+		const LLVector3d focus_offset_target = camera_offset_dir * rescale(fraction, 0.f, 1.f, max_zoom, min_zoom);
+		if ( (RlvActions::isRlvEnabled()) && (!allowFocusOffsetChange(focus_offset_target)) )
+			return;
+		mCameraFocusOffsetTarget = focus_offset_target;
+// [/RLVa:KB]
+//		mCameraFocusOffsetTarget = camera_offset_dir * rescale(fraction, 0.f, 1.f, max_zoom, min_zoom);
 	}
 	startCameraAnimation();
 }
@@ -946,6 +952,11 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 		new_distance = llclamp( new_distance, APPEARANCE_MIN_ZOOM, APPEARANCE_MAX_ZOOM );
 	}
 
+// [RLVa:KB] - Checked: 2.0.0
+	if ( (RlvActions::isRlvEnabled()) && (!allowFocusOffsetChange(new_distance * camera_offset_unit)) )
+		return;
+// [/RLVa:KB]
+
 	mCameraFocusOffsetTarget = new_distance * camera_offset_unit;
 }
 
@@ -1008,6 +1019,11 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 		{
 			new_distance = llclamp( new_distance, APPEARANCE_MIN_ZOOM, APPEARANCE_MAX_ZOOM );
 		}
+
+// [RLVa:KB] - Checked: 2.0.0
+		if ( (RlvActions::isRlvEnabled()) && (!allowFocusOffsetChange(new_distance * camera_offset_unit)) )
+			return;
+// [/RLVa:KB]
 
 		// Compute new camera offset
 		mCameraFocusOffsetTarget = new_distance * camera_offset_unit;
@@ -1931,6 +1947,44 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 //			}
 	}
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	if ( (CAMERA_MODE_THIRD_PERSON == mCameraMode) && (RlvActions::isRlvEnabled()) && (RlvActions::isCameraDistanceClamped()) )
+	{
+		m_fRlvMinDist = m_fRlvMaxDist = false;
+
+		// Av-locked | Focus-locked | Result
+		// ===================================================
+		//     T     |      T       | skip focus => slam av
+		//     T     |      F       | skip focus => slam av
+		//     F     |      T       | skip av    => slam focus
+		//     F     |      F       | clamp focus then av
+		bool fCamAvDistClamped, fCamAvDistLocked = false; float nCamAvDistLimitMin, nCamAvDistLimitMax;
+		if (fCamAvDistClamped = RlvActions::getCameraAvatarDistanceLimits(nCamAvDistLimitMin, nCamAvDistLimitMax))
+			fCamAvDistLocked = nCamAvDistLimitMin == nCamAvDistLimitMax;
+		bool fCamFocusDistClamped, fCamFocusDistLocked = false; float nCamFocusDistLimitMin, nCamFocusDistLimitMax;
+		if (fCamFocusDistClamped = RlvActions::getCameraFocusDistanceLimits(nCamFocusDistLimitMin, nCamFocusDistLimitMax))
+			fCamFocusDistLocked = nCamFocusDistLimitMin == nCamFocusDistLimitMax;
+
+		// Check focus distance limits
+		if ( (fCamFocusDistClamped) && (!fCamAvDistLocked) )
+		{
+			const LLVector3 offsetCameraLocal = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
+			const LLVector3d offsetCamera(gAgent.getFrameAgent().rotateToAbsolute(offsetCameraLocal));
+			const LLVector3d posFocusCam = frame_center_global + head_offset + offsetCamera;
+			if (clampCameraPosition(camera_position_global, posFocusCam, nCamFocusDistLimitMin, nCamFocusDistLimitMax))
+				isConstrained = TRUE;
+		}
+
+		// Check avatar distance limits
+		if ( (fCamAvDistClamped) && (fCamAvDistLocked || !fCamFocusDistClamped) )
+		{
+			const LLVector3d posAvatarCam = gAgent.getPosGlobalFromAgent( (isAgentAvatarValid()) ? gAgentAvatarp->mHeadp->getWorldPosition() : gAgent.getPositionAgent() );
+			if (clampCameraPosition(camera_position_global, posAvatarCam, nCamAvDistLimitMin, nCamAvDistLimitMax))
+				isConstrained = TRUE;
+		}
+	}
+// [/RLVa:KB]
+
 	// Don't let camera go underground
 	F32 camera_min_off_ground = getCameraMinOffGround();
 
@@ -1951,6 +2005,49 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 	return camera_position_global;
 }
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+bool LLAgentCamera::allowFocusOffsetChange(const LLVector3d& offsetFocus)
+{
+	if (RlvActions::isCameraDistanceClamped())
+	{
+		if ( (CAMERA_MODE_THIRD_PERSON == getCameraMode()) && ((m_fRlvMinDist) || (m_fRlvMaxDist)) )
+		{
+			const LLVector3d posFocusGlobal = calcFocusPositionTargetGlobal();
+			// Don't allow moving the focus offset if at minimum and moving closer (or if at maximum and moving further) to prevent camera warping
+			F32 nCurDist = llabs((posFocusGlobal + mCameraFocusOffsetTarget - m_posRlvRefGlobal).magVec());
+			F32 nNewDist = llabs((posFocusGlobal + offsetFocus - m_posRlvRefGlobal).magVec());
+			if ( ((m_fRlvMaxDist) && (nNewDist > nCurDist)) || ((m_fRlvMinDist) && (nNewDist < nCurDist)) )
+				return false;
+		}
+	}
+	return true;
+}
+
+bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector3d posCamRefGlobal, float nDistMin, float nDistMax)
+{
+	const LLVector3d offsetCamera = posCamGlobal - posCamRefGlobal;
+
+	F32 nCamAvDist = llabs(offsetCamera.magVec()), nDistMult = NAN;
+	if (nCamAvDist > nDistMax)
+	{
+		nDistMult = nDistMax / nCamAvDist;
+		m_fRlvMaxDist = true;
+	}
+	else if (nCamAvDist < nDistMin)
+	{
+		nDistMult = nDistMin / nCamAvDist;
+		m_fRlvMinDist = true;
+	}
+
+	if (!isnan(nDistMult))
+	{
+		posCamGlobal = posCamRefGlobal + nDistMult * offsetCamera;
+		m_posRlvRefGlobal = posCamRefGlobal;
+		return true;
+	}
+	return false;
+}
+// [/RLVa:KB]
 
 LLVector3 LLAgentCamera::getCameraOffsetInitial()
 {

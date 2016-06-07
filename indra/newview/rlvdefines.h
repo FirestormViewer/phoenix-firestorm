@@ -190,6 +190,10 @@ enum ERlvBehaviour {
 
 	// Camera
 	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
+	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar
+	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar
+	RLV_BHVR_SETCAM_FOCUSDISTMIN,	// Enforces a minimum distance from the camera focus
+	RLV_BHVR_SETCAM_FOCUSDISTMAX,	// Enforces a maximum distance from the camera focus
 	RLV_BHVR_SETCAM_EYEOFFSET,      // Changes the default camera offset
 	RLV_BHVR_SETCAM_FOCUSOFFSET,    // Changes the default camera focus offset
 	RLV_BHVR_SETCAM_FOCUS,			// Forces the camera focus and/or position to a specific object, avatar or position
@@ -204,6 +208,10 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
+	RLV_MODIFIER_SETCAM_AVDISTMIN,
+	RLV_MODIFIER_SETCAM_AVDISTMAX,
+	RLV_MODIFIER_SETCAM_FOCUSDISTMIN,
+	RLV_MODIFIER_SETCAM_FOCUSDISTMAX,
 	RLV_MODIFIER_SETCAM_EYEOFFSET,
 	RLV_MODIFIER_SETCAM_FOCUSOFFSET,
 	RLV_MODIFIER_SETCAM_FOVMIN,
