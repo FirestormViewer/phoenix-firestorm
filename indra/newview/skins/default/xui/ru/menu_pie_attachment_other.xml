@@ -26,8 +26,8 @@
             <pie_menu name="ExportMenu" label="Сохранить как &gt;">
                 <pie_slice label="Backup" name="Backup"/>
                 <pie_slice label="Collada" name="Collada"/>
+                <pie_slice label="Дамп XML" name="Dump XML"/>
             </pie_menu>
-            <pie_slice label="Дамп XML" name="Dump XML"/>
         </pie_menu>
         <pie_slice label="Инспекция" name="Avatar Inspect"/>
         <pie_menu name="DerenderMenu" label="Не отображать &gt;">

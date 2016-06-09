@@ -59,5 +59,20 @@
          left_pad="1"
          name="dummy_icon"
          width="274" />
+        <text
+         top_delta="0"
+         type="string"
+         length="1"
+         height="25"
+         layout="topleft"
+         right="-12"
+         name="avatar_complexity_label"
+         font="SansSerifMedium"
+         follows="bottom|right"
+         halign="right"
+         v_pad="6"
+         width="150">
+            Complexity: [WEIGHT]
+        </text>
     </panel>
 </panel>

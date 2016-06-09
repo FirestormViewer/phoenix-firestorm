@@ -76,7 +76,8 @@ LLSidepanelAppearance::LLSidepanelAppearance() :
 	mFilterEditor(NULL),
 	mOutfitEdit(NULL),
 	mCurrOutfitPanel(NULL),
-	mOpened(false)
+	mOpened(false),
+	mLastAvatarComplexity(0) // <FS:Ansariel> Show avatar complexity in appearance floater
 {
 	LLOutfitObserver& outfit_observer =  LLOutfitObserver::instance();
 	outfit_observer.addBOFReplacedCallback(boost::bind(&LLSidepanelAppearance::refreshCurrentOutfitName, this, ""));
@@ -558,3 +559,17 @@ bool LLSidepanelAppearance::isWearableEditPanelVisible() const
 	return (mEditWearable) && (mEditWearable->getVisible());
 }
 // [/RLVa:KB]
+
+// <FS:Ansariel> Show avatar complexity in appearance floater
+// static
+void LLSidepanelAppearance::updateAvatarComplexity(U32 complexity)
+{
+	LLSidepanelAppearance* instance = LLFloaterSidePanelContainer::getPanel<LLSidepanelAppearance>("appearance");
+	if (instance->mLastAvatarComplexity != complexity)
+	{
+		instance->mPanelOutfitsInventory->updateAvatarComplexity(complexity);
+		instance->mOutfitEdit->updateAvatarComplexity(complexity);
+	}
+	instance->mLastAvatarComplexity = complexity;
+}
+// </FS:Ansariel>

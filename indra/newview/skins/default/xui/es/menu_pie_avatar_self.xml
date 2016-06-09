@@ -20,8 +20,8 @@
 			</pie_menu>
 			<pie_slice label="Falda" name="Skirt"/>
 		</pie_menu>
-		<pie_menu label="HUD >" name="Pie Object Detach HUD"/>
-		<pie_menu label="Quitar >" name="Pie Object Detach"/>
+		<pie_menu label="HUD &gt;" name="Pie Object Detach HUD"/>
+		<pie_menu label="Quitar &gt;" name="Pie Object Detach"/>
 		<pie_slice label="Quitar todo" name="Detach All"/>
 	</pie_menu>
 	<pie_slice label="Sentarme" name="Sit Down Here"/>

@@ -8,10 +8,10 @@
         label="グループ..."
         name="Groups..."/>
     <pie_menu
-        label="取り外す >"
+        label="取り外す &gt;"
         name="Take Off &gt;">
         <pie_menu
-            label="服 >"
+            label="服 &gt;"
             name="Clothes &gt;">
             <pie_slice
                 label="シャツ"
@@ -32,7 +32,7 @@
                 label="手袋"
                 name="Gloves"/>
             <pie_menu
-                label="詳細 >"
+                label="詳細 &gt;"
                 name="Clothes More">
                 <pie_slice
                     label="（下着の）シャツ"
@@ -60,7 +60,7 @@
                 name="Skirt"/>
         </pie_menu>
         <pie_menu
-            label="HUD >"
+            label="HUD &gt;"
             name="Pie Object Detach HUD" />
         <pie_separator />
         <pie_menu

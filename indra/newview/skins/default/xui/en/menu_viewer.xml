@@ -2078,13 +2078,15 @@
                  parameter="http://community.secondlife.com/t5/Blogs/ct-p/Blogs"/>
         </menu_item_call>-->
         <menu_item_separator/>
-		<menu_item_call
+        <menu_item_call
              label="Check Grid status"
              name="Grid Status">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="GridStatus_url"
-             parameter="WebLaunchExternalTarget,http://status.secondlifegrid.net/" />
+            <menu_item_call.on_click
+             function="Advanced.ShowURL"
+             parameter="https://community.secondlife.com/t5/Status-Grid/bg-p/status-blog" />
+            <menu_item_call.on_visible
+             function="GridCheck"
+             parameter="secondlife"/>
         </menu_item_call>
         <menu_item_call
              label="Report Abuse"

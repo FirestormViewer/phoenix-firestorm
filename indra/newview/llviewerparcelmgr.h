@@ -212,7 +212,10 @@ public:
 
 	void	renderRect(	const LLVector3d &west_south_bottom, 
 						const LLVector3d &east_north_top );
-	void	renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 height, U8 direction, LLViewerRegion* regionp);
+	// <FS:Ansariel> FIRE-10546: Show parcel boundary up to max. build level
+	//void	renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 height, U8 direction, LLViewerRegion* regionp);
+	void	renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 height, U8 direction, LLViewerRegion* regionp, bool absolute_height = false);
+	// </FS:Ansariel>
 	void	renderHighlightSegments(const U8* segments, LLViewerRegion* regionp);
 	void	renderCollisionSegments(U8* segments, BOOL use_pass, LLViewerRegion* regionp);
 

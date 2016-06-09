@@ -57,7 +57,8 @@ LLSpinCtrl::Params::Params()
 	text_enabled_color("text_enabled_color"),
 	text_disabled_color("text_disabled_color"),
 	up_button("up_button"),
-	down_button("down_button")
+	down_button("down_button"),
+	dynamic_button_height("dynamic_button_height", false) // <FS:Ansariel> Option to calculate dynamic button height
 {}
 
 LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
@@ -70,7 +71,11 @@ LLSpinCtrl::LLSpinCtrl(const LLSpinCtrl::Params& p)
 {
 	static LLUICachedControl<S32> spinctrl_spacing ("UISpinctrlSpacing", 0);
 	static LLUICachedControl<S32> spinctrl_btn_width ("UISpinctrlBtnWidth", 0);
-	static LLUICachedControl<S32> spinctrl_btn_height ("UISpinctrlBtnHeight", 0);
+	// <FS:Ansariel> Option to calculate dynamic button height
+	//static LLUICachedControl<S32> spinctrl_btn_height ("UISpinctrlBtnHeight", 0);
+	static LLUICachedControl<S32> spinctrl_btn_height_default ("UISpinctrlBtnHeight", 0);
+	S32 spinctrl_btn_height = p.dynamic_button_height ? getRect().getHeight() / 2 : spinctrl_btn_height_default();
+	// </FS:Ansariel>
 	S32 centered_top = getRect().getHeight();
 	S32 centered_bottom = getRect().getHeight() - 2 * spinctrl_btn_height;
 	S32 btn_left = 0;

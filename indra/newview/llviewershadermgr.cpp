@@ -177,7 +177,7 @@ LLGLSLShader			gGlowProgram;
 LLGLSLShader			gGlowExtractProgram;
 LLGLSLShader			gPostColorFilterProgram;
 LLGLSLShader			gPostNightVisionProgram;
-LLGLSLShader			gVignettePost;	// <FS:CR> Import Vignette from Exodus
+LLGLSLShader			gPostVignetteProgram;	// <FS:CR> Import Vignette from Exodus
 
 // Deferred rendering shaders
 LLGLSLShader			gDeferredImpostorProgram;
@@ -786,7 +786,7 @@ void LLViewerShaderMgr::unloadShaders()
 
 	gPostColorFilterProgram.unload();
 	gPostNightVisionProgram.unload();
-	gVignettePost.unload();
+	gPostVignetteProgram.unload();
 
 	gDeferredDiffuseProgram.unload();
 	gDeferredDiffuseAlphaMaskProgram.unload();
@@ -1071,6 +1071,7 @@ BOOL LLViewerShaderMgr::loadShadersEffects()
 		gGlowExtractProgram.unload();
 		gPostColorFilterProgram.unload();	
 		gPostNightVisionProgram.unload();
+		gPostVignetteProgram.unload();	// <FS:Ansariel> Import Vignette from Exodus
 		return TRUE;
 	}
 
@@ -1105,12 +1106,12 @@ BOOL LLViewerShaderMgr::loadShadersEffects()
 // <FS:CR> Import Vignette from Exodus
 	if (success)
 	{
-		gVignettePost.mName = "Exodus Vignette Post";
-		gVignettePost.mShaderFiles.clear();
-		gVignettePost.mShaderFiles.push_back(make_pair("post/exoPostBaseV.glsl", GL_VERTEX_SHADER_ARB));
-		gVignettePost.mShaderFiles.push_back(make_pair("post/exoVignetteF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gVignettePost.mShaderLevel = mVertexShaderLevel[SHADER_EFFECT];
-		success = gVignettePost.createShader(NULL, NULL);
+		gPostVignetteProgram.mName = "Exodus Vignette Post";
+		gPostVignetteProgram.mShaderFiles.clear();
+		gPostVignetteProgram.mShaderFiles.push_back(make_pair("post/exoPostBaseV.glsl", GL_VERTEX_SHADER_ARB));
+		gPostVignetteProgram.mShaderFiles.push_back(make_pair("post/exoVignetteF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gPostVignetteProgram.mShaderLevel = mVertexShaderLevel[SHADER_EFFECT];
+		success = gPostVignetteProgram.createShader(NULL, NULL);
 	}
 // </FS:CR>
 	

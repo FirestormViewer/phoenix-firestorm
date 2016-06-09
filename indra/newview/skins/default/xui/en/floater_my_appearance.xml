@@ -13,7 +13,7 @@
   reuse_instance="true"
   title="Appearance"
   min_height="200"
-  min_width="200"
+  min_width="325"
   width="333">
     <panel
       top="18"

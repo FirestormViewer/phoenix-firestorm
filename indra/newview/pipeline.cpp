@@ -673,6 +673,10 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
 	gSavedSettings.getControl("RenderAutoHideSurfaceAreaLimit")->getCommitSignal()->connect(boost::bind(&LLPipeline::refreshCachedSettings));
 	connectRefreshCachedSettingsSafe("FSRenderVignette");	// <FS:CR> Import Vignette from Exodus
+	// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
+	connectRefreshCachedSettingsSafe("RenderAttachedLights");
+	connectRefreshCachedSettingsSafe("RenderAttachedParticles");
+	// </FS:Ansariel>
 }
 
 LLPipeline::~LLPipeline()
@@ -1140,6 +1144,10 @@ void LLPipeline::refreshCachedSettings()
 	LLVOAvatar::sMaxNonImpostors = gSavedSettings.getU32("RenderAvatarMaxNonImpostors");
 	LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
 	LLPipeline::sDelayVBUpdate = gSavedSettings.getBOOL("RenderDelayVBUpdate");
+	// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
+	LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
+	LLPipeline::sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
+	// </FS:Ansariel>
 
 	LLPipeline::sUseOcclusion = 
 			(!gUseWireframe

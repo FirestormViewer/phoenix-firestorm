@@ -27,7 +27,7 @@
 	<string name="combo_label">
 		-Voreinstellung auswählen-
 	</string>
-	<text name="label">
+	<text name="label" width="90" left="40">
 		Voreinstellung:
 	</text>
 	<button label="Löschen" name="delete"/>

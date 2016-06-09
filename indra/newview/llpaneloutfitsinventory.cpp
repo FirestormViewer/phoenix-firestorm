@@ -353,3 +353,12 @@ LLSidepanelAppearance* LLPanelOutfitsInventory::getAppearanceSP()
 		dynamic_cast<LLSidepanelAppearance*>(LLFloaterSidePanelContainer::getPanel("appearance"));
 	return panel_appearance;
 }
+
+// <FS:Ansariel> Show avatar complexity in appearance floater
+void LLPanelOutfitsInventory::updateAvatarComplexity(U32 complexity)
+{
+	mMyOutfitsPanel->updateAvatarComplexity(complexity);
+	mCurrentOutfitPanel->updateAvatarComplexity(complexity);
+}
+// </FS:Ansariel>
+

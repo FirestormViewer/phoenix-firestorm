@@ -8,14 +8,14 @@
 	<pie_slice label="Kaufen" name="Buy..."/>
 	<pie_slice label="Nehmen" name="Pie Object Take"/>
 	<pie_slice label="Zahlen" name="Pay..."/>
-	<pie_menu label="Mehr >" name="Object Pie More 1">
+	<pie_menu label="Mehr &gt;" name="Object Pie More 1">
 		<pie_slice label="Löschen" name="Delete"/>
 		<pie_slice label="Anziehen" name="Wear"/>
 		<pie_slice label="Kopie nehmen" name="Take Copy"/>
-		<pie_menu label="HUD anhängen >" name="Pie Object Attach HUD"/>
-		<pie_menu label="Anhängen >" name="Pie Object Attach"/>
+		<pie_menu label="HUD anhängen &gt;" name="Pie Object Attach HUD"/>
+		<pie_menu label="Anhängen &gt;" name="Pie Object Attach"/>
 		<pie_slice label="Zurückgeben" name="Return..."/>
-		<pie_menu label="Mehr >" name="Object Pie More 2">
+		<pie_menu label="Mehr &gt;" name="Object Pie More 2">
 			<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 				<pie_slice label="Blacklist" name="DerenderPermanent"/>
 				<pie_slice label="Temporär" name="Derender"/>

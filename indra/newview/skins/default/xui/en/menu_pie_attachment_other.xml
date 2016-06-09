@@ -85,7 +85,7 @@
     </pie_slice>
     <pie_menu
         name="Avatar Pie More 1"
-        label="More >">
+        label="More &gt;">
 
         <pie_slice
             label="Freeze"
@@ -127,7 +127,7 @@
 
         <pie_menu
             name="Avatar Pie More 2"
-            label="More >">
+            label="More &gt;">
 
             <!-- ## Zi: Is this the right thing to use for avatar textures? -->
             <pie_slice
@@ -167,6 +167,7 @@
                 <pie_slice.on_click
                     function="Object.TexRefresh" />
             </pie_slice>
+			<pie_separator/>
 			<pie_menu
 				name="ExportMenu"
 				label="Save as &gt;">
@@ -188,15 +189,19 @@
 					<pie_slice.on_enable
                     function="Object.EnableExport" />
 				</pie_slice>
+				<pie_separator/>
+				<pie_separator/>
+				<pie_separator/>
+				<pie_separator/>
+				<pie_slice
+					label="Dump XML"
+					name="Dump XML">
+					<pie_slice.on_click
+						function="Advanced.AppearanceToXML" />
+					<pie_slice.on_visible
+						function="Advanced.EnableAppearanceToXML"/>
+				</pie_slice>
 			</pie_menu>
-			<pie_slice
-				label="Dump XML"
-				name="Dump XML">
-				<pie_slice.on_click
-					function="Advanced.AppearanceToXML" />
-				<pie_slice.on_visible
-					function="Advanced.EnableAppearanceToXML"/>
-			</pie_slice>
 			<pie_menu
 				name="RenderMenu"
 				label="Render &gt;">

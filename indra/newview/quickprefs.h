@@ -78,6 +78,9 @@ private:
 
 	void initCallbacks();
 	void loadPresets();
+	void loadDayCyclePresets();
+	void loadSkyPresets();
+	void loadWaterPresets();
 
 	void onChangeUseRegionWindlight();
 	void onChangeWaterPreset();
@@ -101,8 +104,8 @@ public:
 	/*virtual*/ void draw();
 	virtual void onOpen(const LLSD& key);
 
-
-	static void updateParam(EQuickPrefUpdateParam param, const LLSD& value);
+	static void updateParam(EQuickPrefUpdateParam param, const std::string& preset_name);
+	static void reloadPresetsAndSelect(EQuickPrefUpdateParam param);
 	void setSelectedSky(const std::string& preset_name);
 	void setSelectedWater(const std::string& preset_name);
 	void setSelectedDayCycle(const std::string& preset_name);

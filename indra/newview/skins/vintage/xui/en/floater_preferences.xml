@@ -21,9 +21,9 @@
      label="OK"
      label_selected="OK"
      layout="topleft"
-     left_pad="5"
      right="-105"
      name="OK"
+     top="488"
      width="90">
         <button.commit_callback
          function="Pref.OK" />

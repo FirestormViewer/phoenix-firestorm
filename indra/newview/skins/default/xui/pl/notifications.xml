@@ -1309,12 +1309,12 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 		</form>
 	</notification>
 	<notification name="AgentComplexityWithVisibility">
-		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień skomplikowania awatara] to [AGENT_COMPLEXITY].
+		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
-	<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień skomplikowania mojego awatara jest zbyt wysoki" name="notifyignore"/>
+	<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności mojego awatara jest zbyt wysoki" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
-		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień skomplikowania awatara] to [AGENT_COMPLEXITY].
+		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
 	</notification>
 	<notification name="FirstRun">
 		Instalacja [APP_NAME] zakończona.

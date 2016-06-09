@@ -53,6 +53,9 @@ public:
 		Optional<LLButton::Params> up_button;
 		Optional<LLButton::Params> down_button;
 
+		// <FS:Ansariel> Option to calculate dynamic button height
+		Optional<bool> dynamic_button_height;
+
 		Params();
 	};
 protected:
