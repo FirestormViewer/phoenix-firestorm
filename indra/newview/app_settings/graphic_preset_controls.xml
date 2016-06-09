@@ -13,6 +13,8 @@
 		<string>FullScreen</string>
 		<string>MaxFPS</string>
 		<string>RenderAnisotropic</string>
+		<string>RenderAttachedLights</string>
+		<string>RenderAttachedParticles</string>
 		<string>RenderAutoMaskAlphaDeferred</string>
 		<string>RenderAutoMaskAlphaNonDeferred</string>
 		<string>RenderAvatarCloth</string>
