@@ -41,7 +41,9 @@
 #include "quickprefs.h"
 
 LLPresetsManager::LLPresetsManager()
-	: mIsLoadingPreset(false) // <FS:Ansariel> Graphic preset controls independent from XUI
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	: mIsLoadingPreset(false),
+	  mIsDrawDistanceSteppingActive(false)
 {
 	// <FS:Ansariel> Graphic preset controls independent from XUI
 	// This works, because the LLPresetsManager instance is created in the
@@ -392,7 +394,7 @@ void LLPresetsManager::handleGraphicPresetControlChanged(LLControlVariablePtr co
 {
 	LL_DEBUGS() << "Handling graphic preset control change: control = " << control->getName() << " - new = " << new_value << " - old = " << old_value << LL_ENDL;
 
-	if (!mIsLoadingPreset)
+	if (!mIsLoadingPreset && (!mIsDrawDistanceSteppingActive || control->getName() != "RenderFarClip"))
 	{
 		LL_DEBUGS() << "Trigger graphic preset control changed signal" << LL_ENDL;
 

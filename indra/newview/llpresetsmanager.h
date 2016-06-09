@@ -74,6 +74,7 @@ public:
 
 	// <FS:Ansariel> Graphic preset controls independent from XUI
 	void setIsLoadingPreset(bool is_loading) { mIsLoadingPreset = is_loading; }
+	void setIsDrawDistanceSteppingActive(bool is_active) { mIsDrawDistanceSteppingActive = is_active; }
 	// </FS:Ansariel>
 
   private:
@@ -85,6 +86,7 @@ public:
 	void handleGraphicPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value);
 
 	bool mIsLoadingPreset;
+	bool mIsDrawDistanceSteppingActive;
 	std::vector<std::string> mGraphicPresetControls;
 	// </FS:Ansariel>
 };
