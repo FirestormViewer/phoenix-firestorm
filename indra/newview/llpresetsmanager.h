@@ -72,8 +72,21 @@ public:
 
 	preset_list_signal_t mPresetListChangeSignal;
 
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	void setIsLoadingPreset(bool is_loading) { mIsLoadingPreset = is_loading; }
+	// </FS:Ansariel>
+
   private:
     LOG_CLASS(LLPresetsManager);
+
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	void initGraphicPresetControlNames();
+	void initGraphicPresetControls();
+	void handleGraphicPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value);
+
+	bool mIsLoadingPreset;
+	std::vector<std::string> mGraphicPresetControls;
+	// </FS:Ansariel>
 };
 
 #endif // LL_PRESETSMANAGER_H
