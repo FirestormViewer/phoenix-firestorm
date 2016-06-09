@@ -1524,9 +1524,9 @@ void LLAppearanceMgr::wearItemsOnAvatar(const uuid_vec_t& item_ids_to_wear,
                         LLUUID item_id = gAgentWearables.getWearableItemID(item_to_wear->getWearableType(),
                                                                            wearable_count-1);
 // [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-05-02 (Catznip-3.7)
-						removeCOFItemLinks(item_id, NULL, true);
+			removeCOFItemLinks(item_id, NULL, true);
 // [/SL:KB]
-//						removeCOFItemLinks(item_id, cb);
+//			removeCOFItemLinks(item_id, cb);
                     }
                     
                     items_to_link.push_back(item_to_wear);
@@ -2615,9 +2615,8 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		std::set<LLUUID> pendingAttachments;
 		if (LLAttachmentsMgr::instance().getPendingAttachments(pendingAttachments))
 		{
-			for (std::set<LLUUID>::const_iterator itAttachItem = pendingAttachments.begin(); itAttachItem != pendingAttachments.end(); ++itAttachItem)
+			for (const LLUUID& idAttachItem : pendingAttachments)
 			{
-				const LLUUID& idAttachItem = *itAttachItem;
 				if ( (!gAgentAvatarp->isWearingAttachment(idAttachItem)) || (isLinkedInCOF(idAttachItem)) )
 				{
 					LLAttachmentsMgr::instance().clearPendingAttachmentLink(idAttachItem);
