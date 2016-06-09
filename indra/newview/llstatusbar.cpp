@@ -285,8 +285,9 @@ BOOL LLStatusBar::postBuild()
 	// <FS:Ansariel> Not used in Firestorm
 	//mBtnStats = getChildView("stat_btn");
 
-	mIconPresets = getChild<LLIconCtrl>( "presets_icon" );
+	mIconPresets = getChild<LLButton>( "presets_icon" );
 	mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+	mIconPresets->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );

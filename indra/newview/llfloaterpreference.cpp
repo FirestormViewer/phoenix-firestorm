@@ -756,6 +756,10 @@ BOOL LLFloaterPreference::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>("search_prefs_edit");
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
 	// </FS:ND>
+
+	// <FS:Ansariel> Update label for max. non imposters
+	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
+
 	return TRUE;
 }
 
@@ -3016,6 +3020,17 @@ void LLFloaterPreference::setMaxNonImpostorsText(U32 value, LLTextBox* text_box)
 		text_box->setText(llformat("%d", value));
 	}
 }
+
+void LLFloaterPreference::updateMaxNonImpostorsLabel(const LLSD& newvalue)
+{
+	U32 value = newvalue.asInteger();
+
+	if (0 == value || LLVOAvatar::IMPOSTORS_OFF <= value)
+	{
+		value=0;
+	}
+	setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
+}
 // </FS:Ansariel>
 
 void LLFloaterPreferenceGraphicsAdvanced::updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box)
@@ -3698,6 +3713,8 @@ void LLPanelPreference::onCheckContactListColumnMode()
 
 void LLPanelPreference::cancel()
 {
+	LLPresetsManager::instance().setIsLoadingPreset(true); // <FS:Ansariel> Graphic preset controls independent from XUI
+
 	for (control_values_map_t::iterator iter =  mSavedValues.begin();
 		 iter !=  mSavedValues.end(); ++iter)
 	{
@@ -3730,6 +3747,8 @@ void LLPanelPreference::cancel()
 		map_pickradius_transparency->setValue(mOriginalMapPickRadiusTransparency);
 	}
 	// </FS:Ansariel>
+
+	LLPresetsManager::instance().setIsLoadingPreset(false); // <FS:Ansariel> Graphic preset controls indepentent from XUI
 }
 
 //<FS:KC> Handled centrally now
@@ -3960,7 +3979,8 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 }
 void LLPanelPreferenceGraphics::draw()
 {
-	setPresetText();
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	//setPresetText();
 	LLPanelPreference::draw();
 }
 
@@ -3996,14 +4016,16 @@ void LLPanelPreferenceGraphics::setPresetText()
 	//}
 	// </FS:Ansariel>
 
-	if (hasDirtyChilds() && !preset_graphic_active.empty())
-	{
-		gSavedSettings.setString("PresetGraphicActive", "");
-		preset_graphic_active.clear();
-		// This doesn't seem to cause an infinite recursion.  This trigger is needed to cause the pulldown
-		// panel to update.
-		LLPresetsManager::getInstance()->triggerChangeSignal();
-	}
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	//if (hasDirtyChilds() && !preset_graphic_active.empty())
+	//{
+	//	gSavedSettings.setString("PresetGraphicActive", "");
+	//	preset_graphic_active.clear();
+	//	// This doesn't seem to cause an infinite recursion.  This trigger is needed to cause the pulldown
+	//	// panel to update.
+	//	LLPresetsManager::getInstance()->triggerChangeSignal();
+	//}
+	// </FS:Ansariel>
 
 	if (!preset_graphic_active.empty())
 	{

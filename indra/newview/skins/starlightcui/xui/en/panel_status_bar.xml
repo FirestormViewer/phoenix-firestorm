@@ -356,10 +356,11 @@
      width="50">
         24:00 AM PST
     </text>
-    <icon
+    <button
      follows="right|top"
      height="16"
-     image_name="Presets_Icon"
+     image_unselected="Presets_Icon"
+     image_pressed="Presets_Icon"
      left_delta="55"
      top="2"
      name="presets_icon"

@@ -406,7 +406,7 @@ void LLInventoryPanel::setFilterSubString(const std::string& string)
 	getFilter().setFilterSubString(string);
 }
 
-// ## Zi: Extended Inventory Search
+// <FS:Zi> Extended Inventory Search
 void LLInventoryPanel::setFilterSubStringTarget(const std::string& target)
 {
 	getFilter().setFilterSubStringTarget(target);
@@ -416,7 +416,7 @@ LLInventoryFilter::EFilterSubstringTarget LLInventoryPanel::getFilterSubStringTa
 {
 	return getFilter().getFilterSubStringTarget();
 }
-// ## Zi: Extended Inventory Search
+// </FS:Zi> Extended Inventory Search
 
 const std::string LLInventoryPanel::getFilterSubString() 
 { 
@@ -461,12 +461,26 @@ void LLInventoryPanel::setFilterLinks(U64 filter_links)
 	getFilter().setFilterLinks(filter_links);
 }
 
-// ## Zi: Filter Links Menu
+// <FS:Zi> Filter Links Menu
 U64 LLInventoryPanel::getFilterLinks()
 {
 	return getFilter().getFilterLinks();
 }
-// ## Zi: Filter Links Menu
+// </FS:Zi> Filter Links Menu
+
+// <FS>
+void LLInventoryPanel::setWorn(BOOL worn)
+{
+	getFilter().setFilterWorn(worn);
+}
+// </FS>
+
+// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+void LLInventoryPanel::setTransferable(BOOL transferable)
+{
+	getFilter().setFilterTransferable(transferable);
+}
+// </FS:Ansariel>
 
 void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 {
@@ -1690,11 +1704,6 @@ LLInventoryRecentItemsPanel::LLInventoryRecentItemsPanel( const Params& params)
 {
 	// replace bridge builder to have necessary View bridges.
 	mInvFVBridgeBuilder = &RECENT_ITEMS_BUILDER;
-}
-
-void LLInventoryPanel::setWorn(BOOL sl)
-{
-	getFilter().setFilterWorn(sl);
 }
 
 /************************************************************************/

@@ -2,6 +2,12 @@
 <panel label="Grafika" name="Display panel">
 	<tab_container label="Ustawienia graficzne" name="tabs">
 		<panel label="Ogólne" name="General">
+			<text name="preset_label" width="110">
+				Ustawienie w użyciu:
+			</text>
+			<text name="preset_text">
+				(Brak)
+			</text>
 			<text name="QualitySpeed">
 				Jakość i szybkość:
 			</text>
@@ -68,7 +74,8 @@
 			</combo_box>
 			<slider label="Pole widzenia" name="DrawDistance"/>
 			<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
-			<slider label="Maks. il. wyświetlanych awatarów" name="MaxNumberAvatarDrawn"/>
+			<slider label="Maks. złożoność awatarów" name="IndirectMaxComplexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. Jelly Doll)" />
+			<slider label="Maks. il. wyświetlanych awatarów" name="IndirectMaxNonImpostors"/>
 			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
 			<text name="PostProcessText">
 				Niska
@@ -86,7 +93,6 @@
 			<text name="AvatarRenderingText">
 				Rendering awatarów:
 			</text>
-			<check_box label="Upraszczaj oddalone awatary" name="AvatarImpostors"/>
 			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
 			<check_box label="Elastyczne tkaniny ubrań" name="AvatarCloth"/>
 			<text name="TerrainDetailText">
@@ -96,6 +102,12 @@
 				<radio_item label="Mało" name="0"/>
 				<radio_item label="Dużo" name="2"/>
 			</radio_group>
+			<text name="Presets_Label">
+				Ustawienia:
+			</text>
+			<button label="Zapisz" name="PrefSaveButton" left="270" />
+			<button label="Wczytaj" name="PrefLoadButton" />
+			<button label="Usuń" name="PrefDeleteButton" />
 			<button tool_tip="Zresetuj wartości ustawień graficznych." name="Defaults"/>
 		</panel>
 		<panel label="Ustawienia sprzętowe" name="Hardware Settings">

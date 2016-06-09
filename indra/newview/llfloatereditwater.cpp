@@ -535,7 +535,14 @@ void LLFloaterEditWater::refreshWaterPresetsList()
 void LLFloaterEditWater::enableEditing(bool enable)
 {
 	// Enable/disable water controls.
-	getChild<LLPanel>("panel_water_preset")->setCtrlsEnabled(enable);
+	// <FS:Ansariel> FS-modified floater might have this
+	//getChild<LLPanel>("panel_water_preset")->setCtrlsEnabled(enable);
+	LLPanel* panel_water_preset = findChild<LLPanel>("panel_water_preset");
+	if (panel_water_preset)
+	{
+		panel_water_preset->setCtrlsEnabled(enable);
+	}
+	// </FS:Ansariel>
 
 	// Enable/disable saving.
 	mSaveButton->setEnabled(enable);

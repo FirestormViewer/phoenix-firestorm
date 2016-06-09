@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="bottom_panel">
-	<layout_stack name="nearby_chat_bar_panels">
-		<layout_panel name="panel_nearby_chat_bar"><line_editor label="Cliquez ici pour discuter." name="chat_box" tool_tip="Appuyez sur Entrée pour parler, Ctrl+Entrée pour crier"/></layout_panel>
-		<layout_panel name="panel_nearby_chat_toggle"><button name="show_nearby_chat" tool_tip="Affiche/masque les conversations locales"/></layout_panel>
-	</layout_stack>
-</panel>

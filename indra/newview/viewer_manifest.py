@@ -527,7 +527,6 @@ class Windows_i686_Manifest(ViewerManifest):
 
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
-        self.path("featuretable_xp.txt")
         self.path("VivoxAUP.txt")
 
         # Media plugins - QuickTime

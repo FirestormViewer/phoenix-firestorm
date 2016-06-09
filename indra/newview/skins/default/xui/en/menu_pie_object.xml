@@ -80,7 +80,7 @@
     </pie_slice>
 
     <pie_menu
-        label="More >"
+        label="More &gt;"
         name="Object Pie More 1">
 
     <pie_slice
@@ -111,10 +111,10 @@
             function="Tools.EnableTakeCopy" />
     </pie_slice>
     <pie_menu
-        label="Attach HUD >"
+        label="Attach HUD &gt;"
         name="Pie Object Attach HUD" />
     <pie_menu
-        label="Attach >"
+        label="Attach &gt;"
         name="Pie Object Attach" />
     <pie_slice
         enabled="false"
@@ -127,7 +127,7 @@
         </pie_slice>
 
     <pie_menu
-        label="More >"
+        label="More &gt;"
         name="Object Pie More 2">
 
         <pie_slice
@@ -191,7 +191,7 @@
      Might get interesting when we finally do ... -->
 <!-- <pie_separator name="disable_placeholder" /> -->
         <pie_menu
-         label="Pathfinding >"
+         label="Pathfinding &gt;"
          name="Pathfinding">
             <pie_slice
              start_autohide="true"

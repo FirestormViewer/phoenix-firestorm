@@ -187,7 +187,7 @@ bool LLEnvManagerNew::useRegionSettings()
 bool LLEnvManagerNew::useWaterPreset(const std::string& name)
 {
 	// <FS:Ansariel> Quickprefs integration
-	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(name));
+	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, name);
 
 	LL_DEBUGS("Windlight") << "Displaying water preset " << name << LL_ENDL;
 	LLWaterParamManager& water_mgr = LLWaterParamManager::instance();
@@ -215,7 +215,7 @@ bool LLEnvManagerNew::useSkyPreset(const std::string& name, bool interpolate /*=
 	}
 
 	// <FS:Ansariel> Quickprefs integration
-	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, LLSD(name));
+	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, name);
 
 	LL_DEBUGS("Windlight") << "Displaying sky preset " << name << LL_ENDL;
 	sky_mgr.applySkyParams(param_set.getAll(), interpolate);
@@ -239,7 +239,7 @@ bool LLEnvManagerNew::useDayCycle(const std::string& name, LLEnvKey::EScope scop
 		params = getRegionSettings().getWLDayCycle();
 
 		// <FS:Ansariel> Quickprefs integration
-		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, LLSD(PRESET_NAME_REGION_DEFAULT));
+		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, PRESET_NAME_REGION_DEFAULT);
 	}
 	else
 	{
@@ -252,7 +252,7 @@ bool LLEnvManagerNew::useDayCycle(const std::string& name, LLEnvKey::EScope scop
 		}
 
 		// <FS:Ansariel> Quickprefs integration
-		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, LLSD(name));
+		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, name);
 	}
 
 	bool rslt = LLWLParamManager::instance().applyDayCycleParams(params, scope);
@@ -597,7 +597,7 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 		target_water_params = default_water.getAll();
 
 		// <FS:Ansariel> Quickprefs integration
-		FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD("Default"));
+		FloaterQuickPrefs::updateParam(QP_PARAM_WATER, "Default");
 	}
 
 	if (getUseRegionSettings())
@@ -610,7 +610,7 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 			target_water_params = region_water_params;
 
 			// <FS:Ansariel> Quickprefs integration
-			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(PRESET_NAME_REGION_DEFAULT));
+			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, PRESET_NAME_REGION_DEFAULT);
 		}
 		else
 		{
@@ -632,7 +632,7 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 		// <FS:Ansariel> Quickprefs integration
 		else
 		{
-			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(water));
+			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, water);
 		}
 		// </FS:Ansariel> Quickprefs integration
 
@@ -675,7 +675,7 @@ bool LLEnvManagerNew::useRegionSky()
 	// *TODO: Support fixed sky from region.
 
 	// <FS:Ansariel> Quickprefs integration
-	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, LLSD(PRESET_NAME_REGION_DEFAULT));
+	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, PRESET_NAME_REGION_DEFAULT);
 
 	// Otherwise apply region day cycle.
 	LL_DEBUGS("Windlight") << "Applying region sky" << LL_ENDL;

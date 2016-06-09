@@ -831,6 +831,7 @@ This feature is currently in Beta. Please add your name to this [http://goo.gl/f
 	<string name="Snapshots"     value=" Snapshots," />
 	<string name="No Filters"    value="No " />
 	<string name="Since Logoff"  value=" - Since Logoff" />
+	<string name="Transfer Only" value=" - Transfer only" />
 
 	<!-- inventory folder -->
 	<string name="InvFolder My Inventory">Inventory</string>

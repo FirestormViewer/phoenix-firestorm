@@ -179,16 +179,18 @@ public:
 	void setFilterWearableTypes(U64 filter);
 	void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
-	// ## Zi: Extended Inventory Search
+	// <FS:Zi> Extended Inventory Search
 	void setFilterSubStringTarget(const std::string& target);
 	LLInventoryFilter::EFilterSubstringTarget getFilterSubStringTarget() const;
-	// ## Zi: Extended Inventory Search
+	// </FS:Zi> Extended Inventory Search
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
 	void setDateSearchDirection(U32 direction);
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
-	U64 getFilterLinks();		// ## Zi: Filter Links Menu
+	U64 getFilterLinks();		// <FS:Zi> Filter Links Menu
+	void setWorn(BOOL worn);	// <FS>
+	void setTransferable(BOOL transferable); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
 	LLInventoryFilter::EFolderShow getShowFolderState();
@@ -317,9 +319,6 @@ protected:
 private:
 	bool				mBuildDefaultHierarchy; // default inventory hierarchy should be created in postBuild()
 	bool				mViewsInitialized; // Views have been generated
-
-public:
-	void setWorn(BOOL sl);
 };
 
 #endif // LL_LLINVENTORYPANEL_H

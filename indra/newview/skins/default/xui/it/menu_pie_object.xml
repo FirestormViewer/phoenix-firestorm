@@ -8,13 +8,13 @@
 	<pie_slice label="Compra" name="Buy..."/>
 	<pie_slice label="Prendi" name="Pie Object Take"/>
 	<pie_slice label="Paga" name="Pay..."/>
-	<pie_menu label="Avanti >" name="Object Pie More 1">
+	<pie_menu label="Avanti &gt;" name="Object Pie More 1">
 		<pie_slice label="Elimina" name="Delete"/>
 		<pie_slice label="Indossa" name="Wear"/>
 		<pie_slice label="Prendi copia" name="Take Copy"/>
-		<pie_menu label="HUD Indossati>" name="Pie Object Attach HUD"/>
-		<pie_menu label="Indossato >" name="Pie Object Attach"/>
-		<pie_menu label="Avanti >" name="Object Pie More 2">
+		<pie_menu label="HUD Indossati &gt;" name="Pie Object Attach HUD"/>
+		<pie_menu label="Indossato &gt;" name="Pie Object Attach"/>
+		<pie_menu label="Avanti &gt;" name="Object Pie More 2">
 			<pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
 			<pie_slice label="Muta" name="Object Mute"/>
 			<pie_menu label="Script &gt;" name="ScriptsMenu">

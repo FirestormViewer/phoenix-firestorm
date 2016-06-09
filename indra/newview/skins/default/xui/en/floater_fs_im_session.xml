@@ -612,9 +612,9 @@
               layout="topleft"
               left="1"
               right="-1"
-              top="3"
-              height="22"
-              follows="left|right|top"
+              bottom="24"
+              height="24"
+              follows="left|right|bottom"
               name="send_chat"
               label="Send"
               tool_tip="Sends the IM" />

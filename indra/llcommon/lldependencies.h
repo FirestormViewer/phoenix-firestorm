@@ -721,6 +721,9 @@ public:
     template<typename KEY_OR_ITER>
     dep_range get_before_range(const KEY_OR_ITER& key) const;
 
+    void clearCache()
+    { mCache.clear(); }
+
 private:
     DepNodeMap mNodes;
     mutable iterator_list mCache;

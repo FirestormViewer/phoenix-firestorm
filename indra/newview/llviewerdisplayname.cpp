@@ -29,7 +29,10 @@
 #include "llviewerdisplayname.h"
 
 // viewer includes
+#include "fsradar.h"
+#include "lggcontactsets.h"
 #include "llagent.h"
+#include "llviewercontrol.h"
 #include "llviewerregion.h"
 #include "llvoavatar.h"
 
@@ -200,10 +203,30 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		args["OLD_NAME"] = old_display_name;
 		args["SLID"] = av_name.getUserName();
 		args["NEW_NAME"] = av_name.getDisplayName();
-		LLNotificationsUtil::add("DisplayNameUpdate", args);
+
+		if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+		{
+			LLSD payload;
+			payload["agent_id"] = agent_id;
+			LLNotificationsUtil::add("DisplayNameUpdateRemoveAlias", args, payload,
+				boost::bind(&LGGContactSets::callbackAliasReset, LGGContactSets::getInstance(), _1, _2));
+		}
+		else if (gSavedSettings.getBOOL("FSShowDisplayNameUpdateNotification"))
+		{
+			LLNotificationsUtil::add("DisplayNameUpdate", args);
+		}
+
 		if (agent_id == gAgent.getID())
 		{
 			LLViewerDisplayName::sNameChangedSignal();
+		}
+		else
+		{
+			FSRadar* radar = FSRadar::getInstance();
+			if (radar)
+			{
+				radar->updateName(agent_id);
+			}
 		}
 	}
 };

@@ -747,7 +747,7 @@ Oczekiwane: [VALIDS]
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
-		Plik audio jest zbyt długi ([MAX_LENGTH] sekund maksimum):
+		Plik audio jest zbyt długi (maksymalnie [MAX_LENGTH] sekund):
 [FILE]
 	</notification>
 	<notification name="ProblemWithFile">
@@ -1308,6 +1308,14 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 			<ignore name="ignore" text="Ładowanie ubrań nadal trwa"/>
 		</form>
 	</notification>
+	<notification name="AgentComplexityWithVisibility">
+		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
+[OVERLIMIT_MSG]
+	<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności mojego awatara jest zbyt wysoki" name="notifyignore"/>
+	</notification>
+	<notification name="AgentComplexity">
+		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
+	</notification>
 	<notification name="FirstRun">
 		Instalacja [APP_NAME] zakończona.
 
@@ -1650,12 +1658,6 @@ Chcesz ją opuścić?
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
-	</notification>
-	<notification name="GroupDepartError">
-		Nie można opuścić grupy: [reason].
-	</notification>
-	<notification name="GroupDepart">
-		Opuściłeś/aś grupę [group_name].
 	</notification>
 	<notification name="ConfirmKick">
 		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
@@ -2347,6 +2349,10 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 	<notification name="ConfirmEmptyTrash">
 		Na pewno chcesz permanentnie usunąć zawartość Kosza?
 		<usetemplate ignoretext="Potwierdź przed usunięciem zawartości Kosza" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="TrashIsFull">
+		Twój kosz się przepełnia. Może to sprawić, że będziesz mieć problemy z zalogowaniem się.
+		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Wyczyść kosz teraz" />
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Na pewno chcesz wyczyścić bufory przeglądarki internetowej, wyszukiwania i podróży?
@@ -3319,6 +3325,12 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 	</notification>
 	<notification name="AppearanceToXMLFailed">
 		Nie udało się zapisać wyglądu do XML.
+	</notification>
+	<notification name="PresetNotSaved">
+		Błąd podczas zapisywania ustawienia [NAME].
+	</notification>
+	<notification name="PresetNotDeleted">
+		Błąd podczas usuwania ustawienia [NAME].
 	</notification>
 	<notification name="UnableToFindHelpTopic">
 		Nie można znaleźć tematu pomocy dla tego elementu.

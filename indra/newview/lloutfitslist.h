@@ -39,6 +39,7 @@ class LLInventoryCategoriesObserver;
 class LLOutfitListGearMenu;
 class LLWearableItemsList;
 class LLListContextMenu;
+class LLTextBox;
 
 
 /**
@@ -117,6 +118,8 @@ public:
 	*/
 	void expand_all_folders();
 
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	void updateAvatarComplexity(U32 complexity);
 
 private:
 
@@ -194,6 +197,8 @@ private:
 
 	LLAccordionCtrl*				mAccordion;
 	LLPanel*						mListCommands;
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	LLTextBox*						mAvatarComplexityLabel;
 
 	typedef	std::map<LLUUID, LLWearableItemsList*>		wearables_lists_map_t;
 	typedef wearables_lists_map_t::value_type			wearables_lists_map_value_t;

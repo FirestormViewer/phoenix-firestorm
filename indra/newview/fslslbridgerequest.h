@@ -28,13 +28,8 @@
 #ifndef FS_LSLBRIDGEREQUEST_H
 #define FS_LSLBRIDGEREQUEST_H
 
-
-//
-//-TT Client LSL Bridge File
-//
-
 void FSLSLBridgeRequest_Success( LLSD const &aData );
-void FSLSLBridgeRequestResponder_Failure( LLSD const &aData );
-void FSLSLBridgeRequestRadarPosResponder_Success( LLSD const &aData );
+void FSLSLBridgeRequest_Failure( LLSD const &aData );
+void FSLSLBridgeRequestRadarPos_Success( LLSD const &aData );
 
 #endif // FS_LSLBRIDGEREQUEST_H

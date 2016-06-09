@@ -2391,11 +2391,11 @@
 				 control_name="RenderFarClip"
 				 follows="left|top"
 				 height="16"
-				 increment="1"
+				 increment="8"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="4096"
+				 min_val="32"
+				 max_val="1024"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2404,12 +2404,12 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="2"
+				 decimal_digits="0"
 				 follows="top|left"
-				 max_val="10240"
-				 min_val="-10240"
+				 max_val="1024"
+				 min_val="32"
 				 width="53"
-				 increment=".01"/>
+				 increment="8"/>
 				<button
 				 follows="left|top"
 				 name="Reset_Draw_Distance"
@@ -2437,26 +2437,26 @@
 				</text>
 				<slider_bar
 				 name="SB_Avi_Count"
-				 control_name="RenderAvatarMaxVisible"
+				 control_name="IndirectMaxNonImpostors"
 				 follows="left|top"
 				 height="16"
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="100"
+				 min_val="1"
+				 max_val="66"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
 				 name="S_Avi_Count"
-				 control_name="RenderAvatarMaxVisible"
+				 control_name="IndirectMaxNonImpostors"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
 				 follows="top|left"
-				 max_val="100"
-				 min_val="0"
+				 max_val="66"
+				 min_val="1"
 				 width="53"
 				 increment="1"/>
 				<button

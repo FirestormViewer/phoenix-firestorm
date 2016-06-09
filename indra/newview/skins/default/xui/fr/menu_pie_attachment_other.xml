@@ -26,8 +26,8 @@
 			<pie_menu name="ExportMenu" label="Enregistrer sous &gt;">
 				<pie_slice label="Sauvegarde" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
+				<pie_slice label="Dump XML" name="Dump XML"/>
 			</pie_menu>
-			<pie_slice label="Dump XML" name="Dump XML"/>
 		</pie_menu>
 		<pie_slice label="Inspecter" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="Faire disparaitre &gt;">

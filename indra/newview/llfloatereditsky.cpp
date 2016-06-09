@@ -101,7 +101,14 @@ void LLFloaterEditSky::onOpen(const LLSD& key)
 	getChild<LLUICtrl>("hint")->setValue(hint);
 
 	// Hide the hint to the right of the combo if we're invoked to create a new preset.
-	getChildView("note")->setVisible(!new_preset);
+	// <FS:Ansariel> FS-modified floater might not have this
+	//getChildView("note")->setVisible(!new_preset);
+	LLView* note = findChildView("note");
+	if (note)
+	{
+		note->setVisible(!new_preset);
+	}
+	// </FS:Ansariel>
 
 	// Switch between the sky presets combobox and preset name input field.
 	mSkyPresetCombo->setVisible(!new_preset);
@@ -703,13 +710,25 @@ void LLFloaterEditSky::refreshSkyPresetsList()
 void LLFloaterEditSky::enableEditing(bool enable)
 {
 	// Enable/disable the tab and their contents.
-	LLTabContainer* tab_container = getChild<LLTabContainer>("WindLight Tabs");
-	tab_container->setEnabled(enable);
-	for (S32 i = 0; i < tab_container->getTabCount(); ++i)
+	// <FS:Ansariel> FS-modified floater might not have this
+	//LLTabContainer* tab_container = getChild<LLTabContainer>("WindLight Tabs");
+	//tab_container->setEnabled(enable);
+	//for (S32 i = 0; i < tab_container->getTabCount(); ++i)
+	//{
+	//	tab_container->enableTabButton(i, enable);
+	//	tab_container->getPanelByIndex(i)->setCtrlsEnabled(enable);
+	//}
+	LLTabContainer* tab_container = findChild<LLTabContainer>("WindLight Tabs");
+	if (tab_container)
 	{
-		tab_container->enableTabButton(i, enable);
-		tab_container->getPanelByIndex(i)->setCtrlsEnabled(enable);
+		tab_container->setEnabled(enable);
+		for (S32 i = 0; i < tab_container->getTabCount(); ++i)
+		{
+			tab_container->enableTabButton(i, enable);
+			tab_container->getPanelByIndex(i)->setCtrlsEnabled(enable);
+		}
 	}
+	// </FS:Ansariel>
 
 	// Enable/disable saving.
 	mSaveButton->setEnabled(enable);

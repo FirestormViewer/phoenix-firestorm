@@ -889,9 +889,7 @@ void LLPanelMainInventory::draw()
 		mResortActivePanel = false;
 	}
 	LLPanel::draw();
-	/// <FS:CR> This really doesn't need updated every frame. changed() handles
-	/// it whenever inventory changes.
-	//updateItemcountText();
+	updateItemcountText();
 }
 
 void LLPanelMainInventory::updateItemcountText()
@@ -941,12 +939,12 @@ void LLPanelMainInventory::onFocusReceived()
 void LLPanelMainInventory::setFilterTextFromFilter() 
 { 
 	//mFilterText = mActivePanel->getFilter().getFilterText();
-	// ## Zi: Filter dropdown
+	// <FS:Zi> Filter dropdown
 	// this method gets called by the filter subwindow (once every frame), so we update our combo box here
 	LLInventoryFilter &filter = mActivePanel->getFilter();
 	updateFilterDropdown(&filter);
 	mFilterText = filter.getFilterText();
-	// ## Zi: Filter dropdown
+	// </FS:Zi> Filter dropdown
 }
 
 void LLPanelMainInventory::toggleFindOptions()
@@ -1063,11 +1061,8 @@ void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 void LLFloaterInventoryFinder::onResetBtn()
 {
 	LLInventoryPanel* panel = mPanelMainInventory->getPanel();
-	if (panel->getName() == "Recent Items" || panel->getName() == "Worn Items")
-	{
-		panel->getFilter().resetDefault();
-	}
-	else
+	panel->getFilter().resetDefault();
+	if (panel->getName() == "All Items")
 	{
 		panel->setFilterTypes(0xffffffffffffffffULL);
 	}
@@ -1116,6 +1111,7 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 	getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
 	getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
 	getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
+	getChild<LLUICtrl>("check_transferable")->setValue(mFilter->getFilterTransferable()); // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 	getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 	getChild<LLUICtrl>("check_since_logoff")->setValue(mFilter->isSinceLogoff());
 	mSpinSinceHours->set((F32)(hours % 24));
@@ -1236,6 +1232,8 @@ void LLFloaterInventoryFinder::draw()
 
 	mPanelMainInventory->getPanel()->setHoursAgo(hours);
 	mPanelMainInventory->getPanel()->setSinceLogoff(getCheckSinceLogoff());
+	// <FS:Ansariel> FIRE-19340: search inventory by transferable permission
+	mPanelMainInventory->getPanel()->setTransferable(getChild<LLUICtrl>("check_transferable")->getValue().asBoolean());
 	mPanelMainInventory->setFilterTextFromFilter();
 	mPanelMainInventory->getPanel()->setDateSearchDirection(getDateSearchDirection());
 
@@ -1303,7 +1301,7 @@ void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
 	self->getChild<LLUICtrl>("check_snapshot")->setValue(FALSE);
 }
 
-// ## Zi: Inventory Collapse and Expand Buttons
+// <FS:Zi> Inventory Collapse and Expand Buttons
 void LLPanelMainInventory::onCollapseButtonClicked()
 {
 //	mFilterEditor->clear();
@@ -1315,7 +1313,7 @@ void LLPanelMainInventory::onExpandButtonClicked()
 {
 	getPanel()->openAllFolders();
 }
-// ## Zi: Inventory Collapse and Expand Buttons
+// </FS:Zi> Inventory Collapse and Expand Buttons
 
 //////////////////////////////////////////////////////////////////////////////////
 // List Commands                                                                //

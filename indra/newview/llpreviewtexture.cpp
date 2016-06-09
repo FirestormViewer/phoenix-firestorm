@@ -803,7 +803,7 @@ void LLPreviewTexture::updateDimensions()
 				childSetValue("upload_time", LLSD( date_time ) );
 			}
 
- 			if (mIsCopyable)
+ 			if (mIsFullPerm)
  			{
 				childSetValue("uuid", LLSD( mImageID.asString() ));
  			}
@@ -858,7 +858,7 @@ void LLPreviewTexture::updateDimensions()
 		getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
 
 		// <FS:Ansariel> Asset UUID
-		if (mIsCopyable)
+		if (mIsFullPerm)
 		{
 			LLView* copy_uuid_btn = getChildView("copyuuid");
 			copy_uuid_btn->setVisible(TRUE);

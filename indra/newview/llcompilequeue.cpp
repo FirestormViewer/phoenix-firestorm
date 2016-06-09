@@ -505,6 +505,24 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
         LLViewerObject* object = gObjectList.findObject(data->mTaskId);
         if (object)
         {
+			// <FS:KC> LSL Preprocessor
+			static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
+			if(queue->mLSLProc && _NACL_LSLPreprocessor)
+			{
+				LLVFile file(vfs, asset_id, type);
+				S32 file_length = file.getSize();
+				std::vector<char> script_data(file_length+1);
+				file.read((U8*)&script_data[0], file_length);
+				// put a EOS at the end
+				script_data[file_length] = 0;
+				
+				LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing: " + data->mItem->getName());
+				
+				queue->mLSLProc->preprocess_script(asset_id, data, type, LLStringExplicit(&script_data[0]));
+				return;
+			}
+			// </FS:KC> LSL Preprocessor
+			
             std::string url = object->getRegion()->getCapability("UpdateScriptTask");
             std::string scriptName = data->mItem->getName();
 
@@ -550,6 +568,7 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 	}
 	delete data;
 }
+
 
 ///----------------------------------------------------------------------------
 /// Class LLFloaterResetQueue
@@ -820,23 +839,40 @@ void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
 
 // <FS:KC> LSL Preprocessor
 
-void uploadDone(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, std::string aName)
-{
-	LL_INFOS() << "Upload of " << aName << " done: " << ll_pretty_print_sd( response ) << LL_ENDL;
-}
-
 class LLScriptAssetUploadWithId: public LLScriptAssetUpload
 {
 public:
 	LLScriptAssetUploadWithId(	LLUUID taskId, LLUUID itemId, TargetType_t targetType, 
-								bool isRunning, LLUUID exerienceId, std::string buffer, taskUploadFinish_f finish, LLUUID assetId )
-								:  LLScriptAssetUpload( taskId, itemId, targetType,  isRunning, exerienceId, buffer, finish)
+		bool isRunning, std::string scriptName, LLUUID queueId, LLUUID exerienceId, std::string buffer, taskUploadFinish_f finish )
+		:  LLScriptAssetUpload( taskId, itemId, targetType,  isRunning, exerienceId, buffer, finish),
+		mScriptName(scriptName),
+        mQueueId(queueId)
 	{
-		LLScriptAssetUploadWithId::setAssetId( assetId );
 	}
+
+    virtual LLSD prepareUpload()
+    {
+        LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", LLSD(mQueueId));
+        if (queue)
+        {
+            std::string message = std::string("Compiling \"") + getScriptName() + std::string("\"...");
+
+            queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
+        }
+
+        return LLBufferedAssetUploadInfo::prepareUpload();
+    }
+
+    std::string getScriptName() const { return mScriptName; }
+
+private:
+    void setScriptName(const std::string &scriptName) { mScriptName = scriptName; }
+
+    LLUUID mQueueId;
+    std::string mScriptName;
 };
 
-// This is the callback for when each script arrives
+// This is the callback after the script has been processed by preproc
 // static
 void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text)
 {
@@ -865,13 +901,14 @@ void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScri
 				args["SCRIPT"] = data->mItem->getName();
 				LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessingComplete", args));
 				
-				std::string url = object->getRegion()->getCapability("UpdateScriptTask");
 				std::string scriptName = data->mItem->getName();
-
+				
+				LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLFloaterCompileQueue::finishLSLUpload, _1, _2, _3, _4, 
+					scriptName, data->mQueueID);
+				
 				LLResourceUploadInfo::ptr_t uploadInfo( new LLScriptAssetUploadWithId(	data->mTaskId, data->mItem->getUUID(),
-																						(queue->mMono) ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2,
-																						is_running, data->mExperienceId, script_text,
-																						boost::bind( uploadDone, _1, _2, _3, _4, data->mItem->getName() ), asset_id ));
+						(queue->mMono) ? LLScriptAssetUpload::MONO : LLScriptAssetUpload::LSL2,
+						is_running, scriptName, data->mQueueID, data->mExperienceId, script_text, proc));
 
 	            LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 			}

@@ -2,5 +2,8 @@
 <panel name="Wearing">
 	<panel name="bottom_panel">
 		<menu_button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
+		<text name="avatar_complexity_label">
+			Złożoność: [WEIGHT]
+		</text>
 	</panel>
 </panel>
