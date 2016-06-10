@@ -1,5 +1,5 @@
 /** 
- * @file rlvhandeler.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -32,8 +32,6 @@
 #include "rlvlocks.h"
 #include "rlvui.h"
 #include "rlvextensions.h"
-
-#include "fslslbridge.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -1638,10 +1636,11 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				{
 					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
 					nValue += rlvCmdOption.m_nPelvisToFootOffset;
-					if (gAgentAvatarp->getRegion()->avatarHoverHeightEnabled() || !gAgentAvatarp->isUsingServerBakes())
+					if (gAgentAvatarp->getRegion()->avatarHoverHeightEnabled())
 					{
-						LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(nValue, MIN_HOVER_Z, MAX_HOVER_Z));
+						LLVector3 avOffset(0.0, 0.0, llclamp<F32>(nValue, MIN_HOVER_Z, MAX_HOVER_Z));
 						gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", avOffset.mV[VZ]);
+						gAgentAvatarp->setHoverOffset(avOffset, true);
 					}
 					else
 					{
@@ -2052,9 +2051,7 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
-			// Ansa: Do not include the bridge when checking for number of objects
-			S32 bridge_correct = (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0;
-			bool fWorn = ((pAttachPt->getNumObjects() - bridge_correct) > 0) && 
+			bool fWorn = (pAttachPt->getNumObjects() > 0) && 
 				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -2083,11 +2080,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			switch (rlvCmd.getBehaviourType())
 			{
 				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object
-					// Ansa: Do not include the bridge when checking for number of objects
-					{
-						S32 bridge_correct = ((pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0);
-						fAdd = ((pAttachPt->getNumObjects() - bridge_correct) > 0);
-					}
+					fAdd = (pAttachPt->getNumObjects() > 0);
 					break;
 				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be attached to (wear replace OR wear add)
 					fAdd = (gRlvAttachmentLocks.canAttach(pAttachPt) & RLV_WEAR);

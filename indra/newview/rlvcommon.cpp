@@ -1,5 +1,5 @@
 /** 
- * @file rlvcommon.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -21,6 +21,7 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
@@ -32,11 +33,8 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
-#include "llscriptruntimeperms.h"
-#include <boost/algorithm/string/predicate.hpp> // icontains
-#include <boost/algorithm/string/regex.hpp> // regex_replace_all
-#include <boost/foreach.hpp>	// <FS:CR>
-#include "lltrace.h"
+#include "lscript_byteformat.h"
+#include <boost/algorithm/string.hpp>
 
 // ============================================================================
 // RlvNotifications
@@ -81,9 +79,6 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		// Ansariel: Wired up in LLViewerControl because of FIRE-16601
-		//gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
-
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
@@ -152,9 +147,9 @@ void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
 	{
 		LLNotificationsUtil::add(
 			"GenericAlert",
-			LLSD().with("MESSAGE", llformat(RlvStrings::getString("message_toggle_restart").c_str(), 
-				(sdValue.asBoolean()) ? RlvStrings::getString("message_toggle_restart_enabled").c_str()
-				                      : RlvStrings::getString("message_toggle_restart_disabled").c_str())));
+			LLSD().with("MESSAGE", llformat(LLTrans::getString("RLVaToggleMessage").c_str(), 
+				(sdValue.asBoolean()) ? LLTrans::getString("RLVaToggleEnabled").c_str()
+				                      : LLTrans::getString("RLVaToggleDisabled").c_str())));
 	}
 }
 
@@ -175,14 +170,10 @@ void RlvStrings::initClass()
 		// Load the default string values
 		std::vector<std::string> files = gDirUtilp->findSkinnedFilenames(LLDir::XUI, RLV_STRINGS_FILE, LLDir::ALL_SKINS);
 		m_StringMapPath = (!files.empty()) ? files.front() : LLStringUtil::null;
-		// <FS:CR> Old compiler compatibility
-		//for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
-		BOOST_FOREACH(const std::string file, files)
+		for (std::vector<std::string>::const_iterator itFile = files.begin(); itFile != files.end(); ++itFile)
 		{
-			//loadFromFile(*itFile, false);
-			loadFromFile(file, false);
+			loadFromFile(*itFile, false);
 		}
-		// </FS:CR>
 
 		// Load the custom string overrides
 		loadFromFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE), true);
@@ -201,7 +192,7 @@ void RlvStrings::initClass()
 // Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride)
 {
-	llifstream fileStream(strFilePath.c_str(), std::ios::binary); LLSD sdFileData;
+	llifstream fileStream(strFilePath, std::ios::binary); LLSD sdFileData;
 	if ( (!fileStream.is_open()) || (!LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 		return;
 	fileStream.close();
@@ -211,7 +202,7 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride
 		const LLSD& sdStrings = sdFileData["strings"];
 		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
 		{
-			if ((!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))))
+			if ( (!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))) )
 				continue;
 
 			std::list<std::string>& listValues = m_StringMap[itString->first];
@@ -252,7 +243,7 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 			sdStrings[itString->first]["value"] = listValues.back();
 	}
 
-	llofstream fileStream(strFilePath.c_str());
+	llofstream fileStream(strFilePath);
 	if (!fileStream.good())
 		return;
 
@@ -276,7 +267,6 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 const std::string& RlvStrings::getString(const std::string& strStringName)
 {
 	static const std::string strMissing = "(Missing RLVa string)";
-	initClass(); // Ansariel: Make sure RlvStrings gets initialized before accessing it
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
 	return (itString != m_StringMap.end()) ? itString->second.back() : strMissing;
 }
@@ -372,12 +362,6 @@ void RlvStrings::setCustomString(const std::string& strStringName, const std::st
 
 bool RlvUtil::m_fForceTp = false;
 
-std::string escape_for_regex(const std::string& str)
-{
-	using namespace boost;
-	return regex_replace(str, regex("[.^$|()\\[\\]{}*+?\\\\]"), "\\\\&", match_default|format_sed);
-}
-
 // Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
 void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
@@ -385,12 +369,12 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
 	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex((*itRegion)->getName()) + "\\b", boost::regex::icase), strHiddenRegion);
+		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex(pParcelMgr->getAgentParcelName()) + "\\b", boost::regex::icase), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
@@ -403,7 +387,7 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 		LLAvatarName avName;
 		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
 		{
-			const std::string& strDisplayName = escape_for_regex(avName.getDisplayName());
+			const std::string& strDisplayName = avName.getDisplayName();
 			bool fFilterDisplay = (strDisplayName.length() > 2);
 			const std::string& strLegacyName = avName.getLegacyName();
 			fFilterLegacy &= (strLegacyName.length() > 2);
@@ -413,16 +397,16 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 			if (boost::icontains(strLegacyName, strDisplayName))
 			{
 				if (fFilterLegacy)
-					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 				if (fFilterDisplay)
-					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
+					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
 			}
 			else
 			{
 				if (fFilterDisplay)
-					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
+					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
 				if (fFilterLegacy)
-					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
+					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 			}
 		}
 	}
@@ -432,19 +416,19 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 {
 	// Check SCRIPT_PERMISSION_ATTACH
-	if ( (!gRlvAttachmentLocks.canAttach()) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit & nQuestions) )
+	if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to wear any new attachments
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
-		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;		
+		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
 	}
 
 	// Check SCRIPT_PERMISSION_TELEPORT
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit & nQuestions) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT] & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to teleport
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
-		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;		
+		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT];		
 	}
 
 	sdPayload["questions"] = nQuestions;
@@ -563,7 +547,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
-			pMenuItem->setLabel(strLabel + RlvStrings::getString("message_toggle_restart_pending"));
+			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));
 	}
 	return true;
 }

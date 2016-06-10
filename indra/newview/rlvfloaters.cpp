@@ -1,5 +1,5 @@
 /** 
- * @file rlvfloaters.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -42,12 +42,14 @@
 std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
 {
 	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
+	{
 		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
+	}
 	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
 	{
-		std::string attachment_point_name;
-		gAgentAvatarp->getAttachedPointName(pItem->getUUID(), attachment_point_name);
-		return llformat("%s (%s)", pItem->getName().c_str(), attachment_point_name.c_str());
+		std::string strAttachPtName;
+		gAgentAvatarp->getAttachedPointName(pItem->getUUID(), strAttachPtName);
+		return llformat("%s (%s)", pItem->getName().c_str(), strAttachPtName.c_str());
 	}
 	return (pItem) ? pItem->getName() : LLStringUtil::null;
 }
@@ -586,7 +588,7 @@ BOOL RlvFloaterStrings::postBuild()
 	pDefaultBtn->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringRevertDefault, this));
 
 	// Read all string metadata from the default strings file
-	llifstream fileStream(RlvStrings::getStringMapPath().c_str(), std::ios::binary); LLSD sdFileData;
+	llifstream fileStream(RlvStrings::getStringMapPath(), std::ios::binary); LLSD sdFileData;
 	if ( (fileStream.is_open()) && (LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 	{
 		m_sdStringsInfo = sdFileData["strings"];

@@ -1,5 +1,5 @@
 /** 
- * @file rlvinventory.cpp
+ *
  * Copyright (c) 2009-2014, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -19,7 +19,6 @@
 #include "llappearancemgr.h"
 #include "llstartup.h"
 #include "llviewerfoldertype.h"
-#include "llviewermessage.h"
 
 #include "rlvinventory.h"
 
@@ -365,27 +364,6 @@ S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFold
 	return cntType;
 }
 
-// Checked: 2012-11-28 (RLVa-1.4.8)
-bool RlvInventory::isGiveToRLVOffer(const LLOfferInfo& offerInfo)
-{
-	if ( (!RlvSettings::getForbidGiveToRLV()) && (RlvInventory::instance().getSharedRoot()) )
-	{
-		if (offerInfo.mFromObject)
-		{
-			return 
-				(IM_TASK_INVENTORY_OFFERED == offerInfo.mIM) && 
-				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 1);
-		}
-		else
-		{
-			return
-				(IM_INVENTORY_OFFERED == offerInfo.mIM) && 
-				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 0);
-		}
-	}
-	return false;
-}
-
 // ============================================================================
 // RlvRenameOnWearObserver member functions
 //
@@ -411,8 +389,7 @@ void RlvRenameOnWearObserver::doneIdle()
 	}
 
 	const LLViewerJointAttachment* pAttachPt = NULL; S32 idxAttachPt = 0;
-	// Kitty says this check really doesn't do much of anything. -- TS
-	// RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
+	RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
 	for (uuid_vec_t::const_iterator itItem = mComplete.begin(); itItem != mComplete.end(); ++itItem)
 	{
 		const LLUUID& idAttachItem = *itItem;

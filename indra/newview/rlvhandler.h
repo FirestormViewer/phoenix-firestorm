@@ -1,5 +1,5 @@
 /** 
- * @file rlvhandeler.h
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -20,9 +20,9 @@
 #include <stack>
 
 #include "rlvcommon.h"
-//#if LL_GNUC
+#if LL_GNUC
 #include "rlvhelper.h"		// Needed to make GCC happy
-//#endif // LL_GNUC
+#endif // LL_GNUC
 
 // ============================================================================
 

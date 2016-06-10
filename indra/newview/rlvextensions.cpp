@@ -1,5 +1,5 @@
 /** 
- * @file rlvextentions.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -281,13 +281,7 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 		}
 		else
 		{
-			// <FS:Ansariel> FIRE-14466: Menu item checkmark in menu doesn't get properly updated
-			//pEnvMgr->useRegionSettings();
-			pEnvMgr->setUserPrefs(pEnvMgr->getWaterPresetName(),
-					    pEnvMgr->getSkyPresetName(),
-					    pEnvMgr->getDayCycleName(),
-					    false, true, false);
-			// </FS:Ansariel>
+			pEnvMgr->useRegionSettings();
 		}
 		return true;
 	}

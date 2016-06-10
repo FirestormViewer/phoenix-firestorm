@@ -1,5 +1,5 @@
 /** 
- * @file rlvcommon.h
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -19,7 +19,6 @@
 
 #include "llavatarname.h"
 #include "llselectmgr.h"
-#include "lltrans.h"
 #include "llviewercontrol.h"
 
 #include "rlvdefines.h"
@@ -168,7 +167,7 @@ public:
 
 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);

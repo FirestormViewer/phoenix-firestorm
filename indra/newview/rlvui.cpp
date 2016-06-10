@@ -1,5 +1,5 @@
 /** 
- * @file rlvui.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -19,9 +19,6 @@
 #include "llavataractions.h"			// LLAvatarActions::profileVisible()
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
 #include "llavatarnamecache.h"
-// <FS:Ansariel> [FS communication UI]
-#include "fsfloatervoicecontrols.h"
-// </FS:Ansariel> [FS communication UI]
 #include "llenvmanager.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
@@ -46,9 +43,6 @@
 #include "rlvui.h"
 #include "rlvhandler.h"
 #include "rlvextensions.h"
-
-#include "fsradar.h"
-#include "llviewerregion.h"
 
 // ============================================================================
 
@@ -134,7 +128,7 @@ void RlvUIEnabler::onToggleEdit()
 
 		// Hide the build floater if it's currently visible
 		if (LLFloaterReg::instanceVisible("build"))
-			LLToolMgr::instance().toggleBuildMode(LLSD("toggleonly"));
+			LLToolMgr::instance().toggleBuildMode();
 	}
 
 	// Start or stop filtering opening the beacons floater
@@ -225,10 +219,6 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 		LLFloaterReg::const_instance_list_t lFloaters = LLFloaterReg::getFloaterList("inventory");
 		for (LLFloaterReg::const_instance_list_t::const_iterator itFloater = lFloaters.begin(); itFloater != lFloaters.end(); ++itFloater)
 			(*itFloater)->closeFloater();
-
-		LLFloaterReg::const_instance_list_t lSecFloaters = LLFloaterReg::getFloaterList("secondary_inventory");
-		for (LLFloaterReg::const_instance_list_t::const_iterator itSecFloater = lSecFloaters.begin(); itSecFloater != lSecFloaters.end(); ++itSecFloater)
-			(*itSecFloater)->closeFloater();
 	}
 
 	//
@@ -263,17 +253,10 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 	//
 	// Filter (or stop filtering) opening new inventory floaters
 	//
-	// <FS:Ansariel> Modified for FIRE-8804
 	if (!fEnable)
-	{
 		addGenericFloaterFilter("inventory");
-		addGenericFloaterFilter("secondary_inventory");
-	}
 	else
-	{
 		removeGenericFloaterFilter("inventory");
-		removeGenericFloaterFilter("secondary_inventory");
-	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -364,26 +347,14 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
 	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->findChild<LLPanel>("Net Map Panel", TRUE) : NULL;
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
 	{
-		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("ShowRadarMinimap").get() : NULL);
+		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap").get() : NULL);
 		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
 		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
 			pNetMapPanel->setVisible(false);
-	}
-
-	// Break/reestablish the visibility connection for the radar panel embedded minimap instance
-	LLFloater* pRadarFloater = LLFloaterReg::getInstance("fs_radar");
-	LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
-	RLV_ASSERT( (pRadarFloater) && (pRadarNetMapPanel) );
-	if (pRadarNetMapPanel)
-	{
-		pRadarNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("ShowRadarMinimap").get() : NULL);
-		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
-		if ( (!fEnable) && (pRadarNetMapPanel->getVisible()) )
-			pRadarNetMapPanel->setVisible(false);
 	}
 }
 
@@ -396,23 +367,19 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
-	// <FS:Ansariel> [Standalone radar]
-	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
-	FSRadar* pRadar = FSRadar::getInstance();
-	RLV_ASSERT( (pRadar) );
-	if ( (pRadar) )
-		pRadar->updateNames();
-	// </FS:Ansariel> [Standalone radar]
+	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	{
+		if (pPeoplePanel->getNearbyList()->isInVisibleChain())
+			pPeoplePanel->onCommit();
+		pPeoplePanel->getNearbyList()->updateAvatarNames();
+	}
 
-	// Refresh the speaker list
-	// <FS:Ansariel> [FS communication UI]
-	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
-	if (pCallFloater)
-		pCallFloater->getAvatarCallerList()->updateAvatarNames();
-	// </FS:Ansariel> [FS communication UI]
+//	// Refresh the speaker list
+//	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
+//	if (pCallFloater)
+//		pCallFloater->getAvatarCallerList()->updateAvatarNames();
 
 	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
 	if (!fEnable)
@@ -447,10 +414,7 @@ void RlvUIEnabler::onToggleShowWorldMap()
 void RlvUIEnabler::onToggleTp()
 {
 	// Disable the navigation bar "Home" button if both @tplm=n *and* @tploc=n restricted
-	// <FS:Zi> Make navigation bar part of the UI
-	// LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->findChild<LLButton>("home_btn");
-	LLButton* pNavBarHomeBtn = LLNavigationBar::instance().getView()->findChild<LLButton>("home_btn");
-	// </FS:Zi>
+	LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->findChild<LLButton>("home_btn");
 	RLV_ASSERT(pNavBarHomeBtn);
 	if (pNavBarHomeBtn)
 		pNavBarHomeBtn->setEnabled(!(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
@@ -636,10 +600,7 @@ bool RlvUIEnabler::canViewRegionProperties()
 bool RlvUIEnabler::hasOpenIM(const LLUUID& idAgent)
 {
 	LLUUID idSession = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, idAgent);
-	// <FS:Ansariel> [FS communication UI]
-	//return (NULL != LLFloaterReg::findInstance("impanel", idSession));
-	return (NULL != LLFloaterReg::findInstance("fs_impanel", idSession));
-	// </FS:Ansariel> [FS communication UI]
+	return (NULL != LLFloaterReg::findInstance("impanel", idSession));
 }
 
 // Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a
@@ -656,10 +617,7 @@ bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 // Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 bool RlvUIEnabler::isBuildEnabled()
 {
-	// <FS:Ansariel> FIRE-1432: Build button not properly updated
-	//return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
-	return (LLViewerParcelMgr::getInstance()->allowAgentBuild()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
-	// </FS:Ansariel>
+	return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
 }
 
 // ============================================================================

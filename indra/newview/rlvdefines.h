@@ -1,5 +1,5 @@
 /** 
- * @file rlvdefines.h
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -44,9 +44,7 @@
 
 // Experimental commands (not part of the RLV API spec, disabled on public releases)
 #ifdef RLV_EXPERIMENTAL_CMDS
-// <ND/> Disable  RLV_EXTENSION_CMD_ALLOWIDLE for now, it causes FIRE-3863
-//	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
-
+	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
 	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
 	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
 	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
@@ -70,7 +68,7 @@ const S32 RLVa_VERSION_PATCH = 10;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
-#define RLV_RELEASE
+//#define RLV_RELEASE
 
 // Defining these makes it easier if we ever need to change our tag
 #define RLV_WARNS		LL_WARNS("RLV")
@@ -105,7 +103,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4
-#define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90 degrees with the rest of SL
+#define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"

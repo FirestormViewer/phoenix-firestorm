@@ -1,5 +1,5 @@
 /** 
- * @file rlvlocks.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -15,7 +15,6 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "fslslbridge.h"
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
@@ -658,13 +657,6 @@ void RlvAttachmentLockWatchdog::onDetach(const LLViewerObject* pAttachObj, const
 	if ( (!idxAttachPt) || (idAttachItem.isNull()) )
 		return;
 
-	// <FS:Ansariel> Bridge can always be detached
-	if (FSLSLBridge::instance().canDetach(idAttachItem))
-	{
-		return;
-	}
-	// </FS:Ansariel>
-
 	// If it's an attachment that's pending force-detach then we don't want to do anything (even if it's currently "remove locked")
 	rlv_detach_map_t::iterator itDetach = std::find(m_PendingDetach.begin(), m_PendingDetach.end(), idAttachItem);
 	if (itDetach != m_PendingDetach.end())
@@ -1078,8 +1070,11 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 		// Check the parent folders of any links to this item that exist under #RLV
 		if (!fItemLocked)
 		{
-			LLInventoryModel::item_array_t itemLinks = 
-				gInventory.collectLinkedItems(pItem->getUUID(), RlvInventory::instance().getSharedRootID());
+			LLInventoryModel::item_array_t itemLinks;
+			LLInventoryModel::cat_array_t cats;
+			LLLinkedItemIDMatches f(pItem->getUUID());
+			gInventory.collectDescendentsIf(RlvInventory::instance().getSharedRootID(), cats, itemLinks, LLInventoryModel::EXCLUDE_TRASH, f);
+
 			for (LLInventoryModel::item_array_t::iterator itItemLink = itemLinks.begin(); 
 					(itItemLink < itemLinks.end()) && (!fItemLocked); ++itItemLink)
 			{
