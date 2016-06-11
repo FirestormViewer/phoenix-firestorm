@@ -597,7 +597,7 @@ BOOL RlvFloaterStrings::postBuild()
 	pDefaultBtn->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringRevertDefault, this));
 
 	// Read all string metadata from the default strings file
-	llifstream fileStream(RlvStrings::getStringMapPath(), std::ios::binary); LLSD sdFileData;
+	llifstream fileStream(RlvStrings::getStringMapPath().c_str(), std::ios::binary); LLSD sdFileData;
 	if ( (fileStream.is_open()) && (LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 	{
 		m_sdStringsInfo = sdFileData["strings"];
