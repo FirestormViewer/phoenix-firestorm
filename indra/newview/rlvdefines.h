@@ -122,10 +122,13 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWWORLDMAP,			// "showworldmap"
 	RLV_BHVR_SHOWLOC,				// "showloc"
 	RLV_BHVR_SHOWNAMES,				// "shownames"
+	RLV_BHVR_SHOWNAMETAGS,			// "shownametags"
 	RLV_BHVR_SHOWHOVERTEXT,			// "showhovertext"
 	RLV_BHVR_SHOWHOVERTEXTHUD,		// "showhovertexthud"
 	RLV_BHVR_SHOWHOVERTEXTWORLD,	// "showhovertextworld"
 	RLV_BHVR_SHOWHOVERTEXTALL,		// "showhovertextall"
+	RLV_BHVR_SHOWSELF,
+	RLV_BHVR_SHOWSELFHEAD,
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
 	RLV_BHVR_TPLOCAL,
@@ -324,6 +327,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
 #define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
+#define RLV_STRING_BLOCKED_TELEPORT_OFFER   "blocked_teleport_offer"
 #define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 #define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"

@@ -41,9 +41,8 @@
 #include "llviewermenu.h"			// for gMenuHolder
 #include "llconversationmodel.h"
 #include "llviewerobjectlist.h"
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+// [RLVa:KB] - Checked: RLVa-2.0.1
 #include "rlvactions.h"
-#include "rlvhandler.h"
 // [/RLVa:KB]
 
 namespace LLPanelPeopleMenus
@@ -184,17 +183,17 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 
 		for (;id != uuids_end; ++id)
 		{
-			if ( LLAvatarActions::isFriend(*id) )
+//			if ( LLAvatarActions::isFriend(*id) )
+// [RLVa:KB] - Checked: 2014-03-31 (RLVa-2.0.1)
+			if ( (LLAvatarActions::isFriend(*id)) || (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, *id)) )
+// [/RLVa:KB]
 			{
 				result = false;
 				break;
 			}
 		}
 
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-		return result && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-// [/RLVa:KB]
-//		return result;
+		return result;
 	}
 	else if (item == std::string("can_delete"))
 	{
@@ -210,17 +209,17 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 
 		for (;id != uuids_end; ++id)
 		{
-			if ( !LLAvatarActions::isFriend(*id) )
+//			if ( !LLAvatarActions::isFriend(*id) )
+// [RLVa:KB] - Checked: 2014-03-31 (RLVa-2.0.1)
+			if ( (!LLAvatarActions::isFriend(*id)) || (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, *id)) )
+// [/RLVa:KB]
 			{
 				result = false;
 				break;
 			}
 		}
 
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-		return result && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-// [/RLVa:KB]
-//		return result;
+		return result;
 	}
 	else if (item == std::string("can_call"))
 	{
@@ -272,8 +271,8 @@ void PeopleContextMenu::requestTeleport()
 {
 	// boost::bind cannot recognize overloaded method LLAvatarActions::teleportRequest(),
 	// so we have to use a wrapper.
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	bool fRlvCanShowName = (!m_fRlvCheck) || (!RlvActions::isRlvEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	bool fRlvCanShowName = (!m_fRlvCheck) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mUUIDs.front()));
 	RlvActions::setShowName(RlvActions::SNC_TELEPORTREQUEST, fRlvCanShowName);
 	LLAvatarActions::teleportRequest(mUUIDs.front());
 	RlvActions::setShowName(RlvActions::SNC_TELEPORTREQUEST, true);
@@ -285,8 +284,11 @@ void PeopleContextMenu::offerTeleport()
 {
 	// boost::bind cannot recognize overloaded method LLAvatarActions::offerTeleport(),
 	// so we have to use a wrapper.
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	bool fRlvCanShowName = (!m_fRlvCheck) || (!RlvActions::isRlvEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	bool fRlvCanShowName = true;
+	if ( (m_fRlvCheck) && (RlvActions::isRlvEnabled()) )
+		std::for_each(mUUIDs.begin(), mUUIDs.end(), [&fRlvCanShowName](const LLUUID& idAgent) { fRlvCanShowName &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+
 	RlvActions::setShowName(RlvActions::SNC_TELEPORTOFFER, fRlvCanShowName);
 	LLAvatarActions::offerTeleport(mUUIDs);
 	RlvActions::setShowName(RlvActions::SNC_TELEPORTOFFER, true);
@@ -314,14 +316,18 @@ void NearbyPeopleContextMenu::buildContextMenu(class LLMenuGL& menu, U32 flags)
     menuentry_vec_t items;
     menuentry_vec_t disabled_items;
 	
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+// [RLVa:KB] - Checked: RLVa-1.5.0
+	bool fRlvCanShowName = true;
+	if ( (m_fRlvCheck) && (RlvActions::isRlvEnabled()) )
+		std::for_each(mUUIDs.begin(), mUUIDs.end(), [&fRlvCanShowName](const LLUUID& idAgent) { fRlvCanShowName &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+
+	if (!fRlvCanShowName)
 	{
 		if (flags & ITEM_IN_MULTI_SELECTION)
 		{
 			items.push_back(std::string("offer_teleport"));
 		}
-		else 
+		else
 		{
 			items.push_back(std::string("offer_teleport"));
 			items.push_back(std::string("request_teleport"));

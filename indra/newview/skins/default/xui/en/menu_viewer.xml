@@ -1644,16 +1644,6 @@
       	 parameter="RestrainedLoveShowEllipsis" />
       </menu_item_check>
       <menu_item_check
-       label="Show Name Tags"
-       name="Show Name Tags">
-      	<menu_item_check.on_check
-      	 function="CheckControl"
-      	 parameter="RLVaShowNameTags" />
-      	<menu_item_check.on_click
-      	 function="ToggleControl"
-      	 parameter="RLVaShowNameTags" />
-      </menu_item_check>
-      <menu_item_check
        label="Wear Replaces Unlocked"
        name="Wear Replaces Unlocked">
       	<menu_item_check.on_check

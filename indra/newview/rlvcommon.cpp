@@ -38,6 +38,13 @@
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
+// Forward declarations
+//
+
+// llviewermenu.cpp
+LLVOAvatar* find_avatar_from_object(LLViewerObject* object);
+
+// ============================================================================
 // RlvNotifications
 //
 
@@ -377,7 +384,7 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
-		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
+		if ( (LLAvatarNameCache::get(idAgents[idxAgent], &avName)) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgents[idxAgent])) )
 		{
 			const std::string& strDisplayName = avName.getDisplayName();
 			bool fFilterDisplay = (strDisplayName.length() > 2);
@@ -581,6 +588,12 @@ void rlvMenuToggleVisible()
 			pItem->updateBranchParent(pMenuTo);
 		}
 	}
+}
+
+bool rlvMenuCanShowName()
+{
+  const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+  return (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g

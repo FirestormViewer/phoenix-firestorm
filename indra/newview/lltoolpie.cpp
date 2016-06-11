@@ -1123,8 +1123,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
 //				final_name = av_name.getCompleteName();
-// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [RLVa:KB] - Checked: RLVa-1.2.2
+				final_name = (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
 			}
 			else
@@ -1134,9 +1134,9 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+// [RLVa:KB] - Checked: RLVa-1.2.0
 			if ( (!rlv_handler_t::isEnabled()) || 
-				 ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ) )
+			     ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
 			{
 // [/RLVa:KB]
 				LLInspector::Params p;

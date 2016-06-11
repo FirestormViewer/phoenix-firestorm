@@ -111,6 +111,8 @@ bool rlvGetShowException(ERlvBehaviour eBhvr)
 		case RLV_BHVR_TPREQUEST:
 		case RLV_BHVR_ACCEPTTP:
 		case RLV_BHVR_ACCEPTTPREQUEST:
+		case RLV_BHVR_SHOWNAMES:
+		case RLV_BHVR_SHOWNAMETAGS:
 			return true;
 		default:
 			return false;

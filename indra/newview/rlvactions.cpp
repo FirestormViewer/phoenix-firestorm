@@ -77,6 +77,29 @@ bool RlvActions::canStartIM(const LLUUID& idRecipient)
 		( (hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient)) );
 }
 
+bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
+{
+	// Handle most common case upfront
+	if (!s_BlockNamesContexts[eContext])
+		return true;
+
+	if (idAgent.notNull())
+	{
+		switch (eContext)
+		{
+			// Show/hide avatar nametag
+			case SNC_NAMETAG:
+				return (gRlvHandler.isException(RLV_BHVR_SHOWNAMETAGS, idAgent)) || (gAgentID == idAgent);
+			// Show/hide avatar name
+			case SNC_DEFAULT:
+			case SNC_TELEPORTOFFER:
+			case SNC_TELEPORTREQUEST:
+				return gRlvHandler.isException(RLV_BHVR_SHOWNAMES, idAgent);
+		}
+	}
+	return false;
+}
+
 // ============================================================================
 // Movement
 // 

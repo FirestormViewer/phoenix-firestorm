@@ -29,9 +29,13 @@
 #include "llviewerregion.h"
 
 // Command specific includes
+#include "llavatarnamecache.h"			// @shownames
+#include "llavatarlist.h"				// @shownames
 #include "llenvmanager.h"				// @setenv
+#include "llfloatersidepanelcontainer.h"// @shownames
 #include "lloutfitslist.h"				// @showinv - "Appearance / My Outfits" panel
 #include "llpaneloutfitsinventory.h"	// @showinv - "Appearance" floater
+#include "llpanelpeople.h"				// @shownames
 #include "llpanelwearing.h"				// @showinv - "Appearance / Current Outfit" panel
 #include "llsidepanelappearance.h"		// @showinv - "Appearance / Edit appearance" panel
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
@@ -1702,6 +1706,92 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
 	else
 		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
+}
+
+// Handles: @shownames[:<uuid>]=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	// Update the shownames context
+	RlvActions::setShowName(RlvActions::SNC_DEFAULT, !fHasBhvr);
+
+	// Refresh the nearby people list
+	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	{
+		if (pPeoplePanel->getNearbyList()->isInVisibleChain())
+			pPeoplePanel->onCommit();
+		pPeoplePanel->getNearbyList()->updateAvatarNames();
+	}
+
+	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
+	if (fHasBhvr)
+	{
+		LLAvatarNameCache::setForceDisplayNames(true);
+	}
+	else
+	{
+		LLAvatarNameCache::setForceDisplayNames(false);
+		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+	}
+
+	// Refresh all name tags and HUD text
+	LLVOAvatar::invalidateNameTags();
+	LLHUDText::refreshAllObjectText();
+}
+
+// Handles: @shownames[:<uuid>]=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) && (!LLApp::isQuitting()) )
+	{
+		const LLUUID idAgent = RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption());
+
+		// Refresh the nearby people list (if necessary)
+		LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+		RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+		if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) && (pPeoplePanel->getNearbyList()->contains(idAgent)) )
+		{
+			if (pPeoplePanel->getNearbyList()->isInVisibleChain())
+				pPeoplePanel->onCommit();
+			pPeoplePanel->getNearbyList()->updateAvatarNames();
+		}
+
+		// Refresh that avatar's name tag and all HUD text
+		LLVOAvatar::invalidateNameTag(idAgent);
+		LLHUDText::refreshAllObjectText();
+	}
+	return eRet;
+}
+
+// Handles: @shownametags[:<uuid>]=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMETAGS>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	// Update the shownames context
+	RlvActions::setShowName(RlvActions::SNC_NAMETAG, !fHasBhvr);
+
+	// Refresh all name tags
+	LLVOAvatar::invalidateNameTags();
+}
+
+// Handles: @shownametags[:<uuid>]=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) )
+		LLVOAvatar::invalidateNameTag(RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption()));
+	return eRet;
 }
 
 // ============================================================================
