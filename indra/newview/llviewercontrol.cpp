@@ -1098,8 +1098,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
 	// </FS:Ansariel> [FS communication UI]
 
-	gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
-
 	gSavedPerAccountSettings.getControl("GlobalOnlineStatusToggle")->getSignal()->connect(boost::bind(&handleGlobalOnlineStatusChanged, _2));
 
 	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
