@@ -1928,7 +1928,10 @@ std::ostream& operator<<(std::ostream &s, const LLAgent &agent)
 //-----------------------------------------------------------------------------
 BOOL LLAgent::needsRenderAvatar()
 {
-	if (gAgentCamera.cameraMouselook() && !LLVOAvatar::sVisibleInFirstPerson)
+//	if (gAgentCamera.cameraMouselook() && !LLVOAvatar::sVisibleInFirstPerson)
+// [RLVa:KB] - Checked: RLVa-2.0.2
+	if ( (gAgentCamera.cameraMouselook() && !LLVOAvatar::sVisibleInFirstPerson) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELF)) )
+// [/RLVa:KB]
 	{
 		return FALSE;
 	}
@@ -1939,7 +1942,10 @@ BOOL LLAgent::needsRenderAvatar()
 // TRUE if we need to render your own avatar's head.
 BOOL LLAgent::needsRenderHead()
 {
-	return (LLVOAvatar::sVisibleInFirstPerson && LLPipeline::sReflectionRender) || (mShowAvatar && !gAgentCamera.cameraMouselook());
+// [RLVa:KB] - Checked: RLVa-2.0.2
+	return ((LLVOAvatar::sVisibleInFirstPerson && LLPipeline::sReflectionRender) || (mShowAvatar && !gAgentCamera.cameraMouselook())) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELFHEAD));
+// [/RLVa:KB]
+//	return (LLVOAvatar::sVisibleInFirstPerson && LLPipeline::sReflectionRender) || (mShowAvatar && !gAgentCamera.cameraMouselook());
 }
 
 //-----------------------------------------------------------------------------

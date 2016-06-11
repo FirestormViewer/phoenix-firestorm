@@ -29,6 +29,7 @@
 #include "llviewerregion.h"
 
 // Command specific includes
+#include "llagentcamera.h"				// @showself
 #include "llavatarnamecache.h"			// @shownames
 #include "llavatarlist.h"				// @shownames
 #include "llenvmanager.h"				// @setenv
@@ -1792,6 +1793,14 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) )
 		LLVOAvatar::invalidateNameTag(RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption()));
 	return eRet;
+}
+
+// Handles: @showself=n|y and @showselfhead=n|y toggles
+template<> template<>
+void RlvBehaviourShowSelfToggleHandler::onCommandToggle(ERlvBehaviour eBvhr, bool fHasBhvr)
+{
+	if (isAgentAvatarValid())
+		gAgentAvatarp->updateAttachmentVisibility(gAgentCamera.getCameraMode());
 }
 
 // ============================================================================
