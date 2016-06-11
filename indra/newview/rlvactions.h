@@ -40,9 +40,9 @@ public:
 	static bool canSendIM(const LLUUID& idRecipient);
 
 	/*
-	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID.
+	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists)
 	 */
-	static bool canStartIM(const LLUUID& idRecipient);								// @startim and @startimto
+	static bool canStartIM(const LLUUID& idRecipient);
 
 	/*
 	 * Returns true if an avatar's name should be hidden for the requested operation/context
@@ -83,6 +83,25 @@ public:
 	 */
 	static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
 
+	// ===========
+	// Teleporting
+	// ===========
+public:
+	/*
+	 * Returns true if the user can teleport locally (short distances)
+	 */
+	static bool canTeleportToLocal();
+
+	/*
+	 * Returns true if the user can teleport to a (remote) location
+	 */
+	static bool canTeleportToLocation();
+
+	/*
+	 * Returns true if the teleport is considered local (e.g. double-click tp)
+	 */
+	static bool isLocalTp(const LLVector3d& posGlobal);
+
 	// =================
 	// World interaction
 	// =================
@@ -91,6 +110,7 @@ public:
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();
+	static bool canStand(const LLUUID& idRlvObjExcept);
 
 	/*
 	 * Returns true if the user can see their in-world location

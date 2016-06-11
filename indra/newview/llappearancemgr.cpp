@@ -59,12 +59,12 @@
 #include "llappviewer.h"
 #include "llcoros.h"
 #include "lleventcoro.h"
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
 #include "fslslbridge.h"
 
 #if LL_MSVC
@@ -1321,27 +1321,21 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2015-06-30 (Catznip-3.7)
 static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
 {
-	struct is_duplicate_asset
-	{
-		bool operator()(const LLViewerInventoryItem* pItem)
+	std::set<LLUUID> idsAsset;
+	items.erase(std::remove_if(items.begin(), items.end(), 
+		[&idsAsset](const LLViewerInventoryItem* pItem)
 		{
 			if (pItem->isWearableType())
 			{
 				const LLUUID& idAsset = pItem->getAssetUUID();
-				if ( (idAsset.notNull()) &&  (m_idsAsset.end() != m_idsAsset.find(idAsset)) )
+				if ( (idAsset.notNull()) &&  (idsAsset.end() != idsAsset.find(idAsset)) )
 					return true;
-				m_idsAsset.insert(idAsset);
+				idsAsset.insert(idAsset);
 			}
 			return false;
-		}
-	protected:
-		std::set<LLUUID> m_idsAsset;
-	};
-	items.erase(std::remove_if(items.begin(), items.end(), is_duplicate_asset()), items.end());
+		}), items.end());
 }
 // [/SL:KB]
-
-//=========================================================================
 
 const LLUUID LLAppearanceMgr::getCOF() const
 {
@@ -1524,9 +1518,9 @@ void LLAppearanceMgr::wearItemsOnAvatar(const uuid_vec_t& item_ids_to_wear,
                         LLUUID item_id = gAgentWearables.getWearableItemID(item_to_wear->getWearableType(),
                                                                            wearable_count-1);
 // [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-05-02 (Catznip-3.7)
-			removeCOFItemLinks(item_id, NULL, true);
+						removeCOFItemLinks(item_id, NULL, true);
 // [/SL:KB]
-//			removeCOFItemLinks(item_id, cb);
+//						removeCOFItemLinks(item_id, cb);
                     }
                     
                     items_to_link.push_back(item_to_wear);
@@ -2081,6 +2075,8 @@ void LLAppearanceMgr::filterWearableItems(
     }
 }
 
+//void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0)
 void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 {
 	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
@@ -2136,8 +2132,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	
 	// Collect and filter descendents to determine new COF contents.
 
-	// - Body parts: always include COF contents as a fallback in case any
-	// required parts are missing.
+	//
+	// - Body parts: always include COF contents as a fallback in case any required parts are missing.
+	//
 	// Preserve body parts from COF if appending.
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART);
@@ -2155,7 +2152,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	removeDuplicateItems(body_items);
 	filterWearableItems(body_items, 1, 0);
 
+	//
 	// - Wearables: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
@@ -2181,7 +2180,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/SL:KB]
 	filterWearableItems(wear_items, 0, LLAgentWearables::MAX_CLOTHING_LAYERS);
 
+	//
 	// - Attachments: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
@@ -2215,7 +2216,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 
 	removeDuplicateItems(obj_items);
 
+	//
 	// - Gestures: include COF contents only if appending.
+	//
 	LLInventoryModel::item_array_t gest_items;
 	if (append)
 		getDescendentsOfAssetType(cof, gest_items, LLAssetType::AT_GESTURE);
@@ -4215,7 +4218,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		return;
 	}
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
+//	LLPointer<LLInventoryCallback> cb = NULL;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLUUID& id_to_remove = *it;

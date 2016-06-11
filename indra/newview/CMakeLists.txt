@@ -1546,9 +1546,6 @@ set(viewer_HEADER_FILES
     pieseparator.h
     pieslice.h
     pipeline.h
-    roles_constants.h
-    qtoolalign.h
-    quickprefs.h
     rlvactions.h
     rlvdefines.h
     rlvhandler.h
@@ -1559,6 +1556,9 @@ set(viewer_HEADER_FILES
     rlvextensions.h
     rlvfloaters.h
     rlvui.h
+    roles_constants.h
+    qtoolalign.h
+    quickprefs.h
     sanitycheck.h
     streamtitledisplay.h
     utilitybar.h

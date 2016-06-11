@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -131,11 +131,11 @@ public:
 	typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
 	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb )			 { return m_OnCommand.connect(cb); }
 
-	void addCommandHandler(RlvCommandHandler* pHandler);
-	void removeCommandHandler(RlvCommandHandler* pHandler);
+	void addCommandHandler(RlvExtCommandHandler* pHandler);
+	void removeCommandHandler(RlvExtCommandHandler* pHandler);
 protected:
 	void clearCommandHandlers();
-	bool notifyCommandHandlers(rlvCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
+	bool notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
 
 	// Externally invoked event handlers
 public:
@@ -158,18 +158,12 @@ protected:
 
 	// Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
 	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
-	ERlvCmdRet onAddRemAttach(const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemDetach(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
 	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
 	// Command handlers (RLV_TYPE_FORCE)
 	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceRemAttach(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceRemOutfit(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceGroup(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceSit(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, ERlvBehaviour eBhvr) const;
-	void       onForceWearCallback(const uuid_vec_t& idItems, ERlvBehaviour eBhvr) const;
+	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const;
+	void       onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const;
 	// Command handlers (RLV_TYPE_REPLY)
 	ERlvCmdRet processReplyCommand(const RlvCommand& rlvCmd) const;
 	ERlvCmdRet onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const;
@@ -203,7 +197,7 @@ protected:
 	rlv_behaviour_signal_t m_OnBehaviour;
 	rlv_behaviour_signal_t m_OnBehaviourToggle;
 	rlv_command_signal_t   m_OnCommand;
-	mutable std::list<RlvCommandHandler*> m_CommandHandlers;
+	mutable std::list<RlvExtCommandHandler*> m_CommandHandlers;
 
 	static BOOL			  m_fEnabled;				// Use setEnabled() to toggle this
 
@@ -213,6 +207,8 @@ protected:
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
+	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
+	template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
 
 	// --------------------------------
 

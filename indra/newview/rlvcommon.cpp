@@ -33,7 +33,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
-#include "lscript_byteformat.h"
+#include "llscriptruntimeperms.h"
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
@@ -96,11 +96,9 @@ void RlvSettings::initClass()
 		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
 			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
-#ifdef RLV_EXTENSION_STARTLOCATION
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
 		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
 			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
-#endif // RLV_EXTENSION_STARTLOCATION
 
 		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
 			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
@@ -109,21 +107,19 @@ void RlvSettings::initClass()
 	}
 }
 
-#ifdef RLV_EXTENSION_STARTLOCATION
-	// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
-	void RlvSettings::updateLoginLastLocation()
+// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
+void RlvSettings::updateLoginLastLocation()
+{
+	if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
 	{
-		if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
+		BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
+		if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
 		{
-			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
-			if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
-			{
-				gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
-				gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
-			}
+			gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
+			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
 		}
 	}
-#endif // RLV_EXTENSION_STARTLOCATION
+}
 
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 bool RlvSettings::onChangedMenuLevel()
@@ -416,19 +412,19 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 {
 	// Check SCRIPT_PERMISSION_ATTACH
-	if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & nQuestions) )
+	if ( (!gRlvAttachmentLocks.canAttach()) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to wear any new attachments
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
-		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;
 	}
 
 	// Check SCRIPT_PERMISSION_TELEPORT
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT] & nQuestions) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit & nQuestions) )
 	{
 		// Notify the user that we blocked it since they're not allowed to teleport
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
-		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT];		
+		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;
 	}
 
 	sdPayload["questions"] = nQuestions;
@@ -585,7 +581,7 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 	bool fEnable = true;
 	if (rlv_handler_t::isEnabled())
 	{
-		ERlvBehaviour eBhvr = RlvCommand::getBehaviourFromString(sdParam.asString());
+		ERlvBehaviour eBhvr = RlvBehaviourDictionary::instance().getBehaviourFromString(sdParam.asString(), RLV_TYPE_ADDREM);
 		fEnable = (eBhvr != RLV_BHVR_UNKNOWN) ? !gRlvHandler.hasBehaviour(eBhvr) : true;
 	}
 	return fEnable;

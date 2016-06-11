@@ -110,7 +110,6 @@
 // </FS:CR>
 
 #include "fssearchableui.h"
-
 //
 // Globals
 //

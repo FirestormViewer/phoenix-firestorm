@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -18,40 +18,6 @@
 #define RLV_DEFINES_H
 
 // ============================================================================
-// Extensions
-//
-
-// Extensions
-#define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
-#define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
-#define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
-#define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
-#define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
-#define RLV_EXPERIMENTAL_CMDS				// Enables/disables experimental commands en masse
-
-// Experimental features
-#ifdef RLV_EXPERIMENTAL
-	// Stable (will mature to RLV_EXTENSION_XXX in next release if no bugs are found)
-
-	// Under testing (stable, but requires further testing - safe for public release but may be quirky)
-	#define RLV_EXTENSION_FORCEWEAR_FOLDERLINKS	// @attach*/detach* commands will collect from folder links as well
-
-	// Under development (don't include in public release)
-	#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-//		#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-#endif // RLV_EXPERIMENTAL
-
-// Experimental commands (not part of the RLV API spec, disabled on public releases)
-#ifdef RLV_EXPERIMENTAL_CMDS
-	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
-	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
-	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
-	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
-	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
-#endif // RLV_EXPERIMENTAL_CMDS
-
-// ============================================================================
 // Defines
 //
 
@@ -62,9 +28,9 @@ const S32 RLV_VERSION_PATCH = 0;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
-const S32 RLVa_VERSION_MAJOR = 1;
-const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 10;
+const S32 RLVa_VERSION_MAJOR = 2;
+const S32 RLVa_VERSION_MINOR = 0;
+const S32 RLVa_VERSION_PATCH = 0;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
@@ -100,11 +66,13 @@ const S32 RLVa_VERSION_BUILD = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_OPTION_SEPARATOR			";"				// Default separator used in command options
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
+#define RLV_TELEPORT_LOCAL_RADIUS		256				// Any teleport that's more than a region away is non-local
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
@@ -114,10 +82,9 @@ const S32 RLVa_VERSION_BUILD = 0;
 // Enumeration declarations
 //
 
-// NOTE: any changes to this enumeration should be reflected in RlvCommand::initLookupTable()
+// NOTE: any changes to this enumeration should be reflected in the RlvBehaviourDictionary constructor
 enum ERlvBehaviour {
 	RLV_BHVR_DETACH = 0,			// "detach"
-	RLV_BHVR_ATTACH,				// "attach"
 	RLV_BHVR_ADDATTACH,				// "addattach"
 	RLV_BHVR_REMATTACH,				// "remattach"
 	RLV_BHVR_ADDOUTFIT,				// "addoutfit"
@@ -157,6 +124,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWHOVERTEXTALL,		// "showhovertextall"
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
+	RLV_BHVR_TPLOCAL,
 	RLV_BHVR_TPLURE,				// "tplure"
 	RLV_BHVR_TPREQUEST,				// "tprequest"
 	RLV_BHVR_VIEWNOTE,				// "viewnote"
@@ -190,20 +158,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALWAYSRUN,				// "alwaysrun"
 	RLV_BHVR_TEMPRUN,				// "temprun"
 	RLV_BHVR_DETACHME,				// "detachme"
-	RLV_BHVR_ATTACHOVER,			// "attachover"
 	RLV_BHVR_ATTACHTHIS,			// "attachthis"
-	RLV_BHVR_ATTACHTHISOVER,		// "attachthisover"
 	RLV_BHVR_ATTACHTHISEXCEPT,		// "attachthis_except"
 	RLV_BHVR_DETACHTHIS,			// "detachthis"
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
-	RLV_BHVR_ATTACHALL,				// "attachall"
-	RLV_BHVR_ATTACHALLOVER,			// "attachallover"
-	RLV_BHVR_DETACHALL,				// "detachall"
-	RLV_BHVR_ATTACHALLTHIS,			// "attachallthis"
-	RLV_BHVR_ATTACHALLTHISEXCEPT,	// "attachallthis_except"
-	RLV_BHVR_ATTACHALLTHISOVER,		// "attachallthisover"
-	RLV_BHVR_DETACHALLTHIS,			// "detachallthis"
-	RLV_BHVR_DETACHALLTHISEXCEPT,	// "detachallthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
@@ -228,18 +186,37 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETCOMMAND,			// "getcommand"
 	RLV_BHVR_GETSTATUS,				// "getstatus"
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
+	RLV_CMD_FORCEWEAR,				// Internal representation of all force wear commands
 
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN
 };
 
+enum ERlvBehaviourModifier
+{
+	RLV_MODIFIER_PLACEHOLDER,
+
+	RLV_MODIFIER_COUNT,
+	RLV_MODIFIER_UNKNOWN
+};
+
+enum ERlvBehaviourOptionType
+{
+	RLV_OPTION_NONE,				// Behaviour takes no parameters
+	RLV_OPTION_EXCEPTION,			// Behaviour requires an exception as a parameter
+	RLV_OPTION_NONE_OR_EXCEPTION,	// Behaviour takes either no parameters or an exception
+	RLV_OPTION_MODIFIER,			// Behaviour requires a modifier as a parameter
+	RLV_OPTION_NONE_OR_MODIFIER		// Behaviour takes either no parameters or a modifier
+};
+
 enum ERlvParamType {
-	RLV_TYPE_UNKNOWN,
-	RLV_TYPE_ADD,					// <param> == "n"|"add"
-	RLV_TYPE_REMOVE,				// <param> == "y"|"rem"
-	RLV_TYPE_FORCE,					// <param> == "force"
-	RLV_TYPE_REPLY,					// <param> == <number>
-	RLV_TYPE_CLEAR
+	RLV_TYPE_UNKNOWN = 0x00,
+	RLV_TYPE_ADD     = 0x01,		// <param> == "n"|"add"
+	RLV_TYPE_REMOVE  = 0x02,		// <param> == "y"|"rem"
+	RLV_TYPE_FORCE   = 0x04,		// <param> == "force"
+	RLV_TYPE_REPLY   = 0x08,		// <param> == <number>
+	RLV_TYPE_CLEAR   = 0x10,
+	RLV_TYPE_ADDREM  = RLV_TYPE_ADD | RLV_TYPE_REMOVE
 };
 
 enum ERlvCmdRet {
@@ -257,7 +234,8 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DISABLED,		// Command failed (command disabled by user)
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
-	RLV_RET_DEPRECATED				// Command has been deprecated
+	RLV_RET_DEPRECATED,				// Command has been deprecated
+	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
 
 enum ERlvExceptionCheck

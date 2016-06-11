@@ -18,6 +18,7 @@
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llstartup.h"
+#include "llviewermessage.h"
 #include "llviewerfoldertype.h"
 
 #include "rlvinventory.h"
@@ -362,6 +363,27 @@ S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFold
 		}
 	}
 	return cntType;
+}
+
+// Checked: 2012-11-28 (RLVa-1.4.8)
+bool RlvInventory::isGiveToRLVOffer(const LLOfferInfo& offerInfo)
+{
+	if ( (!RlvSettings::getForbidGiveToRLV()) && (RlvInventory::instance().getSharedRoot()) )
+	{
+		if (offerInfo.mFromObject)
+		{
+			return 
+				(IM_TASK_INVENTORY_OFFERED == offerInfo.mIM) && 
+				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 1);
+		}
+		else
+		{
+			return
+				(IM_INVENTORY_OFFERED == offerInfo.mIM) && 
+				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 0);
+		}
+	}
+	return false;
 }
 
 // ============================================================================
@@ -809,12 +831,9 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				     (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) ) &&
 				   ( (!fAttach) || (RlvAttachPtLookup::hasAttachPointName(pItem)) || (RlvSettings::getEnableSharedWear()) );
 			break;
-		#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 		case LLAssetType::AT_GESTURE:
 			fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
-		#ifdef RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		case LLAssetType::AT_CATEGORY:
 			if (LLAssetType::AT_LINK_FOLDER == pItem->getActualType())
 			{
@@ -831,7 +850,6 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				}
 			}
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		default:
 			break;
 	}

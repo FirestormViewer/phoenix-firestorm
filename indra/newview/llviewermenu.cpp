@@ -134,13 +134,13 @@
 #include "llpathfindingmanager.h"
 #include "llstartup.h"
 #include "boost/unordered_map.hpp"
-
-// Firestorm includes
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
+// Firestorm includes
 #include "fsdata.h"
 #include "fslslbridge.h"
 #include "fscommon.h"
@@ -11333,7 +11333,10 @@ void initialize_menus()
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0g) | Added: RLVa-1.2.0
 	enable.add("RLV.MainToggleVisible", boost::bind(&rlvMenuMainToggleVisible, _1));
-	enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
+	if (rlv_handler_t::isEnabled())
+	{
+		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
+	}
 // [/RLVa:KB]
 
 	// <FS:Ansariel> Toggle internal web browser

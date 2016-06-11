@@ -119,6 +119,12 @@
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
 #include "llfloaterregionrestarting.h"
+// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "rlvinventory.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 #include <boost/algorithm/string/split.hpp> //
 #include <boost/regex.hpp>
@@ -147,10 +153,6 @@
 #include "llgiveinventory.h"
 #include "lllandmarkactions.h"
 #include "lltexturefetch.h"
-#include "rlvactions.h"
-#include "rlvhandler.h"
-#include "rlvinventory.h"
-#include "rlvui.h"
 #include "sound_ids.h"
 #include "tea.h" // <FS:AW opensim currency support>
 #include "NACLantispam.h"
@@ -3811,7 +3813,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	case IM_LURE_USER:
 	case IM_TELEPORT_REQUEST:
 		{
-// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
+// [RLVa:KB] - Checked: RLVa-1.4.9
 			// If we auto-accept the offer/request then this will override DnD status (but we'll still let the other party know later)
 			bool fRlvAutoAccept = (rlv_handler_t::isEnabled()) &&
 				( ((IM_LURE_USER == dialog) && (RlvActions::autoAcceptTeleportOffer(from_id))) ||
@@ -3823,7 +3825,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				return;
 			}
 //			else if (is_do_not_disturb) 
-// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
+// [RLVa:KB] - Checked: RLVa-1.4.9
 			else if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
 // [/RLVa:KB]
 			{
@@ -3894,7 +3896,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					}
 				}
 
-// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
+// [RLVa:KB] - Checked: RLVa-1.4.9
 				if (rlv_handler_t::isEnabled())
 				{
 					if ( ((IM_LURE_USER == dialog) && (!RlvActions::canAcceptTpOffer(from_id))) ||
@@ -3906,8 +3908,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						return;
 					}
 
-					// Censor lure message if: 1) restricted from receiving IMs from the sender, or 2) teleport offer and @showloc=n restricted
-					if ( (!RlvActions::canReceiveIM(from_id)) || ((IM_LURE_USER == dialog) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))) )
+					// Censor message if: 1) restricted from receiving IMs from the sender, or 2) teleport offer/request and @showloc=n restricted
+					if ( (!RlvActions::canReceiveIM(from_id)) || 
+						 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (IM_LURE_USER == dialog || IM_TELEPORT_REQUEST == dialog)) )
 					{
 						message = RlvStrings::getString(RLV_STRING_HIDDEN);
 					}
@@ -3973,8 +3976,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					params.substitutions = args;
 					params.payload = payload;
 
-// [RLVa:KB] - Checked: 20103-11-08 (RLVa-1.4.9)
-					if ( (rlv_handler_t::isEnabled()) && (fRlvAutoAccept) )
+// [RLVa:KB] - Checked: RLVa-1.4.9
+					if (fRlvAutoAccept)
 					{
 						if (IM_LURE_USER == dialog)
 							gRlvHandler.setCanCancelTp(false);
@@ -7864,13 +7867,13 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			std::string new_msg =LLNotifications::instance().getGlobalString(text);
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
-		if ( (new_msg == text) && (rlv_handler_t::isEnabled()) )
-		{
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
-				RlvUtil::filterLocation(new_msg);
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				RlvUtil::filterNames(new_msg);
-		}
+			if ( (new_msg == text) && (rlv_handler_t::isEnabled()) )
+			{
+				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+					RlvUtil::filterLocation(new_msg);
+				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+					RlvUtil::filterNames(new_msg);
+			}
 // [/RLVa:KB]
 			args["MESSAGE"] = new_msg;
 			LLNotificationsUtil::add("SystemMessage", args);
@@ -8943,20 +8946,14 @@ void send_lures(const LLSD& notification, const LLSD& response)
 	LLAgentUI::buildSLURL(slurl);
 	text.append("\r\n").append(slurl.getSLURLString());
 
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
-		if ( (RlvActions::hasBehaviour(RLV_BHVR_SENDIM)) || (RlvActions::hasBehaviour(RLV_BHVR_SENDIMTO)) )
-		{
-			// Filter the lure message if one of the recipients of the lure can't be sent an IM to
-			for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray(); 
-					it != notification["payload"]["ids"].endArray(); ++it)
-			{
-				if (!RlvActions::canSendIM(it->asUUID()))
-				{
-					text = RlvStrings::getString(RLV_STRING_HIDDEN);
-					break;
-				}
-			}
-		}
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	// Filter the lure message if any of the recipients are IM-blocked
+	const LLSD& sdRecipients = notification["payload"]["ids"];
+	if ( (gRlvHandler.isEnabled()) && 
+	     (std::any_of(sdRecipients.beginArray(), sdRecipients.endArray(), [](const LLSD& id) { return !RlvActions::canStartIM(id.asUUID()) || !RlvActions::canSendIM(id.asUUID()); })) )
+	{
+		text = RlvStrings::getString(RLV_STRING_HIDDEN);
+	}
 // [/RLVa:KB]
 
 	LLMessageSystem* msg = gMessageSystem;
@@ -8978,12 +8975,18 @@ void send_lures(const LLSD& notification, const LLSD& response)
 
 		// Record the offer.
 		{
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+			bool fRlvHideName = notification["payload"]["rlv_shownames"].asBoolean();
+// [/RLVa:KB]
 			// <FS:Ansariel> Show complete name for TP lures
 			//std::string target_name;
 			//gCacheName->getFullName(target_id, target_name);  // for im log filenames
 			LLSD args;
 			//args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
-			args["TO_NAME"] = LLSLURL("agent", target_id, "completename").getSLURLString();
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+			args["TO_NAME"] = LLSLURL("agent", target_id, (!fRlvHideName) ? "completename" : "rlvanonym").getSLURLString();;
+// [/RLVa:KB]
+//			args["TO_NAME"] = LLSLURL("agent", target_id, "completename").getSLURLString();
 			// </FS:Ansariel>
 	
 			LLSD payload;
@@ -8994,7 +8997,11 @@ void send_lures(const LLSD& notification, const LLSD& response)
 			LLNotificationsUtil::add("TeleportOfferSent", args, payload);
 
 			// Add the recepient to the recent people list.
-			LLRecentPeople::instance().add(target_id);
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+			if (!fRlvHideName)
+				LLRecentPeople::instance().add(target_id);
+// [/RLVa:KB]
+//			LLRecentPeople::instance().add(target_id);
 		}
 	}
 	gAgent.sendReliableMessage();
@@ -9040,8 +9047,7 @@ void handle_lure(const uuid_vec_t& ids)
 
 	LLSD edit_args;
 // [RLVa:KB] - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.0.0a
-	edit_args["REGION"] = 
-		(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RLV_STRING_HIDDEN);
+	edit_args["REGION"] = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? gAgent.getRegion()->getName() : RlvStrings::getString(RLV_STRING_HIDDEN);
 // [/RLVa:KB]
 //	edit_args["REGION"] = gAgent.getRegion()->getName();
 
@@ -9061,6 +9067,7 @@ void handle_lure(const uuid_vec_t& ids)
 				return;
 			}
 		}
+		payload["rlv_shownames"] = !RlvActions::canShowName(RlvActions::SNC_TELEPORTOFFER);
 // [/RLVa:KB]
 		payload["ids"].append(*it);
 	}

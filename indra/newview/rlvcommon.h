@@ -56,6 +56,7 @@ class RlvObject;
 
 struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
+typedef boost::variant<int, float> RlvBehaviourModifierValue;
 
 class RlvGCTimer;
 
@@ -98,10 +99,8 @@ public:
 	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
 	static bool getShowNameTags()				{ return fShowNameTags; }
 
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
-	#endif // RLV_EXTENSION_STARTLOCATION
 
 	static void initClass();
 	static void onChangedSettingMain(const LLSD& sdValue);
@@ -171,7 +170,7 @@ public:
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
-	static bool isValidReplyChannel(S32 nChannel);
+	static bool isValidReplyChannel(S32 nChannel, bool fLoopback = false);
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 
@@ -183,16 +182,16 @@ protected:
 // Extensibility classes
 //
 
-class RlvCommandHandler
+class RlvExtCommandHandler
 {
 public:
-	virtual ~RlvCommandHandler() {}
+	virtual ~RlvExtCommandHandler() {}
 	virtual bool onAddRemCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet) { return false; }
 	virtual bool onClearCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 	virtual bool onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 	virtual bool onForceCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)  { return false; }
 };
-typedef bool (RlvCommandHandler::*rlvCommandHandler)(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
+typedef bool (RlvExtCommandHandler::*rlvExtCommandHandler)(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet);
 
 // ============================================================================
 // Generic menu enablers
@@ -301,9 +300,9 @@ inline bool RlvUtil::isEmote(const std::string& strUTF8Text)
 }
 
 // Checked: 2010-03-09 (RLVa-1.2.0b) | Added: RLVa-1.0.2a
-inline bool RlvUtil::isValidReplyChannel(S32 nChannel)
+inline bool RlvUtil::isValidReplyChannel(S32 nChannel, bool fLoopback /*=false*/)
 {
-	return (nChannel > 0) && (CHAT_CHANNEL_DEBUG != nChannel);
+	return (nChannel > ((!fLoopback) ? 0 : -1)) && (CHAT_CHANNEL_DEBUG != nChannel);
 }
 
 // Checked: 2009-08-05 (RLVa-1.0.1e) | Added: RLVa-1.0.0e
