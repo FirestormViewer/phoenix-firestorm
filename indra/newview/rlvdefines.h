@@ -194,6 +194,8 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
+	RLV_MODIFIER_PLACEHOLDER,
+	
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
 };
