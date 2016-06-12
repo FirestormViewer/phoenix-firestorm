@@ -18,25 +18,38 @@
 #include "llagent.h"
 #include "llimview.h"
 #include "llvoavatarself.h"
+#include "llworld.h"
 #include "rlvactions.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
 
 // ============================================================================
 // Communication/Avatar interaction
-// 
+//
 
 bool RlvActions::s_BlockNamesContexts[SNC_COUNT] = { 0 };
 
-// Checked: 2010-11-30 (RLVa-1.3.0)
+// Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
+static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifier eModDistMin, ERlvBehaviourModifier eModDistMax)
+{
+	LLVector3d posAgent;
+	const RlvBehaviourModifier *pBhvrModDistMin = RlvBehaviourDictionary::instance().getModifier(eModDistMin), *pBhvrModDistMax = RlvBehaviourDictionary::instance().getModifier(eModDistMax);
+	if ( ((pBhvrModDistMin->hasValue()) || (pBhvrModDistMax->hasValue())) && (LLWorld::getInstance()->getAvatar(idAvatar, posAgent)) )
+	{
+		float nDist = llabs(dist_vec_squared(gAgent.getPositionGlobal(), posAgent));
+		return (nDist >= pBhvrModDistMin->getValue<float>()) && (nDist <= pBhvrModDistMax->getValue<float>());
+	}
+	return false;
+}
+
 bool RlvActions::canReceiveIM(const LLUUID& idSender)
 {
 	// User can receive an IM from "sender" (could be an agent or a group) if:
-	//   - not generally restricted from receiving IMs (or the sender is an exception)
+	//   - not generally restricted from receiving IMs (or the sender is an exception or inside the exclusion range)
 	//   - not specifically restricted from receiving an IM from the sender
-	return 
-		(!rlv_handler_t::isEnabled()) ||
-		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.isException(RLV_BHVR_RECVIM, idSender)) ) &&
+	return
+		(!isRlvEnabled()) ||
+		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.isException(RLV_BHVR_RECVIM, idSender)) || (rlvCheckAvatarIMDistance(idSender, RLV_MODIFIER_RECVIMDISTMIN, RLV_MODIFIER_RECVIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) || (!gRlvHandler.isException(RLV_BHVR_RECVIMFROM, idSender)) ) );
 }
 
@@ -52,27 +65,26 @@ bool RlvActions::canSendChannel(int nChannel)
 		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDCHANNELEXCEPT)) || (!gRlvHandler.isException(RLV_BHVR_SENDCHANNELEXCEPT, nChannel)) );
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0)
 bool RlvActions::canSendIM(const LLUUID& idRecipient)
 {
 	// User can send an IM to "recipient" (could be an agent or a group) if:
-	//   - not generally restricted from sending IMs (or the recipient is an exception)
+	//   - not generally restricted from sending IMs (or the recipient is an exception or inside the exclusion range)
 	//   - not specifically restricted from sending an IM to the recipient
-	return 
-		(!rlv_handler_t::isEnabled()) ||
-		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.isException(RLV_BHVR_SENDIM, idRecipient)) ) &&
+	return
+		(!isRlvEnabled()) ||
+		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.isException(RLV_BHVR_SENDIM, idRecipient)) || (rlvCheckAvatarIMDistance(idRecipient, RLV_MODIFIER_SENDIMDISTMIN, RLV_MODIFIER_SENDIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) || (!gRlvHandler.isException(RLV_BHVR_SENDIMTO, idRecipient)) ) );
 }
 
 bool RlvActions::canStartIM(const LLUUID& idRecipient)
 {
 	// User can start an IM session with "recipient" (could be an agent or a group) if:
-	//   - not generally restricted from starting IM sessions (or the recipient is an exception)
+	//   - not generally restricted from starting IM sessions (or the recipient is an exception or inside the exclusion range)
 	//   - not specifically restricted from starting an IM session with the recipient
 	//   - the session already exists
-	return 
-		(!rlv_handler_t::isEnabled()) ||
-		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIM)) || (gRlvHandler.isException(RLV_BHVR_STARTIM, idRecipient)) ) &&
+	return
+		(!isRlvEnabled()) ||
+		( ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIM)) || (gRlvHandler.isException(RLV_BHVR_STARTIM, idRecipient)) || (rlvCheckAvatarIMDistance(idRecipient, RLV_MODIFIER_STARTIMDISTMIN, RLV_MODIFIER_STARTIMDISTMAX)) ) &&
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) ) ||
 		( (hasOpenP2PSession(idRecipient)) || (hasOpenGroupSession(idRecipient)) );
 }

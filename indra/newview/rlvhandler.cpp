@@ -1583,6 +1583,59 @@ ERlvCmdRet RlvBehaviourSendChannelHandler::onCommand(const RlvCommand& rlvCmd, b
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @recvim[:<uuid|range>]=n|y, @sendim[:<uuid|range>]=n|y and @startim[:<uuid|range>]=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourRecvSendStartIMHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS != eRet) && (rlvCmd.hasOption()) )
+	{
+		// Check for <dist_min>[;<dist_max>] option
+		std::vector<std::string> optionList; float nDistMin = F32_MAX, nDistMax = F32_MAX;
+		if ( (!RlvCommandOptionHelper::parseStringList(rlvCmd.getOption(), optionList)) || (optionList.size() > 2) ||
+			 (!RlvCommandOptionHelper::parseOption(optionList[0], nDistMin)) || (nDistMin < 0) ||
+			 ( (optionList.size() >= 2) && (!RlvCommandOptionHelper::parseOption(optionList[1], nDistMax)) ) || (nDistMax < 0) )
+		{
+			return RLV_RET_FAILED_OPTION;
+		}
+
+		// Valid option(s) - figure out which modifier(s) to change
+		ERlvBehaviourModifier eModDistMin, eModDistMax;
+		switch (rlvCmd.getBehaviourType())
+		{
+			case RLV_BHVR_RECVIM:
+				eModDistMin = RLV_MODIFIER_RECVIMDISTMIN; eModDistMax = RLV_MODIFIER_RECVIMDISTMAX;
+				break;
+			case RLV_BHVR_SENDIM:
+				eModDistMin = RLV_MODIFIER_SENDIMDISTMIN; eModDistMax = RLV_MODIFIER_SENDIMDISTMAX;
+				break;
+			case RLV_BHVR_STARTIM:
+				eModDistMin = RLV_MODIFIER_STARTIMDISTMIN; eModDistMax = RLV_MODIFIER_STARTIMDISTMAX;
+				break;
+			default:
+				return RLV_RET_FAILED_OPTION;
+		}
+
+		RlvBehaviourModifier *pBhvrModDistMin = RlvBehaviourDictionary::instance().getModifier(eModDistMin), *pBhvrModDistMax = RlvBehaviourDictionary::instance().getModifier(eModDistMax);
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			pBhvrModDistMin->addValue(nDistMin * nDistMin, rlvCmd.getObjectID());
+			if (optionList.size() >= 2)
+				pBhvrModDistMax->addValue(nDistMax * nDistMax, rlvCmd.getObjectID());
+		}
+		else
+		{
+			pBhvrModDistMin->removeValue(nDistMin * nDistMin, rlvCmd.getObjectID());
+			if (optionList.size() >= 2)
+				pBhvrModDistMax->removeValue(nDistMax * nDistMax, rlvCmd.getObjectID());
+		}
+
+		fRefCount = true;
+		return RLV_RET_SUCCESS;
+	}
+	return eRet;
+}
+
 // Handles: @sendim=n|y toggles
 template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)

@@ -162,6 +162,9 @@ public:
 		uuid_vec_t* avatar_ids = NULL,
 		std::vector<LLVector3d>* positions = NULL, 
 		const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX) const;
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	bool getAvatar(const LLUUID& idAvatar, LLVector3d& posAvatar) const;
+// [/RLVa:KB]
 
 	// Returns 'true' if the region is in mRegionList,
 	// 'false' if the region has been removed due to region change

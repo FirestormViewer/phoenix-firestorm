@@ -201,7 +201,13 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
-	RLV_MODIFIER_FARTOUCHDIST,
+	RLV_MODIFIER_FARTOUCHDIST,		// Radius of a sphere around the user in which they can interact with the world
+	RLV_MODIFIER_RECVIMDISTMIN,		// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_RECVIMDISTMAX,		// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_SENDIMDISTMIN,		// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SENDIMDISTMAX,		// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMIN,	// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMAX,	// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_SITTPDIST,
 	RLV_MODIFIER_TPLOCALDIST,
 

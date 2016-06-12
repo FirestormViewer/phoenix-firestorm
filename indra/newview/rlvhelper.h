@@ -115,7 +115,8 @@ template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE
 
 // List of shared handlers
 typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
-typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;	// Shared between @addattach and @remattach
+typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;	// Shared between @sendchannel and @sendchannel_except
+typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;	// Shared between @recvim, @sendim and @startim
 typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleHandler;	// Shared between @showself and @showselfhead
 typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;				// Shared between @remattach and @detach
 
