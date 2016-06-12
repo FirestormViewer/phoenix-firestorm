@@ -1165,7 +1165,8 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				// If there's an option it should specify a wearable type name (reference count on no option *and* a valid option)
-				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+				RlvCommandOptionGeneric rlvCmdOption;
+				RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption);
 				VERIFY_OPTION_REF( (rlvCmdOption.isEmpty()) || (rlvCmdOption.isWearableType()) );
 
 				// We need to flush any queued force-wear commands before changing the restrictions
@@ -1320,6 +1321,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 }
 
 // Handles: @bhvr=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be no option
@@ -1331,6 +1333,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(const RlvComma
 }
 
 // Handles: @bhvr:<uuid>=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
@@ -1348,6 +1351,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const Rlv
 }
 
 // Handles: @bhvr[:<uuid>]=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there is an option then it should specify a valid UUID (but don't reference count)
@@ -1361,6 +1365,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(c
 }
 
 // Handles: @bhvr:<modifier>=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
@@ -1379,6 +1384,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 }
 
 // Handles: @bhvr[:<modifier>]=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there is an option then it should specify a valid modifier (and reference count)
@@ -1400,7 +1406,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(co
 }
 
 // Handles: @addattach[:<attachpt>]=n|y and @remattach[:<attachpt>]=n|y
-template<> template<>
+template<>
 ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - if there's an option it should specify a valid attachment point name
@@ -1433,7 +1439,7 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 }
 
 // Handles: @detach[:<attachpt>]=n|y
-template<> template<>
+template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// We need to flush any queued force-wear commands before changing the restrictions
@@ -1476,7 +1482,8 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlv
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption);
 
 	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
@@ -1521,7 +1528,8 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - the option should specify a shared folder path
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption );
 	if (!rlvCmdOption.isSharedFolder())
 		return RLV_RET_FAILED_OPTION;
 
@@ -1545,7 +1553,7 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 }
 
 // Handles: @edit=n|y toggles
-template<> template<>
+template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (fHasBhvr)
@@ -1570,7 +1578,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 }
 
 // Handles: @sendchannel[:<channel>]=n|y
-template<> template<>
+template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there's an option then it should be a valid (= positive and non-zero) chat channel
@@ -1593,14 +1601,14 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL>::onCommand(const RlvCommand
 }
 
 // Handles: @sendim=n|y toggles
-template<> template<>
+template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
 }
 
 // Handles: @edit=n|y toggles
-template<> template<>
+template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	for (const auto& dbgSetting : RlvExtGetSet::m_DbgAllowed)
@@ -1611,7 +1619,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 }
 
 // Handles: @edit=n|y toggles
-template<> template<>
+template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
@@ -1641,7 +1649,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 }
 
 // Handles: @showhovertext:<uuid>=n|y
-template<> template<>
+template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
@@ -1664,7 +1672,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 }
 
 // Handles: @edit=n|y toggles
-template<> template<>
+template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (LLApp::isQuitting())
@@ -1778,7 +1786,8 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE & rlvCmd.getBehaviourFlags())
 				{
-					RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+					RlvCommandOptionGeneric rlvCmdOption;
+					RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption);
 					VERIFY_OPTION(rlvCmdOption.isSharedFolder());
 					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				}
@@ -1802,7 +1811,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 }
 
 // Handles: @detachme=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (rlvCmd.hasOption())
@@ -1817,13 +1826,14 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCm
 }
 
 // Handles: @remattach[:<folder|attachpt|attachgroup>]=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 {
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption);
 	if (rlvCmdOption.isSharedFolder())
 		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 
@@ -1859,10 +1869,11 @@ ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 }
 
 // Handles: @remoutfit[:<folder|layer>]=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvCmd)
 {
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption(), rlvCmdOption);
 	if (rlvCmdOption.isSharedFolder())
 		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 
@@ -1907,7 +1918,7 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 }
 
 // Handles: @setgroup:<uuid|name>=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
@@ -1938,7 +1949,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 }
 
 // Handles: @sit:<uuid>=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
@@ -1969,7 +1980,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 }
 
 // Handles: @tpto:<vector>[;<angle>]=force
-template<> template<>
+template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_TPTO>::onCommand(const RlvCommand& rlvCmd)
 {
 	std::vector<std::string> optionList;
@@ -2269,7 +2280,7 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 }
 
 // Handles: @getcommand[:<behaviour>[;<type>[;<separator>]]]=<channel>
-template<> template<>
+template<>
 ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
 {
 	std::vector<std::string> optionList;
