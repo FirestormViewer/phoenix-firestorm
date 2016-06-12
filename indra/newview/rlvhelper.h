@@ -200,7 +200,7 @@ struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
 class RlvBehaviourModifier
 {
 public:
-	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
+	RlvBehaviourModifier(const std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
 	virtual ~RlvBehaviourModifier() {}
 
 	/*
@@ -225,6 +225,7 @@ public:
 	 * Member variables
 	 */
 protected:
+	std::string                          m_strName;
 	RlvBehaviourModifierValue            m_DefaultValue;
 	bool                                 m_fAddDefaultOnEmpty;
 	std::list<RlvBehaviourModifierValueTuple> m_Values;
@@ -312,6 +313,7 @@ protected:
 class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
 {
 	friend class LLSingleton<RlvBehaviourDictionary>;
+	friend class RlvFloaterBehaviours;
 protected:
 	RlvBehaviourDictionary();
 	~RlvBehaviourDictionary();

@@ -283,15 +283,16 @@ BOOL RlvFloaterBehaviours::postBuild()
 	return TRUE;
 }
 
-// Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
 void RlvFloaterBehaviours::refreshAll()
 {
 	LLCtrlListInterface* pBhvrList = childGetListInterface("behaviour_list");
 	LLCtrlListInterface* pExceptList = childGetListInterface("exception_list");
-	if ( (!pBhvrList) || (!pExceptList) )
+	LLCtrlListInterface* pModifierList = childGetListInterface("modifier_list");
+	if ( (!pBhvrList) || (!pExceptList) || (!pModifierList) )
 		return;
 	pBhvrList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 	pExceptList->operateOnAll(LLCtrlListInterface::OP_DELETE);
+	pModifierList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
 	if (!isAgentAvatarValid())
 		return;
@@ -307,6 +308,11 @@ void RlvFloaterBehaviours::refreshAll()
 	sdExceptColumns[0] = LLSD().with("column", "behaviour").with("type", "text");
 	sdExceptColumns[1] = LLSD().with("column", "option").with("type", "text");
 	sdExceptColumns[2] = LLSD().with("column", "issuer").with("type", "text");
+
+	LLSD sdModifierRow; LLSD& sdModifierColumns = sdModifierRow["columns"];
+	sdModifierColumns[0] = LLSD().with("column", "modifier").with("type", "text");
+	sdModifierColumns[1] = LLSD().with("column", "value").with("type", "text");
+	sdModifierColumns[2] = LLSD().with("column", "primary").with("type", "text");
 
 	//
 	// List behaviours
@@ -359,6 +365,35 @@ void RlvFloaterBehaviours::refreshAll()
 				sdBhvrColumns[1]["value"] = strIssuer;
 				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
 			}
+		}
+	}
+
+	//
+	// List modifiers
+	//
+	for (int idxModifier = 0; idxModifier < RLV_MODIFIER_COUNT; idxModifier++)
+	{
+		const RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().m_BehaviourModifiers[idxModifier];
+		if (pBhvrModifier)
+		{
+			sdModifierRow["enabled"] = (pBhvrModifier->hasValue());
+			sdModifierColumns[0]["value"] = pBhvrModifier->getName();
+
+			if (pBhvrModifier->hasValue())
+			{
+				const RlvBehaviourModifierValue& modValue = pBhvrModifier->getValue();
+				if (typeid(float) == modValue.type())
+					sdModifierColumns[1]["value"] = llformat("%f", boost::get<float>(modValue));
+				else if (typeid(int) == modValue.type())
+					sdModifierColumns[1]["value"] = llformat("%d", boost::get<int>(modValue));
+			}
+			else
+			{
+				sdModifierColumns[1]["value"] = "(default)";
+			}
+
+			sdModifierColumns[2]["value"] = (pBhvrModifier->getPrimaryObject().notNull()) ? rlvGetItemNameFromObjID(pBhvrModifier->getPrimaryObject()) : LLStringUtil::null;
+			pModifierList->addElement(sdModifierRow, ADD_BOTTOM);
 		}
 	}
 }
