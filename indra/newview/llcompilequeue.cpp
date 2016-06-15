@@ -159,7 +159,12 @@ public:
         LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", LLSD(mQueueId));
         if (queue)
         {
-            std::string message = std::string("Compiling \"") + getScriptName() + std::string("\"...");
+            // <FS:Ansariel> Translation fixes
+            //std::string message = std::string("Compiling \"") + getScriptName() + std::string("\"...");
+            LLStringUtil::format_map_t args;
+            args["NAME"] = getScriptName();
+            std::string message = queue->getString("Compiling", args);
+            // </FS:Ansariel>
 
             queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
         }
@@ -393,7 +398,9 @@ void LLFloaterCompileQueue::handleScriptRetrieval(LLVFS *vfs, const LLUUID& asse
 			// put a EOS at the end
 			script_data[file_length] = 0;
 
-			LLFloaterCompileQueue::scriptLogMessage(data, "Preprocessing: " + data->mItem->getName());
+			LLStringUtil::format_map_t args;
+			args["SCRIPT"] = data->mItem->getName();
+			LLFloaterCompileQueue::scriptLogMessage(data, LLTrans::getString("CompileQueuePreprocessing", args));
 
 			queue->mLSLProc->preprocess_script(assetId, data, type, LLStringExplicit(&script_data[0]));
 		}
@@ -445,7 +452,12 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         if (!item->getPermissions().allowModifyBy(gAgent.getID(), gAgent.getGroupID()) ||
             !item->getPermissions().allowCopyBy(gAgent.getID(), gAgent.getGroupID()))
         {
-            std::string buffer = "Skipping: " + item->getName() + "(Permissions)";
+            // <FS:Ansariel> Translation fixes
+            //std::string buffer = "Skipping: " + item->getName() + "(Permissions)";
+            LLStringUtil::format_map_t args;
+            args["NAME"] = item->getName();
+            std::string buffer = that->getString("SkippingPermissions", args);
+            // </FS:Ansariel>
             that->addStringMessage(buffer);
             return true;
         }
@@ -626,13 +638,23 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
     {
         std::string buffer = std::string("Compilation of \"") + inventory->getName() + std::string("\" succeeded");
 
-        that->addStringMessage(buffer);
+        //that->addStringMessage(buffer);
         LL_INFOS() << buffer << LL_ENDL;
+        // <FS:Ansariel> Translation fixes
+        LLStringUtil::format_map_t args;
+        args["NAME"] = inventory->getName();
+        that->addStringMessage(that->getString("CompileSuccess", args));
+        // </FS:Ansariel>
     }
     else
     {
         LLSD compile_errors = result["errors"];
-        std::string buffer = std::string("Compilation of \"") + inventory->getName() + std::string("\" failed:");
+        // <FS:Ansariel> Translation fixes
+        //std::string buffer = std::string("Compilation of \"") + inventory->getName() + std::string("\" failed:");
+        LLStringUtil::format_map_t args;
+        args["NAME"] = inventory->getName();
+        std::string buffer = that->getString("CompileFailure", args);
+        // </FS:Ansariel>
         that->addStringMessage(buffer);
         for (LLSD::array_const_iterator line = compile_errors.beginArray();
             line < compile_errors.endArray(); line++)
@@ -996,7 +1018,10 @@ void LLFloaterScriptQueue::objectScriptProcessingQueueCoro(std::string action, L
     floater = hfloater.get();
     if (floater)
     {
-        floater->addStringMessage("Done");
+        // <FS:Ansariel> Translation fixes
+        //floater->addStringMessage("Done");
+        floater->addStringMessage(floater->getString("Done"));
+        // </FS:Ansariel>
         floater->getChildView("close")->setEnabled(TRUE);
     }
 }
@@ -1018,7 +1043,9 @@ public:
         LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", LLSD(mQueueId));
         if (queue)
         {
-            std::string message = std::string("Compiling \"") + getScriptName() + std::string("\"...");
+            LLStringUtil::format_map_t args;
+            args["NAME"] = getScriptName();
+            std::string message = queue->getString("Compiling", args);
 
             queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
         }

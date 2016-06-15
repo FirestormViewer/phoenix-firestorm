@@ -33,6 +33,26 @@
         name="Deleting">
       Deleting
     </floater.string>
+    <floater.string
+        name="Timeout">
+      Timeout: [NAME]
+    </floater.string>
+    <floater.string
+        name="SkippingPermissions">
+      Skipping: [NAME] (Permissions)
+    </floater.string>
+    <floater.string
+        name="Compiling">
+      Compiling "[NAME]"...
+    </floater.string>
+    <floater.string
+        name="CompileSuccess">
+      Compilation of "[NAME]" succeeded
+    </floater.string>
+    <floater.string
+        name="CompileFailure">
+      Compilation of "[NAME]" failed:
+    </floater.string>
     <button
      follows="right|bottom"
      height="24"

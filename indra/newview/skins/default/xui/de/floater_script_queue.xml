@@ -18,5 +18,20 @@
 	<floater.string name="Deleting">
 		Wird gelöscht
 	</floater.string>
+	<floater.string name="Timeout">
+		Zeitüberschreitung: [NAME]
+	</floater.string>
+	<floater.string name="SkippingPermissions">
+		Übersprungen: [NAME] (Berechtigungen)
+	</floater.string>
+	<floater.string name="Compiling">
+		Kompiliere „[NAME]“...
+	</floater.string>
+	<floater.string name="CompileSuccess">
+		Kompilierung von „[NAME]“ erfolgreich
+	</floater.string>
+	<floater.string name="CompileFailure">
+		Kompilierung von „[NAME]“ fehlgeschlagen:
+	</floater.string>
 	<button label="Schließen" label_selected="Schließen" left="215" name="close" width="72"/>
 </floater>
