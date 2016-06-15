@@ -2534,6 +2534,51 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_AVATAR_CENTER">
 		Avatar-Mitte
 	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Linker Ring-Finger
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Rechter Ring-Finger
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Schwanz-Basis
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Schwanz-Spitze
+	</string>
+	<string name="ATTACH_LWING">
+		Linker Flügel
+	</string>
+	<string name="ATTACH_RWING">
+		Rechter Flügel
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Kiefer
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Alt. Linkes Ohr
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Alt. Rechtes Ohr
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Alt. Linkes Auge
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Alt. Rechtes Auge
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Zunge
+	</string>
+	<string name="ATTACH_GROIN">
+		Leiste
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Linker Hinterfuß
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Rechter Hinterfuß
+	</string>
 	<string name="CursorPos">
 		Zeile [LINE], Spalte [COLUMN]
 	</string>
