@@ -502,7 +502,10 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
 
         if (result.has("timeout") && result["timeout"].asBoolean())
         {
+            // <FS:Ansariel> Translation fixes
+            //std::string buffer = "Timeout: " + inventory->getName();
             std::string buffer = that->getString("Timeout") + ": " + inventory->getName();
+            // </FS:Ansariel>
             that->addStringMessage(buffer);
             return true;
         }
@@ -565,7 +568,10 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
     {
         if (result.has("timeout") && result["timeout"].asBoolean())
         {
+            // <FS:Ansariel> Translation fixes
+            //std::string buffer = "Timeout: " + inventory->getName();
             std::string buffer = that->getString("Timeout") + ": " + inventory->getName();
+            // </FS:Ansariel>
             that->addStringMessage(buffer);
             return true;
         }
@@ -627,7 +633,10 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
     {
         if (result.has("timeout") && result["timeout"].asBoolean())
         {
+            // <FS:Ansariel> Translation fixes
+            //std::string buffer = "Timeout: " + inventory->getName();
             std::string buffer = that->getString("Timeout") + ": " + inventory->getName();
+            // </FS:Ansariel>
             that->addStringMessage(buffer);
             return true;
         }
