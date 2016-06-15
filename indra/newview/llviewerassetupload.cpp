@@ -832,7 +832,7 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         else
         {
             reason = "Error in upload request.  Please visit "
-                "http://secondlife.com/support for help fixing this problem.";
+                "http://www.firestormviewer.org/support for help fixing this problem.";
         }
     }
 
