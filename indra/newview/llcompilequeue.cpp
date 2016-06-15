@@ -71,7 +71,7 @@ namespace
 {
 
     const std::string QUEUE_EVENTPUMP_NAME("ScriptActionQueue");
-    const F32         TIMEOUT_INVENTORY_FETCH(5.0f);
+    const F32         TIMEOUT_INVENTORY_FETCH(10.0f); // <FS:Ansariel> Doubled from 5s
 
 
     class ObjectInventoryFetcher: public LLVOInventoryListener
