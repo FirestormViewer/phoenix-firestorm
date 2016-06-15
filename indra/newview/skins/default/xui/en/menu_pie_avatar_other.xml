@@ -85,7 +85,7 @@
     </pie_slice>
     <pie_menu
         name="Avatar Pie More 1"
-        label="More >">
+        label="More &gt;">
 
         <pie_slice
             label="Freeze"
@@ -127,7 +127,7 @@
 
         <pie_menu
             name="Avatar Pie More 2"
-            label="More >">
+            label="More &gt;">
 
             <!-- ## Zi: Is this the right thing to use for avatar textures? -->
             <pie_slice

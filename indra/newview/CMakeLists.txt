@@ -1903,18 +1903,31 @@ list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
 
 set(viewer_APPSETTINGS_FILES
     app_settings/anim.ini
+    app_settings/autoreplace.xml
+    app_settings/client_list_v2.xml
+    app_settings/cloud.xml
+    app_settings/cloud_muted.xml
     app_settings/cmd_line.xml
     app_settings/commands.xml
+    app_settings/foldertypes.xml
+    app_settings/graphic_preset_controls.xml
     app_settings/grass.xml
+    app_settings/grids.fallback.xml
+    app_settings/growl_notifications.xml
     app_settings/high_graphics.xml
     app_settings/ignorable_dialogs.xml
     app_settings/keys.xml
     app_settings/keys_azerty.xml
+    app_settings/keywords.ini
     app_settings/keywords_lsl_default.xml
     app_settings/logcontrol.xml
     app_settings/low_graphics.xml
     app_settings/mid_graphics.xml
-    app_settings/grids.fallback.xml
+    app_settings/posestand.xml
+    app_settings/quick_preferences.xml
+    app_settings/scriptlibrary_aa.xml
+    app_settings/scriptlibrary_ossl.xml
+    app_settings/scriptlibrary_preproc.xml
     app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
     app_settings/settings_phoenix.xml

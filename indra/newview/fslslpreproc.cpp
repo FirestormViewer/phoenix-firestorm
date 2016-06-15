@@ -831,7 +831,8 @@ void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueD
 		return;
 	}
 	
-	std::string script(script_data);
+	std::string script = FSLSLPreprocessor::decode(script_data);
+	
 	mScript = script;
 	mAssetID = asset_id;
 	mData = data;

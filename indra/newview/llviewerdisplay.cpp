@@ -82,6 +82,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "llpresetsmanager.h"
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
@@ -603,8 +604,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	static LLCachedControl<F32> renderFarClip(gSavedSettings, "RenderFarClip");
 	if (gSavedDrawDistance > 0.0f && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
 	{
-		if (gLastDrawDistanceStep != (F32)renderFarClip)
+		if (gLastDrawDistanceStep != renderFarClip())
 		{
+			LLPresetsManager::instance().setIsDrawDistanceSteppingActive(false);
 			gSavedDrawDistance = 0.0f;
 			gLastDrawDistanceStep = 0.0f;
 			gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);
@@ -617,7 +619,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			F32 current = gSavedSettings.getF32("RenderFarClip");
 			if (gSavedDrawDistance > current)
 			{
-				current *= 2.0;
+				current *= 2.0f;
 				if (current > gSavedDrawDistance)
 				{
 					current = gSavedDrawDistance;
@@ -627,6 +629,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			}
 			if (current >= gSavedDrawDistance)
 			{
+				LLPresetsManager::instance().setIsDrawDistanceSteppingActive(false);
 				gSavedDrawDistance = 0.0f;
 				gLastDrawDistanceStep = 0.0f;
 				gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);

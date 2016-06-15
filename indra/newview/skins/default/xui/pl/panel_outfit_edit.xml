@@ -34,9 +34,15 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">
+			Złożoność: [WEIGHT]
+		</text>
 		<button name="shop_btn_1" tool_tip="Odwiedź stronę SL Marketplace. Możesz również zaznaczyć rzecz, którą masz na sobie, a następnie kliknąć tutaj aby zobaczyć więcej rzeczy tego rodzaju."/>
 	</panel>
 	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">
+			Złożoność: [WEIGHT]
+		</text>
 		<button name="shop_btn_2" tool_tip="Odwiedź stronę SL Marketplace. Możesz również zaznaczyć rzecz, którą masz na sobie, a następnie kliknąć tutaj aby zobaczyć więcej rzeczy tego rodzaju."/>
 	</panel>
 	<panel name="save_revert_button_bar">

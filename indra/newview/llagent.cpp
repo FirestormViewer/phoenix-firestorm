@@ -102,6 +102,7 @@
 // Firestorm includes
 #include "fslslbridge.h"
 #include "kcwlinterface.h"
+#include "llpresetsmanager.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
@@ -4474,6 +4475,7 @@ bool LLAgent::teleportCore(bool is_local)
 		// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
 		{
+			LLPresetsManager::instance().setIsDrawDistanceSteppingActive(true);
 			F32 draw_distance = gSavedSettings.getF32("RenderFarClip");
 			if (gSavedDrawDistance < draw_distance)
 			{

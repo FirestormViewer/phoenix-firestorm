@@ -36,6 +36,7 @@ class LLInventoryCategoriesObserver;
 class LLListContextMenu;
 class LLWearableItemsList;
 class LLWearingGearMenu;
+class LLTextBox;
 
 /**
  * @class LLPanelWearing
@@ -66,6 +67,9 @@ public:
 
 	bool hasItemSelected();
 
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	void updateAvatarComplexity(U32 complexity);
+
 private:
 	void onWearableItemsListRightClick(LLUICtrl* ctrl, S32 x, S32 y);
 
@@ -73,6 +77,8 @@ private:
 	LLWearableItemsList* 			mCOFItemsList;
 	LLWearingGearMenu*				mGearMenu;
 	LLListContextMenu*				mContextMenu;
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	LLTextBox*						mAvatarComplexityLabel;
 
 	bool							mIsInitialized;
 };

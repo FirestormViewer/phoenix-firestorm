@@ -50,6 +50,7 @@
 #include "llwearableitemslist.h"
 
 #include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
+#include "lltextbox.h"
 
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
 
@@ -350,6 +351,7 @@ LLOutfitsList::LLOutfitsList()
 	:	LLPanelAppearanceTab()
 	,	mAccordion(NULL)
 	,	mListCommands(NULL)
+	,	mAvatarComplexityLabel(NULL) // <FS:Ansariel> Show avatar complexity in appearance floater
 	,	mIsInitialized(false)
 	,	mItemSelected(false)
 {
@@ -375,6 +377,9 @@ BOOL LLOutfitsList::postBuild()
 {
 	mAccordion = getChild<LLAccordionCtrl>("outfits_accordion");
 	mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
+
+	// <FS:Ansariel> Show avatar complexity in appearance floater
+	mAvatarComplexityLabel = getChild<LLTextBox>("avatar_complexity_label");
 
 	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
 
@@ -1227,4 +1232,10 @@ bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y)
 	return y >= header_bottom;
 }
 
+// <FS:Ansariel> Show avatar complexity in appearance floater
+void LLOutfitsList::updateAvatarComplexity(U32 complexity)
+{
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+}
+// </FS:Ansariel>
 // EOF

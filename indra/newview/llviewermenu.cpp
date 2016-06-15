@@ -9026,14 +9026,16 @@ class LLAdvancedHandleAttachedLightParticles: public view_listener_t
 				       !gSavedSettings.getBOOL(control_name));
 
 		// update internal flags
-		if (control_name == "RenderAttachedLights")
-		{
-			menu_toggle_attached_lights(NULL);
-		}
-		else if (control_name == "RenderAttachedParticles")
-		{
-			menu_toggle_attached_particles(NULL);
-		}
+		// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
+		//if (control_name == "RenderAttachedLights")
+		//{
+		//	menu_toggle_attached_lights(NULL);
+		//}
+		//else if (control_name == "RenderAttachedParticles")
+		//{
+		//	menu_toggle_attached_particles(NULL);
+		//}
+		// </FS:Ansariel>
 		return true;
 	}
 };

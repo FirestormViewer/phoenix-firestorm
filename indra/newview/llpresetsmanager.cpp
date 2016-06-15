@@ -38,9 +38,17 @@
 #include "llviewercontrol.h"
 #include "llfloaterpreference.h"
 #include "llfloaterreg.h"
+#include "quickprefs.h"
 
 LLPresetsManager::LLPresetsManager()
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	: mIsLoadingPreset(false),
+	  mIsDrawDistanceSteppingActive(false)
 {
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	// This works, because the LLPresetsManager instance is created in the
+	// STATE_WORLD_INIT phase during startup when the status bar is initialized
+	initGraphicPresetControls();
 }
 
 LLPresetsManager::~LLPresetsManager()
@@ -148,17 +156,20 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 	{
 		gSavedSettings.setString("PresetGraphicActive", name);
 
-		LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-		if (instance)
-		{
-			instance->getControlNames(name_list);
-            LL_DEBUGS() << "saving preset '" << name << "'; " << name_list.size() << " names" << LL_ENDL;
-			name_list.push_back("PresetGraphicActive");
-		}
-        else
-        {
-            LL_WARNS() << "preferences floater instance not found" << LL_ENDL;
-        }
+		// <FS:Ansariel> Graphic preset controls independent from XUI
+		//LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+		//if (instance)
+		//{
+		//	instance->getControlNames(name_list);
+        //    LL_DEBUGS() << "saving preset '" << name << "'; " << name_list.size() << " names" << LL_ENDL;
+		//	name_list.push_back("PresetGraphicActive");
+		//}
+        //else
+        //{
+        //    LL_WARNS() << "preferences floater instance not found" << LL_ENDL;
+        //}
+		name_list = mGraphicPresetControls;
+		// </FS:Ansariel>
 	}
     else if(PRESETS_CAMERA == subdirectory)
 	{
@@ -261,6 +272,7 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
 
     LL_DEBUGS() << "attempting to load preset '"<<name<<"' from '"<<full_path<<"'" << LL_ENDL;
 
+	mIsLoadingPreset = true; // <FS:Ansariel> Graphic preset controls independent from XUI
 	if(gSavedSettings.loadFromFile(full_path, false, true) > 0)
 	{
 		if(PRESETS_GRAPHIC == subdirectory)
@@ -273,12 +285,20 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
 		{
 			instance->refreshEnabledGraphics();
 		}
+		// <FS:Ansariel> Graphic preset controls independent from XUI
+		FloaterQuickPrefs* phototools = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER);
+		if (phototools)
+		{
+			phototools->refreshSettings();
+		}
+		// </FS:Ansariel>
 		triggerChangeSignal();
 	}
     else
     {
         LL_WARNS() << "failed to load preset '"<<name<<"' from '"<<full_path<<"'" << LL_ENDL;
     }
+	mIsLoadingPreset = false; // <FS:Ansariel> Graphic preset controls independent from XUI
 }
 
 bool LLPresetsManager::deletePreset(const std::string& subdirectory, std::string name)
@@ -319,3 +339,67 @@ boost::signals2::connection LLPresetsManager::setPresetListChangeCallback(const 
 {
 	return mPresetListChangeSignal.connect(cb);
 }
+
+
+// <FS:Ansariel> Graphic preset controls independent from XUI
+void LLPresetsManager::initGraphicPresetControlNames()
+{
+	mGraphicPresetControls.clear();
+
+	const std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "graphic_preset_controls.xml");
+	if (LLFile::isfile(filename))
+	{
+		LLSD controls;
+	
+		llifstream file(filename.c_str());
+		LLSDSerialize::fromXML(controls, file);
+		file.close();
+
+		for (LLSD::array_const_iterator it = controls.beginArray(); it != controls.endArray(); ++it)
+		{
+			mGraphicPresetControls.push_back((*it).asString());
+		}
+	}
+	else
+	{
+		LL_WARNS() << "Graphic preset controls file missing" << LL_ENDL;
+	}
+}
+
+void LLPresetsManager::initGraphicPresetControls()
+{
+	LL_INFOS() << "Initializing graphic preset controls" << LL_ENDL;
+
+	initGraphicPresetControlNames();
+
+	for (std::vector<std::string>::iterator it = mGraphicPresetControls.begin(); it != mGraphicPresetControls.end(); ++it)
+	{
+		std::string control_name = *it;
+		if (gSavedSettings.controlExists(control_name))
+		{
+			gSavedSettings.getControl(control_name)->getSignal()->connect(boost::bind(&LLPresetsManager::handleGraphicPresetControlChanged, this, _1, _2, _3));
+		}
+		else if (gSavedPerAccountSettings.controlExists(control_name))
+		{
+			gSavedPerAccountSettings.getControl(control_name)->getSignal()->connect(boost::bind(&LLPresetsManager::handleGraphicPresetControlChanged, this, _1, _2, _3));
+		}
+		else
+		{
+			LL_WARNS() << "Control \"" << control_name << "\" does not exist." << LL_ENDL;
+		}
+	}
+}
+
+void LLPresetsManager::handleGraphicPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value)
+{
+	LL_DEBUGS() << "Handling graphic preset control change: control = " << control->getName() << " - new = " << new_value << " - old = " << old_value << LL_ENDL;
+
+	if (!mIsLoadingPreset && (!mIsDrawDistanceSteppingActive || control->getName() != "RenderFarClip"))
+	{
+		LL_DEBUGS() << "Trigger graphic preset control changed signal" << LL_ENDL;
+
+		gSavedSettings.setString("PresetGraphicActive", "");
+		triggerChangeSignal();
+	}
+}
+// </FS:Ansariel>

@@ -9,6 +9,9 @@
 		<text name="OutfitcountText">
 			[COUNT] Outfits
 		</text>
+		<text name="avatar_complexity_label">
+			Komplexität: [WEIGHT]
+		</text>
 		<button name="trash_btn" tool_tip="Ausgewähltes Outfit löschen"/>
 	</panel>
 </panel>

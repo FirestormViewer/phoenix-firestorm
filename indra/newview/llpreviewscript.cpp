@@ -2207,7 +2207,10 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
         mPendingUploads++;
         if (!url.empty())
         {
-            std::string buffer(mScriptEd->mEditor->getText());
+			//<FS:KC> Script Preprocessor
+            // std::string buffer(mScriptEd->mEditor->getText());
+			std::string buffer(mScriptEd->getScriptText());
+			//</FS:KC> Script Preprocessor
             LLBufferedAssetUploadInfo::invnUploadFinish_f proc = boost::bind(&LLPreviewLSL::finishedLSLUpload, _1, _4);
 
             // LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mItemUUID, buffer, proc));
@@ -2813,7 +2816,10 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 
     if (!url.empty())
     {
-        std::string buffer(mScriptEd->mEditor->getText());
+		//<FS:KC> Script Preprocessor
+        // std::string buffer(mScriptEd->mEditor->getText());
+		std::string buffer(mScriptEd->getScriptText());
+		//</FS:KC> Script Preprocessor
         LLBufferedAssetUploadInfo::taskUploadFinish_f proc = boost::bind(&LLLiveLSLEditor::finishLSLUpload, _1, _2, _3, _4, isRunning);
 
         LLResourceUploadInfo::ptr_t uploadInfo(new LLScriptAssetUpload(mObjectUUID, mItemUUID, 

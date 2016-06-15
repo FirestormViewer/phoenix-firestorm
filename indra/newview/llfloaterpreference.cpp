@@ -3728,6 +3728,8 @@ void LLPanelPreference::onCheckContactListColumnMode()
 
 void LLPanelPreference::cancel()
 {
+	LLPresetsManager::instance().setIsLoadingPreset(true); // <FS:Ansariel> Graphic preset controls independent from XUI
+
 	for (control_values_map_t::iterator iter =  mSavedValues.begin();
 		 iter !=  mSavedValues.end(); ++iter)
 	{
@@ -3760,6 +3762,8 @@ void LLPanelPreference::cancel()
 		map_pickradius_transparency->setValue(mOriginalMapPickRadiusTransparency);
 	}
 	// </FS:Ansariel>
+
+	LLPresetsManager::instance().setIsLoadingPreset(false); // <FS:Ansariel> Graphic preset controls indepentent from XUI
 }
 
 //<FS:KC> Handled centrally now
@@ -3990,7 +3994,8 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 }
 void LLPanelPreferenceGraphics::draw()
 {
-	setPresetText();
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	//setPresetText();
 	LLPanelPreference::draw();
 }
 
@@ -4026,14 +4031,16 @@ void LLPanelPreferenceGraphics::setPresetText()
 	//}
 	// </FS:Ansariel>
 
-	if (hasDirtyChilds() && !preset_graphic_active.empty())
-	{
-		gSavedSettings.setString("PresetGraphicActive", "");
-		preset_graphic_active.clear();
-		// This doesn't seem to cause an infinite recursion.  This trigger is needed to cause the pulldown
-		// panel to update.
-		LLPresetsManager::getInstance()->triggerChangeSignal();
-	}
+	// <FS:Ansariel> Graphic preset controls independent from XUI
+	//if (hasDirtyChilds() && !preset_graphic_active.empty())
+	//{
+	//	gSavedSettings.setString("PresetGraphicActive", "");
+	//	preset_graphic_active.clear();
+	//	// This doesn't seem to cause an infinite recursion.  This trigger is needed to cause the pulldown
+	//	// panel to update.
+	//	LLPresetsManager::getInstance()->triggerChangeSignal();
+	//}
+	// </FS:Ansariel>
 
 	if (!preset_graphic_active.empty())
 	{

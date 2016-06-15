@@ -39,9 +39,15 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">
+			Komplexität: [WEIGHT]
+		</text>
 		<button name="shop_btn_1" tool_tip="Besuchen Sie den Marktplatz. Sie können auch einen Teil Ihres Outfits auswählen, und dann hier klicken, um ähnliche Artikel anzuzeigen."/>
 	</panel>
 	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">
+			Komplexität: [WEIGHT]
+		</text>
 		<button name="shop_btn_2" tool_tip="Besuchen Sie den Marktplatz. Sie können auch einen Teil Ihres Outfits auswählen, und dann hier klicken, um ähnliche Artikel anzuzeigen."/>
 	</panel>
 	<panel name="save_revert_button_bar">

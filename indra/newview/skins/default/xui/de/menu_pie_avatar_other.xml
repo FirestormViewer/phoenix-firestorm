@@ -14,12 +14,12 @@
 		<pie_slice label="Kontakt-Set" name="Add to set"/>
 	</pie_menu>
 	<pie_slice label="Zahlen..." name="Pay..."/>
-	<pie_menu name="Avatar Pie More 1" label="Mehr >">
+	<pie_menu name="Avatar Pie More 1" label="Mehr &gt;">
 		<pie_slice label="Einfrieren" name="Freeze..."/>
 		<pie_slice label="Karte geben" name="Give Calling Card"/>
 		<pie_slice label="Gruppeneinl." name="Group Invite..."/>
 		<pie_slice label="Hinauswerfen" name="Eject..."/>
-		<pie_menu name="Avatar Pie More 2" label="Mehr >">
+		<pie_menu name="Avatar Pie More 2" label="Mehr &gt;">
 			<pie_slice label="Texturen" name="Debug..."/>
 			<pie_slice label="Skript-Info" name="ScriptInfo"/>
 			<pie_slice label="Anrufen" name="Call"/>

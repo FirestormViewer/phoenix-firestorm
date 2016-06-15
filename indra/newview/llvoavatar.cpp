@@ -120,6 +120,7 @@
 #include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
+#include "llsidepanelappearance.h"
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -9748,6 +9749,13 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		{
 			LLAvatarRenderNotifier::getInstance()->updateNotificationAgent(mVisualComplexity);
 		}
+
+		// <FS:Ansariel> Show avatar complexity in appearance floater
+		if (isSelf())
+		{
+			LLSidepanelAppearance::updateAvatarComplexity(mVisualComplexity);
+		}
+		// </FS:Ansariel>
 	}
 }
 

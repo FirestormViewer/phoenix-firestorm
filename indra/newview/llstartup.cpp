@@ -231,6 +231,7 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llfriendcard.h"
 #include "llnotificationmanager.h"
+#include "llpresetsmanager.h"
 #include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
@@ -2846,6 +2847,7 @@ bool idle_startup()
 		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
 		{
 			// progressive draw distance stepping if requested.
+			LLPresetsManager::instance().setIsDrawDistanceSteppingActive(true);
 			F32 dist1 = gSavedSettings.getF32("RenderFarClip");
 			F32 dist2 = gSavedSettings.getF32("FSSavedRenderFarClip");
 			gSavedDrawDistance = (dist1 >= dist2 ? dist1 : dist2);
