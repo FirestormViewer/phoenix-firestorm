@@ -501,6 +501,7 @@ LLMotion::LLMotionInitStatus LLKeyframeMotion::onInitialize(LLCharacter *charact
 		// request asset
 		mAssetStatus = ASSET_FETCHED;
 
+        LL_DEBUGS("Animation") << "Requesting data fetch for: " << mID << LL_ENDL;
 		character_id = new LLUUID(mCharacter->getID());
 		gAssetStorage->getAssetData(mID,
 						LLAssetType::AT_ANIMATION,
@@ -2323,8 +2324,8 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 			
 			U8* buffer = new U8[size];
 			file.read((U8*)buffer, size);	/*Flawfinder: ignore*/
-			
-			LL_DEBUGS() << "Loading keyframe data for: " << motionp->getName() << ":" << motionp->getID() << " (" << size << " bytes)" << LL_ENDL;
+
+			LL_DEBUGS("Animation") << "Loading keyframe data for: " << motionp->getName() << ":" << motionp->getID() << " (" << size << " bytes)" << LL_ENDL;
 	
 			// <FS:ND> Handle invalid files that cannot be properly loaded
 			try

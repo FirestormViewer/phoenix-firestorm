@@ -6770,7 +6770,6 @@ void LLAppViewer::metricsUpdateRegion(U64 region_handle)
 	}
 }
 
-
 /**
  * Attempts to start a multi-threaded metrics report to be sent back to
  * the grid for consumption.
@@ -6788,6 +6787,11 @@ void LLAppViewer::metricsSend(bool enable_reporting)
 		{
 			std::string	caps_url = regionp->getCapability("ViewerMetrics");
 
+            if (gSavedSettings.getBOOL("QAModeMetrics"))
+            {
+                dump_sequential_xml("metric_asset_stats",gViewerAssetStats->asLLSD(true));
+            }
+            
 			// Make a copy of the main stats to send into another thread.
 			// Receiving thread takes ownership.
 			LLViewerAssetStats * main_stats(new LLViewerAssetStats(*gViewerAssetStats));

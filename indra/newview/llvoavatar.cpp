@@ -1943,6 +1943,10 @@ void LLVOAvatar::resetSkeleton()
         return;
     }
 
+    // Save mPelvis state
+    //LLVector3 pelvis_pos = getJoint("mPelvis")->getPosition();
+    //LLQuaternion pelvis_rot = getJoint("mPelvis")->getRotation();
+
     // Clear all attachment pos overrides
     clearAttachmentPosOverrides();
 
@@ -1995,8 +1999,15 @@ void LLVOAvatar::resetSkeleton()
     // Restore attachment pos overrides
     rebuildAttachmentPosOverrides();
 
-    // Restart animations
-    resetAnimations();
+    // Restore mPelvis state
+    //getJoint("mPelvis")->setRotation(pelvis_rot);
+    //getJoint("mPelvis")->setPosition(pelvis_pos);
+    
+    // Restart animations BENTO - not needed? Removing this fixes a
+    // problem seen if avatar is sitting and animated relative to sit
+    // point.
+
+    //resetAnimations();
 
     LL_DEBUGS("Avatar") << avString() << " reset ends" << LL_ENDL;
 }
@@ -6016,20 +6027,33 @@ void LLVOAvatar::addAttachmentPosOverridesForObject(LLViewerObject *vo)
 					{   									
 						pJoint->setId( currentId );
 						const LLVector3& jointPos = pSkinData->mAlternateBindMatrix[i].getTranslation();									
-                        //Set the joint position
-                        pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString() );
+
+                        bool override_changed;
+                        pJoint->addAttachmentPosOverride( jointPos, mesh_id, avString(), override_changed );
+
+                        if (override_changed)
+                        {
+                            //If joint is a pelvis then handle old/new pelvis to foot values
+                            if ( lookingForJoint == "mPelvis" )
+                            {	
+                                pelvisGotSet = true;											
+                            }										
+                        }
                             
-                        //If joint is a pelvis then handle old/new pelvis to foot values
-                        if ( lookingForJoint == "mPelvis" )
-                        {	
-                            pelvisGotSet = true;											
-                        }										
 					}										
 				}																
 				if (pelvisZOffset != 0.0F)
 				{
+                    F32 pelvis_fixup_before;
+                    bool has_fixup_before =  hasPelvisFixup(pelvis_fixup_before);
 					addPelvisFixup( pelvisZOffset, mesh_id );
-					pelvisGotSet = true;											
+					F32 pelvis_fixup_after;
+                    hasPelvisFixup(pelvis_fixup_after); // Don't have to check bool here because we just added it...
+                    if (!has_fixup_before || (pelvis_fixup_before != pelvis_fixup_after))
+                    {
+                        pelvisGotSet = true;											
+                    }
+                    
 				}
 			}							
 		}
@@ -6179,8 +6203,9 @@ void LLVOAvatar::resetJointPositionsOnDetach(const LLUUID& mesh_id)
 		//Reset joints except for pelvis
 		if ( pJoint )
 		{			
+            bool dummy; // unused
 			pJoint->setId( LLUUID::null );
-			pJoint->removeAttachmentPosOverride(mesh_id, avString());
+			pJoint->removeAttachmentPosOverride(mesh_id, avString(), dummy);
 		}		
 		if ( pJoint && pJoint == pJointPelvis)
 		{
@@ -8626,7 +8651,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 			LLVisualParam* param = contents.mParams[i];
 			F32 newWeight = contents.mParamWeights[i];
 
-			if (is_first_appearance_message || (param->getWeight() != newWeight))
+			if (slam_params || is_first_appearance_message || (param->getWeight() != newWeight))
 			{
 				params_changed = TRUE;
 				params_changed_count++;
