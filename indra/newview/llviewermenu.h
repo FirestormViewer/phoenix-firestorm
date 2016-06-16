@@ -29,6 +29,7 @@
 
 #include "llmenugl.h"
 #include "llsafehandle.h"
+#include "piemenu.h"
 
 class LLMessageSystem;
 class LLSD;
@@ -37,7 +38,6 @@ class LLView;
 class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
-class PieMenu;			// ## Zi: Pie Menu
 
 void initialize_edit_menu();
 void initialize_spellcheck_menu();
@@ -219,7 +219,7 @@ extern LLContextMenu* gDetachPieMenu;
 extern LLContextMenu* gAttachBodyPartPieMenus[9];
 extern LLContextMenu* gDetachBodyPartPieMenus[9];
 
-// ## Zi: Pie Menu
+// <FS:Zi> Pie Menu
 // Pie menus in 3D scene
 extern PieMenu			*gPieMenuAvatarSelf;
 extern PieMenu			*gPieMenuAvatarOther;
@@ -234,19 +234,19 @@ extern PieMenu* gPieAttachScreenMenu;
 extern PieMenu* gPieDetachScreenMenu;
 extern PieMenu* gPieAttachMenu;
 extern PieMenu* gPieDetachMenu;
-extern PieMenu* gPieAttachBodyPartMenus[9];
-extern PieMenu* gPieDetachBodyPartMenus[9];
-// ## Zi: Pie Menu
+extern PieMenu* gPieAttachBodyPartMenus[PIE_MAX_SLICES];
+extern PieMenu* gPieDetachBodyPartMenus[PIE_MAX_SLICES];
+// <FS:Zi> Pie Menu
 
 extern LLMenuItemCallGL* gAutorespondMenu;
 extern LLMenuItemCallGL* gAutorespondNonFriendsMenu;
 
 /*
-// ## Zi: Dead code?
+// <FS:Zi> Dead code
 extern LLMenuItemCallGL* gMutePieMenu;
 extern LLMenuItemCallGL* gMuteObjectPieMenu;
 extern LLMenuItemCallGL* gBuyPassPieMenu;
-// ## Zi: Dead code?
+// </FS:Zi>
 */
 
 #endif

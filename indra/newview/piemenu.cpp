@@ -53,6 +53,7 @@ const F32 PIE_POPUP_FACTOR = 1.7f;			// pie menu size factor on popup
 const F32 PIE_POPUP_TIME = 0.25f;			// time to shrink from popup size to regular size
 const S32 PIE_OUTER_SIZE = 96;				// radius of the outer pie circle
 const F32 PIE_OUTER_SHADE_FACTOR = 1.09f;	// size factor of the outer shading ring
+const F32 PIE_MAX_SLICES_F = F32(PIE_MAX_SLICES);
 
 PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LLMenuGL(p),
@@ -138,10 +139,10 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 			angle = F_PI * 2.f - angle;
 		}
 		// rotate the angle slightly so the slices' centers are aligned correctly
-		angle += F_PI / 8.f;
+		angle += F_PI / PIE_MAX_SLICES_F;
 
 		// calculate slice number from the angle
-		mCurrentSegment = (S32) (8.f * angle / (F_PI * 2.f)) % 8;
+		mCurrentSegment = (S32) (PIE_MAX_SLICES_F * angle / (F_PI * 2.f)) % PIE_MAX_SLICES;
 	}
 
 	return TRUE;
@@ -324,7 +325,7 @@ void PieMenu::draw()
 
 		// clear the label and set up the starting angle to draw in
 		std::string label("");
-		F32 segmentStart = F_PI / 4.f * (F32)num - F_PI / 8.f;
+		F32 segmentStart = F_PI / 4.f * (F32)num - F_PI / PIE_MAX_SLICES_F;
 
 		// iterate through the list of slices
 		if (cur_item_iter != mSlices->end())
@@ -455,7 +456,7 @@ void PieMenu::draw()
 		// next slice
 		num++;
 	}
-	while (num < 8);	// do this until the menu is full
+	while (num < PIE_MAX_SLICES);	// do this until the menu is full
 
 	// draw inner and outer circle, outer only if it was not the first click
 	if (!mFirstClick)

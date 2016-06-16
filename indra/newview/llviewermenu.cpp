@@ -155,7 +155,6 @@
 #include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
 #include "llvovolume.h"
 #include "particleeditor.h"
-#include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
 #include "llscenemonitor.h"
@@ -207,7 +206,7 @@ LLContextMenu	*gMenuAttachmentOther = NULL;
 LLContextMenu	*gMenuLand	= NULL;
 LLContextMenu	*gMenuMuteParticle = NULL;
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 // Pie menus
 PieMenu		*gPieMenuAvatarSelf	= NULL;
 PieMenu		*gPieMenuAvatarOther = NULL;
@@ -216,7 +215,7 @@ PieMenu		*gPieMenuAttachmentSelf = NULL;
 PieMenu		*gPieMenuAttachmentOther = NULL;
 PieMenu		*gPieMenuLand	= NULL;
 PieMenu		*gPieMenuMuteParticle = NULL;
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
@@ -230,14 +229,14 @@ LLContextMenu* gDetachPieMenu = NULL;
 LLContextMenu* gDetachScreenPieMenu = NULL;
 LLContextMenu* gDetachBodyPartPieMenus[9];
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 PieMenu* gPieAttachScreenMenu = NULL;
 PieMenu* gPieAttachMenu = NULL;
-PieMenu* gPieAttachBodyPartMenus[9];
+PieMenu* gPieAttachBodyPartMenus[PIE_MAX_SLICES];
 PieMenu* gPieDetachMenu = NULL;
 PieMenu* gPieDetachScreenMenu = NULL;
-PieMenu* gPieDetachBodyPartMenus[9];
-// ## Zi: Pie menu
+PieMenu* gPieDetachBodyPartMenus[PIE_MAX_SLICES];
+// <FS:Zi> Pie menu
 
 LLMenuItemCallGL* gAutorespondMenu = NULL;
 LLMenuItemCallGL* gAutorespondNonFriendsMenu = NULL;
@@ -543,7 +542,7 @@ void init_menus()
 	gMenuMuteParticle = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_mute_particle.xml", gMenuHolder, registry);
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 	gPieMenuAvatarSelf = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_avatar_self.xml", gMenuHolder, registry);
 	gPieMenuAvatarOther = LLUICtrlFactory::createFromFile<PieMenu>(
@@ -570,7 +569,7 @@ void init_menus()
 
 	gPieMenuMuteParticle = LLUICtrlFactory::createFromFile<PieMenu>(
 		"menu_pie_mute_particle.xml", gMenuHolder, registry);
-// ## Zi: Pie menu
+// </FS:Zi> Pie menu
 
 	///
 	/// set up the colors
@@ -2832,6 +2831,29 @@ void cleanup_menus()
 
 	delete gMenuMuteParticle;
 	gMenuMuteParticle = NULL;
+
+	// <FS:Ansariel> Pie menu
+	delete gPieMenuAvatarSelf;
+	gPieMenuAvatarSelf = NULL;
+
+	delete gPieMenuAvatarOther;
+	gPieMenuAvatarOther = NULL;
+
+	delete gPieMenuObject;
+	gPieMenuObject = NULL;
+
+	delete gPieMenuAttachmentSelf;
+	gPieMenuAttachmentSelf = NULL;
+
+	delete gPieMenuAttachmentOther;
+	gPieMenuAttachmentOther = NULL;
+
+	delete gPieMenuLand;
+	gPieMenuLand = NULL;
+
+	delete gPieMenuMuteParticle;
+	gPieMenuMuteParticle = NULL;
+	// </FS:Ansariel>
 
 	delete gMenuBarView;
 	gMenuBarView = NULL;

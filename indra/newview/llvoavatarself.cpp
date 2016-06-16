@@ -504,10 +504,6 @@ BOOL LLVOAvatarSelf::buildMenus()
 	pieParams.name(pieParams.label);
 	gPieAttachBodyPartMenus[7] = LLUICtrlFactory::create<PieMenu> (pieParams);
 
-	pieParams.label(LLTrans::getString("BodyPartsEnhancedSkeleton"));
-	pieParams.name(pieParams.label);
-	gPieAttachBodyPartMenus[8] = LLUICtrlFactory::create<PieMenu>(pieParams);
-
 	gPieDetachBodyPartMenus[0] = NULL;
 
 	pieParams.label(LLTrans::getString("BodyPartsRightArm"));
@@ -535,10 +531,6 @@ BOOL LLVOAvatarSelf::buildMenus()
 	pieParams.label(LLTrans::getString("BodyPartsRightLeg"));
 	pieParams.name(pieParams.label);
 	gPieDetachBodyPartMenus[7] = LLUICtrlFactory::create<PieMenu> (pieParams);
-
-	pieParams.label(LLTrans::getString("BodyPartsEnhancedSkeleton"));
-	pieParams.name(pieParams.label);
-	gPieDetachBodyPartMenus[8] = LLUICtrlFactory::create<PieMenu>(pieParams);
 // </FS:Zi> Pie menu
 
 	for (S32 i = 0; i < 9; i++)
@@ -548,9 +540,9 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gAttachPieMenu->appendContextSubMenu( gAttachBodyPartPieMenus[i] );
 			// <FS:Zi> Pie menu
 			// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-			if (i < 8)
+			if (i < PIE_MAX_SLICES)
 			{
-				gPieAttachMenu->appendContextSubMenu(gPieAttachBodyPartMenus[i]); 
+				gPieAttachMenu->appendContextSubMenu(gPieAttachBodyPartMenus[i]);
 			}
 			// </FS:Zi>
 		}
@@ -564,18 +556,18 @@ BOOL LLVOAvatarSelf::buildMenus()
 				if (attachment && attachment->getGroup() == i)
 				{
 					LLMenuItemCallGL::Params item_params;
-					PieSlice::Params slice_params;	// ## Zi: Pie menu
+					PieSlice::Params slice_params;	// <FS:Zi> Pie menu
 
 					std::string sub_piemenu_name = attachment->getName();
 					if (LLTrans::getString(sub_piemenu_name) != "")
 					{
 						item_params.label = LLTrans::getString(sub_piemenu_name);
-						slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
+						slice_params.label = LLTrans::getString(sub_piemenu_name);	// <FS:Zi> Pie menu
 					}
 					else
 					{
 						item_params.label = sub_piemenu_name;
-						slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
+						slice_params.label = sub_piemenu_name;	// <FS:Zi> Pie menu
 					}
 					item_params.name =(item_params.label );
 					item_params.on_click.function_name = "Object.AttachToAvatar";
@@ -589,7 +581,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					// <FS:Zi> Pie menu
 					// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-					if (i < 8)
+					if (i < PIE_MAX_SLICES)
 					{
 						slice_params.name = (slice_params.label);
 						slice_params.on_click.function_name = "Object.AttachToAvatar";
@@ -613,7 +605,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
 			// <FS:Zi> Pie menu
 			// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-			if (i < 8)
+			if (i < PIE_MAX_SLICES)
 			{
 				gPieDetachMenu->appendContextSubMenu(gPieDetachBodyPartMenus[i]);
 			}
@@ -652,7 +644,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					// <FS:Zi> Pie menu
 					// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-					if (i < 8)
+					if (i < PIE_MAX_SLICES)
 					{
 						slice_params.name = (slice_params.label);
 						slice_params.on_click.function_name = "Attachment.DetachFromPoint";
@@ -680,7 +672,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (attachment && attachment->getGroup() == 9)
 		{
 			LLMenuItemCallGL::Params item_params;
-			PieSlice::Params slice_params;	// ## Zi: Pie menu
+			PieSlice::Params slice_params;	// <FS:Zi> Pie menu
 			std::string sub_piemenu_name = attachment->getName();
 			if (LLTrans::getString(sub_piemenu_name) != "")
 			{
@@ -846,7 +838,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 				// <FS:Zi> Pie menu
 				// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-				if (group < 8)
+				if (group < PIE_MAX_SLICES)
 				{
 					PieSlice::Params slice_params;
 					slice_params.name = attachment->getName();
