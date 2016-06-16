@@ -465,8 +465,8 @@ void LLPreviewNotecard::finishInventoryUpload(LLUUID itemId, LLUUID newAssetId, 
         {
             nc->refreshFromInventory(newItemId);
         }
-		// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
-		nc->checkCloseAfterSave();
+        // <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+        nc->checkCloseAfterSave();
     }
 }
 
@@ -485,6 +485,8 @@ void LLPreviewNotecard::finishTaskUpload(LLUUID itemId, LLUUID newAssetId, LLUUI
         }
         nc->setAssetId(newAssetId);
         nc->refreshFromInventory();
+        // <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
+        nc->checkCloseAfterSave();
     }
 }
 
