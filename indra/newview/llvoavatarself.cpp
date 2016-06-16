@@ -540,7 +540,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gAttachPieMenu->appendContextSubMenu( gAttachBodyPartPieMenus[i] );
 			// <FS:Zi> Pie menu
 			// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-			if (i < PIE_MAX_SLICES)
+			if (i < 8)
 			{
 				gPieAttachMenu->appendContextSubMenu(gPieAttachBodyPartMenus[i]);
 			}
@@ -581,7 +581,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					// <FS:Zi> Pie menu
 					// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-					if (i < PIE_MAX_SLICES)
+					if (i < 8)
 					{
 						slice_params.name = (slice_params.label);
 						slice_params.on_click.function_name = "Object.AttachToAvatar";
@@ -605,7 +605,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
 			// <FS:Zi> Pie menu
 			// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-			if (i < PIE_MAX_SLICES)
+			if (i < 8)
 			{
 				gPieDetachMenu->appendContextSubMenu(gPieDetachBodyPartMenus[i]);
 			}
@@ -644,7 +644,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					// <FS:Zi> Pie menu
 					// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-					if (i < PIE_MAX_SLICES)
+					if (i < 8)
 					{
 						slice_params.name = (slice_params.label);
 						slice_params.on_click.function_name = "Attachment.DetachFromPoint";
@@ -838,7 +838,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 				// <FS:Zi> Pie menu
 				// Ansa: Exclude Bento additions for now until we figured out a way where to put them...
-				if (group < PIE_MAX_SLICES)
+				if (group < 8)
 				{
 					PieSlice::Params slice_params;
 					slice_params.name = attachment->getName();
