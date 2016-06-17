@@ -570,7 +570,7 @@ support@secondlife.com.
 		Prims: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, Влияние земли: [PEWEIGHT] PE
+		, Влияние земли: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentЗагрузка">
 		, Загрузка влияния земли...

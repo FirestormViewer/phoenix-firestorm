@@ -551,7 +551,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Primów: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, wpływ na działkę: [PEWEIGHT] PE
+		, wpływ na działkę: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
 		, sprawdzanie wpływu na działkę...
