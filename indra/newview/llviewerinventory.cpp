@@ -1490,22 +1490,6 @@ void update_inventory_item(
 	LLPointer<LLInventoryCallback> cb)
 {
 	// <FS:Ansariel> [UDP-Msg]
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-	LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-	LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
-	LLPointer<LLViewerInventoryItem> new_item = NULL;
-
-	if (obj)
-	{
-		new_item = new LLViewerInventoryItem(obj);
-		new_item->fromLLSD(updates,false);
-
-		LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
-		gInventory.accountForUpdate(up);
-		gInventory.updateItem(new_item);
-	}
-// [/SL:KB]
-
 	if (AISAPI::isAvailable())
 	{
 	// </FS:Ansariel> [UDP-Msg]
@@ -1515,18 +1499,14 @@ void update_inventory_item(
 	}
 	else
 	{
-//		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
-//		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
-//		if(obj)
-//		{
-//			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
-//			new_item->copyViewerItem(obj);
-//			new_item->fromLLSD(updates,false);
-
-// [SL:KB] - Patch: Appearance-AISFilter | Checked: 2015-03-01 (Catznip-3.7)
-		if (new_item)
+		LLPointer<LLViewerInventoryItem> obj = gInventory.getItem(item_id);
+		LL_DEBUGS(LOG_INV) << "item_id: [" << item_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
+		if(obj)
 		{
-// [/SL:KB]
+			LLPointer<LLViewerInventoryItem> new_item(new LLViewerInventoryItem);
+			new_item->copyViewerItem(obj);
+			new_item->fromLLSD(updates,false);
+
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessageFast(_PREHASH_UpdateInventoryItem);
 			msg->nextBlockFast(_PREHASH_AgentData);
@@ -1538,9 +1518,9 @@ void update_inventory_item(
 			new_item->packMessage(msg);
 			gAgent.sendReliableMessage();
 
-//			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
-//			gInventory.accountForUpdate(up);
-//			gInventory.updateItem(new_item);
+			LLInventoryModel::LLCategoryUpdate up(new_item->getParentUUID(), 0);
+			gInventory.accountForUpdate(up);
+			gInventory.updateItem(new_item);
 			if (cb)
 			{
 				cb->fire(item_id);
