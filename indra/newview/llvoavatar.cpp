@@ -119,6 +119,7 @@
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
+#include "fsavatarrenderpersistence.h"
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -758,6 +759,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mMeshTexturesDirty = FALSE;
 	mHeadp = NULL;
 
+	// <FS:Ansariel> Load persisted avatar render settings
+	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 
 	// set up animation variables
 	mSpeed = 0.f;
@@ -9304,6 +9307,8 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
+	// <FS:Ansariel> Load persisted avatar render settings
+	FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
 }
 
 

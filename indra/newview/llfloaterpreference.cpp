@@ -129,6 +129,7 @@
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
+#include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
@@ -4820,6 +4821,9 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 		std::string backup_per_account_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder,
 					LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount"));
 
+		// Make sure to persist settings to file before we copy them
+		FSAvatarRenderPersistence::instance().saveAvatarRenderSettings();
+
 		LL_INFOS("SettingsBackup") << "copying per account settings" << LL_ENDL;
 		// create per-user folder if it doesn't exist yet
 		LLFile::mkdir(backup_per_account_folder.c_str());
@@ -5146,6 +5150,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 			exoGroupMuteList::instance().loadMuteList();
 		}
 #endif
+		FSAvatarRenderPersistence::instance().loadAvatarRenderSettings();
 
 		LLPanelMainInventory::sSaveFilters = false;
 	}

@@ -102,7 +102,7 @@ Settings groups to be restored (backup will always save all):
     <layout_stack
      name="ls_list_view_stack"
      follows="top|left|right"
-     height="215"
+     height="220"
      orientation="horizontal"
      top_pad="4"
      left="1"
@@ -242,6 +242,11 @@ Settings groups to be restored (backup will always save all):
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Presets</column>
             <column name="value">presets</column>
+        </row>
+        <row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Avatar Render Settings</column>
+            <column name="value">avatar_render_settings.xml</column>
         </row>
     </scroll_list>
     <!-- since enabled_control does not work properly on scroll list items and
