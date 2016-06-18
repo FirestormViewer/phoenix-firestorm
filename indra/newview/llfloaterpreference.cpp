@@ -2291,7 +2291,10 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 	else
 	{
 		// This is the inverse of the calculation in updateMaxComplexity
-		indirect_max_arc = (U32)((log(max_arc) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE) + MIN_INDIRECT_ARC_LIMIT;
+		// <FS:Ansariel> Fix math rounding error
+		//indirect_max_arc = (U32)((log(max_arc) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE) + MIN_INDIRECT_ARC_LIMIT;
+		indirect_max_arc = (U32)ll_round(((log(F32(max_arc)) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE)) + MIN_INDIRECT_ARC_LIMIT;
+		// </FS:Ansariel>
 	}
 	gSavedSettings.setU32("IndirectMaxComplexity", indirect_max_arc);
 }
