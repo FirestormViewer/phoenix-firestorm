@@ -2966,4 +2966,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Pie_av_render_normally">Normally</string>
   <string name="Pie_av_render_never">Never</string>
   <string name="Pie_av_render_fully">Fully</string>
+
+  <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
 </strings>

@@ -437,6 +437,19 @@
    tool_tip="This will show whether you have autoresponse enabled in your own nametag."
    top_delta="0"/>
     
+   <check_box
+     control_name="FSTagShowTooComplexARW"
+     enabled_control="AvatarNameTagMode"
+     height="16"
+     label="Complexity if too complex"
+     layout="topleft"
+     left="30"
+     width="140"
+     top_pad="3"
+     name="FSTagShowTooComplexARW"
+     tool_tip="If enabled, the nametag will show the current avatar complexity if the avatar is too complex and shown as jelly doll."
+     top_delta="0" />
+
 <!--away/logout-->
 	 <text
      type="string"
@@ -553,7 +566,7 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="40"
+     top_pad="25"
      width="500">
        Unavailable and Autoresponse messages can be found under Privacy / Autoresponse
     </text>

@@ -6636,4 +6636,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Pie_av_render_fully">
 		Vollständig
 	</string>
+	<string name="Nametag_Complexity_Label">
+		Komplexität: [COMPLEXITY]
+	</string>
 </strings>

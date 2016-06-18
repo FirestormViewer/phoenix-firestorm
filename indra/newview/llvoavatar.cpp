@@ -111,6 +111,7 @@
 #include "llscenemonitor.h"
 #include "llsdserialize.h"
 
+#include "fscommon.h"
 #include "fsdata.h"
 #include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
 #include "lggcontactsets.h"
@@ -705,6 +706,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mNameLastname(),
 	// </FS:Ansariel>
 	mTitle(),
+	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+	mNameArc(0),
+	mNameArcColor(LLColor4::white),
+	// </FS:Ansariel>
 	mNameAway(false),
 	mNameDoNotDisturb(false),
 	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag,
@@ -3040,6 +3045,20 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+	static LLCachedControl<bool> show_too_complex_arc_tag(gSavedSettings, "FSTagShowTooComplexARW");
+	U32 complexity(0);
+	LLColor4 complexity_color(LLColor4::white);
+
+	if (!isSelf() && show_too_complex_arc_tag && isTooComplex())
+	{
+		static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
+		complexity = mVisualComplexity;
+		F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
+		F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
+		complexity_color.set(red_level, green_level, 0.f, 1.f);
+	}
+
 	// Rebuild name tag if state change detected
 	if (!mNameIsSet
 		|| new_name
@@ -3057,7 +3076,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_cloud != mNameCloud
 		|| name_tag_color != mNameColor
 		|| is_typing != mNameIsTyping
-		|| distance_string != mDistanceString)
+		|| distance_string != mDistanceString
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		|| complexity != mNameArc
+		|| complexity_color != mNameArcColor)
 	{
 
 		//WS: If we got a uuid and if we know if it's id_based or not, ask FSDATA for the other tagdata, before we display it.
@@ -3234,6 +3256,16 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 		// <FS:Ansariel> Show distance in tag
 
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
+		if (!isSelf() && show_too_complex_arc_tag && isTooComplex())
+		{
+			LLStringUtil::format_map_t label_args;
+			label_args["COMPLEXITY"] = llformat("%d", complexity);
+			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+		}
+		// </FS:Ansariel>
+
 		mNameAway = is_away;
 		mNameDoNotDisturb = is_do_not_disturb;
 		mNameAutoResponse = is_autoresponse; // <FS:Ansariel> Show auto-response in nametag
@@ -3248,6 +3280,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
 		mNameFirstname = firstname->getString();
 		mNameLastname = lastname->getString();
+		// </FS:Ansariel>
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		mNameArc = complexity;
+		mNameArcColor = complexity_color;
 		// </FS:Ansariel>
 		LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
 		new_name = TRUE;
