@@ -200,6 +200,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SETCAM_FOV,			// Changes the current (vertical) field of view
 	RLV_BHVR_SETCAM_FOVMIN,			// Enforces a minimum (vertical) FOV
 	RLV_BHVR_SETCAM_FOVMAX,			// Enforces a maximum (vertical) FOV
+	RLV_BHVR_SETCAM_TEXTURES,		// Replaces all textures with the specified texture (or the default unrezzed one)
 	RLV_BHVR_SETCAM_UNLOCK,			// Forces the camera focus to the user's avatar
 
 	RLV_BHVR_COUNT,
@@ -216,6 +217,7 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_FOCUSOFFSET,
 	RLV_MODIFIER_SETCAM_FOVMIN,
 	RLV_MODIFIER_SETCAM_FOVMAX,
+	RLV_MODIFIER_SETCAM_TEXTURE,
 
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN

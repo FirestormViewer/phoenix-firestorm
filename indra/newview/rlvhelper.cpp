@@ -177,6 +177,8 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmax", RLV_BHVR_SETCAM_FOVMAX));
 	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMin()));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setcam_textures", RLV_BHVR_SETCAM_TEXTURES));
+	addModifier(RLV_BHVR_SETCAM_TEXTURES, RLV_MODIFIER_SETCAM_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>(IMG_DEFAULT, true, nullptr));
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("setcam_unlock"));
 
 	//
@@ -465,6 +467,15 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 			if (3 == sscanf(optionValue.c_str(), "%f/%f/%f", vecOption.mV + 0, vecOption.mV + 1, vecOption.mV + 2))
 			{
 				modValue = vecOption;
+				return true;
+			}
+		}
+		else if (typeid(LLUUID) == m_DefaultValue.type())
+		{
+			LLUUID idOption;
+			if (LLUUID::parseUUID(optionValue, &idOption))
+			{
+				modValue = idOption;
 				return true;
 			}
 		}

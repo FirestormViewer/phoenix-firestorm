@@ -402,6 +402,9 @@ BOOL    LLPipeline::sMemAllocationThrottled = FALSE;
 S32		LLPipeline::sVisibleLightCount = 0;
 F32		LLPipeline::sMinRenderSize = 0.f;
 BOOL	LLPipeline::sRenderingHUDs;
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+bool	LLPipeline::sRenderTextures = true;
+// [/SL:KB]
 
 // EventHost API LLPipeline listener.
 static LLPipelineListener sPipelineListener;

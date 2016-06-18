@@ -39,6 +39,7 @@
 #include "lltabcontainer.h"				// @showinv - Tab container control for inventory tabs
 #include "lltoolmgr.h"					// @edit
 #include "llviewercamera.h"				// @setcam and related
+#include "llviewertexturelist.h"		// @setcam_texture
 
 // RLVa includes
 #include "rlvactions.h"
@@ -1419,10 +1420,19 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(co
 	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(rlvCmd.getBehaviourType());
 	if ( (pBhvrModifier) && (pBhvrModifier->getAddDefault()) )
 	{
+		// HACK-RLVa: reference counting doesn't happen until control returns to our caller but the modifier callbacks will happen now so we need to adjust the reference counts here
 		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
 			pBhvrModifier->addValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
+		}
 		else
+		{
+			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]--;
 			pBhvrModifier->removeValue(pBhvrModifier->getDefaultValue(), rlvCmd.getObjectID());
+			gRlvHandler.m_Behaviours[rlvCmd.getBehaviourType()]++;
+		}
 	}
 
 	fRefCount = true;
@@ -1694,6 +1704,27 @@ template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>::onValueChange() const
 {
 	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
+}
+
+// Handles: @setcam_textures[:<uuid>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_TEXTURE))
+	{
+		if (pBhvrModifier->hasValue())
+		{
+			RLV_INFOS << "Toggling diffuse textures for @setcam_textures" << RLV_ENDL;
+			LLViewerFetchedTexture::sDefaultDiffuseImagep = LLViewerTextureManager::getFetchedTexture(pBhvrModifier->getValue<LLUUID>(), FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+			gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, true);
+		}
+		else
+		{
+			RLV_INFOS << "Restoring diffuse textures for @setcam_textures" << RLV_ENDL;
+			gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, false);
+			LLViewerFetchedTexture::sDefaultDiffuseImagep = nullptr;
+		}
+	}
 }
 
 // Handles: @setcam=n|y toggles
