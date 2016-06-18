@@ -758,8 +758,9 @@ BOOL LLFloaterPreference::postBuild()
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
 	// </FS:ND>
 
-	// <FS:Ansariel> Update label for max. non imposters
+	// <FS:Ansariel> Update label for max. non imposters and max complexity
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
+	gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxComplexityLabel, this, _2));
 
 	return TRUE;
 }
@@ -3031,6 +3032,13 @@ void LLFloaterPreference::updateMaxNonImpostorsLabel(const LLSD& newvalue)
 		value=0;
 	}
 	setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
+}
+
+void LLFloaterPreference::updateMaxComplexityLabel(const LLSD& newvalue)
+{
+	U32 value = newvalue.asInteger();
+
+	LLAvatarComplexityControls::setText(value, getChild<LLTextBox>("IndirectMaxComplexityText"));
 }
 // </FS:Ansariel>
 

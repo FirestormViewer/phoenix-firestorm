@@ -232,6 +232,7 @@ public:
 	void updateMaxNonImpostors();
 	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
 	void updateMaxNonImpostorsLabel(const LLSD& newvalue);
+	void updateMaxComplexityLabel(const LLSD& newvalue);
 	// </FS:Ansariel>
 
 	void refreshUI();
