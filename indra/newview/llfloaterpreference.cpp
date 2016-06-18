@@ -2605,6 +2605,7 @@ void LLFloaterPreference::refresh()
 	// <FS:Ansariel> Improved graphics preferences
 	getChild<LLUICtrl>("fsaa")->setValue((LLSD::Integer)  gSavedSettings.getU32("RenderFSAASamples"));
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
+	LLAvatarComplexityControls::setIndirectControls();
 	setMaxNonImpostorsText(gSavedSettings.getU32("RenderAvatarMaxNonImpostors"),getChild<LLTextBox>("IndirectMaxNonImpostorsText", true));
 	// </FS:Ansariel>
 
