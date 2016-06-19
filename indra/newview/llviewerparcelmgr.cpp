@@ -1526,10 +1526,16 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	LLViewerParcelMgr& parcel_mgr = LLViewerParcelMgr::instance();
 // <FS:CR> Aurora Sim
 	LLViewerRegion* msg_region = LLWorld::getInstance()->getRegion( msg->getSender() );
-	if(msg_region) {
-			parcel_mgr.mParcelsPerEdge = S32( msg_region->getWidth() / PARCEL_GRID_STEP_METERS );
+	if (msg_region)
+	{
+		parcel_mgr.mParcelsPerEdge = S32( msg_region->getWidth() / PARCEL_GRID_STEP_METERS );
 	}
-	else {
+	else
+	{
+		if (!gAgent.getRegion())
+		{
+			return;
+		}
 		parcel_mgr.mParcelsPerEdge = S32( gAgent.getRegion()->getWidth() / PARCEL_GRID_STEP_METERS );
 	}
 // </FS:CR> Aurora Sim
