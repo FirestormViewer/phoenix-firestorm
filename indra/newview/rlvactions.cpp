@@ -41,6 +41,17 @@ bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
 }
 
+bool RlvActions::canChangeToMouselook()
+{
+	// User can switch to mouselook if:
+	//   - not specifically prevented from going into mouselook (NOTE: if an object has exclusive camera control only that object can prevent mouselook)
+	//   - there is no minimum camera distance defined (or it's higher than > 0m)
+	const RlvBehaviourModifier* pCamDistMinModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN);
+	return
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_MOUSELOOK) : !gRlvHandler.hasBehaviour(pCamDistMinModifier->getPrimaryObject(), RLV_BHVR_SETCAM_MOUSELOOK) ) &&
+		( (!pCamDistMinModifier->hasValue()) || (pCamDistMinModifier->getValue<float>() == 0.f) );
+}
+
 bool RlvActions::isCameraDistanceClamped()
 {
 	return

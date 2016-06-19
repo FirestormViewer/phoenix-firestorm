@@ -162,9 +162,9 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Camera
 	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM, RLV_OPTION_NONE>("setcam"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmin", RLV_BHVR_SETCAM_AVDISTMIN));
-	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifier(0.0f, true, new RlvBehaviourModifier_CompMax()));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>(0.0f, false, new RlvBehaviourModifier_CompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmax", RLV_BHVR_SETCAM_AVDISTMAX));
-	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier(F32_MAX, true, new RlvBehaviourModifier_CompMin()));
+	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier(F32_MAX, false, new RlvBehaviourModifier_CompMin()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmin", RLV_BHVR_SETCAM_FOCUSDISTMIN));
 	addModifier(RLV_BHVR_SETCAM_FOCUSDISTMIN, RLV_MODIFIER_SETCAM_FOCUSDISTMIN, new RlvBehaviourModifier(0.0f, true, new RlvBehaviourModifier_CompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmax", RLV_BHVR_SETCAM_FOCUSDISTMAX));
@@ -176,6 +176,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmin", RLV_BHVR_SETCAM_FOVMIN));
 	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmax", RLV_BHVR_SETCAM_FOVMAX));
+	addEntry(new RlvBehaviourToggleProcessor<RLV_BHVR_SETCAM_MOUSELOOK, RLV_OPTION_NONE>("setcam_mouselook"));
 	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>(DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMin()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setcam_textures", RLV_BHVR_SETCAM_TEXTURES));
 	addModifier(RLV_BHVR_SETCAM_TEXTURES, RLV_MODIFIER_SETCAM_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>(IMG_DEFAULT, true, nullptr));
@@ -413,6 +414,11 @@ bool RlvBehaviourModifier::addValue(const RlvBehaviourModifierValue& modValue, c
 		return true;
 	}
 	return false;
+}
+
+const LLUUID& RlvBehaviourModifier::getPrimaryObject() const
+{
+	return (m_pValueComparator) ? m_pValueComparator->m_idPrimaryObject : LLUUID::null;
 }
 
 bool RlvBehaviourModifier::hasValue() const {

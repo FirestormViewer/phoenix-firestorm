@@ -40,6 +40,11 @@ public:
 	static bool canChangeCameraPreset(const LLUUID& idRlvObject);
 
 	/*
+	 * Returns true if the user can switch to mouselook
+	 */
+	static bool canChangeToMouselook();
+
+	/*
 	 * Returns true if the camera's distance (from either the avatar of the focus) is currently restricted/clamped
 	 */
 	static bool isCameraDistanceClamped();

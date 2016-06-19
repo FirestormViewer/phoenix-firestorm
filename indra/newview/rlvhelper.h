@@ -212,6 +212,7 @@ public:
 	bool                             convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
 	bool                             getAddDefault() const { return m_fAddDefaultOnEmpty; }
 	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
+	const LLUUID&                    getPrimaryObject() const;
 	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? m_Values.front().first : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
 	bool                             hasValue() const;

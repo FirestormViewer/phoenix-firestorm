@@ -1639,12 +1639,13 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour e
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
 }
 
-// Handles: @setcam_unlock=n|y toggles
-template<> template<>
-void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+// Handles: @setcam_avdistmin:<distance>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>::onValueChange() const
 {
-	if (fHasBhvr)
-		handle_reset_view();
+	const RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN);
+	if ( (gAgentCamera.cameraMouselook()) && (!RlvActions::canChangeToMouselook()) )
+		gAgentCamera.changeCameraToThirdPerson();
 }
 
 // Handles: @setcam_eyeoffset:<vector3>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
@@ -1706,6 +1707,14 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>::onValueChange() co
 	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
 }
 
+// Handles: @setcam_mouselook=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_MOUSELOOK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if ((fHasBhvr) && (gAgentCamera.cameraMouselook()))
+		gAgentCamera.changeCameraToThirdPerson();
+}
+
 // Handles: @setcam_textures[:<uuid>=n|y changes
 template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>::onValueChange() const
@@ -1725,6 +1734,14 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>::onValueChange() c
 			LLViewerFetchedTexture::sDefaultDiffuseImagep = nullptr;
 		}
 	}
+}
+
+// Handles: @setcam_unlock=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+		handle_reset_view();
 }
 
 // Handles: @setcam=n|y toggles

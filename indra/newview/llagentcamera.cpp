@@ -2150,6 +2150,10 @@ void LLAgentCamera::resetCamera()
 void LLAgentCamera::changeCameraToMouselook(BOOL animate)
 {
 	if (!gSavedSettings.getBOOL("EnableMouselook") 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		|| ( (RlvActions::isRlvEnabled()) && (!RlvActions::canChangeToMouselook()) )
+// [/RLVa:KB]
+
 		|| LLViewerJoystick::getInstance()->getOverrideCamera())
 	{
 		return;
