@@ -41,7 +41,7 @@
 #include "llworld.h"
 #include "lltoolmgr.h"
 #include "llviewerjoystick.h"
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+// [RLVa:KB] - RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -357,15 +357,17 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
 		if (limit_select_distance)
 		{
 			// ...select distance from control
-//			z_far = gSavedSettings.getF32("MaxSelectDistance");
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-			z_far = (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ? gSavedSettings.getF32("MaxSelectDistance") : 1.5;
-// [/RLVa:KB]
+			z_far = gSavedSettings.getF32("MaxSelectDistance");
 		}
 		else
 		{
 			z_far = gAgentCamera.mDrawDistance;
 		}
+
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		if (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH))
+			z_far = RlvActions::getModifierValue<float>(RLV_MODIFIER_FARTOUCHDIST);
+// [/RLVa:KB]
 	}
 	else
 	{

@@ -46,7 +46,8 @@
 #include "llstatusbar.h"
 #include "llmenugl.h"
 #include "pipeline.h"
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a)
+// [RLVa:KB] - Checked: RLVa-1.4.0
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include <boost/tokenizer.hpp>
@@ -247,14 +248,14 @@ void LLHUDText::setString(const std::string &text_utf8)
 //	addLine(text_utf8, mColor);
 // [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
 	// NOTE: setString() is called for debug and map beacons as well
-	if (rlv_handler_t::isEnabled())
+	if (RlvActions::isRlvEnabled())
 	{
 		std::string text(text_utf8);
 		if (gRlvHandler.canShowHoverText(mSourceObject))
 		{
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+			if (!RlvActions::canShowLocation())
 				RlvUtil::filterLocation(text);
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
 				RlvUtil::filterNames(text);
 		}
 		else

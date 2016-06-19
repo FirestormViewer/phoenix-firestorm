@@ -45,8 +45,9 @@
 #include "llrootview.h"
 #include "lllayoutstack.h"
 
-// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 
 //add LLFloaterIMNearbyChatHandler to LLNotificationsUI namespace
@@ -491,16 +492,16 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 		return;//don't process empty messages
 
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-	if (rlv_handler_t::isEnabled())
+	if (RlvActions::isRlvEnabled())
 	{
 		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
 		LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		if ( (!RlvActions::canShowLocation()) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
 			RlvUtil::filterLocation(tmp_chat.mText);
 			tmp_chat.mRlvLocFiltered = TRUE;
 		}
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
 			RlvUtil::filterNames(tmp_chat.mText);
 			tmp_chat.mRlvNamesFiltered = TRUE;
@@ -574,8 +575,8 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
  		LLFirstUse::otherAvatarChatFirst();
 
  		// Add sender to the recent people list.
-// [RLVa:KB] - Checked: 2012-03-15 (RLVa-1.4.6) | Added: RLVa-1.4.6
-		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, chat_msg.mFromID)) )
 	 		LLRecentPeople::instance().add(chat_msg.mFromID);
 // [/RLVa:KB]
 // 		LLRecentPeople::instance().add(chat_msg.mFromID);
@@ -651,8 +652,8 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
             LLUUID id;
             id.generate();
             chat["id"] = id;
-// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-			if (rlv_handler_t::isEnabled())
+// [RLVa:KB] - Checked: RLVa-1.2.0
+			if (RlvActions::isRlvEnabled())
 				chat["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
 // [/RLVa:KB]
             std::string r_color_name = "White";

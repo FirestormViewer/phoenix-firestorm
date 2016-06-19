@@ -65,8 +65,9 @@
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llsdserialize.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+// [RLVa:KB] - Checked: RLVa-2.0.2
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
@@ -1062,12 +1063,25 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 		}
 		else
 		{
+// [RLVa:KB] - Checked: RLVa-2.0.2
+			bool fRlvCanShowAttachment = true;
+			if (rlv_handler_t::isEnabled())
+			{
+				fRlvCanShowAttachment =
+					(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELF)) &&
+					( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELFHEAD)) || (RLV_ATTACHGROUP_HEAD != rlvAttachGroupFromIndex(attachment->getGroup())) );
+			}
+// [/RLVa:KB]
+
 			switch (camera_mode)
 			{
 				case CAMERA_MODE_MOUSELOOK:
 					if (LLVOAvatar::sVisibleInFirstPerson && attachment->getVisibleInFirstPerson())
 					{
-						attachment->setAttachmentVisibility(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.2
+						attachment->setAttachmentVisibility(fRlvCanShowAttachment);
+// [/RLVa:KB]
+//						attachment->setAttachmentVisibility(TRUE);
 					}
 					else
 					{
@@ -1075,7 +1089,10 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 					}
 					break;
 				default:
-					attachment->setAttachmentVisibility(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.2
+					attachment->setAttachmentVisibility(fRlvCanShowAttachment);
+// [/RLVa:KB]
+//					attachment->setAttachmentVisibility(TRUE);
 					break;
 			}
 		}

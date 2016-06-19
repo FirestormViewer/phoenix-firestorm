@@ -98,9 +98,7 @@ public:
 	void              setSitSource(const LLVector3d& posSource)	{ m_posSitSource = posSource; }	// @standtp
 
 	// Command specific helper functions
-	bool canEdit(const LLViewerObject* pObj) const;												// @edit and @editobj
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
-	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
 	bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;	// @touch
 	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
 	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
@@ -231,18 +229,6 @@ extern rlv_handler_t gRlvHandler;
 // ============================================================================
 // Inlined member functions
 //
-
-// Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-inline bool RlvHandler::canEdit(const LLViewerObject* pObj) const
-{
-	// The specified object can be edited if:
-	//   - not generally restricted from editing (or the object's root is an exception)
-	//   - not specifically restricted from editing this object's root
-	return 
-		(pObj) &&
-		((!hasBehaviour(RLV_BHVR_EDIT)) || (isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
-		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
-}
 
 // Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
 inline bool RlvHandler::canShowHoverText(const LLViewerObject *pObj) const

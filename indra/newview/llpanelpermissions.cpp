@@ -65,7 +65,8 @@
 #include "lltrans.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
-#include "rlvhandler.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 
 U8 string_value_to_click_action(std::string p_value);
@@ -411,15 +412,15 @@ void LLPanelPermissions::refresh()
 //	getChildView("Owner Name")->setEnabled(TRUE);
 // [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
 	{
 		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
-		if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
+		if ( (creators_identical) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mCreatorID)) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
 			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
 
 		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
-		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )
+		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, mOwnerID)) )
 			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
 	}
 

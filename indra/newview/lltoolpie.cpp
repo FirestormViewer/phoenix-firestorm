@@ -71,6 +71,7 @@
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -461,7 +462,7 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 //			if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // not already sitting?
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.2.0g
 			if ( (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) && 
-				 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, LLToolPie::getInstance()->getHoverPick().mObjectOffset))) )
+				 ((!rlv_handler_t::isEnabled()) || (RlvActions::canSit(object, LLToolPie::getInstance()->getHoverPick().mObjectOffset))) )
 // [/RLVa:KB]
 			{
 				cursor = UI_CURSOR_TOOLSIT;
@@ -729,10 +730,24 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
                                              FALSE /* ignore transparent */,
                                              FALSE /* ignore particles */);
 
-        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
-            && (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
-                || mPick.mObjectID.notNull()))				// or on an object
+//        if (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
+//            && (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
+//                || mPick.mObjectID.notNull()))				// or on an object
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		bool fValidPick = (!mPick.mPosGlobal.isExactlyZero()			// valid coordinates for pick
+			&& (mPick.mPickType == LLPickInfo::PICK_LAND	// we clicked on land
+				|| mPick.mObjectID.notNull()));				// or on an object
+
+		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			fValidPick = false;
+		}
+
+		if (fValidPick)
+// [/RLVa:KB]
         {
+
             // handle special cases of steering picks
             LLViewerObject* avatar_object = mPick.getObject();
 
@@ -827,8 +842,20 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
             }
         }
 
-		if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
-			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()))
+//		if ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+//			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()))
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		bool fValidPick = ((mPick.mPickType == LLPickInfo::PICK_LAND && !mPick.mPosGlobal.isExactlyZero()) ||
+			(mPick.mObjectID.notNull()  && !mPick.mPosGlobal.isExactlyZero()));
+
+		if ( (fValidPick) && (RlvActions::isRlvEnabled()) && (!RlvActions::canTeleportToLocal(mPick.mPosGlobal)) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_AUTOPILOT);
+			fValidPick = false;
+		}
+
+		if (fValidPick)
+// [/RLVa:KB]
 		{
 			walkToClickedLocation();
 			return TRUE;
@@ -1096,8 +1123,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
 //				final_name = av_name.getCompleteName();
-// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [RLVa:KB] - Checked: RLVa-1.2.2
+				final_name = (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
 			}
 			else
@@ -1107,9 +1134,9 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
-// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+// [RLVa:KB] - Checked: RLVa-1.2.0
 			if ( (!rlv_handler_t::isEnabled()) || 
-				 ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ) )
+			     ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
 			{
 // [/RLVa:KB]
 				LLInspector::Params p;

@@ -106,7 +106,7 @@ public:
 	void setShowPermissions(bool show) { mShowPermissions = show; };
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
 // [/RLVa:KB]
 	
@@ -214,7 +214,7 @@ private:
 	//Speaker indicator and avatar name coords are translated accordingly
 	bool mShowInfoBtn;
 	bool mShowProfileBtn;
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	bool mRlvCheckShowNames;
 // [/RLVa:KB]
 

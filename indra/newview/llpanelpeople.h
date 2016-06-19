@@ -59,7 +59,7 @@ public:
 
     bool mTryToConnectToFacebook;
 
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	LLAvatarList* getNearbyList() { return mNearbyList; }
 // [/RLVa:KB]
 

@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2013, Kitty Barnett
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -80,6 +80,16 @@ public:
 	static bool canReceiveIM(const LLUUID& idSender);
 
 	/*
+	 * Returns true if the user is allowed to send/play gestures (whether active ones from the chat bar or using the gesture preview floater)
+	 */
+	static bool canPlayGestures();
+
+	/*
+	 * Returns true if the user is allowed to chat on the specified channel
+	 */
+	static bool canSendChannel(int nChannel);
+
+	/*
 	 * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
 	 */
 	static bool canSendIM(const LLUUID& idRecipient);
@@ -94,9 +104,9 @@ public:
 	 * (This is used to hide an avatar name in one case but not a near-identical case - such as teleporting a friend vs a nearby agent -
 	 *  in a way that limits the amount of code that needs to be changed to carry context from one function to another)
 	 */
-	enum EShowNamesContext { SNC_TELEPORTOFFER = 0, SNC_TELEPORTREQUEST, SNC_COUNT };
-	static bool canShowName(EShowNamesContext eContext) { return (eContext < SNC_COUNT) ? !s_BlockNamesContexts[eContext] : false; }
-	static void setShowName(EShowNamesContext eContext, bool fShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fShowName; } }
+	enum EShowNamesContext { SNC_DEFAULT = 0, SNC_NAMETAG, SNC_TELEPORTOFFER, SNC_TELEPORTREQUEST, SNC_COUNT };
+	static bool canShowName(EShowNamesContext eContext, const LLUUID& idAgent = LLUUID::null);
+	static void setShowName(EShowNamesContext eContext, bool fCanShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fCanShowName; } }
 
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
@@ -135,7 +145,7 @@ public:
 	/*
 	 * Returns true if the user can teleport locally (short distances)
 	 */
-	static bool canTeleportToLocal();
+	static bool canTeleportToLocal(const LLVector3d& posGlobal);
 
 	/*
 	 * Returns true if the user can teleport to a (remote) location
@@ -152,6 +162,16 @@ public:
 	// =================
 public:
 	/*
+	 * Returns true if the user can edit the specified object
+	 */
+	static bool canEdit(const LLViewerObject* pObj);
+
+	/*
+	 * Returns true if the user can sit up on the specified object
+	 */
+	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+
+	/*
 	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
 	 */
 	static bool canStand();
@@ -167,7 +187,12 @@ public:
 	// ================
 public:
 	/*
-	 * Convenience function to check for a behaviour without having to include rlvhandler.h
+	 * Convenience function to get the current/active value of a behaviour modifier
+	 */
+	template<typename T> static const T& getModifierValue(ERlvBehaviourModifier eBhvrMod);
+
+	/*
+	 * Convenience function to check for a behaviour without having to include rlvhandler.h.
 	 * Do NOT call this function if speed is important (i.e. per-frame)
 	 */
 	static bool hasBehaviour(ERlvBehaviour eBhvr);

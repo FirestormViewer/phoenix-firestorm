@@ -47,8 +47,9 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
+#include "rlvhelper.h"
 #include "llfloaterreg.h"
 // [/RLVa:KB]
 
@@ -86,22 +87,23 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	}
 
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-	if ( (object) && (rlv_handler_t::isEnabled()) )
+	if ( (object) && (RlvActions::isRlvEnabled()) )
 	{
-		if (!gRlvHandler.canEdit(object))
+		if (!RlvActions::canEdit(object))
 		{
 			if (!temp_select)
 				return LLSelectMgr::getInstance()->getSelection();
 			else if (LLToolMgr::instance().inBuildMode())
 				LLToolMgr::instance().toggleBuildMode();
 		}
-		
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && ((!object->isAttachment()) || (!object->permYouOwner())) &&
-			 (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > 1.5f * 1.5f) )
+
+		if ( (RlvActions::hasBehaviour(RLV_BHVR_FARTOUCH)) && ((!object->isAttachment()) || (!object->permYouOwner())) )
 		{
-			// NOTE: see behaviour notes for a rather lengthy explanation of why we're doing things this way
-			//if (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion() + pick.mObjectOffset) > 1.5f * 1.5f)
-			if (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > 1.5f * 1.5f)
+			static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+			float nFartouchDistSq = s_nFartouchDist * s_nFartouchDist;
+			// NOTE: recheck why we did it this way, might be able to simplify
+			if ( (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > nFartouchDistSq) &&
+			     (dist_vec_squared(gAgent.getPositionAgent(), pick.mIntersection) > nFartouchDistSq) )
 			{
 				if ( (LLFloaterReg::instanceVisible("build")) && (pick.mKeyMask != MASK_SHIFT) && (pick.mKeyMask != MASK_CONTROL) )
 					LLSelectMgr::getInstance()->deselectAll();

@@ -66,13 +66,15 @@ const S32 RLVa_VERSION_BUILD = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_MODIFIER_TPLOCAL_DEFAULT    256.f			// Any teleport that's more than a region away is non-local
+#define RLV_MODIFIER_FARTOUCH_DEFAULT   1.5f			// Specifies the default @fartouch distance
+#define RLV_MODIFIER_SITTP_DEFAULT      1.5f			// Specifies the default @sittp distance
 #define RLV_OPTION_SEPARATOR			";"				// Default separator used in command options
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
-#define RLV_TELEPORT_LOCAL_RADIUS		256				// Any teleport that's more than a region away is non-local
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
@@ -104,13 +106,15 @@ enum ERlvBehaviour {
 	RLV_BHVR_CHATWHISPER,			// "chatwhisper"
 	RLV_BHVR_CHATNORMAL,			// "chatnormal"
 	RLV_BHVR_CHATSHOUT,				// "chatshout"
-	RLV_BHVR_SENDCHANNEL,			// "sendchannel"
+	RLV_BHVR_SENDCHANNEL,
+	RLV_BHVR_SENDCHANNELEXCEPT,
 	RLV_BHVR_SENDIM,				// "sendim"
 	RLV_BHVR_SENDIMTO,				// "sendimto"
 	RLV_BHVR_RECVIM,				// "recvim"
 	RLV_BHVR_RECVIMFROM,			// "recvimfrom"
 	RLV_BHVR_STARTIM,				// "startim"
 	RLV_BHVR_STARTIMTO,				// "startimto"
+	RLV_BHVR_SENDGESTURE,
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
 	RLV_BHVR_SHOWINV,				// "showinv"
@@ -118,10 +122,13 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWWORLDMAP,			// "showworldmap"
 	RLV_BHVR_SHOWLOC,				// "showloc"
 	RLV_BHVR_SHOWNAMES,				// "shownames"
+	RLV_BHVR_SHOWNAMETAGS,			// "shownametags"
 	RLV_BHVR_SHOWHOVERTEXT,			// "showhovertext"
 	RLV_BHVR_SHOWHOVERTEXTHUD,		// "showhovertexthud"
 	RLV_BHVR_SHOWHOVERTEXTWORLD,	// "showhovertextworld"
 	RLV_BHVR_SHOWHOVERTEXTALL,		// "showhovertextall"
+	RLV_BHVR_SHOWSELF,
+	RLV_BHVR_SHOWSELFHEAD,
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
 	RLV_BHVR_TPLOCAL,
@@ -210,6 +217,13 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
+	RLV_MODIFIER_FARTOUCHDIST,		// Radius of a sphere around the user in which they can interact with the world
+	RLV_MODIFIER_RECVIMDISTMIN,		// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_RECVIMDISTMAX,		// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_SENDIMDISTMIN,		// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SENDIMDISTMAX,		// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMIN,	// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMAX,	// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
 	RLV_MODIFIER_SETCAM_AVDISTMIN,
 	RLV_MODIFIER_SETCAM_AVDISTMAX,
 	RLV_MODIFIER_SETCAM_FOCUSDISTMIN,
@@ -219,6 +233,8 @@ enum ERlvBehaviourModifier
 	RLV_MODIFIER_SETCAM_FOVMIN,
 	RLV_MODIFIER_SETCAM_FOVMAX,
 	RLV_MODIFIER_SETCAM_TEXTURE,
+	RLV_MODIFIER_SITTPDIST,
+	RLV_MODIFIER_TPLOCALDIST,
 
 	RLV_MODIFIER_COUNT,
 	RLV_MODIFIER_UNKNOWN
@@ -318,7 +334,6 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
 #define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
-#define RLV_SETTING_SHOWNAMETAGS		"RLVaShowNameTags"
 #define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
 #define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
 
@@ -333,6 +348,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
 #define RLV_STRING_HIDDEN_REGION			"hidden_region"
 
+#define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
@@ -342,6 +358,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
 #define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
+#define RLV_STRING_BLOCKED_TELEPORT_OFFER   "blocked_teleport_offer"
 #define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 #define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"

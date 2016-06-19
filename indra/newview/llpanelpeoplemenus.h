@@ -38,7 +38,7 @@ namespace LLPanelPeopleMenus
 class PeopleContextMenu : public LLListContextMenu
 {
 public:
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+// [RLVa:KB] - Checked: RLVa-1.5.0
 	PeopleContextMenu() : m_fRlvCheck(false) {}
 // [/RLVa:KB]
 	/*virtual*/ LLContextMenu* createMenu();
@@ -53,7 +53,7 @@ private:
 	void startConference();
 	void requestTeleport();
 
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+// [RLVa:KB] - Checked: RLVa-1.5.0
 protected:
 	bool m_fRlvCheck;
 // [/RLVa:KB]
@@ -64,7 +64,7 @@ protected:
  */
 class NearbyPeopleContextMenu : public PeopleContextMenu
 {
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+// [RLVa:KB] - Checked: RLVa-1.5.0
 public:
 	NearbyPeopleContextMenu() : PeopleContextMenu() { m_fRlvCheck = true; }
 // [/RLVa:KB]

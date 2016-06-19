@@ -17,14 +17,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llavataractions.h"			// LLAvatarActions::profileVisible()
-#include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
-#include "llavatarnamecache.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
 #include "llimview.h"					// LLIMMgr::computeSessionID()
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
 #include "llnavigationbar.h"			// Navigation bar
-#include "llpanelpeople.h"				// "People" sidebar panel
 #include "llparcel.h"
 #include "llpaneltopinfobar.h"
 #include "llteleporthistory.h"
@@ -47,7 +44,6 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onRefreshHoverText()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTALL, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTWORLD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTHUD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
@@ -65,7 +61,6 @@ RlvUIEnabler::RlvUIEnabler()
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
 
@@ -209,42 +204,6 @@ void RlvUIEnabler::onToggleShowMinimap()
 		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
 			pNetMapPanel->setVisible(false);
 	}
-}
-
-// Checked: 2010-12-08 (RLVa-1.4.0a) | Modified: RLVa-1.2.2c
-void RlvUIEnabler::onToggleShowNames(bool fQuitting)
-{
-	if (fQuitting)
-		return;							// Nothing to do if the viewer is shutting down
-
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
-
-	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-	{
-		if (pPeoplePanel->getNearbyList()->isInVisibleChain())
-			pPeoplePanel->onCommit();
-		pPeoplePanel->getNearbyList()->updateAvatarNames();
-	}
-
-//	// Refresh the speaker list
-//	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
-//	if (pCallFloater)
-//		pCallFloater->getAvatarCallerList()->updateAvatarNames();
-
-	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
-	if (!fEnable)
-	{
-		LLAvatarNameCache::setForceDisplayNames(true);
-	}
-	else
-	{
-		LLAvatarNameCache::setForceDisplayNames(false);
-		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
-	}
-	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a

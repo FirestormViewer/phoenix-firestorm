@@ -510,8 +510,8 @@ void LLAvatarActions::teleportRequest(const LLUUID& id)
 {
 	LLSD notification;
 	notification["uuid"] = id;
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	notification["NAME"] = LLSLURL("agent", id, (RlvActions::canShowName(RlvActions::SNC_TELEPORTREQUEST)) ? "completename" : "rlvanonym").getSLURLString();
+// [RLVa:KB] - Checked: RLVa-1.5.0
+	notification["NAME"] = LLSLURL("agent", id, (RlvActions::canShowName(RlvActions::SNC_TELEPORTREQUEST, id)) ? "completename" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
 //	LLAvatarName av_name;
 //	if (!LLAvatarNameCache::get(id, &av_name))
