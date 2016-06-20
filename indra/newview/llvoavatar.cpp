@@ -3047,12 +3047,12 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
 	// <FS:TS> ...or everyone, if selected
-	static LLCachedControl<bool> show_too_complex_arc_tag(gSavedSettings, "FSTagShowTooComplexARW");
-	static LLCachedControl<bool> show_arc_always_tag(gSavedSettings, "FSTagAlwaysShowARW");
+	static LLCachedControl<bool> show_too_complex_arw_tag(gSavedSettings, "FSTagShowTooComplexARW");
+	static LLCachedControl<bool> show_arw_always_tag(gSavedSettings, "FSTagAlwaysShowARW");
 	U32 complexity(0);
 	LLColor4 complexity_color(LLColor4::white);
 
-	if (!isSelf() && (show_arc_always_tag || (show_too_complex_arc_tag && isTooComplex())))
+	if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
 	{
 		// This calculation is copied from idleUpdateRenderComplexity()
 		static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
@@ -3262,7 +3262,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
 		// <FS:TS> ...or everyone, if selected
 		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
-		if (!isSelf() && (show_arc_always_tag || (show_too_complex_arc_tag && isTooComplex())))
+		if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
 		{
 			LLStringUtil::format_map_t label_args;
 			label_args["COMPLEXITY"] = llformat("%d", complexity);
