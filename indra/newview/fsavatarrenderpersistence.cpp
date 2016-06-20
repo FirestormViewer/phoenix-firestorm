@@ -52,12 +52,12 @@ LLVOAvatar::VisualMuteSettings FSAvatarRenderPersistence::getAvatarRenderSetting
 		return found->second;
 	}
 
-	return LLVOAvatar::VisualMuteSettings::AV_RENDER_NORMALLY;
+	return LLVOAvatar::AV_RENDER_NORMALLY;
 }
 
 void FSAvatarRenderPersistence::setAvatarRenderSettings(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_settings)
 {
-	if (render_settings == LLVOAvatar::VisualMuteSettings::AV_RENDER_NORMALLY)
+	if (render_settings == LLVOAvatar::AV_RENDER_NORMALLY)
 	{
 		avatar_render_setting_t::iterator found = mAvatarRenderMap.find(avatar_id);
 		if (found != mAvatarRenderMap.end())
