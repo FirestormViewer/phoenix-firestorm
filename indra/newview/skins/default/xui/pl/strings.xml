@@ -5999,4 +5999,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Pie_av_render_fully">
 		Zawsze w pełni
 	</string>
+	<string name="Nametag_Complexity_Label">
+		Złożoność: [COMPLEXITY]
+	</string>
 </strings>
