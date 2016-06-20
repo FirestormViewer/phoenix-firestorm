@@ -3054,12 +3054,21 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 	if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
 	{
+		complexity = mVisualComplexity;
 		// This calculation is copied from idleUpdateRenderComplexity()
 		static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
-		complexity = mVisualComplexity;
-		F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
-		F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
-		complexity_color.set(red_level, green_level, 0.f, 1.f);
+		// Show complexity color if we're limiting...
+		if (max_render_cost != 0)
+		{
+			F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
+			F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
+			complexity_color.set(red_level, green_level, 0.f, 1.f);
+		}
+		else
+		{
+			//we're not limiting the complexity, show it as white
+			complexity_color.set(LLColor4::grey);
+		}
 	}
 
 	// Rebuild name tag if state change detected
