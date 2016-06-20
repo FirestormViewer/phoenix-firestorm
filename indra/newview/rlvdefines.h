@@ -195,21 +195,34 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
 	RLV_CMD_FORCEWEAR,				// Internal representation of all force wear commands
 
-	// Camera
+	// Camera (behaviours)
 	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
-	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar
-	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar
-	RLV_BHVR_SETCAM_FOCUSDISTMIN,	// Enforces a minimum distance from the camera focus
-	RLV_BHVR_SETCAM_FOCUSDISTMAX,	// Enforces a maximum distance from the camera focus
+	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar (in m)
+	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar (in m)
+	RLV_BHVR_SETCAM_ORIGINDISTMIN,	// Enforces a minimum distance from the camera origin (in m)
+	RLV_BHVR_SETCAM_ORIGINDISTMAX,	// Enforces a maximum distance from the camera origin (in m)
 	RLV_BHVR_SETCAM_EYEOFFSET,      // Changes the default camera offset
 	RLV_BHVR_SETCAM_FOCUSOFFSET,    // Changes the default camera focus offset
 	RLV_BHVR_SETCAM_FOCUS,			// Forces the camera focus and/or position to a specific object, avatar or position
-	RLV_BHVR_SETCAM_FOV,			// Changes the current (vertical) field of view
-	RLV_BHVR_SETCAM_FOVMIN,			// Enforces a minimum (vertical) FOV
-	RLV_BHVR_SETCAM_FOVMAX,			// Enforces a maximum (vertical) FOV
+	RLV_BHVR_SETCAM_FOV,			// Changes the current - vertical - field of view
+	RLV_BHVR_SETCAM_FOVMIN,			// Enforces a minimum - vertical - FOV (in degrees)
+	RLV_BHVR_SETCAM_FOVMAX,			// Enforces a maximum - vertical - FOV (in degrees)
 	RLV_BHVR_SETCAM_MOUSELOOK,		// Prevent the user from going into mouselook
 	RLV_BHVR_SETCAM_TEXTURES,		// Replaces all textures with the specified texture (or the default unrezzed one)
 	RLV_BHVR_SETCAM_UNLOCK,			// Forces the camera focus to the user's avatar
+	// Camera (behaviours - deprecated)
+	RLV_BHVR_CAMZOOMMIN,			// Enforces a minimum - vertical - FOV angle of 60° / multiplier
+	RLV_BHVR_CAMZOOMMAX,			// Enforces a maximum - vertical - FOV angle of 60° / multiplier
+	// Camera (reply)
+	RLV_BHVR_GETCAM_AVDIST,			// Returns the current minimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_AVDISTMIN,		// Returns the active (if any) minimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_AVDISTMAX,		// Returns the active (if any) maxmimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_FOV,			// Returns the current field of view angle (in radians)
+	RLV_BHVR_GETCAM_FOVMIN,			// Returns the active (if any) minimum field of view angle (in radians)
+	RLV_BHVR_GETCAM_FOVMAX,			// Enforces a maximum (if any) maximum field of view angle (in radians)
+	RLV_BHVR_GETCAM_TEXTURES,		// Returns the active (if any) replace texture UUID
+	// Camera (force)
+	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN
@@ -217,22 +230,22 @@ enum ERlvBehaviour {
 
 enum ERlvBehaviourModifier
 {
-	RLV_MODIFIER_FARTOUCHDIST,		// Radius of a sphere around the user in which they can interact with the world
-	RLV_MODIFIER_RECVIMDISTMIN,		// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
-	RLV_MODIFIER_RECVIMDISTMAX,		// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
-	RLV_MODIFIER_SENDIMDISTMIN,		// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
-	RLV_MODIFIER_SENDIMDISTMAX,		// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
-	RLV_MODIFIER_STARTIMDISTMIN,	// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
-	RLV_MODIFIER_STARTIMDISTMAX,	// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
-	RLV_MODIFIER_SETCAM_AVDISTMIN,
-	RLV_MODIFIER_SETCAM_AVDISTMAX,
-	RLV_MODIFIER_SETCAM_FOCUSDISTMIN,
-	RLV_MODIFIER_SETCAM_FOCUSDISTMAX,
-	RLV_MODIFIER_SETCAM_EYEOFFSET,
-	RLV_MODIFIER_SETCAM_FOCUSOFFSET,
-	RLV_MODIFIER_SETCAM_FOVMIN,
-	RLV_MODIFIER_SETCAM_FOVMAX,
-	RLV_MODIFIER_SETCAM_TEXTURE,
+	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
+	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SENDIMDISTMAX,			// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMIN,		// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMAX,		// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SETCAM_AVDISTMIN,		// Minimum distance between the camera position and the user's avatar (normal value)
+	RLV_MODIFIER_SETCAM_AVDISTMAX,		// Maximum distance between the camera position and the user's avatar (normal value)
+	RLV_MODIFIER_SETCAM_ORIGINDISTMIN,	// Minimum distance between the camera position and the origin point (normal value)
+	RLV_MODIFIER_SETCAM_ORIGINDISTMAX,	// Maximum distance between the camera position and the origin point (normal value)
+	RLV_MODIFIER_SETCAM_EYEOFFSET,		// Specifies the default camera's offset from the camera (vector)
+	RLV_MODIFIER_SETCAM_FOCUSOFFSET,	// Specifies the default camera's focus (vector)
+	RLV_MODIFIER_SETCAM_FOVMIN,			// Minimum value for the camera's field of view (angle in radians)
+	RLV_MODIFIER_SETCAM_FOVMAX,			// Maximum value for the camera's field of view (angle in radians)
+	RLV_MODIFIER_SETCAM_TEXTURE,		// Specifies the UUID of the texture used to texture the world view
 	RLV_MODIFIER_SITTPDIST,
 	RLV_MODIFIER_TPLOCALDIST,
 

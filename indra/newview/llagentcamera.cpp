@@ -1961,22 +1961,22 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		bool fCamAvDistClamped, fCamAvDistLocked = false; float nCamAvDistLimitMin, nCamAvDistLimitMax;
 		if (fCamAvDistClamped = RlvActions::getCameraAvatarDistanceLimits(nCamAvDistLimitMin, nCamAvDistLimitMax))
 			fCamAvDistLocked = nCamAvDistLimitMin == nCamAvDistLimitMax;
-		bool fCamFocusDistClamped, fCamFocusDistLocked = false; float nCamFocusDistLimitMin, nCamFocusDistLimitMax;
-		if (fCamFocusDistClamped = RlvActions::getCameraFocusDistanceLimits(nCamFocusDistLimitMin, nCamFocusDistLimitMax))
-			fCamFocusDistLocked = nCamFocusDistLimitMin == nCamFocusDistLimitMax;
+		bool fCamOriginDistClamped, fCamOriginDistLocked = false; float nCamOriginDistLimitMin, nCamOriginDistLimitMax;
+		if (fCamOriginDistClamped = RlvActions::getCameraOriginDistanceLimits(nCamOriginDistLimitMin, nCamOriginDistLimitMax))
+			fCamOriginDistLocked = nCamOriginDistLimitMin == nCamOriginDistLimitMax;
 
 		// Check focus distance limits
-		if ( (fCamFocusDistClamped) && (!fCamAvDistLocked) )
+		if ( (fCamOriginDistClamped) && (!fCamAvDistLocked) )
 		{
 			const LLVector3 offsetCameraLocal = mCameraZoomFraction * getCameraOffsetInitial() * gSavedSettings.getF32("CameraOffsetScale");
 			const LLVector3d offsetCamera(gAgent.getFrameAgent().rotateToAbsolute(offsetCameraLocal));
 			const LLVector3d posFocusCam = frame_center_global + head_offset + offsetCamera;
-			if (clampCameraPosition(camera_position_global, posFocusCam, nCamFocusDistLimitMin, nCamFocusDistLimitMax))
+			if (clampCameraPosition(camera_position_global, posFocusCam, nCamOriginDistLimitMin, nCamOriginDistLimitMax))
 				isConstrained = TRUE;
 		}
 
 		// Check avatar distance limits
-		if ( (fCamAvDistClamped) && (fCamAvDistLocked || !fCamFocusDistClamped) )
+		if ( (fCamAvDistClamped) && (fCamAvDistLocked || !fCamOriginDistClamped) )
 		{
 			const LLVector3d posAvatarCam = gAgent.getPosGlobalFromAgent( (isAgentAvatarValid()) ? gAgentAvatarp->mHeadp->getWorldPosition() : gAgent.getPositionAgent() );
 			if (clampCameraPosition(camera_position_global, posAvatarCam, nCamAvDistLimitMin, nCamAvDistLimitMax))

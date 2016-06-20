@@ -1791,10 +1791,7 @@ template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	// Once an object has exclusive control over the camera only its behaviours should be active. This affects:
-	//   - RLV_BHVR_SETCAM_EYEOFFSET   => behaviour modifiers handle this for us
-	//   - RLV_BHVR_SETCAM_FOCUSOFFSET => behaviour modifiers handle this for us
-	//   - RLV_BHVR_SETCAM_FOVMIN      => behaviour modifiers handle this for us
-	//   - RLV_BHVR_SETCAM_FOVMAX      => behaviour modifiers handle this for us
+	//   - behaviour modifiers         => it's all handled for us once we set the primary object
 	//   - RLV_BHVR_SETCAM_UNLOCK      => manually (re)set the reference count (and possibly invoke the toggle handler)
 
 	LLUUID idRlvObject; bool fHasCamUnlock = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK);
@@ -1820,10 +1817,15 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour e
 		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
 
 	gAgentCamera.switchCameraPreset( (fHasBhvr) ? CAMERA_RLV_SETCAM_VIEW : CAMERA_PRESET_REAR_VIEW );
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMAX)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMAX)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMIN)->setPrimaryObject(idRlvObject);
 	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMAX)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_TEXTURE)->setPrimaryObject(idRlvObject);
 }
 
 // Handles: @setdebug=n|y toggles
@@ -2316,6 +2318,22 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_FOV>::onCommand(const RlvCommand& rlv
 	return RLV_RET_SUCCESS;
 }
 
+// Handles: @setcam_mode[:<option>]=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_MODE>::onCommand(const RlvCommand& rlvCmd)
+{
+	const std::string& strOption = rlvCmd.getOption();
+	if ("mouselook" == strOption)
+		gAgentCamera.changeCameraToMouselook();
+	else if ("thirdperson" == strOption)
+		gAgentCamera.changeCameraToThirdPerson();
+	else if ( ("reset" == strOption) || (strOption.empty()) )
+		handle_reset_view();
+	else
+		return RLV_RET_FAILED_OPTION;
+	return RLV_RET_SUCCESS;
+}
+
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const
 {
@@ -2718,6 +2736,77 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			}
 		}
 	}
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcam_avdist=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCAM_AVDIST>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (rlvCmd.hasOption())
+		return RLV_RET_FAILED_OPTION;
+	strReply = llformat("%.3lf", (gAgentCamera.getCameraPositionGlobal() - gAgent.getPositionGlobal()).magVec());
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcam_avdistmin=<channel>, @getcam_avdistmax=<channel>, @getcam_fovmin=<channel> and @getcam_fovmax=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyCamMinMaxModifierHandler::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if ( (rlvCmd.hasOption()) || (!boost::starts_with(rlvCmd.getBehaviour(), "getcam_")) )
+		return RLV_RET_FAILED_OPTION;
+	ERlvBehaviour eBhvr = RlvBehaviourDictionary::instance().getBehaviourFromString("setcam_" + rlvCmd.getBehaviour().substr(7), RLV_TYPE_ADDREM);
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifierFromBehaviour(eBhvr))
+		strReply = (pBhvrModifier->hasValue()) ? llformat("%.3f", pBhvrModifier->getValue<float>()) : LLStringUtil::null;
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @camzoommin/max[:<multiplier>]=n|y - DEPRECATED
+template<> template<>
+ERlvCmdRet RlvBehaviourCamZoomMinMaxHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	// NOTE: @camzoommin/max are implemented as semi-synonyms of @setcam_fovmin/max
+	F32 nMult = 1.0f;
+	if ( (rlvCmd.hasOption()) && (!RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), nMult)) )
+		return RLV_RET_FAILED_OPTION;
+
+	RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier( (RLV_BHVR_CAMZOOMMIN == rlvCmd.getBehaviourType()) ? RLV_MODIFIER_SETCAM_FOVMIN : RLV_MODIFIER_SETCAM_FOVMAX);
+	if (pBhvrModifier)
+	{
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			gRlvHandler.m_Behaviours[(RLV_BHVR_CAMZOOMMIN == rlvCmd.getBehaviourType()) ? RLV_BHVR_SETCAM_FOVMIN : RLV_BHVR_SETCAM_FOVMAX]++;
+			pBhvrModifier->addValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID());
+		}
+		else
+		{
+			gRlvHandler.m_Behaviours[(RLV_BHVR_CAMZOOMMIN == rlvCmd.getBehaviourType()) ? RLV_BHVR_SETCAM_FOVMIN : RLV_BHVR_SETCAM_FOVMAX]--;
+			pBhvrModifier->removeValue(DEFAULT_FIELD_OF_VIEW / nMult, rlvCmd.getObjectID());
+		}
+	}
+
+	fRefCount = true;
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcam_fov=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCAM_FOV>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (rlvCmd.hasOption())
+		return RLV_RET_FAILED_OPTION;
+	strReply = llformat("%.3f", LLViewerCamera::getInstance()->getDefaultFOV());
+	return RLV_RET_SUCCESS;
+}
+
+// Handles: @getcam_textures=<channel>
+template<> template<>
+ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCAM_TEXTURES>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
+{
+	if (rlvCmd.hasOption())
+		return RLV_RET_FAILED_OPTION;
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_TEXTURE))
+		strReply = (pBhvrModifier->hasValue()) ? pBhvrModifier->getValue<LLUUID>().asString() : LLStringUtil::null;
 	return RLV_RET_SUCCESS;
 }
 

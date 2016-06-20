@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #include "llviewerprecompiledheaders.h"
@@ -179,10 +179,10 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addModifier(RLV_BHVR_SETCAM_AVDISTMIN, RLV_MODIFIER_SETCAM_AVDISTMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>("Camera - Avatar Distance (Min)", 0.0f, false, new RlvBehaviourModifier_CompMax()));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_avdistmax", RLV_BHVR_SETCAM_AVDISTMAX));
 	addModifier(RLV_BHVR_SETCAM_AVDISTMAX, RLV_MODIFIER_SETCAM_AVDISTMAX, new RlvBehaviourModifier("Camera - Avatar Distance (Max)", F32_MAX, false, new RlvBehaviourModifier_CompMin));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmin", RLV_BHVR_SETCAM_FOCUSDISTMIN));
-	addModifier(RLV_BHVR_SETCAM_FOCUSDISTMIN, RLV_MODIFIER_SETCAM_FOCUSDISTMIN, new RlvBehaviourModifier("Camera - Focus Distance (Min)", 0.0f, true, new RlvBehaviourModifier_CompMax));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_focusdistmax", RLV_BHVR_SETCAM_FOCUSDISTMAX));
-	addModifier(RLV_BHVR_SETCAM_FOCUSDISTMAX, RLV_MODIFIER_SETCAM_FOCUSDISTMAX, new RlvBehaviourModifier("Camera - Focus Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_origindistmin", RLV_BHVR_SETCAM_ORIGINDISTMIN));
+	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMIN, RLV_MODIFIER_SETCAM_ORIGINDISTMIN, new RlvBehaviourModifier("Camera - Focus Distance (Min)", 0.0f, true, new RlvBehaviourModifier_CompMax));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_origindistmax", RLV_BHVR_SETCAM_ORIGINDISTMAX));
+	addModifier(RLV_BHVR_SETCAM_ORIGINDISTMAX, RLV_MODIFIER_SETCAM_ORIGINDISTMAX, new RlvBehaviourModifier("Camera - Focus Distance (Max)", F32_MAX, true, new RlvBehaviourModifier_CompMin));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addModifier(RLV_BHVR_SETCAM_EYEOFFSET, RLV_MODIFIER_SETCAM_EYEOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>("Camera - Eye Offset", LLVector3::zero, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
@@ -195,6 +195,13 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setcam_textures", RLV_BHVR_SETCAM_TEXTURES));
 	addModifier(RLV_BHVR_SETCAM_TEXTURES, RLV_MODIFIER_SETCAM_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>("Camera - Forced Texture", IMG_DEFAULT, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("setcam_unlock"));
+	// Camera (compatibility shim - to be deprecated)
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("camdistmin", RLV_BHVR_SETCAM_AVDISTMIN, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("camdistmax", RLV_BHVR_SETCAM_AVDISTMAX, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
+	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("camtextures", RLV_BHVR_SETCAM_TEXTURES, RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMIN, RlvBehaviourCamZoomMinMaxHandler>("camzoommin", RlvBehaviourInfo::BHVR_DEPRECATED));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_CAMZOOMMAX, RlvBehaviourCamZoomMinMaxHandler>("camzoommax", RlvBehaviourInfo::BHVR_DEPRECATED));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("camunlock", RlvBehaviourInfo::BHVR_SYNONYM | RlvBehaviourInfo::BHVR_DEPRECATED));
 
 	//
 	// Force-wear
@@ -237,6 +244,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_EYEOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_eyeoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RlvForceCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_FOV>("setcam_fov", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvForceProcessor<RLV_BHVR_SETCAM_MODE>("setcam_mode", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SETGROUP>("setgroup"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_SIT>("sit"));
 	addEntry(new RlvForceProcessor<RLV_BHVR_TPTO>("tpto"));
@@ -251,6 +259,13 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addEntry(new RlvBehaviourInfo("getaddoutfitnames",		RLV_BHVR_GETADDOUTFITNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvBehaviourInfo("getattach",				RLV_BHVR_GETATTACH,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getattachnames",			RLV_BHVR_GETATTACHNAMES,		RLV_TYPE_REPLY, RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_AVDIST>("getcam_avdist", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_AVDISTMIN, RlvReplyCamMinMaxModifierHandler>("getcam_avdistmin", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_AVDISTMAX, RlvReplyCamMinMaxModifierHandler>("getcam_avdistmax", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_FOV>("getcam_fov", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_FOVMIN, RlvReplyCamMinMaxModifierHandler>("getcam_fovmin", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_FOVMAX, RlvReplyCamMinMaxModifierHandler>("getcam_fovmax", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
+	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCAM_TEXTURES>("getcam_textures", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addEntry(new RlvReplyProcessor<RLV_BHVR_GETCOMMAND>("getcommand", RlvBehaviourInfo::BHVR_EXTENDED));
 	addEntry(new RlvBehaviourInfo("getgroup",				RLV_BHVR_GETGROUP,				RLV_TYPE_REPLY));
 	addEntry(new RlvBehaviourInfo("getinv",					RLV_BHVR_GETINV,				RLV_TYPE_REPLY));

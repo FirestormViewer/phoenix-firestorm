@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #ifndef RLV_HELPER_H
@@ -40,6 +40,7 @@ public:
 		BHVR_EXTENDED     = 0x0004,				// Behaviour is part of the RLVa extended command set
 		BHVR_EXPERIMENTAL = 0x0008,				// Behaviour is part of the RLVa experimental command set
 		BHVR_BLOCKED      = 0x0010,				// Behaviour is blocked
+		BHVR_DEPRECATED   = 0x0020,				// Behaviour is deprecated
 		BHVR_GENERAL_MASK = 0x0FFF,
 
 		// Force-wear specific flags
@@ -116,9 +117,11 @@ template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE
 // List of shared handlers
 typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeFocusOffsetHandler;	// Shared between @setcam_eyeoffset and @setcam_focusoffset
 typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;					// Shared between @addattach and @remattach
-typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;	// Shared between @sendchannel and @sendchannel_except
-typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;	// Shared between @recvim, @sendim and @startim
-typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleHandler;	// Shared between @showself and @showselfhead
+typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;					// Shared between @sendchannel and @sendchannel_except
+typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;					// Shared between @recvim, @sendim and @startim
+typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleHandler;				// Shared between @showself and @showselfhead
+typedef RlvBehaviourHandler<RLV_BHVR_CAMZOOMMIN> RlvBehaviourCamZoomMinMaxHandler;					// Shared between @camzoommin and @camzoommax (deprecated)
+typedef RlvReplyHandler<RLV_BHVR_GETCAM_AVDISTMIN> RlvReplyCamMinMaxModifierHandler;				// Shared between @getcam_avdistmin and @getcam_avdistmax
 typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;								// Shared between @remattach and @detach
 typedef RlvForceHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvForceCamEyeFocusOffsetHandler;				// Shared between @setcam_eyeoffset and @setcam_focusoffset
 

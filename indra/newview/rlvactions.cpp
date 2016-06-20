@@ -30,13 +30,13 @@
 
 bool RlvActions::canChangeCameraFOV(const LLUUID& idRlvObject)
 {
-	// NOTE: if an object has exclusive camera controls then all other objects are locked out
+	// NOTE: if an object has exclusive camera control then all other objects are locked out
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM));
 }
 
 bool RlvActions::canChangeCameraPreset(const LLUUID& idRlvObject)
 {
-	// NOTE: if an object has exclusive camera controls then all other objects are locked out
+	// NOTE: if an object has exclusive camera control then all other objects are locked out
 	return
 		( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM)) || (gRlvHandler.hasBehaviour(idRlvObject, RLV_BHVR_SETCAM)) ) &&
 		(!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_EYEOFFSET)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSOFFSET));
@@ -57,7 +57,7 @@ bool RlvActions::isCameraDistanceClamped()
 {
 	return
 		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_AVDISTMAX)) ||
-		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMAX));
+		(gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_ORIGINDISTMIN)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_ORIGINDISTMAX));
 }
 
 bool RlvActions::isCameraFOVClamped()
@@ -85,13 +85,13 @@ bool RlvActions::getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax)
 	return false;
 }
 
-bool RlvActions::getCameraFocusDistanceLimits(float& nDistMin, float& nDistMax)
+bool RlvActions::getCameraOriginDistanceLimits(float& nDistMin, float& nDistMax)
 {
-	bool fDistMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMIN), fDistMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOCUSDISTMAX);
+	bool fDistMin = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_ORIGINDISTMIN), fDistMax = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_ORIGINDISTMAX);
 	if ( (fDistMin) || (fDistMax) )
 	{
-		static RlvCachedBehaviourModifier<float> sCamDistMin(RLV_MODIFIER_SETCAM_FOCUSDISTMIN);
-		static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_FOCUSDISTMAX);
+		static RlvCachedBehaviourModifier<float> sCamDistMin(RLV_MODIFIER_SETCAM_ORIGINDISTMIN);
+		static RlvCachedBehaviourModifier<float> sCamDistMax(RLV_MODIFIER_SETCAM_ORIGINDISTMAX);
 
 		nDistMax = (fDistMax) ? sCamDistMax : F32_MAX;
 		nDistMin = (fDistMin) ? sCamDistMin : 0.0;
