@@ -20,8 +20,8 @@
 #include <stack>
 
 #include "rlvcommon.h"
-//#if LL_GNUC
-#include "rlvhelper.h"		// Needed to make GCC happy
+//#if LL_GNUC || LL_CLANG
+#include "rlvhelper.h"		// Needed to make GCC and Clang happy
 //#endif // LL_GNUC
 
 // ============================================================================

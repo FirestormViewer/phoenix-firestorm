@@ -158,7 +158,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   #set(CMAKE_OSX_SYSROOT macosx10.9)
   if(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
     # Assume Xcode 7 if El Capitan SDK is present
-    set(XCODE_VERSION 7.0)
+    set(XCODE_VERSION 7.3)
     set(CMAKE_OSX_SYSROOT macosx10.11)
     message(STATUS "OS X SDK 10.11 found.")
   elseif(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk")
@@ -180,7 +180,9 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_XCODE_ATTRIBUTE_GCC_STRICT_ALIASING NO)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_FAST_MATH NO)
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS ssse3)
-  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libstdc++")
+  # <FS:TS> Need libc++ for C++11 and Boost
+  #set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libstdc++")
+  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
   set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
 
   # Build only for i386 by default, system default on MacOSX 10.6+ is x86_64

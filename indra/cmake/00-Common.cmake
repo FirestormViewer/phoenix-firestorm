@@ -312,6 +312,9 @@ if (DARWIN)
   set(CMAKE_CXX_LINK_FLAGS "-Wl,-no_compact_unwind -Wl,-headerpad_max_install_names,-search_paths_first")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_CXX_LINK_FLAGS}")
   set(DARWIN_extra_cstar_flags "-g -Wno-unused-local-typedef -Wno-deprecated-declarations")
+  # <FS:TS> Take a deep breath and turn on C++11...
+  set(DARWIN_extra_cstar_flags "-std=c++11 -stdlib=libc++ -Wno-overloaded-virtual ${DARWIN_extra_cstar_flags}")
+  # </FS:TS>
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
   # NOTE: it's critical that the optimization flag is put in front.
