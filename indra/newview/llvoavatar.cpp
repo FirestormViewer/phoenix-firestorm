@@ -3050,7 +3050,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	static LLCachedControl<bool> show_too_complex_arw_tag(gSavedSettings, "FSTagShowTooComplexARW");
 	static LLCachedControl<bool> show_arw_always_tag(gSavedSettings, "FSTagAlwaysShowARW");
 	U32 complexity(0);
-	LLColor4 complexity_color(LLColor4::white);
+	LLColor4 complexity_color(LLColor4::grey1); // default if we're not limiting the complexity
 
 	if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
 	{
@@ -3063,11 +3063,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
 			F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
 			complexity_color.set(red_level, green_level, 0.f, 1.f);
-		}
-		else
-		{
-			//we're not limiting the complexity, show it as white
-			complexity_color.set(LLColor4::grey);
 		}
 	}
 
