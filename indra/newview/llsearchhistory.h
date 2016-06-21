@@ -98,7 +98,7 @@ public:
 		/**
 		 * Allows std::list sorting
 		 */
-		bool operator < (const LLSearchHistory::LLSearchHistoryItem& right);
+		bool operator < (const LLSearchHistory::LLSearchHistoryItem& right) const;
 
 		/**
 		 * Allows std::list sorting
