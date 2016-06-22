@@ -50,6 +50,7 @@
 #include "llwearableitemslist.h"
 
 #include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
+#include "llresmgr.h"
 #include "lltextbox.h"
 
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
@@ -496,7 +497,13 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	// </FS:ND>
 
 	// <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
-	getChild<LLTextBox>("OutfitcountText")->setTextArg("COUNT", llformat("%d", cat_array.size()));
+	{
+		std::string count_string;
+		LLLocale locale(LLLocale::USER_LOCALE);
+		LLResMgr::getInstance()->getIntegerString(count_string, (S32)cat_array.size());
+		getChild<LLTextBox>("OutfitcountText")->setTextArg("COUNT", count_string);
+	}
+	// </FS:Ansariel>
 
 	// Handle added tabs.
 	for (uuid_vec_t::const_iterator iter = vadded.begin();
@@ -1235,7 +1242,11 @@ bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y)
 // <FS:Ansariel> Show avatar complexity in appearance floater
 void LLOutfitsList::updateAvatarComplexity(U32 complexity)
 {
-	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+	std::string complexity_string;
+	LLLocale locale(LLLocale::USER_LOCALE);
+	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
+
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);
 }
 // </FS:Ansariel>
 // EOF

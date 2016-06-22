@@ -3268,8 +3268,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
 		if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
 		{
+			std::string complexity_string;
+			LLLocale locale(LLLocale::USER_LOCALE);
+			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
+
 			LLStringUtil::format_map_t label_args;
-			label_args["COMPLEXITY"] = llformat("%d", complexity);
+			label_args["COMPLEXITY"] = complexity_string;
+
 			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 		}
 		// </FS:Ansariel>
