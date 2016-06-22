@@ -522,7 +522,7 @@ void LLUICtrl::setEnabledControlVariable(LLControlVariable* control)
 		mEnabledControlConnection = mEnabledControlVariable->getSignal()->connect(boost::bind(&controlListener, _2, getHandle(), std::string("enabled")));
 		// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
 		//setEnabled(mEnabledControlVariable->getValue().asBoolean());
-		setEnabled((BOOL)mEnabledControlVariable->getValue().asInteger());
+		setEnabled(mEnabledControlVariable->getValue().asString() == "0" ? FALSE : mEnabledControlVariable->getValue().asBoolean());
 	}
 }
 
@@ -539,7 +539,7 @@ void LLUICtrl::setDisabledControlVariable(LLControlVariable* control)
 		mDisabledControlConnection = mDisabledControlVariable->getSignal()->connect(boost::bind(&controlListener, _2, getHandle(), std::string("disabled")));
 		// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
 		//setEnabled(!(mDisabledControlVariable->getValue().asBoolean()));
-		setEnabled(!((BOOL)mDisabledControlVariable->getValue().asInteger()));
+		setEnabled(!(mDisabledControlVariable->getValue().asString() == "0" ? FALSE : mDisabledControlVariable->getValue().asBoolean()));
 	}
 }
 
@@ -593,7 +593,7 @@ bool LLUICtrl::controlListener(const LLSD& newvalue, LLHandle<LLUICtrl> handle, 
 		{
 			// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
 			//ctrl->setEnabled(newvalue.asBoolean());
-			ctrl->setEnabled((BOOL)newvalue.asInteger());
+			ctrl->setEnabled(newvalue.asString() == "0" ? FALSE : newvalue.asBoolean());
 			// </FS:Ansariel>
 			return true;
 		}
@@ -601,7 +601,7 @@ bool LLUICtrl::controlListener(const LLSD& newvalue, LLHandle<LLUICtrl> handle, 
 		{
 			// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
 			//ctrl->setEnabled(!newvalue.asBoolean());
-			ctrl->setEnabled(!((BOOL)newvalue.asInteger()));
+			ctrl->setEnabled(!(newvalue.asString() == "0" ? FALSE : newvalue.asBoolean()));
 			// </FS:Ansariel>
 			return true;
 		}
