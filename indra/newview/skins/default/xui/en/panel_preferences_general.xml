@@ -334,7 +334,6 @@
 	 tool_tip="" />
     <check_box
      control_name="NameTagShowUsernames"
-     enabled_control="AvatarNameTagMode"
      height="16"
      label="Usernames"
      layout="topleft"
@@ -367,7 +366,6 @@
 
     <check_box
      control_name="UseDisplayNames"
-     enabled_control="AvatarNameTagMode"
      follows="top|left"
      height="16"
      label="View Display Names"
@@ -379,7 +377,6 @@
      top_pad="3"/>
    <check_box
      control_name="FSNameTagShowLegacyUsernames"
-     enabled_control="NameTagShowUsernames"
      height="16"
      label="Legacy names instead of usernames"
      layout="topleft"

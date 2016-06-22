@@ -161,6 +161,9 @@ protected:
 	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
 	//</FS:Kadah>
 
+	// <FS:Ansariel> Properly disable avatar tag setting
+	void onAvatarTagSettingsChanged();
+
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	

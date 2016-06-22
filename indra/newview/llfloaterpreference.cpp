@@ -684,10 +684,10 @@ BOOL LLFloaterPreference::postBuild()
 	//getChild<LLComboBox>("ObjectIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ObjectIMOptions"));
 	// </FS:CR>
 	
-// ## Zi: Optional Edit Appearance Lighting
+	// <FS:Zi> Optional Edit Appearance Lighting
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
 	onAppearanceCameraChanged();
-// ## Zi: Optional Edit Appearance Lighting
+	// </FS:Zi> Optional Edit Appearance Lighting
 
 
 	// if floater is opened before login set default localized do not disturb message
@@ -740,11 +740,11 @@ BOOL LLFloaterPreference::postBuild()
 #endif  // OPENSIM // <FS:AW optional opensim support/>
 
 
-// ## Zi: Pie menu
+	// <FS:Zi> Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
 	// make sure pie color controls are enabled or greyed out properly
 	onPieColorsOverrideChanged();
-// ## Zi: Pie menu
+	// </FS:Zi> Pie menu
 
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
@@ -761,6 +761,12 @@ BOOL LLFloaterPreference::postBuild()
 	// <FS:Ansariel> Update label for max. non imposters and max complexity
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
 	gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxComplexityLabel, this, _2));
+
+	// <FS:Ansariel> Properly disable avatar tag setting
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	onAvatarTagSettingsChanged();
+	// </FS:Ansariel>
 
 	return TRUE;
 }
@@ -3373,6 +3379,18 @@ void LLFloaterPreference::saveGraphicsPreset(const std::string& preset)
 {
 	mSavedGraphicsPreset = preset;
 }
+
+
+// <FS:Ansariel> Properly disable avatar tag setting
+void LLFloaterPreference::onAvatarTagSettingsChanged()
+{
+	bool usernames_enabled = gSavedSettings.getBOOL("NameTagShowUsernames");
+	bool legacy_enabled = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames");
+
+	childSetEnabled("FSshow_legacyun", usernames_enabled);
+	childSetEnabled("legacy_trim_check", usernames_enabled && legacy_enabled);
+}
+// </FS:Ansariel>
 
 //------------------------------Updater---------------------------------------
 
