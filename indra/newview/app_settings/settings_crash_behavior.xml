@@ -42,7 +42,7 @@
         <key>Type</key>
             <string>String</string>
         <key>Value</key>
-            <string>http://crashlogs.phoenixviewer.com/upload</string>
+            <string>http://crashlogs.phoenixviewer.com/upload_llsd</string>
         </map>
     </map>
 </llsd>
