@@ -39,6 +39,7 @@
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "lltoolpie.h"
 // [/RLVa:KB]
@@ -401,7 +402,7 @@ void LLInspectObject::updateSitLabel(LLSelectNode* nodep)
 	if (rlv_handler_t::isEnabled())
 	{
 		const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
-		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (gRlvHandler.canSit(pick.getObject(), pick.mObjectOffset)) );
+		sit_btn->setEnabled( (pick.mObjectID.notNull()) && (RlvActions::canSit(pick.getObject(), pick.mObjectOffset)) );
 	}
 // [/RLVa:KB]
 }
@@ -501,12 +502,10 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		LLUUID creator_id = nodep->mPermissions->getCreator();
 //		std::string creator_url = 
 //			LLSLURL("agent", creator_id, "about").getSLURLString();
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+// [RLVa:KB] - Checked: RLVa-1.2.2
 		// Only anonymize the creator if they're also the owner or if they're a nearby avie
-		bool fRlvHideCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) &&
-			 ((nodep->mPermissions->getOwner() == creator_id) || (RlvUtil::isNearbyAgent(creator_id)));
-		std::string creator_url = 
-			LLSLURL("agent", creator_id, (!fRlvHideCreator) ? "about" : "rlvanonym").getSLURLString();
+		bool fRlvHideCreator = (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, creator_id)) && ((nodep->mPermissions->getOwner() == creator_id) || (RlvUtil::isNearbyAgent(creator_id)));
+		const std::string creator_url = LLSLURL("agent", creator_id, (!fRlvHideCreator) ? "about" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
 		args["[CREATOR]"] = creator_url;
 
@@ -523,8 +522,8 @@ void LLInspectObject::updateCreator(LLSelectNode* nodep)
 		{
 			owner_id = nodep->mPermissions->getOwner();
 //			owner_url = LLSLURL("agent", owner_id, "about").getSLURLString();
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-			bool fRlvHideOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [RLVa:KB] - Checked: RLVa-1.2.2
+			bool fRlvHideOwner = (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, owner_id));
 			owner_url = LLSLURL("agent", owner_id, (!fRlvHideOwner) ? "about" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
 		}

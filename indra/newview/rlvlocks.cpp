@@ -20,11 +20,13 @@
 #include "llattachmentsmgr.h"
 #include "lloutfitobserver.h"
 #include "llviewerobjectlist.h"
+#include "llviewermenu.h"
 #include "pipeline.h"
 
 #include "rlvlocks.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
+
 
 // ============================================================================
 // RlvAttachPtLookup member functions
@@ -401,8 +403,7 @@ void RlvAttachmentLocks::updateLockedHUD()
 	// Reset HUD visibility and wireframe options if at least one HUD attachment is locked
 	if (m_fHasLockedHUD)
 	{
-		LLPipeline::sShowHUDAttachments = TRUE;
-		gUseWireframe = FALSE;
+		set_use_wireframe(false);
 	}
 }
 

@@ -6,20 +6,20 @@
   can_resize="true"
   height="300"
   min_height="300"
-  min_width="300"
+  min_width="450"
   name="rlv_behaviours"
   save_rect="true"
   save_visibility="false"
   single_instance="true"
   title="Active RLV Restrictions"
-  width="300">
+  width="450">
   <tab_container
     follows="all"
     layout="topleft"
-    left="8"  
+    left="8"
     name="behaviour_tab"
     height="266"
-    right="-8"   
+    right="-8"
     tab_height="23"
     tab_min_width="120"
     tab_position="top"
@@ -31,16 +31,16 @@
       name="behaviour_panel"
       top="0">
       <scroll_list
-	draw_border="false"
-	draw_heading="true"
-	draw_stripes="true"
-	follows="all"
-	height="266"
-	layout="topleft"
-	multi_select="false"
-	name="behaviour_list"
-	tool_tip="List of current RLVa restrictions."
-	top_pad="0" >
+	     draw_border="false"
+	     draw_heading="true"
+	     draw_stripes="true"
+	     follows="all"
+	     height="266"
+	     layout="topleft"
+	     multi_select="false"
+	     name="behaviour_list"
+	     tool_tip="List of current RLVa restrictions."
+	     top_pad="0" >
         <scroll_list.columns label="Restriction" name="behaviour" width="70" />
         <scroll_list.columns label="Object Name" name="issuer" />
       </scroll_list>
@@ -52,19 +52,41 @@
       name="exception_panel"
       top="0"> 
       <scroll_list
-	draw_border="false"
-	draw_heading="true"
-	draw_stripes="true"
-	follows="all"
-	height="266"
-	layout="topleft"
-	multi_select="false"
-	name="exception_list"
-	tool_tip="List of current RLVa exceptions."
-	top_pad="0" >
+	     draw_border="false"
+	     draw_heading="true"
+	     draw_stripes="true"
+	     follows="all"
+	     height="266"
+	     layout="topleft"
+	     multi_select="false"
+	     name="exception_list"
+	     tool_tip="List of current RLVa exceptions."
+	     top_pad="0" >
         <scroll_list.columns label="Exception" name="behaviour" width="70" />
         <scroll_list.columns label="Source" name="option" width="105" />
         <scroll_list.columns label="Object Name" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel
+      follows="all"  height="265"
+      label="MODIFIERS"
+      layout="topleft"
+      name="modifier_panel"
+      top="0">
+      <scroll_list
+       draw_border="false"
+       draw_heading="true"
+       draw_stripes="true"
+       follows="all"
+       height="266"
+       layout="topleft"
+       multi_select="false"
+       name="modifier_list"
+       tool_tip="List of current RLVa modifiers."
+       top_pad="0" >
+        <scroll_list.columns label="Modifier" name="modifier" width="105" />
+        <scroll_list.columns label="Value" name="value" width="105" />
+        <scroll_list.columns label="Primary Object" name="primary" />
       </scroll_list>
     </panel>
   </tab_container>

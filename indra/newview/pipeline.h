@@ -591,6 +591,9 @@ public:
 	static F32        		sVolumeSAFrame;
 
 	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	static bool				sRenderTextures;
+// [/SL:KB]
 
 	static LLTrace::EventStatHandle<S64> sStatBatchSize;
 

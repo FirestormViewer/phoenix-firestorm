@@ -75,8 +75,8 @@
 #include "llagentui.h"
 #include "llslurl.h"
 #include "llevents.h"				// for LLEventPumps
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-1.2.2
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 
@@ -693,7 +693,7 @@ BOOL LLPanelPeople::postBuild()
 	//mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	//mNearbyList->setShowIcons("NearbyListShowIcons");
 	// </FS:Ansariel> Firestorm radar
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	// Externalized to FSRadar
 	//mNearbyList->setRlvCheckShowNames(true);
 // [/RLVa:KB]
@@ -1010,7 +1010,7 @@ void LLPanelPeople::updateFacebookList(bool visible)
 void LLPanelPeople::updateButtons()
 {
 	std::string cur_tab		= getActiveTabName();
-// [RLVa:KB] - Checked: 2013-05-06 (RLVa-1.4.9)
+// [RLVa:KB] - Checked: RLVa-1.4.9
 	bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
 // [/RLVa:KB]
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
@@ -1060,7 +1060,7 @@ void LLPanelPeople::updateButtons()
 			//if (cur_panel->hasChild("add_friend_btn", TRUE))
 			//	cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
 			if (!nearby_tab_active && cur_panel->hasChild("add_friend_btn", TRUE))
-				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && RlvActions::canShowName(RlvActions::SNC_DEFAULT, selected_id));
 			// </FS:Ansariel> RLVa check
 
 			if (friends_tab_active)
@@ -1078,10 +1078,13 @@ void LLPanelPeople::updateButtons()
 		}
 	}
 
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	if ( (nearby_tab_active) && (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
 	{
-		item_selected = multiple_selected = false;
+		bool fCanShowNames = true;
+		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+		if (!fCanShowNames)
+			item_selected = multiple_selected = false;
 	}
 // [/RLBa:KB]
 }
@@ -1318,13 +1321,6 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 
 void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 {
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
-	{
-		return;
-	}
-// [/RLVa:KB]
-
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
 	if(!item)
 	{
@@ -1337,6 +1333,13 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 		return;
 	}
 	
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, clicked_id)) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 #if 0 // SJB: Useful for testing, but not currently functional or to spec
 	LLAvatarActions::showProfile(clicked_id);
 #else // spec says open IM window
@@ -1451,15 +1454,17 @@ void LLPanelPeople::onGearButtonClicked(LLUICtrl* btn)
 
 void LLPanelPeople::onImButtonClicked()
 {
-// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
-	{
-		return;
-	}
-// [/RLVa:KB]
-
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
+	{
+		bool fCanShowNames = true;
+		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+		if (!fCanShowNames)
+			return;
+	}
+// [/RLVa:KB]
 	if ( selected_uuids.size() == 1 )
 	{
 		// if selected only one person then start up IM

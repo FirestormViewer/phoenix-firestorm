@@ -1366,17 +1366,6 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>RLVaShowNameTags</key>
-    <map>
-      <key>Comment</key>
-      <string>Display of names above avatars is subject to the general "Show Names" setting when @shownames=n restricted</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <boolean>0</boolean>
-    </map>
     <key>RLVaTopLevelMenu</key>
     <map>
       <key>Comment</key>
