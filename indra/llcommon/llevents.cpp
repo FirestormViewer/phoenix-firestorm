@@ -481,14 +481,6 @@ void LLEventPump::stopListening(const std::string& name)
     // avoid a new dependency sort in such cases.
 }
 
-// <FS:ND> Allow full unregister, or mDeps will grow and grow with stale entries from temporary HttpRequestPumper instances
-void LLEventPump::removeFromDeps( std::string const &a_strName )
-{
-    mDeps.remove( a_strName );
-    mDeps.clearCache();
-}
-// </FS:ND?
-
 /*****************************************************************************
 *   LLEventStream
 *****************************************************************************/

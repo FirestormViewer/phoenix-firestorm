@@ -102,7 +102,6 @@ private:
 
     LLTempBoundListener        mBoundListener;
     LLCore::HttpRequest::ptr_t mHttpRequest;
-    std::string mEventName; // <FS:ND/> Remember event name for unregister
 };
 
 
@@ -642,9 +641,8 @@ LLSD HttpCoroJSONHandler::parseBody(LLCore::HttpResponse *response, bool &succes
 HttpRequestPumper::HttpRequestPumper(const LLCore::HttpRequest::ptr_t &request) :
     mHttpRequest(request)
 {
-    mEventName = LLEventPump::inventName(); // <FS:ND/> Remember name for unregister
     mBoundListener = LLEventPumps::instance().obtain("mainloop").
-        listen( mEventName, boost::bind(&HttpRequestPumper::pollRequest, this, _1));
+        listen(LLEventPump::inventName(), boost::bind(&HttpRequestPumper::pollRequest, this, _1));
 }
 
 HttpRequestPumper::~HttpRequestPumper()
@@ -653,9 +651,6 @@ HttpRequestPumper::~HttpRequestPumper()
     {
         mBoundListener.disconnect();
     }
-
-    LLEventPumps::instance().obtain( "mainloop" ).removeFromDeps( mEventName ); // <FS:ND> Unregister, or mDeps of mainloop pump will grow and grow with stale entries from temporary HttpRequestPumper instances
-
 }
 
 bool HttpRequestPumper::pollRequest(const LLSD&)

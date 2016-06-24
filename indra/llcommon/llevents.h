@@ -533,8 +533,6 @@ public:
     /// <tt>getListener(name).disconnect()</tt> because stopListening() also
     /// forgets this name.
     virtual void stopListening(const std::string& name);
-    void removeFromDeps( std::string const &a_strName ); // <FS:ND> Allow full unregister, or mDeps will grow and grow with stale entries from temporary HttpRequestPumper instances
-
     /// Post an event to all listeners. The @c bool return is only meaningful
     /// if the underlying leaf class is LLEventStream -- beware of relying on
     /// it too much! Truthfully, we return @c bool mostly to permit chaining
