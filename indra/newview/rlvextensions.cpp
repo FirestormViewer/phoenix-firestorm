@@ -281,7 +281,7 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 		}
 		else
 		{
-			pEnvMgr->useRegionSettings();
+			pEnvMgr->setUserPrefs(pEnvMgr->getWaterPresetName(), pEnvMgr->getSkyPresetName(), pEnvMgr->getDayCycleName(), false, true);
 		}
 		return true;
 	}

@@ -18,8 +18,8 @@
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llstartup.h"
-#include "llviewermessage.h"
 #include "llviewerfoldertype.h"
+#include "llviewermessage.h"
 
 #include "rlvinventory.h"
 
