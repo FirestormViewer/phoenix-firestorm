@@ -1474,10 +1474,14 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 					setChanged(MOVED | SILHOUETTE);
 				}
-				else if (mText.notNull())
+				else
 				{
-					mText->markDead();
-					mText = NULL;
+					if (mText.notNull())
+					{
+						mText->markDead();
+						mText = NULL;
+					}
+					mHudText.clear();
 				}
 
 				std::string media_url;
@@ -1858,10 +1862,14 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 					setChanged(TEXTURE);
 				}
-				else if(mText.notNull())
+				else
 				{
-					mText->markDead();
-					mText = NULL;
+					if (mText.notNull())
+					{
+						mText->markDead();
+						mText = NULL;
+					}
+					mHudText.clear();
 				}
 
                 std::string media_url;
@@ -5085,8 +5093,20 @@ void LLViewerObject::initHudText()
 
 void LLViewerObject::restoreHudText()
 {
-    if(mText)
+    if (mHudText.empty())
     {
+        if (mText)
+        {
+            mText->markDead();
+            mText = NULL;
+        }
+    }
+    else
+    {
+        if (!mText)
+        {
+            initHudText();
+        }
         mText->setColor(mHudTextColor);
         mText->setString(mHudText);
     }
