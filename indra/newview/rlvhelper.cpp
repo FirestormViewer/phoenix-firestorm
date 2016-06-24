@@ -286,7 +286,7 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	// Populate m_String2InfoMap (the tuple <behaviour, type> should be unique)
 	for (const RlvBehaviourInfo* pBhvrInfo : m_BhvrInfoList)
 	{
-		RLV_ASSERT(m_String2InfoMap.insert(std::make_pair(std::make_pair(pBhvrInfo->getBehaviour(), (ERlvParamType)pBhvrInfo->getParamTypeMask()), pBhvrInfo)).second == true);
+		RLV_VERIFY(m_String2InfoMap.insert(std::make_pair(std::make_pair(pBhvrInfo->getBehaviour(), (ERlvParamType)pBhvrInfo->getParamTypeMask()), pBhvrInfo)).second == true);
 	}
 
 	// Populate m_Bhvr2InfoMap (there can be multiple entries per ERlvBehaviour)
