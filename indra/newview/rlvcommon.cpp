@@ -242,7 +242,7 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 			sdStrings[itString->first]["value"] = listValues.back();
 	}
 
-	llofstream fileStream(strFilePath);
+	llofstream fileStream(strFilePath.c_str());
 	if (!fileStream.good())
 		return;
 

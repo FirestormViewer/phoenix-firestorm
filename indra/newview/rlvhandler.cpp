@@ -2086,7 +2086,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 					nValue += rlvCmdOption.m_nPelvisToFootOffset;
 					if (gAgentAvatarp->getRegion()->avatarHoverHeightEnabled())
 					{
-						LLVector3 avOffset(0.0, 0.0, llclamp<F32>(nValue, MIN_HOVER_Z, MAX_HOVER_Z));
+						LLVector3 avOffset(0.0f, 0.0f, llclamp<F32>(nValue, MIN_HOVER_Z, MAX_HOVER_Z));
 						gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", avOffset.mV[VZ]);
 						gAgentAvatarp->setHoverOffset(avOffset, true);
 					}
