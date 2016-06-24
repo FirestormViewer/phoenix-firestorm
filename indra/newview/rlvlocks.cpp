@@ -15,6 +15,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "fslslbridge.h"
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llattachmentsmgr.h"
@@ -657,6 +658,13 @@ void RlvAttachmentLockWatchdog::onDetach(const LLViewerObject* pAttachObj, const
 	RLV_ASSERT( (!isAgentAvatarValid()) || ((idxAttachPt) && (idAttachItem.notNull())) );
 	if ( (!idxAttachPt) || (idAttachItem.isNull()) )
 		return;
+
+	// <FS:Ansariel> Bridge can always be detached
+	if (FSLSLBridge::instance().canDetach(idAttachItem))
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	// If it's an attachment that's pending force-detach then we don't want to do anything (even if it's currently "remove locked")
 	rlv_detach_map_t::iterator itDetach = std::find(m_PendingDetach.begin(), m_PendingDetach.end(), idAttachItem);

@@ -394,7 +394,7 @@ void LLAvatarList::refresh()
 
 		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
 		//if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
-		if (!have_filter || findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		if (!have_filter || findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
 		// </FS:Ansariel>
 		{
 			if (nadded >= ADD_LIMIT)
@@ -450,7 +450,7 @@ void LLAvatarList::refresh()
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
 			// <FS:Ansariel> FIRE-12750: Name filter not working correctly
 			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter))
-			if (!findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+			if (!findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
 			// </FS:Ansariel>
 			{
 				removeItemByUUID(buddy_id);
@@ -526,7 +526,7 @@ bool LLAvatarList::filterHasMatches()
 
 		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
 		//if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
-		if (have_name && !findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		if (have_name && !findInsensitive(getNameForDisplay(buddy_id, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
 		// </FS:Ansariel>
 		{
 			continue;
@@ -742,20 +742,20 @@ void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 
 // <FS:Ansariel> FIRE-12750: Name filter not working correctly
 // static
-std::string LLAvatarList::getNameForDisplay(const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames)
+std::string LLAvatarList::getNameForDisplay(const LLUUID& avatar_id, const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames)
 {
-	bool fRlvFilter = (rlv_check_shownames) && (RlvActions::hasBehaviour(RLV_BHVR_SHOWNAMES));
+	bool fRlvCanShowName = (!rlv_check_shownames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, avatar_id));
 	if (show_displayname && !show_username)
 	{
-		return ( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+		return ( (fRlvCanShowName) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
 	}
 	else if (!show_displayname && show_username)
 	{
-		return ( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+		return ( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	}
-	else 
+	else
 	{
-		return ( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+		return ( (fRlvCanShowName) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
 	}
 }
 // </FS:Ansariel>

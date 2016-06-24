@@ -195,14 +195,26 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
 	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->findChild<LLPanel>("Net Map Panel", TRUE) : NULL;
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
 	{
-		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("NearbyListShowMap").get() : NULL);
+		pNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("ShowRadarMinimap").get() : NULL);
 		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
 		if ( (!fEnable) && (pNetMapPanel->getVisible()) )
 			pNetMapPanel->setVisible(false);
+	}
+
+	// Break/reestablish the visibility connection for the radar panel embedded minimap instance
+	LLFloater* pRadarFloater = LLFloaterReg::getInstance("fs_radar");
+	LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+	RLV_ASSERT( (pRadarFloater) && (pRadarNetMapPanel) );
+	if (pRadarNetMapPanel)
+	{
+		pRadarNetMapPanel->setMakeVisibleControlVariable( (fEnable) ? gSavedSettings.getControl("ShowRadarMinimap").get() : NULL);
+		// Reestablishing the visiblity connection will show the panel if needed so we only need to take care of hiding it when needed
+		if ( (!fEnable) && (pRadarNetMapPanel->getVisible()) )
+			pRadarNetMapPanel->setVisible(false);
 	}
 }
 
@@ -415,7 +427,10 @@ bool RlvUIEnabler::canViewRegionProperties()
 bool RlvUIEnabler::hasOpenIM(const LLUUID& idAgent)
 {
 	LLUUID idSession = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, idAgent);
-	return (NULL != LLFloaterReg::findInstance("impanel", idSession));
+	// <FS:Ansariel> [FS communication UI]
+	//return (NULL != LLFloaterReg::findInstance("impanel", idSession));
+	return (NULL != LLFloaterReg::findInstance("fs_impanel", idSession));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a
@@ -432,7 +447,10 @@ bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 // Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 bool RlvUIEnabler::isBuildEnabled()
 {
-	return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	// <FS:Ansariel> FIRE-1432: Build button not properly updated
+	//return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	return (LLViewerParcelMgr::getInstance()->allowAgentBuild()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
+	// </FS:Ansariel>
 }
 
 // ============================================================================

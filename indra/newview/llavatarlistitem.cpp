@@ -591,10 +591,11 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 	//	setAvatarName( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	//else 
 	//	setAvatarName( (fRlvCanShowName) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
-	setAvatarName(LLAvatarList::getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames));
+	setAvatarName(LLAvatarList::getNameForDisplay(mAvatarId, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames));
 
-	// NOTE: If you change this, you will break sorting the contacts list
-	//  by username unless you go change the comparator too. -- TS	
+ 	// NOTE: If you change this, you will break sorting the contacts list
+ 	//  by username unless you go change the comparator too. -- TS	
+	setAvatarToolTip( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(fRlvCanShowName);
 // [/RLVa:KB]

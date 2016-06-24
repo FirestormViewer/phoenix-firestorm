@@ -21,6 +21,10 @@
 #include "llnotificationsutil.h"
 #include "llviewerobjectlist.h"
 
+//<FS:TS> FIRE-4453 bridge detached by the RLV command @remattach=force
+#include "fslslbridge.h"
+//</FS:TS> FIRE-4453
+
 #include "rlvcommon.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
@@ -1132,6 +1136,9 @@ bool RlvForceWear::isForceDetachable(const LLViewerObject* pAttachObj, bool fChe
 	//   - it's not "remove locked" by anything (or anything except the object specified by pExceptObj)
 	//   - it's strippable
 	//   - composite folders are disabled *or* it isn't part of a composite folder that has at least one item locked
+	//<FS:TS> FIRE-4453 bridge detached by the RLV command @remattach=force
+	//   - it's not the LSL bridge, which should never be affected by RLV
+	//</FS:TS> FIRE-4453
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	LLViewerInventoryCategory* pFolder = NULL;
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
@@ -1141,6 +1148,9 @@ bool RlvForceWear::isForceDetachable(const LLViewerObject* pAttachObj, bool fChe
 		&& ( (idExcept.isNull()) ? (!gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
 		                         : (!gRlvAttachmentLocks.isLockedAttachmentExcept(pAttachObj, idExcept)) )
 		&& (isStrippable(pAttachObj->getAttachmentItemID()))
+		//<FS:TS> FIRE-4453 bridge detached by the RLV command @remattach=force
+		&& (pAttachObj->getID() != FSLSLBridge::instance().getAttachedID())
+		//</FS:TS> FIRE-4453
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		&& ( (!fCheckComposite) || (!RlvSettings::getEnableComposites()) || 
 	         (!gRlvHandler.getCompositeInfo(pAttachPt->getItemID(), NULL, &pFolder)) || (gRlvHandler.canTakeOffComposite(pFolder)) )

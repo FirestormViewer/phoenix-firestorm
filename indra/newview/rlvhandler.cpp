@@ -57,6 +57,12 @@
 #include "rlvui.h"
 #include "rlvextensions.h"
 
+// <FS:Ansariel> [FS communication UI]
+#include "fsfloatervoicecontrols.h"
+// </FS:Ansariel> [FS communication UI]
+#include "fslslbridge.h"
+#include "fsradar.h"
+
 // Boost includes
 #include <boost/algorithm/string.hpp>
 
@@ -1589,7 +1595,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBh
 
 		// Hide the build floater if it's currently visible
 		if (LLFloaterReg::instanceVisible("build"))
-			LLToolMgr::instance().toggleBuildMode();
+			LLToolMgr::instance().toggleBuildMode("toggleonly");
 	}
 
 	// Start or stop filtering opening the beacons floater
@@ -1907,6 +1913,10 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 		LLFloaterReg::const_instance_list_t invFloaters = LLFloaterReg::getFloaterList("inventory");
 		for (LLFloater* pFloater : invFloaters)
 			pFloater->closeFloater();
+
+		LLFloaterReg::const_instance_list_t lSecFloaters = LLFloaterReg::getFloaterList("secondary_inventory");
+		for (LLFloaterReg::const_instance_list_t::const_iterator itSecFloater = lSecFloaters.begin(); itSecFloater != lSecFloaters.end(); ++itSecFloater)
+			(*itSecFloater)->closeFloater();
 	}
 
 	//
@@ -1941,10 +1951,17 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour 
 	//
 	// Filter (or stop filtering) opening new inventory floaters
 	//
+	// <FS:Ansariel> Modified for FIRE-8804
 	if (fHasBhvr)
+	{
 		RlvUIEnabler::instance().addGenericFloaterFilter("inventory");
+		RlvUIEnabler::instance().addGenericFloaterFilter("secondary_inventory");
+	}
 	else
+	{
 		RlvUIEnabler::instance().removeGenericFloaterFilter("inventory");
+		RlvUIEnabler::instance().removeGenericFloaterFilter("secondary_inventory");
+	}
 }
 
 // Handles: @shownames[:<uuid>]=n|y toggles
@@ -1958,14 +1975,23 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNAMES>::onCommandToggle(ERlvBehaviou
 	RlvActions::setShowName(RlvActions::SNC_DEFAULT, !fHasBhvr);
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-	{
-		if (pPeoplePanel->getNearbyList()->isInVisibleChain())
-			pPeoplePanel->onCommit();
-		pPeoplePanel->getNearbyList()->updateAvatarNames();
-	}
+	// <FS:Ansariel> [Standalone radar]
+	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
+	FSRadar* pRadar = FSRadar::getInstance();
+	RLV_ASSERT( (pRadar) );
+	if ( (pRadar) )
+		pRadar->updateNames();
+	// </FS:Ansariel> [Standalone radar]
+
+	// Refresh the speaker list
+	// <FS:Ansariel> [FS communication UI]
+	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+	if (pCallFloater)
+		pCallFloater->getAvatarCallerList()->updateAvatarNames();
+	// </FS:Ansariel> [FS communication UI]
 
 	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
 	if (fHasBhvr)
@@ -2084,7 +2110,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 				{
 					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
 					nValue += rlvCmdOption.m_nPelvisToFootOffset;
-					if (gAgentAvatarp->getRegion()->avatarHoverHeightEnabled())
+					if (gAgentAvatarp->getRegion()->avatarHoverHeightEnabled() || !gAgentAvatarp->isUsingServerBakes())
 					{
 						LLVector3 avOffset(0.0, 0.0, llclamp<F32>(nValue, MIN_HOVER_Z, MAX_HOVER_Z));
 						gSavedPerAccountSettings.setF32("AvatarHoverOffsetZ", avOffset.mV[VZ]);
@@ -2687,7 +2713,9 @@ ERlvCmdRet RlvHandler::onGetAttach(const RlvCommand& rlvCmd, std::string& strRep
 		const LLViewerJointAttachment* pAttachPt = itAttach->second;
 		if ( (0 == idxAttachPt) || (itAttach->first == idxAttachPt) )
 		{
-			bool fWorn = (pAttachPt->getNumObjects() > 0) && 
+			// Ansa: Do not include the bridge when checking for number of objects
+			S32 bridge_correct = (pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0;
+			bool fWorn = ((pAttachPt->getNumObjects() - bridge_correct) > 0) && 
 				( (!RlvSettings::getHideLockedAttach()) || (RlvForceWear::isForceDetachable(pAttachPt, true, rlvCmd.getObjectID())) );
 			strReply.push_back( (fWorn) ? '1' : '0' );
 		}
@@ -2716,7 +2744,11 @@ ERlvCmdRet RlvHandler::onGetAttachNames(const RlvCommand& rlvCmd, std::string& s
 			switch (rlvCmd.getBehaviourType())
 			{
 				case RLV_BHVR_GETATTACHNAMES:		// Every attachment point that has an attached object
-					fAdd = (pAttachPt->getNumObjects() > 0);
+					// Ansa: Do not include the bridge when checking for number of objects
+					{
+						S32 bridge_correct = ((pAttachPt->getName() == FS_BRIDGE_ATTACHMENT_POINT_NAME && FSLSLBridge::instance().isBridgeValid()) ? 1 : 0);
+						fAdd = ((pAttachPt->getNumObjects() - bridge_correct) > 0);
+					}
 					break;
 				case RLV_BHVR_GETADDATTACHNAMES:	// Every attachment point that can be attached to (wear replace OR wear add)
 					fAdd = (gRlvAttachmentLocks.canAttach(pAttachPt) & RLV_WEAR);
