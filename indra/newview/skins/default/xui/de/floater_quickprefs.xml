@@ -13,6 +13,13 @@
 					Max. Bandbreite:
 				</text>
 				<slider name="max_bandwidth"/>
+				<text name="Maximum complexity" width="105" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als Jelly Doll dargestellt wird.">
+					Max. Komplexität:
+				</text>
+				<slider name="IndirectMaxComplexity" right="-68"/>
+				<text name="IndirectMaxComplexityText" width="60">
+					Kein Limit
+				</text>
 				<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
 					WL-Himmel:
 				</text>

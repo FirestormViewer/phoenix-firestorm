@@ -45,6 +45,7 @@
 #include <cctype>
 // external library headers
 #include <boost/range/iterator_range.hpp>
+#include <boost/dcoroutine/exception.hpp> // for abnormal_exit
 #if LL_WINDOWS
 #pragma warning (push)
 #pragma warning (disable : 4701) // compiler thinks might use uninitialized var, but no
@@ -512,7 +513,15 @@ bool LLEventStream::post(const LLSD& event)
     // Let caller know if any one listener handled the event. This is mostly
     // useful when using LLEventStream as a listener for an upstream
     // LLEventPump.
+
+	// <FS:ND> FIRE-19481; do not let any abnormal_exit propagate
+	// return (*signal)(event);
+
+	try {
     return (*signal)(event);
+	}catch( boost::dcoroutines::abnormal_exit& )
+	{ return false; }
+	// </FS:ND>
 }
 
 /*****************************************************************************

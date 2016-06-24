@@ -10473,7 +10473,10 @@ class LLWorldPostProcess : public view_listener_t
 
 void handle_flush_name_caches()
 {
-	LLAvatarNameCache::cleanupClass();
+	// <FS:Ansariel> Crash fix
+	//LLAvatarNameCache::cleanupClass();
+	LLAvatarNameCache::clearCache();
+	// </FS:Ansariel>
 	if (gCacheName) gCacheName->clear();
 }
 

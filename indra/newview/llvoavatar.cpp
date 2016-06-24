@@ -1,4 +1,4 @@
-﻿/** 
+/** 
  * @File llvoavatar.cpp
  * @brief Implementation of LLVOAvatar class which is a derivation of LLViewerObject
  *
@@ -112,6 +112,7 @@
 #include "llscenemonitor.h"
 #include "llsdserialize.h"
 
+#include "fscommon.h"
 #include "fsdata.h"
 #include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
 #include "lggcontactsets.h"
@@ -120,6 +121,7 @@
 #include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 #include "llsidepanelappearance.h"
+#include "fsavatarrenderpersistence.h"
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -705,6 +707,10 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mNameLastname(),
 	// </FS:Ansariel>
 	mTitle(),
+	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+	mNameArc(0),
+	mNameArcColor(LLColor4::white),
+	// </FS:Ansariel>
 	mNameAway(false),
 	mNameDoNotDisturb(false),
 	mNameAutoResponse(false), // <FS:Ansariel> Show auto-response in nametag,
@@ -759,6 +765,8 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mMeshTexturesDirty = FALSE;
 	mHeadp = NULL;
 
+	// <FS:Ansariel> Load persisted avatar render settings
+	mVisuallyMuteSetting = FSAvatarRenderPersistence::instance().getAvatarRenderSettings(id);
 
 	// set up animation variables
 	mSpeed = 0.f;
@@ -3043,6 +3051,27 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+	// <FS:TS> ...or everyone, if selected
+	static LLCachedControl<bool> show_too_complex_arw_tag(gSavedSettings, "FSTagShowTooComplexARW");
+	static LLCachedControl<bool> show_arw_always_tag(gSavedSettings, "FSTagAlwaysShowARW");
+	U32 complexity(0);
+	LLColor4 complexity_color(LLColor4::grey1); // default if we're not limiting the complexity
+
+	if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
+	{
+		complexity = mVisualComplexity;
+		// This calculation is copied from idleUpdateRenderComplexity()
+		static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
+		// Show complexity color if we're limiting...
+		if (max_render_cost != 0)
+		{
+			F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
+			F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
+			complexity_color.set(red_level, green_level, 0.f, 1.f);
+		}
+	}
+
 	// Rebuild name tag if state change detected
 	if (!mNameIsSet
 		|| new_name
@@ -3060,7 +3089,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_cloud != mNameCloud
 		|| name_tag_color != mNameColor
 		|| is_typing != mNameIsTyping
-		|| distance_string != mDistanceString)
+		|| distance_string != mDistanceString
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		|| complexity != mNameArc
+		|| complexity_color != mNameArcColor)
 	{
 
 		//WS: If we got a uuid and if we know if it's id_based or not, ask FSDATA for the other tagdata, before we display it.
@@ -3237,6 +3269,22 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 		// <FS:Ansariel> Show distance in tag
 
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		// <FS:TS> ...or everyone, if selected
+		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
+		if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
+		{
+			std::string complexity_string;
+			LLLocale locale(LLLocale::USER_LOCALE);
+			LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
+
+			LLStringUtil::format_map_t label_args;
+			label_args["COMPLEXITY"] = complexity_string;
+
+			addNameTagLine(format_string(complexity_label, label_args), complexity_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+		}
+		// </FS:Ansariel>
+
 		mNameAway = is_away;
 		mNameDoNotDisturb = is_do_not_disturb;
 		mNameAutoResponse = is_autoresponse; // <FS:Ansariel> Show auto-response in nametag
@@ -3251,6 +3299,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		// <FS:Ansariel> FIRE-13414: Avatar name isn't updated when the simulator sends a new name
 		mNameFirstname = firstname->getString();
 		mNameLastname = lastname->getString();
+		// </FS:Ansariel>
+		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
+		mNameArc = complexity;
+		mNameArcColor = complexity_color;
 		// </FS:Ansariel>
 		LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
 		new_name = TRUE;
@@ -8045,7 +8097,6 @@ bool resolve_appearance_version(const LLAppearanceMessageContents& contents, S32
 //-----------------------------------------------------------------------------
 void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 {
-    static S32 largestSelfCOFSeen(LLViewerInventoryCategory::VERSION_UNKNOWN);
 	LL_DEBUGS("Avatar") << "starts" << LL_ENDL;
 	
 	// <FS:CR> Use LLCachedControl
@@ -8076,63 +8127,48 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		LL_WARNS() << "bad appearance version info, discarding" << LL_ENDL;
 		return;
 	}
-	llassert(appearance_version > 0);
+	//llassert(appearance_version > 0);
 	if (appearance_version > 1)
 	{
 		LL_WARNS() << "unsupported appearance version " << appearance_version << ", discarding appearance message" << LL_ENDL;
 		return;
 	}
 
-	S32 this_update_cof_version = contents.mCOFVersion;
-	S32 last_update_request_cof_version = mLastUpdateRequestCOFVersion;
+    S32 thisAppearanceVersion(contents.mCOFVersion);
+    if (isSelf())
+    {   // In the past this was considered to be the canonical COF version, 
+        // that is no longer the case.  The canonical version is maintained 
+        // by the AIS code and should match the COF version there. Even so,
+        // we must prevent rolling this one backwards backwards or processing 
+        // stale versions.
 
-	if( isSelf() )
-	{
-		LL_DEBUGS("Avatar") << "this_update_cof_version " << this_update_cof_version
-				<< " last_update_request_cof_version " << last_update_request_cof_version
-				<<  " my_cof_version " << LLAppearanceMgr::instance().getCOFVersion() << LL_ENDL;
+        S32 aisCOFVersion(LLAppearanceMgr::instance().getCOFVersion());
 
-        if (largestSelfCOFSeen > this_update_cof_version)
+        LL_DEBUGS("Avatar") << "handling self appearance message #" << thisAppearanceVersion <<
+            " (highest seen #" << mLastUpdateReceivedCOFVersion <<
+            ") (AISCOF=#" << aisCOFVersion << ")" << LL_ENDL;
+
+        // <FS:Ansariel> [Legacy Bake]
+        if (mFirstTEMessageReceived && (appearance_version == 0))
         {
-            LL_WARNS("Avatar") << "Already processed appearance for COF version " <<
-                largestSelfCOFSeen << ", discarding appearance with COF " << this_update_cof_version << LL_ENDL;
             return;
         }
-        largestSelfCOFSeen = this_update_cof_version;
-		
-		// <FS:Ansariel> [Legacy Bake]
-		if (getRegion() && (getRegion()->getCentralBakeVersion()==0))
-		{
-			LL_WARNS() << avString() << "Received AvatarAppearance message for self in non-server-bake region" << LL_ENDL;
-		}
-		if( mFirstTEMessageReceived && (appearance_version == 0))
-		{
-			return;
-		}
-		// </FS:Ansariel> [Legacy Bake]
-	}
-	else
-	{
-		LL_DEBUGS("Avatar") << "appearance message received" << LL_ENDL;
-	}
+        // </FS:Ansariel> [Legacy Bake]
 
-	// Check for stale update.
-	if (isSelf()
-		// <FS:Ansariel> [Legacy Bake]
-		&& (appearance_version>0)
-		// </FS:Ansariel> [Legacy Bake]
-		&& (this_update_cof_version < last_update_request_cof_version))
-	{
-		LL_WARNS() << "Stale appearance update, wanted version " << last_update_request_cof_version
-				<< ", got " << this_update_cof_version << LL_ENDL;
-		return;
-	}
+        if (mLastUpdateReceivedCOFVersion >= thisAppearanceVersion)
+        {
+            LL_WARNS("Avatar") << "Stale appearance received #" << thisAppearanceVersion <<
+                " attempt to roll back from #" << mLastUpdateReceivedCOFVersion <<
+                "... dropping." << LL_ENDL;
+            return;
+        }
+        if (isEditingAppearance())
+        {
+            LL_DEBUGS("Avatar") << "Editing appearance.  Dropping appearance update." << LL_ENDL;
+            return;
+        }
 
-	if (isSelf() && isEditingAppearance())
-	{
-		LL_DEBUGS("Avatar") << "ignoring appearance message while in appearance edit" << LL_ENDL;
-		return;
-	}
+    }
 
 	// SUNSHINE CLEANUP - is this case OK now?
 	S32 num_params = contents.mParamWeights.size();
@@ -8147,23 +8183,21 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	}
 
 	// No backsies zone - if we get here, the message should be valid and usable, will be processed.
-    LL_INFOS("Avatar") << "Processing appearance message version " << this_update_cof_version << LL_ENDL;
+    LL_INFOS("Avatar") << "Processing appearance message version " << thisAppearanceVersion << LL_ENDL;
 
-	// <FS:Ansariel> [Legacy Bake]
-	if (appearance_version > 0)
-	{
-	// </FS:Ansariel> [Legacy Bake]
-	// Note:
-	// RequestAgentUpdateAppearanceResponder::onRequestRequested()
-	// assumes that cof version is only updated with server-bake
-	// appearance messages.
-	mLastUpdateReceivedCOFVersion = this_update_cof_version;
-	// <FS:Ansariel> [Legacy Bake]
-	}
+    if (isSelf())
+    {
+        // Note:
+        // locally the COF is maintained via LLInventoryModel::accountForUpdate
+        // which is called from various places.  This should match the simhost's 
+        // idea of what the COF version is.  AIS however maintains its own version
+        // of the COF that should be considered canonical. 
+        mLastUpdateReceivedCOFVersion = thisAppearanceVersion;
+    }
 
-	setIsUsingServerBakes(appearance_version > 0);
-	// </FS:Ansariel> [Legacy Bake]
-		
+    // <FS:Ansariel> [Legacy Bake]
+    setIsUsingServerBakes(appearance_version > 0);
+
     if (applyParsedTEMessage(contents.mTEContents) > 0 && isChanged(TEXTURE))
     {
         updateVisualComplexity();
@@ -8313,7 +8347,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		// Got an update for some other avatar
 		// Ignore updates for self, because we have a more authoritative value in the preferences.
 		setHoverOffset(contents.mHoverOffset);
-		LL_INFOS("Avatar") << avString() << "setting hover to " << contents.mHoverOffset[2] << LL_ENDL;
+		LL_DEBUGS("Avatar") << avString() << "setting hover to " << contents.mHoverOffset[2] << LL_ENDL;
 	}
 
 	if (!contents.mHoverOffsetWasSet && !isSelf())
@@ -8954,6 +8988,7 @@ U32 LLVOAvatar::getPartitionType() const
 //static
 void LLVOAvatar::updateImpostors()
 {
+	LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 	LLCharacter::sAllowInstancesChange = FALSE;
 
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
@@ -9327,6 +9362,8 @@ void LLVOAvatar::setVisualMuteSettings(VisualMuteSettings set)
 {
     mVisuallyMuteSetting = set;
     mNeedsImpostorUpdate = TRUE;
+	// <FS:Ansariel> Load persisted avatar render settings
+	FSAvatarRenderPersistence::instance().setAvatarRenderSettings(getID(), set);
 }
 
 

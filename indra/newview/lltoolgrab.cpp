@@ -146,7 +146,10 @@ BOOL LLToolGrab::handleMouseDown(S32 x, S32 y, MASK mask)
 	// call the base class to propogate info to sim
 	LLTool::handleMouseDown(x, y, mask);
 	
-	if (!gAgent.leftButtonBlocked())
+	// <FS:Ansariel> FIRE-19357: Hotfixing mouse capture in mouselook issue with minimal impact workaround for now
+	//if (!gAgent.leftButtonBlocked())
+	if ((gAgentCamera.cameraMouselook() && !gAgent.leftButtonGrabbed()) || (!gAgentCamera.cameraMouselook() && !gAgent.leftButtonBlocked()))
+	// </FS:Ansariel>
 	{
 		// can grab transparent objects (how touch event propagates, scripters rely on this)
 		gViewerWindow->pickAsync(x, y, mask, pickCallback, /*BOOL pick_transparent*/ TRUE);

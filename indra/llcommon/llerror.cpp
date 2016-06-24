@@ -1104,7 +1104,12 @@ namespace LLError
 		{
 			return false;
 		}
-		
+
+		// <FS:ND> FIRE-19403/BUG-18253/MAINT-6469; During viewer shutdown the static instance could have already been destroyed 
+		if( !Settings::instanceExists() )
+			return false;
+		// </FS:ND>
+
 		SettingsConfigPtr s = Settings::getInstance()->getSettingsConfig();
 		
 		s->mShouldLogCallCounter++;

@@ -667,7 +667,10 @@ LLSD LLScriptAssetUpload::generatePostBody()
     {
         body["task_id"] = getTaskId();
         body["item_id"] = getItemId();
-        body["is_script_running"] = getIsRunning();
+        // <FS:Ansariel> OpenSim expects an integer here...
+        //body["is_script_running"] = getIsRunning();
+        body["is_script_running"] = (BOOL)getIsRunning();
+        // </FS:Ansariel>
         body["target"] = (getTargetType() == MONO) ? "mono" : "lsl2";
         body["experience"] = getExerienceId();
     }
@@ -829,7 +832,7 @@ void LLViewerAssetUpload::HandleUploadError(LLCore::HttpStatus status, LLSD &res
         else
         {
             reason = "Error in upload request.  Please visit "
-                "http://secondlife.com/support for help fixing this problem.";
+                "http://www.firestormviewer.org/support for help fixing this problem.";
         }
     }
 

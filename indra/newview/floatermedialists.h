@@ -36,7 +36,7 @@ class LLButton;
 class FloaterMediaLists : public LLFloater
 {
 public:
-    FloaterMediaLists(const LLSD& key);
+	FloaterMediaLists(const LLSD& key);
 	BOOL postBuild();
 	static bool handleAddDomainCallback(const LLSD& notification, const LLSD& response);
 

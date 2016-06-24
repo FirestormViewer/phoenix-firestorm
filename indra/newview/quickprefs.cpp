@@ -139,6 +139,10 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 		return;
 	}
 
+	// Make sure IndirectMaxComplexity gets set properly
+	LLAvatarComplexityControls::setIndirectMaxArc();
+	LLAvatarComplexityControls::setText(gSavedSettings.getU32("RenderAvatarMaxComplexity"), mMaxComplexityLabel);
+
 	gSavedSettings.setBOOL("QuickPrefsEditMode", FALSE);
 
 	// Scan widgets and reapply control variables because some control types
@@ -194,7 +198,7 @@ void FloaterQuickPrefs::initCallbacks()
 		gSavedSettings.getControl("RenderShadowGaussian")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderSSAOEffect")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 
-// <FS:CR> FIRE-9630 - Vignette UI controls
+		// Vignette UI controls
 		getChild<LLSpinCtrl>("VignetteSpinnerX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerX, this));
 		getChild<LLSlider>("VignetteSliderX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteX, this));
 		getChild<LLButton>("Reset_VignetteX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteX, this));
@@ -204,7 +208,6 @@ void FloaterQuickPrefs::initCallbacks()
 		getChild<LLSpinCtrl>("VignetteSpinnerZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerZ, this));
 		getChild<LLSlider>("VignetteSliderZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteZ, this));
 		getChild<LLButton>("Reset_VignetteZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteZ, this));
-// </FS:CR>
 
 		getChild<LLSlider>("SB_Shd_Clarity")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderShadowSplitExponentSlider, this));
 		getChild<LLSpinCtrl>("S_Shd_Clarity")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderShadowSplitExponentSpinner, this));
@@ -229,6 +232,9 @@ void FloaterQuickPrefs::initCallbacks()
 		mAvatarZOffsetSlider->setSliderMouseUpCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetFinalCommit, this));
 		mAvatarZOffsetSlider->setSliderEditorCommitCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetFinalCommit, this));
 		mAvatarZOffsetSlider->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAvatarZOffsetSliderMoved, this));
+
+		mMaxComplexitySlider->setCommitCallback(boost::bind(&FloaterQuickPrefs::updateMaxComplexity, this));
+		gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&FloaterQuickPrefs::updateMaxComplexityLabel, this, _2));
 
 		syncAvatarZOffsetFromPreferenceSetting();
 		// Update slider on future pref changes.
@@ -382,14 +388,15 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
 		mCtrlAvatarShadowDetail = getChild<LLComboBox>("AvatarShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
-// <FS:CR> FIRE-9630 - Vignette UI controls
+
+		// Vignette UI controls
 		mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
 		mSpinnerVignetteY = getChild<LLSpinCtrl>("VignetteSpinnerY");
 		mSpinnerVignetteZ = getChild<LLSpinCtrl>("VignetteSpinnerZ");
 		mSliderVignetteX = getChild<LLSlider>("VignetteSliderX");
 		mSliderVignetteY = getChild<LLSlider>("VignetteSliderY");
 		mSliderVignetteZ = getChild<LLSlider>("VignetteSliderZ");
-// </FS:CR>
+
 		mSliderRenderShadowSplitExponentY = getChild<LLSlider>("SB_Shd_Clarity");
 		mSpinnerRenderShadowSplitExponentY = getChild<LLSpinCtrl>("S_Shd_Clarity");
 
@@ -410,6 +417,9 @@ BOOL FloaterQuickPrefs::postBuild()
 		mAvatarZOffsetSlider = getChild<LLSliderCtrl>("HoverHeightSlider");
 		mAvatarZOffsetSlider->setMinValue(MIN_HOVER_Z);
 		mAvatarZOffsetSlider->setMaxValue(MAX_HOVER_Z);
+
+		mMaxComplexitySlider = getChild<LLSliderCtrl>("IndirectMaxComplexity");
+		mMaxComplexityLabel = getChild<LLTextBox>("IndirectMaxComplexityText");
 	}
 
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
@@ -2152,4 +2162,17 @@ void FloaterQuickPrefs::updateMaxNonImpostors(const LLSD& newvalue)
 	}
 	gSavedSettings.setU32("RenderAvatarMaxNonImpostors", value);
 	LLVOAvatar::updateImpostorRendering(value); // make it effective immediately
+}
+
+void FloaterQuickPrefs::updateMaxComplexity()
+{
+	// Called when the IndirectMaxComplexity control changes
+	LLAvatarComplexityControls::updateMax(mMaxComplexitySlider, mMaxComplexityLabel);
+}
+
+void FloaterQuickPrefs::updateMaxComplexityLabel(const LLSD& newvalue)
+{
+	U32 value = newvalue.asInteger();
+
+	LLAvatarComplexityControls::setText(value, mMaxComplexityLabel);
 }
