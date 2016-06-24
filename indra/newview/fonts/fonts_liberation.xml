@@ -16,7 +16,9 @@
       <file>ヒラギノ角ゴ Pro W3.otf</file>
       <file>ヒラギノ角ゴ ProN W3.otf</file>
       <file>ヒラギノ明朝 ProN W3.ttc</file>
+      <!-- <FS:TS> FIRE-17481: Add El Capitan Korean font -->
       <file>AppleSDGothicNeo.ttc</file>
+      <!-- </FS:TS> FIRE-17481 -->
       <file>AppleGothic.dfont</file>
       <file>AppleGothic.ttf</file>
       <file>AppleSDGothicNeo-Regular.otf</file>

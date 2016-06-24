@@ -27,9 +27,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ff2b6c4678ec520b4dd95431fc7d6191</string>
+              <string>e54568cfa7bced82cb6eae26471b7fa5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.6.48693-darwin-201602191441-r3.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slplugin_x86-4.7.8.50261-darwin-201606211711-r3.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -401,9 +401,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c2c18782baee63f556e21a42527919e6</string>
+              <string>b1064a7e4e8f37fdea5a1538b55ffcc2</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.38.0.201505121710-r147-darwin-201505121710-r147.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.47.0.201605151653-darwin-201605151653.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>

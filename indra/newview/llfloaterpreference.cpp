@@ -129,6 +129,7 @@
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
+#include "fsavatarrenderpersistence.h"
 #include "fsdroptarget.h"
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
@@ -683,10 +684,10 @@ BOOL LLFloaterPreference::postBuild()
 	//getChild<LLComboBox>("ObjectIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ObjectIMOptions"));
 	// </FS:CR>
 	
-// ## Zi: Optional Edit Appearance Lighting
+	// <FS:Zi> Optional Edit Appearance Lighting
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
 	onAppearanceCameraChanged();
-// ## Zi: Optional Edit Appearance Lighting
+	// </FS:Zi> Optional Edit Appearance Lighting
 
 
 	// if floater is opened before login set default localized do not disturb message
@@ -739,11 +740,11 @@ BOOL LLFloaterPreference::postBuild()
 #endif  // OPENSIM // <FS:AW optional opensim support/>
 
 
-// ## Zi: Pie menu
+	// <FS:Zi> Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
 	// make sure pie color controls are enabled or greyed out properly
 	onPieColorsOverrideChanged();
-// ## Zi: Pie menu
+	// </FS:Zi> Pie menu
 
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
@@ -757,8 +758,15 @@ BOOL LLFloaterPreference::postBuild()
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLFloaterPreference::onUpdateFilterTerm, this, false));
 	// </FS:ND>
 
-	// <FS:Ansariel> Update label for max. non imposters
+	// <FS:Ansariel> Update label for max. non imposters and max complexity
 	gSavedSettings.getControl("IndirectMaxNonImpostors")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxNonImpostorsLabel, this, _2));
+	gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateMaxComplexityLabel, this, _2));
+
+	// <FS:Ansariel> Properly disable avatar tag setting
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	onAvatarTagSettingsChanged();
+	// </FS:Ansariel>
 
 	return TRUE;
 }
@@ -2289,7 +2297,10 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 	else
 	{
 		// This is the inverse of the calculation in updateMaxComplexity
-		indirect_max_arc = (U32)((log(max_arc) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE) + MIN_INDIRECT_ARC_LIMIT;
+		// <FS:Ansariel> Fix math rounding error
+		//indirect_max_arc = (U32)((log(max_arc) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE) + MIN_INDIRECT_ARC_LIMIT;
+		indirect_max_arc = (U32)ll_round(((log(F32(max_arc)) - MIN_ARC_LOG) / ARC_LIMIT_MAP_SCALE)) + MIN_INDIRECT_ARC_LIMIT;
+		// </FS:Ansariel>
 	}
 	gSavedSettings.setU32("IndirectMaxComplexity", indirect_max_arc);
 }
@@ -3031,6 +3042,13 @@ void LLFloaterPreference::updateMaxNonImpostorsLabel(const LLSD& newvalue)
 	}
 	setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
 }
+
+void LLFloaterPreference::updateMaxComplexityLabel(const LLSD& newvalue)
+{
+	U32 value = newvalue.asInteger();
+
+	LLAvatarComplexityControls::setText(value, getChild<LLTextBox>("IndirectMaxComplexityText"));
+}
 // </FS:Ansariel>
 
 void LLFloaterPreferenceGraphicsAdvanced::updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box)
@@ -3108,7 +3126,10 @@ void LLAvatarComplexityControls::updateMax(LLSliderCtrl* slider, LLTextBox* valu
 	{
 		// if this is changed, the inverse calculation in setIndirectMaxArc
 		// must be changed to match
-		max_arc = (U32)exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT)));
+		// <FS:Ansariel> Fix math rounding error
+		//max_arc = (U32)exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT)));
+		max_arc = (U32)ll_round(exp(MIN_ARC_LOG + (ARC_LIMIT_MAP_SCALE * (indirect_value - MIN_INDIRECT_ARC_LIMIT))));
+		// </FS:Ansariel>
 	}
 
 	gSavedSettings.setU32("RenderAvatarMaxComplexity", (U32)max_arc);
@@ -3123,7 +3144,12 @@ void LLAvatarComplexityControls::setText(U32 value, LLTextBox* text_box)
 	}
 	else
 	{
-		text_box->setText(llformat("%d", value));
+		// <FS:Ansariel> Proper number formatting with delimiter
+		//text_box->setText(llformat("%d", value));
+		std::string output_string;
+		LLLocale locale(LLLocale::USER_LOCALE);
+		LLResMgr::getInstance()->getIntegerString(output_string, value);
+		text_box->setText(output_string);
 	}
 }
 
@@ -3353,6 +3379,18 @@ void LLFloaterPreference::saveGraphicsPreset(const std::string& preset)
 {
 	mSavedGraphicsPreset = preset;
 }
+
+
+// <FS:Ansariel> Properly disable avatar tag setting
+void LLFloaterPreference::onAvatarTagSettingsChanged()
+{
+	bool usernames_enabled = gSavedSettings.getBOOL("NameTagShowUsernames");
+	bool legacy_enabled = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames");
+
+	childSetEnabled("FSshow_legacyun", usernames_enabled);
+	childSetEnabled("legacy_trim_check", usernames_enabled && legacy_enabled);
+}
+// </FS:Ansariel>
 
 //------------------------------Updater---------------------------------------
 
@@ -4820,6 +4858,9 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 		std::string backup_per_account_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder,
 					LLAppViewer::instance()->getSettingsFilename("Default", "PerAccount"));
 
+		// Make sure to persist settings to file before we copy them
+		FSAvatarRenderPersistence::instance().saveAvatarRenderSettings();
+
 		LL_INFOS("SettingsBackup") << "copying per account settings" << LL_ENDL;
 		// create per-user folder if it doesn't exist yet
 		LLFile::mkdir(backup_per_account_folder.c_str());
@@ -5146,6 +5187,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 			exoGroupMuteList::instance().loadMuteList();
 		}
 #endif
+		FSAvatarRenderPersistence::instance().loadAvatarRenderSettings();
 
 		LLPanelMainInventory::sSaveFilters = false;
 	}

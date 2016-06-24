@@ -520,7 +520,9 @@ void LLUICtrl::setEnabledControlVariable(LLControlVariable* control)
 	{
 		mEnabledControlVariable = control;
 		mEnabledControlConnection = mEnabledControlVariable->getSignal()->connect(boost::bind(&controlListener, _2, getHandle(), std::string("enabled")));
-		setEnabled(mEnabledControlVariable->getValue().asBoolean());
+		// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
+		//setEnabled(mEnabledControlVariable->getValue().asBoolean());
+		setEnabled(mEnabledControlVariable->getValue().asString() == "0" ? FALSE : mEnabledControlVariable->getValue().asBoolean());
 	}
 }
 
@@ -535,7 +537,9 @@ void LLUICtrl::setDisabledControlVariable(LLControlVariable* control)
 	{
 		mDisabledControlVariable = control;
 		mDisabledControlConnection = mDisabledControlVariable->getSignal()->connect(boost::bind(&controlListener, _2, getHandle(), std::string("disabled")));
-		setEnabled(!(mDisabledControlVariable->getValue().asBoolean()));
+		// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
+		//setEnabled(!(mDisabledControlVariable->getValue().asBoolean()));
+		setEnabled(!(mDisabledControlVariable->getValue().asString() == "0" ? FALSE : mDisabledControlVariable->getValue().asBoolean()));
 	}
 }
 
@@ -587,12 +591,18 @@ bool LLUICtrl::controlListener(const LLSD& newvalue, LLHandle<LLUICtrl> handle, 
 		}
 		else if (type == "enabled")
 		{
-			ctrl->setEnabled(newvalue.asBoolean());
+			// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
+			//ctrl->setEnabled(newvalue.asBoolean());
+			ctrl->setEnabled(newvalue.asString() == "0" ? FALSE : newvalue.asBoolean());
+			// </FS:Ansariel>
 			return true;
 		}
 		else if(type =="disabled")
 		{
-			ctrl->setEnabled(!newvalue.asBoolean());
+			// <FS:Ansariel> enabled_control / disabled_control don't work properly with LLRadioGroup
+			//ctrl->setEnabled(!newvalue.asBoolean());
+			ctrl->setEnabled(!(newvalue.asString() == "0" ? FALSE : newvalue.asBoolean()));
+			// </FS:Ansariel>
 			return true;
 		}
 		else if (type == "visible")

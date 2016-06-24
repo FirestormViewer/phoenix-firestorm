@@ -493,7 +493,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TooltipFlagPhantom">Fantasma</string>
 	<string name="TooltipFlagTemporary">Temporal</string>
 	<string name="TooltipPrimCount">Primitivas: [COUNT]</string>
-	<string name="TooltipPrimEquivalent">, Impacto en el Terreno: [PEWEIGHT] PE</string>
+	<string name="TooltipPrimEquivalent">, Impacto en el Terreno: [PEWEIGHT]</string>
 	<string name="TooltipPrimEquivalentLoading">, cargando Impacto en el Terreno...</string>
 	<string name="TooltipPrimEquivalentUnavailable">, Impacto en el terreno no disponible</string>
 	<string name="TooltipDistance">Distancia: [DISTANCE] m</string>

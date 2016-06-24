@@ -127,6 +127,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fsareasearch.cpp
     fsareasearchmenu.cpp
+    fsavatarrenderpersistence.cpp
     fsavatarsearchmenu.cpp
     fsblocklistmenu.cpp
     fschathistory.cpp
@@ -864,6 +865,7 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fsareasearch.h
     fsareasearchmenu.h
+    fsavatarrenderpersistence.h
     fsavatarsearchmenu.h
     fsblocklistmenu.h
     fschathistory.h

@@ -551,7 +551,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Primów: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, wpływ na działkę: [PEWEIGHT] PE
+		, wpływ na działkę: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
 		, sprawdzanie wpływu na działkę...
@@ -5998,5 +5998,8 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Pie_av_render_fully">
 		Zawsze w pełni
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Złożoność: [COMPLEXITY]
 	</string>
 </strings>
