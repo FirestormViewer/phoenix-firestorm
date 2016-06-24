@@ -527,7 +527,7 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 //
 
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
-	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_eRet(RLV_RET_UNKNOWN)
+	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_fRefCounted(false)
 {
 	if (m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam))
 	{
@@ -556,6 +556,12 @@ RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 	}
 
 	m_pBhvrInfo = RlvBehaviourDictionary::instance().getBehaviourInfo(m_strBehaviour, m_eParamType, &m_fStrict);
+}
+
+RlvCommand::RlvCommand(const RlvCommand& rlvCmd, ERlvParamType eParamType)
+	: m_fValid(rlvCmd.m_fValid), m_idObj(rlvCmd.m_idObj), m_strBehaviour(rlvCmd.m_strBehaviour), m_pBhvrInfo(rlvCmd.m_pBhvrInfo),
+	  m_eParamType( (RLV_TYPE_UNKNOWN == eParamType) ? rlvCmd.m_eParamType : eParamType),m_fStrict(rlvCmd.m_fStrict), m_strOption(rlvCmd.m_strOption), m_strParam(rlvCmd.m_strParam), m_fRefCounted(false)
+{
 }
 
 bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption, std::string& strParam)
@@ -916,19 +922,6 @@ bool RlvObject::removeCommand(const RlvCommand& rlvCmd)
 		}
 	}
 	return false;	// Command was never added so nothing to remove now
-}
-
-// Checked: 2011-05-23 (RLVa-1.3.1c) | Added: RLVa-1.3.1c
-void RlvObject::setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
-{
-	for (rlv_command_list_t::iterator itCmd = m_Commands.begin(); itCmd != m_Commands.end(); ++itCmd)
-	{
-		if (*itCmd == rlvCmd)
-		{
-			itCmd->m_eRet = eRet;
-			break;
-		}
-	}
 }
 
 bool RlvObject::hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const

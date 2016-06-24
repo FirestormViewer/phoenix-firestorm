@@ -259,8 +259,6 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 			strRestrictions << "  -> " << itCmd->asString();
 			if ( (!strOption.empty()) && (strOption != itCmd->getOption()) )
 				strRestrictions << "  [" << strOption << "]";
-			if (RLV_RET_SUCCESS != itCmd->getReturnType())
-				strRestrictions << "  (" << RlvStrings::getStringFromReturnCode(itCmd->getReturnType()) << ")";
 			strRestrictions << "\n";
 		}
 	}
@@ -360,7 +358,6 @@ void RlvFloaterBehaviours::refreshAll()
 			else
 			{
 				// List under the "Restrictions" tab
-				sdBhvrRow["enabled"] = (RLV_RET_SUCCESS == itCmd->getReturnType());
 				sdBhvrColumns[0]["value"] = (strOption.empty()) ? itCmd->asString() : itCmd->getBehaviour() + ":" + strOption;
 				sdBhvrColumns[1]["value"] = strIssuer;
 				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
@@ -761,6 +758,7 @@ void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 {
 	LLLineEditor* pInputEdit = static_cast<LLLineEditor*>(pCtrl);
 	std::string strInput = pInputEdit->getText();
+	LLStringUtil::trim(strInput);
 
 	m_pOutputText->appendText(strInput, false);
 	pInputEdit->clear();

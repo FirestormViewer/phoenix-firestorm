@@ -339,7 +339,7 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 				{
 					RlvObject rlvObj(idCurObj);
 					fAdded = rlvObj.addCommand(rlvCmd);
-					m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, rlvObj));
+					itObj = m_Objects.insert(std::pair<LLUUID, RlvObject>(idCurObj, rlvObj)).first;
 				}
 
 				RLV_DEBUGS << "\t- " << ( (fAdded) ? "adding behaviour" : "skipping duplicate" ) << RLV_ENDL;
@@ -348,7 +348,11 @@ ERlvCmdRet RlvHandler::processCommand(const RlvCommand& rlvCmd, bool fFromObj)
 					if (!m_pGCTimer)
 						m_pGCTimer = new RlvGCTimer();
 					eRet = processAddRemCommand(rlvCmd);
-					m_Objects.find(idCurObj)->second.setCommandRet(rlvCmd, eRet);	// HACK-RLVa: find a better way of doing this
+					if (!RLV_RET_SUCCEEDED(eRet))
+					{
+						RlvCommand rlvCmdRem(rlvCmd, RLV_TYPE_REMOVE);
+						itObj->second.removeCommand(rlvCmdRem);
+					}
 //					notifyBehaviourObservers(rlvCmd, !fFromObj);
 				}
 				else

@@ -282,6 +282,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "duplicate";
 		case RLV_RET_SUCCESS_DELAYED:
 			return "delayed";
+		case RLV_RET_SUCCESS_DEPRECATED:
+			return "deprecated";
 		case RLV_RET_FAILED_SYNTAX:
 			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
@@ -296,8 +298,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "unknown command";
 		case RLV_RET_FAILED_NOSHAREDROOT:
 			return "missing #RLV";
-		case RLV_RET_DEPRECATED:
-			return "deprecated";
+		case RLV_RET_FAILED_DEPRECATED:
+			return "deprecated and disabled";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:
