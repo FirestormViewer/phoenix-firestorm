@@ -558,6 +558,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// No teleport in progress
 			gViewerWindow->setShowProgress(FALSE,FALSE);
 			gTeleportDisplay = FALSE;
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+			LLViewerParcelMgr::getInstance()->onTeleportDone();
+// [/SL:KB]
 			break;
 		}
 	}

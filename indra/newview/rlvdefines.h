@@ -278,6 +278,7 @@ enum ERlvCmdRet {
 	RLV_RET_SUCCESS		= 0x0100,	// Command executed succesfully
 	RLV_RET_SUCCESS_UNSET,			// Command executed succesfully (RLV_TYPE_REMOVE for an unrestricted behaviour)
 	RLV_RET_SUCCESS_DUPLICATE,		// Command executed succesfully (RLV_TYPE_ADD for an already restricted behaviour)
+	RLV_RET_SUCCESS_DEPRECATED,		// Command executed succesfully but has been marked as deprecated
 	RLV_RET_SUCCESS_DELAYED,		// Command parsed valid but will execute at a later time
 	RLV_RET_FAILED		= 0x0200,	// Command failed (general failure)
 	RLV_RET_FAILED_SYNTAX,			// Command failed (syntax error)
@@ -287,9 +288,10 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DISABLED,		// Command failed (command disabled by user)
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
-	RLV_RET_DEPRECATED,				// Command has been deprecated
+	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
 	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
+#define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
 
 enum ERlvExceptionCheck
 {

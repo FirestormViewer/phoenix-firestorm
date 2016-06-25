@@ -366,6 +366,7 @@ class RlvCommand
 {
 public:
 	explicit RlvCommand(const LLUUID& idObj, const std::string& strCommand);
+	RlvCommand(const RlvCommand& rlvCmd, ERlvParamType eParamType = RLV_TYPE_UNKNOWN);
 
 	/*
 	 * Member functions
@@ -379,7 +380,6 @@ public:
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
-	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
 	bool               isRefCounted() const     { return m_fRefCounted; }
@@ -409,7 +409,6 @@ protected:
 	bool                    m_fStrict;
 	std::string             m_strOption;
 	std::string             m_strParam;
-	ERlvCmdRet              m_eRet;
 	mutable bool            m_fRefCounted;
 
 	friend class RlvHandler;
@@ -522,7 +521,6 @@ public:
 public:
 	bool addCommand(const RlvCommand& rlvCmd);
 	bool removeCommand(const RlvCommand& rlvCmd);
-	void setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 
 	std::string getStatusString(const std::string& strFilter, const std::string& strSeparator) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;
