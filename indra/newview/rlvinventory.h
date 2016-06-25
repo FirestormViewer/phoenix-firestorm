@@ -313,7 +313,7 @@ inline bool RlvInventory::isFoldedFolder(const LLInventoryCategory* pFolder, boo
 		// .(<attachpt>) type folder
 		(0 != RlvAttachPtLookup::getAttachPointIndex(pFolder))
 		// .(nostrip) folder
-		|| ( (pFolder) && (".("RLV_FOLDER_FLAG_NOSTRIP")" == pFolder->getName()) )
+		|| ( (pFolder) && (".(" RLV_FOLDER_FLAG_NOSTRIP ")" == pFolder->getName()) )
 		// Composite folder (if composite folders are enabled and we're asked to look for them)
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		|| ( (fCheckComposite) && (RlvSettings::getEnableComposites()) &&

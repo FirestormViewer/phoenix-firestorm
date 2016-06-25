@@ -1185,7 +1185,8 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_REMOUTFIT:			// @remoutfit[:<layer>]=n|y			- Checked: 2010-08-29 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
 			{
 				// If there's an option it should specify a wearable type name (reference count on no option *and* a valid option)
-				RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+				RlvCommandOptionGeneric rlvCmdOption;
+				RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 				VERIFY_OPTION_REF( (rlvCmdOption.isEmpty()) || (rlvCmdOption.isWearableType()) );
 
 				// We need to flush any queued force-wear commands before changing the restrictions
@@ -1342,6 +1343,7 @@ ERlvCmdRet RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(const RlvC
 }
 
 // Handles: @bhvr=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be no option
@@ -1353,6 +1355,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE>::onCommand(const RlvComma
 }
 
 // Handles: @bhvr:<uuid>=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
@@ -1370,6 +1373,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_EXCEPTION>::onCommand(const Rlv
 }
 
 // Handles: @bhvr[:<uuid>]=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there is an option then it should specify a valid UUID (but don't reference count)
@@ -1383,6 +1387,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_EXCEPTION>::onCommand(c
 }
 
 // Handles: @bhvr:<modifier>=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid modifier (RlvBehaviourModifier performs the appropriate type checks)
@@ -1410,6 +1415,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(const RlvC
 }
 
 // Handles: @bhvr[:<modifier>]=n|y
+template<>
 ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// If there is an option then it should specify a valid modifier (and reference count)
@@ -1516,7 +1522,8 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlv
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
 ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount)
 {
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 
 	RlvFolderLocks::folderlock_source_t lockSource;
 	if (rlvCmdOption.isEmpty())
@@ -1561,7 +1568,8 @@ ERlvCmdRet RlvHandler::onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCo
 ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - the option should specify a shared folder path
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 	if (!rlvCmdOption.isSharedFolder())
 		return RLV_RET_FAILED_OPTION;
 
@@ -2131,7 +2139,8 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				if (RlvBehaviourInfo::FORCEWEAR_CONTEXT_NONE & rlvCmd.getBehaviourFlags())
 				{
-					RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+					RlvCommandOptionGeneric rlvCmdOption;
+					RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 					VERIFY_OPTION(rlvCmdOption.isSharedFolder());
 					eRet = onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 				}
@@ -2176,7 +2185,8 @@ ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 	if (!isAgentAvatarValid())
 		return RLV_RET_FAILED;
 
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 	if (rlvCmdOption.isSharedFolder())
 		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 
@@ -2215,7 +2225,8 @@ ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvCmd)
 {
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 	if (rlvCmdOption.isSharedFolder())
 		return gRlvHandler.onForceWear(rlvCmdOption.getSharedFolder(), rlvCmd.getBehaviourFlags());
 

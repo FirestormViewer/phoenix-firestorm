@@ -780,7 +780,8 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
 	// @getpath[:<option>]=<channel> => <option> is transformed to a list of inventory item UUIDs to get the path of
-	RlvCommandOptionGeneric rlvCmdOption = RlvCommandOptionHelper::parseOption<RlvCommandOptionGeneric>(rlvCmd.getOption());
+	RlvCommandOptionGeneric rlvCmdOption;
+	RlvCommandOptionHelper::parseOption(rlvCmd.getOption(), rlvCmdOption);
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
 		getItemIDs(rlvCmdOption.getWearableType(), m_idItems);
