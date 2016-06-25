@@ -9193,7 +9193,8 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 	static const U32 COMPLEXITY_BODY_PART_COST = 200;
 
 	// Diagnostic list of all textures on our avatar
-	static std::set<LLUUID> all_textures;
+	// <FS:Ansariel> Disable useless diagnostics
+	//static std::set<LLUUID> all_textures;
 
 	if (mVisualComplexityStale)
 	{
@@ -9289,41 +9290,43 @@ void LLVOAvatar::calculateUpdateRenderComplexity()
 		// Diagnostic output to identify all avatar-related textures.
 		// Does not affect rendering cost calculation.
 		// Could be wrapped in a debug option if output becomes problematic.
-		if (isSelf())
-		{
-			// print any attachment textures we didn't already know about.
-			for (LLVOVolume::texture_cost_t::iterator it = textures.begin(); it != textures.end(); ++it)
-			{
-				LLUUID image_id = it->first;
-				if( ! (image_id.isNull() || image_id == IMG_DEFAULT || image_id == IMG_DEFAULT_AVATAR)
-				   && (all_textures.find(image_id) == all_textures.end()))
-				{
-					// attachment texture not previously seen.
-					LL_INFOS() << "attachment_texture: " << image_id.asString() << LL_ENDL;
-					all_textures.insert(image_id);
-				}
-			}
+		// <FS:Ansariel> Disable useless diagnostics
+		//if (isSelf())
+		//{
+		//	// print any attachment textures we didn't already know about.
+		//	for (LLVOVolume::texture_cost_t::iterator it = textures.begin(); it != textures.end(); ++it)
+		//	{
+		//		LLUUID image_id = it->first;
+		//		if( ! (image_id.isNull() || image_id == IMG_DEFAULT || image_id == IMG_DEFAULT_AVATAR)
+		//		   && (all_textures.find(image_id) == all_textures.end()))
+		//		{
+		//			// attachment texture not previously seen.
+		//			LL_INFOS() << "attachment_texture: " << image_id.asString() << LL_ENDL;
+		//			all_textures.insert(image_id);
+		//		}
+		//	}
 
-			// print any avatar textures we didn't already know about
-		    for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
-			 iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
-				 ++iter)
-			{
-			    const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
-				// TODO: MULTI-WEARABLE: handle multiple textures for self
-				const LLViewerTexture* te_image = getImage(iter->first,0);
-				if (!te_image)
-					continue;
-				LLUUID image_id = te_image->getID();
-				if( image_id.isNull() || image_id == IMG_DEFAULT || image_id == IMG_DEFAULT_AVATAR)
-					continue;
-				if (all_textures.find(image_id) == all_textures.end())
-				{
-					LL_INFOS() << "local_texture: " << texture_dict->mName << ": " << image_id << LL_ENDL;
-					all_textures.insert(image_id);
-				}
-			}
-		}
+		//	// print any avatar textures we didn't already know about
+		//    for (LLAvatarAppearanceDictionary::Textures::const_iterator iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
+		//	 iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
+		//		 ++iter)
+		//	{
+		//	    const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = iter->second;
+		//		// TODO: MULTI-WEARABLE: handle multiple textures for self
+		//		const LLViewerTexture* te_image = getImage(iter->first,0);
+		//		if (!te_image)
+		//			continue;
+		//		LLUUID image_id = te_image->getID();
+		//		if( image_id.isNull() || image_id == IMG_DEFAULT || image_id == IMG_DEFAULT_AVATAR)
+		//			continue;
+		//		if (all_textures.find(image_id) == all_textures.end())
+		//		{
+		//			LL_INFOS() << "local_texture: " << texture_dict->mName << ": " << image_id << LL_ENDL;
+		//			all_textures.insert(image_id);
+		//		}
+		//	}
+		//}
+		// </FS:Ansariel>
 
         if ( cost != mVisualComplexity )
         {
