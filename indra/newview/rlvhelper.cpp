@@ -533,7 +533,7 @@ bool RlvBehaviourModifier::convertOptionValue(const std::string& optionValue, Rl
 RlvCommand::RlvCommand(const LLUUID& idObj, const std::string& strCommand)
 	: m_fValid(false), m_idObj(idObj), m_pBhvrInfo(NULL), m_eParamType(RLV_TYPE_UNKNOWN), m_fStrict(false), m_fRefCounted(false)
 {
-	if (m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam))
+	if ((m_fValid = parseCommand(strCommand, m_strBehaviour, m_strOption, m_strParam)))
 	{
 		S32 nTemp = 0;
 		if ( ("n" == m_strParam) || ("add" == m_strParam) )
