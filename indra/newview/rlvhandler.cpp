@@ -1446,7 +1446,7 @@ ERlvCmdRet RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(co
 }
 
 // Handles: @addattach[:<attachpt>]=n|y and @remattach[:<attachpt>]=n|y
-template<>
+template<> template<>
 ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// Sanity check - if there's an option it should specify a valid attachment point name
@@ -1479,7 +1479,7 @@ ERlvCmdRet RlvBehaviourAddRemAttachHandler::onCommand(const RlvCommand& rlvCmd, 
 }
 
 // Handles: @detach[:<attachpt>]=n|y
-template<>
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_DETACH>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// We need to flush any queued force-wear commands before changing the restrictions
@@ -1593,7 +1593,7 @@ ERlvCmdRet RlvHandler::onAddRemFolderLockException(const RlvCommand& rlvCmd, boo
 }
 
 // Handles: @edit=n|y toggles
-template<>
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_EDIT>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (fHasBhvr)
@@ -1694,7 +1694,7 @@ ERlvCmdRet RlvBehaviourRecvSendStartIMHandler::onCommand(const RlvCommand& rlvCm
 }
 
 // Handles: @sendim=n|y toggles
-template<>
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(fHasBhvr);
@@ -1702,6 +1702,152 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SENDIM>::onCommandToggle(ERlvBehaviour e
 
 // Handles: @setcam_avdistmin:<distance>=n|y changes
 template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_AVDISTMIN>::onValueChange() const
+{
+	if ( (gAgentCamera.cameraMouselook()) && (!RlvActions::canChangeToMouselook()) )
+		gAgentCamera.changeCameraToThirdPerson();
+}
+
+// Handles: @setcam_eyeoffset:<vector3>=n|y and @setcam_focusoffset:<vector3>=n|y toggles
+template<> template<>
+void RlvBehaviourCamEyeFocusOffsetHandler::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_RLV_SETCAM_VIEW);
+	}
+	else
+	{
+		const RlvBehaviourModifier* pBhvrEyeModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET);
+		const RlvBehaviourModifier* pBhvrOffsetModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET);
+		if ( (!pBhvrEyeModifier->hasValue()) && (!pBhvrOffsetModifier->hasValue()) )
+			gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+	}
+}
+
+// Handles: @setcam_eyeoffset:<vector3>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("CameraOffsetRLVaView");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_focusoffset:<vector3>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET))
+	{
+		LLControlVariable* pControl = gSavedSettings.getControl("FocusOffsetRLVaView");
+		if (pBhvrModifier->hasValue())
+			pControl->setValue(pBhvrModifier->getValue<LLVector3>().getValue());
+		else
+			pControl->resetToDefault();
+	}
+}
+
+// Handles: @setcam_fovmin:<angle>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>::onValueChange() const
+{
+	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
+}
+
+// Handles: @setcam_fovmax:<angle>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>::onValueChange() const
+{
+	LLViewerCamera::instance().setDefaultFOV(LLViewerCamera::instance().getDefaultFOV());
+}
+
+// Handles: @setcam_mouselook=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_MOUSELOOK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if ((fHasBhvr) && (gAgentCamera.cameraMouselook()))
+		gAgentCamera.changeCameraToThirdPerson();
+}
+
+// Handles: @setcam_textures[:<uuid>=n|y changes
+template<>
+void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>::onValueChange() const
+{
+	if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_TEXTURE))
+	{
+		if (pBhvrModifier->hasValue())
+		{
+			RLV_INFOS << "Toggling diffuse textures for @setcam_textures" << RLV_ENDL;
+			LLViewerFetchedTexture::sDefaultDiffuseImagep = LLViewerTextureManager::getFetchedTexture(pBhvrModifier->getValue<LLUUID>(), FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+			gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, true);
+		}
+		else
+		{
+			RLV_INFOS << "Restoring diffuse textures for @setcam_textures" << RLV_ENDL;
+			gObjectList.setAllObjectDefaultTextures(LLRender::DIFFUSE_MAP, false);
+			LLViewerFetchedTexture::sDefaultDiffuseImagep = nullptr;
+		}
+	}
+}
+
+// Handles: @setcam_unlock=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (fHasBhvr)
+		handle_reset_view();
+}
+
+// Handles: @setcam=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SETCAM>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	// Once an object has exclusive control over the camera only its behaviours should be active. This affects:
+	//   - behaviour modifiers         => it's all handled for us once we set the primary object
+	//   - RLV_BHVR_SETCAM_UNLOCK      => manually (re)set the reference count (and possibly invoke the toggle handler)
+
+	LLUUID idRlvObject; bool fHasCamUnlock = gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK);
+	if (fHasBhvr)
+	{
+		// Get the UUID of the primary object
+		std::list<const RlvObject*> lObjects;
+		gRlvHandler.findBehaviour(RLV_BHVR_SETCAM, lObjects);
+		idRlvObject = lObjects.front()->getObjectID();
+		// Reset the @setcam_unlock reference count
+		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = (lObjects.front()->hasBehaviour(RLV_BHVR_SETCAM_UNLOCK, false)) ? 1 : 0;
+	}
+	else
+	{
+		std::list<const RlvObject*> lObjects;
+		// Restore the @setcam_unlock reference count
+		gRlvHandler.findBehaviour(RLV_BHVR_SETCAM_UNLOCK, lObjects);
+		gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_UNLOCK] = lObjects.size();
+	}
+
+	// Manually invoke the @setcam_unlock toggle handler if we toggled it on/off
+	if (fHasCamUnlock != gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_UNLOCK))
+		RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_UNLOCK>::onCommandToggle(RLV_BHVR_SETCAM_UNLOCK, !fHasCamUnlock);
+
+	gAgentCamera.switchCameraPreset( (fHasBhvr) ? CAMERA_RLV_SETCAM_VIEW : CAMERA_PRESET_REAR_VIEW );
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_AVDISTMAX)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_ORIGINDISTMAX)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_EYEOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOCUSOFFSET)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMIN)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_FOVMAX)->setPrimaryObject(idRlvObject);
+	RlvBehaviourDictionary::instance().getModifier(RLV_MODIFIER_SETCAM_TEXTURE)->setPrimaryObject(idRlvObject);
+}
+
+// Handles: @setdebug=n|y toggles
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	for (const auto& dbgSetting : RlvExtGetSet::m_DbgAllowed)
@@ -1712,7 +1858,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETDEBUG>::onCommandToggle(ERlvBehaviour
 }
 
 // Handles: @edit=n|y toggles
-template<>
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	const std::string strEnvFloaters[] = { "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
@@ -1742,7 +1888,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 }
 
 // Handles: @showhovertext:<uuid>=n|y
-template<>
+template<> template<>
 ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
 {
 	// There should be an option and it should specify a valid UUID
@@ -1765,7 +1911,7 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWHOVERTEXT>::onCommand(const RlvComma
 }
 
 // Handles: @edit=n|y toggles
-template<>
+template<> template<>
 void RlvBehaviourToggleHandler<RLV_BHVR_SHOWINV>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
 {
 	if (LLApp::isQuitting())
@@ -2018,7 +2164,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 }
 
 // Handles: @detachme=force
-template<>
+template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (rlvCmd.hasOption())
@@ -2033,7 +2179,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_DETACHME>::onCommand(const RlvCommand& rlvCm
 }
 
 // Handles: @remattach[:<folder|attachpt|attachgroup>]=force
-template<>
+template<> template<>
 ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 {
 	if (!isAgentAvatarValid())
@@ -2076,7 +2222,7 @@ ERlvCmdRet RlvForceRemAttachHandler::onCommand(const RlvCommand& rlvCmd)
 }
 
 // Handles: @remoutfit[:<folder|layer>]=force
-template<>
+template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_REMOUTFIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	RlvCommandOptionGeneric rlvCmdOption;
@@ -2259,7 +2405,7 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 }
 
 // Handles: @setgroup:<uuid|name>=force
-template<>
+template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
 	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
@@ -2290,7 +2436,7 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCm
 }
 
 // Handles: @sit:<uuid>=force
-template<>
+template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SIT>::onCommand(const RlvCommand& rlvCmd)
 {
 	LLViewerObject* pObj = NULL; LLUUID idTarget(rlvCmd.getOption());
@@ -2712,7 +2858,7 @@ ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCAM_TEXTURES>::onCommand(const RlvCommand
 }
 
 // Handles: @getcommand[:<behaviour>[;<type>[;<separator>]]]=<channel>
-template<>
+template<> template<>
 ERlvCmdRet RlvReplyHandler<RLV_BHVR_GETCOMMAND>::onCommand(const RlvCommand& rlvCmd, std::string& strReply)
 {
 	std::vector<std::string> optionList;
