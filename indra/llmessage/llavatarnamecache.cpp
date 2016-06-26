@@ -498,6 +498,13 @@ void LLAvatarNameCache::cleanupClass()
     sCache.clear();
 }
 
+// <FS:Ansariel> FIRE-6659: Legacy "Resident" name toggle
+void LLAvatarNameCache::clearCache()
+{
+	sCache.clear();
+}
+// </FS:Ansariel>
+
 bool LLAvatarNameCache::importFile(std::istream& istr)
 {
 	LLSD data;

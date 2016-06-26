@@ -20,6 +20,7 @@
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
+#include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
 #include "llviewerparcelmgr.h"
@@ -34,7 +35,16 @@
 #include "rlvlocks.h"
 
 #include "llscriptruntimeperms.h"
+#include <boost/algorithm/string/predicate.hpp> // icontains
+#include <boost/algorithm/string/regex.hpp> // regex_replace_all
 #include <boost/algorithm/string.hpp>
+
+// ============================================================================
+// Forward declarations
+//
+
+// llviewermenu.cpp
+LLVOAvatar* find_avatar_from_object(LLViewerObject* object);
 
 // ============================================================================
 // RlvNotifications
@@ -71,7 +81,6 @@ bool RlvSettings::fCompositeFolders = false;
 bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
-bool RlvSettings::fShowNameTags = false;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()
@@ -91,10 +100,6 @@ void RlvSettings::initClass()
 
 		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
-
-		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
-		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
-			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
 
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
 		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
@@ -239,7 +244,7 @@ void RlvStrings::saveToFile(const std::string& strFilePath)
 			sdStrings[itString->first]["value"] = listValues.back();
 	}
 
-	llofstream fileStream(strFilePath);
+	llofstream fileStream(strFilePath.c_str());
 	if (!fileStream.good())
 		return;
 
@@ -279,6 +284,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "duplicate";
 		case RLV_RET_SUCCESS_DELAYED:
 			return "delayed";
+		case RLV_RET_SUCCESS_DEPRECATED:
+			return "deprecated";
 		case RLV_RET_FAILED_SYNTAX:
 			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
@@ -293,8 +300,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "unknown command";
 		case RLV_RET_FAILED_NOSHAREDROOT:
 			return "missing #RLV";
-		case RLV_RET_DEPRECATED:
-			return "deprecated";
+		case RLV_RET_FAILED_DEPRECATED:
+			return "deprecated and disabled";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:
@@ -358,6 +365,12 @@ void RlvStrings::setCustomString(const std::string& strStringName, const std::st
 
 bool RlvUtil::m_fForceTp = false;
 
+std::string escape_for_regex(const std::string& str)
+{
+	using namespace boost;
+	return regex_replace(str, regex("[.^$|()\\[\\]{}*+?\\\\]"), "\\\\&", match_default|format_sed);
+}
+
 // Checked: 2009-07-04 (RLVa-1.0.0a) | Modified: RLVa-1.0.0a
 void RlvUtil::filterLocation(std::string& strUTF8Text)
 {
@@ -365,12 +378,12 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 	LLWorld::region_list_t regions = LLWorld::getInstance()->getRegionList();
 	const std::string& strHiddenRegion = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
 	for (LLWorld::region_list_t::const_iterator itRegion = regions.begin(); itRegion != regions.end(); ++itRegion)
-		boost::ireplace_all(strUTF8Text, (*itRegion)->getName(), strHiddenRegion);
+		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex((*itRegion)->getName()) + "\\b", boost::regex::icase), strHiddenRegion);
 
 	// Filter any mention of the parcel name
 	LLViewerParcelMgr* pParcelMgr = LLViewerParcelMgr::getInstance();
 	if (pParcelMgr)
-		boost::ireplace_all(strUTF8Text, pParcelMgr->getAgentParcelName(), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
+		boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + escape_for_regex(pParcelMgr->getAgentParcelName()) + "\\b", boost::regex::icase), RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL));
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
@@ -381,9 +394,9 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
-		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
+		if ( (LLAvatarNameCache::get(idAgents[idxAgent], &avName)) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgents[idxAgent])) )
 		{
-			const std::string& strDisplayName = avName.getDisplayName();
+			const std::string& strDisplayName = escape_for_regex(avName.getDisplayName());
 			bool fFilterDisplay = (strDisplayName.length() > 2);
 			const std::string& strLegacyName = avName.getLegacyName();
 			fFilterLegacy &= (strLegacyName.length() > 2);
@@ -393,16 +406,16 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 			if (boost::icontains(strLegacyName, strDisplayName))
 			{
 				if (fFilterLegacy)
-					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
 				if (fFilterDisplay)
-					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
 			}
 			else
 			{
 				if (fFilterDisplay)
-					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strDisplayName + "\\b", boost::regex::icase), strAnonym);
 				if (fFilterLegacy)
-					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
+					boost::replace_all_regex(strUTF8Text, boost::regex("\\b" + strLegacyName + "\\b", boost::regex::icase), strAnonym);
 			}
 		}
 	}
@@ -529,6 +542,18 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	return true;
 }
 
+void RlvUtil::teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt)
+{
+	if (hRegion)
+	{
+		const LLVector3d posGlobal = from_region_handle(hRegion) + (LLVector3d)posRegion;
+		if (vecLookAt.isExactlyZero())
+			gAgent.teleportViaLocation(posGlobal);
+		else
+			gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
+	}
+}
+
 // ============================================================================
 // Generic menu enablers
 //
@@ -573,6 +598,12 @@ void rlvMenuToggleVisible()
 			pItem->updateBranchParent(pMenuTo);
 		}
 	}
+}
+
+bool rlvMenuCanShowName()
+{
+  const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+  return (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
 }
 
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
@@ -625,7 +656,7 @@ bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 {
 	const LLViewerObject* pObj = pNode->getObject();
-	return (pObj) && (!gRlvHandler.canEdit(pObj));
+	return (pObj) && (!RlvActions::canEdit(pObj));
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a

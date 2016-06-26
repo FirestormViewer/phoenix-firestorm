@@ -9,6 +9,12 @@
 				<text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
 					Maks. przepust.:
 				</text>
+				<text name="Maximum complexity" tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. Jelly Doll)">
+					Maks. złożoność:
+				</text>
+				<text name="IndirectMaxComplexityText">
+					Nielimit.
+				</text>
 				<check_box label="Używaj Windlight regionu" name="UseRegionWindlight" />
 				<text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
 					Niebo WL:

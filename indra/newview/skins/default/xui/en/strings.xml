@@ -294,7 +294,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipFlagPhantom">Phantom</string>
 	<string name="TooltipFlagTemporary">Temporary</string>
 	<string name="TooltipPrimCount">Prims: [COUNT]</string>
-	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT] PE</string>
+	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT]</string>
 	<string name="TooltipPrimEquivalentLoading">, loading Land Impact...</string>
 	<string name="TooltipPrimEquivalentUnavailable">, Land Impact unavailable</string>
 	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
@@ -2977,4 +2977,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Pie_av_render_normally">Normally</string>
   <string name="Pie_av_render_never">Never</string>
   <string name="Pie_av_render_fully">Fully</string>
+
+  <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
 </strings>

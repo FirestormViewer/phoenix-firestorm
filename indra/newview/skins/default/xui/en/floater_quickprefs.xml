@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="true"
     can_close="true"
-    height="179"
+    height="201"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="163"
+    height="185"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="153"
+      height="175"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="153">
+      height="175">
         <text
             type="string"
             length="1"
@@ -127,6 +127,49 @@
             name="max_bandwidth"
             top_delta="-2"
             right="-7" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="18"
+            layout="topleft"
+            left="5"
+            name="Maximum complexity"
+            tool_tip="Controls at what point a visually complex avatar is drawn as a jelly doll"
+            mouse_opaque="false"
+            top_pad="5"
+            width="90">
+            Max Complexity:
+        </text>
+        <slider
+            text_width="40"
+            control_name="IndirectMaxComplexity"
+            decimal_digits="0"
+            follows="left|right|top"
+            height="16"
+            increment="1"
+            initial_value="101"
+            layout="topleft"
+            left_pad="5"
+            max_val="101"
+            min_val="1"
+            name="IndirectMaxComplexity"
+            show_text="false"
+            top_delta="-2"
+            right="-58" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="16"
+            layout="topleft"
+            left_pad="5"
+            name="IndirectMaxComplexityText"
+            text_readonly_color="LabelDisabledColor"
+            top_delta="2"
+            width="50">
+            No Limit
+        </text>
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <check_box
             control_name="UseEnvironmentFromRegion"

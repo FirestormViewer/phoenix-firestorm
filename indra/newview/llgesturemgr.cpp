@@ -61,6 +61,10 @@
 
 #include "chatbar_as_cmdline.h" // <ND/> For FIRE-1624
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
+// [/RLVa:KB]
+
 // Longest time, in seconds, to wait for all animations to stop playing
 const F32 MAX_WAIT_ANIM_SECS = 60.f;
 
@@ -531,6 +535,11 @@ void LLGestureMgr::replaceGesture(const LLUUID& item_id, const LLUUID& new_asset
 void LLGestureMgr::playGesture(LLMultiGesture* gesture)
 {
 	if (!gesture) return;
+
+// [RLVa:KB] - Checked: RLVa-2.0.0 | Handles: @sendgesture
+	if (!RlvActions::canPlayGestures())
+		return;
+// [/RLVa:KB]
 
 	// Reset gesture to first step
 	gesture->mCurrentStep = 0;

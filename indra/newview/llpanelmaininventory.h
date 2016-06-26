@@ -152,7 +152,6 @@ private:
 	std::string					mFilterSubString;
 	S32							mItemCount;
 	std::string 				mItemCountString;
-	LLTextBox*					mItemcountText;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;

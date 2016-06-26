@@ -19,6 +19,7 @@
 
 #include "llavatarname.h"
 #include "llselectmgr.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 
 #include "rlvdefines.h"
@@ -56,7 +57,7 @@ class RlvObject;
 
 struct RlvException;
 typedef boost::variant<std::string, LLUUID, S32, ERlvBehaviour> RlvExceptionOption;
-typedef boost::variant<int, float> RlvBehaviourModifierValue;
+typedef boost::variant<int, float, LLVector3, LLUUID> RlvBehaviourModifierValue;
 
 class RlvGCTimer;
 
@@ -97,7 +98,6 @@ public:
 	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
 	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
 	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
-	static bool getShowNameTags()				{ return fShowNameTags; }
 
 	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
@@ -114,7 +114,6 @@ protected:
 	static bool fCanOOC;
 	static bool fLegacyNaming;
 	static bool fNoSetEnv;
-	static bool fShowNameTags;
 };
 
 // ============================================================================
@@ -166,7 +165,7 @@ public:
 
 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);
@@ -174,6 +173,7 @@ public:
 	static bool sendChatReply(S32 nChannel, const std::string& strUTF8Text);
 	static bool sendChatReply(const std::string& strChannel, const std::string& strUTF8Text);
 
+	static void teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt);
 protected:
 	static bool m_fForceTp;															// @standtp
 };
@@ -199,6 +199,7 @@ typedef bool (RlvExtCommandHandler::*rlvExtCommandHandler)(const RlvCommand& rlv
 
 bool rlvMenuMainToggleVisible(LLUICtrl* pMenuItem);
 void rlvMenuToggleVisible();
+bool rlvMenuCanShowName();
 bool rlvMenuEnableIfNot(const LLSD& sdParam);
 
 // ============================================================================

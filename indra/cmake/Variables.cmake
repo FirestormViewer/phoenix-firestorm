@@ -152,9 +152,28 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(DARWIN 1)
   
   # now we only support Xcode 6.0 using 10.9 (Mavericks), minimum OS 10.7 (Lion)
-  set(XCODE_VERSION 7.3)
+  #<FS:TS> Be a bit more flexible: support Xcode 6 or 7 and SDKs from 10.9 to 10.11
+  #set(XCODE_VERSION 6.0)
   set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
-  set(CMAKE_OSX_SYSROOT macosx10.11)
+  #set(CMAKE_OSX_SYSROOT macosx10.9)
+  if(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
+    # Assume Xcode 7 if El Capitan SDK is present
+    set(XCODE_VERSION 7.3)
+    set(CMAKE_OSX_SYSROOT macosx10.11)
+    message(STATUS "OS X SDK 10.11 found.")
+  elseif(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk")
+    # Assume Xcode 7 if Yosemite SDK is present
+    set(XCODE_VERSION 7.0)
+    set(CMAKE_OSX_SYSROOT macosx10.10)
+    message(STATUS "OS X SDK 10.10 found.")
+  elseif(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk")
+    # Assume Xcode 6 if only Mavericks SDK is present
+    set(XCODE_VERSION 6.0)
+    set(CMAKE_OSX_SYSROOT macosx10.9)
+    message(STATUS "OS X SDK 10.9 found.")
+  else(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
+    error("Unable to determine which OS X SDK to use. Giving up.")
+  endif(IS_DIRECTORY "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk")
 
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
   set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL 3)

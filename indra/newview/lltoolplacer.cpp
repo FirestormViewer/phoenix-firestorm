@@ -45,6 +45,7 @@
 #include "llui.h"
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 
 //Headers added for functions moved from viewer.cpp
@@ -166,9 +167,11 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
 	// NOTE: don't use surface_pos_global since for prims it will be the center of the prim while we need center + offset
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (dist_vec_squared(gAgent.getPositionGlobal(), pick.mPosGlobal) > 1.5f * 1.5f) )
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))
 	{
-		return FALSE;
+		static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+		if (dist_vec_squared(gAgent.getPositionGlobal(), pick.mPosGlobal) > s_nFartouchDist * s_nFartouchDist)
+			return FALSE;
 	}
 // [/RLVa:KB]
 

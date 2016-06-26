@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #ifndef RLV_HELPER_H
@@ -24,6 +24,12 @@
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
+
+// ============================================================================
+// Forward declarations
+//
+
+class RlvBehaviourModifier;
 
 // ============================================================================
 // RlvBehaviourInfo class - Generic behaviour descriptor (used by restrictions, reply and force commands)
@@ -40,6 +46,7 @@ public:
 		BHVR_EXTENDED     = 0x0004,				// Behaviour is part of the RLVa extended command set
 		BHVR_EXPERIMENTAL = 0x0008,				// Behaviour is part of the RLVa experimental command set
 		BHVR_BLOCKED      = 0x0010,				// Behaviour is blocked
+		BHVR_DEPRECATED   = 0x0020,				// Behaviour is deprecated
 		BHVR_GENERAL_MASK = 0x0FFF,
 
 		// Force-wear specific flags
@@ -78,6 +85,49 @@ protected:
 };
 
 // ============================================================================
+// RlvBehaviourDictionary and related classes
+//
+
+class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
+{
+	friend class LLSingleton<RlvBehaviourDictionary>;
+	friend class RlvFloaterBehaviours;
+protected:
+	RlvBehaviourDictionary();
+	~RlvBehaviourDictionary();
+public:
+	void addEntry(const RlvBehaviourInfo* pEntry);
+	void addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry);
+
+	/*
+	 * General helper functions
+	 */
+public:
+	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
+	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
+	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
+	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
+	RlvBehaviourModifier*   getModifier(ERlvBehaviourModifier eBhvrMod) const { return (eBhvrMod < RLV_MODIFIER_COUNT) ? m_BehaviourModifiers[eBhvrMod] : nullptr; }
+	RlvBehaviourModifier*   getModifierFromBehaviour(ERlvBehaviour eBhvr) const;
+	void                    toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBvhrFlag, bool fEnable);
+
+	/*
+	 * Member variables
+	 */
+protected:
+	typedef std::list<const RlvBehaviourInfo*> rlv_bhvrinfo_list_t;
+	typedef std::map<std::pair<std::string, ERlvParamType>, const RlvBehaviourInfo*> rlv_string2info_map_t;
+	typedef std::multimap<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
+	typedef std::map<ERlvBehaviour, ERlvBehaviourModifier> rlv_bhvr2mod_map_t;
+
+	rlv_bhvrinfo_list_t   m_BhvrInfoList;
+	rlv_string2info_map_t m_String2InfoMap;
+	rlv_bhvr2info_map_t	  m_Bhvr2InfoMap;
+	rlv_bhvr2mod_map_t    m_Bhvr2ModifierMap;
+	RlvBehaviourModifier* m_BehaviourModifiers[RLV_MODIFIER_COUNT];
+};
+
+// ============================================================================
 // RlvCommandHandler and related classes
 //
 
@@ -98,61 +148,77 @@ template<> struct RlvCommandHandlerBaseImpl<RLV_TYPE_REPLY>  { static ERlvCmdRet
 //
 // RlvCommandHandler - The actual command handler (Note that a handler is more general than a processor; a handler can - for instance - be used by multiple processors)
 //
-template <ERlvParamType paramType, ERlvBehaviour eBhvr>
+#if LL_WINDOWS
+	#define RLV_TEMPL_FIX(x) template<x>
+#else
+	#define RLV_TEMPL_FIX(x) template<typename Placeholder = int>
+#endif // LL_WINDOWS
+
+template <ERlvParamType templParamType, ERlvBehaviour templBhvr>
 struct RlvCommandHandler
 {
-	static ERlvCmdRet onCommand(const RlvCommand&, bool&);
-	static void onCommandToggle(ERlvBehaviour, bool);
-	static ERlvCmdRet onCommand(const RlvCommand&);
-	static ERlvCmdRet onCommand(const RlvCommand&, std::string&);
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templParamType == RLV_TYPE_ADDREM>::type) static ERlvCmdRet onCommand(const RlvCommand&, bool&);
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templParamType == RLV_TYPE_ADDREM>::type) static void onCommandToggle(ERlvBehaviour, bool);
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templParamType == RLV_TYPE_FORCE>::type)  static ERlvCmdRet onCommand(const RlvCommand&);
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templParamType == RLV_TYPE_REPLY>::type)  static ERlvCmdRet onCommand(const RlvCommand&, std::string&);
 };
 
 // Aliases to improve readability in definitions
-template<ERlvBehaviour eBhvr> using RlvBehaviourHandler = RlvCommandHandler<RLV_TYPE_ADDREM, eBhvr>;
-template<ERlvBehaviour eBhvr> using RlvBehaviourToggleHandler = RlvBehaviourHandler<eBhvr>;
-template<ERlvBehaviour eBhvr> using RlvForceHandler = RlvCommandHandler<RLV_TYPE_FORCE, eBhvr>;
-template<ERlvBehaviour eBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>;
+template<ERlvBehaviour templBhvr> using RlvBehaviourHandler = RlvCommandHandler<RLV_TYPE_ADDREM, templBhvr>;
+template<ERlvBehaviour templBhvr> using RlvBehaviourToggleHandler = RlvBehaviourHandler<templBhvr>;
+template<ERlvBehaviour templBhvr> using RlvForceHandler = RlvCommandHandler<RLV_TYPE_FORCE, templBhvr>;
+template<ERlvBehaviour templBhvr> using RlvReplyHandler = RlvCommandHandler<RLV_TYPE_REPLY, templBhvr>;
 
 // List of shared handlers
-typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;	// Shared between @addattach and @remattach
-typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;				// Shared between @remattach and @detach
+typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeFocusOffsetHandler;	// Shared between @setcam_eyeoffset and @setcam_focusoffset
+typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;					// Shared between @addattach and @remattach
+typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;					// Shared between @sendchannel and @sendchannel_except
+typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;					// Shared between @recvim, @sendim and @startim
+typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleHandler;				// Shared between @showself and @showselfhead
+typedef RlvBehaviourHandler<RLV_BHVR_CAMZOOMMIN> RlvBehaviourCamZoomMinMaxHandler;					// Shared between @camzoommin and @camzoommax (deprecated)
+typedef RlvReplyHandler<RLV_BHVR_GETCAM_AVDISTMIN> RlvReplyCamMinMaxModifierHandler;				// Shared between @getcam_avdistmin and @getcam_avdistmax
+typedef RlvForceHandler<RLV_BHVR_REMATTACH> RlvForceRemAttachHandler;								// Shared between @remattach and @detach
+typedef RlvForceHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvForceCamEyeFocusOffsetHandler;				// Shared between @setcam_eyeoffset and @setcam_focusoffset
 
 //
 // RlvCommandProcessor - Templated glue class that brings RlvBehaviourInfo, RlvCommandHandlerBaseImpl and RlvCommandHandler together
 //
-template <ERlvParamType paramType, ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<paramType, eBhvr>, typename baseImpl = RlvCommandHandlerBaseImpl<paramType>>
+template <ERlvParamType templParamType, ERlvBehaviour templBhvr, typename handlerImpl = RlvCommandHandler<templParamType, templBhvr>, typename baseImpl = RlvCommandHandlerBaseImpl<templParamType>>
 class RlvCommandProcessor : public RlvBehaviourInfo
 {
 public:
 	// Default constructor used by behaviour specializations
-	RlvCommandProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, paramType, nBhvrFlags) {}
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templBhvr != RLV_BHVR_UNKNOWN>::type)
+	RlvCommandProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, templBhvr, templParamType, nBhvrFlags) {}
 
 	// Constructor used when we don't want to specialize on behaviour (see RlvBehaviourGenericProcessor)
-	RlvCommandProcessor(const std::string& strBhvr, ERlvBehaviour a_eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, a_eBhvr, paramType, nBhvrFlags) {}
+	RLV_TEMPL_FIX(typename = typename std::enable_if<templBhvr == RLV_BHVR_UNKNOWN>::type)
+	RlvCommandProcessor(const std::string& strBhvr, ERlvBehaviour eBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, templParamType, nBhvrFlags) {}
 
 	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return baseImpl::processCommand(rlvCmd, &handlerImpl::onCommand); }
 };
 
 // Aliases to improve readability in definitions
-template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_ADDREM, eBhvr>> using RlvBehaviourProcessor = RlvCommandProcessor<RLV_TYPE_ADDREM, eBhvr, handlerImpl>;
-template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_FORCE, eBhvr>> using RlvForceProcessor = RlvCommandProcessor<RLV_TYPE_FORCE, eBhvr, handlerImpl>;
-template<ERlvBehaviour eBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_REPLY, eBhvr>> using RlvReplyProcessor = RlvCommandProcessor<RLV_TYPE_REPLY, eBhvr, handlerImpl>;
+template<ERlvBehaviour templBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_ADDREM, templBhvr>> using RlvBehaviourProcessor = RlvCommandProcessor<RLV_TYPE_ADDREM, templBhvr, handlerImpl>;
+template<ERlvBehaviour templBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_FORCE, templBhvr>> using RlvForceProcessor = RlvCommandProcessor<RLV_TYPE_FORCE, templBhvr, handlerImpl>;
+template<ERlvBehaviour templBhvr, typename handlerImpl = RlvCommandHandler<RLV_TYPE_REPLY, templBhvr>> using RlvReplyProcessor = RlvCommandProcessor<RLV_TYPE_REPLY, templBhvr, handlerImpl>;
 
 // Provides pre-defined generic implementations of basic behaviours (template voodoo - see original commit for something that still made sense)
-template<ERlvBehaviourOptionType optionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
-template<ERlvBehaviourOptionType optionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<optionType>>;
+template<ERlvBehaviourOptionType templOptionType> struct RlvBehaviourGenericHandler { static ERlvCmdRet onCommand(const RlvCommand& rlvCmd, bool& fRefCount); };
+template<ERlvBehaviourOptionType templOptionType> using RlvBehaviourGenericProcessor = RlvBehaviourProcessor<RLV_BHVR_UNKNOWN, RlvBehaviourGenericHandler<templOptionType>>;
 
 // ============================================================================
 // RlvBehaviourProcessor and related classes - Handles add/rem comamnds aka "restrictions)
 //
 
-template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
+template <ERlvBehaviour eBhvr, typename handlerImpl = RlvBehaviourHandler<eBhvr>, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>>
 class RlvBehaviourToggleProcessor : public RlvBehaviourInfo
 {
 public:
 	RlvBehaviourToggleProcessor(const std::string& strBhvr, U32 nBhvrFlags = 0) : RlvBehaviourInfo(strBhvr, eBhvr, RLV_TYPE_ADDREM, nBhvrFlags) {}
-	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &RlvBehaviourGenericHandler<optionType>::onCommand, &toggleHandlerImpl::onCommandToggle); }
+	ERlvCmdRet processCommand(const RlvCommand& rlvCmd) const override { return RlvCommandHandlerBaseImpl<RLV_TYPE_ADDREM>::processCommand(rlvCmd, &handlerImpl::onCommand, &toggleHandlerImpl::onCommandToggle); }
 };
+template <ERlvBehaviour eBhvr, ERlvBehaviourOptionType optionType, typename toggleHandlerImpl = RlvBehaviourToggleHandler<eBhvr>> using RlvBehaviourGenericToggleProcessor = RlvBehaviourToggleProcessor<eBhvr, RlvBehaviourGenericHandler<optionType>, toggleHandlerImpl>;
 
 // ============================================================================
 // RlvBehaviourModifier - stores behaviour modifiers in an - optionally - sorted list and returns the first element (or default value if there are no modifiers)
@@ -195,8 +261,8 @@ struct RlvBehaviourModifier_CompMax : public RlvBehaviourModifier_Comp
 class RlvBehaviourModifier
 {
 public:
-	RlvBehaviourModifier(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator);
-	virtual ~RlvBehaviourModifier() {}
+	RlvBehaviourModifier(const std::string strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator = nullptr);
+	virtual ~RlvBehaviourModifier();
 
 	/*
 	 * Member functions
@@ -204,14 +270,17 @@ public:
 protected:
 	virtual void onValueChange() const {}
 public:
-	bool addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
-	bool convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
-	bool getAddDefault() const { return m_fAddDefaultOnEmpty; }
+	bool                             addValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	bool                             convertOptionValue(const std::string& optionValue, RlvBehaviourModifierValue& modValue) const;
+	bool                             getAddDefault() const { return m_fAddDefaultOnEmpty; }
 	const RlvBehaviourModifierValue& getDefaultValue() const { return m_DefaultValue; }
-	const RlvBehaviourModifierValue& getValue() const { return (!m_Values.empty()) ? m_Values.front().first : m_DefaultValue; }
+	const LLUUID&                    getPrimaryObject() const;
+	const std::string&               getName() const { return m_strName; }
+	const RlvBehaviourModifierValue& getValue() const { return (hasValue()) ? m_Values.front().first : m_DefaultValue; }
 	template<typename T> const T&    getValue() const { return boost::get<T>(getValue()); }
-	void removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
-	void setPrimaryObject(const LLUUID& idPrimaryObject);
+	bool                             hasValue() const;
+	void                             removeValue(const RlvBehaviourModifierValue& modValue, const LLUUID& idObject);
+	void                             setPrimaryObject(const LLUUID& idPrimaryObject);
 
 	typedef boost::signals2::signal<void(const RlvBehaviourModifierValue& newValue)> change_signal_t;
 	change_signal_t& getSignal() { return m_ChangeSignal; }
@@ -220,6 +289,7 @@ public:
 	 * Member variables
 	 */
 protected:
+	std::string                          m_strName;
 	RlvBehaviourModifierValue            m_DefaultValue;
 	bool                                 m_fAddDefaultOnEmpty;
 	std::list<RlvBehaviourModifierValueTuple> m_Values;
@@ -232,8 +302,8 @@ class RlvBehaviourModifierHandler : public RlvBehaviourModifier
 {
 public:
 	//using RlvBehaviourModifier::RlvBehaviourModifier; // Needs VS2015 and up
-	RlvBehaviourModifierHandler(const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
-		: RlvBehaviourModifier(defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
+	RlvBehaviourModifierHandler(const std::string& strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifier_Comp* pValueComparator)
+		: RlvBehaviourModifier(strName, defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
 protected:
 	void onValueChange() const override;
 };
@@ -349,28 +419,30 @@ class RlvCommand
 {
 public:
 	explicit RlvCommand(const LLUUID& idObj, const std::string& strCommand);
+	RlvCommand(const RlvCommand& rlvCmd, ERlvParamType eParamType = RLV_TYPE_UNKNOWN);
 
 	/*
 	 * Member functions
 	 */
 public:
 	std::string        asString() const;
-	const std::string& getBehaviour() const		{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviour() : LLStringUtil::null; }
+	const std::string& getBehaviour() const		{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviour() : m_strBehaviour; }
 	ERlvBehaviour      getBehaviourType() const	{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN; }
 	U32                getBehaviourFlags() const{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourFlags() : 0; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }
 	const std::string& getOption() const		{ return m_strOption; }
 	const std::string& getParam() const			{ return m_strParam; }
 	ERlvParamType      getParamType() const		{ return m_eParamType; }
-	ERlvCmdRet         getReturnType() const	{ return m_eRet; }
 	bool               hasOption() const		{ return !m_strOption.empty(); }
 	bool               isBlocked() const        { return (m_pBhvrInfo) ? m_pBhvrInfo->isBlocked() : false; }
+	bool               isRefCounted() const     { return m_fRefCounted; }
 	bool               isStrict() const			{ return m_fStrict; }
 	bool               isValid() const			{ return m_fValid; }
-	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_FAILED_UNKNOWN; }
+	ERlvCmdRet         processCommand() const   { return (m_pBhvrInfo) ? m_pBhvrInfo->processCommand(*this) : RLV_RET_NO_PROCESSOR; }
 
 protected:
 	static bool parseCommand(const std::string& strCommand, std::string& strBehaviour, std::string& strOption,  std::string& strParam);
+	bool               markRefCounted() const   { return m_fRefCounted = true; }
 
 	/*
 	 * Operators
@@ -384,15 +456,17 @@ public:
 protected:
 	bool                    m_fValid;
 	LLUUID                  m_idObj;
+	std::string             m_strBehaviour;
 	const RlvBehaviourInfo* m_pBhvrInfo;
 	ERlvParamType           m_eParamType;
 	bool                    m_fStrict;
 	std::string             m_strOption;
 	std::string             m_strParam;
-	ERlvCmdRet              m_eRet;
+	mutable bool            m_fRefCounted;
 
 	friend class RlvHandler;
 	friend class RlvObject;
+	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
 };
 
 // ============================================================================
@@ -404,7 +478,12 @@ class RlvCommandOptionHelper
 public:
 	// NOTE: this function is destructive (reference value may still change on parsing failure)
 	template<typename T> static bool parseOption(const std::string& strOption, T& valueOption);
-	template<typename T> static T parseOption(const std::string& strOption);
+	template<typename T> static T parseOption(const std::string& strOption)
+	{
+		T value;
+		parseOption<T>(strOption, value);
+		return value;
+	}
 	static bool parseStringList(const std::string& strOption, std::vector<std::string>& optionList, const std::string& strSeparator = std::string(RLV_OPTION_SEPARATOR));
 };
 
@@ -495,7 +574,6 @@ public:
 public:
 	bool addCommand(const RlvCommand& rlvCmd);
 	bool removeCommand(const RlvCommand& rlvCmd);
-	void setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 
 	std::string getStatusString(const std::string& strFilter, const std::string& strSeparator) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;

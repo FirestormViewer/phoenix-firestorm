@@ -18,8 +18,8 @@
 #include "llagent.h"
 #include "llappearancemgr.h"
 #include "llstartup.h"
-#include "llviewermessage.h"
 #include "llviewerfoldertype.h"
+#include "llviewermessage.h"
 
 #include "rlvinventory.h"
 
@@ -411,7 +411,7 @@ void RlvRenameOnWearObserver::doneIdle()
 	}
 
 	const LLViewerJointAttachment* pAttachPt = NULL; S32 idxAttachPt = 0;
-	RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
+	//RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
 	for (uuid_vec_t::const_iterator itItem = mComplete.begin(); itItem != mComplete.end(); ++itItem)
 	{
 		const LLUUID& idAttachItem = *itItem;

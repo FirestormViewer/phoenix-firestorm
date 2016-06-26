@@ -215,6 +215,7 @@
 #include "growlmanager.h"
 #endif
 
+#include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
@@ -1919,6 +1920,9 @@ bool idle_startup()
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
 		// Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
 		LLFloater *pContacts(FSFloaterContacts::getInstance());
+
+		// <FS:Ansariel> Load persisted avatar render settings
+		FSAvatarRenderPersistence::instance().init();
 		
 		// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
 		if( pContacts )

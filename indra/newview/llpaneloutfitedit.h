@@ -80,7 +80,7 @@ public:
 	{
 		LVIT_ALL = 0,
 		LVIT_CLOTHING,
-		LVIT_GESTURES,
+		//LVIT_GESTURES, // <FS:Ansariel> FIRE-19480 / BUG-20032: Selected wearable type in Edit Outfit -> Add more is off by 1
 		LVIT_BODYPART,
 		LVIT_ATTACHMENT,
 		LVIT_SHAPE,
