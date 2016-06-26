@@ -308,47 +308,6 @@ protected:
 	void onValueChange() const override;
 };
 
-// ============================================================================
-// RlvBehaviourDictionary and related classes
-//
-
-class RlvBehaviourDictionary : public LLSingleton<RlvBehaviourDictionary>
-{
-	friend class LLSingleton<RlvBehaviourDictionary>;
-protected:
-	RlvBehaviourDictionary();
-	~RlvBehaviourDictionary();
-public:
-	void addEntry(const RlvBehaviourInfo* pEntry);
-	void addModifier(ERlvBehaviour eBhvr, ERlvBehaviourModifier eModifier, RlvBehaviourModifier* pModifierEntry);
-
-	/*
-	 * General helper functions
-	 */
-public:
-	ERlvBehaviour           getBehaviourFromString(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
-	const RlvBehaviourInfo*	getBehaviourInfo(const std::string& strBhvr, ERlvParamType eParamType, bool* pfStrict = NULL) const;
-	bool                    getCommands(const std::string& strMatch, ERlvParamType eParamType, std::list<std::string>& cmdList) const;
-	bool                    getHasStrict(ERlvBehaviour eBhvr) const;
-	RlvBehaviourModifier*   getModifier(ERlvBehaviourModifier eBhvrMod) const { return (eBhvrMod < RLV_MODIFIER_COUNT) ? m_BehaviourModifiers[eBhvrMod] : nullptr; }
-	RlvBehaviourModifier*   getModifierFromBehaviour(ERlvBehaviour eBhvr) const;
-	void                    toggleBehaviourFlag(const std::string& strBhvr, ERlvParamType eParamType, RlvBehaviourInfo::EBehaviourFlags eBvhrFlag, bool fEnable);
-
-	/*
-	 * Member variables
-	 */
-protected:
-	typedef std::list<const RlvBehaviourInfo*> rlv_bhvrinfo_list_t;
-	typedef std::map<std::pair<std::string, ERlvParamType>, const RlvBehaviourInfo*> rlv_string2info_map_t;
-	typedef std::multimap<ERlvBehaviour, const RlvBehaviourInfo*> rlv_bhvr2info_map_t;
-	typedef std::map<ERlvBehaviour, ERlvBehaviourModifier> rlv_bhvr2mod_map_t;
-
-	rlv_bhvrinfo_list_t   m_BhvrInfoList;
-	rlv_string2info_map_t m_String2InfoMap;
-	rlv_bhvr2info_map_t	  m_Bhvr2InfoMap;
-	rlv_bhvr2mod_map_t    m_Bhvr2ModifierMap;
-	RlvBehaviourModifier* m_BehaviourModifiers[RLV_MODIFIER_COUNT];
-};
 // Inspired by LLControlCache<T>
 template<typename T>
 class RlvBehaviourModifierCache : public LLRefCount, public LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>
