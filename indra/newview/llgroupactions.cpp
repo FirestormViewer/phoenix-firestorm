@@ -834,7 +834,10 @@ void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent
 	LLSD payload;
 	payload["avatar_id"] = idAgent;
 	payload["group_id"] = idGroup;
-	std::string fullname = LLSLURL("agent", idAgent, "inspect").getSLURLString();
+	// <FS:Ansariel> Show complete name in eject dialog
+	//std::string fullname = LLSLURL("agent", idAgent, "inspect").getSLURLString();
+	std::string fullname = LLSLURL("agent", idAgent, "completename").getSLURLString();
+	// </FS:Ansariel>
 	args["AVATAR_NAME"] = fullname;
 	LLNotificationsUtil::add("EjectGroupMemberWarning",
 							 args,
