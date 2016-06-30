@@ -132,11 +132,6 @@ void LLWorldMapMessage::sendHandleRegionRequest(U64 region_handle,
 
 void LLWorldMapMessage::sendMapBlockRequest(U16 min_x, U16 min_y, U16 max_x, U16 max_y, bool return_nonexistent)
 {
-// <FS:CR> Aurora Sim
-#ifdef OPENSIM
-	if(LLGridManager::getInstance()->isInOpenSim()) return_nonexistent = true;
-#endif //OPENSIM
-// </FS:CR> Aurora Sim
 	//LL_INFOS("World Map") << "LLWorldMap::sendMapBlockRequest()" << ", min = (" << min_x << ", " << min_y << "), max = (" << max_x << ", " << max_y << "), nonexistent = " << return_nonexistent << LL_ENDL;
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_MapBlockRequest);
@@ -216,9 +211,10 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
 // <AW: opensim>
 		// was: llassert(!name.empty())
 		// which made debug builds impossible to use on OpenSim
-		if(name.empty())
+		if (name.empty() && accesscode != 255)
 		{
 			LL_WARNS() << "MapBlockReply returned empty region name, not inserting in  the world map" << LL_ENDL;
+			continue;
 		}
 // </AW: opensim>
 		// Insert that region in the world map, if failure, flag it as a "null_sim"

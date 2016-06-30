@@ -1199,8 +1199,11 @@ void LLPanelGroupMembersSubTab::confirmEjectMembers()
 	if (selection_count == 1)
 	{
 		LLSD args;
-		std::string fullname;
-		gCacheName->getFullName(mMembersList->getValue(), fullname);
+		// <FS:Ansariel> FIRE-19529: Group eject dialog doesn't show avatar name
+		//std::string fullname;
+		//gCacheName->getFullName(mMembersList->getValue(), fullname);
+		std::string fullname = LLSLURL("agent", mMembersList->getValue().asUUID(), "completename").getSLURLString();
+		// <FS:Ansariel>
 		args["AVATAR_NAME"] = fullname;
 		LLSD payload;
 		LLNotificationsUtil::add("EjectGroupMemberWarning",
