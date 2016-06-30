@@ -1190,7 +1190,7 @@ bool RlvFolderLocks::isLockedFolder(LLUUID idFolder, ERlvLockMask eLockTypeMask,
 		idFolderCur = (pParent) ? pParent->getParentUUID() : idFolderRoot;
 	}
 	// If we didn't encounter an explicit deny lock with no exception then the folder is locked if the entire inventory is locked down
-	return (m_fLockedRoot) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
+	return (m_fLockedRoot) && (eSourceTypeMask & ST_ROOTFOLDER) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
