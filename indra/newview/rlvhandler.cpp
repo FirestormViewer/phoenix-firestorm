@@ -732,12 +732,14 @@ bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 	{
 		if ( (!pObj->isAttachment()) || (!pObj->permYouOwner()) )
 		{
-			// Rezzed prim or attachment worn by another avie
+			// User can touch an object (that's isn't one of their own attachments) if:
+			//   - it's an in-world object and they're not prevented from touching it (or the object is an exception)
+			//   - it's an attachment and they're not prevented from touching (another avatar's) attachments (or the attachment is an exception)
+			//   - not fartouch restricted (or the object is within the currently enforced fartouch distance)
 			fCanTouch =
-				( (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
-				( (!pObj->isAttachment()) || (!hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER)) ) &&
-				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) ||
-				  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
+				( (!pObj->isAttachment()) ? (!hasBehaviour(RLV_BHVR_TOUCHWORLD)) || (isException(RLV_BHVR_TOUCHWORLD, idRoot, RLV_CHECK_PERMISSIVE))
+				                          : ((!hasBehaviour(RLV_BHVR_TOUCHATTACH)) && (!hasBehaviour(RLV_BHVR_TOUCHATTACHOTHER))) || (isException(RLV_BHVR_TOUCHATTACH, idRoot, RLV_CHECK_PERMISSIVE)) ) &&
+				( (!hasBehaviour(RLV_BHVR_FARTOUCH)) || (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) <= s_nFartouchDist * s_nFartouchDist) );
 		}
 		else if (!pObj->isHUDAttachment())
 		{
