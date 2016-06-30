@@ -450,7 +450,7 @@ struct RlvCommandOptionGeneric
 {
 	bool isAttachmentPoint() const      { return (!isEmpty()) && (typeid(LLViewerJointAttachment*) == m_varOption.type()); }
 	bool isAttachmentPointGroup() const { return (!isEmpty()) && (typeid(ERlvAttachGroupType) == m_varOption.type()); }
-	bool isEmpty() const                { return m_varOption.empty(); }
+	bool isEmpty() const                { return typeid(boost::blank) == m_varOption.type(); }
 	bool isNumber() const               { return (!isEmpty()) && (typeid(float) == m_varOption.type()); }
 	bool isSharedFolder() const         { return (!isEmpty()) && (typeid(LLViewerInventoryCategory*) == m_varOption.type()); }
 	bool isString() const               { return (!isEmpty()) && (typeid(std::string) == m_varOption.type()); }
@@ -467,7 +467,7 @@ struct RlvCommandOptionGeneric
 	const LLVector3d&          getVector() const { return (isVector()) ? boost::get<LLVector3d>(m_varOption) : LLVector3d::zero; }
 	LLWearableType::EType      getWearableType() const { return (isWearableType()) ? boost::get<LLWearableType::EType>(m_varOption) : LLWearableType::WT_INVALID; }
 
-	typedef boost::variant<LLViewerJointAttachment*, ERlvAttachGroupType, LLViewerInventoryCategory*, std::string, LLUUID, LLWearableType::EType, LLVector3d, float> rlv_option_generic_t;
+	typedef boost::variant<boost::blank, LLViewerJointAttachment*, ERlvAttachGroupType, LLViewerInventoryCategory*, std::string, LLUUID, LLWearableType::EType, LLVector3d, float> rlv_option_generic_t;
 	void operator=(const rlv_option_generic_t& optionValue) { m_varOption = optionValue; }
 protected:
 	rlv_option_generic_t m_varOption;
