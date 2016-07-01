@@ -539,6 +539,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("media_plugin_cef.dll")
             self.end_prefix()
 
+        # Media plugins - LibVLC
+        if self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
+            self.path("media_plugin_libvlc.dll")
+            self.end_prefix()
+
         # winmm.dll shim
         if self.prefix(src='../media_plugins/winmmshim/%s' % self.args['configuration'], dst=""):
             self.path("winmm.dll")
@@ -644,6 +649,12 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("zh-CN.pak")
             self.path("zh-TW.pak")
             self.end_prefix()
+
+            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
+                self.path("libvlc.dll")
+                self.path("libvlccore.dll")
+                self.path("plugins/")
+                self.end_prefix()
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -1333,7 +1344,17 @@ class LinuxManifest(ViewerManifest):
         if self.prefix(src="", dst="bin/llplugin"):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path( "../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+            self.path("../media_plugins/libvlc/libmedia_plugin_libvlc.so", "libmedia_plugin_libvlc.so")
             self.end_prefix("bin/llplugin")
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
+            self.end_prefix()
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
+            self.end_prefix()
 
         # CEF files 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):

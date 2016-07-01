@@ -62,6 +62,7 @@ libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]
 LLCEFLib/CEF Version: [LLCEFLIB_VERSION]
+LibVLC Version: [LIBVLC_VERSION]
 Voice Server Version: [VOICE_VERSION]
 	</string>
   <string name="AboutSettings">
@@ -81,7 +82,7 @@ VFS (cache) creation time (UTC): [VFS_DATE]
   <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>
 	<string name="BuildConfiguration">Build Configuration</string>
-
+	
 	<!--  progress -->
 	<string name="ProgressRestoring">Restoring...</string>
 	<string name="ProgressChangingResolution">Changing resolution...</string>

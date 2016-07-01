@@ -352,8 +352,8 @@ void LLGLSLShader::unloadInternal()
         for (GLsizei i = 0; i < count; i++)
         {
             glDetachObjectARB(mProgramObject, obj[i]);
-            glDeleteObjectARB(obj[i]);
-        }
+                glDeleteObjectARB(obj[i]);
+            }
 
         glDeleteObjectARB(mProgramObject);
 
@@ -1275,6 +1275,28 @@ void LLGLSLShader::uniformMatrix4fv(U32 index, U32 count, GLboolean transpose, c
             glUniformMatrix4fvARB(mUniform[index], count, transpose, v);
         }
     }
+}
+
+void LLGLSLShader::uniform1b(U32 index, GLboolean x)
+{
+	if (mProgramObject > 0)
+	{
+		if (mUniform.size() <= index)
+		{
+			UNIFORM_ERRS << "Uniform index out of bounds." << LL_ENDL;
+			return;
+		}
+
+		if (mUniform[index] >= 0)
+		{
+			std::map<GLint, LLVector4>::iterator iter = mValue.find(mUniform[index]);
+			if (iter == mValue.end() || iter->second.mV[0] != x)
+			{
+				glUniform1iARB(mUniform[index], x);
+				mValue[mUniform[index]] = LLVector4(x, 0.f, 0.f, 0.f);
+			}
+		}
+	}
 }
 
 GLint LLGLSLShader::getUniformLocation(const LLStaticHashedString& uniform)

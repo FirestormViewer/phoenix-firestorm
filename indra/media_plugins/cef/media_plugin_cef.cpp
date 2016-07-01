@@ -108,17 +108,11 @@ private:
 
     VolumeCatcher mVolumeCatcher;
 
-	// <FS:ND> FS specific CEF settings
-	bool mFlipY;
-	// </FS:ND>
-
-	// <FS:ND> Buffer for a popup image to be rendered as an overlay
 	U8 *mPopupBuffer;
 	U32 mPopupW;
 	U32 mPopupH;
 	U32 mPopupX;
 	U32 mPopupY;
-	// </FS:ND>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -147,25 +141,18 @@ MediaPluginBase(host_send_func, host_user_data)
 	mPickedFile = "";
 	mLLCEFLib = new LLCEFLib();
 
-	// <FS:ND> FS specific CEF settings
-	mFlipY = false;
-	// </FS:ND>
-
-	// <FS:ND> Buffer for a popup image to be rendered as an overlay
 	mPopupBuffer = NULL;
 	mPopupW = 0;
 	mPopupH = 0;
 	mPopupX = 0;
 	mPopupY = 0;
-	// </FS:ND>
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 MediaPluginCEF::~MediaPluginCEF()
 {
-	delete [] mPopupBuffer; // <FS:ND> Buffer for a popup image to be rendered as an overlay
+	delete[] mPopupBuffer;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,10 +175,7 @@ void MediaPluginCEF::postDebugMessage(const std::string& msg)
 //
 void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, int width, int height, bool is_popup)
 {
-	// <FS:ND> in case this is a popup, delete our old popup buffer and create a new one if needed.
-	// Put this here as the media_plugin_cef will send a message with all but is_popup set to 0 in case the popup gets destroyed.
-#if FS_CEFLIB_VERSION >= 3
-	if (is_popup)
+	if( is_popup )
 	{
 		delete mPopupBuffer;
 		mPopupBuffer = NULL;
@@ -200,17 +184,11 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 		mPopupX = 0;
 		mPopupY = 0;
 	}
-#endif
-	// </FS:ND>
-	
-	if (mPixels && pixels)
+
+	if( mPixels && pixels )
 	{
 		if (is_popup)
 		{
-			// <FS:ND> This is a valid popup, copy the texture into our overlay buffer.
-			// Can a texture ever have an alpha other than 255/1.0 to make an alpha blended popup/dropdown?
-			// (According to Mobius not w/o hacks, so we assume opague)
-#if FS_CEFLIB_VERSION >= 3
 			if( width > 0 && height> 0 )
 			{
 				mPopupBuffer = new U8[ width * height * mDepth ];
@@ -220,23 +198,6 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 				mPopupX = x;
 				mPopupY = y;
 			}
-#endif
-			// </FS:ND>
-			
-#if FS_CEFLIB_VERSION < 3
-			// <FS:ND/> You are outdated and will be buggy
-			for (int line = 0; line < height; ++line)
-			{
-			 	int inverted_y = mHeight - y - height;
-			 	int src = line * width * mDepth;
-			 	int dst = (inverted_y + line) * mWidth * mDepth + x * mDepth;
-			 
-			 	if (dst + width * mDepth < mWidth * mHeight * mDepth)
-			 	{
-			 		memcpy(mPixels + dst, pixels + src, width * mDepth);
-			 	}
-			}
-#endif
 		}
 		else
 		{
@@ -244,28 +205,24 @@ void MediaPluginCEF::onPageChangedCallback(unsigned char* pixels, int x, int y, 
 			{
 				memcpy(mPixels, pixels, mWidth * mHeight * mDepth);
 			}
-
-			// <FS:ND> If we have a popup, draw on top. Note: No alpha blending, this needs to be added it a popup can be transparent
-			if( mPopupBuffer && mPopupH && mPopupW  )
+			if( mPopupBuffer && mPopupH && mPopupW )
 			{
 				U32 bufferSize = mWidth * mHeight * mDepth;
 				U32 popupStride = mPopupW * mDepth;
 				U32 bufferStride = mWidth * mDepth;
-				int dstY = mHeight - mPopupY - mPopupH;
-				if( !mFlipY )
-					dstY = mPopupY;
+				int dstY = mPopupY;
 
 				int src = 0;
 				int dst = dstY  * mWidth * mDepth + mPopupX * mDepth;
 
-				for (int line = 0; dst + popupStride < bufferSize && line < mPopupH; ++line)
+				for( int line = 0; dst + popupStride < bufferSize && line < mPopupH; ++line )
 				{
 					memcpy( mPixels + dst, mPopupBuffer + src, popupStride );
 					src += popupStride;
 					dst += bufferStride;
 				}
 			}
-			// </FS:ND>
+
 		}
 		setDirty(0, 0, mWidth, mHeight);
 	}
@@ -534,7 +491,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			{
 				// <FS:ND> FS specific CEF settings
 #if defined( LL_WINDOWS ) || defined( LL_LINUX )
-				mLLCEFLib->setFlipY( mFlipY );
+				mLLCEFLib->setFlipY( false );
 #endif
 				// </FS:ND>
 
@@ -582,13 +539,7 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 				message.setValueU32("internalformat", GL_RGB);
 				message.setValueU32("format", GL_BGRA);
 				message.setValueU32("type", GL_UNSIGNED_BYTE);
-
-				// <FS:ND> if mFlipY is true, teh CEF plugin will flip the texture and it will be in correct opengl format. 
-				// If false, it needs to be flipped by the viewer.
-				// message.setValueBoolean("coords_opengl", true);
-				message.setValueBoolean("coords_opengl", mFlipY );
-				// </FS:ND>
-
+				message.setValueBoolean("coords_opengl", false);
 				sendMessage(message);
 			}
 			else if (message_name == "set_user_data_path")
@@ -658,6 +609,8 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 
 				S32 x = message_in.getValueS32("x");
 				S32 y = message_in.getValueS32("y");
+
+				y = mHeight - y;
 
 				// only even send left mouse button events to LLCEFLib
 				// (partially prompted by crash in OS X CEF when sending right button events)
@@ -831,10 +784,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			else if (message_name == "javascript_enabled")
 			{
 				mJavascriptEnabled = message_in.getValueBoolean("enable");
-			}
-			else if( message_name == "cef_flipy" )
-			{
-				mFlipY = message_in.getValueBoolean("enable");
 			}
 		}
         else if (message_class == LLPLUGIN_MESSAGE_CLASS_MEDIA_TIME)
