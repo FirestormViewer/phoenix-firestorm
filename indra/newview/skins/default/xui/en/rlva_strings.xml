@@ -56,6 +56,11 @@
 			<key>value</key>
 			<string>Unable to perform action due to RLV restrictions</string>
 		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>Unable to see the presence of nearby avatars due to RLV restrictions</string>
+		</map>
 		<key>blocked_permattach</key>
 		<map>
 			<key>value</key>

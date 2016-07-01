@@ -246,7 +246,7 @@ void LLHUDText::setString(const std::string &text_utf8)
 {
 	mTextSegments.clear();
 //	addLine(text_utf8, mColor);
-// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
+// [RLVa:KB] - Checked: RLVa-2.0.3
 	// NOTE: setString() is called for debug and map beacons as well
 	if (RlvActions::isRlvEnabled())
 	{
@@ -255,8 +255,10 @@ void LLHUDText::setString(const std::string &text_utf8)
 		{
 			if (!RlvActions::canShowLocation())
 				RlvUtil::filterLocation(text);
-			if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT))
-				RlvUtil::filterNames(text);
+
+			bool fCanShowNearby = RlvActions::canShowNearbyAgents();
+			if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) || (!fCanShowNearby) )
+				RlvUtil::filterNames(text, true, !fCanShowNearby);
 		}
 		else
 		{
@@ -658,14 +660,16 @@ F32 LLHUDText::LLHUDTextSegment::getWidth(const LLFontGL* font)
 	}
 }
 
-// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
-void LLHUDText::refreshAllObjectText()
+// [RLVa:KB] - Checked: RLVa-2.0.3
+void LLHUDText::refreshAllObjectText(EObjectTextFilter eObjFilter)
 {
-	for (TextObjectIterator itText = sTextObjects.begin(); itText != sTextObjects.end(); ++itText)
+	for (LLHUDText* pText : sTextObjects)
 	{
-		LLHUDText* pText = *itText;
-		if ( (pText) && (!pText->mObjText.empty()) && (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) )
+		if ((pText) && (!pText->mObjText.empty()) && (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) &&
+			((OTF_NONE == eObjFilter) || ((OTF_HUD_ATTACHMENTS == eObjFilter) && (pText->mSourceObject->isHUDAttachment()))))
+		{
 			pText->setString(pText->mObjText);
+		}
 	}
 }
 // [/RLVa:KB]

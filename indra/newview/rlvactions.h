@@ -108,6 +108,11 @@ public:
 	static bool canShowName(EShowNamesContext eContext, const LLUUID& idAgent = LLUUID::null);
 	static void setShowName(EShowNamesContext eContext, bool fCanShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fCanShowName; } }
 
+	/*
+	 * Returns true if the user is allowed to see the presence of nearby avatars in UI elements (anonymized or otherwise)
+	 */
+	static bool canShowNearbyAgents();
+
 protected:
 	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
 	static bool s_BlockNamesContexts[SNC_COUNT];

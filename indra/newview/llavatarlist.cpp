@@ -204,6 +204,10 @@ void LLAvatarList::draw()
 void LLAvatarList::clear()
 {
 	getIDs().clear();
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	// We need to be able to call this *somehow* and it actually makes moderate sense to call this in here
+	updateNoItemsMessage(mNameFilter);
+// [/RLVa:KB]
 	setDirty(true);
 	LLFlatListViewEx::clear();
 }
