@@ -1,5 +1,5 @@
 /** 
- * @file rlvlocks.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -21,11 +21,13 @@
 #include "llattachmentsmgr.h"
 #include "lloutfitobserver.h"
 #include "llviewerobjectlist.h"
+#include "llviewermenu.h"
 #include "pipeline.h"
 
 #include "rlvlocks.h"
 #include "rlvhelper.h"
 #include "rlvinventory.h"
+
 
 // ============================================================================
 // RlvAttachPtLookup member functions
@@ -402,8 +404,7 @@ void RlvAttachmentLocks::updateLockedHUD()
 	// Reset HUD visibility and wireframe options if at least one HUD attachment is locked
 	if (m_fHasLockedHUD)
 	{
-		LLPipeline::sShowHUDAttachments = TRUE;
-		gUseWireframe = FALSE;
+		set_use_wireframe(false);
 	}
 }
 
@@ -1078,8 +1079,11 @@ bool RlvFolderLocks::getLockedItems(const LLUUID& idFolder, LLInventoryModel::it
 		// Check the parent folders of any links to this item that exist under #RLV
 		if (!fItemLocked)
 		{
-			LLInventoryModel::item_array_t itemLinks = 
-				gInventory.collectLinkedItems(pItem->getUUID(), RlvInventory::instance().getSharedRootID());
+			LLInventoryModel::item_array_t itemLinks;
+			LLInventoryModel::cat_array_t cats;
+			LLLinkedItemIDMatches f(pItem->getUUID());
+			gInventory.collectDescendentsIf(RlvInventory::instance().getSharedRootID(), cats, itemLinks, LLInventoryModel::EXCLUDE_TRASH, f);
+
 			for (LLInventoryModel::item_array_t::iterator itItemLink = itemLinks.begin(); 
 					(itItemLink < itemLinks.end()) && (!fItemLocked); ++itItemLink)
 			{
@@ -1194,7 +1198,7 @@ bool RlvFolderLocks::isLockedFolder(LLUUID idFolder, ERlvLockMask eLockTypeMask,
 		idFolderCur = (pParent) ? pParent->getParentUUID() : idFolderRoot;
 	}
 	// If we didn't encounter an explicit deny lock with no exception then the folder is locked if the entire inventory is locked down
-	return (m_fLockedRoot) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
+	return (m_fLockedRoot) && (eSourceTypeMask & ST_ROOTFOLDER) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b

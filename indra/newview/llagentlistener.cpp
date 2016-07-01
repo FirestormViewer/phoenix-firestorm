@@ -186,7 +186,7 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.1.0j
 	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canSit(object)) )
+	if ( (rlv_handler_t::isEnabled()) && (!RlvActions::canSit(object)) )
 	{
 		return;
 	}

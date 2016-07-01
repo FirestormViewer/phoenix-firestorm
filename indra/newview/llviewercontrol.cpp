@@ -78,6 +78,9 @@
 #include "llslurl.h"
 #include "llstartup.h"
 #include "llupdaterservice.h"
+// [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 // Firestorm inclues
 #include "fsfloatercontacts.h"
@@ -1050,6 +1053,9 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
+// [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
+	gSavedSettings.getControl("RestrainedLove")->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
+// [/RLVa:KB]
 	gSavedPerAccountSettings.getControl("AvatarHoverOffsetZ")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // <FS:Zi> Moved Avatar Z offset from RLVa to here
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
@@ -1091,8 +1097,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
 	// </FS:Ansariel> [FS communication UI]
-
-	gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&RlvSettings::onChangedSettingMain, _2));
 
 	gSavedPerAccountSettings.getControl("GlobalOnlineStatusToggle")->getSignal()->connect(boost::bind(&handleGlobalOnlineStatusChanged, _2));
 

@@ -114,8 +114,8 @@
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
 #include "llprogressview.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.0
+#include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
@@ -408,6 +408,9 @@ BOOL	LLPipeline::sRenderingHUDs;
 F32	LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
 
 bool	LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+bool	LLPipeline::sRenderTextures = true;
+// [/SL:KB]
 
 // EventHost API LLPipeline listener.
 static LLPipelineListener sPipelineListener;
@@ -3618,9 +3621,9 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
 		const LLViewerObject* pObj = drawablep->getVObj();
 		if ( (pObj) && (pObj->isSelected()) && 
-			 ( (!rlv_handler_t::isEnabled()) || 
+			 ( (!RlvActions::isRlvEnabled()) || 
 			   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
-			     (gRlvHandler.canEdit(pObj)) ) ) )
+			     (RlvActions::canEdit(pObj)) ) ) )
 // [/RVLa:KB]
 		{
 			return;

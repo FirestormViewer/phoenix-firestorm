@@ -69,6 +69,10 @@ public:
 
     bool mTryToConnectToFacebook;
 
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	LLAvatarList* getNearbyList() { return mNearbyList; }
+// [/RLVa:KB]
+
 	// internals
 	class Updater;
 

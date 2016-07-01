@@ -71,9 +71,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>370de49a91ce91516697db8968f5e8b0</string>
+              <string>47ddd059d48f650e39796c10ea828689</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201505191946-r76.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-1.0-darwin-201606211534-r77.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -295,9 +295,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d0abfb393024eea8cffdfde3ec5b673d</string>
+              <string>72b06fb0bbc1d52179abf8bd8db9b2df</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.57-darwin-201505120538-r136.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.57-darwin64-201606171648.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -347,9 +347,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b93d42a16c5a9e6731ca57d363c231e0</string>
+              <string>a1964fea0954d31c3aa29ae196b17f8f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201505131932-r98-darwin-201505131932-r98.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.3.201606172015-darwin-201606172015.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -975,9 +975,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>af760536a469b6e28df675d4c7eca54b</string>
+              <string>9253e0ebde03d4c2161dfeaf02565758</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.201505171732-r96-darwin-201505171732-r96.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/google_breakpad-1413.201606211136-r97-darwin-201606211136-r97.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1301,9 +1301,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bf4bb114d861213eb946c6e8b7e35178</string>
+              <string>a087b1642025efa765e47e8149b026ee</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201508041108-r34-darwin-201508041108-r34.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jsoncpp-0.5.0.201606172236-r32-darwin-201606172236-r32.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1673,11 +1673,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>82779518d3079508ecdafe708e003aaf</string>
+              <string>85d8896ca1cec09affc48122aeea22d2</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201601201743-r174-darwin-201601201743-r174.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.5.3.201606212155-r177-darwin-201606212155-r177.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2135,9 +2135,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>64b2e1e2e4869c56c235ba43c1e66bdb</string>
+              <string>582d360d195d3dfb48695cb5e206cbf1</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/pcre-8.35.-darwin-201505122041-r52.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.35.-darwin-201606171942.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>

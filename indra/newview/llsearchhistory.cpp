@@ -116,7 +116,7 @@ void LLSearchHistory::addEntry(const std::string& search_query)
 	mSearchHistory.push_front(item);
 }
 
-bool LLSearchHistory::LLSearchHistoryItem::operator < (const LLSearchHistory::LLSearchHistoryItem& right)
+bool LLSearchHistory::LLSearchHistoryItem::operator < (const LLSearchHistory::LLSearchHistoryItem& right) const
 {
 	S32 result = LLStringUtil::compareInsensitive(search_query, right.search_query);
 

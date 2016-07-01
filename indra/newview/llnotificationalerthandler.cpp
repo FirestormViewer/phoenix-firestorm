@@ -97,7 +97,7 @@ bool LLAlertHandler::processNotification(const LLNotificationPtr& notification)
 		//   - LLHandlerUtil::logToIMP2P() below will still be called with to_file_only == false
 		//   - LLHandlerUtil::logToIM() will eventually be called as a result and without an open IM session it will log the
 		//     same message as it would for an open session whereas to_file_only == true would take a different code path
-		if ( (RlvActions::hasOpenP2PSession(from_id)) || (RlvActions::canStartIM(from_id)) )
+		if (RlvActions::canStartIM(from_id))
 		{
 // [/RLVa:KB]
 			// firstly create session...

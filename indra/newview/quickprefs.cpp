@@ -53,6 +53,8 @@
 #include "lltoolbarview.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
+#include "llvoavatar.h"
+#include "llvoavatarself.h"
 #include "llwaterparammanager.h"
 #include "llwlparamset.h"
 #include "llwlparammanager.h"

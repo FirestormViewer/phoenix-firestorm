@@ -42,7 +42,7 @@
 
 // <FS:AW> hop:// protocol>
 //#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
-#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))"
+#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife|inworldz|iw):///app))"
 // </FS:AW>
 
 // Utility functions
@@ -340,7 +340,9 @@ std::string LLUrlEntryHTTPNoProtocol::getTooltip(const std::string &url) const
 LLUrlEntryInvalidSLURL::LLUrlEntryInvalidSLURL()
 	: LLUrlEntryBase()
 {
-	mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|secondlife://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
+	// <FS:Ansariel> Inworldz special
+	//mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|secondlife://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
+	mPattern = boost::regex("(http://(maps.secondlife.com|slurl.com)/secondlife/|(secondlife|inworldz|iw)://(/app/(worldmap|teleport)/)?)[^ /]+(/-?[0-9]+){1,3}(/?(\\?title|\\?img|\\?msg)=\\S*)?/?",
 									boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
@@ -1016,7 +1018,7 @@ LLUrlEntryObjectIM::LLUrlEntryObjectIM()
 {
 	// <FS:AW> hop:// protocol; Ansa: Stop at first space so we can use it in notifications!
 	//mPattern = boost::regex("secondlife:///app/objectim/[\\da-f-]+\?.*",
-	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?[^ \t\r\n\v\f]*",
+	mPattern = boost::regex("(hop|secondlife|inworldz|iw):///app/objectim/[\\da-f-]+\?[^ \t\r\n\v\f]*",
 	// </FS:AW>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_objectim.xml";
@@ -1145,7 +1147,9 @@ void LLUrlEntryParcel::processParcelInfo(const LLParcelData& parcel_data)
 //
 LLUrlEntryPlace::LLUrlEntryPlace()
 {
-	mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://)))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?", // <AW: hop:// protocol>
+	// <FS:Ansariel> Inworldz special
+	//mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://)))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?", // <AW: hop:// protocol>
+	mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|((secondlife|inworldz|iw)://)))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slurl.xml";
 	mTooltip = LLTrans::getString("TooltipSLURL");
@@ -1327,7 +1331,7 @@ std::string LLUrlEntryTeleport::getLocation(const std::string &url) const
 //
 LLUrlEntrySL::LLUrlEntrySL()
 {
-	mPattern = boost::regex("(hop|secondlife)://(\\w+)?(:\\d+)?/\\S+", // <AW: hop:// protocol>
+	mPattern = boost::regex("(hop|secondlife|inworldz|iw)://(\\w+)?(:\\d+)?/\\S+", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slapp.xml";
 	mTooltip = LLTrans::getString("TooltipSLAPP");
@@ -1344,7 +1348,7 @@ std::string LLUrlEntrySL::getLabel(const std::string &url, const LLUrlLabelCallb
 //
 LLUrlEntrySLLabel::LLUrlEntrySLLabel()
 {
-	mPattern = boost::regex("\\[(hop|secondlife)://\\S+[ \t]+[^\\]]+\\]", // <AW: hop:// protocol>
+	mPattern = boost::regex("\\[(hop|secondlife|inworldz|iw)://\\S+[ \t]+[^\\]]+\\]", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slapp.xml";
 	mTooltip = LLTrans::getString("TooltipSLAPP");

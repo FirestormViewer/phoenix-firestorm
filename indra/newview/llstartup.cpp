@@ -192,6 +192,10 @@
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
 
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
@@ -233,7 +237,6 @@
 #include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
-#include "rlvhandler.h"
 #include "streamtitledisplay.h"
 #include "tea.h"
 
@@ -1372,11 +1375,7 @@ bool idle_startup()
 		// All accounts have both a home and a last location, and we don't support
 		// more locations than that.  Choose the appropriate one.  JC
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
-#ifndef RLV_EXTENSION_STARTLOCATION
-		if (rlv_handler_t::isEnabled())
-#else
 		if ( (rlv_handler_t::isEnabled()) && (RlvSettings::getLoginLastLocation()) )
-#endif // RLV_EXTENSION_STARTLOCATION
 		{
 			// Force login at the last location
 			LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_LAST));

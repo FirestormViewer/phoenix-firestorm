@@ -74,6 +74,11 @@
 #include "llsidepanelinventory.h"
 #include "llavatarname.h"
 #include "llagentui.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 	
 // Firestorm includes
 #include "fsfloaterim.h"
@@ -91,9 +96,6 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerwindow.h"	// For opening logs externally
 #include "llworld.h"
-#include "rlvactions.h"
-#include "rlvcommon.h"
-#include "rlvhandler.h"
 
 // Flags for kick message
 const U32 KICK_FLAGS_DEFAULT	= 0x0;
@@ -243,7 +245,7 @@ void LLAvatarActions::startIM(const LLUUID& id)
 		return;
 
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
-	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
+	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
@@ -288,7 +290,7 @@ void LLAvatarActions::startCall(const LLUUID& id)
 	}
 
 // [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
-	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
+	if (!RlvActions::canStartIM(id))
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
@@ -556,6 +558,17 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 	{
 		LLMessageSystem* msg = gMessageSystem;
 
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		const LLUUID idRecipient = notification["substitutions"]["uuid"];
+		std::string strMessage = response["message"];
+
+		// Filter the request message if the recipients is IM-blocked
+		if ( (!RlvActions::isRlvEnabled()) || ((RlvActions::canStartIM(idRecipient)) && (RlvActions::canSendIM(idRecipient))) )
+		{
+			strMessage = RlvStrings::getString(RLV_STRING_HIDDEN);
+		}
+// [/RLVa:KB]
+
 		msg->newMessageFast(_PREHASH_ImprovedInstantMessage);
 		msg->nextBlockFast(_PREHASH_AgentData);
 		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
@@ -573,7 +586,10 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 		LLAgentUI::buildFullname(name);
 
 		msg->addStringFast(_PREHASH_FromAgentName, name);
-		msg->addStringFast(_PREHASH_Message, response["message"]);
+// [RLVa:KB] - Checked: RLVa-2.0.0
+		msg->addStringFast(_PREHASH_Message, strMessage);
+// [/RLVa:KB]
+//		msg->addStringFast(_PREHASH_Message, response["message"]);
 		msg->addU32Fast(_PREHASH_ParentEstateID, 0);
 		msg->addUUIDFast(_PREHASH_RegionID, LLUUID::null);
 		msg->addVector3Fast(_PREHASH_Position, gAgent.getPositionAgent());
@@ -601,14 +617,17 @@ void LLAvatarActions::teleportRequest(const LLUUID& id)
 
 	LLSD notification;
 	notification["uuid"] = id;
-	LLAvatarName av_name;
-	if (!LLAvatarNameCache::get(id, &av_name))
-	{
-		// unlikely ... they just picked this name from somewhere...
-		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
-		return; // reinvoke this when the name resolves
-	}
-	notification["NAME"] = av_name.getCompleteName();
+// [RLVa:KB] - Checked: RLVa-1.5.0
+	notification["NAME"] = LLSLURL("agent", id, (RlvActions::canShowName(RlvActions::SNC_TELEPORTREQUEST, id)) ? "completename" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+//	LLAvatarName av_name;
+//	if (!LLAvatarNameCache::get(id, &av_name))
+//	{
+//		// unlikely ... they just picked this name from somewhere...
+//		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
+//		return; // reinvoke this when the name resolves
+//	}
+//	notification["NAME"] = av_name.getCompleteName();
 
 	LLSD payload;
 

@@ -103,6 +103,7 @@
 #include "llfloaterperms.h"
 #include "llvocache.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -5910,7 +5911,7 @@ BOOL LLViewerObject::permTransfer() const
 BOOL LLViewerObject::allowOpen() const
 {
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canEdit(this)));
+	return !flagInventoryEmpty() && (permYouOwner() || permModify()) && ((!RlvActions::isRlvEnabled()) || (RlvActions::canEdit(this)));
 // [/RLVa:KB]
 //	return !flagInventoryEmpty() && (permYouOwner() || permModify());
 }

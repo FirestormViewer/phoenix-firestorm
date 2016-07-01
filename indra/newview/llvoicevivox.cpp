@@ -985,14 +985,17 @@ bool LLVivoxVoiceClient::loginToVivox()
                     errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
                     args["HOSTID"] = errs.str();
                     mTerminateDaemon = true;
-                    if (LLGridManager::getInstance()->isSystemGrid())
-                    {
-                        LLNotificationsUtil::add("NoVoiceConnect", args);
-                    }
-                    else
-                    {
-                        LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);
-                    }
+                    // <FS:Ansariel> FIRE-13130 / FIRE-19552: Unknown notification "NoVoiceConnect-GIAB"
+                    //if (LLGridManager::getInstance()->isSystemGrid())
+                    //{
+                    //    LLNotificationsUtil::add("NoVoiceConnect", args);
+                    //}
+                    //else
+                    //{
+                    //    LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);
+                    //}
+                    LLNotificationsUtil::add("NoVoiceConnect", args);
+                    // </FS:Ansariel>
 
                     mIsLoggingIn = false;
                     return false;
@@ -2884,14 +2887,17 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
 		errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
 		args["HOSTID"] = errs.str();
 		mTerminateDaemon = true;
-		if (LLGridManager::getInstance()->isSystemGrid())
-		{
-			LLNotificationsUtil::add("NoVoiceConnect", args);	
-		}
-		else
-		{
-			LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
-		}
+		// <FS:Ansariel> FIRE-13130 / FIRE-19552: Unknown notification "NoVoiceConnect-GIAB"
+		//if (LLGridManager::getInstance()->isSystemGrid())
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect", args);	
+		//}
+		//else
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
+		//}
+		LLNotificationsUtil::add("NoVoiceConnect", args);
+		// </FS:Ansariel>
 
         result["connector"] = LLSD::Boolean(false);
 	}
