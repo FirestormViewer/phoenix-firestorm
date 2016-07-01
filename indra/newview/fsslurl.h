@@ -53,6 +53,11 @@ public:
 	static const char* SLURL_APP_PATH;
 	static const char* SLURL_REGION_PATH; 
  
+	// Inworldz special
+	static const char* SLURL_INWORLDZ_SCHEME;
+	static const char* SLURL_IW_SCHEME;
+	static const char* PLACES_INWORLDZ_COM;
+
 	enum SLURL_TYPE
 	{
 		INVALID,

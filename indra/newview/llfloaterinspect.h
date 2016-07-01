@@ -36,6 +36,9 @@
 class LLObjectSelection;
 class LLScrollListCtrl;
 class LLUICtrl;
+// [RLVa:KB] - Checked: RLVa-2.0.1
+class LLSelectNode;
+// [/RLVa:KB]
 
 class LLFloaterInspect : public LLFloater
 {
@@ -60,6 +63,10 @@ protected:
 	// protected members
 	void setDirty() { mDirty = TRUE; }
 	bool mDirty;
+
+// [RLVa:KB] - Checked: RLVa-2.0.1
+	const LLSelectNode* getSelectedNode() /*const*/;
+// [/RLVa:KB]
 
 private:
 	void onGetOwnerNameCallback();

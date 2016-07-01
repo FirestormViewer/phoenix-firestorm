@@ -10,8 +10,7 @@
             function="ShowAgentProfile"
             parameter="hit object" />
         <pie_slice.on_enable
-            function="RLV.EnableIfNot"
-            parameter="shownames" />
+            function="RLV.CanShowName" />
     </pie_slice>
     <pie_menu
         name="mute_menu"
@@ -70,8 +69,7 @@
             <pie_slice.on_click
                 function="Avatar.AddToContactSet" />
             <pie_slice.on_enable
-                function="RLV.EnableIfNot"
-                parameter="shownames" />
+                function="RLV.CanShowName" />
         </pie_slice>
     </pie_menu>
     <pie_slice
@@ -102,8 +100,7 @@
             <pie_slice.on_click
                 function="Avatar.GiveCard" />
             <pie_slice.on_enable
-                function="RLV.EnableIfNot"
-                parameter="shownames" />
+                function="RLV.CanShowName" />
         </pie_slice>
         <pie_slice
             label="Invite to Group"
@@ -111,8 +108,7 @@
             <pie_slice.on_click
                 function="Avatar.InviteToGroup" />
             <pie_slice.on_enable
-                function="RLV.EnableIfNot"
-                parameter="shownames" />
+                function="RLV.CanShowName" />
         </pie_slice>
         <pie_separator/>
         <pie_slice
@@ -272,8 +268,7 @@
         <pie_slice.on_click
             function="Avatar.SendIM" />
         <pie_slice.on_enable
-            function="RLV.EnableIfNot"
-            parameter="shownames" />
+            function="RLV.CanShowName" />
     </pie_slice>
 
 </pie_menu>

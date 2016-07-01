@@ -234,8 +234,16 @@ void LLCoros::toplevel(coro::self& self, CoroData* data, const callable_t& calla
 {
     // capture the 'self' param in CoroData
     data->mSelf = &self;
+
+	// <FS:ND> FIRE-19481; do not let any exception propagate
+	// callable();
+
+	try {
     // run the code the caller actually wants in the coroutine
     callable();
+	} catch( ... ){ LL_WARNS() << "Exception during coroutine" << LL_ENDL; }
+	// </FS:ND>
+
     // This cleanup isn't perfectly symmetrical with the way we initially set
     // data->mPrev, but this is our last chance to reset mCurrentCoro.
     sCurrentCoro.reset(data->mPrev);

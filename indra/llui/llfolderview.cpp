@@ -1375,6 +1375,18 @@ BOOL LLFolderView::handleMouseDown( S32 x, S32 y, MASK mask )
 	return LLView::handleMouseDown( x, y, mask );
 }
 
+// <FS:Ansariel> FIRE-14223: Using mouse scroll while renaming an item moves line editor out of inventory floater
+BOOL LLFolderView::handleScrollWheel(S32 x, S32 y, S32 clicks)
+{
+	if (mRenameItem)
+	{
+		finishRenamingItem();
+	}
+
+	return LLView::handleScrollWheel(x, y, clicks);
+}
+// </FS:Ansariel>
+
 BOOL LLFolderView::search(LLFolderViewItem* first_item, const std::string &search_string, BOOL backward)
 {
 	// get first selected item

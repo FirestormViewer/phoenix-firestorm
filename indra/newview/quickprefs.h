@@ -36,7 +36,6 @@
 
 const std::string PHOTOTOOLS_FLOATER = "phototools";
 
-// <FS:Zi> Dynamic quick prefs
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLLayoutPanel;
@@ -47,7 +46,6 @@ class LLSlider;
 class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
-// </FS:Zi>
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_SKY_DAY_CYCLE "__Sky_Day_Cycle__"
@@ -134,7 +132,7 @@ private:
 	LLComboBox*			mCtrlAvatarShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
 	
-	// <FS:CR> FIRE-9630 Vignette UI controls
+	// Vignette UI controls
 	LLSpinCtrl*			mSpinnerVignetteX;
 	LLSpinCtrl*			mSpinnerVignetteY;
 	LLSpinCtrl*			mSpinnerVignetteZ;
@@ -155,9 +153,11 @@ private:
 
 	LLSliderCtrl*		mAvatarZOffsetSlider;
 
-	// <FS:CR>
 	LLButton*			mBtnResetDefaults;
 	
+	LLSliderCtrl*		mMaxComplexitySlider;
+	LLTextBox*			mMaxComplexityLabel;
+
 	// Vignette UI callbacks
 	void onChangeVignetteX();
 	void onChangeVignetteY();
@@ -168,7 +168,6 @@ private:
 	void onClickResetVignetteX();
 	void onClickResetVignetteY();
 	void onClickResetVignetteZ();
-	// </FS:CR>
 
 	void onChangeRenderShadowSplitExponentSlider();
 	void onChangeRenderShadowSplitExponentSpinner();
@@ -183,11 +182,10 @@ private:
 	void onChangeRenderSSAOEffectSpinner();
 	void onClickResetRenderSSAOEffectX();
 
-	// <FS:CR> FIRE-9407 - Restore Quickprefs Defaults
+	// Restore Quickprefs Defaults
 	void onClickRestoreDefaults();
 	void loadSavedSettingsFromFile(const std::string& settings_path);
 	void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
-	// </FS:CR>
 
 	void onAvatarZOffsetSliderMoved();
 	void onAvatarZOffsetFinalCommit();
@@ -196,10 +194,11 @@ private:
 	void onSimulatorFeaturesReceived(const LLUUID &region_id);
 	void syncAvatarZOffsetFromPreferenceSetting();
 	void updateMaxNonImpostors(const LLSD& newvalue);
+	void updateMaxComplexity();
+	void updateMaxComplexityLabel(const LLSD& newvalue);
 
 	boost::signals2::connection mRegionChangedSlot;
 
-// <FS:Zi> Dynamic quick prefs
 public:
 	virtual void onClose(bool app_quitting);
 
@@ -309,10 +308,9 @@ protected:
 
 	// swaps two controls, used for move up and down
 	void swapControls(const std::string& control1, const std::string& control2);
-// </FS:Zi>
 
 	bool hasControl( std::string const &aName ) const
 	{ return mControlsList.end() != mControlsList.find( aName ); }
 
 };
-#endif
+#endif // QUICKPREFS_H

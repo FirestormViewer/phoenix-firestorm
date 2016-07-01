@@ -104,7 +104,10 @@ void LLFloaterBuy::show(const LLSaleInfo& sale_info)
 	// Clean up the lists...
 	floater->reset();
 	floater->mSaleInfo = sale_info;
-	floater->mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	floater->mObjectSelection = LLSelectMgr::getInstance()->getSelection();
+// [/RLVa:KB]
+//	floater->mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
 	
 	LLSelectNode* node = selection->getFirstRootNode();
 	if (!node)

@@ -1526,10 +1526,16 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	LLViewerParcelMgr& parcel_mgr = LLViewerParcelMgr::instance();
 // <FS:CR> Aurora Sim
 	LLViewerRegion* msg_region = LLWorld::getInstance()->getRegion( msg->getSender() );
-	if(msg_region) {
-			parcel_mgr.mParcelsPerEdge = S32( msg_region->getWidth() / PARCEL_GRID_STEP_METERS );
+	if (msg_region)
+	{
+		parcel_mgr.mParcelsPerEdge = S32( msg_region->getWidth() / PARCEL_GRID_STEP_METERS );
 	}
-	else {
+	else
+	{
+		if (!gAgent.getRegion())
+		{
+			return;
+		}
 		parcel_mgr.mParcelsPerEdge = S32( gAgent.getRegion()->getWidth() / PARCEL_GRID_STEP_METERS );
 	}
 // </FS:CR> Aurora Sim
@@ -2581,6 +2587,13 @@ boost::signals2::connection LLViewerParcelMgr::setTeleportFailedCallback(telepor
 	return mTeleportFailedSignal.connect(cb);
 }
 
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+boost::signals2::connection LLViewerParcelMgr::setTeleportDoneCallback(teleport_done_callback_t cb)
+{
+	return mTeleportDoneSignal.connect(cb);
+}
+// [/SL:KB]
+
 /* Ok, we're notified that teleport has been finished.
  * We should now propagate the notification via mTeleportFinishedSignal
  * to all interested parties.
@@ -2608,6 +2621,13 @@ void LLViewerParcelMgr::onTeleportFailed()
 {
 	mTeleportFailedSignal();
 }
+
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+void LLViewerParcelMgr::onTeleportDone()
+{
+	mTeleportDoneSignal();
+}
+// [/SL:KB]
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 boost::signals2::connection LLViewerParcelMgr::setCollisionUpdateCallback(const collision_update_signal_t::slot_type& cb)

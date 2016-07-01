@@ -130,6 +130,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
  	//mCommitCallbackRegistrar.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow, this));
 	mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
 	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
+	//mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
 
 	// <FS:Zi> Filter Links Menu
@@ -191,8 +192,6 @@ BOOL LLPanelMainInventory::postBuild()
 	mExpandBtn = getChild<LLButton>("expand_btn");
 	mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
 	// </FS:Zi> Inventory Collapse and Expand Buttons
-
-	mItemcountText=getChild<LLTextBox>("ItemcountText");
 
 	mFilterTabs = getChild<LLTabContainer>("inventory filter tabs");
 	mFilterTabs->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterSelected, this));
@@ -550,36 +549,16 @@ void LLPanelMainInventory::onClearSearch()
 {
 	BOOL initially_active = FALSE;
 	LLFloater *finder = getFinder();
-// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
-//	if (mActivePanel)
-//	{
-//		initially_active = mActivePanel->getFilter().isNotDefault();
-//		mActivePanel->setFilterSubString(LLStringUtil::null);
-//		// <FS:Ansariel>
-//		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-//		if (mActivePanel->getName() == "Recent Items" || mActivePanel->getName() == "Worn Items")
-//		{
-//			mActivePanel->getFilter().resetDefault();
-//		}
-//		else
-//		{
-//			mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-//		}
-//		// </FS:Ansariel>
-//
-//		// ## Zi: Filter Links Menu
-//		// We don't do this anymore, we have a menu option for it now. -Zi
-////		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
-//		// <FS:Zi> make sure the dropdown shows "All Types" once again
-//		LLInventoryFilter &filter = mActivePanel->getFilter();
-//		updateFilterDropdown(&filter);
-//		// </FS:Zi>
-//	}
 	if (mActivePanel)
 	{
+		// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+		//initially_active = mActivePanel->getFilter().isNotDefault();
+		//mActivePanel->setFilterSubString(LLStringUtil::null);
+		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+		//mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
 		mActivePanel->setFilterSubString(LLStringUtil::null);
+		// </FS:Ansariel>
 	}
-// </FS:Ansariel>
 
 	if (finder)
 	{
@@ -651,38 +630,47 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 }
 
-// ## Zi: Filter dropdown
+// <FS:Zi> Filter dropdown
 void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_name)
 {
 	if (!mActivePanel)
+	{
 		return;
+	}
 
 	// by default enable everything
-	U64 filterTypes=~0;
+	U64 filterTypes = ~0;
 
 	// get the pointer to the filter subwindow
-	LLFloaterInventoryFinder* finder=getFinder();
+	LLFloaterInventoryFinder* finder = getFinder();
 
 	// find the filter name in our filter map
-	if(mFilterMap.find(filter_type_name)!=mFilterMap.end())
+	if (mFilterMap.find(filter_type_name) != mFilterMap.end())
 	{
-		filterTypes=mFilterMap[filter_type_name];
+		filterTypes = mFilterMap[filter_type_name];
 	}
 	// special treatment for "all" filter
-	else if(filter_type_name=="filter_type_all")
+	else if (filter_type_name == "filter_type_all")
 	{
 		// update subwindow if it's open
 		if (finder)
+		{
 			LLFloaterInventoryFinder::selectAllTypes(finder);
+		}
 	}
 	// special treatment for "custom" filter
-	else if(filter_type_name=="filter_type_custom")
+	else if (filter_type_name == "filter_type_custom")
 	{
 		// open the subwindow if needed, otherwise just give it focus
-		if(!finder)
+		if (!finder)
+		{
 			toggleFindOptions();
+		}
 		else
+		{
 			finder->setFocus(TRUE);
+		}
+
 		return;
 	}
 	// invalid selection (broken XML?)
@@ -694,45 +682,53 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 
 	mActivePanel->setFilterTypes(filterTypes);
 	// update subwindow if it's open
-	if(finder)
+	if (finder)
+	{
 		finder->updateElementsFromFilter();
+	}
 }
 
 // reflect state of current filter selection in the dropdown list
 void LLPanelMainInventory::updateFilterDropdown(const LLInventoryFilter* filter)
 {
 	// if we don't have a filter combobox (missing in the skin and failed to create?) do nothing
-	if(!mFilterComboBox)
+	if (!mFilterComboBox)
+	{
 		return;
+	}
 
 	// extract filter bits we need to see
-	U64 filterTypes=filter->getFilterObjectTypes() & mFilterMask;
+	U64 filterTypes = filter->getFilterObjectTypes() & mFilterMask;
 
 	std::string controlName;
 
 	// check if the filter types match our filter mask, meaning "All"
-	if(filterTypes==mFilterMask)
-		controlName="filter_type_all";
+	if (filterTypes == mFilterMask)
+	{
+		controlName = "filter_type_all";
+	}
 	else
 	{
 		// find the name of the current filter in our filter map, if exists
-		for(std::map<std::string,U64>::iterator i=mFilterMap.begin();i!=mFilterMap.end();i++)
+		for (std::map<std::string, U64>::iterator it = mFilterMap.begin(); it != mFilterMap.end(); ++it)
 		{
-			if((*i).second==filterTypes)
+			if ((*it).second == filterTypes)
 			{
-				controlName=(*i).first;
+				controlName = (*it).first;
 				break;
 			}
 		}
 
 		// no filter type found in the map, must be a custom filter
-		if(controlName.empty())
-			controlName="filter_type_custom";
+		if (controlName.empty())
+		{
+			controlName = "filter_type_custom";
+		}
 	}
 
 	mFilterComboBox->setValue(controlName);
 }
-// ## Zi: Filter dropdown
+// </FS:Zi> Filter dropdown
 
  //static
  BOOL LLPanelMainInventory::incrementalFind(LLFolderViewItem* first_item, const char *find_text, BOOL backward)
@@ -791,7 +787,7 @@ void LLPanelMainInventory::onFilterSelected()
 		setFilterSubString(mFilterSubString);
 	}
 	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	LLInventoryFilter &filter = mActivePanel->getFilter();
+	LLInventoryFilter& filter = mActivePanel->getFilter();
 	LLFloaterInventoryFinder *finder = getFinder();
 	if (finder)
 	{
@@ -802,7 +798,7 @@ void LLPanelMainInventory::onFilterSelected()
 		// If our filter is active we may be the first thing requiring a fetch so we better start it here.
 		LLInventoryModelBackgroundFetch::instance().start();
 	}
-	updateFilterDropdown(&filter);	// ## Zi: Filter dropdown
+	updateFilterDropdown(&filter);	// <FS:Zi> Filter dropdown
 	setFilterTextFromFilter();
 }
 
@@ -920,7 +916,7 @@ void LLPanelMainInventory::updateItemcountText()
 	{
 		text = getString("ItemcountUnknown", string_args);
 	}
-
+	
     mCounterCtrl->setValue(text);
 }
 
@@ -938,7 +934,7 @@ void LLPanelMainInventory::onFocusReceived()
 
 void LLPanelMainInventory::setFilterTextFromFilter() 
 { 
-	//mFilterText = mActivePanel->getFilter().getFilterText();
+	//mFilterText = mActivePanel->getFilter().getFilterText(); 
 	// <FS:Zi> Filter dropdown
 	// this method gets called by the filter subwindow (once every frame), so we update our combo box here
 	LLInventoryFilter &filter = mActivePanel->getFilter();
@@ -1652,7 +1648,7 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 	return FALSE;
 }
 
-// ## Zi: Filter Links Menu
+// <FS:Zi> Filter Links Menu
 void LLPanelMainInventory::onFilterLinksChecked(const LLSD& userdata)
 {
 	const std::string command_name = userdata.asString();
@@ -1692,9 +1688,9 @@ BOOL LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)
 
 	return FALSE;
 }
-// ## Zi: Filter Links Menu
+// </FS:Zi> Filter Links Menu
 
-// ## Zi: Extended Inventory Search
+// <FS:Zi> Extended Inventory Search
 void LLPanelMainInventory::onSearchTargetChecked(const LLSD& userdata)
 {
 	getActivePanel()->setFilterSubStringTarget(userdata.asString());
@@ -1711,31 +1707,31 @@ BOOL LLPanelMainInventory::isSearchTargetChecked(const LLSD& userdata)
 	const std::string command_name = userdata.asString();
 	if (command_name == "name")
 	{
-		return (getSearchTarget()==LLInventoryFilter::SUBST_TARGET_NAME);
+		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_NAME);
 	}
 
 	if (command_name == "creator")
 	{
-		return (getSearchTarget()==LLInventoryFilter::SUBST_TARGET_CREATOR);
+		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_CREATOR);
 	}
 
 	if (command_name == "description")
 	{
-		return (getSearchTarget()==LLInventoryFilter::SUBST_TARGET_DESCRIPTION);
+		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_DESCRIPTION);
 	}
 
 	if (command_name == "uuid")
 	{
-		return (getSearchTarget()==LLInventoryFilter::SUBST_TARGET_UUID);
+		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_UUID);
 	}
 
 	if (command_name == "all")
 	{
-		return (getSearchTarget()==LLInventoryFilter::SUBST_TARGET_ALL);
+		return (getSearchTarget() == LLInventoryFilter::SUBST_TARGET_ALL);
 	}
 	return FALSE;
 }
-// ## Zi: Extended Inventory Search
+// </FS:Zi> Extended Inventory Search
 
 bool LLPanelMainInventory::handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept)
 {

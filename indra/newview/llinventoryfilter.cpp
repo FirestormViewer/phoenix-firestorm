@@ -1085,14 +1085,19 @@ void LLInventoryFilter::setFilterWorn(BOOL worn)
 // <FS:Ansariel> FIRE-19340: search inventory by transferable permission
 void LLInventoryFilter::setFilterTransferable(BOOL transferable)
 {
-	setModified();
-	if (transferable)
+	BOOL current = (mFilterOps.mFilterTypes & FILTERTYPE_TRANSFERABLE) != 0;
+
+	if (current != transferable)
 	{
-		mFilterOps.mFilterTypes |= FILTERTYPE_TRANSFERABLE;
-	}
-	else
-	{
-		mFilterOps.mFilterTypes &= ~FILTERTYPE_TRANSFERABLE;
+		setModified();
+		if (transferable)
+		{
+			mFilterOps.mFilterTypes |= FILTERTYPE_TRANSFERABLE;
+		}
+		else
+		{
+			mFilterOps.mFilterTypes &= ~FILTERTYPE_TRANSFERABLE;
+		}
 	}
 }
 // </FS:Ansariel>

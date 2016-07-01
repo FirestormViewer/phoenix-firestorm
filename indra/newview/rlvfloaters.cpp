@@ -1,5 +1,5 @@
 /** 
- * @file rlvfloaters.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -16,6 +16,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llagent.h"
 #include "llappearancemgr.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
@@ -42,12 +43,14 @@
 std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
 {
 	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
+	{
 		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
+	}
 	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
 	{
-		std::string attachment_point_name;
-		gAgentAvatarp->getAttachedPointName(pItem->getUUID(), attachment_point_name);
-		return llformat("%s (%s)", pItem->getName().c_str(), attachment_point_name.c_str());
+		std::string strAttachPtName;
+		gAgentAvatarp->getAttachedPointName(pItem->getUUID(), strAttachPtName);
+		return llformat("%s (%s)", pItem->getName().c_str(), strAttachPtName.c_str());
 	}
 	return (pItem) ? pItem->getName() : LLStringUtil::null;
 }
@@ -71,20 +74,26 @@ std::string rlvGetItemType(const LLViewerInventoryItem* pItem)
 	return "Unknown";
 }
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0g
 std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt = true)
 {
 	const LLViewerObject* pObj = gObjectList.findObject(idObj);
+	if ( (pObj) && (pObj->isAvatar()) )
+	{
+		LLAvatarName avName;
+		if (LLAvatarNameCache::get(pObj->getID(), &avName))
+			return avName.getCompleteName();
+		return ((LLVOAvatar*)pObj)->getFullname();
+	}
+
 	const LLViewerObject* pObjRoot = (pObj) ? pObj->getRootEdit() : NULL;
 	const LLViewerInventoryItem* pItem = ((pObjRoot) && (pObjRoot->isAttachment())) ? gInventory.getItem(pObjRoot->getAttachmentItemID()) : NULL;
 
-	std::string strItemName = (pItem) ? pItem->getName() : idObj.asString();
+	const std::string strItemName = (pItem) ? pItem->getName() : idObj.asString();
 	if ( (!fIncludeAttachPt) || (!pObj) || (!pObj->isAttachment()) || (!isAgentAvatarValid()) )
 		return strItemName;
 
-	const LLViewerJointAttachment* pAttachPt = 
-		get_if_there(gAgentAvatarp->mAttachmentPoints, RlvAttachPtLookup::getAttachPointIndex(pObjRoot), (LLViewerJointAttachment*)NULL);
-	std::string strAttachPtName = (pAttachPt) ? pAttachPt->getName() : std::string("Unknown");
+	const LLViewerJointAttachment* pAttachPt = get_if_there(gAgentAvatarp->mAttachmentPoints, RlvAttachPtLookup::getAttachPointIndex(pObjRoot), (LLViewerJointAttachment*)NULL);
+	const std::string strAttachPtName = (pAttachPt) ? pAttachPt->getName() : std::string("Unknown");
 	return llformat("%s (%s%s)", strItemName.c_str(), strAttachPtName.c_str(), (pObj == pObjRoot) ? "" : ", child");
 }
 
@@ -102,6 +111,8 @@ bool rlvGetShowException(ERlvBehaviour eBhvr)
 		case RLV_BHVR_TPREQUEST:
 		case RLV_BHVR_ACCEPTTP:
 		case RLV_BHVR_ACCEPTTPREQUEST:
+		case RLV_BHVR_SHOWNAMES:
+		case RLV_BHVR_SHOWNAMETAGS:
 			return true;
 		default:
 			return false;
@@ -248,8 +259,6 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 			strRestrictions << "  -> " << itCmd->asString();
 			if ( (!strOption.empty()) && (strOption != itCmd->getOption()) )
 				strRestrictions << "  [" << strOption << "]";
-			if (RLV_RET_SUCCESS != itCmd->getReturnType())
-				strRestrictions << "  (" << RlvStrings::getStringFromReturnCode(itCmd->getReturnType()) << ")";
 			strRestrictions << "\n";
 		}
 	}
@@ -272,15 +281,16 @@ BOOL RlvFloaterBehaviours::postBuild()
 	return TRUE;
 }
 
-// Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
 void RlvFloaterBehaviours::refreshAll()
 {
 	LLCtrlListInterface* pBhvrList = childGetListInterface("behaviour_list");
 	LLCtrlListInterface* pExceptList = childGetListInterface("exception_list");
-	if ( (!pBhvrList) || (!pExceptList) )
+	LLCtrlListInterface* pModifierList = childGetListInterface("modifier_list");
+	if ( (!pBhvrList) || (!pExceptList) || (!pModifierList) )
 		return;
 	pBhvrList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 	pExceptList->operateOnAll(LLCtrlListInterface::OP_DELETE);
+	pModifierList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
 	if (!isAgentAvatarValid())
 		return;
@@ -296,6 +306,11 @@ void RlvFloaterBehaviours::refreshAll()
 	sdExceptColumns[0] = LLSD().with("column", "behaviour").with("type", "text");
 	sdExceptColumns[1] = LLSD().with("column", "option").with("type", "text");
 	sdExceptColumns[2] = LLSD().with("column", "issuer").with("type", "text");
+
+	LLSD sdModifierRow; LLSD& sdModifierColumns = sdModifierRow["columns"];
+	sdModifierColumns[0] = LLSD().with("column", "modifier").with("type", "text");
+	sdModifierColumns[1] = LLSD().with("column", "value").with("type", "text");
+	sdModifierColumns[2] = LLSD().with("column", "primary").with("type", "text");
 
 	//
 	// List behaviours
@@ -343,11 +358,39 @@ void RlvFloaterBehaviours::refreshAll()
 			else
 			{
 				// List under the "Restrictions" tab
-				sdBhvrRow["enabled"] = (RLV_RET_SUCCESS == itCmd->getReturnType());
 				sdBhvrColumns[0]["value"] = (strOption.empty()) ? itCmd->asString() : itCmd->getBehaviour() + ":" + strOption;
 				sdBhvrColumns[1]["value"] = strIssuer;
 				pBhvrList->addElement(sdBhvrRow, ADD_BOTTOM);
 			}
+		}
+	}
+
+	//
+	// List modifiers
+	//
+	for (int idxModifier = 0; idxModifier < RLV_MODIFIER_COUNT; idxModifier++)
+	{
+		const RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().m_BehaviourModifiers[idxModifier];
+		if (pBhvrModifier)
+		{
+			sdModifierRow["enabled"] = (pBhvrModifier->hasValue());
+			sdModifierColumns[0]["value"] = pBhvrModifier->getName();
+
+			if (pBhvrModifier->hasValue())
+			{
+				const RlvBehaviourModifierValue& modValue = pBhvrModifier->getValue();
+				if (typeid(float) == modValue.type())
+					sdModifierColumns[1]["value"] = llformat("%f", boost::get<float>(modValue));
+				else if (typeid(int) == modValue.type())
+					sdModifierColumns[1]["value"] = llformat("%d", boost::get<int>(modValue));
+			}
+			else
+			{
+				sdModifierColumns[1]["value"] = "(default)";
+			}
+
+			sdModifierColumns[2]["value"] = (pBhvrModifier->getPrimaryObject().notNull()) ? rlvGetItemNameFromObjID(pBhvrModifier->getPrimaryObject()) : LLStringUtil::null;
+			pModifierList->addElement(sdModifierRow, ADD_BOTTOM);
 		}
 	}
 }
@@ -667,6 +710,109 @@ void RlvFloaterStrings::refresh()
 	}
 
 	findChild<LLUICtrl>("default_btn")->setEnabled(!m_strStringCurrent.empty());
+}
+
+// ============================================================================
+// RlvFloaterConsole
+//
+
+static const char s_strRlvConsolePrompt[] = "> ";
+static const char s_strRlvConsoleDisabled[] = "RLVa is disabled";
+static const char s_strRlvConsoleInvalid[] = "Invalid command";
+
+RlvFloaterConsole::RlvFloaterConsole(const LLSD& sdKey)
+	: LLFloater(sdKey), m_pOutputText(nullptr)
+{
+}
+
+RlvFloaterConsole::~RlvFloaterConsole()
+{
+}
+
+BOOL RlvFloaterConsole::postBuild()
+{
+	LLLineEditor* pInputEdit = getChild<LLLineEditor>("console_input");
+	pInputEdit->setEnableLineHistory(true);
+	pInputEdit->setCommitCallback(boost::bind(&RlvFloaterConsole::onInput, this, _1, _2));
+	pInputEdit->setFocus(true);
+	pInputEdit->setCommitOnFocusLost(false);
+
+	m_pOutputText = getChild<LLTextEditor>("console_output");
+	m_pOutputText->appendText(s_strRlvConsolePrompt, false);
+
+	return TRUE;
+}
+
+void RlvFloaterConsole::onClose(bool fQuitting)
+{
+	gRlvHandler.processCommand(gAgent.getID(), "clear", true);
+}
+
+void RlvFloaterConsole::addCommandReply(const std::string& strCommand, const std::string& strReply)
+{
+	m_pOutputText->appendText(llformat("%s: ", strCommand.c_str()), true);
+	m_pOutputText->appendText(strReply, false);
+}
+
+void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
+{
+	LLLineEditor* pInputEdit = static_cast<LLLineEditor*>(pCtrl);
+	std::string strInput = pInputEdit->getText();
+	LLStringUtil::trim(strInput);
+
+	m_pOutputText->appendText(strInput, false);
+	pInputEdit->clear();
+
+	if (!rlv_handler_t::isEnabled())
+	{
+		m_pOutputText->appendText(s_strRlvConsoleDisabled, true);
+	}
+	else if ( (strInput.length() <= 3) || (RLV_CMD_PREFIX != strInput[0]) )
+	{
+		m_pOutputText->appendText(s_strRlvConsoleInvalid, true);
+	}
+	else
+	{
+		strInput.erase(0, 1);
+		LLStringUtil::toLower(strInput);
+
+		std::string strExecuted, strFailed, strRetained, *pstr;
+
+		boost_tokenizer tokens(strInput, boost::char_separator<char>(",", "", boost::drop_empty_tokens));
+		for (std::string strCmd : tokens)
+		{
+			ERlvCmdRet eRet = gRlvHandler.processCommand(gAgent.getID(), strCmd, true);
+			if ( RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS) )	
+				pstr = &strExecuted;
+			else if ( RLV_RET_FAILED == (eRet & RLV_RET_FAILED) )
+				pstr = &strFailed;
+			else if (RLV_RET_RETAINED == eRet)
+				pstr = &strRetained;
+			else
+			{
+				RLV_ASSERT(false);
+				pstr = &strFailed;
+			}
+
+			if (const char* pstrSuffix = RlvStrings::getStringFromReturnCode(eRet))
+				strCmd.append(" (").append(pstrSuffix).append(")");
+			else if (RLV_RET_SUCCESS == (eRet & RLV_RET_SUCCESS))
+				strCmd.clear(); // Only show feedback on successful commands when there's an informational notice
+
+			if (!pstr->empty())
+				pstr->push_back(',');
+			pstr->append(strCmd);
+		}
+
+		if (!strExecuted.empty())
+			m_pOutputText->appendText("INFO: @" + strExecuted, true);
+		if (!strFailed.empty())
+			m_pOutputText->appendText("ERR: @" + strFailed, true);
+		if (!strRetained.empty())
+			m_pOutputText->appendText("RET: @" + strRetained, true);
+	}
+
+	m_pOutputText->appendText(s_strRlvConsolePrompt, true);
 }
 
 // ============================================================================

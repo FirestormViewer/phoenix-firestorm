@@ -280,6 +280,9 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
 			gSavedSettings.setString("PresetGraphicActive", name);
 		}
 
+		// <FS:Ansariel> Update indirect controls
+		LLAvatarComplexityControls::setIndirectControls();
+
 		LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 		if (instance)
 		{
