@@ -79,10 +79,15 @@
 #include "llsdserialize.h"
 #include "llcallstack.h"
 #include "llcorehttputil.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+// [RLVa:KB] - Checked: RLVa-2.0.2
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+#include "llviewerparcelmgr.h"
+extern BOOL gTeleportDisplay;
+// [/SL:KB]
 
 // <FS:Ansariel> [Legacy Bake]
 #ifdef OPENSIM
@@ -1301,12 +1306,25 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 		}
 		else
 		{
+// [RLVa:KB] - Checked: RLVa-2.0.2
+			bool fRlvCanShowAttachment = true;
+			if (rlv_handler_t::isEnabled())
+			{
+				fRlvCanShowAttachment =
+					(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELF)) &&
+					( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWSELFHEAD)) || (RLV_ATTACHGROUP_HEAD != rlvAttachGroupFromIndex(attachment->getGroup())) );
+			}
+// [/RLVa:KB]
+
 			switch (camera_mode)
 			{
 				case CAMERA_MODE_MOUSELOOK:
 					if (LLVOAvatar::sVisibleInFirstPerson && attachment->getVisibleInFirstPerson())
 					{
-						attachment->setAttachmentVisibility(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.2
+						attachment->setAttachmentVisibility(fRlvCanShowAttachment);
+// [/RLVa:KB]
+//						attachment->setAttachmentVisibility(TRUE);
 					}
 					else
 					{
@@ -1314,7 +1332,10 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 					}
 					break;
 				default:
-					attachment->setAttachmentVisibility(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.2
+					attachment->setAttachmentVisibility(fRlvCanShowAttachment);
+// [/RLVa:KB]
+//					attachment->setAttachmentVisibility(TRUE);
 					break;
 			}
 		}
@@ -3300,6 +3321,60 @@ void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 	}
 	apr_file_printf( file, "\n</wearable_info>\n" );
 }
+
+// [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
+void LLVOAvatarSelf::addPendingDetach(const LLUUID& idObject)
+{
+	if (mPendingObjectDetach.end() == std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject))
+		mPendingObjectDetach.push_back(idObject);
+
+	if ((!mPendingObjectDetach.empty()) && (!mTeleportDoneConn.connected()))
+		mTeleportDoneConn = LLViewerParcelMgr::instance().setTeleportDoneCallback(boost::bind(&LLVOAvatarSelf::onTeleportDone, this));
+}
+
+bool LLVOAvatarSelf::isPendingDetach(const LLUUID& idObject) const
+{
+	return mPendingObjectDetach.end() != std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
+}
+
+void LLVOAvatarSelf::removePendingDetach(const LLUUID& idObject)
+{
+	auto itPendingDetach = std::find(mPendingObjectDetach.begin(), mPendingObjectDetach.end(), idObject);
+	if (mPendingObjectDetach.end() != itPendingDetach)
+		mPendingObjectDetach.erase(itPendingDetach);
+
+	if (mPendingObjectDetach.empty())
+		mTeleportDoneConn.disconnect();
+}
+
+void LLVOAvatarSelf::onTeleportDone()
+{
+	mTeleportDoneConn.disconnect();
+	doAfterInterval(boost::bind(&LLVOAvatarSelf::checkPendingDetach, this), 30.f);
+}
+
+void LLVOAvatarSelf::checkPendingDetach()
+{
+	if (gTeleportDisplay)
+		return;
+
+	for (const LLUUID& idObj : mPendingObjectDetach)
+	{
+		LLViewerObject* pObject = gObjectList.findObject(idObj);
+		if (pObject)
+		{
+			gObjectList.killObject(pObject);
+			if (gShowObjectUpdates)
+			{
+				LLColor4 color(0.f, 1.f, 0.f, 1.f);
+				gPipeline.addDebugBlip(pObject->getPositionAgent(), color);
+			}
+			LLSelectMgr::getInstance()->removeObjectFromSelections(idObj);
+		}
+	}
+	mPendingObjectDetach.clear();
+}
+// [/SL:KB]
 
 // [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
 F32 LLVOAvatarSelf::getAvatarOffset() /*const*/

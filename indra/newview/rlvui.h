@@ -1,5 +1,5 @@
 /** 
- * @file rlvui.h
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -44,15 +44,9 @@ public:
 	 */
 protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
-	void onToggleEdit();												// edit
 	void onToggleMovement();											// fly, alwaysrun and temprun
-	void onToggleSendIM();												// sendim
-	void onToggleSetDebug();											// setdebug
-	void onToggleSetEnv();												// setenv
-	void onToggleShowInv(bool fQuitting);								// showinv
 	void onToggleShowLoc();												// showloc
 	void onToggleShowMinimap();											// showminimap
-	void onToggleShowNames(bool fQuitting);								// shownames
 	void onToggleShowWorldMap();										// showworldmap
 	void onToggleTp();													// tploc and tplm
 	void onToggleUnsit();												// unsit
@@ -62,10 +56,11 @@ protected:
  	/*
 	 * Floater and sidebar validation callbacks
 	 */
-protected:
+public:
 	void addGenericFloaterFilter(const std::string& strFloaterName);
 	void removeGenericFloaterFilter(const std::string& strFloaterName);
 
+protected:
 	bool filterFloaterGeneric(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterGeneric;
 	bool filterFloaterShowLoc(const std::string&, const LLSD& );

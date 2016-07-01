@@ -70,6 +70,9 @@ const std::string GRID_SLURL_BASE		= "slurl_base";
 const std::string GRID_APP_SLURL_BASE	= "app_slurl_base";
 // </Opensim>
 
+// Inworldz special
+#define INWORLDZ_URI "inworldz.com:8002"
+
 class GridInfoRequestResponder;
 
 // <AW opensim>

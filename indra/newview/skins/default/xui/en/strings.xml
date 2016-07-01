@@ -38,6 +38,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
+	<string name="AboutPositionRLVShowLoc">
+You are in [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
 	<!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
        Most PC users who know what these mean will be used to the English versions,
        and this info sometimes gets sent to support. -->
@@ -289,7 +294,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipFlagPhantom">Phantom</string>
 	<string name="TooltipFlagTemporary">Temporary</string>
 	<string name="TooltipPrimCount">Prims: [COUNT]</string>
-	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT] PE</string>
+	<string name="TooltipPrimEquivalent">, Land Impact: [PEWEIGHT]</string>
 	<string name="TooltipPrimEquivalentLoading">, loading Land Impact...</string>
 	<string name="TooltipPrimEquivalentUnavailable">, Land Impact unavailable</string>
 	<string name="TooltipDistance">Distance: [DISTANCE] m</string>
@@ -2734,6 +2739,12 @@ Try enclosing path to the editor with double quotes.
   <!-- Spell check settings floater -->
   <string name="UserDictionary">[User]</string>
   
+  <!-- RLVa -->
+  <string name="RLVaPendingRestart"> (pending restart)</string>
+  <string name="RLVaToggleMessage">RestrainedLove Support will be %s after you restart</string>
+  <string name="RLVaToggleEnabled">enabled</string>
+  <string name="RLVaToggleDisabled">disabled</string>
+   
   <!-- Experience Tools strings -->
   <string name="experience_tools_experience">Experience</string>
   <string name="ExperienceNameNull">(no experience)</string>
@@ -2997,4 +3008,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Pie_av_render_normally">Normally</string>
   <string name="Pie_av_render_never">Never</string>
   <string name="Pie_av_render_fully">Fully</string>
+
+  <string name="Nametag_Complexity_Label">Complexity: [COMPLEXITY]</string>
 </strings>

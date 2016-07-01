@@ -1865,11 +1865,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		}
 		else
 		{
-//			rez_attachment(item, 0);
 // [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-2.2)
 			// Make this behave consistent with dad3dWearItem
 			rez_attachment(item, 0, !(mask & MASK_CONTROL));
 // [/SL:KB]
+//			rez_attachment(item, 0);
 		}
 	}
 	return ACCEPT_YES_SINGLE;

@@ -57,16 +57,17 @@ BOOL FloaterMediaLists::postBuild()
 		element["columns"][0]["column"] = "list";
 		element["columns"][0]["value"] = itr["domain"].asString();
 		if (itr["action"].asString() == "allow")
-		{	
+		{
 			mWhitelistSLC->addElement(element);
-			mWhitelistSLC->sortByColumn("list", TRUE);
 		}
 		else if (itr["action"].asString() == "deny")
 		{
 			mBlacklistSLC->addElement(element);
-			mBlacklistSLC->sortByColumn("list", TRUE);
 		}
 	}
+
+	mWhitelistSLC->sortByColumn("list", TRUE);
+	mBlacklistSLC->sortByColumn("list", TRUE);
 
 	return TRUE;
 }
@@ -87,7 +88,7 @@ void FloaterMediaLists::onWhitelistRemove()
 	{
 		std::string domain = mWhitelistSLC->getSelectedItemLabel();
 
-		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+		for (S32 i = 0; i < (S32)LLViewerParcelMedia::sMediaFilterList.size(); ++i)
 		{
 			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
 			{
@@ -121,7 +122,7 @@ void FloaterMediaLists::onBlacklistRemove()
 	{
 		std::string domain = mBlacklistSLC->getSelectedItemLabel();
 
-		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+		for (S32 i = 0; i < (S32)LLViewerParcelMedia::sMediaFilterList.size(); ++i)
 		{
 			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
 			{
@@ -160,7 +161,7 @@ bool FloaterMediaLists::handleAddDomainCallback(const LLSD& notification, const 
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
 		
-		LLFloater* floater = LLFloaterReg::getInstance("media_lists");
+		LLFloater* floater = LLFloaterReg::findInstance("media_lists");
 		if (floater)
 		{
 			LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>(whitelist ? "whitelist" : "blacklist");

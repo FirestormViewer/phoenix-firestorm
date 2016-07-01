@@ -1,5 +1,5 @@
 /** 
- * @file rlvextentions.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -281,13 +281,7 @@ bool RlvWindLight::setValue(const std::string& strRlvName, const std::string& st
 		}
 		else
 		{
-			// <FS:Ansariel> FIRE-14466: Menu item checkmark in menu doesn't get properly updated
-			//pEnvMgr->useRegionSettings();
-			pEnvMgr->setUserPrefs(pEnvMgr->getWaterPresetName(),
-					    pEnvMgr->getSkyPresetName(),
-					    pEnvMgr->getDayCycleName(),
-					    false, true, false);
-			// </FS:Ansariel>
+			pEnvMgr->setUserPrefs(pEnvMgr->getWaterPresetName(), pEnvMgr->getSkyPresetName(), pEnvMgr->getDayCycleName(), false, true);
 		}
 		return true;
 	}
@@ -391,11 +385,9 @@ RlvExtGetSet::RlvExtGetSet()
 	{
 		m_DbgAllowed.insert(std::pair<std::string, S16>("AvatarSex", DBG_READ | DBG_WRITE | DBG_PSEUDO));
 		m_DbgAllowed.insert(std::pair<std::string, S16>("RenderResolutionDivisor", DBG_READ | DBG_WRITE));
-		#ifdef RLV_EXTENSION_CMD_GETSETDEBUG_EX
-			m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_FORBIDGIVETORLV, DBG_READ));
-			m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_NOSETENV, DBG_READ));
-			m_DbgAllowed.insert(std::pair<std::string, S16>("WindLightUseAtmosShaders", DBG_READ));
-		#endif // RLV_EXTENSION_CMD_GETSETDEBUG_EX
+		m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_FORBIDGIVETORLV, DBG_READ));
+		m_DbgAllowed.insert(std::pair<std::string, S16>(RLV_SETTING_NOSETENV, DBG_READ));
+		m_DbgAllowed.insert(std::pair<std::string, S16>("WindLightUseAtmosShaders", DBG_READ));
 
 		// Cache persistance of every setting
 		LLControlVariable* pSetting;

@@ -1,5 +1,5 @@
 /** 
- * @file rlvfloaters.h
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -21,6 +21,12 @@
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
+
+// ============================================================================
+// Foward declarations
+//
+class LLComboBox;
+class LLTextEditor;
 
 // ============================================================================
 // RlvFloaterLocks class declaration
@@ -116,6 +122,40 @@ protected:
 	std::string m_strStringCurrent;
 	LLComboBox*	m_pStringList;
 	LLSD		m_sdStringsInfo;
+};
+
+// ============================================================================
+// RlvFloaterConsole - debug console to allow command execution without the need for a script
+//
+
+class RlvFloaterConsole : public LLFloater
+{
+	friend class LLFloaterReg;
+	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
+	friend class RlvHandler;
+private:
+	RlvFloaterConsole(const LLSD& sdKey);
+	~RlvFloaterConsole() override;
+
+	/*
+	 * LLFloater overrides
+	 */
+public:
+	BOOL postBuild() override;
+	void onClose(bool fQuitting) override;
+	
+	/*
+	 * Member functions
+	 */
+protected:
+	void addCommandReply(const std::string& strCommand, const std::string& strReply);
+	void onInput(LLUICtrl* ctrl, const LLSD& param);
+
+	/*
+	 * Member variables
+	 */
+protected:
+	LLTextEditor* m_pOutputText;
 };
 
 // ============================================================================

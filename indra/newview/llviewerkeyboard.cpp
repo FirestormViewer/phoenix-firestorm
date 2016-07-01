@@ -122,6 +122,10 @@ void agent_push_down( EKeystate s )
 
 static void agent_check_temporary_run(LLAgent::EDoubleTapRunMode mode)
 {
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	if ( (gAgent.mDoubleTapRunMode == mode) && (gAgent.getTempRun()) )
+		gAgent.clearTempRun();
+// [/RLVa:KB]
 //	if (gAgent.mDoubleTapRunMode == mode &&
 //		gAgent.getRunning() &&
 //		!gAgent.getAlwaysRun())
@@ -130,10 +134,6 @@ static void agent_check_temporary_run(LLAgent::EDoubleTapRunMode mode)
 //		gAgent.clearRunning();
 //		gAgent.sendWalkRun(gAgent.getRunning());
 //	}
-// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
-	if ( (gAgent.mDoubleTapRunMode == mode) && (gAgent.getTempRun()) )
-		gAgent.clearTempRun();
-// [/RLVa:KB]
 }
 
 static void agent_handle_doubletap_run(EKeystate s, LLAgent::EDoubleTapRunMode mode)

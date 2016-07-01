@@ -163,6 +163,9 @@ protected:
 	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
 	//</FS:Kadah>
 
+	// <FS:Ansariel> Properly disable avatar tag setting
+	void onAvatarTagSettingsChanged();
+
 public:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
@@ -234,6 +237,7 @@ public:
 	void updateMaxNonImpostors();
 	void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
 	void updateMaxNonImpostorsLabel(const LLSD& newvalue);
+	void updateMaxComplexityLabel(const LLSD& newvalue);
 	// </FS:Ansariel>
 
 	void refreshUI();

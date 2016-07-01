@@ -1,6 +1,6 @@
 /** 
- * @file rlvdefines.h
- * Copyright (c) 2009-2011, Kitty Barnett
+ *
+ * Copyright (c) 2009-2016, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -18,55 +18,19 @@
 #define RLV_DEFINES_H
 
 // ============================================================================
-// Extensions
-//
-
-// Extensions
-#define RLV_EXTENSION_CMD_GETSETDEBUG_EX	// Extends the debug variables accessible through @getdebug_xxx/@setdebug_xxx
-#define RLV_EXTENSION_CMD_FINDFOLDERS		// @findfolders:<option>=<channel> - @findfolder with multiple results
-#define RLV_EXTENSION_FORCEWEAR_GESTURES	// @attach*/detach* commands also (de)activate gestures
-#define RLV_EXTENSION_STARTLOCATION			// Reenables "Start Location" at login if not @tploc=n or @unsit=n restricted at last logoff
-#define RLV_EXPERIMENTAL					// Enables/disables experimental features en masse
-#define RLV_EXPERIMENTAL_CMDS				// Enables/disables experimental commands en masse
-
-// Experimental features
-#ifdef RLV_EXPERIMENTAL
-	// Stable (will mature to RLV_EXTENSION_XXX in next release if no bugs are found)
-
-	// Under testing (stable, but requires further testing - safe for public release but may be quirky)
-	#define RLV_EXTENSION_FORCEWEAR_FOLDERLINKS	// @attach*/detach* commands will collect from folder links as well
-
-	// Under development (don't include in public release)
-	#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-//		#define RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-#endif // RLV_EXPERIMENTAL
-
-// Experimental commands (not part of the RLV API spec, disabled on public releases)
-#ifdef RLV_EXPERIMENTAL_CMDS
-// <ND/> Disable  RLV_EXTENSION_CMD_ALLOWIDLE for now, it causes FIRE-3863
-//	#define RLV_EXTENSION_CMD_ALLOWIDLE		// Forces "Away" status when idle (effect is the same as setting AllowIdleAFK to TRUE)
-
-	#define RLV_EXTENSION_CMD_GETCOMMAND	// @getcommand:<option>=<channel>
-	#define RLV_EXTENSION_CMD_GETXXXNAMES	// @get[add|rem]attachnames:<option>=<channel> and @get[add|rem]outfitnames=<channel>
-	#define RLV_EXTENSION_CMD_INTERACT		// @interact=n
-	#define RLV_EXTENSION_CMD_TOUCHXXX		// @touch:uuid=n|y, @touchworld[:<uuid>]=n|y, @touchattach[:<uuid>]=n|y, @touchud[:<uuid>]=n|y
-#endif // RLV_EXPERIMENTAL_CMDS
-
-// ============================================================================
 // Defines
 //
 
 // Version of the specifcation we support
-const S32 RLV_VERSION_MAJOR = 2;
-const S32 RLV_VERSION_MINOR = 8;
-const S32 RLV_VERSION_PATCH = 0;
+const S32 RLV_VERSION_MAJOR = 3;
+const S32 RLV_VERSION_MINOR = 1;
+const S32 RLV_VERSION_PATCH = 4;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
-const S32 RLVa_VERSION_MAJOR = 1;
-const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 10;
+const S32 RLVa_VERSION_MAJOR = 2;
+const S32 RLVa_VERSION_MINOR = 0;
+const S32 RLVa_VERSION_PATCH = 0;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
@@ -102,6 +66,10 @@ const S32 RLVa_VERSION_BUILD = 0;
 
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
+#define RLV_MODIFIER_TPLOCAL_DEFAULT    256.f			// Any teleport that's more than a region away is non-local
+#define RLV_MODIFIER_FARTOUCH_DEFAULT   1.5f			// Specifies the default @fartouch distance
+#define RLV_MODIFIER_SITTP_DEFAULT      1.5f			// Specifies the default @sittp distance
+#define RLV_OPTION_SEPARATOR			";"				// Default separator used in command options
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_PUTINV_SEPARATOR			"/"
 #define RLV_PUTINV_MAXDEPTH				4
@@ -116,10 +84,9 @@ const S32 RLVa_VERSION_BUILD = 0;
 // Enumeration declarations
 //
 
-// NOTE: any changes to this enumeration should be reflected in RlvCommand::initLookupTable()
+// NOTE: any changes to this enumeration should be reflected in the RlvBehaviourDictionary constructor
 enum ERlvBehaviour {
 	RLV_BHVR_DETACH = 0,			// "detach"
-	RLV_BHVR_ATTACH,				// "attach"
 	RLV_BHVR_ADDATTACH,				// "addattach"
 	RLV_BHVR_REMATTACH,				// "remattach"
 	RLV_BHVR_ADDOUTFIT,				// "addoutfit"
@@ -139,13 +106,15 @@ enum ERlvBehaviour {
 	RLV_BHVR_CHATWHISPER,			// "chatwhisper"
 	RLV_BHVR_CHATNORMAL,			// "chatnormal"
 	RLV_BHVR_CHATSHOUT,				// "chatshout"
-	RLV_BHVR_SENDCHANNEL,			// "sendchannel"
+	RLV_BHVR_SENDCHANNEL,
+	RLV_BHVR_SENDCHANNELEXCEPT,
 	RLV_BHVR_SENDIM,				// "sendim"
 	RLV_BHVR_SENDIMTO,				// "sendimto"
 	RLV_BHVR_RECVIM,				// "recvim"
 	RLV_BHVR_RECVIMFROM,			// "recvimfrom"
 	RLV_BHVR_STARTIM,				// "startim"
 	RLV_BHVR_STARTIMTO,				// "startimto"
+	RLV_BHVR_SENDGESTURE,
 	RLV_BHVR_PERMISSIVE,			// "permissive"
 	RLV_BHVR_NOTIFY,				// "notify"
 	RLV_BHVR_SHOWINV,				// "showinv"
@@ -153,12 +122,16 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWWORLDMAP,			// "showworldmap"
 	RLV_BHVR_SHOWLOC,				// "showloc"
 	RLV_BHVR_SHOWNAMES,				// "shownames"
+	RLV_BHVR_SHOWNAMETAGS,			// "shownametags"
 	RLV_BHVR_SHOWHOVERTEXT,			// "showhovertext"
 	RLV_BHVR_SHOWHOVERTEXTHUD,		// "showhovertexthud"
 	RLV_BHVR_SHOWHOVERTEXTWORLD,	// "showhovertextworld"
 	RLV_BHVR_SHOWHOVERTEXTALL,		// "showhovertextall"
+	RLV_BHVR_SHOWSELF,
+	RLV_BHVR_SHOWSELFHEAD,
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
+	RLV_BHVR_TPLOCAL,
 	RLV_BHVR_TPLURE,				// "tplure"
 	RLV_BHVR_TPREQUEST,				// "tprequest"
 	RLV_BHVR_VIEWNOTE,				// "viewnote"
@@ -192,20 +165,10 @@ enum ERlvBehaviour {
 	RLV_BHVR_ALWAYSRUN,				// "alwaysrun"
 	RLV_BHVR_TEMPRUN,				// "temprun"
 	RLV_BHVR_DETACHME,				// "detachme"
-	RLV_BHVR_ATTACHOVER,			// "attachover"
 	RLV_BHVR_ATTACHTHIS,			// "attachthis"
-	RLV_BHVR_ATTACHTHISOVER,		// "attachthisover"
 	RLV_BHVR_ATTACHTHISEXCEPT,		// "attachthis_except"
 	RLV_BHVR_DETACHTHIS,			// "detachthis"
 	RLV_BHVR_DETACHTHISEXCEPT,		// "detachthis_except"
-	RLV_BHVR_ATTACHALL,				// "attachall"
-	RLV_BHVR_ATTACHALLOVER,			// "attachallover"
-	RLV_BHVR_DETACHALL,				// "detachall"
-	RLV_BHVR_ATTACHALLTHIS,			// "attachallthis"
-	RLV_BHVR_ATTACHALLTHISEXCEPT,	// "attachallthis_except"
-	RLV_BHVR_ATTACHALLTHISOVER,		// "attachallthisover"
-	RLV_BHVR_DETACHALLTHIS,			// "detachallthis"
-	RLV_BHVR_DETACHALLTHISEXCEPT,	// "detachallthis_except"
 	RLV_BHVR_ADJUSTHEIGHT,			// "adjustheight"
 	RLV_BHVR_TPTO,					// "tpto"
 	RLV_BHVR_VERSION,				// "version"
@@ -230,18 +193,83 @@ enum ERlvBehaviour {
 	RLV_BHVR_GETCOMMAND,			// "getcommand"
 	RLV_BHVR_GETSTATUS,				// "getstatus"
 	RLV_BHVR_GETSTATUSALL,			// "getstatusall"
+	RLV_CMD_FORCEWEAR,				// Internal representation of all force wear commands
+
+	// Camera (behaviours)
+	RLV_BHVR_SETCAM,                // Gives an object exclusive control of the user's camera
+	RLV_BHVR_SETCAM_AVDISTMIN,		// Enforces a minimum distance from the avatar (in m)
+	RLV_BHVR_SETCAM_AVDISTMAX,		// Enforces a maximum distance from the avatar (in m)
+	RLV_BHVR_SETCAM_ORIGINDISTMIN,	// Enforces a minimum distance from the camera origin (in m)
+	RLV_BHVR_SETCAM_ORIGINDISTMAX,	// Enforces a maximum distance from the camera origin (in m)
+	RLV_BHVR_SETCAM_EYEOFFSET,      // Changes the default camera offset
+	RLV_BHVR_SETCAM_FOCUSOFFSET,    // Changes the default camera focus offset
+	RLV_BHVR_SETCAM_FOCUS,			// Forces the camera focus and/or position to a specific object, avatar or position
+	RLV_BHVR_SETCAM_FOV,			// Changes the current - vertical - field of view
+	RLV_BHVR_SETCAM_FOVMIN,			// Enforces a minimum - vertical - FOV (in degrees)
+	RLV_BHVR_SETCAM_FOVMAX,			// Enforces a maximum - vertical - FOV (in degrees)
+	RLV_BHVR_SETCAM_MOUSELOOK,		// Prevent the user from going into mouselook
+	RLV_BHVR_SETCAM_TEXTURES,		// Replaces all textures with the specified texture (or the default unrezzed one)
+	RLV_BHVR_SETCAM_UNLOCK,			// Forces the camera focus to the user's avatar
+	// Camera (behaviours - deprecated)
+	RLV_BHVR_CAMZOOMMIN,			// Enforces a minimum - vertical - FOV angle of 60° / multiplier
+	RLV_BHVR_CAMZOOMMAX,			// Enforces a maximum - vertical - FOV angle of 60° / multiplier
+	// Camera (reply)
+	RLV_BHVR_GETCAM_AVDIST,			// Returns the current minimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_AVDISTMIN,		// Returns the active (if any) minimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_AVDISTMAX,		// Returns the active (if any) maxmimum distance between the camera and the user's avatar
+	RLV_BHVR_GETCAM_FOV,			// Returns the current field of view angle (in radians)
+	RLV_BHVR_GETCAM_FOVMIN,			// Returns the active (if any) minimum field of view angle (in radians)
+	RLV_BHVR_GETCAM_FOVMAX,			// Enforces a maximum (if any) maximum field of view angle (in radians)
+	RLV_BHVR_GETCAM_TEXTURES,		// Returns the active (if any) replace texture UUID
+	// Camera (force)
+	RLV_BHVR_SETCAM_MODE,			// Switch the user's camera into the specified mode (e.g. mouselook or thirdview)
 
 	RLV_BHVR_COUNT,
 	RLV_BHVR_UNKNOWN
 };
 
+enum ERlvBehaviourModifier
+{
+	RLV_MODIFIER_FARTOUCHDIST,			// Radius of a sphere around the user in which they can interact with the world
+	RLV_MODIFIER_RECVIMDISTMIN,			// Minimum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_RECVIMDISTMAX,			// Maximum distance to receive an IM from an otherwise restricted sender (squared value)
+	RLV_MODIFIER_SENDIMDISTMIN,			// Minimum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SENDIMDISTMAX,			// Maximum distance to send an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMIN,		// Minimum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_STARTIMDISTMAX,		// Maximum distance to start an IM to an otherwise restricted recipient (squared value)
+	RLV_MODIFIER_SETCAM_AVDISTMIN,		// Minimum distance between the camera position and the user's avatar (normal value)
+	RLV_MODIFIER_SETCAM_AVDISTMAX,		// Maximum distance between the camera position and the user's avatar (normal value)
+	RLV_MODIFIER_SETCAM_ORIGINDISTMIN,	// Minimum distance between the camera position and the origin point (normal value)
+	RLV_MODIFIER_SETCAM_ORIGINDISTMAX,	// Maximum distance between the camera position and the origin point (normal value)
+	RLV_MODIFIER_SETCAM_EYEOFFSET,		// Specifies the default camera's offset from the camera (vector)
+	RLV_MODIFIER_SETCAM_FOCUSOFFSET,	// Specifies the default camera's focus (vector)
+	RLV_MODIFIER_SETCAM_FOVMIN,			// Minimum value for the camera's field of view (angle in radians)
+	RLV_MODIFIER_SETCAM_FOVMAX,			// Maximum value for the camera's field of view (angle in radians)
+	RLV_MODIFIER_SETCAM_TEXTURE,		// Specifies the UUID of the texture used to texture the world view
+	RLV_MODIFIER_SITTPDIST,
+	RLV_MODIFIER_TPLOCALDIST,
+
+	RLV_MODIFIER_COUNT,
+	RLV_MODIFIER_UNKNOWN
+};
+
+enum ERlvBehaviourOptionType
+{
+	RLV_OPTION_NONE,				// Behaviour takes no parameters
+	RLV_OPTION_EXCEPTION,			// Behaviour requires an exception as a parameter
+	RLV_OPTION_NONE_OR_EXCEPTION,	// Behaviour takes either no parameters or an exception
+	RLV_OPTION_MODIFIER,			// Behaviour requires a modifier as a parameter
+	RLV_OPTION_NONE_OR_MODIFIER		// Behaviour takes either no parameters or a modifier
+};
+
 enum ERlvParamType {
-	RLV_TYPE_UNKNOWN,
-	RLV_TYPE_ADD,					// <param> == "n"|"add"
-	RLV_TYPE_REMOVE,				// <param> == "y"|"rem"
-	RLV_TYPE_FORCE,					// <param> == "force"
-	RLV_TYPE_REPLY,					// <param> == <number>
-	RLV_TYPE_CLEAR
+	RLV_TYPE_UNKNOWN = 0x00,
+	RLV_TYPE_ADD     = 0x01,		// <param> == "n"|"add"
+	RLV_TYPE_REMOVE  = 0x02,		// <param> == "y"|"rem"
+	RLV_TYPE_FORCE   = 0x04,		// <param> == "force"
+	RLV_TYPE_REPLY   = 0x08,		// <param> == <number>
+	RLV_TYPE_CLEAR   = 0x10,
+	RLV_TYPE_ADDREM  = RLV_TYPE_ADD | RLV_TYPE_REMOVE
 };
 
 enum ERlvCmdRet {
@@ -250,6 +278,7 @@ enum ERlvCmdRet {
 	RLV_RET_SUCCESS		= 0x0100,	// Command executed succesfully
 	RLV_RET_SUCCESS_UNSET,			// Command executed succesfully (RLV_TYPE_REMOVE for an unrestricted behaviour)
 	RLV_RET_SUCCESS_DUPLICATE,		// Command executed succesfully (RLV_TYPE_ADD for an already restricted behaviour)
+	RLV_RET_SUCCESS_DEPRECATED,		// Command executed succesfully but has been marked as deprecated
 	RLV_RET_SUCCESS_DELAYED,		// Command parsed valid but will execute at a later time
 	RLV_RET_FAILED		= 0x0200,	// Command failed (general failure)
 	RLV_RET_FAILED_SYNTAX,			// Command failed (syntax error)
@@ -259,8 +288,10 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DISABLED,		// Command failed (command disabled by user)
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
-	RLV_RET_DEPRECATED				// Command has been deprecated
+	RLV_RET_FAILED_DEPRECATED,		// Command failed (deprecated and no longer supported)
+	RLV_RET_NO_PROCESSOR			// Command doesn't have a template processor define (legacy code)
 };
+#define RLV_RET_SUCCEEDED(eCmdRet)  (((eCmdRet) & RLV_RET_SUCCESS) == RLV_RET_SUCCESS)
 
 enum ERlvExceptionCheck
 {
@@ -318,7 +349,6 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_LOGINLASTLOCATION	"RLVaLoginLastLocation"
 #define RLV_SETTING_SHAREDINVAUTORENAME	"RLVaSharedInvAutoRename"
 #define RLV_SETTING_SHOWASSERTIONFAIL	"RLVaShowAssertionFailures"
-#define RLV_SETTING_SHOWNAMETAGS		"RLVaShowNameTags"
 #define RLV_SETTING_TOPLEVELMENU		"RLVaTopLevelMenu"
 #define RLV_SETTING_WEARREPLACEUNLOCKED	"RLVaWearReplaceUnlocked"
 
@@ -333,6 +363,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_HIDDEN_PARCEL			"hidden_parcel"
 #define RLV_STRING_HIDDEN_REGION			"hidden_region"
 
+#define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
@@ -342,6 +373,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
 #define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
+#define RLV_STRING_BLOCKED_TELEPORT_OFFER   "blocked_teleport_offer"
 #define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
 #define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"

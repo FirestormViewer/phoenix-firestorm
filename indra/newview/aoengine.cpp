@@ -574,17 +574,21 @@ void AOEngine::checkSitCancel()
 
 	if (foreignAnimations(seat))
 	{
-		LLUUID animation = mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT)->mCurrentAnimationID;
-		if (animation.notNull())
+		AOSet::AOState* aoState = mCurrentSet->getStateByRemapID(ANIM_AGENT_SIT);
+		if (aoState)
 		{
-			LL_DEBUGS("AOEngine") << "Stopping sit animation due to foreign animations running" << LL_ENDL;
-			gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
-			// remove cycle point cover-up
-			gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
-			gAgentAvatarp->LLCharacter::stopMotion(animation);
-			mSitCancelTimer.stop();
-			// stop cycle tiemr
-			mCurrentSet->stopTimer();
+			LLUUID animation = aoState->mCurrentAnimationID;
+			if (animation.notNull())
+			{
+				LL_DEBUGS("AOEngine") << "Stopping sit animation due to foreign animations running" << LL_ENDL;
+				gAgent.sendAnimationRequest(animation, ANIM_REQUEST_STOP);
+				// remove cycle point cover-up
+				gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC, ANIM_REQUEST_STOP);
+				gAgentAvatarp->LLCharacter::stopMotion(animation);
+				mSitCancelTimer.stop();
+				// stop cycle tiemr
+				mCurrentSet->stopTimer();
+			}
 		}
 	}
 }
@@ -931,6 +935,11 @@ BOOL AOEngine::removeSet(AOSet* set)
 
 BOOL AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index)
 {
+	if (index < 0)
+	{
+		return FALSE;
+	}
+
 	S32 numOfAnimations = state->mAnimations.size();
 	if (numOfAnimations == 0)
 	{
@@ -1717,9 +1726,16 @@ void AOEngine::onNotecardLoadComplete(LLVFS* vfs, const LLUUID& assetUUID, LLAss
 
 	S32 notecardSize = vfs->getSize(assetUUID, type);
 	char* buffer = new char[notecardSize];
-	vfs->getData(assetUUID, type, (U8*) buffer, 0, notecardSize);
 
-	AOEngine::instance().parseNotecard(buffer);
+	S32 ret = vfs->getData(assetUUID, type, reinterpret_cast<U8*>(buffer), 0, notecardSize);
+	if (ret > 0)
+	{
+		AOEngine::instance().parseNotecard(buffer);
+	}
+	else
+	{
+		delete[] buffer;
+	}
 }
 
 void AOEngine::parseNotecard(const char* buffer)
@@ -1739,7 +1755,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	}
 
 	std::string text(buffer);
-	delete buffer;
+	delete[] buffer;
 
 	std::vector<std::string> lines;
 	LLStringUtil::getTokens(text, lines, "\n");

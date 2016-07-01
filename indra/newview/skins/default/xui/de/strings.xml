@@ -559,7 +559,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Primitive: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, Auswirkung auf Land: [PEWEIGHT] PE
+		, Auswirkung auf Land: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
 		, bestimme Auswirkung auf Land...
@@ -6728,5 +6728,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Pie_av_render_fully">
 		Vollständig
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Komplexität: [COMPLEXITY]
 	</string>
 </strings>

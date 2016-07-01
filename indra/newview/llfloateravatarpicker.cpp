@@ -408,6 +408,7 @@ void LLFloaterAvatarPicker::onList()
 		RLV_ASSERT( (pTabs) && (pNearMePanel) );
 		if ( (pTabs) && (pNearMePanel) )
 		{
+			// TODO-RLVa: check this for RlvActions::canShowName()
 			bool fRlvEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 			pTabs->enableTabButton(pTabs->getIndexForPanel(pNearMePanel), fRlvEnable);
 			if ( (!fRlvEnable) && (pTabs->getCurrentPanel() == pNearMePanel) )

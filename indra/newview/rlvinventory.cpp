@@ -1,5 +1,5 @@
 /** 
- * @file rlvinventory.cpp
+ *
  * Copyright (c) 2009-2014, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -411,8 +411,7 @@ void RlvRenameOnWearObserver::doneIdle()
 	}
 
 	const LLViewerJointAttachment* pAttachPt = NULL; S32 idxAttachPt = 0;
-	// Kitty says this check really doesn't do much of anything. -- TS
-	// RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
+	//RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
 	for (uuid_vec_t::const_iterator itItem = mComplete.begin(); itItem != mComplete.end(); ++itItem)
 	{
 		const LLUUID& idAttachItem = *itItem;
@@ -832,12 +831,9 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				     (m_Folded.end() != std::find(m_Folded.begin(), m_Folded.end(), idParent)) ) &&
 				   ( (!fAttach) || (RlvAttachPtLookup::hasAttachPointName(pItem)) || (RlvSettings::getEnableSharedWear()) );
 			break;
-		#ifdef RLV_EXTENSION_FORCEWEAR_GESTURES
 		case LLAssetType::AT_GESTURE:
 			fRet = (m_Wearable.end() != std::find(m_Wearable.begin(), m_Wearable.end(), idParent));
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_GESTURES
-		#ifdef RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		case LLAssetType::AT_CATEGORY:
 			if (LLAssetType::AT_LINK_FOLDER == pItem->getActualType())
 			{
@@ -854,7 +850,6 @@ bool RlvWearableItemCollector::onCollectItem(const LLInventoryItem* pItem)
 				}
 			}
 			break;
-		#endif // RLV_EXTENSION_FORCEWEAR_FOLDERLINKS
 		default:
 			break;
 	}

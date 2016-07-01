@@ -102,7 +102,7 @@ public:
 	// Return true if filter has at least one match.
 	bool filterHasMatches();
 
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
 	// We need this to be public since we call it from RlvUIEnabler::onToggleShowNames()
 	void updateAvatarNames();
@@ -113,7 +113,7 @@ public:
 	// [/FS:CR]
 
 	// <FS:Ansariel> FIRE-12750: Name filter not working correctly
-	static std::string getNameForDisplay(const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames);
+	static std::string getNameForDisplay(const LLUUID& avatar_id, const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames);
 
 	boost::signals2::connection setRefreshCompleteCallback(const commit_signal_t::slot_type& cb);
 
@@ -151,7 +151,7 @@ private:
 	bool mShowVoiceVolume;
 	bool mShowSpeakingIndicator;
 	bool mShowPermissions;
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - RLVa-1.2.0
 	bool mRlvCheckShowNames;
 // [/RLVa:KB]
 	bool mShowDisplayName;

@@ -1432,6 +1432,10 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 	{
 		ret = mGridList[grid][GRID_APP_SLURL_BASE].asString();
 	}
+	else if (grid == INWORLDZ_URI)
+	{
+		ret = "inworldz:///app";
+	}
 	else
 	{
 		std::string app_base;
@@ -1463,6 +1467,6 @@ std::string LLGridManager::getAppSLURLBase(const std::string& grid)
 		ret =  llformat(app_base.c_str(), grid_norm.c_str());
 	}
 
-	LL_DEBUGS("GridManager") << "App slurl base: " << ret << LL_ENDL;
+	LL_DEBUGS("GridManager") << "App slurl base: " << ret << " - grid = " << grid << LL_ENDL;
 	return ret;
 }

@@ -140,6 +140,9 @@ LLPreviewTexture::~LLPreviewTexture()
 	if (mImage.notNull())
 	{
 		mImage->setBoostLevel(mImageOldBoostLevel);
+		// <FS:Ansariel> Remove NO_DELETE texture state so image gets removed from memory (set by calling setBoostLevel(LLGLTexture::BOOST_PREVIEW))
+		mImage->forceActive();
+		// </FS:Ansariel>
 		mImage = NULL;
 	}
 }

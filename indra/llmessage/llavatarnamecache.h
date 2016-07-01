@@ -102,6 +102,9 @@ namespace LLAvatarNameCache
     F64 nameExpirationFromHeaders(const LLSD& headers);
 
 	void addUseDisplayNamesCallback(const use_display_name_signal_t::slot_type& cb);
+
+	// <FS:Ansariel> FIRE-6659: Legacy "Resident" name toggle
+	void clearCache();
 }
 
 // Parse a cache-control header to get the max-age delta-seconds.

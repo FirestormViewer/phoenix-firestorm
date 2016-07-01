@@ -721,7 +721,10 @@ public:
 	void 			teleportHome()	{ teleportViaLandmark(LLUUID::null); }	// Go home
 	void 			teleportViaLure(const LLUUID& lure_id, BOOL godlike);	// To an invited location
 	void 			teleportViaLocation(const LLVector3d& pos_global);		// To a global location - this will probably need to be deprecated
-	void			teleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	void			teleportViaLocationLookAt(const LLVector3d& pos_global, const LLVector3& look_at = LLVector3::zero);// To a global location, preserving camera rotation
+// [/RLVa:KB]
+//	void			teleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
 	void 			teleportCancel();										// May or may not be allowed by server
     void            restoreCanceledTeleportRequest();
 	bool			getTeleportKeepsLookAt() { return mbTeleportKeepsLookAt; } // Whether look-at reset after teleport
@@ -765,13 +768,19 @@ private:
 	bool            hasPendingTeleportRequest();
 	void            startTeleportRequest();
 
-	void 			teleportRequest(const U64& region_handle,
-									const LLVector3& pos_local,				// Go to a named location home
-									bool look_at_from_camera = false);
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	void 			teleportRequest(const U64& region_handle, const LLVector3& pos_local, const LLVector3& look_at = LLVector3(0, 1, 0));
+// [/RLVa:KB]
+//	void 			teleportRequest(const U64& region_handle,
+//									const LLVector3& pos_local,				// Go to a named location home
+//									bool look_at_from_camera = false);
 	void 			doTeleportViaLandmark(const LLUUID& landmark_id);			// Teleport to a landmark
 	void 			doTeleportViaLure(const LLUUID& lure_id, BOOL godlike);	// To an invited location
 	void 			doTeleportViaLocation(const LLVector3d& pos_global);		// To a global location - this will probably need to be deprecated
-	void			doTeleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
+// [RLVa:KB] - Checked: RLVa-2.0.0
+	void			doTeleportViaLocationLookAt(const LLVector3d& pos_global, const LLVector3& look_at);// To a global location, preserving camera rotation
+// [/RLVa:KB]
+//	void			doTeleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
 
 	void            handleTeleportFinished();
 	void            handleTeleportFailed();
