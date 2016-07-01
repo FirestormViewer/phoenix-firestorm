@@ -14,6 +14,13 @@
         <scroll_list.columns label="Obiekt" name="issuer" />
       </scroll_list>
     </panel>
+    <panel label="Modyfikatory" name="modifier_panel">
+      <scroll_list name="modifier_list" tool_tip="Lista obecnych modyfikatorów RLVa.">
+        <scroll_list.columns label="Modyfik." name="modifier" />
+        <scroll_list.columns label="Wartość" name="value" />
+        <scroll_list.columns label="Główny obiekt" name="primary" />
+      </scroll_list>
+    </panel>
   </tab_container>
   <panel label="bottom_panel" name="bottom_panel">
     <button label="Kopiuj do schowka" name="copy_btn" tool_tip="Kopiuj ograniczenia do schowka" />
