@@ -42,8 +42,9 @@
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
 #include "lltooldraganddrop.h"
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.1
+#include "rlvactions.h"
+#include "rlvcommon.h"
 // [/RLVa:KB]
 #include  <time.h>
 #include "llnotificationsutil.h"
@@ -87,7 +88,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
 	mShowProfileBtn(true),
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: RLVa-1.2.0
 	mRlvCheckShowNames(false),
 // [/RLVa:KB]
 	mShowPermissions(false),
@@ -234,9 +235,10 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	// <FS:AO>, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	//mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	//bool fRlvCanShowName = (!mRlvCheckShowNames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mAvatarId));
+	//mInfoBtn->setVisible( (mShowInfoBtn) && (fRlvCanShowName) );
+	//mProfileBtn->setVisible( (mShowProfileBtn) && (fRlvCanShowName) );
 // [/RLVa:KB]
 
 	mHovered = true;
@@ -424,13 +426,13 @@ void LLAvatarListItem::setLastInteractionTime(U32 secs_since)
 void LLAvatarListItem::setShowInfoBtn(bool show)
 {
 	mShowInfoBtn = show;
-	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mAvatarId))) );
 }
 
 void LLAvatarListItem::setShowVoiceVolume(bool show)
 {
 	mShowVoiceVolume = show;
-	mVoiceSlider->setVisible( (mShowVoiceVolume) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mVoiceSlider->setVisible( (mShowVoiceVolume) && ((!mRlvCheckShowNames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mAvatarId))) );
 	if (show)
 	{
 		updateVoiceLevelSlider();
@@ -511,7 +513,7 @@ void LLAvatarListItem::onProfileBtnClick()
 BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 //	if(mInfoBtn->getRect().pointInRect(x, y))
-// [SL:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+// [RVLa:KB] - Checked: RLVa-1.2.2
 	if ( (mInfoBtn->getVisible()) && (mInfoBtn->getEnabled()) && (mInfoBtn->getRect().pointInRect(x, y)) )
 // [/SL:KB]
 	{
@@ -519,7 +521,7 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
 //	if(mProfileBtn->getRect().pointInRect(x, y))
-// [SL:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+// [RLVa:KB] - Checked: RLVa-1.2.2
 	if ( (mProfileBtn->getVisible()) && (mProfileBtn->getEnabled()) && (mProfileBtn->getRect().pointInRect(x, y)) )
 // [/SL:KB]
 	{
@@ -599,22 +601,22 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 	//}
 	//setAvatarName(name_string);
 	//setAvatarToolTip(av_name.getUserName());
-// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+// [RLVa:KB] - Checked: RLVa-1.2.2
 	// <FS:Ansa> Centralized in LLAvatarList::getNameForDisplay!
-	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	bool fRlvCanShowName = (!mRlvCheckShowNames) || (RlvActions::canShowName(RlvActions::SNC_DEFAULT, mAvatarId));
 	//if (mShowDisplayName && !mShowUsername)
-	//	setAvatarName( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+	//	setAvatarName( (fRlvCanShowName) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
 	//else if (!mShowDisplayName && mShowUsername)
-	//	setAvatarName( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+	//	setAvatarName( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	//else 
-	//	setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
-	setAvatarName(LLAvatarList::getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames));
+	//	setAvatarName( (fRlvCanShowName) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	setAvatarName(LLAvatarList::getNameForDisplay(mAvatarId, av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames));
 
-	// NOTE: If you change this, you will break sorting the contacts list
-	//  by username unless you go change the comparator too. -- TS	
-	setAvatarToolTip( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+ 	// NOTE: If you change this, you will break sorting the contacts list
+ 	//  by username unless you go change the comparator too. -- TS	
+	setAvatarToolTip( (fRlvCanShowName) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
-	mAvatarIcon->setDrawTooltip(!fRlvFilter);
+	mAvatarIcon->setDrawTooltip(fRlvCanShowName);
 // [/RLVa:KB]
 
 	//KC - store the username for use in sorting

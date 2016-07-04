@@ -1,5 +1,5 @@
 /** 
- * @file rlvui.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -17,27 +17,14 @@
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
 #include "llavataractions.h"			// LLAvatarActions::profileVisible()
-#include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
-#include "llavatarnamecache.h"
-// <FS:Ansariel> [FS communication UI]
-#include "fsfloatervoicecontrols.h"
-// </FS:Ansariel> [FS communication UI]
-#include "llenvmanager.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
 #include "llimview.h"					// LLIMMgr::computeSessionID()
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
 #include "llnavigationbar.h"			// Navigation bar
-#include "lloutfitslist.h"				// "My Outfits" sidebar panel
-#include "llpaneloutfitsinventory.h"	// "My Appearance" sidebar panel
-#include "llpanelpeople.h"				// "People" sidebar panel
-#include "llpanelwearing.h"				// "Current Outfit" sidebar panel
 #include "llparcel.h"
 #include "llpaneltopinfobar.h"
-#include "llsidepanelappearance.h"
-#include "lltabcontainer.h"
 #include "llteleporthistory.h"
-#include "lltoolmgr.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llvoavatar.h"
@@ -46,9 +33,6 @@
 #include "rlvui.h"
 #include "rlvhandler.h"
 #include "rlvextensions.h"
-
-#include "fsradar.h"
-#include "llviewerregion.h"
 
 // ============================================================================
 
@@ -60,7 +44,6 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onRefreshHoverText()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTALL, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTWORLD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWHOVERTEXTHUD, boost::bind(&RlvUIEnabler::onRefreshHoverText, this)));
@@ -76,14 +59,8 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_VIEWTEXTURE, boost::bind(&RlvUIEnabler::onToggleViewXXX, this)));
 
 	// onToggleXXX
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SENDIM, boost::bind(&RlvUIEnabler::onToggleSendIM, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETDEBUG, boost::bind(&RlvUIEnabler::onToggleSetDebug, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWLOC, boost::bind(&RlvUIEnabler::onToggleShowLoc, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWMINIMAP, boost::bind(&RlvUIEnabler::onToggleShowMinimap, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWNAMES, boost::bind(&RlvUIEnabler::onToggleShowNames, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWWORLDMAP, boost::bind(&RlvUIEnabler::onToggleShowWorldMap, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onToggleUnsit, this)));
 
@@ -92,10 +69,8 @@ RlvUIEnabler::RlvUIEnabler()
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLM, boost::bind(&RlvUIEnabler::onToggleTp, this)));
 
 	// onUpdateLoginLastLocation
-	#ifdef RLV_EXTENSION_STARTLOCATION
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_TPLOC, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_UNSIT, boost::bind(&RlvUIEnabler::onUpdateLoginLastLocation, this, _1)));
-	#endif // RLV_EXTENSION_STARTLOCATION
 }
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
@@ -118,32 +93,6 @@ void RlvUIEnabler::onRefreshHoverText()
 	LLHUDText::refreshAllObjectText();
 }
 
-// Checked: 2010-03-17 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
-void RlvUIEnabler::onToggleEdit()
-{
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_EDIT);
-
-	if (!fEnable)
-	{
-		// Turn off "View / Highlight Transparent"
-		LLDrawPoolAlpha::sShowDebugAlpha = FALSE;
-
-		// Hide the beacons floater if it's currently visible
-		if (LLFloaterReg::instanceVisible("beacons"))
-			LLFloaterReg::hideInstance("beacons");
-
-		// Hide the build floater if it's currently visible
-		if (LLFloaterReg::instanceVisible("build"))
-			LLToolMgr::instance().toggleBuildMode(LLSD("toggleonly"));
-	}
-
-	// Start or stop filtering opening the beacons floater
-	if (!fEnable)
-		addGenericFloaterFilter("beacons");
-	else
-		removeGenericFloaterFilter("beacons");
-}
-
 // Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 void RlvUIEnabler::onToggleMovement()
 {
@@ -156,124 +105,6 @@ void RlvUIEnabler::onToggleMovement()
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
 	LLFloaterMove::sUpdateMovementStatus();
-}
-
-// Checked: 2013-05-11 (RLVa-1.4.9)
-void RlvUIEnabler::onToggleSendIM()
-{
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM);
-	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(!fEnable);
-}
-
-// Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-void RlvUIEnabler::onToggleSetDebug()
-{
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETDEBUG);
-	for (std::map<std::string, S16>::const_iterator itSetting = RlvExtGetSet::m_DbgAllowed.begin(); 
-			itSetting != RlvExtGetSet::m_DbgAllowed.end(); ++itSetting)
-	{
-		if (itSetting->second & RlvExtGetSet::DBG_WRITE)
-			gSavedSettings.getControl(itSetting->first)->setHiddenFromSettingsEditor(!fEnable);
-	}
-}
-
-// Checked: 2011-09-04 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
-void RlvUIEnabler::onToggleSetEnv()
-{
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SETENV);
-
-	const std::string strEnvFloaters[] = 
-		{ "env_post_process", "env_settings", "env_delete_preset", "env_edit_sky", "env_edit_water", "env_edit_day_cycle" };
-	for (int idxFloater = 0, cntFloater = sizeof(strEnvFloaters) / sizeof(std::string); idxFloater < cntFloater; idxFloater++)
-	{
-		if (!fEnable)
-		{
-			// Hide the floater if it's currently visible
-			if (LLFloaterReg::instanceVisible(strEnvFloaters[idxFloater]))
-				LLFloaterReg::hideInstance(strEnvFloaters[idxFloater]);
-
-			addGenericFloaterFilter(strEnvFloaters[idxFloater]);
-		}
-		else
-		{
-			removeGenericFloaterFilter(strEnvFloaters[idxFloater]);
-		}
-	}
-
-	// Don't allow toggling "Basic Shaders" and/or "Atmopsheric Shaders" through the debug settings under @setenv=n
-	gSavedSettings.getControl("VertexShaderEnable")->setHiddenFromSettingsEditor(!fEnable);
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->setHiddenFromSettingsEditor(!fEnable);
-
-	// Restore the user's WindLight preferences when releasing
-	if (fEnable)
-		LLEnvManagerNew::instance().usePrefs();
-}
-
-// Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a
-void RlvUIEnabler::onToggleShowInv(bool fQuitting)
-{
-	if (fQuitting)
-		return;	// Nothing to do if the viewer is shutting down
-
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
-
-	//
-	// When disabling, close any inventory floaters that may be open
-	//
-	if (!fEnable)
-	{
-		LLFloaterReg::const_instance_list_t lFloaters = LLFloaterReg::getFloaterList("inventory");
-		for (LLFloaterReg::const_instance_list_t::const_iterator itFloater = lFloaters.begin(); itFloater != lFloaters.end(); ++itFloater)
-			(*itFloater)->closeFloater();
-
-		LLFloaterReg::const_instance_list_t lSecFloaters = LLFloaterReg::getFloaterList("secondary_inventory");
-		for (LLFloaterReg::const_instance_list_t::const_iterator itSecFloater = lSecFloaters.begin(); itSecFloater != lSecFloaters.end(); ++itSecFloater)
-			(*itSecFloater)->closeFloater();
-	}
-
-	//
-	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
-	//
-	LLPanelOutfitsInventory* pAppearancePanel = LLPanelOutfitsInventory::findInstance();
-	RLV_ASSERT(pAppearancePanel);
-	if (pAppearancePanel)
-	{
-		LLTabContainer* pAppearanceTabs = pAppearancePanel->getAppearanceTabs();
-		LLOutfitsList* pMyOutfitsPanel = pAppearancePanel->getMyOutfitsPanel();
-		if ( (pAppearanceTabs) && (pMyOutfitsPanel) )
-		{
-			S32 idxTab = pAppearanceTabs->getIndexForPanel(pMyOutfitsPanel);
-			RLV_ASSERT(-1 != idxTab);
-			pAppearanceTabs->enableTabButton(idxTab, fEnable);
-
-			// When disabling, switch to the COF tab if "My Outfits" is currently active
-			if ( (!fEnable) && (pAppearanceTabs->getCurrentPanelIndex() == idxTab) )
-				pAppearanceTabs->selectTabPanel(pAppearancePanel->getCurrentOutfitPanel());
-		}
-
-		LLSidepanelAppearance* pCOFPanel = pAppearancePanel->getAppearanceSP();
-		RLV_ASSERT(pCOFPanel);
-		if ( (!fEnable) && (pCOFPanel) && (pCOFPanel->isOutfitEditPanelVisible()) )
-		{
-			// TODO-RLVa: we should really just be collapsing the "Add more..." inventory panel (and disable the button)
-			pCOFPanel->showOutfitsInventoryPanel();
-		}
-	}
-
-	//
-	// Filter (or stop filtering) opening new inventory floaters
-	//
-	// <FS:Ansariel> Modified for FIRE-8804
-	if (!fEnable)
-	{
-		addGenericFloaterFilter("inventory");
-		addGenericFloaterFilter("secondary_inventory");
-	}
-	else
-	{
-		removeGenericFloaterFilter("inventory");
-		removeGenericFloaterFilter("secondary_inventory");
-	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -385,46 +216,6 @@ void RlvUIEnabler::onToggleShowMinimap()
 		if ( (!fEnable) && (pRadarNetMapPanel->getVisible()) )
 			pRadarNetMapPanel->setVisible(false);
 	}
-}
-
-// Checked: 2010-12-08 (RLVa-1.4.0a) | Modified: RLVa-1.2.2c
-void RlvUIEnabler::onToggleShowNames(bool fQuitting)
-{
-	if (fQuitting)
-		return;							// Nothing to do if the viewer is shutting down
-
-	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
-
-	// Refresh the nearby people list
-	// <FS:Ansariel> [Standalone radar]
-	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
-	FSRadar* pRadar = FSRadar::getInstance();
-	RLV_ASSERT( (pRadar) );
-	if ( (pRadar) )
-		pRadar->updateNames();
-	// </FS:Ansariel> [Standalone radar]
-
-	// Refresh the speaker list
-	// <FS:Ansariel> [FS communication UI]
-	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
-	if (pCallFloater)
-		pCallFloater->getAvatarCallerList()->updateAvatarNames();
-	// </FS:Ansariel> [FS communication UI]
-
-	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
-	if (!fEnable)
-	{
-		LLAvatarNameCache::setForceDisplayNames(true);
-	}
-	else
-	{
-		LLAvatarNameCache::setForceDisplayNames(false);
-		LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
-	}
-	LLVOAvatar::invalidateNameTags();	// See handleDisplayNamesOptionChanged()
 }
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a

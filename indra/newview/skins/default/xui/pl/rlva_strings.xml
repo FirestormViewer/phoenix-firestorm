@@ -40,6 +40,11 @@
 				<key>customizable</key>
 				<boolean>1</boolean>
 			</map>
+			<key>blocked_autopilot</key>
+			<map>
+				<key>value</key>
+				<string>Nie można użyć autopilota ze względu na ograniczenia RLV</string>
+			</map>
 			<key>blocked_generic</key>
 			<map>
 				<key>value</key>
@@ -69,6 +74,11 @@
 			<map>
 				<key>value</key>
 				<string>Nie można teleportować ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_teleport_offer</key>
+			<map>
+				<key>value</key>
+				<string>Nie można zaoferować teleportacji ze względu na ograniczenia RLV</string>
 			</map>
 			<key>blocked_viewxxx</key>
 			<map>
@@ -101,26 +111,6 @@
 				<string>Zablokowano propozycję/prośbę o teleport (od innej osoby)</string>
 				<key>customizable</key>
 				<boolean>1</boolean>
-			</map>
-			<key>message_toggle_restart</key>
-			<map>
-				<key>value</key>
-				<string>Wsparcie dla RestrainedLove zostanie %s po restarcie</string>
-			</map>
-			<key>message_toggle_restart_pending</key>
-			<map>
-				<key>value</key>
-				<string> (wymagany restart)</string>
-			</map>
-			<key>message_toggle_restart_enabled</key>
-			<map>
-				<key>value</key>
-				<string>włączone</string>
-			</map>
-			<key>message_toggle_restart_disabled</key>
-			<map>
-				<key>value</key>
-				<string>wyłączone</string>
 			</map>
 		</map>
 		<key>anonyms</key>

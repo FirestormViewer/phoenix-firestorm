@@ -1,5 +1,5 @@
 /** 
- * @file rlvcommon.cpp
+ *
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -20,7 +20,9 @@
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
+#include "llregionhandle.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
@@ -35,8 +37,14 @@
 #include "llscriptruntimeperms.h"
 #include <boost/algorithm/string/predicate.hpp> // icontains
 #include <boost/algorithm/string/regex.hpp> // regex_replace_all
-#include <boost/foreach.hpp>	// <FS:CR>
-#include "lltrace.h"
+#include <boost/algorithm/string.hpp>
+
+// ============================================================================
+// Forward declarations
+//
+
+// llviewermenu.cpp
+LLVOAvatar* find_avatar_from_object(LLViewerObject* object);
 
 // ============================================================================
 // RlvNotifications
@@ -73,7 +81,6 @@ bool RlvSettings::fCompositeFolders = false;
 bool RlvSettings::fCanOOC = true;
 bool RlvSettings::fLegacyNaming = true;
 bool RlvSettings::fNoSetEnv = false;
-bool RlvSettings::fShowNameTags = false;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()
@@ -81,9 +88,6 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
-		// Ansariel: Wired up in LLViewerControl because of FIRE-16601
-		//gSavedSettings.getControl(RLV_SETTING_MAIN)->getSignal()->connect(boost::bind(&onChangedSettingMain, _2));
-
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
@@ -97,15 +101,9 @@ void RlvSettings::initClass()
 		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
 		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
-		fShowNameTags = rlvGetSetting<bool>(RLV_SETTING_SHOWNAMETAGS, false);
-		if (gSavedSettings.controlExists(RLV_SETTING_SHOWNAMETAGS))
-			gSavedSettings.getControl(RLV_SETTING_SHOWNAMETAGS)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fShowNameTags));
-
-#ifdef RLV_EXTENSION_STARTLOCATION
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
 		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
 			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
-#endif // RLV_EXTENSION_STARTLOCATION
 
 		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
 			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
@@ -114,21 +112,19 @@ void RlvSettings::initClass()
 	}
 }
 
-#ifdef RLV_EXTENSION_STARTLOCATION
-	// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
-	void RlvSettings::updateLoginLastLocation()
+// Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
+void RlvSettings::updateLoginLastLocation()
+{
+	if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
 	{
-		if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
+		BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
+		if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
 		{
-			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
-			if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
-			{
-				gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
-				gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
-			}
+			gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);
+			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
 		}
 	}
-#endif // RLV_EXTENSION_STARTLOCATION
+}
 
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 bool RlvSettings::onChangedMenuLevel()
@@ -152,9 +148,9 @@ void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
 	{
 		LLNotificationsUtil::add(
 			"GenericAlert",
-			LLSD().with("MESSAGE", llformat(RlvStrings::getString("message_toggle_restart").c_str(), 
-				(sdValue.asBoolean()) ? RlvStrings::getString("message_toggle_restart_enabled").c_str()
-				                      : RlvStrings::getString("message_toggle_restart_disabled").c_str())));
+			LLSD().with("MESSAGE", llformat(LLTrans::getString("RLVaToggleMessage").c_str(), 
+				(sdValue.asBoolean()) ? LLTrans::getString("RLVaToggleEnabled").c_str()
+				                      : LLTrans::getString("RLVaToggleDisabled").c_str())));
 	}
 }
 
@@ -175,14 +171,10 @@ void RlvStrings::initClass()
 		// Load the default string values
 		std::vector<std::string> files = gDirUtilp->findSkinnedFilenames(LLDir::XUI, RLV_STRINGS_FILE, LLDir::ALL_SKINS);
 		m_StringMapPath = (!files.empty()) ? files.front() : LLStringUtil::null;
-		// <FS:CR> Old compiler compatibility
-		//for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
-		BOOST_FOREACH(const std::string file, files)
+		for (std::vector<std::string>::const_iterator itFile = files.begin(); itFile != files.end(); ++itFile)
 		{
-			//loadFromFile(*itFile, false);
-			loadFromFile(file, false);
+			loadFromFile(*itFile, false);
 		}
-		// </FS:CR>
 
 		// Load the custom string overrides
 		loadFromFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE), true);
@@ -211,7 +203,7 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride
 		const LLSD& sdStrings = sdFileData["strings"];
 		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
 		{
-			if ((!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))))
+			if ( (!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))) )
 				continue;
 
 			std::list<std::string>& listValues = m_StringMap[itString->first];
@@ -276,7 +268,6 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 const std::string& RlvStrings::getString(const std::string& strStringName)
 {
 	static const std::string strMissing = "(Missing RLVa string)";
-	initClass(); // Ansariel: Make sure RlvStrings gets initialized before accessing it
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
 	return (itString != m_StringMap.end()) ? itString->second.back() : strMissing;
 }
@@ -293,6 +284,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "duplicate";
 		case RLV_RET_SUCCESS_DELAYED:
 			return "delayed";
+		case RLV_RET_SUCCESS_DEPRECATED:
+			return "deprecated";
 		case RLV_RET_FAILED_SYNTAX:
 			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
@@ -307,8 +300,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "unknown command";
 		case RLV_RET_FAILED_NOSHAREDROOT:
 			return "missing #RLV";
-		case RLV_RET_DEPRECATED:
-			return "deprecated";
+		case RLV_RET_FAILED_DEPRECATED:
+			return "deprecated and disabled";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:
@@ -401,7 +394,7 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
-		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
+		if ( (LLAvatarNameCache::get(idAgents[idxAgent], &avName)) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgents[idxAgent])) )
 		{
 			const std::string& strDisplayName = escape_for_regex(avName.getDisplayName());
 			bool fFilterDisplay = (strDisplayName.length() > 2);
@@ -436,7 +429,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	{
 		// Notify the user that we blocked it since they're not allowed to wear any new attachments
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
-		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;		
+		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_ATTACH].permbit;
 	}
 
 	// Check SCRIPT_PERMISSION_TELEPORT
@@ -444,7 +437,7 @@ void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
 	{
 		// Notify the user that we blocked it since they're not allowed to teleport
 		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
-		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;		
+		nQuestions &= ~SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_TELEPORT].permbit;
 	}
 
 	sdPayload["questions"] = nQuestions;
@@ -549,6 +542,18 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	return true;
 }
 
+void RlvUtil::teleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt)
+{
+	if (hRegion)
+	{
+		const LLVector3d posGlobal = from_region_handle(hRegion) + (LLVector3d)posRegion;
+		if (vecLookAt.isExactlyZero())
+			gAgent.teleportViaLocation(posGlobal);
+		else
+			gAgent.teleportViaLocationLookAt(posGlobal, vecLookAt);
+	}
+}
+
 // ============================================================================
 // Generic menu enablers
 //
@@ -563,7 +568,7 @@ bool rlvMenuMainToggleVisible(LLUICtrl* pMenuCtrl)
 		if (gSavedSettings.getBOOL(RLV_SETTING_MAIN) == rlv_handler_t::isEnabled())
 			pMenuItem->setLabel(strLabel);
 		else
-			pMenuItem->setLabel(strLabel + RlvStrings::getString("message_toggle_restart_pending"));
+			pMenuItem->setLabel(strLabel + " " + LLTrans::getString("RLVaPendingRestart"));
 	}
 	return true;
 }
@@ -595,13 +600,19 @@ void rlvMenuToggleVisible()
 	}
 }
 
+bool rlvMenuCanShowName()
+{
+  const LLVOAvatar* pAvatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+  return (pAvatar) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, pAvatar->getID()));
+}
+
 // Checked: 2010-04-23 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 bool rlvMenuEnableIfNot(const LLSD& sdParam)
 {
 	bool fEnable = true;
 	if (rlv_handler_t::isEnabled())
 	{
-		ERlvBehaviour eBhvr = RlvCommand::getBehaviourFromString(sdParam.asString());
+		ERlvBehaviour eBhvr = RlvBehaviourDictionary::instance().getBehaviourFromString(sdParam.asString(), RLV_TYPE_ADDREM);
 		fEnable = (eBhvr != RLV_BHVR_UNKNOWN) ? !gRlvHandler.hasBehaviour(eBhvr) : true;
 	}
 	return fEnable;
@@ -645,7 +656,7 @@ bool RlvSelectHasLockedAttach::apply(LLSelectNode* pNode)
 bool RlvSelectIsEditable::apply(LLSelectNode* pNode)
 {
 	const LLViewerObject* pObj = pNode->getObject();
-	return (pObj) && (!gRlvHandler.canEdit(pObj));
+	return (pObj) && (!RlvActions::canEdit(pObj));
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a

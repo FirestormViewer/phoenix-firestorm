@@ -777,7 +777,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 						report_to_nearby_chat(llformat("Object with key %s not found!", target_key.asString().c_str()));
 						return false;
 					}
-					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(myObject, LLVector3::zero)))
+					if ((!RlvActions::isRlvEnabled()) || (RlvActions::canSit(myObject, LLVector3::zero)))
 					{
 						LLMessageSystem	*msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_AgentRequestSit);

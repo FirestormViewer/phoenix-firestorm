@@ -37,6 +37,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
+	<string name="AboutPositionRLVShowLoc">
+Położenie: [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
 	<string name="AboutSystem">
 Procesor (CPU): [CPU]
 Pamięć (Memory): [MEMORY_MB] MB
@@ -551,7 +556,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Primów: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, wpływ na działkę: [PEWEIGHT] PE
+		, wpływ na działkę: [PEWEIGHT]
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
 		, sprawdzanie wpływu na działkę...
@@ -5411,6 +5416,18 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="TeleportMaturityExceeded">
 		Rezydent nie może odwiedzić tego regionu.
 	</string>
+	<string name="RLVaPendingRestart">
+		(oczekuje restartu)
+	</string>
+	<string name="RLVaToggleMessage">
+		Wsparcie dla RestrainedLove zostanie %s po restarcie
+	</string>
+	<string name="RLVaToggleEnabled">
+		włączone
+	</string>
+	<string name="RLVaToggleDisabled">
+		wyłączone
+	</string>
 	<string name="UserDictionary">
 		[Użytkownika]
 	</string>
@@ -5998,5 +6015,8 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Pie_av_render_fully">
 		Zawsze w pełni
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Złożoność: [COMPLEXITY]
 	</string>
 </strings>

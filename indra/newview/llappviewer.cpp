@@ -95,9 +95,8 @@
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 #include "llappearancemgr.h"
 // [/SL:KB]
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0)
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
 #include "rlvactions.h"
-#include "rlvhelper.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -543,17 +542,13 @@ void idle_afk_check()
 {
 	// check idle timers
 	F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
-//	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
-// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
-	// Enforce an idle time of 30 minutes if @allowidle=n restricted
 	// <FS:CR> Cache frequently hit location
 	static LLCachedControl<S32> sAFKTimeout(gSavedSettings, "AFKTimeout");
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+	// Enforce an idle time of 30 minutes if @allowidle=n restricted
 	S32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? sAFKTimeout : 60 * 30;
-#else
-	static LLCachedControl<S32> afk_timeout(gSavedSettings, "AFKTimeout");	// <FS:CR>
-#endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
+//	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
 	// <FS:CR> Explicit conversions just cos.
 	//if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
 	if (static_cast<S32>(afk_timeout) && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
@@ -3903,16 +3898,28 @@ LLSD LLAppViewer::getViewerInfo() const
 	LLViewerRegion* region = gAgent.getRegion();
 	if (region)
 	{
-		LLVector3d pos = gAgent.getPositionGlobal();
-		info["POSITION"] = ll_sd_from_vector3d(pos);
-		info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
-		info["REGION"] = gAgent.getRegion()->getName();
-		info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
-		info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		if (RlvActions::canShowLocation())
+		{
+// [/RLVa:KB]
+			LLVector3d pos = gAgent.getPositionGlobal();
+			info["POSITION"] = ll_sd_from_vector3d(pos);
+			info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
+			info["REGION"] = gAgent.getRegion()->getName();
+			info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
+			info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
+//			info["SERVER_VERSION"] = gLastVersionChannel;
+			LLSLURL slurl;
+			LLAgentUI::buildSLURL(slurl);
+			info["SLURL"] = slurl.getSLURLString();
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		}
+		else
+		{
+			info["REGION"] = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		}
 		info["SERVER_VERSION"] = gLastVersionChannel;
-		LLSLURL slurl;
-		LLAgentUI::buildSLURL(slurl);
-		info["SLURL"] = slurl.getSLURLString();
+// [/RLVa:KB]
 	}
 
 	// CPU
@@ -3932,7 +3939,7 @@ LLSD LLAppViewer::getViewerInfo() const
 #endif
 
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
-	info["RLV_VERSION"] = (RlvActions::isRlvEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
 // [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCore::LLHttp::getCURLVersion();
@@ -4114,13 +4121,9 @@ std::string LLAppViewer::getViewerInfoString() const
 	if (info.has("REGION"))
 	{
 // [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
-		support << "\n\n";
-		if (RlvActions::canShowLocation())
-			support << LLTrans::getString("AboutPosition", args);
-		else
-			support << RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		support << "\n\n" << LLTrans::getString( (RlvActions::canShowLocation()) ? "AboutPosition" : "AboutPositionRLVShowLoc", args);
 // [/RLVa:KB]
-		//support << "\n\n" << LLTrans::getString("AboutPosition", args);
+//		support << "\n\n" << LLTrans::getString("AboutPosition", args);
 	}
 	support << "\n\n" << LLTrans::getString("AboutSystem", args);
 	support << "\n";

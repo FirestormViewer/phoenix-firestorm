@@ -772,6 +772,18 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 // [/RLVa:KB]
 	}
 	items.push_back(std::string("Task Properties"));
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	items.push_back(std::string("Task Rename"));
+	if ( (!isItemRenameable()) || ((flags & FIRST_SELECTED_ITEM) == 0) )
+	{
+		disabled_items.push_back(std::string("Task Rename"));
+	}
+	items.push_back(std::string("Task Remove"));
+	if (!isItemRemovable())
+	{
+		disabled_items.push_back(std::string("Task Remove"));
+	}
+// [/RLVa:KB]
 //	if(isItemRenameable())
 //	{
 //		items.push_back(std::string("Task Rename"));
@@ -784,18 +796,6 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 //	{
 //		items.push_back(std::string("Task Remove"));
 //	}
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
-	items.push_back(std::string("Task Rename"));
-	items.push_back(std::string("Task Remove"));
-	if (!isItemRenameable() || (flags & FIRST_SELECTED_ITEM) == 0)
-	{
-		disabled_items.push_back(std::string("Task Rename"));
-	}
-	if (!isItemRemovable())
-	{
-		disabled_items.push_back(std::string("Task Remove"));
-	}
-// [/RLVa:KB]
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -1294,6 +1294,7 @@ void LLTaskNotecardBridge::openItem()
 	{
 		return;
 	}
+
 // [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
 	{

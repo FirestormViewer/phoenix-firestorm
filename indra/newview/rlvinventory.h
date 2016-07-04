@@ -1,5 +1,5 @@
 /** 
- * @file rlvinventory.h
+ *
  * Copyright (c) 2009-2014, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -23,6 +23,10 @@
 
 #include "rlvhelper.h"
 #include "rlvlocks.h"
+
+// ============================================================================
+// Forward declarations
+//
 
 class LLOfferInfo;
 

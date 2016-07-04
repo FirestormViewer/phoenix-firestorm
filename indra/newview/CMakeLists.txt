@@ -127,6 +127,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fsareasearch.cpp
     fsareasearchmenu.cpp
+    fsavatarrenderpersistence.cpp
     fsavatarsearchmenu.cpp
     fsblocklistmenu.cpp
     fschathistory.cpp
@@ -864,6 +865,7 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fsareasearch.h
     fsareasearchmenu.h
+    fsavatarrenderpersistence.h
     fsavatarsearchmenu.h
     fsblocklistmenu.h
     fschathistory.h
@@ -1546,9 +1548,6 @@ set(viewer_HEADER_FILES
     pieseparator.h
     pieslice.h
     pipeline.h
-    roles_constants.h
-    qtoolalign.h
-    quickprefs.h
     rlvactions.h
     rlvdefines.h
     rlvhandler.h
@@ -1559,6 +1558,9 @@ set(viewer_HEADER_FILES
     rlvextensions.h
     rlvfloaters.h
     rlvui.h
+    roles_constants.h
+    qtoolalign.h
+    quickprefs.h
     sanitycheck.h
     streamtitledisplay.h
     utilitybar.h

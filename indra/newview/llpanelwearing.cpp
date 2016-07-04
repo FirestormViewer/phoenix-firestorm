@@ -45,6 +45,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "lltextbox.h"
+#include "llresmgr.h"
 
 // Context menu and Gear menu helper.
 static void edit_outfit()
@@ -367,7 +368,11 @@ void LLPanelWearing::copyToClipboard()
 // <FS:Ansariel> Show avatar complexity in appearance floater
 void LLPanelWearing::updateAvatarComplexity(U32 complexity)
 {
-	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+	std::string complexity_string;
+	LLLocale locale(LLLocale::USER_LOCALE);
+	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
+
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);
 }
 // </FS:Ansariel>
 // EOF

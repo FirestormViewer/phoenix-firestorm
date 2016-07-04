@@ -201,7 +201,7 @@
 #elif LL_LINUX
 #define LL_TYPEOF(exp) typeof(exp)
 #elif LL_DARWIN
-#define LL_TYPEOF(exp) typeof(exp)
+#define LL_TYPEOF(exp) decltype(exp)
 #endif
 
 #define LL_TO_STRING_HELPER(x) #x

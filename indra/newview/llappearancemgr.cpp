@@ -59,6 +59,7 @@
 #include "llappviewer.h"
 #include "llcoros.h"
 #include "lleventcoro.h"
+#include "llavatarpropertiesprocessor.h"
 
 #include "llavatarpropertiesprocessor.h"
 
@@ -67,6 +68,7 @@
 #include "rlvhelper.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
 #include "fslslbridge.h"
 
 #if LL_MSVC
@@ -1323,23 +1325,19 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 // [SL:KB] - Patch: Appearance-WearableDuplicateAssets | Checked: 2015-06-30 (Catznip-3.7)
 static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
 {
-	struct is_duplicate_asset
-	{
-		bool operator()(const LLViewerInventoryItem* pItem)
+	std::set<LLUUID> idsAsset;
+	items.erase(std::remove_if(items.begin(), items.end(), 
+		[&idsAsset](const LLViewerInventoryItem* pItem)
 		{
 			if (pItem->isWearableType())
 			{
 				const LLUUID& idAsset = pItem->getAssetUUID();
-				if ( (idAsset.notNull()) &&  (m_idsAsset.end() != m_idsAsset.find(idAsset)) )
+				if ( (idAsset.notNull()) &&  (idsAsset.end() != idsAsset.find(idAsset)) )
 					return true;
-				m_idsAsset.insert(idAsset);
+				idsAsset.insert(idAsset);
 			}
 			return false;
-		}
-	protected:
-		std::set<LLUUID> m_idsAsset;
-	};
-	items.erase(std::remove_if(items.begin(), items.end(), is_duplicate_asset()), items.end());
+		}), items.end());
 }
 // [/SL:KB]
 
@@ -2083,6 +2081,8 @@ void LLAppearanceMgr::filterWearableItems(
     }
 }
 
+//void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0)
 void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 {
 	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
@@ -2617,9 +2617,8 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 		std::set<LLUUID> pendingAttachments;
 		if (LLAttachmentsMgr::instance().getPendingAttachments(pendingAttachments))
 		{
-			for (std::set<LLUUID>::const_iterator itAttachItem = pendingAttachments.begin(); itAttachItem != pendingAttachments.end(); ++itAttachItem)
+			for (const LLUUID& idAttachItem : pendingAttachments)
 			{
-				const LLUUID& idAttachItem = *itAttachItem;
 				if ( (!gAgentAvatarp->isWearingAttachment(idAttachItem)) || (isLinkedInCOF(idAttachItem)) )
 				{
 					LLAttachmentsMgr::instance().clearPendingAttachmentLink(idAttachItem);

@@ -76,6 +76,7 @@
 // [RLVa:KB] - Checked: 2010-09-16 (RLVa-1.2.1a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llresmgr.h"
 
 static LLPanelInjector<LLPanelOutfitEdit> t_outfit_edit("panel_outfit_edit");
 
@@ -1073,9 +1074,11 @@ void LLPanelOutfitEdit::filterWearablesBySelectedItem(void)
 		case LLAssetType::AT_BODYPART:
 			applyListViewFilter(LVIT_BODYPART);
 			break;
-		case LLAssetType::AT_GESTURE:
-			applyListViewFilter(LVIT_GESTURES);
-			break;
+		// <FS:Ansariel> FIRE-19480 / BUG-20032: Selected wearable type in Edit Outfit -> Add more is off by 1
+		//case LLAssetType::AT_GESTURE:
+		//	applyListViewFilter(LVIT_GESTURES);
+		//	break;
+		// </FS:Ansariel>
 		case LLAssetType::AT_CLOTHING:
 		default:
 			applyListViewFilter(LVIT_CLOTHING);
@@ -1437,8 +1440,12 @@ void LLPanelOutfitEdit::saveListSelection()
 // <FS:Ansariel> Show avatar complexity in appearance floater
 void LLPanelOutfitEdit::updateAvatarComplexity(U32 complexity)
 {
-	mAvatarComplexityLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
-	mAvatarComplexityAddingLabel->setTextArg("[WEIGHT]", llformat("%d", complexity));
+	std::string complexity_string;
+	LLLocale locale(LLLocale::USER_LOCALE);
+	LLResMgr::getInstance()->getIntegerString(complexity_string, complexity);
+
+	mAvatarComplexityLabel->setTextArg("[WEIGHT]", complexity_string);
+	mAvatarComplexityAddingLabel->setTextArg("[WEIGHT]", complexity_string);
 }
 // </FS:Ansariel>
 

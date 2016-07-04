@@ -45,7 +45,10 @@ typedef FILE	LLFILE;
 typedef struct _stat	llstat;
 #else
 typedef struct stat		llstat;
-#include <bits/postypes.h>
+//<FS:TS> This file only exists on Linux
+# if LL_LINUX
+#  include <bits/postypes.h>
+# endif
 #endif
 
 #ifndef S_ISREG

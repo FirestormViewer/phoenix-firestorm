@@ -38,6 +38,7 @@
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "lltooldraganddrop.h"
+#include "lltrans.h"
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
 #include "llviewerobject.h"

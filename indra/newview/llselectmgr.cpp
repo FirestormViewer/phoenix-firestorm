@@ -99,6 +99,7 @@
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 // <FS:CR> Aurora Sim
 #include "llviewernetwork.h"
@@ -4394,7 +4395,7 @@ void LLSelectMgr::convertTransient()
 
 void LLSelectMgr::deselectAllIfTooFar()
 {
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+// [RLVa:KB] - Checked: RLVa-1.3.0
 	if ( (!mSelectedObjects->isEmpty()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ))) )
 	{
 		struct NotTransientOrFocusedMediaOrEditable : public LLSelectedNodeFunctor
@@ -4402,8 +4403,7 @@ void LLSelectMgr::deselectAllIfTooFar()
 			bool apply(LLSelectNode* pNode)
 			{
 				const LLViewerObject* pObj = pNode->getObject();
-				return (!pNode->isTransient()) && (pObj) && (!gRlvHandler.canEdit(pObj)) &&
-					(pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
+				return (!pNode->isTransient()) && (pObj) && (!RlvActions::canEdit(pObj)) && (pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
 			}
 		} f;
 		if (mSelectedObjects->getFirstRootNode(&f, TRUE))
@@ -4416,15 +4416,13 @@ void LLSelectMgr::deselectAllIfTooFar()
 		return;
 	}
 
-// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.1.0l
-#ifdef RLV_EXTENSION_CMD_INTERACT
-	// [Fall-back code] Don't allow an active selection (except for HUD attachments - see above) when @interact=n restricted
+// [RLVa:KB] - Checked: RLVa-1.2.0
+	// [Fall-back code] Don't allow an active selection (except for HUD attachments - see above) when @interact restricted
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))
 	{
 		deselectAll();
 		return;
 	}
-#endif // RLV_EXTENSION_CMD_INTERACT
 // [/RLVa:KB]
 
 	// HACK: Don't deselect when we're navigating to rate an object's
@@ -4437,6 +4435,8 @@ void LLSelectMgr::deselectAllIfTooFar()
 	LLVector3d selectionCenter = getSelectionCenterGlobal();
 //	if (gSavedSettings.getBOOL("LimitSelectDistance")
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
+	static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
+
 	BOOL fRlvFartouch = gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH) && gFloaterTools->getVisible();
 	if ( (gSavedSettings.getBOOL("LimitSelectDistance") || (fRlvFartouch) )
 // [/RLVa:KB]
@@ -4447,7 +4447,7 @@ void LLSelectMgr::deselectAllIfTooFar()
 	{
 //		F32 deselect_dist = gSavedSettings.getF32("MaxSelectDistance");
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
-		F32 deselect_dist = (!fRlvFartouch) ? gSavedSettings.getF32("MaxSelectDistance") : 1.5f;
+		F32 deselect_dist = (!fRlvFartouch) ? gSavedSettings.getF32("MaxSelectDistance") : s_nFartouchDist;
 // [/RLVa:KB]
 		F32 deselect_dist_sq = deselect_dist * deselect_dist;
 

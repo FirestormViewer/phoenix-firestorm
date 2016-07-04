@@ -192,6 +192,10 @@
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
 
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
@@ -211,6 +215,7 @@
 #include "growlmanager.h"
 #endif
 
+#include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
@@ -232,7 +237,6 @@
 #include "llprogressview.h"
 #include "lltoolbarview.h"
 #include "NACLantispam.h"
-#include "rlvhandler.h"
 #include "streamtitledisplay.h"
 #include "tea.h"
 
@@ -1371,11 +1375,7 @@ bool idle_startup()
 		// All accounts have both a home and a last location, and we don't support
 		// more locations than that.  Choose the appropriate one.  JC
 // [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-0.2.1d
-#ifndef RLV_EXTENSION_STARTLOCATION
-		if (rlv_handler_t::isEnabled())
-#else
 		if ( (rlv_handler_t::isEnabled()) && (RlvSettings::getLoginLastLocation()) )
-#endif // RLV_EXTENSION_STARTLOCATION
 		{
 			// Force login at the last location
 			LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_LAST));
@@ -1922,6 +1922,9 @@ bool idle_startup()
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
 		// Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
 		LLFloater *pContacts(FSFloaterContacts::getInstance());
+
+		// <FS:Ansariel> Load persisted avatar render settings
+		FSAvatarRenderPersistence::instance().init();
 		
 		// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
 		if( pContacts )
