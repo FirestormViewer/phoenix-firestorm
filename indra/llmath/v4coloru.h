@@ -130,7 +130,11 @@ public:
 	static BOOL parseColor4U(const std::string& buf, LLColor4U* value);
 
 	// conversion
+#ifdef LL_DARWIN
 	operator /*const*/ LLColor4() const
+#else
+	operator const LLColor4() const
+#endif
 	{
 		return LLColor4(*this);
 	}
