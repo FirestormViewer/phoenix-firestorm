@@ -252,8 +252,8 @@
 		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
-		<menu_item_check label="Namensschilder anzeigen" name="Show Name Tags"/>
 		<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="Konsole" name="Console"/>
 		<menu_item_check label="Beschränkungen..." name="Restrictions"/>
 		<menu_item_check label="Texte..." name="Strings"/>
 	</menu>
