@@ -2503,11 +2503,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_BELLY">
 		Bauch
 	</string>
-	<string name="ATTACH_RPEC">
-		Rechts
-	</string>
-	<string name="ATTACH_LPEC">
+	<string name="ATTACH_LEFT_PEC">
 		Linke Brust
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		Rechts
 	</string>
 	<string name="ATTACH_HUD_CENTER_2">
 		HUD Mitte 2
