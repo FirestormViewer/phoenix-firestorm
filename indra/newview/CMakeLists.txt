@@ -240,6 +240,7 @@ set(viewer_SOURCE_FILES
     llbuycurrencyhtml.cpp
     llcallingcard.cpp
     llchannelmanager.cpp
+    llchatbar.cpp
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
@@ -982,6 +983,7 @@ set(viewer_HEADER_FILES
     llcallingcard.h
     llcapabilityprovider.h
     llchannelmanager.h
+    llchatbar.h
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h
