@@ -45,6 +45,11 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 	</string>
+	<string name="AboutPositionRLVShowLoc">
+		Sie befinden sich in [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
 	<string name="AboutSystem">
 		CPU: [CPU]
 Speicher: [MEMORY_MB] MB
@@ -5866,6 +5871,18 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="UserDictionary">
 		[Benutzer]
+	</string>
+	<string name="RLVaPendingRestart">
+		(Neustart ausstehend)
+	</string>
+	<string name="RLVaToggleMessage">
+		RestrainedLove-Support wird nach einem Neustart %s.
+	</string>
+	<string name="RLVaToggleEnabled">
+		aktiviert
+	</string>
+	<string name="RLVaToggleDisabled">
+		deaktiviert
 	</string>
 	<string name="experience_tools_experience">
 		Erlebnis

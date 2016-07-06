@@ -69,7 +69,7 @@
     </panel>
     <panel
       follows="all"  height="265"
-      label="MODIFIERS"
+      label="Modifiers"
       layout="topleft"
       name="modifier_panel"
       top="0">

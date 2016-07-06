@@ -2,16 +2,23 @@
 <floater name="rlv_behaviours" title="Aktywne ograniczenia RLV">
   <tab_container name="behaviour_tab">
     <panel label="Ograniczenia" name="behaviour_panel">
-      <scroll_list name="behaviour_list">
+      <scroll_list name="behaviour_list" tool_tip="Lista obecnych restrykcji RLVa.">
         <scroll_list.columns label="Restrykcja" name="behaviour" />
         <scroll_list.columns label="Obiekt" name="issuer" />
       </scroll_list>
     </panel>
     <panel label="Wyjątki" name="exception_panel">
-      <scroll_list name="exception_list">
+      <scroll_list name="exception_list" tool_tip="Lista obecnych wyjątków RLVa.">
         <scroll_list.columns label="Restrykcja" name="behaviour" />
         <scroll_list.columns label="Źródło" name="option" />
         <scroll_list.columns label="Obiekt" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel label="Modyfikatory" name="modifier_panel">
+      <scroll_list name="modifier_list" tool_tip="Lista obecnych modyfikatorów RLVa.">
+        <scroll_list.columns label="Modyfik." name="modifier" />
+        <scroll_list.columns label="Wartość" name="value" />
+        <scroll_list.columns label="Główny obiekt" name="primary" />
       </scroll_list>
     </panel>
   </tab_container>

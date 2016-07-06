@@ -46,6 +46,11 @@
 		</map>
 
 		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>Autopilot kann aufgrund von RLV-Einschränkungen nicht genutzt werden.</string>
+		</map>
 		<key>blocked_generic</key>
 		<map>
 			<key>value</key>
@@ -75,6 +80,11 @@
 		<map>
 			<key>value</key>
 			<string>Teleport konnte aufgrund von RLV-Einschränkungen nicht initialisiert werden.</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>Teleport kann aufgrund von RLV-Einschränkungen nicht angeboten werden.</string>
 		</map>
 		<key>blocked_viewxxx</key>
 		<map>
