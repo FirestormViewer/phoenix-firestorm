@@ -131,8 +131,12 @@ class LLColor4
 		friend const LLColor4& operator*=(LLColor4 &a, const LLColor4 &b); // Doesn't multiply alpha! (for lighting)
 
 		// conversion
+#ifdef LL_DARWIN
 		operator /*const*/ LLColor4U() const;
-
+#else
+		operator const LLColor4U() const;
+#endif
+		
 		// Basic color values.
 		static LLColor4 red;
 		static LLColor4 green;

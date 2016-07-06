@@ -5709,6 +5709,17 @@
       <key>Value</key>
         <integer>1</integer>
     </map>
+    <key>QueueInventoryFetchTimeout</key>
+    <map>
+        <key>Comment</key>
+        <string>Max time llcompilequeue will wait for inventory fetch to complete (in seconds)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>F32</string>
+        <key>Value</key>
+        <integer>40.0</integer>
+    </map>
     <key>FindLandArea</key>
     <map>
       <key>Comment</key>
@@ -23453,7 +23464,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSUseAis3Api</key>
     <map>
       <key>Comment</key>
-      <string>Option to disable the use of the new AISv3 inventory API</string>
+      <string>Option to disable the use of the AISv3 inventory API. NOTE: This setting has NO EFFECT in Second Life!</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
