@@ -145,7 +145,7 @@ std::map<std::string, U32> LLViewerObject::sObjectDataMap;
 // JC 3/18/2003
 
 const F32 PHYSICS_TIMESTEP = 1.f / 45.f;
-const F64 INV_REQUEST_EXPIRE_TIME_SEC = 60.f;
+const F64 INV_REQUEST_EXPIRE_TIME_SEC = 60.0;
 
 static LLTrace::BlockTimerStatHandle FTM_CREATE_OBJECT("Create Object");
 
