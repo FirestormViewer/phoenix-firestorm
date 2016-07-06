@@ -262,8 +262,8 @@
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat"/>
-		<menu_item_check label="Pokaż tagi imion" name="Show Name Tags"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="Konsola..." name="Console"/>
 		<menu_item_check label="Ograniczenia..." name="Restrictions"/>
 		<menu_item_check label="Ciągi..." name="Strings"/>
 	</menu>
