@@ -269,7 +269,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mInventory(NULL),
 	mInventorySerialNum(0),
 	mRegionp( regionp ),
-	mInvRequestExpireTime(0.f),
+	mInvRequestExpireTime(0.0),
 	mInventoryDirty(FALSE),
 	mDead(FALSE),
 	mOrphaned(FALSE),
@@ -2908,7 +2908,7 @@ void LLViewerObject::removeInventoryListener(LLVOInventoryListener* listener)
 
 BOOL LLViewerObject::isInventoryPending()
 {
-    if (mInvRequestExpireTime == 0.f || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
+    if (mInvRequestExpireTime == 0.0 || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
     {
         return FALSE;
     }
@@ -2953,7 +2953,7 @@ void LLViewerObject::requestInventory()
 
 void LLViewerObject::fetchInventoryFromServer()
 {
-	if (mInvRequestExpireTime == 0.f || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
+	if (mInvRequestExpireTime == 0.0 || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
 	{
 		delete mInventory;
 		LLMessageSystem* msg = gMessageSystem;
@@ -3191,7 +3191,7 @@ void LLViewerObject::doInventoryCallback()
 			mInventoryCallbacks.erase(curiter);
 		}
 	}
-	mInvRequestExpireTime = 0.f;
+	mInvRequestExpireTime = 0.0;
 }
 
 void LLViewerObject::removeInventory(const LLUUID& item_id)
