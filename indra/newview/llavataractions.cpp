@@ -1634,7 +1634,7 @@ void LLAvatarActions::getScriptInfo(const LLUUID& idAgent)
 
 
 // Defined in llworld.cpp
-LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin);
+LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin, F32 width_scale_factorscale_factor);
 
 // static - Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegion** ppRegion, LLVector3d* pPosGlobal)
@@ -1663,7 +1663,7 @@ bool getRegionAndPosGlobalFromAgentID(const LLUUID& idAgent, const LLViewerRegio
 				if (ppRegion)
 					*ppRegion = pRegion;
 				if (pPosGlobal)
-					*pPosGlobal = unpackLocalToGlobalPosition(pRegion->mMapAvatars.at(idxRegionAgent), pRegion->getOriginGlobal());
+					*pPosGlobal = unpackLocalToGlobalPosition(pRegion->mMapAvatars.at(idxRegionAgent), pRegion->getOriginGlobal(), pRegion->getWidthScaleFactor());
 				return (NULL != pRegion);
 			}
 		}
