@@ -2592,11 +2592,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// do nothing -- don't distract newbies in
 			// Prelude with global IMs
 		}
-// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0)
-		else if ( (rlv_handler_t::isEnabled()) && (offline == IM_ONLINE) && ("@version" == message) && 
-		          (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		else if ( (RlvActions::isRlvEnabled()) && (RlvSettings::getEnableIMQuery()) && (offline == IM_ONLINE) && ("@version" == message) && (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
 		{
-			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
+			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(LLUUID::null), session_id);
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE 

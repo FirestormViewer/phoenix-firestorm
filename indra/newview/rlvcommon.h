@@ -91,6 +91,7 @@ public:
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static BOOL getEnableComposites()			{ return fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+	static bool getEnableIMQuery()              { return rlvGetSetting<bool>("RLVaEnableIMQuery", true); }
 	static bool getEnableLegacyNaming()			{ return fLegacyNaming; }
 	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
 	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }		
