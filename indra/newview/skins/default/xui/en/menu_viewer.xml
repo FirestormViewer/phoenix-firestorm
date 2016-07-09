@@ -1624,6 +1624,16 @@
       	 parameter="RestrainedLoveCanOOC" />
       </menu_item_check>
       <menu_item_check
+       label="Allow Temporary Attachments"
+       name="Allow Temporary Attachments">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaEnableTemporaryAttachments" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaEnableTemporaryAttachments" />
+      </menu_item_check>
+      <menu_item_check
        label="Forbid Give to #RLV"
        name="Forbid Give to #RLV">
       	<menu_item_check.on_check

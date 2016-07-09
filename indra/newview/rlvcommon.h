@@ -94,6 +94,7 @@ public:
 	static bool getEnableIMQuery()              { return rlvGetSetting<bool>("RLVaEnableIMQuery", true); }
 	static bool getEnableLegacyNaming()			{ return s_fLegacyNaming; }
 	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
+	static bool getEnableTemporaryAttachments() { return s_fTempAttach; }
 	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }
 	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
 	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
@@ -122,6 +123,7 @@ protected:
 	static bool s_fCanOOC;
 	static bool s_fLegacyNaming;
 	static bool s_fNoSetEnv;
+	static bool s_fTempAttach;
 	static std::list<LLUUID>      s_CompatItemCreators;
 	static std::list<std::string> s_CompatItemNames;
 };

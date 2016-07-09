@@ -348,6 +348,7 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
 #define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
 #define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
+#define RLV_SETTING_ENABLETEMPATTACH    "RLVaEnableTemporaryAttachments"
 #define RLV_SETTING_HIDELOCKEDLAYER		"RLVaHideLockedLayers"
 #define RLV_SETTING_HIDELOCKEDATTACH	"RLVaHideLockedAttachments"
 #define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"

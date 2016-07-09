@@ -83,6 +83,7 @@ bool RlvSettings::s_fCompositeFolders = false;
 bool RlvSettings::s_fCanOOC = true;
 bool RlvSettings::s_fLegacyNaming = true;
 bool RlvSettings::s_fNoSetEnv = false;
+bool RlvSettings::s_fTempAttach = true;
 std::list<LLUUID> RlvSettings::s_CompatItemCreators;
 std::list<std::string> RlvSettings::s_CompatItemNames;
 
@@ -93,6 +94,10 @@ void RlvSettings::initClass()
 	if (!fInitialized)
 	{
 		initCompatibilityMode(LLStringUtil::null);
+
+		s_fTempAttach = rlvGetSetting<bool>(RLV_SETTING_ENABLETEMPATTACH, true);
+		if (gSavedSettings.controlExists(RLV_SETTING_ENABLETEMPATTACH))
+			gSavedSettings.getControl(RLV_SETTING_ENABLETEMPATTACH)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fTempAttach));
 
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 		s_fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
