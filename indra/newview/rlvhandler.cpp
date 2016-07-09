@@ -1070,7 +1070,7 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 
 	if (fEnable)
 	{
-		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersion() << RLV_ENDL;
+		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersionAbout() << RLV_ENDL;
 		m_fEnabled = TRUE;
 
 		// Initialize static classes
@@ -2540,11 +2540,11 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.4.0a)
 		case RLV_BHVR_VERSIONNEW:		// @versionnew=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.2.0b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersion(RLV_BHVR_VERSION == rlvCmd.getBehaviourType());
+			strReply = RlvStrings::getVersion(rlvCmd.getObjectID(), RLV_BHVR_VERSION == rlvCmd.getBehaviourType());
 			break;
 		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.4b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersionNum();
+			strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
 			break;
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);

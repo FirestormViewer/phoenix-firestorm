@@ -90,6 +90,17 @@
       <key>Value</key>
       <string>+</string>
     </map>
+    <key>RLVaCompatibilityModeList</key>
+    <map>
+      <key>Comment</key>
+      <string>Contains a list of creators or partial items names that require compatibility mode handling (see wiki for more information and syntax)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
     <key>RLVaDebugDeprecateExplicitPoint</key>
     <map>
       <key>Comment</key>

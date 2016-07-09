@@ -23,8 +23,10 @@
 #include "llregionhandle.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
+#include "llversioninfo.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
+#include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "llworld.h"
 
@@ -36,6 +38,8 @@
 
 #include "lscript_byteformat.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
+
 
 // ============================================================================
 // Forward declarations
@@ -74,11 +78,13 @@ void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const L
 //
 
 #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-bool RlvSettings::fCompositeFolders = false;
+bool RlvSettings::s_fCompositeFolders = false;
 #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-bool RlvSettings::fCanOOC = true;
-bool RlvSettings::fLegacyNaming = true;
-bool RlvSettings::fNoSetEnv = false;
+bool RlvSettings::s_fCanOOC = true;
+bool RlvSettings::s_fLegacyNaming = true;
+bool RlvSettings::s_fNoSetEnv = false;
+std::list<LLUUID> RlvSettings::s_CompatItemCreators;
+std::list<std::string> RlvSettings::s_CompatItemNames;
 
 // Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.1.0i
 void RlvSettings::initClass()
@@ -86,18 +92,20 @@ void RlvSettings::initClass()
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
+		initCompatibilityMode(LLStringUtil::null);
+
 		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-		fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
+		s_fCompositeFolders = rlvGetSetting<bool>(RLV_SETTING_ENABLECOMPOSITES, false);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLECOMPOSITES))
-			gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fCompositeFolders));
+			gSavedSettings.getControl(RLV_SETTING_ENABLECOMPOSITES)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fCompositeFolders));
 		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
-		fLegacyNaming = rlvGetSetting<bool>(RLV_SETTING_ENABLELEGACYNAMING, true);
+		s_fLegacyNaming = rlvGetSetting<bool>(RLV_SETTING_ENABLELEGACYNAMING, true);
 		if (gSavedSettings.controlExists(RLV_SETTING_ENABLELEGACYNAMING))
-			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &fLegacyNaming));
+			gSavedSettings.getControl(RLV_SETTING_ENABLELEGACYNAMING)->getSignal()->connect(boost::bind(&onChangedSettingBOOL, _2, &s_fLegacyNaming));
 
-		fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
-		fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
+		s_fCanOOC = rlvGetSetting<bool>(RLV_SETTING_CANOOC, true);
+		s_fNoSetEnv = rlvGetSetting<bool>(RLV_SETTING_NOSETENV, false);
 
 		// Don't allow toggling RLVaLoginLastLocation from the debug settings floater
 		if (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION))
@@ -150,6 +158,65 @@ void RlvSettings::onChangedSettingMain(const LLSD& sdValue)
 				(sdValue.asBoolean()) ? LLTrans::getString("RLVaToggleEnabled").c_str()
 				                      : LLTrans::getString("RLVaToggleDisabled").c_str())));
 	}
+}
+
+void RlvSettings::initCompatibilityMode(std::string strCompatList)
+{
+	// NOTE: this function can be called more than once
+	s_CompatItemCreators.clear();
+	s_CompatItemNames.clear();
+
+	strCompatList.append(";").append(rlvGetSetting<std::string>("RLVaCompatibilityModeList", ""));
+
+	boost_tokenizer tokCompatList(strCompatList, boost::char_separator<char>(";", "", boost::drop_empty_tokens));
+	for (const std::string& strCompatEntry : tokCompatList)
+	{
+		if (boost::starts_with(strCompatEntry, "creator:"))
+		{
+			LLUUID idCreator;
+			if ( (44 == strCompatEntry.size()) && (LLUUID::parseUUID(strCompatEntry.substr(8), &idCreator)) &&
+			     (s_CompatItemCreators.end() == std::find(s_CompatItemCreators.begin(), s_CompatItemCreators.end(), idCreator)) )
+			{
+				s_CompatItemCreators.push_back(idCreator);
+			}
+		}
+		else if (boost::starts_with(strCompatEntry, "name:"))
+		{
+			if (strCompatEntry.size() > 5)
+				s_CompatItemNames.push_back(strCompatEntry.substr(5));
+		}
+	}
+}
+
+bool RlvSettings::isCompatibilityModeObject(const LLUUID& idRlvObject)
+{
+	bool fCompatMode = false;
+	if (idRlvObject.notNull())
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(idRlvObject);
+		if ( (pObj) && (pObj->isAttachment()) )
+		{
+			const LLViewerInventoryItem* pItem = gInventory.getItem(pObj->getAttachmentItemID());
+			if (pItem)
+			{
+				fCompatMode = s_CompatItemCreators.end() != std::find(s_CompatItemCreators.begin(), s_CompatItemCreators.end(), pItem->getCreatorUUID());
+				if (!fCompatMode)
+				{
+					const std::string& strAttachName = pItem->getName();
+					for (const std::string& strCompatName : s_CompatItemNames)
+					{
+					    boost::regex regexp(strCompatName, boost::regex::perl | boost::regex::icase);
+						if (boost::regex_match(strAttachName, regexp))
+						{
+							fCompatMode = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return fCompatMode;
 }
 
 // ============================================================================
@@ -314,27 +381,26 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 	return NULL;
 }
 
-// Checked: 2012-02-25 (RLVa-1.4.5) | Modified: RLVa-1.4.5
-std::string RlvStrings::getVersion(bool fLegacy)
+std::string RlvStrings::getVersion(const LLUUID& idRlvObject, bool fLegacy)
 {
+	bool fCompatMode = RlvSettings::isCompatibilityModeObject(idRlvObject);
 	return llformat("%s viewer v%d.%d.%d (RLVa %d.%d.%d)",
 		( (!fLegacy) ? "RestrainedLove" : "RestrainedLife" ),
-		RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH,
+		(!fCompatMode) ? RLV_VERSION_MAJOR : RLV_VERSION_MAJOR_COMPAT, (!fCompatMode) ? RLV_VERSION_MINOR : RLV_VERSION_MINOR_COMPAT, (!fCompatMode) ? RLV_VERSION_PATCH : RLV_VERSION_PATCH_COMPAT,
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH);
 }
 
-// Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
 std::string RlvStrings::getVersionAbout()
 {
-	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d%c" , 
-		RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH,
-		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, 'a' + RLVa_VERSION_BUILD);
+	return llformat("RLV v%d.%d.%d / RLVa v%d.%d.%d.%d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH, LLVersionInfo::getBuild());
 }
 
-// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.1.0a
-std::string RlvStrings::getVersionNum()
+std::string RlvStrings::getVersionNum(const LLUUID& idRlvObject)
 {
-	return llformat("%d%02d%02d%02d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLV_VERSION_BUILD);
+	bool fCompatMode = RlvSettings::isCompatibilityModeObject(idRlvObject);
+	return llformat("%d%02d%02d%02d",
+		(!fCompatMode) ? RLV_VERSION_MAJOR : RLV_VERSION_MAJOR_COMPAT, (!fCompatMode) ? RLV_VERSION_MINOR : RLV_VERSION_MINOR_COMPAT,
+		(!fCompatMode) ? RLV_VERSION_PATCH : RLV_VERSION_PATCH_COMPAT, (!fCompatMode) ? RLV_VERSION_BUILD : RLV_VERSION_BUILD_COMPAT);
 }
 
 // Checked: 2011-11-08 (RLVa-1.5.0)

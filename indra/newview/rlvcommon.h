@@ -80,27 +80,30 @@ class RlvSettings
 {
 public:
 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
-	static bool getCanOOC()						{ return fCanOOC; }
+	static bool getCanOOC()						{ return s_fCanOOC; }
 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
-	static bool getNoSetEnv()					{ return fNoSetEnv; }
+	static bool getNoSetEnv()					{ return s_fNoSetEnv; }
 
 	static std::string getWearAddPrefix()		{ return rlvGetSetting<std::string>(RLV_SETTING_WEARADDPREFIX, LLStringUtil::null); }
 	static std::string getWearReplacePrefix()	{ return rlvGetSetting<std::string>(RLV_SETTING_WEARREPLACEPREFIX, LLStringUtil::null); }
 
 	static bool getDebugHideUnsetDup()			{ return rlvGetSetting<bool>(RLV_SETTING_DEBUGHIDEUNSETDUP, false); }
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static BOOL getEnableComposites()			{ return fCompositeFolders; }
+	static BOOL getEnableComposites()			{ return s_fCompositeFolders; }
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	static bool getEnableIMQuery()              { return rlvGetSetting<bool>("RLVaEnableIMQuery", true); }
-	static bool getEnableLegacyNaming()			{ return fLegacyNaming; }
+	static bool getEnableLegacyNaming()			{ return s_fLegacyNaming; }
 	static bool getEnableSharedWear()			{ return rlvGetSetting<bool>(RLV_SETTING_ENABLESHAREDWEAR, false); }
-	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }		
+	static bool getHideLockedLayers()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDLAYER, false); }
 	static bool getHideLockedAttach()			{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDATTACH, false); }
 	static bool getHideLockedInventory()		{ return rlvGetSetting<bool>(RLV_SETTING_HIDELOCKEDINVENTORY, false); }
 	static bool getSharedInvAutoRename()		{ return rlvGetSetting<bool>(RLV_SETTING_SHAREDINVAUTORENAME, true); }
 
 	static bool getLoginLastLocation()			{ return rlvGetPerUserSetting<bool>(RLV_SETTING_LOGINLASTLOCATION, true); }
 	static void updateLoginLastLocation();
+
+	static void initCompatibilityMode(std::string strCompatList);
+	static bool isCompatibilityModeObject(const LLUUID& idRlvObject);
 
 	static void initClass();
 	static void onChangedSettingMain(const LLSD& sdValue);
@@ -109,11 +112,18 @@ protected:
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static BOOL fCompositeFolders;
+	static BOOL s_fCompositeFolders;
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	static bool fCanOOC;
-	static bool fLegacyNaming;
-	static bool fNoSetEnv;
+
+	/*
+	 * Member variables
+	 */
+protected:
+	static bool s_fCanOOC;
+	static bool s_fLegacyNaming;
+	static bool s_fNoSetEnv;
+	static std::list<LLUUID>      s_CompatItemCreators;
+	static std::list<std::string> s_CompatItemNames;
 };
 
 // ============================================================================
@@ -132,9 +142,9 @@ public:
 	static const std::string& getString(const std::string& strStringName);
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
 	static const std::string& getStringMapPath() { return m_StringMapPath; }
-	static std::string        getVersion(bool fLegacy = false);				// @version
-	static std::string        getVersionAbout();							// Shown in Help / About
-	static std::string        getVersionNum();								// @versionnum
+	static std::string        getVersion(const LLUUID& idRlvObject, bool fLegacy = false);
+	static std::string        getVersionAbout();
+	static std::string        getVersionNum(const LLUUID& idRlvObject);
 	static bool               hasString(const std::string& strStringName, bool fCheckCustom = false);
 	static void               setCustomString(const std::string& strStringName, const std::string& strStringValue);
 
