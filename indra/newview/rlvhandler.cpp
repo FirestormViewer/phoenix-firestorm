@@ -472,21 +472,43 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 // Externally invoked event handlers
 //
 
-// Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
-	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
-	if ( (hasBehaviour(RLV_BHVR_SETGROUP)) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of pending changes
+	static LLUUID s_idLastAgentGroup = LLUUID::null;
+	static bool s_fGroupChanging = false;
+
+	if (s_idLastAgentGroup != gAgent.getGroupID())
 	{
-		// [Copy/paste from LLGroupActions::activate()]
-		LLMessageSystem* msg = gMessageSystem;
-		msg->newMessageFast(_PREHASH_ActivateGroup);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
-		gAgent.sendReliableMessage();
-		return true;
+		s_idLastAgentGroup = gAgent.getGroupID();
+		s_fGroupChanging = false;
+	}
+
+	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
+	if ( (!RlvActions::canChangeActiveGroup()) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	{
+		// Make sure they still belong to the group
+		if ( (m_idAgentGroup.notNull()) && (!gAgent.isInGroup(m_idAgentGroup)) )
+		{
+			m_idAgentGroup.setNull();
+			s_fGroupChanging = false;
+		}
+
+		if (!s_fGroupChanging)
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString()) : "(none)"));
+
+			// [Copy/paste from LLGroupActions::activate()]
+			LLMessageSystem* msg = gMessageSystem;
+			msg->newMessageFast(_PREHASH_ActivateGroup);
+			msg->nextBlockFast(_PREHASH_AgentData);
+			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+			msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
+			gAgent.sendReliableMessage();
+			s_fGroupChanging = true;
+			return true;
+		}
 	}
 	else
 	{
@@ -2384,7 +2406,7 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
-	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
+	if (!RlvActions::canChangeActiveGroup(rlvCmd.getObjectID()))
 	{
 		return RLV_RET_FAILED_LOCK;
 	}

@@ -370,6 +370,7 @@ enum ERlvAttachGroupType
 
 #define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
+#define RLV_STRING_BLOCKED_GROUPCHANGE		"blocked_groupchange"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"

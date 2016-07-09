@@ -43,8 +43,8 @@
 #include "llviewercontrol.h"	// for gSavedSettings
 #include "llviewermenu.h"		// for gMenuHolder
 #include "llvoiceclient.h"
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: RLVa-2.0.3
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLGroupList> r("group_list");
@@ -284,14 +284,14 @@ bool LLGroupList::onContextMenuItemEnable(const LLSD& userdata)
 	bool real_group_selected = selected_group_id.notNull(); // a "real" (not "none") group is selected
 
 	// each group including "none" can be activated
+// [RLVa:KB] - Checked: RLVa-1.3.0
+	if (userdata.asString() == "activate")
+		return (gAgent.getGroupID() != selected_group_id) && (RlvActions::canChangeActiveGroup());
+	else if (userdata.asString() == "leave")
+		return (real_group_selected) && ((gAgent.getGroupID() != selected_group_id) || (RlvActions::canChangeActiveGroup()));
+// [/RLVa:KB]
 //	if (userdata.asString() == "activate")
 //		return gAgent.getGroupID() != selected_group_id;
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
-	if (userdata.asString() == "activate")
-		return (gAgent.getGroupID() != selected_group_id) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP));
-	else if (userdata.asString() == "leave")
-		return (real_group_selected) && ((gAgent.getGroupID() != selected_group_id) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)));
-// [/RLVa:KB]
 
 	if (userdata.asString() == "call")
 	  return real_group_selected && LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();

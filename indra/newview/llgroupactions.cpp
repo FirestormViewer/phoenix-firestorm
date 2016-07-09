@@ -294,8 +294,8 @@ bool LLGroupActions::onJoinGroup(const LLSD& notification, const LLSD& response)
 void LLGroupActions::leave(const LLUUID& group_id)
 {
 //	if (group_id.isNull())
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
-	if ( (group_id.isNull()) || ((gAgent.getGroupID() == group_id) && (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))) )
+// [RLVa:KB] - Checked: RLVa-1.3.0
+	if ( (group_id.isNull()) || ((gAgent.getGroupID() == group_id) && (!RlvActions::canChangeActiveGroup())) )
 // [/RLVa:KB]
 	{
 		return;
@@ -348,8 +348,8 @@ void LLGroupActions::processLeaveGroupDataResponse(const LLUUID group_id)
 // static
 void LLGroupActions::activate(const LLUUID& group_id)
 {
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)) && (gRlvHandler.getAgentGroup() != group_id) )
+// [RLVa:KB] - Checked: RLVa-1.3.0
+	if ( (!RlvActions::canChangeActiveGroup()) && (gRlvHandler.getAgentGroup() != group_id) )
 	{
 		return;
 	}
