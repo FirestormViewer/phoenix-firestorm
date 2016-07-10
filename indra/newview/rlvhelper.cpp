@@ -357,7 +357,7 @@ const RlvBehaviourInfo* RlvBehaviourDictionary::getBehaviourInfo(const std::stri
 	if (pfStrict)
 		*pfStrict = fStrict;
 
-	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair(strBhvr, (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
+	rlv_string2info_map_t::const_iterator itBhvr = m_String2InfoMap.find(std::make_pair( (!fStrict) ? strBhvr : strBhvr.substr(0, strBhvr.size() - 4), (eParamType & RLV_TYPE_ADDREM) ? RLV_TYPE_ADDREM : eParamType));
 	return ( (itBhvr != m_String2InfoMap.end()) && ((!fStrict) || (itBhvr->second->hasStrict())) ) ? itBhvr->second : NULL;
 }
 

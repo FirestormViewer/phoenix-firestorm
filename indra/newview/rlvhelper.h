@@ -385,7 +385,7 @@ public:
 	 */
 public:
 	std::string        asString() const;
-	const std::string& getBehaviour() const		{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviour() : m_strBehaviour; }
+	const std::string& getBehaviour() const		{ return m_strBehaviour; }
 	ERlvBehaviour      getBehaviourType() const	{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN; }
 	U32                getBehaviourFlags() const{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourFlags() : 0; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }
