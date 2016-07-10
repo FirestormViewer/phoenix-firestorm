@@ -367,6 +367,8 @@ public:
 	const uuid_vec_t& getAttachmentLookups()  { return m_LockedAttachmentRem; }
 	const uuid_vec_t& getWearableLookups()    { return m_LockedWearableRem; }
 protected:
+	boost::signals2::connection m_AttachmentChangeConnection;
+
 	// Map of folder locks (idRlvObj -> lockDescr)
 	folderlock_list_t	m_FolderLocks;			// List of add and remove locked folder descriptions
 	S32					m_cntLockAdd;			// Number of RLV_LOCK_ADD locked folders in m_FolderLocks

@@ -964,6 +964,9 @@ void RlvFolderLocks::addFolderLock(const folderlock_source_t& lockSource, ELockP
 		else if (RLV_LOCK_ADD == eLockType)
 			m_cntLockAdd++;
 	}
+
+	if (!m_AttachmentChangeConnection.connected())
+		m_AttachmentChangeConnection = gAgentAvatarp->setAttachmentCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
 	m_fLookupDirty = true;
 }
 
