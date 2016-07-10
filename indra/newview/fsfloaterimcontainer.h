@@ -55,6 +55,8 @@ public:
 // [/SL:KB]
 	bool hasFloater(LLFloater* floaterp);
 
+	void addNewSession(LLFloater* floaterp);
+
 	static FSFloaterIMContainer* findInstance();
 	static FSFloaterIMContainer* getInstance();
 
@@ -98,6 +100,8 @@ private:
 
 	void checkFlashing();
 	uuid_vec_t	mFlashingSessions;
+
+	bool		mIsAddingNewSession;
 
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-05-05 (Catznip-3.3.0)
 protected:

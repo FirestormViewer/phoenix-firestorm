@@ -1746,7 +1746,7 @@ void send_agent_resume()
 
 //static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
 // [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
-LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin)
+LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& region_origin, F32 width_scale_factor)
 // [/SL:KB]
 {
 	LLVector3d pos_local;
@@ -1754,6 +1754,11 @@ LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& regi
 	pos_local.mdV[VZ] = (compact_local & 0xFFU) * 4;
 	pos_local.mdV[VY] = (compact_local >> 8) & 0xFFU;
 	pos_local.mdV[VX] = (compact_local >> 16) & 0xFFU;
+
+	// <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+	pos_local.mdV[VX] *= width_scale_factor;
+	pos_local.mdV[VY] *= width_scale_factor;
+	// </FS:Ansariel>
 
 	return region_origin + pos_local;
 }
@@ -1817,7 +1822,7 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 			// <FS:Ansariel>
 			//LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.at(i), origin_global);
 			U32 compact_local = regionp->mMapAvatars.at(i);
-			LLVector3d pos_global = unpackLocalToGlobalPosition(compact_local, origin_global);
+			LLVector3d pos_global = unpackLocalToGlobalPosition(compact_local, origin_global, regionp->getWidthScaleFactor());
 			// </FS:Ansariel>
 			if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
 			{
@@ -1874,7 +1879,7 @@ bool LLWorld::getAvatar(const LLUUID& idAvatar, LLVector3d& posAvatar) const
 		{
 			if (idAvatar == pRegion->mMapAvatarIDs[idxAgent])
 			{
-				posAvatar = unpackLocalToGlobalPosition(pRegion->mMapAvatars[idxAgent], pRegion->getOriginGlobal());
+				posAvatar = unpackLocalToGlobalPosition(pRegion->mMapAvatars[idxAgent], pRegion->getOriginGlobal(), pRegion->getWidthScaleFactor());
 				return true;
 			}
 		}

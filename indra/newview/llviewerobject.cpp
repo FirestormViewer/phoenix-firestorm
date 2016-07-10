@@ -145,6 +145,7 @@ std::map<std::string, U32> LLViewerObject::sObjectDataMap;
 // JC 3/18/2003
 
 const F32 PHYSICS_TIMESTEP = 1.f / 45.f;
+const F64 INV_REQUEST_EXPIRE_TIME_SEC = 60.0;
 
 static LLTrace::BlockTimerStatHandle FTM_CREATE_OBJECT("Create Object");
 
@@ -268,7 +269,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mInventory(NULL),
 	mInventorySerialNum(0),
 	mRegionp( regionp ),
-	mInventoryPending(FALSE),
+	mInvRequestExpireTime(0.0),
 	mInventoryDirty(FALSE),
 	mDead(FALSE),
 	mOrphaned(FALSE),
@@ -2905,6 +2906,15 @@ void LLViewerObject::removeInventoryListener(LLVOInventoryListener* listener)
 	}
 }
 
+BOOL LLViewerObject::isInventoryPending()
+{
+    if (mInvRequestExpireTime == 0.0 || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
+    {
+        return FALSE;
+    }
+    return TRUE;
+}
+
 void LLViewerObject::clearInventoryListeners()
 {
 	for_each(mInventoryCallbacks.begin(), mInventoryCallbacks.end(), DeletePointer());
@@ -2943,7 +2953,7 @@ void LLViewerObject::requestInventory()
 
 void LLViewerObject::fetchInventoryFromServer()
 {
-	if (!mInventoryPending)
+	if (mInvRequestExpireTime == 0.0 || mInvRequestExpireTime < LLFrameTimer::getTotalSeconds())
 	{
 		delete mInventory;
 		LLMessageSystem* msg = gMessageSystem;
@@ -2956,7 +2966,7 @@ void LLViewerObject::fetchInventoryFromServer()
 		msg->sendReliable(mRegionp->getHost());
 
 		// this will get reset by dirtyInventory or doInventoryCallback
-		mInventoryPending = TRUE;
+		mInvRequestExpireTime = LLFrameTimer::getTotalSeconds() + INV_REQUEST_EXPIRE_TIME_SEC;
 	}
 }
 
@@ -3181,7 +3191,7 @@ void LLViewerObject::doInventoryCallback()
 			mInventoryCallbacks.erase(curiter);
 		}
 	}
-	mInventoryPending = FALSE;
+	mInvRequestExpireTime = 0.0;
 }
 
 void LLViewerObject::removeInventory(const LLUUID& item_id)
