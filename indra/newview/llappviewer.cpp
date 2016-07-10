@@ -3964,14 +3964,6 @@ LLSD LLAppViewer::getViewerInfo() const
 //	info["LLCEFLIB_VERSION"] = "Undefined";
 //#endif
 
-#if defined( FS_CEFLIB_VERSION ) && FS_CEFLIB_VERSION >= 6
-	{
-		std::stringstream strm;
-		strm << LLCEFLIB_BASE_VERSION << ".FS" << FS_CEFLIB_VERSION << "-" << FS_CEF_VERSION << " (Chrome " << FS_CEF_CHROME_VERSION << ")";
-		info[ "LLCEFLIB_VERSION" ] = strm.str();
-	}
-#endif
-	
 	// <FS:ND> Use the total accumulated samples.
 	//S32 packets_in = LLViewerStats::instance().getRecording().getSum(LLStatViewer::PACKETS_IN);
 	//if (packets_in > 0)

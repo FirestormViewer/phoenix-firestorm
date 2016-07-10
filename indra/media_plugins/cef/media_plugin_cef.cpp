@@ -489,12 +489,6 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 		{
 			if (message_name == "init")
 			{
-				// <FS:ND> FS specific CEF settings
-#if defined( LL_WINDOWS ) || defined( LL_LINUX )
-				mLLCEFLib->setFlipY( false );
-#endif
-				// </FS:ND>
-
 				// event callbacks from LLCefLib
 				mLLCEFLib->setOnPageChangedCallback(boost::bind(&MediaPluginCEF::onPageChangedCallback, this, _1, _2, _3, _4, _5, _6));
 				mLLCEFLib->setOnCustomSchemeURLCallback(boost::bind(&MediaPluginCEF::onCustomSchemeURLCallback, this, _1));
