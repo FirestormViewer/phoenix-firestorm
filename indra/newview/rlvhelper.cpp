@@ -187,11 +187,11 @@ RlvBehaviourDictionary::RlvBehaviourDictionary()
 	addModifier(RLV_BHVR_SETCAM_EYEOFFSET, RLV_MODIFIER_SETCAM_EYEOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_EYEOFFSET>("Camera - Eye Offset", LLVector3::zero, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_OPTION_MODIFIER, RlvBehaviourCamEyeFocusOffsetHandler>("setcam_focusoffset", RlvBehaviourInfo::BHVR_EXPERIMENTAL));
 	addModifier(RLV_BHVR_SETCAM_FOCUSOFFSET, RLV_MODIFIER_SETCAM_FOCUSOFFSET, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>("Camera - Focus Offset", LLVector3::zero, true, nullptr));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmin", RLV_BHVR_SETCAM_FOVMIN));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SETCAM_FOVMIN, RlvBehaviourSetCamFovHandler>("setcam_fovmin"));
 	addModifier(RLV_BHVR_SETCAM_FOVMIN, RLV_MODIFIER_SETCAM_FOVMIN, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>("Camera - FOV (Min)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMax));
-	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_MODIFIER>("setcam_fovmax", RLV_BHVR_SETCAM_FOVMAX));
-	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_MOUSELOOK, RLV_OPTION_NONE>("setcam_mouselook"));
+	addEntry(new RlvBehaviourProcessor<RLV_BHVR_SETCAM_FOVMAX, RlvBehaviourSetCamFovHandler>("setcam_fovmax"));
 	addModifier(RLV_BHVR_SETCAM_FOVMAX, RLV_MODIFIER_SETCAM_FOVMAX, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMAX>("Camera - FOV (Max)", DEFAULT_FIELD_OF_VIEW, true, new RlvBehaviourModifier_CompMin));
+	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_MOUSELOOK, RLV_OPTION_NONE>("setcam_mouselook"));
 	addEntry(new RlvBehaviourGenericProcessor<RLV_OPTION_NONE_OR_MODIFIER>("setcam_textures", RLV_BHVR_SETCAM_TEXTURES));
 	addModifier(RLV_BHVR_SETCAM_TEXTURES, RLV_MODIFIER_SETCAM_TEXTURE, new RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_TEXTURE>("Camera - Forced Texture", IMG_DEFAULT, true, nullptr));
 	addEntry(new RlvBehaviourGenericToggleProcessor<RLV_BHVR_SETCAM_UNLOCK, RLV_OPTION_NONE>("setcam_unlock"));

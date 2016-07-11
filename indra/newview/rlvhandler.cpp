@@ -1771,6 +1771,38 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange
 	}
 }
 
+// Handles: @setcam_fovmin:<angle>=n|y and @setcam_fovmax:<angle>=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourSetCamFovHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	static float s_nLastCameraAngle = DEFAULT_FIELD_OF_VIEW;
+
+	S32 nRefMinBhvr = gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_FOVMIN], nRefMaxBhvr = gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_FOVMAX];
+	LLControlVariable* pSetting = gSavedSettings.getControl("CameraAngle");
+
+	// Save the user's current FOV angle if nothing's been restricted (yet)
+	if ( (!nRefMinBhvr) && (!nRefMaxBhvr) && (pSetting) )
+		s_nLastCameraAngle = (pSetting->isPersisted()) ? LLViewerCamera::instance().getDefaultFOV() : DEFAULT_FIELD_OF_VIEW;
+
+	// Perform default handling of the command
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (fRefCount) && (pSetting) )
+	{
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			// Don't persist changes from this point
+			pSetting->setPersist(LLControlVariable::PERSIST_NO);
+		}
+		else if ( (RLV_TYPE_REMOVE == rlvCmd.getParamType()) && (1 == nRefMinBhvr + nRefMaxBhvr) )
+		{
+			// Restore the user's last FOV angle (and resume persistance)
+			LLViewerCamera::instance().setDefaultFOV(s_nLastCameraAngle);
+			pSetting->setPersist(LLControlVariable::PERSIST_NONDFT);
+		}
+	}
+	return eRet;
+}
+
 // Handles: @setcam_fovmin:<angle>=n|y changes
 template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>::onValueChange() const
@@ -2354,6 +2386,14 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_FOV>::onCommand(const RlvCommand& rlv
 		return RLV_RET_FAILED_OPTION;
 
 	LLViewerCamera::getInstance()->setDefaultFOV(nFOV);
+
+	// Don't persist non-default changes that are due to RLV; but do resume persistance once reset back to the default
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX)) )
+	{
+		if (LLControlVariable* pSetting = gSavedSettings.getControl("CameraAngle"))
+			pSetting->setPersist( (pSetting->isDefault()) ? LLControlVariable::PERSIST_NONDFT : LLControlVariable::PERSIST_NO );
+	}
+
 	return RLV_RET_SUCCESS;
 }
 
