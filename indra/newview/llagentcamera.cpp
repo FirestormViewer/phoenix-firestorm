@@ -2081,7 +2081,7 @@ bool LLAgentCamera::clampCameraPosition(LLVector3d& posCamGlobal, const LLVector
 		m_fRlvMinDist = true;
 	}
 
-	if (!isnan(nDistMult))
+	if (!llisnan(nDistMult))
 	{
 		posCamGlobal = posCamRefGlobal + nDistMult * offsetCamera;
 		m_posRlvRefGlobal = posCamRefGlobal;
