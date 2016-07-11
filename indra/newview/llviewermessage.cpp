@@ -2925,11 +2925,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// do nothing -- don't distract newbies in
 			// Prelude with global IMs
 		}
-// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0)
-		else if ( (rlv_handler_t::isEnabled()) && (offline == IM_ONLINE) && ("@version" == message) && 
-		          (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		else if ( (RlvActions::isRlvEnabled()) && (RlvSettings::getEnableIMQuery()) && (offline == IM_ONLINE) && ("@version" == message) && (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
 		{
-			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
+			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(LLUUID::null), session_id);
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE 
@@ -4733,7 +4732,8 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
-				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) )
+				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) &&
+					 ((!chatter) || (!chatter->isAttachment()) || (!chatter->isTempAttachment()) || (RlvSettings::getEnableTemporaryAttachments())) )
 				{
 					mesg.erase(0, 1);
 					LLStringUtil::toLower(mesg);

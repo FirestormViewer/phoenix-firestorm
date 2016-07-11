@@ -62,6 +62,7 @@
 #include "llavatarpropertiesprocessor.h"
 
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvlocks.h"
@@ -1911,6 +1912,13 @@ bool LLAppearanceMgr::getCanRemoveFromCOF(const LLUUID& outfit_cat_id)
 	{
 		return false;
 	}
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(outfit_cat_id, RLV_LOCK_REMOVE)) )
+	{
+		return false;
+	}
+// [/RLVa:KB]
+
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	LLFindWearablesEx is_worn(/*is_worn=*/ true, /*include_body_parts=*/ false);
@@ -1929,6 +1937,13 @@ bool LLAppearanceMgr::getCanAddToCOF(const LLUUID& outfit_cat_id)
 	{
 		return false;
 	}
+
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(outfit_cat_id, RLV_LOCK_ADD)) )
+	{
+		return false;
+	}
+// [/RLVa:KB]
 
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
@@ -1949,6 +1964,14 @@ bool LLAppearanceMgr::getCanReplaceCOF(const LLUUID& outfit_cat_id)
 	{
 		return false;
 	}
+
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	// Block "Replace Current Outfit" if the user can't wear the new folder
+	if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(outfit_cat_id, RLV_LOCK_ADD)) )
+	{
+		return false;
+	}
+// [/RLVa:KB]
 
 	// Check whether it's the base outfit.
 //	if (outfit_cat_id.isNull() || outfit_cat_id == getBaseOutfitUUID())
@@ -2142,9 +2165,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	LLInventoryModel::item_array_t body_items;
 	getDescendentsOfAssetType(cof, body_items, LLAssetType::AT_BODYPART);
 //	getDescendentsOfAssetType(category, body_items, LLAssetType::AT_BODYPART);
-// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0)
+// [RLVa:KB] - Checked: RLVa-2.0.3
 	// Filter out any new body parts that can't be worn before adding them
-	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+	if ( (RlvActions::isRlvEnabled()) && ((gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ADD))) )
 		body_items_new.erase(std::remove_if(body_items_new.begin(), body_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR_REPLACE)), body_items_new.end());
 	body_items.insert(body_items.end(), body_items_new.begin(), body_items_new.end());
 // [/RLVa:KB]
@@ -2159,8 +2182,8 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	LLInventoryModel::item_array_t wear_items;
 	if (append)
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
-// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0)
-	else if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	else if ( (RlvActions::isRlvEnabled()) && ((gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_REMOVE))) )
 	{
 		// Make sure that all currently locked clothing layers remain in COF when replacing
 		getDescendentsOfAssetType(cof, wear_items, LLAssetType::AT_CLOTHING);
@@ -2168,9 +2191,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	}
 // [/RLVa:KB]
 //	getDescendentsOfAssetType(category, wear_items, LLAssetType::AT_CLOTHING);
-// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0)
+// [RLVa:KB] - Checked: RLVa-2.0.3
 	// Filter out any new wearables that can't be worn before adding them
-	if ( (rlv_handler_t::isEnabled()) && (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) )
+	if ( (RlvActions::isRlvEnabled()) && ((gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ADD))) )
 		wear_items_new.erase(std::remove_if(wear_items_new.begin(), wear_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), wear_items_new.end());
 	wear_items.insert(wear_items.end(), wear_items_new.begin(), wear_items_new.end());
 // [/RLVa:KB]
@@ -2185,8 +2208,8 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	LLInventoryModel::item_array_t obj_items;
 	if (append)
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0z) | Modified: RLVa-1.2.0b
-	else if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	else if ( (RlvActions::isRlvEnabled()) && ((gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_REMOVE))) )
 	{
 		// Make sure that all currently locked attachments remain in COF when replacing
 		getDescendentsOfAssetType(cof, obj_items, LLAssetType::AT_OBJECT);
@@ -2194,9 +2217,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	}
 // [/RLVa:KB]
 //	getDescendentsOfAssetType(category, obj_items, LLAssetType::AT_OBJECT);
-// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0)
+// [RLVa:KB] - Checked: RLVa-2.0.3
 	// Filter out any new attachments that can't be worn before adding them
-	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	if ( (RlvActions::isRlvEnabled()) && ((gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) || (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ADD))) )
 		obj_items_new.erase(std::remove_if(obj_items_new.begin(), obj_items_new.end(), RlvPredCanNotWearItem(RLV_WEAR)), obj_items_new.end());
 	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
 // [/RLVa:KB]
