@@ -502,7 +502,8 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 
 		if (!s_fGroupChanging)
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString()) : "(none)"));
+			RlvUtil::notifyBlocked( RLV_STRING_BLOCKED_GROUPCHANGE,
+									LLSD().with( "GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString().c_str()) : "(none)"));
 
 			// [Copy/paste from LLGroupActions::activate()]
 			LLMessageSystem* msg = gMessageSystem;
