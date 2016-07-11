@@ -47,7 +47,7 @@ namespace LLEventPolling
 namespace Details
 {
 
-    class LLEventPollImpl
+    class LLEventPollImpl: public boost::enable_shared_from_this<LLEventPollImpl>
     {
     public:
         LLEventPollImpl(const LLHost &sender);
@@ -130,7 +130,7 @@ namespace Details
         {
             std::string coroname =
                 LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
-                boost::bind(&LLEventPollImpl::eventPollCoro, this, url));
+                boost::bind(&LLEventPollImpl::eventPollCoro, this->shared_from_this(), url));
             LL_INFOS("LLEventPollImpl") << coroname << " with  url '" << url << LL_ENDL;
         }
     }
@@ -302,8 +302,7 @@ namespace Details
 LLEventPoll::LLEventPoll(const std::string&	poll_url, const LLHost& sender):
     mImpl()
 { 
-    mImpl = boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>
-            (new LLEventPolling::Details::LLEventPollImpl(sender));
+    mImpl = boost::shared_ptr<LLEventPolling::Details::LLEventPollImpl>(new LLEventPolling::Details::LLEventPollImpl(sender));
     mImpl->start(poll_url);
 }
 
