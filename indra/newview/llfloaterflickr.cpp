@@ -54,6 +54,7 @@
 #include <boost/regex.hpp>
 #include "llspinctrl.h"
 
+#include "llviewernetwork.h"
 #include "llnotificationsutil.h"
 #ifdef OPENSIM
 #include "exoflickr.h"
@@ -66,8 +67,12 @@ static LLPanelInjector<LLFlickrPhotoPanel> t_panel_photo("llflickrphotopanel");
 static LLPanelInjector<LLFlickrAccountPanel> t_panel_account("llflickraccountpanel");
 
 const std::string DEFAULT_PHOTO_QUERY_PARAMETERS = "?sourceid=slshare_photo&utm_source=flickr&utm_medium=photo&utm_campaign=slshare";
-const std::string DEFAULT_TAG_TEXT = "secondlife ";
-const std::string FLICKR_MACHINE_TAGS_NAMESPACE = "secondlife";
+// <FS:Ansariel> Don't assume we're always in Second Life
+//const std::string DEFAULT_TAG_TEXT = "secondlife ";
+//const std::string FLICKR_MACHINE_TAGS_NAMESPACE = "secondlife";
+const std::string DEFAULT_TAG_TEXT = "Firestorm ";
+static std::string FLICKR_MACHINE_TAGS_NAMESPACE = "secondlife";
+// </FS:Ansariel>
 
 ///////////////////////////
 //LLFlickrPhotoPanel///////
@@ -122,7 +127,10 @@ BOOL LLFlickrPhotoPanel::postBuild()
 	mDescriptionTextBox = getChild<LLUICtrl>("photo_description");
 	mLocationCheckbox = getChild<LLUICtrl>("add_location_cb");
 	mTagsTextBox = getChild<LLUICtrl>("photo_tags");
-	mTagsTextBox->setValue(DEFAULT_TAG_TEXT);
+	// <FS:Ansariel> Don't assume we're always in Second Life
+	//mTagsTextBox->setValue(DEFAULT_TAG_TEXT);
+	mTagsTextBox->setValue(DEFAULT_TAG_TEXT + (LLGridManager::instance().isInSecondLife() ? "secondlife" : ("\"" + LLGridManager::instance().getGridId()) + "\"") + " ");
+	// </FS:Ansariel>
 	mRatingComboBox = getChild<LLUICtrl>("rating_combobox");
 	mPostButton = getChild<LLUICtrl>("post_photo_btn");
 	mCancelButton = getChild<LLUICtrl>("cancel_photo_btn");
@@ -391,7 +399,13 @@ void LLFlickrPhotoPanel::sendPhoto()
 		std::string slurl_string = slurl.getSLURLString();
 
 		// Add query parameters so Google Analytics can track incoming clicks!
-		slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
+		// <FS:Ansariel> Don't assume we're always in Second Life
+		//slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
+		if (LLGridManager::instance().isInSecondLife())
+		{
+			slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
+		}
+		// </FS:Ansariel>
 
 		std::string photo_link_text = "Visit this location";// at [] in Second Life";
 		std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
@@ -404,7 +418,17 @@ void LLFlickrPhotoPanel::sendPhoto()
 				photo_link_text += " at " + parcel_name;
 			}
 		}
-		photo_link_text += " in Second Life";
+		// <FS:Ansariel> Don't assume we're always in Second Life
+		//photo_link_text += " in Second Life";
+		if (LLGridManager::instance().isInSecondLife())
+		{
+			photo_link_text += " in Second Life";
+		}
+		else
+		{
+			photo_link_text += " in \"" + LLGridManager::instance().getGridLabel() + "\"";
+		}
+		// </FS:Ansariel>
 
 		slurl_string = "<a href=\"" + slurl_string + "\">" + photo_link_text + "</a>";
 
@@ -427,6 +451,13 @@ void LLFlickrPhotoPanel::sendPhoto()
 			std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
 			std::string region_name = region->getName();
 			
+			// <FS:Ansariel> Don't assume we're always in Second Life
+			if (!LLGridManager::instance().isInSecondLife())
+			{
+				FLICKR_MACHINE_TAGS_NAMESPACE = LLGridManager::instance().getGridId();
+			}
+			// </FS:Ansariel>
+
 			if (!region_name.empty())
 			{
 				tags += llformat(" \"%s:region=%s\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), region_name.c_str());
