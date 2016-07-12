@@ -1175,6 +1175,11 @@ bool LLAppViewer::init()
 		gMaxVideoRam = S32Megabytes(1024);
 		LL_INFOS() << "At least 2 GB video memory detected - increasing max video ram to " << gMaxVideoRam.value() << " MB" << LL_ENDL;
 	}
+	else if (gGLManager.mVRAM > 768)
+	{
+		gMaxVideoRam = S32Megabytes(768);
+		LL_INFOS() << "At least 1 GB video memory detected - increasing max video ram to " << gMaxVideoRam.value() << " MB" << LL_ENDL;
+	}
 #endif
 	// </FS:Ansariel>
 
