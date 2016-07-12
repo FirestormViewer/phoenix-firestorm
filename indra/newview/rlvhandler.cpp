@@ -2101,6 +2101,33 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 	return eRet;
 }
 
+// Handles: @shownearby=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	// Refresh the nearby people list
+	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	LLAvatarList* pNearbyList = (pPeoplePanel) ? pPeoplePanel->getNearbyList() : NULL;
+	RLV_ASSERT( (pPeoplePanel) && (pNearbyList) );
+	if (pNearbyList)
+	{
+		static std::string s_strNoItemsMsg = pNearbyList->getNoItemsMsg();
+		pNearbyList->setNoItemsMsg( (fHasBhvr) ? RlvStrings::getString("blocked_nearby") : s_strNoItemsMsg );
+		pNearbyList->clear();
+
+		if (pNearbyList->isInVisibleChain())
+			pPeoplePanel->onCommit();
+		if (!fHasBhvr)
+			pPeoplePanel->updateNearbyList();
+	}
+
+	// Refresh that avatar's name tag and all HUD text
+	LLHUDText::refreshAllObjectText();
+}
+
 // Handles: @showself=n|y and @showselfhead=n|y toggles
 template<> template<>
 void RlvBehaviourShowSelfToggleHandler::onCommandToggle(ERlvBehaviour eBvhr, bool fHasBhvr)

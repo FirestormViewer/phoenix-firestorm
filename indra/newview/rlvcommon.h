@@ -169,7 +169,7 @@ public:
 	static bool isNearbyRegion(const std::string& strRegion);						// @showloc
 
 	static void filterLocation(std::string& strUTF8Text);							// @showloc
-	static void filterNames(std::string& strUTF8Text, bool fFilterLegacy = true);	// @shownames
+	static void filterNames(std::string& strUTF8Text, bool fFilterLegacy = true, bool fClearMatches = false);	// @shownames
 	static void filterScriptQuestions(S32& nQuestions, LLSD& sdPayload); 
 
 	static bool isForceTp()	{ return m_fForceTp; }

@@ -450,20 +450,21 @@ void RlvUtil::filterLocation(std::string& strUTF8Text)
 }
 
 // Checked: 2010-12-08 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
-void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
+void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy, bool fClearMatches)
 {
 	uuid_vec_t idAgents;
 	LLWorld::getInstance()->getAvatars(&idAgents, NULL);
 	for (int idxAgent = 0, cntAgent = idAgents.size(); idxAgent < cntAgent; idxAgent++)
 	{
 		LLAvatarName avName;
-		if ( (LLAvatarNameCache::get(idAgents[idxAgent], &avName)) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgents[idxAgent])) )
+		// NOTE: if we're agressively culling nearby names then ignore exceptions
+		if ( (LLAvatarNameCache::get(idAgents[idxAgent], &avName)) && ((fClearMatches) || (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgents[idxAgent]))) )
 		{
 			const std::string& strDisplayName = avName.getDisplayName();
 			bool fFilterDisplay = (strDisplayName.length() > 2);
 			const std::string& strLegacyName = avName.getLegacyName();
 			fFilterLegacy &= (strLegacyName.length() > 2);
-			const std::string& strAnonym = RlvStrings::getAnonym(avName);
+			const std::string& strAnonym = (!fClearMatches) ? RlvStrings::getAnonym(avName) : LLStringUtil::null;
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
 			if (boost::icontains(strLegacyName, strDisplayName))

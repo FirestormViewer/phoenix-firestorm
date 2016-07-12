@@ -834,7 +834,18 @@ void LLPanelPeople::updateNearbyList()
 
 	std::vector<LLVector3d> positions;
 
-	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	if (RlvActions::canShowNearbyAgents())
+	{
+// [/RLVa:KB]
+		LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+// [RLVa:KB] - Checked: RLVa-2.0.3
+	}
+	else
+	{
+		mNearbyList->getIDs().clear();
+	}
+// [/RLVa:KB]
 	mNearbyList->setDirty();
 
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
