@@ -376,11 +376,11 @@ protected:
 
 	// Cached item look-up variables
 	typedef std::multimap<LLUUID, const folderlock_descr_t*> folderlock_map_t;
-	mutable bool				m_fLookupDirty;
-	mutable bool				m_fLockedRoot;
-	mutable uuid_vec_t			m_LockedAttachmentRem;
-	mutable folderlock_map_t	m_LockedFolderMap;
-	mutable uuid_vec_t			m_LockedWearableRem;
+	mutable bool             m_fLookupDirty;
+	mutable U32              m_RootLockType;
+	mutable uuid_vec_t       m_LockedAttachmentRem;
+	mutable folderlock_map_t m_LockedFolderMap;
+	mutable uuid_vec_t       m_LockedWearableRem;
 private:
 	friend class LLSingleton<RlvFolderLocks>;
 };

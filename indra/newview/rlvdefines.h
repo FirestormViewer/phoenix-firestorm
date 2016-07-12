@@ -307,9 +307,10 @@ enum ERlvExceptionCheck
 
 enum ERlvLockMask
 {
-	RLV_LOCK_ADD	= 0x01,
-	RLV_LOCK_REMOVE	= 0x02,
-	RLV_LOCK_ANY	= RLV_LOCK_ADD | RLV_LOCK_REMOVE
+	RLV_LOCK_NONE   = 0x00,
+	RLV_LOCK_ADD    = 0x01,
+	RLV_LOCK_REMOVE = 0x02,
+	RLV_LOCK_ANY    = RLV_LOCK_ADD | RLV_LOCK_REMOVE
 };
 
 enum ERlvWearMask

@@ -941,7 +941,7 @@ protected:
 
 // Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 RlvFolderLocks::RlvFolderLocks()
-	: m_fLookupDirty(false), m_fLockedRoot(false), m_cntLockAdd(0), m_cntLockRem(0)
+	: m_fLookupDirty(false), m_RootLockType(RLV_LOCK_NONE), m_cntLockAdd(0), m_cntLockRem(0)
 {
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
 	RlvInventory::instance().addSharedRootIDChangedCallback(boost::bind(&RlvFolderLocks::onNeedsLookupRefresh, this));
@@ -1193,7 +1193,7 @@ bool RlvFolderLocks::isLockedFolder(LLUUID idFolder, ERlvLockMask eLockTypeMask,
 		idFolderCur = (pParent) ? pParent->getParentUUID() : idFolderRoot;
 	}
 	// If we didn't encounter an explicit deny lock with no exception then the folder is locked if the entire inventory is locked down
-	return (m_fLockedRoot) && (eSourceTypeMask & ST_ROOTFOLDER) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
+	return (m_RootLockType & eLockTypeMask) && (eSourceTypeMask & ST_ROOTFOLDER) && (idsRlvObjRem.empty()) && (idsRlvObjAdd.empty());
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Added: RLVa-1.3.0b
@@ -1209,7 +1209,7 @@ void RlvFolderLocks::refreshLockedLookups() const
 	//
 	// Refresh locked folders
 	//
-	m_fLockedRoot = false;
+	m_RootLockType = RLV_LOCK_NONE;
 	m_LockedFolderMap.clear();
 	for (folderlock_list_t::const_iterator itFolderLock = m_FolderLocks.begin(); itFolderLock != m_FolderLocks.end(); ++itFolderLock)
 	{
@@ -1223,8 +1223,8 @@ void RlvFolderLocks::refreshLockedLookups() const
 				const LLViewerInventoryCategory* pFolder = lockedFolders.at(idxFolder);
 				if (idFolderRoot != pFolder->getUUID())
 					m_LockedFolderMap.insert(std::pair<LLUUID, const folderlock_descr_t*>(pFolder->getUUID(), pLockDescr));
-				else
-					m_fLockedRoot |= (SCOPE_SUBTREE == pLockDescr->eLockScope);
+				else if (SCOPE_SUBTREE == pLockDescr->eLockScope)
+					m_RootLockType |= (U32)pLockDescr->eLockType;
 			}
 		}
 	}
