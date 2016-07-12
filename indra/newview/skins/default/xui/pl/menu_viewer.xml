@@ -260,6 +260,7 @@
 			<menu_item_check label="Blokady..." name="Locks"/>
 		</menu>
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
+		<menu_item_check label="Zezwól na tymczasowe dodatki" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>
