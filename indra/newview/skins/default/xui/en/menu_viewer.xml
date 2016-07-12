@@ -92,6 +92,7 @@
 
         <menu_item_call
          label="Appearance"
+         shortcut="control|O"
          name="ChangeOutfit">
             <menu_item_call.on_click
              function="CustomizeAvatar" />
