@@ -161,7 +161,7 @@ public:
             // <FS:Ansariel> Translation fixes
             //std::string message = std::string("Compiling \"") + getScriptName() + std::string("\"...");
             LLStringUtil::format_map_t args;
-            args["NAME"] = getScriptName();
+            args["OBJECT_NAME"] = getScriptName();
             std::string message = queue->getString("Compiling", args);
             // </FS:Ansariel>
 
@@ -456,7 +456,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
             // <FS:Ansariel> Translation fixes
             //std::string buffer = "Skipping: " + item->getName() + "(Permissions)";
             LLStringUtil::format_map_t args;
-            args["NAME"] = item->getName();
+            args["OBJECT_NAME"] = item->getName();
             std::string buffer = that->getString("SkippingPermissions", args);
             // </FS:Ansariel>
             that->addStringMessage(buffer);
@@ -649,7 +649,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         LL_INFOS() << buffer << LL_ENDL;
         // <FS:Ansariel> Translation fixes
         LLStringUtil::format_map_t args;
-        args["NAME"] = inventory->getName();
+        args["OBJECT_NAME"] = inventory->getName();
         that->addStringMessage(that->getString("CompileSuccess", args));
         // </FS:Ansariel>
     }
@@ -659,7 +659,7 @@ bool LLFloaterCompileQueue::processScript(LLHandle<LLFloaterCompileQueue> hfloat
         // <FS:Ansariel> Translation fixes
         //std::string buffer = std::string("Compilation of \"") + inventory->getName() + std::string("\" failed:");
         LLStringUtil::format_map_t args;
-        args["NAME"] = inventory->getName();
+        args["OBJECT_NAME"] = inventory->getName();
         std::string buffer = that->getString("CompileFailure", args);
         // </FS:Ansariel>
         that->addStringMessage(buffer);
@@ -1071,7 +1071,7 @@ public:
         if (queue)
         {
             LLStringUtil::format_map_t args;
-            args["NAME"] = getScriptName();
+            args["OBJECT_NAME"] = getScriptName();
             std::string message = queue->getString("Compiling", args);
 
             queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
