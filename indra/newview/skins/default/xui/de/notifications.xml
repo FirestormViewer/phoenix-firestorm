@@ -336,6 +336,9 @@ Wenn diese Rolle nicht mehr diese Fähigkeiten haben soll, deaktivieren Sie sie 
 		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe zu verbannen.
 		<usetemplate ignoretext="Verbannen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Verbannen"/>
 	</notification>
+	<notification name="GroupBanUserOnBanlist">
+		Einigen Einwohnern wurde keine Einladung geschickt, da sie aus der Gruppe verbannt wurden.
+	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
 Möchten Sie fortfahren?
@@ -1552,6 +1555,9 @@ Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 
 	<notification name="OwnerCanNotBeDenied">
 		Der Eigentümer des Grundbesitzes kann nicht zur Liste der „Verbannten Einwohner“ hinzugefügt werden.
 	</notification>
+	<notification name="ProblemAddingEstateManagerBanned">
+		Verbannter Einwohner kann nicht zur Liste der Grundbesitzverwalter hinzugefügt werden.
+	</notification>
 	<notification name="CanNotChangeAppearanceUntilLoaded">
 		Das Aussehen lässt sich erst ändern, wenn Kleider und Form/Gestalt geladen sind.
 	</notification>
@@ -1762,6 +1768,10 @@ Wenn Sie die neuesten Features und Fixes ausprobieren möchten, gehen Sie zur Se
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="GroupDepart">
+		Sie haben die Gruppe „[group_name]“ verlassen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="GroupLeaveConfirmMemberWithFee">
 		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Erneutes Beitreten kostet [AMOUNT] L$.
 Diese Gruppe verlassen?
@@ -1772,11 +1782,7 @@ Diese Gruppe verlassen?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GroupDepartError">
-		Verlassen der Gruppe nicht möglich: [reason]
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="GroupDepart">
-		Sie haben die Gruppe „[group_name]“ verlassen.
+		Verlassen der Gruppe nicht möglich.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
@@ -2248,7 +2254,11 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		</form>
 	</notification>
 	<notification name="TooManyPrimsSelected">
-		Zu viele Prims wurden ausgewählt.  Bitte wählen Sie höchstens [MAX_PRIM_COUNT] Prims aus und versuchen Sie es erneut.
+		Zu viele Primitive wurden ausgewählt. Bitte wählen Sie höchstens [MAX_PRIM_COUNT] Primitive aus und versuchen Sie es erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TooManyScriptsSelected">
+		Zu viele Skripte in den ausgewählten Primitiven. Bitte wählen Sie weniger Primitive aus und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemImportingEstateCovenant">
@@ -2256,13 +2266,13 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ProblemAddingEstateManager">
-		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters.  Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
+		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters. Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
 	</notification>
 	<notification name="ProblemAddingEstateBanManager">
 		Grundbesitzer oder Grundstücksverwalter kann nicht auf die Bannliste gesetzt werden.
 	</notification>
 	<notification name="ProblemAddingEstateGeneric">
-		Problem beim Hinzufügen zu dieser Grundbesitzliste.  Bei mindestens einem Grundbesitz ist die Liste voll.
+		Problem beim Hinzufügen zu dieser Grundbesitzliste. Bei mindestens einem Grundbesitz ist die Liste voll.
 	</notification>
 	<notification name="UnableToLoadNotecardAsset">
 		Notizkarten-Asset konnte nicht geladen werden.
@@ -2418,6 +2428,10 @@ Inventarobjekt(e) verschieben?
 	</notification>
 	<notification name="PayObjectFailed">
 		Zahlung fehlgeschlagen: Objekt nicht gefunden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="PaymentBlockedButtonMismatch">
+		Zahlung gestoppt: Der gezahlte Preis stimmt mit keinem der Bezahlen-Buttons für dieses Objekt überein.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
@@ -2893,6 +2907,9 @@ Fliegen ist hier nicht möglich.
 	</notification>
 	<notification name="NoBuild">
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
+	</notification>
+	<notification name="AutopilotCanceled">
+		Autopilot gestoppt
 	</notification>
 	<notification name="PathfindingDirty">
 		Diese Region weist ausstehende Pathfinding-Änderungen auf. Wenn Sie Baurechte besitzen, können Sie die Region durch Klicken auf die Schaltfläche „Region neu formen“ neu formen.
@@ -4057,6 +4074,9 @@ Sie ist voll oder startet in Kürze neu.
 		Objekt „[OBJECT_NAME]“ kann nicht nach
 [OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da nicht genügend Ressourcen für dieses Objekt auf dieser Parzelle vorhanden sind.
 	</notification>
+	<notification name="NoParcelPermsNoObject">
+		Kopieren fehlgeschlagen, da Sie keinen Zugang zu dieser Parzelle haben.
+	</notification>
 	<notification name="CantMoveObjectRegionVersion">
 		Objekt „[OBJECT_NAME]“ kann nicht nach
 [OBJ_POSITION] in Region [REGION_NAME] verschoben werden, da die andere Region eine ältere Version verwendet, die das Empfangen dieses Objekts per Regionswechsel nicht unterstützt.
@@ -4111,6 +4131,12 @@ Sie ist voll oder startet in Kürze neu.
 	</notification>
 	<notification name="CantSaveModifyAttachment">
 		Kein Speichern in Objektinhalt möglich: Dadurch würden die Anhängeberechtigungen geändert.
+	</notification>
+	<notification name="AttachmentHasTooMuchInventory">
+		Ihre Anhänge haben zu viel Inhalt, um mehr hinzuzufügen.
+	</notification>
+	<notification name="IllegalAttachment">
+		Der Anhang hat einen nicht existierenden Punkt am Avatar angefordert. Er wurde stattdessen zur Brust hinzugefügt.
 	</notification>
 	<notification name="TooManyScripts">
 		Zu viele Skripts.
@@ -4502,6 +4528,9 @@ Wählen Sie eine kleinere Landfläche aus.
 	</notification>
 	<notification name="CantTransfterMoneyRegionDisabled">
 		Geldüberweisungen an Objekte sind in dieser Region gegenwärtig deaktiviert.
+	</notification>
+	<notification name="DroppedMoneyTransferRequest">
+		Überweisung kann aufgrund von Systemauslastung nicht durchgeführt werden.
 	</notification>
 	<notification name="CantPayNoAgent">
 		Nicht ersichtlich, wer bezahlt werden muss.
