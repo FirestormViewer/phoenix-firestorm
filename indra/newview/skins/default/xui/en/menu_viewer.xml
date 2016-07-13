@@ -92,6 +92,7 @@
 
         <menu_item_call
          label="Appearance"
+         shortcut="control|O"
          name="ChangeOutfit">
             <menu_item_call.on_click
              function="CustomizeAvatar" />
@@ -2259,6 +2260,16 @@
       	<menu_item_check.on_click
       	 function="ToggleControl"
       	 parameter="RestrainedLoveCanOOC" />
+      </menu_item_check>
+      <menu_item_check
+       label="Allow Temporary Attachments"
+       name="Allow Temporary Attachments">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaEnableTemporaryAttachments" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaEnableTemporaryAttachments" />
       </menu_item_check>
       <menu_item_check
        label="Forbid Give to #RLV"

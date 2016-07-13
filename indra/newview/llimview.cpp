@@ -4309,49 +4309,51 @@ public:
 // [/RLVa:KB]
 
 			// <FS> Mute group chat port from Phoenix
-			BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
-			BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
-			LLGroupData group_data;
-			if (gAgent.getGroupData(session_id, group_data))
+			if (from_id != gAgentID) // FIRE-14222: OpenSim routes agent's chat through here - don't mute it!
 			{
-				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
+				BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
+				BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
+				LLGroupData group_data;
+				if (gAgent.getGroupData(session_id, group_data))
 				{
-					LL_INFOS() << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
-
-					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+					if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
 					{
-						LLStringUtil::format_map_t args;
-						args["NAME"] = LLSLURL("group", session_id, "about").getSLURLString();
-						report_to_nearby_chat(LLTrans::getString("GroupChatMuteNotice", args));
+						LL_INFOS() << "Muting group chat: " << group_data.mName << LL_ENDL;
+
+						if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+						{
+							LLStringUtil::format_map_t args;
+							args["NAME"] = LLSLURL("group", session_id, "about").getSLURLString();
+							report_to_nearby_chat(LLTrans::getString("GroupChatMuteNotice", args));
+						}
+
+						//KC: make sure we leave the group chat at the server end as well
+						std::string aname;
+						gAgent.buildFullname(aname);
+						pack_instant_message(
+							gMessageSystem,
+							gAgentID,
+							FALSE,
+							gAgentSessionID,
+							from_id,
+							aname,
+							LLStringUtil::null,
+							IM_ONLINE,
+							IM_SESSION_LEAVE,
+							session_id);
+						gAgent.sendReliableMessage();
+						gIMMgr->leaveSession(session_id);
+
+						return;
 					}
-					
-					//KC: make sure we leave the group chat at the server end as well
-					std::string aname;
-					gAgent.buildFullname(aname);
-					pack_instant_message(
-						gMessageSystem,
-						gAgent.getID(),
-						FALSE,
-						gAgent.getSessionID(),
-						from_id,
-						aname,
-						LLStringUtil::null,
-						IM_ONLINE,
-						IM_SESSION_LEAVE,
-						session_id);
-					gAgent.sendReliableMessage();
-					//gIMMgr->removeSession(session_id);
-					gIMMgr->leaveSession(session_id);
-					
-					return;
 				}
+				// <FS:Ansariel> Groupdata debug
+				else
+				{
+					LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group chat mute: No agent group data for group " << session_id.asString() << LL_ENDL;
+				}
+				// </FS:Ansariel>
 			}
-			// <FS:Ansariel> Groupdata debug
-			else
-			{
-				LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group chat mute: No agent group data for group " << session_id.asString() << LL_ENDL;
-			}
-			// </FS:Ansariel>
 			// </FS> Mute group chat port from Phoenix
 
 			// standard message, not from system
