@@ -30,12 +30,16 @@
         Not running
     </floater.string>
     <floater.string
-        name="Deleting">
-      Deleting
+     name="Timeout">
+        Timeout: [OBJECT_NAME]
     </floater.string>
     <floater.string
-        name="Timeout">
-      Timeout: [NAME]
+     name="LoadingObjInv">
+        Loading inventory for: [OBJECT_NAME]
+    </floater.string>
+    <floater.string
+        name="Deleting">
+      Deleting
     </floater.string>
     <floater.string
         name="SkippingPermissions">
