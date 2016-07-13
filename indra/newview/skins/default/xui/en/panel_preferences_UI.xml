@@ -111,7 +111,6 @@
         </text>
 		
         <slider
-         enabled_control="ShowHoverTips"
          control_name="ToolTipDelay"
          decimal_digits="3"
          follows="left|top"

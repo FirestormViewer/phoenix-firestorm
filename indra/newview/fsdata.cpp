@@ -56,6 +56,11 @@
 #include "llvfs.h"
 #include "message.h"
 
+// [RLVa:KB]
+#include "rlvactions.h"
+#include "rlvhelper.h"
+// [/RLVa:KB]
+
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 const F32 HTTP_TIMEOUT = 30.f;
@@ -443,6 +448,13 @@ void FSData::processData(const LLSD& fs_data)
 	{
 		updateClientTagsLocal();
 	}
+
+// [RLVa:KB]
+	if ( (RlvActions::isRlvEnabled()) && (fs_data.has("rlva_compat_list")) )
+	{
+		RlvSettings::initCompatibilityMode(fs_data["rlva_compat_list"].asString());
+	}
+// [/RLVa:KB]
 }
 
 void FSData::processAssets(const LLSD& assets)

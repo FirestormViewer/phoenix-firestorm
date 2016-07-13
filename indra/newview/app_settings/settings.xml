@@ -1254,6 +1254,17 @@
       <key>Value</key>
       <string>+</string>
     </map>
+    <key>RLVaCompatibilityModeList</key>
+    <map>
+      <key>Comment</key>
+      <string>Contains a list of creators or partial items names that require compatibility mode handling (see wiki for more information and syntax)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
     <key>RLVaDebugDeprecateExplicitPoint</key>
     <map>
       <key>Comment</key>
@@ -1287,6 +1298,17 @@
       <key>Value</key>
       <boolean>0</boolean>
     </map>
+    <key>RLVaEnableIMQuery</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables a limited number of configuration queries via IM (e.g. @version)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
     <key>RLVaEnableLegacyNaming</key>
     <map>
       <key>Comment</key>
@@ -1302,6 +1324,17 @@
     <map>
       <key>Comment</key>
       <string>Attachments in the shared #RLV folder can be force-attached without needing to specify an attachment point</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
+    <key>RLVaEnableTemporaryAttachments</key>
+    <map>
+      <key>Comment</key>
+      <string>Allows temporary attachments (regardless of origin) to issue RLV commands</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1381,17 +1414,6 @@
     <map>
       <key>Comment</key>
       <string>Don't block wear replace when at least one attachment on the target attachment point is non-detachable</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <boolean>1</boolean>
-    </map>
-    <key>WarnFirstRLVGiveToRLV</key>
-    <map>
-      <key>Comment</key>
-      <string>Enables FirstRLVGiveToRLV warning dialog</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5718,7 +5740,7 @@
         <key>Type</key>
         <string>F32</string>
         <key>Value</key>
-        <integer>40.0</integer>
+        <real>300.0</real>
     </map>
     <key>FindLandArea</key>
     <map>

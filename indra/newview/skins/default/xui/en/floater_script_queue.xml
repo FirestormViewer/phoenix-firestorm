@@ -30,28 +30,32 @@
         Not running
     </floater.string>
     <floater.string
+     name="Timeout">
+        Timeout: [OBJECT_NAME]
+    </floater.string>
+    <floater.string
+     name="LoadingObjInv">
+        Loading inventory for: [OBJECT_NAME]
+    </floater.string>
+    <floater.string
         name="Deleting">
       Deleting
     </floater.string>
     <floater.string
-        name="Timeout">
-      Timeout: [NAME]
-    </floater.string>
-    <floater.string
         name="SkippingPermissions">
-      Skipping: [NAME] (Permissions)
+      Skipping: [OBJECT_NAME] (Permissions)
     </floater.string>
     <floater.string
         name="Compiling">
-      Compiling "[NAME]"...
+      Compiling "[OBJECT_NAME]"...
     </floater.string>
     <floater.string
         name="CompileSuccess">
-      Compilation of "[NAME]" succeeded
+      Compilation of "[OBJECT_NAME]" succeeded
     </floater.string>
     <floater.string
         name="CompileFailure">
-      Compilation of "[NAME]" failed:
+      Compilation of "[OBJECT_NAME]" failed:
     </floater.string>
     <button
      follows="right|bottom"

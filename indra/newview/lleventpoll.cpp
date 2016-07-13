@@ -40,6 +40,8 @@
 #include "llcorehttputil.h"
 #include "lleventfilter.h"
 
+#include "boost/make_shared.hpp"
+
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
 
 namespace LLEventPolling
@@ -47,16 +49,12 @@ namespace LLEventPolling
 namespace Details
 {
 
-    class LLEventPollImpl
+    class LLEventPollImpl: public boost::enable_shared_from_this<LLEventPollImpl>
     {
     public:
         LLEventPollImpl(const LLHost &sender);
 
-        // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-        // void start(const std::string &url);
-        void start( const std::string &url, boost::shared_ptr< LLEventPollImpl > aThis );
-        // </FS:ND>
-		
+        void start(const std::string &url);
         void stop();
 
     private:
@@ -67,10 +65,7 @@ namespace Details
         static const F32                EVENT_POLL_ERROR_RETRY_SECONDS_INC;
         static const S32                MAX_EVENT_POLL_HTTP_ERRORS;
 
-        // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-        // void                            eventPollCoro(std::string url);
-        void                            eventPollCoro( std::string url, boost::shared_ptr< LLEventPollImpl > aThis );
-        // </FS:ND>
+        void                            eventPollCoro(std::string url);
 
         void                            handleMessage(const LLSD &content);
 
@@ -124,24 +119,13 @@ namespace Details
         LLMessageSystem::dispatch(msg_name, message);
     }
 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // void LLEventPollImpl::start(const std::string &url)
-    void LLEventPollImpl::start( const std::string &url, boost::shared_ptr< LLEventPollImpl > aThis )
-    // </FS:ND>
+    void LLEventPollImpl::start(const std::string &url)
     {
         if (!url.empty())
         {
-            // <FS:ND> FIRE-19557; Hold on LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-
-            // std::string coroname =
-            //     LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
-            //     boost::bind(&LLEventPollImpl::eventPollCoro, this, url));
-
-            std::string coroname = LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
-                                                              boost::bind( &LLEventPollImpl::eventPollCoro, this, url, aThis ) );
-
-            // </FS:ND>
-            
+            std::string coroname =
+                LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
+                boost::bind(&LLEventPollImpl::eventPollCoro, this->shared_from_this(), url));
             LL_INFOS("LLEventPollImpl") << coroname << " with  url '" << url << LL_ENDL;
         }
     }
@@ -163,11 +147,8 @@ namespace Details
         }
     }
 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // void LLEventPollImpl::eventPollCoro(std::string url)
-    void LLEventPollImpl::eventPollCoro( std::string url, boost::shared_ptr< LLEventPollImpl > aThis )
-    // </FS:ND>
-	{
+    void LLEventPollImpl::eventPollCoro(std::string url)
+    {
         LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("EventPoller", mHttpPolicy));
         LLSD acknowledge;
         int errorCount = 0;
@@ -304,16 +285,8 @@ namespace Details
 LLEventPoll::LLEventPoll(const std::string&	poll_url, const LLHost& sender):
     mImpl()
 { 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-
-    // mImpl = boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>
-    //         (new LLEventPolling::Details::LLEventPollImpl(sender));
-    // mImpl->start(poll_url);
-
-    mImpl.reset( new LLEventPolling::Details::LLEventPollImpl(sender) );
-    mImpl->start( poll_url, mImpl );
-
-    // </FS:ND>
+    mImpl = boost::make_shared<LLEventPolling::Details::LLEventPollImpl>(sender);
+    mImpl->start(poll_url);
 }
 
 LLEventPoll::~LLEventPoll()

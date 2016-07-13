@@ -15,23 +15,26 @@
 	<floater.string name="NotRunning">
 		Läuft nicht
 	</floater.string>
+	<floater.string name="Timeout">
+		Zeitüberschreitung: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		Lade Inhalt von: [OBJECT_NAME]
+	</floater.string>
 	<floater.string name="Deleting">
 		Wird gelöscht
 	</floater.string>
-	<floater.string name="Timeout">
-		Zeitüberschreitung: [NAME]
-	</floater.string>
 	<floater.string name="SkippingPermissions">
-		Übersprungen: [NAME] (Berechtigungen)
+		Übersprungen: [OBJECT_NAME] (Berechtigungen)
 	</floater.string>
 	<floater.string name="Compiling">
-		Kompiliere „[NAME]“...
+		Kompiliere „[OBJECT_NAME]“...
 	</floater.string>
 	<floater.string name="CompileSuccess">
-		Kompilierung von „[NAME]“ erfolgreich
+		Kompilierung von „[OBJECT_NAME]“ erfolgreich
 	</floater.string>
 	<floater.string name="CompileFailure">
-		Kompilierung von „[NAME]“ fehlgeschlagen:
+		Kompilierung von „[OBJECT_NAME]“ fehlgeschlagen:
 	</floater.string>
 	<button label="Schließen" label_selected="Schließen" left="215" name="close" width="72"/>
 </floater>

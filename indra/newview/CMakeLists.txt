@@ -1973,6 +1973,13 @@ if (NOT USESYSTEMLIBS)
     list(APPEND viewer_SOURCE_FILES ${viewer_CHARACTER_FILES})
 endif (NOT USESYSTEMLIBS)
 
+# <FS:Ansariel> Add fonts moved to separate directory in Firestorm
+file(GLOB viewer_FONT_FILES fonts/*.xml)
+source_group("Fonts" FILES ${viewer_FONT_FILES})
+set_source_files_properties(${viewer_FONT_FILES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_FONT_FILES})
+
 if (WINDOWS)
   file(GLOB viewer_INSTALLER_FILES installers/windows/*.nsi)
 

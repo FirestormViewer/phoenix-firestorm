@@ -4330,6 +4330,13 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 		{
 			disabled_items.push_back(std::string("Replace Outfit"));
 		}
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		// Block "Replace Current Outfit" if the user can't wear the new folder
+		if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(mUUID, RLV_LOCK_ADD)) )
+		{
+			disabled_items.push_back(std::string("Replace Outfit"));
+		}
+// [/RLVa:KB]
 		if (!LLAppearanceMgr::instance().getCanAddToCOF(mUUID))
 		{
 			disabled_items.push_back(std::string("Add To Outfit"));
@@ -6552,6 +6559,11 @@ void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attach
 	     (!attachment) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		attachment = RlvAttachPtLookup::getAttachPoint(item);
+	}
+
+	if ( (RlvActions::isRlvEnabled()) && (!rlvPredCanWearItem(item, RLV_WEAR_REPLACE)) )
+	{
+		return;
 	}
 // [/RLVa:KB]
 

@@ -22,6 +22,7 @@
 #include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llmoveview.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "llviewermessage.h"
 #include "llviewermenu.h"
@@ -478,21 +479,44 @@ ERlvCmdRet RlvHandler::processClearCommand(const RlvCommand& rlvCmd)
 // Externally invoked event handlers
 //
 
-// Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata)
 {
-	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
-	if ( (hasBehaviour(RLV_BHVR_SETGROUP)) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	// NOTE: we'll fire once for every group the user belongs to so we need to manually keep track of pending changes
+	static LLUUID s_idLastAgentGroup = LLUUID::null;
+	static bool s_fGroupChanging = false;
+
+	if (s_idLastAgentGroup != gAgent.getGroupID())
 	{
-		// [Copy/paste from LLGroupActions::activate()]
-		LLMessageSystem* msg = gMessageSystem;
-		msg->newMessageFast(_PREHASH_ActivateGroup);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
-		gAgent.sendReliableMessage();
-		return true;
+		s_idLastAgentGroup = gAgent.getGroupID();
+		s_fGroupChanging = false;
+	}
+
+	// If the user managed to change their active group (= newly joined or created group) we need to reactivate the previous one
+	if ( (!RlvActions::canChangeActiveGroup()) && ("new group" == event->desc()) && (m_idAgentGroup != gAgent.getGroupID()) )
+	{
+		// Make sure they still belong to the group
+		if ( (m_idAgentGroup.notNull()) && (!gAgent.isInGroup(m_idAgentGroup)) )
+		{
+			m_idAgentGroup.setNull();
+			s_fGroupChanging = false;
+		}
+
+		if (!s_fGroupChanging)
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE,
+									LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? LLSLURL("group", m_idAgentGroup, "about").getSLURLString() : LLTrans::getString("GroupNameNone")));
+
+			// [Copy/paste from LLGroupActions::activate()]
+			LLMessageSystem* msg = gMessageSystem;
+			msg->newMessageFast(_PREHASH_ActivateGroup);
+			msg->nextBlockFast(_PREHASH_AgentData);
+			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+			msg->addUUIDFast(_PREHASH_GroupID, m_idAgentGroup);
+			gAgent.sendReliableMessage();
+			s_fGroupChanging = true;
+			return true;
+		}
 	}
 	else
 	{
@@ -1076,7 +1100,7 @@ BOOL RlvHandler::setEnabled(BOOL fEnable)
 
 	if (fEnable)
 	{
-		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersion() << RLV_ENDL;
+		RLV_INFOS << "Enabling Restrained Love API support - " << RlvStrings::getVersionAbout() << RLV_ENDL;
 		m_fEnabled = TRUE;
 
 		// Initialize static classes
@@ -1755,6 +1779,38 @@ void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOCUSOFFSET>::onValueChange
 	}
 }
 
+// Handles: @setcam_fovmin:<angle>=n|y and @setcam_fovmax:<angle>=n|y
+template<> template<>
+ERlvCmdRet RlvBehaviourSetCamFovHandler::onCommand(const RlvCommand& rlvCmd, bool& fRefCount)
+{
+	static float s_nLastCameraAngle = DEFAULT_FIELD_OF_VIEW;
+
+	S32 nRefMinBhvr = gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_FOVMIN], nRefMaxBhvr = gRlvHandler.m_Behaviours[RLV_BHVR_SETCAM_FOVMAX];
+	LLControlVariable* pSetting = gSavedSettings.getControl("CameraAngle");
+
+	// Save the user's current FOV angle if nothing's been restricted (yet)
+	if ( (!nRefMinBhvr) && (!nRefMaxBhvr) && (pSetting) )
+		s_nLastCameraAngle = (pSetting->isPersisted()) ? LLViewerCamera::instance().getDefaultFOV() : DEFAULT_FIELD_OF_VIEW;
+
+	// Perform default handling of the command
+	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_MODIFIER>::onCommand(rlvCmd, fRefCount);
+	if ( (RLV_RET_SUCCESS == eRet) && (fRefCount) && (pSetting) )
+	{
+		if (RLV_TYPE_ADD == rlvCmd.getParamType())
+		{
+			// Don't persist changes from this point
+			pSetting->setPersist(LLControlVariable::PERSIST_NO);
+		}
+		else if ( (RLV_TYPE_REMOVE == rlvCmd.getParamType()) && (1 == nRefMinBhvr + nRefMaxBhvr) )
+		{
+			// Restore the user's last FOV angle (and resume persistance)
+			LLViewerCamera::instance().setDefaultFOV(s_nLastCameraAngle);
+			pSetting->setPersist(LLControlVariable::PERSIST_NONDFT);
+		}
+	}
+	return eRet;
+}
+
 // Handles: @setcam_fovmin:<angle>=n|y changes
 template<>
 void RlvBehaviourModifierHandler<RLV_MODIFIER_SETCAM_FOVMIN>::onValueChange() const
@@ -2358,6 +2414,14 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETCAM_FOV>::onCommand(const RlvCommand& rlv
 		return RLV_RET_FAILED_OPTION;
 
 	LLViewerCamera::getInstance()->setDefaultFOV(nFOV);
+
+	// Don't persist non-default changes that are due to RLV; but do resume persistance once reset back to the default
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMIN)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SETCAM_FOVMAX)) )
+	{
+		if (LLControlVariable* pSetting = gSavedSettings.getControl("CameraAngle"))
+			pSetting->setPersist( (pSetting->isDefault()) ? LLControlVariable::PERSIST_NONDFT : LLControlVariable::PERSIST_NO );
+	}
+
 	return RLV_RET_SUCCESS;
 }
 
@@ -2410,7 +2474,7 @@ void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) cons
 template<> template<>
 ERlvCmdRet RlvForceHandler<RLV_BHVR_SETGROUP>::onCommand(const RlvCommand& rlvCmd)
 {
-	if (gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
+	if (!RlvActions::canChangeActiveGroup(rlvCmd.getObjectID()))
 	{
 		return RLV_RET_FAILED_LOCK;
 	}
@@ -2566,11 +2630,11 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_VERSION:			// @version=<channel>					- Checked: 2010-03-27 (RLVa-1.4.0a)
 		case RLV_BHVR_VERSIONNEW:		// @versionnew=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.2.0b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersion(RLV_BHVR_VERSION == rlvCmd.getBehaviourType());
+			strReply = RlvStrings::getVersion(rlvCmd.getObjectID(), RLV_BHVR_VERSION == rlvCmd.getBehaviourType());
 			break;
 		case RLV_BHVR_VERSIONNUM:		// @versionnum=<channel>				- Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.4b
 			// NOTE: RLV will respond even if there's an option
-			strReply = RlvStrings::getVersionNum();
+			strReply = RlvStrings::getVersionNum(rlvCmd.getObjectID());
 			break;
 		case RLV_BHVR_GETATTACH:		// @getattach[:<layer>]=<channel>
 			eRet = onGetAttach(rlvCmd, strReply);
