@@ -431,7 +431,9 @@ void LLVivoxVoiceClient::connectorCreate()
 		<< "<ClientName>V2 SDK</ClientName>"
 		<< "<AccountManagementServer>" << mVoiceAccountServerURI << "</AccountManagementServer>"
 		<< "<Mode>Normal</Mode>"
+#ifndef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
         << "<ConnectorHandle>" << LLVivoxSecurity::getInstance()->connectorHandle() << "</ConnectorHandle>"
+#endif // </FS:Ansariel>
 		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
 		<< (gSavedSettings.getBOOL("VoiceMultiInstance") ? "<MinimumPort>30000</MinimumPort><MaximumPort>50000</MaximumPort>" : "")
 		// </FS:Ansariel>
@@ -708,6 +710,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
             params.cwd = gDirUtilp->getAppRODataDir();
 
+#ifndef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
 #           ifdef VIVOX_HANDLE_ARGS
             params.args.add("-ah");
             params.args.add(LLVivoxSecurity::getInstance()->accountHandle());
@@ -715,6 +718,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             params.args.add("-ch");
             params.args.add(LLVivoxSecurity::getInstance()->connectorHandle());
 #           endif // VIVOX_HANDLE_ARGS
+#endif // </FS:Ansariel>
 
             sGatewayPtr = LLProcess::create(params);
 
@@ -1883,7 +1887,9 @@ void LLVivoxVoiceClient::loginSendMessage()
 		<< "<ConnectorHandle>" << LLVivoxSecurity::getInstance()->connectorHandle() << "</ConnectorHandle>"
 		<< "<AccountName>" << mAccountName << "</AccountName>"
         << "<AccountPassword>" << mAccountPassword << "</AccountPassword>"
+#ifndef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
         << "<AccountHandle>" << LLVivoxSecurity::getInstance()->accountHandle() << "</AccountHandle>"
+#endif // </FS:Ansariel>
 		<< "<AudioSessionAnswerMode>VerifyAnswer</AudioSessionAnswerMode>"
 		<< "<EnableBuddiesAndPresence>false</EnableBuddiesAndPresence>"
 		<< "<EnablePresencePersistence>0</EnablePresencePersistence>"
@@ -2904,6 +2910,7 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
 	else
 	{
 		// Connector created, move forward.
+#ifndef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
         if (connectorHandle == LLVivoxSecurity::getInstance()->connectorHandle())
         {
             LL_INFOS("Voice") << "Connector.Create succeeded, Vivox SDK version is " << versionID << " connector handle " << connectorHandle << LL_ENDL;
@@ -2921,6 +2928,17 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
                               << LL_ENDL;
             result["connector"] = LLSD::Boolean(false);
         }
+	// <FS:Ansariel> FIRE-19556: Linux voice fix
+#else
+		LL_INFOS("Voice") << "Connector.Create succeeded, Vivox SDK version is " << versionID << LL_ENDL;
+		mVoiceVersion.serverVersion = versionID;
+		LLVivoxSecurity::getInstance()->setConnectorHandle(connectorHandle);
+		mConnectorEstablished = true;
+		mTerminateDaemon = false;
+
+		result["connector"] = LLSD::Boolean(true);
+#endif
+	// </FS:Ansariel>
 	}
 
     LLEventPumps::instance().post("vivoxClientPump", result);
@@ -2948,6 +2966,9 @@ void LLVivoxVoiceClient::loginResponse(int statusCode, std::string &statusString
 	else
 	{
 		// Login succeeded, move forward.
+#ifdef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
+		LLVivoxSecurity::getInstance()->setConnectorHandle(accountHandle);
+#endif // </FS:Ansariel>
 		mAccountLoggedIn = true;
 		mNumberOfAliases = numberOfAliases;
         result["login"] = LLSD::String("response_ok");

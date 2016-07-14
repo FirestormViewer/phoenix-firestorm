@@ -1050,6 +1050,13 @@ class LLVivoxSecurity :	public LLSingleton<LLVivoxSecurity>
     std::string     connectorHandle() { return mConnectorHandle; };
     std::string     accountHandle()    { return mAccountHandle;    };
 
+// <FS:Ansariel> FIRE-19556: Linux voice fix
+#ifdef LL_LINUX
+	void setConnectorHandle(const std::string& handle) { mConnectorHandle = handle; }
+	void setAccountHandle(const std::string& handle) { mAccountHandle = handle; }
+#endif
+// </FS:Ansariel>
+
   private:
     std::string     mConnectorHandle;
     std::string     mAccountHandle;
