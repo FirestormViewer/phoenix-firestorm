@@ -4072,6 +4072,13 @@ void LLMeshRepository::uploadError(LLSD& args)
 //static
 F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32* bytes_visible, S32 lod, F32 *unscaled_value)
 {
+	if (header.has("404")
+		|| !header.has("lowest_lod")
+		|| (header.has("version") && header["version"].asInteger() > MAX_MESH_VERSION))
+	{
+		return 0.f;
+	}
+
 	F32 max_distance = 512.f;
 
 	F32 dlowest = llmin(radius/0.03f, max_distance);
