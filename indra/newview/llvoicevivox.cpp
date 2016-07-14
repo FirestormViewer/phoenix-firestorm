@@ -2967,7 +2967,7 @@ void LLVivoxVoiceClient::loginResponse(int statusCode, std::string &statusString
 	{
 		// Login succeeded, move forward.
 #ifdef LL_LINUX // <FS:Ansariel> FIRE-19556: Linux voice fix
-		LLVivoxSecurity::getInstance()->setConnectorHandle(accountHandle);
+		LLVivoxSecurity::getInstance()->setAccountHandle(accountHandle);
 #endif // </FS:Ansariel>
 		mAccountLoggedIn = true;
 		mNumberOfAliases = numberOfAliases;
