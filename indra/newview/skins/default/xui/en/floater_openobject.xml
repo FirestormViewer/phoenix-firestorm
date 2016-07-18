@@ -30,7 +30,6 @@
     </text>
     <panel_inventory_object
      background_visible="false"
-     draw_border="false"
      follows="all"
      height="250"
      layout="topleft"

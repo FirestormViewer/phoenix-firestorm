@@ -790,8 +790,11 @@ void LLStatusBar::onClickBuyCurrency()
 void LLStatusBar::onMouseEnterPresets()
 {
 	LLView* popup_holder = gViewerWindow->getRootView()->getChildView("popup_holder");
-	LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon" );
-	LLRect icon_rect = icon->getRect();
+	// <FS:Ansariel> Changed presets icon to LLButton
+	//LLIconCtrl* icon =  getChild<LLIconCtrl>( "presets_icon" );
+	//LLRect icon_rect = icon->getRect();
+	LLRect icon_rect = mIconPresets->getRect();
+	// </FS:Ansariel>
 	LLRect pulldown_rect = mPanelPresetsPulldown->getRect();
 	pulldown_rect.setLeftTopAndSize(icon_rect.mLeft -
 	     (pulldown_rect.getWidth() - icon_rect.getWidth()),
