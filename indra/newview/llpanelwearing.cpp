@@ -347,7 +347,7 @@ void LLPanelWearing::onOpen(const LLSD& /*info*/)
 
 void LLPanelWearing::draw()
 {
-	if (mUpdateTimer.getStarted() && (mUpdateTimer.getElapsedTimeF32() > 0.1))
+	if (mUpdateTimer.getStarted() && (mUpdateTimer.getElapsedTimeF32() > 0.1f))
 	{
 		mUpdateTimer.stop();
 		updateAttachmentsList();
@@ -465,7 +465,10 @@ bool LLPanelWearing::populateAttachmentsList(bool update)
 			}
 			else
 			{
-				row["columns"][1]["value"] = "Loading...";
+				// <FS:Ansariel> Translation fix
+				//row["columns"][1]["value"] = "Loading...";
+				row["columns"][1]["value"] = LLTrans::getString("LoadingData");
+				// </FS:Ansariel>
 				populated = false;
 			}
 			mTempItemsList->addElement(row);
