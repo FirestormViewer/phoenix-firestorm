@@ -1050,6 +1050,11 @@ class LLVivoxSecurity :	public LLSingleton<LLVivoxSecurity>
     std::string     connectorHandle() { return mConnectorHandle; };
     std::string     accountHandle()    { return mAccountHandle;    };
 
+    // <FS:ND> For the old Vivox SDK used on Linux
+    void setConnectorHandle(const std::string& handle) { mConnectorHandle = handle; }
+    void setAccountHandle(const std::string& handle) { mAccountHandle = handle; }
+    // </FS:ND>
+	
   private:
     std::string     mConnectorHandle;
     std::string     mAccountHandle;

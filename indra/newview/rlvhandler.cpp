@@ -22,6 +22,7 @@
 #include "llgroupactions.h"
 #include "llhudtext.h"
 #include "llmoveview.h"
+#include "llslurl.h"
 #include "llstartup.h"
 #include "llviewermessage.h"
 #include "llviewermenu.h"
@@ -502,7 +503,8 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 
 		if (!s_fGroupChanging)
 		{
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE, LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? llformat("secondlife:///app/group/%s/about", m_idAgentGroup.asString()) : "(none)"));
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_GROUPCHANGE,
+									LLSD().with("GROUP_SLURL", (m_idAgentGroup.notNull()) ? LLSLURL("group", m_idAgentGroup, "about").getSLURLString() : LLTrans::getString("GroupNameNone")));
 
 			// [Copy/paste from LLGroupActions::activate()]
 			LLMessageSystem* msg = gMessageSystem;
