@@ -2231,9 +2231,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>06c3a9b1005249f0c94a8b9f3775f3d3</string>
+              <string>6e7b0961d6489a1b3c3090eccfd6e80e</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/vivox_3p-slvoice/rev/302004/arch/Linux/installer/slvoice-3.2.0002.10426.302004-linux-302004.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/slvoice-3.2.0002.10426.298329-linux-20160717.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
