@@ -122,6 +122,7 @@ void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos = LLVe
 // </FS:Ansariel> Option to try via exact position
 void handle_object_return();
 void handle_object_delete();
+void handle_object_edit();
 
 // <FS:Techwolf Lupindo> area search
 // expose this function so other classes can call it

@@ -12867,6 +12867,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4. Setting this too high also seriously lowers your graphics performance.</string>
     </map>
+    <key>RenderRiggedLODFactor</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls level of detail of worn rigged meshes (multiplier for current screen area when calculated level of detail)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>2.5</real>
+    </map>
     <key>RenderWater</key>
     <map>
       <key>Comment</key>

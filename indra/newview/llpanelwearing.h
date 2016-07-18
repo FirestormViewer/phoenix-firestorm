@@ -31,9 +31,14 @@
 
 // newview
 #include "llpanelappearancetab.h"
+#include "llselectmgr.h"
+#include "lltimer.h"
 
+class LLAccordionCtrl;
+class LLAccordionCtrlTab;
 class LLInventoryCategoriesObserver;
 class LLListContextMenu;
+class LLScrollListCtrl;
 class LLWearableItemsList;
 class LLWearingGearMenu;
 class LLTextBox;
@@ -53,6 +58,8 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+	/*virtual*/ void draw();
+
 	/*virtual*/ void onOpen(const LLSD& info);
 
 	/*virtual*/ void setFilterSubString(const std::string& string);
@@ -63,22 +70,49 @@ public:
 
 	/*virtual*/ void copyToClipboard();
 
+	void startUpdateTimer();
+	void updateAttachmentsList();
+
 	boost::signals2::connection setSelectionChangeCallback(commit_callback_t cb);
 
 	bool hasItemSelected();
+
+	bool populateAttachmentsList(bool update = false);
+	void onAccordionTabStateChanged();
+	void setAttachmentDetails(LLSD content);
+	void requestAttachmentDetails();
+	void onEditAttachment();
+	void onRemoveAttachment();
 
 	// <FS:Ansariel> Show avatar complexity in appearance floater
 	void updateAvatarComplexity(U32 complexity);
 
 private:
 	void onWearableItemsListRightClick(LLUICtrl* ctrl, S32 x, S32 y);
+	void onTempAttachmentsListRightClick(LLUICtrl* ctrl, S32 x, S32 y);
+
+	void getAttachmentLimitsCoro(std::string url);
 
 	LLInventoryCategoriesObserver* 	mCategoriesObserver;
 	LLWearableItemsList* 			mCOFItemsList;
+	LLScrollListCtrl*				mTempItemsList;
 	LLWearingGearMenu*				mGearMenu;
 	LLListContextMenu*				mContextMenu;
+	LLListContextMenu*				mAttachmentsMenu;
+
+	LLAccordionCtrlTab* 			mWearablesTab;
+	LLAccordionCtrlTab* 			mAttachmentsTab;
+	LLAccordionCtrl*				mAccordionCtrl;
+
 	// <FS:Ansariel> Show avatar complexity in appearance floater
 	LLTextBox*						mAvatarComplexityLabel;
+
+	std::map<LLUUID, LLViewerObject*> mAttachmentsMap;
+
+	std::map<LLUUID, std::string> 	mObjectNames;
+
+	boost::signals2::connection 	mAttachmentsChangedConnection;
+	LLFrameTimer					mUpdateTimer;
 
 	bool							mIsInitialized;
 };
