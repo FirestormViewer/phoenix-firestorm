@@ -2171,6 +2171,14 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehavio
 	//}
 	// </FS:Ansariel> [Standalone radar]
 
+	// <FS:Ansariel> [FS communication UI]
+	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+	if (pCallFloater)
+	{
+		pCallFloater->toggleRlvShowNearbyRestriction(fHasBhvr);
+	}
+	// </FS:Ansariel> [FS communication UI]
+
 	// Refresh that avatar's name tag and all HUD text
 	LLHUDText::refreshAllObjectText();
 }
