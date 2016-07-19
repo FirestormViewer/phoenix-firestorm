@@ -2150,20 +2150,26 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehavio
 		return;	// Nothing to do if the viewer is shutting down
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	LLAvatarList* pNearbyList = (pPeoplePanel) ? pPeoplePanel->getNearbyList() : NULL;
-	RLV_ASSERT( (pPeoplePanel) && (pNearbyList) );
-	if (pNearbyList)
-	{
-		static std::string s_strNoItemsMsg = pNearbyList->getNoItemsMsg();
-		pNearbyList->setNoItemsMsg( (fHasBhvr) ? RlvStrings::getString("blocked_nearby") : s_strNoItemsMsg );
-		pNearbyList->clear();
+	// <FS:Ansariel> [Standalone radar]
+	// -> This is handled in FSRadar (filtering all items) and
+	//    FSPanelRadar (setting the blocked message). Since the radar
+	//    is updated once every second, we do not hassle to explicitly
+	//    clear it here, since it will happening almost instantly anyway
+	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	//LLAvatarList* pNearbyList = (pPeoplePanel) ? pPeoplePanel->getNearbyList() : NULL;
+	//RLV_ASSERT( (pPeoplePanel) && (pNearbyList) );
+	//if (pNearbyList)
+	//{
+	//	static std::string s_strNoItemsMsg = pNearbyList->getNoItemsMsg();
+	//	pNearbyList->setNoItemsMsg( (fHasBhvr) ? RlvStrings::getString("blocked_nearby") : s_strNoItemsMsg );
+	//	pNearbyList->clear();
 
-		if (pNearbyList->isInVisibleChain())
-			pPeoplePanel->onCommit();
-		if (!fHasBhvr)
-			pPeoplePanel->updateNearbyList();
-	}
+	//	if (pNearbyList->isInVisibleChain())
+	//		pPeoplePanel->onCommit();
+	//	if (!fHasBhvr)
+	//		pPeoplePanel->updateNearbyList();
+	//}
+	// </FS:Ansariel> [Standalone radar]
 
 	// Refresh that avatar's name tag and all HUD text
 	LLHUDText::refreshAllObjectText();

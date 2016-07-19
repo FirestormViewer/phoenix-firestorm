@@ -42,6 +42,7 @@
 #include "llpanelblockedlist.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
+#include "rlvactions.h"
 #include "rlvhandler.h"
 
 
@@ -321,6 +322,8 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	S32 lastScroll = mRadarList->getScrollPos();
 
 	// Update list
+	mRadarList->setCommentText(RlvActions::canShowNearbyAgents() ? LLStringUtil::null : RlvStrings::getString("blocked_nearby"));
+
 	mRadarList->clearRows();
 	const std::vector<LLSD>::const_iterator it_end = entries.end();
 	for (std::vector<LLSD>::const_iterator it = entries.begin(); it != it_end; ++it)
