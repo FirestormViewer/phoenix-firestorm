@@ -1088,16 +1088,6 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
-
-// [RLVa:KB] - Checked: RLVa-1.2.0
-	if ( (nearby_tab_active) && (RlvActions::isRlvEnabled()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
-	{
-		bool fCanShowNames = true;
-		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
-		if (!fCanShowNames)
-			item_selected = multiple_selected = false;
-	}
-// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const
@@ -1345,10 +1335,11 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 	}
 	
 // [RLVa:KB] - Checked: RLVa-2.0.1
-	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, clicked_id)) )
-	{
-		return;
-	}
+	// <FS:Ansariel> Firestorm radar; commented out
+	//if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, clicked_id)) )
+	//{
+	//	return;
+	//}
 // [/RLVa:KB]
 
 #if 0 // SJB: Useful for testing, but not currently functional or to spec
@@ -1468,13 +1459,14 @@ void LLPanelPeople::onImButtonClicked()
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
 // [RLVa:KB] - Checked: RLVa-2.0.1
-	if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
-	{
-		bool fCanShowNames = true;
-		std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
-		if (!fCanShowNames)
-			return;
-	}
+	// <FS:Ansariel> Firestorm radar; commented out
+	//if ( (RlvActions::isRlvEnabled()) && (NEARBY_TAB_NAME == getActiveTabName()) && (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) )
+	//{
+	//	bool fCanShowNames = true;
+	//	std::for_each(selected_uuids.begin(), selected_uuids.end(), [&fCanShowNames](const LLUUID& idAgent) { fCanShowNames &= RlvActions::canShowName(RlvActions::SNC_DEFAULT, idAgent); });
+	//	if (!fCanShowNames)
+	//		return;
+	//}
 // [/RLVa:KB]
 	if ( selected_uuids.size() == 1 )
 	{
