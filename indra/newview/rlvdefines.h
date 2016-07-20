@@ -128,6 +128,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWLOC,				// "showloc"
 	RLV_BHVR_SHOWNAMES,				// "shownames"
 	RLV_BHVR_SHOWNAMETAGS,			// "shownametags"
+	RLV_BHVR_SHOWNEARBY,
 	RLV_BHVR_SHOWHOVERTEXT,			// "showhovertext"
 	RLV_BHVR_SHOWHOVERTEXTHUD,		// "showhovertexthud"
 	RLV_BHVR_SHOWHOVERTEXTWORLD,	// "showhovertextworld"
@@ -307,9 +308,10 @@ enum ERlvExceptionCheck
 
 enum ERlvLockMask
 {
-	RLV_LOCK_ADD	= 0x01,
-	RLV_LOCK_REMOVE	= 0x02,
-	RLV_LOCK_ANY	= RLV_LOCK_ADD | RLV_LOCK_REMOVE
+	RLV_LOCK_NONE   = 0x00,
+	RLV_LOCK_ADD    = 0x01,
+	RLV_LOCK_REMOVE = 0x02,
+	RLV_LOCK_ANY    = RLV_LOCK_ADD | RLV_LOCK_REMOVE
 };
 
 enum ERlvWearMask

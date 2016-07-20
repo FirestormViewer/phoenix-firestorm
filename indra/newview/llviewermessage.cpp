@@ -6370,8 +6370,6 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		{
 			// <FS:Ansariel> Cut down logspam
 			//LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
-			LL_WARNS_ONCE() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
-			// </FS:Ansariel>
 		}
 	}
 

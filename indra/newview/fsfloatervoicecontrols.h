@@ -43,6 +43,7 @@ class LLOutputMonitorCtrl;
 class LLSpeakerMgr;
 class LLSpeakersDelayActionsStorage;
 class LLSliderCtrl;
+class LLTextBox;
 
 /**
  * The Voice Control Panel is an ambient window summoned by clicking the flyout chevron
@@ -81,6 +82,8 @@ public:
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 	LLAvatarList* getAvatarCallerList() { return mAvatarList; }
 // [/RLVa:KB]
+
+	void toggleRlvShowNearbyRestriction(bool restricted);
 
 private:
 	typedef enum e_voice_controls_type
@@ -248,6 +251,8 @@ private:
 	 */
 	void reset(const LLVoiceChannel::EState& new_state);
 
+	void updateListVisibility();
+
 private:
 	speaker_state_map_t mSpeakerStateMap;
 	LLSpeakerMgr* mSpeakerManager;
@@ -258,10 +263,12 @@ private:
 	LLPanel* mAgentPanel;
 	LLOutputMonitorCtrl* mSpeakingIndicator;
 	bool mIsModeratorMutedVoice;
+	bool mIsRlvShowNearbyRestricted;
 
 	LLUUID mSelectedParticipant;
 	LLSliderCtrl* mVolumeSlider;
 	LLButton* mMuteButton;
+	LLTextBox* mRlvRestrictedText;
 
 	/**
 	 * Flag indicated that participants voice states should be initialized.

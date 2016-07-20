@@ -1968,13 +1968,13 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	if (mClassifiedsCategory)
 	{
 		LLClassifiedInfo::cat_map::iterator iter;
-		mClassifiedsCategory->add(LLTrans::getString("all_categories"), LLSD("any"));
+		mClassifiedsCategory->add(LLTrans::getString("all_categories"), LLSD(0));
 		mClassifiedsCategory->addSeparator();
 		for (iter = LLClassifiedInfo::sCategories.begin();
 			 iter != LLClassifiedInfo::sCategories.end();
 			 iter++)
 		{
-			mClassifiedsCategory->add(LLTrans::getString(iter->second));
+			mClassifiedsCategory->add(LLTrans::getString(iter->second), LLSD((S32)iter->first));
 		}
 	}
 	childSetAction("classifieds_next", boost::bind(&FSPanelSearchClassifieds::onBtnNext, this));
@@ -2008,7 +2008,7 @@ void FSPanelSearchClassifieds::find()
 		LLNotificationsUtil::add("NoContentToSearch");
 		return;
 	}
-	U32 category = childGetValue("classifieds_category").asInteger();
+	U32 category = mClassifiedsCategory->getValue().asInteger();
 	BOOL auto_renew = FALSE;
 	U32 flags = pack_classified_flags_request(auto_renew, inc_pg, inc_mature, inc_adult);
 	

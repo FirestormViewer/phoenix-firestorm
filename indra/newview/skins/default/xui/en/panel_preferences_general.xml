@@ -436,29 +436,36 @@
    top_delta="0"/>
     
    <check_box
-     control_name="FSTagShowTooComplexARW"
+     control_name="FSTagShowARW"
      enabled_control="AvatarNameTagMode"
      height="16"
-     label="Complexity if too complex"
+     label="Show avatar complexity"
      layout="topleft"
      left="30"
      width="140"
      top_pad="3"
-     name="FSTagShowTooComplexARW"
-     tool_tip="If enabled, the nametag will show the current avatar complexity if the avatar is too complex and shown as a jelly doll."
-     top_delta="0" />
-
+     name="FSTagShowARW"
+     tool_tip="If enabled, the nametag will show the current avatar complexity."/>
    <check_box
-     control_name="FSTagAlwaysShowARW"
-     enabled_control="AvatarNameTagMode"
+     control_name="FSTagShowTooComplexOnlyARW"
      height="16"
-     label="Always show complexity"
+     label="Only if too complex"
      layout="topleft"
-     left_pad="50"
-     width="100"
-     name="FSTagAlwaysShowARW"
-     tool_tip="If enabled, the nametag will always show the current avatar complexity."
-     top_delta="0" />
+     left="40"
+     width="140"
+     top_pad="3"
+     name="FSTagShowTooComplexOnlyARW"
+     tool_tip="If enabled, the nametag will show the current avatar complexity only if the avatar is too complex and shown as a jelly doll."/>
+   <check_box
+     control_name="FSTagShowOwnARW"
+     height="16"
+     label="Show own complexity"
+     layout="topleft"
+     left="40"
+     width="140"
+     top_pad="3"
+     name="FSTagShowOwnARW"
+     tool_tip="If enabled, your own nametag will your current avatar complexity."/>
 
 <!--away/logout-->
 	 <text
@@ -468,7 +475,7 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="15"
+     top_pad="10"
      name="title_afk_text"
      width="260">
         Away timeout:
@@ -576,7 +583,7 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="25"
+     top_pad="10"
      width="500">
        Unavailable and Autoresponse messages can be found under Privacy / Autoresponse
     </text>
