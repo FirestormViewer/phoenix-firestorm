@@ -43,6 +43,8 @@ Maximum 200 per group daily
      left="0"
      right="-1"
      name="notice_list"
+     sort_ascending="false"
+     sort_column="4"
      top_pad="0"
      width="304">
         <scroll_list.columns
@@ -60,6 +62,7 @@ Maximum 200 per group daily
         <scroll_list.columns
          label="Date"
          name="date"
+         sort_column="sort"
          relative_width="0.35" />
         <scroll_list.columns
          name="sort"

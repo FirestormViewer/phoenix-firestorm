@@ -2089,14 +2089,27 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMES>::onCommand(const RlvCommand& 
 		const LLUUID idAgent = RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption());
 
 		// Refresh the nearby people list (if necessary)
-		LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-		RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-		if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) && (pPeoplePanel->getNearbyList()->contains(idAgent)) )
-		{
-			if (pPeoplePanel->getNearbyList()->isInVisibleChain())
-				pPeoplePanel->onCommit();
-			pPeoplePanel->getNearbyList()->updateAvatarNames();
-		}
+		// <FS:Ansariel> [Standalone radar]
+		//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+		//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+		//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) && (pPeoplePanel->getNearbyList()->contains(idAgent)) )
+		//{
+		//	if (pPeoplePanel->getNearbyList()->isInVisibleChain())
+		//		pPeoplePanel->onCommit();
+		//	pPeoplePanel->getNearbyList()->updateAvatarNames();
+		//}
+		FSRadar* pRadar = FSRadar::getInstance();
+		RLV_ASSERT( (pRadar) );
+		if ( (pRadar) )
+			pRadar->updateNames();
+		// </FS:Ansariel> [Standalone radar]
+
+		// Refresh the speaker list
+		// <FS:Ansariel> [FS communication UI]
+		FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+		if (pCallFloater)
+			pCallFloater->getAvatarCallerList()->updateAvatarNames();
+		// </FS:Ansariel> [FS communication UI]
 
 		// Refresh that avatar's name tag and all HUD text
 		LLVOAvatar::invalidateNameTag(idAgent);
@@ -2127,6 +2140,47 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SHOWNAMETAGS>::onCommand(const RlvComman
 	if ( (RLV_RET_SUCCESS == eRet) && (rlvCmd.hasOption()) )
 		LLVOAvatar::invalidateNameTag(RlvCommandOptionHelper::parseOption<LLUUID>(rlvCmd.getOption()));
 	return eRet;
+}
+
+// Handles: @shownearby=n|y toggles
+template<> template<>
+void RlvBehaviourToggleHandler<RLV_BHVR_SHOWNEARBY>::onCommandToggle(ERlvBehaviour eBhvr, bool fHasBhvr)
+{
+	if (LLApp::isQuitting())
+		return;	// Nothing to do if the viewer is shutting down
+
+	// Refresh the nearby people list
+	// <FS:Ansariel> [Standalone radar]
+	// -> This is handled in FSRadar (filtering all items) and
+	//    FSPanelRadar (setting the blocked message). Since the radar
+	//    is updated once every second, we do not hassle to explicitly
+	//    clear it here, since it will happening almost instantly anyway
+	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	//LLAvatarList* pNearbyList = (pPeoplePanel) ? pPeoplePanel->getNearbyList() : NULL;
+	//RLV_ASSERT( (pPeoplePanel) && (pNearbyList) );
+	//if (pNearbyList)
+	//{
+	//	static std::string s_strNoItemsMsg = pNearbyList->getNoItemsMsg();
+	//	pNearbyList->setNoItemsMsg( (fHasBhvr) ? RlvStrings::getString("blocked_nearby") : s_strNoItemsMsg );
+	//	pNearbyList->clear();
+
+	//	if (pNearbyList->isInVisibleChain())
+	//		pPeoplePanel->onCommit();
+	//	if (!fHasBhvr)
+	//		pPeoplePanel->updateNearbyList();
+	//}
+	// </FS:Ansariel> [Standalone radar]
+
+	// <FS:Ansariel> [FS communication UI]
+	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+	if (pCallFloater)
+	{
+		pCallFloater->toggleRlvShowNearbyRestriction(fHasBhvr);
+	}
+	// </FS:Ansariel> [FS communication UI]
+
+	// Refresh that avatar's name tag and all HUD text
+	LLHUDText::refreshAllObjectText();
 }
 
 // Handles: @showself=n|y and @showselfhead=n|y toggles

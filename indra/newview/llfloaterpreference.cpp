@@ -767,6 +767,8 @@ BOOL LLFloaterPreference::postBuild()
 	// <FS:Ansariel> Properly disable avatar tag setting
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("AvatarNameTagMode")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	onAvatarTagSettingsChanged();
 	// </FS:Ansariel>
 
@@ -3397,6 +3399,10 @@ void LLFloaterPreference::onAvatarTagSettingsChanged()
 
 	childSetEnabled("FSshow_legacyun", usernames_enabled);
 	childSetEnabled("legacy_trim_check", usernames_enabled && legacy_enabled);
+
+	bool arw_options_enabled = gSavedSettings.getBOOL("FSTagShowARW") && gSavedSettings.getS32("AvatarNameTagMode") > 0;
+	childSetEnabled("FSTagShowTooComplexOnlyARW", arw_options_enabled);
+	childSetEnabled("FSTagShowOwnARW", arw_options_enabled);
 }
 // </FS:Ansariel>
 
