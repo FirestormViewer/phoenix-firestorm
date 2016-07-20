@@ -324,6 +324,9 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	// Update list
 	mRadarList->setCommentText(RlvActions::canShowNearbyAgents() ? LLStringUtil::null : RlvStrings::getString("blocked_nearby"));
 
+	bool needs_sort = mRadarList->isSorted();
+	mRadarList->setNeedsSort(false);
+
 	mRadarList->clearRows();
 	const std::vector<LLSD>::const_iterator it_end = entries.end();
 	for (std::vector<LLSD>::const_iterator it = entries.begin(); it != it_end; ++it)
@@ -410,6 +413,9 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 			ageCell->setColor(LLColor4(options["age_color"]));
 		}
 	}
+
+	mRadarList->setNeedsSort(needs_sort);
+	mRadarList->updateSort();
 
 	LLStringUtil::format_map_t name_count_args;
 	name_count_args["[TOTAL]"] = stats["total"].asString();
