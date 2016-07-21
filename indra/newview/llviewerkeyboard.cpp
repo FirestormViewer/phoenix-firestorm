@@ -50,6 +50,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llfloaterwebcontent.h"
+#include "fsfloatersearch.h"
 
 //
 // Constants
@@ -631,7 +632,7 @@ void start_gesture( EKeystate s )
 
 	// <FS:Ansariel> FIRE-4167: Don't start gesture if a floater with web content has focus
 	LLFloater* focused_floater = gFloaterView->getFocusedFloater();
-	if (focused_floater && dynamic_cast<LLFloaterWebContent*>(focused_floater))
+	if (focused_floater && (dynamic_cast<LLFloaterWebContent*>(focused_floater) || dynamic_cast<FSFloaterSearch*>(focused_floater)))
 	{
 		return;
 	}
