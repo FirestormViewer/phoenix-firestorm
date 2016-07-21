@@ -1025,11 +1025,13 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 			item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, category_id);
 			if( item_array )
 			{
+				// *FIX: bit of a hack to call update server from here...
+				// <FS:KB> FIRE-19635 / BUG-20161: Detached object ends up in root of inventory
+				//new_item->updateServer(TRUE);
 				LLInventoryModel::LLCategoryUpdate update(category_id, 1);
 				gInventory.accountForUpdate(update);
-
-				// *FIX: bit of a hack to call update server from here...
 				new_item->updateParentOnServer(FALSE);
+				// </FS:KB>
 				item_array->push_back(new_item);
 			}
 			else
@@ -1070,12 +1072,14 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 				item_array = get_ptr_in_map(mParentChildItemTree, parent_id);
 				if(item_array)
 				{
-					LLInventoryModel::LLCategoryUpdate update(parent_id, 1);
-					gInventory.accountForUpdate(update);
-
 					// *FIX: bit of a hack to call update server from
 					// here...
+					// <FS:KB> FIRE-19635 / BUG-20161: Detached object ends up in root of inventory
+					//new_item->updateServer(TRUE);
+					LLInventoryModel::LLCategoryUpdate update(parent_id, 1);
+					gInventory.accountForUpdate(update);
 					new_item->updateParentOnServer(FALSE);
+					// </FS:KB>
 					item_array->push_back(new_item);
 				}
 				else
