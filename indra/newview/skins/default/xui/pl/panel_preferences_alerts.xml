@@ -12,6 +12,7 @@
 	</panel>
 	<panel label="Ludzie" name="tab-people">
 		<check_box label="Mrugaj ikoną aplikacji, gdy nadchodzi wiadomość, a [APP_NAME] jest w tle" name="FSFlashOnMessage"/>
+		<check_box label="Mrugaj ikoną aplikacji także podczas otrzymywania wiadomości IM od obiektów" name="FSFlashOnObjectIM"/>
 		<check_box label="Powiadom, gdy ktoś zmieni Wyświetlane Imię" name="FSShowDisplayNameUpdateNotification"/>
 		<check_box label="Powiadom, gdy kogoś zablokuję lub odblokuję" name="FSReportBlockToNearbyChat"/>
 		<text name="friends_logon_label">
