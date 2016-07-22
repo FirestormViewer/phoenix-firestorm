@@ -120,10 +120,20 @@
      top="10"
      width="450"/>
     <check_box
+     control_name="FSFlashOnObjectIM"
+     height="16"
+     label="Also Flash the app icon when receiving an instant message from an object"
+     layout="topleft"
+     left="20"
+     name="FSFlashOnObjectIM"
+     top_pad="3"
+     width="450"/>
+    <check_box
      control_name="FSShowDisplayNameUpdateNotification"
      height="16"
      label="Notify me when somebody changes their display name"
      layout="topleft"
+     left="10"
      top_pad="3"
      name="FSShowDisplayNameUpdateNotification"
      width="450" />
