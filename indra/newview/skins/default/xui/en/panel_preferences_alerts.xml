@@ -121,8 +121,9 @@
      width="450"/>
     <check_box
      control_name="FSFlashOnObjectIM"
+     enabled_control="FSFlashOnMessage"
      height="16"
-     label="Also Flash the app icon when receiving an instant message from an object"
+     label="Also flash the app icon when receiving an instant message from an object"
      layout="topleft"
      left="20"
      name="FSFlashOnObjectIM"
