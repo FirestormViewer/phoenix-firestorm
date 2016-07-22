@@ -44,6 +44,8 @@ Maximum 200 per group daily
      height="125"
      column_padding="0"
      draw_heading="true"
+     sort_column="4"
+     sort_ascending="false"
      follows="left|top|right"
      layout="topleft">
         <scroll_list.columns
@@ -61,6 +63,7 @@ Maximum 200 per group daily
         <scroll_list.columns
          label="Date"
          name="date"
+         sort_column="sort"
          relative_width="0.35" />
         <scroll_list.columns
          name="sort"

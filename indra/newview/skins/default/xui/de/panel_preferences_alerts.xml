@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Popups" name="popups" title="Popups">
-<tab_container name="tabs">
- 
-    <!-- World -->
-    <panel label="Welt" name="tab-world">
-	<check_box label="Benachrichtigen, wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox"/>
-	<check_box name="FSPaymentInfoInChat" label="Bei L$-Transaktionen im lokalen Chat benachrichtigen"/>
-	<check_box label="Benachrichtigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
-	<check_box label="Aktuelle Neuigkeiten von status.secondlifegrid.net beim Login abrufen" name="AutoQueryGridStatus"/>
-	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
-	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
-	<check_box label="Doppelte IM-Nachrichten filtern, wenn sie bereits als Schlüsselwort-Alarm angezeigt wurden" name="FSFilterGrowlKeywordDuplicateIMs"/>
-    </panel>
+	<tab_container name="tabs">
+		<!-- World -->
+		<panel label="Welt" name="tab-world">
+			<check_box label="Benachrichtigen, wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox"/>
+			<check_box name="FSPaymentInfoInChat" label="Bei L$-Transaktionen im lokalen Chat benachrichtigen"/>
+			<check_box label="Benachrichtigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
+			<check_box label="Aktuelle Neuigkeiten von status.secondlifegrid.net beim Login abrufen" name="AutoQueryGridStatus"/>
+			<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
+			<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
+			<check_box label="Doppelte IM-Nachrichten filtern, wenn sie bereits als Schlüsselwort-Alarm angezeigt wurden" name="FSFilterGrowlKeywordDuplicateIMs"/>
+		</panel>
 
-    <!-- People -->
-    <panel label="Leute" name="tab-people">
-	<check_box label="Anwendungsicon blinkt bei neuen Nachrichten, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnMessage"/>
-	<check_box label="Benachrichtigen, wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
-	<check_box label="Benachrichtigen, wenn ich jemanden blockiere oder freischalte" name="FSReportBlockToNearbyChat"/>
-	<text name="friends_logon_label">
-		Anzeigen, wenn meine Freunden sich an- oder abmelden:
-	</text>
-	<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
-	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
-	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory"/>
-    </panel>
+		<!-- People -->
+		<panel label="Leute" name="tab-people">
+			<check_box label="Anwendungsicon blinkt bei neuen Nachrichten, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnMessage"/>
+			<check_box label="Benachrichtigen, wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
+			<check_box label="Benachrichtigen, wenn ich jemanden blockiere oder freischalte" name="FSReportBlockToNearbyChat"/>
+			<text name="friends_logon_label">
+				Anzeigen, wenn meine Freunden sich an- oder abmelden:
+			</text>
+			<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
+			<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
+			<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory"/>
+		</panel>
 
-    <!-- Objects & Scripts -->
-    <panel label="Objekte &amp; Skripte" name="tab-objects">
-	<check_box label="Anwendungsicon blinkt bei neuen Skriptdialogen, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnScriptDialog"/>
-	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
-	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
-	<radio_group name="show_script_errors_location">
-		<radio_item label="Lokaler Chat" name="script_0"/>
-		<radio_item label="Separates Fenster" name="script_1"/>
-	</radio_group>
-	<check_box label="Benachrichtigen, wenn sich die Skriptanzahl in der Region ändert:" name="FSReportTotalScriptCountChanges"/>
-	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
-	<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
-	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
-    </panel>
+		<!-- Objects & Scripts -->
+		<panel label="Objekte &amp; Skripte" name="tab-objects">
+			<check_box label="Anwendungsicon blinkt bei neuen Skriptdialogen, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnScriptDialog"/>
+			<check_box label="Anwendungsicon blinkt ebenfalls, wenn Instant Messages von Objekten empfangen werden" name="FSFlashOnObjectIM"/>
+			<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
+			<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
+			<radio_group name="show_script_errors_location">
+				<radio_item label="Lokaler Chat" name="script_0"/>
+				<radio_item label="Separates Fenster" name="script_1"/>
+			</radio_group>
+			<check_box label="Benachrichtigen, wenn sich die Skriptanzahl in der Region ändert:" name="FSReportTotalScriptCountChanges"/>
+			<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
+			<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
+			<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
+		</panel>
 
-    <!-- Inventory -->
-    <panel label="Inventar" name="tab-inventory">
-		<check_box label="Benachrichtigen, wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
-		<check_box label="Benachrichtigen, wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
-		<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
-		<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
-		<check_box label="Benachrichtigen, falls Objekte zu schnell eintreffen" name="FSNotifyIncomingObjectSpam"/>
-		<check_box label="Benachrichtigen, falls Objekte von anderen Einwohnern zu schnell eintreffen" name="FSNotifyIncomingObjectSpamFrom"/>
-		<slider name="FSOfferThrottleMaxCount" label="Schwellwert für zu schnell eintreffende Objekte:" label_width="260" width="385" tool_tip="Setzt den Schwellwert für die Anzahl an eintreffenden Objekten innerhalb von 10 Sekunden, ab dem eine Drosselung einsetzt. Standardwert: 5"/>
-    </panel>
+		<!-- Inventory -->
+		<panel label="Inventar" name="tab-inventory">
+			<check_box label="Benachrichtigen, wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
+			<check_box label="Benachrichtigen, wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
+			<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
+			<check_box label="Dateinamen von gespeicherten Schnappschüssen im Chat in der Nähe protokollieren" name="FSLogSnapshotsToLocal"/>
+			<check_box label="Benachrichtigen, falls Objekte zu schnell eintreffen" name="FSNotifyIncomingObjectSpam"/>
+			<check_box label="Benachrichtigen, falls Objekte von anderen Einwohnern zu schnell eintreffen" name="FSNotifyIncomingObjectSpamFrom"/>
+			<slider name="FSOfferThrottleMaxCount" label="Schwellwert für zu schnell eintreffende Objekte:" label_width="260" width="385" tool_tip="Setzt den Schwellwert für die Anzahl an eintreffenden Objekten innerhalb von 10 Sekunden, ab dem eine Drosselung einsetzt. Standardwert: 5"/>
+		</panel>
 
-    <!-- Alerts -->
-    <panel label="Hinweise" name="tab-alerts">
-	<text name="show_label">
-		Immer anzeigen:
-	</text>
-	<text name="dont_show_label">
-		Niemals anzeigen:
-	</text>
-    </panel>
-
-</tab_container>
+		<!-- Alerts -->
+		<panel label="Hinweise" name="tab-alerts">
+			<text name="show_label">
+				Immer anzeigen:
+			</text>
+			<text name="dont_show_label">
+				Niemals anzeigen:
+			</text>
+		</panel>
+	</tab_container>
 </panel>

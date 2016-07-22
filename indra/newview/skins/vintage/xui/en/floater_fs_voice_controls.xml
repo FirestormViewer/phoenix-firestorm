@@ -114,6 +114,16 @@
          name="non_avatar_caller"
          top="10"
          width="276" />
+        <text
+         follows="all"
+         font="SansSerif"
+         height="120"
+         layout="topleft"
+         left="0"
+         name="rlv_restricted"
+         top="10"
+         width="280"
+         wrap="true"/>
       </layout_panel>
     </layout_stack>
     <slider

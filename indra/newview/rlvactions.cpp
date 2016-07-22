@@ -213,9 +213,14 @@ bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
 	return false;
 }
 
+bool RlvActions::canShowNearbyAgents()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNEARBY);
+}
+
 // ============================================================================
 // Movement
-// 
+//
 
 bool RlvActions::canAcceptTpOffer(const LLUUID& idSender)
 {

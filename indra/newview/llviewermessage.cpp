@@ -4209,7 +4209,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	// <FS:CR> Make osx dashboard icon bounce when window isn't in focus
 	//if (viewer_window && viewer_window->getMinimized())
 	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
-	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon)
+	static LLCachedControl<bool> sFSFlashOnObjectIM(gSavedSettings, "FSFlashOnObjectIM");
+	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon && (sFSFlashOnObjectIM || (chat.mChatType != CHAT_TYPE_IM)))
 	{
 		viewer_window->flashIcon(5.f);
 	}

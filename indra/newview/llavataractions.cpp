@@ -563,7 +563,7 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 		std::string strMessage = response["message"];
 
 		// Filter the request message if the recipients is IM-blocked
-		if ( (!RlvActions::isRlvEnabled()) || ((RlvActions::canStartIM(idRecipient)) && (RlvActions::canSendIM(idRecipient))) )
+		if ( (RlvActions::isRlvEnabled()) && ((!RlvActions::canStartIM(idRecipient)) || (!RlvActions::canSendIM(idRecipient))) )
 		{
 			strMessage = RlvStrings::getString(RLV_STRING_HIDDEN);
 		}

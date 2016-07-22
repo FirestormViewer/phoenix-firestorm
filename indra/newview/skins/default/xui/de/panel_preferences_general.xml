@@ -63,8 +63,9 @@
 	<check_box label="Im alten Namensformat „Resident“ abschneiden" name="legacy_trim_check" tool_tip="Schneidet den Nachnamen „Resident“ im alten Namensformat ab." />
 	<check_box label="Alte Position für Avatarnamen" name="FSLegacyNametagPosition" tool_tip="Falls aktiviert, wird die Position des Avatarnamens fest an der Position des Avatars angezeigt und folgt nicht der Bewegung des Kopfes bei Animationen." />
 	<check_box label="„Automatische Antwort“-Modus anzeigen" name="FSShowAutorespondInNameTag" tool_tip="Falls aktiviert, wird der Modus „Automatische Antwort“ im eigenen Avatarnamen angezeigt."/>
-	<check_box label="Komplexität falls zu komplex" name="FSTagShowTooComplexARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität angezeigt, wenn der Avatar zu komplex ist und als Jelly Doll dargestellt wird."/>
-	<check_box label="Komplexität immer anzeigen" name="FSTagAlwaysShowARW" tool_tip="Falls aktiviert, wird immer die aktuelle Avatar-Komplexität angezeigt."/>
+	<check_box label="Komplexität anzeigen" name="FSTagShowARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität angezeigt."/>
+	<check_box label="Nur falls zu komplex" name="FSTagShowTooComplexOnlyARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität nur angezeigt, wenn der Avatar zu komplex ist und als Jelly Doll dargestellt wird."/>
+	<check_box label="Eigene Komplexität anzeigen" name="FSTagShowOwnARW" tool_tip="Falls aktiviert, wird die eigene aktuelle Avatar-Komplexität angezeigt."/>
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>
 	<text name="title_afk_text" width="275">
