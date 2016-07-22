@@ -1630,25 +1630,23 @@ void LLStatusBar::onPopupRolloverChanged(const LLSD& newvalue)
 {
 	bool new_value = newvalue.asBoolean();
 
+	if (mMouseEnterPresetsConnection.connected())
+	{
+		mMouseEnterPresetsConnection.disconnect();
+	}
+	if (mMouseEnterVolumeConnection.connected())
+	{
+		mMouseEnterVolumeConnection.disconnect();
+	}
+	if (mMouseEnterNearbyMediaConnection.connected())
+	{
+		mMouseEnterNearbyMediaConnection.disconnect();
+	}
+
 	if (new_value)
 	{
 		mMouseEnterPresetsConnection = mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 		mMouseEnterVolumeConnection = mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
 		mMouseEnterNearbyMediaConnection = mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
-	}
-	else
-	{
-		if (mMouseEnterPresetsConnection.connected())
-		{
-			mMouseEnterPresetsConnection.disconnect();
-		}
-		if (mMouseEnterVolumeConnection.connected())
-		{
-			mMouseEnterVolumeConnection.disconnect();
-		}
-		if (mMouseEnterNearbyMediaConnection.connected())
-		{
-			mMouseEnterNearbyMediaConnection.disconnect();
-		}
 	}
 }
