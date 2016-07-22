@@ -626,6 +626,14 @@
 		 name="FSShowCurrencyBalanceInStatusbar"
 		 width="270"
 		 control_name="FSShowCurrencyBalanceInStatusbar"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Enable rollover popup on quick graphics menu icon (Restart Required)"
+		 name="FSGraphicsPresetMenuButtonPopupOnRollover"
+		 width="270"
+		 control_name="FSGraphicsPresetMenuButtonPopupOnRollover"/>
 
 		<text
 		type="string"

@@ -285,7 +285,13 @@ BOOL LLStatusBar::postBuild()
 	//mBtnStats = getChildView("stat_btn");
 
 	mIconPresets = getChild<LLButton>( "presets_icon" );
-	mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+    // <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+	// mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+    if (gSavedSettings.getBOOL("FSGraphicsPresetMenuButtonPopupOnRollover"))
+    {
+        mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
+    }
+    // </FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	mIconPresets->setClickedCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
