@@ -22643,7 +22643,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSFlashOnMessage</key>
     <map>
       <key>Comment</key>
-      <string>Flash/Bounce the app icon when a new message is recieved and Firestorm is not in focus</string>
+      <string>Flash/Bounce the app icon when a new message is received and Firestorm is not in focus</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
