@@ -287,7 +287,7 @@ BOOL LLStatusBar::postBuild()
 	mIconPresets = getChild<LLButton>( "presets_icon" );
     // <FS: KC> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	// mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
-    if (gSavedSettings.getBOOL("FSGraphicsPresetMenuButtonPopupOnRollover"))
+    if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
     {
         mIconPresets->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterPresets, this));
     }
@@ -296,7 +296,13 @@ BOOL LLStatusBar::postBuild()
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
-	mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
+    // <FS: KC> FIRE-19697: Add setting to disable status bar icon menu popup on mouseover
+	// mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
+    if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+    {
+        mBtnVolume->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterVolume, this));
+    }
+    // </FS: KC> FIRE-19697: Add setting to disable status bar icon menu popup on mouseover
 
 	// ## Zi: Media/Stream separation
 	mStreamToggle = getChild<LLButton>("stream_toggle_btn");
@@ -305,7 +311,14 @@ BOOL LLStatusBar::postBuild()
 
 	mMediaToggle = getChild<LLButton>("media_toggle_btn");
 	mMediaToggle->setClickedCallback( &LLStatusBar::onClickMediaToggle, this );
-	mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
+    // <FS: KC> FIRE-19697: Add setting to disable status bar icon menu popup on mouseover
+    if (gSavedSettings.getBOOL("FSStatusBarMenuButtonPopupOnRollover"))
+	// mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
+    
+    {
+        mMediaToggle->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterNearbyMedia, this));
+    }
+    // </FS: KC> FIRE-19697: Add setting to disable status bar icon menu popup on mouseover
 
 	LLHints::registerHintTarget("linden_balance", getChild<LLView>("balance_bg")->getHandle());
 

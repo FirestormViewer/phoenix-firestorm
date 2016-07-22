@@ -24053,10 +24053,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSGraphicsPresetMenuButtonPopupOnRollover</key>
+    <key>FSStatusBarMenuButtonPopupOnRollover</key>
     <map>
       <key>Comment</key>
-      <string>Enable rollover popup on quick graphics menu icon (Restart Required)</string>
+      <string>Enable rollover popups on top status bar menu icons: Quick Graphics Presets, Volume, and Media. (Restart Required)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

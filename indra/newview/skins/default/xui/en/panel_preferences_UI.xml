@@ -630,10 +630,10 @@
 		 top_pad="4"
 		 follows="left|top"
 		 height="16"
-		 label="Enable rollover popup on quick graphics menu icon (Restart Required)"
-		 name="FSGraphicsPresetMenuButtonPopupOnRollover"
+		 label="Enable mouse rollover popup on status bar menu icons (Restart Required)"
+		 name="FSStatusBarMenuButtonPopupOnRollover"
 		 width="270"
-		 control_name="FSGraphicsPresetMenuButtonPopupOnRollover"/>
+		 control_name="FSStatusBarMenuButtonPopupOnRollover"/>
 
 		<text
 		type="string"
