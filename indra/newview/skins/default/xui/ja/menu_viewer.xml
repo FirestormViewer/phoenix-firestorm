@@ -16,7 +16,7 @@
 		<menu_item_call label="体験..." name="Experiences"/>
 		
 		<menu_item_call label="プロフィール" name="Profile"/>
-		<menu_item_call label="容姿" name="ChangeOutfit"/>
+		<menu_item_check label="容姿" name="ChangeOutfit"/>
 		<menu_item_call label="アバターを選択..." name="Avatar Picker"/>
 		
 		<menu label="ムーブメント" name="Movement">
