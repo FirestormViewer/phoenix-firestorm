@@ -1415,6 +1415,15 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries を参照してく
 			<ignore name="ignore" text="衣類がダウンロードされるまで時間がかかっているとき"/>
 		</form>
 	</notification>
+	<notification name = "AgentComplexityWithVisibility">
+ご使用の [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 表示の複雑さ] は [AGENT_COMPLEXITY] です。
+[OVERLIMIT_MSG]
+		<usetemplate ignoretext="自分のアバター表示の複雑さが極めて高い時に警告する" name="notifyignore"/>
+	</notification>
+
+	<notification name = "AgentComplexity">
+ご使用の [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 表示の複雑さ] は [AGENT_COMPLEXITY] です。
+	</notification>
 	<notification name="FirstRun">
 		[APP_NAME] のインストールが完了しました。
 
@@ -1779,14 +1788,7 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 		グループを抜けることができません。グループの最後のオーナーであるため、グループを抜けることができません。最初に、別のメンバーをオーナーの役割に割り当ててください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="GroupDepartError">
-		グループを抜けることができません: [reason]。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="GroupDepart">
-		グループ [group_name] を抜けました。
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
+	
 	<notification name="ConfirmKick">
 		本当に住人全員をグリッドから追い出しますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="住人全員を追い出す"/>
@@ -2492,6 +2494,12 @@ Linden Lab
 		ごみ箱の中身をすべて削除しますか？
 		<usetemplate ignoretext="インベントリのごみ箱フォルダを空にする前の確認" name="okcancelignore" notext="キャンセル" yestext="OK"/>
 	</notification>
+	
+	<notification name="TrashIsFull">
+ゴミ箱が一杯です。ログイン時に問題が起こる可能性があります。
+		<usetemplate name="okcancelbuttons" notext="あとでゴミ箱を空にする" yestext="今すぐゴミ箱を空にする"/>
+	</notification>
+	
 	<notification name="ConfirmClearBrowserCache">
 		トラベル、Web、検索の履歴をすべて削除しますか？
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
@@ -3502,6 +3510,15 @@ M キーを押して変更します。
 	<notification name="AppearanceToXMLFailed">
 		容姿のXMLファイルへの保存が失敗しました
 	</notification>
+	
+	<notification name="PresetNotSaved">
+事前設定 [NAME] の保存時にエラーが発生しました。
+	</notification>
+
+	<notification name="PresetNotDeleted">
+事前設定 [NAME] の削除時にエラーが発生しました。
+	</notification>
+  
 	<notification name="UnableToFindHelpTopic">
 		ヘルプトピックが見つかりませんでした。
 	</notification>

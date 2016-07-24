@@ -40,7 +40,7 @@
 			<menu_item_call label="テクスチャのリベークをする" name="Rebake Texture"/>
 			<menu_item_call label="アバターを男性のデフォルトにリセット" name="ResetDefaultAvM"/>
 			<menu_item_call label="アバターを女性のデフォルトにリセット" name="ResetDefaultAvF"/>
-			<menu_item_check label="アバターのレンダリング量を表示" name="Avatar Rendering Cost"/>
+			<menu_item_check label="アバター表示の複雑さ情報を表示" name="Avatar Draw Info" />
 			<menu_item_call label="ラグメーター" name="Lag Meter" />
 			<menu_item_call label="ブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
@@ -358,7 +358,7 @@
 			<menu_item_call label="ラグメーター" name="Lag Meter" />
 			<menu_item_check label="統計バー" name="Statistics Bar"/>
 			<menu_item_check label="シーン読込みの統計" name="Scene Load Statistics" />
-			<menu_item_check label="アバターのレンダリングコストを表示する" name="Avatar Rendering Cost"/>
+			<menu_item_check label="アバター表示の複雑さ情報を表示" name="Avatar Draw Info" />
 		</menu>
 		<menu label="ハイライトと目に見えるもの" name="Highlighting and Visibility">
 			<menu_item_check label="チージービーコン" name="Cheesy Beacon"/>
@@ -515,8 +515,6 @@
 			<menu_item_check label="ジョイント" name="Joints" />
 			<menu_item_check label="レイキャスト" name="Raycast"/>
 			<menu_item_check label="風ベクトル" name="Wind Vectors"/>
-			<menu_item_check label="複雑なものをレンダリング" name="rendercomplexity"/>
-			<menu_item_check label="装着物のバイト数" name="attachment bytes"/>
 			<menu_item_check label="スカルプト" name="Sculpt"/>
 			<menu_item_check label="テクスチャのサイズ" name="Texture Size" />
 			<menu label="テクスチャの密度" name="Texture Density">
