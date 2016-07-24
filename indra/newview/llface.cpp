@@ -293,7 +293,8 @@ void LLFace::setTexture(U32 ch, LLViewerTexture* tex)
 	if ( (LLRender::DIFFUSE_MAP == ch) && (!mShowDiffTexture) )
 	{
 		mOrigDiffTexture = tex;
-		return;
+		if (LLViewerFetchedTexture::sDefaultDiffuseImagep.get() == mTexture[ch].get())
+			return;
 	}
 // [/SL:KB]
 
