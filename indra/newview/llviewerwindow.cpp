@@ -1889,17 +1889,17 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	if (gGLManager.mVRAM > 3584)
 	{
 		gMaxVideoRam = S32Megabytes(2048);
-		LL_INFOS() << "At least 4 GB video memory detected - increasing max video ram to 2048 MB" << LL_ENDL;
+		LL_INFOS() << "At least 4 GB video memory detected - increasing max video ram for textures to 2048 MB" << LL_ENDL;
 	}
 	else if (gGLManager.mVRAM > 1536)
 	{
 		gMaxVideoRam = S32Megabytes(1024);
-		LL_INFOS() << "At least 2 GB video memory detected - increasing max video ram to 1024 MB" << LL_ENDL;
+		LL_INFOS() << "At least 2 GB video memory detected - increasing max video ram for textures to 1024 MB" << LL_ENDL;
 	}
 	else if (gGLManager.mVRAM > 768)
 	{
 		gMaxVideoRam = S32Megabytes(768);
-		LL_INFOS() << "At least 1 GB video memory detected - increasing max video ram to 768 MB" << LL_ENDL;
+		LL_INFOS() << "At least 1 GB video memory detected - increasing max video ram for textures to 768 MB" << LL_ENDL;
 	}
 #endif
 	// </FS:Ansariel>
