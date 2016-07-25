@@ -701,8 +701,6 @@ bool LLAppViewerWin32::initHardwareTest()
 	if (gGLManager.mVRAM == 0)
 	{
 		// <FS:Ansariel> FIRE-12671: Force VRAM if DirectX detection is broken
-		LL_INFOS("AppInit") << "VRAM could not be retrieved via OpenGL extension." << LL_ENDL;
-
 		S32 forced_video_memory;
 		if ((forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory")) > 0)
 		{
