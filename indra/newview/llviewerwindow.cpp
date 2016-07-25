@@ -1877,6 +1877,32 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		LLFeatureManager::getInstance()->setGraphicsLevel(0, false);
 		gSavedSettings.setU32("RenderQualityPerformance", 0);		
 	}
+
+	// <FS:Ansariel> Texture memory management
+	// On 64bit builds, allow up to 1GB texture memory on cards with 2GB video
+	// memory and up to 2GB texture memory on cards with 4GB video memory. Check
+	// is performed against a lower limit as not exactly 2 or 4GB might not be
+	// returned.
+#ifdef ND_BUILD64BIT_ARCH
+	LL_INFOS() << "GLManager detected " << gGLManager.mVRAM << " MB VRAM" << LL_ENDL;
+
+	if (gGLManager.mVRAM > 3584)
+	{
+		gMaxVideoRam = S32Megabytes(2048);
+		LL_INFOS() << "At least 4 GB video memory detected - increasing max video ram to 2048 MB" << LL_ENDL;
+	}
+	else if (gGLManager.mVRAM > 1536)
+	{
+		gMaxVideoRam = S32Megabytes(1024);
+		LL_INFOS() << "At least 2 GB video memory detected - increasing max video ram to 1024 MB" << LL_ENDL;
+	}
+	else if (gGLManager.mVRAM > 768)
+	{
+		gMaxVideoRam = S32Megabytes(768);
+		LL_INFOS() << "At least 1 GB video memory detected - increasing max video ram to 768 MB" << LL_ENDL;
+	}
+#endif
+	// </FS:Ansariel>
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.
