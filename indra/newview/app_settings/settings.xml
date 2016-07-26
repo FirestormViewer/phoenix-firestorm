@@ -12867,16 +12867,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>Values higher than 8 are meaningless and give no improvement. You should set this to no higher than 4. Setting this too high also seriously lowers your graphics performance.</string>
     </map>
-    <key>RenderRiggedLODFactor</key>
+    <key>RenderRiggedFactorMultiplier</key>
     <map>
       <key>Comment</key>
-      <string>Controls level of detail of worn rigged meshes (multiplier for current screen area when calculated level of detail)</string>
+      <string>Affects level of detail for worn rigged meshes</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>2.5</real>
+      <real>7.5</real>
     </map>
     <key>RenderWater</key>
     <map>
@@ -15553,6 +15553,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Size of UI relative to default layout on 1024x768 screen</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>LastSystemUIScaleFactor</key>
+    <map>
+      <key>Comment</key>
+      <string>Size of system UI during last run. On Windows 100% (96 DPI) system setting is 1.0 UI size</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

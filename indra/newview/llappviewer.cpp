@@ -656,7 +656,7 @@ static void settings_to_globals()
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
 	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
-	LLVOVolume::sRiggedLODFactor	= gSavedSettings.getF32("RenderRiggedLODFactor");
+	LLVOVolume::sRiggedFactorMultiplier	= gSavedSettings.getF32("RenderRiggedFactorMultiplier");
 	LLVOVolume::sDistanceFactor			= 1.f-LLVOVolume::sLODFactor * 0.1f;
 	LLVolumeImplFlexible::sUpdateFactor = gSavedSettings.getF32("RenderFlexTimeFactor");
 	LLVOTree::sTreeFactor				= gSavedSettings.getF32("RenderTreeLODFactor");
@@ -767,8 +767,9 @@ LLAppViewer::LLAppViewer()
 	mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", FALSE)),
 	mFastTimerLogThread(NULL),
 	mUpdater(new LLUpdaterService()),
-	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mSettingsLocationList(NULL),
+	mIsFirstRun(false),
+	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
 	if(NULL != sInstance)
@@ -2922,10 +2923,16 @@ bool LLAppViewer::initConfiguration()
 
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
+		// Set firstrun flag to indicate that some further init actiona should be taken 
+		// like determining screen DPI value and so on
+		mIsFirstRun = true;
+
+		<FS>
 		if (gSavedSettings.getString("SessionSettingsFile").empty())
-        {
-            gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
-        }
+		{
+			gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+		}
+		</FS>
 		
 // <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
 #ifdef OPENSIM
@@ -2934,7 +2941,6 @@ bool LLAppViewer::initConfiguration()
 #endif // OPENSIM
 // </FS:CR>
 		
-		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
 	
@@ -3681,7 +3687,8 @@ bool LLAppViewer::initWindow()
 		.fullscreen(false)
 #endif // !LL_DARWIN
 // </FS:CR>
-		.ignore_pixel_depth(ignorePixelDepth);
+		.ignore_pixel_depth(ignorePixelDepth)
+		.first_run(mIsFirstRun);
 
 	gViewerWindow = new LLViewerWindow(window_params);
 

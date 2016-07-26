@@ -1025,13 +1025,11 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 			item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, category_id);
 			if( item_array )
 			{
-				// *FIX: bit of a hack to call update server from here...
-				// <FS:KB> FIRE-19635 / BUG-20161: Detached object ends up in root of inventory
-				//new_item->updateServer(TRUE);
 				LLInventoryModel::LLCategoryUpdate update(category_id, 1);
 				gInventory.accountForUpdate(update);
+
+				// *FIX: bit of a hack to call update server from here...
 				new_item->updateParentOnServer(FALSE);
-				// </FS:KB>
 				item_array->push_back(new_item);
 			}
 			else
@@ -1072,14 +1070,11 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 				item_array = get_ptr_in_map(mParentChildItemTree, parent_id);
 				if(item_array)
 				{
-					// *FIX: bit of a hack to call update server from
-					// here...
-					// <FS:KB> FIRE-19635 / BUG-20161: Detached object ends up in root of inventory
-					//new_item->updateServer(TRUE);
 					LLInventoryModel::LLCategoryUpdate update(parent_id, 1);
 					gInventory.accountForUpdate(update);
+					// *FIX: bit of a hack to call update server from
+					// here...
 					new_item->updateParentOnServer(FALSE);
-					// </FS:KB>
 					item_array->push_back(new_item);
 				}
 				else
@@ -1171,7 +1166,6 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 	if(old_cat)
 	{
 		// We already have an old category, modify its values
-		U32 mask = LLInventoryObserver::NONE;
 		LLUUID old_parent_id = old_cat->getParentUUID();
 		LLUUID new_parent_id = cat->getParentUUID();
 		if(old_parent_id != new_parent_id)
@@ -1228,7 +1222,8 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 		item_array_t* itemsp = new item_array_t;
 		mParentChildCategoryTree[new_cat->getUUID()] = catsp;
 		mParentChildItemTree[new_cat->getUUID()] = itemsp;
-		addChangedMask(LLInventoryObserver::ADD, cat->getUUID());
+		mask |= LLInventoryObserver::ADD;
+		addChangedMask(mask, cat->getUUID());
 	}
 }
 

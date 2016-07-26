@@ -156,7 +156,8 @@ public:
 									min_width,
 									min_height;
 		Optional<bool>				fullscreen,
-									ignore_pixel_depth;
+									ignore_pixel_depth,
+									first_run;
 
 		Params();
 	};
@@ -428,6 +429,9 @@ public:
 	void			setTitle(const std::string& win_title);
 //-TT
 
+	bool getSystemUIScaleFactorChanged() { return mSystemUIScaleFactorChanged; }
+	static void showSystemUIScaleFactorChanged();
+
 private:
 	bool                    shouldShowToolTipFor(LLMouseHandler *mh);
 
@@ -441,6 +445,7 @@ private:
 	S32				getChatConsoleBottomPad(); // Vertical padding for child console rect, varied by bottom clutter
 	LLRect			getChatConsoleRect(); // Get optimal cosole rect.
 
+	static bool onSystemUIScaleFactorChanged(const LLSD& notification, const LLSD& response);
 private:
 	LLWindow*		mWindow;						// graphical window object
 	bool			mActive;
@@ -520,6 +525,7 @@ private:
 	LLPointer<LLViewerObject>	mDragHoveredObject;
 
 	static LLTrace::SampleStatHandle<>	sMouseVelocityStat;
+	bool mSystemUIScaleFactorChanged; // system UI scale factor changed from last run
 };
 
 //

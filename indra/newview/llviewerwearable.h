@@ -89,6 +89,8 @@ public:
 	/*virtual*/ void	revertValues();
 	/*virtual*/ void	saveValues();
 
+	void 				revertValuesWithoutUpdate();
+
 	// Something happened that requires the wearable's label to be updated (e.g. worn/unworn).
 	/*virtual*/void		setUpdated() const;
 

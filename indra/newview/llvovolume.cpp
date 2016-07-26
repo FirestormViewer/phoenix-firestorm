@@ -90,7 +90,7 @@ BOOL gAnimateTextures = TRUE;
 //extern BOOL gHideSelectedObjects;
 
 F32 LLVOVolume::sLODFactor = 1.f;
-F32 LLVOVolume::sRiggedLODFactor = 2.f;
+F32 LLVOVolume::sRiggedFactorMultiplier = 6.f;
 F32	LLVOVolume::sLODSlopDistanceFactor = 0.5f; //Changing this to zero, effectively disables the LOD transition slop 
 F32 LLVOVolume::sDistanceFactor = 1.0f;
 S32 LLVOVolume::sNumLODChanges = 0;
@@ -1259,18 +1259,18 @@ void LLVOVolume::sculpt()
 	}
 }
 
-S32	LLVOVolume::computeLODDetail(F32 distance, F32 radius)
+S32	LLVOVolume::computeLODDetail(F32 distance, F32 radius, F32 lod_factor)
 {
 	S32	cur_detail;
 	if (LLPipeline::sDynamicLOD)
 	{
 		// We've got LOD in the profile, and in the twist.  Use radius.
-		F32 tan_angle = (LLVOVolume::sLODFactor*radius)/distance;
+		F32 tan_angle = (lod_factor*radius) / distance;
 		cur_detail = LLVolumeLODGroup::getDetailFromTan(ll_round(tan_angle, 0.01f));
 	}
 	else
 	{
-		cur_detail = llclamp((S32) (sqrtf(radius)*LLVOVolume::sLODFactor*4.f), 0, 3);		
+		cur_detail = llclamp((S32)(sqrtf(radius)*lod_factor*4.f), 0, 3);
 	}
 	return cur_detail;
 }
@@ -1286,6 +1286,7 @@ BOOL LLVOVolume::calcLOD()
 	
 	F32 radius;
 	F32 distance;
+	F32 lod_factor = LLVOVolume::sLODFactor;
 
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
@@ -1297,10 +1298,12 @@ BOOL LLVOVolume::calcLOD()
 			return FALSE;
 		}
 
+		// Note: when changing, take note that a lot of rigged meshes have only one LOD.
+		lod_factor *= LLVOVolume::sRiggedFactorMultiplier;
 		distance = avatar->mDrawable->mDistanceWRTCamera;
 		F32 avatar_radius = avatar->getBinRadius();
 		F32 object_radius = getVolume() ? getVolume()->mLODScaleBias.scaledVec(getScale()).length() : getScale().length();
-		radius = object_radius * LLVOVolume::sRiggedLODFactor;
+		radius = object_radius * LLVOVolume::sRiggedFactorMultiplier;
 		radius = llmin(radius, avatar_radius);
 	}
 	else
@@ -1308,14 +1311,14 @@ BOOL LLVOVolume::calcLOD()
 		distance = mDrawable->mDistanceWRTCamera;
 		radius = getVolume() ? getVolume()->mLODScaleBias.scaledVec(getScale()).length() : getScale().length();
 	}
-	
+
 	//hold onto unmodified distance for debugging
 	//F32 debug_distance = distance;
-	
+
 	distance *= sDistanceFactor;
 
-	F32 rampDist = LLVOVolume::sLODFactor * 2;
-	
+	F32 rampDist = lod_factor * 2;
+
 	if (distance < rampDist)
 	{
 		// Boost LOD when you're REALLY close
@@ -1328,7 +1331,8 @@ BOOL LLVOVolume::calcLOD()
 	distance *= F_PI/3.f;
 
 	cur_detail = computeLODDetail(ll_round(distance, 0.01f), 
-									ll_round(radius, 0.01f));
+									ll_round(radius, 0.01f),
+									lod_factor);
 
 
 	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_LOD_INFO) &&
@@ -1816,7 +1820,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
 		compiled = TRUE;
 		lodOrSculptChanged(drawable, compiled);
-		genBBoxes(FALSE);
+		if (!mLODChanged)
+		{
+			genBBoxes(FALSE);
+		}
 	}
 	// it has its own drawable (it's moved) or it has changed UVs or it has changed xforms from global<->local
 	else
