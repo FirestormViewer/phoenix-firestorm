@@ -1729,6 +1729,10 @@ Wenn Sie die neuesten Features und Fixes ausprobieren möchten, gehen Sie zur Se
 		Möchten Sie Ihren Internetbrowser öffnen, um diesen Inhalt anzuzeigen?
 		<usetemplate ignoretext="Meinen Browser starten, um eine Webseite anzuzeigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="SystemUIScaleFactorChanged">
+		Die Bildschirmskalierung des Betriebssystems hat sich seit dem letzten Start geändert. Möchten Sie die Einstellungsseite für die UI-Skalierung öffnen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="WebLaunchJoinNow">
 		Möchten Sie Ihre [http://secondlife.com/account/ Startseite] aufrufen, um Ihr Konto zu verwalten?
 		<usetemplate ignoretext="Meinen Browser starten, um mein Konto zu verwalten" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
