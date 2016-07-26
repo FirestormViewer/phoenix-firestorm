@@ -3968,7 +3968,9 @@ BOOL LLWindowWin32::handleImeRequests(WPARAM request, LPARAM param, LRESULT *res
 
 F32 LLWindowWin32::getSystemUISize()
 {
-	float scale_value = 0;
+	// <FS:Ansariel> Type fix
+	//float scale_value = 0;
+	F32 scale_value = 0.f;
 	HWND hWnd = (HWND)getPlatformWindow();
 	HDC hdc = GetDC(hWnd);
 	HMONITOR hMonitor;
