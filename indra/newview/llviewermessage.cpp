@@ -2748,17 +2748,17 @@ static void teleport_region_info_cb(const std::string& slurl, LLSD args, const L
 
 	if (!can_user_access_dst_region)
 	{
-		params.name = "TeleportOffered_MaturityBlocked";
+		params.name = "TeleportOffered_MaturityBlocked_SLUrl";
 		send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 		send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
 	}
 	else if (does_user_require_maturity_increase)
 	{
-		params.name = "TeleportOffered_MaturityExceeded";
+		params.name = "TeleportOffered_MaturityExceeded_SLUrl";
 	}
 	else
 	{
-		params.name = "TeleportOffered";
+		params.name = "TeleportOffered_SLUrl";
 		params.functor.name = "TeleportOffered";
 	}
 
@@ -3935,7 +3935,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["region_maturity"] = region_access;
 
 				// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
-				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept))
+				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept) && LLGridManager::instance().isInSecondLife())
 				{
 					LLVector3d pos_global = from_region_handle(region_handle);
 					pos_global += LLVector3d(pos);
@@ -4209,7 +4209,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	// <FS:CR> Make osx dashboard icon bounce when window isn't in focus
 	//if (viewer_window && viewer_window->getMinimized())
 	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
-	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon)
+	static LLCachedControl<bool> sFSFlashOnObjectIM(gSavedSettings, "FSFlashOnObjectIM");
+	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon && (sFSFlashOnObjectIM || (chat.mChatType != CHAT_TYPE_IM)))
 	{
 		viewer_window->flashIcon(5.f);
 	}

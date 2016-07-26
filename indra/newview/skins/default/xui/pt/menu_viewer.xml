@@ -7,7 +7,7 @@
 		</menu_item_call>
 		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Meu perfil" name="Profile"/>
-		<menu_item_call label="Minha aparência" name="ChangeOutfit"/>
+		<menu_item_check label="Minha aparência" name="ChangeOutfit"/>
 		<menu_item_call label="Selecione um avatar" name="Avatar Picker"/>
 		<menu_item_check label="Meu inventário" name="Inventory"/>
 		<menu_item_call label="Experiências" name="Experiences"/>

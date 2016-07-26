@@ -44,6 +44,8 @@
 
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
 
+#include "boost/make_shared.hpp"
+
 namespace LLEventPolling
 {
 namespace Details
@@ -72,6 +74,7 @@ namespace Details
         bool                            mDone;
         LLCore::HttpRequest::ptr_t      mHttpRequest;
         LLCore::HttpRequest::policy_t   mHttpPolicy;
+        LLCore::HttpOptions::ptr_t      mHttpOptions; // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
         std::string                     mSenderIp;
         int                             mCounter;
         LLCoreHttpUtil::HttpCoroutineAdapter::wptr_t mAdapter;
@@ -91,6 +94,7 @@ namespace Details
         mDone(false),
         mHttpRequest(),
         mHttpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID),
+        mHttpOptions(), // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
         mSenderIp(),
         mCounter(sNextCounter++)
 
@@ -99,6 +103,11 @@ namespace Details
 
         mHttpRequest = LLCore::HttpRequest::ptr_t(new LLCore::HttpRequest);
         mHttpPolicy = app_core_http.getPolicy(LLAppCoreHttp::AP_LONG_POLL);
+        // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+        mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+        mHttpOptions->setRetries(0);
+        mHttpOptions->setTransferTimeout(60);
+        // </FS:Ansariel>
         mSenderIp = sender.getIPandPort();
     }
 
@@ -170,7 +179,10 @@ namespace Details
 //              << LLSDXMLStreamer(request) << LL_ENDL;
 
             LL_DEBUGS("LLEventPollImpl") << " <" << counter << "> posting and yielding." << LL_ENDL;
-            LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request);
+            // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+            //LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request);
+            LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request, mHttpOptions);
+            // </FS:Ansariel>
 
 //          LL_DEBUGS("LLEventPollImpl::eventPollCoro") << "<" << counter << "> result = "
 //              << LLSDXMLStreamer(result) << LL_ENDL;
@@ -186,6 +198,15 @@ namespace Details
                     errorCount = 0;
                     continue;
                 }
+                // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+                else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY))
+                {   // Pre-coro says this is the default answer for timeouts and it can happen
+                    // frequently on OpenSim - assume this is normal and issue a new request immediately
+                    LL_INFOS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
+                    errorCount = 0;
+                    continue;
+                }
+                // </FS:Ansariel>
                 else if ((status == LLCore::HttpStatus(LLCore::HttpStatus::LLCORE, LLCore::HE_OP_CANCELED)) || 
                         (status == LLCore::HttpStatus(HTTP_NOT_FOUND)))
                 {   // Event polling for this server has been canceled.  In 

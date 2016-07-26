@@ -72,6 +72,8 @@
 		<slider label="スクリプトダイアログ当たりの表示行数：" name="FSRowsPerScriptDialog" tool_tip="同時に見ることのできるスクリプトダイアログの最大行数" />
 
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
+		<check_box label="テキストに動きを付ける" name="PieMenuPopupFontEffect" tool_tip="パイメニューが開く時のアニメーションに合わせて、パイメニューの中のテキストも動くようにします。" />
+		<check_box label="外側に丸い影を付ける" name="PieMenuOuterRingShade" tool_tip="パイメニューの縁に丸い影をつけてサブメニューを見やすくします。" />
         <check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />
         <text name="GroupTopRightRequiresRestart">
             （再起動が必要）
@@ -103,6 +105,7 @@
 		<check_box label="トップメニューに現在の場所を表示" name="ShowMenuBarLocation" />
 		<check_box label="メニュー検索を表示" name="show_search_menu_check"/>
 		<check_box label="リンデンドルの残高を表示" name="FSShowCurrencyBalanceInStatusbar" />
+		<check_box label="ステータスバーのメニューアイコンにマウスをロールオーバーでポップアップを表示" name="FSStatusBarMenuButtonPopupOnRollover" />
 		
 		<text name="navfav_textbox">
 			ナビゲーション＆お気に入りバー：

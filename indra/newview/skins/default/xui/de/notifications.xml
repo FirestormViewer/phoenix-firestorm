@@ -3061,7 +3061,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
@@ -3071,7 +3071,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
@@ -3083,6 +3083,36 @@ Diese Region enthält [REGION_CONTENT_MATURITY]-Inhalte, doch aufgrund Ihrer akt
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
+
+Diese Region enthält jedoch Inhalte, die nur für Erwachsene zugänglich sind.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Teleportieren"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
+
+Diese Region enthält [REGION_CONTENT_MATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGION_CONTENT_MATURITY]-Inhalte nicht dargestellt. Sie können Ihre Einstellungen ändern und den Teleport fortsetzen oder Sie können den Teleport abbrechen.
+		<form name="form">
+			<button name="Teleport" text="Ändern und fortfahren"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort ([POS_SLURL]) angeboten:
 
 [MESSAGE]

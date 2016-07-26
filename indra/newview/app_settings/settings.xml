@@ -22687,13 +22687,24 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSFlashOnMessage</key>
     <map>
       <key>Comment</key>
-      <string>Flash/Bounce the app icon when a new message is recieved and Firestorm is not in focus</string>
+      <string>Flash/Bounce the app icon when a new message is received and Firestorm is not in focus</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSFlashOnObjectIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Flash/Bounce the app icon when a new instant message from an object is received and Firestorm is not in focus.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>FSDisableReturnObjectNotification</key>
     <map>
@@ -24085,6 +24096,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSStatusBarMenuButtonPopupOnRollover</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable rollover popups on top status bar menu icons: Quick Graphics Presets, Volume, and Media.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
   </map>
 </llsd>

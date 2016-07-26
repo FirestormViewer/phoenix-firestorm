@@ -1984,17 +1984,20 @@ bool LLAppearanceMgr::getCanReplaceCOF(const LLUUID& outfit_cat_id)
 		return false;
 	}
 
+// <FS:KC> FIRE-11920: Always allow replacing outfit
 	// Check whether the outfit contains any wearables we aren't wearing already (STORM-702).
-	LLInventoryModel::cat_array_t cats;
-	LLInventoryModel::item_array_t items;
-	LLFindWearablesEx is_worn(/*is_worn=*/ false, /*include_body_parts=*/ true);
-	gInventory.collectDescendentsIf(outfit_cat_id,
-		cats,
-		items,
-		LLInventoryModel::EXCLUDE_TRASH,
-		is_worn);
+//	LLInventoryModel::cat_array_t cats;
+//	LLInventoryModel::item_array_t items;
+//	LLFindWearablesEx is_worn(/*is_worn=*/ false, /*include_body_parts=*/ true);
+//	gInventory.collectDescendentsIf(outfit_cat_id,
+//		cats,
+//		items,
+//		LLInventoryModel::EXCLUDE_TRASH,
+//		is_worn);
 
-	return items.size() > 0;
+//	return items.size() > 0;
+	return TRUE;
+// </FS:KC> FIRE-11920: Always allow replacing outfit
 }
 
 // Moved from LLWearableList::ContextMenu for wider utility.
