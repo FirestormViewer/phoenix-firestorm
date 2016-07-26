@@ -18,7 +18,7 @@
 		<panel label="Notificaciones" name="msgs"/>
 		<panel label="Privacidad" name="im"/>
 		<panel label="Avanzado" name="advanced1"/>
-		<panel label="Interfaz" name="starlightUI1"/>
+		<panel label="Interfaz" name="ui"/>
 		<panel label="Skins" name="skins"/>
 		<panel label="Reporte de fallos" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>

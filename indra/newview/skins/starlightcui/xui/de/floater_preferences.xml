@@ -20,7 +20,7 @@
 		<panel label="Meldungen" name="msgs"/>
 		<panel label="Privatsphäre" name="im"/>
 		<panel label="Erweitert" name="advanced1"/>
-		<panel label="Benutzerinterface" name="starlightUI1"/>
+		<panel label="Benutzerinterface" name="ui"/>
 		<panel label="Oberflächendesign" name="skins"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="OpenSim" name="opensim"/>

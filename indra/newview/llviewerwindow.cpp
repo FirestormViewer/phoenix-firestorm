@@ -1970,7 +1970,13 @@ bool LLViewerWindow::onSystemUIScaleFactorChanged(const LLSD& notification, cons
 		LLFloaterReg::toggleInstanceOrBringToFront("preferences");
 		LLFloater* pref_floater = LLFloaterReg::getInstance("preferences");
 		LLTabContainer* tab_container = pref_floater->getChild<LLTabContainer>("pref core");
-		tab_container->selectTabByName("advanced1");
+		// <FS:Ansariel> Adjusted for Firestorm
+		//tab_container->selectTabByName("advanced1");
+		tab_container->selectTabByName("ui");
+		LLPanel* ui_panel = tab_container->getCurrentPanel();
+		LLTabContainer* ui_tab_container = ui_panel->getChild<LLTabContainer>("tabs");
+		ui_tab_container->selectTabByName("ui-2d-overlay");
+		// </FS:Ansariel>
 
 	}
 	return false; 

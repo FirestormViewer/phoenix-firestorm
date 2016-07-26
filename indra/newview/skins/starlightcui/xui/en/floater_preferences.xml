@@ -175,7 +175,7 @@
          label="User Interface"
          layout="topleft"
          help_topic="preferences_ui_extras_tab"
-         name="starlightUI1" />
+         name="ui" />
         <panel
          class="panel_preference_skins"
          filename="panel_preferences_skins.xml"

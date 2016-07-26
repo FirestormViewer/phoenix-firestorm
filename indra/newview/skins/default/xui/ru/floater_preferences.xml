@@ -19,7 +19,7 @@
 		<panel label="Уведомления" name="msgs"/>
 		<panel label="Приватность" name="im"/>
 		<panel label="Расширеное" name="advanced1"/>
-		<panel label="Интерфейс" name="starlightUI1"/>
+		<panel label="Интерфейс" name="ui"/>
 		<panel label="Темы" name="skins"/>
 		<panel label="Ошибки" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
