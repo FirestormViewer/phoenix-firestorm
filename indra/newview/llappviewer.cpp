@@ -2927,12 +2927,12 @@ bool LLAppViewer::initConfiguration()
 		// like determining screen DPI value and so on
 		mIsFirstRun = true;
 
-		<FS>
+		// <FS>
 		if (gSavedSettings.getString("SessionSettingsFile").empty())
 		{
 			gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
 		}
-		</FS>
+		// </FS>
 		
 // <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
 #ifdef OPENSIM
