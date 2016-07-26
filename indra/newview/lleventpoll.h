@@ -57,10 +57,7 @@ public:
 
 
 private:
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>    mImpl;
-    boost::shared_ptr<LLEventPolling::Details::LLEventPollImpl>    mImpl;
-    // </FS:ND>
+    boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>    mImpl;
 };
 
 
