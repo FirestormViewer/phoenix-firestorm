@@ -3132,7 +3132,7 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
+		[NAME_SLURL] はテレポートであなたを呼んでいます。
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3142,7 +3142,7 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
+		[NAME_SLURL] はテレポートであなたを呼んでいます。
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3154,6 +3154,36 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] はテレポートであなたを呼んでいます。
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+ただし、この地域（リージョン）には成人のみアクセスできるコンテンツが含まれています。
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="テレポート"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+この地域（リージョン）には [REGION_CONTENT_MATURITY] コンテンツが含まれていますが、現在の環境設定は [REGION_CONTENT_MATURITY] コンテンツを除外するように設定されています。環境設定を変更してテレポートを続けるか、このテレポートを取り消すことができます。
+		<form name="form">
+			<button name="Teleport" text="変更して続ける"/>
+			<button name="Cancel" text="取り消し"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] はテレポートであなたを呼んでいます （[POS_SLURL]）。
 
 “[MESSAGE]”

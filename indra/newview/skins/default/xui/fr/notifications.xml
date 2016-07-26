@@ -2358,8 +2358,8 @@ Souhaitez-vous le garder ? "Ignorer l'expéditeur" ignorera totalement [NAME_SLU
 			<button name="Info" text="Info"/>
 		</form>
 	</notification>
-	<notification name="TeleportOffered" label="Teleport offer from [NAME_LABEL]">
-[NAME_SLURL] vous propose de vous téléporter à son emplacement ([POS_SLURL]):
+	<notification name="TeleportOffered">
+[NAME_SLURL] vous propose de vous téléporter à son emplacement:
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 		<form name="form">
@@ -2368,7 +2368,7 @@ Souhaitez-vous le garder ? "Ignorer l'expéditeur" ignorera totalement [NAME_SLU
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-[NAME_SLURL] vous propose de vous téléporter à son emplacement ([POS_SLURL]):
+[NAME_SLURL] vous propose de vous téléporter à son emplacement:
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 Cette région contient est de classification [REGION_CONTENT_MATURITY], et vos préférences actuelles sont définies pour exclure le contenu [REGION_CONTENT_MATURITY]. Souhaitez-vous modifier vos préférences et vous téléporter ou annuler cette proposition ?
@@ -2378,6 +2378,31 @@ Cette région contient est de classification [REGION_CONTENT_MATURITY], et vos p
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+[NAME_SLURL] vous propose de vous téléporter à son emplacement:
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+However, this region contains content accessible to adults only.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+[NAME_SLURL] vous propose de vous téléporter à son emplacement ([POS_SLURL]):
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Se téléporter"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+[NAME_SLURL] vous propose de vous téléporter à son emplacement ([POS_SLURL]):
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+Cette région contient est de classification [REGION_CONTENT_MATURITY], et vos préférences actuelles sont définies pour exclure le contenu [REGION_CONTENT_MATURITY]. Souhaitez-vous modifier vos préférences et vous téléporter ou annuler cette proposition ?
+		<form name="form">
+			<button name="Teleport" text="Modifier et poursuivre"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 [NAME_SLURL] vous propose de vous téléporter à son emplacement ([POS_SLURL]):
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
