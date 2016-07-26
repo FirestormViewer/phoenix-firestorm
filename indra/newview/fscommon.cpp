@@ -325,7 +325,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	}
 	else if (action == FS_RGSTR_ACT_ZOOM_IN)
 	{
-		return (!isSelf && LLAvatarActions::canZoomIn(av_id));
+		return (!isSelf && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) && LLAvatarActions::canZoomIn(av_id));
 	}
 	else if (action == FS_RGSTR_ACT_OFFER_TELEPORT)
 	{

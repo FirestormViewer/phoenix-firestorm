@@ -261,6 +261,10 @@ private:
 	void onNavMeshStatusChange(const LLPathfindingNavMeshStatus &pNavMeshStatus);
 	void createNavMeshStatusListenerForCurrentRegion();
 	// </FS:Ansariel> Pathfinding support
+
+	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+	void onPopupRolloverChanged(const LLSD& newvalue);
+
 public:
 
 	/**
@@ -361,6 +365,12 @@ private:
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;
 	boost::signals2::connection	mParcelMgrConnection;
+
+	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+	boost::signals2::connection mMouseEnterPresetsConnection;
+	boost::signals2::connection mMouseEnterVolumeConnection;
+	boost::signals2::connection mMouseEnterNearbyMediaConnection;
+	// </FS:Ansariel>
 
 	// <FS:Zi> Pathfinding rebake functions
 	BOOL			rebakeRegionCallback(const LLSD& notification,const LLSD& response);

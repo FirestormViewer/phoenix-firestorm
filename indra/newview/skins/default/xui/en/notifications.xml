@@ -7979,7 +7979,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    log_to_chat="false"
    type="offer"
    sound="UISndTeleportOffer">
-[NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
+[NAME_SLURL] has offered to teleport you to their location:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -7999,6 +7999,71 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
   <notification
    icon="notify.tga"
    name="TeleportOffered_MaturityExceeded"
+   log_to_im="true"
+   log_to_chat="false"
+   type="offer">
+[NAME_SLURL] has offered to teleport you to their location:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+This region contains [REGION_CONTENT_MATURITY] content, but your current preferences are set to exclude [REGION_CONTENT_MATURITY] content.  We can change your preferences and continue with the teleport, or you can cancel this teleport.
+    <tag>confirm</tag>
+    <form name="form">
+      <button
+       index="0"
+       name="Teleport"
+       text="Change and Continue"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="TeleportOffered_MaturityBlocked"
+   log_to_im="true"
+   log_to_chat="false"
+   type="notifytip">
+[NAME_SLURL] has offered to teleport you to their location:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+However, this region contains content accessible to adults only.
+    <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="TeleportOffered_SLUrl"
+   label="Teleport offer from [NAME_LABEL]"
+   log_to_im="true"
+   log_to_chat="false"
+   type="offer"
+   sound="UISndTeleportOffer">
+[NAME_SLURL] has offered to teleport you to their location ([POS_SLURL]):
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+    <tag>confirm</tag>
+    <form name="form">
+      <button
+       index="0"
+       name="Teleport"
+       text="Teleport"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="TeleportOffered_MaturityExceeded_SLUrl"
    log_to_im="true"
    log_to_chat="false"
    type="offer">
@@ -8023,7 +8088,7 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
 
   <notification
    icon="notify.tga"
-   name="TeleportOffered_MaturityBlocked"
+   name="TeleportOffered_MaturityBlocked_SLUrl"
    log_to_im="true"
    log_to_chat="false"
    type="notifytip">

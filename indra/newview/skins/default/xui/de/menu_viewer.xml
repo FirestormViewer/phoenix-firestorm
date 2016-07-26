@@ -11,7 +11,7 @@
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Profil" name="Profile"/>
-		<menu_item_call label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>

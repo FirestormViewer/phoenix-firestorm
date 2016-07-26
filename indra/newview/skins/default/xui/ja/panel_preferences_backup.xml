@@ -88,6 +88,12 @@
 						<row name="restore_per_account_row_groupmutes">
 							<column name="restore_per_account_files_label">抑止したグループチャット</column>
 						</row>
+						<row name="restore_per_account_row_presets">
+							<column name="restore_per_account_files_label">事前設定</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings">
+							<column name="restore_per_account_files_label">アバター表示設定</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 

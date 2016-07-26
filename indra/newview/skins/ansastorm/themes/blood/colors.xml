@@ -327,7 +327,7 @@
      value="0.04 0.04 0.04 1.0" />
     <color
      name="PieMenuLineColor"
-     value="0 0.2 0 0.5" />
+     value="0.2 0 0 0.5" />
     <color
      name="PieMenuTextColor"
      reference="White" />

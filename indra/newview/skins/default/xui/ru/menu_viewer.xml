@@ -8,7 +8,7 @@
 		<menu_item_call label="Кнопки панели инструментов" name="Toolbar Buttons"/>
 		<menu_item_call label="Профиль" name="Profile"/>
 		<menu_item_call label="Места" name="Picks"/>
-		<menu_item_call label="Внешность" name="ChangeOutfit"/>
+		<menu_item_check label="Внешность" name="ChangeOutfit"/>
 		<menu_item_call label="Выберите аватар" name="Avatar Picker"/>
 		<menu_item_call label="Приключения" name="Experiences"/>
 		<menu_item_call label="Снимок" name="Take Snapshot"/>

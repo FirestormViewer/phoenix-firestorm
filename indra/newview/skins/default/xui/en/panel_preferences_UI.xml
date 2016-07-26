@@ -626,6 +626,14 @@
 		 name="FSShowCurrencyBalanceInStatusbar"
 		 width="270"
 		 control_name="FSShowCurrencyBalanceInStatusbar"/>
+		<check_box
+		 top_pad="4"
+		 follows="left|top"
+		 height="16"
+		 label="Enable mouse rollover popup on status bar menu icons"
+		 name="FSStatusBarMenuButtonPopupOnRollover"
+		 width="270"
+		 control_name="FSStatusBarMenuButtonPopupOnRollover"/>
 
 		<text
 		type="string"
