@@ -3979,13 +3979,15 @@ F32 LLWindowWin32::getSystemUISize()
 
 	if (hShcore != NULL)
 	{
-		SetProcessDpiAwarenessType pSPDA;
-		pSPDA = (SetProcessDpiAwarenessType)GetProcAddress(hShcore, "SetProcessDpiAwareness");
+		// <FS:Ansariel> Set DPI awareness via manifest as recommended
+		//SetProcessDpiAwarenessType pSPDA;
+		//pSPDA = (SetProcessDpiAwarenessType)GetProcAddress(hShcore, "SetProcessDpiAwareness");
+		// </FS:Ansariel>
 		GetDpiForMonitorType pGDFM;
 		pGDFM = (GetDpiForMonitorType)GetProcAddress(hShcore, "GetDpiForMonitor");
-		if (pSPDA != NULL && pGDFM != NULL)
+		if (/*pSPDA != NULL &&*/ pGDFM != NULL) // <FS:Ansariel> Set DPI awareness via manifest as recommended
 		{
-			pSPDA(PROCESS_PER_MONITOR_DPI_AWARE);
+			//pSPDA(PROCESS_PER_MONITOR_DPI_AWARE); // <FS:Ansariel> Set DPI awareness via manifest as recommended
 			POINT    pt;
 			UINT     dpix = 0, dpiy = 0;
 			HRESULT  hr = E_FAIL;
@@ -3993,7 +3995,10 @@ F32 LLWindowWin32::getSystemUISize()
 			// Get the DPI for the main monitor, and set the scaling factor
 			pt.x = 1;
 			pt.y = 1;
-			hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
+			// <FS:Ansariel> Get scaling for primary display, assuming that's where we open the viewer
+			//hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
+			hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
+			// </FS:Ansariel>
 			hr = pGDFM(hMonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy);
 			scale_value = dpix / 96.0f;
 		}
