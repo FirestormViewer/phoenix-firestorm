@@ -42,7 +42,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mDisplayName(LLStringUtil::null),
 	mRange(0.f),
 	mFirstSeen(time(NULL)),
-	mGlobalPos(LLVector3d(0.0f,0.0f,0.0f)),
+	mGlobalPos(LLVector3d(0.0, 0.0, 0.0)),
 	mRegion(LLUUID::null),
 	mStatus(0),
 	mZOffset(0.f),
