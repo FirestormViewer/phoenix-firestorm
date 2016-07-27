@@ -168,7 +168,10 @@ public:
 	virtual LLSD getNativeKeyData() { return LLSD::emptyMap(); }
 
 	// Get system UI size based on DPI (for 96 DPI UI size should be 1.0)
-	virtual F32 getSystemUISize() { return 1.0f; }
+	// <FS:Ansariel> Determine scaling of the display we show the viewer
+	//virtual F32 getSystemUISize() { return 1.0f; }
+	virtual F32 getSystemUISize(S32 x, S32 y) { return 1.0f; }
+	// </FS:Ansariel>
 
 	// <FS:TT> Window Title Access
 	//this needs to be overridden for all platforms

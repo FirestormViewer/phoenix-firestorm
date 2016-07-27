@@ -1821,7 +1821,10 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     }
 
 
-	F32 system_scale_factor = mWindow->getSystemUISize();
+	// <FS:Ansariel> Determine scaling of the display we show the viewer
+	//F32 system_scale_factor = mWindow->getSystemUISize();
+	F32 system_scale_factor = mWindow->getSystemUISize(p.x, p.y);
+	// </FS:Ansariel>
 	if (p.first_run || gSavedSettings.getF32("LastSystemUIScaleFactor") != system_scale_factor)
 	{
 		mSystemUIScaleFactorChanged = true;

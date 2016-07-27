@@ -111,7 +111,10 @@ public:
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
 				void openFile(const std::string& file_name);
 
-	/*virtual*/ F32 getSystemUISize();
+	// <FS:Ansariel> Determine scaling of the display we show the viewer
+	/*virtual*/ //F32 getSystemUISize();
+	/*virtual*/ F32 getSystemUISize(S32 x, S32 y);
+	// </FS:Ansariel>
 
 	// <FS:TT> Window Title Access
 	/*virtual*/ void setTitle(const std::string& win_title);
