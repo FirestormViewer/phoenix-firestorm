@@ -224,7 +224,6 @@
  background_visible="true"
  height="15"
  layout="topleft"
- border_size="0"
  name="favorites_bar_visibility_panel"
  visibility_control="ShowNavbarFavoritesPanel"
  auto_resize="false">
