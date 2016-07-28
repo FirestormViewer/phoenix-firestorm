@@ -1159,30 +1159,6 @@ bool LLAppViewer::init()
 		return false;
 	}
 
-	// <FS:Ansariel> Texture memory management
-	// On 64bit builds, allow up to 1GB texture memory on cards with 2GB video
-	// memory and up to 2GB texture memory on cards with 4GB video memory. Check
-	// is performed against a lower limit as not exactly 2 or 4GB might not be
-	// returned.
-#ifdef ND_BUILD64BIT_ARCH
-	if (gGLManager.mVRAM > 3584)
-	{
-		gMaxVideoRam = S32Megabytes(2048);
-		LL_INFOS() << "At least 4 GB video memory detected - increasing max video ram to " << gMaxVideoRam.value() << " MB" << LL_ENDL;
-	}
-	else if (gGLManager.mVRAM > 1536)
-	{
-		gMaxVideoRam = S32Megabytes(1024);
-		LL_INFOS() << "At least 2 GB video memory detected - increasing max video ram to " << gMaxVideoRam.value() << " MB" << LL_ENDL;
-	}
-	else if (gGLManager.mVRAM > 768)
-	{
-		gMaxVideoRam = S32Megabytes(768);
-		LL_INFOS() << "At least 1 GB video memory detected - increasing max video ram to " << gMaxVideoRam.value() << " MB" << LL_ENDL;
-	}
-#endif
-	// </FS:Ansariel>
-
 	LL_INFOS("InitInfo") << "Hardware test initialization done." << LL_ENDL ;
 
 	// Prepare for out-of-memory situations, during which we will crash on

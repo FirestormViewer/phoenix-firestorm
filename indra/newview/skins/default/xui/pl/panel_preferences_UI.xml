@@ -84,6 +84,7 @@
         <check_box label="Pokaż lokalizację w menu na górze" name="ShowMenuBarLocation" />
         <check_box label="Pokaż wyszukiwarkę pozycji w menu" name="show_search_menu_check" />
         <check_box label="Pokaż stan konta" name="FSShowCurrencyBalanceInStatusbar" />
+        <check_box label="Włącz autorozwijanie menusów przy wskazywaniu ikon na pasku" name="FSStatusBarMenuButtonPopupOnRollover" />
         <text name="navfav_textbox">
             Paski nawigacji i ulubionych:
         </text>

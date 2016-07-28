@@ -7508,6 +7508,13 @@ void handle_viewer_disable_message_log(void*)
 
 void handle_customize_avatar()
 {
+	// <FS:Ansariel> FIRE-19614: Make CTRL-O toggle the appearance floater
+	if (LLFloaterReg::instanceVisible("appearance"))
+	{
+		LLFloaterReg::hideInstance("appearance");
+	}
+	else
+	// </FS:Ansariel>
 	LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "my_outfits"));
 }
 

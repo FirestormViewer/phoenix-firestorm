@@ -2843,7 +2843,7 @@ Por favor, tente novamente em alguns instantes.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
+		[NAME_SLURL] quer teletransportar você para a região deles:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2853,7 +2853,7 @@ Por favor, tente novamente em alguns instantes.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
+		[NAME_SLURL] quer teletransportar você para a região deles:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2865,6 +2865,36 @@ A região tem conteúdo [REGION_CONTENT_MATURITY], mas suas preferências atuais
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] quer teletransportar você para a região deles:
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+No entanto, esta região tem conteúdo acessível apenas para adultos.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Teletransporte"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+A região tem conteúdo [REGION_CONTENT_MATURITY], mas suas preferências atuais estão definidas para excluir conteúdo [REGION_CONTENT_MATURITY].  Podemos alterar suas preferências e continuar o teletransporte, ou você pode cancelar este teletransporte.
+		<form name="form">
+			<button name="Teleport" text="Alterar e continuar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] quer teletransportar você para a região deles ([POS_SLURL]):
 
 “[MESSAGE]”

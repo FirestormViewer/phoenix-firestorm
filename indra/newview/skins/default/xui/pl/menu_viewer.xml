@@ -9,7 +9,7 @@
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
-		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
+		<menu_item_check label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>

@@ -1415,7 +1415,7 @@ void LLStatusBar::onParcelIconClick(EParcelIcon icon)
 	case PATHFINDING_DIRTY_ICON:
 		// <FS:Zi> Pathfinding rebake functions
 		// LLNotificationsUtil::add("PathfindingDirty");
-		LLNotificationsUtil::add("PathfindingDirty",LLSD(),LLSD(),boost::bind(&LLStatusBar::rebakeRegionCallback,this,_1,_2));
+		LLNotificationsUtil::add("PathfindingDirty", LLSD(), LLSD(), boost::bind(&LLStatusBar::rebakeRegionCallback, this, _1, _2));
 		// </FS:Zi>
 		break;
 	case PATHFINDING_DISABLED_ICON:
@@ -1542,10 +1542,9 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 // </FS:PP>
 
 // <FS:Zi> Pathfinding rebake functions
-BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& response)
+BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification, const LLSD& response)
 {
-	std::string newSetName = response["message"].asString();
-	S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
 	if (option == 0)
 	{

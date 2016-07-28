@@ -9,7 +9,7 @@
 		<menu_item_call label="Destacados" name="Picks"/>
 		<menu_item_call label="Experiencias" name="Experiences"/>
 		<menu_item_call label="Publicar en Facebook" name="PostToFacebook"/>
-		<menu_item_call label="Mi apariencia" name="ChangeOutfit"/>
+		<menu_item_check label="Mi apariencia" name="ChangeOutfit"/>
 		<menu_item_call label="Elige un avatar" name="Avatar Picker"/>
 		<menu_item_call label="Tomar fotografía" name="Take Snapshot"/>
 		<menu_item_check label="Mi inventario" name="Inventory"/>
