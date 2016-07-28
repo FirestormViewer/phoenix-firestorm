@@ -640,7 +640,7 @@ void LLFriendCardsManager::onFriendListUpdate(U32 changed_mask)
 void create_agent_calling_card_name_cb(const LLAvatarName& av_name, const LLUUID& calling_cards_folder_id)
 {
 	create_inventory_item(gAgentID,
-		gAgent.getSessionID(),
+		gAgentSessionID,
 		calling_cards_folder_id,
 		LLTransactionID::tnull,
 		av_name.getUserName(),
@@ -652,11 +652,8 @@ void create_agent_calling_card_name_cb(const LLAvatarName& av_name, const LLUUID
 		NULL);
 }
 
-// static
-void LLFriendCardsManager::createAgentCallingCard()
+void calling_card_folder_loaded_cb(const LLUUID& calling_cards_folder_id)
 {
-	const LLUUID calling_cards_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD);
-
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	LLFindAgentCallingCard collector;
@@ -666,6 +663,27 @@ void LLFriendCardsManager::createAgentCallingCard()
 	if (!collector.isAgentCallingCardFound())
 	{
 		LLAvatarNameCache::get(gAgentID, boost::bind(&create_agent_calling_card_name_cb, _2, calling_cards_folder_id));
+	}
+}
+
+// static
+void LLFriendCardsManager::createAgentCallingCard()
+{
+	const LLUUID calling_cards_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD);
+
+	// This instance will be deleted in LLInitialFriendCardsFetch::done().
+	LLInitialFriendCardsFetch* fetch = new LLInitialFriendCardsFetch(calling_cards_folder_id, boost::bind(&calling_card_folder_loaded_cb, calling_cards_folder_id));
+	fetch->startFetch();
+	if (fetch->isFinished())
+	{
+		// everything is already here - call done.
+		fetch->done();
+	}
+	else
+	{
+		// it's all on it's way - add an observer, and the inventory
+		// will call done for us when everything is here.
+		gInventory.addObserver(fetch);
 	}
 }
 // </FS:Ansariel>
