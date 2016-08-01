@@ -547,7 +547,6 @@
              (Avatar look at target settings are on the Privacy tab.)
         </text>
 
-<!-- 
         <check_box
          top_pad="10"
          enabled="false"
@@ -561,7 +560,6 @@
             <check_box.commit_callback
              function="Pref.StaticEyes" />
         </check_box>
--->
 
         <!-- LGG Color Beams -->
         <text
