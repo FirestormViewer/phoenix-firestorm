@@ -1712,7 +1712,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>1.5.3.315268</string>
+        <string>1.5.3.317959</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>
@@ -2350,18 +2350,6 @@
         <string>vlc-bin</string>
         <key>platforms</key>
         <map>
-          <key>windows</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>3bdbb86adc2119a0b7bb17a54372dcd2</string>
-              <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-vlc-bin/rev/315283/arch/CYGWIN/installer/vlc_bin-2.2.3.315283-windows-315283.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>windows</string>
-          </map>
           <key>linux</key>
           <map>
             <key>archive</key>
@@ -2374,9 +2362,21 @@
             <key>name</key>
             <string>linux</string>
           </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>04cff37070a5f65f3652b4ddcec7183f</string>
+              <key>url</key>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-vlc-bin/rev/317935/arch/CYGWIN/installer/vlc_bin-2.2.4.317935-windows-317935.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
         </map>
         <key>version</key>
-        <string>2.2.3.315283</string>
+        <string>2.2.4.317935</string>
       </map>
       <key>xmlrpc-epi</key>
       <map>
