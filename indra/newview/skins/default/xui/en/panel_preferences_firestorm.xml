@@ -552,7 +552,7 @@
          enabled="false"
          follows="left|top"
          height="16"
-         label="Disable random avatar eye moments"
+         label="Disable random avatar eye movements"
          left="15"
          name="FSStaticEyes"
          width="250"
