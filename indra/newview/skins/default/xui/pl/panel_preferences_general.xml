@@ -61,8 +61,9 @@
 	<check_box label="Usuwaj 'Resident' z imion starego typu" name="legacy_trim_check" tool_tip="Usuwaj 'Resident' z imion starego typu."/>
 	<check_box label="Pozycje imion w stary sposób" name="FSLegacyNametagPosition" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie zawieszony na stałej wysokości ponad awatarem i nie będzie podążać za jego głową, jeśli poruszy się ona np. w wyniku animacji."/>
 	<check_box label="Pokaż tryb autoodpowiedzi w moim tagu imienia" name="FSShowAutorespondInNameTag" tool_tip="Status będzie widoczny, gdy włączysz autoodpowiedź."/>
-	<check_box label="Złożoność, gdy jest zbyt duża" name="FSTagShowTooComplexARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać złożoność graficzną awatara, jeśli będzie on zbyt złożony i pokazywany jako mniej obciążająca komputer forma (tzw. Jelly Doll)"/>
-	<check_box label="Zawsze pokazuj złożoność" name="FSTagAlwaysShowARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie zawsze pokazywać złożoność graficzną awatara."/>
+	<check_box label="Pokazuj złożoność" name="FSTagShowARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać obecną złożoność graficzną awatara."/>
+	<check_box label="Tylko gdy jest zbyt duża" name="FSTagShowTooComplexOnlyARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać złożoność graficzną awatara tylko wtedy, gdy będzie on zbyt złożony i zastępowany przez mniej obciążającą komputer formę (tzw. Jelly Doll)."/>
+	<check_box label="Pokazuj własną złożoność" name="FSTagShowOwnARW" tool_tip="Gdy włączysz tą opcję, to tag imienia będzie pokazywać Twoją własną, obecną złożoność graficzną."/>
 	<text name="title_afk_text">
 		Zasypiaj po czasie:
 	</text>

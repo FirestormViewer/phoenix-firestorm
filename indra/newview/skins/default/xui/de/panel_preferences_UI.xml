@@ -90,6 +90,7 @@
 		<check_box label="Position in Menüleiste anzeigen" name="ShowMenuBarLocation" />
 		<check_box label="Menüsuche anzeigen" name="show_search_menu_check"/>
 		<check_box label="Kontostand anzeigen" name="FSShowCurrencyBalanceInStatusbar"/>
+		<check_box label="Popup-Fenster beim Überfahren der Icons mit der Maus in der Statusleiste aktivieren" name="FSStatusBarMenuButtonPopupOnRollover"/>
 		<text name="navfav_textbox">
 			Navigations- und Favoriten-Leiste:
 		</text>

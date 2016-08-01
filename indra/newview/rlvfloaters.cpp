@@ -234,7 +234,7 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 {
 	std::ostringstream strRestrictions;
 
-	strRestrictions << RlvStrings::getVersion() << "\n";
+	strRestrictions << RlvStrings::getVersion(LLUUID::null) << "\n";
 
 	const RlvHandler::rlv_object_map_t* pObjects = gRlvHandler.getObjectMap();
 	for (RlvHandler::rlv_object_map_t::const_iterator itObj = pObjects->begin(), endObj = pObjects->end(); itObj != endObj; ++itObj)

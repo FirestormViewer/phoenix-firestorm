@@ -2907,7 +2907,7 @@ Lütfen biraz sonra tekrar deneyin.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2917,7 +2917,7 @@ Lütfen biraz sonra tekrar deneyin.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2929,6 +2929,36 @@ Bu bölgede [REGION_CONTENT_MATURITY] içeriği mevcut, ama mevcut tercihleriniz
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti:
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Ancak bu bölge sadece yetişkinlerin erişebileceği içeriğe sahip.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Işınla"/>
+			<button name="Cancel" text="İptal"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Bu bölgede [REGION_CONTENT_MATURITY] içeriği mevcut, ama mevcut tercihleriniz [REGION_CONTENT_MATURITY] içeriğini dışlayacak şekilde ayarlanmış durumda.  Tercihlerinizi değiştirebilirsiniz ve ışınlamaya devam edebilirsiniz veya bu ışınlama işlemini iptal edebilirsiniz.
+		<form name="form">
+			<button name="Teleport" text="Değiştir ve Devam Et"/>
+			<button name="Cancel" text="İptal"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] size kendi konumuna ışınlanmayı teklif etti ([POS_SLURL]):
 
 “[MESSAGE]”

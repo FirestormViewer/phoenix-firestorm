@@ -23,6 +23,7 @@
 
 	<panel label="人" name="tab-people">
 		<check_box label="メッセージを受信した時 [APP_NAME] が前面になっていなければ、アプリのアイコンを点滅させる" name="FSFlashOnMessage" />
+		<check_box label="オブジェクトからのIMの場合も受信した時にアプリのアイコンを点滅させる" name="FSFlashOnObjectIM" />
 		<check_box label="誰かが表示名を変更したら通知" name="FSShowDisplayNameUpdateNotification" />
 		<check_box label="誰かをブロックまたはブロック解除したら通知" name="FSReportBlockToNearbyChat" />
 		<text name="friends_logon_label">

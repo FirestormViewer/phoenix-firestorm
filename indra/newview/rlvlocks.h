@@ -367,6 +367,8 @@ public:
 	const uuid_vec_t& getAttachmentLookups()  { return m_LockedAttachmentRem; }
 	const uuid_vec_t& getWearableLookups()    { return m_LockedWearableRem; }
 protected:
+	boost::signals2::connection m_AttachmentChangeConnection;
+
 	// Map of folder locks (idRlvObj -> lockDescr)
 	folderlock_list_t	m_FolderLocks;			// List of add and remove locked folder descriptions
 	S32					m_cntLockAdd;			// Number of RLV_LOCK_ADD locked folders in m_FolderLocks
@@ -374,11 +376,11 @@ protected:
 
 	// Cached item look-up variables
 	typedef std::multimap<LLUUID, const folderlock_descr_t*> folderlock_map_t;
-	mutable bool				m_fLookupDirty;
-	mutable bool				m_fLockedRoot;
-	mutable uuid_vec_t			m_LockedAttachmentRem;
-	mutable folderlock_map_t	m_LockedFolderMap;
-	mutable uuid_vec_t			m_LockedWearableRem;
+	mutable bool             m_fLookupDirty;
+	mutable U32              m_RootLockType;
+	mutable uuid_vec_t       m_LockedAttachmentRem;
+	mutable folderlock_map_t m_LockedFolderMap;
+	mutable uuid_vec_t       m_LockedWearableRem;
 private:
 	friend class LLSingleton<RlvFolderLocks>;
 };
@@ -475,15 +477,14 @@ inline bool RlvAttachmentLocks::isLockedAttachment(const LLViewerObject* pAttach
 	RLV_ASSERT( (!pAttachObj) || (pAttachObj == pAttachObj->getRootEdit()) );
 
 	// Object is locked if:
-	//   - it's not a temporary attachment
 	//   - it's specifically marked as non-detachable (ie @detach=n)
 	//   - it's attached to an attachment point that is RLV_LOCK_REMOVE locked (ie @remattach:<attachpt>=n)
 	//   - it's part of a locked folder
 	return 
-		(pAttachObj) && (pAttachObj->isAttachment()) && (!pAttachObj->isTempAttachment()) &&
-		( (m_AttachObjRem.find(pAttachObj->getID()) != m_AttachObjRem.end()) || 
+		(pAttachObj) && (pAttachObj->isAttachment()) &&
+		( (m_AttachObjRem.find(pAttachObj->getID()) != m_AttachObjRem.end()) ||
 		  (isLockedAttachmentPoint(RlvAttachPtLookup::getAttachPointIndex(pAttachObj), RLV_LOCK_REMOVE)) ||
-		  (RlvFolderLocks::instance().isLockedAttachment(pAttachObj->getAttachmentItemID())) );
+		  ((!pAttachObj->isTempAttachment()) && (RlvFolderLocks::instance().isLockedAttachment(pAttachObj->getAttachmentItemID()))) );
 }
 
 // Checked: 2010-02-28 (RLVa-1.2.0a) | Added: RLVa-1.0.5a

@@ -2748,17 +2748,17 @@ static void teleport_region_info_cb(const std::string& slurl, LLSD args, const L
 
 	if (!can_user_access_dst_region)
 	{
-		params.name = "TeleportOffered_MaturityBlocked";
+		params.name = "TeleportOffered_MaturityBlocked_SLUrl";
 		send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 		send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
 	}
 	else if (does_user_require_maturity_increase)
 	{
-		params.name = "TeleportOffered_MaturityExceeded";
+		params.name = "TeleportOffered_MaturityExceeded_SLUrl";
 	}
 	else
 	{
-		params.name = "TeleportOffered";
+		params.name = "TeleportOffered_SLUrl";
 		params.functor.name = "TeleportOffered";
 	}
 
@@ -2925,11 +2925,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// do nothing -- don't distract newbies in
 			// Prelude with global IMs
 		}
-// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0)
-		else if ( (rlv_handler_t::isEnabled()) && (offline == IM_ONLINE) && ("@version" == message) && 
-		          (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
+// [RLVa:KB] - Checked: RLVa-2.0.3
+		else if ( (RlvActions::isRlvEnabled()) && (RlvSettings::getEnableIMQuery()) && (offline == IM_ONLINE) && ("@version" == message) && (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
 		{
-			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
+			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(LLUUID::null), session_id);
 		}
 // [/RLVa:KB]
 //		else if (offline == IM_ONLINE 
@@ -3936,7 +3935,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				payload["region_maturity"] = region_access;
 
 				// <FS:Ansariel> FIRE-6786: Always show teleport location in teleport offer
-				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept))
+				if (dialog == IM_LURE_USER && (!rlv_handler_t::isEnabled() || !fRlvAutoAccept) && LLGridManager::instance().isInSecondLife())
 				{
 					LLVector3d pos_global = from_region_handle(region_handle);
 					pos_global += LLVector3d(pos);
@@ -4210,7 +4209,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	// <FS:CR> Make osx dashboard icon bounce when window isn't in focus
 	//if (viewer_window && viewer_window->getMinimized())
 	static LLCachedControl<bool> sFlashIcon(gSavedSettings, "FSFlashOnMessage");
-	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon)
+	static LLCachedControl<bool> sFSFlashOnObjectIM(gSavedSettings, "FSFlashOnObjectIM");
+	if (viewer_window && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP && sFlashIcon && (sFSFlashOnObjectIM || (chat.mChatType != CHAT_TYPE_IM)))
 	{
 		viewer_window->flashIcon(5.f);
 	}
@@ -4733,7 +4733,8 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
-				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) )
+				if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) &&
+					 ((!chatter) || (!chatter->isAttachment()) || (!chatter->isTempAttachment()) || (RlvSettings::getEnableTemporaryAttachments())) )
 				{
 					mesg.erase(0, 1);
 					LLStringUtil::toLower(mesg);
@@ -5966,11 +5967,11 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			if (objectp)
 			{
 // [SL:KB] - Patch: Appearance-TeleportAttachKill | Checked: Catznip-4.0
-				if ( (objectp->isAttachment()) && (gAgentAvatarp) && (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE) && (objectp->permYouOwner()) )
-				{
-					gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
-					continue;
-				}
+//				if ( (objectp->isAttachment()) && (gAgentAvatarp) && (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE) && (objectp->permYouOwner()) )
+//				{
+//					gAgentAvatarp->addPendingDetach(objectp->getRootEdit()->getID());
+//					continue;
+//				}
 // [/SL:KB]
 
 				// Display green bubble on kill
@@ -6370,8 +6371,6 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		{
 			// <FS:Ansariel> Cut down logspam
 			//LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
-			LL_WARNS_ONCE() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
-			// </FS:Ansariel>
 		}
 	}
 

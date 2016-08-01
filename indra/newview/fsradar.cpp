@@ -55,8 +55,9 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
-#include "rlvhandler.h"
 #include "llviewerregion.h"
+#include "rlvactions.h"
+#include "rlvhandler.h"
 
 using namespace boost;
 
@@ -228,14 +229,16 @@ void FSRadar::updateRadarList()
 	//STEP 1: Update our basic data model: detect Avatars & Positions in our defined range
 	std::vector<LLVector3d> positions;
 	uuid_vec_t avatar_ids;
-	std::map<LLUUID, LLUUID> region_assignments;
-	if (sLimitRange)
+	if (RlvActions::canShowNearbyAgents())
 	{
-		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange, &region_assignments);
-	}
-	else
-	{
-		world->getAvatars(&avatar_ids, &positions, LLVector3d(), FLT_MAX, &region_assignments);
+		if (sLimitRange)
+		{
+			world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), sNearMeRange);
+		}
+		else
+		{
+			world->getAvatars(&avatar_ids, &positions);
+		}
 	}
 
 	// Determine lists of new added and removed avatars
@@ -298,13 +301,7 @@ void FSRadar::updateRadarList()
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
-		LLViewerRegion* reg = world->getRegionFromID(region_assignments[avId]);
-		if (!reg)
-		{
-			// Fallback in case we somehow didn't get the region via ID
-			LL_DEBUGS() << "Couldn't retrieve region by ID - falling back to region from global position" << LL_ENDL;
-			reg = world->getRegionFromPosGlobal(avPos);
-		}
+		LLViewerRegion* reg = world->getRegionFromPosGlobal(avPos);
 		if (!ent) // don't update this radar listing if data is inaccessible
 		{
 			continue;
@@ -680,33 +677,35 @@ void FSRadar::updateRadarList()
 	//3b: process alerts for avatars that where here last frame, but gone this frame (ie, they left)
 	//    as well as dispatch all earlier detected alerts for crossing range thresholds.
 	//
-	
-	radarfields_map_t::iterator rf_it_end = mLastRadarSweep.end();
-	for (radarfields_map_t::iterator i = mLastRadarSweep.begin(); i != rf_it_end; ++i)
+	if (RlvActions::canShowNearbyAgents())
 	{
-		LLUUID prevId = i->first;
-		RadarFields rf = i->second;
-		if ((sFSRadarShowMutedAndDerendered || !rf.lastIgnore) && mEntryList.find(prevId) == mEntryList.end())
+		radarfields_map_t::iterator rf_it_end = mLastRadarSweep.end();
+		for (radarfields_map_t::iterator i = mLastRadarSweep.begin(); i != rf_it_end; ++i)
 		{
-			if (sRadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
+			LLUUID prevId = i->first;
+			RadarFields rf = i->second;
+			if ((sFSRadarShowMutedAndDerendered || !rf.lastIgnore) && mEntryList.find(prevId) == mEntryList.end())
 			{
-				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_chat_leaving));
-			}
-			if (sRadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
-			{
-				make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
-			}
-			if (sRadarReportSimRangeLeave && (rf.lastRegion == regionSelf || rf.lastRegion.isNull()))
-			{
-				make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
-			}
-				
-			if (sRadarLeaveChannelAlert)
-			{
-				mRadarLeaveAlerts.push_back(prevId);
+				if (sRadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
+				{
+					make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_chat_leaving));
+				}
+				if (sRadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
+				{
+					make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
+				}
+				if (sRadarReportSimRangeLeave && (rf.lastRegion == regionSelf || rf.lastRegion.isNull()))
+				{
+					make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
+				}
+
+				if (sRadarLeaveChannelAlert)
+				{
+					mRadarLeaveAlerts.push_back(prevId);
+				}
 			}
 		}
 	}
@@ -789,7 +788,15 @@ void FSRadar::updateRadarList()
 		RadarFields rf;
 		rf.lastDistance = ent->mRange;
 		rf.lastIgnore = ent->mIgnore;
-		rf.lastRegion = ent->getRegion();
+		rf.lastRegion = LLUUID::null;
+		if (ent->mGlobalPos != LLVector3d(0.0, 0.0, 0.0))
+		{
+			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
+			if (lastRegion)
+			{
+				rf.lastRegion = lastRegion->getRegionID();
+			}
+		}
 		
 		mLastRadarSweep[ent->mID] = rf;
 	}
@@ -797,10 +804,18 @@ void FSRadar::updateRadarList()
 	//
 	//STEP 5: Final data updates and notification of subscribers
 	//
-
-	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size() - 1);
-	mAvatarStats["region"] = llformat("%d", inSameRegion);
-	mAvatarStats["chatrange"] = llformat("%d", inChatRange);
+	if (RlvActions::canShowNearbyAgents())
+	{
+		mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size() - 1);
+		mAvatarStats["region"] = llformat("%d", inSameRegion);
+		mAvatarStats["chatrange"] = llformat("%d", inChatRange);
+	}
+	else
+	{
+		mAvatarStats["total"] = "-";
+		mAvatarStats["region"] = "-";
+		mAvatarStats["chatrange"] = "-";
+	}
 
 	checkTracking();
 

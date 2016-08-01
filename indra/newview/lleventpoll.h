@@ -27,12 +27,6 @@
 #ifndef LL_LLEVENTPOLL_H
 #define LL_LLEVENTPOLL_H
 
-#include "boost/move/unique_ptr.hpp"
-
-namespace boost
-{
-    using ::boost::movelib::unique_ptr; // move unique_ptr into the boost namespace.
-}
 
 class LLHost;
 
@@ -57,10 +51,7 @@ public:
 
 
 private:
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>    mImpl;
-    boost::shared_ptr<LLEventPolling::Details::LLEventPollImpl>    mImpl;
-    // </FS:ND>
+    boost::shared_ptr<LLEventPolling::Details::LLEventPollImpl>  mImpl;
 };
 
 

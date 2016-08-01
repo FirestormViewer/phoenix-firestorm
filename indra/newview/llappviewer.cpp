@@ -1161,6 +1161,7 @@ bool LLAppViewer::init()
 		// Early out from user choice.
 		return false;
 	}
+
 	LL_INFOS("InitInfo") << "Hardware test initialization done." << LL_ENDL ;
 
 	// Prepare for out-of-memory situations, during which we will crash on

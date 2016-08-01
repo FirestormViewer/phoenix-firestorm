@@ -8,7 +8,7 @@
 		</menu_item_call>
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Il mio profilo" name="Profile"/>
-		<menu_item_call label="Il mio aspetto" name="ChangeOutfit"/>
+		<menu_item_check label="Il mio aspetto" name="ChangeOutfit"/>
 		<menu_item_call label="Scegli un avatar" name="Avatar Picker"/>
 		<menu_item_call label="Esperienze" name="Experiences"/>
 		<menu_item_call label="Foto istantanea" name="Take Snapshot"/>

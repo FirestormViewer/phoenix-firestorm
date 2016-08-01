@@ -1611,7 +1611,11 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 			{
 				LLUUID object_id = (*item_it)->getUUID();
 				LLViewerObject* objectp = gObjectList.findObject(object_id);
-				if (objectp)
+//				if (objectp)
+// [RLVa:KB] - Checked: RLVa-2.0.0 | FS-specific
+				// Don't allow derendering of own attachments when RLVa is enabled
+				if ( (objectp) && (gAgentID != objectp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objectp->isAttachment()) || (!objectp->permYouOwner())) )
+// [/RLVa:KB]
 				{
 					std::string region_name;
 					LLViewerRegion* region = objectp->getRegion();

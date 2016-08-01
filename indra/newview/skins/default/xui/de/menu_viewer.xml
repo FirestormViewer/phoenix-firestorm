@@ -11,7 +11,7 @@
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Erlebnisse" name="Experiences"/>
 		<menu_item_call label="Profil" name="Profile"/>
-		<menu_item_call label="Aussehen" name="ChangeOutfit"/>
+		<menu_item_check label="Aussehen" name="ChangeOutfit"/>
 		<menu_item_call label="Avatar auswählen" name="Avatar Picker"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
@@ -250,6 +250,7 @@
 			<menu_item_check label="Sperren..." name="Locks"/>
 		</menu>
 		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
+		<menu_item_check label="Temporäre Anhänge erlauben" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
 		<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>

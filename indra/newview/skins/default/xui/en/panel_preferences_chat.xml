@@ -1303,7 +1303,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1361,7 +1361,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1419,7 +1419,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1477,7 +1477,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1535,7 +1535,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1593,7 +1593,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1725,7 +1725,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
@@ -1908,7 +1908,7 @@
 		 label="D"
 		 layout="topleft"
 		 left_pad="1"
-		 width="15"
+		 width="17"
 		 tool_tip="Reset to the default UUID.">
 			 <button.commit_callback
 			  function="ResetControl"
