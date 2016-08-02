@@ -1687,11 +1687,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7d12fe9dff388d237615f7158315d1cb</string>
+              <string>d382fe4c4d80c4ee778166bf97e82e19</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201602081454-r54.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201608011747-r69.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1701,18 +1701,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>57bbb4defb7986aa241b10558c6abfea</string>
+              <string>6e7f0ce31e34038bb28c0e293a310697</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201603010220-r58.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201607011255-r67.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.5.3.311349</string>
+        <string>1.5.3.317959</string>
       </map>
       <key>llphysicsextensions_source</key>
       <map>

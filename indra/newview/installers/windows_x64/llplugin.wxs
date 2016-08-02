@@ -22,7 +22,7 @@
 		   <File Id="llplugin_llceflib_host_exe" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\llceflib_host.exe" />
 		   <File Id="llplugin_llceflib_host_manifest" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\llceflib_host.exe.manifest" />
 		   <File Id="llplugin_media_plugin_cef_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_cef.dll" />
-		   <File Id="llplugin_media_plugin_quicktime_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_quicktime.dll" />
+		   <!-- <File Id="llplugin_media_plugin_quicktime_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_quicktime.dll" /> -->
 		   <File Id="llplugin_msvcp120_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\msvcp120.dll" />
 		   <File Id="llplugin_msvcr120_dll" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\msvcr120.dll" />
 		   <File Id="llplugin_natives_blob_bin" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\natives_blob.bin" />

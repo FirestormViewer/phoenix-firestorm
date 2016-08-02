@@ -6,12 +6,17 @@ if (LINUX)
     add_subdirectory(cef)
 endif (LINUX)
 
-if (WINDOWS OR DARWIN)
+if (DARWIN)
     add_subdirectory(quicktime)
     add_subdirectory(cef)
-endif (WINDOWS OR DARWIN)
+endif (DARWIN)
 
 if (WINDOWS)
+    if( WORD_SIZE EQUAL 32 )
+       add_subdirectory(quicktime)
+    endif()
+
+    add_subdirectory(cef)
     add_subdirectory(winmmshim)
 endif (WINDOWS)
 
