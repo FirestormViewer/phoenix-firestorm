@@ -1146,6 +1146,46 @@
         <key>version</key>
         <string>0.10.6.294903</string>
       </map>
+      <key>gstreamer10</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/gstreamer.txt</string>
+        <key>name</key>
+        <string>gstreamer10</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>01f39ecf80dae64e30402ac384035b3e</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>437b1dfd7e20cd0b688e2c1393cdbfc3</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605192127-r9-windows-201605192127-r9.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.10.6.294903</string>
+      </map>
       <key>gtk-atk-pango-glib</key>
       <map>
         <key>copyright</key>

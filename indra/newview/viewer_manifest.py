@@ -539,6 +539,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("media_plugin_cef.dll")
             self.end_prefix()
 
+        # Media plugins - GStreamer
+        if self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
+            self.path("media_plugin_gstreamer10.dll")
+            self.end_prefix()
+
         # winmm.dll shim
         if self.prefix(src='../media_plugins/winmmshim/%s' % self.args['configuration'], dst=""):
             self.path("winmm.dll")
@@ -652,17 +657,6 @@ class Windows_i686_Manifest(ViewerManifest):
 
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
-
-        if self.fs_is_64bit_build():
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin'), dst=""):
-               self.path( "slplugin.exe" )
-               self.end_prefix()
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin'), dst="llplugin"):
-               self.path( "*.*" )
-               self.end_prefix()
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin', 'locales'), dst=os.path.join( "llplugin", "locales" ) ):
-               self.path( "*.*" )
-               self.end_prefix()
 
         self.fs_copy_windows_manifest( )
 
@@ -1333,6 +1327,9 @@ class LinuxManifest(ViewerManifest):
         if self.prefix(src="", dst="bin/llplugin"):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path( "../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+            self.end_prefix("bin/llplugin")
+        if self.prefix(src="", dst="bin/llplugin"):
+            self.path("../media_plugins/gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer10.so")
             self.end_prefix("bin/llplugin")
 
         # CEF files 

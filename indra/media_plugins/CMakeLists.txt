@@ -21,3 +21,8 @@ if (WINDOWS)
 endif (WINDOWS)
 
 ### add_subdirectory(example)
+
+if (WINDOWS OR LINUX)
+    add_subdirectory(gstreamer10)
+endif (WINDOWS OR LINUX)
+

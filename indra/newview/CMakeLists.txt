@@ -2122,6 +2122,7 @@ if (WINDOWS)
       SLPlugin
       media_plugin_quicktime
       media_plugin_cef
+      media_plugin_gstreamer10
       winmm_shim
       windows-crash-logger
       )
@@ -2178,14 +2179,10 @@ if (WINDOWS)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
 	
-    if( NOT ND_BUILD64BIT_ARCH )
     add_dependencies(${VIEWER_BINARY_NAME}
       SLPlugin
-   windows-crash-logger
+      windows-crash-logger
     )
-	else()
-       add_dependencies(${VIEWER_BINARY_NAME} windows-crash-logger )
-    endif( NOT ND_BUILD64BIT_ARCH )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
@@ -2376,6 +2373,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
+    media_plugin_gstreamer10
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)

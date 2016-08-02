@@ -6694,6 +6694,7 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
 		XML_SetUserData(parser, this);	
 		XML_Parse(parser, mInput.data() + start, delim - start, false);
 		
+			LL_INFOS("Voice") << "parsing: " << mInput.substr(start, delim - start) << LL_ENDL;
 		// If this message isn't set to be squelched, output the raw XML received.
 		if(!squelchDebugOutput)
 		{
@@ -6856,6 +6857,8 @@ void LLVivoxProtocolParser::StartTag(const char *tag, const char **attr)
 void LLVivoxProtocolParser::EndTag(const char *tag)
 {
 	const std::string& string = textBuffer;
+
+	std::cerr << tag << ": " << textBuffer << std::endl;
 	
 	responseDepth--;
 	
