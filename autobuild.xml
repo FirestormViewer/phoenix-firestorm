@@ -1203,9 +1203,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15af375116f5c943ea6f4190bc764224</string>
+              <string>8cd64b4c5d7f02c5ad87051861108749</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/gtk_3p-gtk-atk-pango-glib/rev/294804/arch/Linux/installer/gtk_atk_pango_glib-0.1-linux-294804.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.0-linux-201608031222.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
