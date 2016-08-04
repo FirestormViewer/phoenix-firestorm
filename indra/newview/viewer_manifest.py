@@ -542,6 +542,8 @@ class Windows_i686_Manifest(ViewerManifest):
         # Media plugins - LibVLC
         if self.prefix(src='../media_plugins/libvlc/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_libvlc.dll")
+            self.end_prefix()
+
         # Media plugins - GStreamer
         if self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
             self.path("media_plugin_gstreamer10.dll")
@@ -1335,7 +1337,7 @@ class LinuxManifest(ViewerManifest):
         # plugins
         if self.prefix(src="", dst="bin/llplugin"):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
-            self.path( "../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
+            self.path("../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
             self.path("../media_plugins/libvlc/libmedia_plugin_libvlc.so", "libmedia_plugin_libvlc.so")
             self.path("../media_plugins/gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer10.so")
             self.end_prefix("bin/llplugin")
