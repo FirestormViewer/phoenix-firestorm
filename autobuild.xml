@@ -1146,6 +1146,46 @@
         <key>version</key>
         <string>0.10.6.294903</string>
       </map>
+      <key>gstreamer10</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
+        <key>license</key>
+        <string>LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/gstreamer.txt</string>
+        <key>name</key>
+        <string>gstreamer10</string>
+        <key>platforms</key>
+        <map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>01f39ecf80dae64e30402ac384035b3e</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>437b1dfd7e20cd0b688e2c1393cdbfc3</string>
+              <key>url</key>
+              <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605192127-r9-windows-201605192127-r9.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>0.10.6.294903</string>
+      </map>
       <key>gtk-atk-pango-glib</key>
       <map>
         <key>copyright</key>
@@ -1163,9 +1203,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>15af375116f5c943ea6f4190bc764224</string>
+              <string>8cd64b4c5d7f02c5ad87051861108749</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/gtk_3p-gtk-atk-pango-glib/rev/294804/arch/Linux/installer/gtk_atk_pango_glib-0.1-linux-294804.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/gtk_atk_pango_glib-2.0-linux-201608031222.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1687,11 +1727,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5421b0ac9c9fbab98a2bbcdefdb09814</string>
+              <string>d382fe4c4d80c4ee778166bf97e82e19</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201607011221.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-windows-201608011747-r69.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1701,11 +1741,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6e7f0ce31e34038bb28c0e293a310697</string>
+              <string>98c702cb445a3afda0d1ee0eb23069c3</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201607011255-r67.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/llceflib-1.0-linux-201608022058-r69.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

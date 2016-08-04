@@ -178,13 +178,33 @@ std::string LLMIMETypes::widgetType(const std::string& mime_type)
 	}
 }
 
+// <FS:ND> Get the selected media impl, hardcoded for now. Can be quicktime/gstreamer/(vlc in the future) depending on OS and bitness
+std::string getStreamingPlugin()
+{
+#if defined( LL_LINUX ) || defined( LL_WINDOWS )
+    return "media_plugin_gstreamer10";
+#else
+    llassert_always( false );
+#endif
+}
+// </FS:ND>
+
 // static
 std::string LLMIMETypes::implType(const std::string& mime_type)
 {
 	mime_info_map_t::const_iterator it = sMap.find(mime_type);
 	if (it != sMap.end())
 	{
-		return it->second.mImpl;
+        // <FS:ND> Get the selected media impl, hardcoded for now. Can be quicktime/gstreamer/(vlc in the future) depending on OS and bitness
+
+        // return it->second.mImpl;
+        std::string impl = it->second.mImpl;
+
+        if( impl == "media_plugin_streaming" )
+            return getStreamingPlugin();
+        
+        return impl;
+        // </FS:ND>
 	}
 	else
 	{

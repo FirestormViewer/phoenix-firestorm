@@ -130,21 +130,10 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_cef
+			media_plugin_streaming
 		</impl>
 	</scheme>
-  <scheme name="libvlc">
-    <label name="libvlc_label">
-      LibVLC supported media
-    </label>
-    <widgettype>
-      movie
-    </widgettype>
-    <impl>
-      media_plugin_libvlc
-    </impl>
-  </scheme>
-  <mimetype name="blank">
+	<mimetype name="blank">
 		<label name="blank_label">
 			- None -
 		</label>
@@ -174,7 +163,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="video/*">
@@ -185,7 +174,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="image/*">
@@ -207,7 +196,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="application/javascript">
@@ -229,7 +218,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_cef
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="application/pdf">
@@ -306,7 +295,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_cef
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="audio/mpeg">
@@ -317,7 +306,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="audio/x-aiff">
@@ -328,7 +317,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="audio/x-wav">
@@ -339,7 +328,7 @@
 			audio
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype menu="1" name="image/bmp">
@@ -449,7 +438,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="video/mp4">
@@ -460,7 +449,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
   <mimetype name="application/octet-stream">
@@ -471,7 +460,7 @@
       movie
     </widgettype>
     <impl>
-      media_plugin_libvlc
+      media_plugin_streaming
     </impl>
   </mimetype>
   <mimetype menu="1" name="video/quicktime">
@@ -482,7 +471,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="video/x-ms-asf">
@@ -493,7 +482,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_libvlc
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype name="video/x-ms-wmv">
@@ -504,7 +493,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_cef
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 	<mimetype menu="1" name="video/x-msvideo">
@@ -515,7 +504,7 @@
 			movie
 		</widgettype>
 		<impl>
-			media_plugin_cef
+			media_plugin_streaming
 		</impl>
 	</mimetype>
 </mimetypes>
