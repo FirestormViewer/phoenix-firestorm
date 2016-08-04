@@ -37,6 +37,9 @@
 #include "vlc/vlc.h"
 #include "vlc/libvlc_version.h"
 
+namespace ll_vlc { // <FS:ND/> Put everything into it's own namespace to hide the gstreamer functions in the global namespace with out own overloads
+#include "vlc_syms.cpp"
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 class MediaPluginLibVLC :
@@ -112,6 +115,8 @@ MediaPluginBase(host_send_func, host_user_data)
 	mURL = std::string();
 
 	setStatus(STATUS_NONE);
+
+	resolveVLCSymbols( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -602,6 +607,9 @@ bool MediaPluginLibVLC::init()
 
 	return true;
 };
+
+}
+using namespace ll_vlc; // </FS:ND> End of namespace, add using so we do not have to prefix MediaPluginLibVLC below
 
 ////////////////////////////////////////////////////////////////////////////////
 //
