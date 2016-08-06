@@ -47,7 +47,7 @@
 #endif
 #include "llstartup.h"
 
-#include "llcorehttputil.h"
+#include "fscorehttputil.h"
 
 void downloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {

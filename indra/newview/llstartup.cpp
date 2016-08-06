@@ -217,6 +217,7 @@
 
 #include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
+#include "fscorehttputil.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
