@@ -3206,7 +3206,10 @@ void LLFloaterPreference::onClickBlockList()
 	// </FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
+	BOOL saved_setting = gSavedSettings.getBOOL("FSDisableBlockListAutoOpen");
+	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", FALSE);
 	LLPanelBlockedList::showPanelAndSelect();
+	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", saved_setting);
 	// </FS:Ansariel>
 }
 
