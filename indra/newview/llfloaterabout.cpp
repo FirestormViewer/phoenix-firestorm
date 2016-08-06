@@ -110,6 +110,9 @@ public:
 	
     static void startFetchServerReleaseNotes();
     static void handleServerReleaseNotes(LLSD results);
+
+	// <FS:Ansariel> FIRE-19760: In Help/About Firestorm server release notes not getting fetched
+	static void fetchServerReleaseNotesCoro(const std::string& cap_url);
 };
 
 
@@ -227,9 +230,11 @@ void LLFloaterAbout::startFetchServerReleaseNotes()
     // an URL suitable for external browsers in the "Location:" HTTP header.
     std::string cap_url = region->getCapability("ServerReleaseNotes");
 
-    LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet(cap_url,
-        &LLFloaterAbout::handleServerReleaseNotes, &LLFloaterAbout::handleServerReleaseNotes);
-
+	// <FS:Ansariel> FIRE-19760: In Help/About Firestorm server release notes not getting fetched
+    //LLCoreHttpUtil::HttpCoroutineAdapter::callbackHttpGet(cap_url,
+    //    &LLFloaterAbout::handleServerReleaseNotes, &LLFloaterAbout::handleServerReleaseNotes);
+	LLCoros::instance().launch("fetchServerReleaseNotesCoro", boost::bind(&LLFloaterAbout::fetchServerReleaseNotesCoro, cap_url));
+	// </FS:Ansariel>
 }
 
 /*static*/
@@ -256,7 +261,44 @@ void LLFloaterAbout::handleServerReleaseNotes(LLSD results)
         }
         LLAppViewer::instance()->setServerReleaseNotesURL(location);
 //    }
+
+	// <FS:Ansariel> FIRE-19760: In Help/About Firestorm server release notes not getting fetched
+	LLFloaterAbout* floater_about = LLFloaterReg::findTypedInstance<LLFloaterAbout>("sl_about");
+	if (floater_about)
+	{
+		floater_about->setSupportText(location);
+	}
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> FIRE-19760: In Help/About Firestorm server release notes not getting fetched
+/*static*/
+void LLFloaterAbout::fetchServerReleaseNotesCoro(const std::string& cap_url)
+{
+	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
+		httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("fetchServerReleaseNotesCoro", LLCore::HttpRequest::DEFAULT_POLICY_ID));
+	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+	LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+
+	httpOpts->setWantHeaders(true);
+	httpOpts->setFollowRedirects(false);
+
+	LLSD result = httpAdapter->getAndSuspend(httpRequest, cap_url, httpOpts);
+
+	LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+
+	if (!status)
+	{
+		handleServerReleaseNotes(httpResults);
+	}
+	else
+	{
+		handleServerReleaseNotes(result);
+	}
+	// </FS:Ansariel>
+}
+
 
 class LLFloaterAboutListener: public LLEventAPI
 {
