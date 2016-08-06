@@ -3371,14 +3371,14 @@ Avatar &apos;[NAME]&apos; è entrato nella modalità aspetto.
 Avatar &apos;[NAME]&apos; ha lasciato la modalità aspetto.
 	</notification>
 	<notification name="NoConnect">
-		Ci sono problemi di connessione tramite [PROTOCOL] [HOSTID].
+		Ci sono problemi di connessione tramite [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Ti consigliamo di controllare le tue impostazioni di rete e della firewall.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		A causa di problemi di connessione al server vocale
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 le comunicazioni tramite voce non saranno disponibili.
 Ti consigliamo di controllare le tue impostazioni di rete e della firewall.

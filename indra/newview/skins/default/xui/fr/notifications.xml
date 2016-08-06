@@ -2767,12 +2767,12 @@ Avatar '[NAME]' entered appearance mode.
 Avatar '[NAME]' left appearance mode.
 	</notification>
 	<notification name="NoConnect">
-We're having trouble connecting using [PROTOCOL] [HOSTID].
+We're having trouble connecting using [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Please check your network and firewall setup.
 	</notification>
 	<notification name="NoVoiceConnect">
 We're having trouble connecting to your voice server:
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 Voice communications will not be available.
 Please check your network and firewall setup.
 		<usetemplate ignoretext="Warn me when the viewer can't connect to the voice server" name="okignore" yestext="OK"/>

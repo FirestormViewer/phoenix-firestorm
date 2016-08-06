@@ -9224,7 +9224,7 @@ Avatar '[NAME]' left appearance mode.
    icon="alertmodal.tga"
    name="NoConnect"
    type="alertmodal">
-We're having trouble connecting using [PROTOCOL] [HOSTID].
+We're having trouble connecting using [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Please check your network and firewall setup.
   <tag>fail</tag>
     <usetemplate
@@ -9238,7 +9238,7 @@ Please check your network and firewall setup.
    type="alertmodal">
 We're having trouble connecting to your voice server:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Voice communications will not be available.
 Please check your network and firewall setup.

@@ -3355,14 +3355,14 @@ Avatar &apos;[NAME]&apos; entrou no modo aparência.
 Avatar &apos;[NAME]&apos; sair do modo aparecer.
 	</notification>
 	<notification name="NoConnect">
-		Detectamos um problema de conexão com [PROTOCOL] [HOSTID].
+		Detectamos um problema de conexão com [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Verifique a configuração da sua rede e firewall.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Estamos tendo problemas de conexão com o seu servidor de voz:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Talvez não seja possível se comunicar via voz.
 Verifique a configuração da sua rede e firewall.
