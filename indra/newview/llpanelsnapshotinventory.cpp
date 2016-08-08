@@ -174,6 +174,15 @@ void LLPanelSnapshotInventory::onResolutionCommit(LLUICtrl* ctrl)
 	getChild<LLSpinCtrl>(getHeightSpinnerName())->setVisible(!current_window_selected);
 }
 
+// <FS:Ansariel> Store settings at logout
+LLPanelSnapshotInventory::~LLPanelSnapshotInventory()
+{
+	gSavedSettings.setS32("LastSnapshotToInventoryResolution", getImageSizeComboBox()->getCurrentIndex());
+	gSavedSettings.setS32("LastSnapshotToInventoryWidth", getTypedPreviewWidth());
+	gSavedSettings.setS32("LastSnapshotToInventoryHeight", getTypedPreviewHeight());
+}
+// </FS:Ansariel>
+
 void LLPanelSnapshotInventoryBase::onSend()
 {
     if (mSnapshotFloater)
@@ -216,12 +225,3 @@ void LLPanelOutfitSnapshotInventory::cancel()
         mSnapshotFloater->closeFloater();
     }
 }
-
-// <FS:Ansariel> Store settings at logout
-LLPanelSnapshotInventory::~LLPanelSnapshotInventory()
-{
-	gSavedSettings.setS32("LastSnapshotToInventoryResolution", getImageSizeComboBox()->getCurrentIndex());
-	gSavedSettings.setS32("LastSnapshotToInventoryWidth", getTypedPreviewWidth());
-	gSavedSettings.setS32("LastSnapshotToInventoryHeight", getTypedPreviewHeight());
-}
-// </FS:Ansariel>
