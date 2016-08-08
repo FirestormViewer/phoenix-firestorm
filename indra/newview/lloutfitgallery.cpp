@@ -147,7 +147,10 @@ void LLOutfitGallery::updateRowsIfNeeded()
     {
         reArrangeRows(1);
     }
-    else if((mRowPanelWidth > (getRect().getWidth() + mItemHorizontalGap)) && mItemsInRow > 3)
+    // <FS:Ansariel> Fix scroll bars if appearance floater at minimum width
+    //else if((mRowPanelWidth > (getRect().getWidth() + mItemHorizontalGap)) && mItemsInRow > 2)
+    else if((mRowPanelWidth > (getRect().getWidth() + mItemHorizontalGap)) && mItemsInRow > 2)
+    // </FS:Ansariel>
     {
         reArrangeRows(-1);
     }
