@@ -396,6 +396,7 @@ LLSidepanelAppearance* LLPanelOutfitsInventory::getAppearanceSP()
 // <FS:Ansariel> Show avatar complexity in appearance floater
 void LLPanelOutfitsInventory::updateAvatarComplexity(U32 complexity)
 {
+	mOutfitGalleryPanel->updateAvatarComplexity(complexity);
 	mMyOutfitsPanel->updateAvatarComplexity(complexity);
 	mCurrentOutfitPanel->updateAvatarComplexity(complexity);
 }
