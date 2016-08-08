@@ -33,6 +33,7 @@
 
 #include "llfloatersnapshot.h" // FIXME: replace with a snapshot storage model
 #include "llpanelsnapshot.h"
+#include "llsnapshotlivepreview.h"
 #include "llviewercontrol.h" // gSavedSettings
 
 // <FS:CR> FIRE-10537 - Temp texture uploads aren't functional on SSB regions
@@ -44,8 +45,22 @@
 /**
  * The panel provides UI for saving snapshot as an inventory texture.
  */
+class LLPanelSnapshotInventoryBase
+    : public LLPanelSnapshot
+{
+    LOG_CLASS(LLPanelSnapshotInventoryBase);
+
+public:
+    LLPanelSnapshotInventoryBase();
+
+	/*virtual*/ BOOL postBuild();
+protected:
+    void onSend();
+    /*virtual*/ LLSnapshotModel::ESnapshotType getSnapshotType();
+};
+
 class LLPanelSnapshotInventory
-:	public LLPanelSnapshot
+    : public LLPanelSnapshotInventoryBase
 {
 	LOG_CLASS(LLPanelSnapshotInventory);
 
@@ -65,10 +80,46 @@ private:
 	/*virtual*/ std::string getImageSizePanelName() const	{ return LLStringUtil::null; }
 	/*virtual*/ void updateControls(const LLSD& info);
 
-	void onSend();
 };
 
-static LLPanelInjector<LLPanelSnapshotInventory> panel_class("llpanelsnapshotinventory");
+class LLPanelOutfitSnapshotInventory
+    : public LLPanelSnapshotInventoryBase
+{
+    LOG_CLASS(LLPanelOutfitSnapshotInventory);
+
+public:
+    LLPanelOutfitSnapshotInventory();
+    	/*virtual*/ BOOL postBuild();
+    	/*virtual*/ void onOpen(const LLSD& key);
+        
+private:
+    /*virtual*/ std::string getWidthSpinnerName() const		{ return ""; }
+    /*virtual*/ std::string getHeightSpinnerName() const	{ return ""; }
+    /*virtual*/ std::string getAspectRatioCBName() const	{ return ""; }
+    /*virtual*/ std::string getImageSizeComboName() const	{ return "texture_size_combo"; }
+    /*virtual*/ std::string getImageSizePanelName() const	{ return LLStringUtil::null; }
+    /*virtual*/ void updateControls(const LLSD& info);
+
+    /*virtual*/ void cancel();
+};
+
+static LLPanelInjector<LLPanelSnapshotInventory> panel_class1("llpanelsnapshotinventory");
+
+static LLPanelInjector<LLPanelOutfitSnapshotInventory> panel_class2("llpaneloutfitsnapshotinventory");
+
+LLPanelSnapshotInventoryBase::LLPanelSnapshotInventoryBase()
+{
+}
+
+BOOL LLPanelSnapshotInventoryBase::postBuild()
+{
+    return LLPanelSnapshot::postBuild();
+}
+
+LLSnapshotModel::ESnapshotType LLPanelSnapshotInventoryBase::getSnapshotType()
+{
+    return LLSnapshotModel::SNAPSHOT_TEXTURE;
+}
 
 LLPanelSnapshotInventory::LLPanelSnapshotInventory()
 {
@@ -91,7 +142,7 @@ BOOL LLPanelSnapshotInventory::postBuild()
 	getHeightSpinner()->setValue(gSavedSettings.getS32("LastSnapshotToInventoryHeight"));
 	// </FS:Ansariel>
 
-	return LLPanelSnapshot::postBuild();
+	return LLPanelSnapshotInventoryBase::postBuild();
 }
 
 // virtual
@@ -123,10 +174,47 @@ void LLPanelSnapshotInventory::onResolutionCommit(LLUICtrl* ctrl)
 	getChild<LLSpinCtrl>(getHeightSpinnerName())->setVisible(!current_window_selected);
 }
 
-void LLPanelSnapshotInventory::onSend()
+void LLPanelSnapshotInventoryBase::onSend()
 {
-	LLFloaterSnapshot::saveTexture();
-	LLFloaterSnapshot::postSave();
+    if (mSnapshotFloater)
+    {
+        mSnapshotFloater->saveTexture();
+        mSnapshotFloater->postSave();
+    }
+}
+
+LLPanelOutfitSnapshotInventory::LLPanelOutfitSnapshotInventory()
+{
+    mCommitCallbackRegistrar.add("Inventory.SaveOutfitPhoto", boost::bind(&LLPanelOutfitSnapshotInventory::onSend, this));
+    mCommitCallbackRegistrar.add("Inventory.SaveOutfitCancel", boost::bind(&LLPanelOutfitSnapshotInventory::cancel, this));
+}
+
+// virtual
+BOOL LLPanelOutfitSnapshotInventory::postBuild()
+{
+    return LLPanelSnapshotInventoryBase::postBuild();
+}
+
+// virtual
+void LLPanelOutfitSnapshotInventory::onOpen(const LLSD& key)
+{
+    getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+    LLPanelSnapshot::onOpen(key);
+}
+
+// virtual
+void LLPanelOutfitSnapshotInventory::updateControls(const LLSD& info)
+{
+    const bool have_snapshot = info.has("have-snapshot") ? info["have-snapshot"].asBoolean() : true;
+    getChild<LLUICtrl>("save_btn")->setEnabled(have_snapshot);
+}
+
+void LLPanelOutfitSnapshotInventory::cancel()
+{
+    if (mSnapshotFloater)
+    {
+        mSnapshotFloater->closeFloater();
+    }
 }
 
 // <FS:Ansariel> Store settings at logout
