@@ -39,7 +39,7 @@
 	<string name="local_failed_str">
 		Не удалось сохранить на компьютере.
 	</string>
-	<panel name="controls_container">
+	<view name="controls_container">
 	<button label="Обновить" name="new_snapshot_btn"/>
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
@@ -60,7 +60,7 @@
             <combo_box.item label="Без фильтра" name="NoFilter"/>
         </combo_box>
 	</panel>
-	</panel>
+	</view>
 	<text name="image_res_text">
 		[WIDTH] (ширина) x [HEIGHT] (высота) пикс.
 	</text>

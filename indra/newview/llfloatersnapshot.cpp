@@ -207,7 +207,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(advanced);
 	if(!floaterp->isMinimized())
 	{
-		LLPanel* controls_container = floaterp->getChild<LLPanel>("controls_container");
+		LLView* controls_container = floaterp->getChild<LLView>("controls_container");
 		if (advanced)
 		{
 			LLRect cc_rect = controls_container->getRect();

@@ -40,7 +40,7 @@
 		無法儲入電腦。
 	</string>
 	<button label="刷新" name="new_snapshot_btn"/>
-	<panel name="controls_container">
+	<view name="controls_container">
 	<panel name="advanced_options_panel">
 		<text name="layer_type_label">
 			擷取快照：
@@ -60,7 +60,7 @@
 			<combo_box.item label="不用濾鏡" name="NoFilter"/>
 		</combo_box>
 	</panel>
-	</panel>
+	</view>
 	<text name="image_res_text">
 		[WIDTH] 像素（寬） x [HEIGHT] 像素（高）
 	</text>
