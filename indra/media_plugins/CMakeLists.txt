@@ -13,6 +13,10 @@ if (DARWIN)
 endif (DARWIN)
 
 if (WINDOWS)
+    if( WORD_SIZE EQUAL 32 )
+       add_subdirectory(quicktime)
+    endif()
+
     add_subdirectory(cef)
     add_subdirectory(winmmshim)
     add_subdirectory(libvlc)

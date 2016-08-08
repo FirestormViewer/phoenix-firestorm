@@ -655,11 +655,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("zh-TW.pak")
             self.end_prefix()
 
-            # if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
-            #     self.path("libvlc.dll")
-            #     self.path("libvlccore.dll")
-            #     self.path("plugins/")
-            #     self.end_prefix()
+            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin', 'release'), dst="llplugin"):
+                self.path("libvlc.dll")
+                self.path("libvlccore.dll")
+                self.path("plugins/")
+                self.end_prefix()
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -1342,14 +1342,14 @@ class LinuxManifest(ViewerManifest):
             self.path("../media_plugins/gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer10.so")
             self.end_prefix("bin/llplugin")
 
-        # if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
-        #     self.path( "plugins.dat" )
-        #     self.path( "*/*.so" )
-        #     self.end_prefix()
-        # 
-        # if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
-        #     self.path( "libvlc*.so*" )
-        #     self.end_prefix()
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'vlc', 'plugins'), dst="bin/llplugin/vlc/plugins"):
+            self.path( "plugins.dat" )
+            self.path( "*/*.so" )
+            self.end_prefix()
+
+        if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib' ), dst="lib"):
+            self.path( "libvlc*.so*" )
+            self.end_prefix()
 
         # CEF files 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
