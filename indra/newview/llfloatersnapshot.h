@@ -70,9 +70,6 @@ protected:
 	LLUICtrl* mThumbnailPlaceholder;
 	LLUICtrl *mRefreshBtn, *mRefreshLabel;
 	LLUICtrl *mSucceessLblPanel, *mFailureLblPanel;
-
-	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
-	bool mIsOpen;
 };
 
 class LLFloaterSnapshotBase::ImplBase
@@ -146,6 +143,7 @@ public:
     
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onClose(bool app_quitting); 	// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
 	/*virtual*/ S32 notify(const LLSD& info);
 	
 	static void update();
@@ -160,6 +158,10 @@ public:
 
 	class Impl;
 	friend class Impl;
+
+	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+private:
+	bool mIsOpen;
 };
 
 ///----------------------------------------------------------------------------

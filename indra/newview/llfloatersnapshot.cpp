@@ -1056,8 +1056,7 @@ LLFloaterSnapshotBase::LLFloaterSnapshotBase(const LLSD& key)
 	  mRefreshBtn(NULL),
 	  mRefreshLabel(NULL),
 	  mSucceessLblPanel(NULL),
-	  mFailureLblPanel(NULL),
-	  mIsOpen(false) // <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+	  mFailureLblPanel(NULL)
 {
 }
 
@@ -1083,6 +1082,7 @@ LLFloaterSnapshotBase::~LLFloaterSnapshotBase()
 // Default constructor
 LLFloaterSnapshot::LLFloaterSnapshot(const LLSD& key)
     : LLFloaterSnapshotBase(key)
+	, mIsOpen(false) // <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
 {
 	impl = new Impl(this);
 }
@@ -1285,6 +1285,20 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 // </FS:CR>
 }
 
+// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
+//virtual
+void LLFloaterSnapshot::onClose(bool app_quitting)
+{
+	LLFloaterSnapshotBase::onClose(app_quitting);
+
+	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
+	mIsOpen = false;
+
+	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
+	gSavedSettings.setString("FSLastSnapshotPanel", panel_container->getCurrentPanel()->getName());
+}
+// </FS:Ansariel>
+
 //virtual
 void LLFloaterSnapshotBase::onClose(bool app_quitting)
 {
@@ -1305,13 +1319,6 @@ void LLFloaterSnapshotBase::onClose(bool app_quitting)
 	{
 		LLToolMgr::getInstance()->setCurrentToolset(impl->mLastToolset);
 	}
-
-	// <FS:Ansariel> FIRE-16145: CTRL-SHIFT-S doesn't update the snapshot anymore
-	mIsOpen = false;
-
-	// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
-	LLSideTrayPanelContainer* panel_container = getChild<LLSideTrayPanelContainer>("panel_container");
-	gSavedSettings.setString("FSLastSnapshotPanel", panel_container->getCurrentPanel()->getName());
 }
 
 // virtual
