@@ -1244,10 +1244,10 @@
     value="0 .2 0 1" />
   <color
     name="OutfitGalleryItemSelected"
-    value="0.22 0.45 0.35 1" />
+    reference="EmphasisColor" />
   <color
     name="OutfitGalleryItemWorn"
-    value="0.33 0.58 0.47 1" />
+    reference="EmphasisColor" />
   <color
     name="OutfitGalleryItemUnselected"
     value="0.4 0.4 0.4 1" />
