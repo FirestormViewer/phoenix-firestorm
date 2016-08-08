@@ -240,6 +240,9 @@ BOOL LLFloaterOutfitSnapshot::postBuild()
     childSetCommitCallback("hud_check", ImplBase::onClickHUDCheck, this);
     getChild<LLUICtrl>("hud_check")->setValue(gSavedSettings.getBOOL("RenderHUDInSnapshot"));
 
+	// <FS:Ansariel> FIRE-15853: HUDs, interface or L$ balance checkbox don't update actual screenshot image
+	childSetCommitCallback("currency_check", ImplBase::onClickCurrencyCheck, this);
+
     getChild<LLUICtrl>("freeze_frame_check")->setValue(gSavedSettings.getBOOL("UseFreezeFrame"));
     childSetCommitCallback("freeze_frame_check", ImplBase::onCommitFreezeFrame, this);
 

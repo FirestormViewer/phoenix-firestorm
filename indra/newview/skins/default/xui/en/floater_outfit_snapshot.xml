@@ -12,7 +12,7 @@
  help_topic="snapshot"
  save_rect="true"
  save_visibility="false"
- title="OUTFIT SNAPSHOT"
+ title="Outfit Snapshot"
  width="624"
  min_height="455">
   <floater.string
@@ -31,6 +31,15 @@
  	 name="inventory_failed_str">
     Failed to save to inventory.
   </string>
+	<view
+	 name="controls_container"
+	 layout="topleft"
+	 follows="left|top"
+	 left="0"
+	 top="25"
+	 bottom="-1"
+	 width="213"
+	 >
   <button
      follows="left|top"
      height="25"
@@ -44,9 +53,9 @@
 	 halign="left"
      layout="topleft"
      left="10"
-	 label="REFRESH"
+	 label="Refresh"
      name="new_snapshot_btn"
-     top_pad="26"
+     top_pad="0"
      width="167" />
 	<button
        follows="left|top"
@@ -84,7 +93,7 @@
 	 follows="top|left"
      left="0"
      name="advanced_options_panel"
-     top_pad="-6"
+     top_pad="0"
      width="210">
         <view_border 
          bevel_style="in"
@@ -94,7 +103,7 @@
          layout="topleft"
          name="advanced_options_hr"
          right="-1"
-         top_pad="5"
+         top_pad="-1"
          />
         <text
          type="string"
@@ -104,24 +113,55 @@
          layout="topleft"
          left="10"
          name="layer_type_label"
-         top_pad="10"
+         top_pad="5"
          width="100">
             Capture:
         </text>
+        <combo_box
+         follows="left|top|right"
+         height="23"
+         label="Image Layers"
+         layout="topleft"
+         left="30"
+         name="layer_types"
+         top_pad="1"
+         right="-2">
+            <combo_box.item
+             label="Colors"
+             name="Colors"
+             value="colors" />
+            <combo_box.item
+             label="Depth"
+             name="Depth"
+             value="depth" />
+            <combo_box.item
+             label="Depth (24 bit)"
+             name="Depth24"
+             value="depth24" />
+        </combo_box>
         <check_box
          label="Interface"
          layout="topleft"
          left="30"
 		 height="16"
-         top_pad="8"
+         top_pad="3"
          width="180"
          name="ui_check" />
+        <check_box
+         enabled_control="RenderUIInSnapshot"
+         control_name="FSShowCurrencyBalanceInSnapshots"
+         label="L$ Balance"
+         layout="topleft"
+         left="30"
+         top_pad="7"
+         width="180"
+         name="currency_check" />
         <check_box
          label="HUDs"
          layout="topleft"
 		 height="16"
          left="30"
-         top_pad="1"
+         top_pad="0"
          width="180"
          name="hud_check" />
         <check_box
@@ -148,7 +188,7 @@
          layout="topleft"
          left="10"
          name="filter_list_label"
-         top_pad="10"
+         top_pad="7"
          width="50">
             Filter:
         </text>
@@ -175,7 +215,7 @@
          layout="topleft"
          name="advanced_options_hr"
          right="-1"
-         top_pad="7"
+         top_pad="5"
          />
     </panel>
       <panel
@@ -224,7 +264,6 @@
            right="-1"
            text_color="0.2 0.85 0.2 1"
            top="4"
-           translate="false"
            type="string">
               Succeeded
           </text>
@@ -255,7 +294,6 @@
            right="-1"
            text_color="0.95 0.4 0.4 1"
            top="4"
-           translate="false"
            type="string">
               Failed
           </text>
@@ -279,7 +317,6 @@
        halign="left"
        name="working_lbl"
        top_delta="5"
-       translate="false"
        type="string"
        visible="false"
        width="162">
@@ -296,12 +333,12 @@
        name="refresh_lbl"
        text_color="0.95 0.4 0.4 1"
        top_delta="0"
-       translate="false"
        type="string"
        visible="false"
        width="130">
           Refresh to save.
       </text>
+	</view>
   <ui_ctrl 
     layout="topleft"
     name="thumbnail_placeholder"
