@@ -76,9 +76,6 @@
 						<row name="restore_per_account_row_groupmutes">
 							<column name="restore_per_account_files_label">Deakt. Gruppenchats</column>
 						</row>
-						<row name="restore_per_account_row_presets">
-							<column name="restore_per_account_files_label">Voreinstellungen</column>
-						</row>
 						<row name="restore_per_account_row_avatar_render_settings">
 							<column name="restore_per_account_files_label">Avatar Darstel.-Einst.</column>
 						</row>
@@ -108,6 +105,9 @@
 						</row>
 						<row name="restore_folders_row_waters">
 							<column name="restore_global_folders_label">Windlight: Wasser</column>
+						</row>
+						<row name="restore_folders_row_presets">
+							<column name="restore_global_folders_label">Voreinstellungen</column>
 						</row>
 					</scroll_list>
 				</layout_panel>

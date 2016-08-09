@@ -62,7 +62,10 @@ void LLPresetsManager::triggerChangeSignal()
 
 void LLPresetsManager::createMissingDefault()
 {
-	std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC, PRESETS_DEFAULT + ".xml");
+	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC, PRESETS_DEFAULT + ".xml");
+	std::string default_file = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_GRAPHIC, PRESETS_DEFAULT + ".xml");
+	// </FS:Ansariel>
 	if (!gDirUtilp->fileExists(default_file))
 	{
 		LL_INFOS() << "No default preset found -- creating one at " << default_file << LL_ENDL;
@@ -78,7 +81,10 @@ void LLPresetsManager::createMissingDefault()
 
 std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 {
-	std::string presets_path = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR);
+	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//std::string presets_path = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR);
+	std::string presets_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR);
+	// </FS:Ansariel>
 	std::string full_path;
 
 	if (!gDirUtilp->fileExists(presets_path))
@@ -86,7 +92,10 @@ std::string LLPresetsManager::getPresetsDir(const std::string& subdirectory)
 		LLFile::mkdir(presets_path);
 	}
 
-	full_path = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, subdirectory);
+	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//full_path = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, subdirectory);
+	full_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, subdirectory);
+	// </FS:Ansariel>
 	if (!gDirUtilp->fileExists(full_path))
 	{
 		LLFile::mkdir(full_path);
