@@ -10,6 +10,7 @@
 		Aktuelles Outfit ([COUNT]/[MAX] Anh.)
 	</panel.string>
 	<tab_container name="appearance_tabs">
+		<panel label="Outfit-Galerie" name="outfit_gallery_tab"/>
 		<panel label="Outfits" name="outfitslist_tab"/>
 		<panel label="Aktuelles Outfit" name="cof_tab"/>
 	</tab_container>

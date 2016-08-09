@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<toggleable_menu name="Gear Outfit">
-	<menu_item_call label="Anziehen - Aktuelles Outfit ersetzen" name="wear"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Outfit">
+	<menu_item_call label="Anziehen - Aktuelles Outfit ersetzen" name="wear_replace"/>
 	<menu_item_call label="Anziehen - Aktuelles Outfit hinzufügen" name="wear_add"/>
 	<menu_item_call label="Ausziehen - Aus aktuellem Outfit entfernen" name="take_off"/>
 	<menu_item_call label="Foto hochladen (L$10)" name="upload_photo"/>
 	<menu_item_call label="Foto auswählen" name="select_photo"/>
 	<menu_item_call label="Foto machen" name="take_snapshot"/>
 	<menu_item_call label="Foto entfernen" name="remove_photo"/>
-	<context_menu label="Neue Kleider" name="New Clothes">
+	<menu label="Neue Kleider" name="New Clothes">
 		<menu_item_call label="Neues Hemd" name="New Shirt"/>
 		<menu_item_call label="Neue Hose" name="New Pants"/>
 		<menu_item_call label="Neue Schuhe" name="New Shoes"/>
@@ -20,16 +20,14 @@
 		<menu_item_call label="Neues Alpha" name="New Alpha"/>
 		<menu_item_call label="Neue Physik" name="New Physics"/>
 		<menu_item_call label="Neue Tätowierung" name="New Tattoo"/>
-	</context_menu>
-	<context_menu label="Neue Körperteile" name="New Body Parts">
+	</menu>
+	<menu label="Neue Körperteile" name="New Body Parts">
 		<menu_item_call label="Neue Form" name="New Shape"/>
 		<menu_item_call label="Neue Haut" name="New Skin"/>
 		<menu_item_call label="Neues Haar" name="New Hair"/>
 		<menu_item_call label="Neue Augen" name="New Eyes"/>
-	</context_menu>
-	<menu_item_call label="Alle Ordner aufklappen" name="expand"/>
-	<menu_item_call label="Alle Ordner schließen" name="collapse"/>
+	</menu>
+	<menu_item_call label="Outfit bearbeiten" name="edit"/>
 	<menu_item_call label="Outfit neu benennen" name="rename"/>
-	<menu_item_call label="Outfit löschen" name="delete_outfit"/>
-	<menu_item_check label="Ordner immer nach Name sortieren" name="sort_folders_by_name"/>
-</toggleable_menu>
+	<menu_item_call label="Outfit löschen" name="delete"/>
+</context_menu>
