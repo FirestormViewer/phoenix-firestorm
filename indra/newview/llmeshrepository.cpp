@@ -4863,9 +4863,14 @@ void on_new_single_inventory_upload_complete(
         // and display something saying that it cost L$
         LLStatusBar::sendMoneyBalanceRequest();
 
+        // <FS:Ansariel> FIRE-10628 - Option to supress upload cost notification
+        if (gSavedSettings.getBOOL("FSShowUploadPaymentToast"))
+        {
         LLSD args;
         args["AMOUNT"] = llformat("%d", upload_price);
         LLNotificationsUtil::add("UploadPayment", args);
+        }
+        // </FS:Ansariel>
     }
 
     if (item_folder_id.notNull())
