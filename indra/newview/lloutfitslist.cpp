@@ -51,6 +51,7 @@
 #include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
 #include "llresmgr.h"
 #include "lltextbox.h"
+#include "lleconomy.h"
 
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
 
@@ -1189,6 +1190,14 @@ LLOutfitListGearMenuBase::LLOutfitListGearMenuBase(LLOutfitListBase* olist)
     mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
         "menu_outfit_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     llassert(mMenu);
+
+    // </FS:Ansariel> Show correct upload fee in context menu
+    LLMenuItemCallGL* upload_item = mMenu->findChild<LLMenuItemCallGL>("upload_photo");
+    if (upload_item)
+    {
+        upload_item->setLabelArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+    }
+    // </FS:Ansariel>
 }
 
 LLOutfitListGearMenuBase::~LLOutfitListGearMenuBase()

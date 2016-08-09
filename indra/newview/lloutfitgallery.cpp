@@ -756,7 +756,16 @@ LLContextMenu* LLOutfitGalleryContextMenu::createMenu()
     enable_registrar.add("Outfit.OnEnable", boost::bind(&LLOutfitGalleryContextMenu::onEnable, this, _2));
     enable_registrar.add("Outfit.OnVisible", boost::bind(&LLOutfitGalleryContextMenu::onVisible, this, _2));
     
-    return createFromFile("menu_gallery_outfit_tab.xml");
+    // </FS:Ansariel> Show correct upload fee in context menu
+    //return createFromFile("menu_gallery_outfit_tab.xml");
+    LLContextMenu* menu = createFromFile("menu_gallery_outfit_tab.xml");
+    LLMenuItemCallGL* upload_item = menu->findChild<LLMenuItemCallGL>("upload_photo");
+    if (upload_item)
+    {
+        upload_item->setLabelArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+    }
+    return menu;
+    // </FS:Ansariel>
 }
 
 void LLOutfitGalleryContextMenu::onUploadPhoto(const LLUUID& outfit_cat_id)
