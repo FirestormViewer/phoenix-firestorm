@@ -29,6 +29,7 @@
 #include "fsavatarrenderpersistence.h"
 #include "llsdserialize.h"
 
+
 FSAvatarRenderPersistence::FSAvatarRenderPersistence()
 {
 }
@@ -69,6 +70,8 @@ void FSAvatarRenderPersistence::setAvatarRenderSettings(const LLUUID& avatar_id,
 	{
 		mAvatarRenderMap[avatar_id] = render_settings;
 	}
+
+	mAvatarRenderSettingChangedCallback(avatar_id, render_settings);
 }
 
 void FSAvatarRenderPersistence::loadAvatarRenderSettings()
