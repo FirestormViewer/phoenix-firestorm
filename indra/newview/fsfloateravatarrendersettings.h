@@ -42,7 +42,6 @@ public:
 	FSFloaterAvatarRenderSettings(const LLSD& key);
 	virtual ~FSFloaterAvatarRenderSettings();
 
-	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ BOOL postBuild();
 
 private:

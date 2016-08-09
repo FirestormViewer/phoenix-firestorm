@@ -71,10 +71,6 @@ void FSFloaterAvatarRenderSettings::addElementToList(const LLUUID& avatar_id, LL
 	mAvatarList->addNameItemRow(item_params);
 }
 
-void FSFloaterAvatarRenderSettings::onOpen(const LLSD& key)
-{
-}
-
 BOOL FSFloaterAvatarRenderSettings::postBuild()
 {
 	mAvatarList = getChild<LLNameListCtrl>("avatar_list");
