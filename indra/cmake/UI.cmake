@@ -50,16 +50,11 @@ else (USESYSTEMLIBS)
         pango-1.0
         pangoft2-1.0
         pangox-1.0
-        pangoxft-1.0
+        #pangoxft-1.0
+        gio-2.0
+        pangocairo-1.0
+        ffi
         )
-
-    if (ND_BUILD64BIT_ARCH)
-      set(UI_LIB_NAMES ${UI_LIB_NAMES}
-          gio-2.0
-		  pangocairo-1.0
-          ffi
-          )
-    endif(ND_BUILD64BIT_ARCH)
 
     foreach(libname ${UI_LIB_NAMES})
       find_library(UI_LIB_${libname}

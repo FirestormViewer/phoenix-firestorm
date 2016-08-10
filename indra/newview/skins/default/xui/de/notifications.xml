@@ -3625,14 +3625,14 @@ Avatar &apos;[NAME]&apos; befindet sich im Modus „Aussehen bearbeiten&quot;.
 Avatar &apos;[NAME]&apos; hat Modus „Aussehen bearbeiten&quot; verlassen.
 	</notification>
 	<notification name="NoConnect">
-		Es gibt Probleme mit der Verbindung mit [PROTOCOL] [HOSTID].
+		Es gibt Probleme mit der Verbindung mit [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Bitte überprüfen Sie Ihre Netzwerk- und Firewalleinstellungen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Verbindung mit Voice-Server ist leider nicht möglich:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Voice-Kommunikation ist leider nicht verfügbar.
 Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.

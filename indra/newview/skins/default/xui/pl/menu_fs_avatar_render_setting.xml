@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Avatar Render Settings Menu">
+	<menu_item_call label="Renderuj normalnie (usuń z listy)" name="av_render_normal" />
+	<menu_item_call label="Nigdy nie renderuj" name="av_render_never" />
+	<menu_item_call label="Zawsze renderuj w pełni" name="av_render_always" />
+</context_menu>

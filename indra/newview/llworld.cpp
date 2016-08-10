@@ -1763,10 +1763,7 @@ LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3d& regi
 	return region_origin + pos_local;
 }
 
-// <FS:Ansariel> Make radar more exact and prevent false region crossing notifications
-//void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positions, const LLVector3d& relative_to, F32 radius) const
-void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positions, const LLVector3d& relative_to, F32 radius, std::map<LLUUID, LLUUID>* region_assignments) const
-// </FS:Ansariel>
+void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positions, const LLVector3d& relative_to, F32 radius) const
 {
 	F32 radius_squared = radius * radius;
 	
@@ -1778,12 +1775,6 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 	{
 		positions->clear();
 	}
-	// <FS:Ansariel> Make radar more exact and prevent false region crossing notifications
-	if (region_assignments != NULL)
-	{
-		region_assignments->clear();
-	}
-	// </FS:Ansariel>
 	// get the list of avatars from the character list first, so distances are correct
 	// when agent is above 1020m and other avatars are nearby
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
@@ -1849,12 +1840,6 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 					}
 					avatar_ids->push_back(uuid);
 				}
-				// <FS:Ansariel> Make radar more exact and prevent false region crossing notifications
-				if (uuid.notNull() && region_assignments != NULL)
-				{
-					region_assignments->insert(std::make_pair(uuid, regionp->getRegionID()));
-				}
-				// </FS:Ansariel>
 			}
 		}
 	}

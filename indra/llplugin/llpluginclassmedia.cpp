@@ -1488,10 +1488,3 @@ void LLPluginClassMedia::initializeUrlHistory(const LLSD& url_history)
 
 	LL_DEBUGS("Plugin") << "Sending history" << LL_ENDL;
 }
-
-void LLPluginClassMedia::setFlipY( bool enabled )
-{
-	LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "cef_flipy");
-	message.setValueBoolean("enable", enabled);
-	sendMessage(message);
-}

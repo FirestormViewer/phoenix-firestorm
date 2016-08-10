@@ -3475,13 +3475,13 @@ Awatar &apos;[NAME]&apos; rozpoczął edycję wyglądu.
 Awatar &apos;[NAME]&apos; opuścił edycję wyglądu.
 	</notification>
 	<notification name="NoConnect">
-		Występuje problem z połączeniem [PROTOCOL] [HOSTID].
+		Występuje problem z połączeniem [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Proszę sprawdź swoją sieć i ustawienia firewall.
 	</notification>
 	<notification name="NoVoiceConnect">
 		Występuje problem z Twoim połączeniem głosowym:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.

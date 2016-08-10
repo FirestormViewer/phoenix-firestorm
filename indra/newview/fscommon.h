@@ -33,7 +33,7 @@
 class LLAvatarName;
 class LLViewerObject;
 
-const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
+const F64 AVATAR_UNKNOWN_Z_OFFSET = -1.0; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;
 
 void report_to_nearby_chat(const std::string& message);

@@ -6,8 +6,8 @@
 	<!-- 一般 -->
 	
 	<panel label="一般" name="General">
-		<text name="preset_label" width="90">
-			使用中の事前設定:
+		<text name="preset_label" width="95">
+			使用中のプリセット:
 		</text>
 
 		<text name="preset_text">
@@ -128,7 +128,7 @@
 		</radio_group>
 		
 		<text name="Presets_Label">
-			事前設定:
+			プリセット:
 		</text>
 		<button label="保存" name="PrefSaveButton" />
 		<button label="読み込み" name="PrefLoadButton" />

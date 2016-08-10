@@ -32,6 +32,7 @@
 
 #include "fsdata.h"
 #include "fscommon.h"
+#include "fscorehttputil.h"
 #include "fswsassetblacklist.h"
 
 /* boost: will not compile unless equivalent is undef'd, beware. */
