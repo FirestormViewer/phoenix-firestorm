@@ -46,7 +46,7 @@ typedef HMODULE   (WINAPI *GetDriverModuleHandle_type)( HDRVR hDriver);
 extern GetDriverModuleHandle_type GetDriverModuleHandle_orig;
 typedef LRESULT   (WINAPI *DefDriverProc_type)( DWORD_PTR dwDriverIdentifier, HDRVR hdrvr, UINT uMsg, LPARAM lParam1, LPARAM lParam2);
 extern DefDriverProc_type DefDriverProc_orig;
-typedef BOOL (WINAPI *DriverCallback_type)(DWORD dwCallBack, DWORD dwFlags, HDRVR hdrvr, DWORD msg, DWORD dwUser, DWORD dwParam1, DWORD dwParam2);
+typedef BOOL( WINAPI *DriverCallback_type )(DWORD_PTR dwCallBack, DWORD dwFlags, HDRVR hdrvr, DWORD msg, DWORD_PTR dwUser, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 extern DriverCallback_type DriverCallback_orig;
 typedef UINT (WINAPI *mmsystemGetVersion_type)(void);
 extern mmsystemGetVersion_type mmsystemGetVersion_orig;

@@ -12,7 +12,6 @@ if (NOT USESYSTEMLIBS)
 
   if( ND_BUILD64BIT_ARCH )
     if( WINDOWS )
-#      use_prebuilt_binary( slplugin_x86 )
       use_prebuilt_binary( wix )
     elseif( DARWIN )
       use_prebuilt_binary( slplugin_x86 )

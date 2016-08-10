@@ -6561,7 +6561,7 @@ void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attach
 		attachment = RlvAttachPtLookup::getAttachPoint(item);
 	}
 
-	if ( (RlvActions::isRlvEnabled()) && (!rlvPredCanWearItem(item, RLV_WEAR_REPLACE)) )
+	if ( (RlvActions::isRlvEnabled()) && (!rlvPredCanWearItem(item, (replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
 	{
 		return;
 	}

@@ -3665,14 +3665,14 @@ M キーを押して変更します。
 アバター「 NAME 」が容姿編集モードを解除しました。
 	</notification>
 	<notification name="NoConnect">
-		[PROTOCOL] [HOSTID]を使って接続できません。
+		[PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;を使って接続できません。
 お使いのネットワークやファイアウォールの設定を確認してください。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		ボイスサーバーに接続できません：
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 ボイスチャットによるコミュニケーションが利用できません。
 お使いのネットワークやファイアウォールの設定を確認してください。

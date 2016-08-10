@@ -684,6 +684,4 @@ private:
 
 } // end namespace LLCoreHttpUtil
 
-#include "fscorehttputil.h"
-
 #endif // LL_LLCOREHTTPUTIL_H

@@ -217,6 +217,7 @@
 
 #include "fsavatarrenderpersistence.h"
 #include "fscommon.h"
+#include "fscorehttputil.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
@@ -317,6 +318,9 @@ void apply_udp_blacklist(const std::string& csv);
 bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y);
 // </FS:CR> Aurora Sim
 void transition_back_to_login_panel(const std::string& emsg);
+// <FS:KC> FIRE-18250: Option to disable default eye movement
+void update_static_eyes();
+// </FS:KC> FIRE-18250
 
 void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is_group)
 {
@@ -1959,6 +1963,11 @@ bool idle_startup()
 		display_startup();
 		// </FS:Ansariel> [FS communication UI]
 
+        // <FS:KC> FIRE-18250: Option to disable default eye movement
+        gAgent.addRegionChangedCallback(boost::bind(&update_static_eyes));
+        update_static_eyes();
+		// </FS:KC>
+
 		// *Note: this is where gWorldMap used to be initialized.
 
 		// register null callbacks for audio until the audio system is initialized
@@ -2897,15 +2906,6 @@ bool idle_startup()
 
 		}
 		// </FS:PP>
-		
-		// <FS:KC> FIRE-18250: Option to disable default eye movement
-		if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
-		{
-			LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
-			gAgentAvatarp->startMotion(anim_id);
-			gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
-		}
-		// </FS:KC>
 
 		return TRUE;
 	}
@@ -4500,3 +4500,13 @@ void transition_back_to_login_panel(const std::string& emsg)
 	gSavedSettings.setBOOL("AutoLogin", FALSE);
 }
 
+// <FS:KC> FIRE-18250: Option to disable default eye movement
+//static
+void update_static_eyes() {
+    if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+    {
+        LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+        gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+    }
+}
+// </FS:KC>

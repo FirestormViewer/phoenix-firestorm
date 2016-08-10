@@ -3628,14 +3628,14 @@ El avatar &apos;[NAME]&apos; ya está en modo de edición de apariencia.
 El avatar &apos;[NAME]&apos; salió del modo de edición de apariencia.
 	</notification>
 	<notification name="NoConnect">
-		Tenemos problemas de conexión con [PROTOCOL] [HOSTID].
+		Tenemos problemas de conexión con [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Comprueba la configuración de la red y del servidor de seguridad.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Tenemos problemas de conexión con tu servidor de voz:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 No podrás establecer comunicaciones de voz.
 Comprueba la configuración de la red y del servidor de seguridad.

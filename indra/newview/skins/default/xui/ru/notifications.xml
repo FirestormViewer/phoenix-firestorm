@@ -3601,14 +3601,14 @@ URL: [MEDIAURL]
 Аватар &quot;[NAME]&quot; вышел из режима внешности.
 	</notification>
 	<notification name="NoConnect">
-		Возникли проблемы соединения при использовании [PROTOCOL] [HOSTID].
+		Возникли проблемы соединения при использовании [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Проверьте настройки сети и брандмауэра.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Возникли проблемы соединения с голосовым сервером:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Голосовая связь будет недоступна.
 Проверьте настройки сети и брандмауэра.
