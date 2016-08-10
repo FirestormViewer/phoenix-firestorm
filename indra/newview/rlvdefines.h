@@ -1,17 +1,17 @@
-/** 
+/**
  *
  * Copyright (c) 2009-2016, Kitty Barnett
- * 
- * The source code in this file is provided to you under the terms of the 
+ *
+ * The source code in this file is provided to you under the terms of the
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt
  * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
- * 
+ *
  * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
+ * you have read and understood your obligations described above, and agree to
  * abide by those obligations.
- * 
+ *
  */
 
 #ifndef RLV_DEFINES_H
@@ -21,17 +21,22 @@
 // Defines
 //
 
-// Version of the specifcation we support
+// Version of the specifcation we report
 const S32 RLV_VERSION_MAJOR = 3;
 const S32 RLV_VERSION_MINOR = 1;
 const S32 RLV_VERSION_PATCH = 4;
 const S32 RLV_VERSION_BUILD = 0;
 
+// Version of the specifcation we report (in compatibility mode)
+const S32 RLV_VERSION_MAJOR_COMPAT = 2;
+const S32 RLV_VERSION_MINOR_COMPAT = 8;
+const S32 RLV_VERSION_PATCH_COMPAT = 0;
+const S32 RLV_VERSION_BUILD_COMPAT = 0;
+
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 2;
 const S32 RLVa_VERSION_MINOR = 0;
-const S32 RLVa_VERSION_PATCH = 0;
-const S32 RLVa_VERSION_BUILD = 0;
+const S32 RLVa_VERSION_PATCH = 3;
 
 // Uncomment before a final release
 #define RLV_RELEASE
@@ -123,6 +128,7 @@ enum ERlvBehaviour {
 	RLV_BHVR_SHOWLOC,				// "showloc"
 	RLV_BHVR_SHOWNAMES,				// "shownames"
 	RLV_BHVR_SHOWNAMETAGS,			// "shownametags"
+	RLV_BHVR_SHOWNEARBY,
 	RLV_BHVR_SHOWHOVERTEXT,			// "showhovertext"
 	RLV_BHVR_SHOWHOVERTEXTHUD,		// "showhovertexthud"
 	RLV_BHVR_SHOWHOVERTEXTWORLD,	// "showhovertextworld"
@@ -302,9 +308,10 @@ enum ERlvExceptionCheck
 
 enum ERlvLockMask
 {
-	RLV_LOCK_ADD	= 0x01,
-	RLV_LOCK_REMOVE	= 0x02,
-	RLV_LOCK_ANY	= RLV_LOCK_ADD | RLV_LOCK_REMOVE
+	RLV_LOCK_NONE   = 0x00,
+	RLV_LOCK_ADD    = 0x01,
+	RLV_LOCK_REMOVE = 0x02,
+	RLV_LOCK_ANY    = RLV_LOCK_ADD | RLV_LOCK_REMOVE
 };
 
 enum ERlvWearMask
@@ -343,6 +350,7 @@ enum ERlvAttachGroupType
 #define RLV_SETTING_ENABLECOMPOSITES	"RLVaEnableCompositeFolders"
 #define RLV_SETTING_ENABLELEGACYNAMING	"RLVaEnableLegacyNaming"
 #define RLV_SETTING_ENABLESHAREDWEAR	"RLVaEnableSharedWear"
+#define RLV_SETTING_ENABLETEMPATTACH    "RLVaEnableTemporaryAttachments"
 #define RLV_SETTING_HIDELOCKEDLAYER		"RLVaHideLockedLayers"
 #define RLV_SETTING_HIDELOCKEDATTACH	"RLVaHideLockedAttachments"
 #define RLV_SETTING_HIDELOCKEDINVENTORY	"RLVaHideLockedInventory"
@@ -365,6 +373,7 @@ enum ERlvAttachGroupType
 
 #define RLV_STRING_BLOCKED_AUTOPILOT		"blocked_autopilot"
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
+#define RLV_STRING_BLOCKED_GROUPCHANGE		"blocked_groupchange"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
 #define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"

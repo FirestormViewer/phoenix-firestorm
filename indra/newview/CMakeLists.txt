@@ -139,6 +139,7 @@ set(viewer_SOURCE_FILES
     fsdroptarget.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
+    fsfloateravatarrendersettings.cpp
     fsfloaterblocklist.cpp
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
@@ -879,6 +880,7 @@ set(viewer_HEADER_FILES
     fsdroptarget.h
     fsexportperms.h
     fsfloateraddtocontactset.h
+    fsfloateravatarrendersettings.h
     fsfloaterblocklist.h
     fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
@@ -1976,6 +1978,20 @@ if (NOT USESYSTEMLIBS)
     list(APPEND viewer_SOURCE_FILES ${viewer_CHARACTER_FILES})
 endif (NOT USESYSTEMLIBS)
 
+# <FS:Ansariel> Add Firestorm folders
+file(GLOB viewer_FONT_FILES fonts/*.xml)
+source_group("Fonts" FILES ${viewer_FONT_FILES})
+set_source_files_properties(${viewer_FONT_FILES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_FONT_FILES})
+
+file(GLOB viewer_FS_RESOURCES fs_resources/*)
+source_group("Firestorm Resources" FILES ${viewer_FS_RESOURCES})
+set_source_files_properties(${viewer_FS_RESOURCES}
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_FS_RESOURCES})
+# </FS:Ansariel>
+
 if (WINDOWS)
   file(GLOB viewer_INSTALLER_FILES installers/windows/*.nsi)
 
@@ -2110,6 +2126,7 @@ if (WINDOWS)
       SLPlugin
       media_plugin_quicktime
       media_plugin_cef
+      media_plugin_gstreamer10
       winmm_shim
       windows-crash-logger
       )
@@ -2166,14 +2183,10 @@ if (WINDOWS)
       add_dependencies(${VIEWER_BINARY_NAME} copy_win_scripts)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
 	
-    if( NOT ND_BUILD64BIT_ARCH )
     add_dependencies(${VIEWER_BINARY_NAME}
       SLPlugin
-   windows-crash-logger
+      windows-crash-logger
     )
-	else()
-       add_dependencies(${VIEWER_BINARY_NAME} windows-crash-logger )
-    endif( NOT ND_BUILD64BIT_ARCH )
 
     # sets the 'working directory' for debugging from visual studio.
     if (NOT UNATTENDED)
@@ -2364,6 +2377,7 @@ else (NOT ENABLE_MEDIA_PLUGINS)
     SLPlugin
     media_plugin_cef
     media_plugin_gstreamer010
+    media_plugin_gstreamer10
     llcommon
     )
 endif (NOT ENABLE_MEDIA_PLUGINS)

@@ -32,6 +32,7 @@ include_directories(
     )
 
 set(llmessage_SOURCE_FILES
+    fscorehttputil.cpp
     llassetstorage.cpp
     llavatarname.cpp
     llavatarnamecache.cpp
@@ -111,6 +112,7 @@ set(llmessage_SOURCE_FILES
 set(llmessage_HEADER_FILES
     CMakeLists.txt
 
+    fscorehttputil.h
     llassetstorage.h
     llavatarname.h
     llavatarnamecache.h

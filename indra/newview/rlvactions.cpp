@@ -121,6 +121,13 @@ bool RlvActions::getCameraFOVLimits(F32& nFOVMin, F32& nFOVMax)
 
 bool RlvActions::s_BlockNamesContexts[SNC_COUNT] = { 0 };
 
+bool RlvActions::canChangeActiveGroup(const LLUUID& idRlvObject)
+{
+	// User can change their active group if:
+	//   - not specifically restricted (by another object that the one specified) from changing their active group
+	return (idRlvObject.isNull()) ? !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP) : !gRlvHandler.hasBehaviourExcept(RLV_BHVR_SETGROUP, idRlvObject);
+}
+
 // Little helper function to check the IM exclusion range for @recvim, @sendim and @startim (returns: min_dist <= (pos user - pos target) <= max_dist)
 static bool rlvCheckAvatarIMDistance(const LLUUID& idAvatar, ERlvBehaviourModifier eModDistMin, ERlvBehaviourModifier eModDistMax)
 {
@@ -206,9 +213,14 @@ bool RlvActions::canShowName(EShowNamesContext eContext, const LLUUID& idAgent)
 	return false;
 }
 
+bool RlvActions::canShowNearbyAgents()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNEARBY);
+}
+
 // ============================================================================
 // Movement
-// 
+//
 
 bool RlvActions::canAcceptTpOffer(const LLUUID& idSender)
 {

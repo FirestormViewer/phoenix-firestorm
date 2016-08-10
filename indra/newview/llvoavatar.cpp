@@ -3221,26 +3221,30 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 	// </FS:Ansariel>
 
-	// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
-	// <FS:TS> ...or everyone, if selected
-	static LLCachedControl<bool> show_too_complex_arw_tag(gSavedSettings, "FSTagShowTooComplexARW");
-	static LLCachedControl<bool> show_arw_always_tag(gSavedSettings, "FSTagAlwaysShowARW");
+	// <FS:Ansariel> Show ARW in nametag options (for Jelly Dolls)
+	static LLCachedControl<bool> show_arw_tag(gSavedSettings, "FSTagShowARW");
+	static LLCachedControl<bool> show_too_complex_only_arw_tag(gSavedSettings, "FSTagShowTooComplexOnlyARW");
+	static LLCachedControl<bool> show_own_arw_tag(gSavedSettings, "FSTagShowOwnARW");
 	U32 complexity(0);
 	LLColor4 complexity_color(LLColor4::grey1); // default if we're not limiting the complexity
 
-	if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
+	if (show_arw_tag &&
+	   ((isSelf() && show_own_arw_tag) ||
+	   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 	{
 		complexity = mVisualComplexity;
-		// This calculation is copied from idleUpdateRenderComplexity()
+
+		// Show complexity color if we're limiting and not showing our own ARW...
 		static LLCachedControl<U32> max_render_cost(gSavedSettings, "RenderAvatarMaxComplexity", 0);
-		// Show complexity color if we're limiting...
-		if (max_render_cost != 0)
+		if (max_render_cost != 0 && !isSelf())
 		{
+			// This calculation is copied from idleUpdateRenderComplexity()
 			F32 green_level = 1.f - llclamp(((F32)complexity - (F32)max_render_cost) / (F32)max_render_cost, 0.f, 1.f);
 			F32 red_level = llmin((F32)complexity / (F32)max_render_cost, 1.f);
 			complexity_color.set(red_level, green_level, 0.f, 1.f);
 		}
 	}
+	// </FS:Ansariel>
 
 	// Rebuild name tag if state change detected
 	if (!mNameIsSet
@@ -3439,10 +3443,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 		// <FS:Ansariel> Show distance in tag
 
-		// <FS:Ansariel> Show Arc in nametag (for Jelly Dolls)
-		// <FS:TS> ...or everyone, if selected
+		// <FS:Ansariel> Show ARW in nametag options (for Jelly Dolls)
 		static const std::string complexity_label = LLTrans::getString("Nametag_Complexity_Label");
-		if (!isSelf() && (show_arw_always_tag || (show_too_complex_arw_tag && isTooComplex())))
+		if (show_arw_tag &&
+		   ((isSelf() && show_own_arw_tag) ||
+		   (!isSelf() && (!show_too_complex_only_arw_tag || isTooComplex()))))
 		{
 			std::string complexity_string;
 			LLLocale locale(LLLocale::USER_LOCALE);

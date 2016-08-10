@@ -9,7 +9,7 @@
 		<menu_item_call label="Miejsca" name="Picks"/>
 		<menu_item_call label="Przygody" name="Experiences"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
-		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
+		<menu_item_check label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
@@ -130,6 +130,7 @@
 		<menu_item_call label="Eksplorator dźwięków" name="Sound Explorer"/>
 		<menu_item_call label="Eksplorator animacji" name="Animation Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="asset_blacklist"/>
+		<menu_item_call label="Ustawienia renderowania awatarów" name="Avatar Render Settings"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
 		<menu_item_check label="Pokaż narzędzia budowania" name="Show Build Tools"/>
@@ -260,6 +261,7 @@
 			<menu_item_check label="Blokady..." name="Locks"/>
 		</menu>
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
+		<menu_item_check label="Zezwól na tymczasowe dodatki" name="Allow Temporary Attachments"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>

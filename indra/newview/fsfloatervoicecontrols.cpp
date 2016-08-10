@@ -54,6 +54,8 @@
 #include "llfirstuse.h"
 
 #include "llsliderctrl.h"
+#include "lltextbox.h"
+#include "rlvcommon.h"
 
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids);
 void reshape_floater(FSFloaterVoiceControls* floater, S32 delta_height);
@@ -112,6 +114,7 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 , mInitParticipantsVoiceState(false)
 , mVolumeSlider(NULL)
 , mMuteButton(NULL)
+, mIsRlvShowNearbyRestricted(false)
 {
 	static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
 	mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
@@ -157,6 +160,9 @@ BOOL FSFloaterVoiceControls::postBuild()
 
 	mVolumeSlider = findChild<LLSliderCtrl>("volume_slider");
 	mMuteButton = findChild<LLButton>("mute_btn");
+
+	mRlvRestrictedText = getChild<LLTextBox>("rlv_restricted");
+	mRlvRestrictedText->setText(RlvStrings::getString("blocked_nearby"));
 
 	if (mVolumeSlider && mMuteButton)
 	{
@@ -350,8 +356,10 @@ void FSFloaterVoiceControls::refreshParticipantList()
 		mNonAvatarCaller->setName(session->mName);
 	}
 
-	mNonAvatarCaller->setVisible(non_avatar_caller);
-	mAvatarList->setVisible(!non_avatar_caller);
+	// Ansariel: Changed for RLVa @shownearby
+	//mNonAvatarCaller->setVisible(non_avatar_caller);
+	//mAvatarList->setVisible(!non_avatar_caller);
+	updateListVisibility();
 
 	if (!non_avatar_caller)
 	{
@@ -885,10 +893,45 @@ void FSFloaterVoiceControls::reset(const LLVoiceChannel::EState& new_state)
 		mAvatarList->setNoItemsCommentText(LLTrans::getString("LoadingData"));
 	}
 
-	mAvatarList->setVisible(TRUE);
-	mNonAvatarCaller->setVisible(FALSE);
+	// Ansariel: Changed for RLVa @shownearby
+	//mAvatarList->setVisible(TRUE);
+	//mNonAvatarCaller->setVisible(FALSE);
+	updateListVisibility();
 
 	mSpeakerManager = NULL;
 }
 
+void FSFloaterVoiceControls::toggleRlvShowNearbyRestriction(bool restricted)
+{
+	mIsRlvShowNearbyRestricted = restricted;
+	updateListVisibility();
+}
+
+void FSFloaterVoiceControls::updateListVisibility()
+{
+	if (mIsRlvShowNearbyRestricted && mVoiceType == VC_LOCAL_CHAT)
+	{
+		mAvatarList->setVisible(FALSE);
+		mNonAvatarCaller->setVisible(FALSE);
+		mRlvRestrictedText->setVisible(TRUE);
+	}
+	else
+	{
+		mRlvRestrictedText->setVisible(FALSE);
+
+		if (mParticipants)
+		{
+			// Case coming from refreshParticipantList
+			bool non_avatar_caller = VC_PEER_TO_PEER_AVALINE == mVoiceType;
+			mNonAvatarCaller->setVisible(non_avatar_caller);
+			mAvatarList->setVisible(!non_avatar_caller);
+		}
+		else
+		{
+			// Case coming from reset()
+			mAvatarList->setVisible(TRUE);
+			mNonAvatarCaller->setVisible(FALSE);
+		}
+	}
+}
 //EOF

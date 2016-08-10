@@ -551,7 +551,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mInvisibilityCheckHistory(-1),
 	mPaused(FALSE),
 	// <FS:CR> Aurora Sim
-	mWidth(region_width_meters)
+	mWidth(region_width_meters),
+	mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS) // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
 {
 	// Moved this up... -> mWidth = region_width_meters;
 // </FS:CR>
@@ -2176,8 +2177,12 @@ public:
 			if(i == target_index)
 			{
 				LLVector3d global_pos(region->getOriginGlobal());
-				global_pos.mdV[VX] += (F64)x;
-				global_pos.mdV[VY] += (F64)y;
+				// <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+				//global_pos.mdV[VX] += (F64)x;
+				//global_pos.mdV[VY] += (F64)y;
+				global_pos.mdV[VX] += (F64)x * region->getWidthScaleFactor();
+				global_pos.mdV[VY] += (F64)y * region->getWidthScaleFactor();
+				// </FS:Ansariel>
 				global_pos.mdV[VZ] += (F64)z * 4.0;
 				LLAvatarTracker::instance().setTrackedCoarseLocation(global_pos);
 			}
@@ -2251,8 +2256,12 @@ void LLViewerRegion::updateCoarseLocations(LLMessageSystem* msg)
 		if(i == target_index)
 		{
 			LLVector3d global_pos(mImpl->mOriginGlobal);
-			global_pos.mdV[VX] += (F64)(x_pos);
-			global_pos.mdV[VY] += (F64)(y_pos);
+			// <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+			//global_pos.mdV[VX] += (F64)(x_pos);
+			//global_pos.mdV[VY] += (F64)(y_pos);
+			global_pos.mdV[VX] += (F64)(x_pos) * mWidthScaleFactor;
+			global_pos.mdV[VY] += (F64)(y_pos) * mWidthScaleFactor;
+			// </FS:Ansariel>
 			global_pos.mdV[VZ] += (F64)(z_pos) * 4.0;
 			LLAvatarTracker::instance().setTrackedCoarseLocation(global_pos);
 		}
@@ -2315,7 +2324,7 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 	std::stringstream str;
 	
 	LLSDSerialize::toPrettyXML(sim_features, str);
-	LL_INFOS() << str.str() << LL_ENDL;
+	LL_INFOS() << "Region ID " << getRegionID().asString() << ": " << str.str() << LL_ENDL;
 	mSimulatorFeatures = sim_features;
 
 	setSimulatorFeaturesReceived(true);

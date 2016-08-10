@@ -101,6 +101,8 @@
         <text name="note_lookat" >
              （アバターの視線に関する設定は「プライバシー」タブにあります。）
         </text>
+        
+        <check_box label="アバターのランダムな目の動きを抑止する" name="FSStaticEyes" />
 
         <!-- LGGカラービーム -->
 		
@@ -271,6 +273,8 @@
     <panel label="制作2" name="BuildTab2">
 
 		<check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="FSBuildPrefsRenderHighlight_toggle"/>
+		<check_box label="選択している土地の境界をハイライトする" name="RenderParcelSelection" />
+		<check_box label="土地の境界を制作できる最大の高さまで表示する" name="FSRenderParcelSelectionToMaxBuildHeight" />
 		<check_box label="遠くのオブジェクトを選択しない" name="LimitSelectDistance"/>
 		<check_box label="ドラッグできる距離を制限 (m):" name="LimitDragDistance" />
 		<spinner name="MaxDragDistance" tool_tip="移動ツールの一回の操作で移動できる最大の距離を設定します。(開始位置からメートル単位で設定) [Default: 48.000]" />

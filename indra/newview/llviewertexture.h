@@ -40,7 +40,10 @@
 #include <list>
 
 extern const S32Megabytes gMinVideoRam;
-extern const S32Megabytes gMaxVideoRam;
+// <FS:Ansariel> Texture memory management
+//extern const S32Megabytes gMaxVideoRam;
+extern S32Megabytes gMaxVideoRam;
+// </FS:Ansariel>
 
 class LLFace;
 class LLImageGL ;

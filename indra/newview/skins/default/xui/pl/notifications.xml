@@ -2932,7 +2932,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 		</form>
 	</notification>
 	<notification name="TeleportOffered" label="Propozycja teleportacji od [NAME_LABEL]">
-		[NAME_SLURL] proponuje Ci teleportację do siebie ([POS_SLURL]):
+		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2942,7 +2942,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] proponuje Ci teleportację do siebie ([POS_SLURL]):
+		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
 [MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2954,6 +2954,36 @@ Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferenc
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] zaproponował/a Ci teleportację do siebie:
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Ten region zawiera jednak treści tylko dla dorosłych.
+	</notification>
+	<notification name="TeleportOffered_SLUrl" label="Propozycja teleportacji od [NAME_LABEL]">
+		[NAME_SLURL] proponuje Ci teleportację do siebie ([POS_SLURL]):
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Teleportuj"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] proponuje Ci teleportację do siebie ([POS_SLURL]):
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGION_CONTENT_MATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
+		<form name="form">
+			<button name="Teleport" text="Zmień i teleportuj"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] zaproponował/a Ci teleportację do siebie ([POS_SLURL]):
 
 [MESSAGE]
@@ -3445,13 +3475,13 @@ Awatar &apos;[NAME]&apos; rozpoczął edycję wyglądu.
 Awatar &apos;[NAME]&apos; opuścił edycję wyglądu.
 	</notification>
 	<notification name="NoConnect">
-		Występuje problem z połączeniem [PROTOCOL] [HOSTID].
+		Występuje problem z połączeniem [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Proszę sprawdź swoją sieć i ustawienia firewall.
 	</notification>
 	<notification name="NoVoiceConnect">
 		Występuje problem z Twoim połączeniem głosowym:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.

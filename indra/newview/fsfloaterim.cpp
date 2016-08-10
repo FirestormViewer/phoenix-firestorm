@@ -2068,21 +2068,18 @@ void FSFloaterIM::sRemoveTypingIndicator(const LLSD& data)
 	floater->removeTypingIndicator();
 }
 
-void FSFloaterIM::onNewIMReceived( const LLUUID& session_id )
+void FSFloaterIM::onNewIMReceived(const LLUUID& session_id)
 {
-
 	if (isChatMultiTab())
 	{
-		FSFloaterIMContainer* im_box = FSFloaterIMContainer::getInstance();
-		if (!im_box) return;
-
-		if (FSFloaterIM::findInstance(session_id)) return;
+		if (FSFloaterIM::findInstance(session_id))
+		{
+			return;
+		}
 
 		FSFloaterIM* new_tab = FSFloaterIM::getInstance(session_id);
-
-		im_box->addFloater(new_tab, FALSE, LLTabContainer::END);
+		FSFloaterIMContainer::getInstance()->addNewSession(new_tab);
 	}
-
 }
 
 void FSFloaterIM::onClickCloseBtn(bool app_quitting)
@@ -2362,6 +2359,9 @@ void FSFloaterIM::handleMinimized(bool minimized)
 	else
 	{
 		gConsole->addSession(mSessionID);
-		updateMessages();
+		if (mChatHistory)
+		{
+			updateMessages();
+		}
 	}
 }

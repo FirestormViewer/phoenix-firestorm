@@ -3092,7 +3092,7 @@ Por favor, vuelve a intentarlo en unos momentos.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
+		[NAME_SLURL] te ofrece teleportarte a su localización:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3102,7 +3102,7 @@ Por favor, vuelve a intentarlo en unos momentos.
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
+		[NAME_SLURL] te ofrece teleportarte a su localización:
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3114,6 +3114,36 @@ Esta región tiene un contenido [REGION_CONTENT_MATURITY, pero tus preferencias 
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] te ofrece teleportarte a su localización:
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+No obstante, el contenido de esta región solo es accesible para los adultos.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Teleportarme"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Esta región tiene un contenido [REGION_CONTENT_MATURITY, pero tus preferencias actuales están configuradas para excluir contenido [REGION_CONTENT_MATURITY]. Podemos cambiar tus preferencias y proceder a teleportarte o bien puedes cancelar el teleporte.
+		<form name="form">
+			<button name="Teleport" text="Cambiar y teleportarme"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] te ofrece teleportarte a su localización ([POS_SLURL]):
 
 “[MESSAGE]”
@@ -3598,14 +3628,14 @@ El avatar &apos;[NAME]&apos; ya está en modo de edición de apariencia.
 El avatar &apos;[NAME]&apos; salió del modo de edición de apariencia.
 	</notification>
 	<notification name="NoConnect">
-		Tenemos problemas de conexión con [PROTOCOL] [HOSTID].
+		Tenemos problemas de conexión con [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Comprueba la configuración de la red y del servidor de seguridad.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Tenemos problemas de conexión con tu servidor de voz:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 No podrás establecer comunicaciones de voz.
 Comprueba la configuración de la red y del servidor de seguridad.

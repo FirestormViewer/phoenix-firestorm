@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Avatar Render Settings Menu">
+	<menu_item_call label="Normal anzeigen (entfernt von Liste)" name="av_render_normal"/>
+	<menu_item_call label="Niemals anzeigen" name="av_render_never"/>
+	<menu_item_call label="Immer anzeigen" name="av_render_always"/>
+</context_menu>

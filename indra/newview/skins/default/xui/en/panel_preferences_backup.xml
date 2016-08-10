@@ -238,11 +238,6 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Disabled Group Chats</column>
             <column name="value">muted_groups.xml</column>
         </row>
-        <row name="restore_per_account_row_presets" value="presets">
-            <column type="checkbox" name="restore_per_account_files_check" value="true" />
-            <column name="restore_per_account_files_label">Presets</column>
-            <column name="value">presets</column>
-        </row>
         <row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Avatar Render Settings</column>
@@ -325,6 +320,11 @@ Settings groups to be restored (backup will always save all):
             <column type="checkbox" name="restore_global_folders_check" value="true" />
             <column name="restore_global_folders_label">Windlight Waters</column>
             <column name="value">windlight/water</column>
+        </row>
+        <row name="restore_folders_row_presets" value="presets">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Presets</column>
+            <column name="value">presets</column>
         </row>
     </scroll_list>
 

@@ -2843,7 +2843,7 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
+		[NAME_SLURL] 想要瞬間傳送你到他的地點：
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2853,7 +2853,7 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
+		[NAME_SLURL] 想要瞬間傳送你到他的地點：
 
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -2865,6 +2865,36 @@ SHA1 指紋：[MD5_DIGEST]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] 想要瞬間傳送你到他的地點：
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+可是，此地區含有僅限成人的內容。
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="瞬間傳送"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+此地區包含 [REGION_CONTENT_MATURITY] 的分級內容，可是你目前的偏好設定排除了 [REGION_CONTENT_MATURITY] 的分級內容。  我們可以變更你的偏好設定好讓你繼續瞬間傳送，你也可取消這動作。
+		<form name="form">
+			<button name="Teleport" text="變更後繼續"/>
+			<button name="Cancel" text="取消"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] 想要瞬間傳送你到他的地點 （[POS_SLURL]）：
 
 “[MESSAGE]”
@@ -3325,14 +3355,14 @@ SHA1 指紋：[MD5_DIGEST]
 化身 &apos;[NAME]&apos; 離開外觀模式。
 	</notification>
 	<notification name="NoConnect">
-		使用 [PROTOCOL] [HOSTID] 連線時出了問題。
+		使用 [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt; 連線時出了問題。
 請檢查你的網路和防火牆設定。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		試圖連接語音伺服器時出了問題：
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 將無法用語音溝通。
 請檢查你的網路和防火牆設定。

@@ -42,21 +42,19 @@
 
 #include "llsdutil.h" // <FS:ND/> for ll_pretty_print_sd
 
+#include "boost/make_shared.hpp"
+
 namespace LLEventPolling
 {
 namespace Details
 {
 
-    class LLEventPollImpl
+    class LLEventPollImpl: public boost::enable_shared_from_this<LLEventPollImpl>
     {
     public:
         LLEventPollImpl(const LLHost &sender);
 
-        // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-        // void start(const std::string &url);
-        void start( const std::string &url, boost::shared_ptr< LLEventPollImpl > aThis );
-        // </FS:ND>
-		
+        void start(const std::string &url);
         void stop();
 
     private:
@@ -67,16 +65,14 @@ namespace Details
         static const F32                EVENT_POLL_ERROR_RETRY_SECONDS_INC;
         static const S32                MAX_EVENT_POLL_HTTP_ERRORS;
 
-        // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-        // void                            eventPollCoro(std::string url);
-        void                            eventPollCoro( std::string url, boost::shared_ptr< LLEventPollImpl > aThis );
-        // </FS:ND>
+        void                            eventPollCoro(std::string url);
 
         void                            handleMessage(const LLSD &content);
 
         bool                            mDone;
         LLCore::HttpRequest::ptr_t      mHttpRequest;
         LLCore::HttpRequest::policy_t   mHttpPolicy;
+        LLCore::HttpOptions::ptr_t      mHttpOptions; // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
         std::string                     mSenderIp;
         int                             mCounter;
         LLCoreHttpUtil::HttpCoroutineAdapter::wptr_t mAdapter;
@@ -96,6 +92,7 @@ namespace Details
         mDone(false),
         mHttpRequest(),
         mHttpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID),
+        mHttpOptions(), // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
         mSenderIp(),
         mCounter(sNextCounter++)
 
@@ -104,6 +101,11 @@ namespace Details
 
         mHttpRequest = LLCore::HttpRequest::ptr_t(new LLCore::HttpRequest);
         mHttpPolicy = app_core_http.getPolicy(LLAppCoreHttp::AP_LONG_POLL);
+        // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+        mHttpOptions = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+        mHttpOptions->setRetries(0);
+        mHttpOptions->setTransferTimeout(60);
+        // </FS:Ansariel>
         mSenderIp = sender.getIPandPort();
     }
 
@@ -124,24 +126,13 @@ namespace Details
         LLMessageSystem::dispatch(msg_name, message);
     }
 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // void LLEventPollImpl::start(const std::string &url)
-    void LLEventPollImpl::start( const std::string &url, boost::shared_ptr< LLEventPollImpl > aThis )
-    // </FS:ND>
+    void LLEventPollImpl::start(const std::string &url)
     {
         if (!url.empty())
         {
-            // <FS:ND> FIRE-19557; Hold on LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-
-            // std::string coroname =
-            //     LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
-            //     boost::bind(&LLEventPollImpl::eventPollCoro, this, url));
-
-            std::string coroname = LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
-                                                              boost::bind( &LLEventPollImpl::eventPollCoro, this, url, aThis ) );
-
-            // </FS:ND>
-            
+            std::string coroname =
+                LLCoros::instance().launch("LLEventPollImpl::eventPollCoro",
+                boost::bind(&LLEventPollImpl::eventPollCoro, this->shared_from_this(), url));
             LL_INFOS("LLEventPollImpl") << coroname << " with  url '" << url << LL_ENDL;
         }
     }
@@ -163,11 +154,8 @@ namespace Details
         }
     }
 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-    // void LLEventPollImpl::eventPollCoro(std::string url)
-    void LLEventPollImpl::eventPollCoro( std::string url, boost::shared_ptr< LLEventPollImpl > aThis )
-    // </FS:ND>
-	{
+    void LLEventPollImpl::eventPollCoro(std::string url)
+    {
         LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("EventPoller", mHttpPolicy));
         LLSD acknowledge;
         int errorCount = 0;
@@ -189,7 +177,10 @@ namespace Details
 //              << LLSDXMLStreamer(request) << LL_ENDL;
 
             LL_DEBUGS("LLEventPollImpl") << " <" << counter << "> posting and yielding." << LL_ENDL;
-            LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request);
+            // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+            //LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request);
+            LLSD result = httpAdapter->postAndSuspend(mHttpRequest, url, request, mHttpOptions);
+            // </FS:Ansariel>
 
 //          LL_DEBUGS("LLEventPollImpl::eventPollCoro") << "<" << counter << "> result = "
 //              << LLSDXMLStreamer(result) << LL_ENDL;
@@ -205,6 +196,15 @@ namespace Details
                     errorCount = 0;
                     continue;
                 }
+                // <FS:Ansariel> Restore pre-coro behavior (60s timeout, no retries)
+                else if (status == LLCore::HttpStatus(HTTP_BAD_GATEWAY))
+                {   // Pre-coro says this is the default answer for timeouts and it can happen
+                    // frequently on OpenSim - assume this is normal and issue a new request immediately
+                    LL_INFOS("LLEventPollImpl") << "Received HTTP 502 - start new request." << LL_ENDL;
+                    errorCount = 0;
+                    continue;
+                }
+                // </FS:Ansariel>
                 else if ((status == LLCore::HttpStatus(LLCore::HttpStatus::LLCORE, LLCore::HE_OP_CANCELED)) || 
                         (status == LLCore::HttpStatus(HTTP_NOT_FOUND)))
                 {   // Event polling for this server has been canceled.  In 
@@ -304,16 +304,8 @@ namespace Details
 LLEventPoll::LLEventPoll(const std::string&	poll_url, const LLHost& sender):
     mImpl()
 { 
-    // <FS:ND> FIRE-19557; Hold on to LLEventPollImpl while the coroutine runs, otherwise the this pointer can get deleted while the coroutine is still active.
-
-    // mImpl = boost::unique_ptr<LLEventPolling::Details::LLEventPollImpl>
-    //         (new LLEventPolling::Details::LLEventPollImpl(sender));
-    // mImpl->start(poll_url);
-
-    mImpl.reset( new LLEventPolling::Details::LLEventPollImpl(sender) );
-    mImpl->start( poll_url, mImpl );
-
-    // </FS:ND>
+    mImpl = boost::make_shared<LLEventPolling::Details::LLEventPollImpl>(sender);
+    mImpl->start(poll_url);
 }
 
 LLEventPoll::~LLEventPoll()

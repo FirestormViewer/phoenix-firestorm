@@ -240,6 +240,7 @@ public:
 	void setCacheID(const LLUUID& id);
 
 	F32	getWidth() const						{ return mWidth; }
+	F32 getWidthScaleFactor() const				{ return mWidthScaleFactor; } // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
 
 	void idleUpdate(F32 max_update_time);
 	void lightIdleUpdate();
@@ -495,6 +496,7 @@ private:
 	U64			mHandle;
 	F32			mTimeDilation;	// time dilation of physics simulation on simulator
 	S32         mLastUpdate; //last time called idleUpdate()
+	F32			mWidthScaleFactor; // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
 
 	// simulator name
 	std::string mName;

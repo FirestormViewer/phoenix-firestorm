@@ -49,7 +49,8 @@ FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 :	LLMultiFloater(seed),
 	mActiveVoiceFloater(NULL),
 	mCurrentVoiceState(VOICE_STATE_NONE),
-	mForceVoiceStateUpdate(false)
+	mForceVoiceStateUpdate(false),
+	mIsAddingNewSession(false)
 {
 	mAutoResize = FALSE;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -233,31 +234,34 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 	{
 // [SL:KB] - Patch: UI-TabRearrange | Checked: 2012-06-22 (Catznip-3.3.0)
 		// If we're redocking a torn off IM floater, return it back to its previous place
-		if ( (floaterp->isTornOff()) && (LLTabContainer::END == insertion_point) )
+		if (!mIsAddingNewSession && (floaterp->isTornOff()) && (LLTabContainer::END == insertion_point) )
 		{
 			LLChicletPanel* pChicletPanel = LLChicletBar::instance().getChicletPanel();
 
 			LLIMChiclet* pChiclet = pChicletPanel->findChiclet<LLIMChiclet>(floaterp->getKey());
-			S32 idxChiclet = pChicletPanel->getChicletIndex(pChiclet);
-			if ( (idxChiclet > 0) && (idxChiclet < pChicletPanel->getChicletCount()) )
+			if (pChiclet)
 			{
-				// Look for the first IM session to the left of this one
-				while (--idxChiclet >= 0)
+				S32 idxChiclet = pChicletPanel->getChicletIndex(pChiclet);
+				if ((idxChiclet > 0) && (idxChiclet < pChicletPanel->getChicletCount()))
 				{
-					if (pChiclet = dynamic_cast<LLIMChiclet*>(pChicletPanel->getChiclet(idxChiclet)))
+					// Look for the first IM session to the left of this one
+					while (--idxChiclet >= 0)
 					{
-						FSFloaterIM* pFloater = FSFloaterIM::findInstance(pChiclet->getSessionId());
-						if (pFloater)
+						if (pChiclet = dynamic_cast<LLIMChiclet*>(pChicletPanel->getChiclet(idxChiclet)))
 						{
-							insertion_point = (LLTabContainer::eInsertionPoint)(mTabContainer->getIndexForPanel(pFloater) + 1);
-							break;
+							FSFloaterIM* pFloater = FSFloaterIM::findInstance(pChiclet->getSessionId());
+							if (pFloater)
+							{
+								insertion_point = (LLTabContainer::eInsertionPoint)(mTabContainer->getIndexForPanel(pFloater) + 1);
+								break;
+							}
 						}
 					}
 				}
-			}
-			else 
-			{
-				insertion_point = (0 == idxChiclet) ? LLTabContainer::START : LLTabContainer::END;
+				else
+				{
+					insertion_point = (0 == idxChiclet) ? LLTabContainer::START : LLTabContainer::END;
+				}
 			}
 		}
 // [/SL:KB]
@@ -268,6 +272,14 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 	LLUUID session_id = floaterp->getKey();
 	mSessions[session_id] = floaterp;
 	floaterp->mCloseSignal.connect(boost::bind(&FSFloaterIMContainer::onCloseFloater, this, session_id));
+}
+
+void FSFloaterIMContainer::addNewSession(LLFloater* floaterp)
+{
+	// Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
+	mIsAddingNewSession = true;
+	addFloater(floaterp, FALSE, LLTabContainer::END);
+	mIsAddingNewSession = false;
 }
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d

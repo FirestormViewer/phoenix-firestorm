@@ -1888,8 +1888,6 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 			bool media_plugin_debugging_enabled = gSavedSettings.getBOOL("MediaPluginDebugging");
 			media_source->enableMediaPluginDebugging( media_plugin_debugging_enabled  || clean_browser);
 
-			media_source->setFlipY( gSavedSettings.getBOOL( "FSFlipCEFY" ) );
-
 			// need to set agent string here before instance created
 			media_source->setBrowserUserAgent(LLViewerMedia::getCurrentUserAgent());
 
@@ -3057,7 +3055,10 @@ void LLViewerMediaImpl::updateImagesMediaStreams()
 //////////////////////////////////////////////////////////////////////////////////////////
 LLViewerMediaTexture* LLViewerMediaImpl::updatePlaceholderImage()
 {
-	if(mTextureId.isNull())
+//	if(mTextureId.isNull())
+// [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
+	if ( (mTextureId.isNull()) || ((LLViewerFetchedTexture::sDefaultDiffuseImagep.notNull()) && (LLViewerFetchedTexture::sDefaultDiffuseImagep->getID() == mTextureId)) )
+// [/SL:KB]
 	{
 		// The code that created this instance will read from the plugin's bits.
 		return NULL;

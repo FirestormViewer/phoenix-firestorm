@@ -232,9 +232,7 @@ public:
 	void getAvatars(
 		uuid_vec_t* avatar_ids = NULL,
 		std::vector<LLVector3d>* positions = NULL, 
-		// <FS:Ansariel> Make radar more exact and prevent false region crossing notifications
-		//const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX) const;
-		const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX, std::map<LLUUID, LLUUID>* region_assignments = NULL) const;
+		const LLVector3d& relative_to = LLVector3d(), F32 radius = FLT_MAX) const;
 // [RLVa:KB] - Checked: RLVa-2.0.1
 	bool getAvatar(const LLUUID& idAvatar, LLVector3d& posAvatar) const;
 // [/RLVa:KB]

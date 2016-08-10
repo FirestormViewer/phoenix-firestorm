@@ -5,7 +5,7 @@ This is WIP. Please change/expand when seeing fit.
 2. autobuild from https://bitbucket.org/NickyD/autobuild-1.0
 3. FMOD, if you want sound, please see https://bitbucket.org/NickyD/3p-fmodex
 
-You will find the urls to all 64 bit prebuild packages in <viewer_source_dir>/package_override.ini
+You will find the urls to all 64 bit prebuild packages in <viewer_source_dir>/package_override_vc12.ini
 
 Make sure you're not building from a Visual Studio command prompt, or parts of the build
 chain might accidentally pick up a 32 bit compiler, resulting in x86<>x64 mismatch.

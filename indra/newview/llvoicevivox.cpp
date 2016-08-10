@@ -395,6 +395,26 @@ bool LLVivoxVoiceClient::writeString(const std::string &str)
 	return result;
 }
 
+// <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
+// Vivox does not support Linux anymore and the SDK SLVoice for Linux uses is old and according to LL
+// will stop working 'soon' (as of 2016-07-17). See also FIRE-19663
+bool viewerUsesWineForVoice()
+{
+#ifndef LL_LINUX
+    return false;
+#else
+    static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "FSLinuxEnableWin32VoiceProxy" );
+
+    return sEnableVoiceChat;
+#endif
+}
+
+bool viewerChoosesConnectionHandles()
+{
+    return viewerUsesWineForVoice();
+}
+// </FS:ND>
+
 
 /////////////////////////////
 // session control messages
@@ -425,13 +445,19 @@ void LLVivoxVoiceClient::connectorCreate()
 		loglevel = savedLogLevel;
 		// </FS:Ansariel>
 	}
+
+    // <FS:ND> Check if using the old SLVoice for Linux. the SDK in that version is too old to handle the extra args
+    std::string strConnectorHandle;
+    if( viewerChoosesConnectionHandles() )
+        strConnectorHandle = "<ConnectorHandle>" + LLVivoxSecurity::getInstance()->connectorHandle() + "</ConnectorHandle>";
+    // </FS:ND>
 	
 	stream 
 	<< "<Request requestId=\"" << mCommandCookie++ << "\" action=\"Connector.Create.1\">"
 		<< "<ClientName>V2 SDK</ClientName>"
 		<< "<AccountManagementServer>" << mVoiceAccountServerURI << "</AccountManagementServer>"
 		<< "<Mode>Normal</Mode>"
-        << "<ConnectorHandle>" << LLVivoxSecurity::getInstance()->connectorHandle() << "</ConnectorHandle>"
+        << strConnectorHandle
 		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
 		<< (gSavedSettings.getBOOL("VoiceMultiInstance") ? "<MinimumPort>30000</MinimumPort><MaximumPort>50000</MaximumPort>" : "")
 		// </FS:Ansariel>
@@ -451,7 +477,10 @@ void LLVivoxVoiceClient::connectorCreate()
 
 void LLVivoxVoiceClient::connectorShutdown()
 {
-	if(!mConnectorEstablished)
+	// <FS:Ansariel> Voice fix
+	//if(!mConnectorEstablished)
+	if(mConnectorEstablished)
+	// </FS:Ansariel>
 	{
 		std::ostringstream stream;
 		stream
@@ -649,7 +678,13 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 #elif LL_DARWIN
         exe_path += "../Resources/SLVoice";
 #else
-        exe_path += "SLVoice";
+        // <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
+        // exe_path += "SLVoice";
+        if( !viewerUsesWineForVoice() )
+            exe_path += "SLVoice"; // native version
+        else
+            exe_path += "win32/SLVoice.exe"; // use bundled win32 version
+        // </FS:ND>
 #endif
         // See if the vivox executable exists
         llstat s;
@@ -657,8 +692,19 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
         {
             // vivox executable exists.  Build the command line and launch the daemon.
             LLProcess::Params params;
+
+			// <FS:ND> On Linux the viewer can run SLVoice.exe through wine (https://www.winehq.org/)
             params.executable = exe_path;
 
+            if( !viewerUsesWineForVoice() )
+                params.executable = exe_path;
+            else
+            {
+                params.executable = "wine";
+                params.args.add( exe_path );
+            }
+            //</FS:ND>
+			
             std::string loglevel = gSavedSettings.getString("VivoxDebugLevel");
             std::string shutdown_timeout = gSavedSettings.getString("VivoxShutdownTimeout");
             if (loglevel.empty())
@@ -708,6 +754,8 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
             params.cwd = gDirUtilp->getAppRODataDir();
 
+            // <FS:ND> Check if using the old SLVoice for Linux. the SDK in that version is too old to handle the extra args
+            if( viewerChoosesConnectionHandles() ) { // </FS:ND>
 #           ifdef VIVOX_HANDLE_ARGS
             params.args.add("-ah");
             params.args.add(LLVivoxSecurity::getInstance()->accountHandle());
@@ -715,6 +763,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             params.args.add("-ch");
             params.args.add(LLVivoxSecurity::getInstance()->connectorHandle());
 #           endif // VIVOX_HANDLE_ARGS
+			} // <FS:ND/> 
 
             sGatewayPtr = LLProcess::create(params);
 
@@ -1878,12 +1927,18 @@ void LLVivoxVoiceClient::loginSendMessage()
 
 	bool autoPostCrashDumps = gSavedSettings.getBOOL("VivoxAutoPostCrashDumps");
 
+    // <FS:ND> Check if using the old SLVoice for Linux. the SDK in that version is too old to handle the extra args
+    std::string strAccountHandle;
+    if( viewerChoosesConnectionHandles() )
+        strAccountHandle = "<AccountHandle>" +  LLVivoxSecurity::getInstance()->accountHandle() + "</AccountHandle>";
+    // </FS:ND>
+    
 	stream
 	<< "<Request requestId=\"" << mCommandCookie++ << "\" action=\"Account.Login.1\">"
 		<< "<ConnectorHandle>" << LLVivoxSecurity::getInstance()->connectorHandle() << "</ConnectorHandle>"
 		<< "<AccountName>" << mAccountName << "</AccountName>"
         << "<AccountPassword>" << mAccountPassword << "</AccountPassword>"
-        << "<AccountHandle>" << LLVivoxSecurity::getInstance()->accountHandle() << "</AccountHandle>"
+        << strAccountHandle
 		<< "<AudioSessionAnswerMode>VerifyAnswer</AudioSessionAnswerMode>"
 		<< "<EnableBuddiesAndPresence>false</EnableBuddiesAndPresence>"
 		<< "<EnablePresencePersistence>0</EnablePresencePersistence>"
@@ -2904,6 +2959,8 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
 	else
 	{
 		// Connector created, move forward.
+        // <FS:ND> Check if using the old SLVoice for Linux. the SDK in that version is too old to handle the extra args
+        if( viewerChoosesConnectionHandles() ) { // </FS:ND>
         if (connectorHandle == LLVivoxSecurity::getInstance()->connectorHandle())
         {
             LL_INFOS("Voice") << "Connector.Create succeeded, Vivox SDK version is " << versionID << " connector handle " << connectorHandle << LL_ENDL;
@@ -2921,6 +2978,15 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
                               << LL_ENDL;
             result["connector"] = LLSD::Boolean(false);
         }
+		} else { // <FS:ND/> For old Linux Voice
+		LL_INFOS("Voice") << "Connector.Create succeeded, Vivox SDK version is " << versionID << LL_ENDL;
+		mVoiceVersion.serverVersion = versionID;
+		LLVivoxSecurity::getInstance()->setConnectorHandle(connectorHandle);
+		mConnectorEstablished = true;
+		mTerminateDaemon = false;
+
+		result["connector"] = LLSD::Boolean(true);
+		} // <FS:ND/> For old Linux voice
 	}
 
     LLEventPumps::instance().post("vivoxClientPump", result);
@@ -2948,6 +3014,11 @@ void LLVivoxVoiceClient::loginResponse(int statusCode, std::string &statusString
 	else
 	{
 		// Login succeeded, move forward.
+
+        // <FS:ND> Check if using the old SLVoice for Linux.
+        if( !viewerChoosesConnectionHandles() )
+            LLVivoxSecurity::getInstance()->setAccountHandle(accountHandle);
+        // </FS:ND>
 		mAccountLoggedIn = true;
 		mNumberOfAliases = numberOfAliases;
         result["login"] = LLSD::String("response_ok");
@@ -6623,6 +6694,7 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
 		XML_SetUserData(parser, this);	
 		XML_Parse(parser, mInput.data() + start, delim - start, false);
 		
+			LL_INFOS("Voice") << "parsing: " << mInput.substr(start, delim - start) << LL_ENDL;
 		// If this message isn't set to be squelched, output the raw XML received.
 		if(!squelchDebugOutput)
 		{
@@ -6785,6 +6857,8 @@ void LLVivoxProtocolParser::StartTag(const char *tag, const char **attr)
 void LLVivoxProtocolParser::EndTag(const char *tag)
 {
 	const std::string& string = textBuffer;
+
+	std::cerr << tag << ": " << textBuffer << std::endl;
 	
 	responseDepth--;
 	

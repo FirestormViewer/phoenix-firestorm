@@ -539,6 +539,11 @@ class Windows_i686_Manifest(ViewerManifest):
             self.path("media_plugin_cef.dll")
             self.end_prefix()
 
+        # Media plugins - GStreamer
+        if self.prefix(src='../media_plugins/gstreamer10/%s' % self.args['configuration'], dst="llplugin"):
+            self.path("media_plugin_gstreamer10.dll")
+            self.end_prefix()
+
         # winmm.dll shim
         if self.prefix(src='../media_plugins/winmmshim/%s' % self.args['configuration'], dst=""):
             self.path("winmm.dll")
@@ -652,17 +657,6 @@ class Windows_i686_Manifest(ViewerManifest):
 
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
-
-        if self.fs_is_64bit_build():
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin'), dst=""):
-               self.path( "slplugin.exe" )
-               self.end_prefix()
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin'), dst="llplugin"):
-               self.path( "*.*" )
-               self.end_prefix()
-            if self.prefix(src=os.path.join(os.pardir, 'packages', 'bin_x86', 'slplugin', 'llplugin', 'locales'), dst=os.path.join( "llplugin", "locales" ) ):
-               self.path( "*.*" )
-               self.end_prefix()
 
         self.fs_copy_windows_manifest( )
 
@@ -1334,6 +1328,9 @@ class LinuxManifest(ViewerManifest):
             self.path("../media_plugins/gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
             self.path( "../media_plugins/cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
             self.end_prefix("bin/llplugin")
+        if self.prefix(src="", dst="bin/llplugin"):
+            self.path("../media_plugins/gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer10.so")
+            self.end_prefix("bin/llplugin")
 
         # CEF files 
         if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'), dst="lib"):
@@ -1489,6 +1486,7 @@ class LinuxManifest(ViewerManifest):
             # Currentelly, the 32-bit ones will work with a 64-bit client.
             if self.prefix(src="../packages/lib/release", dst="bin"):
                     self.path("SLVoice")
+                    self.path("win32")
                     self.end_prefix()
             if self.prefix(src="../packages/lib/release", dst="lib"):
                     self.path("libortp.so")
@@ -1554,7 +1552,7 @@ class LinuxManifest(ViewerManifest):
     def strip_binaries(self):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install \! -name *.pak \! -name *.dat \! -name *.bin \! -name core \! -path '*win32*' | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
 class Linux_i686_Manifest(LinuxManifest):
     def construct(self):

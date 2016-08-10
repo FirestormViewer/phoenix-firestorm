@@ -169,6 +169,8 @@ extern "C"
 					{
 						short volume_16 = (short)(sVolumeLevel * 32767.f);
 
+// <FS:ND/> For x64 we leave out the MMX loop as it needs to be rewritten with SSE2 (_m128) instead of _m64. Needs a check if winshim is even used for x64 before invessting more time.
+#ifndef _M_AMD64
 						// copy volume level 4 times into 64 bit MMX register
 						__m64 volume_64 = _mm_set_pi16(volume_16, volume_16, volume_16, volume_16);
 						__m64* sample_64;
@@ -189,6 +191,9 @@ extern "C"
 
 						// the captain has turned off the MMX sign, you are now free to use floating point registers
 						_mm_empty();
+#else
+						short *sample_64 = (short*)pwh->lpData;
+#endif
 
 						// finish remaining samples that didn't fit into 64 bit register
 						for (short* sample_16 = (short*)sample_64;

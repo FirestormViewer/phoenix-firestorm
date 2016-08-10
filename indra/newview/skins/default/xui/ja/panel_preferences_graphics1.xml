@@ -6,7 +6,14 @@
 	<!-- 一般 -->
 	
 	<panel label="一般" name="General">
-	
+		<text name="preset_label" width="95">
+			使用中のプリセット:
+		</text>
+
+		<text name="preset_text">
+			（なし）
+		</text>
+		
 		<text name="QualitySpeed">
 			クォリティとスピード:
 		</text>
@@ -82,7 +89,14 @@
 			m
 		</text>
 		<slider label="最大パーティクル数：" name="MaxParticleCount"/>
-		<slider label="簡略化せずに描画するアバターの最大数：" name="MaxNumberAvatarDrawn"/>
+		<slider tool_tip="表示の複雑なアバターをゼリー人形のように表示し始める値を設定します。" label="複雑さの最大値" name="IndirectMaxComplexity" />
+		<text name="IndirectMaxComplexityText">
+			0
+		</text>
+		<slider label="簡略化せずに描画するアバターの最大数" name="IndirectMaxNonImpostors" />
+		<text name="IndirectMaxNonImpostorsText">
+			0
+		</text>
 		<slider label="ポストプロセス品質：" name="RenderPostProcess"/>
 		<text name="PostProcessText">
 			低
@@ -103,7 +117,6 @@
 		<text name="AvatarRenderingText">
 			アバターレンダリング：
 		</text>
-		<check_box label="アバターの描画を簡略化" name="AvatarImpostors"/>
 		<check_box label="ハードウェアスキニング" name="AvatarVertexProgram"/>
 		<check_box label="アバターの布" name="AvatarCloth"/>
 		<text name="TerrainDetailText">
@@ -114,6 +127,13 @@
 			<radio_item label="高" name="2"/>
 		</radio_group>
 		
+		<text name="Presets_Label">
+			プリセット:
+		</text>
+		<button label="保存" name="PrefSaveButton" />
+		<button label="読み込み" name="PrefLoadButton" />
+		<button label="削除" name="PrefDeleteButton" />
+
 		<button label="リセット" name="Defaults"/>
 	
 	</panel>
@@ -228,5 +248,6 @@
     </panel>
 	
 </tab_container>
+
 </panel>
 

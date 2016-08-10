@@ -3071,7 +3071,7 @@ URL: [MEDIAURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
-		[NAME_SLURL] предложил(а) телепортировать вас к себе ([POS_SLURL]):
+		[NAME_SLURL] предложил(а) телепортировать вас к себе:
 
 &quot;[MESSAGE]&quot;
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3081,7 +3081,7 @@ URL: [MEDIAURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityExceeded">
-		[NAME_SLURL] предложил(а) телепортировать вас к себе ([POS_SLURL]):
+		[NAME_SLURL] предложил(а) телепортировать вас к себе:
 
 &quot;[MESSAGE]&quot;
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
@@ -3093,6 +3093,36 @@ URL: [MEDIAURL]
 		</form>
 	</notification>
 	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] предложил(а) телепортировать вас к себе:
+
+&quot;[MESSAGE]&quot;
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Однако этот регион содержит контент, доступный только для взрослых.
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
+		[NAME_SLURL] предложил(а) телепортировать вас к себе ([POS_SLURL]):
+
+&quot;[MESSAGE]&quot;
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+		<form name="form">
+			<button name="Teleport" text="Телепортация"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded_SLUrl">
+		[NAME_SLURL] предложил(а) телепортировать вас к себе ([POS_SLURL]):
+
+&quot;[MESSAGE]&quot;
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Этот регион содержит контент с рейтингом [REGION_CONTENT_MATURITY], но ваши настройки не допускают контента [REGION_CONTENT_MATURITY].  Вы можете отказаться от телепортации, или ваши настройки будут изменены.
+		<form name="form">
+			<button name="Teleport" text="Изменить и продолжить"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked_SLUrl">
 		[NAME_SLURL] предложил(а) телепортировать вас к себе ([POS_SLURL]):
 
 &quot;[MESSAGE]&quot;
@@ -3571,14 +3601,14 @@ URL: [MEDIAURL]
 Аватар &quot;[NAME]&quot; вышел из режима внешности.
 	</notification>
 	<notification name="NoConnect">
-		Возникли проблемы соединения при использовании [PROTOCOL] [HOSTID].
+		Возникли проблемы соединения при использовании [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Проверьте настройки сети и брандмауэра.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Возникли проблемы соединения с голосовым сервером:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Голосовая связь будет недоступна.
 Проверьте настройки сети и брандмауэра.

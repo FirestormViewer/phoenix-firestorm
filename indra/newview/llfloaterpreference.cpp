@@ -768,6 +768,8 @@ BOOL LLFloaterPreference::postBuild()
 	// <FS:Ansariel> Properly disable avatar tag setting
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("AvatarNameTagMode")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
+	gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
 	onAvatarTagSettingsChanged();
 	// </FS:Ansariel>
 
@@ -1192,15 +1194,17 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// <FS:Ansariel> Fix resetting graphics preset on cancel
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
 
-	bool started = (LLStartUp::getStartupState() == STATE_STARTED);
+	// <FS:Ansariel> FIRE-19810: Make presets global since PresetGraphicActive setting is global as well
+	//bool started = (LLStartUp::getStartupState() == STATE_STARTED);
 
-	LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
-	LLButton* save_btn = findChild<LLButton>("PrefSaveButton");
-	LLButton* delete_btn = findChild<LLButton>("PrefDeleteButton");
+	//LLButton* load_btn = findChild<LLButton>("PrefLoadButton");
+	//LLButton* save_btn = findChild<LLButton>("PrefSaveButton");
+	//LLButton* delete_btn = findChild<LLButton>("PrefDeleteButton");
 
-	load_btn->setEnabled(started);
-	save_btn->setEnabled(started);
-	delete_btn->setEnabled(started);
+	//load_btn->setEnabled(started);
+	//save_btn->setEnabled(started);
+	//delete_btn->setEnabled(started);
+	// </FS:Ansariel>
 
 	// <FS:ND> Hook up and init for filtering
 	collectSearchableItems();
@@ -3219,7 +3223,10 @@ void LLFloaterPreference::onClickBlockList()
 	// </FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
+	BOOL saved_setting = gSavedSettings.getBOOL("FSDisableBlockListAutoOpen");
+	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", FALSE);
 	LLPanelBlockedList::showPanelAndSelect();
+	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", saved_setting);
 	// </FS:Ansariel>
 }
 
@@ -3418,6 +3425,10 @@ void LLFloaterPreference::onAvatarTagSettingsChanged()
 
 	childSetEnabled("FSshow_legacyun", usernames_enabled);
 	childSetEnabled("legacy_trim_check", usernames_enabled && legacy_enabled);
+
+	bool arw_options_enabled = gSavedSettings.getBOOL("FSTagShowARW") && gSavedSettings.getS32("AvatarNameTagMode") > 0;
+	childSetEnabled("FSTagShowTooComplexOnlyARW", arw_options_enabled);
+	childSetEnabled("FSTagShowOwnARW", arw_options_enabled);
 }
 // </FS:Ansariel>
 
@@ -3630,9 +3641,11 @@ BOOL LLPanelPreference::postBuild()
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	if (hasChild("notify_growl_checkbox", TRUE))
 	{
+		BOOL growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&LLPanelPreference::onEnableGrowlChanged, this));
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setEnabled(GrowlManager::isUsable());
-		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(growl_enabled);
+		getChild<LLCheckBoxCtrl>("FSFilterGrowlKeywordDuplicateIMs")->setEnabled(growl_enabled);
 	}
 	// </FS:Ansariel>
 
@@ -3736,7 +3749,9 @@ void LLPanelPreference::handleFavoritesOnLoginChanged(LLUICtrl* checkbox, const 
 // <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 void LLPanelPreference::onEnableGrowlChanged()
 {
-	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+	BOOL growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
+	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(growl_enabled);
+	getChild<LLCheckBoxCtrl>("FSFilterGrowlKeywordDuplicateIMs")->setEnabled(growl_enabled);
 }
 // </FS:Ansariel>
 
@@ -4038,9 +4053,6 @@ BOOL LLPanelPreferenceGraphics::postBuild()
 	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(FALSE);
 #endif // LL_DARWIN
 // </FS:CR>
-
-	// <FS:Ansariel> Texture memory management
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue((F32)gMaxVideoRam.value());
 
 	return LLPanelPreference::postBuild();
 }
@@ -4918,55 +4930,10 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 				// and only restore selectively
 
 				std::string file = item->getColumn(2)->getValue().asString();
-				if (item->getValue().asString() != "presets")
-				{
-					LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
-					copy_prefs_file(
-						gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file),
-						gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file));
-				}
-				else
-				{
-					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR));
-
-					std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
-					std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
-					std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
-
-					if (LLFile::isdir(graphics_presets_folder))
-					{
-						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_GRAPHIC));
-
-						std::string file_name;
-						while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
-						{
-							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
-
-							if (LLFile::isfile(source.c_str()))
-							{
-								std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(backup_per_account_folder, PRESETS_DIR), PRESETS_GRAPHIC), file_name);
-								copy_prefs_file(source, target);
-							}
-						}
-					}
-
-					if (LLFile::isdir(camera_presets_folder))
-					{
-						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_CAMERA));
-
-						std::string file_name;
-						while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
-						{
-							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
-
-							if (LLFile::isfile(source.c_str()))
-							{
-								std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(backup_per_account_folder, PRESETS_DIR), PRESETS_CAMERA), file_name);
-								copy_prefs_file(source, target);
-							}
-						}
-					}
-				}
+				LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
+				copy_prefs_file(
+					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file),
+					gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file));
 			}
 		}
 		else
@@ -4986,28 +4953,73 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 		LLScrollListItem* item = globalFoldersList[index];
 		// Don't bother with the checkbox and get the path, since we back up all folders
 		// and only restore selectively
-		std::string folder = item->getColumn(2)->getValue().asString();
-
-		std::string folder_name = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, folder) + gDirUtilp->getDirDelimiter();
-		std::string backup_folder_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, folder) + gDirUtilp->getDirDelimiter();
-
-		LL_INFOS("SettingsBackup") << "backing up global folder: " << folder_name << LL_ENDL;
-
-		// create folder if it's not there already
-		LLFile::mkdir(backup_folder_name.c_str());
-
-		std::string file_name;
-		while (gDirUtilp->getNextFileInDir(folder_name, "*", file_name))
+		if (item->getValue().asString() != "presets")
 		{
-			LL_INFOS("SettingsBackup") << "found entry: " << folder_name + file_name << LL_ENDL;
-			// only copy files, not subfolders
-			if (LLFile::isfile(folder_name + file_name.c_str()))
+			std::string folder = item->getColumn(2)->getValue().asString();
+
+			std::string folder_name = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, folder) + gDirUtilp->getDirDelimiter();
+			std::string backup_folder_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, folder) + gDirUtilp->getDirDelimiter();
+
+			LL_INFOS("SettingsBackup") << "backing up global folder: " << folder_name << LL_ENDL;
+
+			// create folder if it's not there already
+			LLFile::mkdir(backup_folder_name.c_str());
+
+			std::string file_name;
+			while (gDirUtilp->getNextFileInDir(folder_name, "*", file_name))
 			{
-				copy_prefs_file(folder_name + file_name, backup_folder_name + file_name);
+				LL_INFOS("SettingsBackup") << "found entry: " << folder_name + file_name << LL_ENDL;
+				// only copy files, not subfolders
+				if (LLFile::isfile(folder_name + file_name.c_str()))
+				{
+					copy_prefs_file(folder_name + file_name, backup_folder_name + file_name);
+				}
+				else
+				{
+					LL_INFOS("SettingsBackup") << "skipping subfolder " << folder_name + file_name << LL_ENDL;
+				}
 			}
-			else
+		}
+		else
+		{
+			LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR));
+
+			std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
+			std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
+			std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
+
+			if (LLFile::isdir(graphics_presets_folder))
 			{
-				LL_INFOS("SettingsBackup") << "skipping subfolder " << folder_name + file_name << LL_ENDL;
+				LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR, PRESETS_GRAPHIC));
+
+				std::string file_name;
+				while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
+				{
+					std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
+
+					if (LLFile::isfile(source.c_str()))
+					{
+						std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(dir_name, PRESETS_DIR), PRESETS_GRAPHIC), file_name);
+						copy_prefs_file(source, target);
+					}
+				}
+			}
+
+			if (LLFile::isdir(camera_presets_folder))
+			{
+				LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR, PRESETS_CAMERA));
+
+				std::string file_name;
+				while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
+				{
+					std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
+
+					if (LLFile::isfile(source.c_str()))
+					{
+						std::string target = gDirUtilp->add(gDirUtilp->add(gDirUtilp->add(dir_name, PRESETS_DIR), PRESETS_CAMERA), file_name);
+						copy_prefs_file(source, target);
+					}
+				}
 			}
 		}
 	}
@@ -5149,57 +5161,12 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 			// Only restore if this item is checked on
 			if (checkbox->getCheckBox()->getValue().asBoolean())
 			{
-				if (item->getValue().asString() != "presets")
-				{
-					// Get the path to restore for this item
-					std::string file = item->getColumn(2)->getValue().asString();
-					LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
-					copy_prefs_file(
-						gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file),
-						gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file));
-				}
-				else
-				{
-					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR));
-
-					std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
-					std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
-					std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
-
-					if (LLFile::isdir(graphics_presets_folder))
-					{
-						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC));
-
-						std::string file_name;
-						while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
-						{
-							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
-
-							if (LLFile::isfile(source.c_str()))
-							{
-								std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_GRAPHIC), file_name);
-								copy_prefs_file(source, target);
-							}
-						}
-					}
-
-					if (LLFile::isdir(camera_presets_folder))
-					{
-						LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA));
-
-						std::string file_name;
-						while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
-						{
-							std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
-
-							if (LLFile::isfile(source.c_str()))
-							{
-								std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, PRESETS_DIR, PRESETS_CAMERA), file_name);
-								copy_prefs_file(source, target);
-							}
-						}
-					}
-				}
+				// Get the path to restore for this item
+				std::string file = item->getColumn(2)->getValue().asString();
+				LL_INFOS("SettingsBackup") << "copying per account file " << file << LL_ENDL;
+				copy_prefs_file(
+					gDirUtilp->getExpandedFilename(LL_PATH_NONE, backup_per_account_folder, file),
+					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, file));
 			}
 		}
 
@@ -5237,29 +5204,74 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		// Only restore if this item is checked on
 		if (checkbox->getCheckBox()->getValue().asBoolean())
 		{
-			// Get the path to restore for this item
-			std::string folder = item->getColumn(2)->getValue().asString();
-
-			std::string folder_name = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, folder) + gDirUtilp->getDirDelimiter();
-			std::string backup_folder_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, folder) + gDirUtilp->getDirDelimiter();
-
-			LL_INFOS("SettingsBackup") << "restoring global folder: " << folder_name << LL_ENDL;
-
-			// create folder if it's not there already
-			LLFile::mkdir(folder_name.c_str());
-
-			std::string file_name;
-			while (gDirUtilp->getNextFileInDir(backup_folder_name, "*", file_name))
+			if (item->getValue().asString() != "presets")
 			{
-				LL_INFOS("SettingsBackup") << "found entry: " << backup_folder_name + file_name << LL_ENDL;
-				// only restore files, not subfolders
-				if (LLFile::isfile(backup_folder_name + file_name.c_str()))
+				// Get the path to restore for this item
+				std::string folder = item->getColumn(2)->getValue().asString();
+
+				std::string folder_name = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, folder) + gDirUtilp->getDirDelimiter();
+				std::string backup_folder_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, folder) + gDirUtilp->getDirDelimiter();
+
+				LL_INFOS("SettingsBackup") << "restoring global folder: " << folder_name << LL_ENDL;
+
+				// create folder if it's not there already
+				LLFile::mkdir(folder_name.c_str());
+
+				std::string file_name;
+				while (gDirUtilp->getNextFileInDir(backup_folder_name, "*", file_name))
 				{
-					copy_prefs_file(backup_folder_name + file_name, folder_name + file_name);
+					LL_INFOS("SettingsBackup") << "found entry: " << backup_folder_name + file_name << LL_ENDL;
+					// only restore files, not subfolders
+					if (LLFile::isfile(backup_folder_name + file_name.c_str()))
+					{
+						copy_prefs_file(backup_folder_name + file_name, folder_name + file_name);
+					}
+					else
+					{
+						LL_INFOS("SettingsBackup") << "skipping subfolder " << backup_folder_name + file_name << LL_ENDL;
+					}
 				}
-				else
+			}
+			else
+			{
+				LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR));
+
+				std::string presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR) + gDirUtilp->getDirDelimiter();
+				std::string graphics_presets_folder = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR, PRESETS_GRAPHIC) + gDirUtilp->getDirDelimiter();
+				std::string camera_presets_folder =  gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name, PRESETS_DIR, PRESETS_CAMERA) + gDirUtilp->getDirDelimiter();
+
+				if (LLFile::isdir(graphics_presets_folder))
 				{
-					LL_INFOS("SettingsBackup") << "skipping subfolder " << backup_folder_name + file_name << LL_ENDL;
+					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_GRAPHIC));
+
+					std::string file_name;
+					while (gDirUtilp->getNextFileInDir(graphics_presets_folder, "*", file_name))
+					{
+						std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, graphics_presets_folder, file_name);
+
+						if (LLFile::isfile(source.c_str()))
+						{
+							std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_GRAPHIC), file_name);
+							copy_prefs_file(source, target);
+						}
+					}
+				}
+
+				if (LLFile::isdir(camera_presets_folder))
+				{
+					LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA));
+
+					std::string file_name;
+					while (gDirUtilp->getNextFileInDir(camera_presets_folder, "*", file_name))
+					{
+						std::string source = gDirUtilp->getExpandedFilename(LL_PATH_NONE, camera_presets_folder, file_name);
+
+						if (LLFile::isfile(source.c_str()))
+						{
+							std::string target = gDirUtilp->add(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, PRESETS_DIR, PRESETS_CAMERA), file_name);
+							copy_prefs_file(source, target);
+						}
+					}
 				}
 			}
 		}

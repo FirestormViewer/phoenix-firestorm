@@ -1369,6 +1369,15 @@ Prøv igen om lidt.
 		</form>
 	</notification>
 	<notification name="TeleportOffered">
+		[NAME_SLURL] har tilbudt en teleport til deres lokation:
+
+[MESSAGE] - [MATURITY_STR] &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;
+		<form name="form">
+			<button name="Teleport" text="Teleportér"/>
+			<button name="Cancel" text="Annullér"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_SLUrl">
 		[NAME_SLURL] har tilbudt en teleport til deres lokation ([POS_SLURL]):
 
 [MESSAGE] - [MATURITY_STR] &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;
@@ -1733,14 +1742,14 @@ Avatar &apos;[NAME]&apos; skiftede til udseende modus.
 Avatar &apos;[NAME]&apos; har forladt udseende modus.
 	</notification>
 	<notification name="NoConnect">
-		Vi har problemer med at oprette forbindelse via [PROTOCOL] [HOSTID].
+		Vi har problemer med at oprette forbindelse via [PROTOCOL] &lt;nolink&gt;[HOSTID]&lt;/nolink&gt;.
 Check venligst din netværks- og firewallsetup.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="NoVoiceConnect">
 		Vi har problemer med at oprette forbindelse til din stemme server:
 
-[HOSTID]
+&lt;nolink&gt;[HOSTID]&lt;/nolink&gt;
 
 Stemme kommunikation vil ikke være tilgængelig.
 Check venligst din netværks- og firewall setup.

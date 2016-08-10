@@ -534,6 +534,7 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 		// </FS:Ansariel>
 		{
 			mVRAM = vram/(1024*1024);
+			LL_INFOS("AppInit") << "VRAM Detected via WMI: " << mVRAM << LL_ENDL;
 		}
 		else
 		{ // Get the English VRAM string
@@ -545,7 +546,7 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 		  // Dump the string as an int into the structure
 		  char *stopstring;
 		  mVRAM = strtol(ram_str.c_str(), &stopstring, 10); 
-		  LL_INFOS("AppInit") << "VRAM Detected: " << mVRAM << " DX9 string: " << ram_str << LL_ENDL;
+		  LL_INFOS("AppInit") << "VRAM Detected via DirectX: " << mVRAM << " DX9 string: " << ram_str << LL_ENDL;
 		}
 
 		if (vram_only)

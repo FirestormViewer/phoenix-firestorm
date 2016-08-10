@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+	layout="topleft"
+	name="Avatar Render Settings Menu">
+	<menu_item_call
+		label="Render normally (removes from list)"
+		layout="topleft"
+		name="av_render_normal">
+		<menu_item_call.on_click
+			function="Avatar.ChangeRenderSetting"
+			parameter="0" />
+	</menu_item_call>
+	<menu_item_call
+		label="Never render"
+		layout="topleft"
+		name="av_render_never">
+		<menu_item_call.on_click
+			function="Avatar.ChangeRenderSetting"
+			parameter="1" />
+	</menu_item_call>
+	<menu_item_call
+		label="Always render"
+		layout="topleft"
+		name="av_render_always">
+		<menu_item_call.on_click
+			function="Avatar.ChangeRenderSetting"
+			parameter="2" />
+	</menu_item_call>
+</context_menu>

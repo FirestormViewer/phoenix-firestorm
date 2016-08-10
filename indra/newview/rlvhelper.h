@@ -174,6 +174,7 @@ typedef RlvBehaviourToggleHandler<RLV_BHVR_SETCAM_EYEOFFSET> RlvBehaviourCamEyeF
 typedef RlvBehaviourHandler<RLV_BHVR_REMATTACH> RlvBehaviourAddRemAttachHandler;					// Shared between @addattach and @remattach
 typedef RlvBehaviourHandler<RLV_BHVR_SENDCHANNEL> RlvBehaviourSendChannelHandler;					// Shared between @sendchannel and @sendchannel_except
 typedef RlvBehaviourHandler<RLV_BHVR_SENDIM> RlvBehaviourRecvSendStartIMHandler;					// Shared between @recvim, @sendim and @startim
+typedef RlvBehaviourHandler<RLV_BHVR_SETCAM_FOVMIN> RlvBehaviourSetCamFovHandler;					// Shared between @setcam_fovmin and @setcam_fovmax
 typedef RlvBehaviourToggleHandler<RLV_BHVR_SHOWSELF> RlvBehaviourShowSelfToggleHandler;				// Shared between @showself and @showselfhead
 typedef RlvBehaviourHandler<RLV_BHVR_CAMZOOMMIN> RlvBehaviourCamZoomMinMaxHandler;					// Shared between @camzoommin and @camzoommax (deprecated)
 typedef RlvReplyHandler<RLV_BHVR_GETCAM_AVDISTMIN> RlvReplyCamMinMaxModifierHandler;				// Shared between @getcam_avdistmin and @getcam_avdistmax
@@ -385,7 +386,7 @@ public:
 	 */
 public:
 	std::string        asString() const;
-	const std::string& getBehaviour() const		{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviour() : m_strBehaviour; }
+	const std::string& getBehaviour() const		{ return m_strBehaviour; }
 	ERlvBehaviour      getBehaviourType() const	{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourType() : RLV_BHVR_UNKNOWN; }
 	U32                getBehaviourFlags() const{ return (m_pBhvrInfo) ? m_pBhvrInfo->getBehaviourFlags() : 0; }
 	const LLUUID&      getObjectID() const		{ return m_idObj; }

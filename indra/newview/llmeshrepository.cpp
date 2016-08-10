@@ -3995,10 +3995,11 @@ void LLMeshRepository::uploadModel(std::vector<LLModelInstance>& data, LLVector3
 
 S32 LLMeshRepository::getMeshSize(const LLUUID& mesh_id, S32 lod)
 {
-	if (mThread)
+	if (mThread && mesh_id.notNull())
 	{
+		LLMutexLock lock(mThread->mHeaderMutex);
 		LLMeshRepoThread::mesh_header_map::iterator iter = mThread->mMeshHeader.find(mesh_id);
-		if (iter != mThread->mMeshHeader.end())
+		if (iter != mThread->mMeshHeader.end() && mThread->mMeshHeaderSize[mesh_id] > 0)
 		{
 			LLSD& header = iter->second;
 
@@ -4070,9 +4071,30 @@ void LLMeshRepository::uploadError(LLSD& args)
 	mUploadErrorQ.push(args);
 }
 
+F32 LLMeshRepository::getStreamingCost(LLUUID mesh_id, F32 radius, S32* bytes, S32* bytes_visible, S32 lod, F32 *unscaled_value)
+{
+    if (mThread && mesh_id.notNull())
+    {
+        LLMutexLock lock(mThread->mHeaderMutex);
+        LLMeshRepoThread::mesh_header_map::iterator iter = mThread->mMeshHeader.find(mesh_id);
+        if (iter != mThread->mMeshHeader.end() && mThread->mMeshHeaderSize[mesh_id] > 0)
+        {
+            return getStreamingCost(iter->second, radius, bytes, bytes_visible, lod, unscaled_value);
+        }
+    }
+    return 0.f;
+}
+
 //static
 F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32* bytes_visible, S32 lod, F32 *unscaled_value)
 {
+	if (header.has("404")
+		|| !header.has("lowest_lod")
+		|| (header.has("version") && header["version"].asInteger() > MAX_MESH_VERSION))
+	{
+		return 0.f;
+	}
+
 	F32 max_distance = 512.f;
 
 	F32 dlowest = llmin(radius/0.03f, max_distance);
@@ -4147,7 +4169,7 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 		}
 	}
 
-	F32 max_area = 102932.f; //area of circle that encompasses region
+	F32 max_area = 102944.f; //area of circle that encompasses region (see MAINT-6559)
 	F32 min_area = 1.f;
 
 	F32 high_area = llmin(F_PI*dmid*dmid, max_area);
@@ -4841,9 +4863,14 @@ void on_new_single_inventory_upload_complete(
         // and display something saying that it cost L$
         LLStatusBar::sendMoneyBalanceRequest();
 
+        // <FS:Ansariel> FIRE-10628 - Option to supress upload cost notification
+        if (gSavedSettings.getBOOL("FSShowUploadPaymentToast"))
+        {
         LLSD args;
         args["AMOUNT"] = llformat("%d", upload_price);
         LLNotificationsUtil::add("UploadPayment", args);
+        }
+        // </FS:Ansariel>
     }
 
     if (item_folder_id.notNull())

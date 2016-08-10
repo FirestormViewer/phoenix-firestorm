@@ -690,17 +690,26 @@ bool LLGLManager::initGL()
 		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
 
 		mVRAM = meminfo[0]/1024;
+
+		// <FS:Ansariel> VRAM detection logging
+		LL_INFOS("RenderInit") << "VRAM detected via ATI MemInfo OpenGL extension: " << mVRAM << " MB" << LL_ENDL;
 	}
 	else if (mHasNVXMemInfo)
 	{
 		S32 dedicated_memory;
 		glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &dedicated_memory);
 		mVRAM = dedicated_memory/1024;
+
+		// <FS:Ansariel> VRAM detection logging
+		LL_INFOS("RenderInit") << "VRAM detected via nVidia MemInfo OpenGL extension: " << mVRAM << " MB" << LL_ENDL;
 	}
 
 	if (mVRAM < 256)
 	{ //something likely went wrong using the above extensions, fall back to old method
 		mVRAM = old_vram;
+
+		// <FS:Ansariel> VRAM detection logging
+		LL_WARNS("RenderInit") << "VRAM detected via MemInfo OpenGL extension most likely broken. Reverting to " << mVRAM << " MB" << LL_ENDL;
 	}
 
 	stop_glerror();
