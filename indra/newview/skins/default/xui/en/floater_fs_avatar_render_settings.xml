@@ -18,7 +18,7 @@
 		Never
 	</floater.string>
 	<floater.string name="av_render_always">
-		Always
+		Fully
 	</floater.string>
 	<name_list
 	 column_padding="0"
