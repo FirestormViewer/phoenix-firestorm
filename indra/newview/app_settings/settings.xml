@@ -12876,7 +12876,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>7.5</real>
+      <real>6.5</real>
     </map>
     <key>RenderWater</key>
     <map>

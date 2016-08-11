@@ -12,7 +12,7 @@
 	<text name="AvatarText">
 		Awatar
 	</text>
-	<slider tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. Jelly Doll)" label="Maks. szczegółowość awatarów:" name="IndirectMaxComplexity" />
+	<slider tool_tip="Kontroluje w jakim momencie awatar, który jest graficznie złożony zostanie zastąpiony przez mniej obciążającą komputer formę (tzw. JellyDoll)" label="Maks. szczegółowość awatarów:" name="IndirectMaxComplexity" />
 	<slider label="Maks. il. wyświetlanych awatarów:" name="IndirectMaxNonImpostors" />
 	<slider label="Detale:" name="AvatarMeshDetail" />
 	<text name="AvatarMeshDetailText">

@@ -140,6 +140,8 @@ public:
 
 	void 			setScriptName(const std::string& name){mScriptName = name;};
 
+	void 			setItemRemoved(bool script_removed){mScriptRemoved = script_removed;};
+
 private:
 	// NaCl - LSL Preprocessor
 	void		onToggleProc();
@@ -199,6 +201,7 @@ private:
 	BOOL			mHasScriptData;
 	LLLiveLSLFile*	mLiveFile;
 	LLUUID			mAssociatedExperience;
+	BOOL			mScriptRemoved;
 	LLTextBox*		mLineCol;
 // <FS:CR> Advanced Script Editor
 	//LLView*			mSaveBtn;
@@ -274,6 +277,7 @@ public:
 // [/SL:KB]
 
 protected:
+	virtual void draw();
 	virtual BOOL canClose();
 	void closeIfNeeded();
 

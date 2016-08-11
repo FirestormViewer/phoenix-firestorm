@@ -13,7 +13,7 @@
 					Max. Bandbreite:
 				</text>
 				<slider name="max_bandwidth"/>
-				<text name="Maximum complexity" width="105" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als Jelly Doll dargestellt wird.">
+				<text name="Maximum complexity" width="105" tool_tip="Legt fest, ab welchem Wert ein visuell komplexer Avatar als JellyDoll dargestellt wird.">
 					Max. Komplexität:
 				</text>
 				<slider name="IndirectMaxComplexity" right="-68"/>

@@ -64,7 +64,7 @@
 	<check_box label="Alte Position für Avatarnamen" name="FSLegacyNametagPosition" tool_tip="Falls aktiviert, wird die Position des Avatarnamens fest an der Position des Avatars angezeigt und folgt nicht der Bewegung des Kopfes bei Animationen." />
 	<check_box label="„Automatische Antwort“-Modus anzeigen" name="FSShowAutorespondInNameTag" tool_tip="Falls aktiviert, wird der Modus „Automatische Antwort“ im eigenen Avatarnamen angezeigt."/>
 	<check_box label="Komplexität anzeigen" name="FSTagShowARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität angezeigt."/>
-	<check_box label="Nur falls zu komplex" name="FSTagShowTooComplexOnlyARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität nur angezeigt, wenn der Avatar zu komplex ist und als Jelly Doll dargestellt wird."/>
+	<check_box label="Nur falls zu komplex" name="FSTagShowTooComplexOnlyARW" tool_tip="Falls aktiviert, wird die aktuelle Avatar-Komplexität nur angezeigt, wenn der Avatar zu komplex ist und als JellyDoll dargestellt wird."/>
 	<check_box label="Eigene Komplexität anzeigen" name="FSTagShowOwnARW" tool_tip="Falls aktiviert, wird die eigene aktuelle Avatar-Komplexität angezeigt."/>
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>

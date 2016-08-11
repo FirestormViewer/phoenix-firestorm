@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="580"
+ height="560"
  layout="topleft"
  name="floater_report_abuse"
  help_topic="floater_report_abuse"
@@ -19,7 +19,7 @@
      layout="topleft"
      left="60"
      name="screenshot"
-     top="15"
+     top="20"
      width="220" />
      <button
      follows="top|left"
@@ -30,16 +30,8 @@
      tool_tip="Refresh Screenshot"
      name="refresh_screenshot"
      left_pad="5"
-     top="121"
+     top="126"
      width="25"/>
-    <check_box
-     height="15"
-     label="Use this screenshot"
-     layout="topleft"
-     left="8"
-     name="screen_check"
-     top_pad="5"
-     width="116" />
     <text
      type="string"
      length="1"
@@ -50,7 +42,7 @@
      layout="topleft"
      left="10"
      name="reporter_title"
-     top_pad="0"
+     top_pad="5"
      width="100">
         Reporter:
     </text>
@@ -417,7 +409,7 @@
      left="80"
      follows="left|top"
      height="23"
-     top="550"
+     top="532"
      label="Report Abuse"
      label_selected="Report Abuse"
      layout="topleft"
