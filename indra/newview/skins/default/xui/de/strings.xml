@@ -2256,6 +2256,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ObjectOutOfRange">
 		Skript (Objekt außerhalb des Bereichs)
 	</string>
+	<string name="ScriptWasDeleted">
+		Skript (aus Inventar gelöscht)
+	</string>
 	<string name="GodToolsObjectOwnedBy">
 		Objekt [OBJECT], Besitzer [OWNER]
 	</string>
