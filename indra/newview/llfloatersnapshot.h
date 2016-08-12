@@ -149,6 +149,7 @@ public:
 	static void update();
 
 	static LLFloaterSnapshot* getInstance();
+	static LLFloaterSnapshot* findInstance();
 	/*virtual*/ void saveTexture();
 	// <FS:Ansariel> Threaded filepickers
 	//BOOL saveLocal();
