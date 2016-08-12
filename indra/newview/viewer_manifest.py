@@ -666,6 +666,17 @@ class Windows_i686_Manifest(ViewerManifest):
         self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'],
                   dst="win_crash_logger.exe")
 
+
+        if self.fs_is_64bit_build():
+            if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst="llplugin"):
+                self.path("msvcp120.dll")
+                self.path("msvcr120.dll")
+                self.end_prefix()
+            if self.prefix(src=os.path.join(os.pardir, '..', 'indra', 'newview', 'installers', 'windows_x64'), dst=""):
+                self.path("msvcp120.dll")
+                self.path("msvcr120.dll")
+                self.end_prefix()
+
         if not self.is_packaging_viewer():
             self.package_file = "copied_deps"    
 
@@ -735,7 +746,9 @@ class Windows_i686_Manifest(ViewerManifest):
         # </FS:ND>
         
         substitution_strings['installer_file'] = installer_file
-        
+        substitution_strings['fs64bit'] = ( 1 if self.fs_is_64bit_build() else 0 )
+
+
         version_vars = """
         !define INSTEXE  "%(final_exe)s"
         !define VERSION "%(version_short)s"
@@ -753,35 +766,44 @@ class Windows_i686_Manifest(ViewerManifest):
             !define INSTNAME   "%(app_name_oneword)s"
             !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
+            !define FS64BIT "%(fs64bit)d"
             Caption "%(caption)s"
             """
 
         tempfile = "secondlife_setup_tmp.nsi"
+
+        install_dir = "PROGRAMFILES"
+        install_dir_regkey = "SOFTWARE\\The Phoenix Firestorm Project\\${INSTNAME}" ""
+
+        if self.fs_is_64bit_build():
+            install_dir += "64"
+            install_dir_regkey = "WOW3264Node\\SOFTWARE\\The Phoenix Firestorm Project\\${INSTNAME}" ""
         
         self.fs_sign_win_binaries() # <FS:ND/> Sign files, step one. Sign compiled binaries
 
-        if not self.fs_is_64bit_build():
-          # the following replaces strings in the nsi template
-          # it also does python-style % substitution
-          self.replace_in("installers/windows/installer_template.nsi", tempfile, {
+        # the following replaces strings in the nsi template
+        # it also does python-style % substitution
+        self.replace_in("installers/windows/installer_template.nsi", tempfile, {
                   "%%VERSION%%":version_vars,
                   "%%SOURCE%%":self.get_src_prefix(),
                   "%%INST_VARS%%":inst_vars_template % substitution_strings,
                   "%%INSTALL_FILES%%":self.nsi_file_commands(True),
+                  "%%INSTALL_DIR%%": install_dir,
+                  "%%INSTALL_DIR_REGKEY%%": install_dir_regkey,
                   "%%DELETE_FILES%%":self.nsi_file_commands(False)})
 
-          # We use the Unicode version of NSIS, available from
-          # http://www.scratchpaper.com/
-          # Check two paths, one for Program Files, and one for Program Files (x86).
-          # Yay 64bit windows.
-          NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
-          if not os.path.exists(NSIS_path):
-              NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
+        # We use the Unicode version of NSIS, available from
+        # http://www.scratchpaper.com/
+        # Check two paths, one for Program Files, and one for Program Files (x86).
+        # Yay 64bit windows.
+        NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
+        if not os.path.exists(NSIS_path):
+            NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
 
-          installer_created=False
-          nsis_attempts=3
-          nsis_retry_wait=15
-          while (not installer_created) and (nsis_attempts > 0):
+        installer_created=False
+        nsis_attempts=3
+        nsis_retry_wait=15
+        while (not installer_created) and (nsis_attempts > 0):
             try:
                 nsis_attempts-=1;
                 self.run_command('"' + NSIS_path + '" /V2 ' + self.dst_path_of(tempfile))
@@ -794,21 +816,8 @@ class Windows_i686_Manifest(ViewerManifest):
                 else:
                     print >> sys.stderr, "Maximum nsis attempts exceeded; giving up"
                     raise
-          # self.remove(self.dst_path_of(tempfile))
-        else:
-          installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.msi" % substitution_strings
-          createMSI = "installers/windows_x64/build.bat"
-          createMSI  = self.dst_path_of( "../../../indra/newview/" + createMSI)
-          settingsFile = "settings_%s_v4.xml" % self.app_name()
+        # self.remove(self.dst_path_of(tempfile))
 
-          substitution_strings['installer_file'] = installer_file
-
-          channelSuffix = self.channel().replace( CHANNEL_VENDOR_BASE, "" ).strip()
-
-          self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
-                           " " + self.channel() + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file[:-4] + " " + " ".join( substitution_strings[ 'version' ].split(".") ) +
-                           " " + self.args['upgradecodes'].split(",")[0] + " " + self.args['upgradecodes'].split(",")[1] + " " + channelSuffix  )
         self.fs_sign_win_installer( substitution_strings ) # <FS:ND/> Sign files, step two. Sign installer.
 
         self.fs_save_windows_symbols( substitution_strings )
