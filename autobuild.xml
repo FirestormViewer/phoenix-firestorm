@@ -458,9 +458,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5aa7b826e7c1cf95e9cd3ef77e314f35</string>
+              <string>b60d5d92be45b9d032fac377d3054821</string>
               <key>url</key>
-              <string>http://s3-proxy.lindenlab.com/private-builds-secondlife-com/hg/repo/fmodex_3p-update-fmodex/rev/297261/arch/CYGWIN/installer/fmodex-4.44.31.297261-windows-297261.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.61-windows-201602062026.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1082,9 +1082,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>98d3dc8d107d04b572fe47bd43a56e74</string>
+              <string>150ed9ecd913045551a287bd67ae1f8d</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/jpeglib_3p-update-jpeglib/rev/296854/arch/CYGWIN/installer/jpeglib-8c.296854-windows-296854.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/jpeglib-8c.201512201541-windows.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1848,9 +1848,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b35adcf74d22c128045aa87aade74736</string>
+              <string>fa394ec294b1ec7fefdd7e87a9f09bd0</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/openjpeg_3p-update-openjpeg/rev/297018/arch/CYGWIN/installer/openjpeg-1.4.297018-windows-297018.tar.bz2</string>
+              <string>http://viewer.catznip.com/downloads/packages/openjpeg-1.5.2.201602060245-windows.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2676,7 +2676,7 @@
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 12"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                 </array>
@@ -2762,7 +2762,7 @@
                 <array>
                   <string>-G</string>
                   <string>"Visual Studio 12"</string>
-                  <string>-DUNATTENDED:BOOL=ON</string>
+                  <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                 </array>
