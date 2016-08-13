@@ -61,8 +61,6 @@
 #include "lleventcoro.h"
 #include "llavatarpropertiesprocessor.h"
 
-#include "llavatarpropertiesprocessor.h"
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvactions.h"
 #include "rlvhandler.h"
